@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/PushButtonType.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -670,6 +671,34 @@ void ElementDescriptor::readAlignAttr( OUString const & rPropName, OUString cons
                 break;
             default:
                 OSL_ENSURE( 0, "### illegal alignment value!" );
+            }
+        }
+    }
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString const & rAttrName )
+{
+    if (beans::PropertyState_DEFAULT_VALUE != _xPropState->getPropertyState( rPropName ))
+    {
+        Any a( _xProps->getPropertyValue( rPropName ) );
+        if (a.getValueTypeClass() == TypeClass_SHORT)
+        {
+            switch (*(sal_Int16 const *)a.getValue())
+            {
+            case awt::PushButtonType_STANDARD:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("standard") ) );
+                break;
+            case awt::PushButtonType_OK:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("ok") ) );
+                break;
+            case awt::PushButtonType_CANCEL:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("cancel") ) );
+                break;
+            case awt::PushButtonType_HELP:
+                addAttribute( rAttrName, OUString( RTL_CONSTASCII_USTRINGPARAM("help") ) );
+                break;
+            default:
+                OSL_ENSURE( 0, "### illegal button-type value!" );
             }
         }
     }

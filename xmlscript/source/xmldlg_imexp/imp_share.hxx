@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-25 11:13:15 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,9 @@ public:
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
     bool importOrientationProperty(
+        OUString const & rPropName, OUString const & rAttrName,
+        Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
+    bool importButtonTypeProperty(
         OUString const & rPropName, OUString const & rAttrName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };

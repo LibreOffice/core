@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-15 13:51:53 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,8 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":default") ) );
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readButtonTypeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("PushButtonType") ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":button-type") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -124,7 +126,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
                       OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) );
     }
     sal_Int16 nState;
-    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
+    if (_xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
     {
         switch (nState)
         {

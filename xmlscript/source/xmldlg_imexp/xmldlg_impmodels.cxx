@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-15 13:51:53 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,6 +1528,9 @@ void ButtonElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultButton") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("default") ),
                                _xAttributes );
+    ctx.importButtonTypeProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("PushButtonType") ),
+                                  OUString( RTL_CONSTASCII_USTRINGPARAM("button-type") ),
+                                  _xAttributes );
 
     ctx.importEvents( _events );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-28 14:56:15 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/PushButtonType.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -720,6 +721,43 @@ bool ImportContext::importAlignProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importButtonTypeProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+{
+    OUString buttonType( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    if (buttonType.getLength())
+    {
+        sal_Int16 nButtonType;
+        if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("standard") ))
+        {
+            nButtonType = awt::PushButtonType_STANDARD;
+        }
+        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ok") ))
+        {
+            nButtonType = awt::PushButtonType_OK;
+        }
+        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("cancel") ))
+        {
+            nButtonType = awt::PushButtonType_CANCEL;
+        }
+        else if (buttonType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("help") ))
+        {
+            nButtonType = awt::PushButtonType_HELP;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid button-type value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nButtonType ) );
         return true;
     }
     return false;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-09-19 08:46:33 $
+ *  last change: $Author: dbo $ $Date: 2001-10-22 08:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ public:
     void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readOrientationAttr( OUString const & rPropName, OUString const & rAttrName );
+    void readButtonTypeAttr( OUString const & rPropName, OUString const & rAttrName );
     //
     inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
     void addNumberFormatAttr(
