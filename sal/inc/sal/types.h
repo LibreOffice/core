@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:07:20 $
+ *  last change: $Author: kz $ $Date: 2001-03-20 11:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,12 @@
 
 #ifdef __cplusplus
 extern "C" {
+            $(SLB)$/communi.lib     \
 #endif
+#include <osl/types.h>
+#include <osl/macros.hxx>
+#include <rtl/types.h>
+#include <rtl/macros.hxx>
 
 /********************************************************************************/
 /* Data types
