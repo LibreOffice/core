@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-20 12:23:02 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 12:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,30 @@ void ScMyShapeResizer::AddShape(uno::Reference <drawing::XShape>& rShape,
     aShapes.push_back(aShape);
 }
 
+void ScMyShapeResizer::GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rStartRect,
+                                          const table::CellAddress& rEndCell,
+                                          awt::Point& rPoint, awt::Size& rSize,
+                                          sal_Int32& rEndX, sal_Int32& rEndY) const
+{
+    awt::Point aRefPoint;
+    aRefPoint.X = rStartRect.Left();
+    aRefPoint.Y = rStartRect.Top();
+    Rectangle* pRect = new Rectangle(pDoc->GetMMRect(
+        static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row),
+        static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row), rEndCell.Sheet ));
+    rEndX += pRect->Left();
+    rEndY += pRect->Top();
+    rPoint.X += aRefPoint.X;
+    if (rPoint.X > rStartRect.Right())
+        rPoint.X = rStartRect.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+    rPoint.Y += aRefPoint.Y;
+    if (rPoint.Y > rStartRect.Bottom())
+        rPoint.Y = rStartRect.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+    rSize.Width = rEndX - rPoint.X;
+    rSize.Height = rEndY - rPoint.Y;
+    delete pRect;
+}
+
 void ScMyShapeResizer::ResizeShapes()
 {
     if (!aShapes.empty() && rImport.GetModel().is())
@@ -165,12 +189,15 @@ void ScMyShapeResizer::ResizeShapes()
         rtl::OUString sRowHeight(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLHGT));
         rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
         rtl::OUString sCaptionPoint( RTL_CONSTASCII_USTRINGPARAM( "CaptionPoint" ));
+        rtl::OUString sConnectorShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape") );
+        rtl::OUString sCaptionShape( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape") );
+        rtl::OUString sStartShape(RTL_CONSTASCII_USTRINGPARAM("StartShape"));
+        rtl::OUString sEndShape(RTL_CONSTASCII_USTRINGPARAM("EndShape"));
         uno::Reference<table::XCellRange> xTableRow;
         uno::Reference<sheet::XSpreadsheet> xSheet;
         uno::Reference<table::XTableRows> xTableRows;
         sal_Int32 nOldRow(-1);
         sal_Int32 nOldSheet(-1);
-        Rectangle* pRect = NULL;
         ScMyToResizeShapes::iterator aItr = aShapes.begin();
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
@@ -217,32 +244,50 @@ void ScMyShapeResizer::ResizeShapes()
                                     awt::Size aSize(aItr->xShape->getSize());
                                     if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                     {
-                                        awt::Point aRefPoint;
-                                        aRefPoint.X = aRec.Left();
-                                        aRefPoint.Y = aRec.Top();
-                                        pRect = new Rectangle(pDoc->GetMMRect(
-                                            static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row),
-                                            static_cast<USHORT>(aItr->aEndCell.Column), static_cast<USHORT>(aItr->aEndCell.Row), aItr->aEndCell.Sheet ));
-                                        aItr->nEndX += pRect->Left();
-                                        aItr->nEndY += pRect->Top();
-                                        awt::Size aOldSize(aSize);
-                                        aPoint.X += aRefPoint.X;
-                                        if (aPoint.X > aRec.Right())
-                                            aPoint.X = aRec.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
-                                        aPoint.Y += aRefPoint.Y;
-                                        if (aPoint.Y > aRec.Bottom())
-                                            aPoint.Y = aRec.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
-                                        aSize.Width = aItr->nEndX - aPoint.X;
-                                        aSize.Height = aItr->nEndY - aPoint.Y;
-                                        aItr->xShape->setPosition(aPoint);
-                                        if( (aSize.Width != aOldSize.Width) ||
-                                            (aSize.Height != aOldSize.Height) )
-                                            aItr->xShape->setSize(aSize);
-                                        delete pRect;
+                                        if (aItr->xShape->getShapeType().equals(sConnectorShape))
+                                        {
+                                            //#103122#; handle connected Connectorshapes
+                                            uno::Reference<beans::XPropertySet> xShapeProps (aItr->xShape, uno::UNO_QUERY);
+                                            if(xShapeProps.is())
+                                            {
+                                                uno::Any aAny = xShapeProps->getPropertyValue(  sStartShape );
+                                                uno::Reference<drawing::XShape> xStartShape;
+                                                aAny >>= xStartShape;
+                                                aAny = xShapeProps->getPropertyValue( sEndShape );
+                                                uno::Reference<drawing::XShape> xEndShape;
+                                                aAny >>= xEndShape;
+                                                if (!xStartShape.is() && !xEndShape.is())
+                                                {
+                                                    awt::Size aOldSize(aSize);
+                                                    GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
+                                                    aItr->xShape->setPosition(aPoint);
+                                                    if( (aSize.Width != aOldSize.Width) ||
+                                                        (aSize.Height != aOldSize.Height) )
+                                                        aItr->xShape->setSize(aSize);
+                                                }
+                                                else if (xStartShape.is() && xEndShape.is())
+                                                {
+                                                    // do nothing, because they are connected
+                                                }
+                                                else
+                                                {
+                                                    // only one point is connected, the other should be removed
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            awt::Size aOldSize(aSize);
+                                            GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
+                                            aItr->xShape->setPosition(aPoint);
+                                            if( (aSize.Width != aOldSize.Width) ||
+                                                (aSize.Height != aOldSize.Height) )
+                                                aItr->xShape->setSize(aSize);
+                                        }
                                     }
                                     else
                                     {
-                                        if (aItr->xShape->getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))))
+                                        if (aItr->xShape->getShapeType().equals(sCaptionShape))
                                         {
                                             Rectangle aRectangle(aPoint.X, aPoint.Y, aPoint.X + aSize.Width, aPoint.Y + aSize.Height);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-01 18:55:57 $
+ *  last change: $Author: sab $ $Date: 2002-09-11 12:09:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 class ScXMLImport;
 class ScChartListenerCollection;
 class ScDocument;
+class Rectangle;
 
 struct ScMyToResizeShape
 {
@@ -103,6 +104,10 @@ class ScMyShapeResizer
     void CreateChartListener(ScDocument* pDoc,
         const rtl::OUString& rName,
         const rtl::OUString* pRangeList);
+    void GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rStartRect,
+                            const com::sun::star::table::CellAddress& rEndCell,
+                            com::sun::star::awt::Point& rPoint, com::sun::star::awt::Size& rSize,
+                            sal_Int32& rEndX, sal_Int32& rEndY) const;
 public:
     ScMyShapeResizer(ScXMLImport& rImport);
     ~ScMyShapeResizer();
