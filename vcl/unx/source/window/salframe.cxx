@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-22 15:43:15 $
+ *  last change: $Author: cp $ $Date: 2001-08-23 17:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1022,28 +1022,94 @@ void SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void    SalFrame::SetWindowState( const SalFrameState *pState )
+
+#define _FRAMESTATE_MASK_GEOMETRY \
+     (SAL_FRAMESTATE_MASK_X     | SAL_FRAMESTATE_MASK_Y |   \
+      SAL_FRAMESTATE_MASK_WIDTH | SAL_FRAMESTATE_MASK_HEIGHT)
+
+void
+SalFrame::SetWindowState( const SalFrameState *pState )
 {
-    int nWidth  = pState->mnWidth  > 0 ? pState->mnWidth  - 1 : 0 ;
-    int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0 ;
+    if (pState == NULL)
+        return;
 
-    Rectangle aPosSize = Rectangle( pState->mnX,
-                                    pState->mnY,
-                                    pState->mnX + nWidth,
-                                    pState->mnY + nHeight );
+    // demand correct positioning from the WM
+    XSizeHints  hints;
+    XSizeHints  supplied;
 
-    maFrameData.SetPosSize( aPosSize );
-
-    if( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
+    Display*    pDisplay = _GetXDisplay();
+    XLIB_Window hWindow  = maFrameData.GetShellWindow();
+    if( XGetWMNormalHints (pDisplay, hWindow, &hints, (long*)&supplied ) )
     {
-        maFrameData.nShowState_ = SHOWSTATE_NORMAL;
-        maFrameData.Maximize();
+        hints.flags         |= PWinGravity;
+        hints.win_gravity    = StaticGravity;
+        XSetWMNormalHints (pDisplay, hWindow, &hints );
+        XSync (pDisplay, False);
     }
-    if( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
+
+    // Request for position or size change
+    if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
     {
-        if ( maFrameData.nShowState_ == SHOWSTATE_UNKNOWN )
+        Rectangle aPosSize;
+
+        // initialize with current geometry
+        if ((pState->mnMask & _FRAMESTATE_MASK_GEOMETRY) != _FRAMESTATE_MASK_GEOMETRY)
+            maFrameData.GetPosSize (aPosSize);
+
+        // change requested properties
+        if (pState->mnMask & SAL_FRAMESTATE_MASK_X)
+        {
+            aPosSize.setX (pState->mnX);
+        }
+        if (pState->mnMask & SAL_FRAMESTATE_MASK_Y)
+        {
+            aPosSize.setY (pState->mnY);
+        }
+        if (pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH)
+        {
+            long nWidth = pState->mnWidth > 0 ? pState->mnWidth  - 1 : 0;
+            aPosSize.setWidth (nWidth);
+        }
+        if (pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT)
+        {
+            int nHeight = pState->mnHeight > 0 ? pState->mnHeight - 1 : 0;
+            aPosSize.setHeight (nHeight);
+        }
+
+        // resize with new args
+        if (maFrameData.pDisplay_->getWMAdaptor()->supportsICCCMPos())
+        {
+            maFrameData.SetPosSize( aPosSize );
+        }
+        else
+        {
+            SetClientSize (aPosSize.GetWidth(), aPosSize.GetHeight());
+        }
+    }
+
+    // request for status change
+    if (pState->mnMask & SAL_FRAMESTATE_MASK_STATE)
+    {
+        if (pState->mnState & SAL_FRAMESTATE_MAXIMIZED)
+        {
             maFrameData.nShowState_ = SHOWSTATE_NORMAL;
-        maFrameData.Minimize();
+            maFrameData.Maximize();
+        }
+        if (pState->mnState & SAL_FRAMESTATE_MINIMIZED)
+        {
+            if (maFrameData.nShowState_ == SHOWSTATE_UNKNOWN)
+                maFrameData.nShowState_ = SHOWSTATE_NORMAL;
+            maFrameData.Minimize();
+        }
+        if (pState->mnState & SAL_FRAMESTATE_NORMAL)
+        {
+            if (maFrameData.nShowState_ != SHOWSTATE_NORMAL)
+                maFrameData.Restore();
+        }
+        if (pState->mnState & SAL_FRAMESTATE_ROLLUP)
+        {
+            /* not implemented */
+        }
     }
 }
 
@@ -1053,23 +1119,35 @@ BOOL SalFrame::GetWindowState( SalFrameState* pState )
     if( SHOWSTATE_MINIMIZED == maFrameData.nShowState_ )
         pState->mnState = SAL_FRAMESTATE_MINIMIZED;
     else
-        pState->mnState = 0;
+        pState->mnState = SAL_FRAMESTATE_NORMAL;
 
     Rectangle aPosSize;
-    if( !maFrameData.aRestoreFullScreen_.IsEmpty() )
+    if (! maFrameData.aRestoreFullScreen_.IsEmpty() )
     {
         aPosSize = maFrameData.aRestoreFullScreen_;
         pState->mnState |= SAL_FRAMESTATE_MAXIMIZED;
     }
     else
+    {
         maFrameData.GetPosSize( aPosSize );
+    }
 
     pState->mnX      = aPosSize.Left();
     pState->mnY      = aPosSize.Top();
     pState->mnWidth  = aPosSize.GetWidth();
     pState->mnHeight = aPosSize.GetHeight();
 
+    pState->mnMask   = _FRAMESTATE_MASK_GEOMETRY | SAL_FRAMESTATE_MASK_STATE;
+
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// get a screenshot of the current frame including window manager decoration
+SalBitmap*
+SalFrame::SnapShot()
+{
+    return NULL;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -2055,7 +2133,7 @@ long SalFrameData::HandleKeyEvent( XKeyEvent *pEvent )
                     nKeySym  = XKeycodeToKeysym (pDisplay_->GetDisplay(),
                                                  pEvent->keycode, 0);
                     nKeyCode = pDisplay_->GetKeyCode(nKeySym, &aDummy);
-                    if (nKeyCode != 0)
+                    if ((nKeyCode != 0) && ((nKeyCode | nModCode) != aKeyEvt.mnCode))
                     {
                         aKeyEvt.mnCode = nKeyCode | nModCode;
                         Call(SALEVENT_KEYINPUT, &aKeyEvt);
@@ -2422,32 +2500,31 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
     nRight_     = wp - w - nLeft_;
     nBottom_    = hp - h - nTop_;
 
+    XSizeHints  hints;
+    XSizeHints  supplied;
+    if( XGetWMNormalHints( pEvent->display,
+                pEvent->window,
+                &hints,
+                (long*)&supplied ) )
+    {
+        if( hints.flags & PMaxSize ) // supplied
+        {
+            nMaxWidth_  = hints.max_width;
+            nMaxHeight_ = hints.max_height;
+            DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
+        }
+        hints.flags |= PWinGravity;
+        hints.win_gravity = StaticGravity;
+        XSetWMNormalHints( pEvent->display,
+                GetShellWindow(),
+                &hints );
+        XSync( pEvent->display, False );
+    }
+
     if( (aPosSize_.IsEmpty() || WindowNeedGoodPosition( XtWindow( hShell_ ) ) )
         && pDisplay_->GetProperties() & PROPERTY_FEATURE_Maximize )
     {
         nShowState_ = SHOWSTATE_NORMAL;
-
-        XSizeHints  hints;
-        long        supplied;
-        if( XGetWMNormalHints( pEvent->display,
-                               pEvent->window,
-                               &hints,
-                               &supplied ) )
-        {
-            if( hints.flags & PMaxSize ) // supplied
-            {
-                nMaxWidth_  = hints.max_width;
-                nMaxHeight_ = hints.max_height;
-                DBG_ASSERT( nMaxWidth_ && nMaxHeight_, "!MaxWidth^!MaxHeight" )
-            }
-            hints.flags |= PWinGravity;
-            hints.win_gravity = StaticGravity;
-            XSetWMNormalHints( pEvent->display,
-                               GetShellWindow(),
-                               &hints );
-            XSync( pEvent->display, False );
-        }
-
         Maximize();
         aRestoreFullScreen_ = aPosSize_;
     }
@@ -2654,8 +2731,8 @@ long SalFrameData::Dispatch( XEvent *pEvent )
                 break;
 
             case MapNotify:
-                if( pEvent->xmap.window == GetShellWindow() ||
-                    pEvent->xmap.window == GetWindow() )
+                if( pEvent->xmap.window == GetShellWindow() /* ||
+                    pEvent->xmap.window == GetWindow() */ )
                 {
                     bMapped_   = TRUE;
                     bViewable_ = TRUE;
