@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:48:14 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ turkish ] = "Alan tipi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo de campo";
+        Text[ finnish ] = "Kenttätyyppi";
     };
     RadioButton RBT_FIX
     {
@@ -123,6 +124,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ turkish ] = "Sabit";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~fijo";
+        Text[ finnish ] = "~Kiinteä";
     };
     RadioButton RBT_VAR
     {
@@ -151,6 +153,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ turkish ] = "Değişken";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~variable";
+        Text[ finnish ] = "~Muuttuja";
     };
     ListBox LB_FORMAT
     {
@@ -185,6 +188,7 @@ ModalDialog DLG_FIELD_MODIFY
         Text[ turkish ] = "Format";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "F~ormato";
+        Text[ finnish ] = "~Muotoile";
     };
     OKButton BTN_OK
     {
@@ -215,7 +219,7 @@ ModalDialog DLG_FIELD_MODIFY
     Text [ dutch ] = "Veldopdracht bewerken" ;
     Text [ portuguese ] = "Editar campos" ;
     Text[ chinese_simplified ] = "±à¼­×Ö¶ÎÖ¸Áî";
-    Text[ russian ] = "Èçìåíåíèå ïîëÿ";
+    Text[ russian ] = "Ïğàâêà ïîëÿ";
     Text[ polish ] = "Edytuj pole";
     Text[ japanese ] = "Ì¨°ÙÄŞºÏİÄŞ‚Ì•ÒW";
     Text[ chinese_traditional ] = "½s¿èÄæ¦ì«ü¥O";
@@ -225,4 +229,5 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ turkish ] = "Alan öğesini düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar campo";
+    Text[ finnish ] = "Muokkaa kenttää";
 };
