@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:34:30 $
+ *  last change: $Author: ama $ $Date: 2002-06-10 08:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2926,7 +2926,8 @@ SwDrawFrmFmt::~SwDrawFrmFmt()
 void SwDrawFrmFmt::MakeFrms()
 {
     SwDrawContact *pContact = (SwDrawContact*)FindContactObj();
-    pContact->ConnectToLayout();
+    if ( pContact )
+         pContact->ConnectToLayout();
 }
 
 void SwDrawFrmFmt::DelFrms()
