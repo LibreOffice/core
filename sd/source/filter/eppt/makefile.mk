@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sj $ $Date: 2000-11-03 18:03:34 $
+#   last change: $Author: sj $ $Date: 2000-11-10 08:18:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,6 +110,7 @@ SHL1STDLIBS = \
                 $(SVTOOLLIB)		\
                 $(VCLLIB)			\
                 $(UCBHELPERLIB)		\
+                $(UNOTOOLSLIB)		\
                 $(SVXLIB)
 
 # --- Targets --------------------------------------------------------------
