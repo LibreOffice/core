@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:30 $
+ *  last change: $Author: dbo $ $Date: 2002-11-07 15:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
 #include <com/sun/star/container/XSet.hpp>
@@ -125,6 +126,9 @@
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/uno/XUnloadingPreference.hpp>
+
+#define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
+
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -399,6 +403,57 @@ Any ServiceEnumeration_Impl::nextElement()
     return Any( &aFactories.getConstArray()[nIt++], ::getCppuType( (const Reference<XInterface > *)0 ) );
 }
 
+//==================================================================================================
+class PropertySetInfo_Impl : public WeakImplHelper1< beans::XPropertySetInfo >
+{
+    Sequence< beans::Property > m_properties;
+
+public:
+    inline PropertySetInfo_Impl( Sequence< beans::Property > const & properties ) SAL_THROW( () )
+        : m_properties( properties )
+        {}
+
+    // XPropertySetInfo impl
+    virtual Sequence< beans::Property > SAL_CALL getProperties()
+        throw (RuntimeException);
+    virtual beans::Property SAL_CALL getPropertyByName( OUString const & name )
+        throw (beans::UnknownPropertyException, RuntimeException);
+    virtual sal_Bool SAL_CALL hasPropertyByName( OUString const & name )
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+Sequence< beans::Property > PropertySetInfo_Impl::getProperties()
+    throw (RuntimeException)
+{
+    return m_properties;
+}
+//__________________________________________________________________________________________________
+beans::Property PropertySetInfo_Impl::getPropertyByName( OUString const & name )
+    throw (beans::UnknownPropertyException, RuntimeException)
+{
+    beans::Property const * p = m_properties.getConstArray();
+    for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
+    {
+        if (p[ nPos ].Name.equals( name ))
+            return p[ nPos ];
+    }
+    throw beans::UnknownPropertyException(
+        OUSTR("unknown property: ") + name, Reference< XInterface >() );
+}
+//__________________________________________________________________________________________________
+sal_Bool PropertySetInfo_Impl::hasPropertyByName( OUString const & name )
+    throw (RuntimeException)
+{
+    beans::Property const * p = m_properties.getConstArray();
+    for ( sal_Int32 nPos = m_properties.getLength(); nPos--; )
+    {
+        if (p[ nPos ].Name.equals( name ))
+            return sal_True;
+    }
+    return sal_False;
+}
+
+
 /*****************************************************************************
     Enumeration by implementation
 *****************************************************************************/
@@ -633,6 +688,8 @@ protected:
     virtual Sequence< Reference< XInterface > > queryServiceFactories(const OUString& aServiceName);
 
     Reference< XComponentContext >  m_xContext;
+
+    Reference< beans::XPropertySetInfo > m_xPropertyInfo;
 
     sal_Int32 m_nUnloadingListenerId;
 
@@ -1063,7 +1120,20 @@ void OServiceManager::dispose()
 Reference<XPropertySetInfo > OServiceManager::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return Reference<XPropertySetInfo >();
+    if (! m_xPropertyInfo.is())
+    {
+        Sequence< beans::Property > seq( 1 );
+        seq[ 0 ] = beans::Property(
+            OUSTR("DefaultContext"), -1, ::getCppuType( &m_xContext ), 0 );
+        Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
+
+        MutexGuard aGuard( m_mutex );
+        if (! m_xPropertyInfo.is())
+        {
+            m_xPropertyInfo = xInfo;
+        }
+    }
+    return m_xPropertyInfo;
 }
 
 void OServiceManager::setPropertyValue(
@@ -1601,6 +1671,8 @@ public:
     void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
     // OServiceManager
+    Reference<XPropertySetInfo > SAL_CALL getPropertySetInfo()
+        throw(::com::sun::star::uno::RuntimeException);
     Any SAL_CALL getPropertyValue(const OUString& PropertyName)
         throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
@@ -1856,6 +1928,28 @@ Reference<XEnumeration > ORegistryServiceManager::createContentEnumeration(const
 }
 
 // OServiceManager
+Reference<XPropertySetInfo > ORegistryServiceManager::getPropertySetInfo()
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    if (! m_xPropertyInfo.is())
+    {
+        Sequence< beans::Property > seq( 2 );
+        seq[ 0 ] = beans::Property(
+            OUSTR("DefaultContext"), -1, ::getCppuType( &m_xContext ), 0 );
+        seq[ 1 ] = beans::Property(
+            OUSTR("Registry"), -1, ::getCppuType( &m_xRegistry ),
+            beans::PropertyAttribute::READONLY );
+        Reference< beans::XPropertySetInfo > xInfo( new PropertySetInfo_Impl( seq ) );
+
+        MutexGuard aGuard( m_mutex );
+        if (! m_xPropertyInfo.is())
+        {
+            m_xPropertyInfo = xInfo;
+        }
+    }
+    return m_xPropertyInfo;
+}
+
 Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
     throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
