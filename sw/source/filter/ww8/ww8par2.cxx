@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 12:51:07 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3765,7 +3765,6 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->n81Flags = pj->n81Flags;
             pSI->n81BiDiFlags = pj->n81BiDiFlags;
             pSI->nOutlineLevel = pj->nOutlineLevel;
-            pSI->bInvisFlag = pj->bInvisFlag;
             pSI->bParaAutoBefore = pj->bParaAutoBefore;
             pSI->bParaAutoAfter = pj->bParaAutoAfter;
 
