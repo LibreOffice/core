@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregister.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:37:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #ifndef _SFXPOOLITEM_HXX
 #include <svtools/poolitem.hxx>
 #endif
+#ifndef SVX_CONTROLL_FUCUS_HELPER_HXX
+#include "ControlFocusHelper.hxx"
+#endif
+
 
 class SvLBoxEntry;
 namespace svx
@@ -93,7 +97,7 @@ namespace svx
     private:
         FixedText           aTypeText;
         FixedText           aPathText;
-        Control             aPathCtrl;
+        SvxControlFocusHelper   aPathCtrl;
         PushButton          m_aNew;
         PushButton          m_aEdit;
         PushButton          m_aDelete;
