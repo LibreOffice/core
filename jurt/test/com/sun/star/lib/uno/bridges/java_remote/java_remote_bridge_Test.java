@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-23 15:38:39 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,14 @@ import com.sun.star.comp.connections.PipedConnection;
 import com.sun.star.connection.XConnection;
 
 import com.sun.star.uno.IEnvironment;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
 
 import com.sun.star.lib.uno.environments.java.java_environment;
 import com.sun.star.lib.uno.environments.java.Proxy;
 
 import com.sun.star.lib.uno.environments.remote.IProtocol;
+
 
 
 public class java_remote_bridge_Test {
@@ -106,8 +108,7 @@ public class java_remote_bridge_Test {
         boolean passed = true;
 
 //          XInterface theProxy = (XInterface)__java_remote_bridge_B.mapInterfaceFrom("testinstance", XInterface.class); // map the instance back from oid world to Bs real world
-        XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", XInterface.class, true, false);
-
+        XInterface theProxy = (XInterface)Proxy.create(__java_remote_bridge_B, "testinstance", new Type(XInterface.class), true, false);
 
         TestInterface theProxy_TestInterfaces[] = new TestInterface[objects];
 

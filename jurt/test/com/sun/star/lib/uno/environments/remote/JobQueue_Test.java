@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,14 @@ package com.sun.star.lib.uno.environments.remote;
 
 import java.util.Vector;
 
-
 import java.io.IOException;
 import java.io.OutputStream;
 
+
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.uno.IEnvironment;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -96,7 +99,7 @@ public class JobQueue_Test {
             _passed = _passed && (((Integer)param).intValue() == _received_requestId);
 
             if(!_passed)
-                throw new NullPointerException("blblbl");
+                throw new NullPointerException("blblbl: " + param + " " + _received_requestId);
 
             ++ _received_requestId;
 
@@ -118,7 +121,7 @@ public class JobQueue_Test {
             ThreadPool.addThread(_context);
             Job job = new Job(this, new MyReceiver(null),      // receiver
                               new MyMessage(true,
-                                            MyInterface.class,
+                                            TypeDescription.getTypeDescription(MyInterface.class),
                                             UnoRuntime.generateOid(this),
                                             JavaThreadPool.getThreadId(Thread.currentThread()),
                                             this,
@@ -143,6 +146,7 @@ public class JobQueue_Test {
         }
     }
 
+    static Object __lock = new Object();
 
     // this is for testing dispose
     static class MyImpl2 implements MyInterface {
@@ -165,7 +169,7 @@ public class JobQueue_Test {
                     wait();   // wait for tester to tell us to leave
                 }
             }
-            catch(InterruptedException interruptedException) {
+              catch(InterruptedException interruptedException) {
                 result = true;
             }
 
@@ -204,13 +208,13 @@ public class JobQueue_Test {
 
 
 
-    static void sendAsyncJobs(int jobs, JobQueue jobQueue, MyReceiver myReceiver, ThreadID threadID, MyInterface myImpl, Object context) {
+    static void sendAsyncJobs(int jobs, JobQueue jobQueue, MyReceiver myReceiver, ThreadID threadID, MyInterface myImpl, Object context) throws Exception {
         // sending asynchrones calls
         System.err.println("\tsending " + jobs + " asynchrones calls...");
 
         for(int i = 0; i < jobs; ++ i) {
             MyMessage myMessage   = new MyMessage(false,
-                                                  MyInterface.class,
+                                                  TypeDescription.getTypeDescription(MyInterface.class),
                                                   UnoRuntime.generateOid(myImpl),
                                                   threadID,
                                                   myImpl,
@@ -229,7 +233,7 @@ public class JobQueue_Test {
 
         for(int i = 0; i < jobs; ++ i) {
             MyMessage myMessage   = new MyMessage(true,
-                                                  MyInterface.class,
+                                                  TypeDescription.getTypeDescription(MyInterface.class),
                                                   UnoRuntime.generateOid(myImpl),
                                                   threadID,
                                                   myImpl,
@@ -253,7 +257,7 @@ public class JobQueue_Test {
                 jobQueue.putJob(job_do, context);
 
                 myMessage   = new MyMessage(true,
-                                            MyInterface.class,
+                                            TypeDescription.getTypeDescription(MyInterface.class),
                                             UnoRuntime.generateOid(myImpl),
                                             threadID,
                                             myImpl,
@@ -355,7 +359,10 @@ public class JobQueue_Test {
         synchronized(myImpl) {
             sendAsyncJobs(1, jobQueue, myReceiver, threadID, myImpl, context);
             myImpl.wait();
+            myImpl.notify();
+
             jobQueue.interrupt(context);
+
             myImpl.notify();
             myImpl.wait();
         }
@@ -364,8 +371,11 @@ public class JobQueue_Test {
         synchronized(myImpl) {
             sendSyncJobs(1, jobQueue, myReceiver, threadID, myImpl, null, context, false);
             myImpl.wait();
-            jobQueue.interrupt(context);
             myImpl.notify();
+
+            jobQueue.interrupt(context);
+
+              myImpl.notify();
             myImpl.wait();
         }
 
@@ -398,7 +408,17 @@ public class JobQueue_Test {
     }
 
     static public void main(String args[]) throws Exception {
-        test(null);
+        if(args.length == 0)
+            test(null);
+
+        else if(args[0].equals("test_disposing"))
+            test_disposing();
+
+        else if(args[0].equals("test_without_thread"))
+            test_without_thread();
+
+        else if(args[0].equals("test_with_thread"))
+            test_with_thread();
     }
 }
 

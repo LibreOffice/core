@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-01-17 10:06:35 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,10 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 
+import com.sun.star.lib.uno.typedesc.TypeDescription;
+
 import com.sun.star.uno.IEnvironment;
+import com.sun.star.uno.Type;
 import com.sun.star.uno.UnoRuntime;
 
 
@@ -188,7 +191,7 @@ public class ThreadPool_Test {
 
         for(int i = 0; i < jobs; ++ i) {
             MyMessage myMessage = new MyMessage(synchron,
-                                                MyInterface.class,
+                                                TypeDescription.getTypeDescription(MyInterface.class),
                                                 UnoRuntime.generateOid(myImpl),
                                                 threadID,
                                                 myImpl,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment_Test.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2000-09-28 11:34:31 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 10:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package com.sun.star.lib.uno.environments.java;
 import java.util.Vector;
 
 
+import com.sun.star.uno.Type;
 import com.sun.star.uno.XInterface;
 
 
@@ -79,22 +80,22 @@ public class java_environment_Test {
         String oid[] = new String[1];
 
         System.err.println("\tregistering ordinary interface twice...");
-        Object obj2 = env.registerInterface(obj, oid, XInterface.class);
-        Object obj3 = env.registerInterface(obj, oid, XInterface.class);
+        Object obj2 = env.registerInterface(obj, oid, new Type(XInterface.class));
+        Object obj3 = env.registerInterface(obj, oid, new Type(XInterface.class));
 
         passed = passed && (obj == obj2) && (obj == obj3);
 
 //          env.list();
 
         System.err.println("\tasking for registered interface...");
-        passed = passed && (obj == env.getRegisteredInterface(oid[0], XInterface.class));
+        passed = passed && (obj == env.getRegisteredInterface(oid[0], new Type(XInterface.class)));
 
 
         System.err.println("\trevoking interface...");
-        env.revokeInterface(oid[0], XInterface.class);
-        env.revokeInterface(oid[0], XInterface.class);
+        env.revokeInterface(oid[0], new Type(XInterface.class));
+        env.revokeInterface(oid[0], new Type(XInterface.class));
 
-        passed = passed && (null == env.getRegisteredInterface(oid[0], XInterface.class));
+        passed = passed && (null == env.getRegisteredInterface(oid[0], new Type(XInterface.class)));
 
         System.err.println("java_environment - tests passed? " + passed);
 
