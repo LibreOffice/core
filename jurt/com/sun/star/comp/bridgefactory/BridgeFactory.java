@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2000-11-27 11:32:40 $
+ *  last change: $Author: tpf $ $Date: 2000-12-07 19:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.4 $ $ $Date: 2000-11-27 11:32:40 $
+ * @version     $Revision: 1.5 $ $ $Date: 2000-12-07 19:10:03 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
@@ -207,8 +207,12 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             if(xBridge != null) {
                 if(xBridge.getName().equals(sName))
                     break;
+
+                else
+                    xBridge = null;
             }
         }
+
 
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".getBridge:" + sName + " " + xBridge);
 
