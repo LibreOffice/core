@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 10:26:11 $
+ *  last change: $Author: os $ $Date: 2002-08-30 12:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@
 #define HID_MULTI_TOX_DLG           (HID_BASE + 305)
 #define HID_ASCII_FILTER            (HID_BASE + 306)
 #define HID_GLBLTREE_EDIT_LINK      (HID_BASE + 307)
+#define HID_FORMAT_NAME_OBJECT_NAME (HID_BASE + 308)// #100286#
 
 // TabPage Help-IDs *********************************************************
 

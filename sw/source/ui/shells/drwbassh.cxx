@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2002-04-04 11:42:02 $
+ *  last change: $Author: os $ $Date: 2002-08-30 12:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#include <helpid.h>
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
 #endif
@@ -560,6 +561,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             sName = pObj->GetName();
             SvxNameDialog* pDlg = new SvxNameDialog( NULL, sName, sDesc );
             pDlg->SetText(SW_RESSTR(STR_NAME_GROUP_DIALOG));
+            // #100286# -------------
+            pDlg->SetEditHelpId( HID_FORMAT_NAME_OBJECT_NAME );
             pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
             if( pDlg->Execute() == RET_OK )
             {
