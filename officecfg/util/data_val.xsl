@@ -3,9 +3,9 @@
  *
  *  $RCSfile: data_val.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:39:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:49:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,24 +78,67 @@
 
 <xsl:variable name="schemaRootURL"><xsl:value-of select="filehelper:makeAbs($schemaRoot)"/></xsl:variable>
 <xsl:variable name="schemaURL"><xsl:value-of select="filehelper:makeAbs($xcs)"/></xsl:variable>
-<xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
 
 <!-- ************************************** -->
 <!-- * oor:component-data							*** -->
 <!-- ************************************** -->
 	<xsl:template match="/oor:component-data">		
+        <xsl:variable name="component-schema" select="document($schemaURL)/oor:component-schema"/>
 		<xsl:for-each select="node|prop">
 			<xsl:apply-templates select=".">				
 				<xsl:with-param name="context" select="$component-schema/component/*[@oor:name = current()/@oor:name]"/>							
+				<xsl:with-param name="component-schema" select="$component-schema"/>							
 			</xsl:apply-templates>
 		</xsl:for-each>				
 	</xsl:template>
 
 <!-- ****************************************** -->
+<!-- * handle template references           *** -->
+<!-- ****************************************** -->
+	<xsl:template name="resolve-template">
+		<xsl:param name = "node-type"/>
+		<xsl:param name = "schema-type"/>
+		<xsl:param name = "component-schema"/>
+		<xsl:variable name = "path">
+			<xsl:call-template name="collectPath"/>
+		</xsl:variable>
+		
+		<xsl:if test="not ($component-schema)">
+			<xsl:message terminate="yes">ERROR: Template '<xsl:value-of select="$node-type"/>', 
+                                         referenced from node '<xsl:value-of select="$path"/>' 
+                                         does not exist in schema!
+            </xsl:message>
+		</xsl:if>
+
+        <xsl:choose>
+            <xsl:when test="$schema-type='node-ref'">
+                <xsl:apply-templates select=".">				
+                    <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>																					
+                    <xsl:with-param name="component-schema" select="$component-schema"/>							
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:when test="$schema-type='set'">
+                <xsl:for-each select="node|prop">						
+                    <xsl:apply-templates select=".">				
+                        <xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $node-type]"/>																					
+                        <xsl:with-param name="component-schema" select="$component-schema"/>							
+                    </xsl:apply-templates>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="true">ERROR: The schema element for node <xsl:value-of select="$path"/>
+                                              is a <xsl:value-of select="$schema-type"/> and should not have a node-type.
+                </xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+<!-- ****************************************** -->
 <!-- * node									*** -->
 <!-- ****************************************** -->
 	<xsl:template match="node">
 		<xsl:param name = "context"/>
+		<xsl:param name = "component-schema"/>
 		<xsl:variable name = "path">
 			<xsl:call-template name="collectPath"/>
 		</xsl:variable>
@@ -113,25 +156,26 @@
 					</xsl:call-template>
 				</xsl:variable>
 
-				<xsl:for-each select="node|prop">						
-					<xsl:apply-templates select=".">				
-						<xsl:with-param name="context" select="document($fileURL)/oor:component-schema/templates/*[@oor:name = $context/@oor:node-type]"/>																					
-					</xsl:apply-templates>
-				</xsl:for-each>
+                <xsl:call-template name="resolve-template">
+                    <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
+                    <xsl:with-param name="schema-type" select="local-name($context)"/>
+                    <xsl:with-param name="component-schema" select="document($fileURL)/oor:component-schema"/>
+                </xsl:call-template>
 			</xsl:when>
 			<!-- look for matching templates within the same component -->
 			<xsl:when test="$context/@oor:node-type">
-				<xsl:for-each select="node|prop">						
-					<xsl:apply-templates select=".">				
-						<xsl:with-param name="context" select="$component-schema/templates/*[@oor:name = $context/@oor:node-type]"/>																					
-					</xsl:apply-templates>
-				</xsl:for-each>
+                <xsl:call-template name="resolve-template">
+                    <xsl:with-param name="node-type" select="$context/@oor:node-type"/>
+                    <xsl:with-param name="schema-type" select="local-name($context)"/>
+                    <xsl:with-param name="component-schema" select="$component-schema"/>
+                </xsl:call-template>
 			</xsl:when>
 			<!-- is the node extensible ? -->
 			<xsl:when test="$context/@oor:extensible='true'">
-				<xsl:for-each select="prop">						
+				<xsl:for-each select="node|prop">						
 					<xsl:apply-templates select="." mode="extensible">				
 					    <xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>																					
+                        <xsl:with-param name="component-schema" select="$component-schema"/>							
 				    </xsl:apply-templates>
 				</xsl:for-each>
 			</xsl:when>
@@ -139,6 +183,7 @@
 				<xsl:for-each select="node|prop">						
 					<xsl:apply-templates select=".">				
 						<xsl:with-param name="context" select="$context/*[@oor:name = current()/@oor:name]"/>																					
+                        <xsl:with-param name="component-schema" select="$component-schema"/>							
 					</xsl:apply-templates>
 				</xsl:for-each>
 			</xsl:otherwise>
@@ -164,6 +209,16 @@
 		
 	</xsl:template>
 
+<!-- ****************************************** -->
+<!-- * node (mode:extensible) - not supported * -->
+<!-- ****************************************** -->
+	<xsl:template match="node" mode="extensible">
+		<xsl:variable name = "path">
+			<xsl:call-template name="collectPath"/>
+		</xsl:variable>
+
+        <xsl:message terminate="yes">ERROR: Node '<xsl:value-of select="$path"/>' is within an extensible node!</xsl:message>
+    </xsl:template>
 <!-- ****************************************** -->
 <!-- * prop (mode:extensible)				*** -->
 <!-- ****************************************** -->
