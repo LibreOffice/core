@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Toolkit.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:03:16 $
+ *  last change:$Date: 2004-01-05 20:42:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,19 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.FormTools;
-import util.SOfficeFactory;
-import util.WriterTools;
-import util.utils;
 
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XWindow;
@@ -84,44 +72,60 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.view.XControlAccess;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.FormTools;
+import util.SOfficeFactory;
+import util.WriterTools;
+import util.utils;
+
+
 /**
 * Test for <code>com.sun.star.awt.Toolkit</code> service.
 */
 public class Toolkit extends TestCase {
-
     XTextDocument xTextDoc;
 
-    protected void initialize ( TestParameters Param, PrintWriter log) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+    protected void initialize(TestParameters Param, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) Param.getMSF());
 
         try {
-            log.println( "creating a textdocument" );
-            xTextDoc = SOF.createTextDoc( null );
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a textdocument");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xTextDoc " );
-        xTextDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xTextDoc ");
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
     * Creating a Testenvironment for the interfaces to be tested.
     * Creates <code>com.sun.star.awt.Toolkit</code> service.
     */
-    public TestEnvironment createTestEnvironment( TestParameters Param,
-                                                  PrintWriter log )
-                                                    throws StatusException {
+    public TestEnvironment createTestEnvironment(TestParameters Param,
+                                                 PrintWriter log)
+                                          throws StatusException {
         XInterface oObj = null;
         XWindowPeer the_win = null;
-        XWindow win = null ;
+        XWindow win = null;
+
         //Insert a ControlShape and get the ControlModel
-        XControlShape aShape = FormTools.createControlShape(
-                                xTextDoc,3000,4500,15000,10000,"CommandButton");
+        XControlShape aShape = FormTools.createControlShape(xTextDoc, 3000,
+                                                            4500, 15000, 10000,
+                                                            "CommandButton");
 
         WriterTools.getDrawPage(xTextDoc).add((XShape) aShape);
 
@@ -129,35 +133,39 @@ public class Toolkit extends TestCase {
 
         //Try to query XControlAccess
         XControlAccess the_access = (XControlAccess) UnoRuntime.queryInterface(
-                        XControlAccess.class,xTextDoc.getCurrentController());
+                                            XControlAccess.class,
+                                            xTextDoc.getCurrentController());
         XController cntrlr = (XController) UnoRuntime.queryInterface(
-                        XController.class,xTextDoc.getCurrentController());
+                                     XController.class,
+                                     xTextDoc.getCurrentController());
 
         //now get the toolkit
         try {
             win = cntrlr.getFrame().getContainerWindow();
+
+
             //win = (XWindow) UnoRuntime.queryInterface(XWindow.class, ctrl) ;
             the_win = the_access.getControl(the_Model).getPeer();
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        log.println( "    creating a new environment for toolkit object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("    creating a new environment for toolkit object");
 
-        log.println("Implementation Name: "+utils.getImplName(oObj));
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("WINPEER",the_win);
+        log.println("Implementation Name: " + utils.getImplName(oObj));
+
+        tEnv.addObjRelation("WINPEER", the_win);
+
 
         // adding relation for XDataTransferProviderAccess
-        tEnv.addObjRelation("XDataTransferProviderAccess.XWindow", win) ;
+        tEnv.addObjRelation("XDataTransferProviderAccess.XWindow", win);
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class Toolkit
-
+} // finish class Toolkit
