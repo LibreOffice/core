@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPluginWindowPeer.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:17:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 /** Allows to notify a plugin from the office side about plugin window's child window creation.
     This interface is oriented for communication with browsers plugins.
  */
-interface XPluginWindowPeer: com::sun::star::uno::XInterface
+published interface XPluginWindowPeer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
