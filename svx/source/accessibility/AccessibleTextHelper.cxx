@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-02 11:32:41 $
+ *  last change: $Author: thb $ $Date: 2002-08-13 11:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,12 +795,12 @@ namespace accessibility
                     aNewRect.Width != aOldRect.Width ||
                     aNewRect.Height != aOldRect.Height )
                 {
-                    // update bounds
+                    // visible data changed
+                    aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT );
+
+                    // update internal bounds
                     return accessibility::AccessibleParaManager::WeakChild( rChild.first, aNewRect );
                 }
-
-                // visible data changed
-                aHardRef->FireEvent( AccessibleEventId::ACCESSIBLE_BOUNDRECT_EVENT );
             }
 
             // identity transform
@@ -943,9 +943,6 @@ namespace accessibility
             // move successors of inserted paragraph one position further
             //maParaManager.MoveRightFrom( pTextHint->GetValue() );
 
-            // release everything from the insertion position until the end
-            maParaManager.Release(nFirst, nLast+1);
-
             // send CHILD_EVENT to affected children
             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
             ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
@@ -958,6 +955,10 @@ namespace accessibility
             // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
             AccessibleTextHelper_LostChildEvent aFunctor( *this );
             ::std::for_each( begin, end, aFunctor );
+
+            // release everything from the insertion position until the end
+            // #102235# Perform the release after the CHILD_EVENT notification
+            maParaManager.Release(nFirst, nLast+1);
         }
     }
 
@@ -974,9 +975,6 @@ namespace accessibility
         // move successors of removed paragraph one position closer
         // maParaManager.MoveLeftFrom( pTextHint->GetValue() );
 
-        // release everything from the remove position until the end
-        maParaManager.Release(nFirst, nLast+1);
-
         // send CHILD_EVENT to affected children
         ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator begin = maParaManager.begin();
         ::accessibility::AccessibleParaManager::VectorOfChildren::const_iterator end = begin;
@@ -989,6 +987,10 @@ namespace accessibility
         // use ACCESSIBLE_ALL_CHILDREN_CHANGED_EVENT
         AccessibleTextHelper_LostChildEvent aFunctor( *this );
         ::std::for_each( begin, end, aFunctor );
+
+        // release everything from the remove position until the end
+        // #102235# Perform the release after the CHILD_EVENT notification
+        maParaManager.Release(nFirst, nLast+1);
 
         // resize child vector to the current child count
         maParaManager.SetNum( nParas );
