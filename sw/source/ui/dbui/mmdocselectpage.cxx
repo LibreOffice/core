@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:15:13 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 13:39:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
             }
 
-            if( pFlt->GetUserData().EqualsAscii( FILTER_XML ))
+            if( pFlt->GetUserData().EqualsAscii( GetFILTER_XML() ))
                 xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
 
             pFlt = aIter.Next();
