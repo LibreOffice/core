@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:09:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:15:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include "globstr.hrc"
 #ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
+#include "hints.hxx"
 #endif
 #ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
@@ -101,6 +102,8 @@
 #endif
 
 using namespace com::sun::star;
+
+SV_IMPL_PTRARR( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr );
 
 //------------------------------------------------------------------------
 
@@ -153,11 +156,13 @@ const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
     {
         {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0},
         {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0},
+        {MAP_CHAR_LEN(SC_UNONAME_FROMSELECT),0,  &getBooleanCppuType(),                      0},
         {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),                      0},
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0},
+        {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD), 0, &getCppuType((sal_Int32*)0),                0},
         {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0},
         {MAP_CHAR_LEN(SC_UNONAME_USEFLTCRT),0,  &getBooleanCppuType(),                      0},
         {0,0,0,0}
@@ -266,7 +271,7 @@ void ScImportDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rS
     pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_SRCOBJ );
     pArray[2].Value <<= rtl::OUString( rParam.aStatement );
 
-    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_NATIVE );
+    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_ISNATIVE );
     ScUnoHelpFunctions::SetBoolInAny( pArray[3].Value, rParam.bNative );
 }
 
@@ -280,7 +285,7 @@ void ScImportDescriptor::FillImportParam( ScImportParam& rParam, const uno::Sequ
         const beans::PropertyValue& rProp = pPropArray[i];
         String aPropName = rProp.Name;
 
-        if (aPropName.EqualsAscii( SC_UNONAME_NATIVE ))
+        if (aPropName.EqualsAscii( SC_UNONAME_ISNATIVE ))
             rParam.bNative = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName.EqualsAscii( SC_UNONAME_DBNAME ))
         {
@@ -1489,10 +1494,18 @@ ScDatabaseRangeObj::~ScDatabaseRangeObj()
 
 void ScDatabaseRangeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    //  Ref-Update interessiert nicht
 
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // ungueltig geworden
+    else if ( rHint.ISA (ScDBRangeRefreshedHint) )
+    {
+        ScDBData* pDBData = GetDBData_Impl();
+        const ScDBRangeRefreshedHint& rRef = (const ScDBRangeRefreshedHint&)rHint;
+        ScImportParam aParam;
+        pDBData->GetImportParam(aParam);
+        if (aParam == rRef.GetImportParam())
+            Refreshed_Impl();
+    }
 }
 
 // Hilfsfuntionen
@@ -1786,6 +1799,8 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScDatabaseRangeObj::getImportDescri
     return aSeq;
 }
 
+// XRefreshable
+
 void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -1810,6 +1825,47 @@ void SAL_CALL ScDatabaseRangeObj::refresh() throw(uno::RuntimeException)
         if (bContinue)
             aFunc.RepeatDB( pData->GetName(), TRUE, TRUE );
     }
+}
+
+void SAL_CALL ScDatabaseRangeObj::addRefreshListener(
+                                const uno::Reference<util::XRefreshListener >& xListener )
+                                                throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference<util::XRefreshListener>* pObj =
+            new uno::Reference<util::XRefreshListener>( xListener );
+    aRefreshListeners.Insert( pObj, aRefreshListeners.Count() );
+
+    //  hold one additional ref to keep this object alive as long as there are listeners
+    if ( aRefreshListeners.Count() == 1 )
+        acquire();
+}
+
+void SAL_CALL ScDatabaseRangeObj::removeRefreshListener(
+                                const uno::Reference<util::XRefreshListener >& xListener )
+                                                throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    USHORT nCount = aRefreshListeners.Count();
+    for ( USHORT n=nCount; n--; )
+    {
+        uno::Reference<util::XRefreshListener>* pObj = aRefreshListeners[n];
+        if ( *pObj == xListener )
+        {
+            aRefreshListeners.DeleteAndDestroy( n );
+            if ( aRefreshListeners.Count() == 0 )
+                release();                          // release ref for listeners
+            break;
+        }
+    }
+}
+
+void ScDatabaseRangeObj::Refreshed_Impl()
+{
+    lang::EventObject aEvent;
+    aEvent.Source = (cppu::OWeakObject*)this;
+    for ( USHORT n=0; n<aRefreshListeners.Count(); n++ )
+        (*aRefreshListeners[n])->refreshed( aEvent );
 }
 
 // XCellRangeSource
@@ -1905,6 +1961,24 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
                 aNewData.SetAdvancedQuerySource(&aCoreRange);
             }
         }
+        else if (aString.EqualsAscii( SC_UNONAME_FROMSELECT ))
+        {
+            aNewData.SetImportSelection(::cppu::any2bool(aValue));
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_REFPERIOD ))
+        {
+            sal_Int32 nRefresh;
+            if (aValue >>= nRefresh)
+            {
+                ScDocument* pDoc = pDocShell->GetDocument();
+                aNewData.SetRefreshDelay(nRefresh);
+                if (pDoc && pDoc->GetDBCollection())
+                {
+                    aNewData.SetRefreshHandler( pDoc->GetDBCollection()->GetRefreshHandler() );
+                    aNewData.SetRefreshControl( pDoc->GetRefreshTimerControlAddress() );
+                }
+            }
+        }
         else
             bDo = FALSE;
 
@@ -1966,6 +2040,15 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
                 ScUnoConversion::FillApiRange(aRange, aCoreRange);
 
             aRet <<= aRange;
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_FROMSELECT ))
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, GetDBData_Impl()->HasImportSelection() );
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_REFPERIOD ))
+        {
+            sal_Int32 nRefresh(GetDBData_Impl()->GetRefreshDelay());
+            aRet <<= nRefresh;
         }
     }
     return aRet;
