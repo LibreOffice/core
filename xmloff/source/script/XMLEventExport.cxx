@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEventExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:32 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,5 +357,10 @@ const XMLEventNameTranslation aStandardEventTable[] =
     { "OnToggleFullscreen", "on-toggle-fullscreen" },
     { "OnSaveDone",         "on-save-done" },
     { "OnSaveAsDone",       "on-save-as-done" },
+    { "OnCopyTo",           "on-copy-to" },
+    { "OnCopyToDone",       "on-copy-to-done" },
+    { "OnViewCreated",      "on-view-created" },
+    { "OnPrepareViewClosing", "on-prepare-view-closing" },
+    { "OnViewClosed",       "on-view-close" },
     { NULL, NULL }
 };
