@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:22:41 $
+ *  last change: $Author: os $ $Date: 2001-05-10 10:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text = "H~ilfslinien beim ~Verschieben" ;
+        Text = "H~ilfslinien beim Verschieben" ;
         Text [ ENGLISH ] = "Guides while moving" ;
         Text[ english_us ] = "Guides ~while moving";
         Text[ portuguese ] = "Guias ao mover";
