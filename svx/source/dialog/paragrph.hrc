@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-04-18 12:41:56 $
+ *  last change: $Author: os $ $Date: 2002-05-27 10:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,11 @@
 
 #define CB_REGISTER                     84
 #define FL_REGISTER                     85
+#define ST_LEFTINDENT_ASIAN             86
+#define ST_RIGHTINDENT_ASIAN            87
+#define ST_TOPSPACE_ASIAN               88
+#define ST_BOTTOMSPACE_ASIAN            89
+
 
 //asian typography
 #define FL_AS_OPTIONS                   1
