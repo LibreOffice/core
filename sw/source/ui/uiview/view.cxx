@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:49:45 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
+#endif
+#ifndef _SVX_EXTRUSION_BAR_HXX
+#include <svx/extrusionbar.hxx>
 #endif
 
 #ifndef _UNOTXVW_HXX
@@ -464,6 +467,11 @@ void SwView::SelectShell()
         else if ( nSelectionType & SwWrtShell::SEL_DRW )
         {
             eShellMode = SEL_DRAW;
+
+            pShell = new svx::ExtrusionBar( this );
+            SetShell( pShell );
+            rDispatcher.Push( *pShell );
+
             pShell = new SwDrawShell( *this );
 
             rDispatcher.Push( *pShell );
