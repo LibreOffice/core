@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-10 08:16:15 $
+ *  last change: $Author: oj $ $Date: 2002-08-13 11:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3609,7 +3609,8 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
 {
     ReusableMutexGuard aGuard(m_aMutex);
     // do we have to remove the multiplex ?
-    if (m_aRowSetApproveListeners.getLength() == 1)
+    m_aRowSetApproveListeners.removeInterface(_rListener);
+    if ( m_aRowSetApproveListeners.getLength() == 0 )
     {
         Reference<XRowSetApproveBroadcaster>  xBroadcaster;
         if (query_aggregation( m_xAggregate, xBroadcaster))
@@ -3618,7 +3619,6 @@ void SAL_CALL ODatabaseForm::removeRowSetApproveListener(const Reference<XRowSet
             xBroadcaster->removeRowSetApproveListener(xListener);
         }
     }
-    m_aRowSetApproveListeners.removeInterface(_rListener);
 }
 
 //==============================================================================
