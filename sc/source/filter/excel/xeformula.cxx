@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:02:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,8 +318,7 @@ public:
     /** Creates a single error token containing the passed error code. */
     XclExpTokenArrayRef CreateErrorFormula( sal_uInt8 nErrCode );
     /** Creates a single token for a special cell reference. */
-    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    XclExpTokenArrayRef CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos );
     /** Creates a single tNameXR token for a reference to an external name. */
     XclExpTokenArrayRef CreateNameXFormula( sal_uInt16 nExtSheet, sal_uInt16 nExtName );
 
@@ -391,12 +390,9 @@ private:
     bool                IsRef2D( const SingleRefData& rRefData ) const;
     bool                IsRef2D( const ComplRefData& rRefData ) const;
 
-    void                ConvertRefData( SingleRefData& rRefData,
-                            sal_uInt16& rnXclCol, sal_uInt16& rnXclRow,
+    void                ConvertRefData( SingleRefData& rRefData, XclAddress& rXclPos,
                             bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const;
-    void                ConvertRefData( ComplRefData& rRefData,
-                            sal_uInt16& rnFirstXclCol, sal_uInt16& rnFirstXclRow,
-                            sal_uInt16& rnLastXclCol, sal_uInt16& rnLastXclRow,
+    void                ConvertRefData( ComplRefData& rRefData, XclRange& rXclRange,
                             bool bNatLangRef ) const;
 
     XclExpRefLogEntry*  GetNewRefLogEntry();
@@ -428,9 +424,8 @@ private:
     void                Append( double fData );
     void                Append( const String& rString );
 
-    void                AppendAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow );
-    void                AppendRange( sal_uInt16 nFirstXclCol, sal_uInt16 nFirstXclRow,
-                            sal_uInt16 nLastXclCol, sal_uInt16 nLastXclRow );
+    void                AppendAddress( const XclAddress& rXclPos );
+    void                AppendRange( const XclRange& rXclRange );
 
     void                AppendSpaceToken( sal_uInt8 nType, sal_uInt8 nCount );
     void                AppendIntToken( sal_uInt16 nValue, sal_uInt8 nSpaces = 0 );
@@ -545,13 +540,12 @@ XclExpTokenArrayRef XclExpFmlaCompImpl::CreateErrorFormula( sal_uInt8 nErrCode )
     return CreateTokenArray();
 }
 
-XclExpTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula(
-        sal_uInt8 nTokenId, sal_uInt16 nXclCol, sal_uInt16 nXclRow )
+XclExpTokenArrayRef XclExpFmlaCompImpl::CreateSpecialRefFormula( sal_uInt8 nTokenId, const XclAddress& rXclPos )
 {
     Init( EXC_FMLATYPE_NAME );
     AppendOpTokenId( nTokenId, EXC_TOKCLASS_NONE );
-    Append( nXclRow );
-    Append( nXclCol );
+    Append( rXclPos.mnRow );
+    Append( rXclPos.mnCol );    // do not use AppendAddress(), we always need 16-bit column here
     return CreateTokenArray();
 }
 
@@ -1515,7 +1509,7 @@ bool XclExpFmlaCompImpl::IsRef2D( const ComplRefData& rRefData ) const
 }
 
 void XclExpFmlaCompImpl::ConvertRefData(
-    SingleRefData& rRefData, sal_uInt16& rnXclCol, sal_uInt16& rnXclRow,
+    SingleRefData& rRefData, XclAddress& rXclPos,
     bool bNatLangRef, bool bTruncMaxCol, bool bTruncMaxRow ) const
 {
     if( mpScBasePos )
@@ -1529,7 +1523,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
             rnScCol = mnMaxAbsCol;
         else if( (rnScCol < 0) || (rnScCol > mnMaxAbsCol) )
             rRefData.SetColDeleted( TRUE );
-        rnXclCol = static_cast< sal_uInt16 >( rnScCol ) & mnMaxColMask;
+        rXclPos.mnCol = static_cast< sal_uInt16 >( rnScCol ) & mnMaxColMask;
 
         // convert row index
         SCsROW& rnScRow = rRefData.nRow;
@@ -1537,7 +1531,7 @@ void XclExpFmlaCompImpl::ConvertRefData(
             rnScRow = mnMaxAbsRow;
         else if( (rnScRow < 0) || (rnScRow > mnMaxAbsRow) )
             rRefData.SetRowDeleted( TRUE );
-        rnXclRow = static_cast< sal_uInt16 >( rnScRow ) & mnMaxRowMask;
+        rXclPos.mnRow = static_cast< sal_uInt16 >( rnScRow ) & mnMaxRowMask;
     }
     else
     {
@@ -1545,37 +1539,36 @@ void XclExpFmlaCompImpl::ConvertRefData(
 
         // convert column index (2-step-cast ScsCOL->sal_Int16->sal_uInt16 to get all bits correctly)
         sal_Int16 nXclRelCol = static_cast< sal_Int16 >( rRefData.IsColRel() ? rRefData.nRelCol : rRefData.nCol );
-        rnXclCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
+        rXclPos.mnCol = static_cast< sal_uInt16 >( nXclRelCol ) & mnMaxColMask;
 
         // convert row index (2-step-cast ScsROW->sal_Int16->sal_uInt16 to get all bits correctly)
         sal_Int16 nXclRelRow = static_cast< sal_Int16 >( rRefData.IsRowRel() ? rRefData.nRelRow : rRefData.nRow );
-        rnXclRow = static_cast< sal_uInt16 >( nXclRelRow ) & mnMaxRowMask;
+        rXclPos.mnRow = static_cast< sal_uInt16 >( nXclRelRow ) & mnMaxRowMask;
     }
 
     // flags for relative column and row
     if( bNatLangRef )
     {
-        DBG_ASSERT( meBiff >= xlBiff8, "XclExpFmlaCompImpl::ConvertRefData - NLRs only for BIFF8" );
+        DBG_ASSERT( meBiff == EXC_BIFF8, "XclExpFmlaCompImpl::ConvertRefData - NLRs only for BIFF8" );
         // Calc does not support absolute reference mode in natural language references
-        ::set_flag( rnXclCol, EXC_TOK_EXT_NATREL );
+        ::set_flag( rXclPos.mnCol, EXC_TOK_EXT_NATREL );
     }
     else
     {
-        sal_uInt16& rnRelField = (meBiff <= xlBiff7) ? rnXclRow : rnXclCol;
+        sal_uInt16& rnRelField = (meBiff <= EXC_BIFF5) ? rXclPos.mnRow : rXclPos.mnCol;
         ::set_flag( rnRelField, EXC_TOK_REF_COLREL, rRefData.IsColRel() );
         ::set_flag( rnRelField, EXC_TOK_REF_ROWREL, rRefData.IsRowRel() );
     }
 }
 
-void XclExpFmlaCompImpl::ConvertRefData( ComplRefData& rRefData,
-        sal_uInt16& rnFirstXclCol, sal_uInt16& rnFirstXclRow,
-        sal_uInt16& rnLastXclCol, sal_uInt16& rnLastXclRow, bool bNatLangRef ) const
+void XclExpFmlaCompImpl::ConvertRefData(
+        ComplRefData& rRefData, XclRange& rXclRange, bool bNatLangRef ) const
 {
     // convert start and end of the range
-    ConvertRefData( rRefData.Ref1, rnFirstXclCol, rnFirstXclRow, bNatLangRef, false, false );
+    ConvertRefData( rRefData.Ref1, rXclRange.maFirst, bNatLangRef, false, false );
     bool bTruncMaxCol = !rRefData.Ref1.IsColDeleted() && (rRefData.Ref1.nCol == 0);
     bool bTruncMaxRow = !rRefData.Ref1.IsRowDeleted() && (rRefData.Ref1.nRow == 0);
-    ConvertRefData( rRefData.Ref2, rnLastXclCol, rnLastXclRow, bNatLangRef, bTruncMaxCol, bTruncMaxRow );
+    ConvertRefData( rRefData.Ref2, rXclRange.maLast, bNatLangRef, bTruncMaxCol, bTruncMaxRow );
 }
 
 XclExpRefLogEntry* XclExpFmlaCompImpl::GetNewRefLogEntry()
@@ -1591,10 +1584,10 @@ XclExpRefLogEntry* XclExpFmlaCompImpl::GetNewRefLogEntry()
 void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
     // get the Excel address components, adjust internal data in aRefData
-    bool bNatLangRef = (meBiff >= xlBiff8) && mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
+    bool bNatLangRef = (meBiff == EXC_BIFF8) && mpScBasePos && (rTokData.GetOpCode() == ocColRowName);
     SingleRefData aRefData( rTokData.mpScToken->GetSingleRef() );
-    sal_uInt16 nXclCol, nXclRow;
-    ConvertRefData( aRefData, nXclCol, nXclRow, bNatLangRef, false, false );
+    XclAddress aXclPos( ScAddress::UNINITIALIZED );
+    ConvertRefData( aRefData, aXclPos, bNatLangRef, false, false );
 
     if( bNatLangRef )
     {
@@ -1604,7 +1597,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
         sal_uInt8 nSubId = aRefData.IsColRel() ? EXC_TOK_EXT_COLV : EXC_TOK_EXT_ROWV;
         AppendOpTokenId( EXC_TOKID_EXTENDED, nExpClass, rTokData.mnSpaces );
         Append( nSubId );
-        AppendAddress( nXclCol, nXclRow );
+        AppendAddress( aXclPos );
     }
     else
     {
@@ -1619,7 +1612,7 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
             sal_uInt8 nBaseId = (!mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_REFN :
                 (lclIsRefDel2D( aRefData ) ? EXC_TOKID_REFERR : EXC_TOKID_REF);
             AppendOpTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), nExpClass, rTokData.mnSpaces );
-            AppendAddress( nXclCol, nXclRow );
+            AppendAddress( aXclPos );
         }
         else if( mpLinkMgr )    // 3D reference
         {
@@ -1630,13 +1623,13 @@ void XclExpFmlaCompImpl::ProcessCellRef( const XclExpTokenData& rTokData, sal_uI
             sal_uInt8 nBaseId = lclIsRefDel2D( aRefData ) ? EXC_TOKID_REFERR3D : EXC_TOKID_REF3D;
             AppendOpTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), nExpClass, rTokData.mnSpaces );
             Append( nExtSheet );
-            if( meBiff <= xlBiff7 )
+            if( meBiff <= EXC_BIFF5 )
             {
                 Append( 0, 8 );
                 Append( nXclTab );
                 Append( nXclTab );
             }
-            AppendAddress( nXclCol, nXclRow );
+            AppendAddress( aXclPos );
         }
         else
         {
@@ -1650,8 +1643,8 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpTokenData& rTokData, sal_u
 {
     // get the Excel address components, adjust internal data in aRefData
     ComplRefData aRefData( rTokData.mpScToken->GetDoubleRef() );
-    sal_uInt16 nFirstXclCol, nFirstXclRow, nLastXclCol, nLastXclRow;
-    ConvertRefData( aRefData, nFirstXclCol, nFirstXclRow, nLastXclCol, nLastXclRow, false );
+    XclRange aXclRange( ScAddress::UNINITIALIZED );
+    ConvertRefData( aRefData, aXclRange, false );
 
     // store external cell contents in CRN records
     if( maCfg.mbFromCell && mpLinkMgr && mpScBasePos )
@@ -1664,7 +1657,7 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpTokenData& rTokData, sal_u
         sal_uInt8 nBaseId = (!mpScBasePos && lclIsRefRel2D( aRefData )) ? EXC_TOKID_AREAN :
              (lclIsRefDel2D( aRefData ) ? EXC_TOKID_AREAERR : EXC_TOKID_AREA);
         AppendOpTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), nExpClass, rTokData.mnSpaces );
-        AppendRange( nFirstXclCol, nFirstXclRow, nLastXclCol, nLastXclRow );
+        AppendRange( aXclRange );
     }
     else if( mpLinkMgr )    // 3D reference
     {
@@ -1676,13 +1669,13 @@ void XclExpFmlaCompImpl::ProcessRangeRef( const XclExpTokenData& rTokData, sal_u
         sal_uInt8 nBaseId = lclIsRefDel2D( aRefData ) ? EXC_TOKID_AREAERR3D : EXC_TOKID_AREA3D;
         AppendOpTokenId( GetTokenId( nBaseId, EXC_TOKCLASS_REF ), nExpClass, rTokData.mnSpaces );
         Append( nExtSheet );
-        if( meBiff <= xlBiff7 )
+        if( meBiff <= EXC_BIFF5 )
         {
             Append( 0, 8 );
             Append( nFirstXclTab );
             Append( nLastXclTab );
         }
-        AppendRange( nFirstXclCol, nFirstXclRow, nLastXclCol, nLastXclRow );
+        AppendRange( aXclRange );
     }
     else
     {
@@ -1910,30 +1903,28 @@ void XclExpFmlaCompImpl::Append( const String& rString )
     xXclStr->WriteToMem( &maTokVec[ nSize ] );
 }
 
-void XclExpFmlaCompImpl::AppendAddress( sal_uInt16 nXclCol, sal_uInt16 nXclRow )
+void XclExpFmlaCompImpl::AppendAddress( const XclAddress& rXclPos )
 {
-    Append( nXclRow );
-    if( meBiff <= xlBiff7 )
-        Append( static_cast< sal_uInt8 >( nXclCol ) );
+    Append( rXclPos.mnRow );
+    if( meBiff <= EXC_BIFF5 )
+        Append( static_cast< sal_uInt8 >( rXclPos.mnCol ) );
     else
-        Append( nXclCol );
+        Append( rXclPos.mnCol );
 }
 
-void XclExpFmlaCompImpl::AppendRange(
-        sal_uInt16 nFirstXclCol, sal_uInt16 nFirstXclRow,
-        sal_uInt16 nLastXclCol, sal_uInt16 nLastXclRow )
+void XclExpFmlaCompImpl::AppendRange( const XclRange& rXclRange )
 {
-    Append( nFirstXclRow );
-    Append( nLastXclRow );
-    if( meBiff <= xlBiff7 )
+    Append( rXclRange.maFirst.mnRow );
+    Append( rXclRange.maLast.mnRow );
+    if( meBiff <= EXC_BIFF5 )
     {
-        Append( static_cast< sal_uInt8 >( nFirstXclCol ) );
-        Append( static_cast< sal_uInt8 >( nLastXclCol ) );
+        Append( static_cast< sal_uInt8 >( rXclRange.maFirst.mnCol ) );
+        Append( static_cast< sal_uInt8 >( rXclRange.maLast.mnCol ) );
     }
     else
     {
-        Append( nFirstXclCol );
-        Append( nLastXclCol );
+        Append( rXclRange.maFirst.mnCol );
+        Append( rXclRange.maLast.mnCol );
     }
 }
 
@@ -1983,7 +1974,7 @@ void XclExpFmlaCompImpl::AppendNameToken( sal_uInt16 nNameIdx, sal_uInt8 nExpCla
     {
         AppendOpTokenId( GetTokenId( EXC_TOKID_NAME, EXC_TOKCLASS_REF ), nExpClass, nSpaces );
         Append( nNameIdx );
-        Append( 0, (meBiff <= xlBiff7) ? 12 : 2 );
+        Append( 0, (meBiff <= EXC_BIFF5) ? 12 : 2 );
     }
     else
         AppendErrorToken( EXC_ERR_NAME );
@@ -1993,10 +1984,10 @@ void XclExpFmlaCompImpl::AppendNameXToken( sal_uInt16 nExtSheet, sal_uInt16 nExt
 {
     AppendOpTokenId( GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ), nExpClass, nSpaces );
     Append( nExtSheet );
-    if( meBiff <= xlBiff7 )
+    if( meBiff <= EXC_BIFF5 )
         Append( 0, 8 );
     Append( nExtName );
-    Append( 0, (meBiff <= xlBiff7) ? 12 : 2 );
+    Append( 0, (meBiff <= EXC_BIFF5) ? 12 : 2 );
 }
 
 void XclExpFmlaCompImpl::AppendMacroCallToken( const String& rFuncName, sal_uInt8 nExpClass, sal_uInt8 nSpaces )
@@ -2149,9 +2140,9 @@ XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
 
-XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType, const ScRangeList& rRangeList )
+XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType, const ScRangeList& rScRanges )
 {
-    ULONG nCount = rRangeList.Count();
+    ULONG nCount = rScRanges.Count();
     if( nCount == 0 )
         return XclExpTokenArrayRef();
 
@@ -2162,7 +2153,7 @@ XclExpTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclExpFomulaType eType
     {
         if( nIdx > 0 )
             aScTokArr.AddOpCode( ocUnion );
-        lclPutRangeToTokenArray( aScTokArr, *rRangeList.GetObject( nIdx ), nCurrScTab, b3DRefOnly );
+        lclPutRangeToTokenArray( aScTokArr, *rScRanges.GetObject( nIdx ), nCurrScTab, b3DRefOnly );
     }
     return mxImpl->CreateFormula( eType, aScTokArr );
 }
@@ -2173,9 +2164,9 @@ XclExpTokenArrayRef XclExpFormulaCompiler::CreateErrorFormula( sal_uInt8 nErrCod
 }
 
 XclExpTokenArrayRef XclExpFormulaCompiler::CreateSpecialRefFormula(
-        sal_uInt8 nTokenId, sal_uInt16 nXclCol, sal_uInt16 nXclRow )
+        sal_uInt8 nTokenId, const XclAddress& rXclPos )
 {
-    return mxImpl->CreateSpecialRefFormula( nTokenId, nXclCol, nXclRow );
+    return mxImpl->CreateSpecialRefFormula( nTokenId, rXclPos );
 }
 
 XclExpTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
