@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.28 $
- *  last change: $Author: hr $ $Date: 2004-03-09 12:15:32 $
+ *  $Revision: 1.29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,11 @@
 #if OSL_DEBUG_LEVEL > 1
 #include <cstdio>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
-static ServerFontLayoutEngine aSimpleLayoutEngine;
+namespace { struct SimpleLayoutEngine : public rtl::Static< ServerFontLayoutEngine, SimpleLayoutEngine > {}; }
 
 // =======================================================================
 // layout implementation for ServerFont
@@ -108,7 +111,7 @@ bool ServerFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED) )
         pLE = mrServerFont.GetLayoutEngine();
     if( !pLE )
-        pLE = &aSimpleLayoutEngine;
+        pLE = &SimpleLayoutEngine::get();
 
     bool bRet = (*pLE)( *this, rArgs );
     return bRet;
