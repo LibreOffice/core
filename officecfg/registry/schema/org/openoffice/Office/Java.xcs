@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 				<desc xml:lang="th">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="hi-IN">Provides information used to initialize a Java Virtual Machine. </desc>
 				<desc xml:lang="x-comment">Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc xml:lang="hu">Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc xml:lang="sk">Provides information used to initialize a Java Virtual Machine. </desc>
+				<desc xml:lang="sl">Provides information used to initialize a Java Virtual Machine. </desc>
 			</info>
 			<prop oor:name="Home" oor:type="xs:string">
 				<!-- OldPath: Java -->
@@ -122,6 +125,9 @@
 						<desc xml:lang="th">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="hi-IN">Specifies the path of the Java installation.</desc>
 						<desc xml:lang="x-comment">Specifies the path of the Java installation.</desc>
+						<desc xml:lang="hu">Specifies the path of the Java installation.</desc>
+						<desc xml:lang="sk">Specifies the path of the Java installation.</desc>
+						<desc xml:lang="sl">Specifies the path of the Java installation.</desc>
 					<label xml:lang="en-US">Java Home</label>
 					<label xml:lang="el">Java Home</label>
 					<label xml:lang="nl">Java Home</label>
@@ -147,6 +153,9 @@
 					<label xml:lang="th">Java Home</label>
 					<label xml:lang="hi-IN">Java Home</label>
 					<label xml:lang="x-comment">Java Home</label>
+					<label xml:lang="hu">Java Home</label>
+					<label xml:lang="sk">Java Home</label>
+					<label xml:lang="sl">Java Home</label>
 				</info>
 				<value>NULL</value>
 			</prop>
@@ -180,6 +189,9 @@
 						<desc xml:lang="th">Specifies the version of the Java installation that is used.</desc>
 						<desc xml:lang="hi-IN">Specifies the version of the Java installation that is used.</desc>
 						<desc xml:lang="x-comment">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="hu">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="sk">Specifies the version of the Java installation that is used.</desc>
+						<desc xml:lang="sl">Specifies the version of the Java installation that is used.</desc>
 					<label xml:lang="en-US">Java Version</label>
 					<label xml:lang="el">Έκδοση Java</label>
 					<label xml:lang="nl">Java Version</label>
@@ -205,6 +217,9 @@
 					<label xml:lang="th">Java Version</label>
 					<label xml:lang="hi-IN">Java Version</label>
 					<label xml:lang="x-comment">Java Version</label>
+					<label xml:lang="hu">Java Version</label>
+					<label xml:lang="sk">Java Version</label>
+					<label xml:lang="sl">Java Version</label>
 				</info>
 				<value>NULL</value>
 			</prop>
@@ -237,6 +252,9 @@
 					<desc xml:lang="th">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="hi-IN">Specifies the JVM shared library that is used.</desc>
 					<desc xml:lang="x-comment">Specifies the JVM shared library that is used.</desc>
+					<desc xml:lang="hu">Specifies the JVM shared library that is used.</desc>
+					<desc xml:lang="sk">Specifies the JVM shared library that is used.</desc>
+					<desc xml:lang="sl">Specifies the JVM shared library that is used.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -270,6 +288,9 @@
 					<desc xml:lang="th">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="hi-IN">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 					<desc xml:lang="x-comment">Contains jars of the Office installation and may also contain other jars or folders.</desc>
+					<desc xml:lang="hu">Contains jars of the Office installation and may also contain other jars or folders.</desc>
+					<desc xml:lang="sk">Contains jars of the Office installation and may also contain other jars or folders.</desc>
+					<desc xml:lang="sl">Contains jars of the Office installation and may also contain other jars or folders.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -303,6 +324,9 @@
 						<desc xml:lang="th">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="hi-IN">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 						<desc xml:lang="x-comment">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+						<desc xml:lang="hu">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+						<desc xml:lang="sk">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+						<desc xml:lang="sl">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
 					<label xml:lang="en-US">Enable JVM</label>
 					<label xml:lang="el">Enable JVM</label>
 					<label xml:lang="nl">Enable JVM</label>
@@ -328,6 +352,9 @@
 					<label xml:lang="th">Enable JVM</label>
 					<label xml:lang="hi-IN">Enable JVM</label>
 					<label xml:lang="x-comment">Enable JVM</label>
+					<label xml:lang="hu">Enable JVM</label>
+					<label xml:lang="sk">Enable JVM</label>
+					<label xml:lang="sl">Enable JVM</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -361,6 +388,9 @@
 						<desc xml:lang="th">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="hi-IN">Determines if security checks are performed for applets.</desc>
 						<desc xml:lang="x-comment">Determines if security checks are performed for applets.</desc>
+						<desc xml:lang="hu">Determines if security checks are performed for applets.</desc>
+						<desc xml:lang="sk">Determines if security checks are performed for applets.</desc>
+						<desc xml:lang="sl">Determines if security checks are performed for applets.</desc>
 					<label xml:lang="en-US">Enable security checks</label>
 					<label xml:lang="el">Enable security checks</label>
 					<label xml:lang="nl">Enable security checks</label>
@@ -386,6 +416,9 @@
 					<label xml:lang="th">Enable security checks</label>
 					<label xml:lang="hi-IN">Enable security checks</label>
 					<label xml:lang="x-comment">Enable security checks</label>
+					<label xml:lang="hu">Enable security checks</label>
+					<label xml:lang="sk">Enable security checks</label>
+					<label xml:lang="sl">Enable security checks</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -419,6 +452,9 @@
 						<desc xml:lang="th">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="hi-IN">Determines if and to what extent Java applets are allowed to access the network.</desc>
 						<desc xml:lang="x-comment">Determines if and to what extent Java applets are allowed to access the network.</desc>
+						<desc xml:lang="hu">Determines if and to what extent Java applets are allowed to access the network.</desc>
+						<desc xml:lang="sk">Determines if and to what extent Java applets are allowed to access the network.</desc>
+						<desc xml:lang="sl">Determines if and to what extent Java applets are allowed to access the network.</desc>
 					<label xml:lang="en-US">Net access</label>
 					<label xml:lang="el">Net access</label>
 					<label xml:lang="nl">Net access</label>
@@ -444,6 +480,9 @@
 					<label xml:lang="th">Net access</label>
 					<label xml:lang="hi-IN">Net access</label>
 					<label xml:lang="x-comment">Net access</label>
+					<label xml:lang="hu">Net access</label>
+					<label xml:lang="sk">Net access</label>
+					<label xml:lang="sl">Net access</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -474,6 +513,8 @@
 							<desc xml:lang="hi-IN">Host - connect to origin</desc>
 							<desc xml:lang="x-comment">Host - connect to origin</desc>
 							<desc xml:lang="sk">Host - connect to origin</desc>
+							<desc xml:lang="hu">Host - connect to origin</desc>
+							<desc xml:lang="sl">Host - connect to origin</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -504,6 +545,8 @@
 							<desc xml:lang="hi-IN">Unrestricted - connect to all</desc>
 							<desc xml:lang="x-comment">Unrestricted - connect to all</desc>
 							<desc xml:lang="sk">Unrestricted - connect to all</desc>
+							<desc xml:lang="hu">Unrestricted - connect to all</desc>
+							<desc xml:lang="sl">Unrestricted - connect to all</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="3">
@@ -534,6 +577,8 @@
 							<desc xml:lang="hi-IN">None - no connection alloed</desc>
 							<desc xml:lang="x-comment">None - no connection alloed</desc>
 							<desc xml:lang="sk">None - no connection alloed</desc>
+							<desc xml:lang="hu">None - no connection alloed</desc>
+							<desc xml:lang="sl">None - no connection alloed</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -568,6 +613,9 @@
 						<desc xml:lang="th">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="hi-IN">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 						<desc xml:lang="x-comment">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+						<desc xml:lang="hu">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+						<desc xml:lang="sk">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
+						<desc xml:lang="sl">Specifies additional Java classes or jars which are contained in the classpath of the JVM (java.class.path system property).</desc>
 					<label xml:lang="en-US">Classpath</label>
 					<label xml:lang="el">Classpath</label>
 					<label xml:lang="nl">Classpath</label>
@@ -593,6 +641,9 @@
 					<label xml:lang="th">Classpath</label>
 					<label xml:lang="hi-IN">Classpath</label>
 					<label xml:lang="x-comment">Classpath</label>
+					<label xml:lang="hu">Classpath</label>
+					<label xml:lang="sk">Classpath</label>
+					<label xml:lang="sl">Classpath</label>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -627,6 +678,9 @@
 					<desc xml:lang="th"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="hi-IN"> Indicates that JVM supports debugging.</desc>
 					<desc xml:lang="x-comment"> Indicates that JVM supports debugging.</desc>
+					<desc xml:lang="hu"> Indicates that JVM supports debugging.</desc>
+					<desc xml:lang="sk"> Indicates that JVM supports debugging.</desc>
+					<desc xml:lang="sl"> Indicates that JVM supports debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DebugPort" oor:type="xs:int">
@@ -659,6 +713,9 @@
 					<desc xml:lang="th">Determines the port for debugging.</desc>
 					<desc xml:lang="hi-IN">Determines the port for debugging.</desc>
 					<desc xml:lang="x-comment">Determines the port for debugging.</desc>
+					<desc xml:lang="hu">Determines the port for debugging.</desc>
+					<desc xml:lang="sk">Determines the port for debugging.</desc>
+					<desc xml:lang="sl">Determines the port for debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
@@ -691,6 +748,9 @@
 					<desc xml:lang="th">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="hi-IN">Turns on verbose garbage collection.</desc>
 					<desc xml:lang="x-comment">Turns on verbose garbage collection.</desc>
+					<desc xml:lang="hu">Turns on verbose garbage collection.</desc>
+					<desc xml:lang="sk">Turns on verbose garbage collection.</desc>
+					<desc xml:lang="sl">Turns on verbose garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Verbose" oor:type="xs:boolean">
@@ -723,6 +783,9 @@
 					<desc xml:lang="th">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="hi-IN">Turns on verbose mode for Java execution.</desc>
 					<desc xml:lang="x-comment">Turns on verbose mode for Java execution.</desc>
+					<desc xml:lang="hu">Turns on verbose mode for Java execution.</desc>
+					<desc xml:lang="sk">Turns on verbose mode for Java execution.</desc>
+					<desc xml:lang="sl">Turns on verbose mode for Java execution.</desc>
 				</info>
 			</prop>
 			<prop oor:name="NativeStackSize" oor:type="xs:int">
@@ -755,6 +818,9 @@
 					<desc xml:lang="th">Determines the native stack size.</desc>
 					<desc xml:lang="hi-IN">Determines the native stack size.</desc>
 					<desc xml:lang="x-comment">Determines the native stack size.</desc>
+					<desc xml:lang="hu">Determines the native stack size.</desc>
+					<desc xml:lang="sk">Determines the native stack size.</desc>
+					<desc xml:lang="sl">Determines the native stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="JavaStackSize" oor:type="xs:int">
@@ -787,6 +853,9 @@
 					<desc xml:lang="th">Determines the Java stack size.</desc>
 					<desc xml:lang="hi-IN">Determines the Java stack size.</desc>
 					<desc xml:lang="x-comment">Determines the Java stack size.</desc>
+					<desc xml:lang="hu">Determines the Java stack size.</desc>
+					<desc xml:lang="sk">Determines the Java stack size.</desc>
+					<desc xml:lang="sl">Determines the Java stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VerifyMode" oor:type="xs:int">
@@ -819,6 +888,9 @@
 					<desc xml:lang="th">Determines the verify mode.</desc>
 					<desc xml:lang="hi-IN">Determines the verify mode.</desc>
 					<desc xml:lang="x-comment">Determines the verify mode.</desc>
+					<desc xml:lang="hu">Determines the verify mode.</desc>
+					<desc xml:lang="sk">Determines the verify mode.</desc>
+					<desc xml:lang="sl">Determines the verify mode.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -850,6 +922,8 @@
 							<desc xml:lang="hi-IN">Verify mode 0</desc>
 							<desc xml:lang="x-comment">Verify mode 0</desc>
 							<desc xml:lang="sk">Verify mode 0</desc>
+							<desc xml:lang="hu">Verify mode 0</desc>
+							<desc xml:lang="sl">Verify mode 0</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
@@ -881,6 +955,8 @@
 							<desc xml:lang="hi-IN">Verify mode 1</desc>
 							<desc xml:lang="x-comment">Verify mode 1</desc>
 							<desc xml:lang="sk">Verify mode 1</desc>
+							<desc xml:lang="hu">Verify mode 1</desc>
+							<desc xml:lang="sl">Verify mode 1</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
@@ -912,6 +988,8 @@
 							<desc xml:lang="hi-IN">Verify mode 2</desc>
 							<desc xml:lang="x-comment">Verify mode 2</desc>
 							<desc xml:lang="sk">Verify mode 2</desc>
+							<desc xml:lang="hu">Verify mode 2</desc>
+							<desc xml:lang="sl">Verify mode 2</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -946,6 +1024,9 @@
 					<desc xml:lang="th">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="hi-IN">Determines the minimum size of the heap.</desc>
 					<desc xml:lang="x-comment">Determines the minimum size of the heap.</desc>
+					<desc xml:lang="hu">Determines the minimum size of the heap.</desc>
+					<desc xml:lang="sk">Determines the minimum size of the heap.</desc>
+					<desc xml:lang="sl">Determines the minimum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="MaxHeapSize" oor:type="xs:int">
@@ -978,6 +1059,9 @@
 					<desc xml:lang="th">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="hi-IN">Determines the maximum size of the heap.</desc>
 					<desc xml:lang="x-comment">Determines the maximum size of the heap.</desc>
+					<desc xml:lang="hu">Determines the maximum size of the heap.</desc>
+					<desc xml:lang="sk">Determines the maximum size of the heap.</desc>
+					<desc xml:lang="sl">Determines the maximum size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
@@ -1010,6 +1094,9 @@
 					<desc xml:lang="th">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="hi-IN">Disables asynchronous garbage collection.</desc>
 					<desc xml:lang="x-comment">Disables asynchronous garbage collection.</desc>
+					<desc xml:lang="hu">Disables asynchronous garbage collection.</desc>
+					<desc xml:lang="sk">Disables asynchronous garbage collection.</desc>
+					<desc xml:lang="sl">Disables asynchronous garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableClassGC" oor:type="xs:boolean">
@@ -1042,6 +1129,9 @@
 					<desc xml:lang="th">Enables garbage collection.</desc>
 					<desc xml:lang="hi-IN">Enables garbage collection.</desc>
 					<desc xml:lang="x-comment">Enables garbage collection.</desc>
+					<desc xml:lang="hu">Enables garbage collection.</desc>
+					<desc xml:lang="sk">Enables garbage collection.</desc>
+					<desc xml:lang="sl">Enables garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VMType" oor:type="xs:string">
@@ -1074,6 +1164,9 @@
 					<desc xml:lang="th">Specifies values for different VM types.</desc>
 					<desc xml:lang="hi-IN">Specifies values for different VM types.</desc>
 					<desc xml:lang="x-comment">Specifies values for different VM types.</desc>
+					<desc xml:lang="hu">Specifies values for different VM types.</desc>
+					<desc xml:lang="sk">Specifies values for different VM types.</desc>
+					<desc xml:lang="sl">Specifies values for different VM types.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="Classic">
@@ -1104,6 +1197,8 @@
 							<desc xml:lang="hi-IN">Classic VM</desc>
 							<desc xml:lang="x-comment">Classic VM</desc>
 							<desc xml:lang="sk">Classic VM</desc>
+							<desc xml:lang="hu">Classic VM</desc>
+							<desc xml:lang="sl">Classic VM</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="Hotspot">
@@ -1134,6 +1229,8 @@
 							<desc xml:lang="hi-IN">Hotspot VM</desc>
 							<desc xml:lang="x-comment">Hotspot VM</desc>
 							<desc xml:lang="sk">Hotspot VM</desc>
+							<desc xml:lang="hu">Hotspot VM</desc>
+							<desc xml:lang="sl">Hotspot VM</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1167,6 +1264,9 @@
 					<desc xml:lang="th">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="hi-IN">Indicates if a JRE or SDK is used.</desc>
 					<desc xml:lang="x-comment">Indicates if a JRE or SDK is used.</desc>
+					<desc xml:lang="hu">Indicates if a JRE or SDK is used.</desc>
+					<desc xml:lang="sk">Indicates if a JRE or SDK is used.</desc>
+					<desc xml:lang="sl">Indicates if a JRE or SDK is used.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="JDK">
@@ -1197,6 +1297,8 @@
 							<desc xml:lang="hi-IN">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="x-comment">JDKxxx or j2sdkxxx</desc>
 							<desc xml:lang="sk">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="hu">JDKxxx or j2sdkxxx</desc>
+							<desc xml:lang="sl">JDKxxx or j2sdkxxx</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="JRE">
@@ -1227,6 +1329,8 @@
 							<desc xml:lang="hi-IN">JRExxx</desc>
 							<desc xml:lang="x-comment">JRExxx</desc>
 							<desc xml:lang="sk">JRExxx</desc>
+							<desc xml:lang="hu">JRExxx</desc>
+							<desc xml:lang="sl">JRExxx</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1261,6 +1365,9 @@
 					<desc xml:lang="th">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="hi-IN">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 					<desc xml:lang="x-comment">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
+					<desc xml:lang="hu">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
+					<desc xml:lang="sk">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
+					<desc xml:lang="sl">Contains directories which contain shared libraries that are used by the Java runtime library.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1295,6 +1402,9 @@
 					<desc xml:lang="th">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="hi-IN">Specifies properties for use with the Java VM.</desc>
 					<desc xml:lang="x-comment">Specifies properties for use with the Java VM.</desc>
+					<desc xml:lang="hu">Specifies properties for use with the Java VM.</desc>
+					<desc xml:lang="sk">Specifies properties for use with the Java VM.</desc>
+					<desc xml:lang="sl">Specifies properties for use with the Java VM.</desc>
 				</info>
 			</prop>
 		</group>
@@ -1325,6 +1435,9 @@
 				<desc xml:lang="th">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="hi-IN">Provides information which are used by jvmsetup. </desc>
 				<desc xml:lang="x-comment">Provides information which are used by jvmsetup. </desc>
+				<desc xml:lang="hu">Provides information which are used by jvmsetup. </desc>
+				<desc xml:lang="sk">Provides information which are used by jvmsetup. </desc>
+				<desc xml:lang="sl">Provides information which are used by jvmsetup. </desc>
 			</info>
 			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
 				<!-- OldPath: Install -->
@@ -1355,6 +1468,9 @@
 					<desc xml:lang="th">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="hi-IN">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 					<desc xml:lang="x-comment">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+					<desc xml:lang="hu">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+					<desc xml:lang="sk">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+					<desc xml:lang="sl">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1388,6 +1504,9 @@
 					<desc xml:lang="th">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="hi-IN">Contains a space separated list of verified Java versions.</desc>
 					<desc xml:lang="x-comment">Contains a space separated list of verified Java versions.</desc>
+					<desc xml:lang="hu">Contains a space separated list of verified Java versions.</desc>
+					<desc xml:lang="sk">Contains a space separated list of verified Java versions.</desc>
+					<desc xml:lang="sl">Contains a space separated list of verified Java versions.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1421,6 +1540,9 @@
 					<desc xml:lang="th">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="hi-IN">Specifies the version of the JRE which is provided by the setup.</desc>
 					<desc xml:lang="x-comment">Specifies the version of the JRE which is provided by the setup.</desc>
+					<desc xml:lang="hu">Specifies the version of the JRE which is provided by the setup.</desc>
+					<desc xml:lang="sk">Specifies the version of the JRE which is provided by the setup.</desc>
+					<desc xml:lang="sl">Specifies the version of the JRE which is provided by the setup.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1454,6 +1576,9 @@
 					<desc xml:lang="th">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="hi-IN">Specifies the vendor of the JRE package.</desc>
 					<desc xml:lang="x-comment">Specifies the vendor of the JRE package.</desc>
+					<desc xml:lang="hu">Specifies the vendor of the JRE package.</desc>
+					<desc xml:lang="sk">Specifies the vendor of the JRE package.</desc>
+					<desc xml:lang="sl">Specifies the vendor of the JRE package.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1487,6 +1612,9 @@
 					<desc xml:lang="th">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="hi-IN">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="x-comment">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="hu">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sk">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sl">Specifies that all Java installations with a lower version will be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1520,6 +1648,9 @@
 					<desc xml:lang="th">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="hi-IN">Specifies the JRE package which can be installed during the Java setup.</desc>
 					<desc xml:lang="x-comment">Specifies the JRE package which can be installed during the Java setup.</desc>
+					<desc xml:lang="hu">Specifies the JRE package which can be installed during the Java setup.</desc>
+					<desc xml:lang="sk">Specifies the JRE package which can be installed during the Java setup.</desc>
+					<desc xml:lang="sl">Specifies the JRE package which can be installed during the Java setup.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1553,6 +1684,9 @@
 					<desc xml:lang="th">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="hi-IN">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 					<desc xml:lang="x-comment">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="hu">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sk">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+					<desc xml:lang="sl">Contains a space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1587,6 +1721,9 @@
 					<desc xml:lang="th">Locates resources.</desc>
 					<desc xml:lang="hi-IN">Locates resources.</desc>
 					<desc xml:lang="x-comment">Locates resources.</desc>
+					<desc xml:lang="hu">Locates resources.</desc>
+					<desc xml:lang="sk">Locates resources.</desc>
+					<desc xml:lang="sl">Locates resources.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1620,6 +1757,9 @@
 					<desc xml:lang="th">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="hi-IN">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 					<desc xml:lang="x-comment">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
+					<desc xml:lang="hu">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
+					<desc xml:lang="sk">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
+					<desc xml:lang="sl">Contains the Office&apos;s jar files. The Java setup uses it to form the SystemClasspath.</desc>
 				</info>
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
@@ -1627,6 +1767,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
