@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengrf.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-17 09:27:29 $
+ *  last change: $Author: gt $ $Date: 2002-10-30 10:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,10 @@ public:
     /// Set displayed filter (chosen from the graphic filter list)
     void                    SetCurrentFilter(const String&);
 
+    /// Set dialog help id at FileDlgHelper
+    void                    SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId );
+    /// Set control help ids at FileDlgHelper
+    void                    SetDialogHelpId( const INT32 _nHelpId );
 private:
     // disable copy and assignment
     SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);
