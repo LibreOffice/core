@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 20:11:23 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 18:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,8 @@ String SCSTR_QHELP_INPUTWND
 
 String SCSTR_QHELP_BTNCALC
 {
-    Text [ de ] = "Funktionsautopilot" ;
-    Text [ en-US ] = "AutoPilot: Functions" ;
-    Text [ x-comment ] = " ";
+    Text [ de ] = "Funktions-Assistent" ;
+    Text [ en-US ] = "Function Wizard" ;
 };
 
 String SCSTR_QHELP_BTNOK
