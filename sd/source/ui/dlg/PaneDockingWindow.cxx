@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:49:49 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,7 @@ USHORT PaneDockingWindow::AddMenu (
         TIB_DROPDOWN,
         nItemCount-1);
     mpTitleToolBox->SetClickHdl (rCallback);
+    mpTitleToolBox->SetDropdownClickHdl (rCallback);
 
     return nItemCount+1;
 }
