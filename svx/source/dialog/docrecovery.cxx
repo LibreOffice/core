@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docrecovery.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:19:48 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1513,7 +1513,7 @@ IMPL_LINK( BrokenRecoveryDialog, SaveButtonHdl, void*, EMPTYARG )
 
                     if ( ::osl::FileBase::E_None == result )
                     {
-                        ::rtl::OString  aTemp( aBuffer, aBytesRead );
+                        ::rtl::OString  aTemp( aBuffer, static_cast< xub_StrLen >( aBytesRead ) );
                         aContent += aTemp;
                     }
                 } while ( ::osl::FileBase::E_None == result && aBytesRead );
@@ -1533,8 +1533,11 @@ IMPL_LINK( BrokenRecoveryDialog, SaveButtonHdl, void*, EMPTYARG )
             :ModalDialog    ( _pParent, SVX_RES( RID_SVX_MDLG_ERR_REP_PREVIEW ) )
             ,maContentML( this, ResId( ML_ERRPREVIEW_CONTENT ) )
             ,maOKBtn( this, ResId( BTN_ERRPREVIEW_OK ) )
+
         {
             FreeResource();
+
+            mnMinHeight = ( maContentML.GetSizePixel().Height() / 2 );
 
             String  aPreview = LoadCrashFile( GetPreviewURL() );
             ErrorRepSendDialog *pMainDlg = (ErrorRepSendDialog *)_pParent;
@@ -1542,9 +1545,11 @@ IMPL_LINK( BrokenRecoveryDialog, SaveButtonHdl, void*, EMPTYARG )
             String aSeperator = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\r\n\r\n================\r\n\r\n" ) );
 
             String aContent = pMainDlg->GetDocType();
-            aContent += aSeperator;
+            if ( aContent.Len() > 0 )
+                aContent += aSeperator;
             aContent += pMainDlg->GetUsing();
-            aContent += aSeperator;
+            if ( aContent.Len() > 0 )
+                aContent += aSeperator;
             aContent += aPreview;
 
             maContentML.SetText( aContent );
@@ -1552,9 +1557,24 @@ IMPL_LINK( BrokenRecoveryDialog, SaveButtonHdl, void*, EMPTYARG )
 
         ErrorRepPreviewDialog::~ErrorRepPreviewDialog()
         {
-
         }
 
+        void ErrorRepPreviewDialog::Resize()
+        {
+            Size a3Sz = LogicToPixel( Size( 3, 3 ), MAP_APPFONT );
+            Size aWinSz = GetSizePixel();
+            Size aBtnSz = maOKBtn.GetSizePixel();
+            Point aEditPnt = maContentML.GetPosPixel();
+
+            long nNewHeight = Max( aWinSz.Height() - aEditPnt.Y() - 3 * a3Sz.Height() - aBtnSz.Height(), mnMinHeight );
+            long nNewWidth = aWinSz.Width() - 4 * a3Sz.Width();
+
+            Size aNewSize( nNewWidth, nNewHeight );
+            maContentML.SetSizePixel( aNewSize );
+            Point aNewPoint( Max( aEditPnt.X() + aNewSize.Width() - aBtnSz.Width(), aEditPnt.X() ),
+                             aEditPnt.Y() + aNewSize.Height() + a3Sz.Height() );
+            maOKBtn.SetPosPixel( aNewPoint );
+        }
     }   // namespace DocRecovery
 }   // namespace svx
 
