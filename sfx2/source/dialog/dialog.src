@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:34:41 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ CheckBox CB_READ_ONLY
     Text[ chinese_traditional ] = "°ßÅª(~R)";
     Text[ arabic ] = "ááŞÑÇÁÉ İŞØ";
     Text[ greek ] = "Ìüíï ãéá áíÜãíùóç";
-    Text[ korean ] = "ÀĞ±â Àü¿ë";
+    Text[ korean ] = "ÀĞ±â Àü¿ë(~R)";
     Text[ turkish ] = "Salt okunur";
     Text[ language_user1 ] = " ";
 };
@@ -338,7 +338,7 @@ PushButton BTN_STANDARD
     Text[ chinese_simplified ] = "±ê×¼(~H)";
     Text[ russian ] = "Ñòàíäàğò";
     Text[ polish ] = "Domyœlnie";
-    Text[ japanese ] = "•W€";
+    Text[ japanese ] = "•W€(~H)";
     Text[ chinese_traditional ] = "¼Ğ·Ç(~H)";
     Text[ arabic ] = "ŞíÇÓí";
     Text[ greek ] = "ĞñïåğéëïãŞ";
