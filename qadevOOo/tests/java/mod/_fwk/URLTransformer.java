@@ -2,9 +2,9 @@
  *
  *  $RCSfile: URLTransformer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:48:18 $
+ *  last change:$Date: 2003-09-08 11:53:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 
 package mod._fwk;
 
-import lib.TestCase;
-import lib.TestParameters;
 import java.io.PrintWriter;
-import lib.TestEnvironment;
-import lib.StatusException;
+
 import lib.Status;
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.XInterface;
-import com.sun.star.text.XTextDocument;
-import util.SOfficeFactory;
 
 /**
 * Test for object that implements the following interfaces :
