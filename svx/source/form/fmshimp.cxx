@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:50 $
+ *  last change: $Author: fs $ $Date: 2002-10-14 13:53:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4503,6 +4503,28 @@ void FmXFormShell::CreateExternalView()
             Reference< XFormController> xFormController(m_xExternalViewController, UNO_QUERY);
             if (xFormController.is())
                 xFormController->addActivateListener((XFormControllerListener*)this);
+
+            // finally, do an update for all dispatchers of the form which we has displayed in the external
+            // browser
+            //
+            // This is a slight hack. The timeline when dispatching and loading this external form
+            // is somewhat bad, it results in a grid in this form which has invalid status information
+            // for the slots we're intercepting (moveNext and such).
+            // Instead of creating complex workarounds (which I cannot imagine at the moment), we
+            // force an update of the dispatchers here.
+            //
+            // 94525 - 2002-10-14 - fs@openoffice.org
+            //
+            ::rtl::OUString sDisplayFormAccessPath = GetAccessPathFromForm( m_xExternalDisplayedForm, GetPageId( m_xExternalDisplayedForm ) );
+            SingleFormDispatchers& rDispatchers = m_aNavigationDispatcher[ sDisplayFormAccessPath ];
+            // loop through all the dispatchers for this form
+            for (   SingleFormDispatchers::const_iterator aDisp = rDispatchers.begin();
+                    aDisp != rDispatchers.end();
+                    ++aDisp
+                )
+            {
+                (*aDisp)->BroadcastCurrentState( );
+            }
         }
     }
 #ifdef DBG_UTIL
@@ -5056,6 +5078,7 @@ void FmFormNavigationDispatcher::SetActive(sal_Bool bEnable)
         SfxPoolItem* pState = NULL;
         SfxItemState eInitialState = GetBindings().QueryState(m_nSlot, pState);
         NotifyState(eInitialState, pState);
+        delete pState;
     }
 }
 
