@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rotmodit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:29:15 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
-TYPEINIT1(SvxRotateModeItem,        SfxEnumItem);
+TYPEINIT1_AUTOFACTORY(SvxRotateModeItem,        SfxEnumItem);
 
 
 //-----------------------------------------------------------------------

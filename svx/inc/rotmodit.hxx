@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rotmodit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:27:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:46:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class SvxRotateModeItem: public SfxEnumItem
 public:
                 TYPEINFO();
 
-                SvxRotateModeItem( SvxRotateMode eMode, USHORT nWhich);
+                SvxRotateModeItem( SvxRotateMode eMode=SVX_ROTATE_MODE_STANDARD, USHORT nWhich=0);
                 SvxRotateModeItem( const SvxRotateModeItem& rItem );
                 ~SvxRotateModeItem();
 
