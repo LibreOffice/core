@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScHeaderFieldsObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:06:27 $
+ *  last change:$Date: 2003-09-08 12:09:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,15 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.beans.XPropertySetInfo;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -74,17 +81,10 @@ import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextFieldsSupplier;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by collection of
@@ -156,11 +156,8 @@ public class ScHeaderFieldsObj extends TestCase {
 
         XInterface oObj = null;
         XPropertySet PropSet;
-        XPropertySetInfo PropSetInfo;
         XNameAccess PageStyles = null;
         XStyle StdStyle = null;
-        XTextContent oContent = null;
-        XInterface aField = null;
 
         XStyleFamiliesSupplier StyleFam = (XStyleFamiliesSupplier)
             UnoRuntime.queryInterface(XStyleFamiliesSupplier.class,
@@ -225,9 +222,6 @@ public class ScHeaderFieldsObj extends TestCase {
             e.printStackTrace(log);
             throw new StatusException("Couldn't create instance", e);
         }
-
-        oContent = (XTextContent)
-            UnoRuntime.queryInterface(XTextContent.class, aField);
 
         XTextCursor the_Cursor = left.createTextCursor();
 

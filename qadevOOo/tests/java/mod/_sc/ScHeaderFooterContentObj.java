@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScHeaderFooterContentObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:06:38 $
+ *  last change:$Date: 2003-09-08 12:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,27 +61,27 @@
 
 package mod._sc;
 
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.XPropertySetInfo;
-import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XHeaderFooterContent;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.style.XStyle;
-import com.sun.star.style.XStyleFamiliesSupplier;
-import com.sun.star.text.XText;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
 
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XHeaderFooterContent;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.style.XStyle;
+import com.sun.star.style.XStyleFamiliesSupplier;
+import com.sun.star.text.XText;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which is represented by service
@@ -142,7 +142,6 @@ public class ScHeaderFooterContentObj extends TestCase {
 
         XInterface oObj = null;
         XPropertySet PropSet;
-        XPropertySetInfo PropSetInfo;
         XNameAccess PageStyles = null;
         XStyle StdStyle = null;
 
