@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-18 11:13:17 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,12 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         m_pTreeView = new DBTreeView(getBrowserView(),m_xMultiServiceFacatory, WB_TABSTOP);
         m_pTreeView->Show();
         m_pTreeView->SetPreExpandHandler(LINK(this, SbaTableQueryBrowser, OnExpandEntry));
+
+        m_pTreeView->setCutHandler(LINK(this, SbaTableQueryBrowser, OnCutEntry));
+        m_pTreeView->setCopyHandler(LINK(this, SbaTableQueryBrowser, OnCopyEntry));
+        m_pTreeView->setPasteHandler(LINK(this, SbaTableQueryBrowser, OnPasteEntry));
+        m_pTreeView->setDeleteHandler(LINK(this, SbaTableQueryBrowser, OnDeleteEntry));
+
         m_pTreeView->getListBox()->setControlActionListener(this);
         m_pTreeView->SetHelpId(HID_CTL_TREEVIEW);
 
@@ -1577,12 +1583,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 
             case ID_BROWSER_COPY:
                 if(m_pTreeView->HasChildPathFocus())
-                {
-                    SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                    EntryType eType = getEntryType(pEntry);
-                    aReturn.bEnabled = (eType == etTable || eType == etQuery || eType == etView);
-                    break;
-                }
+                    aReturn.bEnabled = isEntryCopyAllowed(m_pTreeView->getListBox()->GetCurEntry());
                 else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
                 {
                     SbaGridControl* pControl = getBrowserView()->getVclControl();
@@ -1594,7 +1595,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 
             case ID_BROWSER_CUT:
                 if(m_pTreeView->HasChildPathFocus())
-                    aReturn.bEnabled = sal_False;
+                    aReturn.bEnabled = isEntryCutAllowed(m_pTreeView->getListBox()->GetCurEntry());
                 else
                     return SbaXDataBrowserController::GetState(nId);
                 break;
@@ -1604,42 +1605,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
                 if(m_pTreeView->HasChildPathFocus())
                 {
                     SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                    EntryType eType = getEntryType(pEntry);
-                    switch(eType)
-                    {
-                        case etQuery:
-                        case etQueryContainer:
-                        {
-                            TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-                            aReturn.bEnabled = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
-                            break;
-                        }
-                        case etView:
-                        case etTable:
-                        case etTableContainer:
-                            {
-                                // check if connection is readonly
-                                DBTreeListModel::DBTreeListUserData* pDSData = NULL;
-                                DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
-                                SvLBoxEntry* pDSEntry = NULL;
-                                pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(pEntry);
-                                pDSData =   pDSEntry
-                                        ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
-                                        :   NULL;
-
-                                sal_Bool bIsConnectionWriteAble = sal_False;
-                                if(pDSData && pDSData->xObject.is())
-                                {
-                                    Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
-                                    if(xCon.is())
-                                        bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
-                                }
-                                aReturn.bEnabled = bIsConnectionWriteAble && ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
-                            }
-                            break;
-                        default:
-                            aReturn.bEnabled = sal_False;
-                    }
+                    aReturn.bEnabled = isEntryPasteAllowed(pEntry);
                     break;
                 }
                 else
@@ -1762,36 +1728,13 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
         case ID_BROWSER_PASTE:
             if(m_pTreeView->HasChildPathFocus())
             {
-                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
-                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                EntryType eType = getEntryType(pEntry);
-                switch(eType)
-                {
-                    case etQuery:
-                    case etQueryContainer:
-                        implPasteQuery(pEntry, aTransferData);
-                        break;
-
-                    case etView:
-                    case etTable:
-                    case etTableContainer:
-                        implPasteTable( pEntry, aTransferData );
-                    default:
-                        ;
-                }
+                pasteEntry(m_pTreeView->getListBox()->GetCurEntry());
                 break;
             }// else run through
         case ID_BROWSER_COPY:
             if(m_pTreeView->HasChildPathFocus())
             {
-                SvLBoxEntry* pEntry = m_pTreeView->getListBox()->GetCurEntry();
-                TransferableHelper* pTransfer = NULL;
-                Reference< XTransferable> aEnsureDelete;
-                EntryType eType = getEntryType(pEntry);
-                pTransfer       = implCopyObject( pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
-                aEnsureDelete   = pTransfer;
-                if (pTransfer)
-                    pTransfer->CopyToClipboard(getView());
+                copyEntry(m_pTreeView->getListBox()->GetCurEntry());
             }
             else if (getBrowserView() && getBrowserView()->getVclControl() && !getBrowserView()->getVclControl()->IsEditing())
             {

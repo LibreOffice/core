@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-12 08:42:16 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,46 @@ Link DBTreeView::GetPreExpandHandler() const
 {
     return m_pTreeListBox->GetPreExpandHandler();
 }
-
+// -----------------------------------------------------------------------------
+void    DBTreeView::setCutHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setCutHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getCutHandler() const
+{
+    return m_pTreeListBox->getCutHandler();
+}
+// -----------------------------------------------------------------------------
+void    DBTreeView::setCopyHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setCopyHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getCopyHandler() const
+{
+    return m_pTreeListBox->getCopyHandler();
+}
+// -----------------------------------------------------------------------------
+void    DBTreeView::setPasteHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setPasteHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getPasteHandler() const
+{
+    return m_pTreeListBox->getPasteHandler();
+}
+// -----------------------------------------------------------------------------
+void    DBTreeView::setDeleteHandler(const Link& _rHdl)
+{
+    m_pTreeListBox->setDeleteHandler(_rHdl);
+}
+// -----------------------------------------------------------------------------
+Link    DBTreeView::getDeleteHandler() const
+{
+    return m_pTreeListBox->getDeleteHandler();
+}
 // -----------------------------------------------------------------------------
 void DBTreeView::Resize()
 {

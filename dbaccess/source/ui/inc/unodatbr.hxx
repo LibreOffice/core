@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 13:04:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 11:34:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,12 @@ namespace dbaui
         DECL_LINK( OnEntryDoubleClicked, SvLBoxEntry* );
         DECL_LINK( OnSelectEntry, SvLBoxEntry* );
         DECL_LINK( OnExpandEntry, SvLBoxEntry* );
+
+        DECL_LINK( OnCutEntry, SvLBoxEntry* );
+        DECL_LINK( OnCopyEntry, SvLBoxEntry* );
+        DECL_LINK( OnPasteEntry, SvLBoxEntry* );
+        DECL_LINK( OnDeleteEntry, SvLBoxEntry* );
+
         DECL_LINK( OnTreeEntryCompare, const SvSortData* );
         DECL_LINK( OnAsyncDrop, void* );
 
@@ -409,6 +415,14 @@ namespace dbaui
         // set _rsName as title at the frame
         void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
         void setDefaultTitle() const;
+
+        sal_Bool isEntryCutAllowed(SvLBoxEntry* _pEntry);
+        sal_Bool isEntryCopyAllowed(SvLBoxEntry* _pEntry);
+        sal_Bool isEntryPasteAllowed(SvLBoxEntry* _pEntry);
+
+        void cutEntry(SvLBoxEntry* _pEntry);
+        void copyEntry(SvLBoxEntry* _pEntry);
+        void pasteEntry(SvLBoxEntry* _pEntry);
     };
 
 // .........................................................................

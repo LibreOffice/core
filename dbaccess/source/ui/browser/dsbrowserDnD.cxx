@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-17 10:31:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-18 11:33:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,7 +174,9 @@
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
-
+#ifndef _DBAUI_LINKEDDOCUMENTS_HXX_
+#include "linkeddocuments.hxx"
+#endif
 // .........................................................................
 namespace dbaui
 {
@@ -913,6 +915,165 @@ namespace dbaui
             xPrep->executeUpdate();
         }
     }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnCutEntry, SvLBoxEntry*, _pEntry)
+    {
+        return 0;
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnCopyEntry, SvLBoxEntry*, _pEntry)
+    {
+        if(isEntryCopyAllowed(_pEntry))
+            copyEntry(_pEntry);
+        return 0;
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnPasteEntry, SvLBoxEntry*, _pEntry)
+    {
+        if(isEntryPasteAllowed(_pEntry))
+            pasteEntry(_pEntry);
+        return 0;
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(SbaTableQueryBrowser, OnDeleteEntry, SvLBoxEntry*, _pEntry)
+    {
+        EntryType eType = getEntryType(_pEntry);
+        switch(eType)
+        {
+            case etQuery:
+                implRemoveQuery(_pEntry);
+                break;
+            case etView:
+            case etTable:
+                {
+                    // check if connection is readonly
+                    DBTreeListModel::DBTreeListUserData* pDSData = NULL;
+                    DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
+                    SvLBoxEntry* pDSEntry = NULL;
+                    pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
+                    pDSData =   pDSEntry
+                            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+                            :   NULL;
+
+                    sal_Bool bIsConnectionWriteAble = sal_False;
+                    if(pDSData && pDSData->xObject.is())
+                    {
+                        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
+                        if(xCon.is())
+                            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+                    }
+                    if(bIsConnectionWriteAble && (eType == etTable || eType == etView))
+                        implDropTable(_pEntry);
+                }
+                break;
+            case etBookmark:
+                {
+                    // get the container of the bookmarks
+                    SvLBoxEntry* pContainer = isContainer(_pEntry) ? _pEntry : m_pTreeView->getListBox()->GetParent(_pEntry);
+                    if (!ensureEntryObject(pContainer))
+                        break;
+
+                    String sSelectedObject = GetEntryText(_pEntry);
+
+                    DBTreeListModel::DBTreeListUserData* pContainerData = static_cast<DBTreeListModel::DBTreeListUserData*>(pContainer->GetUserData());
+                    Reference< XNameAccess > xBookmarks(pContainerData->xObject, UNO_QUERY);
+
+                    OLinkedDocumentsAccess aHelper(getView(), getORB(), xBookmarks);
+                    aHelper.drop(sSelectedObject);
+                }
+                break;
+        }
+
+        return 0;
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::isEntryCutAllowed(SvLBoxEntry* _pEntry)
+    {
+        // at the momoent this isn't allowed
+        return sal_False;
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::isEntryCopyAllowed(SvLBoxEntry* _pEntry)
+    {
+        EntryType eType = getEntryType(_pEntry);
+        return  (eType == etTable || eType == etQuery || eType == etView);
+    }
+    // -----------------------------------------------------------------------------
+    sal_Bool SbaTableQueryBrowser::isEntryPasteAllowed(SvLBoxEntry* _pEntry)
+    {
+        sal_Bool bAllowed = sal_False;
+        EntryType eType = getEntryType(_pEntry);
+        switch(eType)
+        {
+            case etQuery:
+            case etQueryContainer:
+            {
+                TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+                bAllowed = aTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY);
+                break;
+            }
+            case etView:
+            case etTable:
+            case etTableContainer:
+                {
+                    // check if connection is readonly
+                    DBTreeListModel::DBTreeListUserData* pDSData = NULL;
+                    DBTreeListModel::DBTreeListUserData* pEntryData = NULL;
+                    SvLBoxEntry* pDSEntry = NULL;
+                    pDSEntry = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
+                    pDSData =   pDSEntry
+                            ?   static_cast<DBTreeListModel::DBTreeListUserData*>(pDSEntry->GetUserData())
+                            :   NULL;
+
+                    sal_Bool bIsConnectionWriteAble = sal_False;
+                    if(pDSData && pDSData->xObject.is())
+                    {
+                        Reference<XConnection> xCon(pDSData->xObject,UNO_QUERY);
+                        if(xCon.is())
+                            bIsConnectionWriteAble = !xCon->getMetaData()->isReadOnly();
+                    }
+                    bAllowed = bIsConnectionWriteAble && ((eType == etTable || eType == etView || eType == etTableContainer) && isTableFormat());
+                }
+                break;
+        }
+        return bAllowed;
+    }
+    // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::cutEntry(SvLBoxEntry* _pEntry)
+    {
+    }
+    // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::copyEntry(SvLBoxEntry* _pEntry)
+    {
+        TransferableHelper* pTransfer = NULL;
+        Reference< XTransferable> aEnsureDelete;
+        EntryType eType = getEntryType(_pEntry);
+        pTransfer       = implCopyObject( _pEntry, eType == etQuery ? CommandType::QUERY : CommandType::TABLE);
+        aEnsureDelete   = pTransfer;
+        if (pTransfer)
+            pTransfer->CopyToClipboard(getView());
+    }
+    // -----------------------------------------------------------------------------
+    void SbaTableQueryBrowser::pasteEntry(SvLBoxEntry* _pEntry)
+    {
+        TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+        EntryType eType = getEntryType(_pEntry);
+        switch(eType)
+        {
+            case etQuery:
+            case etQueryContainer:
+                implPasteQuery(_pEntry, aTransferData);
+                break;
+
+            case etView:
+            case etTable:
+            case etTableContainer:
+                implPasteTable( _pEntry, aTransferData );
+            default:
+                ;
+        }
+    }
+    // -----------------------------------------------------------------------------
 // .........................................................................
 }   // namespace dbaui
 // .........................................................................
@@ -920,6 +1081,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/07/17 10:31:48  oj
+ *  #89128# look if connection is readonly
+ *
  *  Revision 1.20  2001/07/16 13:40:03  oj
  *  #89650# check if table was created for html/rtf format
  *
