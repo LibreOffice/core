@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 10:59:32 $
+ *  last change: $Author: gt $ $Date: 2001-11-01 12:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,21 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
 
 // -----------------------------------------------------------------------
 
+Reference< XController > HelpInterceptor_Impl::getController() const throw( RuntimeException )
+{
+    Reference< XController > xRet;
+    if( m_pWindow )
+    {
+        Reference< XFrame > xFrame = m_pWindow->getTextFrame();
+        if( xFrame.is() )
+            xRet = xFrame->getController();
+    }
+
+    return xRet;
+}
+
+// -----------------------------------------------------------------------
+
 void HelpInterceptor_Impl::addURL( const String& rURL )
 {
     if ( !m_pHistory )
@@ -121,7 +136,22 @@ void HelpInterceptor_Impl::addURL( const String& rURL )
             delete m_pHistory->Remove(i);
     }
 
+    // get view position of _current_ URL
+    HelpHistoryEntry_Impl* pCurEntry = m_pHistory->GetObject( m_nCurPos );
+
+    if( pCurEntry )
+    {
+        try
+        {
+            Reference< XController > xContr( getController() );
+            if( xContr.is() )
+                pCurEntry->aViewData = xContr->getViewData();
+        }
+        catch( const Exception& ) {}
+    }
+
     m_aCurrentURL = rURL;
+
     m_pHistory->Insert( new HelpHistoryEntry_Impl( rURL ), LIST_APPEND );
     m_nCurPos = m_pHistory->Count() - 1;
 
@@ -164,10 +194,14 @@ void HelpInterceptor_Impl::SetStartURL( const String& rURL )
     m_aCurrentURL = rURL;
 }
 
+// -----------------------------------------------------------------------
+
 sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 {
     return m_pHistory && ( m_nCurPos > 0 );
 }
+
+// -----------------------------------------------------------------------
 
 sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 {
@@ -271,7 +305,7 @@ Sequence< ::rtl::OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 {
     Sequence< ::rtl::OUString > aURLList( 1 );
     aURLList[0] = DEFINE_CONST_UNICODE("vnd.sun.star.help://*");
-    return aURLList;;
+    return aURLList;
 }
 
 // -----------------------------------------------------------------------
@@ -309,7 +343,11 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
                             m_pOpenListener->AddListener( xDisp, aURL );
                         }
                         m_aCurrentURL = aURL.Complete;
-                        xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+
+                        Sequence< PropertyValue > aPropSeq( 1 );
+                        aPropSeq[ 0 ].Name = ::rtl::OUString::createFromAscii( "ViewData" );
+                        aPropSeq[ 0 ].Value = pEntry->aViewData;
+                        xDisp->dispatch( aURL, aPropSeq );
                     }
                 }
             }

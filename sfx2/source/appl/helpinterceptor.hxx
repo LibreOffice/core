@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpinterceptor.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 10:59:32 $
+ *  last change: $Author: gt $ $Date: 2001-11-01 12:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #endif
@@ -94,12 +97,18 @@
 #ifndef _LINK_HXX
 #include <tools/link.hxx>
 #endif
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+
 
 struct HelpHistoryEntry_Impl
 {
-    String  aURL;
+    String                      aURL;
+    ::com::sun::star::uno::Any  aViewData;
 
     HelpHistoryEntry_Impl( const String& rURL ) : aURL( rURL ) {}
+    HelpHistoryEntry_Impl( const String& rURL, const ::com::sun::star::uno::Any& rViewData ) : aURL( rURL ), aViewData( rViewData ) {}
 };
 
 DECLARE_LIST(HelpHistoryList_Impl,HelpHistoryEntry_Impl*);
@@ -131,8 +140,9 @@ friend class HelpDispatch_Impl;
     ULONG                       m_nCurPos;
     String                      m_aCurrentURL;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >
+                                getController() const throw( ::com::sun::star::uno::RuntimeException );
     void                        addURL( const String& rURL );
-
 public:
     HelpInterceptor_Impl();
     ~HelpInterceptor_Impl();
