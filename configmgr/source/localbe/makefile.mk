@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2002-11-28 09:05:17 $
+#   last change: $Author: rt $ $Date: 2004-03-30 14:59:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,9 @@ SLOFILES=\
         $(SLO)$/localoutputstream.obj \
         $(SLO)$/localdataimportsvc.obj \
         $(SLO)$/localhierarchybrowsersvc.obj \
+        $(SLO)$/localschemasupplier.obj	\
+        $(SLO)$/localsinglestratum.obj	\
+        $(SLO)$/localfilehelper.obj
 
 # --- Targets ----------------------------------
 
