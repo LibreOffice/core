@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-03 14:10:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:37:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ ModalDialog MD_EDIT_REGION
     TriStateBox CB_EDIT_IN_READONLY
     {
         Pos = MAP_APPFONT ( 98 , 170 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 156 , 10 ) ;
         TabStop = TRUE ;
         TriStateDisable = FALSE ;
         CB_EDIT_IN_READONLY_TEXT
@@ -623,7 +623,7 @@ TabPage TP_INSERT_SECTION
     CheckBox CB_EDIT_IN_READONLY
     {
         Pos = MAP_APPFONT ( 96 , 170 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
         CB_EDIT_IN_READONLY_TEXT
     };
 
@@ -701,23 +701,23 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_NUM
     {
-        Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 18 , 29 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~Nummer neu starten" ;
         Text [ en-US ] = "~Restart numbering";
     };
     FixedText FT_FTN_OFFSET
     {
-        Pos = MAP_APPFONT ( 85 , 29 ) ;
-        Size = MAP_APPFONT ( 49 , 8 ) ;
+        Pos = MAP_APPFONT ( 24 , 46 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ de ] = "~Beginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
     };
     NumericField FLD_FTN_OFFSET
     {
-        Pos = MAP_APPFONT ( 136 , 27 ) ;
+        Pos = MAP_APPFONT ( 90 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -729,16 +729,16 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_FTN_NUM_FMT
     {
-        Pos = MAP_APPFONT ( 12 , 45 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 24 , 61 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "eigenes ~Format" ;
         Text [ en-US ] = "Custom ~format";
     };
     FixedText FT_FTN_PREFIX
     {
-        Pos = MAP_APPFONT ( 85 , 45 ) ;
-        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Pos = MAP_APPFONT ( 30 , 76 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
         Text [ de ] = "~Davor" ;
         Text [ en-US ] = "Be~fore" ;
         Left = TRUE ;
@@ -746,8 +746,8 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_FTN_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 43 ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Pos = MAP_APPFONT ( 90 , 74 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
@@ -755,7 +755,7 @@ TabPage TP_SECTION_FTNENDNOTES
     ListBox LB_FTN_NUMVIEW
     {
         Border = TRUE ;
-         Pos = MAP_APPFONT ( 136 , 43 ) ;
+        Pos = MAP_APPFONT ( 123 , 74 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -763,17 +763,17 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_FTN_SUFFIX
     {
-        Pos = MAP_APPFONT ( 201 , 45 ) ;
+        Pos = MAP_APPFONT ( 191 , 76 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
         Text [ de ] = "Dah~inter" ;
         Text [ en-US ] = "Aft~er" ;
-        Left = TRUE ;
+        Right = TRUE ;
     };
     Edit ED_FTN_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 43 ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Pos = MAP_APPFONT ( 219 , 74 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
@@ -783,38 +783,38 @@ TabPage TP_SECTION_FTNENDNOTES
     FixedLine FL_END
     {
         OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 61 ) ;
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Endnoten" ;
         Text [ en-US ] = "Endnotes";
     };
     CheckBox CB_END_AT_TXTEND
     {
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~am Bereichsende sammeln" ;
         Text [ en-US ] = "C~ollect at end of section";
     };
     CheckBox CB_END_NUM
     {
-        Pos = MAP_APPFONT ( 12 , 88 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 16 , 118 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Nummer neu ~starten" ;
         Text [ en-US ] = "~Restart numbering";
     };
     FixedText FT_END_OFFSET
     {
-        Pos = MAP_APPFONT ( 85 , 88 ) ;
-        Size = MAP_APPFONT ( 49 , 8 ) ;
+        Pos = MAP_APPFONT ( 24 , 135 ) ;
+        Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ de ] = "Be~ginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
     };
     NumericField FLD_END_OFFSET
     {
-        Pos = MAP_APPFONT ( 136 , 86 ) ;
+        Pos = MAP_APPFONT ( 90 , 133 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -826,8 +826,8 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     CheckBox CB_END_NUM_FMT
     {
-        Pos = MAP_APPFONT ( 12 , 104 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 24 , 150 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~eigenes Format" ;
         Text [ en-US ] = "Custom format";
@@ -835,8 +835,8 @@ TabPage TP_SECTION_FTNENDNOTES
 
     FixedText FT_END_PREFIX
     {
-        Pos = MAP_APPFONT ( 85 , 104 ) ;
-        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Pos = MAP_APPFONT ( 30 , 165 ) ;
+        Size = MAP_APPFONT ( 58 , 8 ) ;
         Text [ de ] = "Da~vor" ;
         Text [ en-US ] = "Be~fore" ;
         Left = TRUE ;
@@ -844,8 +844,8 @@ TabPage TP_SECTION_FTNENDNOTES
     Edit ED_END_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 113 , 102 ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Pos = MAP_APPFONT ( 90 , 163 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
@@ -853,7 +853,7 @@ TabPage TP_SECTION_FTNENDNOTES
     ListBox LB_END_NUMVIEW
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 136 , 102 ) ;
+        Pos = MAP_APPFONT ( 123 , 163 ) ;
         Size = MAP_APPFONT ( 62 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -862,17 +862,17 @@ TabPage TP_SECTION_FTNENDNOTES
     };
     FixedText FT_END_SUFFIX
     {
-        Pos = MAP_APPFONT ( 201 , 104 ) ;
+        Pos = MAP_APPFONT ( 191 , 165 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
         Text [ de ] = "Dahinte~r" ;
         Text [ en-US ] = "Aft~er" ;
-        Left = TRUE ;
+        Right = TRUE ;
     };
     Edit ED_END_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 229 , 102 ) ;
-        Size = MAP_APPFONT ( 20 , 12 ) ;
+        Pos = MAP_APPFONT ( 219 , 163 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
         MaxTextLength = 50 ;
