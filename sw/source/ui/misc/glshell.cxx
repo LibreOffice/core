@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glshell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 14:42:16 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,21 +327,13 @@ BOOL SwWebGlosDocShell::Save()
     Beschreibung:
  --------------------------------------------------------------------*/
 
+SV_IMPL_REF ( SwDocShell )
 
-SV_IMPL_REF(SwDocShell)
-
-SwDocShellRef* SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, BOOL bShow )
+SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rShortName, BOOL bShow )
 {
-    SwDocShellRef *pDocShellRef = new SwDocShellRef();
-    SwDocShellRef &xDocSh = *pDocShellRef;
-    SwTextBlocks* pGroup = GetGroupDoc( rGroup );
-    if(pGroup->IsOld())
-    {
-        pGroup->ConvertToNew();
-        if( pGroup->GetError() )
-            ErrorHandler::HandleError( pGroup->GetError() );
-    }
+    SwDocShellRef xDocSh;
 
+    SwTextBlocks* pGroup = GetGroupDoc( rGroup );
     if( pGroup && pGroup->GetCount() )
     {
         // erfrage welche View registriert ist. Im WebWriter gibts es keine
@@ -401,12 +393,15 @@ SwDocShellRef* SwGlossaries::EditGroupDoc( const String& rGroup, const String& r
 
         delete pGroup;
     }
-    return pDocShellRef;
+    return xDocSh;
 }
 
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/05/03 14:42:16  mtg
+    #75825# Set a boolean to show a frame or not, so frames are not displayed when auto texts are edited over the API
+
     Revision 1.1.1.1  2000/09/18 17:14:44  hr
     initial import
 
