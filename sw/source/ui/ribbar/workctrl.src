@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workctrl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 10:55:34 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ Menu RID_INSERT_FIELD_CTRL
             Text[ chinese_traditional ] = "­¶¼Æ";
             Text[ arabic ] = "ÚÏÏ ÇáÕİÍÇÊ";
             Text[ greek ] = "Óıíïëï óåëéäşí";
-            Text[ korean ] = "ÆäÀÌÁö Ä«¿îÆ®";
+            Text[ korean ] = "ÆäÀÌÁö ¼ö";
             Text[ turkish ] = "Sayfa sayısı";
             Text[ language_user1 ] = " ";
         };
