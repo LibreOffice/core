@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-27 03:56:15 $
+ *  last change: $Author: sab $ $Date: 2000-11-03 11:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,9 +79,9 @@
 #endif
 
 #define XML_LINE_LEFT 0
-#define XML_LINE_RIGHT 0
-#define XML_LINE_TOP 0
-#define XML_LINE_BOTTOM 0
+#define XML_LINE_RIGHT 1
+#define XML_LINE_TOP 2
+#define XML_LINE_BOTTOM 3
 
 using namespace ::com::sun::star;
 
