@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mh $ $Date: 2000-12-07 10:01:36 $
+ *  last change: $Author: nn $ $Date: 2001-02-16 18:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,6 +291,9 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             pView->SetMarkedToLayer( SC_LAYER_BACK );
             rBindings.Invalidate(SID_OBJECT_HEAVEN);
             rBindings.Invalidate(SID_OBJECT_HELL);
+            //  leave draw shell if nothing selected (layer may be locked)
+            if ( pView->GetMarkList().GetMarkCount() == 0 )
+                pViewData->GetViewShell()->SetDrawShell( FALSE );
             break;
 
         case SID_FRAME_TO_TOP:
