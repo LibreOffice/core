@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.140 $
+#   $Revision: 1.141 $
 #
-#   last change: $Author: hjs $ $Date: 2003-07-03 15:27:27 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:46:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -294,15 +294,11 @@ DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(IDLDIRS)$/$i)
 DEPIDLFILES:=$(IDLFILES)
 .ENDIF			# "$(EXTERNIDLFILES)"!=""
 .ELSE			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
-.IF "$(GUI)"=="OS2"
-DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) $i $(shell $(FIND) $(IDLDIRS) -name $(i:f) -print) ))
-.ELSE			# "$(GUI)"=="OS2"
-.IF "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
+.IF "$(GUI)"=="WNT"
 DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i) $i $(shell ($(FIND) $(IDLDIRS) -name $(i:f)) | $(SED) s/\//\\/g )))
-.ELSE			# "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
+.ELSE			# "$(GUI)"=="WNT"
 DEPIDLFILES:=$(foreach,i,$(IDLFILES) $(!null,$(shell $(FIND) . -name $i -print) $i $(shell $(FIND) $(IDLDIRS) -name $(i:f) -print )  ))
-.ENDIF			# "$(GUI)"=="WNT" || "$(GUI)"=="WIN"
-.ENDIF			# "$(GUI)"=="OS2"
+.ENDIF			# "$(GUI)"=="WNT"
 .ENDIF			# "$(LOCALIDLFILES)$(EXTERNIDLFILES)"!=""
 .ENDIF			# "$(IDLFILES)"!=""
 
@@ -339,20 +335,6 @@ EXCEPTIONSTARGET=do_it_exceptions
 
 .IF "$(EXCEPTIONSNOOPTFILES)" != ""
 EXCEPTIONSNOOPTTARGET=do_it_exceptions_noopt
-.ENDIF
-
-.IF "$(ADDOPTFILES)" != ""
-ADDOPTTARGET=do_it_add
-.ENDIF
-
-
-#.IF "$(DELOPTFILES)" != ""
-#DELOPTTARGET=do_it_del
-#.ENDIF
-
-
-.IF "$(NOPCHFILES)" != ""
-NOPCHTARGET=do_itpch
 .ENDIF
 
 .IF "$(LIBTARGET)"==""
@@ -418,109 +400,58 @@ NOLIBSLOTARGET=$(SLOFILES)
 .ENDIF
 .ENDIF
 
-.IF "$(UNR)" != ""
-.IF "$(GUI)" == "WIN"
-OPTLINKS=
-MAPSYM=
-.ENDIF
-.ENDIF
-
-.IF "$(OPTLINKS)" != ""
-.IF "$(GUI)" ==  "WIN"
-LINK=$(DEVROOT)$/s70$/bin$/link
-.ENDIF
-.ENDIF
-
-.IF "$(OPTLINKS1)" != ""
-.IF "$(GUI)" ==  "WIN"
-LINK=$(DEVROOT)$/bin$/optlinks$/optlinks
-.ENDIF
-.ENDIF
-
-.IF "$(OPTLINKS2)" != ""
-.IF "$(GUI)" ==  "WIN"
-LINK=$(DEVROOT)$/bin$/optlinks$/neu$/link
-.ENDIF
-.ENDIF
-
-.IF "$(SRCFILES)"!=""
-SRCTARGET=$(SRS)$/$(TARGET).srs
-.ENDIF
-
-.IF "$(SRSFILES)"!=""
-SRSTARGET=$(RES)$/$(TARGET).res
-.ENDIF
-
 .IF "$(SRC1FILES)"!=""
 SRC1TARGET=$(SRS)$/$(SRS1NAME).srs
-.ENDIF
-
-.IF "$(SRS1FILES)"!=""
-SRS1TARGET=$(BIN)$/$(RES1TARGET).res
+DEPSRS1FILE+=$(MISC)$/$(PWD:f).$(SRS1NAME).dprr
+DEPSRSFILES+=$(DEPSRS1FILE)
 .ENDIF
 
 .IF "$(SRC2FILES)"!=""
 SRC2TARGET=$(SRS)$/$(SRS2NAME).srs
-.ENDIF
-
-.IF "$(SRS2FILES)"!=""
-SRS2TARGET=$(BIN)$/$(RES2TARGET).res
+DEPSRS2FILE+=$(MISC)$/$(PWD:f).$(SRS2NAME).dprr
+DEPSRSFILES+=$(DEPSRS2FILE)
 .ENDIF
 
 .IF "$(SRC3FILES)"!=""
 SRC3TARGET=$(SRS)$/$(SRS3NAME).srs
-.ENDIF
-
-.IF "$(SRS3FILES)"!=""
-SRS3TARGET=$(BIN)$/$(RES3TARGET).res
+DEPSRS3FILE+=$(MISC)$/$(PWD:f).$(SRS3NAME).dprr
+DEPSRSFILES+=$(DEPSRS3FILE)
 .ENDIF
 
 .IF "$(SRC4FILES)"!=""
 SRC4TARGET=$(SRS)$/$(SRS4NAME).srs
-.ENDIF
-
-.IF "$(SRS1FILES)"!=""
-SRS4TARGET=$(BIN)$/$(RES4TARGET).res
+DEPSRS4FILE+=$(MISC)$/$(PWD:f).$(SRS4NAME).dprr
+DEPSRSFILES+=$(DEPSRS4FILE)
 .ENDIF
 
 .IF "$(SRC5FILES)"!=""
 SRC5TARGET=$(SRS)$/$(SRS5NAME).srs
-.ENDIF
-
-.IF "$(SRS5FILES)"!=""
-SRS5TARGET=$(BIN)$/$(RES5TARGET).res
+DEPSRS5FILE+=$(MISC)$/$(PWD:f).$(SRS5NAME).dprr
+DEPSRSFILES+=$(DEPSRS5FILE)
 .ENDIF
 
 .IF "$(SRC6FILES)"!=""
 SRC6TARGET=$(SRS)$/$(SRS6NAME).srs
-.ENDIF
-
-.IF "$(SRS6FILES)"!=""
-SRS6TARGET=$(BIN)$/$(RES6TARGET).res
+DEPSRS6FILE+=$(MISC)$/$(PWD:f).$(SRS6NAME).dprr
+DEPSRSFILES+=$(DEPSRS6FILE)
 .ENDIF
 
 .IF "$(SRC7FILES)"!=""
 SRC7TARGET=$(SRS)$/$(SRS7NAME).srs
-.ENDIF
-
-.IF "$(SRS7FILES)"!=""
-SRS7TARGET=$(BIN)$/$(RES7TARGET).res
+DEPSRS7FILE+=$(MISC)$/$(PWD:f).$(SRS7NAME).dprr
+DEPSRSFILES+=$(DEPSRS7FILE)
 .ENDIF
 
 .IF "$(SRC8FILES)"!=""
 SRC8TARGET=$(SRS)$/$(SRS8NAME).srs
-.ENDIF
-
-.IF "$(SRS8FILES)"!=""
-SRS8TARGET=$(BIN)$/$(RES8TARGET).res
+DEPSRS8FILE+=$(MISC)$/$(PWD:f).$(SRS8NAME).dprr
+DEPSRSFILES+=$(DEPSRS8FILE)
 .ENDIF
 
 .IF "$(SRC9FILES)"!=""
 SRC9TARGET=$(SRS)$/$(SRS9NAME).srs
-.ENDIF
-
-.IF "$(SRS9FILES)"!=""
-SRS9TARGET=$(BIN)$/$(RES9TARGET).res
+DEPSRS9FILE+=$(MISC)$/$(PWD:f).$(SRS9NAME).dprr
+DEPSRSFILES+=$(DEPSRS9FILE)
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -638,7 +569,8 @@ ZIP1TARGETN=$(BIN)$/$(ZIP1TARGET).zip
 ZIP1TARGETN=$(foreach,i,$(zip1alllangext) $(BIN)$/$(ZIP1TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP1 ?= TNR!:=1
+ZIP1DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP1TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP1DEPFILE)
 .ENDIF
 
 .IF "$(ZIP2TARGET)"!=""
@@ -655,7 +587,8 @@ ZIP2TARGETN=$(BIN)$/$(ZIP2TARGET).zip
 ZIP2TARGETN=$(foreach,i,$(zip2alllangext) $(BIN)$/$(ZIP2TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP2 ?= TNR!:=2
+ZIP2DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP2TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP2DEPFILE)
 .ENDIF
 
 .IF "$(ZIP3TARGET)"!=""
@@ -672,7 +605,8 @@ ZIP3TARGETN=$(BIN)$/$(ZIP3TARGET).zip
 ZIP3TARGETN=$(foreach,i,$(zip3alllangext) $(BIN)$/$(ZIP3TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP3 ?= TNR!:=3
+ZIP3DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP3TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP3DEPFILE)
 .ENDIF
 
 .IF "$(ZIP4TARGET)"!=""
@@ -689,7 +623,8 @@ ZIP4TARGETN=$(BIN)$/$(ZIP4TARGET).zip
 ZIP4TARGETN=$(foreach,i,$(zip4alllangext) $(BIN)$/$(ZIP4TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP4 ?= TNR!:=4
+ZIP4DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP4TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP4DEPFILE)
 .ENDIF
 
 .IF "$(ZIP5TARGET)"!=""
@@ -706,7 +641,8 @@ ZIP5TARGETN=$(BIN)$/$(ZIP5TARGET).zip
 ZIP5TARGETN=$(foreach,i,$(zip5alllangext) $(BIN)$/$(ZIP5TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP5 ?= TNR!:=5
+ZIP5DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP5TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP5DEPFILE)
 .ENDIF
 
 .IF "$(ZIP6TARGET)"!=""
@@ -723,7 +659,8 @@ ZIP6TARGETN=$(BIN)$/$(ZIP6TARGET).zip
 ZIP6TARGETN=$(foreach,i,$(zip6alllangext) $(BIN)$/$(ZIP6TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP6 ?= TNR!:=6
+ZIP6DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP6TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP6DEPFILE)
 .ENDIF
 
 .IF "$(ZIP7TARGET)"!=""
@@ -740,7 +677,8 @@ ZIP7TARGETN=$(BIN)$/$(ZIP7TARGET).zip
 ZIP7TARGETN=$(foreach,i,$(zip7alllangext) $(BIN)$/$(ZIP7TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP7 ?= TNR!:=7
+ZIP7DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP7TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP7DEPFILE)
 .ENDIF
 
 .IF "$(ZIP8TARGET)"!=""
@@ -757,7 +695,8 @@ ZIP8TARGETN=$(BIN)$/$(ZIP8TARGET).zip
 ZIP8TARGETN=$(foreach,i,$(zip8alllangext) $(BIN)$/$(ZIP8TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP8 ?= TNR!:=8
+ZIP8DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP8TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP8DEPFILE)
 .ENDIF
 
 .IF "$(ZIP9TARGET)"!=""
@@ -774,7 +713,8 @@ ZIP9TARGETN=$(BIN)$/$(ZIP9TARGET).zip
 ZIP9TARGETN=$(foreach,i,$(zip9alllangext) $(BIN)$/$(ZIP9TARGET)$i.zip )
 .ENDIF
 .ENDIF			# "$(common_build_zip)"!=""
-ZIP9 ?= TNR!:=9
+ZIP9DEPFILE=$(subst,$(COMMON_OUTDIR),$(OUTPATH) $(subst,$/bin$/,$/misc$/ $(ZIP9TARGETN:s/.zip/.dpzz)))
+ZIPDEPFILES+=$(ZIP9DEPFILE)
 .ENDIF
 
 .IF "$(APP1TARGET)"!=""
@@ -1672,70 +1612,46 @@ DEF9 ?= TNR!:=9
 .ENDIF
 
 # MISCX for NO_REC_RES uncritical here
-.IF "$(IDLNAME)"!=""
-IDLTARGET=$(MISCX)$/$(IDLNAME).don
-IDL0 ?= TNR!:=
-.ENDIF
-
-.IF "$(IDL1NAME)"!=""
-
-IDL1TARGET=$(MISCX)$/$(IDL1NAME).don
-IDL1 ?= TNR!:=1
-.ENDIF
-
-.IF "$(IDL2NAME)"!=""
-IDL2TARGET=$(MISCX)$/$(IDL2NAME).don
-IDL2 ?= TNR!:=2
-.ENDIF
-
-.IF "$(IDL3NAME)"!=""
-IDL3TARGET=$(MISCX)$/$(IDL3NAME).don
-IDL3 ?= TNR!:=3
-.ENDIF
-
-.IF "$(IDL4NAME)"!=""
-IDL4TARGET=$(MISCX)$/$(IDL4NAME).don
-IDL4 ?= TNR!:=4
-.ENDIF
-
-.IF "$(IDL5NAME)"!=""
-IDL5TARGET=$(MISCX)$/$(IDL5NAME).don
-IDL5 ?= TNR!:=5
-.ENDIF
 
 .IF "$(SDINAME)"!=""
 .DIRCACHE=no
 SDITARGET=$(MISCX)$/$(SDINAME).don
+HIDSIDPARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDINAME)_sid.hid
 SDI0 ?= TNR!:=
 .ENDIF
 
 .IF "$(SDI1NAME)"!=""
 .DIRCACHE=no
 SDI1TARGET=$(MISCX)$/$(SDI1NAME).don
+HIDSID1PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI1NAME)_sid.hid
 SDI1 ?= TNR!:=1
 .ENDIF
 
 .IF "$(SDI2NAME)"!=""
 .DIRCACHE=no
 SDI2TARGET=$(MISCX)$/$(SDI2NAME).don
+HIDSID2PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI2NAME)_sid.hid
 SDI2 ?= TNR!:=2
 .ENDIF
 
 .IF "$(SDI3NAME)"!=""
 .DIRCACHE=no
 SDI3TARGET=$(MISCX)$/$(SDI3NAME).don
+HIDSID3PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI3NAME)_sid.hid
 SDI3 ?= TNR!:=3
 .ENDIF
 
 .IF "$(SDI4NAME)"!=""
 .DIRCACHE=no
 SDI4TARGET=$(MISCX)$/$(SDI4NAME).don
+HIDSID4PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI4NAME)_sid.hid
 SDI4 ?= TNR!:=4
 .ENDIF
 
 .IF "$(SDI5NAME)"!=""
 .DIRCACHE=no
 SDI5TARGET=$(MISCX)$/$(SDI5NAME).don
+HIDSID5PARTICLE=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISCX))$/$(SDI5NAME)_sid.hid
 SDI5 ?= TNR!:=5
 .ENDIF
 
@@ -1759,22 +1675,23 @@ TARGETDPJ=$(MISC)$/$(TARGET).dpj
 .ENDIF			# "$(L10N_framework)"==""
 .ENDIF
 
-#.IF "$(UPDATER)"=="YES"
-#.IF "$(product)"!=""
 .IF "$(no_hids)$(NO_HIDS)"==""
-#.IF "$(BUILD_SOSL)" == ""
 .IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
+BUILDHIDS:=TRUE
 .IF "$(GEN_HID_OTHER)"!=""
 PRJHIDOTHERTARGET=$(SRS)$/hidother.hid
+COMMONPRJHIDOTHERTARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC)$/$(TARGET)_othr.hid)
 .ENDIF
 .IF "$(GEN_HID)"!=""
 PRJHIDTARGET=$(MISC)$/$(PRJNAME).hid
 .ENDIF
-#.ENDIF
+.IF "$(GEN_HID2)"!=""
+PRJHID2TARGET=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst
 .ENDIF
-.ENDIF
-#.ENDIF
-#.ENDIF
+.ENDIF			# "$(USE_SHELL)"=="4NT"
+.ENDIF			# "$(GUI)"=="WNT"
+.ENDIF			# "$(no_hids)$(NO_HIDS)"==""
 
 .IF "$(OS2_SOLENV_INC)"!=""
 OS2_COPY_MK=do_copy_mk
@@ -1817,8 +1734,6 @@ ALLTAR:	\
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
-        $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
-        $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
         $(XMLPROPERTIESN) \
@@ -1835,10 +1750,9 @@ ALLTAR:	\
         $(SCP7TARGETN) \
         $(SCP8TARGETN) \
         $(SCP9TARGETN) \
-        $(SRCTARGET)	$(SRSTARGET) \
-        $(SRC1TARGET)	$(SRS1TARGET) \
-        $(SRC2TARGET)	$(SRS2TARGET) \
-        $(SRC3TARGET)	$(SRS3TARGET) \
+        $(SRC1TARGET)  \
+        $(SRC2TARGET)  \
+        $(SRC3TARGET)  \
         $(SRC4TARGET)	$(SRC5TARGET)	$(SRC6TARGET)		\
         $(SRC7TARGET)	$(SRC8TARGET)	$(SRC9TARGET)		\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
@@ -1863,14 +1777,9 @@ ALLTAR:	\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN)\
-    $(HIDFILES) \
-        $(HID1FILES) $(HID2FILES) \
-        $(HID3FILES) $(HID4FILES) \
-        $(HID5FILES) $(HID6FILES) \
-        $(HID7FILES) $(HID8FILES) \
-        $(HID9FILES) \
-        $(PRJHIDOTHERTARGET) \
+        $(COMMONPRJHIDOTHERTARGET) \
         $(PRJHIDTARGET) \
+        $(PRJHID2TARGET) \
         $(REMOTE_BUILD)\
         last_target
 
@@ -1887,18 +1796,15 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(DELDEFS)		\
         $(YACCTARGET)	\
         $(UNOUCRTARGET)	\
-        $(NOPCHTARGET)						\
         $(UNOIDLDEPTARGETS) \
         $(URDTARGET) \
         $(URDDOCTARGET) \
         $(UNOIDLTARGETS) \
-        $(PROJECTPCHTARGET) \
-        $(ADDOPTTARGET) $(DELOPTTARGET) \
         $(DEPFILES) $(DPCTARGET) \
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
-        $(IDLTARGET)	$(SDITARGET)	\
+        $(SDITARGET)	\
         $(UNODOCTARGET)	\
         $(LOCALDBTARGET)	\
         $(LOCALDOCDBTARGET)	\
@@ -1974,10 +1880,9 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(APP7TARGETN)	$(APP8TARGETN)	$(APP9TARGETN)		\
         $(JARTARGETN)	\
         $(JARTARGETDEPN)	\
-        $(SRCTARGET)	$(SRSTARGET) \
-        $(SRC1TARGET)	$(SRS1TARGET) \
-        $(SRC2TARGET)	$(SRS2TARGET) \
-        $(SRC3TARGET)	$(SRS3TARGET)		  \
+        $(SRC1TARGET)	\
+        $(SRC2TARGET)	\
+        $(SRC3TARGET)	\
         $(SRC4TARGET)	$(SRC5TARGET)	$(SRC6TARGET)		\
         $(SRC7TARGET)	$(SRC8TARGET)	$(SRC9TARGET)		\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
@@ -2003,14 +1908,9 @@ ALLTAR: $(MAKELANGDIR)	$(MAKEDEMODIR)	$(MAKECOMPDIR) $(MAKEXLDIR)	\
         $(RESLIBSPLIT3TARGETN) $(RESLIBSPLIT4TARGETN)\
         $(RESLIBSPLIT5TARGETN) $(RESLIBSPLIT6TARGETN)\
         $(RESLIBSPLIT7TARGETN) \
-        $(HIDFILES) \
-        $(HID1FILES) $(HID2FILES) \
-        $(HID3FILES) $(HID4FILES) \
-        $(HID5FILES) $(HID6FILES) \
-        $(HID7FILES) $(HID8FILES) \
-        $(HID9FILES) \
-        $(PRJHIDOTHERTARGET) \
+        $(COMMONPRJHIDOTHERTARGET) \
         $(PRJHIDTARGET) \
+        $(PRJHID2TARGET) \
                 $(SIGNFORNETSCAPE) \
                 $(SIGNFOREXPLORER) \
                 $(SIGNFORJARSIGNER) \
@@ -2030,12 +1930,8 @@ TARGETDEPS+=$(NOOPTTARGET)
 TARGETDEPS+=$(EXCEPTIONSTARGET)
 .ENDIF
 
-.IF "$(ADDOPT_FLAG)"==""
-TARGETDEPS+=$(ADDOPTTARGET)
-.ENDIF
-
 #don't override .TARGETS when called with targets
-.IF "$(MAKETARGETS)$(TNR)$(ADDOPT_FLAG)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
+.IF "$(MAKETARGETS)$(TNR)$(EXCEPTIONSNOOPT_FLAG)$(EXCEPTIONS_FLAG)$(NOOPT_FLAG)"==""
 .IF "$(TARGETDEPS)"!=""
 #.TARGETS .SEQUENTIAL :- $(TARGETDEPS) ALLTAR
 .INIT .SEQUENTIAL : $(TARGETDEPS) $(NULLPRQ)
@@ -2108,9 +2004,6 @@ $(JAVATARGET) : $(GENJAVAFILES)
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_dir.mk
-
-.INCLUDE : tg_idl.mk
-
 
 .IF "$(UNIXTEXT)"!=""
 $(UNIXTEXT) : $(UNIXTEXT:f)
@@ -2192,9 +2085,15 @@ COMPVTMP:=$(mktmp iii)
 .ENDIF			# "$(UPDATER)"!=""
 
 .IF "$(JAVAVERMK)"!=""
+.IF "$(JAVALOCATION)"!="$(JAVA_HOME)"
+"$(JAVAVERMK)" .PHONY :
+.ELSE          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
 "$(JAVAVERMK)" : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg
+.ENDIF          # "$(JAVALOCATION)"!="$(JAVA_HOME)"
+    @+-$(RM) $@
     @echo JAVAVER:=$(JAVAVER) > $@
     @echo JAVANUMVER:=$(JAVANUMVER) >> $@
+    @echo JAVALOCATION:=$(JAVA_HOME) >> $@
     
 .ENDIF			# "$(JAVAVERMK)"!=""
 
@@ -2249,6 +2148,15 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 .ENDIF
 .ENDIF
 
+.IF "$(COMMONPRJHIDOTHERTARGET)"!=""
+$(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
+        @echo ------------------------------
+        @echo Making: $@
+        @+if exist $@ rm $@
+        +$(TYPE) $(PRJHIDOTHERTARGET) > $@.$(ROUT).tmp 
+        @+$(RENAME) $@.$(ROUT).tmp $@
+.ENDIF	    
+
 # -------
 # - LIB -
 # -------
@@ -2277,7 +2185,13 @@ $(MISC)$/$(TARGET)_xxl_%.done : %.xxl
 # - SRS -
 # -------
 
+.IF "$(SRS1NAME)$(SRS2NAME)$(SRS3NAME)$(SRS4NAME)$(SRS5NAME)$(SRS6NAME)$(SRS7NAME)$(SRS8NAME)$(SRS9NAME)"!=""
+.IF "$(MK_UNROLL)"!=""
+.INCLUDE : _tg_srs.mk
+.ELSE
 .INCLUDE : tg_srs.mk
+.ENDIF
+.ENDIF          # "$(SRS1NAME)$(SRS2NAME)$(SRS3NAME)$(SRS4NAME)$(SRS5NAME)$(SRS6NAME)$(SRS7NAME)$(SRS8NAME)$(SRS9NAME)"!=""
 
 # -------
 # - RES -
@@ -2376,13 +2290,6 @@ $(RSC_MULTI1) $(RSC_MULTI2) $(RSC_MULTI3) $(RSC_MULTI4) $(RSC_MULTI5) $(RSC_MULT
 .INCLUDE : $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
 .INCLUDE : $(MISC)$/$(TARGET).dpc
-.IF "$(GROUP)"=="WRITER"
-.IF "$(debug)"!=""
-.IF "$(depend)"==""
-.INCLUDE : $(MISC)$/$(TARGET).dpw
-.ENDIF			# "$(depend)"==""
-.ENDIF			# "$(debug)"!=""
-.ENDIF			# "$(GROUP)"=="WRITER"
 .ENDIF
 .ELSE		# MAKEFILERC
 .ENDIF		# MAKEFILERC
@@ -2459,41 +2366,6 @@ $(TARGETDPJ) : $(JAVAFILES) $(JAVATARGET)
 .ENDIF			# "$(SOLARVERSION)"!="$(SHARED_SOLARVERSION)"
 
 # ----------------------------------
-# - NOPCH - files ohne PCH -
-# ----------------------------------
-
-.IF "$(NOPCHTARGET)" != ""
-.IF "$(NOPCH_FLAG)" == ""
-$(NOPCHTARGET):
-    @+echo --- NOPCH ---
-    @dmake $(MFLAGS) $(MAKEFILE) PCHSLOFLAGSU= PCHOBJFLAGSU= $(NOPCHFILES) NOPCH_FLAG=TRUE $(CALLMACROS)
-.ENDIF
-.ENDIF
-
-# --------------------------------
-# - PROJECT pre compiled headers -
-# --------------------------------
-.IF "$(PROJECTPCHTARGET)"!=""
-.IF "$(uniq $(TARGETDEPS))"!=""
-.INIT .SEQUENTIAL  :- $(PROJECTPCHTARGET) $(TARGETDEPS)
-.ENDIF
-
-.IF "$(PROJECTPCH_FLAG)"==""
-$(PROJECTPCHTARGET) .PHONY :
-    dmake $(MFLAGS) $(MAKEFILE) $@ PROJECTPCH_FLAG=TRUE $(CALLMACROS)
-.ELSE			# "$(PROJECTPCH_FLAG)"!=""
-$(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
-.IF "$(COM)"=="MSC" || "(COM)"=="BLC"
-.IF "$(PROJECTPCH4DLL)" != ""
-    $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSSLO) $(PCHSLOFLAGSC) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSOUTOBJ)$(SLO)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
-.ELSE
-    $(CXX) $(CFLAGS) $(CFLAGSCXX) $(CFLAGSOBJ) $(PCHOBJFLAGSC) $(CDEFS) $(CDEFSOBJ) $(CFLAGSOUTOBJ)$(OBJ)$/$(PROJECTPCH).obj $(PROJECTPCHSOURCE).cxx
-.ENDIF
-.ENDIF
-.ENDIF			# "$(PROJECTPCH_FLAG)"!=""
-.ENDIF
-
-# ----------------------------------
 # - NOOPT - files ohne optimierung -
 # ----------------------------------
 
@@ -2504,12 +2376,12 @@ $(PROJECTPCHTARGET) : $(PROJECTPCHSOURCE).cxx
 
 $(NOOPTTARGET):
     @+echo --- NOOPTFILES ---
-    @dmake $(MFLAGS) $(MAKEFILE) nopt=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) nopt=true $(NOOPTFILES) NOOPT_FLAG=TRUE $(CALLMACROS)
     @+echo --- NOOPTFILES OVER ---
 
 $(NOOPTFILES):
     @+echo --- NOOPT ---
-    @dmake $(MFLAGS) $(MAKEFILE) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) nopt=true NOOPT_FLAG=TRUE $(CALLMACROS) $@
     @+echo --- NOOPT OVER ---
 .ENDIF
 .ENDIF
@@ -2526,12 +2398,12 @@ $(NOOPTFILES):
 
 $(EXCEPTIONSTARGET):
     @+echo --- EXCEPTIONSFILES ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSFILES) EXCEPTIONS_FLAG=TRUE $(CALLMACROS)
     @+echo --- EXCEPTIONSFILES OVER ---
 
 $(EXCEPTIONSFILES):
     @+echo --- EXCEPTIONS ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONS_FLAG=TRUE $(CALLMACROS) $@
     @+echo --- EXCEPTIONS OVER ---
 
 
@@ -2549,12 +2421,12 @@ $(EXCEPTIONSFILES):
 
 $(EXCEPTIONSNOOPTTARGET):
     @+echo --- EXCEPTIONSNOOPTFILES ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(PROJECTPCHTARGET:s/.pc/.xc/) $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true $(EXCEPTIONSNOOPTFILES) EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS)
     @+echo --- EXCEPTIONSNOOPTFILES OVER ---
 
 $(EXCEPTIONSNOOPTFILES):
     @+echo --- EXCEPTIONSNOOPT ---
-    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/) $@
+    @dmake $(MFLAGS) $(MAKEFILE) ENABLE_EXCEPTIONS=true EXCEPTIONSNOOPT_FLAG=TRUE nopt=true $(CALLMACROS) $@
     @+echo --- EXCEPTIONSNOOPT OVER ---
 
 
@@ -2572,7 +2444,7 @@ $(EXCEPTIONSNOOPTFILES):
 .IF "$(remote)" == ""
 $(REMOTE_BUILD):
     @+echo --- REMOTE_BUILD ---
-    @dmake $(MFLAGS) $(MAKEFILE) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @dmake $(MFLAGS) $(MAKEFILE) remote=true REMOTE_BUILD_FLAG=TRUE $(CALLMACROS)
     @+echo --- REMOTE_BUILD OVER ---
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
@@ -2591,38 +2463,6 @@ warn_lazy_deps:
     @+echo -----------------------------------------------
 .ENDIF			# "$(LAZY_DEPS)"!=""
 
-# ----------------------------------
-# - ADDOPT - files ohne optimierung -
-# ----------------------------------
-
-.IF "$(ADDOPTTARGET)" != ""
-.IF "$(ADDOPT_FLAG)" == ""
-
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) : $(ADDOPTTIONSTARGET)
-
-$(ADDOPTTARGET):
-    @+echo --- ADDOPT ---
-    @+echo no longer supported
-    force_dmake_to_error
-.ENDIF
-.ENDIF
-
-
-# ----------------------------------
-# - DELOPT - files ohne optimierung -
-# ----------------------------------
-
-.IF "$(DELOPTTARGET)" != ""
-.IF "$(DELOPT_FLAG)" == ""
-
-#$(SLOFILES) $(OBJFILES) $(IDLSLOFILES) $(IDLOBJFILES) $(S2USLOFILES) $(SMRSLOFILES) $(SVXLIGHTSLOFILES) $(SVXLIGHTOBJFILES) : $(DELOPTTIONSTARGET)
-
-$(DELOPTTARGET):
-    @+echo --- DELOPT ---
-    @+echo no longer supported
-    force_dmake_to_error
-.ENDIF
-.ENDIF
 # ----------------------------------
 # - OTHER - alles wofuer rules da sind -
 # ----------------------------------
@@ -2759,6 +2599,7 @@ killobj:
     @+echo objects weg!
 
 killsrs:
+# doesn't work - fix me!
 .IF "$(SRSFILES)" != ""
     +$(RM) $(SRSFILES)
 .ENDIF
@@ -2817,15 +2658,11 @@ clean_all :
 
 
 SRCALLTARGET:	\
-        $(OS2_COPY_MK)		\
-        $(IDLTARGET)	$(IDL1TARGET)	$(IDL2TARGET)		\
-        $(IDL3TARGET)	$(IDL4TARGET)	$(IDL5TARGET)		\
         $(SDITARGET)	$(SDI1TARGET)	$(SDI2TARGET)		\
         $(SDI3TARGET)	$(SDI4TARGET)	$(SDI5TARGET)		\
-        $(SRCTARGET)	$(SRSTARGET) \
-        $(SRC1TARGET)	$(SRS1TARGET) \
-        $(SRC2TARGET)	$(SRS2TARGET) \
-        $(SRC3TARGET)	$(SRS3TARGET)	  $(RCTARGET)		  \
+        $(SRC1TARGET)	\
+        $(SRC2TARGET)	\
+        $(SRC3TARGET)	$(RCTARGET)		  \
         $(SRC4TARGET)	$(SRC5TARGET)	$(SRC6TARGET)		\
         $(SRC7TARGET)	$(SRC8TARGET)	$(SRC9TARGET)		\
         $(SRC10TARGET)	$(SRC11TARGET)	$(SRC12TARGET)		\
@@ -2936,6 +2773,16 @@ $(MISC)$/$(PRJNAME).hid : \
     @+if exist $(MISC)\*.* $(ENV_TOOLS)$/slothid.bat $(MISC)\*.lst $@ $(INPATH)
     @echo done Making $@
 
+#new hid.lst trigger with GEN_HID2=TRUE
+$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/hid.lst .PHONY :
+    @echo Making $@ :
+    @echo ---------------
+    @+if exist $@ $(RM) $@
+    @echo $(WORK_STAMP).$(LAST_MINOR) 010101010101010> $@.$(ROUT).tmp
+    $(TYPE) $(SOLARCOMMONBINDIR)$/hid$/*.hid | $(SORT) -u >> $@.$(ROUT).tmp 
+    @+$(RENAME) $@.$(ROUT).tmp $@
+
+
 .IF "$(SOLAR_JAVA)"!=""
 .INCLUDE : tg_java.mk
 .ENDIF          # "$(SOLAR_JAVA)"!=""
@@ -2975,7 +2822,7 @@ ALLTAR : ALLDEP \
 .IF "$(remote)" == ""
 $(REMOTE_DEPEND):
     @+echo --- REMOTE_DEPEND ---
-    @dmake $(MFLAGS) $(MAKEFILE) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @dmake $(MFLAGS) $(MAKEFILE) remote=true depend=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS)
     @+echo --- REMOTE_DEPEND OVER ---
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
