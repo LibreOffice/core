@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyinfo.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:07:12 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,7 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
+#include <vector>
 
 //............................................................................
 namespace pcr
@@ -91,8 +86,7 @@ namespace pcr
         virtual sal_Int32               getPropertyHelpId(sal_Int32 _nId) const = 0;
         virtual sal_Int16               getPropertyPos(sal_Int32 _nId) const = 0;
         virtual sal_uInt32              getPropertyUIFlags(sal_Int32 _nId) const = 0;
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
-                                        getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
+        virtual ::std::vector< String > getPropertyEnumRepresentations(sal_Int32 _nId) const = 0;
     };
 
 //............................................................................
