@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,7 +302,6 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_HIDDEN_PARAGRAPHS         ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_INDEX_MARK_BACKGROUND     ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_FOOTNOTE_BACKGROUND       ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND     ;
-extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_RELATIVE                  ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH        ;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_SIZE_PROTECTED                 ;
@@ -676,6 +675,7 @@ extern const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE;
 extern const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH;
+extern const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE;
 #endif
 
 

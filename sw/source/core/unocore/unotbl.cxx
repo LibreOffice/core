@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2001-02-28 13:49:15 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,7 +682,7 @@ const SfxItemPropertyMap* GetTableDescPropertyMap()
         { SW_PROP_NAME(UNO_NAME_RELATIVE_WIDTH),        FN_TABLE_RELATIVE_WIDTH,&::getCppuType((const sal_Int16*)0)  ,          PROPERTY_NONE, 0    },
         { SW_PROP_NAME(UNO_NAME_REPEAT_HEADLINE) ,      FN_TABLE_HEADLINE_REPEAT,&::getBooleanCppuType(),       PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),         RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),         FN_TABLE_IS_RELATIVE_WIDTH,  &::getBooleanCppuType()  ,     PROPERTY_NONE, 0 },
+        { SW_PROP_NAME(UNO_NAME_IS_WIDTH_RELATIVE),     FN_TABLE_IS_RELATIVE_WIDTH,  &::getBooleanCppuType()  ,     PROPERTY_NONE, 0 },
         { SW_PROP_NAME(UNO_NAME_TABLE_NAME),          0,                      &::getCppuType((const OUString*)0),       PROPERTY_NONE, 0 },
         { SW_PROP_NAME(UNO_NAME_TOP_MARGIN),            RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},
         { SW_PROP_NAME(UNO_NAME_BOTTOM_MARGIN),         RES_UL_SPACE,           &::getCppuType((const sal_Int32*)0), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},
@@ -2032,7 +2032,7 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
 
 
     uno::Any* pSzRel        = 0;
-    GetProperty(UNO_NAME_SIZE_RELATIVE, pSzRel  );
+    GetProperty(UNO_NAME_IS_WIDTH_RELATIVE, pSzRel  );
     uno::Any* pRelWidth     = 0;
     GetProperty(UNO_NAME_RELATIVE_WIDTH, pRelWidth);
     uno::Any* pWidth        = 0;

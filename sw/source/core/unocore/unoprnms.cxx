@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:25 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,6 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_HIDDEN_PARAGRAPHS                 
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_INDEX_MARK_BACKGROUND             (MAP_CHAR_LEN("ShowIndexMarkBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_FOOTNOTE_BACKGROUND               (MAP_CHAR_LEN("ShowFootnoteBackground"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SHOW_TEXT_FIELD_BACKGROUND             (MAP_CHAR_LEN("ShowTextFieldBackground"));
-const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_RELATIVE                          (MAP_CHAR_LEN("SizeRelative"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT                (MAP_CHAR_LEN("IsSyncWidthToHeight"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH                (MAP_CHAR_LEN("IsSyncHeightToWidth"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_SIZE_PROTECTED                         (MAP_CHAR_LEN("SizeProtected"));
@@ -675,4 +674,4 @@ const SwPropNameLen __FAR_DATA UNO_NAME_FOOTNOTE_LINE_DISTANCE              (MAP
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION                       (MAP_CHAR_LEN("CharRotation"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_ROTATION_IS_FIT_TO_LINE        (MAP_CHAR_LEN("CharRotationIsFitToLine"));
 const SwPropNameLen __FAR_DATA UNO_NAME_CHAR_SCALE_WIDTH                    (MAP_CHAR_LEN("CharScaleWidth"));
-
+const SwPropNameLen __FAR_DATA UNO_NAME_IS_WIDTH_RELATIVE                   (MAP_CHAR_LEN("IsWidthRelative"));

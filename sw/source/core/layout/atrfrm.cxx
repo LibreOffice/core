@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-03-01 12:30:44 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -452,13 +452,6 @@ BOOL SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
         case MID_FRMSIZE_REL_WIDTH:
             rVal <<= (sal_Int16)(GetWidthPercent() != 0xFF ? GetWidthPercent() : 0);
         break;
-        case MID_FRMSIZE_IS_SYNC_REL_SIZE:
-        {
-            BOOL bTmp = (0xFF == GetHeightPercent()) ||
-                        (0xFF == GetWidthPercent());
-            rVal.setValue(&bTmp, ::getBooleanCppuType());
-        }
-        break;
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
             BOOL bTmp = 0xFF == GetHeightPercent();
@@ -535,7 +528,6 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 bRet = sal_False;
         }
         break;
-        case MID_FRMSIZE_IS_SYNC_REL_SIZE:
         case MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH:
         {
             sal_Bool bSet = *(sal_Bool*)rVal.getValue();

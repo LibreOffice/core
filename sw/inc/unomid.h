@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-19 08:06:06 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@
 #define MID_FRMSIZE_SIZE                        0
 #define MID_FRMSIZE_REL_HEIGHT                  1
 #define MID_FRMSIZE_REL_WIDTH                   2
-#define MID_FRMSIZE_IS_SYNC_REL_SIZE            3
+
 #define MID_FRMSIZE_WIDTH                       4
 #define MID_FRMSIZE_HEIGHT                      5
 #define MID_FRMSIZE_SIZE_TYPE                   6

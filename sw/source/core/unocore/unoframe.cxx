@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-02 14:04:11 $
+ *  last change: $Author: os $ $Date: 2001-03-06 15:45:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,6 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_SERVER_MAP)     ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
         { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
         { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
-        { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
         { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
         { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
         { SW_PROP_NAME(UNO_NAME_SURROUND  )               , RES_SURROUND,           &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE, MID_SURROUND_SURROUNDTYPE    },
@@ -313,7 +312,7 @@ const SfxItemPropertyMap* GetFrameDescMap()
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
         {0,0,0,0}
     };
-    #define FRM_PROP_COUNT 56
+    #define FRM_PROP_COUNT 55
     return aFrameDescPropertyMap_Impl;
 }
 // unterscheidet sich von der Rahmenbeschreibung durch eine XTextPosition
@@ -353,7 +352,6 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_SERVER_MAP )        ,       RES_URL,                &::getBooleanCppuType(),            PROPERTY_NONE ,MID_URL_SERVERMAP         },
         { SW_PROP_NAME(UNO_NAME_SHADOW_FORMAT),             RES_SHADOW,             &::getCppuType((const table::ShadowFormat*)0),  PROPERTY_NONE, 0},
         { SW_PROP_NAME(UNO_NAME_SIZE),                  RES_FRM_SIZE,           &::getCppuType((const awt::Size*)0),            PROPERTY_NONE, MID_FRMSIZE_SIZE|CONVERT_TWIPS},
-        { SW_PROP_NAME(UNO_NAME_SIZE_RELATIVE),             RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_REL_SIZE   },
         { SW_PROP_NAME(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT    },
         { SW_PROP_NAME(UNO_NAME_IS_SYNC_HEIGHT_TO_WIDTH),   RES_FRM_SIZE,           &::getBooleanCppuType()  ,          PROPERTY_NONE,   MID_FRMSIZE_IS_SYNC_HEIGHT_TO_WIDTH },
         { SW_PROP_NAME(UNO_NAME_SIZE_PROTECTED)    ,    RES_PROTECT,            &::getBooleanCppuType(),            PROPERTY_NONE, MID_PROTECT_SIZE    },
@@ -394,7 +392,7 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 71
+    #define GRPH_PROP_COUNT 70
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -659,8 +657,6 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         GetProperty(C2S(UNO_NAME_RELATIVE_HEIGHT), pRelH);
         uno::Any* pRelW = 0;
         GetProperty(C2S(UNO_NAME_RELATIVE_WIDTH), pRelW);
-        uno::Any* pSzRel = 0;
-        GetProperty(C2S(UNO_NAME_SIZE_RELATIVE), pSzRel);
         uno::Any* pSyncWidth = 0;
         GetProperty(C2S(UNO_NAME_IS_SYNC_WIDTH_TO_HEIGHT), pSyncWidth);
         uno::Any* pSyncHeight = 0;
@@ -673,7 +669,7 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
         GetProperty(C2S(UNO_NAME_SIZE), pSize);
         uno::Any* pSizeType = 0;
         GetProperty(C2S(UNO_NAME_SIZE_TYPE), pSizeType);
-        if( pWidth || pHeight ||pRelH || pRelW || pSzRel || pSize ||pSizeType ||
+        if( pWidth || pHeight ||pRelH || pRelW || pSize ||pSizeType ||
             pSyncWidth || pSyncHeight )
         {
             SwFmtFrmSize aFrmSz;
@@ -685,8 +681,6 @@ sal_Bool BaseFrameProperties_Impl::FillBaseProperties(SfxItemSet& rSet)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pRelH, MID_FRMSIZE_REL_HEIGHT);
             if(pRelW )
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pRelW, MID_FRMSIZE_REL_WIDTH);
-            if(pSzRel)
-                bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSzRel, MID_FRMSIZE_IS_SYNC_REL_SIZE);
             if(pSyncWidth)
                 bRet &= ((SfxPoolItem&)aFrmSz).PutValue(*pSyncWidth, MID_FRMSIZE_IS_SYNC_WIDTH_TO_HEIGHT);
             if(pSyncHeight)
