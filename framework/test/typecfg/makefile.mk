@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 18:22:06 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:40:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,7 @@ APP2OBJS=		$(SLO)$/cfgview.obj					\
                 $(SLO)$/lockhelper.obj
 
 # [ed] 6/16/02 Add in the transactionmanager object on OS X
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 APP2OBJS+=	$(SLO)$/transactionmanager.obj
 .ENDIF
 
@@ -115,7 +115,7 @@ APP2DEPN=		$(SLO)$/servicemanager.obj			\
                 $(SLO)$/lockhelper.obj
 
 # [ed] 6/16/02 Add in the transactionmanager object on OS X
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)$(CVER)"=="MACOSXC295"
 APP2DEPN+=	$(SLO)$/transactionmanager.obj
 .ENDIF
 
