@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:28:06 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,22 +229,25 @@ static void parseLineAndFile(sal_Char* pBuf)
 %x DOCU
 %x COMMENT
 
-DIGIT			[0-9]
+DIGIT           [0-9]
 OCT_DIGIT       [0-7]
 HEX_DIGIT       [a-fA-F0-9]
-ALPHA			[a-zA-Z]
-INT_LITERAL		[1-9][0-9]*
-OCT_LITERAL		0{OCT_DIGIT}*
-HEX_LITERAL		(0x|0X){HEX_DIGIT}*
-ESC_SEQUENCE1	"\\"[ntvbrfa\\\?\'\"]
+CAPITAL         [A-Z]
+SMALL           [a-z]
+ALPHA           [a-zA-Z]
+INT_LITERAL     [1-9][0-9]*
+OCT_LITERAL     0{OCT_DIGIT}*
+HEX_LITERAL     (0x|0X){HEX_DIGIT}*
+ESC_SEQUENCE1   "\\"[ntvbrfa\\\?\'\"]
 ESC_SEQUENCE2   "\\"{OCT_DIGIT}{1,3}
 ESC_SEQUENCE3   "\\"(x|X){HEX_DIGIT}{1,2}
 ESC_SEQUENCE    ({ESC_SEQUENCE1}|{ESC_SEQUENCE2}|{ESC_SEQUENCE3})
-CHAR        	([^\n\t\"\'\\]|{ESC_SEQUENCE})
+CHAR            ([^\n\t\"\'\\]|{ESC_SEQUENCE})
 CHAR_LITERAL    "'"({CHAR}|\")"'"
-STRING_LITERAL	\"({CHAR}|"'")*\"
+STRING_LITERAL  \"({CHAR}|"'")*\"
 
-IDENTIFIER		({ALPHA}|_{ALPHA})({ALPHA}|{DIGIT}|_)*
+IDENTIFIER_NEW  ({ALPHA}({ALPHA}|{DIGIT})*)|({CAPITAL}("_"?({ALPHA}|{DIGIT})+)*)
+IDENTIFIER      ("_"?({ALPHA}|{DIGIT})+)*
 
 %%
 
@@ -253,59 +256,59 @@ IDENTIFIER		({ALPHA}|_{ALPHA})({ALPHA}|{DIGIT}|_)*
 	idlc()->incLineNumber();
 }
 
-attribute		return IDL_ATTRIBUTE;
-bound			return IDL_BOUND;
-case			return IDL_CASE;
-const			return IDL_CONST;
-constants		return IDL_CONSTANTS;
-constrained		return IDL_CONSTRAINED;
-default			return IDL_DEFAULT;
-enum			return IDL_ENUM;
-exception		return IDL_EXCEPTION;
-interface		return IDL_INTERFACE;
-maybeambiguous 	return IDL_MAYBEAMBIGUOUS;
-maybedefault	return IDL_MAYBEDEFAULT;
-maybevoid		return IDL_MAYBEVOID;
-module			return IDL_MODULE;
-needs			return IDL_NEEDS;
-observes		return IDL_OBSERVES;
-optional		return IDL_OPTIONAL;
-property		return IDL_PROPERTY;
-raises			return IDL_RAISES;
-readonly		return IDL_READONLY;
-removable 		return IDL_REMOVEABLE;
-service			return IDL_SERVICE;
-sequence		return IDL_SEQUENCE;
-singleton		return IDL_SINGLETON;
-struct			return IDL_STRUCT;
-switch			return IDL_SWITCH;
-transient 		return IDL_TRANSIENT;
-typedef			return IDL_TYPEDEF;
-union			return IDL_UNION;
+attribute       return IDL_ATTRIBUTE;
+bound           return IDL_BOUND;
+case            return IDL_CASE;
+const           return IDL_CONST;
+constants       return IDL_CONSTANTS;
+constrained     return IDL_CONSTRAINED;
+default         return IDL_DEFAULT;
+enum            return IDL_ENUM;
+exception       return IDL_EXCEPTION;
+interface       return IDL_INTERFACE;
+maybeambiguous  return IDL_MAYBEAMBIGUOUS;
+maybedefault    return IDL_MAYBEDEFAULT;
+maybevoid       return IDL_MAYBEVOID;
+module          return IDL_MODULE;
+needs           return IDL_NEEDS;
+observes        return IDL_OBSERVES;
+optional        return IDL_OPTIONAL;
+property        return IDL_PROPERTY;
+raises          return IDL_RAISES;
+readonly        return IDL_READONLY;
+removable       return IDL_REMOVEABLE;
+service         return IDL_SERVICE;
+sequence        return IDL_SEQUENCE;
+singleton       return IDL_SINGLETON;
+struct          return IDL_STRUCT;
+switch          return IDL_SWITCH;
+transient       return IDL_TRANSIENT;
+typedef         return IDL_TYPEDEF;
+union           return IDL_UNION;
 
-any			return IDL_ANY;				
-boolean		return IDL_BOOLEAN;
-byte		return IDL_BYTE;
-char		return IDL_CHAR;
-double		return IDL_DOUBLE;
-float		return IDL_FLOAT;
-hyper		return IDL_HYPER;
-long		return IDL_LONG;
-short		return IDL_SHORT;
-string		return IDL_STRING;
-type		return IDL_TYPE;
-unsigned	return IDL_UNSIGNED;
-void		return IDL_VOID;
+any             return IDL_ANY;				
+boolean         return IDL_BOOLEAN;
+byte            return IDL_BYTE;
+char            return IDL_CHAR;
+double          return IDL_DOUBLE;
+float           return IDL_FLOAT;
+hyper           return IDL_HYPER;
+long            return IDL_LONG;
+short           return IDL_SHORT;
+string          return IDL_STRING;
+type            return IDL_TYPE;
+unsigned        return IDL_UNSIGNED;
+void            return IDL_VOID;
 
-TRUE		return IDL_TRUE;
-True		return IDL_TRUE;
-FALSE		return IDL_FALSE;
-False		return IDL_FALSE;
+TRUE            return IDL_TRUE;
+True            return IDL_TRUE;
+FALSE           return IDL_FALSE;
+False           return IDL_FALSE;
 
-in			return IDL_IN;
-out			return IDL_OUT;
-inout		return IDL_INOUT;
-oneway		return IDL_ONEWAY;
+in              return IDL_IN;
+out             return IDL_OUT;
+inout           return IDL_INOUT;
+oneway          return IDL_ONEWAY;
 
 ("-")?{INT_LITERAL}+(l|L|u|U)?    {
             	yylval.ival = asciiToInteger( 10, yytext );
