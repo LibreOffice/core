@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AttrTransformerAction.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:29:28 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 15:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ enum XMLAttrTransformerAction
                                          //           + token of new attribute value
                                          // if param2 or param3 are unused they must contain
                                          // XML_TOKEN_INVALID
+    XML_ATACTION_ISO2RNG_DATETIME,       // converts , into . in datetimes
     XML_ATACTION_USER_DEFINED=0x80000000,// user defined actions start here
     XML_ATACTION_END=XML_TACTION_END
 };
