@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2002-04-05 14:17:03 $
+ *  last change: $Author: os $ $Date: 2002-05-28 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3232,19 +3232,19 @@ void    SvxNumberingPreview::Paint( const Rectangle& rRect )
 /*-----------------02.12.97 12:55-------------------
 
 --------------------------------------------------*/
-NumMenuButton::~NumMenuButton()
-{
-}
+//NumMenuButton::~NumMenuButton()
+//{
+//}
 
 /*-----------------02.12.97 12:55-------------------
 
 --------------------------------------------------*/
-void NumMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if(maClickHdl_Impl.IsSet())
-        maClickHdl_Impl.Call(this);
-    MenuButton::MouseButtonDown( rMEvt );
-}
+//void NumMenuButton::MouseButtonDown( const MouseEvent& rMEvt )
+//{
+//    if(maClickHdl_Impl.IsSet())
+//        maClickHdl_Impl.Call(this);
+//    MenuButton::MouseButtonDown( rMEvt );
+//}
 
 /*-----------------03.12.97 10:02-------------------
 

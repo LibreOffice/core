@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-07-05 10:20:09 $
+ *  last change: $Author: os $ $Date: 2002-05-28 13:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ SvxLineTabPage::SvxLineTabPage
 
     //#58425# Symbole auf einer Linie (z.B. StarChart) , MB-Handler setzen
     aSymbolMB.SetSelectHdl(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
-    aSymbolMB.SetClickHdl(LINK(this, SvxLineTabPage, MenuCreateHdl_Impl));
+    aSymbolMB.SetActivateHdl(LINK(this, SvxLineTabPage, MenuCreateHdl_Impl));
     aSymbolWidthMF.SetModifyHdl(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     aSymbolHeightMF.SetModifyHdl(LINK(this, SvxLineTabPage, SizeHdl_Impl));
     aSymbolRatioCB.SetClickHdl(LINK(this, SvxLineTabPage, RatioHdl_Impl));
