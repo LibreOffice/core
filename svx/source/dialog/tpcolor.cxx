@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 12:43:00 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 09:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,13 +103,26 @@
 #include "dlgname.hrc"
 #include "dialmgr.hxx"
 
-#define DLGWIN this->GetParent()->GetParent()
+#define DLGWIN GetParentDialog( this )
 
 /*************************************************************************
 |*
 |*  Dialog zum Aendern und Definieren der Farben
 |*
 \************************************************************************/
+
+static Window* GetParentDialog( Window* pWindow )
+{
+    while( pWindow )
+    {
+        if( pWindow->IsDialog() )
+            break;
+
+        pWindow = pWindow->GetParent();
+    }
+
+    return pWindow;
+}
 
 SvxColorTabPage::SvxColorTabPage
 (
@@ -497,6 +510,14 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
+    Window *pWindow = this;
+    bool bEnabled;
+    while( pWindow )
+    {
+        bEnabled = pWindow->IsEnabled();
+        pWindow = pWindow->GetParent();
+    }
+
     ResMgr* pMgr = DIALOG_MGR();
     String aDesc( ResId( RID_SVXSTR_DESC_COLOR, pMgr ) );
     String aName( aEdtName.GetText() );
