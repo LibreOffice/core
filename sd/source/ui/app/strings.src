@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:37:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4402,7 +4402,7 @@ String STR_LAYERMODE
 /* ### ACHTUNG: Neuer Text in Resource! */
 String STR_MASTERPAGEMODE
 {
-    Text = "Hintergrundansicht" ;
+    Text = "Masteransicht" ;
     Text [ ENGLISH ] = "Background View" ;
     Text [ english_us ] = "Master View" ;
 
@@ -17483,64 +17483,75 @@ String STR_DESC_RENAMESLIDE
     Text[ slovenian ] = "Ime";
 };
 
+String STR_PLACEHOLDER_DESCRIPTION_TITLE
+{
+    Text = "Titelbereich für AutoLayouts" ;
+    Text [ ENGLISH ] = "Titel Area for AutoLayouts" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_OUTLINE
+{
+    Text = "Objektbereich für AutoLayouts" ;
+    Text [ ENGLISH ] = "Object Area for AutoLayouts" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_FOOTER
+{
+    Text = "Fußzeilenbereich" ;
+    Text [ ENGLISH ] = "Footer Area" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_HEADER
+{
+    Text = "Kopfzeilenbereich" ;
+    Text [ ENGLISH ] = "Header Area" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_DATETIME
+{
+    Text = "Datumsbereich" ;
+    Text [ ENGLISH ] = "Date Area" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_SLIDE
+{
+    Text = "Foliennummernbereich" ;
+    Text [ ENGLISH ] = "Slide Number Area" ;
+};
 
+String STR_PLACEHOLDER_DESCRIPTION_NUMBER
+{
+    Text = "Seitenzahlbereich" ;
+    Text [ ENGLISH ] = "Page Number Area" ;
+};
 
+String STR_FIELD_PLACEHOLDER_HEADER
+{
+    Text = "<Kopfzeile>" ;
+    Text [ ENGLISH ] = "<header>" ;
+};
 
+String STR_FIELD_PLACEHOLDER_FOOTER
+{
+    Text = "<Fußzeile>" ;
+    Text [ ENGLISH ] = "<footer>" ;
+};
 
+String STR_FIELD_PLACEHOLDER_DATETIME
+{
+    Text = "<Datum/Uhrzeit>" ;
+    Text [ ENGLISH ] = "<date/time>" ;
+};
+String STR_FIELD_PLACEHOLDER_NUMBER
+{
+    Text = "<Nummer>" ;
+    Text [ ENGLISH ] = "<number>" ;
+};
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+String STR_PLACEHOLDER_DESCRIPTION_NOTES
+{
+    Text = "Bereich für Notizen";
+    Text [ ENGLISH ] = "Notes Area";
+};
 
 
