@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 10:00:22 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,6 @@ void BasicIDEDLL::Init()
         aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
 
     BASIC_MOD() = new BasicIDEModule( pMgr, &BasicDocShell::Factory() );
-
-    BasicDocShell::RegisterFactory( SVX_INTERFACE_BASIDE_DOCSH );
 
     new BasicIDEDLL;
     SfxModule* pMod = BASIC_MOD();
