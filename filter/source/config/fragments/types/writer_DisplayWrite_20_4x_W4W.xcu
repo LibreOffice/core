@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>DisplayWrite 2.0-4.x (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">DisplayWrite 2.0-4.x</value>
+            <value>DisplayWrite 2.0-4.x</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
