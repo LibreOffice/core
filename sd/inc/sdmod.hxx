@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-04 08:52:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #ifndef _PRESENTATION_HXX
 #include "pres.hxx"
 #endif
+#ifndef INCLUDED_SDDLLAPI_H
+#include "sddllapi.h"
+#endif
+
 #ifndef _SVSTOR_HXX
 #include <so3/svstor.hxx>
 #endif
@@ -82,8 +86,15 @@
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
 #endif
+
+#ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>
+#endif
+
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 class SdOptions;
 class BasicIDE;
@@ -147,7 +158,7 @@ public:
     virtual void            FillStatusBar(StatusBar& rBar);
 
     SdOptions*              GetSdOptions(DocumentType eDocType);
-    SvStorageStreamRef      GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
+    SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
 
     BOOL                    GetWaterCan() const { return bWaterCan; }
     void                    SetWaterCan( BOOL bWC ) { bWaterCan = bWC; }
@@ -169,7 +180,7 @@ public:
     */
     OutputDevice* GetRefDevice (::sd::DrawDocShell& rDocShell);
 
-    SvNumberFormatter*      GetNumberFormatter();
+    SD_DLLPUBLIC SvNumberFormatter*     GetNumberFormatter();
 
     ::com::sun::star::text::WritingMode GetDefaultWritingMode() const;
 
