@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docchart.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: jp $ $Date: 2000-11-07 10:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #endif
 #ifndef _SCH_MEMCHRT_HXX
 #include <sch/memchrt.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
+#include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #endif
 
 #ifndef _DOC_HXX
@@ -253,6 +256,7 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
         const SwTblBoxNumFormat& rDfltNumFmt = *(SwTblBoxNumFormat*)
                                         GetDfltAttr( RES_BOXATR_FORMAT );
         pData->SetNumberFormatter( GetFrmFmt()->GetDoc()->GetNumberFormatter());
+
         int bFirstRow = TRUE;
         for( n = nRowStt; n < nLines; ++n )
         {
@@ -284,9 +288,27 @@ SchMemChart *SwTable::UpdateData( SchMemChart* pData,
                             pData->SetNumFormatIdRow( n, rNumFmt.GetValue() );
                     }
                 }
-
             }
             bFirstRow = FALSE;
+        }
+
+        {
+            com::sun::star::uno::Sequence< com::sun::star::chart::
+                        ChartSeriesAddress > aSeriesSeq( nBoxes - nColStt );
+
+            for( USHORT i = nColStt; i < nBoxes; ++i )
+            {
+                const SwTableBox* pSttBox = (*aLines[ nRowStt ])[ i ],
+                                * pEndBox = (*aLines[ nLines-1])[ i ];
+                String sSeries( GetFrmFmt()->GetName() );
+                (sSeries.Insert( '<', 0 ) += '.' ) += pSttBox->GetName();
+                ((sSeries += ':' ) += pEndBox->GetName() ) += '>';
+
+                com::sun::star::chart::ChartSeriesAddress aSeries;
+                aSeries.DataRangeAddress = sSeries;
+                aSeriesSeq[ i - nColStt ] = aSeries;
+            }
+            pData->SetSeriesAddresses( aSeriesSeq );
         }
     }
     else if( pData )
