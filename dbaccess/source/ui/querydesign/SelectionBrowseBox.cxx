@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-02 14:56:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-07 09:27:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
 
     m_nMode = BROWSER_COLUMNSELECTION | BROWSER_HIDESELECT | BROWSER_KEEPSELECTION | BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL;
 
-    m_pTextCell     = new Edit(&GetDataWindow());
+    m_pTextCell     = new Edit(&GetDataWindow(), 0);
     //  m_pTextCell->EnableSpecialCheck(sal_False);
     m_pVisibleCell  = new DbCheckBoxCtrl(&GetDataWindow());
     m_pTableCell    = new DbListBoxCtrl(&GetDataWindow());
