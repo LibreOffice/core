@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2001-04-20 11:05:28 $
+ *  last change: $Author: os $ $Date: 2001-04-20 11:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,6 +779,11 @@ const SfxItemPropertyMap* SwFieldPropMapProvider::GetPropertyMap(USHORT nService
                 {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_ELEMENT ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_FILE    ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_DDE_COMMAND_TYPE    ), 0,    &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
+#if (defined(__SUNPRO_CC) && (__SUNPRO_CC == 0x500)) || (defined(__GNUC__) && defined(__APPLE__))
+                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  new uno::Type(::getCppuType((Sequence<Reference<XDependentTextField> >*)0)), PropertyAttribute::READONLY, 0},
+#else
+                {SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS),  0,  &::getCppuType((Sequence<Reference<XDependentTextField> >*)0), PropertyAttribute::READONLY, 0},
+#endif
                 {SW_PROP_NAME(UNO_NAME_IS_AUTOMATIC_UPDATE), 0,  &::getBooleanCppuType(), PROPERTY_NONE,    0},
                 {SW_PROP_NAME(UNO_NAME_NAME),               0,  &::getCppuType((const OUString*)0), PROPERTY_NONE,  0},
                 {SW_PROP_NAME(UNO_NAME_INSTANCE_NAME),      0,  &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
