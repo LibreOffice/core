@@ -2671,3 +2671,8 @@ __CT??_R0?AVSQLException@sdbc@star@sun@com@@@8??0SQLException@sdbc@star@sun@com@
 ?DbgName_file_OStatement_Base@file@connectivity@@YAPAUDbgDataType@@XZ
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx1005715063@@YAEABVString@@0@Z
 ?isCaseSensitiveParentFolder@?%O:\SRC641\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx271208398@@YAEABVString@@0@Z
+??_C@_0CD@DFIJ@o?3?2SRX642?2wntmsci7?2inc?2vos?1ref?4i@
+??_C@_0DF@MOGM@o?3?2SRX642?2wntmsci7?2inc?2com?1sun?1s@
+?isCaseSensitiveParentFolder@?%O:\SRX642\src\connectivity\source\drivers\file\FDatabaseMetaData.cxx248082840@@YAEABVString@@0@Z
+??_C@_0DB@KMFL@o?3?2SRX642?2wntmsci7?2inc?2comphelpe@
+??_C@_0DG@PHC@o?3?2SRX642?2wntmsci7?2inc?2comphelpe@
