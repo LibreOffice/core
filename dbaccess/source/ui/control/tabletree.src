@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:42:25 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 13:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ String STR_COULDNOTCONNECT
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
-    Text = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Passwort.";
+    Text = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Kennwort.";
     Text [ english ] = "Please check the current settings, e.g. with respect to user name and password.";
     Text [ english_us ] = "Please check the current settings, e.g. user name and password.";
     Text[ portuguese ] = "Verifique as definições actuais, por exemplo, nome de utilizador e senha.";
@@ -379,6 +379,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2002/08/19 07:42:25  oj
+ *  #99473# change string resource files
+ *
  *  Revision 1.26  2002/08/03 20:12:07  kz
  *  Merge SRX643: 03.08.02 - 22:08:55
  *
