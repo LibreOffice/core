@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pointaction.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:25:38 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:31:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #include <canvas/canvastools.hxx>
 #endif
 
+#include <boost/utility.hpp>
+
 #include <mtftools.hxx>
 
 
@@ -93,48 +95,105 @@ namespace cppcanvas
 {
     namespace internal
     {
-        PointAction::PointAction( const ::Point&            rPoint,
-                                  const CanvasSharedPtr&    rCanvas,
-                                  const OutDevState&        rState ) :
-            maPoint( rPoint ),
-            mpCanvas( rCanvas ),
-            maState()
+        namespace
         {
-            tools::initRenderState(maState,rState);
-            maState.DeviceColor = rState.lineColor;
+            class PointAction : public Action, private ::boost::noncopyable
+            {
+            public:
+                PointAction( const ::Point&,
+                             const CanvasSharedPtr&,
+                             const OutDevState& );
+                PointAction( const ::Point&,
+                             const CanvasSharedPtr&,
+                             const OutDevState&,
+                             const ::Color&     );
+
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation ) const;
+                virtual bool render( const ::basegfx::B2DHomMatrix& rTransformation,
+                                     const Subset&                  rSubset ) const;
+
+                virtual sal_Int32 getActionCount() const;
+
+            private:
+                // default: disabled copy/assignment
+                PointAction(const PointAction&);
+                PointAction& operator = ( const PointAction& );
+
+                ::Point                                     maPoint;
+                CanvasSharedPtr                             mpCanvas;
+                ::com::sun::star::rendering::RenderState    maState;
+            };
+
+            PointAction::PointAction( const ::Point&            rPoint,
+                                      const CanvasSharedPtr&    rCanvas,
+                                      const OutDevState&        rState ) :
+                maPoint( rPoint ),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                tools::initRenderState(maState,rState);
+                maState.DeviceColor = rState.lineColor;
+            }
+
+            PointAction::PointAction( const ::Point&            rPoint,
+                                      const CanvasSharedPtr&    rCanvas,
+                                      const OutDevState&        rState,
+                                      const ::Color&            rAltColor ) :
+                maPoint( rPoint ),
+                mpCanvas( rCanvas ),
+                maState()
+            {
+                tools::initRenderState(maState,rState);
+                maState.DeviceColor = ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
+                                                                              rAltColor );
+            }
+
+            bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
+            {
+                RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PointAction::render()" );
+                RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PointAction: 0x%X", this );
+
+                rendering::RenderState aLocalState( maState );
+                ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
+
+                mpCanvas->getUNOCanvas()->drawPoint( ::vcl::unotools::point2DFromPoint(maPoint),
+                                                     mpCanvas->getViewState(),
+                                                     aLocalState );
+
+                return true;
+            }
+
+            bool PointAction::render( const ::basegfx::B2DHomMatrix&    rTransformation,
+                                      const Subset&                     rSubset ) const
+            {
+                // point only contains a single action, fail if subset
+                // requests different range
+                if( rSubset.mnSubsetBegin != 0 ||
+                    rSubset.mnSubsetEnd != 1 )
+                    return false;
+
+                return render( rTransformation );
+            }
+
+            sal_Int32 PointAction::getActionCount() const
+            {
+                return 1;
+            }
         }
 
-        PointAction::PointAction( const ::Point&            rPoint,
-                                  const CanvasSharedPtr&    rCanvas,
-                                  const OutDevState&        rState,
-                                  const ::Color&            rAltColor ) :
-            maPoint( rPoint ),
-            mpCanvas( rCanvas ),
-            maState()
+        ActionSharedPtr PointActionFactory::createPointAction( const ::Point&           rPoint,
+                                                               const CanvasSharedPtr&   rCanvas,
+                                                               const OutDevState&       rState )
         {
-            tools::initRenderState(maState,rState);
-            maState.DeviceColor = ::vcl::unotools::colorToDoubleSequence( rCanvas->getUNOCanvas()->getDevice(),
-                                                                          rAltColor );
+            return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState ) );
         }
 
-        PointAction::~PointAction()
+        ActionSharedPtr PointActionFactory::createPointAction( const ::Point&           rPoint,
+                                                               const CanvasSharedPtr&   rCanvas,
+                                                               const OutDevState&       rState,
+                                                               const ::Color&           rColor  )
         {
+            return ActionSharedPtr( new PointAction( rPoint, rCanvas, rState, rColor ) );
         }
-
-        bool PointAction::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
-        {
-            RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::PointAction::render()" );
-            RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::PointAction: 0x%X", this );
-
-            rendering::RenderState aLocalState( maState );
-            ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
-
-            mpCanvas->getUNOCanvas()->drawPoint( ::vcl::unotools::point2DFromPoint(maPoint),
-                                                 mpCanvas->getViewState(),
-                                                 aLocalState );
-
-            return true;
-        }
-
     }
 }
