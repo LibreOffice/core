@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backtrace.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:20:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 #endif /* defined SOLARIS */
 
 
-#ifdef FREEBSD
+#if defined FREEBSD || defined NETBSD
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
