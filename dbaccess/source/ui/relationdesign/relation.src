@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:49 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ ToolBox RID_BRW_REALTIONDESIGN_TOOLBOX
             Text[ japanese ] = "Ã°ÌÞÙ‚Ì’Ç‰Á...";
             Text[ korean ] = "Å×ÀÌºí Ãß°¡ ...";
             Text[ chinese_simplified ] = "Ôö¼Ó±í¸ñ...";
-            Text[ chinese_traditional ] = "¼W¥[ªí®æ...";
+            Text[ chinese_traditional ] = "·s¼Wªí®æ...";
             Text[ turkish ] = "Add tables ...";
             Text[ arabic ] = "ÅÖÇÝÉ ÌÏÇæá...";
             Text[ catalan ] = "Añadir tablas ...";
@@ -489,7 +489,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ polish ] = "Cofnij";
                     Text[ portuguese_brazilian ] = "Undo";
                     Text[ japanese ] = "Œ³‚É–ß‚·";
-                    Text[ korean ] = "Undo";
+                    Text[ korean ] = "½ÇÇà Ãë¼Ò";
                     Text[ chinese_simplified ] = "³·ÏûÃüÁî";
                     Text[ chinese_traditional ] = "´_­ì";
                     Text[ turkish ] = "Undo";
@@ -519,7 +519,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
                     Text[ polish ] = "Przywróæ";
                     Text[ portuguese_brazilian ] = "Redo";
                     Text[ japanese ] = "‚â‚è’¼‚µ";
-                    Text[ korean ] = "Redo";
+                    Text[ korean ] = "»èÁ¦ Ãë¼Ò";
                     Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî";
                     Text[ chinese_traditional ] = "«ì´_ºM®ø«ü¥O";
                     Text[ turkish ] = "Redo";
@@ -588,7 +588,7 @@ Menu RID_RELATION_DESIGN_MAIN_MENU
             Text[ greek ] = "Å~ñãáëåßá";
             Text[ polish ] = "~Narzêdzia";
             Text[ japanese ] = "Â°Ù(~T)";
-            Text[ korean ] = "µµ±¸(~T)";
+            Text[ korean ] = "¿É¼Ç(~T)";
             Text[ chinese_simplified ] = "¹¤¾ß(~T)";
             Text[ chinese_traditional ] = "¤u¨ã(~T)";
             Text[ arabic ] = "Ã~ÏæÇÊ";
@@ -605,7 +605,28 @@ String STR_QUERY_REL_DELETE_WINDOW
 {
     Text = "Wenn Sie diese Tabelle löschen werden alle zugehörigen Relationen ebenfalls gelöscht. Fortfahren?" ;
     Text [ ENGLISH ] = "When you delete this table all corresponding relations will be deleted as well. Continue?" ;
+    Text[ english_us ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ portuguese ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ russian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ greek ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ dutch ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ french ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ spanish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ finnish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ italian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ danish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ swedish ] = "Om du raderar den här tabellen raderas även alla tillhörande relationer. Vill du fortsätta?";
+    Text[ polish ] = "Wraz z tabel¹ usuniête zostan¹ wszystkie przynale¿ne relacje. Kontynuowaæ?";
+    Text[ portuguese_brazilian ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ japanese ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ korean ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ chinese_simplified ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ chinese_traditional ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ turkish ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ arabic ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
+    Text[ catalan ] = "When you delete this table all corresponding relations will be deleted as well. Continue?";
 };
+
 
 
 
