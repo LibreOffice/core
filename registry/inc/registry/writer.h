@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writer.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 09:18:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ extern "C" {
 
    @param documentation the documentation; must not be null
 
-   @param fileName the file name; must not be null
+   @param fileName the file name; must not be null (deprecated, use an empty string)
 
    @param typeClass the type class of the created type writer
 
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL typereg_writer_setSuperTypeName(
 
    @param documentation the documentation of the field; must not be null
 
-   @param fileName the file name of the field; must not be null
+   @param fileName the file name of the field; must not be null (deprecated, use an empty string)
 
    @param flags the flags of the field
 
