@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,6 +335,13 @@ void SdrPathObj::RecalcBoundRect()
         long nLEndWdt=ImpGetLineEndAdd();
         if (nLEndWdt>nLineWdt) nLineWdt=nLEndWdt;
     }
+
+    //BFS09
+    if(ImpAddLineGeomteryForMiteredLines())
+    {
+        nLineWdt = 0;
+    }
+
     if (nLineWdt!=0) {
         aOutRect.Left  ()-=nLineWdt;
         aOutRect.Top   ()-=nLineWdt;
@@ -345,7 +352,7 @@ void SdrPathObj::RecalcBoundRect()
     ImpAddTextToBoundRect();
 }
 
-sal_Bool SdrPathObj::DoPaintObject(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
+sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     // #110094#-16 Moved to ViewContactOfSdrObj::ShouldPaintObject(..)
     //// Hidden objects on masterpages, draw nothing
@@ -465,17 +472,19 @@ SdrObject* SdrPathObj::CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte*
     aR.Top()   -=nMyTol;
     aR.Bottom()+=nMyTol;
 
-    FASTBOOL bHit=FALSE;
+    sal_Bool bHit(sal_False);
     unsigned nPolyAnz=aPathPolygon.Count();
     if (bFilled) {
         PolyPolygon aPP;
         for (unsigned nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-            aPP.Insert(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
+            aPP.Insert(XOutCreatePolygon(aPathPolygon[nPolyNum]));
+//BFS09         aPP.Insert(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
         }
         bHit=IsRectTouchesPoly(aPP,aR);
     } else {
         for (unsigned nPolyNum=0; nPolyNum<nPolyAnz && !bHit; nPolyNum++) {
-            Polygon aPoly(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
+            Polygon aPoly(XOutCreatePolygon(aPathPolygon[nPolyNum]));
+//BFS09         Polygon aPoly(XOutCreatePolygon(aPathPolygon[nPolyNum],NULL));
             bHit=IsRectTouchesLine(aPoly,aR);
         }
     }
@@ -2405,7 +2414,7 @@ USHORT SdrPathObj::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHi
         rInsNextAfter=TRUE;
         nNewHdl=NbcInsPoint(0,rPos,FALSE,bNewObj,bHideHim);
     } else {
-        VirtualDevice   aVDev;
+//BFS09     VirtualDevice   aVDev;
         Polygon         aPoly, aStart(2), aEnd(2);
         Point           aBestPnt[2];
         BigInt          nBestDst(0x7FFFFFFF);
@@ -2418,11 +2427,11 @@ USHORT SdrPathObj::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHi
         FASTBOOL        bAppend = FALSE;
         FASTBOOL        bTestEnd = FALSE;
 
-        MapMode aMap = aVDev.GetMapMode();
-        aMap.SetMapUnit(pModel->GetScaleUnit());
-        aMap.SetScaleX(pModel->GetScaleFraction());
-        aMap.SetScaleY(pModel->GetScaleFraction());
-        aVDev.SetMapMode(aMap);
+//BFS09     MapMode aMap = aVDev.GetMapMode();
+//BFS09     aMap.SetMapUnit(pModel->GetScaleUnit());
+//BFS09     aMap.SetScaleX(pModel->GetScaleFraction());
+//BFS09     aMap.SetScaleY(pModel->GetScaleFraction());
+//BFS09     aVDev.SetMapMode(aMap);
 
         for (nPoly = 0; nPoly < nPolyCnt; nPoly++)
         {
@@ -2439,7 +2448,8 @@ USHORT SdrPathObj::NbcInsPoint(const Point& rPos, FASTBOOL bNewObj, FASTBOOL bHi
 
                     if (rXPoly.IsControl(nPnt+1)) {
                         lcl_CopyBezier(rXPoly,nPnt,aXPolyPart,0);
-                        aPoly=XOutCreatePolygon(aXPolyPart,&aVDev);
+//BFS09                     aPoly=XOutCreatePolygon(aXPolyPart,&aVDev);
+                        aPoly=XOutCreatePolygon(aXPolyPart);
                         nNextPartPos=3;
                     } else {
                         aPoly = Polygon(2);
@@ -2739,75 +2749,75 @@ void SdrPathObj::RestGeoData(const SdrObjGeoData& rGeo)
     ImpForceKind(); // damit u.a. bClosed gesetzt wird
 }
 
-void SdrPathObj::WriteData(SvStream& rOut) const
-{
-    SdrTextObj::WriteData(rOut);
-    SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrPathObj");
-#endif
-    {
-        SdrDownCompat aPathCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
-#ifdef DBG_UTIL
-        aPathCompat.SetID("SdrPathObj(PathPolygon)");
-#endif
-        rOut<<aPathPolygon;
-    }
-}
+//BFS01void SdrPathObj::WriteData(SvStream& rOut) const
+//BFS01{
+//BFS01 SdrTextObj::WriteData(rOut);
+//BFS01 SdrDownCompat aCompat(rOut,STREAM_WRITE); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrPathObj");
+//BFS01#endif
+//BFS01 {
+//BFS01     SdrDownCompat aPathCompat(rOut,STREAM_WRITE); // ab V11 eingepackt
+//BFS01#ifdef DBG_UTIL
+//BFS01     aPathCompat.SetID("SdrPathObj(PathPolygon)");
+//BFS01#endif
+//BFS01     rOut<<aPathPolygon;
+//BFS01 }
+//BFS01}
 
-void SdrPathObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
-{
-    if (rIn.GetError()!=0) return;
-    SdrTextObj::ReadData(rHead,rIn);
-    SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
-#ifdef DBG_UTIL
-    aCompat.SetID("SdrPathObj");
-#endif
-    aPathPolygon.Clear();
-    if (rHead.GetVersion()<=6 && (rHead.nIdentifier==OBJ_LINE || rHead.nIdentifier==OBJ_POLY || rHead.nIdentifier==OBJ_PLIN)) {
-        // SdrPolyObj importieren
-        switch (eKind) {
-            case OBJ_LINE: {
-                Polygon aP(2);
-                rIn>>aP[0];
-                rIn>>aP[1];
-                aPathPolygon=XPolyPolygon(PolyPolygon(aP));
-            } break;
-            case OBJ_PLIN: {
-                Polygon aP;
-                rIn>>aP;
-                aPathPolygon=XPolyPolygon(PolyPolygon(aP));
-            } break;
-            default: {
-                PolyPolygon aPoly;
-                rIn>>aPoly;
-                aPathPolygon=XPolyPolygon(aPoly);
-                // und nun die Polygone ggf. durch einfuegen eines weiteren Punktes schliessen
-                USHORT nPolyAnz=aPathPolygon.Count();
-                for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
-                    const XPolygon& rPoly=aPathPolygon[nPolyNum];
-                    USHORT nPointAnz=rPoly.GetPointCount();
-                    aPathPolygon[nPolyNum].GetPointCount();
-                    if (nPointAnz>=2 && rPoly[0]!=rPoly[USHORT(nPointAnz-1)]) {
-                        Point aPt(rPoly[0]);
-                        aPathPolygon[nPolyNum][nPointAnz]=aPt;
-                    }
-                }
-            }
-        }
-    } else {
-        if (rHead.GetVersion()>=11) { // ab V11 ist das eingepackt
-            SdrDownCompat aPathCompat(rIn,STREAM_READ);
-#ifdef DBG_UTIL
-            aPathCompat.SetID("SdrPathObj(PathPolygon)");
-#endif
-            rIn>>aPathPolygon;
-        } else {
-            rIn>>aPathPolygon;
-        }
-    }
-    ImpForceKind(); // ggf. den richtigen Identifier herstellen.
-}
+//BFS01void SdrPathObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
+//BFS01{
+//BFS01 if (rIn.GetError()!=0) return;
+//BFS01 SdrTextObj::ReadData(rHead,rIn);
+//BFS01 SdrDownCompat aCompat(rIn,STREAM_READ); // Fuer Abwaertskompatibilitaet (Lesen neuer Daten mit altem Code)
+//BFS01#ifdef DBG_UTIL
+//BFS01 aCompat.SetID("SdrPathObj");
+//BFS01#endif
+//BFS01 aPathPolygon.Clear();
+//BFS01 if (rHead.GetVersion()<=6 && (rHead.nIdentifier==OBJ_LINE || rHead.nIdentifier==OBJ_POLY || rHead.nIdentifier==OBJ_PLIN)) {
+//BFS01     // SdrPolyObj importieren
+//BFS01     switch (eKind) {
+//BFS01         case OBJ_LINE: {
+//BFS01             Polygon aP(2);
+//BFS01             rIn>>aP[0];
+//BFS01             rIn>>aP[1];
+//BFS01             aPathPolygon=XPolyPolygon(PolyPolygon(aP));
+//BFS01         } break;
+//BFS01         case OBJ_PLIN: {
+//BFS01             Polygon aP;
+//BFS01             rIn>>aP;
+//BFS01             aPathPolygon=XPolyPolygon(PolyPolygon(aP));
+//BFS01         } break;
+//BFS01         default: {
+//BFS01             PolyPolygon aPoly;
+//BFS01             rIn>>aPoly;
+//BFS01             aPathPolygon=XPolyPolygon(aPoly);
+//BFS01             // und nun die Polygone ggf. durch einfuegen eines weiteren Punktes schliessen
+//BFS01             USHORT nPolyAnz=aPathPolygon.Count();
+//BFS01             for (USHORT nPolyNum=0; nPolyNum<nPolyAnz; nPolyNum++) {
+//BFS01                 const XPolygon& rPoly=aPathPolygon[nPolyNum];
+//BFS01                 USHORT nPointAnz=rPoly.GetPointCount();
+//BFS01                 aPathPolygon[nPolyNum].GetPointCount();
+//BFS01                 if (nPointAnz>=2 && rPoly[0]!=rPoly[USHORT(nPointAnz-1)]) {
+//BFS01                     Point aPt(rPoly[0]);
+//BFS01                     aPathPolygon[nPolyNum][nPointAnz]=aPt;
+//BFS01                 }
+//BFS01             }
+//BFS01         }
+//BFS01     }
+//BFS01 } else {
+//BFS01     if (rHead.GetVersion()>=11) { // ab V11 ist das eingepackt
+//BFS01         SdrDownCompat aPathCompat(rIn,STREAM_READ);
+//BFS01#ifdef DBG_UTIL
+//BFS01         aPathCompat.SetID("SdrPathObj(PathPolygon)");
+//BFS01#endif
+//BFS01         rIn>>aPathPolygon;
+//BFS01     } else {
+//BFS01         rIn>>aPathPolygon;
+//BFS01     }
+//BFS01 }
+//BFS01 ImpForceKind(); // ggf. den richtigen Identifier herstellen.
+//BFS01}
 
 void SdrPathObj::NbcSetPathPoly(const XPolyPolygon& rPathPoly)
 {
