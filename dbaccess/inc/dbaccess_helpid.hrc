@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-16 16:06:05 $
+ *  last change: $Author: oj $ $Date: 2001-02-23 14:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,12 @@
 #define HID_BROWSER_TABLE_COPY                      (HID_DBACCESS_START + 143)
 #define HID_BROWSER_QUERY_COPY                      (HID_DBACCESS_START + 144)
 #define HID_BROWSER_TABLE_PASTE                     (HID_DBACCESS_START + 145)
+#define HID_TAB_WIZ_COLUMN_SELECT                   (HID_DBACCESS_START + 146)
+#define HID_TAB_WIZ_TYPE_SELECT                     (HID_DBACCESS_START + 147)
+#define HID_TAB_NAMEMATCHING_COLS_AVAIL             (HID_DBACCESS_START + 148)
+#define HID_TAB_NAMEMATCHING_COLS_ASSIGN            (HID_DBACCESS_START + 149)
+#define HID_TAB_WIZ_COPYTABLE                       (HID_DBACCESS_START + 150)
+#define HID_TAB_WIZ_TABLENAME_EDIT                  (HID_DBACCESS_START + 151)
 
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
@@ -242,6 +248,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/02/16 16:06:05  oj
+ *  new helpid
+ *
  *  Revision 1.20  2001/02/14 14:41:37  oj
  *  new helpids
  *
