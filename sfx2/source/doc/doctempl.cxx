@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mav $ $Date: 2002-01-11 18:12:03 $
+ *  last change: $Author: mba $ $Date: 2002-04-23 14:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1786,7 +1786,7 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
                         ErrorHandler::HandleError(lErr);
 
             }
-            else
+            else if (pFilter)
             {
                 const SfxObjectFactory &rFactory =
                     ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())
