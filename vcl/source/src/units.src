@@ -2,9 +2,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-25 11:46:07 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:14:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,5 +109,467 @@ StringArray SV_FUNIT_STRINGS
                 < "mile" ; FUNIT_MILE ; > ;
                 < "%" ; FUNIT_PERCENT ; > ;
         };
-};
+ItemList [ language_user1 ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ english_us ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ russian ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "��" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ greek ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ dutch ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ french ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ spanish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ finnish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ italian ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "PI.GRECO" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ danish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ swedish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ polish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ korean ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "파이" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ catalan ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "pi" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    ItemList [ thai ] =
+    {
+         < "mm" ; FUNIT_MM ; > ;
+        < "cm" ; FUNIT_CM ; > ;
+        < "m" ; FUNIT_M ; > ;
+        < "km" ; FUNIT_KM ; > ;
+        < "twips" ; FUNIT_TWIP ; > ;
+        < "twip" ; FUNIT_TWIP ; > ;
+        < "pt" ; FUNIT_POINT ; > ;
+        < "ไพ" ; FUNIT_PICA ; > ;
+        < "\\"" ; FUNIT_INCH ; > ;
+        < "in" ; FUNIT_INCH ; > ;
+        < "inch" ; FUNIT_INCH ; > ;
+        < "'" ; FUNIT_FOOT ; > ;
+        < "ft" ; FUNIT_FOOT ; > ;
+        < "foot" ; FUNIT_FOOT ; > ;
+        < "feet" ; FUNIT_FOOT ; > ;
+        < "miles" ; FUNIT_MILE ; > ;
+        < "mile" ; FUNIT_MILE ; > ;
+        < "%" ; FUNIT_PERCENT ; > ;
+    };
+    };
 
