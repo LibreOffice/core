@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 16:16:16 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1521,8 +1521,19 @@ Rectangle EnhancedCustomShape2d::GetTextRect() const
         nIndex++;
     Point aTopLeft( GetPoint( seqTextFrames[ nIndex ].TopLeft, sal_True, sal_True ) );
     Point aBottomRight( GetPoint( seqTextFrames[ nIndex ].BottomRight, sal_True, sal_True ) );
+    if ( bFlipH )
+    {
+        aTopLeft.X() = aLogicRect.GetWidth() - aTopLeft.X();
+        aBottomRight.X() = aLogicRect.GetWidth() - aBottomRight.X();
+    }
+    if ( bFlipV )
+    {
+        aTopLeft.Y() = aLogicRect.GetHeight() - aTopLeft.Y();
+        aBottomRight.Y() = aLogicRect.GetHeight() - aBottomRight.Y();
+    }
     Rectangle aRect( aTopLeft, aBottomRight );
     aRect.Move( aLogicRect.Left(), aLogicRect.Top() );
+    aRect.Justify();
     return aRect;
 }
 
@@ -2319,6 +2330,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
 //      pRet->SetModel( pCustomShapeObj->GetModel() );
         pRet->SetMergedItemSet( *this );
     }
+/*
     else if ( eSpType == mso_sptArc )
     {   // the arc is something special, because sometimes the snaprect does not match
         Rectangle aPolyBoundRect;
@@ -2428,6 +2440,7 @@ SdrObject* EnhancedCustomShape2d::CreateObject( sal_Bool bLineGeometryNeededOnly
             ((SdrObjGroup*)pRet)->GetSubList()->NbcInsertObject( pObjCirc );
         }
     }
+*/
     if ( !pRet )
         pRet = CreatePathObj( bLineGeometryNeededOnly );
 
