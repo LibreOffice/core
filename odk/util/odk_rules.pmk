@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 17:23:38 $
+#   last change: $Author: vg $ $Date: 2005-03-07 17:31:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,6 +95,20 @@ $(DESTDIR)$/configure : $(PRJ)$/configure
 $(DESTDIR)$/configure.pl : $(PRJ)$/configure.pl
     +-rm -f $@ >& $(NULLDEV)
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(PRJ)$/configure.pl $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/config.guess : $(SOLARENV)$/bin$/config.guess
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.guess $(MY_TEXTCOPY_TARGETPRE) $@
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
+    +-chmod 755 $@
+.ENDIF
+
+$(DESTDIR)$/config.sub : $(SOLARENV)$/bin$/config.sub
+    +-rm -f $@ >& $(NULLDEV)
+    $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $(SOLARENV)$/bin$/config.sub $(MY_TEXTCOPY_TARGETPRE) $@
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     +-chmod 755 $@
 .ENDIF
