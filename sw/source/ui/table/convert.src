@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:14:14 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:03:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,6 +575,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
     TEXT[ hindi ] = "सारणी को टेक्स्ट् में बदलो";
     TEXT[ slovak ] = "Previesť tabuľku na text";
 };
+
+
 
 
 
