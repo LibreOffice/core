@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-08 22:59:24 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,11 +496,11 @@ String STR_SETINPUTFLD
     Text [ danish ] = "Inputfelt (variabel)" ;
     Text [ portuguese ] = "Campo de entrada (variável)" ;
     Text [ portuguese_brazilian ] = "Eingabefeld (Varibale)" ;
-    Text[ chinese_simplified ] = "ÊäÈë×Ö¶ÎÇø(±äÊı)";
+    Text[ chinese_simplified ] = "ÊäÈë×Ö¶Î(¿É±ä)";
     Text[ russian ] = "Ïîëå ââîäà (èçìåíÿåìîå)";
     Text[ polish ] = "Pole wprowadzania (Zmienna)";
     Text[ japanese ] = "“ü—ÍÌ¨°ÙÄŞ (•Ï”)";
-    Text[ chinese_traditional ] = "¿é¤JÄæ¦ì(ÅÜ¶q)";
+    Text[ chinese_traditional ] = "¿é¤JÄæ¦ì(¥iÅÜ)";
     Text[ arabic ] = "ÍŞá ÅÏÎÇá (ãÊÛíÑÉ)";
     Text[ greek ] = "Ğåäßï åéóáãùãŞò (ÌåôáâëçôŞ)";
     Text[ korean ] = "ÀÔ·ÂÇÊµå(º¯¼ö)";
@@ -1758,7 +1758,7 @@ String FLD_EU_ORT
     TEXT[ chinese_simplified ] = "Î»ÖÃ";
     TEXT[ russian ] = "Ãîğîä";
     TEXT[ polish ] = "Miejscowoœæ";
-    TEXT[ japanese ] = "B–¼A“s“¹•{Œ§–¼";
+    TEXT[ japanese ] = "“s“¹•{Œ§–¼";
     TEXT[ chinese_traditional ] = "¦ì¸m";
     TEXT[ arabic ] = "ÇáãÏíäÉ";
     TEXT[ greek ] = "Ğüëç";
@@ -1812,7 +1812,7 @@ String FLD_EU_POS
     TEXT[ chinese_simplified ] = "Î»ÖÃ";
     TEXT[ russian ] = "Äîëæíîñòü";
     TEXT[ polish ] = "Pozycja";
-    TEXT[ japanese ] = "–ğE";
+    TEXT[ japanese ] = "•”";
     TEXT[ chinese_traditional ] = "¦ì¸m";
     TEXT[ arabic ] = "ÇáãÑßÒ";
     TEXT[ greek ] = "Èİóç";
@@ -1921,7 +1921,7 @@ String FLD_EU_STATE
     Text[ chinese_simplified ] = "Ê¡ÊĞ";
     Text[ russian ] = "Îáëàñòü";
     Text[ polish ] = "Pañstwo";
-    Text[ japanese ] = "‘–¼";
+    Text[ japanese ] = "B–¼";
     Text[ chinese_traditional ] = "¬Ù¥«";
     Text[ arabic ] = "ÇáæáÇíÉ";
     Text[ greek ] = "×şñá";
@@ -3598,4 +3598,5 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ catalan ] = "Editar";
     Text[ finnish ] = "Muokkaa";
 };
+
 
