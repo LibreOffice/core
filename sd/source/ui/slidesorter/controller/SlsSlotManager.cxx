@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:37:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,26 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
 #include <svx/zoomitem.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
 #include <svtools/intitem.hxx>
 #include <svtools/whiter.hxx>
 #include <svtools/itempool.hxx>
 #include <svtools/aeitem.hxx>
-#include <com/sun/star/presentation/FadeEffect.hpp>
 
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
+#ifndef _COM_SUN_STAR_PRESENTATION_FADEEFFECT_HPP_
+#include <com/sun/star/presentation/FadeEffect.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGES_HPP_
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#endif
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace sd { namespace slidesorter { namespace controller {
 
@@ -262,7 +273,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_SLIDE_CHANGE_ASSIGN:
-            rShell.AssignFromSlideChangeWindow();
+            AssignTransitionEffect ();
             rShell.Cancel();
             rRequest.Done();
             break;
@@ -330,12 +341,14 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
             break;
 
         case SID_INSERTPAGE:
+        case SID_INSERT_MASTER_PAGE:
             InsertSlide(rRequest);
             rShell.Cancel();
             rRequest.Done();
             break;
 
         case SID_DELETE_PAGE:
+        case SID_DELETE_MASTER_PAGE:
              if (mrController.GetModel().GetPageCount() > 1
                  && QueryBox (
                      mrController.GetView().GetWindow(),
@@ -350,6 +363,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
              break;
 
         case SID_RENAMEPAGE:
+        case SID_RENAME_MASTER_PAGE:
             RenameSlide ();
             rShell.Cancel();
             rRequest.Done ();
@@ -942,28 +956,52 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
     }
 
     // Cut, copy, and delete page are disabled when there is no selection.
-    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_CUT)  ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_COPY) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_DELETE_PAGE))
+    if (rSet.GetItemState(SID_CUT) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_COPY)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_DELETE_PAGE) == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_DELETE_MASTER_PAGE) == SFX_ITEM_AVAILABLE)
     {
-        BOOL bDisable = TRUE;
         model::SlideSorterModel::Enumeration aSelectedPages (
             mrController.GetModel().GetSelectedPagesEnumeration());
-        if  (aSelectedPages.HasMoreElements())
-            bDisable = FALSE;
+
+        // For copy to work we have to have at least one selected page.
+        if ( ! aSelectedPages.HasMoreElements())
+            rSet.DisableItem(SID_COPY);
+
+        bool bDisable = false;
+        // The operations that lead to the deletion of a page are valid if
+        // a) there is at least one selected page
+        // b) deleting the selected pages leaves at least one page in the
+        // document
+        // c) selected master pages must not be used by slides.
+
+        // Test a).
+        if ( ! aSelectedPages.HasMoreElements())
+            bDisable = true;
+        // Test b): Count the number of selected pages.  It has to be less
+        // than the number of all pages.
+        else if (mrController.GetPageSelector().GetSelectedPageCount()
+            >= mrController.GetPageSelector().GetPageCount())
+            bDisable = true;
+        // Test c): Iterate over the selected pages and look for a master
+        // page that is used by at least one page.
+        else while (aSelectedPages.HasMoreElements())
+        {
+            SdPage* pPage = aSelectedPages.GetNextElement().GetPage();
+            int nUseCount (mrController.GetModel().GetDocument()
+                ->GetMasterPageUserCount(pPage));
+            if (nUseCount > 0)
+            {
+                bDisable = true;
+                break;
+            }
+        }
 
         if (bDisable)
         {
             rSet.DisableItem(SID_CUT);
-            rSet.DisableItem(SID_COPY);
             rSet.DisableItem(SID_DELETE_PAGE);
-        }
-        else if (mrController.GetModel().GetPageCount() < 2)
-        {
-            // Do not delete the last slide of a document.
-            //af: Do we really need this?
-            rSet.DisableItem(SID_CUT);
-            rSet.DisableItem(SID_DELETE_PAGE);
+            rSet.DisableItem(SID_DELETE_MASTER_PAGE);
         }
     }
 
@@ -1483,10 +1521,33 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
         if (nInsertionIndex >= 0)
             pPreviousPage = mrController.GetModel()
                 .GetPageDescriptor(nInsertionIndex)->GetPage();
-        mrController.GetViewShell().CreateOrDuplicatePage (
-            rRequest,
-            mrController.GetModel().GetPageType(),
-            pPreviousPage);
+
+        if (mrController.GetModel().GetEditMode() == EM_PAGE)
+            mrController.GetViewShell().CreateOrDuplicatePage (
+                rRequest,
+                mrController.GetModel().GetPageType(),
+                pPreviousPage);
+        else
+        {
+            // Use the API to create a new page.
+            SdDrawDocument* pDocument = mrController.GetModel().GetDocument();
+            Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier (
+                pDocument->getUnoModel(), UNO_QUERY);
+            if (xMasterPagesSupplier.is())
+            {
+                Reference<drawing::XDrawPages> xMasterPages (
+                    xMasterPagesSupplier->getMasterPages());
+                if (xMasterPages.is())
+                {
+                    xMasterPages->insertNewByIndex (nInsertionIndex+1);
+
+                    // Create shapes for the default layout.
+                    SdPage* pMasterPage = pDocument->GetMasterSdPage(
+                        (USHORT)(nInsertionIndex+1), PK_STANDARD);
+                    pMasterPage->CreateTitleAndLayout (TRUE,TRUE);
+                }
+            }
+        }
     }
 
     // When a new page has been inserted then select it and make it the
@@ -1501,6 +1562,35 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     }
     rSelector.EnableBroadcasting();
     mrController.GetView().LockRedraw(FALSE);
+}
+
+
+
+
+void SlotManager::AssignTransitionEffect (void)
+{
+    SlideSorterViewShell& rShell (mrController.GetViewShell());
+    model::SlideSorterModel& rModel (mrController.GetModel());
+
+    // We have to manually select the pages in the document that are
+    // selected in the slide sorter.
+    rModel.SynchronizeDocumentSelection();
+
+    rShell.AssignFromSlideChangeWindow(rModel.GetEditMode());
+
+    // We have to remove the selection of master pages to not confuse the
+    // model.
+    if (rModel.GetEditMode() == EM_MASTERPAGE)
+    {
+        SdDrawDocument* pDocument = mrController.GetModel().GetDocument();
+        USHORT nMasterPageCount = pDocument->GetMasterSdPageCount(PK_STANDARD);
+        for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
+        {
+            SdPage* pPage = pDocument->GetMasterSdPage(nIndex, PK_STANDARD);
+            if (pPage != NULL)
+                pPage->SetSelected (FALSE);
+        }
+    }
 }
 
 
