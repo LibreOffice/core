@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:57:40 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,8 +840,9 @@ SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
             if (pEditEngine)
                 DELETEZ( pEditEngine );
 
-            sal_uInt16 nCol, nRow;
-            EditView* pEditView;
+                SCCOL nCol;
+                SCROW nRow;
+                EditView* pEditView;
             mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
             if (pEditView)
             {
@@ -899,7 +900,8 @@ SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool b
     //#102219#; there should no EditViewForwarder be, because the cell is now readonly in this interface
 /*  if (!mpEditViewForwarder)
     {
-        sal_uInt16 nCol, nRow;
+        SCCOL nCol;
+        SCROW nRow;
         EditView* pEditView;
         mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
 
