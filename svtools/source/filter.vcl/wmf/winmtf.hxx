@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
+ *  last change: $Author: sj $ $Date: 2001-11-06 17:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,6 +345,8 @@ class WinMtfPathObj : public PolyPolygon
 
     public :
 
+                WinMtfPathObj() { bClosed = sal_False; }
+        void    Init() { Clear(); bClosed = sal_False; };
         void    ClosePath() { bClosed = sal_True; };
 
         void    AddPoint( const Point& rPoint );
@@ -617,7 +619,7 @@ class WinMtfOutput
         void                SelectObject( INT32 nIndex );
         CharSet             GetCharSet(){ return maFont.GetCharSet(); };
 
-        void                ClearPath(){ aPathObj.Clear(); };
+        void                ClearPath(){ aPathObj.Init(); };
         void                ClosePath(){ aPathObj.ClosePath(); };
         const PolyPolygon&  GetPathObj(){ return aPathObj; };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2001-10-19 16:12:40 $
+ *  last change: $Author: sj $ $Date: 2001-11-06 17:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -912,7 +912,6 @@ void WinMtfOutput::StrokeAndFillPath( sal_Bool bStroke, sal_Bool bFill )
     if ( aPathObj.Count() )
     {
         UpdateClipRegion();
-        ClosePath();
         UpdateLineStyle();
         UpdateFillStyle();
         if ( bFill )
@@ -1693,6 +1692,7 @@ void WinMtfOutput::Push( sal_Bool bExtSet )     // !! to be able to access the o
     pSave->aActPos = maActPos;
     pSave->bWinExtSet = bExtSet;
     pSave->aXForm = maXForm;
+    pSave->eRasterOp = meRasterOp;
 
     if ( bExtSet )
     {
