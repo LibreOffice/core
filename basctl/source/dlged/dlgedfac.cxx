@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 12:38:54 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
+#include <com/sun/star/awt/ScrollBarOrientation.hpp>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -150,11 +153,11 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  pObjFactory->pNewObj = pNew;
                  try
                  {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(pNew->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
-                    if (xModelSet.is())
+                    uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
+                    if (xPSet.is())
                     {
                         sal_Bool bB = sal_True;
-                        xModelSet->setPropertyValue(rtl::OUString::createFromAscii("Dropdown"), ::com::sun::star::uno::Any(&bB,::getBooleanCppuType()));
+                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Dropdown" ) ), uno::Any(&bB,::getBooleanCppuType()));
                     }
                  }
                  catch(...)
@@ -177,8 +180,26 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlProgressBarModel"), xDialogSFact);
                  break;
             case OBJ_DLG_HSCROLLBAR:
-                 break;
+            {
+                 DlgEdObj* pNew = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
+                 pObjFactory->pNewObj = pNew;
+                 // set horizontal orientation
+                 try
+                 {
+                    uno::Reference< beans::XPropertySet >  xPSet(pNew->GetUnoControlModel(), uno::UNO_QUERY);
+                    if (xPSet.is())
+                    {
+                        uno::Any aValue;
+                        aValue <<= (sal_Int32) ::com::sun::star::awt::ScrollBarOrientation::HORIZONTAL;
+                        xPSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Orientation" ) ), aValue );
+                    }
+                 }
+                 catch(...)
+                 {
+                 }
+            }    break;
             case OBJ_DLG_VSCROLLBAR:
+                 pObjFactory->pNewObj = new DlgEdObj(rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlScrollBarModel"), xDialogSFact);
                  break;
             case OBJ_DLG_URLBUTTON:
                  break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 12:39:11 $
+ *  last change: $Author: tbe $ $Date: 2001-05-02 12:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -778,6 +778,10 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
     {
         nResId = RID_STR_CLASS_PROGRESSBAR;
     }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+    {
+        nResId = RID_STR_CLASS_SCROLLBAR;
+    }
 
     if (nResId)
     {
@@ -881,6 +885,10 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
     {
         return OBJ_DLG_SPINBUTTON;  // ???change this!
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+    {
+        return OBJ_DLG_VSCROLLBAR;  // ???change this??? OBJ_DLG_HSCROLLBAR
     }
     else
     {
