@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-20 17:16:54 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:46:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage TP_ANIMATION
         Text [ portuguese_brazilian ] = "Aktion bei Mausklick" ;
         Text[ chinese_simplified ] = "µ¥»÷Êó±êÊ±Ö´ĞĞµÄ²Ù×÷";
         Text[ russian ] = "Äåéñòâèå ïğè ùåë÷êå ìûøüş";
-        Text[ polish ] = "Akcja przy klikniêciu mysz¹";
+        Text[ polish ] = "Akcja po klikniêciu mysz¹";
         Text[ japanese ] = "Ï³½¸Ø¯¸‚Å±¸¼®İ";
         Text[ chinese_traditional ] = "«ö¹«¼Ğ®É°õ¦æªº°Ê§@";
         Text[ arabic ] = "ÅÌÑÇÁ ÚäÏ ÇáäŞÑ ÈÇáãÇæÓ";
@@ -155,6 +155,26 @@ TabPage TP_ANIMATION
         Text = "Animation" ;
         Text [ ENGLISH ] = "Animation" ;
         Hide = TRUE ;
+        Text[ english_us ] = "Animation";
+        Text[ portuguese ] = "Animação";
+        Text[ russian ] = "Àíèìàöèÿ";
+        Text[ greek ] = "Åöİ êßíçóçò";
+        Text[ dutch ] = "Animatie";
+        Text[ french ] = "Animation";
+        Text[ spanish ] = "Animación";
+        Text[ finnish ] = "Animaatio";
+        Text[ italian ] = "Animazione";
+        Text[ danish ] = "Animation";
+        Text[ swedish ] = "Animation";
+        Text[ polish ] = "Animacja";
+        Text[ portuguese_brazilian ] = "Animation";
+        Text[ japanese ] = "±ÆÒ°¼®İ";
+        Text[ korean ] = "¾Ö´Ï¸ŞÀÌ¼Ç";
+        Text[ chinese_simplified ] = "¶¯»­";
+        Text[ chinese_traditional ] = "°Êµe";
+        Text[ turkish ] = "Canlandırma";
+        Text[ arabic ] = "ÍÑßÉ";
+        Text[ catalan ] = "Animation";
     };
     ListBox LB_EFFECT
     {
@@ -173,6 +193,26 @@ TabPage TP_ANIMATION
         Text = "Geschwindigkeit" ;
         Text [ ENGLISH ] = "Speed" ;
         Hide = TRUE ;
+        Text[ english_us ] = "Speed";
+        Text[ portuguese ] = "Velocidade";
+        Text[ russian ] = "Speed";
+        Text[ greek ] = "Speed";
+        Text[ dutch ] = "Speed";
+        Text[ french ] = "Speed";
+        Text[ spanish ] = "Velocidad";
+        Text[ finnish ] = "Speed";
+        Text[ italian ] = "Velocità";
+        Text[ danish ] = "Speed";
+        Text[ swedish ] = "Hastighet";
+        Text[ polish ] = "Szybkoœæ";
+        Text[ portuguese_brazilian ] = "Speed";
+        Text[ japanese ] = "½Ëß°ÄŞ";
+        Text[ korean ] = "Speed";
+        Text[ chinese_simplified ] = "ËÙ¶È";
+        Text[ chinese_traditional ] = "³t«×";
+        Text[ turkish ] = "Speed";
+        Text[ arabic ] = "Speed";
+        Text[ catalan ] = "Speed";
     };
     RadioButton RBT_SLOW
     {
@@ -214,7 +254,7 @@ TabPage TP_ANIMATION
         Text [ norwegian ] = "~Middels" ;
         Text [ italian ] = "~Medio" ;
         Text [ portuguese_brazilian ] = "~M?dio" ;
-        Text [ portuguese ] = "~Meio" ;
+        Text [ portuguese ] = "~Media" ;
         Text [ french ] = "~Moyen" ;
         Text [ dutch ] = "~Middel" ;
         Text [ spanish ] = "~Media" ;
@@ -284,11 +324,11 @@ TabPage TP_ANIMATION
         Text [ danish ] = "Usynlig farve" ;
         Text [ portuguese ] = "~Cor invisível" ;
         Text [ portuguese_brazilian ] = "Unsichtbare ~Farbe" ;
-        Text[ chinese_simplified ] = "Í¸Ã÷";
+        Text[ chinese_simplified ] = "Í¸Ã÷É«";
         Text[ russian ] = "Ïğîçğà÷íûé";
         Text[ polish ] = "Niewidoczny kolor";
         Text[ japanese ] = "“§–¾F";
-        Text[ chinese_traditional ] = "³z©ú";
+        Text[ chinese_traditional ] = "³z©ú¦â";
         Text[ arabic ] = "áæä ÛíÑ ãÑÆí";
         Text[ greek ] = "Ìç ïñáôÜ ÷ñşìáôá";
         Text[ korean ] = "º¸ÀÌÁö ¾Ê´Â »ö";
@@ -315,6 +355,26 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
         Text = "Mit Klang ausblenden" ;
         Text [ ENGLISH ] = "Vanish with sound" ;
+        Text[ english_us ] = "Fade with sound";
+        Text[ portuguese ] = "Vanish with sound";
+        Text[ russian ] = "Vanish with sound";
+        Text[ greek ] = "Vanish with sound";
+        Text[ dutch ] = "Vanish with sound";
+        Text[ french ] = "Vanish with sound";
+        Text[ spanish ] = "Ocultar con sonido";
+        Text[ finnish ] = "Vanish with sound";
+        Text[ italian ] = "Sfuma con suono";
+        Text[ danish ] = "Vanish with sound";
+        Text[ swedish ] = "Tona ut med ljud";
+        Text[ polish ] = "Ukryj z dŸwiêkiem";
+        Text[ portuguese_brazilian ] = "Vanish with sound";
+        Text[ japanese ] = "»³İÄŞ‚ÅÁ‚¦¸‚¹‚é";
+        Text[ korean ] = "Vanish with sound";
+        Text[ chinese_simplified ] = "ÏûÊ§Ê±²¥·ÅÉùÒô";
+        Text[ chinese_traditional ] = "®ø¥¢®É¼½©ñÁn­µ";
+        Text[ turkish ] = "Vanish with sound";
+        Text[ arabic ] = "Vanish with sound";
+        Text[ catalan ] = "Vanish with sound";
     };
     Edit EDT_SOUND
     {
@@ -373,11 +433,11 @@ TabPage TP_ANIMATION
         Text [ danish ] = "Afspil lyden helt" ;
         Text [ portuguese_brazilian ] = "Klang ~vollst?ndig abspielen" ;
         Text [ portuguese ] = "Tocar som ~completo" ;
-        Text[ chinese_simplified ] = "ÉùÒôÍêÕûµØ²¥·Å(~P)";
+        Text[ chinese_simplified ] = "ÍêÕûµØ²¥·ÅÉùÒô(~P)";
         Text[ russian ] = "Âîñïğîèçâåñòè ïîëíîñòüş çâóê";
         Text[ polish ] = "Odtwórz pe³ny dŸwiêk";
         Text[ japanese ] = "»³İÄŞ‚ğ‰¹—Ê–L‚©‚ÉÄ¶(~P)";
-        Text[ chinese_traditional ] = "Án­µ§¹¾ã¦a¼½©ñ(~P)";
+        Text[ chinese_traditional ] = "§¹¾ã¦a¼½©ñÁn­µ(~P)";
         Text[ arabic ] = "ÊÔÛíá ÇáÕæÊ ßÇãáÇğ";
         Text[ greek ] = "ĞëŞñçò åêôİëåóç Ş÷ïõ";
         Text[ korean ] = "»ç¿îµå ¿Ïº®ÇÏ°Ô Àç»ı(~P)";
@@ -467,7 +527,7 @@ TabPage TP_ANIMATION
         Hide = TRUE ;
         Text = "~Suchen" ;
         Text [ ENGLISH ] = "~Seek" ;
-        Text [ english_us ] = "Search" ;
+        Text [ english_us ] = "~Find" ;
         Text [ italian ] = "Cerca" ;
         Text [ spanish ] = "~Buscar" ;
         Text [ french ] = "~Rechercher" ;
@@ -495,7 +555,7 @@ TabPage TP_ANIMATION
     Text [ italian ] = "Interazione";
     Text [ portuguese_brazilian ] = "Interaktion";
     Text [ portuguese ] = "Interacção";
-    Text [ danish ] = "Interaktion";
+    Text [ danish ] = "Interaction";
     Text [ french ] = "Interaction";
     Text [ swedish ] = "Interaktion";
     Text [ dutch ] = "Interactie";
@@ -523,3 +583,4 @@ TabPage TP_ANIMATION
     Text [ portuguese_brazilian ] = "Interaktion" ;
     Text [ portuguese ] = "Interacção" ;
 };
+
