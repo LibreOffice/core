@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:46 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4558,9 +4558,25 @@ void WW8PLCFMan::GetNoSprmEnd( short nIdx, WW8PLCFManResult* pRes ) const
         pRes->nSprmId = 0;
 }
 
+bool WW8PLCFMan::TransferOpenSprms(std::stack<USHORT> &rStack)
+{
+    for (int i = 0; i < nPLCF; ++i)
+    {
+        WW8PLCFxDesc* p = &aD[i];
+        if (!p || !p->pIdStk)
+            continue;
+        while (!p->pIdStk->empty())
+        {
+            rStack.push(p->pIdStk->top());
+            p->pIdStk->pop();
+        }
+    }
+    return rStack.empty();
+}
+
 void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
 {
-    register WW8PLCFxDesc* p = &aD[nIdx];   // Sprm-Klasse(!) ermitteln
+    WW8PLCFxDesc* p = &aD[nIdx];    // Sprm-Klasse(!) ermitteln
 
     p->bFirstSprm = false;
     if( bStart )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-19 15:19:45 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 14:38:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2073,24 +2073,19 @@ void SwWW8ImplReader::ReadAttrs(long& rNext, long& rTxtPos, bool& rbStartLine)
 // werden ignoriert.
 void SwWW8ImplReader::ReadAttrEnds( long& rNext, long& rTxtPos )
 {
+    //If there are any unclosed sprms then copy them to
+    //another stack and close the ones that must be closed
+    std::stack<USHORT> aStack;
+    pPlcxMan->TransferOpenSprms(aStack);
 
-    while( rTxtPos >= rNext )
+    while (!aStack.empty())
     {
-        WW8PLCFManResult aRes;
-
-        bool b = pPlcxMan->Get(&aRes);   // hole Attribut-Pos
-
-        if(    !b
-            && (aRes.nSprmId >=  0)     // nur Attributenden noch bearbeiten,
-            && (    (aRes.nSprmId <     eFTN)
-                 || (aRes.nSprmId >= 0x0800) )
-            )
-        {                                                           // Anfaenge gehoeren zum naechsten Spezialtext
-            EndSprm( aRes.nSprmId );                                // Fussnoten und Felder ignorieren
-        }
-        (*pPlcxMan)++;
-        rNext = pPlcxMan->Where();
+        USHORT nSprmId = aStack.top();
+        if ((0 < nSprmId) && (( eFTN > nSprmId) || (0x0800 <= nSprmId)))
+            EndSprm(nSprmId);
+        aStack.pop();
     }
+
     bool bDummyReSync;
     ProcessSpecial(true, &bDummyReSync, -1);
 }

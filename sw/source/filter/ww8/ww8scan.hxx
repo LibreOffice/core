@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-20 14:18:49 $
+ *  last change: $Author: cmc $ $Date: 2002-09-20 14:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,7 @@ public:
     WW8PLCFx_SEPX* GetSepPLCF() const
         { return (WW8PLCFx_SEPX*)pSep->pPLCFx; }
     WW8PLCFxDesc* GetPap() const { return pPap; }
+    bool TransferOpenSprms(std::stack<USHORT> &rStack);
     void SeekPos( long nNewCp );
     void SaveAllPLCFx( WW8PLCFxSaveAll& rSave ) const;
     void RestoreAllPLCFx( const WW8PLCFxSaveAll& rSave );
