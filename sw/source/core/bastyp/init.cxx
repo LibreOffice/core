@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:32:39 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,9 @@
 #ifndef _FMTTSPLT_HXX
 #include <fmtlsplt.hxx>
 #endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
+#endif
 #ifndef _FMTEIRO_HXX
 #include <fmteiro.hxx>
 #endif
@@ -430,6 +433,7 @@ USHORT __FAR_DATA aTableLineSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
+    RES_ROW_SPLIT,      RES_ROW_SPLIT,
     RES_PROTECT,        RES_PROTECT,
     RES_VERT_ORIENT,    RES_VERT_ORIENT,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -596,7 +600,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
 #endif
 
     { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY9
+    { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
 
     { 0, SFX_ITEM_POOLABLE },                           // RES_GRFATR_MIRRORGRF
     { SID_ATTR_GRAF_CROP, SFX_ITEM_POOLABLE },          // RES_GRFATR_CROPGRF
@@ -849,14 +853,11 @@ void _InitCore()
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
     aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] = new SwFmtNoBalancedColumns;
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem(FRMDIR_ENVIRONMENT);
+    aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
-// FrameAttr - Dummies
-    aAttrTab[ RES_FRMATR_DUMMY9 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY9 );
-// FrameAttr - Dummies
 
     aAttrTab[ RES_GRFATR_MIRRORGRF- POOLATTR_BEGIN ] = new SwMirrorGrf;
     aAttrTab[ RES_GRFATR_CROPGRF- POOLATTR_BEGIN ] = new SwCropGrf;
-
     aAttrTab[ RES_GRFATR_ROTATION - POOLATTR_BEGIN ] = new SwRotationGrf;
     aAttrTab[ RES_GRFATR_LUMINANCE - POOLATTR_BEGIN ] = new SwLuminanceGrf;
     aAttrTab[ RES_GRFATR_CONTRAST - POOLATTR_BEGIN ] = new SwContrastGrf;
