@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_javafilter.scp,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:51:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 16:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@ Module gid_Module_Optional_Javafilter
     Files = ( gid_File_Lib_Jfregca );
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Optional_Javafilter_Palm
@@ -80,12 +80,12 @@ Module gid_Module_Optional_Javafilter_Palm
     ParentID = gid_Module_Optional_Javafilter;
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Optional_Javafilter_Palm_Aportisdoc
@@ -94,12 +94,12 @@ Module gid_Module_Optional_Javafilter_Palm_Aportisdoc
     Files = ( gid_File_Oo_Office_Filter_Palm_Pkg, gid_File_Jar_Aportisdoc );
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Optional_Javafilter_Pocketpc
@@ -113,12 +113,12 @@ Module gid_Module_Optional_Javafilter_Pocketpc
     Files = ( gid_File_Lib_Xmergesync );
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word
@@ -128,12 +128,12 @@ Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word
     Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pword_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
 
 Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel
@@ -143,10 +143,10 @@ Module gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel
     Procedures = ( gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Install, gid_Procedure_Javafilter_Xmergesync_Pexcel_Reg_Uninstall );
     Minimal = NO;
     Default = NO;
-    Styles (01) = ();
-    Styles (49) = ();
-    Styles (81) = (HIDDEN_ROOT);
-    Styles (82) = (HIDDEN_ROOT);
-    Styles (86) = (HIDDEN_ROOT);
-    Styles (88) = (HIDDEN_ROOT);
+    Styles (en-US) = ();
+    Styles (de) = ();
+    Styles (ja) = (HIDDEN_ROOT);
+    Styles (ko) = (HIDDEN_ROOT);
+    Styles (zh-CN) = (HIDDEN_ROOT);
+    Styles (zh-TW) = (HIDDEN_ROOT);
 End
