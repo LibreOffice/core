@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,6 +772,7 @@ uno::Any SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                     break;
                 }
                 aRet <<= uRet;
+                break;
             }
             case WID_IDX_LOCALE:
                 bBOOL = sal_False;
@@ -1480,6 +1481,7 @@ void SwXDocumentIndexMark::attachToRange(const Reference< text::XTextRange > & x
                 if(sSecondaryKey.Len())
                     aMark.SetSecondaryKey(sSecondaryKey);
             break;
+            case TOX_USER:
             case TOX_CONTENT:
                 if(USHRT_MAX != nLevel)
                     aMark.SetLevel(nLevel);
@@ -2478,7 +2480,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenEntryText");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(aToken.sCharStyleName);
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
             }
             break;
             case TOKEN_TAB_STOP     :
@@ -2517,7 +2522,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenText");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(aToken.sCharStyleName);
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
 
                 pArr[2].Name = C2U("Text");
                 pArr[2].Value <<= OUString(aToken.sText);
@@ -2532,7 +2540,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenPageNumber");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(aToken.sCharStyleName);
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
             }
             break;
             case TOKEN_CHAPTER_INFO :
@@ -2544,7 +2555,10 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
                 pArr[0].Value <<= OUString::createFromAscii("TokenChapterInfo");
 
                 pArr[1].Name = C2U("CharacterStyleName");
-                pArr[1].Value <<= OUString(aToken.sCharStyleName);
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
 
                 pArr[2].Name = C2U("ChapterFormat");
                 sal_Int16 nVal = text::ChapterFormat::NUMBER;
@@ -2578,13 +2592,20 @@ uno::Any SwXIndexTokenAccess_Impl::getByIndex(sal_Int32 nIndex)
             }
             break;
             case TOKEN_AUTHORITY :
-                rCurTokenSeq.realloc( 2 );
+                rCurTokenSeq.realloc( 3 );
                 PropertyValue* pArr = rCurTokenSeq.getArray();
 
                 pArr[0].Name = C2U("TokenType");
                 pArr[0].Value <<= OUString::createFromAscii("TokenBibliographyDataField");
-                pArr[1].Name = C2U("BibliographyDataField");
-                pArr[1].Value <<= sal_Int16(aToken.nAuthorityField);
+
+                pArr[1].Name = C2U("CharacterStyleName");
+                pArr[1].Value <<= OUString(
+                    SwXStyleFamilies::GetProgrammaticName(
+                        aToken.sCharStyleName,
+                            SFX_STYLE_FAMILY_CHAR));
+
+                pArr[2].Name = C2U("BibliographyDataField");
+                pArr[2].Value <<= sal_Int16(aToken.nAuthorityField);
             break;
         }
     }

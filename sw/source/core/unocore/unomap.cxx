@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-14 16:17:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-15 10:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1569,6 +1569,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aUserMarkMap_Impl[] =
                 {
                     { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), WID_ALT_TEXT,        CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_LEVEL        ),   WID_LEVEL        ,    CPPU_E2T(CPPUTYPE_INT16)  ,         PROPERTY_NONE,     0},
                     { SW_PROP_NMID(UNO_NAME_USER_INDEX_NAME), WID_USER_IDX_NAME,    CPPU_E2T(CPPUTYPE_OUSTRING)  ,      PROPERTY_NONE,     0},
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0}
