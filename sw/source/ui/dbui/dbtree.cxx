@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-07 13:28:40 $
+ *  last change: $Author: os $ $Date: 2001-08-08 10:11:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,11 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
     if(xContainer.is())
     {
         m_refCount++;
-        xContainer->removeContainerListener( this );
+        //block necessary due to solaris' compiler behaviour to
+        //remove temporaries at the block's end
+        {
+            xContainer->removeContainerListener( this );
+        }
         m_refCount--;
     }
 }
