@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ShapeFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-17 14:50:28 $
+ *  last change: $Author: iha $ $Date: 2003-11-03 16:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1751,7 +1751,7 @@ uno::Reference< drawing::XShape >
             //LineOnly
             xProp->setPropertyValue( C2U( UNO_NAME_3D_LINEONLY )
                 , uno::makeAny( (sal_Bool)true ) );
-/*
+
             //Transparency
             if(rLineProperties.Transparence.hasValue())
                 xProp->setPropertyValue( C2U( UNO_NAME_LINETRANSPARENCE )
@@ -1766,7 +1766,7 @@ uno::Reference< drawing::XShape >
             if(rLineProperties.Width.hasValue())
                 xProp->setPropertyValue( C2U( UNO_NAME_LINEWIDTH )
                     , rLineProperties.Width );
-*/
+
             //LineColor
             if(rLineProperties.Color.hasValue())
                 xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
