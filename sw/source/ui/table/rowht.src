@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowht.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:25:18 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:02:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,7 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ czech ] = "Přizpůsobit velikosti";
         Text[ hebrew ] = "~dynamisch anpassen";
         Text[ hindi ] = "~परिमाण केलिए योग्य";
+        Text[ slovak ] = "~Prispôsobiť veľkosti";
     };
     FixedLine FL_HEIGHT
     {
@@ -184,6 +185,7 @@ ModalDialog DLG_ROW_HEIGHT
         Text[ czech ] = "Výška";
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "ऊँचाई";
+        Text[ slovak ] = "Výška";
     };
     Text[ chinese_simplified ] = "行高";
     Text[ russian ] = "������ ������";
@@ -199,7 +201,10 @@ ModalDialog DLG_ROW_HEIGHT
     Text[ czech ] = "Výška řádku";
     Text[ hebrew ] = "‮גובה שורה‬";
     Text[ hindi ] = "पंक्ति ऊँचाई";
+    Text[ slovak ] = "Výška riadku";
 };
+
+
 
 
 
