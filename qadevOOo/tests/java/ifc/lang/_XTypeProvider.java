@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XTypeProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 10:46:27 $
+ *  last change:$Date: 2005-01-25 15:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ public class _XTypeProvider extends MultiMethodTest {
 
 
     /**
-    * Ñalls the method and checks the return value.<p>
+    * Calls the method and checks the return value.<p>
     * Has <b>OK</b> status if one of the return value equals to the
     * type <code>com.sun.star.lang.XTypeProvider</code>.
     */
