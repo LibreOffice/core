@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-16 10:41:58 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,117 +475,6 @@ long ParaPortion::GetXPos( EditLine* pLine, USHORT nIndex )
         }
     }
     return nX;
-}
-
-USHORT ParaPortion::GetChar( EditLine* pLine, long nXPos, BOOL bSmart )
-{
-    DBG_ASSERT( pLine, "Keine Zeile erhalten: GetChar" );
-
-    Size aTmpSz;
-    TextPortion* pPortion;
-
-    USHORT nCurIndex = pLine->GetStart();
-    long nTmpX = pLine->GetStartPosX();
-
-    if ( nTmpX >= nXPos  )
-        return nCurIndex;
-
-    long nLastWidth;
-
-    for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
-    {
-        pPortion = aTextPortionList.GetObject( i );
-        switch ( pPortion->GetKind() )
-        {
-            case PORTIONKIND_TEXT:
-            case PORTIONKIND_FIELD:
-            case PORTIONKIND_HYPHENATOR:
-            case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
-            {
-                nLastWidth = pPortion->GetSize().Width();
-                nTmpX += nLastWidth;
-            }
-            break;
-            case PORTIONKIND_LINEBREAK:
-            {
-                return nCurIndex;
-            }
-            // break; erzeugt Warnung: "Unreachable code"
-            default: DBG_ERROR( "GetChar: Unbekannte Portion" );
-        }
-
-        if ( nTmpX > nXPos )
-        {
-            // Spezielle Portions werden nicht weiter unterteilt:
-            if ( pPortion->GetKind() != PORTIONKIND_TEXT )
-            {
-                // Aber gewichtet:
-                long nLeftDiff = nXPos-(nTmpX-nLastWidth);
-                long nRightDiff = nTmpX-nXPos;
-                if ( bSmart && ( Abs( nRightDiff ) < Abs( nLeftDiff ) ) )
-                    nCurIndex++;
-                return nCurIndex;
-            }
-
-            nTmpX -= nLastWidth;    // vor die Portion stellen
-
-            USHORT nMax = pPortion->GetLen();
-            USHORT nOffset = 0xFFFF;
-            USHORT nTmpCurIndex = nCurIndex - pLine->GetStart();
-
-            for ( USHORT x = 0; x < nMax; x++ )
-            {
-                long nTmpPosMax = nTmpX+pLine->GetCharPosArray().GetObject( nTmpCurIndex+x );
-                if ( nTmpPosMax > nXPos )
-                {
-                    // pruefen, ob dieser oder der davor...
-                    long nTmpPosMin = nTmpX;
-                    if ( x )
-                        nTmpPosMin += pLine->GetCharPosArray().GetObject( nTmpCurIndex+x-1 );
-                    long nDiffLeft = nXPos - nTmpPosMin;
-                    long nDiffRight = nTmpPosMax - nXPos;
-                    DBG_ASSERT( nDiffLeft >= 0, "DiffLeft negativ" );
-                    DBG_ASSERT( nDiffRight >= 0, "DiffRight negativ" );
-                    nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
-                    // I18N: If there are character position with the length
-                    // of 0, they belong to the same character, we can not
-                    // use this position as an index.
-                    // Skip all 0-positions, cheaper than using XBreakIterator:
-                    if ( nOffset < nMax )
-                    {
-                        const long nX = pLine->GetCharPosArray().GetObject(nOffset);
-                        while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray().GetObject(nOffset+1) == nX ) )
-                            nOffset++;
-                    }
-                    break;
-                }
-            }
-
-            // Bei Verwendung des CharPosArray duerfte es keine Ungenauigkeiten geben!
-            // Vielleicht bei Kerning ?
-            // 0xFFF passiert z.B. bei Outline-Font, wenn ganz hinten.
-            if ( nOffset == 0xFFFF )
-                nOffset = nMax;
-
-            DBG_ASSERT( nOffset <= nMax, "nOffset > nMax" );
-
-            nCurIndex += nOffset;
-
-            // nicht gefunden => Ende der Zeile ?
-            // Nein: Dann sorgt die obere While-Schleife schon fuer das
-            // richtige n.
-            // Die unteren beiden Zeilen haben den Effekt, dass man
-            // nicht zwischen die letzten beiden Zeichen klicken kann.
-            //  if ( ( nTmpX + aTmpSz.Width() ) < nXPos )
-            //      nCurIndex++;
-
-            return nCurIndex;
-        }
-
-        nCurIndex += pPortion->GetLen();
-    }
-    return nCurIndex;
 }
 
 void ParaPortion::SetVisible( BOOL bMakeVisible )

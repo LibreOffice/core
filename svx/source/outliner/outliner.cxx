@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: thb $ $Date: 2002-04-26 10:31:41 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1145,7 +1145,7 @@ void Outliner::PaintBullet( USHORT nPara, const Point& rStartPos,
                     // aTextPos ist Bottom, jetzt die Baseline liefern:
                     FontMetric aMetric( pOutDev->GetFontMetric() );
                     aTextPos.Y() -= aMetric.GetDescent();
-                    DrawingText( aTextPos, pPara->GetText(), pBuf, aSvxFont, nPara, 0xFFFF );
+                    DrawingText( aTextPos, pPara->GetText(), 0, pPara->GetText().Len(), pBuf, aSvxFont, nPara, 0xFFFF );
                     delete pBuf;
                 }
                 pOutDev->SetFont( aOldFont );
@@ -1952,6 +1952,13 @@ void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, cons
 {
     DBG_CHKTHIS(Outliner,0);
     DrawPortionInfo aInfo( rStartPos, rText, rFont, nPara, nIndex, pDXArray );
+    aDrawPortionHdl.Call( &aInfo );
+}
+
+void Outliner::DrawingText( const Point& rStartPos, const XubString& rText, USHORT nTextStart, USHORT nTextLen, const long* pDXArray,const SvxFont& rFont, USHORT nPara, USHORT nIndex )
+{
+    DBG_CHKTHIS(Outliner,0);
+    DrawPortionInfo aInfo( rStartPos, rText, nTextStart, nTextLen, rFont, nPara, nIndex, pDXArray );
     aDrawPortionHdl.Call( &aInfo );
 }
 

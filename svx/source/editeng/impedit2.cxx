@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-26 10:16:41 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,24 +849,14 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
 
     EditPaM aOldPaM( aPaM );
 
-    BOOL bCtrl = rKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
-
-    USHORT nCode = rKeyEvent.GetKeyCode().GetCode();
-
+    TextDirectionality eTextDirection = TextDirectionality_LeftToRight_TopToBottom;
     if ( IsVertical() )
-    {
-        switch ( nCode )
-        {
-            case KEY_UP:    nCode = KEY_LEFT;
-                            break;
-            case KEY_DOWN:  nCode = KEY_RIGHT;
-                            break;
-            case KEY_LEFT:  nCode = KEY_DOWN;
-                            break;
-            case KEY_RIGHT: nCode = KEY_UP;
-                            break;
-        }
-    }
+        eTextDirection = TextDirectionality_RightToLeft_TopToBottom;
+
+    KeyEvent aTranslatedKeyEvent = rKeyEvent.LogicalTextDirectionality( eTextDirection );
+
+    BOOL bCtrl = rKeyEvent.GetKeyCode().IsMod1() ? TRUE : FALSE;
+    USHORT nCode = rKeyEvent.GetKeyCode().GetCode();
 
     switch ( nCode )
     {
@@ -874,9 +864,9 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
                             break;
         case KEY_DOWN:      aPaM = CursorDown( aPaM, pEditView );
                             break;
-        case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM );
+        case KEY_LEFT:      aPaM = bCtrl ? WordLeft( aPaM ) : CursorLeft( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL );
                             break;
-        case KEY_RIGHT:     aPaM = bCtrl ? WordRight( aPaM ) : CursorRight( aPaM );
+        case KEY_RIGHT:     aPaM = bCtrl ? WordRight( aPaM ) : CursorRight( aPaM, aTranslatedKeyEvent.GetKeyCode().IsMod2() ? i18n::CharacterIteratorMode::SKIPCHARACTER : i18n::CharacterIteratorMode::SKIPCELL );
                             break;
         case KEY_HOME:      aPaM = bCtrl ? CursorStartOfDoc() : CursorStartOfLine( aPaM );
                             break;
@@ -917,7 +907,7 @@ EditSelection ImpEditEngine::MoveCursor( const KeyEvent& rKeyEvent, EditView* pE
     return pEditView->pImpEditView->GetEditSelection();
 }
 
-EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM )
+EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode )
 {
     EditPaM aNewPaM( rPaM );
 
@@ -925,7 +915,7 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( (USHORT)xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( (USHORT)xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount ) );
     }
     else
     {
@@ -941,14 +931,14 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM )
     return aNewPaM;
 }
 
-EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM )
+EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode )
 {
     EditPaM aNewPaM( rPaM );
     if ( rPaM.GetIndex() < rPaM.GetNode()->Len() )
     {
         uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( (USHORT)xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( (USHORT)xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale( aNewPaM ), nCharacterIteratorMode, nCount, nCount ) );
     }
     else
     {
@@ -986,7 +976,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
     if ( nLine )    // gleicher Absatz
     {
         EditLine* pPrevLine = pPPortion->GetLines().GetObject(nLine-1);
-        aNewPaM.SetIndex( pPPortion->GetChar( pPrevLine, nX ) );
+        aNewPaM.SetIndex( GetChar( pPPortion, pPrevLine, nX ) );
         // Wenn davor eine autom.Umgebrochene Zeile, und ich muss genau an das
         // Ende dieser Zeile, landet der Cursor in der aktuellen Zeile am Anfang
         // Siehe Problem: Letztes Zeichen einer autom.umgebr. Zeile = Cursor
@@ -1001,7 +991,7 @@ EditPaM ImpEditEngine::CursorUp( const EditPaM& rPaM, EditView* pView )
             pLine = pPrevPortion->GetLines().GetObject( pPrevPortion->GetLines().Count()-1 );
             DBG_ASSERT( pLine, "Zeile davor nicht gefunden: CursorUp" );
             aNewPaM.SetNode( pPrevPortion->GetNode() );
-            aNewPaM.SetIndex( pPrevPortion->GetChar( pLine, nX+nOnePixelInRef ) );
+            aNewPaM.SetIndex( GetChar( pPrevPortion, pLine, nX+nOnePixelInRef ) );
         }
     }
 
@@ -1030,7 +1020,7 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView* pView )
     if ( nLine < pPPortion->GetLines().Count()-1 )
     {
         EditLine* pNextLine = pPPortion->GetLines().GetObject(nLine+1);
-        aNewPaM.SetIndex( pPPortion->GetChar( pNextLine, nX ) );
+        aNewPaM.SetIndex( GetChar( pPPortion, pNextLine, nX ) );
         // Sonderbehandlung siehe CursorUp...
         if ( ( aNewPaM.GetIndex() == pNextLine->GetEnd() ) && ( aNewPaM.GetIndex() > pNextLine->GetStart() ) && ( aNewPaM.GetIndex() < pPPortion->GetNode()->Len() ) )
             aNewPaM = CursorLeft( aNewPaM );
@@ -1045,7 +1035,7 @@ EditPaM ImpEditEngine::CursorDown( const EditPaM& rPaM, EditView* pView )
             aNewPaM.SetNode( pNextPortion->GetNode() );
             // Nie ganz ans Ende wenn mehrere Zeilen, da dann eine
             // Zeile darunter der Cursor angezeigt wird.
-            aNewPaM.SetIndex( pNextPortion->GetChar( pLine, nX+nOnePixelInRef ) );
+            aNewPaM.SetIndex( GetChar( pNextPortion, pLine, nX+nOnePixelInRef ) );
             if ( ( aNewPaM.GetIndex() == pLine->GetEnd() ) && ( aNewPaM.GetIndex() > pLine->GetStart() ) && ( pNextPortion->GetLines().Count() > 1 ) )
                 aNewPaM = CursorLeft( aNewPaM );
         }
@@ -1684,7 +1674,7 @@ EditPaM ImpEditEngine::DeleteLeftOrRight( const EditSelection& rSel, BYTE nMode,
     {
         if ( nDelMode == DELMODE_SIMPLE )
         {
-            aDelStart = CursorLeft( aCurPos );
+            aDelStart = CursorLeft( aCurPos, i18n::CharacterIteratorMode::SKIPCHARACTER );
         }
         else if ( nDelMode == DELMODE_RESTOFWORD )
         {
@@ -2985,7 +2975,7 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, BOOL bSmart
     }
 
     // Wenn Zeile gefunden, nur noch X-Position => Index
-    nCurIndex = pPortion->GetChar( pLine, aDocPos.X(), bSmart );
+    nCurIndex = GetChar( pPortion, pLine, aDocPos.X(), bSmart );
 
     if ( ( nCurIndex == pLine->GetEnd() ) &&
          ( pLine != pPortion->GetLines().GetObject( pPortion->GetLines().Count()-1) ) )
@@ -2997,6 +2987,137 @@ EditPaM ImpEditEngine::GetPaM( ParaPortion* pPortion, Point aDocPos, BOOL bSmart
     aPaM.SetIndex( nCurIndex );
     return aPaM;
 }
+
+USHORT ImpEditEngine::GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nXPos, BOOL bSmart )
+{
+    DBG_ASSERT( pLine, "Keine Zeile erhalten: GetChar" );
+
+    Size aTmpSz;
+    TextPortion* pPortion;
+
+    USHORT nCurIndex = pLine->GetStart();
+    long nTmpX = pLine->GetStartPosX();
+
+    if ( nTmpX >= nXPos  )
+        return nCurIndex;
+
+    long nLastWidth;
+
+    for ( USHORT i = pLine->GetStartPortion(); i <= pLine->GetEndPortion(); i++ )
+    {
+        pPortion = pParaPortion->aTextPortionList.GetObject( i );
+        switch ( pPortion->GetKind() )
+        {
+            case PORTIONKIND_TEXT:
+            case PORTIONKIND_FIELD:
+            case PORTIONKIND_HYPHENATOR:
+            case PORTIONKIND_TAB:
+//          case PORTIONKIND_EXTRASPACE:
+            {
+                nLastWidth = pPortion->GetSize().Width();
+                nTmpX += nLastWidth;
+            }
+            break;
+            case PORTIONKIND_LINEBREAK:
+            {
+                return nCurIndex;
+            }
+            // break; erzeugt Warnung: "Unreachable code"
+            default: DBG_ERROR( "GetChar: Unbekannte Portion" );
+        }
+
+        if ( nTmpX > nXPos )
+        {
+            // Spezielle Portions werden nicht weiter unterteilt:
+            if ( pPortion->GetKind() != PORTIONKIND_TEXT )
+            {
+                // Aber gewichtet:
+                long nLeftDiff = nXPos-(nTmpX-nLastWidth);
+                long nRightDiff = nTmpX-nXPos;
+                if ( bSmart && ( Abs( nRightDiff ) < Abs( nLeftDiff ) ) )
+                    nCurIndex++;
+                return nCurIndex;
+            }
+
+            nTmpX -= nLastWidth;    // vor die Portion stellen
+
+            USHORT nMax = pPortion->GetLen();
+            USHORT nOffset = 0xFFFF;
+            USHORT nTmpCurIndex = nCurIndex - pLine->GetStart();
+
+            for ( USHORT x = 0; x < nMax; x++ )
+            {
+                long nTmpPosMax = nTmpX+pLine->GetCharPosArray().GetObject( nTmpCurIndex+x );
+                if ( nTmpPosMax > nXPos )
+                {
+                    // pruefen, ob dieser oder der davor...
+                    long nTmpPosMin = nTmpX;
+                    if ( x )
+                        nTmpPosMin += pLine->GetCharPosArray().GetObject( nTmpCurIndex+x-1 );
+                    long nDiffLeft = nXPos - nTmpPosMin;
+                    long nDiffRight = nTmpPosMax - nXPos;
+                    DBG_ASSERT( nDiffLeft >= 0, "DiffLeft negativ" );
+                    DBG_ASSERT( nDiffRight >= 0, "DiffRight negativ" );
+                    nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
+                    // I18N: If there are character position with the length
+                    // of 0, they belong to the same character, we can not
+                    // use this position as an index.
+                    // Skip all 0-positions, cheaper than using XBreakIterator:
+                    if ( nOffset < nMax )
+                    {
+                        const long nX = pLine->GetCharPosArray().GetObject(nOffset);
+                        while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray().GetObject(nOffset+1) == nX ) )
+                            nOffset++;
+                    }
+                    break;
+                }
+            }
+
+            // Bei Verwendung des CharPosArray duerfte es keine Ungenauigkeiten geben!
+            // Vielleicht bei Kerning ?
+            // 0xFFF passiert z.B. bei Outline-Font, wenn ganz hinten.
+            if ( nOffset == 0xFFFF )
+                nOffset = nMax;
+
+            DBG_ASSERT( nOffset <= nMax, "nOffset > nMax" );
+
+            nCurIndex += nOffset;
+
+            // nicht gefunden => Ende der Zeile ?
+            // Nein: Dann sorgt die obere While-Schleife schon fuer das
+            // richtige n.
+            // Die unteren beiden Zeilen haben den Effekt, dass man
+            // nicht zwischen die letzten beiden Zeichen klicken kann.
+            //  if ( ( nTmpX + aTmpSz.Width() ) < nXPos )
+            //      nCurIndex++;
+
+            // Check if index is within a cell:
+            if ( nCurIndex && ( nCurIndex < pParaPortion->GetNode()->Len() ) )
+            {
+                EditPaM aPaM( pParaPortion->GetNode(), nCurIndex+1 );
+                USHORT nScriptType = GetScriptType( aPaM );
+                if ( nScriptType == i18n::ScriptType::COMPLEX )
+                {
+                    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+                    sal_Int32 nCount = 1;
+                    lang::Locale aLocale = GetLocale( aPaM );
+                    USHORT nRight = (USHORT)xBI->nextCharacters( *pParaPortion->GetNode(), nCurIndex, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                    USHORT nLeft = (USHORT)xBI->previousCharacters( *pParaPortion->GetNode(), nRight, aLocale, ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL, nCount, nCount );
+                    if ( ( nLeft != nCurIndex ) && ( nRight != nCurIndex ) )
+                    {
+                        nCurIndex = ( Abs( nRight - nCurIndex ) < Abs( nLeft - nCurIndex ) ) ? nRight : nLeft;
+                    }
+                }
+            }
+
+            return nCurIndex;
+        }
+
+        nCurIndex += pPortion->GetLen();
+    }
+    return nCurIndex;
+}
+
 
 void ImpEditEngine::CalcHeight( ParaPortion* pPortion )
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-07 13:26:06 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,7 +600,6 @@ public:
 
     USHORT              GetLineNumber( USHORT nIndex );
     long                GetXPos( EditLine* pLine, USHORT nIndex );
-    USHORT              GetChar( EditLine* pLine, long nX, BOOL bSmart = TRUE );
 
     EditLineList&       GetLines()                  { return aLineList; }
 

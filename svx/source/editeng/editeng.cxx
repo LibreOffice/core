@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: mt $ $Date: 2002-04-26 10:16:41 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -773,23 +773,23 @@ ESelection EditEngine::WordRight( const ESelection& rSelection, USHORT nWordType
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-ESelection EditEngine::CursorLeft( const ESelection& rSelection, USHORT /* nCharacterIteratorMode */ ) const
+ESelection EditEngine::CursorLeft( const ESelection& rSelection, USHORT nCharacterIteratorMode ) const
 {
     // ImpEditEngine-Iteration-Methods should be const!
     EditEngine* pE = (EditEngine*)this;
 
     EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->CursorLeft( aSel.Min() );
+    aSel = pE->pImpEditEngine->CursorLeft( aSel.Min(), nCharacterIteratorMode );
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
-ESelection EditEngine::CursorRight( const ESelection& rSelection, USHORT /* nCharacterIteratorMode */ ) const
+ESelection EditEngine::CursorRight( const ESelection& rSelection, USHORT nCharacterIteratorMode ) const
 {
     // ImpEditEngine-Iteration-Methods should be const!
     EditEngine* pE = (EditEngine*)this;
 
     EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
-    aSel = pE->pImpEditEngine->CursorRight( aSel.Max() );
+    aSel = pE->pImpEditEngine->CursorRight( aSel.Max(), nCharacterIteratorMode );
     return pE->pImpEditEngine->CreateESel( aSel );
 }
 
@@ -888,7 +888,7 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
             case KEY_PAGEUP:
             case KEY_PAGEDOWN:
             {
-                if ( !rKeyEvent.GetKeyCode().IsMod2() )
+                if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
@@ -2196,6 +2196,11 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
 void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+}
+
+void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT nTextStart, USHORT nTextLen, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cdt $ $Date: 2002-04-29 14:59:54 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,8 +103,12 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
+#ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_I18N_CHARACTERITERATORMODE_HPP_
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
@@ -527,6 +531,7 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
+    USHORT              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, BOOL bSmart = TRUE );
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
 
     void                SetParaAttrib( BYTE nFunc, EditSelection aSel, sal_uInt16 nValue );
@@ -583,8 +588,8 @@ private:
     EditPaM             PageDown( const EditPaM& rPaM, EditView* pView);
     EditPaM             CursorUp( const EditPaM& rPaM, EditView* pEditView );
     EditPaM             CursorDown( const EditPaM& rPaM, EditView* pEditView );
-    EditPaM             CursorLeft( const EditPaM& rPaM );
-    EditPaM             CursorRight( const EditPaM& rPaM );
+    EditPaM             CursorLeft( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
+    EditPaM             CursorRight( const EditPaM& rPaM, USHORT nCharacterIteratorMode = ::com::sun::star::i18n::CharacterIteratorMode::SKIPCELL );
     EditPaM             CursorStartOfLine( const EditPaM& rPaM );
     EditPaM             CursorEndOfLine( const EditPaM& rPaM );
     EditPaM             CursorStartOfParagraph( const EditPaM& rPaM );

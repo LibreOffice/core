@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cdt $ $Date: 2002-04-29 15:00:12 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1922,7 +1922,3 @@ void ImpEditView::RemoveDragAndDropListeners()
         bActiveDragAndDropListener = FALSE;
     }
 }
-
-
-
-

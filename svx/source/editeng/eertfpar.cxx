@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eertfpar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2002-01-16 10:45:02 $
+ *  last change: $Author: mt $ $Date: 2002-05-03 12:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,9 +293,9 @@ void __EXPORT EditRTFParser::InsertPara()
 void __EXPORT EditRTFParser::MovePos( int bForward )
 {
     if( bForward )
-        aCurSel = pImpEditEngine->CursorRight( aCurSel.Max() );
+        aCurSel = pImpEditEngine->CursorRight( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
     else
-        aCurSel = pImpEditEngine->CursorLeft( aCurSel.Max() );
+        aCurSel = pImpEditEngine->CursorLeft( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
 }
 
 void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
