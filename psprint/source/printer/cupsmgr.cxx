@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:08:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,8 @@ typedef void cups_option_t;
 #include <osl/conditn.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <cupsmgr.hxx>
+
+#include <unistd.h>
 
 namespace psp
 {
