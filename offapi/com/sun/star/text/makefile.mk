@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 15:20:31 $
+#   last change: $Author: tl $ $Date: 2002-12-10 09:25:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,6 +110,7 @@ IDLFILES=\
     DocumentSettings.idl\
     DocumentStatistic.idl\
     Endnote.idl\
+        EndnoteSettings.idl\
     FilenameDisplayFormat.idl\
     FontEmphasis.idl\
     FontRelief.idl\
