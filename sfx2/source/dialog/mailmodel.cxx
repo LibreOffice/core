@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-18 15:49:09 $
+ *  last change: $Author: cd $ $Date: 2001-06-05 08:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@
 #ifndef  _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSIMPLEMAILCLIENTSUPPLIER_HPP_
+#include <com/sun/star/system/XSimpleMailClientSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SIMPLEMAILCLIENTFLAGS_HPP_
+#include <com/sun/star/system/SimpleMailClientFlags.hpp>
+#endif
+
 
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
@@ -124,6 +131,7 @@ using namespace ::com::sun::star::mozilla;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::system;
 using namespace ::rtl;
 
 // --------------------------------------------------------------
@@ -214,13 +222,15 @@ sal_Bool SfxMailModel_Impl::SaveDocument( String& rFileName, String& rType )
         // save document to temp file
         SfxStringItem aFileName( SID_FILE_NAME, rFileName );
         SfxBoolItem aPicklist( SID_PICKLIST, FALSE );
-        SfxBoolItem aSaveTo( SID_SAVETO, FALSE );
+        SfxBoolItem aSaveTo( SID_SAVETO, TRUE );
 #endif
         SfxStringItem* pFilterName = NULL;
         if ( pFilter && bHasFilter )
             pFilterName = new SfxStringItem( SID_FILTER_NAME, pFilter->GetName() );
         pDisp->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON,
                         pFilterName, 0L );
+//      pDisp->Execute( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, &aFileName, &aPicklist, &aSaveTo,
+//                      pFilterName, 0L );
 
         rFileName = xDocShell->GetMedium()->GetName();
 
@@ -402,117 +412,113 @@ sal_Bool SfxMailModel_Impl::Send()
         }
         else
         {
-            SvStream* pStream = new SvFileStream( aFileName, STREAM_STD_READ );
             Reference < XMultiServiceFactory > xMgr = ::comphelper::getProcessServiceFactory();
-            Reference < XDataContainer > xData(
-                xMgr->createInstance( OUString::createFromAscii("com.sun.star.ucb.DataContainer") ), UNO_QUERY );
-            if ( xData.is() )
+            if ( xMgr.is() )
             {
-                xData->setContentType( aContentType );
-                SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
-                Reference < XInputStream > xStream = new ::utl::OInputStreamHelper( xLockBytes, 8192 );
-                Reference < XActiveDataSink > xSink( xData, UNO_QUERY );
-                if ( xSink.is() )
-                    xSink->setInputStream( xStream );
-                else
+                Reference< XSimpleMailClientSupplier >  xSimpleMailClientSupplier( xMgr->createInstance(
+                                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SimpleSystemMail" ))),
+                                                            UNO_QUERY );
+                if ( xSimpleMailClientSupplier.is() )
                 {
-                    try
+                    Reference< XSimpleMailClient > xSimpleMailClient = xSimpleMailClientSupplier->querySimpleMailClient();
+
+                    if ( !xSimpleMailClient.is() )
                     {
-                        Sequence< sal_Int8 > aData( 65536 );
-                        sal_Int8* pData = aData.getArray();
-                        Sequence< sal_Int8 > aBuffer;
-                        sal_Int32 nPos = 0, nRead = xStream->readSomeBytes( aBuffer, 65536 );
-                        while ( nRead > 0 )
+                        // no mail client support => message box!
+                        return sal_False;
+                    }
+
+                    // we have a simple mail client
+                    Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
+                    if ( xSimpleMailMessage.is() )
+                    {
+                        sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
+                        if ( maFromAddress.Len() == 0 )
                         {
-                            if ( aData.getLength() < ( nPos + nRead ) )
-                                aData.realloc( nPos + nRead );
+                            // from address not set, try figure out users e-mail address
+                            CreateFromAddress_Impl( maFromAddress );
+                        }
+                        xSimpleMailMessage->setOriginator( maFromAddress );
 
-                            aBuffer.realloc( nRead );
-                            rtl_copyMemory( (void*)pData, (const void*)aBuffer.getConstArray(), nRead );
-                            pData += nRead;
-                            nPos += nRead;
+                        sal_Int32 nToCount      = mpToList ? mpToList->Count() : 0;
+                        sal_Int32 nCcCount      = mpCcList ? mpCcList->Count() : 0;
+                        sal_Int32 nCcSeqCount   = nCcCount;
 
-                            aBuffer.realloc( 0 );
-                            nRead = xStream->readSomeBytes( aBuffer, 65536 );
+                        // set recipient (only one) for this simple mail server!!
+                        if ( nToCount > 1 )
+                        {
+                            nCcSeqCount = nToCount - 1 + nCcCount;
+                            xSimpleMailMessage->setRecipient( *mpToList->GetObject( 0 ));
+                            nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
+                        }
+                        else if ( nToCount == 1 )
+                        {
+                            xSimpleMailMessage->setRecipient( *mpToList->GetObject( 0 ));
+                            nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                         }
 
-                        aData.realloc( nPos );
-                        xData->setData( aData );
-                    }
-                    catch ( NotConnectedException const & ) {}
-                    catch ( BufferSizeExceededException const & ) {}
-                    catch ( IOException const & ) {}
-                }
+                        // all other recipient must be handled with CC recipients!
+                        if ( nCcSeqCount > 0 )
+                        {
+                            sal_Int32               nIndex = 0;
+                            Sequence< OUString >    aCcRecipientSeq;
 
-                try
-                {
-                    Reference< XCommandEnvironment > aCmdEnv;
-                    String aURL = OUString( DEFINE_CONST_UNICODE("vnd.sun.staroffice.out:///~") );
-                    ::ucb::Content aOutbox( aURL, aCmdEnv );
-                    ::ucb::Content aMessage( aURL, aCmdEnv );
+                            aCcRecipientSeq.realloc( nCcSeqCount );
+                            if ( nCcSeqCount > nCcCount )
+                            {
+                                for ( sal_Int32 i = 1; i < nToCount; ++i )
+                                {
+                                    aCcRecipientSeq[nIndex++] = *mpToList->GetObject(i);
+                                }
+                            }
 
-                    sal_Int32 nIdx = 0, nCount = 4;
-                    sal_Bool bCc = sal_False, bBcc = sal_False;
-                    if ( mpCcList && mpCcList->Count() > 0 )
-                    {
-                        bCc = sal_True;
-                        nCount++;
-                    }
-                    if ( mpBccList && mpBccList->Count() > 0 )
-                    {
-                        bBcc = sal_True;
-                        nCount++;
-                    }
-                    Sequence < OUString > aNamesList(nCount);
-                    OUString* pNames = aNamesList.getArray();
-                    pNames[nIdx++] = OUString::createFromAscii( "Title" );
-                    pNames[nIdx++] = OUString::createFromAscii( "MessageFrom" );
-                    pNames[nIdx++] = OUString::createFromAscii( "MessageTo" );
-                    pNames[nIdx++] = OUString::createFromAscii( "MessageBody" );
-                    if ( bCc )
-                        pNames[nIdx++] = OUString::createFromAscii( "MessageCC" );
-                    if ( bBcc )
-                        pNames[nIdx++] = OUString::createFromAscii( "MessageBCC" );
+                            for ( sal_Int32 i = 0; i < nCcCount; i++ )
+                            {
+                                aCcRecipientSeq[nIndex++] = *mpCcList->GetObject(i);
+                            }
+                            xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
+                        }
 
-                    nIdx = 0;
-                    Sequence < Any > aValuesList(nCount);
-                    Any* pValues = aValuesList.getArray();
-                    pValues[nIdx++] = makeAny( OUString( maSubject ) );
-                    pValues[nIdx++] = makeAny( OUString( maFromAddress ) );
-                    String aValueList;
-                    MakeValueList( mpToList, aValueList );
-                    pValues[nIdx++] = makeAny( OUString( aValueList ) );
-                    pValues[nIdx++] = makeAny( xData );
-                    if ( bCc )
-                    {
-                        MakeValueList( mpCcList, aValueList );
-                        pValues[nIdx++] = makeAny( OUString( aValueList ) );
-                    }
-                    if ( bBcc )
-                    {
-                        MakeValueList( mpBccList, aValueList );
-                        pValues[nIdx++] = makeAny( OUString( aValueList ) );
-                    }
+                        sal_Int32 nBccCount = mpBccList ? mpBccList->Count() : 0;
+                        if ( nBccCount > 0 )
+                        {
+                            Sequence< OUString > aBccRecipientSeq( nBccCount );
+                            for ( sal_Int32 i = 0; i < nBccCount; ++i )
+                            {
+                                aBccRecipientSeq[i] = *mpBccList->GetObject(i);
+                            }
+                            xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
+                        }
 
-                    bSend = aOutbox.insertNewContent(
-                        OUString( DEFINE_CONST_UNICODE("application/vnd.sun.staroffice.message") ),
-                        aNamesList, aValuesList, aMessage );
-                }
-                catch( com::sun::star::ucb::ContentCreationException& )
-                {
-                    DBG_ERRORFILE( "ContentCreationException" );
-                }
-                catch( CommandAbortedException& e )
-                {
-                    ByteString aError( UniString( e.Message ), RTL_TEXTENCODING_MS_1252 );
-                    DBG_ERRORFILE( aError.GetBuffer() );
-                }
-                catch( Exception& )
-                {
-                    DBG_ERRORFILE( "Any other exception" );
+                        Sequence< OUString > aAttachmentSeq( 1 );
+                        aAttachmentSeq[0] = aFileName;
+
+                        xSimpleMailMessage->setSubject( maSubject );
+                        xSimpleMailMessage->setAttachement( aAttachmentSeq );
+/*
+                        SfxViewFrame* pTopViewFrm = mpBindings->GetDispatcher_Impl()->GetFrame()->GetTopViewFrame();
+                        SfxObjectShellRef xDocShell = pTopViewFrm->GetObjectShell();
+                        SvStorageRef xStorage = xDocShell->GetStorage();
+                        xDocShell->DoHandsOff();
+*/
+                        try
+                        {
+                            xSimpleMailClient->sendSimpleMailMessage( xSimpleMailMessage, nSendFlags );
+                            bSend = sal_True;
+                        }
+                        catch ( IllegalArgumentException& )
+                        {
+                            bSend = sal_False;
+                        }
+                        catch ( Exception& )
+                        {
+                            bSend = sal_False;
+                        }
+
+//                      xDocShell->DoSaveCompleted( xStorage );
+                    }
                 }
             }
-            delete pStream;
         }
     }
 
