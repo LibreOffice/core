@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScModelObj.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2004-11-02 12:02:15 $
+ *  last change:$Date: 2005-02-24 17:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,7 @@ public class ScModelObj extends TestCase {
         }
 
         try {
-            log.println("creating a spreadsheetdocument");
+            log.println("creating two spreadsheet documents");
             xSpreadsheetDoc = SOF.createCalcDoc(null);
             xSecondsheetDoc = SOF.createCalcDoc(null);
         } catch (com.sun.star.uno.Exception e) {
