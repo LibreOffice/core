@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:27:47 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,8 +515,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     const SfxPoolItem *pItem;
     const SfxItemSet& rPageItemSet = pCurrPageDesc->GetMaster().GetAttrSet();
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-        ( pDoc->IsHeadInBrowse() ||
-          (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode()) ) &&
+         (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode()) &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_HEADER, sal_True, &pItem) )
     {
         const SwFrmFmt *pHeaderFmt =
@@ -536,8 +535,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
         OutFootEndNotes();
 
     if( !bWriteClipboardDoc && pDoc->GetDocShell() &&
-        ( pDoc->IsFootInBrowse() ||
-          (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode()) ) &&
+        (!pDoc->IsHTMLMode() && !pDoc->IsBrowseMode())  &&
         SFX_ITEM_SET == rPageItemSet.GetItemState( RES_FOOTER, sal_True, &pItem) )
     {
         const SwFrmFmt *pFooterFmt =
