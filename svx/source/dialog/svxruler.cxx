@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:01:09 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,7 +270,7 @@ struct SvxRuler_Impl  {
     ~SvxRuler_Impl()
     {
         nPercSize = 0; nTotalDist = 0;
-        delete pPercBuf; delete pBlockBuf; pPercBuf = 0;
+        delete[] pPercBuf; delete[] pBlockBuf; pPercBuf = 0;
         delete pTextRTLItem;
     }
     void SetPercSize(USHORT nSize);
@@ -283,8 +283,8 @@ void SvxRuler_Impl::SetPercSize(USHORT nSize)
 {
     if(nSize > nPercSize)
     {
-        delete pPercBuf;
-        delete pBlockBuf;
+        delete[] pPercBuf;
+        delete[] pBlockBuf;
         pPercBuf = new USHORT[nPercSize = nSize];
         pBlockBuf = new USHORT[nPercSize = nSize];
     }
@@ -830,7 +830,7 @@ void SvxRuler::UpdateColumns()
     {
         if( nBorderCount < pColumnItem->Count())
         {
-            delete pBorders;
+            delete[] pBorders;
             nBorderCount = pColumnItem->Count();
             pBorders = new RulerBorder[nBorderCount];
             size_t nSize = sizeof( RulerBorder ) * nBorderCount;
@@ -1213,7 +1213,7 @@ void SvxRuler::UpdateTabs()
 
         if(pTabStopItem->Count() + TAB_GAP + nDefTabBuf > nTabBufSize)
         {
-            delete pTabs;
+            delete[] pTabs;
             // 10 (GAP) auf Vorrat
             nTabBufSize = pTabStopItem->Count() + TAB_GAP + nDefTabBuf + GAP;
             pTabs = new RulerTab[nTabBufSize];
