@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-06 11:44:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-06 13:40:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -575,27 +575,30 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         {
             const CommandExtTextInputData* pData = rCEvt.GetExtTextInputData();
 
-            EditSelection aSel( mpIMEInfos->aPos );
-            aSel.Max().GetIndex() += mpIMEInfos->nLen;
-            aSel = DeleteSelected( aSel );
-            aSel = ImpInsertText( aSel, pData->GetText() );
-
-            if ( pData->GetTextAttr() )
+            if ( !pData->IsOnlyCursorChanged() )
             {
-                mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
-                mpIMEInfos->bCursor = pData->IsCursorVisible();
-            }
-            else
-            {
-                mpIMEInfos->DestroyAttribs();
+                EditSelection aSel( mpIMEInfos->aPos );
+                aSel.Max().GetIndex() += mpIMEInfos->nLen;
+                aSel = DeleteSelected( aSel );
+                aSel = ImpInsertText( aSel, pData->GetText() );
+
+                if ( pData->GetTextAttr() )
+                {
+                    mpIMEInfos->CopyAttribs( pData->GetTextAttr(), pData->GetText().Len() );
+                    mpIMEInfos->bCursor = pData->IsCursorVisible();
+                }
+                else
+                {
+                    mpIMEInfos->DestroyAttribs();
+                }
+
+                ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
+                pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
+                FormatAndUpdate( pView );
             }
 
-            ParaPortion* pPortion = FindParaPortion( mpIMEInfos->aPos.GetNode() );
-            pPortion->MarkSelectionInvalid( mpIMEInfos->aPos.GetIndex(), 0 );
-            FormatAndUpdate( pView );
-
-            aSel.Min() = aSel.Max();
-            pView->SetSelection( CreateESel( aSel ) );
+            EditSelection aNewSel = EditPaM( mpIMEInfos->aPos.GetNode(), mpIMEInfos->aPos.GetIndex()+pData->GetCursorPos() );
+            pView->SetSelection( CreateESel( aNewSel ) );
         }
     }
     else if ( rCEvt.GetCommand() == COMMAND_EXTTEXTINPUTPOS )
@@ -630,11 +633,9 @@ void ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
     }
     else if ( rCEvt.GetCommand() == COMMAND_INPUTCONTEXTCHANGE )
     {
-        int x = 0;
     }
     else if ( rCEvt.GetCommand() == COMMAND_CURSORPOS )
     {
-        int x = 0;
     }
 
 #endif // !SVX_LIGHT
