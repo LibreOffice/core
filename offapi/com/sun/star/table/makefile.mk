@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:56:28 $
+#   last change: $Author: vg $ $Date: 2003-04-01 15:15:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -98,6 +98,9 @@ IDLFILES=\
     TableRows.idl\
     TableRowsEnumeration.idl\
     TableSortDescriptor.idl\
+        TableSortDescriptor2.idl\
+        TableSortField.idl\
+        TableSortFieldType.idl\
     XAutoFormattable.idl\
     XCell.idl\
     XCellCursor.idl\
