@@ -33,6 +33,7 @@
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Align"
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"BackgroundColor"
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Border"
+"OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"BorderColor#optional"
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"Enabled"
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"FontDescriptor"
 "OFixedTextModel";"com::sun::star::awt::UnoControlFixedTextModel";"FontEmphasisMark"
