@@ -2,9 +2,9 @@
  *
  *  $RCSfile: semaphor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: mfe $ $Date: 2001-01-04 17:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 
 #include <osl/macros.hxx>
 
-#include <osl/semaphore.h>
+#include <osl/semaphor.h>
 
 
 #ifdef _USE_NAMESPACE
@@ -136,6 +136,9 @@ namespace osl
 /*************************************************************************
 *
 *    $Log: not supported by cvs2svn $
+*    Revision 1.1.1.1  2000/09/18 15:17:13  hr
+*    initial import
+*
 *    Revision 1.4  2000/09/18 14:28:49  willem.vandorp
 *    OpenOffice header added.
 *
