@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 10:50:13 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:44:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ void OCurrencyModel::implConstruct()
 DBG_NAME( OCurrencyModel )
 //------------------------------------------------------------------
 OCurrencyModel::OCurrencyModel(const Reference<XMultiServiceFactory>& _rxFactory)
-    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_CONTROL_CURRENCYFIELD, sal_False, sal_True )
+    :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
                                     // use the old control name for compytibility reasons
 {
     DBG_CTOR( OCurrencyModel, NULL );
