@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: thb $ $Date: 2001-11-09 08:40:41 $
+ *  last change: $Author: pb $ $Date: 2001-11-22 15:03:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,7 +1247,7 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
             try
             {
                 Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::LISTBOX_VERSION,
-                                                    ControlActions::GET_SELECTED_ITEM );
+                                                    ControlActions::GET_SELECTED_ITEM_INDEX );
                 sal_Int16 nVersion = 0;
                 if ( aValue >>= nVersion )
                     rpSet->Put( SfxInt16Item( SID_VERSION, nVersion ) );
