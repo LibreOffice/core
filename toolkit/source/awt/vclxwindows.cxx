@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2002-09-05 11:23:24 $
+ *  last change: $Author: mt $ $Date: 2002-09-06 08:34:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2116,9 +2116,7 @@ void VCLXScrollBar::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::R
             nStyle |= WB_VERT;
 
         pWindow->SetStyle( nStyle );
-
-        if ( pWindow->IsVisible() )
-            pWindow->Resize();
+        pWindow->Resize();
     }
 }
 
