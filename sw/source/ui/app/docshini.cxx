@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 15:55:26 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,7 +507,8 @@ SwDocShell::SwDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
-    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG)
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    bInUpdateFontList(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
@@ -526,7 +527,8 @@ SwDocShell::SwDocShell( SwDoc *pD, SfxObjectCreateMode eMode ):
     SfxObjectShell ( eMode ),
     pView( 0 ),
     pWrtShell( 0 ),
-    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG)
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    bInUpdateFontList(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
@@ -611,22 +613,17 @@ void SwDocShell::AddLink()
 
 void SwDocShell::UpdateFontList()
 {
-    ASSERT(pDoc, "Kein Doc keine FontList");
-    if( pDoc )
+    if(!bInUpdateFontList)
     {
-        SfxPrinter* pPrt = pDoc->GetPrt();
-        delete pFontList;
-
-        if( pPrt && pPrt->GetDevFontCount() && !pDoc->IsBrowseMode() )
-            pFontList = new FontList( pPrt );
-        else
-            pFontList = new FontList( Application::GetDefaultDevice() );
-
-        PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
-
-        SfxViewFrame* pFrm = pWrtShell ? pWrtShell->GetView().GetViewFrame() : 0;
-        if( pFrm )
-            pFrm->GetBindings().Invalidate( SID_ATTR_CHAR_FONTLIST );
+        bInUpdateFontList = true;
+        ASSERT(pDoc, "Kein Doc keine FontList");
+        if( pDoc )
+        {
+            delete pFontList;
+            pFontList = new FontList( &pDoc->GetRefDev() );
+            PutItem( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+        }
+        bInUpdateFontList = false;
     }
 }
 
