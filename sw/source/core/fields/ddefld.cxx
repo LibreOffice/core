@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:19:32 $
+ *  last change: $Author: jp $ $Date: 2001-04-12 17:50:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
 
             // CR-LF am Ende entfernen, ist ueberfluessig!
             xub_StrLen n = sStr.Len();
+            while( n && 0 == sStr.GetChar( n-1 ) )
+                --n;
             if( n && 0x0a == sStr.GetChar( n-1 ) )
                 --n;
             if( n && 0x0d == sStr.GetChar( n-1 ) )
