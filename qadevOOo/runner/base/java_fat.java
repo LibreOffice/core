@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_fat.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-12-11 11:31:00 $
+ *  last change:$Date: 2004-01-05 18:42:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ import util.DynamicClassLoader;
  */
 public class java_fat implements TestBase {
     public static boolean debug = false;
+    public static boolean keepdocument = false;
 
     public boolean executeTest(lib.TestParameters param) {
         DynamicClassLoader dcl = new DynamicClassLoader();
@@ -114,6 +115,8 @@ public class java_fat implements TestBase {
         Vector exclusions = null;
         boolean retValue = true;
         debug = param.getBool("DebugIsActive");
+        keepdocument = param.getBool("KeepDocument");
+        if (keepdocument) System.setProperty("KeepDocument","true");
         if (ExclusionFile != null) {
             exclusions = getExclusionList(ExclusionFile,debug);
         }
@@ -333,7 +336,7 @@ public class java_fat implements TestBase {
             }
 
             try {
-                tCase.cleanupTestCase(param);
+                if (!keepdocument) tCase.cleanupTestCase(param);
             } catch (Exception e) {
                 System.out.println("couldn't cleanup");
             } catch (java.lang.NoClassDefFoundError e) {
