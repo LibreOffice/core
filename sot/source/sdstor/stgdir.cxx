@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 12:28:41 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,7 +699,7 @@ BOOL StgDirEntry::Tmp2Strm()
             pNewStrm = new StgDataStrm( rIo, STG_EOF, 0 );
         if( pNewStrm->SetSize( n ) )
         {
-            void* p = new BYTE[ 4096 ];
+            BYTE* p = new BYTE[ 4096 ];
             pTmpStrm->Seek( 0L );
             while( n )
             {

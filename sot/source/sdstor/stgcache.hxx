@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-02-13 14:15:19 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ class StgPage {
     StgPage *pNext2, *pLast2;               // ordered chain
     StgDirEntry* pOwner;                    // owner
     INT32   nPage;                          // page #
-    void*   pData;                          // nPageSize characters
+    BYTE*   pData;                          // nPageSize characters
     short   nData;                          // size of this page
     BOOL    bDirty;                         // dirty flag
     StgPage( StgCache*, short );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mba $ $Date: 2002-09-12 15:08:22 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,10 @@
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_H_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_H_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #endif
 
 #ifndef _RTTI_HXX //autogen
@@ -295,6 +299,7 @@ protected:
 public:
                                 TYPEINFO();
                                 UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey=0 );
+                                UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey, BOOL bRepair, ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler > xProgress );
                                 UCBStorageStream( UCBStorageStream_Impl* );
 
     virtual ULONG               Read( void * pData, ULONG nSize );
@@ -337,7 +342,19 @@ public:
     static String               CreateLinkFile( const String& rName );
 
                                 UCBStorage( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
-                                UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect = TRUE, BOOL bIsRoot = TRUE );
+                                UCBStorage( const String& rName,
+                                            StreamMode nMode,
+                                            BOOL bDirect = TRUE,
+                                            BOOL bIsRoot = TRUE );
+
+                                UCBStorage( const String& rName,
+                                            StreamMode nMode,
+                                            BOOL bDirect,
+                                            BOOL bIsRoot,
+                                            BOOL bIsRepair,
+                                            ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XProgressHandler >
+                                                xProgressHandler );
+
                                 UCBStorage( UCBStorage_Impl* );
                                 UCBStorage( SvStream& rStrm, BOOL bDirect = TRUE );
 

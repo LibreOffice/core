@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mav $ $Date: 2002-09-18 12:08:28 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,7 +577,7 @@ void SotStorage::CreateStorage( BOOL bForceUCBStorage, StreamMode nMode, Storage
             String aURL;
             ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
             aObj.SetURL( aURL );
-            aName = aObj.GetMainURL();
+            aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
         }
 
         // a new unpacked storage should be created
@@ -796,7 +796,7 @@ BOOL SotStorage::IsStorageFile( const String & rFileName )
         String aURL;
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aURL );
         aObj.SetURL( aURL );
-        aName = aObj.GetMainURL();
+        aName = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READ );

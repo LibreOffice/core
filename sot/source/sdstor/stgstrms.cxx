@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-22 12:28:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,7 +1085,7 @@ BOOL StgTmpStrm::Copy( StgTmpStrm& rSrc )
     SetSize( n );
     if( GetError() == SVSTREAM_OK )
     {
-        void* p = new BYTE[ 4096 ];
+        BYTE* p = new BYTE[ 4096 ];
         rSrc.Seek( 0L );
         Seek( 0L );
         while( n )

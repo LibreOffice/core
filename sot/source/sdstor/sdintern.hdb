@@ -1,0 +1,22 @@
+write "/*************************************************************************"
+write "* SDINTERN.HXX"
+write "* __DATE__"
+write "* (c) 1992-1995 STAR DIVISION"
+write "*************************************************************************/"
+write "#ifndef _SDINTERN_HXX"
+write "#define _SDINTERN_HXX"
+write "#ifndef _SOLAR_H"
+write "#include <tools/solar.h>"
+write "#endif"
+write "#ifndef _STREAM_HXX"
+write "#include <tools/stream.hxx>"
+write "#endif"
+file stg.hxx
+file stgelem.hxx
+file stgcache.hxx
+file stgio.hxx
+file stgstrms.hxx
+file stgavl.hxx
+file stgdir.hxx
+write "#endif"
+

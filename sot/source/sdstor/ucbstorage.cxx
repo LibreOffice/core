@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-22 15:19:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 11:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_RESULTSETEXCEPTION_HPP_
+#include <com/sun/star/ucb/ResultSetException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
 #include <com/sun/star/uno/Sequence.h>
 #endif
@@ -140,6 +143,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <ucbhelper/commandenvironment.hxx>
 
 #include "stg.hxx"
 #include "storinfo.hxx"
@@ -478,7 +482,7 @@ public:
                                                 // reference is destroyed
     BOOL                        m_bIsOLEStorage;// an OLEStorage on a UCBStorageStream makes this an Autocommit-stream
 
-                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL, const ByteString* pKey=0 );
+                                UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL, const ByteString* pKey=0, BOOL bRepair = FALSE, Reference< XProgressHandler > xProgress = Reference< XProgressHandler >() );
 
     void                        Free();
     BOOL                        Init();
@@ -542,8 +546,11 @@ public:
 
     UCBStorageElementList_Impl  m_aChildrenList;
 
-                                UCBStorage_Impl( const ::ucb::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL );
-                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL );
+    BOOL                        m_bRepairPackage;
+    Reference< XProgressHandler > m_xProgressHandler;
+
+                                UCBStorage_Impl( const ::ucb::Content&, const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
+                                UCBStorage_Impl( const String&, StreamMode, UCBStorage*, BOOL, BOOL, BOOL = FALSE, Reference< XProgressHandler > = Reference< XProgressHandler >() );
                                 UCBStorage_Impl( SvStream&, UCBStorage*, BOOL );
     void                        Init();
     sal_Int16                   Commit();
@@ -672,7 +679,7 @@ BOOL UCBStorageElement_Impl::IsModified()
     return bModified;
 }
 
-UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect, const ByteString* pKey )
+UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nMode, UCBStorageStream* pStream, BOOL bDirect, const ByteString* pKey, BOOL bRepair, Reference< XProgressHandler > xProgress  )
     : m_pAntiImpl( pStream )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
@@ -692,7 +699,18 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
     try
     {
         // create the content
-        m_pContent = new ::ucb::Content( rName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+
+        ::rtl::OUString aTemp( rName );
+
+        if ( bRepair )
+        {
+            xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+                                                     xProgress );
+            aTemp += rtl::OUString::createFromAscii("?repairpackage");
+        }
+
+        m_pContent = new ::ucb::Content( aTemp, xComEnv );
 
         if ( pKey )
         {
@@ -1223,7 +1241,7 @@ sal_Int16 UCBStorageStream_Impl::Commit()
 
                 INetURLObject aObj( m_aURL );
                 aObj.SetName( m_aName );
-                m_aURL = aObj.GetMainURL();
+                m_aURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
                 m_bModified = FALSE;
                 m_bSourceRead = TRUE;
             }
@@ -1263,44 +1281,47 @@ BOOL UCBStorageStream_Impl::Revert()
         return FALSE;                   //  ???
     }
 
-    if ( m_bModified )
+    Free();
+    if ( m_aTempURL.Len() )
     {
-        m_rSource = Reference<XInputStream>();
-        m_bSourceRead = FALSE;
-        try
-        {
-            m_rSource = m_pContent->openStream();
-
-            if( m_rSource.is() )
-            {
-                if( !( m_nMode & STREAM_TRUNC ) )
-                    m_bSourceRead = TRUE;
-            }
-            else
-                SetError( SVSTREAM_CANNOT_MAKE );
-        }
-        catch ( ContentCreationException& )
-        {
-            SetError( ERRCODE_IO_GENERAL );
-        }
-        catch ( RuntimeException& )
-        {
-            SetError( ERRCODE_IO_GENERAL );
-        }
-        catch ( Exception& )
-        {
-        }
-
-        // do not remove stream and file, just empty the stream
-        Init();
-        m_pStream->SetStreamSize(0);
-        m_bSourceRead = TRUE;
-        m_bModified = FALSE;
+        ::utl::UCBContentHelper::Kill( m_aTempURL );
+        m_aTempURL.Erase();
     }
 
+    m_bSourceRead = FALSE;
+    try
+    {
+        m_rSource = m_pContent->openStream();
+        if( m_rSource.is() )
+        {
+            if ( m_pAntiImpl && ( m_nMode & STREAM_TRUNC ) )
+                // stream is in use and should be truncated
+                m_bSourceRead = FALSE;
+            else
+            {
+                m_nMode &= ~STREAM_TRUNC;
+                m_bSourceRead = TRUE;
+            }
+        }
+        else
+            SetError( SVSTREAM_CANNOT_MAKE );
+    }
+    catch ( ContentCreationException& )
+    {
+        SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( RuntimeException& )
+    {
+        SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    m_bModified = FALSE;
     m_aName = m_aOriginalName;
     m_aContentType = m_aOriginalContentType;
-    return ( m_pStream->GetError() != ERRCODE_NONE );
+    return ( GetError() == ERRCODE_NONE );
 }
 
 BOOL UCBStorageStream_Impl::Clear()
@@ -1362,6 +1383,15 @@ UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL 
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorageStream !
     pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey );
+    pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
+    StorageBase::nMode = pImp->m_nMode;
+}
+
+UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect, const ByteString* pKey, BOOL bRepair, Reference< XProgressHandler > xProgress )
+{
+    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
+    // to class UCBStorageStream !
+    pImp = new UCBStorageStream_Impl( rName, nMode, this, bDirect, pKey, bRepair, xProgress );
     pImp->AddRef();             // use direct refcounting because in header file only a pointer should be used
     StorageBase::nMode = pImp->m_nMode;
 }
@@ -1521,7 +1551,7 @@ BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
 
     if( pDestStm->SetSize( n ) && n )
     {
-        void* p = new BYTE[ 4096 ];
+        BYTE* p = new BYTE[ 4096 ];
         Seek( 0L );
         pDestStm->Seek( 0L );
         while( n )
@@ -1536,7 +1566,7 @@ BOOL UCBStorageStream::CopyTo( BaseStorageStream* pDestStm )
             n -= nn;
         }
 
-        delete p;
+        delete[] p;
     }
 
     return TRUE;
@@ -1620,11 +1650,21 @@ UCBStorage::UCBStorage( const ::ucb::Content& rContent, const String& rName, Str
     StorageBase::nMode = pImp->m_nMode;
 }
 
+UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler )
+{
+    // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
+    // to class UCBStorage !
+    pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot, bIsRepair, xProgressHandler );
+    pImp->AddRef();
+    pImp->Init();
+    StorageBase::nMode = pImp->m_nMode;
+}
+
 UCBStorage::UCBStorage( const String& rName, StreamMode nMode, BOOL bDirect, BOOL bIsRoot )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
     // to class UCBStorage !
-    pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot );
+    pImp = new UCBStorage_Impl( rName, nMode, this, bDirect, bIsRoot, sal_False, Reference< XProgressHandler >() );
     pImp->AddRef();
     pImp->Init();
     StorageBase::nMode = pImp->m_nMode;
@@ -1649,7 +1689,7 @@ UCBStorage::~UCBStorage()
     pImp->ReleaseRef();
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot )
+UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler  )
     : m_pAntiImpl( pStorage )
     , m_pTempFile( NULL )
     , m_pContent( new ::ucb::Content( rContent ) )
@@ -1666,6 +1706,9 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     , m_bIsLinked( TRUE )
     , m_bListCreated( FALSE )
     , m_aClassId( SvGlobalName() )
+    , m_bRepairPackage( bIsRepair )
+    , m_xProgressHandler( xProgressHandler )
+
 {
     String aName( rName );
     if( !aName.Len() )
@@ -1680,7 +1723,7 @@ UCBStorage_Impl::UCBStorage_Impl( const ::ucb::Content& rContent, const String& 
     m_aURL = rName;
 }
 
-UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot )
+UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStorage* pStorage, BOOL bDirect, BOOL bIsRoot, BOOL bIsRepair, Reference< XProgressHandler > xProgressHandler )
     : m_pAntiImpl( pStorage )
     , m_pTempFile( NULL )
     , m_pContent( NULL )
@@ -1697,6 +1740,8 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_bIsLinked( FALSE )
     , m_bListCreated( FALSE )
     , m_aClassId( SvGlobalName() )
+    , m_bRepairPackage( bIsRepair )
+    , m_xProgressHandler( xProgressHandler )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -1744,6 +1789,7 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
     , m_aClassId( SvGlobalName() )
+    , m_bRepairPackage( FALSE )
 {
     // opening in direct mode is too fuzzy because the data is transferred to the stream in the Commit() call,
     // which will be called in the storages' dtor
@@ -1808,7 +1854,7 @@ void UCBStorage_Impl::Init()
                     aObj.Append( String( RTL_CONSTASCII_USTRINGPARAM("manifest.xml") ) );
 
                     // create input stream
-                    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
+                    SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
                     ::utl::OInputStreamWrapper* pHelper = new ::utl::OInputStreamWrapper( *pStream );
                     com::sun::star::uno::Reference < ::com::sun::star::io::XInputStream > xInputStream( pHelper );
 
@@ -1863,7 +1909,18 @@ void UCBStorage_Impl::CreateContent()
     try
     {
         // create content; where to put StreamMode ?! ( already done when opening the file of the package ? )
-        m_pContent = new ::ucb::Content( m_aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+        Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+
+        ::rtl::OUString aTemp( m_aURL );
+
+        if ( m_bRepairPackage )
+        {
+            xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+                                                     m_xProgressHandler );
+            aTemp += rtl::OUString::createFromAscii("?repairpackage");
+        }
+
+        m_pContent = new ::ucb::Content( aTemp, xComEnv );
     }
     catch ( ContentCreationException& )
     {
@@ -1938,7 +1995,16 @@ void UCBStorage_Impl::ReadContent()
                     String aName( m_aURL );
                     aName += '/';
                     aName += String( xRow->getString(1) );
-                    ::ucb::Content aContent( aName, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+
+                    Reference< ::com::sun::star::ucb::XCommandEnvironment > xComEnv;
+                    if ( m_bRepairPackage )
+                    {
+                        xComEnv = new ::ucb::CommandEnvironment( Reference< ::com::sun::star::task::XInteractionHandler >(),
+                                                                 m_xProgressHandler );
+                           aName += String( RTL_CONSTASCII_USTRINGPARAM( "?repairpackage" ) );
+                    }
+
+                    ::ucb::Content aContent( aName, xComEnv );
 
                     ::rtl::OUString aMediaType;
                     Any aAny = aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
@@ -1973,6 +2039,11 @@ void UCBStorage_Impl::ReadContent()
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( ResultSetException& )
+    {
+        // means that the package file is broken
+        SetError( ERRCODE_IO_BROKENPACKAGE );
     }
     catch ( SQLException& )
     {
@@ -2505,9 +2576,15 @@ BOOL UCBStorage_Impl::Revert()
         else
         {
             if ( pElement->m_xStream.Is() )
+            {
+                pElement->m_xStream->m_bCommited = sal_False;
                 pElement->m_xStream->Revert();
+            }
             else if ( pElement->m_xStorage.Is() )
+            {
+                 pElement->m_xStorage->m_bCommited = sal_False;
                 pElement->m_xStorage->Revert();
+            }
 
             pElement->m_aName = pElement->m_aOriginalName;
             pElement->m_bIsRemoved = FALSE;
@@ -2789,7 +2866,7 @@ BaseStorageStream* UCBStorage::OpenStream( const String& rEleName, StreamMode nM
             String aName( pImp->m_aURL );
             aName += '/';
             aName += rEleName;
-            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pKey );
+            UCBStorageStream* pStream = new UCBStorageStream( aName, nMode, bDirect, pKey, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStream->SetError( GetError() );
             pStream->pImp->m_aName = rEleName;
             return pStream;
@@ -2848,7 +2925,7 @@ UCBStorageStream_Impl* UCBStorage_Impl::OpenStream( UCBStorageElement_Impl* pEle
     String aName( m_aURL );
     aName += '/';
     aName += pElement->m_aOriginalName;
-    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, NULL, bDirect, pKey );
+    pElement->m_xStream = new UCBStorageStream_Impl( aName, nMode, NULL, bDirect, pKey, m_bRepairPackage, m_xProgressHandler );
     return pElement->m_xStream;
 }
 
@@ -2889,7 +2966,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
             String aName( pImp->m_aURL );
             aName += '/';
             aName += rEleName;  //  ???
-            UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
+            UCBStorage *pStorage = new UCBStorage( aName, nMode, bDirect, FALSE, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
             pStorage->pImp->m_bIsRoot = FALSE;
             pStorage->SetError( GetError() );
             return pStorage;
@@ -2945,7 +3022,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
                 String aName( pImp->m_aURL );
                 aName += '/';
                 aName += pElement->m_aOriginalName;
-                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, FALSE );
+                UCBStorage* pStorage = new UCBStorage( aName, nMode, bDirect, FALSE, pImp->m_bRepairPackage, pImp->m_xProgressHandler );
                 pElement->m_xStorage = pStorage->pImp;
                 return pStorage;
             }
@@ -2991,6 +3068,7 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
     String aName( m_aURL );
     aName += '/';
     aName += pElement->m_aOriginalName;  //  ???
+
     pElement->m_bIsStorage = pElement->m_bIsFolder = TRUE;
 
     if ( m_bIsLinked && !::utl::UCBContentHelper::Exists( aName ) )
@@ -2998,11 +3076,11 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
         Content aNewFolder;
         BOOL bRet = ::utl::UCBContentHelper::MakeFolder( *m_pContent, pElement->m_aOriginalName, aNewFolder );
         if ( bRet )
-            pRet = new UCBStorage_Impl( aNewFolder, aName, nMode, NULL, bDirect, FALSE );
+            pRet = new UCBStorage_Impl( aNewFolder, aName, nMode, NULL, bDirect, FALSE, m_bRepairPackage, m_xProgressHandler );
     }
     else
     {
-        pRet = new UCBStorage_Impl( aName, nMode, NULL, bDirect, FALSE );
+        pRet = new UCBStorage_Impl( aName, nMode, NULL, bDirect, FALSE, m_bRepairPackage, m_xProgressHandler );
         pRet->m_bIsLinked = m_bIsLinked;
     }
 
@@ -3181,7 +3259,7 @@ BOOL UCBStorage::IsStorageFile( const String& rFileName )
     {
         ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURL );
         aObj.SetURL( aFileURL );
-        aFileURL = aObj.GetMainURL();
+        aFileURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
     }
 
     SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_STD_READ );
