@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-12-07 14:47:14 $
+ *  last change: $Author: jsc $ $Date: 2001-12-07 14:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,7 +1035,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry1: Method %d contains %d more parameters\n", nParams1 - i);
+        fprintf(stderr, "    Registry1: Method %d contains %d more parameters\n", index, nParams1 - i);
     }
     if ( i < nParams2 && options.forceOutput() )
     {
@@ -1044,7 +1044,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry2: Method %d contains %d more parameters\n", nParams2 - i);
+        fprintf(stderr, "    Registry2: Method %d contains %d more parameters\n", index, nParams2 - i);
     }
 
     sal_uInt16 nExcep1 = (sal_uInt16)reader1.getMethodExcCount(index);
@@ -1087,7 +1087,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry1: Method %d contains %d more exceptions\n", nExcep1 - i);
+        fprintf(stderr, "    Registry1: Method %d contains %d more exceptions\n", index, nExcep1 - i);
     }
     if ( i < nExcep2 && options.forceOutput() )
     {
@@ -1096,7 +1096,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry2: Method %d contains %d more exceptions\n", nExcep2 - i);
+        fprintf(stderr, "    Registry2: Method %d contains %d more exceptions\n", index, nExcep2 - i);
     }
 
     if ( reader1.getMethodMode(index) != reader2.getMethodMode(index) )
