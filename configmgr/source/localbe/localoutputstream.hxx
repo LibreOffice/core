@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localoutputstream.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 17:17:41 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 13:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,16 @@
 #include "filehelper.hxx"
 #endif // _CONFIGMGR_FILEHELPER_HXX_
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
+#include <com/sun/star/configuration/backend/BackendAccessException.hpp>
+#endif
+
 namespace configmgr { namespace localbe {
 
 namespace css = com::sun::star ;
 namespace uno = css::uno ;
 namespace io = css::io ;
+namespace backend = css::configuration::backend ;
 
 /**
   Class wrapping the use of the XOutputStream implementation on a file
@@ -82,7 +87,8 @@ namespace io = css::io ;
   actual file being accessed only on successful completion of the output
   process.
   */
-class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
+class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream>
+{
     public :
         /**
           Constructor using the URL of the file to access.
@@ -96,26 +102,25 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
                     if access to the temporary file fails.
           */
         LocalOutputStream(const rtl::OUString& aFileUrl)
-            throw (io::IOException) ;
+            throw (backend::BackendAccessException, uno::RuntimeException) ;
         /** Destructor */
         ~LocalOutputStream(void) ;
 
         // closeOutput and mark as successful
-        void finishOutput();
+        void finishOutput()
+            throw (backend::BackendAccessException, uno::RuntimeException) ;
     protected :
         // XOutputStream
         virtual void SAL_CALL writeBytes(const uno::Sequence<sal_Int8>& aData)
             throw (io::NotConnectedException,
                     io::BufferSizeExceededException,
-                    io::IOException, uno::RuntimeException) {
-                mTemporaryFile->writeBytes(aData) ;
-            }
+                    io::IOException, uno::RuntimeException);
+
         virtual void SAL_CALL flush(void)
             throw (io::NotConnectedException,
                     io::BufferSizeExceededException,
-                    io::IOException, uno::RuntimeException) {
-                mTemporaryFile->flush() ;
-            }
+                    io::IOException, uno::RuntimeException);
+
         virtual void SAL_CALL closeOutput(void)
             throw (io::NotConnectedException,
                     io::BufferSizeExceededException,
@@ -123,6 +128,8 @@ class LocalOutputStream : public cppu::WeakImplHelper1<io::XOutputStream> {
 
 
     private :
+        uno::Reference<io::XOutputStream> getOutputFile() ;
+
         /** Temporary file used during access */
         uno::Reference<io::XOutputStream> mTemporaryFile ;
         /** URL of the target file */
