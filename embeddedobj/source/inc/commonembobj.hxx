@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:21:28 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #include <com/sun/star/uno/Any.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #endif
@@ -151,6 +154,7 @@ class OCommonEmbeddedObject : public ::com::sun::star::embed::XEmbeddedObject
                             , public ::com::sun::star::embed::XEmbedPersist
                             , public ::com::sun::star::embed::XLinkageSupport
                             , public ::com::sun::star::embed::XInplaceObject
+                            , public ::com::sun::star::container::XChild
                             , public ::cppu::OWeakObject
 {
 protected:
@@ -216,6 +220,8 @@ protected:
     ::rtl::OUString m_aLinkFilterName;
     sal_Bool        m_bLinkHasPassword;
     ::rtl::OUString m_aLinkPassword;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > m_xParent;
 
 private:
     void CommonInit_Impl( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObjectProps );
@@ -542,6 +548,10 @@ public:
     virtual void SAL_CALL removeEventListener(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >& Listener )
         throw ( ::com::sun::star::uno::RuntimeException );
+
+    // XChild
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 };
 
 #endif
