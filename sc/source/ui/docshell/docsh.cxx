@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: er $ $Date: 2002-07-17 17:28:09 $
+ *  last change: $Author: sab $ $Date: 2002-09-25 09:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,13 @@
 #include <unotools/charclass.hxx>
 #ifndef _SV_VIRDEV_HXX
 #include <vcl/virdev.hxx>
+#endif
+
+#ifndef _SFXREQUEST_HXX
+#include <sfx2/request.hxx>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_UPDATEDOCMODE_HPP_
+#include <com/sun/star/document/UpdateDocMode.hpp>
 #endif
 
 #include <sot/formats.hxx>
@@ -529,6 +536,10 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     {
         ScColumn::bDoubleAlloc = sal_True;
         bRet = aImport.Import(sal_False);
+
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
+        nCanUpdate = pUpdateDocItem ? pUpdateDocItem->GetValue() : com::sun::star::document::UpdateDocMode::NO_UPDATE;
+
         UpdateLinks();
         // don't prevent establishing of listeners anymore
         aDocument.SetInsertingFromOtherDoc( FALSE );
@@ -2035,6 +2046,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         bIsInUndo       ( FALSE ), \
         bDocumentModifiedPending( FALSE ), \
         nDocumentLock   ( 0 ), \
+        nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         pVirtualDevice_100th_mm ( NULL )
 
 //------------------------------------------------------------------
