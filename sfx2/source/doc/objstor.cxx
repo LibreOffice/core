@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-09 17:55:57 $
+ *  last change: $Author: mba $ $Date: 2001-03-14 12:40:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,15 +83,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
-#ifndef _COM_SUN_STAR_IO_DATATRANSFEREVENT_HPP_
-#include <com/sun/star/io/DataTransferEvent.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATATRANSFEREVENTLISTENER_HPP_
-#include <com/sun/star/io/XDataTransferEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XDATAEXPORTER_HPP_
-#include <com/sun/star/io/XDataExporter.hpp>
-#endif
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
 #endif
@@ -157,67 +148,7 @@
 #include "openflag.hxx"
 #include "helper.hxx"
 
-
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
-
-class DataTransferEventListener_Impl    :   public ::com::sun::star::io::XDataTransferEventListener ,
-                                            public ::com::sun::star::lang::XTypeProvider            ,
-                                            public ::cppu::OWeakObject
-{
-private:
-    SfxObjectShellRef   xDoc;
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >       xTransfer;
-
-public:
-    SFX_DECL_XINTERFACE_XTYPEPROVIDER
-
-                        DataTransferEventListener_Impl( SfxObjectShell *pDoc, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & xRef )
-                            : xDoc( pDoc )
-                            , xTransfer( xRef )
-                        {}
-
-                        ~DataTransferEventListener_Impl();
-
-    void                Finish();
-    virtual void   SAL_CALL         finished(const ::com::sun::star::io::DataTransferEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void   SAL_CALL         cancelled(const ::com::sun::star::io::DataTransferEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
-    virtual void   SAL_CALL         disposing(const ::com::sun::star::lang::EventObject &) throw( ::com::sun::star::uno::RuntimeException );
-};
-
-SFX_IMPL_XINTERFACE_2( DataTransferEventListener_Impl, OWeakObject, ::com::sun::star::io::XDataTransferEventListener, ::com::sun::star::lang::XEventListener )
-SFX_IMPL_XTYPEPROVIDER_2( DataTransferEventListener_Impl, ::com::sun::star::io::XDataTransferEventListener, ::com::sun::star::lang::XEventListener )
-
-void DataTransferEventListener_Impl::Finish()
-{
-    if ( xDoc.Is() )
-    {
-        if ( !xDoc->Get_Impl()->nLoadedFlags )
-            xDoc->FinishedLoading();
-        xDoc.Clear();
-    }
-
-    xTransfer = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
-}
-
-DataTransferEventListener_Impl::~DataTransferEventListener_Impl()
-{
-    Finish();
-}
-
-void SAL_CALL  DataTransferEventListener_Impl::disposing(const ::com::sun::star::lang::EventObject &) throw( ::com::sun::star::uno::RuntimeException )
-{
-    Finish();
-}
-
-void SAL_CALL  DataTransferEventListener_Impl::finished(const ::com::sun::star::io::DataTransferEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException )
-{
-    Finish();
-}
-
-void SAL_CALL  DataTransferEventListener_Impl::cancelled(const ::com::sun::star::io::DataTransferEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException )
-{
-    Finish();
-}
 
 extern sal_uInt32 CheckPasswd_Impl( Window*, SfxItemPool&, SfxMedium* );
 
@@ -1162,24 +1093,52 @@ sal_Bool SfxObjectShell::ConvertFrom
     return sal_False;
 }
 
-sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
+sal_Bool SfxObjectShell::ImportFrom( SfxMedium& rMedium )
 {
-    String aName( GetMedium()->GetFilter()->GetFilterName() );
+    ::rtl::OUString aTypeName( GetMedium()->GetFilter()->GetTypeName() );
+    ::rtl::OUString aFilterName( GetMedium()->GetFilter()->GetFilterName() );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader( xFilters->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps;
+    ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xFilters ( xFilterFact, ::com::sun::star::uno::UNO_QUERY );
+    if ( xFilters->hasByName( aFilterName ) )
+        xFilters->getByName( aFilterName ) >>= aProps;
+
+    ::rtl::OUString aFilterImplName;
+    sal_Int32 nFilterProps = aProps.getLength();
+    for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
+    {
+        const ::com::sun::star::beans::PropertyValue& rFilterProp = aProps[nFilterProp];
+        if ( rFilterProp.Name.compareToAscii("FilterService") == COMPARE_EQUAL )
+        {
+            rFilterProp.Value >>= aFilterImplName;
+            break;
+        }
+    }
+
+    ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aArgs(1);
+    aArgs[0] <<= aFilterName;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > xLoader;
+    if ( aFilterImplName.getLength() )
+        xLoader = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter >
+            ( xFilterFact->createInstanceWithArguments( aTypeName, aArgs ), ::com::sun::star::uno::UNO_QUERY );
     if ( xLoader.is() )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >  xComp( GetModel(), ::com::sun::star::uno::UNO_QUERY );
         ::com::sun::star::uno::Reference< ::com::sun::star::document::XImporter > xImporter( xLoader, ::com::sun::star::uno::UNO_QUERY );
         xImporter->setTargetDocument( xComp );
-        xLoader->filter( GetModel()->getArgs() );
+
+        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > lDescriptor;
+        rMedium.GetItemSet()->Put( SfxStringItem( SID_OPENURL, rMedium.GetName() ) );
+        TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
+        xLoader->filter( lDescriptor );
 
         pImp->xFilter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XFilter > ( xLoader, ::com::sun::star::uno::UNO_QUERY );
         if ( pImp->xFilter.is() )
-            pImp->aStarOneFilterName = aName;
+            pImp->aStarOneFilterName = aFilterName;
         else
             pImp->aStarOneFilterName.Erase();
         return sal_True;
@@ -1190,17 +1149,41 @@ sal_Bool SfxObjectShell::ImportFrom( SfxMedium&  rMedium )
 
 sal_Bool SfxObjectShell::ExportTo( SfxMedium& rMedium, const SfxItemSet& rSet )
 {
-    String aName( rMedium.GetFilter()->GetFilterName() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
+    ::rtl::OUString aTypeName( GetMedium()->GetFilter()->GetTypeName() );
+    ::rtl::OUString aFilterName( GetMedium()->GetFilter()->GetFilterName() );
     ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > xExporter;
-    if ( pImp->aStarOneFilterName == aName )
-        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( pImp->xFilter, ::com::sun::star::uno::UNO_QUERY );
+
+    if ( pImp->aStarOneFilterName == String( aFilterName ) )
+        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter >
+            ( pImp->xFilter, ::com::sun::star::uno::UNO_QUERY );
     else
     {
-        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilters (
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xMan = ::comphelper::getProcessServiceFactory();
+        ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > xFilterFact (
                 xMan->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.document.FilterFactory" ) ), ::com::sun::star::uno::UNO_QUERY );
 
-        xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter > ( xFilters->createInstance( aName ), ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aProps;
+        ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xFilters ( xFilterFact, ::com::sun::star::uno::UNO_QUERY );
+        if ( xFilters->hasByName( aFilterName ) )
+            xFilters->getByName( aFilterName ) >>= aProps;
+
+        ::rtl::OUString aFilterImplName;
+        sal_Int32 nFilterProps = aProps.getLength();
+        for ( sal_Int32 nFilterProp = 0; nFilterProp<nFilterProps; nFilterProp++ )
+        {
+            const ::com::sun::star::beans::PropertyValue& rFilterProp = aProps[nFilterProp];
+            if ( rFilterProp.Name.compareToAscii("FilterService") == COMPARE_EQUAL )
+            {
+                rFilterProp.Value >>= aFilterImplName;
+                break;
+            }
+        }
+
+        ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aArgs(1);
+        aArgs[0] <<= aFilterName;
+        if ( aFilterImplName.getLength() )
+            xExporter = ::com::sun::star::uno::Reference< ::com::sun::star::document::XExporter >
+                ( xFilterFact->createInstanceWithArguments( aTypeName, aArgs ), ::com::sun::star::uno::UNO_QUERY );
     }
 
     if ( xExporter.is() )
