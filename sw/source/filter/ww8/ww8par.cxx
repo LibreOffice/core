@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-15 14:31:46 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:11:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,14 +204,17 @@
 #ifndef _FMTCLBL_HXX
 #include <fmtclbl.hxx>
 #endif
-#ifndef _FLTINI_HXX
-#include <fltini.hxx>           // ReadFilterFlags
-#endif
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
 #ifndef _DOCUFLD_HXX //autogen
 #include <docufld.hxx>
+#endif
+#ifndef _SWFLTOPT_HXX
+#include <swfltopt.hxx>
+#endif
+#ifndef _FLTINI_HXX
+#include <fltini.hxx>
 #endif
 
 #ifdef DEBUG
@@ -2561,14 +2564,50 @@ ULONG SwWW8ImplReader::LoadDoc( SwPaM& rPaM,WW8Glossary *pGloss)
 
     pAktColl    = 0;
     pAktItemSet = 0;
-    nIniFlags = ReadFilterFlags( "WW" );
-    nIniFlags1= ReadFilterFlags( "WW8" );
-//  nIniHdSiz = ReadFilterFlags( "WWHD" );
-    nIniFtSiz = ReadFilterFlags( "WWFT" );
-    // schiebt Flys um x twips nach rechts o. links
-    nIniFlyDx = ReadFilterFlags( "WWFLX" );
-    nIniFlyDy = ReadFilterFlags( "WWFLY" );// nach oben o. unten
-    Read_FieldIniFlags();
+
+    {
+        static const sal_Char* aNames[ 12 ] = {
+            "WinWord/WW", "WinWord/WW8", "WinWord/WWFT",
+            "WinWord/WWFLX", "WinWord/WWFLY",
+            "WinWord/WWF",
+            "WinWord/WWFA0", "WinWord/WWFA1", "WinWord/WWFA2",
+            "WinWord/WWFB0", "WinWord/WWFB1", "WinWord/WWFB2"
+        };
+        sal_uInt32 aVal[ 12 ];
+        SwFilterOptions aOpt( 12, aNames, aVal );
+
+        nIniFlags = aVal[ 0 ];
+        nIniFlags1= aVal[ 1 ];
+//      nIniHdSiz = ReadFilterFlags( "WWHD" );
+        nIniFtSiz = aVal[ 2 ];
+        // schiebt Flys um x twips nach rechts o. links
+        nIniFlyDx = aVal[ 3 ];
+        nIniFlyDy = aVal[ 4 ];
+
+        nFieldFlags = aVal[ 5 ];
+        if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) )
+        {
+            SwFltSetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF );
+            SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID );
+            SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT );
+            SwFltSetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
+            for( USHORT i = 0; i < 3; i++ )
+                nFieldTagAlways[i] = 0;         // Hypo-Default: bekannte Felder
+                                                // nicht taggen
+            nFieldTagBad[0] = 0xffffffff;       // unbekannte Felder taggen
+            nFieldTagBad[1] = 0xffffffff;       //
+            nFieldTagBad[2] = 0xffffffef;       // "EinfuegenText" nicht taggen
+        }
+        else
+        {
+            nFieldTagAlways[0] = aVal[ 6 ];
+            nFieldTagAlways[1] = aVal[ 7 ];
+            nFieldTagAlways[2] = aVal[ 8 ];
+            nFieldTagBad[0] = aVal[ 9 ];
+            nFieldTagBad[1] = aVal[ 10 ];
+            nFieldTagBad[2] = aVal[ 11 ];
+        }
+    }
 
     UINT16 nMagic;
     *pStrm >> nMagic;
@@ -2851,11 +2890,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.2 2000-11-15 14:31:46 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.3 2000-11-20 14:11:52 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/11/15 14:31:46  jp
+      GetFilterFlags: don't insert SW-Objects
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

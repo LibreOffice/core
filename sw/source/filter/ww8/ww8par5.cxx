@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: khz $ $Date: 2000-10-25 14:19:04 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:11:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,35 +388,6 @@ BOOL _ReadFieldParams::GetTokenSttFromTo(USHORT* pFrom, USHORT* pTo, USHORT nMax
 
 /*  */
 
-
-//----------------------------------------
-//    Initialisieren der Feld-FilterFlags
-//----------------------------------------
-
-void SwWW8ImplReader::Read_FieldIniFlags()
-{
-    USHORT i;
-    nFieldFlags = ReadFilterFlags( "WWF" );
-    if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO ) ){
-        SwFltSetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF );
-        SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_DO_ID );
-        SwFltSetFlag( nFieldFlags, SwFltControlStack::TAGS_IN_TEXT );
-        SwFltSetFlag( nFieldFlags, SwFltControlStack::ALLOW_FLD_CR );
-        for( i = 0; i < 3; i++ ){
-            nFieldTagAlways[i] = 0;         // Hypo-Default: bekannte Felder
-        }                                   // nicht taggen
-        nFieldTagBad[0] = 0xffffffff;       // unbekannte Felder taggen
-        nFieldTagBad[1] = 0xffffffff;       //
-        nFieldTagBad[2] = 0xffffffef;       // "EinfuegenText" nicht taggen
-    }else{
-        nFieldTagAlways[0] = ReadFilterFlags( "WWFA0" );
-        nFieldTagAlways[1] = ReadFilterFlags( "WWFA1" );
-        nFieldTagAlways[2] = ReadFilterFlags( "WWFA2" );
-        nFieldTagBad[0] = ReadFilterFlags( "WWFB0" );
-        nFieldTagBad[1] = ReadFilterFlags( "WWFB1" );
-        nFieldTagBad[2] = ReadFilterFlags( "WWFB2" );
-    }
-}
 
 //----------------------------------------
 //              Bookmarks
@@ -2860,12 +2831,15 @@ void SwWW8ImplReader::Read_Invisible( USHORT, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.3 2000-10-25 14:19:04 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par5.cxx,v 1.4 2000-11-20 14:11:17 jp Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/25 14:19:04  khz
+      code cleaned up
+
       Revision 1.2  2000/10/06 13:11:18  jp
       should changes: don't use IniManager
 

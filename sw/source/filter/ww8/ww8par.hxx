@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 12:12:16 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,6 @@ friend class WW8FormulaControl;
     void QuoteChar( String& rStr, const sal_Unicode _c, BOOL bAllowCr );
     void QuoteString( String& rStr, const String& rOrg );
     void MakeTagString( String& rStr, const String& rOrg );
-    void Read_FieldIniFlags();
     void UpdateFields();
 //  void ConvertFName( String& rName );
     void ConvertFFileName( String& rName, const String& rRaw );
@@ -1116,11 +1115,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.4 2000-11-01 12:12:16 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.5 2000-11-20 14:09:17 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/01 12:12:16  jp
+      optimize: use the same code to read MAC-Pict
+
       Revision 1.3  2000/10/16 10:54:58  khz
       read extended WW9-Frame-Alignment (stored in Escher record 0xF122)
 
