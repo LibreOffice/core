@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -872,6 +872,7 @@ SwNewDBMgr::SwNewDBMgr() :
             pImpl(new SwNewDBMgr_Impl(*this)),
             pMergeEvtSrc(NULL),
             bInMerge(FALSE),
+            bMergeLock(FALSE),
             bMergeSilent(FALSE),
             nMergeType(DBMGR_INSERT),
             bInitDBFields(FALSE)
@@ -926,8 +927,9 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
     BOOL bNewJob = FALSE,
          bUserBreak = FALSE,
          bRet = FALSE;
-
+    long nStartRow, nEndRow;
     do {
+        nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
         {
             pSh->ViewShell::UpdateFlds();
             ++rOpt.nMergeAct;
@@ -942,13 +944,13 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             }
 
             rView.SfxViewShell::Print( rProgress ); // ggf Basic-Macro ausfuehren
-
             if( rOpt.IsPrintSingleJobs() && bRet )
             {
                 //rOpt.bJobStartet = FALSE;
                 bRet = FALSE;
             }
 
+            bMergeLock = TRUE;
             if(rOpt.IsPrintProspect())
             {
                 if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
@@ -959,6 +961,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             }
             else if( pSh->Prt( rOpt, rProgress ) )
                 bRet = TRUE;
+            bMergeLock = FALSE;
 
             if( !pPrt->IsJobActive() )
             {
@@ -972,7 +975,8 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
                 rJNm.Erase();
             }
         }
-    } while( bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
+        nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+    } while( bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord());
 
     if( rOpt.IsPrintSingleJobs() )
     {
@@ -1084,9 +1088,10 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
                 pDoc->SetNewDBMgr( this );
                 pDoc->EmbedAllLinks();
                 String sTempStat(SW_RES(STR_DB_EMAIL));
-
+                long nStartRow, nEndRow;
                 do
                 {
+                    nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
                     if(UIUNDO_DELETE_INVISIBLECNTNT == rSh.GetUndoIds())
                         rSh.Undo();
                     rSh.ViewShell::UpdateFlds();
@@ -1128,7 +1133,9 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
                     if ( bBreak )
                         break; // das Verschicken wurde unterbrochen
-                } while( !bCancel && (bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord()));
+                    nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+                } while( !bCancel &&
+                        (bSynchronizedDoc && (nStartRow != nEndRow) ? ExistsNextRecord() : ToNextMergeRecord()));
                 pDoc->SetNewDBMgr( pOldDBMgr );
                 pView->GetDocShell()->OwnerLock( FALSE );
 
@@ -1169,9 +1176,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
         }
 
         SfxDispatcher* pSfxDispatcher = pSh->GetView().GetViewFrame()->GetDispatcher();
-
-        pSfxDispatcher->Execute( SID_SAVEDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
-        if( !pSh->IsModified() )
+        SwDocShell* pDocSh = pSh->GetView().GetDocShell();
+        pSfxDispatcher->Execute( pDocSh->HasName() ? SID_SAVEDOC : SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD);
+        if( !pDocSh->IsModified() )
         {
             // Beim Speichern wurde kein Abbruch gedrueckt
             SfxMedium* pOrig = pSh->GetView().GetDocShell()->GetMedium();
@@ -1204,7 +1211,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
             String sExt( INetURLObject( sOldName ).GetExtension() );
             sExt.InsertAscii(".", 0);
 
-            do {
+            long nStartRow, nEndRow;
+            do
+            {
+                nStartRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
                 {
                     String sPath(sSubject);
 
@@ -1250,6 +1260,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
 
                         if (xDocSh->DoLoad(pMed))
                         {
+                            //create a view frame for the document
+                            SfxViewFrame* pFrame = SFX_APP()->CreateViewFrame( *xDocSh, 0, TRUE );
+                            //request the layout calculation
+                            ((SwView*) pFrame->GetViewShell())->GetWrtShellPtr()->CalcLayout();
                             SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
                             SwNewDBMgr* pOldDBMgr = pDoc->GetNewDBMgr();
                             pDoc->SetNewDBMgr( this );
@@ -1286,7 +1300,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSh)
                         xDocSh->DoClose();
                     }
                 }
-            } while( !bCancel && bSynchronizedDoc ? ExistsNextRecord() : ToNextMergeRecord());
+                nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
+            } while( !bCancel &&
+                (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
             // Alle Dispatcher freigeben
             pViewFrm = SfxViewFrame::GetFirst(pDocSh);
             while (pViewFrm)
@@ -1667,7 +1683,8 @@ BOOL    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
 {
     if(pImpl->pMergeData)
     {
-        return rDataSource == (String)pImpl->pMergeData->sDataSource &&
+        return !bMergeLock &&
+                rDataSource == (String)pImpl->pMergeData->sDataSource &&
                     rTableOrQuery == (String)pImpl->pMergeData->sCommand &&
                     pImpl->pMergeData->xResultSet.is();
     }
@@ -1706,6 +1723,22 @@ BOOL SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableNam
         aData.sCommand = rTableName;
         aData.nCommandType = -1;
         pFound = FindDSData(aData, FALSE);
+    }
+    //check validity of supplied record Id
+    if(pFound->aSelection.getLength())
+    {
+        //the destination has to be an element of the selection
+        const Any* pSelection = pFound->aSelection.getConstArray();
+        sal_Bool bFound = sal_False;
+        for(sal_Int32 nPos = 0; !bFound && nPos < pFound->aSelection.getLength(); nPos++)
+        {
+            sal_Int32 nSelection;
+            pSelection[nPos] >>= nSelection;
+            if(nSelection == static_cast<sal_Int32>(nAbsRecordId))
+                bFound = sal_True;
+        }
+        if(!bFound)
+            return FALSE;
     }
     if(pFound && pFound->xResultSet.is() && !pFound->bAfterSelection)
     {
@@ -1979,8 +2012,17 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
         if(pFound && pFound->xResultSet.is())
         {
             try
-            {
-                nRet = pFound->xResultSet->getRow();
+            {   //if a selection array is set the current row at the result set may not be set yet
+                if(pFound->aSelection.getLength())
+                {
+                    sal_Int32 nSelIndex = pFound->nSelectionIndex;
+                    if(nSelIndex > pFound->aSelection.getLength())
+                        nSelIndex = pFound->aSelection.getLength() -1;
+                    pFound->aSelection.getConstArray()[nSelIndex] >>= nRet;
+
+                }
+                else
+                    nRet = pFound->xResultSet->getRow();
             }
             catch(Exception&){}
         }
@@ -1993,17 +2035,17 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(
  ---------------------------------------------------------------------------*/
 void    SwNewDBMgr::CloseAll(BOOL bIncludingMerge)
 {
-    //do nothing - keep all connections until the destructor
-//    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
-//    {
-//        SwDSParam* pParam = aDataSourceParams[nPos];
-//        if(bIncludingMerge || pParam != pImpl->pMergeData)
-//        {
-//            pParam->xResultSet = 0;
-//            pParam->xStatement = 0;
-//            pParam->xConnection = 0;
-//        }
-//    }
+    //the only thing done here is to reset the selection index
+    //all connections stay open
+    for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
+    {
+        SwDSParam* pParam = aDataSourceParams[nPos];
+        if(bIncludingMerge || pParam != pImpl->pMergeData)
+        {
+            pParam->nSelectionIndex = 0;
+            pParam->bAfterSelection = sal_False;
+        }
+    }
 }
 /* -----------------------------17.07.00 14:54--------------------------------
 
