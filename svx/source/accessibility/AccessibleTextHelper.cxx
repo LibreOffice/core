@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTextHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-12 13:41:41 $
+ *  last change: $Author: thb $ $Date: 2002-06-12 17:20:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ namespace accessibility
 
         // do NOT hold object mutex when calling this! Danger of deadlock
         void FireEvent( const sal_Int16 nEventId, const uno::Any& rNewValue = uno::Any(), const uno::Any& rOldValue = uno::Any() ) const;
+        void FireEvent( const AccessibleEventObject& rEvent ) const;
 
         void SetFocus( sal_Bool bHaveFocus ) throw (::com::sun::star::uno::RuntimeException);
         sal_Bool HaveFocus() throw (::com::sun::star::uno::RuntimeException);
@@ -1158,6 +1159,19 @@ namespace accessibility
         else
             aEvent = AccessibleEventObject(uno::Reference< uno::XInterface >(), nEventId, rNewValue, rOldValue);
 
+        // no locking necessary, OInterfaceIteratorHelper copies listeners if someone removes/adds in between
+        // Further locking, actually, might lead to deadlocks, since we're calling out of this object
+        aGuard.clear();
+        // -- until here --
+
+        FireEvent(aEvent);
+    }
+
+    void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
+    {
+        // -- object locked --
+        ::osl::ClearableMutexGuard aGuard( maMutex );
+
         ::cppu::OInterfaceIteratorHelper aIter( const_cast< AccessibleTextHelper_Impl* >(this)->maStateListeners );
 
         // no locking necessary, OInterfaceIteratorHelper copies listeners if someone removes/adds in between
@@ -1173,7 +1187,7 @@ namespace accessibility
             {
                 try
                 {
-                    xListener->notifyEvent (aEvent);
+                    xListener->notifyEvent (rEvent);
                 }
                 catch( const lang::DisposedException& e )
                 {
@@ -1365,6 +1379,19 @@ namespace accessibility
 #endif
 
         mpImpl->FireEvent( nEventId, rNewValue, rOldValue );
+
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+    }
+
+    void AccessibleTextHelper::FireEvent( const AccessibleEventObject& rEvent ) const
+    {
+#ifdef DBG_UTIL
+        mpImpl->CheckInvariants();
+#endif
+
+        mpImpl->FireEvent( rEvent );
 
 #ifdef DBG_UTIL
         mpImpl->CheckInvariants();
