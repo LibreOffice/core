@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProvider.java,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: svesik $ $Date: 2004-04-19 23:09:47 $
+*  last change: $Author: rt $ $Date: 2004-05-19 08:23:43 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -124,7 +124,7 @@ public abstract class ScriptProvider
     public final static String CLASSPATH = "classpath";
 
     private String language;
-
+    private XScriptContext m_xScriptContext;
 
     protected XComponentContext m_xContext;
     protected XMultiComponentFactory m_xMultiComponentFactory;
@@ -179,6 +179,10 @@ public abstract class ScriptProvider
         LogUtils.DEBUG( "ScriptProvider: constructor - finished." );
     }
 
+    public XScriptContext getScriptingContext()
+    {
+        return m_xScriptContext;
+    }
 
     public void initialize( Object[] aArguments )
         throws com.sun.star.uno.Exception
@@ -199,7 +203,7 @@ public abstract class ScriptProvider
                         m_xInvocationContext.getPropertyValue(
                             "SCRIPTING_DOC_REF"));
                 XStorageHelper.addNewModel( xModel );
-                ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+                ContainerCache cache = new ContainerCache( m_xContext, xModel );
                 ParcelContainer parcelContainer = cache.getContainer( language, xModel );
 
                 // TODO should be done for provider, no need to proxy this anymore
@@ -220,7 +224,7 @@ public abstract class ScriptProvider
                 // interface ( which is null if initialise is not called
 
 
-                ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+                ContainerCache cache = new ContainerCache( m_xContext );
                 // TODO fix up where paths are fixed up
                 // currently path is also fixed up by macro expander
                 ParcelContainer parcelContainer = cache.getContainer( language, sPath );
@@ -233,13 +237,18 @@ public abstract class ScriptProvider
 
                 m_xInvocationProxy = (XInvocation)UnoRuntime.queryInterface(XInvocation.class, m_xBrowseNodeProxy);
                 m_xPropertySetProxy = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, m_xBrowseNodeProxy);
-
+            }
+            else if ( AnyConverter.getType(aArguments[0]).equals( Type.VOID ) )
+            {
+                // Default type, implies this provider to be used for
+                // execution of application ( user/share ) scripts only
             }
             else
             {
                 throw new com.sun.star.uno.RuntimeException(
                     "ScriptProvider created with invalid argument");
             }
+
         }
         else
         {
@@ -248,6 +257,7 @@ public abstract class ScriptProvider
             LogUtils.DEBUG( "ScriptProviderFor" + language +
                 " initialized without a context");
         }
+        m_xScriptContext = ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory );
         LogUtils.DEBUG( "leaving XInit" );
     }
 
@@ -339,7 +349,28 @@ public abstract class ScriptProvider
     {
 
         ScriptMetaData scriptData = null;
-        ContainerCache cache = new ContainerCache( ScriptContext.createContext( m_xInvocationContext, m_xContext, m_xMultiComponentFactory ) );
+
+        XModel xModel = null;
+        if ( m_xInvocationContext != null ) // not application script
+        {
+            try
+            {
+                xModel = (XModel) AnyConverter.toObject(
+                   new com.sun.star.uno.Type(XModel.class),
+                       m_xInvocationContext.getPropertyValue(
+                           "SCRIPTING_DOC_REF"));
+            }
+            catch ( com.sun.star.lang.WrappedTargetException ignore )
+            {
+            }
+            catch ( com.sun.star.beans.UnknownPropertyException ignore )
+            {
+            }
+            catch ( com.sun.star.lang.IllegalArgumentException ignore )
+            {
+            }
+        }
+        ContainerCache cache = new ContainerCache( m_xContext, xModel  );
 
         scriptData = cache.findScript( scriptURI );
         return scriptData;
