@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.41 2001-07-30 14:54:40 dvo Exp $
+	$Id: style.mod,v 1.42 2001-08-14 13:44:47 bm Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -286,6 +286,12 @@
 								 "repeat">
 <!ATTLIST style:background-image style:position CDATA "center">
 <!ATTLIST style:background-image style:filter-name %string; #IMPLIED>
+
+<!ELEMENT style:symbol-image (office:binary-data?)>
+<!ATTLIST style:symbol-image xlink:type (simple) #IMPLIED>
+<!ATTLIST style:symbol-image xlink:href %uriReference; #IMPLIED>
+<!ATTLIST style:symbol-image xlink:show (embed) #IMPLIED>
+<!ATTLIST style:symbol-image xlink:actuate (onLoad) #IMPLIED>
 
 <!ATTLIST style:properties fo:border CDATA #IMPLIED>
 <!ATTLIST style:properties fo:border-top CDATA #IMPLIED>
