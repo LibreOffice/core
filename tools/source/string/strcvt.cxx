@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strcvt.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+ *  last change: $Author: th $ $Date: 2001-03-16 15:27:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,130 +59,19 @@
  *
  ************************************************************************/
 
-// =======================================================================
-
-static ByteStringData* ImplGetStringDataFromUniString( const sal_Unicode* pUniStr, sal_Size nUniLen,
-                                                       rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
-{
-    DBG_ASSERT( (eTextEncoding != 9) &&
-                (eTextEncoding != RTL_TEXTENCODING_DONTKNOW) &&
-                (eTextEncoding != RTL_TEXTENCODING_UCS2) &&
-                (eTextEncoding != RTL_TEXTENCODING_UCS4),
-                "UniString-->ByteString: Wrong TextEncoding" );
-
-    if ( !nUniLen )
-    {
-        ImplIncRefCount( &aImplEmptyStrData );
-        return &aImplEmptyStrData;
-    }
-
-#ifndef NOOLDSTRING
-    if ( eTextEncoding == CHARSET_SYSTEM )
-        eTextEncoding = GetSystemCharSet();
-#endif
-    nCvtFlags |= RTL_UNICODETOTEXT_FLAGS_FLUSH;
-
-    ByteStringData*             pData;
-    rtl_TextEncodingInfo        aTextEncInfo;
-    rtl_UnicodeToTextConverter  hConverter = rtl_createUnicodeToTextConverter( eTextEncoding );
-    sal_uInt32                  nInfo;
-    sal_Size                    nSrcChars;
-    sal_Size                    nDestBytes;
-    sal_Size                    nNewLen;
-
-    // get TextEncodingInfo
-    aTextEncInfo.StructSize = sizeof( aTextEncInfo );
-    rtl_getTextEncodingInfo( eTextEncoding, &aTextEncInfo );
-
-    // Zuerst konvertieren wir mit der wahrscheinlichen Anzahl
-    // der zu konvertierenden Zeichen
-    nNewLen = nUniLen*aTextEncInfo.AverageCharSize;
-    if ( nNewLen > STRING_MAXLEN )
-        nNewLen = STRING_MAXLEN;
-    pData = ImplAllocData( (xub_StrLen)nNewLen );
-    nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
-                                           pUniStr, nUniLen,
-                                           (sal_Char*)pData->maStr, nNewLen,
-                                           nCvtFlags,
-                                           &nInfo, &nSrcChars );
-    // Solange versuchen zu konvertieren, bis der Buffer ausreicht, oder
-    // die maximale Stringlaenge erreicht ist
-    while ( (nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) &&
-            (nNewLen != STRING_MAXLEN) )
-    {
-        rtl_freeMemory( pData );
-
-        // Dann mit der maximalen Anzahl der Zeichen versuchen
-        // und etwas mehr Overhead geben, falls nicht zu konvertierende
-        // Zeichen durch mehrere Ersatzzeichen ersetzt werden
-        sal_Size nNotConvertedChars = nUniLen-nSrcChars;
-        nNewLen = nDestBytes+(nNotConvertedChars*aTextEncInfo.MaximumCharSize)+
-                  nNotConvertedChars+4;
-        if ( nNewLen > STRING_MAXLEN )
-            nNewLen = STRING_MAXLEN;
-        pData = ImplAllocData( (xub_StrLen)nNewLen );
-        nDestBytes = rtl_convertUnicodeToText( hConverter, 0,
-                                               pUniStr, nUniLen,
-                                               (sal_Char*)pData->maStr, nNewLen,
-                                               nCvtFlags,
-                                               &nInfo, &nSrcChars );
-    }
-
-    // String entsprechend der durch das Konvertieren tatsaechlich
-    // entstehenden Bytes anpassen
-    if ( !nDestBytes )
-    {
-        rtl_freeMemory( pData );
-        ImplIncRefCount( &aImplEmptyStrData );
-        pData = &aImplEmptyStrData;
-    }
-    else if ( nNewLen > nDestBytes+8 )
-    {
-        ByteStringData* pTempData = ImplAllocData( (xub_StrLen)nDestBytes );
-        memcpy( pTempData->maStr, pData->maStr, nDestBytes );
-        rtl_freeMemory( pData );
-        pData = pTempData;
-    }
-    else
-    {
-        pData->mnLen = (xub_StrLen)nDestBytes;
-        pData->maStr[nDestBytes] = '\0';
-    }
-    rtl_destroyUnicodeToTextConverter( hConverter );
-    return pData;
-}
-
 // -----------------------------------------------------------------------
 
 static void ImplUpdateStringFromUniString( ByteString* pString,
                                            const sal_Unicode* pUniStr, sal_Size nUniLen,
                                            rtl_TextEncoding eTextEncoding, sal_uInt32 nCvtFlags )
 {
-    ByteStringData* pNewStringData;
-    pNewStringData = ImplGetStringDataFromUniString( pUniStr, nUniLen, eTextEncoding, nCvtFlags );
+    ByteStringData* pNewStringData = NULL;
+    rtl_uString2String( (rtl_String **)(&pNewStringData),
+                        pUniStr, nUniLen,
+                        eTextEncoding, nCvtFlags );
     ImplDeleteData( pString->mpData );
     pString->mpData = pNewStringData;
 }
-
-// =======================================================================
-
-#ifndef ENABLEUNICODE
-void ByteString::InitStringRes( const UniString& rUniStr )
-{
-    DBG_CTOR( ByteString, DbgCheckByteString );
-    DBG_CHKOBJ( &rUniStr, UniString, DbgCheckUniString );
-
-    mpData = ImplGetStringDataFromUniString( rUniStr.mpData->maStr, rUniStr.mpData->mnLen,
-                                             gsl_getSystemTextEncoding(),
-                                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
-                                             RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
-                                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
-                                             RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR |
-                                             RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
-                                             RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
-                                             RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE );
-}
-#endif
 
 // =======================================================================
 
@@ -191,8 +80,10 @@ ByteString::ByteString( const UniString& rUniStr, rtl_TextEncoding eTextEncoding
     DBG_CTOR( ByteString, DbgCheckByteString );
     DBG_CHKOBJ( &rUniStr, UniString, DbgCheckUniString );
 
-    mpData = ImplGetStringDataFromUniString( rUniStr.mpData->maStr, rUniStr.mpData->mnLen,
-                                             eTextEncoding, nCvtFlags );
+    mpData = NULL;
+    rtl_uString2String( (rtl_String **)(&mpData),
+                        rUniStr.mpData->maStr, rUniStr.mpData->mnLen,
+                        eTextEncoding, nCvtFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -214,8 +105,10 @@ ByteString::ByteString( const UniString& rUniStr, xub_StrLen nPos, xub_StrLen nL
             nLen = nMaxLen;
     }
 
-    mpData = ImplGetStringDataFromUniString( rUniStr.mpData->maStr+nPos, nLen,
-                                             eTextEncoding, nCvtFlags );
+    mpData = NULL;
+    rtl_uString2String( (rtl_String **)(&mpData),
+                        rUniStr.mpData->maStr+nPos, nLen,
+                        eTextEncoding, nCvtFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -226,8 +119,10 @@ ByteString::ByteString( const sal_Unicode* pUniStr,
     DBG_CTOR( ByteString, DbgCheckByteString );
     DBG_ASSERT( pUniStr, "ByteString::ByteString() - pUniStr is NULL" );
 
-    mpData = ImplGetStringDataFromUniString( pUniStr, ImplStringLen( pUniStr ),
-                                             eTextEncoding, nCvtFlags );
+    mpData = NULL;
+    rtl_uString2String( (rtl_String **)(&mpData),
+                        pUniStr, ImplStringLen( pUniStr ),
+                        eTextEncoding, nCvtFlags );
 }
 
 // -----------------------------------------------------------------------
@@ -241,8 +136,10 @@ ByteString::ByteString( const sal_Unicode* pUniStr, xub_StrLen nLen,
     if ( nLen == STRING_LEN )
         nLen = ImplStringLen( pUniStr );
 
-    mpData = ImplGetStringDataFromUniString( pUniStr, nLen,
-                                             eTextEncoding, nCvtFlags );
+    mpData = NULL;
+    rtl_uString2String( (rtl_String **)(&mpData),
+                        pUniStr, nLen,
+                        eTextEncoding, nCvtFlags );
 }
 
 // =======================================================================
@@ -553,13 +450,6 @@ ByteString& ByteString::Convert( rtl_TextEncoding eSource, rtl_TextEncoding eTar
     if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
         return *this;
 
-#ifndef NOOLDSTRING
-    if ( eSource == CHARSET_SYSTEM )
-        eSource = GetSystemCharSet();
-    if ( eTarget == CHARSET_SYSTEM )
-        eTarget = GetSystemCharSet();
-#endif
-
     // Wenn Source und Target gleich sind, muss nicht konvertiert werden
     if ( eSource == eTarget )
         return *this;
@@ -590,13 +480,6 @@ char ByteString::Convert( char c,
     // TextEncoding Dontknow kann nicht konvertiert werden
     if ( (eSource == RTL_TEXTENCODING_DONTKNOW) || (eTarget == RTL_TEXTENCODING_DONTKNOW) )
         return '\0';
-
-#ifndef NOOLDSTRING
-    if ( eSource == CHARSET_SYSTEM )
-        eSource = GetSystemCharSet();
-    if ( eTarget == CHARSET_SYSTEM )
-        eTarget = GetSystemCharSet();
-#endif
 
     // Wenn Source und Target gleich sind, muss nicht konvertiert werden
     if ( eSource == eTarget )
@@ -648,10 +531,6 @@ sal_Unicode ByteString::ConvertToUnicode( const char* pChar, sal_Size* pLen, rtl
     // TextEncoding Dontknow wird nicht konvertiert
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
         return 0;
-#ifndef NOOLDSTRING
-    else if ( eTextEncoding == CHARSET_SYSTEM )
-        eTextEncoding = GetSystemCharSet();
-#endif
 
     rtl_TextToUnicodeConverter  hConverter;
     sal_uInt32                  nInfo;
@@ -689,10 +568,6 @@ sal_Size ByteString::ConvertFromUnicode( sal_Unicode c, char* pBuf, sal_Size nBu
     // TextEncoding Dontknow wird nicht konvertiert
     if ( eTextEncoding == RTL_TEXTENCODING_DONTKNOW )
         return '\0';
-#ifndef NOOLDSTRING
-    else if ( eTextEncoding == CHARSET_SYSTEM )
-        eTextEncoding = GetSystemCharSet();
-#endif
 
     rtl_UnicodeToTextConverter  hConverter;
     sal_uInt32                  nInfo;
