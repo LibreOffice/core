@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-18 14:02:15 $
+ *  last change: $Author: thb $ $Date: 2002-07-19 12:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,7 @@ public:
     friend SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc);
 
     virtual void SetChanged(FASTBOOL bFlag = TRUE);
-    void NbcSetChanged(FASTBOOL bFlag = TRUE) { bChanged = bFlag; }
+    void NbcSetChanged(FASTBOOL bFlag = TRUE);
     virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
     virtual void HandsOff();
 
