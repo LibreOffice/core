@@ -8,10 +8,10 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
-..\%__SRC%\bin\tk%UPD%??.res %_DEST%\bin%_EXT%\tk%upd%??.res
-..\%__SRC%\bin\tk%upd%??.sym %_DEST%\bin%_EXT%\tk?????.sym
-..\%__SRC%\bin\tk%upd%??.dll %_DEST%\bin%_EXT%\tk?????.dll
-..\%__SRC%\misc\tk%upd%??.map %_DEST%\bin%_EXT%\tk?????.map
+..\%__SRC%\bin\tk?????.res %_DEST%\bin%_EXT%\tk?????.res
+..\%__SRC%\bin\tk?????.sym %_DEST%\bin%_EXT%\tk?????.sym
+..\%__SRC%\bin\tk?????.dll %_DEST%\bin%_EXT%\tk?????.dll
+..\%__SRC%\misc\tk?????.map %_DEST%\bin%_EXT%\tk?????.map
 
 ..\util\toolkit.xml %_DEST%\xml%_EXT%\toolkit.xml
 
