@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:04:11 $
+ *  last change: $Author: rt $ $Date: 2005-02-02 13:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
+#include <com/sun/star/document/XEventListener.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
@@ -290,6 +293,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController>                     m_xCurrentController;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                       m_xStorage;
     ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XUIConfigurationManager>    m_xUIConfigurationManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::document::XEventListener >              m_xDocEventBroadcaster;
 
 
     ODatabaseContext*                                   m_pDBContext;
@@ -345,6 +349,18 @@ protected:
     /** dispose all frames for registered controllers
     */
     void disposeControllerFrames();
+
+    /** notifies the global event broadcaster
+        @param  _sEventName
+            On of
+            OnNew      => new document
+            OnLoad      => load document
+            OnUnload   => close document
+            OnSaveDone   => "Save" ended
+            OnSaveAsDone   => "SaveAs" ended
+            OnModifyChanged   => modified/unmodified
+    */
+    void notifyEvent(const ::rtl::OUString& _sEventName);
 protected:
     ODatabaseSource(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory
