@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-30 13:45:19 $
+ *  last change: $Author: mtg $ $Date: 2001-09-05 19:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
     const OUString sSaltProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Salt" ) );
     const OUString sIterationCountProperty ( RTL_CONSTASCII_USTRINGPARAM ( "IterationCount" ) );
     const OUString sSizeProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Size" ) );
+    const OUString sDigestProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
 
     sal_Bool bHaveEncryptionKey = rEncryptionKey.getLength() ? sal_True : sal_False;
 
@@ -369,7 +370,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 pStream->setIterationCount ( nIterationCount );
                 pStream->setKey ( aKey );
 
-                aPropSet.realloc(6); // 6th property is size, below
+                aPropSet.realloc(7); // 6th property is size, below, 7th is Digest
                 pValue = aPropSet.getArray();
                 pValue[2].Name = sInitialisationVectorProperty;
                 pValue[2].Value <<= aVector;
@@ -456,6 +457,12 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
                 catch (IOException & )
                 {
                     VOS_ENSURE( 0, "Error writing ZipOutputStream" );
+                }
+                if (bToBeEncrypted)
+                {
+                    // Need to store the uncompressed size in the manifest
+                    pValue[6].Name = sDigestProperty;
+                    pValue[6].Value <<= pStream->getDigest();
                 }
             }
 
