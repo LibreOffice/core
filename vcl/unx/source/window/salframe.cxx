@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2000-12-15 18:10:10 $
+ *  last change: $Author: pl $ $Date: 2000-12-18 13:35:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,7 +384,21 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
         // Motif sometimes gets stuck on transientShell if the parent was constructed
         // with SystemParentData ( and is therefore not a real top level
         // window anymore )
-        if( mpParent && ! mpParent->maFrameData.hForeignParent_ )
+        /*
+         *  #81918# some WMs (dtwm e.g.) will not map a transient window
+         *  if the parent is iconified. This is normally good behaviour,
+         *  but if a frame is created while the parent is already iconified
+         *  it will usually be an error box or a query (like e.g. the
+         *  save changes? dialogue. In these cases it is better to get
+         *  the users attention. Additionally since on many WMs transient
+         *  leads to minimum decoration (without title) it is better
+         *  to have full decoration for these dialogues, so create a
+         *  frame with iconified parent as a normal application shell
+         */
+        if( mpParent                                    &&
+            ! mpParent->maFrameData.hForeignParent_     &&
+            mpParent->maFrameData.nShowState_ != SHOWSTATE_MINIMIZED
+            )
           hShell_ = XtAppCreateShell( "", "VCLSalFrame",
                                       transientShellWidgetClass,
                                       GetXDisplay(),
