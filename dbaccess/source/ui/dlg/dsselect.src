@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:04:59 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
     Text [ italian ] = "Sorgente dati" ;
     Text [ portuguese_brazilian ] = "Fonte dos Dados" ;
     Text [ portuguese ] = "Fonte de dados" ;
-    Text [ finnish ] = "Tietojen l‰hde" ;
+    Text [ finnish ] = "Tietol‰hde" ;
     Text [ danish ] = "Datakilde" ;
     Text [ french ] = "Source de donnÈes" ;
     Text [ swedish ] = "Datak‰lla" ;
@@ -123,6 +123,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ turkish ] = "Choose a data source:";
         Text[ arabic ] = "«Œ — „’œ— »Ì«‰« :";
         Text[ catalan ] = "Seleccione una fuente de datos:";
+        Text[ finnish ] = "Valitse tietol‰hde:";
     };
     ListBox LB_DATASOURCE
     {
@@ -181,6 +182,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ turkish ] = "Yˆnet...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Administrar...";
+        Text[ finnish ] = "J‰rjest‰";
     };
     String STR_LOCAL_DATASOURCES
     {
@@ -190,7 +192,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text [ italian ] = "Sorgente dati locale" ;
         Text [ portuguese_brazilian ] = "Fontes dos Dados" ;
         Text [ portuguese ] = "Fontes de dados locais" ;
-        Text [ finnish ] = "Tietojen l‰hteet" ;
+        Text [ finnish ] = "paikalliset tietol‰hteet" ;
         Text [ danish ] = "lokale datakilder" ;
         Text [ french ] = "Sources de donnÈes locale" ;
         Text [ swedish ] = "lokala datak‰llor" ;
@@ -231,6 +233,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ arabic ] = "≈„« √‰Â  ⁄–—  Õ„Ì· „ﬂ »… «·»—‰«„Ã #lib#° √Ê √‰Â« „⁄ÿÊ»….  ﬂÊÌ‰ „’«œ— »Ì«‰«  ODBC €Ì— „ Ê›—.";
         Text[ catalan ] = "No se pudo cargar la biblioteca de programa #lib#, quiz·s estÈ daÒada. La configuraciÛn de fuente de datos ODBC no est· disponible.";
+        Text[ finnish ] = "Ohjelmakirjaston lib lataaminen ei onnistunut tai kirjasto on vioittunut. ODBC-tietol‰hteiden kokoonpano ei ole k‰ytett‰viss‰.";
     };
     Text[ catalan ] = "Fuente de datos";
 };
@@ -238,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/04 20:04:59  rt
+ *  Merge SRC630: 04.05.01 - 22:05:05 (NoBranch)
+ *
  *  Revision 1.10  2001/02/09 20:19:13  kz
  *  Merge SWT614: 02/09/01 - 21:18:44
  *
