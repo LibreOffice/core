@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:15:55 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 14:34:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -918,6 +918,7 @@ void _FinitCore()
 
     delete pBreakIt;
     delete pAppCharClass;
+    delete pAppLocaleData;
 
     // das default TableAutoFormat zerstoeren
     delete SwTableAutoFmt::pDfltBoxAutoFmt;
