@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:52:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:53:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
@@ -80,26 +83,43 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTOR_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XBORDERRESIZELISTENER_HPP_
+#include <com/sun/star/frame/XBorderResizeListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XBORDERWIDTHS_HPP_
+#include <com/sun/star/frame/BorderWidths.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOWPEER_HPP_
+#include <com/sun/star/awt/XWindowPeer.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
+#ifndef _COM_SUN_STAR_EMBED_XHATCHWINDOWCONTROLLER_HPP_
+#include <com/sun/star/embed/XHatchWindowController.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
 
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 
 class OCommonEmbeddedObject;
 class Interceptor;
 
 class DocumentHolder :
-    public ::cppu::WeakImplHelper4<
+    public ::cppu::WeakImplHelper6<
                         ::com::sun::star::util::XCloseListener,
                           ::com::sun::star::frame::XTerminateListener,
                         ::com::sun::star::util::XModifyListener,
-                        ::com::sun::star::document::XEventListener >
+                        ::com::sun::star::document::XEventListener,
+                        ::com::sun::star::frame::XBorderResizeListener,
+                        ::com::sun::star::embed::XHatchWindowController >
 {
 private:
 
@@ -110,9 +130,14 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > m_xComponent;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xOwnWindow; // set for inplace objects
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > m_xHatchWindow; // set for inplace objects
+
+    ::com::sun::star::awt::Rectangle m_aObjRect;
+    ::com::sun::star::frame::BorderWidths m_aBorderWidths;
 
     ::rtl::OUString m_aContainerName;
     ::rtl::OUString m_aDocumentNamePart;
@@ -122,10 +147,39 @@ private:
     sal_Bool m_bWaitForClose;
     sal_Bool m_bAllowClosing;
 
+    sal_Int32 m_nNoBorderResizeReact;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
+
+
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
-    void LoadDocToFrame();
+    sal_Bool LoadDocToFrame( sal_Bool );
+
+    ::com::sun::star::awt::Rectangle CalculateBorderedArea( const ::com::sun::star::awt::Rectangle& aRect );
+    ::com::sun::star::awt::Rectangle AddBorderToArea( const ::com::sun::star::awt::Rectangle& aRect );
+
+    void ResizeWindows_Impl( const ::com::sun::star::awt::Rectangle& aHatchRect );
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > RetrieveOwnMenu_Impl();
+    sal_Bool MergeMenues_Impl(
+                const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xOwnLM,
+                   const ::com::sun::star::uno::Reference< drafts::com::sun::star::frame::XLayoutManager >& xContLM,
+                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp );
 
 public:
+
+    static void FindConnectPoints(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xMenu,
+        sal_Int32 nConnectPoints[2] )
+            throw ( ::com::sun::star::uno::Exception );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > MergeMenuesForInplace(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xContMenu,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContDisp,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& xOwnMenu,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xOwnDisp )
+            throw ( ::com::sun::star::uno::Exception );
+
 
     DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,
                     OCommonEmbeddedObject* pEmbObj );
@@ -133,7 +187,7 @@ public:
 
     OCommonEmbeddedObject* GetEmbedObject() { return m_pEmbedObj; }
 
-    void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc, sal_Bool bReadOnly );
+    void SetComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable >& xDoc, sal_Bool bReadOnly );
 
     void LockOffice();
     void FreeOffice();
@@ -142,10 +196,29 @@ public:
     void CloseFrame();
 
     void SetTitle(const rtl::OUString& aDocumentName);
-    rtl::OUString GetTitle() const { return m_aDocumentNamePart; }
+
+    rtl::OUString GetTitle() const
+    {
+        return m_aContainerName + ::rtl::OUString::createFromAscii( " - " ) + m_aDocumentNamePart;
+    }
 
     void SetContainerName(const rtl::OUString& aContainerName);
     rtl::OUString GetContainerName() const { return m_aContainerName; }
+
+    void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );
+
+    sal_Bool SetFrameLMVisibility( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame,
+                                    sal_Bool bVisible );
+
+    sal_Bool ShowInplace( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& xParent,
+                      const ::com::sun::star::awt::Rectangle& aRectangleToShow,
+                      const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
+
+    sal_Bool ShowUI(
+        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& xContainerDP );
+    sal_Bool HideUI(
+        const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager >& xContainerLM );
 
     void Show();
 
@@ -156,7 +229,7 @@ public:
     sal_Bool SetExtent( sal_Int64 nAspect, const ::com::sun::star::awt::Size& aSize );
     sal_Bool GetExtent( sal_Int64 nAspect, ::com::sun::star::awt::Size *pSize );
 
-    sal_Int32 GetMapMode( sal_Int64 nAspect );
+    sal_Int32 GetMapUnit( sal_Int64 nAspect );
 
     void SetOutplaceDispatchInterceptor(
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >&
@@ -165,7 +238,7 @@ public:
         m_xOutplaceInterceptor = xOutplaceInterceptor;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetDocument() { return m_xDocument; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseable > GetComponent() { return m_xComponent; }
 
 // XEventListener
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -183,6 +256,13 @@ public:
 
 // XEventListener
     virtual void SAL_CALL notifyEvent( const ::com::sun::star::document::EventObject& Event ) throw ( ::com::sun::star::uno::RuntimeException );
+
+// XBorderResizeListener
+    virtual void SAL_CALL borderWidthsChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& aObject, const ::com::sun::star::frame::BorderWidths& aNewSize ) throw (::com::sun::star::uno::RuntimeException);
+
+// XHatchWindowController
+    virtual void SAL_CALL requestPositioning( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL calcAdjustedRectangle( const ::com::sun::star::awt::Rectangle& aRect ) throw (::com::sun::star::uno::RuntimeException);
 
 };
 
