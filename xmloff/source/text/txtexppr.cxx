@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
+ *  last change: $Author: dvo $ $Date: 2002-09-09 17:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,11 +141,10 @@ void XMLTextExportPropertySetMapper::handleElementItem(
             if( pProperties && nIdx >= 3 )
             {
                 const XMLPropertyState& rTrans = (*pProperties)[nIdx-3];
-                DBG_ASSERT( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
-                        ->GetEntryContextId( rTrans.mnIndex ),
-                         "invalid property map: pos expected" );
+                // #99657# transparency may be there, but doesn't have to be.
+                // If it's there, it must be in the right position.
                 if( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
-                        ->GetEntryContextId( rTrans.mnIndex ) )
+                      ->GetEntryContextId( rTrans.mnIndex ) )
                     pTrans = &rTrans.maValue;
 
                 const XMLPropertyState& rPos = (*pProperties)[nIdx-2];

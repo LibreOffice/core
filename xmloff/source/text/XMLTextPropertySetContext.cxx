@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:22 $
+ *  last change: $Author: dvo $ $Date: 2002-09-09 17:12:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,24 +152,33 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
         break;
 
     case CTF_BACKGROUND_URL:
+    {
         DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    CTF_BACKGROUND_TRANSPARENCY ==
-                        xMapper->getPropertySetMapper()
-                        ->GetEntryContextId( rProp.mnIndex-3 ) &&
                     CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-2 ) &&
                     CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
+
+        // #99657# Transparency might be there as well... but doesn't have
+        // to. Thus, this is checked with an if, rather than with an assertion.
+        sal_Int32 nTranspIndex = -1;
+        if( (rProp.mnIndex >= 3) &&
+            ( CTF_BACKGROUND_TRANSPARENCY ==
+              xMapper->getPropertySetMapper()->GetEntryContextId(
+                  rProp.mnIndex-3 ) ) )
+            nTranspIndex = rProp.mnIndex-3;
+
         pContext =
             new XMLBackgroundImageContext( GetImport(), nPrefix,
                                            rLocalName, xAttrList,
                                            rProp,
                                            rProp.mnIndex-2,
                                            rProp.mnIndex-1,
-                                           rProp.mnIndex-3,
+                                           nTranspIndex,
                                            rProperties );
-        break;
+    }
+    break;
 #ifndef SVX_LIGHT
     case CTF_SECTION_FOOTNOTE_END:
         pContext = new XMLSectionFootnoteConfigImport(
