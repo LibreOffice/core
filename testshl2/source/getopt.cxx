@@ -8,8 +8,8 @@
 #*                     (see description in headerfile)
 #*
 #*    Creation Date     Stefan Zimmermann  09/15/2000
-#*    last change       $Author: vg $ $Date: 2003-10-06 13:35:48 $
-#*    $Revision: 1.3 $
+#*    last change       $Author: rt $ $Date: 2004-05-03 08:50:43 $
+#*    $Revision: 1.4 $
 #*
 #*    Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 #*
@@ -17,7 +17,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.3 2003-10-06 13:35:48 vg Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/testshl2/source/getopt.cxx,v 1.4 2004-05-03 08:50:43 rt Exp $
 
       Source Code Control System - Update
 
@@ -28,6 +28,7 @@
 
 #include "filehelper.hxx"
 
+using namespace std;
 //----------------------------------------------------------------------------
 // OptDsc
 //----------------------------------------------------------------------------
