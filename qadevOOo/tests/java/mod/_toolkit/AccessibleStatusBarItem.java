@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleStatusBarItem.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2003-09-08 13:01:53 $
+ *  last change:$Date: 2004-01-05 20:39:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.DesktopTools;
-import util.SOfficeFactory;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -81,6 +70,18 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.DesktopTools;
+import util.SOfficeFactory;
+
 
 /**
  * Test for object that implements the following interfaces :
@@ -115,7 +116,6 @@ import com.sun.star.uno.XInterface;
  * @see ifc.accessibility.XAccessibleAction
  */
 public class AccessibleStatusBarItem extends TestCase {
-
     XDesktop the_Desk;
     XTextDocument xTextDoc;
 
@@ -123,19 +123,21 @@ public class AccessibleStatusBarItem extends TestCase {
      * Creates the Desktop service (<code>com.sun.star.frame.Desktop</code>).
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
-        the_Desk = (XDesktop) UnoRuntime.queryInterface(
-                    XDesktop.class, DesktopTools.createDesktop( (XMultiServiceFactory) Param.getMSF()));
+        the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
+                                                        DesktopTools.createDesktop(
+                                                                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
      * Disposes the document, if exists, created in
      * <code>createTestEnvironment</code> method.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
+    protected void cleanup(TestParameters Param, PrintWriter log) {
         log.println("disposing xTextDoc");
 
         if (xTextDoc != null) {
-            xTextDoc.dispose();
+            util.DesktopTools.closeDoc(xTextDoc);
+            ;
         }
     }
 
@@ -158,54 +160,59 @@ public class AccessibleStatusBarItem extends TestCase {
      * @see ifc.accessibility._XAccessibleEventBroadcaster
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters tParam, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters tParam,
+                                                    PrintWriter log) {
+        log.println("creating a test environment");
 
-        log.println( "creating a test environment" );
-
-        if (xTextDoc != null) xTextDoc.dispose();
-
-        // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) tParam.getMSF());
-
-        try {
-            log.println( "creating a text document" );
-            xTextDoc = SOF.createTextDoc(null);
-        } catch ( com.sun.star.uno.Exception e ) {
-            // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+        if (xTextDoc != null) {
+            util.DesktopTools.closeDoc(xTextDoc);
         }
 
-        XModel aModel = (XModel)
-                    UnoRuntime.queryInterface(XModel.class, xTextDoc);
+        ;
+
+        // get a soffice factory object
+        SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                     (XMultiServiceFactory) tParam.getMSF());
+
+        try {
+            log.println("creating a text document");
+            xTextDoc = SOF.createTextDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
+            // Some exception occures.FAILED
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
+        }
+
+        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                           xTextDoc);
 
         XInterface oObj = null;
         XInterface secondItem = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) tParam.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow(
+                                  (XMultiServiceFactory) tParam.getMSF(),
+                                  aModel);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         //at.printAccessibleTree(log,xRoot);
-
         XAccessibleContext statusbar = at.getAccessibleObjectForRole(xRoot,
-            AccessibleRole.STATUS_BAR);
+                                                                     AccessibleRole.STATUS_BAR);
 
         try {
             oObj = statusbar.getAccessibleChild(6);
             secondItem = statusbar.getAccessibleChild(1);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-
         }
 
-        log.println("ImplementationName: "+ util.utils.getImplName(oObj));
+        log.println("ImplementationName: " + util.utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        tEnv.addObjRelation("EditOnly","Can't change or select Text in StatusBarItem");
+        tEnv.addObjRelation("EditOnly",
+                            "Can't change or select Text in StatusBarItem");
         tEnv.addObjRelation("XAccessibleText", secondItem);
 
         tEnv.addObjRelation("LimitedBounds", "yes");
@@ -213,11 +220,11 @@ public class AccessibleStatusBarItem extends TestCase {
         final XTextDocument doc = xTextDoc;
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    doc.getText().setString("AccessibleStatusBarItem");
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                doc.getText().setString("AccessibleStatusBarItem");
+            }
+        });
 
         return tEnv;
     }
