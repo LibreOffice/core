@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-08 14:04:49 $
+ *  last change: $Author: mtg $ $Date: 2001-05-15 13:04:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,7 +410,7 @@ void ZipPackageFolder::saveContents(OUString &rPath, std::vector < Sequence < Pr
             {
                 try
                 {
-                    Reference < XInputStream > xStream = pStream->getRawStream( pStream->aEntry );
+                    Reference < XInputStream > xStream = pStream->getRawStream();
                     try
                     {
                         rZipOut.putNextEntry ( *pTempEntry, pStream->getEncryptionData(), bToBeEncrypted);
