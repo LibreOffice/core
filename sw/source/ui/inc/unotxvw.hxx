@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2002-11-11 13:07:04 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:41:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,13 @@
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
-
+#include "calbck.hxx"
+#ifndef _SW_TEXTCURSORHELPER_HXX
+#include "TextCursorHelper.hxx"
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
+#include <comphelper/uno3.hxx>
+#endif
 
 class SwView;
 class SvEmbeddedObjectRef;
@@ -140,10 +146,11 @@ class SwXTextView :
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& xToFill  );
 
-
+protected:
+    virtual ~SwXTextView();
 public:
     SwXTextView(SwView* pSwView);
-    virtual ~SwXTextView();
+
 
     virtual     ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
@@ -197,23 +204,31 @@ public:
 /* -----------------17.09.98 12:52-------------------
  *
  * --------------------------------------------------*/
-class SwXTextViewCursor : public cppu::WeakImplHelper8
-<
-::com::sun::star::text::XTextViewCursor,
-::com::sun::star::lang::XServiceInfo,
-::com::sun::star::text::XPageCursor,
-::com::sun::star::view::XScreenCursor,
-::com::sun::star::view::XViewCursor,
-::com::sun::star::view::XLineCursor,
-::com::sun::star::beans::XPropertySet,
-::com::sun::star::beans::XPropertyState
->
+class SwUnoCrsr;
+typedef cppu::WeakImplHelper8<
+                            ::com::sun::star::text::XTextViewCursor,
+                            ::com::sun::star::lang::XServiceInfo,
+                            ::com::sun::star::text::XPageCursor,
+                            ::com::sun::star::view::XScreenCursor,
+                            ::com::sun::star::view::XViewCursor,
+                            ::com::sun::star::view::XLineCursor,
+                            ::com::sun::star::beans::XPropertySet,
+                            ::com::sun::star::beans::XPropertyState
+                            > SwXTextViewCursor_Base;
+
+class SwXTextViewCursor : public SwXTextViewCursor_Base,
+public SwClient,
+public OTextCursorHelper
 {
     SwView*             pView;
     SfxItemPropertySet  aPropSet;
+protected:
+    virtual ~SwXTextViewCursor();
 public:
     SwXTextViewCursor(SwView* pVw);
-    virtual ~SwXTextViewCursor();
+
+
+    DECLARE_XINTERFACE();
 
     //XTextViewCursor
     virtual sal_Bool SAL_CALL isVisible(void) throw( ::com::sun::star::uno::RuntimeException );
@@ -283,7 +298,18 @@ public:
     virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException );
 
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
+
+    //XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+
     void    Invalidate(){pView = 0;}
+
+    // ITextCursorHelper
+    virtual const SwPaM*        GetPaM() const;
+    virtual SwPaM*              GetPaM();
+    virtual const SwDoc*        GetDoc() const;
+    virtual SwDoc*              GetDoc();
 };
 #endif
 
