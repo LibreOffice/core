@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-06 18:37:21 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,7 @@ SalI18N_InputContext::Unmap( SalFrame* pFrame )
         if ( maContext != NULL )
         {
             I18NStatus& rStatus( I18NStatus::get() );
-            rStatus.show( false );
+            rStatus.show( false, I18NStatus::contextmap );
 
         }
         mpFocusFrame = NULL;
@@ -476,7 +476,7 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
         rStatus.setParent( pFrame );
         if( pFrame )
         {
-            rStatus.show( true );
+            rStatus.show( true, I18NStatus::contextmap );
             SalI18N_InputMethod *pInputMethod;
             pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
 
@@ -688,7 +688,7 @@ SalI18N_InputContext::UpdateSpotLocation()
     XSetICValues(maContext, XNPreeditAttributes, preedit_attr, NULL);
     XFree(preedit_attr);
 
-    I18NStatus::get().show( true );
+    I18NStatus::get().show( true, I18NStatus::contextmap );
 
     return 0;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-08 13:08:44 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1618,7 +1618,7 @@ MessageToXAutoLock( Display *p_display, int n_message )
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void SalFrame::StartPresentation( BOOL bStart )
 {
-    I18NStatus::get().show( !bStart );
+    I18NStatus::get().show( !bStart, I18NStatus::presentation );
     if ( bStart )
         MessageToXAutoLock( _GetXDisplay(), XAUTOLOCK_DISABLE );
     else
@@ -2410,12 +2410,15 @@ long SalFrameData::HandleFocusEvent( XFocusChangeEvent *pEvent )
     {
         if( FocusIn == pEvent->type )
             mpInputContext->SetICFocus( pFrame_ );
-        /*
-         *  do not unset the IC focuse here because would kill
-         *  a lookup choice windows that might have the focus now
-         *  else
-         *      mpInputContext->UnsetICFocus( pFrame_ );
-         */
+        else
+        {
+            /*
+             *  do not unset the IC focuse here because would kill
+             *  a lookup choice windows that might have the focus now
+             *      mpInputContext->UnsetICFocus( pFrame_ );
+             */
+            I18NStatus::get().show( false, I18NStatus::focus );
+        }
     }
 
 

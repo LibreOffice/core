@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 19:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ public:
     virtual void setPosition( SalFrame* );
     virtual void setText( const String & ) = 0;
     virtual const String& getText() const = 0;
-    virtual void show( bool bShow );
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
 };
 
 }
@@ -116,7 +116,7 @@ void StatusWindow::setPosition( SalFrame* pFrame )
 {
 }
 
-void StatusWindow::show( bool bShow )
+void StatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
     Show( bShow );
 }
@@ -129,6 +129,9 @@ class XIMStatusWindow : public StatusWindow
 {
     FixedText               m_aStatusText;
     SalFrame*               m_pLastParent;
+    Size                    m_aWindowSize;
+
+    Point updatePosition();
 public:
     XIMStatusWindow();
     virtual ~XIMStatusWindow();
@@ -136,7 +139,7 @@ public:
     virtual void setPosition( SalFrame* );
     virtual void setText( const String & );
     virtual const String& getText() const;
-    virtual void show( bool bShow );
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
 };
 
 }
@@ -146,25 +149,50 @@ XIMStatusWindow::XIMStatusWindow() :
         m_aStatusText( this, 0 ),
         m_pLastParent( NULL )
 {
-    Size aSize( PixelToLogic( Size( 150, 2 ) ) );
+    m_aWindowSize = Size( PixelToLogic( Size( 150, 2 ) ) );
     Size aControlSize( PixelToLogic( Size( 146, 2 ) ) );
 
     Font aFont( m_aStatusText.GetFont() );
     if( aFont.GetHeight() < 12 )
         aFont.SetHeight( 12 );
-    aSize.Height() = aFont.GetHeight()+10;
-    aSize = LogicToPixel( aSize );
-    aControlSize.Height() = aSize.Height()-4;
+    m_aWindowSize.Height() = aFont.GetHeight()+10;
+    m_aWindowSize = LogicToPixel( m_aWindowSize );
+    aControlSize.Height() = m_aWindowSize.Height()-4;
 
     m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
     m_aStatusText.SetFont( aFont );
     m_aStatusText.Show( TRUE );
 
-    SetOutputSizePixel( aSize );
+    SetOutputSizePixel( m_aWindowSize );
 }
 
 XIMStatusWindow::~XIMStatusWindow()
 {
+}
+
+Point XIMStatusWindow::updatePosition()
+{
+    Point aRet;
+    if( m_pLastParent )
+    {
+        const SystemEnvData* pEnvData = GetSystemData();
+        const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
+        SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
+
+        SalExtTextInputPosEvent aPosEvent;
+        m_pLastParent->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+        int x, y;
+        XLIB_Window aChild;
+        XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
+                               (XLIB_Window)pParentEnvData->aShellWindow,
+                               m_pLastParent->maFrameData.GetDisplay()->GetRootWindow(),
+                               0, 0,
+                               &x, &y,
+                               &aChild );
+        aRet.X() = x + aPosEvent.mnX;
+        aRet.Y() = y + aPosEvent.mnY+aPosEvent.mnHeight + 4;
+    }
+    return aRet;
 }
 
 void XIMStatusWindow::setPosition( SalFrame* pParent )
@@ -177,42 +205,28 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
             m_pLastParent = pParent;
             Show( FALSE );
         }
-
-        const SystemEnvData* pEnvData = GetSystemData();
-        const SystemEnvData* pParentEnvData = pParent->GetSystemData();
-        SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
-
-        SalExtTextInputPosEvent aPosEvent;
-        pParent->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
-        int x, y;
-        XLIB_Window aChild;
-        XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
-                               (XLIB_Window)pParentEnvData->aShellWindow,
-                               pParent->maFrameData.GetDisplay()->GetRootWindow(),
-                               0, 0,
-                               &x, &y,
-                               &aChild );
-        Point aCursorPos( x, y );
-        aCursorPos.X() += aPosEvent.mnX;
-        aCursorPos.Y() += aPosEvent.mnY+aPosEvent.mnHeight + 4;
-        const SalFrame::Geometry& rGeom( pStatusFrame->GetGeometry() );
-        Rectangle aRect( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
-        Size aStatusSize( aRect.GetSize() );
-        aStatusSize.Width() = GetTextWidth( m_aStatusText.GetText() )+8;
-        aRect.SetPos( aCursorPos );
-        aRect.SetSize( aStatusSize );
-        pStatusFrame->maFrameData.setPosSize( aRect );
+        if( IsVisible() )
+        {
+            const SystemEnvData* pEnvData = GetSystemData();
+            const SystemEnvData* pParentEnvData = m_pLastParent->GetSystemData();
+            SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
+            pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
+        }
     }
 }
 
-void XIMStatusWindow::show( bool bShow )
+void XIMStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
     if( bShow && ! m_aStatusText.GetText().Len() )
         bShow = false;
+
+    const SystemEnvData* pData = GetSystemData();
+    SalFrame* pStatusFrame = (SalFrame*)pData->pSalFrame;
+    if( bShow )
+        pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
     Show( bShow );
     if( bShow )
     {
-        const SystemEnvData* pData = GetSystemData();
         XRaiseWindow( (Display*)pData->pDisplay,
                       (XLIB_Window)pData->aShellWindow );
     }
@@ -221,6 +235,7 @@ void XIMStatusWindow::show( bool bShow )
 void XIMStatusWindow::setText( const String& rText )
 {
     m_aStatusText.SetText( rText );
+    m_aWindowSize.Width() = GetTextWidth( rText )+8;
 }
 
 const String& XIMStatusWindow::getText() const
@@ -245,7 +260,7 @@ public:
 
     virtual void setText( const String & );
     virtual const String& getText() const;
-    virtual void show( bool bShow );
+    virtual void show( bool bShow, I18NStatus::ShowReason eReason );
 
     // overload Window focus handler
     virtual void        GetFocus();
@@ -316,8 +331,14 @@ const String& IIIMPStatusWindow::getText() const
     return m_aStatusBtn.GetText();
 }
 
-void IIIMPStatusWindow::show( bool bShow )
+void IIIMPStatusWindow::show( bool bShow, I18NStatus::ShowReason eReason )
 {
+    if( ! bShow
+        && eReason != I18NStatus::presentation
+        && eReason != I18NStatus::contextmap
+        )
+        return;
+
     Show( bShow );
 }
 
@@ -469,12 +490,12 @@ void I18NStatus::setParent( SalFrame* pParent )
 
 // --------------------------------------------------------------------------
 
-void I18NStatus::show( bool bShow )
+void I18NStatus::show( bool bShow, ShowReason eReason )
 {
     if( m_pStatusWindow )
     {
         m_pStatusWindow->setPosition( m_pParent );
-        m_pStatusWindow->show( bShow );
+        m_pStatusWindow->show( bShow, eReason );
     }
 }
 
@@ -500,7 +521,7 @@ void I18NStatus::setStatusText( const String& rText )
         String aText( pBuffer );
         m_pStatusWindow->setText( aText );
         m_pStatusWindow->setPosition( m_pParent );
-        m_pStatusWindow->show( true );
+        m_pStatusWindow->show( true, contextmap );
     }
 }
 

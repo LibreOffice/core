@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-07 16:24:45 $
+ *  last change: $Author: pl $ $Date: 2001-11-08 19:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,8 @@ public:
     void setStatusText( const String& rText );
     const String& getStatusText() const;
 
-    void show( bool bShow = true );
+    enum ShowReason { focus, presentation, contextmap };
+    void show( bool bShow, ShowReason eReason );
 
     const ::std::vector< ChoiceData >& getChoices() const { return m_aChoices; }
     void clearChoices();
