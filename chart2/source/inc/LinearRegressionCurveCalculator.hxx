@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinearRegressionCurveCalculator.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-17 14:14:00 $
+ *  last change: $Author: bm $ $Date: 2003-12-17 14:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #endif
 
 namespace chart
-{
-
-namespace impl
 {
 
 class LinearRegressionCurveCalculator : public
