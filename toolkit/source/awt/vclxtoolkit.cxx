@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:10:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:31:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -569,11 +569,13 @@ static void SAL_CALL ToolkitWorkerFunction( void* pArgs )
 
 // contructor, which might initialize VCL
 VCLXToolkit::VCLXToolkit( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rSMgr ):
-    cppu::WeakComponentImplHelper5<
-    ::com::sun::star::awt::XToolkit, ::com::sun::star::lang::XServiceInfo,
+    cppu::WeakComponentImplHelper6<
+    ::com::sun::star::awt::XToolkit,
+    ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::awt::XSystemChildFactory,
     ::com::sun::star::awt::XDataTransferProviderAccess,
-    ::com::sun::star::awt::XExtendedToolkit >( GetMutex() ),
+    ::com::sun::star::awt::XExtendedToolkit,
+    ::com::sun::star::awt::XReschedule>( GetMutex() ),
     m_aTopWindowListeners(rBHelper.rMutex),
     m_aKeyHandlers(rBHelper.rMutex),
     m_aFocusListeners(rBHelper.rMutex),
@@ -1644,3 +1646,12 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
         }
     }
 }
+
+// css::awt::XReschedule:
+
+void SAL_CALL VCLXToolkit::reschedule()
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    Application::Reschedule();
+}
+
