@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-05 19:17:19 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Font
 
-    ScAutoFontColorMode eColorMode = pOutput->bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+    ScAutoFontColorMode eColorMode = pOutput->bUseStyleColor ?
+                                        ( pOutput->bForceAutoColor ? SC_AUTOCOL_FORCE : SC_AUTOCOL_DISPLAY ) :
+                                        SC_AUTOCOL_PRINT;
     if ( bPixelToLogic )
         pPattern->GetFont( aFont, eColorMode, pFmtDevice, NULL, pCondSet, nScript );
     else
@@ -1020,7 +1022,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     Point aPos(nPosX,nPosY);
                     Color aFontColor = ((const SvxColorItem&)pInfo->pPatternAttr->
                                             GetItem( ATTR_FONT_COLOR )).GetValue();
-                    if ( aFontColor == COL_AUTO && bUseStyleColor )
+                    if ( ( aFontColor == COL_AUTO || bForceAutoColor ) && bUseStyleColor )
                         aFontColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
                     pDev->DrawPixel( aPos, aFontColor );
                     bEmpty = TRUE;
@@ -1685,6 +1687,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
+                            //! EditEngine needs methods to handle bUseStyleColor, bForceAutoColor
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -2512,6 +2515,7 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
+                            //! EditEngine needs methods to handle bUseStyleColor, bForceAutoColor
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)

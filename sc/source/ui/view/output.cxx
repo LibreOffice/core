@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 14:13:21 $
+ *  last change: $Author: nn $ $Date: 2002-04-24 14:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <so3/ipobj.hxx>
 #include <vcl/poly.hxx>
 #include <vcl/svapp.hxx>
+#include <svtools/accessibilityoptions.hxx>
 
 #include <math.h>
 
@@ -212,6 +213,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     bPagebreakMode( FALSE ),
     bSolidBackground( FALSE ),
     bUseStyleColor( FALSE ),
+    bForceAutoColor( SC_MOD()->GetAccessOptions().GetIsAutomaticFontColor() ),
     bSyntaxMode( FALSE ),
     pValueColor( NULL ),
     pTextColor( NULL ),
@@ -2587,7 +2589,9 @@ long lcl_FindInList( const List& rPosList, const ScTripel &rPos )
 void ScOutputData::PrintNoteMarks( const List& rPosList )
 {
     Font aFont;
-    ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
+    ScAutoFontColorMode eColorMode = bUseStyleColor ?
+                                        ( bForceAutoColor ? SC_AUTOCOL_FORCE : SC_AUTOCOL_DISPLAY ) :
+                                        SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont(aFont, eColorMode);
     aFont.SetSize( Size( 0, (long) ( 120 * nPPTY ) ) );         // 6 pt
     pDev->SetFont( aFont );
