@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:17:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:29:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_BITMAPEX_CXX
 
 #ifndef _RTL_CRC_H_
 #include <rtl/crc.h>
