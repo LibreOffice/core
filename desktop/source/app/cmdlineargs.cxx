@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-12-04 16:05:32 $
+ *  last change: $Author: cd $ $Date: 2001-12-20 09:00:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,6 +369,8 @@ void CommandLineArgs::ResetParamValues()
     m_bClientDisplay        = sal_False;
     m_bTerminateAfterInit   = sal_False;
     m_bVersionString        = sal_False;
+    m_bPrintToList          = sal_False;
+    m_bPrinterName          = sal_False;
 }
 
 } // namespace desktop
