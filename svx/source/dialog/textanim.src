@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textanim.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 07:30:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:41:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text = "E~ffekt" ;
         Text [ ENGLISH ] = "~Effect" ;
-        Text [ english_us ] = "~Effect" ;
+        Text [ english_us ] = "E~ffect" ;
         Text[ portuguese ] = "Effect";
         Text[ russian ] = "›ÙÙÂÍÚ";
         Text[ greek ] = "Effect";
@@ -163,7 +163,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text[ finnish ] = "Effect";
         Text[ italian ] = "Effetto";
         Text[ danish ] = "Effect";
-        Text[ swedish ] = "Effekt";
+        Text[ swedish ] = "E~ffekt";
         Text[ polish ] = "Efekt";
         Text[ portuguese_brazilian ] = "Effect";
         Text[ japanese ] = "å¯â ";
@@ -416,9 +416,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "UppÂt" ;
         QuickHelpText[ russian ] = "¬‚Âı";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‹Ì˘";
-        QuickHelpText[ polish ] = "W gÛrÍ!";
-        QuickHelpText[ japanese ] = "è„Ç÷!";
-        QuickHelpText[ korean ] = "¿ß∑Œ!";
+        QuickHelpText[ polish ] = "W gÛrÍ";
+        QuickHelpText[ japanese ] = "è„Ç÷";
+        QuickHelpText[ korean ] = "¿ß∑Œ";
         QuickHelpText[ chinese_simplified ] = "œÚ…œ";
         QuickHelpText[ chinese_traditional ] = "¶V§W";
         QuickHelpText[ arabic ] = "≈·Ï √⁄·Ï";
@@ -426,7 +426,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Oben";
         QuickHelpText[ catalan ] = "Hacia arriba";
-        QuickHelpText[ finnish ] = "Yl‰osaan!";
+        QuickHelpText[ finnish ] = "Yl‰osaan";
     };
     ImageButton BTN_LEFT
     {
@@ -447,9 +447,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "≈t v‰nster" ;
         QuickHelpText[ russian ] = "¬ÎÂ‚Ó";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
-        QuickHelpText[ polish ] = "W lewo!";
-        QuickHelpText[ japanese ] = "ç∂Ç÷!";
-        QuickHelpText[ korean ] = "øﬁ¬ ¿∏∑Œ!";
+        QuickHelpText[ polish ] = "W lewo";
+        QuickHelpText[ japanese ] = "ç∂Ç÷";
+        QuickHelpText[ korean ] = "øﬁ¬ ¿∏∑Œ";
         QuickHelpText[ chinese_simplified ] = "œÚ◊Û";
         QuickHelpText[ chinese_traditional ] = "¶V•™";
         QuickHelpText[ arabic ] = "≈·Ï «·Ì”«—";
@@ -457,7 +457,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Links";
         QuickHelpText[ catalan ] = "Hacia la izquierda";
-        QuickHelpText[ finnish ] = "Vasemmalle!";
+        QuickHelpText[ finnish ] = "Vasemmalle";
     };
     ImageButton BTN_RIGHT
     {
@@ -478,9 +478,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "≈t hˆger" ;
         QuickHelpText[ russian ] = "¬Ô‡‚Ó";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
-        QuickHelpText[ polish ] = "W prawo!";
-        QuickHelpText[ japanese ] = "âEÇ÷!";
-        QuickHelpText[ korean ] = "ø¿∏•¬ ¿∏∑Œ!";
+        QuickHelpText[ polish ] = "W prawo";
+        QuickHelpText[ japanese ] = "âEÇ÷";
+        QuickHelpText[ korean ] = "ø¿∏•¬ ¿∏∑Œ";
         QuickHelpText[ chinese_simplified ] = "œÚ”“";
         QuickHelpText[ chinese_traditional ] = "¶V•k";
         QuickHelpText[ arabic ] = "≈·Ï «·Ì„Ì‰";
@@ -488,7 +488,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Rechts";
         QuickHelpText[ catalan ] = "Hacia la derecha";
-        QuickHelpText[ finnish ] = "Oikealle!";
+        QuickHelpText[ finnish ] = "Oikealle";
     };
     ImageButton BTN_DOWN
     {
@@ -509,9 +509,9 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText [ swedish ] = "NedÂt" ;
         QuickHelpText[ russian ] = "¬ÌËÁ";
         QuickHelpText[ greek ] = "–ÒÔÚ Ù· Í‹Ù˘";
-        QuickHelpText[ polish ] = "W dÛ≥!";
-        QuickHelpText[ japanese ] = "â∫Ç÷!";
-        QuickHelpText[ korean ] = "æ∆∑°∑Œ!";
+        QuickHelpText[ polish ] = "W dÛ≥";
+        QuickHelpText[ japanese ] = "â∫Ç÷";
+        QuickHelpText[ korean ] = "æ∆∑°∑Œ";
         QuickHelpText[ chinese_simplified ] = "œÚœ¬";
         QuickHelpText[ chinese_traditional ] = "¶V§U";
         QuickHelpText[ arabic ] = "≈·Ï √”›·";
@@ -519,7 +519,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Nach Unten";
         QuickHelpText[ catalan ] = "Hacia abajo";
-        QuickHelpText[ finnish ] = "Alaosaan!";
+        QuickHelpText[ finnish ] = "Alaosaan";
     };
 
     FixedLine FL_PROPERTIES
@@ -588,7 +588,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
         Text = "Text sichtbar beim ~Beenden" ;
         Text [ ENGLISH ] = "Text visible when e~xiting" ;
         Text [ dutch ] = "Tekst zichtbaar bij ~beÎindigen" ;
-        Text [ english_us ] = "Text visible when e~xiting" ;
+        Text [ english_us ] = "Text visible when exiting" ;
         Text [ italian ] = "Testo visibile alla ~fine" ;
         Text [ spanish ] = "Texto visible al ~finalizar" ;
         Text [ french ] = "Texte visible ‡ l'arrÍt" ;
@@ -617,7 +617,7 @@ TabPage RID_SVXPAGE_TEXTANIMATION
                              RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text = "Animationsdurchl‰ufe" ;
         Text [ ENGLISH ] = "Count" ;
-        Text [ english_us ] = "Count" ;
+        Text [ english_us ] = "Animation cycles" ;
         Text [ italian ] = "Passaggi animazione" ;
         Text [ spanish ] = "Cantidad" ;
         Text [ french ] = "Cycles d'animation" ;
@@ -944,6 +944,7 @@ TabDialog RID_SVXDLG_TEXT
     Text[ finnish ] = "Teksti";
 };
  // ******************************************************************* EOF
+
 
 
 
