@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-13 16:03:40 $
+ *  last change: $Author: thb $ $Date: 2002-09-16 11:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1896,7 +1896,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
             DrawPolygon( aPoly );
 
-            mpMetaFile = mpMetaFile;
+            mpMetaFile = pOldMF;
         }
     }
     else
