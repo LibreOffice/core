@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VertSplitView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:55:09 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ namespace dbaui
         virtual void GetFocus();
 
         void setSplitter(Splitter* _pSplitter);
-        void init(Window* _pRight,Window* _pLeft = NULL);
+        void set(Window* _pRight,Window* _pLeft = NULL);
         virtual void Resize();
     };
 }

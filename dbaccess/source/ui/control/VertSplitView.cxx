@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VertSplitView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:35:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:46:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ void OSplitterView::Resize()
 
 }
 // -----------------------------------------------------------------------------
-void OSplitterView::init(Window* _pRight,Window* _pLeft)
+void OSplitterView::set(Window* _pRight,Window* _pLeft)
 {
     m_pLeft = _pLeft;
     m_pRight = _pRight;
