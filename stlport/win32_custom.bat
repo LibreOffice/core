@@ -6,5 +6,6 @@ setlocal
 
 cd %1
 
-type %2\dos_lineends.patch | patch -b -p2
+rem type %2\dos_lineends.patch | patch -b -p2
+patch -i %2\dos_lineends.patch -b -p2
 
