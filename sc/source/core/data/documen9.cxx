@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:23:40 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ BOOL ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
     return TRUE;
 }
 
-void ScDocument::Clear()
+void ScDocument::Clear( sal_Bool bFromDestructor )
 {
     for (SCTAB i=0; i<=MAXTAB; i++)
         if (pTab[i])
@@ -823,7 +823,7 @@ void ScDocument::Clear()
     {
         // #116168#
         //pDrawLayer->Clear();
-        pDrawLayer->ClearModel(sal_False);
+        pDrawLayer->ClearModel( bFromDestructor );
     }
 }
 
