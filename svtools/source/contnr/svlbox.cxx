@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:57:30 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1649,7 +1649,6 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView 
 
     ImplShowTargetEmphasis( pTargetEntry, FALSE );
     pDDTarget = this;
-    ULONG nDDFormatId = SOT_FORMATSTR_ID_TREELISTBOX;
 
     SvLBoxDDInfo aDDInfo;
 
@@ -1690,7 +1689,6 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void SvLBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
-    BOOL bDeleted = FALSE;
 
     ReleaseMouse();
     SvLBoxEntry* pEntry = GetEntry( rPosPixel ); // GetDropTarget( rPos );
