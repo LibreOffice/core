@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:34:10 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 12:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1934,7 +1934,8 @@ void BrowseBox::Dispatch( USHORT nId )
     switch ( nId )
     {
         case BROWSER_SELECTCOLUMN:
-            SelectColumnId( GetCurColumnId() );
+            if ( ColCount() )
+                SelectColumnId( GetCurColumnId() );
             break;
 
         case BROWSER_CURSORDOWN:
@@ -1946,27 +1947,29 @@ void BrowseBox::Dispatch( USHORT nId )
                 bDone = GoToRow( GetCurRow() - 1, FALSE );
             break;
         case BROWSER_SELECTHOME:
-        {
-            DoHideCursor( "BROWSER_SELECTHOME" );
-            for ( long nRow = GetCurRow(); nRow >= 0; --nRow )
-                SelectRow( nRow );
-            GoToRow( 0, TRUE );
-            DoShowCursor( "BROWSER_SELECTHOME" );
+            if ( GetRowCount() )
+            {
+                DoHideCursor( "BROWSER_SELECTHOME" );
+                for ( long nRow = GetCurRow(); nRow >= 0; --nRow )
+                    SelectRow( nRow );
+                GoToRow( 0, TRUE );
+                DoShowCursor( "BROWSER_SELECTHOME" );
+            }
             break;
-        }
         case BROWSER_SELECTEND:
-        {
-            DoHideCursor( "BROWSER_SELECTEND" );
-            long nRowCount = GetRowCount();
-            for ( long nRow = GetCurRow(); nRow < nRowCount; ++nRow )
-                SelectRow( nRow );
-            GoToRow( GetRowCount() - 1, TRUE );
-            DoShowCursor( "BROWSER_SELECTEND" );
+            if ( GetRowCount() )
+            {
+                DoHideCursor( "BROWSER_SELECTEND" );
+                long nRowCount = GetRowCount();
+                for ( long nRow = GetCurRow(); nRow < nRowCount; ++nRow )
+                    SelectRow( nRow );
+                GoToRow( GetRowCount() - 1, TRUE );
+                DoShowCursor( "BROWSER_SELECTEND" );
+            }
             break;
-        }
         case BROWSER_SELECTDOWN:
         {
-            if ( ( GetCurRow() + 1 ) < nRowCount )
+            if ( GetRowCount() && ( GetCurRow() + 1 ) < nRowCount )
             {
                 // deselect the current row, if it isn't the first
                 // and there is no other selected row above
@@ -1982,17 +1985,18 @@ void BrowseBox::Dispatch( USHORT nId )
             break;
         }
         case BROWSER_SELECTUP:
-        {
-            // deselect the current row, if it isn't the first
-            // and there is no other selected row under
-            long nCurRow = GetCurRow();
-            BOOL bSelect = ( !IsRowSelected( nCurRow ) ||
-                             GetSelectRowCount() == 1 || IsRowSelected( nCurRow + 1 ) );
-            SelectRow( nCurRow, bSelect, TRUE );
-            if ( bDone = GoToRow( nCurRow - 1 , FALSE ) )
-                SelectRow( GetCurRow(), TRUE, TRUE );
+            if ( GetRowCount() )
+            {
+                // deselect the current row, if it isn't the first
+                // and there is no other selected row under
+                long nCurRow = GetCurRow();
+                BOOL bSelect = ( !IsRowSelected( nCurRow ) ||
+                                 GetSelectRowCount() == 1 || IsRowSelected( nCurRow + 1 ) );
+                SelectRow( nCurRow, bSelect, TRUE );
+                if ( bDone = GoToRow( nCurRow - 1 , FALSE ) )
+                    SelectRow( GetCurRow(), TRUE, TRUE );
+            }
             break;
-        }
         case BROWSER_CURSORPAGEDOWN:
             bDone = (BOOL)ScrollRows( nRowsOnPage );
             break;
@@ -2019,7 +2023,10 @@ void BrowseBox::Dispatch( USHORT nId )
                 else
                 {
                     USHORT nColId = ( GetColumnId(0) == 0 ) ? GetColumnId(1) : GetColumnId(0);
-                    bDone = ( nCurRow < GetRowCount() - 1 ) && GoToRowColumnId( nCurRow + 1, nColId );
+                    if ( GetRowCount() )
+                        bDone = ( nCurRow < GetRowCount() - 1 ) && GoToRowColumnId( nCurRow + 1, nColId );
+                    else if ( ColCount() )
+                        GoToColumnId( nColId );
                 }
             }
             else
@@ -2043,17 +2050,24 @@ void BrowseBox::Dispatch( USHORT nId )
                 if (nNewId != 0)
                     bDone = GoToColumnId( nNewId );
                 else
-                    bDone = (nCurRow > 0) && GoToRowColumnId(nCurRow - 1, GetColumnId(ColCount() -1));
+                {
+                    if ( GetRowCount() )
+                        bDone = (nCurRow > 0) && GoToRowColumnId(nCurRow - 1, GetColumnId(ColCount() -1));
+                    else if ( ColCount() )
+                        GoToColumnId( GetColumnId(ColCount() -1) );
+                }
             }
             else
                 bDone = ScrollColumns( -1 ) != 0;
             break;
         case BROWSER_ENHANCESELECTION:
-            SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), TRUE );
+            if ( GetRowCount() )
+                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), TRUE );
             bDone = TRUE;
             break;
         case BROWSER_SELECT:
-            SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), FALSE );
+            if ( GetRowCount() )
+                SelectRow( GetCurRow(), !IsRowSelected( GetCurRow() ), FALSE );
             bDone = TRUE;
             break;
         case BROWSER_MOVECOLUMNLEFT:
@@ -2063,6 +2077,7 @@ void BrowseBox::Dispatch( USHORT nId )
                 if ( pHeaderBar && pHeaderBar->IsDragable() )
                 {
                     USHORT nColId = GetCurColumnId();
+                    BOOL bColumnSelected = IsColumnSelected(nColId);
                     USHORT nNewPos = GetColumnPos(nColId);
                     BOOL bMoveAllowed = FALSE;
                     if ( BROWSER_MOVECOLUMNLEFT == nId && nNewPos > 1 )
@@ -2075,6 +2090,8 @@ void BrowseBox::Dispatch( USHORT nId )
                         SetColumnPos( nColId, nNewPos );
                         ColumnMoved( nColId );
                         MakeFieldVisible(GetCurRow(),nColId,TRUE);
+                        if ( bColumnSelected )
+                            SelectColumnId(nColId);
                     }
                 }
             }

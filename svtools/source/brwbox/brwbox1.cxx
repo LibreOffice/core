@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-13 12:34:09 $
+ *  last change: $Author: oj $ $Date: 2002-11-22 12:44:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2302,7 +2302,9 @@ Rectangle BrowseBox::ImplFieldRectPixel( long nRow, USHORT nColumnId ) const
         return Rectangle();
 
     // compute the Y-coordinate relative to DataWin
-    long nRowY = ( nRow - nTopRow ) * GetDataRowHeight();
+    long nRowY = GetDataRowHeight();
+    if ( nRow != BROWSER_ENDOFSELECTION ) // #105497# OJ
+        nRowY = ( nRow - nTopRow ) * GetDataRowHeight();
 
     // assemble the Rectangle relative to DataWin
     return Rectangle(
