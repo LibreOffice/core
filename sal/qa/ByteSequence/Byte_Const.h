@@ -31,6 +31,8 @@ sal_Int8 kTestByte2 = 1;
 sal_Int8 kTestByte3 = 2;
 sal_Int8 kTestByte4 = -98;
 
+sal_Int8 kTestByte5[] = {kTestByte, kTestByte1, kTestByte2, kTestByte3, kTestByte4};
+
 //------------------------------------------------------------------------
 
 char kTestChar = 45;
