@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:23:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,14 +181,26 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         {
             SwNumRule aRule( GetShell().GetUniqueNumRuleName() );
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
-            if(bHtml)
+            const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
+
+            if( bHtml || bRightToLeft )
             {
-                for( BYTE n = 1; n < MAXLEVEL; ++n )
+                for( BYTE n = 0; n < MAXLEVEL; ++n )
                 {
                     SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
-                    // 1/2" fuer HTML
-                    aFmt.SetLSpace(720);
-                    aFmt.SetAbsLSpace(n * 720);
+                    if ( n && bHtml )
+                    {
+                        // 1/2" fuer HTML
+                        aFmt.SetLSpace(720);
+                        aFmt.SetAbsLSpace(n * 720);
+                    }
+                    // --> FME 2005-01-21 #i38904#  Default alignment for
+                    // numbering/bullet should be rtl in rtl paragraph:
+                    if ( bRightToLeft )
+                    {
+                        aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
+                    }
+                    // <--
                     aSvxRule.SetLevel( n, aFmt, FALSE );
                 }
                 aSvxRule.SetFeatureFlag(NUM_ENABLE_EMBEDDED_BMP, FALSE);
