@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condedit.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-20 12:46:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:57:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,20 @@
 #include <svtools/transfer.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-class ConditionEdit : public Edit, public DropTargetHelper
+class SW_DLLPUBLIC ConditionEdit : public Edit, public DropTargetHelper
 {
     BOOL bBrackets, bEnableDrop;
 
-    virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
-    virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
+    SW_DLLPRIVATE virtual sal_Int8  AcceptDrop( const AcceptDropEvent& rEvt );
+    SW_DLLPRIVATE virtual sal_Int8  ExecuteDrop( const ExecuteDropEvent& rEvt );
 
 public:
     ConditionEdit( Window* pParent, const ResId& rResId );
