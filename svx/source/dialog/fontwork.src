@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:42:11 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Text [ portuguese_brazilian ] = "Zentriert" ;
                 Text[ chinese_simplified ] = "æ”÷–";
                 Text[ russian ] = "œÓ ˆÂÌÚÛ";
-                Text[ polish ] = "Wy?rodkuj";
+                Text[ polish ] = "Wyúrodkuj";
                 Text[ japanese ] = "íÜâõëµÇ¶";
                 Text[ chinese_traditional ] = "∏m§§";
                 Text[ arabic ] = " Ê”Ìÿ";
@@ -517,7 +517,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ swedish ] = "AvstÂnd" ;
         QuickHelpText[ russian ] = "»ÌÚÂ‚‡Î";
         QuickHelpText[ danish ] = "Afstand";
-        QuickHelpText[ polish ] = "Abstand";
+        QuickHelpText[ polish ] = "Abstand!";
         QuickHelpText[ japanese ] = "ä‘äu!";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù";
         QuickHelpText[ chinese_traditional ] = "∂°πj";
@@ -565,7 +565,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         QuickHelpText [ swedish ] = "Indrag" ;
         QuickHelpText[ russian ] = "ŒÚÒÚÛÔ";
         QuickHelpText[ danish ] = "Indrykning";
-        QuickHelpText[ polish ] = "Einzug";
+        QuickHelpText[ polish ] = "Einzug!";
         QuickHelpText[ japanese ] = "≤›√ﬁ›ƒ!";
         QuickHelpText[ chinese_simplified ] = "ÀıΩ¯";
         QuickHelpText[ chinese_traditional ] = "¡Y±∆";
@@ -816,7 +816,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ chinese_traditional ] = "´◊";
         CustomUnitText[ arabic ] = "œ—Ã…/œ—Ã« ";
         QuickHelpText[ russian ] = "»ÌÚÂ‚‡Î X";
-        QuickHelpText[ polish ] = "Abstand X";
+        QuickHelpText[ polish ] = "Abstand X!";
         QuickHelpText[ japanese ] = "Abstand X!";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù X";
         QuickHelpText[ chinese_traditional ] = "∂°πj X";
@@ -879,7 +879,7 @@ DockingWindow RID_SVXDLG_FONTWORK
         CustomUnitText[ chinese_traditional ] = "%";
         CustomUnitText[ arabic ] = "%";
         QuickHelpText[ russian ] = "Abstand Y";
-        QuickHelpText[ polish ] = "Abstand Y";
+        QuickHelpText[ polish ] = "Abstand Y!";
         QuickHelpText[ japanese ] = "ä‘äu Y!";
         QuickHelpText[ chinese_simplified ] = "º‰∏Ù Y";
         QuickHelpText[ chinese_traditional ] = "∂°πj Y";
@@ -967,7 +967,7 @@ DockingWindow RID_SVXDLG_FONTWORK
             Text[ portuguese_brazilian ] = "Farbe";
         Text[ danish ] = "-";
     QuickHelpText[ russian ] = "÷‚ÂÚ ÚÂÌË";
-        QuickHelpText[ polish ] = "Schattenfarbe";
+        QuickHelpText[ polish ] = "Schattenfarbe!";
         QuickHelpText[ japanese ] = "âeÇÃêF!";
         QuickHelpText[ chinese_simplified ] = "“ı”∞—’…´";
         QuickHelpText[ chinese_traditional ] = "≥±ºv√C¶‚";
