@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-28 13:15:59 $
+ *  last change: $Author: pb $ $Date: 2001-07-03 09:43:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,7 @@ ULONG SfxDocumentInfo::LoadPropertySet( SvStorage* pStorage )
 
     pStr = (SfxPSStringProperty_Impl*) pPS->GetProperty( PID_REVNUMBER );
     if( pStr )
-        SetDocumentNumber( pStr->GetString().ToInt32() );
+        SetDocumentNumber( (USHORT)pStr->GetString().ToInt32() );
 
     pDate = (SfxPSDateTimeProperty_Impl*) pPS->GetProperty( PID_EDITTIME );
     if( pDate )
@@ -1310,7 +1310,7 @@ SfxDocumentInfo::SfxDocumentInfo() :
     const String aInf( DEFINE_CONST_UNICODE( "Info " ) );
     for( USHORT i = 0; i < MAXDOCUSERKEYS; ++i )    {
         aUserKeys[i].aTitle = aInf;
-        aUserKeys[i].aTitle += String::CreateFromInt32(i);
+        aUserKeys[i].aTitle += String::CreateFromInt32(i+1);
     }
 }
 
