@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-08-24 13:14:27 $
+ *  last change: $Author: rt $ $Date: 2001-08-29 08:53:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Taglia" ;
             Text [ portuguese_brazilian ] = "Co~rtar" ;
             Text [ portuguese ] = "Co~rtar" ;
-            Text [ finnish ] = "~Leikkaa" ;
+            Text [ finnish ] = "L~eikkaa" ;
             Text [ danish ] = "~Klip" ;
             Text [ french ] = "~Couper" ;
             Text [ swedish ] = "~Klipp ut" ;
@@ -186,7 +186,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "~Incolla" ;
             Text [ portuguese_brazilian ] = "~Colar" ;
             Text [ portuguese ] = "Co~lar" ;
-            Text [ finnish ] = "~Liitä" ;
+            Text [ finnish ] = "L~iit?" ;
             Text [ danish ] = "~Indsæt" ;
             Text [ french ] = "C~oller" ;
             Text [ swedish ] = "K~listra in" ;
@@ -243,7 +243,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ italian ] = "Seleziona tutto" ;
             Text [ portuguese_brazilian ] = "Selecionar ~Tudo" ;
             Text [ portuguese ] = "Seleccionar ~tudo" ;
-            Text [ finnish ] = "~Valitse kaikki" ;
+            Text [ finnish ] = "Valitse ~kaikki" ;
             Text [ danish ] = "~Marker alt" ;
             Text [ french ] = "~Sélectionner tout" ;
             Text [ swedish ] = "Markera ~allt" ;
@@ -289,10 +289,11 @@ Menu SV_RESID_MENU_EDIT
             TEXT[ turkish ] = "Özel karakter ekle...";
             TEXT[ language_user1 ] = " ";
             TEXT[ catalan ] = "Insertar ~símbolo...";
-            TEXT[ finnish ] = "~Erikoismerkki";
+            TEXT[ finnish ] = "~Erikoismerkki...";
         };
     };
 };
+
 
 
 
