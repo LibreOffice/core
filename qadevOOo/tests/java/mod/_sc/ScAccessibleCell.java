@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAccessibleCell.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $
+ *  last change: $Author: rt $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,21 +61,8 @@
 
 package mod._sc;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.container.XIndexAccess;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.sheet.XSpreadsheet;
-import com.sun.star.sheet.XSpreadsheetDocument;
-import com.sun.star.sheet.XSpreadsheets;
-import com.sun.star.table.XCell;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -83,11 +70,25 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
-import com.sun.star.uno.AnyConverter;
-import com.sun.star.uno.Type;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.sheet.XSpreadsheet;
+import com.sun.star.sheet.XSpreadsheetDocument;
+import com.sun.star.sheet.XSpreadsheets;
+import com.sun.star.table.XCell;
 import com.sun.star.table.XColumnRowRange;
 import com.sun.star.table.XTableColumns;
-import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  * Test for object which is represented by accessible component of
@@ -132,7 +133,7 @@ public class ScAccessibleCell extends TestCase {
         TestParameters Param, PrintWriter log) {
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(  (XMultiServiceFactory) Param.getMSF());
 
         try {
             log.println("creating a spreadsheetdocument");
@@ -147,14 +148,10 @@ public class ScAccessibleCell extends TestCase {
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xSpreadsheetDoc);
 
-        XController xController = aModel.getCurrentController();
+        XWindow xWindow = AccessibilityTools.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
+        XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
 
-        AccessibilityTools at = new AccessibilityTools();
-
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
-        XAccessible xRoot = at.getAccessibleObject(xWindow);
-
-        oObj = at.getAccessibleObjectForRole
+        oObj = AccessibilityTools.getAccessibleObjectForRole
             (xRoot, AccessibleRole.TABLE_CELL, "B1");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
@@ -163,7 +160,7 @@ public class ScAccessibleCell extends TestCase {
 
         // relation for XAccessibleEventBroadcaster
         XCell xCell = null;
-        final String text = "Text for testing of the interface XAccessibleText";
+        final String text = "XAccessibleText";
         try {
             XSpreadsheets oSheets = xSpreadsheetDoc.getSheets() ;
             XIndexAccess oIndexSheets = (XIndexAccess)
