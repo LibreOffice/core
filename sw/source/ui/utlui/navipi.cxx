@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:36:56 $
+ *  last change: $Author: kz $ $Date: 2004-06-29 08:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -986,9 +986,11 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     Font aFont(GetFont());
     aFont.SetWeight(WEIGHT_NORMAL);
+    GetPageEdit().SetFont(aFont);
+    aFont = aContentTree.GetFont();
+    aFont.SetWeight(WEIGHT_NORMAL);
     aContentTree.SetFont(aFont);
     aGlobalTree.SetFont(aFont);
-    GetPageEdit().SetFont(aFont);
 
     StartListening(*SFX_APP());
     if ( pCreateView )
