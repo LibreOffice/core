@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.15 $
- *  last change: $Author: hdu $ $Date: 2002-09-11 09:59:01 $
+ *  $Revision: 1.16 $
+ *  last change: $Author: hdu $ $Date: 2002-09-25 13:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,11 +103,6 @@ ServerFontLayout::ServerFontLayout( const ImplLayoutArgs& rArgs, ServerFont& rFo
         pLE = &aSimpleLayoutEngine;
 
     (*pLE)( *this, rArgs );
-
-    if( rArgs.mpDXArray )
-        ApplyDXArray( rArgs.mpDXArray );
-    if( rArgs.mnLayoutWidth )
-        Justify( rArgs.mnLayoutWidth );
 }
 
 // =======================================================================
@@ -190,6 +185,11 @@ bool ServerFontLayoutEngine::operator()( ServerFontLayout& rLayout,
     // create layout object
     rLayout.SetGlyphItems( pGlyphItems, nGlyphCount );
     rLayout.SetWantFallback( bWantFallback );
+
+    if( rArgs.mpDXArray )
+        rLayout.ApplyDXArray( rArgs.mpDXArray );
+    else if( rArgs.mnLayoutWidth )
+        rLayout.Justify( rArgs.mnLayoutWidth );
     return true;
 }
 
@@ -490,15 +490,15 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     LEErrorCode rcIcu = LE_NO_ERROR;
 
     // find matching script
-    // TODO: handle errors better
     // TODO: consider script changes
     le_int32 eScriptCode = uscript_getScript( pIcuChars[rArgs.mnMinCharPos], &rcI18n );
+    if( eScriptCode < 0 )   // TODO: handle errors better
+        eScriptCode = latnScriptCode;
 
     // get layout engine matching to this script
     // no engine change necessary if script is latin
     if( (meScriptCode != eScriptCode)
-    &&   (eScriptCode > USCRIPT_INHERITED)
-    &&   (eScriptCode != latnScriptCode) )
+    &&  (eScriptCode > USCRIPT_INHERITED) )
     {
         // TODO: cache multiple layout engines when multiple scripts are used
         delete mpIcuLE;
@@ -524,7 +524,8 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     UTextOffset nEndBidiPos;
     int nRunCount = 1;
 
-    if( rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG )
+    if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG)
+    ||  (rArgs.mnEndCharPos - rArgs.mnMinCharPos <= 1) )
     {
         pParaBidi   = NULL;
         pLineBidi   = NULL;
@@ -562,6 +563,7 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     {
         if( pLineBidi )
         {
+            // TODO: reorder chars, layout at once, reorder charpos
             nMinBidiPos = rArgs.mnMinCharPos;
             bRightToLeft = (UBIDI_RTL == ubidi_getVisualRun( pLineBidi, i, &nMinBidiPos, &nEndBidiPos ));
             nEndBidiPos += nMinBidiPos;
@@ -605,11 +607,10 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
             int nGlyphIndex = pIcuGlyphs[i];
             if( !nGlyphIndex )
                 bWantFallback = true;
-            {
-                // apply vertical flags, etc.
-                sal_Unicode aChar = rArgs.mpStr[ pCharIndices[ i ] ];
-                nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
-            }
+
+            // apply vertical flags, etc.
+            sal_Unicode aChar = rArgs.mpStr[ pCharIndices[ i ] ];
+            nGlyphIndex = rFont.FixupGlyphIndex( nGlyphIndex, aChar );
 
             aNewPos = Point( (int)(pPos->fX+0.5), (int)(pPos->fY+0.5) );
             const GlyphMetric& rGM = rFont.GetGlyphMetric( nGlyphIndex );
@@ -640,6 +641,12 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     // create ServerFontLayout using GlyphItems from above
     rLayout.SetGlyphItems( pGlyphItems, nSumGlyphCount );
     rLayout.SetWantFallback( bWantFallback );
+
+    if( rArgs.mpDXArray )
+        rLayout.ApplyDXArray( rArgs.mpDXArray );
+    else if( rArgs.mnLayoutWidth )
+        rLayout.Justify( rArgs.mnLayoutWidth );
+
     return true;
 }
 
