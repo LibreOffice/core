@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:47:03 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,8 +310,8 @@ String STR_ERROR_NOSTORAGE
 };
 String STR_QUERY_SAVEOWNFORMAT
 {
-    Text [ de ] = "Dieses Dokument kann Formatierungen und Informationen\nenthalten, die nicht im $(FORMAT) Format gespeichert\nwerden können. Möchten Sie die Änderungen im\n$(OWNFORMAT) Format speichern?" ;
-    Text [ en-US ] = "This document may contain attributes and information that cannot be saved under\n$(FORMAT). Do you want to save your changes using the\n$(OWNFORMAT) format?" ;
+    Text [ de ] = "$(FILENAME) enthält möglicherweise Elemente, die mit $(FORMAT)-Format nicht\nkompatibel sind. Möchten Sie das Dokument in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um zu speichern.\n- Klicken Sie auf 'Nein', um die Elemente zu erhalten. Speichern Sie dann das\nDokument im aktuellen %PRODUCTNAME-Format.";
+    Text [ en-US ] = "$(FILENAME) may contain formattings that are not compatible with $(FORMAT) Format.\nDo you want to save the document in this format?\n\n - To save, click 'Yes'\n - To preserve formatting, click No. Next save the document in the latest\n%PRODUCTNAME format.";
     Text [ x-comment ] = " ";
 };
 String STR_QUERY_MUSTOWNFORMAT
