@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: jl $ $Date: 2001-11-12 11:22:45 $
+ *  last change: $Author: jl $ $Date: 2001-11-19 12:00:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,7 +241,10 @@ static void getINetPropsFromConfig(JVM * pjvm,
         Reference<XComponentContext>        _xCtx;
         Reference<XMultiComponentFactory > _xSMgr;
 
+        // For Inet settings
         Reference<XInterface> _xConfigurationAccess;
+        // for Java settings
+        Reference<XInterface> _xConfigurationAccess2;
         Module    _javaLib;
 
         void registerConfigChangesListener();
@@ -442,6 +445,39 @@ void SAL_CALL JavaVirtualMachine_Impl::elementReplaced( const ContainerEvent& Ev
         Event.Element >>= value;
         setINetSettingsInVM( value);
         bDone= sal_True;
+    }
+    else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("NetAccess")))
+    {
+        sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode"));
+        sal_Int32 val;
+        if( Event.Element >>= val)
+        {
+            switch( val)
+            {
+            case 0: sPropertyValue= OUString(RTL_CONSTASCII_USTRINGPARAM("unrestricted"));
+                break;
+            case 1: sPropertyValue= OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+                break;
+            case 2: sPropertyValue= OUString(RTL_CONSTASCII_USTRINGPARAM("host"));
+                break;
+            }
+        }
+        else
+            return;
+    }
+    else if (sAccessor == OUString(RTL_CONSTASCII_USTRINGPARAM("Security")))
+    {
+        sPropertyName= OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.security.disableSecurity"));
+        sal_Bool val;
+        if( Event.Element >>= val)
+        {
+            if( val)
+                sPropertyValue= OUString(RTL_CONSTASCII_USTRINGPARAM("false"));
+            else
+                sPropertyValue= OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+        }
+        else
+            return;
     }
     else
         return;
@@ -697,6 +733,14 @@ void SAL_CALL JavaVirtualMachine_Impl::disposing( const EventObject& Source )
             xContainer->removeContainerListener( static_cast< XContainerListener* >(this));
         _xConfigurationAccess= 0;
     }
+    // In case the configuration manager wants to shut down
+    if (_xConfigurationAccess2.is() &&  Source.Source == _xConfigurationAccess2)
+    {
+        Reference< XContainer > xContainer(_xConfigurationAccess2, UNO_QUERY);
+        if (xContainer.is())
+            xContainer->removeContainerListener( static_cast< XContainerListener* >(this));
+        _xConfigurationAccess2= 0;
+    }
 
     // If the service manager calls us then we are about to be shut down, therefore
     // unregister everywhere. Currently this service is only registered with the
@@ -707,6 +751,10 @@ void SAL_CALL JavaVirtualMachine_Impl::disposing( const EventObject& Source )
         Reference< XContainer > xContainer(_xConfigurationAccess, UNO_QUERY);
         if (xContainer.is())
             xContainer->removeContainerListener( static_cast< XContainerListener* >(this));
+
+        Reference< XContainer > xContainer2(_xConfigurationAccess2, UNO_QUERY);
+        if (xContainer2.is())
+            xContainer2->removeContainerListener( static_cast< XContainerListener* >(this));
     }
 }
 
@@ -967,6 +1015,37 @@ static void getJavaPropsFromSafetySettings(JVM * pjvm,
             OUString sClassPath= key_UserClasspath->getStringValue();
             pjvm->setUserClasspath( sClassPath);
         }
+                Reference<XRegistryKey> key_NetAccess= xRegistryRootKey->openKey(OUString(
+            RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/NetAccess")));
+        if (key_NetAccess.is())
+        {
+            sal_Int32 val= key_NetAccess->getLongValue();
+            OUString sVal;
+            switch( val)
+            {
+            case 0: sVal= OUString(RTL_CONSTASCII_USTRINGPARAM("unrestricted"));
+                break;
+            case 1: sVal= OUString(RTL_CONSTASCII_USTRINGPARAM("none"));
+                break;
+            case 2: sVal= OUString(RTL_CONSTASCII_USTRINGPARAM("host"));
+                break;
+            }
+            OUString sProperty( RTL_CONSTASCII_USTRINGPARAM("appletviewer.security.mode="));
+            sProperty= sProperty + sVal;
+            pjvm->pushProp(sProperty);
+        }
+        Reference<XRegistryKey> key_CheckSecurity= xRegistryRootKey->openKey( OUString(
+            RTL_CONSTASCII_USTRINGPARAM("VirtualMachine/Security")));
+        if( key_CheckSecurity.is())
+        {
+            sal_Bool val= key_CheckSecurity->getLongValue();
+            OUString sProperty(RTL_CONSTASCII_USTRINGPARAM("stardiv.security.disableSecurity="));
+            if( val)
+                sProperty= sProperty + OUString(RTL_CONSTASCII_USTRINGPARAM("false"));
+            else
+                sProperty= sProperty + OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+            pjvm->pushProp( sProperty);
+        }
     }
     xConfRegistry_simple->close();
 }
@@ -1071,6 +1150,13 @@ JavaVirtualMachine_Impl::~JavaVirtualMachine_Impl() throw() {
         if (xContainer.is())
             xContainer->removeContainerListener( static_cast< XContainerListener* >(this));
     }
+    if (_xConfigurationAccess2.is())
+    {
+        Reference< XContainer > xContainer(_xConfigurationAccess2, UNO_QUERY);
+        if (xContainer.is())
+            xContainer->removeContainerListener( static_cast< XContainerListener* >(this));
+    }
+
     if (_xSMgr.is())
     {
         Reference< XComponent > xComp(_xSMgr, UNO_QUERY);
@@ -1327,6 +1413,7 @@ void JavaVirtualMachine_Impl::registerConfigChangesListener()
 
         if (xConfigProvider.is())
         {
+            // We register this instance as listener to changes in org.openoffice.Inet/Settings
             // arguments for ConfigurationAccess
             Sequence< Any > aArguments(2);
             aArguments[0] <<= PropertyValue(
@@ -1348,6 +1435,30 @@ void JavaVirtualMachine_Impl::registerConfigChangesListener()
 
             if (xContainer.is())
                 xContainer->addContainerListener( static_cast< XContainerListener* >(this));
+
+            // now register as listener to changes in org.openoffice.Java/VirtualMachine
+            Sequence< Any > aArguments2(2);
+            aArguments2[0] <<= PropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")),
+                0,
+                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Java/VirtualMachine"))),
+                PropertyState_DIRECT_VALUE);
+            // depth: -1 means unlimited
+            aArguments2[1] <<= PropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
+                0,
+                makeAny( (sal_Int32)-1),
+                PropertyState_DIRECT_VALUE);
+
+            _xConfigurationAccess2= xConfigProvider->createInstanceWithArguments(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                aArguments2);
+
+            Reference< XContainer > xContainer2(_xConfigurationAccess2, UNO_QUERY);
+
+            if (xContainer2.is())
+                xContainer2->addContainerListener( static_cast< XContainerListener* >(this));
+
             // The JavaVM service is registered as listener with the configuration service. That
             // service therefore keeps a reference of JavaVM. We need to unregister JavaVM with the
             // configuration service, otherwise the ref count of JavaVM won't drop to zero.
