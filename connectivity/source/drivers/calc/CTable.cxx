@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:18:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -707,24 +707,23 @@ void SAL_CALL OCalcTable::disposing(void)
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-4);
+    ::std::vector<Type> aOwnTypes;
+    aOwnTypes.reserve(aTypes.getLength());
+
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
-    sal_Int32 i=0;
     for(;pBegin != pEnd;++pBegin)
     {
-        if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XRename>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XAlterTable>*)0) ||
-            *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
-        {
-            aRet.getArray()[i++] = *pBegin;
-        }
+        if(!(   *pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
+                *pBegin == ::getCppuType((const Reference<XIndexesSupplier>*)0) ||
+                *pBegin == ::getCppuType((const Reference<XRename>*)0) ||
+                *pBegin == ::getCppuType((const Reference<XAlterTable>*)0) ||
+                *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
+            aOwnTypes.push_back(*pBegin);
     }
-    aRet.getArray()[i] = ::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 );
+    aOwnTypes.push_back(::getCppuType( (const Reference< ::com::sun::star::lang::XUnoTunnel > *)0 ));
 
-    return aRet;
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 
 // -------------------------------------------------------------------------

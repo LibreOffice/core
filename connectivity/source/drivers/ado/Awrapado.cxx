@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-28 07:00:09 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,10 +1136,10 @@ ColumnAttributesEnum WpADOColumn::get_Attributes() const
     return eNum;
 }
 
-void WpADOColumn::put_Attributes(const ColumnAttributesEnum& _eNum)
+sal_Bool WpADOColumn::put_Attributes(const ColumnAttributesEnum& _eNum)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    pInterface->put_Attributes(_eNum);
+    return SUCCEEDED(pInterface->put_Attributes(_eNum));
 }
 
 ADOProperties* WpADOColumn::get_Properties() const

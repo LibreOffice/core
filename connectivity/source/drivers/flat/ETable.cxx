@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:12:50 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,10 +501,10 @@ void SAL_CALL OFlatTable::disposing(void)
 Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-4);
+    ::std::vector<Type> aOwnTypes;
+    aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
-    sal_Int32 i=0;
     for(;pBegin != pEnd;++pBegin)
     {
         if(!(*pBegin == ::getCppuType((const Reference<XKeysSupplier>*)0)   ||
@@ -513,10 +513,10 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException)
             *pBegin == ::getCppuType((const Reference<XAlterTable>*)0)      ||
             *pBegin == ::getCppuType((const Reference<XDataDescriptorFactory>*)0)))
         {
-            aRet.getArray()[i++] = *pBegin;
+            aOwnTypes.push_back(*pBegin);
         }
     }
-    return aRet;
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 
 // -------------------------------------------------------------------------

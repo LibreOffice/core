@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,7 @@ namespace connectivity
             SortOrderEnum get_SortOrder() const;
             void put_SortOrder(SortOrderEnum _nScale);
             ColumnAttributesEnum get_Attributes() const;
-            void put_Attributes(const ColumnAttributesEnum& _eNum);
+            sal_Bool put_Attributes(const ColumnAttributesEnum& _eNum);
             ADOProperties* get_Properties() const;
         };
 

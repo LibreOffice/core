@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:33 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,8 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
     typedef sdbcx::OCatalog OFileCatalog_BASE;
 
     Sequence< Type > aTypes = OFileCatalog_BASE::getTypes();
-    Sequence< Type > aRet(aTypes.getLength()-3);
+    ::std::vector<Type> aOwnTypes;
+    aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();
     sal_Int32 i=0;
@@ -149,9 +150,11 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException)
             *pBegin == ::getCppuType((const Reference<XUsersSupplier>*)0)   ||
             *pBegin == ::getCppuType((const Reference<XViewsSupplier>*)0)))
         {
-            aRet.getArray()[i++] = *pBegin;
+            aOwnTypes.push_back(*pBegin);
         }
     }
-    return aRet;
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
+// -----------------------------------------------------------------------------
+
 

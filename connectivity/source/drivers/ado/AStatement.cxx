@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 15:01:36 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,7 +550,7 @@ sal_Int32 OStatement_Base::getQueryTimeOut() const  throw(SQLException, RuntimeE
 sal_Int32 OStatement_Base::getMaxRows() const throw(SQLException, RuntimeException)
 {
     sal_Int32 nRet=-1;
-    if(!m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet))
+    if(!(m_RecordSet.IsValid() && m_RecordSet.get_MaxRecords(nRet)))
         ::dbtools::throwFunctionSequenceException(NULL);
     return nRet;
 }

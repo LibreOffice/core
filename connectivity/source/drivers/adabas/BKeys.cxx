@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BKeys.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:39:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,17 +116,15 @@ Sequence< Type > SAL_CALL OKeys::getTypes(  ) throw(RuntimeException)
     Type* pBegin    = aTypes.getArray();
     Type* pEnd      = pBegin + aTypes.getLength();
 
-    Sequence< Type > aRetType(aTypes.getLength()-1);
-    sal_Int32 i=0;
+    ::std::vector<Type> aOwnTypes;
+    aOwnTypes.reserve(aTypes.getLength());
     for(;pBegin != pEnd; ++pBegin)
     {
         if(*pBegin != ::getCppuType(static_cast< Reference<XNameAccess> *>(NULL)))
-        {
-            aRetType.getArray()[i++] = *pBegin;
-        }
+            aOwnTypes.push_back(*pBegin);
     }
 
-    return aRetType;
+    return Sequence< Type >(aOwnTypes.begin(),aOwnTypes.size());
 }
 // -------------------------------------------------------------------------
 Reference< XNamed > OKeys::createObject(const ::rtl::OUString& _rName)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:59 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
 {
     m_aColumn.Create();
     construct();
+    fillPropertyValues();
 }
 
 //--------------------------------------------------------------------------
@@ -211,10 +212,12 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
             case PROPERTY_ID_ISNULLABLE:
                 {
-                    sal_Bool _b;
-                    rValue >>= _b;
-                    if(_b)
-                        m_aColumn.put_Attributes(adColNullable);
+                    sal_Int32 nVal=0;
+                    rValue >>= nVal;
+                    ColumnAttributesEnum eNullable = adColFixed;
+                    if( nVal == ColumnValue::NULLABLE)
+                        eNullable = adColNullable;
+                    m_aColumn.put_Attributes(eNullable);
                 }
                 break;
             case PROPERTY_ID_ISROWVERSION:
