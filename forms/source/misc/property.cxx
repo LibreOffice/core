@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 14:54:12 $
+ *  last change: $Author: oj $ $Date: 2001-08-30 13:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,20 +91,20 @@ sal_Int32 PropertyInfoService::getPropertyId(const ::rtl::OUString& _rName)
     initialize();
 
     PropertyAssignment aCompareName(_rName, -1);
-    PropertyAssignmentNameCompareLess aCompareOp;
 
-    ConstPropertyMapIterator aLowerBound = lower_bound(
+    ::std::pair<PropertyMapIterator,PropertyMapIterator> aPair = equal_range(
         s_AllKnownProperties.begin(),
         s_AllKnownProperties.end(),
         aCompareName,
-        aCompareOp);
+        PropertyAssignmentNameCompareLess());
 
-    if ((aLowerBound != s_AllKnownProperties.end()) && aLowerBound->sName.equals(_rName))
+    sal_Int32 nHandle = -1;
+    if (aPair.first != aPair.second)
     {   // we found something _and_ we have an identity
-        return aLowerBound->nHandle;
+        nHandle = aPair.first->nHandle;
     }
 
-    return -1;
+    return nHandle;
 }
 
 //------------------------------------------------------------------
@@ -119,7 +119,7 @@ sal_Int32 ConcretInfoService::getPreferedPropertyId(const ::rtl::OUString& _rNam
 //..................................................................
 void PropertyInfoService::initialize()
 {
-    if (s_AllKnownProperties.size())
+    if (!s_AllKnownProperties.empty())
         return;
 
     ADD_PROP_ASSIGNMENT(NAME);
@@ -283,11 +283,11 @@ void PropertyInfoService::initialize()
     ADD_PROP_ASSIGNMENT(SORT);
 
     // now sort the array by name
-    PropertyAssignmentNameCompareLess aCompareOp;
+
     std::sort(
         s_AllKnownProperties.begin(),
         s_AllKnownProperties.end(),
-        aCompareOp
+        PropertyAssignmentNameCompareLess()
     );
 }
 
