@@ -8242,10 +8242,10 @@ SfxVoidItem NewXForms FN_XFORMS_INIT
     Asynchron;
 
     /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
     StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
+    ToolBoxConfig = FALSE,
     GroupId = GID_INSERT;
 ]
 
