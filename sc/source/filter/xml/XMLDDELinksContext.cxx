@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:52:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void ScXMLDDELinkContext::EndElement()
 {
     if (nPosition > -1 && nColumns && nRows && GetScImport().GetDocument())
     {
-        ScMatrixRef pMatrix = new ScMatrix( static_cast<USHORT>(nColumns), static_cast<USHORT>(nRows) );
+        ScMatrixRef pMatrix = new ScMatrix( static_cast<SCSIZE>(nColumns), static_cast<SCSIZE>(nRows) );
 
         DBG_ASSERT(static_cast<sal_uInt32>(nColumns * nRows) == aDDELinkTable.size(), "there is a wrong cells count");
         sal_Int32 nCol(0);
@@ -231,8 +231,8 @@ void ScXMLDDELinkContext::EndElement()
             else
                 nCol++;
 
-            USHORT nScCol( static_cast< USHORT >( nCol ) );
-            USHORT nScRow( static_cast< USHORT >( nRow ) );
+            SCSIZE nScCol( static_cast< SCSIZE >( nCol ) );
+            SCSIZE nScRow( static_cast< SCSIZE >( nRow ) );
             if( aItr->bEmpty )
                 pMatrix->PutEmpty( nScCol, nScRow );
             else if( aItr->bString )
