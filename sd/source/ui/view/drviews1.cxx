@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:50:16 $
+ *  last change: $Author: ka $ $Date: 2000-10-24 11:19:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SV_SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>

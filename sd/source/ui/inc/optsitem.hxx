@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-17 15:05:58 $
+ *  last change: $Author: ka $ $Date: 2000-10-24 11:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,6 @@
 #endif
 #ifndef _SFXCFGITEM_HXX //autogen
 #include <sfx2/cfgitem.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFXMODULE_HXX
 #include <sfx2/module.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:44:29 $
+ *  last change: $Author: ka $ $Date: 2000-10-24 11:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #include <svx/dialogs.hrc>
 #include <svx/strarray.hxx>
 #include <svx/dlgutil.hxx>
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
-#endif
 
 #include "sdattr.hxx"
 #include "sdresid.hxx"

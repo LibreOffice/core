@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-10-18 11:02:06 $
+ *  last change: $Author: ka $ $Date: 2000-10-24 11:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,6 @@
 #endif
 #ifndef _SFXSTBMGR_HXX //autogen
 #include <sfx2/stbmgr.hxx>
-#endif
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
 #endif
 #ifndef _SFX_ECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>

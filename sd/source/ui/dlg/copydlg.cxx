@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-12 08:42:02 $
+ *  last change: $Author: ka $ $Date: 2000-10-24 11:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifndef _SFX_SAVEOPT_HXX //autogen
-#include <sfx2/saveopt.hxx>
-#endif
 #ifndef _SVX_DLGUTIL_HXX //autogen
 #include <svx/dlgutil.hxx>
 #endif
