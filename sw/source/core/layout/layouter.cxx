@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layouter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:31:15 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:47:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,11 @@
 // --> OD 2004-06-23 #i28701#
 #ifndef _MOVEDFWDFRMSBYOBJPOS_HXX
 #include <movedfwdfrmsbyobjpos.hxx>
+#endif
+// <--
+// --> OD 2004-10-22 #i35911#
+#ifndef _OBJSTMPCONSIDERWRAPINFL_HXX
+#include <objstmpconsiderwrapinfl.hxx>
 #endif
 // <--
 
@@ -256,7 +261,11 @@ SwLayouter::SwLayouter()
         : pEndnoter( NULL ),
           pLooping( NULL ),
           // --> OD 2004-06-23 #i28701#
-          mpMovedFwdFrms( 0L )
+          mpMovedFwdFrms( 0L ),
+          // <--
+          // --> OD 2004-10-22 #i35911#
+          mpObjsTmpConsiderWrapInfl( 0L )
+          // <--
 {
 }
 
@@ -266,6 +275,10 @@ SwLayouter::~SwLayouter()
     delete pLooping;
     // --> OD 2004-06-23 #i28701#
     delete mpMovedFwdFrms;
+    // <--
+    // --> OD 2004-10-22 #i35911#
+    delete mpObjsTmpConsiderWrapInfl;
+    // <--
 }
 
 void SwLayouter::_CollectEndnotes( SwSectionFrm* pSect )
@@ -397,5 +410,52 @@ bool SwLayouter::FrmMovedFwdByObjPos( const SwDoc& _rDoc,
         return _rDoc.GetLayouter()->mpMovedFwdFrms->
                                 FrmMovedFwdByObjPos( _rTxtFrm, _ornToPageNum );
     }
+}
+// <--
+// --> OD 2004-10-05 #i26945#
+bool SwLayouter::DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
+                                            const SwRowFrm& _rRowFrm )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        return false;
+    }
+    else if ( !_rDoc.GetLayouter()->mpMovedFwdFrms )
+    {
+        return false;
+    }
+    else
+    {
+        return _rDoc.GetLayouter()->
+                        mpMovedFwdFrms->DoesRowContainMovedFwdFrm( _rRowFrm );
+    }
+}
+// <--
+
+// --> OD 2004-10-22 #i35911#
+void SwLayouter::ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc )
+{
+    if ( _rDoc.GetLayouter() &&
+         _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl )
+    {
+        _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Clear();
+    }
+}
+void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
+                                            const SwDoc& _rDoc,
+                                            SwAnchoredObject& _rAnchoredObj )
+{
+    if ( !_rDoc.GetLayouter() )
+    {
+        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
+    }
+
+    if ( !_rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl )
+    {
+        const_cast<SwDoc&>(_rDoc).GetLayouter()->mpObjsTmpConsiderWrapInfl =
+                                new SwObjsMarkedAsTmpConsiderWrapInfluence();
+    }
+
+    _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
 // <--
