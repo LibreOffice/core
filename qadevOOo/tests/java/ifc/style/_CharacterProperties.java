@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _CharacterProperties.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:12:52 $
+ *  last change:$Date: 2003-09-08 11:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,11 @@
 
 package ifc.style;
 
-import com.sun.star.beans.XPropertySet;
 import lib.MultiPropertyTest;
-import lib.MultiPropertyTest$PropertyTester;
 import util.ValueChanger;
 import util.utils;
+
+import com.sun.star.beans.XPropertySet;
 
 
 /**
@@ -247,7 +247,6 @@ public class _CharacterProperties extends MultiPropertyTest {
             changeProp((XPropertySet) oPara,
                 (XPropertySet) oPort,"RubyAdjust", aShort);
         }
-        Short aShort = new Short((short) 1);
     }
 
     /**
