@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWindowPeer.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 10:38:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,14 @@
 
  module com {  module sun {  module star {  module awt {
 
-interface XToolkit;
-interface XPointer;
+ published interface XToolkit;
+ published interface XPointer;
 
 //=============================================================================
 
 /** gives access to the actual window implementation on the device.
  */
-interface XWindowPeer: com::sun::star::lang::XComponent
+published interface XWindowPeer: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
 
