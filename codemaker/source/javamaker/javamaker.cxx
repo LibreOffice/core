@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javamaker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 03:13:45 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:20:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include <stdio.h>
+
+#include "sal/main.h"
 
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #include <codemaker/typemanager.hxx>
@@ -117,11 +119,7 @@ sal_Bool produceAllTypes(const OString& typeName,
     return sal_True;
 }
 
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int _cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     JavaOptions options;
 
