@@ -2,9 +2,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 14:30:46 $
+#   last change: $Author: rt $ $Date: 2004-12-16 10:46:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -411,6 +411,25 @@ sub test_of_gid_uniqueness
     }
 }
 
+############################################
+# gids must not cotain hyphens
+############################################
+
+sub test_of_hyphen
+{
+    my ($allitems) = @_;
+
+    for ( my $i = 0; $i <= $#{$allitems}; $i++ )
+    {
+        my $gid = ${$allitems}[$i];
+
+        if ( $gid =~ /\-/ )
+        {
+            par2script::exiter::exit_program("ERROR: No hyphen allowed in global id: $gid", "test_of_hyphen");
+        }
+    }
+}
+
 ######################################################
 # This function exists for compatibility reasons:
 # In scp the string "DosName" is used, in the
@@ -524,6 +543,8 @@ sub collect_all_items
         my $allgids = get_all_gids_from_script($itemcollector, $oneitem);
 
         test_of_gid_uniqueness($allgids);
+
+        test_of_hyphen($allgids);
 
         # renaming at directories "DosName" to "HostName" and "PD_PROGDIR" to "PREDEFINED_PROGDIR" (only for compatibility reasons)
         if ( $oneitem eq "Directory" ) { convert_dosname_to_hostname($itemcollector); }
