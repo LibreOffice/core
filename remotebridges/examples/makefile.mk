@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2000-10-17 09:28:28 $
+#   last change: $Author: jbu $ $Date: 2000-10-26 14:12:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,8 @@
 
 PRJ=..
 
-PRJNAME=bridges
-TARGET=test
-LIBTARGET=NO
-TARGETTYPE=CUI
+PRJNAME=remotebridges
+TARGET=officeclientsample
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -93,6 +91,7 @@ UNOTYPES = \
         com.sun.star.lang.XSingleServiceFactory \
         com.sun.star.uno.XNamingService \
         com.sun.star.uno.XWeak \
+        com.sun.star.lang.XMain \
         com.sun.star.uno.XAggregation \
         com.sun.star.lang.XMultiServiceFactory \
         com.sun.star.lang.XTypeProvider \
@@ -102,49 +101,29 @@ UNOTYPES = \
         com.sun.star.registry.XImplementationRegistration \
         com.sun.star.lang.XComponent \
         com.sun.star.bridge.XBridgeFactory\
+        com.sun.star.bridge.XUnoUrlResolver\
         com.sun.star.connection.XAcceptor\
         com.sun.star.connection.XConnector\
-        com.sun.star.lang.XServiceInfo
+        com.sun.star.lang.XServiceInfo \
+         com.sun.star.text.XTextDocument
 
+SLOFILES = $(SLO)$/officeclient.obj
 
+SHL1TARGET= officeclientsample
 
+SHL1STDLIBS= \
+        $(SALLIB)	\
+        $(VOSLIB)	\
+        $(CPPULIB) 	\
+        $(CPPUHELPERLIB) 
 
-OBJFILES=	\
-            $(OBJ)$/remoteserver.obj \
-            $(OBJ)$/remoteclient.obj 
+SHL1DEPN=
+SHL1IMPLIB=		i$(SHL1TARGET)
+SHL1LIBS=		$(SLB)$/$(SHL1TARGET).lib
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-
-APP1TARGET=	remoteserver
-APP1OBJS=	$(OBJ)$/remoteserver.obj 
-
-.IF "$(OS)" == "LINUX"
-APP1STDLIBS+= -lstdc++
-.ENDIF
-
-APP1STDLIBS+=	\
-            $(CPPULIB)	\
-            $(COMPHELPER)   \
-            $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT)
-
-APP1DEF=	$(MISC)$/$(APP1TARGET).def
-
-APP2TARGET=	remoteclient
-APP2OBJS=	$(OBJ)$/remoteclient.obj 
-
-.IF "$(OS)" == "LINUX"
-APP2STDLIBS+= -lstdc++
-.ENDIF
-
-APP2STDLIBS+=	\
-            $(CPPULIB)	\
-            $(CPPUHELPERLIB)	\
-            $(VOSLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT) 
-
+DEF1NAME=		$(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
 
 
 # --- Targets ------------------------------------------------------
