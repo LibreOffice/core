@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptProviderForJavaScript.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: hr $ $Date: 2004-10-11 13:31:40 $
+*  last change: $Author: rt $ $Date: 2004-10-22 15:08:27 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -87,14 +87,14 @@ import java.util.Map;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import drafts.com.sun.star.script.provider.XScriptProvider;
-import drafts.com.sun.star.script.provider.XScript;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptProvider;
+import com.sun.star.script.provider.XScript;
+import com.sun.star.script.provider.XScriptContext;
 
-import drafts.com.sun.star.script.provider.ScriptErrorRaisedException;
-import drafts.com.sun.star.script.provider.ScriptExceptionRaisedException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorException;
-import drafts.com.sun.star.script.provider.ScriptFrameworkErrorType;
+import com.sun.star.script.provider.ScriptErrorRaisedException;
+import com.sun.star.script.provider.ScriptExceptionRaisedException;
+import com.sun.star.script.provider.ScriptFrameworkErrorException;
+import com.sun.star.script.provider.ScriptFrameworkErrorType;
 
 import com.sun.star.script.framework.log.LogUtils;
 import com.sun.star.script.framework.provider.ScriptContext;
@@ -170,7 +170,7 @@ public class ScriptProviderForJavaScript
         {
             xSingleServiceFactory = FactoryHelper.getServiceFactory(
                 ScriptProviderForJavaScript._ScriptProviderForJavaScript.class,
-                "drafts.com.sun.star.script.provider.ScriptProviderForJavaScript",
+                "com.sun.star.script.provider.ScriptProviderForJavaScript",
                 multiFactory,
                 regKey );
         }
@@ -193,16 +193,19 @@ public class ScriptProviderForJavaScript
         String impl = "com.sun.star.script.framework.provider.javascript." +
             "ScriptProviderForJavaScript$_ScriptProviderForJavaScript";
 
-        String service1 = "drafts.com.sun.star.script.provider." +
+        String service1 = "com.sun.star.script.provider." +
             "ScriptProvider";
-        String service2 = "drafts.com.sun.star.script.provider." +
+        String service2 = "com.sun.star.script.provider." +
             "LanguageScriptProvider";
-        String service3 = "drafts.com.sun.star.script.provider." +
+        String service3 = "com.sun.star.script.provider." +
             "ScriptProviderForJavaScript";
+        String service4 = "com.sun.star.script.browse." +
+            "BrowseNode";
 
         if ( FactoryHelper.writeRegistryServiceInfo(impl, service1, regKey) &&
             FactoryHelper.writeRegistryServiceInfo(impl, service2, regKey) &&
-            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) )
+            FactoryHelper.writeRegistryServiceInfo(impl, service3, regKey) &&
+            FactoryHelper.writeRegistryServiceInfo(impl, service4, regKey) )
         {
                 return true;
         }
@@ -368,30 +371,9 @@ class ScriptImpl implements XScript
                 scope.put("ARGUMENTS", scope, jsArgs);
 
                 result = ctxt.evaluateString(scope,
-                    source, editorURL, 1, null);
-
+                        source, "<stdin>", 1, null);
                 result = ctxt.toString(result);
                 return result;
-            }
-            catch (EcmaError ec) {
-                LogUtils.DEBUG( "Caught EcmaError exception for JavaScript type = " + ec.getClass() );
-                String message = ec.getMessage();
-                int lineNo = ec.getLineNumber();
-                LogUtils.DEBUG( "\t message  " + message );
-                LogUtils.DEBUG( "\t lineNum  " + lineNo );
-                ScriptErrorRaisedException se = new
-                    ScriptErrorRaisedException( message );
-                se.lineNum = lineNo;
-                se.scriptName = metaData.getLanguageName();
-                se.language = "JavaScript";
-                LogUtils.DEBUG( "ErrorRaised exception  "  );
-                LogUtils.DEBUG( "\t message  " + se.getMessage() );
-                LogUtils.DEBUG( "\t lineNum  " + se.lineNum );
-                LogUtils.DEBUG( "\t language  " + se.language );
-                LogUtils.DEBUG( "\t scriptName  " + se.scriptName );
-                raiseEditor( se.lineNum );
-                throw new InvocationTargetException( "JavaScript error " + metaData.getLanguageName(), null, se );
-
             }
             catch (JavaScriptException jse) {
                 LogUtils.DEBUG( "Caught JavaScriptException exception for JavaScript type = " + jse.getClass() );
