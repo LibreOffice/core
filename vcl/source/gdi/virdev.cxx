@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:36:47 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ using namespace ::com::sun::star::uno;
 // =======================================================================
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    long nDX, long nDY, USHORT nBitCount )
+                                    long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData )
 {
     DBG_ASSERT( nBitCount <= 1,
                 "VirtualDevice::VirtualDevice(): Only 0 or 1 is for BitCount allowed" );
@@ -124,7 +124,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         ((OutputDevice*)pOutDev)->ImplGetGraphics();
     pGraphics = pOutDev->mpGraphics;
     if ( pGraphics )
-        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount );
+        mpVirDev = pSVData->mpDefInst->CreateVirtualDevice( pGraphics, nDX, nDY, nBitCount, pData );
     else
         mpVirDev = NULL;
     if ( !mpVirDev )
@@ -206,6 +206,17 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, USHORT nBitCount, US
 
     // #110958# Enable alpha channel
     mnAlphaDepth = nAlphaBitCount;
+}
+
+// -----------------------------------------------------------------------
+
+VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, USHORT nBitCount )
+:   mpVirDev( NULL ),
+    meRefDevMode( REFDEV_NONE )
+{
+    DBG_TRACE1( "VirtualDevice::VirtualDevice( %hu )", nBitCount );
+
+    ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
 
 // -----------------------------------------------------------------------
