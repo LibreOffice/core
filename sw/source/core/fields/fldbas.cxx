@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 13:52:56 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,9 @@
 #ifndef _CALC_HXX
 #include <calc.hxx>
 #endif
-
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -882,4 +884,9 @@ String SwFormulaField::GetExpandedFormula() const
     }
     else
         return GetFormula();
+}
+
+String SwField::GetDescription() const
+{
+    return SW_RES(STR_FIELD);
 }
