@@ -89,11 +89,14 @@ info:
 jar .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
+compile .PHONY:
+    $(ANT) $(ANTFLAGS) $@
+
 javadoc .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
-compile .PHONY:
-    $(ANT) $(ANTFLAGS) $@
+config .PHONY:
+    $(ANT) $(ANT_FLAGS) $@
 
 test:
     $(ANT) $(ANT_FLAGS) $@
