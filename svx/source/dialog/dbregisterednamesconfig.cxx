@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbregisterednamesconfig.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:52:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 #include "dbregisterednamesconfig.hxx"
 
 
