@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BridgeFactory_Test.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-19 15:48:34 $
+ *  last change: $Author: kr $ $Date: 2001-01-17 09:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ import com.sun.star.uno.UnoRuntime;
 
 public class BridgeFactory_Test {
     static public boolean test(Vector notpassed) throws Exception {
-        System.err.print("\tTesting BridgeFactory...");
+        System.err.print("Testing BridgeFactory...");
 
         PipedConnection rightSide = new PipedConnection(new Object[0]);
         PipedConnection leftSide = new PipedConnection(new Object[]{rightSide});
@@ -114,13 +114,26 @@ public class BridgeFactory_Test {
         // test that the bridge has been removed
         passed = (bridgeFactory.getBridge("testbridge") == null) && passed;
 
+
+
+        rightSide = new PipedConnection(new Object[0]);
+        leftSide = new PipedConnection(new Object[]{rightSide});
+
+
         // test that we really get a new bridge
         XBridge xBridge_new = bridgeFactory.createBridge("testbridge", "urp", (XConnection)leftSide, null);
         passed = !UnoRuntime.areSame(xBridge, xBridge_new) && passed;
 
+        for(int i = 0; i <10000; ++ i) {
+            Object x[] = new Object[100];
+        }
+
         // test getExistingBridges
         xBridges = bridgeFactory.getExistingBridges();
-        passed = UnoRuntime.areSame(xBridge_new, xBridges[0]) && passed;
+        if(xBridges.length == 1)
+            passed = UnoRuntime.areSame(xBridge_new, xBridges[0]) && passed;
+        else
+            passed = false;
 
         // dispose the new bridge
         XComponent xComponent_new = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge_new);
