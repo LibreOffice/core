@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 14:22:44 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,6 @@ SLOFILES= \
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbsimpleregistry.obj
 .ENDIF
-
 
 SHL1TARGET= 	$(TARGET)
 

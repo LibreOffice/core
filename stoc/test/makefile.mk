@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-10 22:47:08 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,10 +148,8 @@ APP4STDLIBS= \
 APP4STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP4OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
@@ -167,10 +165,8 @@ APP5STDLIBS= \
 APP5STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP5OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
@@ -187,10 +183,8 @@ APP6STDLIBS= \
 APP6STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP6OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 
@@ -218,10 +212,8 @@ APP8STDLIBS= \
 APP8STDLIBS+=	$(LIBCIMT)
 .ENDIF
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 APP8OBJS+=$(OBJ)$/staticmbtest.obj 
 .ENDIF
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pluby $ $Date: 2001-02-10 17:52:00 $
+#   last change: $Author: pluby $ $Date: 2001-02-12 01:33:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,16 +127,15 @@ SLOFILES=	\
 # gcc on Mac OS X optimizes out some temporary variables when optimization is
 # turned on for compiling
 .IF "$(OS)"=="MACOSX"
-NOOPTFILES+=$(SLO)$/servicefactory.obj
+NOOPTFILES+=$(SLOFILES)
 .IF "$(NOOPT_FLAG)"!=""
 CFLAGSNOOPT=
 .ENDIF
 .ENDIF
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX" 
 SLOFILES+=$(SLO)$/staticmb.obj
-#OBJFILES+=$(OBJ)$/staticmb.obj
 .ENDIF
 
 SHL1TARGET=	$(TARGET)$(CPPUHELPER_MAJOR)$(COM)

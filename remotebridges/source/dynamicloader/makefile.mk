@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile  $
 #*
 #*	  Ersterstellung	JSC 24.06.99
-#*	  Letzte Aenderung	$Author: hjs $ $Date: 2001-01-16 12:04:17 $
-#*	  $Revision: 1.3 $
+#*	  Letzte Aenderung	$Author: pluby $ $Date: 2001-02-12 01:33:28 $
+#*	  $Revision: 1.4 $
 #*
 #*	  $Logfile:$
 #*
@@ -41,10 +41,8 @@ INCPRE+=$(UNOUCROUT)
 SLOFILES= \
     $(SLO)$/dynamicloader.obj 
 
-# NETBSD: somewhere we have to instantiate the static data members.
-# NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="NETBSD" || "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
+.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmbdynamic.obj
 .ENDIF
 
