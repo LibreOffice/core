@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-02 10:57:15 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,10 +62,6 @@
 #ifndef _XMLEXP_HXX
 #define _XMLEXP_HXX
 
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
-
 #ifndef _XMLOFF_XMLEXP_HXX
 #include <xmloff/xmlexp.hxx>
 #endif
@@ -77,23 +73,12 @@
 #include <xmloff/uniref.hxx>
 #endif
 
-class SwDoc;
 class SwPaM;
-class SwTxtNode;
-class SwSectionNode;
 class SwFmt;
 class SwFrmFmt;
 class SvXMLUnitConverter;
 class SvXMLExportItemMapper;
-class SwXMLAutoStylePool;
-class SvXMLAutoStylePool;
 class SvXMLAutoStylePoolP;
-class SwNodeNum;
-class SfxPoolItem;
-class SfxItemSet;
-class SwXMLNumRuleInfo;
-class OUStrings_Impl;
-class OUStringsSort_Impl;
 class SwTableLine;
 class SwTableLines;
 class SwTableBox;
@@ -104,15 +89,12 @@ class SwXMLTableColumnsSortByWidth_Impl;
 class SwXMLTableFrmFmtsSort_Impl;
 class SwTableNode;
 class XMLPropertySetMapper;
-//class XMLTextMasterPageExport;
-class SwXMLTextParagraphExport;
 
 
 class SwXMLExport : public SvXMLExport
 {
     friend class SwXMLExpContext;
 
-    SwDoc                       *pDoc;          // the current doc
 #ifdef XML_CORE_API
     SwPaM                       *pCurPaM;       // the current PaM
     SwPaM                       *pOrigPaM;      // the original PaM
@@ -127,8 +109,6 @@ class SwXMLExport : public SvXMLExport
     SvXMLItemMapEntriesRef      xTableRowItemMap;
     SvXMLItemMapEntriesRef      xTableCellItemMap;
     UniReference < XMLPropertySetMapper > xParaPropMapper;
-//  UniReference < XMLTextMasterPageExport> xMasterPageExport;
-    SvStorageRef                xPackage;
 
     sal_Int32                   nContentProgressStart;
     sal_Bool                    bExportWholeDoc : 1;// export whole document?
@@ -189,7 +169,7 @@ public:
                  const ::com::sun::star::uno::Reference<
                     ::com::sun::star::container::XIndexContainer > &,
                  sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-                 sal_Bool bShowProgr, SvStorage *pPkg );
+                 sal_Bool bShowProgr );
     virtual ~SwXMLExport();
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
@@ -203,11 +183,7 @@ public:
         return xParaPropMapper;
     }
 
-    SwDoc& GetDoc() { return *pDoc; }
-
     sal_Bool IsShowProgress() const { return bShowProgress; }
-
-    SvStorage *GetPackage() { return &xPackage; }
 };
 
 inline const SvXMLUnitConverter& SwXMLExport::GetTwipUnitConverter() const

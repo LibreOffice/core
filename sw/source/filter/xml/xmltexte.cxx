@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:41:33 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,9 @@ void SwXMLTextParagraphExport::exportStyleContent(
     }
     if( pStyle && SFX_STYLE_FAMILY_PARA == pStyle->GetFamily() )
     {
-        const SwDoc& rDoc = ((SwXMLExport&)GetExport()).GetDoc();
+        const SwDoc *pDoc = pStyle->GetDoc();
         const SwTxtFmtColl *pColl =
-            rDoc.FindTxtFmtCollByName( SwXStyleFamilies::GetUIName( pStyle->GetStyleName(), SFX_STYLE_FAMILY_PARA ) );
+            pDoc->FindTxtFmtCollByName( SwXStyleFamilies::GetUIName( pStyle->GetStyleName(), SFX_STYLE_FAMILY_PARA ) );
         ASSERT( pColl, "There is the text collection?" );
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {

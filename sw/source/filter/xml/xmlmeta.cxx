@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmeta.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 14:42:37 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -126,6 +132,7 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 
 // ---------------------------------------------------------------------
 
@@ -275,7 +282,20 @@ void SwXMLExport::_ExportMeta()
 
     OUStringBuffer aOut(16);
 
-    SwDocStat aDocStat( GetDoc().GetDocStat() );
+    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xTextTunnel.is() )
+        return;
+
+    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+    ASSERT( pText, "SwXText missing" );
+    if( !pText )
+        return;
+
+    SwDocStat aDocStat( pText->GetDoc()->GetDocStat() );
     aOut.append( (sal_Int32)aDocStat.nTbl );
     AddAttribute( XML_NAMESPACE_META, sXML_table_count,
                   aOut.makeStringAndClear() );

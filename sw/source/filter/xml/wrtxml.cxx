@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ sal_uInt32 SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
     SwXMLExport *pExp = new SwXMLExport( xModel, rPaM, *pFileName, xHandler,
                                          xEmbeddedGraphicExport,
                                          bWriteAll, bWriteOnlyFirstTable,
-                                         bShowProgress, pStorage );
+                                         bShowProgress );
 
     sal_uInt32 nRet = pExp->exportDoc( sXML_text );
     if( xDocStream.Is() )
@@ -230,11 +230,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.9 2001-01-03 11:40:56 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.10 2001-01-08 09:44:55 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/01/03 11:40:56  mib
+      support for OLE objects in XML files
+
       Revision 1.8  2000/12/06 08:39:34  mib
       #81388#: Content stream now is called Content.xml
 

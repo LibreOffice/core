@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,10 +167,9 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
              const Reference< XDocumentHandler > & rHandler,
              const Reference< XIndexContainer > & rEmbeddedGrfObjs,
              sal_Bool bExpWholeDoc, sal_Bool bExpFirstTableOnly,
-             sal_Bool bShowProg, SvStorage *pPkg ) :
+             sal_Bool bShowProg ) :
     SvXMLExport( rFileName, rHandler, rModel, rEmbeddedGrfObjs,
                  SW_MOD()->GetMetric( rPaM.GetDoc()->IsHTMLMode() ) ),
-    pDoc( rPaM.GetDoc() ),
 #ifdef XML_CORE_API
     pCurPaM( 0 ),
     pOrigPaM( &rPaM ),
@@ -182,9 +181,9 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
     bExportFirstTableOnly( bExpFirstTableOnly ),
     bShowProgress( bShowProg ),
     sNumberFormat(RTL_CONSTASCII_USTRINGPARAM("NumberFormat")),
-    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell")),
-    xPackage( pPkg )
+    sCell(RTL_CONSTASCII_USTRINGPARAM("Cell"))
 {
+    SwDoc *pDoc = rPaM.GetDoc();
     const SfxPoolItem* pItem;
     const SfxItemPool& rPool = pDoc->GetAttrPool();
     sal_uInt16 nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
@@ -229,17 +228,11 @@ SwXMLExport::SwXMLExport( const Reference< XModel >& rModel, SwPaM& rPaM,
 
     // Update doc stat, so that correct values are exported and
     // the progress works correctly.
-    SwDocStat aDocStat( GetDoc().GetDocStat() );
+    SwDocStat aDocStat( pDoc->GetDocStat() );
     if( aDocStat.bModified )
-        GetDoc().UpdateDocStat( aDocStat
-#if SUPD < 614
-                 ,0
-#endif
-                );
+        pDoc->UpdateDocStat( aDocStat );
     if( bShowProgress )
     {
-//      ::StartProgress( STR_STATSTR_W4WWRITE, 0, pDoc->GetNodes().Count(),
-//                       pDoc->GetDocShell() );
         nContentProgressStart = (sal_Int32)aDocStat.nPara / 2;
         ProgressBarHelper *pProgress = GetProgressBarHelper();
         pProgress->SetReference( nContentProgressStart + 2*aDocStat.nPara );
@@ -268,9 +261,6 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
 
 __EXPORT SwXMLExport::~SwXMLExport()
 {
-//  if( bShowProgress )
-//      ::EndProgress( pDoc->GetDocShell() );
-
 #ifdef XML_CORE_API
     if( pCurPaM )
     {
@@ -369,8 +359,6 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         pCurPaM->GetPoint()->nNode++;   // next node
 
         sal_uInt32 nPos = pCurPaM->GetPoint()->nNode.GetIndex();
-//      if( bShowProgress )
-//          ::SetProgressState( nPos, pDoc->GetDocShell() );
 
         // if not everything should be exported, the WriteAll flag must be
         // set for all but the first and last node anyway.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-05 09:58:11 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,11 +69,27 @@
 #include "hintids.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_TEXT_XTEXTDOCUMENT_HPP_
+#include <com/sun/star/text/XTextDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
+#include <com/sun/star/text/XText.hpp>
+#endif
 #ifndef _XMLOFF_XMLFONTAUTOSTYLEPOOL_HXX
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _UNOOBJ_HXX
+#include <unoobj.hxx>
 #endif
 #ifndef _DOC_HXX //autogen wg. SwDoc
 #include <doc.hxx>
@@ -83,6 +99,9 @@
 #include <xmlexp.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::text;
 
 class SwXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
@@ -98,7 +117,21 @@ SwXMLFontAutoStylePool_Impl::SwXMLFontAutoStylePool_Impl(
 {
     sal_uInt16 aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
                                 RES_CHRATR_CTL_FONT };
-    const SfxItemPool& rPool = rExport.GetDoc().GetAttrPool();
+
+    Reference < XTextDocument > xTextDoc( rExport.GetModel(), UNO_QUERY );
+    Reference < XText > xText = xTextDoc->getText();
+    Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
+    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    if( !xTextTunnel.is() )
+        return;
+
+    SwXText *pText = (SwXText *)xTextTunnel->getSomething(
+                                        SwXText::getUnoTunnelId() );
+    ASSERT( pText, "SwXText missing" );
+    if( !pText )
+        return;
+
+    const SfxItemPool& rPool = pText->GetDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
     for( sal_uInt16 i=0; i<3; i++ )
     {

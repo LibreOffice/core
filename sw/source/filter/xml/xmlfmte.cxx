@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:40:56 $
+ *  last change: $Author: mib $ $Date: 2001-01-08 09:44:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, const char *pFamily )
 
 void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 {
+    SvXMLExport::_ExportStyles( bUsed );
     GetTextParagraphExport()->exportTextStyles( bUsed );
 }
 
