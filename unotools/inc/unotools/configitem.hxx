@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:41:45 $
+ *  last change: $Author: jb $ $Date: 2001-07-10 11:12:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,16 @@ namespace utl
 #define CONFIG_MODE_ALL_LOCALES         0x02
 #define CONFIG_MODE_RELEASE_TREE        0x04
 
+    enum  ConfigNameFormat
+    {
+        CONFIG_NAME_PLAINTEXT_NAME, // unescaped local node name, for user display etc.
+        CONFIG_NAME_LOCAL_NAME,     // local node name, for use in XNameAccess etc. ("Item", "Q & A")
+        CONFIG_NAME_LOCAL_PATH,     // one-level relative path, for use when building pathes etc.  ("Item", "Typ['Q &amp; A']")
+        CONFIG_NAME_FULL_PATH,       // full absolute path. ("/org.openoffice.Sample/Group/Item", "/org.openoffice.Sample/Set/Typ['Q &amp; A']")
+
+        CONFIG_NAME_DEFAULT = CONFIG_NAME_LOCAL_PATH // default format
+    };
+
     class ConfigChangeListener_Impl;
     class ConfigManager;
     struct ConfigItem_Impl;
@@ -164,9 +174,13 @@ namespace utl
                                         sal_Bool bEnableInternalNotification = sal_False);
 #endif
             sal_Bool                IsInternalNotification()const {return IsInValueChange();}
-            //returns all members of a node
+
+            //returns all members of a node in a specific format
             com::sun::star::uno::Sequence< rtl::OUString >
                                     GetNodeNames(const rtl::OUString& rNode);
+            //returns all members of a node in a specific format
+            com::sun::star::uno::Sequence< rtl::OUString >
+                                    GetNodeNames(const rtl::OUString& rNode, ConfigNameFormat eFormat);
             // remove all members of a set
             sal_Bool                ClearNodeSet(const rtl::OUString& rNode);
             // remove selected members of a set

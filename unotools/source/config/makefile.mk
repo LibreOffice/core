@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cd $ $Date: 2001-07-06 07:19:18 $
+#   last change: $Author: jb $ $Date: 2001-07-10 11:13:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings common for the whole project -----
 
 #UNOTYPES=
+
+UNOTYPES+= com.sun.star.configuration.XTemplateContainer
+
 #.INCLUDE : $(PRJINC)$/unotools$/unotools.mk
 
 # --- Settings ----------------------------------
@@ -79,10 +82,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Types -------------------------------------
 
 
-#UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 
-#UNOUCROUT=$(OUT)$/inc
+UNOUCROUT=$(OUT)$/inc
 #INCPRE+=$(UNOUCROUT)
 
 # --- Types -------------------------------------
@@ -97,6 +100,7 @@ SLOFILES=\
         $(SLO)$/confignode.obj \
         $(SLO)$/configitem.obj \
         $(SLO)$/configmgr.obj  \
+        $(SLO)$/configpathes.obj  \
         $(SLO)$/bootstrap.obj
 
 # --- Targets ----------------------------------
