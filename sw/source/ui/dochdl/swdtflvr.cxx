@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dvo $ $Date: 2002-05-27 13:28:21 $
+ *  last change: $Author: dvo $ $Date: 2002-05-30 12:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,6 +399,12 @@ SwTransferable::~SwTransferable()
 
     pWrtShell = 0;
 
+    // dvo 2002-05-30, #99239#: release reference to the document so that
+    // aDocShellRef will delete it (if aDocShellRef is set). Otherwise, the OLE
+    // nodes keep references to their sub-storage when the storage is already
+    // dead.
+    delete pClpDocFac;
+
     //JP 22.04.95: erst schliessen, dann kann die Ref. auch gecleared werden,
     //              so das die DocShell auch tatsaechlich geloescht wird!
     if( aDocShellRef.Is() )
@@ -407,7 +413,6 @@ SwTransferable::~SwTransferable()
         SwDocShell* pDocSh = (SwDocShell*)pObj;
         pDocSh->DoClose();
     }
-
     aDocShellRef.Clear();
 
     SwModule* pMod = SW_MOD();
@@ -420,10 +425,10 @@ SwTransferable::~SwTransferable()
 
     delete pClpGraphic;
     delete pClpBitmap;
-    delete pClpDocFac;
     delete pImageMap;
     delete pTargetURL;
     delete pBkmk;
+
 
     eBufferType = TRNSFR_NONE;
 
