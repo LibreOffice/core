@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 12:14:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:50:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifdef PCH
 #include "filt_pch.hxx"
@@ -286,7 +285,7 @@ ULONG XclMsodrawinggroup::GetLen() const
 // --- class XclMsodrawing --------------------------------------
 
 XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, UINT32 nInitialSize ) :
-    XclMsodrawing_Base( *rRoot.mpRD->pEscher, nInitialSize )
+    XclMsodrawing_Base( *rRoot.GetOldRoot().pEscher, nInitialSize )
 {
     if ( nEscherType )
     {
@@ -406,12 +405,12 @@ XclObj::XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher ) 
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
-    bFirstOnSheet( rRoot.mpRD->pObjRecs->Count() == 0 ),
+    bFirstOnSheet( rRoot.GetOldRoot().pObjRecs->Count() == 0 ),
     mbOwnEscher( bOwnEscher )
 {
     //! first object continues the first MSODRAWING record
     if ( bFirstOnSheet )
-        pMsodrawing = rRoot.mpRD->pObjRecs->GetMsodrawingPerSheet();
+        pMsodrawing = rRoot.GetOldRoot().pObjRecs->GetMsodrawingPerSheet();
     else
         pMsodrawing = new XclMsodrawing( rRoot );
 }
@@ -1032,154 +1031,6 @@ ULONG ExcBundlesheet8::GetLen() const
 }
 
 
-
-// --- class ExcWindow18 ---------------------------------------------
-
-XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot ) :
-    XclExpRecord( EXC_ID_WINDOW1, 10 ),
-    mnActiveTab( 0 ),
-    mnFirstVisTab( 0 ),
-    mnSelectedTabs( 1 )
-{
-    XclExpTabInfo rTabInfo = rRoot.GetTabInfo();
-    mnActiveTab = rTabInfo.GetXclActiveTab();
-    mnFirstVisTab = rTabInfo.GetXclFirstVisTab();
-    mnSelectedTabs = rTabInfo.GetXclSelectedCount();
-}
-
-void XclExpWindow1::WriteBody( XclExpStream& rStrm )
-{
-    rStrm   << sal_uInt16( 0x01E0 )
-            << sal_uInt16( 0x005A )
-            << sal_uInt16( 0x3FCF )
-            << sal_uInt16( 0x2A4E )
-            << EXC_WIN1_DEFAULTFLAGS
-            << mnActiveTab
-            << mnFirstVisTab
-            << mnSelectedTabs
-            << EXC_WIN1_TABBARRATIO;
-}
-
-
-// --- class ExcPane8 ------------------------------------------------
-
-ExcPane8::ExcPane8( const ScExtTabOptions& rTabOptions ) :
-    nSplitX( rTabOptions.nSplitX ),
-    nSplitY( rTabOptions.nSplitY ),
-    nLeftCol( rTabOptions.nLeftSplitCol ),
-    nTopRow( rTabOptions.nTopSplitRow ),
-    nActivePane( rTabOptions.nActPane )
-{
-    // #i20671# right/bottom pane is active if panes are frozen, regardless of cursor pos
-    if( rTabOptions.bFrozen )
-    {
-        if( (nSplitX != 0) && (nSplitY != 0) )
-            nActivePane = 0;
-        else if( nSplitY == 0 )
-            nActivePane = 1;
-        else if( nSplitX == 0 )
-            nActivePane = 2;
-    }
-}
-
-
-void ExcPane8::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << nSplitX << nSplitY << nTopRow << nLeftCol << nActivePane;
-}
-
-
-UINT16 ExcPane8::GetNum() const
-{
-    return 0x0041;
-}
-
-
-ULONG ExcPane8::GetLen() const
-{
-    return 10;
-}
-
-
-// --- class XclExpWindow28 ---------------------------------------------
-
-XclExpWindow28::XclExpWindow28( const XclExpRoot& rRoot, SCTAB nScTab ) :
-    XclExpRecord( 0x023E, 18 ),
-    XclExpRoot( rRoot ),
-    pPaneRec( NULL ),
-    nFlags( 0 ),
-    nLeftCol( 0 ),
-    nTopRow( 0 ),
-    nActiveCol( 0 ),
-    nActiveRow( 0 ),
-    bHorSplit( FALSE ),
-    bVertSplit( FALSE )
-{
-    const XclExpTabInfo& rTabInfo = GetTabInfo();
-    const ScViewOptions& rViewOpt = GetDoc().GetViewOptions();
-    ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
-
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWFORMULAS, rViewOpt.GetOption( VOPT_FORMULAS ) );
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWGRID,     rViewOpt.GetOption( VOPT_GRID ) );
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWHEADINGS, rViewOpt.GetOption( VOPT_HEADER ) );
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SHOWZEROS,    rViewOpt.GetOption( VOPT_NULLVALS ) );
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_OUTLINE,      rViewOpt.GetOption( VOPT_OUTLINER ) );
-
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_SELECTED,     rTabInfo.IsSelectedTab( nScTab ) );
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DISPLAYED,    rTabInfo.IsActiveTab( nScTab ) );
-
-    ::set_flag( nFlags, (sal_uInt16)EXC_WIN2_DEFAULTCOLOR, !rExtDocOpt.pGridCol );
-
-    nGridColorSer = rExtDocOpt.pGridCol ?
-        GetPalette().InsertColor( *rExtDocOpt.pGridCol, xlColorGrid ) :
-        XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
-
-    if( const ScExtTabOptions* pExtTabOpt = rExtDocOpt.GetExtTabOptions( nScTab ) )
-    {
-        ::set_flag( nFlags, static_cast< sal_uInt16 >( EXC_WIN2_FROZEN | EXC_WIN2_FROZENNOSPLIT ), pExtTabOpt->bFrozen );
-        nLeftCol = pExtTabOpt->nLeftCol;
-        nTopRow = pExtTabOpt->nTopRow;
-        nActiveCol = static_cast< sal_uInt16 >( pExtTabOpt->aLastSel.aStart.Col() );
-        nActiveRow = static_cast< sal_uInt16 >( pExtTabOpt->aLastSel.aStart.Row() );
-        bHorSplit = (pExtTabOpt->nSplitX != 0);
-        bVertSplit = (pExtTabOpt->nSplitY != 0);
-        if( bHorSplit || bVertSplit )
-            pPaneRec = new ExcPane8( *pExtTabOpt );
-    }
-
-    // #106948# RTL layout
-    if( GetDoc().IsLayoutRTL( nScTab ) )
-        nFlags |= EXC_WIN2_MIRRORED;
-}
-
-XclExpWindow28::~XclExpWindow28()
-{
-    delete pPaneRec;
-}
-
-void XclExpWindow28::WriteBody( XclExpStream& rStrm )
-{
-    rStrm   << nFlags
-            << nTopRow
-            << nLeftCol
-            << (UINT32) GetPalette().GetColorIndex( nGridColorSer )
-            << (UINT32) 0
-            << (UINT32) 0;
-}
-
-void XclExpWindow28::Save( XclExpStream& rStrm )
-{
-    XclExpRecord::Save( rStrm );
-    if( pPaneRec )
-        pPaneRec->Save( rStrm );
-    ExcSelection( nActiveCol, nActiveRow, 3 ).Save( rStrm );
-    if( bHorSplit )
-        ExcSelection( nActiveCol, nActiveRow, 1 ).Save( rStrm );
-    if( bVertSplit )
-        ExcSelection( nActiveCol, nActiveRow, 2 ).Save( rStrm );
-    if( bHorSplit && bVertSplit )
-        ExcSelection( nActiveCol, nActiveRow, 0 ).Save( rStrm );
-}
 
 // --- class XclObproj -----------------------------------------------
 
