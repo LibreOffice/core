@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2003-09-26 07:54:57 $
+ *  last change: $Author: aw $ $Date: 2003-10-28 11:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _FTOOLS_HXX
-#include <ftools.hxx>
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/inc/numeric/ftools.hxx>
 #endif
 
 #include <math.h>
@@ -134,7 +134,7 @@ public:
             const double fDefault(implGetDefaultValue((RowSize - 1), a));
             const double fLineValue(mpLine->get(a));
 
-            if(!fTools::equal(fDefault, fLineValue))
+            if(!::basegfx::numeric::fTools::equal(fDefault, fLineValue))
             {
                 return false;
             }
@@ -221,7 +221,7 @@ public:
         {
             const double fDefault(implGetDefaultValue((RowSize - 1), nColumn));
 
-            if(!fTools::equal(fDefault, rValue))
+            if(!::basegfx::numeric::fTools::equal(fDefault, rValue))
             {
                 mpLine = new ImplMatLine< RowSize >((RowSize - 1), 0L);
                 mpLine->set(nColumn, rValue);
@@ -240,7 +240,7 @@ public:
                 const double fDefault(implGetDefaultValue((RowSize - 1), a));
                 const double fLineValue(mpLine->get(a));
 
-                if(!fTools::equal(fDefault, fLineValue))
+                if(!::basegfx::numeric::fTools::equal(fDefault, fLineValue))
                 {
                     bNecessary = true;
                 }
@@ -273,13 +273,13 @@ public:
             {
                 double fTemp(fabs(get(a, b)));
 
-                if(fTools::more(fTemp, fBig))
+                if(::basegfx::numeric::fTools::more(fTemp, fBig))
                 {
                     fBig = fTemp;
                 }
             }
 
-            if(fTools::equalZero(fBig))
+            if(::basegfx::numeric::fTools::equalZero(fBig))
             {
                 return false;
             }
@@ -316,7 +316,7 @@ public:
                 set(a, b, fSum);
                 fDum = fStorage[a] * fabs(fSum);
 
-                if(fTools::moreOrEqual(fDum, fBig))
+                if(::basegfx::numeric::fTools::moreOrEqual(fDum, fBig))
                 {
                     fBig = fDum;
                     nAMax = a;
@@ -341,7 +341,7 @@ public:
             // here the failure of precision occurs
             const double fValBB(fabs(get(b, b)));
 
-            if(fTools::equalZero(fValBB))
+            if(::basegfx::numeric::fTools::equalZero(fValBB))
             {
                 return false;
             }
@@ -379,7 +379,7 @@ public:
                     fSum -= get(a, b) * fRow[b];
                 }
             }
-            else if(!fTools::equalZero(fSum))
+            else if(!::basegfx::numeric::fTools::equalZero(fSum))
             {
                 a2 = a;
             }
@@ -398,7 +398,7 @@ public:
 
             const double fValueAA(get(a, a));
 
-            if(!fTools::equalZero(fValueAA))
+            if(!::basegfx::numeric::fTools::equalZero(fValueAA))
             {
                 fRow[a] = fSum / get(a, a);
             }
@@ -417,7 +417,7 @@ public:
                 const double fDefault(implGetDefaultValue(a, b));
                 const double fValueAB(get(a, b));
 
-                if(!fTools::equal(fDefault, fValueAB))
+                if(!::basegfx::numeric::fTools::equal(fDefault, fValueAB))
                 {
                     return false;
                 }
@@ -443,14 +443,14 @@ public:
 
         const double fHomValue(get((RowSize - 1), (RowSize - 1)));
 
-        if(fTools::equalZero(fHomValue))
+        if(::basegfx::numeric::fTools::equalZero(fHomValue))
         {
             return true;
         }
 
         const double fOne(1.0);
 
-        if(fTools::equal(fOne, fHomValue))
+        if(::basegfx::numeric::fTools::equal(fOne, fHomValue))
         {
             return true;
         }
@@ -629,7 +629,7 @@ public:
                 const double fValueA(get(a, b));
                 const double fValueB(rMat.get(a, b));
 
-                if(!fTools::equal(fValueA, fValueB))
+                if(!::basegfx::numeric::fTools::equal(fValueA, fValueB))
                 {
                     return false;
                 }

@@ -2,7 +2,12 @@ fx	basegfx	:	sal NULL
 fx	basegfx									usr1	-	all	fx_mkout NULL
 fx	basegfx\inc								get		-	all	fx_inc NULL
 fx	basegfx\prj								get		-	all	fx_prj NULL
-fx	basegfx\source\base1d					nmake	-	all	fx_base1d NULL
-fx	basegfx\source\base2d					nmake	-	all	fx_base2d NULL
-fx	basegfx\source\base3d					nmake	-	all	fx_base3d NULL
-fx	basegfx\util							nmake	-	all	fx_util fx_base1d fx_base2d fx_base3d NULL
+fx	basegfx\source\curve					nmake	-	all	fx_curve NULL
+fx	basegfx\source\matrix					nmake	-	all	fx_matrix NULL
+fx	basegfx\source\numeric					nmake	-	all	fx_numeric NULL
+fx	basegfx\source\point					nmake	-	all	fx_point NULL
+fx	basegfx\source\polygon					nmake	-	all	fx_polygon NULL
+fx	basegfx\source\range					nmake	-	all	fx_range NULL
+fx	basegfx\source\tuple					nmake	-	all	fx_tuple NULL
+fx	basegfx\source\vector					nmake	-	all	fx_vector NULL
+fx	basegfx\util							nmake	-	all	fx_util fx_curve fx_matrix fx_numeric fx_point fx_polygon fx_range fx_tuple fx_vector NULL

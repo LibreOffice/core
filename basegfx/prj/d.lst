@@ -7,24 +7,15 @@
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 
 mkdir: %_DEST%\inc%_EXT%\basegfx
+mkdir: %_DEST%\inc%_EXT%\basegfx\inc
 
-hedabu: ..\inc\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\b1drange.hxx
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\curve
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\matrix
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\numeric
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\point
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\polygon
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\range
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\tuple
+#mkdir: %_DEST%\inc%_EXT%\basegfx\inc\vector
+#hedabu: ..\inc\base1d\b1drange.hxx %_DEST%\inc%_EXT%\basegfx\inc\base1d\b1drange.hxx
 
-hedabu: ..\inc\b2drange.hxx %_DEST%\inc%_EXT%\basegfx\b2drange.hxx
-hedabu: ..\inc\b2dtuple.hxx %_DEST%\inc%_EXT%\basegfx\b2dtuple.hxx
-hedabu: ..\inc\b2dvector.hxx %_DEST%\inc%_EXT%\basegfx\b2dvector.hxx
-hedabu: ..\inc\b2dpoint.hxx %_DEST%\inc%_EXT%\basegfx\b2dpoint.hxx
-hedabu: ..\inc\b2dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\b2dhompoint.hxx
-hedabu: ..\inc\b2dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\b2dhommatrix.hxx
-hedabu: ..\inc\b2dpolygon.hxx %_DEST%\inc%_EXT%\basegfx\b2dpolygon.hxx
-hedabu: ..\inc\b2dpolygontools.hxx %_DEST%\inc%_EXT%\basegfx\b2dpolygontools.hxx
-hedabu: ..\inc\b2dquadraticbezier.hxx %_DEST%\inc%_EXT%\basegfx\b2dquadraticbezier.hxx
-hedabu: ..\inc\b2dcubicbezier.hxx %_DEST%\inc%_EXT%\basegfx\b2dcubicbezier.hxx
-hedabu: ..\inc\b2dpolypolygon.hxx %_DEST%\inc%_EXT%\basegfx\b2dpolypolygon.hxx
-
-hedabu: ..\inc\b3drange.hxx %_DEST%\inc%_EXT%\basegfx\b3drange.hxx
-hedabu: ..\inc\b3dtuple.hxx %_DEST%\inc%_EXT%\basegfx\b3dtuple.hxx
-hedabu: ..\inc\b3dvector.hxx %_DEST%\inc%_EXT%\basegfx\b3dvector.hxx
-hedabu: ..\inc\b3dpoint.hxx %_DEST%\inc%_EXT%\basegfx\b3dpoint.hxx
-hedabu: ..\inc\b3dhompoint.hxx %_DEST%\inc%_EXT%\basegfx\b3dhompoint.hxx
-hedabu: ..\inc\b3dhommatrix.hxx %_DEST%\inc%_EXT%\basegfx\b3dhommatrix.hxx
