@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2002-04-23 14:30:19 $
+ *  last change: $Author: jsc $ $Date: 2002-05-24 13:16:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -493,6 +493,14 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
     pReg->saveKey(pNewKey, tmpName, sal_False, sal_False);
     */
     _ret = pKey->getRegistry()->loadKey(pNewKey, regFileName, bWarnings, bReport);
+
+    if (_ret == REG_MERGE_ERROR ||
+        (_ret == REG_MERGE_CONFLICT && bWarnings))
+    {
+        pKey->closeKey(pNewKey);
+        return _ret;
+    }
+
     /*
     if (_ret)
     {
