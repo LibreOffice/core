@@ -2,9 +2,9 @@
  *
  *  $RCSfile: showcols.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:21:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:08:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,7 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
     OutputSize = TRUE;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 200, 117 );
-    Text = "Spalten anzeigen";
-    Text [ ENGLISH ] = "Spalten anzeigen";
+    Text [ de ] = "Spalten anzeigen";
     Moveable = TRUE;
     Closeable = TRUE;
 
@@ -77,35 +76,8 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 188, 30 );
         WordBreak = TRUE;
-        Text = "Folgende Spalten sind augenblicklich versteckt. Markieren Sie bitte die wieder einzublendenden und wählen Sie OK";
-        Text [ ENGLISH ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
-        Text[ english_us ] = "The following columns are currently hidden. Please mark the fields you want to show and choose OK.";
-        Text[ portuguese ] = "As seguintes colunas encontram-se ocultas. Seleccione as que deseja ver novamente e clique em OK.";
-        Text[ russian ] = "Ñëåäóşùèå ñòîëáöû ñïğÿòàíû. Âûäåëèòå ñòîëáöû, êîòîğûå íåîáõîäèìî ïîêàçàòü è íàæìèòå Äà.";
-        Text[ greek ] = "Ïé áêüëïõèåò óôŞëåò åßíáé êñõöİò ğñïò ôï ğáñüí. Ğáñáêáëş åğéëİîôå áõôİò ğïõ åğéèõìåßôå íá åìöáíéóôïıí êáé ğáôŞóôå óôç óõíİ÷åéá ôï 'OK'";
-        Text[ dutch ] = "De volgende kolommen zijn momenteel verborgen. Markeer de kolommen die u weer zichtbaar wilt maken en klik op OK.";
-        Text[ french ] = "Les colonnes suivantes sont cachées pour l'instant. Sélectionnez celles que vous souhaitez faire afficher et cliquez sur OK.";
-        Text[ spanish ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
-        Text[ italian ] = "Le seguenti colonne sono momentaneamente nascoste. Selezionate le colonne da mostrare si nuovo e confermate il comando con OK.";
-        Text[ danish ] = "Følgende kolonner er i øjeblikket skjult. Marker dem, som du igen vil vise, og tryk på OK.";
-        Text[ swedish ] = "Följande kolumner är dolda för närvarande. Markera kolumnerna som skall visas igen och välj OK.";
-        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ obecnie ukryte. Zaznacz pola, które maj¹ zostaæ wyœwietlone, po czym kliknij przycisk OK.";
-        Text[ portuguese_brazilian ] = "As seguintes colunas encontram-se ocultas. Selecione as que deseja ver novamente e clique em OK.";
-        Text[ japanese ] = "æ¬¡ã®åˆ—ã¯ç¾åœ¨éš ã•ã‚Œã¦ã„ã¾ã™ã€‚è¡¨ç¤ºã™ã¹ãåˆ—ã‚’é¸æŠã—ã¦OKã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "ë‹¤ìŒ ì—´ì€ í˜„ì¬ ìˆ¨ê²¨ì§„ ìƒíƒœì…ë‹ˆë‹¤. ë‹¤ì‹œ í‘œì‹œí•˜ë ¤ëŠ” ì—´ì„ ì„ íƒí•œ ë‹¤ìŒ [í™•ì¸] ë²„íŠ¼ì„ í´ë¦­í•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "å·²ç»éšå…¥ä»¥ä¸‹çš„åˆ—ã€‚è¯·é€‰ä¸­è¦æ˜¾ç¤ºçš„åˆ—åŒºåŸŸ,ç„¶åç‚¹å‡»ç¡®å®šã€‚";
-        Text[ chinese_traditional ] = "ä»¥ä¸‹çš„æ¬„æ˜¯éš±å…¥çš„ã€‚è«‹æ‚¨é¸å–è¦é¡¯ç¤ºçš„æ¬„ï¼Œç„¶åæŒ‰ä¸€ä¸‹ç¢ºå®šã€‚";
-        Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
-        Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
-        Text[ catalan ] = "Les següents columnes estan ocultes. Seleccioneu les que s'han de mostrar i feu clic sobre Accepta.";
-        Text[ finnish ] = "Seuraavat sarakkeet on piilotettu. Merkitse näytettävät kentät ja valitse sitten OK.";
-        Text[ thai ] = "à¸›à¸±à¸ˆà¸ˆà¸¸à¸šà¸±à¸™à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œà¸™à¸µà¹‰à¸–à¸¹à¸à¸‹à¹ˆà¸­à¸™à¸­à¸¢à¸¹à¹ˆ à¸à¸£à¸¸à¸“à¸²à¸—à¸³à¹€à¸„à¸£à¸·à¹ˆà¸­à¸‡à¸«à¸¡à¸²à¸¢à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¹à¸ªà¸”à¸‡à¹à¸¥à¸°à¹€à¸¥à¸·à¸­à¸à¸•à¸à¸¥à¸‡";
-        Text[ czech ] = "NÃ¡sledujÃ­cÃ­ sloupce jsou skryty. ProsÃ­m oznaÄte pole, kterÃ© chcete zobrazit a stisknÄ›te OK.";
-        Text[ hebrew ] = "â€®×”×¢××•×“×•×ª ×”×‘××•×ª ××•×¡×ª×¨×•×ª ×›×¢×ª. × × ×œ×¦×™×™×Ÿ ××ª ×”×©×“×•×ª ×©×™×© ×œ×”×¦×™×’× ×•×œ×œ×—×•×¥ OK.â€¬";
-        Text[ hindi ] = "à¤¨à¤¿à¤®à¥à¤¨à¤²à¤¿à¤–à¤¿à¤¤ à¤¸à¥à¤¤à¤‚à¤­à¥‹ à¤•à¥‹ à¤…à¤­à¥€ à¤›à¤¿à¤ªà¤¾à¤•à¤° à¤°à¤–à¤¾ à¤¹à¥ˆ à¥¤ à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¦à¤¿à¤–à¤¾à¤¨à¥‡ à¤µà¤¾à¤²à¥‡ à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤•à¥‹ à¤†à¤ª à¤šà¤¿à¤¹à¥à¤¨à¤¿à¤¤ à¤•à¤°à¥‹ à¤”à¤° à¤ à¥€à¤• à¤•à¥‹ à¤šà¥à¤¨à¥‹ à¥¤";
-        Text[ slovak ] = "NasledujÃºce stÄºpce sÃº momentÃ¡lne skrytÃ©. ProsÃ­m oznaÄte pole, ktorÃ© chcete zobraziÅ¥ a stisnite OK.";
-        Text[ hungarian ] = "Az alÃ¡bbi mezÅ‘k jelenleg rejtettek. JelÃ¶lje meg a lÃ¡tni kÃ­vÃ¡nt mezÅ‘ket, Ã©s kattintson az OK gombra.";
-        Text[ slovenian ] = "Nadaljnji stolpci so trenutno skriti. OznaÄite polja, ki jih Å¾elite pokazati, in izberite OK";
+        Text [ de ] = "Folgende Spalten sind augenblicklich versteckt. Markieren Sie bitte die wieder einzublendenden und wählen Sie OK";
+        Text [ en-US ] = "The following columns are currently hidden. Please mark the fields you want to show and choose OK.";
     };
 
     ListBox 1
@@ -133,34 +105,8 @@ ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text[ english_us ] = "Show columns";
-    Text[ portuguese ] = "Mostrar colunas";
-    Text[ russian ] = "Ïîêàçàòü ñòîëáöû";
-    Text[ greek ] = "ÅìöÜíéóç óôçëşí";
-    Text[ dutch ] = "Kolommen weergeven";
-    Text[ french ] = "Afficher les colonnes";
-    Text[ spanish ] = "Mostrar columnas";
-    Text[ italian ] = "Mostra colonne";
-    Text[ danish ] = "Vis kolonner";
-    Text[ swedish ] = "Visa kolumner";
-    Text[ polish ] = "Poka¿ kolumny";
-    Text[ portuguese_brazilian ] = "Mostrar colunas";
-    Text[ japanese ] = "åˆ—ã‚’è¡¨ç¤ºã™ã‚‹";
-    Text[ korean ] = "ì—´ í‘œì‹œ";
-    Text[ chinese_simplified ] = "æ˜¾ç¤ºåˆ—";
-    Text[ chinese_traditional ] = "é¡¯ç¤ºæ¬„";
-    Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
-    Text[ turkish ] = "Sütunları görüntüle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Mostra les columnes";
-    Text[ finnish ] = "Näytä sarakkeet";
-    Text[ thai ] = "à¹à¸ªà¸”à¸‡à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
-    Text[ czech ] = "Zobrazit sloupce";
-    Text[ hebrew ] = "â€®×”×¦×’×ª ×¢××•×“×•×ªâ€¬";
-    Text[ hindi ] = "à¤¸à¥à¤¤à¤‚à¤­à¥‹ à¤•à¥‹ à¤¦à¤¿à¤–à¤¾à¤“";
-    Text[ slovak ] = "ZobraziÅ¥ stÄºpce";
-    Text[ hungarian ] = "Oszlopok megjelenÃ­tÃ©se";
-    Text[ slovenian ] = "PokaÅ¾i stolpce";
+    Text [ en-US ] = "Show columns";
+    Text [ x-comment ] = " ";
 };
 
 
