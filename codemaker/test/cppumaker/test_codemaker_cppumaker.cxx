@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_codemaker_cppumaker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 14:46:37 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 10:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,8 @@
 #include "test/codemaker/cppumaker/Struct.hpp"
 #include "test/codemaker/cppumaker/StructUsage.hpp"
 #include "test/codemaker/cppumaker/AlignmentDerivedStruct.hpp"
+#include "test/codemaker/cppumaker/TestException1.hpp"
+#include "test/codemaker/cppumaker/TestException2.hpp"
 
 #include "boost/scoped_array.hpp"
 #include "com/sun/star/uno/Any.hxx"
@@ -240,6 +242,7 @@
 #include "rtl/ustring.hxx"
 
 #include <cstddef>
+#include <iostream>
 
 namespace {
 
@@ -249,9 +252,12 @@ public:
 
     void testPolyCharStruct();
 
+    void testExceptions();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testBigStruct);
     CPPUNIT_TEST(testPolyCharStruct);
+    CPPUNIT_TEST(testExceptions);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -315,6 +321,48 @@ void Test::testPolyCharStruct() {
         (com::sun::star::uno::makeAny(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
+}
+
+namespace {
+
+bool operator ==(
+    test::codemaker::cppumaker::TestException1 const & e1,
+    test::codemaker::cppumaker::TestException1 const & e2)
+{
+    return e1.Message == e2.Message && e1.Context == e2.Context
+        && e1.m1 == e2.m1 && e1.m2 == e2.m2 && e1.m3 == e2.m3
+        && e1.m4.member1 == e2.m4.member1 && e1.m4.member2 == e2.m4.member2;
+}
+
+std::ostream & operator <<(
+    std::ostream & out, com::sun::star::uno::Exception const &)
+{
+    return out << "<UNO exception>";
+}
+
+}
+
+void Test::testExceptions() {
+    test::codemaker::cppumaker::TestException1 e11(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
+        com::sun::star::uno::makeAny(123.0),
+        test::codemaker::cppumaker::HelperEnum_ONE,
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0));
+    test::codemaker::cppumaker::TestException1 e12(e11);
+    CPPUNIT_ASSERT_EQUAL(e11, e12);
+    test::codemaker::cppumaker::TestException1 e13;
+    e13 = e11;
+    CPPUNIT_ASSERT_EQUAL(e11, e13);
+    test::codemaker::cppumaker::TestException2 e21(
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("abc")), 0, 1,
+        com::sun::star::uno::makeAny(123.0),
+        test::codemaker::cppumaker::HelperEnum_ONE,
+        test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, 0));
+    test::codemaker::cppumaker::TestException2 e22(e21);
+    CPPUNIT_ASSERT_EQUAL(e21, e22);
+    test::codemaker::cppumaker::TestException2 e23;
+    e23 = e21;
+    CPPUNIT_ASSERT_EQUAL(e21, e23);
 }
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
