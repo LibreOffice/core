@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_writer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-04-17 15:49:00 $
+ *  last change: $Author: jbu $ $Date: 2001-04-18 07:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,12 +191,28 @@ void OWriterThread::sendEmptyMessage()
 void OWriterThread::insertReleaseRemoteCall(
     rtl_uString *pOid,typelib_TypeDescriptionReference *pTypeRef)
 {
-    ::osl::MutexGuard guard( m_releaseCallMutex );
+    {
+        ::osl::MutexGuard guard( m_releaseCallMutex );
 
-    struct RemoteReleaseCall call;
-    call.sOid = pOid;
-    call.typeInterface = pTypeRef;
-    m_lstReleaseCalls.push_back( call );
+        struct RemoteReleaseCall call;
+        call.sOid = pOid;
+        call.typeInterface = pTypeRef;
+        m_lstReleaseCalls.push_back( call );
+    }
+    {
+        MutexGuard guard( m_pBridgeImpl->m_marshalingMutex );
+        if( m_bInBlockingWait )
+        {
+            m_bInBlockingWait = sal_False;
+            osl_setCondition( m_oslCondition );
+        }
+        else
+        {
+            // ensure, that the writing thread does not enter blocking mode
+              m_bEnterBlockingWait = sal_False;
+        }
+    }
+    fprintf( stderr , "%d\n" , m_lstReleaseCalls.size() );
 }
 
 /* The release calls for doubled interfaces
