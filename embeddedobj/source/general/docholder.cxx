@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-16 13:05:27 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,42 @@ public:
 
 //===========================================================================
 
+static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >& xTargetMenu,
+                            sal_Int32 nTargetIndex,
+                            const uno::Reference< container::XIndexAccess >& xSourceMenu,
+                            sal_Int32 nSourceIndex,
+                            const ::rtl::OUString aContModuleName )
+{
+    sal_Int32 nInd = 0;
+    ::rtl::OUString aModuleIdentPropName( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ) );
+    sal_Bool bModuleNameSet = sal_False;
+
+    uno::Sequence< beans::PropertyValue > aSourceProps;
+    xSourceMenu->getByIndex( nSourceIndex ) >>= aSourceProps;
+    uno::Sequence< beans::PropertyValue > aTargetProps( aSourceProps.getLength() );
+    for ( nInd = 0; nInd < aSourceProps.getLength(); nInd++ )
+    {
+        aTargetProps[nInd].Name = aSourceProps[nInd].Name;
+        if ( aContModuleName.getLength() && aTargetProps[nInd].Name.equals( aModuleIdentPropName ) )
+        {
+            aTargetProps[nInd].Value <<= aContModuleName;
+            bModuleNameSet = sal_True;
+        }
+        else
+            aTargetProps[nInd].Value = aSourceProps[nInd].Value;
+    }
+
+    if ( !bModuleNameSet && aContModuleName.getLength() )
+    {
+        aTargetProps.realloc( nInd + 1 );
+        aTargetProps[nInd].Name = aModuleIdentPropName;
+        aTargetProps[nInd].Value <<= aContModuleName;
+    }
+
+    xTargetMenu->insertByIndex( nTargetIndex, uno::makeAny( aTargetProps ) );
+}
+
+//===========================================================================
 DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_xFactory( xFactory ),
@@ -647,6 +683,7 @@ void DocumentHolder::FindConnectPoints(
 uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
         const uno::Reference< frame::XDispatchProvider >& xContDisp,
+        const ::rtl::OUString& aContModuleName,
         const uno::Reference< container::XIndexAccess >& xOwnMenu,
         const uno::Reference< frame::XDispatchProvider >& xOwnDisp )
     throw ( uno::Exception )
@@ -679,15 +716,19 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
         if ( nOwnPoints[0] == nInd )
         {
             if ( nContPoints[0] >= 0 && nContPoints[0] < xContMenu->getCount() )
-                xMergedMenu->insertByIndex( nInd, xContMenu->getByIndex( nContPoints[0] ) );
+            {
+                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[0], aContModuleName );
+            }
         }
         else if ( nOwnPoints[1] == nInd )
         {
             if ( nContPoints[1] >= 0 && nContPoints[1] < xContMenu->getCount() )
-                xMergedMenu->insertByIndex( nInd, xContMenu->getByIndex( nContPoints[1] ) );
+            {
+                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[1], aContModuleName );
+            }
         }
         else
-            xMergedMenu->insertByIndex( nInd, xOwnMenu->getByIndex( nInd ) );
+            InsertMenu_Impl( xMergedMenu, nInd, xOwnMenu, nInd, ::rtl::OUString() );
     }
 
     return uno::Reference< container::XIndexAccess >( xMergedMenu, uno::UNO_QUERY_THROW );
@@ -696,7 +737,8 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
 //---------------------------------------------------------------------------
 sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xOwnLM,
                                                const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContLM,
-                                            const uno::Reference< frame::XDispatchProvider >& xContDisp )
+                                            const uno::Reference< frame::XDispatchProvider >& xContDisp,
+                                            const ::rtl::OUString& aContModuleName )
 {
     sal_Bool bMenuMerged = sal_False;
     try
@@ -712,7 +754,7 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::sta
         uno::Reference< container::XIndexAccess > xOwnMenu = RetrieveOwnMenu_Impl();
         uno::Reference< frame::XDispatchProvider > xOwnDisp( m_xFrame, uno::UNO_QUERY_THROW );
 
-        uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenuesForInplace( xContMenu, xContDisp, xOwnMenu, xOwnDisp );
+        uno::Reference< container::XIndexAccess > xMergedMenu = MergeMenuesForInplace( xContMenu, xContDisp, aContModuleName, xOwnMenu, xOwnDisp );
         uno::Reference< ::com::sun::star::frame::XMenuBarMergingAcceptor > xMerge( xOwnLM,
                                                                                          uno::UNO_QUERY_THROW );
         bMenuMerged = xMerge->setMergedMenuBar( xMergedMenu );
@@ -724,7 +766,8 @@ sal_Bool DocumentHolder::MergeMenues_Impl( const uno::Reference< ::com::sun::sta
 }
 
 sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::XLayoutManager >& xContainerLM,
-                                 const uno::Reference< frame::XDispatchProvider >& xContainerDP )
+                                 const uno::Reference< frame::XDispatchProvider >& xContainerDP,
+                                 const ::rtl::OUString& aContModuleName )
 {
     sal_Bool bResult = sal_False;
     if ( xContainerLM.is() )
@@ -746,7 +789,7 @@ sal_Bool DocumentHolder::ShowUI( const uno::Reference< ::com::sun::star::frame::
                 m_xCachedDocAreaAcc = xOwnLM->getDockingAreaAcceptor();
                 xOwnLM->setDockingAreaAcceptor( xDocAreaAcc );
 
-                if ( MergeMenues_Impl( xOwnLM, xContainerLM, xContainerDP ) )
+                if ( MergeMenues_Impl( xOwnLM, xContainerLM, xContainerDP, aContModuleName ) )
                 {
                        xContainerLM->setVisible( sal_False );
                        xContainerLM->lock();
