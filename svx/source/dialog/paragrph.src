@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: os $ $Date: 2002-05-27 10:34:59 $
+ *  last change: $Author: rt $ $Date: 2002-05-28 20:25:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1034,11 +1034,15 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Text = "Lin~ks/Oben" ;
         Text [ english_us ] = "~Left/Top" ;
+        Text[ korean ] = "왼쪽/위";
+        Text[ chinese_traditional ] = "向左/向上";
     };
     String ST_RIGHTALIGN_ASIAN
     {
         Text = "Rech~ts/Unten" ;
         Text [ english_us ] = "Righ~t/Bottom" ;
+        Text[ korean ] = "오른쪽/아래";
+        Text[ chinese_traditional ] = "向右/向下";
     };
     FixedText FT_LASTLINE
     {
@@ -1309,7 +1313,7 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ japanese ] = "縦書き";
         Text[ korean ] = "문자 간 사이";
         Text[ chinese_simplified ] = "直式文字方向";
-        Text[ chinese_traditional ] = "直式文字對齊";
+        Text[ chinese_traditional ] = "字元高度";
         Text[ turkish ] = "Vertical text alignment";
         Text[ arabic ] = "Vertical text alignment";
         Text[ catalan ] = "Vertical text alignment";
