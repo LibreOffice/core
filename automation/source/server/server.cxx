@@ -2,9 +2,9 @@
  *
  *  $RCSfile: server.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 17:08:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,11 +229,11 @@ IMPL_LINK( RemoteControlCommunicationManager, SetWinCaption, Timer*, pTimer_ )
         pTimer = NULL;
     }
 
-    if ( StatementList::GetFirstDocWin() )
+    if ( StatementList::GetFirstDocFrame() )
     {
         if ( !aOriginalWinCaption.Len() )
-            aOriginalWinCaption = StatementList::GetFirstDocWin()->GetText();
-        StatementList::GetFirstDocWin()->SetText(String(aOriginalWinCaption).AppendAscii(" TT").Append(aAdditionalWinCaption).AppendAscii("[").Append(UniString::CreateFromInt32(nPortToListen)).AppendAscii("]"));
+            aOriginalWinCaption = StatementList::GetFirstDocFrame()->GetText();
+        StatementList::GetFirstDocFrame()->SetText(String(aOriginalWinCaption).AppendAscii(" TT").Append(aAdditionalWinCaption).AppendAscii("[").Append(UniString::CreateFromInt32(nPortToListen)).AppendAscii("]"));
     }
     else
     {   // Dann Probieren wir es eben in 1 Sekunde nochmal
@@ -317,7 +317,7 @@ ULONG RemoteControlCommunicationManager::GetPort()
         if ( !bAutomate || aConf.ReadKey( aNoTesttoolKey, "" ) != "" )
             nPortIs = 0;
 
-        nComm = aConf.ReadKey("Comm","0").ToInt32();
+        nComm = (USHORT)aConf.ReadKey("Comm","0").ToInt32();
         if ( nComm )
             aConf.DeleteKey("Comm");
 
@@ -400,7 +400,7 @@ void ExtraIdle::Timeout()
     {
         case 0:
         {
-            SfxPoolItem *pItem = new SfxStringItem(StatementList::pTTProperties->nSidNewDocDirect, CUniString("swriter/web") );
+            SfxPoolItem *pItem = new SfxStringItem((USHORT)StatementList::pTTProperties->nSidNewDocDirect, CUniString("swriter/web") );
             new StatementSlot( StatementList::pTTProperties->nSidNewDocDirect, pItem );
             SetTimeout(30000);
             return;
@@ -581,12 +581,12 @@ void ExtraIdle::Timeout()
                 if ( ( nIndex & 3 ) == 0 )
                 {
                     cRest = aData.GetChar( nIndex );
-                    cRest = aTr.Search( cRest );
+                    cRest = aTr.Search( (sal_Char)cRest );
                 }
                 else
                 {
                     c = aData.GetChar( nIndex );
-                    c = aTr.Search( c );
+                    c = aTr.Search( (sal_Char)c );
 
                     c <<= 2;
                     c |= ( ( cRest & 0x30 ) >> 4 );
