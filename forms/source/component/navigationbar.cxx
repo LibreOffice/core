@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 09:39:21 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,7 +308,7 @@ namespace frm
 
         {
             OStreamSection aEnsureCompat( xDataOut );
-            _rxOutStream << getFont();
+            ::comphelper::operator<<( _rxOutStream, getFont() );
         }
 
         // our boolean flags
@@ -370,7 +370,7 @@ namespace frm
         {
             OStreamSection aEnsureCompat( xDataIn );
             FontDescriptor aFont;
-            _rxInStream >> aFont;
+            ::comphelper::operator>>( _rxInStream, aFont );
             setFont( aFont );
         }
 
