@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
+ *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1147,6 +1147,9 @@ BOOL SwWW8ImplReader::MustCloseSection(long nTxtPos)
         pPaM->GetPoint()->nNode = *pAfterSection;
         pPaM->GetPoint()->nContent.Assign(pPaM->GetCntntNode(), 0);
 
+        if (pPaM->GetNode()->IsEndNode())
+            rDoc.AppendTxtNode(*pPaM->GetPoint());
+
         delete pAfterSection, pAfterSection=0;
         delete pLastPgDeskIdx, pLastPgDeskIdx=0;
     }
@@ -1775,9 +1778,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos,BOOL bMustHaveBreak)
     // Damit der Index auch spaeter noch stimmt
     if( pHdFt )
         pHdFt->UpdateIndex( nCorrIhdt );
-
-    // Die Attribute OLST
-    // werden weiterhin ueber die WWSprmTab abgehandelt
 }
 
 

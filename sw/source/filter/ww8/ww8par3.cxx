@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-17 14:07:04 $
+ *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1528,8 +1528,11 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
                 //inherit numbering from base if not explicitly set for this
                 //style
                 if  (
-                      (rStyleInf.nBase < nStyle) &&
-                      (SFX_ITEM_SET != rStyleInf.pFmt->GetItemState(RES_PARATR_NUMRULE,FALSE))
+                      (rStyleInf.nBase < nStyle) && rStyleInf.pFmt &&
+                      (
+                        SFX_ITEM_SET !=
+                        rStyleInf.pFmt->GetItemState(RES_PARATR_NUMRULE,FALSE)
+                      )
                     )
                 {
                     rStyleInf.pOutlineNumrule =

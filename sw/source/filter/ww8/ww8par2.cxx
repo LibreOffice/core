@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: cmc $ $Date: 2002-06-13 14:19:06 $
+ *  last change: $Author: cmc $ $Date: 2002-06-26 14:45:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,16 +435,18 @@ long SwWW8ImplReader::Read_Ftn( WW8PLCFManResult* pRes, BOOL )
         const SwNodeIndex aOrgLastPgDeskIdx( *pLastPgDeskIdx );
 
         (*pLastPgDeskIdx)++;
-        SwPosition aSectStart( *pLastPgDeskIdx );
-        aSectStart.nContent.Assign( pLastPgDeskIdx->GetNode().GetCntntNode(), 0 );
+        SwPosition aSectStart(*pLastPgDeskIdx);
+        aSectStart.nContent.Assign(pLastPgDeskIdx->GetNode().GetCntntNode(), 0);
 
         SwPosition *pTemp = pPaM->GetPoint();
         if (pTableDesc)
             pTemp = pTableDesc->GetPos();
 
         SwPaM aSectPaM(aSectStart, *pTemp);
-
         InsertSectionWithWithoutCols( aSectPaM, 0 );
+
+        if (pTableDesc)
+            (*pAfterSection)--;
         pPaM->Move( fnMoveBackward );
         DELETEZ( pLastPgDeskIdx );
         // set attributes to correct position
