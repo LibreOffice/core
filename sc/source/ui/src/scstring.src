@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:29:26 $
+ *  last change: $Author: rt $ $Date: 2001-06-16 21:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1502,7 +1502,7 @@ String SCSTR_AREAS
     Text [ danish ] = "Områder" ;
     Text [ french ] = "~Plages" ;
     Text [ swedish ] = "~Områden" ;
-    Text [ dutch ] = "Bereiken" ;
+    Text [ dutch ] = "~Bereiken" ;
     Text [ spanish ] = "Áreas" ;
     Text [ english_us ] = "Ranges" ;
     Text[ chinese_simplified ] = "ÇøÓò";
@@ -3115,6 +3115,7 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
 
 
