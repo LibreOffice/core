@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeInfo.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:36:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:52:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@ public class TypeInfo
 
     /**
        Marks an extended attribute of an interface type as bound.
+
+       <p>Only used in the <code>flags</code> argument of the
+       <code>AttributeTypeInfo</code> constructors.</p>
 
        @since UDK 3.2
      */
