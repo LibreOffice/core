@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-09-28 12:35:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-09 12:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -849,6 +849,7 @@ SvxNumBulletItem::~SvxNumBulletItem()
 {
     delete pNumRule;
 
+#ifndef SVX_LIGHT
     uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
     if(xNumRule.is())
     {
@@ -856,6 +857,7 @@ SvxNumBulletItem::~SvxNumBulletItem()
         if( pNumRules )
             pNumRules->invalidate();
     }
+#endif
 }
 
 /* -----------------27.10.98 10:41-------------------
@@ -904,6 +906,7 @@ uno::Reference< uno::XInterface > SvxNumBulletItem::getUnoNumRule()
     // try weak reference first
     uno::Reference< uno::XInterface > xNumRule( mxUnoNumRule );
 
+#ifndef SVX_LIGHT
     if( !xNumRule.is() )
     {
         // since there is no uno numrule for this item
@@ -912,6 +915,7 @@ uno::Reference< uno::XInterface > SvxNumBulletItem::getUnoNumRule()
 
         mxUnoNumRule = xNumRule;
     }
+#endif
 
     return xNumRule;
 }
