@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 11:13:41 $
+ *  last change: $Author: cmc $ $Date: 2002-10-01 15:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,6 +1064,10 @@ void SwWW8ImplReader::StopAnl(bool bGoBack)
 
 static bool IsEqual(WW8TabBandDesc* p1, WW8TabBandDesc* p2)
 {
+#if 1
+    //#i3862# This isn't such a great idea
+    return false;
+#else
     if( !p1 || !p2 )
         return false;
 
@@ -1119,6 +1123,7 @@ static bool IsEqual(WW8TabBandDesc* p1, WW8TabBandDesc* p2)
             return false;
     }
     return true;
+#endif
 }
 
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
@@ -1953,9 +1958,7 @@ void WW8TabDesc::CalcDefaults()
             int i, j;
             for( i = 0; i < 4; i ++ )
             {
-                if ( pIo->bVer67 ?
-                     ((SVBT16ToShort(pT->rgbrc[i].aBits1) >> 3 & 0x3) == 0)
-                   : ((SVBT16ToShort(pT->rgbrc[i].aBits1) & 0xFF00) == 0))
+                if (pT->rgbrc[i].IsZeroed(pIo->bVer67))
                 {
                     // if shadow is set, its invalid
                     j = i;

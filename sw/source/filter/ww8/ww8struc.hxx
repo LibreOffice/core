@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-19 15:12:04 $
+ *  last change: $Author: cmc $ $Date: 2002-10-01 15:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,6 +203,9 @@ struct WW8_BRC      // Border Code
                             //      Must be 0 when BRC is a substructure of the TC.  Stored in points for Windows.
     short DetermineBorderProperties (bool bVer67, short *pSpace=0,
         BYTE *pCol=0, short *pIdx=0) const;
+    bool IsEmpty(bool bVer67) const;
+    bool IsZeroed(bool bVer67) const;
+    bool IsBlank() const;
 };
 
 typedef WW8_BRC WW8_BRC5[5];        // 5 * Border Code

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: cmc $ $Date: 2002-09-27 10:46:38 $
+ *  last change: $Author: cmc $ $Date: 2002-10-01 15:47:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2120,6 +2120,21 @@ bool SwWW8ImplReader::IsBorder(const WW8_BRC* pbrc, bool bChkBtwn)
     return lcl_IsBorder( bVer67, pbrc, bChkBtwn );
 }
 
+bool WW8_BRC::IsEmpty(bool bVer67) const
+{
+    return (IsBlank() || IsZeroed(bVer67));
+}
+
+bool WW8_BRC::IsBlank() const
+{
+    return (aBits1[0] == 0xff && aBits1[1] == 0xff);
+}
+
+bool WW8_BRC::IsZeroed(bool bVer67) const
+{
+    return (!(bVer67 ? (aBits1[0] & 0x001f) : aBits1[1]));
+}
+
 bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
     short *pSizeArray, BYTE nSetBorders, bool bChkBtwn)
 {
@@ -2137,10 +2152,7 @@ bool SwWW8ImplReader::SetBorder(SvxBoxItem& rBox, const WW8_BRC* pbrc,
     {
         // ungueltige Borders ausfiltern
         const WW8_BRC& rB = pbrc[ aIdArr[ i ] ];
-        if( !(( rB.aBits1[0] == 0xff && rB.aBits1[1] == 0xff ) ||
-                0 == ( bVer67
-                        ? ( rB.aBits1[0] & 0x001f )     // Version 6/7
-                        : rB.aBits1[1] ) ))             // Version 8
+        if( !rB.IsEmpty(bVer67))
         {
             Set1Border(bVer67, rBox, rB, aIdArr[i+1], aIdArr[i], pSizeArray);
             bChange = true;
