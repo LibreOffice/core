@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-11 14:12:33 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:26:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
 void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 {
     // use hyphenator only if hyphenation attribute is set
-    if ( pObj && ((const SfxBoolItem&)pObj->GetItemSet().Get(EE_PARA_HYPHENATE)).GetValue() ) {
+    if ( pObj && ((const SfxBoolItem&)pObj->GetMergedItem(EE_PARA_HYPHENATE)).GetValue() ) {
             com::sun::star::uno::Reference<com::sun::star::linguistic2::XHyphenator> xHyphenator( LinguMgr::GetHyphenator() );
             rOutliner.SetHyphenator( xHyphenator );
     }
@@ -450,8 +450,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     aItemSet.Put( SdrTextAniCountItem( 1 ) );
                     aItemSet.Put( SdrTextAniAmountItem(
                                     (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
-//-/                    pObj->SetAttributes(aItemSet, FALSE);
-                    pObj->SetItemSetAndBroadcast(aItemSet);
+                    pObj->SetMergedItemSetAndBroadcast(aItemSet);
                 }
             }
 
@@ -476,7 +475,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
                         aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                         aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-                        pText->SetItemSet(aSet);
+                        pText->SetMergedItemSet(aSet);
                     }
                 }
             }
@@ -890,7 +889,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
                 aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP));
                 aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
-                pText->SetItemSet(aSet);
+                pText->SetMergedItemSet(aSet);
             }
 
             if(bMarquee)
@@ -904,7 +903,7 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
                 aSet.Put( SdrTextAniCountItem( 1 ) );
                 aSet.Put( SdrTextAniAmountItem( (INT16)pWindow->PixelToLogic(Size(2,1)).Width()) );
 
-                pObj->SetItemSetAndBroadcast(aSet);
+                pObj->SetMergedItemSetAndBroadcast(aSet);
             }
 
             SetInEditMode( pObj );      // #105815# start edit mode
