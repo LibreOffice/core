@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backendfactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-06-13 16:45:55 $
+ *  last change: $Author: jb $ $Date: 2002-09-02 17:23:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include "backendwrap.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
+#endif
+
 #include <drafts/com/sun/star/configuration/backend/XBackend.hpp>
 #include <drafts/com/sun/star/configuration/backend/XSingleBackend.hpp>
 
@@ -88,7 +92,7 @@ namespace configmgr
         namespace backenduno = drafts::com::sun::star::configuration::backend;
 // -------------------------------------------------------------------------
 const sal_Char k_DefaultBackendWrapper[] = "com.sun.star.comp.configuration.backend.SingleBackendAdapter";
-const sal_Char k_DefaultBackendService[] = "com.sun.star.configuration.backend.Backend";
+const sal_Char k_DefaultBackendService[] = "com.sun.star.comp.configuration.backend.LocalSingleBackend";
 // -------------------------------------------------------------------------
 typedef uno::Sequence< uno::Any > UnoInitArgs;
 
@@ -139,16 +143,42 @@ static
 UnoBackend createOfflineBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx, UnoInitArgs const & _aInitArgs)
 {
     UnoBackend xResult;
-    if (_aSettings.hasOfflineSetting() && _aSettings.getOfflineSetting())
+    if ( _aSettings.hasUnoBackendWrapper() )
     {
-        OSL_ENSURE(_aSettings.hasUnoBackendWrapper(), "ERROR: No offline service for offline configuration");
-        if (_aSettings.hasUnoBackendWrapper())
-        {
-            xResult.set( createService(_xCtx,_aInitArgs,_aSettings.getUnoBackendWrapper()), uno::UNO_QUERY );
+        OUString const aWrapperSvc = _aSettings.getUnoBackendWrapper();
 
-            OSL_ENSURE(xResult.is(), "ERROR: Cannot create offline service");
-        }
+        xResult = UnoBackend::query( createService(_xCtx,_aInitArgs,aWrapperSvc) );
     }
+
+    return xResult;
+}
+// -------------------------------------------------------------------------
+
+static
+sal_Bool createOfflineBackend_nothrow(UnoBackend & _rxResult, ConnectionSettings const & _aSettings, CreationContext const & _xCtx, UnoInitArgs const & _aInitArgs)
+{
+    try
+    {
+        _rxResult = createOfflineBackend(_aSettings,_xCtx,_aInitArgs);
+        return _rxResult.is();
+    }
+    catch (uno::Exception &)
+    {
+        return false;
+    }
+}
+// -------------------------------------------------------------------------
+
+static
+uno::Reference< uno::XInterface > createRealBackend(ConnectionSettings const & _aSettings, CreationContext const & _xCtx, UnoInitArgs const & _aInitArgs)
+{
+    OUString const aBackendServiceName = _aSettings.hasUnoBackendService() ?
+                                        _aSettings.getUnoBackendService() :
+                                        OUString::createFromAscii(k_DefaultBackendService);
+
+    uno::Reference< uno::XInterface > xResult =
+        createService(_xCtx,_aInitArgs,_aSettings.getUnoBackendService());
+
     return xResult;
 }
 // -------------------------------------------------------------------------
@@ -160,26 +190,35 @@ UnoBackend createOnlineBackend(ConnectionSettings const & _aSettings, CreationCo
 
     UnoBackend xResult;
 
-    if (_aSettings.hasUnoBackendService())
-    {
-        uno::Reference< uno::XInterface > xRealBackend = createService(_xCtx,_aInitArgs,_aSettings.getUnoBackendService());
-        xResult.set(xRealBackend, uno::UNO_QUERY);
+    uno::Reference< uno::XInterface > xRealBackend = createRealBackend(_aSettings,_xCtx,_aInitArgs);
 
+    if (_aSettings.hasUnoBackendWrapper())
+    {
+        // try wrapping a single backend
+        UnoSingleBackend xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
+        if (xSingleRealBackend.is())
+            xResult = wrapSingleBackend(_aSettings,_xCtx,_aInitArgs,xSingleRealBackend);
+
+        // if we don't have one, try using it as unwrapped backend
+        else
+            xResult.set(xRealBackend, uno::UNO_QUERY);
+    }
+    else
+    {
+         // look for a direct implementation of XBackend
+        xResult.set(xRealBackend, uno::UNO_QUERY);
         if (!xResult.is())
         {
+            // try the default wrapper if we only have a single backend
             UnoSingleBackend xSingleRealBackend( xRealBackend, uno::UNO_QUERY);
             if (xSingleRealBackend.is())
                 xResult = wrapSingleBackend(_aSettings,_xCtx,_aInitArgs,xSingleRealBackend);
 
             else
-                OSL_ENSURE( !xRealBackend.is(), "Configuration Backend implements no known interface" );
+                OSL_ENSURE( !xRealBackend.is(), "Configuration Backend implements no known backendinterface" );
         }
     }
-    else
-    {
-        OUString aBackendFallback( RTL_CONSTASCII_USTRINGPARAM(k_DefaultBackendService) );
-        xResult.set( createService(_xCtx,_aInitArgs,aBackendFallback), uno::UNO_QUERY );
-    }
+
     return xResult;
 }
 // -------------------------------------------------------------------------
@@ -189,11 +228,21 @@ UnoBackend createUnoBackend(ConnectionSettings const & _aSettings, CreationConte
 {
     UnoInitArgs aArguments = createInitArgs(_aSettings);
 
-    UnoBackend xResult = createOfflineBackend(_aSettings,_xCtx,aArguments);
+    UnoBackend xResult;
+    try
+    {
+       xResult = createOnlineBackend(_aSettings,_xCtx,aArguments);
+    }
 
-    // not offline or no offline implementation available
+    // for CannotLoadConfigurationException, try fallback to wrapper-only (offline) mode
+    catch (com::sun::star::configuration::CannotLoadConfigurationException & )
+    {
+        if (!createOfflineBackend_nothrow(xResult,_aSettings,_xCtx,aArguments))
+            throw;
+    }
+
     if (!xResult.is())
-        xResult = createOnlineBackend(_aSettings,_xCtx,aArguments);
+        xResult = createOfflineBackend(_aSettings,_xCtx,aArguments);
 
     return xResult;
 }
