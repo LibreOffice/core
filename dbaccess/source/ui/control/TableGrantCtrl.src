@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 13:45:14 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 17:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ String STR_TABLE_PRIV_NAME
     Text[ chinese_traditional ] = "è¡¨æ ¼åç¨±";
     Text[ arabic ] = "ÇÓã ÇáÌÏæá";
     Text[ turkish ] = "Tablo adı";
-    Text[ finnish ] = "Taulukon nimi";
+    Text[ finnish ] = "Taulun nimi";
     Text[ catalan ] = "Nom de la taula";
     Text[ thai ] = "à¸Šà¸·à¹ˆà¸­à¸•à¸²à¸£à¸²à¸‡";
 };
@@ -96,12 +96,12 @@ String STR_TABLE_PRIV_INSERT
     Text[ENGLISH] = "Insert data";
     Text[ english_us ] = "Insert data";
     Text[ portuguese ] = "Inserir dados";
-    Text[ russian ] = "Âñòàâèòü äàííûå";
+    Text[ russian ] = "Äîáàâëåíèå";
     Text[ greek ] = "ĞñïóèŞêç";
     Text[ dutch ] = "Gegevens invoegen";
     Text[ french ] = "Insérer des données";
     Text[ spanish ] = "Insertar datos";
-    Text[ finnish ] = "Lisää";
+    Text[ finnish ] = "Lisää tietoja";
     Text[ italian ] = "Inserisci dati";
     Text[ danish ] = "Indsæt data";
     Text[ swedish ] = "Infoga data";
@@ -123,12 +123,12 @@ String STR_TABLE_PRIV_DELETE
     Text[ENGLISH] = "Delete data";
     Text[ english_us ] = "Delete data";
     Text[ portuguese ] = "Eliminar";
-    Text[ russian ] = "Óäàëèòü äàííûå";
+    Text[ russian ] = "Óäàëåíèå";
     Text[ greek ] = "ÄéáãñáöŞ";
     Text[ dutch ] = "Gegevens wissen";
     Text[ french ] = "Supprimer les données";
     Text[ spanish ] = "Eliminar datos";
-    Text[ finnish ] = "Poista";
+    Text[ finnish ] = "Poista tietoja";
     Text[ italian ] = "Elimina dati";
     Text[ danish ] = "Slet data";
     Text[ swedish ] = "Radera data";
@@ -150,12 +150,12 @@ String STR_TABLE_PRIV_UPDATE
     Text[ENGLISH] = "Update data";
     Text[ english_us ] = "Modify data";
     Text[ portuguese ] = "Modificar dados";
-    Text[ russian ] = "Èçìåíèòü äàííûå";
+    Text[ russian ] = "Ğåäàêòèğîâàíèå";
     Text[ greek ] = "ÁëëáãŞ";
     Text[ dutch ] = "Gegevens wijzigen";
     Text[ french ] = "Modifier les données";
     Text[ spanish ] = "Modificar datos";
-    Text[ finnish ] = "Muokkaa";
+    Text[ finnish ] = "Muuta tietoja";
     Text[ italian ] = "Cambia dati";
     Text[ danish ] = "Modificer data";
     Text[ swedish ] = "Ändra data";
@@ -193,7 +193,7 @@ String STR_TABLE_PRIV_ALTER
     Text[ chinese_traditional ] = "è®Šæ›´çµæ„";
     Text[ arabic ] = "ÊÚÏíá ÇáÈäíÉ";
     Text[ turkish ] = "Yapıyı değiştir";
-    Text[ finnish ] = "Muuta rakenne";
+    Text[ finnish ] = "Muuta rakennetta";
     Text[ catalan ] = "Modifica l'estructura";
     Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹‚à¸„à¸£à¸‡à¸ªà¸£à¹‰à¸²à¸‡";
 };
@@ -203,12 +203,12 @@ String STR_TABLE_PRIV_SELECT
     Text[ENGLISH] = "Select data";
     Text[ english_us ] = "Read data";
     Text[ portuguese ] = "Ler dados";
-    Text[ russian ] = "×èòàòü äàííûå";
+    Text[ russian ] = "×òåíèå";
     Text[ greek ] = "ÁíÜãíùóç";
     Text[ dutch ] = "Gegevens lezen";
     Text[ french ] = "Lire les données";
     Text[ spanish ] = "Leer datos";
-    Text[ finnish ] = "Lue";
+    Text[ finnish ] = "Lue tietoja";
     Text[ italian ] = "Leggi dati";
     Text[ danish ] = "Læs data";
     Text[ swedish ] = "Läs data";
@@ -246,7 +246,7 @@ String STR_TABLE_PRIV_REFERENCE
     Text[ chinese_traditional ] = "è®Šæ›´å¼•ç”¨";
     Text[ arabic ] = "ÊÚÏíá ÇáãÑÇÌÚ";
     Text[ turkish ] = "Referansları değiştir";
-    Text[ finnish ] = "Muokkaa viitteitä";
+    Text[ finnish ] = "Muuta viitteitä";
     Text[ catalan ] = "Modifica les referències";
     Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚à¸à¸²à¸£à¸­à¹‰à¸²à¸‡à¸­à¸´à¸‡";
 };
@@ -262,7 +262,7 @@ String STR_TABLE_PRIV_DROP
     Text[ dutch ] = "Structuur wissen";
     Text[ french ] = "Supprimer la structure";
     Text[ spanish ] = "Eliminar estructura";
-    Text[ finnish ] = "Pudota";
+    Text[ finnish ] = "Pudota rakenne";
     Text[ italian ] = "Elimina struttura";
     Text[ danish ] = "Slet struktur";
     Text[ swedish ] = "Radera struktur";
