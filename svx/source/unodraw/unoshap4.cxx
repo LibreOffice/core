@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-04 15:58:02 $
+ *  last change: $Author: cl $ $Date: 2002-01-18 16:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,15 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
         SdrOle2Obj* pOle = PTR_CAST( SdrOle2Obj, pObj );
 
         if( pOle )
+        {
             aPersistName = pOle->GetPersistName();
+            if( aPersistName.getLength() )
+            {
+                SvPersist *pPersist = pObj->GetModel()->GetPersist();
+                if( (NULL == pPersist) || ( NULL == pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() ) ) )
+                    aPersistName = OUString();
+            }
+        }
 
         return makeAny( aPersistName );
     }
