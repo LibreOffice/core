@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-10-06 12:37:07 $
+ *  last change:$Date: 2003-12-11 11:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,10 @@ public class java_complex implements TestBase{
     public boolean executeTest(TestParameters param) {
         // is there an ini file for the complex tests defined?
         String complexIniFileName = ((String)param.get("ComplexIni"));
-        CfgParser ini = new CfgParser(complexIniFileName);
-        ini.getIniParameters(param);
+        if (complexIniFileName != null) {
+            CfgParser ini = new CfgParser(complexIniFileName);
+            ini.getIniParameters(param);
+        }
 
         // get the test job
         String testJob = ((String)param.get("TestJob"));
