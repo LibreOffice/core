@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-23 11:54:24 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #pragma hdrstop
 
-
+#include "fuoaprms.hxx"
 
 #include "sdattr.hxx"
 #define ITEMID_COLOR            ATTR_ANIMATION_COLOR
@@ -98,18 +98,27 @@
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"
-#include "fuoaprms.hxx"
 #include "drawdoc.hxx"
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "anminfo.hxx"
 #include "unoaprms.hxx"                 // Undo-Action
 #include "sdundogr.hxx"                 // Undo Gruppe
-#include "sdview.hxx"
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 #include "tpaction.hxx"
-#include "preview.hxx"
-#include "prevchld.hxx"
+#ifndef SD_PREVIEW_WINDOW_HXX
+#include "PreviewWindow.hxx"
+#endif
+#ifndef SD_PREVIEW_CHILD_WINDOW_HXX
+#include "PreviewChildWindow.hxx"
+#endif
 
 using namespace ::com::sun::star;
+
+namespace sd {
 
 TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 
@@ -123,12 +132,12 @@ TYPEINIT1( FuObjectAnimationParameters, FuPoor );
 |*
 \************************************************************************/
 
-FuObjectAnimationParameters::FuObjectAnimationParameters
-                                    (SdViewShell*    pViewSh,
-                                     SdWindow*       pWin,
-                                     SdView*         pView,
-                                     SdDrawDocument* pDoc,
-                                     SfxRequest&     rReq)
+FuObjectAnimationParameters::FuObjectAnimationParameters (
+    ViewShell*   pViewSh,
+    ::sd::Window*        pWin,
+    ::sd::View*      pView,
+    SdDrawDocument* pDoc,
+    SfxRequest&  rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
     BOOL bOnMaster = pView->GetPageViewPvNum(0)->GetPage()->IsMasterPage();
@@ -885,11 +894,12 @@ FuObjectAnimationParameters::FuObjectAnimationParameters
         |* ggfs. in Preview anzeigen
         \**************************************************************/
         SfxChildWindow* pPreviewChildWindow =
-            pViewShell->GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+            pViewShell->GetViewFrame()->GetChildWindow(
+                PreviewChildWindow::GetChildWindowId());
         if (pPreviewChildWindow)
         {
-            SdPreviewWin* pPreviewWin =
-                (SdPreviewWin*)pPreviewChildWindow->GetWindow();
+            PreviewWindow* pPreviewWin =
+                static_cast<PreviewWindow*>(pPreviewChildWindow->GetWindow());
             if (pPreviewWin && pPreviewWin->GetDoc() == pDoc)
             {
                 for (nObject = 0; nObject < nCount; nObject++)
@@ -948,3 +958,4 @@ void FuObjectAnimationParameters::Deactivate()
 }
 
 
+} // end of namespace sd
