@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:31:57 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:19:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Prima immagine" ;
         QuickHelpText [ portuguese_brazilian ] = "Primeira figura" ;
         QuickHelpText [ portuguese ] = "Primeira imagem" ;
-        QuickHelpText [ finnish ] = "Ensimmäinen kuva" ;
+        QuickHelpText [ finnish ] = "Ensimmäinen kuva!" ;
         QuickHelpText [ danish ] = "Første billede" ;
         QuickHelpText [ french ] = "Première image" ;
         QuickHelpText [ swedish ] = "Första bilden" ;
@@ -143,7 +143,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Indietro" ;
         QuickHelpText [ portuguese_brazilian ] = "Inverter" ;
         QuickHelpText [ portuguese ] = "Para trás" ;
-        QuickHelpText [ finnish ] = "Taaksepäin" ;
+        QuickHelpText [ finnish ] = "Taaksepäin!" ;
         QuickHelpText [ danish ] = "Baglæns" ;
         QuickHelpText [ french ] = "Marche arrière" ;
         QuickHelpText [ swedish ] = "Bakåt" ;
@@ -180,7 +180,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ portuguese ] = "Stop" ;
         QuickHelpText [ portuguese_brazilian ] = "Stop" ;
         QuickHelpText [ norwegian ] = "Stop" ;
-        QuickHelpText [ finnish ] = "Stop" ;
+        QuickHelpText [ finnish ] = "Seis!" ;
         QuickHelpText[ russian ] = "Ñòîï";
         QuickHelpText[ polish ] = "Zatrzymanie";
         QuickHelpText[ japanese ] = "’†Ž~";
@@ -204,7 +204,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Riproduci" ;
         QuickHelpText [ portuguese_brazilian ] = "Tocar" ;
         QuickHelpText [ portuguese ] = "Tocar" ;
-        QuickHelpText [ finnish ] = "Eteenpäin" ;
+        QuickHelpText [ finnish ] = "Toista!" ;
         QuickHelpText [ danish ] = "Afspil" ;
         QuickHelpText [ french ] = "Reproduire" ;
         QuickHelpText [ swedish ] = "Spela upp" ;
@@ -234,7 +234,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Ultima immagine" ;
         QuickHelpText [ portuguese_brazilian ] = "Última figura" ;
         QuickHelpText [ portuguese ] = "Última imagem" ;
-        QuickHelpText [ finnish ] = "Viimeinen kuva" ;
+        QuickHelpText [ finnish ] = "Viimeinen kuva!" ;
         QuickHelpText [ danish ] = "Sidste billede" ;
         QuickHelpText [ french ] = "Dernière image" ;
         QuickHelpText [ swedish ] = "Sista bilden" ;
@@ -273,7 +273,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ italian ] = "Numero d'immagine" ;
         QuickHelpText [ portuguese_brazilian ] = "Número da figura" ;
         QuickHelpText [ portuguese ] = "Número da imagem" ;
-        QuickHelpText [ finnish ] = "Kuvan numero" ;
+        QuickHelpText [ finnish ] = "Kuvan numero!" ;
         QuickHelpText [ danish ] = "Billednummer" ;
         QuickHelpText [ french ] = "Numéro de l'image" ;
         QuickHelpText [ swedish ] = "Bildnummer" ;
@@ -335,6 +335,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Anzeigedauer";
         QuickHelpText[ catalan ] = "Duración";
+        QuickHelpText[ finnish ] = "Kesto!";
     };
     ListBox LB_LOOP_COUNT
     {
@@ -828,6 +829,29 @@ DockingWindow FLT_WIN_ANIMATION
         < "1000" ; > ;
         < "Máx." ; > ;
     };
+        QuickHelpText[ finnish ] = "Toistomäärä!";
+    StringList [ finnish ] =
+    {
+            < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "5" ; > ;
+        < "6" ; > ;
+        < "7" ; > ;
+        < "8" ; > ;
+        < "9" ; > ;
+        < "10" ; > ;
+        < "12" ; > ;
+        < "15" ; > ;
+        < "20" ; > ;
+        < "25" ; > ;
+        < "50" ; > ;
+        < "100" ; > ;
+        < "500" ; > ;
+        < "1000" ; > ;
+        < "Enint." ; > ;
+    };
     };
     ImageButton BTN_GET_ONE_OBJECT
     {
@@ -865,6 +889,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekt übernehmen";
         QuickHelpText[ catalan ] = "Aceptar objeto";
+        QuickHelpText[ finnish ] = "Käytä objektia!";
     };
     ImageButton BTN_GET_ALL_OBJECTS
     {
@@ -902,6 +927,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Objekte einzeln übernehmen";
         QuickHelpText[ catalan ] = "Aceptar objetos uno a uno";
+        QuickHelpText[ finnish ] = "Käytä objekteja yksittäin!";
     };
     ImageButton BTN_REMOVE_BITMAP
     {
@@ -939,6 +965,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Aktuelles Bild löschen";
         QuickHelpText[ catalan ] = "Eliminar imagen actual";
+        QuickHelpText[ finnish ] = "Poista nykyinen kuva!";
     };
     ImageButton BTN_REMOVE_ALL
     {
@@ -976,6 +1003,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Alle Bilder löschen";
         QuickHelpText[ catalan ] = "Eliminar todas las imágenes";
+        QuickHelpText[ finnish ] = "Poista kaikki kuvat!";
     };
     FixedText FT_COUNT
     {
@@ -987,7 +1015,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ italian ] = "Numero" ;
         Text [ portuguese_brazilian ] = "Número" ;
         Text [ portuguese ] = "Número" ;
-        Text [ finnish ] = "Numero" ;
+        Text [ finnish ] = "Luku" ;
         Text [ danish ] = "Antal" ;
         Text [ french ] = "Nombre" ;
         Text [ swedish ] = "Antal" ;
@@ -1040,6 +1068,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Resim";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Imagen";
+        Text[ finnish ] = "Kuva";
     };
     RadioButton RBT_GROUP
     {
@@ -1067,6 +1096,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Grup nesnesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objeto de grupo";
+        Text[ finnish ] = "Ryhmäobjekti";
     };
     RadioButton RBT_BITMAP
     {
@@ -1094,6 +1124,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Bit eþlem nesnesi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Objeto bitmap";
+        Text[ finnish ] = "Bittikarttaobjekti";
     };
     FixedText FT_COLOR
     {
@@ -1121,6 +1152,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Saydamlýk rengi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color de transparencia";
+        Text[ finnish ] = "Läpikuultoväri";
     };
     ListBox LB_COLOR
     {
@@ -1143,7 +1175,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ italian ] = "Adattamento" ;
         Text [ portuguese_brazilian ] = "Ajuste" ;
         Text [ portuguese ] = "Alinhamento" ;
-        Text [ finnish ] = "Säätö" ;
+        Text [ finnish ] = "Tasaus" ;
         Text [ danish ] = "Tilpasning" ;
         Text [ french ] = "Adaptation" ;
         Text [ swedish ] = "Anpassning" ;
@@ -1245,15 +1277,15 @@ DockingWindow FLT_WIN_ANIMATION
         };
         StringList [ finnish ] =
         {
-            < "Links/Oben" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Links/Unten" ; Default ; > ;
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
-            < "Rechts/Oben" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-            < "Rechts/Unten" ; Default ; > ;
+            < "Ylävasen" ; Default ; > ;
+            < "Vasen" ; Default ; > ;
+            < "Alavasen" ; Default ; > ;
+            < "Yläosa" ; Default ; > ;
+            < "Keskitetty" ; Default ; > ;
+            < "Alaosa" ; Default ; > ;
+            < "Yläoikea" ; Default ; > ;
+            < "Oikea" ; Default ; > ;
+            < "Alaoikea" ; Default ; > ;
         };
         StringList [ danish ] =
         {
@@ -1487,6 +1519,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ turkish ] = "Oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Crear";
+        Text[ finnish ] = "Luo";
     };
     GroupBox GRP_ANIMATION_GROUP
     {
