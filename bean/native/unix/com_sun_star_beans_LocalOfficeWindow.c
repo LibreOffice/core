@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:16:18 $
+ *  last change: $Author: mi $ $Date: 2004-10-28 15:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #define SYSTEM_OS2     4
 #define SYSTEM_MAC     5
 #define SYSTEM_XWINDOW 6
+
+JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
+  (JNIEnv * env, jobject obj_this);
 
 /*****************************************************************************/
 /*

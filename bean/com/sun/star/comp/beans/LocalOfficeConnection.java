@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:15:36 $
+ *  last change: $Author: mi $ $Date: 2004-10-28 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,12 +106,13 @@ public class LocalOfficeConnection
     public static final String      OFFICE_LIB_NAME     = "officebean";
     public static final String      OFFICE_ID_SUFFIX    = "_Office";
 
+    private static String           mProgramPath;
+
     private Process             mProcess;
     private ContainerFactory        mContainerFactory;
     private XComponentContext       mContext;
 
     private String              mURL;
-    private String              mProgramPath;
     private String              mConnType;
     private String              mPipe;
     private String              mPort;
@@ -119,6 +120,61 @@ public class LocalOfficeConnection
     private String              mInitialObject;
 
     private List                mComponents     = new Vector();
+
+
+    //-------------------------------------------------------------------------
+    static
+    {
+        // preload shared libraries whichs import lips are linked to officebean
+        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
+        {
+            try
+            {
+                NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "msvcr70");
+            }
+            catch (Throwable e)
+            {
+                // loading twice would fail
+                System.err.println( "cannot find msvcr70" );
+            }
+
+            try
+            {
+                NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "msvcr71");
+            }
+            catch (Throwable e)
+            {
+                // loading twice would fail
+                System.err.println( "cannot find msvcr71" );
+            }
+
+            try
+            {
+                NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "uwinapi");
+            }
+            catch (Throwable e)
+            {
+                // loading twice would fail
+                System.err.println( "cannot find uwinapi" );
+            }
+
+            try
+            {
+                NativeLibraryLoader.loadLibrary(LocalOfficeConnection.class.getClassLoader(), "jawt");
+            }
+            catch (Throwable e)
+            {
+                // loading twice would fail
+                System.err.println( "cannot find jawt" );
+            }
+        }
+
+        // load shared library for JNI code
+//      String aSharedLibName = getProgramPath() + java.io.File.separator +
+//          System.mapLibraryName(OFFICE_LIB_NAME);
+//      System.load( aSharedLibName );
+        NativeLibraryLoader.loadLibrary( LocalOfficeConnection.class.getClassLoader(), "officebean" );
+    }
 
     //-------------------------------------------------------------------------
     // debugging method
@@ -144,11 +200,6 @@ public class LocalOfficeConnection
         }
         catch ( java.net.MalformedURLException e )
         {}
-
-        // load libofficebean.so/officebean.dll
-        String aSharedLibName = getProgramPath() + java.io.File.separator +
-            System.mapLibraryName(OFFICE_LIB_NAME);
-        System.load( aSharedLibName );
     }
 
     /**
@@ -379,7 +430,7 @@ public class LocalOfficeConnection
      *
      * @return The path to the office program folder.
      */
-    private String getProgramPath()
+    static private String getProgramPath()
     {
         if (mProgramPath == null)
         {
@@ -396,7 +447,7 @@ public class LocalOfficeConnection
 
             // find soffice executable relative to this class's class loader:
             File path = NativeLibraryLoader.getResource(
-                this.getClass().getClassLoader(), aExec);
+                LocalOfficeConnection.class.getClassLoader(), aExec);
             if (path != null)
                 mProgramPath = path.getParent();
 

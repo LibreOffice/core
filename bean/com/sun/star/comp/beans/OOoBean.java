@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-14 10:37:13 $
+ *  last change: $Author: mi $ $Date: 2004-10-28 15:49:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,21 +176,30 @@ public class OOoBean
     }
 
     //-------------------------------------------------------------------------
-    /// Sets the timeout for methods which launch OOo in milli seconds.
+    /** Sets the timeout for methods which launch OOo in milli seconds.
+
+        This method does not need a connection to an OOo instance.
+     */
     public void setOOoStartTimeOut( int nMilliSecs )
     {
         nOOoStartTimeOut = nMilliSecs;
     }
 
     //-------------------------------------------------------------------------
-    /// Sets the timeout for normal OOO methods calls in milli seconds.
+    /** Sets the timeout for normal OOO methods calls in milli seconds.
+
+        This method does not need a connection to an OOo instance.
+     */
     public void setOOoCallTimeOut( int nMilliSecs )
     {
         nOOoCallTimeOut = nMilliSecs;
     }
 
     //-------------------------------------------------------------------------
-    /// Sets the period length in milli seconds to check the OOo connection.
+    /** Sets the period length in milli seconds to check the OOo connection.
+
+        This method does not need a connection to an OOo instance.
+     */
     public void setOOoCheckCycle( int nMilliSecs )
     {
         nOOoCheckCycle = nMilliSecs;
@@ -228,6 +237,12 @@ public class OOoBean
     //-------------------------------------------------------------------------
     // @requirement FUNC.CON.STRT/0.4
     /** Starts a connection to an OOo instance which is lauched if not running.
+
+        @throws HasConnectionException
+            if a connection was already established.
+
+        @throws NoConnectionException
+            if the specified connection cannot be established
      */
     public void startOOoConnection( String aConnectionURL )
         throws  java.net.MalformedURLException,
@@ -247,20 +262,20 @@ public class OOoBean
      */
     public boolean isOOoConnected()
     {
-        // TBD: could there be an existing, but dead connection?
         return iConnection != null;
     }
 
     //-------------------------------------------------------------------------
     // @requirement FUNC.CON.STOP/0.4
     /** Disconnects from the connected OOo instance.
+
+        If there was no connection yet or anymore, this method can be called
+        anyway.
      */
     public synchronized void stopOOoConnection()
     {
         // clear OOo document, frame etc.
-        try { clear(); }
-        catch (  java.lang.InterruptedException aExc )
-        {} // ignore exceptions from an old, dead connection
+        clear();
 
         // cut the connection
         OfficeConnection iExConnection = iConnection;
@@ -282,6 +297,9 @@ public class OOoBean
     /** Returns the a connection to an OOo instance.
 
         If no connection exists, a default connection will be created.
+
+        @throws NoConnectionException
+            if no connection can be established
      */
     public synchronized OfficeConnection getOOoConnection()
         throws NoConnectionException
@@ -299,6 +317,11 @@ public class OOoBean
 
     //-------------------------------------------------------------------------
 
+    /** Returns the service factory used by this OOoBean instance.
+
+        @throws NoConnectionException
+            if no connection is established and no default connection can be established.
+     */
     public synchronized com.sun.star.lang.XMultiServiceFactory getMultiServiceFactory()
         throws NoConnectionException
     {
@@ -329,7 +352,11 @@ public class OOoBean
     }
 
     //-------------------------------------------------------------------------
-    /// TBD
+    /** Returns the XDesktop interface of the OOo instance used by this OOoBean.
+
+        @throws NoConnectionException
+            if no connection is established and no default connection can be established.
+     */
     public synchronized com.sun.star.frame.XDesktop getOOoDesktop()
         throws NoConnectionException
     {
@@ -356,14 +383,16 @@ public class OOoBean
        If a document is loaded and the content modified,
        the changes are dismissed.  Otherwise nothing happens.
 
-       This method works with and without a connection.
+       This method only does only work on specific subclasses.
 
        @param bClearStateToo
            Not only the document content but also the state of the bean,
         like visibility of child components is cleared.
      */
     public synchronized void clearDocument( boolean bClearStateToo )
-        throws com.sun.star.util.CloseVetoException
+        throws
+            com.sun.star.util.CloseVetoException,
+            NoConnectionException
     {
         // TBD
         com.sun.star.util.XCloseable xCloseable = (com.sun.star.util.XCloseable)
@@ -380,50 +409,56 @@ public class OOoBean
         Any loaded document is unloaded, no matter whether it is modified or not.
         After calling this method, the OOoBean has no office document and no frame
         anymore.  The connection will stay, though.
+
+        This method works with or without an established connection.
      */
     public synchronized void clear()
-        throws java.lang.InterruptedException
     {
         dbgPrint( "clear()" );
 
-        CallWatchThread aCallWatchThread =
-            new CallWatchThread( nOOoCallTimeOut, "clear" );
-        aDocument = null;
-        xDispatcher = null;
-        aFrame = null;
-
-        // clear xFrameWindow
-        if ( xFrameWindow != null )
+        try
         {
-            try { releaseSystemWindow(); }
-            catch ( NoConnectionException aExc )
-            {} // ignore
-            catch ( SystemWindowException aExc )
-            {} // ignore
-            remove( xFrameWindow.getAWTComponent() );
-            xFrameWindow = null;
-        }
+            CallWatchThread aCallWatchThread =
+                new CallWatchThread( nOOoCallTimeOut, "clear" );
+            aDocument = null;
+            xDispatcher = null;
+            aFrame = null;
 
-        // clear xURTTransformer
-        if ( xURLTransformer != null )
-        {
-            try
+            // clear xFrameWindow
+            if ( xFrameWindow != null )
             {
-                com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)
-                    UnoRuntime.queryInterface(
-                        com.sun.star.lang.XComponent.class, xURLTransformer );
-                if ( xComp != null )
-                    xComp.dispose();
+                try { releaseSystemWindow(); }
+                catch ( NoConnectionException aExc )
+                {} // ignore
+                catch ( SystemWindowException aExc )
+                {} // ignore
+                remove( xFrameWindow.getAWTComponent() );
+                xFrameWindow = null;
             }
-            catch ( java.lang.Throwable aExc )
-            {} // ignore
-            xURLTransformer = null;
+
+            // clear xURTTransformer
+            if ( xURLTransformer != null )
+            {
+                try
+                {
+                    com.sun.star.lang.XComponent xComp = (com.sun.star.lang.XComponent)
+                        UnoRuntime.queryInterface(
+                            com.sun.star.lang.XComponent.class, xURLTransformer );
+                    if ( xComp != null )
+                        xComp.dispose();
+                }
+                catch ( java.lang.Throwable aExc )
+                {} // ignore
+                xURLTransformer = null;
+            }
+
+            xDesktop = null;
+            xServiceFactory = null;
+
+            aCallWatchThread.cancel();
         }
-
-        xDesktop = null;
-        xServiceFactory = null;
-
-        aCallWatchThread.cancel();
+        catch ( java.lang.InterruptedException aExc )
+        { /* can be ignored */ }
     }
 
     //-------------------------------------------------------------------------
@@ -502,168 +537,172 @@ public class OOoBean
 
         If no connection exists, a default connection is established.
 
-        @throws java.io.IOException
-            if an IO error occurs reading the ressource specified by the URL.
-
         @throws IllegalArgumentException
             if either of the arguments is out of the specified range.
 
-        @throws NoConnectionException
+        @throws java.io.IOException
+            if an IO error occurs reading the ressource specified by the URL.
+
+        @throws com.sun.star.lang.NoConnectionException
             if no connection can be established.
      */
     public void loadFromURL(
             final String aURL,
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
+            NoConnectionException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException
     {
         dbgPrint( "loadFromURL()" );
 
         // try loading
-        boolean bLoaded = false;
-        while ( !bLoaded )
+        try
         {
-            // watch loading in a thread with a timeout (if OOo hangs)
-            CallWatchThread aCallWatchThread =
-                new CallWatchThread( nOOoStartTimeOut, "loadFromURL" );
-
-            try
+            boolean bLoaded = false;
+            while ( !bLoaded )
             {
-                // get window from OOo on demand
-                if ( xFrameWindow == null )
+                // watch loading in a thread with a timeout (if OOo hangs)
+                CallWatchThread aCallWatchThread =
+                    new CallWatchThread( nOOoStartTimeOut, "loadFromURL" );
+
+                try
                 {
-                    // Establish the connection by request of the ServiceFactory.
-                    getMultiServiceFactory();
-
-                    // remove existing child windows
-                    removeAll();
-
-                    // Create the OfficeWindow.
-                    xFrameWindow = getOOoConnection().createOfficeWindow(OOoBean.this);
-                    add( xFrameWindow.getAWTComponent() );
-                }
-
-                // create the document frame from UNO window.
-                if ( aFrame == null )
-                {
-                    // create the frame
-                    com.sun.star.awt.XWindow xWindow =
-                        (com.sun.star.awt.XWindow) UnoRuntime.queryInterface(
-                        com.sun.star.awt.XWindow.class, xFrameWindow.getUNOWindowPeer());
-                    Object xFrame = xServiceFactory.createInstance( "com.sun.star.frame.Frame");
-                    aFrame = new Frame( (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(
-                            com.sun.star.frame.XFrame.class, xFrame ) );
-                    aFrame.initialize( xWindow );
-                    aFrame.setName( aFrame.toString() );
-
-                    // register the frame at the desktop
-                    com.sun.star.frame.XFrames xFrames =
-                            ( (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
-                            com.sun.star.frame.XFramesSupplier.class, getOOoDesktop() ) ).getFrames();
-                    xFrames.append( aFrame );
-                }
-
-                // Initializes the slot command execution environment.
-                xURLTransformer = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                    com.sun.star.util.XURLTransformer.class,
-                    xServiceFactory.createInstance( "com.sun.star.util.URLTransformer") );
-                xDispatcher = (com.sun.star.frame.XDispatchProvider)UnoRuntime.queryInterface(
-                    com.sun.star.frame.XDispatchProvider.class, aFrame );
-
-                // get XComponentLoader from frame
-                com.sun.star.frame.XComponentLoader xLoader = (com.sun.star.frame.XComponentLoader)
-                    UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class, aFrame );
-                if ( xLoader == null )
-                {
-                    throw new java.lang.RuntimeException(
-                        "com.sun.star.frame.Frame(" + aFrame +
-                            ") without com.sun.star.frame.XComponentLoader" );
-                }
-
-                // Avoid Dialog 'Document changed' while reloading
-                if ( aDocument != null )
-                {
-                    com.sun.star.frame.XController xOldController = null;
-                    if ( aFrame != null && aFrame.getController() != null )
-                        xOldController = aFrame.getController();
-                    try
+                    // get window from OOo on demand
+                    if ( xFrameWindow == null )
                     {
-                        if ( aFrame != null && xOldController != null )
-                            xOldController.suspend(true);
-                        if ( aDocument != null )
-                            try {
-                                // can be disposed if user closed document via UI
-                                aDocument.setModified(false);
-                            }
-                            catch (  com.sun.star.lang.DisposedException aExc ) {}
+                        // Establish the connection by request of the ServiceFactory.
+                        getMultiServiceFactory();
+
+                        // remove existing child windows
+                        removeAll();
+
+                        // Create the OfficeWindow.
+                        xFrameWindow = getOOoConnection().createOfficeWindow(OOoBean.this);
+                        add( xFrameWindow.getAWTComponent() );
                     }
-                    catch (java.lang.IllegalStateException exp)
-                    {}
+
+                    // create the document frame from UNO window.
+                    if ( aFrame == null )
+                    {
+                        // create the frame
+                        com.sun.star.awt.XWindow xWindow =
+                            (com.sun.star.awt.XWindow) UnoRuntime.queryInterface(
+                            com.sun.star.awt.XWindow.class, xFrameWindow.getUNOWindowPeer());
+                        Object xFrame = xServiceFactory.createInstance( "com.sun.star.frame.Frame");
+                        aFrame = new Frame( (com.sun.star.frame.XFrame)UnoRuntime.queryInterface(
+                                com.sun.star.frame.XFrame.class, xFrame ) );
+                        aFrame.initialize( xWindow );
+                        aFrame.setName( aFrame.toString() );
+
+                        // register the frame at the desktop
+                        com.sun.star.frame.XFrames xFrames =
+                                ( (com.sun.star.frame.XFramesSupplier)UnoRuntime.queryInterface(
+                                com.sun.star.frame.XFramesSupplier.class, getOOoDesktop() ) ).getFrames();
+                        xFrames.append( aFrame );
+                    }
+
+                    // Initializes the slot command execution environment.
+                    xURLTransformer = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                        com.sun.star.util.XURLTransformer.class,
+                        xServiceFactory.createInstance( "com.sun.star.util.URLTransformer") );
+                    xDispatcher = (com.sun.star.frame.XDispatchProvider)UnoRuntime.queryInterface(
+                        com.sun.star.frame.XDispatchProvider.class, aFrame );
+
+                    // get XComponentLoader from frame
+                    com.sun.star.frame.XComponentLoader xLoader = (com.sun.star.frame.XComponentLoader)
+                        UnoRuntime.queryInterface( com.sun.star.frame.XComponentLoader.class, aFrame );
+                    if ( xLoader == null )
+                    {
+                        throw new java.lang.RuntimeException(
+                            "com.sun.star.frame.Frame(" + aFrame +
+                                ") without com.sun.star.frame.XComponentLoader" );
+                    }
+
+                    // Avoid Dialog 'Document changed' while reloading
+                    if ( aDocument != null )
+                    {
+                        com.sun.star.frame.XController xOldController = null;
+                        if ( aFrame != null && aFrame.getController() != null )
+                            xOldController = aFrame.getController();
+                        try
+                        {
+                            if ( aFrame != null && xOldController != null )
+                                xOldController.suspend(true);
+                            if ( aDocument != null )
+                                try {
+                                    // can be disposed if user closed document via UI
+                                    aDocument.setModified(false);
+                                }
+                                catch (  com.sun.star.lang.DisposedException aExc ) {}
+                        }
+                        catch (java.lang.IllegalStateException exp)
+                        {}
+                    }
+
+                    // load the document.
+                    com.sun.star.beans.PropertyValue aArgs[] =
+                        addArgument( aArguments, new com.sun.star.beans.PropertyValue(
+                            "MacroExecutionMode", -1,
+                            new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
+                            com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
+                                    //String fn = aFRame.getName();
+                    com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(
+                        aURL, /*aFrame.getName()*/"_self", com.sun.star.frame.FrameSearchFlag.ALL, aArgs );
+
+                    // nothing loaded?
+                    if ( xComponent == null && aDocument != null )
+                    {
+                        // reactivate old document
+                        if ( aFrame != null && aFrame.getController() != null )
+                            aFrame.getController().suspend(false);
+                        aDocument.setModified(true);
+
+                        // throw exception
+                        throw new java.io.IOException(
+                            "Can not load a document: \"" + aURL + "\"");
+                    }
+                    // mDocumentURL = aURL; TBD: still needed?
+
+                    // Get document's XModifiable interface if any.
+                    aDocument = new OfficeDocument(
+                        (com.sun.star.frame.XModel) UnoRuntime.queryInterface(
+                        com.sun.star.frame.XModel.class, xComponent ) );
+                    bLoaded = true;
                 }
-
-                // load the document.
-                com.sun.star.beans.PropertyValue aArgs[] =
-                    addArgument( aArguments, new com.sun.star.beans.PropertyValue(
-                        "MacroExecutionMode", -1,
-                        new Short( com.sun.star.document.MacroExecMode.USE_CONFIG ),
-                        com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
-                                //String fn = aFRame.getName();
-                com.sun.star.lang.XComponent xComponent = xLoader.loadComponentFromURL(
-                    aURL, /*aFrame.getName()*/"_self", com.sun.star.frame.FrameSearchFlag.ALL, aArgs );
-
-                // nothing loaded?
-                if ( xComponent == null && aDocument != null )
+                catch ( NoConnectionException aExc )
                 {
-                    // reactivate old document
-                    if ( aFrame != null && aFrame.getController() != null )
-                        aFrame.getController().suspend(false);
-                    aDocument.setModified(true);
-
-                    // throw exception
-                    throw new java.io.IOException(
-                        "Can not load a document: \"" + aURL + "\"");
+                    // stop, clear and retry
+                    stopOOoConnection();
                 }
-                // mDocumentURL = aURL; TBD: still needed?
+                catch ( com.sun.star.lang.DisposedException aExc )
+                {
+                    // stop, clear and retry
+                    stopOOoConnection();
+                }
+                catch ( com.sun.star.uno.Exception aExc )
+                {
+                    // TDB: handling failure in createInstance
+                    aExc.printStackTrace();
+                    throw new java.io.IOException();
+                }
 
-                // Get document's XModifiable interface if any.
-                aDocument = new OfficeDocument(
-                    (com.sun.star.frame.XModel) UnoRuntime.queryInterface(
-                    com.sun.star.frame.XModel.class, xComponent ) );
-                bLoaded = true;
+                aCallWatchThread.cancel();
+                if ( xServiceFactory == null )
+                    throw new NoConnectionException();
             }
-            catch ( NoConnectionException aExc )
+            if ( iConnection == null )
             {
-                // stop, clear and retry
-                stopOOoConnection();
-            }
-            catch ( com.sun.star.lang.DisposedException aExc )
-            {
-                // stop, clear and retry
-                stopOOoConnection();
-            }
-            catch ( com.sun.star.uno.Exception aExc )
-            {
-                // TDB: handling failure in createInstance
-                aExc.printStackTrace();
-                throw new java.io.IOException();
-            }
-
-            aCallWatchThread.cancel();
-            if ( xServiceFactory == null )
                 throw new NoConnectionException();
-        }
+            }
 
-        if ( iConnection == null )
+            applyToolVisibilities();
+        }
+        catch ( java.lang.InterruptedException aExc )
         {
             throw new NoConnectionException();
         }
-
-        applyToolVisibilities();
     }
 
     //---------------------------------------------------------------------------
@@ -675,13 +714,10 @@ public class OOoBean
             final java.io.InputStream iInStream,
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
-
+            NoConnectionException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException
     {
         // wrap Java stream into UNO stream
                 /*
@@ -717,7 +753,7 @@ public class OOoBean
                 "InputStream", -1, xStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
 
         // call normal load method
-        loadFromURL( "private:stream/", aExtendedArguments );
+        loadFromURL( "private:stream", aExtendedArguments );
     }
 
     //---------------------------------------------------------------------------
@@ -729,13 +765,10 @@ public class OOoBean
             final byte aInBuffer[],
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
-
+            NoConnectionException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException
     {
         // wrap byte arrray into UNO stream
         com.sun.star.io.XInputStream xStream =
@@ -748,36 +781,54 @@ public class OOoBean
                 "InputStream", -1, xStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
 
         // call normal load method
-        loadFromURL( "private:stream/", aExtendedArguments );
+        loadFromURL( "private:stream", aExtendedArguments );
     }
 
     //---------------------------------------------------------------------------
-    /** Stores a document to a URL.
-     *
-     *  TBD
+    /** Stores a document to the given URL.
+
+        @throws IllegalArgumentException
+            if either of the arguments is out of the specified range.
+
+        @throws java.io.IOException
+            if an IO error occurs reading the ressource specified by the URL.
+
+        @throws com.sun.star.lang.NoConnectionException
+            if no connection is established.
+
+        @throws NoDocumentException
+            if no document is loaded
      */
     public void storeToURL(
             final String aURL,
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
+            NoConnectionException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException,
+            NoDocumentException
     {
-        // start runtime timeout
-        CallWatchThread aCallWatchThread =
-            new CallWatchThread( nOOoCallTimeOut, "storeToURL" );
+        // no document available?
+        if ( aDocument == null )
+            throw new NoDocumentException();
 
-        // store the document
-        try { aDocument.storeToURL( aURL, aArguments ); }
-        catch ( com.sun.star.io.IOException aExc )
-        { throw new java.io.IOException(); }
+        try
+        {
+            // start runtime timeout
+            CallWatchThread aCallWatchThread =
+                new CallWatchThread( nOOoCallTimeOut, "storeToURL" );
 
-        // end runtime timeout
-        aCallWatchThread.cancel();
+            // store the document
+            try { aDocument.storeToURL( aURL, aArguments ); }
+            catch ( com.sun.star.io.IOException aExc )
+            { throw new java.io.IOException(); }
+
+            // end runtime timeout
+            aCallWatchThread.cancel();
+        }
+        catch ( java.lang.InterruptedException aExc )
+        { throw new NoConnectionException(); }
     }
 
     //---------------------------------------------------------------------------
@@ -789,12 +840,11 @@ public class OOoBean
             java.io.OutputStream aOutStream,
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
+            NoConnectionException,
+            NoDocumentException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException
 
     {
         // wrap Java stream into UNO stream
@@ -808,7 +858,7 @@ public class OOoBean
                 "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
 
         // call normal store method
-        storeToURL( "private:stream/", aExtendedArguments );
+        storeToURL( "private:stream", aExtendedArguments );
 
         // get byte array from document stream
         try { aStream.closeOutput(); }
@@ -830,13 +880,11 @@ public class OOoBean
             byte aOutBuffer[],
             final com.sun.star.beans.PropertyValue aArguments[] )
         throws
-            java.io.IOException,
-            java.lang.InterruptedException,
-            com.sun.star.lang.IllegalArgumentException,
-
             // @requirement FUNC.CON.LOST/0.2
-            NoConnectionException
-
+            NoConnectionException,
+            NoDocumentException,
+            java.io.IOException,
+            com.sun.star.lang.IllegalArgumentException
     {
         // wrap byte arrray into UNO stream
         com.sun.star.lib.uno.adapter.XOutputStreamToByteArrayAdapter aStream =
@@ -849,7 +897,7 @@ public class OOoBean
                 "OutputStream", -1, aStream, com.sun.star.beans.PropertyState.DIRECT_VALUE ) );
 
         // call normal store method
-        storeToURL( "private:stream/", aExtendedArguments );
+        storeToURL( "private:stream", aExtendedArguments );
 
         // get byte array from document stream
         try { aStream.closeOutput(); }
@@ -877,11 +925,14 @@ public class OOoBean
 
         @throws NoConnectionException
             if the connection is not established.
+
+        @throws NotDocumentException
+            if no document is loaded an thus no frame is available.
      */
     public Frame getFrame()
 
-        // @requirement FUNC.CON.LOST/0.2
-        throws NoConnectionException
+        throws
+            NoConnectionException // @requirement FUNC.CON.LOST/0.2
     {
         if ( iConnection == null )
             throw new NoConnectionException();
@@ -891,8 +942,8 @@ public class OOoBean
     //-------------------------------------------------------------------------
         // @requirement FUNC.BEAN.PROG/0.5
         // @requirement API.SIM.SEAP/0.2
-    // @estimation 1h
-        /** returns the <type scope="com::sun::star::frame::Controller"> of the bean.
+        // @estimation 1h
+    /** returns the <type scope="com::sun::star::frame::Controller"> of the bean.
 
         @returns
             a Java class which implements all interfaces which the service
@@ -902,17 +953,11 @@ public class OOoBean
 
         @throws NoConnectionException
             if the connection is not established.
-
-        @throws NotDocumentLoadedException
-            if no document is loaded an thus no controller is available.
      */
     public Controller getController()
 
         // @requirement FUNC.CON.LOST/0.2
-        throws NoConnectionException,
-
-        // @requirement API.NODC
-        NoDocumentException
+        throws NoConnectionException
     {
         if ( iConnection == null )
             throw new NoConnectionException();
@@ -939,17 +984,11 @@ public class OOoBean
 
         @throws NoConnectionException
             if the connection is not established.
-
-        @throws NotDocumentLoadedException
-            if no document is loaded.
      */
     public OfficeDocument getDocument()
 
         // @requirement FUNC.CON.LOST/0.2
-        throws NoConnectionException,
-
-        // @requirement API.NODC
-        NoDocumentException // TBD
+        throws NoConnectionException
     {
         if ( iConnection == null )
             throw new NoConnectionException();
@@ -966,10 +1005,12 @@ public class OOoBean
 
         If an older OOoBean instance is used with a newer OOo instance,
         some tool bars might not be affected by this method.
+
+        If no connection is established or no document is loaded,
+        the setting is memorized until a document is loaded.  Same
+        is valid when the connection dies within this function call.
      */
     public void setAllBarsVisible( boolean bVisible )
-        throws
-            java.lang.InterruptedException
     {
         bIgnoreVisibility = true;
         setMenuBarVisible( bVisible );
@@ -1057,23 +1098,29 @@ public class OOoBean
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
+        Same is valid when the connection dies within this function call.
 
          @param bVisible
             If false, the menu bar is disabled,
             If true, the menu bar is visible.
      */
     public void setMenuBarVisible(boolean bVisible)
-        throws
-            java.lang.InterruptedException
     {
-        bMenuBarVisible = setToolVisible( "MenuBarVisible", "private:resource/menubar/menubar",
-                SID_TOGGLEMENUBAR, "MenuBarVisible", bMenuBarVisible, bVisible );
+        try
+        {
+            bMenuBarVisible = setToolVisible( "MenuBarVisible", "private:resource/menubar/menubar",
+                    SID_TOGGLEMENUBAR, "MenuBarVisible", bMenuBarVisible, bVisible );
+        }
+        catch ( java.lang.InterruptedException aExc )
+        { bMenuBarVisible = bVisible; }
     }
 
     //--------------------------------------------------------------------------
       /* Returns the visibility of the menu bar.
 
            This method works independently from a connetion or loaded document.
+        If no connection is established or no document is loaded,
+        this method just returns a memorized status.
 
         @return
             True if the menu bar is visible,
@@ -1091,23 +1138,29 @@ public class OOoBean
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
+        Same is valid when the connection dies within this function call.
 
          @param bVisible
             If false, the main function bar is disabled,
             If true, the main function bar is visible.
      */
     public void setStandardBarVisible(boolean bVisible)
-        throws
-            java.lang.InterruptedException
     {
-        bStandardBarVisible = setToolVisible( "StandardBarVisible", "private:resource/toolbar/standardbar",
-                SID_TOGGLEMAINBAR, "FunctionBarVisible", bStandardBarVisible, bVisible );
+        try
+        {
+            bStandardBarVisible = setToolVisible( "StandardBarVisible", "private:resource/toolbar/standardbar",
+                    SID_TOGGLEMAINBAR, "FunctionBarVisible", bStandardBarVisible, bVisible );
+        }
+        catch ( java.lang.InterruptedException aExc )
+        { bMenuBarVisible = bVisible; }
     }
 
     //--------------------------------------------------------------------------
       /* Returns the visibility of the main function bar.
 
            This method works independently from a connetion or loaded document.
+        If no connection is established or no document is loaded,
+        this method just returns a memorized status.
 
         @return
             True if the main function bar is visible,
@@ -1125,23 +1178,29 @@ public class OOoBean
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
+        Same is valid when the connection dies within this function call.
 
          @param bVisible
             If false, the tool function bar is disabled,
             If true, the tool function bar is visible.
      */
     public void setToolBarVisible(boolean bVisible)
-        throws
-            java.lang.InterruptedException
     {
-        bToolBarVisible = setToolVisible( "ToolBarVisible", "private:resource/toolbar/toolbar",
-                SID_TOGGLETOOLBAR, "ToolBarVisible", bToolBarVisible, bVisible );
+        try
+        {
+            bToolBarVisible = setToolVisible( "ToolBarVisible", "private:resource/toolbar/toolbar",
+                    SID_TOGGLETOOLBAR, "ToolBarVisible", bToolBarVisible, bVisible );
+        }
+        catch ( java.lang.InterruptedException aExc )
+        { bMenuBarVisible = bVisible; }
     }
 
     //--------------------------------------------------------------------------
       /* Returns the visibility of the tool function bar.
 
            This method works independently from a connetion or loaded document.
+        If no connection is established or no document is loaded,
+        this method just returns a memorized status.
 
         @return
             True if the tool function bar is visible,
@@ -1159,23 +1218,29 @@ public class OOoBean
 
         If not connected or no document loaded, the value is stored
         and automatically applied to the document after it is loaded.
+        Same is valid when the connection dies within this function call.
 
          @param bVisible
             If false, the status function bar is disabled,
             If true, the status function bar is visible.
      */
     public void setStatusBarVisible(boolean bVisible)
-        throws
-            java.lang.InterruptedException
     {
-        bStatusBarVisible = setToolVisible( "StatusBarVisible", "private:resource/statusbar/statusbar",
-                SID_TOGGLESTATUSBAR, "StatusBarVisible", bStatusBarVisible, bVisible );
+        try
+        {
+            bStatusBarVisible = setToolVisible( "StatusBarVisible", "private:resource/statusbar/statusbar",
+                    SID_TOGGLESTATUSBAR, "StatusBarVisible", bStatusBarVisible, bVisible );
+        }
+        catch ( java.lang.InterruptedException aExc )
+        { bMenuBarVisible = bVisible; }
     }
 
     //--------------------------------------------------------------------------
       /*    Returns the visibility of the status function bar.
 
            This method works independently from a connetion or loaded document.
+        If no connection is established or no document is loaded,
+        this method just returns a memorized status.
 
         @return
             True if the status function bar is visible,

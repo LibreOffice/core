@@ -2,9 +2,9 @@
  *
  *  $RCSfile: com_sun_star_beans_LocalOfficeWindow.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-10-18 07:16:33 $
+ *  last change: $Author: mi $ $Date: 2004-10-28 15:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #define OLD_PROC_KEY "oldwindowproc"
 
 static LRESULT APIENTRY OpenOfficeWndProc( HWND , UINT , WPARAM , LPARAM );
+
+JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNativeWindow
+  (JNIEnv * env, jobject obj_this);
 
 /*****************************************************************************/
 /*
