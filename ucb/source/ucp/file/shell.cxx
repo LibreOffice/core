@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sb $ $Date: 2001-02-12 13:50:07 $
+ *  last change: $Author: abi $ $Date: 2001-02-19 10:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2199,6 +2199,9 @@ shell::move( sal_Int32 CommandId,
 {
     rtl::OUString dstUnqPath( dstUnqPathIn );
 
+    if( dstUnqPath == srcUnqPath )    // Nothing left to be done
+        return;
+
     // Moving file or folder ?
     osl::DirectoryItem aItem;
     osl::FileBase::RC err = osl::DirectoryItem::get( srcUnqPath,aItem );
@@ -2382,6 +2385,9 @@ shell::copy(
     throw( CommandAbortedException )
 {
     rtl::OUString dstUnqPath( dstUnqPathIn );
+
+    if( dstUnqPath == srcUnqPath )    // Nothing left to be done
+        return;
 
     // Moving file or folder ?
     osl::DirectoryItem aItem;
