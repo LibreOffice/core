@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: dvo $ $Date: 2003-10-16 13:00:25 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 16:39:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
 SLOFILES =	\
         $(SLO)$/attributes.obj \
         $(SLO)$/cspline.obj \
