@@ -3,15 +3,15 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:39 $
+ *  last change: $Author: jl $ $Date: 2002-12-04 15:44:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *	   - GNU Lesser General Public License Version 2.1
+ *	   - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -32,7 +32,7 @@
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *  MA  02111-1307  USA
+ *  MA	02111-1307  USA
  *
  *
  *  Sun Industry Standards Source License Version 1.1
@@ -74,7 +74,7 @@
 				<!-- OldLocation: java.ini -->
 				<!-- Notice: Default: depends on Java installation path -->
 				<info>
-					<desc xml:lang="en-US">Specifies the path of the Java installation</desc>
+					<desc xml:lang="en-US">Specifies the path of the Java installation.</desc>
 					<label xml:lang="en-US">Java Home</label>
 				</info>
 				<value>NULL</value>
@@ -165,6 +165,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US"> JVM supports debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DebugPort" oor:type="xs:int">
@@ -172,6 +173,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Determines the port for debugging.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
@@ -179,6 +181,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Turns on the verbose garbace collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="Verbose" oor:type="xs:boolean">
@@ -186,6 +189,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Turns on verbose mode for Java execution.</desc>
 				</info>
 			</prop>
 			<prop oor:name="NativeStackSize" oor:type="xs:int">
@@ -193,6 +197,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Determines the native stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="JavaStackSize" oor:type="xs:int">
@@ -200,6 +205,7 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Determines the java stack size.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VerifyMode" oor:type="xs:int">
@@ -207,21 +213,25 @@
 				<!-- OldLocation: java.ini -->
 				<info>
 					<deprecated/>
+					<desc xml:lang="en-US">Determines the verify mode.</desc>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
 						<info>
-        					<deprecated/>
+							<deprecated/>
+							<desc xml:lang="en-US">Verify mode 0.</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="1">
 						<info>
-        					<deprecated/>
+							<deprecated/>
+							<desc xml:lang="en-US">Verify mode 1.</desc>		
 						</info>
 					</enumeration>
 					<enumeration oor:value="2">
 						<info>
-        					<deprecated/>
+							<deprecated/>
+							<desc xml:lang="en-US">Verify mode 2.</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -230,39 +240,52 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-                    <deprecated/>
+				    <deprecated/>
+					<desc xml:lang="en-US">Determines the minimal size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="MaxHeapSize" oor:type="xs:int">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-        			<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Determines the maximal size of the heap.</desc>
 				</info>
 			</prop>
 			<prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-   					<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Disables asynchronous garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="EnableClassGC" oor:type="xs:boolean">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-   					<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Enables garbage collection.</desc>
 				</info>
 			</prop>
 			<prop oor:name="VMType" oor:type="xs:string">
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-   					<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Values for different VM types.</desc>
 				</info>
 				<constraints>
-					<enumeration oor:value="Classic"/>
-					<enumeration oor:value="Hotspot"/>
+					<enumeration oor:value="Classic">
+					    <info>
+							<desc xml:lang="en-US">Use classic VM.</desc>
+					    </info>
+					</enumeration>
+					<enumeration oor:value="Hotspot">
+						<info>
+							<desc xml:lang="en-US">Use hospot VM.</desc>
+					    </info>
+					</enumeration>
 				</constraints>
 			</prop>
 			<prop oor:name="EnvironmentType" oor:type="xs:string">
@@ -297,7 +320,8 @@
 				<!-- OldPath: Java -->
 				<!-- OldLocation: java.ini -->
 				<info>
-   					<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Properties for use with the Java VM.</desc>
 				</info>
 			</prop>
 		</group>
@@ -365,7 +389,8 @@
 				<!-- OldPath: Install -->
 				<!-- OldLocation: java.ini -->
 				<info>
-   					<deprecated/>
+					<deprecated/>
+					<desc xml:lang="en-US">Used to locate resources.</desc>
 				</info>
 				<value/> <!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
