@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:03 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "~Not larger than page area" ;
         Text [ norwegian ] = "Maksimum Sidehøyde" ;
         Text [ italian ] = "Altezza massima come pagina" ;
-        Text [ portuguese_brazilian ] = "Altura de p?gina no m ximo" ;
+        Text [ portuguese_brazilian ] = "Me~nor que a área da página" ;
         Text [ portuguese ] = "Não superior à área da página" ;
         Text [ finnish ] = "E~i sivualuetta suurempi" ;
         Text [ danish ] = "Op til maksimal sidehøjde" ;
@@ -88,16 +88,19 @@ TabPage TP_FOOTNOTE_PAGE
         Group = TRUE ;
         Text[ chinese_simplified ] = "æœ€é«˜ä¸è¶…è¿‡é¡µé«˜(~N)";
         Text[ russian ] = "Íå áîëüøå âûñîòû ñòğàíèöû";
-        Text[ polish ] = "Nie wy¿ej ni¿ na obszarze strony";
+        Text[ polish ] = "~Nie wy¿ej ni¿ na obszarze strony";
         Text[ japanese ] = "æœ€é«˜ã¯ãƒšãƒ¼ã‚¸ã®é«˜ã•(~N)";
         Text[ chinese_traditional ] = "æœ€é«˜ä¸è¶…éé é«˜(~N)";
         Text[ arabic ] = "áíÓ ÃßÈÑ ãä äØÇŞ ÇáÕİÍÉ";
         Text[ greek ] = "¼÷é ìåãáëıôåñï ıøïò áğü ôçí ğåñéï÷Ş óåëßäáò";
         Text[ korean ] = "í˜ì´ì§€ ì˜ì—­ ë³´ë‹¤ ë†’ì§€ ì•Šê²Œ(~N)";
-        Text[ turkish ] = "En fazla sayfa yüksekliğinde";
+        Text[ turkish ] = "~Sayfa  alanından büyük değil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alçada mà~xima de pàgina";
         Text[ thai ] = "à¹„~à¸¡à¹ˆà¹ƒà¸«à¸à¹ˆà¸à¸§à¹ˆà¸²à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¸«à¸™à¹‰à¸²";
+        Text[ czech ] = "Ne vÄ›tÅ¡Ã­ neÅ¾ oblast strÃ¡nky";
+        Text[ hebrew ] = "HÃ¶he maximal wie ~Seite";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤µà¤¿à¤¸à¥à¤¤à¥€~à¤°à¥à¤£ à¤¸à¥‡ à¤…à¤§à¤¿à¤• à¤¨à¤¹à¥€à¤‚";
     };
     RadioButton RB_MAXHEIGHT
     {
@@ -107,7 +110,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "Ma~ximum footnote height" ;
         Text [ norwegian ] = "Maks. ~Høyde på Fotnote" ;
         Text [ italian ] = "Altezza massima nota a piè pagina" ;
-        Text [ portuguese_brazilian ] = "Max. ~Height of Footnote" ;
+        Text [ portuguese_brazilian ] = "~Altura máxima da nota de rodapé" ;
         Text [ portuguese ] = "~Altura máxima da nota de rodapé" ;
         Text [ finnish ] = "Ala~viitteen korkeus enintään" ;
         Text [ danish ] = "Maks. højde fodnote" ;
@@ -118,16 +121,19 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "Maximum footnote ~height" ;
         Text[ chinese_simplified ] = "æ³¨è„šçš„æœ€é«˜åº¦(~H)";
         Text[ russian ] = "Ìàêñ. âûñîòà ñíîñêè";
-        Text[ polish ] = "~Maks. wysokoœæ przypisów doln.";
+        Text[ polish ] = "M~aks. wysokoœæ przypisów dolnych";
         Text[ japanese ] = "è„šæ³¨ã®æœ€é«˜ã®é«˜ã•(~H)";
         Text[ chinese_traditional ] = "è¨»è…³çš„æœ€é«˜(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃŞÕì ááÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Ìİãéóôï ıøïò õğïóçìåßùóçò";
         Text[ korean ] = "ê°ì£¼ ìµœëŒ€ ë†’ì´(~H)";
-        Text[ turkish ] = "Azami dipnot yüksekliği";
+        Text[ turkish ] = "Azami dipnot ~yüksekliği";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Alçada màx. de ~nota al peu";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸ªà¸¹à¸‡à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–à¸—à¸µà¹ˆà¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸”";
+        Text[ czech ] = "MaximÃ¡lnÃ­ vÃ½Å¡ka zÃ¡patÃ­";
+        Text[ hebrew ] = "Ma~x. HÃ¶he der FuÃŸnote";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ ~à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¤¾ à¤…à¤§à¤¿à¤•à¤¤à¤® à¤Šà¤à¤šà¤¾à¤ˆ";
     };
     MetricField ED_MAXHEIGHT
     {
@@ -156,7 +162,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "~Space to text" ;
         Text [ norwegian ] = "~Avstand fra Hovedtekst" ;
         Text [ italian ] = "~Distanza dal corpo del testo" ;
-        Text [ portuguese_brazilian ] = "~Dist?ncia do Corpo do Texto" ;
+        Text [ portuguese_brazilian ] = "Distância até corpo do texto" ;
         Text [ portuguese ] = "~Distância até corpo do texto" ;
         Text [ finnish ] = "Etäisyys tekstistä" ;
         Text [ danish ] = "Afstand til brødtekst" ;
@@ -168,7 +174,7 @@ TabPage TP_FOOTNOTE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "è‡³å†…æ–‡çš„è·ç¦»";
         Text[ russian ] = "Ğàññòîÿíèå ~äî òåêñòà";
-        Text[ polish ] = "Odstep do obszaru tekstowego";
+        Text[ polish ] = "Odstêp od tekstu";
         Text[ japanese ] = "æœ¬æ–‡ã¾ã§ã®é–“éš”";
         Text[ chinese_traditional ] = "è‡³å…§æ–‡çš„è·ç¦»";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáäÕ";
@@ -178,6 +184,9 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espai per al text";
         Text[ thai ] = "à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸–à¸¶à¸‡à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
+        Text[ czech ] = "VzdÃ¡lenost k textu";
+        Text[ hebrew ] = "~Abstand zum TextkÃ¶rper";
+        Text[ hindi ] = "à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤•à¥‡à¤²à¤¿à¤ à¤…à¤‚à¤¤à¤°";
     };
     MetricField ED_DIST
     {
@@ -204,7 +213,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "Footnote range" ;
         Text [ norwegian ] = "+++Footnote range" ;
         Text [ italian ] = "Area note a piè pagina" ;
-        Text [ portuguese_brazilian ] = "Faixa de nota de p? de p?gina" ;
+        Text [ portuguese_brazilian ] = "Área da nota de rodapé" ;
         Text [ portuguese ] = "Área da nota de rodapé" ;
         Text [ finnish ] = "Alaviitealue" ;
         Text [ danish ] = "Fodnoteområde" ;
@@ -215,16 +224,19 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "Footnote area" ;
         Text[ chinese_simplified ] = "æ³¨è„šåŒºåŸŸ";
         Text[ russian ] = "Îáëàñòü ñíîñîê";
-        Text[ polish ] = "Zakres przypisów dolnych";
+        Text[ polish ] = "Obszar przypisów dolnych";
         Text[ japanese ] = "è„šæ³¨ç¯„å›²";
         Text[ chinese_traditional ] = "è¨»è…³ç¯„åœ";
         Text[ arabic ] = "äØÇŞ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ greek ] = "Ğåñéï÷Ş õğïóçìåßùóçò";
         Text[ korean ] = "ê°ì£¼ ì˜ì—­";
-        Text[ turkish ] = "Dipnot bölümü";
+        Text[ turkish ] = "Dipnot alanı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Àrea de la nota al peu";
         Text[ thai ] = "à¸à¸·à¹‰à¸™à¸—à¸µà¹ˆà¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+        Text[ czech ] = "Oblast poznÃ¡mek pod Äarou";
+        Text[ hebrew ] = "FuÃŸnotenbereich";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¤¾ à¤µà¤¿à¤¸à¥à¤¤à¥€à¤°à¥à¤£";
     };
     FixedText FT_LINEPOS
     {
@@ -235,7 +247,7 @@ TabPage TP_FOOTNOTE_PAGE
         Left = TRUE ;
         Text [ portuguese ] = "~Posição" ;
         Text [ english_us ] = "~Position" ;
-        Text [ portuguese_brazilian ] = "~Position" ;
+        Text [ portuguese_brazilian ] = "~Posição" ;
         Text [ swedish ] = "~Position" ;
         Text [ danish ] = "Placering" ;
         Text [ italian ] = "Posizione" ;
@@ -244,17 +256,20 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ dutch ] = "~Positie" ;
         Text[ chinese_simplified ] = "ä½ç½®(~P)";
         Text[ russian ] = "Ïîëîæåíèå";
-        Text[ polish ] = "Pozycja";
+        Text[ polish ] = "~Pozycja";
         Text[ japanese ] = "ä½ç½®(~P)";
         Text[ chinese_traditional ] = "ä½ç½®(~P)";
         Text[ arabic ] = "ÇáãæÖÚ";
         Text[ greek ] = "Èİóç";
         Text[ korean ] = "ìœ„ì¹˜(~P)";
-        Text[ turkish ] = "Konum";
+        Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posició";
         Text[ finnish ] = "~Sijainti";
         Text[ thai ] = "~à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¾à¤¨";
     };
     ListBox DLB_LINEPOS
     {
@@ -290,9 +305,9 @@ TabPage TP_FOOTNOTE_PAGE
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "A Direita" ; Default ; > ;
+            < "Esquerda" ; Default ; > ;
+            < "Centralizado" ; Default ; > ;
+            < "Direita" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -357,7 +372,7 @@ TabPage TP_FOOTNOTE_PAGE
         StringList [ polish ] =
         {
             < "Z lewej" ; Default ; > ;
-            < "Do œrodka" ; Default ; > ;
+            < "Poœrodku" ; Default ; > ;
             < "Z prawej" ; Default ; > ;
         };
         StringList [ japanese ] =
@@ -393,7 +408,7 @@ TabPage TP_FOOTNOTE_PAGE
         StringList [ turkish ] =
         {
             < "Sol" ; Default ; > ;
-            < "Orta" ; Default ; > ;
+            < "Ortalanmış" ; Default ; > ;
             < "Sağ" ; Default ; > ;
         };
         StringList [ language_user1 ] =
@@ -414,6 +429,24 @@ TabPage TP_FOOTNOTE_PAGE
         < "à¸•à¸£à¸‡à¸à¸¥à¸²à¸‡" ; Default ; > ;
         < "à¸‚à¸§à¸²" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Vlevo" ; Default ; > ;
+        < "UprostÅ™ed" ; Default ; > ;
+        < "Vpravo" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "Links" ; Default ; > ;
+        < "Zentriert" ; Default ; > ;
+        < "Rechts" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "à¤¬à¤¾à¤¯à¤¾à¤" ; Default ; > ;
+        < "à¤•à¥‡à¤¨à¥à¤¦à¥à¤°à¤¿à¤¤" ; Default ; > ;
+        < "à¤¦à¤¾à¤¹à¤¿à¤¨à¤¾" ; Default ; > ;
+    };
     };
     FixedText FT_LINETYPE
     {
@@ -425,7 +458,7 @@ TabPage TP_FOOTNOTE_PAGE
         Left = TRUE ;
         Text [ portuguese ] = "~Espessura da linha" ;
         Text [ english_us ] = "~Weight" ;
-        Text [ portuguese_brazilian ] = "~Tipo" ;
+        Text [ portuguese_brazilian ] = "~Espessura do traço" ;
         Text [ swedish ] = "Styr~ka" ;
         Text [ danish ] = "Styrke" ;
         Text [ italian ] = "~Spessore" ;
@@ -434,17 +467,20 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ dutch ] = "~Sterkte" ;
         Text[ chinese_simplified ] = "çº¿æ¡ç²—ç»†(~W)";
         Text[ russian ] = "Òîëùèíà ëèíèé";
-        Text[ polish ] = "Gruboœæ";
+        Text[ polish ] = "~Gruboœæ";
         Text[ japanese ] = "ç·šã®å¤ªã•(~W)";
         Text[ chinese_traditional ] = "ç·šæ¢ç²—ç´°(~W)";
         Text[ arabic ] = "Óõãúß ÇáÎØ";
         Text[ greek ] = "ĞÜ÷ïò ãñáììŞò";
         Text[ korean ] = "êµµê¸°(~W)";
-        Text[ turkish ] = "Çizgi kal.";
+        Text[ turkish ] = "~Çizgi kalınlığı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pes";
         Text[ finnish ] = "Pa~ksuus";
         Text[ thai ] = "~à¸™à¹‰à¸³à¸«à¸™à¸±à¸";
+        Text[ czech ] = "TlouÅ¡Å¥ka";
+        Text[ hebrew ] = "StÃ¤r~ke";
+        Text[ hindi ] = "~à¤­à¤¾à¤°";
     };
     ListBox DLB_LINETYPE
     {
@@ -465,7 +501,7 @@ TabPage TP_FOOTNOTE_PAGE
         Left = TRUE ;
         Text [ portuguese ] = "~Comprimento" ;
         Text [ english_us ] = "~Length" ;
-        Text [ portuguese_brazilian ] = "~Largura" ;
+        Text [ portuguese_brazilian ] = "~Comprimento" ;
         Text [ swedish ] = "Län~gd" ;
         Text [ danish ] = "Længde" ;
         Text [ italian ] = "~Lunghezza" ;
@@ -474,17 +510,20 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ dutch ] = "L~engte" ;
         Text[ chinese_simplified ] = "é•¿åº¦(~L)";
         Text[ russian ] = "Äëèíà";
-        Text[ polish ] = "D³ugoœæ";
+        Text[ polish ] = "~D³ugoœæ";
         Text[ japanese ] = "é•·ã•(~L)";
         Text[ chinese_traditional ] = "é•·åº¦(~L)";
         Text[ arabic ] = "ÇáØæá";
         Text[ greek ] = "ÌŞêïò";
         Text[ korean ] = "ê¸¸ì´(~L)";
-        Text[ turkish ] = "Uzunluk";
+        Text[ turkish ] = "~Uzunluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Longitud";
         Text[ finnish ] = "~Pituus";
         Text[ thai ] = "à¸„à¸§à¸²à¸¡~à¸¢à¸²à¸§";
+        Text[ czech ] = "DÃ©lka";
+        Text[ hebrew ] = "LÃ¤n~ge";
+        Text[ hindi ] = "~à¤²à¤®à¥à¤¬à¤¾à¤ˆ";
     };
     MetricField ED_LINEWIDTH
     {
@@ -510,7 +549,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "~Spacing to footnote contents" ;
         Text [ norwegian ] = "Avsta~nd" ;
         Text [ italian ] = "Distanza dal contenuto delle note" ;
-        Text [ portuguese_brazilian ] = "Dist?n~cia" ;
+        Text [ portuguese_brazilian ] = "~Afastamento até a nota de rodapé" ;
         Text [ portuguese ] = "E~spaçam. entre traço e texto" ;
         Text [ finnish ] = "~Etäisyys alaviitteiden sisällöstä" ;
         Text [ danish ] = "A~fstand til fodnoteindholdet" ;
@@ -522,16 +561,19 @@ TabPage TP_FOOTNOTE_PAGE
         Left = TRUE ;
         Text[ chinese_simplified ] = "è‡³æ³¨è„šæ–‡çš„é—´éš”(~S)";
         Text[ russian ] = "Ğàññòîÿíèå äî òåêñòà ñíîñêè";
-        Text[ polish ] = "Odstêp od przypisów dolnych";
+        Text[ polish ] = "~Odstêp od przypisów dolnych";
         Text[ japanese ] = "è„šæ³¨ã¾ã§ã®é–“éš”(~S)";
         Text[ chinese_traditional ] = "è‡³è¨»è…³æ–‡çš„é–“éš”(~S)";
         Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ãÍÊæíÇÊ ÇáÍÇÔíÉ ÇáÓİáíÉ";
         Text[ language_user1 ] = " ";
         Text[ greek ] = "Áğüó~ôáóç áğü ôï ğåñéå÷üìåíï õğïóçìåßùóçò";
         Text[ korean ] = "ê°ì£¼ ë‚´ìš©ê³¼ì˜ ê°„ê²©(~S)";
-        Text[ turkish ] = "Dipnot içeriğine uzaklık";
+        Text[ turkish ] = "~Dipnot içeriğine uzaklık";
         Text[ catalan ] = "~Espaiat continguts de la nota al peu";
         Text[ thai ] = "~à¸£à¸°à¸¢à¸°à¸«à¹ˆà¸²à¸‡à¸–à¸¶à¸‡à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸Šà¸´à¸‡à¸­à¸£à¸£à¸–";
+        Text[ czech ] = "VzdÃ¡lenost k obsahu zÃ¡patÃ­";
+        Text[ hebrew ] = "Abstan~d zum FuÃŸnoteninhalt";
+        Text[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  ~à¤•à¥‡ à¤¨à¥€à¤šà¥‡ à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¥‡ à¤µà¤¿à¤·à¤¯ à¤•à¥‹ à¤…à¤‚à¤¤à¤° à¤¦à¥‡à¤¨à¤¾";
     };
     MetricField ED_LINEDIST
     {
@@ -558,7 +600,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ ENGLISH ] = "Line" ;
         Text [ norwegian ] = "Linje" ;
         Text [ italian ] = "Linea di separazione" ;
-        Text [ portuguese_brazilian ] = "Linha" ;
+        Text [ portuguese_brazilian ] = "Linha de separação" ;
         Text [ portuguese ] = "Linha de separação" ;
         Text [ finnish ] = "Erotinviiva" ;
         Text [ danish ] = "Separator" ;
@@ -575,12 +617,32 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ arabic ] = "ÇáÎØ ÇáİÇÕá";
         Text[ greek ] = "Äéá÷ùñéóôéêŞ ãñáììŞ";
         Text[ korean ] = "êµ¬ë¶„ì„ ";
-        Text[ turkish ] = "Ayırma çizgisi";
+        Text[ turkish ] = "Ayraç çizgisi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línia de separació";
         Text[ thai ] = "à¸•à¸±à¸§à¹à¸¢à¸à¸šà¸£à¸£à¸—à¸±à¸”";
+        Text[ czech ] = "OddÄ›lovacÃ­ ÄÃ¡ra";
+        Text[ hebrew ] = "Trennlinie";
+        Text[ hindi ] = "à¤…à¤²à¤—à¤¾à¤¨à¥‡à¤µà¤¾à¤²à¤¾ à¤°à¥‡à¤–à¤¾";
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
