@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:30:51 $
+#   last change: $Author: rt $ $Date: 2003-04-24 13:36:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,7 +76,7 @@ RSCUPDVER=$(RSCREVISION)(SV$(UPD)$(UPDMINOR))
 
 # --- Define time bomb date. Not active for OOo --------------------
 # --- You must use the yyyymmdd format!!! --------------------------
-CDEFS+=-DTIMEBOMB=20030930
+CDEFS+=-DTIMEBOMB=20031231
 
 # --- Files --------------------------------------------------------
 
