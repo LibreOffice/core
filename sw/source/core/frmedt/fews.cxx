@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:35:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
                                         const SvEmbeddedObject *pObj ) const
 {
     const SwFrm *pFrm = Imp()->HasDrawView()
-                ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkList(),
+                ? ::GetFlyFromMarked( &Imp()->GetDrawView()->GetMarkedObjectList(),
                                       (ViewShell*)this)
                 : 0;
 
@@ -485,7 +485,7 @@ void SwFEShell::ShGetFcs( BOOL bUpdate )
     if ( HasDrawView() )
     {
         Imp()->GetDrawView()->SetMarkHdlHidden( FALSE );
-        if ( Imp()->GetDrawView()->HasMarkedObj() )
+        if ( Imp()->GetDrawView()->AreObjectsMarked() )
             FrameNotify( this, FLY_DRAG_START );
     }
 }
@@ -494,7 +494,7 @@ void SwFEShell::ShLooseFcs()
 {
     SwCrsrShell::ShLooseFcs();
 
-    if ( HasDrawView() && Imp()->GetDrawView()->HasMarkedObj() )
+    if ( HasDrawView() && Imp()->GetDrawView()->AreObjectsMarked() )
     {
         Imp()->GetDrawView()->SetMarkHdlHidden( TRUE );
         FrameNotify( this, FLY_DRAG_END );
@@ -654,7 +654,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt,
             if( Imp()->GetDrawView() )
             {
                 SwDrawView *pDView = Imp()->GetDrawView();
-                const SdrMarkList& rMrkList = pDView->GetMarkList();
+                const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
                 StartUndo();
 
                 // OD 27.11.2003 #112045# - copy marked drawing objects to
