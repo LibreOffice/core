@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:43:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Považovat za stejné";
         Text[ hebrew ] = "‮התיחסות כשווה‬";
         Text[ hindi ] = "के समान व्यवहार करो";
+        Text[ slovak ] = "Považovať za rovnaké";
     };
     CheckBox CB_MATCH_CASE
     {
@@ -136,6 +137,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "malá/velká";
         Text[ hebrew ] = "‮אותיות גדולות\\קטנות‬";
         Text[ hindi ] = "~अप्परकेस/लोवरकेस";
+        Text[ slovak ] = "~veľké/malé písmo";
     };
     CheckBox CB_MATCH_FULL_HALF_WIDTH
     {
@@ -168,6 +170,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "~full-width/half-width forms";
         Text[ hebrew ] = "‮טפסים ברוחב מלא\\חצי‬";
         Text[ hindi ] = "पूरा-चौड़ाई/आधा-चौड़ाई फ़ॉर्म्";
+        Text[ slovak ] = "~formy s plnou/polovičnou šírkou";
     };
     CheckBox CB_MATCH_HIRAGANA_KATAKANA
     {
@@ -200,6 +203,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "hiragana/katakana";
         Text[ hebrew ] = "‮הירגנה\\קטקנה‬";
         Text[ hindi ] = "हिरागाना/कटकाना";
+        Text[ slovak ] = "~hiragana/katakana";
     };
     CheckBox CB_MATCH_CONTRACTIONS
     {
@@ -232,6 +236,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "stažené tvary (yo-on, sokuon)";
         Text[ hebrew ] = "‮קיצורים (yo-on, sokuon)‬";
         Text[ hindi ] = "सिकुड़न् (yo-on, sokuon)";
+        Text[ slovak ] = "~zúžené tvary (yo-on, sokuon)";
     };
     CheckBox CB_MATCH_MINUS_DASH_CHOON
     {
@@ -244,7 +249,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ russian ] = "�����/cho-on";
         Text[ greek ] = "�����/��������� ������/cho-on";
         Text[ dutch ] = "~Minteken/verbindingsstreepje/cho-on";
-        Text[ french ] = "Moins/tiret/cho-on";
+        Text[ french ] = "Moins/trait/cho-on";
         Text[ spanish ] = "Menos/Gui�n/cho-on";
         Text[ italian ] = "Meno/trattino/cho-on";
         Text[ danish ] = "~Minus/bindestreg/cho-on";
@@ -264,6 +269,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "mínus/pomlčka/cho-on";
         Text[ hebrew ] = "‮מינוס\\מקף\\צ'ו און‬";
         Text[ hindi ] = "घटाव/डॉश/cho-on";
+        Text[ slovak ] = "~mínus/pomlčka/cho-on";
     };
     CheckBox CB_MATCH_REPEAT_CHAR_MARKS
     {
@@ -296,6 +302,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "značky 'opakovacího znaku'";
         Text[ hebrew ] = "‮סימני 'תוים חוזרים'‬";
         Text[ hindi ] = "'दुहराने का अक्षर' चिह्न";
+        Text[ slovak ] = "'o~pakovacie' znaky";
     };
     CheckBox CB_MATCH_VARIANT_FORM_KANJI
     {
@@ -328,6 +335,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "~variant-form kanji (itaiji)";
         Text[ hebrew ] = "‮צורה אלארנטיבי (איטיג'אי)‬";
         Text[ hindi ] = "~वेरिएन्ट-फ़ॉर्म् कांजि (इटाइजि)";
+        Text[ slovak ] = "~variantná forma kanji (itaiji)";
     };
     CheckBox CB_MATCH_OLD_KANA_FORMS
     {
@@ -360,6 +368,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "staré Kana formy";
         Text[ hebrew ] = "‮צורות קאנה עתיקות‬";
         Text[ hindi ] = "पु~राना काना फ़ॉर्म्";
+        Text[ slovak ] = "staré ~Kana formy";
     };
     CheckBox CB_MATCH_DIZI_DUZU
     {
@@ -392,6 +401,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "di/zi, du/zu";
         Text[ hebrew ] = "‮די\\זי, דו\\זו‬";
         Text[ hindi ] = "~di/zi, du/zu";
+        Text[ slovak ] = "~di/zi, du/zu";
     };
     CheckBox CB_MATCH_BAVA_HAFA
     {
@@ -424,6 +434,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "ba/va, ha/fa";
         Text[ hebrew ] = "‮בא\\ווא, הא\\פא‬";
         Text[ hindi ] = "~ba/va, ha/fa";
+        Text[ slovak ] = "~ba/va, ha/fa";
     };
     CheckBox CB_MATCH_TSITHICHI_DHIZI
     {
@@ -456,6 +467,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "tsi/thi/chi, dhi/zi";
         Text[ hebrew ] = "‮צי\\תי\\צ'י, די\\זי‬";
         Text[ hindi ] = "~tsi/thi/chi, dhi/zi";
+        Text[ slovak ] = "~tsi/thi/chi, dhi/zi";
     };
     CheckBox CB_MATCH_HYUFYU_BYUVYU
     {
@@ -488,6 +500,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "hyu/fyu, byu/vyu";
         Text[ hebrew ] = "‮היו\\פיו, ביו\\וויו‬";
         Text[ hindi ] = "h~yu/fyu, byu/vyu";
+        Text[ slovak ] = "h~yu/fyu, byu/vyu";
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
@@ -520,6 +533,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "se/she, ze/je";
         Text[ hebrew ] = "‮סי\\שי, זה\\ג'ה‬";
         Text[ hindi ] = "~se/she, ze/je";
+        Text[ slovak ] = "~se/she, ze/je";
     };
     CheckBox CB_MATCH_IAIYA
     {
@@ -552,6 +566,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "ia/iya (piano/piyano)";
         Text[ hebrew ] = "‮יא\\אייא (פיאנו\\פיינו)‬";
         Text[ hindi ] = "~ia/iya (piano/piyano)";
+        Text[ slovak ] = "~ia/iya (piano/piyano)";
     };
     CheckBox CB_MATCH_KIKU
     {
@@ -584,6 +599,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "ki/ku (tekisuto/tekusuto)";
         Text[ hebrew ] = "‮קי\\קו (טקיסוטו\\טקוסוטו)‬";
         Text[ hindi ] = "~ki/ku (tekisuto/tekusuto)";
+        Text[ slovak ] = "~ki/ku (tekisuto/tekusuto)";
     };
     CheckBox CB_MATCH_PROLONGED_SOUNDMARK
     {
@@ -614,6 +630,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Prodloužené samohlásky (ka-/kaa)";
         Text[ hebrew ] = "‮תנועות מאורכות (קא-\\קאא)‬";
         Text[ hindi ] = "Prolon~ged vowels (ka-/kaa)";
+        Text[ slovak ] = "Predĺže~né hlásky (ka-/kaa)";
     };
     FixedLine FL_IGNORE
     {
@@ -645,6 +662,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Ignorovat";
         Text[ hebrew ] = "‮התעלמות‬";
         Text[ hindi ] = "उपेक्षा";
+        Text[ slovak ] = "Ignorovať";
     };
     CheckBox CB_IGNORE_PUNCTUATION
     {
@@ -676,6 +694,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Interpunkční znaky";
         Text[ hebrew ] = "‮סימני פיסוק‬";
         Text[ hindi ] = "विरा~म चिह्न अक्षरें";
+        Text[ slovak ] = "I~nterpunkčné znaky";
     };
     CheckBox CB_IGNORE_WHITESPACES
     {
@@ -707,6 +726,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Znaky mezer";
         Text[ hebrew ] = "‮תווים 'לבנים'‬";
         Text[ hindi ] = "~सफ़ेद अंतर का अक्षरें";
+        Text[ slovak ] = "Znaky ~medzier";
     };
     CheckBox CB_IGNORE_MIDDLE_DOT
     {
@@ -738,6 +758,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ czech ] = "Střední tečky";
         Text[ hebrew ] = "‮נקודות אמצעיות‬";
         Text[ hindi ] = "मध्य~भाग बिन्दु";
+        Text[ slovak ] = "Stre~dné bodky";
     };
     Text[ english_us ] = "Searching in Japanese";
     Text[ portuguese ] = "Op��es de procura para Japon�s";
@@ -763,8 +784,11 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     Text[ czech ] = "Hledání v japonštině";
     Text[ hebrew ] = "‮חיפוש ביפנית‬";
     Text[ hindi ] = "जपानीस में खोज कर रहा है";
+    Text[ slovak ] = "Hľadanie v japončine";
 };
 // end TabPage
+
+
 
 
 
