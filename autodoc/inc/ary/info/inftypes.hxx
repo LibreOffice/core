@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftypes.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:12:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ enum E_AtTagId
     atid_todo,
     atid_version,
 
+    atid_since,
     atid_MAX
 };
 
@@ -142,6 +143,7 @@ enum E_AtTagClass
     atc_see = atid_MAX + 5,
     atc_template = atid_MAX + 6,
     atc_label = atid_MAX + 7,
+    atc_since = atid_MAX + 8,
     C_eAtTag_NrOfClasses
 };
 

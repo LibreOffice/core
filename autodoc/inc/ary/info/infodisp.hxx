@@ -2,9 +2,9 @@
  *
  *  $RCSfile: infodisp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:15 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@ class ParameterTag;
 class SeeTag;
 class TemplateTag;
 class LabelTag;
+class SinceTag;
 class DT_Text;
 class DT_MaybeLink;
 class DT_Whitespace;
@@ -126,7 +127,9 @@ class DocuDisplay
                             const TemplateTag & i_rData );
     virtual void        Display_LabelTag(
                             const LabelTag &    i_rData );
-
+    virtual void        Display_SinceTag(
+                            const ary::info::SinceTag &
+                                                i_rData );
     virtual void        Display_DT_Text(
                             const DT_Text &     i_rData );
     virtual void        Display_DT_MaybeLink(
