@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-21 09:07:26 $
+ *  last change: $Author: cl $ $Date: 2001-08-29 07:13:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,36 +617,6 @@ void SdDrawViewShell::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
             SfxBoolItem aItem( SID_FM_DESIGN_MODE, !bReadOnly );
             GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE,
                       SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
-        }
-    }
-
-    if (!bOK && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS &&
-        SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS)->IsStartWithTemplate() &&
-        rBC.ISA(SdDrawDocShell))
-    {
-        SfxEventHint* pEvent = PTR_CAST(SfxEventHint, &rHint);
-        ULONG nId = pEvent == NULL ? 0 : pEvent->GetEventId();
-
-        if (nId == SFX_EVENT_CREATEDOC && pEvent->GetObjShell() == pDocSh
-            && pDoc->GetSdPageCount(PK_STANDARD) == 1)
-        {
-            SfxItemSet* pSet = pDocSh->GetMedium()->GetItemSet();
-
-            if ( pSet &&
-                (SFX_ITEM_SET != pSet->GetItemState(SID_SILENT) ||
-                !((SfxBoolItem&) (pSet->Get(SID_SILENT))).GetValue()) )
-            {
-                // SeitenLayout-Dialog oeffnen,
-                // sofern es sich um ein Dokument mit nur einer Standard-Seite
-                // handelt (Neues Dokument oder Praesentationshintergrund).
-                // Praesentationsvolagen enthalten mehrere fertige Seiten und
-                // beduerfen daher nicht dieses Dialogs.
-                // SID_SILENT: Slot wurde nicht ueber API ausgefuehrt (z.B. BASIC)
-                pDoc->GetSdPage(0, PK_STANDARD)->SetAutoLayout(AUTOLAYOUT_TITLE);
-                SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, pDoc->IsChanged());
-                GetViewFrame()->GetDispatcher()->Execute(SID_MODIFYPAGE,
-                       SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, 0L);
-            }
         }
     }
 }
