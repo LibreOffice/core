@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
+ *  last change: $Author: jp $ $Date: 2001-05-17 09:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,9 @@
 #endif
 #ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
+#endif
+#ifndef _SVDVIEW_HXX
+#include <svx/svdview.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
 #include <svtools/eitem.hxx>
@@ -351,79 +354,85 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
         pProgress = new SfxPrintProgress( this, !bSilent );
     pProgress->SetWaitMode(FALSE);
 
-    // Drucker starten
-    PreparePrint( pDlg );
-    SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
-    SwPrtOptions aOpts( pObjShell->GetTitle(0) );
-    BOOL bStartJob;
-    BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-    if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
+    BOOL bStartJob = pPrinter->InitJob( &GetEditWin(), pSh->HasDrawView() &&
+                    pSh->GetDrawView()->GetModel()->HasTransparentObjects());
+    if( bStartJob )
     {
-        ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(), pSh->GetPrintData() );
-        bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
-    }
-    else
-    {
-        //BrowseView abschalten und die View gegen alle Paints locken.
-        FASTBOOL bBrowse = pSh->IsBrowseMode();
-        SfxAllItemSet aSet( SFX_APP()->GetPool() );
-        SfxBoolItem aBrowse( SID_BROWSER_MODE, FALSE );
-        if ( bBrowse )
+        // Drucker starten
+        PreparePrint( pDlg );
+        SfxObjectShell *pObjShell = GetViewFrame()->GetObjectShell();
+        SwPrtOptions aOpts( pObjShell->GetTitle(0) );
+        BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
+        if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
         {
-            if ( pSh->GetWin() )
-                pSh->GetWin()->Update();
-            pSh->LockPaint();
-            pSh->LockView( TRUE );
-            aSet.Put( aBrowse, aBrowse.Which() );
-            SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
-            GetDocShell()->Execute( aReq );
-        }
-
-        // die Felder aktualisieren
-        BOOL bIsModified = pSh->IsModified();
-        pSh->StartAllAction();
-        SwDocStat aDocStat;
-        pSh->UpdateDocStat( aDocStat );
-        pSh->EndAllTblBoxEdit();
-        pSh->ViewShell::UpdateFlds(TRUE);
-        if( pSh->IsCrsrInTbl() )
-        {
-            pSh->ClearTblBoxCntnt();
-            pSh->SaveTblBoxCntnt();
-        }
-        pSh->EndAllAction();
-
-        if( !bIsModified )
-            pSh->ResetModified();
-
-        BOOL bPrtPros;
-        ::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(), pSh->GetPrintData() );
-        if( -1 != bPrintSelection )
-            aOpts.bPrintSelection = 0 != bPrintSelection;
-
-        SfxViewShell::Print(*pProgress);
-        if( bPrtPros )
-        {
-            bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
-            if( bStartJob )
-                pSh->PrintProspect( aOpts, *pProgress );
+            ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
+                            pSh->GetPrintData() );
+            bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
         }
         else
-            bStartJob = pSh->Prt( aOpts, *pProgress );
-
-        if ( bBrowse )
         {
-            aBrowse.SetValue( TRUE );
-            aSet.Put( aBrowse, aBrowse.Which() );
-            SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
-            GetDocShell()->Execute( aReq );
-            pSh->LockView( FALSE );
-            pSh->UnlockPaint();
+            //BrowseView abschalten und die View gegen alle Paints locken.
+            FASTBOOL bBrowse = pSh->IsBrowseMode();
+            SfxAllItemSet aSet( SFX_APP()->GetPool() );
+            SfxBoolItem aBrowse( SID_BROWSER_MODE, FALSE );
+            if ( bBrowse )
+            {
+                if ( pSh->GetWin() )
+                    pSh->GetWin()->Update();
+                pSh->LockPaint();
+                pSh->LockView( TRUE );
+                aSet.Put( aBrowse, aBrowse.Which() );
+                SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
+                GetDocShell()->Execute( aReq );
+            }
+
+            // die Felder aktualisieren
+            BOOL bIsModified = pSh->IsModified();
+            pSh->StartAllAction();
+            SwDocStat aDocStat;
+            pSh->UpdateDocStat( aDocStat );
+            pSh->EndAllTblBoxEdit();
+            pSh->ViewShell::UpdateFlds(TRUE);
+            if( pSh->IsCrsrInTbl() )
+            {
+                pSh->ClearTblBoxCntnt();
+                pSh->SaveTblBoxCntnt();
+            }
+            pSh->EndAllAction();
+
+            if( !bIsModified )
+                pSh->ResetModified();
+
+            BOOL bPrtPros;
+            ::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(),
+                            pSh->GetPrintData() );
+            if( -1 != bPrintSelection )
+                aOpts.bPrintSelection = 0 != bPrintSelection;
+
+            SfxViewShell::Print(*pProgress);
+            if( bPrtPros )
+            {
+                bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
+                if( bStartJob )
+                    pSh->PrintProspect( aOpts, *pProgress );
+            }
+            else
+                bStartJob = pSh->Prt( aOpts, *pProgress );
+
+            if ( bBrowse )
+            {
+                aBrowse.SetValue( TRUE );
+                aSet.Put( aBrowse, aBrowse.Which() );
+                SfxRequest aReq( SID_BROWSER_MODE, 0, aSet );
+                GetDocShell()->Execute( aReq );
+                pSh->LockView( FALSE );
+                pSh->UnlockPaint();
+            }
         }
     }
 
     bIsApi = FALSE;
-    if ( !bStartJob )
+    if( !bStartJob )
     {
         // Printer konnte nicht gestartet werden
         delete pProgress;

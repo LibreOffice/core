@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
+ *  last change: $Author: jp $ $Date: 2001-05-17 09:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,8 +549,8 @@ void SwPreviewPrintOptionsDialog::Apply()
 
         aData.SetHorzSpace(aHSpaceMF.Denormalize(aHSpaceMF.GetValue(FUNIT_TWIP)));
         aData.SetVertSpace(aVSpaceMF.Denormalize(aVSpaceMF.GetValue(FUNIT_TWIP)));
-        aData.SetRow(aRowsNF.GetValue());
-        aData.SetCol(aColsNF.GetValue());
+        aData.SetRow((BYTE)aRowsNF.GetValue());
+        aData.SetCol((BYTE)aColsNF.GetValue());
         aData.SetLandscape(aLandscapeRB.IsChecked());
 
         ViewShell& rViewSh = rPreView.GetViewShell();
@@ -596,9 +596,9 @@ IMPL_LINK( SwPreviewPrintOptionsDialog, ModifyHdl, Edit*, pEdit )
     else if(pEdit == &aVSpaceMF)
         aSettings.nVert     = aVSpaceMF.Denormalize(aVSpaceMF.GetValue(FUNIT_TWIP));
     else if(pEdit == &aRowsNF)
-        aSettings.nRows     = aRowsNF.GetValue();
+        aSettings.nRows = (USHORT)aRowsNF.GetValue();
     else if(pEdit == &aColsNF)
-        aSettings.nCols     = aColsNF.GetValue();
+        aSettings.nCols = (USHORT)aColsNF.GetValue();
     else if(pEdit == (Edit*)&aLandscapeRB)
         aSettings.bPrinterLandscape = aLandscapeRB.IsChecked();
     else if(pEdit == (Edit*)&aPortraitRB)
@@ -1129,9 +1129,10 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
             const SfxItemSet *pArgs = rReq.GetArgs();
             if( pArgs && pArgs->Count() >= 2 )
             {
-
-                USHORT nCols = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_TABLE_COLUMN)).GetValue();
-                USHORT nRows = ((SfxUInt16Item &)pArgs->Get(SID_ATTR_TABLE_ROW)).GetValue();
+                BYTE nCols = (BYTE)((SfxUInt16Item &)pArgs->Get(
+                                           SID_ATTR_TABLE_COLUMN)).GetValue();
+                BYTE nRows = (BYTE)((SfxUInt16Item &)pArgs->Get(
+                                        SID_ATTR_TABLE_ROW)).GetValue();
                 aViewWin.CalcWish( nRows, nCols );
             }
             else
@@ -1857,7 +1858,7 @@ IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
         if(Help::IsQuickHelpEnabled())
             Help::ShowQuickHelp(pScrollbar, Rectangle(), aEmptyStr, 0);
         // wieviele Seiten scrollen ??
-        USHORT nThmbPos = pScrollbar->GetThumbPos();
+        USHORT nThmbPos = (USHORT)pScrollbar->GetThumbPos();
         if( 1 == aViewWin.GetCol() )
             ++nThmbPos;
         if( nThmbPos != aViewWin.GetSttPage() )
@@ -1974,12 +1975,17 @@ void SwPagePreView::VScrollDocSzChg()
 
 USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
 {
+    ViewShell* pSh = aViewWin.GetViewShell();
+    SfxPrinter* pPrinter = GetPrinter();
+    if( !pPrinter || !pPrinter->InitJob( &aViewWin, pSh->HasDrawView() &&
+                    pSh->GetDrawView()->GetModel()->HasTransparentObjects() ))
+        return ERRCODE_IO_ABORT;
+
+
     SwWait aWait( *GetDocShell(), TRUE );
 
     USHORT nRowCol = ( aViewWin.GetRow() << 8 ) +
                         aViewWin.GetCol();  // Zeilen / DoppelSeiten
-
-    ViewShell* pSh = aViewWin.GetViewShell();
 
     {
         // die Felder aktualisieren
@@ -2221,6 +2227,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/05/10 08:48:50  os
+      store print options at the document
+
       Revision 1.5  2000/11/09 10:14:21  obo
       Without string include
 
