@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MNSInclude.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2002-10-17 09:27:55 $
+ *  last change: $Author: obo $ $Date: 2002-10-18 08:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@
     #define _DEBUG_WAS_DEFINED _DEBUG
     #undef _DEBUG
 #else
-    #undef _DEBUG_WAS_DEFINED _DEBUG
+    #undef _DEBUG_WAS_DEFINED
 #endif
 
 // and turn off the additional virtual methods which are part of some interfaces when compiled
