@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:04:26 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ String SCSTR_APPLICATION
     Text = "%PRODUCTNAME Calc 6.0" ;
     Text [ ENGLISH ] = "%PRODUCTNAME Calc 6.0" ;
     Text[ english_us ] = "%PRODUCTNAME Calc 6.0";
-    Text[ portuguese ] = "StarCalc 5.0";
+    Text[ portuguese ] = "%PRODUCTNAME Calc 6.0";
     Text[ russian ] = "%PRODUCTNAME Calc 6.0";
     Text[ greek ] = "%PRODUCTNAME Calc 6.0";
     Text[ dutch ] = "%PRODUCTNAME Calc 6.0";
@@ -183,7 +183,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text = "%PRODUCTNAME 6.0 Tabelle" ;
     Text [ ENGLISH ] = "%PRODUCTNAME 6.0 Spreadsheet" ;
     Text[ english_us ] = "%PRODUCTNAME 6.0 Spreadsheet";
-    Text[ portuguese ] = "%PRODUCTNAME 5.0 Folha de c·lculo";
+    Text[ portuguese ] = "%PRODUCTNAME 6.0 Folha de c·lculo";
     Text[ russian ] = "ÀËÒÚ ‚ %PRODUCTNAME 6.0";
     Text[ greek ] = "%PRODUCTNAME 6.0 –ﬂÌ·Í·Ú";
     Text[ dutch ] = "%PRODUCTNAME 6.0 werkblad";
@@ -1598,7 +1598,7 @@ String STR_INSERTGRAPHIC
     Text[ chinese_simplified ] = "≤Â»ÎÕº–Œ";
     Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ËÒÛÌÓÍ";
     Text[ polish ] = "Wstaw obraz";
-    Text[ japanese ] = "∏ﬁ◊Ã®Ø∏ÇÃë}ì¸";
+    Text[ japanese ] = "ê}ÇÃë}ì¸";
     Text[ chinese_traditional ] = "¥°§JπœßŒ";
     Text[ arabic ] = "≈œ—«Ã ’Ê—…";
     Text[ greek ] = "≈ÈÛ·„˘„ﬁ „Ò·ˆÈÍÔ˝";
@@ -2679,7 +2679,7 @@ String SCSTR_CHARSET_USER
     Text [ dutch ] = "Systeem" ;
     Text [ swedish ] = "System" ;
     Text [ danish ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
-    Text [ portuguese ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);Sistema" ;
+    Text [ portuguese ] = "Sistema" ;
     Text [ portuguese_brazilian ] = "Ansi;Mac;IBMPC;IBMPC (437);IBMPC (850);IBMPC (860);IBMPC (861);IBMPC (863);IBMPC (865);System" ;
     Text[ chinese_simplified ] = "œµÕ≥";
     Text[ russian ] = "—ËÒÚÂÏ‡";
