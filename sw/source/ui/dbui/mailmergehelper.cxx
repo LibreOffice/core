@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:57:58 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,15 @@
 #ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
+#ifndef _COM_SUN_STAR_MAIL_MAILSERVICEPROVIDER_HPP_
+#include "com/sun/star/mail/MailServiceProvider.hpp"
+#endif
+#ifndef _COM_SUN_STAR_MAIL_XSMTPSERVICE_HPP_
+#include "com/sun/star/mail/XSmtpService.hpp"
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -174,6 +183,93 @@ bool CheckMailAddress( const ::rtl::OUString& rMailAddress )
         return false;
     return true;
 }
+
+/*-- 28.12.2004 10:16:02---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
+        SwMailMergeConfigItem& rConfigItem,
+        uno::Reference< mail::XMailService >&  rxInMailService,
+        const String& rInMailServerPassword,
+        const String& rOutMailServerPassword,
+        Window* pDialogParentWindow )
+{
+    uno::Reference< mail::XSmtpService > xSmtpServer;
+    uno::Reference< lang::XMultiServiceFactory> rMgr = ::comphelper::getProcessServiceFactory();
+    if (rMgr.is())
+        try
+        {
+            uno::Reference< mail::XMailServiceProvider > xMailServiceProvider =
+                    mail::MailServiceProvider::create(getCurrentCmpCtx(rMgr));
+            xSmtpServer = uno::Reference< mail::XSmtpService > (
+                            xMailServiceProvider->create(
+                            mail::MailServiceType_SMTP
+                            ), uno::UNO_QUERY);
+
+            uno::Reference< mail::XConnectionListener> xConnectionListener(new SwConnectionListener());
+
+            if(rConfigItem.IsAuthentication() && rConfigItem.IsSMTPAfterPOP())
+            {
+                uno::Reference< mail::XMailService > xInMailService =
+                        xMailServiceProvider->create(
+                        rConfigItem.IsInServerPOP() ?
+                            mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
+                //authenticate at the POP or IMAP server first
+                String sPasswd = rConfigItem.GetInServerPassword();
+        if(rInMailServerPassword.Len())
+            sPasswd = rInMailServerPassword;
+        uno::Reference<mail::XAuthenticator> xAuthenticator =
+                    new SwAuthenticator(
+                        rConfigItem.GetInServerUserName(),
+                        sPasswd,
+                        pDialogParentWindow);
+
+                xInMailService->addConnectionListener(xConnectionListener);
+                //check connection
+                uno::Reference< uno::XCurrentContext> xConnectionContext =
+                        new SwConnectionContext(
+                            rConfigItem.GetInServerName(),
+                            rConfigItem.GetInServerPort(),
+                            ::rtl::OUString::createFromAscii( "Insecure" ));
+                xInMailService->connect(xConnectionContext, xAuthenticator);
+                rxInMailService = xInMailService;
+            }
+            uno::Reference< mail::XAuthenticator> xAuthenticator;
+            if(rConfigItem.IsAuthentication() &&
+                    !rConfigItem.IsSMTPAfterPOP() &&
+                    rConfigItem.GetMailUserName().getLength())
+            {
+                String sPasswd = rConfigItem.GetMailPassword();
+                if(rOutMailServerPassword.Len())
+                    sPasswd = rOutMailServerPassword;
+                xAuthenticator =
+                    new SwAuthenticator(rConfigItem.GetMailUserName(),
+                            sPasswd,
+                            pDialogParentWindow);
+            }
+            else
+                xAuthenticator =  new SwAuthenticator();
+            //just to check if the server exists
+            xSmtpServer->getSupportedConnectionTypes();
+            //check connection
+
+            uno::Reference< uno::XCurrentContext> xConnectionContext =
+                    new SwConnectionContext(
+                        rConfigItem.GetMailServer(),
+                        rConfigItem.GetMailPort(),
+                        ::rtl::OUString::createFromAscii( rConfigItem.IsSecureConnection() ? "Ssl" : "Insecure"));
+            xSmtpServer->connect(xConnectionContext, xAuthenticator);
+            rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
+        }
+        catch(uno::Exception& rEx)
+        {
+            DBG_ERROR("exception caught")
+            rEx;
+        }
+    return xSmtpServer;
+}
+
+
 } //namespace
 
 /*-- 06.04.2004 10:31:27---------------------------------------------------
@@ -638,7 +734,7 @@ OUString SwAuthenticator::getUserName( ) throw (RuntimeException)
   -----------------------------------------------------------------------*/
 OUString SwAuthenticator::getPassword(  ) throw (RuntimeException)
 {
-    if(m_aUserName.getLength() && !m_aPassword.getLength())
+    if(m_aUserName.getLength() && !m_aPassword.getLength() && m_pParentWindow)
     {
        SfxPasswordDialog* pPasswdDlg =
                 new SfxPasswordDialog( m_pParentWindow );
