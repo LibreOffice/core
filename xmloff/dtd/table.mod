@@ -1,5 +1,5 @@
 <!--
-	$Id: table.mod,v 1.35 2001-05-08 14:06:52 sab Exp $
+	$Id: table.mod,v 1.36 2001-05-21 16:38:10 sab Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -59,6 +59,7 @@
 	table:precision-as-shown %boolean; "false"
 	table:search-criteria-must-apply-to-whole-cell %boolean; "true"
 	table:automatic-find-labels %boolean; "true"
+	table:use-regular-expressions %boolean; "true"
 	table:null-year %positiveInteger; "1930"
 >
 <!ELEMENT table:null-date EMPTY>
