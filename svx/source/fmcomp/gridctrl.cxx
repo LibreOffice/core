@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:28:54 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,10 +132,6 @@
 
 #ifndef _TOOLS_RESID_HXX //autogen
 #include <tools/resid.hxx>
-#endif
-
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
 #endif
 
 #ifndef _SV_SOUND_HXX //autogen
