@@ -1,0 +1,127 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AffineMatrix2D.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:19:39 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_geometry_AffineMatrix2D_idl__
+#define __com_sun_star_geometry_AffineMatrix2D_idl__
+
+module com {  module sun {  module star {  module geometry {
+
+/** This structure defines a 2 by 3 affine matrix.<p>
+
+    The matrix defined by this structure constitutes an affine mapping
+    of a point in 2D to another point in 2D. The last line of a
+    complete 3 by 3 matrix is omitted, since it is implicitely assumed
+    to be [0,0,1].<p>
+
+    An affine mapping, as performed by this matrix, can be written out
+    as follows, where <code>xs</code> and <code>ys</code> are the source, and
+    <code>xd</code> and <code>yd</code> the corresponding result coordinates:
+
+    <code>
+        xd = m00*xs + m01*ys + m02;
+        yd = m10*xs + m11*ys + m12;
+    </code><p>
+
+    Thus, in common matrix language, with M being the
+    <type>AffineMatrix2D</type> and vs=[xs,ys]^T, vd=[xd,yd]^T two 2D
+    vectors, the affine transformation is written as
+    vd=M*vs. Concatenation of transformations amounts to
+    multiplication of matrices, i.e. a translation, given by T,
+    followed by a rotation, given by R, is expressed as vd=R*(T*vs) in
+    the above notation. Since matrix multiplication is associative,
+    this can be shortened to vd=(R*T)*vs=M'*vs. Therefore, a set of
+    consecutive transformations can be accumulated into a single
+    AffineMatrix2D, by multiplying the current transformation with the
+    additional transformation from the left.<p>
+
+    Due to this transformational approach, all geometry data types are
+    points in abstract integer or real coordinate spaces, without any
+    physical dimensions attached to them. This physical measurement
+    units are typically only added when using these data types to
+    render something onto a physical output device, like a screen or a
+    printer, Then, the total transformation matrix and the device
+    resolution determine the actual measurement unit.<p>
+
+    @since #110496#
+ */
+struct AffineMatrix2D
+{
+    /// The top, left matrix entry.
+    double m00;
+
+    /// The top, middle matrix entry.
+    double m01;
+
+    /// The top, right matrix entry.
+    double m02;
+
+    /// The bottom, left matrix entry.
+    double m10;
+
+    /// The bottom, middle matrix entry.
+    double m11;
+
+    /// The bottom, right matrix entry.
+    double m12;
+};
+
+}; }; }; };
+
+#endif
