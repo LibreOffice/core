@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iop.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:36 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,14 +63,23 @@
 module com { module sun { module star { module corba { module iop
 { // IDL
 
-// Standard Protocol Profile tag values
+    /**
+      @deprecated
+     */
     typedef unsigned long ProfileId;
+
+    /**
+      @deprecated
+     */
     constants ProfileIdGroup
         {
             const ProfileId TAG_INTERNET_IOP = 0;
             const ProfileId TAG_MULTIPLE_COMPONENTS = 1;
         };
 
+    /**
+      @deprecated
+     */
     struct TaggedProfile
     {
         ProfileId tag;
@@ -79,6 +88,9 @@ module com { module sun { module star { module corba { module iop
     // an Interoperable Object Reference is a sequence of
     // object-specific protocol profiles, plus a type ID.
 
+    /**
+      @deprecated
+     */
     struct IOR
     {
         CorbaString8 type_id;
@@ -87,23 +99,47 @@ module com { module sun { module star { module corba { module iop
 
     // Standard way of representing multicomponent profiles.
     // This would be encapsulated in a TaggedProfile.
+    /**
+      @deprecated
+     */
     typedef unsigned long ComponentId;
+
+    /**
+      @deprecated
+     */
     struct TaggedComponent
     {
         ComponentId tag;
         sequence <byte> component_data;
     };
+
+    /**
+      @deprecated
+     */
     typedef sequence <TaggedComponent> MultipleComponentProfile;
 
+    /**
+      @deprecated
+     */
     typedef unsigned long ServiceId;
+
+    /**
+      @deprecated
+     */
     struct ServiceContext
     {
         ServiceId context_id;
         sequence < byte > context_data;
     };
 
+    /**
+      @deprecated
+     */
     typedef sequence <ServiceContext> ServiceContextList;
 
+    /**
+      @deprecated
+     */
     constants ServiceIdGroup
         {
             const ServiceId TransactionService = 0;
@@ -118,29 +154,5 @@ module com { module sun { module star { module corba { module iop
             const ServiceId UnknownExceptionInfo = 9;
         };
 
-/*
- const ComponentId TAG_ORB_TYPE = 0;
-    const ComponentId TAG_CODE_SETS = 1;
-    const ComponentId TAG_POLICIES = 2;
-    const ComponentId TAG_ALTERNATE_IIOP_ADDRESS = 3;
-    const ComponentId TAG_ASSOCIATION_OPTIONS = 13;
-    const ComponentId TAG_SEC_NAME = 14;
-    const ComponentId TAG_SPKM_1_SEC_MECH = 15;
-    const ComponentId TAG_SPKM_2_SEC_MECH = 16;
-    const ComponentId TAG_KerberosV5_SEC_MECH = 17;
-    const ComponentId TAG_CSI_ECMA_Secret_SEC_MECH = 18;
-    const ComponentId TAG_CSI_ECMA_Hybrid_SEC_MECH = 19;
-    const ComponentId TAG_SSL_SEC_TRANS = 20;
-    const ComponentId TAG_CSI_ECMA_Public_SEC_MECH = 21;
-    const ComponentId TAG_GENERIC_SEC_MECH = 22;
-    const ComponentId TAG_JAVA_CODEBASE = 25;
-    const ComponentId TAG_COMPLETE_OBJECT_KEY = 5;
-    const ComponentId TAG_ENDPOINT_ID_POSITION = 6;
-    const ComponentId TAG_LOCATION_POLICY = 12;
-    const ComponentId TAG_DCE_STRING_BINDING = 100;
-    const ComponentId TAG_DCE_BINDING_NAME = 101;
-    const ComponentId TAG_DCE_NO_PIPES = 102;
-    const ComponentId TAG_DCE_SEC_MECH = 103; // Security Service
-*/
 }; }; }; }; };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iiop.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 09:58:12 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:50:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 
 module com { module sun { module star { module corba { module iiop
 {
-
+    /**
+       @deprecated
+    */
     struct Version
     {
         byte major;
@@ -70,6 +72,9 @@ module com { module sun { module star { module corba { module iiop
     };
 
 
+    /**
+       @deprecated
+    */
     struct ProfileBody_1_0
     {// renamed from ProfileBody
         Version iiop_version;
@@ -78,6 +83,9 @@ module com { module sun { module star { module corba { module iiop
         sequence <byte> object_key;
     };
 
+    /**
+       @deprecated
+    */
     struct ProfileBody_1_1
     {// also used for 1.2
         Version iiop_version;
@@ -88,14 +96,23 @@ module com { module sun { module star { module corba { module iiop
         sequence <com::sun::star::corba::iop::TaggedComponent> components;
     };
 
+    /**
+       @deprecated
+    */
     struct ListenPoint
     {
         CorbaString8 host;
         unsigned short port;
     };
 
+    /**
+       @deprecated
+    */
     typedef sequence<ListenPoint> ListenPointList;
 
+    /**
+       @deprecated
+    */
     struct BiDirIIOPServiceContext
     {// BI_DIR_IIOP Service Context
         ListenPointList listen_points;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: giop.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 09:58:11 $
+ *  last change: $Author: jbu $ $Date: 2002-01-18 13:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,12 +62,18 @@
 
 module com { module sun { module star { module corba { module giop
 {
+    /**
+      @deprecated
+     */
     struct Version
     {
         byte major;
         byte minor;
     };
-// GIOP 1.1
+
+    /**
+      @deprecated
+     */
     enum MsgType_1_1
     {
         Request, Reply, CancelRequest,
@@ -77,7 +83,9 @@ module com { module sun { module star { module corba { module giop
     };
 
 
-// GIOP 1.0
+    /**
+      @deprecated
+     */
     struct MessageHeader_1_0
     {// Renamed from MessageHeader
         byte magic_1;
@@ -90,7 +98,9 @@ module com { module sun { module star { module corba { module giop
         unsigned long message_size;
     };
 
-// GIOP 1.1
+    /**
+      @deprecated
+     */
     struct MessageHeader_1_1
     {
         byte magic_1;
@@ -103,9 +113,14 @@ module com { module sun { module star { module corba { module giop
         unsigned long message_size;
     };
 
-// GIOP 1.2
+    /**
+      @deprecated
+     */
     typedef MessageHeader_1_1 MessageHeader_1_2;
-// GIOP 1.0
+
+    /**
+      @deprecated
+     */
     struct RequestHeader_1_0
     {
         com::sun::star::corba::iop::ServiceContextList service_context;
@@ -116,7 +131,9 @@ module com { module sun { module star { module corba { module giop
         sequence < byte > requesting_principal;
     };
 
-// GIOP 1.1
+    /**
+      @deprecated
+     */
     struct RequestHeader_1_1
     {
         com::sun::star::corba::iop::ServiceContextList service_context;
@@ -130,14 +147,18 @@ module com { module sun { module star { module corba { module giop
         sequence <byte> requesting_principal; // binary compatible
     };
 
-// GIOP 1.2
-
+    /**
+      @deprecated
+     */
     struct IORAddressingInfo
     {
         unsigned long selected_profile_index;
         com::sun::star::corba::iop::IOR ior;
     };
 
+    /**
+      @deprecated
+     */
     constants TargetAddressGroup
         {
             const short KeyAddr = 0;
@@ -145,6 +166,9 @@ module com { module sun { module star { module corba { module giop
             const short ReferenceAddr = 2;
         };
 
+    /**
+      @deprecated
+     */
     struct TargetAddress : CorbaUnion
     {
         short nDiscriminator;
@@ -154,6 +178,9 @@ module com { module sun { module star { module corba { module giop
     };
 
 
+    /**
+      @deprecated
+     */
     struct RequestHeader_1_2
     {
         unsigned long request_id;
@@ -168,26 +195,9 @@ module com { module sun { module star { module corba { module giop
     };
 
 
-// GIOP 1.0 and 1.1
-/*  enum ReplyStatusType_1_0
-    {// Renamed from ReplyStatusType
-        NO_EXCEPTION,
-        USER_EXCEPTION,
-        SYSTEM_EXCEPTION,
-        LOCATION_FORWARD
-        };
-// GIOP 1.0
-
-    struct ReplyHeader_1_0
-    {// Renamed from ReplyHeader
-        com::sun::star::corba::iop::ServiceContextList service_context;
-        unsigned long request_id;
-        ReplyStatusType reply_status;
-    };
-*/
-// GIOP 1.1
-//  typedef ReplyHeader_1_0 ReplyHeader_1_1;
-
+    /**
+      @deprecated
+     */
     enum ReplyStatusType_1_2
     {
         NO_EXCEPTION,
@@ -199,6 +209,9 @@ module com { module sun { module star { module corba { module giop
     };
 
 
+    /**
+      @deprecated
+     */
     struct ReplyHeader_1_2
     {
         unsigned long request_id;
@@ -206,6 +219,9 @@ module com { module sun { module star { module corba { module giop
         com::sun::star::corba::iop::ServiceContextList service_context; // 1.2 change
     };
 
+    /**
+      @deprecated
+     */
     struct SystemExceptionReplyBody
     {
         CorbaString8 exception_id;
@@ -213,12 +229,17 @@ module com { module sun { module star { module corba { module giop
         unsigned long completion_status;
     };
 
+    /**
+      @deprecated
+     */
     struct CancelRequestHeader
     {
         unsigned long request_id;
     };
 
-// GIOP 1.0
+    /**
+      @deprecated
+     */
     struct LocateRequestHeader_1_0
     {
 // Renamed LocationRequestHeader
@@ -226,17 +247,14 @@ module com { module sun { module star { module corba { module giop
         sequence <byte> object_key;
     };
 
-// GIOP 1.1
+    /**
+      @deprecated
+     */
     typedef LocateRequestHeader_1_0 LocateRequestHeader_1_1;
-// Same Header contents for 1.0 and 1.1
-// GIOP 1.2
-/*  struct LocateRequestHeader_1_2
-    {
-        unsigned long request_id;
-        TargetAddress target;
-    };
-*/
-// GIOP 1.2
+
+    /**
+      @deprecated
+     */
     enum LocateStatusType_1_2 {
         UNKNOWN_OBJECT,
         OBJECT_HERE,
@@ -246,13 +264,18 @@ module com { module sun { module star { module corba { module giop
         LOC_NEEDS_ADDRESSING_MODE // new value for GIOP 1.2
     };
 
+    /**
+      @deprecated
+     */
     struct LocateReplyHeader_1_2
     {
         unsigned long request_id;
         LocateStatusType_1_2 locate_status;
     };
 
-// GIOP 1.2
+    /**
+      @deprecated
+     */
     struct FragmentHeader_1_2
     {
         unsigned long request_id;
