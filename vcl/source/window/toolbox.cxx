@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-31 07:48:02 $
+ *  last change: $Author: ssa $ $Date: 2002-06-10 07:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4559,6 +4559,22 @@ void ToolBox::LoseFocus()
 }
 
 // -----------------------------------------------------------------------
+
+// performs the action associated with an item, ie simulates clicking the item
+void ToolBox::TriggerItem( USHORT nItemId, BOOL bShift, BOOL bCtrl )
+{
+    mnHighItemId = nItemId;
+    USHORT nModifier = 0;
+    if( bShift )
+        nModifier |= KEY_SHIFT;
+    if( bCtrl )
+        nModifier |= KEY_MOD1;
+    KeyCode aKeyCode( 0, nModifier );
+    ImplActivateItem( aKeyCode );
+}
+
+// -----------------------------------------------------------------------
+
 // calls the button's action handler
 // returns TRUE if action was called
 BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
