@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:45:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,11 +392,18 @@ struct Bootstrap_Impl
     sal_Bool getValue( rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const;
 };
 
+static inline bool path_exists( ::rtl::OUString const & path )
+{
+    ::osl::DirectoryItem dirItem;
+    return (::osl::DirectoryItem::E_None ==
+            ::osl::DirectoryItem::get( path, dirItem ));
+}
+
 Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     : _iniName (rIniName)
 {
     OUString const & base_ini = getIniFileNameImpl();
-    if (! rIniName.equals( base_ini ))
+    if (!rIniName.equals( base_ini ) && path_exists( base_ini ))
     {
         _base_ini.reset( new Bootstrap_Impl( base_ini ) );
     }
@@ -458,12 +465,6 @@ Bootstrap_Impl::~Bootstrap_Impl()
 sal_Bool Bootstrap_Impl::getValue(
     rtl_uString * pName, rtl_uString ** ppValue, rtl_uString * pDefault ) const
 {
-    if (0 != _base_ini.get())
-    {
-        if (_base_ini->getValue( pName, ppValue, pDefault ))
-            return sal_True;
-    }
-
     // lookup this ini
     sal_Bool result = sal_True;
     bool further_macro_expansion = true;
@@ -480,6 +481,12 @@ sal_Bool Bootstrap_Impl::getValue(
     }
     else
     {
+        if (0 != _base_ini.get())
+        {
+            if (_base_ini->getValue( pName, ppValue, pDefault ))
+                return sal_True;
+        }
+
         if (0 != *ppValue)
         {
             rtl_uString_release( *ppValue );
