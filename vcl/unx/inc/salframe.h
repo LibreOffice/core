@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:40:17 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SALSTD_HXX
 #include <salstd.hxx>
 #endif
+#ifndef _SV_SALFRAME_HXX
+#include <salframe.hxx>
+#endif
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
 #endif
@@ -89,8 +92,8 @@
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   SalDisplay;
-class   SalGraphics;
-class   SalFrame;
+class   X11SalGraphics;
+class SalGraphicsLayout;
 class   SalColormap;
 class   SalI18N_InputContext;
 
@@ -113,36 +116,28 @@ class SalFrameDelData
         SalFrameDelData*    GetNext ()   { return mpNext; }
 };
 
-// -=-= SalFrameData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+// -=-= X11SalFrame =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 #define SHOWSTATE_UNKNOWN       -1
 #define SHOWSTATE_MINIMIZED     0
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
-class SalFrameData
+class X11SalFrame : public SalFrame
 {
-    friend  class           SalFrame;
-    friend class            ::vcl_sal::WMAdaptor;
-    friend class            ::vcl_sal::NetWMAdaptor;
-    friend class            ::vcl_sal::GnomeWMAdaptor;
-    friend  SalFrame* SalInstance::CreateFrame( SalFrame*, ULONG );
-    friend  SalFrame* SalInstance::CreateChildFrame( SystemParentData*, ULONG );
+    friend class vcl_sal::WMAdaptor;
+    friend class vcl_sal::NetWMAdaptor;
+    friend class vcl_sal::GnomeWMAdaptor;
 
-    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pSalFrameData );
-    STDAPI( SalFrameData );
+    static Bool checkKeyReleaseForRepeat( Display*, XEvent*, XPointer pX11SalFrame );
+    STDAPI( X11SalFrame );
 
-    static SalFrame* s_pSaveYourselfFrame;
+    static X11SalFrame* s_pSaveYourselfFrame;
 
-    SalFrame       *pNextFrame_;        // pointer to next frame
-    SalFrame       *pFrame_;
-
-    SalFrame*       mpParent;            // pointer to parent frame
+    X11SalFrame*    mpNextFrame;        // pointer to next frame
+    X11SalFrame*    mpParent;            // pointer to parent frame
                                     // which should never obscur this frame
     bool            mbTransientForRoot;
-    ::std::list< SalFrame* > maChildren;         // List of child frames
-
-    SALFRAMEPROC    pProc_;             // callback proc
-    void           *pInst_;             // instance handle for callback
+    std::list< X11SalFrame* > maChildren;         // List of child frames
 
     SalDisplay     *pDisplay_;
     XLIB_Window     mhWindow;
@@ -155,8 +150,8 @@ class SalFrameData
     XLIB_Cursor     hCursor_;
     int             nCaptured_;         // is captured
 
-    SalGraphics    *pGraphics_;         // current frame graphics
-    SalGraphics    *pFreeGraphics_;     // first free frame graphics
+    X11SalGraphics  *pGraphics_;            // current frame graphics
+    X11SalGraphics  *pFreeGraphics_;        // first free frame graphics
 
     XLIB_Time       nReleaseTime_;      // timestamp of last key release
     USHORT          nKeyCode_;          // last key code
@@ -205,8 +200,6 @@ class SalFrameData
     SalFrameDelData *mpDeleteData;
     void            NotifyDeleteData ();
 
-    SalGraphics    *GetGraphics();
-
     void            GetPosSize( Rectangle &rPosSize );
     void            SetSize   ( const Size      &rSize );
     void            Center();
@@ -230,44 +223,36 @@ class SalFrameData
     long            HandleReparentEvent ( XReparentEvent    *pEvent );
     long            HandleClientMessage ( XClientMessageEvent*pEvent );
 
-    inline  void            CaptureMouse( BOOL bCapture );
-    inline  void            SetPointer( PointerStyle ePointerStyle );
-
-    inline                  SalFrameData( SalFrame *pFrame );
-    inline                  ~SalFrameData();
-
     DECL_LINK( HandleResizeTimer, void* );
     DECL_LINK( HandleAlwaysOnTopRaise, void* );
 
     void            passOnSaveYourSelf();
 public:
+    X11SalFrame( SalFrame* pParent, ULONG nSalFrameStyle, SystemParentData* pSystemParent = NULL );
+    virtual ~X11SalFrame();
+
     long            Dispatch( XEvent *pEvent );
     void            Init( ULONG nSalFrameStyle, SystemParentData* pParentData = NULL );
-    bool            SetPluginParent( SystemParentData* pNewParent );
 
-    SalDisplay     *GetDisplay() const { return pDisplay_; }
-    inline  Display        *GetXDisplay() const;
-    inline  XLIB_Window     GetDrawable() const;
-    inline  XLIB_Window    GetWindow() const { return mhWindow; }
-    inline  XLIB_Window    GetShellWindow() const { return mhShellWindow; }
-    inline  XLIB_Window     GetForeignParent() const { return mhForeignParent; }
-    inline  XLIB_Window     GetStackingWindow() const { return mhStackingWindow; }
-    inline  long            ShutDown() const
-                { return pProc_( pInst_, pFrame_, SALEVENT_SHUTDOWN, 0 ); }
-    inline  long            Close() const
-                { return pProc_( pInst_, pFrame_, SALEVENT_CLOSE, 0 ); }
-    inline  long            Call( USHORT nEvent, const void *pEvent ) const
-                { return pProc_( pInst_, pFrame_, nEvent, pEvent ); }
-    inline  SalFrame       *GetNextFrame() const { return pNextFrame_; }
+    SalDisplay*             GetDisplay() const { return pDisplay_; }
+    Display*                GetXDisplay() const;
+    XLIB_Window             GetDrawable() const;
+    XLIB_Window             GetWindow() const { return mhWindow; }
+    XLIB_Window             GetShellWindow() const { return mhShellWindow; }
+    XLIB_Window             GetForeignParent() const { return mhForeignParent; }
+    XLIB_Window             GetStackingWindow() const { return mhStackingWindow; }
+    long                    ShutDown() const { return CallCallback( SALEVENT_SHUTDOWN, 0 ); }
+    long                    Close() const { return CallCallback( SALEVENT_CLOSE, 0 ); }
+    X11SalFrame*            GetNextFrame() const { return mpNextFrame; }
               ULONG           GetStyle() const { return nStyle_; }
 
     inline  XLIB_Cursor     GetCursor() const { return hCursor_; }
     inline  BOOL            IsCaptured() const { return nCaptured_ == 1; }
-    #if !defined(__synchronous_extinput__)
-            void            HandleExtTextEvent (XClientMessageEvent *pEvent);
-            void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
-                                void *pExtTextEvent);
-    #endif
+#if !defined(__synchronous_extinput__)
+    void            HandleExtTextEvent (XClientMessageEvent *pEvent);
+    void            PostExtTextEvent (sal_uInt16 nExtTextEventType,
+                                      void *pExtTextEvent);
+#endif
     inline  SalColormap    &GetColormap() const;
     bool                    IsOverrideRedirect() const;
     bool                    IsFloatGrabWindow() const;
@@ -277,20 +262,56 @@ public:
     bool                    isMapped() const { return bMapped_; }
     void            RegisterDeleteData (SalFrameDelData *pData);
     void            UnregisterDeleteData (SalFrameDelData *pData);
+
+    virtual SalGraphics*        GetGraphics();
+    virtual void                ReleaseGraphics( SalGraphics* pGraphics );
+
+    virtual BOOL                PostEvent( void* pData );
+
+    virtual void                SetTitle( const XubString& rTitle );
+    virtual void                SetIcon( USHORT nIcon );
+
+    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
+    virtual void                Enable( BOOL bEnable );
+    virtual void              SetMinClientSize( long nWidth, long nHeight );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                GetClientSize( long& rWidth, long& rHeight );
+    virtual void                GetWorkArea( Rectangle& rRect );
+    virtual SalFrame*           GetParent() const;
+    virtual void                SetWindowState( const SalFrameState* pState );
+    virtual BOOL                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( BOOL bFullScreen );
+    virtual void                StartPresentation( BOOL bStart );
+    virtual void                SetAlwaysOnTop( BOOL bOnTop );
+    virtual void                ToTop( USHORT nFlags );
+    virtual void                SetPointer( PointerStyle ePointerStyle );
+    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                SetPointerPos( long nX, long nY );
+    virtual void                Flush();
+    virtual void                Sync();
+    virtual void                SetInputContext( SalInputContext* pContext );
+    virtual void                EndExtTextInput( USHORT nFlags );
+    virtual String              GetKeyName( USHORT nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
+    virtual LanguageType        GetInputLanguage();
+    virtual SalBitmap*          SnapShot();
+    virtual void                UpdateSettings( AllSettings& rSettings );
+    virtual void                Beep( SoundType eSoundType );
+    virtual const SystemEnvData*    GetSystemData() const;
+    virtual ULONG               GetCurrentModButtons();
+    virtual void                SetParent( SalFrame* pNewParent );
+    virtual bool                SetPluginParent( SystemParentData* pNewParent );
 };
 
 #ifdef _SV_SALDISP_HXX
 
-inline void SalFrameData::CaptureMouse( BOOL bCapture )
-{ nCaptured_ = pDisplay_->CaptureMouse( bCapture ? this : NULL ); }
-
-inline Display *SalFrameData::GetXDisplay() const
+inline Display *X11SalFrame::GetXDisplay() const
 { return pDisplay_->GetDisplay(); }
 
-inline XLIB_Window SalFrameData::GetDrawable() const
+inline XLIB_Window X11SalFrame::GetDrawable() const
 { return GetWindow(); }
 
-inline  SalColormap &SalFrameData::GetColormap() const
+inline  SalColormap &X11SalFrame::GetColormap() const
 { return pDisplay_->GetColormap(); }
 
 #endif
