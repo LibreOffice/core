@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:08:57 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ String RID_STR_COULDNOTOPENTABLE
     Text[ spanish ] = "No se pudo crear la tabla \"ConecciÛn a la fuente de datos\".";
     Text[ italian ] = "Impossibile realizzare il collegamento alla sorgente dati.";
     Text[ danish ] = "The connection to the data source could not be established.";
-    Text[ swedish ] = "Det gick inte att uppr‰tta en fˆrbindelse till datak‰llan.";
+    Text[ swedish ] = "Det gick inte att uppr‰tta en tabellfˆrbindelse till datak‰llan.";
     Text[ polish ] = "Po≥πczenie tabeli ze ürÛd≥em bazy danych nie powiod≥o siÍ.";
     Text[ portuguese_brazilian ] = "The connection to the data source could not be established.";
     Text[ japanese ] = "√ﬁ∞¿ø∞ΩÇ÷ÇÃ√∞ÃﬁŸê⁄ë±ÇÕÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅB";
@@ -214,6 +214,9 @@ String RID_STR_COULDNOTOPENTABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/31 06:08:57  kz
+ *  Merge SRC627: 31.03.01 - 08:08:38 (NoBranch)
+ *
  *  Revision 1.6  2001/03/19 11:42:47  kz
  *  Merge SRC625: 19.03.01 - 12:42:43 (NoBranch)
  *
