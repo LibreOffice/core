@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-16 09:28:18 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 14:46:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef _COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP_
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
+#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEIODEXCEPTION_HPP_
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
@@ -429,6 +432,11 @@ sal_Bool CommandThread_Impl::DoIt()
             m_xLockBytes->SetError( ERRCODE_IO_CANTREAD );
         else
             m_xLockBytes->SetError( ERRCODE_IO_GENERAL );
+    }
+    catch ( UnsupportedDataSinkException& r )
+    {
+        bException = true;
+        m_xLockBytes->SetError( ERRCODE_IO_ACCESSDENIED );
     }
     catch ( Exception )
     {
