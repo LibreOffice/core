@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:01:27 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,7 +1595,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "Αριστερά" ; Default ; > ;
         < "Κάτω/Αριστερά" ; Default ; > ;
         < "Πάνω" ; Default ; > ;
-        < "Κεντραρισμένα" ; Default ; > ;
+        < "Στο κέντρο" ; Default ; > ;
         < "Κάτω" ; Default ; > ;
         < "Πάνω/Δεξιά" ; Default ; > ;
         < "Δεξιά" ; Default ; > ;
@@ -1767,7 +1767,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ japanese ] = "γ‚Άγƒ‹γƒ΅γƒΌγ‚·γƒ§γƒ³γ‚°γƒ«γƒΌγƒ—";
         Text[ chinese_traditional ] = "ε‹•η•«ηΎ¤ηµ„";
         Text[ arabic ] = "γΜγζΪΙ ΗαΝΡίΙ";
-        Text[ greek ] = "Ομάδα εφέ κινήσεων";
+        Text[ greek ] = "Ομάδα κίνησης";
         Text[ korean ] = "μ• λ‹λ©”μ΄μ… κ·Έλ£Ή";
         Text[ turkish ] = "Animasyon grub";
         Text[ language_user1 ] = " ";
@@ -1795,6 +1795,7 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ hindi ] = "ΰ¤Ήΰ¥‚ΰ¤²ΰ¤Ύΰ¤Έ";
     Text[ slovak ] = "AnimΓ΅cia";
 };
+
 
 
 
