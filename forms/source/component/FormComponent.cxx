@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormComponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-04 12:56:34 $
+ *  last change: $Author: fs $ $Date: 2001-04-10 08:49:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,16 +510,16 @@ OControlModel::OControlModel(
         // Muss im eigenen Block,
         // da xAgg vor dem delegator setzen wieder freigesetzt sein muﬂ!
         {
-                        m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
+            m_xAggregate = Reference<XAggregation>(_rxFactory->createInstance(_rUnoControlModelTypeName), UNO_QUERY);
             setAggregation(m_xAggregate);
 
             if (m_xAggregateSet.is() && rDefault.len())
-                                m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(rDefault));
+                m_xAggregateSet->setPropertyValue(PROPERTY_DEFAULTCONTROL, makeAny(rDefault));
         }
 
         if (m_xAggregate.is())
         {
-                        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
+            m_xAggregate->setDelegator(static_cast<XWeak*>(this));
         }
 
         // Refcount wieder bei NULL
