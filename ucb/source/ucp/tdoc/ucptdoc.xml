@@ -38,6 +38,9 @@
         <service-dependency>
             com.sun.star.reflection.ProxyFactory
         </service-dependency>
+        <service-dependency>
+            com.sun.star.embed.StorageFactory
+        </service-dependency>
     </component-description>
 
     <component-description>
@@ -94,6 +97,9 @@
     <type> com.sun.star.frame.XFramesSupplier                           </type>
     <type> com.sun.star.frame.XTransientDocumentsDocumentContentFactory </type>
     <type> com.sun.star.io.XActiveDataSink                              </type>
+    <type> com.sun.star.io.XActiveDataStreamer                          </type>
+    <type> com.sun.star.io.XSeekable                                    </type>
+    <type> com.sun.star.io.XTruncate                                    </type>
     <type> com.sun.star.lang.DisposedException                          </type>
     <type> com.sun.star.lang.IllegalAccessException                     </type>
     <type> com.sun.star.lang.XComponent                                 </type>
