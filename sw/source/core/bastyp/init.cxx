@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-05 10:24:30 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 18:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,9 @@
 #endif
 #ifndef _SVX_CHARRELIEFITEM_HXX
 #include <svx/charreliefitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -574,7 +577,13 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_FTN_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_END_AT_TXTEND
     { 0, SFX_ITEM_POOLABLE },                           // RES_COLUMNBALANCE
-    { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY7
+
+#ifdef VERTICAL_LAYOUT
+    { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },     // RES_FRAMEDIR
+#else
+    { 0, SFX_ITEM_POOLABLE },                           // RES_FRAMEDIR
+#endif
+
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY8
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_DUMMY9
 
@@ -826,9 +835,9 @@ void _InitCore()
     aAttrTab[ RES_FTN_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtFtnAtTxtEnd;
     aAttrTab[ RES_END_AT_TXTEND - POOLATTR_BEGIN ] = new SwFmtEndAtTxtEnd;
     aAttrTab[ RES_COLUMNBALANCE - POOLATTR_BEGIN ] = new SwFmtNoBalancedColumns;
+    aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem;
 
 // FrameAttr - Dummies
-    aAttrTab[ RES_FRMATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY7 );
     aAttrTab[ RES_FRMATR_DUMMY8 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY8 );
     aAttrTab[ RES_FRMATR_DUMMY9 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_FRMATR_DUMMY9 );
 // FrameAttr - Dummies

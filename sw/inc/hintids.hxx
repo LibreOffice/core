@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-07-04 11:31:42 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 18:12:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
     RES_FTN_AT_TXTEND,                              // 104
     RES_END_AT_TXTEND,                              // 105
     RES_COLUMNBALANCE,                              // 106
-    RES_FRMATR_DUMMY7,                              // 107
+    RES_FRAMEDIR,                                   // 107
     RES_FRMATR_DUMMY8,                              // 108
     RES_FRMATR_DUMMY9,                              // 109
 RES_FRMATR_END
@@ -474,6 +474,7 @@ BOOL IsInRange( const USHORT* pRange, const USHORT nId );
 #define ITEMID_MACRO        RES_FRMMACRO
 #define ITEMID_FMTKEEP      RES_KEEP
 #define ITEMID_FMTBREAK     RES_BREAK
+#define ITEMID_FRAMEDIR     RES_FRAMEDIR
 
 //Defines fuer die ehemaligen ParAttribute, die jetzt in paraitem.hxx
 //bzw. tabsitem.hxx von svx zu finden sind.
