@@ -2,9 +2,6 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.5 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:55:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -162,6 +159,21 @@ sub get_productlanguage_for_property_table
     return $windowslanguage;
 }
 
+sub get_language_string
+{
+    my $langstring = "";
+
+    for ( my $i = 0; $i <= $#{$installer::globals::languagenames}; $i++ )
+    {
+        $langstring = $langstring . ${$installer::globals::languagenames}[$i] . ", ";
+    }
+
+    $langstring =~ s/\,\s*$//;
+    $langstring = "(" . $langstring . ")";
+
+    return $langstring;
+}
+
 sub get_productname_for_property_table
 {
     my ( $allvariables ) = @_;
@@ -170,13 +182,19 @@ sub get_productname_for_property_table
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $productname = $name . " " . $version;
 
+    if ( $installer::globals::languagepack )
+    {
+        my $langstring = get_language_string(); # Example (English, Deutsch)
+        $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
+    }
+
     return $productname;
 }
 
 sub get_productversion_for_property_table
 {
     my ( $allvariables ) = @_;
-    my $productversion = $allvariables->{'PRODUCTVERSION'} . ".00.0000";
+    my $productversion = $allvariables->{'PRODUCTVERSION'} . ".00." . $installer::globals::buildid;
     return $productversion;
 }
 
@@ -321,6 +339,35 @@ sub set_codes_in_property_table
         ${$propertyfile}[$i] =~ s/\bPRODUCTCODETEMPLATE\b/$installer::globals::productcode/;
         ${$propertyfile}[$i] =~ s/\bUPGRADECODETEMPLATE\b/$installer::globals::upgradecode/;
     }
+
+    # Saving the property file
+
+    installer::files::save_file($properyfilename ,$propertyfile);
+    my $infoline = "Added language content into idt file: $properyfilename\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+}
+
+############################################################
+# Setting the variable REGKEYPRODPATH, that is used
+# by the language packs.
+############################################################
+
+sub set_regkeyprodpath_in_property_table
+{
+    my ($basedir, , $allvariables) = @_;
+
+    # Reading the property file
+
+    my $properyfilename = $basedir . $installer::globals::separator . "Property.idt";
+    my $propertyfile = installer::files::read_file($properyfilename);
+
+    my $name = $allvariables->{'PRODUCTNAME'};
+    my $version = $allvariables->{'PRODUCTVERSION'};
+
+    my $onepropertyline = "REGKEYPRODPATH" . "\t" . "Software" . "\\" . $installer::globals::manufacturer . "\\". $name;
+
+    push(@{$propertyfile}, $onepropertyline);
 
     # Saving the property file
 
