@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 16:33:50 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -818,7 +818,7 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)) == 0 )
+    if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
     {
         drawing::PointSequenceSequence* pOuterSequence = (drawing::PointSequenceSequence*)aValue.getValue();
 
@@ -858,7 +858,7 @@ void SAL_CALL SvxShapePolyPolygon::setPropertyValue( const OUString& aPropertyNa
         // Polygon setzen
         SetPolygon(aNewPolyPolygon);
     }
-    else if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)) == 0)
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
     {
         drawing::PointSequence* pSequence = (drawing::PointSequence*)aValue.getValue();
 
@@ -905,7 +905,7 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)) == 0)
+    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGON)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const XPolyPolygon& rPolyPoly = GetPolygon();
@@ -935,25 +935,32 @@ uno::Any SAL_CALL SvxShapePolyPolygon::getPropertyValue( const OUString& aProper
         }
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequenceSequence*)0) );
     }
-    else if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)) == 0)
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGON)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const XPolyPolygon& rPolyPoly = GetPolygon();
 
-        drawing::PointSequence aRetval( rPolyPoly.Count() );
+        sal_Int32 nCount = 0;
+        if( rPolyPoly.Count() > 0 )
+            nCount = rPolyPoly[0].GetPointCount();
 
-        // Einzelpolygon holen
-        const XPolygon& rPoly = rPolyPoly[0];
+        drawing::PointSequence aRetval( nCount );
 
-        // Pointer auf arrays holen
-        awt::Point* pSequence = aRetval.getArray();
+        if( nCount > 0 )
+        {
+            // Einzelpolygon holen
+            const XPolygon& rPoly = rPolyPoly[0];
 
-        for(sal_uInt16 b=0;b<rPoly.GetPointCount();b++)
-            *pSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+            // Pointer auf arrays holen
+            awt::Point* pSequence = aRetval.getArray();
+
+            for(sal_Int32 b=0;b<nCount;b++)
+                *pSequence++ = awt::Point( rPoly[b].X(), rPoly[b].Y() );
+        }
 
         return uno::Any( &aRetval, ::getCppuType((const drawing::PointSequence*)0) );
     }
-    else if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)) == 0)
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {
         drawing::PolygonKind ePT = GetPolygonKind();
         return Any( &ePT, ::getCppuType((const drawing::PolygonKind*)0) );
@@ -1033,7 +1040,7 @@ void SAL_CALL SvxShapePolyPolygonBezier::setPropertyValue( const OUString& aProp
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)) == 0)
+    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
         // Koordinaten in das PolyPolygon packen
         drawing::PolyPolygonBezierCoords* pSourcePolyPolygon = (drawing::PolyPolygonBezierCoords*)aValue.getValue();
@@ -1098,7 +1105,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)) == 0)
+    if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYPOLYGONBEZIER)))
     {
         // PolyPolygon in eine struct PolyPolygon packen
         const XPolyPolygon& rPolyPoly = GetPolygon();
@@ -1136,7 +1143,7 @@ uno::Any SAL_CALL SvxShapePolyPolygonBezier::getPropertyValue( const OUString& a
         }
         return uno::Any( &aRetval, ::getCppuType((const drawing::PolyPolygonBezierCoords*)0));
     }
-    else if(aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)) == 0)
+    else if(aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_POLYGONKIND)))
     {
         drawing::PolygonKind ePT = GetPolygonKind();
         return uno::Any( &ePT, ::getCppuType((const drawing::PolygonKind*)0) );
@@ -1234,7 +1241,7 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
     {
         if( aValue.getValueType() == ::getCppuType(( const uno::Sequence< sal_Int8 >*)0) )
         {
@@ -1261,13 +1268,13 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
             }
         }
     }
-    else if( pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) == 0 )
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)))
     {
         OUString aURL;
         if(!(aValue >>= aURL))
             throw lang::IllegalArgumentException();
 
-        if( 0 == aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) ) )
+        if( aURL.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) ) )
         {
             // graphic manager url
             aURL = aURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
@@ -1305,7 +1312,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_FILLBITMAP)))
     {
         const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
 
@@ -1324,7 +1331,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
             return uno::Any( &aSeq, ::getCppuType(( uno::Sequence< sal_Int8 >*)0) );
         }
     }
-    else if( pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) == 0 )
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)) )
     {
         uno::Any aAny;
         if( ((SdrGrafObj*)pObj)->IsLinkedGraphic() )
@@ -1342,7 +1349,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
     }
 
 /*
-    else if( pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NativeFormat")) == 0)
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("NativeFormat")) )
     {
         const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
         GfxLink aLink = ((Graphic*)&rGraphic)->GetLink();
@@ -1352,7 +1359,7 @@ uno::Any SAL_CALL SvxGraphicObject::getPropertyValue( const OUString& aPropertyN
         uno::Sequence<BYTE> aSeq(aLink.GetData(), aLink.GetDataSize());
         return uno::Any( &aSeq, ::getCppuType((const uno::Sequence< BYTE >*)0));
     }
-    else if( pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("LinkType")) == 0 )
+    else if( pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("LinkType")) )
     {
         const Graphic& rGraphic = ((SdrGrafObj*)pObj)->GetGraphic();
         GfxLink aLink = ((Graphic*)&rGraphic)->GetLink();

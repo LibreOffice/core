@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonrule.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-02 15:37:23 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
         const OUString& rPropName = rProp.Name;
         const uno::Any& aVal = rProp.Value;
 
-        if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)) == 0)
+        if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_NUMBERINGTYPE)))
         {
             sal_Int16 nSet;
             aVal >>= nSet;
@@ -391,7 +391,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_PREFIX)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_PREFIX)))
         {
             OUString aPrefix;
             if( aVal >>= aPrefix )
@@ -400,7 +400,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_SUFFIX)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_SUFFIX)))
         {
             OUString aSuffix;
             if( aVal >>= aSuffix )
@@ -409,7 +409,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLETID)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLETID)))
         {
             sal_Int16 nSet;
             if( aVal >>= nSet )
@@ -421,7 +421,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 }
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("BulletChar")) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("BulletChar")))
         {
             OUString aStr;
             if( aVal >>= aStr )
@@ -433,7 +433,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 }
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_ADJUST)))
         {
             sal_Int16 nAdjust;
             if( aVal >>= nAdjust )
@@ -442,7 +442,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_FONT)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_FONT)))
         {
             awt::FontDescriptor aDesc;
             if( aVal >>= aDesc )
@@ -453,7 +453,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("Graphic")) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Graphic")))
         {
             uno::Reference< awt::XBitmap > xBmp;
             if( aVal >>= xBmp )
@@ -464,7 +464,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("GraphicURL")) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicURL")))
         {
             OUString aURL;
             if( aVal >>= aURL )
@@ -475,7 +475,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM("GraphicSize")) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("GraphicSize")))
         {
             awt::Size aUnoSize;
             if( aVal >>= aUnoSize )
@@ -484,7 +484,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_START_WITH)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_START_WITH)))
         {
             sal_Int16 nStart;
             if( aVal >>= nStart )
@@ -493,7 +493,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_LEFT_MARGIN)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_LEFT_MARGIN)))
         {
             sal_Int32 nMargin;
             if( aVal >>= nMargin )
@@ -502,7 +502,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_FIRST_LINE_OFFSET)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_FIRST_LINE_OFFSET)))
         {
             sal_Int32 nMargin;
             if( aVal >>= nMargin )
@@ -511,7 +511,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_COLOR)))
         {
             sal_Int32 nColor;
             if( aVal >>= nColor )
@@ -520,7 +520,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const uno::Sequence< beans::
                 continue;
             }
         }
-        else if(rPropName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)) == 0)
+        else if(rPropName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_NRULE_BULLET_RELSIZE)))
         {
             sal_Int16 nSize;
             if( aVal >>= nSize )

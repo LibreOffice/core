@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-22 16:33:50 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void SAL_CALL Svx3DSceneObject::setPropertyValue( const OUString& aPropertyName,
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0 )
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
@@ -394,7 +394,7 @@ uno::Any SAL_CALL Svx3DSceneObject::getPropertyValue( const OUString& PropertyNa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && PropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0 )
+    if(pObj && PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Objekt in eine homogene 4x4 Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
@@ -435,12 +435,12 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0 )
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) == 0 )
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
     {
         // Position in das Objekt packen
         drawing::Position3D aUnoPos;
@@ -450,7 +450,7 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
             ((E3dCubeObj*)pObj)->SetCubePos(aPos);
         }
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
     {
         // Groesse in das Objekt packen
         drawing::Direction3D aDirection;
@@ -460,7 +460,7 @@ void SAL_CALL Svx3DCubeObject::setPropertyValue( const OUString& aPropertyName, 
             ((E3dCubeObj*)pObj)->SetCubePos(aPos);
         }
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) == 0 )
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
     {
         // sal_Bool bPosIsCenter in das Objekt packen
         if( aValue.getValueType() == ::getCppuBooleanType() )
@@ -481,12 +481,12 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) == 0 )
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) )
     {
         // Position packen
         const Vector3D& rPos = ((E3dCubeObj*)pObj)->GetCubePos();
@@ -498,7 +498,7 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) == 0 )
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) )
     {
         // Groesse packen
         const Vector3D& rSize = ((E3dCubeObj*)pObj)->GetCubeSize();
@@ -510,7 +510,7 @@ uno::Any SAL_CALL Svx3DCubeObject::getPropertyValue( const OUString& aPropertyNa
 
         return uno::Any( &aDir, ::getCppuType((const drawing::Direction3D*)0) );
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) == 0 )
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS_IS_CENTER)) )
     {
         // sal_Bool bPosIsCenter packen
         sal_Bool bIsCenter = ((E3dCubeObj*)pObj)->GetPosIsCenter();
@@ -553,12 +553,12 @@ void SAL_CALL Svx3DSphereObject::setPropertyValue( const OUString& aPropertyName
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
     {
         // Position in das Objekt packen
         drawing::Position3D aUnoPos;
@@ -568,7 +568,7 @@ void SAL_CALL Svx3DSphereObject::setPropertyValue( const OUString& aPropertyName
             ((E3dSphereObj*)pObj)->SetCenter(aPos);
         }
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
     {
         // Groesse in das Objekt packen
         drawing::Direction3D aDir;
@@ -590,12 +590,12 @@ uno::Any SAL_CALL Svx3DSphereObject::getPropertyValue( const OUString& aProperty
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)))
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POS)))
     {
         // Position packen
         const Vector3D& rPos = ((E3dSphereObj*)pObj)->Center();
@@ -607,7 +607,7 @@ uno::Any SAL_CALL Svx3DSphereObject::getPropertyValue( const OUString& aProperty
 
         return uno::Any( &aPos, ::getCppuType((const drawing::Position3D*)0) );
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_SIZE)))
     {
         // Groesse packen
         const Vector3D& rSize = ((E3dSphereObj*)pObj)->Size();
@@ -738,12 +738,12 @@ void SAL_CALL Svx3DLatheObject::setPropertyValue( const OUString& aPropertyName,
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -763,12 +763,12 @@ uno::Any SAL_CALL Svx3DLatheObject::getPropertyValue( const OUString& aPropertyN
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0 )
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         const PolyPolygon3D& rPolyPoly = ((E3dLatheObj*)pObj)->GetPolyPoly3D();
 
@@ -810,12 +810,12 @@ void SAL_CALL Svx3DExtrudeObject::setPropertyValue( const OUString& aPropertyNam
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -835,12 +835,12 @@ uno::Any SAL_CALL Svx3DExtrudeObject::getPropertyValue( const OUString& aPropert
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
         const PolyPolygon3D& rPolyPoly = ((E3dExtrudeObj*)pObj)->GetExtrudePolygon();
@@ -884,12 +884,12 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformationsmatrix in das Objekt packen
         HOMOGEN_MATRIX_TO_OBJECT
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -897,7 +897,7 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
         // Polygon setzen
         ((E3dPolygonObj*)pObj)->SetPolyPolygon3D(aNewPolyPolygon);
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -905,7 +905,7 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
         // Polygon setzen
         ((E3dPolygonObj*)pObj)->SetPolyNormals3D(aNewPolyPolygon);
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition in das Objekt packen
         POLYPOLYGONSHAPE3D_TO_POLYPOLYGON3D
@@ -913,7 +913,7 @@ void SAL_CALL Svx3DPolygonObject::setPropertyValue( const OUString& aPropertyNam
         // Polygon setzen
         ((E3dPolygonObj*)pObj)->SetPolyTexture3D(aNewPolyPolygon);
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
         // sal_Bool bLineOnly in das Objekt packen
         if( aValue.getValueType() == ::getCppuBooleanType() )
@@ -934,33 +934,33 @@ uno::Any SAL_CALL Svx3DPolygonObject::getPropertyValue( const OUString& aPropert
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) == 0)
+    if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TRANSFORM_MATRIX)) )
     {
         // Transformation in eine homogene Matrix packen
         OBJECT_TO_HOMOGEN_MATRIX
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_POLYPOLYGON3D)) )
     {
         // Polygondefinition packen
         const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObj)->GetPolyPolygon3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_NORMALSPOLYGON3D)) )
     {
         // Normalendefinition packen
         const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObj)->GetPolyNormals3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_TEXTUREPOLYGON3D)) )
     {
         // Texturdefinition packen
         const PolyPolygon3D& rPolyPoly = ((E3dPolygonObj*)pObj)->GetPolyTexture3D();
 
         POLYPOLYGON3D_TO_POLYPOLYGONSHAPE3D
     }
-    else if(pObj && aPropertyName.compareToAscii( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) == 0)
+    else if(pObj && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_3D_LINEONLY)) )
     {
         // sal_Bool bLineOnly packen
         sal_Bool bNew = ((E3dPolygonObj*)pObj)->GetLineOnly();

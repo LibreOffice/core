@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-18 16:07:35 $
+ *  last change: $Author: cl $ $Date: 2000-11-22 18:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,31 +118,31 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoDrawMSFactory::createInstance( 
 
         sal_Int32 nId = ID_NOTFOUND;
 
-        if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
+        if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DateTime") ) )
         {
             nId = ID_DATEFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL") ) )
         {
             nId = ID_URLFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageNumber") ) )
         {
             nId = ID_PAGEFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("PageCount") ) )
         {
             nId = ID_PAGESFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("SheetName") ) )
         {
             nId = ID_TABLEFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName") ) )
         {
             nId = ID_EXT_FILEFIELD;
         }
-        else if( 0 == aFieldType.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
+        else if( aFieldType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("Author") ) )
         {
             nId = ID_AUTHORFIELD;
         }
