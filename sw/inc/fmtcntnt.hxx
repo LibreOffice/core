@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtcntnt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 17:54:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 15:49:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,6 @@ public:
     // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
-    virtual SfxPoolItem*    Create(SvStream &, USHORT nVer) const;
-    virtual SvStream&       Store(SvStream &, USHORT nIVer) const;
 
     const SwNodeIndex *GetCntntIdx() const { return pStartNode; }
     void SetNewCntntIdx( const SwNodeIndex *pIdx );
