@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-08 16:24:35 $
+ *  last change: $Author: nn $ $Date: 2001-02-22 17:37:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,7 +654,28 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
     ScDocShell* pSource = aLoader.GetDocShell();
     if ( pSource && pDocShell )
     {
-        pDocShell->LoadStyles( *pSource );
+        //  collect options
+
+        BOOL bLoadReplace = TRUE;           // defaults
+        BOOL bLoadCellStyles = TRUE;
+        BOOL bLoadPageStyles = TRUE;
+
+        const beans::PropertyValue* pPropArray = aOptions.getConstArray();
+        long nPropCount = aOptions.getLength();
+        for (long i = 0; i < nPropCount; i++)
+        {
+            const beans::PropertyValue& rProp = pPropArray[i];
+            String aPropName = rProp.Name;
+
+            if (aPropName.EqualsAscii( SC_UNONAME_OVERWSTL ))
+                bLoadReplace = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            else if (aPropName.EqualsAscii( SC_UNONAME_LOADCELL ))
+                bLoadCellStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+            else if (aPropName.EqualsAscii( SC_UNONAME_LOADPAGE ))
+                bLoadPageStyles = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
+        }
+
+        pDocShell->LoadStylesArgs( *pSource, bLoadReplace, bLoadCellStyles, bLoadPageStyles );
         pDocShell->SetDocumentModified();   // paint is inside LoadStyles
     }
 }
@@ -662,8 +683,21 @@ void SAL_CALL ScStyleFamiliesObj::loadStylesFromURL( const rtl::OUString& aURL,
 uno::Sequence<beans::PropertyValue> SAL_CALL ScStyleFamiliesObj::getStyleLoaderOptions()
                                                 throw(uno::RuntimeException)
 {
-    //  no options supported
-    return uno::Sequence<beans::PropertyValue>(0);
+    //  return defaults for options (?)
+
+    uno::Sequence<beans::PropertyValue> aSequence(3);
+    beans::PropertyValue* pArray = aSequence.getArray();
+
+    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_OVERWSTL );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[0].Value, TRUE );
+
+    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_LOADCELL );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[1].Value, TRUE );
+
+    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_LOADPAGE );
+    ScUnoHelpFunctions::SetBoolInAny( pArray[2].Value, TRUE );
+
+    return aSequence;
 }
 
 //------------------------------------------------------------------------
