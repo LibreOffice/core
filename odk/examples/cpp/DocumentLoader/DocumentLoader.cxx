@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentLoader.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 20:07:32 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:02:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -46,6 +46,7 @@
  *****************************************************************************
  *****************************************************************************/
 #include <stdio.h>
+#include <wchar.h>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -74,14 +75,13 @@ int SAL_CALL main( int argc, char **argv )
      if (argc < 2)
     {
         printf("using: DocumentLoader <file_url> [<uno_connection_url>]\n\n"
-               "example: DocumentLoader  \"file:///e:/temp/test.sxw\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
+               "example: DocumentLoader  \"file:///e:/temp/test.odt\" \"uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager\"\n");
         exit(1);
     }
      if (argc == 3)
     {
         sConnectionString = OUString::createFromAscii(argv[2]);
     }
-
 
     // Creates a simple registry service instance.
     Reference< XSimpleRegistry > xSimpleRegistry(
@@ -101,28 +101,6 @@ int SAL_CALL main( int argc, char **argv )
     */
     Reference< XComponentContext > xComponentContext(
         ::cppu::bootstrap_InitialComponentContext( xSimpleRegistry ) );
-
-    /* Bootstraps an initial component context with service manager upon default
-       types and services registry. This includes insertion of initial services:
-       - (registry) service manager, shared lib loader,
-       - simple registry, nested registry,
-       - implementation registration
-       - registry typedescription provider, typedescription manager (also
-         installs it into cppu core)
-
-       This function tries to find its parameters via these bootstrap variables:
-       - UNO_TYPES        -- a space separated list of file urls of type rdbs
-       - UNO_SERVICES     -- a space separated list of file urls of service rdbs
-       - UNO_WRITERDB     -- a file url of a write rdb (e.g. user.rdb)
-
-       For further info, please look at:
-       http://udk.openoffice.org/common/man/concept/uno_default_bootstrapping.html
-    */
-    /*
-    Reference< XComponentContext > xComponentContext(
-        ::cppu::defaultBootstrap_InitialComponentContext() );
-    OSL_ASSERT( xcomponentcontext.is() );
-    */
 
     /* Gets the service manager instance to be used (or null). This method has
        been added for convenience, because the service manager is a often used
@@ -174,12 +152,13 @@ int SAL_CALL main( int argc, char **argv )
     /* Loads a component specified by an URL into the specified new or existing
        frame.
     */
-    OUString sDocUrl, sWorkingDir;
+    OUString sAbsoluteDocUrl, sWorkingDir, sDocPathUrl;
     osl_getProcessWorkingDir(&sWorkingDir.pData);
-    osl::FileBase::getAbsoluteFileURL( sWorkingDir, OUString::createFromAscii(argv[1]), sDocUrl);
+    osl::FileBase::getFileURLFromSystemPath( OUString::createFromAscii(argv[1]), sDocPathUrl);
+    osl::FileBase::getAbsoluteFileURL( sWorkingDir, sDocPathUrl, sAbsoluteDocUrl);
 
     Reference< XComponent > xComponent = xComponentLoader->loadComponentFromURL(
-        sDocUrl, OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
+        sAbsoluteDocUrl, OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
         Sequence < ::com::sun::star::beans::PropertyValue >() );
 
     // dispose the local service manager
