@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:14:01 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡(~N)";
         Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
         Text[ greek ] = "ÌïñöŞ áñéèìşí";
-        Text[ korean ] = "¼ıÀÚ ¼­½Ä(~N)";
+        Text[ korean ] = "¼ıÀÚ Æ÷¸Ë(~N)";
         Text[ turkish ] = "Sayı f~ormatı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Formato de números";
