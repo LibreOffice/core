@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScDrawPageObj.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-09-08 12:08:56 $
+ *  last change:$Date: 2004-01-05 19:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ public class ScDrawPageObj extends TestCase {
         log.println( "    disposing xSheetDoc " );
         XComponent xComp = (XComponent)
                             UnoRuntime.queryInterface(XComponent.class, xDoc);
-        xComp.dispose();
+        util.DesktopTools.closeDoc(xComp);
     }
 
 
