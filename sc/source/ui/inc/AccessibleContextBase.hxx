@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2002-02-08 11:42:57 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,14 +66,17 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_IllegalAccessibleComponentStateException_HPP_
 #include <drafts/com/sun/star/accessibility/IllegalAccessibleComponentStateException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
@@ -102,20 +105,28 @@
 #endif
 
 
-#include <cppuhelper/implbase4.hxx>
+#ifndef _SFXLSTNER_HXX //autogen
+#include <svtools/lstner.hxx>
+#endif
+#include <cppuhelper/implbase6.hxx>
 #include <unotools/servicehelper.hxx>
+
+class Rectangle;
 
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleContext</code> service.
 */
 class ScAccessibleContextBase
-    :   public cppu::WeakImplHelper4<
+    :   public cppu::WeakImplHelper6<
                 ::drafts::com::sun::star::accessibility::XAccessible,
+                ::drafts::com::sun::star::accessibility::XAccessibleComponent,
                 ::drafts::com::sun::star::accessibility::XAccessibleContext,
+                ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
                 ::com::sun::star::lang::XServiceInfo,
                 ::com::sun::star::lang::XServiceName
-                >
+                >,
+        public SfxListener
 {
 public:
     //=====  internal  ========================================================
@@ -124,15 +135,213 @@ public:
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         const sal_Int16 aRole);
+
+    virtual void SetDefunc();
 protected:
     virtual ~ScAccessibleContextBase    (void);
 public:
+    //=====  SfxListener  =====================================================
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     //=====  XAccessible  =====================================================
 
     /// Return the XAccessibleContext.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext> SAL_CALL
         getAccessibleContext (void) throw (::com::sun::star::uno::RuntimeException);
+
+    //=====  XAccessibleComponent  ============================================
+
+    /** Tests whether the specified point lies within this object's bounds.
+
+        <p>The test point's coordinates are defined relative to the
+        coordinate system of the object.</p>
+
+        @param point
+            Coordinates of the point to test.
+
+        @return
+            Returns <TRUE/> if the point lies within or on the object's bounding
+            box and <FALSE/> otherwise.
+    */
+    virtual sal_Bool SAL_CALL contains(
+        const ::com::sun::star::awt::Point& rPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns the Accessible child that is rendered under the given point.
+
+        @param aPoint
+            Coordinates of the test point for which to find the Accessible
+            child.
+
+        @return
+            If there is one child which is rendered so that its bounding box
+            contains the test point then a reference to that object is
+            returned.  If there is more than one child which satisfies that
+            condition then a reference to that one is returned that is
+            painted on top of the others.  If no there is no child which is
+            rendered at the test point an empty reference is returned.
+    */
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAt(
+        const ::com::sun::star::awt::Point& rPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns the bounding box of this object.
+
+        <p>The returned bounding box has the form of a rectangle.  Its
+        coordinates are relative to the object's parent coordinate system.
+        Note that the two methods <member>getLocation</member> and
+        <member>getSize</member> return the same information.  With method
+        <member>getLocationOnScreen</member> you can get the bound box
+        position in screen coordinates.</p>
+
+        @return
+            The coordinates of the returned rectangle are relative to this
+            object's parent or relative to the screen on which this object
+            is rendered if it has no parent.  If the object is not on any
+            screen the returnred rectangle is empty and located at position
+            (0,0).
+    */
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+    /** Returns the location of the upper left corner of the object's
+        bounding box relative to the parent.</p>.
+
+        <p>The coordinates of the bounding box are given relative to the
+        parent's coordinate system.</p>
+
+        @return
+            The coordinates of the returned position are relative to this
+            object's parent or relative to the screen on which this object
+            is rendered if it has no parent.  If the object is not on any
+            screen the returnred position is (0,0).
+    */
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns the location of the upper left corner of the object's
+        bounding box in screen coordinates.
+
+        <p>This method returns the same point as does the method
+        <member>getLocation</member>.  The difference is that the
+        coordinates are absolute screen coordinates of the screen to which
+        the object is rendered instead of being relative to the object's
+        parent.</p>
+
+        @return
+            The coordinates of the returned position are relative to the
+            screen on which this object is rendered.  If the object is not
+            on any screen the returnred position is (0,0).
+    */
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns the size of this object's bounding box.
+
+        @return
+            The returned size is the size of this object or empty if it is
+            not rendered on any screen.
+    */
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Determines if the object is showing.
+
+        <p>An object is showing if it and all its parents are visible.  This
+        does not neccessarily mean that the object is visible on the screen.
+        There may be other objects obscuring it.  The showing property can
+        be modified by calling <member>setVisible</member> on the objects
+        and on its parents.</p>
+
+        @return
+            Returns <TRUE/> if the object is showing and <FALSE/> otherwise.
+
+        @see isVisible, setVisible
+    */
+    virtual sal_Bool SAL_CALL isShowing(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Determines if the object is visible.
+
+        <p>If an object and all of its parents are visible then the object
+        is also called showing.  If an object is showing then it has also
+        set the <const>AccessibleStateType::VISIBLE</const> state set in its
+        <type>AccessibleStateSet</type>.</p>
+
+        @return
+            Returns <TRUE/> if the object is visible and <FALSE/> otherwise.
+
+        @see isShowing
+    */
+    virtual sal_Bool SAL_CALL isVisible(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns whether the object can accept the focus or not.
+
+        <p>If it can it has also set the
+        <const>AccessibleStateType::FOCUSABLE</const> state set in its
+        <type>AccessibleStateSet</type>.
+
+        @return
+            An object returns <TRUE/> if it can accept the focus and returns
+            <FALSE/> otherwise.
+    */
+    virtual sal_Bool SAL_CALL isFocusTraversable(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Adds a new focus listener.
+
+        <p>The focus listener will receive future focus events from this
+        component.  If the specified listener is already a member of the set
+        of registered focus listeners this method call is ignored.</p>
+
+        @param xListener
+            The listener object that is called for future focus events.
+    */
+    virtual void SAL_CALL addFocusListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Removes a focus listener.
+
+        <p>The specified focus listener will no longer receive focus events
+        from this component.  If this listener has not been added by a prior
+        call to <member>addFocusListener</member> then this method call is
+        ignored.</p>
+
+        @param xListener
+            Listener to remove from the list of focus listener.
+    */
+    virtual void SAL_CALL removeFocusListener(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Grabs the focus to this object.
+
+        <p>If this object can not accept the focus,
+        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
+        object then nothing happens.  Otherwise the object will attempt to
+        take the focus.  Nothing happens if that fails, otherwise the object
+        has the focus.  This method is called <code>requestFocus</code> in
+        the Java Accessibility API 1.4.</p>
+    */
+    virtual void SAL_CALL grabFocus(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Returns the key bindings associated with this object.
+
+        <p>This method stems from the Java interface
+        <code>AccessibleExtendedComponent</code>.</p>
+
+        @return
+            The returned value represents the current key bindings
+            associated with this object.
+    */
+    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -143,8 +352,8 @@ public:
     /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
         getAccessibleChild (long nIndex)
-        throw (::com::sun::star::uno::RuntimeException/*,
-                ::com::sun::star::lang::IndexOutOfBoundsException*/);
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return a reference to the parent.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
@@ -191,20 +400,22 @@ public:
         throw (::com::sun::star::uno::RuntimeException,
             ::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException);
 
-    /** Add listener that is informed of future changes of name and
-          description properties.
+    //=====  XAccessibleEventBroadcaster  =====================================
+
+    /** Add listener that is informed of future changes of name,
+          description and so on events.
     */
     virtual void SAL_CALL
-        addPropertyChangeListener (
+        addEventListener (
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertyChangeListener>& xListener)
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
-    //  Remove an existing property change listener.
+    //  Remove an existing event listener.
     virtual void SAL_CALL
-        removePropertyChangeListener (
+        removeEventListener (
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertyChangeListener>& xListener)
+                ::drafts::com::sun::star::accessibility::XAccessibleEventListener>& xListener)
         throw (com::sun::star::uno::RuntimeException);
 
     //=====  XServiceInfo  ====================================================
@@ -255,11 +466,36 @@ public:
 
 
 protected:
+    /// Return this object's description.
+    virtual ::rtl::OUString SAL_CALL
+        createAccessibleDescription (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current name.
+    virtual ::rtl::OUString SAL_CALL
+        createAccessibleName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the desktop.
+    virtual Rectangle GetBoundingBoxOnScreen(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the parent object.
+    virtual Rectangle GetBoundingBox(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
     /// Calls all Listener to tell they the change.
     void
-        CommitChange(const rtl::OUString& rPropertyName,
-                    const com::sun::star::uno::Any& rNewValue,
-                    const com::sun::star::uno::Any& rOldValue);
+        CommitChange(const drafts::com::sun::star::accessibility::AccessibleEventObject& rEvent);
+
+    /// Calls all Listener to tell they that the object is now DEFUNC
+    void CommitDefunc();
+
+    /// Calls all FocusListener to tell they that the focus is gained.
+    void CommitFocusGained(const com::sun::star::awt::FocusEvent& rFocusEvent);
+
+    /// Calls all FocusListener to tell they that the focus is lost.
+    void CommitFocusLost(const com::sun::star::awt::FocusEvent& rFocusEvent);
 
     /// Mutex guarding this object.
     ::osl::Mutex maMutex;
@@ -281,7 +517,10 @@ private:
     ::rtl::OUString msName;
 
     /// List of property change listeners.
-    cppu::OInterfaceContainerHelper* mpPropertyChangeListeners;
+    cppu::OInterfaceContainerHelper* mpEventListeners;
+
+    /// List of focus listeners.
+    cppu::OInterfaceContainerHelper* mpFocusListeners;
 
     /** This is the role of this object.
     */

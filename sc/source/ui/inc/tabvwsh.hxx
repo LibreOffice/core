@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-02 14:15:44 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,9 @@ private:
     Rectangle               aChartPos;
     USHORT                  nChartDestTab;
     USHORT                  nCurRefDlgId;
+
+    SfxBroadcaster*         pAccessibilityBroadcaster;
+
 
 private:
     void    Construct();
@@ -442,6 +445,12 @@ public:
     void    StopSimpleRefDialog();
 
     void    SetCurRefDlgId( USHORT nNew );
+
+    void    AddAccessibilityObject( SfxListener& rObject );
+    void    RemoveAccessibilityObject( SfxListener& rObject );
+    void    BroadcastAccessibility( const SfxHint &rHint );
+    BOOL    HasAccessibilityObjects();
+
 };
 
 //==================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,16 +66,13 @@
 #ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
 #endif
+#ifndef SC_VIEWDATA_HXX
+#include "viewdata.hxx"
+#endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HPP_
-#include <com/sun/star/sheet/XSpreadsheetView.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
+class ScTabViewShell;
+class ScAccessibleSpreadsheet;
+class SdrPage;
 
 /** @descr
         This base class provides an implementation of the
@@ -90,10 +87,48 @@ public:
     ScAccessibleDocument(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        const com::sun::star::uno::Reference
-        < com::sun::star::sheet::XSpreadsheetView >& rxSheetView);
+        ScTabViewShell* pViewShell,
+        ScSplitPos eSplitPos);
     virtual ~ScAccessibleDocument   (void);
 
+     virtual void SetDefunc();
+
+   //=====  SfxListener  =====================================================
+
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    //=====  XAccessibleComponent  ============================================
+
+    /** Returns the Accessible child that is rendered under the given point.
+
+        @param aPoint
+            Coordinates of the test point for which to find the Accessible
+            child.
+
+        @return
+            If there is one child which is rendered so that its bounding box
+            contains the test point then a reference to that object is
+            returned.  If there is more than one child which satisfies that
+            condition then a reference to that one is returned that is
+            painted on top of the others.  If no there is no child which is
+            rendered at the test point an empty reference is returned.
+    */
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
+        SAL_CALL getAccessibleAt(
+        const ::com::sun::star::awt::Point& rPoint )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /** Grabs the focus to this object.
+
+        <p>If this object can not accept the focus,
+        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
+        object then nothing happens.  Otherwise the object will attempt to
+        take the focus.  Nothing happens if that fails, otherwise the object
+        has the focus.  This method is called <code>requestFocus</code> in
+        the Java Accessibility API 1.4.</p>
+    */
+    virtual void SAL_CALL grabFocus(  )
+        throw (::com::sun::star::uno::RuntimeException);
 
     //=====  XAccessibleContext  ==============================================
 
@@ -124,20 +159,40 @@ public:
 
 
 protected:
+    /// Return this object's description.
+    virtual ::rtl::OUString SAL_CALL
+        createAccessibleDescription (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current name.
+    virtual ::rtl::OUString SAL_CALL
+        createAccessibleName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the desktop.
+    virtual Rectangle GetBoundingBoxOnScreen(void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    /// Return the object's current bounding box relative to the parent object.
+    virtual Rectangle GetBoundingBox(void)
+        throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    /** UNO API representation of the view of this object.
-    It is used to get all needed information. It gives access to the current sheet and so on.
-    */
-    com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheetView > mxSheetView;
+    ScTabViewShell* mpViewShell;
+    ScSplitPos      meSplitPos;
+    ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
 
-    com::sun::star::uno::Reference < com::sun::star::frame::XModel >
-        getModel(const com::sun::star::uno::Reference
-            < com::sun::star::sheet::XSpreadsheetView >& rxSheetView);
-    sal_Int32 getVisibleTable();
-    sal_Bool ScAccessibleDocument::HasDrawPages(
-                com::sun::star::uno::Reference
-                    <com::sun::star::sheet::XSpreadsheetDocument>& rxDoc);
+    sal_uInt16 getVisibleTable();
+
+    ::com::sun::star::uno::Reference
+        < ::drafts::com::sun::star::accessibility::XAccessible >
+        GetAccessibleSpreadsheet();
+
+    void FreeAccessibleSpreadsheet();
+
+    void ClearMemberAndDisableListening();
+
+    SdrPage* GetDrawPage();
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
@@ -151,8 +206,6 @@ private:
     sal_Bool IsVisible(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
-
-    com::sun::star::uno::Reference < com::sun::star::frame::XModel > mxModel;
 };
 
 

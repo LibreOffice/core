@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:46:12 $
+ *  last change: $Author: sab $ $Date: 2002-02-14 16:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,17 +66,15 @@
 #ifndef _SC_ACCESSIBLE_CONTEXT_BASE_HXX
 #include "AccessibleContextBase.hxx"
 #endif
+#ifndef SC_SCGLOB_HXX
+#include "global.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLETABLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleTable.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETVIEW_HDL_
-#include <com/sun/star/sheet/XSpreadsheetView.hdl>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLRANGEADDRESS_HPP_
-#include <com/sun/star/table/CellRangeAddress.hpp>
-#endif
+class ScTabViewShell;
 
 /** @descr
         This base class provides an implementation of the
@@ -91,10 +89,11 @@ public:
     ScAccessibleTableBase (
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-        const com::sun::star::uno::Reference <
-        com::sun::star::sheet::XSpreadsheetView >& rxSheetView,
-        const com::sun::star::table::CellRangeAddress& rRange);
+        ScDocument* pDoc,
+        const ScRange& rRange);
     virtual ~ScAccessibleTableBase ();
+
+    virtual void SetDefunc();
 
     //=====  XInterface  ======================================================
 
@@ -221,16 +220,16 @@ public:
 
     /// Return the number of currently visible children.
     // is overloaded to calculate this on demand
-    virtual long SAL_CALL
+    virtual sal_Int32 SAL_CALL
         getAccessibleChildCount (void)
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (long nIndex)
-        throw (::com::sun::star::uno::RuntimeException/*,
-                ::com::sun::star::lang::IndexOutOfBoundsException*/);
+        getAccessibleChild (sal_Int32 nIndex)
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
 
 protected:
     /// Return this object's description.
@@ -295,17 +294,10 @@ public:
 
 
 protected:
-
-    /** UNO API representation of the view of the current document.
-    */
-    com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheetView > mxSheetView;
-
-    /** UNO API representation of the current sheet.
-    */
-    com::sun::star::uno::Reference < com::sun::star::sheet::XSpreadsheet > mxSheet;
-
     /// contains the range of the table, because it could be a subrange of the complete table
-    com::sun::star::table::CellRangeAddress maRange;
+    ScRange maRange;
+
+    ScDocument* mpDoc;
 };
 
 
