@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:33:53 $
+ *  last change: $Author: er $ $Date: 2001-02-22 15:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5198,7 +5198,7 @@ BOOL ScInterpreter::MayBeRegExp( const String& rStr )
 {
     if ( !rStr.Len() || (rStr.Len() == 1 && rStr.GetChar(0) != '.') )
         return FALSE;   // einzelnes Metazeichen kann keine RegExp sein
-    static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','(',')','|', 0 };
+    static const sal_Unicode cre[] = { '.','*','+','?','[',']','^','$','\\','<','>','(',')','|', 0 };
     const sal_Unicode* p1 = rStr.GetBuffer();
     sal_Unicode c1;
     while ( c1 = *p1++ )
