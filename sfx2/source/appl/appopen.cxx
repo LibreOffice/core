@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:13:29 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:56:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
@@ -176,7 +179,6 @@
 #include "docfile.hxx"
 #include "docinf.hxx"
 #include "fcontnr.hxx"
-#include "fsetobsh.hxx"
 #include "loadenv.hxx"
 #include "new.hxx"
 #include "objitem.hxx"
@@ -194,6 +196,7 @@
 #include "sfxuno.hxx"
 #include "objface.hxx"
 #include "filedlghelper.hxx"
+#include "docfac.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
@@ -478,7 +481,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
     else
     {
         if ( !xDoc.Is() )
-            xDoc = ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())->GetFactory().CreateObject();
+            xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName() );
 
         SfxMedium *pMedium = new SfxMedium( rFileName, STREAM_STD_READ, FALSE, pFilter, pSet );
         if(!xDoc->DoLoad(pMedium))
@@ -573,7 +576,7 @@ void SfxApplication::LoadEa_Impl(SfxMedium &rMedium, SfxObjectShell& rObj)
 SfxMedium* SfxApplication::InsertDocumentDialog
 (
     ULONG                   nFlags,
-    const SfxObjectFactory& rFact
+    const String& rFact
 )
 {
     return InsertDocumentDialog( nFlags, rFact, 0 );
@@ -584,7 +587,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
 SfxMedium* SfxApplication::InsertDocumentDialog
 (
     ULONG                   nFlags,
-    const SfxObjectFactory& rFact,
+    const String& rFact,
     ULONG                   nHelpId
 )
 {
@@ -599,11 +602,11 @@ SfxMedium* SfxApplication::InsertDocumentDialog
         String aURL = *(pURLList->GetObject(0));
         pMedium = new SfxMedium(
                 aURL, SFX_STREAM_READONLY, FALSE,
-                GetFilterMatcher().GetFilter( aFilter ), pSet );
+                GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
 
         pMedium->UseInteractionHandler(TRUE);
         LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
-        SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+        SfxFilterMatcher aMatcher( rFact );
         xLoader->SetFilterMatcher( &aMatcher );
         xLoader->Start();
         while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
@@ -622,7 +625,7 @@ SfxMedium* SfxApplication::InsertDocumentDialog
 SfxMediumList* SfxApplication::InsertDocumentsDialog
 (
     ULONG                   nFlags,
-    const SfxObjectFactory& rFact,
+    const String& rFact,
     ULONG                   nHelpId
 )
 {
@@ -639,11 +642,11 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
             String aURL = *(pURLList->GetObject(n));
             SfxMedium* pMedium = new SfxMedium(
                     aURL, SFX_STREAM_READONLY, FALSE,
-                    GetFilterMatcher().GetFilter( aFilter ), pSet );
+                    GetFilterMatcher().GetFilter4FilterName( aFilter ), pSet );
 
             pMedium->UseInteractionHandler(TRUE);
             LoadEnvironment_ImplRef xLoader = new LoadEnvironment_Impl( pMedium );
-            SfxFilterMatcher aMatcher( rFact.GetFilterContainer() );
+            SfxFilterMatcher aMatcher( rFact );
             xLoader->SetFilterMatcher( &aMatcher );
             xLoader->Start();
             while( xLoader->GetState() != LoadEnvironment_Impl::DONE  )
@@ -667,7 +670,7 @@ SfxMediumList* SfxApplication::InsertDocumentsDialog
 SfxMediumList* SfxApplication::InsertDocumentsDialog
 (
     ULONG                   nFlags,
-    const SfxObjectFactory& rFact
+    const String& rFact
 )
 {
     return InsertDocumentsDialog( nFlags, rFact, 0 );
@@ -717,21 +720,7 @@ SfxObjectShellLock SfxApplication::NewDoc_Impl( const String& rFact, const SfxIt
         aParam.Erase(0,1);
     }
 
-    WildCard aSearchedFac( aFact.EraseAllChars('4').ToUpperAscii() );
-    for( USHORT n = SfxObjectFactory::GetObjectFactoryCount_Impl(); !pFactory && n--; )
-    {
-        pFactory = &SfxObjectFactory::GetObjectFactory_Impl( n );
-        if( !aSearchedFac.Matches( String::CreateFromAscii( pFactory->GetShortName() ).ToUpperAscii() ) )
-            pFactory = 0;
-    }
-
-    if( !pFactory )
-    {
-        DBG_ERROR("Unknown factory!");
-        pFactory = &SfxObjectFactory::GetDefaultFactory();
-    }
-
-    xDoc = pFactory->CreateObject();
+    xDoc = SfxObjectShell::CreateObjectByFactoryName( aFact );
     aParam = INetURLObject::decode( aParam, '%', INetURLObject::DECODE_WITH_CHARSET );
     if( xDoc.Is() )
         xDoc->DoInitNew_Impl( aParam );
@@ -790,30 +779,7 @@ void SfxApplication::NewDocDirectExec_Impl( SfxRequest& rReq )
     if( pFactoryName )
         aFactory = pFactoryName->GetValue();
     else
-    {
-        SvtModuleOptions aOpt;
-
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITER);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SCALC))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_CALC);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SDRAW))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_DRAW);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_IMPRESS);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SMATH))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_MATH);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITERGLOBAL);
-        else
-        if (aOpt.IsModuleInstalled(SvtModuleOptions::E_SWRITER))
-            aFactory = aOpt.GetFactoryShortName(SvtModuleOptions::E_WRITERWEB);
-    }
+        aFactory = SvtModuleOptions().GetDefaultModuleName();
 
     SFX_REQUEST_ARG( rReq, pFileFlagsItem, SfxStringItem, SID_OPTIONS, FALSE);
     if ( pFileFlagsItem )
@@ -1070,7 +1036,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         }
 
         ULONG nErr = sfx2::FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, *(SfxObjectFactory*)pDummy, pURLList, aFilter, pSet, aPath );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, aPath );
 
         if ( nErr == ERRCODE_ABORT )
         {
