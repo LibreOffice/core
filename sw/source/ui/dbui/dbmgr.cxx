@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: os $ $Date: 2001-10-16 11:10:55 $
+ *  last change: $Author: jp $ $Date: 2001-10-19 15:33:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,8 @@
 
 #include <stdio.h>
 
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
-#include <com/sun/star/ucb/TransferInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_NAMECLASH_HPP_
-#include <com/sun/star/ucb/NameClash.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -212,6 +200,9 @@
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
 #endif
+#ifndef _SWUNOHELPER_HXX
+#include <swunohelper.hxx>
+#endif
 
 #ifndef _DBUI_HRC
 #include <dbui.hrc>
@@ -301,7 +292,6 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::util;
-using namespace ::com::sun::star::ucb;
 using namespace com::sun::star::task;
 
 #define C2S(cChar) String::CreateFromAscii(cChar)
@@ -978,26 +968,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
                 sTmpName = utl::TempFile::CreateTempName(0);
                 sTmpName = URIHelper::SmartRelToAbs(sTmpName);
-
-                try
-                {
-                    String sMain(sTmpName);
-                    sal_Unicode cSlash = '/';
-                    xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
-                    sMain.Erase(nSlashPos);
-                    ::ucb::Content aNewContent( sMain, Reference< XCommandEnvironment > ());
-                    Any aAny;
-                    TransferInfo aInfo;
-                    aInfo.NameClash = NameClash::ERROR;
-                    aInfo.NewTitle = INetURLObject(sTmpName).GetName();
-                    aInfo.SourceURL = sMainURL;
-                    aInfo.MoveData  = FALSE;
-                    aAny <<= aInfo;
-                    aNewContent.executeCommand( C2U( "transfer" ), aAny);
-                }
-                catch( Exception& rEx)
-                {
-                }
+                SWUnoHelper::UCB_CopyFile( sMainURL, sTmpName );
             }
             String sAddress;
             ULONG nDocNo = 1;
@@ -1081,18 +1052,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
 
             }
             // remove the temporary file
-            try
-            {
-                ::ucb::Content aTempContent(
-                    sTmpName,
-                    Reference< XCommandEnvironment > ());
-                aTempContent.executeCommand( C2U( "delete" ),
-                                    makeAny( sal_Bool( sal_True ) ) );
-            }
-            catch( Exception& rEx)
-            {
-                DBG_ERRORFILE( "Exception" );
-            }
+            SWUnoHelper::UCB_DeleteFile( sTmpName );
             SW_MOD()->SetView(&pSh->GetView());
         }
 
