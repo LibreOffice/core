@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-16 12:07:56 $
+ *  last change: $Author: tl $ $Date: 2002-12-10 10:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,9 @@ IMPL_LINK( SwHyphWrapper, SpellError, void *, nLang )
 // -----------------------------------------------------------------------
 sal_Bool SwHyphWrapper::SpellMore()
 {
+    PSH->Push();
     bInfoBox = sal_True;
+    PSH->Combine();
     return sal_False;
 }
 
