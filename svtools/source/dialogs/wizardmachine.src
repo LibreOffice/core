@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:45:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 21:47:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String STR_WIZDLG_FINISH
     Text[ polish ] = "Utw髍z";
     Text[ portuguese_brazilian ] = "~Finish";
     Text[ japanese ] = "姰椆(~R)";
-    Text[ korean ] = "付魔(~R)";
+    Text[ korean ] = "付魔(R)";
     Text[ chinese_simplified ] = "完成(~R)";
     Text[ chinese_traditional ] = "ЧΘ(~R)";
     Text[ turkish ] = "~Finish";
@@ -135,7 +135,7 @@ String STR_WIZDLG_PREVIOUS
     Text[ polish ] = "<< Wstecz";
     Text[ portuguese_brazilian ] = "<< ~Previous";
     Text[ japanese ] = "<< 栠傞(~K)";
-    Text[ korean ] = "<< 第肺(~K)";
+    Text[ korean ] = "<< 第肺(K)";
     Text[ chinese_simplified ] = "<< 返回(~K)";
     Text[ chinese_traditional ] = "<< (~K)";
     Text[ turkish ] = "<< ~Previous";
@@ -147,6 +147,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/06/13 21:45:05  kz
+ *  Merge SRC633: 06/13/01 - 23:44:20
+ *
  *  Revision 1.13  2001/06/08 21:48:55  obo
  *  Merge SRC633: 08.06.01 - 23:51:24
  *
@@ -189,6 +192,7 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
 
 
 
