@@ -13296,3 +13296,17 @@ _TI3?AVDisposedException@lang@star@sun@com@@
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3264430909@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3264430909@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx3264430909@@YAEABVString@@AAV2@@Z
+?IsCTLSequenceChecking@SvtCTLOptions@@QBEEXZ
+?SetCTLSequenceChecking@SvtCTLOptions@@QAEXE@Z
+?IsCTLSequenceChecking@SvtLanguageOptions@@QBEEXZ
+?SetCTLSequenceChecking@SvtLanguageOptions@@QAEXE@Z
+??0OUStringBuffer@rtl@@QAE@VOUString@1@@Z
+??0SvtExtendedSecurityOptions@@QAE@XZ
+??1SvtExtendedSecurityOptions@@QAE@XZ
+?GetInitMutex@SvtExtendedSecurityOptions@@SAAAVMutex@osl@@XZ
+?GetOpenHyperlinkMode@SvtExtendedSecurityOptions@@QAE?AW4OpenHyperlinkMode@1@XZ
+?GetSecureExtensionList@SvtExtendedSecurityOptions@@QBE?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
+?IsSecureHyperlink@SvtExtendedSecurityOptions@@QBEEABVOUString@rtl@@@Z
+?SetOpenHyperlinkMode@SvtExtendedSecurityOptions@@QAEXW4OpenHyperlinkMode@1@@Z
+?appendAscii@OUStringBuffer@rtl@@QAEAAV12@PBDJ@Z
+?m_nRefCount@SvtExtendedSecurityOptions@@0JA
