@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,9 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
         const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 nFlags ) const
+        sal_uInt16 nFlags,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
            ((XMLTextExportPropertySetMapper *)this);
@@ -106,6 +108,37 @@ void XMLTextExportPropertySetMapper::handleElementItem(
         pThis->maTextColumnsExport.exportXML( rProperty.maValue );
         break;
 
+    case CTF_BACKGROUND_URL:
+        {
+            DBG_ASSERT( pProperties && nIdx >= 2,
+                        "property vector missing" );
+            const Any *pPos = 0, *pFilter = 0;
+            if( pProperties && nIdx >= 2 )
+            {
+                const XMLPropertyState& rPos = (*pProperties)[nIdx-2];
+                DBG_ASSERT( CTF_BACKGROUND_POS == getPropertySetMapper()
+                        ->GetEntryContextId( rPos.mnIndex ),
+                         "invalid property map: pos expected" );
+                if( CTF_BACKGROUND_POS == getPropertySetMapper()
+                        ->GetEntryContextId( rPos.mnIndex ) )
+                    pPos = &rPos.maValue;
+
+                const XMLPropertyState& rFilter = (*pProperties)[nIdx-1];
+                DBG_ASSERT( CTF_BACKGROUND_FILTER == getPropertySetMapper()
+                        ->GetEntryContextId( rFilter.mnIndex ),
+                         "invalid property map: filter expected" );
+                if( CTF_BACKGROUND_FILTER == getPropertySetMapper()
+                        ->GetEntryContextId( rFilter.mnIndex ) )
+                    pFilter = &rFilter.maValue;
+            }
+            sal_uInt32 nPropIndex = rProperty.mnIndex;
+            pThis->maBackgroundImageExport.exportXML(
+                    rProperty.maValue, pPos, pFilter,
+                    getPropertySetMapper()->GetEntryNameSpace( nPropIndex ),
+                    getPropertySetMapper()->GetEntryXMLName( nPropIndex ) );
+        }
+        break;
+
     default:
         DBG_ASSERT( !this, "unknown element property" );
         break;
@@ -116,7 +149,9 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
         SvXMLAttributeList& rAttrList,
         const XMLPropertyState& rProperty,
         const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap ) const
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     XMLTextExportPropertySetMapper *pThis =
            ((XMLTextExportPropertySetMapper *)this);
@@ -135,6 +170,8 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     case CTF_NUMBERINGSTYLENAME:
     case CTF_PAGEDESCNAME:
     case CTF_OLDTEXTBACKGROUND:
+    case CTF_BACKGROUND_POS:
+    case CTF_BACKGROUND_FILTER:
         // There's nothing to do here!
         break;
     default:
@@ -150,14 +187,12 @@ XMLTextExportPropertySetMapper::XMLTextExportPropertySetMapper(
     bDropWholeWord( sal_False ),
     maTabStopExport( rExport.GetDocHandler(), rExport.GetMM100UnitConverter() ),
     maDropCapExport( rExport.GetDocHandler(), rExport.GetMM100UnitConverter() ),
-    maTextColumnsExport( rExport )
+    maTextColumnsExport( rExport ),
+    maBackgroundImageExport( rExport )
 {
 }
 
 XMLTextExportPropertySetMapper::~XMLTextExportPropertySetMapper()
 {
 }
-
-
-
 

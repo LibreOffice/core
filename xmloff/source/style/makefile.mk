@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: dr $ $Date: 2000-10-18 11:38:23 $
+#   last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,8 @@ CXXFILES = \
         MarkerStyle.cxx					\
         NamedBoolPropertyHdl.cxx		\
         TransGradientStyle.cxx			\
+        XMLBackgroundImageContext.cxx	\
+        XMLBackgroundImageExport.cxx	\
         XMLClipPropertyHandler.cxx		\
         XMLConstantsPropertyHandler.cxx	\
         XMLElementPropertyContext.cxx	\
@@ -203,6 +205,8 @@ SLOFILES =	\
         $(SLO)$/MarkerStyle.obj					\
         $(SLO)$/NamedBoolPropertyHdl.obj		\
         $(SLO)$/TransGradientStyle.obj			\
+        $(SLO)$/XMLBackgroundImageContext.obj	\
+        $(SLO)$/XMLBackgroundImageExport.obj	\
         $(SLO)$/XMLClipPropertyHandler.obj		\
         $(SLO)$/XMLConstantsPropertyHandler.obj	\
         $(SLO)$/XMLElementPropertyContext.obj	\

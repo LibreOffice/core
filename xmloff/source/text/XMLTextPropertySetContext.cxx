@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextPropertySetContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 09:48:30 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _XMLTEXTCOLUMNSCONTEXT_HXX
 #include "XMLTextColumnsContext.hxx"
 #endif
+#ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
+#include "XMLBackgroundImageContext.hxx"
+#endif
 
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include "txtprmap.hxx"
@@ -123,18 +126,36 @@ SvXMLImportContext *XMLTextPropertySetContext::CreateChildContext(
                                                    rProperties );
         break;
     case CTF_DROPCAPFORMAT:
-        DBG_ASSERT( rProp.mnIndex >= 2 &&
-                    CTF_DROPCAPWHOLEWORD  == xMapper->getPropertySetMapper()
-                        ->GetEntryContextId( rProp.mnIndex-2 ),
-                    "invalid property map!");
-        XMLTextDropCapImportContext *pDCContext =
-            new XMLTextDropCapImportContext( GetImport(), nPrefix,
-                                                    rLocalName, xAttrList,
-                                                    rProp,
-                                                    rProp.mnIndex-2,
-                                                    rProperties );
-        rDropCapTextStyleName = pDCContext->GetStyleName();
+        {
+            DBG_ASSERT( rProp.mnIndex >= 2 &&
+                        CTF_DROPCAPWHOLEWORD  == xMapper->getPropertySetMapper()
+                            ->GetEntryContextId( rProp.mnIndex-2 ),
+                        "invalid property map!");
+            XMLTextDropCapImportContext *pDCContext =
+                new XMLTextDropCapImportContext( GetImport(), nPrefix,
+                                                        rLocalName, xAttrList,
+                                                        rProp,
+                                                        rProp.mnIndex-2,
+                                                        rProperties );
+            rDropCapTextStyleName = pDCContext->GetStyleName();
         pContext = pDCContext;
+        }
+        break;
+
+    case CTF_BACKGROUND_URL:
+        DBG_ASSERT( rProp.mnIndex >= 2 &&
+                    CTF_BACKGROUND_POS  == xMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-2 ) &&
+                    CTF_BACKGROUND_FILTER  == xMapper->getPropertySetMapper()
+                        ->GetEntryContextId( rProp.mnIndex-1 ),
+                    "invalid property map!");
+        pContext =
+            new XMLBackgroundImageContext( GetImport(), nPrefix,
+                                           rLocalName, xAttrList,
+                                           rProp,
+                                           rProp.mnIndex-2,
+                                           rProp.mnIndex-1,
+                                           rProperties );
         break;
     }
 

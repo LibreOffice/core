@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-17 12:54:42 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,4 +205,16 @@ public:
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
 };
 
+/**
+    PropertyHandler for properties that cannot make use of importXML
+    and exportXML methods, but can make use of the default comparison
+*/
+class XMLCompareOnlyPropHdl : public XMLPropertyHandler
+{
+public:
+    virtual ~XMLCompareOnlyPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
 #endif      // _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX

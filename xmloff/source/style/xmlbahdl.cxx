@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-17 12:54:42 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 #include <xmlbahdl.hxx>
 #endif
@@ -496,7 +499,7 @@ XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
 
 sal_Bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
-    sal_Bool bRet = sal_True;
+    sal_Bool bRet = sal_False;
 
     if( rStrImpValue.compareToAscii( sXML_transparent ) != 0 )
     {
@@ -514,7 +517,7 @@ sal_Bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const An
     sal_Int32 nColor;
 
     if( rStrExpValue.compareToAscii( sXML_transparent ) == 0 )
-        bRet = sal_True;
+        bRet = sal_False;
     else if( rValue >>= nColor )
     {
         Color aColor( nColor );
@@ -541,7 +544,7 @@ XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bValue = (rStrImpValue.compareToAscii( sXML_transparent ) == 0);
-    rValue <<= sal_Bool( bValue );
+    rValue.setValue( &bValue, ::getBooleanCppuType() );
 
     return sal_True;
 }
@@ -549,9 +552,9 @@ sal_Bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& 
 sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bIsTrans;
+    sal_Bool bIsTrans = *(sal_Bool *)rValue.getValue();
 
-    if( rValue >>= bIsTrans )
+    if( bIsTrans )
     {
         rStrExpValue = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_transparent ) );
         bRet = sal_True;
@@ -561,3 +564,24 @@ sal_Bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& 
 }
 
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLCompareOnlyPropHdl
+//
+
+XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
+{
+    // Nothing to do
+}
+
+sal_Bool XMLCompareOnlyPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    DBG_ASSERT( !this, "importXML called for compare-only-property" );
+    return sal_False;
+}
+
+sal_Bool XMLCompareOnlyPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    DBG_ASSERT( !this, "exportXML called for compare-only-property" );
+    return sal_False;
+}

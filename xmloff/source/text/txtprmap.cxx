@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:18:30 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,8 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_CHRATR_NOLINEBREAK
     // TODO: not used?
     // RES_CHRATR_BACKGROUND
-    M_E( "CharBackColor",   STYLE,  text_background_color, XML_TYPE_COLOR, 0 ),
+    M_E( "CharBackColor",   STYLE,  text_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "CharBackTransparent", STYLE,  text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_TXTATR_INETFMT
     // TODO
@@ -248,8 +249,11 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_ANCHOR
     // not required
     // RES_BACKGROUND
-    M_E( "ParaBackColor",   FO, background_color,       XML_TYPE_COLOR, 0 ),
-//  M_E( STYLE, background_image,       RES_BACKGROUND, MID_FLAG_ELEMENT_ITEM ),
+    M_E( "ParaBackColor",   FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "ParaBackTransparent", FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_E( "ParaBackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    M_E( "ParaBackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    M_E( "ParaBackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
     // RES_BOX
     M_E( "LeftBorder",          STYLE,  border_line_width,        XML_TYPE_BORDER_WIDTH, CTF_ALLBORDERWIDTH ),
     M_E( "LeftBorder",          STYLE,  border_line_width_left,   XML_TYPE_BORDER_WIDTH, CTF_LEFTBORDERWIDTH ),
@@ -345,7 +349,8 @@ XMLPropertyMapEntry aXMLTextPropMap[] =
     // RES_CHRATR_NOLINEBREAK
     // TODO: not used?
     // RES_CHRATR_BACKGROUND
-    M_E( "CharBackColor",   STYLE,  text_background_color, XML_TYPE_COLOR, 0 ),
+    M_E( "CharBackColor",   STYLE,  text_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "CharBackTransparent", STYLE,  text_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     M_E( "CharBackColor",   FO, text_background_color, XML_TYPE_COLOR|MID_FLAG_SPECIAL_ITEM_EXPORT, CTF_OLDTEXTBACKGROUND ),
     // RES_TXTATR_INETFMT
     // TODO
@@ -437,7 +442,11 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // RES_ANCHOR
     // see above
     // RES_BACKGROUND
-    // TODO
+    M_E( "BackColor",   FO, background_color,       XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+    M_E( "BackTransparent", FO, background_color,       XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    M_E( "BackGraphicLocation", STYLE,  position,   MID_FLAG_SPECIAL_ITEM|XML_TYPE_BUILDIN_CMP_ONLY, CTF_BACKGROUND_POS  ),
+    M_E( "BackGraphicFilter",STYLE, filter_name,    MID_FLAG_SPECIAL_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_FILTER ),
+    M_E( "BackGraphicURL",  STYLE,  background_image,   MID_FLAG_ELEMENT_ITEM|XML_TYPE_STRING, CTF_BACKGROUND_URL ),
     // RES_BOX
     M_E( "LeftBorder",          STYLE,  border_line_width,        XML_TYPE_BORDER_WIDTH, CTF_ALLBORDERWIDTH ),
     M_E( "LeftBorder",          STYLE,  border_line_width_left,   XML_TYPE_BORDER_WIDTH, CTF_LEFTBORDERWIDTH ),

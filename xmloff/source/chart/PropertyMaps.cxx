@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: bm $ $Date: 2000-09-27 15:17:15 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,15 +355,21 @@ XMLChartExportPropertyMapper::~XMLChartExportPropertyMapper()
 void XMLChartExportPropertyMapper::handleElementItem(
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags ) const
+    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx ) const
 {
     // call parent
-    SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags );
+    SvXMLExportPropertyMapper::handleElementItem( rHandler, rProperty,
+            rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
 }
 
 void XMLChartExportPropertyMapper::handleSpecialItem(
     SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap ) const
+    const SvXMLUnitConverter& rUnitConverter,
+    const SvXMLNamespaceMap& rNamespaceMap,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx ) const
 {
     sal_Int32 nContextId = maPropMapper->GetEntryContextId( rProperty.mnIndex );
 
@@ -446,7 +452,7 @@ void XMLChartExportPropertyMapper::handleSpecialItem(
     else
     {
         // call parent
-        SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap );
+        SvXMLExportPropertyMapper::handleSpecialItem( rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
     }
 }
 

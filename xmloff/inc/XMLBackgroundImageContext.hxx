@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: txtexppr.hxx,v $
+ *  $RCSfile: XMLBackgroundImageContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:20 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,64 +58,43 @@
  *
  *
  ************************************************************************/
-#ifndef _XMLOFF_TXTEXPPR_HXX
-#define _XMLOFF_TXTEXPPR_HXX
 
+#ifndef _XMLBACKGROUNDIMAGECONTEXT_HXX
+#define _XMLBACKGROUNDIMAGECONTEXT_HXX
 
-#ifndef _XMLOFF_XMLEXPPR_HXX
-#include "xmlexppr.hxx"
-#endif
-#ifndef _XMLOFF_TXTDROPE_HXX
-#include "txtdrope.hxx"
-#endif
-#ifndef _XMLOFF_XMLTABE_HXX
-#include "xmltabe.hxx"
-#endif
-#ifndef _XMLOFF_XMLTEXTCOLUMNSEXPORT_HXX
-#include "XMLTextColumnsExport.hxx"
-#endif
-#ifndef _XMLOFF_XMLBACKGROUNDIMAGEEXPORT_HXX
-#include "XMLBackgroundImageExport.hxx"
+#ifndef _XMLOFF_XMLELEMENTPROPERTYCONTEXT_HXX
+#include "XMLElementPropertyContext.hxx"
 #endif
 
-class SvXMLExport;
-class XMLTextExportPropertySetMapper: public SvXMLExportPropertyMapper
+class XMLBackgroundImageContext : public XMLElementPropertyContext
 {
-    ::rtl::OUString sDropCharStyle;
-    sal_Bool bDropWholeWord;
+    XMLPropertyState aPosProp;
+    XMLPropertyState aFilterProp;
 
-protected:
-//  SvXMLUnitConverter& mrUnitConverter;
-//  const Reference< xml::sax::XDocumentHandler > & mrHandler;
-    XMLTextDropCapExport maDropCapExport;
-    SvxXMLTabStopExport maTabStopExport;
-    XMLTextColumnsExport maTextColumnsExport;
-    XMLBackgroundImageExport maBackgroundImageExport;
+private:
+    void ProcessAttrs(
+            const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
 public:
+    TYPEINFO();
 
-    XMLTextExportPropertySetMapper(
-            const UniReference< XMLPropertySetMapper >& rMapper,
-            SvXMLExport& rExport );
-    virtual ~XMLTextExportPropertySetMapper();
+    XMLBackgroundImageContext(
+        SvXMLImport& rImport,
+        sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+        const XMLPropertyState& rProp,
+        sal_Int32 nPosIdx,
+        sal_Int32 nFilterIdx,
+        ::std::vector< XMLPropertyState > &rProps );
 
-    virtual void handleElementItem(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
-        sal_uInt16 nFlags,
-        const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const;
+    virtual ~XMLBackgroundImageContext();
 
-    virtual void handleSpecialItem(
-        SvXMLAttributeList& rAttrList,
-        const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap,
-        const ::std::vector< XMLPropertyState > *pProperties = 0,
-        sal_uInt32 nIdx = 0 ) const;
+    virtual void EndElement();
 };
 
 
 #endif
+

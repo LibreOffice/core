@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:05 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,8 @@ using namespace ::com::sun::star;
 // ctor/dtor , class SvXMLExportPropertyMapper
 //
 
-SvXMLExportPropertyMapper::SvXMLExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper )
+SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
+        const UniReference< XMLPropertySetMapper >& rMapper )
 : maPropMapper( rMapper )
 {
 }
@@ -110,39 +111,45 @@ SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
-                                 const ::std::vector< XMLPropertyState >& rProperties,
-                                 const SvXMLUnitConverter& rUnitConverter,
-                                 const SvXMLNamespaceMap& rNamespaceMap,
-                                 sal_uInt16 nFlags /* = 0 */ ) const
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags ) const
 {
-    _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap, nFlags, 0 );
+    _exportXML( rAttrList, rProperties, rUnitConverter, rNamespaceMap,
+                nFlags, 0 );
 }
 
 
 void SvXMLExportPropertyMapper::exportXML( SvXMLAttributeList& rAttrList,
-                    const XMLPropertyState& rProperty,
-                    const SvXMLUnitConverter& rUnitConverter,
-                    const SvXMLNamespaceMap& rNamespaceMap,
-                    sal_uInt16 nFlags ) const
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags ) const
 {
-    if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
-        _exportXML( rAttrList, rProperty, rUnitConverter, rNamespaceMap, nFlags);   //, 0 );
+    if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
+                MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
+        _exportXML( rAttrList, rProperty, rUnitConverter, rNamespaceMap,
+                    nFlags );
 }
 
-void SvXMLExportPropertyMapper::exportXML( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                           const ::std::vector< XMLPropertyState >& rProperties,
-                                           const SvXMLUnitConverter& rUnitConverter,
-                                           const SvXMLNamespaceMap& rNamespaceMap,
-                                           sal_uInt16 nFlags ) const
+void SvXMLExportPropertyMapper::exportXML(
+           const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags ) const
 {
     SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
-    uno::Reference< ::com::sun::star::xml::sax::XAttributeList > xAttrList( pAttrList );
+    uno::Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
 
     SvUShorts aIndexArray;
 
-    _exportXML( *pAttrList, rProperties, rUnitConverter, rNamespaceMap, nFlags, &aIndexArray );
+    _exportXML( *pAttrList, rProperties, rUnitConverter, rNamespaceMap,
+                nFlags, &aIndexArray );
 
-    if( pAttrList->getLength() > 0L || (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 || aIndexArray.Count() != 0 )
+    if( pAttrList->getLength() > 0L || (nFlags & XML_EXPORT_FLAG_EMPTY) != 0 ||
+        aIndexArray.Count() != 0 )
     {
         if( (nFlags & XML_EXPORT_FLAG_IGN_WS) != 0 )
         {
@@ -151,42 +158,53 @@ void SvXMLExportPropertyMapper::exportXML( const uno::Reference< ::com::sun::sta
         }
 
         OUString sLName( OUString::createFromAscii(sXML_properties) );
-        OUString sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE, sLName );
+        OUString sName = rNamespaceMap.GetQNameByKey( XML_NAMESPACE_STYLE,
+                                                      sLName );
         rHandler->startElement( sName, xAttrList );
 
-        exportElementItems( rHandler, rUnitConverter, rNamespaceMap, rProperties, nFlags, aIndexArray );
+        exportElementItems( rHandler, rUnitConverter, rNamespaceMap,
+                            rProperties, nFlags, aIndexArray );
 
         rHandler->endElement( sName );
     }
 }
 
-/** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
-void SvXMLExportPropertyMapper::handleSpecialItem( SvXMLAttributeList& rAttrList,
-                                                   const XMLPropertyState& rProperty,
-                                                   const SvXMLUnitConverter& rUnitConverter,
-                                                   const SvXMLNamespaceMap& rNamespaceMap ) const
-                                                   // const SfxItemSet* pSet /* = NULL */ ) const Do we need this any more ?
+/** this method is called for every item that has the
+    MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
+void SvXMLExportPropertyMapper::handleSpecialItem(
+        SvXMLAttributeList& rAttrList,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     DBG_ERROR( "special item not handled in xml export" );
 }
 
-/** this method is called for every item that has the MID_FLAG_NO_ITEM_EXPORT flag set */
-void SvXMLExportPropertyMapper::handleNoItem( SvXMLAttributeList& rAttrList,
-                                              const XMLPropertyState& rProperty,
-                                              const SvXMLUnitConverter& rUnitConverter,
-                                              const SvXMLNamespaceMap& rNamespaceMap ) const
-                                              // const SfxItemSet& rSet ) const  Do we need this any more ?
+/** this method is called for every item that has the
+    MID_FLAG_NO_ITEM_EXPORT flag set */
+void SvXMLExportPropertyMapper::handleNoItem(
+        SvXMLAttributeList& rAttrList,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     DBG_ERROR( "no item not handled in xml export" );
 }
 
-/** this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set */
-void SvXMLExportPropertyMapper::handleElementItem( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                                   const XMLPropertyState& rProperty,
-                                                   const SvXMLUnitConverter& rUnitConverter,
-                                                   const SvXMLNamespaceMap& rNamespaceMap,
-                                                   // const SfxItemSet& rSet,               Do we need this any more ?
-                                                   sal_uInt16 nFlags ) const
+/** this method is called for every item that has the
+    MID_FLAG_ELEMENT_EXPORT flag set */
+void SvXMLExportPropertyMapper::handleElementItem(
+        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     DBG_ERROR( "element item not handled in xml export" );
 }
@@ -197,24 +215,27 @@ void SvXMLExportPropertyMapper::handleElementItem( const uno::Reference< ::com::
 //
 
 /** fills the given attribute list with the items in the given set */
-void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
-                                           const ::std::vector< XMLPropertyState >& rProperties,
-                                           const SvXMLUnitConverter& rUnitConverter,
-                                           const SvXMLNamespaceMap& rNamespaceMap,
-                                           sal_uInt16 nFlags,
-                                           SvUShorts* pIndexArray ) const
+void SvXMLExportPropertyMapper::_exportXML(
+        SvXMLAttributeList& rAttrList,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags,
+        SvUShorts* pIndexArray ) const
 {
-    const sal_uInt16 nCount = rProperties.size();
-    sal_uInt16 nIndex = 0;
+    const sal_uInt32 nCount = rProperties.size();
+    sal_uInt32 nIndex = 0;
 
     while( nIndex < nCount )
     {
         if( rProperties[nIndex].mnIndex >= 0 )  // valid entry?
         {
             // we have a valid map entry here, so lets use it...
-            if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex ) & MID_FLAG_NO_ITEM_EXPORT ) == 0 )
+            if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex )
+                        & MID_FLAG_NO_ITEM_EXPORT ) == 0 )
             {
-                if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
+                if( ( maPropMapper->GetEntryFlags( rProperties[nIndex].mnIndex )
+                            & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
                 {
                     // element items do not add any properties,
                     // we export it later
@@ -223,12 +244,14 @@ void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
                 }
                 else
                 {
-                    exportXML( rAttrList, rProperties[nIndex], rUnitConverter, rNamespaceMap, nFlags );// , &rSet ); I think we do not need the total vector of XMLPropertyState in the called method
+                    _exportXML( rAttrList, rProperties[nIndex], rUnitConverter,
+                               rNamespaceMap, nFlags, &rProperties, nIndex );
                 }
             }
             else
             {
-                handleNoItem( rAttrList, rProperties[nIndex], rUnitConverter, rNamespaceMap );  //, rSet ); Must we transfer the total set any more ?
+                handleNoItem( rAttrList, rProperties[nIndex], rUnitConverter,
+                              rNamespaceMap, &rProperties, nIndex );
             }
         }
 
@@ -236,15 +259,19 @@ void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
     }
 }
 
-void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
-                                           const XMLPropertyState& rProperty,
-                                           const SvXMLUnitConverter& rUnitConverter,
-                                           const SvXMLNamespaceMap& rNamespaceMap,
-                                           sal_uInt16 nFlags ) const
+void SvXMLExportPropertyMapper::_exportXML(
+        SvXMLAttributeList& rAttrList,
+        const XMLPropertyState& rProperty,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        sal_uInt16 nFlags,
+        const ::std::vector< XMLPropertyState > *pProperties,
+        sal_uInt32 nIdx ) const
 {
     OUString sCDATA( OUString::createFromAscii( sXML_CDATA ) );
 
-    if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
+    if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
+                MID_FLAG_SPECIAL_ITEM_EXPORT ) != 0 )
     {
         /* Currently, we have nothing like a SvXMLAttrContainerItem, since we use properties instead of poolitems
 
@@ -299,23 +326,27 @@ void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
         else
         */
         {
-            handleSpecialItem( rAttrList, rProperty /*rEntry, rItem*/, rUnitConverter, rNamespaceMap ); //, pSet ); Must we transfer the total set any more ?
+            handleSpecialItem( rAttrList, rProperty, rUnitConverter,
+                               rNamespaceMap, pProperties, nIdx );
         }
     }
-    else if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
+    else if ( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
+                    MID_FLAG_ELEMENT_ITEM_EXPORT ) == 0 )
     {
         OUString aValue;
-        const OUString sName( rNamespaceMap.GetQNameByKey( maPropMapper->GetEntryNameSpace( rProperty.mnIndex ),
-                                                        maPropMapper->GetEntryXMLName( rProperty.mnIndex ) ) );
+        const OUString sName( rNamespaceMap.GetQNameByKey(
+                    maPropMapper->GetEntryNameSpace( rProperty.mnIndex ),
+                    maPropMapper->GetEntryXMLName( rProperty.mnIndex ) ) );
 
         sal_Bool bRemove = sal_False;
-        if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) & MID_FLAG_MERGE_ATTRIBUTE ) != 0 )
+        if( ( maPropMapper->GetEntryFlags( rProperty.mnIndex ) &
+                    MID_FLAG_MERGE_ATTRIBUTE ) != 0 )
         {
             aValue = rAttrList.getValueByName( sName );
             bRemove = aValue.getLength() != 0;
         }
 
-        if( maPropMapper->exportXML( aValue, rProperty, rUnitConverter ) )  //rEntry.nMemberId & MID_FLAG_MASK, rUnitConverter ) )
+        if( maPropMapper->exportXML( aValue, rProperty, rUnitConverter ) )
         {
             if( bRemove )
                 rAttrList.RemoveAttribute( sName );
@@ -324,12 +355,13 @@ void SvXMLExportPropertyMapper::_exportXML( SvXMLAttributeList& rAttrList,
     }
 }
 
-void SvXMLExportPropertyMapper::exportElementItems( const uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-                                                    const SvXMLUnitConverter& rUnitConverter,
-                                                    const SvXMLNamespaceMap& rNamespaceMap,
-                                                    const ::std::vector< XMLPropertyState >& rProperties,
-                                                    sal_uInt16 nFlags,
-                                                    const SvUShorts& rIndexArray ) const
+void SvXMLExportPropertyMapper::exportElementItems(
+        const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
+        const SvXMLUnitConverter& rUnitConverter,
+        const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState >& rProperties,
+        sal_uInt16 nFlags,
+        const SvUShorts& rIndexArray ) const
 {
     const sal_uInt16 nCount = rIndexArray.Count();
 
@@ -339,18 +371,16 @@ void SvXMLExportPropertyMapper::exportElementItems( const uno::Reference< ::com:
     {
         const sal_uInt16 nElement = rIndexArray.GetObject( nIndex );
 
-        DBG_ASSERT( 0 != ( maPropMapper->GetEntryFlags( rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT), "wrong mid flag!" );
+        DBG_ASSERT( 0 != ( maPropMapper->GetEntryFlags(
+                rProperties[nElement].mnIndex ) & MID_FLAG_ELEMENT_ITEM_EXPORT),
+                "wrong mid flag!" );
 
         rHandler->ignorableWhitespace( sWS );
-        handleElementItem( rHandler, rProperties[nElement] /**pEntry, *pItem*/, rUnitConverter, rNamespaceMap /*, rSet*/, nFlags);
+        handleElementItem( rHandler, rProperties[nElement], rUnitConverter,
+                           rNamespaceMap, nFlags, &rProperties, nElement );
         bItemsExported = sal_True;
     }
 
     if( bItemsExported )
         rHandler->ignorableWhitespace( sWS );
 }
-
-/** returns the item with the givin WhichId from the given ItemSet if its
-    set or its default item if its not set and the XML_EXPORT_FLAG_DEEP
-    is set in the flags
-*/

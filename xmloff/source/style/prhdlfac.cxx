@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-17 12:54:42 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetBasicHandler( sal_Int32 
                 break;
             case XML_TYPE_ISTRANSPARENT :
                 pPropHdl = new XMLIsTransparentPropHdl;
+                break;
+            case XML_TYPE_BUILDIN_CMP_ONLY :
+                pPropHdl = new XMLCompareOnlyPropHdl;
                 break;
 
             case XML_TYPE_TEXT_CROSSEDOUT:

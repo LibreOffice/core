@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-19 13:53:38 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,22 @@ SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
 {
     OUString sLName( OUString::createFromAscii(pLName) );
     aName = rExp.GetNamespaceMap().GetQNameByKey( nPrefixKey, sLName );
+
+    if( bIWSOutside )
+        rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );
+    rExport.GetDocHandler()->startElement( aName, rExport.GetXAttrList() );
+    rExport.ClearAttrList();
+}
+
+SvXMLElementExport::SvXMLElementExport( SvXMLExport& rExp,
+                                        sal_uInt16 nPrefixKey,
+                                        const OUString& rLName,
+                                        sal_Bool bIWSOutside,
+                                        sal_Bool bIWSInside ) :
+    rExport( rExp ),
+    bIgnWS( bIWSInside )
+{
+    aName = rExp.GetNamespaceMap().GetQNameByKey( nPrefixKey, rLName );
 
     if( bIWSOutside )
         rExport.GetDocHandler()->ignorableWhitespace( rExport.sWS );

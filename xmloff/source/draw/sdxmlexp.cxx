@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2000-10-10 10:58:27 $
+ *  last change: $Author: mib $ $Date: 2000-10-19 14:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,18 +213,24 @@ class ImpPresPageDrawStylePropMapper : public SvXMLExportPropertyMapper
     /** this method is called for every item that has the MID_FLAG_NO_ITEM_EXPORT flag set */
     virtual void handleNoItem(
         SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap ) const;
+        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties = 0,
+        sal_uInt32 nIdx = 0 ) const;
 
     /** this method is called for every item that has the MID_FLAG_ELEMENT_EXPORT flag set */
     virtual void handleElementItem(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
         const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-        const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags ) const;
+        const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+        const ::std::vector< XMLPropertyState > *pProperties = 0,
+        sal_uInt32 nIdx = 0 ) const;
 
     /** this method is called for every item that has the MID_FLAG_SPECIAL_ITEM_EXPORT flag set */
     virtual void handleSpecialItem(
         SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap ) const;
+        const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
+        const ::std::vector< XMLPropertyState > *pProperties = 0,
+        sal_uInt32 nIdx = 0 ) const;
 
 public:
     ImpPresPageDrawStylePropMapper( const UniReference< XMLPropertySetMapper >& rMapper );
@@ -243,27 +249,33 @@ ImpPresPageDrawStylePropMapper::~ImpPresPageDrawStylePropMapper()
 
 void ImpPresPageDrawStylePropMapper::handleNoItem(
     SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap ) const
+    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx ) const
 {
     // call parent
-    SvXMLExportPropertyMapper::handleNoItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap);
+    SvXMLExportPropertyMapper::handleNoItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
 }
 
 void ImpPresPageDrawStylePropMapper::handleElementItem(
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & rHandler,
     const XMLPropertyState& rProperty, const SvXMLUnitConverter& rUnitConverter,
-    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags ) const
+    const SvXMLNamespaceMap& rNamespaceMap, sal_uInt16 nFlags,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx) const
 {
     // call parent
-    SvXMLExportPropertyMapper::handleElementItem(rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags);
+    SvXMLExportPropertyMapper::handleElementItem(rHandler, rProperty, rUnitConverter, rNamespaceMap, nFlags, pProperties, nIdx );
 }
 
 void ImpPresPageDrawStylePropMapper::handleSpecialItem(
     SvXMLAttributeList& rAttrList, const XMLPropertyState& rProperty,
-    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap ) const
+    const SvXMLUnitConverter& rUnitConverter, const SvXMLNamespaceMap& rNamespaceMap,
+    const ::std::vector< XMLPropertyState > *pProperties,
+    sal_uInt32 nIdx ) const
 {
     // call parent
-    SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap);
+    SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
 }
 
 //////////////////////////////////////////////////////////////////////////////
