@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:35:45 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,13 +146,16 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
+using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 /*--------------------------------------------------------------------
@@ -421,17 +424,17 @@ IMPL_LINK( SwCharURLPage, InsertFileHdl, PushButton *, pBtn )
     if( xMgr.is() )
     {
         Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= C2U("FileOpen");
+        aProps.getArray()[0] <<= TemplateDescription::FILEOPEN_SIMPLE;
         xFP = Reference< XFilePicker >(
                 xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                 UNO_QUERY );
     }
-    DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+    DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
 //    pFileDlg->SetHelpId(HID_FILEDLG_CHARDLG);
     if( xFP->execute() == RET_OK )
     {
-        aURLED.SetText(URIHelper::SmartRelToAbs(xFP->getPath().getConstArray()[0]));
+        aURLED.SetText(URIHelper::SmartRelToAbs(xFP->getFiles().getConstArray()[0]));
     }
     return 0;
 }

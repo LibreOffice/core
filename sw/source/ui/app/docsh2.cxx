@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:16:25 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,22 +281,28 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_LISTBOXCONTROLACTIONS_HPP_
+#include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
+using namespace com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
@@ -856,9 +862,15 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     aProps.getArray()[0] <<= C2U("FileOpen");
                     xFP = Reference< XFilePicker >(
                             xMgr->createInstanceWithArguments(
-                                C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                                C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                             UNO_QUERY );
                 }
+                if(!xFP.is())
+                {
+                    DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
+                    break;
+                }
+
                 xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
 
                 SfxObjectFactory &rFact = GetFactory();
@@ -880,7 +892,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 nRet = xFP->execute();
                 if( nRet == RET_OK )
                 {
-                    aFileName = xFP->getPath().getConstArray()[0];
+                    aFileName = xFP->getFiles().getConstArray()[0];
                 }
 //                else if( nRet == RET_TEMPLATE )
 //                {
@@ -895,16 +907,22 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 try
                 {
                     Reference<XFilePickerControlAccess> xCtrlAcc(xFP, UNO_QUERY);
-                    Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_TEXT);
+/*                    Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_TEXT, 0);
                     aOpt.SetTxtFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True);
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_FRAME);
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_FRAME, 0);
                     aOpt.SetFrmFmts( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_PAGES);
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_PAGES, 0);
                     aOpt.SetPageDescs( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_NUMBERING);
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_NUMBERING, 0);
                     aOpt.SetNumRules( aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True );
-                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_OVERWRITE);
+                    aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_OVERWRITE, 0);
                     aOpt.SetMerge( !(aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True) );
+*/
+                    aOpt.SetTxtFmts( sal_True );
+                    aOpt.SetFrmFmts( sal_True );
+                    aOpt.SetPageDescs( sal_True );
+                    aOpt.SetNumRules(sal_True );
+                    aOpt.SetMerge( sal_True );
                 }
                 catch(Exception& rEx)
                 {
@@ -1201,11 +1219,16 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 if( xMgr.is() )
                 {
                     Sequence <Any> aProps(1);
-                    aProps.getArray()[0] <<= C2U("FileSave_AutoextTemplateBox");
+                    aProps.getArray()[0] <<= TemplateDescription::FILESAVE_AUTOEXTENSION_TEMPLATE;
                     xFP = Reference< XFilePicker >(
                             xMgr->createInstanceWithArguments(
-                                C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                                C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                             UNO_QUERY );
+                }
+                if(!xFP.is())
+                {
+                    DBG_ERROR("service com.sun.star.ui.dialogs.FilePicker not found");
+                    break;
                 }
 
                 const SfxFilter* pFlt;
@@ -1242,7 +1265,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 Sequence<OUString> aListBoxEntries(nCount);
                 OUString* pEntries = aListBoxEntries.getArray();
                 sal_Int32 nIdx = 0;
-                sal_Int32 nSelect = 0;
+                sal_Int16 nSelect = 0;
                 OUString sStartTemplate;
                 SwTxtFmtColl *pFnd = 0, *pAny = 0;
                 for(USHORT i = 0; i < nCount; ++i)
@@ -1270,10 +1293,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 try
                 {
                     Any aTemplates(&aListBoxEntries, ::getCppuType(&aListBoxEntries));
-                    xCtrlAcc->setValue( FilePickerElementID::CBO_TEMPLATES, aTemplates );
+
+                    xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                        ListboxControlActions::ADD_ITEMS , aTemplates );
                     Any aSelectPos(&nSelect, ::getCppuType(&nSelect));
-                    xCtrlAcc->setValue( FilePickerElementID::CBO_TEMPLATES, aSelectPos );
-                    xCtrlAcc->setLabel( FilePickerElementID::CBO_TEMPLATES,
+                    xCtrlAcc->setValue( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                        ListboxControlActions::SET_SELECT_ITEM, aSelectPos );
+                    xCtrlAcc->setLabel( ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
                                             String(SW_RES( STR_FDLG_TEMPLATE_NAME )));
                 }
                 catch(Exception& rEx)
@@ -1286,11 +1312,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 xFP->setDisplayDirectory( aPathOpt.GetWorkPath() );
                 if( RET_OK == xFP->execute() )
                 {
-                    aFileName = xFP->getPath().getConstArray()[0];
-                    Any aTemplateValue = xCtrlAcc->getValue( FilePickerElementID::CBO_TEMPLATES );
-
-                    if (sTemplateName.Len())
-                        pSplitColl = pDoc->FindTxtFmtCollByName(sTemplateName);
+                    aFileName = xFP->getFiles().getConstArray()[0];
+                    Any aTemplateValue = xCtrlAcc->getValue(
+                        ExtendedFilePickerElementIds::LISTBOX_TEMPLATE,
+                        ListboxControlActions::GET_SELECTED_ITEM );
+                    OUString sTmpl;
+                    aTemplateValue >>= sTmpl;
+                    if (sTmpl.getLength())
+                        pSplitColl = pDoc->FindTxtFmtCollByName(sTmpl);
                 }
 
                 if( aFileName.Len() )

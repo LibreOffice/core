@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 16:10:22 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,16 +176,19 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILTERMANAGER_HPP_
-#include <com/sun/star/ui/XFilterManager.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #endif
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::ui;
+using namespace com::sun::star::ui::dialogs;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
 
@@ -498,13 +501,13 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
     if( xMgr.is() )
     {
         Sequence <Any> aProps(1);
-        aProps.getArray()[0] <<= C2U("FileSave");
+        aProps.getArray()[0] <<= TemplateDescription::FILESAVE_SIMPLE;
         xFP = Reference< XFilePicker >(
                 xMgr->createInstanceWithArguments(
-                    C2U( "com.sun.star.ui.FilePicker" ), aProps ),
+                    C2U( "com.sun.star.ui.dialogs.FilePicker" ), aProps ),
                 UNO_QUERY );
     }
-    DBG_ERROR("how to set help ids at com.sun.star.ui.FilePicker")
+    DBG_ERROR("how to set help ids at com.sun.star.ui.dialogs.FilePicker")
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath);
@@ -570,7 +573,7 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 
         if( RET_OK == xFP->execute() )
         {
-            String sPath( xFP->getPath().getConstArray()[0] );
+            String sPath( xFP->getFiles().getConstArray()[0] );
             //verwendeten Pfad merken - bitte nicht wieder wegoptimieren!
             aPath.SetSmartURL( sPath);
             sGrfPath = aPath.GetPath();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 09:59:40 $
+ *  last change: $Author: os $ $Date: 2001-06-15 13:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,18 +203,15 @@
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKER_HPP_
-#include <com/sun/star/ui/XFilePicker.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
+#include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_UI_XFILEPICKERCONTROLACCESS_HPP_
-#include <com/sun/star/ui/XFilePickerControlAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_FILEPICKERELEMENTID_HPP_
-#include <com/sun/star/ui/FilePickerElementID.hpp>
+#ifndef _COM_SUN_STAR_UI_DIALOGS_EXTENDEDFILEPICKERELEMENTIDS_HPP_
+#include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #endif
 
-using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 #define SwGrfShell
@@ -760,8 +757,8 @@ BOOL SwTextShell::InsertGraphicDlg()
     {
         sal_Bool bTrue = sal_True;
         Any aVal(&bTrue, ::getBooleanCppuType());
-        xCtrlAcc->setValue( FilePickerElementID::CBX_INSERT_AS_LINK, aVal);
-        xCtrlAcc->enableControl( FilePickerElementID::CBX_INSERT_AS_LINK, sal_False);
+        xCtrlAcc->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aVal);
+        xCtrlAcc->enableControl( ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
     }
 
     if( ERRCODE_NONE == pFileDlg->Execute() )
@@ -773,7 +770,7 @@ BOOL SwTextShell::InsertGraphicDlg()
             bAsLink = sal_True;
         else
         {
-            Any aVal = xCtrlAcc->getValue( FilePickerElementID::CBX_INSERT_AS_LINK);
+            Any aVal = xCtrlAcc->getValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0);
             DBG_ASSERT(aVal.hasValue(), "Value CBX_INSERT_AS_LINK not found")
             bAsLink = aVal.hasValue() ? *(sal_Bool*) aVal.getValue() : sal_True;
         }
