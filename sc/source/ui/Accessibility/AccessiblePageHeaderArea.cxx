@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageHeaderArea.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-27 14:21:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:11:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,14 +87,14 @@
 #include "sc.hrc"
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
+#include <com/sun/star/accessibility/AccessibleRole.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
 
 #ifndef _EDITOBJ_HXX
@@ -117,7 +117,7 @@
 #endif
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star::accessibility;
+using namespace ::com::sun::star::accessibility;
 
     //=====  internal  ========================================================
 
@@ -178,7 +178,7 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
                 mpTextHelper->UpdateChildren();
 
             AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::ACCESSIBLE_VISIBLE_DATA_EVENT;
+            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
             aEvent.Source = uno::Reference< XAccessible >(this);
             CommitChange(aEvent);
         }
@@ -187,12 +187,12 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
 }
     //=====  XAccessibleComponent  ============================================
 
-uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessibleAt(
+uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessibleAtPoint(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
     uno::Reference<XAccessible> xRet;
-    if (contains(rPoint))
+    if (containsPoint(rPoint))
     {
          ScUnoGuard aGuard;
         IsObjectValid();
@@ -248,7 +248,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     else
     {
         pStateSet->AddState(AccessibleStateType::ENABLED);
-        pStateSet->AddState(AccessibleStateType::MULTILINE);
+        pStateSet->AddState(AccessibleStateType::MULTI_LINE);
         if (isShowing())
             pStateSet->AddState(AccessibleStateType::SHOWING);
         if (isVisible())
@@ -275,7 +275,7 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     aSequence.realloc(nOldSize + 1);
     ::rtl::OUString* pNames = aSequence.getArray();
 
-    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.sheet.AccessiblePageHeaderFooterAreasView"));
+    pNames[nOldSize] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.AccessiblePageHeaderFooterAreasView"));
 
     return aSequence;
 }
@@ -386,7 +386,7 @@ void ScAccessiblePageHeaderArea::CreateTextHelper()
             (new ScAccessibleHeaderTextData(mpViewShell, mpEditObj, mbHeader, meAdjust));
         ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessibleHeaderTextData));
 
-        mpTextHelper = new accessibility::AccessibleTextHelper(pEditSource );
+        mpTextHelper = new ::accessibility::AccessibleTextHelper(pEditSource );
         mpTextHelper->SetEventSource(this);
     }
 }
