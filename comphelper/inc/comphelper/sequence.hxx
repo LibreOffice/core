@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:08:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,10 @@
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #define _COMPHELPER_SEQUENCE_HXX_
 
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm> // copy algorithm
+#define INCLUDED_ALGORITHM
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -70,6 +73,10 @@
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
 #endif
 
 //.........................................................................
@@ -83,7 +90,7 @@ namespace comphelper
     /** search the given string within the given sequence, return the positions where it was found.
         if _bOnlyFirst is sal_True, only the first occurence will be returned.
     */
-    staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
+    COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
 
     //-------------------------------------------------------------------------
     namespace internal
@@ -98,7 +105,7 @@ namespace comphelper
     //-------------------------------------------------------------------------
     /// concat two sequences
     template <class T>
-    staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rRight)
+     staruno::Sequence<T> concatSequences(const staruno::Sequence<T>& _rLeft, const staruno::Sequence<T>& _rRight)
     {
         sal_Int32 nLeft(_rLeft.getLength()), nRight(_rRight.getLength());
         const T* pLeft = _rLeft.getConstArray();
