@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-15 15:33:23 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,9 +103,9 @@ namespace dbaccess
 {
 //........................................................................
 
-//==========================================================================
+//=========================================================================
 //= OCommandDefinition - a database "document" which describes a query
-//==========================================================================
+//=========================================================================
 
 typedef ::cppu::WeakImplHelper2<
                     ::com::sun::star::lang::XUnoTunnel,
@@ -123,13 +123,25 @@ class OCommandDefinition    :public OCommandDefinition_Base
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xContainer;
 
-private:
-    OCommandDefinition();
-
 protected:
     ~OCommandDefinition();
 
+private:
+    OCommandDefinition();
+
 public:
+    // helper class for controlling access privileges
+    class AccessControl
+    {
+        friend class OCommandContainer;
+    private:
+        AccessControl() { }
+    };
+
+    // --------------------------------------------------------------------
+    // some kind of default ctor, accessible for selected classes only
+    OCommandDefinition(AccessControl&);
+
     OCommandDefinition(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContainer,
             const ::rtl::OUString& _rElementName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,15 @@ extern "C" void SAL_CALL createRegistryInfo_ODocumentDefinition()
 
 //--------------------------------------------------------------------------
 ODocumentDefinition::ODocumentDefinition()
+    :OConfigurationFlushable(m_aMutex)
+    ,OPropertySetHelper(m_aBHelper)
+    ,m_aFlushListeners(m_aMutex)
+{
+    DBG_CTOR(ODocumentDefinition, NULL);
+}
+
+//--------------------------------------------------------------------------
+ODocumentDefinition::ODocumentDefinition(ODocumentDefinition::AccessControl&)
     :OConfigurationFlushable(m_aMutex)
     ,OPropertySetHelper(m_aBHelper)
     ,m_aFlushListeners(m_aMutex)

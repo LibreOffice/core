@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,12 @@ ODocumentContainer::ODocumentContainer(OWeakObject& _rParent, Mutex& _rMutex)
 ODocumentContainer::~ODocumentContainer()
 {
     DBG_DTOR(ODocumentContainer, NULL);
+}
+
+//--------------------------------------------------------------------------
+Reference< XPropertySet > ODocumentContainer::createObject()
+{
+    return new ODocumentDefinition(ODocumentDefinition::AccessControl());
 }
 
 //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:03:53 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,15 @@ void OCommandDefinition::registerProperties()
 
 //--------------------------------------------------------------------------
 OCommandDefinition::OCommandDefinition()
+    :OPropertyContainer(m_aBHelper)
+    ,OConfigurationFlushable(m_aMutex)
+{
+    DBG_CTOR(OCommandDefinition, NULL);
+    registerProperties();
+}
+
+//--------------------------------------------------------------------------
+OCommandDefinition::OCommandDefinition(OCommandDefinition::AccessControl&)
     :OPropertyContainer(m_aBHelper)
     ,OConfigurationFlushable(m_aMutex)
 {

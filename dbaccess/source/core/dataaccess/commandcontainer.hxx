@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:15:16 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ protected:
         const ::rtl::OUString& _rName,
         const OConfigurationNode& _rObjectNode
     );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createObject();
 };
 
 //........................................................................

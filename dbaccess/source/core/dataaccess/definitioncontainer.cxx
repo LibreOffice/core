@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: fs $ $Date: 2001-02-07 13:15:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -461,7 +461,7 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_False);
 
-    if ((_nIndex < 0) || (_nIndex >= m_aDocuments.size()))
+    if ((_nIndex < 0) || (_nIndex >= (sal_Int32)m_aDocuments.size()))
         throw IndexOutOfBoundsException();
 
     DocumentsIterator aPos = m_aDocuments.begin() + _nIndex;
@@ -720,6 +720,20 @@ void ODefinitionContainer::checkValid(sal_Bool _bIntendWriteAccess) const throw 
     DBG_ASSERT( (m_aDocuments.size() == m_aDocumentObjectKeys.size()) &&
                 (m_aDocuments.size() == m_aDocumentMap.size()),
         "ODefinitionContainer::checkValid : inconsistent state !");
+}
+
+//--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODefinitionContainer::createInstance(  ) throw(Exception, RuntimeException)
+{
+    Reference< XPropertySet > xNew = createObject();
+    OSL_ENSURE(approveNewObject(xNew), "ODefinitionContainer::createInstance: createObject returned nonsense!");
+    return xNew.get();
+}
+
+//--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODefinitionContainer::createInstanceWithArguments( const Sequence< Any >& /* aArguments */ ) throw(Exception, RuntimeException)
+{
+    return createInstance();
 }
 
 //--------------------------------------------------------------------------
