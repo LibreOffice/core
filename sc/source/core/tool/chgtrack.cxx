@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 16:18:27 $
+ *  last change: $Author: sab $ $Date: 2001-02-12 12:19:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1183,16 +1183,6 @@ BOOL ScChangeActionDel::LoadLinks( SvStream& rStrm, ScChangeTrack* pTrack )
     return bOk;
 }
 
-void ScChangeActionDel::LoadCellContent( ULONG nActionNumber, ScChangeTrack* pTrack )
-{
-    ScChangeActionContent* pContent;
-    pContent = (ScChangeActionContent*) pTrack->GetActionOrGenerated( nActionNumber );
-    if ( pContent )
-        AddContent( pContent );
-    else
-        DBG_ERROR( "ScChangeActionDel::LoadLinks: missing Content" );
-}
-
 void ScChangeActionDel::AddContent( ScChangeActionContent* pContent )
 {
     ScChangeActionCellListEntry* pE = new ScChangeActionCellListEntry(
@@ -1531,16 +1521,6 @@ BOOL ScChangeActionMove::LoadLinks( SvStream& rStrm, ScChangeTrack* pTrack )
     return bOk;
 }
 
-void ScChangeActionMove::LoadCellContent( ULONG nActionNumber, ScChangeTrack* pTrack )
-{
-    ScChangeActionContent* pContent;
-    pContent = (ScChangeActionContent*) pTrack->GetActionOrGenerated( nActionNumber );
-    if ( pContent )
-        AddContent( pContent );
-    else
-        DBG_ERROR( "ScChangeActionDel::LoadLinks: missing Content" );
-}
-
 
 void ScChangeActionMove::AddContent( ScChangeActionContent* pContent )
 {
@@ -1721,19 +1701,19 @@ ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
 }
 
 ScChangeActionContent::ScChangeActionContent( const ULONG nActionNumber,
-            ScBaseCell* pTempOldCell, const ScBigRange& aBigRange,
+            ScBaseCell* pTempNewCell, const ScBigRange& aBigRange,
             ScDocument* pDoc )
         :
         ScChangeAction(SC_CAT_CONTENT, aBigRange, nActionNumber),
-        pOldCell(pTempOldCell),
-        pNewCell(NULL),
+        pNewCell(pTempNewCell),
+        pOldCell(NULL),
         pNextContent(NULL),
         pPrevContent(NULL),
         pNextInSlot(NULL),
         ppPrevInSlot(NULL)
 {
-    if (pOldCell)
-        ScChangeActionContent::SetCell( aOldValue, pOldCell, 0, pDoc );
+    if (pNewCell)
+        ScChangeActionContent::SetCell( aNewValue, pNewCell, 0, pDoc );
 }
 
 ScChangeActionContent::~ScChangeActionContent()
@@ -4968,9 +4948,9 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
 }
 
 
-ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pOldCell, const ScBigRange& aBigRange )
+ULONG ScChangeTrack::AddLoadedGenerated(ScBaseCell* pNewCell, const ScBigRange& aBigRange )
 {
-    ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pOldCell, aBigRange, pDoc );
+    ScChangeActionContent* pAct = new ScChangeActionContent( --nGeneratedMin, pNewCell, aBigRange, pDoc );
     if ( pAct )
     {
         if ( pFirstGeneratedDelContent )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 16:16:37 $
+ *  last change: $Author: sab $ $Date: 2001-02-12 12:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,8 +700,6 @@ public:
 
     virtual void                GetDescription( String&, ScDocument*,
                                     BOOL bSplitRange = FALSE ) const;
-            void                LoadCellContent(ULONG nActionNumber,
-                                            ScChangeTrack* pTrack); // only to use in the XML import
             void                SetCutOffInsert( ScChangeActionIns* p, short n )
                                     { pCutOff = p; nCutOff = n; }   // only to use in the XML import
                                                                     // this should be protected, but for the XML import it is public
@@ -784,8 +782,6 @@ public:
 
     virtual void                GetRefString( String&, ScDocument*,
                                     BOOL bFlag3D = FALSE ) const;
-            void                LoadCellContent(ULONG nActionNumber,
-                                            ScChangeTrack* pTrack); // only to use in the XML import
 };
 
 
@@ -924,7 +920,7 @@ public:
                                                 ScDocument* pDoc,
                                                 const String& sResult); // to use for XML Import
                                 ScChangeActionContent(const ULONG nActionNumber,
-                                                ScBaseCell* pOldCell,
+                                                ScBaseCell* pNewCell,
                                                 const ScBigRange& aBigRange,
                                                 ScDocument* pDoc); // to use for XML Import of Generated Actions
     virtual                     ~ScChangeActionContent();
