@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueconverter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-12 11:04:37 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,12 @@
 
 #include "valueconverter.hxx"
 
+#ifndef _CONFIGMGR_STRDECL_HXX_
 #include "strdecl.hxx"
+#endif
+#ifndef CONFIGMGR_TYPECONVERTER_HXX
 #include "typeconverter.hxx"
-
-#include "msc_msg.hxx"
+#endif
 
 inline sal_Bool rtl_ascii_isWhitespace( sal_Unicode ch )
 {
@@ -80,7 +82,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
 static
-void throwConversionError(sal_Char const* pErrorMsg) CFG_THROW( ( script::CannotConvertException) )
+void throwConversionError(sal_Char const* pErrorMsg) CFG_THROW1( script::CannotConvertException )
 {
     OSL_ENSURE(false, pErrorMsg);
 
@@ -99,7 +101,7 @@ bool charInRange(Char ch, char from, char to) throw()
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned makeHexNibble(unsigned char ch) CFG_THROW( ( script::CannotConvertException) )
+unsigned makeHexNibble(unsigned char ch) CFG_THROW1 ( script::CannotConvertException)
 {
     unsigned nRet;
 
@@ -117,7 +119,7 @@ unsigned makeHexNibble(unsigned char ch) CFG_THROW( ( script::CannotConvertExcep
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned readHexNibble(sal_Unicode ch) CFG_THROW( ( script::CannotConvertException) )
+unsigned readHexNibble(sal_Unicode ch) CFG_THROW1 ( script::CannotConvertException)
 {
     if (!charInRange(ch, 0, 127)) throwConversionError("Non-Ascii Character in binary value");
 
@@ -127,7 +129,7 @@ unsigned readHexNibble(sal_Unicode ch) CFG_THROW( ( script::CannotConvertExcepti
 // -----------------------------------------------------------------------------
 static
 inline
-unsigned int readHexByte(sal_Unicode const*& pStr) CFG_THROW( ( script::CannotConvertException) )
+unsigned int readHexByte(sal_Unicode const*& pStr) CFG_THROW1 ( script::CannotConvertException)
 {
     register unsigned int nHigh = readHexNibble(*pStr++);
     register unsigned int nLow =  readHexNibble(*pStr++);
@@ -137,7 +139,7 @@ unsigned int readHexByte(sal_Unicode const*& pStr) CFG_THROW( ( script::CannotCo
 // -----------------------------------------------------------------------------
 static
 void parseHexBinary(OUString const& aHexString_, uno::Sequence<sal_Int8>& rBinarySeq_)
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     // PRE: aBinaryString with HexCode
     // POST: rBinarySeq with the to Hex converted String
@@ -194,7 +196,7 @@ namespace Encoding {
 
 // -----------------------------------------------------------------------------
 uno::Sequence<sal_Int8> OValueConverter::parseBinary(OUString const& aBinaryString_) const
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException)
 {
     uno::Sequence<sal_Int8> aResultSeq;
 
@@ -231,7 +233,7 @@ uno::Type OValueConverter::getType() const
 }
 // -----------------------------------------------------------------------------
 bool OValueConverter::convertToAny(OUString const& aContent, uno::Any& rValue) const
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1( script::CannotConvertException)
 {
     // PRE: filled content and ValueInfo and an existing Any Object
     // POST: Any contain the Data from the content
@@ -258,7 +260,7 @@ bool OValueConverter::convertToAny(OUString const& aContent, uno::Any& rValue) c
 
 // -----------------------------------------------------------------------------
 bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rValue) const
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     OSL_PRECOND(!m_aValueDesc.isNull,"OValueConverter::convertScalarToAny - check for NULL before calling");
     OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY),"'Any' values must be NULL");
@@ -312,7 +314,7 @@ bool OValueConverter::convertScalarToAny(OUString const& aContent, uno::Any& rVa
 // -----------------------------------------------------------------------------
 template <class T>
 bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rSequence, OValueConverter const& rConverter)
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     uno::TypeClass const aElementTypeClass = ::getCppuType(static_cast<T const*>(0)).getTypeClass();
 
@@ -351,7 +353,7 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< T >& rS
 
 // template<> // use an explicit specialization
 bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Sequence<sal_Int8> >& rSequence, OValueConverter const& rParser )
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     rSequence.realloc(aStringList.size());
 
@@ -369,7 +371,7 @@ bool convertListToSequence(StringList const& aStringList, uno::Sequence< uno::Se
 // -----------------------------------------------------------------------------
 
 bool OValueConverter::convertListToAny(StringList const& aContentList, uno::Any& rValue) const
-        CFG_THROW( ( script::CannotConvertException, uno::RuntimeException ) )
+        CFG_UNO_THROW1 ( script::CannotConvertException )
 {
     OSL_PRECOND(!m_aValueDesc.isNull,"OValueConverter::convertListToAny - check for NULL before calling");
     OSL_ENSURE(!m_aValueDesc.sType.equalsIgnoreAsciiCase(TYPE_ANY),"'Any' not allowed for lists");
@@ -437,25 +439,15 @@ namespace
             //   canUseWhitespace(OUString const&)
             // in xmlformater.cxx
             // -----------------------------------------------------------------------------
-/*
-            sal_Unicode const c_chWhite0 = ' ';
-            sal_Unicode const c_chWhite1 = '\t';
-
-#pragma MSC_MSG("LLA->JB Why yon handle line breaks uncorrect?")
-            //! OSL_ENSURE((ch != 0xA) && (ch != 0xD), "Unexpected line break character");
-            if (ch == 0xD) return true;
-            if (ch == 0xA) return true;
-            return (ch == c_chWhite0) || (ch == c_chWhite1);
-*/
             return rtl_ascii_isWhitespace(ch) ? true : false;
         }
 
-        sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
+        sal_Int32 findFirstTokenStart(OUString const& sText) const CFG_NOTHROW()
         {
             return findNextTokenStart(sText,0);
         }
 
-        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const throw()
+        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const  CFG_NOTHROW()
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nPrevTokenEnd;
@@ -474,7 +466,7 @@ namespace
                 return NO_MORE_TOKENS;
         }
 
-        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const throw()
+        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const CFG_NOTHROW()
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nTokenStart;
@@ -494,17 +486,17 @@ namespace
     struct OTokenizeBySeparator
     {
         OUString const sSeparator;
-        OTokenizeBySeparator(OUString const& _sSeparator) throw()
+        OTokenizeBySeparator(OUString const& _sSeparator) CFG_NOTHROW()
             : sSeparator(_sSeparator)
         {
             OSL_PRECOND(sSeparator.trim().getLength() > 0, "Invalid empty separator string");
         }
 
-        sal_Int32 findFirstTokenStart(OUString const& sText) const throw()
+        sal_Int32 findFirstTokenStart(OUString const& sText) const CFG_NOTHROW()
         {
             return 0;
         }
-        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const throw()
+        sal_Int32 findNextTokenStart(OUString const& sText, sal_Int32 nPrevTokenEnd) const CFG_NOTHROW()
         {
             sal_Int32 const nEnd = sText.getLength();
             sal_Int32 nPos = nPrevTokenEnd;
@@ -516,7 +508,7 @@ namespace
             else
                 return NO_MORE_TOKENS;
         }
-        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const throw()
+        sal_Int32 findTokenEnd(OUString const& sText, sal_Int32 nTokenStart) const CFG_NOTHROW()
         {
             sal_Int32 const nEnd = sText.getLength();
             OSL_PRECOND( 0 <= nTokenStart && nTokenStart <= nEnd ,
@@ -533,7 +525,7 @@ namespace
 // -----------------------------------------------------------------------------
     template <class Tokenizer>
     void tokenizeListData(Tokenizer const& aTokenizer, OUString const& aContent, StringList& rContentList)
-            CFG_THROW( ( uno::RuntimeException ) )
+            CFG_NOTHROW( )
     {
         sal_Int32 nTokenPos = aTokenizer.findFirstTokenStart(aContent);
 
@@ -553,7 +545,7 @@ namespace
 }
 // -----------------------------------------------------------------------------
 void OValueConverter::splitListData(OUString const& aContent, StringList& rContentList) const
-    CFG_THROW( ( uno::RuntimeException ) )
+    CFG_NOTHROW( )
 {
     OUString sSeparator = m_aValueDesc.sSeparator;
 
