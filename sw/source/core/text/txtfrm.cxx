@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 09:58:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,8 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
         const ViewShell *pVsh = GetShell();
         if ( !pVsh )
             return sal_False;
-        return OUTDEV_PRINTER == pVsh->GetOut()->GetOutDevType() ||
+
+        return ! pVsh->GetWin() ||
                (!pVsh->GetViewOptions()->IsShowHiddenPara()      &&
                 !pVsh->GetViewOptions()->IsFldName());
     }
@@ -2037,9 +2038,7 @@ KSHORT SwTxtFrm::GetLineSpace() const
             if( !pVsh->GetDoc()->IsBrowseMode() ||
                 pVsh->GetViewOptions()->IsPrtFormat() )
             {
-                OutputDevice* pPrt = GetTxtNode()->GetDoc()->GetPrt();
-                if ( pPrt && ((Printer*)pPrt)->IsValid() )
-                    pOut = pPrt;
+                pOut = &GetTxtNode()->GetDoc()->GetRefDev();
             }
             SwFont aFont( pSet, GetTxtNode()->GetDoc() );
             // Wir muessen dafuer sorgen, dass am OutputDevice der Font
