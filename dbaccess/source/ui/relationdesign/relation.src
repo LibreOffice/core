@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-08 13:13:39 $
+ *  last change: $Author: rt $ $Date: 2002-11-25 15:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ String STR_QUERY_REL_EDIT_RELATION
     Text[ greek ] = "Η σχέση αυτή υπάρχει ήδη. Θέλετε να την επεξεργαστείτε;";
     Text[ dutch ] = "Deze relatie bestaat reeds. Wilt u deze bewerken?";
     Text[ french ] = "Cette relation existe dιjΰ. Voulez-vous l'ιditer ?";
-    Text[ spanish ] = "Ya existe esta relaciσn. ΏDesea editarla?";
+    Text[ spanish ] = "Esta relaciσn ya existe. ΏDesea editarla?";
     Text[ italian ] = "Questa relazione esiste giΰ. Volete modificarla?";
     Text[ danish ] = "Denne relation findes allerede. Vil du redigere den?";
     Text[ swedish ] = "Den hδr relationen finns redan. Vill du redigera den?";
@@ -270,7 +270,7 @@ String STR_RELATIONDESIGN
     Text[ greek ] = "Σχεδιασμός σχέσης";
     Text[ dutch ] = "Relatie-ontwerp";
     Text[ french ] = "Ιbauche de relation";
-    Text[ spanish ] = "Diseρo de relaciones";
+    Text[ spanish ] = "Diseρo de relaciσn";
     Text[ italian ] = "Struttura relazione";
     Text[ danish ] = "Relationsdesign";
     Text[ swedish ] = "Relationsutkast";
