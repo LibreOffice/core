@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-21 14:57:55 $
+ *  last change: $Author: sj $ $Date: 2001-06-22 15:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2979,30 +2979,22 @@ void SdrPowerPointImport::SolveSolver( const PptSolverContainer& rSolver )
     }
 }
 
-SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterpages with this method
+// be sure not to import masterpages with this method
+void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry* pMasterPersist )
 {
     UINT32 nMerk = rStCtrl.Tell();
-    SdrPage* pRet = NULL;
     HeaderFooterEntry* pHFEM = NULL;
-    pRet = MakeBlancPage( FALSE );
+
     PptSlidePersistList* pList = GetPageList( eAktPageKind );
     if ( ( !pList ) || ( pList->Count() <= nAktPageNum ) )
-        return pRet;
+        return;
     PptSlidePersistEntry& rSlidePersist = *(*pList)[ nAktPageNum ];
     if ( rSlidePersist.bStarDrawFiller )
-        return pRet;
+        return;
 
-    if ( HasMasterPage( nAktPageNum, eAktPageKind ) )
-    {
-        USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-        pRet->InsertMasterPage( nMasterNum );
-        PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-        if ( pPageList && nMasterNum < pPageList->Count() )
-        {
-            PptSlidePersistEntry& rMasterPersist = *(*pPageList)[ nMasterNum ];
-            pHFEM = rMasterPersist.pHeaderFooterEntry;  // get the masterpage's HeaderFooterEntry
-         }
-    }
+    if ( pMasterPersist )
+        pHFEM = pMasterPersist->pHeaderFooterEntry; // get the masterpage's HeaderFooterEntry
+
     DffRecordHeader aPageHd;
     if ( SeekToAktPage( &aPageHd ) )
     {
@@ -3181,7 +3173,6 @@ SdrPage* SdrPowerPointImport::ImportPage()      // be sure not to import masterp
             SolveSolver( *rSlidePersist.pSolverContainer );
     }
     rStCtrl.Seek( nMerk );
-    return pRet;
 }
 
 const PptSlideLayoutAtom* SdrPowerPointImport::GetSlideLayoutAtom() const
