@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-04 04:25:00 $
+ *  last change: $Author: sab $ $Date: 2001-04-04 04:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1538,6 +1538,8 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScCellRangesBase::getPropertyStates
         pStates[i] = GetPropertyState(nWhich, aNameString);
         if (!pMap)
             pMap = lcl_GetCellsPropertyMap();
+        else
+            pMap++;
     }
     return aRet;
 }
