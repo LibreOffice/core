@@ -181,15 +181,15 @@ public class XmlUpdater extends Thread {
         //Adding <Office>/user/Scripts/java/
         File scriptsDir = new File( scriptsPath );
     File highlightDir = new File( scriptsPath+File.separator+"Highlight"+File.separator );
-    File spellDir = new File( scriptsPath+File.separator+"Spell"+File.separator );
+    File memoryDir = new File( scriptsPath+File.separator+"MemoryUsage"+File.separator );
         if( !scriptsDir.isDirectory() ) {
         //File highlightDir = new File( scriptsPath+File.separator+"Highlight"+File.separator );
-        //File spellDir = new File( scriptsPath+File.separator+"Spell"+File.separator );
+        //File spellDir = new File( scriptsPath+File.separator+"Memory"+File.separator );
             if( !highlightDir.mkdirs() ) {
                 System.out.println( "Highlight script directory failed!!!!");
             }
-            if( !spellDir.mkdirs() ) {
-                System.out.println( "Spell script directory failed!!!!");
+            if( !memoryDir.mkdirs() ) {
+                System.out.println( "MemoryUsage script directory failed!!!!");
             }
             else {
                 System.out.println( "Scripts/java directory created");
@@ -198,6 +198,7 @@ public class XmlUpdater extends Thread {
         else
             System.out.println( "Scripts/java directory exists" );
 
+//Robert Kinsella test 1 end
 
 
 
@@ -265,28 +266,29 @@ public class XmlUpdater extends Thread {
     else {
         System.out.println( "Highlight script already deployed" );
     }
-    File spellScript = new File( scriptsPath+File.separator+"Spell"+File.separator+"Spellcheck.java" );
-    if( !spellScript.exists() ) {
-        if (!zd.extractEntry("examples/Spell/Spellcheck.java",scriptsPath+File.separator+"Spell"+File.separator, statusLabel))
+    File memoryScript = new File( scriptsPath+File.separator+"MemoryUsage"+File.separator+"MemoryUsage.java" );
+    if( !memoryScript.exists() ) {
+        if (!zd.extractEntry("examples/MemoryUsage/MemoryUsage.java",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
         }
-        if (!zd.extractEntry("examples/Spell/Spellcheck.jar",scriptsPath+File.separator+"Spell"+File.separator, statusLabel))
+        if (!zd.extractEntry("examples/MemoryUsage/MemoryUsage.class",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
         }
-        if (!zd.extractEntry("examples/Spell/parcel-descriptor.xml",scriptsPath+File.separator+"Spell"+File.separator, statusLabel))
+        if (!zd.extractEntry("examples/MemoryUsage/parcel-descriptor.xml",scriptsPath+File.separator+"MemoryUsage"+File.separator, statusLabel))
         {
             onInstallComplete();
             return;
         }
     }
     else {
-        System.out.println( "Spell script already deployed" );
+        System.out.println( "MemoryUsage script already deployed" );
         }
 
+// Robert Kinsella test 2 end
 //--------------------------------
 
     // Adding binding dialog
