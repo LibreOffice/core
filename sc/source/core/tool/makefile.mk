@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hjs $ $Date: 2003-08-18 14:42:24 $
+#   last change: $Author: vg $ $Date: 2003-12-17 19:51:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -148,7 +148,9 @@ NOOPTFILES= \
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
-        $(SLO)$/interpr4.obj
+        $(SLO)$/interpr2.obj \
+        $(SLO)$/interpr4.obj \
+        $(SLO)$/token.obj 
 .ENDIF
 
 .IF "$(GUI)"=="OS2"
