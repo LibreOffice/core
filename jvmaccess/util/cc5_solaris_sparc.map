@@ -4,8 +4,13 @@ UDK_3.1 {
         __1cJjvmaccessIJavaInfoNInitException2t6M_v_; # jvmaccess::JavaInfo::InitException::InitException()
         __1cJjvmaccessIJavaInfoNInitException2t6Mrk2_v_; # jvmaccess::JavaInfo::InitException::InitException(InitException const &)
         __1cJjvmaccessIJavaInfoNInitException2T6M_v_; # jvmaccess::JavaInfo::InitException::~InitException()
-        __1cJjvmaccessIJavaInfoNInitException2G6Mrk2_r2_; # jvmaccess::JavaInfo::InitException&jvmaccess::JavaInfo::InitException::operator=(InitException const &)
+        __1cJjvmaccessIJavaInfoNInitException2G6Mrk2_r2_; # jvmaccess::JavaInfo::InitException::operator=(InitException const &)
         __1cJjvmaccessbS__RTTI__1nJjvmaccessIJavaInfoNInitException__; # RTTI for jvmaccess::JavaInfo::InitException
+        __1cJjvmaccessIJavaInfoUUnsupportedException2t6M_v_; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException()
+        __1cJjvmaccessIJavaInfoUUnsupportedException2t6Mrk2_v_; # jvmaccess::JavaInfo::UnsupportedException::UnsupportedException(UnsupportedException const &)
+        __1cJjvmaccessIJavaInfoUUnsupportedException2T6M_v_; # jvmaccess::JavaInfo::UnsupportedException::~UnsupportedException()
+        __1cJjvmaccessIJavaInfoUUnsupportedException2G6Mrk2_r2_; # jvmaccess::JavaInfo::UnsupportedException::operator =(UnsupportedException const &)
+        __1cJjvmaccessbZ__RTTI__1nJjvmaccessIJavaInfoUUnsupportedException__; # RTTI for jvmaccess::JavaInfo::UnsupportedException
         __1cJjvmaccessIJavaInfo2t6MrknDrtlIOUString__v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &)
         __1cJjvmaccessIJavaInfo2t5B6MrknDrtlIOUString__v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &) #Nvariant 1
         __1cJjvmaccessIJavaInfo2t6MrknDrtlIOUString_i_v_; # jvmaccess::JavaInfo::JavaInfo(rtl::OUString const &, int)
