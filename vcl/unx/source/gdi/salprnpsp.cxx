@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:21:00 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,6 +1208,13 @@ IMPL_STATIC_LINK( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, pDummy )
 
 void vcl_sal::PrinterUpdate::update()
 {
+    if( ! static_cast< X11SalInstance* >(GetSalData()->pInstance_)->isPrinterInit() )
+    {
+        // #i45389# start background printer detection
+        psp::PrinterInfoManager& rManager = psp::PrinterInfoManager::get();
+        return;
+    }
+
     if( nActiveJobs < 1 )
         doUpdate();
     else if( ! pPrinterUpdateTimer )
