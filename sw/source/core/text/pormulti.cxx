@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:26 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 09:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1964,7 +1964,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             ASSERT( pUpperFrm, "pFrm is in table but does not have an upper cell frame" )
             const SwTableLine* pLine = ((SwRowFrm*)pUpperFrm->GetUpper())->GetTabLine();
             const SwFmtFrmSize& rFrmFmtSize = pLine->GetFrmFmt()->GetFrmSize();
-            if ( ATT_VAR_SIZE == rFrmFmtSize.GetSizeType() )
+            if ( ATT_VAR_SIZE == rFrmFmtSize.GetHeightSizeType() )
                 pUpperFrm = pPage;
         }
         if ( pUpperFrm == pPage && !pFrm->IsInFtn() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 09:56:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-26 09:02:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,8 +336,8 @@ void SwFrm::CheckDirChange()
                     SwTableLine* pLine = (SwTableLine*)((SwCellFrm*)this)->GetTabBox()->GetUpper();
                     SwFrmFmt* pFrmFmt = pLine->GetFrmFmt();
                     SwFmtFrmSize aNew( pFrmFmt->GetFrmSize() );
-                    if ( ATT_FIX_SIZE != aNew.GetSizeType() )
-                        aNew.SetSizeType( ATT_MIN_SIZE );
+                    if ( ATT_FIX_SIZE != aNew.GetHeightSizeType() )
+                        aNew.SetHeightSizeType( ATT_MIN_SIZE );
                     if ( aNew.GetHeight() < nMinVertCellHeight )
                         aNew.SetHeight( nMinVertCellHeight );
                     SwDoc* pDoc = pFrmFmt->GetDoc();
