@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:39:11 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:49:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Uzaklýk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Espa~cio";
+        Text[ finnish ] = "~Välit";
     };
     MetricField MF_ABSTAND
     {
@@ -156,6 +157,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Açý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Á~ngulo";
+        Text[ finnish ] = "~Kulma";
     };
     ListBox LB_WINKEL
     {
@@ -335,11 +337,19 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ catalan ] =
     {
-            < "Cualquiera" ; 9000 ; > ;
-        < "30 grados" ; 9000 ; > ;
-        < "45 grados" ; 9000 ; > ;
-        < "60 grados" ; 9000 ; > ;
+            < "Cualquiera" ; 1 ; > ;
+        < "30 grados" ; 3000 ; > ;
+        < "45 grados" ; 4500 ; > ;
+        < "60 grados" ; 6000 ; > ;
         < "90 grados" ; 9000 ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Vapaa" ; 9000 ; > ;
+        < "30 astetta" ; 9000 ; > ;
+        < "45 astetta" ; 9000 ; > ;
+        < "60 astetta" ; 9000 ; > ;
+        < "90 astetta" ; 9000 ; > ;
     };
     };
     FixedText FT_ANSATZ
@@ -368,6 +378,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "U~zatma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Salida";
+        Text[ finnish ] = "~Loppuliite";
     };
     ListBox LB_ANSATZ
     {
@@ -547,11 +558,19 @@ TabPage RID_SVXPAGE_CAPTION
     };
     StringList [ catalan ] =
     {
-            < "Óptimo" ; 2 ; > ;
-        < "Desde arriba" ; 2 ; > ;
-        < "De izquierda" ; 2 ; > ;
-        < "Horizontal" ; 2 ; > ;
+            < "Óptimo" ; 4 ; > ;
+        < "Desde arriba" ; 3 ; > ;
+        < "De izquierda" ; 3 ; > ;
+        < "Horizontal" ; 1 ; > ;
         < "Vertical" ; 2 ; > ;
+    };
+    StringList [ finnish ] =
+    {
+            < "Optimaalinen" ; 2 ; > ;
+        < "Ylhäältä" ; 2 ; > ;
+        < "Vasemmalta" ; 2 ; > ;
+        < "Vaakataso" ; 2 ; > ;
+        < "Pystysuora" ; 2 ; > ;
     };
     };
     FixedText FT_UM
@@ -580,6 +599,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Deðer";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~De";
+        Text[ finnish ] = "~Laatija";
     };
     MetricField MF_ANSATZ
     {
@@ -621,6 +641,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Konum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Posición";
+        Text[ finnish ] = "~Sijainti";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -658,6 +679,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Uzunluk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Longitud";
+        Text[ finnish ] = "~Pituus";
     };
     MetricField MF_LAENGE
     {
@@ -700,6 +722,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "~Optimum";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ó~ptimo";
+        Text[ finnish ] = "~Optimaalinen";
     };
     String STR_CAPTTYPE_1
     {
@@ -725,6 +748,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Düz çizgili";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea recta";
+        Text[ finnish ] = "Suora viiva";
     };
     String STR_CAPTTYPE_2
     {
@@ -750,6 +774,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Açýlý çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea acodada";
+        Text[ finnish ] = "Kulmikas viiva";
     };
     String STR_CAPTTYPE_3
     {
@@ -775,6 +800,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Tek açýlý çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea acodada con un solo ángulo";
+        Text[ finnish ] = "Kulmikas liitinviiva";
     };
     String STR_CAPTTYPE_4
     {
@@ -800,6 +826,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Çift açýlý çizgi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Línea acodada con dos ángulos";
+        Text[ finnish ] = "Kaksikulmainen viiva";
     };
     String STR_HORZ_LIST
     {
@@ -825,6 +852,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Üst;Orta;Alt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Arriba;centro;abajo";
+        Text[ finnish ] = "Yläosa;Keskiosa;Alaosa";
     };
     String STR_VERT_LIST
     {
@@ -850,6 +878,7 @@ TabPage RID_SVXPAGE_CAPTION
         Text[ turkish ] = "Sol;Orta;Sað";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Izquierda;centrado;derecha";
+        Text[ finnish ] = "Vasen;Keskiosa;Oikea";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -878,6 +907,7 @@ TabPage RID_SVXPAGE_CAPTION
     Text[ turkish ] = "Belirtme çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Leyenda";
+    Text[ finnish ] = "Kuvatekstit";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 TabDialog RID_SVXDLG_CAPTION
@@ -990,6 +1020,7 @@ TabDialog RID_SVXDLG_CAPTION
                 Text[ turkish ] = "Belirtme çizgisi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Leyenda";
+                Text[ finnish ] = "Kuvateksti";
             };
         };
     };
@@ -1004,6 +1035,7 @@ TabDialog RID_SVXDLG_CAPTION
     Text[ turkish ] = "Belirtme çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Leyenda";
+    Text[ finnish ] = "Kuvatekstit";
 };
  // ********************************************************************** EOF
 
