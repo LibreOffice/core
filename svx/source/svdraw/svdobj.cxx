@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-22 09:48:51 $
+ *  last change: $Author: thb $ $Date: 2002-08-23 09:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2291,7 +2291,8 @@ void SdrObject::ImpDrawLineGeometry(
 
                 if( aBounds.GetWidth() )
                 {
-                    double fScale( (double)rLineParameters.GetStartWidth() / (double)aBounds.GetWidth() );
+                    double fScale( (double)rLineParameters.GetStartWidth() / (double)rLineParameters.GetLineWidth() *
+                                   (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
                     aStartPoly.Scale( fScale, fScale );
                 }
 
@@ -2308,7 +2309,8 @@ void SdrObject::ImpDrawLineGeometry(
 
                 if( aBounds.GetWidth() )
                 {
-                    double fScale( static_cast<double>(rLineParameters.GetEndWidth()) / static_cast<double>(aBounds.GetWidth()) );
+                    double fScale( (double)rLineParameters.GetEndWidth() / (double)rLineParameters.GetLineWidth() *
+                                   (double)SvtGraphicStroke::normalizedArrowWidth / (double)aBounds.GetWidth() );
                     aEndPoly.Scale( fScale, fScale );
                 }
 
