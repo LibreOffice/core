@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-21 11:44:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -811,14 +811,14 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
         WildCard aPatternCheck(pPattReg->first);
         if (aPatternCheck.Matches(aURL.Main))
         {
-            // first item in pPattReg->second is a preferred type or any type,
-            // if no preferred one exists!
-            // Add it as result to the [out] parameter and break this method.
-
             const OUStringList& rTypesForPattern = pPattReg->second;
-            css::beans::NamedValue aMatch(*(rTypesForPattern.begin()), css::uno::makeAny(sal_True)); // true => indicates: match by URLPattern!
-            rFlatTypes.push_back(aMatch);
-            return;
+
+            FlatDetectionInfo aInfo;
+            aInfo.sType = *(rTypesForPattern.begin());
+            aInfo.bMatchByPattern = sal_True;
+
+            rFlatTypes.push_back(aInfo);
+//          return;
         }
     }
 
@@ -835,8 +835,11 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
                                           pIt != rTypesForExtension.end()  ;
                                         ++pIt                              )
         {
-            css::beans::NamedValue aMatch(*pIt, css::uno::makeAny(sal_False)); // false => indicates: does not match by URLPattern!
-            rFlatTypes.push_back(aMatch);
+            FlatDetectionInfo aInfo;
+            aInfo.sType             = *pIt;
+            aInfo.bMatchByExtension = sal_True;
+
+            rFlatTypes.push_back(aInfo);
         }
     }
 
