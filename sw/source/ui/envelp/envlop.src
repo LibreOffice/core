@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-30 16:32:13 $
+ *  last change: $Author: vg $ $Date: 2001-06-08 22:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ TabDialog DLG_ENV
                 Text[ korean ] = "º≠Ωƒ";
                 Text[ chinese_simplified ] = "∏Ò Ω";
                 Text[ chinese_traditional ] = "ÆÊ¶°";
-                Text[ turkish ] = "Format";
+                Text[ turkish ] = "Renk format˝";
                 Text[ arabic ] = "«· ‰”Ìﬁ";
                 Text[ catalan ] = "Formato";
                 Text[ finnish ] = "Muoto";
@@ -485,3 +485,4 @@ String STR_DOC_TITLE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sobre";
 };
+
