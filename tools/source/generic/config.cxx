@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:45:02 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,7 +1174,7 @@ ByteString Config::GetKeyName( USHORT nKey ) const
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "Config::GetKeyName( " );
-    aTraceStr += nKey;
+    aTraceStr += ByteString::CreateFromInt32(nKey);
     aTraceStr += " ) from ";
     aTraceStr += GetGroup();
     aTraceStr += " in ";
