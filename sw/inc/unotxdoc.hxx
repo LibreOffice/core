@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2001-06-26 11:41:52 $
+ *  last change: $Author: dbo $ $Date: 2001-09-05 09:04:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,9 +172,6 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE_HXX_
-#include <cppuhelper/implbase.hxx>
-#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 #endif
@@ -198,6 +195,12 @@ public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
 public Ifc25, public Ifc26
 
+#ifdef MACOSX /* use old impl helpers for macosx */
+
+#ifndef _CPPUHELPER_IMPLBASE_HXX_
+#include <cppuhelper/implbase.hxx>
+#endif
+
 __DEF_IMPLHELPER_PRE( 26 )
     __IFC_WRITEOFFSET( 1 ) __IFC_WRITEOFFSET( 2 ) __IFC_WRITEOFFSET( 3 ) __IFC_WRITEOFFSET( 4 )
     __IFC_WRITEOFFSET( 5 ) __IFC_WRITEOFFSET( 6 ) __IFC_WRITEOFFSET( 7 ) __IFC_WRITEOFFSET( 8 )
@@ -207,6 +210,37 @@ __DEF_IMPLHELPER_PRE( 26 )
     __IFC_WRITEOFFSET( 21) __IFC_WRITEOFFSET( 22) __IFC_WRITEOFFSET( 23) __IFC_WRITEOFFSET( 24)
     __IFC_WRITEOFFSET( 25) __IFC_WRITEOFFSET( 26)
 __DEF_IMPLHELPER_POST( 26 )
+
+#else /* ! MACOSX */
+
+#ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
+#include <cppuhelper/implbase_ex.hxx>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
+#include <cppuhelper/implbase_ex_pre.hxx>
+#endif
+#define __IFC_EX_TYPE_INIT26( class_cast ) \
+    __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 5 ), __IFC_EX_TYPE_INIT( class_cast, 6 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 7 ), __IFC_EX_TYPE_INIT( class_cast, 8 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 9 ), __IFC_EX_TYPE_INIT( class_cast, 10 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 11 ), __IFC_EX_TYPE_INIT( class_cast, 12 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 13 ), __IFC_EX_TYPE_INIT( class_cast, 14 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 15 ), __IFC_EX_TYPE_INIT( class_cast, 16 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 17 ), __IFC_EX_TYPE_INIT( class_cast, 18 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 19 ), __IFC_EX_TYPE_INIT( class_cast, 20 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 21 ), __IFC_EX_TYPE_INIT( class_cast, 22 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 23 ), __IFC_EX_TYPE_INIT( class_cast, 24 ), \
+    __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 )
+#ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
+#include <cppuhelper/implbase_ex_post.hxx>
+#endif
+__DEF_IMPLHELPER_EX( 26 )
+
+#endif /* MACOSX */
+
 
 class SwDoc;
 class SvxForbiddenCharactersTable;
