@@ -9,6 +9,8 @@ mkdir: %_DEST%\bin%_EXT%\jvmfwk_so_wnt
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\sunjavaplugin*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\class\JREProperties.class  %_DEST%\bin%_EXT%\JREProperties.class
+..\%__SRC%\class\JREProperties.class  %_DEST%\lib%_EXT%\JREProperties.class
 ..\%__SRC%\bin\javaldx %_DEST%\bin%_EXT%\javaldx
 ..\source\javasettings.xml %_DEST%\bin%_EXT%\javasettings.xml
 ..\%__SRC%\bin\javavendors_so.xml %_DEST%\bin%_EXT%\so\javavendors.xml
