@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:10:27 $
+ *  last change: $Author: kz $ $Date: 2001-07-20 20:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ String STR_SVT_MYDOCS
     Text[ portuguese_brazilian ] = "My Documents";
     Text[ japanese ] = "Ï²ÄŞ·­ÒİÄ";
     Text[ korean ] = "°íÀ¯ ¹®¼­";
-    Text[ chinese_simplified ] = "ÎÒµÄÎÄ¼ş";
+    Text[ chinese_simplified ] = "ÎÒµÄÎÄµµ";
     Text[ chinese_traditional ] = "§Úªº¤å¥ó§¨";
     Text[ turkish ] = "My Documents";
     Text[ arabic ] = "My Documents";
@@ -239,7 +239,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ portuguese ] = "Anterior";
             Text[ russian ] = "Íàçàä";
             Text[ greek ] = "Back";
-            Text[ dutch ] = "Back";
+            Text[ dutch ] = "Vorige";
             Text[ french ] = "Précédent";
             Text[ spanish ] = "Regresar";
             Text[ italian ] = "Indietro";
@@ -267,7 +267,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ portuguese ] = "Subir um nível";
             Text[ russian ] = "Íà îäèí óğîâåíü ââåğõ";
             Text[ greek ] = "Higher";
-            Text[ dutch ] = "Higher";
+            Text[ dutch ] = "Een niveau hoger";
             Text[ french ] = "Au répertoire supérieur";
             Text[ spanish ] = "Subir un nivel";
             Text[ italian ] = "Alla cartella superiore";
@@ -299,7 +299,7 @@ ToolBox TB_SVT_FILEVIEW
             Text[ portuguese ] = "Imprimir";
             Text[ russian ] = "Ïå÷àòü";
             Text[ greek ] = "Print";
-            Text[ dutch ] = "Print";
+            Text[ dutch ] = "Afdrukken";
             Text[ french ] = "Imprimer";
             Text[ spanish ] = "Imprimir";
             Text[ italian ] = "Stampa";
@@ -337,7 +337,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ portuguese ] = "Propriedades do documento";
             Text[ russian ] = "Ñâîéñòâà äîêóìåíòà";
             Text[ greek ] = "Docinfo";
-            Text[ dutch ] = "Docinfo";
+            Text[ dutch ] = "Documenteigenschappen";
             Text[ french ] = "Propriétés du document";
             Text[ spanish ] = "Propiedades del documento";
             Text[ finnish ] = "Docinfo";
@@ -348,7 +348,7 @@ ToolBox TB_SVT_FRAMEWIN
             Text[ portuguese_brazilian ] = "Docinfo";
             Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì‘®«";
             Text[ korean ] = "Docinfo";
-            Text[ chinese_simplified ] = "ÎÄµµµÄÊôĞÔ";
+            Text[ chinese_simplified ] = "ÎÄµµÊôĞÔ";
             Text[ chinese_traditional ] = "¤å¥óÄİ©Ê";
             Text[ turkish ] = "Docinfo";
             Text[ arabic ] = "Docinfo";
@@ -843,5 +843,6 @@ StringArray STRARY_SVT_DOCINFO
         < "Größe" ; DI_SIZE ; > ;
     };
 };
+
 
 
