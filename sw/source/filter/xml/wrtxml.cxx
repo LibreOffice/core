@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:32:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,12 @@ sal_uInt32 SwXMLWriter::_Write()
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { "AutoTextMode", sizeof("AutoTextMode")-1, 0,
               &::getBooleanCppuType(),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StyleNames", sizeof("StyleNames")-1, 0,
+              &::getCppuType( (Sequence<OUString>*)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        { "StyleFamilies", sizeof("StyleFamilies")-1, 0,
+              &::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         { NULL, 0, 0, NULL, 0, 0 }
     };
