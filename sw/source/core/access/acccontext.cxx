@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 07:20:24 $
+ *  last change: $Author: mib $ $Date: 2002-07-04 07:36:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,7 +921,7 @@ awt::Point SAL_CALL SwAccessibleContext::getLocation()
 
     //      aPixPos = pWin->LogicToPixel( aLogBounds.Pos() );
     aPixPos = GetMap()->CoreToPixel( aLogBounds.Pos() );
-    if( pParent->IsRootFrm() )
+    if( !pParent->IsRootFrm() )
     {
         Point aParentLogPos( GetBounds( pParent ).Pos() ); // twip rel to doc root
         //          Point aParentPixPos( pWin->LogicToPixel( aParentLogPos ) );
