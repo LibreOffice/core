@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 16:01:29 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:38:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,16 +233,18 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask, B
 SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, BOOL bOnly3DAttr) const
 {
     // ItemSet mit entspr. Bereich anlegen
-    SfxItemSet aSet(pMod->GetItemPool(),
+    SfxItemSet aSet(
+        pMod->GetItemPool(),
         SDRATTR_START,      SDRATTR_END,
         SID_ATTR_3D_INTERN, SID_ATTR_3D_INTERN,
         0, 0);
+
     sal_uInt32 nSelectedItems(0L);
 
     if(pInScene)
     {
         // special scene
-        aSet.Put(pInScene->GetItemSet());
+        aSet.Put(pInScene->GetMergedItemSet());
     }
     else
     {
@@ -295,12 +297,8 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, BOOL
 
     if(pInScene)
     {
-        // special scene
-        SdrBroadcastItemChange aItemChange(*pInScene);
-        if(bReplaceAll)
-            pInScene->ClearItem();
-        pInScene->SetItemSet(rAttr);
-        pInScene->BroadcastItemChange(aItemChange);
+        //pInScene->SetItemSetAndBroadcast(rAttr, bReplaceAll);
+        pInScene->SetMergedItemSetAndBroadcast(rAttr, bReplaceAll);
     }
     else
     {
