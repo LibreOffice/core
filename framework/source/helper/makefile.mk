@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:30:20 $
+#   last change: $Author: rt $ $Date: 2005-02-02 13:52:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,8 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/uiconfigelementwrapperbase.obj          \
                     $(SLO)$/moduleidentifier.obj                    \
                     $(SLO)$/shareablemutex.obj                      \
-                    $(SLO)$/vclstatusindicator.obj
+                    $(SLO)$/vclstatusindicator.obj                  \
+                    $(SLO)$/wakeupthread.obj
 
 # --- Targets ------------------------------------------------------
 
