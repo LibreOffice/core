@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-09 14:59:09 $
+ *  last change: $Author: sj $ $Date: 2001-08-07 14:24:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,56 +133,6 @@ USHORT GetImportFormatCount( GraphicFilter& rFlt )
         return rFlt.GetImportFormatCount();
     else
         return 4;
-}
-
-// -----------------------------------------------------------------------
-
-String GetImportFormatName( GraphicFilter& rFlt,
-                            USHORT nFormat, String pFmtStrs[] )
-{
-    if ( rFlt.GetImportFormatCount() )
-        return rFlt.GetImportFormatName( nFormat );
-    else
-        return pFmtStrs[STR_FLT_BMP + nFormat].GetToken( 0, ',' );
-}
-
-// -----------------------------------------------------------------------
-
-void GetImportFormatWildcard( GraphicFilter& rFlt,
-                                sal_uInt16 nFormat, String& aDest )
-{
-    String aWildcard;
-    sal_Int32 i = 0;
-
-    while( TRUE )
-    {
-        aWildcard = rFlt.GetImportWildcard( nFormat, i++ );
-        if ( !aWildcard.Len() )
-            break;
-        if ( aDest.Search( aWildcard ) == STRING_NOTFOUND )
-        {
-            if ( aDest.Len() )
-                aDest += sal_Unicode(';');
-            aDest += aWildcard;
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-String GetImportFormatOSType( GraphicFilter& rFlt, USHORT nFormat, String pFmtStrs[] )
-{
-    String aOSType;
-
-    if ( rFlt.GetImportFormatCount() )
-        aOSType = rFlt.GetImportFormatShortName( nFormat );
-    else
-    {
-#ifdef MAC
-        aOSType = pFmtStrs[STR_FLT_BMP + nFormat].GetToken( 2, ',' );
-#endif
-    }
-    return aOSType;
 }
 
 // -----------------------------------------------------------------------
