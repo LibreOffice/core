@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xoutbmp.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:05 $
+ *  last change: $Author: ka $ $Date: 2000-11-10 14:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,13 +80,12 @@
 #define XOUTBMP_DONT_EXPAND_FILENAME    0x10000000L
 #define XOUTBMP_USE_GIF_IF_POSSIBLE     0x20000000L
 #define XOUTBMP_USE_GIF_IF_SENSIBLE     0x40000000L
+#define XOUTBMP_USE_NATIVE_IF_POSSIBLE  0x80000000L
 
 // --------------
 // - XOutBitmap -
 // --------------
 
-// !!!DirEntry
-class DirEntry;
 class GraphicFilter;
 class VirtualDevice;
 class INetURLObject;
@@ -103,7 +102,6 @@ public:
                                                  const Point& rPoint, const Size& rSize );
     static Graphic      MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags );
     static Animation    MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr );
-    static Bitmap       GetBitmapFromGraphic( const Graphic& rGraphic );
     static USHORT       WriteGraphic( const Graphic& rGraphic, String& rFileName,
                                       const String& rFilterName, const ULONG nFlags = 0L,
                                       const Size* pMtfSize_100TH_MM = NULL );
@@ -113,10 +111,6 @@ public:
                                            const Rectangle& rTileRect, const BitmapEx& rBmpEx );
 
     static USHORT       ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
-                                       GraphicFilter& rFilter, const USHORT nFormat,
-                                       BOOL bIgnoreOptions );
-// !!!DirEntry
-    static USHORT       ExportGraphic( const Graphic& rGraphic, const DirEntry& rPath,
                                        GraphicFilter& rFilter, const USHORT nFormat,
                                        BOOL bIgnoreOptions );
 
