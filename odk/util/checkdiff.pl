@@ -9,13 +9,17 @@ while( <STDIN> )
 {
     if( /^diff/ )
     {
-        print STDERR "files differ : ".substr( $_, 5 );
+        print STDERR "ERROR : files differ ".substr( $_, 5 );
         $return++;
     }
     if( /^Binary/ )
     {
-        print STDERR "$_";
+        print STDERR "ERROR : $_";
         $return++;
     }
+}
+if( $return != 0 )
+{
+    unlink "$ARGV[0]";
 }
 exit $return;
