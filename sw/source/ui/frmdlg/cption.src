@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-17 20:45:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,11 +549,11 @@ ModalDialog DLG_SEQUENCE_OPTION
         Text [ french ] = "Numérotation par chapitre" ;
         Text [ dutch ] = "Hoofdstuksgewijs nummeren" ;
         Text [ portuguese ] = "Numeração por capítulos" ;
-        Text[ chinese_simplified ] = "°´ÕÂ±àºÅ";
+        Text[ chinese_simplified ] = "°´ÕÂ½Ú±àºÅ";
         Text[ russian ] = "Íóìåğàöèÿ ïî ãëàâàì";
         Text[ polish ] = "Numeracja wed³ug rozdzia³ów";
         Text[ japanese ] = "Í‚²‚Æ‚Ì”Ô†•t‚¯";
-        Text[ chinese_traditional ] = "«ö³¹½s¸¹";
+        Text[ chinese_traditional ] = "«ö³¹¸`½s¸¹";
         Text[ arabic ] = "ÊÑŞíã ÇáİÕæá";
         Text[ greek ] = "Áñßèìçóç êáôÜ êåöÜëáéá";
         Text[ korean ] = "Àåº°·Î  ¹øÈ£¸Å±â±â";
@@ -749,6 +749,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     Text[ finnish ] = "Numeroalueen asetukset";
 };
  // ********************************************************************** EOF
+
 
 
 
