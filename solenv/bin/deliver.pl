@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-16 13:46:56 $
+#   last change: $Author: rt $ $Date: 2004-09-15 16:27:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.71 $ ';
+$id_str = ' $Revision: 1.72 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -800,10 +800,7 @@ sub copy_if_newer
         $rc = copy($from, $temp_file);
     };
     if ( $rc) {
-        $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
-        if ( !$rc ) {
-            # try again
-            sleep 3;
+        if ( is_newer($temp_file, $from, 0) ) {
             $rc = utime($$from_stat_ref[9], $$from_stat_ref[9], $temp_file);
             if ( !$rc ) {
                 print_error("can't update temporary file modification time '$temp_file': $!",0);
