@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 06:58:22 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 08:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,11 +278,11 @@ BOOL OTableGrantControl::SaveModified()
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
-    sal_Int32 nRow = m_nDataPos;
+    sal_Int32 nRow = GetCurRow();
     if(nRow == -1 || nRow >= m_aTableNames.getLength())
         return FALSE;
 
-    ::rtl::OUString sTableName = m_aTableNames[m_nDataPos];
+    ::rtl::OUString sTableName = m_aTableNames[nRow];
     BOOL bErg = TRUE;
     try
     {
@@ -316,6 +316,7 @@ BOOL OTableGrantControl::SaveModified()
                         GRANT_REVOKE_RIGHT(Privilege::DROP);
                         break;
                 }
+                fillPrivilege(nRow);
             }
         }
     }
@@ -340,11 +341,9 @@ String OTableGrantControl::GetCellText( long nRow, USHORT nColId )
         return m_aTableNames[nRow];
 
     sal_Int32 nPriv = 0;
-    TTablePrivilegeMap::const_iterator aFind = m_aPrivMap.find(m_aTableNames[nRow]);
-    if(aFind == m_aPrivMap.end())
-        nPriv = fillPrivilege(nRow);
-    else
-        nPriv = aFind->second;
+    TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
+    if(aFind != m_aPrivMap.end())
+        nPriv = aFind->second.nRights;
 
     return String::CreateFromInt32(isAllowed(nColId,nPriv) ? 1 :0);
 }
@@ -360,17 +359,13 @@ void OTableGrantControl::InitController( DbCellControllerRef& rController, long 
     else
     {
         // get the privileges from the user
-        TTablePrivilegeMap::const_iterator aFind = m_aPrivMap.find(sTablename);
-        if(aFind == m_aPrivMap.end())
-            m_pCheckCell->GetBox().Check(isAllowed(nColumnId,fillPrivilege(nRow)));
-        else
-            m_pCheckCell->GetBox().Check(isAllowed(nColumnId,aFind->second));
+        TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
+        m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() ? isAllowed(nColumnId,aFind->second.nRights) : FALSE);
     }
 }
 // -----------------------------------------------------------------------------
-sal_Int32 OTableGrantControl::fillPrivilege(sal_Int32 _nRow)
+void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
 {
-    sal_Int32 nPrivs = 0;
     Reference<XAuthorizable> xAuth;
     if(m_xUsers->hasByName(m_sUserName))
     {
@@ -379,8 +374,15 @@ sal_Int32 OTableGrantControl::fillPrivilege(sal_Int32 _nRow)
             m_xUsers->getByName(m_sUserName) >>= xAuth;
             if(xAuth.is())
             {
-                nPrivs = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
-                m_aPrivMap[m_aTableNames[_nRow]] = nPrivs;
+                // get the privileges
+                TPrivileges nRights;
+                nRights.nRights = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
+                if(m_xGrantUser.is())
+                    nRights.nWithGrant = m_xGrantUser->getGrantablePrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
+                else
+                    nRights.nWithGrant = 0;
+
+                m_aPrivMap[m_aTableNames[_nRow]] = nRights;
             }
         }
         catch(SQLException& e)
@@ -391,7 +393,6 @@ sal_Int32 OTableGrantControl::fillPrivilege(sal_Int32 _nRow)
         {
         }
     }
-    return nPrivs;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableGrantControl::isAllowed(USHORT _nColumnId,sal_Int32 _nPrivilege) const
@@ -429,15 +430,21 @@ void OTableGrantControl::setUserName(const ::rtl::OUString _sUserName)
     m_sUserName = _sUserName;
     m_aPrivMap = TTablePrivilegeMap();
 }
+// -----------------------------------------------------------------------------
+void OTableGrantControl::setGrantUser(const Reference< XAuthorizable>& _xGrantUser)
+{
+    OSL_ENSURE(_xGrantUser.is(),"OTableGrantControl::setGrantUser: GrantUser is null!");
+    m_xGrantUser = _xGrantUser;
+}
 //------------------------------------------------------------------------------
 DbCellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId )
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
+    DbCellController* pController = NULL;
     switch( nColumnId )
     {
         case COL_TABLE_NAME:
-            return NULL;//new DbEditCellController( m_pEdit );
             break;
         case COL_INSERT:
         case COL_DELETE:
@@ -447,14 +454,15 @@ DbCellController* OTableGrantControl::GetController( long nRow, USHORT nColumnId
         case COL_REF:
         case COL_DROP:
             {
-                if(!m_bEnable)
-                    return NULL;
-                return new DbCheckBoxCellController( m_pCheckCell );
+                TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
+                if(aFind != m_aPrivMap.end() && isAllowed(nColumnId,aFind->second.nWithGrant))
+                    pController = new DbCheckBoxCellController( m_pCheckCell );
             }
             break;
         default:
-            return NULL;
+            ;
     }
+    return pController;
 }
 //------------------------------------------------------------------------------
 BOOL OTableGrantControl::SeekRow( long nRow )
@@ -470,11 +478,17 @@ void OTableGrantControl::PaintCell( OutputDevice& rDev, const Rectangle& rRect, 
 {
     DBG_CHKTHIS(OTableGrantControl,NULL);
 
-    String aText(((OTableGrantControl*)this)->GetCellText( m_nDataPos, nColumnId ));
     if(nColumnId != COL_TABLE_NAME)
-        PaintTristate(rDev, rRect, aText.ToInt32() == 1 ? STATE_CHECK : STATE_NOCHECK,m_bEnable);
+    {
+        TTablePrivilegeMap::const_iterator aFind = findPrivilege(m_nDataPos);
+        if(aFind != m_aPrivMap.end())
+            PaintTristate(rDev, rRect, isAllowed(nColumnId,aFind->second.nRights) ? STATE_CHECK : STATE_NOCHECK,isAllowed(nColumnId,aFind->second.nWithGrant));
+        else
+            PaintTristate(rDev, rRect, STATE_NOCHECK,FALSE);
+    }
     else
     {
+        String aText(((OTableGrantControl*)this)->GetCellText( m_nDataPos, nColumnId ));
         Point aPos( rRect.TopLeft() );
         sal_Int32 nWidth = GetDataWindow().GetTextWidth( aText );
         sal_Int32 nHeight = GetDataWindow().GetTextHeight();
@@ -498,6 +512,16 @@ void OTableGrantControl::CellModified()
     SaveModified();
 }
 // -----------------------------------------------------------------------------
-
+OTableGrantControl::TTablePrivilegeMap::const_iterator OTableGrantControl::findPrivilege(sal_Int32 _nRow) const
+{
+    TTablePrivilegeMap::const_iterator aFind = m_aPrivMap.find(m_aTableNames[_nRow]);
+    if(aFind == m_aPrivMap.end())
+    {
+        fillPrivilege(_nRow);
+        aFind = m_aPrivMap.find(m_aTableNames[_nRow]);
+    }
+    return aFind;
+}
+// -----------------------------------------------------------------------------
 
 

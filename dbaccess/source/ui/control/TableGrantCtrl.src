@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableGrantCtrl.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 06:58:16 $
+ *  last change: $Author: oj $ $Date: 2001-06-21 08:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,74 +89,20 @@ String STR_TABLE_PRIV_NAME
 
 String STR_TABLE_PRIV_INSERT
 {
-    Text = "Einfügen";
-    Text[ENGLISH] = "Insert";
-    Text[ english_us ] = "Insert";
-    Text[ portuguese ] = "Inserir";
-    Text[ russian ] = "Âñòàâèòü";
-    Text[ greek ] = "ĞñïóèŞêç";
-    Text[ dutch ] = "Invoegen";
-    Text[ french ] = "Insérer";
-    Text[ spanish ] = "Insertar";
-    Text[ italian ] = "Inserisci";
-    Text[ danish ] = "Indsæt";
-    Text[ swedish ] = "Infoga";
-    Text[ polish ] = "Wstaw";
-    Text[ portuguese_brazilian ] = "Insert";
-    Text[ japanese ] = "‘}“ü";
-    Text[ korean ] = "»ğÀÔ";
-    Text[ chinese_simplified ] = "²åÈë";
-    Text[ chinese_traditional ] = "´¡¤J";
-    Text[ arabic ] = "ÅÏÑÇÌ";
-    Text[ turkish ] = "Ekle";
+    Text = "Daten einfügen";
+    Text[ENGLISH] = "Insert data";
 };
 
 String STR_TABLE_PRIV_DELETE
 {
-    Text = "Löschen";
-    Text[ENGLISH] = "Delete";
-    Text[ english_us ] = "Delete";
-    Text[ portuguese ] = "Eliminar";
-    Text[ russian ] = "Óäàëèòü";
-    Text[ greek ] = "ÄéáãñáöŞ";
-    Text[ dutch ] = "Wissen";
-    Text[ french ] = "Supprimer";
-    Text[ spanish ] = "Eliminar";
-    Text[ italian ] = "Cancella";
-    Text[ danish ] = "Slet";
-    Text[ swedish ] = "Radera";
-    Text[ polish ] = "Usuñ";
-    Text[ portuguese_brazilian ] = "Delete";
-    Text[ japanese ] = "íœ";
-    Text[ korean ] = "»èÁ¦";
-    Text[ chinese_simplified ] = "É¾³ı";
-    Text[ chinese_traditional ] = "§R°£";
-    Text[ arabic ] = "ÍĞİ";
-    Text[ turkish ] = "Sil";
+    Text = "Daten löschen";
+    Text[ENGLISH] = "Delete data";
 };
 
 String STR_TABLE_PRIV_UPDATE
 {
-    Text = "Ändern";
-    Text[ENGLISH] = "Update";
-    Text[ english_us ] = "Modify";
-    Text[ portuguese ] = "Modificar";
-    Text[ russian ] = "Èçìåíèòü";
-    Text[ greek ] = "ÁëëáãŞ";
-    Text[ dutch ] = "Wijzigen";
-    Text[ french ] = "Modifier";
-    Text[ spanish ] = "Modificar";
-    Text[ italian ] = "Cambia";
-    Text[ danish ] = "Modificer";
-    Text[ swedish ] = "Ändra";
-    Text[ polish ] = "Modyfikuj";
-    Text[ portuguese_brazilian ] = "Update";
-    Text[ japanese ] = "•ÏX";
-    Text[ korean ] = "º¯°æ";
-    Text[ chinese_simplified ] = "¸ü¸Ä";
-    Text[ chinese_traditional ] = "§ó·s";
-    Text[ arabic ] = "ÊÚÏíá";
-    Text[ turkish ] = "Değiştir";
+    Text = "Daten ändern";
+    Text[ENGLISH] = "Update data";
 };
 
 String STR_TABLE_PRIV_ALTER
@@ -184,26 +130,8 @@ String STR_TABLE_PRIV_ALTER
 };
 String STR_TABLE_PRIV_SELECT
 {
-    Text = "Lesen";
-    Text[ENGLISH] = "Select";
-    Text[ english_us ] = "Read";
-    Text[ portuguese ] = "Ler";
-    Text[ russian ] = "×èòàòü";
-    Text[ greek ] = "ÁíÜãíùóç";
-    Text[ dutch ] = "Lezen";
-    Text[ french ] = "Lire";
-    Text[ spanish ] = "Leer";
-    Text[ italian ] = "Leggi";
-    Text[ danish ] = "Læs";
-    Text[ swedish ] = "Läs";
-    Text[ polish ] = "Czytaj";
-    Text[ portuguese_brazilian ] = "Select";
-    Text[ japanese ] = "“Ç‚İæ‚è";
-    Text[ korean ] = "ÀĞ±â";
-    Text[ chinese_simplified ] = "¶ÁÈ¡";
-    Text[ chinese_traditional ] = "Åª¨ú";
-    Text[ arabic ] = "ŞÑÇÁÉ";
-    Text[ turkish ] = "Oku";
+    Text = "Daten lesen";
+    Text[ENGLISH] = "Select data";
 };
 
 String STR_TABLE_PRIV_REFERENCE
@@ -232,9 +160,8 @@ String STR_TABLE_PRIV_REFERENCE
 
 String STR_TABLE_PRIV_DROP
 {
-    Text = "Löschen";
-    Text[ENGLISH] = "Droping";
-    Text[ english_us ] = "Droping";
+    Text = "Struktur löschen";
+    Text[ENGLISH] = "Drop structure";
 };
 
 
