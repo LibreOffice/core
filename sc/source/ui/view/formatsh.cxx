@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 15:08:47 $
+ *  last change: $Author: dr $ $Date: 2002-04-05 10:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1845,6 +1845,11 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     pTabViewShell->HideListBox();               // Autofilter-DropDown-Listbox
+    if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
+    {
+        SC_MOD()->InputEnterHandler();
+        pTabViewShell->UpdateInputHandler();
+    }
 
     USHORT nSlot = rReq.GetSlot();
     switch( nSlot )
@@ -1859,6 +1864,7 @@ void ScFormatShell::ExecuteTextDirection( SfxRequest& rReq )
             rItemSet.Put( SvxOrientationItem( eOrient, ATTR_ORIENTATION ) );
             rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
             pTabViewShell->ApplySelectionPattern( aAttr );
+            pTabViewShell->AdjustBlockHeight();
         }
         break;
     }
@@ -1869,9 +1875,13 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
     const SfxItemSet& rAttrSet = pTabViewShell->GetSelectionPattern()->GetItemSet();
 
-    BOOL bVertDontCare = (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SFX_ITEM_DONTCARE);
-    BOOL bTopBottom = !bVertDontCare && ((const SfxBoolItem&) rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
-    BOOL bLeftRight = !bTopBottom && (((const SvxOrientationItem&) rAttrSet.Get( ATTR_ORIENTATION )).GetValue() != SVX_ORIENTATION_STACKED);
+    BOOL bVertDontCare =
+        (rAttrSet.GetItemState( ATTR_VERTICAL_ASIAN ) == SFX_ITEM_DONTCARE) ||
+        (rAttrSet.GetItemState( ATTR_ORIENTATION ) == SFX_ITEM_DONTCARE);
+    BOOL bLeftRight = !bVertDontCare &&
+        (((const SvxOrientationItem&) rAttrSet.Get( ATTR_ORIENTATION )).GetValue() != SVX_ORIENTATION_STACKED);
+    BOOL bTopBottom = !bVertDontCare && !bLeftRight &&
+        ((const SfxBoolItem&) rAttrSet.Get( ATTR_VERTICAL_ASIAN )).GetValue();
 
     SfxWhichIter aIter( rSet );
     USHORT nWhich = aIter.FirstWhich();
@@ -1880,11 +1890,15 @@ void ScFormatShell::GetTextDirectionState( SfxItemSet& rSet )
         switch( nWhich )
         {
             case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
-                if( !bVertDontCare )
+                if( bVertDontCare )
+                    rSet.InvalidateItem( nWhich );
+                else
                     rSet.Put( SfxBoolItem( nWhich, bLeftRight ) );
             break;
             case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
-                if( !bVertDontCare )
+                if( bVertDontCare )
+                    rSet.InvalidateItem( nWhich );
+                else
                     rSet.Put( SfxBoolItem( nWhich, bTopBottom ) );
             break;
         }
