@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access_controller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2002-04-11 11:55:57 $
+ *  last change: $Author: dbo $ $Date: 2002-04-15 14:23:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <cppuhelper/implementationentry.hxx>
 
 #include <com/sun/star/uno/XCurrentContext.hpp>
+#include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -810,8 +811,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         buf.appendAscii(
             RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occured): ") );
         buf.append( exc.Message );
-        throw RuntimeException( buf.makeStringAndClear(), exc.Context );
-//         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
+        throw DeploymentException( buf.makeStringAndClear(), exc.Context );
     }
     catch (RuntimeException &)
     {
