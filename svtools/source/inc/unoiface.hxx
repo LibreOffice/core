@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-23 12:51:24 $
+ *  last change: $Author: mt $ $Date: 2002-11-15 11:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,13 +94,11 @@ private:
     TextListenerMultiplexer maTextListeners;
 
 protected:
-    DECL_LINK(          ModifyHdl, MultiLineEdit* );
+    void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
 
 public:
                     VCLXMultiLineEdit();
                     ~VCLXMultiLineEdit();
-
-    void    SetWindow( Window* pWindow );
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);

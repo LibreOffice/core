@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-19 12:07:42 $
+ *  last change: $Author: mt $ $Date: 2002-11-15 11:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,9 +201,6 @@ VCLXMultiLineEdit::VCLXMultiLineEdit() : maTextListeners( *this )
 
 VCLXMultiLineEdit::~VCLXMultiLineEdit()
 {
-    MultiLineEdit* pEdit = (MultiLineEdit*) GetWindow();
-    if ( pEdit )
-        pEdit->SetModifyHdl( Link() );
 }
 
 ::com::sun::star::uno::Any VCLXMultiLineEdit::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
@@ -223,21 +220,6 @@ IMPL_XTYPEPROVIDER_START( VCLXMultiLineEdit )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
-
-void VCLXMultiLineEdit::SetWindow( Window* pWindow )
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    MultiLineEdit* pPrevMultiLineEdit = (MultiLineEdit*) GetWindow();
-    if ( pPrevMultiLineEdit )
-        pPrevMultiLineEdit->SetModifyHdl( Link() );
-
-    MultiLineEdit* pNewMultiLineEdit = (MultiLineEdit*) pWindow;
-    if ( pNewMultiLineEdit )
-        pNewMultiLineEdit->SetModifyHdl( LINK( this, VCLXMultiLineEdit, ModifyHdl ) );
-
-    VCLXWindow::SetWindow( pWindow );
-}
 
 void VCLXMultiLineEdit::addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -260,7 +242,12 @@ void VCLXMultiLineEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun
 
         // In JAVA wird auch ein textChanged ausgeloest, in VCL nicht.
         // ::com::sun::star::awt::Toolkit soll JAVA-komform sein...
-        ModifyHdl( NULL );
+        if ( maTextListeners.getLength() )
+        {
+            ::com::sun::star::awt::TextEvent aEvent;
+            aEvent.Source = (::cppu::OWeakObject*)this;
+            maTextListeners.textChanged( aEvent );
+        }
     }
 }
 
@@ -422,13 +409,26 @@ void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines 
     }
 }
 
-IMPL_LINK( VCLXMultiLineEdit, ModifyHdl, MultiLineEdit*, EMPTYARG )
+void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
-    ::com::sun::star::awt::TextEvent aEvent;
-    aEvent.Source = (::cppu::OWeakObject*)this;
-    maTextListeners.textChanged( aEvent );
-
-    return 1;
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_EDIT_MODIFY:
+        {
+            if ( maTextListeners.getLength() )
+            {
+                ::com::sun::star::awt::TextEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                maTextListeners.textChanged( aEvent );
+            }
+        }
+        break;
+        default:
+        {
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+        }
+        break;
+    }
 }
 
 void VCLXMultiLineEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
