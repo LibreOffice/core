@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2000-10-26 18:57:15 $
+#   last change: $Author: obo $ $Date: 2001-01-16 13:03:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -198,6 +198,7 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpsave.obj	\
     $(SLO)$/dbdocutl.obj \
+        $(SLO)$/dptabsrc.obj \
     $(SLO)$/globalx.obj
 
 # --- Tagets -------------------------------------------------------
