@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 12:46:30 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
 {
     DBG_CTOR(OScrollWindowHelper,NULL);
+
     //////////////////////////////////////////////////////////////////////
     // ScrollBars
 
@@ -176,10 +177,10 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 // -----------------------------------------------------------------------------
 OScrollWindowHelper::~OScrollWindowHelper()
 {
+    DBG_DTOR(OScrollWindowHelper,NULL);
     ::std::auto_ptr<Window> aTemp(m_pCornerWindow);
     m_pCornerWindow = NULL;
     m_pTableView = NULL;
-    DBG_DTOR(OScrollWindowHelper,NULL);
 }
 
 // -----------------------------------------------------------------------------
@@ -703,7 +704,7 @@ void OJoinTableView::InitColors()
     DBG_CHKTHIS(OJoinTableView,NULL);
     // die Farben fuer die Darstellung sollten die Systemfarben sein
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
-    SetBackground(Wallpaper(Color(aSystemStyle.GetWindowColor())));
+    SetBackground(Wallpaper(Color(aSystemStyle.GetDialogColor())));
 }
 
 //------------------------------------------------------------------------------
