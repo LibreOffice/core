@@ -1,6 +1,5 @@
 -o fwk.DispatchRecorder
 -o fwk.DispatchRecorderSupplier
--o fwk.DocumentProperties
 -o fwk.Frame
 -o fwk.JobExecutor
 -o fwk.JobHandler
