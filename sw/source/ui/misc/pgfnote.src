@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:45 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ danish ] = "Maks. h鴍de fodnote" ;
         Text [ french ] = "Hauteur max. du ~pied de page" ;
         Text [ swedish ] = "Fotnotens ma~x h鰆d" ;
-        Text [ dutch ] = "~Maximum hoogte voetnoot" ;
+        Text [ dutch ] = "~Maximum hoogte" ;
         Text [ spanish ] = "Altura m醲. de ~nota al pie" ;
         Text [ english_us ] = "Maximum footnote ~height" ;
         Text[ chinese_simplified ] = "注脚的最高度(~H)";
@@ -446,7 +446,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese ] = "~Comprimento" ;
         Text [ english_us ] = "~Length" ;
         Text [ portuguese_brazilian ] = "~Largura" ;
-        Text [ swedish ] = "L~鋘gd" ;
+        Text [ swedish ] = "L鋘~gd" ;
         Text [ danish ] = "L鎛gde" ;
         Text [ italian ] = "~Lunghezza" ;
         Text [ spanish ] = "~Longitud" ;
