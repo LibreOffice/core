@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:23:14 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,7 +385,7 @@ TabPage TP_FORMAT_TABLE
         Text [ portuguese ] = "Propriedades" ;
         Text [ finnish ] = "Ominaisuudet" ;
         Text [ danish ] = "Egenskaber" ;
-        Text [ french ] = "Options" ;
+        Text [ french ] = "Propriétés" ;
         Text [ swedish ] = "Egenskaper" ;
         Text [ dutch ] = "Eigenschappen" ;
         Text [ spanish ] = "Propiedades" ;
@@ -884,7 +884,7 @@ TabPage TP_TABLE_COLUMN
         Text[ chinese_traditional ] = "¹ïºÙ½Õ¾ãÄæ¼e(~J)";
         Text[ arabic ] = "ÊÛííÑ ÇáÃÚãÏÉ ÈÔßá ãÊßÇİÆ";
         Text[ greek ] = "Ïìïéüìïñöç áëëáãŞ ~óôçëşí";
-        Text[ korean ] = " ¿­ ÀÏÁ¤ÇÏ°Ô¡¡º¯°æ(~J)";
+        Text[ korean ] = "¿­ ÀÏÁ¤ÇÏ°Ô¡¡º¯°æ(~J)";
         Text[ turkish ] = "Sütunları orantılı değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Modificar columnas proporcionalmente";
@@ -1625,4 +1625,5 @@ InfoBox MSG_WRONG_TABLENAME
     Message[ catalan ] = "El nombre de la tabla no debe contener espacios.";
     Message[ finnish ] = "Taulukon nimessä ei saa olla välejä.";
 };
+
 
