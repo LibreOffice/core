@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:12:54 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ korean ] = "Ïö©ÏßÄ";
                         Text[ turkish ] = "Form";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Formulario";
+                        Text[ catalan ] = "Formulari";
                         Text[ finnish ] = "muoto";
                         Text[ thai ] = "‡πÅ‡∏ö‡∏ö‡∏ü‡∏≠‡∏£‡πå‡∏°";
                     };
@@ -140,7 +140,7 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text[ korean ] = "Ïà®Í≤®ÏßÑ Ïª®Ìä∏Î°§";
                         Text[ turkish ] = "Gizli komut alan˝";
                         Text[ language_user1 ] = " ";
-                        Text[ catalan ] = "~Control oculto";
+                        Text[ catalan ] = "Control ocult";
                         Text[ finnish ] = "Piilotettu ohjausobjekti";
                         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏Ñ‡∏ß‡∏ö‡∏Ñ‡∏∏‡∏°‡∏ó‡∏µ‡πà‡∏ã‡πà‡∏≠‡∏ô";
                     };
@@ -156,7 +156,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "ÏÉàÎ°ú ÎßåÎì§Í∏∞(~N)";
             Text[ turkish ] = "~Yeni";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "N~uevo";
+            Text[ catalan ] = "~Nou";
             Text[ finnish ] = "~Uusi";
             Text[ thai ] = "‡πÉ~‡∏´‡∏°‡πà";
         };
@@ -184,7 +184,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "Êõ¥ÊõøÊàê";
             Text[ arabic ] = "«” »œ«· »‹";
             Text[ turkish ] = "ﬁununla dei˛tir...";
-            Text[ catalan ] = "Reemplazar con";
+            Text[ catalan ] = "ReemplaÁa amb";
             Text[ finnish ] = "Korvaa objektilla";
             Text[ thai ] = "‡πÅ‡∏ó‡∏ô‡∏ó‡∏µ‡πà‡∏î‡πâ‡∏ß‡∏¢";
         };
@@ -216,7 +216,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "ÏÇ≠Ï†ú(~D)";
             Text[ turkish ] = "Sil";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Eliminar";
+            Text[ catalan ] = "~Suprimeix";
             Text[ finnish ] = "~Poista";
             Text[ thai ] = "~‡∏•‡∏ö";
         };
@@ -245,7 +245,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "ÌôúÏÑ±Ìôî ÏàúÏÑú...";
             Text[ turkish ] = "Etkinle˛tirme s˝ras˝...";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Secuencia de activaciÛn...";
+            Text[ catalan ] = "Ordre de les pestanyes...";
             Text[ finnish ] = "Sarkainj‰rjestys...";
             Text[ thai ] = "‡∏•‡∏≥‡∏î‡∏±‡∏ö‡∏£‡∏∞‡∏¢‡∏∞‡∏Å‡∏±‡πâ‡∏ô...";
         };
@@ -274,7 +274,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "Ïù¥Î¶Ñ Î≥ÄÍ≤Ω(~R)";
             Text[ turkish ] = "Yeniden adland˝r";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Cambiar nombre";
+            Text[ catalan ] = "~Reanomena";
             Text[ finnish ] = "~Nime‰ uudelleen";
             Text[ thai ] = "‡πÄ~‡∏õ‡∏•‡∏µ‡πà‡∏¢‡∏ô‡∏ä‡∏∑‡πà‡∏≠";
         };
@@ -303,7 +303,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "Îì±Î°ùÏ†ïÎ≥¥(~I)";
             Text[ turkish ] = "÷zellikler";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Propiedades";
+            Text[ catalan ] = "Propie~tats";
             Text[ finnish ] = "~Ominaisuudet";
             Text[ thai ] = "‡∏Ñ‡∏∏‡∏ì‡∏™‡∏°~‡∏ö‡∏±‡∏ï‡∏¥";
         };
@@ -332,7 +332,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ korean ] = "ÎîîÏûêÏù∏ Î™®ÎìúÏóêÏÑú Ïó¥Í∏∞";
             Text[ turkish ] = "Tasar˝m kipinde aÁ";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Abrir en modo diseÒo";
+            Text[ catalan ] = "Obre en mode disseny";
             Text[ finnish ] = "Avaa suunnittelun‰kym‰ss‰";
             Text[ thai ] = "‡πÄ‡∏õ‡∏¥‡∏î‡πÉ‡∏ô‡πÇ‡∏´‡∏°‡∏î‡∏≠‡∏≠‡∏Å‡πÅ‡∏ö‡∏ö";
         };
@@ -360,7 +360,7 @@ Menu RID_FMEXPLORER_POPUPMENU
             Text[ chinese_traditional ] = "Ëá™ÂãïÂ∞çÊ∫ñÊéßÂà∂È†Ö";
             Text[ turkish ] = "Automatic control focus";
             Text[ arabic ] = " —ﬂÌ“  ·ﬁ«∆Ì ·⁄‰’— «· Õﬂ„";
-            Text[ catalan ] = "Foco autom·tico de control";
+            Text[ catalan ] = "Focus autom‡tic de control";
             Text[ finnish ] = "Automaattinen kohdistuksen ohjaus";
             Text[ thai ] = "‡πÇ‡∏ü‡∏Å‡∏±‡∏™‡∏Å‡∏≤‡∏£‡∏Ñ‡∏ß‡∏ö‡∏Ñ‡∏∏‡∏°‡∏≠‡∏±‡∏ï‡πÇ‡∏ô‡∏°‡∏±‡∏ï‡∏¥";
         };
@@ -396,7 +396,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· ‰’";
             Text[ turkish ] = "Metin alan˝";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Campo de texto";
+            Text[ catalan ] = "Quadre de ~text";
             Text[ finnish ] = "~Tekstikehys";
             Text[ thai ] = "‡∏Å‡∏•‡πà‡∏≠‡∏á~‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°";
         };
@@ -424,7 +424,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "ÊåâÈàï(~B)";
             Text[ arabic ] = "“— ÷€ÿ";
             Text[ turkish ] = "D¸me";
-            Text[ catalan ] = "~BotÛn";
+            Text[ catalan ] = "~BotÛ";
             Text[ finnish ] = "~Painike";
             Text[ thai ] = "~‡∏õ‡∏∏‡πà‡∏°";
         };
@@ -453,7 +453,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· ⁄‰Ê‰…";
             Text[ turkish ] = "Etiket alan˝";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Campo de etiqueta";
+            Text[ catalan ] = "Cam~p d'etiqueta";
             Text[ finnish ] = "~Nimiˆkentt‰";
             Text[ thai ] = "‡∏õ‡πâ‡∏≤‡∏¢~‡∏ä‡∏∑‡πà‡∏≠‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•";
         };
@@ -481,7 +481,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "Áæ§ÁµÑÊñπÂ°ä(~R)";
             Text[ arabic ] = "ﬂ«œ—  Ã„Ì⁄";
             Text[ turkish ] = "Grup ÁerÁevesi";
-            Text[ catalan ] = "~Marco de grupo";
+            Text[ catalan ] = "Quadre de g~rup";
             Text[ finnish ] = "~Ryhmittele ruudut";
             Text[ thai ] = "‡∏à‡∏±‡∏î~‡∏Å‡∏•‡∏∏‡πà‡∏°‡∏Å‡∏•‡πà‡∏≠‡∏á";
         };
@@ -510,7 +510,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "„—»⁄ ﬁ«∆„…";
             Text[ turkish ] = "Liste alan˝";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "L~istado";
+            Text[ catalan ] = "Quadre de ll~ista";
             Text[ finnish ] = "~Luetteloruutu";
             Text[ thai ] = "‡∏Å‡∏•‡πà‡∏≠‡∏á‡∏£‡∏≤~‡∏¢‡∏Å‡∏≤‡∏£";
         };
@@ -538,7 +538,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "Ê†∏ÂèñÊñπÂ°ä(~C)";
             Text[ arabic ] = "Œ«‰… «Œ Ì«—";
             Text[ turkish ] = "SeÁme kutusu";
-            Text[ catalan ] = "~Casilla de verificaciÛn";
+            Text[ catalan ] = "~Casella de verificaciÛ";
             Text[ finnish ] = "~Valintaruutu";
             Text[ thai ] = "‡∏Å‡∏•‡πà‡∏≠‡∏á~‡∏Å‡∏≤‡πÄ‡∏Ñ‡∏£‡∏∑‡πà‡∏≠‡∏á‡∏´‡∏°‡∏≤‡∏¢";
         };
@@ -567,7 +567,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "“— ŒÌ«—";
             Text[ turkish ] = "SeÁenek d¸mesi";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "~Campo de opciÛn";
+            Text[ catalan ] = "~Camp d'opciÛ";
             Text[ finnish ] = "~Valintanappi";
             Text[ thai ] = "‡∏õ‡∏∏‡πà‡∏°~‡∏ß‡∏¥‡∏ó‡∏¢‡∏∏";
         };
@@ -595,7 +595,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "ÁµÑÂêàÊñπÊ°Ü(~X)";
             Text[ arabic ] = "„—»⁄  Õ—Ì— Ê”—œ";
             Text[ turkish ] = "Kombinasyon alan˝";
-            Text[ catalan ] = "Ca~mpo combinado";
+            Text[ catalan ] = "Q~uadre combinat";
             Text[ finnish ] = "~Yhdistelm‰ruutu";
             Text[ thai ] = "‡∏Å‡∏•‡πà~‡∏≠‡∏á‡∏Ñ‡∏≠‡∏°‡πÇ‡∏ö‡πâ ";
         };
@@ -623,7 +623,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "ÂúñÂΩ¢ÊåâÈàï(~M)";
             Text[ arabic ] = "„› «Õ „’Ê¯—";
             Text[ turkish ] = "Grafiksel d¸me";
-            Text[ catalan ] = "BotÛn g~r·fico";
+            Text[ catalan ] = "BotÛ g~r‡fic";
             Text[ finnish ] = "~Kuvapainike";
             Text[ thai ] = "‡∏õ‡∏∏‡πà‡∏°‡∏£‡∏π‡∏õ‡∏†‡∏≤~‡∏û";
         };
@@ -652,7 +652,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "«Œ Ì«— «·„·›";
             Text[ turkish ] = "Dosya seÁimi";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Selec~ciÛn de archivo";
+            Text[ catalan ] = "Selec~ciÛ de fitxer";
             Text[ finnish ] = "~Tiedoston valinta";
             Text[ thai ] = "‡πÄ‡∏•‡∏∑‡∏≠‡∏Å‡πÅ~‡∏ü‡πâ‡∏°";
         };
@@ -681,7 +681,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· «· «—ÌŒ";
             Text[ turkish ] = "Tarih alan˝";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Campo de ~fecha";
+            Text[ catalan ] = "Camp ~data";
             Text[ finnish ] = "~P‰iv‰m‰‰r‰kentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•~‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà";
         };
@@ -710,7 +710,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· «·Êﬁ ";
             Text[ turkish ] = "Zaman alan˝";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Campo ~horario";
+            Text[ catalan ] = "Camp t~emps";
             Text[ finnish ] = "~Aikakentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡πÄ‡∏ß~‡∏•‡∏≤";
         };
@@ -739,7 +739,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· —ﬁ„Ì";
             Text[ turkish ] = "Say˝sal alan";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "C~ampo numÈrico";
+            Text[ catalan ] = "C~amp numËric";
             Text[ finnish ] = "~Numeerinen kentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•~‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç";
         };
@@ -767,7 +767,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "Ë≤®Âπ£Ê¨Ñ‰Ωç(~U)";
             Text[ arabic ] = "Õﬁ· «·⁄„·…";
             Text[ turkish ] = "Para birimi alan˝";
-            Text[ catalan ] = "Cam~po de moneda";
+            Text[ catalan ] = "Camp m~oneda";
             Text[ finnish ] = "~Valuuttakentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏™~‡∏Å‡∏∏‡∏•‡πÄ‡∏á‡∏¥‡∏ô";
         };
@@ -795,7 +795,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "ÈÅÆÁΩ©Ê¨Ñ‰Ωç(~P)";
             Text[ arabic ] = "Õﬁ· „ıﬁ‰¯Û⁄";
             Text[ turkish ] = "Maskelenmi˛ alan";
-            Text[ catalan ] = "Campo s~eleccionado";
+            Text[ catalan ] = "Camp s~eleccionat";
             Text[ finnish ] = "~Kuviokentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•~‡∏•‡∏ß‡∏î‡∏•‡∏≤‡∏¢";
         };
@@ -823,7 +823,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ chinese_traditional ] = "ÂúñÂºèÊéßÂà∂È†Ö(~G)";
             Text[ arabic ] = "⁄‰’—  Õﬂ„ —”Ê„Ì";
             Text[ turkish ] = "Grafiksel komut alan˝";
-            Text[ catalan ] = "Control de ima~gen";
+            Text[ catalan ] = "Control d'imat~ge";
             Text[ finnish ] = "~Kuvan ohjaus";
             Text[ thai ] = "‡∏Ñ‡∏ß‡∏ö‡∏Ñ‡∏∏‡∏°‡∏†‡∏≤~‡∏û";
         };
@@ -852,7 +852,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ arabic ] = "Õﬁ· „ı‰”¯Ûﬁ";
             Text[ turkish ] = "Formatl˝ alan";
             Text[ language_user1 ] = " ";
-            Text[ catalan ] = "Campo for~mateado";
+            Text[ catalan ] = "Camp fo~rmatat";
             Text[ finnish ] = "~Muotoiltu kentt‰";
             Text[ thai ] = "‡πÄ‡∏Ç‡∏ï‡∏Ç‡πâ‡∏≠‡∏°‡∏π‡∏•‡∏Å‡∏≤‡∏£‡∏à‡∏±‡∏î‡∏£‡∏π‡∏õ‡πÅ~‡∏ö‡∏ö";
         };
@@ -941,7 +941,7 @@ ModalDialog RID_SVXDLG_SETFORM
         Text[ korean ] = "Í≤ΩÎ°ú";
         Text[ turkish ] = "Veri yolu";
         Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Ruta";
+        Text[ catalan ] = "CamÌ";
         Text[ finnish ] = "Polku";
         Text[ thai ] = "‡πÄ‡∏™‡πâ‡∏ô‡∏ó‡∏≤‡∏á";
     };
@@ -987,7 +987,7 @@ ModalDialog RID_SVXDLG_SETFORM
     Text[ korean ] = "Ïö©ÏßÄ ÏÑ†ÌÉù";
     Text[ turkish ] = "Form seÁimi";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "SelecciÛn de formulario";
+    Text[ catalan ] = "Seleccioneu el formulari";
     Text[ finnish ] = "Valitse lomake";
     Text[ thai ] = "‡πÄ‡∏•‡∏∑‡∏≠‡∏Å‡πÅ‡∏ö‡∏ö";
 };
@@ -1019,7 +1019,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ korean ] = "Ïö©ÏßÄ ÎÑ§ÎπÑÍ≤åÏù¥ÌÑ∞";
     Text[ turkish ] = "Form navigatˆr¸";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Navegador de formulario";
+    Text[ catalan ] = "Navegador de formularis";
     Text[ finnish ] = "Lomakkeen siirtym‰valikko";
     Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏ô‡∏≥‡πÅ‡∏ö‡∏ö";
 };
