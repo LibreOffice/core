@@ -2,9 +2,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-14 12:41:18 $
+#   last change: $Author: hjs $ $Date: 2002-03-26 18:15:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -387,7 +387,7 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"	
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
@@ -402,7 +402,7 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.c
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"	
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
@@ -417,7 +417,7 @@ $(MISC)$/s_%.dpcc : $(MISCX)$/%.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"	
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(SLO)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
@@ -432,7 +432,7 @@ $(MISC)$/o_%.dpcc : $(MISCX)$/%.cxx
     @echo ------------------------------ $(noout)
     @echo Making: $@ $(noout)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"	
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"	
     @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | sed s\#$(MISC)$/\#\# > $@
 .ELSE			# "$(GUI)"=="UNX"	
     @$(MAKEDEPEND) -f - -p$(OBJ)$/ $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $< | $(SED) s/$(MISC:s/\/\\/)\\// > $@
