@@ -2,9 +2,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:22:23 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:19:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,13 +819,20 @@ void StatusBar::RequestHelp( const HelpEvent& rHEvt )
         }
         else if ( rHEvt.GetMode() & HELPMODE_EXTENDED )
         {
+            String aCommand = GetItemCommand( nItemId );
             ULONG nHelpId = GetHelpId( nItemId );
-            if ( nHelpId )
+
+            if ( aCommand.Len() || nHelpId )
             {
                 // Wenn eine Hilfe existiert, dann ausloesen
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
-                    pHelp->Start( nHelpId, this );
+                {
+                    if ( aCommand.Len() )
+                        pHelp->Start( aCommand, this );
+                    else if ( nHelpId )
+                        pHelp->Start( nHelpId, this );
+                }
                 return;
             }
         }
@@ -1365,11 +1372,16 @@ const XubString& StatusBar::GetHelpText( USHORT nItemId ) const
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
     {
         ImplStatusItem* pItem = mpItemList->GetObject( nPos );
-        if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+        if ( !pItem->maHelpText.Len() && ( pItem->mnHelpId || pItem->maCommand.Len() ))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+            {
+                if ( pItem->maCommand.Len() )
+                    pItem->maHelpText = pHelp->GetHelpText( pItem->maCommand, this );
+                if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
+                    pItem->maHelpText = pHelp->GetHelpText( pItem->mnHelpId, this );
+            }
         }
 
         return pItem->maHelpText;
