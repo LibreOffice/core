@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-21 12:55:02 $
+#   last change: $Author: kz $ $Date: 2004-07-30 13:38:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,16 @@ TARGET=so_berkeleydb
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=db-3.2.9
+ADDITIONAL_FILES=btree$/makefile.mk clib$/makefile.mk common$/makefile.mk \
+                 cxx$/makefile.mk db$/makefile.mk dbm$/makefile.mk \
+                 env$/makefile.mk hash$/makefile.mk hsearch$/makefile.mk \
+                 libdb_java$/makefile.mk clib$/makefile.mk common$/makefile.mk \
+                 lock$/makefile.mk log$/makefile.mk mp$/makefile.mk \
+                 mutex$/makefile.mk os$/makefile.mk os_win32$/makefile.mk \
+                 qam$/makefile.mk txn$/makefile.mk xa$/makefile.mk \
+                 makefile.mk libdb32.dxp libdb_java32.dxp
+
+
 
 # not needed for win32. comment out when causing problems...
 PATCH_FILE_NAME=db-3.2.9.patch
@@ -86,6 +96,7 @@ CONFIGURE_FLAGS+=--enable-java
 .ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR_OUT=$(CONFIGURE_DIR)
 .IF "$(OS)"=="IRIX"
 CONFIGURE_ACTION= $(CONFIG_SHELL) ..$/dist$/configure
 BUILD_ACTION=gmake
@@ -105,7 +116,6 @@ OUT2BIN=java$/classes$/db.jar
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
-BUILD_DIR=build_win32
 .IF "$(SOLAR_JAVA)" != ""
 BUILD_JAVA_DEVENV= /build Release /project db_java /useenv
 BUILD_JAVA_MSDEV= /MAKE "db_java - RELEASE"
@@ -114,34 +124,37 @@ BUILD_JAVA_BIN=java$/classes$/db.jar \
 BUILD_JAVA_LIB=$(BUILD_DIR)$/Release$/libdb_java32.lib
 .ENDIF
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-CONFIGURE_DIR=build_win32
-CONFIGURE_ACTION=wdevenv Berkeley_DB Release
 .IF "$(USE_SHELL)"!="4nt"
 BUILD_ACTION_SEP=;
 .ELSE # "$(USE_SHELL)"!="4nt"
 BUILD_ACTION_SEP=^
 .ENDIF # "$(USE_SHELL)"!="4nt"
-BUILD_ACTION=devenv Berkeley_DB.sln /build Release /project db_buildall /useenv $(BUILD_ACTION_SEP) devenv Berkeley_DB.sln  $(BUILD_JAVA_DEVENV)
+BUILD_DIR=
+BUILD_ACTION=dmake
 .ELSE
+BUILD_DIR=build_win32
 BUILD_ACTION=msdev Berkeley_DB.dsw /useenv /MAKE "db_buildall - RELEASE" $(BUILD_JAVA_MSDEV)
 .ENDIF
-
+BUILD_DIR_OUT=build_win32
+.IF "$(COMEX)"=="9"
 OUT2BIN= $(BUILD_JAVA_BIN) \
      $(BUILD_DIR)$/Release$/libdb32.dll
 
 OUT2LIB= \
     $(BUILD_JAVA_LIB) \
     $(BUILD_DIR)$/Release$/libdb32.lib
-
+.ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
 OUT2INC= \
-    $(BUILD_DIR)$/db.h \
+    $(BUILD_DIR_OUT)$/db.h \
     include$/db_185.h \
     include$/db_cxx.h
 
+.IF "$(GUI)"!="WNT" || ("$(GUI)=="WNT" && "$(COMEX)"=="9")
 .IF "$(SOLAR_JAVA)"!=""
 OUT2CLASS=java$/classes$/db.jar
+.ENDIF
 .ENDIF
 
 # --- Targets ------------------------------------------------------
