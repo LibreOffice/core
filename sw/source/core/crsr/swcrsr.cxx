@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 15:23:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1881,14 +1881,34 @@ FASTBOOL SwCursor::GotoTblBox( const String& rName )
 FASTBOOL SwCursor::MovePara(SwWhichPara fnWhichPara, SwPosPara fnPosPara )
 {
     //JP 28.8.2001: for optimization test something before
-    const SwNode* pNd;
-    if( fnWhichPara == fnParaCurr ||
-        (( pNd = &GetPoint()->nNode.GetNode())->IsTxtNode() &&
-          pNd->GetNodes()[ pNd->GetIndex() +
-                    (fnWhichPara == fnParaNext ? 1 : -1 ) ]->IsTxtNode() ) )
+    const SwNode* pNd = &GetPoint()->nNode.GetNode();
+    bool bShortCut = false;
+    if ( fnWhichPara == fnParaCurr )
     {
-        return (*fnWhichPara)( *this, fnPosPara );
+        // --> FME 2005-02-21 #i41048#
+        // If fnWhichPara == fnParaCurr, (*fnWhichPara)( *this, fnPosPara )
+        // can already move the cursor to a different text node. In this case
+        // we better check if IsSelOvr().
+        const SwCntntNode* pCntntNd = pNd->GetCntntNode();
+        if ( pCntntNd )
+        {
+            const xub_StrLen nSttEnd = fnPosPara == fnMoveForward ? 0 : pCntntNd->Len();
+            if ( GetPoint()->nContent.GetIndex() != nSttEnd )
+                bShortCut = true;
+        }
+        // <--
     }
+    else
+    {
+        if ( pNd->IsTxtNode() &&
+             pNd->GetNodes()[ pNd->GetIndex() +
+                    (fnWhichPara == fnParaNext ? 1 : -1 ) ]->IsTxtNode() )
+            bShortCut = true;
+    }
+
+    if ( bShortCut )
+        return (*fnWhichPara)( *this, fnPosPara );
+
     // else we must use the SaveStructure, because the next/prev is not
     // a same node type.
     SwCrsrSaveState aSave( *this );
