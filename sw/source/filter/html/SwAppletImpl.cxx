@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwAppletImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-01 13:28:37 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ void SwApplet_Impl::CreateApplet( const String& rCode, const String& rName,
     //sAlt = rAlt;
 }
 
+#ifdef SOLAR_JAVA
 sal_Bool SwApplet_Impl::CreateApplet()
 {
     String aCode, aName, aCodeBase;
@@ -220,7 +221,7 @@ sal_Bool SwApplet_Impl::CreateApplet()
     CreateApplet( aCode, aName, bMayScript, aCodeBase );
     return sal_True;
 }
-
+#endif
 
 SwApplet_Impl::~SwApplet_Impl()
 {
@@ -232,7 +233,9 @@ void SwApplet_Impl::FinishApplet()
     xApplet->EnableSetModified( TRUE );
 }
 
+#ifdef SOLAR_JAVA
 void SwApplet_Impl::AppendParam( const String& rName, const String& rValue )
 {
     aCommandList.Append( rName, rValue );
 }
+#endif
