@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:00:33 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,45 +328,6 @@ void SfxApplication::OpenClients()
     if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
     {
         // Crash-Recovery
-/*
-#if SUPD<613//MUSTINI
-        SfxIniManager *pIni = GetIniManager();
-        sal_Bool bSendMail = (sal_uInt16) pIni->ReadKey( DEFINE_CONST_UNICODE("Common"), DEFINE_CONST_UNICODE("SendCrashMail") ).ToInt32();
-        String aFileName = pIni->ReadKey( pIni->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ), DEFINE_CONST_UNICODE("Info") );
-
-        if ( bSendMail && aFileName.Len() )
-        {
-            SvFileStream aStr( aFileName, STREAM_STD_READ );
-            if ( !aStr.GetError() )
-            {
-                aStr.Seek( STREAM_SEEK_TO_END );
-                sal_uInt32 nLen = aStr.Tell();
-                aStr.Seek( STREAM_SEEK_TO_BEGIN );
-                char *pBuffer = new char[nLen+1];
-                aStr.Read( pBuffer, nLen );
-                pBuffer[nLen] = 0;
-                String aBodyText( pBuffer, nLen );
-                delete pBuffer;
-
-                SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
-                SfxStringItem aBody( SID_POSTSTRING, aBodyText );
-                SfxStringItem aMail( SID_FILE_NAME, DEFINE_CONST_UNICODE("mailto:staroffice-bugs@staroffice.de") );
-                SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
-                SfxBoolItem aSend( SID_MAIL_SEND, sal_False );
-
-                pAppDispat->Execute( SID_OPENDOC, SFX_CALLMODE_SLOT, &aReferer, &aBody, &aMail, &aSend, &aTarget, 0L );
-                pIni->DeleteKey( pIni->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ), DEFINE_CONST_UNICODE("Info") );
-                aStr.Close();
-                SfxContentHelper::Kill( aFileName );
-            }
-        }
-#else
-        sal_Bool bSendMail = SvtInternalOptions().CrashMailEnabled();
-#ifdef ENABLE_MISSINGKEYASSERTIONS//MUSTINI
-        DBG_ASSERT(!(bSendMail==sal_True),"SfxApplication::OpenClients()\nSendCrashMail not full supported yet!\n");
-#endif
-#endif
-*/
         SvtInternalOptions  aInternalOptions        ;
         sal_Bool            bUserCancel = sal_False ;
         ::rtl::OUString     sURL                    ;

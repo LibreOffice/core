@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 15:44:02 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,8 +497,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                 // Daten am Medium updaten
                 SfxItemSet *pSet = GetMedium()->GetItemSet();
-                pSet->ClearItem( SID_POSTSTRING );
-                pSet->ClearItem( SID_POSTLOCKBYTES );
+                pSet->ClearItem( SID_POSTDATA );
                 pSet->ClearItem( SID_TEMPLATE );
                 pSet->ClearItem( SID_DOC_READONLY );
                 pSet->ClearItem( SID_CONTENTTYPE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-21 14:36:56 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sViewId         = String::CreateFromAscii( "ViewId"         );
             static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
             static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
-            static const String sPostString     = String::CreateFromAscii( "PostString"     );
             static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
             static const String sContentType    = String::CreateFromAscii( "ContentType"    );
             static const String sPostData       = String::CreateFromAscii( "PostData"       );
@@ -264,7 +263,10 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             static const String sURL            = String::CreateFromAscii( "URL"            );
 
             if ( aName == sInputStream && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
-                rSet.Put( SfxUsrAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+                rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
+
+            if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType( (Reference < XInputStream >*)0 ) )
+                rSet.Put( SfxUnoAnyItem( SID_POSTDATA, rProp.Value ) );
 
             // AsTemplate-Property?
             if ( aName == sAsTemplate && rProp.Value.getValueType() == ::getBooleanCppuType() )
@@ -296,10 +298,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else if ( aName == sPreview && rProp.Value.getValueType() == ::getBooleanCppuType() )
                 rSet.Put( SfxBoolItem( SID_PREVIEW, *((sal_Bool*)rProp.Value.getValue()) ) );
 
-            // PostString-Property?
-            else if ( aName == sPostString && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
-                rSet.Put( SfxStringItem( SID_POSTSTRING, *((::rtl::OUString*)rProp.Value.getValue()) ) );
-
             else if ( aName == sURL && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_OPENURL, *((::rtl::OUString*)rProp.Value.getValue()) ) );
 
@@ -317,15 +315,6 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 
             else if ( aName == sJumpMark && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 rSet.Put( SfxStringItem( SID_JUMPMARK, *((::rtl::OUString*)rProp.Value.getValue()) ) );
-
-            else if ( aName == sPostData && rProp.Value.getValueType() == ::getCppuType((const ::com::sun::star::uno::Sequence<sal_Int8>*)0) )
-            {
-                SvCacheStream* pStream = new SvCacheStream;
-                ::com::sun::star::uno::Sequence<sal_Int8> aSequ = *((::com::sun::star::uno::Sequence<sal_Int8>*) rProp.Value.getValue());
-                pStream->Write( (void*) aSequ.getConstArray(), aSequ.getLength() );
-                SfxRefItem aItem( SID_POSTLOCKBYTES, new SvLockBytes( pStream, sal_True ) );
-                rSet.Put( aItem );
-            }
 
             // PosSize-Property?
             else if ( aName == sPosSize && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
@@ -376,13 +365,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             nItems++;
         if ( rSet.GetItemState( SID_DOC_READONLY ) == SFX_ITEM_SET )
             nItems++;
-        if ( rSet.GetItemState( SID_POSTSTRING ) == SFX_ITEM_SET )
-            nItems++;
         if ( rSet.GetItemState( SID_CONTENTTYPE ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_VIEW_POS_SIZE ) == SFX_ITEM_SET )
             nItems++;
-        if ( rSet.GetItemState( SID_POSTLOCKBYTES ) == SFX_ITEM_SET )
+        if ( rSet.GetItemState( SID_POSTDATA ) == SFX_ITEM_SET )
             nItems++;
         if ( rSet.GetItemState( SID_CHARSET ) == SFX_ITEM_SET )
             nItems++;
@@ -424,7 +411,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         static const String sViewId         = String::CreateFromAscii( "ViewId"         );
         static const String sPluginMode     = String::CreateFromAscii( "PluginMode"     );
         static const String sReadOnly       = String::CreateFromAscii( "ReadOnly"       );
-        static const String sPostString     = String::CreateFromAscii( "PostString"     );
         static const String sFrameName      = String::CreateFromAscii( "FrameName"      );
         static const String sContentType    = String::CreateFromAscii( "ContentType"    );
         static const String sPostData       = String::CreateFromAscii( "PostData"       );
@@ -441,7 +427,12 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
         if ( rSet.GetItemState( SID_INPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sInputStream;
-            pValue[nItems++].Value = ( ((SfxUsrAnyItem*)pItem)->GetValue() );
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+        }
+        if ( rSet.GetItemState( SID_POSTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
+        {
+            pValue[nItems].Name = sPostData;
+            pValue[nItems++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
         }
         if ( rSet.GetItemState( SID_TEMPLATE, sal_False, &pItem ) == SFX_ITEM_SET )
         {
@@ -483,11 +474,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             pValue[nItems].Name = sPreview;
             pValue[nItems++].Value <<= ( ((SfxBoolItem*)pItem)->GetValue() );
         }
-        if ( rSet.GetItemState( SID_POSTSTRING, sal_False, &pItem ) == SFX_ITEM_SET )
-        {
-            pValue[nItems].Name = sPostString;
-            pValue[nItems++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
-        }
         if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             pValue[nItems].Name = sFrameName;
@@ -525,20 +511,6 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             pValue[nItems].Name = sPosSize;
             Rectangle aRect = pRectItem->GetValue();
             DBG_ASSERT(sal_False, "TransformItems()\nSfxIniManager::GetString used to set property \"PosSize\" ...!\n");
-        }
-
-        SFX_ITEMSET_ARG( &rSet, pRefItem, SfxRefItem, SID_POSTLOCKBYTES, sal_False );
-        if ( pRefItem )
-        {
-            // Mit TLX-Spezialhack fuer die Pointercasts
-            pValue[nItems].Name = sPostData;
-            SvLockBytes* pBytes = new SvLockBytes;
-            int nDiff = (char*)pBytes - (char*)(SvRefBase*)pBytes;
-            SvLockBytes* pLB = (SvLockBytes*)(
-                    (char*)(SvRefBase*)&((SfxRefItem*)pRefItem )->GetValue() + nDiff );
-            delete pBytes;
-            SfxLockBytesItem aLock( SID_POSTLOCKBYTES, pLB );
-            aLock.QueryValue( pValue[nItems++].Value );
         }
 
         if ( rSet.GetItemState( SID_CHARSET, sal_False, &pItem ) == SFX_ITEM_SET )

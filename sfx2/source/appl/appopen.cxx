@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cd $ $Date: 2001-06-25 16:27:41 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:44:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,18 +310,9 @@ SfxObjectShellRef SfxApplication::DocAlreadyLoaded
                     // Vergleiche anhand der URLs
                     INetURLObject aUrl( xDoc->GetMedium()->GetName() );
                     if ( !aUrl.HasError() && aUrl == aUrlToFind &&
-                         (!bForbidVisible ||
-                          !SfxViewFrame::GetFirst( xDoc, 0, TRUE )) &&
+                         (!bForbidVisible || !SfxViewFrame::GetFirst( xDoc, 0, TRUE )) &&
                          !xDoc->IsLoading())
                     {
-                        SFX_ITEMSET_ARG(
-                            xDoc->GetMedium()->GetItemSet(), pPostItem, SfxStringItem,
-                            SID_POSTSTRING, FALSE );
-                        SFX_ITEMSET_ARG(
-                            xDoc->GetMedium()->GetItemSet(), pPost2Item,
-                            SfxRefItem, SID_POSTLOCKBYTES, FALSE );
-                        if( !pPost2Item && ( !pPostItem && (aPostString.Len()<1) ||
-                            pPostItem && pPostItem->GetValue() == aPostString ))
                             break;
                     }
                 }

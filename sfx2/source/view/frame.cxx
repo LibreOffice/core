@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-29 14:09:52 $
+ *  last change: $Author: mba $ $Date: 2001-06-27 12:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,10 +1208,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     // FileOpen-Parameter merken
     SfxItemSet* pItemSet = pMed->GetItemSet();
     String aName( pMed->GetName() );
-    SFX_ITEMSET_ARG( pItemSet, pPostItem, SfxStringItem, SID_POSTSTRING, sal_False );
-    String aPost;
-    if(  pPostItem )
-        aPost = pPostItem->GetValue();
 
     const SfxFilter* pFilter = pMed->GetOrigFilter();
     String aFilter;
@@ -1232,9 +1228,6 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
         pSet->Put( *pRefererItem );
     else
         pSet->Put( SfxStringItem( SID_REFERER, String() ) );
-
-    if ( pPostItem )
-        pSet->Put( *pPostItem );
 
     if ( pOptionsItem )
         pSet->Put( *pOptionsItem );
@@ -1488,24 +1481,12 @@ sal_Bool SfxFrame::CheckContentForLoad_Impl()
         SfxItemSet* pNew = GetDescriptor()->GetArgs();
 
         // Falls URLs nicht uebereinstimmen
-        if ( INetURLObject( GetDescriptor()->GetActualURL() ) !=
-                INetURLObject( pMedium->GetOrigURL() ) )
+        if ( INetURLObject( GetDescriptor()->GetActualURL() ) != INetURLObject( pMedium->GetOrigURL() ) )
             return sal_True;
 
         // Falls die Filter nicht uebereinstimmen
         SFX_ITEMSET_ARG( pNew, pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-        if( pMedium->GetOrigFilter() && pFilterItem &&
-            pFilterItem->GetValue() != pMedium->GetOrigFilter()->GetName() )
-            return sal_True;
-
-        // Falls die Poststrings nicht uebereinstimmen
-        SFX_ITEMSET_ARG( pSet, pPostItem, SfxStringItem, SID_POSTSTRING, sal_False );
-        SFX_ITEMSET_ARG( pNew, pNewPostItem, SfxStringItem, SID_POSTSTRING, sal_False );
-        SFX_ITEMSET_ARG( pSet, pPost2Item, SfxRefItem, SID_POSTLOCKBYTES, sal_False );
-        SFX_ITEMSET_ARG( pNew, pNewPost2Item, SfxRefItem, SID_POSTLOCKBYTES, sal_False );
-        if( pPost2Item || pNewPost2Item || (
-            pPostItem && pNewPostItem && pNewPostItem->GetValue() != pPostItem->GetValue() ||
-            !pPostItem && pNewPostItem || pPostItem && !pNewPostItem ) )
+        if( pMedium->GetOrigFilter() && pFilterItem && pFilterItem->GetValue() != pMedium->GetOrigFilter()->GetName() )
             return sal_True;
 
         return sal_False;
