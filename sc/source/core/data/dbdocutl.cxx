@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocutl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:21:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:17:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         switch ( nType )
         {
             case sdbc::DataType::BIT:
+            case sdbc::DataType::BOOLEAN:
                 //! use language from doc (here, date/time and currency)?
                 nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
                                     NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
