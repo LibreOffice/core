@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-25 10:47:40 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,8 +96,26 @@ void GtkHookedYieldMutex::ThreadsEnter()
 void GtkHookedYieldMutex::ThreadsLeave()
 {
     aYieldStack.push_front( mnCount );
-    while( mnCount > 0 )
+
+#if OSL_DEBUG_LEVEL > 1
+    if( mnThreadId &&
+        mnThreadId != NAMESPACE_VOS(OThread)::getCurrentIdentifier())
+        fprintf( stderr, "\n\n--- A different thread owns the mutex ...---\n\n\n");
+#endif
+
+    while( mnCount > 1 )
         release();
+    release();
+}
+
+void GtkHookedYieldMutex::acquire()
+{
+    SalYieldMutex::acquire();
+}
+
+void GtkHookedYieldMutex::release()
+{
+    SalYieldMutex::release();
 }
 
 extern "C"
@@ -160,6 +178,7 @@ extern "C"
         SetSalData( pSalData );
         pSalData->pInstance_ = pInstance;
         pSalData->Init();
+        pSalData->initNWF();
 
         return pInstance;
     }
