@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 11:58:55 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 14:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::xmloff::token::GetXMLToken;
+using ::xmloff::token::IsXMLToken;
 using ::xmloff::token::XML_XMLNS;
 using ::xmloff::token::XML_URN_OASIS_NAMES_TC;
 using ::xmloff::token::XML_OPENDOCUMENT;
@@ -482,10 +483,21 @@ sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
     // #i38644#
     // we exported the wrong namespace for smil, so we correct this here on load
     // for older documents
-    if( rName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http://www.w3.org/2001/SMIL20" ) ) )
+    if( IsXMLToken( rName, ::xmloff::token::XML_N_SVG ) )
     {
-        rName = GetXMLToken( ::xmloff::token::XML_N_SMIL );
-        return true;
+        rName = GetXMLToken( ::xmloff::token::XML_N_SVG_COMPAT );
+        return sal_True;
+    }
+    else if( IsXMLToken( rName, ::xmloff::token::XML_N_FO ) )
+    {
+        rName = GetXMLToken( ::xmloff::token::XML_N_FO_COMPAT );
+        return sal_True;
+    }
+    else if( IsXMLToken( rName, ::xmloff::token::XML_N_SMIL ) ||
+               IsXMLToken( rName, ::xmloff::token::XML_N_SMIL_OLD )  )
+    {
+        rName = GetXMLToken( ::xmloff::token::XML_N_SMIL_COMPAT );
+        return sal_True;
     }
 
     //
