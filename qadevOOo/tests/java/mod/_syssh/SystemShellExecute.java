@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemShellExecute.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:19:02 $
+ *  last change:$Date: 2003-05-27 13:56:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ public class SystemShellExecute extends TestCase {
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
             PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
 
         try {
             XInterface xInt = (XInterface)xMSF.createInstance(
