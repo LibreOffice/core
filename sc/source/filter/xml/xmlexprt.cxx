@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-19 12:08:06 $
+ *  last change: $Author: sab $ $Date: 2001-03-19 13:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1388,6 +1388,7 @@ void ScXMLExport::_ExportContent()
 
 void ScXMLExport::_ExportStyles( sal_Bool bUsed )
 {
+    SvXMLExport::_ExportStyles(bUsed);
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     uno::Reference <lang::XMultiServiceFactory> xMultiServiceFactory(GetModel(), uno::UNO_QUERY);
     if (xMultiServiceFactory.is())
