@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:31:43 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:56:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Text [ English ] = "Hypenation" ;
     Text [ norwegian ] = "Hypenation" ;
     Text [ italian ] = "Sillabazione" ;
-    Text [ portuguese_brazilian ] = "Hifenação" ;
+    Text [ portuguese_brazilian ] = "Hifena??o" ;
     Text [ portuguese ] = "Divisão silábica" ;
     Text [ finnish ] = "Tavutus" ;
     Text [ danish ] = "Orddeling" ;
