@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 07:19:18 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,59 +124,6 @@ SfxMacro* BasicIDE::CreateMacro()
 
 //----------------------------------------------------------------------------
 
-/*
-SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
-{
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
-    SFX_APP()->EnterBasicCall();
-
-    SbMethod* pMethod = NULL;
-
-    Window* pParent = Application::GetDefDialogParent();
-
-    MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
-    if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
-        pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
-
-    short nRetValue = pChooser->Execute();
-
-    IDE_DLL()->GetExtraData()->ChoosingMacro() = FALSE;
-
-    switch ( nRetValue )
-    {
-        case MACRO_OK_RUN:
-        {
-            pMethod = pChooser->GetMacro();
-            if ( pMethod && bExecute )
-            {
-                pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
-                Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
-            }
-        }
-        break;
-    }
-
-    delete pChooser;
-
-    SFX_APP()->LeaveBasicCall();
-
-    return pMethod;
-}
-*/
-
-//----------------------------------------------------------------------------
-
-/*
-SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const String& rPreferredMacroDesciption )
-{
-    if ( rPreferredMacroDesciption.Len() )
-        IDE_DLL()->GetExtraData()->GetLastMacro() = rPreferredMacroDesciption;
-    return BasicIDE::ChooseMacro( bExecute, bChooseOnly );
-}
-*/
-
-//----------------------------------------------------------------------------
-
 void BasicIDE::Organize()
 {
     Window* pParent = Application::GetDefDialogParent();
@@ -212,13 +159,6 @@ BOOL BasicIDE::IsValidSbxName( const String& rName )
 SbMethod* BasicIDE::FindMacro( SbModule* pModule, const String& rMacroName )
 {
     return (SbMethod*)pModule->GetMethods()->Find( rMacroName, SbxCLASS_METHOD );
-}
-
-//----------------------------------------------------------------------------
-
-SbModule* BasicIDE::FindModule( StarBASIC* pBasic, const String& rModName )
-{
-    return pBasic->FindModule( rModName );
 }
 
 //----------------------------------------------------------------------------
@@ -463,34 +403,6 @@ BOOL BasicIDE::HasModule( SfxObjectShell* pShell, const String& rLibName, const 
 
     return aOUSource;
 }
-
-//----------------------------------------------------------------------------
-
-/*
-::rtl::OUString BasicIDE::FindModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
-    throw(NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // find module
-    ::rtl::OUString aOUModSource;
-    ::rtl::OUString aOUModName( rModName );
-    if( xLib.is() && xLib->hasByName( aOUModName ) )
-    {
-        Any aElement = xLib->getByName( aOUModName );
-        aElement >>= aOUModSource;
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::FindModule: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-
-    return aOUModSource;
-}
-*/
 
 //----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-23 10:55:47 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,21 +234,6 @@ void lcl_ConvertTabsToSpaces( String& rLine )
 }
 
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas, SbModule* pModule ) :
-        IDEBaseWindow( pParent, pBas ),
-        aXEditorWindow( this )
-{
-    DBG_CTOR( ModulWindow, 0 );
-    nValid = VALIDWINDOW;
-    pLayout = pParent;
-    aXEditorWindow.Show();
-
-    DBG_ASSERT( pModule, "Es muss ein Modul uebergeben werden!" );
-    xModule = pModule;
-    SetBackground();
-}
-
-// new CTOR
 ModulWindow::ModulWindow( ModulWindowLayout* pParent, StarBASIC* pBas,
                            SfxObjectShell* pShell, String aLibName, String aModName, ::rtl::OUString& aModule )
         :IDEBaseWindow( pParent, pBas )

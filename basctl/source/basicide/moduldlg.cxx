@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-04 13:37:14 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -755,6 +755,9 @@ void ObjectPage::NewModule()
             if ( pNewDlg->Execute() )
             {
                 String aModName( pNewDlg->GetObjectName() );
+
+                if ( aModName.Len() == 0 )
+                    aModName = BasicIDE::CreateModuleName( pShell, aLibName );
 
                 try
                 {

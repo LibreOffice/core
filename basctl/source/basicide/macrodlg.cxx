@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-28 11:28:45 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,11 @@
 #ifndef _SFX_MINFITEM_HXX //autogen
 #include <sfx2/minfitem.hxx>
 #endif
+
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
 
 DECLARE_LIST( MacroList, SbMethod* );
 
@@ -406,43 +411,59 @@ void MacroChooser::DeleteMacro()
 
 SbMethod* MacroChooser::CreateMacro()
 {
-    String aLib, aMod, aSub;
-    BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLib, aMod, aSub );
-    aSub = aMacroNameEdit.GetText();
+    String aLibName, aModName, aSubName;
+    BasicManager* pBasMgr = aBasicBox.GetSelectedSbx( aLibName, aModName, aSubName );
+    aSubName = aMacroNameEdit.GetText();
     DBG_ASSERT( pBasMgr, "Record/New: Kein BasicManager?" );
-    StarBASIC* pBasic = aLib.Len() ? pBasMgr->GetLib( aLib ) : pBasMgr->GetLib( 0 );
+    StarBASIC* pBasic = aLibName.Len() ? pBasMgr->GetLib( aLibName ) : pBasMgr->GetLib( 0 );
     if ( !pBasic )
         pBasic = pBasMgr->GetLib( 0 );
     DBG_ASSERT( pBasic, "Record/New: Kein Basic?" );
     SbModule* pModule = 0;
-    if( aMod.Len() )
-        pModule = pBasic->FindModule( aMod );
+    if( aModName.Len() )
+        pModule = pBasic->FindModule( aModName );
     else if ( pBasic->GetModules()->Count() )
         pModule = (SbModule*)pBasic->GetModules()->Get( 0 );
+
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+    if ( aLibName.Len() == 0 )
+        aLibName = pBasic->GetName();
+    if ( aModName.Len() == 0 )
+        aModName = pModule ? pModule->GetName() : BasicIDE::CreateModuleName( pShell, aLibName );
 
     if ( !pModule )
     {
         NewObjectDialog* pNewDlg = new NewObjectDialog( this, NEWOBJECTMODE_MOD );
-        pNewDlg->SetObjectName( BasicIDE::CreateModuleName( pBasic, aMod ) );
+        pNewDlg->SetObjectName( aModName );
         if ( pNewDlg->Execute() )
         {
-            aMod = pNewDlg->GetObjectName();
-            if ( !BasicIDE::FindModule( pBasic, aMod ) )
+            aModName = pNewDlg->GetObjectName();
+
+            if ( aModName.Len() == 0 )
+                aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+
+            try
             {
-                pModule = BasicIDE::CreateModule( pBasic, aMod, FALSE );
-                DBG_ASSERT( pModule , "Modul wurde nicht erzeugt!" );
+                ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, FALSE );
+                pModule = pBasic->FindModule( aModName );
+                DBG_ASSERT( pModule , "MacroChooser::CreateMacro: module was not created!" );
             }
-            else
+            catch ( container::ElementExistException& )
             {
                 ErrorBox( this, WB_OK | WB_DEF_OK,
                         String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
+            }
+            catch ( container::NoSuchElementException& e )
+            {
+                ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                DBG_ERROR( aBStr.GetBuffer() );
             }
         }
         delete pNewDlg;
     }
 
-    DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSub, SbxCLASS_METHOD ), "Macro existiert schon!" );
-    SbMethod* pMethod = pModule ? BasicIDE::CreateMacro( pModule, aSub ) : NULL;
+    DBG_ASSERT( !pModule || !pModule->GetMethods()->Find( aSubName, SbxCLASS_METHOD ), "Macro existiert schon!" );
+    SbMethod* pMethod = pModule ? BasicIDE::CreateMacro( pModule, aSubName ) : NULL;
     return pMethod;
 }
 

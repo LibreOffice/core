@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-06-22 14:45:07 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,52 +435,6 @@ void BasicIDE::InsertDialog( SfxObjectShell* pShell, const String& rLibName, con
 
 //----------------------------------------------------------------------------
 
-String BasicIDE::CreateModuleName( StarBASIC* pBasic, const String& rModName )
-{
-    String aModName( rModName );
-    if ( aModName.Len() == 0 )
-    {
-        // Namen generieren...
-        String aModStdName( RTL_CONSTASCII_USTRINGPARAM( "Module" ) );
-        //String aModStdName( IDEResId( RID_STR_STDMODULENAME ) );
-        BOOL bValid = FALSE;
-        USHORT i = 1;
-        while ( !bValid )
-        {
-            aModName = aModStdName;
-            aModName += String::CreateFromInt32( i );
-            if ( !pBasic->FindModule( aModName ) )
-                bValid = TRUE;
-
-            i++;
-        }
-    }
-    return aModName;
-}
-
-//----------------------------------------------------------------------------
-
-SbModule* BasicIDE::CreateModule( StarBASIC* pBasic, const String& rModName, BOOL bCreateMain )
-{
-    if ( pBasic->FindModule( rModName ) )
-        return 0;
-
-    String aModName = CreateModuleName( pBasic, rModName );
-
-    String aSource( String( RTL_CONSTASCII_USTRINGPARAM( "REM  *****  BASIC  *****\n\n" ) ) );
-    if ( bCreateMain )
-        aSource += String( RTL_CONSTASCII_USTRINGPARAM( "Sub Main\n\nEnd Sub" ) );
-
-    SbModule* pModule;
-    pModule = pBasic->MakeModule( aModName, aSource );
-
-    DBG_ASSERT( pModule, "Modul?!" );
-    BasicIDE::MarkDocShellModified( pBasic );
-    return pModule;
-}
-
-//----------------------------------------------------------------------------
-
 BOOL BasicIDE::HasDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
 {
     BOOL bHasDialog = FALSE;
@@ -532,36 +486,6 @@ Reference< io::XInputStreamProvider > BasicIDE::GetDialog( SfxObjectShell* pShel
 
     return xISP;
 }
-
-//----------------------------------------------------------------------------
-
-/*
-Reference< io::XInputStreamProvider > BasicIDE::FindDialog( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
-{
-    // get library
-    Reference< container::XNameContainer > xLib;
-    try
-    {
-        xLib = GetDialogLibrary( pShell, rLibName, TRUE );
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
-    }
-
-    // find dialog
-    Reference< io::XInputStreamProvider > xISP;
-    ::rtl::OUString aOUDlgName( rDlgName );
-    if( xLib.is() && xLib->hasByName( aOUDlgName ) )
-    {
-        Any aElement = xLib->getByName( aOUDlgName );
-        aElement >>= xISP;
-    }
-
-    return xISP;
-}
-*/
 
 //----------------------------------------------------------------------------
 

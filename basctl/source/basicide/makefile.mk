@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mba $ $Date: 2001-07-20 10:49:36 $
+#   last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,6 +120,7 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/basobj2.obj		\
                 $(SLO)$/basobj3.obj		\
                 $(SLO)$/bastype2.obj	\
+                $(SLO)$/macrodlg.obj	\
                 $(SLO)$/moduldlg.obj	\
                 $(SLO)$/moduldl2.obj
 

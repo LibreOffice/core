@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-07-25 07:19:18 $
+ *  last change: $Author: tbe $ $Date: 2001-07-25 14:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,27 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                 if ( !pModule )
                 {
                     if ( rInfo.GetModule().Len() || !pBasic->GetModules()->Count() )
-                        pModule = BasicIDE::CreateModule( pBasic, rInfo.GetModule() );
+                    {
+                        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
+                        String aLibName = pBasic->GetName();
+                        String aModName = rInfo.GetModule();
+
+                        try
+                        {
+                            ::rtl::OUString aModule = BasicIDE::CreateModule( pShell, aLibName, aModName );
+                            pModule = pBasic->FindModule( aModName );
+                        }
+                        catch ( container::ElementExistException& e )
+                        {
+                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                            DBG_ERROR( aBStr.GetBuffer() );
+                        }
+                        catch ( container::NoSuchElementException& e )
+                        {
+                            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
+                            DBG_ERROR( aBStr.GetBuffer() );
+                        }
+                    }
                     else
                         pModule = (SbModule*) pBasic->GetModules()->Get(0);
                 }
