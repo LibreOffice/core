@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscripti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 08:52:21 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:32:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ XMLScriptElementContext::XMLScriptElementContext( SvXMLImport& rImport, sal_uInt
             else if( (XML_NAMESPACE_XLINK == nAttrPrefix) && bLinked &&
                      sAttrName.equalsAsciiL( sXML_href, sizeof(sXML_href)-1 ) )
             {
-                sLinkTargetURL = xAttrList->getValueByIndex( i );
+                sLinkTargetURL = GetImport().GetAbsoluteReference(xAttrList->getValueByIndex( i ));
             }
             //else if( msLName.equalsAsciiL( sXML_external_source_url, sizeof(sXML_external_source_url)-1 ) )
             //{

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameHyperlinkContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-25 13:35:19 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ XMLTextFrameHyperlinkContext::XMLTextFrameHyperlinkContext(
         switch( rTokenMap.Get( nPrefix, aLocalName ) )
         {
         case XML_TOK_TEXT_HYPERLINK_HREF:
-            sHRef = rValue;
+            sHRef = GetImport().GetAbsoluteReference( rValue );
             break;
         case XML_TOK_TEXT_HYPERLINK_NAME:
             sName = rValue;

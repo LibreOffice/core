@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-14 08:43:31 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include <tools/debug.hxx>
 #include <tools/inetdef.hxx>
 #include <tools/isolang.hxx>
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #include <unotools/configmgr.hxx>
 
 #include "xmlmetae.hxx"
@@ -493,7 +496,7 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         {
             sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
                                 ::rtl::OUString::createFromAscii(sXML_href) );
-            pAttrList->AddAttribute( sAttrName, sCDATA, sReloadURL );
+            pAttrList->AddAttribute( sAttrName, sCDATA, INetURLObject::AbsToRel( sReloadURL) );
         }
 
         aPropVal = xInfoProp->getPropertyValue(
@@ -545,7 +548,7 @@ void SfxXMLMetaExport::Export( const SvXMLNamespaceMap& rNamespaceMap )
         //  template URL
         sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_XLINK,
                                 ::rtl::OUString::createFromAscii(sXML_href) );
-        pAttrList->AddAttribute( sAttrName, sCDATA, sTplPath );
+        pAttrList->AddAttribute( sAttrName, sCDATA, INetURLObject::AbsToRel(sTplPath) );
 
         //  template name
         aPropVal = xInfoProp->getPropertyValue(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ void XMLSectionSourceImportContext::StartElement(
     if ((sURL.getLength() > 0) || (sFilterName.getLength() > 0))
     {
         SectionFileLink aFileLink;
-        aFileLink.FileURL = sURL;
+        aFileLink.FileURL = GetImport().GetAbsoluteReference( sURL );
         aFileLink.FilterName = sFilterName;
 
         aAny <<= aFileLink;

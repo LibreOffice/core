@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-20 14:16:28 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:33:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ void XMLSectionExport::ExportRegularSectionStart(
         if (aFileLink.FileURL.getLength() > 0)
         {
             GetExport().AddAttribute(XML_NAMESPACE_XLINK, sXML_href,
-                                     aFileLink.FileURL);
+                                     GetExport().GetRelativeReference( aFileLink.FileURL) );
         }
 
         if (aFileLink.FilterName.getLength() > 0)

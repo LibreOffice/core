@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoMarkFileContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 11:38:57 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ void XMLAutoMarkFileContext::StartElement(
              sLocalName.equalsAsciiL(sXML_href, sizeof(sXML_href)-1 ) )
         {
             Any aAny;
-            aAny <<= xAttrList->getValueByIndex(i);
+            aAny <<= GetImport().GetAbsoluteReference( xAttrList->getValueByIndex(i) );
             Reference<XPropertySet> xPropertySet(
                 GetImport().GetModel(), UNO_QUERY );
             if (xPropertySet.is())

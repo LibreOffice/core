@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-26 11:48:27 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:38:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2440,7 +2440,7 @@ sal_Bool XMLTextParagraphExport::addHyperlinkAttributes(
     {
         GetExport().AddAttributeASCII( XML_NAMESPACE_XLINK, sXML_type,
                                        sXML_simple );
-        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, sHRef );
+        GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href, GetExport().GetRelativeReference( sHRef ) );
 
         if( sName.getLength() > 0 )
             GetExport().AddAttribute( XML_NAMESPACE_OFFICE, sXML_name, sName );
@@ -2690,7 +2690,7 @@ void XMLTextParagraphExport::exportTextDeclarations()
             if (sUrl.getLength() > 0)
             {
                 GetExport().AddAttribute( XML_NAMESPACE_XLINK, sXML_href,
-                                          sUrl );
+                                          GetExport().GetRelativeReference(sUrl) );
                 SvXMLElementExport aAutoMarkElement(
                     GetExport(), XML_NAMESPACE_TEXT,
                     sXML_alphabetical_index_auto_mark_file,

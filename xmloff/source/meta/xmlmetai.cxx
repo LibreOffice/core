@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:28 $
+ *  last change: $Author: mib $ $Date: 2001-06-27 07:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -441,7 +441,7 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
                 switch( aTokenMap.Get( nPrefix, aLocalName ) )
                 {
                 case XML_TOK_META_TEMPLATE_HREF:
-                    aPropAny <<= sValue;
+                    aPropAny <<= GetImport().GetAbsoluteReference(sValue);
                     xInfoProp->setPropertyValue(
                         ::rtl::OUString::createFromAscii(PROP_TEMPLATEURL),
                         aPropAny );
@@ -496,7 +496,7 @@ SfxXMLMetaElementContext::SfxXMLMetaElementContext( SvXMLImport& rImport, sal_uI
                 switch( aTokenMap.Get( nPrefix, aLocalName ) )
                 {
                     case XML_TOK_META_RELOAD_HREF:
-                        aPropAny <<= sValue;
+                        aPropAny <<= GetImport().GetAbsoluteReference(sValue);
                         xInfoProp->setPropertyValue(
                             ::rtl::OUString::createFromAscii(PROP_RELOADURL),
                             aPropAny );
