@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdescr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:42:48 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,9 @@
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "frmdescr.hxx"
 #include "app.hxx"
@@ -104,10 +106,10 @@ struct SfxFrameDescriptor_Impl
 SfxFrameSetDescriptor::SfxFrameSetDescriptor(SfxFrameDescriptor *pFrame) :
     pParentFrame( pFrame ),
     nFrameSpacing( SPACING_NOT_SET ),
-    bIsRoot( pParentFrame ? (pParentFrame->pParentFrameSet == 0) : TRUE ),
-    bRowSet( FALSE ),
+    nHasBorder( BORDER_YES ),
     nMaxId( 0 ),
-    nHasBorder( BORDER_YES )
+    bIsRoot( pParentFrame ? (pParentFrame->pParentFrameSet == 0) : TRUE ),
+    bRowSet( FALSE )
 {
     DBG_CTOR(SfxFrameSetDescriptor, 0);
 
@@ -326,7 +328,7 @@ SfxFrameSetDescriptor* SfxFrameSetDescriptor::Clone(
     SfxFrameSetDescriptor *pSet = new SfxFrameSetDescriptor( pFrame );
 
     for ( USHORT n=0; n<aFrames.Count(); n++ )
-        SfxFrameDescriptor* pFrame = aFrames[n]->Clone( pSet, bWithIds );
+        aFrames[n]->Clone( pSet, bWithIds );
 
     pSet->aDocumentTitle = aDocumentTitle;
     pSet->nFrameSpacing = nFrameSpacing;
@@ -344,9 +346,11 @@ SfxFrameSetDescriptor* SfxFrameSetDescriptor::Clone(
 BOOL SfxFrameSetDescriptor::CheckContent() const
 {
     BOOL bRet=FALSE;
-    for ( USHORT n=0; n<aFrames.Count(); n++ )
-        if ( bRet = aFrames[n]->CheckContent() )
+    for ( USHORT n=0; n<aFrames.Count(); n++ ) {
+        bRet = aFrames[n]->CheckContent();
+        if ( bRet )
             break;
+    }
     return bRet;
 }
 
@@ -398,14 +402,14 @@ USHORT SfxFrameSetDescriptor::MakeItemId()
 }
 
 SfxFrameDescriptor::SfxFrameDescriptor( SfxFrameSetDescriptor *pParSet ) :
+    pParentFrameSet( pParSet ),
+    pFrameSet( 0L ),
     aMargin( -1, -1 ),
     nWidth( 0L ),
-    nItemId( 0 ),
-    pFrameSet( 0L ),
-    pParentFrameSet( pParSet ),
     eScroll( ScrollingAuto ),
     eSizeSelector( SIZE_ABS ),
     nHasBorder( BORDER_YES ),
+    nItemId( 0 ),
     bResizeHorizontal( TRUE ),
     bResizeVertical( TRUE ),
     bHasUI( TRUE ),
@@ -973,12 +977,12 @@ SfxFrameProperties::SfxFrameProperties( const SfxFrameDescriptor *pD )
     , eSizeSelector( pD->GetSizeSelector() )
     , eSetSizeSelector( SIZE_REL )
     , bHasBorder( pD->HasFrameBorder() )
-    , bHasBorderInherited( FALSE )
     , bBorderSet( pD->IsFrameBorderSet() )
     , bResizable( pD->IsResizable() )
-    , bIsInColSet( FALSE )
     , bSetResizable( FALSE )
     , bIsRootSet( FALSE )
+    , bIsInColSet( FALSE )
+    , bHasBorderInherited( FALSE )
     , pFrame( pD->Clone() )
 {
     SfxFrameSetDescriptor *pSet = pD->GetParent();
