@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: dbo $ $Date: 2000-12-06 16:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,47 +456,62 @@ void SAL_CALL OWeakRefListener::dispose()
 //-- WeakReferenceHelper ----------------------------------------------------------
 //------------------------------------------------------------------------
 WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
+    : m_pImpl( 0 )
 {
-    m_pImpl = new OWeakRefListener(xInt);
-    m_pImpl->acquire();
+    if (xInt.is())
+    {
+        m_pImpl = new OWeakRefListener(xInt);
+        m_pImpl->acquire();
+    }
 }
 
 WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
+    : m_pImpl( 0 )
 {
-    m_pImpl = rWeakRef.m_pImpl;
-
-    if( m_pImpl )
+    Reference< XInterface > xInt( rWeakRef.get() );
+    if (xInt.is())
+    {
+        m_pImpl = new OWeakRefListener(xInt);
         m_pImpl->acquire();
+    }
 }
 
 WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef)
 {
-    OWeakRefListener* pOldImpl;
+    if (this != &rWeakRef)
     {
-        // the weak reference is multithread save
-        MutexGuard guard(cppu::getWeakMutex());
-        if (m_pImpl == rWeakRef.m_pImpl)
-            return *this;
-
-        pOldImpl = m_pImpl;
-
-        m_pImpl = rWeakRef.m_pImpl;
-        if ( m_pImpl )
+        Reference< XInterface > xInt( rWeakRef.get() );
+        if (m_pImpl)
         {
+            if (m_pImpl->m_XWeakConnectionPoint.is())
+            {
+                m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
+                m_pImpl->m_XWeakConnectionPoint.clear();
+            }
+            m_pImpl->release();
+            m_pImpl = 0;
+        }
+        if (xInt.is())
+        {
+            m_pImpl = new OWeakRefListener(xInt);
             m_pImpl->acquire();
         }
     }
-
-    // maybe call the destructor. It is better to release the guard before this call.
-    if( pOldImpl )
-        pOldImpl->release();
     return *this;
 }
 
 WeakReferenceHelper::~WeakReferenceHelper()
 {
     if (m_pImpl)
+    {
+        if (m_pImpl->m_XWeakConnectionPoint.is())
+        {
+            m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
+            m_pImpl->m_XWeakConnectionPoint.clear();
+        }
         m_pImpl->release();
+        m_pImpl = 0; // for safety
+    }
 }
 
 Reference< XInterface > WeakReferenceHelper::get() const
