@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: vg $ $Date: 2005-03-10 18:00:36 $
+#   last change: $Author: obo $ $Date: 2005-03-18 14:52:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.85 $$"
+LIBSMKREV!:="$$Revision: 1.86 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -360,7 +360,7 @@ SFX2LIB=$(LIBPRE) sfx.lib
 SFXLIB=$(SFX2LIB)
 FWELIB=$(LIBPRE) ifwe.lib
 FWILIB=$(LIBPRE) ifwi.lib
-BTSTRPLIB=$(LIBPRE) bootstrp.lib
+BTSTRPLIB=$(LIBPRE) btstrp.lib
 TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
