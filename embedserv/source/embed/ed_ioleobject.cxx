@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ioleobject.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 11:13:34 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ STDMETHODIMP EmbedDocument_Impl::Close( DWORD dwSaveOption )
 
     if ( m_pDAdviseHolder )
         m_pDAdviseHolder->SendOnDataChange( (IDataObject*)this, 0, ADVF_DATAONSTOP );
+
+    m_pDocHolder->CloseFrame();
 
     if ( m_pClientSite )
         m_pClientSite->OnShowWindow( FALSE );

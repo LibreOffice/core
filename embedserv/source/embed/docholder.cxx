@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 11:37:55 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,6 @@ extern ::rtl::OUString  getFilterNameFromGUID_Impl( GUID* );
 
 DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface)
     : m_xFactory( xFactory ),
-      m_nStreamMode(0),
       m_pOLEInterface(pOLEInterface)
 {
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
@@ -116,6 +115,9 @@ DocumentHolder::~DocumentHolder()
 {
     if ( m_xDocument.is() )
         CloseDocument();
+
+    if( m_xFrame.is() )
+        CloseFrame();
 
     if ( m_xFactory.is() )
         FreeOffice();
@@ -167,8 +169,11 @@ void DocumentHolder::CloseDocument()
         }
     }
     m_xDocument = uno::Reference< frame::XModel >();
-    m_nStreamMode = 0;
+}
 
+
+void DocumentHolder::CloseFrame()
+{
     uno::Reference<util::XCloseable> xCloseable(
         m_xFrame,uno::UNO_QUERY);
     if(xCloseable.is())
@@ -177,27 +182,22 @@ void DocumentHolder::CloseDocument()
         }
         catch( const uno::Exception& ) {
         }
+    else
+        uno::Reference<lang::XComponent>(m_xFrame,uno::UNO_QUERY)->dispose();
 
     m_xFrame = uno::Reference< frame::XFrame >();
 }
 
-void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc,
-                                  DWORD nStreamMode)
+void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc)
 {
     if ( m_xDocument.is() )
         CloseDocument();
 
     m_xDocument = xDoc;
-    m_nStreamMode = nStreamMode;
 
     uno::Reference< util::XCloseBroadcaster > xBroadcaster( m_xDocument, uno::UNO_QUERY );
     if ( xBroadcaster.is() )
         xBroadcaster->addCloseListener( (util::XCloseListener*)this );
-
-//      uno::Reference< util::XModifyBroadcaster > xMB(
-//          m_xDocument,uno::UNO_QUERY );
-//      if(xMB.is())
-//          xMB->addModifyListener((util::XModifyListener*)this);
 
     if ( m_xDocument.is() )
     {
@@ -285,7 +285,11 @@ void SAL_CALL DocumentHolder::disposing( const com::sun::star::lang::EventObject
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         m_xDocument = uno::Reference< frame::XModel >();
+
+    if( m_xFrame.is() && m_xFrame == aSource.Source )
+        m_xFrame = uno::Reference< frame::XFrame >();
 }
+
 
 void SAL_CALL DocumentHolder::queryClosing( const lang::EventObject& aSource, sal_Bool bGetsOwnership )
         throw( util::CloseVetoException )
@@ -301,13 +305,11 @@ void SAL_CALL DocumentHolder::notifyClosing( const lang::EventObject& aSource )
     if ( xEventBroadcaster.is() )
         xEventBroadcaster->removeCloseListener( (util::XCloseListener*)this );
 
-    uno::Reference< util::XModifyBroadcaster > xModifyBroadcaster(
-        aSource.Source,uno::UNO_QUERY );
-    if(xModifyBroadcaster.is())
-        xModifyBroadcaster->removeModifyListener((util::XModifyListener*)this);
-
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
         m_xDocument = uno::Reference< frame::XModel >();
+
+    if( m_xFrame.is() && m_xFrame == aSource.Source )
+        m_xFrame = uno::Reference< frame::XFrame >();
 }
 
 void SAL_CALL DocumentHolder::queryTermination( const lang::EventObject& aSource )
@@ -335,3 +337,4 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& aEvent )
     if(m_pOLEInterface)
         m_pOLEInterface->notify();
 }
+

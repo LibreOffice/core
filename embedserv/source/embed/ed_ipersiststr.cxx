@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 11:13:34 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 13:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                             uno::UNO_QUERY );
             if ( aDocument.is() )
             {
-                m_pDocHolder->SetDocument( aDocument,nStreamMode );
+                m_pDocHolder->SetDocument( aDocument );
 
                 uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
                 if( xLoadable.is() )
@@ -508,7 +508,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
                                             uno::UNO_QUERY );
         if ( aDocument.is() )
         {
-            m_pDocHolder->SetDocument( aDocument,nStreamMode );
+            m_pDocHolder->SetDocument( aDocument );
 
             uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
             if( xLoadable.is() )
@@ -688,7 +688,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
                     uno::UNO_QUERY );
     if ( aDocument.is() )
     {
-        m_pDocHolder->SetDocument( aDocument,nStreamMode );
+        m_pDocHolder->SetDocument( aDocument );
 
         uno::Reference< frame::XLoadable > xLoadable( m_pDocHolder->GetDocument(), uno::UNO_QUERY );
         if( xLoadable.is() )

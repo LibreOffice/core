@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: abi $ $Date: 2003-03-26 11:38:37 $
+ *  last change: $Author: abi $ $Date: 2003-03-26 13:51:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xFactory;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDocument;
-    DWORD m_nStreamMode;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > DocumentFrame();
@@ -106,9 +104,10 @@ public:
     DocumentHolder( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xFactory,EmbedDocument_Impl *pOLEInterface);
     ~DocumentHolder();
 
-    void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc,DWORD nStreamMode );
+    void SetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xDoc);
 
     void CloseDocument();
+    void CloseFrame();
     void FreeOffice();
 
     void show();
