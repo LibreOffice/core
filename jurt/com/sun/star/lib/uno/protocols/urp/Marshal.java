@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Marshal.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 14:35:15 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ final class Marshal {
             write16Bit(0xFFFF);
         } else {
             boolean[] found = new boolean[1];
-            short index = objectIdCache.add(found, objectId);
+            int index = objectIdCache.add(found, objectId);
             writeStringValue(found[0] ? null : objectId);
             write16Bit(index);
         }
@@ -117,7 +117,7 @@ final class Marshal {
     public void writeThreadId(ThreadId threadId) {
         byte[] data = threadId.getBytes();
         boolean[] found = new boolean[1];
-        short index = threadIdCache.add(found, data);
+        int index = threadIdCache.add(found, data);
         if (found[0]) {
             writeCompressedNumber(0);
         } else {
@@ -133,7 +133,7 @@ final class Marshal {
             write8Bit(typeClass.getValue());
         } else {
             boolean[] found = new boolean[1];
-            short index = typeCache.add(found, type.getTypeName());
+            int index = typeCache.add(found, type.getTypeName());
             write8Bit(typeClass.getValue() | (found[0] ? 0 : 0x80));
             write16Bit(index);
             if (!found[0]) {
