@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proparrhlp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:31 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 16:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,6 @@ protected:
 }
 //... namespace comphelper ................................................
 
-#endif _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
+#endif // _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 
 
