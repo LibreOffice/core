@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: mh $ $Date: 2001-10-18 12:07:56 $
+#   last change: $Author: jl $ $Date: 2002-07-23 14:07:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ CDEFS += -D__SGI_STL_BOOL_H
 
 SLOFILES= \
         $(SLO)$/javavm.obj		\
-        $(SLO)$/jvmargs.obj	
+        $(SLO)$/jvmargs.obj	\
+        $(SLO)$/interact.obj
 
 SHL1TARGET= $(TARGET)
 SHL1VERSIONMAP=$(TARGET).map

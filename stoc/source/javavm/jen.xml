@@ -27,13 +27,26 @@ the existing vm given back.
         <type>  com.sun.star.lang.XSingleServiceFactory         </type>
         <type>  com.sun.star.lang.XMultiServiceFactory          </type>
     <type>  com.sun.star.lang.XComponent  </type>
+    <type>  com.sun.star.lang.WrappedTargetRuntimeException  </type>
         <type>  com.sun.star.registry.XSimpleRegistry           </type>
         <type>  com.sun.star.lang.XSingleComponentFactory                   </type>
         <type>  com.sun.star.uno.XComponentContext                  </type>
         <type>  com.sun.star.uno.XAggregation                   </type>
         <type>  com.sun.star.uno.XWeak                          </type>
         <type>  com.sun.star.uno.TypeClass                      </type>
+        <type>  com.sun.star.uno.XCurrentContext </type>
     <type>  com.sun.star.beans.PropertyValue  </type>
+    <type>  com.sun.star.task.XInteractionHandler  </type>
+    <type>  com.sun.star.task.XInteractionRequest  </type>
+    <type>  com.sun.star.task.XInteractionContinuation  </type>
+    <type>  com.sun.star.task.XInteractionAbort  </type>
+    <type>  com.sun.star.task.XInteractionRetry  </type>
+    <type>  com.sun.star.java.JavaInitializationException  </type>
+    <type>  com.sun.star.java.JavaDisabledException  </type>
+    <type>  com.sun.star.java.JavaNotConfiguredException  </type>
+    <type>  com.sun.star.java.MissingJavaRuntimeException  </type>
+    <type>  com.sun.star.java.JavaVMCreationFailureException  </type>
+
     </component-description>
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
