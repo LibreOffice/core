@@ -5,36 +5,48 @@
 Sub StartDicOOo
 
 Dim ThePath as string
+Dim DefPath as string
 Dim aService as object
 Dim MyDicOOo as string
-dim TheDoc as object 
+dim TheDoc as object
 dim args(1) as new com.sun.star.beans.PropertyValue
 
 on error resume next
 
 &apos; Find path
 aService = CreateUnoService(&quot;com.sun.star.util.PathSubstitution&quot;)
-ThePath =ConvertToURL(aService.substituteVariables(&quot;$(prog)&quot;, true))
-ThePath=ThePath &amp; &quot;/../share/dict/ooo&quot;
+ThePath =ConvertToURL(aService.substituteVariables(&quot;$(user)&quot;, true))
+ThePath=ThePath &amp; &quot;/wordbook&quot;
+DefPath =ConvertToURL(aService.substituteVariables(&quot;$(prog)&quot;, true))
+DefPath=DefPath &amp; &quot;/../share/dict/ooo&quot;
+
+MyDicOOo=&quot;&quot;
 
 if  fileExists(ThePath &amp; &quot;/DicOOo.lst&quot;) then
-&apos;read DicOOo.lst file
+	&apos;read DicOOo.lst file in user directory
         Open ThePath &amp; &quot;/DicOOo.lst&quot; for input as #1
                 line input #1, MyDicOOo
         close #1
 else
-&apos;create default DicOOo.lst file
-        Open ThePath &amp; &quot;/DicOOo.lst&quot; for output as #1
-                MyDicOOo=ThePath &amp; &quot;/DicOOo.sxw&quot;
-                print #1, MyDicOOo
+	if fileExists(DefPath &amp; &quot;/DicOOo.lst&quot;) then
+	&apos;read DicOOo.lst file in share directory
+	    Open DefPath &amp; &quot;/DicOOo.lst&quot; for input as #1
+                line input #1, MyDicOOo
         close #1
+    else
+    	&apos;creates default file in user directory
+    	Open ThePath &amp; &quot;/DicOOo.lst&quot; for output as #1
+    		print #1,convertFromURL(DefPath &amp; &quot;/DicOOo.lst&quot;)
+    	close #1
+    endif    
 endif
 
-&apos;security
+&apos;security 
 if Not fileExists(MyDicOOo) then
-        MyDicOOo= ThePath &amp; &quot;/DicOOo.sxw&quot;
+        MyDicOOo= DefPath &amp; &quot;/DicOOo.sxw&quot;
 endif
-MyDicOOo=ConvertToURL(MyDicOOo) 
+
+MyDicOOo=ConvertToURL(MyDicOOo)
 
 &apos;Opens DicOOo main file
 args(0).name=&quot;InteractionHandler&quot;
@@ -43,4 +55,5 @@ args(1).name=&quot;MacroExecutionMode&quot;
 args(1).value=com.sun.star.document.MacroExecMode.ALWAYS_EXECUTE_NO_WARN &apos;4
 TheDoc=StarDesktop.loadComponentFromURL(MyDicOOo,&quot;_blank&quot;,0,args())
 
-End Sub</script:module>
+End Sub
+</script:module>
