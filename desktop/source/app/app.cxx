@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-18 06:44:15 $
+ *  last change: $Author: cd $ $Date: 2002-10-21 05:36:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
+#include <svtools/miscopt.hxx>
 #endif
 #ifndef _UNOTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
@@ -1535,6 +1538,18 @@ void Desktop::Main()
 #endif
 
         {
+            sal_Bool bUseSystemFileDialog;
+            if ( pCmdLineArgs->IsHeadless() )
+            {
+                // Ensure that we use not the system file dialogs as
+                // headless mode relies on Application::EnableHeadlessMode()
+                // which does only work for VCL dialogs!!
+                SvtMiscOptions aMiscOptions;
+
+                bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+                aMiscOptions.SetUseSystemFileDialog( sal_False );
+            }
+
             Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
             InitTestToolLib();
@@ -1624,6 +1639,10 @@ void Desktop::Main()
             // call Application::Execute to process messages in vcl message loop
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "call ::Application::Execute" );
             Execute();
+
+            // Restore old value
+            if ( pCmdLineArgs->IsHeadless() )
+                SvtMiscOptions().SetUseSystemFileDialog( bUseSystemFileDialog );
 
             // remove temp directory
             removeTemporaryDirectory();
