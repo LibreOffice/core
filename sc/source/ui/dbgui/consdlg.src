@@ -2,9 +2,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:26:36 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:38:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,7 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     StringList [ arabic ] =
     {
-            < "Sum" ; Default ; > ;
+            < "ÇáãÌãæÚ" ; Default ; > ;
         < "Count" ; Default ; > ;
         < "Average" ; Default ; > ;
         < "Max" ; Default ; > ;
@@ -373,16 +373,16 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     StringList [ korean ] =
     {
             < "ÇÕ°è" ; Default ; > ;
-        < "Ä«¿îÆ®" ; Default ; > ;
+        < "¼ö" ; Default ; > ;
         < "Æò±Õ" ; Default ; > ;
         < "ÃÖ´ë" ; Default ; > ;
         < "ÃÖ¼Ò" ; Default ; > ;
         < "Á¦Ç°" ; Default ; > ;
-        < "Ä«¿îÆ® (¹øÈ£¸¸)" ; Default ; > ;
+        < "¼ö (¼ýÀÚ¸¸)" ; Default ; > ;
         < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "Ç¥ÁØ ÆíÂ÷ (¸ðÁý´Ü)" ; Default ; > ;
-        < "Ç¥ÁØÆíÂ÷ (»ùÇÃ)" ; Default ; > ;
-        < "ºÐ»ê(¸ðÁý´Ü)" ; Default ; > ;
+        < "StDevP (¸ðÁý´Ü)" ; Default ; > ;
+        < "ºÐ»ê (»ùÇÃ)" ; Default ; > ;
+        < "ºÐ»ê (¸ðÁý´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
     {
