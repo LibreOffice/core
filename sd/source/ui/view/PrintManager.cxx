@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 10:41:41 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,9 +67,9 @@
 #endif
 #include "sdattr.hxx"
 #include "sdpage.hxx"
-#include "printdlg.hxx"
+//CHINA001 #include "printdlg.hxx"
 #include "drawdoc.hxx"
-#include "prntopts.hxx"
+//CHINA001 #include "prntopts.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -87,9 +87,9 @@
 #include <tools/multisel.hxx>
 #include <svtools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
-#ifndef _SD_PRNTOPTS_HXX
-#include "prntopts.hxx"
-#endif
+//CHINA001 #ifndef _SD_PRNTOPTS_HXX
+//CHINA001 #include "prntopts.hxx"
+//CHINA001 #endif
 #ifndef _SVX_PRTQRY_HXX
 #include <svx/prtqry.hxx>
 #endif
@@ -105,8 +105,13 @@
 #include "sdresid.hxx"
 #include <svx/svdetc.hxx>
 #include "strings.hrc"
-
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "printdlg.hrc" //CHINA001
+#include "prntopts.hrc" //CHINA001
+#include "app.hrc" //CHINA001
+#ifndef _SFXINTITEM_HXX //CHINA001
+#include <svtools/intitem.hxx> //CHINA001
+#endif //CHINA001
 namespace sd {
 
 PrintManager::PrintManager (ViewShellBase& rViewShell)
@@ -253,9 +258,19 @@ SfxTabPage*  PrintManager::CreatePrintOptionsPage(
     const SfxItemSet &rOptions)
 {
     DocumentType eDocType = mrViewShell.GetDocument()->GetDocumentType();
-    SdPrintOptions* pPage = new SdPrintOptions( pParent, rOptions );
+    //CHINA001 SdPrintOptions* pPage = new SdPrintOptions( pParent, rOptions );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( TP_PRINT_OPTIONS );
+    DBG_ASSERT(fnCreatePage, "SdAbstractDialogFactory fail!");//CHINA001
+    SfxTabPage* pPage = (*fnCreatePage)( pParent, rOptions );
     if( eDocType == DOCUMENT_TYPE_DRAW )
-        pPage->SetDrawMode();
+    { //add by CHINA001
+        //CHINA001 pPage->SetDrawMode();
+        SfxAllItemSet aSet(*(rOptions.GetPool())); //CHINA001
+        aSet.Put (SfxUInt32Item(SID_SDMODE_FLAG,SD_DRAW_MODE));
+        pPage->PageCreated(aSet);
+    }
     return pPage;
 }
 
@@ -314,11 +329,15 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
             ( ( nPageWidth > nPrintWidth || nPageHeight > nPrintHeight ) &&
               ( nPageWidth > nPrintHeight || nPageHeight > nPrintWidth ) ) )
         {
-            SdPrintDlg aDlg (mrViewShell.GetWindow());
-            nRet = aDlg.Execute();
+            //CHINA001 SdPrintDlg aDlg (mrViewShell.GetWindow());
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            AbstractSdPrintDlg* pDlg = pFact->CreateSdPrintDlg(ResId( DLG_PRINT_WARNINGS ), mrViewShell.GetWindow() );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            nRet = pDlg->Execute(); //CHINA001 nRet = aDlg.Execute();
             if( nRet == RET_OK )
             {
-                USHORT nOption = aDlg.GetAttr();
+                USHORT nOption = pDlg->GetAttr(); //CHINA001 USHORT nOption = aDlg.GetAttr();
 
                 if( nOption == 1 )
                     pPrintOpts->SetPagesize();
@@ -328,6 +347,7 @@ USHORT  PrintManager::Print (SfxProgress& rProgress, PrintDialog* pDlg)
                 if( nOption == 3 )
                     pPrintOpts->SetCutPage();
             }
+            delete pDlg; //add by CHINA001
         }
 
         if( nRet == RET_CANCEL )
