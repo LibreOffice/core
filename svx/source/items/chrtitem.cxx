@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrtitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-05-15 10:26:58 $
+ *  last change: $Author: sj $ $Date: 2002-12-05 11:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,7 @@
 
 #include <stdio.h>
 #include <float.h>
+#include <rtl/math.hxx>
 
 #define ITEMID_CHARTSTYLE       0
 #define ITEMID_CHARTDATADESCR   0
@@ -308,10 +309,8 @@ SvxDoubleItem::SvxDoubleItem(const SvxDoubleItem& rItem) :
 
 XubString SvxDoubleItem::GetValueText() const
 {
-    char cBuff[80];
-    sprintf(cBuff, "%e", fVal);
-
-    return String(cBuff, sizeof(cBuff), gsl_getSystemTextEncoding());
+    rtl::OString aOStr( rtl::math::doubleToString( fVal, rtl_math_StringFormat_E, 4, '.', false ) );
+    return String( aOStr.getStr(), (sal_uInt16)aOStr.getLength() );
 }
 
 // -----------------------------------------------------------------------
@@ -329,12 +328,7 @@ SfxItemPresentation SvxDoubleItem::GetPresentation
             pIntlWrapper->getLocaleData()->getNumDecimalSep().GetChar(0), TRUE );
     }
     else
-    {
-        char cBuff[80];
-        sprintf(cBuff, "%.4E", fVal);
-        rText.AppendAscii(cBuff);
-    }
-
+        rText = GetValueText();
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
