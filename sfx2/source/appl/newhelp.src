@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:25:00 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 06:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,7 +555,7 @@ String STR_HELP_BUTTON_SOURCEVIEW
     Text[ korean ] = "HTML º“Ω∫≈ÿΩ∫∆Æ";
     Text[ turkish ] = "HTML kaynak kodu";
     Text[ catalan ] = "HTML Source";
-    Text[ finnish ] = "HTML-Quelltext";
+    Text[ finnish ] = "HTML-l‰hde";
 };
 
 String STR_HELP_FIRST_MESSAGE
