@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:07:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void ScDrawTextObjectBar::ExecFormText(SfxRequest& rReq)
 {
     ScTabView*          pTabView    = pViewData->GetView();
     ScDrawView*         pDrView     = pTabView->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkList();
+    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() )
     {
@@ -276,7 +276,7 @@ void ScDrawTextObjectBar::GetFormTextState(SfxItemSet& rSet)
     const SdrObject*    pObj        = NULL;
     SvxFontWorkDialog*  pDlg        = NULL;
     ScDrawView*         pDrView     = pViewData->GetView()->GetScDrawView();
-    const SdrMarkList&  rMarkList   = pDrView->GetMarkList();
+    const SdrMarkList&  rMarkList   = pDrView->GetMarkedObjectList();
     USHORT              nId = SvxFontWorkChildWindow::GetChildWindowId();
 
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
