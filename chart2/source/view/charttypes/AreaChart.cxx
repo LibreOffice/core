@@ -327,6 +327,8 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
             uno::Reference< drawing::XShape > xBorder =
                 m_pShapeFactory->createLine3D( xSeriesGroupShape_Shapes
                     , aBorderPoly, aLineProperties );
+            //because of this name this line will be used for marking the axis
+            m_pShapeFactory->setShapeName( xBorder, C2U("MarkHandles") );
         }
     }
     else //m_nDimension!=3
@@ -336,6 +338,8 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
+        //because of this name this line will be used for marking the axis
+        m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     }
     return true;
 }
@@ -413,6 +417,8 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
     this->setMappedProperties( xShape
                 , pSeries->getPropertiesOfSeries()
                 , m_aShapePropertyMapForArea );
+    //because of this name this line will be used for marking the axis
+    m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
     return true;
 }
 
