@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appchild.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *  last change: $Author: mba $ $Date: 2000-10-12 17:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,25 +312,12 @@ SfxHelpPI* SfxApplication::GetHelpPI()
 
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {
-    SfxInPlaceFrame *pIPFrame = PTR_CAST(SfxInPlaceFrame,pFrame);
-    if ( pIPFrame )
-        return pIPFrame->GetEnv_Impl()->GetWorkWindow();
+    if ( pFrame )
+        return pFrame->GetFrame()->GetWorkWindow_Impl();
+    else if ( pViewFrame )
+        return pViewFrame->GetFrame()->GetWorkWindow_Impl();
     else
-    {
-        if ( pFrame )
-            return pFrame->GetFrame()->GetWorkWindow_Impl();
-        else if ( pViewFrame )
-        {
-            SfxInPlaceFrame *pIPFrame = PTR_CAST(SfxInPlaceFrame,pViewFrame);
-            if ( pIPFrame )
-                return pViewFrame->GetParentViewFrame_Impl()->GetFrame()->GetWorkWindow_Impl();
-//                return pIPFrame->GetEnv_Impl()->GetWorkWindow();
-            else
-                return pViewFrame->GetFrame()->GetWorkWindow_Impl();
-        }
-        else
-            return NULL;
-    }
+        return NULL;
 }
 
 //--------------------------------------------------------------------
