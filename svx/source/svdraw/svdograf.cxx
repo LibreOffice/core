@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-09 16:32:39 $
+ *  last change: $Author: ka $ $Date: 2000-10-11 11:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,6 @@ SdrGrafObj::SdrGrafObj():
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject;
-    pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
     nGrafStreamPos=0;
     bSwappedOut = bNotLoaded = FALSE;
@@ -303,7 +302,6 @@ SdrGrafObj::SdrGrafObj(const Graphic& rGrf, const Rectangle& rRect):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
     nGrafStreamPos = 0;
     bSwappedOut = bNotLoaded = FALSE;
@@ -322,7 +320,6 @@ SdrGrafObj::SdrGrafObj( const Graphic& rGrf ):
     pGraphicLink    ( NULL )
 {
     pGraphic = new GraphicObject( rGrf );
-    pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
     nGrafStreamPos = 0;
     bSwappedOut = bNotLoaded = FALSE;
@@ -351,7 +348,6 @@ SdrGrafObj::~SdrGrafObj()
 void SdrGrafObj::SetGraphicObject( const GraphicObject& rGrfObj )
 {
     *pGraphic = rGrfObj;
-    pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
     pGraphic->SetSwapStreamHdl( LINK( this, SdrGrafObj, ImpSwapHdl ), Application::IsRemoteServer() ? 60000 : 20000 );
     nGrafStreamPos = 0;
     bSwappedOut = bNotLoaded = FALSE;
@@ -967,7 +963,10 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 if( bEnable )
                 {
                     if( eAnimMode == SDR_ANIMATION_ANIMATE )
+                    {
+                        pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
                         pGraphic->StartAnimation( pOutDev, aTopLeft, aDrawSize, 0, &aAttr );
+                    }
                     else if( eAnimMode == SDR_ANIMATION_DONT_ANIMATE )
                         pGraphic->Draw( pOutDev, aTopLeft, aDrawSize, &aAttr );
                 }
@@ -1305,6 +1304,7 @@ void SdrGrafObj::StartAnimation( OutputDevice* pOutDev, const Point& rPoint, con
     FASTBOOL        bVMirr = nMirrorCase == 3 || nMirrorCase == 4;
 
     aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
+    pGraphic->SetAnimationNotifyHdl( LINK( this, SdrGrafObj, ImpAnimationHdl ) );
     pGraphic->StartAnimation( pOutDev, rPoint, rSize, nExtraData, &aAttr );
 }
 
