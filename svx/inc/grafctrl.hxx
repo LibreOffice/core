@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-24 17:49:45 $
+ *  last change: $Author: ka $ $Date: 2000-11-26 14:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,5 +216,16 @@ public:
                                     const SfxHint& rHint, const TypeId& rHintType );
 };
 
+// ---------------------
+// - SvxGrafAttrHelper -
+// ---------------------
+
+class SvxGrafAttrHelper
+{
+public:
+
+    static void     ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView );
+    static void     GetGrafAttrState( SfxItemSet& rSet, SdrView& rView );
+};
 
 #endif // _SVX_GRAFCTRL_HXX
