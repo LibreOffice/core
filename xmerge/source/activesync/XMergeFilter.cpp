@@ -311,6 +311,7 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
     DWORD dwClassName            = _MAX_PATH;
     DWORD dwKeyName              = _MAX_PATH;
 
+
     /*
      * Java leaves registry keys at HKLM\SOFTWARE\JavaSoft.
      *
@@ -329,6 +330,7 @@ TCHAR* CXMergeFilter::GetJavaBaseDir()
         lRet = ::RegEnumKeyEx(hKey, i, szKeyName, &dwKeyName, 0, szClassName, &dwClassName, NULL);
         if(!strncmp(szKeyName, "1.4", 3))
             break;
+        dwKeyName = _MAX_PATH;
     }
 
     // Found a Java 1.4 installation.  Can now read its home directory.
