@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:11 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 09:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,6 @@ OTableController::OTableController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bOwnConnection(sal_False)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_bNew(sal_True)
-    ,m_pNoConnection(NULL)
 {
     InvalidateAll();
 }

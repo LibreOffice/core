@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-14 10:35:10 $
+ *  last change: $Author: oj $ $Date: 2001-03-15 09:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xTable;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
 
-        FixedText*      m_pNoConnection;    // set in toolbox when no connection is available
         ::rtl::OUString m_sDataSourceName;  // is set in initialze
         ::rtl::OUString m_sCatalogName;     // catalog for update data
         ::rtl::OUString m_sSchemaName;      // schema for update data
