@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
+ *  last change: $Author: mba $ $Date: 2001-11-27 11:00:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,10 @@
 
 #include <tools/link.hxx>
 #include <tools/list.hxx>
+#include <tools/urlobj.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 #include <svtools/miscopt.hxx>
+#include <framework/Imagesconfiguration.hxx>
 
 #pragma hdrstop
 
@@ -87,6 +90,7 @@
 #include "viewfrm.hxx"
 #include "objsh.hxx"
 #include "cfgmgr.hxx"
+#include "macrconf.hxx"
 
 static const USHORT nVersion = 5;
 DECLARE_LIST( LinkList, Link * );
@@ -124,6 +128,7 @@ public:
     virtual BOOL    Store(SotStorage&);
     void            AddLink( const Link& );
     void            RemoveLink( const Link& );
+    void            LoadBitmap( Bitmap&, SotStorage&, const String& );
 
                     SfxImageManager_Impl( SfxConfigManager* pCfg );
                     ~SfxImageManager_Impl();
@@ -396,17 +401,120 @@ void SfxImageManager_Impl::RemoveLink( const Link& rLink )
 
 //-------------------------------------------------------------------------
 
+void SfxImageManager_Impl::LoadBitmap( Bitmap& rBmp, SotStorage& rStorage, const String& rURL )
+{
+    // locate and open bitmap for ImageList
+    SotStorageStreamRef xBitmapStream;
+    SvStream* pStream = NULL;
+
+    // bitmap may be internal (relative URL) or external (absolute URL)
+    INetURLObject aObj( rURL );
+    if ( aObj.GetProtocol() != INET_PROT_NOT_VALID )
+    {
+        // get external stream for bitmap
+        pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
+    }
+    else
+    {
+        // find internal stream by parsing URL, starting in the root of rStorage
+        SotStorageRef xBitmapStorage = &rStorage;
+
+        // every string followed by a slash is a directory
+        USHORT nTokenCount = rURL.GetTokenCount( '/' );
+
+        // open directories
+        for ( USHORT nToken=0; nToken<nTokenCount-1; nToken++ )
+            xBitmapStorage = xBitmapStorage->OpenSotStorage( rURL.GetToken( nToken, '/' ), STREAM_STD_READ );
+
+        // now get the stream
+        xBitmapStream = xBitmapStorage->OpenSotStream( rURL.GetToken( nToken, '/' ), STREAM_STD_READ );
+        pStream = xBitmapStream;
+    }
+
+    *pStream >> rBmp;
+    if ( !xBitmapStream.Is() )
+        DELETEZ( pStream );
+}
+
 int SfxImageManager_Impl::Load( SotStorage& rStorage )
 {
     SotStorageStreamRef xStream =
             rStorage.OpenSotStream( GetStreamName(), STREAM_STD_READ );
     if ( xStream->GetError() )
         return ERR_READ;
+    else
+    {
+        SfxMacroConfig* pCfg = SfxMacroConfig::GetOrCreate();
+        ::framework::ImageListsDescriptor aDescriptor;
+        if ( !::framework::ImagesConfiguration::LoadImages( *xStream, aDescriptor ) )
+            return ERR_READ;
 
-    int nRet = Load( *xStream );
-    if ( nRet == ERR_OK )
-        MakeDefaultImageList();
-    return nRet;
+        if ( !aDescriptor.pImageList || !aDescriptor.pImageList->Count() )
+            return ERR_READ;
+
+        ::framework::ImageListItemDescriptor* pList = aDescriptor.pImageList->GetObject(0);
+        USHORT nCount = pList->pImageItemList->Count();
+        if ( !nCount )
+            return ERR_READ;
+
+        Bitmap aBmp;
+        LoadBitmap( aBmp, rStorage, pList->aURL );
+
+        // get the Ids of the ImageList
+        USHORT* pIds = new USHORT[nCount];
+        for ( USHORT i=0; i<nCount; i++ )
+        {
+            const ::framework::ImageItemDescriptor* pItem = pList->pImageItemList->GetObject(i);
+            if ( pItem->aCommandURL.CompareToAscii("slot:",5) == COMPARE_EQUAL )
+            {
+                pIds[i] = (USHORT) pItem->aCommandURL.Copy( 5 ).ToInt32();
+            }
+            else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
+            {
+                SfxMacroInfo aInfo( pItem->aCommandURL );
+                pCfg->GetSlotId( &aInfo );
+                pIds[i] = aInfo.GetSlotId();
+            }
+        }
+
+        delete pUserImageList;
+        if ( pList->nMaskMode = ::framework::ImageMaskMode_Color )
+            pUserImageList = new ImageList( aBmp, pList->aMaskColor, nCount, pIds );
+        else
+        {
+            Bitmap aMask;
+            LoadBitmap( aMask, rStorage, pList->aMaskURL );
+            pUserImageList = new ImageList( aBmp, aMask, nCount, pIds );
+        }
+
+        DELETEZ( pIds );
+        pUserDefList = new SfxBitmapList_Impl;
+
+        nCount = aDescriptor.pExternalImageList ? aDescriptor.pExternalImageList->Count() : 0;
+        for ( USHORT n=0; n<nCount; n++ )
+        {
+            ::framework::ExternalImageItemDescriptor* pItem = aDescriptor.pExternalImageList->GetObject(n);
+            USHORT nId = 0;
+            if ( pItem->aCommandURL.CompareToAscii("slot:",5) == COMPARE_EQUAL )
+            {
+                nId = (USHORT) pItem->aCommandURL.Copy( 5 ).ToInt32();
+            }
+            else if ( pItem->aCommandURL.CompareToAscii("macro:",6) == COMPARE_EQUAL )
+            {
+                SfxMacroInfo aInfo( pItem->aCommandURL );
+                pCfg->GetSlotId( &aInfo );
+                nId = aInfo.GetSlotId();
+            }
+
+            Bitmap aBmp;
+            LoadBitmap( aBmp, rStorage, pItem->aURL );
+            pUserDefList->AddBitmap( nId, aBmp );
+        }
+    }
+
+    MakeDefaultImageList();
+    SetDefault( FALSE );
+    return ERR_OK;
 }
 
 BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
@@ -415,7 +523,109 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
     if ( xStream->GetError() )
         return FALSE;
     else
-        return Store( *xStream );
+    {
+        // create a descriptor
+        SfxMacroConfig* pCfg = SfxMacroConfig::GetOrCreate();
+        ::framework::ImageListsDescriptor aDescriptor;
+        aDescriptor.pImageList = new ::framework::ImageListDescriptor;
+
+        // insert userimagelist as one and only list (more is not supported currently, default lists remain in resource)
+        ::framework::ImageListItemDescriptor* pList = new ::framework::ImageListItemDescriptor;
+        aDescriptor.pImageList->Insert( pList, 0 );
+
+        // bitmaps are stored in an internal bitmap directory
+        SotStorageRef xBitmapStorage = rStorage.OpenSotStorage( String::CreateFromAscii("Bitmaps"), STREAM_STD_READWRITE );
+
+        if ( pUserImageList->HasMaskColor() )
+        {
+            // mask color
+            pList->nMaskMode = ::framework::ImageMaskMode_Color;
+            pList->aMaskColor = pUserImageList->GetMaskColor();
+        }
+        else
+        {
+            // masking is done by a mask bitmap, store bitmap and set URL
+            pList->nMaskMode = ::framework::ImageMaskMode_Bitmap;
+
+            pList->aMaskURL = String::CreateFromAscii("Bitmaps/");
+            String aStreamName = String::CreateFromAscii("userimagesmask.bmp");
+            pList->aMaskURL += aStreamName;
+
+            // store bitmap
+            SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+            *xBitmapStream << pUserImageList->GetMaskBitmap();
+        }
+
+        // a modified list always contains a userlist
+        pList->pImageItemList = new ::framework::ImageItemListDescriptor;
+        for ( USHORT i=0; i<pUserImageList->GetImageCount(); i++ )
+        {
+            ::framework::ImageItemDescriptor* pItem = new ::framework::ImageItemDescriptor;
+
+            pItem->nIndex = i;
+            USHORT nId = pUserImageList->GetImageId(i);
+            if ( SfxMacroConfig::IsMacroSlot( nId ) )
+            {
+                const SfxMacroInfo* pInfo = pCfg->GetMacroInfo( nId );
+                pItem->aCommandURL = pInfo->GetURL();
+            }
+            else if ( nId )
+            {
+                pItem->aCommandURL = String::CreateFromAscii("slot:");
+                pItem->aCommandURL += String::CreateFromInt32( nId );
+            }
+
+            pList->pImageItemList->Insert( pItem, pList->pImageItemList->Count() );
+        }
+
+        // store URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
+        pList->aURL = String::CreateFromAscii("Bitmaps/");
+        String aStreamName = String::CreateFromAscii("userimages.bmp");
+        pList->aURL += aStreamName;
+
+        // store bitmap
+        SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+        *xBitmapStream << pUserImageList->GetBitmap();
+
+        // collect all external bitmaps
+        USHORT nCount = pUserDefList->GetBitmapCount();
+        if ( nCount )
+        {
+            aDescriptor.pExternalImageList = new ::framework::ExternalImageItemListDescriptor;
+            for ( USHORT i=0; i<nCount; i++ )
+            {
+                ::framework::ExternalImageItemDescriptor* pItem = new ::framework::ExternalImageItemDescriptor;
+                USHORT nId = pUserDefList->GetBitmapId(i);
+                if ( SfxMacroConfig::IsMacroSlot( nId ) )
+                {
+                    const SfxMacroInfo* pInfo = pCfg->GetMacroInfo( nId );
+                    pItem->aCommandURL = pInfo->GetURL();
+                }
+                else if ( nId )
+                {
+                    pItem->aCommandURL = String::CreateFromAscii("slot:");
+                    pItem->aCommandURL += String::CreateFromInt32( nId );
+                }
+
+                // store URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
+                pItem->aURL = String::CreateFromAscii("Bitmaps/");
+                String aStreamName = String::CreateFromAscii("image");
+                aStreamName += String::CreateFromInt32(i);
+                aStreamName += String::CreateFromAscii(".bmp");
+                pItem->aURL += aStreamName;
+
+                aDescriptor.pExternalImageList->Insert( pItem, aDescriptor.pExternalImageList->Count() );
+
+                // store bitmap
+                SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+                *xBitmapStream << *pUserDefList->GetBitmap( nId );
+            }
+        }
+
+        // store configuration
+        xBitmapStorage->Commit();
+        return ::framework::ImagesConfiguration::StoreImages( *xStream, aDescriptor );
+    }
 }
 
 
@@ -443,6 +653,7 @@ int SfxImageManager_Impl::Load(SvStream& rStream)
 //  SvFileStream aBitmapStream( String("d:\\INPUT.BMP"), STREAM_STD_WRITE);
 //  aBitmapStream << pUserImageList->GetBitmap();
 
+    SetDefault( FALSE );
     return SfxConfigItem::ERR_OK;
 }
 
@@ -456,6 +667,7 @@ BOOL SfxImageManager_Impl::ReInitialize()
 }
 
 //-------------------------------------------------------------------------
+
 
 BOOL SfxImageManager_Impl::Store(SvStream& rStream)
 {
@@ -663,22 +875,18 @@ SfxImageManager::~SfxImageManager()
 
 BOOL SfxImageManager::Import( SvStream& rInStream, SotStorage& rOutStorage )
 {
-/*
     SfxImageManager_Impl aImpl( NULL );
-    aImpl.Load( rInStream );
-    aImpl.Store( rOutStorage );
- */
-    return TRUE;
+    if ( aImpl.Load( rInStream ) == SfxConfigItem::ERR_OK )
+        return aImpl.Store( rOutStorage );
+    return FALSE;
 }
 
 BOOL SfxImageManager::Export( SotStorage& rInStorage, SvStream& rOutStream )
 {
-/*
     SfxImageManager_Impl aImpl( NULL );
-    aImpl.Load( rInStorage );
-    aImpl.Store( rOutStream );
- */
-    return TRUE;
+    if ( aImpl.Load( rInStorage ) == SfxConfigItem::ERR_OK )
+        return aImpl.Store( rOutStream );
+    return FALSE;
 }
 
 //-------------------------------------------------------------------------
@@ -706,6 +914,9 @@ void SfxImageManager::LockImage( USHORT nId, ToolBox *pBox )
         {
             // Eine physikalische Kopie des Images in der User-Liste machen
             pUserImageList->AddImage( nId, pBox->GetItemImage( nId ) );
+            if ( SfxMacroConfig::IsMacroSlot(nId) )
+                SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
+
             pImp->SetDefault( FALSE );
         }
 
@@ -863,6 +1074,8 @@ Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, SfxModule *pModule )
             {
                 // Das Image in die UserImageList "ubertragen
                 pUserImageList->AddImage( nId, pList->GetImage( nId ) );
+                if ( SfxMacroConfig::IsMacroSlot(nId) )
+                    SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
                 pImp->SetDefault( FALSE );
                 return pUserImageList->GetImage( nId );
             }
@@ -970,6 +1183,8 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
             // defaultm"assig vorhanden ist
             pUserImageList->AddImage( nId, aImage );
         }
+        else if ( SfxMacroConfig::IsMacroSlot(nId) )
+            SfxMacroConfig::GetOrCreate()->ReleaseSlotId( nId );
 
         bReplaced = TRUE;
     }
@@ -1011,6 +1226,8 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
         else
             pUserImageList->ReplaceImage( nId, aImage );
 
+        if ( SfxMacroConfig::IsMacroSlot(nId) )
+            SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
         bReplaced = TRUE;
     }
 
@@ -1253,4 +1470,11 @@ IMPL_LINK( SfxImageManager, ConfigChanged_Impl, void*, pVoid )
     }
 
     return TRUE;
+}
+
+BOOL SfxImageManager::CopyConfiguration_Impl( SfxConfigManager& rSource, SfxConfigManager& rDest )
+{
+    SfxImageManager_Impl aTmp( &rDest );
+    aTmp.ReConnect( &rSource );
+    return rDest.StoreConfigItem( aTmp );
 }
