@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:56:11 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,10 +64,6 @@
 
 #ifndef _SV_WINDOW_HXX //autogen
 #include <vcl/window.hxx>
-#endif
-
-#ifndef _TOOLBOX_HXX //autogen
-#include <vcl/toolbox.hxx>
 #endif
 
 #ifndef _TOOLS_RESID_HXX //autogen wg. ResId
