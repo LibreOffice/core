@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 16:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5442,7 +5442,6 @@ SprmReadInfo aSprmReadTab[] = {
     0x4873, &SwWW8ImplReader::Read_Language, //"sprmCRgLid3?" // chp.rglid[0];LID: for non-Far East text (like a duplicate of 486D);word;
     0x4874, (FNReadRecord)0, //undocumented
     0x6463, (FNReadRecord)0, //undocumented
-    0x6870, (FNReadRecord)0, //undocumented
     0x2461, (FNReadRecord)0, //undoc, must be asian version of "sprmPJc"
     0x845E, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft"
     0x8460, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaLeft1"

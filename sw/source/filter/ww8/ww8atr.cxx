@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-14 13:40:39 $
+ *  last change: $Author: cmc $ $Date: 2002-05-14 16:47:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,10 +1191,10 @@ static Writer& OutWW8_SwColor( Writer& rWrt, const SfxPoolItem& rHt )
     else
         rWrtWW8.pO->Insert(98, rWrtWW8.pO->Count());
 
-    rWrtWW8.pO->Insert(rWrtWW8.TransCol(rAttr.GetValue()),
-        rWrtWW8.pO->Count() );
+    BYTE nColour = rWrtWW8.TransCol(rAttr.GetValue());
+    rWrtWW8.pO->Insert(nColour, rWrtWW8.pO->Count());
 
-    if (rWrtWW8.bWrtWW8)
+    if (rWrtWW8.bWrtWW8 && nColour)
     {
         rWrtWW8.InsUInt16(0x6870);
         rWrtWW8.InsUInt32(wwUtility::RGBToBGR(rAttr.GetValue().GetColor()));
