@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScAnnotationObj.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 13:00:16 $
+ *  last change:$Date: 2003-09-08 12:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,17 @@
 
 package mod._sc;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.SOfficeFactory;
+
 import com.sun.star.container.XIndexAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSheetAnnotation;
 import com.sun.star.sheet.XSheetAnnotationAnchor;
 import com.sun.star.sheet.XSpreadsheet;
@@ -72,16 +80,10 @@ import com.sun.star.sheet.XSpreadsheets;
 import com.sun.star.table.CellAddress;
 import com.sun.star.table.XCell;
 import com.sun.star.table.XCellRange;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.SOfficeFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
 * Test for object which represents some text annotation
@@ -152,10 +154,8 @@ public class ScAnnotationObj extends TestCase {
             ( TestParameters Param, PrintWriter log )
             throws StatusException {
 
-        XInterface oInterface = null;
         XInterface oObj = null;
-        boolean result = true;
-        Object oRange = null ;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
