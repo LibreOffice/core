@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:40:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 11:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@ protected:
     DlgEdObj(const ::rtl::OUString& rModelName,
              const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxSFac);
 
-    virtual void     WriteData(SvStream& rOut) const;                           // not working yet
-    virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);      // not working yet
+//BFS01 virtual void     WriteData(SvStream& rOut) const;                           // not working yet
+//BFS01 virtual void     ReadData(const SdrObjIOHeader& rHead, SvStream& rIn);      // not working yet
 
     virtual void NbcMove( const Size& rSize );
     virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
