@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:46:14 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:39:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1273,7 +1273,7 @@ void SwTOXBaseSection::InsertAlphaDelimitter( const SwTOXInternational& rIntl )
             // alle kleiner Blank wollen wir nicht haben -> sind Sonderzeichen
             if( ' ' <= sDeli.GetChar( 0 ) )
             {
-                SwTOXCustom* pCst = new SwTOXCustom( sDeli, FORM_ALPHA_DELIMITTER,
+                SwTOXCustom* pCst = new SwTOXCustom( sDeli, aEmptyStr, FORM_ALPHA_DELIMITTER,
                                                      rIntl, aSortArr[i]->GetLocale() );
                 aSortArr.Insert( pCst, i++ );
             }
@@ -2513,7 +2513,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
     if(i == nMax)
     {   // Falls nicht vorhanden erzeugen und einfuegen
         //
-        SwTOXCustom* pKey = new SwTOXCustom( sToCompare, nLevel, rIntl,
+        SwTOXCustom* pKey = new SwTOXCustom( sToCompare, sToCompareReading, nLevel, rIntl,
                                              rNew.GetLocale() );
         for(i = nMin; i < nMax; ++i)
         {
