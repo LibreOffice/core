@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentTemplates.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:37 $
+ *  last change:$Date: 2003-05-27 13:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ public class DocumentTemplates extends TestCase {
 
     protected void initialize( TestParameters tParam, PrintWriter log ) {
         String aURL=util.utils.getFullTestURL("report2.stw");
-        xTextDoc = util.WriterTools.loadTextDoc(tParam.getMSF(),aURL);
+        xTextDoc = util.WriterTools.loadTextDoc((XMultiServiceFactory)tParam.getMSF(),aURL);
     }
 
     protected void cleanup( TestParameters tParam, PrintWriter log ) {
@@ -104,7 +104,7 @@ public class DocumentTemplates extends TestCase {
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
 
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
         XStorable store = null;
 

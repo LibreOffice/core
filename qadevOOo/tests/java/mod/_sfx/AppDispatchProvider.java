@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDispatchProvider.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:17:37 $
+ *  last change:$Date: 2003-05-27 13:25:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package mod._sfx;
 
 import com.sun.star.uno.XInterface;
+import com.sun.star.lang.XMultiServiceFactory;
 import java.io.PrintWriter;
 import lib.Status;
 import lib.StatusException;
@@ -105,7 +106,7 @@ public class AppDispatchProvider extends TestCase {
 
         //now get the OButtonControl
         try {
-            oInterface = Param.getMSF().createInstance
+            oInterface = ((XMultiServiceFactory)Param.getMSF()).createInstance
                 ("com.sun.star.comp.sfx2.AppDispatchProvider") ;
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get service");
