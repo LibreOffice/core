@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:00:00 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 13:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text[ chinese_traditional ] = "¤ÀÃş(~C)";
         Text[ arabic ] = "ÇáİÆÉ";
         Text[ greek ] = "Êáôçãïñßá";
-        Text[ korean ] = "¹üÁÖ";
+        Text[ korean ] = "¹üÁÖ(~C)";
         Text[ turkish ] = "~Kategori";
         Text[ language_user1 ] = " ";
     };
@@ -164,7 +164,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         {
             < "Tutte" ; Default ; > ;
             < "Definito dall'utente" ; Default ; > ;
-            < "num" ; Default ; > ;
+            < "Numero" ; Default ; > ;
             < "Percentuale" ; Default ; > ;
             < "Valuta" ; Default ; > ;
             < "Data" ; Default ; > ;
@@ -458,14 +458,14 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ dutch ] = "F~ormaatcode" ;
         Text [ spanish ] = "Código del for~mato" ;
         Text [ english_us ] = "~Format code" ;
-        Text[ chinese_simplified ] = "¸ñÊ½Âë(~O)";
+        Text[ chinese_simplified ] = "¸ñÊ½Âë(~F)";
         Text[ russian ] = "Êîä ôîğìàòà";
         Text[ polish ] = "Kod formatu";
-        Text[ japanese ] = "‘®º°ÄŞ(~O)";
-        Text[ chinese_traditional ] = "®æ¦¡½X(~O)";
+        Text[ japanese ] = "‘®º°ÄŞ(~F)";
+        Text[ chinese_traditional ] = "®æ¦¡½X(~F)";
         Text[ arabic ] = "ÑãÒ ÊäÓíŞ";
         Text[ greek ] = "Êùäéêüò ìïñöïğïßçóçò";
-        Text[ korean ] = "¼­½Ä ÄÚµå(~O)";
+        Text[ korean ] = "¼­½Ä ÄÚµå(~F)";
         Text[ turkish ] = "Format ~kodu";
         Text[ language_user1 ] = " ";
     };
