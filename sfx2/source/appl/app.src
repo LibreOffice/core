@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-27 13:01:26 $
+ *  last change: $Author: kz $ $Date: 2001-03-09 20:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1131,7 +1131,7 @@ String GID_CONNECTOR
 {
     Text = "Verbinder" ;
     Text [ english ] = "Connector" ;
-    Text [ portuguese ] = "Conectores" ;
+    Text [ portuguese ] = "Conector" ;
     Text [ english_us ] = "Connector" ;
     Text [ portuguese_brazilian ] = "Verbinder" ;
     Text [ swedish ] = "Fˆrbindelse" ;
@@ -3233,7 +3233,7 @@ String RID_PLUGIN
     Text [ danish ] = "Aktiver PlugIns" ;
     Text [ italian ] = "Attivazione PlugIn " ;
     Text [ spanish ] = "Activar Plug-in" ;
-    Text [ french ] = "Activation de Plug-In" ;
+    Text [ french ] = "Activation de Plug-in" ;
     Text [ dutch ] = "PlugIn-activering" ;
     Text[ chinese_simplified ] = "º§ªÓ Plug-In";
     Text[ russian ] = "¿ÍÚË‚ËÓ‚‡Ú¸ Plug-In";
@@ -3835,7 +3835,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ portuguese ] = "DirectÛrio de plug-ins";
     Text[ russian ] = " ‡Ú‡ÎÓ„ Plugins";
     Text[ dutch ] = "Plugins directory";
-    Text[ french ] = "RÈpertoire de Plug-Ins";
+    Text[ french ] = "RÈpertoire de Plug-ins";
     Text[ spanish ] = "Directorio de Plug-ins";
     Text[ italian ] = "Cartella plugin";
     Text[ danish ] = "PlugIn-bibliotek";
@@ -3908,9 +3908,9 @@ String STR_KEY_ADDINS_PATH
     Text[ portuguese ] = "Add-Ins";
     Text[ greek ] = "AddIns";
     Text[ dutch ] = "AddIns";
-    Text[ french ] = "Add-Ins";
+    Text[ french ] = "Add-ins";
     Text[ spanish ] = "AddIns";
-    Text[ swedish ] = "AddIns";
+    Text[ swedish ] = "Add-ins";
     Text[ russian ] = "AddIns";
     Text[ italian ] = "AddIns";
     Text[ danish ] = "Add-Ins";
@@ -4010,7 +4010,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ swedish ] = "Lingvistik";
     Text[ polish ] = "Pisownia";
     Text[ portuguese_brazilian ] = "Linguistic";
-    Text[ japanese ] = "åæåÍ";
+    Text[ japanese ] = "ΩÕﬂÿ›∏ﬁ";
     Text[ korean ] = "ææÓ";
     Text[ chinese_simplified ] = "”Ô—‘πÊ‘Ú";
     Text[ chinese_traditional ] = "ªy®•≥W´h";
