@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: bm $ $Date: 2002-05-06 07:24:32 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:31:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,10 +211,18 @@ protected:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 public:
-    SchXMLImport( sal_uInt16 nImportFlags = IMPORT_ALL );
-    SchXMLImport( com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
-                  com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver > &,
-                  sal_Bool bLoadDoc, sal_Bool bShowProgress );
+    // #110680#
+    SchXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        sal_uInt16 nImportFlags = IMPORT_ALL );
+
+    // #110680#
+    SchXMLImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+        com::sun::star::uno::Reference< com::sun::star::frame::XModel > xModel,
+        com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver > &,
+        sal_Bool bLoadDoc, sal_Bool bShowProgress );
+
     virtual ~SchXMLImport() throw ();
 
     // XServiceInfo ( : SvXMLExport )
