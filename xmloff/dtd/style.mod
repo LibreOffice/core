@@ -1,5 +1,5 @@
 <!--
-	$Id: style.mod,v 1.19 2000-12-15 14:04:20 mib Exp $
+	$Id: style.mod,v 1.20 2000-12-18 13:52:58 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -126,7 +126,7 @@
 <!ATTLIST style:properties style:run-through (foreground|background) #IMPLIED>
 <!ATTLIST style:properties style:editable %boolean; #IMPLIED>
 <!ATTLIST style:properties style:mirror CDATA #IMPLIED>
-<!ATTLIST style:properties style:clip CDATA #IMPLIED>
+<!ATTLIST style:properties fo:clip CDATA #IMPLIED>
 
 <!-- text properties -->
 <!ATTLIST style:properties fo:font-variant (normal|small-caps) #IMPLIED>
