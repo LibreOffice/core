@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2001-12-03 16:34:59 $
+ *  last change: $Author: kz $ $Date: 2001-12-14 18:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Kerning";
         Text[ polish ] = "Kerning";
         Text[ portuguese_brazilian ] = "Kerning";
-        Text[ japanese ] = "ｶｰﾆﾝｸﾞ";
+        Text[ japanese ] = "カーニング";
         Text[ korean ] = "커닝";
         Text[ chinese_simplified ] = "字符间隔";
         Text[ chinese_traditional ] = "字元間隔";
@@ -147,7 +147,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ polish ] = "Znaki zachodnie i interpunkcja azjatycka";
         Text[ portuguese_brazilian ] = "Western text and punctuation";
         Text[ japanese ] = "半角英字と日本語の区切り記号(~T)";
-        Text[ korean ] = "알파벳 문자 텍스트와 구두점(~T)";
+        Text[ korean ] = "알파벳 문자와 아시아 구두점(T)";
         Text[ chinese_simplified ] = "西文字符和中日韩标点符号(~T)";
         Text[ chinese_traditional ] = "西文和中日韓文字標點符號(~T)";
         Text[ turkish ] = "Western text and punctuation";
@@ -436,7 +436,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ swedish ] = "Utan anv�ndardefinierade radbrytningstecken";
         Text[ polish ] = "Bez zdefiniowanych indywidualnie znak�w podzia�u wiersza";
         Text[ portuguese_brazilian ] = "Without user-defined line break symbols";
-        Text[ japanese ] = "ﾕｰｻﾞｰ定義の改行時の禁則文字は除く";
+        Text[ japanese ] = "ユーザー定義の改行時の禁則文字は除く";
         Text[ korean ] = "사용자 정의 줄바꾸기 기호 없음";
         Text[ chinese_simplified ] = "不附带使用者自定的换行符号";
         Text[ chinese_traditional ] = "不附帶使用者自訂的換行符號";
@@ -457,7 +457,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ swedish ] = "Proxy";
     Text[ polish ] = "Proxy";
     Text[ portuguese_brazilian ] = "Proxy";
-    Text[ japanese ] = "ﾌﾟﾛｷｼ";
+    Text[ japanese ] = "プロキシ";
     Text[ korean ] = "프록시";
     Text[ chinese_simplified ] = "代理服务器";
     Text[ chinese_traditional ] = "代理伺服器";
@@ -466,6 +466,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ catalan ] = "Servidor intermediari";
     Text[ finnish ] = "V�lityspalvelin";
 };
+
 
 
 
