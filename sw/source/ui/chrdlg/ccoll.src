@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:49:10 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     CheckBox CB_CONDITION
     {
@@ -117,7 +119,7 @@ TabPage TP_CONDCOLL
         Text [ french ] = "Co~mme style conditionnel" ;
         Text [ dutch ] = "~Als conditioneel opmaakprofiel" ;
         Text [ swedish ] = "som villkorlig m~all" ;
-        Text [ danish ] = "Som betinget typografi" ;
+        Text [ danish ] = "~Betinget typografi" ;
         Text [ portuguese_brazilian ] = "~Estilo Condicional" ;
         Text [ portuguese ] = "~Estilo condicional" ;
         Text[ chinese_simplified ] = "当作有条件的样式(~C)";
@@ -137,6 +139,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "~Als bedingte Vorlage";
         Text[ hindi ] = "~शर्त के अन्तर्गत शैली";
         Text[ slovak ] = "~Podmienený štýl";
+        Text[ hungarian ] = "~Feltételes stílus";
+        Text[ slovenian ] = "~Pogojni slog";
     };
     FixedText FT_CONTEXT
     {
@@ -171,6 +175,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "~Kontext";
         Text[ hindi ] = "~सन्दर्भ";
         Text[ slovak ] = "Konte~xt";
+        Text[ hungarian ] = "~Környezet";
+        Text[ slovenian ] = "Konte~kst";
     };
     FixedText FT_USED
     {
@@ -185,7 +191,7 @@ TabPage TP_CONDCOLL
         Text [ spanish ] = "Estilos utilizados" ;
         Text [ french ] = "Style utilis�" ;
         Text [ swedish ] = "Anv�nda formatmallar" ;
-        Text [ danish ] = "Anvendt typografi" ;
+        Text [ danish ] = "Anvendte typografier" ;
         Text [ portuguese ] = "Estilos em uso" ;
         Text [ portuguese_brazilian ] = "Estilos Aplicados" ;
         Text[ chinese_simplified ] = "使用的样式";
@@ -205,6 +211,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "Verwendete Vorlage";
         Text[ hindi ] = "लागू की हुयी शैलियाँ";
         Text[ slovak ] = "Použité štýly";
+        Text[ hungarian ] = "Alkalmazott stílusok";
+        Text[ slovenian ] = "Uporabljeni slogi";
     };
     Control TB_CONDCOLLS
     {
@@ -249,6 +257,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "A~bsatzvorlagen";
         Text[ hindi ] = "~परिच्छेद शैलियाँ";
         Text[ slovak ] = "Štýly ~odstavca";
+        Text[ hungarian ] = "~Bekezdésstílusok";
+        Text[ slovenian ] = "Slogi ~odstavka";
     };
     ListBox LB_STYLE
     {
@@ -284,7 +294,7 @@ TabPage TP_CONDCOLL
         Text [ spanish ] = "~Borrar" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "Ta ~bort" ;
-        Text [ danish ] = "Fjern" ;
+        Text [ danish ] = "~Fjern" ;
         Text [ portuguese ] = "~Remover" ;
         Text [ portuguese_brazilian ] = "~Remover" ;
         Text[ chinese_simplified ] = "删除(~M)";
@@ -304,6 +314,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "~Entfernen";
         Text[ hindi ] = "हटा~ओ";
         Text[ slovak ] = "~Odstrániť";
+        Text[ hungarian ] = "~Eltávolítás";
+        Text[ slovenian ] = "Od~strani";
     };
     PushButton PB_ASSIGN
     {
@@ -319,7 +331,7 @@ TabPage TP_CONDCOLL
         Text [ spanish ] = "~Aplicar" ;
         Text [ french ] = "~Assigner" ;
         Text [ swedish ] = "Till~dela" ;
-        Text [ danish ] = "Tildel" ;
+        Text [ danish ] = "~Anvend" ;
         Text [ portuguese ] = "~Atribuir" ;
         Text [ portuguese_brazilian ] = "~Aplicar" ;
         Text[ chinese_simplified ] = "指定(~A)";
@@ -339,6 +351,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "‮יישום‬";
         Text[ hindi ] = "~लागू करो";
         Text[ slovak ] = "~Použiť";
+        Text[ hungarian ] = "~Alkalmaz";
+        Text[ slovenian ] = "~Uporabi";
     };
     StringArray STR_REGIONS
     {
@@ -534,7 +548,7 @@ TabPage TP_CONDCOLL
             < "Tabelsidehoved" ; > ;
             < "Tabel" ; > ;
             < "Ramme" ; > ;
-            < "Omr�de" ; > ;
+            < "Sektion" ; > ;
             < "Fodnote" ; > ;
             < "Slutnote" ; > ;
             < "Sidehoved" ; > ;
@@ -1211,6 +1225,68 @@ TabPage TP_CONDCOLL
         < " 9. úroveň číslovania" ; > ;
         < "10. úroveň číslovania" ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "Táblázatfejléc" ; > ;
+        < "Táblázat" ; > ;
+        < "Keret" ; > ;
+        < "Szakasz" ; > ;
+        < "Lábjegyzet" ; > ;
+        < "Végjegyzet" ; > ;
+        < "Élőfej" ; > ;
+        < "Élőláb" ; > ;
+        < "1. Vázlat szint" ; > ;
+        < "2. vázlatszint" ; > ;
+        < "3. vázlatszint" ; > ;
+        < "4. vázlatszint" ; > ;
+        < "5. vázlatszint" ; > ;
+        < "6. vázlatszint" ; > ;
+        < "7. vázlatszint" ; > ;
+        < "8. vázlatszint" ; > ;
+        < "9. vázlatszint" ; > ;
+        < "10. vázlatszint" ; > ;
+        < "1. számozási szint" ; > ;
+        < "2. számozási szint" ; > ;
+        < "3. számozási szint" ; > ;
+        < "4. számozási szint" ; > ;
+        < "5. számozási szint" ; > ;
+        < "6. számozási szint" ; > ;
+            < "7. számozási szint" ; > ;
+            < "8. számozási szint" ; > ;
+            < "9. számozási szint" ; > ;
+            < "10. számozási szint" ; > ;
+        };
+    ItemList [ slovenian ] =
+    {
+         < "Glava tabele" ; > ;
+        < "Tabela" ; > ;
+        < "Okvir" ; > ;
+        < "Odsek" ; > ;
+        < "Sprotna opomba" ; > ;
+        < "Končna opomba" ; > ;
+        < "Glava" ; > ;
+        < "Noga" ; > ;
+        < " Raven orisa 1" ; > ;
+        < " Raven orisa 2" ; > ;
+        < " Raven orisa 3" ; > ;
+        < " Raven orisa 4" ; > ;
+        < " Raven orisa 5" ; > ;
+        < " Raven orisa 6" ; > ;
+        < " Raven orisa 7" ; > ;
+        < " Raven orisa 8" ; > ;
+        < " Raven orisa 9" ; > ;
+        < " Raven orisa 10" ; > ;
+        < " Oštevilčevanje 1" ; > ;
+        < " Oštevilčevanje 2" ; > ;
+        < " Oštevilčevanje 3" ; > ;
+        < " Oštevilčevanje 4" ; > ;
+        < " Oštevilčevanje 5" ; > ;
+        < " Oštevilčevanje 6" ; > ;
+            < " Oštevilčevanje 7" ; > ;
+            < " Oštevilčevanje 8" ; > ;
+            < " Oštevilčevanje 9" ; > ;
+            < " Oštevilčevanje 10" ; > ;
+        };
     };
     String STR_NOTEMPL
     {
@@ -1242,70 +1318,8 @@ TabPage TP_CONDCOLL
         Text[ hebrew ] = "<keine>";
         Text[ hindi ] = "<कोई नहीं>";
         Text[ slovak ] = "<nič>";
+        Text[ hungarian ] = "<semmi>";
+        Text[ slovenian ] = "<brez>";
     };
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
