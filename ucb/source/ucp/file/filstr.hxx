@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filstr.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:52:52 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,11 +100,11 @@
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XASYNCOUTPUTMONITOR_HPP_
+#include "com/sun/star/io/XAsyncOutputMonitor.hpp"
+#endif
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XJOB_HPP_ //HACK see #i38298#
-#include "com/sun/star/task/XJob.hpp"
 #endif
 
 namespace fileaccess {
@@ -123,7 +123,7 @@ namespace fileaccess {
           public com::sun::star::io::XInputStream,
           public com::sun::star::io::XOutputStream,
           public com::sun::star::io::XTruncate,
-          public com::sun::star::task::XJob //HACK see #i38298#
+          public com::sun::star::io::XAsyncOutputMonitor
     {
         friend class XInputStreamForStream;
         friend class XOutputStreamForStream;
@@ -288,13 +288,9 @@ namespace fileaccess {
                    com::sun::star::io::IOException,
                    com::sun::star::uno::RuntimeException );
 
-        //HACK see #i38298#
-        virtual com::sun::star::uno::Any SAL_CALL execute(
-            com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue >
-            const &)
+        virtual void SAL_CALL waitForCompletion()
             throw (
-                com::sun::star::lang::IllegalArgumentException,
-                com::sun::star::uno::Exception,
+                com::sun::star::io::IOException,
                 com::sun::star::uno::RuntimeException);
 
     private:
