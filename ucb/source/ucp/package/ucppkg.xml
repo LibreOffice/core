@@ -30,7 +30,7 @@
         <status value="final"/>
 
         <service-dependency>
-            com.sun.star.package.Package
+            com.sun.star.packages.Package
         </service-dependency>
     </component-description>
 
