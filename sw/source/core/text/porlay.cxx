@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:32:29 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,50 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     SetDummy( bTmpDummy );
     SetRedline( rLine.GetRedln() &&
         rLine.GetRedln()->CheckLine( rLine.GetStart(), rLine.GetEnd() ) );
+}
+
+void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
+                                     SwTwips& _orDescent,
+                                     SwTwips& _orObjAscent,
+                                     SwTwips& _orObjDescent,
+                                     const SwLinePortion* _pDontConsiderPortion ) const
+{
+    _orAscent = 0;
+    _orDescent = 0;
+    _orObjAscent = 0;
+    _orObjDescent = 0;
+
+    const SwLinePortion* pPortion = this;
+    if ( !pPortion->GetLen() && pPortion->GetPortion() )
+    {
+        pPortion = pPortion->GetPortion();
+    }
+
+    while ( pPortion )
+    {
+        if ( !pPortion->IsBreakPortion() && !pPortion->IsFlyPortion() )
+        {
+            SwTwips nPortionAsc = static_cast<SwTwips>(pPortion->GetAscent());
+            SwTwips nPortionDesc = static_cast<SwTwips>(pPortion->Height()) -
+                                   nPortionAsc;
+
+            sal_Bool bFlyCmp = pPortion->IsFlyCntPortion()
+                               ? static_cast<const SwFlyCntPortion*>(pPortion)->IsMax()
+                               : ( pPortion != _pDontConsiderPortion );
+            if ( bFlyCmp )
+            {
+                _orObjAscent = Max( _orObjAscent, nPortionAsc );
+                _orObjDescent = Max( _orObjDescent, nPortionDesc );
+            }
+
+            if ( !pPortion->IsFlyCntPortion() && !pPortion->IsGrfNumPortion() )
+            {
+                _orAscent = Max( _orAscent, nPortionAsc );
+                _orDescent = Max( _orDescent, nPortionDesc );
+            }
+        }
+        pPortion = pPortion->GetPortion();
+    }
 }
 
 /*************************************************************************
