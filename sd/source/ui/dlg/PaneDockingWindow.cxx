@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:11:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <vcl/toolbox.hxx>
+#ifndef _SV_TASKPANELIST_HXX
+#include <vcl/taskpanelist.hxx>
+#endif
 
 namespace sd {
 
@@ -100,6 +103,12 @@ PaneDockingWindow::PaneDockingWindow (
         msTitle = pBase->GetPaneManager().GetWindowTitle (mePane);
         pBase->GetPaneManager().SetWindow (mePane, this);
     }
+
+    // Tell the system window about the new docking window so that it can be
+    // reached via the keyboard.
+    SystemWindow* pSystemWindow = GetSystemWindow();
+    if (pSystemWindow != NULL)
+        pSystemWindow->GetTaskPaneList()->AddWindow(this);
 }
 
 
@@ -109,6 +118,13 @@ PaneDockingWindow::~PaneDockingWindow (void)
 {
     ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
         GetBindings().GetDispatcher()->GetFrame());
+
+    // Tell the next system window that the docking window is no longer
+    // available.
+    SystemWindow* pSystemWindow = GetSystemWindow();
+    if (pSystemWindow != NULL)
+        pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
+
     // Tell the ViewShellBase that the window of this slide sorter is not
     // available anymore.
     if (pBase != NULL)
