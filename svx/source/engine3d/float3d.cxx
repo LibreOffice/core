@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 18:08:42 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 07:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 
     aLink = LINK( this, Svx3DWin, DoubleClickHdl );
     aCtlFavorites.SetDoubleClickHdl( aLink );
+    aCtlFavorites.SetStyle( aCtlFavorites.GetStyle() | WB_FLATVALUESET );
 
     aLink = LINK( this, Svx3DWin, ClickFavoriteHdl );
     aCtlFavorites.SetSelectHdl( aLink );
@@ -407,9 +408,6 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
     aCtlLightPreview.SetUserInteractiveChangeCallback( aLink );
     aLink = LINK( this, Svx3DWin, ChangeSelectionCallbackHdl );
     aCtlLightPreview.SetUserSelectionChangeCallback( aLink );
-
-    aCtlPreview.SetBorderStyle( WINDOW_BORDER_MONO );
-    aCtlLightPreview.SetBorderStyle( WINDOW_BORDER_MONO );
 
     aSize = GetOutputSizePixel();
     SetMinOutputSizePixel( aSize );
