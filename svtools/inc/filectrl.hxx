@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filectrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:50 $
+ *  last change: $Author: fs $ $Date: 2001-09-04 08:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,9 @@ private:
 
     FileControlMode             mnFlags;
     FileControlMode_Internal    mnInternalFlags;
+
+private:
+    void            ImplBrowseFile( );
 
 protected:
     void            Resize();
