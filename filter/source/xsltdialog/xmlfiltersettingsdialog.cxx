@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2003-05-08 09:00:38 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1717,7 +1717,7 @@ OUString string_decode( const OUString & rText )
 
 bool isFileURL( const ::rtl::OUString & rURL )
 {
-    return rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("http:") ) == 0;
+    return rURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM("file:") ) == 0;
 }
 
 // -----------------------------------------------------------------------
