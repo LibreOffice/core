@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:20:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 
 #pragma hdrstop
 
