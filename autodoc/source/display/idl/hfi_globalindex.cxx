@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_globalindex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 11:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 // NOT FULLY DEFINED SERVICES
 #include <cosv/template/tpltools.hxx>
 #include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_language.hxx>
 #include <ary/idl/i_module.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_navibar.hxx"
@@ -134,6 +135,11 @@ const char *    C_sOwnerNames[C_nNumberOfIdlTypes] =
                       "module ",    "enum ",        "module ",      "module ",      "", // could be struct or exception
                       "module ",    "module ",      "constants group ", "module ",  "interface "
                     };
+const intt C_nNamesArrayOffset = intt(ary::idl::Module::class_id);
+const int C_nIxField = 9;
+
+
+
 
 const char C_cAlphabet[] =
 "<a class=\"inverse\" href=\"index-1.html\"><B>A</B></a> <a class=\"inverse\" href=\"index-2.html\"><B>B</B></a> <a class=\"inverse\" href=\"index-3.html\"><B>C</B></a> <a class=\"inverse\" href=\"index-4.html\"><B>D</B></a> <a class=\"inverse\" href=\"index-5.html\"><B>E</B></a> "
@@ -143,11 +149,21 @@ const char C_cAlphabet[] =
 "<a class=\"inverse\" href=\"index-21.html\"><B>U</B></a> <a class=\"inverse\" href=\"index-22.html\"><B>V</B></a> <a class=\"inverse\" href=\"index-23.html\"><B>W</B></a> <a class=\"inverse\" href=\"index-24.html\"><B>X</B></a> <a class=\"inverse\" href=\"index-25.html\"><B>Y</B></a> "
 "<a class=\"inverse\" href=\"index-26.html\"><B>Z</B></a>";
 
-typedef std::vector<ary::idl::Ce_id> PageData;
 
-PageData G_PageData;
+
+HF_IdlGlobalIndex::PageData     G_PageData;
 
 }   // end anonymous namespace
+
+
+inline void
+HF_IdlGlobalIndex::write_EntryItself( Xml::Element &               o_destination,
+                                      const ary::idl::CodeEntity & i_ce,
+                                      const HF_IdlTypeText &       i_typeLinkWriter ) const
+{
+    i_typeLinkWriter.Produce_IndexLink(o_destination, i_ce);
+    o_destination << " - ";
+}
 
 
 HF_IdlGlobalIndex::HF_IdlGlobalIndex( Environment &     io_rEnv,
@@ -186,47 +202,15 @@ HF_IdlGlobalIndex::Produce_Page(ary::idl::alphabetical_index::E_Letter i_letter)
     csv::erase_container(G_PageData);
     Env().Data().Get_IndexData(G_PageData, i_letter);
 
-    static StringVector aModule_;
-    csv::erase_container(aModule_);
-    String sCeMain;
-    String sCeMember;
-
-    const intt nDiff = intt(ary::idl::Module::class_id);
-    const int nIxModule = 0;
-    const int nIxField = 9;
-
-    HF_IdlTypeText aLinker(Env(),HF_IdlTypeText::use_for_javacompatible_index);
+    // Helper object to produce links to the index Entries.
+    HF_IdlTypeText aTypeLinkWriter(Env(),HF_IdlTypeText::use_for_javacompatible_index);
 
     PageData::const_iterator itEnd = G_PageData.end();
     for ( PageData::const_iterator iter = G_PageData.begin();
           iter != itEnd;
           ++iter )
     {
-        const client & rCe = Env().Data().Find_Ce(*iter);
-        if (NOT rCe.Owner().IsValid())
-            return; // Omit global namespace.
-        const client & rOwner = Env().Data().Find_Ce(rCe.Owner());
-
-        Xml::Element & rDT = CurOut() >> *new Html::DefListTerm;
-        aLinker.Produce_IndexLink(rDT, rCe);
-
-        rDT << " - ";
-
-        int nIx = int(rCe.ClassId()-nDiff);
-        csv_assert(csv::in_range(0,nIx,15));
-        rDT << C_sTypeNames[nIx]
-            << "in ";
-        if (nIx != nIxField)
-        {
-            rDT << C_sOwnerNames[nIx];
-        }
-        else
-        {
-            uintt nOwnerIx = rOwner.ClassId()-nDiff;
-            rDT << C_sTypeNames[nOwnerIx];
-        }
-        aLinker.Produce_IndexOwnerLink(rDT, rOwner);
-        CurOut() << new Html::DefListDefinition;
+        produce_Line(iter, aTypeLinkWriter);
     }   // end for
 
     Out().Leave();
@@ -243,33 +227,74 @@ HF_IdlGlobalIndex::make_Navibar() const
     CurOut() << new Html::HorizontalLine();
 }
 
-
-#if 0
 void
-HF_IdlGlobalIndex::StoreString( const String  &     i_sName,
-                                E_Types             i_eType,
-                                bool                i_bUseOwner )
+HF_IdlGlobalIndex::produce_Line( PageData::const_iterator i_entry,
+                                 const HF_IdlTypeText &   i_typeLinkWriter) const
 {
-    aText.seekp(0);
+    const client &
+        rCe = Env().Data().Find_Ce(*i_entry);
+    if (NOT rCe.Owner().IsValid())
+        return; // Omit global namespace.
 
-    aText << char('A'+char(i_eType));
+    // The destination for the created output:
+    Xml::Element & rDT = CurOut() >> *new Html::DefListTerm;
 
-    aText   << i_sName
-            << C_cSplit
-            << sCurModule;
-    if (i_bUseOwner)
-    {
-        aText << "*"
-              << sCurOwner;
-    }
-
-    int nBegin = tolower(aText.c_str()[1]);
-    if (nBegin >= 'a' AND nBegin <= 'z')
-        aData[nBegin-'a'].push_back(aText.c_str());
+    /** The following code is intended to produce an output that
+        will be recognized by the context help system of Forte.
+        That is reached by making it similar to the indices, that
+        Javadoc produces.
+        If the link to the Entry contains a hashmark, the Forte-Help
+        requires following a link to the owner.
+        But if there is no hashmark, the following link must go to
+        the same Entry again. Doesn't make really sense :-(, but that's
+        like it is.
+    */
+    write_EntryItself(rDT,rCe,i_typeLinkWriter);
+    if (rCe.SightLevel() == ary::idl::sl_Member)
+        write_OwnerOfEntry(rDT,rCe,i_typeLinkWriter);
     else
-        aData[C_nIndexUnderscore].push_back(aText.c_str());
+        write_EntrySecondTime(rDT,rCe,i_typeLinkWriter);
+
+    // This produces an empty "<dd></dd>", which is also needed to reach
+    //   similarity to the Javadoc index:
+    CurOut() << new Html::DefListDefinition;
 }
 
+void
+HF_IdlGlobalIndex::write_OwnerOfEntry( Xml::Element &               o_destination,
+                                       const ary::idl::CodeEntity & i_ce,
+                                       const HF_IdlTypeText &       i_typeLinkWriter ) const
+{
+    const client &
+        rOwner = Env().Data().Find_Ce(i_ce.Owner());
 
-#endif // 0
+    int nIx = int(i_ce.ClassId() - C_nNamesArrayOffset);
+    csv_assert(csv::in_range(0,nIx,C_nNumberOfIdlTypes));
 
+    o_destination << C_sTypeNames[nIx]
+                  << "in ";
+    if (nIx != C_nIxField)
+    {
+        o_destination << C_sOwnerNames[nIx];
+    }
+    else
+    {
+        uintt nOwnerIx = rOwner.ClassId() - C_nNamesArrayOffset;
+        csv_assert(csv::in_range(0,nOwnerIx,C_nNumberOfIdlTypes));
+        o_destination << C_sTypeNames[nOwnerIx];
+    }
+    i_typeLinkWriter.Produce_IndexOwnerLink(o_destination, rOwner);
+}
+
+void
+HF_IdlGlobalIndex::write_EntrySecondTime( Xml::Element &                o_destination,
+                                          const ary::idl::CodeEntity &  i_ce,
+                                          const HF_IdlTypeText &        i_typeLinkWriter ) const
+{
+    int nIx = int(i_ce.ClassId() - C_nNamesArrayOffset);
+    csv_assert(csv::in_range(0,nIx,C_nNumberOfIdlTypes));
+
+    o_destination << C_sTypeNames[nIx]
+                  << " ";
+    i_typeLinkWriter.Produce_IndexSecondEntryLink(o_destination, i_ce);
+}
