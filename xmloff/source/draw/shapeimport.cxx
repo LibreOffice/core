@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 15:44:42 $
+ *  last change: $Author: cl $ $Date: 2001-11-15 13:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -978,6 +978,17 @@ ShapeSortContext::ShapeSortContext( uno::Reference< drawing::XShapes >& rShapes,
 :   mxShapes( rShapes ), mnCurrentZ( 0 ), mpParentContext( pParentContext ),
     msZOrder(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))
 {
+    // first add the already existing shapes in the unsorted list
+    ZOrderHint aNewHint;
+
+    sal_Int32 nCount = rShapes->getCount();
+    while( mnCurrentZ < nCount )
+    {
+        aNewHint.nIs = mnCurrentZ++;
+        aNewHint.nShould = -1;
+
+        maUnsortedList.push_back(aNewHint);
+    }
 }
 
 void ShapeSortContext::moveShape( sal_Int32 nSourcePos, sal_Int32 nDestPos )
