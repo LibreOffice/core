@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlxtexp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-27 14:18:57 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,14 +79,13 @@ namespace com { namespace sun { namespace star {
 class SvxXMLXTableExportComponent : public SvXMLExport
 {
 public:
+    // #110680#
     SvxXMLXTableExportComponent(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const rtl::OUString& rFileName,
-        const com::sun::star::uno::Reference<
-            com::sun::star::xml::sax::XDocumentHandler > & xHandler,
-        const com::sun::star::uno::Reference<
-            com::sun::star::container::XNameContainer > & xTable,
-        com::sun::star::uno::Reference<
-            com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
+        const com::sun::star::uno::Reference< com::sun::star::xml::sax::XDocumentHandler > & xHandler,
+        const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > & xTable,
+        com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& xGrfResolver);
 
     ~SvxXMLXTableExportComponent();
 
