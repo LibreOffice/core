@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:44:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:59:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ SwXTextPortionEnumeration::SwXTextPortionEnumeration(
     pUnoCrsr->Add(this);
 
     DBG_ASSERT(nEnd == -1 || (nStart <= nEnd &&
-        nEnd < pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
+        nEnd <= pUnoCrsr->Start()->nNode.GetNode().GetTxtNode()->GetTxt().Len()),
             "start or end value invalid!")
     //alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // AM ZEICHEN gebunden sind
