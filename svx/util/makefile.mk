@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 09:48:14 $
+#   last change: $Author: obo $ $Date: 2004-06-01 08:51:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -106,6 +106,7 @@ SHL4STDLIBS= \
             $(CPPULIB) \
             $(VOSLIB) \
             $(SALLIB) \
+            $(JVMFWKLIB) \
             $(ICUUCLIB)
 
 # --- Svx - DLL ----------
