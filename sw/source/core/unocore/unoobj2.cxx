@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:26 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,9 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
 #endif
+#ifndef _COM_SUN_STAR_TABLE_TABLESORTFIELD_HPP_
+#include <com/sun/star/table/TableSortField.hpp>
+#endif
 #ifndef _UNOIDX_HXX
 #include <unoidx.hxx>
 #endif
@@ -513,7 +516,7 @@ void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
  ---------------------------------------------------------------------------*/
 uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bool bFromTable)
 {
-    uno::Sequence< beans::PropertyValue > aRet(17);
+    uno::Sequence< beans::PropertyValue > aRet(5);
     beans::PropertyValue* pArray = aRet.getArray();
 
     uno::Any aVal;
@@ -529,61 +532,49 @@ uno::Sequence< beans::PropertyValue > SwXTextCursor::createSortDescriptor(sal_Bo
     pArray[1] = beans::PropertyValue(C2U("Delimiter"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal.setValue( &bTrue, ::getCppuBooleanType());
-    pArray[2] = beans::PropertyValue(C2U("SortColumns"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[2] = beans::PropertyValue(C2U("IsSortColumns"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal <<= (INT16)1;
-    pArray[3] = beans::PropertyValue(C2U("SortRowOrColumnNo0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    aVal <<= (INT32)3;
+    pArray[3] = beans::PropertyValue(C2U("MaxSortFieldsCount"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    aVal.setValue( &bFalse, ::getCppuBooleanType());
-    pArray[4] = beans::PropertyValue(C2U("IsSortNumeric0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
-    pArray[5] = beans::PropertyValue(C2U("IsSortAscending0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal <<= (INT16)1;
-    pArray[6] = beans::PropertyValue(C2U("SortRowOrColumnNo1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bFalse, ::getCppuBooleanType());
-    pArray[7] = beans::PropertyValue(C2U("IsSortNumeric1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
-    pArray[8] = beans::PropertyValue(C2U("IsSortAscending1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal <<= (INT16)1;
-    pArray[9] = beans::PropertyValue(C2U("SortRowOrColumnNo2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bFalse, ::getCppuBooleanType());
-    pArray[10] = beans::PropertyValue(C2U("IsSortNumeric2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bTrue, ::getCppuBooleanType());
-    pArray[11] = beans::PropertyValue(C2U("IsSortAscending2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
-    aVal.setValue( &bFalse, ::getCppuBooleanType());
-    pArray[12] = beans::PropertyValue(C2U("IsCaseSensitive"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    uno::Sequence< table::TableSortField > aFields(3);
+    table::TableSortField* pFields = aFields.getArray();
 
     Locale aLang( SvxCreateLocale( LANGUAGE_SYSTEM ) );
-    aVal.setValue( &aLang, ::getCppuType( (Locale*)0) );
-    pArray[13] = beans::PropertyValue(C2U("CollatorLocale"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
-
     // get collator algorithm to be used for the locale
     Sequence < OUString > aSeq( GetAppCollator().listCollatorAlgorithms( aLang ) );
     INT32 nLen = aSeq.getLength();
     DBG_ASSERT( nLen > 0, "list of collator algorithms is empty!");
-    OUString aTxt;
+    OUString aCollAlg;
     if (nLen > 0)
-        aTxt = aSeq.getConstArray()[0];
+        aCollAlg = aSeq.getConstArray()[0];
 #ifdef DEBUG
     const OUString *pTxt = aSeq.getConstArray();
 #endif
 
-    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
-    pArray[14] = beans::PropertyValue(C2U("CollatorAlgorithm0"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pFields[0].Field = 1;
+    pFields[0].IsAscending = sal_True;
+    pFields[0].IsCaseSensitive = sal_False;
+    pFields[0].FieldType = table::TableSortFieldType_ALPHANUMERIC;
+    pFields[0].CollatorLocale = aLang;
+    pFields[0].CollatorAlgorithm = aCollAlg;
 
-    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
-    pArray[15] = beans::PropertyValue(C2U("CollatorAlgorithm1"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pFields[1].Field = 1;
+    pFields[1].IsAscending = sal_True;
+    pFields[1].IsCaseSensitive = sal_False;
+    pFields[1].FieldType = table::TableSortFieldType_ALPHANUMERIC;
+    pFields[1].CollatorLocale = aLang;
+    pFields[1].CollatorAlgorithm = aCollAlg;
 
-    aVal.setValue( &aTxt, ::getCppuType( (OUString*)0 ) );
-    pArray[16] = beans::PropertyValue(C2U("CollatorAlgorithm2"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pFields[2].Field = 1;
+    pFields[2].IsAscending = sal_True;
+    pFields[2].IsCaseSensitive = sal_False;
+    pFields[2].FieldType = table::TableSortFieldType_ALPHANUMERIC;
+    pFields[2].CollatorLocale = aLang;
+    pFields[2].CollatorAlgorithm = aCollAlg;
+
+    aVal <<= aFields;
+    pArray[4] = beans::PropertyValue(C2U("SortFields"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     return aRet;
 }
@@ -626,11 +617,16 @@ sal_Bool SwXTextCursor::convertSortProperties(
     pKey3->eSortOrder   = SRT_ASCENDING;
     SwSortKey* aKeys[3] = {pKey1, pKey2, pKey3};
 
+    sal_Bool bOldSortdescriptor(sal_False);
+    sal_Bool bNewSortdescriptor(sal_False);
+
     for( int n = 0; n < rDescriptor.getLength(); ++n )
     {
         uno::Any aValue( pProperties[n].Value );
 //      String sPropName = pProperties[n].Name;
         const OUString& rPropName = pProperties[n].Name;
+
+        // old and new sortdescriptor
         if( COMPARE_EQUAL == rPropName.compareToAscii("IsSortInTable"))
         {
             if ( aValue.getValueType() == ::getBooleanCppuType() )
@@ -646,8 +642,10 @@ sal_Bool SwXTextCursor::convertSortProperties(
             else
                 bRet = sal_False;
         }
+        // old sortdescriptor
         else if(COMPARE_EQUAL == rPropName.compareToAscii("SortColumns"))
         {
+            bOldSortdescriptor = sal_True;
             if ( aValue.getValueType() == ::getBooleanCppuType() )
             {
                 sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
@@ -658,6 +656,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("IsCaseSensitive"))
         {
+            bOldSortdescriptor = sal_True;
             if ( aValue.getValueType() == ::getBooleanCppuType() )
             {
                 sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
@@ -668,6 +667,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
         }
         else if(COMPARE_EQUAL == rPropName.compareToAscii("CollatorLocale"))
         {
+            bOldSortdescriptor = sal_True;
             Locale aLocale;
             if (aValue >>= aLocale)
                 rSortOpt.nLanguage = SvxLocaleToLanguage( aLocale );
@@ -678,6 +678,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             rPropName.getLength() == 18 &&
             (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
         {
+            bOldSortdescriptor = sal_True;
             sal_uInt16 nIndex = rPropName.getStr()[17];
             nIndex -= '0';
             OUString aTxt;
@@ -690,6 +691,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             rPropName.getLength() == 18 &&
             (rPropName.getStr()[17] >= '0' && rPropName.getStr()[17] <= '9'))
         {
+            bOldSortdescriptor = sal_True;
             sal_uInt16 nIndex = rPropName.getStr()[17];
             nIndex -= '0';
             sal_Int16 nCol = -1;
@@ -704,6 +706,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             rPropName.getLength() == 14 &&
             (rPropName.getStr()[13] >= '0' && rPropName.getStr()[13] <= '9'))
         {
+            bOldSortdescriptor = sal_True;
             sal_uInt16 nIndex = rPropName.getStr()[13];
             nIndex = nIndex - '0';
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
@@ -718,6 +721,7 @@ sal_Bool SwXTextCursor::convertSortProperties(
             rPropName.getLength() == 16 &&
             (rPropName.getStr()[15] >= '0' && rPropName.getStr()[15] <= '9'))
         {
+            bOldSortdescriptor = sal_True;
             sal_uInt16 nIndex = rPropName.getStr()[15];
             nIndex -= '0';
             if ( aValue.getValueType() == ::getBooleanCppuType() && nIndex < 3 )
@@ -728,6 +732,50 @@ sal_Bool SwXTextCursor::convertSortProperties(
             else
                 bRet = sal_False;
         }
+        // new sortdescriptor
+        else if(COMPARE_EQUAL == rPropName.compareToAscii("IsSortColumns"))
+        {
+            bNewSortdescriptor = sal_True;
+            if ( aValue.getValueType() == ::getBooleanCppuType() )
+            {
+                sal_Bool bTemp = *(sal_Bool*)aValue.getValue();
+                rSortOpt.eDirection = bTemp ? SRT_COLUMNS : SRT_ROWS;
+            }
+            else
+                bRet = sal_False;
+        }
+        else if (COMPARE_EQUAL == rPropName.compareToAscii("SortFields"))
+        {
+            bNewSortdescriptor = sal_True;
+            uno::Sequence < table::TableSortField > aFields;
+            if ( aValue >>= aFields )
+            {
+                sal_Int32 nCount(aFields.getLength());
+                if (nCount <= 3)
+                {
+                    table::TableSortField* pFields = aFields.getArray();
+                    for (sal_Int32 i = 0; i < nCount; ++i)
+                    {
+                        rSortOpt.bIgnoreCase = !pFields[i].IsCaseSensitive;
+                        rSortOpt.nLanguage = SvxLocaleToLanguage( pFields[i].CollatorLocale );
+                        aKeys[i]->sSortType = pFields[i].CollatorAlgorithm;
+                        aKeys[i]->nColumnId = pFields[i].Field;
+                        aKeys[i]->bIsNumeric = (pFields[i].FieldType == table::TableSortFieldType_NUMERIC);
+                        aKeys[i]->eSortOrder = pFields[i].IsAscending ? SRT_ASCENDING : SRT_DESCENDING;
+                    }
+                }
+                else
+                    bRet = sal_False;
+            }
+            else
+                bRet = sal_False;
+        }
+    }
+
+    if (bNewSortdescriptor && bOldSortdescriptor)
+    {
+        DBG_ERROR("someone tried to set the old deprecated and the new sortdescriptor");
+        bRet = sal_False;
     }
 
     if(pKey1->nColumnId != USHRT_MAX)
