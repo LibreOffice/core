@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:14:29 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -993,7 +993,7 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                 bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
             }
             SwTwips nLower = bCommonBorder ?
-                             rAttrs.GetBottomLine( this ) :
+                             rAttrs.GetBottomLine( *(this) ) :
                              rAttrs.CalcBottomLine();
 
             (Prt().*fnRect->fnSetPosY)( (!bVert || bReverse) ? nUpper : nLower);
@@ -1110,6 +1110,12 @@ void SwCntntFrm::MakeAll()
 
     SwBorderAttrAccess aAccess( SwFrm::GetCache(), this );
     const SwBorderAttrs &rAttrs = *aAccess.Get();
+
+    // OD 2004-02-26 #i25029#
+    if ( !IsFollow() && rAttrs.JoinedWithPrev( *(this) ) )
+    {
+        pNotify->SetBordersJoinedWithPrev();
+    }
 
     const BOOL bKeep = IsKeep( rAttrs );
 
@@ -1562,6 +1568,11 @@ void SwCntntFrm::MakeAll()
     UnlockJoin();
     if ( bMovedFwd || bMovedBwd )
         pNotify->SetInvaKeep();
+    // OD 2004-02-26 #i25029#
+    if ( bMovedFwd )
+    {
+        pNotify->SetInvalidatePrevPrtArea();
+    }
     delete pNotify;
     SetFlyLock( FALSE );
 }
@@ -1730,7 +1741,7 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                     bCommonBorder = pSct->GetFmt()->GetBalancedColumns().GetValue();
                 }
                 nUpper += bCommonBorder ?
-                          rAttrs.GetBottomLine( pFrm ) :
+                          rAttrs.GetBottomLine( *(pFrm) ) :
                           rAttrs.CalcBottomLine();
             }
             else
