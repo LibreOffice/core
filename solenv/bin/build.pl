@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.105 $
+#   $Revision: 1.106 $
 #
-#   last change: $Author: rt $ $Date: 2004-04-08 15:52:29 $
+#   last change: $Author: obo $ $Date: 2004-04-14 14:00:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,7 +74,6 @@
 
     if (defined $ENV{CWS_WORK_STAMP}) {
         require lib; import lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-        require Cws; import Cws;
         require Logging; import Logging if (!defined $ENV{NO_LOGGING});
         require CvsModule; import CvsModule;
         require GenInfoParser; import GenInfoParser;
@@ -85,7 +84,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.105 $ ';
+    $id_str = ' $Revision: 1.106 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -845,25 +844,11 @@ sub init_logging {
     foreach (@ARGV) {$parameter_list .= "$_\;"};
     $parameter_list = $` if ($parameter_list =~ /;$/o);
 
-    my $cws = Cws->new();
     my $childws  = $ENV{CWS_WORK_STAMP};
     my $masterws = $ENV{WORK_STAMP};
-    $cws->child($childws);
-    $cws->master($masterws);
-    $log->set_cws_handle($cws);
-    $log->start_log_extended($script_name, $parameter_list, $masterws, $childws, $vcsid);
-    # Set interrupt handler
-    $SIG{'INT'} = 'INT_handler';
+    return if (!defined( $childws ) || !defined( $masterws ));
+    $log->start_log_extended($script_name, $parameter_list, $masterws, $childws);
 };
-
-#
-# Interrupt handler to log ctrl+c ua
-#
-sub INT_handler {
-    print("Command aborted!\n");
-    &finish_logging('Manual abort (ctrl-c)');
-    do_exit(1);
-}
 
 #
 # Get all options passed
@@ -1866,9 +1851,9 @@ sub pick_for_build_type {
 sub do_exit {
     my $exit_code = shift;
     if ($exit_code) {
-        &finish_logging("error occured");
+#        &finish_logging("error occured");
     } else {
-        &finish_logging;
+#        &finish_logging;
     };
     exit($exit_code);
 };
