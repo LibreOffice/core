@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:39:10 $
+#   last change: $Author: hr $ $Date: 2004-02-02 19:05:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,16 +104,6 @@ SHL1 SHL2 SHL3 SHL4 SHL5 SHL6 SHL7 SHL8 SHL9:
 
 .IF "$(OS)"=="AIX"
 SHL$(TNR)STDLIBS=
-.ENDIF
-
-# Link in static data members for template classes
-.IF "$(OS)$(CVER)"=="MACOSXC295"
-SHL$(TNR)STDLIBS+=$(STATICLIB)
-# Allow certain libraries to not link to libstatic*.dylib. This is only used
-# by libraries that cannot be linked to other libraries.
-.IF "$(NOSHAREDSTATICLIB)"==""
-SHL$(TNR)STDLIBS+=$(STATICLIB)
-.ENDIF
 .ENDIF
 
 .IF "$(SHLLINKARCONLY)" != ""
@@ -425,11 +415,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .IF "$(OS)"=="MACOSX"
         $(CC) -c -dynamic -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
-    .IF "$(CVER)"=="C295"
-        @echo "------------------------------"
-        @echo "Updating static data member initializations"
-        @+dmake -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-    .ENDIF
 .ENDIF
 .IF "$(OS)"=="LINUX" || "$(OS)"=="NETBSD" || "$(OS)"=="FREEBSD"
         $(CC) -c -fPIC -o $(SLO)$/{$(subst,$(UPD)$(DLLPOSTFIX),_dflt $(SHL$(TNR)TARGET))}_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.c
@@ -451,14 +436,6 @@ $(SHL$(TNR)TARGETN) : \
     $(SHL$(TNR)STDLIBS) $(SHL$(TNR)ARCHIVES) $(STDSHL) $(STDSHL$(TNR)) -filelist $(MISC)$/$(@:b).list $(LINKOUTPUT_FILTER) > $(MISC)$/$(@:b).cmd
     @cat $(MISC)$/$(@:b).cmd
     @+source $(MISC)$/$(@:b).cmd
-    .IF "$(CVER)"=="C295"
-        # This is a hack as libstatic and libcppuhelper have a circular dependency
-        .IF "$(PRJNAME)"=="cppuhelper"
-            @echo "------------------------------"
-            @echo "Rerunning static data member initializations"
-            @+dmake -u -f $(SOLARENV)$/$(OUTPATH)$/inc/makefile.mk $(MFLAGS) $(CALLMACROS) "PRJ=$(PRJ)" "PRJNAME=$(PRJNAME)" "TARGET=$(TARGET)"
-        .ENDIF
-    .ENDIF
 .IF "$(SHL$(TNR)VERSIONMAP)"!=""
 .IF "$(DEBUG)"==""
     @strip -i -r -u -S -s $(SHL$(TNR)VERSIONMAP) $@
