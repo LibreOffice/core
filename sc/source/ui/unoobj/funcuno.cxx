@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-06 17:47:37 $
+ *  last change: $Author: nn $ $Date: 2000-10-12 10:16:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 #include <tools/debug.hxx>
 #include <sfx2/app.hxx>
+#include <svtools/itemprop.hxx>
 
 #include "funcuno.hxx"
 #include "miscuno.hxx"
@@ -78,14 +79,18 @@
 #include "addincol.hxx"
 #include "rangeseq.hxx"
 #include "cell.hxx"
+#include "docoptio.hxx"
+#include "optuno.hxx"
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-#define SCFUNCTIONACCESS_SERVICE    "com.sun.star.sheet.FunctionAccess"
+//  registered as implementation for service FunctionAccess,
+//  also supports service SpreadsheetDocumentSettings (to set null date etc.)
 
-SC_SIMPLE_SERVICE_INFO( ScFunctionAccess, "ScFunctionAccess", SCFUNCTIONACCESS_SERVICE )
+#define SCFUNCTIONACCESS_SERVICE    "com.sun.star.sheet.FunctionAccess"
+#define SCDOCSETTINGS_SERVICE       "com.sun.star.sheet.SpreadsheetDocumentSettings"
 
 //------------------------------------------------------------------------
 
@@ -176,13 +181,15 @@ void ScTempDocCache::Clear()
 //------------------------------------------------------------------------
 
 ScFunctionAccess::ScFunctionAccess() :
-    bInvalid( FALSE )
+    bInvalid( FALSE ),
+    pOptions( NULL )
 {
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
 }
 
 ScFunctionAccess::~ScFunctionAccess()
 {
+    delete pOptions;
 }
 
 void ScFunctionAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
@@ -220,7 +227,77 @@ uno::Sequence<rtl::OUString> ScFunctionAccess::getSupportedServiceNames_Static()
     return aRet;
 }
 
-// ---
+// XServiceInfo
+
+rtl::OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException)
+{
+    return rtl::OUString::createFromAscii( "ScFunctionAccess" );
+}
+
+sal_Bool SAL_CALL ScFunctionAccess::supportsService( const rtl::OUString& rServiceName )
+                                                    throw(uno::RuntimeException)
+{
+    String aServiceStr = rServiceName;
+    return aServiceStr.EqualsAscii( SCFUNCTIONACCESS_SERVICE ) ||
+           aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE );
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
+                                                    throw(uno::RuntimeException)
+{
+    uno::Sequence<rtl::OUString> aRet(2);
+    rtl::OUString* pArray = aRet.getArray();
+    pArray[0] = rtl::OUString::createFromAscii( SCFUNCTIONACCESS_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCDOCSETTINGS_SERVICE );
+    return aRet;
+}
+
+// XPropertySet (document settings)
+
+uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySetInfo()
+                                                        throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    static uno::Reference<beans::XPropertySetInfo> aRef =
+        new SfxItemPropertySetInfo( ScDocOptionsHelper::GetPropertyMap() );
+    return aRef;
+}
+
+void SAL_CALL ScFunctionAccess::setPropertyValue(
+                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
+                        lang::IllegalArgumentException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( !pOptions )
+        pOptions = new ScDocOptions();
+
+    // options aren't initialized from configuration - always get the same default behaviour
+
+    BOOL bDone = ScDocOptionsHelper::setPropertyValue( *pOptions, aPropertyName, aValue );
+    if (!bDone)
+        throw beans::UnknownPropertyException();
+}
+
+uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const rtl::OUString& aPropertyName )
+                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
+                        uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    if ( !pOptions )
+        pOptions = new ScDocOptions();
+
+    // options aren't initialized from configuration - always get the same default behaviour
+
+    return ScDocOptionsHelper::getPropertyValue( *pOptions, aPropertyName );
+}
+
+SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFunctionAccess )
+
+// XFunctionAccess
 
 BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
 {
@@ -307,6 +384,13 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         // function not found
         throw container::NoSuchElementException();
     }
+
+    //
+    //  set options (null date, etc.)
+    //
+
+    if ( pOptions )
+        pDoc->SetDocOptions( *pOptions );
 
     //
     //  add arguments to token array
