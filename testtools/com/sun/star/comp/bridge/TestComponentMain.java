@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestComponentMain.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2002-09-17 15:10:27 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XSet;
 import com.sun.star.loader.XImplementationLoader;
 
+import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 
@@ -140,9 +141,7 @@ public class TestComponentMain
             "com.sun.star.comp.bridge.TestComponent$_TestObject", oldsmgr,null );
         set.insert(o);
 
-        XAcceptor xAcceptor = (XAcceptor)UnoRuntime.queryInterface(
-            XAcceptor.class,
-            smgr.createInstanceWithContext("com.sun.star.connection.Acceptor",ctx));
+        XAcceptor xAcceptor = Acceptor.create(ctx);
 
         System.err.println("waiting for connect...");
 
