@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 23:38:44 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,14 +220,14 @@ String RID_STR_SOURCETOBIG
     Text [ portuguese_brazilian ] = "Der Quelltext ist zu gro? und kann weder gespeichert noch compiliert werden.\nL?chen Sie einige Kommentare oder ?ertragen Sie einige Methoden in ein anderes Modul." ;
     Text [ portuguese ] = "O texto-fonte ι demasiado longo e nγo pode ser guardado nem compilado.\nElimine alguns comentαrios ou transfira alguns mιtodos para outro mσdulo." ;
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
-    Text[ russian ] = "Θρυξδνϋι ςεκρς ρλθψκξμ αξλόψξι θ εγξ νεβξημξζνξ νθ ρξυπΰνθςό, νθ κξμοθλθπξβΰςό.\nΣδΰλθςε νεκξςξπϋε κξμμενςΰπθθ θλθ οεπενερθςε νεκξςξπϋε μεςξδϋ β δπσγξι μξδσλό.";
+    Text[ russian ] = "Θρυξδνϋι ςεκρς ρλθψκξμ αξλόψξι θ εγξ νεβξημξζνξ νθ ρξυπΰνθςό, νθ κξμοθλθπξβΰςό.\nΣδΰλθςε νεκξςξπϋε κξμμενςΰπθθ θλθ οεπενερθςε νεκξςξπϋε ";
     Text[ polish ] = "Tekst rσd³owy jest za duΏy. Nie moΏna go zapisaζ ani skompilowaζ.\nNaleΏy usunΉζ kilka komentarzy lub przenieζ kilka metod do innego modu³u.";
     Text[ japanese ] = "Ώ°½Γ·½Δ‚ª’·‚·‚¬‚ΔA•Ϋ‘¶‚ΰΊέΚί²Ω‚πs‚¤‚±‚Ζ‚ΰ‚Ε‚«‚ά‚Ή‚ρB\nΊÒέΔ‚π‚Ά‚­‚Β‚©ν‚·‚ι‚©AÒΏ―Δή‚Μ‚Ά‚­‚Β‚©‚π•Κ‚ΜΣΌή­°Ω‚Ι“]‘—‚µ‚ά‚·B";
     Text[ chinese_traditional ] = "­μ©lΐΙ¤Σ¤j΅MµLªkΐx¦s½sΔ¶΅C\n½Π±z§R°£¤@¨ΗµωΈΡ©ΞªΜ±N΄X­Σ¤θªkΒΰ²Ύ¨μ¤@­Σ¨δ¥LªΊΌÒ¶τ¤§¤¤΅C";
     Text[ arabic ] = "δΥ ΗαγΥΟΡ ίΘνΡ αΟΡΜΙ νΚΪΠΡ γΪεΗ ΝέΩε΅ Γζ ΚΡΜγΚε.\nήγ ΘΝΠέ ΘΪΦ ΗαΚΪανήΗΚ΅ Γζ Ηδήα ΘΪΦ ΗαΓΣΗανΘ Εαμ ζΝΟΙ δγΨνΙ ΓΞΡμ.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλια ή μετακινήστε ορισμένες μεθόδους σε κάποια άλλη λειτουργική μονάδα.";
+    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλ";
     Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ®°΅ ³ΚΉ« ΔΏΌ­ ΐϊΐε ¶Η΄Β ΔΔΖΔΐΟΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\nΐΟΊΞ ΑΦΌ®ΐ» »θΑ¦ΗΟ°Ε³ª, ΈξΈξ ΈήΌÒµεΈ¦ ΄ΩΈ¥ Έπµβ·Ξ ΏΕ±β½Κ½ΓΏΐ.";
     Text[ turkish ] = "Kaynak metin uzunluπu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazύ aηύklamalarύ silin ya da bazύ yφntemleri baώka bir modόle aktarύn.";
     Text[ catalan ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nElimine algunos comentarios o transfiera algunos mιtodos a otro mσdulo.";
@@ -1628,18 +1628,18 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText [ portuguese ] = "Elimina Observador" ;
     QuickHelpText [ swedish ] = "Ta bort bevakare" ;
     QuickHelpText[ russian ] = "Σαπΰςό κξνςπξλόνξε ηνΰχενθε";
-    QuickHelpText[ polish ] = "Usuρ czujkκ!";
-    QuickHelpText[ japanese ] = "µΜή»ή°Κή‚Μν!";
-    QuickHelpText[ chinese_simplified ] = "ÒώΘλ²ιΏ΄!";
+    QuickHelpText[ polish ] = "Usuρ czujkκ";
+    QuickHelpText[ japanese ] = "µΜή»ή°Κή‚Μν";
+    QuickHelpText[ chinese_simplified ] = "ÒώΘλ²ιΏ΄";
     QuickHelpText[ chinese_traditional ] = "Ατ¤JΐΛµψ";
     QuickHelpText[ arabic ] = "ΕÒΗαΙ ΗαγΡΗήΘ";
     QuickHelpText[ dutch ] = "Bewaker verwijderen";
-    QuickHelpText[ chinese_simplified ] = "ÒώΘλ²ιΏ΄!";
+    QuickHelpText[ chinese_simplified ] = "ÒώΘλ²ιΏ΄";
     QuickHelpText[ greek ] = "Κατάργηση παρατηρητή";
-    QuickHelpText[ korean ] = "°¨½ΓΐΪ΅΅Α¦°Ε!";
+    QuickHelpText[ korean ] = "°¨½ΓΐΪ΅΅Α¦°Ε";
     QuickHelpText[ turkish ] = "Remove Watch";
     QuickHelpText[ catalan ] = "Eliminar observador";
-    QuickHelpText[ finnish ] = "Poista kello!";
+    QuickHelpText[ finnish ] = "Poista kello";
 };
 ImageButton RID_IMGBTN_GOTOCALL
 {
@@ -2784,5 +2784,6 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
