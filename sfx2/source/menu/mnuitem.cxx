@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *  last change: $Author: pb $ $Date: 2000-09-20 08:09:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "tbxctrl.hxx"
 #include "arrdecl.hxx"
 #include "module.hxx"
+#include "unoctitm.hxx"
 
 //====================================================================
 
