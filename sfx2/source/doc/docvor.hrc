@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 13:03:02 $
+ *  last change: $Author: pb $ $Date: 2001-07-13 09:37:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,11 +71,14 @@
 #define ID_EXPORT 221
 #define ID_RESCAN 220
 #define ID_COPY_TO 210
-#define ID_DEFAULT_TEMPLATE 230
-#define ID_RESET_DEFAULT_TEMPLATE 231
 #define ID_NEW 200
 #define ID_PRINT    240
 #define ID_PRINTER_SETUP    2341
+
+#define ID_DEFAULT_TEMPLATE 300
+#define ID_RESET_DEFAULT_TEMPLATE 301
+//!!! dont use the ids from 302 to 350, we need them as dynamic ids
+#define ID_RESET_DEFAULT_TEMPLATE_END (ID_RESET_DEFAULT_TEMPLATE+49)
 
 #define LB_RIGHT_TYP 11
 #define LB_RIGHT 10
