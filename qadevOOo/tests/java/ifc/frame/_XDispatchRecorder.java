@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchRecorder.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:22 $
+ *  last change:$Date: 2003-05-27 12:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchRecorder;
 import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import lib.MultiMethodTest;
@@ -110,7 +111,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
     public void _endRecording() {
         requiredMethod("startRecording()");
 
-        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";
@@ -145,7 +146,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
     public void _recordDispatch() {
         executeMethod("endRecording()");
 
-        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";
@@ -172,7 +173,7 @@ public class _XDispatchRecorder extends MultiMethodTest {
     public void _recordDispatchAsComment() {
         executeMethod("endRecording()");
 
-        dispURL = utils.parseURL(tParam.getMSF(), ".uno:InsertText");
+        dispURL = utils.parseURL((XMultiServiceFactory)tParam.getMSF(), ".uno:InsertText");
 
         PropertyValue prop = new PropertyValue();
         prop.Name = "Text";

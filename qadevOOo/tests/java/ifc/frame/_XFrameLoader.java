@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XFrameLoader.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:19 $
+ *  last change:$Date: 2003-05-27 12:26:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 package ifc.frame;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XFrameLoader;
@@ -135,14 +136,14 @@ public class _XFrameLoader extends MultiMethodTest {
         frame = (XFrame) tEnv.getObjRelation("FrameLoader.Frame") ;
 
         if (frame == null) {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
             try {
                 log.println( "creating a textdocument" );
                 frameSup = SOF.createTextDoc( null );
 
-                Object oDsk = tParam.getMSF().createInstance
-                    ("com.sun.star.frame.Desktop") ;
+                Object oDsk = ((XMultiServiceFactory)tParam.getMSF())
+                        .createInstance("com.sun.star.frame.Desktop") ;
                 XDesktop dsk = (XDesktop)
                     UnoRuntime.queryInterface(XDesktop.class, oDsk) ;
 
