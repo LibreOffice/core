@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 15:08:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:27:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #ifndef SD_PRINT_MANAGER_HXX
 #include "PrintManager.hxx"
 #endif
+#include "UpdateLockManager.hxx"
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
 #endif
@@ -252,7 +253,8 @@ ViewShellBase::ViewShellBase (
       mpDocument (NULL),
       mpPrintManager (new PrintManager(*this)),
       mpFormShellManager(NULL),
-      mpEventMultiplexer(NULL)
+      mpEventMultiplexer(NULL),
+      mpUpdateLockManager(new UpdateLockManager(*this))
 {
     // Set up the members in the correct order.
     if (GetViewFrame()->GetObjectShell()->ISA(DrawDocShell))
@@ -537,7 +539,7 @@ void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
         aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
         Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
         SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), aObjSizePixel.Width() ),
-                        Fraction( aSize.Height(), aObjSizePixel.Height() ) );
+            Fraction( aSize.Height(), aObjSizePixel.Height() ) );
     }
 
     ResizePixel (rOrigin, rSize, false);
@@ -597,14 +599,8 @@ void ViewShellBase::ResizePixel (
 
 void ViewShellBase::Rearrange (void)
 {
-    ::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
-    {
-        ResizePixel (
-            pWindow->GetPosPixel(),
-            pWindow->GetOutputSizePixel(),
-            GetDocShell()->IsInPlaceActive());
-    }
+    OSL_ASSERT(GetViewFrame()!=NULL);
+    GetViewFrame()->Resize(TRUE);
 }
 
 
@@ -1053,7 +1049,6 @@ void ViewShellBase::ShowUIControls (bool bVisible)
 
 
 
-
 ViewShell::ShellType ViewShellBase::GetInitialViewShellType (void)
 {
     ViewShell::ShellType aShellType (ViewShell::ST_IMPRESS);
@@ -1159,6 +1154,13 @@ tools::EventMultiplexer& ViewShellBase::GetEventMultiplexer (void)
     return *mpEventMultiplexer.get();
 }
 
+
+
+
+UpdateLockManager& ViewShellBase::GetUpdateLockManager (void) const
+{
+    return *mpUpdateLockManager;
+}
 
 
 } // end of namespace sd
@@ -1282,7 +1284,6 @@ void ViewShellFactory::ReleaseShell (::sd::ViewShell* pShell)
 {
     delete pShell;
 }
-
 
 
 } // end of anonymouse namespace
