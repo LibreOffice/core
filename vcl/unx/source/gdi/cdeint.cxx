@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cdeint.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2002-06-24 15:53:02 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,14 +64,12 @@
 #include <salunx.h>
 #include <saldisp.hxx>
 #include <cdeint.hxx>
-#include <salframe.hxx>
 #include <settings.hxx>
 
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 
-CDEIntegrator::CDEIntegrator( SalFrame* pFrame ) :
-        DtIntegrator( pFrame )
+CDEIntegrator::CDEIntegrator()
 {
     meType = DtCDE;
     mnRefCount++;
