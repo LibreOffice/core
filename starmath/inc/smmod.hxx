@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-10-08 11:46:08 $
+ *  last change: $Author: tl $ $Date: 2002-01-11 15:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,11 @@ class SmModule : public SmModuleDummy
     SmLocalizedSymbolData   *pLocSymbolData;
     SmRectCache             *pRectCache;
     SvtSysLocale            *pSysLocale;
+    VirtualDevice           *pVirtualDev;
 
     virtual void FillStatusBar(StatusBar &rBar);
     void _CreateSysLocale() const;
+    void _CreateVirtualDev() const;
 
 public:
     TYPEINFO();
@@ -180,6 +182,13 @@ public:
         if( !pSysLocale )
             _CreateSysLocale();
         return *pSysLocale;
+    }
+
+    VirtualDevice &     GetDefaultVirtualDev()
+    {
+        if (!pVirtualDev)
+            _CreateVirtualDev();
+        return *pVirtualDev;
     }
 
     //virtuelle Methoden fuer den Optionendialog

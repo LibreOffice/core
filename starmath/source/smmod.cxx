@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-11-02 12:13:16 $
+ *  last change: $Author: tl $ $Date: 2002-01-11 15:35:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,8 @@ SmModule::SmModule(SvFactory* pObjFact) :
     pConfig( 0 ),
     pLocSymbolData( 0 ),
     pRectCache( new SmRectCache ),
-    pSysLocale( 0 )
+    pSysLocale( 0 ),
+    pVirtualDev( 0 )
 {
     SetName( C2S("StarMath" ));
 }
@@ -302,12 +303,19 @@ SmModule::~SmModule()
     delete pLocSymbolData;
     delete pRectCache;
     delete pSysLocale;
+    delete pVirtualDev;
 }
 
 void SmModule::_CreateSysLocale() const
 {
     SmModule* pThis = (SmModule*)this;
     pThis->pSysLocale = new SvtSysLocale;
+}
+
+void SmModule::_CreateVirtualDev() const
+{
+    SmModule* pThis = (SmModule*)this;
+    pThis->pVirtualDev = new VirtualDevice;
 }
 
 SmConfig * SmModule::GetConfig()

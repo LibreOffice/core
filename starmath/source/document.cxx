@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: tl $ $Date: 2002-01-04 13:28:52 $
+ *  last change: $Author: tl $ $Date: 2002-01-11 15:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ void SmDocShell::ArrangeFormula()
         if (pView)
             pOutDev = &pView->GetGraphicWindow();
         else
-        {   pOutDev = new VirtualDevice;
+        {   pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
