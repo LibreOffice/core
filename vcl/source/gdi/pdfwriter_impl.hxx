@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:18:15 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,6 +315,7 @@ private:
 
     MapMode                         m_aMapMode; // PDFWriterImpl scaled units
     std::list< PDFPage >            m_aPages;
+    PDFDocInfo                      m_aDocInfo;
     /* maps object numbers to file offsets (needed for xref) */
     std::vector< sal_uInt64 >       m_aObjects;
     /* contains Bitmaps until they are written to the
@@ -470,6 +471,8 @@ private:
     bool emitCatalog();
     // writes xref and trailer
     bool emitTrailer();
+    // emits info dict (if applicable)
+    sal_Int32 emitInfoDict();
 
     /* adds an entry to m_aObjects and returns its index+1,
      * sets the offset to ~0
@@ -511,6 +514,9 @@ public:
     bool emit();
 
     PDFWriter::PDFVersion getVersion() const { return m_eVersion; }
+    void setDocInfo( const PDFDocInfo& rInfo );
+    const PDFDocInfo& getDocInfo() const { return m_aDocInfo; }
+
 
     /* graphics state */
     void push( sal_uInt16 nFlags );
