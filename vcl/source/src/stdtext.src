@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:10:18 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:04:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ String SV_STDTEXT_SERVICENOTAVAILABLE
     Text[ russian ] = "Çàãğóçèòü îäèí èç êîìïîíåíòîâ (%s) íå óäàåòñÿ.\nÇàïóñòèòå èíñòàëëÿöèş ñ âîññòàíîâëåíèåì.";
     Text[ dutch ] = "Een component (%s) kon niet worden geladen.\nStart setup opnieuw met de optie Reparatie.";
     Text[ french ] = "Impossible de charger l'un des composants (%s).\nVeuillez redémarrer le programme d'installation (Setup) et exécuter une réparation.";
-    Text[ spanish ] = "No se pudo cargar un componente (%s).\nInicie por favor el programa de instalación y ejecute una Reparación.";
+    Text[ spanish ] = "El componente (%s) no se pudo cargar.\nInicie el programa de instalación y ejecute una reparación.";
     Text[ italian ] = "Impossibile caricare il componente (%s).\nRiavviate il setup e eseguite la riparazione.";
     Text[ danish ] = "Det var ikke muligt at indlæse en komponent (%s).\nStart venligst installationsprogrammet (Setup) og udfør en reparation.";
     Text[ swedish ] = "Det gick inte att ladda en komponent (%s).\nStarta setupprogrammet och gör en reparation.";
@@ -346,7 +346,7 @@ String SV_ACCESSERROR_MISSING_JAVA
     Text[ greek ] = "No Java Installation";
     Text[ dutch ] = "No Java Installation";
     Text[ french ] = "Aucune installation Java";
-    Text[ spanish ] = "Falta una instalación de Java";
+    Text[ spanish ] = "Instalación de Java inexistente";
     Text[ finnish ] = "No Java Installation";
     Text[ italian ] = "Manca un'installazione di Java";
     Text[ danish ] = "No Java Installation";
