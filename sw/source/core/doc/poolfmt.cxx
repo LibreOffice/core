@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 13:11:36 $
+ *  last change: $Author: jp $ $Date: 2001-08-24 08:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -584,16 +584,23 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, String* pDesc,
     case RES_POOLCOLL_HEADLINE_BASE:            // Basis Ueberschrift
         {
             static const USHORT aFntInit[] = {
-                DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,        LANGUAGE_ENGLISH_US,
-                DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,    LANGUAGE_ENGLISH_US,
-                DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,    LANGUAGE_ARABIC_SAUDI_ARABIA,
+                DEFAULTFONT_LATIN_HEADING,  RES_CHRATR_FONT,
+                                RES_CHRATR_LANGUAGE, LANGUAGE_ENGLISH_US,
+                DEFAULTFONT_CJK_HEADING,    RES_CHRATR_CJK_FONT,
+                                RES_CHRATR_CJK_LANGUAGE, LANGUAGE_ENGLISH_US,
+                DEFAULTFONT_CTL_HEADING,    RES_CHRATR_CTL_FONT,
+                                RES_CHRATR_CTL_LANGUAGE, LANGUAGE_ARABIC_SAUDI_ARABIA,
                 0
             };
 
-            for( const USHORT* pArr = aFntInit; *pArr; pArr += 3 )
+            for( const USHORT* pArr = aFntInit; *pArr; pArr += 4 )
             {
+                USHORT nLng = ((SvxLanguageItem&)GetDefault( *(pArr+2) )).GetLanguage();
+                if( LANGUAGE_DONTKNOW == nLng )
+                    nLng = *(pArr+3);
+
                 Font aFnt( OutputDevice::GetDefaultFont( *pArr,
-                                *(pArr+2), DEFAULTFONT_FLAGS_ONLYONE ) );
+                                        nLng, DEFAULTFONT_FLAGS_ONLYONE ) );
 
                 aSet.Put( SvxFontItem( aFnt.GetFamily(), aFnt.GetName(),
                                         aEmptyStr, aFnt.GetPitch(),
