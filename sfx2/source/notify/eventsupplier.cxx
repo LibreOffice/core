@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-21 11:00:56 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 08:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
 
                 maEventData[i] = aValue;
 
-                SvxMacro   *pMacro = ConvertToMacro( aValue );
+                SvxMacro   *pMacro = ConvertToMacro( aValue, mpObjShell );
                 USHORT      nID = (USHORT) SfxEventConfiguration::GetEventId_Impl( aName );
 
                 if ( nID && pMacro )
@@ -353,7 +353,7 @@ SfxEvents_Impl::~SfxEvents_Impl()
 }
 
 //--------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement ) const
+SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement, SfxObjectShell* pObjShell )
 {
     SvxMacro* pMacro = NULL;
 
@@ -412,8 +412,8 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const ANY& rElement ) const
             {
                 OUSTRING aBasMgrName( INetURLObject::decode( aScriptURL.copy( 8, nHashPos-8 ), INET_HEX_ESCAPE, INetURLObject::DECODE_WITH_CHARSET ) );
 
-                if ( aBasMgrName.compareToAscii(".") == 0 )
-                    aLibrary = mpObjShell->GetTitle( SFX_TITLE_APINAME );
+                if ( aBasMgrName.compareToAscii(".") == 0 && pObjShell )
+                    aLibrary = pObjShell->GetTitle( SFX_TITLE_APINAME );
                 else if ( aBasMgrName.getLength() )
                     aLibrary = aBasMgrName;
                 else

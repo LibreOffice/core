@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-05-21 10:58:30 $
+ *  last change: $Author: mba $ $Date: 2001-08-24 08:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
 #include <com/sun/star/document/XEventListener.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_DOCUMENT_XEVENTBROADCASTER_HPP_
+#include <com/sun/star/document/XEventBroadcaster.hpp>
+#endif
 
 #ifndef  _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
@@ -131,7 +134,6 @@ class SfxEvents_Impl : public ::cppu::WeakImplHelper2< ::com::sun::star::contain
     ::osl::Mutex                    maMutex;
     SfxObjectShell                 *mpObjShell;
 
-    SvxMacro*                   ConvertToMacro( const ANY& rElement ) const;
     sal_Bool                    Warn_Impl();
     ANY                         BlowUpMacro( const ANY& rEvent ) const;
 
@@ -163,6 +165,8 @@ public:
     // --- ::lang::XEventListener ---
     virtual void SAL_CALL       disposing( const EVENTOBJECT& Source )
                                     throw( RUNTIMEEXCEPTION );
+
+    static SvxMacro*                   ConvertToMacro( const ANY& rElement, SfxObjectShell* pDoc );
 };
 
 #endif
