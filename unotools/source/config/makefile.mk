@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jb $ $Date: 2001-07-10 11:13:39 $
+#   last change: $Author: fs $ $Date: 2001-08-21 12:53:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,6 +97,7 @@ UNOUCROUT=$(OUT)$/inc
 # --- Files -------------------------------------
 
 SLOFILES=\
+        $(SLO)$/configvaluecontainer.obj \
         $(SLO)$/confignode.obj \
         $(SLO)$/configitem.obj \
         $(SLO)$/configmgr.obj  \
