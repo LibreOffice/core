@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptexanimations.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:06:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:46:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1951,7 +1951,39 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
             case TextAnimationType::BY_WORD : nTextUnitEffect = 1; break;
             case TextAnimationType::BY_LETTER : nTextUnitEffect = 2; break;
         }
+
         fInterval = (float)xIterate->getIterateInterval();
+
+        // convert interval from absolute to percentage
+        double fDuration = 0.0;
+
+        Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
+        if( xEnumerationAccess.is() )
+        {
+            Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY );
+            if( xEnumeration.is() )
+            {
+                while( xEnumeration->hasMoreElements() )
+                {
+                    Reference< XAnimate > xChildNode( xEnumeration->nextElement(), UNO_QUERY );
+                    if( xChildNode.is() )
+                    {
+                        double fChildBegin = 0.0;
+                        double fChildDuration = 0.0;
+                        xChildNode->getBegin() >>= fChildBegin;
+                        xChildNode->getDuration() >>= fChildDuration;
+
+                        fChildDuration += fChildBegin;
+                        if( fChildDuration > fDuration )
+                            fDuration = fChildDuration;
+                    }
+                }
+            }
+        }
+
+        if( fDuration )
+            fInterval = (float)(100.0 * fInterval / fDuration);
+
         rStrm << fInterval << nTextUnitEffect << nU1 << nU2 << nU3;
         aTarget = xIterate->getTarget();
     }
