@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-21 12:26:04 $
+ *  last change: $Author: mba $ $Date: 2001-02-26 17:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,64 @@
 #include "sfxresid.hxx"
 
 //-------------------------------------------------------------------------
+
+class SfxEventAsyncer_Impl : public SfxListener
+{
+    SfxEventHint        aHint;
+    Timer*              pTimer;
+
+public:
+
+    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    SfxEventAsyncer_Impl( const SfxEventHint& rHint );
+    ~SfxEventAsyncer_Impl();
+    DECL_LINK( TimerHdl, Timer*);
+};
+
+// -----------------------------------------------------------------------
+
+void SfxEventAsyncer_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    SfxSimpleHint* pHint = PTR_CAST( SfxSimpleHint, &rHint );
+    if( pHint && pHint->GetId() == SFX_HINT_DYING && pTimer->IsActive() )
+    {
+        pTimer->Stop();
+        delete this;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
+ : aHint( rHint )
+{
+    if( rHint.GetObjShell() )
+        StartListening( *rHint.GetObjShell() );
+    pTimer = new Timer;
+    pTimer->SetTimeoutHdl( LINK(this, SfxEventAsyncer_Impl, TimerHdl) );
+    pTimer->SetTimeout( 0 );
+    pTimer->Start();
+}
+
+// -----------------------------------------------------------------------
+
+SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
+{
+    delete pTimer;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pTimer)
+{
+    pTimer->Stop();
+    SFX_APP()->Broadcast( aHint );
+    if ( aHint.GetObjShell() )
+        aHint.GetObjShell()->Broadcast( aHint );
+    delete this;
+    return 0L;
+}
+
 
 const USHORT* SfxApplication::GetOptionsRanges() const
 {
@@ -1448,11 +1506,19 @@ void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, FASTBOOL bSync
     DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
 
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
-    if ( !pDoc || !pDoc->IsPreview() )
+    if ( !pDoc )
         pAppData_Impl->pEventConfig->ExecuteEvent( rEventHint.GetEventId(), pDoc, bSynchron, rEventHint.GetArgs() );
-    Broadcast(rEventHint);
-    if ( pDoc )
-        pDoc->Broadcast( rEventHint );
+    else
+        // is loaded on demand!
+        pDoc->GetEventConfig_Impl();
+    if ( bSynchron )
+    {
+        Broadcast(rEventHint);
+        if ( pDoc )
+            pDoc->Broadcast( rEventHint );
+    }
+    else
+        new SfxEventAsyncer_Impl( rEventHint );
 }
 
 //-------------------------------------------------------------------------
