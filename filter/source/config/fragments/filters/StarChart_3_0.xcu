@@ -1,13 +1,13 @@
     <node oor:name="StarChart 3.0" oor:op="replace" oor:finalized="true" oor:mandatory="true">
+        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER 3RDPARTYFILTER SILENTEXPORT</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">StarChart 3.0</value>
+        </prop>
         <prop oor:name="FileFormatVersion"><value>3450</value></prop>
         <prop oor:name="Type"><value>chart_StarChart_30</value></prop>
-        <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="UserData"/>
-        <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="TemplateName"/>
-        <prop oor:name="UIName">
-            <value>StarChart 3.0</value>
-        </prop>
-        <prop oor:name="Flags"><value>IMPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER SILENTEXPORT 3RDPARTYFILTER</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.chart.ChartDocument</value></prop>
     </node>
