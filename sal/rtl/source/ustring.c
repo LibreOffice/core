@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-05 11:01:37 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_U
     do
     {
         if ( !nStr1Len )
-            return 0;
+            return *pStr2 == '\0' ? 0 : -1;
 
         /* If character between 'A' and 'Z', than convert it to lowercase */
         c1 = (sal_Int32)*pStr1;
