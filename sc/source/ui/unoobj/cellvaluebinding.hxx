@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellvaluebinding.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:50:58 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef SC_CELLVALUEBINDING_HXX
 #define SC_CELLVALUEBINDING_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XVALUEBINDING_HPP_
-#include <drafts/com/sun/star/form/XValueBinding.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
+#include <com/sun/star/form/binding/XValueBinding.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -116,7 +116,7 @@ namespace calc
     //=====================================================================
     class OCellValueBinding;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper5 <   ::drafts::com::sun::star::form::XValueBinding
+    typedef ::cppu::WeakAggComponentImplHelper5 <   ::com::sun::star::form::binding::XValueBinding
                                                 ,   ::com::sun::star::lang::XServiceInfo
                                                 ,   ::com::sun::star::util::XModifyBroadcaster
                                                 ,   ::com::sun::star::util::XModifyListener
@@ -164,8 +164,8 @@ namespace calc
         // XValueBinding
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getSupportedValueTypes(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL supportsType( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const ::com::sun::star::uno::Type& aType ) throw (::drafts::com::sun::star::form::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& aValue ) throw (::drafts::com::sun::star::form::IncompatibleTypesException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getValue( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setValue( const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::form::binding::IncompatibleTypesException, ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing();
@@ -200,7 +200,7 @@ namespace calc
         void    checkDisposed( ) const
                     SAL_THROW( ( ::com::sun::star::lang::DisposedException ) );
         void    checkValueType( const ::com::sun::star::uno::Type& _rType ) const
-                    SAL_THROW( ( ::drafts::com::sun::star::form::IncompatibleTypesException ) );
+                    SAL_THROW( ( ::com::sun::star::form::binding::IncompatibleTypesException ) );
         void    checkInitialized()
                     SAL_THROW( ( ::com::sun::star::uno::RuntimeException ) );
 
