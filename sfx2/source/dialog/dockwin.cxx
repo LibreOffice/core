@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 15:14:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1494,7 +1494,7 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
     }
     else if ( rEvt.GetType() == EVENT_LOSEFOCUS && !HasChildPathFocus() )
     {
-//        pBindings->SetActiveFrame( XFrameRef() );
+        pBindings->SetActiveFrame( NULL );
         pMgr->Deactivate_Impl();
     }
 
