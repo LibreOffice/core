@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:17:19 $
+#   last change: $Author: mfe $ $Date: 2001-02-22 14:31:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,6 +69,8 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
 
+
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  svpre.mk
@@ -77,7 +79,7 @@ PROJECTPCHSOURCE=cont_pch
 
 # --- Files --------------------------------------------------------
 
-START_SCRIPT = sdaemon.cmd
+
 
 .IF "$(header)" == ""
 
@@ -94,14 +96,10 @@ CFILES=     conditn.c       \
             security.c      \
             profile.c       \
             time.c          \
-            tools.c         \
             file.c          \
-    signal.c        \
-    pipe.c          \
-            daemon.c	\
-            util.c	\
-            channel.c	\
-            ports.c
+            signal.c        \
+            pipe.c          \
+            util.c
 
 SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/diagnose.obj \
@@ -116,14 +114,10 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/security.obj \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
-            $(SLO)$/tools.obj    \
             $(SLO)$/file.obj     \
             $(SLO)$/signal.obj   \
             $(SLO)$/pipe.obj     \
-            $(SLO)$/daemon.obj	\
-            $(SLO)$/util.obj	\
-            $(SLO)$/channel.obj	\
-            $(SLO)$/ports.obj
+            $(SLO)$/util.obj
 
 .ENDIF
 
@@ -140,26 +134,13 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/security.obj \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
-            $(OBJ)$/tools.obj    \
             $(OBJ)$/file.obj     \
             $(OBJ)$/signal.obj   \
             $(OBJ)$/pipe.obj     \
-            $(OBJ)$/daemon.obj	\
-            $(OBJ)$/util.obj	\
-            $(OBJ)$/channel.obj	\
-            $(OBJ)$/ports.obj
+            $(OBJ)$/util.obj
 
-DEPOBJFILES = $(OBJ)$/sdaemon.obj
 
 # --- Targets ------------------------------------------------------
 
-ALL: \
-    ALLTAR \
-    $(BIN)$/$(START_SCRIPT) 
-
 .INCLUDE :  target.mk
-
-$(BIN)$/$(START_SCRIPT): $(START_SCRIPT)
-    @+$(COPY) $(START_SCRIPT) $@
-    @+echo $(START_SCRIPT) copied
 
