@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-23 11:59:50 $
+ *  last change: $Author: bm $ $Date: 2001-05-28 08:06:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2006,4 +2006,6 @@ XML_CONSTASCII_ACTION( sXML_angled_line, "angled-line" );
 XML_CONSTASCII_ACTION( sXML_angled_connector_line, "angled-connector-line" );
 
 XML_CONSTASCII_ACTION( sXML_play, "play" );
+XML_CONSTASCII_ACTION( sXML_data_source_has_labels, "data-source-has-labels" );
+
 #endif
