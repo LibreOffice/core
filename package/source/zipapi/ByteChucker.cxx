@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ByteChucker.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-05 18:44:36 $
+ *  last change: $Author: mtg $ $Date: 2001-09-06 10:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #ifndef _PACKAGE_CONSTANTS_HXX_
 #include <PackageConstants.hxx>
 #endif
-#include <memory.h> //for memcpy
+#include <string.h> //for memcpy
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
