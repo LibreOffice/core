@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBoxItem.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-19 12:47:01 $
+ *  last change:$Date: 2003-03-19 13:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@ import com.sun.star.uno.XInterface;
 import drafts.com.sun.star.accessibility.AccessibleRole;
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleAction;
-import drafts.com.sun.star.accessibility.XAccessibleComponent;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -210,12 +209,15 @@ public class AccessibleToolBoxItem extends TestCase {
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this dialog");
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
+        final XAccessibleAction oAction = (XAccessibleAction)
+            UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
+                    try {
+                        oAction.doAccessibleAction(0);
+                    } catch(com.sun.star.lang.IndexOutOfBoundsException e) {}
                 }
             });
 
