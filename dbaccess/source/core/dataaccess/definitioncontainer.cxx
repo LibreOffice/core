@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-25 13:28:23 $
+ *  last change: $Author: obo $ $Date: 2001-09-28 09:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
-    if(evt.PropertyName == PROPERTY_NAME)
+        if(evt.PropertyName == (rtl::OUString) PROPERTY_NAME)
     {
         try
         {
@@ -782,7 +782,7 @@ void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& a
 {
     MutexGuard aGuard(m_rMutex);
     checkValid(sal_True);
-    if(aEvent.PropertyName == PROPERTY_NAME)
+        if(aEvent.PropertyName == (rtl::OUString) PROPERTY_NAME)
     {
         ::rtl::OUString sNewName;
         aEvent.NewValue >>= sNewName;
