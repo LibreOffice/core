@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2001-10-31 19:32:52 $
+ *  last change: $Author: mt $ $Date: 2001-11-07 11:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -812,6 +812,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
             {
                 DeselectAll();
                 mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
+                SetTopEntry( 0 );
                 if ( mbStackMode ) // #87072#, #92323#
                 {
                     mbTravelSelect = TRUE;
