@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintSettings.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-02 11:57:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:11:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 // DocMerge from xml: service com::sun::star::text::PrintSettings
 /** These properties describe the printing of the content of a text document.
  */
-service PrintSettings
+published service PrintSettings
 {
     //-------------------------------------------------------------------------
 
