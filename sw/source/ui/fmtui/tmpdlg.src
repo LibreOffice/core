@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 21:03:28 $
+ *  last change: $Author: obo $ $Date: 2001-03-21 20:53:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,7 +359,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
                 Text[ korean ] = "¾Æ½Ã¾Æ  Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
@@ -463,7 +463,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ italian ] = "Layout asiatico";
                 Text[ danish ] = "Asian layout";
                 Text[ swedish ] = "Asiatisk layout";
-                Text[ polish ] = "Uk³ad azjatycki";
+                Text[ polish ] = "Layout azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
                 Text[ japanese ] = "˜a•¶Ú²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
