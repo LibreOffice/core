@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleList.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Date: 2003-09-08 12:59:51 $
+ *  last change: $Date: 2004-01-05 20:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,6 @@
  ************************************************************************/
 package mod._toolkit;
 
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
-
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleAction;
@@ -89,6 +79,17 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
 
 
 public class AccessibleList extends TestCase {
@@ -238,7 +239,8 @@ public class AccessibleList extends TestCase {
             log.println("Dialog already disposed");
         }
 
-        xTextDoc.dispose();
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
