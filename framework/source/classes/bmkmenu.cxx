@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmkmenu.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 07:54:09 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <vcl/config.hxx>
+#include <vcl/svapp.hxx>
 #include <svtools/dynamicmenuoptions.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -232,6 +233,9 @@ void BmkMenu::Initialize()
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
+
     UINT32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -249,7 +253,7 @@ void BmkMenu::Initialize()
 
             if ( aImageId.getLength() > 0 )
             {
-                Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE );
+                Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
                 if ( !!aImage )
                 {
                     bImageSet = sal_True;
@@ -259,15 +263,18 @@ void BmkMenu::Initialize()
 
             if ( !bImageSet )
             {
-                Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE );
+                Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
                 if ( !aImage )
                     InsertItem( nId, aTitle );
                 else
                     InsertItem( nId, aTitle, aImage );
             }
 
+            // Store values from configuration to the New and Wizard menu entries to enable
+            // sfx2 based code to support high contrast mode correctly!
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes;
             pUserAttributes->aTargetFrame = aTargetFrame;
+            pUserAttributes->aImageId = aImageId;
             SetUserValue( nId, (ULONG)pUserAttributes );
 
             SetItemCommand( nId, aURL );

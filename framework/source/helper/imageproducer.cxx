@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imageproducer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 17:04:14 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:46:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,10 @@ pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pNewGetImageFunc )
 }
 
 
-Image SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig )
+Image SAL_CALL GetImageFromURL( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
     if ( _pGetImageFunc )
-        return _pGetImageFunc( rFrame, aURL, bBig );
+        return _pGetImageFunc( rFrame, aURL, bBig, bHiContrast );
     else
         return Image();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesconfiguration.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 09:48:59 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,11 +110,13 @@ struct ImageListItemDescriptor
                                 , nMaskMode( ImageMaskMode_Color ) {}
     ~ImageListItemDescriptor() { delete pImageItemList; }
 
-    String                      aURL;           // a URL to a bitmap with several images inside
-    Color                       aMaskColor;     // a color used as transparent
-    String                      aMaskURL;       // a URL to an optional bitmap used as a mask
-    ImageMaskMode               nMaskMode;      // a enum to describe the current mask mode
-    ImageItemListDescriptor*    pImageItemList; // an array of ImageItemDescriptors that describes every image
+    String                      aURL;                   // an URL to a bitmap with several images inside
+    Color                       aMaskColor;             // a color used as transparent
+    String                      aMaskURL;               // an URL to an optional bitmap used as a mask
+    ImageMaskMode               nMaskMode;              // an enum to describe the current mask mode
+    ImageItemListDescriptor*    pImageItemList;         // an array of ImageItemDescriptors that describes every image
+    String                      aHighContrastURL;       // an URL to an optional high contrast bitmap with serveral images inside
+    String                      aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
 
 typedef ImageListItemDescriptor* ImageListItemDescriptorPtr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-14 15:15:13 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,13 @@ void SvxTbxCtlDraw::StateChanged( USHORT nSID, SfxItemState eState,
 
         if( GetId() == SID_INSERT_DRAW && nTemp != USHRT_MAX )
         {
+            // Check whether we are in high contrast mode or not!
+            BOOL bHiContrast = GetToolBox().GetBackground().GetColor().IsDark();
+
             nLastAction = nTemp;
             USHORT nImage = nLastAction ? nLastAction : GetId();
             SfxViewFrame* pFrame = GetBindings().GetDispatcher()->GetFrame();
-            Image aImage = pFrame->GetImageManager()->GetImage( nImage );
+            Image aImage = pFrame->GetImageManager()->GetImage( nImage, bHiContrast );
             GetToolBox().SetItemImage( GetId(), aImage );
         }
     }

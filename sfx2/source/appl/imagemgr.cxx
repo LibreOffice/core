@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-18 15:45:56 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig )
+Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
     INetURLObject aObj( aURL );
     INetProtocol nProtocol = aObj.GetProtocol();
@@ -142,10 +142,10 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
             if ( nId )
             {
                 if ( pViewFrame )
-                    return pViewFrame->GetImageManager()->GetImage( nId, pModule, bBig );
+                    return pViewFrame->GetImageManager()->GetImage( nId, pModule, bBig, bHiContrast );
                 else
                 {
-                    return SFX_APP()->GetImageManager_Impl()->GetImage( nId, NULL, bBig );
+                    return SFX_APP()->GetImageManager_Impl()->GetImage( nId, NULL, bBig, bHiContrast );
                 }
             }
             break;
@@ -158,6 +158,6 @@ Image SAL_CALL GetImage( ::com::sun::star::uno::Reference< ::com::sun::star::fra
         }
     }
 
-    return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
+    return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-02-22 08:09:54 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include <stdio.h>
+
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
@@ -108,16 +110,18 @@ class SfxBitmapList_Impl;
 class SfxImageManager_Impl : public SfxConfigItem
 {
 public:
-    LinkList        aList;
-    SvtMiscOptions  aOpt;
-    SfxBitmapList_Impl* pUserDefList;
-    ImageList*      pUserImageList;
+    LinkList            m_aList;
+    SvtMiscOptions      m_aOpt;
+    SfxBitmapList_Impl* m_pUserDefList;
+    ImageList*          m_pUserImageList;
+    ImageList*          m_pHCUserImageList;
+    int                 m_nUserRef;
 
-    void            MakeDefaultImageList();
+    void            MakeDefaultImageList( BOOL bHiContrast = FALSE );
     void            MakeUserList();
     void            RebuildUserList();
-    Image           GetImage( USHORT nId, SfxModule*, BOOL ) const;
-    Image           SeekImage(USHORT nId, SfxModule* pModule ) const;
+    Image           GetImage( USHORT nId, SfxModule*, BOOL bBig, BOOL bHiContrast ) const;
+    Image           SeekImage(USHORT nId, SfxModule* pModule, BOOL bHiContrast ) const;
 
     virtual BOOL    ReInitialize();
     int             Load( SvStream& );
@@ -137,8 +141,12 @@ public:
 // elements common to all ImageManager instances
 static ImageList* pImageListSmall=0;
 static ImageList* pImageListBig=0;
-static ImageList* pOffImageList;
+static ImageList* pImageListHiSmall=0;
+static ImageList* pImageListHiBig=0;
+//static ImageList* pOffImageList;
+//static ImageList* pOffHiImageList;
 static ImageList* pImageList;
+static ImageList* pHiImageList;
 static SfxImageManager_Impl* pGlobalConfig=NULL;
 static nRef=0;
 static nGlobalRef=0;
@@ -146,13 +154,17 @@ static nGlobalRef=0;
 // we need a static list of all pImp instances, so all operations that should change all instances can be performed
 // which operations ?!
 
-ImageList* GetImageList( BOOL bBig )
+ImageList* GetImageList( BOOL bBig, BOOL bHiContrast = FALSE )
 {
-    ImageList*& rpList = bBig ? pImageListBig : pImageListSmall;
+    // Has to be changed if we know how the IDs are named!!!
+    ImageList*& rpList = bBig ? ( bHiContrast ? pImageListHiBig : pImageListBig ) :
+                                ( bHiContrast ? pImageListHiSmall : pImageListSmall );
     if ( !rpList )
     {
         ResMgr *pResMgr = Resource::GetResManager();
-        ResId aResId( bBig ? RID_DEFAULTIMAGELIST_LC : RID_DEFAULTIMAGELIST_SC );
+        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
+                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ));
+
         aResId.SetRT( RSC_IMAGELIST );
 
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
@@ -161,6 +173,12 @@ ImageList* GetImageList( BOOL bBig )
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
+
+        // Testcode!!!
+        char temp[128];
+        sprintf( temp, "g:\\imagelist%d%d.bmp", bBig ? 1 : 0, bHiContrast ? 1: 0 );
+        SvFileStream aBitmapStream( String::CreateFromAscii( temp ), STREAM_STD_WRITE);
+        aBitmapStream << rpList->GetBitmap();
     }
 
     return rpList;
@@ -367,8 +385,9 @@ SvStream& operator << (SvStream& rStream, const SfxBitmapList_Impl& rList)
 
 SfxImageManager_Impl::SfxImageManager_Impl( SfxConfigManager* pCfgMgr )
     : SfxConfigItem( SFX_ITEMTYPE_IMAGELIST, pCfgMgr )
-    , pUserImageList( 0 )
-    , pUserDefList( 0 )
+    , m_pUserDefList( 0 )
+    , m_pUserImageList( 0 )
+    , m_pHCUserImageList( 0 )
 {
 //    SetInternal( TRUE );
     Initialize();
@@ -376,24 +395,26 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxConfigManager* pCfgMgr )
 
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
-    delete pUserDefList;
-    delete pUserImageList;
+    delete m_pUserDefList;
+    delete m_pUserImageList;
+    delete m_pHCUserImageList;
+
     if ( this == pGlobalConfig )
         pGlobalConfig = NULL;
 }
 
 void SfxImageManager_Impl::AddLink( const Link& rLink )
 {
-    aList.Insert( new Link( rLink ) );
+    m_aList.Insert( new Link( rLink ) );
 }
 
 void SfxImageManager_Impl::RemoveLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( USHORT n=0; n<m_aList.Count(); n++ )
     {
-        if ( (*aList.GetObject(n) ) == rLink )
+        if ( (*m_aList.GetObject(n) ) == rLink )
         {
-            delete aList.Remove(n);
+            delete m_aList.Remove(n);
             break;
         }
     }
@@ -458,7 +479,9 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             return ERR_READ;
 
         Bitmap aBmp;
+        Bitmap aHCBmp;
         LoadBitmap( aBmp, rStorage, pList->aURL );
+        LoadBitmap( aHCBmp, rStorage, pList->aHighContrastURL );
 
         // get the Ids of the ImageList
         USHORT* pIds = new USHORT[nCount];
@@ -477,18 +500,25 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
             }
         }
 
-        delete pUserImageList;
+        delete m_pUserImageList;
+        delete m_pHCUserImageList;
+
         if ( pList->nMaskMode = ::framework::ImageMaskMode_Color )
-            pUserImageList = new ImageList( aBmp, pList->aMaskColor, nCount, pIds );
+        {
+            m_pUserImageList = new ImageList( aBmp, pList->aMaskColor, nCount, pIds );
+            m_pHCUserImageList = new ImageList( aHCBmp, pList->aMaskColor, nCount, pIds );
+        }
         else
         {
             Bitmap aMask;
             LoadBitmap( aMask, rStorage, pList->aMaskURL );
-            pUserImageList = new ImageList( aBmp, aMask, nCount, pIds );
+            m_pUserImageList = new ImageList( aBmp, aMask, nCount, pIds );
+            LoadBitmap( aMask, rStorage, pList->aHighContrastMaskURL );
+            m_pHCUserImageList = new ImageList( aHCBmp, aMask, nCount, pIds );
         }
 
         DELETEZ( pIds );
-        pUserDefList = new SfxBitmapList_Impl;
+        m_pUserDefList = new SfxBitmapList_Impl;
 
         nCount = aDescriptor.pExternalImageList ? aDescriptor.pExternalImageList->Count() : 0;
         for ( USHORT n=0; n<nCount; n++ )
@@ -508,7 +538,7 @@ int SfxImageManager_Impl::Load( SotStorage& rStorage )
 
             Bitmap aBmp;
             LoadBitmap( aBmp, rStorage, pItem->aURL );
-            pUserDefList->AddBitmap( nId, aBmp );
+            m_pUserDefList->AddBitmap( nId, aBmp );
         }
     }
 
@@ -536,11 +566,11 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
         // bitmaps are stored in an internal bitmap directory
         SotStorageRef xBitmapStorage = rStorage.OpenSotStorage( String::CreateFromAscii("Bitmaps"), STREAM_STD_READWRITE );
 
-        if ( pUserImageList->HasMaskColor() )
+        if ( m_pUserImageList->HasMaskColor() )
         {
             // mask color
             pList->nMaskMode = ::framework::ImageMaskMode_Color;
-            pList->aMaskColor = pUserImageList->GetMaskColor();
+            pList->aMaskColor = m_pUserImageList->GetMaskColor();
         }
         else
         {
@@ -553,17 +583,25 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
             // store bitmap
             SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-            *xBitmapStream << pUserImageList->GetMaskBitmap();
+            *xBitmapStream << m_pUserImageList->GetMaskBitmap();
+
+            pList->aHighContrastMaskURL = String::CreateFromAscii( "Bitmaps/" );
+            aStreamName = String::CreateFromAscii( "hcuserimagesmask.bmp" );
+            pList->aHighContrastMaskURL += aStreamName;
+
+            // store bitmap
+            xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+            *xBitmapStream << m_pHCUserImageList->GetMaskBitmap();
         }
 
         // a modified list always contains a userlist
         pList->pImageItemList = new ::framework::ImageItemListDescriptor;
-        for ( USHORT i=0; i<pUserImageList->GetImageCount(); i++ )
+        for ( USHORT i=0; i<m_pUserImageList->GetImageCount(); i++ )
         {
             ::framework::ImageItemDescriptor* pItem = new ::framework::ImageItemDescriptor;
 
             pItem->nIndex = i;
-            USHORT nId = pUserImageList->GetImageId(i);
+            USHORT nId = m_pUserImageList->GetImageId(i);
             if ( SfxMacroConfig::IsMacroSlot( nId ) )
             {
                 const SfxMacroInfo* pInfo = pCfg->GetMacroInfo( nId );
@@ -585,17 +623,26 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
         // store bitmap
         SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-        *xBitmapStream << pUserImageList->GetBitmap();
+        *xBitmapStream << m_pUserImageList->GetBitmap();
+
+        // store high contrast URL of bitmap relative to configuration storage; name is "BitmapXXX.bmp", where XXX is an index
+        pList->aHighContrastURL = String::CreateFromAscii("Bitmaps/");
+        aStreamName = String::CreateFromAscii("hcuserimages.bmp");
+        pList->aHighContrastURL += aStreamName;
+
+        // store high contrast bitmap
+        xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
+        *xBitmapStream << m_pHCUserImageList->GetBitmap();
 
         // collect all external bitmaps
-        USHORT nCount = pUserDefList->GetBitmapCount();
+        USHORT nCount = m_pUserDefList->GetBitmapCount();
         if ( nCount )
         {
             aDescriptor.pExternalImageList = new ::framework::ExternalImageItemListDescriptor;
             for ( USHORT i=0; i<nCount; i++ )
             {
                 ::framework::ExternalImageItemDescriptor* pItem = new ::framework::ExternalImageItemDescriptor;
-                USHORT nId = pUserDefList->GetBitmapId(i);
+                USHORT nId = m_pUserDefList->GetBitmapId(i);
                 if ( SfxMacroConfig::IsMacroSlot( nId ) )
                 {
                     const SfxMacroInfo* pInfo = pCfg->GetMacroInfo( nId );
@@ -618,7 +665,7 @@ BOOL SfxImageManager_Impl::Store( SotStorage& rStorage )
 
                 // store bitmap
                 SotStorageStreamRef xBitmapStream = xBitmapStorage->OpenSotStream( aStreamName, STREAM_STD_READWRITE | STREAM_TRUNC );
-                *xBitmapStream << *pUserDefList->GetBitmap( nId );
+                *xBitmapStream << *m_pUserDefList->GetBitmap( nId );
             }
         }
 
@@ -644,8 +691,8 @@ int SfxImageManager_Impl::Load(SvStream& rStream)
     MakeUserList();
 
     // Userdef-Listen einlesen
-    rStream >> *pUserImageList;
-    rStream >> *pUserDefList;
+    rStream >> *m_pUserImageList;
+    rStream >> *m_pUserDefList;
 
     if ( nColorCount != Application::GetDefaultDevice()->GetColorCount() )
         RebuildUserList();
@@ -661,8 +708,8 @@ BOOL SfxImageManager_Impl::ReInitialize()
 {
     BOOL bRet = SfxConfigItem::ReInitialize();
     if ( bRet )
-        for ( USHORT n=0; n<aList.Count(); n++ )
-            aList.GetObject(n)->Call( this );
+        for ( USHORT n=0; n<m_aList.Count(); n++ )
+            m_aList.GetObject(n)->Call( this );
     return bRet;
 }
 
@@ -675,11 +722,11 @@ BOOL SfxImageManager_Impl::Store(SvStream& rStream)
 //  aBitmapStream << pUserImageList->GetBitmap();
 
     rStream << nVersion
-            << aOpt.GetSymbolSet()
+            << m_aOpt.GetSymbolSet()
             << Application::GetDefaultDevice()->GetColorCount();
 
-    rStream << *pUserImageList;
-    rStream << *pUserDefList;
+    rStream << *m_pUserImageList;
+    rStream << *m_pUserDefList;
 
     return TRUE;
 }
@@ -704,32 +751,42 @@ String SfxImageManager_Impl::GetStreamName() const
 
 void SfxImageManager_Impl::MakeUserList()
 {
-    if ( pUserImageList )
+    if ( m_pUserImageList )
     {
-        DELETEZ( pUserImageList );
-        DELETEZ( pUserDefList );
+        DELETEZ( m_pUserImageList );
+        DELETEZ( m_pHCUserImageList );
+        DELETEZ( m_pUserDefList );
     }
 
-    pUserDefList = new SfxBitmapList_Impl;
-    pUserImageList = new ImageList;
+    m_pUserDefList = new SfxBitmapList_Impl;
+    m_pUserImageList = new ImageList;
+    m_pHCUserImageList = new ImageList;
 }
 
 //-------------------------------------------------------------------------
 
-void SfxImageManager_Impl::MakeDefaultImageList()
+void SfxImageManager_Impl::MakeDefaultImageList( BOOL bHiContrast )
 {
     USHORT nType=0;
-    switch ( aOpt.GetSymbolSet() )
     {
-        case SFX_SYMBOLS_SMALL:
-            pImageList = GetImageList( FALSE );
-            break;
-        case SFX_SYMBOLS_LARGE:
-            pImageList = GetImageList( TRUE );
-            break;
-        default:
-            DBG_ERROR("Unknown Symboltype!");
-            break;
+        switch ( m_aOpt.GetSymbolSet() )
+        {
+            case SFX_SYMBOLS_SMALL:
+                if ( bHiContrast )
+                    pHiImageList = GetImageList( FALSE, TRUE );
+                else
+                    pImageList = GetImageList( FALSE, FALSE );
+                break;
+            case SFX_SYMBOLS_LARGE:
+                if ( bHiContrast )
+                    pHiImageList = GetImageList( TRUE, TRUE );
+                else
+                    pImageList = GetImageList( TRUE, FALSE );
+                break;
+            default:
+                DBG_ERROR("Unknown Symboltype!");
+                break;
+        }
     }
 }
 
@@ -752,17 +809,20 @@ void SfxImageManager_Impl::RebuildUserList()
     Size aNewSize = pImageList->GetImageSize();
     aDev.SetOutputSizePixel(aNewSize);
 
-    ImageList *pOldList = pUserImageList;
-    pUserImageList = new ImageList( pOldList->GetImageCount() );
+    ImageList *pOldList = m_pUserImageList;
+    ImageList *pOldHCList = m_pHCUserImageList;
+    m_pUserImageList = new ImageList( pOldList->GetImageCount() );
+    m_pHCUserImageList = new ImageList( pOldHCList->GetImageCount() );
+
     for ( USHORT i=0; i<pOldList->GetImageCount(); i++ )
     {
         USHORT nId = pOldList->GetImageId( i );
         Image aImage;
 
         // Image benutzerdefiniert ?
-        if ( pUserDefList->GetBitmapPos(nId) != USHRT_MAX )
+        if ( m_pUserDefList->GetBitmapPos(nId) != USHRT_MAX )
         {
-            Bitmap *pBmp = pUserDefList->GetBitmap( nId );
+            Bitmap *pBmp = m_pUserDefList->GetBitmap( nId );
             if ( pBmp->GetSizePixel() != aNewSize )
             {
                 aDev.DrawBitmap( Point(), aNewSize, *pBmp );
@@ -770,51 +830,82 @@ void SfxImageManager_Impl::RebuildUserList()
             }
             else
                 aImage = Image( *pBmp, aColor );
+
+            if ( aImage.GetSizePixel() == aNewSize )
+            {
+                m_pUserImageList->AddImage( nId, aImage );
+                m_pHCUserImageList->AddImage( nId, aImage ); // user images are always used as non high contrast
+            }
         }
         else
-            aImage = SeekImage( nId, NULL );
-
-        if ( aImage.GetSizePixel() == aNewSize )
-            pUserImageList->AddImage( nId, aImage );
+        {
+            aImage = SeekImage( nId, NULL, FALSE ); // look for non high contrast mode image
+            m_pUserImageList->AddImage( nId, aImage );
+            aImage = SeekImage( nId, NULL, TRUE ); // look for high contrast mode image
+            m_pHCUserImageList->AddImage( nId, aImage );
+        }
     }
 
     delete pOldList;
+    delete pOldHCList;
 }
 
-Image SfxImageManager_Impl::GetImage( USHORT nId, SfxModule *pModule, BOOL bBig ) const
+Image SfxImageManager_Impl::GetImage( USHORT nId, SfxModule *pModule, BOOL bBig, BOOL bHiContrast ) const
 {
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
     ImageList *pList=0;
     if ( pModule )
-        pList = pModule->GetImageList_Impl( bBig );
+        pList = pModule->GetImageList_Impl( bBig, bHiContrast );
 
-    if ( pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pUserImageList->GetImage( nId );
-    else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pList->GetImage( nId );
+    if ( bHiContrast )
+    {
+        if ( m_pHCUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return m_pHCUserImageList->GetImage( nId );
+        else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pList->GetImage( nId );
+        else
+            return GetImageList( bBig, bHiContrast )->GetImage( nId );
+    }
     else
-        return GetImageList( bBig )->GetImage( nId );
+    {
+        if ( m_pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return m_pUserImageList->GetImage( nId );
+        else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pList->GetImage( nId );
+        else
+            return GetImageList( bBig, bHiContrast )->GetImage( nId );
+    }
 }
 
-Image SfxImageManager_Impl::SeekImage( USHORT nId, SfxModule *pModule ) const
+Image SfxImageManager_Impl::SeekImage( USHORT nId, SfxModule *pModule, BOOL bHiContrast ) const
 {
+    BOOL bBig = ( m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
     ImageList *pList=0;
     if ( pModule )
-        pList = pModule->GetImageList_Impl( aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+        pList = pModule->GetImageList_Impl( bBig, bHiContrast );
 
-    if ( pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pUserImageList->GetImage( nId );
-    else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pList->GetImage( nId );
-    else if ( pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pImageList->GetImage( nId );
-    else if ( pOffImageList )
-        return pOffImageList->GetImage( nId );
+    if ( bHiContrast )
+    {
+        if ( m_pHCUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return m_pHCUserImageList->GetImage( nId );
+        else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pList->GetImage( nId );
+        else
+            return GetImageList( bBig, bHiContrast )->GetImage( nId );
+    }
     else
-        return pImageList->GetImage(nId); // leeres Image zur"uckgeben
+    {
+        if ( m_pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return m_pUserImageList->GetImage( nId );
+        else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pList->GetImage( nId );
+        else
+            return GetImageList( bBig, bHiContrast )->GetImage( nId );
+    }
 }
 
 //-------------------------------------------------------------------------
@@ -842,11 +933,11 @@ SfxImageManager::SfxImageManager( SfxObjectShell* pDoc )
     }
 
     // internal cached data for comparision in callback
-    pData->nSet = pImp->aOpt.GetSymbolSet();
-    pData->nOutStyle = pImp->aOpt.GetToolboxStyle();
+    pData->nSet = pImp->m_aOpt.GetSymbolSet();
+    pData->nOutStyle = pImp->m_aOpt.GetToolboxStyle();
 
     // register callback for changes of SymbolSet or ToolboxStyle
-    pImp->aOpt.AddListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
+    pImp->m_aOpt.AddListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
 
 //    SetInternal( TRUE );
     nRef++;
@@ -861,13 +952,14 @@ SfxImageManager::~SfxImageManager()
 
     if ( !--nRef )
     {
-        DELETEZ( pOffImageList );
         DELETEZ( pImageListSmall );
         DELETEZ( pImageListBig );
+        DELETEZ( pImageListHiSmall );
+        DELETEZ( pImageListHiBig );
     }
 
     DELETEZ( pData->pToolBoxList );
-    pImp->aOpt.RemoveListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
+    pImp->m_aOpt.RemoveListener( LINK( this, SfxImageManager, OptionsChanged_Impl ) );
     if ( pImp != pGlobalConfig || !--nGlobalRef )
         delete pImp;
     delete pData;
@@ -901,57 +993,67 @@ BOOL SfxImageManager::Export( SotStorage& rInStorage, SvStream& rOutStream )
 
 void SfxImageManager::LockImage( USHORT nId, ToolBox *pBox )
 {
-    // Neue Images kommen aus der Office-Liste
-    if ( !pOffImageList || pOffImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
-        return;
+    LockImage( nId, pBox, FALSE );
+}
 
+void SfxImageManager::LockImage( USHORT nId, ToolBox *pBox, BOOL bHiContrast )
+{
     // Das Image mu\s die richtige Gr"o\e haben
     if ( pBox->GetItemImage(nId).GetSizePixel() == pImageList->GetImageSize() )
     {
         // Ist das Image schon vorhanden ?
-        ImageList *pUserImageList = pImp->pUserImageList;
+        ImageList *pUserImageList = pImp->m_pUserImageList;
+        ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
         if ( pUserImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
         {
-            // Eine physikalische Kopie des Images in der User-Liste machen
+            // Eine physikalische Kopie des Images in der User-Listen machen
             pUserImageList->AddImage( nId, pBox->GetItemImage( nId ) );
+            pHCUserImageList->AddImage( nId, pBox->GetItemImage( nId ) );
+
             if ( SfxMacroConfig::IsMacroSlot(nId) )
                 SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
 
             pImp->SetDefault( FALSE );
         }
 
-        // In der Toolbox dieses neue Image benutzen, so da\s die Referenz
-        // auf die Quellliste wieder entfernt wird.
-        pBox->SetItemImage( nId, pUserImageList->GetImage( nId ) );
+        // Toolbox should use image from the user image list so that the reference to
+        // the source image list will be released!
+        if ( bHiContrast )
+            pBox->SetItemImage( nId, pHCUserImageList->GetImage( nId ) );
+        else
+            pBox->SetItemImage( nId, pUserImageList->GetImage( nId ) );
     }
 }
 
 //-------------------------------------------------------------------------
 
-Image SfxImageManager::MakeUserImage( USHORT nId, Image& aImage )
+Image SfxImageManager::MakeUserImage( USHORT nId, Image& aImage, BOOL bHiContrast )
 {
-    // Neue Images kommen aus der Office-Liste
-    if ( !pOffImageList || pOffImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
-        return Image();
-
     // Das Image mu\s die richtige Gr"o\e haben
     if ( aImage.GetSizePixel() == pImageList->GetImageSize() )
     {
         // Ist das Image schon vorhanden ?
-        ImageList *pUserImageList = pImp->pUserImageList;
+        ImageList *pUserImageList = pImp->m_pUserImageList;
+        ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
+
         if ( pUserImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
         {
-            // Eine physikalische Kopie des Images in der User-Liste machen
+            // Eine physikalische Kopie des Images in den User-Listen machen
             pUserImageList->AddImage( nId, aImage );
+            pHCUserImageList->AddImage( nId, aImage );
+
             if ( SfxMacroConfig::IsMacroSlot(nId) )
                 SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
 
             pImp->SetDefault( FALSE );
         }
 
-        // In der Toolbox dieses neue Image benutzen, so da\s die Referenz
-        // auf die Quellliste wieder entfernt wird.
-        return pUserImageList->GetImage( nId );
+        // Return image from the user image list so that the reference to
+        // the source image list will be released!
+        if ( bHiContrast )
+            return pHCUserImageList->GetImage( nId );
+        else
+            return pUserImageList->GetImage( nId );
     }
 
     return Image();
@@ -971,20 +1073,8 @@ void SfxImageManager::SetSymbolSet_Impl( sal_Int16 nNewSet )
         pImp->MakeDefaultImageList();
         Size aNewSize = pImageList->GetImageSize();
 
-        ImageList *pOld = pOffImageList;
-        if ( pOld || !pImp->IsDefault() )
-        {
-            // Auch die Officeliste neu erzeugen bzw. neu anlegen
-            DELETEZ( pOffImageList );
-            StartCustomize();
-        }
-
         if ( !pImp->IsDefault() )
             pImp->RebuildUserList();
-
-        // Wenn es die Officeliste vorher nicht gab, muss sie jetzt wieder entfernt werden
-        if ( !pOld )
-            EndCustomize();
 
         for ( USHORT n=0; n<pData->pToolBoxList->Count(); n++ )
         {
@@ -1042,7 +1132,12 @@ void SfxImageManager::SetSymbolSet_Impl( sal_Int16 nNewSet )
 
 Image SfxImageManager::SeekImage( USHORT nId, SfxModule *pModule ) const
 {
-    return pImp->SeekImage( nId, pModule );
+    return SeekImage( nId, FALSE, pModule );
+}
+
+Image SfxImageManager::SeekImage( USHORT nId, BOOL bHiContrast, SfxModule *pModule ) const
+{
+    return pImp->SeekImage( nId, pModule, bHiContrast );
 }
 
 //-------------------------------------------------------------------------
@@ -1055,28 +1150,43 @@ Image SfxImageManager::SeekImage( USHORT nId, SfxModule *pModule ) const
 */
 Image SfxImageManager::GetImage( USHORT nId, SfxModule *pModule ) const
 {
-    return pImp->GetImage( nId, pModule, ( pImp->aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE ) );
+    return GetImage( nId, FALSE, pModule );
 }
 
-Image SfxImageManager::GetImage( USHORT nId, SfxModule *pModule, BOOL bBig ) const
+Image SfxImageManager::GetImage( USHORT nId, BOOL bHiContrast, SfxModule *pModule ) const
 {
-    return pImp->GetImage( nId, pModule, bBig );
+    return pImp->GetImage( nId, pModule, ( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
+}
+
+Image SfxImageManager::GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const
+{
+    return GetImage( nId, pMod, bBig, FALSE );
+}
+
+Image SfxImageManager::GetImage( USHORT nId, SfxModule *pModule, BOOL bBig, BOOL bHiContrast ) const
+{
+    return pImp->GetImage( nId, pModule, bBig, bHiContrast );
 }
 
 Image SfxImageManager::GetImageFromModule_Impl( USHORT nId, SfxModule *pModule )
 {
+    return GetImageFromModule_Impl( nId, pModule, FALSE );
+}
+
+Image SfxImageManager::GetImageFromModule_Impl( USHORT nId, SfxModule *pModule, BOOL bHiContrast )
+{
     if ( pModule )
     {
-        ImageList *pList = pModule->GetImageList_Impl( pImp->aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+        ImageList *pList = pModule->GetImageList_Impl(( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE ), bHiContrast );
         if ( pList )
             return pList->GetImage( nId );
     }
     else
     {
-        if ( pOffImageList )
-            return pOffImageList->GetImage( nId );
-        else
+        if ( bHiContrast )
             return pImageList->GetImage( nId );
+        else
+            return pHiImageList->GetImage( nId );
     }
 
     return Image();
@@ -1084,13 +1194,29 @@ Image SfxImageManager::GetImageFromModule_Impl( USHORT nId, SfxModule *pModule )
 
 Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, SfxModule *pModule )
 {
-    ImageList *pUserImageList = pImp->pUserImageList;
+    return GetAndLockImage_Impl( nId, FALSE, pModule );
+}
+
+Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, BOOL bHiContrast, SfxModule *pModule )
+{
+    BOOL bBig = ( pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+    ImageList *pUserImageList = pImp->m_pUserImageList;
+    ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
 
     // Zuerst in der UserImagelist suchen
-    if ( pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-        return pUserImageList->GetImage( nId );
-    else if ( pModule )
-        return GetImage( nId, pModule );
+    if ( bHiContrast )
+    {
+        if ( pHCUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pHCUserImageList->GetImage( nId );
+    }
+    else
+    {
+        if ( pUserImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+            return pUserImageList->GetImage( nId );
+    }
+
+    if ( pModule )
+        return GetImage( nId, pModule, bBig, bHiContrast );
     else
     {
         pModule = SFX_APP()->GetActiveModule();
@@ -1100,15 +1226,39 @@ Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, SfxModule *pModule )
         if ( pModule && pImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
         {
             // Dann in der Liste des aktiven Moduls suchen
-            ImageList *pList = pModule->GetImageList_Impl( pImp->aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+            ImageList *pList = pModule->GetImageList_Impl( bBig, bHiContrast );
             if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
             {
                 // Das Image in die UserImageList "ubertragen
-                pUserImageList->AddImage( nId, pList->GetImage( nId ) );
+                if ( bHiContrast )
+                {
+                    // Add it to the high contrast user image list
+                    pHCUserImageList->AddImage( nId, pList->GetImage( nId ) );
+
+                    // Do it for the NON high contrast user image list, too!!
+                    ImageList *pNonList = pModule->GetImageList_Impl( bBig, FALSE );
+                    if ( pNonList )
+                        pUserImageList->AddImage( nId, pNonList->GetImage( nId ) );
+                }
+                else
+                {
+                    // Add it to the user image list
+                    pUserImageList->AddImage( nId, pList->GetImage( nId ) );
+
+                    // Do it for the high contrast user image list, too!!
+                    ImageList *pHiList = pModule->GetImageList_Impl( bBig, TRUE );
+                    if ( pHiList )
+                        pHCUserImageList->AddImage( nId, pHiList->GetImage( nId ) );
+                }
+
                 if ( SfxMacroConfig::IsMacroSlot(nId) )
                     SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
                 pImp->SetDefault( FALSE );
-                return pUserImageList->GetImage( nId );
+
+                if ( bHiContrast )
+                    return pHCUserImageList->GetImage( nId );
+                else
+                    return pUserImageList->GetImage( nId );
             }
         }
 
@@ -1125,36 +1275,7 @@ Image SfxImageManager::GetAndLockImage_Impl( USHORT nId, SfxModule *pModule )
 
 void SfxImageManager::StartCustomize()
 {
-    // Officeliste schon angelegt ?
-    if ( pOffImageList )
-        return;
-
-    USHORT nType=0;
-    switch ( pImp->aOpt.GetSymbolSet() )
-    {
-        case SFX_SYMBOLS_SMALL:
-            nType = RID_OFFICEIMAGELIST_SC;
-            break;
-        case SFX_SYMBOLS_LARGE:
-            nType = RID_OFFICEIMAGELIST_LC;
-            break;
-        default:
-            DBG_ERROR("Unbekannter Symboltyp!");
-            break;
-    }
-
-    // Die Office-Imagelist wird vom default-ResMgr bereitgestellt
-    ResMgr *pResMgr = Resource::GetResManager();
-    ResId aResId( nType );
-    aResId.SetRT( RSC_IMAGELIST );
-
-    DBG_ASSERT( pResMgr->IsAvailable(aResId),
-            "Keine default ImageList vorhanden!" );
-
-    if ( pResMgr->IsAvailable(aResId) )
-        pOffImageList = new ImageList( aResId );
-    else
-        pOffImageList = new ImageList();
+    // no more office list
 }
 
 //-------------------------------------------------------------------------
@@ -1166,7 +1287,7 @@ void SfxImageManager::StartCustomize()
 
 void SfxImageManager::EndCustomize()
 {
-    DELETEZ( pOffImageList);
+    // no more office list
 }
 
 //-------------------------------------------------------------------------
@@ -1179,13 +1300,16 @@ void SfxImageManager::EndCustomize()
 
 void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 {
-    ImageList *pUserImageList = pImp->pUserImageList;
-    SfxBitmapList_Impl* pUserDefList = pImp->pUserDefList;
+    ImageList *pUserImageList = pImp->m_pUserImageList;
+    ImageList *pHCUserImageList = pImp->m_pHCUserImageList;
+
+    SfxBitmapList_Impl* pUserDefList = pImp->m_pUserDefList;
     BOOL bReplaced = FALSE;
     if ( !pBmp && GetImage( nId ).GetSizePixel().Width() )
     {
         // Auf default zuruecksetzen; zuerst das Userdef-Image entfernen
         pUserImageList->RemoveImage( nId );
+        pHCUserImageList->RemoveImage( nId );
 
         // Falls zu der "ubergebenen Id eine UserBitmap vorliegt, wird sie
         // jetzt wieder entfernt
@@ -1194,19 +1318,6 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
                 pUserDefList->RemoveBitmap( nId );
 
         Image aImage = GetImage( nId );
-        if ( !aImage.GetSizePixel().Width() )
-        {
-            // Kein default-Image vorhanden, vielleicht eines in Officeliste?
-            ImageList *pOldOffImageList = pOffImageList;
-            if ( !pOldOffImageList )
-                StartCustomize();
-            aImage = pOffImageList->GetImage( nId );
-
-            // Wenn es die OfficeListe vorher nicht gab, mu\s sie jetzt wieder
-            // entfernt werden
-            if ( !pOldOffImageList )
-                EndCustomize();
-        }
 
         if ( aImage.GetSizePixel().Width() )
         {
@@ -1253,9 +1364,15 @@ void SfxImageManager::ReplaceImage( USHORT nId, Bitmap* pBmp )
 
         // In die User-Liste aufnehmen
         if ( pUserImageList->GetImagePos( nId ) == IMAGELIST_IMAGE_NOTFOUND )
+        {
             pUserImageList->AddImage( nId, aImage );
+            pHCUserImageList->AddImage( nId, aImage );
+        }
         else
+        {
             pUserImageList->ReplaceImage( nId, aImage );
+            pHCUserImageList->ReplaceImage( nId, aImage );
+        }
 
         if ( SfxMacroConfig::IsMacroSlot(nId) )
             SfxMacroConfig::GetOrCreate()->RegisterSlotId( nId );
@@ -1291,7 +1408,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, USHORT nFlags )
     pInf->nFlags = nFlags;
     pInf->pModule = NULL;
     pData->pToolBoxList->Append( pInf );
-    pBox->SetOutStyle( pImp->aOpt.GetToolboxStyle() );
+    pBox->SetOutStyle( pImp->m_aOpt.GetToolboxStyle() );
 }
 
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, SfxModule* pModule, USHORT nFlags )
@@ -1302,7 +1419,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, SfxModule* pModule, USHORT
     pInf->nFlags = nFlags;
     pInf->pModule = pModule;
     pData->pToolBoxList->Append( pInf );
-    pBox->SetOutStyle( pImp->aOpt.GetToolboxStyle() );
+    pBox->SetOutStyle( pImp->m_aOpt.GetToolboxStyle() );
 }
 
 //-------------------------------------------------------------------------
@@ -1332,7 +1449,7 @@ void SfxImageManager::RegisterToolBoxManager( SfxToolBoxManager *pMgr, USHORT nF
     pInf->pMgr = pMgr;
     pInf->nFlags = nFlags;
     pData->pToolBoxList->Append( pInf );
-    pInf->pToolBox->SetOutStyle( pImp->aOpt.GetToolboxStyle() );
+    pInf->pToolBox->SetOutStyle( pImp->m_aOpt.GetToolboxStyle() );
 }
 
 //-------------------------------------------------------------------------
@@ -1381,13 +1498,21 @@ Color SfxImageManager::GetMaskColor() const
 
 void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule )
 {
+    SetImages( rToolBox, pModule, FALSE );
+}
+
+void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule, BOOL bHiContrast )
+{
+    BOOL bBig = pImp->m_aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE;
+
     if ( !pModule )
         pModule = SFX_APP()->GetActiveModule();
     ImageList *pList=0;
     if ( pModule )
-        pList = pModule->GetImageList_Impl( pImp->aOpt.GetSymbolSet() == SFX_SYMBOLS_LARGE );
+        pList = pModule->GetImageList_Impl( bBig, bHiContrast );
 
-    ImageList *pUserImageList = pImp->pUserImageList;
+    ImageList *pUserImageList   = bHiContrast ? pImp->m_pHCUserImageList : pImp->m_pUserImageList;
+    ImageList *pWorkImageList   = GetImageList( bBig, bHiContrast );
     USHORT nCount = rToolBox.GetItemCount();
     for (USHORT n=0; n<nCount; n++)
     {
@@ -1400,8 +1525,8 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule )
                     rToolBox.SetItemImage(nId, pUserImageList->GetImage(nId));
                 else if ( pList && pList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
                     rToolBox.SetItemImage(nId, pList->GetImage(nId));
-                else if ( pImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
-                    rToolBox.SetItemImage(nId, pImageList->GetImage(nId));
+                else if ( pWorkImageList->GetImagePos( nId ) != IMAGELIST_IMAGE_NOTFOUND )
+                    rToolBox.SetItemImage(nId, pWorkImageList->GetImage(nId));
             }
 
             case TOOLBOXITEM_SEPARATOR:
@@ -1424,7 +1549,7 @@ void SfxImageManager::SetImages( ToolBox& rToolBox, SfxModule *pModule )
 
 BOOL SfxImageManager::IsUserDef_Impl(USHORT nId) const
 {
-    return ( pImp->pUserDefList->GetBitmapPos(nId) != USHRT_MAX );
+    return ( pImp->m_pUserDefList->GetBitmapPos(nId) != USHRT_MAX );
 }
 
 //-------------------------------------------------------------------------
@@ -1437,7 +1562,7 @@ BOOL SfxImageManager::IsUserDef_Impl(USHORT nId) const
 
 const Bitmap& SfxImageManager::GetUserDefBitmap_Impl( USHORT nId ) const
 {
-    SfxBitmapList_Impl* pUserDefList = pImp->pUserDefList;
+    SfxBitmapList_Impl* pUserDefList = pImp->m_pUserDefList;
     USHORT nPos = pUserDefList->GetBitmapPos( nId );
     DBG_ASSERT( nPos != USHRT_MAX, "Bitmap nicht vorhanden!" );
     return ( *pUserDefList->GetBitmap(nId) );
@@ -1479,8 +1604,8 @@ Size SfxImageManager::GetImageSize() const
 
 IMPL_LINK( SfxImageManager, OptionsChanged_Impl, void*, pVoid )
 {
-    SetOutStyle_Impl( pImp->aOpt.GetToolboxStyle() );
-    SetSymbolSet_Impl( pImp->aOpt.GetSymbolSet() );
+    SetOutStyle_Impl( pImp->m_aOpt.GetToolboxStyle() );
+    SetSymbolSet_Impl( pImp->m_aOpt.GetSymbolSet() );
 
     return 0L;
 }
@@ -1489,15 +1614,36 @@ Image SfxImageManager::GetGlobalImage( USHORT nId, BOOL bBig )
 {
     if ( !pGlobalConfig )
         return Image();
-    return pGlobalConfig->GetImage( nId, NULL, bBig );
+    return pGlobalConfig->GetImage( nId, NULL, bBig, FALSE );
+}
+
+Image SfxImageManager::GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast )
+{
+    if ( !pGlobalConfig )
+        return Image();
+    return pGlobalConfig->GetImage( nId, NULL, bBig, bHiContrast );
 }
 
 IMPL_LINK( SfxImageManager, ConfigChanged_Impl, void*, pVoid )
 {
+    BOOL bHiContrast = FALSE;
+
+    if ( pData->pToolBoxList->Count() > 0 )
+    {
+        // Check whether toolbox is in high contrast mode or not!
+        ToolBox *pBox = (*pData->pToolBoxList)[0]->pToolBox;
+        Color   aBackColor = pBox->GetBackground().GetColor();
+        if ( aBackColor.IsDark() )
+            bHiContrast = TRUE;
+    }
+
     for ( USHORT i=0; i<pImageList->GetImageCount(); i++ )
     {
         USHORT nId = pImageList->GetImageId(i);
-        ExchangeItemImage_Impl( nId, pImp->GetImage( nId, pData->pDoc->GetModule(), ( pData->nSet == SFX_SYMBOLS_LARGE ) ) );
+        ExchangeItemImage_Impl( nId, pImp->GetImage( nId,
+                                        pData->pDoc->GetModule(),
+                                        ( pData->nSet == SFX_SYMBOLS_LARGE ),
+                                        bHiContrast ) );
     }
 
     return TRUE;

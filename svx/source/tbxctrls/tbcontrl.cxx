@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-04-02 13:51:10 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:49:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -402,6 +402,7 @@ private:
     Color       aCurColor;
     Rectangle   theUpdRect;
     Size        theBmpSize;
+    BOOL        bWasHiContrastMode;
 };
 
 //========================================================================
@@ -1658,14 +1659,14 @@ BOOL SvxLineWindow::Close()
 SvxTbxButtonColorUpdater::SvxTbxButtonColorUpdater( USHORT nTbxBtnId,
                                                     ToolBox* ptrTbx,
                                                     USHORT nMode ) :
-    nDrawMode   ( nMode ),
-    nBtnId      ( nTbxBtnId ),
-    pTbx        ( ptrTbx ),
-    pBtnBmp     ( NULL ),
-    aCurColor   ( COL_TRANSPARENT )
-
+    nDrawMode         ( nMode ),
+    nBtnId            ( nTbxBtnId ),
+    pTbx              ( ptrTbx ),
+    pBtnBmp           ( NULL ),
+    aCurColor         ( COL_TRANSPARENT )
 {
     DBG_ASSERT( pTbx, "ToolBox not found :-(" );
+    bWasHiContrastMode = pTbx ? ( pTbx->GetBackground().GetColor().IsDark() ) : FALSE;
     Update(nTbxBtnId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
     return;
 }
@@ -1683,15 +1684,17 @@ void SvxTbxButtonColorUpdater::Update( const Color& rColor )
 {
     Image   aImage( pTbx->GetItemImage( nBtnId ) );
     BOOL    bSizeChanged = ( theBmpSize != aImage.GetSizePixel() );
+    BOOL    bDisplayModeChanged = ( bWasHiContrastMode != pTbx->GetBackground().GetColor().IsDark() );
 
-    if ( aCurColor == rColor && !bSizeChanged )
+    if ( aCurColor == rColor && !bSizeChanged && !bDisplayModeChanged )
         return;
 
     VirtualDevice aVirDev( *pTbx );
     Point aNullPnt;
 
-    if ( bSizeChanged )
+    if ( bSizeChanged || bDisplayModeChanged )
     {
+        bWasHiContrastMode = pTbx->GetBackground().GetColor().IsDark();
         theBmpSize = aImage.GetSizePixel();
 
         if ( theBmpSize.Width() <= 16 )

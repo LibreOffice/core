@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-09 12:58:04 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:45:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,10 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
     m_bIsBookmarkMenu   = sal_False;
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
-    SvtMenuOptions aOptions;
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+    m_bShowMenuImages   = SvtMenuOptions().IsMenuIconsEnabled();
+
     ::std::vector< USHORT > aQueryLabelItemIdVector;
 
     int nItemCount = pMenu->GetItemCount();
@@ -302,9 +305,9 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, Menu* pMenu, sal_Bool bDe
             }
             else if ( pMenu->GetItemType( i ) != MENUITEM_SEPARATOR )
             {
-                if ( aOptions.IsMenuIconsEnabled() )
+                if ( m_bShowMenuImages )
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                     if ( !!aImage )
                         pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -357,6 +360,10 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
     m_xFrame            = rFrame;
     m_bInitialized      = sal_False;
     m_bIsBookmarkMenu   = sal_True;
+
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrast    = rSettings.GetMenuColor().IsDark();
+
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     int nItemCount = pBmkMenu->GetItemCount();
@@ -397,10 +404,8 @@ MenuManager::MenuManager( REFERENCE< XFRAME >& rFrame, BmkMenu* pBmkMenu, sal_Bo
 
                 if ( pBmkAttributes )
                 {
-                    // read additional attributes from attributes struct and delete it afterwards
+                    // read additional attributes from attributes struct and BmkMenu implementation will delete all attributes itself!!
                     pMenuItemHandler->aTargetFrame = pBmkAttributes->aTargetFrame;
-                    delete pBmkAttributes;
-                    pBmkMenu->SetUserValue( nItemId, 0 );
                 }
 
                 m_aMenuItemHandlerVector.push_back( pMenuItemHandler );
@@ -874,7 +879,8 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
     if ( pMenu == m_pVCLMenu )
     {
         // set/unset hiding disabled menu entries
-        sal_Bool bDontHide = SvtMenuOptions().IsEntryHidingEnabled();
+        sal_Bool bDontHide          = SvtMenuOptions().IsEntryHidingEnabled();
+        sal_Bool bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
 
         sal_uInt16 nFlag = pMenu->GetMenuFlags();
         if ( bDontHide )
@@ -894,6 +900,51 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         else if ( m_aMenuItemCommand == aSpecialWindowMenu ||
                   m_aMenuItemCommand == aSlotSpecialWindowMenu )
             UpdateSpecialWindowMenu( pMenu );
+
+        // Check if some modes have changed so we have to update our menu images
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bIsHiContrast = rSettings.GetMenuColor().IsDark();
+
+        if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )
+        {
+            // The mode changed so we have to replace all images
+            m_bWasHiContrast    = bIsHiContrast;
+            m_bShowMenuImages   = bShowMenuImages;
+
+            for ( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
+            {
+                USHORT nId = pMenu->GetItemId( nPos );
+                if ( pMenu->GetItemType( nPos ) != MENUITEM_SEPARATOR )
+                {
+                    if ( bShowMenuImages )
+                    {
+                        sal_Bool        bImageSet = sal_False;
+                        ::rtl::OUString aImageId;
+
+                        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+
+                        if ( pMenuAttributes )
+                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+
+                        if ( aImageId.getLength() > 0 )
+                        {
+                            Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrast );
+                            if ( !!aImage )
+                            {
+                                bImageSet = sal_True;
+                                pMenu->SetItemImage( nId, aImage );
+                            }
+                        }
+
+                        if ( !bImageSet )
+                            pMenu->SetItemImage( nId, GetImageFromURL( m_xFrame, pMenu->GetItemCommand( nId ), FALSE, bIsHiContrast ) );
+                    }
+                    else
+                        pMenu->SetItemImage( nId, Image() );
+                }
+            }
+        }
 
         if ( m_bInitialized )
             return 0;

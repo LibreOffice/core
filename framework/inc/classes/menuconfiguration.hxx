@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 07:51:55 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ class MenuConfiguration
         struct Attributes
         {
             ::rtl::OUString aTargetFrame;
+            ::rtl::OUString aImageId;
         };
 
         MenuConfiguration(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-09 18:28:09 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ class MenuManager : public XSTATUSLISTENER      ,
         sal_Bool                            m_bDeleteChildren;
         sal_Bool                            m_bActive;
         sal_Bool                            m_bIsBookmarkMenu;
+        sal_Bool                            m_bWasHiContrast;
+        sal_Bool                            m_bShowMenuImages;
         ::rtl::OUString                     m_aMenuItemCommand;
         Menu*                               m_pVCLMenu;
         REFERENCE< XFRAME >                 m_xFrame;

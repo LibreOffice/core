@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 12:23:06 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #include <framework/menuconfiguration.hxx>
 #include <vcl/taskpanelist.hxx>
 
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
+#endif
+
 #pragma hdrstop
 
 #include "tbxctrl.hxx"
@@ -113,6 +117,7 @@
 #include "app.hxx"
 #include "unoctitm.hxx"
 #include "helpid.hrc"
+#include "imagemgr.hxx"
 #include "workwin.hxx"
 
 using namespace ::com::sun::star::uno;
@@ -644,6 +649,11 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl
     rBox.SetHelpId( nId, HID_TBXCONTROL_FILENEW );
     rBox.SetItemBits( nId,  rBox.GetItemBits( nId ) | TIB_DROPDOWN);
     SetImage( String() );
+
+    // Determine the current background color of the menus
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrastMode    = rSettings.GetMenuColor().IsDark();
+    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
 }
 
 SfxAppToolBoxControl_Impl::~SfxAppToolBoxControl_Impl()
@@ -660,7 +670,7 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL += String::CreateFromAscii(SfxObjectFactory::GetDefaultFactory().GetShortName());
     }
 
-    GetToolBox().SetItemImage( GetId(), SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE ) );
+    GetToolBox().SetItemImage( GetId(), SvFileInformationManager::GetImage( INetURLObject( aURL ), FALSE, m_bWasHiContrastMode ) );
 }
 
 void SfxAppToolBoxControl_Impl::StateChanged
@@ -714,6 +724,69 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
 //--------------------------------------------------------------------
 long Select_Impl( void* pHdl, void* pVoid );
 
+
+IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pMenu )
+{
+    if ( pMenu )
+    {
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
+        BOOL bShowMenuImages    = SvtMenuOptions().IsMenuIconsEnabled();
+
+        if (( bIsHiContrastMode != m_bWasHiContrastMode ) ||
+            ( bShowMenuImages   != m_bShowMenuImages    )    )
+        {
+            m_bWasHiContrastMode = bIsHiContrastMode;
+            m_bShowMenuImages    = bShowMenuImages;
+
+            USHORT nCount = pMenu->GetItemCount();
+            for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
+            {
+                USHORT nId = pMenu->GetItemId( nSVPos );
+                if ( pMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
+                {
+                    if ( bShowMenuImages )
+                    {
+                        sal_Bool        bImageSet = sal_False;
+                        ::rtl::OUString aImageId;
+                        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+
+                        if ( pMenuAttributes )
+                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+
+                        if ( aImageId.getLength() > 0 )
+                        {
+                            Image aImage = GetImage( Reference< ::com::sun::star::frame::XFrame >(), aImageId, FALSE, bIsHiContrastMode );
+                            if ( !!aImage )
+                            {
+                                bImageSet = sal_True;
+                                pMenu->SetItemImage( nId, aImage );
+                            }
+                        }
+
+                        String aCmd( pMenu->GetItemCommand( nId ) );
+                        if ( !bImageSet && aCmd.Len() )
+                        {
+                            Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode );
+                            if ( !!aImage )
+                                pMenu->SetItemImage( nId, aImage );
+                        }
+                    }
+                    else
+                        pMenu->SetItemImage( nId, Image() );
+                }
+            }
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
+//--------------------------------------------------------------------
+
 IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
 {
     SfxApplication* pApp = SFX_APP();
@@ -734,6 +807,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Timeout, Timer *, pTimer )
     if( pMenu )
     {
         pMenu->SetSelectHdl( Link( this, Select_Impl ) );
+        pMenu->SetActivateHdl( LINK( this, SfxAppToolBoxControl_Impl, Activate ));
         rBox.SetItemDown( GetId(), TRUE );
         USHORT nSelected = pMenu->Execute( &rBox, aRect, POPUPMENU_EXECUTE_UP );
         if ( nSelected )

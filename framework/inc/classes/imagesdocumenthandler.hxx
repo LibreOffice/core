@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagesdocumenthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-27 09:48:59 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ class OReadImagesDocumentHandler : public ::com::sun::star::xml::sax::XDocumentH
             IMG_ATTRIBUTE_BITMAPINDEX,
             IMG_ATTRIBUTE_MASKURL,
             IMG_ATTRIBUTE_MASKMODE,
+            IMG_ATTRIBUTE_HIGHCONTRASTURL,
+            IMG_ATTRIBUTE_HIGHCONTRASTMASKURL,
             IMG_XML_ENTRY_COUNT
         };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-12 07:42:35 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include <stdio.h>
 #include <tools/rcid.h>
 
 #include <cstdarg>
@@ -95,10 +96,12 @@ public:
     SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
+    ImageList*                  pImgListHiSmall;
+    ImageList*                  pImgListHiBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
-    ImageList*                  GetImageList( ResMgr*, BOOL );
+    ImageList*                  GetImageList( ResMgr*, BOOL, BOOL bHiContrast = FALSE );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -115,14 +118,18 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pFactArr;
     delete pImgListSmall;
     delete pImgListBig;
+    delete pImgListHiSmall;
+    delete pImgListHiBig;
 }
 
-ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig )
+ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiContrast )
 {
-    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
+    ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig: pImgListBig ) :
+                                ( bHiContrast ? pImgListHiSmall : pImgListSmall );
     if ( !rpList )
     {
-        ResId aResId( bBig ? RID_DEFAULTIMAGELIST_LC : RID_DEFAULTIMAGELIST_SC, pResMgr );
+        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
+                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), pResMgr );
         aResId.SetRT( RSC_IMAGELIST );
 
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
@@ -131,6 +138,12 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig )
             rpList = new ImageList( aResId );
         else
             rpList = new ImageList();
+
+        // Testcode!!!
+        char temp[128];
+        sprintf( temp, "g:\\imagelist_m%d%d.bmp", bBig ? 1 : 0, bHiContrast ? 1: 0 );
+        SvFileStream aBitmapStream( String::CreateFromAscii( temp ), STREAM_STD_WRITE);
+        aBitmapStream << rpList->GetBitmap();
     }
 
     return rpList;
@@ -259,6 +272,8 @@ void SfxModule::Construct_Impl()
         pImpl->pFactArr=0;
         pImpl->pImgListSmall=0;
         pImpl->pImgListBig=0;
+        pImpl->pImgListHiSmall=0;
+        pImpl->pImgListHiBig=0;
 
         SetPool( &pApp->GetPool() );
     }
@@ -441,7 +456,12 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 
 ImageList* SfxModule::GetImageList_Impl( BOOL bBig )
 {
-    return pImpl->GetImageList( pResMgr, bBig );
+    return pImpl->GetImageList( pResMgr, bBig, FALSE );
+}
+
+ImageList* SfxModule::GetImageList_Impl( BOOL bBig, BOOL bHiContrast )
+{
+    return pImpl->GetImageList( pResMgr, bBig, bHiContrast );
 }
 
 SfxTabPage* SfxModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemSet& rSet )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgmgr.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cd $ $Date: 2002-03-04 16:57:58 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ class SfxImageManager_Impl;
 struct SfxImageManagerData_Impl;
 class SfxImageManager
 {
-    SfxImageManager_Impl* pImp;
-    SfxImageManagerData_Impl* pData;
-    SfxImageManagerData_Impl* pHCData; // internal instance for high contrast mode
+    SfxImageManager_Impl*       pImp;
+    SfxImageManagerData_Impl*   pData;
+    void*                       pHCImp; // internal use
 
     void            SetSymbolSet_Impl( sal_Int16 );
     void            SetOutStyle_Impl( sal_Int16 );
@@ -98,6 +98,7 @@ public:
     static BOOL     Export( SotStorage& rInStorage, SvStream& rOutStream );
     static BOOL     Copy( SotStorage& rIn, SotStorage& rOut );
     static Image    GetGlobalImage( USHORT nId, BOOL bBig );
+    static Image    GetGlobalImage( USHORT nId, BOOL bBig, BOOL bHiContrast );
 
                     // each document may have its own imagemanager, but all documents without an own
                     // image configuration share the same instance
@@ -108,11 +109,15 @@ public:
     Color           GetMaskColor() const;
 
                     // get images from resources
-    Image           GetImage(USHORT nId, SfxModule* pMod = 0) const;
+    Image           GetImage(USHORT nId, SfxModule* pMod = 0 ) const;
+    Image           GetImage(USHORT nId, BOOL bHiContrast, SfxModule* pMod = 0 ) const;
     void            SetImages( ToolBox& rToolBox, SfxModule* );
-    void            LockImage(USHORT nNewId, ToolBox *pBox);
-    Image           MakeUserImage(USHORT nNewId, Image& aSourceImage );
+    void            SetImages( ToolBox& rToolBox, SfxModule*, BOOL bHiContrast );
+    void            LockImage(USHORT nNewId, ToolBox *pBox );
+    void            LockImage(USHORT nNewId, ToolBox *pBox, BOOL bHiContrast );
+    Image           MakeUserImage(USHORT nNewId, Image& aSourceImage, BOOL bHiContrast = FALSE );
     Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig ) const;
+    Image           GetImage(USHORT nId, SfxModule* pMod, BOOL bBig, BOOL bHiContrast ) const;
 
                     // add images to configurable user list
     void            ReplaceImage(USHORT nId, Bitmap* pBmp=0);
@@ -121,7 +126,8 @@ public:
                     // reconfigure user list
     void            StartCustomize();
     void            EndCustomize();
-    Image           SeekImage(USHORT nId, SfxModule* pModule = 0) const;
+    Image           SeekImage(USHORT nId, SfxModule* pModule = 0 ) const;
+    Image           SeekImage(USHORT nId, BOOL bHiContrast, SfxModule* pModule = 0 ) const;
 
                     // register/release toolboxes
     void            RegisterToolBox(ToolBox*, USHORT nFlags=0xFFFF );
@@ -133,8 +139,10 @@ public:
 #if _SOLAR__PRIVATE
     BOOL            IsUserDef_Impl(USHORT nId) const;
     const Bitmap&   GetUserDefBitmap_Impl(USHORT nId) const;
-    Image           GetAndLockImage_Impl(USHORT nId, SfxModule* pMod = 0);
+    Image           GetAndLockImage_Impl(USHORT nId, SfxModule* pMod = 0 );
+    Image           GetAndLockImage_Impl(USHORT nId, BOOL bHiContrast, SfxModule* pMod = 0 );
     Image           GetImageFromModule_Impl( USHORT nId, SfxModule *pMod );
+    Image           GetImageFromModule_Impl( USHORT nId, SfxModule *pMod, BOOL bHiContrast );
     static BOOL     CopyConfiguration_Impl( SfxConfigManager& rSource, SfxConfigManager& rDest );
 #endif
 };

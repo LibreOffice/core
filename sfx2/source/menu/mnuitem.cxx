@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-19 17:18:36 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,20 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef _SVTOOLS_IMAGEMGR_HXX
+#include <svtools/imagemgr.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MENUOPTIONS_HXX
+#include <svtools/menuoptions.hxx>
 #endif
 #include <framework/menuconfiguration.hxx>
 #pragma hdrstop
@@ -115,12 +124,13 @@
 #include "module.hxx"
 #include "unoctitm.hxx"
 #include "viewfrm.hxx"
+#include "imgmgr.hxx"
+#include "imagemgr.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
-
 
 //====================================================================
 
@@ -491,6 +501,12 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     SfxApplication* pApp = SFX_APP();
     SfxAppData_Impl* pImpl = pApp->Get_Impl();
 
+    // Determine the current background color setting for menus
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bIsHiContrastMode  = rSettings.GetMenuColor().IsDark();
+    m_bWasHiContrastMode    = bIsHiContrastMode;
+    m_bShowMenuImages       = SvtMenuOptions().IsMenuIconsEnabled();
+
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
     ::framework::MenuConfiguration aConf( aXMultiServiceFactory );
     Reference<com::sun::star::frame::XFrame> aXFrame( GetBindings().GetDispatcher_Impl()->GetFrame()->GetFrame()->GetFrameInterface() );
@@ -498,6 +514,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     if( pMenu )
     {
         pMenu->SetSelectHdl( Link( this, Select_Impl ) );
+        pMenu->SetActivateHdl( LINK(this, SfxAppMenuControl_Impl, Activate) );
         rMenu.SetPopupMenu( nPos, pMenu );
     }
 }
@@ -505,6 +522,66 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
 SfxAppMenuControl_Impl::~SfxAppMenuControl_Impl()
 {
     delete pMenu;
+}
+
+IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pMenu )
+{
+    if ( pMenu )
+    {
+        BOOL bShowMenuImages = SvtMenuOptions().IsMenuIconsEnabled();
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        BOOL bIsHiContrastMode = rSettings.GetMenuColor().IsDark();
+
+        if (( bIsHiContrastMode != m_bWasHiContrastMode ) ||
+            ( bShowMenuImages != m_bShowMenuImages      )    )
+        {
+            m_bWasHiContrastMode    = bIsHiContrastMode;
+            m_bShowMenuImages       = bShowMenuImages;
+
+            USHORT nCount = pMenu->GetItemCount();
+            for ( USHORT nSVPos = 0; nSVPos < nCount; nSVPos++ )
+            {
+                USHORT nId = pMenu->GetItemId( nSVPos );
+                if ( pMenu->GetItemType( nSVPos ) != MENUITEM_SEPARATOR )
+                {
+                    if ( bShowMenuImages )
+                    {
+                        sal_Bool        bImageSet = sal_False;
+                        ::rtl::OUString aImageId;
+                        ::framework::MenuConfiguration::Attributes* pMenuAttributes =
+                            (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( nId );
+
+                        if ( pMenuAttributes )
+                            aImageId = pMenuAttributes->aImageId; // Retrieve image id from menu attributes
+
+                        if ( aImageId.getLength() > 0 )
+                        {
+                            Image aImage = GetImage( Reference< ::com::sun::star::frame::XFrame >(), aImageId, FALSE, bIsHiContrastMode );
+                            if ( !!aImage )
+                            {
+                                bImageSet = sal_True;
+                                pMenu->SetItemImage( nId, aImage );
+                            }
+                        }
+
+                        String aCmd( pMenu->GetItemCommand( nId ) );
+                        if ( !bImageSet && aCmd.Len() )
+                        {
+                            Image aImage = SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode );
+                            if ( !!aImage )
+                                pMenu->SetItemImage( nId, aImage );
+                        }
+                    }
+                    else
+                        pMenu->SetItemImage( nId, Image() );
+                }
+            }
+        }
+
+        return TRUE;
+    }
+
+    return FALSE;
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,

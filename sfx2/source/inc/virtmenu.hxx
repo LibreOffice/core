@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-02 15:35:52 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ private:
     BOOL            bHelpInitialized : 1;
     BOOL            bIsActive : 1;
     BOOL            bControllersUnBound : 1;
+    BOOL            bWasHighContrast : 1;
 
 private:
     void            Construct_Impl();
@@ -155,6 +156,8 @@ public:
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
+    BOOL            IsHiContrastMode() const;
+    void            UpdateImages();
 
     DECL_LINK( Select, Menu * );
 };

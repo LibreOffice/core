@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtmenu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-19 07:58:19 $
+ *  last change: $Author: cd $ $Date: 2002-04-11 11:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 
 #pragma hdrstop
@@ -172,7 +175,8 @@ SfxVirtualMenu::SfxVirtualMenu( USHORT nOwnId,
     pItems(0),
     pBindings(&rBindings),
     pResMgr(0),
-    nLocks(0), pAutoDeactivate(0), bHelpInitialized( bWithHelp )
+    nLocks(0), pAutoDeactivate(0), bHelpInitialized( bWithHelp ),
+    bWasHighContrast( FALSE )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxVirtualMenu, 0);
@@ -198,7 +202,8 @@ SfxVirtualMenu::SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
     pItems(0),
     pBindings(&rBindings),
     pResMgr(0),
-    nLocks(0), pAutoDeactivate(0),  bHelpInitialized( bWithHelp )
+    nLocks(0), pAutoDeactivate(0),  bHelpInitialized( bWithHelp ),
+    bWasHighContrast( FALSE )
 {
     DBG_MEMTEST();
     DBG_CTOR(SfxVirtualMenu, 0);
@@ -283,6 +288,17 @@ SfxVirtualMenu::~SfxVirtualMenu()
 }
 //--------------------------------------------------------------------
 
+BOOL SfxVirtualMenu::IsHiContrastMode() const
+{
+    const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    Color aMenuColor = rSettings.GetMenuColor();
+    if ( aMenuColor.IsDark() )
+        return TRUE;
+    else
+        return FALSE;
+}
+
+//--------------------------------------------------------------------
 // internal: creates the virtual menu from the pSVMenu
 
 void SfxVirtualMenu::CreateFromSVMenu()
@@ -310,6 +326,10 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
     // iterate through the items
     pBindings->ENTERREGISTRATIONS(); ++nLocks;
+
+    // Update high contrast state
+    bWasHighContrast = IsHiContrastMode();
+
     USHORT nSVPos = 0;
     for ( USHORT nPos = 0; nPos < nCount; ++nPos, ++nSVPos )
     {
@@ -347,7 +367,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                                 pSVMenu->GetHelpText(nId), *pBindings);
 
                 if (  aOptions.IsMenuIconsEnabled() )
-                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
+                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast ) );
             }
             else
             {
@@ -401,7 +421,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     if ( aCmd.Len() )
                     {
                         if ( aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
+                            pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bWasHighContrast ) );
                         pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nId,
                             *pSVMenu, *pBindings, this );
                         if ( pMnuCtrl )
@@ -440,7 +460,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
 //                        if ( !pSVMenu->GetPopupMenu( nId ) && aOptions.IsMenuIconsEnabled() )
                         if (  aOptions.IsMenuIconsEnabled() )
-                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
+                            pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bWasHighContrast ) );
                     }
 
                     if ( !IsItemHidden_Impl(nId, bOleServer, bMac) )
@@ -491,6 +511,7 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
     SfxViewFrame *pViewFrame = pBindings->GetDispatcher()->GetFrame();
     SfxModule* pModule = pViewFrame->GetObjectShell()->GetModule();
     BOOL bIcons = aOptions.IsMenuIconsEnabled();
+    BOOL bIsHiContrastMode = IsHiContrastMode();
 
     for ( USHORT nSVPos=0; nSVPos<nCount; ++nSVPos )
     {
@@ -500,9 +521,9 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
         {
             String aCmd( pSVMenu->GetItemCommand( nId ) );
             if ( aCmd.Len() )
-                pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE ) );
+                pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
             else
-                pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE ) );
+                pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
         }
         else if( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE && !bIcons )
         {
@@ -511,6 +532,36 @@ IMPL_LINK( SfxVirtualMenu, SettingsChanged, void*, pVoid )
     }
 
     return 0;
+}
+
+//--------------------------------------------------------------------
+
+void SfxVirtualMenu::UpdateImages()
+{
+    SvtMenuOptions aOptions;
+    BOOL bIcons = aOptions.IsMenuIconsEnabled();
+
+    if ( bIcons )
+    {
+        BOOL            bIsHiContrastMode   = IsHiContrastMode();
+        USHORT          nCount              = pSVMenu->GetItemCount();
+        SfxViewFrame *  pViewFrame          = pBindings->GetDispatcher()->GetFrame();
+        SfxModule*      pModule             = pViewFrame->GetObjectShell()->GetModule();
+
+        for ( USHORT nSVPos=0; nSVPos < nCount; ++nSVPos )
+        {
+            USHORT nId = pSVMenu->GetItemId( nSVPos );
+            PopupMenu* pPopup = pSVMenu->GetPopupMenu( nId );
+            if ( pSVMenu->GetItemType( nSVPos ) == MENUITEM_STRINGIMAGE )
+            {
+                String aCmd( pSVMenu->GetItemCommand( nId ) );
+                if ( aCmd.Len() )
+                    pSVMenu->SetItemImage( nId, SvFileInformationManager::GetImage( aCmd, FALSE, bIsHiContrastMode ) );
+                else
+                    pSVMenu->SetItemImage( nId, pBindings->GetImageManager()->GetImage( nId, pModule, FALSE, bIsHiContrastMode ) );
+            }
+        }
+    }
 }
 
 //--------------------------------------------------------------------
@@ -755,6 +806,13 @@ IMPL_LINK( SfxVirtualMenu, Activate, Menu *, pMenu )
 
         if ( pAutoDeactivate ) // QAP-Hack
             pAutoDeactivate->Start();
+
+        if ( IsHiContrastMode() != bWasHighContrast )
+        {
+            // Refresh images as our background color changed and remember it!!
+            bWasHighContrast = IsHiContrastMode();
+            UpdateImages();
+        }
 
         // erledigt
         return TRUE;
