@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-10 09:42:33 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include "docuno.hxx"
 #include "attrib.hxx"
 
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
+
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlkywd.hxx>
@@ -87,7 +91,7 @@ using namespace com::sun::star;
 ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         ScXMLImport& rImport,
         USHORT nPrfx,
-        const NAMESPACE_RTL(OUString)& rLName,
+        const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ):
     SvXMLImportContext( rImport, nPrfx, rLName ),
     aBorderColor( COL_BLACK ),
@@ -100,11 +104,11 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
-        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
-        rtl::OUString aLocalName;
+        OUString sAttrName = xAttrList->getNameByIndex( i );
+        OUString aLocalName;
         USHORT nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                             sAttrName, &aLocalName );
-        rtl::OUString sValue = xAttrList->getValueByIndex( i );
+        OUString sValue = xAttrList->getValueByIndex( i );
 
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableScenarioAttrTokenMap();
 
@@ -142,7 +146,8 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES:
             {
-                GetScImport().GetRangeListFromString( sValue, aScenarioRanges );
+                ScXMLConverter::GetRangeListFromString(
+                    aScenarioRanges, sValue, GetScImport().GetDocument() );
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COMMENT:
@@ -160,7 +165,7 @@ ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
 
 SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
         USHORT nPrefix,
-        const NAMESPACE_RTL(OUString)& rLName,
+        const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
@@ -169,32 +174,26 @@ SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
 void ScXMLTableScenarioContext::EndElement()
 {
     sal_Int16   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetScImport().GetModel() );
-    if( pDocObj )
+    ScDocument* pDoc = GetScImport().GetDocument();
+
+    pDoc->SetScenario( nCurrTable, TRUE );
+    USHORT nFlags( 0 );
+    if( bDisplayBorder )
+        nFlags |= SC_SCENARIO_SHOWFRAME;
+    if( bCopyBack )
+        nFlags |= SC_SCENARIO_TWOWAY;
+    if( bCopyStyles )
+        nFlags |= SC_SCENARIO_ATTRIB;
+    if( !bCopyFormulas )
+        nFlags |= SC_SCENARIO_VALUE;
+    pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
+    for( sal_Int32 i = 0; i < aScenarioRanges.Count(); i++ )
     {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if( pDoc )
-        {
-            pDoc->SetScenario( nCurrTable, TRUE );
-            USHORT nFlags( 0 );
-            if( bDisplayBorder )
-                nFlags |= SC_SCENARIO_SHOWFRAME;
-            if( bCopyBack )
-                nFlags |= SC_SCENARIO_TWOWAY;
-            if( bCopyStyles )
-                nFlags |= SC_SCENARIO_ATTRIB;
-            if( !bCopyFormulas )
-                nFlags |= SC_SCENARIO_VALUE;
-            pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-            for( sal_Int32 i = 0; i < aScenarioRanges.Count(); i++ )
-            {
-                ScRange* pRange = aScenarioRanges.GetObject( i );
-                if( pRange )
-                    pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                        pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
-            }
-            pDoc->SetActiveScenario( nCurrTable, bIsActive );
-        }
+        ScRange* pRange = aScenarioRanges.GetObject( i );
+        if( pRange )
+            pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
+                pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );
     }
+    pDoc->SetActiveScenario( nCurrTable, bIsActive );
 }
 

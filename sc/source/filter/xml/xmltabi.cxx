@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-01 13:19:03 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include "xmlmapch.hxx"
 #include "docuno.hxx"
 #include "olinetab.hxx"
+
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -228,14 +232,8 @@ void ScXMLTableContext::EndElement()
                     if( xPrintAreas.is() )
                     {
                         uno::Sequence< table::CellRangeAddress > aRangeList;
-                        sal_Int32 nIndex = 0;
-                        while( nIndex >= 0 )
-                        {
-                            table::CellRangeAddress aCellRange;
-                            nIndex = GetScImport().GetRangeFromString( sPrintRanges, nIndex, aCellRange );
-                            aRangeList.realloc( aRangeList.getLength() + 1 );
-                            aRangeList[ aRangeList.getLength() - 1 ] = aCellRange;
-                        }
+                        ScXMLConverter::GetRangeListFromString(
+                            aRangeList, sPrintRanges, GetScImport().GetDocument() );
                         xPrintAreas->setPrintAreas( aRangeList );
                     }
                 }

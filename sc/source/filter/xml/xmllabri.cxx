@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-26 13:23:21 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #endif
 
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 #ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
 #endif
@@ -192,9 +195,9 @@ void ScXMLLabelRangeContext::EndElement()
         if( aAny >>= xLabelRanges )
         {
             table::CellRangeAddress aLabelRange;
-            GetScImport().GetRangeFromString( sLabelRangeStr, 0, aLabelRange );
+            ScXMLConverter::GetRangeFromString( aLabelRange, sLabelRangeStr, GetScImport().GetDocument() );
             table::CellRangeAddress aDataRange;
-            GetScImport().GetRangeFromString( sDataRangeStr, 0, aDataRange );
+            ScXMLConverter::GetRangeFromString( aDataRange, sDataRangeStr, GetScImport().GetDocument() );
             xLabelRanges->addNew( aLabelRange, aDataRange );
         }
     }

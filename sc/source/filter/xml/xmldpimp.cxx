@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-10 06:26:25 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include "dpshttab.hxx"
 #include "dpsdbtab.hxx"
 #include "attrib.hxx"
+
+#ifndef _SC_XMLCONVERTER_HXX
+#include "XMLConverter.hxx"
+#endif
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -751,7 +755,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION :
             {
-                nFunction = GetFunction(sValue);
+                nFunction = (sal_Int16) ScXMLConverter::GetFunctionFromString( sValue );
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION :
@@ -793,38 +797,6 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( USHORT nPref
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
     return pContext;
-}
-
-sal_Int16 ScXMLDataPilotFieldContext::GetFunction(const rtl::OUString& sFunction)
-{
-    if (sFunction.compareToAscii("auto") == 0)
-        return sheet::GeneralFunction_AUTO;
-    else if (sFunction.compareToAscii("average") == 0)
-        return sheet::GeneralFunction_AVERAGE;
-    else if (sFunction.compareToAscii("count") == 0)
-        return sheet::GeneralFunction_COUNT;
-    else if (sFunction.compareToAscii("countnums") == 0)
-        return sheet::GeneralFunction_COUNTNUMS;
-    else if (sFunction.compareToAscii("max") == 0)
-        return sheet::GeneralFunction_MAX;
-    else if (sFunction.compareToAscii("min") == 0)
-        return sheet::GeneralFunction_MIN;
-    else if (sFunction.compareToAscii("none") == 0)
-        return sheet::GeneralFunction_NONE;
-    else if (sFunction.compareToAscii("product") == 0)
-        return sheet::GeneralFunction_PRODUCT;
-    else if (sFunction.compareToAscii("stdev") == 0)
-        return sheet::GeneralFunction_STDEV;
-    else if (sFunction.compareToAscii("stdevp") == 0)
-        return sheet::GeneralFunction_STDEVP;
-    else if (sFunction.compareToAscii("sum") == 0)
-        return sheet::GeneralFunction_SUM;
-    else if (sFunction.compareToAscii("var") == 0)
-        return sheet::GeneralFunction_VAR;
-    else if (sFunction.compareToAscii("varp") == 0)
-        return sheet::GeneralFunction_VARP;
-    else
-        return 0;
 }
 
 sal_Int16 ScXMLDataPilotFieldContext::GetOrientation(const rtl::OUString& sOrientation)
@@ -1009,7 +981,7 @@ ScXMLDataPilotSubTotalContext::ScXMLDataPilotSubTotalContext( ScXMLImport& rImpo
         {
             case XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION :
             {
-                pDataPilotSubTotals->AddFunction(pDataPilotSubTotals->GetDataPilotField()->GetFunction(sValue));
+                pDataPilotSubTotals->AddFunction( ScXMLConverter::GetFunctionFromString( sValue ) );
             }
             break;
         }

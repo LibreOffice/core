@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-02 14:05:44 $
+ *  last change: $Author: dr $ $Date: 2000-11-02 16:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,8 @@ void ScXMLContentValidationContext::EndElement()
         ScXMLConverter::ParseFormula(aValidation.sFormula1);
     if (aValidation.sFormula2.getLength())
         ScXMLConverter::ParseFormula(aValidation.sFormula2);
-    GetScImport().GetCellFromString(sBaseCellAddress, aValidation.aBaseCellAddress);
+    ScXMLConverter::GetAddressFromString(
+        aValidation.aBaseCellAddress, sBaseCellAddress, GetScImport().GetDocument() );
     GetAlertStyle(sErrorMessageType, aValidation.aAlertStyle);
     aValidation.bShowErrorMessage = bDisplayError;
     aValidation.bShowImputMessage = bDisplayHelp;
