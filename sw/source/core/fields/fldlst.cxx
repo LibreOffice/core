@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldlst.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:06:03 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:51:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, FASTBOOL bBuildTmpLst )
         SwFieldType* pFldType = (SwFieldType*)rFldTypes[ i ];
         USHORT nType = pFldType->Which();
 
-        if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType )
+        if( RES_SETEXPFLD == nType || RES_INPUTFLD == nType || RES_DROPDOWN == nType )
         {
             SwClientIter aIter( *pFldType );
             for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
@@ -112,7 +112,7 @@ SwInputFieldList::SwInputFieldList( SwEditShell* pShell, FASTBOOL bBuildTmpLst )
                 const SwTxtFld* pTxtFld = pFld->GetTxtFld();
 
                 //  nur InputFields und interaktive SetExpFlds bearbeiten
-                //
+                //  and DropDown fields
                 if( !pTxtFld || ( RES_SETEXPFLD == nType &&
                     !((SwSetExpField*)pFld->GetFld())->GetInputFlag()))
                     continue;
