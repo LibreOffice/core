@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-21 11:20:16 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 80 , 8 );
         Text = "~Schriftart";
         Text [ ENGLISH ] = "~Font";
-        Text [ english_us ] = "~Font";
+        Text [ english_us ] = "Font";
         Text[ portuguese ] = "~Tipo de letra";
         Text[ russian ] = "“ËÔ ¯ËÙÚ‡";
         Text[ greek ] = "√Ò·ÏÏ·ÙÔ~ÛÂÈÒ‹";
@@ -144,7 +144,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ swedish ] = "Tecken~snitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Font";
-        Text[ japanese ] = "Ã´›ƒ";
+        Text[ japanese ] = "Ã´›ƒÇÃéÌóﬁ";
         Text[ korean ] = "±€≤√";
         Text[ chinese_simplified ] = "◊÷ÃÂ";
         Text[ chinese_traditional ] = "¶r´¨";
@@ -212,7 +212,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Te~ckenstil";
-        Text[ polish ] = "KrÛj czcionki";
+        Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Type";
         Text[ japanese ] = "Ω¿≤Ÿ(~T)";
         Text[ korean ] = "±€≤√°°¿Ø«¸(~T)";
@@ -239,7 +239,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Te~ckenstil";
-        Text[ polish ] = "KrÛj czcionki";
+        Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Type";
         Text[ japanese ] = "Ω¿≤Ÿ(~T)";
         Text[ korean ] = "±€≤√°°¿Ø«¸(~T)";
@@ -442,7 +442,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         };
         StringList [ portuguese ] =
         {
-            "Padr„o" ;
+            "Normal" ;
             "It·lico" ;
             "Negrito" ;
             "It·lico negrito" ;
@@ -580,7 +580,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 38 , 8 );
         Text = "Sc~hriftgrad";
         Text [ ENGLISH ] = "~Size";
-        Text [ english_us ] = "~Size";
+        Text [ english_us ] = "Size";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "–‡ÁÏÂ ¯ËÙÚ‡";
         Text[ greek ] = "Ã›„ÂËÔÚ";
@@ -589,8 +589,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "TamaÒo";
         Text[ italian ] = "Dimesione carattere";
         Text[ danish ] = "Size";
-        Text[ swedish ] = "Teckensto~rlek";
-        Text[ polish ] = "Rozmiar czcionki";
+        Text[ swedish ] = "Te~ckenstorlek";
+        Text[ polish ] = "Rozmiar";
         Text[ portuguese_brazilian ] = "Size";
         Text[ japanese ] = "ª≤Ωﬁ";
         Text[ korean ] = "≈©±‚";
@@ -607,7 +607,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 40 , 8 );
         Text = "Sc~hriftgrad";
         Text [ ENGLISH ] = "~Size";
-        Text [ english_us ] = "~Size";
+        Text [ english_us ] = "Size";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "–‡ÁÏÂ ¯ËÙÚ‡";
         Text[ greek ] = "Ã›„ÂËÔÚ";
@@ -616,8 +616,8 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "TamaÒo";
         Text[ italian ] = "Dimesione carattere";
         Text[ danish ] = "Size";
-        Text[ swedish ] = "Teckensto~rlek";
-        Text[ polish ] = "Rozmiar czcionki";
+        Text[ swedish ] = "Te~ckenstorlek";
+        Text[ polish ] = "Rozmiar";
         Text[ portuguese_brazilian ] = "Size";
         Text[ japanese ] = "ª≤Ωﬁ";
         Text[ korean ] = "≈©±‚";
@@ -650,7 +650,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 66 , 8 );
         Text = "S~prache";
         Text [ ENGLISH ] = "~Language";
-        Text [ english_us ] = "~Language";
+        Text [ english_us ] = "Language";
         Text[ portuguese ] = "~LÌngua";
         Text[ russian ] = "ﬂÁ˚Í";
         Text[ greek ] = "√Î˛ÛÛ·";
@@ -748,7 +748,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 80 , 8 );
         Text = "Sch~riftart";
         Text [ ENGLISH ] = "F~ont";
-        Text [ english_us ] = "F~ont";
+        Text [ english_us ] = "Font";
         Text[ portuguese ] = "Ti~po de letra";
         Text[ russian ] = "“ËÔ ¯ËÙÚ‡";
         Text[ greek ] = "√Ò·ÏÏ·ÙÔÛÂ~ÈÒ‹";
@@ -757,10 +757,10 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "Fuente";
         Text[ italian ] = "Tipo di carattere";
         Text[ danish ] = "Font";
-        Text[ swedish ] = "Teckensn~itt";
+        Text[ swedish ] = "Tec~kensnitt";
         Text[ polish ] = "Czcionka";
         Text[ portuguese_brazilian ] = "Font";
-        Text[ japanese ] = "Ã´›ƒ";
+        Text[ japanese ] = "Ã´›ƒÇÃéÌóﬁ";
         Text[ korean ] = "±€≤√";
         Text[ chinese_simplified ] = "◊÷ÃÂ";
         Text[ chinese_traditional ] = "¶r´¨√˛´¨";
@@ -793,7 +793,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Stile";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Teckenst~il";
-        Text[ polish ] = "KrÛj czcionki";
+        Text[ polish ] = "Styl";
         Text[ portuguese_brazilian ] = "Type";
         Text[ japanese ] = "Ω¿≤Ÿ(~Y)";
         Text[ korean ] = "±€≤√°°¿Ø«¸(~Y)";
@@ -972,7 +972,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 38 , 8 );
         Text = "Schri~ftgrad";
         Text [ ENGLISH ] = "S~ize";
-        Text [ english_us ] = "S~ize";
+        Text [ english_us ] = "Size";
         Text[ portuguese ] = "~Tamanho";
         Text[ russian ] = "–‡ÁÏÂ ¯ËÙÚ‡";
         Text[ greek ] = "Ã›„ÂËÔÚ";
@@ -982,7 +982,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ italian ] = "Dimensione";
         Text[ danish ] = "Size";
         Text[ swedish ] = "Teckens~torlek";
-        Text[ polish ] = "Rozmiar czcionki";
+        Text[ polish ] = "Rozmiar";
         Text[ portuguese_brazilian ] = "Size";
         Text[ japanese ] = "ª≤Ωﬁ";
         Text[ korean ] = "≈©±‚";
@@ -1007,7 +1007,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 66 , 8 );
         Text = "Spr~ache";
         Text [ ENGLISH ] = "L~anguage";
-        Text [ english_us ] = "L~anguage";
+        Text [ english_us ] = "Language";
         Text[ portuguese ] = "~LÌngua";
         Text[ russian ] = "ﬂÁ˚Í";
         Text[ greek ] = "√Î˛ÛÛ·";
@@ -1016,7 +1016,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ spanish ] = "Idioma";
         Text[ italian ] = "Lingua";
         Text[ danish ] = "Language";
-        Text[ swedish ] = "SprÂ~k";
+        Text[ swedish ] = "S~prÂk";
         Text[ polish ] = "JÍzyk";
         Text[ portuguese_brazilian ] = "Language";
         Text[ japanese ] = "åæåÍ";
@@ -1078,7 +1078,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text [ norwegian ] = "Color" ;
         Text [ italian ] = "Colore" ;
         Text [ portuguese_brazilian ] = "Font color" ;
-        Text [ portuguese ] = "Cor da letra" ;
+        Text [ portuguese ] = "Cor" ;
         Text [ finnish ] = "Fontin v‰ri" ;
         Text [ danish ] = "Font color" ;
         Text [ french ] = "Couleur" ;
@@ -1104,7 +1104,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Size = MAP_APPFONT ( 58 , 8 );
         Text = "Schriftfar~be";
         Text [ ENGLISH ] = "Font ~color" ;
-        Text [ english_us ] = "Font ~color" ;
+        Text [ english_us ] = "Font ~Color" ;
         Text[ portuguese ] = "~Cor da letra";
         Text[ russian ] = "÷‚ÂÚ ¯ËÙÚ‡";
         Text[ greek ] = "◊Ò˛Ï· „Ò·ÏÏ·ÙÔÛÂÈÒ‹Ú";
@@ -1198,7 +1198,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT( 68 , 8 );
         Text = "~Unterstreichung";
         Text [ ENGLISH ] = "~Underlining" ;
-        Text [ english_us ] = "~Underlining" ;
+        Text [ english_us ] = "Underlining" ;
         Text[ portuguese ] = "~Sublinhado";
         Text[ russian ] = "œÓ‰˜ÂÍË‚‡ÌËÂ";
         Text[ greek ] = "~’Ô„Ò‹ÏÏÈÛÁ";
@@ -1673,7 +1673,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Farbe";
         Text [ ENGLISH ] = "~Color";
-        Text [ english_us ] = "~Color";
+        Text [ english_us ] = "Color";
         Text[ portuguese ] = "Co~r";
         Text[ russian ] = "÷‚ÂÚ";
         Text[ greek ] = "◊Ò˛Ï·";
@@ -1708,7 +1708,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Durchstreichung";
         Text [ ENGLISH ] = "~Strikethrough" ;
-        Text [ english_us ] = "~Strikethrough" ;
+        Text [ english_us ] = "Strikethrough" ;
         Text[ portuguese ] = "~Rasurado";
         Text[ russian ] = "«‡˜ÂÍË‚‡ÌËÂ";
         Text[ greek ] = "~ƒÈ·ÍÒÈÙﬁ ‰È·„Ò·ˆﬁ";
@@ -2023,7 +2023,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ english_us ] =
         {
-            < "(None)" ; default ; > ;
+            < "(Without)" ; default ; > ;
             < "Dot" ; default ; > ;
             < "Circle" ; default ; > ;
             < "Disc" ; default ; > ;
@@ -2095,7 +2095,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ swedish ] =
         {
-            < "(Inget)" ; default ; > ;
+            < "(Utan)" ; default ; > ;
             < "Punkt" ; default ; > ;
             < "Cirkel" ; default ; > ;
             < "Skiva" ; default ; > ;
@@ -2103,7 +2103,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ polish ] =
         {
-            < "(brak)" ; default ; > ;
+            < "(Brak)" ; default ; > ;
             < "Kropka" ; default ; > ;
             < "KÛ≥ko" ; default ; > ;
             < "Dysk" ; default ; > ;
@@ -2120,9 +2120,9 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         StringList [ japanese ] =
         {
             < "(Ç»Çµ)" ; default ; > ;
-            < "çïä€" ; default ; > ;
+            < "ì_" ; default ; > ;
             < "ä€" ; default ; > ;
-            < "íÜçï" ; default ; > ;
+            < "ìhÇËÇ¬Ç‘ÇµÇÃä€" ; default ; > ;
             < "±∏æ›ƒ" ; default ; > ;
         };
         StringList [ korean ] =
@@ -2188,7 +2188,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 68 , 8 );
         Text = "~Position";
         Text [ ENGLISH ] = "~Position" ;
-        Text [ english_us ] = "~Position" ;
+        Text [ english_us ] = "Position" ;
         Text[ portuguese ] = "~PosiÁ„o";
         Text[ russian ] = "œÓÁËˆËˇ";
         Text[ greek ] = "»›ÛÁ";
@@ -2333,7 +2333,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT( 82 , 8 );
         Text = "~Auszeichnungen";
         Text [ ENGLISH ] = "~Effects" ;
-        Text [ english_us ] = "~Effects" ;
+        Text [ english_us ] = "Effects" ;
         Text[ portuguese ] = "~Efeitos";
         Text[ russian ] = "›ÙÙÂÍÚ˚ ‚˚‰ÂÎÂÌËˇ";
         Text[ greek ] = "≈ˆ›";
@@ -2377,7 +2377,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ english_us ] =
         {
-            < "(None)" ; Default ; > ;
+            < "(Without)" ; Default ; > ;
             < "Capitals" ; Default ; > ;
             < "Lowercase" ; Default ; > ;
             < "Title" ; Default ; > ;
@@ -2433,7 +2433,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ spanish ] =
         {
-            < "Ninguno" ; Default ; > ;
+            < "(Ninguno)" ; Default ; > ;
             < "May˙sculas" ; Default ; > ;
             < "Min˙sculas" ; Default ; > ;
             < "TÌtulo" ; Default ; > ;
@@ -2441,7 +2441,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ italian ] =
         {
-            < "Nessuno" ; Default ; > ;
+            < "(Nessuno)" ; Default ; > ;
             < "Maiuscolo" ; Default ; > ;
             < "Minuscolo" ; Default ; > ;
             < "Titolo" ; Default ; > ;
@@ -2457,7 +2457,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ swedish ] =
         {
-            < "Inga" ; Default ; > ;
+            < "(Utan)" ; Default ; > ;
             < "Versaler" ; Default ; > ;
             < "Gemener" ; Default ; > ;
             < "Titel" ; Default ; > ;
@@ -2465,7 +2465,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ polish ] =
         {
-            < "Brak" ; Default ; > ;
+            < "(Brak)" ; Default ; > ;
             < "Wersaliki" ; Default ; > ;
             < "Ma≥e litery" ; Default ; > ;
             < "Czcionka tytu≥owa" ; Default ; > ;
@@ -2481,7 +2481,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ japanese ] =
         {
-            < "Ç»Çµ" ; Default ; > ;
+            < "(Ç»Çµ) " ; Default ; > ;
             < "ëÂï∂éö" ; Default ; > ;
             < "è¨ï∂éö" ; Default ; > ;
             < "¿≤ƒŸï∂éö" ; Default ; > ;
@@ -2497,7 +2497,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ chinese_simplified ] =
         {
-            < "Œﬁ" ; Default ; > ;
+            < "(Œﬁ)" ; Default ; > ;
             < "¥Û–¥◊÷ƒ∏" ; Default ; > ;
             < "–°–¥◊÷ƒ∏" ; Default ; > ;
             < "±ÍÃ‚◊÷ÃÂ" ; Default ; > ;
@@ -2505,7 +2505,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ chinese_traditional ] =
         {
-            < "µL" ; Default ; > ;
+            < "(µL)" ; Default ; > ;
             < "§jºg¶r•¿" ; Default ; > ;
             < "§pºg¶r•¿" ; Default ; > ;
             < "º–√D§Â¶r" ; Default ; > ;
@@ -2596,7 +2596,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ english_us ] =
         {
-            < "(None)" ; Default ; > ;
+            < "(Without)" ; Default ; > ;
             < "Embossed" ; Default ; > ;
             < "Engraved" ; Default ; > ;
         };
@@ -2632,13 +2632,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ spanish ] =
         {
-            < "Ninguno" ; Default ; > ;
+            < "(Ninguno)" ; Default ; > ;
             < "Saliente" ; Default ; > ;
             < "Ahondado" ; Default ; > ;
         };
         StringList [ italian ] =
         {
-            < "Nessuno" ; Default ; > ;
+            < "(Nessuno)" ; Default ; > ;
             < "In rilievo" ; Default ; > ;
             < "Incavato" ; Default ; > ;
         };
@@ -2650,13 +2650,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ swedish ] =
         {
-            < "Ingen" ; Default ; > ;
+            < "(Utan)" ; Default ; > ;
             < "Upphˆjt" ; Default ; > ;
             < "Graverat" ; Default ; > ;
         };
         StringList [ polish ] =
         {
-            < "Brak" ; Default ; > ;
+            < "(Brak)" ; Default ; > ;
             < "Wypuk≥e" ; Default ; > ;
             < "WklÍs≥e" ; Default ; > ;
         };
@@ -2668,7 +2668,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ japanese ] =
         {
-            < "Ç»Çµ" ; Default ; > ;
+            < "(Ç»Çµ)" ; Default ; > ;
             < "ïÇÇ´èoÇµ" ; Default ; > ;
             < "ïÇÇ´í§ÇË" ; Default ; > ;
         };
@@ -2680,13 +2680,13 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         };
         StringList [ chinese_simplified ] =
         {
-            < "Œﬁ" ; Default ; > ;
+            < "(Œﬁ)" ; Default ; > ;
             < "—ÙŒƒ" ; Default ; > ;
             < "“ıŒƒ" ; Default ; > ;
         };
         StringList [ chinese_traditional ] =
         {
-            < "µL" ; Default ; > ;
+            < "(µL)" ; Default ; > ;
             < "ØB•Y" ; Default ; > ;
             < "¿J®Ë" ; Default ; > ;
         };
@@ -2721,7 +2721,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Kontur" ;
         Text [ ENGLISH ] = "~Outline" ;
-        Text [ english_us ] = "~Outline" ;
+        Text [ english_us ] = "Outline" ;
         Text[ portuguese ] = "~Contorno";
         Text[ russian ] = " ÓÌÚÛ";
         Text[ greek ] = "ƒÈ‹ÒËÒ˘ÛÁ";
@@ -2748,7 +2748,7 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         Size = MAP_APPFONT ( 82 , 10 ) ;
         Text = "~Schatten" ;
         Text [ ENGLISH ] = "Sh~adow" ;
-        Text [ english_us ] = "Sh~adow" ;
+        Text [ english_us ] = "Shadow" ;
         Text[ portuguese ] = "~Sombras";
         Text[ russian ] = "“ÂÌ¸";
         Text[ greek ] = "~”ÍÈ‹";
@@ -3038,7 +3038,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT ( 58 , 10 );
         Text = "~Hoch";
         Text [ ENGLISH ] = "~Super" ;
-        Text [ english_us ] = "~Super" ;
+        Text [ english_us ] = "Superscript" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~cima";
         Text[ russian ] = "—‚ÂıÛ";
@@ -3066,7 +3066,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT ( 58 , 10 );
         Text = "~Normal";
         Text [ ENGLISH ] = "~Normal" ;
-        Text [ english_us ] = "~Normal" ;
+        Text [ english_us ] = "Normal" ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Normal";
         Text[ russian ] = "—Ú‡Ì‰‡Ú";
@@ -3094,7 +3094,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT ( 58 , 10 );
         Text = "~Tief";
         Text [ ENGLISH ] = "S~ub" ;
-        Text [ english_us ] = "S~ub" ;
+        Text [ english_us ] = "Subscript" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~baixo";
         Text[ russian ] = "—ÌËÁÛ";
@@ -3131,12 +3131,12 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ spanish ] = "Super/subÌndice";
         Text[ italian ] = "Apice/Pedice di";
         Text[ danish ] = "Raise/lower by";
-        Text[ swedish ] = "Hˆj/s‰n~k";
+        Text[ swedish ] = "Hˆj/s‰n~k med";
         Text[ polish ] = "Ind.gr./Ind.dln. przy";
         Text[ portuguese_brazilian ] = "Raise/lower by";
         Text[ japanese ] = "è„/â∫ÇÃäÑçá";
         Text[ korean ] = "≥Ù∞‘/≥∑∞‘, ¡§µµ";
-        Text[ chinese_simplified ] = "…œ…˝ªÚœ¬Ωµµƒ ˝÷µ";
+        Text[ chinese_simplified ] = "…œ…˝/œ¬Ωµ÷µ";
         Text[ chinese_traditional ] = "§W™@/§U≠∞≠»";
         Text[ turkish ] = "Raise/lower by";
         Text[ arabic ] = "„— ›⁄/„‰Œ›÷ »„ﬁœ«—";
@@ -3165,7 +3165,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT ( 76 , 10 );
         Text = "~Automatisch";
         Text [ ENGLISH ] = "~Automatic" ;
-        Text [ english_us ] = "~Automatic" ;
+        Text [ english_us ] = "A~utomatic" ;
         TabStop = TRUE;
         Text[ portuguese ] = "A~utom·tico";
         Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
@@ -3175,7 +3175,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ spanish ] = "Autom·tico";
         Text[ italian ] = "A~utomatico";
         Text[ danish ] = "Automatic";
-        Text[ swedish ] = "A~utomatiskt";
+        Text[ swedish ] = "~Automatiskt";
         Text[ polish ] = "Automatycznie";
         Text[ portuguese_brazilian ] = "Automatic";
         Text[ japanese ] = "é©ìÆ(~U)";
@@ -3193,7 +3193,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Size = MAP_APPFONT ( 58 , 8 );
         Text = "~Schriftgrˆﬂe rel.";
         Text [ ENGLISH ] = "R~elative font size" ;
-        Text [ english_us ] = "R~elative font size" ;
+        Text [ english_us ] = "Relative font size" ;
         Text[ portuguese ] = "Ta~manho relativo";
         Text[ russian ] = "–‡ÁÏÂ ÓÚÌÓÒ.";
         Text[ greek ] = "Ã›„ÂËÔÚ „Ò·ÏÏ·ÙÔ~ÛÂÈÒ‹Ú Û˜ÂÙÈÍ‹";
@@ -3290,25 +3290,25 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~0 Grad";
         Text [ ENGLISH ] = "~0 degrees" ;
         Text [ english_us ] = "~0 degrees" ;
-        Text[ portuguese ] = "~0 graus";
-        Text[ russian ] = "~0 „‡‰ÛÒÓ‚";
-        Text[ greek ] = "~0 ‚·ËÏÔﬂ";
-        Text[ dutch ] = "~0 graden";
-        Text[ french ] = "~0 degrÈ";
-        Text[ spanish ] = "~0 grados";
-        Text[ italian ] = "~0 gradi";
-        Text[ danish ] = "~0 degree";
+        Text[ portuguese ] = "0 graus";
+        Text[ russian ] = "0 „‡‰ÛÒÓ‚";
+        Text[ greek ] = "0 ‚·ËÏÔﬂ";
+        Text[ dutch ] = "0 graden";
+        Text[ french ] = "0 degrÈ";
+        Text[ spanish ] = "0 grados";
+        Text[ italian ] = "0 gradi";
+        Text[ danish ] = "0 degree";
         Text[ swedish ] = "~0 grad";
-        Text[ polish ] = "~0 stopni";
-        Text[ portuguese_brazilian ] = "~0 degree";
-        Text[ japanese ] = "~0 ìx";
-        Text[ korean ] = "~0 µµ";
-        Text[ chinese_simplified ] = "~0 ∂»";
-        Text[ chinese_traditional ] = "~0 ´◊";
-        Text[ turkish ] = "~0 degree";
-        Text[ arabic ] = "~0 œ—Ã…";
-        Text[ catalan ] = "~0 grados";
-        Text[ finnish ] = "~0 Grad";
+        Text[ polish ] = "0 stopni";
+        Text[ portuguese_brazilian ] = "0 degree";
+        Text[ japanese ] = "0 ìx";
+        Text[ korean ] = "0 µµ";
+        Text[ chinese_simplified ] = "0 ∂»";
+        Text[ chinese_traditional ] = "0 ´◊";
+        Text[ turkish ] = "0 degree";
+        Text[ arabic ] = "0 œ—Ã…";
+        Text[ catalan ] = "0 grados";
+        Text[ finnish ] = "0 Grad";
     };
     RadioButton RB_90_DEG
     {
@@ -3318,25 +3318,25 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~90 Grad";
         Text [ ENGLISH ] = "~90 degrees" ;
         Text [ english_us ] = "~90 degrees" ;
-        Text[ portuguese ] = "~90 graus";
-        Text[ russian ] = "~90 „‡‰ÛÒÓ‚";
-        Text[ greek ] = "~90 ‚·ËÏÔﬂ";
-        Text[ dutch ] = "~90 graden";
-        Text[ french ] = "~90 degrÈs";
-        Text[ spanish ] = "~90 grados";
-        Text[ italian ] = "~90 gradi";
-        Text[ danish ] = "~90 degree";
+        Text[ portuguese ] = "90 graus";
+        Text[ russian ] = "90 „‡‰ÛÒÓ‚";
+        Text[ greek ] = "90 ‚·ËÏÔﬂ";
+        Text[ dutch ] = "90 graden";
+        Text[ french ] = "90 degrÈs";
+        Text[ spanish ] = "90 grados";
+        Text[ italian ] = "90 gradi";
+        Text[ danish ] = "90 degree";
         Text[ swedish ] = "~90 grader";
-        Text[ polish ] = "~90 stopni";
-        Text[ portuguese_brazilian ] = "~90 degree";
-        Text[ japanese ] = "~90 ìx";
-        Text[ korean ] = "~90 µµ";
-        Text[ chinese_simplified ] = "~90 ∂»";
-        Text[ chinese_traditional ] = "~90 ´◊";
-        Text[ turkish ] = "~90 degree";
-        Text[ arabic ] = "~90 œ—Ã…";
-        Text[ catalan ] = "~90 grados";
-        Text[ finnish ] = "~90 astetta";
+        Text[ polish ] = "90 stopni";
+        Text[ portuguese_brazilian ] = "90 degree";
+        Text[ japanese ] = "90 ìx";
+        Text[ korean ] = "90 µµ";
+        Text[ chinese_simplified ] = "90 ∂»";
+        Text[ chinese_traditional ] = "90 ´◊";
+        Text[ turkish ] = "90 degree";
+        Text[ arabic ] = "90 œ—Ã…";
+        Text[ catalan ] = "90 grados";
+        Text[ finnish ] = "90 astetta";
     };
     RadioButton RB_270_DEG
     {
@@ -3346,25 +3346,25 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "~270 Grad";
         Text [ ENGLISH ] = "~270 degrees" ;
         Text [ english_us ] = "~270 degrees" ;
-        Text[ portuguese ] = "~270 graus";
-        Text[ russian ] = "~270 „‡‰ÛÒÓ‚";
-        Text[ greek ] = "~270 ‚·ËÏÔﬂ";
-        Text[ dutch ] = "~270 graden";
-        Text[ french ] = "~270 degrÈs";
-        Text[ spanish ] = "~270 grados";
-        Text[ italian ] = "~270 gradi";
-        Text[ danish ] = "~270 degree";
+        Text[ portuguese ] = "270 graus";
+        Text[ russian ] = "270 „‡‰ÛÒÓ‚";
+        Text[ greek ] = "270 ‚·ËÏÔﬂ";
+        Text[ dutch ] = "270 graden";
+        Text[ french ] = "270 degrÈs";
+        Text[ spanish ] = "270 grados";
+        Text[ italian ] = "270 gradi";
+        Text[ danish ] = "270 degree";
         Text[ swedish ] = "~270 grader";
-        Text[ polish ] = "~270 stopni";
-        Text[ portuguese_brazilian ] = "~270 degree";
-        Text[ japanese ] = "~270 ìx";
-        Text[ korean ] = "~270 µµ";
-        Text[ chinese_simplified ] = "~270 ∂»";
-        Text[ chinese_traditional ] = "~270 ´◊";
-        Text[ turkish ] = "~270 degree";
-        Text[ arabic ] = "~270 œ—Ã…";
-        Text[ catalan ] = "~270 grados";
-        Text[ finnish ] = "~270 Grad";
+        Text[ polish ] = "270 stopni";
+        Text[ portuguese_brazilian ] = "270 degree";
+        Text[ japanese ] = "270 ìx";
+        Text[ korean ] = "270 µµ";
+        Text[ chinese_simplified ] = "270 ∂»";
+        Text[ chinese_traditional ] = "270 ´◊";
+        Text[ turkish ] = "270 degree";
+        Text[ arabic ] = "270 œ—Ã…";
+        Text[ catalan ] = "270 grados";
+        Text[ finnish ] = "270 Grad";
     };
     CheckBox CB_FIT_TO_LINE
     {
@@ -3373,7 +3373,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         TabStop = TRUE;
         Text = "An ~Zeile anpassen";
         Text [ ENGLISH ] = "Fit to ~line" ;
-        Text [ english_us ] = "Fit to ~line" ;
+        Text [ english_us ] = "Fit to line" ;
         Text[ portuguese ] = "Ajustar ‡ linha";
         Text[ russian ] = "—Ó„Î‡ÒÓ‚‡Ú¸ ÒÓ ÒÚÓÍÓÈ";
         Text[ greek ] = "–ÒÔÛ·ÒÏÔ„ﬁ ˘Ú ÒÔÚ ÙÁ ÛÂÈÒ‹";
@@ -3382,7 +3382,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ spanish ] = "Ajustar a fila";
         Text[ italian ] = "Adatta alla riga";
         Text[ danish ] = "Fit to line";
-        Text[ swedish ] = "Anpassa till rad";
+        Text[ swedish ] = "Anpassa till ~rad";
         Text[ polish ] = "Dopasuj do wiersza";
         Text[ portuguese_brazilian ] = "Fit to line";
         Text[ japanese ] = "çsÇ…çáÇÌÇπÇÈ";
@@ -3409,13 +3409,13 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ spanish ] = "TamaÒo del ancho";
         Text[ italian ] = "Scala larghezza";
         Text[ danish ] = "Scale width";
-        Text[ swedish ] = "Skala bredd";
+        Text[ swedish ] = "Skala ~bredd";
         Text[ polish ] = "Skaluj szerokoúÊ";
         Text[ portuguese_brazilian ] = "Scale width";
         Text[ japanese ] = "ïùÇÃî{ó¶";
         Text[ korean ] = "∆¯ Ω∫ƒ…¿œ∏µ";
-        Text[ chinese_simplified ] = " π”√øÌ∂»œ‘ æ±»¿˝";
-        Text[ chinese_traditional ] = "±ƒ•Œºe´◊≈„•‹§Ò®“";
+        Text[ chinese_simplified ] = "øÌ∂»œ‘ æ±»¿˝";
+        Text[ chinese_traditional ] = "ºe´◊≈„•‹§Ò®“";
         Text[ turkish ] = "Scale width";
         Text[ arabic ] = " ÕÃÌ„ «·⁄—÷";
         Text[ catalan ] = "TamaÒo del ancho";
@@ -3609,7 +3609,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Center = TRUE ;
         Text = "~um";
         Text [ ENGLISH ] = "~by" ;
-        Text [ english_us ] = "~by" ;
+        Text [ english_us ] = "b~y" ;
         Text[ portuguese ] = "a";
         Text[ russian ] = "Ì‡";
         Text[ greek ] = "Í·Ù‹";
@@ -3618,7 +3618,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text[ spanish ] = "de";
         Text[ italian ] = "per";
         Text[ danish ] = "by";
-        Text[ swedish ] = "o~m";
+        Text[ swedish ] = "~med";
         Text[ polish ] = "o";
         Text[ portuguese_brazilian ] = "by";
         Text[ japanese ] = "ä‘äu";
@@ -3742,7 +3742,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
         Size = MAP_APPFONT ( 236 , 10 );
         Text = "~Doppelzeilig schreiben";
         Text [ ENGLISH ] = "Write in ~double lines" ;
-        Text [ english_us ] = "Write in ~double lines" ;
+        Text [ english_us ] = "~Write in double lines" ;
         TabStop = TRUE;
         Text[ portuguese ] = "~Linhas duplas";
         Text[ russian ] = "ƒ‚Â ÒÚÓÍË ‚ Ó‰ÌÓÈ";
@@ -4288,6 +4288,7 @@ TabPage RID_SVXPAGE_CHAR_TWOLINES
 };
 
  // ********************************************************************** EOF
+
 
 
 
