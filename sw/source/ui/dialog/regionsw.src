@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-04 11:02:04 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 15:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ ModalDialog MD_EDIT_REGION
         Text[ chinese_traditional ] = "≤æ∞£(~R)";
         Text[ arabic ] = "≈“«·…";
         Text[ greek ] = " ·Ù‹Ò„ÁÛÁ";
-        Text[ korean ] = "Ω««‡√Îº“(~R)";
+        Text[ korean ] = "Ω««‡√Îº“";
         Text[ turkish ] = "Kald˝r";
     };
     HelpButton PB_HELP
