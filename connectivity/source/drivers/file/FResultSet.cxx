@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:02:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ OResultSet::OResultSet(OStatement_Base* pStmt,OSQLParseTreeIterator&    _aSQLIte
                         ,m_nRowPos(-1)
                         ,m_bLastRecord(sal_False)
                         ,m_bEOF(sal_False)
-                        ,m_xDBMetaData(pStmt->getConnection()->getMetaData())
+                        ,m_xDBMetaData(pStmt->getOwnConnection()->getMetaData())
                         ,m_xMetaData(NULL)
                         ,m_aSQLIterator(_aSQLIterator)
                         ,m_pTable(NULL)
