@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: cl $ $Date: 2000-12-01 16:52:32 $
+#   last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES =				\
+        UnoNameItemTable.cxx \
         unoipset.cxx	\
         unoshape.cxx	\
         unoshap2.cxx	\
@@ -98,6 +99,7 @@ CXXFILES =				\
         gluepts.cxx
 
 SLOFILES =	\
+        $(SLO)$/UnoNameItemTable.obj \
         $(SLO)$/unoshape.obj	\
         $(SLO)$/unoipset.obj	\
         $(SLO)$/unoctabl.obj	\

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unottabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
 #endif
-
-#include <cppuhelper/implbase2.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -87,82 +79,39 @@
 #endif
 
 #include "svdmodel.hxx"
-#include "xdef.hxx"
 #include "xflhtit.hxx"
 
-#ifndef _LIST_HXX
-#include<tools/list.hxx>
+#ifndef _SVX_UNONAMEITEMTABLE_HXX_
+#include "UnoNameItemTable.hxx"
 #endif
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
-
-class SvxUnoTransGradientTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class SvxUnoTransGradientTable : public SvxUnoNameItemTable
 {
-private:
-    SdrModel*       mpModel;
-    SfxItemPool*    mpPool;
-
-    ItemSetArray_Impl   aItemSetArray;
-
 public:
     SvxUnoTransGradientTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoTransGradientTable() throw();
 
+    virtual NameOrIndex* createItem() const throw();
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
-
-    static OUString getImplementationName_Static() throw()
-    {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxUnoTransGradientTable"));
-    }
-
-    static uno::Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
-
-    // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-
-    // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-
-    // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException);
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
 };
 
 SvxUnoTransGradientTable::SvxUnoTransGradientTable( SdrModel* pModel ) throw()
-: mpModel( pModel ),
-  mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
+: SvxUnoNameItemTable( pModel, XATTR_FILLFLOATTRANSPARENCE )
 {
 }
 
 SvxUnoTransGradientTable::~SvxUnoTransGradientTable() throw()
 {
-    for( int i = 0; i<aItemSetArray.Count(); i++ )
-        delete (SfxItemSet*)aItemSetArray.GetObject( i );
-}
-
-sal_Bool SAL_CALL SvxUnoTransGradientTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
-{
-    uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return TRUE;
-
-    return FALSE;
 }
 
 OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::RuntimeException )
@@ -173,114 +122,16 @@ OUString SAL_CALL SvxUnoTransGradientTable::getImplementationName() throw( uno::
 uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SvxUnoTransGradientTable::getSupportedServiceNames_Static(void) throw()
-{
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TransparencyGradientTable" ));
     return aSNS;
 }
 
-// XNameContainer
-void SAL_CALL SvxUnoTransGradientTable::insertByName( const OUString& aName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+NameOrIndex* SvxUnoTransGradientTable::createItem() const throw()
 {
-    if( hasByName( aName ) )
-        throw container::ElementExistException();
-
-    SfxItemSet* mpInSet = new SfxItemSet( *mpPool, XATTR_FILLFLOATTRANSPARENCE, XATTR_FILLFLOATTRANSPARENCE );
-    aItemSetArray.Insert( mpInSet );
-
-    XFillFloatTransparenceItem aTransGradient;
-    aTransGradient.SetName( String( aName ) );
-    aTransGradient.PutValue( aElement );
-    aTransGradient.SetEnabled( TRUE );
-
-    mpInSet->Put( aTransGradient, XATTR_FILLFLOATTRANSPARENCE );
-}
-
-void SAL_CALL SvxUnoTransGradientTable::removeByName( const OUString& Name )
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-
-// XNameReplace
-void SAL_CALL SvxUnoTransGradientTable::replaceByName( const OUString& aName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-
-// XNameAccess
-uno::Any SAL_CALL SvxUnoTransGradientTable::getByName( const  OUString& aName )
-    throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
-{
-    if( mpPool )
-    {
-        const String aSearchName( aName );
-        const USHORT nCount = mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE);
-        const XFillFloatTransparenceItem *pItem;
-
-        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-        {
-            pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
-
-            if( pItem && ( pItem->GetName() == aSearchName ) )
-            {
-                uno::Any aAny;
-                pItem->QueryValue( aAny );
-                return aAny;
-            }
-        }
-    }
-
-    throw container::NoSuchElementException();
-}
-
-uno::Sequence< OUString > SAL_CALL SvxUnoTransGradientTable::getElementNames(  )
-    throw( uno::RuntimeException )
-{
-    const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE) : 0;
-    uno::Sequence< OUString > aSeq( nCount );
-    OUString* pStrings = aSeq.getArray();
-    XFillFloatTransparenceItem *pItem;
-
-    for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
-
-        if( pItem )
-        {
-            if( pItem->GetName().Len() == 0 )
-                pItem->SetName( pItem->CreateStandardName( mpPool, XATTR_FILLFLOATTRANSPARENCE ) );
-
-            pStrings[nSurrogate] = pItem->GetName();
-            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillFloatTransparenceItem in pool should have a name !");
-        }
-    }
-
-    return aSeq;
-}
-
-sal_Bool SAL_CALL SvxUnoTransGradientTable::hasByName( const OUString& aName )
-    throw( uno::RuntimeException )
-{
-    const String aSearchName( aName );
-    const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE) : 0;
-    uno::Sequence< OUString > aSeq( nCount );
-    OUString* pStrings = aSeq.getArray();
-    const XFillFloatTransparenceItem *pItem;
-
-    for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (XFillFloatTransparenceItem*)mpPool->GetItem(XATTR_FILLFLOATTRANSPARENCE, nSurrogate);
-
-        if( pItem && pItem->GetName() == aSearchName )
-            return sal_True;
-    }
-
-    return sal_False;
+    XFillFloatTransparenceItem* pNewItem = new XFillFloatTransparenceItem();
+    pNewItem->SetEnabled( TRUE );
+    return pNewItem;
 }
 
 // XElementAccess
@@ -288,12 +139,6 @@ uno::Type SAL_CALL SvxUnoTransGradientTable::getElementType(  )
     throw( uno::RuntimeException )
 {
     return ::getCppuType((const struct awt::Gradient*)0);
-}
-
-sal_Bool SAL_CALL SvxUnoTransGradientTable::hasElements(  )
-    throw( uno::RuntimeException )
-{
-    return mpPool && mpPool->GetItemCount(XATTR_FILLFLOATTRANSPARENCE) != 0;
 }
 
 /**

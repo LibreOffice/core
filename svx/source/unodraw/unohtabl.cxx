@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohtabl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-12 15:51:48 $
+ *  last change: $Author: cl $ $Date: 2001-01-28 16:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,17 +59,9 @@
  *
  ************************************************************************/
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_DRAWING_HATCH_HPP_
 #include <com/sun/star/drawing/Hatch.hpp>
 #endif
-
-#include <cppuhelper/implbase2.hxx>
 
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
@@ -79,8 +71,8 @@
 #include <svtools/itemset.hxx>
 #endif
 
-#ifndef _LIST_HXX
-#include<tools/list.hxx>
+#ifndef _SVX_UNONAMEITEMTABLE_HXX_
+#include "UnoNameItemTable.hxx"
 #endif
 
 #include "xhatch.hxx"
@@ -92,73 +84,29 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 
-DECLARE_LIST( ItemSetArray_Impl, SfxItemSet* )
-
-class SvxUnoHatchTable : public WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
+class SvxUnoHatchTable : public SvxUnoNameItemTable
 {
-private:
-    SdrModel*       mpModel;
-    SfxItemPool*    mpPool;
-
-    ItemSetArray_Impl   aItemSetArray;
-
-    void CreateName( OUString& rStrName);
-
 public:
     SvxUnoHatchTable( SdrModel* pModel ) throw();
     virtual ~SvxUnoHatchTable() throw();
 
+    virtual NameOrIndex* createItem() const throw();
+
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException );
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException);
     virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException);
-
-    static OUString getImplementationName_Static() throw()
-    {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SvxUnoHatchTable"));
-    }
-
-    static uno::Sequence< OUString >  getSupportedServiceNames_Static(void) throw();
-
-    // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-
-    // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-
-    // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException);
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException);
 };
 
 SvxUnoHatchTable::SvxUnoHatchTable( SdrModel* pModel ) throw()
-: mpModel( pModel ),
-  mpPool( pModel ? &pModel->GetItemPool() : (SfxItemPool*)NULL )
+: SvxUnoNameItemTable( pModel, XATTR_FILLHATCH )
 {
 }
 
 SvxUnoHatchTable::~SvxUnoHatchTable() throw()
 {
-    for( int i = 0; i<aItemSetArray.Count(); i++ )
-        delete (SfxItemSet*)aItemSetArray.GetObject( i );
-}
-
-sal_Bool SAL_CALL SvxUnoHatchTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException)
-{
-    uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
-    const OUString * pArray = aSNL.getConstArray();
-
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
-        if( pArray[i] == ServiceName )
-            return TRUE;
-
-    return FALSE;
 }
 
 OUString SAL_CALL SvxUnoHatchTable::getImplementationName() throw( uno::RuntimeException )
@@ -169,126 +117,14 @@ OUString SAL_CALL SvxUnoHatchTable::getImplementationName() throw( uno::RuntimeE
 uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getSupportedServiceNames(  )
     throw( uno::RuntimeException )
 {
-    return getSupportedServiceNames_Static();
-}
-
-uno::Sequence< OUString > SvxUnoHatchTable::getSupportedServiceNames_Static(void) throw()
-{
     uno::Sequence< OUString > aSNS( 1 );
     aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.HatchTable" ));
     return aSNS;
 }
 
-// XNameContainer
-void SAL_CALL SvxUnoHatchTable::insertByName( const OUString& aName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
+NameOrIndex* SvxUnoHatchTable::createItem() const throw()
 {
-    if( hasByName( aName ) )
-        throw container::ElementExistException();
-
-    SfxItemSet* mpInSet = new SfxItemSet( *mpPool, XATTR_FILLHATCH, XATTR_FILLHATCH );
-    aItemSetArray.Insert( mpInSet );//, aItemSetArray.Count() );
-
-    XFillHatchItem aHatch;
-    aHatch.SetName( String( aName ) );
-    aHatch.PutValue( aElement );
-
-    mpInSet->Put( aHatch, XATTR_FILLHATCH );
-}
-
-void SAL_CALL SvxUnoHatchTable::removeByName( const OUString& Name )
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
-{
-}
-
-// XNameReplace
-void SAL_CALL SvxUnoHatchTable::replaceByName( const OUString& aName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
-{
-}
-
-// XNameAccess
-uno::Any SAL_CALL SvxUnoHatchTable::getByName( const  OUString& aName )
-    throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
-{
-    if( mpPool )
-    {
-        const String aSearchName( aName );
-        const USHORT nCount = mpPool->GetItemCount(XATTR_FILLHATCH);
-        const XFillHatchItem *pItem;
-
-        for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-        {
-            pItem = (XFillHatchItem*)mpPool->GetItem(XATTR_FILLHATCH, nSurrogate);
-
-            if( pItem && ( pItem->GetName() == aSearchName ) )
-            {
-                uno::Any aAny;
-                pItem->QueryValue( aAny );
-                return aAny;
-            }
-        }
-    }
-
-    throw container::NoSuchElementException();
-}
-
-uno::Sequence< OUString > SAL_CALL SvxUnoHatchTable::getElementNames(  )
-    throw( uno::RuntimeException )
-{
-    const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLHATCH) : 0;
-    uno::Sequence< OUString > aSeq( nCount );
-    OUString* pStrings = aSeq.getArray();
-    XFillHatchItem *pItem;
-
-    for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (XFillHatchItem*)mpPool->GetItem(XATTR_FILLHATCH, nSurrogate);
-
-        if( pItem )
-        {
-            if( pItem->GetName().Len() == 0 )
-                pItem->SetName( pItem->CreateStandardName( mpPool, XATTR_FILLHATCH ) );
-
-            pStrings[nSurrogate] = pItem->GetName();
-
-            DBG_ASSERT( pStrings[nSurrogate].getLength(), "XFillHatchItem in pool should have a name !");
-        }
-    }
-
-    return aSeq;
-}
-
-sal_Bool SAL_CALL SvxUnoHatchTable::hasByName( const OUString& aName )
-    throw( uno::RuntimeException )
-{
-    const String aSearchName( aName );
-    const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLHATCH) : 0;
-    uno::Sequence< OUString > aSeq( nCount );
-    OUString* pStrings = aSeq.getArray();
-    const XFillHatchItem *pItem;
-
-    for( USHORT nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (XFillHatchItem*)mpPool->GetItem(XATTR_FILLHATCH, nSurrogate);
-        if( pItem && pItem->GetName() == aSearchName )
-            return sal_True;
-    }
-
-    return sal_False;
-}
-
-void SvxUnoHatchTable::CreateName( OUString& rStrName )
-{
-    const USHORT nCount = mpPool ? mpPool->GetItemCount(XATTR_FILLGRADIENT) : 0;
-    sal_Bool bFound = sal_True;
-
-    for( sal_Int32 nPostfix = 1; nPostfix<= nCount && bFound; nPostfix++ )
-    {
-        rStrName = OUString::createFromAscii( "Standard " );
-        rStrName += OUString::valueOf( nPostfix );
-        bFound = hasByName( rStrName );
-    }
+    return new XFillHatchItem();
 }
 
 // XElementAccess
@@ -296,12 +132,6 @@ uno::Type SAL_CALL SvxUnoHatchTable::getElementType(  )
     throw( uno::RuntimeException )
 {
     return ::getCppuType((const struct drawing::Hatch*)0);
-}
-
-sal_Bool SAL_CALL SvxUnoHatchTable::hasElements(  )
-    throw( uno::RuntimeException )
-{
-    return mpPool && mpPool->GetItemCount(XATTR_FILLHATCH) != 0;
 }
 
 /**
