@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:54 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 15:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,6 @@ namespace configmgr
     class ValueChange : public Change
     {
     public:
-        typedef uno::Any Any;
         struct SetToDefault {};
         enum Mode { wasDefault, changeValue, setToDefault, changeDefault };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-15 14:34:34 $
+ *  last change: $Author: jb $ $Date: 2002-02-15 15:44:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ static inline bool isLayerChangeMode(ValueChange::Mode _eMode)
 ValueChange::ValueChange(OUString const& _rName,
                          const node::Attributes& _rAttributes,
                          Mode _eMode,
-                         Any const & aNewValue, Any const & aOldValue)
+                         uno::Any const & aNewValue, uno::Any const & aOldValue)
     : Change(_rName, isDefaultMode(_eMode))
      ,m_aValueType( implGetValueType(aNewValue,aOldValue) )
      ,m_aValue(aNewValue)
@@ -127,7 +127,7 @@ ValueChange::ValueChange(OUString const& _rName,
     m_aAttributes.markAsDefault(Change::isToDefault());
 }
 // -------------------------------------------------------------------------
-ValueChange::ValueChange(Any const & aNewValue, ValueNode const& aOldValue)
+ValueChange::ValueChange(uno::Any const & aNewValue, ValueNode const& aOldValue)
     : Change(aOldValue.getName(),false)
      ,m_aValueType( aOldValue.getValueType() )
      ,m_aValue(aNewValue)
