@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:51 $
+ *  last change: $Author: sab $ $Date: 2001-02-06 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,10 +65,19 @@
 class ScDocument;
 class SfxMedium;
 
+namespace com { namespace sun { namespace star {
+    namespace uno { template<class X> class Reference; }
+    namespace frame { class XModel; }
+    namespace task { class XStatusIndicator; }
+} } }
+
 class ScXMLImportWrapper
 {
     ScDocument&     rDoc;
     SfxMedium&      rMedium;
+
+    com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator> GetStatusIndicator(
+        com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel);
 
 public:
     ScXMLImportWrapper(ScDocument& rD, SfxMedium& rM);
