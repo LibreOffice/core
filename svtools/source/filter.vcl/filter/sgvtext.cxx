@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgvtext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:28:31 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -845,7 +845,7 @@ void FormatLine(UCHAR* TBuf, USHORT& Index, ObjTextType& Atr0, ObjTextType& AktA
     UCHAR        c,c0;
     UCHAR        ct;
     BOOL         First;               // erster Char ?
-    BYTE         Just;                // Absatzformatierung
+    BYTE         Just = 0;                // Absatzformatierung
     BOOL         Border;              // Rand der Box erreicht ?
     BOOL         Border0;
     BOOL         AbsEnd;              // Ende des Absatzes erreicht ?
@@ -1081,7 +1081,7 @@ void TextType::Draw(OutputDevice& rOut)
     ObjTextType T1,T2;
     USHORT Index1;
     USHORT Index2;
-    UCHAR  c;
+    UCHAR  c = TextEnd;
     USHORT l;                // Anzahl der Zeichen in der Zeile
     USHORT i;
     short  yPos0;
@@ -1094,7 +1094,7 @@ void TextType::Draw(OutputDevice& rOut)
     short  ySize;
     double sn,cs;
     USHORT TopToBase;
-    BOOL   Ende;
+    BOOL   Ende = 0;
     USHORT lc;
     BOOL   LineFit; // FitSize.x=0? oder Flags -> jede Zeile stretchen
     BOOL   TextFit;
