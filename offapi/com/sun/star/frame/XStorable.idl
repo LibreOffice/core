@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStorable.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:25 $
+ *  last change: $Author: mi $ $Date: 2001-03-22 17:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,11 @@ interface XStorable: com::sun::star::uno::XInterface
         </dd>
         </dl>
 
-        </p>@see storeTo
+        </p>
+
+        @see storeTo
+        @see com::sun::star::document::MediaDescriptor
+            for more information on values for <var>aArgs</var>.
      */
     void storeAsURL( [in] string aURL,
              [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
@@ -197,11 +201,11 @@ interface XStorable: com::sun::star::uno::XInterface
     /** stores the object's persistent data to a URL and
         continues to be a representation of the old URL.
 
+        <p>This is the normal behavior for UI's export feature.  </p>
 
-
-        <p>This is the normal behavior for UI's export feature.
-
-        </p>@see storeAs
+        @see storeAs
+        @see com::sun::star::document::MediaDescriptor
+            for more information on values for <var>aArgs</var>.
      */
     void storeToURL( [in] string aURL,
              [in] sequence<com::sun::star::beans::PropertyValue> aArgs )
@@ -216,6 +220,9 @@ interface XStorable: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 16:41:25  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/12/19 16:03:30  mi
     documentations syntax errors fixed
 
