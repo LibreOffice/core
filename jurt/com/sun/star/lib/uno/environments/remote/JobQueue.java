@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobQueue.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kr $ $Date: 2001-03-06 17:39:30 $
+ *  last change: $Author: kr $ $Date: 2001-03-09 11:45:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ import com.sun.star.uno.UnoRuntime;
  * (put by <code>putjob</code>) into the async queue, which is only
  * known by the sync queue.
  * <p>
- * @version     $Revision: 1.10 $ $ $Date: 2001-03-06 17:39:30 $
+ * @version     $Revision: 1.11 $ $ $Date: 2001-03-09 11:45:22 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.ThreadPool
  * @see         com.sun.star.lib.uno.environments.remote.Job
@@ -152,7 +152,7 @@ public class JobQueue {
 
         public Object invoke(Object params[]) {
             try {
-                _javaThreadPool.enter(1000);
+                _javaThreadPool.enter(5000);
             }
             catch(java.lang.Exception exception) {
                 if(_head != null || _active) { // there was a job in progress, so give a stack
@@ -252,6 +252,23 @@ public class JobQueue {
         return _worker_thread;
     }
 
+
+    synchronized void acquire() {
+        if(_add_count <= 0)
+            _javaThreadPool.addJobQueue(_threadId, this);
+
+        ++ _add_count;
+    }
+
+    synchronized void release() {
+        -- _add_count;
+
+        if(_add_count <= 0) {
+            _javaThreadPool.removeJobQueue(_threadId);
+            dispose();
+        }
+    }
+
     /**
      * Adds a dispose id.
      * <p>
@@ -309,17 +326,8 @@ public class JobQueue {
      * @return a job or null if timed out
      * @param  waitTime        the maximum amount of time to wait for a job
      */
-    private synchronized Job removeJob(int waitTime) throws InterruptedException {
+    private Job removeJob(int waitTime) throws InterruptedException {
         if(DEBUG) System.err.println("##### " + getClass().getName() + ".removeJob:" + _head + " " + _threadId);
-
-        // wait max. waitTime time for a job to enter the queue
-        boolean waited = false;
-        while(_head == null && waitTime >= 0 && !waited) {
-            wait(waitTime);
-
-            // signal that we have already waited once
-              waited = true;
-        }
 
         // if there is an async queue, wait for jobs to be done
         if(_async_jobQueue != null) {
@@ -335,15 +343,25 @@ public class JobQueue {
         }
 
         Job job = null;
+        synchronized (this) {
+            // wait max. waitTime time for a job to enter the queue
+            boolean waited = false;
+            while(_head == null && waitTime >= 0 && !waited) {
+                wait(waitTime);
 
-        if(_head != null) {
-            _current = _head;
-            _head    = _head._next;
+                // signal that we have already waited once
+                waited = true;
+            }
 
-            if(_head == null)
-                _tail = null;
+            if(_head != null) {
+                _current = _head;
+                _head    = _head._next;
 
-            job = _current;
+                if(_head == null)
+                    _tail = null;
+
+                job = _current;
+            }
         }
 
         return job;
@@ -366,12 +384,7 @@ public class JobQueue {
             synchronized(this) {
                 // create the async JobQueue ?
                 if(_async_jobQueue == null) {
-                    try {
-                        _async_jobQueue = _javaThreadPool.addThread(true, new ThreadID(_threadId), disposeId, this);
-                    }
-                    catch(InterruptedException interruptedException) {
-                        throw new RuntimeException(interruptedException.toString());
-                    }
+                    _async_jobQueue = new JobQueue(_javaThreadPool, new ThreadID(_threadId), this);
                 }
 
                 // fill the async queue, async queue are intentionally not disposed
@@ -404,6 +417,11 @@ public class JobQueue {
         _tail = job;
 
         if(_worker_thread == null && _createThread && _createThread_now) { // if there is no thread, which dispatches and if shall create one, create one
+
+            acquire();
+            if(_sync_jobQueue != null)
+                _sync_jobQueue.acquire();
+
             _createThread_now = false;
             new JobDispatcher().start();
         }
@@ -541,12 +559,9 @@ public class JobQueue {
 
 
     void dispose() {
-        if(_sync_jobQueue != null) {
-            _javaThreadPool.removeThread(_sync_jobQueue._threadId);
-
-            _sync_jobQueue._async_jobQueue = null;
-            _sync_jobQueue = null;
-        }
+          if(_sync_jobQueue != null) {
+            _sync_jobQueue.release();
+          }
     }
 
     /**
