@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:12:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:53:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "cfgids.hxx"
+#include "tools/SdGlobalResourceContainer.hxx"
 
 TYPEINIT1( SdModule, SfxModule );
 
@@ -162,7 +163,8 @@ SdModule::SdModule(SfxObjectFactory* pDrawObjFact, SfxObjectFactory* pGraphicObj
     pImpressOptions(NULL),
     pDrawOptions(NULL),
     pSearchItem(NULL),
-    pNumberFormatter( NULL )
+    pNumberFormatter( NULL ),
+    mpResourceContainer(new ::sd::SdGlobalResourceContainer())
 {
     SetName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarDraw" ) ) );  // Nicht uebersetzen!
     pSearchItem = new SvxSearchItem(ITEMID_SEARCH);
