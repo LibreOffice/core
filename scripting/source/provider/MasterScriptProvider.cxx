@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterScriptProvider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 15:31:52 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 
 #include "ActiveMSPList.hxx"
 #include "MasterScriptProvider.hxx"
+#include "URIHelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -419,10 +420,8 @@ MasterScriptProvider::providerCache()
         if ( !m_pPCache )
         {
             ::rtl::OUString serviceName1 = OUSTR("com.sun.star.script.provider.ScriptProviderForBasic");
-            ::rtl::OUString serviceName2 = OUSTR("com.sun.star.script.provider.ScriptProviderForPython");
-            Sequence< ::rtl::OUString > blacklist(2);
+            Sequence< ::rtl::OUString > blacklist(1);
             blacklist[ 0 ] = serviceName1;
-            blacklist[ 1 ] = serviceName2;
 
             if ( !m_bIsPkgMSP )
             {
@@ -590,6 +589,7 @@ MasterScriptProvider::insertByName( const ::rtl::OUString& aName, const Any& aEl
         Sequence < Reference< provider::XScriptProvider > > xSProviders =
             providerCache()->getAllProviders();
         sal_Int32 index = 0;
+
         for ( ; index < xSProviders.getLength(); index++ )
         {
             Reference< container::XNameContainer > xCont( xSProviders[ index ], UNO_QUERY );
@@ -922,11 +922,46 @@ SAL_THROW( () )
         "com.sun.star.script.provider.MasterScriptProvider" ) );
 }
 
+// ***** registration or ScriptingFrameworkURIHelper
+Reference< XInterface > SAL_CALL urihelper_create(
+    const Reference< XComponentContext > & xCompC )
+{
+    return ( cppu::OWeakObject * )
+        new ::func_provider::ScriptingFrameworkURIHelper( xCompC );
+}
+
+Sequence< ::rtl::OUString > urihelper_getSupportedServiceNames( )
+    SAL_THROW( () )
+{
+    ::rtl::OUString serviceNameList[] = {
+        ::rtl::OUString::createFromAscii(
+            "com.sun.star.script.provider.ScriptURIHelper" ) };
+
+    Sequence< ::rtl::OUString > serviceNames = Sequence <
+        ::rtl::OUString > ( serviceNameList, 1 );
+
+    return serviceNames;
+}
+
+::rtl::OUString urihelper_getImplementationName( )
+    SAL_THROW( () )
+{
+    return ::rtl::OUString::createFromAscii(
+        "com.sun.star.script.provider.ScriptURIHelper");
+}
+
 static struct cppu::ImplementationEntry s_entries [] =
     {
         {
             sp_create, sp_getImplementationName,
             sp_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
+        },
+        {
+            urihelper_create,
+            urihelper_getImplementationName,
+            urihelper_getSupportedServiceNames,
+            cppu::createSingleComponentFactory,
             0, 0
         },
         {
