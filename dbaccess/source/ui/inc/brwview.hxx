@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:45:26 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,10 +144,10 @@ namespace dbaui
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
-    protected:
         // window overridables
         virtual void Resize();
 
+    protected:
         virtual void GetFocus();
     };
 }
