@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-09 07:47:03 $
+ *  last change: $Author: mav $ $Date: 2002-07-17 14:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,11 +225,11 @@ service MediaDescriptor
     [property] short MacroExecutionMode;
 
     //-------------------------------------------------------------------------
-    /** can the document be updated depending from template.
-        the value should be one from <type scope="com::sun::star::document">ConfigItemAPIMode</type>
+    /** can the document be updated depending from links.
+        the value should be one from <type scope="com::sun::star::document">UpdateDocMode</type>
         constant list
      */
-    [property] short UpdateDocFromTemplate;
+    [property] short UpdateDocMode;
 };
 
 //=============================================================================
