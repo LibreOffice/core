@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:26:15 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,6 +358,7 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     aTestText.Append( Button::GetStandardText( BUTTON_HELP ) );
     aTestText.Append( Button::GetStandardText( BUTTON_CLOSE ) );
     aTestText.Append( Button::GetStandardText( BUTTON_MORE ) );
+    aTestText.Append( Button::GetStandardText( BUTTON_LESS ) );
     aTestText.Append( Button::GetStandardText( BUTTON_ABORT ) );
 
     return HasGlyphs( rFont, aTestText ) >= aTestText.Len();
