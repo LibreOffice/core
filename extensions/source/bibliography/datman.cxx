@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 08:35:59 $
+ *  last change: $Author: os $ $Date: 2001-02-19 14:04:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1479,11 +1479,15 @@ Reference< awt::XControlModel >  BibDataManager::loadControlModel(
         if(xFields->hasByName(rName))
         {
             aElement = xFields->getByName(rName);
-            xField = *(Reference< XPropertySet > *)aElement.getValue();
+            aElement >>= xField;
             Reference< XPropertySetInfo >  xInfo = xField.is() ? xField->getPropertySetInfo() : Reference< XPropertySetInfo > ();
+
+            OUString sCurrentModelType;
+            const OUString sType(C2U("Type"));
             sal_Int32 nFormatKey = 0;
-            if (xInfo.is() && xInfo->hasPropertyByName(FM_PROP_FORMATKEY))
-                xField->getPropertyValue(FM_PROP_FORMATKEY) >>= nFormatKey;
+            sal_Bool bIsFormatted           = sal_False;
+            sal_Bool bFormattedIsNumeric    = sal_True;
+            xField->getPropertyValue(sType) >>= nFormatKey;
 
             rtl::OUString aInstanceName(C2U("com.sun.star.form.component."));
 
