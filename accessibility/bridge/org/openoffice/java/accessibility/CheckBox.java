@@ -66,12 +66,9 @@ class CheckBox extends ToggleButton {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleCheckBox();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleCheckBox();
     }
 
     protected class AccessibleCheckBox extends AccessibleToggleButton {
