@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:26 $
+ *  last change: $Author: ama $ $Date: 2000-10-13 08:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1337,10 +1337,16 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         case PREP_CLEAR:
         default:
         {
-#ifdef WARN_LOCK
-            ASSERT(!IsLocked(), "+SwTxtFrm::Prepare: this is locked (warning)");
-#endif
-            if( !IsLocked() )
+            if( IsLocked() )
+            {
+                if( PREP_FLY_ARRIVE == ePrep )
+                {
+                    xub_StrLen nLen = ( GetFollow() ? GetFollow()->GetOfst() :
+                                      STRING_LEN ) - GetOfst();
+                    InvalidateRange( SwCharRange( GetOfst(), nLen ), 0 );
+                }
+            }
+            else
             {
                 if( pPara->GetRepaint()->HasArea() )
                     SetCompletePaint();
