@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-02 11:17:50 $
+ *  last change: $Author: bm $ $Date: 2001-05-07 10:09:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1404,24 +1404,36 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             // axis-title
             if( bHasXAxisTitle )
             {
-                if( bExportContent )
+                uno::Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getXAxisTitle(), uno::UNO_QUERY );
+                if( xTitleProp.is())
                 {
-                    uno::Reference< drawing::XShape > xShape( xAxisSupp->getXAxisTitle(), uno::UNO_QUERY );
-                    if( xShape.is())        // && "HasBeenMoved"
-                        addPosition( xShape );
-
-                    SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
-                    // content (text:p)
-                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-                    if( xPropSet.is())
+                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
+                    if( bExportContent )
                     {
-                        uno::Any aAny( xPropSet->getPropertyValue(
+                        ::rtl::OUString aText;
+                        uno::Any aAny( xTitleProp->getPropertyValue(
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        rtl::OUString aText;
                         aAny >>= aText;
+
+                        uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                        if( xShape.is())
+                            addPosition( xShape );
+
+                        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+                        if( aASName.getLength())
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+
+                        // paragraph containing title
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
                         mrExport.GetDocHandler()->characters( aText );
                     }
+                    else
+                    {
+                        if( aPropertyStates.size())
+                            GetAutoStylePoolP().Add( nStyleFamily, aPropertyStates );
+                    }
+                    aPropertyStates.clear();
                 }
             }
 
@@ -1559,24 +1571,36 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             // axis-title
             if( bHasYAxisTitle )
             {
-                if( bExportContent )
+                uno::Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getYAxisTitle(), uno::UNO_QUERY );
+                if( xTitleProp.is())
                 {
-                    uno::Reference< drawing::XShape > xShape( xAxisSupp->getYAxisTitle(), uno::UNO_QUERY );
-                    if( xShape.is())        // && "HasBeenMoved"
-                        addPosition( xShape );
-
-                    SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
-                    // content (text:p)
-                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-                    if( xPropSet.is())
+                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
+                    if( bExportContent )
                     {
-                        uno::Any aAny( xPropSet->getPropertyValue(
+                        ::rtl::OUString aText;
+                        uno::Any aAny( xTitleProp->getPropertyValue(
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        rtl::OUString aText;
                         aAny >>= aText;
+
+                        uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                        if( xShape.is())
+                            addPosition( xShape );
+
+                        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+                        if( aASName.getLength())
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+
+                        // paragraph containing title
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
                         mrExport.GetDocHandler()->characters( aText );
                     }
+                    else
+                    {
+                        if( aPropertyStates.size())
+                            GetAutoStylePoolP().Add( nStyleFamily, aPropertyStates );
+                    }
+                    aPropertyStates.clear();
                 }
             }
 
@@ -1710,24 +1734,36 @@ void SchXMLExportHelper::exportAxes( uno::Reference< chart::XDiagram > xDiagram,
             // axis-title
             if( bHasZAxisTitle )
             {
-                if( bExportContent )
+                uno::Reference< beans::XPropertySet > xTitleProp( xAxisSupp->getZAxisTitle(), uno::UNO_QUERY );
+                if( xTitleProp.is())
                 {
-                    uno::Reference< drawing::XShape > xShape( xAxisSupp->getZAxisTitle(), uno::UNO_QUERY );
-                    if( xShape.is())
-                        addPosition( xShape );
-
-                    SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
-                    // content (text:p)
-                    uno::Reference< beans::XPropertySet > xPropSet( xShape, uno::UNO_QUERY );
-                    if( xPropSet.is())
+                    aPropertyStates = mxExpPropMapper->Filter( xTitleProp );
+                    if( bExportContent )
                     {
-                        uno::Any aAny( xPropSet->getPropertyValue(
+                        ::rtl::OUString aText;
+                        uno::Any aAny( xTitleProp->getPropertyValue(
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "String" ))));
-                        rtl::OUString aText;
                         aAny >>= aText;
+
+                        uno::Reference< drawing::XShape > xShape( xTitleProp, uno::UNO_QUERY );
+                        if( xShape.is())
+                            addPosition( xShape );
+
+                        aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+                        if( aASName.getLength())
+                            mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
+                        SvXMLElementExport aTitle( mrExport, XML_NAMESPACE_CHART, sXML_title, sal_True, sal_True );
+
+                        // paragraph containing title
                         SvXMLElementExport aTitlePara( mrExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False );
                         mrExport.GetDocHandler()->characters( aText );
                     }
+                    else
+                    {
+                        if( aPropertyStates.size())
+                            GetAutoStylePoolP().Add( nStyleFamily, aPropertyStates );
+                    }
+                    aPropertyStates.clear();
                 }
             }
 
