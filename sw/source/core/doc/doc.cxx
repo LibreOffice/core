@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:08:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:15:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,8 +242,6 @@
 
 // Seiten-Deskriptoren
 SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
-// Autoren
-// IMPL_PTRREGARR_NOTL(Authors,Author) USED?
 // Verzeichnisse
 SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
 // FeldTypen
@@ -628,17 +626,6 @@ SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
 
 //----- Macro ---------------------------------------------------------
 
-BOOL SwDoc::HasGlobalMacro( USHORT nEvent ) const
-{
-    return pMacroTable->IsKeyValid(nEvent);
-}
-
-const SvxMacro& SwDoc::GetGlobalMacro( USHORT nEvent ) const
-{
-    ASSERT(pMacroTable->IsKeyValid(nEvent), "Get fuer nicht ex. Macro");
-    return *(pMacroTable->Get(nEvent));
-}
-
 void SwDoc::SetGlobalMacro( USHORT nEvent, const SvxMacro& rMacro )
 {
     SvxMacro *pMacro;
@@ -650,14 +637,6 @@ void SwDoc::SetGlobalMacro( USHORT nEvent, const SvxMacro& rMacro )
         return;
     }
     pMacroTable->Insert(nEvent, new SvxMacro(rMacro));
-}
-
-BOOL SwDoc::DelGlobalMacro(USHORT nEvent)
-{
-    SetModified();
-    SvxMacro *pMacro = pMacroTable->Remove(nEvent);
-    delete pMacro;
-    return (pMacro != 0);
 }
 
 /*************************************************************************
@@ -1302,19 +1281,6 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 
 }
 
-void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
-{
-    if (DoesUndo())
-    {
-        SwUndo * pUndo = new SwUndoFmtAttr(rFmt.GetAttr(rItem.Which()), rFmt);
-
-        AppendUndo(pUndo);
-    }
-
-    rFmt.SetAttr(rItem);
-
-}
-
 void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
     if (DoesUndo())
@@ -1367,25 +1333,6 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 }
 
 // -> #111840#
-BOOL SwDoc::IsChar(const SwPosition & rPos)
-{
-    SwNode & rNode = rPos.nNode.GetNode();
-
-    return rNode.IsTxtNode();
-}
-
-xub_Unicode SwDoc::GetChar(const SwPosition & rPos)
-{
-    SwNode & rNode = rPos.nNode.GetNode();
-    xub_Unicode aResult = 0;
-
-    ASSERT(IsChar(rPos), "no text at position!");
-
-    aResult = rNode.GetTxtNode()->GetTxt().GetChar(rPos.nContent.GetIndex());
-
-    return aResult;
-}
-
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwField * pResult = NULL;
