@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:06 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:43:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include <svx/svxids.hrc>
 #include <sfx2/app.hxx>
+#include "frmview.hxx"
 #include "sdresid.hxx"
 #include "docshell.hxx"
 #include "presvish.hxx"
@@ -221,9 +222,16 @@ void SdPresViewShell::CreateFullScreenShow( SdViewShell* pOriginShell, SfxReques
     SdPresViewShell*    pShell = (SdPresViewShell*) pNewFrame->GetCurrentViewFrame()->GetViewShell();
     SfxUInt16Item       aId( SID_CONFIGITEMID, SID_NAVIGATOR );
     SfxBoolItem         aShowItem( SID_SHOWPOPUPS, FALSE );
+    const USHORT        nCurSdPageNum = ( pActualPage->GetPageNum() - 1 ) / 2;
+    FrameView*          pNewFrameView = pOriginShell->GetFrameView();
 
-    pShell->SwitchPage( ( pActualPage->GetPageNum() - 1 ) / 2 );
+    pNewFrameView->Connect();
+    pShell->GetFrameView()->Disconnect();
+    pShell->pFrameView = pNewFrameView;
+    pShell->ReadFrameViewData( pNewFrameView );
+    pShell->SwitchPage( nCurSdPageNum );
     pShell->WriteFrameViewData();
+
     pShell->GetViewFrame()->GetDispatcher()->Execute( SID_SHOWPOPUPS, SFX_CALLMODE_SYNCHRON, &aShowItem, &aId, 0L );
     pShell->GetViewFrame()->Show();
     pShell->pFuSlideShow = new FuSlideShow( pShell, pShell->pWindow, pShell->pDrView, pShell->pDoc, rReq );
