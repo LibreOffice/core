@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:33:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
         SetFillColor( aOldFillColor );
     }
 
-    pView->InitRedraw( this , rRect );
+    pView->CompleteRedraw( this , rRect );
 }
 
 
