@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:11:42 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2183,8 +2183,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         sal_uInt8 nWWColMax = nRealColCnt > nMaxCols ?
             nMaxCols : msword_cast<sal_uInt8>(nRealColCnt);
 
-        // 1.Zeile eine Headline?  sprmTTableHeader
-        if( !nLine && rTbl.IsHeadlineRepeat() )
+        // Check if this is a repeated row - sprmTTableHeader
+        if( rTbl.GetRowsToRepeat() > nLine)
         {
             if( rWW8Wrt.bWrtWW8 )
                 SwWW8Writer::InsUInt16( aAt, 0x3404 );
