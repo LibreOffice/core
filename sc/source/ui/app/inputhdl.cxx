@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-17 11:39:42 $
+ *  last change: $Author: nn $ $Date: 2002-04-17 11:55:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1055,11 +1055,24 @@ void ScInputHandler::NextAutoEntry( BOOL bBack )
                     {
                         lcl_RemoveLineEnd( aNew );
                         String aIns = aNew.Copy( aAutoSearch.Len() );
-                        pActiveView->DeleteSelected();
-                        pActiveView->InsertText( aIns, FALSE );
-                        pActiveView->SetSelection( ESelection(
-                                                    aSel.nEndPara, aSel.nStartPos + aIns.Len(),
-                                                    aSel.nEndPara, aSel.nStartPos ) );
+
+                        //  when editing in input line, apply to both edit views
+                        if ( pTableView )
+                        {
+                            pTableView->DeleteSelected();
+                            pTableView->InsertText( aIns, FALSE );
+                            pTableView->SetSelection( ESelection(
+                                                        aSel.nEndPara, aSel.nStartPos + aIns.Len(),
+                                                        aSel.nEndPara, aSel.nStartPos ) );
+                        }
+                        if ( pTopView )
+                        {
+                            pTopView->DeleteSelected();
+                            pTopView->InsertText( aIns, FALSE );
+                            pTopView->SetSelection( ESelection(
+                                                        aSel.nEndPara, aSel.nStartPos + aIns.Len(),
+                                                        aSel.nEndPara, aSel.nStartPos ) );
+                        }
                     }
                     else
                     {
