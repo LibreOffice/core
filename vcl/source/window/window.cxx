@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-15 11:07:11 $
+ *  last change: $Author: ssa $ $Date: 2002-05-16 11:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
 {
     // We prefer Andale Sans UI as our UI Font
     String aAndaleSansUI( RTL_CONSTASCII_USTRINGPARAM( "Andale Sans UI" ) );
-    if ( mpFrameData->mpFontList->FindFont( aAndaleSansUI ) )
+    if ( mpFrameData->mpFontList->FindFont( aAndaleSansUI ) && !rSettings.GetStyleSettings().GetUseSystemUIFonts() )
     {
         StyleSettings aStyleSettings = rSettings.GetStyleSettings();
         Font aFont = aStyleSettings.GetAppFont();
@@ -360,6 +360,57 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
         aStyleSettings.SetGroupFont( aFont );
         rSettings.SetStyleSettings( aStyleSettings );
     }
+
+    if( 1 )
+    {
+        // #97047: Force all fonts except Mneu and Help to a fixed height
+        // to avoid UI scaling due to large fonts
+        StyleSettings aStyleSettings = rSettings.GetStyleSettings();
+
+        Font aFont = aStyleSettings.GetAppFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetAppFont( aFont );
+        //aFont = aStyleSettings.GetHelpFont();
+        //aFont.SetHeight( 8 );
+        //aStyleSettings.SetHelpFont( aFont );
+        aFont = aStyleSettings.GetTitleFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetTitleFont( aFont );
+        aFont = aStyleSettings.GetFloatTitleFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetFloatTitleFont( aFont );
+        //aFont = aStyleSettings.GetMenuFont();
+        //aFont.SetHeight( 8 );
+        //aStyleSettings.SetMenuFont( aFont );
+        aFont = aStyleSettings.GetToolFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetToolFont( aFont );
+        aFont = aStyleSettings.GetLabelFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetLabelFont( aFont );
+        aFont = aStyleSettings.GetInfoFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetInfoFont( aFont );
+        aFont = aStyleSettings.GetRadioCheckFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetRadioCheckFont( aFont );
+        aFont = aStyleSettings.GetPushButtonFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetPushButtonFont( aFont );
+        aFont = aStyleSettings.GetFieldFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetFieldFont( aFont );
+        aFont = aStyleSettings.GetIconFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetIconFont( aFont );
+        aFont = aStyleSettings.GetGroupFont();
+        aFont.SetHeight( 8 );
+        aStyleSettings.SetGroupFont( aFont );
+
+        rSettings.SetStyleSettings( aStyleSettings );
+    }
+
+
 
 #ifdef DBG_UTIL
     // Evt. AppFont auf Fett schalten, damit man feststellen kann,
@@ -699,10 +750,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     // init data
     mpRealParent = pRealParent;
 
-    // #99318: make sure fontcache and list is available before call to SetSettings
-    mpFontList      = mpFrameData->mpFontList;
-    mpFontCache     = mpFrameData->mpFontCache;
-
     if ( mbFrame )
     {
 #ifndef REMOTE_APPSERVER
@@ -826,6 +873,8 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     USHORT nScreenZoom = rStyleSettings.GetScreenZoom();
     mnDPIX          = (mpFrameData->mnDPIX*nScreenZoom)/100;
     mnDPIY          = (mpFrameData->mnDPIY*nScreenZoom)/100;
+    mpFontList      = mpFrameData->mpFontList;
+    mpFontCache     = mpFrameData->mpFontCache;
     maFont          = rStyleSettings.GetAppFont();
     ImplPointToLogic( maFont );
 
@@ -7651,3 +7700,77 @@ BOOL Window::ImplGetCurrentBackgroundColor( Color& rCol )
     return bRet;
 }
 
+void Window::DrawSelectionBackground( const Rectangle& rRect, USHORT highlight, BOOL bChecked, BOOL bDrawBorder, BOOL bDrawExtBorderOnly )
+{
+    // colors used for item highlighting
+    Color aSelectionBorderCol( GetSettings().GetStyleSettings().GetActiveColor() );
+    Color aSelectionFillCol( aSelectionBorderCol );
+    Color aSelectionMaskCol( aSelectionBorderCol );
+
+    USHORT lum = GetSettings().GetStyleSettings().GetFaceColor().GetLuminance();
+    BOOL bDark = (lum <= 25);
+    BOOL bBright = (lum >= 225);
+
+    Rectangle aRect( rRect );
+    if( bDrawExtBorderOnly )
+    {
+        aRect.nLeft     -= 1;
+        aRect.nTop      -= 1;
+        aRect.nRight    += 1;
+        aRect.nBottom   += 1;
+    }
+    Color oldFillCol = GetFillColor();
+    Color oldLineCol = GetLineColor();
+
+    if( bDrawBorder )
+        SetLineColor( bDark ? Color(COL_WHITE) : ( bBright ? Color(COL_BLACK) : aSelectionBorderCol ) );
+    else
+        SetLineColor();
+
+    USHORT nPercent;
+    if( !highlight )
+    {
+        if( bDark )
+            aSelectionFillCol = COL_WHITE;
+        else
+            nPercent = 95;              // just checked (light)
+
+    }
+    else
+    {
+        if( bChecked || highlight == 1 )
+        {
+            if( bDark )
+                aSelectionFillCol = COL_GRAY;
+            else
+                nPercent = 55;          // selected, pressed or checked ( very dark )
+        }
+        else
+        {
+            if( bDark )
+                aSelectionFillCol = COL_LIGHTGRAY;
+            else
+                nPercent = 85;          // selected ( dark )
+        }
+    }
+
+    if( bDark && bDrawExtBorderOnly )
+        SetFillColor();
+    else
+        SetFillColor( aSelectionFillCol );
+
+
+    if( bDark )
+    {
+        DrawRect( aRect );
+    }
+    else
+    {
+        Polygon aPoly( aRect );
+        PolyPolygon aPolyPoly( aPoly );
+        DrawTransparent( aPolyPoly, nPercent );
+    }
+
+    SetFillColor( oldFillCol );
+    SetLineColor( oldLineCol );
+}
