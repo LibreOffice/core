@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:54:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,15 @@ uno::Reference< container::XEnumeration >  SwXCell::createEnumeration(void) thro
         SwPosition aPos(*pSttNd);
         SwUnoCrsr* pUnoCrsr = GetDoc()->CreateUnoCrsr(aPos, sal_False);
         pUnoCrsr->Move( fnMoveForward, fnGoNode );
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_TBLTEXT);
+
+        SwXParagraphEnumeration *pEnum = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_TBLTEXT);
+        const SwTableNode* pTblNode = pSttNd->FindTableNode();
+        // remember table and start node for later travelling
+        // (used in export of tables in tables)
+        pEnum->SetOwnTable( &pTblNode->GetTable() );
+        pEnum->SetOwnStartNode( pSttNd );
+
+        aRef = pEnum;
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
@@ -2472,8 +2480,7 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
         SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
-        //keine Tabellen in Tabellen!
-        if(!aPam.GetNode()->FindTableNode())
+
         {
             UnoActionContext aCont( pDoc );
 
@@ -2538,12 +2545,7 @@ void SwXTextTable::attachToRange(const uno::Reference< XTextRange > & xTextRange
             }
             pDoc->EndUndo( UNDO_END );
         }
-        else
-        {
-            IllegalArgumentException aExcept;
-            aExcept.Message = C2U("tables cannot be inserted into tables");
-            throw aExcept;
-        }
+
     }
     else
         throw IllegalArgumentException();
