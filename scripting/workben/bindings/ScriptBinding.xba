@@ -588,7 +588,8 @@ Sub WriteXMLFromArray()
 	On Error Goto ErrorHandler
 	cfgFile =  GetOfficePath() + &quot;user/config/soffice.cfg/&quot; + xmlFileName 
 	updateCfgFile( cfgFile )
-	if ( false ) then&apos; config stuff not in build yet
+	&apos;if ( false ) then&apos; config stuff not in build yet
+	if ( true ) then
 		updateConfig( xmlFileName )
 	else
 		msgbox (&quot;Office must be restarted before your changes will take effect.&quot;+ chr$(10)+&quot;Also close the Office QuickStarter (Windows and Linux)&quot;, 48, &quot;Assign Script (Java) To Menu&quot; )
