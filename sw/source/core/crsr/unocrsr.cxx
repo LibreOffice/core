@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 09:34:52 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
 
 {}
 
+// @@@ semantic: no copy ctor.
 SwUnoCrsr::SwUnoCrsr( SwUnoCrsr& rICrsr )
     : SwCursor( rICrsr ), SwModify( 0 ),
     bRemainInSection( rICrsr.bRemainInSection ),
