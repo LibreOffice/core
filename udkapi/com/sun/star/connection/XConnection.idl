@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnection.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-12 16:04:15 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,20 @@ interface XConnection: com::sun::star::uno::XInterface
 {
 
     /** reads a requested number of bytes from the connection.
-        <p> This method is blocking, meaning that it  always returns a bytesequence
-        with the requested number of bytes unless it has reached end of file (which
+        <p> This method is blocking, meaning that it always returns a bytesequence
+        with the requested number of bytes, unless it has reached end of file (which
         often means, that close() has been called).
 
         <p> please see also the readSomeBytes() method of XConnection2.
 
-        @return The read number of bytes. The return value and the length of the
+        @return The read number of bytes.
+                The return value and the length of the
                 returned sequence must be identical.
         @param nBytesToRead
                 The number of bytes to be read from the stream.
 
         @throws com::sun::star::io::IOException
-               in case an error occured during reading from the stream.
+               in case an error occurred during reading from the stream.
      */
     long read( [out] sequence < byte > aReadBytes , [in] long nBytesToRead )
             raises( com::sun::star::io::IOException );
@@ -99,7 +100,7 @@ interface XConnection: com::sun::star::uno::XInterface
         <p>The method blocks until the whole sequence is written.
 
         @throws com::sun::star::io::IOException
-               in case an error occured during writing to the stream.
+               in case an error occurred during writing to the stream.
      */
     void write( [in] sequence < byte > aData )
         raises( com::sun::star::io::IOException );
@@ -110,7 +111,7 @@ interface XConnection: com::sun::star::uno::XInterface
     void flush( )
             raises( com::sun::star::io::IOException );
 
-    /** Immeadiatly terminates any ongoing read or write calls.
+    /** Immediately terminates any ongoing read or write calls.
         All subsequent read or write calls()
      */
     void close( )

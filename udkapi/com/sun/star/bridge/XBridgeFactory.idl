@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeFactory.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ interface XBridgeFactory: com::sun::star::uno::XInterface
              getBridge(). No BridgeExistsException can be thrown in this case.
 
         @param sProtocol
-            The protocol, that will be used on the connection (e.g. urp) plus additional
+            The protocol, that will be used on the connection (e.g., urp) plus additional
             comma separated name=value protocol properties.
 
         @param aConnection

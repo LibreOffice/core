@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XInstanceProvider.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-12 16:01:03 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ interface XInstanceProvider: com::sun::star::uno::XInterface
             The name of the requested object.
 
        @returns
-            the object associated with the name. The return value maybe null in case
+            the object associated with the name. The return value may be null in case
             there is no object to offer for this string. In this case, XBridge.getInstance()
             will also return a null reference
 

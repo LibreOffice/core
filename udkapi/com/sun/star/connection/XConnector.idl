@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-12 16:04:15 $
+ *  last change: $Author: mi $ $Date: 2001-11-16 14:25:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 module com {  module sun {  module star {  module connection {
 
 /**
-   allows to activly establish an interprocess connection.
+   allows to actively establish an interprocess connection.
  */
 interface XConnector: com::sun::star::uno::XInterface
 {
@@ -80,16 +80,19 @@ interface XConnector: com::sun::star::uno::XInterface
         <p>
         Tries to connect to an <type>XAcceptor</type>.
 
-        @param sConnectionDescription contains the kind of the connection plus a
-               comma seperated list of attributes.
-               e.g. <em>socket,host=locahost,port=2345</em> for a tcpip connection.
+        @param sConnectionDescription
+                contains the kind of the connection plus a
+                comma seperated list of attributes,
+               e.g., <em>socket,host=locahost,port=2345</em> for a tcpip connection.
 
-        @throws ConnectionSetupException  Problems during setting up the connector
-                on client side(e.g. Security-reasons, socket already busy .. ), or the
-                string could not be interpreted correctly.
+        @throws ConnectionSetupException
+                Problems during setting up the connector
+              on client side, (e.g., Security-reasons, socket already busy .. ),
+                or the string could not be interpreted correctly.
 
-        @throws NoConnectException     Couldn't reach a server (e.g. network failure), no server
-                                       is listening
+        @throws NoConnectException
+                Couldn't reach a server (e.g. network failure),
+                no server is listening
      */
     XConnection connect( [in] string sConnectionDescription )
         raises( NoConnectException,ConnectionSetupException );
