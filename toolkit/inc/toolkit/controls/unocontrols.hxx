@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 09:51:19 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 11:15:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,7 @@ class UnoDialogControl : public UnoControlContainer,
                          public ::com::sun::star::awt::XDialog
 {
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar > mxMenuBar;
     TopWindowListenerMultiplexer    maTopWindowListeners;
 
 protected:

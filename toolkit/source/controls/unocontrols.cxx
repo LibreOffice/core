@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-10 10:03:01 $
+ *  last change: $Author: mt $ $Date: 2001-08-10 11:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,7 @@ void UnoDialogControl::createPeer( const uno::Reference< awt::XToolkit > & rxToo
     UnoControlContainer::createPeer( rxToolkit, rParentPeer );
 
     uno::Reference < awt::XTopWindow > xTW( mxPeer, uno::UNO_QUERY );
+    xTW->setMenuBar( mxMenuBar );
     if ( maTopWindowListeners.getLength() )
         xTW->addTopWindowListener( &maTopWindowListeners );
 }
@@ -746,9 +747,15 @@ void UnoDialogControl::toBack(  ) throw (::com::sun::star::uno::RuntimeException
     }
 }
 
-void UnoDialogControl::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& ) throw (::com::sun::star::uno::RuntimeException)
+void UnoDialogControl::setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& rxMenuBar ) throw (::com::sun::star::uno::RuntimeException)
 {
-    DBG_ERROR( "UnoDialogControl::setMenuBar niy" );
+    mxMenuBar = rxMenuBar;
+    if ( getPeer().is() )
+    {
+        uno::Reference< awt::XTopWindow > xTW( getPeer(), uno::UNO_QUERY );
+        if( xTW.is() )
+            xTW->setMenuBar( mxMenuBar );
+    }
 }
 
 // beans::XPropertiesChangeListener
