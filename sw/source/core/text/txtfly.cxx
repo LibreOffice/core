@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-08-30 11:47:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,8 +418,8 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
     if( GetCurr() )
     {
         // Erst pruefen wir, ob ueberhaupt ein Fly mit der Zeile ueberlappt.
-        // = pCurr->GetRealHeight()
-        const long nHeight = GetLineHeight();
+        // = GetLineHeight()
+        const long nHeight = GetCurr()->GetRealHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
         SwRect aInter( rInf.GetTxtFly()->GetFrm( aLine ) );
         if( !aInter.HasArea() )
@@ -444,7 +444,10 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     aInter._Intersection( aLine );
                     if( aInter.HasArea() )
                     {
+                        // to be evaluated during reformat of this line:
+                        // RealHeight including spacing
                         rInf.SetLineHeight( KSHORT(nHeight) );
+                        // Height without extra spacing
                         rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
                         return sal_True;
                     }
@@ -456,7 +459,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                 if ( ! aInter.IsOver( aLine ) )
                 {
                     rInf.SetLineHeight( KSHORT(nHeight) );
-                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                    rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
                     return sal_True;
                 }
                 else
@@ -521,8 +524,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         nAscent = pLast->GetAscent();
         nHeight = pLast->Height();
 
-        // if not already done, me make a first guess for the lines real height
-        // for savety reasons we do not want pCurr to be changed
+        // we make a first guess for the lines real height
         if ( ! pCurr->GetRealHeight() )
             CalcRealHeight();
 
