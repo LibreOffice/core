@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:40:50 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1426,23 +1426,26 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
 
 SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
                             SwFrmFmt *pDerivedFrom,
-                            BOOL bBroadcast)
+                            BOOL bBroadcast, BOOL bAuto)
 {
 
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
+
+    pFmt->SetAuto(bAuto);
     pFrmFmtTbl->Insert( pFmt, pFrmFmtTbl->Count());
     SetModified();
 
-
     if (bBroadcast)
+    {
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
                                 SFX_STYLESHEET_CREATED);
 
-    if (DoesUndo())
-    {
-        SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
+        if (DoesUndo())
+        {
+            SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
 
-        AppendUndo(pUndo);
+            AppendUndo(pUndo);
+        }
     }
 
     return pFmt;
@@ -1589,6 +1592,7 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
                                     ND_TEXTNODE );
 
         pCNd->ChgFmtColl( pPara->pFmtColl );
+
         pPara->nWhich++;
     }
     return TRUE;
@@ -1600,6 +1604,7 @@ BOOL SwDoc::SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt, BOOL bReset)
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     SwHistory* pHst = 0;
     BOOL bRet = TRUE;
+
     if( DoesUndo() )
     {
         ClearRedo();
