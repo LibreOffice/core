@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 07:47:18 $
+ *  last change: $Author: os $ $Date: 2001-06-19 10:53:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,6 +724,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
+            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rSh.GetView()));
+            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, eMetric));
             SwTableRep* pTblRep = ::lcl_TableParamToItemSet( aCoreSet, rSh );
             SwTableTabDlg* pDlg = new SwTableTabDlg( GetView().GetWindow(),
                                                      GetPool(), &aCoreSet, &rSh);
