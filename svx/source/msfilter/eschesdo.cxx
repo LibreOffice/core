@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-28 18:43:42 $
+ *  last change: $Author: sj $ $Date: 2000-12-11 14:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 
 #ifndef _ESCHESDO_HXX
 #include "eschesdo.hxx"
-#endif
-#ifndef _SVX_ESCHEREX_HXX
-#include "escherex.hxx"
 #endif
 
 #ifndef _SVDOBJ_HXX //autogen wg. SdrObject
@@ -513,7 +510,7 @@ BOOL ImplEESdrWriter::ImplGetShapeByIndex( UINT32 nIndex, BOOL bGroup )
 
 // -------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj )
+void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt )
 {
     if( rObj.ImplGetText() )
     {
@@ -575,7 +572,7 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj )
             if ( *( (INT16*)mAny.get() ) == 1 )
             {
                 nTextAttr |= 0x10001;
-                mpEscherEx->AddOpt( ESCHER_Prop_scaleText, ? );
+                rPropOpt.AddOpt( ESCHER_Prop_scaleText, ? );
             }
         }
 */
@@ -590,24 +587,24 @@ void ImplEESdrWriter::ImplWriteTextBundle( ImplEESdrObject& rObj )
         if ( nRight >= 200 )
             nRight -=200;
 
-        mpEscherEx->AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
-        mpEscherEx->AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
-        mpEscherEx->AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
-        mpEscherEx->AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextLeft, nLeft * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, nRight * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextTop, nTop * 360 );
+        rPropOpt.AddOpt( ESCHER_Prop_dyTextBottom, nBottom * 360 );
 
-        mpEscherEx->AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
-        mpEscherEx->AddOpt( ESCHER_Prop_AnchorText, eAnchor );
-        mpEscherEx->AddOpt( ESCHER_Prop_FitTextToShape, nTextAttr );
+        rPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
+        rPropOpt.AddOpt( ESCHER_Prop_AnchorText, eAnchor );
+        rPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, nTextAttr );
         UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                                                     rObj.GetShapeId() );
-        mpEscherEx->AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
+        rPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
     }
 }
 
 
 // -------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj,
+void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                             const Point& rRefPoint )
 {
     INT32 nAngle = rObj.GetAngle();
@@ -648,7 +645,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj,
     nAngle *= 655;
     nAngle += 0x8000;
     nAngle &=~0xffff;                                   // nAngle auf volle Gradzahl runden
-    mpEscherEx->AddOpt( ESCHER_Prop_Rotation, nAngle );
+    rPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
 
     rObj.SetAngle( nAngle );
     rObj.SetRect( aRect );
@@ -656,7 +653,7 @@ void ImplEESdrWriter::ImplFlipBoundingBox( ImplEESdrObject& rObj,
 
 //  -----------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplWriteAny( ImplEESdrObject& rObj,
+void ImplEESdrWriter::ImplWriteAny( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                     UINT32 nFlags, BOOL bBezier,
                                     Polygon* pPolygon )
 {
@@ -863,12 +860,12 @@ void ImplEESdrWriter::ImplWriteAny( ImplEESdrObject& rObj,
     *pPtr++ = 0;
     *pPtr++ = 0x80;
 
-    mpEscherEx->AddOpt( ESCHER_Prop_geoRight, aGeoRect.GetSize().Width() );
-    mpEscherEx->AddOpt( ESCHER_Prop_geoBottom, aGeoRect.GetSize().Height() );
+    rPropOpt.AddOpt( ESCHER_Prop_geoRight, aGeoRect.GetSize().Width() );
+    rPropOpt.AddOpt( ESCHER_Prop_geoBottom, aGeoRect.GetSize().Height() );
 
-    mpEscherEx->AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-    mpEscherEx->AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (BYTE*)pVerticesBuf, nVerticesBufSize );
-    mpEscherEx->AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (BYTE*)pSegmentBuf, nSegmentBufSize );
+    rPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+    rPropOpt.AddOpt( ESCHER_Prop_pVertices, TRUE, nVerticesBufSize - 6, (BYTE*)pVerticesBuf, nVerticesBufSize );
+    rPropOpt.AddOpt( ESCHER_Prop_pSegmentInfo, TRUE, nSegmentBufSize, (BYTE*)pSegmentBuf, nSegmentBufSize );
 }
 
 //  -----------------------------------------------------------------------
@@ -887,10 +884,9 @@ void ImplEESdrWriter::ImplWriteAny( ImplEESdrObject& rObj,
     mnTextStyle = EPP_TEXTSTYLE_TEXT;                           \
     mpEscherEx->OpenContainer( ESCHER_SpContainer );            \
     ADD_SHAPE( ESCHER_ShpInst_TextBox, 0xa00 );                 \
-    mpEscherEx->BeginCount();                                   \
     if ( bFill )                                                \
-        ImplWriteFillBundle( rObj, TRUE );                      \
-    ImplWriteTextBundle( rObj );                                \
+        ImplWriteFillBundle( rObj, aPropOpt, TRUE );            \
+    ImplWriteTextBundle( rObj, aPropOpt );                      \
 }
 
 UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
@@ -955,6 +951,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         mpCurrentDefault->SetObject( TEXT );
 #endif // EES_WRITE_EPP
 
+        EscherPropertyContainer aPropOpt;
         if ( rObj.GetType().EqualsAscii( "drawing.Rectangle" ))
         {
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -964,7 +961,6 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 nRadius = ImplMapSize( Size( nRadius, 0 )).Width();
                 ADD_SHAPE( ESCHER_ShpInst_RoundRectangle, 0xa00 );  // Flags: Connector | HasSpt
-                mpEscherEx->BeginCount();
                 INT32 nLenght = rObj.GetRect().GetWidth();
                 if ( nLenght > rObj.GetRect().GetHeight() )
                     nLenght = rObj.GetRect().GetHeight();
@@ -973,15 +969,14 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     nRadius = 0x2a30;                           // 0x2a30 ist PPTs maximum radius
                 else
                     nRadius = ( 0x2a30 * nRadius ) / nLenght;
-                mpEscherEx->AddOpt( ESCHER_Prop_adjustValue, nRadius );
+                aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nRadius );
             }
             else
             {
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
-                mpEscherEx->BeginCount();
             }
-            ImplWriteFillBundle( rObj, TRUE );
-            ImplWriteTextBundle( rObj );
+            ImplWriteFillBundle( rObj, aPropOpt, TRUE );
+            ImplWriteTextBundle( rObj, aPropOpt );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Ellipse" ))
         {
@@ -1017,8 +1012,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_Ellipse, 0xa00 );         // Flags: Connector | HasSpt
-                mpEscherEx->BeginCount();
-                ImplWriteFillBundle( rObj, TRUE );
+                ImplWriteFillBundle( rObj, aPropOpt, TRUE );
             }
             else
             {
@@ -1054,28 +1048,27 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 Polygon aPolygon( rRect, aStart, aEnd, ePolyKind );
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-                mpEscherEx->BeginCount();
                 switch ( ePolyKind )
                 {
                     case POLY_PIE :
                     case POLY_CHORD :
                     {
-                        ImplWriteAny( rObj, ANY_FLAGS_POLYPOLYGON, FALSE,
+                        ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE,
                                         &aPolygon );
-                        ImplWriteFillBundle( rObj, TRUE );
+                        ImplWriteFillBundle( rObj, aPropOpt, TRUE );
                     }
                     break;
 
                     case POLY_ARC :
                     {
-                        ImplWriteAny( rObj, ANY_FLAGS_POLYLINE, FALSE,
+                        ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, FALSE,
                                     &aPolygon );
-                        ImplWriteLineBundle( rObj, FALSE );
+                        ImplWriteLineBundle( rObj, aPropOpt, FALSE );
                     }
                     break;
                 }
             }
-            ImplWriteTextBundle( rObj );
+            ImplWriteTextBundle( rObj, aPropOpt );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Control" ))
         {
@@ -1138,7 +1131,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                             aShapeA, aEndPoint, aShapeB );
             rObj.SetRect( Rectangle( ImplMapPoint( aStartPoint ),
                                      ImplMapPoint( aEndPoint ) ) );
-            ImplWriteAny( rObj, ANY_FLAGS_LINE, FALSE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_LINE, FALSE );
             const Rectangle& rRect = rObj.GetRect();
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             UINT32 nFlags = 0xa00;                  // Flags: Connector | HasSpt
@@ -1155,18 +1148,16 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 case ConnectorType_CURVE :
                 {
                     ADD_SHAPE( ESCHER_ShpInst_CurvedConnector3, nFlags );
-                    mpEscherEx->BeginCount();
-                    mpEscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
-                    mpEscherEx->AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
-                    mpEscherEx->AddOpt( ESCHER_Prop_adjust2Value, -nAdjustValue2 );
+                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleCurved );
+                    aPropOpt.AddOpt( ESCHER_Prop_adjustValue, nAdjustValue1 );
+                    aPropOpt.AddOpt( ESCHER_Prop_adjust2Value, -nAdjustValue2 );
                 }
                 break;
 
                 case ConnectorType_STANDARD :   // Connector 2->5
                 {
                     ADD_SHAPE( ESCHER_ShpInst_BentConnector3, nFlags );
-                    mpEscherEx->BeginCount();
-                    mpEscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
+                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleBent );
                 }
                 break;
 
@@ -1176,12 +1167,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 {
                     nFlags |= 0x100;
                     ADD_SHAPE( ESCHER_ShpInst_StraightConnector1, nFlags );
-                    mpEscherEx->BeginCount();
-                    mpEscherEx->AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
+                    aPropOpt.AddOpt( ESCHER_Prop_cxstyle, ESCHER_cxstyleStraight );
                 }
                 break;
             }
-            ImplWriteLineBundle( rObj, FALSE );
+            ImplWriteLineBundle( rObj, aPropOpt, FALSE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Measure" ))
@@ -1199,8 +1189,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     nFlags |= 0x40;                                             // Flags: HorzMirror
 
                 ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
-                mpEscherEx->BeginCount();
-                mpEscherEx->AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+                aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
                 ImplWriteLineBundle( FALSE );
                 mpEscherEx->EndCount( ESCHER_OPT, 3 );
                 maRect.Justify();
@@ -1271,7 +1260,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Line" ))
         {
-            ImplWriteAny( rObj, ANY_FLAGS_LINE, FALSE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_LINE, FALSE );
             if( rObj.ImplHasText() )
             {
                 aTextRefPoint = rObj.GetRect().TopLeft();
@@ -1287,9 +1276,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nFlags |= 0x40;             // Flags: HorzMirror
 
             ADD_SHAPE( ESCHER_ShpInst_Line, nFlags );
-            mpEscherEx->BeginCount();
-            mpEscherEx->AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
-            ImplWriteLineBundle( rObj, FALSE );
+            aPropOpt.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
+            ImplWriteLineBundle( rObj, aPropOpt, FALSE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.PolyPolygon" ))
@@ -1301,9 +1289,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            mpEscherEx->BeginCount();
-            ImplWriteAny( rObj, ANY_FLAGS_POLYPOLYGON, FALSE );
-            ImplWriteFillBundle( rObj, TRUE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, FALSE );
+            ImplWriteFillBundle( rObj, aPropOpt, TRUE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.PolyLine" ))
@@ -1315,9 +1302,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            mpEscherEx->BeginCount();
-            ImplWriteAny( rObj, ANY_FLAGS_POLYLINE, FALSE );
-            ImplWriteLineBundle( rObj, FALSE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, FALSE );
+            ImplWriteLineBundle( rObj, aPropOpt, FALSE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.OpenBezier" ) ||
@@ -1331,9 +1317,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            mpEscherEx->BeginCount();
-            ImplWriteAny( rObj, ANY_FLAGS_POLYLINE, TRUE );
-            ImplWriteLineBundle( rObj, FALSE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYLINE, TRUE );
+            ImplWriteLineBundle( rObj, aPropOpt, FALSE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.ClosedBezier" ) ||
@@ -1347,9 +1332,8 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             }
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_NotPrimitive, 0xa00 );        // Flags: Connector | HasSpt
-            mpEscherEx->BeginCount();
-            ImplWriteAny( rObj, ANY_FLAGS_POLYPOLYGON, TRUE );
-            ImplWriteFillBundle( rObj, TRUE );
+            ImplWriteAny( rObj, aPropOpt, ANY_FLAGS_POLYPOLYGON, TRUE );
+            ImplWriteFillBundle( rObj, aPropOpt, TRUE );
             rObj.SetAngle( 0 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.GraphicObject" ))
@@ -1369,41 +1353,38 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
 #endif // EES_WRITE_EPP
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
-                mpEscherEx->BeginCount();
                 UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                                                         rObj.GetShapeId() );
-                mpEscherEx->AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                mpEscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
             }
             else
             {
                 if( rObj.ImplGetText() )
                 {
                     ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );           // Flags: Connector | HasSpt
-                    mpEscherEx->BeginCount();
-                    if( ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("GraphicObjectFillBitmap"),TRUE ) )
+                    if( ImplGetGraphic( rObj, aPropOpt, ::rtl::OUString::createFromAscii("GraphicObjectFillBitmap"),TRUE ) )
                     {
-                        mpEscherEx->AddOpt( ESCHER_Prop_WrapText,
+                        aPropOpt.AddOpt( ESCHER_Prop_WrapText,
                                             ESCHER_WrapNone );
-                        mpEscherEx->AddOpt( ESCHER_Prop_AnchorText,
+                        aPropOpt.AddOpt( ESCHER_Prop_AnchorText,
                                             ESCHER_AnchorMiddle );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest,
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest,
                                             0x140014 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillBackColor,
+                        aPropOpt.AddOpt( ESCHER_Prop_fillBackColor,
                                             0x8000000 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash,
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,
                                             0x80000 );
-                        ImplWriteTextBundle( rObj );
+                        ImplWriteTextBundle( rObj, aPropOpt );
                     }
                 }
                 else
                 {
                     ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-                    mpEscherEx->BeginCount();
-                    if( ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("GraphicObjectFillBitmap"), FALSE ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping,
+                    if( ImplGetGraphic( rObj, aPropOpt, ::rtl::OUString::createFromAscii("GraphicObjectFillBitmap"), FALSE ) )
+                        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping,
                                             0x800080 );
                 }
             }
@@ -1428,12 +1409,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 mnTextStyle = EPP_TEXTSTYLE_TITLE;
                 nPlaceHolderAtom = EPP_PLACEHOLDER_TITLE;
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );           // Flags: HaveAnchor | HaveMaster
-                mpEscherEx->BeginCount();
-                mpEscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
-                ImplWriteFillBundle( rObj, TRUE );
-                ImplWriteTextBundle( rObj );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterTitle );
+                ImplWriteFillBundle( rObj, aPropOpt, TRUE );
+                ImplWriteTextBundle( rObj, aPropOpt );
                 if( rObj.IsEmptyPresObj() )
-                    mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
             }
             else
             {
@@ -1464,13 +1444,12 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 nPlaceHolderAtom = EPP_PLACEHOLDER_BODY;
                 mpEscherEx->OpenContainer( ESCHER_SpContainer );
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );           // Flags: HaveAnchor | HaveMaster
-                mpEscherEx->BeginCount();
-                mpEscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
-                ImplWriteFillBundle( rObj, TRUE );
-                ImplWriteTextBundle( rObj );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                ImplWriteFillBundle( rObj, aPropOpt, TRUE );
+                ImplWriteTextBundle( rObj, aPropOpt );
 
                 if ( rObj.IsEmptyPresObj() )
-                    mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
             }
             else
             {
@@ -1485,12 +1464,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             nPlaceHolderAtom = EPP_PLACEHOLDER_GENERICTEXTOBJECT;
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0xa00 );
-            mpEscherEx->BeginCount();
-            mpEscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x40004 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fFillOK, 0x100001 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110011 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
+            aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x40004 );
+            aPropOpt.AddOpt( ESCHER_Prop_fFillOK, 0x100001 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110011 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90008 );
+            aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x10001 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.Frame" ))
         {
@@ -1511,13 +1489,12 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                     nPlaceHolderAtom = 22;  // EPP_PLACEHOLDER_CLIPART
 #endif // EES_WRITE_EPP
                 ADD_SHAPE( ESCHER_ShpInst_Rectangle, 0x220 );               // Flags: HaveAnchor | HaveMaster
-                mpEscherEx->BeginCount();
                 UINT32 nTxtBxId = mpEscherEx->QueryTextID( rObj.GetShapeRef(),
                                                         rObj.GetShapeId() );
-                mpEscherEx->AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
-                mpEscherEx->AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
+                aPropOpt.AddOpt( ESCHER_Prop_lTxid, nTxtBxId );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x10001 );
+                aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x10001 );
+                aPropOpt.AddOpt( ESCHER_Prop_hspMaster, mnShapeMasterBody );
             }
             else
             {
@@ -1525,22 +1502,21 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 BOOL bAppOLE = TRUE;
                 ADD_SHAPE( ESCHER_ShpInst_PictureFrame,
                     0xa00 | (bAppOLE ? SHAPEFLAG_OLESHAPE : 0) );
-                mpEscherEx->BeginCount();
-                if ( ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("MetaFile"), FALSE ) )
+                if ( ImplGetGraphic( rObj, aPropOpt, ::rtl::OUString::createFromAscii("MetaFile"), FALSE ) )
                 {
                     if ( bAppOLE )
                     {   // snooped from Xcl hex dump, nobody knows the trouble I have seen
-                        mpEscherEx->AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_pictureId,      0x00000001 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillColor,      0x08000041 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillBackColor,  0x08000041 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00110010 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_lineColor,      0x08000040 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash,0x00080008 );
-//                      mpEscherEx->AddOpt( ESCHER_Prop_fshadowObscured,0x00020000 );
-                        mpEscherEx->AddOpt( ESCHER_Prop_fPrint,         0x00080000 );
+                        aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape,    0x00080008 );
+                        aPropOpt.AddOpt( ESCHER_Prop_pictureId,     0x00000001 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fillColor,     0x08000041 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0x08000041 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest,    0x00110010 );
+                        aPropOpt.AddOpt( ESCHER_Prop_lineColor,     0x08000040 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash,0x00080008 );
+//                      aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured,0x00020000 );
+                        aPropOpt.AddOpt( ESCHER_Prop_fPrint,            0x00080000 );
                     }
-                    mpEscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+                    aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
                 }
             }
         }
@@ -1553,19 +1529,17 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
 
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-            mpEscherEx->BeginCount();
 
-            if ( ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("Bitmap"), FALSE ) )
-                mpEscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+            if ( ImplGetGraphic( rObj, aPropOpt, ::rtl::OUString::createFromAscii("Bitmap"), FALSE ) )
+                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else if ( rObj.GetType().EqualsAscii( "drawing.dontknow" ))
         {
             rObj.SetAngle( 0 );
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             ADD_SHAPE( ESCHER_ShpInst_PictureFrame, 0xa00 );
-            mpEscherEx->BeginCount();
-            if ( ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("MetaFile"), FALSE ) )
-                mpEscherEx->AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
+            if ( ImplGetGraphic( rObj, aPropOpt, ::rtl::OUString::createFromAscii("MetaFile"), FALSE ) )
+                aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x800080 );
         }
         else
         {
@@ -1578,19 +1552,19 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             {
                 if ( ::cppu::any2bool( rObj.GetUsrAny() ) )
                 {
-                    mpEscherEx->AddOpt( ESCHER_Prop_fshadowObscured, 0x20002 );
+                    aPropOpt.AddOpt( ESCHER_Prop_fshadowObscured, 0x20002 );
                     if( rObj.ImplGetPropertyValue(  ::rtl::OUString::createFromAscii("ShadowColor") ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_shadowColor,
+                        aPropOpt.AddOpt( ESCHER_Prop_shadowColor,
                             mpEscherEx->GetColor(
                                     *((UINT32*)rObj.GetUsrAny().getValue()) ) );
                     if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("ShadowXDistance") ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_shadowOffsetX,
+                        aPropOpt.AddOpt( ESCHER_Prop_shadowOffsetX,
                                     *((INT32*)rObj.GetUsrAny().getValue()) * 360 );
                     if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("ShadowYDistance") ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_shadowOffsetY,
+                        aPropOpt.AddOpt( ESCHER_Prop_shadowOffsetY,
                                     *((INT32*)rObj.GetUsrAny().getValue()) * 360 );
                     if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("ShadowTransparence") ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_shadowOpacity,
+                        aPropOpt.AddOpt( ESCHER_Prop_shadowOpacity,
                             ( ( (100 - (*((UINT16*)rObj.GetUsrAny().getValue())))
                                         << 16 ) / 100 ) );
                 }
@@ -1601,7 +1575,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
             rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("LayerID") ) &&
             (*((UINT16*)rObj.GetUsrAny().getValue()) ) == mpEscherEx->GetHellLayerId() )
         {
-            mpEscherEx->AddOpt( ESCHER_Prop_fPrint, 0x200020 );
+            aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x200020 );
         }
 
         {
@@ -1618,12 +1592,11 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                 if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("RotationPointY") ))
                 {
                     aRefPoint.Y() = *( (INT32*)rObj.GetUsrAny().getValue() );
-                    ImplFlipBoundingBox( rObj, ImplMapPoint( aRefPoint ) );
+                    ImplFlipBoundingBox( rObj, aPropOpt, ImplMapPoint( aRefPoint ) );
                 }
             }
         }
-        mpEscherEx->EndCount( ESCHER_OPT, 3 );
-
+        aPropOpt.Commit( mpEscherEx->GetStream() );
         if( mpEscherEx->GetGroupLevel() > 1 )
         {
             mpEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
@@ -1752,6 +1725,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
         if ( mpHostAppData && mpHostAppData->DontWriteShape() )
             break;
 
+        EscherPropertyContainer aPropOpt;
         rObj.SetAngle( rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("RotateAngle")));
         INT32 nAngle = rObj.GetAngle();
         if( rObj.GetType().EqualsAscii( "drawing.Line" ))
@@ -1765,16 +1739,15 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             mnTextStyle = EPP_TEXTSTYLE_TEXT;
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             mpEscherEx->AddShape( ESCHER_ShpInst_TextBox, 0xa00 );
-            mpEscherEx->BeginCount();
-            ImplWriteTextBundle( rObj );
+            ImplWriteTextBundle( rObj, aPropOpt );
 
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
-            mpEscherEx->AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );      // Size Shape To Fit Text
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+            aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x60006 );     // Size Shape To Fit Text
             if ( nAngle < 0 )
                 nAngle = ( 36000 + nAngle ) % 36000;
             if ( nAngle )
-                ImplFlipBoundingBox( rObj, rObj.GetRect().TopLeft() );
+                ImplFlipBoundingBox( rObj, aPropOpt, rObj.GetRect().TopLeft() );
         }
         else
         {
@@ -1782,11 +1755,10 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             mpEscherEx->OpenContainer( ESCHER_SpContainer );
             nShapeID = mpEscherEx->GetShapeID();
             mpEscherEx->AddShape( nShapeType = ESCHER_ShpInst_TextBox, 0xa00, nShapeID );
-            mpEscherEx->BeginCount();
-            ImplWriteTextBundle( rObj );
+            ImplWriteTextBundle( rObj, aPropOpt );
 
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-            mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
+            aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
 
             if( nAngle < 0 )
                 nAngle = ( 36000 + nAngle ) % 36000;
@@ -1796,14 +1768,14 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
             nAngle *= 655;
             nAngle += 0x8000;
             nAngle &=~0xffff;   // nAngle auf volle Gradzahl runden
-            mpEscherEx->AddOpt( ESCHER_Prop_Rotation, nAngle );
+            aPropOpt.AddOpt( ESCHER_Prop_Rotation, nAngle );
             mpEscherEx->SetGroupSnapRect( mpEscherEx->GetGroupLevel(),
                                             rObj.GetRect() );
             mpEscherEx->SetGroupLogicRect( mpEscherEx->GetGroupLevel(),
                                             rObj.GetRect() );
         }
         rObj.SetAngle( nAngle );
-        mpEscherEx->EndCount( ESCHER_OPT, 3 );
+        aPropOpt.Commit( mpEscherEx->GetStream() );
 
         // write the childanchor
         mpEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
@@ -1947,7 +1919,7 @@ void ImplEESdrWriter::ImplWritePage(
 
 // -------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
+void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt, BOOL bEdge )
 {
     UINT32 nLineFlags = 0x80008;
     ESCHER_LineEnd eLineEnd = ESCHER_LineArrowEnd;
@@ -1985,9 +1957,9 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
                         }
                     }
                 }
-                mpEscherEx->AddOpt( ESCHER_Prop_lineStartArrowLength, 1 );
-                mpEscherEx->AddOpt( ESCHER_Prop_lineStartArrowWidth, 1 );
-                mpEscherEx->AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
+                rPropOpt.AddOpt( ESCHER_Prop_lineStartArrowLength, 1 );
+                rPropOpt.AddOpt( ESCHER_Prop_lineStartArrowWidth, 1 );
+                rPropOpt.AddOpt( ESCHER_Prop_lineStartArrowhead, eLineEnd );
                 nLineFlags |= 0x100010;
             }
         }
@@ -2027,9 +1999,9 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
                         }
                     }
                 }
-                mpEscherEx->AddOpt( ESCHER_Prop_lineEndArrowLength, 1 );
-                mpEscherEx->AddOpt( ESCHER_Prop_lineEndArrowWidth, 1 );
-                mpEscherEx->AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
+                rPropOpt.AddOpt( ESCHER_Prop_lineEndArrowLength, 1 );
+                rPropOpt.AddOpt( ESCHER_Prop_lineEndArrowWidth, 1 );
+                rPropOpt.AddOpt( ESCHER_Prop_lineEndArrowhead, eLineEnd );
                 nLineFlags |= 0x100010;
             }
         }
@@ -2046,7 +2018,7 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
         {
             case LineStyle_NONE :
             {
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );         // 80000
+                rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );            // 80000
                 rObj.SetShadow( rObj.GetShadow() ^ 1 );
             }
             break;
@@ -2062,7 +2034,7 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
                     {
                         case DashStyle_ROUND :
                         case DashStyle_ROUNDRELATIVE :
-                            mpEscherEx->AddOpt( ESCHER_Prop_lineEndCapStyle, 0 );   // Style Round setzen
+                            rPropOpt.AddOpt( ESCHER_Prop_lineEndCapStyle, 0 );  // Style Round setzen
                         break;
                     }
                     if ( ((!(pLineDash->Dots )) ||
@@ -2100,13 +2072,13 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
 
                         }
                     }
-                    mpEscherEx->AddOpt( ESCHER_Prop_lineDashing, eDash );
+                    rPropOpt.AddOpt( ESCHER_Prop_lineDashing, eDash );
                 }
             }
             case LineStyle_SOLID :
             default:
             {
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
+                rPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
             }
             break;
         }
@@ -2114,29 +2086,29 @@ void ImplEESdrWriter::ImplWriteLineBundle( ImplEESdrObject& rObj, BOOL bEdge )
         {
             UINT32 nLineColor = mpEscherEx->GetColor(
                                     *((UINT32*)rObj.GetUsrAny().getValue()) );
-            mpEscherEx->AddOpt( ESCHER_Prop_lineColor, nLineColor );
-            mpEscherEx->AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
+            rPropOpt.AddOpt( ESCHER_Prop_lineColor, nLineColor );
+            rPropOpt.AddOpt( ESCHER_Prop_lineBackColor, nLineColor ^ 0xffffff );
         }
     }
 
     UINT32 nLineSize = (UINT32)rObj.ImplGetInt32PropertyValue( ::rtl::OUString::createFromAscii("LineWidth"));
 
     if ( nLineSize > 1 )
-        mpEscherEx->AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );   // 100TH MM -> PT , 1PT = 12700 EMU
+        rPropOpt.AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );  // 100TH MM -> PT , 1PT = 12700 EMU
     if ( bEdge == FALSE )
     {
-        mpEscherEx->AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
-        mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+        rPropOpt.AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
     }
 }
 
 
 // -------------------------------------------------------------------
 
-void ImplEESdrWriter::ImplWriteFillBundle( ImplEESdrObject& rObj, BOOL bEdge )
+void ImplEESdrWriter::ImplWriteFillBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt, BOOL bEdge )
 {
-    mpEscherEx->AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
-    mpEscherEx->AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
+    rPropOpt.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapNone );
+    rPropOpt.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
 
     UINT32 nFillBackColor = 0;
     rObj.SetShadow( rObj.GetShadow() | 2 );
@@ -2153,17 +2125,17 @@ void ImplEESdrWriter::ImplWriteFillBundle( ImplEESdrObject& rObj, BOOL bEdge )
                 if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("FillGradient") ))
                 {
                     awt::Gradient* pVCLGradient = (awt::Gradient*)rObj.GetUsrAny().getValue();
-                    mpEscherEx->WriteGradient( pVCLGradient );
+                    mpEscherEx->WriteGradient( rPropOpt, pVCLGradient );
                 }
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+                rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
             }
             break;
 
             case FillStyle_BITMAP :
             {
-                ImplGetGraphic( rObj, ::rtl::OUString::createFromAscii("FillBitmap"), TRUE );
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-                mpEscherEx->AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
+                ImplGetGraphic( rObj, rPropOpt, ::rtl::OUString::createFromAscii("FillBitmap"), TRUE );
+                rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+                rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor  );
             }
             break;
             case FillStyle_HATCH :
@@ -2176,28 +2148,28 @@ void ImplEESdrWriter::ImplWriteFillBundle( ImplEESdrObject& rObj, BOOL bEdge )
                 if ( nTransparency != 100 )
                 {
                     if ( nTransparency )    // opacity
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
+                        rPropOpt.AddOpt( ESCHER_Prop_fillOpacity, ( ( 100 - nTransparency ) << 16 ) / 100 );
                     if ( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("FillColor") ))
                     {
                         UINT32 nFillColor = mpEscherEx->GetColor(
                                     *((UINT32*)rObj.GetUsrAny().getValue()) );
                         nFillBackColor = nFillColor ^ 0xffffff;
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillColor, nFillColor );
+                        rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
                     }
-                    mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-                    mpEscherEx->AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
+                    rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+                    rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
                     break;
                 }
             }
             case FillStyle_NONE :
             {
-                mpEscherEx->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
+                rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100000 );
                 rObj.SetShadow( rObj.GetShadow() ^ 2 );
             }
             break;
         }
     }
-    ImplWriteLineBundle( rObj, bEdge );
+    ImplWriteLineBundle( rObj, rPropOpt, bEdge );
 }
 
 
@@ -2213,7 +2185,7 @@ BOOL ImplEESdrWriter::ImplIsMetaFile( ImplEESdrObject& rObj )
 
 // -------------------------------------------------------------------
 
-BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj,
+BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                 const sal_Unicode* pName, BOOL bFillBitmap )
 {
     if( rObj.ImplGetPropertyValue( pName ) )
@@ -2238,7 +2210,7 @@ BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj,
                     if( aName.compareToAscii("FillBitmap") == 0 &&
                         rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("FillBitmapTile")) &&
                         ::cppu::any2bool( rObj.GetUsrAny() ) )
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillType,
+                        rPropOpt.AddOpt( ESCHER_Prop_fillType,
                                             ESCHER_FillTexture );
                     else
                     {
@@ -2252,10 +2224,10 @@ BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj,
                             aBitmapEx.Rotate( rObj.GetAngle(), COL_TRANSPARENT );
                             rObj.SetAngle( 0 );
                         }
-                        mpEscherEx->AddOpt( ESCHER_Prop_fillType,
+                        rPropOpt.AddOpt( ESCHER_Prop_fillType,
                                             ESCHER_FillPicture );
                     }
-                    mpEscherEx->AddOpt( bFillBitmap ? ESCHER_Prop_fillBlip
+                    rPropOpt.AddOpt( bFillBitmap ? ESCHER_Prop_fillBlip
                                                     : ESCHER_Prop_pib,
                                         mpEscherEx->AddGraphic( *mpPicStrm,
                                             Graphic( aBitmapEx ) ), TRUE );
@@ -2306,7 +2278,7 @@ BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj,
                         return FALSE;
 
                     aDest.Seek( STREAM_SEEK_TO_END );
-                    mpEscherEx->AddOpt( ESCHER_Prop_pib, mpEscherEx->AddEMF(
+                    rPropOpt.AddOpt( ESCHER_Prop_pib, mpEscherEx->AddEMF(
                                         *mpPicStrm, (const BYTE*)aDest.GetData(), aDest.Tell(),
                                         aRect ), TRUE );
                 }
@@ -2315,7 +2287,7 @@ BOOL ImplEESdrWriter::ImplGetGraphic( ImplEESdrObject& rObj,
                     Sequence<sal_Int8> aWmfSeq(*(Sequence<sal_Int8>*)aOLE2Any.getValue());
                     const sal_Int8* pAry = aWmfSeq.getArray();
                     if ( pAry )
-                        mpEscherEx->AddOpt( ESCHER_Prop_pib, mpEscherEx->AddWMF(
+                        rPropOpt.AddOpt( ESCHER_Prop_pib, mpEscherEx->AddWMF(
                                             *mpPicStrm, (BYTE*)pAry, aWmfSeq.getLength(),
                                             aRect ), TRUE );
                 }

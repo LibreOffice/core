@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: sj $ $Date: 2000-12-11 14:35:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,9 @@
 
 #ifndef _ESCHESDO_HXX
 #define _ESCHESDO_HXX
-
+#ifndef _SVX_ESCHEREX_HXX
+#include "escherex.hxx"
+#endif
 #ifndef _COM_SUN_STAR_AWT_FONTDESCRIPTOR_HPP_
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #endif
@@ -331,19 +333,19 @@ protected:
                                     ImplEESdrSolverContainer& rSolver,
                                     ImplEESdrPageType ePageType );  // returns ShapeID
 
-            void                ImplFlipBoundingBox( ImplEESdrObject& rObj,
+            void                ImplFlipBoundingBox( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                     const Point& rRefPoint );
             BOOL                ImplGetText( ImplEESdrObject& rObj );
-            void                ImplWriteLineBundle( ImplEESdrObject& rObj,
+            void                ImplWriteLineBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                      BOOL bEdge );
-            void                ImplWriteFillBundle( ImplEESdrObject& rObj,
+            void                ImplWriteFillBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                      BOOL bEdge );
-            void                ImplWriteTextBundle( ImplEESdrObject& rObj );
-            void                ImplWriteAny( ImplEESdrObject& rObj,
+            void                ImplWriteTextBundle( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt );
+            void                ImplWriteAny( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                                 UINT32 nFlags, BOOL bBezier,
                                                 Polygon* pPolygon = NULL );
             BOOL                ImplIsMetaFile( ImplEESdrObject& rObj );
-            BOOL                ImplGetGraphic( ImplEESdrObject& rObj,
+            BOOL                ImplGetGraphic( ImplEESdrObject& rObj, EscherPropertyContainer& rPropOpt,
                                             const sal_Unicode*, BOOL bFillBitmap );
             void                ImplWriteAdditionalText(
                                                 ImplEESdrObject& rObj,
