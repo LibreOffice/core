@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:18:48 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -614,18 +614,24 @@ void ScTransferObj::InitDocShell()
                 pDestDoc->ShowCol( nCol, 0, FALSE );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
-        for (nRow=nStartY; nRow<=nEndY; nRow++)
+
+        ScBitMaskCompressedArray< SCROW, BYTE> & rDestRowFlags =
+            pDestDoc->GetRowFlagsArrayModifiable(0);
+        ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray(
+                    nSrcTab), nStartY, nEndY);
+        for ( ; aIter; ++aIter )
         {
-            BYTE nSourceFlags = pDoc->GetRowFlags( nRow, nSrcTab );
+            nRow = aIter.GetPos();
+            BYTE nSourceFlags = *aIter;
             if ( nSourceFlags & CR_HIDDEN )
                 pDestDoc->ShowRow( nRow, 0, FALSE );
             else
             {
-                pDestDoc->SetRowHeight( nRow, 0, pDoc->GetRowHeight( nRow, nSrcTab ) );
+                pDestDoc->SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
 
                 //  if height was set manually, that flag has to be copied, too
                 if ( nSourceFlags & CR_MANUALSIZE )
-                    pDestDoc->SetRowFlags( nRow, 0, pDestDoc->GetRowFlags( nRow, 0 ) | CR_MANUALSIZE );
+                    rDestRowFlags.OrValue( nRow, CR_MANUALSIZE);
             }
         }
 
@@ -681,8 +687,7 @@ void ScTransferObj::InitDocShell()
 
         for (nCol=0; nCol<nStartX; nCol++)
             nPosX += pDestDoc->GetColWidth( nCol, 0 );
-        for (nRow=0; nRow<nStartY; nRow++)
-            nPosY += pDestDoc->FastGetRowHeight( nRow, 0 );
+        nPosY += pDestDoc->FastGetRowHeight( 0, nStartY-1, 0 );
         nPosX = (long) ( nPosX * HMM_PER_TWIPS );
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
 
