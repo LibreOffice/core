@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virtualmachine.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 11:40:56 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 11:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ VirtualMachine::~VirtualMachine()
 
 void VirtualMachine::acquireInitialContextClassLoader(JNIEnv * pEnv)
 {
+#ifdef SOLAR_JAVA
     jclass aClass = pEnv->FindClass("java/lang/Thread");
     jmethodID aMethod1 = pEnv->GetStaticMethodID(aClass, "currentThread",
                                                  "()Ljava/lang/Thread;");
@@ -142,10 +143,12 @@ void VirtualMachine::acquireInitialContextClassLoader(JNIEnv * pEnv)
         OSL_ENSURE(m_aInitialContextClassLoader != 0,
                    "JNI: NewGlobalRef failed");
     }
+#endif
 }
 
 void VirtualMachine::releaseInitialContextClassLoader() const
 {
+#ifdef SOLAR_JAVA
     if (m_aInitialContextClassLoader != 0)
     {
         JNIEnv * pEnv;
@@ -159,10 +162,14 @@ void VirtualMachine::releaseInitialContextClassLoader() const
             OSL_ENSURE(n == JNI_OK, "JNI: DetachCurrentThread failed");
         }
     }
+#endif
 }
 
 JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
 {
+#ifndef SOLAR_JAVA
+    return 0;
+#else
     OSL_ENSURE(pAttached != 0, "bad parameter");
     JNIEnv * pEnv;
     jint n = m_pVm->GetEnv(reinterpret_cast< void ** >(&pEnv), m_nVersion);
@@ -190,10 +197,13 @@ JNIEnv * VirtualMachine::attachThread(bool * pAttached) const
     else
         *pAttached = false;
     return pEnv;
+#endif
 }
 
 void VirtualMachine::detachThread() const
 {
+#ifdef SOLAR_JAVA
     jint n = m_pVm->DetachCurrentThread();
     OSL_ENSURE(n == JNI_OK, "JNI: DetachCurrentThread failed");
+#endif
 }
