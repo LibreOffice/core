@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-09 15:20:42 $
+ *  last change: $Author: hro $ $Date: 2001-05-14 07:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,6 +1119,7 @@ rtl_TextEncoding SAL_CALL osl_getThreadTextEncoding()
     if( -1 == gTextEncodingKey )
     {
         rtl_TextEncoding defaultEncoding;
+        const char *pszEncoding;
 
         oslMutex         globalMutex = *osl_getGlobalMutex();
 
