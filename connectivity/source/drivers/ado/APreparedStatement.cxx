@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:57:43 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
     {   // special handling for parameters
-        // we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å"
+        /* we recusive replace all occurences of ? in the statement and replace them with name like "æ¬å" */
         sal_Int32 nParameterCount = 0;
         ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
