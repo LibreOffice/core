@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-21 14:39:20 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 16:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
