@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:21:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2443,9 +2443,9 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
     aRszMvHdlPt.X() = 0, aRszMvHdlPt.Y() = 0;
 
     BYTE nMouseTabCol = 0;
-    BOOL bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
-         rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons() &&
-        !rSh.IsTableMode();
+    const BOOL bTmp = !rSh.IsDrawCreate() && !pApplyTempl && !rSh.IsInSelect() &&
+         rMEvt.GetClicks() == 1 && MOUSE_LEFT == rMEvt.GetButtons();
+
     if (  bTmp &&
          0 != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPos ) ) &&
          !rSh.IsObjSelectable( aDocPos ) )
@@ -2458,28 +2458,31 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         }
         // <--
 
-        //Zuppeln von Tabellenspalten aus dem Dokument heraus.
-        if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
-            rView.SetTabColFromDoc( TRUE );
-        else
-            rView.SetTabRowFromDoc( TRUE );
+        if ( !rSh.IsTableMode() )
+        {
+            //Zuppeln von Tabellenspalten aus dem Dokument heraus.
+            if(SW_TABCOL_VERT == nMouseTabCol || SW_TABCOL_HORI == nMouseTabCol)
+                rView.SetTabColFromDoc( TRUE );
+            else
+                rView.SetTabRowFromDoc( TRUE );
 
-        rView.SetTabColFromDocPos( aDocPos );
-        rView.InvalidateRulerPos();
-        SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
-        rBind.Update();
-        if ( RulerColumnDrag( rView , rMEvt,
-                (SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol)) )
-        {
-            rView.SetTabColFromDoc( FALSE );
-            rView.SetTabRowFromDoc( FALSE );
+            rView.SetTabColFromDocPos( aDocPos );
             rView.InvalidateRulerPos();
+            SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
             rBind.Update();
-            bCallBase = FALSE;
-        }
-        else
-        {
-            return;
+            if ( RulerColumnDrag( rView , rMEvt,
+                    (SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol)) )
+            {
+                rView.SetTabColFromDoc( FALSE );
+                rView.SetTabRowFromDoc( FALSE );
+                rView.InvalidateRulerPos();
+                rBind.Update();
+                bCallBase = FALSE;
+            }
+            else
+            {
+                return;
+            }
         }
     }
     // #i23726#
@@ -3236,22 +3239,25 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     BYTE nMouseTabCol;
-    if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() &&
-        !rSh.IsTableMode())
+    if( !bIsDocReadOnly && bInsWin && !pApplyTempl && !rSh.IsInSelect() )
     {
         if ( SW_TABCOL_NONE != (nMouseTabCol = rSh.WhichMouseTabCol( aDocPt ) ) &&
              !rSh.IsObjSelectable( aDocPt ) )
         {
             USHORT nPointer = USHRT_MAX;
+            bool bChkTblSel = false;
+
             switch ( nMouseTabCol )
             {
                 case SW_TABCOL_VERT :
                 case SW_TABROW_HORI :
                     nPointer = POINTER_VSIZEBAR;
+                    bChkTblSel = true;
                     break;
                 case SW_TABROW_VERT :
                 case SW_TABCOL_HORI :
                     nPointer = POINTER_HSIZEBAR;
+                    bChkTblSel = true;
                     break;
                 // --> FME 2004-07-30 #i20126# Enhanced table selection
                 case SW_TABSEL_HORI :
@@ -3275,8 +3281,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 // <--
             }
 
-            if ( USHRT_MAX != nPointer )
+            if ( USHRT_MAX != nPointer &&
+                // --> FME 2004-10-20 #i35543#
+                // Enhanced table selection is explicitely allowed in table mode
+                ( !bChkTblSel || !rSh.IsTableMode() ) )
+                // <--
+            {
                 SetPointer( nPointer );
+            }
 
             return;
         }
