@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:24 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ PushButton RID_SCBTN_HFEDIT
     Text [ english_us ] = "~Edit..." ;
     Text[ chinese_simplified ] = "编辑(~E)...";
     Text[ russian ] = "������...";
-    Text[ polish ] = "Edytuj...";
+    Text[ polish ] = "~Edytuj...";
     Text[ japanese ] = "編集(~E)...";
     Text[ chinese_traditional ] = "編輯(~E)...";
     Text[ arabic ] = "�����...";
@@ -91,7 +91,19 @@ PushButton RID_SCBTN_HFEDIT
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Edita...";
     Text[ thai ] = "แ~ก้ไข...";
+    Text[ czech ] = "Upravit...";
+    Text[ hebrew ] = "‮עריכה...‬";
+    Text[ hindi ] = "~संपादन...";
 };
+
+
+
+
+
+
+
+
+
 
 
 
