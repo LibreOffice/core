@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-24 13:18:38 $
+ *  last change: $Author: oj $ $Date: 2002-06-27 07:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,11 +920,12 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
         OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
         ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
-        for(;aIter != m_vRowList.end();++aIter)
+        ::std::vector<OTableRow*>::iterator aEnd = m_vRowList.end();
+        for(;aIter != aEnd;++aIter)
         {
             OSL_ENSURE(*aIter,"OTableRow is null!");
             OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-            if(!pField)
+            if ( !pField || (*aIter)->IsReadOnly() )
                 continue;
 
             Reference<XPropertySet> xColumn;
@@ -994,7 +995,7 @@ void OTableController::loadData()
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenstruktur bereits vorhanden, Struktur leeren
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
-    for(;aIter != m_vRowList.begin();++aIter)
+    for(;aIter != m_vRowList.end();++aIter)
         delete *aIter;
     m_vRowList.clear();
 
@@ -1117,7 +1118,7 @@ void OTableController::loadData()
 
     OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
 
-    sal_Bool bReadRow = !isAddAllowed();
+    bool bReadRow = !isAddAllowed();
     for(sal_Int32 i=m_vRowList.size(); i<128; i++ )
     {
         pTabEdRow = new OTableRow();
@@ -1140,17 +1141,22 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
     if(xKeys.is())
     {
         Reference<XPropertySet> xProp;
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
+        sal_Int32 nCount = xKeys->getCount();
+        for(sal_Int32 i=0;i< nCount;++i)
         {
             xKeys->getByIndex(i) >>= xProp;
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
+            OSL_ENSURE(xProp.is(),"Key is invalid: NULL!");
+            if ( xProp.is() )
             {
-                xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
-                xKeyColumns = xKeyColsSup->getColumns();
-                break;
+                sal_Int32 nKeyType = 0;
+                xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                if(KeyType::PRIMARY == nKeyType)
+                {
+                    xKeyColsSup = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                    OSL_ENSURE(xKeyColsSup.is(),"Columnsupplier is null!");
+                    xKeyColumns = xKeyColsSup->getColumns();
+                    break;
+                }
             }
         }
     }
@@ -1209,17 +1215,22 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                 OTypeInfoMap::const_iterator aIter = m_aTypeInfo.begin();
                 for(;aIter != m_aTypeInfo.end();++aIter)
                 {
-                    if(aIter->second->bAutoIncrement)
+                    // OJ: we don't want to set an autoincrement column to be key
+                    // because we don't have the possiblity to know how to create
+                    // such auto increment column later on
+                    // so until we know how to do it, we create a column without autoincrement
+                    //  if ( !aIter->second->bAutoIncrement )
                     {   // therefor we have searched
-                        pTypeInfo = aIter->second;
-                        break;
+                        if(aIter->second->nType == DataType::INTEGER)
+                        {
+                            pTypeInfo = aIter->second; // alternative
+                            break;
+                        }
+                        else if(!pTypeInfo && aIter->second->nType == DataType::DOUBLE)
+                            pTypeInfo = aIter->second; // alternative
+                        else if(!pTypeInfo && aIter->second->nType == DataType::REAL)
+                            pTypeInfo = aIter->second; // alternative
                     }
-                    else if(aIter->second->nType == DataType::INTEGER)
-                        pTypeInfo = aIter->second; // alternative
-                    else if(!pTypeInfo && aIter->second->nType == DataType::DOUBLE)
-                        pTypeInfo = aIter->second; // alternative
-                    else if(!pTypeInfo && aIter->second->nType == DataType::REAL)
-                        pTypeInfo = aIter->second; // alternative
                 }
                 if(!pTypeInfo) // just a fallback
                     pTypeInfo = getTypeInfoByType(DataType::VARCHAR);
@@ -1230,7 +1241,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
                     pNewRow->SetFieldType( pTypeInfo );
                     OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-                    pActFieldDescr->SetAutoIncrement(pTypeInfo->bAutoIncrement);
+                    pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
                     pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
 
@@ -1272,16 +1283,17 @@ void OTableController::alterColumns()
 
     ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? (xMetaData->storesMixedCaseQuotedIdentifiers() ? true : false): sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
+    ::std::vector<OTableRow*>::iterator aEnd = m_vRowList.end();
     // first look for columns where something other than the name changed
-    for(sal_Int32 nPos = 0;aIter != m_vRowList.end();++aIter,++nPos)
+    for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
     {
         OSL_ENSURE(*aIter,"OTableRow is null!");
         OFieldDescription* pField = (*aIter)->GetActFieldDescr();
-        if(!pField)
+        if ( !pField || (*aIter)->IsReadOnly() )
             continue;
 
         Reference<XPropertySet> xColumn;
-        if(xColumns->hasByName(pField->GetName()))
+        if ( xColumns->hasByName(pField->GetName()) )
         {
             aColumns[pField->GetName()] = sal_True;
             xColumns->getByName(pField->GetName()) >>= xColumn;
