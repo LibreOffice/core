@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 14:04:32 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 14:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ void EditBrowseBoxImpl::disposeCell()
     }
     catch(const Exception&)
     {
+        OSL_ENSURE( sal_False, "EditBrowseBoxImpl::disposeCell: caught an exception while disposing the AccessibleCell!" );
     }
 }
 // -----------------------------------------------------------------------------
@@ -151,7 +152,7 @@ void EditBrowseBox::GrabTableFocus()
         aController->GetWindow().GrabFocus();
 }
 //------------------------------------------------------------------------------
-void EditBrowseBox::DetermineFocus()
+void EditBrowseBox::DetermineFocus( const sal_uInt16 _nGetFocusFlags )
 {
     sal_Bool bFocus = sal_False;
     for (Window* pWindow = Application::GetFocusWindow();
@@ -171,6 +172,29 @@ void EditBrowseBox::DetermineFocus()
 
             m_aImpl->m_pFocusCell  = NULL;
             m_aImpl->m_xActiveCell = NULL;
+        }
+
+        if ( GetBrowserFlags( ) & EBBF_SMART_TAB_TRAVEL )
+        {
+            if  (   bHasFocus                           // we got the focus
+                &&  ( _nGetFocusFlags & GETFOCUS_TAB )  // using the TAB key
+                )
+            {
+                long nRowCount = GetRowCount();
+                USHORT nColCount = ColCount();
+
+                if ( ( nRowCount > 0 ) && ( nColCount > 0 ) )
+                {
+                    if ( _nGetFocusFlags & GETFOCUS_FORWARD )
+                    {
+                        GoToRowColumnId( 0, GetColumnId( 1 ) );
+                    }
+                    else if ( _nGetFocusFlags & GETFOCUS_BACKWARD )
+                    {
+                        GoToRowColumnId( nRowCount - 1, GetColumnId( nColCount -1 ) );
+                    }
+                }
+            }
         }
     }
 }

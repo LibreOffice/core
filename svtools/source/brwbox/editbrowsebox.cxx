@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-08 11:43:35 $
+ *  last change: $Author: fs $ $Date: 2002-09-10 14:32:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ namespace svt
 // .......................................................................
     namespace
     {
+        //..............................................................
         sal_Bool isHiContrast(Window* _pWindow)
         {
             OSL_ENSURE(_pWindow,"Window must be not null!");
@@ -139,6 +140,18 @@ namespace svt
                     break;
             }
             return pIter && pIter->GetBackground().GetColor().IsDark();
+        }
+
+        //..............................................................
+        sal_uInt16 getRealGetFocusFlags( Window* _pWindow )
+        {
+            sal_uInt16 nFlags = 0;
+            while ( _pWindow && !nFlags )
+            {
+                nFlags = _pWindow->GetGetFocusFlags( );
+                _pWindow = _pWindow->GetParent();
+            }
+            return nFlags;
         }
     }
 
@@ -312,7 +325,7 @@ namespace svt
     void EditBrowseBox::LoseFocus()
     {
         BrowseBox::LoseFocus();
-        DetermineFocus();
+        DetermineFocus( 0 );
     }
 
     //------------------------------------------------------------------------------
@@ -325,7 +338,7 @@ namespace svt
         if (IsEditing() && Controller()->GetWindow().IsVisible())
             Controller()->GetWindow().GrabFocus();
 
-        DetermineFocus();
+        DetermineFocus( getRealGetFocusFlags( this ) );
     }
 
     //------------------------------------------------------------------------------
@@ -762,8 +775,12 @@ namespace svt
         switch (rEvt.GetType())
         {
             case EVENT_GETFOCUS:
+                DetermineFocus( getRealGetFocusFlags( this ) );
+                break;
+
             case EVENT_LOSEFOCUS:
-                DetermineFocus();
+                DetermineFocus( 0 );
+                break;
         }
         return BrowseBox::Notify(rEvt);
     }
@@ -1501,6 +1518,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/08/08 11:43:35  oj
+ *  #102008# only send a ACCESSIBLE_ACTIVE_DESCENDANT_EVENT event when we have the focus
+ *
  *  Revision 1.13  2002/07/26 07:44:24  bm
  *  #101228# new browser flag EBBF_HANDLE_COLUMN_TEXT for displaying text in column
  *           0 in the handle column (like in the normal browse-box).
