@@ -214,16 +214,13 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-NOUTF8][-L l1,l2,...] -LF l1,l2 \n" );
+    fprintf( stdout, "Syntax: HELPEX[-p Prj][-r PrjRoot]-i FileIn ( -o FileOut | -x path -y relfile )[-m DataBase][-e][-b][-u][-L l1,l2,...][-QQ] -LF l1,l2 \n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
     fprintf( stdout, " FileIn:   Source file (*.lng)\n" );
     fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
     fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-    fprintf( stdout, " -e: no function\n" );
-    fprintf( stdout, " -b: no function\n" );
-    fprintf( stdout, " -u: no function\n" );
-    fprintf( stdout, " -NOUTF8: disable UTF8 as language independent encoding\n" );
+    fprintf( stdout, " -QQ: quiet output\n" );
     fprintf( stdout, " -L: Restrict the handled languages. l1,l2,... are elements of (en-US,fr,de...)\n" );
     fprintf( stdout, "     A fallback language can be defined like this: l1=f1.\n" );
     fprintf( stdout, "     f1, f2,... are also elements of (en-US,fr,de...)\n" );
