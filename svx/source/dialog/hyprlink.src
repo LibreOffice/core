@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:34:25 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ czech ] = "Název URL";
         QuickHelpText[ hebrew ] = "Name der URL";
         QuickHelpText[ hindi ] = "URL नाम";
+        QuickHelpText[ slovak ] = "Názov URL";
     };
     FixedText FT_URL
     {
@@ -146,6 +147,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         Text[ czech ] = "URL:";
         Text[ hebrew ] = "URL:";
         Text[ hindi ] = "URL:";
+        Text[ slovak ] = "URL:";
     };
     ComboBox CB_URL
     {
@@ -184,6 +186,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ czech ] = "Internetová URL";
         QuickHelpText[ hebrew ] = "Sammelbox für Internet-URLs";
         QuickHelpText[ hindi ] = "इन्टरनेट् URLs";
+        QuickHelpText[ slovak ] = "Internetové URL";
     };
     ToolBox TB
     {
@@ -223,6 +226,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ czech ] = "Hypertextový odkaz";
                 Text[ hebrew ] = "Hyperlink";
                 Text[ hindi ] = "हाइपरलिंक";
+                Text[ slovak ] = "Hypertextový odkaz";
             };
             ToolBoxItem
             {
@@ -256,6 +260,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ czech ] = "Záložka";
                 Text[ hebrew ] = "‮סימניה‬";
                 Text[ hindi ] = "पृष्ठसंकेत";
+                Text[ slovak ] = "Záložka";
             };
             ToolBoxItem
             {
@@ -289,6 +294,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ czech ] = "Hledat";
                 Text[ hebrew ] = "Search";
                 Text[ hindi ] = "खोज";
+                Text[ slovak ] = "Hľadať";
             };
         };
     };
@@ -317,6 +323,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text[ czech ] = "Vložit hypertextový odkaz";
     Text[ hebrew ] = "HiperLink‮הוספת ‬";
     Text[ hindi ] = "हाइपरलिंक जोड़ो";
+    Text[ slovak ] = "Vložiť hypertextový odkaz";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -353,6 +360,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ czech ] = "Jako text";
             Text[ hebrew ] = "Als ~Text";
             Text[ hindi ] = "टेक्स्ट् जैसे";
+            Text[ slovak ] = "Ako text";
         };
         MenuItem
         {
@@ -384,6 +392,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ czech ] = "Jako tlačítko";
             Text[ hebrew ] = "Als ~Button";
             Text[ hindi ] = "~बटन जैसे";
+            Text[ slovak ] = "Ako ~tlačidlo";
         };
     };
 };
@@ -421,6 +430,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ czech ] = "Toto URL lze ověřit pouze po navázání spojení. Navázat spojení?";
     Message[ hebrew ] = "Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden?";
     Message[ hindi ] = "केवल कनेक्शन् करने के पश्चात् इस URL को प्रमाणित कर सकते है । कनेक्शन् स्थापित करना चाहते है?";
+    Message[ slovak ] = "Toto URL môže byť overené iba po nadviazaní spojenia. Nadviazať spojenie?";
 };
 QueryBox RID_SVXQB_DONTEXIST
 {
@@ -455,7 +465,10 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ czech ] = "Toto URL neexistuje. Přesto vložit?";
     Message[ hebrew ] = "Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden?";
     Message[ hindi ] = "इस URL अस्तित्व में नहीं है । किसी तरह जोड़ना है?";
+    Message[ slovak ] = "Toto URL neexistuje. Napriek tomu vložiť?";
 };
+
+
 
 
 
