@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 18:02:18 $
+ *  last change: $Author: obo $ $Date: 2004-03-15 12:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,12 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -107,8 +113,14 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
-#include <comphelper/extract.hxx>
+//#ifndef _COMPHELPER_EXTRACT_HXX_
+//#include <comphelper/extract.hxx>
+//#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 
 using namespace dbaui;
@@ -119,6 +131,8 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::beans;
 
 //------------------------------------------------------------------------------
@@ -189,7 +203,7 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         {
             if (m_xColumns->hasByName(*pBegin))
             {
-                ::cppu::extractInterface(xColumn,m_xColumns->getByName(*pBegin));
+                xColumn.set(m_xColumns->getByName(*pBegin),UNO_QUERY);
                 OSL_ENSURE(xColumn.is(),"DlgFilterCrit::DlgFilterCrit: Column is null!");
             }
             else
@@ -212,10 +226,12 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
         aLB_WHEREFIELD3.SelectEntryPos(0);
 
         // Jetzt die Felder mit den Kriterien des SQL-Strings fuellen
+
         if ( rFieldName.Len() )
         {
             ::rtl::OUString sFieldName( rFieldName );
-            if ( m_xColumns->hasByName( sFieldName ) && ::cppu::extractInterface( xColumn, m_xColumns->getByName( sFieldName ) ) )
+            xColumn = getColumn( sFieldName );
+            if ( xColumn.is() )
                 m_xQueryComposer->appendFilterByColumn(xColumn);
         }
 
@@ -271,33 +287,43 @@ DlgFilterCrit::~DlgFilterCrit()
 #define LbPos(x)        ((x).GetSelectEntryPos())
 
 //------------------------------------------------------------------------------
-OSQLPredicateType DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16 nCount) const
+sal_Int32 DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16 nCount) const
 {
-    OSQLPredicateType ePreType;
+    sal_Int32 ePreType;
 
     if(nCount == 10)
     {
         switch(nPos)
         {
         case 0:
+            ePreType = SQLFilterOperator::EQUAL;
+            break;
         case 1:
+            ePreType = SQLFilterOperator::NOT_EQUAL;
+            break;
         case 2:
+            ePreType = SQLFilterOperator::LESS;
+            break;
         case 3:
+            ePreType = SQLFilterOperator::LESS_EQUAL;
+            break;
         case 4:
+            ePreType = SQLFilterOperator::GREATER;
+            break;
         case 5:
-            ePreType = (OSQLPredicateType)(nPos + SQL_PRED_EQUAL);
+            ePreType = SQLFilterOperator::GREATER_EQUAL;
             break;
         case 6:
-            ePreType = SQL_PRED_LIKE;
+            ePreType = SQLFilterOperator::LIKE;
             break;
         case 7:
-            ePreType = SQL_PRED_NOTLIKE;
+            ePreType = SQLFilterOperator::NOT_LIKE;
             break;
         case 8:
-            ePreType = SQL_PRED_ISNULL;
+            ePreType = SQLFilterOperator::SQLNULL;
             break;
         case 9:
-            ePreType = SQL_PRED_ISNOTNULL;
+            ePreType = SQLFilterOperator::NOT_SQLNULL;
             break;
         }
     }
@@ -306,18 +332,28 @@ OSQLPredicateType DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16
         switch(nPos)
         {
         case 0:
+            ePreType = SQLFilterOperator::EQUAL;
+            break;
         case 1:
+            ePreType = SQLFilterOperator::NOT_EQUAL;
+            break;
         case 2:
+            ePreType = SQLFilterOperator::LESS;
+            break;
         case 3:
+            ePreType = SQLFilterOperator::LESS_EQUAL;
+            break;
         case 4:
+            ePreType = SQLFilterOperator::GREATER;
+            break;
         case 5:
-            ePreType = (OSQLPredicateType)(nPos + SQL_PRED_EQUAL);
+            ePreType = SQLFilterOperator::GREATER_EQUAL;
             break;
         case 6:
-            ePreType = SQL_PRED_ISNULL;
+            ePreType = SQLFilterOperator::SQLNULL;
             break;
         case 7:
-            ePreType = SQL_PRED_ISNOTNULL;
+            ePreType = SQLFilterOperator::NOT_SQLNULL;
             break;
         }
     }
@@ -326,61 +362,102 @@ OSQLPredicateType DlgFilterCrit::GetOSQLPredicateType(sal_uInt16 nPos,sal_uInt16
         switch(nPos)
         {
         case 0:
-            ePreType = SQL_PRED_LIKE;
+            ePreType = SQLFilterOperator::LIKE;
             break;
         case 1:
-            ePreType = SQL_PRED_NOTLIKE;
+            ePreType = SQLFilterOperator::NOT_LIKE;
             break;
         }
     }
     return ePreType;
 }
 //------------------------------------------------------------------------------
-sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox& rListBox) const
+sal_uInt16 DlgFilterCrit::GetSelectionPos(sal_Int32 eType,const ListBox& rListBox) const
 {
     sal_uInt16 nPos;
     switch(eType)
     {
-        case SQL_PRED_EQUAL:
+        case SQLFilterOperator::EQUAL:
             nPos = 0;
             break;
-        case SQL_PRED_NOTEQUAL:
+        case SQLFilterOperator::NOT_EQUAL:
             nPos = 1;
             break;
-        case SQL_PRED_LESS:
+        case SQLFilterOperator::LESS:
             nPos = 2;
             break;
-        case SQL_PRED_LESSOREQUAL:
+        case SQLFilterOperator::LESS_EQUAL:
             nPos = 3;
             break;
-        case SQL_PRED_GREATER:
+        case SQLFilterOperator::GREATER:
             nPos = 4;
             break;
-        case SQL_PRED_GREATEROREQUAL:
+        case SQLFilterOperator::GREATER_EQUAL:
             nPos = 5;
             break;
-        case SQL_PRED_NOTLIKE:
+        case SQLFilterOperator::NOT_LIKE:
             nPos = rListBox.GetEntryCount() > 2 ? rListBox.GetEntryCount()-3 : 0;
             break;
-        case SQL_PRED_LIKE:
+        case SQLFilterOperator::LIKE:
             nPos = rListBox.GetEntryCount() > 2 ? rListBox.GetEntryCount()-4 : 1;
             break;
-        case SQL_PRED_ISNULL:
+        case SQLFilterOperator::SQLNULL:
             nPos = rListBox.GetEntryCount()-2;
             break;
-        case SQL_PRED_ISNOTNULL:
+        case SQLFilterOperator::NOT_SQLNULL:
             nPos = rListBox.GetEntryCount()-1;
             break;
     }
     return nPos;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue) const
+void DlgFilterCrit::getCondition(const ListBox& _rField,const ListBox& _rComp,const Edit& _rValue,PropertyValue& _rFilter) const
 {
+    try
+    {
+        _rFilter.Name = _rField.GetSelectEntry();
+        Reference< XPropertySet > xColumn = getQueryColumn(_rFilter.Name);
+        if ( xColumn.is() && xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
+        {
+            xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= _rFilter.Name;
+        }
+    }
+    catch(Exception)
+    {
+    }
+
+    _rFilter.Handle = GetOSQLPredicateType(_rComp.GetSelectEntryPos(),_rComp.GetEntryCount());
+    if ( SQLFilterOperator::SQLNULL != _rFilter.Handle && _rFilter.Handle != SQLFilterOperator::NOT_SQLNULL )
+    {
+        String sPredicateValue = m_aPredicateInput.getPredicateValue( _rValue.GetText(), getMatchingColumn( _rValue ), sal_True );
+        ::Replace_OS_PlaceHolder( sPredicateValue );
+        _rFilter.Value <<= ::rtl::OUString(sPredicateValue);
+    }
+/*
     ::rtl::OUString aFilter(_rField.GetSelectEntry());
-    // first quote the field name
+
+    Reference< XPropertySet > xColumn = getQueryColumn(aFilter);
     ::rtl::OUString aQuote  = m_xMetaData.is() ? m_xMetaData->getIdentifierQuoteString() : ::rtl::OUString();
-    aFilter = ::dbtools::quoteName(aQuote,aFilter);
+    if ( xColumn.is() )
+    {
+        ::rtl::OUString sRealName,sTableName;
+        xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
+        xColumn->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
+        if(sTableName.indexOf('.',0) != -1)
+        {
+            ::rtl::OUString aCatlog,aSchema,aTable;
+            ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatlog,aSchema,aTable,::dbtools::eInDataManipulation);
+            ::dbtools::composeTableName(m_xMetaData,aCatlog,aSchema,aTable,sTableName,sal_True,::dbtools::eInDataManipulation);
+        }
+        else
+            sTableName = ::dbtools::quoteName(aQuote,sTableName);
+
+        aFilter =  sTableName;
+        aFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
+        aFilter += ::dbtools::quoteName(aQuote,sRealName);
+    }
+    else
+        aFilter = ::dbtools::quoteName(aQuote,aFilter);
 
     aFilter += ::rtl::OUString::createFromAscii(" ");
     sal_Bool bNeedText = sal_True;
@@ -427,6 +504,7 @@ sal_uInt16 DlgFilterCrit::GetSelectionPos(OSQLPredicateType eType,const ListBox&
         aFilter += sPredicateValue;
     }
     return aFilter;
+    */
 }
 
 //------------------------------------------------------------------------------
@@ -437,6 +515,47 @@ Reference< XPropertySet > DlgFilterCrit::getColumn( const ::rtl::OUString& _rFie
     {
         if ( m_xColumns.is() && m_xColumns->hasByName( _rFieldName ) )
             m_xColumns->getByName( _rFieldName ) >>= xColumn;
+
+        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
+        if ( xColumns.is() && !xColumn.is() )
+        {
+            Sequence< ::rtl::OUString> aSeq = xColumns->getElementNames();
+            const ::rtl::OUString* pIter = aSeq.getConstArray();
+            const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+            for(;pIter != pEnd;++pIter)
+            {
+                Reference<XPropertySet> xProp(xColumns->getByName(*pIter),UNO_QUERY);
+                if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME) )
+                {
+                    ::rtl::OUString sRealName;
+                    xProp->getPropertyValue(PROPERTY_REALNAME)  >>= sRealName;
+                    if ( sRealName == _rFieldName )
+                    {
+                        if ( m_xColumns.is() && m_xColumns->hasByName( *pIter ) )
+                            m_xColumns->getByName( *pIter ) >>= xColumn;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    catch( const Exception& e )
+    {
+        e;  // make compiler happy
+        DBG_ERROR( "DlgFilterCrit::getMatchingColumn: caught an exception!" );
+    }
+
+    return xColumn;
+}
+//------------------------------------------------------------------------------
+Reference< XPropertySet > DlgFilterCrit::getQueryColumn( const ::rtl::OUString& _rFieldName ) const
+{
+    Reference< XPropertySet > xColumn;
+    try
+    {
+        Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
+        if ( xColumns.is() && xColumns->hasByName( _rFieldName ) )
+            xColumns->getByName( _rFieldName ) >>= xColumn;
     }
     catch( const Exception& e )
     {
@@ -494,36 +613,75 @@ IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 //------------------------------------------------------------------------------
 void DlgFilterCrit::GetFilterList() const
 {
-    PropertyValue aItem;
-    ::rtl::OUString aFilter;
+    Sequence<Sequence<PropertyValue> > aFilter;
+    aFilter.realloc(1);
+    //  ::rtl::OUString aFilter;
 
     if( LbPos(aLB_WHEREFIELD1) != 0 )
-        aFilter = getCondition(aLB_WHEREFIELD1,aLB_WHERECOMP1,aET_WHEREVALUE1);
+    {
+        aFilter[0].realloc(1);
+        getCondition(aLB_WHEREFIELD1,aLB_WHERECOMP1,aET_WHEREVALUE1,aFilter[0][0]);
+    }
 
     if( LbPos(aLB_WHEREFIELD2) != 0 )
     {
-        if(aFilter.getLength())
+
+        PropertyValue* pPos;
+        if ( aLB_WHERECOND2.GetSelectEntryPos() )
         {
-            if(aLB_WHERECOND2.GetSelectEntryPos())
-                aFilter += ::rtl::OUString::createFromAscii(" OR ");
-            else
-                aFilter += ::rtl::OUString::createFromAscii(" AND ");
+            sal_Int32 nPos = aFilter.getLength();
+            aFilter.realloc( nPos + 1);
+            aFilter[nPos].realloc( 1);
+            pPos = &aFilter[nPos][0];
         }
-        aFilter += getCondition(aLB_WHEREFIELD2,aLB_WHERECOMP2,aET_WHEREVALUE2);
+        else
+        {
+            sal_Int32 nPos = aFilter.getLength() - 1;
+            sal_Int32 nAndPos = aFilter[nPos].getLength();
+            aFilter[nPos].realloc( aFilter[nPos].getLength() + 1);
+            pPos = &aFilter[nPos][nAndPos];
+        }
+        getCondition(aLB_WHEREFIELD2,aLB_WHERECOMP2,aET_WHEREVALUE2,*pPos);
     }
 
     if( LbPos(aLB_WHEREFIELD3) != 0 )
     {
-        if(aFilter.getLength())
+        PropertyValue* pPos;
+        if ( aLB_WHERECOND3.GetSelectEntryPos() )
         {
-            if(aLB_WHERECOND3.GetSelectEntryPos())
-                aFilter += ::rtl::OUString::createFromAscii(" OR ");
-            else
-                aFilter += ::rtl::OUString::createFromAscii(" AND ");
+            sal_Int32 nPos = aFilter.getLength();
+            aFilter.realloc( nPos + 1);
+            aFilter[nPos].realloc( 1);
+            pPos = &aFilter[nPos][0];
         }
-        aFilter += getCondition(aLB_WHEREFIELD3,aLB_WHERECOMP3,aET_WHEREVALUE3);
+        else
+        {
+            sal_Int32 nPos = aFilter.getLength() - 1;
+            sal_Int32 nAndPos = aFilter[nPos].getLength();
+            aFilter[nPos].realloc( aFilter[nPos].getLength() + 1);
+            pPos = &aFilter[nPos][nAndPos];
+        }
+        getCondition(aLB_WHEREFIELD3,aLB_WHERECOMP3,aET_WHEREVALUE3,*pPos);
     }
-    m_xQueryComposer->setFilter(aFilter);
+    try
+    {
+        Reference<XMultiServiceFactory> xFac(m_xConnection,UNO_QUERY);
+        if ( xFac.is() )
+        {
+            Reference< XSingleSelectQueryAnalyzer> xAnalyzer( xFac->createInstance( SERVICE_NAME_SINGLESELECTQUERYCOMPOSER ),UNO_QUERY);
+            Reference< XSingleSelectQueryComposer> xComposer(xAnalyzer,UNO_QUERY);
+            if ( xComposer.is() )
+            {
+                xAnalyzer->setQuery(m_xQueryComposer->getQuery());
+                xComposer->setStructuredFilter(aFilter);
+                m_xQueryComposer->setFilter(xAnalyzer->getFilter());
+            }
+        }
+    }
+    catch(Exception)
+    {
+        OSL_ENSURE(0,"Could create filter!");
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -542,34 +700,34 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
     // remove the predicate from the condition
     switch(_rItem.Handle)
     {
-        case SQL_PRED_EQUAL:
+        case SQLFilterOperator::EQUAL:
             //  aStr.Erase(0,1);
             break;
-        case SQL_PRED_NOTEQUAL:
+        case SQLFilterOperator::NOT_EQUAL:
             aStr.Erase(0,2);
             break;
-        case SQL_PRED_LESS:
+        case SQLFilterOperator::LESS:
             aStr.Erase(0,1);
             break;
-        case SQL_PRED_LESSOREQUAL:
+        case SQLFilterOperator::LESS_EQUAL:
             aStr.Erase(0,2);
             break;
-        case SQL_PRED_GREATER:
+        case SQLFilterOperator::GREATER:
             aStr.Erase(0,1);
             break;
-        case SQL_PRED_GREATEROREQUAL:
+        case SQLFilterOperator::GREATER_EQUAL:
             aStr.Erase(0,2);
             break;
-        case SQL_PRED_NOTLIKE:
+        case SQLFilterOperator::NOT_LIKE:
             aStr.Erase(0,8);
             break;
-        case SQL_PRED_LIKE:
+        case SQLFilterOperator::LIKE:
             aStr.Erase(0,4);
             break;
-        case SQL_PRED_ISNULL:
+        case SQLFilterOperator::SQLNULL:
             aStr.Erase(0,7);
             break;
-        case SQL_PRED_ISNOTNULL:
+        case SQLFilterOperator::NOT_SQLNULL:
             aStr.Erase(0,11);
             break;
     }
@@ -606,12 +764,17 @@ void DlgFilterCrit::SetLine( sal_uInt16 nIdx,const PropertyValue& _rItem,sal_Boo
 
     if ( pColumnListControl && pPredicateListControl && pPredicateValueControl )
     {
+        ::rtl::OUString sName;
+        if ( xColumn.is() )
+            xColumn->getPropertyValue(PROPERTY_NAME) >>= sName;
+        else
+            sName = _rItem.Name;
         // select the appropriate field name
-        SelectField( *pColumnListControl, _rItem.Name );
+        SelectField( *pColumnListControl, sName );
         ListSelectHdl( pColumnListControl );
 
         // select the appropriate condition
-        pPredicateListControl->SelectEntryPos( GetSelectionPos( (OSQLPredicateType)_rItem.Handle, *pPredicateListControl ) );
+        pPredicateListControl->SelectEntryPos( GetSelectionPos( _rItem.Handle, *pPredicateListControl ) );
 
         // initially normalize this value
         ::rtl::OUString aString( aStr );
@@ -770,7 +933,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
 
     Reference<XPropertySet> xColumn;
     if (m_xColumns->hasByName(aName))
-        ::cppu::extractInterface(xColumn,m_xColumns->getByName(aName));
+        xColumn.set(m_xColumns->getByName(aName),UNO_QUERY);
     if(xColumn.is())
     {
         sal_Int32 nDataType;
@@ -827,8 +990,8 @@ String DlgFilterCrit::BuildWherePart()
 void DlgFilterCrit::addQuoting(const ::rtl::OUString& _rColumnName,String& _rCondition) const
 {
     Reference<XPropertySet> xColumn;
-    if(m_xColumns->hasByName(_rColumnName))
-        m_xColumns->getByName(_rColumnName) >>= xColumn;
+    if ( m_xColumns->hasByName(_rColumnName) )
+        xColumn.set(m_xColumns->getByName(_rColumnName),UNO_QUERY);
 
     if(!m_xMetaData.is() || !xColumn.is())
         return;
