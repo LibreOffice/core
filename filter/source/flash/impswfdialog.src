@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impswfdialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:07:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:22:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ ModalDialog DLG_OPTIONS
         Text [ dutch ] = "1: min. kwaliteit\n100: max. kwaliteit" ;
         Text [ swedish ] = "1: min. kvalitet\n100: max. kvalitet" ;
         Text [ danish ] = "~1: min. kvalitet\n100: maks. kvalitet" ;
-        Text [ portuguese_brazilian ] = "0: min. Qualidade\n100: max. Qualidade" ;
+        Text [ portuguese_brazilian ] = "0: Qualidade min.\n100: Qualidade máx." ;
         Text [ portuguese ] = "1: min. qualidade\n100: max. qualidade" ;
         Text[ chinese_simplified ] = "1: æœ€å·®è´¨é‡ \n100: æœ€ä½³è´¨é‡";
         Text[ russian ] = "1: íèçêîå êà÷åñòâî\n100: âûñîêîå êà÷åñòâî";
@@ -226,14 +226,14 @@ ModalDialog DLG_OPTIONS
         TabStop = TRUE ;
     };
 
-    Text[ language_user1 ] = "EM Dec 2002: DON NOT TRANSLATE \"Macromedia Flash (SWF)\" because it is a product name. Only translate \"Options\"";
+    Text[ language_user1 ] = "; EM Dec 2002: DON NOT TRANSLATE \"Macromedia Flash (SWF)\" because it is a product name. Only translate \"Options\"";
     Text[ portuguese ] = "Flash Options";
     Text[ russian ] = "Flash Options";
     Text[ spanish ] = "Opciones Macromedia Flash (SWF)";
     Text[ italian ] = "Opzioni Macromedia Flash (SWF)";
     Text[ swedish ] = "Alternativ för Macromedia Flash (SWF)";
     Text[ polish ] = "Flash Options";
-    Text[ portuguese_brazilian ] = "Flash Options";
+    Text[ portuguese_brazilian ] = "Opções Flash";
     Text[ japanese ] = "Macromedia Flash (SWF) ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
     Text[ korean ] = "Macromedia Flash (SWF) ì˜µì…˜";
     Text[ turkish ] = "Macromedia Flash (SWF) Seçenekleri";
@@ -252,6 +252,7 @@ ModalDialog DLG_OPTIONS
     Text[ hindi ] = "Macromedia Flash (SWF) Options";
     Text[ slovak ] = "Macromedia Flash (SWF) voÄ¾by";
 };
+
 
 
 
