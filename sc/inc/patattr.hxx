@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-10 17:22:59 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,16 @@ public:
     void                    ClearItems( const USHORT* pWhich );
 
     void                    DeleteUnchanged( const ScPatternAttr* pOldAttrs );
+
+    /** Static helper function to fill a font object from the passed item set. */
+    static void             GetFont( Font& rFont, const SfxItemSet& rItemSet,
+                                        ScAutoFontColorMode eAutoMode,
+                                        OutputDevice* pOutDev = NULL,
+                                        const Fraction* pScale = NULL,
+                                        const SfxItemSet* pCondSet = NULL,
+                                        BYTE nScript = 0, const Color* pBackConfigColor = NULL,
+                                        const Color* pTextConfigColor = NULL );
+    /** Fills a font object from the own item set. */
     void                    GetFont( Font& rFont, ScAutoFontColorMode eAutoMode,
                                         OutputDevice* pOutDev = NULL,
                                         const Fraction* pScale = NULL,
