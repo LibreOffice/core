@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-13 12:00:41 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 21:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ ModalDialog DLG_ASS
         Text[ polish ] = "Wybierz typ przejœcia slajdu";
         Text[ portuguese_brazilian ] = "Choose your slide change";
         Text[ japanese ] = "‰æ–ÊØ‚è‘Ö‚¦•û–@";
-        Text[ chinese_simplified ] = "ÇëÄúÑ¡Ôñ»ÃµÆÆ¬¸ü»»";
+        Text[ chinese_simplified ] = "ÇëÑ¡ÔñÒ»¸ö¸ü»»µÄ»ÃµÆÆ¬";
         Text[ chinese_traditional ] = "½Ð±zÅÜ´«§ë¼v¤ù";
         Text[ arabic ] = "ÇÎÊÑ ØÑíÞÉ ÊÛííÑ ÇáÔÑÇÆÍ";
         Text[ greek ] = "ÅðéëïãÞ áëëáãÞò äéáöáíåéþí";
@@ -571,8 +571,8 @@ ModalDialog DLG_ASS
         Text[ polish ] = "Efekt:";
         Text[ portuguese_brazilian ] = "~Effect:";
         Text[ japanese ] = "Œø‰Ê(~E):";
-        Text[ chinese_simplified ] = "Ð§¹û(~E)";
-        Text[ chinese_traditional ] = "®ÄªG(~E)";
+        Text[ chinese_simplified ] = "Ð§¹û(~E)£º";
+        Text[ chinese_traditional ] = "®ÄªG(~E)¡G";
         Text[ arabic ] = "ÇáÊÃËíÑ:";
         Text[ greek ] = "ÅöÝ:";
         Text[ korean ] = "È¿°ú:";
@@ -609,8 +609,8 @@ ModalDialog DLG_ASS
         Text[ polish ] = "Szy~bkoœæ:";
         Text[ portuguese_brazilian ] = "~Speed:";
         Text[ japanese ] = "½Ëß°ÄÞ(~S):";
-        Text[ chinese_simplified ] = "ËÙ¶È(~S)";
-        Text[ chinese_traditional ] = "³t«×(~S)";
+        Text[ chinese_simplified ] = "ËÙ¶È(~S)£º";
+        Text[ chinese_traditional ] = "³t«×(~S)¡G";
         Text[ arabic ] = "ÇáÓÑÚÉ:";
         Text[ greek ] = "Ôá÷ýôçôá:";
         Text[ korean ] = "¼Óµµ:";
@@ -647,7 +647,7 @@ ModalDialog DLG_ASS
         Text[ polish ] = "Wybierz typ prezentacji";
         Text[ portuguese_brazilian ] = "Choose the presentation kind";
         Text[ japanese ] = "ÌßÚ¾ÞÝÃ°¼®Ý‚ÌŽí—Þ‚ð‘I‘ð‚µ‚Ä‚­‚¾‚³‚¢";
-        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÑÝÊ¾ÎÄ¸åµÄÀàÐÍ";
+        Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÑÝÊ¾ÎÄ¸åµÄÀàÐÍ";
         Text[ chinese_traditional ] = "½Ð±z¿ï¾ÜÂ²³øÃþ«¬";
         Text[ arabic ] = "ÇÎÊÑ äæÚ ÇáÚÑÖ ÇáÊÞÏíãí";
         Text[ greek ] = "ÅðéëÝîôå ôïí ôýðï ôçò ðáñïõóßáóçò";
@@ -874,7 +874,7 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Beskriv dine grundlæggende ideer" ;
         Text [ portuguese ] = "Descreva as suas ideias de base" ;
         Text [ portuguese_brazilian ] = "Nennen Sie Ihre Grundgedanken" ;
-        Text[ chinese_simplified ] = "ÇëÄúÊäÈëÄúµÄ»ù±¾ÉèÏë";
+        Text[ chinese_simplified ] = "ÇëÊäÈëÄúµÄ»ù±¾ÉèÏë";
         Text[ russian ] = "Íàçîâèòå Âàøè îñíîâíûå èäåè";
         Text[ polish ] = "Przedstaw g³ówne idee";
         Text[ japanese ] = "•\\Ž¦‚·‚é€–Ú‚ð“ü—Í‚µ‚Ü‚·B";
@@ -902,7 +902,7 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Hvad er dit navn eller dit firmas navn?" ;
         Text [ portuguese ] = "Qual é o seu nome ou o nome da sua empresa?" ;
         Text [ portuguese_brazilian ] = "Wie ist Ihr Name oder der Name Ihrer Firma?" ;
-        Text[ chinese_simplified ] = "ÄúµÄÐÕÃûºÍ¹«Ë¾µÄÃû³Æ£¿";
+        Text[ chinese_simplified ] = "ÇëÊäÈëÄúµÄÐÕÃûºÍ¹«Ë¾Ãû³Æ¡£";
         Text[ russian ] = "Íàçîâèòå Âàøå èìÿ è íàèìåíîâàíèå Âàøåé îðãàíèçàöèè";
         Text[ polish ] = "Podaj proszê swoje nazwisko oraz nazwê swojej firmy";
         Text[ japanese ] = "”­•\\ŽÒ‚Ì–¼‘O‚Ü‚½‚Í‰ïŽÐ–¼‚Í?";
@@ -938,7 +938,7 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Hvilket emne skal præsentationen have?" ;
         Text [ portuguese ] = "Qual é o tema da sua apresentação?" ;
         Text [ portuguese_brazilian ] = "Was ist der Themenbereich Ihrer Präsentation?" ;
-        Text[ chinese_simplified ] = "ÄúµÄÑÝÊ¾ÎÄ¸åµÄÖ÷Ìâ°üÀ¨ÄÄÐ©·½Ãæ£¿";
+        Text[ chinese_simplified ] = "ÑÝÊ¾ÎÄ¸åµÄÖ÷Ìâ°üÀ¨ÄÄÐ©·½Ãæ£¿";
         Text[ russian ] = "Íàçîâèòå òåìó Âàøåé ïðåçåíòàöèè";
         Text[ polish ] = "Co jest tematem twojej prezentacji?";
         Text[ japanese ] = "ÌßÚ¾ÞÝÃ°¼®Ý‚ÌÃ°Ï”ÍˆÍ‚Í?";
@@ -973,7 +973,7 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Yderligere ideer som skal præsenteres?" ;
         Text [ portuguese ] = "Outras ideias a apresentar?" ;
         Text [ portuguese_brazilian ] = "Weitere darzustellende Gedanken?" ;
-        Text[ chinese_simplified ] = "»¹Òª¼ÓÈëÆäËûµÄÉèÏë£¿";
+        Text[ chinese_simplified ] = "»¹ÐèÒª¼ÓÈëÆäËûµÄÉèÏë£¿";
         Text[ russian ] = "Íàçîâèòå Âàøè äîïîëíèòåëüíûå èäåè";
         Text[ polish ] = "Dodatkowe pomys³y do uwzglêdnienia w prezentacji?";
         Text[ japanese ] = "‚»‚Ì‘¼‚É•\\Ž¦‚µ‚½‚¢î•ñ‚Í?";
@@ -1133,7 +1133,7 @@ ModalDialog DLG_ASS
         Text [ danish ] = "Næste >>" ;
         Text [ portuguese_brazilian ] = "~Weiter >>" ;
         Text [ portuguese ] = "~Seguinte >>" ;
-        Text[ chinese_simplified ] = "¼ÌÐø(~N)";
+        Text[ chinese_simplified ] = "¼ÌÐø(~N) >>";
         Text[ russian ] = "~Äàëåå >>";
         Text[ polish ] = "Dalej >>";
         Text[ japanese ] = "ŽŸ‚Ö(~N) >>";
