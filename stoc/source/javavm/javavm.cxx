@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 12:44:43 $
+ *  last change: $Author: jl $ $Date: 2002-08-12 10:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,17 +1320,16 @@ static void initVMConfiguration(JVM * pjvm,
     if( bPropsFail ||bPropsFail2)
     {
         getJavaPropsFromEnvironment(&jvm);
-        // at this point we have to find out if there is a classpath and runtimelib. If not
+        // at this point we have to find out if there is a classpath. If not
         // we'll throw the exception, because Java is misconfigured and won't run.
         OUString usRuntimeLib= jvm.getRuntimeLib();
         OUString usUserClasspath= jvm.getUserClasspath();
         OUString usSystemClasspath= jvm.getSystemClasspath();
-        if( usRuntimeLib.getLength() == 0
-            || (usUserClasspath.getLength() == 0 && usSystemClasspath.getLength() == 0))
+        if( usUserClasspath.getLength() == 0 && usSystemClasspath.getLength() == 0)
         {
             if (bPropsFail)
                 throw confexc;
-            throw new JavaNotConfiguredException(OUSTR("There is neither a java.ini (or javarc) " \
+            throw JavaNotConfiguredException(OUSTR("There is neither a java.ini (or javarc) " \
                                                        "and there are no environment variables set which " \
                                                        "contain configuration data"), Reference<XInterface>());
         }
