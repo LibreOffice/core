@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:29:46 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:20:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,7 +543,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     Control TLB_REPLACE
     {
-        //HelpId = HID_OFACTL_AUTOCORR_REPLACE ;
+        HelpId = HID_OPTIONS_DICT_EDIT_ENTRIES_LIST;
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 191 , 58 ) ;
         Border = TRUE ;
