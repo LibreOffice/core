@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoimap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-27 20:00:31 $
+ *  last change: $Author: cl $ $Date: 2001-03-29 11:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
     {
     case IMAP_OBJ_RECTANGLE:
         {
-            const Rectangle aRect( ((IMapRectangleObject*)&rMapObject)->GetRectangle() );
+            const Rectangle aRect( ((IMapRectangleObject*)&rMapObject)->GetRectangle(sal_False) );
             maBoundary.X = aRect.Left();
             maBoundary.Y = aRect.Top();
             maBoundary.Width = aRect.GetWidth();
@@ -301,8 +301,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMAP_OBJ_CIRCLE:
         {
-            mnRadius = (sal_Int32)((IMapCircleObject*)&rMapObject)->GetRadius();
-            const Point aPoint( ((IMapCircleObject*)&rMapObject)->GetCenter() );
+            mnRadius = (sal_Int32)((IMapCircleObject*)&rMapObject)->GetRadius(sal_False);
+            const Point aPoint( ((IMapCircleObject*)&rMapObject)->GetCenter(sal_False) );
 
             maCenter.X = aPoint.X();
             maCenter.Y = aPoint.Y();
@@ -310,7 +310,7 @@ SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const Sv
         break;
     case IMAP_OBJ_POLYGON:
         {
-            const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon() );
+            const Polygon aPoly( ((IMapPolygonObject*)&rMapObject)->GetPolygon(sal_False) );
 
             const USHORT nCount = aPoly.GetSize();
             maPolygon.realloc( nCount );
@@ -350,14 +350,14 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
     case IMAP_OBJ_RECTANGLE:
         {
             const Rectangle aRect( maBoundary.X, maBoundary.Y, maBoundary.X + maBoundary.Width - 1, maBoundary.Y + maBoundary.Height - 1 );
-            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aDescription, aTarget, aName, mbIsActive );
+            pNewIMapObject = new IMapRectangleObject( aRect, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
         }
         break;
 
     case IMAP_OBJ_CIRCLE:
         {
             const Point aCenter( maCenter.X, maCenter.Y );
-            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aDescription, aTarget, aName, mbIsActive );
+            pNewIMapObject = new IMapCircleObject( aCenter, mnRadius, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
         }
         break;
 
@@ -373,7 +373,7 @@ IMapObject* SvUnoImageMapObject::createIMapObject() const
                 aPoly.SetPoint( aPoint, nPoint );
             }
 
-            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aDescription, aTarget, aName, mbIsActive );
+            pNewIMapObject = new IMapPolygonObject( aPoly, aURL, aDescription, aTarget, aName, mbIsActive, sal_False );
         }
         break;
     }
