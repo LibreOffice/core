@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-17 14:59:27 $
+#   last change: $Author: obo $ $Date: 2004-11-19 09:42:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -354,17 +354,6 @@ SHL4VERSIONMAP= exports.map
 # --- Targets -----------------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-ALLTAR : $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/commandimagelist.ilst
-
-$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))$/commandimagelist.ilst .PHONY :
-    +-$(RM) $@ $@.$(INPATH)
-.IF "$(use_shell)"!="4nt"
-    $(FIND) $(SOLARSRC)/res/commandimagelist -name "*.png" | sed "s#$(SOLARSRC)#%GLOBAL%#" > $@.$(INPATH)
-.ELSE			# "$(use_shell)"!="4nt"
-    $(FIND) $(SOLARSRC)/res/commandimagelist -name "*.png" | sed "s/$(SOLARSRC:s/\/\\/)/%%GLOBAL%%/" > $@.$(INPATH)
-.ENDIF			# "$(use_shell)"!="4nt"
-    +$(RENAME) $@.$(INPATH) $@
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
