@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:27:51 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:51:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,6 +272,7 @@ XML_CONSTASCII_ACTION( sXML_cone, "cone" );
 XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
 XML_CONSTASCII_ACTION( sXML_connection_name, "connection-name" );
 XML_CONSTASCII_ACTION( sXML_connector, "connector" );
+XML_CONSTASCII_ACTION( sXML_continue, "continue" );
 XML_CONSTASCII_ACTION( sXML_consecutive_numbering, "consecutive-numbering" );
 XML_CONSTASCII_ACTION( sXML_constant, "constant" );
 XML_CONSTASCII_ACTION( sXML_contains_header, "contains-header");

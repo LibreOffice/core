@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,12 +78,6 @@ using namespace ::com::sun::star::beans;
 
 //______________________________________________________________________________
 
-inline void lcl_RemoveState( XMLPropertyState* pState )
-{
-    pState->mnIndex = -1;
-    pState->maValue.clear();
-}
-
 inline sal_Bool lcl_HasSameLineWidth( const table::BorderLine& rLine1, const table::BorderLine& rLine2 )
 {
     return  (rLine1.InnerLineWidth == rLine2.InnerLineWidth) &&
@@ -96,6 +90,20 @@ inline sal_Bool operator==( const table::BorderLine& rLine1, const table::Border
     return  (rLine1.Color == rLine2.Color) &&
             lcl_HasSameLineWidth( rLine1, rLine2 );
 }
+
+inline void lcl_RemoveState( XMLPropertyState* pState )
+{
+    pState->mnIndex = -1;
+    pState->maValue.clear();
+}
+
+void lcl_RemoveStateIfZero16( XMLPropertyState* pState )
+{
+    sal_Int16   nValue;
+    if( (pState->maValue >>= nValue) && !nValue )
+        lcl_RemoveState( pState );
+}
+
 
 //______________________________________________________________________________
 // helper struct to handle equal XMLPropertyState's for page, header and footer
@@ -254,6 +262,9 @@ void XMLPageMasterPropSetMapper::ContextFilter(
     XMLPropertyState*       pPMFooterMinHeight  = NULL;
     XMLPropertyState*       pPMFooterDynamic    = NULL;
 
+    XMLPropertyState*       pPMScaleTo          = NULL;
+    XMLPropertyState*       pPMScaleToPages     = NULL;
+
     for( ::std::vector< XMLPropertyState >::iterator pProp = rPropState.begin(); pProp != rPropState.end(); pProp++ )
     {
         sal_Int16 nContextId    = GetEntryContextId( pProp->mnIndex );
@@ -295,6 +306,8 @@ void XMLPageMasterPropSetMapper::ContextFilter(
             case CTF_PM_FOOTERHEIGHT:       pPMFooterHeight     = pProp;    break;
             case CTF_PM_FOOTERMINHEIGHT:    pPMFooterMinHeight  = pProp;    break;
             case CTF_PM_FOOTERDYNAMIC:      pPMFooterDynamic    = pProp;    break;
+            case CTF_PM_SCALETO:            pPMScaleTo          = pProp;    break;
+            case CTF_PM_SCALETOPAGES:       pPMScaleToPages     = pProp;    break;
         }
     }
 
@@ -323,5 +336,10 @@ void XMLPageMasterPropSetMapper::ContextFilter(
     }
     if( pPMFooterDynamic )
         lcl_RemoveState( pPMFooterDynamic );
+
+    if( pPMScaleTo )
+        lcl_RemoveStateIfZero16( pPMScaleTo );
+    if( pPMScaleToPages )
+        lcl_RemoveStateIfZero16( pPMScaleToPages );
 }
 

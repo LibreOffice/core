@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterStyleMap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,9 +117,9 @@ const XMLPropertyMapEntry aXMLPageMasterStyleMap[] =
     { "PrintObjects",           XML_NAMESPACE_STYLE,    sXML_print,                     XML_PM_TYPE_PRINTOBJECTS | MID_FLAG_MULTI_PROPERTY | MID_FLAG_MERGE_ATTRIBUTE,  0 },
     { "PrintZeroValues",        XML_NAMESPACE_STYLE,    sXML_print,                     XML_PM_TYPE_PRINTZEROVALUES | MID_FLAG_MERGE_ATTRIBUTE,                         0 },
     { "PrintDownFirst",         XML_NAMESPACE_STYLE,    sXML_print_page_order,          XML_PM_TYPE_PRINTPAGEORDER,                             0 },
-    { "FirstPageNumber",        XML_NAMESPACE_STYLE,    sXML_first_page_number,         XML_TYPE_NUMBER16,                                      0 },
-    { "PageScale",              XML_NAMESPACE_STYLE,    sXML_scale_to,                  XML_TYPE_NUMBER16,                                      0 },
-    { "ScaleToPages",           XML_NAMESPACE_STYLE,    sXML_scale_to_pages,            XML_TYPE_NUMBER16,                                      0 },
+    { "FirstPageNumber",        XML_NAMESPACE_STYLE,    sXML_first_page_number,         XML_PM_TYPE_FIRSTPAGENUMBER,                            0 },
+    { "PageScale",              XML_NAMESPACE_STYLE,    sXML_scale_to,                  XML_TYPE_NUMBER16,                                      CTF_PM_SCALETO },
+    { "ScaleToPages",           XML_NAMESPACE_STYLE,    sXML_scale_to_pages,            XML_TYPE_NUMBER16,                                      CTF_PM_SCALETOPAGES },
 // header
     { "HeaderHeight",                   XML_NAMESPACE_SVG,      sXML_height,                    XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_HEADERHEIGHT },
     { "HeaderHeight",                   XML_NAMESPACE_FO,       sXML_min_height,                XML_TYPE_MEASURE | MID_FLAG_SPECIAL_ITEM_EXPORT,        CTF_PM_HEADERMINHEIGHT },

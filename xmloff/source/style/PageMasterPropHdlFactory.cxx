@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdlFactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2000-10-20 16:30:27 $
+ *  last change: $Author: dr $ $Date: 2000-10-23 09:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _XMLOFF_PROPERTYHANDLER_BASICTYPES_HXX
 #include "xmlbahdl.hxx"
 #endif
+#ifndef _XMLOFF_NAMEDBOOLPROPERTYHANDLER_HXX
+#include "NamedBoolPropertyHdl.hxx"
+#endif
 
 #ifndef _XMLOFF_PAGEMASTERPROPHDL_HXX_
 #include "PageMasterPropHdl.hxx"
@@ -80,6 +83,8 @@
 #include "PageMasterStyleMap.hxx"
 #endif
 
+
+using namespace ::rtl;
 
 //______________________________________________________________________________
 
@@ -114,7 +119,9 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLPMPropHdl_PaperTrayNumber();
             break;
             case XML_PM_TYPE_PRINTORIENTATION:
-                pHdl = new XMLBoolValuesPropHdl( sXML_landscape, sXML_portrait );
+                pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_landscape ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_portrait ) ) );
             break;
             case XML_PM_TYPE_PRINTANNOTATIONS:
                 pHdl = new XMLPMPropHdl_Print( sXML_annotations );
@@ -141,7 +148,12 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLPMPropHdl_Print( sXML_zero_values );
             break;
             case XML_PM_TYPE_PRINTPAGEORDER:
-                pHdl = new XMLBoolValuesPropHdl( sXML_ttb, sXML_ltr );
+                pHdl = new XMLNamedBoolPropertyHdl(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ttb ) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_ltr ) ) );
+            break;
+            case XML_PM_TYPE_FIRSTPAGENUMBER:
+                pHdl = new XMLNumberNonePropHdl( sXML_continue, 2 );
             break;
         }
 
