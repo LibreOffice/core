@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-23 10:53:47 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:14:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1057,13 +1057,9 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     if ( !bIncludeFiltered )
     {
         //  manually find number of non-filtered rows
-        SCROW nPastedCount = 0;
-        SCROW nTestEndRow = aSrcRange.aEnd.Row();
-        SCTAB nFlagTab = aSrcRange.aStart.Tab();
-        ScDocument* pDoc = pDocShell->GetDocument();
-        for (SCROW nRow = aSrcRange.aStart.Row(); nRow <= nTestEndRow; nRow++)
-            if ( ( pDoc->GetRowFlags( nRow, nFlagTab ) & CR_FILTERED ) == 0 )
-                ++nPastedCount;
+        SCROW nPastedCount = pDocShell->GetDocument()->GetRowFlagsArray(
+                aSrcRange.aStart.Tab()).CountForCondition(
+                aSrcRange.aStart.Row(), aSrcRange.aEnd.Row(), CR_FILTERED, 0);
         if ( nPastedCount == 0 )
             nPastedCount = 1;
         aDestEnd.SetRow( aNewDestPos.Row() + nPastedCount - 1 );
