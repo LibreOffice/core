@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:29:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 09:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
@@ -536,6 +537,7 @@ void __EXPORT ScDrawView::MarkListHasChanged()
 
     SdrOle2Obj* pOle2Obj = NULL;
     SdrGrafObj* pGrafObj = NULL;
+    SdrMediaObj* pMediaObj = NULL;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -565,6 +567,12 @@ void __EXPORT ScDrawView::MarkListHasChanged()
         {
             pGrafObj = (SdrGrafObj*) pObj;
             pViewSh->SetGraphicShell(TRUE);
+            bSubShellSet = TRUE;
+        }
+        else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
+        {
+            pMediaObj = (SdrMediaObj*) pObj;
+            pViewSh->SetMediaShell(TRUE);
             bSubShellSet = TRUE;
         }
         else if (pObj->GetObjIdentifier() != OBJ_TEXT   // Verhindern, das beim Anlegen
