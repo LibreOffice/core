@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp3.c,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:42:18 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ char            *filename;
         return (TRUE);
 }
 
-addfile(fp, filename)
+void addfile(fp, filename)
 FILE            *fp;                    /* Open file pointer            */
 char            *filename;              /* Name of the file             */
 /*
@@ -133,7 +133,7 @@ char            *filename;              /* Name of the file             */
         wrongline = TRUE;               /* Force out initial #line      */
 }
 
-setincdirs()
+void setincdirs()
 /*
  * Append system-specific directories to the include directory list.
  * Called only when cpp is started.
@@ -322,7 +322,7 @@ char            *argv[];
 
                 case 'S':
                     sizp = size_table;
-                    if (isdatum = (*ap != '*')) /* If it's just -S,     */
+                    if ((isdatum = (*ap != '*'))) /* If it's just -S,     */
                         endtest = T_FPTR;       /* Stop here            */
                     else {                      /* But if it's -S*      */
                         ap++;                   /* Step over '*'        */
@@ -411,7 +411,7 @@ readoptions(char* filename, char*** pfargv)
         int c;
         int bInQuotes = 0;
         char optbuff[1024], *poptbuff;
-        int fargc=0, i, back;
+        int fargc=0, back;
         char *fargv[PARALIMIT], **pfa;
 
         pfa=*pfargv=malloc(sizeof(fargv));
@@ -469,7 +469,7 @@ readoptions(char* filename, char*** pfargv)
 
 
 #if HOST != SYS_UNIX
-FILE_LOCAL
+FILE_LOCAL void
 zap_uc(ap)
 register char   *ap;
 /*
@@ -489,7 +489,7 @@ register char   *ap;
 }
 #endif
 
-initdefines()
+void initdefines()
 /*
  * Initialize the built-in #define's.  There are two flavors:
  *      #define decus   1               (static definitions)
