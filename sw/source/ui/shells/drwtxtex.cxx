@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:29:55 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 13:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,7 +687,12 @@ ASK_ESCAPE:
         case SID_CHINESE_CONVERSION:
         {
             if (!SvtCJKOptions().IsAnyEnabled())
+            {
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
                 rSet.DisableItem(nWhich);
+            }
+            else
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
         }
         break;
 
@@ -759,7 +764,12 @@ ASK_ESCAPE:
         {
             SvtCJKOptions aCJKOptions;
             if(!aCJKOptions.IsChangeCaseMapEnabled())
+            {
                 rSet.DisableItem(nWhich);
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_False );
+            }
+            else
+                GetView().GetViewFrame()->GetBindings().SetVisibleState( nWhich, sal_True );
         }
         break;
         default:
