@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dfoster $ $Date: 2003-01-23 15:58:32 $
+#   last change: $Author: npower $ $Date: 2003-02-13 14:29:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,27 +76,20 @@ COMP1TYPELIST=$(TARGET)
 
 .INCLUDE :  ..$/cppumaker.mk
 
-SRCFILES=      ScriptExecDialog.src     \
-
-RESLIB1NAME=            scripting
-RESLIB1SRSFILES=        $(SRS)$/runtimemgr.srs
 
 SLOFILES=\
         $(SLO)$/ScriptNameResolverImpl.obj\
-        $(SLO)$/ScriptRuntimeManager.obj
+        $(SLO)$/ScriptRuntimeManager.obj \
 
 SHL1TARGET=	$(TARGET)
 
 SHL1STDLIBS= \
         $(TOOLSLIB)	\
-        $(VCLLIB)	\
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
-        $(SALLIB) \
-        $(VCLLIB) 
+        $(SALLIB)
 
-SHL1DEPN= \
-        $(SHL1RES)
+SHL1DEPN= 
 
 SHL1IMPLIB=	$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
