@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:15:52 $
+ *  last change: $Author: mtg $ $Date: 2001-10-12 13:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,13 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP_
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
+ /*
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+ */
 
+class SwDoc;
 /*-----------------12.02.98 11:21-------------------
 
 --------------------------------------------------*/
@@ -104,6 +110,7 @@ class SwXFrame : public cppu::WeakImplHelper6
     SwEventListenerContainer        aLstnrCntnr;
     SfxItemPropertySet              aPropSet;
     const SfxItemPropertyMap*       _pMap;
+    SwDoc*                          mpDoc;
 
     const FlyCntType                eType;
 
@@ -112,10 +119,15 @@ class SwXFrame : public cppu::WeakImplHelper6
     sal_Bool                        bIsDescriptor;
     String                          sName;
 
+protected:
+    com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
+    com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
+
 public:
-    SwXFrame();
+    SwXFrame( );
     SwXFrame(FlyCntType eSet,
-                const SfxItemPropertyMap*   pMap); //Descriptor-If
+                const SfxItemPropertyMap*   pMap,
+                SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertyMap*   pMap);
     virtual ~SwXFrame();
@@ -174,7 +186,7 @@ public:
     void attachToRange(const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & xTextRange)throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
     void attach( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >& xTextRange ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    SwFrmFmt*       GetFrmFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+    SwFrmFmt*       GetFrmFmt() const { return bIsDescriptor ? 0 : (SwFrmFmt*)GetRegisteredIn(); }
     FlyCntType      GetFlyCntType()const {return eType;}
 
     sal_Bool            IsDescriptor() const {return bIsDescriptor;}
@@ -202,7 +214,7 @@ protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor();
 public:
-    SwXTextFrame();
+    SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
     virtual ~SwXTextFrame();
 
@@ -264,7 +276,7 @@ class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
                             public SwXFrame
 {
 public:
-    SwXTextGraphicObject();
+    SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
     virtual ~SwXTextGraphicObject();
 
@@ -309,7 +321,7 @@ class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
                                 public SwXFrame
 {
 public:
-    SwXTextEmbeddedObject();
+    SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
     virtual ~SwXTextEmbeddedObject();
 
