@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableRow.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:53:04 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:18:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,9 +118,9 @@ OTableRow::OTableRow( const OTableRow& rRow, long nPosition ) :
 //------------------------------------------------------------------------------
 OTableRow::~OTableRow()
 {
+    DBG_DTOR(OTableRow,NULL);
     if(m_bOwnsDescriptions)
         delete m_pActFieldDescr;
-    DBG_DTOR(OTableRow,NULL);
 }
 
 //------------------------------------------------------------------------------
