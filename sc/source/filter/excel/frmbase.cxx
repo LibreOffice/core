@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmbase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-01-08 07:23:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:44:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ void _ScRangeListTabs::Append( SingleRefData a, const BOOL b )
     }
     else
     {
-        DBG_ASSERT( a.nTab <= MAXTAB, "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
+        DBG_ASSERT( ValidTab(a.nTab), "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
     }
 
     bHasRanges = TRUE;
@@ -150,31 +150,31 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
         if( a.Ref1.nTab != a.Ref2.nTab )
             return;
 
-        INT16&  rTab = a.Ref1.nTab;
+        SCsTAB& rTab = a.Ref1.nTab;
         if( rTab > MAXTAB )
             rTab = MAXTAB;
         else if( rTab < 0 )
             rTab = 0;
 
-        INT16&  rCol1 = a.Ref1.nCol;
+        SCsCOL& rCol1 = a.Ref1.nCol;
         if( rCol1 > MAXCOL )
             rCol1 = MAXCOL;
         else if( rCol1 < 0 )
             rCol1 = 0;
 
-        INT16&  rRow1 = a.Ref1.nRow;
+        SCsROW& rRow1 = a.Ref1.nRow;
         if( rRow1 > MAXROW )
             rRow1 = MAXROW;
         else if( rRow1 < 0 )
             rRow1 = 0;
 
-        INT16&  rCol2 = a.Ref2.nCol;
+        SCsCOL& rCol2 = a.Ref2.nCol;
         if( rCol2 > MAXCOL )
             rCol2 = MAXCOL;
         else if( rCol2 < 0 )
             rCol2 = 0;
 
-        INT16&  rRow2 = a.Ref2.nRow;
+        SCsROW& rRow2 = a.Ref2.nRow;
         if( rRow2 > MAXROW )
             rRow2 = MAXROW;
         else if( rRow2 < 0 )
@@ -182,7 +182,7 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
     }
     else
     {
-        DBG_ASSERT( a.Ref1.nTab <= MAXTAB,
+        DBG_ASSERT( ValidTab(a.Ref1.nTab),
             "-_ScRangeListTabs::Append(): Luegen haben kurze Abstuerze!" );
         DBG_ASSERT( a.Ref1.nTab == a.Ref2.nTab,
             "+_ScRangeListTabs::Append(): 3D-Ranges werden in SC nicht unterstuetzt!" );
@@ -201,7 +201,7 @@ void _ScRangeListTabs::Append( ComplRefData a, const BOOL b )
 
 const ScRange* _ScRangeListTabs::First( const UINT16 n )
 {
-    DBG_ASSERT( n <= MAXTAB, "-_ScRangeListTabs::First(): Und tschuessssssss!" );
+    DBG_ASSERT( ValidTab(n), "-_ScRangeListTabs::First(): Und tschuessssssss!" );
 
     if( ppTabLists[ n ] )
     {
