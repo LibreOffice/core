@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2001-02-02 19:33:23 $
+#   last change: $Author: nn $ $Date: 2001-02-08 15:59:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SLOFILES =  \
     $(SLO)$/dataobj2.obj \
     $(SLO)$/dataobj3.obj \
     $(SLO)$/transobj.obj \
+    $(SLO)$/drwtrans.obj \
     $(SLO)$/inputhdl.obj \
     $(SLO)$/inputwin.obj \
     $(SLO)$/rfindlst.obj \
