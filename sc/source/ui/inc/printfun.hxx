@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:21:12 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:15:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,7 @@ private:
     USHORT              nManualZoom;        //  Zoom in Preview (Prozent)
     BOOL                bClearWin;          //  Ausgabe vorher loeschen
     BOOL                bUseStyleColor;
+    BOOL                bIsRender;
 
     USHORT              nPrintTab;
     long                nPageStart;         //  Offset fuer erste Seite
@@ -274,12 +275,14 @@ public:
                                  const ScPrintOptions* pOptions = NULL,
                                  ScPageBreakData* pData = NULL );
 
-                    ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
+                    // ctors for device other than printer - for preview and pdf:
+
+                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, USHORT nTab,
                                  long nPage = 0, long nDocP = 0,
                                  const ScRange* pArea = NULL,
                                  const ScPrintOptions* pOptions = NULL );
 
-                    ScPrintFunc( ScDocShell* pShell, Window* pWindow,
+                    ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
                                  const ScPrintState& rState,
                                  const ScPrintOptions* pOptions );
 
@@ -296,6 +299,7 @@ public:
 
     void            SetClearFlag( BOOL bFlag );
     void            SetUseStyleColor( BOOL bFlag );
+    void            SetRenderFlag( BOOL bFlag );
 
     BOOL            UpdatePages();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-08 09:45:18 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #pragma hdrstop
 
 #include <svx/fmdpage.hxx>
+#include <svx/fmview.hxx>
 #include <svx/svdpage.hxx>
 
 #include <svtools/numuno.hxx>
@@ -74,6 +75,8 @@
 #include <sfx2/bindings.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/charclass.hxx>
+#include <tools/multisel.hxx>
+#include <toolkit/awt/vclxdevice.hxx>
 #include <ctype.h>
 #include <float.h>  // DBL_MAX
 
@@ -108,6 +111,7 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "shapeuno.hxx"
+#include "printfun.hxx"
 
 using namespace com::sun::star;
 
@@ -332,6 +336,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XConsolidatable )
     SC_QUERYINTERFACE( sheet::XDocumentAuditing )
     SC_QUERYINTERFACE( style::XStyleFamiliesSupplier )
+    SC_QUERYINTERFACE( view::XRenderable )
     SC_QUERYINTERFACE( document::XLinkTargetSupplier )
     SC_QUERYINTERFACE( beans::XPropertySet )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
@@ -379,7 +384,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         long nAggLen = aAggTypes.getLength();
         const uno::Type* pAggPtr = aAggTypes.getConstArray();
 
-        const long nThisLen = 14;
+        const long nThisLen = 15;
         aTypes.realloc( nParentLen + nAggLen + nThisLen );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheetDocument>*)0);
@@ -391,11 +396,12 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XConsolidatable>*)0);
         pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XDocumentAuditing>*)0);
         pPtr[nParentLen + 8] = getCppuType((const uno::Reference<style::XStyleFamiliesSupplier>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<document::XLinkTargetSupplier>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
+        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<view::XRenderable>*)0);
+        pPtr[nParentLen +10] = getCppuType((const uno::Reference<document::XLinkTargetSupplier>*)0);
+        pPtr[nParentLen +11] = getCppuType((const uno::Reference<beans::XPropertySet>*)0);
+        pPtr[nParentLen +12] = getCppuType((const uno::Reference<lang::XMultiServiceFactory>*)0);
+        pPtr[nParentLen +13] = getCppuType((const uno::Reference<lang::XUnoTunnel>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<lang::XServiceInfo>*)0);
 
         long i;
         for (i=0; i<nParentLen; i++)
@@ -476,6 +482,278 @@ uno::Reference<container::XNameAccess> SAL_CALL ScModelObj::getStyleFamilies()
     if (pDocShell)
         return new ScStyleFamiliesObj(pDocShell);
     return NULL;
+}
+
+// XRenderable
+
+
+class ScPrintFuncCache
+{
+    ScDocShell*     pDocSh;
+    long            nTotalPages;
+    long            nPages[MAXTAB+1];
+    long            nFirstAttr[MAXTAB+1];
+
+public:
+            ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark );
+            ~ScPrintFuncCache();
+
+    long    GetPageCount() const                { return nTotalPages; }
+    long    GetFirstAttr( USHORT nTab ) const   { return nFirstAttr[nTab]; }
+    USHORT  GetTabForPage( long nPage ) const;
+    long    GetTabStart( USHORT nTab ) const;
+    long    GetDisplayStart( USHORT nTab ) const;
+};
+
+
+ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark ) :
+    pDocSh( pD ),
+    nTotalPages( 0 )
+{
+    //  page count uses the stored cell widths for the printer anyway,
+    //  so ScPrintFunc with the document's printer can be used to count
+
+    SfxPrinter* pPrinter = pDocSh->GetPrinter();
+
+    ScRange aRange;
+    const ScRange* pSelRange = NULL;
+    if ( rMark.IsMarked() )
+    {
+        rMark.GetMarkArea( aRange );
+        pSelRange = &aRange;
+    }
+
+    ScDocument* pDoc = pDocSh->GetDocument();
+    USHORT nTabCount = pDoc->GetTableCount();
+    USHORT nTab;
+    for ( nTab=0; nTab<nTabCount; nTab++ )
+    {
+        long nAttrPage = nTab ? nFirstAttr[nTab-1] : 1;
+
+        long nThisTab = 0;
+        if ( rMark.GetTableSelect( nTab ) )
+        {
+            ScPrintFunc aFunc( pDocSh, pPrinter, nTab, nAttrPage, 0, pSelRange );
+            nThisTab = aFunc.GetTotalPages();
+            nFirstAttr[nTab] = aFunc.GetFirstPageNo();          // from page style or previous sheet
+        }
+        else
+            nFirstAttr[nTab] = nAttrPage;
+
+        nPages[nTab] = nThisTab;
+        nTotalPages += nThisTab;
+    }
+}
+
+USHORT ScPrintFuncCache::GetTabForPage( long nPage ) const
+{
+    ScDocument* pDoc = pDocSh->GetDocument();
+    USHORT nTabCount = pDoc->GetTableCount();
+    USHORT nTab = 0;
+    while ( nTab < nTabCount && nPage >= nPages[nTab] )
+        nPage -= nPages[nTab++];
+    return nTab;
+}
+
+long ScPrintFuncCache::GetTabStart( USHORT nTab ) const
+{
+    long nRet = 0;
+    for ( USHORT i=0; i<nTab; i++ )
+        nRet += nPages[i];
+    return nRet;
+}
+
+long ScPrintFuncCache::GetDisplayStart( USHORT nTab ) const
+{
+    //! merge with lcl_GetDisplayStart in preview?
+
+    long nDisplayStart = 0;
+    ScDocument* pDoc = pDocSh->GetDocument();
+    for (USHORT i=0; i<nTab; i++)
+    {
+        if ( pDoc->NeedPageResetAfterTab(i) )
+            nDisplayStart = 0;
+        else
+            nDisplayStart += nPages[i];
+    }
+    return nDisplayStart;
+}
+
+ScPrintFuncCache::~ScPrintFuncCache()
+{
+}
+
+
+OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rOptions )
+{
+    OutputDevice* pRet = NULL;
+    const beans::PropertyValue* pPropArray = rOptions.getConstArray();
+    long nPropCount = rOptions.getLength();
+    for (long i = 0; i < nPropCount; i++)
+    {
+        const beans::PropertyValue& rProp = pPropArray[i];
+        String aPropName = rProp.Name;
+
+        if (aPropName.EqualsAscii( SC_UNONAME_RENDERDEV ))
+        {
+            uno::Reference<awt::XDevice> xRenderDevice;
+            if ( ( rProp.Value >>= xRenderDevice ) && xRenderDevice.is() )
+            {
+                VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
+                if ( pDevice )
+                    pRet = pDevice->GetOutputDevice();
+            }
+        }
+    }
+    return pRet;
+}
+
+
+BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMark ) const
+{
+    DBG_ASSERT( !rMark.IsMarked() && !rMark.IsMultiMarked(), "FillRenderMarkData: MarkData must be empty" );
+    DBG_ASSERT( pDocShell, "FillRenderMarkData: DocShell must be set" );
+
+    BOOL bDone = FALSE;
+
+    uno::Reference<uno::XInterface> xInterface;
+    if ( aSelection >>= xInterface )
+    {
+        ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
+        if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
+        {
+            BOOL bCursor = pSelObj->IsCursorOnly();
+            const ScRangeList& rRanges = pSelObj->GetRangeList();
+
+            rMark.MarkFromRangeList( rRanges, FALSE );
+            rMark.MarkToSimple();
+
+            if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
+            {
+                if ( bCursor )              // nothing selected -> use whole tables
+                    rMark.ResetMark();      // doesn't change table selection
+                bDone = TRUE;
+            }
+            // multi selection isn't supported
+        }
+        else if ( ScModelObj::getImplementation( xInterface ) == this )
+        {
+            //  render the whole document
+            //  -> no selection, all sheets
+
+            USHORT nTabCount = pDocShell->GetDocument()->GetTableCount();
+            for (USHORT nTab = 0; nTab < nTabCount; nTab++)
+                rMark.SelectTable( nTab, TRUE );
+            bDone = TRUE;
+        }
+        // other selection types aren't supported
+    }
+
+    return bDone;
+}
+
+
+sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
+                                    const uno::Sequence<beans::PropertyValue>& xOptions )
+                                throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScMarkData aMark;
+    if ( !FillRenderMarkData( aSelection, aMark ) )
+        return 0;
+
+    ScPrintFuncCache aCache( pDocShell, aMark );
+    return aCache.GetPageCount();
+}
+
+uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
+                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& xOptions )
+                                throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScMarkData aMark;
+    if ( !FillRenderMarkData( aSelection, aMark ) )
+        throw lang::IllegalArgumentException();
+
+    ScPrintFuncCache aCache( pDocShell, aMark );
+    if ( nRenderer >= aCache.GetPageCount() )
+        throw lang::IllegalArgumentException();
+
+    USHORT nTab = aCache.GetTabForPage( nRenderer );
+    ScPrintFunc aFunc( pDocShell, pDocShell->GetPrinter(), nTab );      // just for page size
+    Size aTwips = aFunc.GetPageSize();
+    awt::Size aPageSize( TwipsToHMM( aTwips.Width() ), TwipsToHMM( aTwips.Height() ) );
+
+    uno::Sequence<beans::PropertyValue> aSequence(3);
+    beans::PropertyValue* pArray = aSequence.getArray();
+    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_PAGESIZE );
+    pArray[0].Value <<= aPageSize;
+    return aSequence;
+}
+
+void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelection,
+                                    const uno::Sequence<beans::PropertyValue>& rOptions )
+                                throw(lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if (!pDocShell)
+        throw uno::RuntimeException();
+
+    ScMarkData aMark;
+    if ( !FillRenderMarkData( aSelection, aMark ) )
+        throw lang::IllegalArgumentException();
+
+    ScPrintFuncCache aCache( pDocShell, aMark );
+    long nTotalPages = aCache.GetPageCount();
+    if ( nRenderer >= nTotalPages )
+        throw lang::IllegalArgumentException();
+
+    OutputDevice* pDev = lcl_GetRenderDevice( rOptions );
+    if ( !pDev )
+        throw lang::IllegalArgumentException();
+
+    USHORT nTab = aCache.GetTabForPage( nRenderer );
+    ScDocument* pDoc = pDocShell->GetDocument();
+
+    FmFormView* pDrawView = NULL;
+    Rectangle aFull( 0, 0, LONG_MAX, LONG_MAX );
+    if ( pDoc->HasControl( nTab, aFull ) )
+    {
+        ScDrawLayer* pModel = pDoc->GetDrawLayer();         // can't be NULL then
+        pDrawView = new FmFormView( pModel, pDev );
+        pDrawView->ShowPagePgNum( nTab, Point() );
+        pDrawView->SetPrintPreview( TRUE );
+    }
+
+    ScRange aRange;
+    const ScRange* pSelRange = NULL;
+    if ( aMark.IsMarked() )
+    {
+        aMark.GetMarkArea( aRange );
+        pSelRange = &aRange;
+    }
+
+    ScPrintFunc aFunc( pDev, pDocShell, nTab, aCache.GetFirstAttr(nTab), nTotalPages, pSelRange );
+    aFunc.SetDrawView( pDrawView );
+//  aFunc.SetRenderFlag( TRUE );
+
+    Range aPageRange( nRenderer+1, nRenderer+1 );
+    MultiSelection aPage( aPageRange );
+    aPage.SetTotalRange( Range(0,RANGE_MAX) );
+    aPage.Select( aPageRange );
+
+    long nDisplayStart = aCache.GetDisplayStart( nTab );
+    long nTabStart = aCache.GetTabStart( nTab );
+
+    long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
+
+    delete pDrawView;
 }
 
 // XLinkTargetSupplier

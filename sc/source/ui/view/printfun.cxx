@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-07 10:31:09 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -270,6 +270,7 @@ void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
     nManualZoom = 100;
     bClearWin = FALSE;
     bUseStyleColor = FALSE;
+    bIsRender = FALSE;
 
     InitParam(pOptions);
 
@@ -299,7 +300,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, USHORT nT
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
+ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, USHORT nTab,
                             long nPage, long nDocP, const ScRange* pArea,
                             const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
@@ -316,11 +317,11 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow, USHORT nTab,
         bPrintCurrentTable  ( FALSE ),
         bMultiArea          ( FALSE )
 {
-    pDev = pWindow;
+    pDev = pOutDev;
     Construct( pOptions );
 }
 
-ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
+ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
                              const ScPrintState& rState, const ScPrintOptions* pOptions )
     :   pDocShell           ( pShell ),
         pPrinter            ( NULL ),
@@ -330,7 +331,7 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, Window* pWindow,
         bPrintCurrentTable  ( FALSE ),
         bMultiArea          ( FALSE )
 {
-    pDev = pWindow;
+    pDev = pOutDev;
 
     nPrintTab   = rState.nPrintTab;
     nStartCol   = rState.nStartCol;
@@ -1583,7 +1584,7 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
         aGridColor = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
     aOutputData.SetGridColor( aGridColor );
 
-    if (!pPrinter)
+    if ( !pPrinter && !bIsRender )      // when rendering (PDF), don't use printer
     {
         OutputDevice* pRefDev = pDoc->GetPrinter();     // auch fuer Preview den Drucker nehmen
         Fraction aPrintFrac( nZoom, 100 );              // ohne nManualZoom
@@ -2308,6 +2309,11 @@ void ScPrintFunc::SetUseStyleColor( BOOL bFlag )
     bUseStyleColor = bFlag;
     if (pEditEngine)
         pEditEngine->EnableAutoColor( bUseStyleColor );
+}
+
+void ScPrintFunc::SetRenderFlag( BOOL bFlag )
+{
+    bIsRender = bFlag;      // set when using XRenderable (PDF)
 }
 
 //

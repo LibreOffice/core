@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: er $ $Date: 2002-08-08 13:03:43 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:14:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1206,6 +1206,7 @@ ScCellRangesBase::ScCellRangesBase() :
     aPropSet(lcl_GetCellsPropertyMap()),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
+    bCursorOnly( FALSE ),
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
@@ -1221,6 +1222,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     aPropSet(lcl_GetCellsPropertyMap()),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
+    bCursorOnly( FALSE ),
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
@@ -1243,6 +1245,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     aPropSet(lcl_GetCellsPropertyMap()),
     bChartColAsHdr( FALSE ),
     bChartRowAsHdr( FALSE ),
+    bCursorOnly( FALSE ),
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
@@ -1422,6 +1425,14 @@ void ScCellRangesBase::SetNewRanges(const ScRangeList& rNew)
 {
     aRanges = rNew;
     RefChanged();
+}
+
+void ScCellRangesBase::SetCursorOnly( BOOL bSet )
+{
+    //  set for a selection object that is created from the cursor position
+    //  without anything selected (may contain several sheets)
+
+    bCursorOnly = bSet;
 }
 
 uno::Any SAL_CALL ScCellRangesBase::queryInterface( const uno::Type& rType )

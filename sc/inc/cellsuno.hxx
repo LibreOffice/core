@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-24 08:33:08 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,6 +282,7 @@ private:
     ScRangeList             aRanges;
     BOOL                    bChartColAsHdr;
     BOOL                    bChartRowAsHdr;
+    BOOL                    bCursorOnly;
     BOOL                    bValueChangePosted;
     XPropertyChangeListenerArr_Impl aValueListeners;
 
@@ -347,6 +348,9 @@ public:
 
     void                    SetNewRange(const ScRange& rNew);   // fuer Cursor
     void                    SetNewRanges(const ScRangeList& rNew);
+
+    void                    SetCursorOnly(BOOL bSet);
+    BOOL                    IsCursorOnly() const            { return bCursorOnly; }
 
                             // XSheetOperation
     virtual double SAL_CALL computeFunction( ::com::sun::star::sheet::GeneralFunction nFunction )

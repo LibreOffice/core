@@ -2,9 +2,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-06-18 13:11:09 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ void ScPreview::CalcPages( USHORT nToWhichTab )
         long nAttrPage = i ? nFirstAttr[i-1] : 1;
 
         long nThisStart = nTotalPages;
-        ScPrintFunc aPrintFunc( pDocShell, this, i, nAttrPage, 0, NULL, &aOptions );
+        ScPrintFunc aPrintFunc( this, pDocShell, i, nAttrPage, 0, NULL, &aOptions );
         long nThisTab = aPrintFunc.GetTotalPages();
         nPages[i] = nThisTab;
         nTotalPages += nThisTab;
@@ -371,9 +371,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         ScPrintFunc* pPrintFunc;
         if (bStateValid)
-            pPrintFunc = new ScPrintFunc( pDocShell, this, aState, &aOptions );
+            pPrintFunc = new ScPrintFunc( this, pDocShell, aState, &aOptions );
         else
-            pPrintFunc = new ScPrintFunc( pDocShell, this, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
+            pPrintFunc = new ScPrintFunc( this, pDocShell, nTab, nFirstAttr[nTab], nTotalPages, NULL, &aOptions );
 
         pPrintFunc->SetOffset(aOffset);
         pPrintFunc->SetManualZoom(nZoom);

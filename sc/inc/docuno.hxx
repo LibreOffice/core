@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:14:49 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #include <svx/fmdmod.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
+#include <com/sun/star/view/XRenderable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #endif
@@ -155,6 +158,7 @@
 
 class ScDocShell;
 class ScAnnotationObj;
+class ScMarkData;
 class ScTableColumnObj;
 class ScTableRowObj;
 class ScTableSheetObj;
@@ -172,6 +176,7 @@ class ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XConsolidatable,
                     public com::sun::star::sheet::XDocumentAuditing,
                     public com::sun::star::style::XStyleFamiliesSupplier,
+                    public com::sun::star::view::XRenderable,
                     public com::sun::star::document::XLinkTargetSupplier,
                     public com::sun::star::beans::XPropertySet,
                     public SvxFmMSFactory,  // derived from XMultiServiceFactory
@@ -188,6 +193,9 @@ private:
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawTrGradTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawMarkerTab;
     com::sun::star::uno::Reference<com::sun::star::uno::XInterface> xDrawDashTab;
+
+    BOOL                    FillRenderMarkData( const com::sun::star::uno::Any& aSelection,
+                                                ScMarkData& rMark ) const;
 
 public:
                             ScModelObj(ScDocShell* pDocSh);
@@ -220,6 +228,24 @@ public:
                                 // XStyleFamiliesSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL
                             getStyleFamilies() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XRenderable
+    virtual sal_Int32 SAL_CALL getRendererCount( const ::com::sun::star::uno::Any& aSelection,
+                                    const ::com::sun::star::uno::Sequence<
+                                        ::com::sun::star::beans::PropertyValue >& xOptions )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
+                            getRenderer( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection,
+                                    const ::com::sun::star::uno::Sequence<
+                                        ::com::sun::star::beans::PropertyValue >& xOptions )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   render( sal_Int32 nRenderer, const ::com::sun::star::uno::Any& aSelection,
+                                    const ::com::sun::star::uno::Sequence<
+                                        ::com::sun::star::beans::PropertyValue >& xOptions )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::uno::RuntimeException);
 
                             // XLinkTargetSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL

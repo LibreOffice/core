@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-12 08:42:34 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -841,6 +841,14 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                 rMark.ExtendRangeListTables( xRanges );
 
             pObj = new ScCellRangesObj( pDocSh, *xRanges );
+        }
+
+        if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
+        {
+            //  remember if the selection was from the cursor position without anything selected
+            //  (used when rendering the selection)
+
+            pObj->SetCursorOnly( TRUE );
         }
     }
 

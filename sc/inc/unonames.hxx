@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-11 10:46:48 $
+ *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -505,6 +505,10 @@
 #define SC_UNONAME_INITVAL          "InitialValue"
 #define SC_UNONAME_TITLE            "Title"
 #define SC_UNONAME_CLOSEONUP        "CloseOnMouseRelease"
+
+//  XRenderable
+#define SC_UNONAME_PAGESIZE         "PageSize"
+#define SC_UNONAME_RENDERDEV        "RenderDevice"
 
 #endif
 
