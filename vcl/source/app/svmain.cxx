@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-11 18:09:54 $
+ *  last change: $Author: jbu $ $Date: 2001-05-11 16:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,12 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
     // convert path to native file format
     rtl::OUString aNativeFileName;
+#ifdef TF_FILEURL
+    OSL_VERIFY( osl_File_E_None ==
+                osl::FileBase::getSystemPathFromFileURL(aExeFileName, aNativeFileName) );
+#else
     osl::FileBase::getSystemPathFromNormalizedPath(aExeFileName, aNativeFileName);
+#endif
 
     pSVData->maAppData.mpAppFileName = new String( aNativeFileName );
 
