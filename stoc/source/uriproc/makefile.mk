@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-19 13:21:57 $
+#   last change: $Author: rt $ $Date: 2004-06-17 11:44:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,16 +78,21 @@ UNOTYPES = \
     com.sun.star.uno.XComponentContext \
     com.sun.star.uno.XInterface \
     com.sun.star.uri.RelativeUriExcessParentSegments \
+    com.sun.star.uri.UriReferenceFactory \
+    com.sun.star.uri.XExternalUriReferenceTranslator \
     com.sun.star.uri.XUriReference \
     com.sun.star.uri.XUriReferenceFactory \
     com.sun.star.uri.XUriSchemeParser \
+    com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory \
     com.sun.star.uri.XVndSunStarScriptUrlReference
 
 SHL1TARGET = $(TARGET).uno
 SHL1OBJS = \
+    $(SLO)$/ExternalUriReferenceTranslator.obj \
     $(SLO)$/UriReference.obj \
     $(SLO)$/UriReferenceFactory.obj \
     $(SLO)$/UriSchemeParser_vndDOTsunDOTstarDOTscript.obj \
+    $(SLO)$/VndSunStarPkgUrlReferenceFactory.obj \
     $(SLO)$/component.obj \
     $(SLO)$/supportsService.obj
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
