@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContentProviderManager.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: sb $ $Date: 2001-11-28 09:43:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,18 +198,17 @@ interface XContentProviderManager: com::sun::star::uno::XInterface
     sequence<com::sun::star::ucb::ContentProviderInfo> queryContentProviders();
 
     //-------------------------------------------------------------------------
-    /** returns the currently active content provider for a URL template.
+    /** returns the currently active content provider for a content
+        identifier.
 
-        @param Scheme
-        a URL scheme. More generally, this may not only be a URL scheme, but a
-        URL template (see <member>registerContentProvider</member> for a
-        discussion of URL templates).
+        @param Identifier
+        a content identifier (i.e., a URL).
 
         @returns
         a content provider.
     */
     com::sun::star::ucb::XContentProvider queryContentProvider(
-                [in] string Scheme );
+                [in] string Identifier );
 };
 
 //=============================================================================
