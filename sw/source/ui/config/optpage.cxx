@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-28 13:04:42 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 09:26:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2265,19 +2265,12 @@ IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, pLB )
 void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 {
     SvxFont& rFont = rExampleWin.GetFont();
-
-    Font aFont;
-    aFont.SetCharSet( gsl_getSystemTextEncoding() );
+    Font aFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SERIF,
+                Application::GetSettings().GetUILanguage(),
+                DEFAULTFONT_FLAGS_ONLYONE, &rExampleWin ));
     aFont.SetSize( Size( 0, 12 ) );
-    aFont.SetPitch( PITCH_VARIABLE );
-
-    aFont.SetName( C2S("Times") );
-    aFont.SetFamily( FAMILY_ROMAN );
-
-//  Font aFont = System::GetStandardFont(STDFONT_ROMAN);
     aFont.SetFillColor(Color(COL_WHITE));
     aFont.SetWeight(WEIGHT_NORMAL);
-
     rFont = aFont;
     const Size aLogSize( rExampleWin.GetOutputSize() );
     rFont.SetSize(Size(0, aLogSize.Height() * 2 / 3));
@@ -2286,7 +2279,6 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 
     Color aWhiteColor = COL_WHITE;
     Wallpaper aWall(aWhiteColor);
-//  Wallpaper aWall(Color( COL_WHITE ));
     rExampleWin.SetBackground(aWall);
     rExampleWin.Invalidate();
 }
