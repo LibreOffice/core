@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Callback.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-09-05 08:32:19 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 10:06:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,3 +542,5 @@ STDMETHODIMP CCallback::inSeqXEventListener( LPSAFEARRAY listeners, LPSAFEARRAY 
 
     return S_OK;
 }
+
+
