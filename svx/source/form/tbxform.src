@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-09 20:40:19 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 19:51:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ String RID_SVXTBX_FORM_FILTER
     Text[ arabic ] = "‘—Ìÿ «·›· —";
     Text[ turkish ] = "Filtre Áubuu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de filtros";
 };
 
  //------------------------------------------------------------------------
@@ -147,6 +148,7 @@ ToolBox RID_SVXTBX_FORM_FILTER
     Text[ arabic ] = "‘—Ìÿ «·›· —";
     Text[ turkish ] = "Filtre Áubuu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de filtros";
 };
 
 String RID_SVXTBX_FORM_NAVIGATION
@@ -172,6 +174,7 @@ String RID_SVXTBX_FORM_NAVIGATION
     Text[ arabic ] = "‘—Ìÿ ﬁ«⁄œ… «·»Ì«‰« ";
     Text[ turkish ] = "Veritaban˝ Áubuu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de base de datos";
 };
 
  //------------------------------------------------------------------------
@@ -325,6 +328,7 @@ ToolBox RID_SVXTBX_FORM_NAVIGATION
     Text[ arabic ] = "‘—Ìÿ ﬁ«⁄œ… «·»Ì«‰« ";
     Text[ turkish ] = "Veritaban˝ Áubuu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Barra de base de datos";
 };
 
  //------------------------------------------------------------------------
@@ -544,6 +548,7 @@ FloatingWindow RID_SVXTBX_FORM
     Text[ arabic ] = "„Â«„ «·«” „«—…";
     Text[ turkish ] = "Form i˛levleri";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Funciones formulario";
 };
 
 ModalDialog RID_SVX_DLG_INPUTRECORDNO
@@ -593,6 +598,7 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
         Text[ chinese_traditional ] = "¬‡®Ï∏ÍÆ∆±¯•ÿ";
         Text[ arabic ] = "«·«‰ ﬁ«· ≈·Ï «·”Ã·";
         Text[ turkish ] = "Veri k¸mesine git";
+        Text[ catalan ] = "ir a registro";
     };
     NumericField 1
     {
@@ -619,5 +625,6 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Text[ chinese_traditional ] = "∏ÍÆ∆±¯•ÿΩs∏π";
     Text[ arabic ] = "—ﬁ„ «·”Ã·";
     Text[ turkish ] = "Veri k¸mesi no.";
+    Text[ catalan ] = "N˙mero de registro";
 };
 
