@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 15:33:54 $
+#   last change: $Author: rt $ $Date: 2005-01-28 15:40:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,6 @@ SRC1FILES =  \
         ruler.src \
         rubydialog.src\
         SpellDialog.src \
-        spldlg.src \
         swframeposstrings.src \
         swpossizetabpage.src \
         scriptdlg.src \
@@ -185,7 +184,6 @@ EXCEPTIONSFILES=\
     $(SLO)$/hyphen.obj		\
     $(SLO)$/rubydialog.obj 	\
     $(SLO)$/thesdlg.obj		\
-    $(SLO)$/spldlg.obj		\
     $(SLO)$/numpages.obj	\
     $(SLO)$/splwrap.obj		\
     $(SLO)$/hangulhanja.obj \
@@ -354,7 +352,6 @@ LIB1OBJFILES= \
     $(SLO)$/hyphen.obj      \
     $(SLO)$/rubydialog.obj  \
     $(SLO)$/thesdlg.obj     \
-    $(SLO)$/spldlg.obj      \
     $(SLO)$/splwrap.obj     \
     $(SLO)$/hangulhanja.obj \
     $(SLO)$/_contdlg.obj \
