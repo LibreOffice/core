@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-20 01:30:47 $
+#   last change: $Author: fs $ $Date: 2000-11-21 19:23:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/treeiterators.obj \
         $(SLO)$/configexcept.obj	\
         $(SLO)$/configgroup.obj	\
         $(SLO)$/configpath.obj	\
