@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAccessController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:41 $
+ *  last change: $Author: mi $ $Date: 2001-11-20 10:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ interface XAccessController : com::sun::star::uno::XInterface
         only with the permissions possessed by the caller's protection domain.
         </p>
         @param action
-               action object to be execute
+               action object to be executed
         @param restriction
                access control context to restrict permission; null for no restriction
         @return
