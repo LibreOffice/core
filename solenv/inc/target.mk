@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.91 $
+#   $Revision: 1.92 $
 #
-#   last change: $Author: hjs $ $Date: 2001-12-05 13:40:52 $
+#   last change: $Author: hjs $ $Date: 2001-12-12 12:36:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -184,6 +184,19 @@ something_wrong_with_objects :
 
 .INCLUDE : postset.mk
 
+.IF "$(UPDATER)"!=""
+.IF "$(BUILD_SOSL)"==""
+.IF "$(PRJNAME)"=="vcl"
+.IF "$(REMOTE_BUILD_FLAG)" == ""
+.IF "$(remote)" == ""
+REMOTE_BUILD=do_it_remote
+REMOTE_DEPEND=do_it_remote
+.ENDIF          # "$(remote)" == ""
+.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
+.ENDIF          # "$(PRJNAME)"=="vcl"
+.ENDIF          # "$(BUILD_SOSL)"!=""
+.ENDIF          # "$(UPDATER)"!=""
+
 .IF "$(depend)" == ""
 
 # -------
@@ -359,6 +372,7 @@ NOPCHTARGET=do_itpch
 .IF "$(REMOTE_BUILD_FLAG)" == ""
 .IF "$(remote)" == ""
 REMOTE_BUILD=do_it_remote
+REMOTE_DEPEND=do_it_remote
 .ENDIF          # "$(remote)" == ""
 .ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
 .ENDIF          # "$(PRJNAME)"=="vcl"
@@ -1141,7 +1155,7 @@ UNOTYPES+=$($(COMP1TYPELIST)_XML2CMPTYPES)
 SHL1DESCRIPTIONOBJ*=$(SLO)$/$(COMP1TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 COMP1RDBTARGETN:=$(BIN)$/$(COMP1TYPELIST).rdb
-COMP1TYPELISTN:=$(MISC)$/$(COMP1TYPELIST).xml
+#COMP1TYPELISTN:=$(MISC)$/$(COMP1TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP2TYPELIST)"!=""
@@ -1150,7 +1164,7 @@ UNOTYPES+=$($(COMP2TYPELIST)_XML2CMPTYPES)
 SHL2DESCRIPTIONOBJ*=$(SLO)$/$(COMP2TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 COMP2RDBTARGETN:=$(BIN)$/$(COMP2TYPELIST).rdb
-COMP2TYPELISTN:=$(MISC)$/$(COMP2TYPELIST).xml
+#COMP2TYPELISTN:=$(MISC)$/$(COMP2TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP3TYPELIST)"!=""
@@ -1159,7 +1173,7 @@ UNOTYPES+=$($(COMP3TYPELIST)_XML2CMPTYPES)
 SHL3DESCRIPTIONOBJ*=$(SLO)$/$(COMP3TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 COMP3RDBTARGETN:=$(BIN)$/$(COMP3TYPELIST).rdb
-COMP3TYPELISTN:=$(MISC)$/$(COMP3TYPELIST).xml
+#COMP3TYPELISTN:=$(MISC)$/$(COMP3TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP4TYPELIST)"!=""
@@ -1168,7 +1182,7 @@ UNOTYPES+=$($(COMP4TYPELIST)_XML2CMPTYPES)
 SHL4DESCRIPTIONOBJ*=$(SLO)$/$(COMP4TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 COMP4RDBTARGETN:=$(BIN)$/$(COMP4TYPELIST).rdb
-COMP4TYPELISTN:=$(MISC)$/$(COMP4TYPELIST).xml
+#COMP4TYPELISTN:=$(MISC)$/$(COMP4TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP5TYPELIST)"!=""
@@ -1177,7 +1191,7 @@ UNOTYPES+=$($(COMP5TYPELIST)_XML2CMPTYPES)
 SHL5DESCRIPTIONOBJ*=$(SLO)$/$(COMP5TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 COMP5RDBTARGETN:=$(BIN)$/$(COMP5TYPELIST).rdb
-COMP5TYPELISTN:=$(MISC)$/$(COMP5TYPELIST).xml
+#COMP5TYPELISTN:=$(MISC)$/$(COMP5TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP6TYPELIST)"!=""
@@ -1186,7 +1200,7 @@ UNOTYPES+=$($(COMP6TYPELIST)_XML2CMPTYPES)
 SHL6DESCRIPTIONOBJ*=$(SLO)$/$(COMP6TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 COMP6RDBTARGETN:=$(BIN)$/$(COMP6TYPELIST).rdb
-COMP6TYPELISTN:=$(MISC)$/$(COMP6TYPELIST).xml
+#COMP6TYPELISTN:=$(MISC)$/$(COMP6TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP7TYPELIST)"!=""
@@ -1195,7 +1209,7 @@ UNOTYPES+=$($(COMP7TYPELIST)_XML2CMPTYPES)
 SHL7DESCRIPTIONOBJ*=$(SLO)$/$(COMP7TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 COMP7RDBTARGETN:=$(BIN)$/$(COMP7TYPELIST).rdb
-COMP7TYPELISTN:=$(MISC)$/$(COMP7TYPELIST).xml
+#COMP7TYPELISTN:=$(MISC)$/$(COMP7TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP8TYPELIST)"!=""
@@ -1204,7 +1218,7 @@ UNOTYPES+=$($(COMP8TYPELIST)_XML2CMPTYPES)
 SHL8DESCRIPTIONOBJ*=$(SLO)$/$(COMP8TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 COMP8RDBTARGETN:=$(BIN)$/$(COMP8TYPELIST).rdb
-COMP8TYPELISTN:=$(MISC)$/$(COMP8TYPELIST).xml
+#COMP8TYPELISTN:=$(MISC)$/$(COMP8TYPELIST).xml
 .ENDIF
 
 .IF "$(COMP9TYPELIST)"!=""
@@ -1213,7 +1227,7 @@ UNOTYPES+=$($(COMP9TYPELIST)_XML2CMPTYPES)
 SHL9DESCRIPTIONOBJ*=$(SLO)$/$(COMP9TYPELIST)_description.obj
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 COMP9RDBTARGETN:=$(BIN)$/$(COMP9TYPELIST).rdb
-COMP9TYPELISTN:=$(MISC)$/$(COMP9TYPELIST).xml
+#COMP9TYPELISTN:=$(MISC)$/$(COMP9TYPELIST).xml
 .ENDIF
 
 UNOTYPES!:=$(strip $(UNOTYPES))
@@ -2034,6 +2048,9 @@ $(OBJFILES) : $(UNOUCRHEADER)
 $(SLOFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
 $(UNOUCRTARGET) : $(UNOUCRDEP)
+.IF "$(XML2MK_FILES)"!=""
+    @+del $(foreach,i,$(XML2MK_FILES) $(MISC)$/$(i).mk) >& $(NULLDEV)
+.ENDIF			# "$(XML2MK_FILES)"!=""
     +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
@@ -2824,18 +2841,38 @@ wordcount:
 testt:
     @echo test
 
-.ELSE
+.ELSE			# "$(depend)" == ""
 
 # ----------
 # - DEPEND -
 # ----------
 
 ALLTAR : ALLDEP \
+        $(REMOTE_DEPEND) \
         $(SUBDIRS)
 
 .INCLUDE : tg_dep.mk
 
-.ENDIF
+# ----------------------------------
+# - REMOTE_DEPEND - remote vcl dependencies -
+# ----------------------------------
+
+.IF "$(UPDATER)"!=""
+.IF "$(BUILD_SOSL)"==""
+.IF "$(PRJNAME)"=="vcl"
+.IF "$(REMOTE_BUILD_FLAG)" == ""
+.IF "$(remote)" == ""
+$(REMOTE_DEPEND):
+    @+echo --- REMOTE_DEPEND ---
+    @dmake $(MFLAGS) remote=true depemd=t REMOTE_BUILD_FLAG=TRUE $(CALLMACROS) $(PROJECTPCHTARGET:s/.pc/.xc/)
+    @+echo --- REMOTE_DEPEND OVER ---
+.ENDIF          # "$(remote)" == ""
+.ENDIF          # "$(REMOTE_BUILD_FLAG)" == ""
+.ENDIF          # "$(PRJNAME)"=="vcl"
+.ENDIF          # "$(BUILD_SOSL)"==""
+.ENDIF          # "$(UPDATER)"!=""
+
+.ENDIF			# "$(depend)" == ""
 
 .IF "$(SUBDIRS)"!=""
 
