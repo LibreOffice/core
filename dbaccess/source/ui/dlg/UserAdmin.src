@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:20:04 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 20:53:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ japanese ] = "Õ°»Ş°‚Ì‘I‘ğ";
         Text[ korean ] = "»ç¿ëÀÚ ¼±ÅÃ";
         Text[ chinese_simplified ] = "Ê¹ÓÃÕßÑ¡Ôñ";
-        Text[ chinese_traditional ] = "¦Û­q¿ï¾Ü";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¿ï¾Ü";
         Text[ arabic ] = "ÇÎÊíÇÑ ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı seçimi";
         Text[ finnish ] = "User selection";
@@ -118,7 +118,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ russian ] = "Ïîëüçîâàòåëü:";
         Text[ greek ] = "×ñŞóôçò:";
         Text[ dutch ] = "Gebr~uiker:";
-        Text[ french ] = "~Utilisateur :";
+        Text[ french ] = "Utilisateur :";
         Text[ spanish ] = "Usuari~o:";
         Text[ italian ] = "Ut~ente:";
         Text[ danish ] = "Bruger:";
@@ -126,7 +126,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ polish ] = "U¿ytkownik:";
         Text[ portuguese_brazilian ] = "Us~er:";
         Text[ japanese ] = "Õ°»Ş°(~E):";
-        Text[ korean ] = "»ç¿ëÀÚ:(~E)";
+        Text[ korean ] = "»ç¿ëÀÚ(~E):";
         Text[ chinese_simplified ] = "Ê¹ÓÃÕß(~E)£º";
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~E)¡G";
         Text[ arabic ] = "ÇáãÓÊÎÏã:";
@@ -159,10 +159,10 @@ TabPage TAB_PAGE_USERADMIN
         Text[ENGLISH]       = "~User add...";
         Text[ english_us ] = "~Add User...";
         Text[ portuguese ] = "~Novo utilizador...";
-        Text[ russian ] = "Íîâûé ïîëüçîâàòåëü...";
+        Text[ russian ] = "Äîáàâèòü ïîëüçîâàòåëÿ...";
         Text[ greek ] = "Íİïò ÷ñŞóôçò...";
         Text[ dutch ] = "Gebruiker ~toevoegen...";
-        Text[ french ] = "~Nouvel utilisateur...";
+        Text[ french ] = "Ajouter un utilisateur...";
         Text[ spanish ] = "~Nuevo usuario...";
         Text[ finnish ] = "~New user...";
         Text[ italian ] = "~Nuovo utente...";
@@ -170,10 +170,10 @@ TabPage TAB_PAGE_USERADMIN
         Text[ swedish ] = "Lägg till ~användare...";
         Text[ polish ] = "Dodaj u¿ytkownika...";
         Text[ portuguese_brazilian ] = "~New user...";
-        Text[ japanese ] = "Õ°»Ş°‚Ì’Ç‰Á(~N)...";
-        Text[ korean ] = "»õ »ç¿ëÀÚ(~N)...";
-        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕß(~N)...";
-        Text[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ(~N)...";
+        Text[ japanese ] = "Õ°»Ş°‚Ì’Ç‰Á(~A)...";
+        Text[ korean ] = "»õ »ç¿ëÀÚ(~A)...";
+        Text[ chinese_simplified ] = "ĞÂÔöÊ¹ÓÃÕß(~A)...";
+        Text[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ(~A)...";
         Text[ turkish ] = "Yeni kullanıcı...";
         Text[ arabic ] = "ãÓÊÎÏã ÌÏíÏ...";
         Text[ catalan ] = "~New user...";
@@ -224,7 +224,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ russian ] = "Óáğàòü ïîëüçîâàòåëÿ...";
         Text[ greek ] = "ÄéáãñáöŞ ÷ñŞóôç...";
         Text[ dutch ] = "~Gebruiker wissen...";
-        Text[ french ] = "~Supprimer l'utilisateur...";
+        Text[ french ] = "Supprimer l'utilisateur...";
         Text[ spanish ] = "~Eliminar usuario...";
         Text[ italian ] = "Cancella utente...";
         Text[ danish ] = "Slet bruger...";
@@ -249,10 +249,10 @@ TabPage TAB_PAGE_USERADMIN
         Text [ ENGLISH ]    = "Access rights for choosen user" ;
         Text[ english_us ] = "Access rights for selected user";
         Text[ portuguese ] = "Direitos de acesso para utilizador seleccionado";
-        Text[ russian ] = "Ïğàâà ïîëüçîâàòåëÿ äëÿ âûáğàííîãî ïîëüçîâàòåëÿ";
+        Text[ russian ] = "Ïğàâà äîñòóïà äëÿ âûáğàííîãî ïîëüçîâàòåëÿ";
         Text[ greek ] = "Äéêáéşìáôá ÷ñŞóôç ãéá ôïí åğéëåãìİíï ÷ñŞóôç";
         Text[ dutch ] = "Toegangsrechten voor geselecteerde gebruikers";
-        Text[ french ] = "Droits accordés à l'utilisateur sélectionné";
+        Text[ french ] = "Droits d'accès pour l'utilisateur sélectionné";
         Text[ spanish ] = "Derechos de usuario para usuarios seleccionados";
         Text[ italian ] = "Diritti utente per utente selezionato";
         Text[ danish ] = "Den valgte brugers brugerrettigheder";
@@ -286,10 +286,10 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message [ English ] = "Do you really want to delete the select user?" ;
     Message[ english_us ] = "Do you really want to delete the user?";
     Message[ portuguese ] = "Eliminar utilizador?";
-    Message[ russian ] = "Do you really want to delete the select user?";
+    Message[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîãî ïîëüçîâàòåëÿ?";
     Message[ greek ] = "Do you really want to delete the select user?";
     Message[ dutch ] = "Wilt u deze gebruikersnaam werkelijk wissen?";
-    Message[ french ] = "Do you really want to delete the select user?";
+    Message[ french ] = "Voulez-vous vraiment supprimer l'utilisateur ?";
     Message[ spanish ] = "¿Desea realmente eliminar el usuario?";
     Message[ finnish ] = "Do you really want to delete the select user?";
     Message[ italian ] = "Volete davvero eliminare l'utente selezionato?";
@@ -305,5 +305,6 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ arabic ] = "Do you really want to delete the select user?";
     Message[ catalan ] = "Do you really want to delete the select user?";
 };
+
 
 
