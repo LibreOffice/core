@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscinit.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:42:55 $
+ *  last change: $Author: mm $ $Date: 2001-05-16 15:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,6 +425,8 @@ void RscTypCont::Init()
     aWinBits.SetConstant( nTopImageId, WB_TOPIMAGE );
     nNoLabelId          = pHS->Insert( "WB_NOLABEL" );
     aWinBits.SetConstant( nNoLabelId, WB_NOLABEL );
+    nVertId             = pHS->Insert( "WB_VERT" );
+    aWinBits.SetConstant( nVertId, WB_VERT );
 }
 {
     /********** I n i t   B a s i c   T y p e s **************************/
@@ -1001,6 +1003,9 @@ void RscTypCont::Init()
     pClassFixedLine =
           new RscClass( nId, RSC_FIXEDLINE, pClassControl );
     pClassFixedLine->SetCallPar( *pWinPar1, *pWinPar2, *pWinParType );
+
+    INS_WINBIT(pClassFixedLine,Vert)
+
     aNmTb.Put( nId, CLASSNAME, pClassFixedLine );
     pRoot->Insert( pClassFixedLine );
 
