@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodraw.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: os $ $Date: 2001-06-05 08:20:38 $
+ *  last change: $Author: os $ $Date: 2001-06-18 14:08:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,7 +390,7 @@ uno::Reference< drawing::XShape >  SwFmDrawPage::_CreateShape( SdrObject *pObj )
             uno::Reference< uno::XInterface > xCreate(xRet, uno::UNO_QUERY);
             xRet = 0;
             Reference< XPropertySet >  xPrSet;
-            if(pObj->IsGroupObject())
+            if(pObj->IsGroupObject() && !pObj->Is3DObj())
                 xPrSet = new SwXGroupShape( xCreate );
             else
                 xPrSet = new SwXShape( xCreate );
@@ -1616,11 +1616,23 @@ void SwXGroupShape::release(  ) throw()
 void SwXGroupShape::add( const Reference< XShape >& xShape ) throw (RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
+    SvxShape* pSvxShape = GetSvxShape();
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pSvxShape && pFmt)
     {
-        pSvxShape->add(xShape);
+        sal_Bool bOk = FALSE;
+        Reference<XShapes> xShapes;
+        if( xShapeAgg.is() )
+        {
+            const uno::Type& rType = ::getCppuType((Reference<XShapes>*)0 );
+            Any aAgg = xShapeAgg->queryAggregation( rType );
+            aAgg >>= xShapes;
+        }
+        if(xShapes.is())
+            xShapes->add(xShape);
+        else
+            throw RuntimeException();
+
         Reference<XUnoTunnel> xTunnel(xShape, UNO_QUERY);
         SwXShape* pSwShape = 0;
         if(xShape.is())
@@ -1654,11 +1666,17 @@ void SwXGroupShape::add( const Reference< XShape >& xShape ) throw (RuntimeExcep
 void SwXGroupShape::remove( const Reference< XShape >& xShape ) throw (RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
-    if(pSvxShape)
-        pSvxShape->remove(xShape);
-    else
+    sal_Bool bOk = FALSE;
+    Reference<XShapes> xShapes;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = ::getCppuType((Reference<XShapes>*)0 );
+        Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xShapes;
+    }
+    if(!xShapes.is())
         throw RuntimeException();
+    xShapes->remove(xShape);
 }
 /*-- 31.05.01 09:59:20---------------------------------------------------
 
@@ -1666,13 +1684,17 @@ void SwXGroupShape::remove( const Reference< XShape >& xShape ) throw (RuntimeEx
 sal_Int32 SwXGroupShape::getCount(void) throw( uno::RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
     sal_Int32 nRet = 0;
-    if(pSvxShape)
-        nRet = pSvxShape->getCount();
-    else
+    Reference<XIndexAccess> xAcc;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = ::getCppuType((Reference<XIndexAccess>*)0 );
+        Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xAcc;
+    }
+    if(!xAcc.is())
         throw RuntimeException();
-    return nRet;
+    return xAcc->getCount();
 }
 /*-- 31.05.01 09:59:20---------------------------------------------------
 
@@ -1680,13 +1702,16 @@ sal_Int32 SwXGroupShape::getCount(void) throw( uno::RuntimeException )
 Any SwXGroupShape::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
-    Any aRet;
-    if(pSvxShape)
-        aRet = pSvxShape->getByIndex(nIndex);
-    else
+    Reference<XIndexAccess> xAcc;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = ::getCppuType((Reference<XIndexAccess>*)0 );
+        Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xAcc;
+    }
+    if(!xAcc.is())
         throw RuntimeException();
-    return aRet;
+    return xAcc->getByIndex(nIndex);
 }
 /*-- 31.05.01 09:59:20---------------------------------------------------
 
@@ -1694,13 +1719,16 @@ Any SwXGroupShape::getByIndex(sal_Int32 nIndex) throw( IndexOutOfBoundsException
 uno::Type SwXGroupShape::getElementType(  ) throw(RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
-    uno::Type aRet;
-    if(pSvxShape)
-        aRet = pSvxShape->getElementType();
-    else
+    Reference<XIndexAccess> xAcc;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = ::getCppuType((Reference<XIndexAccess>*)0 );
+        Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xAcc;
+    }
+    if(!xAcc.is())
         throw RuntimeException();
-    return aRet;
+    return xAcc->getElementType();
 }
 /*-- 31.05.01 09:59:22---------------------------------------------------
 
@@ -1708,14 +1736,15 @@ uno::Type SwXGroupShape::getElementType(  ) throw(RuntimeException)
 sal_Bool SwXGroupShape::hasElements(  ) throw(RuntimeException)
 {
     vos::OGuard  aGuard(Application::GetSolarMutex());
-    SvxShapeGroup* pSvxShape = (SvxShapeGroup*)GetSvxShape();
-    sal_Bool bRet = sal_False;
-    if(pSvxShape)
-        bRet = pSvxShape->hasElements();
-    else
+    Reference<XIndexAccess> xAcc;
+    if( xShapeAgg.is() )
+    {
+        const uno::Type& rType = ::getCppuType((Reference<XIndexAccess>*)0 );
+        Any aAgg = xShapeAgg->queryAggregation( rType );
+        aAgg >>= xAcc;
+    }
+    if(!xAcc.is())
         throw RuntimeException();
-    return bRet;
+    return xAcc->hasElements();
 }
-
-
 
