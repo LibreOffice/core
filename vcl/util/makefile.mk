@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: sb $ $Date: 2002-08-13 13:08:43 $
+#   last change: $Author: hdu $ $Date: 2002-08-27 11:27:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -249,7 +249,8 @@ DEFLIB1NAME =vcl
 
 .IF "$(GUI)" == "WNT"
 
-SHL1STDLIBS += gdi32.lib        \
+SHL1STDLIBS += uwinapi.lib      \
+               gdi32.lib        \
                winspool.lib     \
                ole32.lib        \
                shell32.lib      \
