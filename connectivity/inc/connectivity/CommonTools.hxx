@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 06:58:31 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:48:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,11 @@
 #ifndef _OSL_INTERLOCK_H_
 #include <osl/interlck.h>
 #endif
-
-#ifdef _MSC_VER
-#ifndef SAL_NO_VTABLE
-#define SAL_NO_VTABLE __declspec(novtable)
-#endif
-#else
-#define SAL_NO_VTABLE
+#ifndef INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+#include <jvmaccess/virtualmachine.hxx>
+#endif // INCLUDED_JVMACCESS_VIRTUALMACHINE_HXX
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 namespace com { namespace sun { namespace star { namespace util {
@@ -209,6 +207,23 @@ namespace connectivity
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     void checkDisposed(sal_Bool _bThrow) throw ( ::com::sun::star::lang::DisposedException );
+
+
+    /** creates a java virtual machine
+        @param  _rxFactory
+            The ORB.
+        @return
+            The JavaVM.
+    */
+    ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory);
+
+    /** return <TRUE/> if the java class exists, otherwise <FALSE/>.
+        @param  _pJVM
+            The JavaVM.
+        @param  _sClassName
+            The class name to look for.
+    */
+    sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const ::rtl::OUString& _sClassName );
 }
 
 //==================================================================================
