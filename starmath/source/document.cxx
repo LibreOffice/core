@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-22 15:20:15 $
+ *  last change: $Author: tl $ $Date: 2001-05-30 13:08:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -917,9 +917,24 @@ BOOL SmDocShell::Save()
 }
 
 
+void SmDocShell::UpdateText()
+{
+    if (pEditEngine && pEditEngine->IsModified())
+    {
+        String aEngTxt( pEditEngine->GetText( LINEEND_LF ) );
+        if (GetText() != aEngTxt)
+            SetText( aEngTxt );
+    }
+}
+
+
 BOOL SmDocShell::SaveAs(SvStorage * pNewStor)
 {
     BOOL bRet = FALSE;
+
+    //! apply latest changes if necessary
+    UpdateText();
+
     if ( SfxInPlaceObject::SaveAs( pNewStor ) )
     {
         if( !pTree )
@@ -1140,7 +1155,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     InsertFrom(*pMedium);
                 delete pMedium;
 
-                SetFormulaArranged(FALSE);
+                UpdateText();
                 ArrangeFormula();
                 Resize();
                 // Fenster anpassen, neuzeichnen, ModifyCount erhöhen,...
@@ -1336,7 +1351,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
 //??            case SOT_FORMATSTR_ID_STARMATH:
                     Insert( xStore );
                     break;
+                default:
+                    DBG_ERROR( "unexpected format ID" );
                 }
+                UpdateText();
             }
         }
         break;
