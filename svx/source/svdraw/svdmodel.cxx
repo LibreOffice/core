@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: sj $ $Date: 2001-11-27 10:18:45 $
+ *  last change: $Author: cl $ $Date: 2001-12-06 10:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,6 +361,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, SvPersist* pPers,
     mpForbiddenCharactersTable = NULL;
     mbModelLocked = FALSE;
     mpOutlinerCache = NULL;
+    mbKernAsianPunctuation = sal_False;
 
 #ifndef SVX_LIGHT
     SvxAsianConfig aAsian;
