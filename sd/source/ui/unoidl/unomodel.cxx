@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:25:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,9 +1269,6 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if( NULL == pDoc )
-        throw lang::DisposedException();
-
     if (
         (ServiceName.equalsAscii("com.sun.star.document.OfficeDocument"       )) ||
         (ServiceName.equalsAscii("com.sun.star.drawing.GenericDrawingDocument")) ||
@@ -1290,9 +1287,6 @@ sal_Bool SAL_CALL SdXImpressDocument::supportsService( const OUString& ServiceNa
 uno::Sequence< OUString > SAL_CALL SdXImpressDocument::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-
-    if( NULL == pDoc )
-        throw lang::DisposedException();
 
     uno::Sequence< OUString > aSeq( 4 );
     OUString* pServices = aSeq.getArray();
