@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:30 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_SALSYS_CXX
-
 #ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
 #endif
@@ -94,11 +92,3 @@ BOOL SalSystem::AddRecentDoc( SalFrame*, const XubString& rFileName )
 {
     return FALSE;
 }
-
-// -----------------------------------------------------------------------
-
-XubString SalSystem::GetSummarySystemInfos( ULONG nFlags )
-{
-    return XubString();
-}
-
