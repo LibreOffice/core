@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2001-09-12 11:10:06 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 13:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,13 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
 
         // Refcount wieder bei NULL
         decrement(m_refCount);
+    }
+
+    if ( m_xAggregateSet.is() )
+    {
+        Reference<XPropertySetInfo> xPropInfo = m_xAggregateSet->getPropertySetInfo();
+        if ( xPropInfo.is() && xPropInfo->hasPropertyByName(PROPERTY_TRISTATE) )
+            m_xAggregateSet->setPropertyValue(PROPERTY_TRISTATE, makeAny(sal_True) );
     }
 
     m_aHidden <<= (sal_Bool)sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:46:12 $
+ *  last change: $Author: oj $ $Date: 2002-03-19 13:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,16 +376,15 @@ void OCheckBoxModel::_onValueChanged()
     if (m_xAggregateSet.is())
     {
         Any aValue;
-        if (m_xColumn->getBoolean())
-            aValue <<= (sal_Int16)CB_CHECK;
-        else if (m_xColumn->wasNull())
+        sal_Bool bValue = m_xColumn->getBoolean();
+        if (m_xColumn->wasNull())
         {
             sal_Bool bTriState;
             m_xAggregateSet->getPropertyValue(PROPERTY_TRISTATE) >>= bTriState;
             aValue <<= (sal_Int16)(bTriState ? CB_DONTKNOW : m_nDefaultChecked);
         }
         else
-            aValue <<= (sal_Int16)CB_NOCHECK;
+            aValue <<= ( bValue ? (sal_Int16)CB_CHECK : (sal_Int16)CB_NOCHECK );
         m_bInReset = sal_True;
         {   // release our mutex once (it's acquired in the calling method !), as setting aggregate properties
             // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
