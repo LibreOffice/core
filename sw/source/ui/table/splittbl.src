@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:59:06 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ ModalDialog DLG_SPLIT_TABLE
         TabStop = TRUE ;
         Text [ portuguese ] = "~Copiar título" ;
         Text [ english_us ] = "~Copy heading" ;
-        Text [ portuguese_brazilian ] = "~Überschrift kopieren" ;
+        Text [ portuguese_brazilian ] = "~?berschrift kopieren" ;
         Text [ swedish ] = "Kopiera ~överskrift" ;
         Text [ danish ] = "Kopier overskrift" ;
         Text [ italian ] = "~Copia intestazione" ;
@@ -157,7 +157,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ ENGLISH ] = "New heading ~with style" ;
         Text [ portuguese ] = "Título ~personalizado (com modelo)" ;
         Text [ english_us ] = "C~ustom heading (apply Style)" ;
-        Text [ portuguese_brazilian ] = "~Eigene Überschrift, mit Vorlage" ;
+        Text [ portuguese_brazilian ] = "~Eigene ?berschrift, mit Vorlage" ;
         Text [ swedish ] = "~Egen överskrift, med formatmall" ;
         Text [ danish ] = "Egen overskrift, med typografi" ;
         Text [ italian ] = "~Propria intestazione con modello" ;
@@ -185,7 +185,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ ENGLISH ] = "~New heading" ;
         Text [ portuguese ] = "Título ~personalizado" ;
         Text [ english_us ] = "Cu~stom heading" ;
-        Text [ portuguese_brazilian ] = "E~igene Überschrift" ;
+        Text [ portuguese_brazilian ] = "E~igene ?berschrift" ;
         Text [ swedish ] = "E~gen överskrift" ;
         Text [ danish ] = "Egen overskrift" ;
         Text [ italian ] = "Propria ~intestazione" ;
@@ -213,7 +213,7 @@ ModalDialog DLG_SPLIT_TABLE
         Text [ ENGLISH ] = "N~o heading" ;
         Text [ portuguese ] = "~Sem título" ;
         Text [ english_us ] = "~No heading" ;
-        Text [ portuguese_brazilian ] = "~Keine Überschrift" ;
+        Text [ portuguese_brazilian ] = "~Keine ?berschrift" ;
         Text [ swedish ] = "~Ingen överskrift" ;
         Text [ danish ] = "Ingen overskrift" ;
         Text [ italian ] = "~Senza intestazione" ;
