@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 12:20:05 $
+#   last change: $Author: obo $ $Date: 2004-08-12 10:15:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,6 +89,7 @@ SLOFILES =  \
         $(SLO)$/frmsh.obj \
         $(SLO)$/grfsh.obj \
         $(SLO)$/grfshex.obj \
+        $(SLO)$/mediash.obj \
         $(SLO)$/listsh.obj \
         $(SLO)$/olesh.obj \
         $(SLO)$/slotadd.obj \
