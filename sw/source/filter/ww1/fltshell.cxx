@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltshell.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:01:21 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,11 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
             if( aBkSet.Count() )
                 pNd->SetAttr( aBkSet );
 
-
+#if 0
+            /*
+            #96598# and #23610#
+            In trying to make columns work for indexes work noticed this code is no longer relevant
+            */
             USHORT nCols = ((SwFltTOX*)pEntry->pAttr)->GetCols();
             aRegion.Move( fnMoveBackward );
             SwTOXBase* pBase = (SwTOXBase*)pDoc->GetCurTOX( *aRegion.GetPoint() );
@@ -706,6 +710,7 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos, SwFltStackEntry*
                 aSet.Put( aCol );
                 pBase->SetAttrSet( aSet );
             }
+#endif
         }
         break;
     case RES_FLTR_SECTION:
