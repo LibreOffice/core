@@ -111,12 +111,11 @@ public class ComboBox extends Container {
                 if (unoAS != null) {
                     if (unoAS.contains(AccessibleStateType.EXPANDABLE)) {
                         states.add(AccessibleState.EXPANDABLE);
-                    }
-                    if (unoAS.contains(AccessibleStateType.EXPANDED)) {
-                        states.add(AccessibleState.EXPANDED);
-                    }
-                    if (unoAS.contains(AccessibleStateType.COLLAPSED)) {
-                        states.add(AccessibleState.COLLAPSED);
+                        if (unoAS.contains(AccessibleStateType.EXPANDED)) {
+                            states.add(AccessibleState.EXPANDED);
+                        } else {
+                            states.add(AccessibleState.COLLAPSED);
+                        }
                     }
                 }
             } catch (com.sun.star.uno.RuntimeException e) {
