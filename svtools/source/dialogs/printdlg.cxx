@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-07-04 13:07:46 $
+ *  last change: $Author: pb $ $Date: 2001-08-16 12:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,17 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
 using namespace rtl;
 
+struct SvtPrinterImpl
+{
+    Printer*    m_pTempPrinter;
+    sal_Bool    m_bHelpDisabled;
+
+    SvtPrinterImpl() : m_pTempPrinter( NULL ), m_bHelpDisabled( sal_False ) {}
+    ~SvtPrinterImpl() { delete m_pTempPrinter; }
+};
+
+#define TEMPPRINTER()   mpPrinterImpl->m_pTempPrinter
+
 // =======================================================================
 
 PrintDialog::PrintDialog( Window* pWindow ) :
@@ -158,7 +169,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     FreeResource();
 
     mpPrinter       = NULL;
-    mpTempPrinter   = NULL;
+    mpPrinterImpl   = new SvtPrinterImpl;
     mnCopyCount     = 1;
     mnFirstPage     = 0;
     mnLastPage      = 0;
@@ -200,7 +211,7 @@ PrintDialog::PrintDialog( Window* pWindow ) :
 PrintDialog::~PrintDialog()
 {
     ImplFreePrnDlgListBox( &maLbName, FALSE );
-    delete mpTempPrinter;
+    delete mpPrinterImpl;
 }
 
 // -----------------------------------------------------------------------
@@ -232,7 +243,7 @@ void PrintDialog::ImplSetInfo()
         maBtnBrowse.Show( FALSE );
         maFiFaxNo.Show( TRUE );
         maEdtFaxNo.Show( TRUE );
-        Printer* pPrinter = mpTempPrinter ? mpTempPrinter : mpPrinter;
+        Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
         maEdtFaxNo.SetText( pPrinter->GetJobValue( String::CreateFromAscii( "FAX#" ) ) );
     }
     else
@@ -262,8 +273,8 @@ void PrintDialog::ImplCheckOK()
 
     if ( bEnable )
     {
-        if ( mpTempPrinter )
-            bEnable = mpTempPrinter->IsValid();
+        if ( TEMPPRINTER() )
+            bEnable = TEMPPRINTER()->IsValid();
         else
             bEnable = mpPrinter->IsValid();
     }
@@ -367,9 +378,9 @@ IMPL_LINK( PrintDialog, ImplStatusHdl, Timer*, EMPTYARG )
 
 IMPL_LINK( PrintDialog, ImplPropertiesHdl, void*, EMPTYARG )
 {
-    if ( !mpTempPrinter )
-        mpTempPrinter = new Printer( mpPrinter->GetJobSetup() );
-    mpTempPrinter->Setup();
+    if ( !TEMPPRINTER() )
+        TEMPPRINTER() = new Printer( mpPrinter->GetJobSetup() );
+    TEMPPRINTER()->Setup();
 
     return 0;
 }
@@ -378,8 +389,8 @@ IMPL_LINK( PrintDialog, ImplPropertiesHdl, void*, EMPTYARG )
 
 IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
 {
-    mpTempPrinter = ImplPrnDlgListBoxSelect( &maLbName, &maBtnProperties,
-                                             mpPrinter, mpTempPrinter );
+    TEMPPRINTER() = ImplPrnDlgListBoxSelect( &maLbName, &maBtnProperties,
+                                             mpPrinter, TEMPPRINTER() );
     ImplSetInfo();
 
     return 0;
@@ -421,7 +432,7 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
             {
                 xFilterMgr->appendFilter( maAllFilterStr, OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
             }
-            catch( IllegalArgumentException& rExc )
+            catch( IllegalArgumentException& )
             {
                 DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
             }
@@ -506,7 +517,7 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
 
     if( p == &maEdtFaxNo )
     {
-        Printer* pPrinter = mpTempPrinter ? mpTempPrinter : mpPrinter;
+        Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
         pPrinter->SetJobValue( String::CreateFromAscii( "FAX#" ), maEdtFaxNo.GetText() );
     }
 
@@ -579,6 +590,11 @@ long PrintDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_GETFOCUS) && IsReallyVisible() )
         ImplStatusHdl( &maStatusTimer );
+    else if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && mpPrinterImpl->m_bHelpDisabled )
+            return 1; // do nothing
+    }
 
     return ModalDialog::Notify( rNEvt );
 }
@@ -589,10 +605,10 @@ void PrintDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DATACHANGED_PRINTER )
     {
-        mpTempPrinter = ImplPrnDlgUpdatePrinter( mpPrinter, mpTempPrinter );
+        TEMPPRINTER() = ImplPrnDlgUpdatePrinter( mpPrinter, TEMPPRINTER() );
         Printer* pPrn;
-        if ( mpTempPrinter )
-            pPrn = mpTempPrinter;
+        if ( TEMPPRINTER() )
+            pPrn = TEMPPRINTER();
         else
             pPrn = mpPrinter;
         ImplFillPrnDlgListBox( pPrn, &maLbName, &maBtnProperties );
@@ -626,8 +642,8 @@ short PrintDialog::Execute()
     // Wenn Dialog mit OK beendet wurde, dann die Daten updaten
     if( nRet == TRUE )
     {
-        if ( mpTempPrinter )
-            mpPrinter->SetPrinterProps( mpTempPrinter );
+        if ( TEMPPRINTER() )
+            mpPrinter->SetPrinterProps( TEMPPRINTER() );
         ImplFillDialogData();
     }
 
@@ -636,4 +652,11 @@ short PrintDialog::Execute()
     return nRet;
 }
 
+// -----------------------------------------------------------------------
+
+void PrintDialog::DisableHelp()
+{
+    mpPrinterImpl->m_bHelpDisabled = sal_True;
+    maBtnHelp.Disable();
+}
 
