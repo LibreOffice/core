@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-02-09 09:07:12 $
+ *  last change: $Author: os $ $Date: 2001-04-25 12:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,31 +1110,34 @@ void SwVisitingCardPage::InitFrameControl()
             aAutoTextGroupLB.SetEntryData(nEntry, new String(sGroup));
         }
     }
-    if(LISTBOX_ENTRY_NOTFOUND == aAutoTextGroupLB.GetSelectEntryPos())
-        aAutoTextGroupLB.SelectEntryPos(0);
-    String sCurGroupName(
-        *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
-    if(_xAutoText->hasByName(sCurGroupName))
+    if(aAutoTextGroupLB.GetEntryCount())
     {
-        uno::Any aGroup = _xAutoText->getByName(sCurGroupName);
-        try
+        if(LISTBOX_ENTRY_NOTFOUND == aAutoTextGroupLB.GetSelectEntryPos())
+            aAutoTextGroupLB.SelectEntryPos(0);
+        String sCurGroupName(
+            *(String*)aAutoTextGroupLB.GetEntryData(aAutoTextGroupLB.GetSelectEntryPos()));
+        if(_xAutoText->hasByName(sCurGroupName))
         {
-            uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
-            uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
-            const OUString* pBlocks = aBlockNames.getConstArray();
-            uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
-            const OUString* pTitles = aTitles.getConstArray();
-            for(i = 0; i < aBlockNames.getLength();i++)
+            uno::Any aGroup = _xAutoText->getByName(sCurGroupName);
+            try
             {
-                String sTitle(pTitles[i]);
-                SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry(sTitle);
-                String sBlock(pBlocks[i]);
-                pEntry->SetUserData(new String(sBlock));
+                uno::Reference< text::XAutoTextGroup >  xGroup = *(uno::Reference< text::XAutoTextGroup > *)aGroup.getValue();
+                uno::Sequence<OUString> aBlockNames = xGroup->getElementNames();
+                const OUString* pBlocks = aBlockNames.getConstArray();
+                uno::Sequence< OUString > aTitles = xGroup->getTitles() ;
+                const OUString* pTitles = aTitles.getConstArray();
+                for(i = 0; i < aBlockNames.getLength();i++)
+                {
+                    String sTitle(pTitles[i]);
+                    SvLBoxEntry* pEntry = aAutoTextLB.InsertEntry(sTitle);
+                    String sBlock(pBlocks[i]);
+                    pEntry->SetUserData(new String(sBlock));
+                }
             }
-        }
-        catch( uno::RuntimeException& )
-        {
-            // we'll be her if path settings were wrong
+            catch( uno::RuntimeException& )
+            {
+                // we'll be her if path settings were wrong
+            }
         }
     }
 }
