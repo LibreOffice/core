@@ -23,6 +23,7 @@ common
         *copyprj
 		__mgrdir
         rsc_once
+        wrapper_override_cc_wrapper
         *zipdep
         AWK
 		BIG_GOODIES
