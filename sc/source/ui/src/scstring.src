@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-30 20:27:14 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 23:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2256,7 +2256,7 @@ String SCSTR_CHG_PROTECT
 {
     Text = "Aufzeichnung schützen" ;
     Text [ ENGLISH ] = "Protect trace" ;
-    Text [ english_us ] = "Protect trace" ;
+    Text [ english_us ] = "Protect Records" ;
     Text [ dutch ] = "Registratie beveiligen" ;
     Text [ italian ] = "Proteggi registrazione" ;
     Text [ spanish ] = "Proteger grabación" ;
@@ -2282,7 +2282,7 @@ String SCSTR_CHG_UNPROTECT
 {
     Text = "Aufzeichnungsschutz aufheben" ;
     Text [ ENGLISH ] = "Unprotect trace" ;
-    Text [ english_us ] = "Unprotect trace" ;
+    Text [ english_us ] = "Unprotect Records" ;
     Text [ dutch ] = "Beveiliging van registratie opheffen" ;
     Text [ italian ] = "Elimina protezione registrazione" ;
     Text [ spanish ] = "Desactivar protección de la grabación" ;
@@ -3115,4 +3115,5 @@ String SCSTR_UNDO_GRAFFILTER
     Text[ catalan ] = "Filtro de imagen";
     Text[ finnish ] = "Grafiikkasuodatin";
 };
+
 
