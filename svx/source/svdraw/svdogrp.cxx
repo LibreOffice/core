@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:16:15 $
+ *  last change: $Author: thb $ $Date: 2002-03-12 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1554,7 +1554,11 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(BOOL bBezier) const
     for(UINT32 a=0;a<pSub->GetObjCount();a++)
     {
         SdrObject* pIterObj = pSub->GetObj(a);
-        pGroup->GetSubList()->NbcInsertObject(pIterObj->DoConvertToPolyObj(bBezier));
+        SdrObject* pResult = pIterObj->DoConvertToPolyObj(bBezier);
+
+        // pResult can be NULL e.g. for empty objects
+        if( pResult )
+            pGroup->GetSubList()->NbcInsertObject(pResult);
     }
 
     return pGroup;

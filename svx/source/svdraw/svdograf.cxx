@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ka $ $Date: 2001-11-02 16:00:37 $
+ *  last change: $Author: thb $ $Date: 2002-03-12 10:34:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,6 +1690,25 @@ SdrObject* SdrGrafObj::DoConvertToPolyObj(BOOL bBezier) const
                 pGrp->NbcSetLayer(GetLayer());
                 pGrp->SetModel(GetModel());
                 pRetval = ImpConvertAddText(pRetval, bBezier);
+
+                // convert all children
+                if( pRetval )
+                {
+                    SdrObject* pHalfDone = pRetval;
+                    pRetval = pHalfDone->DoConvertToPolyObj(bBezier);
+                    delete pHalfDone; // resulting object is newly created
+
+                    if( pRetval )
+                    {
+                        // flatten subgroups. As we call
+                        // DoConvertToPolyObj() on the resulting group
+                        // objects, subgroups can exist (e.g. text is
+                        // a group object for every line).
+                        SdrObjList* pList = pRetval->GetSubList();
+                        if( pList )
+                            pList->FlattenGroups();
+                    }
+                }
             }
             else
                 delete pGrp;
