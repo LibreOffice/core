@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:48:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,6 +234,10 @@ enum ScShadowPart
 #define SC_ROTDIR_RIGHT         3
 #define SC_ROTDIR_CENTER        4
 
+#define SC_CLIPMARK_NONE        0
+#define SC_CLIPMARK_LEFT        1
+#define SC_CLIPMARK_RIGHT       2
+
 struct CellInfo
     {
         ScBaseCell*                 pCell;
@@ -263,7 +267,7 @@ struct CellInfo
         USHORT                      nWidth;
 
         BOOL                        bMarked;
-        BOOL                        bStandard;
+        BYTE                        nClipMark;
         BOOL                        bEmptyCellText;
 
         BOOL                        bMerged;
@@ -452,6 +456,7 @@ private:
     BOOL                bIsClip;
     BOOL                bCutMode;
     BOOL                bIsUndo;
+    BOOL                bIsVisible;                     // set from view ctor
 
     BOOL                bIsEmbedded;                    // Embedded-Bereich anzeigen/anpassen ?
 
@@ -662,6 +667,9 @@ public:
     void            ClearDrawPage(USHORT nTab);
     void            SetVisible( USHORT nTab, BOOL bVisible );
     BOOL            IsVisible( USHORT nTab ) const;
+    void            SetLayoutRTL( USHORT nTab, BOOL bRTL );
+    BOOL            IsLayoutRTL( USHORT nTab ) const;
+    BOOL            IsNegativePage( USHORT nTab ) const;
     void            SetScenario( USHORT nTab, BOOL bFlag );
     BOOL            IsScenario( USHORT nTab ) const;
     void            GetScenarioData( USHORT nTab, String& rComment,
@@ -949,6 +957,9 @@ public:
     void            SetCutMode( BOOL bCut );
     BOOL            IsCutMode();
     void            SetClipArea( const ScRange& rArea, BOOL bCut = FALSE );
+
+    BOOL            IsDocVisible() const                        { return bIsVisible; }
+    void            SetDocVisible( BOOL bSet );
 
     BOOL            HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark = NULL );
 
