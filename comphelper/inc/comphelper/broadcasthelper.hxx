@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcasthelper.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-20 11:09:57 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 06:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,13 @@ namespace comphelper
         ::osl::Mutex&               GetMutex() { return m_aMutex; }
         ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return m_aBHelper; }
 
+    };
+
+    // base class for all classes who are derived from OPropertySet and from OComponent
+    class OBaseMutex
+    {
+    protected:
+        ::osl::Mutex m_aMutex;
     };
 }
 #endif // _COMPHELPER_BROADCASTHELPER_HXX_
