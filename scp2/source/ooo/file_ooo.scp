@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.27 $
+*  $Revision: 1.28 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-02 17:49:42 $
+*  last change: $Author: hr $ $Date: 2004-08-03 14:34:51 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -383,12 +383,6 @@ End
 
 STD_SETUPZIP_BMP_FILE( gid_File_Bmp_Installation, oo_product.bmp )
 
-File gid_File_Bmp_Ssologin
-    TXT_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "ssologin.bmp";
-    Styles = (PACKED);
-End
 
 File gid_File_Dtd_Accelerator
     TXT_FILE_BODY;
@@ -1516,6 +1510,35 @@ File gid_File_Oo_Vcl_Xcu
     Styles = (PACKED);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/VCL.xcu";
+End
+
+File gid_File_Oo_Ldap_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice;
+    Name = "/registry/schema/org/openoffice/LDAP.xcs";
+End
+
+
+File gid_File_Oo_Ldap_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
+    Name = "/registry/data/org/openoffice/LDAP.xcu";
+End
+
+File gid_File_Oo_Ldap_Attr_Map
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Ldap;
+    Name = "oo-ldap-attr.map";
+End
+
+File gid_File_Oo_AD_Ldap_Attr_Map
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Ldap;
+    Name = "oo-ad-ldap-attr.map";
 End
 
 File gid_File_Program_All_Delete_Only
