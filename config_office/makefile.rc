@@ -1,14 +1,63 @@
 #*************************************************************************
-#*
-#*    $Workfile:$
-#*
-#*    generated recursive makefile
-#*    last change       $Author: jmarmion $ $Date: 2000-10-12 13:10:53 $
-#*    $Revision: 1.4 $
-#*
-#*    $Logfile:$
-#*
-#*
+#
+#   $RCSfile: makefile.rc,v $
+#
+#   $Revision: 1.5 $
+#
+#   last change: $Author: pluby $ $Date: 2000-10-20 00:36:02 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
 #*************************************************************************
 
 
@@ -44,12 +93,12 @@ RC_SUBDIRS =  \
 	DocumentProperties \
 	UnoControls \
 	api \
-	automation \
 	basctl \
 	basic \
 	bridges \
 	chaos \
 	codemaker \
+	comphelper \
 	configmgr \
 	connectivity \
 	cppu \
@@ -67,19 +116,17 @@ RC_SUBDIRS =  \
 	goodies \
 	i18n \
 	idl \
-	ie \
 	inet \
+	instsetoo \
 	io \
 	javaunohelper \
 	jtools \
 	jurt \
-	ldapber \
-	lingu \
+	jut \
 	officecfg \
 	offmgr \
 	offuh \
 	rdbmaker \
-	readlicense \
 	registry \
 	remotebridges \
 	res \
@@ -97,6 +144,7 @@ RC_SUBDIRS =  \
 	setup2 \
 	sfx2 \
 	sim2 \
+	sip \
 	sj2 \
 	so3 \
 	sot \
@@ -121,8 +169,7 @@ RC_SUBDIRS =  \
 	wizards \
 	xml2cmp \
 	xmlhelp \
-	xmloff \
-	xprinter 
+	xmloff
 
 # 
 # bootstrap target
@@ -131,9 +178,13 @@ RC_SUBDIRS =  \
 bootstrap .PHONY :
 	@config_office/bootstrap
 
-install : instsetoo 
-	cd $?; dmake subdmake=true  product="full"
- 
+
+# 
+# configure target
+# 
+
+configure .PHONY SETDIR=config_office :
+	@configure
 
 # 
 # single directory targets for
@@ -141,73 +192,73 @@ install : instsetoo
 # 
 
 DocumentProperties : svtools
-UnoControls : cppuhelper
+UnoControls : cppuhelper tools
 api : unoidl
-automation : basic
 basctl : svx
-basic : goodies idl
-bridges : cppuhelper jurt offuh
+basic : goodies
+bridges : cppuhelper jurt
 chaos : inet svtools unzip
 codemaker : api
-configmgr : unotools
+comphelper : cppuhelper offuh tools
+configmgr : javaunohelper offuh unoil unotools
 connectivity : svtools
-cppu : codemaker offuh
+cppu : codemaker
 cppuhelper : cppu
 cpputools : cppuhelper
-dbaccess : svx
+dbaccess : connectivity svx
 desktop : sc sd sw
 eventattacher : cppuhelper
-extensions : offmgr rdbmaker xml2cmp unoil
-external : std2
+extensions : rdbmaker svx
 forms : svx
 framework : svtools
 goodies : so3
-i18n : bridges stoc unotools sax
+i18n : bridges stoc svtools unotools
 idl : tools
-ie : svx
-inet : tools ldapber
-io : ucbhelper
-javaunohelper : cppuhelper 
+inet : tools
+instsetoo : UnoControls chaos configmgr cpputools dbaccess desktop eventattacher extensions extras forms framework i18n io remotebridges sax scaddins scp wizards
+io : rdbmaker xml2cmp
+javaunohelper : bridges cppuhelper unoil
 jurt : codemaker sandbox
-lingu : sfx2
-offmgr : sch sdb sim2 starmath uui
+jut : javaunohelper
+offmgr : basctl sch sdb sim2 starmath uui
+offuh : codemaker
 rdbmaker : cppuhelper
 registry : store
-remotebridges : bridges
+remotebridges : bridges rdbmaker xml2cmp
 rsc : tools
-sal : std2 external 
-sax : cppuhelper
+sal : std2
+sax : cppuhelper external
 sc : offmgr
 scaddins : cppuhelper
-sch : svx
+sch : basctl svx
 scp : scptools
-scptools : setup2 
+scptools : setup2
 sd : offmgr sc
 sdb : sfx2
-setup2 : basic transex3 unzip automation 
-sfx2 : setup2
+setup2 : basic transex3 unoil unzip
+sfx2 : idl setup2
 sim2 : svx
-sj2 : svtools sandbox
+sip : sd
+sj2 : jtools sandbox svtools
 so3 : inet sj2
 sot : tools
 starmath : svx
-stoc : bridges rdbmaker
+stoc : bridges rdbmaker xml2cmp
 store : vos
-svtools : toolkit ucbhelper
-svx : lingu sfx2 xmloff
+svtools : toolkit ucbhelper unotools
+svx : sfx2 xmloff
 sw : offmgr sd
 toolkit : vcl
 tools : external vos
 transex3 : tools
 ucbhelper : cppuhelper offuh
-unoidl : registry tools
-unotools : cppuhelper offuh
+unoidl : registry
+unoil : jurt
+unotools : comphelper
 uui : svtools
-vcl : rsc sot ucbhelper unotools xprinter
-vos : sal 
+vcl : rsc sot ucbhelper unotools
+vos : sal
 wizards : offmgr
-xmloff : lingu
-#install : instsetoo
 
 # 
 # central target makefile
