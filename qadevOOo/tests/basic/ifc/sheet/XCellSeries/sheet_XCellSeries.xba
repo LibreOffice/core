@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sheet_XCellSeries" script:language="StarBasic">
+
+'*************************************************************************
+'*
+'*  $RCSfile: sheet_XCellSeries.xba,v $ 
+'*
+'*  $Revision: 1.1 $ 
+'*
+'*  last change:$Date: 2003-02-27 16:10:09 $ 
+'*
+'*  The Contents of this file are made available subject to the terms of
+'*  either of the following licenses
+'*
+'*         - GNU Lesser General Public License Version 2.1
+'*         - Sun Industry Standards Source License Version 1.1
+'*
+'*  Sun Microsystems Inc., October, 2000
+'*
+'*  GNU Lesser General Public License Version 2.1
+'*  =============================================
+'*  Copyright 2000 by Sun Microsystems, Inc.
+'*  901 San Antonio Road, Palo Alto, CA 94303, USA
+'*
+'*  This library is free software; you can redistribute it and/or
+'*  modify it under the terms of the GNU Lesser General Public
+'*  License version 2.1, as published by the Free Software Foundation.
+'*
+'*  This library is distributed in the hope that it will be useful,
+'*  but WITHOUT ANY WARRANTY; without even the implied warranty of
+'*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+'*  Lesser General Public License for more details.
+'*
+'*  You should have received a copy of the GNU Lesser General Public
+'*  License along with this library; if not, write to the Free Software
+'*  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+'*  MA  02111-1307  USA
+'*
+'*
+'*  Sun Industry Standards Source License Version 1.1
+'*  =================================================
+'*  The contents of this file are subject to the Sun Industry Standards
+'*  Source License Version 1.1 (the "License"); You may not use this file
+'*  except in compliance with the License. You may obtain a copy of the
+'*  License at http://www.openoffice.org/license.html.
+'*
+'*  Software provided under this License is provided on an "AS IS" basis,
+'*  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+'*  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+'*  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+'*  See the License for the specific provisions governing your rights and
+'*  obligations concerning the Software.
+'*
+'*  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+'*
+'*  Copyright: 2000 by Sun Microsystems, Inc.
+'*
+'*  All Rights Reserved.
+'*
+'*  Contributor(s): _______________________________________
+'*
+'*
+'*************************************************************************
+'*************************************************************************
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+' - Global aCellSeries(1) As Integer
+'           aCellSeries(0) = amount of rows of range
+'           aCellSeries(1) = amount of columns of range
+
+'*************************************************************************
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sheet.XCellSeries
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim startValue as Integer
+    Dim nStep as Integer
+    Dim shouldValue as Integer
+    Dim filledValue as Integer
+    Dim endCell(2) as Integer
+    Dim n as Integer
+    
+	startValue = 5
+    nStep = 2
+    
+    ' if 'nStep' is not a divisor of 'aCellSeries' it must be calculated
+    ' the last filled cell
+    for n = 0 to 1
+        if (aCellSeries(n) mod nStep) &lt;&gt; 0 then
+            endCell(n) = aCellSeries(n) - (nStep-1)
+        else
+            endCell(n) = aCellSeries(n)
+        end if
+    next n
+    
+    'set defined start value
+    oObj.getCellByPosition(0,0).setValue(startValue)
+
+    Test.StartMethod("fillAuto()")
+    bOK = TRUE
+    oObj.fillAuto(com.sun.star.sheet.FillDirection.TO_BOTTOM, nStep)
+    shouldValue = endCell(0) / nStep + startValue
+    filledValue = oObj.getCellByPosition(0,endCell(0)).getValue()
+ 	bOK = bOK AND ( shouldValue = filledValue ) 
+    Test.MethodTested("fillAuto()", bOK)
+
+
+    Test.StartMethod("fillSeries()")
+    bOK = TRUE
+    out.log("fillSeries() 1/3")
+    oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, _
+    com.sun.star.sheet.FillMode.LINEAR, _
+    com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, nStep, 20000000)
+    shouldValue = endCell(0) * nStep + startValue
+    filledValue = oObj.getCellByPosition(0,endCell(0)).getValue()
+ 	bOK = bOK and (shouldValue = filledValue) 
+
+    out.log("fillSeries() 2/3")
+    oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, _
+    com.sun.star.sheet.FillMode.LINEAR, _
+    com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, nStep, 20000000)
+    shouldValue = endCell(1) * nStep + startValue
+    filledValue = oObj.getCellByPosition(endCell(1),0).getValue()
+ 	bOK = bOK and (shouldValue = filledValue) 
+ 	
+ 	
+    out.log("fillSeries() 3/3")
+    oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, _
+    com.sun.star.sheet.FillMode.GROWTH, _
+    com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, nStep, 20000000)
+    shouldValue = startValue * nStep ^ endCell(0)
+    filledValue = oObj.getCellByPosition(0,endCell(0)).getValue()
+ 	bOK = bOK and (shouldValue = filledValue) 
+
+    Test.MethodTested("fillSeries()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>
