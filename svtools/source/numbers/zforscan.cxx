@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:28:38 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:27:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,10 @@
 #ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 #include <unotools/numberformatcodewrapper.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
-//#include "iniman.hxx"
 #include "zforlist.hxx"
 #include "zformat.hxx"
 
@@ -91,21 +93,33 @@
 #include "zforscan.hxx"
 #undef _ZFORSCAN_CXX
 
-
-String ImpSvNumberformatScan::theEnglishColors[SC_MAX_ANZ_STANDARD_FARBEN] =
+namespace
 {
-    String( RTL_CONSTASCII_USTRINGPARAM( "BLACK" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "BLUE" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "GREEN" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "CYAN" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "RED" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "MAGENTA" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "BROWN" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "GREY" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "YELLOW" ) ),
-    String( RTL_CONSTASCII_USTRINGPARAM( "WHITE" ) )
-};
+    struct ImplEnglishColors
+    {
+        const String* operator()()
+        {
+            static const String aEnglishColors[SC_MAX_ANZ_STANDARD_FARBEN] =
+            {
+                String( RTL_CONSTASCII_USTRINGPARAM( "BLACK" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "BLUE" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "GREEN" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "CYAN" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "RED" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "MAGENTA" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "BROWN" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "GREY" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "YELLOW" ) ),
+                String( RTL_CONSTASCII_USTRINGPARAM( "WHITE" ) )
+            };
+            return &aEnglishColors[0];
+        }
+    };
 
+    struct theEnglishColors
+            : public rtl::StaticAggregate< const String, ImplEnglishColors> {};
+
+}
 
 ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
 {
@@ -458,9 +472,10 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
         i++;
     if ( i >= SC_MAX_ANZ_STANDARD_FARBEN )
     {
+        const String* pEnglishColors = theEnglishColors::get();
         USHORT j = 0;
         while ( j < SC_MAX_ANZ_STANDARD_FARBEN &&
-                sString != theEnglishColors[j] )
+                sString != pEnglishColors[j] )
             ++j;
         if ( j < SC_MAX_ANZ_STANDARD_FARBEN )
             i = j;
