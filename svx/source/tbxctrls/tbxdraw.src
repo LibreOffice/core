@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:31:07 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,7 +483,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 RadioCheck = TRUE ;
                 Text = "Vertikale Legende" ;
                 Text [ ENGLISH ] = "Vertical Caption" ;
-                Text[ english_us ] = "Vertical Caption";
+                Text[ english_us ] = "Vertical Callout";
                 Text[ portuguese ] = "Vertical Caption";
                 Text[ russian ] = "Βεπςθκΰλόνΰÿ λεγενδΰ";
                 Text[ greek ] = "Κατακόρυφο υπόμνημα";
