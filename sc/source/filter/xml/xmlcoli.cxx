@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 14:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,11 +215,14 @@ void ScXMLTableColContext::EndElement()
                     uno::Reference <beans::XPropertySet> xColumnProperties(xTableColumns, uno::UNO_QUERY);
                     if (xColumnProperties.is())
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
-                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
-                        if (pStyle)
-                            pStyle->FillPropertySet(xColumnProperties);
+                        if (sStyleName.getLength())
+                        {
+                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
+                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XML_STYLE_FAMILY_TABLE_COLUMN, sStyleName, sal_True);
+                            if (pStyle)
+                                pStyle->FillPropertySet(xColumnProperties);
+                        }
                         rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
                         uno::Any aAny = xColumnProperties->getPropertyValue(sVisible);
                         if (IsXMLToken(sVisibility, XML_VISIBLE))

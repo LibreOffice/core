@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-31 15:41:16 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 14:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                 }
                             }
                     }
-                    if (nCurrentSheet > 0)
+                    if (nCurrentSheet > 0 && sStyleName.getLength())
                     {
                         uno::Reference <beans::XPropertySet> xProperties(xCurrentSheet, uno::UNO_QUERY);
                         if (xProperties.is())
@@ -314,9 +314,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                             XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                 XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
                             if (pStyle)
-                            {
                                 pStyle->FillPropertySet(xProperties);
-                            }
                         }
                     }
                     else

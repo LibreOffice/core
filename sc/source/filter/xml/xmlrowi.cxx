@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
+ *  last change: $Author: sab $ $Date: 2001-09-06 14:51:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,11 +224,14 @@ void ScXMLTableRowContext::EndElement()
                     uno::Reference <beans::XPropertySet> xRowProperties(xTableRows, uno::UNO_QUERY);
                     if (xRowProperties.is())
                     {
-                        XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
-                        XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                            XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
-                        if (pStyle)
-                            pStyle->FillPropertySet(xRowProperties);
+                        if (sStyleName.getLength())
+                        {
+                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)rXMLImport.GetAutoStyles();
+                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
+                            if (pStyle)
+                                pStyle->FillPropertySet(xRowProperties);
+                        }
                         uno::Any aVisibleAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
                         uno::Any aFilteredAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
                         sal_Bool bVisible (sal_True);
