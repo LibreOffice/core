@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gh $ $Date: 2001-03-20 14:31:51 $
+ *  last change: $Author: svesik $ $Date: 2001-04-08 20:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,11 +1124,11 @@ sal_Bool SAL_CALL osl_setThreadKeyData(oslThreadKey Key, void *pData)
 static rtl_TextEncoding eImplCharSet = RTL_TEXTENCODING_DONTKNOW;
 static rtl_TextEncoding eImplDefaultCharSet = RTL_TEXTENCODING_MS_1252;
 
-#if defined(NETBSD) || defined(SCO)
+#if defined(SCO)
 static rtl_TextEncoding GetSystemCharSetFromSystemLanguage();
 static rtl_TextEncoding GetSystemCharSetFromLocale( const char* pLocaleString );
 static rtl_TextEncoding GetSystemCharSetFromEnvironment();
-#endif /* if def NETBSD || SCO */
+#endif /* if def SCO */
 
 #ifdef UNX
 
@@ -1193,11 +1193,11 @@ static rtl_TextEncoding osl_getSystemTextEncoding()
         }
 
 
-#if defined(NETBSD) || defined(SCO)
+#if defined(SCO)
         nTextEncoding = GetSystemCharSetFromEnvironment();
         if (nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
             nTextEncoding = GetSystemCharSetFromSystemLanguage();
-#elif defined(LINUX) || defined(SOLARIS)
+#elif defined(LINUX) || defined(SOLARIS) || defined(NETBSD)
         nTextEncoding = GetSystemCharsetFromNLLanginfo();
 #elif defined(MACOSX)
         nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
@@ -1220,7 +1220,7 @@ static rtl_TextEncoding osl_getSystemTextEncoding()
 }
 
 
-#if defined(NETBSD) || defined(SCO)
+#if defined(SCO)
 
 /*
  *  gather from system language to what charset may adequate,
@@ -1422,11 +1422,11 @@ static rtl_TextEncoding GetSystemCharSetFromEnvironment()
     return GetSystemCharSetFromLocale( pEnvironmentPtr );
 }
 
-#endif /* ifdef NETBSD || SCO */
+#endif /* ifdef SCO */
 
 
 
-#if defined(LINUX) || defined(SOLARIS)
+#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD)
 
 /*
  * rtl_getTextEncodingFromLanguage maps from nl_langinfo(CODESET) to
@@ -1476,7 +1476,7 @@ const _pair _nl_language_list[] = {
 /* XXX MS-874 is an extension to tis620, so this is not
  * really equivalent */
 
-#elif defined(LINUX)
+#elif defined(LINUX) || defined(NETBSD)
 
 const _pair _nl_language_list[] = {
     { "ANSI_X3.110-1983",   RTL_TEXTENCODING_DONTKNOW },/* ISO-IR-99 NAPLPS */
@@ -1668,7 +1668,16 @@ GetSystemCharsetFromNLLanginfo()
 
     /* get the charset as indicated by the LC_CTYPE locale */
     ctype_locale = setlocale( LC_CTYPE, "" );
+
+#if (defined NETBSD)
+// poor man's way of getting the codeset,
+// but NetBSD doesn't understand CODESET (yet)
+    codeset    = getenv( "LANG" );
+    if (codeset == NULL)
+      codeset = getenv ( "LC_CTYPE" );
+#else
     codeset    = nl_langinfo( CODESET );
+#endif
 
     if ( codeset != NULL )
     {
@@ -1700,7 +1709,7 @@ GetSystemCharsetFromNLLanginfo()
 
     return RTL_TEXTENCODING_DONTKNOW;
 }
-#endif /* ifdef LINUX || SOLARIS */
+#endif /* ifdef LINUX || SOLARIS || NETBSD*/
 
 
 static int
