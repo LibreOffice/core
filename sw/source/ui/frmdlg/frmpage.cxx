@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:33:28 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:35:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _SV_MNEMONIC_HXX
+#include <vcl/mnemonic.hxx>
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -1246,7 +1249,7 @@ USHORT SwFrmPage::FillPosLB(FrmMap *pMap, USHORT nAlign, ListBox &rLB)
             USHORT nResId = aMirrorPagesCB.IsChecked() ? pMap[i].nMirrorStrId : pMap[i].nStrId;
             nResId = lcl_ChangeResIdToVerticalOrRTL(nResId, bIsVerticalFrame, bIsInRightToLeft);
             String sEntry(SW_RES(nResId));
-            sEntry.EraseAllChars( '~' );
+            sEntry = MnemonicGenerator::EraseAllMnemonicChars( sEntry );
             if (rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
                 // bei zeichengebundenen Rahmen keine doppelten Eintraege einfuegen
                 rLB.InsertEntry(sEntry);
@@ -1477,7 +1480,7 @@ USHORT SwFrmPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
                 USHORT nResId = pMap[i].nStrId;
 
                 String sEntry(SW_RES(nResId));
-                sEntry.EraseAllChars( '~' );
+                sEntry = MnemonicGenerator::EraseAllMnemonicChars( sEntry );
 
                 if (sEntry == sSelEntry)
                 {
@@ -1568,12 +1571,14 @@ IMPL_LINK( SwFrmPage, RelSizeClickHdl, CheckBox *, pBtn )
     if (pBtn == &aRelWidthCB)
     {
         aWidthED.ShowPercent(pBtn->IsChecked());
-        aWidthED.MetricField::SetMax(MAX_PERCENT_WIDTH);
+        if(pBtn->IsChecked())
+            aWidthED.MetricField::SetMax(MAX_PERCENT_WIDTH);
     }
     else // pBtn == &aRelHeightCB
     {
         aHeightED.ShowPercent(pBtn->IsChecked());
-        aHeightED.MetricField::SetMax(MAX_PERCENT_HEIGHT);
+        if(pBtn->IsChecked())
+            aHeightED.MetricField::SetMax(MAX_PERCENT_HEIGHT);
     }
 
     if (pBtn)   // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
