@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 13:01:55 $
+ *  last change: $Author: hr $ $Date: 2001-01-04 17:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@
 #include <offmgr/ofaaccfg.hxx>
 #endif
 #ifndef _COM_SUN_STAR_I18N_TRANSLITERATIONMODULES_HDL_
-#include <com/sun/star/i18n/transliterationmodules.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hdl>
 #endif
 
 #ifndef _SWWDOCSH_HXX //autogen
@@ -1028,6 +1028,9 @@ void SwTextShell::InsertSymbol(const String& rChars, const String& rFontName)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/12/21 13:01:55  jp
+    new: transliteration
+
     Revision 1.3  2000/11/14 18:32:27  jp
     use moduleoptions
 
