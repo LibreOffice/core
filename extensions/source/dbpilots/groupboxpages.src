@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:35:53 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ french ] = "Quels ~intitul�s attribuer aux boutons radio ?";
         Text[ spanish ] = "�Qu� ~nombres deben contener los campos de opci�n?";
         Text[ italian ] = "Quale nome volete assegnare ai campi di opzione ?";
-        Text[ danish ] = "Hvilke ~betegnelser skal alternativfelterne have?";
+        Text[ danish ] = "Hvilke ~betegnelser skal indstillingsfelterne have?";
         Text[ swedish ] = "Vilka ~beteckningar skall alternativf�lten f�?";
         Text[ polish ] = "Jakie ~nazwy powinny by� u�yte dla p�l opcji?";
         Text[ portuguese_brazilian ] = "Que ~nomes deseja dar para os bot�es de op��o?";
@@ -109,6 +109,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ hebrew ] = "Welche ~Bezeichnungen sollen die Optionsfelder erhalten?";
         Text[ hindi ] = "आप वि~कल्प क्षेत्रों को क्या नाम देना चाहते है?";
         Text[ slovak ] = "Ktorým me~nám chcete chcete priradiť pole volieb?";
+        Text[ hungarian ] = "Mik legyenek a rádiógombok ~nevei?";
+        Text[ slovenian ] = "Kako želite po~imenovati polja z možnostmi?";
     };
     Edit ET_RADIOLABELS
     {
@@ -144,7 +146,7 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ french ] = "~Boutons radio";
         Text[ spanish ] = "~Campos de opci�n";
         Text[ italian ] = "~Campi di opzione";
-        Text[ danish ] = "~Alternativfelter";
+        Text[ danish ] = "~Indstillingsfelter";
         Text[ swedish ] = "~Alternativf�lt";
         Text[ polish ] = "~Pola opcji";
         Text[ portuguese_brazilian ] = "~Bot�es de op��o";
@@ -161,6 +163,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Text[ hebrew ] = "~Optionsfelder";
         Text[ hindi ] = "~विकल्प क्षेत्र";
         Text[ slovak ] = "P~olia možností";
+        Text[ hungarian ] = "~Rádiógombok";
+        Text[ slovenian ] = "Polja z ~možnostmi";
     };
     ListBox LB_RADIOBUTTONS
     {
@@ -195,6 +199,8 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
     Text[ hebrew ] = "Daten";
     Text[ hindi ] = "ड़ॉटा";
     Text[ slovak ] = "Dáta";
+    Text[ hungarian ] = "Adat";
+    Text[ slovenian ] = "Podatki";
 };
 
 TabPage RID_PAGE_DEFAULTFIELDSELECTION
@@ -243,6 +249,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ hebrew ] = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
         Text[ hindi ] = "एक विकल्प क्षेत्र को अनुपस्थिति में चुनना है ?";
         Text[ slovak ] = "Má byť jedno pole voľby vybrané ako východzie?";
+        Text[ hungarian ] = "Legyen alapértelmezésben kijelölt rádiógomb?";
+        Text[ slovenian ] = "Ali naj bo izbrano eno polje z možnostmi kot privzeto?";
     };
     RadioButton RB_DEFSELECTION_YES
     {
@@ -277,6 +285,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ hebrew ] = "~Ja, und zwar folgendes:";
         Text[ hindi ] = "~हाँ, निम्नलिखित:";
         Text[ slovak ] = "Á~no, nasledujúce:";
+        Text[ hungarian ] = "~Igen, a következő:";
+        Text[ slovenian ] = "~Da, naslednje:";
     };
     ListBox LB_DEFSELECTIONFIELD
     {
@@ -321,6 +331,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Text[ hebrew ] = "Nein, kein Feld soll ausgewählt sein.";
         Text[ hindi ] = "नहीं, एक क्षेत्र को नहीं चुन सकते है ।";
         Text[ slovak ] = "Žiadne prislúchajúce pole nebude vybrané.";
+        Text[ hungarian ] = "Nem, ne legyen alapértelmezett gomb.";
+        Text[ slovenian ] = "Ne, polje naj ne bo izbrano.";
     };
     Text[ portuguese ] = "Selec��o do campo padr�o";
     Text[ russian ] = "����� ���� �� ���������";
@@ -346,6 +358,8 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
     Text[ hebrew ] = "Standardfeldauswahl";
     Text[ hindi ] = "अनुपस्थिति क्षेत्र चुनाव";
     Text[ slovak ] = "Východzie Pole";
+    Text[ hungarian ] = "Alapértelmezett mező kiválasztása";
+    Text[ slovenian ] = "Izbor privzetega polja";
 };
 
 TabPage RID_PAGE_OPTIONVALUES
@@ -395,6 +409,8 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ hebrew ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
         Text[ hindi ] = "जब आप एक विकल्प को चुनते है , तब विकल्प समूह को एक निर्दिष्ट मूल्य दिया जाता है ।";
         Text[ slovak ] = "Keď si vyberiete voľbu, skupine volieb bude priradená špecifická hodnota.";
+        Text[ hungarian ] = "Amennyiben egy rádiógombot kijelöl, a rádiógomb-csoport egy meghatározott értéket vesz fel.";
+        Text[ slovenian ] = "Ko izberete eno možnost, je skupini možnosti dodeljena posebna vrednost.";
     };
     FixedText FT_OPTIONVALUES
     {
@@ -431,6 +447,8 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ hebrew ] = "Welchen ~Wert möchten Sie jeder Option zuweisen?";
         Text[ hindi ] = "हरेक वि~कल्प को आप कौनसी मूल्य को निर्दिष्ट करना चाहते है?";
         Text[ slovak ] = "Ktorú ~hodnotu chcete priradiť každej voľbe?";
+        Text[ hungarian ] = "Milyen ~értékeket szeretne hozzárendelni az egyes lehetőségekhez?";
+        Text[ slovenian ] = "Kolikšno ~vrednost želite dodeliti posamezni možnosti?";
     };
     Edit ET_OPTIONVALUE
     {
@@ -453,7 +471,7 @@ TabPage RID_PAGE_OPTIONVALUES
         Text [ french ] = "~Boutons radio";
         Text [ spanish ] = "~Campos de opci�n";
         Text [ italian ] = "~Campi di opzione";
-        Text [ danish ] = "~Alternativfelter";
+        Text [ danish ] = "~Indstillingsfelter";
         Text [ swedish ] = "~Alternativf�lt";
         Text [ polish ] = "~Pola opcji";
         Text [ portuguese_brazilian ] = "~Bot�es de op��o";
@@ -473,6 +491,8 @@ TabPage RID_PAGE_OPTIONVALUES
         Text[ hebrew ] = "~Optionsfelder";
         Text[ hindi ] = "~विकल्प क्षेत्र";
         Text[ slovak ] = "P~ole volieb";
+        Text[ hungarian ] = "~Rádiógombok";
+        Text[ slovenian ] = "Polja z ~možnostmi";
     };
     ListBox LB_RADIOBUTTONS
     {
@@ -507,6 +527,8 @@ TabPage RID_PAGE_OPTIONVALUES
     Text[ hebrew ] = "Feldwerte";
     Text[ hindi ] = "क्षेत्र मूल्य";
     Text[ slovak ] = "Hodnoty polí";
+    Text[ hungarian ] = "Mezőértékek";
+    Text[ slovenian ] = "Vrednosti polj";
 };
 
 TabPage RID_PAGE_OPTIONS_FINAL
@@ -518,7 +540,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
     Text [ english_us ] = "Create Option Group";
     Text [ portuguese ] = "Criar grupo de op��es";
     Text [ russian ] = "������� ������ ����������";
-    Text [ dutch ] = "optiegroep maken";
+    Text [ dutch ] = "optiegroep aanmaken";
     Text [ french ] = "Cr�er un groupe d'options";
     Text [ spanish ] = "Crear grupo de opciones";
     Text [ italian ] = "Crea gruppo di opzioni";
@@ -530,7 +552,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
     Text [ chinese_simplified ] = "制作选项小组";
     Text [ chinese_traditional ] = "新建選項群組";
     Text [ arabic ] = "����� ������ ������";
-    Text [ dutch ] = "optiegroep maken";
+    Text [ dutch ] = "optiegroep aanmaken";
     Text [ chinese_simplified ] = "制作选项小组";
     Text [ greek ] = "���������� ������ ��������";
     Text [ korean ] = "옵션 그룹 만들기";
@@ -575,6 +597,8 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text[ hebrew ] = "Welche ~Beschriftung soll Ihre Optionsgruppe haben?";
         Text[ hindi ] = "आप ~विकल्प समूह को क्या नाम देना चाहते है?";
         Text[ slovak ] = "Aký ~názov ma byť priradený Vašej skupine volieb?";
+        Text[ hungarian ] = "Milyen ~felirattal látja el a vezérlőelem-csoportot?";
+        Text[ slovenian ] = "Kakšen ~napis želite dati vaši skupini možnosti?";
     };
     Edit ET_NAMEIT
     {
@@ -594,7 +618,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ english_us ] = "These were all details needed to create the option group.";
         Text [ portuguese ] = "As informa��es necess�rias para criar o grupo de op��es est�o agora completas.";
         Text [ russian ] = "��� ��� �����������, ����������� ��� �������� ������ ����������.";
-        Text [ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
+        Text [ dutch ] = "De gegevens voor het aanmaken van de optiegroep zijn nu compleet.";
         Text [ french ] = "Toutes les informations n�cessaires ont �t� rassembl�es ; le groupe d'options va pouvoir �tre cr��.";
         Text [ spanish ] = "Ya se dispone de las informaciones necesarias para crear el grupo de opciones.";
         Text [ italian ] = "Tutte le informazioni necessarie per creare il gruppo di opzioni sono state indicate.";
@@ -606,7 +630,7 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text [ chinese_simplified ] = "这些是制作选项小组所需的全部资料。";
         Text [ chinese_traditional ] = "這些是用於製作選項群組所需的全部的設定資料。";
         Text [ arabic ] = "���� ��� �� ���� �������� ������� ������ ������ ��������.";
-        Text [ dutch ] = "De gegevens voor het maken van de optiegroep zijn nu compleet.";
+        Text [ dutch ] = "De gegevens voor het aanmaken van de optiegroep zijn nu compleet.";
         Text [ chinese_simplified ] = "这些是制作选项小组所需的全部资料。";
         Text [ greek ] = "���� ���� �� �������� ��� ����������� ��� ��� ���������� ��� ������ ��������.";
         Text [ korean ] = "지금까지 옵션 그룹 작성에 필요한 모든 지정 내용이었습니다.";
@@ -618,6 +642,8 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Text[ hebrew ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
         Text[ hindi ] = "विकल्प समूह को उत्पन्न करने केलिए इन सब विवरणों का आवश्यकता है ।";
         Text[ slovak ] = "Toto boli všetky informácie potrebné na vytvorenie skupiny volieb.";
+        Text[ hungarian ] = "Mindössze ennyire volt szükség a rádiógomb-csoport létrehozásához.";
+        Text[ slovenian ] = "To so vse potrebne podrobnosti za ustvarjanje skupine možnosti.";
     };
     Text[ catalan ] = "Crea el grup d'opcions";
     Text[ finnish ] = "Luo valintaryhm�";
@@ -626,6 +652,8 @@ TabPage RID_PAGE_OPTIONS_FINAL
     Text[ hebrew ] = "Optionsgruppe erstellen";
     Text[ hindi ] = "विकल्प समूह उत्पन्न करो";
     Text[ slovak ] = "Vytvoriť skupinu výberu";
+    Text[ hungarian ] = "Rádiógomb-csoport létrehozása";
+    Text[ slovenian ] = "Ustvari skupino možnosti";
 };
 
 String RID_STR_GROUPWIZ_DBFIELD
@@ -659,11 +687,23 @@ String RID_STR_GROUPWIZ_DBFIELD
     Text[ hebrew ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
     Text[ hindi ] = "आप विकल्प समूह को लेखासंचय क्षेत्र में संचित कर सकते है अथवा आगामी कार्य में उपयोग कर सकते है । ";
     Text[ slovak ] = "Môžete uložiť hodnotu zo skupiny volieb do databázového poľa, alebo ju použiť neskôr.";
+    Text[ hungarian ] = "Tárolhatja a rádiógomb-csoport értékét az adatbázisban, vagy felhasználhatja egy későbbi művelethez.";
+    Text[ slovenian ] = "Vrednost skupine možnosti lahko shranite v polje zbirke podatkov ali pa jo uporabite za kasnejša dejanja.";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.23.90.1  2003/12/16 11:43:25  hr
+ *  #111934#: join CWS ooo111fix1
+ *
+ *  Revision 1.23.44.1  2003/11/24 13:32:10  ihi
+ *  OOo 1.1.1 merge
+ *
+ *  Revision 1.23  2003/07/17 12:35:53  hr
+ *  INTEGRATION: CWS mergerc3 (1.22.6); FILE MERGED
+ *  2003/07/16 17:08:01 ihi 1.22.6.1: rc-3 merge all languages
+ *
  *  Revision 1.22.6.1  2003/07/16 17:08:01  ihi
  *  rc-3 merge all languages
  *
@@ -797,6 +837,8 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
+
 
 
 
