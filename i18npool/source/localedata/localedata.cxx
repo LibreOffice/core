@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:47:41 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 15:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #include <stdio.h>
 
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 
@@ -765,87 +767,91 @@ public:
 static
 sal_Char* U2C( OUString str )
 {
-         sal_Char* s = new sal_Char[ str.getLength()+1 ];
-         for(int i=0; i<str.getLength(); i++) s[i] = str[i];
-         s[i]='\0';
-         return s;
+     sal_Char* s = new sal_Char[ str.getLength()+1 ];
+     int i;
+     for( i = 0; i < str.getLength(); i++)
+         s[i] = str[i];
+     s[i]='\0';
+     return s;
 }
 
 
 Sequence< Reference<container::XIndexAccess> > SAL_CALL
 LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
-         int i;
+    int i;
 
-         // load symbol
-         MyFunc_Type3 func = (MyFunc_Type3) getFunctionSymbol( rLocale, "getOutlineNumberingLevels" );
+    // load symbol
+    MyFunc_Type3 func = (MyFunc_Type3) getFunctionSymbol( rLocale, "getOutlineNumberingLevels" );
 
-         if ( func )
-         {
-              // invoke function
-              sal_Int16 nStyles;
-              sal_Int16 nLevels;
-              sal_Int16 nAttributes;
-              sal_Unicode**** p0 = func( nStyles, nLevels, nAttributes );
+    if ( func )
+    {
+        // invoke function
+        sal_Int16 nStyles;
+        sal_Int16 nLevels;
+        sal_Int16 nAttributes;
+        sal_Unicode**** p0 = func( nStyles, nLevels, nAttributes );
 
-              Sequence< Reference<container::XIndexAccess> > aRet( nStyles );
+        Sequence< Reference<container::XIndexAccess> > aRet( nStyles );
 
-                      OUString aEmptyStr;
+        OUString aEmptyStr;
 
-              sal_Unicode**** pStyle = p0;
-              for( i=0;  i<nStyles;  i++ )
-              {
-                   OutlineNumberingLevel_Impl* level = new OutlineNumberingLevel_Impl[ nLevels+1 ];
-                   sal_Unicode*** pLevel = pStyle[i];
-                   for( int j=0;  j<nLevels;  j++ )
-                   {
-                        sal_Unicode** pAttribute = pLevel[j];
-                        for( int k=0; k<nAttributes; k++ )
-                        {
-                             OUString tmp( pAttribute[k] );
-                             switch( k )
-                             {
-                             case 0: level[j].cPrefix             = tmp.toChar();    break;
-                             case 1: level[j].nNumType            = tmp.toInt32();   break;
-                             case 2: level[j].cSuffix             = tmp.toChar();    break;
-    //                       case 3: level[j].cBulletChar         = tmp.toChar();    break;
-                             case 3: level[j].cBulletChar         = tmp.toInt32(16); break; // base 16
-                             case 4: level[j].sBulletFontName     = U2C( tmp );      break;
-                             case 5: level[j].nParentNumbering    = tmp.toInt32();   break;
-                             case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
-                             case 7: level[j].nSymbolTextDistance = tmp.toInt32();   break;
-                             case 8: level[j].nFirstLineOffset    = tmp.toInt32();   break;
-                             case 9: // Adjust
-                                  // thise values seem to be hard-coded elsewhere:
-    //                           level[j].Value <<= (sal_Int16) text::HoriOrientation::LEFT;
-    //                           level[j].Value <<= (sal_Int16) style::HorizontalAlignment::LEFT;
-                                  break;
-                             case 10: level[j].sTransliteration = tmp; break;
-                             case 11: level[j].nNatNum    = tmp.toInt32();   break;
-                             default:
-                                  assert(0);
-                             }
-                        }
-                   }
-                   level[j].cPrefix             = 0;
-                   level[j].nNumType            = 0;
-                   level[j].cSuffix             = 0;
-                   level[j].cBulletChar         = 0;
-                   level[j].sBulletFontName     = 0;
-                   level[j].nParentNumbering    = 0;
-                   level[j].nLeftMargin         = 0;
-                   level[j].nSymbolTextDistance = 0;
-                   level[j].nFirstLineOffset    = 0;
-                       level[j].sTransliteration        = aEmptyStr;
-                   level[j].nNatNum    = 0;
-                   aRet[i] = new OutlineNumbering( level, nLevels );
-              }
-              return aRet;
-         }
-         else {
-              Sequence< Reference<container::XIndexAccess> > seq1(0);
-              return seq1;
-         }
+        sal_Unicode**** pStyle = p0;
+        for( i=0;  i<nStyles;  i++ )
+        {
+            int j;
+
+            OutlineNumberingLevel_Impl* level = new OutlineNumberingLevel_Impl[ nLevels+1 ];
+            sal_Unicode*** pLevel = pStyle[i];
+            for( j = 0;  j < nLevels;  j++ )
+            {
+                sal_Unicode** pAttribute = pLevel[j];
+                for( int k=0; k<nAttributes; k++ )
+                {
+                    OUString tmp( pAttribute[k] );
+                    switch( k )
+                    {
+                        case 0: level[j].cPrefix             = tmp.toChar();    break;
+                        case 1: level[j].nNumType            = tmp.toInt32();   break;
+                        case 2: level[j].cSuffix             = tmp.toChar();    break;
+                        //case 3: level[j].cBulletChar         = tmp.toChar();    break;
+                        case 3: level[j].cBulletChar         = tmp.toInt32(16); break; // base 16
+                        case 4: level[j].sBulletFontName     = U2C( tmp );      break;
+                        case 5: level[j].nParentNumbering    = tmp.toInt32();   break;
+                        case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
+                        case 7: level[j].nSymbolTextDistance = tmp.toInt32();   break;
+                        case 8: level[j].nFirstLineOffset    = tmp.toInt32();   break;
+                        case 9: // Adjust
+                        // these values seem to be hard-coded elsewhere:
+                        // level[j].Value <<= (sal_Int16) text::HoriOrientation::LEFT;
+                        // level[j].Value <<= (sal_Int16) style::HorizontalAlignment::LEFT;
+                            break;
+                        case 10: level[j].sTransliteration = tmp; break;
+                        case 11: level[j].nNatNum    = tmp.toInt32();   break;
+                        default:
+                            assert(0);
+                    }
+                }
+            }
+            level[j].cPrefix             = 0;
+            level[j].nNumType            = 0;
+            level[j].cSuffix             = 0;
+            level[j].cBulletChar         = 0;
+            level[j].sBulletFontName     = 0;
+            level[j].nParentNumbering    = 0;
+            level[j].nLeftMargin         = 0;
+            level[j].nSymbolTextDistance = 0;
+            level[j].nFirstLineOffset    = 0;
+            level[j].sTransliteration        = aEmptyStr;
+            level[j].nNatNum    = 0;
+            aRet[i] = new OutlineNumbering( level, nLevels );
+        }
+        return aRet;
+    }
+    else {
+        Sequence< Reference<container::XIndexAccess> > seq1(0);
+        return seq1;
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
