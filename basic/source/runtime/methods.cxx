@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-26 16:36:11 $
+ *  last change: $Author: ab $ $Date: 2002-06-06 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -899,6 +899,7 @@ void implRemoveDirRecursive( const String& aDirPath )
             File::remove( aPath );
         }
     }
+    nRet = aDir.close();
 
     nRet = Directory::remove( aDirPath );
 }
