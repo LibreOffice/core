@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-09 12:36:50 $
+ *  last change: $Author: fs $ $Date: 2000-10-13 16:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ Reference< XConnection > OTableTreeListBox::UpdateTableList(const ::rtl::OUStrin
             Reference< XDriverAccess > xDriverManager;
             sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
                 // in case an error occures
-            sCurrentActionError.SearchAndReplaceAscii("(#servicename#)", (::rtl::OUString)SERVICE_SDBC_DRIVERMANAGER);
+            sCurrentActionError.SearchAndReplaceAscii("#servicename#", (::rtl::OUString)SERVICE_SDBC_DRIVERMANAGER);
             try
             {
                 xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
@@ -364,6 +364,9 @@ void OTableTreeListBox::UpdateTableList(const Reference< XDatabaseMetaData >& _r
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2000/10/09 12:36:50  fs
+ *  reinserted the code for connecting in UpdateTableList
+ *
  *  Revision 1.1  2000/10/05 10:00:59  fs
  *  initial checkin
  *
