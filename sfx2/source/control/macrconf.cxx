@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 16:47:49 $
+ *  last change: $Author: mba $ $Date: 2001-08-16 15:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,16 +221,19 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
     if ( rURL.CompareToAscii( "macro:", 6 ) == COMPARE_EQUAL )
     {
         String aTmp = rURL.Copy( 6 );
-        if ( aTmp.GetTokenCount('/') == 3 )
+        if ( aTmp.GetTokenCount('/') > 3 )
         {
             // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
             // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
             if ( aTmp.CompareToAscii("///", 3 ) != COMPARE_EQUAL )
                 bAppBasic = FALSE;
             aTmp = rURL.GetToken( 3, '/' );
-            aLibName = aTmp.GetToken( 0, '.' );
-            aModuleName = aTmp.GetToken( 1, '.' );
-            aMethodName = aTmp.GetToken( 2, '.' );
+            if ( aTmp.GetTokenCount('.') == 3 )
+            {
+                aLibName = aTmp.GetToken( 0, '.' );
+                aModuleName = aTmp.GetToken( 1, '.' );
+                aMethodName = aTmp.GetToken( 2, '.' );
+            }
         }
     }
 
