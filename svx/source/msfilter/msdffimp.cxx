@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-04 13:21:10 $
+ *  last change: $Author: cmc $ $Date: 2002-04-11 15:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3513,13 +3513,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
             FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
-            if (bTextFrame)
-            {
-                delete pObj;
-                pObj = pOrgObj = 0;
-            }
-#if 0
-            else
+            if (!bTextFrame)
             {
                 //Either
                 //a) its a simple text object or
@@ -3538,21 +3532,13 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 );
             }
 
-            if( bTextFrame && pObj )
-                pTextObj = PTR_CAST(SdrRectObj, pObj);
-            if( !pTextObj)
+            if (bTextFrame)
             {
-                pTextObj = new SdrRectObj( OBJ_TEXT, rTextRect );
-                pTextObj->SetModel( pSdrModel );
+                delete pObj;
+                pObj = pOrgObj = 0;
             }
-
-            if( pTextObj != pObj )
-                pTextImpRec = new SvxMSDffImportRec( *pImpRec );
-#else
             pTextObj = new SdrRectObj(OBJ_TEXT, rTextRect);
-            pTextObj->SetModel(pSdrModel);
             pTextImpRec = new SvxMSDffImportRec(*pImpRec);
-#endif
 
             // Distance of Textbox to it's surrounding Autoshape
             INT32 nTextLeft  =GetPropertyValue( DFF_Prop_dxTextLeft, 91440L);
@@ -3589,16 +3575,26 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             if( !pObj )
                 ApplyAttributes( rSt, aSet, pTextObj );
 
-            switch ( (MSO_WrapMode)GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
+            if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
+                aSet.Put( SdrTextMinFrameHeightItem(
+                    rTextRect.Bottom() - rTextRect.Top() ) );
+                aSet.Put( SdrTextMinFrameWidthItem(
+                    rTextRect.Right() - rTextRect.Left() ) );
+            }
+            else
+            {
+                aSet.Put( SdrTextAutoGrowHeightItem( FALSE ) );
+                aSet.Put( SdrTextAutoGrowWidthItem( FALSE ) );
+            }
+
+            switch ( (MSO_WrapMode)
+                GetPropertyValue( DFF_Prop_WrapText, mso_wrapSquare ) )
             {
                 case mso_wrapNone :
-                {
-                    // be sure this is FitShapeToText
-                    if ( GetPropertyValue( DFF_Prop_FitTextToShape ) & 2 )
-                            aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
-                }
+                    aSet.Put( SdrTextAutoGrowWidthItem( TRUE ) );
                 break;
-
                 case mso_wrapByPoints :
                     aSet.Put( SdrTextContourFrameItem( TRUE ) );
                 break;
@@ -3617,7 +3613,8 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             // Textverankerung lesen
             if ( IsProperty( DFF_Prop_anchorText ) )
             {
-                MSO_Anchor eTextAnchor = (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
+                MSO_Anchor eTextAnchor =
+                    (MSO_Anchor)GetPropertyValue( DFF_Prop_anchorText );
 
                 SdrTextVertAdjust eTVA = SDRTEXTVERTADJUST_CENTER;
                 BOOL bTVASet(FALSE);
@@ -3676,11 +3673,9 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                 if ( bTHASet )
                     aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
             }
-            aSet.Put( SdrTextMinFrameHeightItem(
-                rTextRect.Bottom() - rTextRect.Top() ) );
-            aSet.Put( SdrTextMinFrameWidthItem(
-                rTextRect.Right() - rTextRect.Left() ) );
+
             pTextObj->SetItemSet(aSet);
+            pTextObj->SetModel(pSdrModel);
 
             INT32 nTextRotationAngle=0;
             if ( IsProperty( DFF_Prop_txflTextFlow ) )
