@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:20:23 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:29:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
+
+#include <map>
 
 #include <svtools/poolcach.hxx>
 #include <svtools/zforlist.hxx>
@@ -359,6 +361,31 @@ const ScPatternAttr* ScColumn::GetPattern( SCROW nRow ) const
 const SfxPoolItem* ScColumn::GetAttr( SCROW nRow, USHORT nWhich ) const
 {
     return &pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
+}
+
+
+const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const
+{
+    ::std::map< const ScPatternAttr*, size_t > aAttrMap;
+    const ScPatternAttr* pMaxPattern = 0;
+    size_t nMaxCount = 0;
+
+    ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
+    const ScPatternAttr* pPattern;
+    SCROW nAttrRow1, nAttrRow2;
+
+    while( (pPattern = aAttrIter.Next( nAttrRow1, nAttrRow2 )) != 0 )
+    {
+        size_t& rnCount = aAttrMap[ pPattern ];
+        rnCount += (nAttrRow2 - nAttrRow1 + 1);
+        if( rnCount > nMaxCount )
+        {
+            pMaxPattern = pPattern;
+            nMaxCount = rnCount;
+        }
+    }
+
+    return pMaxPattern;
 }
 
 
