@@ -9024,3 +9024,7 @@ lpfnGetWindowTextW
 ??3ReferenceObject@salhelper@@SAXPAX@Z
 ?acquire@ReferenceObject@salhelper@@UAAJXZ
 ?release@ReferenceObject@salhelper@@UAAJXZ
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUCalendarItem@i18n@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUCurrency@i18n@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUFormatElement@i18n@345@@Z
+?getCppuType@@YAABVType@uno@star@sun@com@@PBUNumberFormatCode@i18n@345@@Z
