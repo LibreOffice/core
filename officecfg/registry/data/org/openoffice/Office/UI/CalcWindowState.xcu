@@ -3,9 +3,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:27:20 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 10:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,9 @@
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
+                </prop>
+                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/arrowshapes" oor:op="replace">
