@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.126 $
+#   $Revision: 1.127 $
 #
-#   last change: $Author: rt $ $Date: 2002-11-06 14:49:54 $
+#   last change: $Author: rt $ $Date: 2002-11-19 13:53:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -938,6 +938,7 @@ SOLARUCRDIR=$(SOLARVERSION)$/$(INPATH)$/ucr$(EXT_UPDMINOR)
 SOLARPARDIR=$(SOLARVERSION)$/$(INPATH)$/par$(EXT_UPDMINOR)
 SOLARXMLDIR=$(SOLARVERSION)$/$(INPATH)$/xml$(EXT_UPDMINOR)
 SOLARDOCDIR=$(SOLARVERSION)$/$(INPATH)$/doc$(EXT_UPDMINOR)
+SOLARCOMMONBINDIR=$(SOLARVERSION)$/common$(PROEXT)$/bin$(EXT_UPDMINOR)
 
 # Full-Debug Pfade
 .IF "$(debug)" != ""
