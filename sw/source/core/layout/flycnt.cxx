@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:39:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,13 @@
 #ifndef _TOCNTNTANCHOREDOBJECTPOSITION_HXX
 #include <tocntntanchoredobjectposition.hxx>
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _DCONTACT_HXX
+#include <dcontact.hxx>
+#endif
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -131,6 +138,9 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     bAutoPosition = FLY_AUTO_CNTNT == pFmt->GetAnchor().GetAnchorId();
 }
 
+// --> OD 2004-06-29 #i28701#
+TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
+// <--
 /*************************************************************************
 |*
 |*  SwFlyAtCntFrm::Modify()
@@ -144,6 +154,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;
+
     if( RES_ATTRSET_CHG == nWhich && SFX_ITEM_SET ==
         ((SwAttrSetChg*)pNew)->GetChgSet()->GetItemState( RES_ANCHOR, FALSE,
             (const SfxPoolItem**)&pAnch ))
@@ -163,7 +174,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 "Unzulaessiger Wechsel des Ankertyps." );
 
         //Abmelden, neuen Anker besorgen und 'dranhaengen.
-        SwRect aOld( AddSpacesToFrm() );
+        SwRect aOld( GetObjRectWithSpaces() );
         SwPageFrm *pOldPage = FindPageFrm();
         const SwFrm *pOldAnchor = GetAnchorFrm();
         SwCntntFrm *pCntnt = (SwCntntFrm*)GetAnchorFrm();
@@ -220,6 +231,9 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         _InvalidatePos();
         InvalidatePage();
         SetNotifyBack();
+        // --> OD 2004-06-24 #i28701# - reset member <maLastCharRect> and
+        // <mnLastTopOfLine> for to-character anchored objects.
+        ClearCharRectAndTopOfLine();
     }
     else
         SwFlyFrm::Modify( pOld, pNew );
@@ -386,29 +400,18 @@ void SwFlyAtCntFrm::MakeAll()
 
     if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
-        if( !GetPage() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
         {
             SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
             SwPageFrm *pPage = pFly ? pFly->FindPageFrm() : NULL;
             if( pPage )
-                pPage->SwPageFrm::AppendFly( this );
+                pPage->AppendFlyToPage( this );
         }
-        if( GetPage() )
+        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        if( GetPageFrm() )
         {
-        //Den Anker muessen wir zwischendurch natuerlich Formatieren, damit
-        //Repaints usw. stimmen sollte er natuerlich trotzdem Invalid bleiben.
-        //Jetzt Stufe 2: Damit Repaints stimmen muessen alle Frms wieder Invalidiert
-        //werden, die unterwegs formatiert werden.
-        //Dazu werden sie ein ein PrtArr eingetragen; die Frms mit CompletePaint
-        //zu flaggen scheint mir hier das Mittel der Wahl.
-        //(Vielleicht sollte es einmal die Moeglichkeit geben sie einfach mit
-        //Paint zu flaggen; kein Formatieren, aber ein Paint-Aufruf, vor allem
-        //wohl fuer TxtFrms geeignet.
-        //Jetzt Stufe 3: einfach ein globales Flag und schon flaggen sie sich
-        //selbst.
             bSetCompletePaintOnInvalidate = TRUE;
-            sal_Bool bLockedAnchor =
-                static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked();
             {
                 SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
                 const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
@@ -425,9 +428,15 @@ void SwFlyAtCntFrm::MakeAll()
                     pFmt->UnlockModify();
                 }
             }
+
             SwOszControl aOszCntrl( this );
 
-            if ( !bLockedAnchor )
+            const sal_Bool bLockedAnchor =
+                static_cast<const SwTxtFrm*>( GetAnchorFrm() )->IsAnyJoinLocked();
+
+            // OD 2004-05-12 #i28701# - no format of anchor frame, if
+            // wrapping style influence is considered on object positioning
+            if ( !ConsiderObjWrapInfluenceOnObjPos() && !bLockedAnchor )
             {
                 // If the anchor is located inside a section, we better calculate
                 // the section first:
@@ -445,9 +454,13 @@ void SwFlyAtCntFrm::MakeAll()
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
-                BOOL bPosChg = aOldPos != (Frm().*fnRect->fnGetPos)();
+                const bool bPosChgDueToOwnFormat =
+                                        aOldPos != (Frm().*fnRect->fnGetPos)();
 
-                if ( !bLockedAnchor )
+                // OD 2004-05-12 #i28701# - no format of anchor frame, if
+                // wrapping style influence is considered on object positioning
+                if ( !ConsiderObjWrapInfluenceOnObjPos() &&
+                     !bLockedAnchor )
                 {
                     // If the anchor is located inside a section, we better calculate
                     // the section first:
@@ -455,11 +468,16 @@ void SwFlyAtCntFrm::MakeAll()
                     GetAnchorFrm()->Calc();
                 }
 
-                if( aOldPos != (Frm().*fnRect->fnGetPos)() ||
-                    ( !GetValidPosFlag() &&( pFooter || bPosChg ) ) )
+                if ( aOldPos != (Frm().*fnRect->fnGetPos)() ||
+                     ( !GetValidPosFlag() &&
+                       ( pFooter || bPosChgDueToOwnFormat ) ) )
+                {
                     bOsz = aOszCntrl.ChkOsz();
-                if( bExtra && Lower() && !Lower()->GetValidPosFlag() )
-                {  // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
+                }
+
+                if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
+                {
+                    // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
                     // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
                     // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
                     _InvalidateSize();
@@ -515,6 +533,18 @@ void SwFlyAtCntFrm::MakeAll()
             bSetCompletePaintOnInvalidate = FALSE;
         }
     }
+}
+
+/** method to determine, if a <MakeAll()> on the Writer fly frame is possible
+
+    OD 2004-05-11 #i28701#
+
+    @author OD
+*/
+bool SwFlyAtCntFrm::IsFormatPossible() const
+{
+    return SwFlyFreeFrm::IsFormatPossible() &&
+           !SwOszControl::IsInProgress( this );
 }
 
 /*************************************************************************
@@ -1110,7 +1140,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 {
     SwPageFrm *pOldPage = FindPageFrm();
-    const SwRect aOld( AddSpacesToFrm() );
+    const SwRect aOld( GetObjRectWithSpaces() );
     Point aNew( rNew );
 
     if( GetAnchorFrm()->IsVertical() || GetAnchorFrm()->IsRightToLeft() )
@@ -1273,8 +1303,9 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         }
         pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
     }
-    else if ( pPage && pPage != GetPage() )
-        GetPage()->MoveFly( this, pPage );
+    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+    else if ( pPage && pPage != GetPageFrm() )
+        GetPageFrm()->MoveFly( this, pPage );
 
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
     ChgRelPos( aRelPos );
@@ -1393,110 +1424,28 @@ void DeepCalc( const SwFrm *pFrm )
     } while ( bContinue );
 }
 
-void SwFlyAtCntFrm::AssertPage()
+/** method to assure that anchored object is registered at the correct
+    page frame
+
+    OD 2004-07-02 #i28701#
+    takes over functionality of deleted method <SwFlyAtCntFrm::AssertPage()>
+
+    @author OD
+*/
+void SwFlyAtCntFrm::RegisterAtCorrectPage()
 {
-  //Prueft ob der Fly an der Seite haengt, auf der er steht, falls nicht
-  //wird er umgehaengt. Zur Pruefung wird nur die vertikale Ausrichtung
-  //herangezogen.
-
-  SwPageFrm *pNewPage = FindPageFrm();
-  SwPageFrm *pMyPage  = pNewPage;
-  BOOL bSuperfluous = FALSE;
-
-  //#45516# Ausnahmebehandlung. Eine Tabelle ist zu gross und haengt aus der
-  //Seite heraus. Der Rahmen kann dann zwar richtig bei seinem Anker stehen,
-  //Positionsmaessig aber ueber der naechsten Seite haengen. Damit das dann
-  //noch halbwegs brauchbar gedruckt werden kann (HTML) und der Rahmen nicht
-  //wirr in der Gegend gepaintet wird, wird der Rahmen bei der Seite verankert,
-  //auf der auch sein Anker sitzt.
-  if ( GetAnchorFrm()->GetValidSizeFlag() &&
-       Frm().Top() >= GetAnchorFrm()->Frm().Top() &&
-       Frm().Top() < GetAnchorFrm()->Frm().Bottom() )
-  {
-      pNewPage = AnchorFrm()->FindPageFrm();
-  }
-  else
-  {
-      BOOL bFound = FALSE;
-      const BOOL bFtn = GetAnchorFrm()->IsInFtn();
-      int nDir = INT_MAX; // 1 == Forward, 2 == Backward.
-      while ( !bFound )
-      {
-          pNewPage->Calc();
-          if ( Frm().Top() < pNewPage->Frm().Top() && pNewPage->GetPrev() )
-          {
-              pNewPage = (SwPageFrm*)pNewPage->GetPrev();
-                // OD 19.02.2003 #105643# - skip empty page and consider empty
-                // page at the beginning of the document.
-                // Assumption about document layout:
-                //      No two empty pages following each other.
-                if ( pNewPage->IsEmptyPage() )
-                {
-                    if ( pNewPage->GetPrev() )
-                    {
-                        pNewPage = static_cast<SwPageFrm*>(pNewPage->GetPrev());
-                    }
-                    else
-                    {
-                        bFound = TRUE;
-                        pNewPage = static_cast<SwPageFrm*>(pNewPage->GetNext());
-                    }
-                }
-              if ( nDir == 2 )
-              {
-                  bFound = TRUE;
-                  pNewPage = AnchorFrm()->FindPageFrm();
-              }
-              else
-                  nDir = 1;
-          }
-          else if ( Frm().Top() > pNewPage->Frm().Bottom() )
-          {
-              if ( nDir == 1 )
-              {
-                  bFound = TRUE;
-                  pNewPage = AnchorFrm()->FindPageFrm();
-              }
-              else
-              {
-                  nDir = 2;
-                  if ( !pNewPage->GetNext() )
-                  {
-                      pNewPage->GetLeaf( bFtn ? MAKEPAGE_NONE : MAKEPAGE_APPEND,
-                                          TRUE, GetAnchorFrm());
-                      bSuperfluous = TRUE;
-                  }
-                  if ( pNewPage->GetNext() )
-                  {
-                      pNewPage = (SwPageFrm*)pNewPage->GetNext();
-                      if( pNewPage->IsEmptyPage() )
-                      {
-                          if( pNewPage->GetNext() )
-                              pNewPage = (SwPageFrm*)pNewPage->GetNext();
-                          else
-                          {
-                              bFound = TRUE;
-                              pNewPage = (SwPageFrm*)pNewPage->GetPrev();
-                          }
-                      }
-                  }
-                  else
-                      bFound = TRUE;
-              }
-          }
-          else
-              bFound = TRUE;
-      }
-  }
-
-  if ( pMyPage != pNewPage )
-  {
-      ASSERT( IsLocked(), "AssertPage: Unlocked Frame??" );
-      pMyPage->MoveFly( this, pNewPage );
-      if ( bSuperfluous && pMyPage->GetPhyPageNum() > pNewPage->GetPhyPageNum() )
-          ((SwRootFrm*)pNewPage->GetUpper())->SetSuperfluous();
-  }
-
+    SwPageFrm* pPageFrm( 0L );
+    if ( GetVertPosOrientFrm() )
+    {
+        pPageFrm = const_cast<SwPageFrm*>(GetVertPosOrientFrm()->FindPageFrm());
+    }
+    if ( pPageFrm && GetPageFrm() != pPageFrm )
+    {
+        if ( GetPageFrm() )
+            GetPageFrm()->MoveFly( this, pPageFrm );
+        else
+            pPageFrm->AppendFlyToPage( this );
+    }
 }
 
 // OD 2004-03-23 #i26791#
@@ -1518,7 +1467,23 @@ void SwFlyAtCntFrm::MakeObjPos()
             aObjPositioning( *GetVirtDrawObj() );
     aObjPositioning.CalcPosition();
 
-    AssertPage();
-
     SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
+}
+
+// OD 2004-05-12 #i28701#
+bool SwFlyAtCntFrm::_InvalidationAllowed( const InvalidationType _nInvalid ) const
+{
+    bool bAllowed( SwFlyFreeFrm::_InvalidationAllowed( _nInvalid ) );
+
+    // forbiddance of base instance can't be over ruled.
+    if ( bAllowed )
+    {
+        if ( _nInvalid == INVALID_POS ||
+             _nInvalid == INVALID_ALL )
+        {
+            bAllowed = InvalidationOfPosAllowed();
+        }
+    }
+
+    return bAllowed;
 }
