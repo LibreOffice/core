@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 15:00:38 $
+ *  last change: $Author: vg $ $Date: 2003-07-25 11:40:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#define BUG_110335 1
 #define CACHE_RESPONSE_HEADERS 1
 
 /**************************************************************************
@@ -181,6 +182,9 @@
 #include <ucbhelper/cancelcommandexecution.hxx>
 #endif
 
+#ifndef _DAVRESOURCEACCESSTHREAD_HXX_
+#include "DAVResourceAccessThread.hxx"
+#endif
 #ifndef _WEBDAV_UCP_CONTENT_HXX
 #include "webdavcontent.hxx"
 #endif
@@ -675,6 +679,29 @@ uno::Any SAL_CALL Content::execute(
                     // PULL: wait for client read
                     try
                     {
+#ifdef BUG_110335
+#ifdef CACHE_RESPONSE_HEADERS
+                        m_xCachedProps.reset();
+#endif
+                        DAVResourceAccessThread* th =
+                            new DAVResourceAccessThread(
+                                m_xSMgr,
+                                m_xResAccess->getSessionFactory(),
+                                m_xIdentifier->getContentIdentifier(),
+                                Environment,
+                                bool(CACHE_RESPONSE_HEADERS));
+
+                        if(! th->Get(xDataSink)) {
+                            DAVException e = th->GetException();
+                            delete th;
+                            throw e;
+                        }
+
+#ifdef CACHE_RESPONSE_HEADERS
+                        m_xCachedProps.reset(
+                            new ContentProperties( th->getResource() ) );
+#endif
+#else  //NOT BUG_110335
 #ifdef CACHE_RESPONSE_HEADERS
                         // throw away previously cached headers.
                         m_xCachedProps.reset();
@@ -697,6 +724,7 @@ uno::Any SAL_CALL Content::execute(
                             = m_xResAccess->GET( Environment );
 #endif
                         xDataSink->setInputStream( xIn );
+#endif // NOT BUG_110335
                     }
                     catch ( DAVException const & e )
                     {
