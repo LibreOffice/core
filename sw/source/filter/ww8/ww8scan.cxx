@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6204,7 +6204,10 @@ static SprmInfo aWwSprmTab[] = {
     0x703A, 4, L_FIX, // undocumented, sep, perhaps related to textgrids ?
     0x303B, 1, L_FIX, // undocumented sep
     0x244B, 1, L_FIX, // undocumented, must be subtable "sprmPFInTable" equiv
-    0x244C, 1, L_FIX  // undocumented, must be subtable "sprmPFTtp" equiv
+    0x244C, 1, L_FIX, // undocumented, must be subtable "sprmPFTtp" equiv
+    0x940E, 2, L_FIX, // undocumented
+    0x940F, 2, L_FIX, // undocumented
+    0x9410, 2, L_FIX  // undocumented
 };
 
 extern "C"

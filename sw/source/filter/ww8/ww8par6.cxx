@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2251,7 +2251,15 @@ void WW8FlyPara::ApplyTabPos(WW8_TablePos *pTabPos, const BYTE *pSprm29)
         nSp49 = pTabPos->nSp49;
         //Assume that the older one overrides the newer one.
         if (!pSprm29)
+        {
             nSp29 = pTabPos->nSp29;
+            nSp37 = pTabPos->nSp37;
+        }
+        else
+        {
+            ASSERT(nSp29 == pTabPos->nSp29, "report A: need to see such a document");
+            ASSERT(nSp37 == pTabPos->nSp37, "report B: need to see such a document");
+        }
     }
 }
 
@@ -4787,6 +4795,7 @@ BOOL SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
     if (pRes = pPap->HasSprm(0x360D))
     {
         pTabPos->nSp29 = *pRes;
+        pTabPos->nSp37 = 1;     //Possible fail area
         if (pRes = pPap->HasSprm(0x940E))
             pTabPos->nSp26 = SVBT16ToShort(pRes);
         if (pRes = pPap->HasSprm(0x940F))
@@ -5353,6 +5362,9 @@ SprmReadInfo aSprmReadTab[] = {
     0x845D, (FNReadRecord)0, //undoc, must be asian version of "sprmPDxaRight"
     0x3615, (FNReadRecord)0, //undocumented
     0x360D, (FNReadRecord)0, //undocumented
+    0x940E, (FNReadRecord)0, //undocumented
+    0x940F, (FNReadRecord)0, //undocumented
+    0x9410, (FNReadRecord)0, //undocumented
     0x703A, (FNReadRecord)0, //undocumented
     0x303B, (FNReadRecord)0, //undocumented
     0x244B, (FNReadRecord)0, // undocumented, must be subtable "sprmPFInTable"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-20 11:26:34 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,18 +1487,18 @@ void SwWW8ImplReader::UpdatePageDescs(USHORT nInPageDescOffset)
     }
 }
 
-USHORT SwWW8ImplReader::TabCellSprm() const
+USHORT SwWW8ImplReader::TabCellSprm(int nLevel) const
 {
     if (bVer67)
         return 24;
-    return nTable ? 0x244B : 0x2416;
+    return nLevel ? 0x244B : 0x2416;
 }
 
-USHORT SwWW8ImplReader::TabRowSprm() const
+USHORT SwWW8ImplReader::TabRowSprm(int nLevel) const
 {
     if (bVer67)
         return 25;
-    return nTable ? 0x244C : 0x2417;
+    return nLevel ? 0x244C : 0x2417;
 }
 
 BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
@@ -1576,7 +1576,7 @@ BOOL SwWW8ImplReader::ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync,
         if (const BYTE *pLevel = pPlcxMan->HasParaSprm(0x6649))
             nCellLevel = *pLevel;
 
-        if (SearchRowEnd(pPap, nMyStartCp) && (ParseTabPos(&aTabPos,pPap)))
+        if (SearchRowEnd(pPap, nMyStartCp, nCellLevel-1) && (ParseTabPos(&aTabPos,pPap)))
             pTabPos = &aTabPos;
 
         pPlcxMan->GetPap()->Restore( aSave );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,8 +312,8 @@ public:
     void SetNumRuleName( const String& rName );
 };
 
-BOOL SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp)
-    const
+BOOL SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
+    int nLevel) const
 {
     WW8PLCFxDesc aRes;
     aRes.pMemPos = 0;
@@ -330,7 +330,7 @@ BOOL SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp)
     {
         if (pPap->Where() != LONG_MAX)
         {
-            const BYTE* pB = pPap->HasSprm(TabRowSprm());
+            const BYTE* pB = pPap->HasSprm(TabRowSprm(nLevel));
             if (pB && *pB == 1)
                 return TRUE;    // RowEnd found
         }
@@ -1274,9 +1274,9 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     WW8TabBandDesc* pNewBand = new WW8TabBandDesc;
 
     WW8PLCFxSave1 aSave;
-    pIoClass->pPlcxMan->GetPap()->Save( aSave );
+    pIo->pPlcxMan->GetPap()->Save( aSave );
 
-    WW8PLCFx_Cp_FKP* pPap = pIoClass->pPlcxMan->GetPapPLCF();
+    WW8PLCFx_Cp_FKP* pPap = pIo->pPlcxMan->GetPapPLCF();
 
     eOri = HORI_LEFT;
 
@@ -1291,7 +1291,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         WW8_TablePos *pTabPos  = 0;
 
         // Suche Ende einer TabZeile
-        if(!(pIoClass->SearchRowEnd(pPap, nStartCp)))
+        if(!(pIo->SearchRowEnd(pPap, nStartCp, pIo->nTable)))
         {
             bOk = FALSE;
             break;
@@ -1466,7 +1466,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         pActBand->nRows++;
 
         WW8_CP nMyStartCp=nStartCp;
-        if (pIoClass->SearchRowEnd(pPap, nMyStartCp))
+        if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nTable))
             if (SwWW8ImplReader::ParseTabPos(&aTabPos,pPap))
                 pTabPos = &aTabPos;
 
@@ -1498,7 +1498,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
 
         // InTable
         if (
-            ( 0 == (pParams = pPap->HasSprm(pIoClass->TabCellSprm())) ) ||
+            (0 == (pParams = pPap->HasSprm(pIo->TabCellSprm(pIo->nTable)))) ||
             (1 != *pParams)
            )
         {
@@ -1506,7 +1506,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
         }
 
         BOOL bStartApo, bStopApo, bNowStyleApo;
-        pIoClass->TestApo(bStartApo,bStopApo,bNowStyleApo,TRUE,FALSE,pTabPos);
+        pIo->TestApo(bStartApo,bStopApo,bNowStyleApo,TRUE,FALSE,pTabPos);
 
         /*
         ##513##, #79474# If this is not sufficent, then we should look at
@@ -1536,7 +1536,7 @@ WW8TabDesc::WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp )
     }
     delete pNewBand;
 
-    pIoClass->pPlcxMan->GetPap()->Restore( aSave );
+    pIo->pPlcxMan->GetPap()->Restore( aSave );
 }
 
 WW8TabDesc::~WW8TabDesc()

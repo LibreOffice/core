@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: cmc $ $Date: 2002-03-13 11:28:26 $
+ *  last change: $Author: cmc $ $Date: 2002-03-20 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -904,8 +904,8 @@ friend class WW8FormulaControl;
         int nInTable, BOOL bTableRowEnd, WW8_TablePos *pTabPos);
 
     BOOL ProcessSpecial( BOOL bAllEnd, BOOL* pbReSync, WW8_CP nStartCp );
-    USHORT TabCellSprm() const;
-    USHORT TabRowSprm() const;
+    USHORT TabCellSprm(int nLevel) const;
+    USHORT TabRowSprm(int nLevel) const;
 
     ULONG ReadWmfHeader( WmfFileHd* pHd, long nPos );
     BOOL ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
@@ -1216,7 +1216,7 @@ public:     // eigentlich private, geht aber leider nur public
 
     short ImportSprm( const BYTE* pPos, USHORT nId = 0 );
 
-    BOOL SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp) const;
+    BOOL SearchRowEnd(WW8PLCFx_Cp_FKP* pPap,WW8_CP &rStartCp, int nLevel) const;
 
     const WW8Fib& GetFib() const    { return *pWwFib; }
     SwDoc& GetDoc() const           { return rDoc; }
