@@ -2,9 +2,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:17:51 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:26:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -705,6 +705,10 @@ sub try_to_create_directory
         {
             $created_directory = 0;
         }
+    }
+    else
+    {
+        $created_directory = 1;
     }
 
     return $created_directory;
