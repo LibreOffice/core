@@ -2,9 +2,9 @@
  *
  *  $RCSfile: measctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:48:04 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 10:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ SvxXMeasurePreview::SvxXMeasurePreview
     rAttrs  ( rInAttrs )
 
 {
-    pExtOutDev = new ExtOutputDevice( this );
+    pExtOutDev = new XOutputDevice( this );
 
     SetMapMode( MAP_100TH_MM );
 
