@@ -18406,3 +18406,5 @@ _real@8@3ff9a0a0a0a0a0a0a000
 ?ExecuteDrop@FmFieldWinListBox@@UAECABUExecuteDropEvent@@@Z
 ?GetPolyPolygon@EscherPropertyContainer@@SA?AVPolyPolygon@@ABV?$Reference@VXShape@drawing@star@sun@com@@@uno@star@sun@com@@@Z
 ?GetPolyPolygon@EscherPropertyContainer@@SA?AVPolyPolygon@@ABVAny@uno@star@sun@com@@@Z
+??0SvxShapeCaption@@QAE@PAVSdrObject@@@Z
+??1SvxShapeCaption@@UAE@XZ
