@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-29 09:02:24 $
+ *  last change: $Author: obo $ $Date: 2002-08-04 20:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
             Text[ french ] = "Fermer";
             Text[ spanish ] = "Cerrar";
             Text[ italian ] = "Chiudi";
-            Text[ danish ] = "Close";
+            Text[ danish ] = "Luk";
             Text[ swedish ] = "St‰ng";
             Text[ polish ] = "Zamknij";
             Text[ portuguese_brazilian ] = "Close";
@@ -415,7 +415,7 @@ QueryBox QUERY_BRW_DELETE_ROWS
     Message [ english_us ] = "Do you want to delete the selected data?" ;
     Message [ portuguese_brazilian ] = "Sollen die selektierten Daten gel?cht werden?" ;
     Message [ swedish ] = "Skall de markerade data raderas?" ;
-    Message [ danish ] = "Skal de udvalgte data slettes?" ;
+    Message [ danish ] = "Skal de markerede data slettes?" ;
     Message [ italian ] = "Eliminare i dati selezionati?" ;
     Message [ spanish ] = "øDesea eliminar los datos seleccionados?" ;
     Message [ french ] = "Voulez-vous supprimer les donnÈes sÈlectionnÈes ?" ;
@@ -477,7 +477,7 @@ String SBA_BROWSER_SETTING_ORDER
     Text[ french ] = "Erreur de dÈfinition des critËres de tri";
     Text[ spanish ] = "Error al definir los criterios de ordenaciÛn";
     Text[ italian ] = "Errore nell'impostare i criteri";
-    Text[ danish ] = "Fejl ved definition af sorteringskriterierne";
+    Text[ danish ] = "Fejl under definering af sorteringskriterierne";
     Text[ swedish ] = "Fel vid definition av sorteringskriterier";
     Text[ polish ] = "B≥πd podczas osadzania kryteriÛw sortowania";
     Text[ portuguese_brazilian ] = "error setting the sort criteria";
@@ -503,7 +503,7 @@ String SBA_BROWSER_SETTING_FILTER
     Text[ french ] = "Erreur de dÈfinition des critËres de filtre";
     Text[ spanish ] = "Error al definir los criterios de filtro";
     Text[ italian ] = "Errore nell'impostare i criteri del filtro";
-    Text[ danish ] = "Fejl ved definition af filterkriterierne";
+    Text[ danish ] = "Fejl under definering af filtreringskriterierne";
     Text[ swedish ] = "Fel vid definition av filterkriterier";
     Text[ polish ] = "B≥πd podczas osadzania kryteriÛw filtra";
     Text[ portuguese_brazilian ] = "error setting the filter criteria";
@@ -530,7 +530,7 @@ String RID_STR_CONNECTION_LOST
     Text[ french ] = "Connexion perdue";
     Text[ spanish ] = "Se perdiÛ la conexiÛn";
     Text[ italian ] = "Il collegamento Ë stato interrotto";
-    Text[ danish ] = "Tabt forbindelse";
+    Text[ danish ] = "Forbindelsen blev afbrudt";
     Text[ swedish ] = "Bruten fˆrbindelse";
     Text[ polish ] = "Brak po≥πczenia";
     Text[ portuguese_brazilian ] = "connection lost";
@@ -605,7 +605,7 @@ String RID_STR_QUERIES_CONTAINER
     Text[ french ] = "RequÍtes";
     Text[ spanish ] = "Consultas";
     Text[ italian ] = "Ricerche";
-    Text[ danish ] = "Queries";
+    Text[ danish ] = "Foresp¯rgsler";
     Text[ swedish ] = "Sˆkningar";
     Text[ polish ] = "Kwerendy";
     Text[ portuguese_brazilian ] = "Queries";
@@ -632,7 +632,7 @@ String RID_STR_TABLES_CONTAINER
     Text[ french ] = "Tables";
     Text[ spanish ] = "Tablas";
     Text[ italian ] = "Tabelle";
-    Text[ danish ] = "Tables";
+    Text[ danish ] = "Tabeller";
     Text[ swedish ] = "Tabeller";
     Text[ polish ] = "Tabele";
     Text[ portuguese_brazilian ] = "Tables";
@@ -660,7 +660,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ spanish ] = "VÌnculos";
     Text[ finnish ] = "Linkit";
     Text[ italian ] = "Collegamenti";
-    Text[ danish ] = "Bookmarks";
+    Text[ danish ] = "Genveje";
     Text[ swedish ] = "L‰nkar";
     Text[ polish ] = "£πcza";
     Text[ portuguese_brazilian ] = "Bookmarks";
@@ -687,7 +687,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ french ] = "GÈrer les sources de ~donnÈes...";    \
     Text[ spanish ] = "A~dministrar fuentes de datos...";   \
     Text[ italian ] = "Amministra ~sorgente dati...";   \
-    Text[ danish ] = "administrate ~data sources ...";  \
+    Text[ danish ] = "Administrer ~datakilder...";  \
     Text[ swedish ] = "Administrera ~datak‰llor...";    \
     Text[ polish ] = "~Administracja ürÛde≥ danych..."; \
     Text[ portuguese_brazilian ] = "administrate ~data sources ...";    \
@@ -742,7 +742,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ french ] = "DÈ~connecter";    \
     Text[ spanish ] = "Cerrar cone~xiÛn";   \
     Text[ italian ] = "C~hiudi collegamento";   \
-    Text[ danish ] = "~close connection";   \
+    Text[ danish ] = "A~fbryd forbindelse"; \
     Text[ swedish ] = "St‰n~g fˆrbindelse"; \
     Text[ polish ] = "~Roz≥πcz";    \
     Text[ portuguese_brazilian ] = "~close connection"; \
@@ -770,7 +770,7 @@ String RID_STR_BOOKMARKS_CONTAINER
     Text[ french ] = "~RÈtablir la connexion";  \
     Text[ spanish ] = "Actualizar cone~xiÛn";   \
     Text[ italian ] = "Ag~giorna collegamento"; \
-    Text[ danish ] = "~refresh connection"; \
+    Text[ danish ] = "O~pdater forbindelse";    \
     Text[ swedish ] = "Fˆ~rnya fˆrbindelse";    \
     Text[ polish ] = "~OdtwÛrz po≥πczenie"; \
     Text[ portuguese_brazilian ] = "~refresh connection";   \
@@ -927,7 +927,7 @@ Menu MENU_BROWSER_TABLECONTEXT
             Text[ french ] = "…bauche de relatio~n";
             Text[ spanish ] = "DiseÒo de rela~ciones";
             Text[ italian ] = "Struttura r~elazione";
-            Text[ danish ] = "relatio~n design";
+            Text[ danish ] = "Relatio~nsforslag";
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
@@ -991,7 +991,7 @@ Menu MENU_BROWSER_VIEWCONTEXT
             Text[ french ] = "…bauche de relatio~n";
             Text[ spanish ] = "DiseÒo de rela~ciones";
             Text[ italian ] = "Struttura r~elazione";
-            Text[ danish ] = "relatio~n design";
+            Text[ danish ] = "Relatio~nsforslag";
             Text[ swedish ] = "Relatio~nsutkast";
             Text[ polish ] = "~Projekt relacji";
             Text[ portuguese_brazilian ] = "relatio~n design";
@@ -1043,7 +1043,7 @@ String STR_TITLE_CONFIRM_DELETION
     Text[ french ] = "Confirmation de suppression";
     Text[ spanish ] = "Confirmar eliminaciÛn";
     Text[ italian ] = "Conferma 'Elimina'";
-    Text[ danish ] = "confirm deletion";
+    Text[ danish ] = "BekrÊft sletning";
     Text[ swedish ] = "Bekr‰fta radering";
     Text[ polish ] = "Potwierdü usuniÍcie";
     Text[ portuguese_brazilian ] = "confirm deletion";
@@ -1070,7 +1070,7 @@ String STR_QUERY_DELETE_QUERY
     Text[ french ] = "Voulez-vous supprimer la requÍte '$name$' ?";
     Text[ spanish ] = "øDesea eliminar la consulta '$name$'?";
     Text[ italian ] = "Volete eliminare la ricerca '$name$'?";
-    Text[ danish ] = "Do you want to delete the query '%1'?";
+    Text[ danish ] = "Skal foresp¯rgslen '$name$' slettes?";
     Text[ swedish ] = "Ska sˆkningen '$name$' raderas?";
     Text[ polish ] = "UsunπÊ kwerendÍ'$name$'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the query '%1'?";
@@ -1097,7 +1097,7 @@ String STR_QUERY_DELETE_TABLE
     Text[ french ] = "Voulez-vous supprimer la table '%1' ?";
     Text[ spanish ] = "øDesea eliminar la tabla '%1'?";
     Text[ italian ] = "Volete eliminare la tabella '%1'?";
-    Text[ danish ] = "Do you want to delete the table '%1'?";
+    Text[ danish ] = "Skal tabellen '%1' slettes?";
     Text[ swedish ] = "Ska tabellen '%1' raderas?";
     Text[ polish ] = "UsunπÊ tabelÍ'%1'?";
     Text[ portuguese_brazilian ] = "Do you want to delete the table '%1'?";
@@ -1125,7 +1125,7 @@ QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
     Message[ french ] = "La requÍte existe dÈj‡. Voulez-vous la supprimer ?";
     Message[ spanish ] = "Ya existe la consulta. øDesea eliminarla?";
     Message[ italian ] = "La ricerca esiste gi‡. Volete eliminarla?";
-    Message[ danish ] = "The query already exists. Do you want to delete the query?";
+    Message[ danish ] = "Foresp¯rgslen findes allerede. Skal den slettes?";
     Message[ swedish ] = "Sˆkningen finns redan. Ska den raderas?";
     Message[ polish ] = "Kwerenda juø istnieje. UsunπÊ jπ?";
     Message[ portuguese_brazilian ] = "The query already exists. Do you want to delete the query?";
@@ -1153,7 +1153,7 @@ QueryBox QUERY_CONNECTION_LOST
     Message[ french ] = "La connexion ‡ la base de donnÈes a ÈtÈ annulÈe ! RÈtablir la connexion ?";
     Message[ spanish ] = "°Se eliminÛ la conexiÛn a la base de datos! øDesea restablecerla?";
     Message[ italian ] = "Il collegamento al database Ë stato terminato. Volete ristabilirlo?";
-    Message[ danish ] = "The connection to the database was lost! Reconnect";
+    Message[ danish ] = "Forbindelsen til databasen blev slettet! Skal den genoprettes?";
     Message[ swedish ] = "Fˆrbindelsen till databasen har raderats! Ska den uppr‰ttas igen?";
     Message[ polish ] = "Po≥πczenie z bazπ danych zosta≥o przerwane! Czy po≥πczyÊ ponownie?";
     Message[ portuguese_brazilian ] = "The connection to the database was lost! Reconnect";
@@ -1180,7 +1180,7 @@ String STR_OPENTABLES_WARNINGS
     Text[ french ] = "Avertissements !";
     Text[ spanish ] = "Han aparecido advertencias.";
     Text[ italian ] = "Avvertimenti";
-    Text[ danish ] = "Warnings encountered.";
+    Text[ danish ] = "Advarsler foreligger.";
     Text[ swedish ] = "Varningar har fˆrekommit.";
     Text[ polish ] = "Wystπpi≥y ostrzeøenia.";
     Text[ portuguese_brazilian ] = "Warnings encountered.";
@@ -1207,7 +1207,7 @@ String STR_OPENTABLES_WARNINGS_DETAILS
     Text[ french ] = "Avertissements en provenance de la connexion (BD) durant le processus de rÈcupÈration des tables.";
     Text[ spanish ] = "La conexiÛn a la base de datos ha enviado advertencias durante la determinaciÛn de las tablas.";
     Text[ italian ] = "Il collegamento al database ha inviato avvertenze durante il rilevamento delle tabelle.";
-    Text[ danish ] = "While retrieving the tables, warnings were provided by the connection.";
+    Text[ danish ] = "Ved beregning af tabellerne er der modtaget advarsler fra databaseforbindelsen.";
     Text[ swedish ] = "Databasfˆrbindelsen rapporterade varningar medan tabellerna best‰mdes.";
     Text[ polish ] = "W trakcie ustalania tabel, po≥πczenie z bazπ danych wysy≥a≥o ostrzeøenia.";
     Text[ portuguese_brazilian ] = "While retrieving the tables, warnings were provided by the connection.";
@@ -1234,7 +1234,7 @@ String STR_CONNECTING_DATASOURCE
     Text[ french ] = "Connexion ‡ \"$name$\" ...";
     Text[ spanish ] = "Conectando a \"$name$\" ...";
     Text[ italian ] = "Collegamento a \"$name$\" ...";
-    Text[ danish ] = "connecting to \"$name$\" ...";
+    Text[ danish ] = "Opretter forbindelse til \"$name$\" ...";
     Text[ swedish ] = "Kopplar till \"$name$\" ...";
     Text[ polish ] = "Trwa ≥πczenie z \"$name$\" ...";
     Text[ portuguese_brazilian ] = "connecting to \"$name$\" ...";
@@ -1261,7 +1261,7 @@ String STR_LOADING_QUERY
     Text[ french ] = "Chargement de la requÍte $name$ ...";
     Text[ spanish ] = "cargando consulta $name$ ...";
     Text[ italian ] = "Carica ricerca $name$ ...";
-    Text[ danish ] = "loading query $name$ ...";
+    Text[ danish ] = "indlÊser foresp¯rgslen $name$ ...";
     Text[ swedish ] = "Laddar sˆkning $name$ ...";
     Text[ polish ] = "Trwa ≥adowanie kwerendy $name$ ...";
     Text[ portuguese_brazilian ] = "loading query $name$ ...";
@@ -1288,7 +1288,7 @@ String STR_LOADING_TABLE
     Text[ french ] = "Chargement de la table $name$ ...";
     Text[ spanish ] = "cargando tabla $name$ ...";
     Text[ italian ] = "Carica tabella $name$ ...";
-    Text[ danish ] = "loading table $name$ ...";
+    Text[ danish ] = "indlÊser tabellen $name$ ...";
     Text[ swedish ] = "Laddar tabell $name$ ...";
     Text[ polish ] = "Trwa ≥adowanie tabeli $name$ ...";
     Text[ portuguese_brazilian ] = "loading table $name$ ...";
@@ -1316,7 +1316,7 @@ String STR_DSBROWSER_TITLE
         Text[ spanish ] = "Vista de fuente de datos";
         Text[ finnish ] = "Data source browser";
         Text[ italian ] = "Vista sorgente dati";
-        Text[ danish ] = "Data source browser";
+        Text[ danish ] = "Datakildevisning";
         Text[ swedish ] = "Datak‰llor vy";
         Text[ polish ] = "Widok ürÛde≥ danych";
         Text[ portuguese_brazilian ] = "Data source browser";
@@ -1343,7 +1343,7 @@ String STR_NO_TABLE_FORMAT_INSIDE
         Text[ spanish ] = "No se pudo encontrar ning˙n formato de hoja de c·lculo.";
         Text[ finnish ] = "No table format found.";
         Text[ italian ] = "Il formato della tabella non Ë stato trovato";
-        Text[ danish ] = "No table format found.";
+        Text[ danish ] = "Det var ikke muligt at finde noget tabelformat.";
         Text[ swedish ] = "Det gick inte att hitta nÂgot tabellformat.";
         Text[ polish ] = "Nie znaleziono øadnego formatu tabeli.";
         Text[ portuguese_brazilian ] = "No table format found.";
@@ -1370,7 +1370,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ spanish ] = "No se pudo realizar la conexiÛn a la fuente de datos \"$name$\".";
         Text[ finnish ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ italian ] = "Impossibile stabilire il collegamento alla sorgente dati esterna \"$name$\".";
-        Text[ danish ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ danish ] = "\"Der kunne ikke oprettes forbindelse til datakilden \"\"$name$\"\".\"";
         Text[ swedish ] = "Det gick inte att skapa fˆrbindelsen till datak‰llan \"$name$\".";
         Text[ polish ] = "Brak po≥πczenia ze ürÛd≥em danych \"$name$\".";
         Text[ portuguese_brazilian ] = "The connection to the data source \"$name$\" could not be established.";
@@ -1380,7 +1380,7 @@ String STR_COULDNOTCONNECT_DATASOURCE
         Text[ chinese_traditional ] = "ÁÑ°Ê≥ïÈÄ£Á∑öÂà∞Ë≥áÊñôÊ∫ê \"$name$\" „ÄÇ";
         Text[ turkish ] = "The connection to the data source \"$name$\" could not be established.";
         Text[ arabic ] = "The connection to the data source \"$name$\" could not be established.";
-        Text[ catalan ] = "The connection to the data source \"$name$\" could not be established.";
+        Text[ catalan ] = "No s'ha pogut establir la connexiÛ amb \"$name$\".";
         Text[ thai ] = "The connection to the data source \"$name$\" could not be established.";
     };
 
@@ -1405,10 +1405,10 @@ Menu RID_MENU_REFRESH_DATA
                 Text[ greek ] = "reconstruct";
                 Text[ dutch ] = "opnieuw opbouwen";
                 Text[ french ] = "Reconstituer";
-                Text[ spanish ] = "reconstruir";
+                Text[ spanish ] = "Reconstruir";
                 Text[ finnish ] = "reconstruct";
                 Text[ italian ] = "Ricostruisci";
-                Text[ danish ] = "reconstruct";
+                Text[ danish ] = "Gendan";
                 Text[ swedish ] = "≈terskapa";
                 Text[ polish ] = "Odúwieø";
                 Text[ portuguese_brazilian ] = "reconstruct";
