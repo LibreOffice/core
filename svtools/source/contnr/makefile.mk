@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2002-07-19 13:27:41 $
+#   last change: $Author: dr $ $Date: 2002-10-02 14:36:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -110,7 +110,8 @@ SLOFILES=   $(SLO)$/svtabbx.obj		\
             $(SLO)$/imivctl2.obj	\
             $(SLO)$/ivctrl.obj		\
             $(SLO)$/fileview.obj	\
-            $(SLO)$/templwin.obj
+            $(SLO)$/templwin.obj	\
+            $(SLO)$/tooltiplbox.obj
 
 EXCEPTIONSFILES=\
             $(SLO)$/fileview.obj	\
