@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Decimal.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:13:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,22 +99,22 @@ service Decimal
     /** specifies the inclusive upper bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-maxInclusive
     */
-    [property, maybevoid] double MaxInclusive;
+    [property, maybevoid] double MaxInclusiveDouble;
 
     /** specifies the exclusive upper bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-maxExclusive
     */
-    [property, maybevoid] double MaxExclusive;
+    [property, maybevoid] double MaxExclusiveDouble;
 
     /** specifies the inclusive lower bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-minInclusive
     */
-    [property, maybevoid] double MinInclusive;
+    [property, maybevoid] double MinInclusiveDouble;
 
     /** specifies the exclusive lower bound for the value
         @see http://www.w3.org/TR/xmlschema-2/#rf-minExclusive
     */
-    [property, maybevoid] double MinExclusive;
+    [property, maybevoid] double MinExclusiveDouble;
 };
 
 //=============================================================================
