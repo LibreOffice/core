@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-01 13:58:02 $
+ *  last change: $Author: cl $ $Date: 2001-08-08 15:47:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _SFXENUMITEM_HXX
+#include <svtools/eitem.hxx>
 #endif
 
 #ifndef _LIST_HXX
@@ -192,6 +196,30 @@ void SvxItemPropertySet::ObtainSettingsFromPropertySet(SvxItemPropertySet& rProp
     }
 }
 
+/** this function checks if a SFX_METRIC_ITEM realy needs to be converted.
+    This check is for items that store either metric values if theire positiv
+    or percentage if theire negativ.
+*/
+sal_Bool SvxUnoCheckForConversion( const SfxItemSet& rSet, sal_Int32 nWID, const uno::Any& rVal )
+{
+    sal_Bool bConvert = sal_True; // the default is that all metric items must be converted
+
+    switch( nWID )
+    {
+    case XATTR_FILLBMP_SIZEX:
+    case XATTR_FILLBMP_SIZEY:
+        {
+            sal_Int32 nValue;
+            if( rVal >>= nValue )
+                bConvert = nValue > 0;
+            break;
+        }
+    }
+
+    // the default is to always
+    return bConvert;
+}
+
 //----------------------------------------------------------------------
 uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, const SfxItemSet& rSet ) const
 {
@@ -225,7 +253,8 @@ uno::Any SvxItemPropertySet::getPropertyValue( const SfxItemPropertyMap* pMap, c
             // check for needed metric translation
             if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
             {
-                SvxUnoConvertToMM( eMapUnit, aVal );
+                if( SvxUnoCheckForConversion( rSet, pMap->nWID, aVal ) )
+                    SvxUnoConvertToMM( eMapUnit, aVal );
             }
         }
         // convert typeless SfxEnumItem to enum type
@@ -282,7 +311,8 @@ void SvxItemPropertySet::setPropertyValue( const SfxItemPropertyMap* pMap, const
             // check for needed metric translation
             if(pMap->nMemberId & SFX_METRIC_ITEM && eMapUnit != SFX_MAPUNIT_100TH_MM)
             {
-                SvxUnoConvertFromMM( eMapUnit, aValue );
+                if( SvxUnoCheckForConversion( rSet, pMap->nWID, aValue ) )
+                    SvxUnoConvertFromMM( eMapUnit, aValue );
             }
         }
 
