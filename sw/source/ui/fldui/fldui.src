@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:35:57 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:33:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2259,7 +2259,7 @@ String FMT_NUM_PAGEDESC
     TEXT [ finnish ] = "Sivutyylinä" ;
     TEXT [ danish ] = "Som sidetypografi" ;
     TEXT [ french ] = "D'après le style de page" ;
-    TEXT [ swedish ] = "Som sidformatmallen" ;
+    TEXT [ swedish ] = "Som sidformatmall" ;
     TEXT [ dutch ] = "Zoals pagina-opmaakprofiel" ;
     TEXT [ spanish ] = "Como estilo de página" ;
     TEXT [ english_us ] = "As Page Style" ;
@@ -2745,7 +2745,7 @@ String FMT_REF_PAGE_PGDSC
     TEXT [ finnish ] = "Sivutyylinä" ;
     TEXT [ danish ] = "Som sidetypografi" ;
     TEXT [ french ] = "D'après le style de page" ;
-    TEXT [ swedish ] = "Som sidformatmallen" ;
+    TEXT [ swedish ] = "Som sidformatmall" ;
     TEXT [ dutch ] = "Volgens pagina-opmaakprofiel" ;
     TEXT [ spanish ] = "Como estilo de página" ;
     TEXT [ english_us ] = "As Page Style" ;
@@ -2903,7 +2903,7 @@ String FMT_MARK_FRAME
     Text[ chinese_simplified ] = "¿ò";
     Text[ russian ] = "Ðàìêà";
     Text[ polish ] = "Ramka";
-    Text[ japanese ] = "˜g";
+    Text[ japanese ] = "Ã·½ÄÎÞ¯¸½";
     Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
     Text[ arabic ] = "ßÇÏÑ";
     Text[ greek ] = "Ðåñßãñáììá";
