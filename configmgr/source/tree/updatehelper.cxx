@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:29:58 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:01:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,7 +266,11 @@ public:
         SubtreeChange aActualChanges(_anUpdateTree, SubtreeChange::NoChildCopy());
 
         if ( adjust_helper(aActualChanges,_anUpdateTree, _anUpdateAccess, _aRootNode) )
+        {
             applyUpdateToTree(aActualChanges, _anUpdateAccess, _aRootNode);
+        }
+        _anUpdateTree.swap(aActualChanges);
+
     }
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -618,8 +622,6 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
         virtual void handle(ISubtree const& _aNewNode)
         {
             data::NodeAccess aChildNode = data::getSubnode(m_aCacheNode,getNodeName(_aNewNode));
-
-            OSL_ENSURE(aChildNode.isValid(), "TreeDifferenceBuilder: could not find expected node !");
 
             if (aChildNode.isValid())
             {
