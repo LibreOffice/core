@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxtr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-01 13:43:51 $
+ *  last change: $Author: aw $ $Date: 2002-07-17 11:36:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,11 @@ void SdrTextObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fract
         // gone. This error must be present since day one of this old drawing layer.
         // It's astonishing that noone discovered it earlier.
         // Polygon aPol(Rect2Poly(aRect,aGeo));
-        Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
+        // Polygon aPol(Rect2Poly(GetSnapRect(), aGeo));
+
+        // #101412# go back to old method, side effects are impossible
+        // to calculate.
+        Polygon aPol(Rect2Poly(aRect,aGeo));
 
         for(sal_uInt16 a(0); a < aPol.GetSize(); a++)
         {
