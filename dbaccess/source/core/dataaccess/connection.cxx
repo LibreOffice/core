@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-15 10:40:25 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         catch(SQLException&)
         {
         }
-        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this,bCase, this);
+        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex,this, bCase, this,this);
         // check if we supports types
         Reference<XResultSet> xRes = m_xConnection->getMetaData()->getTableTypes();
         if(xRes.is())
@@ -406,7 +406,7 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
         }
         if(m_bSupportsViews)
         {
-            m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this);
+            m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,this);
             m_pViews->addContainerListener(m_pTables);
             m_pTables->addContainerListener(m_pViews);
         }
@@ -625,6 +625,72 @@ Reference< XSQLQueryComposer >  OConnection::createQueryComposer(void) throw( Ru
     m_aComposers.push_back(WeakReferenceHelper(xComposer));
     return xComposer;
 }
+// -----------------------------------------------------------------------------
+void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
+{
+    if ( _rToBeRefreshed == Reference< XNameAccess >(m_pTables) )
+    {
+        if (!m_pTables->isInitialized())
+        {
+
+            // check if out "master connection" can supply tables
+            if(!m_xMasterTables.is())
+            {
+                try
+                {
+                    Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                    Reference< XDriver > xDriver = xManager->getDriverByURL(m_xConnection->getMetaData()->getURL());
+                    OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
+                    Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
+                    if(xSupp.is())
+                        m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+                }
+                catch(SQLException&)
+                {
+                }
+            }
+
+
+            if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
+            {   // yes -> wrap them
+                m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
+            }
+            else
+            {   // no -> use an own container
+                m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
+            }
+        }
+    }
+    else if ( _rToBeRefreshed == Reference< XNameAccess >(m_pViews) )
+    {
+        if (!m_pViews->isInitialized())
+        {
+            // check if out "master connection" can supply tables
+            Reference< XViewsSupplier > xMaster(m_xMasterTables,UNO_QUERY);
+            if(!m_xMasterTables.is())
+            {
+                try
+                {
+                    Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+                    Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
+
+                    if(xSupp.is())
+                        m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
+                    xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
+                }
+                catch(SQLException&)
+                {
+                }
+            }
+
+            if (xMaster.is() && xMaster->getViews().is())
+                m_pViews->construct(xMaster->getViews(),m_aTableFilter, m_aTableTypeFilter);
+            else
+                m_pViews->construct(m_aTableFilter, m_aTableTypeFilter);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
 
 // XTablesSupplier
 //------------------------------------------------------------------------------
@@ -633,36 +699,7 @@ Reference< XNameAccess >  OConnection::getTables() throw( RuntimeException )
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    if (!m_pTables->isInitialized())
-    {
-
-        // check if out "master connection" can supply tables
-        if(!m_xMasterTables.is())
-        {
-            try
-            {
-                Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                Reference< XDriver > xDriver = xManager->getDriverByURL(m_xConnection->getMetaData()->getURL());
-                OSL_ENSURE(xDriver.is(),"NO driver found for url already connected to!");
-                Reference< XDataDefinitionSupplier > xSupp(xDriver,UNO_QUERY);
-                if(xSupp.is())
-                    m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
-            }
-            catch(SQLException&)
-            {
-            }
-        }
-
-
-        if (m_xMasterTables.is() && m_xMasterTables->getTables().is())
-        {   // yes -> wrap them
-            m_pTables->construct(m_xMasterTables->getTables(),m_aTableFilter, m_aTableTypeFilter);
-        }
-        else
-        {   // no -> use an own container
-            m_pTables->construct(m_aTableFilter, m_aTableTypeFilter);
-        }
-    }
+    refresh(m_pTables);
 
     return m_pTables;
 }
@@ -672,31 +709,7 @@ Reference< XNameAccess > SAL_CALL OConnection::getViews(  ) throw(RuntimeExcepti
     MutexGuard aGuard(m_aMutex);
     checkDisposed();
 
-    if (!m_pViews->isInitialized())
-    {
-        // check if out "master connection" can supply tables
-        Reference< XViewsSupplier > xMaster(m_xMasterTables,UNO_QUERY);
-        if(!m_xMasterTables.is())
-        {
-            try
-            {
-                Reference< XDriverAccess> xManager(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
-                Reference< XDataDefinitionSupplier > xSupp(xManager->getDriverByURL(m_xConnection->getMetaData()->getURL()),UNO_QUERY);
-
-                if(xSupp.is())
-                    m_xMasterTables = xSupp->getDataDefinitionByConnection(m_xMasterConnection);
-                xMaster = Reference< XViewsSupplier >(m_xMasterTables,UNO_QUERY);
-            }
-            catch(SQLException&)
-            {
-            }
-        }
-
-        if (xMaster.is() && xMaster->getViews().is())
-            m_pViews->construct(xMaster->getViews(),m_aTableFilter, m_aTableTypeFilter);
-        else
-            m_pViews->construct(m_aTableFilter, m_aTableTypeFilter);
-    }
+    refresh(m_pTables);
 
     return m_pViews;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-15 10:36:56 $
+ *  last change: $Author: oj $ $Date: 2002-08-21 10:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #ifndef _CONNECTIVITY_CONNECTIONWRAPPER_HXX_
 #include "connectivity/ConnectionWrapper.hxx"
 #endif
+#ifndef DBA_CORE_REFRESHLISTENER_HXX
+#include "RefreshListener.hxx"
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -127,6 +130,7 @@ class OConnection           :public ::comphelper::OBaseMutex
                             ,public ::connectivity::OConnectionWrapper
                             ,public OConnection_Base
                             ,public IWarningsContainer
+                            ,public IRefreshListener
 {
 protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier >
@@ -224,6 +228,9 @@ public:
     void flushMembers();
     // set the confignode this happens when the datasource was reinserted
     void setNewConfigNode(const ::utl::OConfigurationTreeRoot& _aConfigTreeNode);
+
+    // IRefreshListener
+    virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed);
 protected:
     // IWarningsContainer
     virtual void appendWarning(const ::com::sun::star::sdbc::SQLException& _rWarning);
