@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorlistener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:28 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:33:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,12 +90,24 @@
 #include <rtl/ustring.h>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
 #endif
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
 #endif
 
 //__________________________________________
@@ -129,7 +141,7 @@ ColorListener::ColorListener( const css::uno::Reference< css::awt::XWindow >& xW
     , m_pConfig     (NULL                         )
 {
     impl_startListening();
-    impl_applyColor();
+    impl_applyColor(sal_True);
 }
 
 //__________________________________________
@@ -160,13 +172,13 @@ ColorListener::~ColorListener()
 void ColorListener::Notify( SfxBroadcaster& rBroadCaster, const SfxHint& rHint )
 {
     if (((SfxSimpleHint&)rHint).GetId()==SFX_HINT_COLORS_CHANGED)
-        impl_applyColor();
+        impl_applyColor(sal_True);
 }
 
-void ColorListener::impl_applyColor()
+void ColorListener::impl_applyColor( sal_Bool bInvalidate )
 {
     /* SAFE { */
-    ReadGuard aReadLock(m_aLock);
+    WriteGuard aWriteLock(m_aLock);
 
     if (m_pConfig)
     {
@@ -174,13 +186,17 @@ void ColorListener::impl_applyColor()
         ::svtools::ColorConfigValue aBackgroundColor = m_pConfig->GetColorValue( ::svtools::APPBACKGROUND );
         if (xPeer.is())
         {
-            xPeer->setBackground(aBackgroundColor.nColor);
-            xPeer->invalidate(
-                css::awt::InvalidateStyle::UPDATE | css::awt::InvalidateStyle::CHILDREN | css::awt::InvalidateStyle::NOTRANSPARENT );
+            m_nColor = aBackgroundColor.nColor;
+            xPeer->setBackground(m_nColor);
+            if (bInvalidate)
+            {
+                xPeer->invalidate(
+                    css::awt::InvalidateStyle::UPDATE | css::awt::InvalidateStyle::CHILDREN | css::awt::InvalidateStyle::NOTRANSPARENT );
+            }
         }
     }
 
-    aReadLock.unlock();
+    aWriteLock.unlock();
     /* } SAFE */
 }
 
@@ -213,6 +229,29 @@ void SAL_CALL ColorListener::disposing( const css::lang::EventObject& aEvent ) t
     /* } SAFE */
 }
 
+IMPL_LINK( ColorListener, impl_SettingsChanged, void*, pVoid )
+{
+    VclWindowEvent* pEvent = (VclWindowEvent*)pVoid;
+    if (pEvent->GetId() != VCLEVENT_APPLICATION_DATACHANGED)
+        return 0L;
+
+    /* SAFE { */
+    ReadGuard aReadLock(m_aLock);
+    Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
+    if (!pWindow)
+        return 0L;
+
+    OutputDevice* pDevice = (OutputDevice*)pWindow;
+    long nNewColor = (long)(pDevice->GetBackground().GetColor().GetColor());
+
+    if (m_nColor != nNewColor)
+        impl_applyColor(sal_False);
+    aReadLock.unlock();
+    /* } SAFE */
+
+    return 0L;
+}
+
 //__________________________________________
 
 /** starts listening for color changes and window destroy.
@@ -227,6 +266,8 @@ void ColorListener::impl_startListening()
 
     if (!m_bListen)
     {
+        Application::AddEventListener( LINK( this, ColorListener, impl_SettingsChanged ) );
+
         if (!m_pConfig)
             m_pConfig = new ::svtools::ColorConfig();
 
@@ -254,6 +295,8 @@ void ColorListener::impl_stopListening()
 
     if (m_bListen)
     {
+        Application::RemoveEventListener( LINK( this, ColorListener, impl_SettingsChanged ) );
+
         EndListeningAll();
 
         delete m_pConfig;
