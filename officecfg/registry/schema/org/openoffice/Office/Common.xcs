@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:00:28 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 09:36:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,6 +820,27 @@
 					<desc>Use cfg package Jobs instead of this.</desc>
 				</info>
 			</group>
+		</group>
+		<group oor:name="TrustedAuthor">
+			<info>
+				<author>GT</author>
+				<desc>All Certificate informations needed to handle and identify the signature.</desc>
+			</info>
+			<prop oor:name="SubjectName" oor:type="xs:string">
+				<info>
+					<desc>Subject name of Certificate.</desc>
+				</info>
+			</prop>
+			<prop oor:name="SerialNumber" oor:type="xs:string">
+				<info>
+					<desc>Serial Number of Certificate.</desc>
+				</info>
+			</prop>
+			<prop oor:name="RawData" oor:type="xs:string">
+				<info>
+					<desc>Raw of Certificate.</desc>
+				</info>
+			</prop>
 		</group>
 	</templates>
 	<component>
@@ -2014,7 +2035,7 @@
 						<author>MBA</author>
 						<desc>Lists all trustworthy URLs: file: All scripts from the local file system including a LAN; private:explorer: Scripts from the Explorer; private:help: Scripts in the help system; private:newmenu: Scripts that are executed by the commands File-New and AutoPilot; private:schedule: Scripts of the scheduler; private:searchfolder: Scripts of the searchfolder; private:user: Scripts that are entered in the URL field.</desc>
 					</info>
-					<value>$(userurl) $(insturl)</value>
+					<value></value>
 				</prop>
 				<prop oor:name="OfficeBasic" oor:type="xs:int">
 					<!-- OldPath: Security/StarBASIC -->
@@ -2064,6 +2085,73 @@
 					</info>
 					<value>true</value>
 				</prop>
+				<prop oor:name="WarnSaveOrSendDoc" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to warn when saving or sending documents with personal/hidden data.</desc>
+					</info>
+					<value>false</value>
+				</prop>
+				<prop oor:name="WarnSignDoc" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to warn when signing documents with personal/hidden data.</desc>
+					</info>
+					<value>true</value>
+				</prop>
+				<prop oor:name="WarnPrintDoc" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to warn when printing documents with personal/hidden data.</desc>
+					</info>
+					<value>false</value>
+				</prop>
+				<prop oor:name="WarnCreatePDF" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to warn when creating PDF documents with personal/hidden data.</desc>
+					</info>
+					<value>false</value>
+				</prop>
+				<prop oor:name="RemovePersonalInfoOnSaving" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to remove personal information on saving.</desc>
+					</info>
+					<value>false</value>
+				</prop>
+				<prop oor:name="RecommendPasswordProtection" oor:type="xs:boolean">
+					<info>
+						<author>GT</author>
+						<desc>Specifies wether to recommend password protection when saving documents.</desc>
+					</info>
+					<value>false</value>
+				</prop>
+				<prop oor:name="MacroSecurityLevel" oor:type="xs:int">
+					<info>
+						<author>GT</author>
+						<desc>Level of Macro security.</desc>
+					</info>
+					<constraints>
+						<minInclusive oor:value="0">
+							<info>
+								<desc>Lowest level.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="3">
+							<info>
+								<desc>Highest level.</desc>
+							</info>
+						</maxInclusive>
+					</constraints>
+					<value>1</value>
+				</prop>
+				<set oor:name="TrustedAuthors" oor:node-type="TrustedAuthor">
+					<info>
+						<author>GT</author>
+						<desc>List with trusted authors.</desc>
+					</info>
+				</set>
 			</group>
 		</group>
 		<group oor:name="View">
@@ -2622,7 +2710,7 @@
 					<desc>Specifies if printing a document can modify a document due to reformatting</desc>
 					<label>(PrinterOptions) PrintingModifiesDocument</label>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<group oor:name="Warning">
 				<info>
