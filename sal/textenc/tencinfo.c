@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 14:44:17 $
+ *  last change: $Author: th $ $Date: 2001-08-22 09:52:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,6 +893,8 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "isoir159", RTL_TEXTENCODING_JIS_X_0208 },
         { "x0212", RTL_TEXTENCODING_JIS_X_0212 },
         { "isoir6", RTL_TEXTENCODING_ASCII_US },
+        { "xsjis", RTL_TEXTENCODING_SHIFT_JIS },
+        { "sjis", RTL_TEXTENCODING_SHIFT_JIS },
         { "ascii", RTL_TEXTENCODING_ASCII_US },
         { "us", RTL_TEXTENCODING_ASCII_US },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
