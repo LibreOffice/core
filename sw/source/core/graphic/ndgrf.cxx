@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:13:48 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,8 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
 {
     aGrfObj = rGrfObj;
     aGrfObj.SetSwapStreamHdl( LINK( this, SwGrfNode, SwapGraphic ) );
+    if( rGrfObj.HasUserData() && rGrfObj.IsSwappedOut() )
+        aGrfObj.SetSwapState();
     bInSwapIn = bChgTwipSize = bLoadLowResGrf = bFrameInPaint =
         bScaleImageMap = FALSE;
     bGrafikArrived = TRUE;
@@ -265,6 +267,8 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
         else if( pGrfObj )
         {
             aGrfObj = *pGrfObj;
+            if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
+                aGrfObj.SetSwapState();
             aGrfObj.SetLink( rGrfName );
             bReadGrf = TRUE;
         }
@@ -291,19 +295,23 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
     }
     else if( pGraphic && !rGrfName.Len() )
     {
+        // MIB 27.02.2001: Old stream must be deleted before the new one is set.
+        if( HasStreamName() )
+            DelStreamName();
+
         aGrfObj.SetGraphic( *pGraphic );
         bReadGrf = TRUE;
-
-        if( aStrmName.Len() )
-            DelStreamName();
     }
     else if( pGrfObj && !rGrfName.Len() )
     {
-        aGrfObj = *pGrfObj;
-        bReadGrf = TRUE;
-
-        if( aStrmName.Len() )
+        // MIB 27.02.2001: Old stream must be deleted before the new one is set.
+        if( HasStreamName() )
             DelStreamName();
+
+        aGrfObj = *pGrfObj;
+        if( pGrfObj->HasUserData() && pGrfObj->IsSwappedOut() )
+            aGrfObj.SetSwapState();
+        bReadGrf = TRUE;
     }
         // Import einer Grafik:
         // Ist die Grafik bereits geladen?
@@ -312,7 +320,7 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
 
     else
     {
-        if( aStrmName.Len() )
+        if( HasStreamName() )
             DelStreamName();
 
         // einen neuen Grafik-Link anlegen
@@ -374,7 +382,7 @@ SwGrfNode::~SwGrfNode()
     }
     else
     {
-        if( !pDoc->IsInDtor() && aStrmName.Len() )
+        if( !pDoc->IsInDtor() && HasStreamName() )
             DelStreamName();
     }
     //#39289# Die Frames muessen hier bereits geloescht weil der DTor der
@@ -427,11 +435,25 @@ Size SwGrfNode::GetTwipSize() const
 
 
 
+BOOL SwGrfNode::ImportGraphic( SvStream& rStrm )
+{
+    Graphic aGraphic;
+    if( !GetGrfFilter()->ImportGraphic( aGraphic, String(), rStrm ) )
+    {
+        const String aUserData( aGrfObj.GetUserData() );
+
+        aGrfObj.SetGraphic( aGraphic );
+        aGrfObj.SetUserData( aUserData );
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 // Returnwert:
 // -1 : ReRead erfolgreich
 //  0 : nicht geladen
 //  1 : Einlesen erfolgreich
-
 
 short SwGrfNode::SwapIn( BOOL bWaitForData )
 {
@@ -466,7 +488,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
     else if( aGrfObj.IsSwappedOut() )
     {
         // Die Grafik ist im Storage oder im TempFile drin
-        if( !aStrmName.Len() )
+        if( !HasStreamName() )
             nRet = (short)aGrfObj.SwapIn();
         else
         {
@@ -474,10 +496,12 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             ASSERT( refRoot.Is(), "Kein Storage am Doc" );
             if( refRoot.Is() )
             {
-                String aPicStgName( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" )));
-                SvStorageRef refPics = refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
+                String aStrmName, aPicStgName;
+                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+                SvStorageRef refPics = aPicStgName.Len()
+                       ? refRoot->OpenStorage( aPicStgName,
+                        STREAM_READ | STREAM_SHARE_DENYWRITE )
+                    : refRoot;
                 if( refPics->GetError() == SVSTREAM_OK )
                 {
                     SvStorageStreamRef refStrm =
@@ -486,7 +510,8 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
                     if( refStrm->GetError() == SVSTREAM_OK )
                     {
                         refStrm->SetVersion( refRoot->GetVersion() );
-                        if( aGrfObj.SwapIn( refStrm ) )
+                        if( bGraphic ? aGrfObj.SwapIn( refStrm )
+                                     : ImportGraphic( *refStrm ) )
                             nRet = 1;
                     }
                 }
@@ -524,7 +549,7 @@ short SwGrfNode::SwapOut()
             // Die Grafik wird in eine TempFile geschrieben, wenn
             // sie frisch eingefuegt war, d.h. wenn es noch keinen
             // Streamnamen im Storage gibt.
-            if( !aStrmName.Len() )
+            if( !HasStreamName() )
                 if( !aGrfObj.SwapOut() )
                     return 0;
         }
@@ -542,7 +567,7 @@ void SwGrfNode::SaveCompleted( BOOL bClear )
     if( aNewStrmName.Len() )
     {
         if( !bClear )       // der Name wird zum aktuellen
-            aStrmName = aNewStrmName;
+            SetStreamName( aNewStrmName );
         aNewStrmName.Erase();
     }
 }
@@ -556,36 +581,53 @@ void SwGrfNode::SaveCompleted( BOOL bClear )
 // Streamnamen abgelegt (SaveAs). nach einem SaveAs wird
 // vom SW3-I/O-System noch SaveCompleted() aufgerufen,
 // da nun der Doc-Storage dem neuen Storage entspricht.
+// MIB 02/28/2001: This method is called only to store graphics
+// in the 3.1 to 5.0 formats. For the 6.0 format, graphics
+// are exported using the SvXMLGraphicObjectHelper class.
 
 
 BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
 {
     if( !refLink.Is() )
     {
-        String aName( aStrmName );
+        BOOL bGraphic = TRUE; // Does the graphic stream (if it exists)
+                              // contain a streamed graphic (TRUE) or the
+                              // raw image data only (FALSE)
+        String aSrcStrmName, aSrcPicStgName;
+        if( HasStreamName() )
+            bGraphic = GetStreamStorageNames( aSrcStrmName, aSrcPicStgName );
         SvStorage* pDocStg = GetDoc()->GetDocStorage();
         if( !pRoot )
             pRoot = pDocStg;
+        ASSERT( SOFFICE_FILEFORMAT_60 > pRoot->GetVersion(),
+                "SwGrfNode::StoreGraphic called for 6.0+ file format" );
 
-        String aPicStgName( String::CreateFromAscii(
-                        RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" )));
-        if( pRoot != pDocStg )
+        String aDstPicStgName(
+                RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" ) );
+        String aDstStrmName( aSrcStrmName );
+        if( pRoot != pDocStg || !bGraphic )
         {
+            // If the stream does not contain a streamed graphic object,
+            // the graphic has to be stored again.
+            ASSERT( !bGraphic || aSrcStrmName.Len(),
+                    "graphic stream but no stream name" );
             // Neuer Storage. Wenn die Grafik im DocStg drin ist,
             // kann sie bequem per CopyTo() kopiert werden.
-            if( aName.Len() )
+            if( aSrcStrmName.Len() )
             {
-                SvStorageRef refSrcPics =
-                    pDocStg->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
+                SvStorageRef refSrcPics = aSrcPicStgName.Len()
+                    ? pDocStg->OpenStorage( aSrcPicStgName,
+                        STREAM_READ | STREAM_SHARE_DENYWRITE )
+                    : pDocStg;
 
                 SvStorageStreamRef refStrm;
 
-                BOOL bWriteNew = pDocStg->GetVersion() != pRoot->GetVersion();
+                BOOL bWriteNew = pDocStg->GetVersion() != pRoot->GetVersion() ||
+                                 !bGraphic;
                 if( !bWriteNew &&
                     SOFFICE_FILEFORMAT_40 <= pRoot->GetVersion() )
                 {
-                    refStrm = refSrcPics->OpenStream( aName,
+                    refStrm = refSrcPics->OpenStream( aSrcStrmName,
                                     STREAM_READ | STREAM_SHARE_DENYWRITE );
                     if( SVSTREAM_OK == refStrm->GetError() )
                     {
@@ -618,48 +660,57 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
                         SVSTREAM_OK == refSrcPics->GetError() )
                     {
                         if( !refStrm.Is() )
-                            refStrm = refSrcPics->OpenStream( aName,
+                            refStrm = refSrcPics->OpenStream( aSrcStrmName,
                                     STREAM_READ | STREAM_SHARE_DENYWRITE );
                         if( SVSTREAM_OK == refStrm->GetError() )
                         {
                             refStrm->SetVersion( pDocStg->GetVersion() );
-                            if( !aGrfObj.SwapIn( refStrm ) )
+                            if( !(bGraphic ? aGrfObj.SwapIn( refStrm )
+                                            : ImportGraphic( *refStrm ) ) )
                                 return FALSE;
                         }
                     }
-                    aName.Erase();
+                    // If the graphic is restored within the same storage,
+                    // its storage has to be removed.
+                    if( pRoot == pDocStg )
+                    {
+                        refStrm.Clear();
+                        DelStreamName();
+                    }
+                    aDstStrmName.Erase();
                 }
                 else
                 {
                     SvStorageRef refDstPics =
-                        pRoot->OpenStorage( aPicStgName,
+                        pRoot->OpenStorage( aDstPicStgName,
                             STREAM_READWRITE | STREAM_SHARE_DENYALL );
-                    if( refDstPics->IsContained( aName ) )
+                    if( refDstPics->IsContained( aDstStrmName ) )
                         // nur neu erzeugen, wenn Name schon vorhanden ist!
-                        aName = Sw3Io::UniqueName( refDstPics, "Pic" );
+                        aDstStrmName = Sw3Io::UniqueName( refDstPics, "Pic" );
 
-                    if( refSrcPics->CopyTo( aStrmName, refDstPics, aName )
+                    if( refSrcPics->CopyTo( aSrcStrmName, refDstPics,
+                                            aDstStrmName )
                         && refDstPics->Commit() )
-                        aNewStrmName = aName;
+                        aNewStrmName = aDstStrmName;
                     else
                         return FALSE;
                 }
             }
         }
 
-        if( !aName.Len() )
+        if( !aDstStrmName.Len() )
         {
             ASSERT( pRoot, "Kein Storage gegeben" );
             if( pRoot )
             {
                 SvStorageRef refPics =
-                    pRoot->OpenStorage( aPicStgName,
+                    pRoot->OpenStorage( aDstPicStgName,
                         STREAM_READWRITE | STREAM_SHARE_DENYALL );
                 if( SVSTREAM_OK == refPics->GetError() )
                 {
-                    aName = Sw3Io::UniqueName( refPics, "Pic" );
+                    aDstStrmName = Sw3Io::UniqueName( refPics, "Pic" );
                     SvStorageStreamRef refStrm =
-                        refPics->OpenStream( aName,
+                        refPics->OpenStream( aDstStrmName,
                         STREAM_READWRITE | STREAM_SHARE_DENYALL );
                     if( SVSTREAM_OK == refStrm->GetError() )
                     {
@@ -697,7 +748,7 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
                                 ( refStrm->Commit() | refPics->Commit()
                                   /*| pRoot->Commit()*/ ))
                             {
-                                aStrmName = aName;
+                                SetStreamName( aDstStrmName );
                                 bRes = TRUE;
                             }
                         }
@@ -708,7 +759,7 @@ BOOL SwGrfNode::StoreGraphics( SvStorage* pRoot )
                         {
                             if( bIsSwapOut )
                                 aGrfObj.SwapOut();
-                            aNewStrmName = aName;
+                            aNewStrmName = aDstStrmName;
                             bRes = TRUE;
                         }
                         return bRes;
@@ -751,11 +802,11 @@ BOOL SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
 }
 
 
-const String& SwGrfNode::GetStreamName() const
+String SwGrfNode::GetStreamName() const
 {
     if( aNewStrmName.Len() )
         return aNewStrmName;
-    return aStrmName;
+    return aGrfObj.GetUserData();
 }
 
 // Eine Grafik Undo-faehig machen. Falls sie sich bereits in
@@ -771,10 +822,10 @@ BOOL SwGrfNode::SavePersistentData()
     }
 
     // Erst mal reinswappen, falls sie im Storage ist
-    if( aStrmName.Len() && !SwapIn() )
+    if( HasStreamName() && !SwapIn() )
         return FALSE;
 
-    if( aStrmName.Len() )
+    if( HasStreamName() )
         DelStreamName();
 
     // Und in TempFile rausswappen
@@ -931,17 +982,18 @@ void SwGrfNode::ScaleImageMap()
 
 void SwGrfNode::DelStreamName()
 {
-    if( aStrmName.Len() )
+    if( HasStreamName() )
     {
         // Dann die Grafik im Storage loeschen
         SvStorage* pDocStg = GetDoc()->GetDocStorage();
         if( pDocStg )
         {
-            String aPicStgName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" )));
-            SvStorageRef refPics =
-                pDocStg->OpenStorage( aPicStgName,
-                    STREAM_READWRITE | STREAM_SHARE_DENYALL );
+            String aPicStgName, aStrmName;
+            GetStreamStorageNames( aStrmName, aPicStgName );
+            SvStorageRef refPics = aPicStgName.Len()
+                ? pDocStg->OpenStorage( aPicStgName,
+                    STREAM_READWRITE | STREAM_SHARE_DENYALL )
+                : pDocStg;
             if( refPics->GetError() == SVSTREAM_OK )
             {
                 refPics->Remove( aStrmName );
@@ -949,10 +1001,48 @@ void SwGrfNode::DelStreamName()
                 refPics->ResetError();  // Falls wir ReadOnly waren
             }
         }
-        aStrmName.Erase();
+        aGrfObj.SetUserData();
     }
 }
 
+BOOL SwGrfNode::GetStreamStorageNames( String& rStrmName,
+                                      String& rStorName ) const
+{
+    BOOL bGraphic = FALSE;
+    rStorName.Erase();
+    rStrmName.Erase();
+
+    String aUserData( aGrfObj.GetUserData() );
+    if( !aUserData.Len() )
+        return FALSE;
+
+    String aProt( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.Package:" ) );
+    if( 0 == aUserData.CompareTo( aProt, aProt.Len() ) )
+    {
+        // 6.0 (XML) Package
+        xub_StrLen nPos = aUserData.Search( '/' );
+        if( STRING_NOTFOUND == nPos )
+        {
+            rStrmName = aUserData.Copy( aProt.Len() );
+        }
+        else
+        {
+            rStorName = aUserData.Copy( aProt.Len(), nPos-aProt.Len() );
+            rStrmName = aUserData.Copy( nPos+1 );
+        }
+    }
+    else
+    {
+        // 3.1 - 5.2
+        rStorName = String( RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" ) );
+        rStrmName = aUserData;
+        bGraphic = TRUE;
+    }
+    ASSERT( STRING_NOTFOUND == rStrmName.Search( '/' ),
+            "invalid graphic stream name" );
+
+    return bGraphic;
+}
 
 SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
@@ -963,16 +1053,18 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     Graphic aTmpGrf;
     SwBaseLink* pLink = (SwBaseLink*)(SvBaseLink*) refLink;
-    if( !pLink && aStrmName.Len() )
+    if( !pLink && HasStreamName() )
     {
         SvStorageRef refRoot = pThis->GetDoc()->GetDocStorage();
         ASSERT( refRoot.Is(), "Kein Storage am Doc" );
         if( refRoot.Is() )
         {
-            String aPicStgName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" )));
-            SvStorageRef refPics = refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
+            String aStrmName, aPicStgName;
+            BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+            SvStorageRef refPics = aPicStgName.Len()
+                   ? refRoot->OpenStorage( aPicStgName,
+                        STREAM_READ | STREAM_SHARE_DENYWRITE )
+                : refRoot;
             if( refPics->GetError() == SVSTREAM_OK )
             {
                 SvStorageStreamRef refStrm = refPics->OpenStream( aStrmName,
@@ -980,7 +1072,10 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                 if( refStrm->GetError() == SVSTREAM_OK )
                 {
                     refStrm->SetVersion( refRoot->GetVersion() );
-                    aTmpGrf.SwapIn( refStrm );
+                    bGraphic ? aTmpGrf.SwapIn( refStrm )
+                             : GetGrfFilter()->ImportGraphic( aTmpGrf,
+                                                               String(),
+                                                              *refStrm );
                 }
             }
         }
@@ -1037,17 +1132,18 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     {
         pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
 
-        if( aStrmName.Len() )
+        if( HasStreamName() )
         {
             SvStorageRef refRoot = GetDoc()->GetDocStorage();
             ASSERT( refRoot.Is(), "Kein Storage am Doc" );
             if( refRoot.Is() )
             {
-                String aPicStgName( String::CreateFromAscii(
-                            RTL_CONSTASCII_STRINGPARAM( "EmbeddedPictures" )));
-                SvStorageRef refPics =
-                    refRoot->OpenStorage( aPicStgName,
-                        STREAM_READ | STREAM_SHARE_DENYWRITE );
+                String aStrmName, aPicStgName;
+                BOOL bGraphic = GetStreamStorageNames( aStrmName, aPicStgName );
+                SvStorageRef refPics = aPicStgName.Len()
+                    ? refRoot->OpenStorage( aPicStgName,
+                        STREAM_READ | STREAM_SHARE_DENYWRITE )
+                    : refRoot;
                 if( refPics->GetError() == SVSTREAM_OK )
                 {
                     SvStream* pTmp = refPics->OpenStream( aStrmName,
@@ -1059,9 +1155,17 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
                             pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
                         else
                         {
-                            pRet = pTmp;
-                            bDelStrm = FALSE;
-                            pRet->SetVersion( refRoot->GetVersion() );
+                            if( bGraphic )
+                            {
+                                pRet = pTmp;
+                                bDelStrm = FALSE;
+                                pRet->SetVersion( refRoot->GetVersion() );
+                            }
+                            else
+                            {
+                                ImportGraphic( *pTmp );
+                                pRet = GRFMGR_AUTOSWAPSTREAM_LOADED;
+                            }
                         }
                     }
                     if( bDelStrm )

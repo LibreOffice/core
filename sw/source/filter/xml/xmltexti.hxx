@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:45 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,6 @@ class SvPlugInObjectRef;
 
 class SwXMLTextImportHelper : public XMLTextImportHelper
 {
-    sal_Bool bBlockMode;
     SwApplet_Impl *pAppletImpl;
     SvPlugInObjectRef xPlugin;
     SvCommandList aCmdList;
@@ -139,9 +138,6 @@ public:
     virtual void endPlugin( );
 
     virtual sal_Bool IsInHeaderFooter() const;
-
-    virtual sal_Bool IsBlockMode() { return bBlockMode; }
-
 
     // redlining helper methods
     // (here is the real implementation)

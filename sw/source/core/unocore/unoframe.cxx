@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 07:14:16 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1288,7 +1288,9 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 if( sTmp.EqualsAscii( sPackageProtocol,
                                       0, sizeof( sPackageProtocol )-1 ) )
                 {
-                    pGrfObj = 0; // TODO
+                    pGrfObj = new GraphicObject;
+                    pGrfObj->SetUserData( sTmp );
+                    pGrfObj->SetSwapState();
                     sGrfName.Erase();
                 }
                 else if( sTmp.EqualsAscii( sGraphicObjectProtocol,
@@ -1945,7 +1947,9 @@ void SwXFrame::attachToRange(const uno::Reference< XTextRange > & xTextRange)
                 if( sGraphicURL.EqualsAscii( sPackageProtocol,
                                                0, sizeof( sPackageProtocol )-1 ) )
                 {
-                    pGrfObj = 0; // TODO
+                    pGrfObj = new GraphicObject;
+                    pGrfObj->SetUserData( sGraphicURL );
+                    pGrfObj->SetSwapState();
                     sGraphicURL.Erase();
                 }
                 else if( sGraphicURL.EqualsAscii( sGraphicObjectProtocol,

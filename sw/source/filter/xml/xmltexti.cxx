@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:52 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,9 +127,8 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
         const Reference < XModel>& rModel,
         sal_Bool bInsertM, sal_Bool bStylesOnlyM, sal_Bool bProgress,
         sal_Bool bBlockM) :
-    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress ),
-    pRedlineHelper(NULL),
-    bBlockMode(bBlockM)
+    XMLTextImportHelper( rModel, bInsertM, bStylesOnlyM, bProgress, bBlockM ),
+    pRedlineHelper(NULL)
 {
 }
 

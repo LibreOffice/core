@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-23 14:33:30 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 14:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,10 @@ public:
                 ::com::sun::star::beans::XPropertySet >& rPropSet,
         ::rtl::OUString& rStreamName,
         ::rtl::OUString& rClassId ) const;
+    virtual void setTextEmbeddedGraphicURL(
+        const ::com::sun::star::uno::Reference <
+                ::com::sun::star::beans::XPropertySet >& rPropSet,
+        ::rtl::OUString& rStreamName ) const;
 };
 
 
