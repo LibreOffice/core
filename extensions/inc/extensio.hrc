@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 11:56:17 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:24:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@
 #define HID_PROP_SPIN                           (HID_FORMS_START +  83)
 #define HID_PROP_STRICTFORMAT                   (HID_FORMS_START +  84)
 #define HID_PROP_SHOWTHOUSANDSEP                (HID_FORMS_START +  85)
-    // FREE
+#define HID_PROP_VERTICAL_ALIGN                 (HID_FORMS_START +  86)
 #define HID_PROP_PRINTABLE                      (HID_FORMS_START +  87)
 #define HID_PROP_TARGET_URL                     (HID_FORMS_START +  88)
 #define HID_PROP_TARGET_FRAME                   (HID_FORMS_START +  89)
