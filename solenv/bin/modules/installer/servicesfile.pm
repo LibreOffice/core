@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2004-06-15 10:33:32 $
+#   last change: $Author: kz $ $Date: 2004-06-18 16:55:16 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -279,6 +279,7 @@ sub register_unocomponents
     installer::logger::include_header_into_logfile("Registering UNO components:");
 
     my $error_occured = 0;
+    my $counter = 0;
 
     my $systemcall = "";
 
@@ -294,44 +295,50 @@ sub register_unocomponents
 
         for ( my $i = 0; $i <= $#{$unocomponents}; $i++ )
         {
+            my $doinclude = 1;
             my $sourcepath = ${$unocomponents}[$i]->{'sourcepath'};
 
             $to = $sourcepath;
             installer::pathanalyzer::get_path_from_fullqualifiedname(\$to);
 
-            if (!($to eq $onesourcepath)) { next; }
+            if (!($to eq $onesourcepath)) { $doinclude = 0; }
 
-            my $filename = ${$unocomponents}[$i]->{'Name'};
+            if ( $doinclude )
+            {
+                my $filename = ${$unocomponents}[$i]->{'Name'};
+                $filestring = $filestring . $filename . "\;";
+                $counter++;
+            }
 
-            $filestring = $filestring . $filename . "\;";
+            if ((( $counter > 0 ) && ( $counter%25 == 0 )) || (( $counter > 0 ) && ( $i == $#{$unocomponents} )))   # limiting to 25 files
+            {
+                $filestring =~ s/\;\s*$//;
+                chdir($onesourcepath);
+
+                $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote;
+
+                my $returnvalue = system($systemcall);
+
+                my $infoline;
+                if ($returnvalue)
+                {
+                    $infoline = "ERROR: $systemcall\n";
+                    $error_occured = 1;
+                }
+                else
+                {
+                    $infoline = "SUCCESS: $systemcall\n";
+                }
+
+                push( @installer::globals::logfileinfo, $infoline);
+
+                chdir($from);
+
+                $counter = 0;
+                $filestring = "";
+            }
         }
-
-        $filestring =~ s/\;\s*$//;
-
-        chdir($onesourcepath);
-
-        $systemcall = "$$regcompfileref -register -s -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote;
-
-        my $returnvalue = system($systemcall);
-
-        my $infoline;
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: $systemcall\n";
-            $error_occured = 1;
-        }
-        else
-        {
-            $infoline = "SUCCESS: $systemcall\n";
-        }
-
-        push( @installer::globals::logfileinfo, $infoline);
-
-        chdir($from);
     }
-
-#           if ((( $i > 0 ) &&  ( $i%100 == 0 )) || ( $i == $#{$unocomponents} ))   # limiting to 100 files
-#           {
 
     return $error_occured;
 }
