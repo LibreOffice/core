@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-08-31 08:56:36 $
+ *  last change: $Author: mh $ $Date: 2001-10-22 17:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
-
-
 
 // INCLUDE -------------------------------------------------------------------
 

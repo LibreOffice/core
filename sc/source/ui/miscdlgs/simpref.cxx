@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
+ *  last change: $Author: mh $ $Date: 2001-10-22 17:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #endif
 
 #pragma hdrstop
-
-#ifndef PCH
-#include <segmentc.hxx>
-#endif
 
 // INCLUDE -------------------------------------------------------------------
 
