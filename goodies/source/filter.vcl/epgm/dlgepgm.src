@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgepgm.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:09:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ hebrew ] = "‮סוג קובץ‬";
         Text[ hindi ] = "फाइल रचना";
         Text[ slovak ] = "Formát súboru";
+        Text[ hungarian ] = "Fájlformátum";
+        Text[ slovenian ] = "Oblika zapisa datoteke";
     };
     RadioButton RB_RAW
     {
@@ -159,6 +161,8 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ hebrew ] = "‮בינרי‬";
         Text[ hindi ] = "~बैनरी";
         Text[ slovak ] = "~Binárny";
+        Text[ hungarian ] = "~Bináris";
+        Text[ slovenian ] = "~Dvojiško";
     };
     RadioButton RB_ASCII
     {
@@ -195,6 +199,8 @@ ModalDialog DLG_EXPORT_EPGM
         Text[ hebrew ] = "‮טקסט‬";
         Text[ hindi ] = "~टेक्स्ट्";
         Text[ slovak ] = "~Textový";
+        Text[ hungarian ] = "S~zöveg";
+        Text[ slovenian ] = "~Besedilo";
     };
     Text[ italian ] = "Opzioni PGM";
     Text[ portuguese_brazilian ] = "Op��es PGM";
@@ -223,7 +229,10 @@ ModalDialog DLG_EXPORT_EPGM
     Text[ hebrew ] = "‮אפשרויות PGM‬";
     Text[ hindi ] = "PGM विकल्प";
     Text[ slovak ] = "Možnosti pre formát PGM";
+    Text[ hungarian ] = "PGM-beállítások";
+    Text[ slovenian ] = "Možnosti za PGM";
 };
+
 
 
 
