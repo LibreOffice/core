@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 07:32:24 $
+ *  last change: $Author: rt $ $Date: 2002-11-04 17:51:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,7 @@ String STR_QUERY_UNDO_TABFIELDMOVED
     Text[ russian ] = "Move column";
     Text[ greek ] = "Move column";
     Text[ dutch ] = "Move column";
-    Text[ french ] = "Move column";
+    Text[ french ] = "D�placer la colonne";
     Text[ spanish ] = "Desplazar columna";
     Text[ finnish ] = "Move column";
     Text[ italian ] = "Muovi colonna";
@@ -1524,6 +1524,28 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         {
             Identifier = ID_EDIT_QUERY_SQL ;
             Text = "Show Parse Tree" ;
+            Text[ language_user1 ] = "EM Oct 2002: Do Not Translate. This is only for the in-house developer \"Debugging\" version of SO.";
+            Text[ english_us ] = "Show Parse Tree";
+            Text[ portuguese ] = "Show Parse Tree";
+            Text[ russian ] = "Show Parse Tree";
+            Text[ greek ] = "Show Parse Tree";
+            Text[ dutch ] = "Show Parse Tree";
+            Text[ french ] = "Show Parse Tree";
+            Text[ spanish ] = "Show Parse Tree";
+            Text[ finnish ] = "Show Parse Tree";
+            Text[ italian ] = "Show Parse Tree";
+            Text[ danish ] = "Show Parse Tree";
+            Text[ swedish ] = "Show Parse Tree";
+            Text[ polish ] = "Show Parse Tree";
+            Text[ portuguese_brazilian ] = "Show Parse Tree";
+            Text[ japanese ] = "Show Parse Tree";
+            Text[ korean ] = "Show Parse Tree";
+            Text[ chinese_simplified ] = "Show Parse Tree";
+            Text[ chinese_traditional ] = "Show Parse Tree";
+            Text[ turkish ] = "Show Parse Tree";
+            Text[ arabic ] = "Show Parse Tree";
+            Text[ catalan ] = "Show Parse Tree";
+            Text[ thai ] = "Show Parse Tree";
         };
 #endif
 /*      ToolBoxItem
@@ -2169,7 +2191,7 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
     Text[ greek ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ dutch ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ french ] = "Un nom de colonne doit figurer avant 'COMME'.";
-    Text[ spanish ] = "Delante de la instrucci�n 'COMO' debe aparecer un nombre de columna. ";
+    Text[ spanish ] = "Debe aparecer un nombre de columna delante de 'COMO'. ";
     Text[ finnish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ italian ] = "L'enunciato 'COME' dev'essere preceduto da un nome di colonna.";
     Text[ danish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
@@ -2177,8 +2199,8 @@ String STR_QRY_LIKE_LEFT_NO_COLUMN
     Text[ polish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ japanese ] = "'LIKE' の前に列名を記述する必要があります。";
     Text[ korean ] = "'LIKE' 문장의 왼쪽에는 열 이름을 하나 밖에 사용할 수 없습니다.";
-    Text[ chinese_simplified ] = "在 LIKE 之前仅允许一个列名称。";
-    Text[ chinese_traditional ] = "在 LIKE 之前僅允許一個欄位名稱。";
+    Text[ chinese_simplified ] = "在 LIKE 之前必须输入一个列名称。";
+    Text[ chinese_traditional ] = "在 'LIKE' 之前必須輸入一個欄位名稱。";
     Text[ turkish ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
     Text[ arabic ] = "On the left side of a 'LIKE' statement only a column name is allowed.";
 };
@@ -2191,7 +2213,7 @@ String STR_QRY_CHECK_CASESENSITIVE
     Text[ russian ] = "Please check if you are using the correct case.";
     Text[ greek ] = "Please check if you are using the correct case.";
     Text[ dutch ] = "Please check if you are using the correct case.";
-    Text[ french ] = "Impossible de d�tecter la colonne. Veuillez noter que la base de donn�es fait la distinction entre les majuscules et les minuscules.";
+    Text[ french ] = "Impossible de d�tecter la colonne. Notez que la base de donn�es fait la distinction entre les majuscules et les minuscules.";
     Text[ spanish ] = "No se encontr� la columna. Compruebe que la base de datos distinga entre may�sculas y min�sculas. ";
     Text[ finnish ] = "Please check if you are using the correct case.";
     Text[ italian ] = "Impossibile trovare la colonna. Vi preghiamo di osservare che il database � sensibile alle maiuscole e minuscole.";
@@ -2210,12 +2232,52 @@ String STR_QUERYDESIGN
 {
     Text = "Abfrageentwurf";
     Text[ english_us ] = "Query Design";
+    Text[ portuguese ] = "Query Design";
+    Text[ russian ] = "Query Design";
+    Text[ greek ] = "Query Design";
+    Text[ dutch ] = "Query Design";
+    Text[ french ] = "Query Design";
+    Text[ spanish ] = "Query Design";
+    Text[ finnish ] = "Query Design";
+    Text[ italian ] = "Query Design";
+    Text[ danish ] = "Query Design";
+    Text[ swedish ] = "Query Design";
+    Text[ polish ] = "Query Design";
+    Text[ portuguese_brazilian ] = "Query Design";
+    Text[ japanese ] = "Query Design";
+    Text[ korean ] = "Query Design";
+    Text[ chinese_simplified ] = "Query Design";
+    Text[ chinese_traditional ] = "Query Design";
+    Text[ turkish ] = "Query Design";
+    Text[ arabic ] = "Query Design";
+    Text[ catalan ] = "Query Design";
+    Text[ thai ] = "Query Design";
 };
 
 String STR_VIEWDESIGN
 {
     Text = "Ansichtsentwurf";
     Text[ english_us ] = "View Design";
+    Text[ portuguese ] = "View Design";
+    Text[ russian ] = "View Design";
+    Text[ greek ] = "View Design";
+    Text[ dutch ] = "View Design";
+    Text[ french ] = "View Design";
+    Text[ spanish ] = "View Design";
+    Text[ finnish ] = "View Design";
+    Text[ italian ] = "View Design";
+    Text[ danish ] = "View Design";
+    Text[ swedish ] = "View Design";
+    Text[ polish ] = "View Design";
+    Text[ portuguese_brazilian ] = "View Design";
+    Text[ japanese ] = "View Design";
+    Text[ korean ] = "View Design";
+    Text[ chinese_simplified ] = "View Design";
+    Text[ chinese_traditional ] = "View Design";
+    Text[ turkish ] = "View Design";
+    Text[ arabic ] = "View Design";
+    Text[ catalan ] = "View Design";
+    Text[ thai ] = "View Design";
 };
 
 
