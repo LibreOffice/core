@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2001-07-20 20:25:51 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2653,11 +2653,11 @@ TabPage RID_PRINTOPTIONPAGE
         Text [ dutch ] = "~Originele grootte" ;
         Text [ spanish ] = "T~amaño original" ;
         Text [ english_us ] = "O~riginal size" ;
-        Text[ chinese_simplified ] = "Ô­ÓĞ´óĞ¡(~R)";
+        Text[ chinese_simplified ] = "Ô­¼ş´óĞ¡(~R)";
         Text[ russian ] = "Èñõîäíûé ğàçìåğ";
         Text[ polish ] = "~Rozmiar oryginalny";
         Text[ japanese ] = "µØ¼ŞÅÙ»²½Ş(~R)";
-        Text[ chinese_traditional ] = "­ì¦³¤j¤p(~R)";
+        Text[ chinese_traditional ] = "­ì¥ó¤j¤p(~R)";
         Text[ arabic ] = "ÇáÍÌã ÇáÃÕáí";
         Text[ greek ] = "Áñ÷éêü ìİãåè~ïò";
         Text[ korean ] = "¿ø·¡ Å©±â(~R)";
@@ -3237,7 +3237,7 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text [ ENGLISH ] = "~Subset" ;
         Text[ english_us ] = "~Subset";
         Text[ portuguese ] = "~Subconjunto";
-        Text[ russian ] = "~Íàáîğ ñèìâîëîâ";
+        Text[ russian ] = "Êàòåãîğèÿ";
         Text[ greek ] = "Ğåñéï÷Ş";
         Text[ dutch ] = "~Bereik";
         Text[ french ] = "~Sous-ensemble";
@@ -3287,8 +3287,8 @@ ModalDialog RID_SYMDEFINEDIALOG
         Text[ portuguese_brazilian ] = "Schriftschni~tt:";
         Text[ japanese ] = "Ì«İÄ‚Ì½À²Ù(~T)";
         Text[ korean ] = "À¯Çü(~T):";
-        Text[ chinese_simplified ] = "×ÖÌåÊ½Ñù(~T)";
-        Text[ chinese_traditional ] = "¦r«¬¦¡¼Ë¡G(~T)";
+        Text[ chinese_simplified ] = "×ÖÌåĞÎ×´(~T)";
+        Text[ chinese_traditional ] = "¦r«¬§Îª¬¡G(~T)";
         Text[ turkish ] = "Yazıtipi varyantı:";
         Text[ arabic ] = "äãØ ÇáÎØ:";
         Text[ catalan ] = "~Estilo:";
@@ -3469,11 +3469,11 @@ WarningBox RID_NOMATHTYPEFACEWARNING
     Message [ dutch ] = "Het lettertype \"StarMath\" is niet geïnstalleerd!\nZonder dit lettertype werkt %PRODUCTNAME Math niet correct...\nInstalleer dit lettertype en start %PRODUCTNAME Math opnieuw." ;
     Message [ spanish ] = "¡La fuente \"StarMath\" no está instalada!\nSin esta fuente StarMath no funcionará correctamente...\nInstale la fuente y reinicie StarMath." ;
     Message [ english_us ] = "The \"StarMath\" font has not been installed.\nWithout this font %PRODUCTNAME Math cannot function correctly.\nPlease install this font and restart %PRODUCTNAME Math." ;
-    Message[ chinese_simplified ] = "Ã»ÓĞ°²×°¡°StarMath¡± ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö StarMath×ÖÌå³ÌĞò»áÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ StarMath ¡£";
+    Message[ chinese_simplified ] = "Ã»ÓĞ°²×° StarMath ×ÖÌå£¡\nÃ»ÓĞÕâ¸ö StarMath×ÖÌå³ÌĞò»áÎŞ·¨Õı³£ÔË×÷¡£\nÇëÔÚ°²×°Õâ¸ö×ÖÌåºóÖØĞÂÆô¶¯ StarMath ¡£";
     Message[ russian ] = "Øğèôò \"StarMath\" íå èíñòàëëèğîâàí !\nÁåç ıòîãî øğèôòà %PRODUCTNAME Math ìîæåò íåïğàâèëüíî ğàáîòàòü...\nÈíñòàëëèğóéòå øğèôò è ïåğåçàïóñòèòå %PRODUCTNAME Math.";
     Message[ polish ] = "Czcionka \"StarMath\" nie jest zainstalowana!\nBez tej czcionki %PRODUCTNAME Math nie mo¿e poprawnie pracowaæ...\nZainstaluj tê czcionkê i uruchom %PRODUCTNAME Math ponownie.";
     Message[ japanese ] = "\"StarMath\" Ì«İÄ‚ª²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ¡\n‚±‚ÌÌ«İÄ‚È‚µ‚Å‚Í %PRODUCTNAME Math ‚ª‚¤‚Ü‚­‹@”\\‚µ‚Ü‚¹‚ñ...\n‚Ü‚¸Ì«İÄ‚ğ²İ½Ä°Ù‚µ‚Ä %PRODUCTNAME Math ‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢B";
-    Message[ chinese_traditional ] = "¨S¦³¦w¸Ë StarMath ¦r«¬\n¦ÓµLªk¥¿±`¹B§@¡I\n½Ğ±z¦w¸Ë StarMath ¦r«¬¡AµM¦Z¦A­«·s¶}±Ò StaMath¡C";
+    Message[ chinese_traditional ] = "¨S¦³¦w¸Ë StarMath ¦r«¬\n¦ÓµLªk¥¿±`¹B¦æ¡I\n½Ğ¦w¸Ë StarMath ¦r«¬¡AµM¦Z¦A­«·s¶}±Ò StaMath¡C";
     Message[ arabic ] = "ÇáÎØ \"StarMath\" ÛíÑ ãõËÈøóÊ!\nÈÏæä åĞÇ ÇáÎØ áÇ íÓÊØíÚ %PRODUCTNAME Math ÇáÚãá ÈÔßá ÕÍíÍ...\nÇáÑÌÇÁ ÊËÈíÊ åĞÇ ÇáÎØ¡ Ëã ÈÏÁ %PRODUCTNAME Math ãÌÏÏÇğ.";
     Message[ greek ] = "Äåí İãéíå ç åãêáôÜóôáóç ôçò ãñáììáôïóåéñÜò \"StarMath\".\n×ùñßò áõôŞ ôç ãñáììáôïóåéñÜ ôï StarMath äåí èá åêôåëåóôåß óùóôÜ.\nĞáñáêáëş åãêáôáóôŞóåôå áõô ";
     Message[ korean ] = "\"StarMath\" ±Û²ÃÀÌ ¼³Ä¡µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù!\nÀÌ ±Û²ÃÀÌ ¾øÀ¸¸é%PRODUCTNAME Math°¡ Á¦´ë·Î ÀÛ¾÷À» ÇÒ ¼ö ¾ø½À´Ï´Ù...\n±Û²ÃÀ» ¼³Ä¡ÇÑ ´ÙÀ½, %PRODUCTNAME Math¸¦ ´Ù½Ã ½ÃÀÛÇÏ½Ê½Ã¿À.";
@@ -3500,11 +3500,11 @@ QueryBox RID_DEFAULTSAVEQUERY
     Message [ dutch ] = "Wilt u deze wijzigingen opslaan als standaardinstellingen?\n\nDeze wijzigingen hebben uitwerkingen op alle nieuwe formules." ;
     Message [ spanish ] = "¿Desea guardar los cambios como predeterminados?\n\nEstos cambios tendrán efecto en todas las nuevas fórmulas." ;
     Message [ english_us ] = "Should the changes be saved as defaults?\n\nThese changes will apply for all new formulas." ;
-    Message[ chinese_simplified ] = "ÄúÒª½«¸ü¸Ä×÷Îª±ê×¼¸ñÊ½´æÅÌ£¿\n\nÕâ¸ö¸ü¸Ä»áÓ°ÏìËùÓĞĞÂ¹«Ê½¡£";
+    Message[ chinese_simplified ] = "Òª½«¸ü¸ÄÄÚÈİ×÷Îª±ê×¼¸ñÊ½´æÅÌ£¿\n\nÕâ¸ö¸ü¸Ä»áÓ°ÏìËùÓĞĞÂ¹«Ê½¡£";
     Message[ russian ] = "Ñîõğàíèòü èçìåíåíèÿ êàê ñòàíäàğòíûå ?\n\nİòè èçìåíåíèÿ ïîâëèÿşò íà âñå íîâûå ôîğìóëû.";
     Message[ polish ] = "Czy zapisaæ zmiany jako domyœlne?\n\nTe zmiany wywieraj¹ wp³yw na wszystkie nowe formu³y.";
     Message[ japanese ] = "‚±‚Ì•ÏX‚ğ•W€‚Æ‚µ‚Ä•Û‘¶‚µ‚Ü‚·‚©B\n\n‚±‚Ì•ÏX‚Í‚·‚×‚Ä‚ÌV‚µ‚¢”®‚É‰e‹¿‚µ‚Ü‚·B";
-    Message[ chinese_traditional ] = "±z­n±NÅÜ§ó§@¬°¼Ğ·Ç®æ¦¡Àx¦s¡H\n\n³o­ÓÅÜ§ó·|¼vÅT©Ò¦³ªº·s¤½¦¡¡C";
+    Message[ chinese_traditional ] = "­n±NÅÜ§ó·í§@¼Ğ·Ç®æ¦¡Àx¦s¡H\n\n³o­ÓÅÜ§ó·|¼vÅT©Ò¦³ªº·s¤½¦¡¡C";
     Message[ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ ßÇİÊÑÇÖí¿\n\nÓæİ íßæä áåĞå ÇáÊÛííÑÇÊ ÃËÑÇğ Úáì ßá ÇáÕíÛ ÇáÌÏíÏÉ.";
     Message[ greek ] = "Íá áğïèçêåõôïıí ïé áëëáãİò ùò ğñïåğéëïãŞ;\n\nÏé áëëáãİò áõôİò èá İ÷ïõí åğßäñáóç óå üëïõò ôïõò íİïõò ôığïõò.";
     Message[ korean ] = "º¯°æ»çÇ×À» ±âº»À¸·Î ÀúÀåÇÏ½Ã°Ú½À´Ï±î?\n\nÀÌ º¯°æ»çÇ×µéÀº ¸ğµç »õ ¼ö½Ä¿¡ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
@@ -6216,7 +6216,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 TEXT[ portuguese ] = "Conjunto dos números complexos";
                 TEXT[ danish ] = "mængden af komplekse tal";
                 TEXT[ french ] = "Ensemble des nombres complexes";
-                TEXT[ swedish ] = "mängd komplexa tal";
+                TEXT[ swedish ] = "Mängd komplexa tal";
                 TEXT[ dutch ] = "Set complexe getallen";
                 TEXT[ spanish ] = "Conjunto de números complejos";
                 TEXT[ english_us ] = "Complex Numbers Set";
@@ -7483,7 +7483,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "Accent to the upper-right" ;
                 Text[ english_us ] = "Accent To The Right";
                 Text[ portuguese ] = "Acento para a direita";
-                Text[ russian ] = "Óäàğåíèå âïğàâî";
+                Text[ russian ] = "Óäàğåíèå âïğàâî ââåğõ";
                 Text[ greek ] = "Ôüíïò ğñïò ôá äåîéÜ";
                 Text[ dutch ] = "Accent naar rechtsboven";
                 Text[ french ] = "Accent aigu";
@@ -7492,7 +7492,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ italian ] = "Accento verso destra";
                 Text[ danish ] = "accent aigu";
                 Text[ swedish ] = "Accent åt höger";
-                Text[ polish ] = "Akcent w prawo";
+                Text[ polish ] = "Akcent w prawo do góry";
                 Text[ portuguese_brazilian ] = "Accent nach rechts";
                 Text[ japanese ] = "±·­°Ä";
                 Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ¾Ç¼¾Æ®";
@@ -7510,7 +7510,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ ENGLISH ] = "Accent to the lower-right" ;
                 Text[ english_us ] = "Accent To The Left";
                 Text[ portuguese ] = "Acento grave";
-                Text[ russian ] = "Óäàğåíèå âëåâî";
+                Text[ russian ] = "Óäàğåíèå âïğàâî âíèç";
                 Text[ greek ] = "Ôüíïò ğñïò ôá áñéóôåñÜ";
                 Text[ dutch ] = "Accent naar linksonder";
                 Text[ french ] = "Accent grave";
@@ -7519,7 +7519,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ italian ] = "Accento verso sinistra";
                 Text[ danish ] = "accent grave";
                 Text[ swedish ] = "Accent åt vänster";
-                Text[ polish ] = "Akcent w lewo";
+                Text[ polish ] = "Akcent w lewo na dó³";
                 Text[ portuguese_brazilian ] = "Accent nach links";
                 Text[ japanese ] = "¸ŞÚ°ÌŞ";
                 Text[ korean ] = "¾Ç¼¾Æ® ¿ŞÂÊÀ¸·Î";
@@ -9168,7 +9168,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ danish ] = "matrixstablet" ;
                 Text [ italian ] = "Disposizione matrice" ;
                 Text [ spanish ] = "Disposición matriz" ;
-                Text [ french ] = "Disposition de la matrice" ;
+                Text [ french ] = "Disposition en matrice" ;
                 Text [ dutch ] = "Matrix rangschikking" ;
                 Text [ portuguese ] = "Dispor em forma de matriz" ;
                 Text[ chinese_simplified ] = "±àÅÅ¾ØÕó";
@@ -10089,11 +10089,11 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text [ french ] = "Formatage" ;
                 Text [ dutch ] = "Opmaak" ;
                 Text [ portuguese ] = "Formatos" ;
-                Text[ chinese_simplified ] = "¸ñÊ½";
+                Text[ chinese_simplified ] = "¸ñÊ½»¯";
                 Text[ russian ] = "Ôîğìàò";
                 Text[ polish ] = "Formatowania";
                 Text[ japanese ] = "‘®";
-                Text[ chinese_traditional ] = "®æ¦¡";
+                Text[ chinese_traditional ] = "®æ¦¡¤Æ";
                 Text[ arabic ] = "ÊäÓíŞ";
                 Text[ greek ] = "ÌïñöïğïéŞóåéò";
                 Text[ korean ] = "Æ÷¸ËÆÃ";
@@ -11202,6 +11202,7 @@ String RID_MATH_TOOLBOX
     Text[ catalan ] = "Barra de herramientas";
     Text[ finnish ] = "Päätyökalurivi";
 };
+
 
 
 
