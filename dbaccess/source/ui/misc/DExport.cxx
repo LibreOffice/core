@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_vColumnSize(0)
     ,m_vFormatKey(0)
     ,m_vColumns(_rColumnPositions)
+    ,m_bFoundTable(sal_False)
 {
     m_nDefToken = gsl_getSystemTextEncoding();
 
@@ -217,6 +218,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_aDestColumns(_rxConnection->getMetaData()->storesMixedCaseQuotedIdentifiers())
     ,m_xFactory(_rM)
     ,m_pTypeInfo(NULL)
+    ,m_bFoundTable(sal_False)
 {
     try
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:21:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,10 +197,9 @@ SvParserState ORTFReader::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
-    return SvRTFParser::CallParser();
+    SvParserState  eParseState = SvRTFParser::CallParser();
+    return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
-
-
 // ---------------------------------------------------------------------------
 void ORTFReader::NextToken( int nToken )
 {
@@ -423,7 +422,8 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 
-    m_bInTbl = sal_False;
+    m_bInTbl        = sal_False;
+    m_bFoundTable   = sal_True;
 
     sal_Bool bError = sal_False;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:19:25 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,7 +263,8 @@ SvParserState OHTMLReader::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
-    return HTMLParser::CallParser();
+    SvParserState  eParseState = HTMLParser::CallParser();
+    return m_bFoundTable ? eParseState : SVPAR_ERROR;
 }
 // -----------------------------------------------------------------------------
 rtl_TextEncoding OHTMLReader::GetEncodingByMIME( const String& rMime )
@@ -646,7 +647,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     if(!aTableName.Len())
         aTableName = aTempName;
 
-    m_bInTbl = sal_False;
+    m_bInTbl        = sal_False;
+    m_bFoundTable   = sal_True;
 
     sal_Bool bError = sal_False;
     OCopyTableWizard aWizard(NULL,aTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-02 13:22:02 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ namespace dbaui
         sal_Bool            m_bHead;        // ist true, wenn die Kopfzeile noch nicht gelesen wurde
         sal_Bool            m_bDontAskAgain;// Falls beim Einf"ugen ein Fehler auftritt, soll die Fehlermeldung nicht
         sal_Bool            m_bIsAutoIncrement; // if PKey is set by user
+        sal_Bool            m_bFoundTable;      // set to true when a table was found
 
 
         virtual sal_Bool    CreateTable(int nToken) = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:43:50 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1355,8 +1355,14 @@ String STR_DSBROWSER_TITLE
         Text[ turkish ] = "Data source browser";
         Text[ arabic ] = "Data source browser";
         Text[ catalan ] = "Data source browser";
-    };
+};
 
+String STR_NO_TABLE_FORMAT_INSIDE
+{
+    Text = "Es konnte kein Tabellenformat gefunden werden." ;
+    Text [ english ] = "No table format found." ;
+    Text [ english_us ] = "No table format found." ;
+};
 
 
 

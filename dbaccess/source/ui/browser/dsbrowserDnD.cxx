@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-05 12:46:52 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:40:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,7 +578,8 @@ namespace dbaui
                 xEvt = pImport;
                 SvStream* pStream = (SvStream*)(SotStorageStream*)aStream;
                 pImport->setStream(pStream);
-                pImport->Read();
+                if(!pImport->Read())
+                    throw SQLException(String(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,::rtl::OUString::createFromAscii("S1000") ,0,Any());
             }
             else
                 DBG_ERROR("SbaTableQueryBrowser::implPasteTable: invalid call (no supported format found)!");
@@ -919,6 +920,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/07/05 12:46:52  oj
+ *  #87744# use HTML_SIMPLE
+ *
  *  Revision 1.18  2001/07/05 12:19:25  oj
  *  #87744# check for right HTML_TYPE
  *

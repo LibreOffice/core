@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 13:42:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@
 #define DLG_DOCUMENTLINK                RID_DIALOG_START + 20
 #define DLG_DEADDOCUMENTLINK            RID_DIALOG_START + 21
 #define DLG_DIRECTSQL                   RID_DIALOG_START + 22
+#define DLG_PASSWORD                    RID_DIALOG_START + 23
 
 //========================================================================
 // tab pages
@@ -441,6 +442,8 @@
 #define STR_ADABAS_ERROR_SYSTEMTABLES       RID_STRING_START + 180
 #define STR_TABLEDESIGN_ALTER_ERROR         RID_STRING_START + 181
 #define STR_QUERY_REL_DELETE_WINDOW         RID_STRING_START + 182
+#define STR_NO_TABLE_FORMAT_INSIDE          RID_STRING_START + 183
+#define STR_ERROR_PASSWORDS_NOT_IDENTICAL   RID_STRING_START + 184
 
 //========================================================================
 // untyped resources
@@ -455,6 +458,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.55  2001/07/09 06:56:48  oj
+ *  #88144# d&d for creating relations corrected
+ *
  *  Revision 1.54  2001/07/06 08:13:55  oj
  *  #88923# correct table altering
  *
