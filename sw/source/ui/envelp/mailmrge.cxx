@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 14:34:14 $
+ *  last change: $Author: os $ $Date: 2002-06-20 14:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -757,7 +757,7 @@ IMPL_LINK( SwMailMergeDlg, InsertPathHdl, PushButton *, pBtn )
     xFP->setDisplayDirectory(sPath);
     if( xFP->execute() == RET_OK )
     {
-        aPathED.SetText(xFP->getDisplayDirectory());
+        aPathED.SetText(xFP->getDirectory());
     }
     return 0;
 }
