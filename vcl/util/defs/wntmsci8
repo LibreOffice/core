@@ -8093,3 +8093,8 @@ _real@3fd3333333333333
 ?IsDisplayable@MenuBar@@QBEEXZ
 ?SetDisplayable@MenuBar@@QAEXE@Z
 ??0WinImeStatus@@QAE@XZ
+?GetAlphaBitCount@OutputDevice@@QBEGXZ
+?HasAlpha@OutputDevice@@QAEEXZ
+?GetBitmapEx@OutputDevice@@QBE?AVBitmapEx@@ABVPoint@@ABVSize@@@Z
+??0VirtualDevice@@QAE@ABVOutputDevice@@GG@Z
+?ExpandPaintClipRegion@Window@@QAEXABVRegion@@@Z
