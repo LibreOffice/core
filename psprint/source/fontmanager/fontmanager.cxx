@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 08:38:22 $
+ *  last change: $Author: pl $ $Date: 2001-05-22 14:25:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     FontInfo* pInfo = NULL;
     int nResult = parseFile( fp, &pInfo, P_ALL );
     fclose( fp );
-    if( nResult != ok )
+    if( ! pInfo || ! pInfo->numOfChars )
     {
         if( pInfo )
             freeFontInfo( pInfo );
