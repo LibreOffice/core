@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 13:41:12 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,13 @@
 #ifndef _XMLOFF_XMLICTXT_HXX
 #include "xmlictxt.hxx"
 #endif
+#ifndef XMLOFF_FORMS_LOGGING_HXX
+#include "logging.hxx"
+#endif
 
 class SvXMLElementExport;
 class SvXMLExport;
+
 //.........................................................................
 namespace xmloff
 {
@@ -82,6 +86,7 @@ namespace xmloff
     class OFormsRootImport
                 :public SvXMLImportContext
                 ,public OAttributeMetaData
+                ,public OStackedLogging
     {
     public:
         TYPEINFO();
@@ -93,6 +98,7 @@ namespace xmloff
         virtual SvXMLImportContext * CreateChildContext( USHORT nPrefix, const ::rtl::OUString& rLocalName,
             const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
         virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
+        virtual void EndElement();
 
     protected:
         void implImportBool(
@@ -139,6 +145,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/03/20 13:41:12  fs
+ *  initial checkin - importing/exporting the office:forms element
+ *
  *
  *  Revision 1.0 20.03.01 13:04:49  fs
  ************************************************************************/

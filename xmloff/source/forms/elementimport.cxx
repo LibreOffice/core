@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-09 13:55:30 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OElementImport::StartElement(const Reference< sax::XAttributeList >& _rxAttrList)
     {
+        ENTER_LOG_CONTEXT( "xmloff::OElementImport - importing one element" );
         // call the base class. This should give us enough information (especially the service name)
         // to create our UNO element
         OPropertyImport::StartElement(_rxAttrList);
@@ -309,6 +310,7 @@ namespace xmloff
         }
 
         m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+        LEAVE_LOG_CONTEXT( );
     }
 
     //---------------------------------------------------------------------
@@ -1387,6 +1389,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2002/09/09 13:55:30  fs
+ *  #102475# OControlImport::EndElement: when reading a 'default value' property (such as 'DefaultText'), ensure that it does not wrongly overwrite the 'value' property (such as 'Text')
+ *
  *  Revision 1.28  2002/08/22 07:36:10  oj
  *  #99721# now save image url relative
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeforms.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-10 07:58:39 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:33:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,9 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+#ifndef _RTL_LOGFILE_HXX_
+#include <rtl/logfile.hxx>
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -143,6 +146,7 @@ namespace xmloff
     //-------------------------------------------------------------------------
     void OFormsRootImport::StartElement( const Reference< sax::XAttributeList >& _rxAttrList )
     {
+        ENTER_LOG_CONTEXT( "xmloff::OFormsRootImport - importing the complete tree" );
         SvXMLImportContext::StartElement( _rxAttrList );
 
         try
@@ -163,6 +167,13 @@ namespace xmloff
         {
             OSL_ENSURE(sal_False, "OFormsRootImport::StartElement: caught an exception while setting the document properties!");
         }
+    }
+
+    //-------------------------------------------------------------------------
+    void OFormsRootImport::EndElement()
+    {
+        SvXMLImportContext::EndElement();
+        LEAVE_LOG_CONTEXT( );
     }
 
     //=====================================================================
@@ -234,6 +245,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/04/10 07:58:39  fs
+ *  #98553# allow for empty document model - happens when copy'n'pasting form controls between documents
+ *
  *  Revision 1.3  2001/07/10 17:07:05  mtg
  *  updated namespace handling
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-05 15:24:12 $
+ *  last change: $Author: fs $ $Date: 2002-10-02 14:31:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _XMLOFF_FORMS_EVENTIMPORT_HXX_
 #include "eventimport.hxx"
 #endif
+#ifndef XMLOFF_FORMS_LOGGING_HXX
+#include "logging.hxx"
+#endif
 
 //.........................................................................
 namespace xmloff
@@ -127,6 +130,7 @@ namespace xmloff
                 :public OPropertyImport
                 ,public OAttributeMetaData
                 ,public IEventAttacher
+                ,public OStackedLogging
     {
     protected:
         ::rtl::OUString         m_sServiceName;     // the service name as extracted from the service-name attribute
@@ -639,6 +643,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/11/05 15:24:12  fs
+ *  #94194# +m_bEncounteredLSAttrib
+ *
  *  Revision 1.13  2001/06/25 13:32:38  fs
  *  #88691# TargetURL property value must be saved relative to own document
  *
