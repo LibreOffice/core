@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:57:11 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 13:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 #include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
-#include <vcl/group.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/msgbox.hxx>
 #include "stdctrl.hxx"
@@ -84,10 +83,10 @@ class DlgExportEJPG : public ModalDialog
 private:
     FixedInfo           aFiDescr;
     NumericField        aNumFldQuality;
-    GroupBox            aGrpQuality;
+    FixedLine           aGrpQuality;
     RadioButton         aRbGray;
     RadioButton         aRbRGB;
-    GroupBox            aGrpColors;
+    FixedLine           aGrpColors;
     OKButton            aBtnOK;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;

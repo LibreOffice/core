@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgejpg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2001-05-11 14:08:32 $
+ *  last change: $Author: sj $ $Date: 2001-05-15 13:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@ ModalDialog DLG_EXPORT_JPG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 159 , 111 ) ;
+    Size = MAP_APPFONT ( 159 , 92 ) ;
     Text = "JPEG Optionen" ;
     Text [ ENGLISH ] = "JPEG Optionen" ;
     Text [ english_us ] = "JPEG Options" ;
@@ -95,10 +95,10 @@ ModalDialog DLG_EXPORT_JPG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    GroupBox GRP_QUALITY
+    FixedLine GRP_QUALITY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 90 , 55 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Qualität" ;
         Text [ ENGLISH ] = "Quality" ;
         Text [ english_us ] = "Quality" ;
@@ -127,8 +127,8 @@ ModalDialog DLG_EXPORT_JPG
     };
     FixedText FI_DESCR
     {
-        Pos = MAP_APPFONT ( 12 , 15 ) ;
-        Size = MAP_APPFONT ( 81 , 21 ) ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 81 , 16 ) ;
         Text = "1: min. Qualität\n100: max. Qualität" ;
         Text [ ENGLISH ] = "1: min. quality\n100: max. quality" ;
         Text [ english_us ] = "1: min. Quality\n100: max. Quality" ;
@@ -158,7 +158,7 @@ ModalDialog DLG_EXPORT_JPG
     NumericField NUM_FLD_QUALITY
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
         TabStop = TRUE ;
         Spin = TRUE ;
@@ -168,10 +168,10 @@ ModalDialog DLG_EXPORT_JPG
         Last = 100 ;
         Repeat = TRUE ;
     };
-    GroupBox GRP_COLORS
+    FixedLine GRP_COLORS
     {
-        Pos = MAP_APPFONT ( 6 , 61 ) ;
-        Size = MAP_APPFONT ( 90 , 44 ) ;
+        Pos = MAP_APPFONT ( 6 , 51 ) ;
+        Size = MAP_APPFONT ( 90 , 8 ) ;
         Text = "Farbauflösung" ;
         Text [ ENGLISH ] = "Color resolution" ;
         Text [ english_us ] = "Color resolution" ;
@@ -200,8 +200,8 @@ ModalDialog DLG_EXPORT_JPG
     };
     RadioButton RB_GRAY
     {
-        Pos = MAP_APPFONT ( 12 , 72 ) ;
-        Size = MAP_APPFONT ( 81 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
         Text = "Graustufen" ;
         Text [ ENGLISH ] = "Grayscales" ;
@@ -231,8 +231,8 @@ ModalDialog DLG_EXPORT_JPG
     };
     RadioButton RB_RGB
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
-        Size = MAP_APPFONT ( 81 , 12 ) ;
+        Pos = MAP_APPFONT ( 12 , 76 ) ;
+        Size = MAP_APPFONT ( 81 , 10 ) ;
         TabStop = TRUE ;
         Text = "Echtfarben" ;
         Text [ ENGLISH ] = "TrueColors" ;
