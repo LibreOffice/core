@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxyfac.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-25 14:47:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/reflection/XProxyFactory.hpp"
+#include "com/sun/star/uno/RuntimeException.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #define SERVICE_NAME "com.sun.star.reflection.ProxyFactory"
