@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "objectregistry.hxx"
 
 #include "apitreeaccess.hxx"
+#include "apitreeimplobj.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -440,6 +441,22 @@ bool Factory::tunnelSetElement(sal_Int64& nSomething, SetElement& rElement, uno:
     }
     else
         return false;
+}
+
+//-----------------------------------------------------------------------------
+
+ApiTreeImpl const* Factory::findDescendantTreeImpl(configuration::NodeID const& aNode, ApiTreeImpl const* pImpl)
+{
+    ApiTreeImpl* pRet = 0;
+    if (pImpl)
+    {
+        if ( NodeElement* pElement = pImpl->getFactory().findElement( aNode ) )
+        {
+            UnoInterfaceRef xReleaseIt( implToUno(pElement) );
+            pRet = &pElement->getApiTree();
+        }
+    }
+    return pRet;
 }
 
 //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-14 10:16:09 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,7 +244,7 @@ namespace configmgr
             UnoInterfaceRef getObjectAt(Index nIndex) const
             {
                 osl::MutexGuard aGuard(mutex());
-                UnoInterfaceRef aRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
+                UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
                 return xRet;
             }
 

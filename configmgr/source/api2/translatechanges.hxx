@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace configmgr
         // resolve non-uno elements to Uno Objects
         bool resolveUnoObjects(UnoChange& aUnoChange, configuration::NodeChangeInfo const& aChange,  Factory& rFactory);
         // resolve non-uno elements to Uno Objects inplace
-        bool resolveToUno(configuration::NodeChangeInfo const& aChange, Factory& rFactory);
+        bool resolveToUno(configuration::NodeChangeInfo& aChange, Factory& rFactory);
 
     // building events
         /// find the sending api object
@@ -121,9 +121,9 @@ namespace configmgr
         void fillChangeFromResolved(util::ElementChange& rChange, configuration::ExtendedNodeChangeInfo const& aInfo);
 
         /// fill a event from a NodeChangeInfo
-        void fillEventData(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, Factory& rFactory);
+        bool fillEventData(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, Factory& rFactory);
         /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
-        void fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo);
+        bool fillEventDataFromResolved(container::ContainerEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo);
         /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change
         bool fillEventData(beans::PropertyChangeEvent& rEvent, configuration::ExtendedNodeChangeInfo const& aInfo, Factory& rFactory, bool bMore);
         /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already) - returns false if this isn't a property change

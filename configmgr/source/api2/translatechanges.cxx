@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,24 +264,30 @@ void fillChangeFromResolved(util::ElementChange& rChange, ExtendedNodeChangeInfo
 // ---------------------------------------------------------------------------------------------------
 
 /// fill a event from a NodeChangeInfo
-void fillEventData(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo, Factory& rFactory)
+bool fillEventData(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo, Factory& rFactory)
 {
     UnoChange aUnoChange;
     if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
+    {
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
+        return false;
+    }
 
     rEvent.Accessor     <<= aInfo.accessor.getLocalName().toString();
     rEvent.Element          = aUnoChange.newValue;
     rEvent.ReplacedElement  = aUnoChange.oldValue;
 
+    return !aInfo.isEmpty();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
-void fillEventDataFromResolved(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo)
+bool fillEventDataFromResolved(container::ContainerEvent& rEvent, ExtendedNodeChangeInfo const& aInfo)
 {
     rEvent.Accessor         <<= aInfo.accessor.getLocalName().toString();
     rEvent.Element          = aInfo.change.newValue;
     rEvent.ReplacedElement  = aInfo.change.oldValue;
+
+    return !aInfo.isEmpty();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
@@ -302,7 +308,7 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, ExtendedNodeChangeInfo co
     rEvent.PropertyHandle   = -1;
      rEvent.Further         = bMore;
 
-    return true;
+    return !aInfo.isEmpty();
 }
 // ---------------------------------------------------------------------------------------------------
 /// fill a event from a NodeChangeInfo(uno objects are assumed to be resolved already)
@@ -319,7 +325,7 @@ bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, ExtendedNodeC
     rEvent.PropertyHandle   = -1;
      rEvent.Further         = bMore;
 
-    return true;
+    return !aInfo.isEmpty();
 }
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 #include "apitypes.hxx"
 #include "configexcept.hxx"
 #include "configpath.hxx"
-#include "noderef.hxx"
 #include <vos/ref.hxx>
 
 namespace com { namespace sun { namespace star {
@@ -93,6 +92,7 @@ namespace configmgr
     namespace configuration
     {
 // ---------------------------------------------------------------------------------------------------
+        class NodeRef;
         class NodeChange;
         class NodeChanges;
 
@@ -106,44 +106,24 @@ namespace configmgr
         using configuration::NodeChange;
         using configuration::NodeChanges;
 
-        class AccessBase;
+// ---------------------------------------------------------------------------------------------------
+        class Broadcaster;
         class NotifierImpl;
-        class NotifierImpl;
+        class ApiTreeImpl;
         typedef vos::ORef<NotifierImpl> NotifierHolder;
 
         namespace css = ::com::sun::star;
-
-        /// broadcasts events for changes to a single config node or several sibling nodes
-        class Broadcaster
-        {
-            NotifierHolder m_aTargets;
-            configuration::Tree m_aBaseTree;
-        public:
-            /// construct a broadcaster
-            Broadcaster(NotifierHolder const& rImpl,configuration::Tree const& aBaseTree);
-            Broadcaster(Broadcaster const& aOther);
-            ~Broadcaster();
-
-            /// give all property veto listeners on the affected node a chance to veto
-            void queryConstraints(NodeChange const& aChange) throw(css::beans::PropertyVetoException);
-            /// give all property veto listeners on any of the affected nodes a chance to veto
-            void queryConstraints(NodeChanges const& aChanges) throw(css::beans::PropertyVetoException);
-            /// notify all listeners which are affected by this change
-            void notifyListeners(NodeChange const& aChange) throw();
-            /// notify all listeners which are affected by any of these changes
-            void notifyListeners(NodeChanges const& aChanges) throw();
-        private:
-            void operator=(Broadcaster const& aOther);
-        };
-
+// ---------------------------------------------------------------------------------------------------
         /// manages collections of event listeners observing a config tree, thread-safe
         class Notifier
         {
-            NotifierHolder      m_aImpl;
-            configuration::Tree m_aTree;
+            friend class Broadcaster;
+            friend class BroadcasterHelper;
+            NotifierHolder          m_aImpl;
+            ApiTreeImpl const*const m_pTree;
         public:
             /// construct this around the given Implementation, for the given tree
-            explicit Notifier(NotifierHolder const & aImpl, configuration::Tree const& aTree);
+            explicit Notifier(NotifierHolder const & aImpl, ApiTreeImpl const* pTree);
             Notifier(Notifier const& aOther);
             ~Notifier();
 
@@ -155,8 +135,8 @@ namespace configmgr
 
         // ---------------------------------------------------------------------------------------------------
             osl::Mutex&         getMutex() const;
-            configuration::Tree getTree() const { return m_aTree; }
-            NotifierImpl&       getImpl() const { return m_aImpl.getBody(); }
+            //configuration::Tree getTree() const { return m_aTree; }
+            //NotifierImpl&     getImpl() const { return m_aImpl.getBody(); }
 
         // ---------------------------------------------------------------------------------------------------
             bool checkAlive(uno::XInterface* pObject) const throw(css::lang::DisposedException);
@@ -229,7 +209,6 @@ namespace configmgr
         class DisposeGuardImpl : NotCopyable
         {
             osl::MutexGuard m_aLock;
-            NotifierImpl&   m_rNotifierImpl;
         public:
             DisposeGuardImpl(NotifierImpl& rNotifierImpl) throw();
             DisposeGuardImpl(Notifier const& rNotifier) throw();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-10 12:22:55 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ namespace configmgr
             SetElement* extractSetElement(UnoAny const& aElement);
             bool tunnelSetElement(sal_Int64& nSomething, SetElement& rElement, uno::Sequence< sal_Int8 > const& aTunnelID);
             // registry operations
+
+            static ApiTreeImpl const* findDescendantTreeImpl(configuration::NodeID const& aNode, ApiTreeImpl const* pImpl);
         protected:
             NodeElement*    doFindElement(configuration::NodeID const& aNode);
             void            doRegisterElement(configuration::NodeID const& aNode, NodeElement* pElement);

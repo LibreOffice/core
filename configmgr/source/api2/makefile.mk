@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jb $ $Date: 2000-11-13 13:26:28 $
+#   last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES=	\
+        $(SLO)$/broadcaster.obj		\
         $(SLO)$/listenercontainer.obj		\
         $(SLO)$/groupimpl.obj		\
         $(SLO)$/userimpl.obj		\

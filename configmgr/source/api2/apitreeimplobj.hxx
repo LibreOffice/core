@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,9 @@ namespace configmgr
         // api object handling
             Factory&                    getFactory()    const   { return m_rProvider.getFactory(); }
             Notifier                    getNotifier()   const;
+
+        // needs external locking
+            ApiTreeImpl const*          getRootTreeImpl() const;
 
             uno::XInterface*            getUnoInstance() const  { return m_pInstance; }
             ApiProvider&                getProvider()           { return m_rProvider; }

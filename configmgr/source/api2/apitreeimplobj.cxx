@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 14:38:58 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 18:15:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,7 +171,7 @@ osl::Mutex& ApiTreeImpl::getApiLock() const
 
 Notifier ApiTreeImpl::getNotifier() const
 {
-    return Notifier(m_aNotifier,m_aTree);
+    return Notifier(m_aNotifier,this);
 }
 //-------------------------------------------------------------------------
 
@@ -295,6 +295,17 @@ void ApiTreeImpl::deinit()
 void ApiTreeImpl::haveNewParent(ApiTreeImpl* pNewParent) // public interface
 {
     setParentTree(pNewParent);
+}
+
+//-------------------------------------------------------------------------
+
+ApiTreeImpl const* ApiTreeImpl::getRootTreeImpl() const
+{
+    ApiTreeImpl const* pRet = this;
+    while (pRet->m_pParentTree)
+        pRet = pRet->m_pParentTree;
+
+    return pRet;
 }
 
 //-------------------------------------------------------------------------
