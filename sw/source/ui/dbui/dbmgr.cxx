@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 06:20:20 $
+ *  last change: $Author: os $ $Date: 2001-06-06 12:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1958,7 +1958,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
 {
     OUString sDataSource, sDataTableOrQuery;
     Reference<XResultSet>  xResSet;
-    Sequence<sal_Int32> aSelection;
+    Sequence<Any> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;

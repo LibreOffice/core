@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:38:40 $
+ *  last change: $Author: os $ $Date: 2001-06-06 12:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1158,12 +1158,12 @@ FASTBOOL SwInsertDBColAutoPilot::SplitTextToColArr( const String& rTxt,
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
+void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
     Reference< XDataSource> xSource,
     Reference< XConnection> xConnection,
     Reference< sdbc::XResultSet > xResultSet )
 {
-    const sal_Int32* pSelection = rSelection.getLength() ? rSelection.getConstArray() : 0;
+    const Any* pSelection = rSelection.getLength() ? rSelection.getConstArray() : 0;
     SwWrtShell& rSh = pView->GetWrtShell();
 
     Reference< sdbc::XRow > xRow(xResultSet, UNO_QUERY);
@@ -1285,14 +1285,18 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                 if(bScrollable)
                 {
                     if(pSelection)
-                        bBreak = !xResultSet->absolute((ULONG)pSelection[i] );
+                    {
+                        sal_Int32 nPos; pSelection[i] >>= nPos;
+                        bBreak = !xResultSet->absolute(nPos);
+                    }
                     else if(!i)
                         bBreak = !xResultSet->first();
                 }
                 else if(pSelection)
                 {
-                    ULONG nOldPos = 0 == i ? 0 : (ULONG)pSelection[i -1];
-                    ULONG nPos = (ULONG)pSelection[i];
+                    sal_Int32 nPos; pSelection[i] >>= nPos;
+                    sal_Int32 nPrePos; pSelection[i - 1] >>= nPrePos;
+                    sal_Int32 nOldPos = 0 == i ? 0 : nPrePos;
                     long nDiff = nPos - nOldPos;
                     while(nDiff > 0 && !bBreak)
                     {
@@ -1304,7 +1308,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                     bBreak = !xResultSet->next();
 
             }
-            catch(Exception aExcept)
+            catch(Exception& aExcept)
             {
                 bBreak = TRUE;
             }
@@ -1361,7 +1365,7 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                             rSh.SwEditShell::Insert( sVal );
                     }
                 }
-                catch(Exception aExcept)
+                catch(Exception& aExcept)
                 {
                     DBG_ERROR(ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer())
                 }
@@ -1484,14 +1488,18 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                     if(bScrollable)
                     {
                         if(pSelection)
-                            bBreak = !xResultSet->absolute((ULONG)pSelection[i] );
+                        {
+                            sal_Int32 nPos; pSelection[i] >>= nPos;
+                            bBreak = !xResultSet->absolute(nPos);
+                        }
                         else if(!i)
                             bBreak = !xResultSet->first();
                     }
                     else if(pSelection)
                     {
-                        ULONG nOldPos = 0 == i ? 0 : (ULONG)pSelection[i - 1];
-                        ULONG nPos = (ULONG)pSelection[i];
+                        sal_Int32 nPos; pSelection[i] >>= nPos;
+                        sal_Int32 nPrePos; pSelection[i-1] >>= nPrePos;
+                        sal_Int32 nOldPos = 0 == i ? 0 : nPrePos;
                         long nDiff = nPos - nOldPos;
                         while(nDiff > 0 && !bBreak)
                         {
@@ -1502,7 +1510,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<sal_Int32>& rSelection,
                     else if(!i)
                         bBreak = !xResultSet->next();
                 }
-                catch(...){ bBreak = TRUE; }
+                catch(Exception&)
+                { bBreak = TRUE; }
                 if(bBreak)
                     break;
                 for( n = 0; n < nCols; ++n )

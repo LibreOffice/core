@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbinsdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:42:02 $
+ *  last change: $Author: os $ $Date: 2001-06-06 12:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ public:
 
     virtual ~SwInsertDBColAutoPilot();
 
-    void DataToDoc( const ::com::sun::star::uno::Sequence<sal_Int32>& rSelection,
+    void DataToDoc( const ::com::sun::star::uno::Sequence<::com::sun::star::uno::Any>& rSelection,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> xConnection,
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet);
