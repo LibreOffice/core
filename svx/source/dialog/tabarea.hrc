@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-09 10:44:39 $
+ *  last change: $Author: af $ $Date: 2002-11-22 14:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@
 #define FT_TRANSPARENT 9
 #define FT_X_SIZE 10
 #define FT_Y_SIZE 11
+#define FT_BITMAPS_HIDDEN 12
 
 #define RBT_TRANS_OFF 8
 #define RBT_TRANS_LINEAR 9

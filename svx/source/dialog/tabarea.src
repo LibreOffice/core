@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 18:06:43 $
+ *  last change: $Author: af $ $Date: 2002-11-22 14:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2634,6 +2634,12 @@ TabPage RID_SVXPAGE_BITMAP
         TabStop = TRUE ;
         DropDown = TRUE ;
         DDExtraWidth = TRUE ;
+    };
+    FixedText FT_BITMAPS_HIDDEN
+    {
+        // Hidden label that provides the name for the bitmaps list box.
+        Text = "Bitmap" ;
+        Text [ ENGLISH ] = "Bitmap" ;
     };
     ListBox LB_BITMAPS
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2002-11-14 10:07:03 $
+ *  last change: $Author: af $ $Date: 2002-11-22 14:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,9 @@ SvxBitmapTabPage::SvxBitmapTabPage
     aLbColor            ( this, ResId( LB_COLOR ) ),
     aFtBackgroundColor  ( this, ResId( FT_BACKGROUND_COLOR ) ),
     aLbBackgroundColor  ( this, ResId( LB_BACKGROUND_COLOR ) ),
+    // This fix text is used only to provide the name for the following
+    // bitmap list box.  The fixed text is not displayed.
+    aLbBitmapsHidden    ( this, ResId( FT_BITMAPS_HIDDEN ) ),
     aLbBitmaps          ( this, ResId( LB_BITMAPS ) ),
     aFlProp             ( this, ResId( FL_PROP ) ),
     aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
@@ -1187,3 +1190,13 @@ void SvxBitmapTabPage::PointChanged( Window* pWindow, RECT_POINT eRcPt )
     }
 }
 
+
+
+
+Window* SvxBitmapTabPage::GetParentLabeledBy( const Window* pLabeled ) const
+{
+    if (pLabeled == &aLbBitmaps)
+        return const_cast<FixedText*>(&aLbBitmapsHidden);
+    else
+        return SvxTabPage::GetParentLabeledBy (pLabeled);
+}
