@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xehelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:45:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -665,7 +665,7 @@ bool lclConvertToDos( String& rUrl, const String& rBasePath, bool bSaveRelUrl )
 
 /** Encodes special parts of the URL, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this URL, or NULL. */
-void lclEncodeDosUrl( String& rUrl, const String* pTableName = NULL )
+void lclEncodeDosUrl( XclBiff eBiff, String& rUrl, const String* pTableName = NULL )
 {
     if( rUrl.Len() )
     {
@@ -704,7 +704,19 @@ void lclEncodeDosUrl( String& rUrl, const String* pTableName = NULL )
     }
     else    // empty URL -> self reference
     {
-        rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
+        switch( eBiff )
+        {
+            case xlBiff5:
+            case xlBiff7:
+                rUrl = pTableName ? EXC_URLSTART_SELFENCODED : EXC_URLSTART_SELF;
+            break;
+            case xlBiff8:
+                DBG_ASSERT( pTableName, "lclEncodeDosUrl - sheet name required for BIFF8" );
+                rUrl = EXC_URLSTART_SELF;
+            break;
+            default:
+                DBG_ERROR_BIFF();
+        }
     }
 
     // table name
@@ -720,8 +732,8 @@ void lclEncodeDosUrl( String& rUrl, const String* pTableName = NULL )
 String XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName )
 {
     String aDosUrl( rAbsUrl );
-    if( lclConvertToDos( aDosUrl, rRoot.GetBasePath(), rRoot.IsRelUrl() ) )
-        lclEncodeDosUrl( aDosUrl, pTableName );
+    if( !aDosUrl.Len() || lclConvertToDos( aDosUrl, rRoot.GetBasePath(), rRoot.IsRelUrl() ) )
+        lclEncodeDosUrl( rRoot.GetBiff(), aDosUrl, pTableName );
     return aDosUrl;
 }
 
