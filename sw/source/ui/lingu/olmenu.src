@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:25:16 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ Menu MN_SPELL_POPUP
             Text[ russian ] = "Ïğàâ~îïèñàíèå";
             Text[ polish ] = "~Pisownia";
             Text[ japanese ] = "•¶ÍZ³(~S)";
-            Text[ chinese_traditional ] = "«÷¦r(~S)";
+            Text[ chinese_traditional ] = "«÷¼gÀË¬d(~S)";
             Text[ arabic ] = "~ÊÏŞíŞ ÅãáÇÆí";
             Text[ dutch ] = "~Spellingcontrole";
             Text[ chinese_simplified ] = "Æ´Ğ´¼ì²é(~S)";
@@ -257,14 +257,14 @@ String STR_SPELL_OK
     Text [ spanish ] = "¡Ha finalizado la revisión ortográfica!" ;
     Text [ french ] = "La vérification de l'orthographe est terminée !" ;
     Text [ dutch ] = "De spellingcontrole is beëindigd!" ;
-    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²éÒÑ¾­½áÊø£¡";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÒÑ¾­½áÊø£¡";
     Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ çàêîí÷åíà!";
     Text[ polish ] = "Sprawdzanie pisowni zosta³o zakoñczone!";
     Text[ japanese ] = "½ÍßÙÁª¯¸‚ªI—¹‚µ‚Ü‚µ‚½B";
-    Text[ chinese_traditional ] = "«÷¦rÀË¬d¤w¸gµ²§ô¡T";
+    Text[ chinese_traditional ] = "«÷¼gÀË¬d¤w¸gµ²§ô¡T";
     Text[ arabic ] = ".Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí";
     Text[ dutch ] = "De spellingcontrole is beëindigd!";
-    Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²éÒÑ¾­½áÊø£¡";
+    Text[ chinese_simplified ] = "Æ´Ğ´¼ì²éÒÑ¾­½áÊø£¡";
     Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò ïëïêëçñşèçêå!";
     Text[ korean ] = "¸ÂÃã¹ı °Ë»ç°¡ ¿Ï·áµÇ¾ú½À´Ï´Ù.";
     Text[ turkish ] = "Yazım denetimi tamamlandı!";
@@ -286,7 +286,7 @@ String STR_HYP_OK
     Text[ chinese_simplified ] = "Á¬×Ö·û¼ì²éÒÑ¾­Íê³É£¡";
     Text[ russian ] = "Ğàññòàíîâêà ïåğåíîñîâ çàêîí÷åíà!";
     Text[ polish ] = "Dzielenie wyrazów zosta³o zakoñczone.";
-    Text[ japanese ] = "Ê²ÌÈ°¼®İ‚ªI—¹‚µ‚Ü‚µ‚½!";
+    Text[ japanese ] = "Ê²ÌÈ°¼®İ‚ªI—¹‚µ‚Ü‚µ‚½B";
     Text[ chinese_traditional ] = "³s¦r²ÅÀË¬d¤w¸g§¹¦¨¡I";
     Text[ arabic ] = "ÊãøóÊ ÚãáíÉ İÕá ÇáãŞÇØÚ!";
     Text[ dutch ] = "De verdeling in lettergrepen is beëindigd!";
