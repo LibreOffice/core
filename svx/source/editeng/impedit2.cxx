@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:57:41 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bUpdate             = TRUE;
     bUseAutoColor       = TRUE;
     bForceAutoColor     = FALSE;
+    bAddExtLeading      = FALSE;
 #ifndef SVX_LIGHT
     bUndoEnabled        = TRUE;
 #else
