@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-28 08:56:14 $
+ *  last change: $Author: dv $ $Date: 2001-03-29 09:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,20 +711,26 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             SFX_REQUEST_ARG(rReq, pFileItem, SfxStringItem, SID_FILE_NAME, FALSE);
             const String aFileName(((const SfxStringItem *)pFileItem)->GetValue());
 
-            // Filter
+            // Find the template filter with the highest version number
             const SfxFilter* pFilter;
             const SfxObjectFactory& rFactory = GetFactory();
-            USHORT nFilterCount = rFactory.GetFilterCount();
+            USHORT  nFilterCount = rFactory.GetFilterCount();
+            ULONG   nVersion = 0;
             int n;
             for( n=0; n<nFilterCount; n++)
             {
-                pFilter = rFactory.GetFilter( n );
-                if( pFilter && pFilter->IsOwnFormat() &&
-                    pFilter->IsOwnTemplateFormat() )
-                    break;
+                const SfxFilter* pTemp = rFactory.GetFilter( n );
+                if( pTemp && pTemp->IsOwnFormat() &&
+                    pTemp->IsOwnTemplateFormat() &&
+                    ( pTemp->GetVersion() > nVersion ) )
+                {
+                    pFilter = pTemp;
+                    nVersion = pTemp->GetVersion();
+                }
             }
-            DBG_ASSERT( n < nFilterCount && pFilter, "Template Filter nicht gefunden" );
-            if( !pFilter || n == nFilterCount )
+
+            DBG_ASSERT( pFilter, "Template Filter nicht gefunden" );
+            if( !pFilter )
                 pFilter = rFactory.GetFilter(0);
 
             // Medium zusammenbauen
@@ -748,7 +754,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
             // Because we can't save into a storage directly ( only using tempfile ), we must save the DocInfo first, then
             // we can call SaveTo_Impl and Commit
-            if ( pFilter->UsesStorage() )
+            if ( pFilter->UsesStorage() && ( pFilter->GetVersion() < SOFFICE_FILEFORMAT_60 ) )
             {
                 SfxDocumentInfo *pInfo = new SfxDocumentInfo;
                 pInfo->CopyUserData(GetDocInfo());
