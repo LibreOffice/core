@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:23:07 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 15:28:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
     {
         case KEY_ESCAPE:
         {
-            bReturn = cancel();
+            bReturn = FuDraw::cancel();
         }
         break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-29 14:40:06 $
+ *  last change: $Author: cl $ $Date: 2002-12-05 15:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_ESCAPE:
         {
-            bReturn = cancel();
+            bReturn = FuPoor::cancel();
         }
         break;
 
