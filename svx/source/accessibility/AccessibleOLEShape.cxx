@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleOLEShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:58:55 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,11 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 AccessibleOLEShape::AccessibleOLEShape (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :      AccessibleShape (rxShape, rxParent, NULL)
+    const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    long nIndex)
+    :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
 {
 }
 
@@ -106,10 +108,9 @@ sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount (void)
 
 
 sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 nIndex)
-    throw (::com::sun::star::lang::IndexOutOfBoundsException,
-        ::com::sun::star::uno::RuntimeException)
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    return sal_False;
+    throw lang::IndexOutOfBoundsException();
 }
 
 
@@ -205,12 +206,12 @@ uno::Sequence<uno::Type> SAL_CALL
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
-    AccessibleOLEShape::createAccessibleBaseName (void)
+    AccessibleOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case DRAWING_OLE:
@@ -243,10 +244,10 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 ::rtl::OUString
-    AccessibleOLEShape::createAccessibleDescription (void)
+    AccessibleOLEShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return createAccessibleName ();
+    return CreateAccessibleName ();
 }
 
 

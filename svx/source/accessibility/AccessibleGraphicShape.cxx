@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleGraphicShape.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:58:55 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:15:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,11 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 AccessibleGraphicShape::AccessibleGraphicShape (const ::com::sun::star::uno::Reference<
         ::com::sun::star::drawing::XShape>& rxShape,
-        const ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent)
-    :      AccessibleShape (rxShape, rxParent, NULL)
+    const ::com::sun::star::uno::Reference<
+        ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
+    AccessibleShapeTreeInfo& rShapeTreeInfo,
+    long nIndex)
+    :      AccessibleShape (rxShape, rxParent, rShapeTreeInfo, nIndex)
 {
 }
 
@@ -191,12 +193,12 @@ uno::Sequence<uno::Type> SAL_CALL
 
 /// Set this object's name if is different to the current name.
 ::rtl::OUString
-    AccessibleGraphicShape::createAccessibleBaseName (void)
+    AccessibleGraphicShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName;
 
-    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().getTypeId (mxShape);
+    ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case DRAWING_GRAPHIC_OBJECT:
@@ -217,10 +219,8 @@ uno::Sequence<uno::Type> SAL_CALL
 
 
 ::rtl::OUString
-    AccessibleGraphicShape::createAccessibleDescription (void)
+    AccessibleGraphicShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return createAccessibleName ();
+    return CreateAccessibleName ();
 }
-
-
