@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:05:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Text [ ENGLISH ] = "Data Pilot" ;
     Text [ norwegian ] = "Data Pilot" ;
     Text [ italian ] = "DataPilot" ;
-    Text [ portuguese_brazilian ] = "Data Pilot" ;
+    Text [ portuguese_brazilian ] = "Tabela Dinâmica" ;
     Text [ portuguese ] = "Piloto de dados" ;
     Text [ english_us ] = "DataPilot" ;
     Text[ danish ] = "DataPilot";
@@ -108,26 +108,29 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "Spalte" ;
         Text[ ENGLISH ] = "Column" ;
         Text[ english_us ] = "Column" ;
-        Text[ portuguese ] = "Column";
-        Text[ russian ] = "Column";
-        Text[ greek ] = "Column";
-        Text[ dutch ] = "Column";
+        Text[ portuguese ] = "Coluna";
+        Text[ russian ] = "Êîëîíêà";
+        Text[ greek ] = "ÓôŞëç";
+        Text[ dutch ] = "Kolom";
         Text[ french ] = "Colonne";
         Text[ spanish ] = "Columna";
-        Text[ finnish ] = "Column";
+        Text[ finnish ] = "Sarake";
         Text[ italian ] = "Colonna";
-        Text[ danish ] = "Column";
+        Text[ danish ] = "Kolonne";
         Text[ swedish ] = "Kolumn";
-        Text[ polish ] = "Column";
+        Text[ polish ] = "Kolumna";
         Text[ portuguese_brazilian ] = "Column";
         Text[ japanese ] = "åˆ—";
         Text[ korean ] = "ì—´";
         Text[ chinese_simplified ] = "åˆ—";
         Text[ chinese_traditional ] = "æ¬„";
-        Text[ turkish ] = "Column";
-        Text[ arabic ] = "Column";
-        Text[ catalan ] = "COLUMN";
+        Text[ turkish ] = "Sütun";
+        Text[ arabic ] = "ÚãæÏ";
+        Text[ catalan ] = "Column";
         Text[ thai ] = "à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "Sloupec";
+        Text[ hebrew ] = "Spalte";
+        Text[ hindi ] = "Column";
     };
     Control WND_COL
     {
@@ -142,26 +145,29 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "Zeile" ;
         Text[ ENGLISH ] = "Row" ;
         Text[ english_us ] = "Row" ;
-        Text[ portuguese ] = "Row";
-        Text[ russian ] = "Row";
-        Text[ greek ] = "Row";
-        Text[ dutch ] = "Row";
+        Text[ portuguese ] = "Linha";
+        Text[ russian ] = "ÑÒĞÎÊÀ";
+        Text[ greek ] = "ÃñáììŞ";
+        Text[ dutch ] = "Rij";
         Text[ french ] = "Ligne";
         Text[ spanish ] = "Fila";
-        Text[ finnish ] = "Row";
+        Text[ finnish ] = "Rivit";
         Text[ italian ] = "Riga";
-        Text[ danish ] = "Row";
+        Text[ danish ] = "Række";
         Text[ swedish ] = "Rad";
-        Text[ polish ] = "Row";
+        Text[ polish ] = "Wiersz";
         Text[ portuguese_brazilian ] = "Row";
         Text[ japanese ] = "è¡Œ";
         Text[ korean ] = "í–‰";
         Text[ chinese_simplified ] = "è¡Œ";
         Text[ chinese_traditional ] = "åˆ—";
-        Text[ turkish ] = "Row";
-        Text[ arabic ] = "Row";
+        Text[ turkish ] = "Satır";
+        Text[ arabic ] = "Õİ";
         Text[ catalan ] = "fila";
         Text[ thai ] = "à¸šà¸£à¸£à¸—à¸±à¸”";
+        Text[ czech ] = "Å˜Ã¡dek";
+        Text[ hebrew ] = "Zeile";
+        Text[ hindi ] = "Row";
     };
     Control WND_ROW
     {
@@ -176,26 +182,29 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "Daten" ;
         Text[ ENGLISH ] = "Data" ;
         Text[ english_us ] = "Data" ;
-        Text[ portuguese ] = "Data";
-        Text[ russian ] = "Data";
-        Text[ greek ] = "Data";
-        Text[ dutch ] = "Data";
+        Text[ portuguese ] = "DADOS";
+        Text[ russian ] = "ÄÀÍÍÛÅ";
+        Text[ greek ] = "Äåäïìİíá";
+        Text[ dutch ] = "Gegevens";
         Text[ french ] = "Données";
         Text[ spanish ] = "Datos";
-        Text[ finnish ] = "Data";
+        Text[ finnish ] = "Tiedot";
         Text[ italian ] = "Dati";
-        Text[ danish ] = "Data";
+        Text[ danish ] = "DATA";
         Text[ swedish ] = "Data";
-        Text[ polish ] = "Data";
+        Text[ polish ] = "DANE";
         Text[ portuguese_brazilian ] = "Data";
         Text[ japanese ] = "ãƒ‡ãƒ¼ã‚¿";
         Text[ korean ] = "ë°ì´í„°";
         Text[ chinese_simplified ] = "æ•°æ®";
         Text[ chinese_traditional ] = "è³‡æ–™";
-        Text[ turkish ] = "Data";
-        Text[ arabic ] = "Data";
+        Text[ turkish ] = "Veri";
+        Text[ arabic ] = "X_range";
         Text[ catalan ] = "Dades";
         Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
+        Text[ czech ] = "Data";
+        Text[ hebrew ] = "Daten";
+        Text[ hindi ] = "Data";
     };
     Control WND_DATA
     {
@@ -231,10 +240,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ì˜ì—­ ì„ íƒ";
         Text[ chinese_simplified ] = "é€‰æ‹©åŒºåŸŸ";
         Text[ chinese_traditional ] = "é¸å–å€åŸŸ";
-        Text[ turkish ] = "Selection area";
+        Text[ turkish ] = "Seçim alanı";
         Text[ arabic ] = "Selection area";
         Text[ catalan ] = "Selection area";
         Text[ thai ] = "Selection area";
+        Text[ czech ] = "Oblast vÃ½bÄ›ru";
+        Text[ hebrew ] = "Auswahlbereich";
+        Text[ hindi ] = "Selection area";
     };
     ScrollBar WND_HSCROLL
     {
@@ -252,7 +264,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Drag the fields from the right into the desired area using the mouse." ;
         Text [ norwegian ] = "Dra feltene fra høyre og inn I det ønskede området ved å bruke musen." ;
         Text [ italian ] = "Trascinate i campi da destra nell'area desiderata usando il mouse." ;
-        Text [ portuguese_brazilian ] = "Arraste os campos da direita para a ?rea desejada usando o mouse." ;
+        Text [ portuguese_brazilian ] = "Arraste os campos da direita para a área desejada usando o mouse." ;
         Text [ portuguese ] = "Com o rato arraste os campos da direita para as áreas desejadas." ;
         Text [ finnish ] = "Vedä oikealla olevat kentät haluamaasi kohtaan." ;
         Text [ danish ] = "Træk felterne på højre side til de ønskede områder ved hjælp af musen." ;
@@ -263,16 +275,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Drag the fields from the right into the desired position." ;
         Text[ chinese_simplified ] = "ç”¨é¼ æ ‡å°†å³é¡µä¸­çš„å­—æ®µç§»åˆ°æŒ‡å®šçš„åŒºåŸŸã€‚";
         Text[ russian ] = "Ïåğåòàùèòå ïîëÿ ñ ïğàâîé ñòîğîíû â æåëàåìóş îáëàñòü.";
-        Text[ polish ] = "Przesuñ pola z prawej strony za pomoc¹ myszy do ¿¹danego obszaru.";
+        Text[ polish ] = "Przeci¹gnij pola z prawej strony w ¿¹dane miejsce.";
         Text[ japanese ] = "å³å´ã«ã‚ã‚‹ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ãƒœã‚¿ãƒ³ã‚’ä»»æ„ã®ç¯„å›²ã«ãƒ‰ãƒ©ãƒƒã‚°ã—ã¾ã™ã€‚";
         Text[ chinese_traditional ] = "è«‹ä½¿ç”¨æ»‘é¼ éµå°‡æ¬„ä½æ‹–æ‹‰åˆ°å³é çš„ä»»æ„ä¸€å€‹å€åŸŸã€‚";
         Text[ arabic ] = "ÇÓÍÈ ÇáÍŞæá ãä ÇáÕİÍÉ Çáíãäì ÈæÇÓØÉ ÇáãÇæÓ Åáì ÇáãäÇØŞ ÇáÊí ÊÑÛÈ İíåÇ.";
         Text[ greek ] = "Óıñåôå ìå ôï ğïíôßêé ôá ğåäßá ôçò äåîéÜò óåëßäáò óôéò ğåñéï÷İò ğïõ åğéèõìåßôå.";
         Text[ korean ] = "ë§ˆìš°ìŠ¤ë¥¼ ì´ìš©í•˜ì—¬ ì˜¤ë¥¸ìª½ì—ì„œë¶€í„° ì›í•˜ëŠ” ì˜ì—­ìœ¼ë¡œ í•„ë“œë¥¼ ë„ì‹­ì‹œì˜¤";
-        Text[ turkish ] = "Sağdaki alanları fare ile istenen konuma sürükleyin.";
+        Text[ turkish ] = "Sağdaki alanları istenilen konuma sürükleyin.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Arrossega els camps de la dreta fins a la posició desitjada.";
         Text[ thai ] = "à¸¥à¸²à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸ˆà¸²à¸à¸‚à¸§à¸²à¸¡à¸·à¸­à¹„à¸›à¸¢à¸±à¸‡à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡à¸—à¸µà¹ˆà¸•à¹‰à¸­à¸‡à¸à¸²à¸£";
+        Text[ czech ] = "PÅ™etÃ¡hnÄ›te pole z pravÃ© ÄÃ¡sti na poÅ¾adovanÃ© mÃ­sto.";
+        Text[ hebrew ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewÃ¼nschten Bereiche.";
+        Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤°à¥‹à¤‚ à¤•à¥‹ à¤¦à¤¾à¤¹à¤¿à¤¨à¥€ à¤“à¤° à¤¸à¥‡ à¤–à¥€à¤‚à¤šà¤•à¤° à¤‡à¤·à¥à¤Ÿ à¤¸à¥à¤¥à¤¾à¤¨ à¤®à¥‡à¤‚ à¤°à¤–à¥‹ à¥¤";
     };
     FixedLine FL_LAYOUT
     {
@@ -297,10 +312,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ë ˆì´ì•„ì›ƒ";
         Text[ chinese_simplified ] = "ç‰ˆå¼";
         Text[ chinese_traditional ] = "ç‰ˆå¼";
-        Text[ turkish ] = "Sayfa düzeni";
+        Text[ turkish ] = "Yerleşim";
         Text[ arabic ] = "ÊÎØíØ";
         Text[ catalan ] = "Disseny";
         Text[ thai ] = "à¹€à¸„à¹‰à¸²à¹‚à¸„à¸£à¸‡";
+        Text[ czech ] = "RozloÅ¾enÃ­";
+        Text[ hebrew ] = "â€®×¤×¨×™×¡×”â€¬";
+        Text[ hindi ] = "à¤…à¤­à¤¿à¤¨à¥à¤¯à¤¾à¤¸";
     };
     OKButton BTN_OK
     {
@@ -329,26 +347,29 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text = "Entfernen" ;
         Text [ ENGLISH ] = "Remove" ;
         Text[ english_us ] = "Remove";
-        Text[ portuguese ] = "Remove";
-        Text[ russian ] = "Remove";
-        Text[ greek ] = "Remove";
-        Text[ dutch ] = "Remove";
+        Text[ portuguese ] = "Remover";
+        Text[ russian ] = "Óäàëåíèå";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ dutch ] = "Verwijderen";
         Text[ french ] = "Supprimer";
         Text[ spanish ] = "Borrar";
-        Text[ finnish ] = "Remove";
+        Text[ finnish ] = "poista";
         Text[ italian ] = "Deinstallazione";
-        Text[ danish ] = "Remove";
+        Text[ danish ] = "Fjern";
         Text[ swedish ] = "Ta bort";
-        Text[ polish ] = "Remove";
+        Text[ polish ] = "usuñ";
         Text[ portuguese_brazilian ] = "Remove";
         Text[ japanese ] = "å‰Šé™¤";
         Text[ korean ] = "ì œê±°";
         Text[ chinese_simplified ] = "ç§»é™¤";
         Text[ chinese_traditional ] = "ç§»é™¤";
-        Text[ turkish ] = "Remove";
-        Text[ arabic ] = "Remove";
+        Text[ turkish ] = "Sil";
+        Text[ arabic ] = "ÅÒÇáÉ";
         Text[ catalan ] = "Remove";
         Text[ thai ] = "à¹€à¸­à¸²à¸­à¸­à¸";
+        Text[ czech ] = "Odstranit";
+        Text[ hebrew ] = "â€®×”×¡×¨×”â€¬";
+        Text[ hindi ] = "Remove";
     };
     PushButton BTN_OPTIONS
     {
@@ -374,10 +395,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ korean ] = "ì˜µì…˜...";
         Text[ chinese_simplified ] = "é€‰é¡¹...";
         Text[ chinese_traditional ] = "é¸é …...";
-        Text[ turkish ] = "Options...";
+        Text[ turkish ] = "Seçenekler...";
         Text[ arabic ] = "Options...";
         Text[ catalan ] = "Options...";
         Text[ thai ] = "Options...";
+        Text[ czech ] = "Volby...";
+        Text[ hebrew ] = "â€®××¤×©×¨×•×™×•×ªâ€¬";
+        Text[ hindi ] = "Options...";
     };
     MoreButton BTN_MORE
     {
@@ -428,6 +452,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Resultat";
         Text[ thai ] = "à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œ";
+        Text[ czech ] = "VÃ½sledek";
+        Text[ hebrew ] = "Ergebnis";
+        Text[ hindi ] = "à¤¨à¤¤à¥€à¤œà¤¾";
     };
     FixedText FT_OUTAREA
     {
@@ -438,7 +465,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "~Output from" ;
         Text [ norwegian ] = "Utgående fra " ;
         Text [ italian ] = "Risultato da" ;
-        Text [ portuguese_brazilian ] = "Sa?da de" ;
+        Text [ portuguese_brazilian ] = "Resultados em" ;
         Text [ portuguese ] = "~Resultado em" ;
         Text [ finnish ] = "Tulokset" ;
         Text [ danish ] = "~Output fra" ;
@@ -449,16 +476,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Results to" ;
         Text[ chinese_simplified ] = "è¾“å‡ºåŒºåŸŸä»";
         Text[ russian ] = "Ğåçóëüòàò â";
-        Text[ polish ] = "Rozpocznij od";
+        Text[ polish ] = "Wyniki do";
         Text[ japanese ] = "çµæœè²¼ã‚Šä»˜ã‘å…ˆ";
         Text[ chinese_traditional ] = "åŒ¯å‡ºå€åŸŸå¾";
         Text[ arabic ] = "ÇáäÊÇÆÌ Åáì";
         Text[ greek ] = "Åî~áãùãŞ áğü";
         Text[ korean ] = "ê²°ê³¼";
-        Text[ turkish ] = "Çıktı başl.";
+        Text[ turkish ] = "Sonuçlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Resultats a";
         Text[ thai ] = "à¸œà¸¥à¸¥à¸±à¸à¸˜à¹Œà¸•à¹ˆà¸­";
+        Text[ czech ] = "VÃ½sledky do";
+        Text[ hebrew ] = "~Ausgabe ab";
+        Text[ hindi ] = "à¤®à¥‡à¤‚ à¤¨à¤¤à¥€à¤œà¤¾";
     };
     ListBox LB_OUTAREA
     {
@@ -507,6 +537,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ catalan ] = "Redueix";
         QuickHelpText[ finnish ] = "Kutista";
         QuickHelpText[ thai ] = "Shrink";
+        QuickHelpText[ czech ] = "ZmenÅ¡it";
+        QuickHelpText[ hebrew ] = "Verkleinern";
+        QuickHelpText[ hindi ] = "à¤¸à¤¿à¤•à¥à¤¡à¤¨à¤¾";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -518,7 +551,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "~Ignore empty rows" ;
         Text [ norwegian ] = "~Ignorer tomme rader " ;
         Text [ italian ] = "~Ignora le righe vuote" ;
-        Text [ portuguese_brazilian ] = "~Ignorar fileiras vazias" ;
+        Text [ portuguese_brazilian ] = "~Ignorar linhas vazias" ;
         Text [ portuguese ] = "~Ignorar linhas vazias" ;
         Text [ finnish ] = "~Ohita tyhjät rivit" ;
         Text [ danish ] = "Ignorer tomme rækker" ;
@@ -529,16 +562,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Ignore ~empty rows" ;
         Text[ chinese_simplified ] = "å¿½ç•¥ç©ºè¡Œ(~E)";
         Text[ russian ] = "Ïğîïóñêàòü ïóñòûå ñòğîêè";
-        Text[ polish ] = "Zignoruj spacje";
+        Text[ polish ] = "Ignoruj ~puste wiersze";
         Text[ japanese ] = "ç©ºç™½è¡Œã‚’ç„¡è¦–ã™ã‚‹(~E)";
         Text[ chinese_traditional ] = "å¿½ç•¥ç©ºåˆ—(~E)";
         Text[ arabic ] = "ÊÌÇåá ÇáÕİæİ ÇáİÇÑÛÉ";
         Text[ greek ] = "ĞáñÜâëåøç êåíşí ãñáììşí";
         Text[ korean ] = "ë¹ˆ í–‰ ë¬´ì‹œ(~E)";
-        Text[ turkish ] = "Boş satırları ~yok say";
+        Text[ turkish ] = "Boş satırları ~yoksay";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ignora les files ~buides";
         Text[ thai ] = "à¹€à¸¥à¸´à¸à¹à¸–à¸§~à¸§à¹ˆà¸²à¸‡";
+        Text[ czech ] = "Ignorovat prÃ¡zdnÃ© Å™Ã¡dky";
+        Text[ hebrew ] = "Leerzeilen ~ignorieren";
+        Text[ hindi ] = "~à¤–à¤¾à¤²à¥€ à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤‰à¤ªà¥‡à¤•à¥à¤·à¤¾ à¤•à¤°à¥‹";
     };
     CheckBox BTN_DETECTCAT
     {
@@ -550,7 +586,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "~Detect Categories" ;
         Text [ norwegian ] = "~Finn Kategorier " ;
         Text [ italian ] = "~Individua categorie" ;
-        Text [ portuguese_brazilian ] = "~Detectar Categorias" ;
+        Text [ portuguese_brazilian ] = "~Identificar categorias" ;
         Text [ portuguese ] = "~Indicar categorias" ;
         Text [ finnish ] = "~Tunnista luokat" ;
         Text [ danish ] = "Identificer kategorier" ;
@@ -561,16 +597,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "~Identify categories" ;
         Text[ chinese_simplified ] = "è¯†åˆ«åˆ†ç±»(~I)";
         Text[ russian ] = "Ğàñïîçíàâàíèå êàòåãîğèé";
-        Text[ polish ] = "Identyfikacja kategorii";
+        Text[ polish ] = "~Identyfikuj kategorie";
         Text[ japanese ] = "åˆ†é¡é …ç›®ã®èªè­˜(~I)";
         Text[ chinese_traditional ] = "è­˜åˆ¥åˆ†é¡(~I)";
         Text[ arabic ] = "ÊÚÑíİ ÇáİÆÉ";
         Text[ greek ] = "Áíáãíşñéóç êáôçãïñéşí";
-        Text[ korean ] = "ë²”ì£¼ í‘œì‹œ(~I)";
-        Text[ turkish ] = "~Kategoriyi tanımla";
+        Text[ korean ] = "ë¶„ë¥˜ í•­ëª© ì‹ë³„(~I)";
+        Text[ turkish ] = "~Kategorileri tanımla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Identifica les categories";
         Text[ thai ] = "~à¸£à¸°à¸šà¸¸à¸›à¸£à¸°à¹€à¸ à¸—";
+        Text[ czech ] = "Identifikovat kategorie";
+        Text[ hebrew ] = "~Kategorieerkennung";
+        Text[ hindi ] = "à¤µà¤°à¥à¤—à¥‹à¤‚ à¤•à¥€ ~à¤ªà¤¹à¤šà¤¾à¤¨";
     };
     CheckBox BTN_TOTALCOL
     {
@@ -588,20 +627,23 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ spanish ] = "Columnas de totales" ;
         Text [ french ] = "Total - colonnes" ;
         Text [ dutch ] = "Saldo ~kolommen" ;
-        Text [ portuguese_brazilian ] = "Gesamtergebnis-~Spalten" ;
+        Text [ portuguese_brazilian ] = "Total das ~colunas" ;
         Text[ chinese_simplified ] = "æ€»è®¡çš„åˆ—";
         Text[ russian ] = "Âñåãî ñòîëáöîâ";
-        Text[ polish ] = "~Podsumowanie kolumn";
+        Text[ polish ] = "Suma ~kolumn";
         Text[ japanese ] = "åˆ—ã®ç·è¨ˆ";
         Text[ chinese_traditional ] = "ç¸½è¨ˆçš„æ¬„";
         Text[ arabic ] = "ÃÚãÏÉ ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá óôçëşí";
         Text[ korean ] = "ì—´ í•©ê³„";
-        Text[ turkish ] = "Sütun ~toplamı";
+        Text[ turkish ] = "Toplam ~sütun sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Total de ~columnes";
         Text[ finnish ] = "~Sarakkeita yhteensä";
         Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡~à¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ";
+        Text[ czech ] = "SeÄÃ­st sloupce";
+        Text[ hebrew ] = "Gesamtergebnis-Spalten";
+        Text[ hindi ] = "~à¤¸à¥à¤¤à¤‚à¤­à¥‹à¤‚ à¤•à¥€ à¤•à¥à¤² à¤¸à¤‚à¤–à¥à¤¯à¤¾";
     };
     CheckBox BTN_TOTALROW
     {
@@ -619,20 +661,23 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ spanish ] = "~Filas de totales" ;
         Text [ french ] = "Total - ~lignes" ;
         Text [ dutch ] = "~Saldo rijen" ;
-        Text [ portuguese_brazilian ] = "~Gesamtergebnis-Zeilen" ;
+        Text [ portuguese_brazilian ] = "Total das ~linhas" ;
         Text[ chinese_simplified ] = "æ€»è®¡çš„è¡Œ(~T)";
         Text[ russian ] = "Âñåãî ñòğîê";
-        Text[ polish ] = "Podsumowanie liczby linijek";
+        Text[ polish ] = "£¹czni~e wierszy";
         Text[ japanese ] = "è¡Œã®ç·è¨ˆ(~T)";
         Text[ chinese_traditional ] = "ç¸½è¨ˆçš„åˆ—(~T)";
         Text[ arabic ] = "Õİæİ ÇáãÌãæÚ";
         Text[ greek ] = "Óõíïëéêü Üèñïéóìá ãñáììşí";
         Text[ korean ] = "í–‰ í•©ê³„(~T)";
-        Text[ turkish ] = "Satır t~oplamı";
+        Text[ turkish ] = "~Toplam satır sayısı";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Total de files";
         Text[ finnish ] = "~Rivejä yhteensä";
         Text[ thai ] = "~à¸œà¸¥à¸£à¸§à¸¡à¹à¸–à¸§";
+        Text[ czech ] = "SeÄÃ­st Å™Ã¡dky";
+        Text[ hebrew ] = "~Gesamtergebnis-Zeilen";
+        Text[ hindi ] = "à¤ªà¤‚à¤•à¥à¤¤à¤¿à¤¯à¥‹à¤‚ à¤•à¥€ ~à¤•à¥à¤² à¤¸à¤‚à¤–à¥à¤¯à¤¾";
     };
     String PIVOTSTR_SUM
     {
@@ -661,6 +706,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Suma - ";
         Text[ thai ] = "à¸œà¸¥à¸£à¸§à¸¡ - ";
+        Text[ czech ] = "SouÄet - ";
+        Text[ hebrew ] = "â€®×¡×›×•× -â€¬";
+        Text[ hindi ] = "à¤œà¥‹à¤¡ - ";
     };
     String PIVOTSTR_COUNT
     {
@@ -679,16 +727,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Count - " ;
         Text[ chinese_simplified ] = "æ•°ç›® - ";
         Text[ russian ] = "Êîëè÷åñòâî -  ";
-        Text[ polish ] = "Liczba -   ";
+        Text[ polish ] = "Liczba - ";
         Text[ japanese ] = "ç·æ•° - ";
         Text[ chinese_traditional ] = "æ•¸ç›® - ";
         Text[ arabic ] = "- Count";
         Text[ greek ] = "ĞëŞèïò - ";
         Text[ korean ] = "ê°œìˆ˜ - ";
-        Text[ turkish ] = "Adet Sayısı - ";
+        Text[ turkish ] = "Say - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Compta - ";
         Text[ thai ] = "à¸™à¸±à¸š - ";
+        Text[ czech ] = "PoÄet - ";
+        Text[ hebrew ] = "Anzahl -";
+        Text[ hindi ] = "à¤—à¤¿à¤¨à¤¤à¥€ - ";
     };
     String PIVOTSTR_AVG
     {
@@ -696,7 +747,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Average - " ;
         Text [ norwegian ] = "Gjennomsnitt - " ;
         Text [ italian ] = "Media - " ;
-        Text [ portuguese_brazilian ] = "M?dia - " ;
+        Text [ portuguese_brazilian ] = "Média - " ;
         Text [ portuguese ] = "Média - " ;
         Text [ finnish ] = "Keskiarvo - " ;
         Text [ danish ] = "Middel - " ;
@@ -707,7 +758,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Mean - " ;
         Text[ chinese_simplified ] = "ä¸­é—´å€¼ - ";
         Text[ russian ] = "Ñğåäíåå çíà÷åíèå -  ";
-        Text[ polish ] = "Œrednia wartoœæ -  ";
+        Text[ polish ] = "Œrednia - ";
         Text[ japanese ] = "å¹³å‡å€¤ - ";
         Text[ chinese_traditional ] = "å¹³å‡å€¼ - ";
         Text[ arabic ] = "Ü Average";
@@ -717,6 +768,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mitjana - ";
         Text[ thai ] = "à¸„à¹ˆà¸²à¹€à¸‰à¸¥à¸µà¹ˆà¸¢ - ";
+        Text[ czech ] = "StÅ™ednÃ­ hodnota - ";
+        Text[ hebrew ] = "Mittelwert -";
+        Text[ hindi ] = "à¤®à¤¾à¤§à¥à¤¯ - ";
     };
     String PIVOTSTR_MAX
     {
@@ -724,7 +778,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Max - " ;
         Text [ norwegian ] = "Maks - " ;
         Text [ italian ] = "Max - " ;
-        Text [ portuguese_brazilian ] = "Max - " ;
+        Text [ portuguese_brazilian ] = "Máx - " ;
         Text [ portuguese ] = "Máx - " ;
         Text [ finnish ] = "MAKS - " ;
         Text [ danish ] = "Maks - " ;
@@ -735,7 +789,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Max - " ;
         Text[ chinese_simplified ] = "æœ€å¤§  - ";
         Text[ russian ] = "Ìàêñèìóì -  ";
-        Text[ polish ] = "Max -   ";
+        Text[ polish ] = "Maks - ";
         Text[ japanese ] = "æœ€å¤§å€¤ - ";
         Text[ chinese_traditional ] = "æœ€å¤§  - ";
         Text[ arabic ] = "- Max";
@@ -745,6 +799,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Màx. - ";
         Text[ thai ] = "à¸¡à¸²à¸à¸—à¸µà¹ˆà¸ªà¸¸à¸” - ";
+        Text[ czech ] = "Max - ";
+        Text[ hebrew ] = "Max - ";
+        Text[ hindi ] = "à¤…à¤§à¤¿à¤•à¤¤à¤® - ";
     };
     String PIVOTSTR_MIN
     {
@@ -763,7 +820,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Min - " ;
         Text[ chinese_simplified ] = "æœ€å° - ";
         Text[ russian ] = "Ìèíèìóì -  ";
-        Text[ polish ] = "Min -   ";
+        Text[ polish ] = "Min - ";
         Text[ japanese ] = "æœ€å°å€¤ - ";
         Text[ chinese_traditional ] = "æœ€å° - ";
         Text[ arabic ] = "- Min";
@@ -773,6 +830,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Mín. - ";
         Text[ thai ] = "à¸™à¹‰à¸­à¸¢à¸—à¸µà¹ˆà¸ªà¸¸à¸” - ";
+        Text[ czech ] = "Min - ";
+        Text[ hebrew ] = "Min - ";
+        Text[ hindi ] = "à¤¨à¥à¤¯à¥‚à¤¨à¤¤à¤® - ";
     };
     String PIVOTSTR_PROD
     {
@@ -791,7 +851,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Product - " ;
         Text[ chinese_simplified ] = "ä¹˜ç§¯- ";
         Text[ russian ] = "Ïğîèçâåäåíèå -  ";
-        Text[ polish ] = "Produkt -  ";
+        Text[ polish ] = "Iloczyn -  ";
         Text[ japanese ] = "ç© - ";
         Text[ chinese_traditional ] = "ä¹˜ç©- ";
         Text[ arabic ] = "- Product";
@@ -801,6 +861,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Producte - ";
         Text[ thai ] = "à¸œà¸¥à¸´à¸•à¸ à¸±à¸“à¸‘à¹Œ - ";
+        Text[ czech ] = "Produkt - ";
+        Text[ hebrew ] = "Produkt -";
+        Text[ hindi ] = "à¤—à¥à¤£à¤¨ - ";
     };
     String PIVOTSTR_COUNT2
     {
@@ -819,16 +882,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Count - " ;
         Text[ chinese_simplified ] = "æ•°ç›® - ";
         Text[ russian ] = "Êîëè÷åñòâî -  ";
-        Text[ polish ] = "Liczba -   ";
+        Text[ polish ] = "Liczba - ";
         Text[ japanese ] = "ç·æ•° - ";
         Text[ chinese_traditional ] = "æ•¸ç›® - ";
         Text[ arabic ] = "- Count";
         Text[ greek ] = "ĞëŞèïò - ";
         Text[ korean ] = "ìˆ«ì - ";
-        Text[ turkish ] = "Adet sayısı - ";
+        Text[ turkish ] = "Say - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Compta - ";
         Text[ thai ] = "à¸™à¸±à¸š - ";
+        Text[ czech ] = "PoÄet - ";
+        Text[ hebrew ] = "Anzahl -";
+        Text[ hindi ] = "à¤—à¤¿à¤¨à¤¤à¥€ - ";
     };
     String PIVOTSTR_DEV
     {
@@ -836,7 +902,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Dev - " ;
         Text [ norwegian ] = "Avv - " ;
         Text [ italian ] = "Dev - " ;
-        Text [ portuguese_brazilian ] = "Dev - " ;
+        Text [ portuguese_brazilian ] = "DesvPad - " ;
         Text [ portuguese ] = "DesvP - " ;
         Text [ finnish ] = "KESKIHAJONTA - " ;
         Text [ danish ] = "Stdafv - " ;
@@ -853,10 +919,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ arabic ] = "- StDev";
         Text[ greek ] = "StDev - ";
         Text[ korean ] = "StDev - ";
-        Text[ turkish ] = "StDev - ";
+        Text[ turkish ] = "StSapma - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "StDev - ";
         Text[ thai ] = "StDev - ";
+        Text[ czech ] = "StDev - ";
+        Text[ hebrew ] = "StAbw -";
+        Text[ hindi ] = "StDev - ";
     };
     String PIVOTSTR_DEV2
     {
@@ -864,7 +933,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Dev2 - " ;
         Text [ norwegian ] = "Avv2 - " ;
         Text [ italian ] = "DevP - " ;
-        Text [ portuguese_brazilian ] = "DevP - " ;
+        Text [ portuguese_brazilian ] = "DesvPadP - " ;
         Text [ portuguese ] = "DesvPadP - " ;
         Text [ finnish ] = "KESKIHAJONTAP - " ;
         Text [ danish ] = "StdafvP - " ;
@@ -881,10 +950,13 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ arabic ] = "- StDevP";
         Text[ greek ] = "StDevP - ";
         Text[ korean ] = "StDevP - ";
-        Text[ turkish ] = "StDevP - ";
+        Text[ turkish ] = "StSapmaP - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "StDevP - ";
         Text[ thai ] = "StDevP - ";
+        Text[ czech ] = "StDevP - ";
+        Text[ hebrew ] = "StAbwN -";
+        Text[ hindi ] = "StDevP - ";
     };
     String PIVOTSTR_VAR
     {
@@ -892,7 +964,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Var - " ;
         Text [ norwegian ] = " Var - " ;
         Text [ italian ] = "Var - " ;
-        Text [ portuguese_brazilian ] = "Var - " ;
+        Text [ portuguese_brazilian ] = "Var -" ;
         Text [ portuguese ] = "Variância - " ;
         Text [ finnish ] = "Var - " ;
         Text [ danish ] = "Varians - " ;
@@ -903,16 +975,19 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "Var - " ;
         Text[ chinese_simplified ] = "æ–¹å·®- ";
         Text[ russian ] = "Ñìåùåííàÿ äèñïåğñèÿ -  ";
-        Text[ polish ] = "Wariancja -  ";
+        Text[ polish ] = "Wariancja - ";
         Text[ japanese ] = "åˆ†æ•£ - ";
         Text[ chinese_traditional ] = "æ–¹å·®- ";
         Text[ arabic ] = "- VAR";
         Text[ greek ] = "Var - ";
         Text[ korean ] = "ë¶„ì‚° - ";
-        Text[ turkish ] = "Var - ";
+        Text[ turkish ] = "Değişken - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Var - ";
         Text[ thai ] = "Var - ";
+        Text[ czech ] = "Var - ";
+        Text[ hebrew ] = "Varianz -";
+        Text[ hindi ] = "Var - ";
     };
     String PIVOTSTR_VAR2
     {
@@ -920,7 +995,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ ENGLISH ] = "Var2 - " ;
         Text [ norwegian ] = " Var2 - " ;
         Text [ italian ] = "Var2 - " ;
-        Text [ portuguese_brazilian ] = "Var2 - " ;
+        Text [ portuguese_brazilian ] = "VarP-" ;
         Text [ portuguese ] = "Variâncias - " ;
         Text [ finnish ] = "VarP - " ;
         Text [ danish ] = "VariansP - " ;
@@ -931,19 +1006,38 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text [ english_us ] = "VarP - " ;
         Text[ chinese_simplified ] = "æ–¹å·® - ";
         Text[ russian ] = "Íåñìåùåííàÿ äèñïåğñèÿ -  ";
-        Text[ polish ] = "Wariancje -  ";
+        Text[ polish ] = "Wariancje - ";
         Text[ japanese ] = "åˆ†æ•£ - ";
         Text[ chinese_traditional ] = "æ–¹å·® - ";
         Text[ arabic ] = "- VARP";
         Text[ greek ] = "VarP - ";
         Text[ korean ] = "ë¶„ì‚° - ";
-        Text[ turkish ] = "VarP - ";
+        Text[ turkish ] = "DeğişkenP - ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "VarP - ";
         Text[ thai ] = "VarP - ";
+        Text[ czech ] = "VarP - ";
+        Text[ hebrew ] = "Varianzen -";
+        Text[ hindi ] = "VarP - ";
     };
     Text[ thai ] = "à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸™à¸³à¸£à¹ˆà¸­à¸‡";
+    Text[ czech ] = "KontingenÄnÃ­ tabulka";
+    Text[ hebrew ] = "Datenpilot";
+    Text[ hindi ] = "à¤¡à¤¼à¥‰à¤Ÿà¤¾à¤ªà¥ˆà¤²à¤Ÿà¥";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
