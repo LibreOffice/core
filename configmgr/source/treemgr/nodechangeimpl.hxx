@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:40:31 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:36:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,13 +306,17 @@ namespace configmgr
         class ValueResetImpl
         : public ValueChangeImpl
         {
+            bool m_bTargetIsDefault;
         public:
             explicit ValueResetImpl();
             explicit ValueResetImpl(UnoAny const& aNewValue, UnoAny const& aOldValue);
 
         protected:
-            // override: set the new value as well
+            // override: set the new value as well and check the default state
             virtual void preCheckValue(ValueMemberNode& rNode, UnoAny& rOld, UnoAny& rNew);
+
+            /// checks, if this represents an actual change (given whether the change has been applied or not)
+            virtual bool doIsChange() const;
 
             // implement: set the target to default
             virtual void doApplyChange( ValueMemberUpdate& rNode);
