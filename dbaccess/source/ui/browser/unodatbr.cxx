@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-26 09:34:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 07:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2138,6 +2138,7 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
 {
     if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
     {
+        setTitle(_rDataSourceName,_rCommand);
         SvLBoxEntry* pDataSource = NULL;
         SvLBoxEntry* pCommandType = NULL;
         SvLBoxEntry* pCommand = getObjectEntry(_rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True);
@@ -2404,11 +2405,8 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 FormLoaded(sal_True);
             }
             // set the title of the beamer
-            Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-            if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
-            {
-                xProp->setPropertyValue(PROPERTY_TITLE,makeAny(aName));
-            }
+
+            setTitle(sDataSourceName,aName);
         }
         catch(SQLException& e)
         {
@@ -2947,6 +2945,12 @@ void SAL_CALL SbaTableQueryBrowser::initialize( const Sequence< Any >& aArgument
         {
             OSL_ENSURE(sal_False, "SbaTableQueryBrowser::initialize: could not set the update related names!");
         }
+    }
+    else
+    {
+        // set a default title
+        ::rtl::OUString sTitle = String(ModuleRes(STR_DSBROWSER_TITLE));
+        setTitle(sTitle,::rtl::OUString());
     }
 }
 
@@ -3719,6 +3723,20 @@ SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry*
         return etBookmark;
 
     return etUnknown;
+}
+// -----------------------------------------------------------------------------
+// set the title of the beamer
+void SbaTableQueryBrowser::setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName)  const
+{
+    ::rtl::OUString sTitle = _rsDataSourceName;
+    if(_rsName.getLength())
+    {
+        sTitle += ::rtl::OUString::createFromAscii(": ");
+        sTitle += _rsName;
+    }
+    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
+    if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
+        xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sTitle));
 }
 
 // .........................................................................

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-20 12:25:48 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 07:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,6 +437,7 @@
 #define STR_TABLE_PRIV_REFERENCE            RID_STRING_START + 176
 #define STR_TABLE_PRIV_DROP                 RID_STRING_START + 177
 #define STR_TABLE_PRIV_NAME                 RID_STRING_START + 178
+#define STR_DSBROWSER_TITLE                 RID_STRING_START + 179
 
 //========================================================================
 // untyped resources
@@ -451,6 +452,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2001/06/20 12:25:48  oj
+ *  #88434# new query msg
+ *
  *  Revision 1.50  2001/06/20 08:25:48  fs
  *  #87909# disambiguated duplicate ids
  *

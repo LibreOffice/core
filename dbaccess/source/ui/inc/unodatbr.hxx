@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 12:37:57 $
+ *  last change: $Author: oj $ $Date: 2001-07-03 07:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -398,6 +398,9 @@ namespace dbaui
                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable,
                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
                        sal_Bool bIsAutoIncrement) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+        // set _rsName as title at the frame
+        void setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName) const;
     };
 
 // .........................................................................
