@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-13 12:07:49 $
+#   last change: $Author: kz $ $Date: 2004-06-11 12:11:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,12 +68,18 @@ ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE : settings.mk
 
+SRS1NAME = $(TARGET)
+SRC1FILES = \
+    dp_misc.src
+
 SLOFILES = \
-        $(SLO)$/dp_misc.obj                                     \
-        $(SLO)$/dp_ucb.obj                                      \
-        $(SLO)$/dp_xml.obj                                      \
-        $(SLO)$/dp_log.obj                                      \
-        $(SLO)$/dp_persmap.obj                                  \
+        $(SLO)$/dp_misc.obj \
+        $(SLO)$/dp_resource.obj \
+        $(SLO)$/dp_interact.obj \
+        $(SLO)$/dp_ucb.obj \
+        $(SLO)$/dp_xml.obj \
+        $(SLO)$/dp_log.obj \
+        $(SLO)$/dp_persmap.obj \
         $(SLO)$/dp_services.obj
 
 .INCLUDE : ..$/target.pmk
