@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:07 $
+ *  last change: $Author: vg $ $Date: 2003-07-24 11:55:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,9 +93,7 @@ class XclEscherEx : public EscherEx
 private:
         List                aOffsetMap;
         Stack               aStack;
-#if EXC_INCL_EXP_OCX
         XclExpOcxConverter  aOcxConverter;      /// Export of form controls.
-#endif
         RootData&           rRootData;
         utl::TempFile*      pPicTempFile;
         SvStream*           pPicStrm;
