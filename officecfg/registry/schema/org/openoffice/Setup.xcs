@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-19 23:03:10 $
+ *  last change: $Author: er $ $Date: 2002-06-26 14:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,13 +200,17 @@
         </info>
       </prop>
       <prop oor:name="ooSetupSystemLocale" oor:type="xs:string">
+        <!-- Responsible: ER -->
+        <!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Locale setting -->
         <info>
-          <desc xml:lang="en-US">This item stores the systems locale setting and will initially be set the setup application</desc>
+            <desc xml:lang="en-US">The locale setting the user wants to work with. If empty (default), the locale set at system level is used. Possible values are, for example, "en-US" or "de-DE". Initially set empty by the setup application.</desc>
         </info>
       </prop>
       <prop oor:name="ooSetupCurrency" oor:type="xs:string">
+        <!-- Responsible: ER -->
+        <!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Default currency -->
         <info>
-          <desc xml:lang="en-US">The default currency the user wants to work with. If empty, the default currency of the System_Locale is taken. Values are, for example, USD-en-US or EUR-de-DE</desc>
+            <desc xml:lang="en-US">The default currency the user wants to work with. If empty (default), the default currency of the ooSetupSystemLocale is taken. Possible values are, for example, "USD-en-US" or "EUR-de-DE". Initially set empty by the setup application.</desc>
         </info>
       </prop>
     </group>
