@@ -83,7 +83,11 @@ Dim NullValue
 		GetPeerSize() = oPeer.PreferredSize()
 		oControl.Time = NullValue
 	Else
-		oControl.Text = Mid(SBSIZETEXT,1,oControl.MaxTextLen)
+		If oControl.MaxTextLen &gt; SBMAXTEXTSIZE Then
+			oControl.Text = Mid(SBSIZETEXT,1, SBMAXTEXTSIZE)
+		Else
+			oControl.Text = Mid(SBSIZETEXT,1, oControl.MaxTextLen)
+		End If		
 		GetPeerSize() = oPeer.PreferredSize()
 		oControl.Text = &quot;&quot;
 	End If
@@ -191,7 +195,7 @@ Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Ob
 &apos;Todo: How do you set currencies?
 		End If
 	ElseIf CurControlType = cTextBox Then	&apos;com.sun.star.sdbc.DataType.CHAR, com.sun.star.sdbc.DataType.VARCHAR, com.sun.star.sdbc.DataType.LONGVARCHAR
-		If oLocObject.MaxTextLen = 0 Or oLocObject.MaxTextLen &gt; SBMAXTEXTSIZE Then
+		If CurFieldLength = 0 Then			 &apos;Or oLocObject.MaxTextLen &gt; SBMAXTEXTSIZE
 			oLocObject.MaxTextLen = SBMAXTEXTSIZE
 			CurFieldLength = SBMAXTEXTSIZE
 		Else
