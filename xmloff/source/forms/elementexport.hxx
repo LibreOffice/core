@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _XMLOFF_FORMS_CONTROLELEMENT_HXX_
 #include "controlelement.hxx"
 #endif
+#ifndef _XMLOFF_FORMS_VALUEPROPERTIES_HXX_
+#include "valueproperties.hxx"
+#endif
 
 class SvXMLExport;
 class SvXMLElementExport;
@@ -92,6 +95,7 @@ namespace xmloff
     */
     class OControlExport
                 :public OControlElement
+                ,public OValuePropertiesMetaData
                 ,public OPropertyExport
     {
     protected:
@@ -203,13 +207,6 @@ namespace xmloff
                 out parameter. The set of integers.
         */
         void getSequenceInt16PropertyAsSet(const ::rtl::OUString& _rPropertyName, Int16Set& _rOut);
-
-        /** calculate the property names for the <em>current-value</em> and the <em>value</em> attribute.
-
-            <p>If the control does not have any of the properties requested, the respective out parameter will be set
-            to NULL.</p>
-        */
-        void getPropertyNames_ca(sal_Char const * & _rpCurrentValue, sal_Char const * & _rpValue);
     };
 
     //=====================================================================
@@ -278,6 +275,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.2  2000/11/19 15:41:32  fs
  *  extended the export capabilities - generic controls / grid columns / generic properties / some missing form properties
  *

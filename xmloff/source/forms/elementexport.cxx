@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-06 17:28:05 $
+ *  last change: $Author: fs $ $Date: 2000-12-13 10:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,7 @@ namespace xmloff
             const sal_Char* pValuePropertyName = NULL;
 
             // get the property names
-            getPropertyNames_ca(pCurrentValuePropertyName, pValuePropertyName);
+            getValuePropertyNames(m_eType, m_nClassId, pCurrentValuePropertyName, pValuePropertyName);
 
             static const sal_Char* pCurrentValueAttributeName = getCommonControlAttributeName(CCA_CURRENT_VALUE);
             static const sal_Char* pValueAttributeName = getCommonControlAttributeName(CCA_VALUE);
@@ -680,32 +680,13 @@ namespace xmloff
             // values
             const sal_Char* pMinValuePropertyName = NULL;
             const sal_Char* pMaxValuePropertyName = NULL;
-            switch (m_nClassId)
-            {
-                case FormComponentType::DATEFIELD:
-                    pMinValuePropertyName = PROPERTY_DATE_MIN;
-                    pMaxValuePropertyName = PROPERTY_DATE_MAX;
-                    break;
-                case FormComponentType::TIMEFIELD:
-                    pMinValuePropertyName = PROPERTY_TIME_MIN;
-                    pMaxValuePropertyName = PROPERTY_TIME_MAX;
-                    break;
-                case FormComponentType::NUMERICFIELD:
-                case FormComponentType::CURRENCYFIELD:
-                    pMinValuePropertyName = PROPERTY_VALUE_MIN;
-                    pMaxValuePropertyName = PROPERTY_VALUE_MAX;
-                    break;
-                case FormComponentType::PATTERNFIELD:
-                    // no min/max value for the pattern field
-                    break;
-                case FormComponentType::TEXTFIELD:
-                    pMinValuePropertyName = PROPERTY_EFFECTIVE_MIN;
-                    pMaxValuePropertyName = PROPERTY_EFFECTIVE_MAX;
-                    break;
-                default:
-                    OSL_ENSURE(sal_False, "OControlExport::examineListSource_maybeExportAttribute: exporting an unknown control as FormattedText!");
-                    break;
-            }
+            getValueLimitPropertyNames(m_nClassId, pMinValuePropertyName, pMaxValuePropertyName);
+
+            OSL_ENSURE((NULL == pMinValuePropertyName) == (0 == (SCA_MIN_VALUE & m_nIncludeSpecial)),
+                "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
+            OSL_ENSURE((NULL == pMaxValuePropertyName) == (0 == (SCA_MAX_VALUE & m_nIncludeSpecial)),
+                "OControlExport::exportCommonControlAttributes: no property found for the min value attribute!");
+
             // add the two attributes
             static const sal_Char* pMinValueAttributeName = getSpecialAttributeName(SCA_MIN_VALUE);
             static const sal_Char* pMaxValueAttributeName = getSpecialAttributeName(SCA_MAX_VALUE);
@@ -916,9 +897,17 @@ namespace xmloff
                 if (m_nClassId == FormComponentType::TEXTFIELD)
                     m_nIncludeCommon |= CCA_MAX_LENGTH;
 
-                // for formatted-text XML element allows max and min values and validation
+                // max and min values and validation:
                 if (FORMATTED_TEXT == m_eType)
-                    m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE | SCA_VALIDATION;
+                {   // in general all control represented as formatted-text have these props
+                    if (FormComponentType::PATTERNFIELD != m_nClassId)
+                        // but the PatternField does not have value limits
+                        m_nIncludeSpecial |= SCA_MAX_VALUE | SCA_MIN_VALUE;
+
+                    if (FormComponentType::TEXTFIELD != m_nClassId)
+                        // and the FormattedField does not have a validation flag
+                        m_nIncludeSpecial |= SCA_VALIDATION;
+                }
 
                 // if it's not a password field, the CurrentValue needs to be stored, too
                 if (PASSWORD != m_eType)
@@ -1064,57 +1053,6 @@ namespace xmloff
         m_nIncludeCommon |= CCA_CONTROL_ID;
     }
 
-    //---------------------------------------------------------------------
-    void OControlExport::getPropertyNames_ca(sal_Char const * & _rpCurrentValue,
-            sal_Char const * & _rpValue)
-    {
-        // reset the pointers in case we can't determine the property names
-        _rpCurrentValue = _rpValue = NULL;
-        switch (m_nClassId)
-        {
-            case FormComponentType::TEXTFIELD:
-                if (FORMATTED_TEXT == m_eType)
-                {
-                    _rpCurrentValue = PROPERTY_EFFECTIVE_VALUE;
-                    _rpValue = PROPERTY_EFFECTIVE_DEFAULT;
-                }
-                else
-                {
-                    _rpCurrentValue = PROPERTY_TEXT;
-                    _rpValue = PROPERTY_DEFAULT_TEXT;
-                }
-                break;
-            case FormComponentType::DATEFIELD:
-                _rpCurrentValue = PROPERTY_DATE;
-                _rpValue = PROPERTY_DEFAULT_DATE;
-                break;
-            case FormComponentType::TIMEFIELD:
-                _rpCurrentValue = PROPERTY_TIME;
-                _rpValue = PROPERTY_DEFAULT_TIME;
-                break;
-            case FormComponentType::NUMERICFIELD:
-            case FormComponentType::CURRENCYFIELD:
-                _rpCurrentValue = PROPERTY_VALUE;
-                _rpValue = PROPERTY_DEFAULT_VALUE;
-                break;
-            case FormComponentType::PATTERNFIELD:
-            case FormComponentType::FILECONTROL:
-            case FormComponentType::COMBOBOX:
-                _rpValue = PROPERTY_DEFAULT_TEXT;
-                // NO BREAK!!
-            case FormComponentType::COMMANDBUTTON:
-                _rpCurrentValue = PROPERTY_TEXT;
-                break;
-            case FormComponentType::CHECKBOX:
-            case FormComponentType::RADIOBUTTON:
-                _rpValue = PROPERTY_REFVALUE;
-                break;
-            case FormComponentType::HIDDENCONTROL:
-                _rpValue = PROPERTY_VALUE;
-                break;
-        }
-    }
-
     //=====================================================================
     //= OColumnExport
     //=====================================================================
@@ -1169,11 +1107,18 @@ namespace xmloff
 
         // the attribute "service name" (which has a slightly different meaning for columns
         DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_COLUMNSERVICENAME, ::rtl::OUString);
-        exportStringPropertyAttribute(
-            getCommonControlAttributeNamespace(CCA_SERVICE_NAME),
-            getCommonControlAttributeName(CCA_SERVICE_NAME),
-            PROPERTY_COLUMNSERVICENAME
-            );
+        ::rtl::OUString sColumnServiceName;
+        m_xProps->getPropertyValue(PROPERTY_COLUMNSERVICENAME) >>= sColumnServiceName;
+        // the service name is a full qualified one (i.e. com.sun.star.form.TextField), but the
+        // real service name for the column (for use with the XGridColumnFactory) is only the last
+        // token of this complete name.
+        sal_Int32 nLastSep = sColumnServiceName.lastIndexOf('.');
+        OSL_ENSURE(-1 != nLastSep, "OColumnExport::startExportElement: invalid service name!");
+        sColumnServiceName = sColumnServiceName.copy(nLastSep + 1);
+        // add the attribute
+        AddAttribute(getCommonControlAttributeNamespace(CCA_SERVICE_NAME), getCommonControlAttributeName(CCA_SERVICE_NAME), sColumnServiceName);
+        // flag the property as "handled"
+        exportedProperty(PROPERTY_COLUMNSERVICENAME);
 
         // the attribute "label"
         exportStringPropertyAttribute(
@@ -1349,6 +1294,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2000/12/06 17:28:05  fs
+ *  changes for the formlayer import - still under construction
+ *
  *  Revision 1.3  2000/11/29 10:36:05  mh
  *  add: stdio.h for Solaris8
  *
