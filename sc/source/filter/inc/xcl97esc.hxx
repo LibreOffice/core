@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97esc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-20 11:10:25 $
+ *  last change: $Author: dr $ $Date: 2002-12-12 11:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,8 @@ public:
 
     inline  XclEscherEx*        GetEx() const       { return pEx; }
     inline  SvStream&           GetStrm() const     { return *pStrm; }
+
+    void                        AddSdrPage( RootData& rRootData );
 };
 
 
