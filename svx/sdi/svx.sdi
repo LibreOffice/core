@@ -8610,6 +8610,8 @@ SvxCaseMapItem CaseMap SID_ATTR_CHAR_CASEMAP
 SfxBoolItem DesignMode SID_FM_DESIGN_MODE
 
 [
+    UnoName = "SwitchControlDesignMode";
+
     /* flags: */
     AutoUpdate = TRUE,
     Cachable = Cachable,
