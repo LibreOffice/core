@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:50:53 $
+ *  last change: $Author: rt $ $Date: 2003-04-30 08:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,6 +385,9 @@ SwDoc::SwDoc() :
      */
     pVirDev = new VirtualDevice( 1 );
     pVirDev->SetReferenceDevice();
+    MapMode aMapMode( pVirDev->GetMapMode() );
+    aMapMode.SetMapUnit( MAP_TWIP );
+    pVirDev->SetMapMode( aMapMode );
 
     /*
      * Defaultformate und DefaultFormatsammlungen (FmtColl)
@@ -743,6 +746,10 @@ VirtualDevice& SwDoc::_GetVirDev() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
     pNewVir->SetReferenceDevice();
+    MapMode aMapMode( pNewVir->GetMapMode() );
+    aMapMode.SetMapUnit( MAP_TWIP );
+    pNewVir->SetMapMode( aMapMode );
+
     ((SwDoc*)this)->SetVirDev( pNewVir, sal_True );
     return *pVirDev;
 }
