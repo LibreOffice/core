@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bc $ $Date: 2000-12-08 18:32:44 $
+ *  last change: $Author: bc $ $Date: 2001-02-20 13:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #define CorrespondenceNoTextmark    1300
 #define CorrespondenceMsgError  1302
 #define CorrespondenceDialog    1303
-
+#define TextField    1400
 // --------------------------------------------------------------------
 String SAMPLES
 {
@@ -447,6 +447,7 @@ String CorrespondenceDialog+1
     Text[ chinese_traditional ] = "³æ«Ê«H¥ó";
     Text[ arabic ] = "ÎØÇÈ ãÝÑÏ";
     Text[ turkish ] = "Tek mektup";
+    Text[ language_user1 ] = " ";
 };
 
 String CorrespondenceDialog+2
@@ -473,3 +474,11 @@ String CorrespondenceDialog+2
     Text[ turkish ] = "Standart mektup";
 };
 
+String TextField
+{
+    Text = "Benutzerdatenfeld ist nicht definiert!";
+    Text[English] = "Textfield is not defined!";
+    Text[ english_us ] = "Textfield is not defined!";
+    Text[ language_user1 ] = "Mitteilung in einer Messagebox";
+
+};
