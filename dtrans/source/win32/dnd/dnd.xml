@@ -11,9 +11,10 @@
 </description>
         <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
         <language>  c++ </language>
-        <status value="final"/>
+        <status value="beta"/>
         <supported-service> com.sun.star.datatransfer.dnd.OleDragSource</supported-service>
         <supported-service> com.sun.star.datatransfer.dnd.OleDropTarget</supported-service>
+        <service-dependency>    ... </service-dependency>
         <type>   com.sun.star.datatransfer.dnd.DNDConstants         </type>
         <type>   com.sun.star.datatransfer.dnd.XDropTarget          </type>
         <type>   com.sun.star.datatransfer.dnd.XDropTargetDragContext   </type>
