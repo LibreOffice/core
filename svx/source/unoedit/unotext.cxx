@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-11 15:05:53 $
+ *  last change: $Author: cl $ $Date: 2001-07-04 10:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,6 +1537,8 @@ void SAL_CALL SvxUnoText::removeTextContent( const uno::Reference< text::XTextCo
 uno::Reference< text::XText > SAL_CALL SvxUnoText::getText()
     throw(uno::RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     ESelection aSelection;
     ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
     ((SvxUnoText*)this)->SetSelection( aSelection );
