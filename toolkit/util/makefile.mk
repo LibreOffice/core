@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: tbe $ $Date: 2002-03-18 18:04:33 $
+#   last change: $Author: hjs $ $Date: 2002-04-05 16:23:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -123,8 +123,7 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo > $@
-    @echo Provider>> $@
+    @echo Provider> $@
     @echo UnoEditControl>> $@
     @echo UnoControlEditModel>> $@
     @echo UnoFixedTextControl>> $@
