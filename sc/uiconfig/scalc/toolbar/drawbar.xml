@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="helpid:10128" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="helpid:10102" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="helpid:10104" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="helpid:10110" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="helpid:10395" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="helpid:10397" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="helpid:10464" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Arc" toolbar:helpid="helpid:10114" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Pie" toolbar:helpid="helpid:10112" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:CircleCut" toolbar:helpid="helpid:10115" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="helpid:10253" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VerticalText" toolbar:helpid="helpid:10905" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Text_Marquee" toolbar:helpid="helpid:10465" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="helpid:10254" toolbar:text="" toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:VerticalCaption" toolbar:helpid="helpid:10906" toolbar:text="" toolbar:style="radio" />
+</toolbar:toolbar>
