@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleChartElement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-20 09:53:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ module com {  module sun {  module star {  module chart {
 
     @since #107627#
 */
-service AccessibleChartElement
+published service AccessibleChartElement
 {
     /** Base interface for being accessible.  It gives access to the
         <type scope="::com::sun::star::accessibility">XAccessibleContext</type>
