@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-01 12:19:56 $
+ *  last change: $Author: ama $ $Date: 2001-04-27 14:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,8 @@ void SwWrongList::Move( xub_StrLen nPos, long nDiff )
             Invalidate( nWrPos, nEnd );
             xub_StrLen nWrLen = WRLEN( i ) + xub_StrLen( nDiff );
             aLen.GetObject( i++ ) = nWrLen;
+            nWrLen += nWrPos;
+            Invalidate( nWrPos, nWrLen );
         }
         else
             Invalidate( nPos, nEnd );
@@ -368,5 +370,79 @@ sal_Bool SwWrongList::InvalidateWrong( )
     }
     else
         return sal_False;
+}
+
+SwWrongList* SwWrongList::SplitList( xub_StrLen nSplitPos )
+{
+    SwWrongList *pRet = NULL;
+    MSHORT nLst = 0;
+    xub_StrLen nWrPos;
+    xub_StrLen nWrLen;
+    while( nLst < Count() && WRPOS( nLst ) < nSplitPos )
+        ++nLst;
+    if( nLst && ( nWrPos = WRPOS( nLst - 1 ) )
+        + ( nWrLen = WRLEN( nLst - 1 ) ) > nSplitPos )
+    {
+        nWrLen += nWrPos - nSplitPos;
+        GetObject( --nLst ) = nSplitPos;
+        aLen.GetObject( nLst ) = nWrLen;
+    }
+    if( nLst )
+    {
+        pRet = new SwWrongList;
+        pRet->SvXub_StrLens::Insert( this, 0, 0, nLst );
+        pRet->aLen.Insert( &aLen, 0, 0, nLst );
+        pRet->SetInvalid( GetBeginInv(), GetEndInv() );
+        pRet->_Invalidate( nSplitPos ? nSplitPos - 1 : nSplitPos, nSplitPos );
+        Remove( 0, nLst );
+        aLen.Remove( 0, nLst );
+    }
+    if( STRING_LEN == GetBeginInv() )
+        SetInvalid( 0, 1 );
+    else
+    {
+        ShiftLeft( nBeginInvalid, 0, nSplitPos );
+        ShiftLeft( nEndInvalid, 0, nSplitPos );
+        _Invalidate( 0, 1 );
+    }
+    nLst = 0;
+    while( nLst < Count() )
+    {
+        nWrPos = GetObject( nLst ) - nSplitPos;
+        GetObject( nLst++ ) = nWrPos;
+    }
+    return pRet;
+}
+
+void SwWrongList::JoinList( SwWrongList* pNext, xub_StrLen nInsertPos )
+{
+    if( pNext )
+    {
+        USHORT nCnt = Count();
+        pNext->Move( 0, nInsertPos );
+        SvXub_StrLens::Insert( pNext, nCnt, 0, pNext->Count() );
+        aLen.Insert( &pNext->aLen, nCnt, 0, pNext->Count() );
+        Invalidate( pNext->GetBeginInv(), pNext->GetEndInv() );
+        if( nCnt && Count() > nCnt )
+        {
+            xub_StrLen nWrPos = WRPOS( nCnt );
+            xub_StrLen nWrLen = WRLEN( nCnt );
+            if( !nWrPos )
+            {
+                nWrPos += nInsertPos;
+                nWrLen -= nInsertPos;
+                GetObject( nCnt ) = nWrPos;
+                aLen.GetObject( nCnt ) = nWrLen;
+            }
+            if( nWrPos == WRPOS( nCnt - 1 ) + WRLEN( nCnt - 1 ) )
+            {
+                nWrLen += WRLEN( nCnt - 1 );
+                aLen.GetObject( nCnt - 1 ) = nWrLen;
+                Remove( nCnt, 1 );
+                aLen.Remove( nCnt, 1 );
+            }
+        }
+    }
+    Invalidate( nInsertPos ? nInsertPos - 1 : nInsertPos, nInsertPos + 1 );
 }
 

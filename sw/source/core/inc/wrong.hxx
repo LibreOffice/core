@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2001-04-27 14:44:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,13 @@ public:
     void Move( xub_StrLen nPos, long nDiff );
     void Clear();
     void Clear( xub_StrLen nBegin, xub_StrLen nEnd );
+
+    // Divide the list into two part, the wrong words until nSplitPos will be
+    // removed and transferred to a new SwWrongList.
+    SwWrongList* SplitList( xub_StrLen nSplitPos );
+    // Join the next SwWrongList, nInsertPos is my own text length, where
+    // the other wrong list has to be inserted.
+    void JoinList( SwWrongList* pNext, xub_StrLen nInsertPos );
 
     inline xub_StrLen Len( USHORT nIdx ) const { return WRLEN( nIdx );  }
     inline xub_StrLen Pos( USHORT nIdx ) const { return WRPOS( nIdx );  }

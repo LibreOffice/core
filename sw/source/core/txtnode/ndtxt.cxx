@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 15:47:41 $
+ *  last change: $Author: ama $ $Date: 2001-04-27 14:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,8 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
         Cut( pNode, aIdx, nSplitPos );
 
         if( GetWrong() )
-            GetWrong()->Move( 0, -nSplitPos );
+            pNode->SetWrong( GetWrong()->SplitList( nSplitPos ) );
+
         SetWrongDirty( TRUE );
 
         if( pNode->pSwpHints )
@@ -552,8 +553,11 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
     }
     else
     {
-        //Ersten Teil des Inhalts in den neuen Node uebertragen und
-        //im alten Node loeschen.
+        SwWrongList *pList = GetWrong();
+        pWrong = NULL;
+
+        SetWrongDirty( TRUE );
+
         SwIndex aIdx( this );
         Cut( pNode, aIdx, rPos.nContent.GetIndex() );
 
@@ -572,6 +576,12 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
                     DestroyAttr( pHt );
                 }
             MoveTxtAttr_To_AttrSet();
+        }
+
+        if( pList )
+        {
+            pNode->SetWrong( pList->SplitList( nSplitPos ) );
+            pWrong = pList;
         }
 
         if ( GetDepends() )
@@ -634,6 +644,23 @@ SwCntntNode *SwTxtNode::JoinNext()
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nOldLen = aText.Len();
+        SwWrongList *pList = GetWrong();
+        if( pList )
+        {
+            pList->JoinList( pTxtNode->GetWrong(), nOldLen );
+            SetWrongDirty( TRUE );
+            pWrong = NULL;
+        }
+        else
+        {
+            pList = pTxtNode->GetWrong();
+            if( pList )
+            {
+                pList->Move( 0, nOldLen );
+                SetWrongDirty( TRUE );
+                pTxtNode->pWrong = NULL;
+            }
+        }
         { // wg. SwIndex
             pTxtNode->Cut( this, SwIndex(pTxtNode), pTxtNode->Len() );
         }
@@ -647,6 +674,7 @@ SwCntntNode *SwTxtNode::JoinNext()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, TRUE );
         }
         rNds.Delete(aIdx);
+        pWrong = pList;
         InvalidateNumRule();
     }
     else
@@ -666,6 +694,24 @@ SwCntntNode *SwTxtNode::JoinPrev()
         _SaveCntntIdx( pDoc, aIdx.GetIndex(), USHRT_MAX, aBkmkArr, SAVEFLY );
         SwTxtNode *pTxtNode = aIdx.GetNode().GetTxtNode();
         xub_StrLen nLen = pTxtNode->Len();
+        SwWrongList *pList = pTxtNode->GetWrong();
+        if( pList )
+        {
+            pList->JoinList( GetWrong(), Len() );
+            SetWrongDirty( TRUE );
+            pTxtNode->pWrong = NULL;
+            SetWrong( NULL );
+        }
+        else
+        {
+            pList = GetWrong();
+            if( pList )
+            {
+                pList->Move( 0, nLen );
+                SetWrongDirty( TRUE );
+                pWrong = NULL;
+            }
+        }
         { // wg. SwIndex
             pTxtNode->Cut( this, SwIndex( this ), SwIndex(pTxtNode), nLen );
         }
@@ -679,6 +725,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, TRUE );
         }
         rNds.Delete(aIdx);
+        pWrong = pList;
         InvalidateNumRule();
     }
     else
