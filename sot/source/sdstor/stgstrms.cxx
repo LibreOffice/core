@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgstrms.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: mm $ $Date: 2000-10-12 16:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,8 @@
 
 #include <string.h>     // memcpy()
 
-#ifndef _TOOLS_FSYS_HXX
-#include <tools/fsys.hxx>
-#endif
+#include <osl/file.hxx>
+#include <tools/tempfile.hxx>
 #include <tools/debug.hxx>
 
 #include "stg.hxx"
@@ -1114,8 +1113,7 @@ StgTmpStrm::~StgTmpStrm()
     if( pStrm )
     {
         pStrm->Close();
-        DirEntry aEntry( aName );
-        aEntry.Kill();
+        osl::File::remove( aName );
         delete pStrm;
     }
 }
@@ -1142,9 +1140,7 @@ void StgTmpStrm::SetSize( ULONG n )
     {
         if( n > THRESHOLD )
         {
-            DirEntry aEntry;
-            aEntry = aEntry.TempName();
-            aName = aEntry.GetFull();
+            aName = TempFile::CreateTempName();
             SvFileStream* s = new SvFileStream( aName, STREAM_READWRITE );
             ULONG nCur = Tell();
             ULONG i = nEndOfData;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: mm $ $Date: 2000-10-12 16:18:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <osl/file.hxx>
 #include <stg.hxx>
 #include <storinfo.hxx>
 #include <storage.hxx>
@@ -474,8 +475,7 @@ SotStorage::SotStorage( const String & rName, StreamMode nMode,
     // sie neu erzeugt werden soll
     if( aName.Len() && ( ( nMode & ERASEMASK ) == ERASEMASK ) )
     {
-        DirEntry aFile( rName );
-        aFile.Kill();
+        osl::File::remove( rName );
     }
 
     pTmpStg = new Storage( aName, nMode,

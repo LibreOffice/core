@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+#   last change: $Author: mm $ $Date: 2000-10-12 16:18:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,11 +89,7 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= $(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 
-.IF "$(VCL)" != ""
-SHL1STDLIBS=$(TOOLSLIB) $(RTLLIB)
-.ELSE
-SHL1STDLIBS=$(SVLIB) $(TOOLSLIB)
-.ENDIF
+SHL1STDLIBS=$(TOOLSLIB) $(RTLLIB) $(SALLIB)
 
 .IF "$(COM)"=="ICC" || "$(COM)"=="WTC"
 SHL1OBJS= $(SLO)$/object.obj

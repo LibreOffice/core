@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:51 $
+ *  last change: $Author: mm $ $Date: 2000-10-12 16:18:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 
 #include <storinfo.hxx>
+#include <osl/file.hxx>
+#include <tools/tempfile.hxx>
 #ifndef _TOOLS_OWNLIST_HXX
 #include <tools/ownlist.hxx>
 #endif
@@ -340,8 +342,7 @@ Storage::Storage( const String& rFile, StreamMode m, BOOL bDirect )
     if( !aName.Len() )
     {
         // no name = temporary name!
-        DirEntry aEntry;
-        aName = aEntry.TempName().GetFull();
+        aName = TempFile::CreateTempName();
         bTemp = TRUE;
     }
     // the root storage creates the I/O system
@@ -461,9 +462,7 @@ Storage::~Storage()
     // remove the file if temporary root storage
     if( bIsRoot && pEntry && pEntry->bTemp )
     {
-        DirEntry aEntry( GetName() );
-        FSysError nErr = aEntry.Kill();
-        DBG_ASSERT( nErr == FSYS_ERR_OK, "cannot delete temp-file" )
+        osl::File::remove( GetName() );
     }
 }
 
