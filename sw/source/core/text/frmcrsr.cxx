@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 11:12:25 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 16:39:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,9 +357,13 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 if ( pCMS->bRealHeight )
                 {
                     pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
-                    pCMS->aRealHeight.X() =  ( rOrig.Width() -
-                                               pCMS->aRealHeight.X() +
-                                               pCMS->aRealHeight.Y() );
+                    if ( pCMS->aRealHeight.Y() < 0 )
+                    {
+                        // writing direction is from top to bottom
+                        pCMS->aRealHeight.X() =  ( rOrig.Width() -
+                                                   pCMS->aRealHeight.X() +
+                                                   pCMS->aRealHeight.Y() );
+                    }
                 }
                 if( pCMS->b2Lines && pCMS->p2Lines)
                 {
