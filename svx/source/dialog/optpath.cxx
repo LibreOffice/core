@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:19:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,12 @@
  *
  ************************************************************************/
 
+#ifdef SVX_DLLIMPLEMENTATION
+#undef SVX_DLLIMPLEMENTATION
+#endif
+
 // include ---------------------------------------------------------------
-#pragma hdrstop
+
 #include "svxdlg.hxx" //CHINA001
 
 #ifndef _SHL_HXX
