@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawutil.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 10:42:14 $
+ *  last change: $Author: nn $ $Date: 2001-10-16 14:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,13 +113,31 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, USHORT nTab,
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
-    rScaleX = MakeFraction( aPixelLog.X() * rZoomX.GetNumerator(),
-                (long) ( nTwipsX * HMM_PER_TWIPS * rZoomX.GetDenominator() ) );
-    rScaleY = MakeFraction( aPixelLog.Y() * rZoomY.GetNumerator(),
-                (long) ( nTwipsY * HMM_PER_TWIPS * rZoomY.GetDenominator() ) );
+    //  Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)
+    //  because ReduceInaccurate is called later anyway.
 
-    rScaleX.ReduceInaccurate( 14 );
-    rScaleY.ReduceInaccurate( 14 );
+    if ( aPixelLog.X() && nTwipsX )
+        rScaleX = Fraction( ((double)aPixelLog.X()) *
+                            ((double)rZoomX.GetNumerator()) /
+                            ((double)nTwipsX) /
+                            ((double)HMM_PER_TWIPS) /
+                            ((double)rZoomX.GetDenominator()) );
+    else
+        rScaleX = Fraction( 1, 1 );
+
+    if ( aPixelLog.Y() && nTwipsY )
+        rScaleY = Fraction( ((double)aPixelLog.Y()) *
+                            ((double)rZoomY.GetNumerator()) /
+                            ((double)nTwipsY) /
+                            ((double)HMM_PER_TWIPS) /
+                            ((double)rZoomY.GetDenominator()) );
+    else
+        rScaleY = Fraction( 1, 1 );
+
+    //  17 bits of accuracy are needed to always hit the right part of
+    //  cells in the last rows
+    rScaleX.ReduceInaccurate( 17 );
+    rScaleY.ReduceInaccurate( 17 );
 }
 
 
