@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:31:32 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 09:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,7 @@ XML_CONSTASCII_ACTION( sXML_decorate_words_only, "decorate-words-only" );
 XML_CONSTASCII_ACTION( sXML_decorative, "decorative" );
 XML_CONSTASCII_ACTION( sXML_deep, "deep" );
 XML_CONSTASCII_ACTION( sXML_default, "default" );
+XML_CONSTASCII_ACTION( sXML_default_style, "default-style" );
 XML_CONSTASCII_ACTION( sXML_default_style_name, "default-style-name" );
 XML_CONSTASCII_ACTION( sXML_degree, "degree" );
 XML_CONSTASCII_ACTION( sXML_delay, "delay" );

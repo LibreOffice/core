@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabe.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ SvXMLEnumMapEntry psXML_tabstop_style[] =
     { "center", style::TabAlign_CENTER  },
     { "right", style::TabAlign_RIGHT    },
     { "char", style::TabAlign_DECIMAL   },
-    { "????", style::TabAlign_DEFAULT  },   // ?????????????????????????????????????
+    { "default", style::TabAlign_DEFAULT  },    // ?????????????????????????????????????
     { 0,        0 }
 };
 
@@ -221,8 +221,8 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
         const sal_uInt16 nTabs   = aSeq.getLength();
 
         // ignore default tab stop here
-        if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
-            return;
+        //if( 1 == nTabs && style::TabAlign_DEFAULT == pTabs[0].Alignment )
+        //  return;
 
         OUString sElem = GetQNameByKey( XML_NAMESPACE_STYLE,
                                        OUString::createFromAscii(sXML_tab_stops) );
@@ -236,7 +236,8 @@ void SvxXMLTabStopExport::Export( const uno::Any& rAny,
                         nIndex == 0 ||
                         style::TabAlign_DEFAULT != pTabs[nIndex-1].Alignment,
                         "tab default distance unexpected" );
-            if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment )
+            if( style::TabAlign_DEFAULT != pTabs[nIndex].Alignment ||
+                 0 == nIndex )
                 exportTabStop( &(pTabs[nIndex]) );
         }
 

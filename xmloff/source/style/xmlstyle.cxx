@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-03 11:07:58 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
     { XML_NAMESPACE_STYLE,  sXML_page_master,   XML_TOK_STYLE_PAGE_MASTER          },
     { XML_NAMESPACE_TEXT,   sXML_list_style,    XML_TOK_TEXT_LIST_STYLE            },
     { XML_NAMESPACE_TEXT,   sXML_outline_style, XML_TOK_TEXT_OUTLINE               },
+    { XML_NAMESPACE_STYLE,  sXML_default_style, XML_TOK_STYLE_DEFAULT_STYLE        },
     { XML_NAMESPACE_DRAW,   sXML_gradient,      XML_TOK_STYLES_GRADIENTSTYLES      },
     { XML_NAMESPACE_DRAW,   sXML_hatch,         XML_TOK_STYLES_HATCHSTYLES         },
     { XML_NAMESPACE_DRAW,   sXML_fill_image,    XML_TOK_STYLES_BITMAPSTYLES        },
@@ -264,13 +265,14 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 
 TYPEINIT1( SvXMLStyleContext, SvXMLImportContext );
 
-SvXMLStyleContext::SvXMLStyleContext( SvXMLImport& rImp, sal_uInt16 nPrfx,
-                                      const OUString& rLName,
-                                      const uno::Reference< xml::sax::XAttributeList >&  ) :
+SvXMLStyleContext::SvXMLStyleContext(
+        SvXMLImport& rImp, sal_uInt16 nPrfx,
+        const OUString& rLName,
+        const uno::Reference< xml::sax::XAttributeList >&,
+        sal_uInt16 nFam ) :
     SvXMLImportContext( rImp, nPrfx, rLName ),
     nHelpId( UCHAR_MAX ),
-    nFamily( 0 ),
-    nSubFamily( 0U ),
+    nFamily( nFam ),
     bValid( sal_True ),
     bNew( sal_True )
 {
@@ -319,16 +321,13 @@ class SvXMLStyleIndex_Impl
 {
     OUString              sName;
     sal_uInt16            nFamily;
-    sal_uInt16            nSubFamily;
     const SvXMLStyleContext *pStyle;
 
 public:
 
-    SvXMLStyleIndex_Impl( sal_uInt16 nFam, sal_uInt16 nSubFam,
-                          const OUString& rName ) :
+    SvXMLStyleIndex_Impl( sal_uInt16 nFam, const OUString& rName ) :
         sName( rName ),
         nFamily( nFam ),
-        nSubFamily( nSubFam ),
         pStyle ( 0 )
     {
     }
@@ -336,14 +335,12 @@ public:
     SvXMLStyleIndex_Impl( const SvXMLStyleContext *pStl ) :
         sName( pStl->GetName() ),
         nFamily( pStl->GetFamily() ),
-        nSubFamily( pStl->GetSubFamily() ),
         pStyle ( pStl )
     {
     }
 
     const OUString& GetName() const { return sName; }
     sal_uInt16 GetFamily() const { return nFamily; }
-    sal_uInt16 GetSubFamily() const { return nSubFamily; }
     const SvXMLStyleContext *GetStyle() const { return pStyle; }
 };
 
@@ -354,10 +351,6 @@ int SvXMLStyleIndexCmp_Impl( const SvXMLStyleIndex_Impl& r1,
     if( (sal_uInt16)r1.GetFamily() < (sal_uInt16)r2.GetFamily() )
         nRet = -1;
     else if( (sal_uInt16)r1.GetFamily() > (sal_uInt16)r2.GetFamily() )
-        nRet = 1;
-    else if( r1.GetSubFamily() < r2.GetSubFamily() )
-        nRet = -1;
-    else if( r1.GetSubFamily() > r2.GetSubFamily() )
         nRet = 1;
     else
         nRet = (int)r1.GetName().compareTo( r2.GetName() );
@@ -410,7 +403,6 @@ public:
     void Clear();
 
     const SvXMLStyleContext *FindStyleChildContext( sal_uInt16 nFamily,
-                                      sal_uInt16 nSubFamily,
                                       const OUString& rName,
                                       sal_Bool bCreateIndex ) const;
 
@@ -463,7 +455,6 @@ void SvXMLStylesContext_Impl::Clear()
 
 const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
                                   sal_uInt16 nFamily,
-                                  sal_uInt16 nSubFamily,
                                   const OUString& rName,
                                   sal_Bool bCreateIndex ) const
 {
@@ -486,7 +477,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
 
     if( pIndices )
     {
-        SvXMLStyleIndex_Impl aIndex( nFamily, nSubFamily, rName );
+        SvXMLStyleIndex_Impl aIndex( nFamily, rName );
         sal_uInt32 nPos = 0;
         if( pIndices->Seek_Entry( &aIndex, &nPos ) )
             pStyle = pIndices->GetObject( nPos )->GetStyle();
@@ -497,7 +488,6 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
         {
             const SvXMLStyleContext *pS = aStyles.GetObject( i );
             if( pS->GetFamily() == nFamily &&
-                pS->GetSubFamily() == nSubFamily &&
                 pS->GetName() == rName )
                 pStyle = pS;
         }
@@ -541,9 +531,11 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
     if (!pStyle)
     {
         const SvXMLTokenMap& rTokenMap = GetStyleStylesElemTokenMap();
-        switch( rTokenMap.Get( nPrefix, rLocalName ) )
+        sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+        switch( nToken  )
         {
             case XML_TOK_STYLE_STYLE:
+            case XML_TOK_STYLE_DEFAULT_STYLE:
             {
                 sal_uInt16 nFamily = 0;
                 sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -562,7 +554,10 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext(
                         break;
                     }
                 }
-                pStyle = CreateStyleStyleChildContext( nFamily, nPrefix,
+                pStyle = XML_TOK_STYLE_STYLE==nToken
+                    ? CreateStyleStyleChildContext( nFamily, nPrefix,
+                                                    rLocalName, xAttrList )
+                    : CreateDefaultStyleStyleChildContext( nFamily, nPrefix,
                                                     rLocalName, xAttrList );
             }
             break;
@@ -655,7 +650,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
         case XML_STYLE_FAMILY_TEXT_TEXT:
         case XML_STYLE_FAMILY_TEXT_SECTION:
             pStyle = new XMLTextStyleContext( GetImport(), nPrefix, rLocalName,
-                                              xAttrList, *this );
+                                              xAttrList, *this, nFamily );
             break;
         case XML_STYLE_FAMILY_CONTROL_ID:
         case XML_STYLE_FAMILY_SD_DRAWINGPAGE_ID:
@@ -676,6 +671,14 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleStyleChildContext(
 
     return pStyle;
 }
+
+SvXMLStyleContext *SvXMLStylesContext::CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
+        const uno::Reference< xml::sax::XAttributeList > & xAttrList )
+{
+    return 0;
+}
+
 
 sal_Bool SvXMLStylesContext::InsertStyleFamily( sal_uInt16 ) const
 {
@@ -976,8 +979,8 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
                                           sal_Bool bFinish )
 {
     // pass 1: create text, paragraph and frame styles
-    sal_uInt16 nCount = GetStyleCount();
-    for( sal_uInt16 i=0; i<nCount; i++ )
+    sal_uInt32 nCount = GetStyleCount();
+    for( sal_uInt32 i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
         if( !pStyle )
@@ -1005,8 +1008,8 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
 
 void SvXMLStylesContext::FinishStyles( sal_Bool bOverwrite )
 {
-    sal_uInt16 nCount = GetStyleCount();
-    for( sal_uInt16 i=0; i<nCount; i++ )
+    sal_uInt32 nCount = GetStyleCount();
+    for( sal_uInt32 i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
         if( !pStyle || !pStyle->IsValid() )
@@ -1030,12 +1033,10 @@ const OUString& SvXMLStylesContext::GetParentHRef() const
 
 const SvXMLStyleContext *SvXMLStylesContext::FindStyleChildContext(
                                   sal_uInt16 nFamily,
-                                  sal_uInt16 nSubFamily,
                                   const OUString& rName,
                                   sal_Bool bCreateIndex ) const
 {
-    return pImpl->FindStyleChildContext( nFamily, nSubFamily,rName,
-                                         bCreateIndex );
+    return pImpl->FindStyleChildContext( nFamily, rName, bCreateIndex );
 }
 
 // ---------------------------------------------------------------------

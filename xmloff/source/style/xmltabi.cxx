@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-02 15:51:17 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,21 +176,25 @@ SvxXMLTabStopContext_Impl::SvxXMLTabStopContext_Impl(
                 aTabStop.Position = nVal;
             break;
         case XML_TOK_TABSTOP_TYPE:
-            if( 0 == rValue.compareToAscii( sXML_left, sizeof( sXML_left ) ) )
+            if( rValue.equalsAsciiL( sXML_left, sizeof( sXML_left )-1 ) )
             {
                 aTabStop.Alignment = style::TabAlign_LEFT;
             }
-            else if( 0 == rValue.compareToAscii( sXML_right, sizeof( sXML_right ) ) )
+            else if( rValue.equalsAsciiL( sXML_right, sizeof( sXML_right )-1 ) )
             {
                 aTabStop.Alignment = style::TabAlign_RIGHT;
             }
-            else if( 0 == rValue.compareToAscii( sXML_center, sizeof( sXML_center ) ) )
+            else if( rValue.equalsAsciiL( sXML_center, sizeof( sXML_center )-1 ) )
             {
                 aTabStop.Alignment = style::TabAlign_CENTER;
             }
-            else if( 0 == rValue.compareToAscii( sXML_char, sizeof( sXML_char ) ) )
+            else if( rValue.equalsAsciiL( sXML_char, sizeof( sXML_char )-1 ) )
             {
                 aTabStop.Alignment = style::TabAlign_DECIMAL;
+            }
+            else if( rValue.equalsAsciiL( sXML_default, sizeof( sXML_default )-1 ) )
+            {
+                aTabStop.Alignment = style::TabAlign_DEFAULT;
             }
             break;
         case XML_TOK_TABSTOP_CHAR:
@@ -292,15 +296,26 @@ void SvxXMLTabStopImportContext::EndElement( )
     if( mpTabStops )
     {
         sal_uInt16 nCount = mpTabStops->Count();
+        sal_uInt16 nNewCount;
 
         uno::Sequence< style::TabStop> aSeq( nCount );
         style::TabStop* pTabStops = aSeq.getArray();
         for( sal_uInt16 i=0; i < nCount; i++ )
         {
             SvxXMLTabStopContext_Impl *pTabStopContext = (*mpTabStops)[i];
-            *pTabStops++ = pTabStopContext->getTabStop();
+            const style::TabStop& rTabStop = pTabStopContext->getTabStop();
+            sal_Bool bDflt = style::TabAlign_DEFAULT == rTabStop.Alignment;
+            if( !bDflt || 0==i )
+            {
+                *pTabStops++ = pTabStopContext->getTabStop();
+                nNewCount++;
+            }
+            if( bDflt && 0==i )
+                break;
         }
 
+        if( nCount != nNewCount )
+            aSeq.realloc( nNewCount );
         aProp.maValue <<= aSeq;
     }
     else

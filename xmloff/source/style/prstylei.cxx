@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-07 13:33:06 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,14 @@ void XMLPropStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
     if( XML_NAMESPACE_STYLE == nPrefixKey &&
         rLocalName.compareToAscii( sXML_family ) == 0 )
     {
+#ifndef PRODUCT
+        sal_uInt16 nOldFam = GetFamily();
+#endif
         SetFamily( ((SvXMLStylesContext *)&xStyles)->GetFamily( rValue ) );
+#ifndef PRODUCT
+        DBG_ASSERT( 0 == nOldFam || GetFamily() == nOldFam,
+                    "unexpected style family" );
+#endif
     }
     else
     {
@@ -128,11 +135,13 @@ TYPEINIT1( XMLPropStyleContext, SvXMLStyleContext );
 XMLPropStyleContext::XMLPropStyleContext( SvXMLImport& rImport,
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList > & xAttrList,
-        SvXMLStylesContext& rStyles ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+        SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+        sal_Bool bDefault ) :
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
     xStyles( &rStyles ),
     sIsPhysical( RTL_CONSTASCII_USTRINGPARAM( "IsPhysical" ) ),
-    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) )
+    sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
+    bDefaultStyle( bDefault )
 {
 }
 
@@ -203,7 +212,7 @@ Reference < XStyle > XMLPropStyleContext::Create()
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {
     const OUString& rName = GetName();
-    if( 0 == rName.getLength() )
+    if( 0 == rName.getLength() || bDefaultStyle )
         return;
 
     Reference < XNameContainer > xFamilies =

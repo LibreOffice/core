@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexppr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-15 13:52:14 $
+ *  last change: $Author: mib $ $Date: 2001-01-05 10:01:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,6 +237,52 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::Filter(
                             xPropSet->getPropertyValue( rAPIName ) );
                         aPropStateArray.push_back( aNewProperty );
                     }
+                }
+            }
+        }
+
+        // Call centext-filter
+        ContextFilter( aPropStateArray, xPropSet );
+
+        // Have to do if we change from a vector to a list or something like that
+        /*vector< XMLPropertyState >::iterator aItr = aPropStateArray.begin();
+        while (aItr != aPropStateArray.end())
+        {
+            if (aItr->mnIndex == -1)
+                aItr = aPropStateArray.erase(aItr);
+            else
+                aItr++;
+        }*/
+    }
+
+    return aPropStateArray;
+}
+
+vector< XMLPropertyState > SvXMLExportPropertyMapper::FilterDefaults(
+        const Reference< XPropertySet > xPropSet ) const
+{
+    vector< XMLPropertyState > aPropStateArray;
+
+    // Retrieve XPropertySetInfo and XPropertyState
+    Reference< XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+    Reference< XPropertyState > xPropState( xPropSet, UNO_QUERY );
+
+    if( xInfo.is() && xPropState.is() )
+    {
+        sal_Int32 nProps = maPropMapper->GetEntryCount();
+
+        for( sal_Int32 i=0; i < nProps; i++ )
+        {
+            // Does the PropertySet contain name of mpEntries-array ?
+            if( (maPropMapper->GetEntryFlags( i ) &
+                    MID_FLAG_DEFAULT_ITEM_EXPORT) != 0 )
+            {
+                const OUString& rAPIName = maPropMapper->GetEntryAPIName( i );
+                if( xInfo->hasPropertyByName( rAPIName ) )
+                {
+                    XMLPropertyState aNewProperty( i,
+                        xPropState->getPropertyDefault( rAPIName ) );
+                    aPropStateArray.push_back( aNewProperty );
                 }
             }
         }
