@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-08 12:12:47 $
+ *  last change: $Author: dl $ $Date: 2001-02-19 10:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,11 @@
 #define BMP_EFFECT_STRTCH_VERTICAL          (RID_APP_START+153)
 #define BMP_EFFECT_ROTATE_HORIZONTAL        (RID_APP_START+154)
 #define BMP_EFFECT_ROTATE_VERTICAL          (RID_APP_START+155)
+
+#define BMP_FOIL_21             RID_APP_START+156
+#define BMP_FOIL_22             RID_APP_START+157
+#define BMP_FOIL_23             RID_APP_START+158
+#define BMP_FOIL_24             RID_APP_START+159
 
 // -----------------------------------------------------------------------------
 

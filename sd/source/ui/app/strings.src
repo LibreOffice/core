@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:10:28 $
+ *  last change: $Author: dl $ $Date: 2001-02-19 10:44:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3049,6 +3049,31 @@ String STR_AUTOLAYOUT_4OBJ
     Text[ arabic ] = "ÚäæÇä æ4 ßÇÆäÇÊ";
     Text[ turkish ] = "Baþlýk ve 4 nesne";
 };
+String STR_AL_TITLE_VERT_OUTLINE
+{
+    Text = "Titel, vertikaler text" ;
+    Text [ ENGLISH ] = "Title, vertical text" ;
+    Text [ english_us ] = "Title, vertical text" ;
+};
+String STR_AL_TITLE_VERT_OUTLINE_CLIPART
+{
+    Text = "Titel, vertikaler Text, Clipart" ;
+    Text [ ENGLISH ] = "Title, vertical text, clipart" ;
+    Text [ english_us ] = "Title, vertical text, clipart" ;
+};
+String STR_AL_VERT_TITLE_TEXT_CHART
+{
+    Text = "Vertikaler Titel, Text, Diagramm" ;
+    Text [ ENGLISH ] = "Vertical title, text, chart" ;
+    Text [ english_us ] = "Vertical title, text, chart" ;
+};
+String STR_AL_VERT_TITLE_VERT_OUTLINE
+{
+    Text = "Vertikaler Titel, vertikaler Text" ;
+    Text [ ENGLISH ] = "Vertical title, vertical text" ;
+    Text [ english_us ] = "Vertical title, vertical text" ;
+};
+
 String STR_AUTOLAYOUT_HANDOUT1
 {
     Text = "Eine Seite" ;

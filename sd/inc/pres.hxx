@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pres.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: dl $ $Date: 2001-02-19 10:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,11 @@ enum AutoLayout
     AUTOLAYOUT_HANDOUT2,
     AUTOLAYOUT_HANDOUT3,
     AUTOLAYOUT_HANDOUT4,
-    AUTOLAYOUT_HANDOUT6
+    AUTOLAYOUT_HANDOUT6,
+    AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART,
+    AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE,
+    AUTOLAYOUT_TITLE_VERTICAL_OUTLINE,
+    AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
 };
 
 enum PageKind

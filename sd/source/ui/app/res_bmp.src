@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:33:33 $
+ *  last change: $Author: dl $ $Date: 2001-02-19 10:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,22 @@ Bitmap BMP_FOIL_19
 Bitmap BMP_FOIL_20
 {
     File = "foil20.bmp" ;
+};
+Bitmap BMP_FOIL_21
+{
+    File = "foil21.bmp" ;
+};
+Bitmap BMP_FOIL_22
+{
+    File = "foil22.bmp" ;
+};
+Bitmap BMP_FOIL_23
+{
+    File = "foil23.bmp" ;
+};
+Bitmap BMP_FOIL_24
+{
+    File = "foil24.bmp" ;
 };
 Bitmap BMP_FOILH_01
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:11:47 $
+ *  last change: $Author: dl $ $Date: 2001-02-19 10:44:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,7 +328,6 @@
 #define STR_AUTOLAYOUT_HANDOUT6     (RID_APP_START+235)
 #define STR_AUTOLAYOUT_NOTES        (RID_APP_START+236)
 
-// fuer weitere Layouts...
 
 #define STR_TRANSFORM               (RID_APP_START+240)
 
@@ -738,6 +737,11 @@
 
 #define STR_TWAIN_NO_SOURCE                 (RID_APP_START+670)
 #define STR_UNDO_VECTORIZE                  (RID_APP_START+671)
+
+#define STR_AL_VERT_TITLE_TEXT_CHART      (RID_APP_START+672)
+#define STR_AL_VERT_TITLE_VERT_OUTLINE    (RID_APP_START+673)
+#define STR_AL_TITLE_VERT_OUTLINE         (RID_APP_START+674)
+#define STR_AL_TITLE_VERT_OUTLINE_CLIPART (RID_APP_START+675)
 
 /******************************************************************************
 * Ab (RID_APP_START+700 beginnen die Ids in glob.hrc!
