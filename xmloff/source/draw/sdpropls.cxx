@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-06 17:44:55 $
+ *  last change: $Author: mib $ $Date: 2001-04-18 08:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,9 +239,9 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, CTF_FILLTRANSNAME },
 
     { "FillBitmapSizeX",                XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapSizeY",                XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapLogicalSize",          XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapMode",                 XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
     { "FillBitmapPositionOffsetX",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
     { "FillBitmapPositionOffsetY",      XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
@@ -286,8 +286,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     { "GraphicCrop",                    XML_NAMESPACE_FO,   sXML_clip,                  XML_TYPE_TEXT_CLIP, 0 },
 
     // animation text attributes
-    { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_BLINKING },
-    { "TextAnimationKind",              XML_NAMESPACE_TEXT, sXML_animation,             XML_TYPE_TEXT_ANIMATION|MID_FLAG_MULTI_ATTRIBUTE, CTF_TEXTANIMATION_KIND },
+    { "TextAnimationKind",              XML_NAMESPACE_STYLE,sXML_text_blinking,         XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING },
+    { "TextAnimationKind",              XML_NAMESPACE_TEXT, sXML_animation,             XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND },
     { "TextAnimationDirection",         XML_NAMESPACE_TEXT, sXML_animation_direction,   XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 },
     { "TextAnimationStartInside",       XML_NAMESPACE_TEXT, sXML_animation_start_inside,XML_TYPE_BOOL, 0 },
     { "TextAnimationStopInside",        XML_NAMESPACE_TEXT, sXML_animation_stop_inside, XML_TYPE_BOOL, 0 },
@@ -367,9 +367,9 @@ const XMLPropertyMapEntry aXMLSDPresPageProps[] =
     { "FillBitmapName",             XML_NAMESPACE_DRAW, sXML_fill_image_name,       XML_TYPE_STRING, 0 },
     { "FillTransparenceName",       XML_NAMESPACE_DRAW, sXML_transparency_name,     XML_TYPE_STRING, 0 },
     { "FillBitmapSizeX",            XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_width,      XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapSizeY",            XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 },
-    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MULTI_ATTRIBUTE, 0 },
+    { "FillBitmapLogicalSize",      XML_NAMESPACE_DRAW, sXML_fill_image_height,     XML_SD_TYPE_LOGICAL_SIZE|MID_FLAG_MULTI_PROPERTY, 0 },
     { "FillBitmapMode",             XML_NAMESPACE_STYLE,sXML_repeat,                XML_SD_TYPE_BITMAP_MODE, 0 },
     { "FillBitmapPositionOffsetX",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_x,XML_TYPE_PERCENT, 0 },
     { "FillBitmapPositionOffsetY",  XML_NAMESPACE_DRAW, sXML_fill_image_ref_point_y,XML_TYPE_PERCENT, 0 },
