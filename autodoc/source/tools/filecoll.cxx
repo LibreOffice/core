@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecoll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-15 18:47:03 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:32:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,6 @@
 
 
 // NOT FULLY DEFINED SERVICES
-#include <stdio.h>
 #include <cosv/ploc_dir.hxx>
 
 
