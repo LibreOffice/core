@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-26 21:55:47 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 20:39:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,26 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XPSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _ZIP_ENTRY_HXX_
 #include <ZipEntry.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
 class ZipPackageFolder;
 
-class ZipPackageEntry : public com::sun::star::container::XNamed,
-                        public com::sun::star::container::XChild,
-                        public com::sun::star::lang::XUnoTunnel,
-                        public com::sun::star::beans::XPropertySet
+class ZipPackageEntry : public cppu::WeakImplHelper5
+<
+    com::sun::star::container::XNamed,
+    com::sun::star::container::XChild,
+    com::sun::star::lang::XUnoTunnel,
+    com::sun::star::beans::XPropertySet,
+    com::sun::star::lang::XServiceInfo
+>
 {
 protected:
     bool mbIsFolder:1;
@@ -94,7 +104,7 @@ protected:
     ZipPackageFolder * pParent;
 public:
     ZipEntry aEntry;
-    ZipPackageEntry ( bool bNewFolder );
+    ZipPackageEntry ( bool bNewFolder = sal_False );
     virtual ~ZipPackageEntry( void );
 
     ::rtl::OUString & GetMediaType () { return sMediaType; }
