@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addonstoolbarwrapper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:00:20 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void SAL_CALL AddonsToolBarWrapper::initialize( const Sequence< Any >& aArgument
 }
 
 // XUIElement interface
-Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException)
+Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
 
@@ -258,7 +258,7 @@ Reference< XInterface > SAL_CALL AddonsToolBarWrapper::getRealInterface(  ) thro
         if ( pToolBarManager )
         {
             Window* pWindow = (Window *)pToolBarManager->GetToolBar();
-            return VCLUnoHelper::GetInterface( pWindow );
+            return Reference< XInterface >( VCLUnoHelper::GetInterface( pWindow ), UNO_QUERY );
         }
     }
 
