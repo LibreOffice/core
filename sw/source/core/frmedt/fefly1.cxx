@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:03:07 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 #include <svtools/imapobj.hxx>
 #endif
 #ifndef _SOERR_HXX //autogen
-#include <so3/soerr.hxx>
+#include <svtools/soerr.hxx>
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
-#endif
-#ifndef _SFX_INTERNO_HXX //autogen
-#include <sfx2/interno.hxx>
 #endif
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -955,7 +952,7 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
     }
 }
 
-void SwFEShell::Insert( SvInPlaceObject *pObj,
+void SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
                         const SfxItemSet* pFlyAttrSet,
                         const SfxItemSet* pGrfAttrSet,
                         SwFrmFmt* pFrmFmt )
@@ -964,7 +961,7 @@ void SwFEShell::Insert( SvInPlaceObject *pObj,
     SET_CURR_SHELL( this );
     StartAllAction();
         FOREACHPAM_START( this )
-            pFmt = GetDoc()->Insert(*PCURCRSR, pObj,
+            pFmt = GetDoc()->Insert(*PCURCRSR, xObj,
                                     pFlyAttrSet, pGrfAttrSet, pFrmFmt );
             ASSERT( pFmt, "Doc->Insert(notxt) failed." );
 
@@ -1478,9 +1475,9 @@ void SwFEShell::SetObjRect( const SwRect& rRect )
 #*  Update      :  MA 13. Jul. 95
 #***********************************************************************/
 
-void SwFEShell::RequestObjectResize( const SwRect &rRect, SvEmbeddedObject *pIPObj )
+void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
-    SwFlyFrm *pFly = FindFlyFrm( pIPObj );
+    SwFlyFrm *pFly = FindFlyFrm( xObj );
     if ( !pFly )
         return;
 
@@ -1786,7 +1783,7 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
                 if ( pNd->IsGrfLink() )
                 {
                     //Halbfertige Grafik?
-                    ::so3::SvLinkSource* pLnkObj = pNd->GetLink()->GetObj();
+                    ::sfx2::SvLinkSource* pLnkObj = pNd->GetLink()->GetObj();
                     if( pLnkObj && pLnkObj->IsPending() )
                         return 0;
                     rbLink = sal_True;
