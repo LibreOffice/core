@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperlabel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-26 20:40:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:25:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,11 @@ namespace svt
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
         m_pImpl = new HyperLabelImpl;
         ToggleBackgroundColor( COL_TRANSPARENT );
+
+        WinBits nWinStyle = GetStyle();
+        nWinStyle |= WB_EXTRAOFFSET;
+        SetStyle( nWinStyle );
+
         Show();
     }
 
