@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docftn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:50:08 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:39:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -491,6 +491,9 @@ BOOL SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
                     bTypeChgd = TRUE;
                     pTxtFtn->CheckCondColl();
+                    //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
+                    SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
+                    GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
                 }
             }
         }
@@ -540,6 +543,7 @@ BOOL SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
         }
         else if( GetRootFrm() )
             GetRootFrm()->UpdateFtnNums();
+        SetModified();
     }
     else
         delete pUndo;
