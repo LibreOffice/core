@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleShape.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:43:59 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_AccessibleShape_idl__
+#define __com_sun_star_drawing_AccessibleShape_idl__
+
+#ifndef __com_sun_star_accessibility_XAccessible_idl__
+#include <com/sun/star/accessibility/XAccessible.idl>
+#endif
+#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#endif
+#ifndef __com_sun_star_accessibility_XAccessibleExtendedComponent_idl__
+#include <com/sun/star/accessibility/XAccessibleExtendedComponent.idl>
+#endif
+
+module com {  module sun {  module star {  module drawing {
+
+/** The <type>AccessibleShape</type> service is implemented by UNO shapes to
+    provide accessibility information that describe the shapes' features.
+    A UNO shape is any object that implements the <type
+    scope="::com::sun::star::drawing">XShape</type> interface.
+
+    <p>The content of a draw page is modeled as tree of accessible shapes
+    and accessible text paragraphs.  The root of this (sub-)tree is the
+    accessible draw document view.  An accessible shape implements either
+    this service or one of the 'derived' services
+    <type>AccessibleGraphicShape</type> or <type>AccessibleOLEShape</type>.
+    See the section Children in the description of the
+    <type>XAccessibleContext</type> interface support for more details.</p>
+
+    <p>There are two services that extend this one:  the
+    <type>AccessibleGraphicShape</type> and the
+    <type>AccessibleOLEShape</type> services provide additional interfaces.
+    See there for details.</p>
+
+    <p>A shape object is either fully or partially visible on the screen or
+    has set the state DEFUNC to indicate that it is no longer actively
+    supported by its parent.</p>
+
+    <p>Each shape object that has not set the DEFUNC state has a valid
+    parent.  That is either the containing draw page or a group shape or a
+    3D scene object.</p>
+*/
+service AccessibleShape
+{
+    /** Base interface for being accessible.  It gives access to the
+        <type>XAccessibleContext</type> interface.
+    */
+    interface ::com::sun::star::accessibility::XAccessible;
+
+    /** Give access to the structural information of a shape.
+
+        <p>You can access the following information for the shape being made
+        accessible:
+        <ul>
+        <li>Role: The role of all shapes is <const
+            scope="com::sun::star::accessibility"
+            >AccessibleRole::SHAPE</const>.</li>
+        <li>Name: The name of a shape is its localized type name.</li>
+        <li>Description: Descriptions are localized and start with the
+            shape's type and style.  After that follow some properties that
+            differ from the defaults with respect to the style.
+        <li>Children: The children of a shape are either other accessible
+            shapes or accessible text paragraphs.  Only group shapes, 3D scene
+            shapes, and OLE shapes may contain other shapes as children.
+            Some of the shapes may have text paragraphs as (additional)
+            children.  See <type>(Yet to be written)</type> for details of
+            how this text is represented.</li>
+        <li>Parent: The parent is either the document view as represented by
+            <type>AccessibleDrawDocumentView</type> or a group shape, 3D
+            scene shape, or OLE shape.</li>
+        <li>Relations: Are set and maintained from the outside.  See the
+        service description of the object that has accessible shapes as
+        children for details.</li>
+        <li>States: The states supported by this service are:
+            <ul>
+            <li><p><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::DEFUNC</const> is set if an accessible
+                shape is not visible but still existent for some reason.
+                This should not really happen and is a sign that someone,
+                e.g. an AT-Tool holds references to such a shape.  The
+                reason for this is that either the owner of the accessible
+                shape did not remove it from its list of children or that
+                the AT-Tool does not care for the events indicating
+                this.</p>
+                <p>Usually an object that has the <const
+                scope="com::sun::star::accessibility"
+                >AccessibleStateType::DEFUNC</const> state set has already
+                been disposed and subsequent calls to this object result in
+                <type>DisposedException</type> exceptions.</p>
+                <p>If this state is set then no other of the states below is
+                set.  This  is also true for the states that are otherwise
+                allways set (which  makes 'allways' more of a sort of
+                'normally').</p></li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::EDITABLE</const></li> is always set.
+                This state is interpreted to mean that not only text but
+                also other, graphical, properties of a shape can be modified.
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::ENABLED</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::FOCUSABLE</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::FOCUSED</const> is set according to
+                whether the shape currently has the focus.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::MULTILINE</const> is set if a shape
+                supports the <type>XAccessibleText</type> interface.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::OPAQUE</const> is set for certain shapes
+                with certain attributes like for a filled rectangle.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::RESIZABLE</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SELECTABLE</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SELECTED</const> is set according to
+                whether the shape is currently selected.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::SHOWING</const> is always set.</li>
+            <li><const scope="com::sun::star::accessibility"
+                >AccessibleStateType::VISIBLE</const> is always set.</li>
+            </ul>
+        <li>Locale: The shape returns the locale of its parent.</li>
+        <li>Property change listeners: Property change listeners that are
+            registered with a shape are informed of the usual events.</li>
+        </ul>
+    */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** Give access to the graphical representation of a shape.
+
+        <p>The bounding box returned by the <member
+        scope="::com::sun::star::accessibility"
+        >XAccessibleComponent::getBounds</member> function returns the
+        shape's bounding box clipped at its parent's bounding box</p>
+
+        <p>An accessible shape tries as best as it can to return proper
+        values for calls to the
+        <member scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getForeground</member> and
+        <member  scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getBackground</member> functions.
+        If the shape is painted with a uniform and non-transparent color
+        then the returned colors may differ from the ones visible on the
+        screen.</p>
+
+        <p>Key bindings are not supported at the moment</p>
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** Give extended access to the graphical representation of a shape.
+
+        <p>The functions <member
+        scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getFont</member>,
+        <member scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getTitledBorderText</member>, and
+        <member scope="::com::sun::star::accessibility"
+        >XAccessibleExtendedComponent::getToolTipText</member> are not
+        supported and return empty references respectively empty
+        strings.</p>
+
+        <p>The support of this interface is optional to reduce overhead in
+        case that no text is displayed and color information can not be
+        determined with an acceptable cost.</p>
+    */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleExtendedComponent;
+};
+
+}; }; }; };
+
+#endif
