@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:02:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,8 +736,8 @@ PptSlidePersistEntry::~PptSlidePersistEntry()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam ) :
-    SvxMSDffManager         ( rParam.rDocStream, rParam.pTracer ),
+SdrEscherImport::SdrEscherImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
+    SvxMSDffManager         ( rParam.rDocStream, rBaseURL, rParam.pTracer ),
     pFonts                  ( NULL ),
     nStreamLen              ( 0 ),
     nTextStylesIndex        ( 0xffff ),
@@ -1524,9 +1524,9 @@ void SdrEscherImport::CheckTimesNewRoman() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam ) :
+SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
     bOk                 ( rStCtrl.GetErrorCode() == SVSTREAM_OK ),
-    SdrEscherImport     ( rParam ),
+    SdrEscherImport     ( rParam, rBaseURL ),
     pDefaultSheet       ( NULL ),
     pPersistPtr         ( NULL ),
     nPersistPtrAnz      ( 0 ),
