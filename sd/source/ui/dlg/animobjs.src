@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-24 21:10:41 $
+ *  last change: $Author: ka $ $Date: 2002-03-15 13:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ DockingWindow FLT_WIN_ANIMATION
     Zoomable = TRUE ;
     Dockable = TRUE ;
     EnableResizing = TRUE ;
-    Size = MAP_APPFONT ( 159 , 242 ) ;
+    Size = MAP_APPFONT ( 159 , 236 ) ;
     Text = "Animation" ;
     Text [ ENGLISH ] = "Animation" ;
     Text [ norwegian ] = "Animasjon" ;
@@ -1126,47 +1126,10 @@ DockingWindow FLT_WIN_ANIMATION
         Text[ catalan ] = "Objecte de mapa de bits";
         Text[ finnish ] = "Bittikarttaobjekti";
     };
-    FixedText FT_COLOR
+    FixedText FT_ADJUSTMENT
     {
         Pos = MAP_APPFONT ( 12 , 198 ) ;
         Size = MAP_APPFONT ( 62 , 10 ) ;
-        Text = "Transparenzfarbe" ;
-        Text [ ENGLISH ] = "Tranparence color" ;
-        Text [ dutch ] = "Transparante kleur" ;
-        Text [ english_us ] = "Transparency color" ;
-        Text [ italian ] = "Colore di trasparenza" ;
-        Text [ spanish ] = "Color de transparencia" ;
-        Text [ french ] = "Transparence" ;
-        Text [ swedish ] = "Tranparensf‰rg" ;
-        Text [ danish ] = "Transparensfarve" ;
-        Text [ portuguese ] = "Cor de transparÍncia" ;
-        Text [ portuguese_brazilian ] = "Transparenzfarbe" ;
-        Text[ chinese_simplified ] = "ÈÄèÊòéËâ≤";
-        Text[ russian ] = "œÓÁ‡˜Ì˚È";
-        Text[ polish ] = "Przeüroczysty";
-        Text[ japanese ] = "ÈÄèÊòéËâ≤";
-        Text[ chinese_traditional ] = "ÈÄèÊòéËâ≤";
-        Text[ arabic ] = "·Ê‰ ‘›«›";
-        Text[ greek ] = "ƒÈ·ˆ·Ì›Ú ˜Ò˛Ï·";
-        Text[ korean ] = "Ìà¨Î™ÖÏÉâ";
-        Text[ turkish ] = "Saydaml˝k rengi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Color de transparencia";
-        Text[ finnish ] = "L‰pikuultov‰ri";
-    };
-    ListBox LB_COLOR
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 75 , 196 ) ;
-        Size = MAP_APPFONT ( 72 , 100 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        DDExtraWidth = TRUE ;
-    };
-    FixedText FT_ADJUSTMENT
-    {
-        Pos = MAP_APPFONT ( 11 , 218 ) ;
-        Size = MAP_APPFONT ( 39 , 10 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         DeltaLang [ ENGLISH ] = < -1 ; Default ; -2 ; Default ; > ;
         Text = "Anpassung" ;
@@ -1197,8 +1160,8 @@ DockingWindow FLT_WIN_ANIMATION
     ListBox LB_ADJUSTMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 216 ) ;
-        Size = MAP_APPFONT ( 51 , 100 ) ;
+        Pos = MAP_APPFONT ( 75 , 196 ) ;
+        Size = MAP_APPFONT ( 72 , 100 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         DeltaLang [ ENGLISH ] = < -1 ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;

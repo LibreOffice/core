@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: ka $ $Date: 2002-03-15 13:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,8 +182,6 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
         aGrpBitmap          ( this, SdResId( GRP_BITMAP ) ),
         aRbtGroup           ( this, SdResId( RBT_GROUP ) ),
         aRbtBitmap          ( this, SdResId( RBT_BITMAP ) ),
-        aFtColor            ( this, SdResId( FT_COLOR ) ),
-        aLbColor            ( this, SdResId( LB_COLOR ) ),
         aFtAdjustment       ( this, SdResId( FT_ADJUSTMENT ) ),
         aLbAdjustment       ( this, SdResId( LB_ADJUSTMENT ) ),
         aBtnCreateGroup     ( this, SdResId( BTN_CREATE_GROUP ) ),
@@ -191,8 +189,6 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
         pBindings           ( pInBindings ),
         pWin                ( pParent ),
         pBitmapEx           ( NULL ),
-        aBmpExList          (),
-        aTimeList           (),
         bMovie              ( FALSE ),
         bAllObjects         ( FALSE )
 {
@@ -236,34 +232,24 @@ SdAnimationWin::SdAnimationWin( SfxBindings* pInBindings,
 
     // der Animator ist leer; es kann keine Animationsgruppe erstellt werden
     aBtnCreateGroup.Disable();
-
-    // Initiierung der Initialisierung der ColorLB
-    SfxBoolItem aItem( SID_ANIMATOR_INIT, TRUE );
-    GetBindings().GetDispatcher()->Execute(
-        SID_ANIMATOR_INIT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 }
 
 // -----------------------------------------------------------------------
 
 SdAnimationWin::~SdAnimationWin()
 {
+    ULONG i, nCount;
+
     delete pControllerItem;
 
     // Bitmapliste bereinigen
-    ULONG nCount = aBmpExList.Count();
-    for( ULONG i = 0; i < nCount; i++ )
-    {
-        pBitmapEx = (BitmapEx*) aBmpExList.GetObject( i );
-        delete pBitmapEx;
-    }
+    for( i = 0, nCount = aBmpExList.Count(); i < nCount; i++ )
+        delete static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
     aBmpExList.Clear();
 
     // Timeliste bereinigen
-    nCount = aTimeList.Count();
-    for( i = 0; i < nCount; i++ )
-    {
-        delete (Time*) aTimeList.GetObject( i );
-    }
+    for( i = 0, nCount = aTimeList.Count(); i < nCount; i++ )
+        delete static_cast< Time* >( aTimeList.GetObject( i ) );
     aTimeList.Clear();
 
     // die Clones loeschen
@@ -272,19 +258,10 @@ SdAnimationWin::~SdAnimationWin()
 
 // -----------------------------------------------------------------------
 
-void SdAnimationWin::InitColorLB( const SdDrawDocument* pDoc )
-{
-    aLbColor.InsertEntry( String( SdResId( STR_NONE ) ) );
-    aLbColor.Fill( pDoc->GetColorTable() );
-}
-
-// -----------------------------------------------------------------------
-
 IMPL_LINK( SdAnimationWin, ClickFirstHdl, void *, EMPTYARG )
 {
     aBmpExList.First();
-    pBitmapEx = (BitmapEx*) aBmpExList.GetCurObject();
-
+    pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
     UpdateControl( aBmpExList.GetCurPos() );
 
     return( 0L );
@@ -318,7 +295,7 @@ IMPL_LINK( SdAnimationWin, ClickPlayHdl, void *, p )
     if( aRbtBitmap.IsChecked() )
     {
         for( ULONG i = 0; i < nCount; i++ )
-            aTime += *(Time*) aTimeList.GetObject( i );
+            aTime += *static_cast< Time* >( aTimeList.GetObject( i ) );
         nFullTime  = aTime.GetMSFromTime();
     }
     else
@@ -349,14 +326,13 @@ IMPL_LINK( SdAnimationWin, ClickPlayHdl, void *, p )
     {
         // Um Konsistenz zwischen Liste und Anzeige zu erwirken
         aBmpExList.Seek( i );
-        pBitmapEx = (BitmapEx*) aBmpExList.GetCurObject();
-        // statt nur: pBitmapEx = (BitmapEx*) aBmpExList.GetObject( i );
+        pBitmapEx = static_cast< BitmapEx* >(  aBmpExList.GetCurObject() );
 
         UpdateControl( i, bDisableCtrls );
 
         if( aRbtBitmap.IsChecked() )
         {
-            Time* pTime = (Time*) aTimeList.GetObject( i );
+            Time* pTime = static_cast< Time* >( aTimeList.GetObject( i ) );
             DBG_ASSERT( pTime, "Keine Zeit gefunden!" );
 
             aTimeField.SetTime( *pTime );
@@ -404,8 +380,7 @@ IMPL_LINK( SdAnimationWin, ClickPlayHdl, void *, p )
 IMPL_LINK( SdAnimationWin, ClickLastHdl, void *, EMPTYARG )
 {
     aBmpExList.Last();
-    pBitmapEx = (BitmapEx*) aBmpExList.GetCurObject();
-
+    pBitmapEx = static_cast< BitmapEx* >(  aBmpExList.GetCurObject() );
     UpdateControl( aBmpExList.GetCurPos() );
 
     return( 0L );
@@ -420,25 +395,17 @@ IMPL_LINK( SdAnimationWin, ClickRbtHdl, void *, p )
         aTimeField.SetText( String() );
         aTimeField.Enable( FALSE );
         aLbLoopCount.Enable( FALSE );
-        //aLbLoopCount.SetNoSelection();
-        aFtColor.Enable( FALSE );
-        aLbColor.Enable( FALSE );
-        //aLbColor.SetNoSelection();
     }
     else if( p == &aRbtBitmap || aRbtBitmap.IsChecked() )
     {
         ULONG n = aNumFldBitmap.GetValue() - 1;
         if( n >= 0 )
         {
-            Time* pTime = (Time*)aTimeList.GetObject( n );
+            Time* pTime = static_cast< Time* >( aTimeList.GetObject( n ) );
             aTimeField.SetTime( *pTime );
         }
         aTimeField.Enable();
         aLbLoopCount.Enable();
-        //aLbLoopCount.SetValue( aLbLoopCount.GetValue() );
-        aFtColor.Enable();
-        aLbColor.Enable();
-        //aLbColor.SetValue( aLbColor.GetValue() );
     }
 
     return( 0L );
@@ -468,14 +435,14 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
     if( pBtn == &aBtnRemoveBitmap )
     {
         ULONG nPos = aBmpExList.GetCurPos();
-        pBitmapEx = (BitmapEx*) aBmpExList.GetCurObject();
+        pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
         if( pBitmapEx )
         {
             delete pBitmapEx;
             aBmpExList.Remove();
-            pBitmapEx = (BitmapEx*) aBmpExList.GetCurObject();
+            pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
         }
-        Time* pTime = (Time*) aTimeList.GetObject( nPos );
+        Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
         if( pTime )
         {
             delete pTime;
@@ -505,7 +472,7 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
             long nCount = aBmpExList.Count();
             for( long i = nCount - 1; i >= 0; i-- )
             {
-                pBitmapEx = (BitmapEx*) aBmpExList.GetObject( i );
+                pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
                 delete pBitmapEx;
 
                 pObject = pPage->GetObj( i );
@@ -524,7 +491,7 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
             nCount = aTimeList.Count();
             for( i = 0; i < nCount; i++ )
             {
-                delete (Time*) aTimeList.GetObject( i );
+                delete static_cast< Time* >( aTimeList.GetObject( i ) );
             }
             aTimeList.Clear();
         }
@@ -537,7 +504,6 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
         // Falls vorher durch Uebernahme von AnimatedGIFs disabled:
         //aRbtBitmap.Enable();
         aRbtGroup.Enable();
-        aLbColor.SetNoSelection();
     }
 
     // Zoom fuer DisplayWin berechnen und setzen
@@ -570,7 +536,7 @@ IMPL_LINK( SdAnimationWin, ModifyBitmapHdl, void *, EMPTYARG )
     if( nBmp > aBmpExList.Count() )
         nBmp = aBmpExList.Count();
 
-    pBitmapEx = (BitmapEx*) aBmpExList.GetObject( nBmp - 1 );
+    pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( nBmp - 1 ) );
 
     // Positionieren in der Liste
     aBmpExList.Seek( nBmp - 1 );
@@ -586,7 +552,7 @@ IMPL_LINK( SdAnimationWin, ModifyTimeHdl, void *, EMPTYARG )
 {
     ULONG nPos = aNumFldBitmap.GetValue() - 1;
 
-    Time* pTime = (Time*) aTimeList.GetObject( nPos );
+    Time* pTime = static_cast< Time* >( aTimeList.GetObject( nPos ) );
     DBG_ASSERT( pTime, "Zeit nicht gefunden!" )
 
     *pTime = aTimeField.GetTime();
@@ -646,7 +612,6 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
         aBtnGetAllObjects.Enable( FALSE );
         aRbtGroup.Enable( FALSE );
         aRbtBitmap.Enable( FALSE );
-        aLbColor.Enable( FALSE );
         aBtnCreateGroup.Enable( FALSE );
         aFtAdjustment.Enable( FALSE );
         aLbAdjustment.Enable( FALSE );
@@ -658,7 +623,6 @@ void SdAnimationWin::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aRbtGroup.Enable();
 
         aRbtBitmap.Enable();
-        aLbColor.Enable();
         aBtnCreateGroup.Enable();
         aFtAdjustment.Enable( TRUE );
         aLbAdjustment.Enable( TRUE );
@@ -723,7 +687,7 @@ Fraction SdAnimationWin::GetScale()
         aBmpSize.Height() = 0;
         for( ULONG i = 0; i < nCount; i++ )
         {
-            pBitmapEx = (BitmapEx*) aBmpExList.GetObject( i );
+            pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
             Size aSize( pBitmapEx->GetBitmap().GetSizePixel() );
             aBmpSize.Width() = Max( aBmpSize.Width(), aSize.Width() );
             aBmpSize.Height() = Max( aBmpSize.Height(), aSize.Height() );
@@ -736,7 +700,7 @@ Fraction SdAnimationWin::GetScale()
                              (double)aDisplaySize.Height() / (double)aBmpSize.Height() ) );
     }
     // Liste wieder auf alten Stand bringen
-    pBitmapEx = (BitmapEx*) aBmpExList.GetObject( nPos );
+    pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( nPos ) );
     return( aFrac );
 }
 
@@ -781,8 +745,6 @@ void SdAnimationWin::Resize()
         aGrpBitmap.Hide();
         aRbtGroup.Hide();
         aRbtBitmap.Hide();
-        aFtColor.Hide();
-        aLbColor.Hide();
         aFtAdjustment.Hide();
         aLbAdjustment.Hide();
         aBtnCreateGroup.Hide();
@@ -801,8 +763,6 @@ void SdAnimationWin::Resize()
         aFiCount.SetPosPixel( aFiCount.GetPosPixel() + aPt );
         aRbtGroup.SetPosPixel( aRbtGroup.GetPosPixel() + aPt );
         aRbtBitmap.SetPosPixel( aRbtBitmap.GetPosPixel() + aPt );
-        aFtColor.SetPosPixel( aFtColor.GetPosPixel() + aPt );
-        aLbColor.SetPosPixel( aLbColor.GetPosPixel() + aPt );
         aFtAdjustment.SetPosPixel( aFtAdjustment.GetPosPixel() + aPt );
         aLbAdjustment.SetPosPixel( aLbAdjustment.GetPosPixel() + aPt );
         aBtnGetOneObject.SetPosPixel( aBtnGetOneObject.GetPosPixel() + aPt );
@@ -836,8 +796,6 @@ void SdAnimationWin::Resize()
         aGrpBitmap.Show();
         aRbtGroup.Show();
         aRbtBitmap.Show();
-        aFtColor.Show();
-        aLbColor.Show();
         aFtAdjustment.Show();
         aLbAdjustment.Show();
         aBtnCreateGroup.Show();
@@ -894,22 +852,18 @@ void SdAnimationWin::AddObj( SdView& rView )
         BOOL bAnimObj = FALSE;
         if( nMarkCount == 1 )
         {
-            SdrMark*         pMark    = rMarkList.GetMark(0);
-            SdrObject*       pObject  = pMark->GetObj();
-            SdAnimationInfo* pAnimInfo = rView.GetDoc()->GetAnimationInfo( pObject );
-            Color            aBlueScreen( COL_WHITE );
-
-            UINT32 nInv = pObject->GetObjInventor();
-            UINT16 nId = pObject->GetObjIdentifier();
+            SdrMark*            pMark = rMarkList.GetMark(0);
+            SdrObject*          pObject = pMark->GetObj();
+            SdAnimationInfo*    pAnimInfo = rView.GetDoc()->GetAnimationInfo( pObject );
+            UINT32              nInv = pObject->GetObjInventor();
+            UINT16              nId = pObject->GetObjIdentifier();
 
             // Animated Bitmap (GIF)
-
             if( nInv == SdrInventor && nId == OBJ_GRAF && ( (SdrGrafObj*) pObject )->IsAnimated() )
             {
                 const SdrGrafObj*   pGrafObj = (SdrGrafObj*) pObject;
                 Graphic             aGraphic( pGrafObj->GetTransformedGraphic() );
-
-                USHORT nCount = 0;
+                USHORT              nCount = 0;
 
                 if( aGraphic.IsAnimated() )
                     nCount = aGraphic.GetAnimation().Count();
@@ -936,13 +890,6 @@ void SdAnimationWin::AddObj( SdView& rView )
                                 aLbLoopCount.SelectEntry( UniString::CreateFromInt32( nLoopCount ) );
                         }
 
-                        // Transparenzfarbe
-                        if( i == 0 && aLbColor.GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND )
-                        {
-                            Color aColor = pBitmapEx->GetTransparentColor();
-                            aLbColor.SelectEntry( aColor );
-                        }
-
                         // Time
                         long nTime = rAnimBmp.nWait;
                         Time* pTime = new Time( 0, 0, nTime / 100, nTime % 100 );
@@ -957,60 +904,35 @@ void SdAnimationWin::AddObj( SdView& rView )
                     bAnimObj = TRUE;
                 }
             }
-            else if( bAllObjects ) // || pAnimInfo
+            else if( bAllObjects || ( pAnimInfo && pAnimInfo->bIsMovie ) )
             {
-                if( pAnimInfo )
-                    aBlueScreen = pAnimInfo->aBlueScreen;
+                // Mehrere Objekte
+                SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
 
-                SdrPaintInfoRec aPaintInfoRec;
-                VirtualDevice   aVD;
-                Rectangle       aObjRect( pObject->GetBoundRect() );
-                Size            aObjSize( aObjRect.GetSize() );
-                Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
-                MapMode         aMap( aVD.GetMapMode() );
-                aMap.SetMapUnit( MAP_100TH_MM );
-                aMap.SetOrigin( aOrigin );
-                aVD.SetMapMode( aMap );
-                aVD.SetOutputSize( aObjSize );
-                aVD.SetBackground( Wallpaper( aBlueScreen ) );
-                //AdjustVDev( &aVD );
-                ExtOutputDevice aOut( &aVD );
-
-                if( bAllObjects || ( pAnimInfo && pAnimInfo->bIsMovie ) )
+                for( USHORT nObject = 0; nObject < pObjList->GetObjCount(); nObject++ )
                 {
-                    // Mehrere Objekte
-                    SdrObjList* pObjList = ((SdrObjGroup*)pObject)->GetSubList();
+                    SdrObject* pSnapShot = (SdrObject*) pObjList->GetObj( (ULONG) nObject );
 
-                    for( USHORT nObject = 0;
-                         nObject < pObjList->GetObjCount();
-                         nObject++ )
-                    {
-                        SdrObject* pSnapShot = (SdrObject*) pObjList->
-                                                    GetObj( (ULONG) nObject );
-                        aVD.Erase();
-                        pSnapShot->Paint( aOut, aPaintInfoRec );
+                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pSnapShot->GetModel(), pSnapShot ).GetBitmapEx() );
+                    aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
 
-                        pBitmapEx = new BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
-                        aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
+                    // Time
+                    Time* pTime = new Time( aTimeField.GetTime() );
+                    aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
 
-                        // Time
-                        Time* pTime = new Time( aTimeField.GetTime() );
-                        aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
+                    // Clone
+                    pPage->InsertObject( pSnapShot->Clone(), aBmpExList.GetCurPos() + 1 );
 
-                        // Clone
-                        SdrObject*  pClone  = pSnapShot->Clone();
-                        pPage->InsertObject( pClone, aBmpExList.GetCurPos() + 1 );
-                        // Weiterschalten der BitmapListe
-                        aBmpExList.Next();
-                    }
-                    bAnimObj = TRUE;
+                    // Weiterschalten der BitmapListe
+                    aBmpExList.Next();
                 }
+                bAnimObj = TRUE;
             }
         }
         // Auch ein einzelnes animiertes Objekt
         if( !bAnimObj && !( bAllObjects && nMarkCount > 1 ) )
         {
-            pBitmapEx = new BitmapEx( rView.GetAllMarkedBitmap() );
+            pBitmapEx = new BitmapEx( rView.GetAllMarkedGraphic().GetBitmapEx() );
             aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
 
             // Time
@@ -1027,46 +949,25 @@ void SdAnimationWin::AddObj( SdView& rView )
             SdrObject*  pClone  = pObject->Clone();
             pPage->InsertObject(pClone, aBmpExList.GetCurPos() + 1);
         }
-
         // mehrere Objekte: die Clones zu einer Gruppe zusammenfassen
         else if (nMarkCount > 1)
         {
             // Objekte einzeln uebernehmen
             if( bAllObjects )
             {
-                SdrPaintInfoRec aPaintInfoRec;
-                VirtualDevice   aVD;
-                Color           aBlueScreen( COL_WHITE );
-                MapMode         aMap( aVD.GetMapMode() );
-                aMap.SetMapUnit( MAP_100TH_MM );
-                ExtOutputDevice aOut( &aVD );
-
                 for( ULONG nObject= 0; nObject < nMarkCount; nObject++ )
                 {
                     // Clone
-                    SdrMark*    pMark   = rMarkList.GetMark(nObject);
-                    SdrObject*  pObject = pMark->GetObj();
-                    SdrObject*  pClone  = pObject->Clone();
+                    SdrObject* pObject = rMarkList.GetMark( nObject )->GetObj();
 
-                    Rectangle       aObjRect( pObject->GetBoundRect() );
-                    Size            aObjSize( aObjRect.GetSize() );
-                    Point           aOrigin( Point( -aObjRect.Left(), -aObjRect.Top() ) );
-                    aMap.SetOrigin( aOrigin );
-                    aVD.SetMapMode( aMap );
-                    aVD.SetOutputSize( aObjSize );
-                    aVD.SetBackground( Wallpaper( aBlueScreen ) );
-
-                    //aVD.Erase();
-                    pClone->Paint( aOut, aPaintInfoRec );
-
-                    pBitmapEx = new BitmapEx( aVD.GetBitmap( aObjRect.TopLeft(), aObjSize ) );
+                    pBitmapEx = new BitmapEx( SdrExchangeView::GetObjGraphic( pObject->GetModel(), pObject ).GetBitmapEx() );
                     aBmpExList.Insert( pBitmapEx, aBmpExList.GetCurPos() + 1 );
 
                     // Time
                     Time* pTime = new Time( aTimeField.GetTime() );
                     aTimeList.Insert( pTime, aBmpExList.GetCurPos() + 1 );
 
-                    pPage->InsertObject( pClone, aBmpExList.GetCurPos() + 1 );
+                    pPage->InsertObject( pObject->Clone(), aBmpExList.GetCurPos() + 1 );
 
                     aBmpExList.Next();
                 }
@@ -1076,13 +977,10 @@ void SdAnimationWin::AddObj( SdView& rView )
             {
                 SdrObjGroup* pCloneGroup = new SdrObjGroup;
                 SdrObjList*  pObjList    = pCloneGroup->GetSubList();
+
                 for (ULONG nObject= 0; nObject < nMarkCount; nObject++)
-                {
-                    SdrMark*    pMark   = rMarkList.GetMark(nObject);
-                    SdrObject*  pObject = pMark->GetObj();
-                    SdrObject*  pClone  = pObject->Clone();
-                    pObjList->InsertObject(pClone, LIST_APPEND);
-                }
+                    pObjList->InsertObject(rMarkList.GetMark(nObject)->GetObj()->Clone(), LIST_APPEND);
+
                 pPage->InsertObject(pCloneGroup, aBmpExList.GetCurPos() + 1);
             }
         }
@@ -1123,10 +1021,10 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
     // Groesste Bitmap ermitteln
     for( ULONG i = 0; i < nCount; i++ )
     {
-        const Bitmap&   rBmp = ( (BitmapEx*) aBmpExList.GetObject( i ) )->GetBitmap();
-        const Graphic   aGraphic( rBmp );
+        const BitmapEx& rBmpEx = *static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
+        const Graphic   aGraphic( rBmpEx );
         Size            aTmpSizeLog;
-        const Size      aTmpSizePix( rBmp.GetSizePixel() );
+        const Size      aTmpSizePix( rBmpEx.GetSizePixel() );
 
         if ( aGraphic.GetPrefMapMode().GetMapUnit() == MAP_PIXEL )
             aTmpSizeLog = pDefDev->PixelToLogic( aGraphic.GetPrefSize(), aMap100 );
@@ -1147,55 +1045,17 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
         // Bitmapgruppe erzeugen (Animated GIF)
         Animation   aAnimation;
         Point       aPt;
-        BitmapEx*   pBmpEx;
 
         for( i = 0; i < nCount; i++ )
         {
-            pBitmapEx = (BitmapEx*) aBmpExList.GetObject( i );
-            USHORT nPos = aLbColor.GetSelectEntryPos();
-            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0 ) // -keine-
-            {
-                BitmapEx    aBmpEx;
-                Color       aColor( aLbColor.GetSelectEntryColor() );
-                Bitmap      aMask;
-
-                // OS/2 (nur Merlin?) hat Probleme, die Farben bei bestimmten Treibern
-                // korrekt abzubilden (untere Bits werden abgeschnitten); somit wird
-                // aus Weiss ein etwas dunkleres Weiss => Toleranz etwas erhoehen
-#ifdef OS2
-                aMask = pBitmapEx->GetBitmap().CreateMask( aColor, 7 );
-#else
-                aMask = pBitmapEx->GetBitmap().CreateMask( aColor, 2 );
-#endif
-
-                if( pBitmapEx->IsTransparent() )
-                    aMask.CombineSimple( pBitmapEx->GetMask(), BMP_COMBINE_OR );
-
-                pBmpEx = new BitmapEx( pBitmapEx->GetBitmap(), aMask );
-                pBmpEx->SetTransparentColor( aColor );
-            }
-            else if( nPos == 0 )
-            {
-                Color aColor = pBitmapEx->GetTransparentColor();
-                pBmpEx = new BitmapEx( *pBitmapEx );
-
-                if( pBmpEx->IsTransparent() )
-                {
-                    Bitmap aBmp( pBmpEx->GetBitmap() );
-                    aBmp.Replace( pBmpEx->GetMask(), aColor );
-                    *pBmpEx = aBmp;
-                }
-            }
-            else
-                pBmpEx = new BitmapEx( pBitmapEx->GetBitmap() );
-
-            Time* pTime = (Time*) aTimeList.GetObject( i );
+            Time* pTime = static_cast< Time* >( aTimeList.GetObject( i ) );
             long  nTime = pTime->Get100Sec();
             nTime += pTime->GetSec() * 100;
 
+            pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
+
             // Offset fuer die gewuenschte Ausrichtung bestimmen
-            const Bitmap&   rBmp = pBitmapEx->GetBitmap();
-            const Size      aBmpSize( rBmp.GetSizePixel() );
+            const Size aBmpSize( pBitmapEx->GetSizePixel() );
 
             switch( eBA )
             {
@@ -1241,17 +1101,14 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
             }
 
             // LoopCount (Anzahl der Durchlaeufe) ermitteln
-            long nLoopCount = 0L;
-            nPos = aLbLoopCount.GetSelectEntryPos();
-            if( nPos != LISTBOX_ENTRY_NOTFOUND &&
-                nPos != aLbLoopCount.GetEntryCount() - 1 ) // unendlich
-            {
-                nLoopCount = (long) aLbLoopCount.GetSelectEntry().ToInt32();
-            }
-
             AnimationBitmap aAnimBmp;
+            long            nLoopCount = 0L;
+            USHORT          nPos = aLbLoopCount.GetSelectEntryPos();
 
-            aAnimBmp.aBmpEx = *pBmpEx;
+            if( nPos != LISTBOX_ENTRY_NOTFOUND && nPos != aLbLoopCount.GetEntryCount() - 1 ) // unendlich
+                nLoopCount = (long) aLbLoopCount.GetSelectEntry().ToInt32();
+
+            aAnimBmp.aBmpEx = *pBitmapEx;
             aAnimBmp.aPosPix = aPt;
             aAnimBmp.aSizePix = aBmpSize;
             aAnimBmp.nWait = nTime;
@@ -1261,17 +1118,12 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
             aAnimation.Insert( aAnimBmp );
             aAnimation.SetDisplaySizePixel( aMaxSizePix );
             aAnimation.SetLoopCount( nLoopCount );
-
-            delete pBmpEx;
         }
 
         SdrGrafObj* pGrafObj = new SdrGrafObj( Graphic( aAnimation ) );
-        const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ),
-                          aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
+        const Point aOrg( aWindowCenter.X() - ( aMaxSizeLog.Width() >> 1 ), aWindowCenter.Y() - ( aMaxSizeLog.Height() >> 1 ) );
 
-        //if( pOutWin )
         pGrafObj->SetLogicRect( Rectangle( aOrg, aMaxSizeLog ) );
-
         rView.InsertObject( pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
     }
     else
@@ -1370,11 +1222,6 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
 
         rView.InsertObject( pGroup, *pPV, SDRINSERT_SETDEFLAYER);
     }
-    /*
-    aFtAdjustment.Enable( FALSE );
-    aFtAdjustment.Invalidate(); // sollte eigentlich unnoetig sein
-    aLbAdjustment.Enable( FALSE );
-    */
 
     ClickFirstHdl( this );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:36:42 $
+ *  last change: $Author: ka $ $Date: 2002-03-15 13:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,9 +295,7 @@ void SdDrawViewShell::ExecAnimationWin( SfxRequest& rReq )
 
             if ( pAnimWin )
             {
-                if( nSId == SID_ANIMATOR_INIT )
-                    pAnimWin->InitColorLB( pDoc );
-                else if( nSId == SID_ANIMATOR_ADD )
+                if( nSId == SID_ANIMATOR_ADD )
                     pAnimWin->AddObj( *pDrView );
                 else if( nSId == SID_ANIMATOR_CREATE )
                     pAnimWin->CreateAnimObj( *pDrView );
