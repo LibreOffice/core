@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 10:55:11 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ public:
     const unsigned char*    GetBuffer() const { return mpFileMap; }
     int                     GetFileSize() const { return mnFileSize; }
     const ::rtl::OString*   GetFileName() const { return &maNativeFileName; }
+    int                     GetLangBoost() const { return mnLangBoost; }
+
 private:
                             FtFontFile( const ::rtl::OString& rNativeFileName );
 
@@ -92,6 +94,7 @@ private:
     const unsigned char*    mpFileMap;
     int                     mnFileSize;
     int                     mnRefCount;
+    int                     mnLangBoost;
 };
 
 // -----------------------------------------------------------------------
@@ -100,58 +103,67 @@ private:
 class FtFontInfo
 {
 public:
-    FtFontInfo( const ImplFontData&, const ::rtl::OString&,
-                int nFaceNum, int nFontId, int nSynthetic,
-                const unicodeKernMap* pUnicodeKern = NULL
-                );
+                           FtFontInfo( const ImplDevFontAttributes&,
+                               const ::rtl::OString& rNativeFileName,
+                               int nFaceNum, int nFontId, int nSynthetic,
+                                const ExtraKernInfo* );
+                          ~FtFontInfo();
 
     const unsigned char*  GetTable( const char*, ULONG* pLength=0 ) const;
 
     FT_FaceRec_*          GetFaceFT();
     void                  ReleaseFaceFT( FT_FaceRec_* );
 
-    const ::rtl::OString* GetFontFileName() const { return mpFontFile->GetFileName(); }
-    const ImplFontData&   GetFontData() const { return maFontData; }
-    int                   GetFaceNum() const { return mnFaceNum; }
-    int                   GetSynthetic() const { return mnSynthetic; }
+    const ::rtl::OString* GetFontFileName() const   { return mpFontFile->GetFileName(); }
+    int                   GetFaceNum() const        { return mnFaceNum; }
+    int                   GetSynthetic() const      { return mnSynthetic; }
+    int                   GetFontId() const         { return mnFontId; }
 
-    int                   GetFontId() const { return mnFontId; }
-    void                  SetFontId( int nFontId ) { mnFontId = nFontId; }
+    bool                  IsSymbolFont() const      { return maDevFontAttributes.IsSymbolFont(); }
+    const ImplFontAttributes& GetFontAttributes() const { return maDevFontAttributes; }
 
-    int                   GetGlyphIndex( sal_Unicode cChar ) const;
-    void                  CacheGlyphIndex( sal_Unicode cChar, int nGI ) const;
-    const glyphKernMap*   GetGlyphKernMap() const
-    { return (maUnicodeKernPairs.size() || maGlyphKernPairs.size()) ? &maGlyphKernPairs : NULL; }
-    const unicodeKernMap* GetUnicodeKernMap() const
-    { return maUnicodeKernPairs.size() ? &maUnicodeKernPairs : NULL; }
+    void                  AnnounceFont( ImplDevFontList* );
 
+    int                   GetGlyphIndex( sal_UCS4 cChar ) const;
+    void                  CacheGlyphIndex( sal_UCS4 cChar, int nGI ) const;
+
+    bool                  HasExtraKerning() const;
+    int                   GetExtraKernPairs( ImplKernPairData** ) const;
+    int                   GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
 
 private:
-    ImplFontData    maFontData;
+    FT_FaceRec_*    maFaceFT;
     FtFontFile*     mpFontFile;
     const int       mnFaceNum;
-    const int       mnSynthetic;
-    int             mnFontId;
-
-    FT_FaceRec_*    maFaceFT;
     int             mnRefCount;
+    const int       mnSynthetic;
+
+    int             mnFontId;
+    ImplDevFontAttributes maDevFontAttributes;
 
     // cache unicode->glyphid mapping because looking it up is expensive
-    typedef ::std::hash_map<sal_Unicode,int> FIGlyphMap;
-    mutable FIGlyphMap maGlyphMap;
+    // TODO: change to hash_multimap when a use case requires a m:n mapping
+    typedef ::std::hash_map<int,int> Int2IntMap;
+    mutable Int2IntMap maChar2Glyph;
+    mutable Int2IntMap maGlyph2Char;
 
-    mutable glyphKernMap maGlyphKernPairs;
-    unicodeKernMap maUnicodeKernPairs;
+    const ExtraKernInfo* mpExtraKernInfo;
 };
 
 // these two inlines are very important for performance
 
-inline int FtFontInfo::GetGlyphIndex( sal_Unicode cChar ) const
+inline int FtFontInfo::GetGlyphIndex( sal_UCS4 cChar ) const
 {
-    FIGlyphMap::const_iterator it = maGlyphMap.find( cChar );
-    if( it != maGlyphMap.end() )
-        return it->second;
-    return -1;
+    Int2IntMap::const_iterator it = maChar2Glyph.find( cChar );
+    if( it == maChar2Glyph.end() )
+        return -1;
+    return it->second;
+}
+
+inline void FtFontInfo::CacheGlyphIndex( sal_UCS4 cChar, int nIndex ) const
+{
+    maChar2Glyph[ cChar ] = nIndex;
+    maGlyph2Char[ nIndex ] = cChar;
 }
 
 // -----------------------------------------------------------------------
@@ -164,14 +176,12 @@ public:
 
     long                AddFontDir( const String& rUrlName );
     void                AddFontFile( const rtl::OString& rNormalizedName,
-                                     int nFaceNum, int nFontId, const ImplFontData*,
-                                     const unicodeKernMap* pKern = NULL
-                                     );
-    long                FetchFontList( ImplDevFontList* ) const;
+                            int nFaceNum, int nFontId, const ImplDevFontAttributes&,
+                            const ExtraKernInfo* );
+    void                AnnounceFonts( ImplDevFontList* ) const;
     void                ClearFontList();
 
     FreetypeServerFont* CreateFont( const ImplFontSelectData& );
-    void*               GetFontHandle (int nFontId);
 
 private:
     typedef ::std::hash_map<int,FtFontInfo*> FontList;
@@ -186,26 +196,25 @@ private:
 class FreetypeServerFont : public ServerFont
 {
 public:
-                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo*, const glyphKernMap*, const unicodeKernMap* );
+                                FreetypeServerFont( const ImplFontSelectData&, FtFontInfo* );
     virtual                     ~FreetypeServerFont();
 
     virtual const ::rtl::OString* GetFontFileName() const { return mpFontInfo->GetFontFileName(); }
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
-    virtual int                 GetFontId() const { return mpFontInfo->GetFontId(); }
-    virtual void                SetFontId( int nFontId ) { mpFontInfo->SetFontId( nFontId ); }
     virtual bool                TestFont() const;
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 
-    virtual int                 GetGlyphIndex( sal_Unicode ) const;
-    int                         GetRawGlyphIndex( sal_Unicode ) const;
-    int                         FixupGlyphIndex( int nGlyphIndex, sal_Unicode ) const;
+    virtual int                 GetGlyphIndex( sal_UCS4 ) const;
+    int                         GetRawGlyphIndex( sal_UCS4 ) const;
+    int                         FixupGlyphIndex( int nGlyphIndex, sal_UCS4 ) const;
 
     virtual bool                GetAntialiasAdvice( void ) const;
     virtual bool                GetGlyphBitmap1( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphBitmap8( int nGlyphIndex, RawBitmap& ) const;
     virtual bool                GetGlyphOutline( int nGlyphIndex, PolyPolygon& ) const;
     virtual int                 GetGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const;
+    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
 
     const unsigned char*        GetTable( const char* pName, ULONG* pLength )
                                 { return mpFontInfo->GetTable( pName, pLength ); }
@@ -217,7 +226,6 @@ protected:
 
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_* ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
-    virtual ULONG               GetKernPairs( ImplKernPairData** ) const;
     virtual ULONG               GetFontCodeRanges( sal_uInt32* pCodes ) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
@@ -235,6 +243,27 @@ private:
     rtl_UnicodeToTextConverter  maRecodeConverter;
 
     ServerFontLayoutEngine*     mpLayoutEngine;
+};
+
+// -----------------------------------------------------------------------
+
+class ImplFTSFontData : public ImplFontData
+{
+private:
+    FtFontInfo*             mpFtFontInfo;
+    enum { IFTSFONT_MAGIC = 0x1F150A1C };
+
+public:
+                            ImplFTSFontData( FtFontInfo*, const ImplDevFontAttributes& );
+    virtual                 ~ImplFTSFontData();
+
+    FtFontInfo*             GetFtFontInfo() const { return mpFtFontInfo; }
+
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual ImplFontData*   Clone() const   { return new ImplFTSFontData( *this ); }
+    virtual int             GetFontId() const { return mpFtFontInfo->GetFontId(); }
+
+    static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( IFTSFONT_MAGIC ); }
 };
 
 // -----------------------------------------------------------------------
