@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2002-07-31 10:49:47 $
+#   last change: $Author: svesik $ $Date: 2002-08-29 14:12:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,13 +103,55 @@ COMNAME=msci
 .ENDIF
 
 .IF "$(COM)"=="GCC"
+
+LIBSTDCPP3:=
+SHORTSTDCPP3:=
+
 .IF "$(CCNUMVER)">="000200910000"
 COMID=GCC
 COMNAME=gcc2
 .ENDIF
+
 .IF "$(CCNUMVER)">="000300000001"
+
 COMID=gcc3
 COMNAME=gcc3
+
+.IF "$(CCNUMVER)"=="000300000001"
+LIBSTDCPP3="3.0.1"
+SHORTSTDCPP3="3"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300000002"
+LIBSTDCPP3="3.0.2"
+SHORTSTDCPP3="3"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300000003"
+LIBSTDCPP3="3.0.3"
+SHORTSTDCPP3="3"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300000004"
+LIBSTDCPP3="3.0.4"
+SHORTSTDCPP3="3"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300010000"
+LIBSTDCPP3="4.0.0"
+SHORTSTDCPP3="4"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300010001"
+LIBSTDCPP3="4.0.1"
+SHORTSTDCPP3="4"
+.ENDIF
+
+.IF "$(CCNUMVER)"=="000300020000"
+LIBSTDCPP3="5.0.0"
+SHORTSTDCPP3="5"
+.ENDIF
+
 .ENDIF
 .ENDIF
 
