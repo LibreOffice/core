@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2001-04-25 14:00:39 $
+ *  last change: $Author: er $ $Date: 2002-04-15 11:06:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1129,6 +1129,7 @@ class ScChangeTrack : public SfxListener
             BOOL                bInDeleteTop;
             BOOL                bInPasteCut;
             BOOL                bUseFixDateTime;
+            BOOL                bTime100thSeconds;
 
                                 // not implemented, prevent usage
                                 ScChangeTrack( const ScChangeTrack& );
@@ -1450,6 +1451,14 @@ public:
                                     { return aProtectPass; }
             BOOL                IsProtected() const
                                     { return aProtectPass.getLength() != 0; }
+
+                                // If time stamps of actions of this
+                                // ChangeTrack and a second one are to be
+                                // compared including 100th seconds.
+            void                SetTime100thSeconds( BOOL bVal )
+                                    { bTime100thSeconds = bVal; }
+            BOOL                IsTime100thSeconds() const
+                                    { return bTime100thSeconds; }
 };
 
 

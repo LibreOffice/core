@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-22 16:28:49 $
+ *  last change: $Author: er $ $Date: 2002-04-15 11:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2568,6 +2568,7 @@ void ScChangeTrack::Init()
     bInDeleteUndo = FALSE;
     bInPasteCut = FALSE;
     bUseFixDateTime = FALSE;
+    bTime100thSeconds = TRUE;
 
     SvtUserOptions aUserOpt;
     aUser = aUserOpt.GetFirstName();
