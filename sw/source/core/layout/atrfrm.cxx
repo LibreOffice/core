@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:53 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,6 +304,10 @@
 #endif
 #ifndef _UNOOBJ_HXX
 #include <unoobj.hxx>
+#endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1721,13 +1725,17 @@ SwFmtAnchor::SwFmtAnchor( RndStdIds nRnd, sal_uInt16 nPage )
     : SfxPoolItem( RES_ANCHOR ),
     pCntntAnchor( 0 ),
     nAnchorId( nRnd ),
-    nPageNum( nPage )
+    nPageNum( nPage ),
+    // OD 2004-05-05 #i28701# - get always new increased order number
+    mnOrder( ++mnOrderCounter )
 {}
 
 SwFmtAnchor::SwFmtAnchor( const SwFmtAnchor &rCpy )
     : SfxPoolItem( RES_ANCHOR ),
     nAnchorId( rCpy.GetAnchorId() ),
-    nPageNum( rCpy.GetPageNum() )
+    nPageNum( rCpy.GetPageNum() ),
+    // OD 2004-05-05 #i28701# - get always new increased order number
+    mnOrder( ++mnOrderCounter )
 {
     pCntntAnchor = rCpy.GetCntntAnchor() ?
                         new SwPosition( *rCpy.GetCntntAnchor() ) : 0;
@@ -1753,6 +1761,8 @@ SwFmtAnchor& SwFmtAnchor::operator=(const SwFmtAnchor& rAnchor)
 {
     nAnchorId  = rAnchor.GetAnchorId();
     nPageNum   = rAnchor.GetPageNum();
+    // OD 2004-05-05 #i28701# - get always new increased order number
+    mnOrder = ++mnOrderCounter;
 
     delete pCntntAnchor;
     pCntntAnchor = rAnchor.pCntntAnchor ?
@@ -1763,6 +1773,7 @@ SwFmtAnchor& SwFmtAnchor::operator=(const SwFmtAnchor& rAnchor)
 int  SwFmtAnchor::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    // OD 2004-05-05 #i28701# - Note: <mnOrder> hasn't to be considered.
     return ( nAnchorId == ((SwFmtAnchor&)rAttr).GetAnchorId() &&
              nPageNum == ((SwFmtAnchor&)rAttr).GetPageNum()   &&
                     //Anker vergleichen. Entweder zeigen beide auf das gleiche
@@ -1776,6 +1787,21 @@ int  SwFmtAnchor::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem*  SwFmtAnchor::Clone( SfxItemPool* ) const
 {
     return new SwFmtAnchor( *this );
+}
+
+// OD 2004-05-05 #i28701#
+sal_uInt32 SwFmtAnchor::mnOrderCounter = 0;
+
+// OD 2004-05-05 #i28701#
+sal_uInt32 SwFmtAnchor::GetOrder() const
+{
+    return mnOrder;
+}
+
+// OD 2004-05-05 #i28701#
+void SwFmtAnchor::SetOrder( const sal_uInt32 _nNewOrder )
+{
+    mnOrder = _nNewOrder;
 }
 
 /*-----------------16.02.98 15:21-------------------
@@ -2904,12 +2930,15 @@ void SwFlyFrmFmt::MakeFrms()
 
             if( pFrm->GetDrawObjs() )
             {
-                SwDrawObjs &rObjs = *pFrm->GetDrawObjs();
+                // --> OD 2004-07-01 #i28701# - new type <SwSortedObjs>
+                SwSortedObjs &rObjs = *pFrm->GetDrawObjs();
                 for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
                 {
-                    SdrObject *pO = rObjs[i];
-                    if( pO->ISA( SwVirtFlyDrawObj ) &&
-                        ((SwVirtFlyDrawObj*)pO)->GetFmt() == this )
+                    // --> OD 2004-07-01 #i28701# - consider changed type of
+                    // <SwSortedObjs> entries.
+                    SwAnchoredObject* pObj = rObjs[i];
+                    if( pObj->ISA(SwFlyFrm) &&
+                        (&pObj->GetFrmFmt()) == this )
                     {
                         bAdd = sal_False;
                         break;
