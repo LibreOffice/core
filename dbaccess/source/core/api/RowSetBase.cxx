@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 16:31:23 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -622,9 +622,11 @@ sal_Bool SAL_CALL ORowSetBase::next(  ) throw(SQLException, RuntimeException)
 
         if ( m_aBookmark.hasValue() ) // #104474# OJ
             positionCache();
+        sal_Bool bAfterLast = m_pCache->isAfterLast();
         bRet = m_pCache->next();
 
-        if ( bRet )
+
+        if ( bRet || bAfterLast != m_pCache->isAfterLast() )
         {
             // notification order
             // - column values
@@ -734,25 +736,23 @@ void SAL_CALL ORowSetBase::beforeFirst(  ) throw(SQLException, RuntimeException)
         ORowSetNotifier aNotifier( this );
             // this will call cancelRowModification on the cache if necessary
 
-        ORowSetRow aOldValues = getOldRow(bWasNew);
-
-        if(!m_bBeforeFirst)
+        if ( !m_bBeforeFirst )
         {
+            ORowSetRow aOldValues = getOldRow(bWasNew);
             m_pCache->beforeFirst();
-            m_aBookmark     = Any();
-            m_aCurrentRow   = m_pCache->getEnd();
-            m_aCurrentRow.setBookmark(m_aBookmark);
-            m_bBeforeFirst  = !(m_bAfterLast = sal_False);
 
             // notification order
             // - column values
             // - cursorMoved
             setCurrentRow(sal_True,aOldValues,aGuard);
-        }
 
-        // - IsModified
-        // - IsNew
-        aNotifier.fire();
+            // - IsModified
+            // - Isnew
+            aNotifier.fire();
+
+            // - RowCount/IsRowCountFinal
+            fireRowcount();
+        }
 
         // to be done _after_ the notifications!
         m_aOldRow->clearRow();
