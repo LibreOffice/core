@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:24:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,12 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, USHORT nSrcPos, USHORT nD
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
-                SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
+                // #116235#
+                SdrObject* pNewObject = pOldObject->Clone();
+                // SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
+                pNewObject->SetModel(pDrawLayer);
+                pNewObject->SetPage(pNewPage);
+
                 pNewObject->NbcMove(Size(0,0));
                 pNewPage->InsertObject( pNewObject );
 
@@ -815,7 +820,11 @@ void ScDocument::Clear()
     pSelectionAttr = NULL;
 
     if (pDrawLayer)
-        pDrawLayer->Clear();
+    {
+        // #116168#
+        //pDrawLayer->Clear();
+        pDrawLayer->ClearModel(sal_False);
+    }
 }
 
 BOOL ScDocument::HasControl( USHORT nTab, const Rectangle& rMMRect )
