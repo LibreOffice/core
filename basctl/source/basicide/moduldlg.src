@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 11:39:07 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ TabDialog RID_TD_ORGANIZE
     TEXT[ portuguese ] = "Gerir macros";
     TEXT[ danish ] = "Makroadministration";
     TEXT[ french ] = "Gestion de macros";
-    TEXT[ swedish ] = "Förvalta makron";
+    TEXT[ swedish ] = "Administrera makron";
     TEXT[ dutch ] = "Macro's beheren";
     TEXT[ spanish ] = "Administrar";
     TEXT[ english_us ] = "Macro Organizer";
@@ -149,7 +149,7 @@ TabDialog RID_TD_ORGANIZE
     Text [ portuguese ] = "Gerir macros" ;
     Text [ english_us ] = "Macro Organizer" ;
     Text [ portuguese_brazilian ] = "Gerenciar" ;
-    Text [ swedish ] = "Förvalta makron" ;
+    Text [ swedish ] = "Administrera makron" ;
     Text [ danish ] = "Makroadministration" ;
     Text [ italian ] = "Gestione macro" ;
     Text [ spanish ] = "Administrar" ;
@@ -337,7 +337,7 @@ TabPage RID_TP_MODULS
         Text[ russian ] = "Íîâûé äèàëîã...";
         Text[ polish ] = "Nowy dialog...";
         Text[ japanese ] = "V‚µ‚¢ÀŞ²±Û¸Ş(~N)...";
-        Text[ chinese_traditional ] = "·s«Ø¹ï¸Ü¤è¶ô(~N)...";
+        Text[ chinese_traditional ] = "¶}±Ò¹ï¸Ü¤è¶ô(~N)...";
         Text[ arabic ] = "ãÑÈÚ ÍæÇÑ ÌÏíÏ...";
         Text[ greek ] = "Äçìéïõñãßá äéáëü~ãïõ...";
         Text[ korean ] = "»õ ´ëÈ­»óÀÚ(~N)...";
@@ -541,7 +541,7 @@ TabPage RID_TP_LIBS
         Text[ russian ] = "Ñîçäàòü...";
         Text[ polish ] = "Nowy...";
         Text[ japanese ] = "V‹Kì¬(~N)...";
-        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)...";
+        Text[ chinese_traditional ] = "·s«Ø(~N)...";
         Text[ arabic ] = "ÌÏíÏ...";
         Text[ greek ] = "Äçìéïõñãßá...";
         Text[ korean ] = "»õ·Î(~N)...";
@@ -567,7 +567,7 @@ TabPage RID_TP_LIBS
         Text[ russian ] = "Äîáàâèòü...";
         Text[ polish ] = "Dodaj...";
         Text[ japanese ] = "’Ç‰Á(~A)...";
-        Text[ chinese_traditional ] = "·s¼W(~A)...";
+        Text[ chinese_traditional ] = "¼W¥[(~A)...";
         Text[ arabic ] = "ÅÖÇİÉ...";
         Text[ greek ] = "ĞñïóèŞêç...";
         Text[ korean ] = "Ãß°¡(~A)...";
@@ -833,7 +833,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ chinese_traditional ] = "¥t¶}±Ò·sÀÉ(~A)";
         Text[ arabic ] = "ÅäÔÇÁ ãáİ ãäİÕá";
         Text[ greek ] = "Äçìéïõñãßá îå÷ùñé~óôïı áñ÷åßïõ";
-        Text[ korean ] = "º°µµ ÆÄÀÏ »ı¼º(~A)";
+        Text[ korean ] = "º°µµ ÆÄÀÏ ÀÛ¼º(~A)";
         Text[ turkish ] = "Ayrı dosya oluştur";
     };
 };
