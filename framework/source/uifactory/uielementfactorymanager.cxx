@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uielementfactorymanager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-25 17:53:25 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 17:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,16 @@ rtl::OUString ConfigurationAccess_UIElementFactoryManager::getFactorySpecifierFr
             return pIter->second;
         else
         {
+            // Support factories which uses a defined prefix before the ui name.
+            sal_Int32 nIndex = rName.indexOf( '_' );
+            if ( nIndex > 0 )
+            {
+                rtl::OUString aName = rName.copy( 0, nIndex+1 );
+                pIter = m_aUIElementFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, rtl::OUString() ));
+                if ( pIter != m_aUIElementFactoryManagerMap.end() )
+                    return pIter->second;
+            }
+
             pIter = m_aUIElementFactoryManagerMap.find( getHashKeyFromStrings( rType, rtl::OUString(), rtl::OUString() ));
             if ( pIter != m_aUIElementFactoryManagerMap.end() )
                 return pIter->second;
