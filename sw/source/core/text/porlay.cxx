@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-19 11:14:15 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 10:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #endif
 #ifndef _SVX_SCRIPTTYPEITEM_HXX
 #include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -506,16 +509,20 @@ BYTE WhichFont( xub_StrLen nIdx, const String* pTxt, const SwScriptInfo* pSI )
  * searches for script changes in rTxt and stores them
  *************************************************************************/
 
-void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
+                                   const OutputDevice& rOut )
 {
 
     if( !pBreakIt->xBreak.is() )
         return;
 
     xub_StrLen nChg = nInvalidityPos;
+    // STRING_LEN means the data structure is up to date
+    nInvalidityPos = STRING_LEN;
+
     USHORT nCnt = 0;
     USHORT nCntComp = 0;
-    USHORT nScript;
+    BYTE nScript;
 
     // compression type
     const String& rTxt = rNode.GetTxt();
@@ -550,7 +557,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
         }
     }
     else
-        nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
+        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, 0 );
 
     const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
     aScriptChg.Remove( nCnt, nScriptRemove );
@@ -563,27 +570,63 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     if ( nChg )
          nChg--;
 
-    // WEAK can only occur at the beginning of a paragraph
-    if( WEAK == nScript )
+    if( WEAK == pBreakIt->xBreak->getScriptType( rTxt, nChg ) )
     {
-        ASSERT( 0 == nChg, "WEAK in ScriptInfo at non 0 position" );
+        xub_StrLen nEnd =
+                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, WEAK );
 
-//
-// IMPORTANT:
-//
-// This is not optimal. It would be better to consider the next occuring
-// script for weak characters at the beginning of a paragraph.
-// To make this work we would have to trigger a reformat from the
-// beginning of the weak characters
+        if( nEnd > rTxt.Len() )
+            nEnd = rTxt.Len();
 
-//        xub_StrLen nWeakEnd =
-//                (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-//        if( nWeakEnd < rTxt.Len() )
-//            nScript = pBreakIt->xBreak->getScriptType( rTxt, nWeakEnd );
-//        else
-            // default to application language
+        ASSERT( GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() ),
+                "Wrong default language" );
 
-        nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+        if ( WEAK == nScript )
+            nScript = (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+
+        // map scripts to font indices
+        const BYTE nScripts[3] = {
+                 nScript - 1, nScript % 3, ( nScript + 1 ) % 3 };
+
+        xub_StrLen nOldChg = nChg;
+
+        while ( nChg < nEnd )
+        {
+            for ( BYTE i = 0; i < 3; ++i )
+            {
+                nChg = rOut.HasGlyphs(
+                         rFnt.GetFnt( nScripts[i] ), rTxt, nChg, nEnd - nChg );
+
+                if ( nChg > nOldChg )
+                {
+                    // add new group
+                    aScriptChg.Insert( nChg, nCnt );
+                    aScriptType.Insert( nScripts[i] + 1, nCnt++ );
+                    nOldChg = nChg;
+
+                    // specials: continue with font[0] font
+                    if ( 1 == i )
+                        break;
+                }
+                else if ( 2 == i )
+                {
+                    // if we did not make any progress with the font[2]: default
+                    ++nChg;
+                    aScriptChg.Insert( nChg, nCnt );
+                    aScriptType.Insert( nScripts[0] + 1, nCnt++ );
+                    nOldChg = nChg;
+                }
+
+                // check if already finished
+                if ( nChg == nEnd )
+                    break;
+            }
+        }
+
+        // Get next script type or set to weak in order to exit
+        nScript = ( nEnd < rTxt.Len() ) ?
+                  (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nEnd ) :
+                  (BYTE)WEAK;
     }
 
     USHORT nLastChg;
@@ -605,27 +648,17 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
     aCompLen.Remove( nCntComp, nCompRemove );
     aCompType.Remove( nCntComp, nCompRemove );
 
-    // nSkipScript can differ from nScript: Starting a line with a weak
-    // character, the script defaults to the application language. A call of
-    // endOfScript() with the default language would not be correct.
-    const USHORT nSkipScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-    nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nSkipScript );
-
-    // If first characters are weak, nScript is the language which has been
-    // assigned to them by default. If the next script is the same as the default
-    // script for the weak characters, we have to call endOfScript once more
-    if ( WEAK == nSkipScript )
-    {
-        const USHORT nNextScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
-        if ( nNextScript == nScript )
-            nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-    }
+    if ( WEAK == nScript )
+        // only weak characters in paragraph
+        return;
 
     do
     {
         ASSERT( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
         ASSERT( STRING_LEN != nChg, "65K? Strange length of script section" );
+
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
 
         if ( nChg > rTxt.Len() )
             nChg = rTxt.Len();
@@ -638,8 +671,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
         if ( CHARCOMPRESS_NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
         {
-            USHORT ePrevState = NONE;
-            USHORT eState;
+            BYTE ePrevState = NONE;
+            BYTE eState;
             USHORT nPrevChg = nLastChg;
 
             while ( nLastChg < nChg )
@@ -678,7 +711,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
                              ePrevState != KANA )
                         {
                             aCompChg.Insert( nPrevChg, nCntComp );
-                            USHORT nTmpType = ePrevState;
+                            BYTE nTmpType = ePrevState;
                             aCompType.Insert( nTmpType, nCntComp );
                             aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
                         }
@@ -699,7 +732,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
                      ePrevState != KANA )
                 {
                     aCompChg.Insert( nPrevChg, nCntComp );
-                    USHORT nTmpType = ePrevState;
+                    BYTE nTmpType = ePrevState;
                     aCompType.Insert( nTmpType, nCntComp );
                     aCompLen.Insert( nLastChg - nPrevChg, nCntComp++ );
                 }
@@ -709,14 +742,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
         if ( nChg >= rTxt.Len() )
             break;
 
-        nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
+        nScript = (BYTE)pBreakIt->xBreak->getScriptType( rTxt, nChg );
         nLastChg = nChg;
-        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
 
-    } while( TRUE );
-
-    // STRING_LEN means the data structure is up to date
-    nInvalidityPos = STRING_LEN;
+    } while ( TRUE );
 }
 
 /*************************************************************************
@@ -747,7 +776,7 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
  * returns the script of the character at the input position
  *************************************************************************/
 
-USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
+BYTE SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
 {
     USHORT nEnd = CountScriptChg();
     for( USHORT nX = 0; nX < nEnd; ++nX )
@@ -757,7 +786,7 @@ USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
     }
 
     // the default is the application language script
-    return GetScriptTypeOfLanguage( GetAppLanguage() );
+    return (BYTE)GetScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
 }
 
 /*************************************************************************
@@ -765,7 +794,7 @@ USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
  * returns the type of the compressed character
  *************************************************************************/
 
-USHORT SwScriptInfo::CompType( const xub_StrLen nPos ) const
+BYTE SwScriptInfo::CompType( const xub_StrLen nPos ) const
 {
     USHORT nEnd = CountCompChg();
     for( USHORT nX = 0; nX < nEnd; ++nX )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 13:03:21 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 10:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_SHORTS
+#define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_XUB_STRLEN
 #include <svtools/svstdarr.hxx>
@@ -100,10 +101,10 @@ class SwScriptInfo
 {
 private:
     SvXub_StrLens aScriptChg;
-    SvUShorts aScriptType;
+    SvBytes aScriptType;
     SvXub_StrLens aCompChg;
     SvXub_StrLens aCompLen;
-    SvUShorts aCompType;
+    SvBytes aCompType;
     xub_StrLen nInvalidityPos;
 
 public:
@@ -112,7 +113,9 @@ public:
     inline SwScriptInfo() : nInvalidityPos( 0 ) {};
 
     // determines script changes
-    void InitScriptInfo( const SwTxtNode& rNode );
+    void InitScriptInfo( const SwTxtNode& rNode, const SwFont& rFnt,
+                         const OutputDevice& rOut );
+
     // set/get position from which data is invalid
     inline void SetInvalidity( const xub_StrLen nPos );
     inline xub_StrLen GetInvalidity() { return nInvalidityPos; };
@@ -120,17 +123,17 @@ public:
     // array operations, nCnt refers to array position
     inline USHORT CountScriptChg() const;
     inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
-    inline USHORT GetScriptType( const USHORT nCnt ) const;
+    inline BYTE GetScriptType( const USHORT nCnt ) const;
 
     inline USHORT CountCompChg() const;
     inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
     inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
-    inline xub_StrLen GetCompType( const USHORT nCnt ) const;
+    inline BYTE GetCompType( const USHORT nCnt ) const;
 
     // "high" level operations, nPos refers to string position
     xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
-    USHORT ScriptType( const xub_StrLen nPos ) const;
-    USHORT CompType( const xub_StrLen nPos ) const;
+    BYTE ScriptType( const xub_StrLen nPos ) const;
+    BYTE CompType( const xub_StrLen nPos ) const;
 
     // examines the range [ nStart, nStart + nEnd ] if there are kanas
     // returns start index of kana entry in array, otherwise USHRT_MAX
@@ -153,7 +156,7 @@ inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
     ASSERT( nCnt < aScriptChg.Count(),"No ScriptChange today!");
     return aScriptChg[ nCnt ];
 }
-inline USHORT SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
+inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
     ASSERT( nCnt < aScriptChg.Count(),"No ScriptType today!");
     return aScriptType[ nCnt ];
@@ -170,7 +173,7 @@ inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
     return aCompLen[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::GetCompType( const USHORT nCnt ) const
+inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
 {
     ASSERT( nCnt < aCompChg.Count(),"No CompressionType today!");
     return aCompType[ nCnt ];

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-22 12:59:59 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 10:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,16 @@
 #include <extinput.hxx>
 #endif
 
+#ifndef _SFX_PRINTER_HXX //autogen
+#include <sfx2/printer.hxx>
+#endif
+#ifndef _WINDOW_HXX //autogen
+#include <vcl/window.hxx>
+#endif
+#ifndef _VIEWSH_HXX
+#include <viewsh.hxx>   // ViewShell
+#endif
+
 using namespace ::com::sun::star;
 
 extern BYTE WhichFont( xub_StrLen nIdx, const String* pTxt,
@@ -160,6 +170,19 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     // Beim HTML-Import kann es vorkommen, dass kein Layout existiert.
     SwRootFrm *pRootFrm = rTxtNode.GetDoc()->GetRootFrm();
     pShell = pRootFrm ? pRootFrm->GetShell() : 0;
+
+    // get output device for later font checking for weak characters
+    OutputDevice* pOut = rTxtNode.GetDoc()->GetPrt();
+    if( !pOut || !((Printer*)pOut)->IsValid() )
+    {
+        if( pShell )
+        {
+            if( 0 == ( pOut = pShell->GetReferenzDevice() ) )
+                pOut = pShell->GetWin();
+        }
+        if( !pOut )
+            pOut = GetpApp()->GetDefaultDevice();
+    }
 
     pScriptInfo = &rScrInf;
     pAttrSet = &rTxtNode.GetSwAttrSet();
@@ -206,7 +229,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     // determine script changes if not already done for current paragraph
     ASSERT( pScriptInfo, "No script info available");
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
-         pScriptInfo->InitScriptInfo( rTxtNode );
+         pScriptInfo->InitScriptInfo( rTxtNode, *pFnt, *pOut );
 
     if ( pBreakIt->xBreak.is() )
     {
