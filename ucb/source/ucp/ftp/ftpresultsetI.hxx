@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ftploaderthread.hxx,v $
+ *  $RCSfile: ftpresultsetI.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:25 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,53 +58,46 @@
  *
  *
  ************************************************************************/
+#ifndef _FTP_FTPRESULTSETI_HXX_
+#define _FTP_FTPRESULTSETI_HXX_
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
-#define _FTP_FTPLOADERTHREAD_HXX_
-
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
+#ifndef  _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-#ifndef __CURL_TYPES_H
-#include <curl/types.h>
+#ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
+#include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <com/sun/star/beans/Property.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UCB_NUMBEREDSORTINGINFO_HPP_
+#include <com/sun/star/ucb/NumberedSortingInfo.hpp>
+#endif
+#include "ftpresultsetbase.hxx"
+#include "ftpdirp.hxx"
 
 
 namespace ftp {
 
-    /** A loaderthread acts as factory for CURL-handles,
-     *  the key being ( implicit ) the threadid.
-     *  Owner is a FtpContentProvider-instance
-     */
-
-    class FtpLoaderThread
+    class ResultSetI
+        : public ResultSetBase
     {
     public:
 
-        FtpLoaderThread();
-        ~FtpLoaderThread();
-
-        CURL* handle();
-
+        ResultSetI(
+            const com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory>& xMSF,
+            const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XContentProvider>& xProvider,
+            sal_Int32 nOpenMode,
+            const com::sun::star::uno::Sequence<
+            com::sun::star::beans::Property >& seq,
+            const com::sun::star::uno::Sequence<
+            com::sun::star::ucb::NumberedSortingInfo >& seqSort,
+            const std::vector<FTPDirentry>&  dirvec);
 
     private:
-
-        /** Don't enable assignment and copy construction.
-         *  Not defined:
-         */
-
-        FtpLoaderThread(const FtpLoaderThread&);
-        FtpLoaderThread& operator=(const FtpLoaderThread&);
-
-        oslThreadKey m_threadKey;
-
-    };  // end class FtpLoaderThread
+    };
 
 }
 

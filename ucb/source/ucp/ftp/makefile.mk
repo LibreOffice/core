@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
+#   last change: $Author: abi $ $Date: 2002-07-31 15:13:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,9 +79,16 @@ UCPFTP_MAJOR=1
 SLOFILES=\
     $(SLO)$/ftpservices.obj  \
     $(SLO)$/ftpcontentprovider.obj  \
+    $(SLO)$/ftpurl.obj   \
     $(SLO)$/ftpcontent.obj   \
+    $(SLO)$/ftpcontentidentifier.obj   \
+    $(SLO)$/ftpcontentcaps.obj \
+    $(SLO)$/ftpdynresultset.obj  \
+    $(SLO)$/ftpresultsetbase.obj \
+    $(SLO)$/ftpresultsetI.obj \
     $(SLO)$/ftploaderthread.obj  \
-    $(SLO)$/ftpinpstr.obj
+    $(SLO)$/ftpinpstr.obj	\
+    $(SLO)$/ftpdirp.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
@@ -110,7 +117,20 @@ SHL1LIBS= \
 
 APP1TARGET=ftptest
 APP1OBJS=\
-    $(OBJ)$/test.obj
+    $(OBJ)$/test.obj \
+    $(OBJ)$/test_activedatasink.obj  \
+    $(OBJ)$/test_multiservicefac.obj  \
+    $(SLO)$/ftpcontentcaps.obj \
+    $(SLO)$/ftpservices.obj  \
+    $(SLO)$/ftpcontentprovider.obj  \
+    $(SLO)$/ftpcontent.obj   \
+    $(SLO)$/ftpdynresultset.obj  \
+    $(SLO)$/ftpresultsetbase.obj \
+    $(SLO)$/ftpresultsetI.obj  \
+    $(SLO)$/ftpcontentidentifier.obj   \
+    $(SLO)$/ftploaderthread.obj  \
+    $(SLO)$/ftpinpstr.obj	\
+    $(SLO)$/ftpdirp.obj
 
 .IF "$(COMPHELPERLIB)"==""
 .IF "$(GUI)" == "UNX"
@@ -125,7 +145,10 @@ APP1STDLIBS=\
     $(CPPULIB) \
     $(CPPUHELPERLIB) \
     $(SALLIB) \
-    $(COMPHELPERLIB)
+    $(VOSLIB) \
+    $(COMPHELPERLIB) \
+    $(UCBHELPERLIB) \
+    $(SOLARLIBDIR)$/libcurl.lib
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 

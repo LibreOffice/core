@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: ftploaderthread.hxx,v $
+ *  $RCSfile: ftpdynresultset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: abi $ $Date: 2002-07-31 15:13:25 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:13:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,54 +59,48 @@
  *
  ************************************************************************/
 
-/**************************************************************************
-                                TODO
- **************************************************************************
+#ifndef _FTP_FTPDYNRESULTSET_HXX
+#define _FTP_FTPDYNRESULTSET_HXX
 
- *************************************************************************/
-
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
-#define _FTP_FTPLOADERTHREAD_HXX_
-
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
+#ifndef _UCBHELPER_RESULTSETHELPER_HXX
+#include <ucbhelper/resultsethelper.hxx>
 #endif
-#ifndef __CURL_TYPES_H
-#include <curl/types.h>
+#ifndef _VOS_REF_HXX_
+#include <vos/ref.hxx>
 #endif
-
+#ifndef _FTP_FTPCONTENT_HXX_
+#include "ftpcontent.hxx"
+#endif
 
 namespace ftp {
 
-    /** A loaderthread acts as factory for CURL-handles,
-     *  the key being ( implicit ) the threadid.
-     *  Owner is a FtpContentProvider-instance
-     */
+    class ResultSetFactory;
 
-    class FtpLoaderThread
+    class DynamicResultSet : public ::ucb::ResultSetImplHelper
     {
-    public:
-
-        FtpLoaderThread();
-        ~FtpLoaderThread();
-
-        CURL* handle();
-
+        vos::ORef< FtpContent > m_xContent;
+        com::sun::star::uno::Reference<
+        com::sun::star::ucb::XCommandEnvironment > m_xEnv;
+        ResultSetFactory*                    m_pFactory;
 
     private:
+        virtual void initStatic();
+        virtual void initDynamic();
 
-        /** Don't enable assignment and copy construction.
-         *  Not defined:
-         */
+    public:
+        DynamicResultSet(
+            const com::sun::star::uno::Reference<
+            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+            const vos::ORef< FtpContent >& rxContent,
+            const com::sun::star::ucb::OpenCommandArgument2& rCommand,
+            const com::sun::star::uno::Reference<
+            com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+            ResultSetFactory* pFactory );
 
-        FtpLoaderThread(const FtpLoaderThread&);
-        FtpLoaderThread& operator=(const FtpLoaderThread&);
-
-        oslThreadKey m_threadKey;
-
-    };  // end class FtpLoaderThread
+        ~DynamicResultSet();
+    };
 
 }
 
-
 #endif
+

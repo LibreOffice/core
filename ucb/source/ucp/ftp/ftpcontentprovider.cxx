@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontentprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,9 +152,14 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL(FtpContentProvider);
 //=========================================================================
 
 // virtual
-Reference<XContent> SAL_CALL FtpContentProvider::queryContent(const Reference< XContentIdentifier >& xCanonicId)
-    throw( IllegalIdentifierException,
-           RuntimeException )
+Reference<XContent> SAL_CALL
+FtpContentProvider::queryContent(
+    const Reference< XContentIdentifier >& xCanonicId
+)
+    throw(
+        IllegalIdentifierException,
+        RuntimeException
+    )
 {
     // Check, if a content with given id already exists...
     Reference<XContent> xContent
@@ -174,7 +179,8 @@ Reference<XContent> SAL_CALL FtpContentProvider::queryContent(const Reference< X
         }
     }
 
-    xContent = new FtpContent(m_xSMgr,this,xCanonicId); // may throw IllegalIdentifierException
+    xContent = new FtpContent(m_xSMgr,this,xCanonicId);
+    // may throw IllegalIdentifierException
     return xContent;
 }
 

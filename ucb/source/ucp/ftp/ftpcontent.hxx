@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-20 14:49:21 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,12 +159,20 @@ namespace ftp
                        com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
 
-        virtual com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >
-        getCommands( const com::sun::star::uno::Reference<
-                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
+        virtual com::sun::star::uno::Sequence<
+        com::sun::star::ucb::CommandInfo>
+        getCommands(const com::sun::star::uno::Reference<
+                    com::sun::star::ucb::XCommandEnvironment > & xEnv);
 
 
         virtual ::rtl::OUString getParentURL();
+
+        com::sun::star::uno::Reference<com::sun::star::sdbc::XRow>
+        getPropertyValues(
+            const com::sun::star::uno::Sequence<
+            com::sun::star::beans::Property>& seqProp
+        );
+
     };
 
 }

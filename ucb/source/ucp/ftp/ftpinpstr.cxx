@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpinpstr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <algorithm>
 #define STD_ALGORITHM
 #endif
+#include <stdio.h>
 
 using namespace ftp;
 using namespace com::sun::star::uno;
@@ -82,12 +83,13 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::io;
 
 
-
 FtpInputStream::FtpInputStream()
-    : m_nLen(0),
+    : m_nMaxLen(1024*1024),
+      m_nLen(0),
       m_nWritePos(0),
       m_nReadPos(0),
-      m_pBuffer(NULL) { }
+      m_pBuffer(0),
+      m_pFile(0)  { }
 
 
 FtpInputStream::~FtpInputStream() {
@@ -116,6 +118,9 @@ void SAL_CALL FtpInputStream::release( void ) throw() {
 }
 
 
+/** nBytesToRead < 0
+    returns zero written bytes.
+*/
 
 sal_Int32 SAL_CALL FtpInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                              sal_Int32 nBytesToRead)
@@ -130,10 +135,9 @@ sal_Int32 SAL_CALL FtpInputStream::readBytes(Sequence< sal_Int8 >& aData,
     if(0 <= curr && aData.getLength() < curr)
         aData.realloc(curr);
 
-    for(sal_Int32 k = 0; k < curr; ++k )
-        aData[k] = static_cast<sal_Int8*>(m_pBuffer)[m_nReadPos+k];
+    for(sal_Int32 k = 0; k < curr; )
+        aData[k++] = static_cast<sal_Int8*>(m_pBuffer)[m_nReadPos++];
 
-    m_nReadPos += curr;
     return curr > 0 ? curr : 0;
 }
 
@@ -197,8 +201,12 @@ void SAL_CALL FtpInputStream::seek(sal_Int64 location)
 
 
 
-sal_Int64 SAL_CALL FtpInputStream::getPosition( void ) throw( IOException,
-                                                              RuntimeException ) {
+sal_Int64 SAL_CALL
+FtpInputStream::getPosition(
+    void )
+    throw( IOException,
+           RuntimeException )
+{
     osl::MutexGuard aGuard( m_aMutex );
     return sal_Int64(m_nReadPos);
 }
@@ -212,16 +220,52 @@ sal_Int64 SAL_CALL FtpInputStream::getLength( void ) throw(
 }
 
 
-void FtpInputStream::append(const void* pBuffer,sal_uInt32 nLen)  throw() {
+const void* FtpInputStream::getBuffer(void) const throw()
+{
+    return m_pBuffer;
+}
+
+
+
+void
+FtpInputStream::append(
+    const void* pBuffer,
+    size_t size,
+    size_t nmemb
+) throw()
+{
+    if(m_pFile)
+        append2File(pBuffer,size,nmemb);
+
     osl::MutexGuard aGuard( m_aMutex );
+    sal_uInt32 nLen = size*nmemb;
     sal_uInt32 tmp(nLen + m_nWritePos);
+    if(tmp > 1024*1024) {
+        // if download is larger than 1MB store in file
+        m_pFile = tmpfile();
+        fwrite(m_pBuffer,m_nWritePos,1,m_pFile);
+        rtl_freeMemory(m_pBuffer),m_nLen = 0,m_nWritePos = 0,m_nReadPos = 0;
+    }
+    else
     if(m_nLen < tmp) { // enlarge in steps of multiples of 1K
         do {
             m_nLen+=1024;
         } while(m_nLen < tmp);
+
         m_pBuffer = rtl_reallocateMemory(m_pBuffer,m_nLen);
     }
-
-    rtl_copyMemory(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,pBuffer,nLen);
+    rtl_copyMemory(static_cast<sal_Int8*>(m_pBuffer)+m_nWritePos,
+                   pBuffer,nLen);
     m_nWritePos = tmp;
+}
+
+
+void
+FtpInputStream::append2File(
+    const void* pBuffer,
+    size_t size,
+    size_t nmemb
+) throw()
+{
+    fwrite(pBuffer,size,nmemb,m_pFile);
 }

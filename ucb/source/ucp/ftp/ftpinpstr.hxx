@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpinpstr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:13:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _FTP_FTPINPSTR_HXX_
 #define _FTP_FTPINPSTR_HXX_
 
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -80,6 +83,8 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#include <stdio.h>
+
 
 namespace ftp {
 
@@ -97,6 +102,10 @@ namespace ftp {
           public com::sun::star::io::XSeekable
     {
     public:
+
+        /** Defines the storage kind found
+         *  on which the inputstream acts.
+         */
 
         FtpInputStream();
 
@@ -170,14 +179,25 @@ namespace ftp {
         /** appends the content of *pBuffer.
          */
 
-        void append(const void* pBuffer,sal_uInt32 nLen) throw();
+        void append(const void* pBuffer,size_t size,size_t nmemb) throw();
+
+        const void* getBuffer() const throw();
 
     private:
+
+        /** Don't hold more than 1MB in memory.
+         */
+
+        const sal_uInt32 m_nMaxLen;
 
         osl::Mutex m_aMutex;
 
         sal_uInt32 m_nLen,m_nWritePos,m_nReadPos;
         void* m_pBuffer;
+        rtl::OUString m_aTmpFileURL;
+
+        FILE* m_pFile;
+        void append2File(const void* pBuffer,size_t size,size_t nmemb) throw();
     };
 
 

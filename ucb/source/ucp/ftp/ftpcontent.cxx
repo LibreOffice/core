@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpcontent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-06-24 15:17:55 $
+ *  last change: $Author: abi $ $Date: 2002-07-31 15:12:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,45 +65,33 @@
 
  *************************************************************************/
 
-#ifndef _FTP_FTPCONTENT_HXX_
+#include <memory>
+#include <vector>
+#include "ftpdynresultset.hxx"
+#include "ftpresultsetfactory.hxx"
+#include "ftpresultsetI.hxx"
 #include "ftpcontent.hxx"
-#endif
-#ifndef _FTP_FTPCONTENTPROVIDER_HXX_
 #include "ftpcontentprovider.hxx"
-#endif
-#ifndef _FTP_FTPLOADERTHREAD_HXX_
 #include "ftploaderthread.hxx"
-#endif
-#ifndef _FTP_FTPINPSTR_HXX_
 #include "ftpinpstr.hxx"
-#endif
-#ifndef __CURL_CURL_H
+#include "ftpdirp.hxx"
+
 #include <curl/curl.h>
-#endif
-#ifndef __CURL_EASY_H
 #include <curl/easy.h>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
+#include <ucbhelper/cancelcommandexecution.hxx>
+#include <ucbhelper/contentidentifier.hxx>
+#include <ucbhelper/propertyvalueset.hxx>
+#include <ucbhelper/cancelcommandexecution.hxx>
 #include <com/sun/star/beans/Property.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
-#include <com/sun/star/ucb/CommandInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
 #include <com/sun/star/io/XOutputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XACTIVEDATASTREAMER_HPP_
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDDATASINKEXCEPTION_HPP_
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
-#endif
+#include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>
+#include <com/sun/star/ucb/OpenMode.hpp>
+
 
 using namespace ftp;
 using namespace com::sun::star::lang;
@@ -111,6 +99,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::io;
+using namespace com::sun::star::sdbc;
 
 
 //=========================================================================
@@ -171,8 +160,10 @@ XTYPEPROVIDER_IMPL_4( FtpContent,
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
 
 XSERVICEINFO_IMPL_1( FtpContent,
-                     rtl::OUString::createFromAscii("com.sun.star.comp.FtpContent"),
-                     rtl::OUString::createFromAscii("com.sun.star.ucb.FtpContent"));
+                     rtl::OUString::createFromAscii(
+                         "com.sun.star.comp.FtpContent"),
+                     rtl::OUString::createFromAscii(
+                         "com.sun.star.ucb.FtpContent"));
 
 
 
@@ -233,7 +224,7 @@ extern "C" {
 
         FtpBufferContainer *p = reinterpret_cast<FtpBufferContainer*>(stream);
         if(p && p->m_out)
-            p->m_out->append(buffer,ret);
+            p->m_out->append(buffer,size,nmemb);
         return ret;
     }
 
@@ -252,8 +243,10 @@ extern "C" {
         try{
             StreamContainer *p = reinterpret_cast<StreamContainer*>(stream);
             if(p && p->m_out.is())
-                p->m_out->writeBytes(Sequence<sal_Int8>(static_cast<sal_Int8*>(buffer),
-                                                      size*nmemb));
+                p->m_out->writeBytes(
+                    Sequence<sal_Int8>(static_cast<sal_Int8*>(buffer),
+                                       size*nmemb)
+                );
             return ret;
         } catch(const Exception&) {
             return 0;
@@ -265,53 +258,242 @@ extern "C" {
 #endif
 
 
-// virtual
-Any SAL_CALL FtpContent::execute( const Command& aCommand,
-                                  sal_Int32 CommandId,
-                                  const Reference<
-                                  XCommandEnvironment >& Environment )
-    throw( Exception, CommandAbortedException, RuntimeException )
-{
 
+class ResultSetFactoryI
+    : public ResultSetFactory
+{
+public:
+
+    ResultSetFactoryI(const Reference<XMultiServiceFactory >&  xSMgr,
+                      const Reference<XContentProvider >&  xProvider,
+                      sal_Int32 nOpenMode,
+                      const Sequence<Property>& seq,
+                      const Sequence<NumberedSortingInfo>& seqSort,
+                      const std::vector<FTPDirentry>& dirvec)
+        : m_xSMgr(xSMgr),
+          m_xProvider(xProvider),
+          m_nOpenMode(nOpenMode),
+          m_seq(seq),
+          m_seqSort(seqSort),
+          m_dirvec(dirvec)
+    {
+    }
+
+    virtual ResultSetBase* createResultSet()
+    {
+        return new ResultSetI(m_xSMgr,
+                              m_xProvider,
+                              m_nOpenMode,
+                              m_seq,
+                              m_seqSort,
+                              m_dirvec);
+    }
+
+public:
+
+    Reference< XMultiServiceFactory >               m_xSMgr;
+    Reference< XContentProvider >                   m_xProvider;
+    sal_Int32                                       m_nOpenMode;
+    Sequence< Property >                            m_seq;
+    Sequence< NumberedSortingInfo >                 m_seqSort;
+    std::vector<FTPDirentry>                        m_dirvec;
+};
+
+
+
+
+
+// virtual
+Any SAL_CALL FtpContent::execute(
+    const Command& aCommand,
+    sal_Int32 CommandId,
+    const Reference<
+    XCommandEnvironment >& Environment
+)
+    throw(
+        Exception,
+        CommandAbortedException,
+        RuntimeException
+    )
+{
     Any aRet;
 
-    if( aCommand.Name.compareToAscii( "getPropertyValues" ) == 0 ) {
+    if(aCommand.Name.compareToAscii("getPropertyValues") == 0) {
+        Sequence< Property > Properties;
+        if(!( aCommand.Argument >>= Properties))
+        {
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
+        }
+
+        aRet <<= getPropertyValues(Properties);
+    }
+    else if(aCommand.Name.compareToAscii("setPropertyValues") == 0) {
+    }
+    else if(aCommand.Name.compareToAscii("getCommandInfo") == 0) {
+        // Note: Implemented by base class.
+        aRet <<= getCommandInfo(Environment);
+    }
+    else if(aCommand.Name.compareToAscii("getPropertySetInfo") == 0) {
+        // Note: Implemented by base class.
+        aRet <<= getPropertySetInfo(Environment);
     }
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 ) {
         OpenCommandArgument2 aOpenCommand;
-        if ( !( aCommand.Argument >>= aOpenCommand ) )
-            throw IllegalArgumentException();
+        if ( !( aCommand.Argument >>= aOpenCommand ) ) {
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
+        }
 
-        Reference< XActiveDataStreamer > activeDataStreamer( aOpenCommand.Sink,UNO_QUERY );
-        if(activeDataStreamer.is())
-            throw UnsupportedDataSinkException();
 
         CURL *curl = m_pFCP->handle();
 
-        /** Now setting the URL
-         */
+        // Setting the header write function,
+        // which receives the output of the control connection.
+
+        std::auto_ptr<FtpInputStream> header(new FtpInputStream());
+        FtpBufferContainer headerContainer(header.get());
+
+        curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION,write2InputStream);
+        curl_easy_setopt(curl,CURLOPT_WRITEHEADER,&headerContainer);
+
+
+        // Now setting the URL
 
         rtl::OUString aOUStr(m_xIdentifier->getContentIdentifier());
         rtl::OString aOStr(aOUStr.getStr(),
                            aOUStr.getLength(),
-                           RTL_TEXTENCODING_UTF8); // Only ASCII in URLs => UTF8 ok
+                           RTL_TEXTENCODING_UTF8); // Only ASCII in URLs
+        //                                         // => UTF8 ok
+
         curl_easy_setopt(curl,CURLOPT_URL,aOStr.getStr());
 
-        Reference<XActiveDataSink> activeDataSink(aOpenCommand.Sink,UNO_QUERY);
-        if(activeDataSink.is()) {
-            FtpBufferContainer cont(new FtpInputStream());
+        if(aOpenCommand.Mode == OpenMode::DOCUMENT) {
+            // Open as a document
+            Reference<XActiveDataSink>
+                xActiveDataSink(aOpenCommand.Sink,UNO_QUERY);
+            Reference< XOutputStream >
+                xOutputStream(aOpenCommand.Sink,UNO_QUERY);
+
+            if(xActiveDataSink.is()) {
+                FtpBufferContainer cont(new FtpInputStream());
+                curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2InputStream);
+                curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
+                curl_easy_perform(curl);
+                xActiveDataSink->setInputStream(cont.m_out);
+            }
+            else if(xOutputStream.is()) {
+                StreamContainer cont(xOutputStream);
+                curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,
+                                 write2OutputStream);
+                curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
+                curl_easy_perform(curl);
+            }
+            else {
+                aRet <<= UnsupportedDataSinkException();
+                ucbhelper::cancelCommandExecution(aRet,Environment);
+            }
+        }
+        else if(aOpenCommand.Mode == OpenMode::ALL ||
+                aOpenCommand.Mode == OpenMode::DOCUMENTS ||
+                aOpenCommand.Mode == OpenMode::FOLDERS ) {
+            std::auto_ptr<FtpInputStream> ap(new FtpInputStream());
+            FtpBufferContainer cont(ap.get());
             curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2InputStream);
             curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
             curl_easy_perform(curl);
-            activeDataSink->setInputStream(cont.m_out);
-        }
 
-        Reference< XOutputStream > xOutputStream(aOpenCommand.Sink,UNO_QUERY);
-        if(xOutputStream.is()) {
-            StreamContainer cont(xOutputStream);
-            curl_easy_setopt(curl,CURLOPT_WRITEFUNCTION,write2OutputStream);
-            curl_easy_setopt(curl,CURLOPT_WRITEDATA,&cont);
-            curl_easy_perform(curl);
+            rtl::OUString aStr((char*)header.get()->getBuffer(),
+                               sal_Int32(header.get()->getLength()),
+                               RTL_TEXTENCODING_UTF8);
+
+            // Now parse the content.
+            // Parsing is here somewhat ugly, because
+            // the regular expression does not forward
+            // the pointer to end of parsed expression.
+
+            sal_uInt32 len = (sal_uInt32) ap.get()->getLength();
+            char* fwd = (char*) ap.get()->getBuffer();
+            char *p1, *p2;
+            p1 = p2 = fwd;
+
+            enum OS { DOS,UNIX,VMS,UNKNOWN };
+            OS osKind(UNKNOWN);
+            std::vector<FTPDirentry> resvec;
+            FTPDirentry aDirEntry;
+
+            while(true) {
+                while(p2-fwd < int(len) && *p2 != '\n') ++p2;
+                if(p2-fwd == int(len)) break;
+
+                *p2 = 0;
+                switch(osKind) {
+                    case DOS:
+                        FTPDirectoryParser::parseDOS(aDirEntry,p1);
+                        break;
+                    case UNIX:
+                        FTPDirectoryParser::parseUNIX(aDirEntry,p1);
+                        break;
+                    case VMS:
+                        FTPDirectoryParser::parseUNIX(aDirEntry,p1);
+                        break;
+                    default:
+                        if(FTPDirectoryParser::parseUNIX(aDirEntry,p1))
+                            osKind = UNIX;
+                        else if(FTPDirectoryParser::parseDOS(aDirEntry,p1))
+                            osKind = DOS;
+                        else if(FTPDirectoryParser::parseVMS(aDirEntry,p1))
+                            osKind = VMS;
+                }
+                if(osKind != int(UNKNOWN)) {
+                    if(1 + aOUStr.lastIndexOf(sal_Unicode('/')) ==
+                       aOUStr.getLength())
+                        aDirEntry.m_aURL =
+                            aOUStr +
+                            aDirEntry.m_aName;
+                    else
+                        aDirEntry.m_aURL =
+                            aOUStr +
+                            sal_Unicode('/') +
+                            aDirEntry.m_aName;
+
+                    resvec.push_back(aDirEntry);
+                    aDirEntry.clear();
+                }
+
+                p1 = p2 + 1;
+            }
+
+            if(osKind == int(UNKNOWN)) {
+                // Ok, this was not a directory, but a file
+                //todo: Check here wether our parent lists our name
+            }
+            else {
+                Reference< XDynamicResultSet > xSet
+                    = new DynamicResultSet(
+                        m_xSMgr,
+                        this,
+                        aOpenCommand,
+                        Environment,
+                        new ResultSetFactoryI(m_xSMgr,
+                                              m_xProvider.getBodyPtr(),
+                                              aOpenCommand.Mode,
+                                              aOpenCommand.Properties,
+                                              aOpenCommand.SortingInfo,
+                                              resvec));
+                aRet <<= xSet;
+            }
+        }
+        else if(aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_NONE ||
+                aOpenCommand.Mode == OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
+            // Unsupported OpenMode
+            aRet <<= UnsupportedOpenModeException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
+        }
+        else {
+            // IllegalArgumentException:: No OpenMode
+            aRet <<= IllegalArgumentException();
+            ucbhelper::cancelCommandExecution(aRet,Environment);
         }
     }
     else
@@ -321,25 +503,7 @@ Any SAL_CALL FtpContent::execute( const Command& aCommand,
 }
 
 
-//              curl_easy_setopt(curl,CURLOPT_HEADERFUNCTION,write2OutputStream);
-//              curl_easy_setopt(curl,CURLOPT_WRITEHEADER,&cont);
-
-
 //              curl_slist_free_all(list);
-
-
-Sequence<Property> FtpContent::getProperties(const Reference<XCommandEnvironment>& xEnv)
-{
-    Sequence<Property> ret(0);
-    return ret;
-}
-
-
-
-Sequence<CommandInfo> FtpContent::getCommands(const Reference<XCommandEnvironment> & xEnv)
-{
-    return Sequence<CommandInfo>(0);
-}
 
 
 
@@ -348,3 +512,45 @@ rtl::OUString FtpContent::getParentURL()
     return rtl::OUString();
 }
 
+
+
+Reference< XRow > FtpContent::getPropertyValues(
+    const Sequence< Property >& seqProp
+)
+{
+    FTPDirentry aDirEntry;
+    vos::ORef<::ucb::PropertyValueSet> xRow =
+        new ::ucb::PropertyValueSet(m_xSMgr);
+
+    for(sal_Int32 i = 0; i < seqProp.getLength(); ++i) {
+        const rtl::OUString& Name = seqProp[i].Name;
+        if(Name.compareToAscii("ContentType") == 0)
+            xRow->appendString(seqProp[i],
+                               rtl::OUString::createFromAscii(
+                                   "application/ftp"));
+        else if(Name.compareToAscii("Title") == 0)
+            xRow->appendString(seqProp[i],aDirEntry.m_aName);
+        else if(Name.compareToAscii("IsReadOnly") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                sal_Bool(aDirEntry.m_nMode &
+                                         INETCOREFTP_FILEMODE_WRITE));
+        else if(Name.compareToAscii("IsDocument") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                ! sal_Bool(aDirEntry.m_nMode &
+                                           INETCOREFTP_FILEMODE_ISDIR));
+        else if(Name.compareToAscii("IsFolder") == 0)
+            xRow->appendBoolean(seqProp[i],
+                                sal_Bool(aDirEntry.m_nMode &
+                                         INETCOREFTP_FILEMODE_ISDIR));
+        else if(Name.compareToAscii("Size") == 0)
+            xRow->appendLong(seqProp[i],
+                             aDirEntry.m_nSize);
+        else if(Name.compareToAscii("DateCreated") == 0)
+            xRow->appendTimestamp(seqProp[i],
+                                  aDirEntry.m_aDate);
+        else
+            xRow->appendVoid(seqProp[i]);
+    }
+
+    return Reference<XRow>(xRow.getBodyPtr());
+}
