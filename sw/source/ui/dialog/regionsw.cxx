@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 13:43:00 $
+ *  last change: $Author: os $ $Date: 2001-08-07 09:27:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1300,7 +1300,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
             {
                 SwTestPasswdDlg aPasswdDlg(this);
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-                if (aPasswdDlg.Execute())
+                if(RET_OK == aPasswdDlg.Execute())
                 {
                     String sNewPasswd( aPasswdDlg.GetPassword() );
                     if( aPasswdDlg.GetConfirm() == sNewPasswd )
@@ -1313,6 +1313,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                         ChangePasswdHdl(pBox);
                         break;
                     }
+                }
+                else
+                {
+                    if(!bChange)
+                        aPasswdCB.Check(FALSE);
+                    break;
                 }
             }
             pRepr->GetSection().SetPasswd(pRepr->GetTempPasswd());
@@ -1879,28 +1885,30 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
 {
     sal_Bool bChange = pButton == &aPasswdPB;
     sal_Bool bSet = bChange ? bChange : aPasswdCB.IsChecked();
-        if(bSet)
+    if(bSet)
+    {
+        if(!aNewPasswd.getLength() || bChange)
         {
-            if(!aNewPasswd.getLength() || bChange)
+            SwTestPasswdDlg aPasswdDlg(this);
+            aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
+            if(RET_OK == aPasswdDlg.Execute())
             {
-                SwTestPasswdDlg aPasswdDlg(this);
-                aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
-                if (aPasswdDlg.Execute())
+                String sNewPasswd( aPasswdDlg.GetPassword() );
+                if( aPasswdDlg.GetConfirm() == sNewPasswd )
                 {
-                    String sNewPasswd( aPasswdDlg.GetPassword() );
-                    if( aPasswdDlg.GetConfirm() == sNewPasswd )
-                    {
-                        SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                    }
-                    else
-                    {
-                        InfoBox(pButton, SW_RES(REG_WRONG_PASSWD_REPEAT)).Execute();
-                    }
+                    SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                }
+                else
+                {
+                    InfoBox(pButton, SW_RES(REG_WRONG_PASSWD_REPEAT)).Execute();
                 }
             }
+            else if(!bChange)
+                aPasswdCB.Check(FALSE);
         }
-        else
-            aNewPasswd.realloc(0);
+    }
+    else
+        aNewPasswd.realloc(0);
     return 0;
 }
 /*---------------------------------------------------------------------
@@ -2362,6 +2370,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.15  2001/07/05 13:43:00  ama
+    Chg #89181#: New data exchange
+
     Revision 1.14  2001/07/05 13:26:33  ama
     Chg #89181#: New data exchange
 
