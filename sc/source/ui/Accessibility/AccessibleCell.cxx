@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-05 16:47:04 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,13 @@
 
 
 #include "AccessibleCell.hxx"
+
+#ifndef SC_ITEMS_HXX
+#include "scitems.hxx"
+#endif
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+
 #ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
 #endif
@@ -72,9 +79,6 @@
 #endif
 #ifndef SC_SCATTR_HXX
 #include "attrib.hxx"
-#endif
-#ifndef SC_ITEMS_HXX
-#include "scitems.hxx"
 #endif
 #ifndef SC_MISCUNO_HXX
 #include "miscuno.hxx"
@@ -256,7 +260,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     if (IsOpaque(xParentStates))
         pStateSet->AddState(AccessibleStateType::OPAQUE);
     pStateSet->AddState(AccessibleStateType::SELECTABLE);
-    if (IsSelected(xParentStates))
+    if (IsSelected())
         pStateSet->AddState(AccessibleStateType::SELECTED);
     if (isShowing())
         pStateSet->AddState(AccessibleStateType::SHOWING);
@@ -357,9 +361,15 @@ sal_Bool ScAccessibleCell::IsOpaque(
     return bOpaque;
 }
 
-sal_Bool ScAccessibleCell::IsSelected(const uno::Reference<XAccessibleStateSet>& rxParentStates)
+sal_Bool ScAccessibleCell::IsSelected()
 {
-    return sal_False;
+    sal_Bool bResult(sal_False);
+    if (mpViewShell && mpViewShell->GetViewData())
+    {
+        const ScMarkData& rMarkdata = mpViewShell->GetViewData()->GetMarkData();
+        bResult = rMarkdata.IsCellMarked(maCellAddress.Col(), maCellAddress.Row());
+    }
+    return bResult;
 }
 
 ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
@@ -450,11 +460,11 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         if (pTargetSet)
         {
             sal_uInt32 nPos(0);
-            for (sal_uInt32 i = rRange.aStart.Col(); i <= rRange.aEnd.Col(); i++)
+            for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
             {
-                for (sal_uInt32 j = rRange.aStart.Row(); j <= rRange.aEnd.Row(); j++)
+                for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
                 {
-                    pTargetSet[nPos] = xTable->getAccessibleCellAt(j, i);
+                    pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
                     nPos++;
                 }
             }
