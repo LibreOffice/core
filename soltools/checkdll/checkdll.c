@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkdll.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:27:23 $
+ *  last change: $Author: mh $ $Date: 2003-07-17 10:26:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,14 +135,14 @@ int main(int argc, char *argv[])
 #else
                         // Mac OS X can't unload dylibs
 #endif
-                        return 0;
                 } else {
-                        printf(": ERROR: symbol %s not found\n", psymbol);
+                        printf(": WARNING: symbol %s not found\n", psymbol);
                 }
+                return 0;
         } else {
-                printf(": ERROR: %s is not a valid dylib name\n", argv[1]);
+                printf(": WARNING: %s is not a valid dylib name\n", argv[1]);
         }
-    return 3;
+        return 3;
 
         // fixme use NSLinkEditError() for better error messages
 
@@ -151,23 +151,23 @@ int main(int argc, char *argv[])
     if ( (phandle = dlopen(argv[1], RTLD_NOW)) != NULL ) {
         if  ( (pfun = (char *(*)(void))dlsym(phandle, psymbol)) != NULL ) {
             printf(": ok\n");
-#ifdef NO_UNLOAD_CHECK
-            _exit(0);
-#else
-            dlclose(phandle);
-#endif
-            return 0;
         }
-    }
-    printf(": ERROR: %s\n", dlerror());
-    if (phandle)
+        else
+        {
+            printf(": WARNING: %s\n", dlerror());
+        }
 #ifdef NO_UNLOAD_CHECK
-        _exit(3);
+        _exit(0);
 #else
         dlclose(phandle);
 #endif
+        return 0;
+    }
+
+    printf(": ERROR: %s\n", dlerror());
     return 3;
 
 #endif /* MACOSX */
 }
+
 
