@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 20:17:13 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:08:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@
         Text [ italian ] = "~Disponi" ; \
         Text [ portuguese_brazilian ] = "Organizar" ; \
         Text [ portuguese ] = "~Disposição" ; \
-        Text [ finnish ] = "Järjestä" ; \
+        Text [ finnish ] = "~Järjestä" ; \
         Text [ danish ] = "Pl~acering" ; \
         Text [ french ] = "~Disposition" ; \
         Text [ swedish ] = "~Placering" ; \
@@ -114,7 +114,7 @@
                     Text [ italian ] = "Porta più ~avanti" ; \
                     Text [ portuguese_brazilian ] = "Tazer Para Frente" ; \
                     Text [ portuguese ] = "~Trazer para a frente" ; \
-                    Text [ finnish ] = "Yksi eteen" ; \
+                    Text [ finnish ] = "Siirrä ~eteenpäin" ; \
                     Text [ danish ] = "F~lyt fremad" ; \
                     Text [ french ] = "V~ers l'avant" ; \
                     Text [ swedish ] = "Flytta l~ängre fram" ; \
@@ -143,7 +143,7 @@
                     Text [ italian ] = "Porta più i~ndietro" ; \
                     Text [ portuguese_brazilian ] = "Enviar Para o Fundo" ; \
                     Text [ portuguese ] = "Enviar para o ~fundo" ; \
-                    Text [ finnish ] = "Yksi taakse" ; \
+                    Text [ finnish ] = "Siirrä taakse~päin" ; \
                     Text [ danish ] = "Flyt bag~ud" ; \
                     Text [ french ] = "~Vers l'arrière" ; \
                     Text [ swedish ] = "Flytta lä~ngre bak" ; \
@@ -229,6 +229,7 @@
                     Text[ arabic ] = "Úáì ÇáÕÝÍÉ";\
                     Text[ turkish ] = "Sayfa";\
                     Text[ catalan ] = "A la ~página";\
+                    Text[ finnish ] = "Sivul~le";\
                 };\
                 MenuItem\
                 {\
@@ -255,6 +256,7 @@
                     Text[ arabic ] = "Úáì ÇáÎáíÉ";\
                     Text[ turkish ] = "Hücre";\
                     Text[ catalan ] = "A la ~celda";\
+                    Text[ finnish ] = "So~luun";\
                 };\
             };\
         };\
@@ -272,6 +274,7 @@
         Text[ arabic ] = "~ÅÑÓÇÁ";\
         Text[ turkish ] = "~Sabitleyici";\
         Text[ catalan ] = "~Anclaje";\
+        Text[ finnish ] = "Ank~kuri";\
     };
 
 #define MN_ALIGNSUB \
@@ -370,6 +373,7 @@ String RID_OBJECTBAR_DRAWFORM
     Text[ korean ] = "ÄÁÆ®·Ñ µµ±¸¸ðÀ½";
     Text[ turkish ] = "Komut alaný çubuðu";
     Text[ catalan ] = "Barra de campos de control";
+    Text[ finnish ] = "Ohjaintyökalurivi";
 };
 
 ToolBox RID_OBJECTBAR_DRAWFORM
@@ -546,6 +550,7 @@ String RID_POPUP_DRAWFORM
     Text[ korean ] = "¾ç½Ä°³Ã¼ÀÇ ÆË¾÷ ¸Þ´º";
     Text[ turkish ] = "Form nesneleri için popup mönü";
     Text[ catalan ] = "Menú emergente para objetos de formulario";
+    Text[ finnish ] = "Lomakeobjektien ponnahdusvalikko";
 };
  //
  //     Popup-Menue fuer (Uno-) Controls
