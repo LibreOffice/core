@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:00:51 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,6 @@
  ************************************************************************/
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-
-
-#pragma hdrstop
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
