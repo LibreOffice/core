@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-12-06 14:50:38 $
+ *  last change: $Author: oj $ $Date: 2002-12-09 07:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,13 +482,13 @@ namespace dbaui
     void OGeneralPage::switchMessage(sal_Bool _bDeleted,const DATASOURCE_TYPE _eType)
     {
         SPECIAL_MESSAGE eMessage = smNone;
-        if ( _eType == m_eNotSupportedKnownType )
-        {
-            eMessage = smUnsupportedType;
-        }
-        else if ( _bDeleted )
+        if ( _bDeleted )
         {
             eMessage = smDatasourceDeleted;
+        }
+        else if ( _eType == m_eNotSupportedKnownType )
+        {
+            eMessage = smUnsupportedType;
         }
         else if ( m_aName.IsEnabled() && ( 0L == m_aNameValidator.Call( this ) ) )
         {
@@ -1412,6 +1412,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2002/12/06 14:50:38  oj
+ *  #106045# check if connectionurl should disabled
+ *
  *  Revision 1.29  2002/11/21 15:23:01  oj
  *  #105213# impl new feature of rown mysql driver page
  *
