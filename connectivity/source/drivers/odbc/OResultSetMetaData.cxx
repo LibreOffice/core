@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 11:50:05 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:35:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,30 +85,36 @@ OResultSetMetaData::~OResultSetMetaData()
     SQLSMALLINT BUFFER_LEN = 128;
     char *pName = new char[BUFFER_LEN];
     SQLSMALLINT nRealLen=0;
-    OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
+    SQLRETURN nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     BUFFER_LEN,
                                     &nRealLen,
                                     NULL
-                                    ),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+                                    );
+    ::rtl::OUString sValue;
+    if ( nRet == SQL_SUCCESS )
+        sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+    delete [] pName;
+    OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     if(nRealLen > BUFFER_LEN)
     {
-        delete [] pName;
         pName = new char[nRealLen];
-        OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
+        nRet = N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
                                     (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     nRealLen,
                                     &nRealLen,
                                     NULL
-                                    ),m_aStatementHandle,SQL_HANDLE_STMT,*this);
+                                    );
+        if ( nRet == SQL_SUCCESS )
+            sValue = ::rtl::OUString(pName,nRealLen,m_pConnection->getTextEncoding());
+        delete [] pName;
+        OTools::ThrowException(m_pConnection,nRet,m_aStatementHandle,SQL_HANDLE_STMT,*this);
     }
 
-    ::rtl::OUString sValue(pName,nRealLen,m_pConnection->getTextEncoding());
-    delete [] pName;
     return  sValue;
 }
 // -------------------------------------------------------------------------
