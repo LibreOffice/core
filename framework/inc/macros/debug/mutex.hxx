@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mutex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-15 05:42:44 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:19:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,28 +72,8 @@
     //  includes
     //_____________________________________________________________________________________________________________
 
-    #ifndef __FRAMEWORK_THREADHELP_IRWLOCK_H_
-    #include <threadhelp/irwlock.h>
-    #endif
-
-    #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
-    #include <threadhelp/readguard.hxx>
-    #endif
-
-    #ifndef __FRAMEWORK_THREADHELP_WRITEGUARD_HXX_
-    #include <threadhelp/writeguard.hxx>
-    #endif
-
     #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
-    #endif
-
-    #ifndef _RTL_USTRING_
-    #include <rtl/ustring.hxx>
-    #endif
-
-    #ifndef _OSL_MUTEX_HXX_
-    #include <osl/mutex.hxx>
     #endif
 
     /*_____________________________________________________________________________________________________________
@@ -103,136 +83,54 @@
     _____________________________________________________________________________________________________________*/
 
     #ifndef LOGFILE_MUTEX
-        #define LOGFILE_MUTEX   \
-                    "mutex.log"
+        #define LOGFILE_MUTEX   "mutex.log"
     #endif
 
-    //_____________________________________________________________________________________________________________
-    //  debug guard!
-    //_____________________________________________________________________________________________________________
-
-    class dbgGuard
-    {
-        public:
-
-            dbgGuard::dbgGuard( ::osl::Mutex* pMutex, const char* sMethod )
-                :   m_pMutex    ( pMutex    )
-                ,   m_sMethod   ( sMethod   )
-            {
-                ::rtl::OStringBuffer sBuffer(256);
-                if( m_pMutex->tryToAcquire() == sal_False )
-                {
-                    sBuffer.append( "\""                            );
-                    sBuffer.append( m_sMethod                       );
-                    sBuffer.append( "\" block at acquire( pMutex="  );
-                    sBuffer.append( (sal_Int32)(m_pMutex)           );
-                    sBuffer.append( " this="                        );
-                    sBuffer.append( (sal_Int32)(this)               );
-                    sBuffer.append( " )\n"                          );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
-                    m_pMutex->acquire();
-                }
-
-                sBuffer.append( "\""                        );
-                sBuffer.append( m_sMethod                   );
-                sBuffer.append( "\" acquire( pMutex=");
-                sBuffer.append( (sal_Int32)(m_pMutex)       );
-                sBuffer.append( " this="                    );
-                sBuffer.append( (sal_Int32)(this)           );
-                sBuffer.append( " )\n"                      );
-                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
-            }
-
-            dbgGuard( ::osl::Mutex& rMutex, const char* sMethod )
-                :   m_pMutex    ( &rMutex   )
-                ,   m_sMethod   ( sMethod   )
-            {
-                ::rtl::OStringBuffer sBuffer(256);
-                if( m_pMutex->tryToAcquire() == sal_False )
-                {
-                    sBuffer.append( "\""                            );
-                    sBuffer.append( m_sMethod                       );
-                    sBuffer.append( "\" block at acquire( pMutex="  );
-                    sBuffer.append( (sal_Int32)(m_pMutex)           );
-                    sBuffer.append( " this="                        );
-                    sBuffer.append( (sal_Int32)(this)               );
-                    sBuffer.append( " )\n"                          );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
-                    m_pMutex->acquire();
-                }
-
-                sBuffer.append( "\""                        );
-                sBuffer.append( m_sMethod                   );
-                sBuffer.append( "\" finish acquire( pMutex=");
-                sBuffer.append( (sal_Int32)(m_pMutex)       );
-                sBuffer.append( " this="                    );
-                sBuffer.append( (sal_Int32)(this)           );
-                sBuffer.append( " )\n"                      );
-                WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
-            }
-
-            inline ~dbgGuard()
-            {
-                clear();
-            }
-
-            inline void clear()
-            {
-                if( m_pMutex != NULL )
-                {
-                    m_pMutex->release();
-
-                    ::rtl::OStringBuffer sBuffer(256);
-                    sBuffer.append( "\""                    );
-                    sBuffer.append( m_sMethod               );
-                    sBuffer.append( "\" release( pMutex="   );
-                    sBuffer.append( (sal_Int32)(m_pMutex)   );
-                    sBuffer.append( " this="                );
-                    sBuffer.append( (sal_Int32)(this)       );
-                    sBuffer.append( " )\n"                  );
-                    WRITE_LOGFILE( LOGFILE_MUTEX, sBuffer.makeStringAndClear() );
-
-                    m_pMutex = NULL;
-                }
-            }
-
-        protected:
-            ::osl::Mutex*   m_pMutex    ;
-            ::rtl::OString  m_sMethod   ;
-    };
-
     /*_____________________________________________________________________________________________________________
-        LOCK_MUTEX( AGUARD, AMUTEX, SMETHOD )
+        LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )
 
-        These macro define a clearable guard and log information about result of this mutex aquire.
-        If you will see a "block statement" without a "successfull statement" you know ...
-        these can be a deadlock or something else is wrong!
+        Write informations about current set lock type for whole framework project to special file.
     _____________________________________________________________________________________________________________*/
 
-    #define LOCK_MUTEX( AGUARD, AMUTEX, SMETHOD )                                                               \
-                dbgGuard AGUARD( AMUTEX, SMETHOD );
-
-    /*_____________________________________________________________________________________________________________
-        LOCK_GLOBALMUTEX( AGUARD, SMETHOD )
-
-        These macro define a clearable guard and log information about result of this mutex aquire.
-        As mutex we use the osl global mutex automaticly.
-        If you will see a "block statement" without a "successfull statement" you know ...
-        these can be a deadlock or something else is wrong!
-    _____________________________________________________________________________________________________________*/
-
-    #define LOCK_GLOBALMUTEX( AGUARD, SMETHOD )                                                                 \
-                dbgGuard AGUARD( ::osl::Mutex::getGlobalMutex(), SMETHOD );
-
-    /*_____________________________________________________________________________________________________________
-        UNLOCK_MUTEX( AGUARD, SMETHOD )
-
-        Use this macro to unlock any locked mutex in same scope.
-        We will log some information for you.
-    _____________________________________________________________________________________________________________*/
-
-    #define UNLOCK_MUTEX( AGUARD, SMETHOD )                                                                     \
-                AGUARD.clear();
+    #define LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )                                                               \
+                /* new scope to prevent us against multiple definitions of variables ... */                     \
+                {                                                                                               \
+                    ::rtl::OStringBuffer _sBuffer( 256 );                                                       \
+                    _sBuffer.append( "Set framework lock type to fallback: \"" );                               \
+                    switch( _EFALLBACK )                                                                        \
+                    {                                                                                           \
+                        case E_NOTHING      :   _sBuffer.append( "E_NOTHING"    );                              \
+                                                break;                                                          \
+                        case E_OWNMUTEX     :   _sBuffer.append( "E_OWNMUTEX"   );                              \
+                                                break;                                                          \
+                        case E_SOLARMUTEX   :   _sBuffer.append( "E_SOLARMUTEX" );                              \
+                                                break;                                                          \
+                        case E_FAIRRWLOCK   :   _sBuffer.append( "E_FAIRRWLOCK" );                              \
+                                                break;                                                          \
+                    }                                                                                           \
+                    _sBuffer.append( "\"\n" );                                                                  \
+                    if( _EFALLBACK != _ECURRENT )                                                               \
+                    {                                                                                           \
+                        _sBuffer.append( "... environment overwrite framework lock type with: \"" );            \
+                        switch( _ECURRENT )                                                                     \
+                        {                                                                                       \
+                            case E_NOTHING      :   _sBuffer.append( "E_NOTHING"    );                          \
+                                                    break;                                                      \
+                            case E_OWNMUTEX     :   _sBuffer.append( "E_OWNMUTEX"   );                          \
+                                                    break;                                                      \
+                            case E_SOLARMUTEX   :   _sBuffer.append( "E_SOLARMUTEX" );                          \
+                                                    break;                                                      \
+                            case E_FAIRRWLOCK   :   _sBuffer.append( "E_FAIRRWLOCK" );                          \
+                                                    break;                                                      \
+                        }                                                                                       \
+                        _sBuffer.append( "\"\n" );                                                              \
+                    }                                                                                           \
+                    else                                                                                        \
+                    {                                                                                           \
+                        _sBuffer.append( "... use fallback, because user don't set another value!\n" );         \
+                    }                                                                                           \
+                    WRITE_LOGFILE( LOGFILE_MUTEX, _sBuffer.makeStringAndClear() )                               \
+                }
 
 #else   // #ifdef ENABLE_MUTEXDEBUG
 
@@ -242,15 +140,7 @@
     _____________________________________________________________________________________________________________*/
 
     #undef  LOGFILE_MUTEX
-
-    #define LOCK_MUTEX( AGUARD, AMUTEX, SMETHOD )                                                               \
-                ::osl::ClearableMutexGuard AGUARD( AMUTEX );
-
-    #define LOCK_GLOBALMUTEX( AGUARD, SMETHOD )                                                                 \
-                ::osl::ClearableMutexGuard AGUARD( ::osl::Mutex::getGlobalMutex() );
-
-    #define UNLOCK_MUTEX( AGUARD, SMETHOD )                                                                     \
-                AGUARD.clear();
+    #define LOG_LOCKTYPE( _EFALLBACK, _ECURRENT )
 
 #endif  // #ifdef ENABLE_MUTEXDEBUG
 
