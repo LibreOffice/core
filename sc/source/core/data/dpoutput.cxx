@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:24:29 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 12:53:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include "globstr.hrc"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
+#include "collect.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
 
@@ -857,6 +858,53 @@ BOOL ScDPOutput::HasError()
 long ScDPOutput::GetHeaderRows()
 {
     return nPageFieldCount + ( bDoFilter ? 1 : 0 );
+}
+
+void ScDPOutput::GetMemberResultNames( StrCollection& rNames, long nDimension )
+{
+    //  Return the list of all member names in a dimension's MemberResults.
+    //  Only the dimension has to be compared because this is only used with table data,
+    //  where each dimension occurs only once.
+
+    uno::Sequence<sheet::MemberResult> aMemberResults;
+    bool bFound = false;
+    long nField;
+
+    // look in column fields
+
+    for (nField=0; nField<nColFieldCount && !bFound; nField++)
+        if ( pColFields[nField].nDim == nDimension )
+        {
+            aMemberResults = pColFields[nField].aResult;
+            bFound = true;
+        }
+
+    // look in row fields
+
+    for (nField=0; nField<nRowFieldCount && !bFound; nField++)
+        if ( pRowFields[nField].nDim == nDimension )
+        {
+            aMemberResults = pRowFields[nField].aResult;
+            bFound = true;
+        }
+
+    // collect the member names
+
+    if ( bFound )
+    {
+        const sheet::MemberResult* pArray = aMemberResults.getConstArray();
+        long nResultCount = aMemberResults.getLength();
+
+        for (long nItem=0; nItem<nResultCount; nItem++)
+        {
+            if ( pArray[nItem].Flags & sheet::MemberResultFlags::HASMEMBER )
+            {
+                StrData* pNew = new StrData( pArray[nItem].Name );
+                if ( !rNames.Insert( pNew ) )
+                    delete pNew;
+            }
+        }
+    }
 }
 
 //
