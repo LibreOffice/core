@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,13 +147,9 @@ void __EXPORT ScAreaLink::DataChanged(SvData& rData)
         String aArea;
         pLinkManager->GetDisplayNames(*this,0,&aFile,&aArea,&aFilter);
 
-        //  aus dem Dialog kommt der Filtername mit Applikation davor
-        //! soll das so sein ??!?!
-        String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
-        aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-        xub_StrLen nPreLen = aAppPrefix.Len();
-        if ( aFilter.Copy(0,nPreLen) == aAppPrefix )
-            aFilter.Erase(0,nPreLen);
+        //  the file dialog returns the filter name with the application prefix
+        //  -> remove prefix
+        ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         // #81155# dialog doesn't set area, so keep old one
         if ( !aArea.Len() )

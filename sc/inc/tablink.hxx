@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 15:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ public:
     static String       GetOptions( SfxMedium& rMedium );
     static void         GetFilterName( const String& rFileName,
                                         String& rFilter, String& rOptions );
+    static void         RemoveAppPrefix( String& rFilterName );
 };
 
 #endif

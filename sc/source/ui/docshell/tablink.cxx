@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 15:31:48 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,9 @@ void __EXPORT ScTableLink::DataChanged(SvData& rData)
         String aFilter;
         pLinkManager->GetDisplayNames(*this,0,&aFile,NULL,&aFilter);
 
-        //  aus dem Dialog kommt der Filtername mit Applikation davor
-        //! soll das so sein ??!?!
-        String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
-        aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
-        xub_StrLen nPreLen = aAppPrefix.Len();
-        if ( aFilter.Copy(0,nPreLen) == aAppPrefix )
-            aFilter.Erase(0,nPreLen);
+        //  the file dialog returns the filter name with the application prefix
+        //  -> remove prefix
+        ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
             Refresh(aFile,aFilter);         // nicht doppelt laden!
@@ -419,6 +415,15 @@ void ScDocumentLoader::GetFilterName( const String& rFileName,
         rFilter = ScDocShell::GetOwnFilterName();       //  sonst Calc-Datei
 
     delete pMedium;
+}
+
+void ScDocumentLoader::RemoveAppPrefix( String& rFilterName )       // static
+{
+    String aAppPrefix = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM( STRING_SCAPP ));
+    aAppPrefix.AppendAscii(RTL_CONSTASCII_STRINGPARAM( ": " ));
+    xub_StrLen nPreLen = aAppPrefix.Len();
+    if ( rFilterName.Copy(0,nPreLen) == aAppPrefix )
+        rFilterName.Erase(0,nPreLen);
 }
 
 ScDocumentLoader::ScDocumentLoader( const String& rFileName,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 06:59:40 $
+ *  last change: $Author: nn $ $Date: 2001-03-07 15:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3676,6 +3676,10 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     String aNewOptions = rOptions;
     if (!aFilterName.Len())
         ScDocumentLoader::GetFilterName( rFile, aFilterName, aNewOptions );
+
+    //  remove application prefix from filter name here, so the filter options
+    //  aren't reset when the filter name is changed in ScAreaLink::DataChanged
+    ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
     SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
 
