@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-12-15 11:09:31 $
+ *  last change: $Author: os $ $Date: 2001-01-10 16:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ BibConfig::BibConfig() :
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
                 pAssignmentPropertyNames[nFieldIdx++] += C2U("/FieldName");
                 pAssignmentPropertyNames[nFieldIdx] = sSubPrefix;
-                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatasourceFieldName");
+                pAssignmentPropertyNames[nFieldIdx++]   += C2U("/DatabaseFieldName");
             }
             Sequence<Any> aAssignmentValues = GetProperties(aAssignmentPropertyNames);
             const Any* pAssignmentValues = aAssignmentValues.getConstArray();
@@ -321,7 +321,7 @@ void    BibConfig::Commit()
         sPrefix += C2U("Fields");
         sal_Int32 nFieldAssignment = 0;
         OUString sFieldName = C2U("/FieldName");
-        OUString sDatabaseFieldName = C2U("/DatasourceFieldName");
+        OUString sDatabaseFieldName = C2U("/DatabaseFieldName");
         ClearNodeSet( sPrefix );
 
         while(nFieldAssignment < COLUMN_COUNT &&
