@@ -1,0 +1,10 @@
+lc	lingucomponent	:	linguistic lingu NULL
+lc	lingucomponent								usr1	-	all	lc_mkout NULL
+lc	lingucomponent\source\lingutil						nmake	-	all	lc_util NULL
+lc	lingucomponent\source\thesaurus\parser					nmake	-	all	lc_parser lc_util NULL
+lc	lingucomponent\source\thesaurus\libth					nmake	-	all	lc_libth lc_util NULL
+lc	lingucomponent\source\spellcheck\myspell				nmake	-	all	lc_myspell lc_util NULL
+lc	lingucomponent\source\spellcheck\spell					nmake	-	all	lc_libspell lc_myspell NULL
+lc	lingucomponent\source\hyphenator\altlinuxhyph\libhnj			nmake	-	all	lc_libhnj lc_util NULL
+lc	lingucomponent\source\hyphenator\altlinuxhyph\hyphen			nmake	-	all	lc_libhyphen lc_libhnj NULL
+lc	lingucomponent\source\hyphenator\altlinuxhyph\hyphtabs			nmake	-	all	lc_hyphtabs lc_util NULL

@@ -1,0 +1,30 @@
+..\%__SRC%\bin\*.dat %_DEST%\bin%_EXT%\*.dat
+..\%__SRC%\bin\*.idx %_DEST%\bin%_EXT%\*.idx
+..\%__SRC%\bin\*.aff %_DEST%\bin%_EXT%\*.aff
+..\%__SRC%\bin\*.dic %_DEST%\bin%_EXT%\*.dic
+..\%__SRC%\bin\*.lst %_DEST%\bin%_EXT%\*.lst
+
+..\%__SRC%\bin\lth* %_DEST%\bin%_EXT%\lth*
+..\%__SRC%\lib\ilth* %_DEST%\lib%_EXT%\ilth*
+..\%__SRC%\lib\liblth.a %_DEST%\lib%_EXT%\liblth.a
+..\%__SRC%\lib\liblth*.dylib %_DEST%\lib%_EXT%\liblth*.dylib
+..\%__SRC%\lib\liblth*.so %_DEST%\lib%_EXT%\liblth*.so
+
+..\%__SRC%\bin\spell* %_DEST%\bin%_EXT%\spell*
+..\%__SRC%\lib\ilspell* %_DEST%\lib%_EXT%\ilspell*
+..\%__SRC%\lib\libspell.a %_DEST%\lib%_EXT%\libspell.a
+..\%__SRC%\lib\libspell*.dylib %_DEST%\lib%_EXT%\libspell*.dylib
+..\%__SRC%\lib\libspell*.so %_DEST%\lib%_EXT%\libspell*.so
+
+..\%__SRC%\bin\hyph* %_DEST%\bin%_EXT%\hyph*
+..\%__SRC%\lib\ihyph* %_DEST%\lib%_EXT%\ihyph*
+..\%__SRC%\lib\libhnj.* %_DEST%\lib%_EXT%\libhnj.*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\libhyphen*.so %_DEST%\lib%_EXT%\libhyphen*.so
+
+..\%__SRC%\bin\ulingu* %_DEST%\bin%_EXT%\ulingu*
+..\%__SRC%\lib\ilulingu* %_DEST%\lib%_EXT%\iulingu*
+..\%__SRC%\lib\libulingu.a %_DEST%\lib%_EXT%\libulingu.a
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\libulingu*.so %_DEST%\lib%_EXT%\libulingu*.so
+
