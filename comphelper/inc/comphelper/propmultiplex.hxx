@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propmultiplex.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 14:05:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:35:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,13 @@ namespace comphelper
         virtual void _disposing(const ::com::sun::star::lang::EventObject& _rSource) throw( ::com::sun::star::uno::RuntimeException);
 
     protected:
-        void setAdapter(OPropertyChangeMultiplexer* _pAdapter);
+        /** If the derivee also owns the mutex which we know as reference, then call this within your
+            derivee's dtor.
+        */
+        void    disposeAdapter();
+
+        // pseudo-private. Making it private now could break compatibility
+        void    setAdapter( OPropertyChangeMultiplexer* _pAdapter );
     };
 
     //==================================================================
