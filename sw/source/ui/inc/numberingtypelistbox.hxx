@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:05:44 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <vcl/lstbox.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 #define INSERT_NUM_TYPE_NO_NUMBERING                0x01
 #define INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING        0x02
 #define INSERT_NUM_TYPE_BITMAP                      0x04
@@ -72,9 +76,11 @@
 #define INSERT_NUM_EXTENDED_TYPES                   0x10
 
 struct SwNumberingTypeListBox_Impl;
-class SwNumberingTypeListBox : public ListBox
+
+class SW_DLLPUBLIC SwNumberingTypeListBox : public ListBox
 {
     SwNumberingTypeListBox_Impl* pImpl;
+
 public:
     SwNumberingTypeListBox( Window* pWin, const ResId& rResId,
         USHORT nTypeFlags = INSERT_NUM_TYPE_PAGE_STYLE_NUMBERING|INSERT_NUM_TYPE_NO_NUMBERING|INSERT_NUM_EXTENDED_TYPES );
