@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:50:49 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = pData->GetViewShell();
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     USHORT              nSlotId  = rReq.GetSlot();
-    short               nRepeat = 1;
+    SCsCOLROW           nRepeat = 1;
     BOOL                bSel = FALSE;
     BOOL                bKeep = FALSE;
 
@@ -105,7 +105,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     {
         const   SfxPoolItem* pItem;
         if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
-            nRepeat = ((const SfxInt16Item*)pItem)->GetValue();
+            nRepeat = static_cast<SCsCOLROW>(((const SfxInt16Item*)pItem)->GetValue());
         if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
             bSel = ((const SfxBoolItem*)pItem)->GetValue();
     }
@@ -124,7 +124,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
         }
     }
 
-    short nRTLSign = 1;
+    SCsCOLROW nRTLSign = 1;
     if ( pData->GetDocument()->IsLayoutRTL( pData->GetTabNo() ) )
     {
         //! evaluate cursor movement option?
@@ -155,19 +155,19 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORLEFT:
-            pTabViewShell->MoveCursorRel( -nRepeat * nRTLSign, 0, SC_FOLLOW_LINE, bSel, bKeep );
+            pTabViewShell->MoveCursorRel( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKLEFT:
-            pTabViewShell->MoveCursorArea( -nRepeat * nRTLSign, 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(-nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORRIGHT:
-            pTabViewShell->MoveCursorRel(   nRepeat * nRTLSign, 0, SC_FOLLOW_LINE, bSel, bKeep );
+            pTabViewShell->MoveCursorRel(   static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_LINE, bSel, bKeep );
             break;
 
         case SID_CURSORBLKRIGHT:
-            pTabViewShell->MoveCursorArea( nRepeat * nRTLSign, 0, SC_FOLLOW_JUMP, bSel, bKeep );
+            pTabViewShell->MoveCursorArea( static_cast<SCsCOL>(nRepeat * nRTLSign), 0, SC_FOLLOW_JUMP, bSel, bKeep );
             break;
 
         case SID_CURSORPAGEDOWN:
@@ -179,11 +179,11 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             break;
 
         case SID_CURSORPAGERIGHT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( nRepeat, 0, SC_FOLLOW_FIX, bSel, bKeep );
+            pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         case SID_CURSORPAGELEFT_: //XXX !!!
-            pTabViewShell->MoveCursorPage( -nRepeat, 0, SC_FOLLOW_FIX, bSel, bKeep );
+            pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
         default:
@@ -193,7 +193,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
 
     pTabViewShell->ShowAllCursors();
 
-    rReq.AppendItem( SfxInt16Item(FN_PARAM_1, nRepeat) );
+    rReq.AppendItem( SfxInt16Item(FN_PARAM_1, static_cast<sal_Int16>(nRepeat)) );
     rReq.AppendItem( SfxBoolItem(FN_PARAM_2, bSel) );
     rReq.Done();
 }
