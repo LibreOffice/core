@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jl $ $Date: 2002-09-13 06:23:07 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:36:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,10 +61,7 @@
 #*************************************************************************
 PRJ=..$/..
 # from cppumaker --------------------------------------------------
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 .IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
 UNOUCROUT=	$(OUT)$/inc$/comprehensive
 INCPRE+=	$(OUT)$/inc$/comprehensive

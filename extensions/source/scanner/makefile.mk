@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2002-03-11 20:02:33 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:35:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJNAME=extensions
 TARGET=scn
 ENABLE_EXCEPTIONS=TRUE
 PACKAGE=com$/sun$/star$/scanner
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------

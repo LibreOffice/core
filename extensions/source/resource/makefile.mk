@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:30 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:22:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,9 +104,6 @@ SHL1IMPLIB=		ires
 SHL1LIBS=		$(LIB1TARGET)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
-# NEW
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
     com.sun.star.uno.XWeak						\

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: os $ $Date: 2002-05-07 13:49:06 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:37:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,8 +135,6 @@ SHL1STDLIBS= \
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
 INCPRE+=$(UNOUCROUT)
 
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
     com.sun.star.awt.PosSize \

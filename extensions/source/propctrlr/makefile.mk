@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: fs $ $Date: 2001-06-11 11:34:13 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 08:30:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,9 +80,6 @@ CDEFS+=-DCOMPMOD_RESPREFIX=pcr
 #Create UNO Header files
 UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
 INCPRE+=$(UNOUCROUT)
-
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
 UNOTYPES=\
     com.sun.star.frame.XController				\
