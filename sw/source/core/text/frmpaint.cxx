@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:40:46 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ public:
     inline SwFont* GetFont() const { return pFnt; }
     inline void IncLineNr() { ++nLineNr; }
     inline sal_Bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
-    inline HasDivider() { if( !nDivider ) return sal_False;
+    inline sal_Bool HasDivider() { if( !nDivider ) return sal_False;
         return !(nLineNr % rLineInf.GetDividerCountBy()); }
 
     void PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed );
