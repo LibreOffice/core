@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDataCaption.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:18 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 /** These values specify how the captions of data points are displayed.
  */
-constants ChartDataCaption
+published constants ChartDataCaption
 {
     //-------------------------------------------------------------------------
 
