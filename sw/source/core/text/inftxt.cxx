@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:39:12 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:55:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,9 +282,9 @@ void ChkOutDev( const SwTxtSizeInfo &rInf )
     if ( !rInf.GetVsh() )
         return;
 
-    const OutputDevice *pOut = rInf.GetOut();
-    const OutputDevice *pWin = rInf.GetVsh()->GetWin();
-    const OutputDevice *pRef = rInf.GetRefDev();
+    const OutputDevice* pOut = rInf.GetOut();
+    const OutputDevice* pWin = rInf.GetVsh()->GetWin();
+    const OutputDevice* pRef = rInf.GetRefDev();
     ASSERT( pOut && pRef, "ChkOutDev: invalid output devices" )
 }
 #endif  // PRODUCT
@@ -350,6 +350,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
     else
     {
         //Zugriff ueber StarONE, es muss keine Shell existieren oder aktiv sein.
+        ASSERT( pVsh, "SwTxtSizeInfo::CtorInit(), pVsh = 0" )
         if ( pNd->GetDoc()->IsBrowseMode() ) //?!?!?!?
             //in Ermangelung eines Besseren kann hier ja wohl nur noch das
             //AppWin genommen werden?
@@ -468,7 +469,7 @@ void SwTxtSizeInfo::SelectFont()
     // auf dem alten Wert.
     // Falsch: GetOut()->SetFont( GetFont()->GetFnt() );
     GetFont()->Invalidate();
-    GetFont()->ChgPhysFnt( pVsh, GetOut() );
+    GetFont()->ChgPhysFnt( pVsh, *GetOut() );
 }
 
 /*************************************************************************
@@ -1201,8 +1202,8 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion &rPor, sal_Bool bScript ) 
         Point aTmp;
 
         const USHORT nPostItsWidth = pOpt->GetPostItsWidth( GetOut() );
-        const USHORT nFontHeight = pFnt->GetHeight( pVsh, GetOut() );
-        const USHORT nFontAscent = pFnt->GetAscent( pVsh, GetOut() );
+        const USHORT nFontHeight = pFnt->GetHeight( pVsh, *GetOut() );
+        const USHORT nFontAscent = pFnt->GetAscent( pVsh, *GetOut() );
 
         switch ( pFnt->GetOrientation( GetTxtFrm()->IsVertical() ) )
         {
@@ -1255,7 +1256,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice *pOut = (OutputDevice*)GetOut();
+        OutputDevice* pOut = (OutputDevice*)GetOut();
         sal_Bool bChgColor = sal_False;
 
         // For dark background we do not want to have a filled rectangle
@@ -1301,7 +1302,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
 
     if ( aIntersect.HasArea() )
     {
-        OutputDevice *pOut = (OutputDevice*)GetOut();
+        OutputDevice* pOut = (OutputDevice*)GetOut();
         const Color aOldColor( pOut->GetFillColor() );
         sal_Bool bChgColor;
         if( 0 != ( bChgColor = aOldColor != *pFnt->GetBackColor() ) )
@@ -1840,7 +1841,7 @@ SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
         else
             pFnt = 0;
         pNew->Invalidate();
-        pNew->ChgPhysFnt( pInf->GetVsh(), pInf->GetOut() );
+        pNew->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
         if( pItr && pItr->GetFnt() == pFnt )
         {
             pIter = pItr;
@@ -1942,7 +1943,7 @@ sal_Bool SwTxtFormatInfo::ChgHyph( const sal_Bool bNew )
         InitHyph( bNew );
         // 5744: Sprache am Hyphenator einstellen.
         if( pFnt )
-            pFnt->ChgPhysFnt( pVsh, pOut );
+            pFnt->ChgPhysFnt( pVsh, *pOut );
     }
     return bOld;
 }
