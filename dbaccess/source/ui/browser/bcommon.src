@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bcommon.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:09:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:26:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,73 +65,15 @@
 
 String RID_STR_QRY_TITLE
 {
-    Text = "Abfrage #" ;
-    Text [ ENGLISH ] = "Query #" ;
-    Text [ english_us ] = "Query #" ;
-    Text [ portuguese ] = "Consulta #" ;
-    Text [ portuguese_brazilian ] = "Consulta #" ;
-    Text [ swedish ] = "Sˆkning #" ;
-    Text [ danish ] = "Foresp¯rgsel #" ;
-    Text [ italian ] = "Ricerca #" ;
-    Text [ spanish ] = "Consulta #" ;
-    Text [ french ] = "RequÍte #" ;
-    Text [ dutch ] = "Query #" ;
-    Text[ chinese_simplified ] = "Êü•ËØ¢ #";
-    Text[ russian ] = "«‡ÔÓÒ #";
-    Text[ polish ] = "Kwerenda #";
-    Text[ japanese ] = "„ÇØ„Ç®„É™„Éº #";
-    Text[ dutch ] = "Query #";
-    Text[ chinese_simplified ] = "Êü•ËØ¢ #";
-    Text[ greek ] = "≈Ò˛ÙÁÏ· #";
-    Text[ korean ] = "ÏøºÎ¶¨ #";
-    Text[ chinese_traditional ] = "Êü•Ë©¢ #";
-    Text[ arabic ] = "«·«” ›”«— #";
-    Text[ turkish ] = "Sogrulama #";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Consulta #";
-    Text[ finnish ] = "Kysely #";
-    Text[ thai ] = "‡πÅ‡∏ö‡∏ö‡∏™‡∏≠‡∏ö‡∏ñ‡∏≤‡∏°  #";
-    Text[ czech ] = "Dotaz #";
-    Text[ hebrew ] = "Abfrage #";
-    Text[ hindi ] = "‡§ú‡§æ‡§®‡§ï‡§æ‡§∞‡•Ä #";
-    Text[ slovak ] = "Dotaz #";
-    Text[ hungarian ] = "# lek√©rdez√©s";
-    Text[ slovenian ] = "Poizvedba #";
+    Text [ de ] = "Abfrage #" ;
+    Text [ en-US ] = "Query #" ;
+    Text [ x-comment ] = " ";
 };
 String RID_STR_TBL_TITLE
 {
-    Text = "Tabelle #" ;
-    Text [ ENGLISH ] = "Table #" ;
-    Text [ english_us ] = "Table #" ;
-    Text [ portuguese ] = "Tabela #" ;
-    Text [ portuguese_brazilian ] = "Tabela #" ;
-    Text [ swedish ] = "Tabell #" ;
-    Text [ danish ] = "Tabel #" ;
-    Text [ italian ] = "Tabella #" ;
-    Text [ spanish ] = "Tabla #" ;
-    Text [ french ] = "Table #" ;
-    Text [ dutch ] = "Tabel #" ;
-    Text[ chinese_simplified ] = "Ë°®Ê†º #";
-    Text[ russian ] = "“‡·ÎËˆ‡ #";
-    Text[ polish ] = "Tabela #";
-    Text[ japanese ] = "„ÉÜ„Éº„Éñ„É´ #";
-    Text[ dutch ] = "Tabel #";
-    Text[ chinese_simplified ] = "Ë°®Ê†º #";
-    Text[ greek ] = "–ﬂÌ·Í·Ú #";
-    Text[ korean ] = "ÌÖåÏù¥Î∏î #";
-    Text[ chinese_traditional ] = "Ë°®Ê†º #";
-    Text[ arabic ] = "«·ÃœÊ· #";
-    Text[ turkish ] = "Tablo #";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Taula #";
-    Text[ finnish ] = "Taulu #";
-    Text[ thai ] = "‡∏ï‡∏≤‡∏£‡∏≤‡∏á #";
-    Text[ czech ] = "Tabulka #";
-    Text[ hebrew ] = "Tabelle #";
-    Text[ hindi ] = "‡§∏‡§æ‡§∞‡§£‡•Ä #";
-    Text[ slovak ] = "Tabuƒæka #";
-    Text[ hungarian ] = "# t√°bla ";
-    Text[ slovenian ] = "Tabela #";
+    Text [ de ] = "Tabelle #" ;
+    Text [ en-US ] = "Table #" ;
+    Text [ x-comment ] = " ";
 };
 
 
