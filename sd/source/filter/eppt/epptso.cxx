@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epptso.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-20 10:17:12 $
+ *  last change: $Author: sj $ $Date: 2002-08-20 11:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4044,6 +4044,49 @@ void PPTWriter::ImplWriteClickAction( SvStream& rSt, ::com::sun::star::presentat
         break;
 
         case ::com::sun::star::presentation::ClickAction_DOCUMENT :
+        {
+            if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Bookmark" ) ) ) )
+            {
+                String aBookmark( *(::rtl::OUString*)mAny.getValue() );
+                if ( aBookmark.Len() )
+                {
+                    nAction = 4;
+                    nHyperLinkID = ++mnExEmbed;
+                    nHyperLinkType = 8;
+                    maHyperlink.Insert( new EPPTHyperlink( aBookmark, 2 | ( 1 << 31 ) ), LIST_APPEND );
+                    *mpExEmbed  << (sal_uInt16)0xf
+                                << (sal_uInt16)EPP_ExHyperlink
+                                << (sal_uInt32)0;
+                    sal_uInt32 nHyperSize, nHyperStart = mpExEmbed->Tell();
+                    *mpExEmbed  << (sal_uInt16)0
+                                << (sal_uInt16)EPP_ExHyperlinkAtom
+                                << (sal_uInt32)4
+                                << nHyperLinkID;
+
+                    String aFile( aBookmark );
+                    INetURLObject aUrl( aBookmark );
+                    if ( INET_PROT_FILE == aUrl.GetProtocol() )
+                        aFile = aUrl.PathToFileName();
+
+                    sal_uInt16 i, nFileLen = aFile.Len();
+                    *mpExEmbed << (sal_uInt32)( EPP_CString << 16 ) << (sal_uInt32)( nFileLen * 2 );
+                    for ( i = 0; i < nFileLen; i++ )
+                        *mpExEmbed << aFile.GetChar( i );
+
+                    sal_uInt16 nBookmarkLen = aBookmark.Len();
+                    *mpExEmbed << (sal_uInt32)( ( EPP_CString << 16 ) | 0x10 ) << (sal_uInt32)( nBookmarkLen * 2 );
+                    for ( i = 0; i < nBookmarkLen; i++ )
+                        *mpExEmbed << aBookmark.GetChar( i );
+
+                    nHyperSize = mpExEmbed->Tell() - nHyperStart;
+                    mpExEmbed->SeekRel( - ( (sal_Int32)nHyperSize + 4 ) );
+                    *mpExEmbed  << nHyperSize;
+                    mpExEmbed->SeekRel( nHyperSize );
+                }
+            }
+        }
+        break;
+
         case ::com::sun::star::presentation::ClickAction_INVISIBLE :
         case ::com::sun::star::presentation::ClickAction_VERB :
         case ::com::sun::star::presentation::ClickAction_VANISH :
