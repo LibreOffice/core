@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-11 18:06:38 $
+ *  last change: $Author: sab $ $Date: 2002-09-27 12:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1087,7 +1087,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
             {
                 aDocView.SetHideAutoSpell( bHideAutoSpell );
                 pDoc->SetViewOptions( aDocView );
-                pDocSh->SetDocumentModified();
+                //#92038#; don't set document modified, because this flag is no longer saved
+//              pDocSh->SetDocumentModified();
             }
         }
         if ( bOldHideAuto != bHideAutoSpell )
@@ -1174,7 +1175,8 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                     pDoc->RemoveAutoSpellObj();     //  Edit-Text-Objekte wieder zurueckwandeln
                 }
 
-                pDocSh->SetDocumentModified();
+                //#92038#; don't set document modified, because this flag is no longer saved
+//              pDocSh->SetDocumentModified();
 
                 bRepaint = TRUE;            //  weil HideAutoSpell evtl. ungueltig
                                             //! alle Views painten ???
