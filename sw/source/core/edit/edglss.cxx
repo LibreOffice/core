@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 13:46:33 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,15 +144,13 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
 {
     SwDoc* pGDoc = rBlks.GetDoc();
 
-    // Bis es eine Option dafuer gibt, base URL loeschen
-    const String aOldURL( INetURLObject::GetBaseURL() );
-
+    String sBase;
     if(bSaveRelFile)
     {
-        INetURLObject::SetBaseURL( URIHelper::SmartRelToAbs(rBlks.GetFileName()));
+        INetURLObject aURL( rBlks.GetFileName() );
+        sBase = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
-    else
-        INetURLObject::SetBaseURL( aEmptyStr );
+    rBlks.SetBaseURL( sBase );
 
     USHORT nRet;
 
@@ -172,7 +170,6 @@ USHORT SwEditShell::MakeGlossary( SwTextBlocks& rBlks, const String& rName, cons
             nRet = (USHORT) -1;
     }
 
-    INetURLObject::SetBaseURL( aOldURL );
     return nRet;
 }
 
@@ -187,16 +184,13 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
     SwDoc* pGDoc = rBlock.GetDoc();
     SwDoc* pDoc = GetDoc();
 
-    // Bis es eine Option dafuer gibt, base URL loeschen
-    const String aOldURL( INetURLObject::GetBaseURL() );
-
+    String sBase;
     if(bSaveRelFile)
     {
-        INetURLObject::SetBaseURL( URIHelper::SmartRelToAbs(rBlock.GetFileName()));
+        INetURLObject aURL( rBlock.GetFileName() );
+        sBase = aURL.GetMainURL( INetURLObject::NO_DECODE );
     }
-    else
-        INetURLObject::SetBaseURL( aEmptyStr );
-
+    rBlock.SetBaseURL( sBase );
     USHORT nRet = USHRT_MAX;
 
     if( bOnlyTxt )
@@ -251,7 +245,6 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             nRet = rBlock.PutDoc();
         }
     }
-    INetURLObject::SetBaseURL( aOldURL );
     EndAllAction();
     return nRet;
 }
@@ -390,7 +383,7 @@ BOOL SwEditShell::GetSelectedText( String &rBuf, int nHndlParaBrk )
         aStream.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 #endif
         WriterRef xWrt;
-        SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_TEXT ), xWrt );
+        SwIoSystem::GetWriter( String::CreateFromAscii( FILTER_TEXT ), String(), xWrt );
         if( xWrt.Is() )
         {
                 // Selektierte Bereiche in ein ASCII Dokument schreiben
