@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:37:27 $
+ *  last change: $Author: nn $ $Date: 2000-12-02 16:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ class SvXMLNumFmtElementContext : public SvXMLImportContext
     LanguageType            nElementLang;
     sal_Bool                bLong;
     sal_Bool                bTextual;
+    rtl::OUString           sCalendar;
 
 public:
                 SvXMLNumFmtElementContext( SvXMLImport& rImport, USHORT nPrfx,
@@ -274,7 +275,8 @@ enum SvXMLStyleElemAttrTokens
     XML_TOK_ELEM_ATTR_LANGUAGE,
     XML_TOK_ELEM_ATTR_COUNTRY,
     XML_TOK_ELEM_ATTR_STYLE,
-    XML_TOK_ELEM_ATTR_TEXTUAL
+    XML_TOK_ELEM_ATTR_TEXTUAL,
+    XML_TOK_ELEM_ATTR_CALENDAR
 };
 
 //-------------------------------------------------------------------------
@@ -370,6 +372,7 @@ static __FAR_DATA SvXMLTokenMapEntry aStyleElemAttrMap[] =
     { XML_NAMESPACE_NUMBER, sXML_country,                XML_TOK_ELEM_ATTR_COUNTRY              },
     { XML_NAMESPACE_NUMBER, sXML_style,                  XML_TOK_ELEM_ATTR_STYLE                },
     { XML_NAMESPACE_NUMBER, sXML_textual,                XML_TOK_ELEM_ATTR_TEXTUAL              },
+    { XML_NAMESPACE_NUMBER, sXML_calendar,               XML_TOK_ELEM_ATTR_CALENDAR             },
     XML_TOKEN_MAP_END
 };
 
@@ -670,6 +673,9 @@ SvXMLNumFmtElementContext::SvXMLNumFmtElementContext( SvXMLImport& rImport,
                 if ( SvXMLUnitConverter::convertBool( bAttrBool, sValue ) )
                     bTextual = bAttrBool;
                 break;
+            case XML_TOK_ELEM_ATTR_CALENDAR:
+                sCalendar = sValue;
+                break;
         }
     }
 
@@ -757,12 +763,14 @@ void SvXMLNumFmtElementContext::EndElement()
             break;
 
         case XML_TOK_STYLE_DAY:
+            rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateDayLeadingZero() :
                                    rParent.GetInternational().IsDateDayLeadingZero();
             rParent.AddNfKeyword( bEffLong ? NF_KEY_DD : NF_KEY_D );
             break;
         case XML_TOK_STYLE_MONTH:
+            rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
             {
                 if (bLong)
@@ -778,6 +786,7 @@ void SvXMLNumFmtElementContext::EndElement()
                                              ( bEffLong ? NF_KEY_MM : NF_KEY_M ) );
             break;
         case XML_TOK_STYLE_YEAR:
+            rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
                                    rParent.GetInternational().IsDateCentury();
@@ -788,6 +797,7 @@ void SvXMLNumFmtElementContext::EndElement()
                 rParent.AddNfKeyword( bEffLong ? NF_KEY_YYYY : NF_KEY_YY );
             break;
         case XML_TOK_STYLE_ERA:
+            rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() )
                 bEffLong = bLong ? rParent.GetInternational().IsLongDateCentury() :
                                    rParent.GetInternational().IsDateCentury();
@@ -795,14 +805,17 @@ void SvXMLNumFmtElementContext::EndElement()
             //  HasEra flag is set
             break;
         case XML_TOK_STYLE_DAY_OF_WEEK:
+            rParent.UpdateCalendar( sCalendar );
             if ( rParent.IsFromSystem() && bLong )
                 bEffLong = ( rParent.GetInternational().GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
             rParent.AddNfKeyword( bEffLong ? NF_KEY_NNNN : NF_KEY_NN );
             break;
         case XML_TOK_STYLE_WEEK_OF_YEAR:
+            rParent.UpdateCalendar( sCalendar );
             rParent.AddNfKeyword( NF_KEY_WW );
             break;
         case XML_TOK_STYLE_QUARTER:
+            rParent.UpdateCalendar( sCalendar );
             rParent.AddNfKeyword( bEffLong ? NF_KEY_QQ : NF_KEY_Q );
             break;
         case XML_TOK_STYLE_HOURS:
@@ -1379,6 +1392,20 @@ void SvXMLNumFormatContext::AddColor( const Color& rColor )
         aColName.insert( 0, (sal_Unicode) '[' );
         aColName.append( (sal_Unicode) ']' );
         aFormatCode.insert( 0, aColName.makeStringAndClear() );
+    }
+}
+
+void SvXMLNumFormatContext::UpdateCalendar( const rtl::OUString& rNewCalendar )
+{
+    if ( rNewCalendar != sCalendar )
+    {
+        sCalendar = rNewCalendar;
+        if ( sCalendar.getLength() )
+        {
+            aFormatCode.appendAscii( "[~" );            // intro for calendar code
+            aFormatCode.append( sCalendar );
+            aFormatCode.append( (sal_Unicode) ']' );    // end of "new" currency symbolcalendar code
+        }
     }
 }
 

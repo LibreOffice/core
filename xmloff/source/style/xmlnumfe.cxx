@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-29 20:37:27 $
+ *  last change: $Author: nn $ $Date: 2000-12-02 16:08:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,8 @@ using namespace ::com::sun::star;
 #define XMLNUM_SYMBOLTYPE_CURRENCY   (-13)
 #define XMLNUM_SYMBOLTYPE_CURRDEL    (-14)
 #define XMLNUM_SYMBOLTYPE_CURREXT    (-15)
+#define XMLNUM_SYMBOLTYPE_CALENDAR   (-16)
+#define XMLNUM_SYMBOLTYPE_CALDEL     (-17)
 
 //-------------------------------------------------------------------------
 
@@ -221,6 +223,17 @@ OUString lcl_CreateStyleName( sal_Int32 nKey, sal_Int32 nPart, sal_Bool bDefPart
         aFmtName.append( nPart );
     }
     return aFmtName.makeStringAndClear();
+}
+
+void SvXMLNumFmtExport::AddCalendarAttr_Impl( const OUString& rCalendar )
+{
+    if ( rCalendar.getLength() )
+    {
+        OUString sAttrName = pNamespaceMap->GetQNameByKey( XML_NAMESPACE_NUMBER,
+                                OUString::createFromAscii( sXML_calendar ) );
+        OUString sAttrValue = rCalendar;
+        pAttrList->AddAttribute( sAttrName, sCDATA, sAttrValue );
+    }
 }
 
 void SvXMLNumFmtExport::AddTextualAttr_Impl( sal_Bool bText )
@@ -966,6 +979,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
 
         //  second loop to write elements
 
+        OUString aCalendar;
         sal_Bool bNumWritten = sal_False;
         short nPrevType = 0;
         nPos = 0;
@@ -1071,11 +1085,17 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                         WriteTextContentElement_Impl();
                     break;
 
+                case XMLNUM_SYMBOLTYPE_CALENDAR:
+                    if ( pElemStr )
+                        aCalendar = *pElemStr;
+                    break;
+
                 // date elements:
 
                 case NF_KEY_D:
                 case NF_KEY_DD:
                     {
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_DD );
                         WriteDayElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
@@ -1088,6 +1108,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_AAA:
                 case NF_KEY_AAAA:
                     {
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_NNN || nElemType == NF_KEY_NNNN ||
                                            nElemType == NF_KEY_DDDD || nElemType == NF_KEY_AAAA );
                         WriteDayOfWeekElement_Impl( bSystemDate ? bLongSysDate : bLong );
@@ -1104,6 +1125,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_MMM:
                 case NF_KEY_MMMM:
                     {
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_MM  || nElemType == NF_KEY_MMMM );
                         sal_Bool bText = ( nElemType == NF_KEY_MMM || nElemType == NF_KEY_MMMM );
                         WriteMonthElement_Impl( ( bSystemDate ? bLongSysDate : bLong ), bText );
@@ -1115,6 +1137,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_EEC:
                     {
                         //! add calendar attribute for E and EE?
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_YYYY || nElemType == NF_KEY_EEC );
                         WriteYearElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
@@ -1124,6 +1147,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_GGG:
                     {
                         //! distinguish GG and GGG
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_GGG );
                         WriteEraElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
@@ -1131,11 +1155,13 @@ void SvXMLNumFmtExport::ExportPart_Impl( SvNumberformat& rFormat, sal_uInt32 nKe
                 case NF_KEY_Q:
                 case NF_KEY_QQ:
                     {
+                        AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                         sal_Bool bLong = ( nElemType == NF_KEY_QQ );
                         WriteQuarterElement_Impl( bSystemDate ? bLongSysDate : bLong );
                     }
                     break;
                 case NF_KEY_WW:
+                    AddCalendarAttr_Impl( aCalendar );      // adds to pAttrList
                     WriteWeekElement_Impl();
                     break;
 
