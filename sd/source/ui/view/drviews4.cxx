@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:29:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,6 +428,27 @@ void SdDrawViewShell::MouseMove(const MouseEvent& rMEvt, SdWindow* pWin)
             }
             else if ( pWin != pWindow )
                  pWin->CaptureMouse();
+        }
+
+        // #109585#
+        // Since the next MouseMove may execute a IsSolidDraggingNow() in
+        // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
+        // is needed it is necessary to set it here.
+        if(pDrView && pDoc)
+        {
+            svtools::ColorConfig aColorConfig;
+            Color aFillColor;
+
+            if(DOCUMENT_TYPE_IMPRESS == pDoc->GetDocumentType())
+            {
+                aFillColor = Color( aColorConfig.GetColorValue( svtools::APPBACKGROUND ).nColor );
+            }
+            else
+            {
+                aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
+            }
+
+            pDrView->SetApplicationBackgroundColor(aFillColor);
         }
 
         SdViewShell::MouseMove(rMEvt, pWin);
