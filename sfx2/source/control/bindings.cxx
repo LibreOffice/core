@@ -2,8 +2,8 @@
  *
  *  $RCSfile: bindings.cxx,v $
  *
- *  $Revision: 1.23 $
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:53 $
+ *  $Revision: 1.24 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -521,7 +521,7 @@ void SfxBindings::Update_Impl
 {
     if( pCache->GetDispatch().is() && pCache->GetItemLink() )
     {
-        pCache->SetCachedState();
+        pCache->SetCachedState(TRUE);
         return;
     }
 
@@ -635,7 +635,7 @@ void SfxBindings::Update
         {
             if( pCache->GetDispatch().is() && pCache->GetItemLink() )
             {
-                pCache->SetCachedState();
+                pCache->SetCachedState(TRUE);
             }
             else
             {
