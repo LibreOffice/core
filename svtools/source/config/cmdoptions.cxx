@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 13:34:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:20:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,10 +91,6 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
-#ifndef __SGI_STL_HASH_MAP
-#include <hash_map>
-#endif
-
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
@@ -104,6 +100,7 @@
 #endif
 
 #include <algorithm>
+#include <hash_map>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
