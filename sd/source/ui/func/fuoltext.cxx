@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoltext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-12 12:42:25 $
+ *  last change: $Author: mt $ $Date: 2002-07-24 14:04:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,8 @@ BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
         bReturn = FuOutline::MouseMove(rMEvt);
     }
 
+    // MT 07/2002: Done in OutlinerView::MouseMove
+    /*
     const SvxFieldItem* pFieldItem = pOutlineView->GetViewByWindow( pWindow )->
                                         GetFieldUnderMousePointer();
     const SvxFieldData* pField = NULL;
@@ -238,6 +240,7 @@ BOOL FuOutlineText::MouseMove(const MouseEvent& rMEvt)
     }
     else
        pWindow->SetPointer( Pointer( POINTER_TEXT ) );
+    */
 
     return (bReturn);
 }
