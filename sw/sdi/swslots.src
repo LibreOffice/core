@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: os $ $Date: 2002-05-03 13:56:52 $
+ *  last change: $Author: kz $ $Date: 2002-05-16 14:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ SfxSlotInfo FN_ABSTRACT_STARIMPRESS
     SlotName[ dutch ] = "Presentatie uit extract";
     SlotName[ chinese_simplified ] = "ζΌ”η¤Ίζ–‡η¨Ώζ¥θ‡ªζ‘θ¦";
     SlotName[ greek ] = "Παρουσίαση από Abstract";
-    SlotName[ korean ] = "μ¶”μƒ ν”„λ¦¬μ  ν…μ΄μ…";
+    SlotName[ korean ] = "μ¶”μƒ ν”„λ μ  ν…μ΄μ…";
     SlotName[ turkish ] = "Sunu φzeti ηύkar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Presentaciσn desde extracto";
@@ -989,7 +989,7 @@ SfxSlotInfo FN_EDIT_FOOTNOTE
 SfxSlotInfo FN_EDIT_FORMULA
 {
     SlotName = "Rechenleiste";
-    SlotName[ english_us ] = "Insert Formula";
+    SlotName[ english_us ] = "Formula Bar";
     SlotName[ portuguese ] = "Inserir fσrmula";
     SlotName[ russian ] = "Βρςΰβθςό τξπμσλσ";
     SlotName[ greek ] = "Εισαγωγή τύπου";
@@ -3440,7 +3440,7 @@ SfxSlotInfo FN_INSERT_COLUMN_BREAK
     SlotName[ dutch ] = "Kolomeinde invoegen";
     SlotName[ chinese_simplified ] = "ζ’ε…¥ε†ζ η¬¦";
     SlotName[ greek ] = "Εισαγωγή αλλαγής στήλης";
-    SlotName[ korean ] = "μ—΄ λ‚λ„κΈ° μ‚½μ…";
+    SlotName[ korean ] = "μ—΄ μ‚½μ…";
     SlotName[ turkish ] = "Sόtun sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar cambio de columnas";
@@ -4132,7 +4132,7 @@ SfxSlotInfo FN_INSERT_LINEBREAK
     SlotName[ dutch ] = "Handmatig regeleinde invoegen";
     SlotName[ chinese_simplified ] = "ζ‰‹ε·¥ζ’ε…¥ζΆθ΅η¬¦";
     SlotName[ greek ] = "Εισαγωγή χειροκίνητης αλλαγής γραμμής";
-    SlotName[ korean ] = "μλ™ κ°ν–‰ μ‚½μ…";
+    SlotName[ korean ] = "μλ™ λ‹¨λ½ μ‚½μ…";
     SlotName[ turkish ] = "Manόel satύr sonu ekle";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Insertar salto de lνnea manual";
@@ -5841,7 +5841,7 @@ SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
     SlotName[ dutch ] = "Overzicht naar Klembord";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€θ‡³ε‰ªθ΄΄ζΏ";
     SlotName[ greek ] = "Διάρθρωση προς το πρόχειρο";
-    SlotName[ korean ] = "ν΄λ¦½λ³΄λ“μ λ‹¤λ‹¨κ³„";
+    SlotName[ korean ] = "ν΄λ¦½λ³΄λ“μ μ•„μ›ƒνΈλΌμΈ";
     SlotName[ turkish ] = "Anahatlarύ panoya gφnder";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema al portapapeles";
@@ -5870,7 +5870,7 @@ SfxSlotInfo FN_OUTLINE_TO_IMPRESS
     SlotName[ dutch ] = "Overzicht bij presentatie";
     SlotName[ chinese_simplified ] = "ε¤§ηΊ²ι€ε°ζΌ”η¤Ίζ–‡η¨Ώ";
     SlotName[ greek ] = "Διάρθρωση προς παρουσίαση";
-    SlotName[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… λ‹¤λ‹¨κ³„";
+    SlotName[ korean ] = "ν”„λ μ  ν…μ΄μ… μ•„μ›ƒνΈλΌμΈ";
     SlotName[ turkish ] = "Anahatlarύ sunuya aktar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Esquema para presentaciσn";
@@ -5899,7 +5899,7 @@ SfxSlotInfo FN_PAGE_STYLE_SET_COLS
     SlotName[ dutch ] = "Pagina-opmaakprofiel: kolommen";
     SlotName[ chinese_simplified ] = "ι΅µιΆζ ·εΌοΌε—";
     SlotName[ greek ] = "Πρότυπο σελίδας: Στήλες";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ: μ—΄";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ: μ—΄";
     SlotName[ turkish ] = "Sayfa biηimi: Sόtunlar";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de pαgina: Columnas";
@@ -6938,7 +6938,7 @@ SfxSlotInfo FN_SET_PAGE_STYLE
     SlotName[ dutch ] = "Pagina-opmaakprofiel toewijzen";
     SlotName[ chinese_simplified ] = "ζ‡ε®ι΅µιΆζ ·εΌ";
     SlotName[ greek ] = "Εφαρμογή πρότυπου σελίδας";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ μ μ©";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ μ μ©";
     SlotName[ turkish ] = "Sayfa biηimi uygula";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Aplicar estilo de pαgina";
@@ -7808,7 +7808,7 @@ SfxSlotInfo FN_STAT_TEMPLATE
     SlotName[ dutch ] = "Pagina-opmaakprofiel";
     SlotName[ chinese_simplified ] = "ι΅µιΆζ ·εΌ";
     SlotName[ greek ] = "Πρότυπο σελίδας";
-    SlotName[ korean ] = "νμ΄μ§€ ν…ν”λ¦Ώ";
+    SlotName[ korean ] = "νμ΄μ§€ μ¤νƒ€μΌ";
     SlotName[ turkish ] = "Sayfa biηimi";
     SlotName[ language_user1 ] = " ";
     SlotName[ catalan ] = "Estilo de pαgina";
@@ -9647,7 +9647,7 @@ SfxSlotInfo FN_FORMAT_COLUMN
     SlotName[ polish ] = "Kolumny";
     SlotName[ portuguese_brazilian ] = "Spalten";
     SlotName[ japanese ] = "ζ®µηµ„γΏ";
-    SlotName[ korean ] = "μ—΄";
+    SlotName[ korean ] = "λ‹¨";
     SlotName[ chinese_simplified ] = "ε—";
     SlotName[ chinese_traditional ] = "ζ¬„";
     SlotName[ arabic ] = "ΓΪγΟΙ";
@@ -9879,7 +9879,7 @@ SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 {
     SlotName = "Seitenansicht schlieίen";
     SlotName [ english ] =  "Close preview";
-    SlotName[ english_us ] = "Close preview";
+    SlotName[ english_us ] = "Close Preview";
     SlotName[ portuguese ] = "Close preview";
     SlotName[ russian ] = "Close preview";
     SlotName[ greek ] = "Close preview";
