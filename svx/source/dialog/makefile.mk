@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 17:42:32 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:37:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,6 @@ PROJECTPCHSOURCE=$(PRJ)$/util$/svxpch
 
 PRJNAME=svx
 TARGET=dialogs
-AUTOSEG=true
 VERSION=$(UPD)
 
 .IF "$(debug)" != ""
@@ -78,16 +77,10 @@ OPTLINKS=YES
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(GUI)" != "MAC"
 CFLAGS+=-DDG_DLL
-.ELSE
-CFLAGS+=-D DG_DLL
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -106,101 +99,6 @@ HXX2DEPN=\
 
 IMGLST_SRS=$(SRS)$/dialogs.srs
 BMP_IN=$(PRJ)$/win/res
-
-CXXFILES = \
-        _contdlg.cxx \
-        _bmpmask.cxx \
-        iconcdlg.cxx\
-        contwnd.cxx \
-        ctrdial.cxx\
-        ctredlin.cxx\
-        fontlb.cxx \
-        graphctl.cxx \
-        nforient.cxx\
-        worient.cxx\
-        align.cxx \
-        backgrnd.cxx \
-        bbdlg.cxx \
-        border.cxx \
-        chardlg.cxx \
-        charmap.cxx \
-        checklbx.cxx \
-        connctrl.cxx \
-        connect.cxx \
-        dlgctl3d.cxx \
-        dlgctrl.cxx \
-        dlgname.cxx \
-        dlgutil.cxx \
-        fntctrl.cxx \
-        fontwork.cxx \
-        frmsel.cxx \
-        hdft.cxx \
-        hyperdlg.cxx \
-        hltpbase.cxx\
-        hlinettp.cxx\
-        hlmailtp.cxx\
-        hldoctp.cxx\
-        hldocntp.cxx\
-        hlmarkwn.cxx\
-        hyphen.cxx \
-        imapdlg.cxx \
-        imapwnd.cxx \
-        impgrf.cxx \
-        opengrf.cxx \
-        labdlg.cxx \
-        langbox.cxx \
-        langtab.cxx \
-        linelink.cxx \
-        measctrl.cxx \
-        measure.cxx \
-        dstribut.cxx \
-        numfmt.cxx \
-        numpages.cxx \
-        page.cxx \
-        paragrph.cxx \
-        paraprev.cxx \
-        passwd.cxx \
-        pfiledlg.cxx\
-        prtqry.cxx \
-        postdlg.cxx \
-        relfld.cxx  \
-        rlrcitem.cxx \
-        rulritem.cxx \
-        rubydialog.cxx \
-        simptabl.cxx \
-        spldlg.cxx \
-        splwrap.cxx \
-        srchctrl.cxx \
-        srchdlg.cxx \
-        srchxtra.cxx \
-        stddlg.cxx \
-        strarray.cxx \
-        svxbox.cxx \
-        svxruler.cxx \
-        tabarea.cxx \
-        tabline.cxx \
-        tabstpge.cxx \
-        textanim.cxx \
-        textattr.cxx \
-        thesdlg.cxx \
-        tparea.cxx   \
-        tpbitmap.cxx \
-        tpcolor.cxx  \
-        tpgradnt.cxx \
-        tphatch.cxx  \
-        tpline.cxx \
-        tplnedef.cxx \
-        tplneend.cxx \
-        tpshadow.cxx   \
-        transfrm.cxx \
-        txencbox.cxx \
-        txenctab.cxx \
-        zoom.cxx \
-        grfflt.cxx \
-        commonlingui.cxx \
-        hangulhanjadlg.cxx \
-        hangulhanja.cxx \
-        $(PROJECTPCHSOURCE).cxx
 
 SRS1NAME=dialogs
 SRC1FILES =  \
