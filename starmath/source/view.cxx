@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2002-05-15 13:47:02 $
+ *  last change: $Author: vg $ $Date: 2002-05-17 14:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
