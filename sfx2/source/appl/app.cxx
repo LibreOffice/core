@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 13:30:38 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 14:04:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,14 +432,14 @@ SfxApplication* SfxApplication::GetOrCreate()
 
         SfxHelp* pSfxHelp = new SfxHelp;
         Application::SetHelp( pSfxHelp );
-        if ( SvtHelpOptions().IsExtendedHelp() )
-            Help::EnableBalloonHelp();
-        else
-            Help::DisableBalloonHelp();
         if ( SvtHelpOptions().IsHelpTips() )
             Help::EnableQuickHelp();
         else
             Help::DisableQuickHelp();
+        if ( SvtHelpOptions().IsHelpTips() && SvtHelpOptions().IsExtendedHelp() )
+            Help::EnableBalloonHelp();
+        else
+            Help::DisableBalloonHelp();
 
         pNew->NotifyEvent(SfxEventHint(SFX_EVENT_STARTAPP), sal_False);
     }
