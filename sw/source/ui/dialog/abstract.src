@@ -2,9 +2,9 @@
  *
  *  $RCSfile: abstract.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text = "Eigenschaften" ;
         Text [ English ] = "Properties" ;
         Text [ english_us ] = "Properties" ;
-        Text [ portuguese_brazilian ] = "Eigenschaften" ;
+        Text [ portuguese_brazilian ] = "Propriedades" ;
         Text [ swedish ] = "Egenskaper" ;
         Text [ danish ] = "Egenskaber" ;
         Text [ italian ] = "Proprietà" ;
@@ -104,6 +104,9 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ catalan ] = "Propietats";
         Text[ finnish ] = "Ominaisuudet";
         Text[ thai ] = "à¸„à¸¸à¸“à¸ªà¸¡à¸šà¸±à¸•à¸´";
+        Text[ czech ] = "Vlastnosti";
+        Text[ hebrew ] = "â€®×××¤×™× ×™×â€¬";
+        Text[ hindi ] = "à¤µà¤¿à¤¶à¥‡à¤·à¤¤à¤¾à¤¯à¥‡à¤‚";
     };
     FixedText FT_LEVEL
     {
@@ -112,7 +115,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text = "Einbezogene Kapitelebenen" ;
         Text [ English ] = "Included outline levels" ;
         Text [ english_us ] = "Included outline levels" ;
-        Text [ portuguese_brazilian ] = "Einbezogene Kapitelebenen" ;
+        Text [ portuguese_brazilian ] = "Níveis da estrutura de tópicos incluídos" ;
         Text [ swedish ] = "Inkluderade kapitelnivåer" ;
         Text [ danish ] = "Inkluderede kapitelniveauer" ;
         Text [ italian ] = "Livelli di capitolo inclusi" ;
@@ -122,7 +125,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ portuguese ] = "Níveis de capítulo incluídos" ;
         Text[ chinese_simplified ] = "åŒ…å«çš„ç« èŠ‚å¤§çº²çº§";
         Text[ russian ] = "Âêëş÷åííûå óğîâíè ñòğóêòóğû";
-        Text[ polish ] = "£¹cznie z poziomami rozdzia³u";
+        Text[ polish ] = "£¹cznie z poziomami konspektu";
         Text[ japanese ] = "æŠ½å‡ºã™ã‚‹ç« ãƒ¬ãƒ™ãƒ«æ•°";
         Text[ chinese_traditional ] = "åŒ…å«çš„ç« ç¯€å¤§ç¶±";
         Text[ arabic ] = "ãÓÊæíÇÊ ÇáİÕá ÇáãÖãäÉ";
@@ -134,6 +137,9 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ catalan ] = "Nivells del capítol inclosos";
         Text[ finnish ] = "Sisällytetyt jäsennystasot";
         Text[ thai ] = "à¸£à¸§à¸¡à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡";
+        Text[ czech ] = "ÃšrovnÄ› vnoÅ™enÃ­ kapitol";
+        Text[ hebrew ] = "Einbezogene Kapitelebenen";
+        Text[ hindi ] = "à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¥à¤¤à¤°à¥‹à¤‚ à¤•à¥‹ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤•à¤¿à¤¯à¤¾";
     };
     NumericField NF_LEVEL
     {
@@ -158,7 +164,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text = "Absätze je Kapitel" ;
         Text [ English ] = "Paragraphs per Outline" ;
         Text [ english_us ] = "Subpoints per level" ;
-        Text [ portuguese_brazilian ] = "Abs?tze je Kapitel" ;
+        Text [ portuguese_brazilian ] = "Sub pontos por nível" ;
         Text [ swedish ] = "Stycken per kapitel" ;
         Text [ danish ] = "Afsnit per kapitel" ;
         Text [ italian ] = "Paragrafi per capitolo" ;
@@ -168,7 +174,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ portuguese ] = "Parágrafos por capítulo" ;
         Text[ chinese_simplified ] = "æ¯ç« èŠ‚åŒ…å«çš„æ®µè½";
         Text[ russian ] = "Àáçàöåâ â óğîâíå";
-        Text[ polish ] = "Akapity w rozdziale";
+        Text[ polish ] = "Podpunkty na poziom";
         Text[ japanese ] = "ç« ã‚ãŸã‚Šã®æ®µè½æ•°";
         Text[ chinese_traditional ] = "æ¯ç« ç¯€åŒ…å«çš„æ®µè½";
         Text[ arabic ] = "İŞÑÇÊ İí ßá İÕá";
@@ -180,6 +186,9 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ catalan ] = "Subpunts per nivell";
         Text[ finnish ] = "Alipisteitä tasolla";
         Text[ thai ] = "à¸ˆà¸¸à¸”à¸¢à¹ˆà¸­à¸¢à¸•à¹ˆà¸­à¸£à¸°à¸”à¸±à¸š";
+        Text[ czech ] = "Podbody v jednotlivÃ½ch ÃºrovnÃ­ch";
+        Text[ hebrew ] = "AbsÃ¤tze je Kapitel";
+        Text[ hindi ] = "à¤à¤• à¤¸à¥à¤¤à¤° à¤®à¥‡à¤‚ à¤…à¤§à¥€à¤¨à¤µà¤¿à¤·à¤¯à¥‡à¤‚";
     };
     NumericField NF_PARA
     {
@@ -205,7 +214,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ English ] = "The selected number of paragraphs of the included outline levels will be used to create the summary." ;
         WordBreak = TRUE ;
         Text [ english_us ] = "The abstract contains the selected number of paragraphs from the included outline levels." ;
-        Text [ portuguese_brazilian ] = "Im Abstrakt erscheint die ausgew?hlte Anzahl von Abs?tzen aus den einbezogenen Kapitelebenen." ;
+        Text [ portuguese_brazilian ] = "O resumo contém o número de parágrafos selecionados a partir dos níveis da estrutura de tópicos incluidos." ;
         Text [ swedish ] = "Utdraget innehåller det utvalda antalet stycken från de inkluderade kapitelnivåerna." ;
         Text [ danish ] = "Abstractet indeholder det valgte antal afsnit fra de inkluderede kapitelniveauer." ;
         Text [ italian ] = "Il sunto contiene il numero di paragrafi scelto dai livelli di capitolo inclusi." ;
@@ -215,7 +224,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text [ portuguese ] = "O Abstracto contém a quantidade de parágrafos seleccionada dos níveis de capítulos incluídos." ;
         Text[ chinese_simplified ] = "ä»åŒ…æ‹¬çš„ç« èŠ‚çº§ä¸­é€‰å‡ºçš„ä¸€å®šæ•°ç›®çš„æ®µè½æ˜¾ç¤ºåœ¨æ‘˜è¦ä¸­ã€‚";
         Text[ russian ] = "Â ïğåäñòàâëåíèè ñîäåğæèòñÿ âûáğàííîå ÷èñëî àáçàöåâ èç âêëş÷åííûõ óğîâíåé ñòğóêòóğû";
-        Text[ polish ] = "Abstrakt zawiera wybran¹ iloœæ akapitów z awieraj¹cych w³¹czone poziomy akapitu.";
+        Text[ polish ] = "W wyci¹gu znajduje siê wybrana liczba akapitów z do³¹czonych poziomów konspektu.";
         Text[ japanese ] = "è¦ç´„ã«ã¯ã€æŒ‡å®šæ•°ã®æ®µè½ãŒå„ç« ãƒ¬ãƒ™ãƒ«ã‹ã‚‰æŠ½å‡ºã•ã‚Œã¾ã™ã€‚";
         Text[ chinese_traditional ] = "æ‘˜è¦æ¨¡å¼é¡¯ç¤ºç›¸é—œç« ç¯€ä¸­é¸å–çš„ä¸€å®šæ•¸ç›®çš„æ®µè½";
         Text[ arabic ] = "Óæİ íÙåÑ İí ÇáÊáÎíÕ ÚÏÏ ÇáİŞÑÇÊ ÇáÊí Êã ÊÍÏíÏåÇ ãä Èíä ãÓÊæíÇÊ ÇáİÕæá ÇáãÖãäÉ.";
@@ -227,6 +236,9 @@ ModalDialog DLG_INSERT_ABSTRACT
         Text[ catalan ] = "En l'estracte apareix la quantitat desitjada de paràgrafs dels nivells dels capítols inclosos.";
         Text[ finnish ] = "Tiivistelmässä on valittu määrä kappaleita sisällytetyistä jäsennystasoista.";
         Text[ thai ] = "à¸šà¸—à¸„à¸±à¸”à¸¢à¹ˆà¸­à¸¡à¸µà¸•à¸±à¸§à¹€à¸¥à¸‚à¸—à¸µà¹ˆà¹€à¸¥à¸·à¸­à¸à¸‚à¸­à¸‡à¸¢à¹ˆà¸­à¸«à¸™à¹‰à¸²à¸ˆà¸²à¸à¸£à¸°à¸”à¸±à¸šà¹€à¸„à¹‰à¸²à¸£à¹ˆà¸²à¸‡à¸—à¸µà¹ˆà¸£à¸§à¸¡à¹„à¸§à¹‰";
+        Text[ czech ] = "Abstrakt obsahuje zvolenÃ½ poÄet odstavcÅ¯ z vybranÃ½ch ÃºrovnÃ­ kapitol.";
+        Text[ hebrew ] = "Im Abstrakt erscheint die ausgewÃ¤hlte Anzahl von AbsÃ¤tzen aus den einbezogenen Kapitelebenen.";
+        Text[ hindi ] = "à¤¸à¤¾à¤°à¤¾à¤‚à¤¶ à¤®à¥‡à¤‚ à¤¸à¤®à¥à¤®à¤¿à¤²à¤¿à¤¤ à¤¬à¤¾à¤¹à¤°à¥€ à¤°à¥‚à¤ªà¤°à¥‡à¤–à¤¾ à¤¸à¥à¤¤à¤° à¤¸à¥‡ à¤šà¥à¤¨à¥‡ à¤¹à¥à¤ à¤ªà¤°à¤¿à¤šà¥à¤›à¥‡à¤¦ à¤¹à¥ˆ à¥¤";
     };
     OKButton PB_OK
     {
@@ -248,7 +260,7 @@ ModalDialog DLG_INSERT_ABSTRACT
         TabStop = TRUE ;
     };
     Text [ english_us ] = "Create AutoAbstract" ;
-    Text [ portuguese_brazilian ] = "AutoAbstrakt erzeugen" ;
+    Text [ portuguese_brazilian ] = "Criar AutoResumo" ;
     Text [ swedish ] = "Skapa AutoUtdrag" ;
     Text [ danish ] = "Opret AutoAbstract" ;
     Text [ italian ] = "Crea un sommario automatico" ;
@@ -258,7 +270,7 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text [ portuguese ] = "Criar AutoAbstracto" ;
     Text[ chinese_simplified ] = "ç”Ÿæˆè‡ªåŠ¨æ‘˜è¦";
     Text[ russian ] = "Ñîçäàòü àáñòğàêòíîå ïğåäñòàâëåíèå";
-    Text[ polish ] = "Utwórz Autokonspekt";
+    Text[ polish ] = "Utwórz Autowyci¹g";
     Text[ japanese ] = "è‡ªå‹•æŠ½å‡ºã®ä½œæˆ";
     Text[ chinese_traditional ] = "ç”¢ç”Ÿè‡ªå‹•æ‘˜è¦";
     Text[ arabic ] = "ÅäÔÇÁ ÊáÎíÕ ÊáŞÇÆí";
@@ -270,7 +282,19 @@ ModalDialog DLG_INSERT_ABSTRACT
     Text[ catalan ] = "Crea AutoAbstracte";
     Text[ finnish ] = "Luo automaattinen tiivistelmä";
     Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸šà¸—à¸„à¸±à¸”à¸¢à¹ˆà¸­à¸­à¸±à¸•à¹‚à¸™à¸¡à¸±à¸•à¸´";
+    Text[ czech ] = "VytvoÅ™it automatickÃ½ konspekt";
+    Text[ hebrew ] = "AutoAbstract erzeugen";
+    Text[ hindi ] = "à¤¸à¥à¤µà¤šà¤¾à¤²à¤¿à¤¤ à¤¢à¤‚à¤— à¤¸à¥‡ à¤¸à¤¾à¤°à¤¾à¤‚à¤¶ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
 };
+
+
+
+
+
+
+
+
+
 
 
 
