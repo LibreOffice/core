@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:51:49 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:03:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@ public:
             throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
             throw( ::com::sun::star::uno::RuntimeException );
+
+    virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xParent )
+            throw( ::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString > getSupportedServiceNames_Static();
     static ::rtl::OUString getImplementationName_Static();
