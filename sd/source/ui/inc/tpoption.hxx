@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-13 12:20:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:50:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ public:
         <member>SetDrawMode()</member> method more than once.
     */
     void SetImpressMode (void);
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 
