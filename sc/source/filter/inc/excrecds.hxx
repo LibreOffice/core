@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:37:12 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -635,6 +635,9 @@ public:
                             ~ExcRichStr();
 
     inline  UINT16          GetFormCount() const;
+
+    /** returns font idx and removes the List entry for a char index otherwise EXC_FONT_NOTFOUND from the aForms. */
+    sal_uInt16                          RemoveFontOfChar(sal_uInt16 nCharIdx);
 
                             // number of bytes to be saved
     inline  ULONG           GetByteCount() const;
