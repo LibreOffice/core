@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-10 07:41:54 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 13:40:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,7 +517,7 @@ protected:
     virtual void _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& ) throw(::com::sun::star::uno::RuntimeException);
 
 private:
-    void    executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
+    sal_Bool executeRowSet(ReusableMutexGuard& _rClearForNotifies, sal_Bool bMoveToFirst = sal_True,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
     bool    fillParameters(ReusableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
