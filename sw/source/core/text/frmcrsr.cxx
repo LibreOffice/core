@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-11 07:54:56 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:12:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,12 +352,20 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
             pFrm->SwapWidthAndHeight();
             pFrm->SwitchHorizontalToVertical( rOrig );
 
-            if ( pCMS && pCMS->bRealHeight )
+            if ( pCMS )
             {
-                pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
-                pCMS->aRealHeight.X() =  ( rOrig.Width() -
-                                           pCMS->aRealHeight.X() +
-                                           pCMS->aRealHeight.Y() );
+                if ( pCMS->bRealHeight )
+                {
+                    pCMS->aRealHeight.Y() = -pCMS->aRealHeight.Y();
+                    pCMS->aRealHeight.X() =  ( rOrig.Width() -
+                                               pCMS->aRealHeight.X() +
+                                               pCMS->aRealHeight.Y() );
+                }
+                if( pCMS->b2Lines && pCMS->p2Lines)
+                {
+                    pFrm->SwitchHorizontalToVertical( pCMS->p2Lines->aLine );
+                    pFrm->SwitchHorizontalToVertical( pCMS->p2Lines->aPortion );
+                }
             }
         }
 #endif
