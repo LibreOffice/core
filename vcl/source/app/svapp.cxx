@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-07 13:47:30 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 15:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,13 +189,13 @@ public:
         m_xBroadcaster( xBroadcaster ) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& );
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& ) throw();
 
     // XStreamListener
-    virtual void SAL_CALL started();
-    virtual void SAL_CALL closed();
-    virtual void SAL_CALL terminated();
-    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& rException );
+    virtual void SAL_CALL started() throw();
+    virtual void SAL_CALL closed() throw();
+    virtual void SAL_CALL terminated() throw();
+    virtual void SAL_CALL error( const ::com::sun::star::uno::Any& rException ) throw();
 };
 
 IMPL_LINK( RVPConnectionListener, signalSolarThread, void*, pDummy )
@@ -204,30 +204,30 @@ IMPL_LINK( RVPConnectionListener, signalSolarThread, void*, pDummy )
     return 0;
 }
 
-void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject& rObject )
+void RVPConnectionListener::disposing( const ::com::sun::star::lang::EventObject& rObject ) throw()
 {
     m_xBroadcaster.clear();
 }
 
-void RVPConnectionListener::started()
+void RVPConnectionListener::started() throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "RVPConnectionListener::started\n" );
 #endif
 }
-void RVPConnectionListener::closed()
+void RVPConnectionListener::closed() throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "RVPConnectionListener::closed\n" );
 #endif
 }
-void RVPConnectionListener::terminated()
+void RVPConnectionListener::terminated() throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "RVPConnectionListener::terminated\n" );
 #endif
 }
-void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException )
+void RVPConnectionListener::error( const ::com::sun::star::uno::Any& rException ) throw()
 {
 #ifdef DEBUG
     fprintf( stderr, "connection to client lost ... terminating\n" );

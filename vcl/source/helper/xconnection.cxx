@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xconnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-05 16:41:16 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 15:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,35 +102,35 @@ DisplayConnection::~DisplayConnection()
 }
 
 
-void SAL_CALL DisplayConnection::addEventHandler( const Any& window, const Reference< XEventHandler >& handler, sal_Int32 eventMask )
+void SAL_CALL DisplayConnection::addEventHandler( const Any& window, const Reference< XEventHandler >& handler, sal_Int32 eventMask ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeEventHandler( const Any& window, const Reference< XEventHandler >& handler )
+void SAL_CALL DisplayConnection::removeEventHandler( const Any& window, const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.remove( handler );
 }
 
-void SAL_CALL DisplayConnection::addErrorHandler( const Reference< XEventHandler >& handler )
+void SAL_CALL DisplayConnection::addErrorHandler( const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnection::removeErrorHandler( const Reference< XEventHandler >& handler )
+void SAL_CALL DisplayConnection::removeErrorHandler( const Reference< XEventHandler >& handler ) throw()
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.remove( handler );
 }
 
-Any SAL_CALL DisplayConnection::getIdentifier()
+Any SAL_CALL DisplayConnection::getIdentifier() throw()
 {
     return m_aAny;
 }

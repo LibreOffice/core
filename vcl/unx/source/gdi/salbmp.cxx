@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-29 16:15:55 $
+ *  last change: $Author: pl $ $Date: 2001-09-11 15:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,7 @@ BitmapBuffer* SalBitmap::ImplCreateDIB( Drawable aDrawable,
             else if( aSrcBuf.mnBitCount <= 8 )
             {
                 SalColormap&    rColMap = pSalDisp->GetColormap();
-                const USHORT    nCols = Min( (USHORT)rColMap.GetUsed(), 1 << nDrawableDepth );
+                const USHORT    nCols = Min( (ULONG)rColMap.GetUsed(), (ULONG)(1 << nDrawableDepth) );
 
                 rPal.SetEntryCount( nCols );
                 pDstPal = &rPal;
@@ -438,7 +438,7 @@ XImage* SalBitmap::ImplCreateXImage( SalDisplay *pSalDisp, long nDepth, const Sa
             else if( pImage->depth <= 8 )
             {
                 SalColormap& rColMap = pSalDisp->GetColormap();
-                const USHORT nCols = Min( (USHORT)rColMap.GetUsed(), 1 << pImage->depth );
+                const USHORT nCols = Min( (ULONG)rColMap.GetUsed(), (ULONG)(1 << pImage->depth) );
 
                 pPal = new BitmapPalette( nCols );
 
