@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:56:14 $
+ *  last change: $Author: kz $ $Date: 2001-04-11 18:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -633,7 +633,7 @@ ModalDialog DLG_GLOSSARY
                 Text[ russian ] = "Κξοθπξβΰςό";
                 Text[ greek ] = "Αντι~γραφή";
                 Text[ dutch ] = "~Kopiλren";
-                Text[ french ] = "~Copier";
+                Text[ french ] = "Co~pier";
                 Text[ spanish ] = "~Copiar";
                 Text[ italian ] = "~Copia";
                 Text[ danish ] = "K~opier";
@@ -882,7 +882,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ chinese_simplified ] = "ÒΡΎ­΄ζΤΪΥβΈφΛυΠ΄΅£ΗλΔϊΚδΘλÒ»ΈφΖδΛϋΛυΠ΄Γϋ³Ζ£΅";
     MESSAGE[ russian ] = "έςξ ρξκπΰωενθε σζε ρσωερςβσες. Οξζΰλσιρςΰ, βϋαεπθςε δπσγξε θμÿ!";
     MESSAGE[ polish ] = "Te inicja³y juΏ zosta³y uΏyte. Proszκ podaζ innΉ nazwκ!";
-    MESSAGE[ japanese ] = "‚±‚ΜΌ®°Δ¶―Δ·°‚Ν‚·‚Ε‚Ιg—p‚³‚κ‚Δ‚Ά‚ά‚·B•Κ‚Μ·°‚π‘I‘π‚µ‚Δ‰Ί‚³‚ΆB";
+    MESSAGE[ japanese ] = "‚±‚ΜΌ®°Δ¶―Δ‚Ν‚·‚Ε‚Ιg—p‚³‚κ‚Δ‚Ά‚ά‚·B•Κ‚Μ–Ό‘O‚π‘I‘π‚µ‚Δ‚­‚Ύ‚³‚ΆB";
     MESSAGE[ chinese_traditional ] = "¤wΈg¨Ο¥Ξ¤F³o­ΣΑYΌg΅C½Π±zΏι¤J¤@­Σ¤£¦PªΊ¦WΊΩ΅T";
     MESSAGE[ arabic ] = "εΠΗ ΗαΗΞΚΥΗΡ γζΜζΟ ΘΗαέΪα. ΗαΡΜΗΑ ΗΣΚΞΟΗγ ΗΣγ ΜΟνΟ!";
     MESSAGE[ greek ] = "Τα αρχικά υπάρχουν ήδη. Παρακαλώ εισάγετε κάποιο άλλο όνομα!";
