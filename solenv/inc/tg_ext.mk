@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: er $ $Date: 2002-07-19 16:26:05 $
+#   last change: $Author: hjs $ $Date: 2002-09-03 10:22:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,9 +92,9 @@ BACK_PATH=..$/..$/..$/
 # Remove entire package from output directory, for example, if new patches are
 # to be applied.
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-    REMOVE_PACKAGE_COMMAND=+$(RM) -r $(PACKAGE_DIR) >& $(NULLDEV)
+    REMOVE_PACKAGE_COMMAND=+-$(RM) -r $(PACKAGE_DIR) >& $(NULLDEV)
 .ELSE			# "$(GUI)"=="WNT"
-    REMOVE_PACKAGE_COMMAND=+$(RM) /s $(PACKAGE_DIR) >& $(NULLDEV)
+    REMOVE_PACKAGE_COMMAND=+-$(RM) /s $(PACKAGE_DIR) >& $(NULLDEV)
 .ENDIF			# "$(GUI)"=="WNT"
 
 P_CONFIGURE_DIR=$(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$(CONFIGURE_DIR)
@@ -259,7 +259,7 @@ $(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 .IF "$(OUTDIR2INC)"!=""
 .IF "$(GUI)"=="WNT"
     @$(MKDIR) $(foreach,i,$(OUTDIR2INC) $(INCCOM)$/$(i:b))
-    @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
+    @+echo copied $(foreach,i,$(OUTDIR2INC) $(shell +$(COPY) $(COPYRECURSE) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i$/* $(INCCOM)$/$(i:b) >& $(NULLDEV) && echo $i))
 .ELSE			# "$(GUI)"=="WNT"
     +$(COPY) $(COPYRECURSE) $(foreach,i,$(OUTDIR2INC) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/$i) $(INCCOM)
 .ENDIF			# "$(GUI)"=="WNT"
