@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 08:55:09 $
+ *  last change: $Author: tl $ $Date: 2002-10-16 11:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
-#include <paratr.hxx>
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -106,6 +105,12 @@
 #include <svx/svdpage.hxx>
 #endif
 
+#ifndef _PARATR_HXX
+#include <paratr.hxx>
+#endif
+#ifndef _FCHRFMT_HXX
+#include <fchrfmt.hxx>
+#endif
 #ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
@@ -463,6 +468,9 @@ SwDoc::~SwDoc()
     //!! (this is case is not possible via UI but via API...)
     SwFmtDrop aDrop;
     SetDefault(aDrop);
+    //!! same for SwFmtCharFmt
+    SwFmtCharFmt aCharFmt(NULL);
+    SetDefault(aCharFmt);
 
     aIdleTimer.Stop();  // den Idltimer abschalten
 
