@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_resource_ooo.scp,v $
 *
-*  $Revision: 1.8 $
+*  $Revision: 1.9 $
 *
-*  last change: $Author: hr $ $Date: 2004-08-03 13:18:42 $
+*  last change: $Author: obo $ $Date: 2004-08-12 10:37:06 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -191,3 +191,5 @@ STD_SETUPZIP_RES_FILE( gid_File_Res_Vcl, vcl )
 STD_RES_FILE( gid_File_Res_Wwz, wwz )
 
 STD_RES_FILE( gid_File_Res_Xsltdlg, xsltdlg )
+
+STD_RES_FILE( gid_File_Res_AVMedia, avmedia )
