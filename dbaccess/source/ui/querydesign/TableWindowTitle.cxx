@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ void OTableWindowTitle::Command( const CommandEvent& rEvt )
             GrabFocus();
             OQueryTableView* pView = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
             OSL_ENSURE(pView,"No OQueryTableView!");
-            if(!pView->getDesignView()->getController()->isReadOnly() && pView->getDesignView()->getController()->getConnection().is())
+            if(!pView->getDesignView()->getController()->isReadOnly() && pView->getDesignView()->getController()->isConnected())
             {
                 Point aPoint = rEvt.GetMousePosPixel();
                 PopupMenu aContextMenu( ModuleRes(RID_QUERYCOLPOPUPMENU) );

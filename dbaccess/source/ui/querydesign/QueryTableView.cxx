@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,18 +369,25 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl:
     Reference< XConnection> xConnection = m_pView->getController()->getConnection();
     if(!xConnection.is())
         return;
-    ::rtl::OUString sCatalog, sSchema, sTable;
-    ::dbtools::qualifiedNameComponents(xConnection->getMetaData(),
-                                strDatabase,
-                                sCatalog,
-                                sSchema,
-                                sTable);
-    ::rtl::OUString sRealName(sSchema);
-    if (sRealName.getLength())
-        sRealName+= ::rtl::OUString('.');
-    sRealName += sTable;
+    try
+    {
+        ::rtl::OUString sCatalog, sSchema, sTable;
+        ::dbtools::qualifiedNameComponents(xConnection->getMetaData(),
+                                    strDatabase,
+                                    sCatalog,
+                                    sSchema,
+                                    sTable);
+        ::rtl::OUString sRealName(sSchema);
+        if (sRealName.getLength())
+            sRealName+= ::rtl::OUString('.');
+        sRealName += sTable;
 
-    AddTabWin(strDatabase, sRealName, ConvertAlias(strTableName), bNewTable);
+        AddTabWin(strDatabase, sRealName, ConvertAlias(strTableName), bNewTable);
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"qualifiedNameComponents");
+    }
 }
 // -----------------------------------------------------------------------------
 // find the table which has a foreign key with this referencedTable name

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,19 @@
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
 #endif
-
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::datatransfer;
+
+OJoinExchangeData::OJoinExchangeData(OTableWindowListBox* pBox)
+    : pListBox(pBox)
+    , pEntry(pBox->FirstSelected())
+{ }
 
 const ULONG SCROLLING_TIMESPAN = 500;
 const long LISTBOX_SCROLLING_AREA = 6;
@@ -105,6 +112,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent, const String& r
     ,m_aMousePos( Point(0,0) )
     ,m_bReallyScrolled( sal_False )
     ,m_bDragSource( sal_False )
+    ,m_nDropEvent(0)
 {
     DBG_CTOR(OTableWindowListBox,NULL);
     m_aScrollTimer.SetTimeout( SCROLLING_TIMESPAN );
@@ -126,6 +134,8 @@ void OTableWindowListBox::dragFinished( )
 //------------------------------------------------------------------------------
 OTableWindowListBox::~OTableWindowListBox()
 {
+    if (m_nDropEvent)
+        Application::RemoveUserEvent(m_nDropEvent);
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
     m_pTabWin = NULL;
@@ -143,19 +153,26 @@ SvLBoxEntry* OTableWindowListBox::GetEntryFromText( const String& rEntryText )
     OJoinController* pController = pView->getController();
 
     BOOL bCase = FALSE;
-    Reference<XConnection> xConnection = pController->getConnection();
-    if(xConnection.is())
+    try
     {
-        Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-        if(xMeta.is())
-            bCase = xMeta->storesMixedCaseQuotedIdentifiers();
+        Reference<XConnection> xConnection = pController->getConnection();
+        if(xConnection.is())
+        {
+            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+            if(xMeta.is())
+                bCase = xMeta->storesMixedCaseQuotedIdentifiers();
+        }
+        while( pEntry )
+        {
+            if((bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.EqualsIgnoreCaseAscii(GetEntryText(pEntry))))
+            {
+                return pEntry;
+            }
+            pEntry = (SvLBoxEntry*)pTreeList->Next( pEntry );
+        }
     }
-
-    while( pEntry )
+    catch(SQLException&)
     {
-        if((bCase ? rEntryText == GetEntryText(pEntry) : rEntryText.EqualsIgnoreCaseAscii(GetEntryText(pEntry))))
-            return pEntry;
-        pEntry = (SvLBoxEntry*)pTreeList->Next( pEntry );
     }
 
     return NULL;
@@ -244,18 +261,16 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, pBox )
 void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 {
     OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-    if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->getConnection().is())
+    if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
     {
         EndSelection();
 
         // eine Beschreibung der Source
         OJoinExchangeData jxdSource(this);
-
+        m_bDragSource = sal_True;
         // in ein Exchange-Objekt packen
         OJoinExchObj* pJoin = new OJoinExchObj(jxdSource);
         Reference< XTransferable > xEnsureDelete(pJoin);
-
-        m_bDragSource = sal_True;
         pJoin->StartDrag(this, DND_ACTION_LINK, this);
     }
 }
@@ -265,7 +280,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
 {
     sal_Int8 nDND_Action = DND_ACTION_NONE;
     // check the format
-    if (OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()) && !m_bDragSource)
+    if (!m_bDragSource && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector()))
     {   // don't drop into the window if it's the drag source itself
 
 
@@ -331,38 +346,45 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
                 nDND_Action = DND_ACTION_LINK;
         }
     }
-
     return nDND_Action;
 }
+// -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+IMPL_LINK( OTableWindowListBox, DropHdl, void *, EMPTY_ARG)
 {
-    TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
-    if (!OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
-    {
-        DBG_ERROR("OTableWindowListBox::ExecuteDrop: this should never have passed AcceptDrop!");
-        return DND_ACTION_NONE;
-    }
-
-    // target window description
-    OJoinExchangeData jxdDest(this);
-
-    // source window description
-    OJoinExchangeData jxdSource = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
     // create the connection
+    OSL_ENSURE(m_pTabWin,"No TableWindow!");
     try
     {
         OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
-        pCont->AddConnection(jxdSource, jxdDest);
+        OSL_ENSURE(pCont,"No QueryTableView!");
+        pCont->AddConnection(m_aDropInfo.aSource, m_aDropInfo.aDest);
     }
     catch(const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
         m_pTabWin->getDesignView()->getController()->setErrorOccured(::dbtools::SQLExceptionInfo(e));
     }
+    return 0L;
+}
+//------------------------------------------------------------------------------
+sal_Int8 OTableWindowListBox::ExecuteDrop( const ExecuteDropEvent& _rEvt )
+{
+    TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
+    if (!m_bDragSource && OJoinExchObj::isFormatAvailable(aDropped.GetDataFlavorExVector()))
+    {   // don't drop into the window if it's the drag source itself
 
-    return DND_ACTION_LINK;
+        m_aDropInfo.aSource = OJoinExchangeData(this);
+        m_aDropInfo.aDest   = OJoinExchObj::GetSourceDescription(_rEvt.maDropEvent.Transferable);
+
+        if (m_nDropEvent)
+            Application::RemoveUserEvent(m_nDropEvent);
+        m_nDropEvent = Application::PostUserEvent(LINK(this, OTableWindowListBox, DropHdl));
+
+        return DND_ACTION_LINK;
+    }
+    return DND_ACTION_NONE;
 }
 
 //------------------------------------------------------------------------------
@@ -379,10 +401,12 @@ void OTableWindowListBox::GetFocus()
         m_pTabWin->GetFocus();
     SvTreeListBox::GetFocus();
     if (GetCurEntry() != NULL)
+    {
         if (GetSelectionCount() == 0)
             Select(GetCurEntry(), TRUE);
         else
             ShowFocusRect(FirstSelected());
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -396,3 +420,5 @@ IMPL_LINK( OTableWindowListBox, DoubleClickHdl, SvTreeListBox *, pBox )
 
     return 0;
 }
+// -----------------------------------------------------------------------------
+

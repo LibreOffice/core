@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-30 13:05:53 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,16 +80,6 @@
 
 namespace dbaui
 {
-    struct OJoinExchangeData
-    {
-    public:
-        OTableWindowListBox*    pListBox;       // die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
-        SvLBoxEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
-
-        OJoinExchangeData(OTableWindowListBox* pBox) : pListBox(pBox), pEntry(pBox->FirstSelected()) { }
-        OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
-    };
-
     //==================================================================
     // OJoinExchObj :
     // Zusaetzliche Daten fuer das Erzeugen von Joins in der JoinShell

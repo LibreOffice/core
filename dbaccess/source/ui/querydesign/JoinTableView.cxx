@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-08 07:32:33 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,6 @@
 #define INCLUDED_FUNCTIONAL
 #include <functional>
 #endif
-
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
@@ -877,26 +876,25 @@ void OJoinTableView::MouseButtonUp( const MouseEvent& rEvt )
     Window::MouseButtonUp(rEvt);
     //////////////////////////////////////////////////////////////////////
     // Wurde eine Connection ausgewaehlt?
-    if( !m_vTableConnection.size() )
-        return;
-
-    DeselectConn(GetSelectedConn());
-
-    ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-    for(;aIter != m_vTableConnection.end();++aIter)
+    if( !m_vTableConnection.empty() )
     {
-        if( (*aIter)->CheckHit(rEvt.GetPosPixel()) )
+        DeselectConn(GetSelectedConn());
+
+        ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
+        for(;aIter != m_vTableConnection.end();++aIter)
         {
-            SelectConn((*aIter));
+            if( (*aIter)->CheckHit(rEvt.GetPosPixel()) )
+            {
+                SelectConn((*aIter));
 
-            // Doppelclick
-            if( rEvt.GetClicks() == 2 )
-                ConnDoubleClicked( (*aIter) );
+                // Doppelclick
+                if( rEvt.GetClicks() == 2 )
+                    ConnDoubleClicked( (*aIter) );
 
-            break;
+                break;
+            }
         }
     }
-
 }
 
 //------------------------------------------------------------------------------
@@ -1225,7 +1223,7 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
                 if( (*aIter)->CheckHit(rEvt.GetMousePosPixel()) )
                 {
                     SelectConn((*aIter));
-                    if(!getDesignView()->getController()->isReadOnly() && getDesignView()->getController()->getConnection().is())
+                    if(!getDesignView()->getController()->isReadOnly() && getDesignView()->getController()->isConnected())
                     {
                         PopupMenu aContextMenu(ModuleRes(RID_QUERYCOLPOPUPMENU));
                         switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))

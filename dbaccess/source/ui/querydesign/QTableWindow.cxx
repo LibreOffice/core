@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,26 +356,32 @@ sal_Bool OQueryTableWindow::ExistsField(const ::rtl::OUString& strFieldName, OTa
     if(xConnection.is())
     {
         SvLBoxEntry* pEntry = m_pListBox->First();
-        ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
-
-        while (pEntry)
+        try
         {
-            if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
-            {
-                OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
-                DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+            ::comphelper::UStringMixEqual bCase(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers());
 
-                rInfo->SetTabWindow(this);
-                rInfo->SetField(strFieldName);
-                rInfo->SetTable(GetTableName());
-                rInfo->SetAlias(GetAliasName());
-                rInfo->SetDatabase(GetComposedName());
-                rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
-                rInfo->SetDataType(pInf->GetDataType());
-                bExists = sal_True;
-                break;
+            while (pEntry)
+            {
+                if (bCase(strFieldName,::rtl::OUString(m_pListBox->GetEntryText(pEntry))))
+                {
+                    OTableFieldInfo* pInf = static_cast<OTableFieldInfo*>(pEntry->GetUserData());
+                    DBG_ASSERT(pInf != NULL, "OQueryTableWindow::ExistsField : Feld hat keine FieldInfo !");
+
+                    rInfo->SetTabWindow(this);
+                    rInfo->SetField(strFieldName);
+                    rInfo->SetTable(GetTableName());
+                    rInfo->SetAlias(GetAliasName());
+                    rInfo->SetDatabase(GetComposedName());
+                    rInfo->SetFieldIndex(m_pListBox->GetModel()->GetAbsPos(pEntry));
+                    rInfo->SetDataType(pInf->GetDataType());
+                    bExists = sal_True;
+                    break;
+                }
+                pEntry = m_pListBox->Next(pEntry);
             }
-            pEntry = m_pListBox->Next(pEntry);
+        }
+        catch(SQLException&)
+        {
         }
     }
 

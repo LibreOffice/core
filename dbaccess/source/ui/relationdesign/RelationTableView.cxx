@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:49 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@
 #include <connectivity/dbexception.hxx>
 #endif
 
+
 using namespace dbaui;
 using namespace ::dbtools;
 using namespace ::com::sun::star::uno;
@@ -246,10 +247,16 @@ BOOL ORelationTableView::IsAddAllowed()
             bAllowed = FALSE;
         else
         {
-            Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
-            OSL_ENSURE(xMetaData.is(),"ORelationTableView::IsAddAllowed: The metadata is null!");
+            try
+            {
+                Reference < XDatabaseMetaData > xMetaData( xConnection->getMetaData() );
+                OSL_ENSURE(xMetaData.is(),"ORelationTableView::IsAddAllowed: The metadata is null!");
 
-            bAllowed = xMetaData.is() && xMetaData->supportsIntegrityEnhancementFacility();
+                bAllowed = xMetaData.is() && xMetaData->supportsIntegrityEnhancementFacility();
+            }
+            catch(SQLException&)
+            {
+            }
         }
     }
     return bAllowed;
@@ -275,6 +282,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
         }
     }
     // insert table connection into view
+
+
     Reference<XTablesSupplier> xTablesSup(getDesignView()->getController()->getConnection(),UNO_QUERY);
     ORelationTableConnectionData* pTabConnData = NULL;
     OSL_ENSURE(xTablesSup.is(),"ORelationTableView::AddConnection no TablesSupplier");

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:56:01 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,15 +333,25 @@ void OTableEditorCtrl::InitCellController()
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Zelle Feldname
-    Reference<XConnection> xCon = GetView()->getController()->getConnection();
-    Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
+    xub_StrLen nMaxTextLen = EDIT_NOLIMIT;
+    ::rtl::OUString sExtraNameChars;
+    try
+    {
+        Reference<XConnection> xCon = GetView()->getController()->getConnection();
+        Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
-    xub_StrLen nMaxTextLen((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
+        xub_StrLen nMaxTextLen = ((xub_StrLen)xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
-    if( nMaxTextLen == 0 )
-        nMaxTextLen = EDIT_NOLIMIT;
+        if( nMaxTextLen == 0 )
+            nMaxTextLen = EDIT_NOLIMIT;
+        sExtraNameChars = xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString();
+    }
+    catch(SQLException&)
+    {
+        OSL_ASSERT(!"getMaxColumnNameLength");
+    }
 
-    pNameCell = new OSQLNameEdit( &GetDataWindow(), xMetaData.is() ? xMetaData->getExtraNameCharacters() : ::rtl::OUString(),WB_LEFT );
+    pNameCell = new OSQLNameEdit( &GetDataWindow(), sExtraNameChars,WB_LEFT );
     pNameCell->SetMaxTextLen( nMaxTextLen );
 
     //////////////////////////////////////////////////////////////////////

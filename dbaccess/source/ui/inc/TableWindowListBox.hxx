@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-09 06:56:48 $
+ *  last change: $Author: oj $ $Date: 2001-10-11 08:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #include <svtools/svtreebx.hxx>
 #endif
 
-#if SUPD<627
-#ifndef _TRANSFER_HXX
-#include <svtools/transfer.hxx>
-#endif
-#endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
 #endif
@@ -78,6 +73,22 @@ struct AcceptDropEvent;
 struct ExecuteDropEvent;
 namespace dbaui
 {
+    class OTableWindowListBox;
+    struct OJoinExchangeData
+    {
+    public:
+        OTableWindowListBox*    pListBox;       // die ListBox innerhalb desselben (daraus kann man sich das TabWin und daraus den WinName besorgen)
+        SvLBoxEntry*            pEntry;         // der Eintrag, der gedraggt oder auf den gedroppt wurde
+
+        OJoinExchangeData(OTableWindowListBox* pBox);
+        OJoinExchangeData() : pListBox(NULL), pEntry(NULL) { }
+    };
+    struct OJoinDropData
+    {
+        OJoinExchangeData aSource;
+        OJoinExchangeData aDest;
+    };
+
     class OTableWindow;
     class OTableWindowListBox
             :public SvTreeListBox
@@ -86,11 +97,14 @@ namespace dbaui
         DECL_LINK( DoubleClickHdl, SvTreeListBox* );
         DECL_LINK( ScrollUpHdl, SvTreeListBox* );
         DECL_LINK( ScrollDownHdl, SvTreeListBox* );
+        DECL_LINK( DropHdl, void* );
 
         Timer                       m_aScrollTimer;
         Point                       m_aMousePos;
 
         OTableWindow*               m_pTabWin;
+        sal_Int32                   m_nDropEvent;
+        OJoinDropData               m_aDropInfo;
 
         BOOL                        m_bReallyScrolled : 1;
         BOOL                        m_bDragSource : 1;
@@ -117,6 +131,8 @@ namespace dbaui
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
         SvLBoxEntry* GetEntryFromText( const String& rEntryText );
+
+
     };
 }
 #endif // DBAUI_TABLEWINDOWLISTBOX_HXX
