@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 17:55:17 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 16:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,12 +852,17 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 bInDeleteUndo = FALSE;
             // RelNameRefs are always moved
             bHasRelName = HasRelNameReference();
-            // Referenz geaendert und neues Listening noetig?
-            // ausser Insert/Delete ohne Spezialitaeten
+            // Reference changed and new listening needed?
+            // Except in Insert/Delete without specialties.
             bNewListening = (bRangeModified || pRangeData || bColRowNameCompile
                     || (bValChanged &&
                         (eUpdateRefMode != URM_INSDEL || bInDeleteUndo)) ||
-                    (bHasRelName && eUpdateRefMode != URM_COPY));
+                    (bHasRelName && eUpdateRefMode != URM_COPY))
+                // #i36299# Don't duplicate action during cut&paste / drag&drop
+                // on a cell in the range moved, start/end listeners is done
+                // via ScDocument::DeleteArea() and ScDocument::CopyFromClip().
+                && !(eUpdateRefMode == URM_MOVE &&
+                        pDocument->IsInsertingFromOtherDoc() && r.In(aPos));
             if ( bNewListening )
                 EndListeningTo( pDocument, pOld, aOldPos );
         }
@@ -894,7 +899,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
             ScCompiler aComp2(pDocument, aPos, *pCode);
-            aComp2.MoveRelWrap();
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
                 nDx, nDy, nDz );
             bValChanged = TRUE;
