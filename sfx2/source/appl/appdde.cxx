@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appdde.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:02:23 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:02:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,9 @@
 #endif
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "app.hxx"
 #include "appdata.hxx"
