@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 07:44:06 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 11:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,6 +224,7 @@ SbiRuntime::pStep2 SbiRuntime::aStep2[] = {// Alle Opcodes mit zwei Operanden
                                         // von Basic nicht ueberschrieben wird (+StringID+Typ)
     MEMBER(SbiRuntime::StepFIND_G),     // Sucht globale Variable mit Spezialbehandlung wegen _GLOBAL_P
     MEMBER(SbiRuntime::StepDCREATE_REDIMP), // Objekt-Array redimensionieren (+StringID+StringID)
+    MEMBER(SbiRuntime::StepFIND_CM),    // Search inside a class module (CM) to enable global search in time
 };
 
 
