@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 13:07:50 $
+ *  last change: $Author: fme $ $Date: 2002-11-07 10:10:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,7 +1243,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 SwFrm* pBoxFrm = pTblFrm;
                 while( pBoxFrm && !pBoxFrm->IsCellFrm() )
                     pBoxFrm = pBoxFrm->GetUpper();
-                if( pBoxFrm )
+                if( pBoxFrm && pBoxFrm->Frm().HasArea() )
                     MakeVisible( pBoxFrm->Frm() );
                 else
                     MakeVisible( aCharRect );
