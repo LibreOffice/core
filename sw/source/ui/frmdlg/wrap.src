@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:11:47 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 22:57:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,7 +456,7 @@ TabPage TP_FRM_WRAP
         Text [ swedish ] = "H~öger" ;
         Text [ dutch ] = "Rec~hts" ;
         Text [ spanish ] = "D~erecha" ;
-        Text [ english_us ] = "Rig~ht" ;
+        Text [ english_us ] = "~Right" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "ÓÒ(~H)";
         Text[ russian ] = "Ñïðàâà";
@@ -587,7 +587,7 @@ TabPage TP_FRM_WRAP
         Text [ french ] = "Écarts" ;
         Text [ swedish ] = "Avstånd" ;
         Text [ dutch ] = "Afstanden" ;
-        Text [ spanish ] = "Distancias" ;
+        Text [ spanish ] = "Espacios" ;
         Text [ english_us ] = "Spacing" ;
         Text[ chinese_simplified ] = "¼ä¸ô";
         Text[ russian ] = "Èíòåðâàëû";
@@ -622,3 +622,4 @@ TabPage TP_FRM_WRAP
         IdCount = { 11 ; };
     };
 };
+
