@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NativeLibraryLoader.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 15:18:46 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 08:56:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@ import java.net.URLClassLoader;
 import java.net.URLDecoder;
 
 /** Helper functions to locate and load native files.
+
+    The methods in this class are designed to find the requested resources in as
+    many cases as possible.  They search various places, roughly from most
+    specific to most general.  This works well if a component is known to bring
+    with it a certain resource, and that resource has to be found.  However, it
+    might not work very well in cases where you want to check whether a
+    component brings with it a certain resource or not: a similarly named
+    resource from another component might be found by the eager search
+    algorithm.
  */
 public final class NativeLibraryLoader {
     /** Load a system library, using a given class loader to locate the library.
@@ -83,10 +92,12 @@ public final class NativeLibraryLoader {
     public static void loadLibrary(ClassLoader loader, String libname) {
         File path = getResource(loader, System.mapLibraryName(libname));
         if (path == null) {
-            throw new UnsatisfiedLinkError(
-                "Don't know how to load native library " + libname);
+            // If the library cannot be found as a class loader resource, try
+            // the global System.loadLibrary as a last resort:
+            System.loadLibrary(libname);
+        } else {
+            System.load(path.getAbsolutePath());
         }
-        System.load(path.getAbsolutePath());
     }
 
     /** Locate a system resource, using a given class loader.
