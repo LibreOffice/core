@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgattr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nf $ $Date: 2001-03-19 09:42:15 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,14 +128,14 @@ TabDialog DLG_ATTR
         Text [ dutch ] = "~Ongedaan" ;
         Text [ spanish ] = "~Regresar" ;
         Text [ english_us ] = "Bac~k" ;
-        Text[ chinese_simplified ] = "·µ»Ø";
+        Text[ chinese_simplified ] = "·µ»Ø(~K)";
         Text[ russian ] = "Íàçàä";
         Text[ polish ] = "Wstecz";
         Text[ japanese ] = "–ß‚é(~K)";
-        Text[ chinese_traditional ] = "ªð¦^";
+        Text[ chinese_traditional ] = "ªð¦^(~K)";
         Text[ arabic ] = "ÇáÓÇÈÞ";
         Text[ greek ] = "Ðßóù";
-        Text[ korean ] = "µÚ·Î";
+        Text[ korean ] = "µÚ·Î(~K)";
         Text[ turkish ] = "Geri";
     };
     String TP_ATTR_CHAR
