@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unobkm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:01:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,9 +293,26 @@ void SwXBookmark::setName(const OUString& rName) throw( uno::RuntimeException )
         }
 
         SwRewriter aRewriter;
-        aRewriter.AddRule(UNDO_ARG1, sOldName);
+
+        {
+            String aStr(SW_RES(STR_START_QUOTE));
+
+            aStr += sOldName;
+            aStr += String(SW_RES(STR_END_QUOTE));
+
+            aRewriter.AddRule(UNDO_ARG1, aStr);
+        }
+
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
-        aRewriter.AddRule(UNDO_ARG3, rName);
+
+        {
+            String aStr(SW_RES(STR_START_QUOTE));
+
+            aStr += String(rName);
+            aStr += String(SW_RES(STR_END_QUOTE));
+            aRewriter.AddRule(UNDO_ARG3, aStr);
+        }
+
         pDoc->StartUndo(UNDO_BOOKMARK_RENAME, &aRewriter);
 
         SwBookmark* pMark = pDoc->MakeBookmark(aPam, aCode,
