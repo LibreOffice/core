@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentSettingsContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 09:09:00 $
+ *  last change: $Author: sab $ $Date: 2001-03-22 17:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
 #endif
 
 using namespace com::sun::star;
@@ -536,6 +539,12 @@ void XMLConfigItemContext::EndElement()
         else if (sType.compareToAscii(sXML_string) == 0)
         {
             rAny <<= sValue;
+        }
+        else if (sType.compareToAscii(sXML_datetime) == 0)
+        {
+            util::DateTime aDateTime;
+            SvXMLUnitConverter::convertDateTime(aDateTime, sValue);
+            rAny <<= aDateTime;
         }
         else
             DBG_ERROR("wrong type");
