@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paratr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:11:34 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-
-#pragma hdrstop
 
 #include "hintids.hxx"
 #include <swtypes.hxx>
@@ -203,29 +200,10 @@ void SwFmtDrop::Modify( SfxPoolItem *pA, SfxPoolItem *pB )
     }
 }
 
-
-
 sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& rInfo ) const
 {
-    // fuers UNDO: pruefe ob das Attribut wirklich in diesem Format steht
-#ifdef USED_30
-    if( pDefinedIn )
-    {
-        if( IS_TYPE( SwTxtNode, pDefinedIn )
-            && ((SwTxtNode*)pDefinedIn)->....... )
-            ;
-        else if( IS_TYPE( SwTxtFmtColl, pDefinedIn )
-            && ((SwTxtFmtColl*)pDefinedIn)->....... )
-            ;
-//   this == pFmt->GetAttr( RES_PARATR_DROP, sal_False ))
-//        return pFmt->GetInfo( rInfo );
-
-    }
-#endif
     return sal_True;    // weiter
 }
-
-
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -238,15 +216,10 @@ int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
              pDefinedIn == ((SwFmtDrop&)rAttr).pDefinedIn );
 }
 
-
-
 SfxPoolItem* SwFmtDrop::Clone( SfxItemPool* ) const
 {
     return new SwFmtDrop( *this );
 }
-
-
-
 
 sal_Bool SwFmtDrop::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
