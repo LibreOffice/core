@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:33:25 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1739,17 +1739,18 @@ void XMLShapeExport::ImpExportCaptionShape(
 
         // write Caption shape. Add export later.
         sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
-        SvXMLElementExport* pObj = NULL;
-        if ( (nFeatures & SEF_EXPORT_ANNOTATION) == SEF_EXPORT_ANNOTATION )
-            pObj = new SvXMLElementExport(rExport, XML_NAMESPACE_OFFICE, XML_ANNOTATION, bCreateNewline, sal_True);
-        else
-            pObj = new SvXMLElementExport(rExport, XML_NAMESPACE_DRAW, XML_CAPTION, bCreateNewline, sal_True);
+        sal_Bool bAnnotation( (nFeatures & SEF_EXPORT_ANNOTATION) == SEF_EXPORT_ANNOTATION );
 
+        SvXMLElementExport aObj( rExport,
+                                 (bAnnotation ? XML_NAMESPACE_OFFICE
+                                               : XML_NAMESPACE_DRAW),
+                                 (bAnnotation ? XML_ANNOTATION : XML_CAPTION),
+                                 bCreateNewline, sal_True );
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
+        if( bAnnotation )
+            rExport.exportAnnotationMeta( xShape );
         ImpExportText( xShape );
-        rExport.exportAnnotationMeta( xShape );
-        delete pObj;
     }
 }
 
