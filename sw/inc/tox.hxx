@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:41:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 11:39:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,9 +407,9 @@ public:
     inline const String&    GetTemplate(USHORT nLevel) const;
 
     // #i21237#
-    inline void SetPattern(USHORT nLevel, const SwFormTokens& rName);
-    inline void SetPattern(USHORT nLevel, const String& rStr);
-    inline const SwFormTokens&  GetPattern(USHORT nLevel) const;
+    void    SetPattern(USHORT nLevel, const SwFormTokens& rName);
+    void    SetPattern(USHORT nLevel, const String& rStr);
+    const SwFormTokens& GetPattern(USHORT nLevel) const;
 
     //convert pattern string from old to new format or vice versa
     // #i21237#
@@ -737,26 +737,6 @@ inline void SwForm::SetTemplate(USHORT nLevel, const String& rTemplate)
 {
     ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
     aTemplate[nLevel] = rTemplate;
-}
-
-inline void SwForm::SetPattern(USHORT nLevel, const SwFormTokens& rTokens)
-{
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    aPattern[nLevel] = rTokens;
-}
-
-inline void SwForm::SetPattern(USHORT nLevel, const String & rStr)
-{
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
-
-    SwFormTokensHelper aHelper(rStr);
-    aPattern[nLevel] = aHelper.GetTokens();
-}
-
-inline const SwFormTokens& SwForm::GetPattern(USHORT nLevel) const
-{
-    ASSERT(nLevel < GetFormMax(), "Index >= FORM_MAX");
-    return aPattern[nLevel];
 }
 
 inline const String& SwForm::GetTemplate(USHORT nLevel) const
