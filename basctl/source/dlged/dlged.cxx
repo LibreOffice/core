@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-26 12:38:44 $
+ *  last change: $Author: tbe $ $Date: 2001-07-10 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ void DlgEditor::PrintData( Printer* pPrinter, const String& rTitle )    // not w
         pPrinter->SetMapMode( aMap );
         Font aFont;
 #ifdef OS2
-        aFont.SetName( System::GetStandardFont( STDFONT_SWISS ).GetName() );
+        //aFont.SetName( System::GetStandardFont( STDFONT_SWISS ).GetName() );
 #endif
         aFont.SetAlign( ALIGN_BOTTOM );
         aFont.SetSize( Size( 0, 360 ));
