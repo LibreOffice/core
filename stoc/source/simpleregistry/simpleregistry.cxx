@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleregistry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: jsc $ $Date: 2000-12-04 12:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1066,14 +1066,21 @@ void SAL_CALL SimpleRegistryImpl::open( const OUString& rURL, sal_Bool bReadOnly
         accessMode = REG_READONLY;
 
     if ( !m_registry.open(rURL, accessMode) )
+    {
+        m_url = rURL;
         return;
+    }
 
     if ( bCreate )
     {
         if ( !m_registry.create(rURL) )
+        {
+            m_url = rURL;
             return;
+        }
     }
 
+    m_url = OUString();
     throw InvalidRegistryException();
 }
 
@@ -1092,7 +1099,10 @@ void SAL_CALL SimpleRegistryImpl::close(  )
     if ( m_registry.isValid() )
     {
         if ( !m_registry.close() )
+        {
+            m_url = OUString();
             return;
+        }
     }
 
     throw InvalidRegistryException();
@@ -1106,7 +1116,10 @@ void SAL_CALL SimpleRegistryImpl::destroy(  )
     if ( m_registry.isValid() )
     {
         if ( !m_registry.destroy(OUString()) )
+        {
+            m_url = OUString();
             return;
+        }
     }
 
     throw InvalidRegistryException();
