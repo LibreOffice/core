@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 18:01:52 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1102,6 +1102,7 @@ SvxParaAlignTabPage::SvxParaAlignTabPage( Window* pParent, const SfxItemSet& rSe
     aCenter.SetClickHdl( aLink );
     aJustify.SetClickHdl( aLink );
     aLastLineLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, LastLineHdl_Impl ) );
+    aTextDirectionLB.SetSelectHdl( LINK( this, SvxParaAlignTabPage, TextDirectionHdl_Impl ) );
 
     USHORT nHtmlMode = GetHtmlMode_Impl(rSet);
     if(!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES)) )
@@ -1363,9 +1364,27 @@ IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( SvxParaAlignTabPage, LastLineHdl_Impl, ListBox*, pListBox )
+IMPL_LINK( SvxParaAlignTabPage, LastLineHdl_Impl, ListBox*, EMPTYARG )
 {
     UpdateExample_Impl(FALSE);
+    return 0;
+}
+
+IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
+{
+    SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
+    switch ( eDir )
+    {
+        // check the default alignment for this text direction
+        case FRMDIR_HORI_LEFT_TOP :     aLeft.Check( TRUE ); break;
+        case FRMDIR_HORI_RIGHT_TOP :    aRight.Check( TRUE ); break;
+        case FRMDIR_ENVIRONMENT :       /* do nothing */ break;
+        default:
+        {
+            DBG_ERRORFILE( "SvxParaAlignTabPage::TextDirectionHdl_Impl(): other directions not supported" );
+        }
+    }
+
     return 0;
 }
 
