@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 14:16:42 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 10:18:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@
 #endif
 #ifndef _DBAUI_COMMONPAGES_HXX_
 #include "commonpages.hxx"
+#endif
+#ifndef _DBAUI_TABLESPAGE_HXX_
+#include "tablespage.hxx"
+#endif
+#ifndef _DBAUI_GENERALPAGE_HXX_
+#include "generalpage.hxx"
 #endif
 #ifndef _DBAUI_LOCALRESACCESS_HXX_
 #include "localresaccess.hxx"
@@ -1004,6 +1010,7 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
         case PAGE_GENERAL:
             static_cast<OGeneralPage&>(_rPage).SetTypeSelectHandler(LINK(this, ODbAdminDialog, OnTypeSelected));
             static_cast<OGeneralPage&>(_rPage).SetNameModifyHandler(LINK(this, ODbAdminDialog, OnNameModified));
+            static_cast<OGeneralPage&>(_rPage).setServiceFactory(m_xORB);
             static_cast<OGeneralPage&>(_rPage).SetAdminDialog(this);
             break;
         case PAGE_TABLESUBSCRIPTION:
@@ -2581,6 +2588,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.51  2001/05/23 14:16:42  oj
+ *  #87149# new helpids
+ *
  *  Revision 1.50  2001/05/15 15:07:06  fs
  *  #86991# save the current (modified) settings when inserting a new data source
  *
