@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>WiziWord 3.0 (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">WiziWord 3.0</value>
+            <value>WiziWord 3.0</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

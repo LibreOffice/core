@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Wang PC (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Wang PC</value>
+            <value>Wang PC</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
