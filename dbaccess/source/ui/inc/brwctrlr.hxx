@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 14:03:04 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,12 +322,6 @@ namespace dbaui
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  CreateGridModel();
             // our default implementation simply instantiates a stardiv.one.form.component.Grid service
             // you most probably don't want to override this behaviuor
-        virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid) = 0;
-            // called immediately after a successfull CreateGridModel
-            // do any initialization (data source etc.) here. the grid model should be fully functional after that.
-            // return sal_False if you didn't succeed (don't throw exceptions, they won't be catched)
-            //
-            // the form returned by getDataSource() is already valid so you may want to use it ...
 
         // the default implementation of disposing distributes the events to the following disposingXXX functions
         virtual void disposingGridControl(const ::com::sun::star::lang::EventObject& Source);   // calls removeControlListeners
