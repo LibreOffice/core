@@ -29,6 +29,7 @@ common
 		bndchk
 		BOTH
 		BSCLIENT
+		BTARGET
 		BUILD_TOOLS
 		CLASSPATH
 		CALL_CDECL
@@ -155,6 +156,7 @@ common
 		WST
 		XCLASSPATH
         ZIPDEP
+		ZIPSOURCE
 	}
 	restore
 	{
