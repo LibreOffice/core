@@ -2,9 +2,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2004-10-18 13:53:34 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:32:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -250,7 +250,7 @@ sub register_unocomponents
 
                 my @regcompoutput = ();
 
-                $systemcall = "$$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " 2\>\&1 |";
+                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -341,7 +341,7 @@ sub register_javacomponents
 
                     my @regcompoutput = ();
 
-                    $systemcall = "$$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
+                    $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -env:UNO_JAVA_COMPONENT_PATH=" . $installer::globals::quote . $fileurl . $installer::globals::quote . " 2\>\&1 |";
 
                     open (REG, "$systemcall");
                     while (<REG>) {push(@regcompoutput, $_); }
@@ -472,7 +472,9 @@ sub prepare_classpath_for_java_registration
         if ( $ENV{'CLASSPATH'} ) { $oldclasspathstring = $ENV{'CLASSPATH'}; }
         else { $oldclasspathstring = "\."; }
         my $classpathstring = $$jarfileref . $installer::globals::pathseparator . $oldclasspathstring;
-
+        if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "tcsh" )) {
+            $classpathstring =~ s/\//\\/g;      # guw.pl likes '\' in $PATH.
+        }
         $ENV{'CLASSPATH'} = $classpathstring;
 
         my $infoline = "Setting CLASSPATH to $ENV{'CLASSPATH'}\n";
@@ -644,7 +646,7 @@ sub prepare_regcomp_rdb
 
         chdir($to);
 
-        my $systemcall = "$regcompfile -register -s -r $regcomprdb -c $libfilename";
+        my $systemcall = "$installer::globals::wrapcmd $regcompfile -register -s -r $regcomprdb -c $libfilename";
 
         my $returnvalue = system($systemcall);
 
