@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-28 16:46:20 $
+ *  last change: $Author: tbe $ $Date: 2002-04-11 09:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLERADIOBUTTON_HXX_
 #include <toolkit/awt/vclxaccessibleradiobutton.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLESCROLLBAR_HXX_
+#include <toolkit/awt/vclxaccessiblescrollbar.hxx>
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLETEXTCOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessibletextcomponent.hxx>
@@ -1952,6 +1955,11 @@ IMPL_XTYPEPROVIDER_START( VCLXScrollBar )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XScrollBar>* ) NULL ),
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXScrollBar::CreateAccessibleContext()
+{
+    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleScrollBar( this );
+}
 
 // ::com::sun::star::lang::XComponent
 void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)

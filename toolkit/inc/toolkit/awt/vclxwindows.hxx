@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-26 18:24:06 $
+ *  last change: $Author: tbe $ $Date: 2002-04-11 09:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
