@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:09:57 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:25:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -816,20 +816,65 @@ void rtfSections::CopyFrom(const SwPageDesc &rFrom, SwPageDesc &rDest)
 {
     UseOnPage ePage = rFrom.ReadUseOn();
     rDest.WriteUseOn(ePage);
+
     mrReader.pDoc->CopyHeader(rFrom.GetMaster(), rDest.GetMaster());
+    SwFrmFmt &rDestFmt = rDest.GetMaster();
+    rDestFmt.SetAttr(rFrom.GetMaster().GetHeader());
     mrReader.pDoc->CopyHeader(rFrom.GetLeft(), rDest.GetLeft());
     mrReader.pDoc->CopyFooter(rFrom.GetMaster(), rDest.GetMaster());
     mrReader.pDoc->CopyFooter(rFrom.GetLeft(), rDest.GetLeft());
+}
+
+void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
+{
+    UseOnPage ePage = rFrom.ReadUseOn();
+    rDest.WriteUseOn(ePage);
+
+    SwFrmFmt &rDestMaster = rDest.GetMaster();
+    SwFrmFmt &rFromMaster = rFrom.GetMaster();
+    rDestMaster.SetAttr(rFromMaster.GetHeader());
+    rDestMaster.SetAttr(rFromMaster.GetFooter());
+    rFromMaster.SetAttr(SwFmtHeader());
+    rFromMaster.SetAttr(SwFmtFooter());
+
+    SwFrmFmt &rDestLeft = rDest.GetLeft();
+    SwFrmFmt &rFromLeft = rFrom.GetLeft();
+    rDestLeft.SetAttr(rFromLeft.GetHeader());
+    rDestLeft.SetAttr(rFromLeft.GetFooter());
+    rFromLeft.SetAttr(SwFmtHeader());
+    rFromLeft.SetAttr(SwFmtFooter());
 }
 
 void rtfSections::SetHdFt(rtfSection &rSection)
 {
     ASSERT(rSection.mpPage, "makes no sense to call without a main page");
     if (rSection.mpPage && rSection.maPageInfo.mpPageHdFt)
-        CopyFrom(*rSection.maPageInfo.mpPageHdFt, *rSection.mpPage);
+    {
+        if (rSection.maPageInfo.mbPageHdFtUsed)
+        {
+            MoveFrom(*rSection.maPageInfo.mpPageHdFt, *rSection.mpPage);
+            rSection.maPageInfo.mbPageHdFtUsed = false;
+            rSection.maPageInfo.mpPageHdFt = rSection.mpPage;
+        }
+        else
+            CopyFrom(*rSection.maPageInfo.mpPageHdFt, *rSection.mpPage);
+    }
 
     if (rSection.mpTitlePage && rSection.maPageInfo.mpTitlePageHdFt)
-        CopyFrom(*rSection.maPageInfo.mpTitlePageHdFt, *rSection.mpTitlePage);
+    {
+        if (rSection.maPageInfo.mbTitlePageHdFtUsed)
+        {
+            MoveFrom(*rSection.maPageInfo.mpTitlePageHdFt,
+                    *rSection.mpTitlePage);
+            rSection.maPageInfo.mbTitlePageHdFtUsed = false;
+            rSection.maPageInfo.mpTitlePageHdFt = rSection.mpTitlePage;
+        }
+        else
+        {
+            CopyFrom(*rSection.maPageInfo.mpTitlePageHdFt,
+                    *rSection.mpTitlePage);
+        }
+    }
 }
 
 SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
@@ -1061,10 +1106,9 @@ void rtfSections::InsertSegments(bool bNewDoc)
             pTxtNd = 0;
         }
     }
-
-    myDummyIter aDEnd = maDummyPageNos.end();
-    for (myDummyIter aDummy = maDummyPageNos.begin(); aDummy != aDEnd; ++aDummy)
-        mrReader.pDoc->DelPageDesc(*aDummy);
+    myrDummyIter aDEnd = maDummyPageNos.rend();
+    for (myrDummyIter aI = maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
+        mrReader.pDoc->DelPageDesc(*aI);
 }
 
 SwRTFParser::~SwRTFParser()
@@ -1553,7 +1597,17 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             }
         }
     }
-    else
+
+    bool bNoNum = true;
+    if (
+        (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(RES_PARATR_NUMRULE))
+     || (SFX_ITEM_SET == rSet.GetAttrSet().GetItemState(FN_PARAM_NUM_LEVEL))
+       )
+    {
+        bNoNum = false;
+    }
+
+    if (bNoNum)
     {
         for( ULONG n = nSNd; n <= nENd; ++n )
         {
@@ -1585,7 +1639,7 @@ SectPageInformation::SectPageInformation(const DocPageInformation &rDoc)
     mnPgnStarts(rDoc.mnPgnStart), mnCols(1), mnColsx(720),
     mnStextflow(rDoc.mbRTLdoc ? 3 : 0), mnBkc(2), mbLndscpsxn(rDoc.mbLandscape),
     mbTitlepg(false), mbFacpgsxn(rDoc.mbFacingp), mbRTLsection(rDoc.mbRTLdoc),
-    mbPgnrestart(false)
+    mbPgnrestart(false), mbTitlePageHdFtUsed(false), mbPageHdFtUsed(false)
 {
 };
 
@@ -1601,7 +1655,9 @@ SectPageInformation::SectPageInformation(const SectPageInformation &rSect)
     mnStextflow(rSect.mnStextflow), mnBkc(rSect.mnBkc),
     mbLndscpsxn(rSect.mbLndscpsxn), mbTitlepg(rSect.mbTitlepg),
     mbFacpgsxn(rSect.mbFacpgsxn), mbRTLsection(rSect.mbRTLsection),
-    mbPgnrestart(rSect.mbPgnrestart)
+    mbPgnrestart(rSect.mbPgnrestart),
+    mbTitlePageHdFtUsed(rSect.mbTitlePageHdFtUsed),
+    mbPageHdFtUsed(rSect.mbPageHdFtUsed)
 {
 };
 
@@ -2216,6 +2272,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                     aName += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
                     aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    aNewSection.mbPageHdFtUsed = true;
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
                 ReadHeaderFooter(nToken, aNewSection.mpPageHdFt);
@@ -2228,6 +2285,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                     aTitle += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
                     aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);
+                    aNewSection.mbTitlePageHdFtUsed = true;
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
                 ReadHeaderFooter(nToken, aNewSection.mpTitlePageHdFt);
