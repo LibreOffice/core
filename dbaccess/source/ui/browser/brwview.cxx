@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-06 17:41:04 $
+ *  last change: $Author: fs $ $Date: 2000-12-08 21:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,11 @@ void UnoDataBrowserView::Resize()
     Size    aSplitSize(0,0);
     Size    aNewSize( GetOutputSizePixel() );
 
-    if(m_pTreeView && m_pSplitter)
+    Size aToolBoxSize(0,0);
+    if (m_pToolBox)
+        aToolBoxSize = m_pToolBox->GetSizePixel();
+
+    if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
 
         aSplitPos   = m_pSplitter->GetPosPixel();
@@ -243,23 +247,21 @@ void UnoDataBrowserView::Resize()
 
         if( aSplitPos.X() <= 0)
             aSplitPos.X() = LogicToPixel( Size(sal_Int32(aNewSize.Width() * 0.2), 0 ), MAP_APPFONT ).Width();
+
         // set the size of treelistbox
-        m_pTreeView->SetPosSizePixel(   Point( 0, 0 ),
-                                        Size( aSplitPos.X(), aNewSize.Height() ) );
+        m_pTreeView->SetPosSizePixel(   Point( 0, aToolBoxSize.Height() ),
+                                        Size( aSplitPos.X(), aNewSize.Height() - aToolBoxSize.Height() ) );
         //set the size of the splitter
-        m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() ) );
+        m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) );
         m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, 0 ),
-                                        Size( aNewSize.Width(), aNewSize.Height() ) ) );
+                                        Size( aNewSize.Width(), aNewSize.Height() - aToolBoxSize.Height() ) ) );
     }
 
     // set the size of the toolbox
-    Size aToolBoxSize(0,0);
     if (m_pToolBox)
-    {
-        aToolBoxSize = m_pToolBox->GetSizePixel();
-        m_pToolBox->SetPosSizePixel(Point(aSplitPos.X() + aSplitSize.Width(), 0),
+        m_pToolBox->SetPosSizePixel(Point(0, 0),
             Size(aNewSize.Width() - aSplitSize.Width() - aSplitPos.X(), aToolBoxSize.Height()));
-    }
+
     // set the size of grid control
     Reference< ::com::sun::star::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
     if (xGridAsWindow.is())
