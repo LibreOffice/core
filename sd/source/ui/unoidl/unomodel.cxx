@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-15 16:24:24 $
+ *  last change: $Author: cl $ $Date: 2001-01-17 19:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -973,6 +973,26 @@ void SAL_CALL SdDrawPagesAccess::remove( const uno::Reference< drawing::XDrawPag
     rModel.SetModified();
 }
 
+// XServiceInfo
+sal_Char pSdDrawPagesAccessService[sizeof("com.sun.star.drawing.DrawPages")] = "com.sun.star.drawing.DrawPages";
+
+OUString SAL_CALL SdDrawPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdDrawPagesAccess" ) );
+}
+
+sal_Bool SAL_CALL SdDrawPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSdDrawPagesAccessService ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SdDrawPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSdDrawPagesAccessService ) );
+    uno::Sequence< OUString > aSeq( &aService, 1 );
+    return aSeq;
+}
+
 //=============================================================================
 // class SdMasterPagesAccess
 //=============================================================================
@@ -1166,6 +1186,26 @@ void SAL_CALL SdMasterPagesAccess::remove( const uno::Reference< drawing::XDrawP
     }
 
     pSdPage->Invalidate();
+}
+
+// XServiceInfo
+sal_Char pSdMasterPagesAccessService[sizeof("com.sun.star.drawing.MasterPages")] = "com.sun.star.drawing.MasterPages";
+
+OUString SAL_CALL SdMasterPagesAccess::getImplementationName(  ) throw(uno::RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdMasterPagesAccess" ) );
+}
+
+sal_Bool SAL_CALL SdMasterPagesAccess::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException)
+{
+    return ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( pSdMasterPagesAccessService ) );
+}
+
+uno::Sequence< OUString > SAL_CALL SdMasterPagesAccess::getSupportedServiceNames(  ) throw(uno::RuntimeException)
+{
+    OUString aService( RTL_CONSTASCII_USTRINGPARAM( pSdMasterPagesAccessService ) );
+    uno::Sequence< OUString > aSeq( &aService, 1 );
+    return aSeq;
 }
 
 //=============================================================================
