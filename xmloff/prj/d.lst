@@ -86,3 +86,4 @@ hedabu: ..\inc\XMLFontStylesContext.hxx %_DEST%\inc%_EXT%\xmloff\XMLFontStylesCo
 hedabu: ..\inc\ProgressBarHelper.hxx %_DEST%\inc%_EXT%\xmloff\ProgressBarHelper.hxx
 hedabu: ..\inc\formlayerexport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerexport.hxx
 hedabu: ..\inc\formlayerimport.hxx %_DEST%\inc%_EXT%\xmloff\formlayerimport.hxx
+hedabu: ..\inc\animexp.hxx %_DEST%\inc%_EXT%\xmloff\animexp.hxx
