@@ -648,7 +648,8 @@ Function runVBTest( Log)
 document.writeln("================================================================================<br>")
 document.writeln("VB Script<br>")
 document.writeln("================================================================================<p>")
-Set	factory= GetObject("", "com.sun.star.ServiceManager")
+'Set	factory= CreateObject("", "com.sun.star.ServiceManager")
+Set	factory= CreateObject("com.sun.star.ServiceManager")
 Set	oletest= factory.createInstance("oletest.OleTest")
     
 Dim arrInt
