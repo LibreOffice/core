@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: os $ $Date: 2002-05-30 13:54:51 $
+ *  last change: $Author: dvo $ $Date: 2002-07-26 13:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,6 +696,7 @@ void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
         pBoxFmt->LockModify();
         pBoxFmt->ResetAttr( RES_BOXATR_FORMULA );
         pBoxFmt->ResetAttr( RES_BOXATR_VALUE );
+        pBoxFmt->SetAttr( SwTblBoxNumFormat(NUMBERFORMAT_TEXT) );
         pBoxFmt->UnlockModify();
     }
     rCell.SwXText::setString(rTxt);
