@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 18:30:06 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,9 +161,10 @@ using namespace ::osl;
 
 #define SFX_TASKBAR_NOTIFICATION    WM_USER+1
 
-static HWND aListenerWindow = NULL;
-static HWND aExecuterWindow = NULL;
-static BOOL bModalMode = FALSE;
+static HWND  aListenerWindow = NULL;
+static HWND  aExecuterWindow = NULL;
+static BOOL  bModalMode = FALSE;
+static HMENU popupMenu = NULL;
 
 static void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis);
 static void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis);
@@ -316,7 +317,7 @@ static HMENU createSystrayMenu( )
 
 static void deleteSystrayMenu( HMENU hMenu )
 {
-    if( !hMenu )
+    if( !hMenu || !IsMenu( hMenu ))
         return;
 
     MENUITEMINFOW mi;
@@ -366,10 +367,30 @@ static void addTaskbarIcon( HWND hWnd )
 
 // -------------------------------
 
+static void removeTaskbarIcon()
+{
+    ShutdownIcon *pShutdownIcon = ShutdownIcon::getInstance();
+    OSL_ENSURE( pShutdownIcon, "ShutdownIcon instance empty!");
+
+    if( !pShutdownIcon )
+        return;
+
+    if ( IsWindow( aListenerWindow ))
+    {
+        deleteSystrayMenu( popupMenu );
+
+        NOTIFYICONDATAA nid;
+        nid.cbSize=sizeof(NOTIFYICONDATA);
+        nid.hWnd = aListenerWindow;
+        nid.uID = ID_QUICKSTART;
+        Shell_NotifyIconA(NIM_DELETE, &nid);
+    }
+}
+
+// -------------------------------
+
 LRESULT CALLBACK listenerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static HMENU popupMenu = NULL;
-
     static UINT s_uTaskbarRestart = 0;
     static UINT s_uMsgKillTray = 0;
 
@@ -510,8 +531,6 @@ static sal_Bool checkOEM() {
 
 LRESULT CALLBACK executerWndProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    static HMENU popupMenu = NULL;
-
     switch (uMsg)
     {
         case WM_NCCREATE:
