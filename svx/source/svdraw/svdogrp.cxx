@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdogrp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-08 10:43:05 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1416,6 +1416,19 @@ void SdrObjGroup::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewIte
             SdrObject* pObj = (SdrObject*)aPostItemChangeList.GetObject(a);
             pObj->PostItemChange(nWhich);
         }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// ItemSet was changed, maybe user wants to react
+
+void SdrObjGroup::ItemSetChanged()
+{
+    if(!IsLinkedGroup())
+    {
+        sal_uInt32 nCount(pSub->GetObjCount());
+        for(sal_uInt32 a(0); a < nCount; a++)
+            pSub->GetObj(a)->ItemSetChanged();
     }
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-05 11:38:42 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3275,6 +3275,7 @@ void SdrObject::SetItem( const SfxPoolItem& rItem )
     {
         ItemChange(nWhichID, &rItem);
         PostItemChange(nWhichID);
+        ItemSetChanged();
     }
 }
 
@@ -3284,6 +3285,7 @@ void SdrObject::ClearItem( const sal_uInt16 nWhich )
     {
         ItemChange(nWhich);
         PostItemChange(nWhich);
+        ItemSetChanged();
     }
 }
 
@@ -3293,6 +3295,7 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
     sal_uInt16 nWhich(aWhichIter.FirstWhich());
     const SfxPoolItem *pPoolItem;
     std::vector< sal_uInt16 > aPostItemChangeList;
+    BOOL bDidChange(FALSE);
 
     while(nWhich)
     {
@@ -3300,6 +3303,7 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
         {
             if(AllowItemChange(nWhich, pPoolItem))
             {
+                bDidChange = TRUE;
                 ItemChange(nWhich, pPoolItem);
                 aPostItemChangeList.push_back( nWhich );
             }
@@ -3307,13 +3311,25 @@ void SdrObject::SetItemSet( const SfxItemSet& rSet )
         nWhich = aWhichIter.NextWhich();
     }
 
-    std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
-    const std::vector< sal_uInt16 >::iterator aEnd = aPostItemChangeList.end();
-    while( aIter != aEnd )
+    if(bDidChange)
     {
-        PostItemChange((*aIter));
-        aIter++;
+        std::vector< sal_uInt16 >::iterator aIter = aPostItemChangeList.begin();
+        const std::vector< sal_uInt16 >::iterator aEnd = aPostItemChangeList.end();
+        while( aIter != aEnd )
+        {
+            PostItemChange((*aIter));
+            aIter++;
+        }
+
+        ItemSetChanged();
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// ItemSet was changed, maybe user wants to react
+
+void SdrObject::ItemSetChanged()
+{
 }
 
 void SdrObject::BroadcastItemChange(const SdrBroadcastItemChange& rChange)

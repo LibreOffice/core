@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,77 +248,54 @@ void SdrTextObj::NbcSetStyleSheet(SfxStyleSheet* pNewStyleSheet, FASTBOOL bDontR
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
 
-void SdrTextObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+void SdrTextObj::ItemSetChanged()
 {
     // handle outliner attributes
+    ImpForceItemSet();
+
     if(pOutlinerParaObject)
     {
-        if(nWhich >= EE_CHAR_START && nWhich <= EE_CHAR_END)
+        Outliner* pOutliner;
+
+        if(!pEdtOutl)
         {
-            Outliner* pOutliner;
-
-            if(!pEdtOutl)
-            {
-                pOutliner = &ImpGetDrawOutliner();
-                pOutliner->SetText(*pOutlinerParaObject);
-            }
-            else
-            {
-                pOutliner = pEdtOutl;
-            }
-
-            sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
-            for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
-            {
-                if(pNewItem)
-                {
-                    SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                    aSet.Put(*pNewItem);
-                    pOutliner->SetParaAttribs(nPara, aSet);
-                }
-                else
-                {
-                    if(nWhich)
-                    {
-                        SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                        aSet.ClearItem(nWhich);
-                        pOutliner->SetParaAttribs(nPara, aSet);
-                    }
-                    else
-                    {
-                        pOutliner->SetParaAttribs(nPara, pOutliner->GetEmptyItemSet());
-                        pOutliner->QuickRemoveCharAttribs(nPara, 0);
-                    }
-                }
-            }
-
-            if(!pEdtOutl)
-            {
-                if(nParaCount)
-                {
-                    SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
-                    ImpForceItemSet();
-                    mpObjectItemSet->Put(aNewSet);
-                }
-
-                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
-                pOutliner->Clear();
-                NbcSetOutlinerParaObject(pTemp);
-            }
+            pOutliner = &ImpGetDrawOutliner();
+            pOutliner->SetText(*pOutlinerParaObject);
+        }
+        else
+        {
+            pOutliner = pEdtOutl;
         }
 
-        // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
-        if(nWhich == SDRATTR_TEXT_CONTOURFRAME)
-            SendRepaintBroadcast();
+        sal_uInt16 nParaCount((sal_uInt16)pOutliner->GetParagraphCount());
+        for(sal_uInt16 nPara(0); nPara < nParaCount; nPara++)
+        {
+            SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+            aSet.Put(*mpObjectItemSet);
+            pOutliner->SetParaAttribs(nPara, aSet);
+        }
+
+        if(!pEdtOutl)
+        {
+            if(nParaCount)
+            {
+                SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                mpObjectItemSet->Put(aNewSet);
+            }
+
+            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+            pOutliner->Clear();
+            NbcSetOutlinerParaObject(pTemp);
+        }
     }
 
-    // call parent
-    SdrAttrObj::ItemChange(nWhich, pNewItem);
-}
+    // Extra-Repaint wenn das Layout so radikal geaendert wird (#43139#)
+    if(SFX_ITEM_SET == mpObjectItemSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
+        SendRepaintBroadcast();
 
-//void SdrTextObj::ImpCheckItemSetChanges(const SfxItemSet& rAttr)
-//{
-//}
+    // call parent
+    SdrAttrObj::ItemSetChanged();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

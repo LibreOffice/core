@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-28 16:20:12 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,10 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
 }
 
 
+#ifndef _SV_SALBTYPE_HXX
+#include <vcl/salbtype.hxx>     // FRound
+#endif
+
 FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec, FASTBOOL bRestoreColors, USHORT nImpMode) const
 {
     FASTBOOL bOk=TRUE;
@@ -753,7 +757,51 @@ FASTBOOL SdrObjList::Paint(ExtOutputDevice& rXOut, const SdrPaintInfoRec& rInfoR
                                 aLink.Call(&aRec); // sollte mal 'nen ReturnCode liefern
                             }
                             else
+                            {
                                 bOk=pObj->Paint(rXOut,rInfoRec);
+
+//////////////////////////////////////////////////////////////////////////////
+
+    Vector2D aTRScale;
+    double fTRShear;
+    double fTRRotate;
+    Vector2D aTRTranslate;
+    Matrix3D aOrigMat;
+    XPolyPolygon aTRPolyPolygon;
+
+    BOOL bIsPath = pObj->TRGetBaseGeometry(aOrigMat, aTRPolyPolygon);
+    aOrigMat.DecomposeAndCorrect(aTRScale, fTRShear, fTRRotate, aTRTranslate);
+    Rectangle aTRBaseRect(
+        Point(FRound(aTRTranslate.X()), FRound(aTRTranslate.Y())),
+        Size(FRound(aTRScale.X()), FRound(aTRScale.Y())));
+
+    Color aLineColorMerk(rXOut.GetOutDev()->GetLineColor());
+    Color aFillColorMerk(rXOut.GetOutDev()->GetFillColor());
+    rXOut.GetOutDev()->SetFillColor();
+
+    rXOut.GetOutDev()->SetLineColor(COL_BLACK);
+    rXOut.GetOutDev()->DrawRect(aTRBaseRect);
+
+    if(bIsPath)
+    {
+        rXOut.GetOutDev()->SetLineColor(COL_LIGHTRED);
+        XPolyPolygon aTRPoPo(aTRPolyPolygon);
+        aTRPoPo.Move(aTRBaseRect.Left(), aTRBaseRect.Top());
+        sal_uInt16 nCount(aTRPoPo.Count());
+        for(sal_uInt16 a(0); a < nCount; a++)
+            rXOut.GetOutDev()->DrawPolygon(XOutCreatePolygon(aTRPoPo[a], rXOut.GetOutDev()));
+    }
+
+    rXOut.GetOutDev()->SetLineColor(aLineColorMerk);
+    rXOut.GetOutDev()->SetFillColor(aFillColorMerk);
+
+    static BOOL bDoTestSetAllGeometry(FALSE);
+    if(bDoTestSetAllGeometry)
+        pObj->TRSetBaseGeometry(aOrigMat, aTRPolyPolygon);
+
+
+//////////////////////////////////////////////////////////////////////////////
+                            }
 
                             // nach dem ersten Objekt bei reinem Hintergrundcache
                             // sollen die folgenden Objekte natuerlich nicht gezeichnet werden

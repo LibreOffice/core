@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:08:54 $
+ *  last change: $Author: aw $ $Date: 2001-02-09 17:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1823,13 +1823,13 @@ SfxItemSet* SdrGrafObj::CreateNewItemSet(SfxItemPool& rPool)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // private support routines for ItemSet access
-void SdrGrafObj::PostItemChange(const sal_uInt16 nWhich)
+void SdrGrafObj::ItemSetChanged()
 {
     // local changes
     SetXPolyDirty();
 
     // call parent
-    SdrRectObj::PostItemChange(nWhich);
+    SdrRectObj::ItemSetChanged();
 
     // local changes
     ImpSetAttrToGrafInfo();
