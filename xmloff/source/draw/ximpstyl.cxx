@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-05 23:14:55 $
+ *  last change: $Author: cl $ $Date: 2000-12-07 12:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -667,7 +667,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
             }
         }
     }
-
+/*
     // set PageProperties?
     if(msStyleName.getLength())
     {
@@ -718,7 +718,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
             }
         }
     }
-
+*/
     // now delete all up-to-now contained shapes.
     while(rShapes->getCount())
     {
