@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:50:31 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 21:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ ModalDialog DLG_PRINT_WARNINGS
         Size = MAP_APPFONT ( 134 , 25 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen : Die Seiteneinstellungen stimmen nicht mit dem Druckbereich ³berein.\nSie k÷nnen folgende Optionen wõhlen */
         Text = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen" ;
-        Text [ portuguese ] = "A configuração da página não é compatível com a área de impressão.\nPode escolher as seguintes opções" ;
+        Text [ portuguese ] = "A configuração da página não é compatível com a área de impressão.\nPoderá escolher as seguintes opções" ;
         Text [ swedish ] = "Sidinställningarna stämmer inte överens med utskriftsområdet.\nVälj ett av följande alternativ" ;
         Text [ danish ] = "Sideindstillingerne svarer ikke til udskriftsområdet.\nDu kan vælge følgende muligheder" ;
         Text [ italian ] = "Le impostazioni della pagina non corrispondono all'area di stampa.\nÈ possibile scegliere le seguenti opzioni" ;
