@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menumanager.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:19:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 09:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,10 @@
 
 #ifndef _SV_MENU_HXX
 #include <vcl/menu.hxx>
+#endif
+
+#ifndef _SV_ACCEL_HXX
+#include <vcl/accel.hxx>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
