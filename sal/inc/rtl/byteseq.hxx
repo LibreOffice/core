@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:13 $
+ *  last change: $Author: dbo $ $Date: 2001-08-22 11:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,74 +79,70 @@ namespace rtl
 {
 
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence()
+inline ByteSequence::ByteSequence() SAL_THROW( () )
     : _pSequence( 0 )
 {
-    rtl_byte_sequence_construct( &_pSequence , 0 );
+    ::rtl_byte_sequence_construct( &_pSequence, 0 );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( const ByteSequence & rSeq ) :
-    _pSequence( 0 )
-{
-    rtl_byte_sequence_assign( &_pSequence , rSeq._pSequence );
-}
-//__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Sequence *pSequence) :
-    _pSequence( pSequence )
-{
-    rtl_byte_sequence_acquire( pSequence );
-}
-//__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len )
+inline ByteSequence::ByteSequence( const ByteSequence & rSeq ) SAL_THROW( () )
     : _pSequence( 0 )
 {
-    rtl_byte_sequence_constructFromArray( &_pSequence, pElements , len );
+    ::rtl_byte_sequence_assign( &_pSequence, rSeq._pSequence );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault value )
+inline ByteSequence::ByteSequence( sal_Sequence *pSequence) SAL_THROW( () )
+    : _pSequence( pSequence )
+{
+    ::rtl_byte_sequence_acquire( pSequence );
+}
+//__________________________________________________________________________________________________
+inline ByteSequence::ByteSequence( const sal_Int8 * pElements, sal_Int32 len ) SAL_THROW( () )
     : _pSequence( 0 )
 {
-    rtl_byte_sequence_constructNoDefault( &_pSequence , len );
+    ::rtl_byte_sequence_constructFromArray( &_pSequence, pElements, len );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire value )
+inline ByteSequence::ByteSequence( sal_Int32 len, enum __ByteSequence_NoDefault value ) SAL_THROW( () )
+    : _pSequence( 0 )
+{
+    ::rtl_byte_sequence_constructNoDefault( &_pSequence, len );
+}
+//__________________________________________________________________________________________________
+inline ByteSequence::ByteSequence( sal_Sequence *pSequence, enum __ByteSequence_NoAcquire value ) SAL_THROW( () )
     : _pSequence( pSequence )
 {
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::ByteSequence( sal_Int32 len )
+inline ByteSequence::ByteSequence( sal_Int32 len ) SAL_THROW( () )
     : _pSequence( 0 )
 {
-    rtl_byte_sequence_construct( &_pSequence , len );
+    ::rtl_byte_sequence_construct( &_pSequence, len );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence::~ByteSequence()
+inline ByteSequence::~ByteSequence() SAL_THROW( () )
 {
-    rtl_byte_sequence_release( _pSequence );
+    ::rtl_byte_sequence_release( _pSequence );
 }
 //__________________________________________________________________________________________________
-inline ByteSequence & ByteSequence::operator = ( const ByteSequence & rSeq )
+inline ByteSequence & ByteSequence::operator = ( const ByteSequence & rSeq ) SAL_THROW( () )
 {
-    rtl_byte_sequence_assign( &_pSequence , rSeq._pSequence );
+    ::rtl_byte_sequence_assign( &_pSequence, rSeq._pSequence );
     return *this;
 }
 //__________________________________________________________________________________________________
-inline sal_Bool ByteSequence::operator == ( const ByteSequence & rSeq ) const
+inline sal_Bool ByteSequence::operator == ( const ByteSequence & rSeq ) const SAL_THROW( () )
 {
-    if (_pSequence == rSeq._pSequence)
-        return sal_True;
-    if (_pSequence->nElements != rSeq._pSequence->nElements)
-        return sal_False;
-    return (0 == ::rtl_compareMemory( _pSequence->elements, rSeq._pSequence->elements, _pSequence->nElements ));
+    return ::rtl_byte_sequence_equals( _pSequence, rSeq._pSequence );
 }
 //__________________________________________________________________________________________________
-inline sal_Int8 * ByteSequence::getArray()
+inline sal_Int8 * ByteSequence::getArray() SAL_THROW( () )
 {
     ::rtl_byte_sequence_reference2One( &_pSequence );
     return (sal_Int8 *)_pSequence->elements;
 }
 //__________________________________________________________________________________________________
-inline void ByteSequence::realloc( sal_Int32 nSize )
+inline void ByteSequence::realloc( sal_Int32 nSize ) SAL_THROW( () )
 {
     ::rtl_byte_sequence_realloc( &_pSequence, nSize );
 }
