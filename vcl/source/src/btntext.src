@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2002-08-15 20:41:18 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 12:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,17 +284,17 @@ String SV_BUTTONTEXT_IGNORE
     Text[ russian ] = "~Ignore";
     Text[ greek ] = "~Ignore";
     Text[ dutch ] = "~Ignore";
-    Text[ french ] = "~Ignore";
-    Text[ spanish ] = "~Ignore";
+    Text[ french ] = "Ignorer";
+    Text[ spanish ] = "~Ignorar";
     Text[ finnish ] = "~Ignore";
-    Text[ italian ] = "~Ignore";
+    Text[ italian ] = "~Ignora";
     Text[ danish ] = "~Ignore";
-    Text[ swedish ] = "~Ignore";
+    Text[ swedish ] = "~Ignorera";
     Text[ polish ] = "~Ignore";
     Text[ portuguese_brazilian ] = "~Ignore";
     Text[ japanese ] = "無視する";
-    Text[ korean ] = "~Ignore";
-    Text[ chinese_simplified ] = "~Ignore";
+    Text[ korean ] = "무시(~I)";
+    Text[ chinese_simplified ] = "忽略(~I)";
     Text[ chinese_traditional ] = "忽略(~I)";
     Text[ turkish ] = "~Ignore";
     Text[ arabic ] = "~Ignore";
