@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 09:58:59 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:11:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,9 +1132,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
                         {
                             SdrObject *pObj = (*pPage->GetSortedObjs())[i];
 //JP 22.12.99: why ignore FlyFrames? The result is Bug 69762 for FlyFrames
-//                          if ( pObj->IsWriterFlyFrame() )
+//                          if ( pObj->ISA(SwVirtFlyDrawObj) )
 //                              continue;
-                            const Rectangle &rBound = pObj->GetBoundRect();
+                            const Rectangle &rBound = pObj->GetCurrentBoundRect();
                             // OD 03.03.2003 #107927# - use correct datatype
                             const SwTwips nL = Max( 0L, rBound.Left() - nOfst );
                             if ( nL < nMinLeft )
