@@ -81,13 +81,8 @@ $(ZIP1TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP1DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP1TMP).{$(subst,$(ZIP1HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -183,13 +178,8 @@ $(ZIP2TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP2DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP2TMP).{$(subst,$(ZIP2HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -285,13 +275,8 @@ $(ZIP3TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP3DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP3TMP).{$(subst,$(ZIP3HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -387,13 +372,8 @@ $(ZIP4TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP4DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP4TMP).{$(subst,$(ZIP4HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -489,13 +469,8 @@ $(ZIP5TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP5DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP5TMP).{$(subst,$(ZIP5HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -591,13 +566,8 @@ $(ZIP6TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP6DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP6TMP).{$(subst,$(ZIP6HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -693,13 +663,8 @@ $(ZIP7TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP7DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP7TMP).{$(subst,$(ZIP7HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -795,13 +760,8 @@ $(ZIP8TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP8DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP8TMP).{$(subst,$(ZIP8HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -897,13 +857,8 @@ $(ZIP9TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP9DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP9TMP).{$(subst,$(ZIP9HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
@@ -999,13 +954,8 @@ $(ZIP10TARGETN) : delzip
     @+-$(GNUCOPY) -p $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@) $@.$(INPATH) >& $(NULLDEV)
     @+-$(RM) $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@)
     @+-$(RM) $@ >& $(NULLDEV)
-.IF "$(GUI)"=="UNX"
-    @+if ( -r $@.$(INPATH) ) $(RENAME) $@.$(INPATH) $@
-#	@+if ( -r $@ ) $(TOUCH) $@
-.ELSE			# "$(GUI)"=="UNX"
-    @+if exist $@.$(INPATH) $(RENAME) $@.$(INPATH) $@
-#	@+if exist $@ $(TOUCH) $@
-.ENDIF			# "$(GUI)"=="UNX"
+    @+$(IFEXIST) $@.$(INPATH) $(THEN) $(RENAME) $@.$(INPATH) $@
+#	@+$(IFEXIST) $@ $(THEN) $(TOUCH) $@
 .ELSE			# "$(common_build_zip)"!=""
 .IF "$(ZIP10DIR)" != ""
     @+-$(GNUCOPY) -p $@ $(ZIP10TMP).{$(subst,$(ZIP10HELPVAR),_ $(@:db))}.zip >& $(NULLDEV)
