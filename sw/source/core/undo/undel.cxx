@@ -1,10 +1,11 @@
+
 /*************************************************************************
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-18 18:06:50 $
+ *  last change: $Author: jp $ $Date: 2001-05-23 16:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,8 +788,9 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
 
     if( !bDelFullPara )
     {
+        SwUndRng aTmpRng( rPam );
         RemoveIdxFromRange( rPam, FALSE );
-        SetPaM( rPam );
+        aTmpRng.SetPaM( rPam );
 
         if( !bJoinNext )            // Dann Selektion von unten nach oben
             rPam.Exchange();        // wieder herstellen!
@@ -910,11 +912,14 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.3 2001-05-18 18:06:50 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/undel.cxx,v 1.4 2001-05-23 16:00:54 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/05/18 18:06:50  jp
+      Bug #70454#: Undo - use the correct position for the move
+
       Revision 1.2  2000/10/25 15:13:25  jp
       use CharClass/BreakIt instead of old WordSelection
 
