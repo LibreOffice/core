@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-30 20:11:06 $
+ *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,8 +361,8 @@ public:
 public:
     static const INT16 MaxFollowing;
     static const INT16 MaxLeading;
-    static sal_Unicode aJapanBeginLevel1[101];
-    static sal_Unicode aJapanEndLevel1[51];
+    static sal_Unicode aJapanNotBeginLevel1[101];
+    static sal_Unicode aJapanNotEndLevel1[51];
 };
 
 struct WW8_DOGRID
@@ -859,11 +859,14 @@ struct WW67_ATRD                // fuer die 6/7-Version
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.2 2001-01-30 20:11:06 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8struc.hxx,v 1.3 2001-02-16 10:08:12 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/01/30 20:11:06  cmc
+      #83362# CJK Forbidden Character {Im|Ex}port
+
       Revision 1.1.1.1  2000/09/18 17:14:59  hr
       initial import
 

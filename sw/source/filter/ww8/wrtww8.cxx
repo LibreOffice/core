@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-15 20:03:11 $
+ *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,7 +415,7 @@ static sal_Unicode __READONLY_DATA aLangNotEnd[4][51] = {
 },
 };
 
-sal_Unicode WW8DopTypography::aJapanBeginLevel1[101] =
+sal_Unicode WW8DopTypography::aJapanNotBeginLevel1[101] =
 //Japanese Level 1
 {
 0x0021, 0x0025, 0x0029, 0x002c, 0x002e, 0x003a, 0x003b, 0x003f, 0x005d, 0x007d,
@@ -426,7 +426,7 @@ sal_Unicode WW8DopTypography::aJapanBeginLevel1[101] =
 0xffe0
 };
 
-sal_Unicode WW8DopTypography::aJapanEndLevel1[51] =
+sal_Unicode WW8DopTypography::aJapanNotEndLevel1[51] =
 //Japanese Level 1
 {
 0x0024, 0x0028, 0x005b, 0x005c, 0x007b, 0x00a3, 0x00a5, 0x2018, 0x201c, 0x3008,
@@ -493,11 +493,11 @@ void SwWW8Writer::ExportDopTypography(WW8DopTypography &rTypo)
                 if (rTypo.GetConvertedLang() == LANGUAGE_JAPANESE)
                 {
                     if( !lcl_CmpBeginEndChars( pForbidden->endLine,
-                            WW8DopTypography::aJapanBeginLevel1,
-                            sizeof(WW8DopTypography::aJapanBeginLevel1 )) &&
+                            WW8DopTypography::aJapanNotEndLevel1,
+                            sizeof(WW8DopTypography::aJapanNotEndLevel1 )) &&
                         !lcl_CmpBeginEndChars( pForbidden->beginLine,
-                            WW8DopTypography::aJapanEndLevel1,
-                            sizeof(WW8DopTypography::aJapanEndLevel1 )) )
+                            WW8DopTypography::aJapanNotBeginLevel1,
+                            sizeof(WW8DopTypography::aJapanNotBeginLevel1 )) )
                     {
                         rTypo.reserved2 = 0;
                         continue;
@@ -2262,11 +2262,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.10 2001-02-15 20:03:11 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.11 2001-02-16 10:08:12 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/15 20:03:11  jp
+      ExportDopTypography: better compare for the forbidden chars
+
       Revision 1.9  2001/02/13 15:36:26  jp
       Bug #83797#: default is write UniCode
 

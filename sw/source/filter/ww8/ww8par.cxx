@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-01 16:11:30 $
+ *  last change: $Author: cmc $ $Date: 2001-02-16 10:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -748,8 +748,8 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     if (!rTypo.reserved2)
     {
         i18n::ForbiddenCharacters aForbidden(
-            WW8DopTypography::aJapanEndLevel1,
-            WW8DopTypography::aJapanBeginLevel1);
+            WW8DopTypography::aJapanNotBeginLevel1,
+            WW8DopTypography::aJapanNotEndLevel1);
         rDoc.SetForbiddenCharacters(LANGUAGE_JAPANESE,aForbidden);
     }
 }
@@ -3038,11 +3038,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.10 2001-02-01 16:11:30 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.11 2001-02-16 10:08:12 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.10  2001/02/01 16:11:30  cmc
+      #83362# Missing i18n header include
+
       Revision 1.9  2001/01/30 20:11:06  cmc
       #83362# CJK Forbidden Character {Im|Ex}port
 
