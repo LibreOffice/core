@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-01 14:30:13 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,7 +512,7 @@ void SwDocShell::RemoveLink()
 sal_Bool  SwDocShell::Load(SvStorage* pStor)
 {
     sal_Bool bRet = sal_False;
-    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
     if( SfxInPlaceObject::Load( pStor ))
     {
         if( pDoc )              // fuer Letzte Version !!
@@ -800,6 +800,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/02/01 14:30:13  mib
+    XML files now can be loaded/saved as own format
+
     Revision 1.8  2000/11/20 09:12:09  jp
     should change: use LocaleDataWrapper
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-05 18:44:42 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1358,17 +1358,15 @@ void SwDocShell::FillClass( SvGlobalName * pClassName,
         pAppName->AssignAscii( "StarWriter 4.0" );
         *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_40);
     }
-    else if (nVersion == SOFFICE_FILEFORMAT_XML)
+    else if (nVersion == SOFFICE_FILEFORMAT_50)
+    {
+        *pClassName     = SvGlobalName( SO3_SW_CLASSID_50 );
+        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_50;
+        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE_50);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pClassName     = SvGlobalName( SO3_SW_CLASSID_60 );
-
-        *pClipFormat    = SOT_FORMATSTR_ID_STARWRITER_60;
-        *pLongUserName  = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
-    }
-    else if (nVersion == SOFFICE_FILEFORMAT_NOW ||
-             nVersion == SOFFICE_FILEFORMAT_50)
-    {
-        *pLongUserName = SW_RESSTR(STR_WRITER_DOCUMENT_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWDOC_NAME);
 }
@@ -1700,6 +1698,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/02/05 18:44:42  jp
+    Bug #83467#: LoadStylesFrom - initialise the reader variable
+
     Revision 1.11  2001/02/01 14:30:13  mib
     XML files now can be loaded/saved as own format
 

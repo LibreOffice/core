@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-01 14:30:12 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:41:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ class SwTmpPersist : public SvPersist
                             String * pAppName,
                             String * pLongUserName,
                             String * pUserName,
-                            long nFileFormat=SOFFICE_FILEFORMAT_NOW ) const;
+                            long nFileFormat=SOFFICE_FILEFORMAT_CURRENT ) const;
     virtual BOOL Save();
     virtual BOOL SaveCompleted( SvStorage * );
 public:
@@ -516,7 +516,7 @@ BOOL SwDocShell::ConvertFrom( SfxMedium& rMedium )
 
 BOOL SwDocShell::Save()
 {
-    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+    sal_Bool bXML = pIo->GetStorage()->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
     ULONG nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
@@ -596,7 +596,7 @@ BOOL SwDocShell::Save()
 
 BOOL SwDocShell::SaveAs( SvStorage * pStor )
 {
-    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_XML;
+    sal_Bool bXML = pStor->GetVersion() >= SOFFICE_FILEFORMAT_60;
 
     SwWait aWait( *this, TRUE );
 
@@ -1479,6 +1479,9 @@ BOOL SwTmpPersist::SaveCompleted( SvStorage * pStor )
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/02/01 14:30:12  mib
+    XML files now can be loaded/saved as own format
+
     Revision 1.6  2001/01/19 09:40:12  jp
     Method SvLinkManager::PrepareReload removed
 

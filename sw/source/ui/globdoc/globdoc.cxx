@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,16 +137,26 @@ void __EXPORT SwGlobalDocShell::FillClass( SvGlobalName * pClassName,
 
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE_40);
     }
-    else if (nVersion == SOFFICE_FILEFORMAT_NOW)
+    else if (nVersion == SOFFICE_FILEFORMAT_50)
+    {
+        *pClassName = SvGlobalName( SO3_SWGLOB_CLASSID_50 );
+        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERGLOB_50;
+        *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE_50);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pLongUserName = SW_RESSTR(STR_WRITER_GLOBALDOC_FULLTYPE);
     }
+
     *pUserName = SW_RESSTR(STR_HUMAN_SWGLOBDOC_NAME);
 }
 
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:38  hr
+    initial import
+
     Revision 1.9  2000/09/18 16:05:35  willem.vandorp
     OpenOffice header added.
 

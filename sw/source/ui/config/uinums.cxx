@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uinums.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-15 09:13:34 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
     for( USHORT n = aItems.Count(); n; )
     {
         SfxPoolItem* pItem = aItems[ --n ];
-        USHORT nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_NOW );
+        USHORT nIVers = pItem->GetVersion( SOFFICE_FILEFORMAT_50 );
         ASSERT( nIVers != USHRT_MAX,
                 "Was'n das: Item-Version USHRT_MAX in der aktuellen Version" );
         rStream << pItem->Which()
@@ -684,13 +684,13 @@ void SwNumRulesWithName::_SwNumFmtGlobal::Store( SvStream& rStream )
 
         if( aFmt.GetGrfBrush() )
         {
-            USHORT nVersion = aFmt.GetGrfBrush()->GetVersion( SOFFICE_FILEFORMAT_NOW );
+            USHORT nVersion = aFmt.GetGrfBrush()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
             aFmt.GetGrfBrush()->Store( rStream, nVersion );
         }
         if( aFmt.GetGrfOrient() )
         {
-            USHORT nVersion = aFmt.GetGrfOrient()->GetVersion( SOFFICE_FILEFORMAT_NOW );
+            USHORT nVersion = aFmt.GetGrfOrient()->GetVersion( SOFFICE_FILEFORMAT_50 );
             rStream << nVersion;
             aFmt.GetGrfOrient()->Store( rStream, nVersion );
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:51 $
+ *  last change: $Author: mib $ $Date: 2001-02-06 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,13 @@ void __EXPORT SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE_40);
     }
-    else if (nVersion == SOFFICE_FILEFORMAT_NOW)
+    else if ( nVersion == SOFFICE_FILEFORMAT_50)
+    {
+        *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_50 );
+        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_50;
+        *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE_50);
+    }
+    else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
@@ -190,6 +196,9 @@ void __EXPORT SwWebDocShell::FillClass( SvGlobalName * pClassName,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 17:14:51  hr
+    initial import
+
     Revision 1.22  2000/09/18 16:06:20  willem.vandorp
     OpenOffice header added.
 
