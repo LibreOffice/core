@@ -15916,6 +15916,12 @@
                     <value xml:lang="pt">Ca~mpos</value>
                 </prop>
             </node>
+            <node oor:name=".uno:ToggleBreakPointEnabled" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Haltepunkt aktiv/inaktiv</value>
+                    <value xml:lang="en-US">Breakpoint Enabled/Disabled</value>
+                </prop>
+            </node>
             <node oor:name="service:com.sun.star.deployment.ui.PackageManagerDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Package Manager...</value>
