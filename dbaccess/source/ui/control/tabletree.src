@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-02 22:44:43 $
+ *  last change: $Author: kz $ $Date: 2002-08-03 20:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ String STR_COULDNOTCONNECT
     Text[ french ] = "Impossible d'établir une connexion pour l'URL #connurl# !";
     Text[ spanish ] = "No se pudo realizar ninguna conexión para la URL #connurl#.";
     Text[ italian ] = "Non è possibile creare il collegamento all'URL #connurl#.";
-    Text[ danish ] = "Det var ikke muligt at oprette en forbindelse for URL'en #connurl#.";
+    Text[ danish ] = "Det var ikke muligt at oprette forbindelse til URL #connurl#.";
     Text[ swedish ] = "Det gick inte att upprätta någon förbindelse för URL:en #connurl#.";
     Text[ polish ] = "Brak po³¹czenia z URL #connurl#.";
     Text[ portuguese_brazilian ] = "A connection could not be established for URL #connurl#.";
@@ -257,7 +257,7 @@ String STR_COULDNOTCONNECT_PLEASECHECK
     Text[ french ] = "Vérifiez les paramètres actifs - par ex. ceux qui concernent le nom d'utilisateur et le mot de passe.";
     Text[ spanish ] = "Compruebe la configuración actual, en especial la que se refiere al nombre de usuario y a la contraseña.";
     Text[ italian ] = "Verificare le impostazioni attuali; in particolare quelle in riferimento al nome utente e password.";
-    Text[ danish ] = "Kontroller venligst de aktuelle indstillinger, f.eks. med hensyn til brugernavn og adgangskode.";
+    Text[ danish ] = "Kontroller de aktuelle indstillinger, f.eks. vedrørende brugernavn og adgangskode.";
     Text[ swedish ] = "Kontrollera de aktuella inställningarna, till exempel med avseende på användarnamn och lösenord.";
     Text[ polish ] = "SprawdŸ bie¿¹ce konfiguracje, np. nazwê u¿ytkownika i has³o.";
     Text[ portuguese_brazilian ] = "Please check the current settings, e.g. with respect to user name and password.";
@@ -309,7 +309,7 @@ String STR_ALL_TABLES
     Text[ french ] = "Toutes les tables";
     Text[ spanish ] = "Todas las tablas";
     Text[ italian ] = "Tutte le tabelle";
-    Text[ danish ] = "All tables";
+    Text[ danish ] = "Alle tabeller";
     Text[ swedish ] = "Alla tabeller";
     Text[ polish ] = "Wszystkie tabele";
     Text[ portuguese_brazilian ] = "All tables";
@@ -335,7 +335,7 @@ String STR_ALL_VIEWS
     Text[ french ] = "Toutes les vues";
     Text[ spanish ] = "Todas las visualizaciones de tablas";
     Text[ italian ] = "Tutte le viste di tabelle";
-    Text[ danish ] = "All views";
+    Text[ danish ] = "Alle tabelvisninger";
     Text[ swedish ] = "Alla tabellvyer";
     Text[ polish ] = "Wszystkie widoki tabeli";
     Text[ portuguese_brazilian ] = "All views";
@@ -361,7 +361,7 @@ String STR_ALL_TABLES_AND_VIEWS
     Text[ french ] = "Toutes les tables et vues";
     Text[ spanish ] = "Todas las tablas y visualizaciones de tablas";
     Text[ italian ] = "Tutte le tabelle e le viste di tabelle";
-    Text[ danish ] = "All tables and views";
+    Text[ danish ] = "Alle tabeller og tabelvisninger";
     Text[ swedish ] = "Alla tabeller och tabellvyer";
     Text[ polish ] = "Wszystkie tabele i widoki tabeli";
     Text[ portuguese_brazilian ] = "All tables and views";
@@ -379,6 +379,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2002/05/02 22:44:43  kz
+ *  Merge SRX642: 03.05.02 - 00:44:08
+ *
  *  Revision 1.24  2002/04/29 08:49:48  oj
  *  #98772# hi contrast changes
  *
