@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-04 13:01:30 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 17:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,11 +265,11 @@ pfunc_osl_printDebugMessage StatementCommand::pOriginal_osl_DebugMessageFunc = N
 
 #define SET_WINP_CLOSING(pWin) \
     pWindowWaitPointer = pWin; \
-    nWindowWaitUId = pControl->GetUniqueOrHelpId(); \
-    nWindowWaitOldHelpId = pWin->GetHelpId(); \
-    nWindowWaitOldUniqueId = pWin->GetUniqueId(); \
-    pWin->SetHelpId(4321); \
-    pWin->SetUniqueId(1234);
+    aWindowWaitUId = pControl->GetSmartUniqueOrHelpId(); \
+    aWindowWaitOldHelpId = pWin->GetSmartHelpId(); \
+    aWindowWaitOldUniqueId = pWin->GetSmartUniqueId(); \
+    pWin->SetSmartHelpId( SmartId(4321) ); \
+    pWin->SetSmartUniqueId( SmartId(1234) );
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -334,7 +334,7 @@ void StatementFlow::SendViaSocket()
     else
     {
         // Macht nix. Wenn das Basic nicht mehr da ist, ist sowiso alles egal
-        DBG_ERROR("Rückmeldung an Basic Fehlgeschlagen")
+        DBG_ERROR("Cannot send results to TestTool")
     }
 
     pRet->Reset();
@@ -410,8 +410,9 @@ BOOL StatementFlow::Execute()
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 // neue Hilfsfunktion, die stetig erweitert werden muss
-static short ImpGetRType( Window *pWin, ULONG nUId )
+static short ImpGetRType( Window *pWin, SmartId aUId )
 {
+    ULONG nUId = aUId.GetNum(); // GetNum() is always zero if no num is defined
     // GGGg gggg::gggg gggg::ggLL LLLl::llll llll
     DBG_ASSERT( pWin, "missing Parameter" );
     short nRT;
@@ -991,7 +992,7 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
                 break;
 
             default:
-                if ( pBase->GetUniqueOrHelpId() == 0 && !( nConf & DH_MODE_ALLWIN ) )
+                if ( pBase->GetSmartUniqueOrHelpId().Equals( SmartId() ) && !( nConf & DH_MODE_ALLWIN ) )
                     bSkip = TRUE;
         }
 
@@ -1004,24 +1005,13 @@ void StatementCommand::WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst
             if ( aName.Len() == 0 )
                 aName = pBase->GetText();
 
-            if ( pBase->GetType() == WINDOW_TOOLBOX )
-            {
-                ToolBox *pTB = ((ToolBox*)pBase);
-                if ( pTB->GetHelpIdAsString().Len() || ( nConf & DH_MODE_ALLWIN ) )
-                    pRet->GenReturn ( RET_WinInfo, SmartId( pTB->GetHelpIdAsString() ), (ULONG)pBase->GetType(),
-                        TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
-                if ( !pTB->GetHelpIdAsString().Len() || ( nConf & DH_MODE_ALLWIN ) )
-                    pRet->GenReturn ( RET_WinInfo, SmartId( pBase->GetUniqueOrHelpId() ), (ULONG)pBase->GetType(),
-                        TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
-            }
-            else
-            {
-                pRet->GenReturn ( RET_WinInfo, SmartId( pBase->GetUniqueOrHelpId() ), (ULONG)pBase->GetType(),
+            SmartId aId = pBase->GetSmartUniqueOrHelpId();
+            if ( aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
+                pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetStr() ), (ULONG)pBase->GetType(),
                     TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
-            }
-
-
-
+            if ( !aId.HasString() || ( nConf & DH_MODE_ALLWIN ) )
+                pRet->GenReturn ( RET_WinInfo, SmartId( aId.GetNum() ), (ULONG)pBase->GetType(),
+                    TypeString(pBase->GetType()).AppendAscii(": ").Append(aName), FALSE );
 
 
             if ( pBase->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
@@ -1598,6 +1588,11 @@ BOOL StatementCommand::DisplayHID()
 //          Act = GetMouseWin();
             Act = pDisplayHidWin->LastMouseMoveWin();
 
+            if ( !StatementList::WinPtrValid ( Old ) )
+                Old = NULL;
+            if ( !StatementList::WinPtrValid ( Act ) )
+                Act = NULL;
+
             if ( Act && Act->GetType() == WINDOW_BORDERWINDOW )
                 Act = Act->GetWindow( WINDOW_CLIENT );
 
@@ -1610,10 +1605,10 @@ BOOL StatementCommand::DisplayHID()
                 if ( Act )
                 {
                     SET_WIN(Act);
-                    pDisplayHidWin->SetDisplayText(UniString::CreateFromInt64(Act->GetUniqueOrHelpId()).AppendAscii(" WinType: ")
+                    pDisplayHidWin->SetDisplayText(Act->GetSmartUniqueOrHelpId().GetText().AppendAscii(" WinType: ")
                         .Append(UniString::CreateFromInt64(Act->GetType())).AppendAscii("  ").Append(Act->GetText()));
-                    if ( Act && Act->GetUniqueId() != Act->GetHelpId() )
-                        pDisplayHidWin->SetText(UniString( TTProperties::GetSvtResId( TT_ALTERNATE_CAPTION ) ).Append(UniString::CreateFromInt64(Act->GetHelpId())));
+                    if ( Act && !Act->GetSmartUniqueId().Equals( Act->GetSmartHelpId() ) )
+                        pDisplayHidWin->SetText(UniString( TTProperties::GetSvtResId( TT_ALTERNATE_CAPTION ) ).Append(Act->GetSmartHelpId().GetText()));
                     else
                         pDisplayHidWin->SetText( aOriginalCaption );
                 }
@@ -1625,7 +1620,7 @@ BOOL StatementCommand::DisplayHID()
 //              SET_WIN(Act);
                 if ( pDisplayHidWin->IsDisplayTextModified() && pDisplayHidWin->GetDisplayText().Len() > 0 )
                 {
-                    Act->SetUniqueId( pDisplayHidWin->GetDisplayText().ToInt32() );
+                    Act->SetSmartUniqueId( SmartId( pDisplayHidWin->GetDisplayText().ToInt32() ) );
                     pDisplayHidWin->ClearDisplayTextModified();
                 }
             }
@@ -2203,14 +2198,14 @@ void StatementCommand::Translate()
             {
                 Window* pNew = pTranslationWindow->GetWindow( WINDOW_CLIENT );
                 // Bei Dockingwindoes das kanze Geraffel von Docking Floating überspringen
-                while ( IsDialog( pNew ) && !pNew->GetUniqueOrHelpId() && pNew->GetChildCount() == 1 )
+                while ( IsDialog( pNew ) && !pNew->GetSmartUniqueOrHelpId().HasAny() && pNew->GetChildCount() == 1 )
                     pNew = pNew->GetChild( 0 );
                 pTranslationWindow = pNew;
             }
 
             aTranslation = CUniString("0;");
 
-            aTranslation += UniString::CreateFromInt64( pTranslationWindow->GetUniqueOrHelpId() );
+            aTranslation += pTranslationWindow->GetSmartUniqueOrHelpId().GetText();
             aTranslation += ';';
 
             aTranslation += TypeString( pTranslationWindow->GetType() );
@@ -2224,7 +2219,7 @@ void StatementCommand::Translate()
 
             if ( pParentDialog )
             {
-                aTranslation += UniString::CreateFromInt64( pParentDialog->GetUniqueOrHelpId() );
+                aTranslation += pParentDialog->GetSmartUniqueOrHelpId().GetText();
                 aTranslation += ';';
                 aTranslation += TypeString( pParentDialog->GetType() );
             }
@@ -2324,10 +2319,10 @@ Window* StatementCommand::GetNextRecoverWin()
         pControl = GetNextOverlap( pBase );
         if ( pControl && pControl->IsVisible() && !IsFirstDocFrame( pControl ) && !IsIMEWin( pControl ) )
         {
-/*            Window *pDock = GetWinByRT( pControl, WINDOW_DOCKINGWINDOW, FALSE );
-            if ( pDock )
+            Window *pDock = GetWinByRT( pControl, WINDOW_TOOLBOX, FALSE );
+            if ( pDock && pDock->GET_REAL_PARENT() == pControl )
                 return pDock;
-            else*/
+            else
                 return pControl;
         }
 
@@ -2371,7 +2366,7 @@ BOOL StatementCommand::Execute()
 #if OSL_DEBUG_LEVEL > 1
 #define REPORT_WIN_CLOSED(pControl, aInfo)          \
     _REPORT_WIN_CLOSED(pControl, aInfo)             \
-    m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( UIdString(SmartId(pControl->GetUniqueOrHelpId())) ) );
+    m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( UIdString(pControl->GetSmartUniqueOrHelpId()) ) );
 #else
 #define REPORT_WIN_CLOSED(pControl, aInfo) _REPORT_WIN_CLOSED(pControl, aInfo)
 #endif
@@ -2388,7 +2383,7 @@ BOOL StatementCommand::Execute()
     aString1.AppendAscii("\" geschlossen, RType = ");\
     aString1 += TypeString(pControl->GetType());    \
     aString1.AppendAscii(", UId = ");               \
-    aString1 += UIdString(SmartId(pControl->GetUniqueOrHelpId()));
+    aString1 += UIdString(pControl->GetSmartUniqueOrHelpId());
 
 
     switch ( nMethodId )
@@ -2443,12 +2438,12 @@ BOOL StatementCommand::Execute()
                          && pControl->GetType() != WINDOW_TOOLBOX
                          && nRetryCount-- )
                     {
-                        short nRT = ImpGetRType( pControl, pControl->GetUniqueOrHelpId() );
+                        short nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
 
                         if ( nRT == C_TabControl && pControl->GET_REAL_PARENT() && pControl->GET_REAL_PARENT()->GetType() == WINDOW_TABDIALOG )
                         {   // Bei Tabcontrol den zugehörigen Tabdialog nehmen
                             pControl = pControl->GET_REAL_PARENT();
-                            nRT = ImpGetRType( pControl, pControl->GetUniqueOrHelpId() );
+                            nRT = ImpGetRType( pControl, pControl->GetSmartUniqueOrHelpId() );
                         }
 
                         switch( nRT )
@@ -2661,7 +2656,7 @@ BOOL StatementCommand::Execute()
                 else if ( !IsDialog(pWin) )
                     ReportError( GEN_RES_STR0( S_NO_DIALOG_IN_GETACTIVE ) );
                 else
-                    pRet->GenReturn( RET_Value, aSmartMethodId, (ULONG)pWin->GetUniqueOrHelpId());
+                    pRet->GenReturn( RET_Value, aSmartMethodId, (ULONG)pWin->GetSmartUniqueOrHelpId().GetNum());
             }
             break;
         case RC_UseBindings:
@@ -3677,7 +3672,7 @@ BOOL StatementControl::ControlOK( Window *pControl, const sal_Char* cBezeichnung
 {
     if ( pControl && ( ( ( IsAccessable(pControl) || (nMethodId & M_WITH_RETURN) ) &&
                          pControl->IsVisible() ) ||
-                         aUId.Equals( UID_ACTIVE ) ) )
+                         aUId.Matches( UID_ACTIVE ) ) )
         return TRUE;
     else
     {
@@ -4515,7 +4510,7 @@ BOOL StatementControl::Execute()
 #endif
 
 
-    if ( aUId.Equals( UID_ACTIVE ) )
+    if ( aUId.Matches( UID_ACTIVE ) )
         pControl = GetAnyActive();
     else
     {
@@ -4536,7 +4531,7 @@ BOOL StatementControl::Execute()
     if ( pControl && pControl->GetType() == WINDOW_TOOLBOX )
     {
         ToolBox *pTB = ((ToolBox*)pControl);
-        if ( !( aUId.Equals( pControl->GetUniqueOrHelpId() ) || aUId.Equals( pTB->GetHelpIdAsString() ) ) )
+        if ( !aUId.Matches( pControl->GetSmartUniqueOrHelpId() ) )
         {   // Also wenn wir irgendwas auf einer Toolbox gefunden haben
             switch ( nMethodId )
             {
@@ -4594,7 +4589,7 @@ BOOL StatementControl::Execute()
 
     if( pControl )          // Das Fenster Existiert irgendwo, kann aber auch hidden sein!
     {
-        nRT = ImpGetRType( pControl, aUId.GetNum() );   // If not Numeric pControl is used
+        nRT = ImpGetRType( pControl, aUId );   // If not Numeric pControl is used
 #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Type is: " );
         m_pDbgWin->AddText( String::CreateFromInt32( nRT ) );
@@ -4710,7 +4705,7 @@ BOOL StatementControl::Execute()
                             }
                             break;
                         case M_GetPage:
-                            pRet->GenReturn ( RET_Value, aUId, ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetUniqueOrHelpId());
+                            pRet->GenReturn ( RET_Value, aUId, ((TabControl*)pControl)->GetTabPage(((TabControl*)pControl)->GetCurPageId())->GetSmartUniqueOrHelpId().GetNum());
                             break;
                         case M_SetPage :
                             {       // Wegen lokaler Variablen
@@ -4726,7 +4721,7 @@ BOOL StatementControl::Execute()
                                         pTControl->DeactivatePage();
                                     pTControl->SetCurPageId( pTControl->GetPageId(i) );
                                     pTControl->ActivatePage();*/
-                                    nID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetUniqueOrHelpId();
+                                    nID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetSmartUniqueOrHelpId().GetNum();
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
                                         i = 0;
@@ -5183,11 +5178,11 @@ BOOL StatementControl::Execute()
                 case C_ToolBox:
                     {
                         ToolBox *pTB = ((ToolBox*)pControl);
-                        if ( !( aUId.Equals( pTB->GetUniqueOrHelpId() ) || aUId.Equals( pTB->GetHelpIdAsString() ) ) )  // Also Button auf der ToolBox gefunden
+                        if ( !aUId.Matches( pTB->GetSmartUniqueOrHelpId() ) )   // Also Button auf der ToolBox gefunden
                         {
                             if ( nParams == PARAM_NONE )
                             {           // Wir fälschen einen Parameter
-                                if ( aUId.IsNumeric() )
+                                if ( aUId.HasNumeric() )
                                 {
                                     nParams = PARAM_ULONG_1;
                                     nLNr1 = USHORT( aUId.GetNum() );
@@ -5210,9 +5205,9 @@ BOOL StatementControl::Execute()
             aButtonId = SmartId( aString1 );\
         if( nParams == PARAM_ULONG_1 )\
             aButtonId = SmartId( nLNr1 );\
-        for ( nNr1 = 0; nNr1 < pTB->GetItemCount() && !aButtonId.Equals(pTB->GetItemCommand(pTB->GetItemId(nNr1))) &&\
-                                                      !aButtonId.Equals(pTB->GetHelpId(pTB->GetItemId(nNr1))) ; nNr1++ ) {}\
-        bBool1 = aButtonId.Equals(pTB->GetItemCommand(pTB->GetItemId(nNr1))) || aButtonId.Equals(pTB->GetHelpId(pTB->GetItemId(nNr1)));\
+        for ( nNr1 = 0; nNr1 < pTB->GetItemCount() && !aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nNr1))) &&\
+                                                      !aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nNr1))) ; nNr1++ ) {}\
+        bBool1 = aButtonId.Matches(pTB->GetItemCommand(pTB->GetItemId(nNr1))) || aButtonId.Matches(pTB->GetHelpId(pTB->GetItemId(nNr1)));\
         if ( !bBool1 )\
             ReportError( aUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
         else\
@@ -5925,7 +5920,7 @@ SvLBoxString* pItem = NULL;\
                             break;
                         case M_Close:
                                 //aWindowWaitUId = aUId;
-                            DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                             SET_WINP_CLOSING(pControl);
                             ((DockingWindow*)pControl)->Close();
                             break;
@@ -5980,7 +5975,7 @@ SvLBoxString* pItem = NULL;\
                             break;
                         }
                         case M_Close:
-                            DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                             SET_WINP_CLOSING(pControl);
                             ((FloatingWindow*)pControl)->Close();
                             break;
@@ -6005,7 +6000,7 @@ SvLBoxString* pItem = NULL;\
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_Close:
-                            DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                             SET_WINP_CLOSING(pControl);
                             ((SystemWindow*)pControl)->Close();
                             break;
@@ -6014,7 +6009,7 @@ SvLBoxString* pItem = NULL;\
                             Window *pChild = GetWinByRT( pControl, WINDOW_OKBUTTON );
                             if( ControlOK( pChild, "OK Button" ) )
                             {
-                                DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                                DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                                 SET_WINP_CLOSING(pControl);
                                 ((Button*)pChild)->Click();
                             }
@@ -6026,7 +6021,7 @@ SvLBoxString* pItem = NULL;\
                             Window *pChild = GetWinByRT( pControl, WINDOW_CANCELBUTTON );
                             if( ControlOK( pChild, "Cancel Button" ) )
                             {
-                                DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                                DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                                 SET_WINP_CLOSING(pControl);
                                 ((Button*)pChild)->Click();
                             }
@@ -6063,7 +6058,7 @@ SvLBoxString* pItem = NULL;\
                             AnimateMouse( pControl, MitteOben);
                             break;
                         case M_Close:
-                            DBG_ASSERT( aUId.Equals( pControl->GetUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
+                            DBG_ASSERT( aUId.Matches( pControl->GetSmartUniqueOrHelpId() ), "aUID != UniqueOrHelpId");
                             SET_WINP_CLOSING(pControl);
                             ((WorkWindow*)pControl)->Close();
                             break;
