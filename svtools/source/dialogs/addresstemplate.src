@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:38:12 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:09:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ chinese_traditional ] = "æ¨£å¼ï¼šæŒ‡å®šé€šè¨ŠéŒ„";
     Text[ turkish ] = "Templates: Address Book assignment";
     Text[ arabic ] = "ŞæÇáÈ: ÊÚííä ÏİÊÑ ÇáÚäÇæíä";
+    Text[ czech ] = "Å ablony: PÅ™iÅ™azenÃ­ knihy adres";
 
     FixedLine FL_DATASOURCEFRAME
     {
