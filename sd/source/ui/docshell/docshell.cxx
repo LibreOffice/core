@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:24:31 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #endif
 
 #include <sfx2/docfac.hxx>
+#include <sfx2/objface.hxx>
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -218,21 +219,11 @@ Link*        DrawDocShell::mpSpecialProgressHdl = NULL;
 \************************************************************************/
 TYPEINIT1( DrawDocShell, SfxObjectShell );
 
-
-
-
 SFX_IMPL_OBJECTFACTORY(
     DrawDocShell,
+    SvGlobalName(SO3_SIMPRESS_CLASSID),
     SFXOBJECTSHELL_STD_NORMAL,
-    simpress,
-    SvGlobalName(SO3_SIMPRESS_CLASSID) )
-{
-    DrawDocShell::Factory().SetCreateNewSlotId( SID_NEWSD );
-    DrawDocShell::Factory().SetDocumentServiceName( String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) );
-    DrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
-    DrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
-}
-
+    "simpress" )
 
 /*************************************************************************
 |*
@@ -244,7 +235,6 @@ void DrawDocShell::Construct()
 {
     bInDestruction = FALSE;
     SetSlotFilter();     // setzt Filter zurueck
-    SetShell(this);
 
     pDoc = new SdDrawDocument(eDocType, this);
     SetModel( new SdXImpressDocument( this ) );
@@ -270,7 +260,7 @@ DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
     pUndoManager(NULL),
     pFontList(NULL),
     pFuActual(NULL),
-    bUIActive(FALSE),
+    //bUIActive(FALSE),
     pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
 //  pStbMgr( NULL ),
@@ -299,7 +289,7 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
     pUndoManager(NULL),
     pFontList(NULL),
     pFuActual(NULL),
-    bUIActive(FALSE),
+    //bUIActive(FALSE),
     pFormatClipboard(new SdFormatClipboard()),
     pProgress(NULL),
 //  pStbMgr( NULL ),
@@ -522,7 +512,7 @@ void DrawDocShell::InPlaceActivate( BOOL bActive )
         }
     }
 
-    SfxInPlaceObject::InPlaceActivate( bActive );
+    SfxObjectShell::InPlaceActivate( bActive );
 
     if( bActive )
     {
@@ -663,7 +653,7 @@ void DrawDocShell::ApplySlotFilter() const
 
 void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 {
-    SfxInPlaceObject::SetModified( bSet );
+    SfxObjectShell::SetModified( bSet );
 
     // #100237# change model state, too
     // #103182# only set the changed state if modification is enabled
