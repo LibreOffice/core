@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-10 07:46:46 $
+ *  last change: $Author: kso $ $Date: 2001-06-22 08:08:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -868,7 +868,9 @@ Reference< XResultSet > Content::createCursor(
 
     Reference< XDynamicResultSet > xDynSet;
     Reference< XResultSet > xStaticSet;
-    if ( aResult >>= xDynSet )
+
+    aResult >>= xDynSet;
+    if ( xDynSet.is() )
         xStaticSet = xDynSet->getStaticResultSet();
 
     VOS_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
@@ -924,7 +926,9 @@ Reference< XResultSet > Content::createCursor(
 
     Reference< XDynamicResultSet > xDynSet;
     Reference< XResultSet > xStaticSet;
-    if ( aResult >>= xDynSet )
+
+    aResult >>= xDynSet;
+    if ( xDynSet.is() )
         xStaticSet = xDynSet->getStaticResultSet();
 
     VOS_ENSURE( xStaticSet.is(), "Content::createCursor - no cursor!" );
