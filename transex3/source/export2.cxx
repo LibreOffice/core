@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -580,8 +580,9 @@ ByteString Export::GetNativeFile( ByteString sSource )
     DirEntry aTemp( GetTempFile());
     ByteString sReturn( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
-    if ( ConvertLineEnds( sSource, sReturn ))
-        return sReturn;
+    for ( USHORT i = 0; i < 10; i++ )
+        if ( ConvertLineEnds( sSource, sReturn ))
+            return sReturn;
 
     return "";
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 15:02:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,7 @@ BOOL SourceTreeLocalizer::CheckNegativeList( const ByteString &rFileName )
 
     ByteString sNegative( NegativeList[ nIndex ] );
     while( sNegative != "NULL" && bReturn ) {
+        sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
 
@@ -345,6 +346,7 @@ BOOL SourceTreeLocalizer::CheckPositiveList( const ByteString &rFileName )
 
     ByteString sNegative( PositiveList[ nIndex ] );
     while( sNegative != "NULL" && !bReturn ) {
+        sNegative.SearchAndReplaceAll( "\\", sDelimiter );
         sNegative.SearchAndReplaceAll( "/", sDelimiter );
         sNegative.ToLowerAscii();
 
@@ -470,10 +472,14 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
         DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
 
     ByteString sCur( rFile );
+    sCur.SearchAndReplaceAll( "\\", sDelimiter );
     sCur.SearchAndReplaceAll( "/", sDelimiter );
 
     aEntry += DirEntry( String( sCur, RTL_TEXTENCODING_ASCII_US ));
     ByteString sFile( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+
+    ByteString sBCur( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
+    fprintf( stdout, "##### %s #####\n", sBCur.GetBuffer());
 
     ULONG nIndex = 0;
     ByteString sExtension( aEntry.GetExtension(), RTL_TEXTENCODING_ASCII_US );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+ *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,11 +312,12 @@ BOOL LngParser::Merge(
                 sLang.EraseLeadingChars( ' ' );
                 sLang.EraseTrailingChars( ' ' );
 
-                if ( !sLang.IsNumericAscii() || !LANGUAGE_ALLOWED( sLang.ToInt32())) {
+                if ( !sLang.IsNumericAscii()) {
                     pLines->Remove( nPos );
                 }
                 else if (( MergeDataFile::GetLangIndex( sLang.ToInt32()) < LANGUAGES ) &&
-                    ( pEntrys ))
+                    ( pEntrys ) &&
+                    ( LANGUAGE_ALLOWED( sLang.ToInt32())))
                 {
                     // this is a valid text line
                     USHORT nIndex = MergeDataFile::GetLangIndex( sLang.ToInt32());
@@ -339,6 +340,7 @@ BOOL LngParser::Merge(
                     nPos ++;
                 }
                 else
+                    nLastLangPos = nPos;
                     nPos ++;
             }
             else

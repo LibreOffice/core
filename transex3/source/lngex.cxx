@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngex.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-31 09:44:37 $
+ *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,7 @@ BOOL ParseCommandLine( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = argv[ i ];
-                    sPrj.ToLowerAscii(); // the project
+//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {

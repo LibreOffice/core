@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
+ *  last change: $Author: nf $ $Date: 2001-06-11 13:49:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_PRJ: {
                     sPrj = ByteString( argv[ i ]);
-                    sPrj.ToLowerAscii(); // the project
+//                  sPrj.ToLowerAscii(); // the project
                 }
                 break;
                 case STATE_ROOT: {
@@ -259,7 +259,7 @@ extern FILE *GetCfgFile()
             // create file name, beginnig with project root
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
-            sActFileName.ToLowerAscii();
+//          sActFileName.ToLowerAscii();
 
             fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
