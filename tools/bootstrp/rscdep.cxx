@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscdep.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-07 16:34:45 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 14:20:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ simple_getopt(int argc, char *argv[], const char *optstring)
         if ( arg[0] == '-' && arg[1] != '\0' ) {
             char *popt;
             int c = arg[1];
-            if ( (popt = strchr(optstring, c)) == NULL ) {
+            if ( (popt = (char*)strchr(optstring, c)) == NULL ) {
                 optopt = c;
                 if ( opterr )
                     fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
