@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-21 10:06:46 $
+ *  last change: $Author: fs $ $Date: 2001-02-28 12:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2085,8 +2085,8 @@ BOOL OResultSet::OpenImpl()
                         eKeyType[i] = SQL_ORDERBYKEY_NONE;
                     else
                     {
-                        OSL_ENSURE(m_aRow->size() > nOrderbyColumnNumber[i]+1,"Invalid Index");
-                        switch ((m_aRow->begin()+nOrderbyColumnNumber[i]+1)->getTypeKind())
+                        OSL_ENSURE(m_aRow->size() > nOrderbyColumnNumber[i],"Invalid Index");
+                        switch ((m_aRow->begin()+nOrderbyColumnNumber[i])->getTypeKind())
                         {
                         case DataType::CHAR:
                             case DataType::VARCHAR:
