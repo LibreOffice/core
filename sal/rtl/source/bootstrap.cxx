@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-07-25 08:12:51 $
+ *  last change: $Author: rt $ $Date: 2001-07-26 10:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ static ::rtl::OUString &getIniFileNameImpl()
                     rtl_uStringbuffer_newFromStringBuffer(
                         &pFileName, pExeName->length + 4, pExeName );
 
-                const sal_Char *pNewSuffix = SAL_CONFIGFILE();
+                const sal_Char *pNewSuffix = SAL_CONFIGFILE("");
                 OUString sOldSuffix( RTL_CONSTASCII_USTRINGPARAM( ".exe" ) );
 
                 if(pFileName->length > sOldSuffix.getLength()
