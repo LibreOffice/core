@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resids.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,11 +85,11 @@
 
 // SpecialOptions
 #define RID_TP_SPE         30
-#define GB_DIRECTORIES     31
+#define FL_DIRECTORIES     31
 #define LOG_TEXT           32
 #define BASIS_TEXT         33
 #define HID_TEXT           34
-#define GB_OTHER           35
+#define FL_OTHER           35
 #define TIMEOUT_TEXT       36
 #define LOG_NAME           37
 #define BASIS_NAME         38
@@ -103,11 +103,11 @@
 
 // GenericOptions
 #define RID_TP_GEN         50
-#define RID_GB_AREA        51
+#define RID_FL_AREA        51
 #define RID_CB_AREA        52
 #define RID_PB_NEW_AREA    53
 #define RID_PD_DEL_AREA    54
-#define RID_GB_VALUE       55
+#define RID_FL_VALUE       55
 #define RID_CB_VALUE       56
 #define RID_PB_NEW_VALUE   57
 #define RID_PB_DEL_VALUE   58

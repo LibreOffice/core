@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:09 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SV_TABPAGE_HXX //autogen
 #include <vcl/tabpage.hxx>
-#endif
-#ifndef _SV_GROUP_HXX //autogen
-#include <vcl/group.hxx>
 #endif
 #ifndef _SV_CONFIG_HXX //autogen
 #include <vcl/config.hxx>
@@ -176,11 +173,11 @@ public:
 
 class SpecialOptions : public TabPage
 {
-    GroupBox aDirs;
+    FixedLine aDirs;
     ConfEdit aLog;
     ConfEdit aBasis;
     ConfEdit aHID;
-    GroupBox aOther;
+    FixedLine aOther;
     FixedText aTimeoutText;
     TimeField aServerTimeout;
     CheckBox aAutoReload;
@@ -198,12 +195,12 @@ DECLARE_LIST( StringList, String * );
 
 class GenericOptions : public TabPage
 {
-    GroupBox aGbArea;
+    FixedLine aFlArea;
     ComboBox aCbArea;
     PushButton aPbNewArea;
     PushButton aPbDelArea;
 
-    GroupBox aGbValue;
+    FixedLine aFlValue;
     ComboBox aCbValue;
     PushButton aPbNewValue;
     PushButton aPbDelValue;

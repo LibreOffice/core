@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gh $ $Date: 2001-06-08 13:44:14 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,11 +310,11 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 
 SpecialOptions::SpecialOptions( Window* pParent )
 : TabPage( pParent, ResId( RID_TP_SPECIAL ) )
-, aDirs( this, ResId(GB_DIRECTORIES) )
+, aDirs( this, ResId(FL_DIRECTORIES) )
 , aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBasisverzeichnis" )
 , aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"Basisverzeichnis" )
 , aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDVerzeichnis" )
-, aOther( this, ResId(GB_OTHER) )
+, aOther( this, ResId(FL_OTHER) )
 , aTimeoutText( this, ResId(TIMEOUT_TEXT) )
 , aServerTimeout( this, ResId(SERVER_TIMEOUT) )
 , aAutoReload( this, ResId(CB_AUTORELOAD) )
@@ -350,12 +350,12 @@ GenericOptions::GenericOptions( Window* pParent )
 : TabPage( pParent, ResId( RID_TP_GENERIC ) )
 , aConf( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 
-, aGbArea( this, ResId( RID_GB_AREA ) )
+, aFlArea( this, ResId( RID_FL_AREA ) )
 , aCbArea( this, ResId( RID_CB_AREA ) )
 , aPbNewArea( this, ResId( RID_PB_NEW_AREA ) )
 , aPbDelArea( this, ResId( RID_PD_DEL_AREA ) )
 
-, aGbValue( this, ResId( RID_GB_VALUE ) )
+, aFlValue( this, ResId( RID_FL_VALUE ) )
 , aCbValue( this, ResId( RID_CB_VALUE ) )
 , aPbNewValue( this, ResId( RID_PB_NEW_VALUE ) )
 , aPbDelValue( this, ResId( RID_PB_DEL_VALUE ) )

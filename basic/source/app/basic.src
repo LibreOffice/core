@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-27 20:07:55 $
+ *  last change: $Author: tbe $ $Date: 2001-07-31 15:12:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3265,9 +3265,9 @@ TabPage RID_TP_GENERIC {
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
-    GroupBox RID_GB_AREA {
+    FixedLine RID_FL_AREA {
             Pos = MAP_APPFONT( 4, 4 );
-            Size = MAP_APPFONT( 228, 28 );
+            Size = MAP_APPFONT( 228, 8 );
             Text = "Bereich";
             Text [ english_us ] = "Range";
             Text[ portuguese ] = "Área";
@@ -3352,9 +3352,9 @@ TabPage RID_TP_GENERIC {
         Text[ catalan ] = "Eliminar";
         Text[ finnish ] = "Poista";
     };
-    GroupBox RID_GB_VALUE {
+    FixedLine RID_FL_VALUE {
             Pos = MAP_APPFONT( 4, 36 );
-            Size = MAP_APPFONT( 228, 60 );
+            Size = MAP_APPFONT( 228, 8 );
             Text = "Einstellung";
             Text [ english_us ] = "Setting";
             Text[ portuguese ] = "Configuração";
@@ -3445,9 +3445,9 @@ TabPage RID_TP_SPECIAL {
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 244, 100 );
-    GroupBox GB_DIRECTORIES {
-            Pos = MAP_APPFONT( 4, 4 );
-            Size = MAP_APPFONT( 230, 56 );
+    FixedLine FL_DIRECTORIES {
+            Pos = MAP_APPFONT( 4, 2 );
+            Size = MAP_APPFONT( 230, 8 );
             Text = "Verzeichnisse";
             Text [ english_us ] = "Directories";
             Text[ portuguese ] = "Directórios";
@@ -3641,9 +3641,9 @@ TabPage RID_TP_SPECIAL {
         Text[ catalan ] = "...";
         Text[ finnish ] = "...";
     };
-    GroupBox GB_OTHER {
-            Pos = MAP_APPFONT( 4, 62 );
-            Size = MAP_APPFONT( 230, 34 );
+    FixedLine FL_OTHER {
+            Pos = MAP_APPFONT( 4, 60 );
+            Size = MAP_APPFONT( 230, 8 );
             Text = "Andere Einstellungen";
             Text [ english_us ] = "Other settings";
             Text[ portuguese ] = "Outras definições";
