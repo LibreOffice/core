@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
+ *  last change: $Author: mav $ $Date: 2002-11-28 11:49:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_XPASSWORDCONTAINER_HPP_
 #include "com/sun/star/task/XPasswordContainer.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UCB_UNSUPPORTEDNAMECLASHEXCEPTION_HPP_
+#include "com/sun/star/ucb/UnsupportedNameClashException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_AUTHENTICATIONREQUEST_HPP_
 #include "com/sun/star/ucb/AuthenticationRequest.hpp"
@@ -634,6 +637,28 @@ UUIInteractionHandler::handle(
                                 nErrorCode,
                                 aArguments,
                                 rRequest->getContinuations());
+
+            return;
+        }
+
+        star::ucb::UnsupportedNameClashException aUORequest;
+        if (aAnyRequest >>= aUORequest)
+        {
+            ErrCode nErrorCode = ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE;
+            std::vector< rtl::OUString > aArguments;
+
+            star::uno::Reference< star::task::XInteractionApprove > xApprove;
+            star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
+            getContinuations(
+                rRequest->getContinuations(), &xApprove, &xDisapprove, 0, 0, 0, 0);
+
+            if( xApprove.is() && xDisapprove.is() )
+            {
+                handleErrorRequest( star::task::InteractionClassification_QUERY,
+                                    nErrorCode,
+                                    aArguments,
+                                    rRequest->getContinuations());
+            }
 
             return;
         }
