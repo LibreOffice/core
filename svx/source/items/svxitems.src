@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-21 18:09:54 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 15:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -8684,6 +8684,18 @@ String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
     Text = "Textfluss aus der Umgebung";
     Text [ English ] = "text flow from environment";
+};
+
+String RID_SVXITEMS_PARASNAPTOGRID_ON
+{
+    Text = "Absatz-Gitter aktiv";
+    Text [ English ] = "paragraph snap to grid";
+};
+
+String RID_SVXITEMS_PARASNAPTOGRID_OFF
+{
+    Text = "Absatz-Gitter nicht aktiv";
+    Text [ English ] = "paragraph does not snap to grid";
 };
 
  // ********************************************************************** EOF

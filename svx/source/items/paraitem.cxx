@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-05 11:34:03 $
+ *  last change: $Author: fme $ $Date: 2002-02-06 15:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ using namespace ::com::sun::star;
 #define ITEMID_HANGINGPUNCTUATION 0
 #define ITEMID_FORBIDDENRULE 0
 #define ITEMID_PARAVERTALIGN 0
+#define ITEMID_PARAGRID 0
 
 #include <tools/rtti.hxx>
 #include <svtools/sbx.hxx>
@@ -126,6 +127,7 @@ using namespace ::com::sun::star;
 #include "hngpnctitem.hxx"
 #include "forbiddenruleitem.hxx"
 #include "paravertalignitem.hxx"
+#include "pgrditem.hxx"
 
 
 #include <rtl/ustring>
@@ -168,7 +170,7 @@ TYPEINIT1_AUTOFACTORY(SvxScriptSpaceItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxHangingPunctuationItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxForbiddenRuleItem, SfxBoolItem);
 TYPEINIT1_AUTOFACTORY(SvxParaVertAlignItem, SfxUInt16Item);
-
+TYPEINIT1_AUTOFACTORY(SvxParaGridItem, SfxBoolItem);
 
 SV_IMPL_VARARR_SORT( SvxTabStopArr, SvxTabStop )
 
@@ -1632,5 +1634,56 @@ int SvxParaVertAlignItem::operator==( const SfxPoolItem& rItem ) const
     return SfxUInt16Item::operator==( rItem );
 }
 
+
+SvxParaGridItem::SvxParaGridItem( sal_Bool bOn, const sal_uInt16 nId )
+    : SfxBoolItem( nId, bOn )
+{
+}
+
+SfxPoolItem* SvxParaGridItem::Clone( SfxItemPool *pPool ) const
+{
+    return new SvxParaGridItem( GetValue(), Which() );
+}
+
+SfxPoolItem* SvxParaGridItem::Create(SvStream & rStrm, USHORT) const
+{
+    sal_Bool bFlag;
+    rStrm >> bFlag;
+    return new SvxParaGridItem( bFlag, Which() );
+}
+
+USHORT  SvxParaGridItem::GetVersion( USHORT nFFVer ) const
+{
+    DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
+            SOFFICE_FILEFORMAT_40==nFFVer ||
+            SOFFICE_FILEFORMAT_50==nFFVer,
+            "SvxParaGridItem: Gibt es ein neues Fileformat?" );
+
+    return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
+}
+
+SfxItemPresentation SvxParaGridItem::GetPresentation(
+        SfxItemPresentation ePres,
+        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric,
+        String &rText, const IntlWrapper* pIntl ) const
+{
+    switch( ePres )
+    {
+    case SFX_ITEM_PRESENTATION_NONE:
+        rText.Erase();
+        break;
+    case SFX_ITEM_PRESENTATION_NAMELESS:
+    case SFX_ITEM_PRESENTATION_COMPLETE:
+        {
+            rText = GetValue() ?
+                    SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_ON ) :
+                    SVX_RESSTR( RID_SVXITEMS_PARASNAPTOGRID_OFF );
+
+            return ePres;
+        }
+        break;
+    }
+    return SFX_ITEM_PRESENTATION_NONE;
+}
 
 
