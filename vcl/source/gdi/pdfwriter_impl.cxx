@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:05 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:54:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,117 @@ static void appendNonStrokingColor( const Color& rColor, OStringBuffer& rBuffer 
         rBuffer.append( " rg" );
     }
 }
+
+// matrix helper class
+namespace vcl
+{
+/*  for sparse matrices of the form (2D linear transformations)
+ *  f[0] f[1] 0
+ *  f[2] f[3] 0
+ *  f[4] f[5] 1
+ */
+class Matrix3
+{
+    double f[6];
+
+    void set( double *pn ) { for( int i = 0 ; i < 5; i++ ) f[i] = pn[i]; }
+public:
+    Matrix3();
+    ~Matrix3() {}
+
+    void skew( double alpha, double beta );
+    void scale( double sx, double sy );
+    void rotate( double angle );
+    void translate( double tx, double ty );
+
+    void append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer );
+
+    Point transform( const Point& rPoint );
+};
+}
+
+Matrix3::Matrix3()
+{
+    // initialize to unity
+    f[0] = 1.0;
+    f[1] = 0.0;
+    f[2] = 0.0;
+    f[3] = 1.0;
+    f[4] = 0.0;
+    f[5] = 0.0;
+}
+
+Point Matrix3::transform( const Point& rOrig )
+{
+    double x = (double)rOrig.X(), y = (double)rOrig.Y();
+    return Point( (int)(x*f[0] + y*f[2] + f[4]), (int)(x*f[1] + y*f[3] + f[5]) );
+}
+
+void Matrix3::skew( double alpha, double beta )
+{
+    double fn[6];
+    double tb = tan( beta );
+    fn[0] = f[0] + f[2]*tb;
+    fn[1] = f[1];
+    fn[2] = f[2] + f[3]*tb;
+    fn[3] = f[3];
+    fn[4] = f[4] + f[5]*tb;
+    fn[5] = f[5];
+    if( alpha != 0.0 )
+    {
+        double ta = tan( alpha );
+        fn[1] += f[0]*ta;
+        fn[3] += f[2]*ta;
+        fn[5] += f[4]*ta;
+    }
+    set( fn );
+}
+
+void Matrix3::scale( double sx, double sy )
+{
+    double fn[6];
+    fn[0] = sx*f[0];
+    fn[1] = sy*f[1];
+    fn[2] = sx*f[2];
+    fn[3] = sy*f[3];
+    fn[4] = sx*f[4];
+    fn[5] = sy*f[5];
+    set( fn );
+}
+
+void Matrix3::rotate( double angle )
+{
+    double fn[6];
+    double fSin = sin(angle);
+    double fCos = cos(angle);
+    fn[0] = f[0]*fCos - f[1]*fSin;
+    fn[1] = f[0]*fSin + f[1]*fCos;
+    fn[2] = f[2]*fCos - f[3]*fSin;
+    fn[3] = f[2]*fSin + f[3]*fCos;
+    fn[4] = f[4]*fCos - f[5]*fSin;
+    fn[5] = f[4]*fSin + f[5]*fCos;
+    set( fn );
+}
+
+void Matrix3::translate( double tx, double ty )
+{
+    f[4] += tx;
+    f[5] += ty;
+}
+
+void Matrix3::append( PDFWriterImpl::PDFPage& rPage, OStringBuffer& rBuffer )
+{
+    appendDouble( f[0], rBuffer );
+    rBuffer.append( ' ' );
+    appendDouble( f[1], rBuffer );
+    rBuffer.append( ' ' );
+    appendDouble( f[2], rBuffer );
+    rBuffer.append( ' ' );
+    appendDouble( f[3], rBuffer );
+    rBuffer.append( ' ' );
+    rPage.appendPoint( Point( f[4], f[5] ), rBuffer );
+}
+
 
 
 PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
@@ -1108,192 +1219,6 @@ bool PDFWriterImpl::emitTilings()
         aTilingObj.setLength( 0 );
         aTilingObj.append( "\r\nendstream\r\nendobj\r\n\r\n" );
         CHECK_RETURN( writeBuffer( aTilingObj.getStr(), aTilingObj.getLength() ) );
-    }
-    return true;
-}
-
-bool PDFWriterImpl::emitHatches()
-{
-    OStringBuffer aHatchStream( 1024 );
-    OStringBuffer aHatchObj( 1024 );
-
-    // get maximum page rectangle
-    sal_Int32 nWidth, nHeight, nMax = 0;
-    for( std::list<PDFPage>::const_iterator pg = m_aPages.begin(); pg != m_aPages.end(); ++pg )
-    {
-        if( pg->m_nPageWidth && pg->m_nPageHeight )
-        {
-            nWidth  = pg->m_nPageWidth;
-            nHeight = pg->m_nPageHeight;
-        }
-        else
-        {
-            nWidth  = m_nInheritedPageWidth;
-            nHeight = m_nInheritedPageHeight;
-        }
-        nMax = (nMax > nWidth ? nMax : nWidth);
-        nMax = (nMax > nHeight ? nMax : nHeight);
-    }
-
-    sal_Int32 nSingleHatch = 0, nDoubleHatch = 0, nTripleHatch = 0;
-
-    for( std::list<HatchEmit>::iterator it = m_aHatches.begin(); it != m_aHatches.end(); ++it )
-    {
-        aHatchStream.setLength( 0 );
-        aHatchObj.setLength( 0 );
-
-        const Hatch& rHatch = it->m_aHatch;
-
-        // draw hatch
-        sal_Int32 nBaseHatch = 0;
-        switch( rHatch.GetStyle() )
-        {
-            case HATCH_SINGLE:
-                if( ! nSingleHatch )
-                    nSingleHatch = createObject();
-                nBaseHatch = nSingleHatch;
-                break;
-            case HATCH_DOUBLE:
-                if( ! nDoubleHatch )
-                    nDoubleHatch = createObject();
-                nBaseHatch = nDoubleHatch;
-                break;
-            case HATCH_TRIPLE:
-                if( ! nTripleHatch )
-                    nTripleHatch = createObject();
-                nBaseHatch = nTripleHatch;
-                break;
-        }
-        aHatchStream.append( "/HCS cs " );
-        aHatchStream.append( (double)rHatch.GetColor().GetRed()/255.0 );
-        aHatchStream.append( ' ' );
-        aHatchStream.append( (double)rHatch.GetColor().GetGreen()/255.0 );
-        aHatchStream.append( ' ' );
-        aHatchStream.append( (double)rHatch.GetColor().GetBlue()/255.0 );
-        aHatchStream.append( " /P" );
-        aHatchStream.append( nBaseHatch );
-        aHatchStream.append( " scn\r\n" );
-        aHatchStream.append( -nMax );
-        aHatchStream.append( ' ' );
-        aHatchStream.append( -nMax );
-        aHatchStream.append( ' ' );
-        aHatchStream.append( 2*nMax );
-        aHatchStream.append( ' ' );
-        aHatchStream.append( 2*nMax );
-        aHatchStream.append( " re f\r\n" );
-
-        // write pattern object
-        aHatchObj.append( it->m_nObject );
-        aHatchObj.append( " 0 obj\r\n" );
-        aHatchObj.append( "<< /Type /Pattern\r\n"
-                          "   /PatternType 1\r\n"
-                          "   /PaintType 1\r\n"
-                          "   /TilingType 1\r\n"
-                          "   /BBox [ " );
-        aHatchObj.append( -nMax );
-        aHatchObj.append( ' ' );
-        aHatchObj.append( -nMax );
-        aHatchObj.append( ' ' );
-        aHatchObj.append( nMax );
-        aHatchObj.append( ' ' );
-        aHatchObj.append( nMax );
-        aHatchObj.append( " ]\r\n"
-                          "   /XStep " );
-        aHatchObj.append( 2*nMax );
-        aHatchObj.append( "\r\n"
-                          "   /YStep " );
-        aHatchObj.append( 2*nMax );
-        aHatchObj.append( "\r\n"
-                          "   /Matrix [ " );
-        // prepare matrix
-        const double theta = (double)rHatch.GetAngle() * M_PI / 1800.0;
-        Size aSize( rHatch.GetDistance(), 0 );
-        aSize = lcl_convert( it->m_aMapMode,
-                             MapMode( MAP_POINT ),
-                             getReferenceDevice(),
-                             aSize );
-        const double scale = (double)aSize.Width();
-        appendDouble( scale*cos( theta ), aHatchObj );
-        aHatchObj.append( ' ' );
-        appendDouble( scale*sin( theta ), aHatchObj );
-        aHatchObj.append( ' ' );
-        appendDouble( scale*(-sin( theta )), aHatchObj );
-        aHatchObj.append( ' ' );
-        appendDouble( scale*cos( theta ), aHatchObj );
-        aHatchObj.append( " 0 0 ]\r\n" );
-
-        aHatchObj.append( "   /Resources <<\r\n"
-                          "     /ColorSpace << /HCS [ /Pattern /DeviceRGB ] >>\r\n"
-                          "     /Pattern << /P" );
-        aHatchObj.append( nBaseHatch );
-        aHatchObj.append( ' ' );
-        aHatchObj.append( nBaseHatch );
-        aHatchObj.append( " 0 R >>\r\n"
-                          "     >>\r\n"
-                          "   /Length " );
-        aHatchObj.append( (sal_Int32)aHatchStream.getLength() );
-        aHatchObj.append( "\r\n"
-                          ">>\r\n"
-                          "stream\r\n" );
-        CHECK_RETURN( updateObject( it->m_nObject ) );
-        CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
-        CHECK_RETURN( writeBuffer( aHatchStream.getStr(), aHatchStream.getLength() ) );
-        aHatchObj.setLength( 0 );
-        aHatchObj.append( "\r\nendstream\r\nendobj\r\n\r\n" );
-        CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
-    }
-
-    // emit needed base hatches
-    for( int i = 0; i < 3; i++ )
-    {
-        if( ( i == 0 && nSingleHatch ) ||
-            ( i == 1 && nDoubleHatch ) ||
-            ( i == 2 && nTripleHatch ) )
-        {
-            sal_Int32 nObject = 0;
-            aHatchStream.setLength( 0 );
-            switch( i )
-            {
-                case 0:
-                    nObject = nSingleHatch;
-                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
-                    break;
-                case 1:
-                    nObject = nDoubleHatch;
-                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
-                    aHatchStream.append( "0.5 0 m 0.5 1 l S\r\n" );
-                    break;
-                case 2:
-                    nObject = nTripleHatch;
-                    aHatchStream.append( "0 0.5 m 1 0.5 l S\r\n" );
-                    aHatchStream.append( "0.5 0 m 0.5 1 l S\r\n" );
-                    aHatchStream.append( "0 1 m 1 0 l S\r\n" );
-                    break;
-            }
-            CHECK_RETURN( updateObject( nObject ) );
-            aHatchObj.setLength( 0 );
-
-            aHatchObj.append( nObject );
-            aHatchObj.append( " 0 obj\r\n" );
-            aHatchObj.append( "<< /Type /Pattern\r\n"
-                              "   /PatternType 1\r\n"
-                              "   /PaintType 2\r\n"
-                              "   /TilingType 1\r\n"
-                              "   /BBox [ 0 0 1 1 ]\r\n"
-                              "   /XStep 1\r\n"
-                              "   /YStep 1\r\n"
-                              "   /Resources << >>\r\n"
-                              "   /Length " );
-            aHatchObj.append( (sal_Int32)aHatchStream.getLength() );
-            aHatchObj.append( "\r\n"
-                              ">>\r\n"
-                              "stream\r\n" );
-            CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
-            CHECK_RETURN( writeBuffer( aHatchStream.getStr(), aHatchStream.getLength() ) );
-            aHatchObj.setLength( 0 );
-            aHatchObj.append( "\r\nendstream\r\nendobj\r\n\r\n" );
-            CHECK_RETURN( writeBuffer( aHatchObj.getStr(), aHatchObj.getLength() ) );
-        }
     }
     return true;
 }
@@ -2232,24 +2157,12 @@ sal_Int32 PDFWriterImpl::emitResources()
 
     // emit patterns
     sal_Int32 nPatternDict = 0;
-    if( m_aHatches.begin() != m_aHatches.end() || m_aTilings.begin() != m_aTilings.end() )
+    if( m_aTilings.begin() != m_aTilings.end() )
     {
-        if( m_aHatches.begin() != m_aHatches.end() )
-            CHECK_RETURN( emitHatches() );
-        if( m_aTilings.begin() != m_aTilings.end() )
-            CHECK_RETURN( emitTilings() );
+        CHECK_RETURN( emitTilings() );
         aLine.setLength( 0 );
         aLine.append( nPatternDict = createObject() );
         aLine.append( " 0 obj\r\n<< " );
-        for( std::list<HatchEmit>::const_iterator hatch = m_aHatches.begin();
-             hatch != m_aHatches.end(); ++hatch )
-        {
-            aLine.append( "/P" );
-            aLine.append( hatch->m_nObject );
-            aLine.append( ' ' );
-            aLine.append( hatch->m_nObject );
-            aLine.append( " 0 R\r\n   " );
-        }
         for( std::list<BitmapPatternEmit>::const_iterator tile = m_aTilings.begin();
              tile != m_aTilings.end(); ++tile )
         {
@@ -2745,111 +2658,89 @@ void PDFWriterImpl::registerGlyphs(
     }
 }
 
+void PDFWriterImpl::drawRelief( SalLayout& rLayout, const String& rText, bool bTextLines )
+{
+    push( PUSH_ALL );
+
+    FontRelief eRelief = m_aCurrentPDFState.m_aFont.GetRelief();
+
+    Color aTextColor = m_aCurrentPDFState.m_aFont.GetColor();
+    Color aTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+    Color aReliefColor( COL_LIGHTGRAY );
+    if( aTextColor == COL_BLACK )
+        aTextColor = Color( COL_WHITE );
+    if( aTextLineColor == COL_BLACK )
+        aTextLineColor = Color( COL_WHITE );
+    if( aTextColor == COL_WHITE )
+        aReliefColor = Color( COL_BLACK );
+
+    Font aSetFont = m_aCurrentPDFState.m_aFont;
+    aSetFont.SetRelief( RELIEF_NONE );
+    aSetFont.SetShadow( FALSE );
+
+    aSetFont.SetColor( aReliefColor );
+    setTextLineColor( aTextLineColor );
+    setFont( aSetFont );
+    long nOff = 1 + getReferenceDevice()->mnDPIX/300;
+    if( eRelief == RELIEF_ENGRAVED )
+        nOff = -nOff;
+
+    rLayout.DrawOffset() += Point( nOff, nOff );
+    updateGraphicsState();
+    drawLayout( rLayout, rText, bTextLines );
+
+    rLayout.DrawOffset() -= Point( nOff, nOff );
+    setTextLineColor( aTextLineColor );
+    aSetFont.SetColor( aTextColor );
+    setFont( aSetFont );
+    updateGraphicsState();
+    drawLayout( rLayout, rText, bTextLines );
+
+    // clean up the mess
+    pop();
+}
+
+void PDFWriterImpl::drawShadow( SalLayout& rLayout, const String& rText, bool bTextLines )
+{
+    Font aSaveFont = m_aCurrentPDFState.m_aFont;
+    Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
+
+    Font& rFont = m_aCurrentPDFState.m_aFont;
+    if( rFont.GetColor() == Color( COL_BLACK ) || rFont.GetColor().GetLuminance() < 8 )
+        rFont.SetColor( Color( COL_LIGHTGRAY ) );
+    else
+        rFont.SetColor( Color( COL_BLACK ) );
+    rFont.SetShadow( FALSE );
+    setFont( rFont );
+    setTextLineColor( rFont.GetColor() );
+    updateGraphicsState();
+
+    long nOff = 1 + ((m_pReferenceDevice->mpFontEntry->mnLineHeight-24)/24);
+    if( rFont.IsOutline() )
+        nOff++;
+    rLayout.DrawBase() += Point( nOff, nOff );
+    drawLayout( rLayout, rText, bTextLines );
+    rLayout.DrawBase() -= Point( nOff, nOff );
+
+    setFont( aSaveFont );
+    setTextLineColor( aSaveTextLineColor );
+    updateGraphicsState();
+}
+
 void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines )
 {
-    FontRelief eRelief = m_aCurrentPDFState.m_aFont.GetRelief();
     // relief takes precedence over shadow (see outdev3.cxx)
-    if(  eRelief != RELIEF_NONE )
+    if(  m_aCurrentPDFState.m_aFont.GetRelief() != RELIEF_NONE )
     {
-        push( PUSH_ALL );
-
-        Color aTextColor = m_aCurrentPDFState.m_aFont.GetColor();
-        Color aTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
-        Color aReliefColor( COL_LIGHTGRAY );
-        if( aTextColor == COL_BLACK )
-            aTextColor = Color( COL_WHITE );
-        if( aTextLineColor == COL_BLACK )
-            aTextLineColor = Color( COL_WHITE );
-        if( aTextColor == COL_WHITE )
-            aReliefColor = Color( COL_BLACK );
-
-        Font aSetFont = m_aCurrentPDFState.m_aFont;
-        aSetFont.SetRelief( RELIEF_NONE );
-        aSetFont.SetShadow( FALSE );
-
-        aSetFont.SetColor( aReliefColor );
-        setTextLineColor( aTextLineColor );
-        setFont( aSetFont );
-        long nOff = 1 + getReferenceDevice()->mnDPIX/300;
-        if( eRelief == RELIEF_ENGRAVED )
-            nOff = -nOff;
-
-        rLayout.DrawOffset() += Point( nOff, nOff );
-        updateGraphicsState();
-        drawLayout( rLayout, rText, bTextLines );
-
-        rLayout.DrawOffset() -= Point( nOff, nOff );
-        setTextLineColor( aTextLineColor );
-        aSetFont.SetColor( aTextColor );
-        setFont( aSetFont );
-        updateGraphicsState();
-        drawLayout( rLayout, rText, bTextLines );
-
-        // clean up the mess
-        pop();
+        drawRelief( rLayout, rText, bTextLines );
         return;
     }
     else if( m_aCurrentPDFState.m_aFont.IsShadow() )
-    {
-        Font aSaveFont = m_aCurrentPDFState.m_aFont;
-        Color aSaveTextLineColor = m_aCurrentPDFState.m_aTextLineColor;
-
-        Font& rFont = m_aCurrentPDFState.m_aFont;
-        if( rFont.GetColor() == Color( COL_BLACK ) || rFont.GetColor().GetLuminance() < 8 )
-            rFont.SetColor( Color( COL_LIGHTGRAY ) );
-        else
-            rFont.SetColor( Color( COL_BLACK ) );
-        rFont.SetShadow( FALSE );
-        setFont( rFont );
-        setTextLineColor( rFont.GetColor() );
-        updateGraphicsState();
-
-        long nOff = 1 + ((m_pReferenceDevice->mpFontEntry->mnLineHeight-24)/24);
-        if( rFont.IsOutline() )
-            nOff++;
-        rLayout.DrawBase() += Point( nOff, nOff );
-        drawLayout( rLayout, rText, bTextLines );
-        rLayout.DrawBase() -= Point( nOff, nOff );
-
-        setFont( aSaveFont );
-        setTextLineColor( aSaveTextLineColor );
-        updateGraphicsState();
-    }
+        drawShadow( rLayout, rText, bTextLines );
 
     OStringBuffer aLine( 512 );
 
-    // setup text colors (if necessary)
-    bool bPop = false;
-    if( m_aCurrentPDFState.m_aFont.IsOutline() &&
-        m_aCurrentPDFState.m_aLineColor != m_aCurrentPDFState.m_aFont.GetColor() )
-    {
-        bPop = true;
-        aLine.append( "q " );
-        appendStrokingColor( m_aCurrentPDFState.m_aFont.GetColor(), aLine );
-        aLine.append( "\r\n" );
-    }
-    else if( m_aCurrentPDFState.m_aFillColor != m_aCurrentPDFState.m_aFont.GetColor() )
-    {
-        bPop = true;
-        aLine.append( "q " );
-        appendNonStrokingColor( m_aCurrentPDFState.m_aFont.GetColor(), aLine );
-        aLine.append( "\r\n" );
-    }
-
-    // begin text object
-    aLine.append( "BT\r\n" );
-    // outline attribute ?
-    if( m_aCurrentPDFState.m_aFont.IsOutline() )
-    {
-        aLine.append( "1 Tr " );
-        double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
-        m_aPages.back().appendMappedLength( fW, aLine );
-        aLine.append ( " w\r\n" );
-    }
-
     const int nMaxGlyphs = 256;
-
-    // note: the layout calculates in outdevs device pixel !!
 
     long pGlyphs[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
@@ -2866,10 +2757,12 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
     bool bFirst = true;
     int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
+    double fSkew = 0.0;
     sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
     TextAlign eAlign = m_aCurrentPDFState.m_aFont.GetAlign();
 
     // transform font height back to current units
+    // note: the layout calculates in outdevs device pixel !!
     nFontHeight = m_pReferenceDevice->ImplDevicePixelToLogicHeight( nFontHeight );
     if( m_aCurrentPDFState.m_aFont.GetWidth() )
     {
@@ -2885,15 +2778,88 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         // force state before GetFontMetric
         m_pReferenceDevice->ImplNewFont();
     }
+
+    // perform artificial italics if necessary
+    if( ( m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_NORMAL ||
+          m_aCurrentPDFState.m_aFont.GetItalic() == ITALIC_OBLIQUE ) &&
+        !( m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meItalic == ITALIC_NORMAL ||
+           m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meItalic == ITALIC_OBLIQUE )
+        )
+    {
+        fSkew = M_PI/12.0;
+    }
+
     // if the mapmode is distorted we need to adjust for that also
     if( m_aCurrentPDFState.m_aMapMode.GetScaleX() != m_aCurrentPDFState.m_aMapMode.GetScaleY() )
     {
         fXScale *= (double)(m_aCurrentPDFState.m_aMapMode.GetScaleX() / m_aCurrentPDFState.m_aMapMode.GetScaleY());
     }
 
-    double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
-    double fSin = sin( fAngle );
-    double fCos = cos( fAngle );
+    int nAngle = m_aCurrentPDFState.m_aFont.GetOrientation();
+    // normalize angles
+    while( nAngle < 0 )
+        nAngle += 3600;
+    nAngle = nAngle % 3600;
+    double fAngle = (double)nAngle * M_PI / 1800.0;
+
+    Matrix3 aRotScale;
+    aRotScale.scale( fXScale, 1.0 );
+    if( fAngle != 0.0 )
+        aRotScale.rotate( -fAngle );
+
+    bool bPop = false;
+    bool bABold = false;
+    // artificial bold necessary ?
+    int nBoldness = (int)m_aCurrentPDFState.m_aFont.GetWeight() - (int)m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData->meWeight;
+    if( nBoldness > 1 )
+    {
+        if( ! bPop )
+            aLine.append( "q " );
+        bPop = true;
+        bABold = true;
+    }
+    // setup text colors (if necessary)
+    Color aStrokeColor( COL_TRANSPARENT );
+    Color aNonStrokeColor( COL_TRANSPARENT );
+
+    if( m_aCurrentPDFState.m_aFont.IsOutline() )
+    {
+        aStrokeColor = m_aCurrentPDFState.m_aFont.GetColor();
+        aNonStrokeColor = Color( COL_WHITE );
+    }
+    else
+        aNonStrokeColor = m_aCurrentPDFState.m_aFont.GetColor();
+    if( bABold )
+        aStrokeColor = m_aCurrentPDFState.m_aFont.GetColor();
+
+    if( aStrokeColor != Color( COL_TRANSPARENT ) && aStrokeColor != m_aCurrentPDFState.m_aLineColor )
+    {
+        if( ! bPop )
+            aLine.append( "q " );
+        bPop = true;
+        appendStrokingColor( aStrokeColor, aLine );
+        aLine.append( "\r\n" );
+    }
+    if( aNonStrokeColor != Color( COL_TRANSPARENT ) && aNonStrokeColor != m_aCurrentPDFState.m_aFillColor )
+    {
+        if( ! bPop )
+            aLine.append( "q " );
+        bPop = true;
+        appendNonStrokingColor( aNonStrokeColor, aLine );
+        aLine.append( "\r\n" );
+    }
+
+    // begin text object
+    aLine.append( "BT\r\n" );
+    // outline attribute ?
+    if( m_aCurrentPDFState.m_aFont.IsOutline() || bABold )
+    {
+        double fW = (double)m_aCurrentPDFState.m_aFont.GetHeight() / 30.0;
+        // set correct text mode, set stroke width
+        aLine.append( "2 Tr " ); // fill, then stroke
+        m_aPages.back().appendMappedLength( fW, aLine );
+        aLine.append ( " w\r\n" );
+    }
 
     sal_Int32 nLastMappedFont = -1;
     while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pAdvanceWidths, pCharPosAry )) )
@@ -2909,8 +2875,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
 
         if( aDiff.X() || aDiff.Y() )
         {
-            aDiff = Point( (int)(fXScale * fCos * (double)aDiff.X() + fSin * (double)aDiff.Y()),
-                               -(int)(fXScale * fSin * (double)aDiff.X() - fCos * (double)aDiff.Y()) );
+            aDiff = aRotScale.transform( aDiff );
             aPos += aDiff;
         }
 
@@ -2951,6 +2916,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 double fDeltaAngle = 0.0;
                 double fYScale = 1.0;
                 double fTempXScale = fXScale;
+                double fSkewB = fSkew;
+                double fSkewA = 0.0;
 
                 Point aDeltaPos;
                 if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTL )
@@ -2960,6 +2927,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aDeltaPos.Y() = (int)((double)m_pReferenceDevice->GetFontMetric().GetDescent() * fXScale);
                     fYScale = fXScale;
                     fTempXScale = 1.0;
+                    fSkewA = -fSkewB;
+                    fSkewB = 0.0;
                 }
                 else if( ( nGlyphFlags[n] & GF_ROTMASK ) == GF_ROTR )
                 {
@@ -2968,6 +2937,8 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     aDeltaPos.Y() = -m_pReferenceDevice->GetFontMetric().GetAscent() + m_pReferenceDevice->GetFontMetric().GetDescent();
                     fYScale = fXScale;
                     fTempXScale = 1.0;
+                    fSkewA = fSkewB;
+                    fSkewB = 0.0;
                 }
                 aDeltaPos += (m_pReferenceDevice->PixelToLogic( Point( (int)((double)nXOffset/fXScale)/rLayout.GetUnitsPerPixel(), 0 ) ) - m_pReferenceDevice->PixelToLogic( Point() ) );
                 nXOffset += pAdvanceWidths[n];
@@ -2975,21 +2946,15 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                     continue;
 
 
-                aDeltaPos = Point( (int)(fXScale * fCos * (double)aDeltaPos.X() + fSin * (double)aDeltaPos.Y()),
-                                   -(int)(fXScale * fSin * (double)aDeltaPos.X() - fCos * (double)aDeltaPos.Y()) );
+                aDeltaPos = aRotScale.transform( aDeltaPos );
 
-                double fDSin = sin( fAngle+fDeltaAngle );
-                double fDCos = cos( fAngle+fDeltaAngle );
-
-                appendDouble( fTempXScale*fDCos, aLine );
-                aLine.append( ' ' );
-                appendDouble( fDSin*fTempXScale, aLine );
-                aLine.append( ' ' );
-                appendDouble( -fDSin*fYScale, aLine );
-                aLine.append( ' ' );
-                appendDouble( fDCos*fYScale, aLine );
-                aLine.append( ' ' );
-                m_aPages.back().appendPoint( aPos+aDeltaPos, aLine );
+                Matrix3 aMat;
+                if( fSkewB != 0.0 || fSkewA != 0.0 )
+                    aMat.skew( fSkewA, fSkewB );
+                aMat.scale( fTempXScale, fYScale );
+                aMat.rotate( fAngle+fDeltaAngle );
+                aMat.translate( aPos.X()+aDeltaPos.X(), aPos.Y()+aDeltaPos.Y() );
+                aMat.append( m_aPages.back(), aLine );
                 aLine.append( " Tm" );
                 if( nLastMappedFont != pMappedFontObjects[n] )
                 {
@@ -3008,7 +2973,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
         else // normal case
         {
             // optimize use of Td vs. Tm
-            if( fXScale == 1.0 && fCos == 1.0 && fSin == 0.0 )
+            if( fAngle == 0.0 && fXScale == 1.0 && ( !bFirst || fSkew == 0.0 ) )
             {
                 if( bFirst )
                 {
@@ -3027,16 +2992,16 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             }
             else
             {
-                appendDouble( fXScale*fCos, aLine );
-                aLine.append( ' ' );
-                appendDouble( fSin*fXScale, aLine );
-                aLine.append( ' ' );
-                appendDouble( -fSin, aLine );
-                aLine.append( ' ' );
-                appendDouble( fCos, aLine );
-                aLine.append( ' ' );
-                m_aPages.back().appendPoint( aPos, aLine );
+                Matrix3 aMat;
+                if( fSkew != 0.0 )
+                    aMat.skew( 0.0, fSkew );
+                aMat.scale( fXScale, 1.0 );
+                aMat.rotate( fAngle );
+                aMat.translate( aPos.X(), aPos.Y() );
+                aMat.append( m_aPages.back(), aLine );
                 aLine.append( " Tm\r\n" );
+                aLastPos = aPos;
+                bFirst = false;
             }
             int nLast = 0;
             while( nLast < nGlyphs )
@@ -3203,8 +3168,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             {
                 Point aAdjOffset = aOffset;
                 aAdjOffset.X() += (nAdvance - nEmphWidth) / 2;
-                aAdjOffset = Point( (int)(fXScale * fCos * (double)aAdjOffset.X() + fSin * (double)aAdjOffset.Y()),
-                                 -(int)(fXScale * fSin * (double)aAdjOffset.X() - fCos * (double)aAdjOffset.Y()) );
+                aAdjOffset = aRotScale.transform( aAdjOffset );
 
                 aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );
 
@@ -3625,17 +3589,10 @@ void PDFWriterImpl::drawTextLine( const Point& rPos, long nWidth, FontStrikeout 
 
     // rotate and translate matrix
     double fAngle = (double)m_aCurrentPDFState.m_aFont.GetOrientation() * M_PI / 1800.0;
-    double fSin = sin( fAngle );
-    double fCos = cos( fAngle );
-    appendDouble( fCos, aLine );
-    aLine.append( ' ' );
-    appendDouble( fSin, aLine );
-    aLine.append( ' ' );
-    appendDouble( -fSin, aLine );
-    aLine.append( ' ' );
-    appendDouble( fCos, aLine );
-    aLine.append( ' ' );
-    m_aPages.back().appendPoint( aPos, aLine );
+    Matrix3 aMat;
+    aMat.rotate( fAngle );
+    aMat.translate( aPos.X(), aPos.Y() );
+    aMat.append( m_aPages.back(), aLine );
     aLine.append( " cm\r\n" );
 
     if ( aUnderlineColor.GetTransparency() != 0 )
@@ -5114,22 +5071,6 @@ void PDFWriterImpl::drawGradient( const PolyPolygon& rPolyPoly, const Gradient& 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-sal_Int32 PDFWriterImpl::createHatch( const Hatch& rHatch )
-{
-    // check if we already have this gradient
-    for( std::list<HatchEmit>::iterator it = m_aHatches.begin(); it != m_aHatches.end(); ++it )
-    {
-        if( it->m_aHatch == rHatch && it->m_aMapMode == m_aCurrentPDFState.m_aMapMode )
-            return it->m_nObject;
-    }
-
-    m_aHatches.push_back( HatchEmit() );
-    m_aHatches.back().m_aHatch  = rHatch;
-    m_aHatches.back().m_nObject = createObject();
-    m_aHatches.back().m_aMapMode = m_aCurrentPDFState.m_aMapMode;
-    return m_aHatches.back().m_nObject;
-}
-
 void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch )
 {
     MARK( "drawHatch" );
@@ -5139,20 +5080,16 @@ void PDFWriterImpl::drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch
     if( m_aGraphicsStack.front().m_aLineColor == Color( COL_TRANSPARENT ) &&
         m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
         return;
+    if( rPolyPoly.Count() )
+    {
+        PolyPolygon     aPolyPoly( rPolyPoly );
 
-    sal_Int32 nHatch = createHatch( rHatch );
-
-    OStringBuffer aLine( 256 );
-    aLine.append( "q /Pattern cs /P" );
-    aLine.append( nHatch );
-    aLine.append( " scn\r\n" );
-    m_aPages.back().appendPolyPolygon( rPolyPoly, aLine );
-    if( m_aGraphicsStack.front().m_aLineColor != Color( COL_TRANSPARENT ) )
-        aLine.append( " B* " );
-    else
-        aLine.append( " f* " );
-    aLine.append( "Q\r\n" );
-    writeBuffer( aLine.getStr(), aLine.getLength() );
+        aPolyPoly.Optimize( POLY_OPTIMIZE_NO_SAME );
+        push( PUSH_LINECOLOR );
+        setLineColor( rHatch.GetColor() );
+        getReferenceDevice()->ImplDrawHatch( aPolyPoly, rHatch, FALSE );
+        pop();
+    }
 }
 
 void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall )
