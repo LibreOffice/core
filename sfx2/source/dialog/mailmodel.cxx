@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:09:52 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:59:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,10 +320,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocument( String& rFileName
         const SfxFilter* pFilter = xDocShell->GetMedium()->GetFilter();
         sal_Bool bHasFilter = pFilter ? sal_True : sal_False;
         if ( !pFilter )
-        {
-            SfxFilterMatcher aFilterMatcher( xDocShell->GetFactory().GetFilterContainer() );
-            pFilter = aFilterMatcher.GetDefaultFilter();
-        }
+            pFilter = xDocShell->GetFactory().GetFilterContainer()->GetFilter(0);
 
         // create temp file name with leading chars and extension
         sal_Bool    bHasName = xDocShell->HasName();
@@ -419,7 +416,7 @@ SfxMailModel_Impl::SaveResult SfxMailModel_Impl::SaveDocAsPDF( String& rFileName
         pDisp->Execute( SID_MAIL_PREPAREEXPORT, SFX_CALLMODE_SYNCHRON );
 
         // Get PDF Filter from container
-        SfxFactoryFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
+        SfxFilterContainer* pFilterContainer = xDocShell->GetFactory().GetFilterContainer();
         if ( pFilterContainer )
         {
             String aPDFExtension = String::CreateFromAscii( ".pdf" );
