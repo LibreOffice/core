@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 18:18:20 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:53:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1782,7 +1782,7 @@ String RID_YOU_SURE
     Text[ finnish ] = "Oletko varma?";
     Text[ catalan ] = "Esteu segur?";
     Text[ thai ] = "คุณแน่ใจหรือไม่ ?";
-    Text[ czech ] = "Jste si jist ?";
+    Text[ czech ] = "Jste si jist?";
     Text[ hebrew ] = "‮אכן כן?‬";
     Text[ hindi ] = "सचमुच ?";
     Text[ slovak ] = "Ste si istý?";
@@ -2318,7 +2318,7 @@ ModalDialog RID_PPDIMPORT_DLG
         Text[ finnish ] = "Selaa...";
         Text[ catalan ] = "Navega...";
         Text[ thai ] = "เรียกดู...";
-        Text[ czech ] = "Prohlížet...";
+        Text[ czech ] = "Listovat...";
         Text[ hebrew ] = "‮דפדוף...‬";
         Text[ hindi ] = "ब्रउज़...";
         Text[ slovak ] = "Prehliadať...";
@@ -4781,6 +4781,8 @@ String RID_TXT_FONT_REGULAR
     Text[ hindi ] = "नियमित";
     Text[ slovak ] = "Východzou";
 };
+
+
 
 
 
