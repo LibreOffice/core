@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:39:26 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,7 +352,8 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     // get current controller and initialize listeners
     try
     {
-        mxView = Reference< XDrawView >::query( mxModel->getCurrentController() );
+        mxView = Reference< XDrawView >::query( static_cast<drawing::XDrawView*>(mrBase.GetMainViewShell()->GetController()));
+/*      mxView = Reference< XDrawView >::query( mxModel->getCurrentController() );*/
         addListener();
     }
     catch( Exception& e )
@@ -936,6 +937,8 @@ void CustomAnimationPane::updateControls()
 
         if( bEnableUp || bEnableDown )
         {
+            MainSequenceRebuildGuard aGuard( mpMainSequence );
+
             EffectSequenceHelper* pSequence = 0;
             EffectSequence::iterator aIter( maListSelection.begin() );
             const EffectSequence::iterator aEnd( maListSelection.end() );
@@ -1222,9 +1225,9 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
 
         // convert absolute time to percentage value
-        float fIterateInterval = pEffect->getIterateInterval();
+        float fIterateInterval = (float)pEffect->getIterateInterval();
         if( pEffect->getDuration() )
-            fIterateInterval = fIterateInterval / pEffect->getDuration();
+            fIterateInterval = (float)( fIterateInterval / pEffect->getDuration() );
         fIterateInterval *= 100.0;
         addValue( pSet, nHandleIterateInterval, makeAny( (double)fIterateInterval ) );
 
@@ -1312,6 +1315,8 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 {
     // change selected effect
     bool bChanged = false;
+
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
 
     EffectSequence::iterator aIter( maListSelection.begin() );
     const EffectSequence::iterator aEnd( maListSelection.end() );
@@ -1832,6 +1837,8 @@ void CustomAnimationPane::onChange( bool bCreate )
             }
             else
             {
+                MainSequenceRebuildGuard aGuard( mpMainSequence );
+
                 // get selected effect
                 EffectSequence::iterator aIter( maListSelection.begin() );
                 const EffectSequence::iterator aEnd( maListSelection.end() );
@@ -1864,6 +1871,8 @@ void CustomAnimationPane::onRemove()
     if( maListSelection.size() )
     {
         addUndo();
+
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         EffectSequence aList( maListSelection );
 
@@ -1903,6 +1912,8 @@ void CustomAnimationPane::onChangeStart( sal_Int16 nNodeType )
 {
     addUndo();
 
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
     bool bNeedRebuild = false;
 
     EffectSequence::iterator aIter( maListSelection.begin() );
@@ -1930,6 +1941,8 @@ void CustomAnimationPane::onChangeProperty()
     if( mpLBProperty->getSubControl() )
     {
         addUndo();
+
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         const Any aValue( mpLBProperty->getSubControl()->getValue() );
 
@@ -1962,6 +1975,8 @@ void CustomAnimationPane::onChangeSpeed()
     if( mpCBSpeed->GetSelectEntryCount() == 1 )
     {
         addUndo();
+
+        MainSequenceRebuildGuard aGuard( mpMainSequence );
 
         double fDuration;
 
@@ -2051,6 +2066,7 @@ void CustomAnimationPane::moveSelection( bool bUp )
 
     bool bChanged = false;
 
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
     EffectSequence& rEffectSequence = pSequence->getSequence();
 
     if( bUp )
