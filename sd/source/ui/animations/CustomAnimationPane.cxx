@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-16 10:12:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,9 @@
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
 
+#include <memory>
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
@@ -310,6 +313,12 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     maStrProperty = mpFTProperty->GetText();
 
     FreeResource();
+
+    // use bold font for group headings (same font for all fixed lines):
+    Font font( mpFLEffect->GetFont() );
+    font.SetWeight( WEIGHT_BOLD );
+    mpFLEffect->SetFont( font );
+    mpFLModify->SetFont( font );
 
     fillDurationComboBox( mpCBSpeed );
     mpPBMoveUp->SetSymbol( SYMBOL_ARROW_UP );
@@ -2146,11 +2155,11 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
         xRoot->appendChild( xAnimationNode );
 
         pViewShell->SetSlideShow( 0 );
-        Slideshow* pSlideshow = new Slideshow( pViewShell, pView, pViewShell->GetDoc() );
-        pViewShell->SetSlideShow( pSlideshow );
-
+        std::auto_ptr<Slideshow> pSlideshow(
+            new Slideshow( pViewShell, pView, pViewShell->GetDoc() ) );
         Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
-        pSlideshow->startPreview( mxCurrentPage, xNode );
+        if (pSlideshow->startPreview( mxCurrentPage, xNode ))
+            pViewShell->SetSlideShow( pSlideshow.release() );
     }
 }
 
