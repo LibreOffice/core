@@ -354,11 +354,8 @@ void start_handler(void *userData,
     TVDom  *p;
     p = *tvDom;
 
-//  if( kind == TVDom::tree_node )
-    {
-        *tvDom = p->newChild();
-        p = *tvDom;
-    }
+    *tvDom = p->newChild();
+    p = *tvDom;
 
     p->setKind( kind );
     while( *atts )
@@ -381,9 +378,7 @@ void end_handler(void *userData,
                  const XML_Char *name )
 {
     TVDom **tvDom = static_cast< TVDom** >( userData );
-
-//  if( (*tvDom)->getKind() == TVDom::tree_node )
-        *tvDom = (*tvDom)->getParent();
+    *tvDom = (*tvDom)->getParent();
 }
 
 
@@ -528,7 +523,7 @@ TVChildTarget::getByHierarchicalName( const rtl::OUString& aName )
 
     if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1 )
     {
-        sal_Int32 pref = name.copy( 0,idx ).toInt32() - 1;
+        sal_Int32 pref = name.copy(0,idx).toInt32() - 1;
 
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             throw NoSuchElementException();
