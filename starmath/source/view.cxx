@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2001-09-03 10:40:38 $
+ *  last change: $Author: tl $ $Date: 2001-11-02 13:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -802,6 +802,8 @@ void SmViewShell::InnerResizePixel(const Point &rOfs, const Size &rSize)
 void SmViewShell::OuterResizePixel(const Point &rOfs, const Size &rSize)
 {
     GetGraphicWindow().SetPosSizePixel(rOfs, rSize);
+    if (GetDoc()->IsPreview())
+        GetGraphicWindow().ZoomToFitInWindow();
     GetGraphicWindow().Update();
 }
 
