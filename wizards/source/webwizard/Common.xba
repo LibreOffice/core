@@ -46,8 +46,7 @@ Dim StylesOptions(0) as New com.sun.star.beans.PropertyValue
 	LoadNewStyles() = bLocWithBackGraphic
 ErrorOcurred:
 	If Err &lt;&gt; 0 Then
-		MsgBox
-		(WebWiz_gErrWhileLoadStyles$, 16, WebWiz_gWizardName$)
+		MsgBox (WebWiz_gErrWhileLoadStyles$, 16, WebWiz_gWizardName$)
 		CancelHTMLWizard()
 	End If
 End Function
