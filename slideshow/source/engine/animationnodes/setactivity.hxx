@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setactivity.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:08:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:50:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,11 @@ namespace presentation
                 mpAttributeLayer.reset();
             }
 
+            virtual double calcTimeLag() const
+            {
+                return 0.0;
+            }
+
             virtual bool perform()
             {
                 if( !mpAnimation.get() || !mpAttributeLayer.get() || !mpShape.get() )
@@ -130,7 +135,7 @@ namespace presentation
                 return true;
             }
 
-            virtual void end()
+            virtual void dequeued()
             {
             }
 
