@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mh $ $Date: 2004-04-08 13:49:55 $
+#   last change: $Author: khendricks $ $Date: 2004-04-08 14:37:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,7 @@ PRJ=.
 
 PRJNAME=msfontextract
 TARGET=libmspack
+NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 

@@ -1,5 +1,5 @@
-*** misc/libmspack/mspack/makefile.mk	2004-01-25 11:18:01.000000000 -0500
---- misc/build/libmspack/mspack/makefile.mk	2004-01-25 11:15:16.000000000 -0500
+*** misc/libmspack/mspack/makefile.mk	2004-03-05 11:07:50.000000000 -0500
+--- misc/build/libmspack/mspack/makefile.mk	2004-03-05 11:07:32.000000000 -0500
 ***************
 *** 1 ****
 ! dummy
@@ -8,9 +8,9 @@
 ! #
 ! #   $RCSfile: msfontextract.patch,v $
 ! #
-! #   $Revision: 1.1 $
+! #   $Revision: 1.2 $
 ! #
-! #   last change: $Author: mh $ $Date: 2004-04-08 13:49:56 $
+! #   last change: $Author: khendricks $ $Date: 2004-04-08 14:37:56 $
 ! #
 ! #   The Contents of this file are made available subject to the terms of
 ! #   either of the following licenses
@@ -72,7 +72,7 @@
 ! TARGET=msfontextract
 ! TARGETTYPE=CUI
 ! LIBTARGET=NO
-! 
+! NO_DEFAULT_STL=TRUE
 ! # --- Settings -----------------------------------------------------
 ! 
 ! 
@@ -102,8 +102,8 @@
 ! # --- Targets ------------------------------------------------------
 ! 
 ! .INCLUDE :  target.mk
-*** misc/libmspack/mspack/ministub.c	2004-01-25 11:18:01.000000000 -0500
---- misc/build/libmspack/mspack/ministub.c	2004-01-25 11:15:16.000000000 -0500
+*** misc/libmspack/mspack/ministub.c	2004-03-05 11:07:50.000000000 -0500
+--- misc/build/libmspack/mspack/ministub.c	2004-03-05 11:06:11.000000000 -0500
 ***************
 *** 1 ****
 ! dummy
@@ -119,12 +119,12 @@
 ! int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
 ! void qtmd_free() {}
 ! 
-*** misc/libmspack/mspack/msfontextract.c	2004-01-25 11:18:01.000000000 -0500
---- misc/build/libmspack/mspack/msfontextract.c	2004-01-25 11:17:42.000000000 -0500
+*** misc/libmspack/mspack/msfontextract.c	2004-03-05 11:07:50.000000000 -0500
+--- misc/build/libmspack/mspack/msfontextract.c	2004-03-05 11:06:11.000000000 -0500
 ***************
 *** 1 ****
 ! dummy
---- 1,111 ----
+--- 1,107 ----
 ! /*
 ! * Portions (almost all!) (C) 2003 Stuart Caie.
 ! * you can redistribute it and/or modify it under
@@ -185,8 +185,6 @@
 ! main(int argc, char** argv)
 ! {
 ! 
-!   char * ef = NULL;
-!   char * dp = NULL;
 !   struct mscab_decompressor *cabd;
 !   struct mscabd_cabinet *cab;
 !   struct mscabd_file *file;
@@ -195,7 +193,6 @@
 ! 
 !   /* argv[1] is the cabinet to extract */
 !   /* argv[2] is the path to extract to */
-! 
 !   if ((!(argv[1])) || (!(argv[2]))) {
 !     fprintf(stderr,"Usage: %s <cabinet> <destpath>\n",argv[0]);
 !     return 1;
@@ -214,14 +211,13 @@
 !   }
 ! 
 ! 
-! 
 !    /* look for an embedded cabinet */
 !    if ((cab = cabd->search(cabd, argv[1]))) {
 !      /* for all files in the cabinet */
 !      for (file = cab->files; file; file = file->next) {
 !        if (!(ename = create_output_name(file->filename, argv[2]))) continue;
 !        if ((cabd->extract(cabd, file, ename))) {
-!          fprintf(stderr,"%s: extract error on \"%s\": %s\n", argv[1],
+!          fprintf(stderr,"%s: extract error on \"%s\": %s\n",argv[1],
 !                 ename, error_msg(cabd->last_error(cabd)));
 !          exit(1);
 !        }
@@ -230,9 +226,40 @@
 !      cabd->close(cabd, cab);
 !    }
 !    else {
-!      fprintf(stderr, "%s: no embedded cabinet found\n", argv[1]);
+!      fprintf(stderr, "%s: no embedded cabinet found\n", argv[1] );
 !    }
 !    mspack_destroy_cab_decompressor(cabd);
 !    return 0;
 ! }
 ! 
+*** misc/libmspack/mspack/mspack.h	2003-12-12 12:06:15.000000000 -0500
+--- misc/build/libmspack/mspack/mspack.h	2004-03-05 11:06:11.000000000 -0500
+***************
+*** 120,125 ****
+--- 120,130 ----
+  #include <sys/types.h>
+  #include <unistd.h>
+  
++ /* MS Compiler defines size_t in stddef.h */
++ #if defined(_MSC_VER)
++ #include <stddef.h>
++ #endif
++ 
+  /**
+   * System self-test function, to ensure both library and calling program
+   * can use one another.
+*** misc/libmspack/mspack/system.h	2003-09-11 10:06:52.000000000 -0400
+--- misc/build/libmspack/mspack/system.h	2004-03-05 11:06:11.000000000 -0500
+***************
+*** 18,23 ****
+--- 18,27 ----
+  # define D(x)
+  #endif
+  
++ /* Brutal hack to make it compile with MS .NET Compiler that doesn't
++    know what inline means. */
++ #define inline
++ 
+  /* endian-neutral reading of little-endian data */
+  #define __egi32(a,n) ( (((a)[n+3]) << 24) | (((a)[n+2]) << 16) | \
+  		       (((a)[n+1]) <<  8) |  ((a)[n+0])        )
