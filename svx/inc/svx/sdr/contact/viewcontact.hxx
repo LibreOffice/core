@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:03:57 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:20:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <tools/gen.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predeclarations
 
@@ -101,7 +105,7 @@ namespace sdr
 {
     namespace contact
     {
-        class ViewContact
+        class SVX_DLLPUBLIC ViewContact
         {
         protected:
             // List of ViewObjectContacts. This contains all VOCs which were constructed
