@@ -2,9 +2,9 @@
 *
 *  $RCSfile: xmltoken.cxx,v $
 *
-*  $Revision: 1.85 $
+*  $Revision: 1.86 $
 *
-*  last change: $Author: kz $ $Date: 2005-01-14 11:59:24 $
+*  last change: $Author: rt $ $Date: 2005-01-27 11:08:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,7 @@ namespace xmloff { namespace token {
         TOKEN( "contains-header",                 XML_CONTAINS_HEADER ),
         TOKEN( "content",                         XML_CONTENT ),
         TOKEN( "content-validation",              XML_CONTENT_VALIDATION ),
-        TOKEN( "validation-name",                 XML_CONTENT_VALIDATION_NAME ),
+        TOKEN( "content-validation-name",         XML_CONTENT_VALIDATION_NAME ),
         TOKEN( "content-validations",             XML_CONTENT_VALIDATIONS ),
         TOKEN( "continue",                        XML_CONTINUE ),
         TOKEN( "continue-numbering",              XML_CONTINUE_NUMBERING ),
@@ -2417,7 +2417,7 @@ namespace xmloff { namespace token {
         TOKEN( "graphics",                        XML_GRAPHICS ),
         TOKEN( "tab",                              XML_TAB ),
         TOKEN( "text-underline-mode",              XML_TEXT_UNDERLINE_MODE ),
-        TOKEN( "text-line-though-mode",            XML_TEXT_LINE_THROUGH_MODE ),
+        TOKEN( "text-line-through-mode",           XML_TEXT_LINE_THROUGH_MODE ),
         TOKEN( "continuous",                       XML_CONTINUOUS ),
         TOKEN( "skip-white-space",                 XML_SKIP_WHITE_SPACE ),
         TOKEN( "scripts",                          XML_SCRIPTS ),
