@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTypeProvider.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:44:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:03:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {  module sun {  module star {  module lang {
 /** interface to get information about the types
     (usually interface types) supported by an object.
  */
-interface XTypeProvider: com::sun::star::uno::XInterface
+published interface XTypeProvider: com::sun::star::uno::XInterface
 {
 
     /** returns
