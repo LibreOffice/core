@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:54:40 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:25:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,14 +387,19 @@ void DlgEditor::DoScroll( ScrollBar* pActScroll )
 
     pWindow->Update();
 
-    Wallpaper aOldBackground = pWindow->GetBackground();
-    pWindow->SetBackground();
+    // #i31562#
+    // When scrolling, someone was rescuing the Wallpaper and forced the window scroll to
+    // be done without background refresh. I do not know why, but that causes the repaint
+    // problems. Taking that out.
+    //  Wallpaper aOldBackground = pWindow->GetBackground();
+    //  pWindow->SetBackground();
+
     pWindow->Scroll( -nX, -nY, SCROLL_NOCHILDREN );
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     pWindow->SetMapMode( aMap );
     pWindow->Update();
 
-    pWindow->SetBackground( aOldBackground );
+    // pWindow->SetBackground( aOldBackground );
 
     DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
     Broadcast( aHint );
