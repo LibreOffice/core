@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-23 14:39:11 $
+ *  last change: $Author: ka $ $Date: 2001-09-25 16:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 
 #ifndef SVX_LIGHT
 #include <so3/lnkbase.hxx>
+#else
+#include <svtools/pathoptions.hxx>
 #endif
 
 #include <math.h>
@@ -208,7 +210,13 @@ GraphicFilter* SVX_LIGHT_pGrapicFilter = NULL;
 GraphicFilter* GetGrfFilter()
 {
     if( !SVX_LIGHT_pGrapicFilter )
+    {
+        const SvtPathOptions aPathOptions;
+
         SVX_LIGHT_pGrapicFilter = new GraphicFilter( FALSE );
+        SVX_LIGHT_pGrapicFilter->SetFilterPath( aPathOptions.GetFilterPath() );
+    }
+
     return SVX_LIGHT_pGrapicFilter;
 }
 
