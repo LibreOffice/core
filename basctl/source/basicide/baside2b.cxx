@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:44:17 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@
 #include <svtools/xtextedt.hxx>
 #include <svtools/txtattr.hxx>
 #include <svtools/textwindowaccessibility.hxx>
+#include <basic/sbuno.hxx>
 
 #include <helpid.hrc>
 #include <baside2.hrc>
@@ -123,6 +124,7 @@ using namespace ::com::sun::star::uno;
 
 
 long nVirtToolBoxHeight;    // wird im WatchWindow init., im Stackwindow verw.
+long nHeaderBarHeight;
 
 #define SCROLL_LINE     12
 #define SCROLL_PAGE     60
@@ -158,170 +160,6 @@ void setTextEngineText( ExtTextEngine* pEngine, const ::rtl::OUString aStr )
     aMemStream.SetStreamCharSet( RTL_TEXTENCODING_UTF8 );
     aMemStream.SetLineDelimiter( LINEEND_LF );
     pEngine->Read( aMemStream );
-}
-
-
-void lcl_GetValues( String& rWatchStr, SbxDimArray* pArray,
-                            short* pIdx, USHORT nCurrentDim )
-{
-    USHORT nDims = pArray->GetDims();
-    short nMin, nMax;
-    pArray->GetDim( nCurrentDim, nMin, nMax );
-    for ( USHORT n = nMin; n <= nMax; n++ )
-    {
-//      pIdx[nDims-nCurrentDim] = n;
-        pIdx[nCurrentDim-1] = n;
-//      if ( nCurrentDim > 1 )
-        if ( nCurrentDim < nDims )
-            rWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "[ " ) );
-
-//      if ( nCurrentDim > 1 )
-        if ( nCurrentDim < nDims )
-//          lcl_GetValues( rWatchStr, pArray, pIdx, nCurrentDim-1 );
-            lcl_GetValues( rWatchStr, pArray, pIdx, nCurrentDim+1 );
-        else
-        {
-            SbxBase* pElem = pArray->Get( pIdx );
-            if ( pElem )
-                rWatchStr += ((SbxVariable*)pElem)->GetString();
-            if ( n < nMax )
-                rWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "; " ) );
-        }
-//      if ( nCurrentDim > 1 )
-        if ( nCurrentDim < nDims )
-            rWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( " ]" ) );
-    }
-}
-
-
-SbxBase* lcl_FindElement( SbxDimArray* pArray, const String& rIndex, BOOL& rbValidIndex )
-{
-    rbValidIndex = FALSE;
-    SbxBase* pElem = 0;
-
-    USHORT nTokens = rIndex.GetTokenCount( ',' );
-    USHORT nDims = pArray->GetDims();
-    if ( nDims == nTokens )
-    {
-        short* pIdx = new short[ nDims ];
-        for ( USHORT n = nDims; n; )
-            pIdx[--n] = 0;
-
-        rbValidIndex = TRUE;
-        for ( USHORT nDim = nTokens; nDim; nDim--,rbValidIndex )
-        {
-            String aTmpIndex( rIndex.GetToken( nDims-nDim, ',' ) );
-            aTmpIndex.EraseLeadingChars();
-            aTmpIndex.EraseTrailingChars();
-            short nIndex = 0x7FFF;
-
-            if ( ByteString( aTmpIndex, RTL_TEXTENCODING_UTF8 ).IsNumericAscii() )
-                nIndex = (USHORT) aTmpIndex.ToInt32();
-            else
-            {
-                SbxBase* pIndexSBX = StarBASIC::FindSBXInCurrentScope( aTmpIndex );
-                if ( pIndexSBX && pIndexSBX->ISA( SbxVariable ) && !pIndexSBX->ISA( SbxMethod ) )
-                {
-                    SbxVariable* pIndexVar = (SbxVariable*)pIndexSBX;
-                    SbxDataType eType = pIndexVar->GetType();
-                    if ( ( (BYTE)eType != (BYTE)SbxOBJECT )
-                            && !( eType & SbxARRAY ) )
-                    {
-                        nIndex = (USHORT) pIndexVar->GetString().ToInt32();
-                    }
-                }
-            }
-
-            short nMin, nMax;
-            pArray->GetDim( nDim, nMin, nMax );
-            if ( ( nIndex >= nMin ) && ( nIndex <= nMax ) )
-                pIdx[nDims-nDim] = nIndex;
-            else
-                rbValidIndex = FALSE;   // Und Abbruch...
-        }
-
-        if ( rbValidIndex )
-            pElem = pArray->Get( pIdx );
-    }
-
-    return pElem;
-}
-
-void lcl_FormatArrayString( String& rResult )
-{
-    USHORT nLastSep = 0xFFFF;
-
-    // Format eines mehrdimensionalen Arrays:
-    // Beliebig tief geschachtelt.
-    // {[ [ 1;2 ][ 3;4 ] ] [ 5;6 ][ 7;8 ] ] ]}
-
-    // Geschw. Klammern nur dann entfernen, wenn sie genau am Anfang und Ende
-    // stehen, falls es einfach nur char's in einem String sind.
-    if ( ( rResult.Len() > 1 ) && ( rResult.GetChar( 0 ) == '{' ) && ( rResult.GetChar( rResult.Len() - 1 ) == '}') )
-    {
-        rResult.Erase( 0, 1 );
-        rResult.Erase( rResult.Len()-1, 1 );
-        rResult.EraseLeadingChars();
-        rResult.EraseTrailingChars();
-    }
-
-    // Jetzt die Klammern abarbeiten:
-    // Vor einer '[' muss ein Separator gewesen sein (oder Start)
-    // String stammen.
-    // Nach einer ']' muss ein Blank oder ein ']' oder ein '[' stehen.
-    USHORT nIndex = 0;
-    USHORT nLevel = 0;
-    char cLastSep = ' ';
-    BOOL bLastWasSep = TRUE;
-    while ( nIndex < rResult.Len() )
-    {
-        switch ( rResult.GetChar( nIndex ) )
-        {
-            case '[':
-            {
-                if ( bLastWasSep )
-                {
-                    rResult.Erase( nIndex, 1 );
-                    while ( ( nIndex < rResult.Len() ) && ( rResult.GetChar( nIndex ) == ' ' ) )
-                        rResult.Erase( nIndex, 1 );
-                    nLevel++;
-                    cLastSep = '[';
-                    bLastWasSep = TRUE;
-                }
-                else
-                    nIndex++;
-            }
-            break;
-            case ']':
-            {
-                USHORT nNext = nIndex+1;
-                if ( nLevel &&
-                    ( ( nNext == rResult.Len() ) || ( rResult.GetChar( nNext ) == ' ' )
-                        || ( rResult.GetChar( nNext ) == '[' ) || ( rResult.GetChar( nNext ) == ']' ) ) )
-                {
-                    rResult.Erase( nIndex, 1 );
-                    while ( ( nIndex < rResult.Len() ) && ( rResult.GetChar( nIndex ) == ' ' ) )
-                        rResult.Erase( nIndex, 1 );
-                    nLevel--;
-                    // vor einer ']' steht keine ';':
-                    if ( cLastSep == '[' )
-                        rResult.Insert( ';', nIndex++ );
-                    cLastSep = ']';
-                    bLastWasSep = TRUE;
-                }
-                else
-                    nIndex++;
-            }
-            break;
-            default:
-            {
-                nIndex++;
-                bLastWasSep = FALSE;
-            }
-        }
-    }
-//  if ( rResult.Len() && rResult[(USHORT)(rResult.Len()-1)] == ';' )
-//      rResult.Erase( rResult.Len()-1 );
 }
 
 void lcl_DrawIDEWindowFrame( DockingWindow* pWin )
@@ -1402,20 +1240,54 @@ void BreakPointWindow::setBackgroundColor(Color aColor)
     m_bHighContrastMode = aColor.IsDark();
 }
 
+
+const long ITEM_ID_VARIABLE = 1;
+const long ITEM_ID_VALUE = 2;
+const long ITEM_ID_TYPE = 3;
+
 WatchWindow::WatchWindow( Window* pParent ) :
     BasicDockingWindow( pParent ),
-    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP ),
+    aTreeListBox( this, WB_BORDER | WB_3DLOOK | WB_HASBUTTONS | WB_HASLINES | WB_HSCROLL | WB_TABSTOP
+                                  | WB_HASLINESATROOT | WB_HASBUTTONSATROOT ),
+    aHeaderBar( this ),
     aXEdit( this, IDEResId( RID_EDT_WATCHEDIT ) ),
     aWatchStr( IDEResId( RID_STR_REMOVEWATCH ) ),
     aRemoveWatchButton( this, IDEResId( RID_IMGBTN_REMOVEWATCH ) )
 {
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
+    nHeaderBarHeight = 16;
 
     aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
     aTreeListBox.EnableInplaceEditing( TRUE );
     aTreeListBox.SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
-    aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
-    aTreeListBox.SetHighlightRange();
+    aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
+    aTreeListBox.SetHighlightRange( 1, 5 );
+
+    Point aPnt( DWBORDER, nVirtToolBoxHeight + 1 );
+    aHeaderBar.SetPosPixel( aPnt );
+    aHeaderBar.SetEndDragHdl( LINK( this, WatchWindow, implEndDragHdl ) );
+
+    int nVarTabWidth = 220;
+    int nValueTabWidth = 100;
+    int nTypeTabWidth = 1250;
+    aHeaderBar.InsertItem( ITEM_ID_VARIABLE,
+        String( RTL_CONSTASCII_USTRINGPARAM( "Variable" ) ), nVarTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_VALUE,
+        String( RTL_CONSTASCII_USTRINGPARAM( "Value" ) ), nValueTabWidth );
+    aHeaderBar.InsertItem( ITEM_ID_TYPE,
+        String( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ), nTypeTabWidth );
+
+    sal_Int32 tabs[ 4 ];
+    tabs[ 0 ] = 3; // two tabs
+    tabs[ 1 ] = 0;
+    tabs[ 2 ] = nVarTabWidth;
+    tabs[ 3 ] = nVarTabWidth + nValueTabWidth;
+    aTreeListBox.SvHeaderTabListBox::SetTabs( tabs, MAP_PIXEL );
+    aTreeListBox.InitHeaderBar( &aHeaderBar );
+
+    aTreeListBox.SetNodeDefaultImages( );
+
+    aHeaderBar.Show();
 
     aRemoveWatchButton.Disable();
 
@@ -1473,27 +1345,104 @@ void __EXPORT WatchWindow::Resize()
     if ( aBoxSz.Height() < 4 )
         aBoxSz.Height() = 0;
 
+    aBoxSz.Height() -= nHeaderBarHeight;
     aTreeListBox.SetSizePixel( aBoxSz );
     aTreeListBox.GetHScroll()->SetPageSize( aTreeListBox.GetHScroll()->GetVisibleSize() );
+
+    aBoxSz.Height() = nHeaderBarHeight;
+    aHeaderBar.SetSizePixel( aBoxSz );
 
     Invalidate();   //Wegen DrawLine im Paint...
 }
 
+struct MemberList
+{
+    String*         mpMemberNames;
+    int             mnMemberCount;
 
+    MemberList( void )
+        : mpMemberNames( NULL )
+        , mnMemberCount( 0 )
+    {}
+    ~MemberList()
+    {
+        clear();
+    }
+
+    void clear( void );
+    void allocList( int nCount );
+};
+
+void MemberList::clear( void )
+{
+    if( mnMemberCount )
+    {
+        delete[] mpMemberNames;
+        mnMemberCount = 0;
+    }
+}
+
+void MemberList::allocList( int nCount )
+{
+    clear();
+    if( nCount > 0 )
+    {
+        mnMemberCount = nCount;
+        mpMemberNames = new String[ mnMemberCount ];
+    }
+}
+
+struct WatchItem
+{
+    String          maName;
+    SbxObjectRef    mpObject;
+    MemberList      maMemberList;
+
+    SbxDimArrayRef  mpArray;
+    int             nDimLevel;  // 0 = Root
+    int             nDimCount;
+    short*          pIndices;
+
+    WatchItem( void )
+        : nDimLevel( 0 )
+        , nDimCount( 0 )
+        , pIndices( NULL )
+    {}
+    ~WatchItem()
+        { clear(); }
+
+    void clear( bool bIncludeArrayData=true )
+    {
+        mpObject = NULL;
+        maMemberList.clear();
+        if( bIncludeArrayData )
+        {
+            mpArray = NULL;
+            nDimLevel = 0;
+            nDimCount = 0;
+            delete[] pIndices;
+            pIndices = NULL;
+        }
+    }
+
+};
 
 void WatchWindow::AddWatch( const String& rVName )
 {
-    // TRUE/FALSE: ChildsOnDemand => Fuer properties
-    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( rVName, 0, FALSE, LIST_APPEND );
-    // Den Variablen-Namen ranhaengen, da der Text des Entries
-    // immer um den Wert der Wariablen ergaenzt wird.
-    pNewEntry->SetUserData( new String( rVName ) );
+    WatchItem* pWatchItem = new WatchItem;
+    String aVar, aIndex;
+    lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
+    pWatchItem->maName = aVar;
+
+    String aWatchStr( aVar );
+    aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "\t\t" ) );
+    SvLBoxEntry* pNewEntry = aTreeListBox.InsertEntry( aWatchStr, 0, TRUE, LIST_APPEND );
+    pNewEntry->SetUserData( pWatchItem );
+
     aTreeListBox.Select( pNewEntry, TRUE );
     aTreeListBox.MakeVisible( pNewEntry );
     aRemoveWatchButton.Enable();
 }
-
-
 
 BOOL WatchWindow::RemoveSelectedWatch()
 {
@@ -1503,7 +1452,7 @@ BOOL WatchWindow::RemoveSelectedWatch()
         aTreeListBox.GetModel()->Remove( pEntry );
         pEntry = aTreeListBox.GetCurEntry();
         if ( pEntry )
-            aXEdit.SetText( *((String*)pEntry->GetUserData()) );
+            aXEdit.SetText( ((WatchItem*)pEntry->GetUserData())->maName );
         else
             aXEdit.SetText( String() );
         if ( !aTreeListBox.GetEntryCount() )
@@ -1537,12 +1486,45 @@ IMPL_LINK_INLINE_START( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
 {
     SvLBoxEntry* pCurEntry = aTreeListBox.GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
-        aXEdit.SetText( *((String*)pCurEntry->GetUserData()) );
+        aXEdit.SetText( ((WatchItem*)pCurEntry->GetUserData())->maName );
 
     return 0;
 }
 IMPL_LINK_INLINE_END( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
 
+
+IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
+{
+    const sal_Int32 TAB_WIDTH_MIN = 10;
+    sal_Int32 nMaxWidth =
+        aHeaderBar.GetSizePixel().getWidth() - 2 * TAB_WIDTH_MIN;
+
+    sal_Int32 nVariableWith = aHeaderBar.GetItemSize( ITEM_ID_VARIABLE );
+    if( nVariableWith < TAB_WIDTH_MIN )
+        aHeaderBar.SetItemSize( ITEM_ID_VARIABLE, TAB_WIDTH_MIN );
+    else if( nVariableWith > nMaxWidth )
+        aHeaderBar.SetItemSize( ITEM_ID_VARIABLE, nMaxWidth );
+
+    sal_Int32 nValueWith = aHeaderBar.GetItemSize( ITEM_ID_VALUE );
+    if( nValueWith < TAB_WIDTH_MIN )
+        aHeaderBar.SetItemSize( ITEM_ID_VALUE, TAB_WIDTH_MIN );
+    else if( nValueWith > nMaxWidth )
+        aHeaderBar.SetItemSize( ITEM_ID_VALUE, nMaxWidth );
+
+    if (aHeaderBar.GetItemSize( ITEM_ID_TYPE ) < TAB_WIDTH_MIN)
+        aHeaderBar.SetItemSize( ITEM_ID_TYPE, TAB_WIDTH_MIN );
+
+    sal_Int32 nPos = 0;
+    USHORT nTabs = aHeaderBar.GetItemCount();
+    // OSL_ASSERT( m_treelb->TabCount() == nTabs );
+    for( USHORT i = 1 ; i < nTabs ; ++i )
+    {
+        nPos += aHeaderBar.GetItemSize( i );
+        aTreeListBox.SetTab( i, nPos, MAP_PIXEL );
+    }
+    return 0;
+}
+IMPL_LINK_INLINE_END( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 
 
 IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
@@ -1572,9 +1554,9 @@ IMPL_LINK( WatchWindow, EditAccHdl, Accelerator *, pAcc )
     return 0;
 }
 
-void WatchWindow::UpdateWatches()
+void WatchWindow::UpdateWatches( bool bBasicStopped )
 {
-    aTreeListBox.UpdateWatches();
+    aTreeListBox.UpdateWatches( bBasicStopped );
 }
 
 
@@ -1821,9 +1803,8 @@ EditorWindow::GetComponentInterface(BOOL bCreate)
 }
 
 WatchTreeListBox::WatchTreeListBox( Window* pParent, WinBits nWinBits )
-    : SvTreeListBox( pParent, nWinBits )
-{
-}
+    : SvHeaderTabListBox( pParent, nWinBits )
+{}
 
 WatchTreeListBox::~WatchTreeListBox()
 {
@@ -1831,26 +1812,171 @@ WatchTreeListBox::~WatchTreeListBox()
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
-        delete (String*)pEntry->GetUserData();
+        delete (WatchItem*)pEntry->GetUserData();
         pEntry = Next( pEntry );
     }
 }
 
-BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  )
+void WatchTreeListBox::SetTabs()
 {
+    SvHeaderTabListBox::SetTabs();
+    int nTabCount = aTabs.Count();
+    for( int i = 0 ; i < nTabCount ; i++ )
+    {
+        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(i);
+        if( i == 2 )
+            pTab->nFlags |= SV_LBOXTAB_EDITABLE;
+        else
+            pTab->nFlags &= ~SV_LBOXTAB_EDITABLE;
+    }
+}
+
+void WatchTreeListBox::RequestingChilds( SvLBoxEntry * pParent )
+{
+    if( !StarBASIC::IsRunning() )
+        return;
+
+    if( GetChildCount( pParent ) > 0 )
+        return;
+
+    SvLBoxEntry * pEntry = pParent;
+    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+
+    SbxDimArray* pArray = pItem->mpArray;
+    SbxObject* pObj = pItem->mpObject;
+    if( pObj )
+    {
+        createAllObjectProperties( pObj );
+         SbxArray* pProps = pObj->GetProperties();
+        USHORT nPropCount = pProps->Count();
+        pItem->maMemberList.allocList( nPropCount );
+
+        for( USHORT i = 0 ; i < nPropCount - 3 ; i++ )
+        {
+            SbxVariable* pVar = pProps->Get( i );
+
+            String aName( pVar->GetName() );
+            pItem->maMemberList.mpMemberNames[i] = aName;
+            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aName, pEntry );
+            WatchItem* pChildItem = new WatchItem();
+            pChildItem->maName = aName;
+            pChildEntry->SetUserData( pChildItem );
+            MakeVisible( pChildEntry );
+        }
+        if( nPropCount > 0 )
+        {
+            UpdateWatches();
+        }
+    }
+    else if( pArray )
+    {
+        USHORT nElementCount = 0;
+
+        // Loop through indices of current level
+        int nParentLevel = pItem->nDimLevel;
+        int nThisLevel = nParentLevel + 1;
+        short nMin, nMax;
+        pArray->GetDim( nThisLevel, nMin, nMax );
+        for( USHORT i = nMin ; i <= nMax ; i++ )
+        {
+            WatchItem* pChildItem = new WatchItem();
+
+            // Copy data and create name
+            String aName( pItem->maName );
+            pChildItem->maName = aName;
+
+            aName += String( RTL_CONSTASCII_USTRINGPARAM( "(" ) );
+            pChildItem->mpArray = pItem->mpArray;
+            pChildItem->nDimLevel = pItem->nDimLevel + 1;
+            pChildItem->nDimCount = pItem->nDimCount;
+            pChildItem->pIndices = new short[ pChildItem->nDimCount ];
+            USHORT j;
+            for( j = 0 ; j < nParentLevel ; j++ )
+            {
+                short n = pChildItem->pIndices[j] = pItem->pIndices[j];
+                aName += String::CreateFromInt32( n );
+                aName += String( RTL_CONSTASCII_USTRINGPARAM( "," ) );
+            }
+            pChildItem->pIndices[ nParentLevel ] = i;
+            aName += String::CreateFromInt32( i );
+            aName += String( RTL_CONSTASCII_USTRINGPARAM( ")" ) );
+
+            SvLBoxEntry* pChildEntry = SvTreeListBox::InsertEntry( aName, pEntry );
+            nElementCount++;
+            pChildEntry->SetUserData( pChildItem );
+            MakeVisible( pChildEntry );
+        }
+        if( nElementCount > 0 )
+        {
+            UpdateWatches();
+        }
+    }
+}
+
+SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement )
+{
+    SbxBase* pSBX = NULL;
+    rbArrayElement = false;
+
+    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    String aVName( pItem->maName );
+
+    SvLBoxEntry* pParentEntry = GetParent( pEntry );
+    WatchItem* pParentItem = pParentEntry ? (WatchItem*)pParentEntry->GetUserData() : NULL;
+    if( pParentItem )
+    {
+        SbxObject* pObj = pParentItem->mpObject;
+        SbxDimArray* pArray;
+        if( pObj )
+        {
+            pSBX = pObj->Find( aVName, SbxCLASS_DONTCARE );
+
+            SbxVariable* pVar;
+            if ( pSBX && (pVar = PTR_CAST( SbxVariable, pSBX )) != NULL
+                        && !pSBX->ISA( SbxMethod ) )
+            {
+                // Force getting value
+                SbxValues aRes;
+                aRes.eType = SbxVOID;
+                pVar->Get( aRes );
+            }
+        }
+        // Array?
+        else if( (pArray = pItem->mpArray) != NULL )
+        {
+            rbArrayElement = true;
+            if( pItem->nDimLevel == pItem->nDimCount )
+                pSBX = pArray->Get( pItem->pIndices );
+        }
+    }
+    else
+    {
+        pSBX = StarBASIC::FindSBXInCurrentScope( aVName );
+    }
+    return pSBX;
+}
+
+BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& rSel )
+{
+    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+
     BOOL bEdit = FALSE;
     if ( StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError() )
     {
-        String aEntryText( GetEntryText( pEntry ) );
-        USHORT nPos = aEntryText.Search( '=' );
-        if ( nPos != STRING_NOTFOUND )
-            aEditingRes = aEntryText.Copy( nPos+1);
-        else
-            aEditingRes.Erase();
-        aEditingRes.EraseLeadingChars();
-        aEditingRes.EraseTrailingChars();
-
-        bEdit = TRUE;
+        // No out of scope entries
+        bool bArrayElement;
+        SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
+        if ( ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) ) || bArrayElement )
+        {
+            // Accept no objects and only end nodes of arrays for editing
+            if( !pItem->mpObject && (pItem->mpArray == NULL || pItem->nDimLevel == pItem->nDimCount) )
+            {
+                aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
+                aEditingRes.EraseLeadingChars();
+                aEditingRes.EraseTrailingChars();
+                bEdit = TRUE;
+            }
+        }
     }
 
     if ( !bEdit )
@@ -1861,57 +1987,52 @@ BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& rS
 
 BOOL __EXPORT WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
-    USHORT nPos = rNewText.Search( '=' );
-    String aVName, aResult;
-    aVName = rNewText.Copy( 0, nPos );
-    if ( nPos != STRING_NOTFOUND )
-        aResult = rNewText.Copy( nPos+1);
-    aVName.EraseLeadingChars();
-    aVName.EraseTrailingChars();
+    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    String aVName( pItem->maName );
+
+    String aResult = rNewText;
     aResult.EraseLeadingChars();
     aResult.EraseTrailingChars();
 
-    BOOL bVarModified = ( aVName != *((String*)pEntry->GetUserData()) ) ? TRUE : FALSE;
+    int nResultLen = aResult.Len();
+    sal_Unicode cFirst = aResult.GetChar( 0 );
+    sal_Unicode cLast  = aResult.GetChar( nResultLen - 1 );
+    if( cFirst == '\"' && cLast == '\"' )
+        aResult = aResult.Copy( 1, nResultLen - 2 );
+
     BOOL bResModified = ( aResult != aEditingRes ) ? TRUE : FALSE;
-
     BOOL bError = FALSE;
-
     if ( !aVName.Len() )
+    {
         bError = TRUE;
-
-    if ( bVarModified && !bError )
-    {
-        delete (String*)pEntry->GetUserData();
-        pEntry->SetUserData( new String( aVName ) );
-    }
-
-    if ( aVName.Len() && strchr( cSuffixes, aVName.GetChar( aVName.Len() - 1 ) ) )
-    {
-        aVName.Erase( aVName.Len()-1, 1 );
-        if ( !aVName.Len() )
-            bError = TRUE;
     }
 
     BOOL bRet = FALSE;
 
     if ( bError )
+    {
         Sound::Beep();
+    }
     else if ( bResModified )
     {
-        bRet = ImplBasicEntryEdited( pEntry, aVName, aResult );
+        bRet = ImplBasicEntryEdited( pEntry, aResult );
     }
 
     return bRet;
 }
 
-BOOL WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rVName, const String& rResult )
+BOOL WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult )
 {
+    WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+    String aVName( pItem->maName );
+
     BOOL bError = FALSE;
     String aResult( rResult );
-    String aVar, aIndex;
-    lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
-    SbxBase* pToBeChanged  = 0;
-    SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aVar );
+    String aIndex;
+    bool bArrayElement;
+    SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
+
+    SbxBase* pToBeChanged = NULL;
     if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
     {
         SbxVariable* pVar = (SbxVariable*)pSBX;
@@ -1919,51 +2040,7 @@ BOOL WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
         if ( (BYTE)eType == (BYTE)SbxOBJECT )
             bError = TRUE;
         else if ( eType & SbxARRAY )
-        {
-            SbxBase* pBase = pVar->GetObject();
-            if ( pBase && pBase->ISA( SbxDimArray ) )
-            {
-                SbxDimArray* pArray = (SbxDimArray*)pBase;
-                if ( !aIndex.Len() )
-                {
-                    // Das Array auf das Format XX;XX;XX formatieren lassen,
-                    // wenn TokenCount == Array-Groesse, Werte reinplaetten.
-                    lcl_FormatArrayString( aResult );
-                    USHORT nVars = pArray->Count();
-                    if ( aResult.GetTokenCount() == (nVars+1) )
-                    {
-                        for ( USHORT nVar = 0; nVar < nVars; nVar++,bError )
-                        {
-                            SbxBase* pElem = pArray->SbxArray::Get( nVar );
-                            if ( pElem && pElem->ISA( SbxVariable ) )
-                            {
-                                String aVar = aResult.GetToken( nVar, ';' );
-                                // Falls die Variablen als String geputtet werden
-                                // addieren sich sonst die Zwischenraeume...
-                                aVar.EraseLeadingChars();
-                                aVar.EraseTrailingChars();
-                                ((SbxVariable*)pElem)->PutStringExt( aVar );
-                            }
-                            else
-                                bError = TRUE;
-                        }
-                    }
-                    else
-                        bError = TRUE;
-                }
-                else
-                {
-                    BOOL bValidIndex;
-                    pToBeChanged = lcl_FindElement( pArray, aIndex, bValidIndex );
-                    if ( pToBeChanged )
-                        lcl_FormatArrayString( aResult );
-                    else
-                        bError = TRUE;
-                }
-            }
-            else
-                bError = TRUE;
-        }
+            bError = TRUE;
         else
             pToBeChanged = pSBX;
     }
@@ -1999,7 +2076,66 @@ BOOL WatchTreeListBox::ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& 
 }
 
 
-void WatchTreeListBox::UpdateWatches()
+static void implCollapseModifiedObjectEntry( SvLBoxEntry* pParent, WatchTreeListBox* pThis )
+{
+    pThis->Collapse( pParent );
+
+    SvLBoxTreeList* pModel = pThis->GetModel();
+    SvLBoxEntry* pDeleteEntry;
+    while( (pDeleteEntry = pThis->SvTreeListBox::GetEntry( pParent, 0 )) != NULL )
+    {
+        implCollapseModifiedObjectEntry( pDeleteEntry, pThis );
+
+        WatchItem* pItem = (WatchItem*)pDeleteEntry->GetUserData();
+        delete pItem;
+        pModel->Remove( pDeleteEntry );
+    }
+}
+
+static String implCreateTypeStringForDimArray( WatchItem* pItem, SbxDataType eType )
+{
+    String aRetStr = getBasicTypeName( eType );
+
+    SbxDimArray* pArray = pItem->mpArray;
+
+    int nDimLevel = pItem->nDimLevel;
+    int nDims = pItem->nDimCount;
+    if( nDimLevel < nDims )
+    {
+        aRetStr += '(';
+        for( int i = nDimLevel ; i < nDims ; i++ )
+        {
+            short nMin, nMax;
+            pArray->GetDim( i+1, nMin, nMax );
+            aRetStr += String::CreateFromInt32( nMin );
+            aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( " to " ) );
+            aRetStr += String::CreateFromInt32( nMax );
+            if( i < nDims - 1 )
+                aRetStr += String( RTL_CONSTASCII_USTRINGPARAM( ", " ) );
+        }
+        aRetStr += ')';
+    }
+    return aRetStr;
+}
+
+
+inline void implEnableChildren( SvLBoxEntry* pEntry, bool bEnable )
+{
+    if( bEnable )
+    {
+        pEntry->SetFlags(
+            (pEntry->GetFlags() &
+            ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN))
+            | SV_ENTRYFLAG_CHILDS_ON_DEMAND );
+    }
+    else
+    {
+        pEntry->SetFlags(
+            (pEntry->GetFlags() & ~(SV_ENTRYFLAG_CHILDS_ON_DEMAND)) );
+    }
+}
+
+void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
 {
     SbMethod* pCurMethod = StarBASIC::GetActiveMethod();
     SbModule* pModule = pCurMethod ? pCurMethod->GetModule() : 0;
@@ -2009,65 +2145,187 @@ void WatchTreeListBox::UpdateWatches()
     SvLBoxEntry* pEntry = First();
     while ( pEntry )
     {
-        String aVName( *( (String*)pEntry->GetUserData() ) );
+        WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
+        String aVName( pItem->maName );
         DBG_ASSERT( aVName.Len(), "Var? - Darf nicht leer sein!" );
-        String aWatchStr( aVName );
-        aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( " = " ) );
+        String aWatchStr;
+        String aTypeStr;
         if ( pCurMethod )
         {
-            String aVar, aIndex;
-            lcl_SeparateNameAndIndex( aVName, aVar, aIndex );
-            SbxBase* pSBX = StarBASIC::FindSBXInCurrentScope( aVar );
+            bool bArrayElement;
+            SbxBase* pSBX = ImplGetSBXForEntry( pEntry, bArrayElement );
+
+            // Array? If no end node create type string
+            if( bArrayElement && pItem->nDimLevel < pItem->nDimCount )
+            {
+                SbxDataType eType = pItem->mpArray->GetType();
+                aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
+                implEnableChildren( pEntry, true );
+            }
+
+            bool bCollapse = false;
             if ( pSBX && pSBX->ISA( SbxVariable ) && !pSBX->ISA( SbxMethod ) )
             {
                 SbxVariable* pVar = (SbxVariable*)pSBX;
                 // Sonderbehandlung fuer Arrays:
                 SbxDataType eType = pVar->GetType();
                 if ( (BYTE)eType == (BYTE)SbxOBJECT )
-                    aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<?>" ) );
+                {
+                    SbxObject* pObj = NULL;
+                    SbxBase* pBase = pVar->GetObject();
+                    if( pBase && pBase->ISA( SbxObject ) )
+                        pObj = (SbxObject*)pBase;
+
+                    if( pObj )
+                    {
+                        // Check if member list has changed
+                        bool bObjChanged = false;
+                        if( pItem->mpObject != NULL && pItem->maMemberList.mpMemberNames != NULL )
+                        {
+                            SbxArray* pProps = pObj->GetProperties();
+                            USHORT nPropCount = pProps->Count();
+                            for( USHORT i = 0 ; i < nPropCount - 3 ; i++ )
+                            {
+                                SbxVariable* pVar = pProps->Get( i );
+                                String aName( pVar->GetName() );
+                                if( pItem->maMemberList.mpMemberNames[i] != aName )
+                                {
+                                    bObjChanged = true;
+                                    break;
+                                }
+                            }
+                            if( bObjChanged )
+                                bCollapse = true;
+                        }
+
+                        pItem->mpObject = pObj;
+                        implEnableChildren( pEntry, true );
+                        aTypeStr = getBasicObjectTypeName( pObj );
+                    }
+                    else
+                    {
+                        aWatchStr = String( RTL_CONSTASCII_USTRINGPARAM( "Null" ) );
+                        if( pItem->mpObject != NULL )
+                        {
+                            bCollapse = true;
+                            pItem->clear( false );
+
+                            implEnableChildren( pEntry, false );
+                        }
+                    }
+                }
                 else if ( eType & SbxARRAY )
                 {
                     // Mehrdimensionale Arrays beruecksichtigen!
                     SbxBase* pBase = pVar->GetObject();
                     if ( pBase && pBase->ISA( SbxDimArray ) )
                     {
-                        SbxDimArray* pArray = (SbxDimArray*)pBase;
-                        aWatchStr += '{';
-                        USHORT nDims = pArray->GetDims();
-                        if ( !aIndex.Len() )
+                        SbxDimArray* pNewArray = (SbxDimArray*)pBase;
+                        SbxDimArray* pOldArray = pItem->mpArray;
+
+                        bool bArrayChanged = false;
+                        if( pNewArray != NULL && pOldArray != NULL )
                         {
-                            short* pIdx = new short[ nDims ];
-                            for ( USHORT n = nDims; n; )
-                                pIdx[--n] = 0;
-                            // hoechste Dimension festhalen.
-//                          lcl_GetValues( aWatchStr, pArray, pIdx, nDims );
-                            lcl_GetValues( aWatchStr, pArray, pIdx, 1 );
-                            delete pIdx;
+                            // Compare Array dimensions to see if array has changed
+                            // Can be a copy, so comparing pointers does not work
+                            USHORT nOldDims = pOldArray->GetDims();
+                            USHORT nNewDims = pNewArray->GetDims();
+                            if( nOldDims != nNewDims )
+                            {
+                                bArrayChanged = true;
+                            }
+                            else
+                            {
+                                for( int i = 0 ; i < nOldDims ; i++ )
+                                {
+                                    short nOldMin, nOldMax;
+                                    short nNewMin, nNewMax;
+
+                                    pOldArray->GetDim( i+1, nOldMin, nOldMax );
+                                    pNewArray->GetDim( i+1, nNewMin, nNewMax );
+                                    if( nOldMin != nNewMin || nOldMax != nNewMax )
+                                    {
+                                        bArrayChanged = true;
+                                        break;
+                                    }
+                                }
+                            }
                         }
-                        else
+                        else if( pNewArray == NULL || pOldArray == NULL )
+                            bArrayChanged = true;
+
+
+                        if( bArrayChanged )
                         {
-                            BOOL bValidIndex;
-                            SbxBase* pElem = lcl_FindElement( pArray, aIndex, bValidIndex );
-                            if ( pElem )
-                                aWatchStr += ((SbxVariable*)pElem)->GetString();
-                            else if ( !bValidIndex )
-                                aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<Invalid index>" ) );
+                            if( pOldArray != NULL )
+                                bCollapse = true;
+
+                            pItem->clear();
+                            if( pNewArray )
+                            {
+                                implEnableChildren( pEntry, true );
+
+                                pItem->mpArray = pNewArray;
+                                USHORT nDims = pNewArray->GetDims();
+                                pItem->nDimLevel = 0;
+                                pItem->nDimCount = nDims;
+                                pItem->pIndices = new short[ nDims ];
+                            }
                         }
-                        aWatchStr += '}';
+                        aTypeStr = implCreateTypeStringForDimArray( pItem, eType );
                     }
                     else
                         aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<?>" ) );
                 }
                 else
+                {
+                    if( pItem->mpObject != NULL )
+                    {
+                        bCollapse = true;
+                        pItem->clear( false );
+
+                        implEnableChildren( pEntry, false );
+                    }
+
+                    bool bString = ((BYTE)eType == (BYTE)SbxSTRING);
+                    String aStrStr( RTL_CONSTASCII_USTRINGPARAM( "\"" ) );
+                    if( bString )
+                        aWatchStr += aStrStr;
                     aWatchStr += pVar->GetString();
+                    if( bString )
+                        aWatchStr += aStrStr;
+                }
+                if( !aTypeStr.Len() )
+                {
+                    if( !pVar->IsFixed() )
+                        aTypeStr = String( RTL_CONSTASCII_USTRINGPARAM( "Variant/" ) );
+                    aTypeStr += getBasicTypeName( pVar->GetType() );
+                }
             }
-            else
+            else if( !bArrayElement )
                 aWatchStr += String( RTL_CONSTASCII_USTRINGPARAM( "<Out of Scope>" ) );
+
+            if( bCollapse )
+                implCollapseModifiedObjectEntry( pEntry, this );
+
         }
-        SetEntryText( pEntry, aWatchStr );
+        else if( bBasicStopped )
+        {
+            if( pItem->mpObject || pItem->mpArray )
+            {
+                implCollapseModifiedObjectEntry( pEntry, this );
+                pItem->mpObject = NULL;
+            }
+        }
+
+        SvHeaderTabListBox::SetEntryText( aWatchStr, pEntry, ITEM_ID_VALUE-1 );
+        SvHeaderTabListBox::SetEntryText( aTypeStr, pEntry, ITEM_ID_TYPE-1 );
 
         pEntry = Next( pEntry );
     }
+
+    // Force redraw
+    Invalidate();
 
     SbxBase::ResetError();
     if( eOld != SbxERR_OK )
