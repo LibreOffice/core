@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-02 16:45:18 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,10 @@
 #pragma hdrstop
 
 // INCLUDE ---------------------------------------------------------------
+
+#ifndef SC_DOCUMENT_HXX
+#include "document.hxx"
+#endif
 
 #include "xmlbodyi.hxx"
 #include "xmltabi.hxx"
@@ -168,4 +172,15 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLBodyContext::EndElement()
 {
+    ScMyImpDetectiveOpArray&    rDetOpArray = GetScImport().GetDetectiveOpArray();
+    ScDocument*                 pDoc        = GetScImport().GetDocument();
+    ScMyImpDetectiveOp          rDetOp;
+
+    rDetOpArray.Sort();
+    while( rDetOpArray.GetFirstOp( rDetOp ) )
+    {
+        ScDetOpData aOpData( rDetOp.aPosition, rDetOp.eOpType );
+        pDoc->AddDetectiveOperation( aOpData );
+    }
 }
+

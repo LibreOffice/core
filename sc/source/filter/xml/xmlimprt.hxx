@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 11:31:21 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #include "global.hxx"
 #ifndef _XMLSTYLE_HXX
 #include "xmlstyle.hxx"
+#endif
+#ifndef _SC_XMLDETECTIVECONTEXT_HXX
+#include "XMLDetectiveContext.hxx"
 #endif
 #ifndef _COM_SUN_STAR_SHEET_VALIDATIONALERTSTYLE_HPP_
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
@@ -720,6 +723,7 @@ class ScXMLImport: public SvXMLImport
 
     ScMyNamedExpressions    aMyNamedExpressions;
     ScMyImportValidations   aValidations;
+    ScMyImpDetectiveOpArray aDetectiveOpArray;
 
 protected:
 
@@ -853,6 +857,8 @@ public:
 
     void AddValidation(const ScMyImportValidation& aValidation) { aValidations.push_back(aValidation); }
     sal_Bool GetValidation(const rtl::OUString& sName, ScMyImportValidation& aValidation);
+
+    inline ScMyImpDetectiveOpArray& GetDetectiveOpArray()   { return aDetectiveOpArray; }
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 11:31:21 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,6 +1289,7 @@ ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::fram
     aTables(*this),
     aMyNamedExpressions(),
     aValidations(),
+    aDetectiveOpArray(),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
     sSC_float(RTL_CONSTASCII_USTRINGPARAM(sXML_float)),
     sSC_time(RTL_CONSTASCII_USTRINGPARAM(sXML_time)),

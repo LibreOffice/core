@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 09:57:28 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,7 +249,8 @@ public:
     static ScDetectiveObjType
                         GetDetObjTypeFromString(
                             const ::rtl::OUString& rString );
-    static ScDetOpType  GetDetOpTypeFromString(
+    static sal_Bool     GetDetOpTypeFromString(
+                            ScDetOpType& rDetOpType,
                             const ::rtl::OUString& rString );
 
 // EXPORT: Detective

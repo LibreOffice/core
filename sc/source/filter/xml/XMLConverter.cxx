@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,17 +616,21 @@ ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rStr
     return SC_DETOBJ_NONE;
 }
 
-ScDetOpType ScXMLConverter::GetDetOpTypeFromString( const OUString& rString )
+sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUString& rString )
 {
     if( rString.compareToAscii( sXML_trace_dependents ) == 0 )
-        return SCDETOP_ADDSUCC;
-    if( rString.compareToAscii( sXML_trace_precedents ) == 0 )
-        return SCDETOP_ADDPRED;
-    if( rString.compareToAscii( sXML_remove_dependents ) == 0 )
-        return SCDETOP_DELSUCC;
-    if( rString.compareToAscii( sXML_remove_precedents ) == 0 )
-        return SCDETOP_DELPRED;
-    return SCDETOP_ADDERROR;
+        rDetOpType = SCDETOP_ADDSUCC;
+    else if( rString.compareToAscii( sXML_trace_precedents ) == 0 )
+        rDetOpType = SCDETOP_ADDPRED;
+    else if( rString.compareToAscii( sXML_trace_errors ) == 0 )
+        rDetOpType = SCDETOP_ADDERROR;
+    else if( rString.compareToAscii( sXML_remove_dependents ) == 0 )
+        rDetOpType = SCDETOP_DELSUCC;
+    else if( rString.compareToAscii( sXML_remove_precedents ) == 0 )
+        rDetOpType = SCDETOP_DELPRED;
+    else
+        return sal_False;
+    return sal_True;
 }
 
 

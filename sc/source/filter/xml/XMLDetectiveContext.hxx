@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,40 @@ typedef ::std::vector< ScMyImpDetectiveObj > ScMyImpDetectiveObjVec;
 
 //___________________________________________________________________
 
+struct ScMyImpDetectiveOp
+{
+    ScAddress                   aPosition;
+    ScDetOpType                 eOpType;
+    sal_Int32                   nIndex;
+
+    inline                      ScMyImpDetectiveOp() : nIndex( -1 ) {}
+
+    static sal_Bool             operator<(
+                                    const ScMyImpDetectiveOp& rDetOp1,
+                                    const ScMyImpDetectiveOp& rDetOp2 );
+};
+
+typedef ::std::vector< ScMyImpDetectiveOp > ScMyImpDetectiveOpVec;
+
+class ScMyImpDetectiveOpArray
+{
+private:
+    ScMyImpDetectiveOpVec       aDetectiveOpVec;
+
+public:
+    inline                      ScMyImpDetectiveOpArray() :
+                                    aDetectiveOpVec()   {}
+
+    inline void                 AddDetectiveOp( const ScMyImpDetectiveOp& rDetOp )
+                                    { aDetectiveOpVec.push_back( rDetOp ); }
+
+    void                        Sort();
+    sal_Bool                    GetFirstOp( ScMyImpDetectiveOp& rDetOp );
+};
+
+
+//___________________________________________________________________
+
 class ScXMLDetectiveContext : public SvXMLImportContext
 {
 private:
@@ -158,6 +192,9 @@ public:
 class ScXMLDetectiveOperationContext : public SvXMLImportContext
 {
 private:
+    ScMyImpDetectiveOp          aDetectiveOp;
+    sal_Bool                    bHasType;
+
     const ScXMLImport&          GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport&                GetScImport()       { return (ScXMLImport&)GetImport(); }
 

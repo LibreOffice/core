@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dr $ $Date: 2000-11-10 16:56:12 $
+ *  last change: $Author: dr $ $Date: 2000-11-10 18:35:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,13 @@
 #ifndef _XMLOFF_XMLKYWD_HXX
 #include <xmloff/xmlkywd.hxx>
 #endif
+#ifndef _XMLOFF_XMLUCONV_HXX
+#include <xmloff/xmluconv.hxx>
+#endif
 
+#ifndef SC_CONVUNO_HXX
+#include "convuno.hxx"
+#endif
 #ifndef SC_XMLIMPRT_HXX
 #include "xmlimprt.hxx"
 #endif
@@ -96,6 +102,30 @@ ScMyImpDetectiveObj::ScMyImpDetectiveObj() :
     eObjType( SC_DETOBJ_NONE ),
     bHasError( sal_False )
 {
+}
+
+
+//___________________________________________________________________
+
+sal_Bool ScMyImpDetectiveOp::operator<( const ScMyImpDetectiveOp& rDetOp1,
+                                        const ScMyImpDetectiveOp& rDetOp2 )
+{
+    return (rDetOp1.nIndex < rDetOp2.nIndex);
+}
+
+void ScMyImpDetectiveOpArray::Sort()
+{
+    ::std::sort( aDetectiveOpVec.begin(), aDetectiveOpVec.end(), ScMyImpDetectiveOp::operator< );
+}
+
+sal_Bool ScMyImpDetectiveOpArray::GetFirstOp( ScMyImpDetectiveOp& rDetOp )
+{
+    if( !aDetectiveOpVec.size() )
+        return sal_False;
+    ScMyImpDetectiveOpVec::iterator aItr = aDetectiveOpVec.begin();
+    rDetOp = *aItr;
+    aDetectiveOpVec.erase( aItr );
+    return sal_True;
 }
 
 
@@ -221,7 +251,9 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
         USHORT nPrfx,
         const OUString& rLName,
         const uno::Reference< xml::sax::XAttributeList >& xAttrList ) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    aDetectiveOp(),
+    bHasType( sal_False )
 {
     if( !xAttrList.is() ) return;
 
@@ -237,38 +269,19 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ) )
         {
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_NAME:
-//              rRangeSource.sSourceStr = sValue;
-//          break;
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_NAME:
-//              rRangeSource.sFilterName = sValue;
-//          break;
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_FILTER_OPTIONS:
-//              rRangeSource.sFilterOptions = sValue;
-//          break;
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_HREF:
-//              rRangeSource.sURL = sValue;
-//          break;
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_COLUMN:
-//          {
-//              sal_Int32 nValue;
-//              if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
-//                  rRangeSource.nColumns = nValue;
-//              else
-//                  rRangeSource.nColumns = 1;
-//          }
-//          break;
-//          case XML_TOK_TABLE_CELL_RANGE_SOURCE_ATTR_LAST_ROW:
-//          {
-//              sal_Int32 nValue;
-//              if( SvXMLUnitConverter::convertNumber( nValue, sValue, 1 ) )
-//                  rRangeSource.nRows = nValue;
-//              else
-//                  rRangeSource.nRows = 1;
-//          }
-//          break;
+            case XML_TOK_DETECTIVE_OPERATION_ATTR_NAME:
+                bHasType = ScXMLConverter::GetDetOpTypeFromString( aDetectiveOp.eOpType, sValue );
+            break;
+            case XML_TOK_DETECTIVE_OPERATION_ATTR_INDEX:
+            {
+                sal_Int32 nValue;
+                if( SvXMLUnitConverter::convertNumber( nValue, sValue, 0 ) )
+                    aDetectiveOp.nIndex = nValue;
+            }
+            break;
         }
     }
+    ScUnoConversion::FillScAddress( aDetectiveOp.aPosition, rImport.GetTables().GetRealCellPos() );
 }
 
 ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()
@@ -285,5 +298,7 @@ SvXMLImportContext *ScXMLDetectiveOperationContext::CreateChildContext(
 
 void ScXMLDetectiveOperationContext::EndElement()
 {
+    if( bHasType && (aDetectiveOp.nIndex >= 0) )
+        GetScImport().GetDetectiveOpArray().AddDetectiveOp( aDetectiveOp );
 }
 
