@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_reader.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,13 @@ public:
     inline sal_Bool readFlags( struct MessageFlags *pFlags );
 private:
     void disposeEnvironment();
+
+    inline sal_Bool getMemberTypeDescription(
+        typelib_InterfaceAttributeTypeDescription **ppAttributeType,
+        typelib_InterfaceMethodTypeDescription **ppMethodType,
+        sal_Bool *pbIsSetter,
+        sal_uInt16 nMethodId ,
+        typelib_TypeDescriptionReference *pITypeRef);
 
     remote_Connection *m_pConnection;
     uno_Environment *m_pEnvRemote;

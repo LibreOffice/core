@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include "urp_bridgeimpl.hxx"
 
 using namespace ::rtl;
+using namespace ::osl;
 using namespace ::com::sun::star::uno;
 namespace bridges_urp
 {
@@ -232,22 +233,27 @@ void urp_BridgeImpl::applyProtocolChanges( const Properties &props )
 
 void urp_BridgeImpl::addError( char *pError )
 {
-    OUString message = OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
-    message += OUString::createFromAscii( ": " );
+    OUString message = OUString( RTL_CONSTASCII_USTRINGPARAM( "(tid=" ) );
+    message += OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
+    message += OUString::createFromAscii( ") " );
     message += OUString::createFromAscii( pError );
+    MutexGuard guard( m_errorListMutex );
     m_lstErrors.push_back( message );
 }
 
 void urp_BridgeImpl::addError( const OUString & error )
 {
-    OUString message = OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
-    message += OUString::createFromAscii( ": " );
+    OUString message = OUString( RTL_CONSTASCII_USTRINGPARAM( "(tid=" ) );
+    message += OUString::valueOf( (sal_Int32 ) osl_getThreadIdentifier( 0 ) );
+    message += OUString::createFromAscii( ") " );
     message += error;
+    MutexGuard guard( m_errorListMutex );
     m_lstErrors.push_back( message );
 }
 
 void urp_BridgeImpl::dumpErrors( FILE * f)
 {
+    MutexGuard guard( m_errorListMutex );
     for( ::std::list< OUString >::iterator ii = m_lstErrors.begin() ;
          ii != m_lstErrors.end() ;
          ++ii )
@@ -256,4 +262,18 @@ void urp_BridgeImpl::dumpErrors( FILE * f)
         fprintf( f,  "%s\n" , o.getStr() );
     }
 }
+
+OUString urp_BridgeImpl::getErrorsAsString( )
+{
+    MutexGuard guard( m_errorListMutex );
+    OUString ret;
+    for( ::std::list< OUString >::iterator ii = m_lstErrors.begin() ;
+         ii != m_lstErrors.end() ;
+         ++ii )
+    {
+        ret += *ii;
+    }
+    return ret;
+}
+
 }

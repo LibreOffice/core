@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_environment.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 09:03:33 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,7 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
         }
 
         // from now on, no calls can be delivered via the bridge
-        uno_threadpool_disposeThreads( (sal_Int64) pEnvRemote );
+        uno_threadpool_dispose( pImpl->m_hThreadPool );
 
           pContext->m_pConnection->close( pContext->m_pConnection );
 
@@ -356,7 +356,9 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
             pImpl->m_pLogFile = 0;
         }
 #endif
+#ifdef DEBUG
         pImpl->dumpErrors( stderr );
+#endif
 
         // destroy the threads
         delete pImpl->m_pWriter;
@@ -376,7 +378,6 @@ void RemoteEnvironment::thisDispose( uno_Environment *pEnvRemote )
     }
 }
 
-
 void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
 {
     remote_Context *pContext = (remote_Context * )pEnvRemote->pContext;
@@ -393,7 +394,7 @@ void RemoteEnvironment::thisDisposing( uno_Environment *pEnvRemote )
     pImpl->m_pPropertyObject->thisRelease();
     pImpl->m_pPropertyObject = 0;
 
-     uno_threadpool_stopDisposeThreads( (sal_Int64) pEnvRemote );
+     uno_threadpool_destroy( pImpl->m_hThreadPool );
 
     pContext->aBase.release( (uno_Context * ) pContext );
 #ifdef DEBUG
@@ -440,6 +441,9 @@ extern "C" SAL_DLLEXPORT void SAL_CALL uno_initEnvironment(
     // Initialize impl struct     urp_BridgeImpl
     urp_BridgeImpl *pImpl = new ::bridges_urp::urp_BridgeImpl( 256, 8192 );
     pContext->m_pBridgeImpl = pImpl;
+
+    // Initialize threadpool
+    pImpl->m_hThreadPool = uno_threadpool_create();
 
     // take the bridgepointer as id
     pImpl->m_properties.seqBridgeID = ByteSequence( (sal_Int8*)&pEnvRemote , sizeof( pEnvRemote ) );

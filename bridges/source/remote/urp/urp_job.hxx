@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,6 @@ private:
     typelib_InterfaceTypeDescription          *m_pInterfaceType;
     sal_Bool m_bReleaseForTypeDescriptionNecessary;
 
-    uno_threadpool_Handle *m_pThreadpoolHandle;
     uno_Any  **m_ppException;
     sal_Bool m_bOneway;
     sal_Bool m_bBridgePropertyCall;

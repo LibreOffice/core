@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_job.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ namespace bridges_urp
     //-------------------------------------------------------------------------------------------
     void ClientJob::initiate()
     {
-        uno_threadpool_putReply( m_pTid , (sal_Int8*) this );
+        uno_threadpool_putJob( m_pBridgeImpl->m_hThreadPool, m_pTid , this, 0, sal_False);
     }
 
     //--------------------------------------------------------------------------------------------
@@ -348,7 +348,7 @@ namespace bridges_urp
 
         if( ! m_bOneway )
         {
-            m_pThreadpoolHandle = uno_threadpool_createHandle( (sal_Int64 ) m_pEnvRemote );
+            uno_threadpool_attach( m_pBridgeImpl->m_hThreadPool );
             m_pBridgeImpl->m_clientJobContainer.add( *(ByteSequence*)&(m_pTid), this );
         }
 
@@ -369,32 +369,38 @@ namespace bridges_urp
     //------------------------------------------------------------------------------------
     void ClientJob::wait()
     {
-        if(! m_bOneway)
-        {
-            //---------------------------
-            // Wait for the reply
-            //---------------------------
-            ClientJob * pData = 0;
-            uno_threadpool_enter( m_pThreadpoolHandle, (void **) &pData );
+        //---------------------------
+        // Wait for the reply
+        //---------------------------
+        void * pDisposeReason = 0;
 
-            if( ! pData )
+        uno_threadpool_enter(m_pBridgeImpl->m_hThreadPool, &pDisposeReason );
+
+        if( ! pDisposeReason )
+        {
+            // thread has been disposed !
+            // avoid leak due continous calling on a disposed reference.
+            if( m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid ) )
             {
-                // avoid leak due continous calling on a disposed reference.
-                if( m_pBridgeImpl->m_clientJobContainer.remove( *(ByteSequence*) &m_pTid ) )
-                {
-                    // OK, we retrieved the job from the container
-                    prepareRuntimeExceptionClientSide(
-                        m_ppException, OUString( RTL_CONSTASCII_USTRINGPARAM( "URP_Bridge : disposed" ) ) );
-                }
-                else
-                {
-                    // if pData == 0, the Job MUST BE still in the container,
-                    // because the threadpool is disposed after the reader thread
-                    // is in a known state.
-                    OSL_ASSERT( !"we should never be here" );
-                }
+                // OK, we retrieved the job from the container
+                OUString sMessage( RTL_CONSTASCII_USTRINGPARAM( "URP_Bridge : disposed\n" ) );
+                sMessage += m_pBridgeImpl->getErrorsAsString();
+                prepareRuntimeExceptionClientSide( m_ppException, sMessage );
+            }
+            else
+            {
+                // the Job MUST BE still in the container,
+                // because the threadpool is disposed after the reader thread
+                // is in a known state.
+                OSL_ASSERT( !"we should never be here" );
             }
         }
+        else
+        {
+            OSL_ASSERT( pDisposeReason == (void*)this );
+        }
+
+        uno_threadpool_detach( m_pBridgeImpl->m_hThreadPool );
     }
 
     //------------------------------------------------------------------------------------
@@ -691,8 +697,11 @@ namespace bridges_urp
     //-------------------------------------------------------------------------------------
     void ServerMultiJob::initiate()
     {
-        uno_threadpool_putRequest(
-            m_pTid, this, doit,
+        uno_threadpool_putJob(
+            m_pBridgeImpl->m_hThreadPool,
+            m_pTid,
+            this,
+            doit,
             m_aTypeInfo[0].m_bIsOneway );
     }
 

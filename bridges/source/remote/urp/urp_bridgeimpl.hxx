@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urp_bridgeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:01:28 $
+ *  last change: $Author: jbu $ $Date: 2001-05-14 09:57:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,8 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 
+#include <uno/threadpool.h>
+
 #include <bridges/remote/bridgeimpl.hxx>
 
 #include "urp_cache.hxx"
@@ -114,9 +116,11 @@ struct urp_BridgeImpl :
     void addError( char *pError );
     void addError( const ::rtl::OUString &anError );
     void dumpErrors( FILE *f );
+    ::rtl::OUString getErrorsAsString();
 
     ::osl::Mutex m_marshalingMutex;
     ::osl::Mutex m_disposingMutex;
+    ::osl::Mutex m_errorListMutex;
     Marshal m_blockMarshaler;
     sal_Int32 m_nMarshaledMessages;
 
@@ -149,6 +153,7 @@ struct urp_BridgeImpl :
     struct Properties m_properties;
     class PropertyObject *m_pPropertyObject;
     ::std::list< ::rtl::OUString > m_lstErrors;
+    uno_ThreadPool m_hThreadPool;
 };
 
 
