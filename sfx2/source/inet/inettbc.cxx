@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 08:58:10 $
+ *  last change: $Author: mba $ $Date: 2001-01-30 09:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_UNO_ANY_H_
+#include <com/sun/star/uno/Any.h>
+#endif
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -92,6 +95,7 @@
 #include "referers.hxx"
 #include "sfxtypes.hxx"
 #include "helper.hxx"
+#include "ucbhelp.hxx"
 
 // -----------------------------------------------------------------------
 class SfxMatchContext_Impl : public ::vos::OThread
@@ -932,6 +936,10 @@ String SfxURLBox::GetURL()
         String aName = ParseSmart( GetText(), aBaseURL, SvtPathOptions().GetWorkPath() );
         if ( aName.Len() )
             aObj.SetURL( aName );
+        ::com::sun::star::uno::Any aAny = UCB_Helper::GetProperty( aObj.GetMainURL(), WID_TITLE );
+        ::rtl::OUString aTitle;
+        if ( aAny >>= aTitle )
+            aObj.SetName( aTitle );
     }
 
     return aObj.GetMainURL();
