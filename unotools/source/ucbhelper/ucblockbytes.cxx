@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:47:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,7 +756,7 @@ Moderator::Moderator(
     // now exchange the whole data sink stuff
     // with a thread safe version
 
-    Reference<XInterface> *pxSink;
+    Reference<XInterface> *pxSink = NULL;
 
     PostCommandArgument2 aPostArg;
     OpenCommandArgument2 aOpenArg;
@@ -956,7 +956,7 @@ void SAL_CALL Moderator::run()
 {
     ResultType aResultType;
     Any        aResult;
-    sal_Int32  nIOErrorCode;
+    sal_Int32  nIOErrorCode = 0;
 
     try
     {
