@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:23:17 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:32:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,8 @@ void SwTextShell::ExecDB(SfxRequest &rReq)
                 aDescriptor[daSelection]    <<= aSelection;
                 aDescriptor[daCommandType]  <<= nCommandTypeArg;
 
-                pNewDBMgr->MergeNew(DBMGR_MERGE, *GetShellPtr(), aDescriptor);
+                SwMergeDescriptor aMergeDesc( DBMGR_MERGE, *GetShellPtr(), aDescriptor );
+                pNewDBMgr->MergeNew(aMergeDesc);
 
                 if ( bDisposeResultSet )
                     ::comphelper::disposeComponent(xCursor);
