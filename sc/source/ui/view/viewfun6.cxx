@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun6.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:10:45 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void ScViewFunc::ShowNote()
     SCTAB nTab = GetViewData()->GetTabNo();
     BOOL bUndo (pDoc->IsUndoEnabled());
 
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
          !pDoc->HasNoteObject( nCol, nRow, nTab ) )
     {
@@ -266,9 +266,24 @@ void ScViewFunc::ShowNote()
         {
             aNote.SetShown( TRUE );
             pDoc->SetNote( nCol, nRow, nTab, aNote );
+            // This repaint should not be neccessary.
+            // But it solves a problem where following an
+            // insertion of more note text, the note sometimes
+            // displays the height to the previous note position.
+            // A similar problem is also in ScUndoEditNote::Undo().
+            ScRange aDrawRange;
+            aDrawRange.aStart.SetCol(0);
+            aDrawRange.aStart.SetRow(0);
+            aDrawRange.aStart.SetTab(nTab);
+            aDrawRange.aEnd.SetCol(MAXCOL);
+            aDrawRange.aEnd.SetRow(MAXROW);
+            aDrawRange.aEnd.SetTab(nTab);
+            pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
             if (pUndo)
                 pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
                                                 TRUE, ScAddress(nCol,nRow,nTab), pUndo ) );
+
+
 
             pDocSh->SetDocumentModified();
         }
@@ -293,7 +308,7 @@ void ScViewFunc::HideNote()
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
 
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     if ( pDoc->GetNote( nCol, nRow, nTab, aNote ) &&
          pDoc->HasNoteObject( nCol, nRow, nTab ) )
     {
@@ -306,6 +321,21 @@ void ScViewFunc::HideNote()
         {
             aNote.SetShown( FALSE );
             pDoc->SetNote( nCol, nRow, nTab, aNote );
+            // This repaint should not be neccessary.
+            // But it solves a problem where following an
+            // insertion of more note text, the note sometimes
+            // continues to displays the additional height to
+            // the previous note height position - despite the fact
+            // that we have chosen to hide the note.
+            // A similar problem is also in ScUndoEditNote::Undo().
+            ScRange aDrawRange;
+            aDrawRange.aStart.SetCol(0);
+            aDrawRange.aStart.SetRow(0);
+            aDrawRange.aStart.SetTab(nTab);
+            aDrawRange.aEnd.SetCol(MAXCOL);
+            aDrawRange.aEnd.SetRow(MAXROW);
+            aDrawRange.aEnd.SetTab(nTab);
+            pDocSh->PostPaint( aDrawRange, PAINT_GRID| PAINT_EXTRAS);
             if (pUndo)
                 pDocSh->GetUndoManager()->AddUndoAction( new ScUndoNote( pDocSh,
                                                 FALSE, ScAddress(nCol,nRow,nTab), pUndo ) );
@@ -330,7 +360,7 @@ void ScViewFunc::EditNote()
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
 
-    ScPostIt aNote;
+    ScPostIt aNote(pDoc);
     BOOL bFound = pDoc->GetNote( nCol, nRow, nTab, aNote );
     if ( !bFound || !pDoc->HasNoteObject( nCol, nRow, nTab ) )      // neu oder versteckt
     {
