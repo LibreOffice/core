@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2000-12-22 09:51:06 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,6 +688,8 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_TABSTOPS),  RES_PARATR_TABSTOP,  new uno::Type(::getCppuType((uno::Sequence<style::TabStop>*)0)),       PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
 #else
                     { SW_PROP_NAME(UNO_NAME_TABSTOPS),                  RES_PARATR_TABSTOP,     &::getCppuType((const uno::Sequence<style::TabStop>*)0),        PropertyAttribute::MAYBEVOID, CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_HYPER_LINK_EVENTS ),        RES_TXTATR_INETFMT,     &::getCppuType((uno::Reference<container::XNameReplace>*)0),    PropertyAttribute::MAYBEVOID, MID_URL_HYPERLINKEVENTS},
+
 #endif
                     {0,0,0,0}
                 };

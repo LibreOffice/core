@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomid.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 12:19:40 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@
 #define MID_URL_TARGET                          5
 #define MID_URL_VISITED_FMT                     6
 #define MID_URL_UNVISITED_FMT                   7
+#define MID_URL_HYPERLINKEVENTS                 8
 
 #define MID_CHAIN_PREVNAME                      0
 #define MID_CHAIN_NEXTNAME                      1

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: os $ $Date: 2000-12-19 15:50:31 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,6 +344,7 @@ const SwPropNameLen __FAR_DATA  UNO_NAME_HORI_ORIENT_POSITION                   
 const SwPropNameLen __FAR_DATA  UNO_NAME_HYPER_LINK_U_R_L                       (MAP_CHAR_LEN("HyperLinkURL"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HYPER_LINK_TARGET                      (MAP_CHAR_LEN("HyperLinkTarget"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_HYPER_LINK_NAME                        (MAP_CHAR_LEN("HyperLinkName"));
+const SwPropNameLen __FAR_DATA  UNO_NAME_HYPER_LINK_EVENTS                      (MAP_CHAR_LEN("HyperLinkEvents"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_INFO_TYPE                              (MAP_CHAR_LEN("InfoType"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_INFO_FORMAT                            (MAP_CHAR_LEN("InfoFormat"));
 const SwPropNameLen __FAR_DATA  UNO_NAME_IS_INPUT                               (MAP_CHAR_LEN("Input"));

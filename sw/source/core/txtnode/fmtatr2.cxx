@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-16 21:31:21 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _UNOSTYLE_HXX
 #include <unostyle.hxx>
+#endif
+#ifndef _UNOEVENT_HXX
+#include <unoevent.hxx>     // SwHyperlinkEventDescriptor
 #endif
 
 #ifndef _CMDID_H
@@ -354,6 +357,19 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
             sVal = SwXStyleFamilies::GetProgrammaticName( aINetFmt,
                                                     SFX_STYLE_FAMILY_CHAR );
         break;
+        case MID_URL_HYPERLINKEVENTS:
+        {
+            // create (and return) event descriptor
+            SwHyperlinkEventDescriptor* pEvents =
+                new SwHyperlinkEventDescriptor();
+            pEvents->copyMacrosFromINetFmt(*this);
+            uno::Reference<container::XNameReplace> xNameReplace(pEvents);
+
+            // all others return a string; so we just set rVal here and exit
+            rVal <<= xNameReplace;
+            return bRet;
+        }
+        break;
         default:
             bRet = FALSE;
     }
@@ -363,37 +379,63 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
     BOOL bRet = TRUE;
-    if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
-        return FALSE;
-    XubString sVal = *(rtl::OUString*)rVal.getValue();
-    switch(nMemberId)
-    {
-        case MID_URL_URL:
-            aURL = sVal;
-        break;
-        case MID_URL_TARGET:
-            aTargetFrame = sVal;
-        break;
-        case MID_URL_HYPERLINKNAME:
-             aName = sVal;
-        break;
-        case MID_URL_VISITED_FMT:
-        {
-            aVisitedFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                       SFX_STYLE_FAMILY_CHAR );
-            nVisitedId = SwDoc::GetPoolId( aVisitedFmt, GET_POOLID_CHRFMT );
 
-        }
-        break;
-        case MID_URL_UNVISITED_FMT:
+    // all properties except HyperlinkEvents are of type string, hence
+    // we treat HyperlinkEvents specially
+    if (MID_URL_HYPERLINKEVENTS == nMemberId)
+    {
+        uno::Reference<container::XNameReplace> xReplace;
+        rVal >>= xReplace;
+        if (xReplace.is())
         {
-            aINetFmt = SwXStyleFamilies::GetUIName( sVal,
-                                                    SFX_STYLE_FAMILY_CHAR );
-            nINetId = SwDoc::GetPoolId( aINetFmt,   GET_POOLID_CHRFMT );
+            // Create hyperlink event descriptor. Then copy events
+            // from argument into descriptor. Then copy events from
+            // the descriptor into the format.
+            SwHyperlinkEventDescriptor aEvents;
+            aEvents.copyMacrosFromNameReplace(xReplace);
+            aEvents.copyMacrosIntoINetFmt(*this);
         }
-        break;
-        default:
+        else
+        {
+            // wrong type!
             bRet = FALSE;
+        }
+    }
+    else
+    {
+        // all string properties:
+        if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
+            return FALSE;
+        XubString sVal = *(rtl::OUString*)rVal.getValue();
+        switch(nMemberId)
+        {
+            case MID_URL_URL:
+                aURL = sVal;
+                break;
+            case MID_URL_TARGET:
+                aTargetFrame = sVal;
+                break;
+            case MID_URL_HYPERLINKNAME:
+                aName = sVal;
+                break;
+            case MID_URL_VISITED_FMT:
+            {
+                aVisitedFmt = SwXStyleFamilies::GetUIName(
+                    sVal, SFX_STYLE_FAMILY_CHAR );
+                nVisitedId = SwDoc::GetPoolId( aVisitedFmt,
+                                               GET_POOLID_CHRFMT );
+            }
+            break;
+            case MID_URL_UNVISITED_FMT:
+            {
+                aINetFmt = SwXStyleFamilies::GetUIName(
+                    sVal, SFX_STYLE_FAMILY_CHAR );
+                nINetId = SwDoc::GetPoolId( aINetFmt,   GET_POOLID_CHRFMT );
+            }
+            break;
+            default:
+                bRet = FALSE;
+        }
     }
     return bRet;
 }

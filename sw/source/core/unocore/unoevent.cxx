@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoevent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-12-22 09:52:39 $
+ *  last change: $Author: dvo $ $Date: 2001-01-02 14:29:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,11 @@
 #endif
 
 #ifndef _SFX_HRC
-#include "sfx2/sfx.hrc"
+#include <sfx2/sfx.hrc>
+#endif
+
+#ifndef _FMTINFMT_HXX
+#include "fmtinfmt.hxx"
 #endif
 
 #ifndef _SFXMACITEM_HXX
@@ -120,9 +124,13 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
 
-const sal_Char sServiceName[] = "com.sun.star.container.XNameReplace";
-const sal_Char sImplementationName[] = "SwEventDescriptor";
-
+const sal_Char sAPI_ServiceName[] = "com.sun.star.container.XNameReplace";
+const sal_Char sAPI_SwFrameEventDescriptor[] = "SwFrameEventDescriptor";
+const sal_Char sAPI_SwFrameStyleEventDescriptor[] =
+                                    "SwFrameStyleEventDescriptor";
+const sal_Char sAPI_SwDetachedEventDescriptor[] = "SwDetachedEventDescriptor";
+const sal_Char sAPI_SwHyperlinkEventDescriptor[] =
+                                    "SwHyperlinkEventDescriptor";
 
 //
 // tables of all known events handled by this class
@@ -311,10 +319,15 @@ const USHORT aTest[] =
 };
 
 
-SwEventDescriptor::SwEventDescriptor(
-    XInterface& rParent,
+
+
+//
+// SwEventDescriptor
+//
+
+SwBaseEventDescriptor::SwBaseEventDescriptor(
     const USHORT* aSupportedEvents) :
-        xParentRef(&rParent),
+        sServiceName(RTL_CONSTASCII_USTRINGPARAM(sAPI_ServiceName)),
         aSupportedMacroItemIDs(aSupportedEvents),
         sEventType(RTL_CONSTASCII_USTRINGPARAM("EventType")),
         sMacroName(RTL_CONSTASCII_USTRINGPARAM("MacroName")),
@@ -322,23 +335,26 @@ SwEventDescriptor::SwEventDescriptor(
         sStarBasic(RTL_CONSTASCII_USTRINGPARAM("StarBasic")),
         sJavaScript(RTL_CONSTASCII_USTRINGPARAM("JavaScript")),
         sScript(RTL_CONSTASCII_USTRINGPARAM("Script")),
-        sNone(RTL_CONSTASCII_USTRINGPARAM("None"))
+        sNone(RTL_CONSTASCII_USTRINGPARAM("None")),
+        sEmpty(),
+        aEmptyMacro(sEmpty, sEmpty)
 {
     DBG_ASSERT(aSupportedEvents != NULL, "Need a list of supported events!");
 }
 
 
-SwEventDescriptor::~SwEventDescriptor()
+SwBaseEventDescriptor::~SwBaseEventDescriptor()
 {
-    // automatically release xParentRef !
 }
 
-void SwEventDescriptor::replaceByName(
+void SwBaseEventDescriptor::replaceByName(
     const OUString& rName,
     const Any& rElement )
     throw(
         IllegalArgumentException,
-        NoSuchElementException)
+        NoSuchElementException,
+        WrappedTargetException,
+        RuntimeException)
 {
     USHORT nMacroID = getMacroID(rName);
 
@@ -352,8 +368,211 @@ void SwEventDescriptor::replaceByName(
     Sequence<PropertyValue> aSequence;
     rElement >>= aSequence;
 
+    // perform replace (in subclass)
+    replaceByName(nMacroID, getMacroFromAny(rElement));
+}
+
+Any SwBaseEventDescriptor::getByName(
+    const OUString& rName )
+    throw(NoSuchElementException)
+{
+    USHORT nMacroID = getMacroID(rName);
+
+    // error checking
+    if (0 == nMacroID)
+        throw new NoSuchElementException();
+
+    // perform get (in subclass)
+    return getAnyFromMacro(getByName(nMacroID));
+}
+
+Sequence<OUString> SwBaseEventDescriptor::getElementNames() throw()
+{
+    // this implementation is somewhat slower than it needs to be, but
+    // I don't think it's worth the effort to speed it up...
+
+    // 1) count the supported macro IDs
+    sal_Int16 nCount = 0;
+    for( ; aSupportedMacroItemIDs[nCount] != 0; nCount++) ;
+
+    // 2) create and fill sequence
+    Sequence<OUString> aSequence(nCount);
+    for( sal_Int16 i = 0; i < nCount; i++)
+    {
+        aSequence[i] = mapEventIDToName( aSupportedMacroItemIDs[i] );
+    }
+
+    return aSequence;
+}
+
+sal_Bool SwBaseEventDescriptor::hasByName(
+    const OUString& rName )
+    throw()
+{
+    USHORT nMacroID = getMacroID(rName);
+    return (nMacroID != 0);
+}
+
+Type SwBaseEventDescriptor::getElementType() throw()
+{
+    return ::getCppuType((Sequence<PropertyValue> *)0);
+}
+
+sal_Bool SwBaseEventDescriptor::hasElements() throw()
+{
+    // check if the first element of aSupportedMacroItemIDs is already
+    // the delimiter
+    return aSupportedMacroItemIDs[0] == 0;
+}
+
+sal_Bool SwBaseEventDescriptor::supportsService(const OUString& rServiceName)
+    throw( )
+{
+    return sServiceName.equals(rServiceName);
+}
+
+Sequence<OUString> SwBaseEventDescriptor::getSupportedServiceNames(void)
+    throw()
+{
+    Sequence<OUString> aSequence(1);
+    aSequence[0] = sServiceName;
+
+    return aSequence;
+}
+
+USHORT SwBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
+{
+    // iterate over known event names
+    for(sal_Int16 i = 0; aKnownEventNames[i] != NULL; i++)
+    {
+        if (0 == rName.compareToAscii(aKnownEventNames[i]))
+        {
+            return aKnownEventIDs[i];
+        }
+    }
+
+    // not found -> return zero
+    return 0;
+}
+
+OUString SwBaseEventDescriptor::mapEventIDToName(USHORT nPoolID) const
+{
+    // iterate over known event IDs
+    for(sal_Int16 i = 0; aKnownEventIDs[i] != 0; i++)
+    {
+        if (nPoolID == aKnownEventIDs[i])
+        {
+            return OUString::createFromAscii(aKnownEventNames[i]);
+        }
+    }
+
+    // not found -> return empty string
+    OUString sEmpty;
+    return sEmpty;
+}
+
+USHORT SwBaseEventDescriptor::getMacroID(const OUString& rName) const
+{
+    USHORT nID = mapNameToEventID(rName);
+    if (nID != 0)
+    {
+        for (sal_Int16 i=0; aSupportedMacroItemIDs[i] != 0; i++)
+        {
+            if (aSupportedMacroItemIDs[i] == nID)
+            {
+                // found! return nID
+                return nID;
+            }
+        }
+    }
+
+    // not found -> return 0
+    return 0;
+}
+
+Any SwBaseEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
+{
+    Any aRetValue;
+    sal_Bool bRetValueOK = sal_False;   // do we have a ret value?
+
+    if (rMacro.HasMacro())
+    {
+        switch (rMacro.GetScriptType())
+        {
+            case STARBASIC:
+            {
+                // create sequence
+                Sequence<PropertyValue> aSequence(3);
+                Any aTmp;
+
+                // create type
+                PropertyValue aTypeValue;
+                aTypeValue.Name = sEventType;
+                aTmp <<= sStarBasic;
+                aTypeValue.Value = aTmp;
+                aSequence[0] = aTypeValue;
+
+                // macro name
+                PropertyValue aNameValue;
+                aNameValue.Name = sMacroName;
+                OUString sNameTmp(rMacro.GetMacName());
+                aTmp <<= sNameTmp;
+                aNameValue.Value = aTmp;
+                aSequence[1] = aNameValue;
+
+                // library name
+                PropertyValue aLibValue;
+                aLibValue.Name = sLibrary;
+                OUString sLibTmp(rMacro.GetLibName());
+                aTmp <<= sLibTmp;
+                aLibValue.Value = aTmp;
+                aSequence[2] = aLibValue;
+
+                aRetValue <<= aSequence;
+                bRetValueOK = sal_True;
+                break;
+            }
+
+            case JAVASCRIPT:
+            case EXTENDED_STYPE:
+            default:
+                DBG_ERROR("not implemented");
+        }
+    }
+    // else: bRetValueOK not set
+
+    // if we don't have a return value, make an empty one
+    if (! bRetValueOK)
+    {
+        // create "None" macro
+        Sequence<PropertyValue> aSequence(1);
+
+        PropertyValue aKindValue;
+        aKindValue.Name = sEventType;
+        Any aTmp;
+        aTmp <<= sNone;
+        aKindValue.Value = aTmp;
+        aSequence[0] = aKindValue;
+
+        aRetValue <<= aSequence;
+        bRetValueOK = sal_True;
+    }
+
+    return aRetValue;
+}
+
+
+const SvxMacro SwBaseEventDescriptor::getMacroFromAny(
+    const Any& rAny)
+        throw ( IllegalArgumentException )
+{
+    // get sequence
+    Sequence<PropertyValue> aSequence;
+    rAny >>= aSequence;
+
     // process ...
     sal_Bool bTypeOK = sal_False;
+    sal_Bool bNone = sal_False;     // true if EventType=="None"
     enum ScriptType eType;
     OUString sScriptVal;
     OUString sMacroVal;
@@ -376,6 +595,11 @@ void SwEventDescriptor::replaceByName(
                 eType = JAVASCRIPT;
                 bTypeOK = sal_True;
             }
+            else if (sTmp.equals(sNone))
+            {
+                bNone = sal_True;
+                bTypeOK = sal_True;
+            }
             // else: unknown script type
         }
         else if (aValue.Name.equals(sMacroName))
@@ -393,228 +617,255 @@ void SwEventDescriptor::replaceByName(
         // else: unknown PropertyValue -> ignore
     }
 
-    SvxMacroItem aItem(RES_FRMMACRO);
-    aItem.SetMacroTable(getMacroItem().GetMacroTable());
     if (bTypeOK)
     {
-        if (eType == STARBASIC)
+        if (bNone)
         {
-            SvxMacro aMacro(sMacroVal, sLibVal, eType);
-            aItem.SetMacro(nMacroID, aMacro);
+            // create empty macro
+            OUString sEmpty;
+            SvxMacro aMacro(sEmpty, sEmpty, STARBASIC);
+            return aMacro;
         }
         else
         {
-            // TODO: JavaScript macros
+            if (eType == STARBASIC)
+            {
+                // create macro and return
+                SvxMacro aMacro(sMacroVal, sLibVal, eType);
+                return aMacro;
+            }
+            else
+            {
+                // we can't process type: abort
+                // TODO: JavaScript macros
+                throw new IllegalArgumentException();
+            }
         }
     }
     else
     {
-        // no valid type -> no valid macro -> delete if present
-        if (aItem.HasMacro(nMacroID))
-            aItem.DelMacro(nMacroID);
+        // no valid type: abort
+        throw new IllegalArgumentException();
     }
+}
+
+
+
+
+//
+// SwEventDescriptor
+//
+
+
+SwEventDescriptor::SwEventDescriptor(
+    XInterface& rParent,
+    const USHORT* aSupportedEvents) :
+        SwBaseEventDescriptor(aSupportedEvents),
+        xParentRef(&rParent)
+{
+}
+
+
+SwEventDescriptor::~SwEventDescriptor()
+{
+    // automatically release xParentRef !
+}
+
+void SwEventDescriptor::replaceByName(
+    const USHORT nEvent,
+    const SvxMacro& rMacro)
+        throw(
+            IllegalArgumentException,
+            NoSuchElementException,
+            WrappedTargetException,
+            RuntimeException)
+{
+    SvxMacroItem aItem(RES_FRMMACRO);
+    aItem.SetMacroTable(getMacroItem().GetMacroTable());
+    aItem.SetMacro(nEvent, rMacro);
     setMacroItem(aItem);
 }
 
-Any SwEventDescriptor::getByName(
-    const OUString& rName )
-    throw(NoSuchElementException)
+const SvxMacro& SwEventDescriptor::getByName(
+    const USHORT nEvent )
+        throw(
+            NoSuchElementException,
+            WrappedTargetException,
+            RuntimeException)
 {
-    USHORT nMacroID = getMacroID(rName);
-
-    // error checking
-    if (0 == nMacroID)
-        throw new NoSuchElementException();
-
-    Any aAny;
     const SvxMacroItem& rItem = getMacroItem();
-    if (rItem.HasMacro(nMacroID))
+    if (rItem.HasMacro(nEvent))
     {
-        aAny = getAnyFromMacro(rItem.GetMacro(nMacroID));
+        return rItem.GetMacro(nEvent);
     }
     else
     {
-        // create empty macro
-        String sEmpty;
-        SvxMacro aMacro(sEmpty, sEmpty);
-        aAny = getAnyFromMacro(aMacro);
+        return aEmptyMacro;
+    }
+}
+
+
+
+
+//
+// SwDetachedEventDescriptor
+//
+
+SwDetachedEventDescriptor::SwDetachedEventDescriptor(
+    const USHORT* aMacroItems) :
+    SwBaseEventDescriptor(aMacroItems),
+    sImplName(RTL_CONSTASCII_USTRINGPARAM(sAPI_SwDetachedEventDescriptor))
+{
+    // allocate aMacros
+    sal_Int16 nCount = getIndex(0);
+    aMacros = new SvxMacro*[nCount];
+
+    // ... and initialize
+    for(sal_Int16 i = 0; i < nCount; i++)
+    {
+        aMacros[i] = NULL;
+    }
+}
+
+SwDetachedEventDescriptor::~SwDetachedEventDescriptor()
+{
+    // delete contents of aMacros
+    sal_Int16 nCount = getIndex(0);
+    for(sal_Int16 i = 0; i < nCount; i++)
+    {
+        if (NULL != aMacros[i])
+            delete aMacros[i];
     }
 
-    return aAny;
+    delete aMacros;
 }
 
-Sequence<OUString> SwEventDescriptor::getElementNames() throw()
+sal_Int16 SwDetachedEventDescriptor::getIndex(const USHORT nID)
 {
-    // this implementation is somewhat slower than it needs to be, but
-    // I don't think it's worth the effort to speed it up...
-
-    // 1) count the supported macro IDs
-    sal_Int16 nCount = 0;
-    for( ; aSupportedMacroItemIDs[nCount] != 0; nCount++) ;
-
-    // 2) create and fill sequence
-    Sequence<OUString> aSequence(nCount);
-    for( sal_Int16 i = 0; i < nCount; i++)
+    // iterate over supported events
+    sal_Int16 nIndex = 0;
+    while ( (aSupportedMacroItemIDs[nIndex] != nID) &&
+            (aSupportedMacroItemIDs[nIndex] != 0)      )
     {
-        aSequence[i] = mapEventIDToName( aSupportedMacroItemIDs[i] );
+        nIndex++;
     }
-
-    return aSequence;
+    return (aSupportedMacroItemIDs[nIndex] == nID) ? nIndex : -1;
 }
 
-sal_Bool SwEventDescriptor::hasByName(
-    const OUString& rName )
-    throw()
+
+OUString SwDetachedEventDescriptor::getImplementationName()
+    throw( ::com::sun::star::uno::RuntimeException )
 {
-    USHORT nMacroID = getMacroID(rName);
-    return (nMacroID != 0);
+    return sImplName;
 }
 
-Type SwEventDescriptor::getElementType() throw()
+
+void SwDetachedEventDescriptor::replaceByName(
+    const USHORT nEvent,
+    const SvxMacro& rMacro)
+    throw(
+        IllegalArgumentException,
+        NoSuchElementException,
+        WrappedTargetException,
+        RuntimeException)
 {
-    return ::getCppuType((Sequence<PropertyValue> *)0);
+    sal_Int16 nIndex = getIndex(nEvent);
+    if (-1 == nIndex)
+        throw new IllegalArgumentException();
+
+    aMacros[nIndex] = new SvxMacro(rMacro.GetMacName(), rMacro.GetLibName(),
+                                   rMacro.GetScriptType() );
 }
 
-sal_Bool SwEventDescriptor::hasElements() throw()
+
+const SvxMacro& SwDetachedEventDescriptor::getByName(
+    const USHORT nEvent )
+    throw(
+        NoSuchElementException,
+        WrappedTargetException,
+        RuntimeException)
 {
-    // check if the first element of aSupportedMacroItemIDs is already
-    // the delimiter
-    return aSupportedMacroItemIDs[0] == 0;
+    sal_Int16 nIndex = getIndex(nEvent);
+    if (-1 == nIndex)
+        throw new IllegalArgumentException();
+
+    return (NULL == aMacros[nIndex]) ? aEmptyMacro : (*aMacros[nIndex]);
 }
 
-rtl::OUString SwEventDescriptor::getImplementationName(void)
-    throw(RuntimeException)
+const sal_Bool SwDetachedEventDescriptor::hasByName(
+    const USHORT nEvent )       /// item ID of event
+        throw(IllegalArgumentException)
 {
-    OUString sName(RTL_CONSTASCII_USTRINGPARAM(sImplementationName));
-    return sName;
+    sal_Int16 nIndex = getIndex(nEvent);
+    if (-1 == nIndex)
+        throw new IllegalArgumentException();
+
+    return (NULL == aMacros[nIndex]) ? sal_False : aMacros[nIndex]->HasMacro();
 }
 
-sal_Bool SwEventDescriptor::supportsService(const OUString& rServiceName)
-    throw( )
+
+//
+// SwHyperlinkEventDescriptor
+//
+
+SwHyperlinkEventDescriptor::SwHyperlinkEventDescriptor() :
+    SwDetachedEventDescriptor(aHyperlinkEvents),
+    sImplName(RTL_CONSTASCII_USTRINGPARAM(sAPI_SwHyperlinkEventDescriptor))
 {
-    return rServiceName.equalsAsciiL(sServiceName, sizeof(sServiceName)-1);
 }
 
-Sequence<OUString> SwEventDescriptor::getSupportedServiceNames(void)
-    throw()
+SwHyperlinkEventDescriptor::~SwHyperlinkEventDescriptor()
 {
-    OUString sService(RTL_CONSTASCII_USTRINGPARAM(sServiceName));
-
-    Sequence<OUString> aSequence(1);
-    aSequence[0] = sService;
-
-    return aSequence;
 }
 
-USHORT SwEventDescriptor::mapNameToEventID(const OUString& rName) const
+OUString SwHyperlinkEventDescriptor::getImplementationName(void)
+    throw( RuntimeException )
 {
-    for(sal_Int16 i = 0; aKnownEventNames[i] != NULL; i++)
+    return sImplName;
+}
+
+void SwHyperlinkEventDescriptor::copyMacrosFromINetFmt(
+    const SwFmtINetFmt& aFmt)
+{
+    for(sal_Int16 i = 0; aSupportedMacroItemIDs[i] != NULL; i++)
     {
-        if (0 == rName.compareToAscii(aKnownEventNames[i]))
+        USHORT nEvent = aSupportedMacroItemIDs[i];
+        const SvxMacro* aMacro = aFmt.GetMacro(nEvent);
+        if (NULL != aMacro)
+            replaceByName(nEvent, *aMacro);
+    }
+}
+
+void SwHyperlinkEventDescriptor::copyMacrosIntoINetFmt(
+    SwFmtINetFmt& aFmt)
+{
+    for(sal_Int16 i = 0; aSupportedMacroItemIDs[i] != NULL; i++)
+    {
+        USHORT nEvent = aSupportedMacroItemIDs[i];
+        if (hasByName(nEvent))
+            aFmt.SetMacro(nEvent, getByName(nEvent));
+    }
+}
+
+
+void SwHyperlinkEventDescriptor::copyMacrosFromNameReplace(
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::container::XNameReplace> & xReplace)
+{
+    // iterate over all names (all names that *we* support)
+    Sequence<OUString> aNames = getElementNames();
+    sal_Int32 nCount = aNames.getLength();
+    for(sal_Int32 i = 0; i < nCount; i++)
+    {
+        // copy element for that name
+        const OUString& rName = aNames[i];
+        if (xReplace->hasByName(rName))
         {
-            return aKnownEventIDs[i];
+            SwBaseEventDescriptor::replaceByName(rName,
+                                                 xReplace->getByName(rName));
         }
     }
-
-    // not found -> return zero
-    return 0;
 }
-
-OUString SwEventDescriptor::mapEventIDToName(USHORT nPoolID) const
-{
-    for(sal_Int16 i = 0; aKnownEventIDs[i] != 0; i++)
-    {
-        if (nPoolID == aKnownEventIDs[i])
-        {
-            return OUString::createFromAscii(aKnownEventNames[i]);
-        }
-    }
-
-    // not found -> return empty string
-    OUString sEmpty;
-    return sEmpty;
-}
-
-USHORT SwEventDescriptor::getMacroID(const OUString& rName) const
-{
-    USHORT nID = mapNameToEventID(rName);
-    if (nID != 0)
-    {
-        for (sal_Int16 i=0; aSupportedMacroItemIDs[i] != 0; i++)
-        {
-            if (aSupportedMacroItemIDs[i] == nID)
-            {
-                // found! return nID
-                return nID;
-            }
-        }
-    }
-
-    // not found -> return 0
-    return 0;
-}
-
-Any SwEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
-{
-    Any aRetValue;
-
-    if (rMacro.HasMacro())
-    {
-        enum ScriptType eType = rMacro.GetScriptType();
-        switch (eType)
-        {
-            case STARBASIC:
-            {
-                // create sequence
-                Sequence<PropertyValue> aSequence(2);
-                Any aTmp;
-
-                // create type
-                PropertyValue aTypeValue;
-                aTypeValue.Name = sEventType;
-                aTmp <<= sStarBasic;
-                aTypeValue.Value = aTmp;
-                aSequence[0] = aTypeValue;
-
-                PropertyValue aStringValue;
-                aStringValue.Name = sMacroName;
-                OUStringBuffer sBuf;
-                sBuf.append(rMacro.GetLibName());
-                sBuf.append(sal_Unicode('.'));
-                sBuf.append(rMacro.GetMacName());
-                aTmp <<= sBuf.makeStringAndClear();
-                aStringValue.Value = aTmp;
-                aSequence[1] = aStringValue;
-
-                aRetValue <<= aSequence;
-                break;
-            }
-
-            case JAVASCRIPT:
-            case EXTENDED_STYPE:
-            default:
-                DBG_ERROR("not implemented");
-                break;
-        }
-    }
-    else
-    {
-        // create "None" macro
-        Sequence<PropertyValue> aSequence(1);
-
-        PropertyValue aKindValue;
-        aKindValue.Name = sEventType;
-        Any aTmp;
-        aTmp <<= sNone;
-        aKindValue.Value = aTmp;
-        aSequence[0] = aKindValue;
-
-        aRetValue <<= aSequence;
-    }
-
-    return aRetValue;
-}
-
 
 
 //
@@ -625,6 +876,8 @@ Any SwEventDescriptor::getAnyFromMacro(const SvxMacro& rMacro)
 SwFrameEventDescriptor::SwFrameEventDescriptor(
     SwXTextFrame& rFrameRef ) :
         SwEventDescriptor((text::XTextFrame&)rFrameRef, aFrameEvents),
+        sSwFrameEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_SwFrameEventDescriptor)),
         rFrame(rFrameRef)
 {
 }
@@ -657,6 +910,12 @@ const SvxMacroItem& SwFrameEventDescriptor::getMacroItem()
     return (const SvxMacroItem&)rFrame.GetFrmFmt()->GetAttr(RES_FRMMACRO);
 }
 
+OUString SwFrameEventDescriptor::getImplementationName()
+    throw( RuntimeException )
+{
+    return sSwFrameEventDescriptor;
+}
+
 
 //
 // SwFrameStyleEventDescriptor
@@ -666,6 +925,8 @@ SwFrameStyleEventDescriptor::SwFrameStyleEventDescriptor(
     SwXFrameStyle& rStyleRef ) :
         SwEventDescriptor((document::XEventSupplier&)rStyleRef,
                           aFrameStyleEvents),
+        sSwFrameStyleEventDescriptor(RTL_CONSTASCII_USTRINGPARAM(
+            sAPI_SwFrameStyleEventDescriptor)),
         rStyle(rStyleRef)
 {
 }
@@ -713,4 +974,10 @@ const SvxMacroItem& SwFrameStyleEventDescriptor::getMacroItem()
     }
     else
         return aEmptyMacroItem;
+}
+
+OUString SwFrameStyleEventDescriptor::getImplementationName()
+    throw( RuntimeException )
+{
+    return sSwFrameStyleEventDescriptor;
 }
