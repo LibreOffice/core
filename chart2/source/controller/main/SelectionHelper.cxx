@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-22 18:14:07 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,11 +268,11 @@ bool SelectionHelper::getFrameDragSingles()
 SdrObject* SelectionHelper::getObjectToMark()
 {
     //return the selected object itself
-    //or a sub object if one with name "MarkHandles" exsists
-
+    //or a specific other object if that exsists
     SdrObject* pObj = m_pSelectedObj;
-
     m_pMarkObj = pObj;
+
+    //search for a direct child with name "MarkHandles"
     if(pObj)
     {
         SdrObjList* pSubList = pObj->GetSubList();
@@ -368,7 +368,7 @@ bool SelectionHelper::getMarkHandles( SdrHdlList& rHdlList )
     while (aIterator.IsMore())
     {
         SdrObject* pSubObj = aIterator.Next();
-        Point aPos = pSubObj->GetBoundRect().Center();
+        Point aPos = pSubObj->GetCurrentBoundRect().Center();
         SdrHdl* pHdl = new SdrHdl(aPos,HDL_POLY);
         rHdlList.AddHdl(pHdl);
     }
