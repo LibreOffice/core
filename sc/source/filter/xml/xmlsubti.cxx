@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 16:00:05 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -135,16 +134,14 @@ ScMyTableData::ScMyTableData(sal_Int32 nSheet, sal_Int32 nCol, sal_Int32 nRow)
         nRealRows(nDefaultRowCount + 1, 0),
         nChangedCols()
 {
-    sal_Int32 i;
-
     aTableCellPos.Sheet = nSheet;
     aTableCellPos.Column = nCol;
     aTableCellPos.Row = nRow;
 
-    for ( i = 0; i < 3; i++)
+    for (sal_Int32 i = 0; i < 3; ++i)
         nRealCols[i] = i;
-    for (i = 0; i < 3; i++)
-        nRealRows[i] = i;
+    for (sal_Int32 j = 0; j < 3; ++j)
+        nRealRows[j] = j;
 
     nSpannedCols = 1;
     nColCount = 0;
@@ -157,7 +154,7 @@ ScMyTableData::~ScMyTableData()
 
 void ScMyTableData::AddRow()
 {
-    aTableCellPos.Row++;
+    ++aTableCellPos.Row;
     if (static_cast<sal_uInt32>(aTableCellPos.Row) >= nRowsPerRow.size())
     {
         nRowsPerRow.resize(nRowsPerRow.size() + nDefaultRowCount, 1);
@@ -168,7 +165,7 @@ void ScMyTableData::AddRow()
 
 void ScMyTableData::AddColumn()
 {
-    aTableCellPos.Column++;
+    ++aTableCellPos.Column;
     if (static_cast<sal_uInt32>(aTableCellPos.Column) >= nColsPerCol.size())
     {
         nColsPerCol.resize(nColsPerCol.size() + nDefaultColCount, 1);
@@ -181,7 +178,7 @@ sal_Int32 ScMyTableData::FindNextCol(const sal_Int32 nIndex) const
 {
     sal_Int32 i = nIndex;
     while(nRealCols[i] < 0)
-        i++;
+        ++i;
     return nRealCols[i];
 }
 
@@ -192,10 +189,11 @@ sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const sal_Bool bIsN
 
 sal_Int32 ScMyTableData::GetChangedCols(const sal_Int32 nFromIndex, const sal_Int32 nToIndex) const
 {
-    ScMysalIntList::const_iterator i = nChangedCols.begin();
-    while ((i != nChangedCols.end()) && ((*i < nToIndex) && !(*i >= nFromIndex)))
-        i++;
-    if (i == nChangedCols.end())
+    ScMysalIntList::const_iterator i(nChangedCols.begin());
+    ScMysalIntList::const_iterator endi(nChangedCols.end());
+    while ((i != endi) && ((*i < nToIndex) && !(*i >= nFromIndex)))
+        ++i;
+    if (i == endi)
         return -1;
     else
         if ((*i >= nFromIndex) && (*i < nToIndex))
@@ -206,13 +204,14 @@ sal_Int32 ScMyTableData::GetChangedCols(const sal_Int32 nFromIndex, const sal_In
 
 void ScMyTableData::SetChangedCols(const sal_Int32 nValue)
 {
-    ScMysalIntList::iterator i = nChangedCols.begin();
-    while ((i != nChangedCols.end()) && (*i < nValue))
+    ScMysalIntList::iterator i(nChangedCols.begin());
+    ScMysalIntList::iterator endi(nChangedCols.end());
+    while ((i != endi) && (*i < nValue))
     {
         sal_Int32 nTemp = *i;
-        i++;
+        ++i;
     }
-    if ((i == nChangedCols.end()) || (*i != nValue))
+    if ((i == endi) || (*i != nValue))
         nChangedCols.insert(i, nValue);
 }
 
@@ -238,7 +237,7 @@ ScMyTables::~ScMyTables()
         pTable = aTableVec[nTableCount - 1];
         delete pTable;
         aTableVec[nTableCount - 1] = NULL;
-        nTableCount--;
+        --nTableCount;
     }
 }
 
@@ -255,16 +254,16 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
             aTable = aTableVec[nTableCount - 1];
             delete aTable;
             aTableVec[nTableCount - 1] = NULL;
-            nTableCount--;
+            --nTableCount;
         }
-        nCurrentSheet++;
+        ++nCurrentSheet;
 
         bProtection = bTempProtection;
         sPassword = sTempPassword;
         uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( rImport.GetModel(), uno::UNO_QUERY );
         if ( xSpreadDoc.is() )
         {
-            uno::Reference <sheet::XSpreadsheets> xSheets = xSpreadDoc->getSheets();
+            uno::Reference <sheet::XSpreadsheets> xSheets(xSpreadDoc->getSheets());
             if (xSheets.is())
             {
                 if (nCurrentSheet > 0)
@@ -279,7 +278,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                         if (pDoc)
                         {
                             rImport.LockSolarMutex();
-                            String sTabName = String::CreateFromAscii("Table");
+                            String sTabName(String::CreateFromAscii("Table"));
                             pDoc->CreateValidTabName(sTabName);
                             rtl::OUString sOUTabName(sTabName);
                             xSheets->insertNewByName(sOUTabName, nCurrentSheet);
@@ -290,10 +289,10 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                 uno::Reference <container::XIndexAccess> xIndex( xSheets, uno::UNO_QUERY );
                 if ( xIndex.is() )
                 {
-                    uno::Any aSheet = xIndex->getByIndex(nCurrentSheet);
-                    if ( aSheet >>= xCurrentSheet )
+                    xCurrentSheet.set(xIndex->getByIndex(nCurrentSheet), uno::UNO_QUERY);
+                    if ( xCurrentSheet.is() )
                     {
-                        xCurrentCellRange = uno::Reference<table::XCellRange>(xCurrentSheet, uno::UNO_QUERY);
+                        xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
                         if (!(nCurrentSheet > 0))
                         {
                             uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
@@ -308,7 +307,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     if (pDoc)
                                     {
                                         rImport.LockSolarMutex();
-                                        String sTabName = String::CreateFromAscii("Table");
+                                        String sTabName(String::CreateFromAscii("Table"));
                                         pDoc->CreateValidTabName(sTabName);
                                         rtl::OUString sOUTabName(sTabName);
                                         xNamed->setName(sOUTabName);
@@ -330,13 +329,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
 sal_Bool ScMyTables::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
 {
-    uno::Reference <table::XCellRange> xMergeCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
-    uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow), uno::UNO_QUERY);
     if (xMergeable.is())
     {
-        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeCellRange, uno::UNO_QUERY);
-        uno::Reference<sheet::XSpreadsheet> xTable = xMergeSheetCellRange->getSpreadsheet();
-        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor = xTable->createCursorByRange(xMergeSheetCellRange);
+        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeable, uno::UNO_QUERY);
+        uno::Reference<sheet::XSpreadsheet> xTable(xMergeSheetCellRange->getSpreadsheet());
+        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor(xTable->createCursorByRange(xMergeSheetCellRange));
         if (xMergeSheetCursor.is())
         {
             xMergeSheetCursor->collapseToMergedArea();
@@ -363,10 +361,8 @@ void ScMyTables::UnMerge()
         if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
         {
             //unmerge
-            uno::Reference <table::XCellRange> xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow);
-            uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                    aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
                 xMergeable->merge(sal_False);
         }
@@ -381,10 +377,8 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
         if (IsMerged(xCurrentCellRange, GetRealCellPos().Column, GetRealCellPos().Row, aCellAddress))
         {
             //unmerge
-            uno::Reference <table::XCellRange> xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow);
-            uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                    aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
                 xMergeable->merge(sal_False);
         }
@@ -392,18 +386,16 @@ void ScMyTables::DoMerge(sal_Int32 nCount)
         //merge
         uno::Reference <table::XCellRange> xMergeCellRange;
         if (nCount == -1)
-            xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+            xMergeCellRange.set(xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.EndColumn
                                                     + aTableVec[nTableCount - 1]->GetColsPerCol(aTableVec[nTableCount - 1]->GetColumn()) - 1,
                                                     aCellAddress.EndRow
-                                                    + aTableVec[nTableCount - 1]->GetRowsPerRow(aTableVec[nTableCount - 1]->GetRow()) - 1);
+                                                    + aTableVec[nTableCount - 1]->GetRowsPerRow(aTableVec[nTableCount - 1]->GetRow()) - 1));
         else
-            xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+            xMergeCellRange.set(xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
                                                     aCellAddress.StartColumn
                                                     + nCount - 1,
-                                                    aCellAddress.EndRow);
+                                                    aCellAddress.EndRow));
         uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
         if (xMergeable.is())
             xMergeable->merge(sal_True);
@@ -416,24 +408,20 @@ void ScMyTables::InsertRow()
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nRow(GetRealCellPos().Row);
-        for (sal_Int32 j = 0; j < GetRealCellPos().Column - aTableVec[nTableCount - 1]->GetColumn() - 1; j++)
+        for (sal_Int32 j = 0; j < GetRealCellPos().Column - aTableVec[nTableCount - 1]->GetColumn() - 1; ++j)
         {
             if (IsMerged(xCurrentCellRange, j, nRow - 1, aCellAddress))
             {
                 //unmerge
-                uno::Reference <table::XCellRange> xMergeCellRange =
-                    xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow);
-                uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+                uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
                     xMergeable->merge(sal_False);
             }
 
             //merge
-            uno::Reference <table::XCellRange> xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow + 1);
-            uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                    aCellAddress.EndColumn, aCellAddress.EndRow + 1), uno::UNO_QUERY);
             if (xMergeable.is())
                 xMergeable->merge(sal_True);
             j += aCellAddress.EndColumn - aCellAddress.StartColumn;
@@ -482,10 +470,10 @@ void ScMyTables::SetRowStyle(const rtl::OUString& rCellStyleName)
 void ScMyTables::CloseRow()
 {
     sal_Int32 nToMerge;
-    sal_Int32 nSpannedCols = aTableVec[nTableCount - 1]->GetSpannedCols();
-    sal_Int32 nColCount = aTableVec[nTableCount - 1]->GetColCount();
-    sal_Int32 nCol = aTableVec[nTableCount - 1]->GetColumn();
-    sal_Int32 nColsPerCol = aTableVec[nTableCount - 1]->GetColsPerCol(nCol);
+    sal_Int32 nSpannedCols(aTableVec[nTableCount - 1]->GetSpannedCols());
+    sal_Int32 nColCount(aTableVec[nTableCount - 1]->GetColCount());
+    sal_Int32 nCol(aTableVec[nTableCount - 1]->GetColumn());
+    sal_Int32 nColsPerCol(aTableVec[nTableCount - 1]->GetColsPerCol(nCol));
     if (nSpannedCols > nColCount)
         nToMerge = aTableVec[nTableCount - 1]->GetChangedCols(nCol, nCol + nColsPerCol + nSpannedCols - nColCount);
     else
@@ -501,16 +489,14 @@ void ScMyTables::InsertColumn()
     {
         table::CellRangeAddress aCellAddress;
         sal_Int32 nCol(GetRealCellPos().Column);
-        for (sal_Int32 j = 0; j <= GetRealCellPos().Row - aTableVec[nTableCount - 1]->GetRow() - 1; j++)
+        for (sal_Int32 j = 0; j <= GetRealCellPos().Row - aTableVec[nTableCount - 1]->GetRow() - 1; ++j)
         {
             table::CellRangeAddress aTempCellAddress;
             if (IsMerged(xCurrentCellRange, nCol - 1, j, aCellAddress))
             {
                 //unmerge
-                uno::Reference <table::XCellRange> xMergeCellRange =
-                    xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow);
-                uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+                uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
                 if (xMergeable.is())
                     xMergeable->merge(sal_False);
                 aTempCellAddress = aCellAddress;
@@ -525,15 +511,13 @@ void ScMyTables::InsertColumn()
             }
 
             //insert Cell
-            sheet::CellInsertMode aCellInsertMode = sheet::CellInsertMode_RIGHT;
+            sheet::CellInsertMode aCellInsertMode(sheet::CellInsertMode_RIGHT);
             uno::Reference <sheet::XCellRangeMovement>  xCellRangeMovement (xCurrentSheet, uno::UNO_QUERY);
             xCellRangeMovement->insertCells(aTempCellAddress, aCellInsertMode);
 
             //merge
-            uno::Reference <table::XCellRange> xMergeCellRange =
-                xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn + 1, aCellAddress.EndRow);
-            uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference <util::XMergeable> xMergeable (xCurrentCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                        aCellAddress.EndColumn + 1, aCellAddress.EndRow), uno::UNO_QUERY);
             if (xMergeable.is())
                 xMergeable->merge(sal_True);
             j += aCellAddress.EndRow - aCellAddress.StartRow;
@@ -546,18 +530,18 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
 {
     if (!bIsCovered)
     {
-        sal_Int32 nColCount = aTableVec[nTableCount - 1]->GetColCount();
-        sal_Int32 nSpannedCols = aTableVec[nTableCount - 1]->GetSpannedCols();
+        sal_Int32 nColCount(aTableVec[nTableCount - 1]->GetColCount());
+        sal_Int32 nSpannedCols(aTableVec[nTableCount - 1]->GetSpannedCols());
         if ( (nSpannedCols > nColCount) &&
             (aTableVec[nTableCount - 1]->GetRow() == 0) &&
             (aTableVec[nTableCount - 1]->GetColumn() == 0) )
         {
             if (nColCount > 0)
             {
-                sal_Int32 FirstColsSpanned = nSpannedCols / nColCount;
-                sal_Int32 LastColSpanned = FirstColsSpanned
-                    + (nSpannedCols % nColCount);
-                for (sal_Int32 i = 0; i < nColCount - 1; i++)
+                sal_Int32 FirstColsSpanned(nSpannedCols / nColCount);
+                sal_Int32 LastColSpanned(FirstColsSpanned
+                    + (nSpannedCols % nColCount));
+                for (sal_Int32 i = 0; i < nColCount - 1; ++i)
                 {
                     aTableVec[nTableCount - 1]->SetColsPerCol(i, FirstColsSpanned);
                     aTableVec[nTableCount - 1]->SetRealCols(i + 1,
@@ -570,7 +554,7 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
                     + LastColSpanned);
             }
         }
-        sal_Int32 nTemp = aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn());
+        sal_Int32 nTemp(aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn()));
         if (aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn()) > nSpannedCols - 1)
         {
             if ( aTableVec[nTableCount - 1]->GetRow() == 0)
@@ -617,18 +601,18 @@ void ScMyTables::AddColumn(sal_Bool bIsCovered)
 
 void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 {
-    nTableCount++;
+    ++nTableCount;
     if (static_cast<sal_uInt32>(nTableCount) >= aTableVec.size())
         aTableVec.resize(aTableVec.size() + nDefaultTabCount);
-    ScMyTableData* aTable = new ScMyTableData(nCurrentSheet);
+    ScMyTableData* aTable(new ScMyTableData(nCurrentSheet));
     if (nTableCount > 1)
     {
-        sal_Int32 nCol = aTableVec[nTableCount - 2]->GetColumn();
-        sal_Int32 nColCount = aTableVec[nTableCount - 2]->GetColCount();
-        sal_Int32 nColsPerCol = aTableVec[nTableCount - 2]->GetColsPerCol(nCol);
-        sal_Int32 nSpannedCols = aTableVec[nTableCount - 2]->GetSpannedCols();
-        sal_Int32 nTemp = nSpannedCols - nColCount;
-        sal_Int32 nTemp2 = nCol - (nColCount - 1);
+        sal_Int32 nCol(aTableVec[nTableCount - 2]->GetColumn());
+        sal_Int32 nColCount(aTableVec[nTableCount - 2]->GetColCount());
+        sal_Int32 nColsPerCol(aTableVec[nTableCount - 2]->GetColsPerCol(nCol));
+        sal_Int32 nSpannedCols(aTableVec[nTableCount - 2]->GetSpannedCols());
+        sal_Int32 nTemp(nSpannedCols - nColCount);
+        sal_Int32 nTemp2(nCol - (nColCount - 1));
         if ((nTemp > 0) && (nTemp2 == 0))
             nTempSpannedCols *= (nTemp + 1);
         else
@@ -659,7 +643,7 @@ void ScMyTables::UpdateRowHeights()
         rImport.LockSolarMutex();
         // update automatic row heights
         SCTAB nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
-        for (SCTAB i = 0; i < nTableCount; i++)
+        for (SCTAB i = 0; i < nTableCount; ++i)
             ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
         rImport.UnlockSolarMutex();
     }
@@ -703,7 +687,7 @@ void ScMyTables::DeleteTable()
     uno::Reference < container::XNamed > xNamed(xCurrentSheet, uno::UNO_QUERY );
     if ( xNamed.is() )
     {
-        rtl::OUString sCurrentName = xNamed->getName();
+        rtl::OUString sCurrentName(xNamed->getName());
         if (sCurrentName != sCurrentSheetName && rImport.GetDocument())
         {
             rImport.GetDocument()->RenameTab( static_cast<SCTAB>(nCurrentSheet),
@@ -735,10 +719,9 @@ void ScMyTables::DeleteTable()
 
 table::CellAddress ScMyTables::GetRealCellPos()
 {
-    sal_Int32 nRow, nCol;
-    nRow = 0;
-    nCol = 0;
-    for (sal_Int32 i = 1; i <= nTableCount; i++)
+    sal_Int32 nRow(0);
+    sal_Int32 nCol(0);
+    for (sal_Int32 i = 1; i <= nTableCount; ++i)
     {
         nCol += aTableVec[i - 1]->GetRealCols(aTableVec[i - 1]->GetColumn());
         nRow += aTableVec[i - 1]->GetRealRows(aTableVec[i - 1]->GetRow());
@@ -767,7 +750,7 @@ uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
     {
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xCurrentSheet, uno::UNO_QUERY );
         if( xDrawPageSupplier.is() )
-            xDrawPage = xDrawPageSupplier->getDrawPage();
+            xDrawPage.set(xDrawPageSupplier->getDrawPage());
         nCurrentDrawPage = nCurrentSheet;
     }
     return xDrawPage;
@@ -777,8 +760,7 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
 {
     if( (nCurrentSheet != nCurrentXShapes) || !xShapes.is() )
     {
-        uno::Reference <drawing::XShapes > xTempShapes ( GetCurrentXDrawPage(), uno::UNO_QUERY );
-        xShapes = xTempShapes;
+        xShapes.set(GetCurrentXDrawPage(), uno::UNO_QUERY);
         rImport.GetShapeImport()->startPage(xShapes);
         rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
         nCurrentXShapes = nCurrentSheet;
@@ -825,8 +807,8 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
     sal_Bool bResult(sal_False);
     if (!aMatrixRangeList.empty())
     {
-        ScMyMatrixRangeList::iterator aItr = aMatrixRangeList.begin();
-        ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
+        ScMyMatrixRangeList::iterator aItr(aMatrixRangeList.begin());
+        ScMyMatrixRangeList::iterator aEndItr(aMatrixRangeList.end());
         sal_Bool bReady(sal_False);
         while(!bReady && aItr != aEndItr)
         {
