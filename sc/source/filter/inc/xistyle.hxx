@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xistyle.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:20:03 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -570,6 +570,9 @@ public:
     /** Returns the next formatted cell range in this column. */
     inline XclImpXFIndex*       Next()      { return maIndexList.Next(); }
 
+    /** Inserts a single row range into the list. */
+    void                        SetDefaultXF( sal_uInt32 nEncXFIndex );
+
     /** Inserts a new (encoded) XF index (first try to expand the last range). */
     void                        SetXF( sal_uInt16 nRow, sal_uInt32 nEncXFIndex );
 
@@ -609,6 +612,8 @@ public:
     void                        SetBoolXF( sal_uInt16 nCol, sal_uInt16 nRow, sal_uInt16 nXFIndex );
     /** Inserts a new XF index for all cells in a row. */
     void                        SetRowDefXF( sal_uInt16 nRow, sal_uInt16 nXFIndex );
+    /** Inserts a new XF index for all cells in a column. */
+    void                        SetColumnDefXF( sal_uInt16 nCol, sal_uInt16 nXFIndex );
 
     /** Inserts the first cell of a merged cell range. */
     void                        SetMerge( sal_uInt16 nCol, sal_uInt16 nRow );
