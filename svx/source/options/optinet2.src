@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:03:27 $
+ *  last change: $Author: kz $ $Date: 2004-08-31 12:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,338 +515,129 @@ TabPage RID_SVXPAGE_INET_SEARCH
 /*                                                                      */
 /************************************************************************/
 
-#define GB_SCRIPT_EXEC_X    6
-#define GB_SCRIPT_EXEC_Y    3
-#define FL_HYPERLINKS_Y     106
-#define GB_JAVA_Y           130
-
-TabPage RID_SVXPAGE_INET_SCRIPTING
+TabPage RID_SVXPAGE_INET_SECURITY
 {
     OutputSize = TRUE ;
-    Size = MAP_APPFONT ( 260 , 185 ) ;
-    SVLook = TRUE ;
-    Hide = TRUE ;
-    Text [ de ] = "Scripting" ;
-    Text [ en-US ] = "Scripting" ;
-    Text [ x-comment ] = " ";
-    FixedLine GB_STARBASIC
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X , GB_SCRIPT_EXEC_Y ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "%PRODUCTNAME Basic-Script" ;
-        Text [ en-US ] = "%PRODUCTNAME Basic Script" ;
-        Text [ x-comment ] = " ";
-    };
-    FixedImage FI_EXECMACRO
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X - 1, GB_SCRIPT_EXEC_Y + 14 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    FixedText FT_EXEC_MACRO
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 13 ) ;
-        Size = MAP_APPFONT ( 53 , 8 ) ;
-        Text [ de ] = "~Makro ausführen" ;
-        Text [ en-US ] = "~Run macro";
-    };
-    ListBox LB_EXEC_MACRO
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 11 ) ;
-        Size = MAP_APPFONT ( 90 , 48 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Niemals" ; > ;
-            < "Gemäß Pfadliste" ; > ;
-            < "Immer" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-             < "; Nie" ; > ;
-            < "; Gemäß Pfadliste" ; > ;
-            < "; Immer" ; > ;
-        };
-        StringList [ en-US ] =
-        {
-             < "Never" ; > ;
-            < "According to path list" ; > ;
-            < "Always" ; > ;
-        };
-    };
-    FixedImage FI_CONFIRM
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 59, GB_SCRIPT_EXEC_Y + 28 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    CheckBox CB_CONFIRM
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 27 ) ;
-        Size = MAP_APPFONT ( 176 , 10 ) ;
-        Text [ de ] = "~Nachfragen bei anderen Dokumentquellen" ;
-        Text [ en-US ] = "C~onfirm in case of other document sources";
-    };
-    FixedImage FI_WARNING
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 59 , GB_SCRIPT_EXEC_Y + 41 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    CheckBox CB_WARNING
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 66 , GB_SCRIPT_EXEC_Y + 40 ) ;
-        Size = MAP_APPFONT ( 176 , 10 ) ;
-        Text [ de ] = "~Vor Ausführung immer warnen" ;
-        Text [ en-US ] = "Show ~warning before running";
-    };
-    FixedImage FI_SCRIPTEXEC
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X -1 , GB_SCRIPT_EXEC_Y + 56 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    FixedText FT_PATH_LIST
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 55 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Pfa~dliste" ;
-        Text [ en-US ] = "~Path list";
-    };
-    ListBox LB_SCRIPT_EXEC
-    {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 53 ) ;
-        Size = MAP_APPFONT ( 119 , 28 ) ;
-        Border = TRUE ;
-        Sort = TRUE ;
-        // #98647# ---------------------------------------------
-        AutoHScroll = TRUE;
+    Size = MAP_APPFONT( TP_WIDTH , TP_HEIGHT );
+    SVLook = TRUE;
+    Hide = TRUE;
+    Text [ de ] = "Sicherheit";
+    Text [ en-US ] = "Security";
 
-    };
-    PushButton PB_SCRIPT_DELETE
+    FixedLine FL_SEC_SECOPTIONS
     {
-        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 53 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
-        Text [ en-US ] = "~Delete" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( COL_0, ROW_0 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ de ] = "Sicherheitsoptionen";
+        Text [ en-US ] = "Security Options";
     };
-    PushButton PB_SCRIPT_DEFAULT
+    FixedText FI_SEC_SECOPTIONS
     {
-        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 70 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Standard" ;
-        Text [ en-US ] = "D~efault" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( COL_1, ROW_1 );
+        Size = MAP_APPFONT( COL_4-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "Warnen wenn ein Dokument aufgezeichnete Änderungen, Versionen, versteckte Informartionen oder Notizen enthält";
+        Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes when";
     };
-    FixedText FT_NEW_PATH
+    CheckBox CB_SEC_SAVEORSENDDOCS
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 6 , GB_SCRIPT_EXEC_Y + 89 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "N~euer Pfad" ;
-        Text [ en-US ] = "New pa~th";
+        Pos = MAP_APPFONT( COL_2, ROW_2 );
+        Size = MAP_APPFONT( COL_3-COL_2, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Speichern oder Senden solcher Dokumente";
+        Text [ en-US ] = "saving or sending documents";
     };
-    Edit ED_SCRIPT_EXEC
+    CheckBox CB_SEC_SIGNDOCS
     {
-        Pos = MAP_APPFONT ( GB_SCRIPT_EXEC_X + 60 , GB_SCRIPT_EXEC_Y + 88 ) ;
-        Size = MAP_APPFONT ( 119 , 12 ) ;
-        Border = TRUE ;
+        Pos = MAP_APPFONT( COL_3, ROW_2 );
+        Size = MAP_APPFONT( COL_5-COL_3, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Dokuemte signieren";
+        Text [ en-US ] = "signing documents";
     };
-    PushButton PB_SCRIPT_INSERT
+    CheckBox CB_SEC_PRINTDOCS
     {
-        Pos = MAP_APPFONT ( 188 , GB_SCRIPT_EXEC_Y + 87 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen" ;
-        Text [ en-US ] = "~Add" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( COL_2, ROW_3 );
+        Size = MAP_APPFONT( COL_3-COL_2, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Dokuemte drucken";
+        Text [ en-US ] = "printing documents";
     };
-    FixedLine FL_HYPERLINKS
+    CheckBox CB_SEC_CREATEPDF
     {
-        Pos = MAP_APPFONT ( 6 , FL_HYPERLINKS_Y ) ;
-        Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Hyperlinks" ;
-        Text [ en-US ] = "Hyperlinks";
+        Pos = MAP_APPFONT( COL_3, ROW_3 );
+        Size = MAP_APPFONT( COL_5-COL_3, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "PDF-Dateien erzeugen";
+        Text [ en-US ] = "creating PDF-files";
     };
-    FixedImage FI_HYPERLINKS
+    CheckBox CB_SEC_REMOVEPERSINFO
     {
-        Pos = MAP_APPFONT ( 5, FL_HYPERLINKS_Y + 13 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
+        Pos = MAP_APPFONT( COL_1, ROW_4 );
+        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Benutzerdaten nicht speichern";
+        Text [ en-US ] = "Remove personal information on saving";
     };
-    FixedText FT_HYPERLINKS
+    CheckBox CB_SEC_RECOMMPASSWD
     {
-        Pos = MAP_APPFONT ( 12 , FL_HYPERLINKS_Y + 12 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "H~yperlinks öffnen" ;
-        Text [ en-US ] = "Open h~yperlinks" ;
+        Pos = MAP_APPFONT( COL_1, ROW_5 );
+        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Kennwortschutz beim Speichern empfehlen";
+        Text [ en-US ] = "Recommend password protection on saving";
     };
-    ListBox LB_HYPERLINKS
+    FixedLine FL_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT ( 66 , FL_HYPERLINKS_Y + 10 ) ;
-        Size = MAP_APPFONT ( 90 , 48 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Niemals" ; > ;
-            < "Mit Sicherheitsüberprüfung" ; > ;
-            < "Immer" ; > ;
-        };
-        StringList [ en-US ] =
-        {
-            < "Never" ; > ;
-            < "With security check" ; > ;
-            < "Always" ; > ;
-        };
-    StringList [ x-comment ] =
-    {
-         < "; Niemals" ; > ;
-        < "; Mit Sicherheitsüberprüfung" ; > ;
-        < "; Immer" ; > ;
+        Pos = MAP_APPFONT( COL_0, ROW_6 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ de ] = "Makrosicherheit";
+        Text [ en-US ] = "Macro security";
     };
-    };
-    FixedLine FL_JAVA
+    FixedText FI_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT ( 6 , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 179, 8 ) ;
-        Text [ de ] = "Java" ;
-        Text [ en-US ] = "Java";
+        Pos = MAP_APPFONT( COL_1, ROW_7 );
+        Size = MAP_APPFONT( COL_3a-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ de ] = "Anpassen der Sicherheitsstufe für das Ausführen von Makros und Definieren der vertrauenswürdigen Makro-Entwickler.";
+        Text [ en-US ] = "Adjust the security level for executing macros and specify trusted macro developers.";
     };
-    FixedImage FI_JAVAENABLE
+    PushButton PB_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT ( 5 , GB_JAVA_Y + 12 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
+        Pos = MAP_APPFONT( COL_4, ROW_8 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ de ] = "Makro Sicherheit...";
+        Text [ en-US ] = "Macro Security...";
     };
-    CheckBox CB_J_ENABLE
+    FixedLine FL_SEC_FILESHARING
     {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "~freischalten" ;
-        Text [ en-US ] = "~Enable" ;
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( COL_0, ROW_9 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ de ] = "Optionen für gemeinsame Benutzung des Dokumentes";
+        Text [ en-US ] = "File sharing options for this document";
     };
-    FixedImage FI_JAVASECURITY
+    CheckBox CB_SEC_RECOMMREADONLY
     {
-        Pos = MAP_APPFONT ( 59, GB_JAVA_Y + 12 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
+        Pos = MAP_APPFONT( COL_1, ROW_10 );
+        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Empfehlung dieses Dokument schreibgeschützt zu öffnen";
+        Text [ en-US ] = "Recommend to open document read-only";
     };
-    CheckBox CB_J_SECURITY
+    CheckBox CB_SEC_RECORDCHANGES
     {
-        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Sicherhei~tsüberprüfungen";
-        Text [ en-US ] = "~Security checks";
-        Text [ x-comment ] = " ";
+        Pos = MAP_APPFONT( COL_1, ROW_11 );
+        Size = MAP_APPFONT( COL_3a-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ de ] = "Änderungen aufzeichnen";
+        Text [ en-US ] = "Record changes";
     };
-    FixedImage FI_NETACCESS
+    PushButton PB_SEC_PROTRECORDS
     {
-        Pos = MAP_APPFONT ( 5 , GB_JAVA_Y + 27 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
+        Pos = MAP_APPFONT( COL_2, ROW_12 );
+        Size = MAP_APPFONT( BUTTON_SPECIAL_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
-    FixedText FT_NETACCESS
+    String STR_SEC_PROTRECORDS
     {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 26 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Netzz~ugriff" ;
-        Text [ en-US ] = "Net ~access" ;
-        Text [ x-comment ] = " ";
+        Text [ de ] = "Schützen...";
+        Text [ en-US ] = "Protect...";
     };
-    ListBox LB_NETACCESS
+    String STR_SEC_UNPROTRECORDS
     {
-        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 66 , 48 ) ;
-        Border = TRUE ;
-        DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Uneingeschränkt" ; > ;
-            < "Keinen" ; > ;
-            < "Rechner" ; > ;
-        };
-        StringList [ en-US ] =
-        {
-            < "Unrestricted" ; > ;
-            < "None" ; > ;
-            < "Host" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < " " ; > ;
-            < " " ; > ;
-            < " " ; > ;
-        };
-    };
-    FixedImage FI_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( 5, GB_JAVA_Y + 42 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    FixedText FT_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( 12 , GB_JAVA_Y + 41 ) ;
-        Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "~ClassPath" ;
-        Text [ en-US ] = "~ClassPath" ;
-        Text [ x-comment ] = "; EM18.7.01 (laut AS) Java Variable: This must left the same as German";
-    };
-    Edit ED_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( 66 , GB_JAVA_Y + 39 ) ;
-        Size = MAP_APPFONT ( 66 , 12 ) ;
-        Border = TRUE ;
-    };
-    PushButton PB_CLASSPATH
-    {
-        Pos = MAP_APPFONT ( 135 , GB_JAVA_Y + 38 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Durchsuchen...";
-        Text [ en-US ] = "~Browse..." ;
-    };
-    FixedLine FL_SEPARATOR
-    {
-        Pos = MAP_APPFONT ( 188 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 2 , 52 ) ;
-        Vert = TRUE;
-    };
-    FixedLine GB_EXECUTE
-    {
-        Pos = MAP_APPFONT ( 193 , GB_JAVA_Y ) ;
-        Size = MAP_APPFONT ( 61 , 8 ) ;
-        Text [ de ] = "Freischalten" ;
-        Text [ en-US ] = "E~nable" ;
-        Text [ x-comment ] = " ";
-    };
-    FixedImage FI_EXECPLUG
-    {
-        Pos = MAP_APPFONT ( 190 , GB_JAVA_Y + 12 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    CheckBox CB_EXECUTE_PLUGINS
-    {
-        Pos = MAP_APPFONT ( 197 , GB_JAVA_Y + 11 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text [ de ] = "~PlugIns" ;
-        Text [ en-US ] = "Plug-ins" ;
-        Text [ x-comment ] = " ";
-    };
-    FixedImage FI_EXEAPPLETS
-    {
-        Pos = MAP_APPFONT ( 190 , GB_JAVA_Y + 25 ) ;
-        Size = MAP_APPFONT ( 6 , 6 ) ;
-        Hide = TRUE;
-    };
-    CheckBox CB_EXECUTE_APPLETS
-    {
-        Pos = MAP_APPFONT ( 197 , GB_JAVA_Y + 24 ) ;
-        Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text [ de ] = "~Applets" ;
-        Text [ en-US ] = "Applets";
+        Text [ de ] = "Schutz aufheben...";
+        Text [ en-US ] = "Unprotect...";
     };
 };
 
@@ -956,35 +747,4 @@ TabPage RID_SVXPAGE_INET_MAIL
 };
 
  // ******************************************************************* EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
