@@ -84,4 +84,12 @@ class AccessibleTreeHandler
         return aChild;
     }
 
+
+    /** Update only the child count node.  Trust on other ways to update the
+        accessible children.
+    */
+    public void update (AccessibleTreeNode aNode)
+    {
+        maChildList.setElementAt (null, 0);
+    }
 }
