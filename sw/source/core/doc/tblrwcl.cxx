@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2001-02-27 17:55:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,7 @@
 #endif
 
 #define COLFUZZY 20
+#define ROWFUZZY 10
 
 typedef SwTableLine* SwTableLinePtr;
 SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16, 16 );
@@ -3886,7 +3887,7 @@ void SetLineHeight( SwTableLine& rLine, SwTwips nOldHeight, SwTwips nNewHeight,
 
     SwFrmSize eSize = ATT_MIN_SIZE;
     if( !bMinSize &&
-        nMyOldH - nMyNewH > CalcRowRstHeight( pLineFrm ) )
+        ( nMyOldH - nMyNewH ) > ( CalcRowRstHeight( pLineFrm ) + ROWFUZZY ))
         eSize = ATT_FIX_SIZE;
 
     pFmt->SetAttr( SwFmtFrmSize( eSize, 0, nMyNewH ) );
@@ -3917,7 +3918,7 @@ BOOL lcl_SetSelLineHeight( SwTableLine* pLine, CR_SetLineHeight& rParam,
         SwLayoutFrm* pLineFrm = GetRowFrm( *pLine );
         ASSERT( pLineFrm, "wo ist der Frm von der SwTableLine?" );
         SwTwips nRstHeight = CalcRowRstHeight( pLineFrm );
-        if( nRstHeight < nDist )
+        if( (nRstHeight + ROWFUZZY) < nDist )
             bRet = FALSE;
     }
     return bRet;
