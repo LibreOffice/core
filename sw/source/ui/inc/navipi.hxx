@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 15:20:38 $
+ *  last change: $Author: os $ $Date: 2002-03-13 08:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ class SwNavHelpToolBox : public SwHelpToolBox
 {
     virtual void    MouseButtonDown(const MouseEvent &rEvt);
     virtual void    RequestHelp( const HelpEvent& rHEvt );
-
     public:
         SwNavHelpToolBox(SwNavigationPI* pParent, const ResId &rResId);
 };
@@ -217,6 +216,7 @@ public:
     BOOL            IsGlobalMode() const {return    bGlobalMode;}
 
     SwView*         GetCreateView() const;
+    void            CreateNavigationTool(const Rectangle& rRect, BOOL bSetFocus);
 };
 
 class SwNavigationChild : public SfxChildWindowContext
