@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 07:23:51 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 16:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ dutch ] = "~Wachtwoord" ;
         Text [ swedish ] = "Lösenord" ;
         Text [ danish ] = "Adgangskode" ;
-        Text [ portuguese_brazilian ] = "~Paßwort" ;
+        Text [ portuguese_brazilian ] = "~Pa?wort" ;
         Text [ portuguese ] = "~Senha" ;
         Text[ chinese_simplified ] = "ÃÜÂë(~P)";
         Text[ russian ] = "Ïàğîëü";
@@ -158,7 +158,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ dutch ] = "W~achtwoord" ;
         Text [ swedish ] = "Lösenord" ;
         Text [ danish ] = "Adgangskode" ;
-        Text [ portuguese_brazilian ] = "Pa~ßwort" ;
+        Text [ portuguese_brazilian ] = "Pa~?wort" ;
         Text [ portuguese ] = "~Senha" ;
         Text[ chinese_simplified ] = "ÃÜÂë(~S)";
         Text[ russian ] = "Ïàğîëü";
@@ -275,7 +275,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ swedish ] = "Ogiltigt lösenord" ;
         Text [ danish ] = "Ugyldig adgangskode" ;
         Text [ portuguese ] = "Senha incorrecta" ;
-        Text [ portuguese_brazilian ] = "Ungültiges Paßwort" ;
+        Text [ portuguese_brazilian ] = "Ung?tiges Pa?wort" ;
         Text[ chinese_simplified ] = "ÃÜÂëÎŞĞ§";
         Text[ russian ] = "Íåïğàâèëüíûé ïàğîëü";
         Text[ polish ] = "Has³o nieprawid³owe";
@@ -303,7 +303,7 @@ ModalDialog RID_SVXDLG_PASSWORD
         Text [ swedish ] = "Lösenord stämmer inte överens" ;
         Text [ danish ] = "Adgangskode passer ikke" ;
         Text [ portuguese ] = "As senhas não combinam." ;
-        Text [ portuguese_brazilian ] = "Paßwörter stimmen nicht überein" ;
+        Text [ portuguese_brazilian ] = "Pa?w?ter stimmen nicht ?erein" ;
         Text[ chinese_simplified ] = "ÃÜÂë²»Ò»ÖÂ";
         Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò";
         Text[ polish ] = "Has³a nie zgadzaj¹ siê";
@@ -324,7 +324,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     Text [ dutch ] = "Wachtwoord veranderen" ;
     Text [ swedish ] = "Ändra lösenord" ;
     Text [ danish ] = "Modificer adgangskode" ;
-    Text [ portuguese_brazilian ] = "Paßwort ändern" ;
+    Text [ portuguese_brazilian ] = "Pa?wort ?ndern" ;
     Text [ portuguese ] = "Mudar senha" ;
     Text[ chinese_simplified ] = "¸ü¸ÄÃÜÂë";
     Text[ russian ] = "Èçìåíèòü ïàğîëü";
