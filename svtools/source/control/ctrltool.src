@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:40:09 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 21:35:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@ String STR_SVT_STYLE_LIGHT
     Text [ english_us ] = "Light" ;
     Text [ italian ] = "Light" ;
     Text [ spanish ] = "Light" ;
-    Text [ french ] = "Estompé" ;
+    Text [ french ] = "Light" ;
     Text [ dutch ] = "Light" ;
     Text [ swedish ] = "Ljus" ;
     Text [ danish ] = "Light" ;
@@ -94,7 +94,7 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text [ english_us ] = "Light Italic" ;
     Text [ italian ] = "Corsivo Light" ;
     Text [ spanish ] = "Cursiva light" ;
-    Text [ french ] = "Italique estompé" ;
+    Text [ french ] = "Italique Light" ;
     Text [ dutch ] = "Light Cursief" ;
     Text [ swedish ] = "Ljus kursiv" ;
     Text [ danish ] = "Light kursiv" ;
@@ -207,7 +207,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text [ swedish ] = "Fet kursiv" ;
     Text [ danish ] = "Fed kursiv" ;
     Text [ portuguese_brazilian ] = "Bold Italic" ;
-    Text [ portuguese ] = "Negrito itálico" ;
+    Text [ portuguese ] = "Itálico negrito" ;
     Text[ russian ] = "Æèðíûé êóðñèâ";
     Text[ polish ] = "Pogrubiona kursywa";
     Text[ japanese ] = "‘¾ŽšŽÎ‘Ì";
@@ -448,5 +448,6 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ catalan ] = "Esta fuente no está instalada. Se usará la fuente existente más adecuada.";
     TEXT[ finnish ] = "Tätä fonttia ei ole asennettu. Lähintä käytettävissä olevaa fonttia käytetään.";
 };
+
 
 
