@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-14 09:56:05 $
+ *  last change: $Author: fs $ $Date: 2001-09-25 14:17:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ namespace abp
     }
 
     //--------------------------------------------------------------------------
-    void SAL_CALL OABSPilotUno::execute( const Reference< XInterface >& xContext, const Sequence< NamedValue >& aArgs ) throw (IllegalArgumentException, RuntimeException)
+    Any SAL_CALL OABSPilotUno::execute( const Reference< XInterface >& xContext, const Sequence< NamedValue >& aArgs ) throw (IllegalArgumentException, RuntimeException)
     {
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog
@@ -215,6 +215,9 @@ namespace abp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/09/14 09:56:05  fs
+ *  #91062# support the XJob interface
+ *
  *  Revision 1.1  2001/08/01 11:10:07  fs
  *  initial checkin - address book auto pilot - uno wrapper for the pilot
  *
