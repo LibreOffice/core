@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextTableCursor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 13:53:35 $
+ *  last change:$Date: 2003-09-08 12:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,19 +61,18 @@
 
 package mod._sw;
 
-import com.sun.star.table.XCell;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.text.XText;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextTable;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
 import util.SOfficeFactory;
+
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XTextTable;
+import com.sun.star.uno.XInterface;
 
 /**
  *
@@ -140,9 +139,6 @@ public class SwXTextTableCursor extends TestCase {
             throw new StatusException("Couldn't create TextTable : "
                     + uE.getMessage(), uE);
         }
-
-        XCell oCell = oTable.getCellByName("A1");
-        XText oCellText = (XText)UnoRuntime.queryInterface(XText.class, oCell);
 
         oObj = oTable.createCursorByCellName("A1");
 
