@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-22 06:48:39 $
+ *  last change: $Author: as $ $Date: 2001-10-24 14:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,18 +187,13 @@ StatusIndicatorFactory::StatusIndicatorFactory( const css::uno::Reference< css::
         ,   m_xFactory          ( xFactory                      )
         ,   m_xOwner            ( xOwner                        )
         ,   m_xParentWindow     ( xParentWindow                 )
+        ,   m_pStatusBar (NULL)
 {
     // Safe impossible cases
     LOG_ASSERT2( implcp_StatusIndicatorFactory( xFactory, xOwner, xParentWindow ), "StatusIndicatorFactory::StatusIndicatorFactory()", "Invalid parameter detected!" )
 
     try
     {
-        {
-            // Create status indicator window to shared it for all created indictaor objects by this factory.
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
-        }
-
         m_xParentWindow->addWindowListener( this );
 
         // We must be listener for disposing of our owner frame too.
@@ -368,14 +363,6 @@ void SAL_CALL StatusIndicatorFactory::disposing( const css::lang::EventObject& a
         m_xParentWindow->removeWindowListener( this );
         m_xOwner->removeEventListener        ( this );
 
-        // Destroy shared status indicator.
-        // Attention: Don't do it after destroying of parent or indicator window!
-        // Otherwhise vcl say: "parent with living child destroyed ..."
-        {
-            vos::OGuard aGuard( Application::GetSolarMutex() );
-            delete m_pStatusBar;
-            m_pStatusBar = NULL;
-        }
 
         // Let owner, parent and all other references die ...
         m_xParentWindow     = css::uno::Reference< css::awt::XWindow >();
@@ -457,6 +444,14 @@ void StatusIndicatorFactory::start( const css::uno::Reference< css::task::XStatu
 
     try
     {
+
+        {
+            // Create status indicator window to shared it for all created indictaor objects by this factory.
+            vos::OGuard aGuard( Application::GetSolarMutex() );
+            if( m_pStatusBar == NULL )
+                m_pStatusBar = new StatusBar( VCLUnoHelper::GetWindow( m_xParentWindow ), WB_3DLOOK|WB_BORDER );
+        }
+
         vos::OGuard aGuard( Application::GetSolarMutex() );
 
         Window* pParentWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
@@ -541,6 +536,14 @@ void StatusIndicatorFactory::end( const css::uno::Reference< css::task::XStatusI
                 }
 
                 m_pStatusBar->Show( sal_False );
+                // Destroy shared status indicator.
+                // Attention: Don't do it after destroying of parent or indicator window!
+                // Otherwhise vcl say: "parent with living child destroyed ..."
+                {
+                    vos::OGuard aGuard( Application::GetSolarMutex() );
+                    delete m_pStatusBar;
+                    m_pStatusBar = NULL;
+                }
                 m_xActiveIndicator = css::uno::Reference< css::task::XStatusIndicator >();
             }
         }
@@ -695,10 +698,13 @@ void StatusIndicatorFactory::implts_recalcLayout()
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
         {
-            css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
-            Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
+            if( m_pStatusBar != NULL )
+            {
+                css::awt::Rectangle   aParentSize     = m_xParentWindow->getPosSize();
+                Size                  aStatusBarSize  = m_pStatusBar->GetSizePixel();
 
-            m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
+                m_pStatusBar->SetPosSizePixel( 0, aParentSize.Height-aStatusBarSize.Height(), aParentSize.Width, aStatusBarSize.Height() );
+            }
         }
     }
     catch( css::uno::RuntimeException& )
