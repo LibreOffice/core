@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-03-30 11:51:22 $
+ *  last change: $Author: hr $ $Date: 2005-04-06 10:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,7 @@
  *
  *
  ************************************************************************/
+
 #ifndef CONNECTIVITY_HSQLDB_DRIVER_HXX
 #include "hsqldb/HDriver.hxx"
 #endif
@@ -101,6 +102,9 @@
 #endif
 #ifndef CONNECTIVITY_HSQLDB_TERMINATELISTENER_HXX
 #include "HTerminateListener.hxx"
+#endif
+#ifndef CONNECTIVITY_HSQLDB_CATALOG_HXX
+#include "hsqldb/HCatalog.hxx"
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -313,7 +317,7 @@ namespace connectivity
                     }
                     Reference< XComponent> xIfc = new OConnectionWeakWrapper(xOrig,m_xFactory);
                     xConnection.set(xIfc,UNO_QUERY);
-                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,WeakReferenceHelper(xConnection))));
+                    m_aConnections.push_back(TWeakPair(WeakReferenceHelper(xOrig),TWeakConnectionPair(sKey,TWeakRefPair(WeakReferenceHelper(xConnection),WeakReferenceHelper()))));
 
                     Reference<XTransactionBroadcaster> xBroad(xStorage,UNO_QUERY);
                     if ( xBroad.is() )
@@ -386,6 +390,22 @@ namespace connectivity
         checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
 
         Reference< XTablesSupplier > xTab;
+
+        TWeakPairVector::iterator aEnd = m_aConnections.end();
+        for (TWeakPairVector::iterator i = m_aConnections.begin(); aEnd != i; ++i)
+        {
+            if ( i->second.second.first.get() == connection.get() )
+            {
+                xTab = Reference< XTablesSupplier >(i->second.second.second.get().get(),UNO_QUERY);
+                if ( !xTab.is() )
+                {
+                    xTab = new OHCatalog(connection);
+                    i->second.second.second = WeakReferenceHelper(xTab);
+                }
+                break;
+            }
+        }
+
         return xTab;
     }
 
@@ -408,9 +428,9 @@ namespace connectivity
     //------------------------------------------------------------------------------
     Sequence< ::rtl::OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
-        Sequence< ::rtl::OUString > aSNS( 1 );
+        Sequence< ::rtl::OUString > aSNS( 2 );
         aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
-        //  aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
+        aSNS[1] = ::rtl::OUString::createFromAscii("com.sun.star.sdbcx.Driver");
         return aSNS;
     }
     //------------------------------------------------------------------
