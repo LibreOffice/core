@@ -2,9 +2,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:16:25 $
+ *  last change: $Author: fs $ $Date: 2001-08-15 13:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,16 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
+    sal_Bool OSingleDocumentController::Construct(Window* _pParent)
+    {
+        DBG_ASSERT( getView(), "OSingleDocumentController::Construct: have no view!" );
+        if ( getView() )
+            getView()->enableSeparator( );
+
+        return OSingleDocumentController_CBASE::Construct( _pParent );
+    }
+
+    //--------------------------------------------------------------------
     void SAL_CALL OSingleDocumentController::disposing(const EventObject& _rSource) throw( RuntimeException )
     {
         if ( isConnected() && ( _rSource.Source == getConnection() ) )
@@ -410,6 +420,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/15 13:16:25  oj
+ *  #88644# insert some DBG's
+ *
  *  Revision 1.1  2001/08/14 12:00:02  fs
  *  initial checkin - base class for controller which work on one single object belonging to a data source connection
  *
