@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hjs $ $Date: 2001-02-09 11:22:18 $
+#   last change: $Author: hjs $ $Date: 2001-02-12 11:45:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1342,7 +1342,6 @@ PROJECTPCHTARGET=$(MISC)$/$(PROJECTPCH).pch
 .ENDIF
 .IF "$(EXCEPTIONS_FLAG)"!=""
 PROJECTPCHTARGET!:=$(PROJECTPCHTARGET:s/.pc/.xc/)
-$(CALLTARGETS):$(PROJECTPCHTARGET)
 .ENDIF
 .IF "$(COM)"=="MSC"
 .IF "$(PROJECTPCH4DLL)"!=""
