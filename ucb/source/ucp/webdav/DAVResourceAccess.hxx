@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-10-24 11:59:12 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 10:03:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,10 @@ public:
                         com::sun::star::lang::XMultiServiceFactory > & rSMgr,
                        rtl::Reference<
                         DAVSessionFactory > const & rSessionFactory,
-                       const rtl::OUString & rURL )
-        throw( DAVException );
+                       const rtl::OUString & rURL );
+    DAVResourceAccess( const DAVResourceAccess & rOther );
+
+    DAVResourceAccess & operator=( const DAVResourceAccess & rOther );
 
     void setURL( const rtl::OUString & rNewURL )
         throw( DAVException );
