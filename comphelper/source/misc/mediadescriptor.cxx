@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 11:54:18 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:12:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,8 +668,31 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
     // or failed by an error - we must try it in readonly mode.
     if (!xInputStream.is())
     {
-        bReadOnly = sal_True;
-        (*this)[MediaDescriptor::PROP_READONLY()] <<= bReadOnly;
+        try
+        {
+            css::uno::Reference< css::ucb::XContentIdentifier > xContId(
+                aContent.get().is() ? aContent.get()->getIdentifier() : 0 );
+
+            rtl::OUString aScheme;
+            if ( xContId.is() )
+                aScheme = xContId->getContentProviderScheme();
+
+            // Only file system content provider is able to provide XStream
+            // so for this content impossibility to create XStream triggers
+            // switch to readonly mode
+            if( aScheme.equalsIgnoreAsciiCaseAscii( "file" ) )
+                bReadOnly = sal_True;
+            else
+                aContent.getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ) ) ) >>= bReadOnly;
+        }
+        catch(const css::uno::RuntimeException&)
+            { throw; }
+        catch(const css::uno::Exception&)
+            { /* no error handling if IsReadOnly property does not exist for UCP */ }
+
+        if ( bReadOnly )
+               (*this)[MediaDescriptor::PROP_READONLY()] <<= bReadOnly;
+
         pInteraction->resetInterceptions();
         pInteraction->resetErrorStates();
         try
@@ -695,3 +718,4 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
 }
 
 } // namespace comphelper
+
