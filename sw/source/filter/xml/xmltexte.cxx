@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-09 13:15:58 $
+ *  last change: $Author: kz $ $Date: 2001-02-13 16:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ void SwXMLTextParagraphExport::getTextEmbeddedObjectProperties(
     if( pInfo )
     {
         SvGlobalName aClassName( pInfo->GetClassName() );
-        if( !SvFactory::IsIntern( aClassName ) )
+        if( !SvFactory::IsIntern( aClassName, 0 ) )
             rClassId = aClassName.GetHexName();
     }
 }
