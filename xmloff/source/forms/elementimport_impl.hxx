@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport_impl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-03 16:25:34 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ template <class BASE>
     if (m_xColumnFactory.is())
     {
         // create the column
-        xReturn = m_xColumnFactory->createColumn(m_sServiceName);
+        xReturn = m_xColumnFactory->createColumn(this->m_sServiceName);
         OSL_ENSURE(xReturn.is(), "OColumnImport::createElement: the factory returned an invalid object!");
     }
     return xReturn;
@@ -157,6 +157,12 @@ template <class BASE>
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4.334.1  2004/07/13 20:28:08  fa
+ *  #i31445# explicitly scope data member to satisfy gcc 3.4
+ *
+ *  Revision 1.4  2001/01/03 16:25:34  fs
+ *  file format change (extra wrapper element for controls, similar to columns)
+ *
  *  Revision 1.3  2001/01/02 15:58:21  fs
  *  event ex- & import
  *
