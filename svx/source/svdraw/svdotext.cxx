@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-20 12:37:19 $
+ *  last change: $Author: aw $ $Date: 2001-04-04 17:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,6 +612,15 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameHeight(long nHgt)
     if(bTextFrame)
     {
         SetItem(SdrTextMinFrameHeightItem(nHgt));
+
+        // #84974# use bDisableAutoWidthOnDragging as
+        // bDisableAutoHeightOnDragging if vertical.
+        if(IsVerticalWriting() && bDisableAutoWidthOnDragging)
+        {
+            bDisableAutoWidthOnDragging = FALSE;
+            SetItem(SdrTextAutoGrowHeightItem(FALSE));
+        }
+
         return TRUE;
     }
     return FALSE;
@@ -642,11 +651,15 @@ FASTBOOL SdrTextObj::NbcSetMinTextFrameWidth(long nWdt)
     if(bTextFrame)
     {
         SetItem(SdrTextMinFrameWidthItem(nWdt));
-        if(bDisableAutoWidthOnDragging)
+
+        // #84974# use bDisableAutoWidthOnDragging only
+        // when not vertical.
+        if(!IsVerticalWriting() && bDisableAutoWidthOnDragging)
         {
             bDisableAutoWidthOnDragging = FALSE;
             SetItem(SdrTextAutoGrowWidthItem(FALSE));
         }
+
         return TRUE;
     }
     return FALSE;
