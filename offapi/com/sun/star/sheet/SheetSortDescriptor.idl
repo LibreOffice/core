@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetSortDescriptor.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 10:10:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:49:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com {  module sun {  module star {  module sheet {
     <p>This service extends the <type scope="com::sun::star::table">TableSortDescriptor</type>
     service with spreadsheet specific properties.</p>
  */
-service SheetSortDescriptor
+published service SheetSortDescriptor
 {
     //-------------------------------------------------------------------------
 
