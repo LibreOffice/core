@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-06 08:56:00 $
+#   last change: $Author: kz $ $Date: 2004-02-25 16:55:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -112,6 +112,7 @@ IDLFILES=\
     XTransferableSupplier.idl\
     XComponentSupplier.idl\
     XStorage.idl\
+    XPackageStructureCreator.idl\
     UnreachableStateException.idl\
     WrongStateException.idl\
     ObjectSaveVetoException.idl\
