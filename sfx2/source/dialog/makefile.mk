@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 08:43:48 $
+#   last change: $Author: rt $ $Date: 2005-02-02 16:47:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,16 +78,17 @@ EXCEPTIONSFILES=\
         $(SLO)$/mailmodelapi.obj	\
         $(SLO)$/cfg.obj				\
         $(SLO)$/partwnd.obj         \
-                $(SLO)$/templdlg.obj        \
+        $(SLO)$/templdlg.obj        \
         $(SLO)$/itemconnect.obj     \
         $(SLO)$/acccfg.obj			\
         $(SLO)$/recfloat.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
-                $(SLO)$/macropg.obj            \
-                $(SLO)$/sfxdlg.obj            \
-        $(SLO)$/about.obj			\
+        $(SLO)$/macropg.obj         \
+        $(SLO)$/sfxdlg.obj          \
+        $(SLO)$/about.obj           \
+        $(SLO)$/alienwarn.obj       \
         $(SLO)$/basedlgs.obj		\
         $(SLO)$/dinfdlg.obj			\
         $(SLO)$/dinfedt.obj			\
@@ -114,6 +115,7 @@ SLOFILES =\
 SRS1NAME=$(TARGET)
 SRC1FILES =\
         recfloat.src		\
+        alienwarn.src       \
         cfg.src				\
         dialog.src			\
         dinfdlg.src			\
