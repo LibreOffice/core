@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:40:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:12:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,10 @@
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx> // SwFontAccess
 #endif
+// OD 2004-05-24 #i28701#
+#ifndef _SORTEDOBJS_HXX
+#include <sortedobjs.hxx>
+#endif
 
 /*************************************************************************
 |*
@@ -246,7 +250,9 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
     SwFtnBossFrm( pFmt ),
     pSortedObjs( 0 ),
     pDesc( pPgDsc ),
-    nPhyPageNum( 0 )
+    nPhyPageNum( 0 ),
+    // OD 2004-05-17 #i28701#
+    mbLayoutInProgress( false )
 {
     SetDerivedVert( FALSE );
     SetDerivedR2L( FALSE );
@@ -322,26 +328,8 @@ SwPageFrm::~SwPageFrm()
         //Speicher zugegriffen.
         for ( USHORT i = 0; i < pSortedObjs->Count(); ++i )
         {
-            SdrObject *pObj = (*pSortedObjs)[i];
-            if ( pObj->ISA(SwVirtFlyDrawObj) )
-            {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                if ( pFly->IsFlyFreeFrm() )
-                    ((SwFlyFreeFrm*)pFly)->SetPage ( 0 );
-            }
-            else if ( pObj->GetUserCall() )
-            {
-                // OD 24.06.2003 #108784# - consider 'virtual' drawing objects
-                if ( pObj->ISA(SwDrawVirtObj) )
-                {
-                    SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pObj);
-                    pDrawVirtObj->SetPageFrm( 0 );
-                }
-                else
-                {
-                    ((SwDrawContact*)pObj->GetUserCall())->ChgPage( 0 );
-                }
-            }
+            SwAnchoredObject* pAnchoredObj = (*pSortedObjs)[i];
+            pAnchoredObj->SetPageFrm( 0L );
         }
         delete pSortedObjs;
         pSortedObjs = 0;        //Auf 0 setzen, sonst rauchts beim Abmdelden von Flys!
@@ -495,24 +483,23 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             if ( bSdrObj )
             {
                 // OD 23.06.2003 #108784# - consider 'virtual' drawing objects
+                SwDrawContact *pContact =
+                            static_cast<SwDrawContact*>(::GetUserCall(pSdrObj));
                 if ( pSdrObj->ISA(SwDrawVirtObj) )
                 {
                     SwDrawVirtObj* pDrawVirtObj = static_cast<SwDrawVirtObj*>(pSdrObj);
-                    SwDrawContact* pContact =
-                            static_cast<SwDrawContact*>(GetUserCall(&(pDrawVirtObj->GetReferencedObj())));
                     if ( pContact )
                     {
                         pDrawVirtObj->RemoveFromWriterLayout();
                         pDrawVirtObj->RemoveFromDrawingPage();
-                        pPg->SwFrm::AppendVirtDrawObj( pContact, pDrawVirtObj );
+                        pPg->AppendDrawObj( *(pContact->GetAnchoredObj( pDrawVirtObj )) );
                     }
                 }
                 else
                 {
-                    SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pSdrObj);
                     if ( pContact->GetAnchorFrm() )
                         pContact->DisconnectFromLayout( false );
-                    pPg->SwFrm::AppendDrawObj( pContact );
+                    pPg->AppendDrawObj( *(pContact->GetAnchoredObj( pSdrObj )) );
                 }
             }
             else
@@ -528,7 +515,7 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
                 }
                 else
                     pFly = new SwFlyLayFrm( (SwFlyFrmFmt*)pFmt, pPg );
-                pPg->SwFrm::AppendFly( pFly );
+                pPg->AppendFly( pFly );
                 ::RegistFlys( pPg, pFly );
             }
         }
@@ -1056,11 +1043,12 @@ void SwPageFrm::Cut()
             for ( int i = 0; GetSortedObjs() &&
                              (USHORT)i < GetSortedObjs()->Count(); ++i )
             {
-                SdrObject *pO = (*GetSortedObjs())[i];
-                SwFlyFrm *pFly;
-                if ( pO->ISA(SwVirtFlyDrawObj) &&
-                     (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm())->IsFlyAtCntFrm() )
+                // --> OD 2004-06-29 #i28701#
+                SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
+
+                if ( pAnchoredObj->ISA(SwFlyAtCntFrm) )
                 {
+                    SwFlyFrm* pFly = static_cast<SwFlyAtCntFrm*>(pAnchoredObj);
                     SwPageFrm *pAnchPage = pFly->GetAnchorFrm() ?
                                 pFly->AnchorFrm()->FindPageFrm() : 0;
                     if ( pAnchPage && (pAnchPage != this) )
@@ -1071,6 +1059,7 @@ void SwPageFrm::Cut()
                         pFly->_InvalidatePos();
                     }
                 }
+                // <--
             }
         }
         //Window aufraeumen
@@ -1164,12 +1153,11 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
     {
         for( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
         {
-            SwFlyFrm *pFly;
-            SdrObject *pO = (*pFrm->GetDrawObjs())[i];
-            if( pO->ISA(SwVirtFlyDrawObj) &&
-                0 != (pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm()) &&
-                pFly->IsFlyInCntFrm() )
+            // --> OD 2004-06-29 #i28701#
+            SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+            if ( pAnchoredObj->ISA(SwFlyInCntFrm) )
             {
+                SwFlyFrm* pFly = static_cast<SwFlyInCntFrm*>(pAnchoredObj);
                 SwCntntFrm *pCnt = pFly->ContainsCntnt();
                 while ( pCnt )
                 {
@@ -1177,6 +1165,7 @@ void lcl_PrepFlyInCntRegister( SwCntntFrm *pFrm )
                     pCnt = pCnt->GetNextCntntFrm();
                 }
             }
+            // <--
         }
     }
 }
@@ -1195,10 +1184,11 @@ void SwPageFrm::PrepareRegisterChg()
     {
         for( USHORT i = 0; i < GetSortedObjs()->Count(); ++i )
         {
-            SdrObject *pO = (*GetSortedObjs())[i];
-            if ( pO->ISA(SwVirtFlyDrawObj) )
+            // --> OD 2004-06-29 #i28701#
+            SwAnchoredObject* pAnchoredObj = (*GetSortedObjs())[i];
+            if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
-                SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 pFrm = pFly->ContainsCntnt();
                 while ( pFrm )
                 {
@@ -1620,47 +1610,19 @@ void SwRootFrm::RemoveSuperfluous()
             // OD 19.06.2003 #108784# - consider that drawing objects in
             // header/footer are supported now.
             bool bOnlySuperfluosObjs = true;
-            SwSortDrawObjs &rObjs = *pPage->GetSortedObjs();
+            SwSortedObjs &rObjs = *pPage->GetSortedObjs();
             for ( USHORT i = 0; bOnlySuperfluosObjs && i < rObjs.Count(); ++i )
             {
-                SdrObject *pO = rObjs[i];
+                // --> OD 2004-06-29 #i28701#
+                SwAnchoredObject* pAnchoredObj = rObjs[i];
                 // OD 2004-01-19 #110582# - do not consider hidden objects
-                if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId( pO->GetLayer() ) )
+                if ( pPage->GetFmt()->GetDoc()->IsVisibleLayerId(
+                                    pAnchoredObj->GetDrawObj()->GetLayer() ) &&
+                     !pAnchoredObj->GetAnchorFrm()->FindFooterOrHeader() )
                 {
-                    if ( pO->ISA(SwVirtFlyDrawObj) )
-                    {
-                        SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
-                        // OD 19.06.2003 #108784# - correction
-                        if ( !pFly->GetAnchorFrm()->FindFooterOrHeader() )
-                        {
-                            bOnlySuperfluosObjs = false;
-                        }
-                    }
-                    else
-                    {
-                        // OD 19.06.2003 #108784# - determine, if drawing object
-                        // isn't anchored in header/footer frame. If so, drawing
-                        // object isn't superfluos.
-                        const SwFrm* pAnchorFrm = 0L;
-                        if ( pO->ISA(SwDrawVirtObj) )
-                        {
-                            pAnchorFrm = static_cast<SwDrawVirtObj*>(pO)->GetAnchorFrm();
-                        }
-                        else
-                        {
-                            SwDrawContact* pDrawContact =
-                                    static_cast<SwDrawContact*>(pO->GetUserCall());
-                            pAnchorFrm = pDrawContact ? pDrawContact->GetAnchorFrm() : 0L;
-                        }
-                        if ( pAnchorFrm )
-                        {
-                            if ( !pAnchorFrm->FindFooterOrHeader() )
-                            {
-                                bOnlySuperfluosObjs = false;
-                            }
-                        }
-                    }
+                    bOnlySuperfluosObjs = false;
                 }
+                // <--
             }
             bExistEssentialObjs = !bOnlySuperfluosObjs;
         }
@@ -1812,8 +1774,9 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                   pPage->GetSortedObjs() && USHORT(i) < pPage->GetSortedObjs()->Count();
                   ++i)
             {
-                SwFrmFmt *pFmt = ::FindFrmFmt( (*pPage->GetSortedObjs())[i] );
-                const SwFmtAnchor &rAnch = pFmt->GetAnchor();
+                // --> OD 2004-06-29 #i28701#
+                SwFrmFmt& rFmt = (*pPage->GetSortedObjs())[i]->GetFrmFmt();
+                const SwFmtAnchor &rAnch = rFmt.GetAnchor();
                 const USHORT nPg = rAnch.GetPageNum();
                 if ( rAnch.GetAnchorId() == FLY_PAGE &&
                      nPg != pPage->GetPhyPageNum() )
@@ -1827,10 +1790,10 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
 #ifdef PRODUCT
-                        pFmt->SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
+                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
 #else
-                        const USHORT nCnt = pPage->GetSortedObjs()->Count();
-                        pFmt->SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
+                        const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
+                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
                         ASSERT( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->Count(),
                                 "Kann das Obj nicht umhaengen." );
@@ -1973,50 +1936,47 @@ void SwRootFrm::ImplCalcBrowseWidth()
         {
             for ( USHORT i = 0; i < pFrm->GetDrawObjs()->Count(); ++i )
             {
-                SdrObject *pObj = (*pFrm->GetDrawObjs())[i];
-                SwFrmFmt *pFmt = ::FindFrmFmt( pObj );
-                const FASTBOOL bFly = pObj->ISA(SwVirtFlyDrawObj);
+                // --> OD 2004-06-29 #i28701#
+                SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
+                const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
+                const FASTBOOL bFly = pAnchoredObj->ISA(SwFlyFrm);
                 if ( bFly &&
-                     WEIT_WECH == ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->Frm().Width()||
-                     pFmt->GetFrmSize().GetWidthPercent() )
+                     WEIT_WECH == pAnchoredObj->GetObjRect().Width()||
+                     rFmt.GetFrmSize().GetWidthPercent() )
                     continue;
 
                 long nWidth = 0;
-                switch ( pFmt->GetAnchor().GetAnchorId() )
+                switch ( rFmt.GetAnchor().GetAnchorId() )
                 {
                     case FLY_IN_CNTNT:
-                        nWidth = bFly ? pFmt->GetFrmSize().GetWidth() :
-                                        pObj->GetCurrentBoundRect().GetWidth();
+                        nWidth = bFly ? rFmt.GetFrmSize().GetWidth() :
+                                        pAnchoredObj->GetObjRect().Width();
                         break;
                     case FLY_AT_CNTNT:
                         {
-                        if ( bFly )
-                        {
-                            nWidth = pFmt->GetFrmSize().GetWidth();
-                            const SwFmtHoriOrient &rHori = pFmt->GetHoriOrient();
-                            switch ( rHori.GetHoriOrient() )
-                            {
-                                case HORI_NONE:
-                                    nWidth += rHori.GetPos();
-                                    break;
-                                case HORI_INSIDE:
-                                case HORI_LEFT:
-                                    if ( PRTAREA == rHori.GetRelationOrient() )
-                                        nWidth += pFrm->Prt().Left();
-                            }
-                        }
-                        else
-                            //Fuer Zeichenobjekte ist die Auswahl sehr klein,
-                            //weil sie keine Attribute haben, also durch ihre
-                            //aktuelle Groesse bestimmt werden.
-                            nWidth = pObj->GetCurrentBoundRect().Right() -
-                                     pObj->GetAnchorPos().X();
+                            nWidth = pAnchoredObj->GetObjRect().Right();
+//                            if ( bFly )
+//                            {
+//                                nWidth = rFmt.GetFrmSize().GetWidth();
+//                                const SwFmtHoriOrient &rHori = rFmt.GetHoriOrient();
+//                                switch ( rHori.GetHoriOrient() )
+//                                {
+//                                    case HORI_NONE:
+//                                        nWidth += rHori.GetPos();
+//                                        break;
+//                                    case HORI_INSIDE:
+//                                    case HORI_LEFT:
+//                                        if ( PRTAREA == rHori.GetRelationOrient() )
+//                                            nWidth += pFrm->Prt().Left();
+//                                }
+//                            }
+//                            else
+//                                //Fuer Zeichenobjekte ist die Auswahl sehr klein,
+//                                //weil sie keine Attribute haben, also durch ihre
+//                                //aktuelle Groesse bestimmt werden.
+//                                nWidth = pObj->GetCurrentBoundRect().Right() -
+//                                         pObj->GetAnchorPos().X();
 
-//MA 31. Jan. 97: Zaehlt doch garnicht mehr, seit die Flys den Rand nicht
-//mehr beruecksichtigen.
-//                      const SwContact *pCon = (SwContact*)pObj->GetUserCall();
-//                      const SvxLRSpaceItem &rLR = pCon->GetFmt()->GetLRSpace();
-//                      nWidth += rLR.GetLeft() + rLR.GetRight();
                         }
                         break;
                     default:    /* do nothing */;
