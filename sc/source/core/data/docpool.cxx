@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 10:10:59 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddenruleitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/hngpnctitem.hxx>
 #include <svx/itemtype.hxx>
 #include <svx/langitem.hxx>
@@ -122,6 +123,7 @@ USHORT* ScDocumentPool::pVersionMap5 = 0;
 USHORT* ScDocumentPool::pVersionMap6 = 0;
 USHORT* ScDocumentPool::pVersionMap7 = 0;
 USHORT* ScDocumentPool::pVersionMap8 = 0;
+USHORT* ScDocumentPool::pVersionMap9 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
@@ -162,6 +164,7 @@ static SfxItemInfo __READONLY_DATA  aItemInfos[] =
     { SID_ATTR_ALIGN_DEGREES,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_VALUE    ab 367
     { SID_ATTR_ALIGN_LOCKPOS,       SFX_ITEM_POOLABLE },    // ATTR_ROTATE_MODE     ab 367
     { SID_ATTR_ALIGN_ASIANVERTICAL, SFX_ITEM_POOLABLE },    // ATTR_VERTICAL_ASIAN  from 642
+    { SID_ATTR_FRAMEDIRECTION,      SFX_ITEM_POOLABLE },    // ATTR_WRITINGDIR      from 643
     { SID_ATTR_ALIGN_LINEBREAK,     SFX_ITEM_POOLABLE },    // ATTR_LINEBREAK
     { SID_ATTR_ALIGN_MARGIN,        SFX_ITEM_POOLABLE },    // ATTR_MARGIN
     { 0,                            SFX_ITEM_POOLABLE },    // ATTR_MERGE
@@ -289,6 +292,10 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     ppPoolDefaults[ ATTR_ROTATE_VALUE    - ATTR_STARTINDEX ] = new SfxInt32Item( ATTR_ROTATE_VALUE, 0 );
     ppPoolDefaults[ ATTR_ROTATE_MODE     - ATTR_STARTINDEX ] = new SvxRotateModeItem( SVX_ROTATE_MODE_BOTTOM, ATTR_ROTATE_MODE );
     ppPoolDefaults[ ATTR_VERTICAL_ASIAN  - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_VERTICAL_ASIAN );
+    //  The default for the ATTR_WRITINGDIR cell attribute must by FRMDIR_ENVIRONMENT,
+    //  so that value is returned when asking for a default cell's attributes.
+    //  The value from the page style is set as DefaultHorizontalTextDirection for the EditEngine.
+    ppPoolDefaults[ ATTR_WRITINGDIR      - ATTR_STARTINDEX ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, ATTR_WRITINGDIR );
     ppPoolDefaults[ ATTR_LINEBREAK       - ATTR_STARTINDEX ] = new SfxBoolItem( ATTR_LINEBREAK );
     ppPoolDefaults[ ATTR_MARGIN          - ATTR_STARTINDEX ] = new SvxMarginItem;
     ppPoolDefaults[ ATTR_MERGE           - ATTR_STARTINDEX ] = new ScMergeAttr;
@@ -376,6 +383,9 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
 
     // ATTR_VERTICAL_ASIAN from 642q
     SetVersionMap( 8, 100, 181, pVersionMap8 );
+
+    // ATTR_WRITINGDIR from 643y
+    SetVersionMap( 9, 100, 182, pVersionMap9 );
 }
 
 __EXPORT ScDocumentPool::~ScDocumentPool()
@@ -397,7 +407,8 @@ void ScDocumentPool::InitVersionMaps()
     DBG_ASSERT( !pVersionMap1 && !pVersionMap2 &&
                 !pVersionMap3 && !pVersionMap4 &&
                 !pVersionMap5 && !pVersionMap6 &&
-                !pVersionMap7 && !pVersionMap8, "InitVersionMaps call multiple times" );
+                !pVersionMap7 && !pVersionMap8 &&
+                !pVersionMap9, "InitVersionMaps call multiple times" );
 
     // alte WhichId's mappen
     // nicht mit ATTR_* zaehlen, falls die sich nochmal aendern
@@ -506,6 +517,19 @@ void ScDocumentPool::InitVersionMaps()
     // 1 entry inserted
     for ( i=nMap8New, j=nMap8Start+nMap8New+1; i < nMap8Count; i++, j++ )
         pVersionMap8[i] = j;
+
+    //  9th map: ATTR_WRITINGDIR added in 643y
+
+    const USHORT nMap9Start = 100;  // ATTR_STARTINDEX
+    const USHORT nMap9End   = 182;  // ATTR_ENDINDEX
+    const USHORT nMap9Count = nMap9End - nMap9Start + 1;
+    const USHORT nMap9New   = 35;   // ATTR_WRITINGDIR - ATTR_STARTINDEX
+    pVersionMap9 = new USHORT [ nMap9Count ];
+    for ( i=0, j=nMap9Start; i < nMap9New; i++, j++ )
+        pVersionMap9[i] = j;
+    // 1 entry inserted
+    for ( i=nMap9New, j=nMap9Start+nMap9New+1; i < nMap9Count; i++, j++ )
+        pVersionMap9[i] = j;
 }
 
 void ScDocumentPool::DeleteVersionMaps()
@@ -513,8 +537,11 @@ void ScDocumentPool::DeleteVersionMaps()
     DBG_ASSERT( pVersionMap1 && pVersionMap2 &&
                 pVersionMap3 && pVersionMap4 &&
                 pVersionMap5 && pVersionMap6 &&
-                pVersionMap7 && pVersionMap8, "DeleteVersionMaps without maps" );
+                pVersionMap7 && pVersionMap8 &&
+                pVersionMap9, "DeleteVersionMaps without maps" );
 
+    delete[] pVersionMap9;
+    pVersionMap9 = 0;
     delete[] pVersionMap8;
     pVersionMap8 = 0;
     delete[] pVersionMap7;

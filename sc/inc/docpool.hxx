@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docpool.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-03 10:09:14 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,7 @@ class ScDocumentPool: public SfxItemPool
     static USHORT*  pVersionMap6;
     static USHORT*  pVersionMap7;
     static USHORT*  pVersionMap8;
+    static USHORT*  pVersionMap9;
 
 public:
             ScDocumentPool( SfxItemPool* pSecPool = NULL, BOOL bLoadRefCounts = FALSE );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-27 08:25:19 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/lrspitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/paperinf.hxx>
@@ -185,6 +186,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                                            ATTR_BACKGROUND, ATTR_BACKGROUND,
                                            ATTR_BORDER, ATTR_SHADOW,
                                            ATTR_LRSPACE, ATTR_PAGE_NULLVALS,
+                                           ATTR_WRITINGDIR, ATTR_WRITINGDIR,
                                            ATTR_USERDEF, ATTR_USERDEF,
                                            0 );
 
@@ -246,6 +248,13 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                         pSet->Put( aHFSetItem, ATTR_PAGE_FOOTERSET );
                         pSet->Put( aBoxInfoItem ); // PoolDefault wg. Formatvorlagen
                                                    // nicht ueberschreiben!
+
+                        //  Writing direction: not as pool default because the default for cells
+                        //  must remain FRMDIR_ENVIRONMENT, and each page style's setting is
+                        //  supposed to be saved in the file format.
+                        //  The page default may be read from a configuration item later.
+                        SvxFrameDirection eDirection = FRMDIR_HORI_LEFT_TOP;
+                        pSet->Put( SvxFrameDirectionItem( eDirection ), ATTR_WRITINGDIR );
 
                         rPool.SetPoolDefaultItem( aPageItem );
                         rPool.SetPoolDefaultItem( aPaperSizeItem );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:18:38 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <vcl/system.hxx>
 #include <stdlib.h>     // qsort
 #include <svx/scriptspaceitem.hxx>
+#include <svx/scripttypeitem.hxx>
 
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -1024,36 +1025,56 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         if (!pEditEngine)
         {
-            xub_StrLen nDifPos;
-            if (rNewString.Len() > aString.Len())
-                nDifPos = rNewString.Match(aString);
+            //  test if CTL script type is involved
+            BYTE nOldScript = 0;
+            BYTE nNewScript = 0;
+            SfxObjectShell* pObjSh = SfxObjectShell::Current();
+            if ( pObjSh && pObjSh->ISA(ScDocShell) )
+            {
+                //  any document can be used (used only for its break iterator)
+                ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();
+                nOldScript = pDoc->GetStringScriptType( aString );
+                nNewScript = pDoc->GetStringScriptType( rNewString );
+            }
+
+            if ( ( nOldScript & SCRIPTTYPE_COMPLEX ) || ( nNewScript & SCRIPTTYPE_COMPLEX ) )
+            {
+                // if CTL is involved, the whole text has to be redrawn
+                Invalidate();
+            }
             else
-                nDifPos = aString.Match(rNewString);
+            {
+                xub_StrLen nDifPos;
+                if (rNewString.Len() > aString.Len())
+                    nDifPos = rNewString.Match(aString);
+                else
+                    nDifPos = aString.Match(rNewString);
 
-            long nSize1 = GetTextWidth(aString);
-            long nSize2 = GetTextWidth(rNewString);
-            if ( nSize1>0 && nSize2>0 )
-                nTextSize = Max( nSize1, nSize2 );
-            else
-                nTextSize = GetOutputSize().Width();        // Ueberlauf
+                long nSize1 = GetTextWidth(aString);
+                long nSize2 = GetTextWidth(rNewString);
+                if ( nSize1>0 && nSize2>0 )
+                    nTextSize = Max( nSize1, nSize2 );
+                else
+                    nTextSize = GetOutputSize().Width();        // Ueberlauf
 
-            if (nDifPos == STRING_MATCH)
-                nDifPos = 0;
+                if (nDifPos == STRING_MATCH)
+                    nDifPos = 0;
 
-                                            // -1 wegen Rundung und "A"
-            Point aLogicStart = PixelToLogic(Point(TEXT_STARTPOS-1,0));
-            nStartPos = aLogicStart.X();
-            nInvPos = nStartPos;
-            if (nDifPos)
-                nInvPos += GetTextWidth(aString,0,nDifPos);
+                                                // -1 wegen Rundung und "A"
+                Point aLogicStart = PixelToLogic(Point(TEXT_STARTPOS-1,0));
+                nStartPos = aLogicStart.X();
+                nInvPos = nStartPos;
+                if (nDifPos)
+                    nInvPos += GetTextWidth(aString,0,nDifPos);
 
-            USHORT nFlags = 0;
-            if ( nDifPos == aString.Len() )         // only new characters appended
-                nFlags = INVALIDATE_NOERASE;        // then background is already clear
+                USHORT nFlags = 0;
+                if ( nDifPos == aString.Len() )         // only new characters appended
+                    nFlags = INVALIDATE_NOERASE;        // then background is already clear
 
-            Invalidate( Rectangle( nInvPos, 0,
-                                    nStartPos+nTextSize, GetOutputSize().Height()-1 ),
-                        nFlags );
+                Invalidate( Rectangle( nInvPos, 0,
+                                        nStartPos+nTextSize, GetOutputSize().Height()-1 ),
+                            nFlags );
+            }
         }
         else
         {

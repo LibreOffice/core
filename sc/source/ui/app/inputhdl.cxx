@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-21 10:10:56 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:58:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,6 +502,8 @@ void ScInputHandler::UpdateSpellSettings( BOOL bFromStartTab )
             pEngine->SetForbiddenCharsTable( pDoc->GetForbiddenCharacters() );
             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
+            pEngine->SetDefaultHorizontalTextDirection(
+                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( pViewData->GetTabNo() ) );
         }
 
         //  language is set separately, so the speller is needed only if online

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-06 08:53:02 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1412,6 +1412,8 @@ public:
     BOOL            GetAsianKerning() const;
     BOOL            IsValidAsianKerning() const;
     void            SetAsianKerning(BOOL bNew);
+
+    BYTE            GetEditTextDirection(USHORT nTab) const;    // EEHorizontalTextDirection values
 
     ScLkUpdMode     GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

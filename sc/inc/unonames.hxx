@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-26 18:13:38 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,7 @@
 #define SC_UNONAME_ROTANG           "RotateAngle"
 #define SC_UNONAME_ROTREF           "RotateReference"
 #define SC_UNONAME_ASIANVERT        "AsianVerticalMode"
+#define SC_UNONAME_WRITING          "WritingMode"
 
 #define SC_UNONAME_BOTTBORDER       "BottomBorder"
 #define SC_UNONAME_LEFTBORDER       "LeftBorder"

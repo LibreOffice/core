@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-04 10:33:57 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_TOPBORDER),ATTR_BORDER,        &::getCppuType((const table::BorderLine*)0),        0, TOP_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),  ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aCellStyleMap_Impl;
@@ -303,6 +304,7 @@ const SfxItemPropertyMap* lcl_GetPageStyleMap()
         {MAP_CHAR_LEN(OLD_UNO_PAGE_HDRBACKTRAN),SC_WID_UNO_HEADERSET,&::getBooleanCppuType(),                       0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_USERDEF),      ATTR_USERDEF,       &getCppuType((uno::Reference<container::XNameContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_PAGE_WIDTH),       ATTR_PAGE_SIZE,     &::getCppuType((const sal_Int32*)0),            0, MID_SIZE_WIDTH | CONVERT_TWIPS },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),      ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aPageStyleMap_Impl;

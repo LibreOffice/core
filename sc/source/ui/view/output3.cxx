@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 14:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,8 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
 
     SdrOutliner& rOutl = pModel->GetDrawOutliner();
     rOutl.EnableAutoColor( bUseStyleColor );
+    rOutl.SetDefaultHorizontalTextDirection(
+                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
 
     ExtOutputDevice* pXOut = new ExtOutputDevice( pDev );
     pXOut->SetOutDev( pDev );

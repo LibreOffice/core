@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 15:09:21 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 14:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2567,7 +2567,8 @@ BOOL ScViewData::UpdateFixY( USHORT nTab )              // TRUE = Wert geaendert
 
 void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
 {
-    BOOL bOnlineSpell = GetDocument()->GetDocOptions().IsAutoSpell();
+    ScDocument* pLocalDoc = GetDocument();
+    BOOL bOnlineSpell = pLocalDoc->GetDocOptions().IsAutoSpell();
     BOOL bHideSpell = GetOptions().IsHideAutoSpell();
 
     ULONG nCntrl = rOutl.GetControlWord();
@@ -2595,6 +2596,9 @@ void ScViewData::UpdateOutlinerFlags( Outliner& rOutl ) const
         com::sun::star::uno::Reference<com::sun::star::linguistic2::XSpellChecker1> xXSpellChecker1( LinguMgr::GetSpellChecker() );
         rOutl.SetSpeller( xXSpellChecker1 );
     }
+
+    rOutl.SetDefaultHorizontalTextDirection(
+        (EEHorizontalTextDirection)pLocalDoc->GetEditTextDirection( nTabNo ) );
 }
 
 ScAddress ScViewData::GetCurPos() const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-04 08:33:47 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,6 +277,7 @@ const SfxItemPropertyMap* lcl_GetCellsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aCellsPropertyMap_Impl;
@@ -369,6 +370,7 @@ const SfxItemPropertyMap* lcl_GetRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aRangePropertyMap_Impl;
@@ -463,6 +465,7 @@ const SfxItemPropertyMap* lcl_GetCellPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aCellPropertyMap_Impl;
@@ -561,6 +564,7 @@ const SfxItemPropertyMap* lcl_GetColumnPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  SC_WID_UNO_CELLWID, &getCppuType((sal_Int32*)0),            0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aColumnPropertyMap_Impl;
@@ -656,6 +660,7 @@ const SfxItemPropertyMap* lcl_GetRowPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aRowPropertyMap_Impl;
@@ -749,6 +754,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_VALILOC),  SC_WID_UNO_VALILOC, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VALIXML),  SC_WID_UNO_VALIXML, &getCppuType((uno::Reference<beans::XPropertySet>*)0), 0 | beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((table::CellVertJustify*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
         {0,0,0,0}
     };
     return aSheetPropertyMap_Impl;

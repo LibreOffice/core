@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-05 06:43:44 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,7 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "UserDefinedAttributes", XML_NAMESPACE_TEXT, XML_XMLNS, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_FO, XML_VERTICAL_ALIGN, XML_SC_TYPE_VERTJUSTIFY, 0),
+    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
     { 0L }
 };
 

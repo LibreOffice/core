@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-21 10:12:34 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 14:00:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1690,6 +1690,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
                             pEngine->EnableAutoColor( bUseStyleColor );
+                            pEngine->SetDefaultHorizontalTextDirection(
+                                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -2417,6 +2419,19 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     pEngine->SetPaperSize(aPaperLogic);
                                 }
 
+                                if ( pEngine->IsRightToLeft( 0 ) )
+                                {
+                                    //  For right-to-left, EditEngine always calculates its lines
+                                    //  beginning from the right edge, but EditLine::nStartPosX is
+                                    //  of USHORT type, so the PaperSize must be limited to USHRT_MAX.
+                                    Size aLogicPaper = pEngine->GetPaperSize();
+                                    if ( aLogicPaper.Width() > USHRT_MAX )
+                                    {
+                                        aLogicPaper.Width() = USHRT_MAX;
+                                        pEngine->SetPaperSize(aLogicPaper);
+                                    }
+                                }
+
                                 if ( bSimClip && !nOriVal && !bAsianVertical )
                                 {
                                     //  kein hartes Clipping, aber nur die betroffenen
@@ -2524,6 +2539,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                             pEngine->SetAsianCompressionMode( pDoc->GetAsianCompression() );
                             pEngine->SetKernAsianPunctuation( pDoc->GetAsianKerning() );
                             pEngine->EnableAutoColor( bUseStyleColor );
+                            pEngine->SetDefaultHorizontalTextDirection(
+                                (EEHorizontalTextDirection)pDoc->GetEditTextDirection( nTab ) );
                         }
                         else
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
@@ -3180,6 +3197,19 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                 }
 
                                 //! bSimClip is not used here (because nOriVal is set)
+
+                                if ( pEngine->IsRightToLeft( 0 ) )
+                                {
+                                    //  For right-to-left, EditEngine always calculates its lines
+                                    //  beginning from the right edge, but EditLine::nStartPosX is
+                                    //  of USHORT type, so the PaperSize must be limited to USHRT_MAX.
+                                    Size aLogicPaper = pEngine->GetPaperSize();
+                                    if ( aLogicPaper.Width() > USHRT_MAX )
+                                    {
+                                        aLogicPaper.Width() = USHRT_MAX;
+                                        pEngine->SetPaperSize(aLogicPaper);
+                                    }
+                                }
 
                                 pEngine->Draw( pDev, aLogicStart, (short)nOriVal );
 

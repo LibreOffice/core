@@ -2,9 +2,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-24 13:32:55 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/fontitem.hxx>
 #include <svx/forbiddenruleitem.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/postitem.hxx>
 #include <svx/rotmodit.hxx>
@@ -478,6 +479,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     FontRelief      eRelief;
     LanguageType    eLang, eCjkLang, eCtlLang;
     BOOL            bHyphenate;
+    SvxFrameDirection eDirection;
 
     //! additional parameter to control if language is needed?
 
@@ -573,6 +575,10 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
         if ( pCondSet->GetItemState( ATTR_HYPHENATE, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rMySet.Get( ATTR_HYPHENATE );
         bHyphenate = ((const SfxBoolItem*)pItem)->GetValue();
+
+        if ( pCondSet->GetItemState( ATTR_WRITINGDIR, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rMySet.Get( ATTR_WRITINGDIR );
+        eDirection = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
     }
     else        // alles direkt aus Pattern
     {
@@ -621,6 +627,8 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
                         rMySet.Get( ATTR_CTL_FONT_LANGUAGE )).GetLanguage();
         bHyphenate = ((const SfxBoolItem&)
                         rMySet.Get( ATTR_HYPHENATE )).GetValue();
+        eDirection = (SvxFrameDirection)((const SvxFrameDirectionItem&)
+                        rMySet.Get( ATTR_WRITINGDIR )).GetValue();
     }
 
     // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
@@ -656,6 +664,7 @@ void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCo
     pEditSet->Put( SvxLanguageItem  ( eCjkLang,     EE_CHAR_LANGUAGE_CJK ) );
     pEditSet->Put( SvxLanguageItem  ( eCtlLang,     EE_CHAR_LANGUAGE_CTL ) );
     pEditSet->Put( SfxBoolItem      ( EE_PARA_HYPHENATE, bHyphenate ) );
+    pEditSet->Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
 }
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:25:17 $
+ *  last change: $Author: nn $ $Date: 2002-09-09 13:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,7 @@
 #include <tools/string.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
+#include <svx/frmdiritem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/linkmgr.hxx>
 #include <svx/scripttypeitem.hxx>
@@ -406,6 +407,30 @@ BOOL ScDocument::RenamePageStyleInUse( const String& rOld, const String& rNew )
         }
 
     return bWasInUse;
+}
+
+//------------------------------------------------------------------------
+
+BYTE ScDocument::GetEditTextDirection(USHORT nTab) const
+{
+    EEHorizontalTextDirection eRet = EE_HTEXTDIR_DEFAULT;
+
+    String aStyleName = GetPageStyle( nTab );
+    SfxStyleSheetBase* pStyle = xPoolHelper->GetStylePool()->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
+    if ( pStyle )
+    {
+        SfxItemSet& rStyleSet = pStyle->GetItemSet();
+        SvxFrameDirection eDirection = (SvxFrameDirection)
+            ((const SvxFrameDirectionItem&)rStyleSet.Get( ATTR_WRITINGDIR )).GetValue();
+
+        if ( eDirection == FRMDIR_HORI_LEFT_TOP )
+            eRet = EE_HTEXTDIR_L2R;
+        else if ( eDirection == FRMDIR_HORI_RIGHT_TOP )
+            eRet = EE_HTEXTDIR_R2L;
+        // else (invalid for EditEngine): keep "default"
+    }
+
+    return eRet;
 }
 
 //------------------------------------------------------------------------
