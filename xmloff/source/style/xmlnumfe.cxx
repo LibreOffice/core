@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumfe.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 07:39:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,10 @@
 #include <unotools/charclass.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
-#include <comphelper/processfactory.hxx>
+
+// #110680#
+//#include <comphelper/processfactory.hxx>
+
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include "xmlnumfe.hxx"
@@ -320,8 +323,12 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     else
     {
         lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
-        pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+
+        // #110680#
+        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
+        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+        pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
@@ -354,8 +361,12 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     else
     {
         lang::Locale aLocale( SvNumberFormatter::ConvertLanguageToLocale( ::GetSystemLanguage() ) );
-        pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+
+        // #110680#
+        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
+        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
+        pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
+        pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
 
     pUsedList = new SvXMLNumUsedList_Impl;
