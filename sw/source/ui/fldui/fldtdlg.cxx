@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-11-29 12:14:10 $
+ *  last change: $Author: os $ $Date: 2002-12-12 16:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,4 +474,9 @@ void SwFldDlg::InsertHdl()
 void SwFldDlg::ActivateDatabasePage()
 {
     ShowPage( TP_FLD_DB );
+    SfxTabPage* pDBPage =  GetTabPage( TP_FLD_DB );
+    if( pDBPage )
+    {
+        ((SwFldDBPage*)pDBPage)->ActivateMailMergeAddress();
+    }
 }

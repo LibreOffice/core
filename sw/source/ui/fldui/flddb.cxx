@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-08-15 08:20:00 $
+ *  last change: $Author: os $ $Date: 2002-12-12 16:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,9 @@
 #endif
 #ifndef _FLDDB_HXX
 #include <flddb.hxx>
+#endif
+#ifndef _DBCONFIG_HXX
+#include <dbconfig.hxx>
 #endif
 
 #define USER_DATA_VERSION_1     "1"
@@ -584,5 +587,16 @@ void    SwFldDBPage::FillUserData()
         nTypeSel = (USHORT)(ULONG)aTypeLB.GetEntryData( nTypeSel );
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
+}
+/* -----------------12.12.2002 11:33-----------------
+ *
+ * --------------------------------------------------*/
+void SwFldDBPage::ActivateMailMergeAddress()
+{
+    ULONG nData = TYP_DBFLD;
+    aTypeLB.SelectEntryPos(aTypeLB.GetEntryPos( (const void*) nData ));
+    aTypeLB.GetSelectHdl().Call(&aTypeLB);
+    const SwDBData& rData = SW_MOD()->GetDBConfig()->GetAddressSource();
+    aDatabaseTLB.Select(rData.sDataSource, rData.sCommand, aEmptyStr);
 }
 
