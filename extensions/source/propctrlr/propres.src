@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propres.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-02 20:20:59 $
+ *  last change: $Author: kz $ $Date: 2002-08-05 20:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ String RID_STR_PROPPAGE_DEFAULT
     Text[ arabic ] = "ÚÇã";
     Text[ turkish ] = "Genel";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Continguts";
+    Text[ catalan ] = "General";
     Text[ finnish ] = "Yleistä";
     Text[ thai ] = "à¸—à¸±à¹ˆà¸§à¹„à¸›";
 };
@@ -175,6 +175,9 @@ String RID_STR_BOOL
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2002/08/02 20:20:59  kz
+ *  Merge SRX643: 02.08.02 - 22:17:43
+ *
  *  Revision 1.15  2001/08/24 10:52:53  kz
  *  Merge SRC638: 24.08.01 - 12:51:34
  *
