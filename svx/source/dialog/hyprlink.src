@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:50:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:40:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ chinese_simplified ] = "µ±Χχ°΄Ε¥(~B)";
             Text[ chinese_traditional ] = "·ν§@«φ¶s(~B)";
             Text[ arabic ] = "ίγέΚΗΝ";
-            Text[ greek ] = "Ως ~πεδίο επιλογής";
+            Text[ greek ] = "Ως πεδίο επιλογής";
             Text[ korean ] = "ΉφΖ°ΐΈ·Ξ(~B)";
             Text[ turkish ] = "Dόπme olarak";
             Text[ language_user1 ] = " ";
