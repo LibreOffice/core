@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:42 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,8 +222,6 @@ SdTPAction::SdTPAction( Window* pWindow, const SfxItemSet& rInAttrs ) :
         aRbtSlow        ( this, SdResId( RBT_SLOW ) ),
         aRbtMedium      ( this, SdResId( RBT_MEDIUM ) ),
         aRbtFast        ( this, SdResId( RBT_FAST ) ),
-        aFtTranspColor  ( this, SdResId( FT_TRANSPCOLOR ) ),
-        aLbTranspColor  ( this, SdResId( LB_TRANSPCOLOR ) ),
         aTsbSound       ( this, SdResId( TSB_SOUND ) ),
         aEdtSound       ( this, SdResId( EDT_SOUND ) ),
         aBtnSearch      ( this, SdResId( BTN_SEARCH ) ),
@@ -291,65 +289,6 @@ void SdTPAction::SetView( const SdView* pSdView )
     SvxColorTableItem aItem( *(const SvxColorTableItem*)( pDocSh->GetItem( SID_COLOR_TABLE ) ) );
     pColTab = aItem.GetColorTable();
     DBG_ASSERT( pColTab, "Keine Farbtabelle vorhanden!" );
-    FillColorLB();
-}
-
-//------------------------------------------------------------------------
-
-void SdTPAction::FillColorLB()
-{
-    Color aColorArray[16];
-    BOOL  aBoolArray[16];
-    long  aEntryArray[16];
-
-    for( int i = 0; i < 16; i++ )
-        aBoolArray[ i ] = FALSE;
-
-    aColorArray[ 0 ] = Color( COL_BLACK );
-    aColorArray[ 1 ] = Color( COL_BLUE );
-    aColorArray[ 2 ] = Color( COL_GREEN );
-    aColorArray[ 3 ] = Color( COL_CYAN );
-    aColorArray[ 4 ] = Color( COL_RED );
-    aColorArray[ 5 ] = Color( COL_MAGENTA );
-    aColorArray[ 6 ] = Color( COL_BROWN );
-    aColorArray[ 7 ] = Color( COL_GRAY );
-    aColorArray[ 8 ] = Color( COL_LIGHTGRAY );
-    aColorArray[ 9 ] = Color( COL_LIGHTBLUE );
-    aColorArray[ 10 ] = Color( COL_LIGHTGREEN );
-    aColorArray[ 11 ] = Color( COL_LIGHTCYAN );
-    aColorArray[ 12 ] = Color( COL_LIGHTRED );
-    aColorArray[ 13 ] = Color( COL_LIGHTMAGENTA );
-    aColorArray[ 14 ] = Color( COL_YELLOW );
-    aColorArray[ 15 ] = Color( COL_WHITE );
-
-    for( long j = 0, nCount = pColTab->Count(); j < nCount; j++ )
-    {
-        XColorEntry* pEntry = pColTab->Get( j );
-        Color& rColor = pEntry->GetColor();
-        for( int k = 0; k <= 15; k++ )
-        {
-            if( !aBoolArray[ k ] )
-            {
-                if( rColor.IsRGBEqual( aColorArray[ k ] ) )
-                {
-                    aBoolArray[ k ] = TRUE;
-                    aEntryArray[ k ] = j;
-                }
-            }
-        }
-        // Abbruch, wenn alle Bools TRUE sind
-    }
-
-    for( i = 0; i < 16; i++ )
-    {
-        if( aBoolArray[ i ] )
-        {
-            XColorEntry* pEntry = pColTab->Get( aEntryArray[ i ] );
-            aLbTranspColor.InsertEntry( pEntry->GetColor(), pEntry->GetName() );
-        }
-        else
-            aLbTranspColor.InsertEntry( aColorArray[ i ], String() );
-    }
 }
 
 // -----------------------------------------------------------------------
@@ -626,16 +565,6 @@ BOOL SdTPAction::FillItemSet( SfxItemSet& rAttrs )
                 bModified = TRUE;
             }
         }
-
-        // Transparenzfarbe
-        if( aLbTranspColor.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND &&
-            aLbTranspColor.GetSavedValue() != aLbTranspColor.GetSelectEntryPos() )
-        {
-            SvxColorItem aColorItem( aLbTranspColor.GetSelectEntryColor(),
-                                     ATTR_ANIMATION_TRANSPCOLOR );
-            rAttrs.Put( aColorItem );
-        }
-
     }
 
     return( bModified );
@@ -724,14 +653,6 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     else
         aTsbPlayFull.SetState( STATE_DONTKNOW );
 
-    // Transparenzfarbe
-    const SfxPoolItem* pPoolItem;
-    if( SFX_ITEM_DONTCARE != rAttrs.GetItemState( ATTR_ANIMATION_TRANSPCOLOR, FALSE, &pPoolItem ) )
-    {
-        Color aColor = ( ( const SvxColorItem* ) pPoolItem )->GetValue();
-        aLbTranspColor.SelectEntry( aColor );
-    }
-
     switch( eCA )
     {
         case presentation::ClickAction_VANISH:
@@ -765,7 +686,6 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     aRbtMedium.SaveValue();
     aRbtFast.SaveValue();
     aEdtSound.SaveValue();
-    aLbTranspColor.SaveValue();
     aTsbSound.SaveValue();
     aTsbPlayFull.SaveValue();
 }
@@ -774,27 +694,12 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
 
 void SdTPAction::ActivatePage( const SfxItemSet& rSet )
 {
-    const SvxColorItem* pColorItem;
-    if( SFX_ITEM_SET == rSet.GetItemState( ATTR_ANIMATION_TRANSPCOLOR, FALSE,
-                                    (const SfxPoolItem**) &pColorItem ) )
-    {
-        Color aColor = pColorItem->GetValue();
-        aLbTranspColor.SelectEntry( aColor );
-    }
 }
 
 // -----------------------------------------------------------------------
 
 int SdTPAction::DeactivatePage( SfxItemSet* pSet )
 {
-    if( pSet &&
-        GetActualClickAction() == presentation::ClickAction_VANISH )
-    {
-        SvxColorItem aColorItem( aLbTranspColor.GetSelectEntryColor(),
-                                    ATTR_ANIMATION_TRANSPCOLOR );
-        pSet->Put( aColorItem );
-    }
-
     if( pSet )
         FillItemSet( *pSet );
 
@@ -969,25 +874,6 @@ IMPL_LINK( SdTPAction, ChangeEffectHdl, void *, EMPTYARG )
         }
     }
 
-    // Interaktions-TP
-    if( nPos == presentation::AnimationEffect_MOVE_TO_LEFT          ||
-        nPos == presentation::AnimationEffect_MOVE_TO_UPPERLEFT     ||
-        nPos == presentation::AnimationEffect_MOVE_TO_TOP           ||
-        nPos == presentation::AnimationEffect_MOVE_TO_UPPERRIGHT    ||
-        nPos == presentation::AnimationEffect_MOVE_TO_RIGHT         ||
-        nPos == presentation::AnimationEffect_MOVE_TO_LOWERRIGHT    ||
-        nPos == presentation::AnimationEffect_MOVE_TO_BOTTOM        ||
-        nPos == presentation::AnimationEffect_MOVE_TO_LOWERLEFT )
-    {
-        aFtTranspColor.Enable();
-        aLbTranspColor.Enable();
-    }
-    else
-    {
-        aFtTranspColor.Disable();
-        aLbTranspColor.Disable();
-    }
-
     return( 0L );
 }
 
@@ -1048,8 +934,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Hide();
             aRbtMedium.Hide();
             aRbtFast.Hide();
-            aFtTranspColor.Hide();
-            aLbTranspColor.Hide();
             aTsbPlayFull.Hide();
             aTsbSound.Hide();
 
@@ -1078,8 +962,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Hide();
             aRbtMedium.Hide();
             aRbtFast.Hide();
-            aFtTranspColor.Hide();
-            aLbTranspColor.Hide();
             aTsbPlayFull.Hide();
             aTsbSound.Hide();
 
@@ -1116,8 +998,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Hide();
             aRbtMedium.Hide();
             aRbtFast.Hide();
-            aFtTranspColor.Hide();
-            aLbTranspColor.Hide();
             aTsbPlayFull.Hide();
             aEdtSound.Hide();
             aTsbSound.Hide();
@@ -1139,8 +1019,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Hide();
             aRbtMedium.Hide();
             aRbtFast.Hide();
-            aFtTranspColor.Hide();
-            aLbTranspColor.Hide();
             aTsbPlayFull.Hide();
             aEdtSound.Hide();
             aTsbSound.Hide();
@@ -1165,8 +1043,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Hide();
             aRbtMedium.Hide();
             aRbtFast.Hide();
-            aFtTranspColor.Hide();
-            aLbTranspColor.Hide();
             aTsbPlayFull.Hide();
             aEdtSound.Hide();
             aTsbSound.Hide();
@@ -1275,8 +1151,6 @@ IMPL_LINK( SdTPAction, ClickActionHdl, void *, EMPTYARG )
             aRbtSlow.Show();
             aRbtMedium.Show();
             aRbtFast.Show();
-            aFtTranspColor.Show();
-            aLbTranspColor.Show();
             aTsbPlayFull.Show();
             aEdtSound.Show();
             aTsbSound.Show();

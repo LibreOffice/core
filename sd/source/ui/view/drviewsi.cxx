@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-06 15:55:02 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,6 @@ void SdDrawViewShell::UpdateEffectWindow()
                 short nInvisibleSet     = ATTR_MISSING;
                 short nSoundOnSet       = ATTR_MISSING;
                 short nSoundFileSet     = ATTR_MISSING;
-                short nBlueScreenSet    = ATTR_MISSING;
                 short nPlayFullSet      = ATTR_MISSING;
                 short nClickActionSet   = ATTR_MISSING;
                 short nBookmarkSet      = ATTR_MISSING;
@@ -314,7 +313,6 @@ void SdDrawViewShell::UpdateEffectWindow()
                 BOOL            bFadeOut        = FALSE;
                 Color           aFadeColor      = COL_LIGHTGRAY;
                 BOOL            bInvisible      = FALSE;
-                Color           aBlueScreen     = COL_LIGHTMAGENTA;
                 BOOL            bSoundOn        = FALSE;
                 String          aSound;
                 BOOL            bPlayFull       = FALSE;
@@ -368,9 +366,6 @@ void SdDrawViewShell::UpdateEffectWindow()
 
                     aSound              = pInfo->aSoundFile;
                     nSoundFileSet       = ATTR_SET;
-
-                    aBlueScreen         = pInfo->aBlueScreen;
-                    nBlueScreenSet      = ATTR_SET;
 
                     bPlayFull           = pInfo->bPlayFull;
                     nPlayFullSet        = ATTR_SET;
@@ -433,9 +428,6 @@ void SdDrawViewShell::UpdateEffectWindow()
                         if( aSound != pInfo->aSoundFile )
                             nSoundFileSet = ATTR_MIXED;
 
-                        if( aBlueScreen != pInfo->aBlueScreen )
-                            nBlueScreenSet = ATTR_MIXED;
-
                         if( bPlayFull != pInfo->bPlayFull )
                             nPlayFullSet = ATTR_MIXED;
 
@@ -485,9 +477,6 @@ void SdDrawViewShell::UpdateEffectWindow()
 
                         if (nSoundFileSet == ATTR_SET)
                             nSoundFileSet = ATTR_MIXED;
-
-                        if (nBlueScreenSet == ATTR_SET)
-                            nBlueScreenSet = ATTR_MIXED;
 
                         if (nPlayFullSet == ATTR_SET && bPlayFull == TRUE)
                             nPlayFullSet = ATTR_MIXED;
@@ -553,7 +542,6 @@ void SdDrawViewShell::UpdateEffectWindow()
                         bInvisible      = pInfo->bDimHide;         nInvisibleSet       = ATTR_SET;
                         bSoundOn        = pInfo->bSoundOn;         nSoundOnSet         = ATTR_SET;
                         aSound          = pInfo->aSoundFile;       nSoundFileSet       = ATTR_SET;
-                        aBlueScreen     = pInfo->aBlueScreen;      nBlueScreenSet      = ATTR_SET;
                         bPlayFull       = pInfo->bPlayFull;        nPlayFullSet        = ATTR_SET;
                         eClickAction    = pInfo->eClickAction;     nClickActionSet     = ATTR_SET;
                         aBookmark       = pInfo->aBookmark;        nBookmarkSet        = ATTR_SET;
@@ -631,13 +619,6 @@ void SdDrawViewShell::UpdateEffectWindow()
                     aSet.Put(SfxStringItem(ATTR_ANIMATION_SOUNDFILE, aSound));
                 else
                     aSet.InvalidateItem(ATTR_ANIMATION_SOUNDFILE);
-
-                if (nBlueScreenSet == ATTR_SET)
-                    aSet.Put(SvxColorItem(aBlueScreen, ATTR_ANIMATION_TRANSPCOLOR));
-                else if (nBlueScreenSet == ATTR_MIXED)
-                    aSet.InvalidateItem(ATTR_ANIMATION_TRANSPCOLOR);
-                else
-                    aSet.Put(SvxColorItem(RGB_Color( COL_LIGHTMAGENTA ), ATTR_ANIMATION_TRANSPCOLOR));
 
                 if (nPlayFullSet == ATTR_SET)
                     aSet.Put(SfxBoolItem(ATTR_ANIMATION_PLAYFULL, bPlayFull));
@@ -735,7 +716,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
             short nInvisibleSet     = ATTR_MISSING;
             short nSoundOnSet       = ATTR_MISSING;
             short nSoundFileSet     = ATTR_MISSING;
-            short nBlueScreenSet    = ATTR_MISSING;
             short nPlayFullSet      = ATTR_MISSING;
             short nClickActionSet   = ATTR_MISSING;
             short nBookmarkSet      = ATTR_MISSING;
@@ -753,7 +733,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
             BOOL            bFadeOut        = FALSE;
             Color           aFadeColor      = COL_LIGHTGRAY;
             BOOL            bInvisible      = FALSE;
-            Color           aBlueScreen     = COL_LIGHTMAGENTA;
             BOOL            bSoundOn        = FALSE;
             String          aSound;
             BOOL            bPlayFull       = FALSE;
@@ -847,14 +826,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
             else
                 nFadeColorSet = ATTR_MISSING;
 
-            if (aSet.GetItemState(ATTR_ANIMATION_TRANSPCOLOR) == SFX_ITEM_SET)
-            {
-                aBlueScreen = ((SvxColorItem&)aSet.Get(ATTR_ANIMATION_TRANSPCOLOR)).GetValue();
-                nBlueScreenSet = ATTR_SET;
-            }
-            else
-                nBlueScreenSet = ATTR_MISSING;
-
             if (aSet.GetItemState(ATTR_ANIMATION_PLAYFULL) == SFX_ITEM_SET)
             {
                 bPlayFull = ((SfxBoolItem&)aSet.Get(ATTR_ANIMATION_PLAYFULL)).GetValue();
@@ -925,7 +896,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
                 nInvisibleSet      == ATTR_SET  ||
                 nSoundOnSet        == ATTR_SET  ||
                 nSoundFileSet      == ATTR_SET  ||
-                nBlueScreenSet     == ATTR_SET  ||
                 nPlayFullSet       == ATTR_SET  ||
                 nClickActionSet    == ATTR_SET  ||
                 nBookmarkSet       == ATTR_SET  ||
@@ -1032,7 +1002,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
                         pAction->SetDimHide(pInfo->bDimHide, pInfo->bDimHide);
                         pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
                         pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
-                        pAction->SetBlueScreen(pInfo->aBlueScreen, pInfo->aBlueScreen);
                         pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
                         pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
                         pAction->SetClickAction(pInfo->eClickAction, pInfo->eClickAction);
@@ -1063,7 +1032,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
                         pAction->SetDimHide(pInfo->bDimHide, bInvisible);
                         pAction->SetSoundOn(pInfo->bSoundOn, bSoundOn);
                         pAction->SetSound(pInfo->aSoundFile, aSound);
-                        pAction->SetBlueScreen(pInfo->aBlueScreen, aBlueScreen);
                         pAction->SetPlayFull(pInfo->bPlayFull, bPlayFull);
                         pAction->SetPathObj(pInfo->pPathObj, pPath);
                         pAction->SetClickAction(pInfo->eClickAction, eClickAction);
@@ -1105,9 +1073,6 @@ void SdDrawViewShell::AssignFromEffectWindow()
 
                         if (nSoundFileSet == ATTR_SET)
                             pInfo->aSoundFile = aSound;
-
-                        if (nBlueScreenSet == ATTR_SET)
-                            pInfo->aBlueScreen = aBlueScreen;
 
                         if (nPlayFullSet == ATTR_SET)
                             pInfo->bPlayFull = bPlayFull;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-20 17:16:55 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,6 @@ private:
     RadioButton         aRbtSlow;
     RadioButton         aRbtMedium;
     RadioButton         aRbtFast;
-    FixedText           aFtTranspColor;
-    ColorLB             aLbTranspColor;
 
     FixedText           aFtTree;                // jump destination controls
     SdPageObjsTLB       aLbTree;
@@ -178,7 +176,6 @@ private:
 
     virtual ::com::sun::star::presentation::AnimationEffect GetActualAnimationEffect();
 
-    void                    FillColorLB();
     void                    UpdateTree();
     virtual void            OpenFileDialog();
     ::com::sun::star::presentation::ClickAction     GetActualClickAction();

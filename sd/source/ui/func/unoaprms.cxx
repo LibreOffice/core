@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoaprms.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:53 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,6 @@ SdAnimationPrmsUndoAction::SdAnimationPrmsUndoAction(
         bNewDimHide     = bOldDimHide    = pInfo->bDimHide;
         bNewSoundOn     = bOldSoundOn    = pInfo->bSoundOn;
         aNewSoundFile   = aOldSoundFile  = pInfo->aSoundFile;
-        aNewBlueScreen  = aOldBlueScreen = pInfo->aBlueScreen;
         bNewPlayFull    = bOldPlayFull   = pInfo->bPlayFull;
 
         pNewPathObj     = pOldPathObj    = pInfo->pPathObj;
@@ -142,7 +141,6 @@ void SdAnimationPrmsUndoAction::Undo()
             pInfo->bDimHide     = bOldDimHide;
             pInfo->bSoundOn     = bOldSoundOn;
             pInfo->aSoundFile   = aOldSoundFile;
-            pInfo->aBlueScreen  = aOldBlueScreen;
             pInfo->bPlayFull    = bOldPlayFull;
             pInfo->SetPath(pOldPathObj);
             pInfo->eClickAction = eOldClickAction;
@@ -198,7 +196,6 @@ void SdAnimationPrmsUndoAction::Redo()
     pInfo->bDimHide     = bNewDimHide;
     pInfo->bSoundOn     = bNewSoundOn;
     pInfo->aSoundFile   = aNewSoundFile;
-    pInfo->aBlueScreen  = aNewBlueScreen;
     pInfo->bPlayFull    = bNewPlayFull;
     pInfo->SetPath(pNewPathObj);
     pInfo->eClickAction = eNewClickAction;

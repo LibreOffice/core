@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 20:28:21 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,48 +308,9 @@ TabPage TP_ANIMATION
         Text[ catalan ] = "~R·pida";
     };
 #define MA_Y3 (MA_Y2 + 3*(RSC_CD_RADIOBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y))
-    FixedText FT_TRANSPCOLOR
-    {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + 1) ;
-        Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text = "Unsichtbare ~Farbe" ;
-        Text [ ENGLISH ] = "Invisible ~color" ;
-        Hide = TRUE ;
-        Text [ dutch ] = "~Onzichtbare kleur" ;
-        Text [ english_us ] = "Invisible Color" ;
-        Text [ italian ] = "Colore invisibile" ;
-        Text [ spanish ] = "~Color transparente" ;
-        Text [ french ] = "Couleur invisible" ;
-        Text [ swedish ] = "Osynlig ~f‰rg" ;
-        Text [ danish ] = "Usynlig farve" ;
-        Text [ portuguese ] = "~Cor invisÌvel" ;
-        Text [ portuguese_brazilian ] = "Unsichtbare ~Farbe" ;
-        Text[ chinese_simplified ] = "Õ∏√˜…´";
-        Text[ russian ] = "œÓÁ‡˜Ì˚È";
-        Text[ polish ] = "Niewidoczny kolor";
-        Text[ japanese ] = "ìßñæêF";
-        Text[ chinese_traditional ] = "≥z©˙¶‚";
-        Text[ arabic ] = "·Ê‰ €Ì— „—∆Ì";
-        Text[ greek ] = "ÃÁ ÔÒ·Ù‹ ˜Ò˛Ï·Ù·";
-        Text[ korean ] = "∫∏¿Ã¡ˆ æ ¥¬ ªˆ";
-        Text[ turkish ] = "Gˆr¸nmez renk";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Color transparente";
-        Text[ finnish ] = "L‰pin‰kyv‰";
-    };
-    ListBox LB_TRANSPCOLOR
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( MA_ACTIONLB_LEFT , MA_Y3 ) ;
-        Size = MAP_APPFONT ( 82 , 63 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        Hide = TRUE ;
-    };
-#define MA_Y4 (MA_Y3 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_GROUP_Y)
     TriStateBox TSB_SOUND
     {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 ) ;
         Size = MAP_APPFONT ( 247 - 65 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -379,7 +340,7 @@ TabPage TP_ANIMATION
     Edit EDT_SOUND
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
         Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT + RSC_SP_CHK_TEXTINDENT) , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -388,7 +349,7 @@ TabPage TP_ANIMATION
      // schiedlich heissen, da sie eben auch eine unterschiedliche Bedeutung haben
     PushButton BTN_SEARCH
     {
-        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y3 + RSC_CD_CHECKBOX_HEIGHT ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -418,7 +379,7 @@ TabPage TP_ANIMATION
     };
     TriStateBox TSB_PLAY_FULL
     {
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y ) ;
         Size = MAP_APPFONT ( 219 , 10 ) ;
         Text = "Klang ~vollst‰ndig abspielen" ;
         Text [ ENGLISH ] = "Play sound full" ;
@@ -490,7 +451,7 @@ TabPage TP_ANIMATION
     Edit EDT_BOOKMARK
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
         Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -498,7 +459,7 @@ TabPage TP_ANIMATION
     Edit EDT_DOCUMENT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
         Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -506,7 +467,7 @@ TabPage TP_ANIMATION
     Edit EDT_PROGRAM
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
         Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -514,14 +475,14 @@ TabPage TP_ANIMATION
     Edit EDT_MACRO
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y4 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
+        Pos = MAP_APPFONT ( RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT , MA_Y3 + RSC_CD_CHECKBOX_HEIGHT + 1 ) ;
         Size = MAP_APPFONT ( 247 - 65 - 10 - (RSC_SP_DLG_INNERBORDER_LEFT + RSC_SP_FLGR_INNERBORDER_LEFT) , 12 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
     };
     PushButton BTN_SEEK
     {
-        Pos = MAP_APPFONT ( 247 - 65, MA_Y4 + RSC_CD_CHECKBOX_HEIGHT ) ;
+        Pos = MAP_APPFONT ( 247 - 65, MA_Y3 + RSC_CD_CHECKBOX_HEIGHT ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;

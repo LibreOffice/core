@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: ka $ $Date: 2001-10-23 11:54:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,6 @@ sal_Int8 SdView::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rT
                                 pAction->SetDimHide(pInfo->bDimHide, pInfo->bDimHide);
                                 pAction->SetSoundOn(pInfo->bSoundOn, pInfo->bSoundOn);
                                 pAction->SetSound(pInfo->aSoundFile, pInfo->aSoundFile);
-                                pAction->SetBlueScreen(pInfo->aBlueScreen, pInfo->aBlueScreen);
                                 pAction->SetPlayFull(pInfo->bPlayFull, pInfo->bPlayFull);
                                 pAction->SetPathObj(pInfo->pPathObj, pInfo->pPathObj);
                                 pAction->SetClickAction(pInfo->eClickAction, eClickAction);
