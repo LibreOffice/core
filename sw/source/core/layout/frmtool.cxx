@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 12:59:57 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 10:53:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -784,7 +784,12 @@ SwFlyNotify::~SwFlyNotify()
     }
 
     // OD 2004-05-13 #i28701#
-    if ( pFly->ConsiderObjWrapInfluenceOnObjPos() )
+    // --> OD 2005-03-21 #i45180# - no adjustment of layout process flags and
+    // further notifications/invalidations, if format is called by grow/shrink
+    if ( pFly->ConsiderObjWrapInfluenceOnObjPos() &&
+         ( !pFly->ISA(SwFlyFreeFrm) ||
+           !static_cast<SwFlyFreeFrm*>(pFly)->IsNoMoveOnCheckClip() ) )
+    // <--
     {
         if ( bPosChgd || bFrmChgd )
         {
