@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:25:24 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:42:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -582,6 +582,18 @@ FASTBOOL SwCrsrShell::IsInHeaderFooter( FASTBOOL* pbInHeader ) const
     if( pFrm && pbInHeader )
         *pbInHeader = pFrm->IsHeaderFrm();
     return 0 != pFrm;
+}
+
+// #i23726#
+SwPosition SwCrsrShell::GetDocPos(const Point &rPt)
+{
+    SwPosition aPos(*pCurCrsr->GetPoint());
+    Point aPt(rPt);
+
+    SwCrsrMoveState aTmpState( MV_NONE );
+    GetLayout()->GetCrsrOfst(&aPos, aPt, &aTmpState);
+
+    return aPos;
 }
 
 int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
