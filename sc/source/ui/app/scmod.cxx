@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-27 08:14:54 $
+ *  last change: $Author: nn $ $Date: 2000-11-09 19:52:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,14 +1364,15 @@ void ScModule::CloseDialogs()
         SetRefDialog( nCurRefDlgId, FALSE );
 }
 
-void ScModule::SetRefDialog( USHORT nId, BOOL bVis )
+void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
 {
     //! move reference dialog handling to view
     //! (only keep function autopilot here for references to other documents)
 
     if(nCurRefDlgId==0 || (nId==nCurRefDlgId && !bVis))
     {
-        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+        if ( !pViewFrm )
+            pViewFrm = SfxViewFrame::Current();
 
         // #79379# bindings update causes problems with update of stylist if
         // current style family has changed
