@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:16:36 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:41:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,9 @@ class SdXMLGenericPageContext : public SvXMLImportContext
 
 protected:
     rtl::OUString               maPageLayoutName;
+    rtl::OUString               maUseHeaderDeclName;
+    rtl::OUString               maUseFooterDeclName;
+    rtl::OUString               maUseDateTimeDeclName;
 
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
