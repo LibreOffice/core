@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_vafu.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:39:45 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,8 @@ PE_VarFunc::Setup_StatusFunctions()
                                               &PE_VarFunc::On_start_Bracket_Right,
                                               &PE_VarFunc::On_start_Identifier,
                                               &PE_VarFunc::On_start_Identifier,
-                                              &PE_VarFunc::On_start_Identifier };
+                                              &PE_VarFunc::On_start_Identifier,
+                                              &PE_VarFunc::On_start_typename };
     static INT16 stateT_start[] =           { Tid_Identifier,
                                               Tid_operator,
                                               Tid_class,
@@ -188,7 +189,8 @@ PE_VarFunc::Setup_StatusFunctions()
                                               Tid_Bracket_Right,
                                               Tid_DoubleColon,
                                               Tid_BuiltInType,
-                                              Tid_TypeSpecializer };
+                                              Tid_TypeSpecializer,
+                                              Tid_typename };
 
     static F_Tok stateF_expectCtor[] =      { &PE_VarFunc::On_expectCtor_Bracket_Left };
     static INT16 stateT_expectCtor[] =      { Tid_Bracket_Left };
@@ -515,6 +517,12 @@ PE_VarFunc::On_start_Bracket_Right(const char * i_sText)
 }
 
 void
+PE_VarFunc::On_start_typename(const char * i_sText)
+{
+    pSpuType->Push(not_done);
+}
+
+void
 PE_VarFunc::On_expectCtor_Bracket_Left(const char * i_sText)
 {
     pSpuFunctionCtor->Push(not_done);
@@ -568,6 +576,10 @@ void
 PE_VarFunc::On_afterName_DoubleColon(const char * i_sText)
 {
     pSpuIgnore->Push(done);   // This seems to be only an implementation.
+
+    // This may have been a template.
+    // In that case, the declaration needs to be closed.
+    Env().Close_OpenTemplate();
 }
 
 void
