@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8gr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-01 13:55:13 $
+ *  last change: $Author: cmc $ $Date: 2002-07-08 16:16:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,11 @@ Writer& OutWW8_SwOleNode( Writer& rWrt, SwCntntNode& rNode )
                     waste time rewriting it
                     */
                     if (!bDuplicate)
+                    {
                         rWW8Wrt.GetOLEExp().ExportOLEObject( *pObj, *xOleStg );
+                        //We never need this preview image
+                        xOleStg->Remove(CREATE_CONST_ASC("\2OlePres000"));
+                    }
 
                     // write as embedded field - the other things will be done
                     // in the escher export
