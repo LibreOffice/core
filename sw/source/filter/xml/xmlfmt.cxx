@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-18 11:20:44 $
+ *  last change: $Author: rt $ $Date: 2000-10-24 14:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -609,7 +609,7 @@ public:
     const SfxItemSet *GetItemSet() const { return pItemSet; }
 
     const OUString& GetMasterPageName() const { return sMasterPageName; }
-    sal_Bool HasMasterPageName() const { bHasMasterPageName; }
+    sal_Bool HasMasterPageName() const { return bHasMasterPageName; }
 
     sal_Bool IsPageDescConnected() const { return bPageDescConnected; }
     void ConnectPageDesc();
