@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXNumberingRules.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2004-08-11 15:27:43 $
+ *  last change:$Date: 2005-01-25 16:01:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ public class SwXNumberingRules extends TestCase {
             xTextDoc = SOF.createTextDoc( null );
         } catch ( com.sun.star.uno.Exception e ) {
             e.printStackTrace( log );
-            throw new StatusException( "Couldn³t create document", e );
+            throw new StatusException( "Couldn't create document", e );
         }
     }
 
