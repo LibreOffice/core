@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: af $ $Date: 2002-05-03 16:45:04 $
+ *  last change: $Author: af $ $Date: 2002-05-13 12:17:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star::accessibility;
+using ::com::sun::star::uno::Reference;
 
 namespace accessibility {
 
@@ -183,6 +184,20 @@ void AccessibleContextBase::ResetState (sal_Int16 aState)
             uno::Any(),
             aOldValue);
     }
+}
+
+
+
+
+sal_Bool AccessibleContextBase::GetState (sal_Int16 aState)
+{
+    ::utl::AccessibleStateSetHelper* pStateSet =
+        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    if (pStateSet != NULL)
+        return pStateSet->contains(aState);
+    else
+        // If there is no state set then return false as a default value.
+        return sal_False;
 }
 
 
@@ -654,9 +669,29 @@ void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
         ::cppu::OInterfaceIteratorHelper I (*pContainer);
         while (I.hasMoreElements())
         {
-            XAccessibleEventListener* pxListener =
+            Reference<XAccessibleEventListener> xListener =
                 static_cast<XAccessibleEventListener*>(I.next());
-            pxListener->notifyEvent (aEvent);
+
+            try
+            {
+                xListener->notifyEvent (aEvent);
+            }
+            catch (lang::DisposedException e)
+            {
+                // DisposedExceptions from the listener might indicate a
+                // broken connection to a different environment.
+
+                OSL_ENSURE(e.Context.is(), "caught dispose exception with empty Context field");
+                // If the exception stems from the listener then remove it
+                // from the list of listeners.  If the Context field of the
+                // exception is empty this is interpreted to indicate the
+                // listener as well.
+                if (e.Context == xListener
+                    || !e.Context.is())
+                    rBHelper.removeListener (::getCppuType(&xListener), xListener);
+            }
+            // Other events are not caught at the moment.  Might change in
+            // the future if there is demand to do so.
         }
     }
 }
