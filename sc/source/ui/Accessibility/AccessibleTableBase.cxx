@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-01 14:59:58 $
+ *  last change: $Author: sab $ $Date: 2002-08-02 12:48:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,10 @@ sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
+    // I don't need to guard, because the called funtions have a guard
+//    ScUnoGuard aGuard;
+    if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
+        throw lang::IndexOutOfBoundsException();
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));
 }
 
