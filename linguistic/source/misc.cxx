@@ -2,9 +2,9 @@
  *
  *  $RCSfile: misc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-03 15:20:46 $
+ *  last change: $Author: tl $ $Date: 2001-02-23 14:45:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ using namespace com::sun::star;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::i18n;
 using namespace com::sun::star::linguistic2;
 
 namespace linguistic
@@ -473,23 +474,21 @@ Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
 
 BOOL IsUpper( const String &rText, INT16 nLanguage )
 {
-    sal_Int32 bUpperFlags =
-        ::com::sun::star::i18n::KCharacterType::UPPER |
-        ::com::sun::star::i18n::KCharacterType::LETTER |
-        ::com::sun::star::i18n::KCharacterType::DIGIT;
-    return bUpperFlags == CharClass( CreateLocale( nLanguage ) ).
+    // european languages only...
+    sal_Int32 nFlags = CharClass( CreateLocale( nLanguage ) ).
                 getStringType( rText, 0, rText.Len() );
+    return      (nFlags & KCharacterType::UPPER)
+            && !(nFlags & KCharacterType::LOWER);
 }
 
 
 BOOL IsLower( const String &rText, INT16 nLanguage )
 {
-    sal_Int32 bUpperFlags =
-        ::com::sun::star::i18n::KCharacterType::LOWER |
-        ::com::sun::star::i18n::KCharacterType::LETTER |
-        ::com::sun::star::i18n::KCharacterType::DIGIT;
-    return bUpperFlags == CharClass( CreateLocale( nLanguage ) ).
+    // european languages only...
+    sal_Int32 nFlags = CharClass( CreateLocale( nLanguage ) ).
                 getStringType( rText, 0, rText.Len() );
+    return      (nFlags & KCharacterType::LOWER)
+            && !(nFlags & KCharacterType::UPPER);
 }
 
 
