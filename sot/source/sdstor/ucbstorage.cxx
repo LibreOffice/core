@@ -145,7 +145,7 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
 {
                                 ~UCBStorageStream_Impl();
-protected:
+public:
 
     virtual ULONG               GetData( void* pData, ULONG nSize );
     virtual ULONG               PutData( const void* pData, ULONG nSize );
@@ -154,7 +154,6 @@ protected:
     virtual void                FlushData();
     virtual void                ResetError();
 
-public:
     UCBStorageStream*           m_pAntiImpl;    // only valid if an external reference exists
 
     String                      m_aOriginalName;// the original name before accessing the stream
@@ -178,6 +177,7 @@ public:
 
                                 UCBStorageStream_Impl( const String&, StreamMode, UCBStorageStream*, BOOL );
 
+    BOOL                        Clear();
     sal_Int16                   Commit();       // if modified and commited: transfer an XInputStream to the content
     BOOL                        Revert();       // discard all changes
     BaseStorage*                CreateStorage();// create an OLE Storage on the UCBStorageStream
@@ -498,6 +498,7 @@ void  UCBStorageStream_Impl::SetSize( ULONG nSize )
 void  UCBStorageStream_Impl::FlushData()
 {
     m_pStream->Flush();
+    m_bCommited = TRUE;
 }
 
 void  UCBStorageStream_Impl::ResetError()
@@ -613,6 +614,15 @@ BOOL UCBStorageStream_Impl::Revert()
     return ( m_pStream->GetError() != ERRCODE_NONE );
 }
 
+BOOL UCBStorageStream_Impl::Clear()
+{
+    BOOL bRet = ( m_pAntiImpl == NULL );
+    DBG_ASSERT( bRet, "Removing used stream!" );
+    if( bRet )
+        DELETEZ( m_pSource );
+    return bRet;
+}
+
 UCBStorageStream::UCBStorageStream( const String& rName, StreamMode nMode, BOOL bDirect )
 {
     // pImp must be initialized in the body, because otherwise the vtable of the stream is not initialized
@@ -633,6 +643,8 @@ UCBStorageStream::UCBStorageStream( UCBStorageStream_Impl *pImpl )
 
 UCBStorageStream::~UCBStorageStream()
 {
+    if ( pImp->m_nMode & STREAM_WRITE )
+        pImp->Flush();
     pImp->m_pAntiImpl = NULL;
     pImp->ReleaseRef();
 }
@@ -669,8 +681,7 @@ ULONG UCBStorageStream::Tell()
 void UCBStorageStream::Flush()
 {
     // streams are never really transacted, so flush also means commit !
-//    Commit();
-    pImp->m_pStream->Flush();
+    Commit();
 }
 
 BOOL UCBStorageStream::SetSize( ULONG nNewSize )
@@ -733,8 +744,7 @@ BOOL  UCBStorageStream::Equals( const BaseStorageStream& rStream ) const
 BOOL UCBStorageStream::Commit()
 {
     // mark this stream for sending it on root commit
-    pImp->m_pStream->Flush();
-    pImp->m_bCommited = TRUE;
+    pImp->FlushData();
     return TRUE;
 }
 
@@ -945,8 +955,8 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
         String aTemp = String::CreateFromAscii("vnd.sun.star.pkg://");
         aTemp += INetURLObject::encode( aName, INetURLObject::PART_AUTHORITY, '%', INetURLObject::ENCODE_ALL );
         m_aURL = aTemp;
-        if ( nMode & STREAM_WRITE )
-            m_pStream = ::utl::UcbStreamHelper::CreateStream( aName, nMode );
+        if ( m_nMode & STREAM_WRITE )
+            m_pStream = ::utl::UcbStreamHelper::CreateStream( aName, STREAM_STD_READWRITE );
     }
     else
     {
@@ -1435,6 +1445,7 @@ sal_Int16 UCBStorage_Impl::Commit()
     {
         try
         {
+            // all errors will be caught in the "catch" statement outside the loop
             while ( pElement && nRet )
             {
                 ::ucb::Content* pContent = pElement->GetContent();
@@ -1442,7 +1453,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 if ( !pContent && pElement->IsModified() )
                 {
                     // if the element has never been opened, no content has been created until now
-                    bDeleteContent = TRUE;
+                    bDeleteContent = TRUE;  // remember to delete it later
                     String aName( m_aURL );
                     aName += '/';
                     aName += pElement->m_aOriginalName;
@@ -1451,16 +1462,26 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                 if ( pElement->m_bIsRemoved )
                 {
-                    // errors will be caught in the "catch" statement outside the loop
-                    nRet = COMMIT_RESULT_SUCCESS;
-                    Any aAny;
-                    pContent->executeCommand( ::rtl::OUString::createFromAscii("delete"), aAny );
+                    // first remove all open stream handles
+                    if( pElement->m_xStream->Clear() )
+                    {
+                        pContent->executeCommand( ::rtl::OUString::createFromAscii("delete"), makeAny( sal_Bool( sal_True ) ) );
+                        nRet = COMMIT_RESULT_SUCCESS;
+                    }
+                    else
+                        // couldn't release stream because there are external references to it
+                        nRet = COMMIT_RESULT_FAILURE;
                 }
                 else
                 {
                     sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
                     if ( pElement->m_xStorage.Is() )
                     {
+                        // element is a storage
+                        // do a commit in the following cases:
+                        //  - if storage is already inserted, and changed
+                        //  - storage is not in a package
+                        //  - it's a new storage, try to insert and commit if successful inserted
                         if ( !pElement->m_bIsInserted || m_bIsLinked || pElement->m_xStorage->Insert( m_pContent ) )
                         {
                             nLocalRet = pElement->m_xStorage->Commit();
@@ -1469,9 +1490,11 @@ sal_Int16 UCBStorage_Impl::Commit()
                     }
                     else if ( pElement->m_xStream.Is() )
                     {
+                        // element is a stream
                         nLocalRet = pElement->m_xStream->Commit();
                         if ( pElement->m_xStream->m_bIsOLEStorage )
                         {
+                            // OLE storage should be stored encrytped, if the storage uses encryption
                             pElement->m_xStream->m_aContentType = String::CreateFromAscii("application/vnd.sun.star.oleobject");
                             Any aValue;
                             aValue <<= (BOOL) TRUE;
@@ -1483,8 +1506,8 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                     if ( pElement->m_aName != pElement->m_aOriginalName )
                     {
-                        // errors will be caught in the "catch" statement outside the loop
-                        nRet = COMMIT_RESULT_SUCCESS;
+                        // name ( title ) of the element was changed
+                        nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->m_aName;
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("Title"), aAny );
@@ -1492,8 +1515,8 @@ sal_Int16 UCBStorage_Impl::Commit()
 
                     if ( pElement->IsLoaded() && pElement->GetContentType() != pElement->GetOriginalContentType() )
                     {
-                        // errors will be caught in the "catch" statement outside the loop
-                        nRet = COMMIT_RESULT_SUCCESS;
+                        // mediatype of the element was changed
+                        nLocalRet = COMMIT_RESULT_SUCCESS;
                         Any aAny;
                         aAny <<= (rtl::OUString) pElement->GetContentType();
                         pContent->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"), aAny );
@@ -1504,7 +1527,11 @@ sal_Int16 UCBStorage_Impl::Commit()
                 }
 
                 if ( bDeleteContent )
+                    // content was created inside the loop
                     delete pContent;
+
+                if ( nRet == COMMIT_RESULT_FAILURE )
+                    break;
 
                 pElement = m_aChildrenList.Next();
             }
@@ -1585,6 +1612,11 @@ sal_Int16 UCBStorage_Impl::Commit()
                     }
                     else
                     {
+                        // release the stream of the storage ( if there is any )
+                        if ( m_pStream )
+                            DELETEZ( m_pStream );
+
+                        // force writing
                         Any aAny;
                         m_pContent->executeCommand( ::rtl::OUString::createFromAscii("flush"), aAny );
                         if ( m_pSource != 0 )
@@ -1622,9 +1654,9 @@ sal_Int16 UCBStorage_Impl::Commit()
                     return COMMIT_RESULT_FAILURE;
                 }
             }
-            else
+            else if ( nRet != COMMIT_RESULT_NOTHING_TO_DO )
             {
-                // how to tell the content : forget all changes ?!
+                // how to tell the content : forget all changes ?! Should we ?!
                 SetError( ERRCODE_IO_GENERAL );
                 return nRet;
             }
