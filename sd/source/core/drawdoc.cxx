@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-28 08:11:11 $
+ *  last change: $Author: ka $ $Date: 2001-07-03 13:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,7 +554,9 @@ __EXPORT SdDrawDocument::~SdDrawDocument()
         // BaseLinks freigeben
         for ( USHORT n = pLinkManager->GetServers().Count(); n; )
         {
+#ifndef TF_SVDATA
             ( (SvPseudoObject*) pLinkManager->GetServers()[ --n ])->Closed();
+#endif
         }
 
         if ( pLinkManager->GetLinks().Count() )
