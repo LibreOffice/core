@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2001-05-07 13:11:55 $
+#   last change: $Author: obo $ $Date: 2001-05-07 13:45:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -177,7 +177,7 @@ OSLLIB=
 RTLLIB=
 TECLIB=
 CPPULIB=-lcppu
-CPPUHELPERLIB=-lcppuhelper$(COM)
+CPPUHELPERLIB=-lcppuhelper2$(COM)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COM)
 REGLIB=-lreg
