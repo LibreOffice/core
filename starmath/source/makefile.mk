@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 11:16:03 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:52:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,7 +71,7 @@ TARGET=starmath
 PROJECTPCH=math_pch
 PDBTARGET=math_pch
 PROJECTPCHSOURCE=math_pch
-
+LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
@@ -89,13 +89,13 @@ SRC2FILES = smres.src   \
             symbol.src	\
             commands.src
 
-SLOFILES =  \
+SLO1FILES =  \
         $(SLO)$/register.obj \
         $(SLO)$/typemap.obj \
         $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
         $(SLO)$/action.obj \
-        $(SLO)$/accessibility.obj \
+            $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \
@@ -115,20 +115,27 @@ SLOFILES =  \
         $(SLO)$/unomodel.obj \
         $(SLO)$/unodoc.obj
 
+SLO2FILES =  \
+        $(SLO)$/register.obj  \
+        $(SLO)$/detreg.obj
+
+SLOFILES = \
+    $(SLO1FILES) \
+    $(SLO2FILES)
+
 EXCEPTIONSFILES =   \
         $(SLO)$/accessibility.obj \
-        $(SLO)$/register.obj  \
         $(SLO)$/mathml.obj \
         $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
+        $(SLO)$/smdetect.obj \
         $(SLO)$/unodoc.obj
 
+LIB1TARGET = \
+    $(SLB)$/$(TARGET).lib
 
-LIB2TARGET =    $(SLB)$/ysm.lib
-LIB2ARCHIV =    $(LB)$/libysm.a
-LIB2OBJFILES  =    $(SLO)$/smlib.obj
-
-DEPOBJFILES = $(SLO)$/smlib.obj
+LIB1OBJFILES = \
+    $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
 
@@ -137,8 +144,6 @@ CDEFS+=-DUSE_POLYGON
 .ENDIF
 
 .INCLUDE :  target.mk
-
-$(SLO)$/smlib.obj : $(INCCOM)$/dllname.hxx
 
 $(INCCOM)$/dllname.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
