@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-26 13:57:48 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 07:33:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,8 +82,6 @@ BOOTSTRAP_SERVICE=FALSE
 
 # CFLAGS+=/GR -DUNICODE -D_UNICODE
 CFLAGS+= -D_WIN32_DCOM
-UNOUCRDEP=	$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/applicat.rdb
 
 .IF "$(BOOTSTRAP_SERVICE)" == "TRUE"
 UNOUCROUT=	$(OUT)$/inc$/comprehensive
@@ -100,7 +98,7 @@ UNOTYPES= com.sun.star.lang.XInitialization \
           com.sun.star.datatransfer.dnd.XDropTargetListener \
           com.sun.star.datatransfer.dnd.DNDConstants		\
           com.sun.star.datatransfer.dnd.XDragSource
-          
+ 
 
 
 .IF "$(depend)" != ""
@@ -117,7 +115,7 @@ APP1OBJS=	$(OBJ)$/dndTest.obj	\
         $(OBJ)$/dataobject.obj 	
 
 LIBCIMT=msvcrtd.lib
-            
+
 
 APP1STDLIBS= \
     $(SALLIB) \

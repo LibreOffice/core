@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-20 16:33:08 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 07:33:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ LIBTARGET=NO
 .IF "$(OS)"=="MACOSX" 
 .IF "$(GUIBASE)"=="aqua"
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 .ENDIF # "$(GUIBASE)"=="aqua"
 .ENDIF # "$(OS)"=="MACOSX" 
 USE_BOUNDCHK=

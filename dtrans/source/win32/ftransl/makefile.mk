@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: tra $ $Date: 2001-05-11 10:33:01 $
+#   last change: $Author: jbu $ $Date: 2002-10-01 07:33:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJNAME=dtrans
 TARGET=ftransl
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
-COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+COMPRDB=$(SOLARBINDIR)$/types.rdb
 USE_BOUNDCHK=
 
 .IF "$(USE_BOUNDCHK)"=="TR"

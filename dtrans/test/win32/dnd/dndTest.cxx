@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndTest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-07-19 11:14:24 $
+ *  last change: $Author: jbu $ $Date: 2002-10-01 07:33:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ int main( int argc, char *argv[ ], char *envp[ ] )
 HRESULT doTest()
 {
 
-    MultiServiceFactory= createRegistryServiceFactory( OUString(L"applicat.rdb"));
+    MultiServiceFactory= createRegistryServiceFactory( OUString(L"types.rdb"), OUString( L"services.rdb") , sal_True);
 
     // create the MTA thread that is used to realize MTA calls to the services
     // We create the thread and wait until the thread has created its message queue
