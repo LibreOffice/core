@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertyhdl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:03:48 $
+ *  last change: $Author: fs $ $Date: 2001-06-07 12:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_AWT_FONTWIDTH_HPP_
 #include <com/sun/star/awt/FontWidth.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_FONTEMPHASISMARK_HPP_
+#include <com/sun/star/awt/FontEmphasisMark.hpp>
+#endif
 #ifndef _XMLOFF_XMLTYPES_HXX
 #include "xmltypes.hxx"
 #endif
@@ -88,6 +91,9 @@
 #endif
 #ifndef _XMLOFF_FORMS_CALLBACKS_HXX_
 #include "callbacks.hxx"
+#endif
+#ifndef _XMLOFF_XMLCONSTANTSPROPERTYHANDLER_HXX
+#include "XMLConstantsPropertyHandler.hxx"
 #endif
 
 //.........................................................................
@@ -129,7 +135,7 @@ namespace xmloff
         {
             case XML_TYPE_TEXT_ALIGN:
                 if (!m_pTextAlignHandler)
-                    m_pTextAlignHandler = new OEnumInt16Handler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), -1);
+                    m_pTextAlignHandler = new XMLConstantsPropertyHandler(OEnumMapper::getEnumMap(OEnumMapper::epTextAlign), 0);
                 pHandler = m_pTextAlignHandler;
                 break;
 
@@ -150,11 +156,105 @@ namespace xmloff
                     m_pFontWidthHandler = new OFontWidthHandler;
                 pHandler = m_pFontWidthHandler;
                 break;
+
+            case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
+                if (!m_pFontEmphasisHandler)
+                    m_pFontEmphasisHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), sXML_none );
+                pHandler = m_pFontEmphasisHandler;
+                break;
+
+            case XML_TYPE_TEXT_FONT_RELIEF:
+                if (!m_pFontReliefHandler)
+                    m_pFontReliefHandler = new XMLConstantsPropertyHandler( OEnumMapper::getEnumMap(OEnumMapper::epFontRelief), sXML_none );
+                pHandler = m_pFontEmphasisHandler;
+                break;
         }
 
         if (!pHandler)
             pHandler = XMLPropertyHandlerFactory::GetPropertyHandler(_nType);
         return pHandler;
+    }
+
+    //=====================================================================
+    //= OControlTextEmphasisHandler
+    //=====================================================================
+    OControlTextEmphasisHandler::OControlTextEmphasisHandler()
+    {
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OControlTextEmphasisHandler::exportXML( ::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    {
+        ::rtl::OUStringBuffer aReturn;
+        sal_Bool bSuccess = sal_False;
+        sal_Int16 nFontEmphasis;
+        if (_rValue >>= nFontEmphasis)
+        {
+            // the type
+            sal_Int16 nType = nFontEmphasis & ~(FontEmphasisMark::ABOVE | FontEmphasisMark::BELOW);
+            // the position of the mark
+            sal_Bool bBelow = 0 != (nFontEmphasis & FontEmphasisMark::BELOW);
+
+            // convert
+            if (bSuccess = _rUnitConverter.convertEnum(aReturn, nType, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis), sXML_none))
+            {
+                aReturn.append( (sal_Unicode)' ' );
+                aReturn.appendAscii( (const sal_Char*)(bBelow ? sXML_below : sXML_above) );
+
+                _rStrExpValue = aReturn.makeStringAndClear();
+            }
+        }
+
+        return bSuccess;
+    }
+
+    //---------------------------------------------------------------------
+    sal_Bool OControlTextEmphasisHandler::importXML( const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter ) const
+    {
+        sal_Bool bSuccess = sal_True;
+        sal_uInt16 nEmphasis = FontEmphasisMark::NONE;
+
+        sal_Bool bBelow = sal_False;
+        sal_Bool bHasPos = sal_False, bHasType = sal_False;
+
+        ::rtl::OUString sToken;
+        SvXMLTokenEnumerator aTokenEnum(_rStrImpValue);
+        while (aTokenEnum.getNextToken(sToken))
+        {
+            if (!bHasPos)
+            {
+                if (sToken.equalsAsciiL( sXML_above, sizeof(sXML_above)-1))
+                {
+                    bBelow = sal_False;
+                    bHasPos = sal_True;
+                }
+                else if (sToken.equalsAsciiL(sXML_below, sizeof(sXML_below)-1))
+                {
+                    bBelow = sal_True;
+                    bHasPos = sal_True;
+                }
+            }
+            if (!bHasType)
+            {
+                if (_rUnitConverter.convertEnum(nEmphasis, sToken, OEnumMapper::getEnumMap(OEnumMapper::epFontEmphasis)))
+                {
+                    bHasType = sal_True;
+                }
+                else
+                {
+                    bSuccess = sal_False;
+                    break;
+                }
+            }
+        }
+
+        if (bSuccess)
+        {
+            nEmphasis |= bBelow ? FontEmphasisMark::BELOW : FontEmphasisMark::ABOVE;
+            _rValue <<= (sal_Int16)nEmphasis;
+        }
+
+        return bSuccess;
     }
 
     //=====================================================================
@@ -276,47 +376,6 @@ namespace xmloff
         return bSuccess;
     }
 
-    //=====================================================================
-    //= OEnumInt16Handler
-    //=====================================================================
-    //---------------------------------------------------------------------
-    OEnumInt16Handler::OEnumInt16Handler(const SvXMLEnumMapEntry* _pMap, sal_Int16 _nVoidValue)
-        :m_pMap(_pMap)
-        ,m_nVoidValue(_nVoidValue)
-    {
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OEnumInt16Handler::importXML(const ::rtl::OUString& _rStrImpValue, Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
-    {
-        // extract the value
-        sal_uInt16 nValue = m_nVoidValue;
-        sal_Bool bSuccess = _rUnitConverter.convertEnum(nValue, _rStrImpValue, m_pMap);
-        if (!bSuccess || (m_nVoidValue == nValue))
-            _rValue.clear();
-        else
-            _rValue <<= (sal_Int16)nValue;
-
-        return bSuccess;
-    }
-
-    //---------------------------------------------------------------------
-    sal_Bool OEnumInt16Handler::exportXML(::rtl::OUString& _rStrExpValue, const Any& _rValue, const SvXMLUnitConverter& _rUnitConverter) const
-    {
-        // extract the value
-        sal_Int16 nValue = m_nVoidValue;
-        if (_rValue.hasValue())
-            _rValue >>= nValue;
-
-        // convert it
-        ::rtl::OUStringBuffer aBuffer;
-        sal_Bool bSuccess = _rUnitConverter.convertEnum(aBuffer, nValue, m_pMap);
-        _rStrExpValue = aBuffer.makeStringAndClear();
-
-        // outta here
-        return bSuccess;
-    }
-
 //.........................................................................
 }   // namespace xmloff
 //.........................................................................
@@ -324,6 +383,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/05/28 15:03:48  fs
+ *  #86712# hold the handler as pointer, not as member instance
+ *
  *  Revision 1.5  2001/05/15 14:02:13  fs
  *  #86823# changed the handling for control borders
  *
