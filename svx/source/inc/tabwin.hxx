@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:12:06 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,15 +92,20 @@
 #ifndef _COMPHELPER_PROPERTY_MULTIPLEX_HXX_
 #include <comphelper/propmultiplex.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
 
 //==================================================================
 class FmFieldWin;
-class FmFieldWinListBox: public SvTreeListBox
+class FmFieldWinListBox
+                    :public SvTreeListBox
+                    ,public DragSourceHelper
 {
     FmFieldWin* pTabWin;
 
 protected:
-    virtual void Command( const CommandEvent& rEvt );
+//  virtual void Command( const CommandEvent& rEvt );
 
 public:
     FmFieldWinListBox( FmFieldWin* pParent );
@@ -111,6 +116,10 @@ public:
         return (!nDragDropMode) ? sal_False : SvTreeListBox::QueryDrop(rDEvt);
     }
         // this prevents an assertion the base class makes (unjustified ?) to fail - 67071 - fs - 21.06.99
+
+protected:
+    // DragSourceHelper
+    virtual void StartDrag( sal_Int8 nAction, const Point& rPosPixel );
 };
 
 //========================================================================
@@ -123,9 +132,9 @@ public:
 };
 
 //========================================================================
-class FmFieldWin :  public SfxFloatingWindow,
-                    public SfxControllerItem,
-                    public ::comphelper::OPropertyChangeListener
+class FmFieldWin    :public SfxFloatingWindow
+                    ,public SfxControllerItem
+                    ,public ::comphelper::OPropertyChangeListener
 {
     ::osl::Mutex        m_aMutex;
     FmFieldWinListBox* pListBox;
@@ -156,9 +165,9 @@ public:
     const ::rtl::OUString&  GetObjectName() const { return m_aObjectName; }
     sal_Int32               GetObjectType() const { return m_nObjectType; }
 
+protected:
     // FmXChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
-
 };
 
 //========================================================================

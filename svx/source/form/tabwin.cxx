@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:28:22 $
+ *  last change: $Author: fs $ $Date: 2001-03-26 15:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
 #endif
+#ifndef _SVX_DBAEXCHANGE_HXX_
+#include "dbaexchange.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -109,9 +112,9 @@
 #include "fmshell.hxx"
 #endif
 
-#ifndef _SVX_FMEXCH_HXX
-#include "fmexch.hxx"
-#endif
+//#ifndef _SVX_FMEXCH_HXX
+//#include "fmexch.hxx"
+//#endif
 
 #ifndef _SVX_FMPAGE_HXX
 #include "fmpage.hxx"
@@ -176,7 +179,10 @@ const long MIN_WIN_SIZE_Y = 50;
 const long LISTBOX_BORDER = 2;
 
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer;
 using namespace ::svxform;
+using namespace ::svx;
 
 //==================================================================
 // class FmFieldWinListBox
@@ -185,18 +191,11 @@ DBG_NAME(FmFieldWinListBox);
 //------------------------------------------------------------------------------
 FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     :SvTreeListBox( pParent, WB_HASBUTTONS|WB_BORDER )
+    ,DragSourceHelper(this)
     ,pTabWin( pParent )
 {
     DBG_CTOR(FmFieldWinListBox,NULL);
     SetHelpId( HID_FIELD_SEL );
-
-    ::rtl::OUString aString;
-    for( sal_Int32 i=1; i<11; i++ )
-    {
-        aString = ::rtl::OUString::createFromAscii("Feld ");
-        aString += ::rtl::OUString::valueOf(i);
-        InsertEntry( aString );
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -206,38 +205,27 @@ FmFieldWinListBox::~FmFieldWinListBox()
 }
 
 //------------------------------------------------------------------------------
-void FmFieldWinListBox::Command(const CommandEvent& rEvt)
+void FmFieldWinListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
 {
-    switch (rEvt.GetCommand())
+    SvLBoxEntry* pSelected = FirstSelected();
+    if (!pSelected)
+        // no drag without a field
+        return;
+
+    TransferableHelper* pTransferColumn = new OColumnTransferable(
+        pTabWin->GetDatabaseName(),
+        pTabWin->GetObjectType(),
+        pTabWin->GetObjectName(),
+        GetEntryText( pSelected),
+        CTF_FIELD_DESCRIPTOR | CTF_CONTROL_EXCHANGE
+    );
+    Reference< XTransferable> xEnsureDelete = pTransferColumn;
+    if (pTransferColumn)
     {
-        case COMMAND_STARTDRAG:
-        {
-            EndSelection();
-            Pointer aMovePtr( POINTER_COPYDATA ),
-                    aCopyPtr( POINTER_COPYDATA ),
-                    aLinkPtr( POINTER_LINKDATA );
-
-            UniString aCopyData = pTabWin->GetDatabaseName();
-            aCopyData   += sal_Unicode(11);
-            aCopyData   += pTabWin->GetObjectName().getStr();
-            aCopyData   += sal_Unicode(11);
-            aCopyData   += ::rtl::OUString::valueOf((sal_Int32)pTabWin->GetObjectType()).getStr();
-            aCopyData   += sal_Unicode(11);
-
-            SvLBoxEntry* pFirstSelected = FirstSelected();
-            if( pFirstSelected )
-                aCopyData += UniString(GetEntryText( pFirstSelected ));
-
-            SvxFmFieldExchRef xFieldExch = new SvxFmFieldExch(aCopyData);
-            // TODO make it linkable but when we have a new clipboard format
-            // where the connection can be transfered as well
-            DragManager::ExecuteDrag( xFieldExch, DRAG_COPYABLE  );
-        }   break;
-        default:
-            Window::Command( rEvt );
+        EndSelection();
+        pTransferColumn->StartDrag( this, DND_ACTION_COPY );
     }
 }
-
 
 //========================================================================
 // class FmFieldWinData
