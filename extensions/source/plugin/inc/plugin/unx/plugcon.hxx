@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: rt $ $Date: 2001-10-26 07:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #endif
 #include <X11/Xatom.h>
 #define XP_UNIX
+#include <stdio.h>
 #ifndef _NPAPI_H_
 #include <npsdk/npupp.h>
 #include <npsdk/npapi.h>
