@@ -1,3 +1,3 @@
-db	berkeleydb	:	external NULL
+db	berkeleydb	:	external xml2cmp sal NULL
 db	berkeleydb						nmake	-	u	as_mkout NULL
 db	berkeleydb						nmake	-	w,vc7	as_mkout NULL
