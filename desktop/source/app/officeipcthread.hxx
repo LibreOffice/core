@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ghiggins $ $Date: 2002-07-05 06:54:14 $
+ *  last change: $Author: lo $ $Date: 2002-10-11 14:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _CPPUHELPER_WEAKBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
 
 namespace desktop
 {
@@ -108,6 +111,8 @@ struct ProcessDocumentsRequest
     ::rtl::OUString aForceNewList;  // Documents that should be forced to create a new document
     ::rtl::OUString aPrinterName;   // The printer name that should be used for printing
     ::rtl::OUString aPrintToList;   // Documents that should be printed on the given printer
+    ::osl::Condition *pcProcessed;  // pointer to a condition to be set when the request has been processed
+
 };
 
 class DispatchWatcher;
@@ -129,6 +134,13 @@ class OfficeIPCThread : public vos::OThread
     sal_Bool                    mbShutdownInProgress;
 
     static ::osl::Mutex&        GetMutex();
+
+    static const char *sc_aTerminationSequence;
+    static const int sc_nTSeqLength;
+    static const char *sc_aShowSequence;
+    static const int sc_nShSeqLength;
+    static const char *sc_aConfirmationSequence;
+    static const int sc_nCSeqLength;
 
     OfficeIPCThread();
 

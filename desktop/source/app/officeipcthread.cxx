@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-25 12:13:30 $
+ *  last change: $Author: lo $ $Date: 2002-10-11 14:11:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,12 @@
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
+#ifndef _OSL_CONDITN_HXX_
+#include <osl/conditn.hxx>
+#endif
+#ifdef DEBUG
+#include <assert.h>
+#endif
 
 using namespace vos;
 using namespace rtl;
@@ -98,12 +104,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
-
+/* SHAME!!!
 #define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
 #define TERMINATION_LENGTH 28
-
 #define SHOW_SEQUENCE   "-show"
 #define SHOW_LENGTH     5
+*/
 
 // Type of pipe we use
 enum PipeMode
@@ -122,6 +128,14 @@ extern desktop::CommandLineArgs*    GetCommandLineArgs();
 
 namespace desktop
 {
+
+const char  *OfficeIPCThread::sc_aTerminationSequence = "InternalIPC::TerminateThread";
+const int OfficeIPCThread::sc_nTSeqLength = 28;
+const char  *OfficeIPCThread::sc_aShowSequence = "-show";
+const int OfficeIPCThread::sc_nShSeqLength = 5;
+const char  *OfficeIPCThread::sc_aConfirmationSequence = "InternalIPC::ProcessingDone";;
+const int OfficeIPCThread::sc_nCSeqLength = 27;
+
 
 OfficeIPCThread*    OfficeIPCThread::pGlobalOfficeIPCThread = 0;
 #ifndef SOLARIS
@@ -460,7 +474,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread(
                                          aArguments.Len() );
         }
         delete pThread;
-
         if ( bWaitBeforeClose )
         {
             // Fix for bug #95361#
@@ -596,28 +609,27 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
                 aArguments += '|';
             }
         }
-
+        // finaly, write the string onto the pipe
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
+
+        // write a NULL byte onto the pipe to mark end of transfer
+        pThread->maStreamPipe.write( "\0", 1 );
+
+        // wait for confirmation #95361# #95425#
+        ByteString aToken(sc_aConfirmationSequence);
+        char *aReceiveBuffer = new char[aToken.Len()+1];
+        int n = pThread->maStreamPipe.read( aReceiveBuffer, aToken.Len() );
+        aReceiveBuffer[n]='\0';
         delete pThread;
 
-#ifdef UNX
-        if ( bWaitBeforeClose )
-        {
-            // Fix for bug #95361#
-            // We are waiting before office shutdown itself. Netscape
-            // deletes temporary files after the responsible application
-            // exited. The running office must have time to open the file
-            // before Netscape can delete it!!
-            // We have to find a better way to handle this kind of problem
-            // in the future.
-            TimeValue aTimeValue;
-            aTimeValue.Seconds = 5;
-            aTimeValue.Nanosec = 0; // 5sec
-            osl::Thread::wait( aTimeValue );
+        if (aToken.CompareTo(aReceiveBuffer)!= COMPARE_EQUAL) {
+            // something went wrong
+            delete aReceiveBuffer;
+            return IPC_STATUS_BOOTSTRAP_ERROR;
+        } else {
+            delete aReceiveBuffer;
+            return IPC_STATUS_2ND_OFFICE;
         }
-#endif
-
-        return IPC_STATUS_2ND_OFFICE;
     }
 
     return IPC_STATUS_OK;
@@ -641,7 +653,8 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 #else
         OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
 #endif
-        Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
+        // Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
+        Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
         // close the pipe so that the streampipe on the other
         // side produces EOF
@@ -688,95 +701,115 @@ void SAL_CALL OfficeIPCThread::run()
         OPipe::TPipeError
             nError = maPipe.accept( maStreamPipe );
 
+        if( nError == OStreamPipe::E_None )
         {
             osl::ClearableMutexGuard aGuard( GetMutex() );
 
-            if( nError == OStreamPipe::E_None )
-            {
-                ByteString aArguments;
-                char pBuf[ 2049 ];
-                int nBytes;
-                do
-                {
-                    nBytes = maStreamPipe.read( pBuf, 2048 );
-                    pBuf[ nBytes ] = 0;
+            ByteString aArguments;
+            // test byte by byte
+            const int nBufSz = 2048;
+            char pBuf[nBufSz];
+            int nBytes = 0;
+            int nResult = 0;
+            // read into pBuf until '\0' is read or read-error
+            while ((nResult=maStreamPipe.recv( pBuf+nBytes, nBufSz-nBytes))>0) {
+                nBytes += nResult;
+                if (pBuf[nBytes-1]=='\0') {
                     aArguments += pBuf;
-                } while( ! maStreamPipe.isEof() || nBytes > 0 );
-                maStreamPipe.close();
-
-                // #90717# Is this a lookup message from another application? if so, ignore
-                if ( aArguments.Len() == 0 )
-                    continue;
-
-                // is this a termination message ? if so, terminate
-                if(( aArguments.CompareTo( TERMINATION_SEQUENCE,
-                                          TERMINATION_LENGTH ) == COMPARE_EQUAL ) ||
-                    mbBlockRequests )
-                    return;
-
-                String              aEmpty;
-                CommandLineArgs     aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
-                CommandLineArgs*    pCurrentCmdLineArgs = GetCommandLineArgs();
-
-                if ( aCmdLineArgs.IsQuickstart() )
-                {
-                    // we have to use application event, because we have to start quickstart service in main thread!!
-                    ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty,
-                                              "QUICKSTART", aEmpty );
-                    ImplPostForeignAppEvent( pAppEvent );
+                    break;
                 }
+            }
 
-                sal_Bool bDocRequestSent = sal_False;
-                ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
+            // #90717# Is this a lookup message from another application? if so, ignore
+            if ( aArguments.Len() == 0 )
+                continue;
 
-                // Print requests are not dependent on the -invisible cmdline argument as they are
-                // loaded with the "hidden" flag! So they are always checked.
-                bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
-                bDocRequestSent |= ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
-                                     aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )      );
+            // is this a termination message ? if so, terminate
+            if(( aArguments.CompareTo( sc_aTerminationSequence,
+                                        sc_nTSeqLength ) == COMPARE_EQUAL ) ||
+                mbBlockRequests )
+                return;
 
-                if ( !pCurrentCmdLineArgs->IsInvisible() )
-                {
-                    // Read cmdline args that can open/create documents. As they would open a window
-                    // they are only allowed if the "-invisible" is currently not used!
-                    bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
-                    bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
-                    bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
-                }
+            String              aEmpty;
+            CommandLineArgs     aCmdLineArgs( OUString( aArguments.GetBuffer(), aArguments.Len(), gsl_getSystemTextEncoding() ));
+            CommandLineArgs*    pCurrentCmdLineArgs = GetCommandLineArgs();
 
-                if ( bDocRequestSent )
-                 {
-                    // Send requests to dispatch watcher if we have at least one. The receiver
-                    // is responsible to delete the request after processing it.
-                    ImplPostProcessDocumentsEvent( pRequest );
-                }
-                else
-                {
-                    // delete not used request again
-                    delete pRequest;
-                }
+            if ( aCmdLineArgs.IsQuickstart() )
+            {
+                // we have to use application event, because we have to start quickstart service in main thread!!
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty,
+                                            "QUICKSTART", aEmpty );
+                ImplPostForeignAppEvent( pAppEvent );
+            }
 
-                if (( aArguments.CompareTo( SHOW_SEQUENCE, SHOW_LENGTH ) == COMPARE_EQUAL ) ||
-                      !bDocRequestSent )
-                {
-                    // no document was sent, just bring Office to front
-                    ApplicationEvent* pAppEvent =
-                        new ApplicationEvent( aEmpty, aEmpty,
-                                              "APPEAR", aEmpty );
-                    ImplPostForeignAppEvent( pAppEvent );
-                }
+            sal_Bool bDocRequestSent = sal_False;
+            ProcessDocumentsRequest* pRequest = new ProcessDocumentsRequest;
+            ::osl::Condition cProcessed;
+            pRequest->pcProcessed = & cProcessed;
+
+            // Print requests are not dependent on the -invisible cmdline argument as they are
+            // loaded with the "hidden" flag! So they are always checked.
+            bDocRequestSent |= aCmdLineArgs.GetPrintList( pRequest->aPrintList );
+            bDocRequestSent |= ( aCmdLineArgs.GetPrintToList( pRequest->aPrintToList ) &&
+                                    aCmdLineArgs.GetPrinterName( pRequest->aPrinterName )       );
+
+            if ( !pCurrentCmdLineArgs->IsInvisible() )
+            {
+                // Read cmdline args that can open/create documents. As they would open a window
+                // they are only allowed if the "-invisible" is currently not used!
+                bDocRequestSent |= aCmdLineArgs.GetOpenList( pRequest->aOpenList );
+                bDocRequestSent |= aCmdLineArgs.GetForceOpenList( pRequest->aForceOpenList );
+                bDocRequestSent |= aCmdLineArgs.GetForceNewList( pRequest->aForceNewList );
+            }
+
+            if ( bDocRequestSent )
+             {
+                // Send requests to dispatch watcher if we have at least one. The receiver
+                // is responsible to delete the request after processing it.
+                ImplPostProcessDocumentsEvent( pRequest );
             }
             else
             {
-#if defined DEBUG || defined DBG_UTIL
-                fprintf( stderr, "Error on accept: %d\n", (int)nError );
-#endif
-                TimeValue tval;
-                tval.Seconds = 1;
-                tval.Nanosec = 0;
-                sleep( tval );
+                // delete not used request again
+                delete pRequest;
+                // don't wait for processing
+                cProcessed.set();
             }
+
+            if (( aArguments.CompareTo( sc_aShowSequence, sc_nShSeqLength ) == COMPARE_EQUAL ) ||
+                    !bDocRequestSent )
+            {
+                // no document was sent, just bring Office to front
+                ApplicationEvent* pAppEvent =
+                    new ApplicationEvent( aEmpty, aEmpty,
+                                            "APPEAR", aEmpty );
+                ImplPostForeignAppEvent( pAppEvent );
+                cProcessed.set();
+            }
+
+            // we don't need the mutex any longer...
+            aGuard.clear();
+            // wait for processing to finish
+            cProcessed.wait();
+            // processing finished, inform the requesting end
+            nBytes = 0;
+            while (
+                (nResult = maStreamPipe.send(sc_aConfirmationSequence+nBytes, sc_nCSeqLength-nBytes))>0 &&
+                ((nBytes += nResult) < sc_nCSeqLength) );
+            // now we can close, don't we?
+            // maStreamPipe.close();
+
+        }
+        else
+        {
+#if defined DEBUG || defined DBG_UTIL
+            fprintf( stderr, "Error on accept: %d\n", (int)nError );
+#endif
+            TimeValue tval;
+            tval.Seconds = 1;
+            tval.Nanosec = 0;
+            sleep( tval );
         }
     }
 }
@@ -828,6 +861,8 @@ void OfficeIPCThread::ExecuteCmdLineRequests( const ProcessDocumentsRequest& aRe
 
         // Execute dispatch requests
         pGlobalOfficeIPCThread->mpDispatchWatcher->executeDispatchRequests( aDispatchList );
+        // after execution, set condition in request
+        aRequest.pcProcessed->set();
     }
 }
 
