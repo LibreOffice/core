@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 10:57:52 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 10:29:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ class FlagToolBoxState
     TIB_AUTOSIZE, TIB_DROPDOWN,
 };*/
             Identifier = TT_SHOW;
-            Text = "IDs anzeigen";
+            Text = "IDs%PRODUCTVERSIONanzeigen";
             Text[ english_us ] = "Display IDs";
             ItemBitmap = Bitmap  {
                 File = "ttshow.bmp";
@@ -113,7 +113,7 @@ class FlagToolBoxState
     ToolBoxItem  {
             _ToolBoxItemFlags = TIB_AUTOSIZE;
             Identifier = TT_OUTPUT;
-            Text = "Das ist das Eingabefenster";
+            Text = "Das%PRODUCTVERSIONist%PRODUCTVERSIONdas%PRODUCTVERSIONEingabefenster";
             Text[ english_us ] = "This is the input window";
             Text[ portuguese ] = "Esta й a janela de entrada";
             Text[ russian ] = "Это окно ввода";
@@ -138,7 +138,7 @@ class FlagToolBoxState
         };
     ToolBoxItem  {
             Identifier = TT_SEND_DATA;
-            Text = "Zum TestTool Ьbertragen";
+            Text = "Zum%PRODUCTVERSIONTestTool%PRODUCTVERSIONЬbertragen";
             Text[ english_us ] = "Transfer to TestTool";
             ItemBitmap = Bitmap  {
                 File = "ttremote.bmp";
@@ -166,7 +166,7 @@ class FlagToolBoxState
         };
     ToolBoxItem  {
             Identifier = TT_ALLWIN;
-            Text = "Alle Fenster anzeigen";
+            Text = "Alle%PRODUCTVERSIONFenster%PRODUCTVERSIONanzeigen";
             Text[ english_us ] = "Show all windows";
             ItemBitmap = Bitmap  {
                 File = "ttall.bmp";
@@ -191,7 +191,7 @@ class FlagToolBoxState
         };
     ToolBoxItem  {
             Identifier = TT_KURZNAME;
-            Text = "Kurzname Anzeigen(Falls Vorhanden)";
+            Text = "Kurzname%PRODUCTVERSIONAnzeigen%PRODUCTVERSIONFalls%PRODUCTVERSIONVorhanden%PRODUCTVERSION";
             Text[ english_us ] = "Show short name (if one exists)";
             ItemBitmap = Bitmap  {
                 File = "ttdef.bmp";
@@ -216,7 +216,7 @@ class FlagToolBoxState
         };
     ToolBoxItem  {
             Identifier = TT_LANGNAME;
-            Text = "Langname immer Anzeigen";
+            Text = "Langname%PRODUCTVERSIONimmer%PRODUCTVERSIONAnzeigen";
             Text[ english_us ] = "Always show long name";
             ItemBitmap = Bitmap  {
                 File = "tthid.bmp";
@@ -266,7 +266,7 @@ Bitmap TT_SHOW2 {
 WorkWindow TT_INLINE_TRANSLATION {
     SVLook = TRUE;
     Size = MAP_APPFONT( 2*Control_Border + 4*ButtonWidth + 3*Button_Button, 120 );
-    Text = "Inplace Translation";
+    Text = "Inplace%PRODUCTVERSIONTranslation";
     Text[ ENGLISH ] = "Inplace Translation";
     Text[ DANISH ] = "Ny oversжttelse";
     Text[ ENGLISH_US ] = "Translation In Place";
@@ -274,7 +274,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
     Text[ JAPANESE ] = "‚Н‚ЯЌћ‚Э–|–у";
-    Text[ DUTCH ] = "Vertaling";
+    Text[ DUTCH ] = "Inplace translation";
     Text[ POLISH ] = "Nowe tіumaczenie";
     Text[ PORTUGUESE_BRAZILIAN ] = "Inplace Translation";
     Text[ RUSSIAN ] = "Новый перевод";
@@ -340,7 +340,7 @@ WorkWindow TT_INLINE_TRANSLATION {
     FixedText TT_FT_OLD {
             Pos = MAP_APPFONT( 7, 33 );
             Size = MAP_APPFONT( 162, 10 );
-            Text = "Original Text";
+            Text = "Original%PRODUCTVERSIONText";
             Text[ ENGLISH ] = "Original Text";
             Text[ DANISH ] = "Originaltekst";
             Text[ ENGLISH_US ] = "Original Text";
@@ -529,7 +529,7 @@ WorkWindow TT_INLINE_TRANSLATION {
 MessBox TT_DISCARD_CHANGED_DATA {
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_YES;
-    Message = "The Translation will be lost. Proceed?";
+    Message = "The%PRODUCTVERSIONTranslation%PRODUCTVERSIONwill%PRODUCTVERSIONbe%PRODUCTVERSIONlost%PRODUCTVERSIONProceed%PRODUCTVERSION";
     Message[ ENGLISH_US ] = "The Translation will be lost. Proceed anyway?";
     Message[ portuguese ] = "A traduзгo serб perdida. Continuar?";
     Message[ russian ] = "Перевод будет потерян. Все равно продолжить?";
@@ -554,7 +554,7 @@ MessBox TT_DISCARD_CHANGED_DATA {
 ErrorBox TT_NO_CONTROL {
     Buttons = WB_OK;
     DefButton = WB_DEF_OK;
-    Message = "The Control is no longer valid. The Translation cannot be saved.";
+    Message = "The%PRODUCTVERSIONControl%PRODUCTVERSIONis%PRODUCTVERSIONno%PRODUCTVERSIONlonger%PRODUCTVERSIONvalid%PRODUCTVERSIONThe%PRODUCTVERSIONTranslation%PRODUCTVERSIONcannot%PRODUCTVERSIONbe%PRODUCTVERSIONsaved%PRODUCTVERSION";
     Message [ ENGLISH_US ] = "This Control is no longer valid. The Translation cannot be saved.";
     Message[ portuguese ] = "Este Controlo jб nгo й vбlido. Impossнvel guardar a traduзгo.";
     Message[ russian ] = "Команда больше недействительна. Перевод сохранить невозможно.";
@@ -578,7 +578,7 @@ ErrorBox TT_NO_CONTROL {
 
 String TT_GPF
 {
-    Text = "GPF Aufgetreten";
+    Text = "GPF%PRODUCTVERSIONAufgetreten";
     Text[ english_us ] = "GPF occured";
     Text[ portuguese ] = "Ocorreu um erro GPF";
     Text[ russian ] = "Произошла ошибка";
@@ -601,7 +601,7 @@ String TT_GPF
 
 String TT_ALTERNATE_CAPTION
 {
-    Text = "HelpID ungleich UniqueID: ";
+    Text = "HelpID%PRODUCTVERSIONungleich%PRODUCTVERSIONUniqueID%PRODUCTVERSION";
     Text[ english_us ] = "HelpID does not match UniqueID: ";
     Text[ portuguese ] = "HelpID desigual a UniqueID ";
     Text[ russian ] = "HelpID не равно UniqueID: ";
