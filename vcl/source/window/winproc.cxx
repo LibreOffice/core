@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-26 08:35:51 $
+ *  last change: $Author: ssa $ $Date: 2002-04-18 15:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,6 +945,8 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     KeyCode     aKeyCode( nKeyCode, nKeyCode );
     USHORT      nCode = aKeyCode.GetCode();
 
+    BOOL bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
+
     // determine last input time
     pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
 
@@ -1017,10 +1019,11 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
             {
                 USHORT nCode = aKeyCode.GetCode();
 
-                if ( nCode == KEY_ESCAPE )
+                if ( (nCode == KEY_ESCAPE) || bCtrlF6)
                 {
                     pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                    return 1;
+                    if( !bCtrlF6 )
+                        return 1;
                 }
             }
         }
@@ -1423,7 +1426,8 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
 static void KillOwnPopups( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if ( pSVData->maWinData.mpFirstFloat && pWindow->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
+    Window *pParent = pWindow->ImplIsFloatingWindow() ? pWindow->ImplGetWindow() : pWindow;
+    if ( pSVData->maWinData.mpFirstFloat && pParent->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
             pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
