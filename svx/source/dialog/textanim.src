@@ -1,0 +1,755 @@
+/*************************************************************************
+ *
+ *  $RCSfile: textanim.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // pragma ----------------------------------------------------------------
+
+#include "dialogs.hrc"
+#include "textanim.hrc"
+#define HALFBUTTON_WIDTH 7
+#define BUTTON_WIDTH 2 * HALFBUTTON_WIDTH
+#define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH )
+ // RID_SVXPAGE_TEXTANIMATION ---------------------------------------------
+TabPage RID_SVXPAGE_TEXTANIMATION
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Textanimation" ;
+    Text [ ENGLISH ] = "Text animation" ;
+    Text [ dutch ] = "Tekstanimatie" ;
+    Text [ english_us ] = "Animation" ;
+    Text [ italian ] = "Animazione testo" ;
+    Text [ spanish ] = "AnimaciÛn de texto" ;
+    Text [ french ] = "Animation texte" ;
+    Text [ swedish ] = "Textanimation" ;
+    Text [ danish ] = "Tekstanimation" ;
+    Text [ portuguese ] = "AnimaÁ„o de texto" ;
+    Text [ portuguese_brazilian ] = "Textanimation" ;
+    ListBox LB_EFFECT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 14 , 14 ) ;
+        Size = MAP_APPFONT ( 95 , 57 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Kein Effekt" ; Default ; > ;
+            < "Blinken" ; Default ; > ;
+            < "Durchlaufen" ; Default ; > ;
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 4 : Hin- und zur¸cklaufen*/
+            /* ### ACHTUNG: Neuer Eintrag in Liste? 4 : Hin- und zur¸cklaufen*/
+            < "Hin- und zur¸cklaufen" ; Default ; > ;
+            < "Reinlaufen" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Kein Effekt" ; Default ; > ;
+            < "Blinken" ; Default ; > ;
+            < "Durchlaufen" ; Default ; > ;
+            < "Hin- und zur¸cklaufen" ; Default ; > ;
+            < "Reinlaufen" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Sem efeito" ; Default ; > ;
+            < "Intermitente" ; Default ; > ;
+            < "Deslize contÌnuo" ; Default ; > ;
+            < "De um lado para o outro" ; Default ; > ;
+            < "Mover para dentro" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "No Effect" ; Default ; > ;
+            < "Blink" ; Default ; > ;
+            < "Scroll Through" ; Default ; > ;
+            < "Scroll Back and Forth" ; Default ; > ;
+            < "Scroll In" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Kein Effekt" ; Default ; > ;
+            < "Blinken" ; Default ; > ;
+            < "Durchlaufen" ; Default ; > ;
+            < "Hin- und zur¸cklaufen" ; Default ; > ;
+            < "Reinlaufen" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Ingen effekt" ; Default ; > ;
+            < "Blinka" ; Default ; > ;
+            < "Genomlˆpa" ; Default ; > ;
+            < "Lˆpa fram och tillbaka" ; Default ; > ;
+            < "Lˆpa in i" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Ingen effekt" ; Default ; > ;
+            < "Blink" ; Default ; > ;
+            < "Glid igennem" ; Default ; > ;
+            < "Glid frem- og tilbage" ; Default ; > ;
+            < "Glid ind" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Nessun effetto" ; Default ; > ;
+            < "Lampeggio" ; Default ; > ;
+            < "Scorrimento" ; Default ; > ;
+            < "Scorrimento in avanti e indietro" ; Default ; > ;
+            < "Scorrimento interno" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Sin efecto" ; Default ; > ;
+            < "Intermitente" ; Default ; > ;
+            < "Continuo" ; Default ; > ;
+            < "De un lado al otro" ; Default ; > ;
+            < "Entrar" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Aucun effet" ; Default ; > ;
+            < "Clignoter" ; Default ; > ;
+            < "DÈfiler ‡ travers" ; Default ; > ;
+            < "DÈfilement bidirectionnel" ; Default ; > ;
+            < "DÈfiler dedans" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Geen effect" ; Default ; > ;
+            < "Knipperen" ; Default ; > ;
+            < "Doorlopen" ; Default ; > ;
+            < "Heen en weer lopen" ; Default ; > ;
+            < "Binnenlopen" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "Œﬁ–ßπ˚" ; Default ; > ;
+        < "…¡À∏" ; Default ; > ;
+        < "¡¨–¯" ; Default ; > ;
+        < "Õ˘∑µªÓ∂Ø" ; Default ; > ;
+        < "“ª¥ŒΩ¯»Î" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¡ÂÁ ˝ÙÙÂÍÚ‡" ; Default ; > ;
+        < "ÃË„‡ÌËÂ" ; Default ; > ;
+        < "—Í‚ÓÁÌ‡ˇ ·Â„Û˘‡ˇ ÒÚÓÍ‡" ; Default ; > ;
+        < "—ÚÓÍ‡, ·Â„Û˘‡ˇ ‚ÔÂÂ‰ Ë Ì‡Á‡‰" ; Default ; > ;
+        < "—ÚÓÍ‡, ·Â„Û˘‡ˇ ‚Ó ‚ÌÛÚ¸" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Bez efektu" ; Default ; > ;
+        < "Miganie" ; Default ; > ;
+        < "Przep≥yw" ; Default ; > ;
+        < "PrzewiÒ tam i z powrotem" ; Default ; > ;
+        < "ZwiniÍcie" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "Ç»Çµ" ; Default ; > ;
+        < "ì_ñ≈" ; Default ; > ;
+        < "í âﬂ" ; Default ; > ;
+        < "ëOå„Ç…êiçs" ; Default ; > ;
+        < "ó¨ÇµçûÇ›" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "µLÆƒ™G" ; Default ; > ;
+        < "∞{√{" ; Default ; > ;
+        < "´˘ƒÚ" ; Default ; > ;
+        < "®”¶^¨°∞ " ; Default ; > ;
+        < "≥Ê¶V∂i§J" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "◊˘ÒﬂÚ Âˆ›" ; Default ; > ;
+        < "Õ· ·Ì·‚ÔÛ‚ﬁÌÂÈ" ; Default ; > ;
+        < " ˝ÎÈÛÁ ‰È· Ï›ÛÔı" ; Default ; > ;
+        < " ˝ÎÈÛÁ ÂÏÒ¸Ú Í·È ﬂÛ˘" ; Default ; > ;
+        < " ﬂÌÁÛÁ ÂÌÙ¸Ú" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "»ø∞˙ æ¯¿Ω" ; Default ; > ;
+        < "±Ùπ⁄¿Ã±‚" ; Default ; > ;
+        < "¿¸√º Ω∫≈©∑—" ; Default ; > ;
+        < "æ’µ⁄∑Œ Ω∫≈©∑—" ; Default ; > ;
+        < "Ω∫≈©∑— ¿Œ" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "»œÊ‰  √ÀÌ—« " ; Default ; > ;
+        < "Ê„Ì÷" ; Default ; > ;
+        < " Õ—Ìﬂ ⁄»—" ; Default ; > ;
+        < " Õ—ﬂ ··√„«„ Ê«·Œ·›" ; Default ; > ;
+        < " Õ—Ìﬂ œ«Œ·" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Efekt yok" ; Default ; > ;
+        < "Yan˝p sˆnme" ; Default ; > ;
+        < "GeÁi˛" ; Default ; > ;
+        < "Git gel" ; Default ; > ;
+        < "›Áeri kay" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    ImageButton BTN_UP
+    {
+        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH , 35 ) ;
+        Size = BUTTON_SIZE ;
+        Symbol = IMAGEBUTTON_ARROW_UP ;
+        QuickHelpText = "Nach Oben" ;
+        QuickHelpText [ ENGLISH ] = "To top" ;
+        QuickHelpText [ english_us ] = "To Top" ;
+        QuickHelpText [ italian ] = "In alto" ;
+        QuickHelpText [ spanish ] = "Hacia arriba" ;
+        QuickHelpText [ french ] = "Vers le haut" ;
+        QuickHelpText [ dutch ] = "Naar boven" ;
+        QuickHelpText [ danish ] = "Opad" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nach Oben" ;
+        QuickHelpText [ portuguese ] = "Para cima" ;
+        QuickHelpText [ swedish ] = "UppÂt" ;
+        QuickHelpText[ russian ] = "¬‚Âı";
+        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‹Ì˘";
+        QuickHelpText[ polish ] = "W gÛrÍ";
+        QuickHelpText[ japanese ] = "è„Ç÷";
+        QuickHelpText[ korean ] = "To Top";
+        QuickHelpText[ chinese_simplified ] = "œÚ…œ";
+        QuickHelpText[ chinese_traditional ] = "¶V§W";
+        QuickHelpText[ arabic ] = "≈·Ï √⁄·Ï";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_LEFT
+    {
+        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH - BUTTON_WIDTH , 35 + BUTTON_WIDTH ) ;
+        Size = BUTTON_SIZE ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT ;
+        QuickHelpText = "Nach Links" ;
+        QuickHelpText [ ENGLISH ] = "To left" ;
+        QuickHelpText [ english_us ] = "To Left" ;
+        QuickHelpText [ italian ] = "A sinistra" ;
+        QuickHelpText [ spanish ] = "Hacia la izquierda" ;
+        QuickHelpText [ french ] = "Vers la gauche" ;
+        QuickHelpText [ dutch ] = "Naar links" ;
+        QuickHelpText [ danish ] = "Mod venstre" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nach Links" ;
+        QuickHelpText [ portuguese ] = "Esquerda" ;
+        QuickHelpText [ swedish ] = "≈t v‰nster" ;
+        QuickHelpText[ russian ] = "¬ÎÂ‚Ó";
+        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ·ÒÈÛÙÂÒ‹";
+        QuickHelpText[ polish ] = "W lewo";
+        QuickHelpText[ japanese ] = "ç∂Ç÷";
+        QuickHelpText[ korean ] = "To Left";
+        QuickHelpText[ chinese_simplified ] = "œÚ◊Û";
+        QuickHelpText[ chinese_traditional ] = "¶V•™";
+        QuickHelpText[ arabic ] = "≈·Ï «·Ì”«—";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_RIGHT
+    {
+        Pos = MAP_APPFONT ( 62 + HALFBUTTON_WIDTH , 35 + BUTTON_WIDTH ) ;
+        Size = BUTTON_SIZE ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT ;
+        QuickHelpText = "Nach Rechts" ;
+        QuickHelpText [ ENGLISH ] = "To left" ;
+        QuickHelpText [ english_us ] = "To Right" ;
+        QuickHelpText [ italian ] = "A destra" ;
+        QuickHelpText [ spanish ] = "Hacia la derecha" ;
+        QuickHelpText [ french ] = "Vers la droite" ;
+        QuickHelpText [ dutch ] = "Naar rechts" ;
+        QuickHelpText [ danish ] = "Mod h¯jre" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nach Rechts" ;
+        QuickHelpText [ portuguese ] = "Direita" ;
+        QuickHelpText [ swedish ] = "≈t hˆger" ;
+        QuickHelpText[ russian ] = "¬Ô‡‚Ó";
+        QuickHelpText[ greek ] = "–ÒÔÚ Ù· ‰ÂÓÈ‹";
+        QuickHelpText[ polish ] = "W prawo";
+        QuickHelpText[ japanese ] = "âEÇ÷";
+        QuickHelpText[ korean ] = "To Right";
+        QuickHelpText[ chinese_simplified ] = "œÚ”“";
+        QuickHelpText[ chinese_traditional ] = "¶V•k";
+        QuickHelpText[ arabic ] = "≈·Ï «·Ì„Ì‰";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ImageButton BTN_DOWN
+    {
+        Pos = MAP_APPFONT ( 62 - HALFBUTTON_WIDTH , 35 + 2*BUTTON_WIDTH ) ;
+        Size = BUTTON_SIZE ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN ;
+        QuickHelpText = "Nach Unten" ;
+        QuickHelpText [ ENGLISH ] = "To bottom" ;
+        QuickHelpText [ english_us ] = "To Bottom" ;
+        QuickHelpText [ italian ] = "In basso" ;
+        QuickHelpText [ spanish ] = "Hacia abajo" ;
+        QuickHelpText [ french ] = "Vers le bas" ;
+        QuickHelpText [ dutch ] = "Naar beneden" ;
+        QuickHelpText [ danish ] = "Nedad" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nach Unten" ;
+        QuickHelpText [ portuguese ] = "Para baixo" ;
+        QuickHelpText [ swedish ] = "NedÂt" ;
+        QuickHelpText[ russian ] = "¬ÌËÁ";
+        QuickHelpText[ greek ] = "–ÒÔÚ Ù· Í‹Ù˘";
+        QuickHelpText[ polish ] = "W dÛ≥";
+        QuickHelpText[ japanese ] = "â∫Ç÷";
+        QuickHelpText[ korean ] = "To Bottom";
+        QuickHelpText[ chinese_simplified ] = "œÚœ¬";
+        QuickHelpText[ chinese_traditional ] = "¶V§U";
+        QuickHelpText[ arabic ] = "≈·Ï √”›·";
+        QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_START_INSIDE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Text = "Text sichtbar beim ~Starten" ;
+        Text [ ENGLISH ] = "S~tart inside" ;
+        Text [ dutch ] = "Tekst zichtbaar bij ~starten" ;
+        Text [ english_us ] = "S~tart inside" ;
+        Text [ italian ] = "Testo visibile all'~inizio" ;
+        Text [ spanish ] = "Texto visible al ~iniciar" ;
+        Text [ french ] = "Texte visible au dÈpart" ;
+        Text [ swedish ] = "Text synlig vid ~start" ;
+        Text [ danish ] = "Tekst synlig ved start" ;
+        Text [ portuguese ] = "Texto visÌvel ao ~iniciar" ;
+        Text [ portuguese_brazilian ] = "Text sichtbar beim ~Starten" ;
+        Text[ chinese_simplified ] = "‘⁄∆Ù∂Ø ±œ‘ æŒƒ◊÷(~T)";
+        Text[ russian ] = "œÓÍ‡Á˚‚‡Ú¸ ÚÂÍÒÚ ÔË Á‡ÔÛÒÍÂ";
+        Text[ polish ] = "Tekst widoczny przy rozpoczÍciu";
+        Text[ japanese ] = "äJénéûÇ…√∑ΩƒÇ™å©Ç¶ÇÈ(~S)";
+        Text[ chinese_traditional ] = "¶b±“∞ Æ…≈„•‹§Â¶r(~S)";
+        Text[ greek ] = " ÂﬂÏÂÌÔ ÔÒ·Ù¸ Í·Ù‹ ÙÁÌ ÂÍÍﬂÌÁ~ÛÁ";
+        Text[ korean ] = "Ω√¿€Ω√ ≈ÿΩ∫∆Æ «•Ω√(~T)";
+        Text[ arabic ] = "≈ŸÂ«— «·‰’ ⁄‰œ «·»œ«Ì…";
+        Text[ turkish ] = "Metni, canland˝rma ba˛larken ~gˆr¸nt¸le";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_STOP_INSIDE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 105 , 12 ) ;
+        Text = "Text sichtbar beim ~Beenden" ;
+        Text [ ENGLISH ] = "S~top inside" ;
+        Text [ dutch ] = "Tekst zichtbaar bij ~beÎindigen" ;
+        Text [ english_us ] = "Text visible when exiting" ;
+        Text [ italian ] = "Testo visibile alla ~fine" ;
+        Text [ spanish ] = "Texto visible al ~finalizar" ;
+        Text [ french ] = "Texte visible ‡ l'arrÍt" ;
+        Text [ swedish ] = "Text synlig vid a~vslutning" ;
+        Text [ danish ] = "Tekst synlig ved afslutning" ;
+        Text [ portuguese ] = "Texto visÌvel ao ~finalizar" ;
+        Text [ portuguese_brazilian ] = "Text sichtbar beim ~Beenden" ;
+        Text[ chinese_simplified ] = "‘⁄Ω· ¯ ±œ‘ æŒƒ◊÷(~O)";
+        Text[ russian ] = "œÓÍ‡Á˚‚‡Ú¸ ÚÂÍÒÚ ÔË ‚˚ıÓ‰Â";
+        Text[ polish ] = "Tekst widoczny przy zakoÒczeniu";
+        Text[ japanese ] = "èIóπéûÇ…√∑ΩƒÇ™å©Ç¶ÇÈ(~O)";
+        Text[ chinese_traditional ] = "¶bµ≤ßÙÆ…≈„•‹§Â¶r(~O)";
+        Text[ greek ] = " ÂﬂÏÂÌÔ ÔÒ·Ù¸ Í·Ù‹ ÙÁÌ ›ÓÔ‰Ô";
+        Text[ korean ] = "¡æ∑·Ω√ ≈ÿΩ∫∆Æ «•Ω√(~O)";
+        Text[ arabic ] = "≈ŸÂ«— «·‰’ ⁄‰œ «·«‰ Â«¡";
+        Text[ turkish ] = "Metni, canland˝rma bittiinde gˆ~r¸nt¸le";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_ENDLESS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 15 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "~Endlos" ;
+        Text [ ENGLISH ] = "~Endless" ;
+        Text [ dutch ] = "~Eindeloos" ;
+        Text [ english_us ] = "~Continuous" ;
+        Text [ italian ] = "Continuo" ;
+        Text [ spanish ] = "~Continuo" ;
+        Text [ french ] = "~Continu" ;
+        Text [ swedish ] = "~Kontinuerligt" ;
+        Text [ danish ] = "Endel¯s" ;
+        Text [ portuguese ] = "~ContÌnuo" ;
+        Text [ portuguese_brazilian ] = "~Endlos" ;
+        Text[ chinese_simplified ] = "Œﬁœﬁ(~C)";
+        Text[ russian ] = "¡ÂÒÍÓÌÂ˜ÌÓ";
+        Text[ polish ] = "Bez koÒca";
+        Text[ japanese ] = "¥›ƒﬁ⁄Ω(~C)";
+        Text[ chinese_traditional ] = "´˘ƒÚ(~C)";
+        Text[ greek ] = "”ıÌÂ˜ﬁÚ";
+        Text[ korean ] = "ø¨º”(~C)";
+        Text[ arabic ] = "»·« ‰Â«Ì…";
+        Text[ turkish ] = "~Sonsuz";
+        Text[ language_user1 ] = " ";
+    };
+    NumericField NUM_FLD_COUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 196 , 15 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        First = 1 ;
+    };
+    GroupBox GRP_EFFECT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 126 ) ;
+        Text = "Effekt" ;
+        Text [ ENGLISH ] = "Effect" ;
+        Text [ english_us ] = "Effects" ;
+        Text [ italian ] = "Effetto" ;
+        Text [ spanish ] = "Efecto" ;
+        Text [ french ] = "Effet" ;
+        Text [ dutch ] = "Effect" ;
+        Text [ swedish ] = "Effekt" ;
+        Text [ danish ] = "Effekt" ;
+        Text [ portuguese_brazilian ] = "Effekt" ;
+        Text [ portuguese ] = "Efeitos" ;
+        Text[ chinese_simplified ] = "–ßπ˚";
+        Text[ russian ] = "›ÙÙÂÍÚ";
+        Text[ polish ] = "Efekt";
+        Text[ japanese ] = "å¯â ";
+        Text[ chinese_traditional ] = "Æƒ™G";
+        Text[ greek ] = "≈ˆ›";
+        Text[ korean ] = "»ø∞˙";
+        Text[ arabic ] = "«· √ÀÌ—« ";
+        Text[ turkish ] = "Efekt";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_COUNT
+    {
+        Pos = MAP_APPFONT ( 124 , 3 ) ;
+        Size = MAP_APPFONT ( 130 , 30 ) ;
+        Text = "Anzahl" ;
+        Text [ ENGLISH ] = "Count" ;
+        Text [ english_us ] = "Count" ;
+        Text [ italian ] = "Numero" ;
+        Text [ spanish ] = "Cantidad" ;
+        Text [ french ] = "Nombre" ;
+        Text [ dutch ] = "Aantal" ;
+        Text [ swedish ] = "Antal" ;
+        Text [ danish ] = "Antal" ;
+        Text [ portuguese_brazilian ] = "Anzahl" ;
+        Text [ portuguese ] = "Quantidade" ;
+        Text[ chinese_simplified ] = " ˝ƒø";
+        Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
+        Text[ polish ] = "Liczba";
+        Text[ japanese ] = "âÒêî";
+        Text[ chinese_traditional ] = "º∆•ÿ";
+        Text[ greek ] = "–ÎﬁËÔÚ";
+        Text[ korean ] = "∞≥ºˆ";
+        Text[ arabic ] = "«·⁄œœ";
+        Text[ turkish ] = "Adet say˝s˝";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_PIXEL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 79 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "~Pixel" ;
+        Text [ ENGLISH ] = "~Pixel" ;
+        Text [ dutch ] = "~Pixels" ;
+        Text [ english_us ] = "~Pixels" ;
+        Text [ italian ] = "~Pixel" ;
+        Text [ spanish ] = "PÌ~xel" ;
+        Text [ french ] = "~Pixels" ;
+        Text [ swedish ] = "~Pixel" ;
+        Text [ danish ] = "Pixel" ;
+        Text [ portuguese ] = "~Pixel" ;
+        Text [ portuguese_brazilian ] = "~Pixel" ;
+        Text[ chinese_simplified ] = "œÒÀÿ(~P)";
+        Text[ russian ] = "œËÍÒÂÎ¸";
+        Text[ polish ] = "Pi~ksel";
+        Text[ japanese ] = "Àﬂ∏æŸ(~P)";
+        Text[ chinese_traditional ] = "π≥Ø¿(~P)";
+        Text[ greek ] = "~Pixel";
+        Text[ korean ] = "«»ºø(~P)";
+        Text[ arabic ] = "»ﬂ”·";
+        Text[ turkish ] = "~Piksel";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_AMOUNT
+    {
+        Pos = MAP_APPFONT ( 124 , 67 ) ;
+        Size = MAP_APPFONT ( 130 , 30 ) ;
+        Text = "Schrittweite" ;
+        Text [ ENGLISH ] = "Amount" ;
+        Text [ english_us ] = "Increment" ;
+        Text [ italian ] = "Incremento" ;
+        Text [ spanish ] = "Incremento" ;
+        Text [ french ] = "Pas de progression" ;
+        Text [ dutch ] = "Stapgrootte" ;
+        Text [ swedish ] = "Stegl‰ngd" ;
+        Text [ danish ] = "Trinvidde" ;
+        Text [ portuguese_brazilian ] = "Schrittweite" ;
+        Text [ portuguese ] = "Incremento" ;
+        Text[ chinese_simplified ] = "‘ˆ¡ø";
+        Text[ russian ] = "ÿËËÌ‡ ¯‡„‡";
+        Text[ polish ] = "Inkrement";
+        Text[ japanese ] = "Ω√ØÃﬂêî";
+        Text[ chinese_traditional ] = "∫•∂i";
+        Text[ greek ] = "¬ﬁÏ·";
+        Text[ korean ] = "¡ı∞°∫–";
+        Text[ arabic ] = "«· “«Ìœ";
+        Text[ turkish ] = "Ad˝m";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_AMOUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 196 , 78 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Pixel" ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+    };
+    TriStateBox TSB_AUTO
+    {
+        Pos = MAP_APPFONT ( 132 , 48 ) ;
+        Size = MAP_APPFONT ( 60 , 12 ) ;
+        Text = "~Automatisch" ;
+        Text [ ENGLISH ] = "~Automatic" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Automatisch" ;
+        Text [ english_us ] = "~Automatic" ;
+        Text [ italian ] = "~Automatico" ;
+        Text [ spanish ] = "~Autom·tico" ;
+        Text [ french ] = "~Automatique" ;
+        Text [ swedish ] = "~Automatisk" ;
+        Text [ danish ] = "Automatisk" ;
+        Text [ portuguese ] = "~Automaticamente" ;
+        Text [ portuguese_brazilian ] = "~Automatisch" ;
+        Text[ chinese_simplified ] = "◊‘∂Ø(~A)";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ polish ] = "Automatycznie";
+        Text[ japanese ] = "é©ìÆ";
+        Text[ chinese_traditional ] = "¶€∞ (~A)";
+        Text[ greek ] = "¡ıÙ¸Ï·Ù·";
+        Text[ korean ] = "¿⁄µø(~A)";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text[ turkish ] = "~Otomatik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_DELAY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 196 , 47 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Spinsize = 50 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " ms" ;
+        Maximum = 100000 ;
+        Last = 100000 ;
+    };
+    GroupBox GRP_DELAY
+    {
+        Pos = MAP_APPFONT ( 124 , 35 ) ;
+        Size = MAP_APPFONT ( 130 , 30 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
+        /* ### ACHTUNG: Neuer Text in Resource? Verzˆgerung : Verz˜gerung */
+        Text = "Verzˆgerung" ;
+        Text [ ENGLISH ] = "Delay" ;
+        Text [ english_us ] = "Delay" ;
+        Text [ italian ] = "Ritardo" ;
+        Text [ spanish ] = "Retardo" ;
+        Text [ french ] = "Cadence" ;
+        Text [ dutch ] = "Vertraging" ;
+        Text [ swedish ] = "Fˆrsening" ;
+        Text [ danish ] = "Forsinkelse" ;
+        Text [ portuguese_brazilian ] = "Verzˆgerung" ;
+        Text [ portuguese ] = "Atraso" ;
+        Text[ chinese_simplified ] = "—”≥Ÿ";
+        Text[ russian ] = "«‡‰ÂÊÍ‡";
+        Text[ polish ] = "OpÛünienie";
+        Text[ japanese ] = "íxÇ≠Ç∑ÇÈ";
+        Text[ chinese_traditional ] = "©µø";
+        Text[ greek ] = " ·ËıÛÙ›ÒÁÛÁ";
+        Text[ korean ] = "¡ˆø¨";
+        Text[ arabic ] = " √ŒÌ—";
+        Text[ turkish ] = "Gecikme";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "ªÓ∂ØŒƒ◊÷";
+    Text[ russian ] = "¿ÌËÏ‡ˆËˇ ÚÂÍÒÚ‡";
+    Text[ polish ] = "Animacje";
+    Text[ japanese ] = "±∆“∞ºÆ›√∑Ωƒ";
+    Text[ chinese_traditional ] = "∞ ∫A§Â¶r";
+    Text[ greek ] = "≈ˆ› ÍﬂÌÁÛÁÚ ÍÂÈÏ›ÌÔı";
+    Text[ korean ] = "æ÷¥œ∏ﬁ¿Ãº«";
+    Text[ arabic ] = " √ÀÌ—«  „ Õ—ﬂ…";
+    Text[ turkish ] = "Metin canland˝rma";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SVXDLG_TEXT -------------------------------------------------------
+TabDialog RID_SVXDLG_TEXT
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 289 , 176 ) ;
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 260 , 135 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                PageResID = RID_SVXPAGE_TEXTATTR ;
+                Identifier = RID_SVXPAGE_TEXTATTR ;
+                Text = "Text" ;
+                Text [ ENGLISH ] = "Text" ;
+                Text [ english_us ] = "Text" ;
+                Text [ italian ] = "Testo" ;
+                Text [ spanish ] = "Texto" ;
+                Text [ french ] = "Texte" ;
+                Text [ dutch ] = "Tekst" ;
+                Text [ swedish ] = "Text" ;
+                Text [ danish ] = "Tekst" ;
+                Text [ portuguese_brazilian ] = "Text" ;
+                Text [ portuguese ] = "Texto" ;
+                Text[ chinese_simplified ] = "Œƒ◊÷";
+                Text[ russian ] = "“ÂÍÒÚ";
+                Text[ polish ] = "Tekst";
+                Text[ japanese ] = "ï∂éöóÒ";
+                Text[ chinese_traditional ] = "§Â¶r";
+                Text[ greek ] = " ÂﬂÏÂÌÔ";
+                Text[ korean ] = "≈ÿΩ∫∆Æ";
+                Text[ arabic ] = "‰’";
+                Text[ turkish ] = "Metin";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                PageResID = RID_SVXPAGE_TEXTANIMATION ;
+                Identifier = RID_SVXPAGE_TEXTANIMATION ;
+                Text = "Lauftext" ;
+                Text [ ENGLISH ] = "Text animation" ;
+                Text [ english_us ] = "Text Animation" ;
+                Text [ italian ] = "Testo scorrevole" ;
+                Text [ spanish ] = "AnimaciÛn de texto" ;
+                Text [ french ] = "DÈfilement de texte" ;
+                Text [ dutch ] = "Tekstanimatie" ;
+                Text [ swedish ] = "Lˆptext" ;
+                Text [ danish ] = "Animeret tekst" ;
+                Text [ portuguese_brazilian ] = "Lauftext" ;
+                Text [ portuguese ] = "Texto animado" ;
+                Text[ chinese_simplified ] = "ªÓ∂ØŒƒ◊÷";
+                Text[ russian ] = "¡Â„Û˘‡ˇ ÒÚÓÍ‡";
+                Text[ polish ] = "Animacja tekstu";
+                Text[ japanese ] = "√∑Ωƒ±∆“∞ºÆ›";
+                Text[ chinese_traditional ] = "∞ ∫A§Â¶r";
+                Text[ greek ] = " ÈÌÔ˝ÏÂÌÔ ÍÂﬂÏÂÌÔ";
+                Text[ korean ] = "≈ÿΩ∫∆Æ æ÷¥œ∏ﬁ¿Ãº«";
+                Text[ arabic ] = "‰’ „ Õ—ﬂ";
+                Text[ turkish ] = "Metin canland˝rma";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "Œƒ◊÷";
+    Text[ russian ] = "“ÂÍÒÚ";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "√∑Ωƒ";
+    Text[ chinese_traditional ] = "§Â¶r";
+    Text[ greek ] = " ÂﬂÏÂÌÔ";
+    Text[ korean ] = "≈ÿΩ∫∆Æ";
+    Text[ arabic ] = "‰’";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+ // ******************************************************************* EOF

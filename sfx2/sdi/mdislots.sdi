@@ -1,0 +1,404 @@
+/*=========================================================================
+    shell SfxMDIFrame
+
+    (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
+    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Logfile:   T:/sfx2/sdi/mdislots.sdv  $ $Workfile:   MDISLOTS.SDI  $
+=========================================================================*/
+
+
+
+
+interface Windows : Collection
+[
+    uuid = "7ADC8720-1114-101D-B8ED-3273768855A7" ;
+]
+{
+     //---------------------------------------------------------------------
+    SID_CASCADEWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_TILEWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_HORIZONTALWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_VERTICALWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_ARRANGEICONS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_CLOSEWINS // ole(opt) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_MINIMIZEWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+}
+
+
+interface Task : Object
+[
+    uuid = "FC02CBE1-8D8A-11d1-89CC-00A0249D57BE" ;
+
+]
+{
+    //-----------------------------------------------------------------
+    SfxVoidItem CloseActiveWindow SID_CLOSEWIN ()
+    [
+            ExecMethod = Exec_Impl ;
+            StateMethod = State_Impl ;
+    ]
+    //---------------------------------------------------------------------
+    SID_FLOATING_TASK
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+    //---------------------------------------------------------------------
+    SID_INSERT_TASKFRAME
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+    //---------------------------------------------------------------------
+    SID_TASK_ALWAYSVISIBLE
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+    //---------------------------------------------------------------------
+    SfxBoolItem Tile SID_TILEDOCKWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SfxBoolItem ArrangeHorizontal SID_HORIZONTALDOCKWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SfxBoolItem ArrangeVertical SID_VERTICALDOCKWINS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+
+    SID_ACTIVEWINDOW
+    [
+        StateMethod = State_Impl;
+    ]
+
+    SID_CLOSETASK
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+
+    SID_NEXTWINDOW
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+
+    SID_PREVWINDOW
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = State_Impl ;
+    ]
+}
+
+interface TaskPartWindow : TopWindow
+[
+    uuid = "A5EEDEF0-9CA3-11D1-AA41-00A0249D57BE";
+]
+{
+    // Window.Task
+    SID_TASK
+    [
+        StateMethod = GetState_Impl;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxTopViewFrame : SfxViewFrame
+
+/*  [Beschreibung]
+
+    Funktionalit"at jedes MDI-Fensters, in dem spezifische Views (Ansichten)
+    eines Dokuments dargestellt werden. Angesprochen werden diese Objekte
+    entweder als 'ActiveWindow' oder mit dem Namen des Dokuments (i.d.R.
+    der Dateiname) ohne Pfad aber mit der Nummer des Fensters, alles in eckigen Klammern (z.B. als
+    '[unbenannt1:1]' oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der
+    Caption-Bar (solange nur ein Fenster f"ur das betreffende Dokument
+    existiert) darf die Nummer niemals ausgelassen werden. Die Numerierung
+    beginnt bei 1 und ist f"ur die Existenz des Fensters stabil.
+*/
+{
+    import TaskPartWindow [Automation];
+
+    // Slot ist schon in base interface, Exec/State-Methoden sind spezifisch
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    // Mu\s einfach nur drin sein, damit nicht disabled
+    SID_TOPDOC
+    [
+    ]
+}
+
+shell SfxExternalTopViewFrame_Impl : SfxViewFrame
+
+/*  [Beschreibung]
+
+    Funktionalit"at jedes MDI-Fensters, in dem spezifische Views (Ansichten)
+    eines Dokuments dargestellt werden. Angesprochen werden diese Objekte
+    entweder als 'ActiveWindow' oder mit dem Namen des Dokuments (i.d.R.
+    der Dateiname) ohne Pfad aber mit der Nummer des Fensters, alles in eckigen Klammern (z.B. als
+    '[unbenannt1:1]' oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der
+    Caption-Bar (solange nur ein Fenster f"ur das betreffende Dokument
+    existiert) darf die Nummer niemals ausgelassen werden. Die Numerierung
+    beginnt bei 1 und ist f"ur die Existenz des Fensters stabil.
+*/
+{
+    import TopWindow [Automation];
+
+    // Slot ist schon in base interface, Exec/State-Methoden sind spezifisch
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+//      ExecMethod = Exec_Impl ;
+//      StateMethod = GetState_Impl ;
+    ]
+
+    // Mu\s einfach nur drin sein, damit nicht disabled
+    SID_TOPDOC
+    [
+    ]
+}
+
+shell SfxTask
+{
+    import Task [Automation];
+}
+
+/*-------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.66  1999/02/09 16:36:54  MBA
+    Fix #61564#: ArrangeSlots ohne Toggle
+
+
+      Rev 1.65   09 Feb 1999 17:36:54   MBA
+   Fix #61564#: ArrangeSlots ohne Toggle
+
+      Rev 1.64   20 Jan 1999 11:09:00   MBA
+   Fix #58947#: eigene Slots fuer Task-Arrange
+
+      Rev 1.63   18 Dec 1998 18:06:08   MBA
+   Fix #58947#: Next/PrevWindow
+
+      Rev 1.62   18 May 1998 13:31:48   MBA
+   ExternalTopViewFrame
+
+      Rev 1.61   04 Feb 1998 11:11:14   MBA
+   Import korrigiert
+
+      Rev 1.60   04 Feb 1998 10:45:20   MBA
+   Interface TaskPartWindow, neue TaskSlots
+
+      Rev 1.59   29 Jan 1998 10:07:20   MBA
+   SID_INSERT_FRAME jetzt SID_INSERT_TASKFRAME
+
+      Rev 1.58   26 Jan 1998 11:11:14   MBA
+   Neuer Slot SID_INSERT_FRAME
+
+      Rev 1.57   21 Jan 1998 09:53:22   MBA
+   Neue TaskSlots
+
+      Rev 1.56   19 Jan 1998 15:17:34   MBA
+   SID_SPLIT_TASK...
+
+      Rev 1.55   16 Jan 1998 11:33:50   MBA
+   SfxTopViewFrame, SfxTask
+
+      Rev 1.54   13 Nov 1997 12:49:32   MBA
+   Property Name gehoert in base class
+
+      Rev 1.53   28 Aug 1997 12:23:34   MBA
+   Neue Interface-Namen
+
+      Rev 1.52   04 Jun 1997 12:16:30   PB
+   rmv: alte Slots
+
+      Rev 1.51   23 Feb 1997 21:20:02   MBA
+   SID_RELOAD, SID_EDITDOC
+
+      Rev 1.50   19 Feb 1997 16:42:08   MBA
+   SID_TOPDOC
+
+      Rev 1.49   09 Dec 1996 12:06:30   MBA
+   Helptext,Configname raus
+
+      Rev 1.48   24 Oct 1996 13:49:34   MI
+   #32691# (OLE)-Object-Menu auch in plugins enablen
+
+      Rev 1.47   22 Oct 1996 20:10:18   HJS
+   merge 22.10.96
+
+      Rev 1.46   16 Oct 1996 15:14:50   MBA
+   SID_EDIT_FRAMESET entfernt
+
+      Rev 1.45   08 Oct 1996 14:30:38   HJS
+   merge 08.10.96
+
+      Rev 1.44   12 Sep 1996 18:19:56   TLX
+   State_Impl -> StateView_Impl
+
+      Rev 1.43   12 Sep 1996 18:13:06   TLX
+   NEWWINDOW in Window
+
+      Rev 1.42   12 Sep 1996 15:44:42   MBA
+
+
+      Rev 1.41   11 Sep 1996 13:10:10   TLX
+   LASTVERSION und EDITDOC in den ViewFrame
+
+      Rev 1.40   09 Sep 1996 16:42:48   MBA
+   Neue Slotfiles
+
+      Rev 1.39   05 Sep 1996 12:49:10   WP
+   Mergefehler
+
+      Rev 1.38   30 Aug 1996 13:41:40   HJS
+   eu...
+
+      Rev 1.38   30 Aug 1996 13:39:40   HJS
+
+      Rev 1.37   27 Aug 1996 18:55:30   MBA
+   SID_VIEWSHELL etc. an ViewFrame
+
+      Rev 1.36   19 Aug 1996 11:48:38   TLX
+   Neuer SuperCache Mode
+
+      Rev 1.35   12 Aug 1996 15:36:08   MBA
+   SID_EDIT_FRAMESETS kein ReadOnlyDoc-Slot
+
+      Rev 1.34   03 Aug 1996 09:13:12   EL
+   SID_CREATELINK_INSELECTED
+
+      Rev 1.33   30 Jul 1996 15:05:28   MI
+   fix #29621# Ablegen von Bookmarks bei unbenanntem Doc
+
+      Rev 1.32   24 Jun 1996 18:07:34   MI
+   fix #28983# 'bearbeiten' falsch geschrieben
+
+      Rev 1.31   21 Jun 1996 14:16:36   MBA
+   SID_RESTOREWIN
+
+      Rev 1.30   14 Jun 1996 16:02:14   MBA
+   ConfigName fuer SID_EDIT_FRAMESET
+
+      Rev 1.29   06 Jun 1996 18:01:28   MBA
+   New SID_EDIT_FRAMESET
+
+      Rev 1.28   28 May 1996 16:36:56   MBA
+   Neue INET-Slots
+
+      Rev 1.27   11 Mar 1996 10:32:08   MI
+   SID_EDITDOC
+
+      Rev 1.26   09 Mar 1996 17:21:24   MI
+   kein OpenUrl am ViewFrame
+
+      Rev 1.25   28 Feb 1996 21:34:52   MI
+   SID_OPENURL
+
+      Rev 1.24   17 Jan 1996 10:43:06   MI
+   Windows.Close mit Returnwert (Grosskunden)
+
+      Rev 1.23   11 Jan 1996 18:46:30   MI
+   fix #24226# Groessenaenderungen relativ Recorden
+
+      Rev 1.22   15 Dec 1995 19:06:32   MI
+   Area etc. Absolut recorden
+
+      Rev 1.21   13 Dec 1995 14:32:14   MI
+   Name-Property explizit
+
+      Rev 1.20   12 Dec 1995 18:50:32   MI
+   Windows ohne Coll...
+
+      Rev 1.19   07 Dec 1995 12:58:18   MI
+   Area
+
+      Rev 1.18   06 Dec 1995 21:56:50   MI
+   Windows
+
+      Rev 1.17   05 Dec 1995 09:36:10   MI
+   interne Interfaces nicht exportieren
+
+      Rev 1.16   04 Dec 1995 19:09:36   MI
+   Minimized/Maximized
+
+      Rev 1.15   03 Dec 1995 11:54:04   MI
+   interface Window
+
+      Rev 1.14   30 Nov 1995 10:34:20   MI
+   SwitchViewShell nicht exportiert
+
+      Rev 1.13   28 Nov 1995 17:34:18   MI
+   neue Tags
+
+      Rev 1.12   23 Nov 1995 17:30:14   MI
+   neue IDL
+
+      Rev 1.11   17 Oct 1995 16:14:54   KL
+   Ueberarbeitung nach MS-Standard
+
+      Rev 1.10   06 Oct 1995 15:51:16   MI
+   HelpTexts scharfgeschaltet
+
+      Rev 1.9   29 Aug 1995 14:07:36   MI
+   Checkliste eingebaut
+
+-------------------------------------------------------------------------*/
+
+
+
+

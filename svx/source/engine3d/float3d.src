@@ -1,0 +1,3377 @@
+/*************************************************************************
+ *
+ *  $RCSfile: float3d.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:15 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+#include "float3d.hrc"
+#define WIDTH                       158
+#define HEIGHT                      197
+#define HEIGHT                      209
+#define BORDER                      3
+#define BUTTON_WIDTH            13
+#define BUTTON_HEIGHT       13
+#define VT_BUTTON_WIDTH     18
+#define GROUP_Y                     (BORDER + BUTTON_HEIGHT + 3)
+#define GROUP_HEIGHT            95
+#define GROUP_WIDTH             (WIDTH - 2 * BORDER)
+#define GROUP_PREV_X            60
+#define GROUP_PREV_Y            (GROUP_Y + GROUP_HEIGHT + 1)
+#define GROUP_PREV_WIDTH    (WIDTH - BORDER - GROUP_PREV_X)
+#define GROUP_PREV_HEIGHT   (HEIGHT - GROUP_PREV_Y - BORDER)
+#define BUTTON_SIZE             MAP_APPFONT( BUTTON_WIDTH, BUTTON_WIDTH );
+#ifndef STD_MASKCOLOR
+#define STD_MASKCOLOR Color { Red=0xC000; Green=0xC000; Blue=0xC000; }
+#endif
+DockingWindow RID_SVXFLOAT_3D
+{
+    HelpID = SID_3D_WIN ;
+    Border = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Size = MAP_APPFONT ( WIDTH , HEIGHT ) ;
+    Text = "3D-Effekte" ;
+    Text [ ENGLISH ] = "3-D Effects" ;
+    Text [ english_us ] = "3D Effects" ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    ImageButton BTN_FAVORITES
+    {
+        Pos = MAP_APPFONT ( 4 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Favoriten" ;
+        QuickHelpText [ ENGLISH ] = "Favorites" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dfavor.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "Favoritos" ;
+        QuickHelpText [ english_us ] = "Favorites" ;
+        QuickHelpText [ portuguese_brazilian ] = "Favoriten" ;
+        QuickHelpText [ swedish ] = "Favoriter" ;
+        QuickHelpText [ danish ] = "Favoriter" ;
+        QuickHelpText [ italian ] = "Preferiti" ;
+        QuickHelpText [ spanish ] = "Favoritos" ;
+        QuickHelpText [ french ] = "Favoris" ;
+        QuickHelpText [ dutch ] = "Favorieten" ;
+    QuickHelpText[ russian ] = "»Á·‡ÌÌ˚Â";
+        QuickHelpText[ polish ] = "Ulubione";
+        QuickHelpText[ japanese ] = "Ç®ãCÇ…ì¸ÇË";
+        QuickHelpText[ chinese_simplified ] = " ’≤ÿ";
+        QuickHelpText[ chinese_traditional ] = "ß⁄™∫≥Ã∑R";
+        QuickHelpText[ arabic ] = "«·„›÷·";
+        QuickHelpText[ dutch ] = "Favorieten";
+        QuickHelpText[ chinese_simplified ] = " ’≤ÿ";
+        QuickHelpText[ greek ] = "¡„·ÁÏ›Ì·";
+        QuickHelpText[ korean ] = "Favorites";
+    };
+    ImageButton BTN_GEO
+    {
+        Pos = MAP_APPFONT ( 22 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Geometrie" ;
+        QuickHelpText [ ENGLISH ] = "Geometry" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dgeo.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "Geometria" ;
+        QuickHelpText [ english_us ] = "Geometry" ;
+        QuickHelpText [ portuguese_brazilian ] = "Geometrie" ;
+        QuickHelpText [ swedish ] = "Geometri" ;
+        QuickHelpText [ danish ] = "Geometri" ;
+        QuickHelpText [ italian ] = "Geometria" ;
+        QuickHelpText [ spanish ] = "GeometrÌa" ;
+        QuickHelpText [ french ] = "GÈomÈtrie" ;
+        QuickHelpText [ dutch ] = "Geometrie" ;
+    QuickHelpText[ russian ] = "√ÂÓÏÂÚËˇ";
+        QuickHelpText[ polish ] = "Geometria";
+        QuickHelpText[ japanese ] = "äÙâΩäw";
+        QuickHelpText[ chinese_simplified ] = "º∏∫Œ";
+        QuickHelpText[ chinese_traditional ] = "§L¶Û";
+        QuickHelpText[ arabic ] = "«·Â‰œ”…";
+        QuickHelpText[ dutch ] = "Geometrie";
+        QuickHelpText[ chinese_simplified ] = "º∏∫Œ";
+        QuickHelpText[ greek ] = "√Â˘ÏÂÙÒﬂ·";
+        QuickHelpText[ korean ] = "Geometry";
+    };
+    ImageButton BTN_REPRESENTATION
+    {
+        Pos = MAP_APPFONT ( 40 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Darstellung" ;
+        QuickHelpText [ ENGLISH ] = "Representation" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3drepres.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "ApresentaÁ„o" ;
+        QuickHelpText [ english_us ] = "Material Properties" ;
+        QuickHelpText [ portuguese_brazilian ] = "Darstellung" ;
+        QuickHelpText [ swedish ] = "Visning" ;
+        QuickHelpText [ danish ] = "Visning" ;
+        QuickHelpText [ italian ] = "Rappresentazione" ;
+        QuickHelpText [ spanish ] = "RepresentaciÛn" ;
+        QuickHelpText [ french ] = "ReprÈsentation" ;
+        QuickHelpText [ dutch ] = "Weergave" ;
+    QuickHelpText[ russian ] = "œÂ‰ÒÚ‡‚ÎÂÌËÂ";
+        QuickHelpText[ polish ] = "Przedstawienie";
+        QuickHelpText[ japanese ] = "ï\\é¶";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ";
+        QuickHelpText[ chinese_traditional ] = "≈„•‹";
+        QuickHelpText[ arabic ] = "«·⁄—÷";
+        QuickHelpText[ dutch ] = "Weergave";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ";
+        QuickHelpText[ greek ] = "≈Ïˆ‹ÌÈÛÁ";
+        QuickHelpText[ korean ] = "Material Properties";
+    };
+    ImageButton BTN_LIGHT
+    {
+        Pos = MAP_APPFONT ( 58 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Beleuchtung" ;
+        QuickHelpText [ ENGLISH ] = "Lighting" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dlight.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "IluminaÁ„o" ;
+        QuickHelpText [ english_us ] = "Illumination" ;
+        QuickHelpText [ portuguese_brazilian ] = "Beleuchtung" ;
+        QuickHelpText [ swedish ] = "Belysning" ;
+        QuickHelpText [ danish ] = "Belysning" ;
+        QuickHelpText [ italian ] = "Illuminazione" ;
+        QuickHelpText [ spanish ] = "IluminaciÛn" ;
+        QuickHelpText [ french ] = "Eclairage" ;
+        QuickHelpText [ dutch ] = "Belichting" ;
+    QuickHelpText[ russian ] = "ŒÒ‚Â˘ÂÌËÂ";
+        QuickHelpText[ polish ] = "Oúwietlenie";
+        QuickHelpText[ japanese ] = "è∆ñæ";
+        QuickHelpText[ chinese_simplified ] = "’’√˜";
+        QuickHelpText[ chinese_traditional ] = "∑”©˙";
+        QuickHelpText[ arabic ] = "«·≈÷«¡…";
+        QuickHelpText[ dutch ] = "Belichting";
+        QuickHelpText[ chinese_simplified ] = "’’√˜";
+        QuickHelpText[ greek ] = "÷˘ÙÈÛÏ¸Ú";
+        QuickHelpText[ korean ] = "Illumination";
+    };
+    ImageButton BTN_TEXTURE
+    {
+        Pos = MAP_APPFONT ( 76 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Texturen" ;
+        QuickHelpText [ ENGLISH ] = "Textures" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "3dtextur.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Texturas" ;
+        QuickHelpText [ english_us ] = "Textures" ;
+        QuickHelpText [ portuguese_brazilian ] = "Texturen" ;
+        QuickHelpText [ swedish ] = "Texturer" ;
+        QuickHelpText [ danish ] = "Teksturer" ;
+        QuickHelpText [ italian ] = "Strutture" ;
+        QuickHelpText [ spanish ] = "Texturas" ;
+        QuickHelpText [ french ] = "Textures" ;
+        QuickHelpText [ dutch ] = "Texturen" ;
+    QuickHelpText[ russian ] = "“ÂÍÒÚÛ˚";
+        QuickHelpText[ polish ] = "Tekstury";
+        QuickHelpText[ japanese ] = "√∏Ω¡≠±";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì";
+        QuickHelpText[ chinese_traditional ] = "§Â≤z";
+        QuickHelpText[ arabic ] = "√‰”Ã…";
+        QuickHelpText[ dutch ] = "Texturen";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì";
+        QuickHelpText[ greek ] = "’ˆﬁ";
+        QuickHelpText[ korean ] = "Textures";
+    };
+    ImageButton BTN_MATERIAL
+    {
+        Pos = MAP_APPFONT ( 94 , BORDER ) ;
+        Size = MAP_APPFONT ( VT_BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        QuickHelpText = "Material" ;
+        QuickHelpText [ ENGLISH ] = "Material" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "material.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "Material" ;
+        QuickHelpText [ english_us ] = "Material" ;
+        QuickHelpText [ portuguese_brazilian ] = "Material" ;
+        QuickHelpText [ swedish ] = "Material" ;
+        QuickHelpText [ danish ] = "Materiale" ;
+        QuickHelpText [ italian ] = "Materiale" ;
+        QuickHelpText [ spanish ] = "Material" ;
+        QuickHelpText [ french ] = "MatÈriau" ;
+        QuickHelpText [ dutch ] = "Materiaal" ;
+    QuickHelpText[ russian ] = "Ã‡ÚÂË‡Î";
+        QuickHelpText[ polish ] = "Materia≥";
+        QuickHelpText[ japanese ] = "ëfçﬁ";
+        QuickHelpText[ chinese_simplified ] = "≤ƒ¡œ";
+        QuickHelpText[ chinese_traditional ] = "ß˜Æ∆";
+        QuickHelpText[ arabic ] = "«·„«œ…";
+        QuickHelpText[ dutch ] = "Materiaal";
+        QuickHelpText[ chinese_simplified ] = "≤ƒ¡œ";
+        QuickHelpText[ greek ] = "’ÎÈÍ¸";
+        QuickHelpText[ korean ] = "Material";
+    };
+    ImageButton BTN_UPDATE
+    {
+        Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH * 2 , BORDER ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Aktualisieren" ;
+        QuickHelpText [ ENGLISH ] = "Update" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "Actualizar" ;
+        QuickHelpText [ english_us ] = "Update" ;
+        QuickHelpText [ portuguese_brazilian ] = "Aktualisieren" ;
+        QuickHelpText [ swedish ] = "Uppdatera" ;
+        QuickHelpText [ danish ] = "Opdater" ;
+        QuickHelpText [ italian ] = "Aggiorna" ;
+        QuickHelpText [ spanish ] = "Actualizar" ;
+        QuickHelpText [ french ] = "Actualiser" ;
+        QuickHelpText [ dutch ] = "Actualiseren" ;
+    QuickHelpText[ russian ] = "Œ·ÌÓ‚ËÚ¸";
+        QuickHelpText[ polish ] = "Aktualizuj";
+        QuickHelpText[ japanese ] = "çXêVÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "∏¸–¬";
+        QuickHelpText[ chinese_traditional ] = "ßÛ∑s";
+        QuickHelpText[ arabic ] = " ÕœÌÀ";
+        QuickHelpText[ dutch ] = "Actualiseren";
+        QuickHelpText[ chinese_simplified ] = "∏¸–¬";
+        QuickHelpText[ greek ] = "≈ÌÁÏ›Ò˘ÛÁ";
+        QuickHelpText[ korean ] = "Update";
+    };
+    ImageButton BTN_ASSIGN
+    {
+        Pos = MAP_APPFONT ( WIDTH - BORDER - BUTTON_WIDTH , BORDER ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Zuweisen" ;
+        QuickHelpText [ ENGLISH ] = "Assign" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "apply.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        QuickHelpText [ portuguese ] = "Atribuir" ;
+        QuickHelpText [ english_us ] = "Assign" ;
+        QuickHelpText [ portuguese_brazilian ] = "Zuweisen" ;
+        QuickHelpText [ swedish ] = "Tilldela" ;
+        QuickHelpText [ danish ] = "Tildel" ;
+        QuickHelpText [ italian ] = "Assegna" ;
+        QuickHelpText [ spanish ] = "Asignar" ;
+        QuickHelpText [ french ] = "Assigner" ;
+        QuickHelpText [ dutch ] = "Toewijzen" ;
+    QuickHelpText[ russian ] = "œËÒ‚ÓËÚ¸";
+        QuickHelpText[ polish ] = "Przypisz";
+        QuickHelpText[ japanese ] = "äÑÇËìñÇƒÇÈ";
+        QuickHelpText[ chinese_simplified ] = "÷∏∂®";
+        QuickHelpText[ chinese_traditional ] = "´¸©w";
+        QuickHelpText[ arabic ] = " ⁄ÌÌ‰";
+        QuickHelpText[ dutch ] = "Toewijzen";
+        QuickHelpText[ chinese_simplified ] = "÷∏∂®";
+        QuickHelpText[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ";
+        QuickHelpText[ korean ] = "Assign";
+    };
+     // Unterer Teil
+    ImageButton BTN_CHANGE_TO_3D
+    {
+        Pos = MAP_APPFONT ( BORDER , HEIGHT - BUTTON_HEIGHT - BORDER ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Umwandeln in 3D" ;
+        QuickHelpText [ ENGLISH ] = "Convert to 3D" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "convrt3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Converte em 3-D" ;
+        QuickHelpText [ english_us ] = "Convert to 3D" ;
+        QuickHelpText [ portuguese_brazilian ] = "Umwandeln in 3D" ;
+        QuickHelpText [ swedish ] = "Omvandla till 3D" ;
+        QuickHelpText [ danish ] = "Konverter til 3D" ;
+        QuickHelpText [ italian ] = "Converti in 3D" ;
+        QuickHelpText [ spanish ] = "Convertir en 3D" ;
+        QuickHelpText [ french ] = "Convertir en 3 D" ;
+        QuickHelpText [ dutch ] = "Converteren naar 3D" ;
+    QuickHelpText[ russian ] = "œÂÓ·‡ÁÓ‚‡Ú¸ ‚ 3-Ã";
+        QuickHelpText[ polish ] = "Konwertuj na 3-W";
+        QuickHelpText[ japanese ] = "3DÇ…ïœä∑";
+        QuickHelpText[ chinese_simplified ] = "◊™ªª≥… 3 Œ¨";
+        QuickHelpText[ chinese_traditional ] = "¬‡≈‹¶® 3 ∫˚";
+        QuickHelpText[ arabic ] = " ÕÊÌ· ≈·Ï À·«ÀÌ «·√»⁄«œ";
+        QuickHelpText[ dutch ] = "Converteren naar 3D";
+        QuickHelpText[ chinese_simplified ] = "◊™ªª≥… 3 Œ¨";
+        QuickHelpText[ greek ] = "ÃÂÙ·ÙÒÔﬁ ÛÂ 3 D";
+        QuickHelpText[ korean ] = "Convert to 3D";
+    };
+    ImageButton BTN_LATHE_OBJ
+    {
+        Pos = MAP_APPFONT ( BORDER + BUTTON_WIDTH + 1 , HEIGHT - BUTTON_HEIGHT - BORDER ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Umwandeln in Rotationskˆrper" ;
+        QuickHelpText [ ENGLISH ] = "Convert to lathe object" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "rotate3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Converte em objecto de rotaÁ„o" ;
+        QuickHelpText [ english_us ] = "Convert to Lathe Object" ;
+        QuickHelpText [ portuguese_brazilian ] = "Umwandeln in Rotationskˆrper" ;
+        QuickHelpText [ swedish ] = "Omvandla till rotationsobjekt" ;
+        QuickHelpText [ danish ] = "Konverter til rotationslegeme" ;
+        QuickHelpText [ italian ] = "Converti in corpo di rotazione" ;
+        QuickHelpText [ spanish ] = "Convertir en cuerpo de rotaciÛn" ;
+        QuickHelpText [ french ] = "Convertir en corps de rÈvolution" ;
+        QuickHelpText [ dutch ] = "Veranderen in rotatieobjecten" ;
+    QuickHelpText[ russian ] = "œÂÓ·‡ÁÓ‚‡Ú¸ ‚ ÚÂÎÓ ‚‡˘ÂÌËˇ";
+        QuickHelpText[ polish ] = "Konwertuj na obiekt obrotowy";
+        QuickHelpText[ japanese ] = "âÒì]ëÃÇ…ïœä∑";
+        QuickHelpText[ chinese_simplified ] = "◊™ªª≥…–˝◊™ÃÂ";
+        QuickHelpText[ chinese_traditional ] = "¬‡≈‹¶®±€¬‡≈È";
+        QuickHelpText[ arabic ] = " ÕÊÌ· ≈·Ï ﬂ«∆‰ «” œ«—…";
+        QuickHelpText[ dutch ] = "Veranderen in rotatieobjecten";
+        QuickHelpText[ chinese_simplified ] = "◊™ªª≥…–˝◊™ÃÂ";
+        QuickHelpText[ greek ] = "ÃÂÙ·ÙÒÔﬁ ÛÂ ·ÌÙÈÍÂﬂÏÂÌÔ ÂÒÈÛÙÒÔˆﬁÚ";
+        QuickHelpText[ korean ] = "Convert to Lathe Object";
+    };
+    ImageButton BTN_PERSPECTIVE
+    {
+        Pos = MAP_APPFONT ( BORDER + ( BUTTON_WIDTH + 1 ) * 2 , HEIGHT - BUTTON_HEIGHT - BORDER ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Perspektive ein-/ausschalten" ;
+        QuickHelpText [ ENGLISH ] = "Perspective" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "persp3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Activa/Desactiva Perspectiva" ;
+        QuickHelpText [ english_us ] = "Perspective On/Off" ;
+        QuickHelpText [ portuguese_brazilian ] = "Perspektive ein-/ausschalten" ;
+        QuickHelpText [ swedish ] = "Perspektiv pÂ/av" ;
+        QuickHelpText [ danish ] = "Aktiver/deaktiver perspektiv" ;
+        QuickHelpText [ italian ] = "Attiva/disattiva prospettiva" ;
+        QuickHelpText [ spanish ] = "Activar/desactivar perspectiva" ;
+        QuickHelpText [ french ] = "Activer/dÈsactiver la perspective" ;
+        QuickHelpText [ dutch ] = "Perspectief in-/uitschakelen" ;
+    QuickHelpText[ russian ] = "¬ÍÎ./‚˚ÍÎ. ÔÂÒÔÂÍÚË‚Û";
+        QuickHelpText[ polish ] = "W≥πcz/Wy≥πcz perspektywÍ";
+        QuickHelpText[ japanese ] = "âìãﬂñ@ µ›/µÃ";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ/“˛»ÎÕ∏ ”";
+        QuickHelpText[ chinese_traditional ] = "≈„•‹/¡Ù§J≥zµ¯";
+        QuickHelpText[ arabic ] = " ‘€Ì·/≈Ìﬁ«› «·„‰ŸÊ—";
+        QuickHelpText[ dutch ] = "Perspectief in-/uitschakelen";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ/“˛»ÎÕ∏ ”";
+        QuickHelpText[ greek ] = "–ÒÔÔÙÈÍﬁ Õ·È/º˜È";
+        QuickHelpText[ korean ] = "Perspective On/Off";
+    };
+    Control CTL_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( GROUP_PREV_X + 6 , GROUP_PREV_Y + 9 ) ;
+        Size = MAP_APPFONT ( GROUP_PREV_WIDTH - 12 , GROUP_PREV_HEIGHT - 15 ) ;
+        TabStop = TRUE ;
+    };
+    Control CTL_LIGHT_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( GROUP_PREV_X + 6 , GROUP_PREV_Y + 9 ) ;
+        Size = MAP_APPFONT ( GROUP_PREV_WIDTH - 12 , GROUP_PREV_HEIGHT - 15 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT ( GROUP_PREV_X , GROUP_PREV_Y ) ;
+        Size = MAP_APPFONT ( GROUP_PREV_WIDTH , GROUP_PREV_HEIGHT ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ english_us ] = "Preview" ;
+        Text [ portuguese_brazilian ] = "Vorschau" ;
+        Text [ swedish ] = "Fˆrhandsvisning" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ spanish ] = "PrevisualizaciÛn " ;
+        Text [ french ] = "AperÁu" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+    };
+     // Favoriten
+    Control CTL_FAVORITES
+    {
+         //HelpId = HID_SD_CTL_FAVORITES ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( BORDER + 6 , GROUP_Y + 9 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 12 , GROUP_HEIGHT - 15 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+    };
+    GroupBox GRP_FAVORITES
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH , GROUP_HEIGHT ) ;
+        Text = "Favoriten" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ english_us ] = "Favorites" ;
+        Text [ portuguese_brazilian ] = "Favoriten" ;
+        Text [ swedish ] = "Favoriter" ;
+        Text [ danish ] = "Favoriter" ;
+        Text [ italian ] = "Preferiti" ;
+        Text [ spanish ] = "Favoritos" ;
+        Text [ french ] = "Favoris" ;
+        Text [ dutch ] = "Favorieten" ;
+        Text [ portuguese ] = "Favoritos" ;
+        Text[ chinese_simplified ] = " ’≤ÿ";
+        Text[ russian ] = "»Á·‡ÌÌ˚Â";
+        Text[ polish ] = "Ulubione";
+        Text[ japanese ] = "Ç®ãCÇ…ì¸ÇË";
+        Text[ chinese_traditional ] = "ß⁄™∫≥Ã∑R";
+        Text[ arabic ] = "«·„›÷·…";
+        Text[ dutch ] = "Favorieten";
+        Text[ chinese_simplified ] = " ’≤ÿ";
+        Text[ greek ] = "–ÒÔÙÈÏﬁÛÂÈÚ";
+        Text[ korean ] = "¡Ò∞‹ √£±‚";
+        Text[ turkish ] = "S˝k kullan˝lanlar";
+    };
+    ImageButton BTN_ONLY_3D
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_PREV_Y+1 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Nur 3D-Attribute zuweisen" ;
+        QuickHelpText [ ENGLISH ] = "Assign only 3D attributes" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "only3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Atribui apenas atributos 3-D" ;
+        QuickHelpText [ english_us ] = "3D Attributes Only" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nur 3D-Attribute zuweisen" ;
+        QuickHelpText [ swedish ] = "Tilldela bara 3D-attribut" ;
+        QuickHelpText [ danish ] = "Tildel kun 3D-attributter" ;
+        QuickHelpText [ italian ] = "Assegna solo attributi 3D" ;
+        QuickHelpText [ spanish ] = "Asignar sÛlo los atributos tridimensionales" ;
+        QuickHelpText [ french ] = "Assigner uniquement les attributs 3 D" ;
+        QuickHelpText [ dutch ] = "Alleen 3D-attributen toewijzen" ;
+    QuickHelpText[ russian ] = "œËÏÂÌËÚ¸ ÚÓÎ¸ÍÓ ‡ÚË·ÛÚ˚ 3-Ã";
+        QuickHelpText[ polish ] = "Przypisz tylko atrybuty 3-W";
+        QuickHelpText[ japanese ] = "3DÇÃëÆê´ÇÃÇ›äÑÇËìñÇƒ";
+        QuickHelpText[ chinese_simplified ] = "÷ª÷∏∂® 3 Œ¨ Ù–‘";
+        QuickHelpText[ chinese_traditional ] = "•u´¸©w 3 ∫˚ƒ›© ";
+        QuickHelpText[ arabic ] = " ⁄ÌÌ‰ ”„«  À·«ÀÌ… «·√»⁄«œ ›ﬁÿ";
+        QuickHelpText[ dutch ] = "Alleen 3D-attributen toewijzen";
+        QuickHelpText[ chinese_simplified ] = "÷ª÷∏∂® 3 Œ¨ Ù–‘";
+        QuickHelpText[ greek ] = "Ã¸ÌÔ È‰È¸ÙÁÙÂÚ 3ƒ";
+        QuickHelpText[ korean ] = "3D Attributes Only";
+    };
+    ImageButton BTN_ALL_ATTRIBUTES
+    {
+        Pos = MAP_APPFONT ( BORDER + BUTTON_WIDTH , GROUP_PREV_Y+1 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Alle Attribute zuweisen" ;
+        QuickHelpText [ ENGLISH ] = "Assign all attributes" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "allattri.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Aplica todos os atributos" ;
+        QuickHelpText [ english_us ] = "Assign All Attributes" ;
+        QuickHelpText [ portuguese_brazilian ] = "Alle Attribute zuweisen" ;
+        QuickHelpText [ swedish ] = "Tilldela alla attribut" ;
+        QuickHelpText [ danish ] = "Tildel alle attributter" ;
+        QuickHelpText [ italian ] = "Assegna tutti gli attributi" ;
+        QuickHelpText [ spanish ] = "Asignar todos los atributos" ;
+        QuickHelpText [ french ] = "Appliquer tous les attributs" ;
+        QuickHelpText [ dutch ] = "Alle attributen toewijzen" ;
+    QuickHelpText[ russian ] = "œËÒ‚ÓËÚ¸ ‚ÒÂ ‡ÚË·ÛÚ˚";
+        QuickHelpText[ polish ] = "Przypisz wszystkie atrybuty";
+        QuickHelpText[ japanese ] = "Ç∑Ç◊ÇƒÇÃëÆê´ÇäÑÇËìñÇƒÇÈ";
+        QuickHelpText[ chinese_simplified ] = "∑÷≈‰À˘”– Ù–‘";
+        QuickHelpText[ chinese_traditional ] = "´¸©w©“¶≥™∫ƒ›© ";
+        QuickHelpText[ arabic ] = " ⁄ÌÌ‰ ﬂ· «·”„« ";
+        QuickHelpText[ dutch ] = "Alle attributen toewijzen";
+        QuickHelpText[ chinese_simplified ] = "∑÷≈‰À˘”– Ù–‘";
+        QuickHelpText[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ ¸Î˘Ì Ù˘Ì È‰ÈÔÙﬁÙ˘Ì";
+        QuickHelpText[ korean ] = "Assign All Attributes";
+    };
+     // Geometrie
+    FixedText FT_HORIZONTAL
+    {
+        Pos = MAP_APPFONT ( 13 , 37 ) ;
+        Size = MAP_APPFONT ( 43 , 10 ) ;
+        Text = "Horizontal" ;
+        Text [ ENGLISH ] = "Horizontal" ;
+        Text [ english_us ] = "Horizontal" ;
+        Text [ portuguese_brazilian ] = "Horizontal" ;
+        Text [ swedish ] = "Horisontell" ;
+        Text [ danish ] = "Vandret" ;
+        Text [ italian ] = "Orizzontale" ;
+        Text [ spanish ] = "Horizontal" ;
+        Text [ french ] = "horizontaux" ;
+        Text [ dutch ] = "Horizontaal" ;
+        Text [ portuguese ] = "Horizontal" ;
+        Text[ chinese_simplified ] = "ÀÆ∆Ω∑ΩœÚ";
+        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ polish ] = "Poziomo";
+        Text[ japanese ] = "êÖïΩ";
+        Text[ chinese_traditional ] = "§Ù•≠§Ë¶V";
+        Text[ arabic ] = "√›ﬁÌ";
+        Text[ dutch ] = "Horizontaal";
+        Text[ chinese_simplified ] = "ÀÆ∆Ω∑ΩœÚ";
+        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
+        Text[ korean ] = "ºˆ∆Ú";
+        Text[ turkish ] = "Yatay";
+    };
+    NumericField NUM_HORIZONTAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 59 , 35 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+    FixedText FT_VERTICAL
+    {
+        Size = MAP_APPFONT ( 36 , 10 ) ;
+        Pos = MAP_APPFONT ( 85 , 37 ) ;
+        Text = "Vertikal" ;
+        Text [ ENGLISH ] = "Vertical" ;
+        Text [ english_us ] = "Vertical" ;
+        Text [ portuguese_brazilian ] = "Vertikal" ;
+        Text [ swedish ] = "Vertikal" ;
+        Text [ danish ] = "Lodret" ;
+        Text [ italian ] = "Verticale" ;
+        Text [ spanish ] = "Vertical" ;
+        Text [ french ] = "verticaux" ;
+        Text [ dutch ] = "Verticaal" ;
+        Text [ portuguese ] = "Vertical" ;
+        Text[ chinese_simplified ] = "¥π÷±∑ΩœÚ";
+        Text[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
+        Text[ polish ] = "Pionowo";
+        Text[ japanese ] = "êÇíº";
+        Text[ chinese_traditional ] = "´´™Ω§Ë¶V";
+        Text[ arabic ] = "—√”Ì";
+        Text[ dutch ] = "Verticaal";
+        Text[ chinese_simplified ] = "¥π÷±∑ΩœÚ";
+        Text[ greek ] = " ·Ù·Í¸Òıˆ·";
+        Text[ korean ] = "ºˆ¡˜";
+        Text[ turkish ] = "Dikey";
+    };
+    NumericField NUM_VERTICAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 124 , 35 ) ;
+        Size = MAP_APPFONT ( 22 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 2 ;
+        First = 2 ;
+        Maximum = 256 ;
+        Last = 256 ;
+    };
+    GroupBox GRP_SEGMENTS
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , GROUP_Y + 8 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 24 ) ;
+        Text = "Segmente" ;
+        Text [ ENGLISH ] = "Segments" ;
+        Text [ english_us ] = "Segments" ;
+        Text [ portuguese_brazilian ] = "Segmente" ;
+        Text [ swedish ] = "Segment" ;
+        Text [ danish ] = "Segmenter" ;
+        Text [ italian ] = "Segmenti" ;
+        Text [ spanish ] = "Segmentos" ;
+        Text [ french ] = "Segments" ;
+        Text [ dutch ] = "Segmenten" ;
+        Text [ portuguese ] = "Segmentos" ;
+        Text[ chinese_simplified ] = "∑÷∂Œ";
+        Text[ russian ] = "—Â„ÏÂÌÚ˚";
+        Text[ polish ] = "Segmenty";
+        Text[ japanese ] = "êÿï–";
+        Text[ chinese_traditional ] = "§¿¨q";
+        Text[ arabic ] = "ﬁÿ⁄";
+        Text[ dutch ] = "Segmenten";
+        Text[ chinese_simplified ] = "∑÷∂Œ";
+        Text[ greek ] = "‘ÏﬁÏ·Ù·";
+        Text[ korean ] = "ºº±◊∏’∆Æ";
+        Text[ turkish ] = "ParÁalar";
+    };
+    FixedText FT_PERCENT_DIAGONAL
+    {
+        Pos = MAP_APPFONT ( 9 , 56 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        Text = "Kantenrundung" ;
+        Text [ ENGLISH ] = "Percent diagonal" ;
+        Text [ english_us ] = "Rounded edges" ;
+        Text [ portuguese_brazilian ] = "Kantenrundung" ;
+        Text [ swedish ] = "Rundade kanter" ;
+        Text [ danish ] = "Kant-afrunding" ;
+        Text [ italian ] = "Bordi arrotondati" ;
+        Text [ spanish ] = "Aristas redondeadas" ;
+        Text [ french ] = "Arrondi d'arÍtes" ;
+        Text [ dutch ] = "Kantenronding" ;
+        Text [ portuguese ] = "Arredondar arestas" ;
+        Text[ chinese_simplified ] = "±ﬂΩ«±‰‘≤";
+        Text[ russian ] = "«‡ÍÛ„ÎÂÌÌ˚Â Í‡ˇ";
+        Text[ polish ] = "Zaokr. krawÍdzi";
+        Text[ japanese ] = "äpÇä€Ç≠Ç∑ÇÈ";
+        Text[ chinese_traditional ] = "√‰®§≈‹∂Í";
+        Text[ arabic ] = "«” œ«—… «·ÕÊ«›";
+        Text[ dutch ] = "Kantenronding";
+        Text[ chinese_simplified ] = "±ﬂΩ«±‰‘≤";
+        Text[ greek ] = "¡ÔÛÙÒÔ„„ıÎÂÏ›Ì· ‹ÍÒ·";
+        Text[ korean ] = "∏º≠∏Æ µ’±€∏≤";
+        Text[ turkish ] = "Kenar eimi";
+    };
+    MetricField MTR_PERCENT_DIAGONAL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 54 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 100 ;
+        Last = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    FixedText FT_BACKSCALE
+    {
+        Pos = MAP_APPFONT ( 9 , 70 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        Text = "Tiefenskalierung" ;
+        Text [ ENGLISH ] = "Backscale" ;
+        Text [ portuguese ] = "Escala de profundidade" ;
+        Text [ english_us ] = "Scaled depth" ;
+        Text [ portuguese_brazilian ] = "Tiefenskalierung" ;
+        Text [ swedish ] = "Djupskalering" ;
+        Text [ danish ] = "Dybdeskalering" ;
+        Text [ italian ] = "Scala profondit‡" ;
+        Text [ spanish ] = "Escala de profundidad" ;
+        Text [ french ] = "…chelle de profondeur" ;
+        Text [ dutch ] = "Diepte op schaal brengen" ;
+        Text[ chinese_simplified ] = "…Ó∂»±»¿˝";
+        Text[ russian ] = "√ÎÛ·ËÌÌÓÂ Ï‡Ò¯Ú‡·ËÓ‚‡ÌËÂ";
+        Text[ polish ] = "Skalowanie g≥Íbi";
+        Text[ japanese ] = "âúçsÇ´ÇÃê[Ç≥";
+        Text[ chinese_traditional ] = "≤`´◊§Ò®“";
+        Text[ arabic ] = " ÕÃÌ„ «·⁄„ﬁ";
+        Text[ dutch ] = "Diepte op schaal brengen";
+        Text[ chinese_simplified ] = "…Ó∂»±»¿˝";
+        Text[ greek ] = " ÎﬂÏ·Í· ‚‹ËÔıÚ";
+        Text[ korean ] = "±Ì¿Ã πË¿≤";
+        Text[ turkish ] = "Derinlik ˆlÁeklendirmesi";
+    };
+    MetricField MTR_BACKSCALE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 68 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 10000 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 10000 ;
+    };
+    FixedText FT_END_ANGLE
+    {
+        Pos = MAP_APPFONT ( 9 , 84 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        Text = "Endwinkel" ;
+        Text [ ENGLISH ] = "End angle" ;
+        Text [ english_us ] = "Rotation angle" ;
+        Text [ portuguese_brazilian ] = "Endwinkel" ;
+        Text [ swedish ] = "Slutvinkel" ;
+        Text [ danish ] = "Slutvinkel" ;
+        Text [ italian ] = "Angolo finale" ;
+        Text [ spanish ] = "¡ngulo final" ;
+        Text [ french ] = "Angle final" ;
+        Text [ dutch ] = "Eindhoek" ;
+        Text [ portuguese ] = "¬ngulo de rotaÁ„o" ;
+        Text[ chinese_simplified ] = "–˝◊™Ω«∂»";
+        Text[ russian ] = " ÓÌÂ˜Ì˚È Û„ÓÎ ÔÓ‚ÓÓÚ‡";
+        Text[ polish ] = "Kπt koÒcowy";
+        Text[ japanese ] = "âÒì]äpìx";
+        Text[ chinese_traditional ] = "±€¬‡®§´◊";
+        Text[ arabic ] = "“«ÊÌ… «·‰Â«Ì…";
+        Text[ dutch ] = "Eindhoek";
+        Text[ chinese_simplified ] = "–˝◊™Ω«∂»";
+        Text[ greek ] = "‘ÂÎÈÍﬁ „˘Ìﬂ·";
+        Text[ korean ] = "»∏¿¸∞¢";
+        Text[ turkish ] = "Dˆn¸˛ aÁ˝s˝";
+    };
+    MetricField MTR_END_ANGLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 82 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Unit = FUNIT_CUSTOM ;
+        Maximum = 36000 ;
+        Last = 36000 ;
+        DecimalDigits = 1 ;
+        CustomUnitText = " ∞" ;
+    };
+    FixedText FT_DEPTH
+    {
+        Pos = MAP_APPFONT ( 9 , 98 ) ;
+        Size = MAP_APPFONT ( 72 , 10 ) ;
+        Text = "Tiefe" ;
+        Text [ ENGLISH ] = "Depth" ;
+        Text [ english_us ] = "Depth" ;
+        Text [ portuguese_brazilian ] = "Tiefe" ;
+        Text [ swedish ] = "Djup" ;
+        Text [ danish ] = "Dybde" ;
+        Text [ italian ] = "Profondit‡" ;
+        Text [ spanish ] = "Profundidad" ;
+        Text [ french ] = "Profondeur" ;
+        Text [ dutch ] = "Diepte" ;
+        Text [ portuguese ] = "Profundidade" ;
+        Text[ chinese_simplified ] = "…Ó∂»";
+        Text[ russian ] = "√ÎÛ·ËÌ‡";
+        Text[ polish ] = "G≥Íbia";
+        Text[ japanese ] = "âúçsÇ´";
+        Text[ chinese_traditional ] = "≤`´◊";
+        Text[ arabic ] = "«·⁄„ﬁ";
+        Text[ dutch ] = "Diepte";
+        Text[ chinese_simplified ] = "…Ó∂»";
+        Text[ greek ] = "¬‹ËÔÚ";
+        Text[ korean ] = "±Ì¿Ã";
+        Text[ turkish ] = "Derinlik";
+    };
+    MetricField MTR_DEPTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 96 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_MM ;
+        StrictFormat = TRUE ;
+        Minimum = 0 ;
+        First = 0 ;
+        Maximum = 10000000 ;
+        Last = 10000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    GroupBox GRP_GEOMETRIE
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - 2 * BORDER , GROUP_HEIGHT ) ;
+        Text = "Geometrie" ;
+        Text [ ENGLISH ] = "Geometry" ;
+        Text [ english_us ] = "Geometry" ;
+        Text [ portuguese_brazilian ] = "Geometrie" ;
+        Text [ swedish ] = "Geometri" ;
+        Text [ danish ] = "Geometri" ;
+        Text [ italian ] = "Geometria" ;
+        Text [ spanish ] = "GeometrÌa" ;
+        Text [ french ] = "GÈomÈtrie" ;
+        Text [ dutch ] = "Geometrie" ;
+        Text [ portuguese ] = "Geometria" ;
+        Text[ chinese_simplified ] = "º∏∫Œ";
+        Text[ russian ] = "√ÂÓÏÂÚËˇ";
+        Text[ polish ] = "Geometria";
+        Text[ japanese ] = "äÙâΩäw";
+        Text[ chinese_traditional ] = "¥X¶Û";
+        Text[ arabic ] = "«·Â‰œ”…";
+        Text[ dutch ] = "Geometrie";
+        Text[ chinese_simplified ] = "º∏∫Œ";
+        Text[ greek ] = "√Â˘ÏÂÙÒﬂ·";
+        Text[ korean ] = "±‚«œ";
+        Text[ turkish ] = "Geometri";
+    };
+    ImageButton BTN_NORMALS_OBJ
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 11 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Objektspezifisch" ;
+        QuickHelpText [ ENGLISH ] = "object specific" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normobjs.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "EspecÌfico do objecto" ;
+        QuickHelpText [ english_us ] = "Object-Specific" ;
+        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ swedish ] = "Objektspecifik" ;
+        QuickHelpText [ danish ] = "Objektspecifik" ;
+        QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
+        QuickHelpText [ spanish ] = "EspecÌfico del objeto" ;
+        QuickHelpText [ french ] = "SpÈcifique ‡ l'objet" ;
+        QuickHelpText [ dutch ] = "Objectspezifiek" ;
+    QuickHelpText[ russian ] = "¬ Á‡‚ËÒËÏÓÒÚË ÓÚ Ó·˙ÂÍÚ‡";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ japanese ] = "µÃﬁºﬁ™∏ƒì¡óLê´";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ chinese_traditional ] = "ØSÆÌ™´•Û";
+        QuickHelpText[ arabic ] = "Œ«’ »«·ﬂ«∆‰";
+        QuickHelpText[ dutch ] = "Objectspezifiek";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ greek ] = "”˜ÂÙÈÍ‹ ÏÂ ÙÔ ·ÌÙÈÍÂﬂÏÂÌÔ";
+        QuickHelpText[ korean ] = "Object-Specific";
+    };
+    ImageButton BTN_NORMALS_FLAT
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH , GROUP_PREV_Y + 11 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Flach" ;
+        QuickHelpText [ ENGLISH ] = "Flat" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normflat.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Plano" ;
+        QuickHelpText [ english_us ] = "Flat" ;
+        QuickHelpText [ portuguese_brazilian ] = "Flach" ;
+        QuickHelpText [ swedish ] = "Platt" ;
+        QuickHelpText [ danish ] = "Flad" ;
+        QuickHelpText [ italian ] = "Piano" ;
+        QuickHelpText [ spanish ] = "Plano" ;
+        QuickHelpText [ french ] = "Plat" ;
+        QuickHelpText [ dutch ] = "Vlak" ;
+    QuickHelpText[ russian ] = "œÎÓÒÍËÈ";
+        QuickHelpText[ polish ] = "P≥aski";
+        QuickHelpText[ japanese ] = "ïΩñ ";
+        QuickHelpText[ chinese_simplified ] = "∆ΩÃπ";
+        QuickHelpText[ chinese_traditional ] = "•≠©Z";
+        QuickHelpText[ arabic ] = "„”ÿÕ";
+        QuickHelpText[ dutch ] = "Vlak";
+        QuickHelpText[ chinese_simplified ] = "∆ΩÃπ";
+        QuickHelpText[ greek ] = "≈ﬂÂ‰Ô";
+        QuickHelpText[ korean ] = "Flat";
+    };
+    ImageButton BTN_NORMALS_SPHERE
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH * 2 , GROUP_PREV_Y + 11 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Kugelfˆrmig" ;
+        QuickHelpText [ ENGLISH ] = "spherical" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "normsphe.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "EsfÈrico" ;
+        QuickHelpText [ english_us ] = "Spherical" ;
+        QuickHelpText [ portuguese_brazilian ] = "Kugelfˆrmig" ;
+        QuickHelpText [ swedish ] = "Sf‰risk" ;
+        QuickHelpText [ danish ] = "Kugleformet" ;
+        QuickHelpText [ italian ] = "Sferico" ;
+        QuickHelpText [ spanish ] = "EsfÈrico" ;
+        QuickHelpText [ french ] = "SphÈrique" ;
+        QuickHelpText [ dutch ] = "Bolvormig" ;
+    QuickHelpText[ russian ] = "ÿ‡ÓÓ·‡ÁÌ˚È";
+        QuickHelpText[ polish ] = "W kszta≥cie kuli";
+        QuickHelpText[ japanese ] = "ãÖèÛ";
+        QuickHelpText[ chinese_simplified ] = "«ÚÃÂ";
+        QuickHelpText[ chinese_traditional ] = "≤y≈È";
+        QuickHelpText[ arabic ] = "ﬂ—ÊÌ";
+        QuickHelpText[ dutch ] = "Bolvormig";
+        QuickHelpText[ chinese_simplified ] = "«ÚÃÂ";
+        QuickHelpText[ greek ] = "”ˆ·ÈÒÈÍ¸";
+        QuickHelpText[ korean ] = "Spherical";
+    };
+    ImageButton BTN_NORMALS_INVERT
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 28 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Normalen umkehren" ;
+        QuickHelpText [ ENGLISH ] = "Invert normals" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "invert3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Inverter normais" ;
+        QuickHelpText [ english_us ] = "Invert Normals" ;
+        QuickHelpText [ portuguese_brazilian ] = "Normalen umkehren" ;
+        QuickHelpText [ swedish ] = "Omv‰nda normaler" ;
+        QuickHelpText [ danish ] = "Inverter normaler" ;
+        QuickHelpText [ italian ] = "Inverti i normali" ;
+        QuickHelpText [ spanish ] = "Invertir los normales" ;
+        QuickHelpText [ french ] = "Inverser les verticales" ;
+        QuickHelpText [ dutch ] = "Normalen omkeren" ;
+    QuickHelpText[ russian ] = "œÓ‚ÓÓÚ ÓÚÌÓÒ. ÓÒ‚Â˘ÂÌËˇ";
+        QuickHelpText[ polish ] = "OdwrÛÊ normalne";
+        QuickHelpText[ japanese ] = "ñ@ê¸Çãtì]Ç≥ÇπÇÈ";
+        QuickHelpText[ chinese_simplified ] = "∑¥÷√∑®œﬂ";
+        QuickHelpText[ chinese_traditional ] = "§œ∏m™kΩu";
+        QuickHelpText[ arabic ] = "⁄ﬂ” «·ŒÿÊÿ «·„ ⁄«„œ…";
+        QuickHelpText[ dutch ] = "Normalen omkeren";
+        QuickHelpText[ chinese_simplified ] = "∑¥÷√∑®œﬂ";
+        QuickHelpText[ greek ] = "¡ÌÙÈÛÙÒÔˆﬁ Í·Ù·ÍÔÒ˝ˆ˘Ì ÂÈˆ‹ÌÂÈ·Ú!";
+        QuickHelpText[ korean ] = "Invert Normals";
+    };
+    ImageButton BTN_TWO_SIDED_LIGHTING
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 + BUTTON_WIDTH * 2 , GROUP_PREV_Y + 28 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "2-seitige Beleuchtung" ;
+        QuickHelpText [ ENGLISH ] = "2 sided lighting" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "lght2sid.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "IluminaÁ„o de ambos os lados" ;
+        QuickHelpText [ english_us ] = "Double-Sided Illumination" ;
+        QuickHelpText [ portuguese_brazilian ] = "2-seitige Beleuchtung" ;
+        QuickHelpText [ swedish ] = "2-sidig belysning" ;
+        QuickHelpText [ danish ] = "2-sidet belysning" ;
+        QuickHelpText [ italian ] = "Illuminazione su due lati" ;
+        QuickHelpText [ spanish ] = "IluminaciÛn en dos lados" ;
+        QuickHelpText [ french ] = "Eclairage des deux cÙtÈs" ;
+        QuickHelpText [ dutch ] = "Dubbelzijdige belichting" ;
+    QuickHelpText[ russian ] = "ƒ‚ÛÒÚÓÓÌÌÂÂ ÓÒ‚Â˘ÂÌËÂ";
+        QuickHelpText[ polish ] = "Dwustronne oúwietlenie";
+        QuickHelpText[ japanese ] = "2ñ Ç©ÇÁÇÃè∆ñæ";
+        QuickHelpText[ chinese_simplified ] = "¡Ω√Ê’’√˜";
+        QuickHelpText[ chinese_traditional ] = "¬˘≠±∑”©˙";
+        QuickHelpText[ arabic ] = "≈÷«¡… „“œÊÃ… «·ÃÊ«‰»";
+        QuickHelpText[ dutch ] = "Dubbelzijdige belichting";
+        QuickHelpText[ chinese_simplified ] = "¡Ω√Ê’’√˜";
+        QuickHelpText[ greek ] = "ƒﬂÎÂıÒÔÚ ˆ˘ÙÈÛÏ¸Ú";
+        QuickHelpText[ korean ] = "Double-Sided Illumination";
+    };
+    GroupBox GRP_NORMALS
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_PREV_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - ( WIDTH - GROUP_PREV_X ) - BORDER - 3 , 44 ) ;
+        Text = "Normalen" ;
+        Text [ ENGLISH ] = "Normals" ;
+        Text [ english_us ] = "Normals" ;
+        Text [ portuguese_brazilian ] = "Normalen" ;
+        Text [ swedish ] = "Normaler" ;
+        Text [ danish ] = "Normaler" ;
+        Text [ italian ] = "Normali" ;
+        Text [ spanish ] = "Normales" ;
+        Text [ french ] = "Verticales" ;
+        Text [ dutch ] = "Normale" ;
+        Text [ portuguese ] = "Verticais" ;
+        Text[ chinese_simplified ] = "∑®œﬂ";
+        Text[ russian ] = "Œ·˚˜Ì˚Â";
+        Text[ polish ] = "Normalne";
+        Text[ japanese ] = "ñ@ê¸";
+        Text[ chinese_traditional ] = "™kΩu";
+        Text[ arabic ] = "„⁄«ÌÌ—";
+        Text[ dutch ] = "Normale";
+        Text[ chinese_simplified ] = "∑®œﬂ";
+        Text[ greek ] = " ·Ù·Í¸ÒıˆÔÚ ÂÈˆ‹ÌÂÈ·Ú";
+        Text[ korean ] = "±‚∫ª";
+        Text[ turkish ] = "Normaller";
+    };
+    ImageButton BTN_DOUBLE_SIDED
+    {
+        Pos = MAP_APPFONT ( BORDER , HEIGHT - BUTTON_HEIGHT * 2 - BORDER - 3 ) ;
+        Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
+        QuickHelpText = "Doppelseitig" ;
+        QuickHelpText [ ENGLISH ] = "Double sided" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "doublesi.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Ambos os lados" ;
+        QuickHelpText [ english_us ] = "Double-Sided" ;
+        QuickHelpText [ portuguese_brazilian ] = "Doppelseitig" ;
+        QuickHelpText [ swedish ] = "Dubbelsidig" ;
+        QuickHelpText [ danish ] = "Dobbeltsidet" ;
+        QuickHelpText [ italian ] = "Su entrambi i lati" ;
+        QuickHelpText [ spanish ] = "Doble p·gina" ;
+        QuickHelpText [ french ] = "Double-face" ;
+        QuickHelpText [ dutch ] = "Dubbelzijdig" ;
+    QuickHelpText[ russian ] = "— ‰‚Ûı ÒÚÓÓÌ";
+        QuickHelpText[ polish ] = "Dwustronny";
+        QuickHelpText[ japanese ] = "óºñ ";
+        QuickHelpText[ chinese_simplified ] = "À´√Ê";
+        QuickHelpText[ chinese_traditional ] = "¬˘≠±";
+        QuickHelpText[ arabic ] = "ﬂ·« «·ÊÃÂÌ‰";
+        QuickHelpText[ dutch ] = "Dubbelzijdig";
+        QuickHelpText[ chinese_simplified ] = "À´√Ê";
+        QuickHelpText[ greek ] = "ƒÈÎÔÛ›ÎÈ‰·";
+        QuickHelpText[ korean ] = "Double-Sided";
+    };
+     // Darstellung
+    FixedText FT_SHADEMODE
+    {
+        Pos = MAP_APPFONT ( 11 , 32 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ swedish ] = "L‰ge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ russian ] = "–ÂÊËÏ";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "”∞ƒﬁ";
+        Text[ chinese_traditional ] = "º“¶°";
+        Text[ arabic ] = "«·Ê÷⁄";
+        Text[ dutch ] = "Modus";
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "∏µÂ";
+        Text[ turkish ] = "Kip";
+    };
+    ListBox LB_SHADEMODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 74 , 30 ) ;
+        Size = MAP_APPFONT ( 75 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "plano" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Flad" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Flat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Plano" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Plat" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Vlak" ; > ;
+            < "Phong" ; > ;
+            < "Gouraud" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "∆Ω–Œ" ; > ;
+        < "∑“ œ(Phong)" ; > ;
+        < "π˘ œ(Gouraud)" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "œÎÓÒÍÓÒÚÌÓÈ" ; > ;
+        < "‘ÓÌ„" ; > ;
+        < "√ÛÓ" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "P≥aski" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ïΩñ " ; > ;
+        < "Ã´›(Phong)" ; > ;
+        < "ºﬁ€∞(Gouraud)" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "•≠ßŒ" ; > ;
+        < "™‚§Û" ; > ;
+        < "≥¢§Û" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "„”ÿÕ" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Vlak" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "∆Ω–Œ" ; > ;
+        < "∑“ œ(Phong)" ; > ;
+        < "π˘ œ(Gouraud)" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "≈ﬂÂ‰Ô" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "∆Ú∏È" ; > ;
+        < "Phong" ; > ;
+        < "∞ÌøÏ∑ØµÂ(Gouraud)" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "Flat" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Flat" ; > ;
+        < "Phong" ; > ;
+        < "Gouraud" ; > ;
+    };
+    };
+    ImageButton BTN_SHADOW_3D
+    {
+        Pos = MAP_APPFONT ( 14 , 52 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "3D-Schatten ein/-ausschalten" ;
+        QuickHelpText [ ENGLISH ] = "3D shadow" ;
+        TabStop = TRUE ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "shadow3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Activa/Desactiva Sombreado 3-D" ;
+        QuickHelpText [ english_us ] = "3D Shadowing On/Off" ;
+        QuickHelpText [ portuguese_brazilian ] = "3D-Schatten ein/-ausschalten" ;
+        QuickHelpText [ swedish ] = "3D-skugga pÂ/av" ;
+        QuickHelpText [ danish ] = "Aktiver/deaktiver 3D-skygge" ;
+        QuickHelpText [ italian ] = "Mostra/nascondi ombre 3D" ;
+        QuickHelpText [ spanish ] = "Activar/desactivar sombra tridimensional" ;
+        QuickHelpText [ french ] = "Activer/dÈsactiver l'ombre 3 D" ;
+        QuickHelpText [ dutch ] = "3D-schaduw in/-uitschakelen" ;
+    QuickHelpText[ russian ] = "¬ÍÎ./‚˚ÍÎ. ÚÂÌ¸ 3-Ã";
+        QuickHelpText[ polish ] = "W≥πcz/Wy≥πcz cieÒ 3-W";
+        QuickHelpText[ japanese ] = "3DÇÃâeÅ@µ›/µÃ";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ/“˛»Î 3 Œ¨“ı”∞";
+        QuickHelpText[ chinese_traditional ] = "≈„•‹/¡Ù§J 3 ∫˚≥±ºv";
+        QuickHelpText[ arabic ] = "≈ŸÂ«—/≈Œ›«¡ «·Ÿ· À·«ÀÌ «·√»⁄«œ";
+        QuickHelpText[ dutch ] = "3D-schaduw in/-uitschakelen";
+        QuickHelpText[ chinese_simplified ] = "œ‘ æ/“˛»Î 3 Œ¨“ı”∞";
+        QuickHelpText[ greek ] = "”ÍÈ· 3ƒ Õ·È/º˜È";
+        QuickHelpText[ korean ] = "3D Shadowing On/Off";
+    };
+    FixedText FT_SLANT
+    {
+        Pos = MAP_APPFONT ( 31 , 54 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
+        /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
+        Text = "Papierneigung" ;
+        Text [ ENGLISH ] = "Paper slant" ;
+        Text [ english_us ] = "Surface angle" ;
+        Text [ portuguese_brazilian ] = "Neigung" ;
+        Text [ swedish ] = "Papperslutning" ;
+        Text [ danish ] = "PapirhÊldning" ;
+        Text [ italian ] = "Inclinazione carta" ;
+        Text [ spanish ] = "¡ngulo superficie" ;
+        Text [ french ] = "Inclinaison papier" ;
+        Text [ dutch ] = "Helling" ;
+        Text [ portuguese ] = "¬ngulo do papel" ;
+        Text[ chinese_simplified ] = "∆Ω√Ê«„–±";
+        Text[ russian ] = "Õ‡ÍÎÓÌ ·ÛÏ‡„Ë";
+        Text[ polish ] = "Pochyl. papieru";
+        Text[ japanese ] = "ópéÜÇÃåXÇ´";
+        Text[ chinese_traditional ] = "•≠≠±∂…±◊";
+        Text[ arabic ] = "„Ì· «·Ê—ﬁ";
+        Text[ dutch ] = "Helling";
+        Text[ chinese_simplified ] = "∆Ω√Ê«„–±";
+        Text[ greek ] = " ÎﬂÛÁ ˜·ÒÙÈÔ˝";
+        Text[ korean ] = "øÎ¡ˆ¿« ±‚øÔ±‚";
+        Text[ turkish ] = "Y¸zey aÁ˝s˝";
+    };
+    MetricField MTR_SLANT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 96 , 52 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 5 ;
+        Maximum = 90 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " ∞" ;
+        Last = 90 ;
+    };
+    GroupBox GRP_SHADOW
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , 43 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 25 ) ;
+        Text = "Schatten" ;
+        Text [ ENGLISH ] = "Shadow" ;
+        Text [ english_us ] = "Shadow" ;
+        Text [ portuguese_brazilian ] = "Schatten" ;
+        Text [ swedish ] = "Skugga" ;
+        Text [ danish ] = "Skygge" ;
+        Text [ italian ] = "Ombre" ;
+        Text [ spanish ] = "Sombra" ;
+        Text [ french ] = "Ombre" ;
+        Text [ dutch ] = "Schaduw" ;
+        Text [ portuguese ] = "Sombreado" ;
+        Text[ chinese_simplified ] = "“ı”∞";
+        Text[ russian ] = "“ÂÌ¸";
+        Text[ polish ] = "CieÒ";
+        Text[ japanese ] = "âe";
+        Text[ chinese_traditional ] = "≥±ºv";
+        Text[ arabic ] = "«·Ÿ·";
+        Text[ dutch ] = "Schaduw";
+        Text[ chinese_simplified ] = "“ı”∞";
+        Text[ greek ] = "”ÍÈ‹";
+        Text[ korean ] = "¿Ωøµ";
+        Text[ turkish ] = "Gˆlge";
+    };
+    FixedText FT_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 13 , 81 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Entfernung" ;
+        Text [ ENGLISH ] = "Distance" ;
+        Text [ english_us ] = "Distance" ;
+        Text [ portuguese_brazilian ] = "Entfernung" ;
+        Text [ swedish ] = "AvstÂnd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ italian ] = "Distanza" ;
+        Text [ spanish ] = "Distancia" ;
+        Text [ french ] = "Distance" ;
+        Text [ dutch ] = "Afstand" ;
+        Text [ portuguese ] = "Dist‚ncia" ;
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ russian ] = "–‡ÒÒÚÓˇÌËÂ";
+        Text[ polish ] = "Odleg≥oúÊ";
+        Text[ japanese ] = "ä‘äu";
+        Text[ chinese_traditional ] = "∂°πj";
+        Text[ arabic ] = "«· »«⁄œ";
+        Text[ dutch ] = "Afstand";
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ greek ] = "¡¸ÛÙ·ÛÁ";
+        Text[ korean ] = "∞≈∏Æ";
+        Text[ turkish ] = "Uzakl˝k";
+    };
+    MetricField MTR_DISTANCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 96 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_MM ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 1000000 ;
+        Last = 1000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    FixedText FT_FOCAL_LENGTH
+    {
+        Pos = MAP_APPFONT ( 13 , 95 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Brennweite" ;
+        Text [ ENGLISH ] = "Focal length" ;
+        Text [ english_us ] = "Focal length" ;
+        Text [ portuguese_brazilian ] = "Brennweite" ;
+        Text [ swedish ] = "Br‰nnvidd" ;
+        Text [ danish ] = "BrÊndvidde" ;
+        Text [ italian ] = "Ampiezza focale" ;
+        Text [ spanish ] = "Distancia focal" ;
+        Text [ french ] = "Focale" ;
+        Text [ dutch ] = "Focus" ;
+        Text [ portuguese ] = "Dist‚ncia focal" ;
+        Text[ chinese_simplified ] = "Ωπæ‡";
+        Text[ russian ] = "‘ÓÍÛÒÌÓÂ ‡ÒÒÚÓˇÌËÂ";
+        Text[ polish ] = "Ogniskowa";
+        Text[ japanese ] = "è≈ì_ãóó£";
+        Text[ chinese_traditional ] = "µJ∂Z";
+        Text[ arabic ] = "«·ÿÊ· «·»ƒ—Ì";
+        Text[ dutch ] = "Focus";
+        Text[ chinese_simplified ] = "Ωπæ‡";
+        Text[ greek ] = "≈ÛÙÈ·Íﬁ ·¸ÛÙ·ÛÁ";
+        Text[ korean ] = "√ ¡° ∞≈∏Æ";
+        Text[ turkish ] = "Odak uzakl˝˝";
+    };
+    MetricField MTR_FOCAL_LENGTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 96 , 93 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_MM ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 1000000 ;
+        Last = 1000000 ;
+        DecimalDigits = 2 ;
+        SpinSize = 100 ;
+    };
+    GroupBox GRP_CAMERA
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , 70 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 39 ) ;
+        Text = "Kamera" ;
+        Text [ ENGLISH ] = "Camera" ;
+        Text [ english_us ] = "Camera" ;
+        Text [ portuguese_brazilian ] = "Kamera" ;
+        Text [ swedish ] = "Kamera" ;
+        Text [ danish ] = "Kamera" ;
+        Text [ italian ] = "Punto di osservazione" ;
+        Text [ spanish ] = "C·mara" ;
+        Text [ french ] = "CamÈra" ;
+        Text [ dutch ] = "Camera" ;
+        Text [ portuguese ] = "C‚mera" ;
+        Text[ chinese_simplified ] = "’’œ‡ª˙";
+        Text[ russian ] = "‘ÓÚÓÍ‡ÏÂ‡";
+        Text[ polish ] = "Kamera";
+        Text[ japanese ] = "∂“◊";
+        Text[ chinese_traditional ] = "∑”¨€æ˜";
+        Text[ arabic ] = "«·ﬂ«„Ì—«";
+        Text[ dutch ] = "Camera";
+        Text[ chinese_simplified ] = "’’œ‡ª˙";
+        Text[ greek ] = " ‹ÏÂÒ·";
+        Text[ korean ] = "ƒ´∏ﬁ∂Û";
+        Text[ turkish ] = "Kamera";
+    };
+    GroupBox GRP_REPRESENTATION
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - 2 * BORDER , GROUP_HEIGHT ) ;
+        Text = "Darstellung" ;
+        Text [ ENGLISH ] = "Representation" ;
+        Text [ english_us ] = "Shading" ;
+        Text [ portuguese_brazilian ] = "Darstellung" ;
+        Text [ swedish ] = "Visning" ;
+        Text [ danish ] = "Visning" ;
+        Text [ italian ] = "Rappresentazione" ;
+        Text [ spanish ] = "RepresentaciÛn" ;
+        Text [ french ] = "Affichage" ;
+        Text [ dutch ] = "Weergave" ;
+        Text [ portuguese ] = "Destacar" ;
+        Text[ chinese_simplified ] = "œ‘ æ";
+        Text[ russian ] = "ƒÂÏÓÌÒÚ‡ˆËˇ";
+        Text[ polish ] = "Przedstawienie";
+        Text[ japanese ] = "ï\\é¶";
+        Text[ chinese_traditional ] = "≈„•‹";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ dutch ] = "Weergave";
+        Text[ chinese_simplified ] = "œ‘ æ";
+        Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ";
+        Text[ korean ] = "∏Ìæœ";
+        Text[ turkish ] = "Gˆr¸nt¸";
+    };
+     // Beleuchtung
+    ImageButton BTN_LIGHT_1
+    {
+        Pos = MAP_APPFONT ( 13 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 1" ;
+        QuickHelpText [ ENGLISH ] = "Light source 1" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 1" ;
+        QuickHelpText [ english_us ] = "Light source 1" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 1" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 1" ;
+        QuickHelpText [ danish ] = "Lyskilde 1" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 1" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 1" ;
+        QuickHelpText [ french ] = "Source de lumiËre 1" ;
+        QuickHelpText [ dutch ] = "Lichtbron 1" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 1";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 1";
+        QuickHelpText[ japanese ] = "åıåπ 1";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 1";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 1";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 1";
+        QuickHelpText[ dutch ] = "Lichtbron 1";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 1";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 1";
+        QuickHelpText[ korean ] = "Light source 1";
+    };
+    ImageButton BTN_LIGHT_2
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH + 1 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 2" ;
+        QuickHelpText [ ENGLISH ] = "Light source 2" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 2" ;
+        QuickHelpText [ english_us ] = "Light source 2" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 2" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 2" ;
+        QuickHelpText [ danish ] = "Lyskilde 2" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 2" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 2" ;
+        QuickHelpText [ french ] = "Source de lumiËre 2" ;
+        QuickHelpText [ dutch ] = "Lichtbron 2" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 2";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 2";
+        QuickHelpText[ japanese ] = "åıåπ 2";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 2";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 2";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 2";
+        QuickHelpText[ dutch ] = "Lichtbron 2";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 2";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 2";
+        QuickHelpText[ korean ] = "Light source 2";
+    };
+    ImageButton BTN_LIGHT_3
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 2 + 2 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 3" ;
+        QuickHelpText [ ENGLISH ] = "Light source 3" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 3" ;
+        QuickHelpText [ english_us ] = "Light source 3" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 3" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 3" ;
+        QuickHelpText [ danish ] = "Lyskilde 3" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 3" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 3" ;
+        QuickHelpText [ french ] = "Source de lumiËre 3" ;
+        QuickHelpText [ dutch ] = "Lichtbron 3" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 3";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 3";
+        QuickHelpText[ japanese ] = "åıåπ 3";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 3";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 3";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 3";
+        QuickHelpText[ dutch ] = "Lichtbron 3";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 3";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 3";
+        QuickHelpText[ korean ] = "Light source 3";
+    };
+    ImageButton BTN_LIGHT_4
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 3 + 3 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 4" ;
+        QuickHelpText [ ENGLISH ] = "Light source 4" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 4" ;
+        QuickHelpText [ english_us ] = "Light source 4" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 4" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 4" ;
+        QuickHelpText [ danish ] = "Lyskilde 4" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 4" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 4" ;
+        QuickHelpText [ french ] = "Source de lumiËre 4" ;
+        QuickHelpText [ dutch ] = "Lichtbron 4" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 4";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 4";
+        QuickHelpText[ japanese ] = "åıåπ 4";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 4";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 4";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 4";
+        QuickHelpText[ dutch ] = "Lichtbron 4";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 4";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 4";
+        QuickHelpText[ korean ] = "Light source 4";
+    };
+    ImageButton BTN_LIGHT_5
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 4 + 4 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 5" ;
+        QuickHelpText [ ENGLISH ] = "Light source 5" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 5" ;
+        QuickHelpText [ english_us ] = "Light source 5" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 5" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 5" ;
+        QuickHelpText [ danish ] = "Lyskilde 5" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 5" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 5" ;
+        QuickHelpText [ french ] = "Source de lumiËre 5" ;
+        QuickHelpText [ dutch ] = "Lichtbron 5" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 5";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 5";
+        QuickHelpText[ japanese ] = "åıåπ 5";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 5";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 5";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 5";
+        QuickHelpText[ dutch ] = "Lichtbron 5";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 5";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 5";
+        QuickHelpText[ korean ] = "Light source 5";
+    };
+    ImageButton BTN_LIGHT_6
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 5 + 5 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 6" ;
+        QuickHelpText [ ENGLISH ] = "Light source 6" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 6" ;
+        QuickHelpText [ english_us ] = "Light source 6" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 6" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 6" ;
+        QuickHelpText [ danish ] = "Lyskilde 6" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 6" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 6" ;
+        QuickHelpText [ french ] = "Source de lumiËre 6" ;
+        QuickHelpText [ dutch ] = "Lichtbron 6" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 6";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 6";
+        QuickHelpText[ japanese ] = "åıåπ 6";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 6";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 6";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 6";
+        QuickHelpText[ dutch ] = "Lichtbron 6";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 6";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 6";
+        QuickHelpText[ korean ] = "Light source 6";
+    };
+    ImageButton BTN_LIGHT_7
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 6 + 6 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 7" ;
+        QuickHelpText [ ENGLISH ] = "Light source 7" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 7" ;
+        QuickHelpText [ english_us ] = "Light source 7" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 7" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 7" ;
+        QuickHelpText [ danish ] = "Lyskilde 7" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 7" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 7" ;
+        QuickHelpText [ french ] = "Source de lumiËre 7" ;
+        QuickHelpText [ dutch ] = "Lichtbron 7" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 7";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 7";
+        QuickHelpText[ japanese ] = "åıåπ 7";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 7";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 7";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 7";
+        QuickHelpText[ dutch ] = "Lichtbron 7";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 7";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 7";
+        QuickHelpText[ korean ] = "Light source 7";
+    };
+    ImageButton BTN_LIGHT_8
+    {
+        Pos = MAP_APPFONT ( 13 + BUTTON_WIDTH * 7 + 7 , 38 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Lichtquelle 8" ;
+        QuickHelpText [ ENGLISH ] = "Light source 8" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "light.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Fonte de luz 8" ;
+        QuickHelpText [ english_us ] = "Light source 8" ;
+        QuickHelpText [ portuguese_brazilian ] = "Lichtquelle 8" ;
+        QuickHelpText [ swedish ] = "Ljusk‰lla 8" ;
+        QuickHelpText [ danish ] = "Lyskilde 8" ;
+        QuickHelpText [ italian ] = "Sorgente luminosa 8" ;
+        QuickHelpText [ spanish ] = "Fuente de luz 8" ;
+        QuickHelpText [ french ] = "Source de lumiËre 8" ;
+        QuickHelpText [ dutch ] = "Lichtbron 8" ;
+    QuickHelpText[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡ 8";
+        QuickHelpText[ polish ] = "èrÛd≥o úwiat≥a 8";
+        QuickHelpText[ japanese ] = "åıåπ 8";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 8";
+        QuickHelpText[ chinese_traditional ] = "•˙∑Ω 8";
+        QuickHelpText[ arabic ] = "„’œ— «·÷Ê¡ 8";
+        QuickHelpText[ dutch ] = "Lichtbron 8";
+        QuickHelpText[ chinese_simplified ] = "π‚‘¥ 8";
+        QuickHelpText[ greek ] = "–Á„ﬁ ˆ˘ÙÈÛÏÔ˝ 8";
+        QuickHelpText[ korean ] = "Light source 8";
+    };
+    ListBox LB_LIGHT_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_5
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_6
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_7
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_LIGHT_8
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 54 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_LIGHT_COLOR
+    {
+        Pos = MAP_APPFONT ( 32 + BUTTON_WIDTH * 7 + 7 , 54 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ ENGLISH ] = "Chose color with color dialog" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Caixa de di·logo das cores" ;
+        QuickHelpText [ english_us ] = "Colors Dialog" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ swedish ] = "V‰lj f‰rg via f‰rgdialog" ;
+        QuickHelpText [ danish ] = "VÊlg farve via farvedialog" ;
+        QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores a travÈs del di·logo de colores" ;
+        QuickHelpText [ french ] = "SÈlectionner la couleur ‡ partir de la boÓte de dialogue de couleurs" ;
+        QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
+    QuickHelpText[ russian ] = "¬˚·‡Ú¸ ˆ‚ÂÚ ‚ ‰Ë‡ÎÓ„Â";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorÛw";
+        QuickHelpText[ japanese ] = "êFÇÃ¿ﬁ≤±€∏ﬁÇëIëÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "—’…´∂‘ª∞¿∏";
+        QuickHelpText[ chinese_traditional ] = "≥zπL√C¶‚§Ë∂ÙøÔæ‹√C¶‚";
+        QuickHelpText[ arabic ] = "«Œ Ì«— «··Ê‰ ⁄»— „—»⁄ ÕÊ«— «·√·Ê«‰";
+        QuickHelpText[ dutch ] = "Kleur via kleurdialoog kiezen";
+        QuickHelpText[ chinese_simplified ] = "—’…´∂‘ª∞¿∏";
+        QuickHelpText[ greek ] = "≈ÈÎÔ„ﬁ ˜Ò˛Ï·ÙÔÚ Ï›Û˘ ‰È·Î¸„Ôı ˜Ò˛Ï·ÙÔÚ";
+        QuickHelpText[ korean ] = "Colors Dialog";
+    };
+    GroupBox GRP_LIGHTSOURCE
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , 27 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 46 ) ;
+        Text = "Lichtquelle" ;
+        Text [ ENGLISH ] = "Lichtquelle" ;
+        Text [ portuguese ] = "Fonte de luz" ;
+        Text [ english_us ] = "Light source" ;
+        Text [ portuguese_brazilian ] = "Lichtquelle" ;
+        Text [ swedish ] = "Ljusk‰lla" ;
+        Text [ danish ] = "Lyskilde" ;
+        Text [ italian ] = "Sorgente luminosa" ;
+        Text [ spanish ] = "Fuente de luz" ;
+        Text [ french ] = "Source de lumiËre" ;
+        Text [ dutch ] = "Lichtbron" ;
+        Text[ chinese_simplified ] = "π‚‘¥";
+        Text[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡";
+        Text[ polish ] = "èrÛd≥o úwiat≥a";
+        Text[ japanese ] = "åıåπ";
+        Text[ chinese_traditional ] = "•˙∑Ω";
+        Text[ arabic ] = "„’œ— «·÷Ê¡";
+        Text[ dutch ] = "Lichtbron";
+        Text[ chinese_simplified ] = "π‚‘¥";
+        Text[ greek ] = "–ÒÔ›ÎÂıÛÁ ˆ˘Ù¸Ú";
+        Text[ korean ] = "±§ø¯";
+        Text[ turkish ] = "I˛˝k kayna˝";
+    };
+    ListBox LB_AMBIENTLIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 85 ) ;
+        Size = MAP_APPFONT ( 19 + 97 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_AMBIENT_COLOR
+    {
+        Pos = MAP_APPFONT ( 32 + BUTTON_WIDTH * 7 + 7 , 85 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ ENGLISH ] = "Chose color with color dialog" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Caixa de di·logo das cores" ;
+        QuickHelpText [ english_us ] = "Colors Dialog" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ swedish ] = "V‰lj f‰rg via f‰rgdialog" ;
+        QuickHelpText [ danish ] = "VÊlg farve via farvedialog" ;
+        QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores a travÈs del di·logo de colores" ;
+        QuickHelpText [ french ] = "SÈlectionner la couleur ‡ partir de la boÓte de dialogue de couleurs" ;
+        QuickHelpText [ dutch ] = "Kleur uit catalogus kiezen" ;
+    QuickHelpText[ russian ] = "ƒË‡ÎÓ„Ó‚ÓÂ ÓÍÌÓ ˆ‚ÂÚÓ‚";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorÛw";
+        QuickHelpText[ japanese ] = "êFÇÃ¿ﬁ≤±€∏ﬁÇ≈êFÇëIëÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ chinese_traditional ] = "≥zπL√C¶‚πÔ∏‹§Ë∂ÙøÔæ‹√C¶‚";
+        QuickHelpText[ arabic ] = "«Œ Ì«— «··Ê‰ ⁄»— ÕÊ«— «·√·Ê«‰";
+        QuickHelpText[ dutch ] = "Kleur uit catalogus kiezen";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ greek ] = "≈ÈÎÔ„ﬁ ˜Ò˛Ï·ÙÔÚ Ï›Û˘ ÙÔı ‰È·Î¸„Ôı ˜Ò˘Ï‹Ù˘Ì";
+        QuickHelpText[ korean ] = "Colors Dialog";
+    };
+    GroupBox GRP_AMBIENTLIGHT
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , 74 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 30 ) ;
+        Text = "Umgebungslicht" ;
+        Text [ ENGLISH ] = "Ambient light" ;
+        Text [ english_us ] = "Ambient light" ;
+        Text [ portuguese_brazilian ] = "Umgebungslicht" ;
+        Text [ swedish ] = "Omgivningsljus" ;
+        Text [ danish ] = "Omgivelseslys" ;
+        Text [ italian ] = "Luce ambientale" ;
+        Text [ spanish ] = "Luz ambiental" ;
+        Text [ french ] = "LuminiËre ambiante" ;
+        Text [ dutch ] = "Omgevingslicht" ;
+        Text [ portuguese ] = "Luz ambiente" ;
+        Text[ chinese_simplified ] = "÷‹Œßπ‚œﬂ";
+        Text[ russian ] = "ŒÍÛÊ‡˛˘ËÈ Ò‚ÂÚ";
+        Text[ polish ] = "åwiat≥o otaczajπce";
+        Text[ japanese ] = "é¸àÕÇÃñæÇÈÇ≥â¡å∏";
+        Text[ chinese_traditional ] = "∂g≥Ú•˙Ωu";
+        Text[ arabic ] = "·Ê‰ ≈÷«¡… «·»Ì∆… «·„ÕÌÿ…";
+        Text[ dutch ] = "Omgevingslicht";
+        Text[ chinese_simplified ] = "÷‹Œßπ‚œﬂ";
+        Text[ greek ] = "÷˘ÙÈÛÏ¸Ú ÂÒÈ‚‹ÎÎÔÌÙÔÚ";
+        Text[ korean ] = "¡÷∫Ø±§";
+        Text[ turkish ] = "Ortam ˝˛˝˝";
+    };
+    GroupBox GRP_LIGHT
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - 2 * BORDER , GROUP_HEIGHT ) ;
+        Text = "Beleuchtung" ;
+        Text [ ENGLISH ] = "Lighting" ;
+        Text [ english_us ] = "Illumination" ;
+        Text [ portuguese_brazilian ] = "Beleuchtung" ;
+        Text [ swedish ] = "Belysning" ;
+        Text [ danish ] = "Belysning" ;
+        Text [ italian ] = "Illuminazione" ;
+        Text [ spanish ] = "IluminaciÛn" ;
+        Text [ french ] = "…clairage" ;
+        Text [ dutch ] = "Belichting" ;
+        Text [ portuguese ] = "IluminaÁ„o" ;
+        Text[ chinese_simplified ] = "’’√˜";
+        Text[ russian ] = "ŒÒ‚Â˘ÂÌËÂ";
+        Text[ polish ] = "Oúwietlenie";
+        Text[ japanese ] = "è∆ÇËâfÇ¶";
+        Text[ chinese_traditional ] = "∑”©˙";
+        Text[ arabic ] = "«·≈÷«¡…";
+        Text[ dutch ] = "Belichting";
+        Text[ chinese_simplified ] = "’’√˜";
+        Text[ greek ] = "÷˘ÙÈÛÏ¸Ú";
+        Text[ korean ] = "¡∂∏Ì";
+        Text[ turkish ] = "I˛˝kland˝rma";
+    };
+    FixedText FT_LIGHT_X
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 10 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "X" ;
+    };
+    FixedText FT_LIGHT_Y
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 22 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Y" ;
+    };
+    FixedText FT_LIGHT_Z
+    {
+        Pos = MAP_APPFONT ( BORDER + 5 , GROUP_PREV_Y + 34 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Z" ;
+    };
+    GroupBox GRP_LIGHT_INFO
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_PREV_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - ( WIDTH - GROUP_PREV_X ) - BORDER - 3 , 46 ) ;
+        Text = "Lichtrichtung" ;
+        Text [ ENGLISH ] = "Light direction" ;
+        Text [ english_us ] = "Direction" ;
+        Text [ portuguese_brazilian ] = "Lichtrichtung" ;
+        Text [ swedish ] = "Ljusriktning" ;
+        Text [ danish ] = "Lysretning" ;
+        Text [ italian ] = "Direzione illuminazione" ;
+        Text [ spanish ] = "DirecciÛn de la luz" ;
+        Text [ french ] = "Direction" ;
+        Text [ dutch ] = "Lichtrichting" ;
+        Text [ portuguese ] = "DirecÁ„o da luz" ;
+        Text[ chinese_simplified ] = "π‚‘¥∑ΩœÚ";
+        Text[ russian ] = "Õ‡Ô‡‚ÎÂÌËÂ Ò‚ÂÚ‡";
+        Text[ polish ] = "Kierunek úwiat≥a";
+        Text[ japanese ] = "åıÇÃï˚å¸";
+        Text[ chinese_traditional ] = "•˙∑Ω§Ë¶V";
+        Text[ arabic ] = "« Ã«Â «·÷Ê¡";
+        Text[ dutch ] = "Lichtrichting";
+        Text[ chinese_simplified ] = "π‚‘¥∑ΩœÚ";
+        Text[ greek ] = " ·ÙÂ˝ËıÌÛÁ ˆ˘Ù¸Ú";
+        Text[ korean ] = "∫˚¿« πÊ«‚";
+        Text[ turkish ] = "I˛˝k yˆn¸";
+    };
+     // Texturen
+    FixedText FT_TEX_KIND
+    {
+        Pos = MAP_APPFONT ( 11 , 31 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Kind" ;
+        Text [ english_us ] = "Type" ;
+        Text [ portuguese_brazilian ] = "Art" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ danish ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ french ] = "Type" ;
+        Text [ dutch ] = "Type" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ";
+        Text[ chinese_traditional ] = "√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ dutch ] = "Type";
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ korean ] = "¡æ∑˘";
+        Text[ turkish ] = "T¸r";
+    };
+    ImageButton BTN_TEX_LUMINANCE
+    {
+        Pos = MAP_APPFONT ( 70 , 29 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Schwarzweiﬂ" ;
+        QuickHelpText [ ENGLISH ] = "Black & white" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "luminanc.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Preto & Branco" ;
+        QuickHelpText [ english_us ] = "Black & White" ;
+        QuickHelpText [ portuguese_brazilian ] = "Schwarzweiﬂ" ;
+        QuickHelpText [ swedish ] = "Svartvit" ;
+        QuickHelpText [ danish ] = "Sort-hvid" ;
+        QuickHelpText [ italian ] = "Bianco e nero" ;
+        QuickHelpText [ spanish ] = "Blanco y negro" ;
+        QuickHelpText [ french ] = "Noir et blanc" ;
+        QuickHelpText [ dutch ] = "Zwart-wit" ;
+    QuickHelpText[ russian ] = "◊ÂÌÓ-·ÂÎÓÂ";
+        QuickHelpText[ polish ] = "Czarno-bia≥y";
+        QuickHelpText[ japanese ] = "îíçï";
+        QuickHelpText[ chinese_simplified ] = "∫⁄∞◊";
+        QuickHelpText[ chinese_traditional ] = "∂¬•’";
+        QuickHelpText[ arabic ] = "√»Ì÷ Ê√”Êœ";
+        QuickHelpText[ dutch ] = "Zwart-wit";
+        QuickHelpText[ chinese_simplified ] = "∫⁄∞◊";
+        QuickHelpText[ greek ] = "¡ÛÒ¸Ï·ıÒÔ";
+        QuickHelpText[ korean ] = "Black & White";
+    };
+    ImageButton BTN_TEX_COLOR
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 29 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe" ;
+        QuickHelpText [ ENGLISH ] = "Color" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "color.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Cor" ;
+        QuickHelpText [ english_us ] = "Color" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ swedish ] = "F‰rg" ;
+        QuickHelpText [ danish ] = "Farve" ;
+        QuickHelpText [ italian ] = "Colore" ;
+        QuickHelpText [ spanish ] = "Color" ;
+        QuickHelpText [ french ] = "Couleur" ;
+        QuickHelpText [ dutch ] = "Kleur" ;
+    QuickHelpText[ russian ] = "÷‚ÂÚ";
+        QuickHelpText[ polish ] = "Kolor";
+        QuickHelpText[ japanese ] = "êF";
+        QuickHelpText[ chinese_simplified ] = "—’…´";
+        QuickHelpText[ chinese_traditional ] = "√C¶‚";
+        QuickHelpText[ arabic ] = "«··Ê‰";
+        QuickHelpText[ dutch ] = "Kleur";
+        QuickHelpText[ chinese_simplified ] = "—’…´";
+        QuickHelpText[ greek ] = "◊Ò˛Ï·";
+        QuickHelpText[ korean ] = "Color";
+    };
+    FixedText FT_TEX_MODE
+    {
+        Pos = MAP_APPFONT ( 11 , 47 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Modus" ;
+        Text [ ENGLISH ] = "Mode" ;
+        Text [ english_us ] = "Mode" ;
+        Text [ portuguese_brazilian ] = "Modus" ;
+        Text [ swedish ] = "L‰ge" ;
+        Text [ danish ] = "Modus" ;
+        Text [ italian ] = "Modo" ;
+        Text [ spanish ] = "Modo" ;
+        Text [ french ] = "Mode" ;
+        Text [ dutch ] = "Modus" ;
+        Text [ portuguese ] = "Modo" ;
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ russian ] = "–ÂÊËÏ";
+        Text[ polish ] = "Tryb";
+        Text[ japanese ] = "”∞ƒﬁ";
+        Text[ chinese_traditional ] = "º“¶°";
+        Text[ arabic ] = "«·Ê÷⁄";
+        Text[ dutch ] = "Modus";
+        Text[ chinese_simplified ] = "ƒ£ Ω";
+        Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "∏µÂ";
+        Text[ turkish ] = "Kip";
+    };
+    ImageButton BTN_TEX_REPLACE
+    {
+        Pos = MAP_APPFONT ( 70 , 45 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Nur Textur" ;
+        QuickHelpText [ ENGLISH ] = "Only Texture" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "replac3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "SÛ textura" ;
+        QuickHelpText [ english_us ] = "Only Texture" ;
+        QuickHelpText [ portuguese_brazilian ] = "Nur Textur" ;
+        QuickHelpText [ swedish ] = "Bara textur" ;
+        QuickHelpText [ danish ] = "Kun tekstur" ;
+        QuickHelpText [ italian ] = "Solo struttura" ;
+        QuickHelpText [ spanish ] = "SÛlo textura" ;
+        QuickHelpText [ french ] = "Uniquement la texture" ;
+        QuickHelpText [ dutch ] = "Alleen textuur" ;
+    QuickHelpText[ russian ] = "“ÓÎ¸ÍÓ ÚÂÍÒÚÛ‡";
+        QuickHelpText[ polish ] = "Tylko tekstura";
+        QuickHelpText[ japanese ] = "√∏Ω¡≠±ÇÃÇ›";
+        QuickHelpText[ chinese_simplified ] = "÷ª «Œ∆¿Ì";
+        QuickHelpText[ chinese_traditional ] = "•u¨OØæ≤z";
+        QuickHelpText[ arabic ] = "‰”ÌÃ ›ﬁÿ";
+        QuickHelpText[ dutch ] = "Alleen textuur";
+        QuickHelpText[ chinese_simplified ] = "÷ª «Œ∆¿Ì";
+        QuickHelpText[ greek ] = "Ã¸ÌÔ ıˆﬁ";
+        QuickHelpText[ korean ] = "Only Texture";
+    };
+    ImageButton BTN_TEX_MODULATE
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 45 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Textur und Schattierung" ;
+        QuickHelpText [ ENGLISH ] = "Texture and shading" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "modula3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Textura e sombreado" ;
+        QuickHelpText [ english_us ] = "Texture and Shading" ;
+        QuickHelpText [ portuguese_brazilian ] = "Textur und Schattierung" ;
+        QuickHelpText [ swedish ] = "Textur och skugga" ;
+        QuickHelpText [ danish ] = "Tekstur og nuance" ;
+        QuickHelpText [ italian ] = "Struttura e ombre" ;
+        QuickHelpText [ spanish ] = "Textura y sombras" ;
+        QuickHelpText [ french ] = "Texture et ombre" ;
+        QuickHelpText [ dutch ] = "Textuur en schaduw" ;
+    QuickHelpText[ russian ] = "“ÂÍÒÚÛ‡ Ë ÚÂÌ¸";
+        QuickHelpText[ polish ] = "Tekstura i cieniowanie";
+        QuickHelpText[ japanese ] = "√∏Ω¡≠±Ç∆âeïtÇ´";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì∫Õ“ı”∞";
+        QuickHelpText[ chinese_traditional ] = "Øæ≤z©M≥±ºv";
+        QuickHelpText[ arabic ] = "‰”ÌÃ Ê Ÿ·Ì·";
+        QuickHelpText[ dutch ] = "Textuur en schaduw";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì∫Õ“ı”∞";
+        QuickHelpText[ greek ] = "’ˆﬁ Í·È ÛÍﬂ·ÛÁ";
+        QuickHelpText[ korean ] = "Texture and Shading";
+    };
+    ImageButton BTN_TEX_BLEND
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 45 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Textur, Schattierung und Farbe" ;
+        QuickHelpText [ ENGLISH ] = "Texture, shadingand color" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "blend3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Textura, sombras e cor" ;
+        QuickHelpText [ english_us ] = "Texture, Shadow and Color" ;
+        QuickHelpText [ portuguese_brazilian ] = "Textur, Schattierung und Farbe" ;
+        QuickHelpText [ swedish ] = "Textur, skugga och f‰rg" ;
+        QuickHelpText [ danish ] = "Tekstur, nuance og farve" ;
+        QuickHelpText [ italian ] = "Struttura, ombra e colore" ;
+        QuickHelpText [ spanish ] = "Textura, sombra y color" ;
+        QuickHelpText [ french ] = "Texture, ombre et couleur" ;
+        QuickHelpText [ dutch ] = "Textuur, schaduw en kleur" ;
+    QuickHelpText[ russian ] = "“ÂÍÒÚÛ‡, ÚÂÌ¸, ˆ‚ÂÚ";
+        QuickHelpText[ polish ] = "Tekstura, Cieniowanie i Kolor";
+        QuickHelpText[ japanese ] = "√∏Ω¡≠±, âeïtÇ´ãyÇ—êF";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì£¨“ı”∞∫Õ—’…´";
+        QuickHelpText[ chinese_traditional ] = "Øæ≤z°A≥±ºv©M√C¶‚";
+        QuickHelpText[ arabic ] = "‰”ÌÃ°  Ÿ·Ì· Ê·Ê‰";
+        QuickHelpText[ dutch ] = "Textuur, schaduw en kleur";
+        QuickHelpText[ chinese_simplified ] = "Œ∆¿Ì£¨“ı”∞∫Õ—’…´";
+        QuickHelpText[ greek ] = "’ˆﬁ, ÛÍﬂ·ÛÁ Í·È ˜Ò˛ÏÏ·";
+        QuickHelpText[ korean ] = "Texture, Shadow and Color";
+    };
+    FixedText FT_TEX_PROJECTION_X
+    {
+        Pos = MAP_APPFONT ( 11 , 62 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Projektion X" ;
+        Text [ ENGLISH ] = "Projection X" ;
+        Text [ english_us ] = "Projection X" ;
+        Text [ portuguese_brazilian ] = "Projektion X" ;
+        Text [ swedish ] = "Projektion X" ;
+        Text [ danish ] = "Projektion X" ;
+        Text [ italian ] = "Proiezione X" ;
+        Text [ spanish ] = "ProyecciÛn X" ;
+        Text [ french ] = "Projection X" ;
+        Text [ dutch ] = "Projectie X" ;
+        Text [ portuguese ] = "ProjecÁ„o X" ;
+        Text[ chinese_simplified ] = "Õ∂”∞ X";
+        Text[ russian ] = "œÓÂÍˆËˇ X";
+        Text[ polish ] = "Projekcja X";
+        Text[ japanese ] = "Ãﬂ€ºﬁ™∏ƒX";
+        Text[ chinese_traditional ] = "ßÎºv X";
+        Text[ arabic ] = "«·„”ﬁÿ ”";
+        Text[ dutch ] = "Projectie X";
+        Text[ chinese_simplified ] = "Õ∂”∞ X";
+        Text[ greek ] = "–ÒÔ‚ÔÎﬁ X";
+        Text[ korean ] = "«¡∑Œ¡ßº« X";
+        Text[ turkish ] = "›zd¸˛¸m X";
+    };
+    ImageButton BTN_TEX_OBJECT_X
+    {
+        Pos = MAP_APPFONT ( 70 , 60 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Objektspezifisch" ;
+        QuickHelpText [ ENGLISH ] = "object specific" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "objspc3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "EspecÌfico do objecto" ;
+        QuickHelpText [ english_us ] = "Object-Specific" ;
+        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ swedish ] = "Objektspecifik" ;
+        QuickHelpText [ danish ] = "Objektspecifik" ;
+        QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
+        QuickHelpText [ spanish ] = "EspecÌfico del objeto" ;
+        QuickHelpText [ french ] = "SpÈcifique ‡ l'objet" ;
+        QuickHelpText [ dutch ] = "Passend bij object" ;
+    QuickHelpText[ russian ] = "¬ Á‡‚ËÒËÏÓÒÚË ÓÚ Ó·˙ÂÍÚ‡";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ japanese ] = "µºﬁ≠Õﬁ∏ƒÇÃì¡éÍê´";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ chinese_traditional ] = "ØSÆÌ™´•Û";
+        QuickHelpText[ arabic ] = "Œ«’ »«·ﬂ«∆‰";
+        QuickHelpText[ dutch ] = "Passend bij object";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ greek ] = "”˜ÂÙÈÍ‹ ÏÂ ÙÔ ·ÌÙÈÍÂﬂÏÂÌÔ";
+        QuickHelpText[ korean ] = "Object-Specific";
+    };
+    ImageButton BTN_TEX_PARALLEL_X
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 60 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Parallel" ;
+        QuickHelpText [ ENGLISH ] = "Parallel" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "parallel.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Paralelo" ;
+        QuickHelpText [ english_us ] = "Parallel" ;
+        QuickHelpText [ portuguese_brazilian ] = "Parallel" ;
+        QuickHelpText [ swedish ] = "Parallell" ;
+        QuickHelpText [ danish ] = "Parallel" ;
+        QuickHelpText [ italian ] = "Parallelo" ;
+        QuickHelpText [ spanish ] = "Paralelo" ;
+        QuickHelpText [ french ] = "ParallËle" ;
+        QuickHelpText [ dutch ] = "Parallel" ;
+    QuickHelpText[ russian ] = "œ‡‡ÎÎÂÎ¸ÌÓ";
+        QuickHelpText[ polish ] = "RÛwnolegle";
+        QuickHelpText[ japanese ] = "ïΩçs";
+        QuickHelpText[ chinese_simplified ] = "∆Ω––";
+        QuickHelpText[ chinese_traditional ] = "•≠¶Ê";
+        QuickHelpText[ arabic ] = "„Ê«“Ú";
+        QuickHelpText[ dutch ] = "Parallel";
+        QuickHelpText[ chinese_simplified ] = "∆Ω––";
+        QuickHelpText[ greek ] = "–·Ò‹ÎÎÁÎ·";
+        QuickHelpText[ korean ] = "Parallel";
+    };
+    ImageButton BTN_TEX_CIRCLE_X
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 60 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Kreisfˆrmig" ;
+        QuickHelpText [ ENGLISH ] = "circular" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Circular" ;
+        QuickHelpText [ english_us ] = "Circular" ;
+        QuickHelpText [ portuguese_brazilian ] = "Kreisfˆrmig" ;
+        QuickHelpText [ swedish ] = "Cirkelformad" ;
+        QuickHelpText [ danish ] = "Cirkelformet" ;
+        QuickHelpText [ italian ] = "Circolare" ;
+        QuickHelpText [ spanish ] = "Circular" ;
+        QuickHelpText [ french ] = "Circulaire" ;
+        QuickHelpText [ dutch ] = "Cirkelvormig" ;
+    QuickHelpText[ russian ] = " Û„ÓÓ·‡ÁÌ˚È";
+        QuickHelpText[ polish ] = "W kszta≥cie ko≥a";
+        QuickHelpText[ japanese ] = "â~å`èÛ";
+        QuickHelpText[ chinese_simplified ] = "‘≤–Œ";
+        QuickHelpText[ chinese_traditional ] = "∂ÍßŒ";
+        QuickHelpText[ arabic ] = "œ«∆—Ì";
+        QuickHelpText[ dutch ] = "Cirkelvormig";
+        QuickHelpText[ chinese_simplified ] = "‘≤–Œ";
+        QuickHelpText[ greek ] = " ıÍÎÈÍ‹";
+        QuickHelpText[ korean ] = "Circular";
+    };
+    FixedText FT_TEX_PROJECTION_Y
+    {
+        Pos = MAP_APPFONT ( 11 , 77 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Projektion Y" ;
+        Text [ ENGLISH ] = "Projection Y" ;
+        Text [ english_us ] = "Projection Y" ;
+        Text [ portuguese_brazilian ] = "Projektion Y" ;
+        Text [ swedish ] = "Projektion Y" ;
+        Text [ danish ] = "Projektion Y" ;
+        Text [ italian ] = "Proiezione Y" ;
+        Text [ spanish ] = "ProyecciÛn Y" ;
+        Text [ french ] = "Projection Y" ;
+        Text [ dutch ] = "Projectie Y" ;
+        Text [ portuguese ] = "ProjecÁ„o Y" ;
+        Text[ chinese_simplified ] = "Õ∂”∞ Y";
+        Text[ russian ] = "œÓÂÍˆËˇ Y";
+        Text[ polish ] = "Projekcja Y";
+        Text[ japanese ] = "Ãﬂ€ºﬁ™∏ƒY";
+        Text[ chinese_traditional ] = "ßÎºv Y";
+        Text[ arabic ] = "«·„”ﬁÿ ’";
+        Text[ dutch ] = "Projectie Y";
+        Text[ chinese_simplified ] = "Õ∂”∞ Y";
+        Text[ greek ] = "–ÒÔ‚ÔÎﬁ Y";
+        Text[ korean ] = "«¡∑Œ¡ßº« Y";
+        Text[ turkish ] = "›zd¸˛¸m Y";
+    };
+    ImageButton BTN_TEX_OBJECT_Y
+    {
+        Pos = MAP_APPFONT ( 70 , 75 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Objektspezifisch" ;
+        QuickHelpText [ ENGLISH ] = "Object specific" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "objspc3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "EspecÌfico do objecto" ;
+        QuickHelpText [ english_us ] = "Object-Specific" ;
+        QuickHelpText [ portuguese_brazilian ] = "Objektspezifisch" ;
+        QuickHelpText [ swedish ] = "Objektspecifik" ;
+        QuickHelpText [ danish ] = "Objektspecifik" ;
+        QuickHelpText [ italian ] = "Specifico per l'oggetto" ;
+        QuickHelpText [ spanish ] = "EspecÌfico del objeto" ;
+        QuickHelpText [ french ] = "SpÈcifique ‡ l'objet" ;
+        QuickHelpText [ dutch ] = "Passend bij object" ;
+    QuickHelpText[ russian ] = "¬ Á‡‚ËÒËÏÓÒÚË ÓÚ Ó·˙ÂÍÚ‡";
+        QuickHelpText[ polish ] = "Specyficzny dla obiektu";
+        QuickHelpText[ japanese ] = "µÃﬁºﬁ≠∏ƒÇÃì¡éÍê´";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ chinese_traditional ] = "ØSÆÌ™´•Û";
+        QuickHelpText[ arabic ] = "Œ«’ »«·ﬂ«∆‰";
+        QuickHelpText[ dutch ] = "Passend bij object";
+        QuickHelpText[ chinese_simplified ] = "Ãÿ ‚∂‘œÛ";
+        QuickHelpText[ greek ] = "”˜ÂÙÈÍ‹ ÏÂ ÙÔ ·ÌÙÈÍÂﬂÏÂÌÔ";
+        QuickHelpText[ korean ] = "Object-Specific";
+    };
+    ImageButton BTN_TEX_PARALLEL_Y
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH , 75 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Parallel" ;
+        QuickHelpText [ ENGLISH ] = "Parallel" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "parallel.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Paralelo" ;
+        QuickHelpText [ english_us ] = "Parallel" ;
+        QuickHelpText [ portuguese_brazilian ] = "Parallel" ;
+        QuickHelpText [ swedish ] = "Parallell" ;
+        QuickHelpText [ danish ] = "Parallel" ;
+        QuickHelpText [ italian ] = "Parallelo" ;
+        QuickHelpText [ spanish ] = "Paralelo" ;
+        QuickHelpText [ french ] = "ParallËle" ;
+        QuickHelpText [ dutch ] = "Parallel" ;
+    QuickHelpText[ russian ] = "œ‡‡ÎÎÂÎ¸ÌÓ";
+        QuickHelpText[ polish ] = "RÛwnolegle";
+        QuickHelpText[ japanese ] = "ïΩçs";
+        QuickHelpText[ chinese_simplified ] = "∆Ω––";
+        QuickHelpText[ chinese_traditional ] = "•≠¶Ê";
+        QuickHelpText[ arabic ] = "„Ê«“Ú";
+        QuickHelpText[ dutch ] = "Parallel";
+        QuickHelpText[ chinese_simplified ] = "∆Ω––";
+        QuickHelpText[ greek ] = "–·Ò‹ÎÎÁÎ·";
+        QuickHelpText[ korean ] = "Parallel";
+    };
+    ImageButton BTN_TEX_CIRCLE_Y
+    {
+        Pos = MAP_APPFONT ( 70 + BUTTON_WIDTH * 2 , 75 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Kreisfˆrmig" ;
+        QuickHelpText [ ENGLISH ] = "Circular" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "sphere3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Circular" ;
+        QuickHelpText [ english_us ] = "Circular" ;
+        QuickHelpText [ portuguese_brazilian ] = "Kreisfˆrmig" ;
+        QuickHelpText [ swedish ] = "Cirkelformad" ;
+        QuickHelpText [ danish ] = "Cirkelformet" ;
+        QuickHelpText [ italian ] = "Circolare" ;
+        QuickHelpText [ spanish ] = "Circular" ;
+        QuickHelpText [ french ] = "Circulaire" ;
+        QuickHelpText [ dutch ] = "Cirkelvormig" ;
+    QuickHelpText[ russian ] = " Û„ÓÓ·‡ÁÌ˚È";
+        QuickHelpText[ polish ] = "W kszta≥cie ko≥a";
+        QuickHelpText[ japanese ] = "â~å`èÛ";
+        QuickHelpText[ chinese_simplified ] = "‘≤–Œ";
+        QuickHelpText[ chinese_traditional ] = "∂ÍßŒ";
+        QuickHelpText[ arabic ] = "œ«∆—Ì";
+        QuickHelpText[ dutch ] = "Cirkelvormig";
+        QuickHelpText[ chinese_simplified ] = "‘≤–Œ";
+        QuickHelpText[ greek ] = " ıÍÎÈÍ‹";
+        QuickHelpText[ korean ] = "Circular";
+    };
+    FixedText FT_TEX_FILTER
+    {
+        Pos = MAP_APPFONT ( 11 , 92 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Filtern" ;
+        Text [ ENGLISH ] = "Filtering" ;
+        Text [ english_us ] = "Filtering" ;
+        Text [ portuguese_brazilian ] = "Filtern" ;
+        Text [ swedish ] = "Filtrera" ;
+        Text [ danish ] = "Filtrer" ;
+        Text [ italian ] = "Filtra" ;
+        Text [ spanish ] = "Filtrar" ;
+        Text [ french ] = "Filtrer" ;
+        Text [ dutch ] = "Filteren" ;
+        Text [ portuguese ] = "Filtros" ;
+        Text[ chinese_simplified ] = "π˝¬À";
+        Text[ russian ] = "‘ËÎ¸Ú‡ˆËˇ";
+        Text[ polish ] = "Filtrowanie";
+        Text[ japanese ] = "Ã®Ÿ¿";
+        Text[ chinese_traditional ] = "πL¬o";
+        Text[ arabic ] = " ’›Ì…";
+        Text[ dutch ] = "Filteren";
+        Text[ chinese_simplified ] = "π˝¬À";
+        Text[ greek ] = "÷ÈÎÙÒ‹ÒÈÛÏ·";
+        Text[ korean ] = "« ≈Õ∏µ";
+        Text[ turkish ] = "Filtrele";
+    };
+    ImageButton BTN_TEX_FILTER
+    {
+        Pos = MAP_APPFONT ( 70 , 90 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Filtern ein/aus" ;
+        QuickHelpText [ ENGLISH ] = "filtering" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "filter3d.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Activa/Desactiva filtro" ;
+        QuickHelpText [ english_us ] = "Filtering On/Off" ;
+        QuickHelpText [ portuguese_brazilian ] = "Filtern ein/aus" ;
+        QuickHelpText [ swedish ] = "Filtrera pÂ/av" ;
+        QuickHelpText [ danish ] = "Aktiver/deaktiver filtrering" ;
+        QuickHelpText [ italian ] = "Filtro on/off" ;
+        QuickHelpText [ spanish ] = "Activar/desactivar filtraciÛn" ;
+        QuickHelpText [ french ] = "Activer/dÈsactiver le filtre" ;
+        QuickHelpText [ dutch ] = "Filteren aan/uit" ;
+    QuickHelpText[ russian ] = "¬ÍÎ./‚˚ÍÎ. ÙËÎ¸Ú˚";
+        QuickHelpText[ polish ] = "W≥πcz/Wy≥πcz filtrowanie";
+        QuickHelpText[ japanese ] = "Ã®Ÿ¿ µ›/µÃ";
+        QuickHelpText[ chinese_simplified ] = "º§ªÓ/ ßªÓπ˝¬À";
+        QuickHelpText[ chinese_traditional ] = "øE¨°/•¢¨°πL¬oæπ";
+        QuickHelpText[ arabic ] = " ‘€Ì·/≈Ìﬁ«› «· ’›Ì…";
+        QuickHelpText[ dutch ] = "Filteren aan/uit";
+        QuickHelpText[ chinese_simplified ] = "º§ªÓ/ ßªÓπ˝¬À";
+        QuickHelpText[ greek ] = "÷ﬂÎÙÒÔ Õ·È/º˜È";
+        QuickHelpText[ korean ] = "Filtering On/Off";
+    };
+    GroupBox GRP_TEXTURE
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( WIDTH - 2 * BORDER , GROUP_HEIGHT ) ;
+        Text = "Texturen" ;
+        Text [ ENGLISH ] = "Textures" ;
+        Text [ english_us ] = "Textures" ;
+        Text [ portuguese_brazilian ] = "Texturen" ;
+        Text [ swedish ] = "Texturer" ;
+        Text [ danish ] = "Tekstur" ;
+        Text [ italian ] = "Motivi" ;
+        Text [ spanish ] = "Texturas" ;
+        Text [ french ] = "Textures" ;
+        Text [ dutch ] = "Texturen" ;
+        Text [ portuguese ] = "Texturas" ;
+        Text[ chinese_simplified ] = "Œ∆¿Ì";
+        Text[ russian ] = "“ÂÍÒÚÛ˚";
+        Text[ polish ] = "Tekstury";
+        Text[ japanese ] = "√∏Ω¡≠±";
+        Text[ chinese_traditional ] = "Øæ≤z";
+        Text[ arabic ] = "«·√‰”Ã…";
+        Text[ dutch ] = "Texturen";
+        Text[ chinese_simplified ] = "Œ∆¿Ì";
+        Text[ greek ] = "’ˆﬁ";
+        Text[ korean ] = "¡˙∞®";
+        Text[ turkish ] = "Y¸zeyler";
+    };
+     // Material
+    /*  Control CTL_MATERIAL
+  {
+      //HelpId = HID_SD_CTL_FAVORITES ;
+      Border = TRUE ;
+      Pos = MAP_APPFONT ( BORDER + 6 , GROUP_Y + 9 ) ;
+      Size = MAP_APPFONT ( GROUP_WIDTH - 12 , GROUP_HEIGHT - 15 ) ;
+      TabStop = TRUE ;
+      Hide = TRUE ;
+  };
+*/
+     // Materialeditor
+    FixedText FT_MAT_FAVORITES
+    {
+        Pos = MAP_APPFONT ( 6 , 30 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "Favoriten" ;
+        Text [ ENGLISH ] = "Favorites" ;
+        Text [ english_us ] = "Favorites" ;
+        Text [ portuguese_brazilian ] = "Favoriten" ;
+        Text [ swedish ] = "Favoriter" ;
+        Text [ danish ] = "Favoriter" ;
+        Text [ italian ] = "Preferiti" ;
+        Text [ spanish ] = "Favoritos" ;
+        Text [ french ] = "Favoris" ;
+        Text [ dutch ] = "Favorieten" ;
+        Text [ portuguese ] = "Favoritos" ;
+        Text[ chinese_simplified ] = " ’≤ÿ";
+        Text[ russian ] = "»Á·‡ÌÌ˚Â";
+        Text[ polish ] = "Ulubione";
+        Text[ japanese ] = "Ç®ãCÇ…ì¸ÇË";
+        Text[ chinese_traditional ] = "ß⁄™∫≥Ã∑R";
+        Text[ arabic ] = "«·„›÷·…";
+        Text[ dutch ] = "Favorieten";
+        Text[ chinese_simplified ] = " ’≤ÿ";
+        Text[ greek ] = "–ÒÔÙÈÏﬁÛÂÈÚ";
+        Text[ korean ] = "¡Ò∞‹ √£±‚";
+        Text[ turkish ] = "S˝k kullan˝lanlar";
+    };
+    ListBox LB_MAT_FAVORITES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 28 ) ;
+        Size = MAP_APPFONT ( 66 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Benutzerdefiniert" ; > ;
+            < "Metall" ; > ;
+            < "Gold" ; > ;
+            < "Chrom" ; > ;
+            < "Plastik" ; > ;
+            < "Holz" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "User-defined" ; > ;
+            < "Metal" ; > ;
+            < "Gold" ; > ;
+            < "Chrome" ; > ;
+            < "Plastic" ; > ;
+            < "Wood" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Definido pelo utilizador" ; > ;
+            < "Metal" ; > ;
+            < "Ouro" ; > ;
+            < "Cromado" ; > ;
+            < "Pl·stico" ; > ;
+            < "Madeira" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "User-defined" ; > ;
+            < "Metal" ; > ;
+            < "Gold" ; > ;
+            < "Chrome" ; > ;
+            < "Plastic" ; > ;
+            < "Wood" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Benutzerdefiniert" ; > ;
+            < "Metall" ; > ;
+            < "Gold" ; > ;
+            < "Chrom" ; > ;
+            < "Plastik" ; > ;
+            < "Holz" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Anv‰ndardefinierad" ; > ;
+            < "Metall" ; > ;
+            < "Guld" ; > ;
+            < "Krom" ; > ;
+            < "Plast" ; > ;
+            < "Tr‰" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Brugerdefineret" ; > ;
+            < "Metal" ; > ;
+            < "Guld" ; > ;
+            < "Krom" ; > ;
+            < "Plastik" ; > ;
+            < "TrÊ" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Definito dall'utente" ; > ;
+            < "Metallo" ; > ;
+            < "Oro" ; > ;
+            < "Cromato" ; > ;
+            < "Plastica" ; > ;
+            < "Legno" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Definido por el usuario" ; > ;
+            < "Metal" ; > ;
+            < "Oro" ; > ;
+            < "Cromo" ; > ;
+            < "Pl·stico" ; > ;
+            < "Madera" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "DÈfini par l'utilisateur" ; > ;
+            < "MÈtal" ; > ;
+            < "Or" ; > ;
+            < "Chrome" ; > ;
+            < "Plastique" ; > ;
+            < "Bois" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Gebruikergedefinieerd" ; > ;
+            < "Metaal" ; > ;
+            < "Goud" ; > ;
+            < "Chroom" ; > ;
+            < "Plastic" ; > ;
+            < "Hout" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < " π”√’ﬂ◊‘∂®" ; > ;
+        < "Ω Ù" ; > ;
+        < "Ω" ; > ;
+        < "∏ı" ; > ;
+        < "À‹¡œ" ; > ;
+        < "ƒæÕ∑" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "«‡‰‡ÌÓ ÔÓÎ¸ÁÓ‚‡ÚÂÎÂÏ" ; > ;
+        < "ÃÂÚ‡ÎÎ" ; > ;
+        < "«ÓÎÓÚÓ" ; > ;
+        < "’ÓÏ" ; > ;
+        < "œÎ‡ÒÚËÍ" ; > ;
+        < "ƒÂÂ‚Ó" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Zdef. przez uøytk." ; > ;
+        < "Metal" ; > ;
+        < "Z≥oto" ; > ;
+        < "Chrom" ; > ;
+        < "Plastyk" ; > ;
+        < "Drewno" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "’∞ªﬁ∞ê›íË" ; > ;
+        < "“¿Ÿ" ; > ;
+        < "∫ﬁ∞Ÿƒﬁ" ; > ;
+        < "∏ﬁ€—" ; > ;
+        < "Ãﬂ◊Ω¡Ø∏" ; > ;
+        < "ñÿçﬁ" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶€≠q" ; > ;
+        < "™˜ƒ›" ; > ;
+        < "™˜" ; > ;
+        < "ªÃ" ; > ;
+        < "∂ÏΩ¶" ; > ;
+        < "§Ï¿Y" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "„⁄—› „‰ ﬁ»· «·„” Œœ„" ; > ;
+        < "„⁄œ‰" ; > ;
+        < "–Â»" ; > ;
+        < "ﬂ—Ê„" ; > ;
+        < "»·«” Ìﬂ" ; > ;
+        < "Œ‘»" ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Gebruikergedefinieerd" ; > ;
+        < "Metaal" ; > ;
+        < "Goud" ; > ;
+        < "Chroom" ; > ;
+        < "Plastic" ; > ;
+        < "Hout" ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < " π”√’ﬂ◊‘∂®" ; > ;
+        < "Ω Ù" ; > ;
+        < "Ω" ; > ;
+        < "∏ı" ; > ;
+        < "À‹¡œ" ; > ;
+        < "ƒæÕ∑" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "œÒÈÊ¸ÏÂÌÔ ·¸ ÙÔÌ ˜ÒﬁÛÙÁ" ; > ;
+        < "Ã›Ù·ÎÎÔ" ; > ;
+        < "◊ÒıÛ¸Ú" ; > ;
+        < "◊Ò˛ÏÈÔ" ; > ;
+        < "–Î·ÛÙÈÍ¸" ; > ;
+        < "Œ˝ÎÔ" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ªÁøÎ¿⁄ ¡§¿«" ; > ;
+        < "±›º”" ; > ;
+        < "±›" ; > ;
+        < "≈©∑“" ; > ;
+        < "«√∂ÛΩ∫∆Ω" ; > ;
+        < "≥™π´" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < "Benutzerdefiniert" ; > ;
+        < "Metall" ; > ;
+        < "Gold" ; > ;
+        < "Chrom" ; > ;
+        < "Plastik" ; > ;
+        < "Holz" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Kullan˝c˝ tan˝ml˝" ; > ;
+        < "Metal" ; > ;
+        < "Alt˝n" ; > ;
+        < "Krom" ; > ;
+        < "Plastik" ; > ;
+        < "Ah˛ap" ; > ;
+    };
+    };
+    FixedText FT_MAT_COLOR
+    {
+        Pos = MAP_APPFONT ( 6 , 45 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Objektfarbe" ;
+        Text [ ENGLISH ] = "Object color" ;
+        Text [ english_us ] = "Object color" ;
+        Text [ portuguese_brazilian ] = "Objektfarbe" ;
+        Text [ swedish ] = "Objektf‰rg" ;
+        Text [ danish ] = "Objektfarve" ;
+        Text [ italian ] = "Colore oggetto" ;
+        Text [ spanish ] = "Color del objeto" ;
+        Text [ french ] = "Couleur objet" ;
+        Text [ dutch ] = "Objectkleur" ;
+        Text [ portuguese ] = "Cor do objecto" ;
+        Text[ chinese_simplified ] = "∂‘œÛ—’…´";
+        Text[ russian ] = "÷‚ÂÚ Ó·˙ÂÍÚ‡";
+        Text[ polish ] = "Kolor obiektu";
+        Text[ japanese ] = "µÃﬁºﬁ™∏ƒÇÃêF";
+        Text[ chinese_traditional ] = "™´•Û√C¶‚";
+        Text[ arabic ] = "·Ê‰ «·ﬂ«∆‰";
+        Text[ dutch ] = "Objectkleur";
+        Text[ chinese_simplified ] = "∂‘œÛ—’…´";
+        Text[ greek ] = "◊Ò˛Ï· ·ÌÙÈÍÂÈÏ›ÌÔı";
+        Text[ korean ] = "∞≥√º ªˆ";
+        Text[ turkish ] = "Nesne rengi";
+    };
+    ListBox LB_MAT_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 43 ) ;
+        Size = MAP_APPFONT ( 52 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_MAT_COLOR
+    {
+        Pos = MAP_APPFONT ( 35 + BUTTON_WIDTH * 7 + 7 , 43 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ ENGLISH ] = "Chose color with color dialog" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Caixa de di·logo das cores" ;
+        QuickHelpText [ english_us ] = "Colors Dialog" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ swedish ] = "V‰lj f‰rg via f‰rgdialog" ;
+        QuickHelpText [ danish ] = "VÊlg farve via farvedialog" ;
+        QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores a travÈs del di·logo de colores" ;
+        QuickHelpText [ french ] = "SÈlectionner la couleur ‡ partir de la boÓte de dialogue de couleurs" ;
+        QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
+    QuickHelpText[ russian ] = "¬˚·‡Ú¸ ˆ‚ÂÚ ‚ ‰Ë‡ÎÓ„Â";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorÛw";
+        QuickHelpText[ japanese ] = "êFÇÃ¿ﬁ≤±€∏ﬁÇÃêFÇëIëÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "—’…´∂‘ª∞¿∏";
+        QuickHelpText[ chinese_traditional ] = "≥zπL√C¶‚§Ë∂ÙøÔæ‹√C¶‚";
+        QuickHelpText[ arabic ] = "«Œ Ì«— «··Ê‰ ⁄»— „—»⁄ ÕÊ«— «·√·Ê«‰";
+        QuickHelpText[ dutch ] = "Kleur via kleurendialoog kiezen";
+        QuickHelpText[ chinese_simplified ] = "—’…´∂‘ª∞¿∏";
+        QuickHelpText[ greek ] = "≈ÈÎÔ„ﬁ ˜Ò˛Ï·ÙÔÚ Ï›Û˘ ‰È·Î¸„Ôı ˜Ò˛Ï·ÙÔÚ";
+        QuickHelpText[ korean ] = "Colors Dialog";
+    };
+    FixedText FT_MAT_EMISSION
+    {
+        Pos = MAP_APPFONT ( 6, 59 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Leuchtfarbe" ;
+        Text [ ENGLISH ] = "Emission" ;
+        Text [ english_us ] = "Illumination color" ;
+        Text [ portuguese_brazilian ] = "Leuchtfarbe" ;
+        Text [ swedish ] = "Lysf‰rg" ;
+        Text [ danish ] = "Lysfarve" ;
+        Text [ italian ] = "Illuminazione" ;
+        Text [ spanish ] = "IluminaciÛn" ;
+        Text [ french ] = "Luminescence" ;
+        Text [ dutch ] = "Lichtgevende kleur" ;
+        Text [ portuguese ] = "Cor de iluminaÁ„o" ;
+        Text[ chinese_simplified ] = "’’√˜—’…´";
+        Text[ russian ] = "÷‚ÂÚ ÓÒ‚Â˘ÂÌËˇ";
+        Text[ polish ] = "Kolor oúwietlenia";
+        Text[ japanese ] = "è∆ÇÁÇ∑êF";
+        Text[ chinese_traditional ] = "∑”©˙√C¶‚";
+        Text[ arabic ] = "·Ê‰ «·≈÷«¡…";
+        Text[ dutch ] = "Lichtgevende kleur";
+        Text[ chinese_simplified ] = "’’√˜—’…´";
+        Text[ greek ] = "◊Ò˛Ï· ˆ˘ÙÈÛÏÔ˝";
+        Text[ korean ] = "¡∂∏Ìªˆ";
+        Text[ turkish ] = "I˛˝k rengi";
+    };
+    ListBox LB_MAT_EMISSION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 57 ) ;
+        Size = MAP_APPFONT ( 52 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_EMISSION_COLOR
+    {
+        Pos = MAP_APPFONT ( 35 + BUTTON_WIDTH * 7 + 7 , 57 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ ENGLISH ] = "Chose color with color dialog" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Caixa de di·logo das cores" ;
+        QuickHelpText [ english_us ] = "Colors Dialog" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ swedish ] = "V‰lj f‰rg via f‰rgdialog" ;
+        QuickHelpText [ danish ] = "VÊlg farve via farvedialog" ;
+        QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
+        QuickHelpText [ spanish ] = "Seleccionar color en el di·logo de colores" ;
+        QuickHelpText [ french ] = "SÈlectionner la couleur ‡ partir de la boÓte de dialogue de couleurs" ;
+        QuickHelpText [ dutch ] = "Kleur via kleurdialoog kiezen" ;
+    QuickHelpText[ russian ] = "ƒË‡ÎÓ„Ó‚ÓÂ ÓÍÌÓ ˆ‚ÂÚÓ‚";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorÛw";
+        QuickHelpText[ japanese ] = "êFÇÃ¿ﬁ≤±€∏ﬁÇÃêFÇëIëÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ chinese_traditional ] = "≥zπL√C¶‚§Ë∂ÙøÔæ‹√C¶‚";
+        QuickHelpText[ arabic ] = "«Œ Ì«— «··Ê‰ ⁄»— ÕÊ«— «·√·Ê«‰";
+        QuickHelpText[ dutch ] = "Kleur via kleurdialoog kiezen";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ greek ] = "≈ÈÎÔ„ﬁ ˜Ò˛Ï·ÙÔÚ Ï›Û˘ ÙÔı ‰È·Î¸„Ôı ˜Ò˘Ï‹Ù˘Ì";
+        QuickHelpText[ korean ] = "Colors Dialog";
+    };
+    FixedText FT_MAT_SPECULAR
+    {
+        Pos = MAP_APPFONT ( 14 , 82 ) ;
+        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Text = "Farbe" ;
+        Text [ ENGLISH ] = "Color" ;
+        Text [ english_us ] = "Color" ;
+        Text [ portuguese_brazilian ] = "Farbe" ;
+        Text [ swedish ] = "F‰rg" ;
+        Text [ danish ] = "Farve" ;
+        Text [ italian ] = "Colore" ;
+        Text [ spanish ] = "Color" ;
+        Text [ french ] = "Couleur" ;
+        Text [ dutch ] = "Kleur" ;
+        Text [ portuguese ] = "Cor" ;
+        Text[ chinese_simplified ] = "—’…´";
+        Text[ russian ] = "÷‚ÂÚ";
+        Text[ polish ] = "Kolor";
+        Text[ japanese ] = "êF";
+        Text[ chinese_traditional ] = "√C¶‚";
+        Text[ arabic ] = "«··Ê‰";
+        Text[ dutch ] = "Kleur";
+        Text[ chinese_simplified ] = "—’…´";
+        Text[ greek ] = "◊Ò˛Ï·";
+        Text[ korean ] = "ªˆ";
+        Text[ turkish ] = "Renk";
+    };
+    ListBox LB_MAT_SPECULAR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 80 ) ;
+        Size = MAP_APPFONT ( 52 , 100 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ImageButton BTN_SPECULAR_COLOR
+    {
+        Pos = MAP_APPFONT ( 35 + BUTTON_WIDTH * 7 + 7 , 80 ) ;
+        Size = BUTTON_SIZE
+        QuickHelpText = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ ENGLISH ] = "Chose color with color dialog" ;
+        ButtonImage = Image
+        {
+            ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+            MaskColor = STD_MASKCOLOR ;
+        };
+        TabStop = TRUE ;
+        QuickHelpText [ portuguese ] = "Caixa de di·logo das cores" ;
+        QuickHelpText [ english_us ] = "Colors Dialog" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe ¸ber Farbdialog w‰hlen" ;
+        QuickHelpText [ swedish ] = "V‰lj f‰rg via f‰rgdialog" ;
+        QuickHelpText [ danish ] = "VÊlg farve via farvedialog" ;
+        QuickHelpText [ italian ] = "Scelta colore tramite apposito dialogo" ;
+        QuickHelpText [ spanish ] = "Seleccionar colores a travÈs del di·logo de colores" ;
+        QuickHelpText [ french ] = "SÈlectionner la couleur ‡ partir de la boÓte de dialogue de couleurs" ;
+        QuickHelpText [ dutch ] = "Kleur via kleurendialoog kiezen" ;
+    QuickHelpText[ russian ] = "¬˚·‡Ú¸ ˆ‚ÂÚ ‚ ‰Ë‡ÎÓ„Â";
+        QuickHelpText[ polish ] = "Wybierz kolor przez dialog kolorÛw";
+        QuickHelpText[ japanese ] = "êFÇÃ¿ﬁ≤±€∏ﬁÇÃêFÇëIëÇ∑ÇÈ";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ chinese_traditional ] = "≥zπL√C¶‚§Ë∂ÙøÔæ‹√C¶‚";
+        QuickHelpText[ arabic ] = "«Œ Ì«— «··Ê‰ ⁄»— ÕÊ«— «·√·Ê«‰";
+        QuickHelpText[ dutch ] = "Kleur via kleurendialoog kiezen";
+        QuickHelpText[ chinese_simplified ] = "ΩË÷˙—’…´∂‘ª∞¿∏—°‘Ò—’…´";
+        QuickHelpText[ greek ] = "≈ÈÎÔ„ﬁ ˜Ò˛Ï·ÙÔÚ Ï›Û˘ ÙÔı ‰È·Î¸„Ôı ˜Ò˘Ï‹Ù˘Ì";
+        QuickHelpText[ korean ] = "Colors Dialog";
+    };
+    FixedText FT_MAT_SPECULAR_INTENSITY
+    {
+        Pos = MAP_APPFONT ( 14 , 96 ) ;
+        Size = MAP_APPFONT ( 44 , 10 ) ;
+        Text = "Intensit‰t" ;
+        Text [ ENGLISH ] = "Intensity" ;
+        Text [ english_us ] = "Intensity" ;
+        Text [ portuguese_brazilian ] = "Intensit‰t" ;
+        Text [ swedish ] = "Intensitet" ;
+        Text [ danish ] = "Intensitet" ;
+        Text [ italian ] = "Intensit‡" ;
+        Text [ spanish ] = "Intensidad" ;
+        Text [ french ] = "IntensitÈ" ;
+        Text [ dutch ] = "Intensiteit" ;
+        Text [ portuguese ] = "Intensidade" ;
+        Text[ chinese_simplified ] = "«ø∂»";
+        Text[ russian ] = "»ÌÚÂÌÚÒË‚ÌÓÒÚ¸";
+        Text[ polish ] = "IntensywnoúÊ";
+        Text[ japanese ] = "ñæà√ìx";
+        Text[ chinese_traditional ] = "±j´◊";
+        Text[ arabic ] = "«·‘œ…";
+        Text[ dutch ] = "Intensiteit";
+        Text[ chinese_simplified ] = "«ø∂»";
+        Text[ greek ] = "∏ÌÙ·ÛÁ";
+        Text[ korean ] = "≥Ûµµ";
+        Text[ turkish ] = "Younluk";
+    };
+    MetricField MTR_MAT_SPECULAR_INTENSITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 94 ) ;
+        Size = MAP_APPFONT ( 52 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Minimum = 1 ;
+        First = 1 ;
+        Maximum = 100 ;
+        Last = 100 ;
+        SpinSize = 1 ;
+    };
+    GroupBox GRP_MAT_SPECULAR
+    {
+        Pos = MAP_APPFONT ( BORDER + 6 , 72 ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH - 2 * 6 , 39 ) ;
+        Text = "Glanzpunkt" ;
+        Text [ ENGLISH ] = "Specular" ;
+        Text [ english_us ] = "Specular" ;
+        Text [ portuguese_brazilian ] = "Glanzpunkt" ;
+        Text [ swedish ] = "Spegelglans" ;
+        Text [ danish ] = "Spejlglans" ;
+        Text [ italian ] = "Riflesso" ;
+        Text [ spanish ] = "Punto de brillo" ;
+        Text [ french ] = "Point brillant" ;
+        Text [ dutch ] = "Glanspunt" ;
+        Text [ portuguese ] = "Ponto brilhante" ;
+        Text[ chinese_simplified ] = "∑¢π‚µ„";
+        Text[ russian ] = "“Ó˜Í‡ ·ÎÂÒÍ‡";
+        Text[ polish ] = "B≥yszczπcy punkt";
+        Text[ japanese ] = "åıëÚì_";
+        Text[ chinese_traditional ] = "µo•˙¬I";
+        Text[ arabic ] = "‰ﬁÿ… «··„⁄«‰";
+        Text[ dutch ] = "Glanspunt";
+        Text[ chinese_simplified ] = "∑¢π‚µ„";
+        Text[ greek ] = "”ÁÏÂﬂÔ ·Ì‹ÍÎ·ÛÁÚ";
+        Text[ korean ] = "«œ¿œ∂Û¿Ã∆Æ";
+        Text[ turkish ] = "Parlama noktas˝";
+    };
+    /*
+    ImageButton BTN_MAT_FAVORITES {
+            Pos = MAP_APPFONT( BORDER, GROUP_PREV_Y+1 );
+            Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+      QuickHelpText = "Material Favoriten" ;
+      QuickHelpText[ ENGLISH ] = "Material favorites" ;
+      ButtonImage = Image
+      {
+          ImageBitmap = Bitmap { File = "matfavor.bmp" ; };
+          MaskColor = STD_MASKCOLOR ;
+      };
+            TabStop = TRUE;
+        };
+    ImageButton BTN_MAT_EDITOR {
+            Pos = MAP_APPFONT( BORDER + BUTTON_WIDTH, GROUP_PREV_Y+1 );
+            Size = MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
+      QuickHelpText = "Material Editor" ;
+      QuickHelpText[ ENGLISH ] = "Material editor" ;
+      ButtonImage = Image
+      {
+          ImageBitmap = Bitmap { File = "matedit.bmp" ; };
+          MaskColor = STD_MASKCOLOR ;
+      };
+            TabStop = TRUE;
+        };
+*/
+    GroupBox GRP_MATERIAL
+    {
+        Pos = MAP_APPFONT ( BORDER , GROUP_Y ) ;
+        Size = MAP_APPFONT ( GROUP_WIDTH , GROUP_HEIGHT ) ;
+        Text = "Material" ;
+        Text [ ENGLISH ] = "Material" ;
+        Text [ portuguese ] = "Material" ;
+        Text [ english_us ] = "Material Properties" ;
+        Text [ portuguese_brazilian ] = "Material" ;
+        Text [ swedish ] = "Material" ;
+        Text [ danish ] = "Materiale" ;
+        Text [ italian ] = "Materiale" ;
+        Text [ spanish ] = "Material" ;
+        Text [ french ] = "MatÈriau" ;
+        Text [ dutch ] = "Materiaal" ;
+        Text[ chinese_simplified ] = "≤ƒ¡œ";
+        Text[ russian ] = "Ã‡ÚÂË‡Î";
+        Text[ polish ] = "Materia≥";
+        Text[ japanese ] = "ëfçﬁ";
+        Text[ chinese_traditional ] = "ß˜Æ∆";
+        Text[ arabic ] = "«·„«œ…";
+        Text[ dutch ] = "Materiaal";
+        Text[ chinese_simplified ] = "≤ƒ¡œ";
+        Text[ greek ] = "’ÎÈÍ¸";
+        Text[ korean ] = "¿Á¡˙";
+        Text[ turkish ] = "Malzeme";
+    };
+    Text [ portuguese_brazilian ] = "3D-Effekte" ;
+    Text [ swedish ] = "3D-effekter" ;
+    Text [ danish ] = "3D-effekter" ;
+    Text [ italian ] = "Effetti 3D" ;
+    Text [ spanish ] = "Efectos 3D" ;
+    Text [ french ] = "Effets 3D" ;
+    Text [ dutch ] = "3D-effecten" ;
+    Text [ portuguese ] = "Efeitos 3D" ;
+    Text[ chinese_simplified ] = "3 Œ¨-–ßπ˚";
+    Text[ russian ] = "›ÙÙÂÍÚ˚ 3-Ã";
+    Text[ polish ] = "Efekty 3-W";
+    Text[ japanese ] = "3D å¯â ";
+    Text[ chinese_traditional ] = "3 ∫˚Æƒ™G";
+    Text[ arabic ] = " √ÀÌ—«  À·«ÀÌ… «·√»⁄«œ";
+    Text[ dutch ] = "3D-effecten";
+    Text[ chinese_simplified ] = "3 Œ¨-–ßπ˚";
+    Text[ greek ] = "≈ˆ› 3ƒ";
+    Text[ korean ] = "3¬˜ø¯ »ø∞˙";
+    Text[ turkish ] = "3B efektler";
+};
+Image RID_SVXIMAGE_LIGHT_ON
+{
+    ImageBitmap = Bitmap { File = "lighton.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+Image RID_SVXIMAGE_LIGHT_OFF
+{
+    ImageBitmap = Bitmap { File = "light.bmp" ; };
+    MaskColor = STD_MASKCOLOR ;
+};
+/*Image RID_SVXIMAGE_LIGHT_ON_SELECTED {
+      ImageBitmap = Bitmap { File = "lightons.bmp" ; };
+      MaskColor = STD_MASKCOLOR ;
+};
+Image RID_SVXIMAGE_LIGHT_OFF_SELECTED {
+      ImageBitmap = Bitmap { File = "lightsel.bmp" ; };
+      MaskColor = STD_MASKCOLOR ;
+};*/
+
+String RID_SVXFLOAT3D_FAVORITE
+{
+    Text = "Favorit" ;
+    Text [ ENGLISH ] = "Favorite" ;
+    Text[ english_us ] = "Favorite";
+    Text[ portuguese ] = "Favorito";
+    Text[ russian ] = "Favorite";
+    Text[ greek ] = "–ÒÔÙﬂÏÁÛÁ";
+    Text[ dutch ] = "Favoriet";
+    Text[ french ] = "Favori";
+    Text[ spanish ] = "Favorite";
+    Text[ italian ] = "Favorite";
+    Text[ danish ] = "Favorit";
+    Text[ swedish ] = "Favorit";
+    Text[ polish ] = "Favorite";
+    Text[ portuguese_brazilian ] = "Favorite";
+    Text[ japanese ] = "Ç®ãCÇ…ì¸ÇË";
+    Text[ korean ] = "Favorite";
+    Text[ chinese_simplified ] = " ’≤ÿº–";
+    Text[ chinese_traditional ] = "ß⁄™∫≥Ã∑R";
+    Text[ turkish ] = "Favorite";
+    Text[ arabic ] = "«·„›÷·";
+};
+String RID_SVXFLOAT3D_FIX_X
+{
+    Text = "X" ;
+    Text [ ENGLISH ] = "X" ;
+    Text[ english_us ] = "X";
+    Text[ portuguese ] = "X";
+    Text[ russian ] = "X";
+    Text[ greek ] = "X";
+    Text[ dutch ] = "X";
+    Text[ french ] = "X";
+    Text[ spanish ] = "X";
+    Text[ italian ] = "X";
+    Text[ danish ] = "X";
+    Text[ swedish ] = "X";
+    Text[ polish ] = "X";
+    Text[ portuguese_brazilian ] = "X";
+    Text[ japanese ] = "X";
+    Text[ korean ] = "X";
+    Text[ chinese_simplified ] = "X";
+    Text[ chinese_traditional ] = "X";
+    Text[ turkish ] = "X";
+    Text[ arabic ] = "X";
+};
+String RID_SVXFLOAT3D_FIX_Y
+{
+    Text = "Y" ;
+    Text [ ENGLISH ] = "Y" ;
+    Text[ english_us ] = "Y";
+    Text[ portuguese ] = "Y";
+    Text[ russian ] = "Y";
+    Text[ greek ] = "Y";
+    Text[ dutch ] = "Y";
+    Text[ french ] = "Y";
+    Text[ spanish ] = "Y";
+    Text[ italian ] = "Y";
+    Text[ danish ] = "Y";
+    Text[ swedish ] = "Y";
+    Text[ polish ] = "Y";
+    Text[ portuguese_brazilian ] = "Y";
+    Text[ japanese ] = "Y";
+    Text[ korean ] = "Y";
+    Text[ chinese_simplified ] = "Y";
+    Text[ chinese_traditional ] = "Y";
+    Text[ turkish ] = "Y";
+    Text[ arabic ] = "Y";
+};
+String RID_SVXFLOAT3D_FIX_Z
+{
+    Text = "Z" ;
+    Text [ ENGLISH ] = "Z" ;
+    Text[ english_us ] = "Z";
+    Text[ portuguese ] = "Z";
+    Text[ russian ] = "Z";
+    Text[ greek ] = "Z";
+    Text[ dutch ] = "Z";
+    Text[ french ] = "Z";
+    Text[ spanish ] = "Z";
+    Text[ italian ] = "Z";
+    Text[ danish ] = "Z";
+    Text[ swedish ] = "Z";
+    Text[ polish ] = "Z";
+    Text[ portuguese_brazilian ] = "Z";
+    Text[ japanese ] = "Z";
+    Text[ korean ] = "Z";
+    Text[ chinese_simplified ] = "Z";
+    Text[ chinese_traditional ] = "Z";
+    Text[ turkish ] = "Z";
+    Text[ arabic ] = "Z";
+};
+String RID_SVXFLOAT3D_FIX_R
+{
+    Text = "R:" ;
+    Text [ ENGLISH ] = "R:" ;
+    Text[ english_us ] = "R:";
+    Text[ portuguese ] = "R:";
+    Text[ russian ] = "R:";
+    Text[ greek ] = "R:";
+    Text[ dutch ] = "R:";
+    Text[ french ] = "R :";
+    Text[ spanish ] = "R:";
+    Text[ italian ] = "R:";
+    Text[ danish ] = "R:";
+    Text[ swedish ] = "R:";
+    Text[ polish ] = "R:";
+    Text[ portuguese_brazilian ] = "R:";
+    Text[ japanese ] = "R:";
+    Text[ korean ] = "R:";
+    Text[ chinese_simplified ] = "R:";
+    Text[ chinese_traditional ] = "R:";
+    Text[ turkish ] = "R:";
+    Text[ arabic ] = "R:";
+};
+String RID_SVXFLOAT3D_FIX_G
+{
+    Text = "G:" ;
+    Text [ ENGLISH ] = "G:" ;
+    Text[ english_us ] = "G:";
+    Text[ portuguese ] = "G:";
+    Text[ russian ] = "G:";
+    Text[ greek ] = "G:";
+    Text[ dutch ] = "G:";
+    Text[ french ] = "V :";
+    Text[ spanish ] = "G:";
+    Text[ italian ] = "G:";
+    Text[ danish ] = "G:";
+    Text[ swedish ] = "G:";
+    Text[ polish ] = "G:";
+    Text[ portuguese_brazilian ] = "G:";
+    Text[ japanese ] = "G:";
+    Text[ korean ] = "G:";
+    Text[ chinese_simplified ] = "G:";
+    Text[ chinese_traditional ] = "G:";
+    Text[ turkish ] = "G:";
+    Text[ arabic ] = "G:";
+};
+String RID_SVXFLOAT3D_FIX_B
+{
+    Text = "B:" ;
+    Text [ ENGLISH ] = "B:" ;
+    Text[ english_us ] = "B:";
+    Text[ portuguese ] = "B:";
+    Text[ russian ] = "B:";
+    Text[ greek ] = "B:";
+    Text[ dutch ] = "B:";
+    Text[ french ] = "B :";
+    Text[ spanish ] = "B:";
+    Text[ italian ] = "B:";
+    Text[ danish ] = "B:";
+    Text[ swedish ] = "B:";
+    Text[ polish ] = "B:";
+    Text[ portuguese_brazilian ] = "B:";
+    Text[ japanese ] = "B:";
+    Text[ korean ] = "B:";
+    Text[ chinese_simplified ] = "B:";
+    Text[ chinese_traditional ] = "B:";
+    Text[ turkish ] = "B:";
+    Text[ arabic ] = "B:";
+};
+

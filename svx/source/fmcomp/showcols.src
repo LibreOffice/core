@@ -1,0 +1,147 @@
+/*************************************************************************
+ *
+ *  $RCSfile: showcols.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "fmresids.hrc"
+#include "svxids.hrc"
+#include "globlmn.hrc"
+
+ModalDialog RID_SVX_DLG_SHOWGRIDCOLUMNS
+{
+    OutputSize = TRUE;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 200, 117 );
+    Text = "Spalten anzeigen";
+    Text [ ENGLISH ] = "Spalten anzeigen";
+    Moveable = TRUE;
+    Closeable = TRUE;
+
+    FixedText 1
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 188, 30 );
+        WordBreak = TRUE;
+        Text = "Folgende Spalten sind augenblicklich versteckt. Markieren Sie bitte die wieder einzublendenden und wählen Sie OK";
+        Text [ ENGLISH ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
+        Text[ english_us ] = "The following columns are currently hidden. Please mark the fields you want to show and choose OK.";
+        Text[ portuguese ] = "As seguintes colunas encontram-se ocultas. Seleccione as que deseja ver novamente e clique em OK.";
+        Text[ russian ] = "Ñëåäóşùèå êîëîíêè ñïğÿòàíû. Âûäåëèòå òå êîëîíêè, êîòîğûå íåîáõîäèìî ñíîâà ïîêàçàòü è íàæìèòå OK.";
+        Text[ greek ] = "Ïé áêüëïõèåò óôŞëåò åßíáé êñõöİò ğñïò ôï ğáñüí. Ğáñáêáëş åğéëİîôå áõôİò ğïõ åğéèõìåßôå íá åìöáíéóôïıí êáé ğáôŞóôå óôç óõíİ÷åéá ôï 'OK'";
+        Text[ dutch ] = "De volgende kolommen zijn momenteel verborgen. Markeer de kolommen die u weer zichtbaar wilt maken en klik op OK.";
+        Text[ french ] = "Les colonnes suivantes sont cachées pour l'instant. Veuillez sélectionner celles que vous souhaitez faire afficher et cliquez sur OK.";
+        Text[ spanish ] = "Las siguientes columnas están por ahora ocultas. Seleccione las que deban mostrarse y pulse sobre Aceptar.";
+        Text[ italian ] = "Le seguenti colonne sono momentaneamente nascoste. Selezionate le colonne da mostrare si nuovo e confermate il comando con OK.";
+        Text[ danish ] = "Følgende kolonner er for tiden skjult. Marker dem, som du igen vil vise, og tryk på OK.";
+        Text[ swedish ] = "Följande kolumner är dolda för närvarande. Markera kolumnerna som skall visas igen och välj OK.";
+        Text[ polish ] = "Nastêpuj¹ce kolumny s¹ narazie ukryte. Zaznacz proszê wszystkie kolumny, który maj¹ zostaæ wyœwietlone i naciœnij OK.";
+        Text[ portuguese_brazilian ] = "The following columns are hidden currently. Please mark the fields you want to show and chosse OK";
+        Text[ japanese ] = "Ÿ‚Ì—ñ‚ÍŒ»İ‰B‚³‚ê‚Ä‚¢‚Ü‚·B•\\¦‚·‚×‚«—ñ‚ğ‘I‘ğ‚µ‚ÄOK‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ korean ] = "´ÙÀ½ ¿­µéÀº ÇöÀç ¼û°ÜÁø »óÅÂÀÔ´Ï´Ù. ´Ù½Ã ³ªÅ¸³»°íÀÚ ÇÏ´Â ¿­À» ¼±ÅÃ Ç¥½ÃÇÏ¿© È®ÀÎ ¹öÆ°À» Å¬¸¯ÇÏ½Ê½Ã¿À.";
+        Text[ chinese_simplified ] = "ÒÔÏÂµÄÁĞÄ¿Ç°±»ÒşÈë¡£ÇëÄú±ê¼ÇÒªÏÔÊ¾µÄÁĞÇøÓò²¢°´»÷È·¶¨(OK)°´Å¥";
+        Text[ chinese_traditional ] = "¥H¤UªºÄæ¬OÁô¤Jªº¡C½Ğ±z¿ï¨ú­nÅã¥ÜªºÄæ¡AµM¦Z«ö¤@¤U½T©w¡C";
+        Text[ arabic ] = "åĞå ÇáÃÚãÏÉ ãÎİíÉ ÍÇáíÇğ. ÇáÑÌÇÁ ÊÍÏíÏ ÇáÃÚãÏÉ ÇáÊí ÊÑíÏ ÅÙåÇÑåÇ¡ Ëã ÇáäŞÑ İæŞ \"ÍÓäÇğ\"";
+        Text[ turkish ] = "Şu sütunlar şu an gizlenmiş durumda. Tekrar görüntülemek istediklerinizi seçin ve \"Tamam\" düğmesini tıklayın.";
+    };
+
+    ListBox 1
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 6, 39 );
+        Size = MAP_APPFONT( 188, 55 );
+        TabStop = TRUE;
+        DropDown = FALSE;
+        AutoHScroll = TRUE;
+        VScroll = TRUE;
+    };
+
+    OKButton 1
+    {
+        Pos = MAP_APPFONT( 6, 97 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+        DefButton = TRUE ;
+    };
+
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT( 144, 97 );
+        Size = MAP_APPFONT( 50, 14 );
+        TabStop = TRUE;
+    };
+    Text[ english_us ] = "Show columns";
+    Text[ portuguese ] = "Mostrar colunas";
+    Text[ russian ] = "Ïîêàçàòü êîëîíêè";
+    Text[ greek ] = "ÅìöÜíéóç óôçëşí";
+    Text[ dutch ] = "Kolommen weergeven";
+    Text[ french ] = "Afficher les colonnes";
+    Text[ spanish ] = "Mostrar columnas";
+    Text[ italian ] = "Mostra colonne";
+    Text[ danish ] = "Vis kolonner";
+    Text[ swedish ] = "Visa kolumner";
+    Text[ polish ] = "Wyœwietl kolumny";
+    Text[ portuguese_brazilian ] = "Spalten anzeigen";
+    Text[ japanese ] = "—ñ‚ğ•\\¦‚·‚é";
+    Text[ korean ] = "¿­ Ç¥½Ã";
+    Text[ chinese_simplified ] = "ÏÔÊ¾ÁĞ";
+    Text[ chinese_traditional ] = "Åã¥ÜÄæ";
+    Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
+    Text[ turkish ] = "Sütunları görüntüle";
+    Text[ language_user1 ] = " ";
+};
+

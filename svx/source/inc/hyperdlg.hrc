@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hyperdlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+/* Tabpage : Hyperlink - Internet */
+
+#define GRP_LINKTYPE                1
+#define RB_LINKTYP_INTERNET         2
+#define RB_LINKTYP_FTP              3
+#define RB_LINKTYP_TELNET           4
+#define FT_TARGET_HTML              5
+#define CB_TARGET_HTML              6
+#define FT_LOGIN                    7
+#define ED_LOGIN                    8
+#define FT_PASSWD                   9
+#define ED_PASSWD                   10
+#define CBX_ANONYMOUS               11
+#define BTN_BROWSE                  12
+#define BTN_TARGET                  13
+
+/* Tabpage : Hyperlink - Mail & News */
+
+#define GRP_MAILNEWS                1
+#define RB_LINKTYP_MAIL             2
+#define RB_LINKTYP_NEWS             3
+#define FT_RECEIVER                 4
+#define CB_RECEIVER                 5
+#define FT_SUBJECT                  6
+#define ED_SUBJECT                  7
+#define BTN_ADRESSBOOK              8
+
+/* Tabpage : Hyperlink - Document */
+
+#define GRP_DOCUMENT                1
+#define FT_PATH_DOC                 2
+#define CB_PATH_DOC                 3
+#define BTN_FILEOPEN                4
+#define GRP_TARGET                  5
+#define FT_TARGET_DOC               6
+#define ED_TARGET_DOC               7
+#define FT_URL                      8
+#define FT_FULL_URL                 9
+
+/* Tabpage : Hyperlink - New document */
+
+#define GRP_NEWDOCUMENT             1
+#define RB_EDITNOW                  2
+#define RB_EDITLATER                3
+#define FT_PATH_NEWDOC              4
+#define ED_PATH_NEWDOC              5
+#define FT_DOCUMENT_TYPES           6
+#define LB_DOCUMENT_TYPES           7
+#define BTN_CREATE                  8
+
+/* Tabpage-section : Hyperlink - more justifications */
+
+#define GRP_MORE                    30
+#define FT_FRAME                    31
+#define CB_FRAME                    32
+#define FT_FORM                     33
+#define LB_FORM                     34
+#define FT_INDICATION               35
+#define ED_INDICATION               36
+#define FT_TEXT                     37
+#define ED_TEXT                     38
+#define BTN_SCRIPT                  39
+

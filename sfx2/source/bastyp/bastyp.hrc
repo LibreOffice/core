@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bastyp.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sfx.hrc"
+
+//fuer das Mapping Fehlercode -> ResId
+
+#define RC_BASTYP               RID_SFX_BASTYP_START
+#define DLG_FILTER_SELECT           (RC_BASTYP)
+#if SUPD<552
+#define STR_ERR_HDLMESS                 (RC_BASTYP+1)
+#define RID_ERRHDL_CLASS                (RC_BASTYP+2)
+#endif
+#define STR_FILTER_DOWNLOAD             (RC_BASTYP+3)
+#define STR_FILTER_CHOOSER              (RC_BASTYP+4)
+#define STR_FILTER_OTHERS               (RC_BASTYP+5)
+#define STR_FILTER_ZIPPED               (RC_BASTYP+6)
+#define STR_FILTER_CHANNELON_OFFLINE        (RC_BASTYP+7)
+#define STR_FILTER_EXTERNAL         (RC_BASTYP+8)
+#define STR_FILTER_NOT_INSTALLED        (RC_BASTYP+9)
+#define STR_FILTER_CONSULT_SERVICE      (RC_BASTYP+10)
+#define STR_FILTER_COMPONENT            (RC_BASTYP+11)
+#define STR_MEMEXCEPTION            (RC_BASTYP+28)
+#define MSG_MEM_WARN                (RC_BASTYP+29)
+
+#define RID_JSPROMPT                    (RC_BASTYP+8)
+#define RID_JSPROMPT_TEXT               1
+#define RID_JSPROMPT_CANCEL             2
+#define RID_JSPROMPT_OK                 3
+
+#define RID_FLT_INTERACTIVE             (RC_BASTYP+9)
+#define RID_FLT_INTERACTIVE_TEXT            1
+#define RID_FLT_INTERACTIVE_EDIT            2
+#define RID_FLT_INTERACTIVE_CANCEL          3
+#define RID_FLT_INTERACTIVE_OK              4
+
+//= ErrorTexte "downloadcontroller" =================================================================
+#define ERR_INET_NAME_RESOLVE           (RC_BASTYP + 12)
+#define ERR_INET_CONNECT                (RC_BASTYP + 13)
+#define ERR_INET_READ                   (RC_BASTYP + 14)
+#define ERR_INET_WRITE                  (RC_BASTYP + 15)
+#define ERR_INET_GENERAL                (RC_BASTYP + 16)
+#define ERR_WRONG_URL                   (RC_BASTYP + 17)
+#define ERR_ACTIVEDOWNLOADS         (RC_BASTYP + 18)
+#define ERR_QUEUEDDOWNLOADS                 (RC_BASTYP + 19)
+#define ERR_FILEISLOCAL             (RC_BASTYP + 20)
+#define ERR_FILENAMECHECK83         (RC_BASTYP + 21)
+#define ERR_INSUFFICIENTDISKSPACE       (RC_BASTYP + 22)
+
+//= Texte "downloadcontroller" =================================================================
+#define STR_DOWNLOAD_SOURCE             (RC_BASTYP + 23)
+#define STR_DOWNLOAD_DESTINATION        (RC_BASTYP + 24)
+#define STR_DOWNLOAD_STATE          (RC_BASTYP + 25)
+#define STR_DOWNLOAD_REMAININGTIME      (RC_BASTYP + 26)
+#define STR_DOWNLOAD_STATEFORMAT        (RC_BASTYP + 27)
+

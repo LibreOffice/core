@@ -1,0 +1,645 @@
+/*************************************************************************
+ *
+ *  $RCSfile: svxerr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#define __RSC
+#include "svxerr.hxx"
+#include "dialogs.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // Error-Context ---------------------------------------------------------
+Resource RID_SVXERRCTX
+{
+    String ERRCTX_SVX_LINGU_THESAURUS&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Ausführen des Thesaurus. : $(ERR) beim Ausf³hren des Thesaurus. */
+        TEXT = "$(ERR) beim Ausführen des Thesaurus." ;
+        Text [ English ] = "$(ERR) executing the thesaurus." ;
+        Text [ english_us ] = "$(ERR) executing the thesaurus." ;
+        Text [ italian ] = "$(ERR) nell'uso del dizionario dei sinonimi." ;
+        Text [ spanish ] = "$(ERR) al ejecutar el diccionario de sinónimos." ;
+        Text [ french ] = "$(ERR) lors de l'exécution du dictionnaire des synonymes" ;
+        Text [ dutch ] = "$(ERR) bij het uitvoeren van de thesaurus." ;
+        Text [ swedish ] = "$(ERR) vid användandet av synonymordboken." ;
+        Text [ danish ] = "$(ERR) ved brug af synonymordbogen." ;
+        Text [ portuguese ] = "$(ERR) ao executar o dicionário de sinónimos." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Ausführen des Thesaurus." ;
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚÊ¹ÓÃ´ÊµäÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè òåçàóğóñà.";
+        Text[ polish ] = "$(ERR) przy wykonywaniu Tezaurusa.";
+        Text[ japanese ] = "$(ERR) —ŞŒê«“Tg—p‚ÌÛ‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¨Ï¥Îµü¨å®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊäİíĞ ŞÇãæÓ ÇáãÑÇÏİÇÊ.";
+        Text[ dutch ] = "$(ERR) bij het uitvoeren van de thesaurus.";
+        Text[ chinese_simplified ] = "$(ERR)·¢ÉúÔÚÊ¹ÓÃ´ÊµäÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åêôİëåóç ôïõ èçóáõñïı ëİîåùí.";
+        Text[ korean ] = "µ¿ÀÇ¾î »çÀü ½ÇÇà½Ã $(ERR)";
+        Text[ turkish ] = "Eşanlamlılar kullanımı sırasında $(ERR).";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SVX_LINGU_SPELLING&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Rechtschreibprüfung. : $(ERR) bei der Ausf³hrung der Rechtschreibpr³fung. */
+        TEXT = "$(ERR) bei der Ausführung der Rechtschreibprüfung." ;
+        Text [ English ] = "$(ERR) executing the spellchecker." ;
+        Text [ english_us ] = "$(ERR) executing the spellcheck." ;
+        Text [ italian ] = "$(ERR) nell'eseguire il controllo ortografico." ;
+        Text [ spanish ] = "$(ERR) al ejecutar la revisión ortográfica." ;
+        Text [ french ] = "$(ERR) lors de l'exécution de la vérification de l'orthographe." ;
+        Text [ dutch ] = "$(ERR) bij het uitvoeren van de spellingcontrole" ;
+        Text [ swedish ] = "$(ERR) vid utförandet av rättstavningskontrollen." ;
+        Text [ danish ] = "$(ERR) under køring af stavekontrollen." ;
+        Text [ portuguese ] = "$(ERR) ao executar a verificação ortográfica." ;
+        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Rechtschreibprüfung." ;
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÖ´ĞĞÕı×Ö·¨¼ì²éÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè ïğîâåğêè ïğàâîïèñàíèÿ.";
+        Text[ polish ] = "$(ERR) przy sprawdzaniu pisowni.";
+        Text[ japanese ] = "$(ERR) ½ÍßÙÁª¯¸Às’†‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¨Ï¥Î«÷¦r¥\\¯à®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊäİíĞ ÚãáíÉ ÇáÊÏŞíŞ ÇáÅãáÇÆí.";
+        Text[ dutch ] = "$(ERR) bij het uitvoeren van de spellingcontrole";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÖ´ĞĞÕı×Ö·¨¼ì²éÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åêôİëåóç ôïõ ïñèïãñáöéêïı åëİã÷ïõ.";
+        Text[ korean ] = "¸ÂÃã¹ı °Ë»ç ½ÇÇà½Ã $(ERR)";
+        Text[ turkish ] = "Yazım denetimi sırasında $(ERR).";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SVX_LINGU_HYPHENATION&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) bei der Ausführung der Trennhilfe. : $(ERR) bei der Ausf³hrung der Trennhilfe. */
+        TEXT = "$(ERR) bei der Ausführung der Trennhilfe." ;
+        Text [ English ] = "$(ERR) executing the hyphenation." ;
+        Text [ english_us ] = "$(ERR) executing the hyphenation." ;
+        Text [ italian ] = "$(ERR) nell'eseguire la sillabazione." ;
+        Text [ spanish ] = "$(ERR) al ejecutar la separación silábica." ;
+        Text [ french ] = "$(ERR) lors de l'exécution de la césure." ;
+        Text [ dutch ] = "$(ERR) bij het uitvoeren van de woordafbreking" ;
+        Text [ swedish ] = "$(ERR) vid utförandet av avstavningen." ;
+        Text [ danish ] = "$(ERR) under køring af orddelingen." ;
+        Text [ portuguese ] = "$(ERR) ao executar a divisão silábica." ;
+        Text [ portuguese_brazilian ] = "$(ERR) bei der Ausführung der Trennhilfe." ;
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÊ¹ÓÃÁ¬×Ö·ûÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè âûïîëíåíèè ğàññòîíîâêè ïåğåíîñîâ.";
+        Text[ polish ] = "$(ERR) przy wykonywaniu dzielenia s³ów na sylaby.";
+        Text[ japanese ] = "$(ERR) Ê²ÌÈ°¼®İÀs’†‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¨Ï¥Î³s¦r²Å®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊäİíĞ ÚãáíÉ İÕá ÇáãŞÇØÚ.";
+        Text[ dutch ] = "$(ERR) bij het uitvoeren van de woordafbreking";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÊ¹ÓÃÁ¬×Ö·ûÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôçí åêôİëåóç ôçò âïŞèåéáò óõëëáâéóìïı.";
+        Text[ korean ] = "ÇÏÀÌÇÂ ½ÇÇà½Ã $(ERR)";
+        Text[ turkish ] = "Heceleme yardımını yürütme sırasında $(ERR).";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SVX_LINGU_DICTIONARY&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
+        /* ### ACHTUNG: Neuer Text in Resource? $(ERR) beim Anlegen eines Wörterbuches. : $(ERR) beim Anlegen eines W÷rterbuches. */
+        TEXT = "$(ERR) beim Anlegen eines Wörterbuches." ;
+        Text [ English ] = "$(ERR) creating a dictionary." ;
+        Text [ english_us ] = "$(ERR) creating a dictionary." ;
+        Text [ italian ] = "$(ERR) nel creare un dizionario." ;
+        Text [ spanish ] = "$(ERR) al crear un diccionario." ;
+        Text [ french ] = "$(ERR) lors de la création d'un dictionnaire" ;
+        Text [ dutch ] = "$(ERR) bij het maken van een woordenboek" ;
+        Text [ swedish ] = "$(ERR) vid skapandet av en ordbok." ;
+        Text [ danish ] = "$(ERR) under oprettelse af en ordbog." ;
+        Text [ portuguese ] = "$(ERR) ao criar dicionário." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Anlegen eines Wörterbuches." ;
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ½¨Á¢Ò»¸ö´ÊµäÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè ñîçäàíèè ñëîâàğÿ.";
+        Text[ polish ] = "$(ERR) przy tworzeniu s³ownika.";
+        Text[ japanese ] = "$(ERR)«‘ì¬‚ÌÛ‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¥Í¦¨¤@­Óµü¨å®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÅäÔÇÁ ŞÇãæÓ.";
+        Text[ dutch ] = "$(ERR) bij het maken van een woordenboek";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ½¨Á¢Ò»¸ö´ÊµäÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôç äçìéïõñãßá åíüò ëåîéêïı.";
+        Text[ korean ] = "»çÀü ÀÛ¼º½Ã $(ERR)";
+        Text[ turkish ] = "Sözlük oluşturma sırasında $(ERR).";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SVX_BACKGROUND&ERRCODE_RES_MASK
+    {
+        TEXT = "$(ERR) beim Festlegen eines Hintergrundattributes." ;
+        Text [ English ] = "$(ERR) setting background attribute." ;
+        Text [ english_us ] = "$(ERR) setting background attribute." ;
+        Text [ italian ] = "$(ERR) nel definire un attributo dello sfondo." ;
+        Text [ spanish ] = "$(ERR) al definir un atributo de fondo." ;
+        Text [ french ] = "$(ERR) lors du paramétrage de l'attribut d'arrière-plan" ;
+        Text [ dutch ] = "$(ERR) bij het maken van een achtergrondattribuut" ;
+        Text [ swedish ] = "$(ERR) vid fastställandet av bakgrundsattributen." ;
+        Text [ danish ] = "$(ERR) under indstilling af et baggrundsattribut." ;
+        Text [ portuguese ] = "$(ERR) ao definir atributo do plano de fundo." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Festlegen eines Hintergrundattributes." ;
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÈ·¶¨Ò»¸ö±³¾°ÊôĞÔÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè óñòàíîâêå àòğèáóòà ôîíà.";
+        Text[ polish ] = "$(ERR) przy ustawianiu atrybutów t³a.";
+        Text[ japanese ] = "$(ERR) ”wŒi‘®«‚ğİ’è‚·‚éÛ‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b½T©w¤@­Ó­I´ºÄİ©Ê®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÚííä ÅÍÏì ÓãÇÊ ÇáÎáİíÉ.";
+        Text[ dutch ] = "$(ERR) bij het maken van een achtergrondattribuut";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚÈ·¶¨Ò»¸ö±³¾°ÊôĞÔÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôïí ïñéóìü ìéáò éäéüôçôáò öüíôïõ.";
+        Text[ korean ] = "¹è°æ ¼Ó¼º ¼³Á¤½Ã $(ERR)";
+        Text[ turkish ] = "Artalan özniteliklerinin tanımlanması sırasında $(ERR) .";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCTX_SVX_IMPORT_GRAPHIC&ERRCODE_RES_MASK
+    {
+        TEXT = "$(ERR) beim Laden einer Grafik." ;
+        Text [ English ] = "$(ERR) loading graphic." ;
+        Text [ english_us ] = "$(ERR) loading the graphics." ;
+        Text [ italian ] = "$(ERR) nel caricare un'immagine." ;
+        Text [ spanish ] = "$(ERR) al cargar una imagen." ;
+        Text [ french ] = "$(ERR) lors du chargement d'un graphique" ;
+        Text [ dutch ] = "$(ERR) bij het laden van een afbeelding" ;
+        Text [ swedish ] = "$(ERR) vid laddning av en grafik." ;
+        Text [ danish ] = "$(ERR) under indlæsning af et billede." ;
+        Text [ portuguese ] = "$(ERR) ao carregar imagem." ;
+        Text [ portuguese_brazilian ] = "$(ERR) beim Laden einer Grafik." ;
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÔØÒ»¸öÍ¼ĞÎÊ±¡£";
+        Text[ russian ] = "$(ERR) ïğè çàãğóçêå ãğàôèêè.";
+        Text[ polish ] = "$(ERR) przy ³adowaniu grafiki.";
+        Text[ japanese ] = "$(ERR) ¸Ş×Ì¨¯¸‚ğÛ°ÄŞ’†‚É”­¶B";
+        Text[ chinese_traditional ] = "$(ERR)µo¥Í¦b¸Ë¸ü¤@­Ó¹Ï¤ù®É¡C";
+        Text[ arabic ] = "$(ERR) ÃËäÇÁ ÊÍãíá ÇáÑÓã.";
+        Text[ dutch ] = "$(ERR) bij het laden van een afbeelding";
+        Text[ chinese_simplified ] = "$(ERR) ·¢ÉúÔÚ×°ÔØÒ»¸öÍ¼ĞÎÊ±¡£";
+        Text[ greek ] = "$(ERR) êáôÜ ôç öüñôùóç åíüò ãñáöéêïı.";
+        Text[ korean ] = "±×·¡ÇÈ ·Îµå½Ã $(ERR)";
+        Text[ turkish ] = "Grafik yükleme sırasında $(ERR).";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // Error-Code ------------------------------------------------------------
+Resource RID_SVXERRCODE
+{
+    String ERRCODE_SVX_LINGU_THESAURUSNOTEXISTS&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
+        /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache */
+        TEXT = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache" ;
+        TEXT [ English ] = "For the current Language no Thesaurus is available.\nPlease check your installation and install the desired language." ;
+        Text [ english_us ] = "No thesaurus available for the current language.\nPlease check your installation and install the desired language" ;
+        Text [ italian ] = "Per la lingua scelta non esiste un dizionario dei sinonimi..\nControllare l'installazione ed installare se necessario il linguaggio desiderato" ;
+        Text [ spanish ] = "No hay ningún diccionario de sinónimos disponible para el idioma seleccionado.\nExamine por favor su instalación e instale en caso dado el idioma deseado." ;
+        Text [ french ] = "Aucun dictionnaire des synonymes n'est disponible pour la langue sélectionnée.\nVeuillez vérifiez l'installation et installer\nle cas échéant la langue concernée." ;
+        Text [ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal" ;
+        Text [ swedish ] = "Ingen synonymordbok är tillgänglig för det inställda språket.\nKontrollera Din installation och installera eventuellt det önskade språket." ;
+        Text [ danish ] = "Synonymordbogen står ikke til rådighed for det indstillede sprog.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
+        Text [ portuguese ] = "O dicionário de sinónimos não se encontra disponível para a língua especificada.\nConfira a sua instalação e, se necessário, instale a língua desejada." ;
+        Text [ portuguese_brazilian ] = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache" ;
+        Text[ chinese_simplified ] = "ÄúËùÉè¶¨µÄÓïÑÔÃ»ÓĞÏàÓ¦µÄ´Êµä¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒª£¬ÇëÄú°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
+        Text[ russian ] = "Äëÿ óñòàíîâëåííîãî ÿçûêà òåçàóğóñ íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
+        Text[ polish ] = "Tezaurus jest niedostêpny dla wybranego jêzyka.\nProszê sprawdziæ instalacjê i zainstalowaæ potrzebny jêzyk.";
+        Text[ japanese ] = "İ’è‚³‚ê‚½Œ¾Œê—p‚Ì—ŞŒê«“T‚Íg—p‚Å‚«‚Ü‚¹‚ñB\n‚²g—p‚ÌÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÄÁª¯¸‚µ‚ÄAê‡‚É‚æ‚Á‚Ä‚ÍA‚²Šó–]‚ÌŒ¾Œê‚ğ²İ½Ä°Ù‚µ‚Ä‰º‚³‚¢B";
+        Text[ chinese_traditional ] = "±z©Ò³]©wªº»y¨¥¨S¦³¬ÛÀ³ªºµü¨å¡C\n½Ğ±zÀË¬d¦w¸Ë¡M­Y¦³¥²­n¡M½Ğ¦w¸Ë©Ò­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
+        Text[ arabic ] = "áÇ íæÌÏ ŞÇãæÓ ãÑÇÏİÇÊ ááÛÉ ÇáÊí Êã ÊÍÏíÏåÇ.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ Ëã ÇáŞíÇã ÈÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
+        Text[ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
+        Text[ chinese_simplified ] = "ÄúËùÉè¶¨µÄÓïÑÔÃ»ÓĞÏàÓ¦µÄ´Êµä¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒª£¬ÇëÄú°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
+        Text[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß, åêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
+        Text[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ µ¿ÀÇ¾î »çÀüÀ» ÀÌ¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ÇÑ °ÍÀ» °ËÅäÇÏ°í ÇÊ¿äÇÏ¸é ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "Ayarlanan dile ilişkin eşanlamlılar mevcut değil.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache. : $(ARG1) ist f³r die Pr³fung nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache. */
+        /* ### ACHTUNG: Neuer Text in Resource? $(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache. : $(ARG1) ist f³r die Pr³fung nicht verf³gbar.\nšberpr³fen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew³nschte Sprache. */
+        TEXT = "$(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache." ;
+        TEXT [ English ] = "$(ARG1) is not available for spellchecking.\nPlease check your installation and install the desired language." ;
+        Text [ english_us ] = "$(ARG1) is not available for spellchecking.\nPlease check your installation and install the desired language." ;
+        Text [ italian ] = "$(ARG1) non è disponibile per il controllo.\nControllare l'installazione ed installare se necessario la lingua desiderata." ;
+        Text [ spanish ] = "$(ARG1) no disponible para la revisión ortográfica.\n Examine por favor su instalación e instale en caso dado el idioma deseado." ;
+        Text [ french ] = "$(ARG1) n'est pas disponible pour vérification. \nVeuillez vérifier l'installation et installer le cas échéant la langue souhaitée." ;
+        Text [ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal" ;
+        Text [ swedish ] = "$(ARG1) är inte tillgänglig för stavningskontrollen.\nKontrollera installationen och installera eventuellt det önskade språket." ;
+        Text [ danish ] = "$(ARG1) står ikke til rådighed for kontrollen.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
+        Text [ portuguese ] = "$(ARG1) não está disponível para a verificação ortográfica. \nConfira a sua instalação e, se necessário, instale a língua desejada." ;
+        Text [ portuguese_brazilian ] = "$(ARG1) ist für die Prüfung nicht verfügbar.\nÜberprüfen Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gewünschte Sprache." ;
+        Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
+        Text[ russian ] = "$(ARG1) äëÿ ïğîâåğêè íåäîñòóïåí.\nÏğîâåğüòå, ïîæàëóéñòà. Âàøó èíñòàëëÿöèş è, â ñëó÷àå íåîáõîäèìîñòè, èíñòàëëèğóéòå òğåáóåìûé ÿçûê.";
+        Text[ polish ] = "$(ARG1) jest dla sprawdzania pisowni niedostêpny.\nProszê sprawdziæ instalacjê i zainstalowaæ potrzebny jêzyk.";
+        Text[ japanese ] = "$(ARG1)‚Í½ÍßÙÁª¯¸‚Ég—p‚Å‚«‚Ü‚¹‚ñB\n‚²g—p‚ÌÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÄÁª¯¸‚µ‚ÄAê‡‚É‚æ‚Á‚Ä‚ÍA‚²Šó–]‚ÌŒ¾Œê‚ğ²İ½Ä-Ù‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "$(ARG1)¤£¦s¦b¡C\n½Ğ±zÀË¬d¦w¸Ë¡M­Y¦³¥²­n½Ğ±z¦w¸Ë©Ò»İªº»y¨¥ª©¥»¡C";
+        Text[ arabic ] = "$(ARG1) ÛíÑ ãÊæİÑ ááÊÏŞíŞ ÇáÅãáÇÆí.\nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ.";
+        Text[ dutch ] = "$(ARG1) voor de controle is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal";
+        Text[ chinese_simplified ] = "$(ARG1)²»´æÔÚ¡£\nÇëÄú¼ì²é°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùĞèµÄÓïÑÔ°æ±¾¡£";
+        Text[ greek ] = "$(ARG1) äåí åßíáé äéáèİóéìï ãéá ôïí ïñèïãñáöéêü İëåã÷ï.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé åãêáôáóôŞóôå áí ÷ñåéáóôåß ôçí ãëşóóá ğïõ åğéèõìåßôáé.";
+        Text[ korean ] = "$(ARG1)´Â ¸ÂÃã¹ı °Ë»ç¿¡ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.\n¼³Ä¡ÇÑ °ÍÀ» °ËÅäÇÏ°í ÇÊ¿äÇÏ¸é ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+        Text[ turkish ] = "$(ARG1) yazım denetiminde kullanılamıyor.\nLütfen kurulumu kontrol edin ve gerekirse istenilen dili kurun.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_LINGU_LINGUNOTEXISTS&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
+        /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist nicht verfügbar. : Die Rechtschreibpr³fung ist nicht verf³gbar. */
+        TEXT = "Die Rechtschreibprüfung ist nicht verfügbar." ;
+        TEXT [ English ] = "Spellchecking is not available." ;
+        Text [ english_us ] = "Spellcheck is not available." ;
+        Text [ italian ] = "Il controllo ortografico non è disponibile." ;
+        Text [ spanish ] = "La revisión ortográfica no está disponible." ;
+        Text [ french ] = "La vérification de l'orthographe n'est pas disponible." ;
+        Text [ dutch ] = "De spellingcontrole is niet beschikbaar." ;
+        Text [ swedish ] = "Rättstavningskontrollen är inte tillgänglig." ;
+        Text [ danish ] = "Stavekontrollen står ikke til rådighed." ;
+        Text [ portuguese ] = "A verificação ortográfica não está disponível." ;
+        Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist nicht verfügbar." ;
+        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÕı×Ö·¨¼ì²é¹¦ÄÜ¡£";
+        Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ íåäîñòóïíà.";
+        Text[ polish ] = "Sprawdzanie pisowni jest niedostêpne.";
+        Text[ japanese ] = "‚±‚Ì•¶ÍZ³‚Íg—p‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "³o­Ó«÷¦r¥\\¯à¤£¦s¦b¡C";
+        Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí ÛíÑ ãÊæİÑ.";
+        Text[ dutch ] = "De spellingcontrole is niet beschikbaar.";
+        Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÕı×Ö·¨¼ì²é¹¦ÄÜ¡£";
+        Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò äåí åßíáé äéáèİóéìïò.";
+        Text[ korean ] = "¸ÂÃã¹ı °Ë»ç¸¦ ÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Yazım denetimi işlevi kullanılamıyor.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_LINGU_HYPHENNOTEXISTS&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
+        /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar. : Die Trennhilfe ist nicht verf³gbar. */
+        TEXT = "Die Trennhilfe ist nicht verfügbar." ;
+        TEXT [ English ] = "Hyphenation is not available." ;
+        Text [ english_us ] = "Hyphenation not available." ;
+        Text [ italian ] = "La sillabazione non è disponibile." ;
+        Text [ spanish ] = "La ayuda para la separación silábica no está disponible." ;
+        Text [ french ] = "La césure n'est pas disponible." ;
+        Text [ dutch ] = "De modus Woordafbreken is niet beschikbaar." ;
+        Text [ swedish ] = "Avstavningshjälpen är inte tillgänglig." ;
+        Text [ danish ] = "Orddelingen står ikke til rådighed." ;
+        Text [ portuguese ] = "A separação silábica não está disponível." ;
+        Text [ portuguese_brazilian ] = "Die Trennhilfe ist nicht verfügbar." ;
+        Text[ chinese_simplified ] = "Á¬×Ö·û²»´æÔÚ¡£";
+        Text[ russian ] = "Ïîìîùü â ğàññòàíîâêå ïåğåíîñîâ íåäîñòóïíà.";
+        Text[ polish ] = "Dzielenie wyrazów jest niedostêpne.";
+        Text[ japanese ] = "Ê²ÌÈ°¼®İ‚ªg—p‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "³s¦r²Å¤£¦s¦b¡C";
+        Text[ arabic ] = "ãÓÇÚÏÉ İÕá ÇáãŞÇØÚ ÛíÑ ãÊæİÑÉ.";
+        Text[ dutch ] = "De modus Woordafbreken is niet beschikbaar.";
+        Text[ chinese_simplified ] = "Á¬×Ö·û²»´æÔÚ¡£";
+        Text[ greek ] = "Ç âïŞèåéá óõëëáâéóìïı äåí åßíáé äéáèİóéìç.";
+        Text[ korean ] = "ÇÏÀÌÇÂÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Heceleme yardımı mevcut değil.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_LINGU_DICT_NOTREADABLE&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
+        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht gelesen werden. */
+        TEXT = "Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden." ;
+        TEXT [ English ] = "The personal dictionary $(ARG1) cannot be read." ;
+        Text [ english_us ] = "The custom dictionary $(ARG1) cannot be read." ;
+        Text [ italian ] = "Il dizionario personalizzato $(ARG1) non può essere letto" ;
+        Text [ spanish ] = "No es posible leer el diccionario personal $(ARG1)." ;
+        Text [ french ] = "Impossible de lire le dictionnaire personnalisé $(ARG1)." ;
+        Text [ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden gelezen." ;
+        Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte läsas." ;
+        Text [ danish ] = "Det er ikke muligt at læse den personlige ordbog $(ARG1)." ;
+        Text [ portuguese ] = "Impossível ler o dicionário pessoal $(ARG1)." ;
+        Text [ portuguese_brazilian ] = "Das persönliche Wörterbuch $(ARG1) kann nicht gelesen werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öË½ÈË´Êµä $(ARG1)¡£";
+        Text[ russian ] = "Ïğî÷èòàòü ñëîâàğü ïîëüçîâàòåëÿ $(ARG1) íå óäàåòñÿ.";
+        Text[ polish ] = "S³ownik u¿ytkownika $(ARG1) nie móg³ zostaæ odczytany.";
+        Text[ japanese ] = "Õ°»Ş°«‘$(ARG1)‚ª“Ç‚İæ‚ê‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "µLªkÅª¥X­Ó¤Hµü¨å $(ARG1)¡C";
+        Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ÇáŞÇãæÓ ÇáÔÎÕí $(ARG1).";
+        Text[ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden gelezen.";
+        Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öË½ÈË´Êµä $(ARG1)¡£";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áíÜãíùóç ôïõ ğñïóùğéêïı ëåîéêïı $(ARG1).";
+        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À» ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Özel sözlük $(ARG1) okunamıyor.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE&ERRCODE_RES_MASK
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
+        /* ### ACHTUNG: Neuer Text in Resource? Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden. : Das pers÷nliche W÷rterbuch $(ARG1) kann nicht angelegt werden. */
+        TEXT = "Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden." ;
+        TEXT [ English ] = "The personal dictionary $(ARG1) cannot be created." ;
+        Text [ english_us ] = "The custom dictionary $(ARG1) cannot be created." ;
+        Text [ italian ] = "Il dizionario personalizzato $(ARG1) non può essere letto" ;
+        Text [ spanish ] = "No se puede crear el diccionario personal $(ARG1)." ;
+        Text [ french ] = "Impossible d'installer le dictionnaire $(ARG1)." ;
+        Text [ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden aangelegd." ;
+        Text [ swedish ] = "Den personliga ordboken $(ARG1) kan inte skapas." ;
+        Text [ danish ] = "Det er ikke muligt at oprette den personlige ordbog $(ARG1)." ;
+        Text [ portuguese ] = "Impossível criar o dicionário pessoal $(ARG1)." ;
+        Text [ portuguese_brazilian ] = "Das persönliche Wörterbuch $(ARG1) kann nicht angelegt werden." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Ë½ÈË´Êµä $(ARG1)¡£";
+        Text[ russian ] = "Ñîçäàòü ñëîâàğü ïîëüçîâàòåëÿ $(ARG1) íå óäàåòñÿ.";
+        Text[ polish ] = "S³ownik u¿ytkownika $(ARG1) nie móg³ zostaæ odczytany.";
+        Text[ japanese ] = "Õ°»Ş°«‘$(ARG1)‚ªì¬‚Å‚«‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "µLªk«Ø¥ß­Ó¤Hµü¨å $(ARG1)¡C";
+        Text[ arabic ] = "áÇ íãßä ÅäÔÇÁ ÇáŞÇãæÓ ÇáÔÎÕí $(ARG1).";
+        Text[ dutch ] = "Het persoonlijke woordenboek $(ARG1) kan niet worden aangelegd.";
+        Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Ë½ÈË´Êµä $(ARG1)¡£";
+        Text[ greek ] = "Äåí åßíáé äõíáôüí íá äçìéïõñãçèåß ôï ğñïóùğéêü ëåîéêü $(ARG1).";
+        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ »çÀü$(ARG1)À» ¸¸µé ¼ö ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "Özel sözlük $(ARG1) oluşturulamıyor.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_GRAPHIC_NOTREADABLE&ERRCODE_RES_MASK
+    {
+        TEXT = "Die Grafik $(ARG1) konnte nicht gefunden werden." ;
+        TEXT [ English ] = "$(ARG1) could not be found." ;
+        Text [ english_us ] = "The graphic $(ARG1) could not be found." ;
+        Text [ italian ] = "L'immagine $(ARG1) non è stata trovata" ;
+        Text [ spanish ] = "No se pudo encontrar la imagen $(ARG1)." ;
+        Text [ french ] = "Impossible de trouver le fichier §(ARG1)." ;
+        Text [ dutch ] = "Afbeelding $(ARG1) niet gevonden." ;
+        Text [ swedish ] = "Grafiken $(ARG1) kunde inte hittas." ;
+        Text [ danish ] = "Det var ikke muligt at finde billedet $(ARG1)." ;
+        Text [ portuguese_brazilian ] = "Die Grafik $(ARG1) konnte nicht gefunden werden." ;
+        Text [ portuguese ] = "Foi impossível encontrar a imagem $(ARG1)." ;
+        Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Í¼ĞÎ $(ARG1)¡£";
+        Text[ russian ] = "Íàéòè ãğàôèêó $(ARG1) íå óäàåòñÿ.";
+        Text[ polish ] = "Grafiki $(ARG1) nie znaleziono.";
+        Text[ japanese ] = "¸Ş×Ì¨¯¸‚Ì$(ARG1)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "µLªk§ä¨ì¹Ï¤ù $(ARG1)¡C";
+        Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáÑÓã $(ARG1).";
+        Text[ dutch ] = "Afbeelding $(ARG1) niet gevonden.";
+        Text[ chinese_simplified ] = "ÎŞ·¨ÕÒµ½Í¼ĞÎ $(ARG1)¡£";
+        Text[ greek ] = "Äåí âñİèçêå ôï ãñáöéêü $(ARG1).";
+        Text[ korean ] = "±×·¡ÇÈ$(ARG1)À» Ã£Áö ¸øÇß½À´Ï´Ù.";
+        Text[ turkish ] = "Grafik $(ARG1) bulunamadı.";
+        Text[ language_user1 ] = " ";
+    };
+    String ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT&ERRCODE_RES_MASK
+    {
+        TEXT = "Eine unverknüpfte Grafik konnte nicht geladen werden" ;
+        TEXT [ English ] = "An embedded graphic could not be read" ;
+        TEXT[ english_us ] = "An unlinked graphic could not be loaded";
+        TEXT[ portuguese ] = "Foi impossível carregar uma imagem não ligada.";
+        TEXT[ greek ] = "Äåí Şôáí äõíáôüí íá öïñôùèåß êÜğïéï ãñáöéêü ÷ùñßò óıíäåóç";
+        TEXT[ dutch ] = "Niet-gekoppelde afbeelding kon niet worden geladen";
+        TEXT[ french ] = "Une image (non liée) n'a pas pu être chargée.";
+        TEXT[ spanish ] = "No se pudo cargar una imagen no vinculada";
+        TEXT[ swedish ] = "En grafik utan länk kunde inte laddas";
+        TEXT[ russian ] = "Çàãğóçèòü íå ïğèâÿçàííóş ãğàôèêó íå óäàåòñÿ";
+        TEXT[ italian ] = "Non è stato possibile caricare un'immagine non collegata";
+        TEXT[ danish ] = "Det var ikke muligt at indlæse en ikke-kædet grafik";
+        TEXT[ polish ] = "Nie mo¿na by³o za³adowaæ po³¹czonej grafiki";
+        TEXT[ portuguese_brazilian ] = "An embedded graphic could not be read";
+        TEXT[ japanese ] = "Øİ¸‚³‚ê‚Ä‚¢‚È‚¢}‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ";
+        TEXT[ korean ] = "¿¬°áµÇÁö ¾ÊÀº ±×·¡ÇÈÀº ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù.";
+        TEXT[ chinese_simplified ] = "ÎŞ·¨×°ÔØÒ»¸öÉĞÎ´Á´½ÓµÄÍ¼ĞÎ";
+        TEXT[ chinese_traditional ] = "µLªk¸Ë¸ü¤@­Ó©|¥¼³sµ²ªº¹Ï§Î";
+        TEXT[ arabic ] = "ÊÚĞÑ ÊÍãíá ÅÍÏì ÇáÕæÑ ÇáÛíÑ ãÑÊÈØÉ";
+        TEXT[ turkish ] = "Bağlantı oluşturulmamış bir grafik yüklenemedi";
+    };
+    String ERRCODE_SVX_LINGU_NOLANGUAGE&ERRCODE_RES_MASK
+    {
+        TEXT = "Am ausgewählten Begriff ist keine Sprache eingestellt." ;
+        TEXT [ English ] = "There's no language at the selected object." ;
+        TEXT[ english_us ] = "A language has not been fixed for the selected term.";
+        TEXT[ portuguese ] = "Não foi especificada a língua para o termo seleccionado.";
+        TEXT[ greek ] = "Äåí İ÷åé åğéëå÷èåß ãëşóóá ãéá ôïí óõãêåêñéìİíï üñï.";
+        TEXT[ dutch ] = "Voor het geselecteerde item werd geen taal vastgelegd.";
+        TEXT[ french ] = "Aucune langue n'a été spécifiée pour le terme sélectionné.";
+        TEXT[ spanish ] = "No hay idioma determinado para la entrada seleccionada";
+        TEXT[ swedish ] = "Inget språk har ställts in för det utvalda begreppet.";
+        TEXT[ russian ] = "ßçûê äëÿ âûäåëåííîãî ïîíÿòèÿ íå óñòàíîâëåí.";
+        TEXT[ italian ] = "Non è stata impostata la lingua per il termine selezionato.";
+        TEXT[ danish ] = "Der er ikke indstillet et sprog ved det valgte udtryk.";
+        TEXT[ polish ] = "Nie ustawiono jêzyka przy wybranym haœle.";
+        TEXT[ portuguese_brazilian ] = "There's no language at the selected object.";
+        TEXT[ japanese ] = "‘I‘ğ‚µ‚½‚à‚Ì‚ÉŠY“–‚·‚éŒ¾Œê‚ª‚ ‚è‚Ü‚¹‚ñB";
+        TEXT[ korean ] = "¼±ÅÃµÈ ¿ë¾î¿¡´Â ¾Æ¹« ¾ğ¾îµµ ¼³Á¤µÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù.";
+        TEXT[ chinese_simplified ] = "Ã»ÓĞÉè¶¨ÓïÑÔ¡£";
+        TEXT[ chinese_traditional ] = "¨S¦³¿ï¾Ü¤@­Ó»y¨¥¡C";
+        TEXT[ arabic ] = "áÇ ÊæÌÏ áÛÉ Úáì ÇáßÇÆä ÇáãõÍÏÏ.";
+        TEXT[ turkish ] = "Seçilen sözcük için dil belirlenmedi.";
+    };
+    String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text = "Die Formular-Schicht wurden nicht geladen, da notwendige IO-Services (stardiv.uno.io.*) nicht instantiiert werden konnten";
+        Text [ english ] = "The form layer wasn't loaded as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
+        Text[ english_us ] = "The form layer wasn't loaded as the required IO-services (stardiv.uno.io.*) could not be instantiated";
+        Text[ portuguese ] = "Impossível carregar a camada do formulário: foi impossível instanciar os serviços IO (stardiv.uno.io.*) necessários";
+        Text[ greek ] = "Äåí öïñôşèçêå ç óôñşóç ôçò öüñìáò, åğåéäŞ äåí Şôáí äõíáôüí íá ãßíåé åíçìİñùóç êÜğïéùí áğáéôïõìİíùí õğçñåóéşí åéóüäïõ - åîüäïõ (stardiv.uno.io.*).";
+        Text[ dutch ] = "Formulier-level kon niet worden geladen daar noodzakelijke io--services (stardiv.uno.io.*) niet konden worden geïnstantieerd.";
+        Text[ french ] = "La couche de formulaire n'a pas été chargée : impossible d'instancier les services IO (stardiv.uno.io.*) requis.";
+        Text[ spanish ] = "No se cargó la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ swedish ] = "Formulärskiktet laddades inte eftersom nödvändig IO-service (stardiv.uno.io.*) inte kunde instantieras.";
+        Text[ language_user1 ] = " ";
+        Text[ russian ] = "Ñëîé ôîğìóëÿğà íå çàãğóæåí, ïîñêîëüêó íåîáõîäèìàÿ äëÿ ıòîãî ñëóæáà io (stardiv.uno.io.*) íå êîíêğåòèçèğîâàíà.";
+        Text[ italian ] = "Lo strato del formulario non è stato caricato poichè stato possibile creare i servizi IO (strdiv.uno.io.*) necessari.";
+        Text[ danish ] = "Formularlaget blev ikke indlæst, fordi det ikke var muligt at instantiere den krævede IO-service (stardiv.uno.io.*).";
+        Text[ polish ] = "Warstwa formularza nie zosta³a za³adowana, poniewa¿ nie mo¿na by³o utworzyæ wymaganych serwisów IO (stardiv.uno.io.*)";
+        Text[ portuguese_brazilian ] = "The form layer wasn't loaded as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
+        Text[ japanese ] = "IO»°ËŞ½(stardiv.uno.io.*)‚ª²İ½Ä°Ù‚Å‚«‚È‚©‚Á‚½‚½‚ßAÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ¿¹½ÃÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜ×°ÔØ±íµ¥·Ö²ãĞÅÏ¢";
+        Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¸Ë¸üªí³æ¼h¦¸¡C";
+        Text[ arabic ] = "áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
+        Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yüklenemedi.";
+    };
+    String (ERRCODE_SVX_FORMS_NOIOSERVICES | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
+    {
+        Text = "Die Formular-Schicht wurden nicht geschrieben, da notwendige IO-Services (stardiv.uno.io.*) nicht instantiiert werden konnten";
+        Text [ english ] = "The form layer wasn't written as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
+        Text[ english_us ] = "The form layer wasn't written as the required IO services (stardiv.uno.io.*) could not be instantiated";
+        Text[ portuguese ] = "Impossível escrever a camada do formulário: foi impossível instanciar os serviços IO (stardiv.uno.io.*) necessários.";
+        Text[ greek ] = "Äåí öïñôşèçêå ç óôñşóç ôçò öüñìáò, åğåéäŞ äåí Şôáí äõíáôüí íá ãßíåé åíçìİñùóç êÜğïéùí áğáéôïõìİíùí õğçñåóéşí åéóüäïõ - åîüäïõ (stardiv.uno.io.*).";
+        Text[ dutch ] = "Formulier-level werd niet geschreven daar noodzakelijke io-services (stardiv.uno.io.*) niet konden worden geïnstantieerd.";
+        Text[ french ] = "La couche de formulaire n'a pas été écrite : impossible d'instancier les services IO (stardiv.uno.io.*) requis.";
+        Text[ spanish ] = "No se pudo escribir la capa de formulario porque no se pudieron instanciar servicios IO necesarios (stardiv.uno.io.*)";
+        Text[ swedish ] = "Formulärskiktet skrevs inte eftersom nödvändig IO-service (stardiv.uno.io.*) inte kunde instantieras";
+        Text[ russian ] = "Ñëîé ôîğìóëÿğà íå çàïèñàí, ïîñêîëüêó íåîáõîäèìàÿ äëÿ ıòîãî ñëóæáà io (stardiv.uno.io.*) íå êîíêğåòèçèğîâàíà.";
+        Text[ italian ] = "Lo strato del formulario non è stato scritto perché non non è stato possibile creare i servizi IO (stardiv.uno.io.*) necessari.";
+        Text[ danish ] = "Formularlaget blev ikke skrevet, fordi det ikke var muligt at instantiere den krævede IO-service (stardiv.uno.io.*).";
+        Text[ polish ] = "Warstwa formularza nie zosta³a zapisana, poniewa¿ nie mo¿na by³o utworzyæ wymaganych serwisów IO (stardiv.uno.io.*)";
+        Text[ portuguese_brazilian ] = "The form layer wasn't written as neccessary io-services (stardiv.uno.io.*) could not be instantiated";
+        Text[ japanese ] = "IO»°ËŞ½(stardiv.uno.io.*)‚ª²İ½Ä°Ù‚Å‚«‚È‚©‚Á‚½‚½‚ßAÌ«°Ñ‘w‚Í‘‚«‚±‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ korean ] = "ÇÊ¿äÇÑ IO¼­ºñ½º(stardiv.uno.io.*)¸¦ ¿¹½ÃÇÏÁö ¸øÇß±â ¶§¹®¿¡ Æû °èÃşÀÌ ±â·ÏµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÒòÎªÎŞ·¨°²×°ĞèÒªµÄ IO ·şÎñ(stardiv.uno.io.*)£¬ËùÒÔ²»ÄÜĞ´Èë±íµ¥·Ö²ãĞÅÏ¢";
+        Text[ chinese_traditional ] = "¦]¬°¨S¦³¦w¸Ë¥²­nªº IO ªA°È(stardiv.uno.io.*)¦ÓµLªk¼g¤Jªí³æ¼h¦¸¡C";
+        Text[ arabic ] = "áã íÊã ßÊÇÈÉ ØÈŞÉ ÇáÇÓÊãÇÑÉ¡ ÅĞ ÊÚĞÑ ÅäÔÇÁ ÎÏãÇÊ IO ÇááÇÒãÉ (stardiv.uno.io.*)";
+        Text[ turkish ] = "Gerekli IO hizmetleri (stardiv.uno.io.*) başlatılamadığı için, form düzeyi yazılamadı.";
+    };
+    String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text = "Beim Lesen der Formular-Controls trat ein Fehler auf. Die Formular-Schicht wurde nicht geladen";
+        Text [ english ] = "While reading the form controls an error occured. The form layer has not been loaded";
+        Text[ english_us ] = "An error occurred while reading the form controls. The form layer has not been loaded";
+        Text[ portuguese ] = "Ocorreu um erro na leitura dos controlos do formulário. Foi impossível carregar a camada do formulário.";
+        Text[ greek ] = "ÊáôÜ ôçí áíÜãíùóç ôùí óôïé÷åßùí åëİã÷ïõ ôçò öüñìáò ğáñïõóéÜóôçêå İíá óöÜëìá. Ç óôñşóç ôçò öüñìáò äåí öïñôşèçêå.";
+        Text[ dutch ] = "Fout bij lezen van formulier-controls. Formulier-level werd niet geladen.";
+        Text[ french ] = "Une erreur est survenue lors de la lecture des contrôles de formulaire. La couche de formulaire n'a pas été chargée.";
+        Text[ spanish ] = "Ha ocurrido un error al leer los controles de formulario. No se cargó la capa de formulario.";
+        Text[ swedish ] = "Det uppstod ett fel vid läsning av formulär-controls. Formulärskiktet laddades inte";
+        Text[ russian ] = "Ïğè ÷òåíèè ıëåìåíòîâ óïğàâëåíèÿ ôîğìóëÿğà ïğîèçîøëà îøèáêà. Ñëîé ôîğìóëÿğà íå çàãğóæåí.";
+        Text[ italian ] = "Si è verificato un errore nella lettura del formulario Controls. Lo strato del formulario non è stato caricato";
+        Text[ danish ] = "Der opstod en fejl under læsning af formular-kontrolelementerne. Formularlaget blev ikke indlæst.";
+        Text[ polish ] = "Podczas odczytu kontroli formularza wyst¹pi³ b³¹d. Warstwa formularza nie zosta³a za³adowana";
+        Text[ portuguese_brazilian ] = "While reading the form controls an error occured. The form layer has not been loaded";
+        Text[ japanese ] = "Ì«°Ñ‘w‚Ì“Ç‚İæ‚è’†‚ÉƒGƒ‰[”­¶B‚±‚ÌÌ«°Ñ‘w‚Í“Ç‚İ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ korean ] = "¾ç½Ä ÄÁÆ®·ÑÀ» ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¾ç½Ä °èÃşÀÌ ·ÎµåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨×°ÔØ±íµ¥·Ö²ãĞÅÏ¢¡£";
+        Text[ chinese_traditional ] = "¦bÅª¨úªí³æ±±¨î¶µ®Éµo¥Í¿ù»~¡CµLªk¸Ë¸üªí³æ¼h¦¸¡C";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÊÍãíá ØÈŞÉ ÇáÇÓÊãÇÑÉ";
+        Text[ turkish ] = "Form komut öğeleri okunurken bir hata oluştu. Form düzeyi yüklenemedi.";
+    };
+    String (ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_CLASS_WRITE) & ERRCODE_RES_MASK
+    {
+        Text = "Beim Schreiben der Formular-Controls trat ein Fehler auf. Die Formular-Schicht wurde nicht gespeichert";
+        Text [ english ] = "While writing the form controls an error occured. The form layer has not been saved";
+        Text[ english_us ] = "An error occurred while writing the form controls. The form layer has not been saved";
+        Text[ portuguese ] = "Ocorreu um erro ao escrever os controlos do formulário. Foi impossível guardar a camada do formulário.";
+        Text[ greek ] = "ÊáôÜ ôçí åããñáöŞ ôùí óôïé÷åßùí åëİã÷ïõ ôçò öüñìáò ğáñïõóéÜóôçêå İíá óöÜëìá. Ç óôñşóç ôçò öüñìáò äåí öïñôşèçêå.";
+        Text[ dutch ] = "Fout bij schrijven van formulier-controls. Formulier-level werd niet opgeslagen.";
+        Text[ french ] = "Une erreur est survenue lors de l'écriture des contrôles de formulaire. La couche de formulaire n'a pas été enregistrée.";
+        Text[ spanish ] = "Ha ocurrido un error al escribir los controles de formulario. No se guardó la capa de formulario.";
+        Text[ swedish ] = "Det uppstod ett fel vid skrivning av formulär-controls. Formulärskiktet sparades inte";
+        Text[ russian ] = "Ïğè íàïèñàíèè ıëåìåíòîâ óïğàâëåíèÿ ôîğìóëÿğà ïğîèçîøëà îøèáêà. Ñëîé ôîğìóëÿğà íå ñîõğàíåí.";
+        Text[ italian ] = "Si è verificato un errore durante la compilazione del formulario controls. Lo strato del formulario non è stato salvato.";
+        Text[ danish ] = "Der opstod en fejl under skrivning af formular-kontrolelementerne. Formularlaget blev ikke gemt.";
+        Text[ polish ] = "Podczas zapisu kontroli formularza wyst¹pi³ b³¹d. Warstwa formularza nie zosta³a zapisana";
+        Text[ portuguese_brazilian ] = "While writing the form controls an error occured. The form layer has not been saved";
+        Text[ japanese ] = "Ì«°Ñ‘w‚Ì‘‚«‚İ’†‚ÉƒGƒ‰[”­¶BÌ«°Ñ‘w‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        Text[ korean ] = "¾ç½Ä ÄÁÆ®·ÑÀ» ±â·ÏÇÒ ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ¾ç½Ä °èÃşÀÌ ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÔÚĞ´Èë±íµ¥¿ØÖÆÇøÊ±·¢ÉúÒ»¸ö´íÎó¡£ÎŞ·¨´æÅÌ±íµ¥·Ö²ãĞÅÏ¢¡£";
+        Text[ chinese_traditional ] = "¦b¼g¤Jªí³æ±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¨S¦³Àx¦sªí³æ¼h¦¸¡C";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ÚäÇÕÑ ÊÍßã ÇáÇÓÊãÇÑÉ. áã íÊã ÍİÙ ØÈŞÉ ÇáÇÓÊãÇÑÉ";
+        Text[ turkish ] = "Form komut öğeleri yazılırken bir hata oluştu. Form düzeyi kaydedilemedi.";
+    };
+    String (ERRCODE_SVX_BULLETITEM_NOBULLET | ERRCODE_CLASS_READ) & ERRCODE_RES_MASK
+    {
+        Text = "Beim Lesen eines Bullets trat ein Fehler auf. Es konnten nicht alle Bullets geladen werden";
+        Text [ english ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
+        Text[ english_us ] = "An error occurred while reading one of the bullets. Not all of the bullets were loaded.";
+        Text[ portuguese ] = "Surgiu um erro durante a leitura de uma marca. Foi impossível carregá-las todas.";
+        Text[ russian ] = "Âî âğåìÿ ÷òåíèÿ îäíîãî ìàğêåğà ïğîèçîøëà îøèáêà. Ïîıòîìó çàãğóçèòü âñå ìàğêåğû íå óäàñòñÿ.";
+        Text[ greek ] = "ÊáôÜ ôçí áíÜãíùóç ìéáò êïõêßäáò ğáñïõóéÜóôçêå İíá óöÜëìá. Äåí Şôáí äõíáôüí íá ãßíåé öüñôùóç üëùí ôùí êïõêßäùí";
+        Text[ dutch ] = "Fout bij laden van opsommingsteken. Niet alle konden worden geladen.";
+        Text[ french ] = "Une erreur s'est produite pendant la lecture d'une puce. Certaines puces n'ont pas pu être chargées.";
+        Text[ spanish ] = "Ha ocurrido un error al leer una viñeta. No se pudieron cargar todas las viñetas.";
+        Text[ italian ] = "Durante la lettura di un bullet si è verificato un errore. Non è stato possibile caricare tutti i bullet.";
+        Text[ danish ] = "Der opstod en fejl ved læsning af et punkttegn. Det var ikke muligt at indlæse alle punkttegn.";
+        Text[ swedish ] = "Det uppstod ett fel vid läsning av en bullet. Alla bullets kunde inte laddas";
+        Text[ polish ] = "Wyst¹pi³ b³¹d przy odczycie wypunktowania. Nie mo¿na by³o za³adowaæ wszystkich wypunktowañ.";
+        Text[ portuguese_brazilian ] = "There occurred an error during reading a bullet. Not all Bullets coud be read correctly";
+        Text[ japanese ] = "‰Óğ‘‚«‚ğ“Ç‚İ‚ŞÛ‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚·‚×‚Ä‚Ì‰Óğ‘‚«‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        Text[ korean ] = "±Û¸Ó¸®Ç¥¸¦ ÀĞÀ» ¶§ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù. ±Û¸Ó¸®Ç¥¸¦ ¸ğµÎ ·ÎµåÇÏÁö´Â ¸øÇß½À´Ï´Ù.";
+        Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡Ò»¸öÍ¼±ê·ûºÅÊ±·¢Éú´íÎó¡£ÎŞ·¨×°ÔØÈ«²¿Í¼±ê·ûºÅ¡£";
+        Text[ chinese_traditional ] = "¦bÅª¨ú¤@­Ó¶µ¥Ø²Å¸¹®Éµo¥Í¿ù»~¡CµLªk¸Ë¸ü©Ò¦³ªº¶µ¥Ø²Å¸¹¡C";
+        Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ÅÍÏì ÚáÇãÇÊ ÇáÊÚÏÇÏ. ÊÚĞÑ ÊÍãíá ßá ÚáÇãÇÊ ÇáÊÚÏÇÏ.";
+        Text[ turkish ] = "Madde işaretleri okunurken hata oluştu. Bu nedenle tüm madde işaretleri yüklenemedi.";
+    };
+
+    String ERRCODE_SVX_MODIFIED_VBASIC_STORAGE & ERRCODE_RES_MASK
+    {
+//      TEXT = "Der Basic-Code wurde verändert und kann somit nicht mehr als Original gespeichert werden." ;
+//      TEXT [ English ] = "The Basic-Code is modified and so it can not be saved as original." ;
+        TEXT = "Alle Veränderungen am Dokument Basic Code gehen verloren. Stattdessen wird der originale VBA Makrocode gespeichert." ;
+        TEXT [ English ] = "All changes made on the document Basic code will be lost. The original VBA macro code will be saved instead." ;
+        TEXT[ english_us ] = "All changes to the Basic Code are lost.The original VBA Macro Code is saved instead.";
+        TEXT[ portuguese ] = "As modificações efectuadas no documento Basic Code perder-se-ão. No seu lugar será guardado o código macro VBA.";
+        TEXT[ russian ] = "Âñå èçìåíåíèÿ äîêóìåíòà Basic Code áóäóò óòåğÿíû. Âìåñòî ıòîãî áóäåò ñîõğàíåí èñõîäíûé VBA ìàêğîêîä.";
+        TEXT[ greek ] = "¼ëåò ïé áëëáãİò ôïõ åããñÜöïõ Basic Code èá ÷áèïıí. Áíôß áõôïı èá áğïèçêåõôåß ôï áõèåíôéêü VBA Makrocode.";
+        TEXT[ dutch ] = "De Basic-code werd veranderd en kan daardoor niet meer als origineel worden opgeslagen.";
+        TEXT[ french ] = "Comme les modifications apportées au code Basic du document vont être perdues, c'est le code de macro VBA d'origine qui va être enregistré à la place.";
+        TEXT[ spanish ] = "Se perderán todas las modificaciones del Basic Code del documento. En su lugar se guardará el código macro VBA original.";
+        TEXT[ italian ] = "Tutte le modifiche apportate al documento Basic Code andranno perdute. Pertanto verrà salvato l'originale VBA.";
+        TEXT[ danish ] = "Alle ændringer i dokumentet Basic Code går tabt. I stedet gemmes gemmes den originale VBA Macro Code.";
+        TEXT[ swedish ] = "Alla ändringar av dokument-Basic Code går förlorade. I stället sparas original-VBA-makrokoden.";
+        TEXT[ polish ] = "Wszelkie modyfikacje dotycz¹ce Basic Code dokumentu bêd¹ anulowane. Zapisany zostanie za to oryginalny kod makro VBA.";
+        TEXT[ portuguese_brazilian ] = "The Basic-Code is modified and so it can not be saved as original.";
+        TEXT[ japanese ] = "Basic Code ÄŞ·­ÒİÄ‚Ì‚·‚×‚Ä‚Ì•ÏX‚Í¸‚í‚ê‚Ü‚µ‚½BµØ¼ŞÅÙ‚Ì VBA Makrocode‚ª‚»‚Ì‘ã‚è‚É•Û‘¶‚³‚ê‚Ü‚·B";
+        TEXT[ korean ] = "Basic-Code°¡ º¯°æµÇ¾î ÀÌÁ¦´Â ¿øº»À¸·Î ÀúÀåÇÒ ¼ö ¾ø½À´Ï´Ù.";
+        TEXT[ chinese_simplified ] = "¶ªÊ§ÁË¶ÔBasic CodeÎÄµµ½øĞĞµÄ¸ü¸Ä¡£´æÅÌµÄÖ»ÊÇÔ´VBAºêÂë¡£";
+        TEXT[ chinese_traditional ] = "¤å¥óªº Basic ½X©Ò¦³ÅÜ§ó¤w¸g¬y¥¢¡C¤w¸gÀx¦s·½ VBA ¥¨¶°¡C";
+        TEXT[ turkish ] = "Basic Code belgesindeki tüm değişiklikler kaybolacak. Bunun yerine orjinal VBA Macrocode kaydedilecek.";
+        TEXT[ arabic ] = "Óæİ ÊÖíÚ ßÇİÉ ÇáÊÚÏíáÇÊ ÇáÊí Êã ÅÏÎÇáåÇ Úáì  Basic Code ÇáãÓÊäÏ¡ æÓæİ íÊã ÍİÙ VBA Macro Code ÈÏáÇğ ãäåÇ.";
+    };
+
+    String ERRCODE_SVX_VBASIC_STORAGE_EXIST & ERRCODE_RES_MASK
+    {
+        TEXT = "Der im Dokument enthaltene originale VBA Basic Code wird nicht gespeichert." ;
+        TEXT [ English ] = "The original VBA basic code contained in the document will no be saved." ;
+        TEXT[ english_us ] = "The original VBA Basic Code contained in the document will not be saved.";
+        TEXT[ portuguese ] = "O código VBA original contido no documento não será guardado.";
+        TEXT[ russian ] = "Ñîäåğæàùèéñÿ â äîêóìåíòå èñõîäíûé VBA Basic Code ñîõğàíåí íå áóäåò.";
+        TEXT[ greek ] = "Äåí èá ãßíåé áğïèŞêåõóç ôïõ áõèåíôéêïı VBA basic code ğïõ ğåñéİ÷åôáé óôï İããñáöï.";
+        TEXT[ dutch ] = "The original VBA basic code contained in the document will no be saved.";
+        TEXT[ french ] = "Le code VBA basic d'origine contenu dans le document ne sera pas enregistré.";
+        TEXT[ spanish ] = "No se guardará el Basic Code VBA incluido en el documento.";
+        TEXT[ italian ] = "Non è possibile salvare il codice VBA Basic contenuto nel documeto.";
+        TEXT[ danish ] = "Den originale VBA Basic Code, som er indeholdt i dokumentet, gemmes ikke.";
+        TEXT[ swedish ] = "Original-VBA-basickoden som finns i dokumentet sparas inte.";
+        TEXT[ polish ] = "Zawarty w dokumencie oryginalny VBA Basic Code nie zostanie zapisany.";
+        TEXT[ portuguese_brazilian ] = "The original VBA basic code contained in the document will no be saved.";
+        TEXT[ japanese ] = "ÄŞ·­ÒİÄ‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚éµØ¼ŞÅÙ‚Ì VBA Basic Code ‚Í•Û‘¶‚³‚ê‚Ü‚¹‚ñB";
+        TEXT[ korean ] = "The original VBA basic code contained in the document will no be saved.";
+        TEXT[ chinese_simplified ] = "²»»á´æÅÌÎÄµµÖĞº¬ÓĞµÄÔ´VBA Basic Code¡£";
+        TEXT[ chinese_traditional ] = "¤å¥ó§t¦³ªº·½ VBA basic ½X¤£·|³QÀx¦s¡C";
+        TEXT[ turkish ] = "Belgede bulunan ilk VBA basic kodu kaydedilmeyecek.";
+        TEXT[ arabic ] = "áä íÊã ÍİÙ ÇáÜ  VBA Basic CodeÇáÃÕáí ÇáãæÌæÏ İí ÇáãÓÊäÏ.";
+    };
+};
+ // ********************************************************************** EOF

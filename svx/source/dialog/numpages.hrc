@@ -1,0 +1,158 @@
+/*************************************************************************
+ *
+ *  $RCSfile: numpages.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define FT_ALIGN        50
+#define LB_ALIGN        51
+#define FT_DIST_BORDER  52
+#define MF_DIST_BORDER  53
+#define FT_DIST_NUM     54
+#define MF_DIST_NUM     55
+#define GB_POS          56
+
+#define LB_FMT_CHAR     60
+#define FT_FMT_CHAR     61
+
+#define FT_WIDTH        67
+#define FI_URL          68
+#define FT_HEIGHT       70
+
+
+#define MN_STD_NUMBER   120
+#define MD_DEL_NUMBER   121
+#define MN_STD_BULLET   122
+#define MN_DEL_BULLET   123
+
+#define STR_BULLET      200
+#define STR_NUMFMT_1    201
+#define STR_NUMFMT_2    202
+#define STR_NUMFMT_3    203
+#define STR_NUMFMT_4    204
+#define STR_NUMFMT_5    205
+#define STR_NUMFMT_6    206
+#define STR_NUMFMT_7    207
+#define STR_NUMFMT_8    208
+#define STR_NUMFMT_7_HTML    209
+
+#define LB_FORM         210
+#define ED_FORM         211
+#define GB_FORM         212
+
+#define BT_BULLET       213
+
+#define BG_VALUES       220
+#define VS_VALUES       221
+#define ST_CUSTOMIZE    222
+#define FT_ERROR        223
+#define CB_LINKED       224
+
+#define GB_LEVEL        150
+#define LB_LEVEL        151
+#define GB_FORMAT       152
+#define GB_PREVIEW      153
+#define GB_POSITION     154
+#define FT_PREFIX       155
+#define ED_PREFIX       156
+#define FT_FMT          157
+#define LB_FMT          158
+#define FT_SUFFIX       159
+#define ED_SUFFIX       160
+#define FT_BORDERDIST   161
+#define MF_BORDERDIST   162
+#define FT_NUMDIST      163
+#define MF_NUMDIST      164
+#define FT_INDENT       165
+#define MF_INDENT       166
+#define FT_CHARFMT      167
+#define LB_CHARFMT      168
+#define NF_ALL_LEVEL    169
+#define FT_START        170
+#define ED_START        171
+#define FT_BULLET       172
+#define PB_BULLET       173
+#define WIN_PREVIEW     174
+#define FT_BITMAP       175
+#define PB_SEARCH       176
+#define CB_RATIO        177
+#define FT_SIZE         178
+#define MF_WIDTH        179
+#define FT_MULT         180
+#define MF_HEIGHT       181
+#define FT_ORIENT       182
+#define LB_ORIENT       183
+#define MB_BITMAP       184
+#define CB_RELATIVE     185
+#define FT_ALL_LEVEL    186
+#define PB_STANDARD     187
+#define CB_SAME_LEVEL   188
+#define GB_SAME_LEVEL   189
+#define FT_BUL_COLOR    190
+#define LB_BUL_COLOR    191
+#define FT_BUL_REL_SIZE 192
+#define MF_BUL_REL_SIZE 193
+#define CB_USE_BULLET   194
+#define ST_POPUP_EMPTY_ENTRY 195
+
+#define MN_GRAPHIC_DLG     1
+#define MN_GALLERY         2
+#define MN_GALLERY_ENTRY 100
+
+
+

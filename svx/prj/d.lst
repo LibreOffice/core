@@ -1,0 +1,568 @@
+touch: ..\inc\hid.lst %_DEST%\bin%_EXT%\hid.lst
+..\%__SRC%\misc\svxinter.c %_DEST%\odk\src%_EXT%\svxinter.c
+..\%__SRC%\misc\svx.hid %_DEST%\bin%_EXT%\svx.hid
+..\%__SRC%\inc\svxinter.h %_DEST%\odk\inc%_EXT%\svxinter.h
+..\%__SRC%\inc\svxslots.ilb %_DEST%\inc%_EXT%\svxslots.ilb
+..\%__SRC%\inc\fren\svxslots.ilb %_DEST%\inc%_EXT%\fren\svxslots.ilb
+..\%__SRC%\inc\dtch\svxslots.ilb %_DEST%\inc%_EXT%\dtch\svxslots.ilb
+..\%__SRC%\inc\span\svxslots.ilb %_DEST%\inc%_EXT%\span\svxslots.ilb
+..\%__SRC%\inc\port\svxslots.ilb %_DEST%\inc%_EXT%\port\svxslots.ilb
+..\%__SRC%\inc\ital\svxslots.ilb %_DEST%\inc%_EXT%\ital\svxslots.ilb
+..\%__SRC%\inc\enus\svxslots.ilb %_DEST%\inc%_EXT%\enus\svxslots.ilb
+..\%__SRC%\inc\swed\svxslots.ilb %_DEST%\inc%_EXT%\swed\svxslots.ilb
+..\%__SRC%\inc\dan\svxslots.ilb %_DEST%\inc%_EXT%\dan\svxslots.ilb
+..\%__SRC%\inc\chinsim\svxslots.ilb %_DEST%\inc%_EXT%\chinsim\svxslots.ilb
+..\%__SRC%\inc\japn\svxslots.ilb %_DEST%\inc%_EXT%\japn\svxslots.ilb
+..\%__SRC%\inc\russ\svxslots.ilb %_DEST%\inc%_EXT%\russ\svxslots.ilb
+..\%__SRC%\inc\pol\svxslots.ilb %_DEST%\inc%_EXT%\pol\svxslots.ilb
+..\%__SRC%\inc\svxlink.hxx %_DEST%\inc%_EXT%\svxlink.hxx
+..\%__SRC%\inc\\*.ilb* %_DEST%\inc%_EXT%\*.ilb*
+..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\dl.lib %_DEST%\lib%_EXT%\dl.lib
+..\%__SRC%\slb\dg.lib %_DEST%\lib%_EXT%\xdg.lib
+..\%__SRC%\lib\svx.lib %_DEST%\lib%_EXT%\svx.lib
+..\%__SRC%\slb\svx.lib %_DEST%\lib%_EXT%\xsvx.lib
+..\%__SRC%\lib\svxinter.lib %_DEST%\odk\lib%_EXT%\svxinter.lib
+..\%__SRC%\lib\svl.lib %_DEST%\lib%_EXT%\svl.lib
+..\%__SRC%\lib\dl1.lib %_DEST%\lib%_EXT%\dl1.lib
+..\%__SRC%\lib\dl2.lib %_DEST%\lib%_EXT%\dl2.lib
+..\%__SRC%\lib\svx1.lib %_DEST%\lib%_EXT%\svx1.lib
+..\%__SRC%\lib\svx2.lib %_DEST%\lib%_EXT%\svx2.lib
+..\%__SRC%\slb\xdraw.lib %_DEST%\lib%_EXT%\svxsmrtd.lib
+..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
+..\%__SRC%\bin\dg*.dll %_DEST%\bin%_EXT%\dg*.dll
+..\%__SRC%\bin\dl*.dll %_DEST%\bin%_EXT%\dl*.dll
+..\%__SRC%\bin\dg*.sym %_DEST%\bin%_EXT%\dg*.sym
+..\%__SRC%\misc\dg*.map %_DEST%\bin%_EXT%\dg*.map
+..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
+..\%__SRC%\bin\svx*.res %_DEST%\bin%_EXT%\svx*.res
+..\%__SRC%\bin\gal*.res %_DEST%\bin%_EXT%\gal*.res
+..\%__SRC%\bin\svx*.sym %_DEST%\bin%_EXT%\svx*.sym
+..\%__SRC%\misc\svx*.map %_DEST%\bin%_EXT%\svx*.map
+..\%__SRC%\misc\svx.csv %_DEST%\inc%_EXT%\svx.csv
+..\%__SRC%\bin\svl*.dll %_DEST%\bin%_EXT%\svl*.dll
+..\%__SRC%\bin\svl*.sym %_DEST%\bin%_EXT%\svl*.sym
+..\%__SRC%\bin\svxslots.tlb %_DEST%\bin%_EXT%\svxslots.tlb
+..\%__SRC%\srs\svxslots.srs %_DEST%\res%_EXT%\svxslots.srs
+..\%__SRC%\lib\svxl.lib %_DEST%\lib%_EXT%\svxl.lib
+..\%__SRC%\lib\libsvxl.a %_DEST%\lib%_EXT%\libsvxl.a
+
+mkdir: %_DEST%\inc%_EXT%\svx
+hedabu: ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
+hedabu: ..\inc\dialdll.hxx %_DEST%\inc%_EXT%\svx\dialdll.hxx
+hedabu: ..\inc\svdfield.hxx %_DEST%\inc%_EXT%\svx\svdfield.hxx
+hedabu: ..\inc\svxitems.hrc %_DEST%\inc%_EXT%\svx\svxitems.hrc
+hedabu: ..\inc\multipat.hxx %_DEST%\inc%_EXT%\svx\multipat.hxx
+hedabu: ..\inc\fontlb.hxx %_DEST%\inc%_EXT%\svx\fontlb.hxx
+hedabu: ..\inc\optgrid.hxx %_DEST%\inc%_EXT%\svx\optgrid.hxx
+hedabu: ..\inc\svddef.hxx %_DEST%\inc%_EXT%\svx\svddef.hxx
+hedabu: ..\inc\svdfppt.hxx %_DEST%\inc%_EXT%\svx\svdfppt.hxx
+hedabu: ..\inc\svxifact.hxx %_DEST%\inc%_EXT%\svx\svxifact.hxx
+hedabu: ..\inc\linkmgr.hxx %_DEST%\inc%_EXT%\svx\linkmgr.hxx
+hedabu: ..\inc\svdsob.hxx %_DEST%\inc%_EXT%\svx\svdsob.hxx
+hedabu: ..\inc\svdlayer.hxx %_DEST%\inc%_EXT%\svx\svdlayer.hxx
+hedabu: ..\inc\adjitem.hxx %_DEST%\inc%_EXT%\svx\adjitem.hxx
+hedabu: ..\inc\adritem.hxx %_DEST%\inc%_EXT%\svx\adritem.hxx
+hedabu: ..\inc\akrnitem.hxx %_DEST%\inc%_EXT%\svx\akrnitem.hxx
+hedabu: ..\inc\algitem.hxx %_DEST%\inc%_EXT%\svx\algitem.hxx
+hedabu: ..\inc\align.hxx %_DEST%\inc%_EXT%\svx\align.hxx
+hedabu: ..\inc\simptabl.hxx %_DEST%\inc%_EXT%\svx\simptabl.hxx
+hedabu: ..\inc\ctredlin.hxx %_DEST%\inc%_EXT%\svx\ctredlin.hxx
+hedabu: ..\inc\backgrnd.hxx %_DEST%\inc%_EXT%\svx\backgrnd.hxx
+hedabu: ..\inc\bbdlg.hxx %_DEST%\inc%_EXT%\svx\bbdlg.hxx
+hedabu: ..\inc\blnkitem.hxx %_DEST%\inc%_EXT%\svx\blnkitem.hxx
+hedabu: ..\inc\bmpmask.hxx %_DEST%\inc%_EXT%\svx\bmpmask.hxx
+hedabu: ..\inc\bolnitem.hxx %_DEST%\inc%_EXT%\svx\bolnitem.hxx
+hedabu: ..\inc\border.hxx %_DEST%\inc%_EXT%\svx\border.hxx
+hedabu: ..\inc\boxitem.hxx %_DEST%\inc%_EXT%\svx\boxitem.hxx
+hedabu: ..\inc\brkitem.hxx %_DEST%\inc%_EXT%\svx\brkitem.hxx
+hedabu: ..\inc\brshitem.hxx %_DEST%\inc%_EXT%\svx\brshitem.hxx
+hedabu: ..\inc\camera3d.hxx %_DEST%\inc%_EXT%\svx\camera3d.hxx
+hedabu: ..\inc\chardlg.hxx %_DEST%\inc%_EXT%\svx\chardlg.hxx
+hedabu: ..\inc\charmap.hxx %_DEST%\inc%_EXT%\svx\charmap.hxx
+hedabu: ..\inc\checklbx.hxx %_DEST%\inc%_EXT%\svx\checklbx.hxx
+hedabu: ..\inc\chrtitem.hxx %_DEST%\inc%_EXT%\svx\chrtitem.hxx
+hedabu: ..\inc\class3d.hxx %_DEST%\inc%_EXT%\svx\class3d.hxx
+hedabu: ..\inc\cmapitem.hxx %_DEST%\inc%_EXT%\svx\cmapitem.hxx
+hedabu: ..\inc\cntritem.hxx %_DEST%\inc%_EXT%\svx\cntritem.hxx
+hedabu: ..\inc\colritem.hxx %_DEST%\inc%_EXT%\svx\colritem.hxx
+hedabu: ..\inc\connctrl.hxx %_DEST%\inc%_EXT%\svx\connctrl.hxx
+hedabu: ..\inc\connect.hxx %_DEST%\inc%_EXT%\svx\connect.hxx
+hedabu: ..\inc\contdlg.hxx %_DEST%\inc%_EXT%\svx\contdlg.hxx
+hedabu: ..\inc\crsditem.hxx %_DEST%\inc%_EXT%\svx\crsditem.hxx
+hedabu: ..\inc\ctrdial.hxx %_DEST%\inc%_EXT%\svx\ctrdial.hxx
+hedabu: ..\inc\cscoitem.hxx %_DEST%\inc%_EXT%\svx\cscoitem.hxx
+hedabu: ..\inc\colrctrl.hxx %_DEST%\inc%_EXT%\svx\colrctrl.hxx
+hedabu: ..\inc\cube3d.hxx %_DEST%\inc%_EXT%\svx\cube3d.hxx
+hedabu: ..\inc\polygn3d.hxx %_DEST%\inc%_EXT%\svx\polygn3d.hxx
+hedabu: ..\inc\lathe3d.hxx %_DEST%\inc%_EXT%\svx\lathe3d.hxx
+hedabu: ..\inc\dlight3d.hxx %_DEST%\inc%_EXT%\svx\dlight3d.hxx
+hedabu: ..\inc\e3ditem.hxx %_DEST%\inc%_EXT%\svx\e3ditem.hxx
+hedabu: ..\inc\def3d.hxx %_DEST%\inc%_EXT%\svx\def3d.hxx
+hedabu: ..\inc\svdtypes.hxx %_DEST%\inc%_EXT%\svx\svdtypes.hxx
+hedabu: ..\inc\volume3d.hxx %_DEST%\inc%_EXT%\svx\volume3d.hxx
+hedabu: ..\inc\xenum.hxx %_DEST%\inc%_EXT%\svx\xenum.hxx
+hedabu: ..\inc\dialmgr.hxx %_DEST%\inc%_EXT%\svx\dialmgr.hxx
+hedabu: ..\inc\dlgctl3d.hxx %_DEST%\inc%_EXT%\svx\dlgctl3d.hxx
+hedabu: ..\inc\dlgctrl.hxx %_DEST%\inc%_EXT%\svx\dlgctrl.hxx
+hedabu: ..\inc\dlgname.hxx %_DEST%\inc%_EXT%\svx\dlgname.hxx
+hedabu: ..\inc\dlgutil.hxx %_DEST%\inc%_EXT%\svx\dlgutil.hxx
+hedabu: ..\inc\drawitem.hxx %_DEST%\inc%_EXT%\svx\drawitem.hxx
+hedabu: ..\inc\dialogs.hrc %_DEST%\inc%_EXT%\svx\dialogs.hrc
+hedabu: ..\inc\escpitem.hxx %_DEST%\inc%_EXT%\svx\escpitem.hxx
+hedabu: ..\inc\extrud3d.hxx %_DEST%\inc%_EXT%\svx\extrud3d.hxx
+hedabu: ..\inc\escherex.hxx %_DEST%\inc%_EXT%\svx\escherex.hxx
+hedabu: ..\inc\f3dchild.hxx %_DEST%\inc%_EXT%\svx\f3dchild.hxx
+hedabu: ..\inc\fhgtitem.hxx %_DEST%\inc%_EXT%\svx\fhgtitem.hxx
+hedabu: ..\inc\fillctrl.hxx %_DEST%\inc%_EXT%\svx\fillctrl.hxx
+hedabu: ..\inc\float3d.hxx %_DEST%\inc%_EXT%\svx\float3d.hxx
+hedabu: ..\inc\flditem.hxx %_DEST%\inc%_EXT%\svx\flditem.hxx
+hedabu: ..\inc\flstitem.hxx %_DEST%\inc%_EXT%\svx\flstitem.hxx
+hedabu: ..\inc\fntctl.hxx %_DEST%\inc%_EXT%\svx\fntctl.hxx
+hedabu: ..\inc\fntctrl.hxx %_DEST%\inc%_EXT%\svx\fntctrl.hxx
+hedabu: ..\inc\fntszctl.hxx %_DEST%\inc%_EXT%\svx\fntszctl.hxx
+hedabu: ..\inc\fontitem.hxx %_DEST%\inc%_EXT%\svx\fontitem.hxx
+hedabu: ..\inc\fontwork.hxx %_DEST%\inc%_EXT%\svx\fontwork.hxx
+hedabu: ..\inc\frmitem.hxx %_DEST%\inc%_EXT%\svx\frmitem.hxx
+hedabu: ..\inc\frmsel.hxx %_DEST%\inc%_EXT%\svx\frmsel.hxx
+hedabu: ..\inc\fwdtitem.hxx %_DEST%\inc%_EXT%\svx\fwdtitem.hxx
+hedabu: ..\inc\gallery.hxx %_DEST%\inc%_EXT%\svx\gallery.hxx
+hedabu: ..\inc\galbrws.hxx %_DEST%\inc%_EXT%\svx\galbrws.hxx
+hedabu: ..\inc\globlmn.hrc %_DEST%\inc%_EXT%\svx\globlmn.hrc
+hedabu: ..\inc\globlac.hrc %_DEST%\inc%_EXT%\svx\globlac.hrc
+hedabu: ..\inc\globl3d.hxx %_DEST%\inc%_EXT%\svx\globl3d.hxx
+hedabu: ..\inc\grafctrl.hxx %_DEST%\inc%_EXT%\svx\grafctrl.hxx
+hedabu: ..\inc\graphctl.hxx %_DEST%\inc%_EXT%\svx\graphctl.hxx
+hedabu: ..\inc\hdft.hxx %_DEST%\inc%_EXT%\svx\hdft2.hxx
+hedabu: ..\inc\htmlmode.hxx %_DEST%\inc%_EXT%\svx\htmlmode.hxx
+hedabu: ..\inc\hyznitem.hxx %_DEST%\inc%_EXT%\svx\hyznitem.hxx
+hedabu: ..\inc\ifaceids.hxx %_DEST%\inc%_EXT%\svx\ifaceids.hxx
+hedabu: ..\inc\imapdlg.hxx %_DEST%\inc%_EXT%\svx\imapdlg.hxx
+hedabu: ..\inc\impgrf.hxx %_DEST%\inc%_EXT%\svx\impgrf.hxx
+hedabu: ..\inc\insctrl.hxx %_DEST%\inc%_EXT%\svx\insctrl.hxx
+hedabu: ..\inc\itemdata.hxx %_DEST%\inc%_EXT%\svx\itemdata.hxx
+hedabu: ..\inc\itemwin.hxx %_DEST%\inc%_EXT%\svx\itemwin.hxx
+hedabu: ..\inc\keepitem.hxx %_DEST%\inc%_EXT%\svx\keepitem.hxx
+hedabu: ..\inc\kernitem.hxx %_DEST%\inc%_EXT%\svx\kernitem.hxx
+hedabu: ..\inc\labdlg.hxx %_DEST%\inc%_EXT%\svx\labdlg.hxx
+hedabu: ..\inc\label3d.hxx %_DEST%\inc%_EXT%\svx\label3d.hxx
+hedabu: ..\inc\langbox.hxx %_DEST%\inc%_EXT%\svx\langbox.hxx
+hedabu: ..\inc\langitem.hxx %_DEST%\inc%_EXT%\svx\langitem.hxx
+hedabu: ..\inc\langtab.hxx %_DEST%\inc%_EXT%\svx\langtab.hxx
+hedabu: ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
+hedabu: ..\inc\lcolitem.hxx %_DEST%\inc%_EXT%\svx\lcolitem.hxx
+hedabu: ..\inc\lgview3d.hxx %_DEST%\inc%_EXT%\svx\lgview3d.hxx
+hedabu: ..\inc\light3d.hxx %_DEST%\inc%_EXT%\svx\light3d.hxx
+hedabu: ..\inc\lightdlg.hxx %_DEST%\inc%_EXT%\svx\lightdlg.hxx
+hedabu: ..\inc\linectrl.hxx %_DEST%\inc%_EXT%\svx\linectrl.hxx
+hedabu: ..\inc\linelink.hxx %_DEST%\inc%_EXT%\svx\linelink.hxx
+hedabu: ..\inc\lrspitem.hxx %_DEST%\inc%_EXT%\svx\lrspitem.hxx
+hedabu: ..\inc\lspcitem.hxx %_DEST%\inc%_EXT%\svx\lspcitem.hxx
+hedabu: ..\inc\matrix3d.hxx %_DEST%\inc%_EXT%\svx\matrix3d.hxx
+hedabu: ..\inc\measctrl.hxx %_DEST%\inc%_EXT%\svx\measctrl.hxx
+hedabu: ..\inc\measure.hxx %_DEST%\inc%_EXT%\svx\measure.hxx
+hedabu: ..\inc\dstribut.hxx %_DEST%\inc%_EXT%\svx\dstribut.hxx
+hedabu: ..\inc\modctrl.hxx %_DEST%\inc%_EXT%\svx\modctrl.hxx
+hedabu: ..\inc\multifil.hxx %_DEST%\inc%_EXT%\svx\multifil.hxx
+hedabu: ..\inc\nhypitem.hxx %_DEST%\inc%_EXT%\svx\nhypitem.hxx
+hedabu: ..\inc\nlbkitem.hxx %_DEST%\inc%_EXT%\svx\nlbkitem.hxx
+hedabu: ..\inc\numfmt.hxx %_DEST%\inc%_EXT%\svx\numfmt.hxx
+hedabu: ..\inc\numinf.hxx %_DEST%\inc%_EXT%\svx\numinf.hxx
+hedabu: ..\inc\numfmtsh.hxx %_DEST%\inc%_EXT%\svx\numfmtsh.hxx
+hedabu: ..\inc\nforient.hxx %_DEST%\inc%_EXT%\svx\nforient.hxx
+hedabu: ..\inc\obj3d.hxx %_DEST%\inc%_EXT%\svx\obj3d.hxx
+hedabu: ..\inc\objfac3d.hxx %_DEST%\inc%_EXT%\svx\objfac3d.hxx
+hedabu: ..\inc\opaqitem.hxx %_DEST%\inc%_EXT%\svx\opaqitem.hxx
+hedabu: ..\inc\optgenrl.hxx %_DEST%\inc%_EXT%\svx\optgenrl.hxx
+hedabu: ..\inc\optitems.hxx %_DEST%\inc%_EXT%\svx\optitems.hxx
+hedabu: ..\inc\optlingu.hxx %_DEST%\inc%_EXT%\svx\optlingu.hxx
+hedabu: ..\inc\optpath.hxx %_DEST%\inc%_EXT%\svx\optpath.hxx
+hedabu: ..\inc\optsave.hxx %_DEST%\inc%_EXT%\svx\optsave.hxx
+hedabu: ..\inc\optspell.hxx %_DEST%\inc%_EXT%\svx\optspell.hxx
+hedabu: ..\inc\optinet2.hxx %_DEST%\inc%_EXT%\svx\optinet2.hxx
+hedabu: ..\inc\optmail.hxx %_DEST%\inc%_EXT%\svx\optmail.hxx
+hedabu: ..\inc\optldap.hxx %_DEST%\inc%_EXT%\svx\optldap.hxx
+hedabu: ..\inc\optextbr.hxx %_DEST%\inc%_EXT%\svx\optextbr.hxx
+hedabu: ..\inc\orphitem.hxx %_DEST%\inc%_EXT%\svx\orphitem.hxx
+hedabu: ..\inc\p2dobj3d.hxx %_DEST%\inc%_EXT%\svx\p2dobj3d.hxx
+hedabu: ..\inc\page.hxx %_DEST%\inc%_EXT%\svx\page.hxx
+hedabu: ..\inc\pagectrl.hxx %_DEST%\inc%_EXT%\svx\pagectrl.hxx
+hedabu: ..\inc\pageitem.hxx %_DEST%\inc%_EXT%\svx\pageitem.hxx
+hedabu: ..\inc\paperinf.hxx %_DEST%\inc%_EXT%\svx\paperinf.hxx
+hedabu: ..\inc\paragrph.hxx %_DEST%\inc%_EXT%\svx\paragrph.hxx
+hedabu: ..\inc\paraprev.hxx %_DEST%\inc%_EXT%\svx\paraprev.hxx
+hedabu: ..\inc\passwd.hxx %_DEST%\inc%_EXT%\svx\passwd.hxx
+hedabu: ..\inc\pbinitem.hxx %_DEST%\inc%_EXT%\svx\pbinitem.hxx
+hedabu: ..\inc\pmdlitem.hxx %_DEST%\inc%_EXT%\svx\pmdlitem.hxx
+hedabu: ..\inc\pntobj3d.hxx %_DEST%\inc%_EXT%\svx\pntobj3d.hxx
+hedabu: ..\inc\point3d.hxx %_DEST%\inc%_EXT%\svx\point3d.hxx
+hedabu: ..\inc\poly3d.hxx %_DEST%\inc%_EXT%\svx\poly3d.hxx
+hedabu: ..\inc\polyob3d.hxx %_DEST%\inc%_EXT%\svx\polyob3d.hxx
+hedabu: ..\inc\polysc3d.hxx %_DEST%\inc%_EXT%\svx\polysc3d.hxx
+hedabu: ..\inc\postattr.hxx %_DEST%\inc%_EXT%\svx\postattr.hxx
+hedabu: ..\inc\postdlg.hxx %_DEST%\inc%_EXT%\svx\postdlg.hxx
+hedabu: ..\inc\postitem.hxx %_DEST%\inc%_EXT%\svx\postitem.hxx
+hedabu: ..\inc\prntitem.hxx %_DEST%\inc%_EXT%\svx\prntitem.hxx
+hedabu: ..\inc\protitem.hxx %_DEST%\inc%_EXT%\svx\protitem.hxx
+hedabu: ..\inc\prszitem.hxx %_DEST%\inc%_EXT%\svx\prszitem.hxx
+hedabu: ..\inc\pszctrl.hxx %_DEST%\inc%_EXT%\svx\pszctrl.hxx
+hedabu: ..\inc\rectenum.hxx %_DEST%\inc%_EXT%\svx\rectenum.hxx
+hedabu: ..\inc\relfld.hxx %_DEST%\inc%_EXT%\svx\relfld.hxx
+hedabu: ..\inc\rotmodit.hxx %_DEST%\inc%_EXT%\svx\rotmodit.hxx
+hedabu: ..\inc\ruler.hxx %_DEST%\inc%_EXT%\svx\ruler.hxx
+hedabu: ..\inc\rulritem.hxx %_DEST%\inc%_EXT%\svx\rulritem.hxx
+hedabu: ..\inc\scene3d.hxx %_DEST%\inc%_EXT%\svx\scene3d.hxx
+hedabu: ..\inc\sdangitm.hxx %_DEST%\inc%_EXT%\svx\sdangitm.hxx
+hedabu: ..\inc\sderitm.hxx %_DEST%\inc%_EXT%\svx\sderitm.hxx
+hedabu: ..\inc\sdgcoitm.hxx %_DEST%\inc%_EXT%\svx\sdgcoitm.hxx
+hedabu: ..\inc\sdgrsitm.hxx %_DEST%\inc%_EXT%\svx\sdgrsitm.hxx
+hedabu: ..\inc\sdgluitm.hxx %_DEST%\inc%_EXT%\svx\sdgluitm.hxx
+hedabu: ..\inc\sdginitm.hxx %_DEST%\inc%_EXT%\svx\sdginitm.hxx
+hedabu: ..\inc\sdggaitm.hxx %_DEST%\inc%_EXT%\svx\sdggaitm.hxx
+hedabu: ..\inc\sdgmoitm.hxx %_DEST%\inc%_EXT%\svx\sdgmoitm.hxx
+hedabu: ..\inc\sdgtritm.hxx %_DEST%\inc%_EXT%\svx\sdgtritm.hxx
+hedabu: ..\inc\sdmetitm.hxx %_DEST%\inc%_EXT%\svx\sdmetitm.hxx
+hedabu: ..\inc\sdmsitm.hxx %_DEST%\inc%_EXT%\svx\sdmsitm.hxx
+hedabu: ..\inc\sdolsitm.hxx %_DEST%\inc%_EXT%\svx\sdolsitm.hxx
+hedabu: ..\inc\sdooitm.hxx %_DEST%\inc%_EXT%\svx\sdooitm.hxx
+hedabu: ..\inc\sdprcitm.hxx %_DEST%\inc%_EXT%\svx\sdprcitm.hxx
+hedabu: ..\inc\sdshcitm.hxx %_DEST%\inc%_EXT%\svx\sdshcitm.hxx
+hedabu: ..\inc\sdshitm.hxx %_DEST%\inc%_EXT%\svx\sdshitm.hxx
+hedabu: ..\inc\sdshsitm.hxx %_DEST%\inc%_EXT%\svx\sdshsitm.hxx
+hedabu: ..\inc\sdshtitm.hxx %_DEST%\inc%_EXT%\svx\sdshtitm.hxx
+hedabu: ..\inc\sdsxyitm.hxx %_DEST%\inc%_EXT%\svx\sdsxyitm.hxx
+hedabu: ..\inc\sdtaaitm.hxx %_DEST%\inc%_EXT%\svx\sdtaaitm.hxx
+hedabu: ..\inc\sdtacitm.hxx %_DEST%\inc%_EXT%\svx\sdtacitm.hxx
+hedabu: ..\inc\sdtaditm.hxx %_DEST%\inc%_EXT%\svx\sdtaditm.hxx
+hedabu: ..\inc\sdtagitm.hxx %_DEST%\inc%_EXT%\svx\sdtagitm.hxx
+hedabu: ..\inc\sdtaiitm.hxx %_DEST%\inc%_EXT%\svx\sdtaiitm.hxx
+hedabu: ..\inc\sdtaitm.hxx %_DEST%\inc%_EXT%\svx\sdtaitm.hxx
+hedabu: ..\inc\sdtakitm.hxx %_DEST%\inc%_EXT%\svx\sdtakitm.hxx
+hedabu: ..\inc\sdtayitm.hxx %_DEST%\inc%_EXT%\svx\sdtayitm.hxx
+hedabu: ..\inc\sdtcfitm.hxx %_DEST%\inc%_EXT%\svx\sdtcfitm.hxx
+hedabu: ..\inc\sdtditm.hxx %_DEST%\inc%_EXT%\svx\sdtditm.hxx
+hedabu: ..\inc\sdtfsitm.hxx %_DEST%\inc%_EXT%\svx\sdtfsitm.hxx
+hedabu: ..\inc\sdtmfitm.hxx %_DEST%\inc%_EXT%\svx\sdtmfitm.hxx
+hedabu: ..\inc\sdynitm.hxx %_DEST%\inc%_EXT%\svx\sdynitm.hxx
+hedabu: ..\inc\selctrl.hxx %_DEST%\inc%_EXT%\svx\selctrl.hxx
+hedabu: ..\inc\shaditem.hxx %_DEST%\inc%_EXT%\svx\shaditem.hxx
+hedabu: ..\inc\shdditem.hxx %_DEST%\inc%_EXT%\svx\shdditem.hxx
+hedabu: ..\inc\sizeitem.hxx %_DEST%\inc%_EXT%\svx\sizeitem.hxx
+hedabu: ..\inc\sphere3d.hxx %_DEST%\inc%_EXT%\svx\sphere3d.hxx
+hedabu: ..\inc\spldlg.hxx %_DEST%\inc%_EXT%\svx\spldlg.hxx
+hedabu: ..\inc\spltitem.hxx %_DEST%\inc%_EXT%\svx\spltitem.hxx
+hedabu: ..\inc\splwrap.hxx %_DEST%\inc%_EXT%\svx\splwrap.hxx
+hedabu: ..\inc\srchdlg.hxx %_DEST%\inc%_EXT%\svx\srchdlg.hxx
+hedabu: ..\inc\srchitem.hxx %_DEST%\inc%_EXT%\svx\srchitem.hxx
+hedabu: ..\inc\stddlg.hxx %_DEST%\inc%_EXT%\svx\stddlg.hxx
+hedabu: ..\inc\strarray.hxx %_DEST%\inc%_EXT%\svx\strarray.hxx
+hedabu: ..\inc\svdattr.hxx %_DEST%\inc%_EXT%\svx\svdattr.hxx
+hedabu: ..\inc\svdattrx.hxx %_DEST%\inc%_EXT%\svx\svdattrx.hxx
+hedabu: ..\inc\svdattrx.hxx %_DEST%\inc%_EXT%\svx\svdattrx.hxx
+hedabu: ..\inc\svdcrtv.hxx %_DEST%\inc%_EXT%\svx\svdcrtv.hxx
+hedabu: ..\inc\svddrag.hxx %_DEST%\inc%_EXT%\svx\svddrag.hxx
+hedabu: ..\inc\svddrgmt.hxx %_DEST%\inc%_EXT%\svx\svddrgmt.hxx
+hedabu: ..\inc\svddrgv.hxx %_DEST%\inc%_EXT%\svx\svddrgv.hxx
+hedabu: ..\inc\svdedtv.hxx %_DEST%\inc%_EXT%\svx\svdedtv.hxx
+hedabu: ..\inc\svdedxv.hxx %_DEST%\inc%_EXT%\svx\svdedxv.hxx
+hedabu: ..\inc\svdetc.hxx %_DEST%\inc%_EXT%\svx\svdetc.hxx
+hedabu: ..\inc\svdglev.hxx %_DEST%\inc%_EXT%\svx\svdglev.hxx
+hedabu: ..\inc\svdglue.hxx %_DEST%\inc%_EXT%\svx\svdglue.hxx
+hedabu: ..\inc\svdhdl.hxx %_DEST%\inc%_EXT%\svx\svdhdl.hxx
+hedabu: ..\inc\svdhlpln.hxx %_DEST%\inc%_EXT%\svx\svdhlpln.hxx
+hedabu: ..\inc\svdio.hxx %_DEST%\inc%_EXT%\svx\svdio.hxx
+hedabu: ..\inc\svditer.hxx %_DEST%\inc%_EXT%\svx\svditer.hxx
+hedabu: ..\inc\svdmark.hxx %_DEST%\inc%_EXT%\svx\svdmark.hxx
+hedabu: ..\inc\svdmodel.hxx %_DEST%\inc%_EXT%\svx\svdmodel.hxx
+hedabu: ..\inc\svdmrkv.hxx %_DEST%\inc%_EXT%\svx\svdmrkv.hxx
+hedabu: ..\inc\svdoattr.hxx %_DEST%\inc%_EXT%\svx\svdoattr.hxx
+hedabu: ..\inc\svdobj.hxx %_DEST%\inc%_EXT%\svx\svdobj.hxx
+hedabu: ..\inc\svdocapt.hxx %_DEST%\inc%_EXT%\svx\svdocapt.hxx
+hedabu: ..\inc\svdocirc.hxx %_DEST%\inc%_EXT%\svx\svdocirc.hxx
+hedabu: ..\inc\svdoedge.hxx %_DEST%\inc%_EXT%\svx\svdoedge.hxx
+hedabu: ..\inc\svdograf.hxx %_DEST%\inc%_EXT%\svx\svdograf.hxx
+hedabu: ..\inc\svdogrp.hxx %_DEST%\inc%_EXT%\svx\svdogrp.hxx
+hedabu: ..\inc\svdomeas.hxx %_DEST%\inc%_EXT%\svx\svdomeas.hxx
+hedabu: ..\inc\svdoole2.hxx %_DEST%\inc%_EXT%\svx\svdoole2.hxx
+hedabu: ..\inc\svdopage.hxx %_DEST%\inc%_EXT%\svx\svdopage.hxx
+hedabu: ..\inc\svdopath.hxx %_DEST%\inc%_EXT%\svx\svdopath.hxx
+hedabu: ..\inc\svdopoly.hxx %_DEST%\inc%_EXT%\svx\svdopoly.hxx
+hedabu: ..\inc\svdorect.hxx %_DEST%\inc%_EXT%\svx\svdorect.hxx
+hedabu: ..\inc\svdosmev.hxx %_DEST%\inc%_EXT%\svx\svdosmev.hxx
+hedabu: ..\inc\svdosmrt.hxx %_DEST%\inc%_EXT%\svx\svdosmrt.hxx
+hedabu: ..\inc\svdotext.hxx %_DEST%\inc%_EXT%\svx\svdotext.hxx
+hedabu: ..\inc\svdoukwn.hxx %_DEST%\inc%_EXT%\svx\svdoukwn.hxx
+hedabu: ..\inc\svdovirt.hxx %_DEST%\inc%_EXT%\svx\svdovirt.hxx
+hedabu: ..\inc\svdpage.hxx %_DEST%\inc%_EXT%\svx\svdpage.hxx
+hedabu: ..\inc\svdpagv.hxx %_DEST%\inc%_EXT%\svx\svdpagv.hxx
+hedabu: ..\inc\svdpntv.hxx %_DEST%\inc%_EXT%\svx\svdpntv.hxx
+hedabu: ..\inc\svdpoev.hxx %_DEST%\inc%_EXT%\svx\svdpoev.hxx
+hedabu: ..\inc\svdpool.hxx %_DEST%\inc%_EXT%\svx\svdpool.hxx
+hedabu: ..\inc\svdsnpv.hxx %_DEST%\inc%_EXT%\svx\svdsnpv.hxx
+hedabu: ..\inc\svdsuro.hxx %_DEST%\inc%_EXT%\svx\svdsuro.hxx
+hedabu: ..\inc\svdtouch.hxx %_DEST%\inc%_EXT%\svx\svdtouch.hxx
+hedabu: ..\inc\svdtrans.hxx %_DEST%\inc%_EXT%\svx\svdtrans.hxx
+hedabu: ..\inc\svdundo.hxx %_DEST%\inc%_EXT%\svx\svdundo.hxx
+hedabu: ..\inc\svdoutl.hxx %_DEST%\inc%_EXT%\svx\svdoutl.hxx
+hedabu: ..\inc\svdview.hxx %_DEST%\inc%_EXT%\svx\svdview.hxx
+hedabu: ..\inc\svdvmark.hxx %_DEST%\inc%_EXT%\svx\svdvmark.hxx
+hedabu: ..\inc\svdxcgv.hxx %_DEST%\inc%_EXT%\svx\svdxcgv.hxx
+hedabu: ..\inc\svimbase.hxx %_DEST%\inc%_EXT%\svx\svimbase.hxx
+hedabu: ..\inc\svxbox.hxx %_DEST%\inc%_EXT%\svx\svxbox.hxx
+hedabu: ..\inc\svxerr.hxx %_DEST%\inc%_EXT%\svx\svxerr.hxx
+hedabu: ..\inc\svxfont.hxx %_DEST%\inc%_EXT%\svx\svxfont.hxx
+hedabu: ..\inc\svxenum.hxx %_DEST%\inc%_EXT%\svx\svxenum.hxx
+hedabu: ..\inc\svxids.hrc %_DEST%\inc%_EXT%\svx\svxids.hrc
+hedabu: ..\inc\svxrtf.hxx %_DEST%\inc%_EXT%\svx\svxrtf.hxx
+hedabu: ..\inc\sxallitm.hxx %_DEST%\inc%_EXT%\svx\sxallitm.hxx
+hedabu: ..\inc\sxcaitm.hxx %_DEST%\inc%_EXT%\svx\sxcaitm.hxx
+hedabu: ..\inc\sxcecitm.hxx %_DEST%\inc%_EXT%\svx\sxcecitm.hxx
+hedabu: ..\inc\sxcgitm.hxx %_DEST%\inc%_EXT%\svx\sxcgitm.hxx
+hedabu: ..\inc\sxciaitm.hxx %_DEST%\inc%_EXT%\svx\sxciaitm.hxx
+hedabu: ..\inc\sxcikitm.hxx %_DEST%\inc%_EXT%\svx\sxcikitm.hxx
+hedabu: ..\inc\sxcisitm.hxx %_DEST%\inc%_EXT%\svx\sxcisitm.hxx
+hedabu: ..\inc\sxcllitm.hxx %_DEST%\inc%_EXT%\svx\sxcllitm.hxx
+hedabu: ..\inc\sxcsitm.hxx %_DEST%\inc%_EXT%\svx\sxcsitm.hxx
+hedabu: ..\inc\sxctitm.hxx %_DEST%\inc%_EXT%\svx\sxctitm.hxx
+hedabu: ..\inc\sxekitm.hxx %_DEST%\inc%_EXT%\svx\sxekitm.hxx
+hedabu: ..\inc\sxelditm.hxx %_DEST%\inc%_EXT%\svx\sxelditm.hxx
+hedabu: ..\inc\sxenditm.hxx %_DEST%\inc%_EXT%\svx\sxenditm.hxx
+hedabu: ..\inc\sxesitm.hxx %_DEST%\inc%_EXT%\svx\sxesitm.hxx
+hedabu: ..\inc\sxfiitm.hxx %_DEST%\inc%_EXT%\svx\sxfiitm.hxx
+hedabu: ..\inc\sxlayitm.hxx %_DEST%\inc%_EXT%\svx\sxlayitm.hxx
+hedabu: ..\inc\sxlogitm.hxx %_DEST%\inc%_EXT%\svx\sxlogitm.hxx
+hedabu: ..\inc\sxmbritm.hxx %_DEST%\inc%_EXT%\svx\sxmbritm.hxx
+hedabu: ..\inc\sxmfsitm.hxx %_DEST%\inc%_EXT%\svx\sxmfsitm.hxx
+hedabu: ..\inc\sxmkitm.hxx %_DEST%\inc%_EXT%\svx\sxmkitm.hxx
+hedabu: ..\inc\sxmlhitm.hxx %_DEST%\inc%_EXT%\svx\sxmlhitm.hxx
+hedabu: ..\inc\sxmoitm.hxx %_DEST%\inc%_EXT%\svx\sxmoitm.hxx
+hedabu: ..\inc\sxmovitm.hxx %_DEST%\inc%_EXT%\svx\sxmovitm.hxx
+hedabu: ..\inc\sxmseitm.hxx %_DEST%\inc%_EXT%\svx\sxmseitm.hxx
+hedabu: ..\inc\sxmsitm.hxx %_DEST%\inc%_EXT%\svx\sxmsitm.hxx
+hedabu: ..\inc\sxmspitm.hxx %_DEST%\inc%_EXT%\svx\sxmspitm.hxx
+hedabu: ..\inc\sxmsuitm.hxx %_DEST%\inc%_EXT%\svx\sxmsuitm.hxx
+hedabu: ..\inc\sxmtaitm.hxx %_DEST%\inc%_EXT%\svx\sxmtaitm.hxx
+hedabu: ..\inc\sxmtfitm.hxx %_DEST%\inc%_EXT%\svx\sxmtfitm.hxx
+hedabu: ..\inc\sxmtpitm.hxx %_DEST%\inc%_EXT%\svx\sxmtpitm.hxx
+hedabu: ..\inc\sxmtritm.hxx %_DEST%\inc%_EXT%\svx\sxmtritm.hxx
+hedabu: ..\inc\sxmuitm.hxx %_DEST%\inc%_EXT%\svx\sxmuitm.hxx
+hedabu: ..\inc\sxoneitm.hxx %_DEST%\inc%_EXT%\svx\sxoneitm.hxx
+hedabu: ..\inc\sxonitm.hxx %_DEST%\inc%_EXT%\svx\sxonitm.hxx
+hedabu: ..\inc\sxopitm.hxx %_DEST%\inc%_EXT%\svx\sxopitm.hxx
+hedabu: ..\inc\sxraitm.hxx %_DEST%\inc%_EXT%\svx\sxraitm.hxx
+hedabu: ..\inc\sxreaitm.hxx %_DEST%\inc%_EXT%\svx\sxreaitm.hxx
+hedabu: ..\inc\sxreoitm.hxx %_DEST%\inc%_EXT%\svx\sxreoitm.hxx
+hedabu: ..\inc\sxroaitm.hxx %_DEST%\inc%_EXT%\svx\sxroaitm.hxx
+hedabu: ..\inc\sxrooitm.hxx %_DEST%\inc%_EXT%\svx\sxrooitm.hxx
+hedabu: ..\inc\sxsaitm.hxx %_DEST%\inc%_EXT%\svx\sxsaitm.hxx
+hedabu: ..\inc\sxsalitm.hxx %_DEST%\inc%_EXT%\svx\sxsalitm.hxx
+hedabu: ..\inc\sxsiitm.hxx %_DEST%\inc%_EXT%\svx\sxsiitm.hxx
+hedabu: ..\inc\sxsoitm.hxx %_DEST%\inc%_EXT%\svx\sxsoitm.hxx
+hedabu: ..\inc\sxtraitm.hxx %_DEST%\inc%_EXT%\svx\sxtraitm.hxx
+hedabu: ..\inc\tabarea.hxx %_DEST%\inc%_EXT%\svx\tabarea.hxx
+hedabu: ..\inc\tabline.hxx %_DEST%\inc%_EXT%\svx\tabline.hxx
+hedabu: ..\inc\tabstpge.hxx %_DEST%\inc%_EXT%\svx\tabstpge.hxx
+hedabu: ..\inc\tbcontrl.hxx %_DEST%\inc%_EXT%\svx\tbcontrl.hxx
+hedabu: ..\inc\tbxalign.hxx %_DEST%\inc%_EXT%\svx\tbxalign.hxx
+hedabu: ..\inc\tbxctl.hxx %_DEST%\inc%_EXT%\svx\tbxctl.hxx
+hedabu: ..\inc\tbxdraw.hxx %_DEST%\inc%_EXT%\svx\tbxdraw.hxx
+hedabu: ..\inc\textanim.hxx %_DEST%\inc%_EXT%\svx\textanim.hxx
+hedabu: ..\inc\textattr.hxx %_DEST%\inc%_EXT%\svx\textattr.hxx
+hedabu: ..\inc\thesdlg.hxx %_DEST%\inc%_EXT%\svx\thesdlg.hxx
+hedabu: ..\inc\tp3dattr.hxx %_DEST%\inc%_EXT%\svx\tp3dattr.hxx
+hedabu: ..\inc\transfrm.hxx %_DEST%\inc%_EXT%\svx\transfrm.hxx
+hedabu: ..\inc\tstpitem.hxx %_DEST%\inc%_EXT%\svx\tstpitem.hxx
+hedabu: ..\inc\udlnitem.hxx %_DEST%\inc%_EXT%\svx\udlnitem.hxx
+hedabu: ..\inc\ulspitem.hxx %_DEST%\inc%_EXT%\svx\ulspitem.hxx
+hedabu: ..\inc\unolingu.hxx %_DEST%\inc%_EXT%\svx\unolingu.hxx
+hedabu: ..\inc\unomid.hxx %_DEST%\inc%_EXT%\svx\unomid.hxx
+hedabu: ..\inc\unopage.hxx %_DEST%\inc%_EXT%\svx\unopage.hxx
+hedabu: ..\inc\unoprnms.hxx %_DEST%\inc%_EXT%\svx\unoprnms.hxx
+hedabu: ..\inc\unoshape.hxx %_DEST%\inc%_EXT%\svx\unoshape.hxx
+hedabu: ..\inc\unoshcol.hxx %_DEST%\inc%_EXT%\svx\unoshcol.hxx
+hedabu: ..\inc\unoipset.hxx %_DEST%\inc%_EXT%\svx\unoipset.hxx
+hedabu: ..\inc\unoprov.hxx %_DEST%\inc%_EXT%\svx\unoprov.hxx
+hedabu: ..\inc\unomod.hxx %_DEST%\inc%_EXT%\svx\unomod.hxx
+hedabu: ..\inc\fmdpage.hxx %_DEST%\inc%_EXT%\svx\fmdpage.hxx
+hedabu: ..\inc\fmsearch.hxx %_DEST%\inc%_EXT%\svx\fmsearch.hxx
+hedabu: ..\inc\vcattr.hxx %_DEST%\inc%_EXT%\svx\vcattr.hxx
+hedabu: ..\inc\vcbrwwrp.hxx %_DEST%\inc%_EXT%\svx\vcbrwwrp.hxx
+hedabu: ..\inc\vcsbxdef.hxx %_DEST%\inc%_EXT%\svx\vcsbxdef.hxx
+hedabu: ..\inc\vector3d.hxx %_DEST%\inc%_EXT%\svx\vector3d.hxx
+hedabu: ..\inc\view3d.hxx %_DEST%\inc%_EXT%\svx\view3d.hxx
+hedabu: ..\inc\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx
+hedabu: ..\inc\viewpt3d.hxx %_DEST%\inc%_EXT%\svx\viewpt3d.hxx
+hedabu: ..\inc\volmrk3d.hxx %_DEST%\inc%_EXT%\svx\volmrk3d.hxx
+hedabu: ..\inc\wghtitem.hxx %_DEST%\inc%_EXT%\svx\wghtitem.hxx
+hedabu: ..\inc\widwitem.hxx %_DEST%\inc%_EXT%\svx\widwitem.hxx
+hedabu: ..\inc\worient.hxx %_DEST%\inc%_EXT%\svx\worient.hxx
+hedabu: ..\inc\wrlmitem.hxx %_DEST%\inc%_EXT%\svx\wrlmitem.hxx
+hedabu: ..\inc\xbitmap.hxx %_DEST%\inc%_EXT%\svx\xbitmap.hxx
+hedabu: ..\inc\xbtmpit.hxx %_DEST%\inc%_EXT%\svx\xbtmpit.hxx
+hedabu: ..\inc\xcolit.hxx %_DEST%\inc%_EXT%\svx\xcolit.hxx
+hedabu: ..\inc\xcolit.hxx %_DEST%\inc%_EXT%\svx\xcolit.hxx
+hedabu: ..\inc\xdef.hxx %_DEST%\inc%_EXT%\svx\xdef.hxx
+hedabu: ..\inc\xdash.hxx %_DEST%\inc%_EXT%\svx\xdash.hxx
+hedabu: ..\inc\xfillit.hxx %_DEST%\inc%_EXT%\svx\xfillit.hxx
+hedabu: ..\inc\xfillit.hxx %_DEST%\inc%_EXT%\svx\xfillit.hxx
+hedabu: ..\inc\xfillit0.hxx %_DEST%\inc%_EXT%\svx\xfillit0.hxx
+hedabu: ..\inc\xfillit0.hxx %_DEST%\inc%_EXT%\svx\xfillit0.hxx
+hedabu: ..\inc\xflasit.hxx %_DEST%\inc%_EXT%\svx\xflasit.hxx
+hedabu: ..\inc\xflbckit.hxx %_DEST%\inc%_EXT%\svx\xflbckit.hxx
+hedabu: ..\inc\xflbmpit.hxx %_DEST%\inc%_EXT%\svx\xflbmpit.hxx
+hedabu: ..\inc\xflbmsli.hxx %_DEST%\inc%_EXT%\svx\xflbmsli.hxx
+hedabu: ..\inc\xflbmsxy.hxx %_DEST%\inc%_EXT%\svx\xflbmsxy.hxx
+hedabu: ..\inc\xflbmtit.hxx %_DEST%\inc%_EXT%\svx\xflbmtit.hxx
+hedabu: ..\inc\xflboxy.hxx %_DEST%\inc%_EXT%\svx\xflboxy.hxx
+hedabu: ..\inc\xflbstit.hxx %_DEST%\inc%_EXT%\svx\xflbstit.hxx
+hedabu: ..\inc\xflbtoxy.hxx %_DEST%\inc%_EXT%\svx\xflbtoxy.hxx
+hedabu: ..\inc\xflclit.hxx %_DEST%\inc%_EXT%\svx\xflclit.hxx
+hedabu: ..\inc\xflgrit.hxx %_DEST%\inc%_EXT%\svx\xflgrit.hxx
+hedabu: ..\inc\xflftrit.hxx %_DEST%\inc%_EXT%\svx\xflftrit.hxx
+hedabu: ..\inc\xflhtit.hxx %_DEST%\inc%_EXT%\svx\xflhtit.hxx
+hedabu: ..\inc\xflshtit.hxx %_DEST%\inc%_EXT%\svx\xflshtit.hxx
+hedabu: ..\inc\xfltrit.hxx %_DEST%\inc%_EXT%\svx\xfltrit.hxx
+hedabu: ..\inc\xftadit.hxx %_DEST%\inc%_EXT%\svx\xftadit.hxx
+hedabu: ..\inc\xftdiit.hxx %_DEST%\inc%_EXT%\svx\xftdiit.hxx
+hedabu: ..\inc\xftmrit.hxx %_DEST%\inc%_EXT%\svx\xftmrit.hxx
+hedabu: ..\inc\xftouit.hxx %_DEST%\inc%_EXT%\svx\xftouit.hxx
+hedabu: ..\inc\xftsfit.hxx %_DEST%\inc%_EXT%\svx\xftsfit.hxx
+hedabu: ..\inc\xftshcit.hxx %_DEST%\inc%_EXT%\svx\xftshcit.hxx
+hedabu: ..\inc\xftshit.hxx %_DEST%\inc%_EXT%\svx\xftshit.hxx
+hedabu: ..\inc\xftshtit.hxx %_DEST%\inc%_EXT%\svx\xftshtit.hxx
+hedabu: ..\inc\xftshxy.hxx %_DEST%\inc%_EXT%\svx\xftshxy.hxx
+hedabu: ..\inc\xftstit.hxx %_DEST%\inc%_EXT%\svx\xftstit.hxx
+hedabu: ..\inc\xgrad.hxx %_DEST%\inc%_EXT%\svx\xgrad.hxx
+hedabu: ..\inc\xgrscit.hxx %_DEST%\inc%_EXT%\svx\xgrscit.hxx
+hedabu: ..\inc\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
+hedabu: ..\inc\xhatch.hxx %_DEST%\inc%_EXT%\svx\xhatch.hxx
+hedabu: ..\inc\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
+hedabu: ..\inc\xit.hxx %_DEST%\inc%_EXT%\svx\xit.hxx
+hedabu: ..\inc\xlineit.hxx %_DEST%\inc%_EXT%\svx\xlineit.hxx
+hedabu: ..\inc\xlineit.hxx %_DEST%\inc%_EXT%\xlineit.hxx
+hedabu: ..\inc\xlineit0.hxx %_DEST%\inc%_EXT%\svx\xlineit0.hxx
+hedabu: ..\inc\xlineit0.hxx %_DEST%\inc%_EXT%\xlineit0.hxx
+hedabu: ..\inc\xlinjoit.hxx %_DEST%\inc%_EXT%\xlinjoit.hxx
+hedabu: ..\inc\xlnasit.hxx %_DEST%\inc%_EXT%\svx\xlnasit.hxx
+hedabu: ..\inc\xlnclit.hxx %_DEST%\inc%_EXT%\svx\xlnclit.hxx
+hedabu: ..\inc\xlndsit.hxx %_DEST%\inc%_EXT%\svx\xlndsit.hxx
+hedabu: ..\inc\xlnedcit.hxx %_DEST%\inc%_EXT%\svx\xlnedcit.hxx
+hedabu: ..\inc\xlnedit.hxx %_DEST%\inc%_EXT%\svx\xlnedit.hxx
+hedabu: ..\inc\xlnedwit.hxx %_DEST%\inc%_EXT%\svx\xlnedwit.hxx
+hedabu: ..\inc\xlnstcit.hxx %_DEST%\inc%_EXT%\svx\xlnstcit.hxx
+hedabu: ..\inc\xlnstit.hxx %_DEST%\inc%_EXT%\svx\xlnstit.hxx
+hedabu: ..\inc\xlnstwit.hxx %_DEST%\inc%_EXT%\svx\xlnstwit.hxx
+hedabu: ..\inc\xlntrit.hxx %_DEST%\inc%_EXT%\svx\xlntrit.hxx
+hedabu: ..\inc\xlnwtit.hxx %_DEST%\inc%_EXT%\svx\xlnwtit.hxx
+hedabu: ..\inc\xoutbmp.hxx %_DEST%\inc%_EXT%\svx\xoutbmp.hxx
+hedabu: ..\inc\xoutx.hxx %_DEST%\inc%_EXT%\svx\xoutx.hxx
+hedabu: ..\inc\xoutx.hxx %_DEST%\inc%_EXT%\svx\xoutx.hxx
+hedabu: ..\inc\xpoly.hxx %_DEST%\inc%_EXT%\svx\xpoly.hxx
+hedabu: ..\inc\xpoly.hxx %_DEST%\inc%_EXT%\svx\xpoly.hxx
+hedabu: ..\inc\xpool.hxx %_DEST%\inc%_EXT%\svx\xpool.hxx
+hedabu: ..\inc\xpool.hxx %_DEST%\inc%_EXT%\xpool.hxx
+hedabu: ..\inc\xsetit.hxx %_DEST%\inc%_EXT%\svx\xsetit.hxx
+hedabu: ..\inc\xsetit.hxx %_DEST%\inc%_EXT%\xsetit.hxx
+hedabu: ..\inc\xtable.hxx %_DEST%\inc%_EXT%\svx\xtable.hxx
+hedabu: ..\inc\xtable.hxx %_DEST%\inc%_EXT%\xtable.hxx
+hedabu: ..\inc\xtextit.hxx %_DEST%\inc%_EXT%\svx\xtextit.hxx
+hedabu: ..\inc\xtextit.hxx %_DEST%\inc%_EXT%\xtextit.hxx
+hedabu: ..\inc\xtextit0.hxx %_DEST%\inc%_EXT%\svx\xtextit0.hxx
+hedabu: ..\inc\xtextit0.hxx %_DEST%\inc%_EXT%\xtextit0.hxx
+hedabu: ..\inc\xtxasit.hxx %_DEST%\inc%_EXT%\svx\xtxasit.hxx
+hedabu: ..\inc\xexch.hxx %_DEST%\inc%_EXT%\svx\xexch.hxx
+hedabu: ..\inc\zoom.hxx %_DEST%\inc%_EXT%\svx\zoom.hxx
+hedabu: ..\inc\zoomctrl.hxx %_DEST%\inc%_EXT%\svx\zoomctrl.hxx
+hedabu: ..\inc\zoomitem.hxx %_DEST%\inc%_EXT%\svx\zoomitem.hxx
+hedabu: ..\source\items\boxobj.hxx %_DEST%\inc%_EXT%\svx\boxobj.hxx
+hedabu: ..\inc\itemtype.hxx %_DEST%\inc%_EXT%\svx\itemtype.hxx
+hedabu: ..\inc\outliner.hxx %_DEST%\inc%_EXT%\svx\outliner.hxx
+hedabu: ..\inc\outlobj.hxx %_DEST%\inc%_EXT%\svx\outlobj.hxx
+hedabu: ..\inc\editdata.hxx %_DEST%\inc%_EXT%\svx\editdata.hxx
+hedabu: ..\inc\editeng.hxx %_DEST%\inc%_EXT%\svx\editeng.hxx
+hedabu: ..\inc\editobj.hxx %_DEST%\inc%_EXT%\svx\editobj.hxx
+hedabu: ..\inc\editstat.hxx %_DEST%\inc%_EXT%\svx\editstat.hxx
+hedabu: ..\inc\editund2.hxx %_DEST%\inc%_EXT%\svx\editund2.hxx
+hedabu: ..\inc\editview.hxx %_DEST%\inc%_EXT%\svx\editview.hxx
+hedabu: ..\inc\eeitem.hxx %_DEST%\inc%_EXT%\svx\eeitem.hxx
+hedabu: ..\inc\eeitemid.hxx %_DEST%\inc%_EXT%\svx\eeitemid.hxx
+hedabu: ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
+hedabu: ..\inc\svxacorr.hxx %_DEST%\inc%_EXT%\svx\svxacorr.hxx
+hedabu: ..\inc\swafopt.hxx %_DEST%\inc%_EXT%\svx\swafopt.hxx
+hedabu: ..\inc\textconv.hxx %_DEST%\inc%_EXT%\svx\textconv.hxx
+hedabu: ..\inc\txtrange.hxx %_DEST%\inc%_EXT%\svx\txtrange.hxx
+hedabu: ..\inc\fmmodel.hxx %_DEST%\inc%_EXT%\svx\fmmodel.hxx
+hedabu: ..\inc\fmpage.hxx %_DEST%\inc%_EXT%\svx\fmpage.hxx
+hedabu: ..\inc\fmview.hxx %_DEST%\inc%_EXT%\svx\fmview.hxx
+hedabu: ..\inc\fmobjfac.hxx %_DEST%\inc%_EXT%\svx\fmobjfac.hxx
+hedabu: ..\inc\fmglob.hxx %_DEST%\inc%_EXT%\svx\fmglob.hxx
+hedabu: ..\inc\fmshell.hxx %_DEST%\inc%_EXT%\svx\fmshell.hxx
+hedabu: ..\source\inc\fmstream.hxx %_DEST%\inc%_EXT%\svx\fmstream.hxx
+hedabu: ..\inc\tbxform.hxx %_DEST%\inc%_EXT%\svx\tbxform.hxx
+hedabu: ..\inc\dbexch.hrc %_DEST%\inc%_EXT%\svx\dbexch.hrc
+hedabu: ..\inc\dbmsgbox.hrc %_DEST%\inc%_EXT%\svx\dbmsgbox.hrc
+hedabu: ..\inc\dbmsgbox.hxx %_DEST%\inc%_EXT%\svx\dbmsgbox.hxx
+hedabu: ..\inc\bulitem.hxx %_DEST%\inc%_EXT%\svx\bulitem.hxx
+hedabu: ..\inc\svdouno.hxx %_DEST%\inc%_EXT%\svx\svdouno.hxx
+hedabu: ..\inc\deflt3d.hxx %_DEST%\inc%_EXT%\svx\deflt3d.hxx
+hedabu: ..\inc\unotext.hxx %_DEST%\inc%_EXT%\svx\unotext.hxx
+hedabu: ..\inc\unoedsrc.hxx %_DEST%\inc%_EXT%\svx\unoedsrc.hxx
+hedabu: ..\inc\unofored.hxx %_DEST%\inc%_EXT%\svx\unofored.hxx
+hedabu: ..\inc\unoforou.hxx %_DEST%\inc%_EXT%\svx\unoforou.hxx
+hedabu: ..\inc\e3dundo.hxx %_DEST%\inc%_EXT%\svx\e3dundo.hxx
+hedabu: ..\inc\anchorid.hxx %_DEST%\inc%_EXT%\svx\anchorid.hxx
+hedabu: ..\inc\msdffimp.hxx %_DEST%\inc%_EXT%\svx\msdffimp.hxx
+hedabu: ..\inc\msdffdef.hxx %_DEST%\inc%_EXT%\svx\msdffdef.hxx
+hedabu: ..\inc\unoshtxt.hxx %_DEST%\inc%_EXT%\svx\unoshtxt.hxx
+hedabu: ..\inc\numitem.hxx %_DEST%\inc%_EXT%\svx\numitem.hxx
+hedabu: ..\inc\numpages.hxx %_DEST%\inc%_EXT%\svx\numpages.hxx
+hedabu: ..\inc\numdef.hxx %_DEST%\inc%_EXT%\svx\numdef.hxx
+hedabu: ..\inc\numvset.hxx %_DEST%\inc%_EXT%\svx\numvset.hxx
+hedabu: ..\inc\dbbrowse.hxx %_DEST%\inc%_EXT%\svx\dbbrowse.hxx
+hedabu: ..\inc\fmdmod.hxx %_DEST%\inc%_EXT%\svx\fmdmod.hxx
+hedabu: ..\inc\fmgridcl.hxx %_DEST%\inc%_EXT%\svx\fmgridcl.hxx
+hedabu: ..\inc\fmgridif.hxx %_DEST%\inc%_EXT%\svx\fmgridif.hxx
+hedabu: ..\inc\gridctrl.hxx %_DEST%\inc%_EXT%\svx\gridctrl.hxx
+hedabu: ..\inc\qryparam.hxx %_DEST%\inc%_EXT%\svx\qryparam.hxx
+hedabu: ..\inc\pfiledlg.hxx %_DEST%\inc%_EXT%\svx\pfiledlg.hxx
+hedabu: ..\inc\hyperdlg.hxx %_DEST%\inc%_EXT%\svx\hyperdlg.hxx
+hedabu: ..\inc\hlnkitem.hxx %_DEST%\inc%_EXT%\svx\hlnkitem.hxx
+hedabu: ..\inc\unofdesc.hxx %_DEST%\inc%_EXT%\svx\unofdesc.hxx
+hedabu: ..\source\xmlfilt\xmlnumi.hxx %_DEST%\inc%_EXT%\svx\xmlnumi.hxx
+hedabu: ..\source\xmlfilt\xmlnume.hxx %_DEST%\inc%_EXT%\svx\xmlnume.hxx
+hedabu: ..\inc\ivctrl.hxx %_DEST%\inc%_EXT%\svx\ivctrl.hxx
+hedabu: ..\inc\iconcdlg.hxx %_DEST%\inc%_EXT%\svx\iconcdlg.hxx
+hedabu: ..\source\xmlfilt\xmltabe.hxx %_DEST%\inc%_EXT%\svx\xmltabe.hxx
+hedabu: ..\source\xmlfilt\xmltabi.hxx %_DEST%\inc%_EXT%\svx\xmltabi.hxx
+hedabu: ..\source\xmlfilt\xmlbrshe.hxx %_DEST%\inc%_EXT%\svx\xmlbrshe.hxx
+hedabu: ..\source\xmlfilt\xmlbrshi.hxx %_DEST%\inc%_EXT%\svx\xmlbrshi.hxx
+hedabu: ..\inc\unoshprp.hxx %_DEST%\inc%_EXT%\svx\unoshprp.hxx
+hedabu: ..\inc\svxmsbas.hxx %_DEST%\inc%_EXT%\svx\svxmsbas.hxx
+hedabu: ..\inc\prtqry.hxx %_DEST%\inc%_EXT%\svx\prtqry.hxx
+hedabu: ..\inc\msoleexp.hxx %_DEST%\inc%_EXT%\svx\msoleexp.hxx
+hedabu: ..\inc\unoapi.hxx %_DEST%\inc%_EXT%\svx\unoapi.hxx
+hedabu: ..\inc\sdasaitm.hxx %_DEST%\inc%_EXT%\svx\sdasaitm.hxx
+hedabu: ..\inc\unofill.hxx %_DEST%\inc%_EXT%\svx\unofill.hxx
+hedabu: ..\source\dialog\grfpage.hxx %_DEST%\inc%_EXT%\svx\grfpage.hxx
+hedabu: ..\inc\grfcrop.hxx %_DEST%\inc%_EXT%\svx\grfcrop.hxx
+hedabu: ..\inc\unonrule.hxx %_DEST%\inc%_EXT%\svx\unonrule.hxx
+
+..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
+..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
+..\xml\SvxShape.xml %_DEST%\xml%_EXT%\SvxShape.xml
+..\xml\SvxShapeCircle.xml %_DEST%\xml%_EXT%\SvxShapeCircle.xml
+..\xml\SvxShapeCollection.xml %_DEST%\xml%_EXT%\SvxShapeCollection.xml
+..\xml\SvxShapeConnector.xml %_DEST%\xml%_EXT%\SvxShapeConnector.xml
+..\xml\SvxShapeControl.xml %_DEST%\xml%_EXT%\SvxShapeControl.xml
+..\xml\SvxShapeDimensioning.xml %_DEST%\xml%_EXT%\SvxShapeDimensioning.xml
+..\xml\SvxShapeGroup.xml %_DEST%\xml%_EXT%\SvxShapeGroup.xml
+..\xml\SvxShapePolyPolygon.xml %_DEST%\xml%_EXT%\SvxShapePolyPolygon.xml
+..\xml\SvxShapePolyPolygonBezier.xml %_DEST%\xml%_EXT%\SvxShapePolyPolygonBezier.xml
+..\xml\SvxUnoNumberingRules.xml %_DEST%\xml%_EXT%\SvxUnoNumberingRules.xml
+..\xml\SvxUnoText.xml %_DEST%\xml%_EXT%\SvxUnoText.xml
+..\xml\SvxUnoTextContent.xml %_DEST%\xml%_EXT%\SvxUnoTextContent.xml
+..\xml\SvxUnoTextContentEnum.xml %_DEST%\xml%_EXT%\SvxUnoTextContentEnum.xml
+..\xml\SvxUnoTextCursor.xml %_DEST%\xml%_EXT%\SvxUnoTextCursor.xml
+..\xml\SvxUnoTextField.xml %_DEST%\xml%_EXT%\SvxUnoTextField.xml
+..\xml\SvxUnoTextRange.xml %_DEST%\xml%_EXT%\SvxUnoTextRange.xml
+..\xml\SvxUnoTextRangeEnumeration.xml %_DEST%\xml%_EXT%\SvxUnoTextRangeEnumeration.xml

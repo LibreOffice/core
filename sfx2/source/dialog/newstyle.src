@@ -1,0 +1,177 @@
+/*************************************************************************
+ *
+ *  $RCSfile: newstyle.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "dialog.hrc"
+#include "newstyle.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // DLG_NEW_STYLE_BY_EXAMPLE ----------------------------------------------
+ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
+{
+    HelpId = SID_STYLE_NEW_BY_EXAMPLE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 177 , 118 ) ;
+    Text = "Vorlage erzeugen" ;
+    Text [ ENGLISH ] = "Create template" ;
+    Text [ norwegian ] = "Lag mal" ;
+    Text [ italian ] = "Crea modello" ;
+    Text [ portuguese_brazilian ] = "Criar modelo" ;
+    Text [ portuguese ] = "Criar estilo" ;
+    Text [ finnish ] = "Luo malli" ;
+    Text [ danish ] = "Opret typografi" ;
+    Text [ french ] = "Création d'un style" ;
+    Text [ swedish ] = "Skapa formatmall" ;
+    Text [ dutch ] = "Opmaakprofiel maken" ;
+    Text [ spanish ] = "Crear estilo" ;
+    Text [ english_us ] = "Create Style" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Disable = TRUE ;
+        Pos = MAP_APPFONT ( 121 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 121 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    ComboBox LB_COL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 94 , 92 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_COL
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 109 , 109 ) ;
+        Text = "Vorlagenname" ;
+        Text [ ENGLISH ] = "Template name" ;
+        Text [ norwegian ] = "Navn på mal" ;
+        Text [ italian ] = "Nome modello" ;
+        Text [ portuguese_brazilian ] = "Nome do modelo" ;
+        Text [ portuguese ] = "Nome do estilo" ;
+        Text [ finnish ] = "Mallin nimi" ;
+        Text [ danish ] = "Typografinavn" ;
+        Text [ french ] = "Nom du style" ;
+        Text [ swedish ] = "Formatmallens namn" ;
+        Text [ dutch ] = "Naam opmaakprofiel" ;
+        Text [ spanish ] = "Nombre del estilo" ;
+        Text [ english_us ] = "Style name" ;
+        Text[ chinese_simplified ] = "ÑùÊ½Ãû³Æ";
+        Text[ russian ] = "Íàçâàíèå øàáëîíà";
+        Text[ polish ] = "Nazwa stylu";
+        Text[ japanese ] = "½À²Ù–¼";
+        Text[ chinese_traditional ] = "¼Ë¦¡¦WºÙ";
+        Text[ arabic ] = "ÇÓã ÇáäãØ";
+        Text[ greek ] = "¼íïìá ğñïôığïõ";
+        Text[ korean ] = "À¯Çü ÀÌ¸§";
+        Text[ turkish ] = "Biçim adı";
+        Text[ language_user1 ] = " ";
+    };
+    QueryBox MSG_OVERWRITE
+    {
+        Buttons = WB_YES_NO ;
+        DefButton = WB_DEF_NO ;
+        /* ### ACHTUNG: Neuer Text in Resource? Vorlage existiert bereits. Überschreiben? : Vorlage existiert bereits. šberschreiben? */
+        /* ### ACHTUNG: Neuer Text in Resource? Vorlage existiert bereits. Überschreiben? : Vorlage existiert bereits. šberschreiben? */
+        Message = "Vorlage existiert bereits. Überschreiben?" ;
+        Message [ ENGLISH ] = "Template already exists. Overwrite?" ;
+        Message [ norwegian ] = "Malen finnes allerede. Skriv over?" ;
+        Message [ italian ] = "Il modello esiste già. Sovrascrivere?" ;
+        Message [ portuguese_brazilian ] = "O modelo já existe. Sobregravar?" ;
+        Message [ portuguese ] = "O modelo já existe. Deseja substituí-lo?" ;
+        Message [ finnish ] = "Malli on jo tehty. Korvataanko se?" ;
+        Message [ danish ] = "Typografien findes allerede. Skal den overskrives?" ;
+        Message [ french ] = "Ce style existe déjà. Voulez-vous le remplacer ?" ;
+        Message [ swedish ] = "Formatmallen finns redan. Skriva över?" ;
+        Message [ dutch ] = "Dit opmaakprofiel bestaat reeds. Overschrijven?" ;
+        Message [ spanish ] = "El estilo ya existe. ¿Desea sobrescribirlo?" ;
+        Message [ english_us ] = "Style already exists. Overwrite?" ;
+        Message[ chinese_simplified ] = "ÑùÊ½ÒÑ¾­´æÔÚ¡£Òª¸²Ğ´Ëü£¿";
+        Message[ russian ] = "Ñòèëü óæå ñóùåñòâóåò. Ïåğåïèñàòü?";
+        Message[ polish ] = "Styl ju¿ istnieje. Zast¹piæ innym?";
+        Message[ japanese ] = "½À²Ù‚Í‚·‚Å‚É‚ ‚è‚Ü‚·Bã‘‚«‚µ‚Ü‚·‚©?";
+        Message[ chinese_traditional ] = "¼Ë¦¡¤w¸g¦s¦b¡C­nÂĞ¼g¡H";
+        Message[ arabic ] = "åĞÇ ÇáäãØ ãæÌæÏ ãÓÈŞÇğ. åá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
+        Message[ greek ] = "Ôï ğñüôõğï õğÜñ÷åé Şäç. Íá äéáãñáöåß;";
+        Message[ korean ] = "¼­½ÄÆÄÀÏÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. °ãÃÄ ¾²½Ã°Ú½À´Ï±î?";
+        Message[ turkish ] = "Biçim mevcut durumda. Üzerine yazılsın mı?";
+        Message[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Éú³ÉÑùÊ½";
+    Text[ russian ] = "Ñîçäàòü ñòèëü";
+    Text[ polish ] = "Utwórz styl";
+    Text[ japanese ] = "½À²Ù‚Ìì¬";
+    Text[ chinese_traditional ] = "¥Í¦¨¼Ë¦¡";
+    Text[ arabic ] = "ÅäÔÇÁ äãØ";
+    Text[ greek ] = "Äçìéïõñãßá ğñïôığïõ";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ ÀÛ¼º";
+    Text[ turkish ] = "Biçim oluştur";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ *  $RCSfile: numfmt.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_NUMFMT_HRC
+#define _SVX_NUMFMT_HRC
+
+// defines ------------------------------------------------------------------
+
+//================================================
+// allgemein:
+#define FT_PREVIEW              100
+
+//================================================
+// Zahlen-TabPage:
+#define WND_NUMBER_PREVIEW      2
+#define FT_CATEGORY             3
+#define FT_FORMAT               4
+#define FT_OPTIONS              5
+#define FT_EDFORMAT             6
+#define LB_CATEGORY             9
+#define LB_FORMAT               10
+#define GB_OPTIONS              11
+#define FT_LANGUAGE             12
+#define LB_LANGUAGE             13
+#define ED_FORMAT               14
+#define BTN_ADD                 15
+#define BTN_REMOVE              16
+#define BMP_CHECK               17
+#define BMP_DCHECK              18
+#define BMP_CROSS               19
+#define BMP_DCROSS              20
+#define FT_DECIMALS             21
+#define ED_DECIMALS             22
+#define FT_LEADZEROES           23
+#define ED_LEADZEROES           24
+#define BTN_NEGRED              25
+#define BTN_THOUSAND            26
+#define FT_COMMENT              27
+#define ED_COMMENT              28
+#define IB_ADD                  29
+#define IB_REMOVE               30
+#define IB_INFO                 31
+#define IL_ICON                 32
+#define LB_CURRENCY             33
+#define STR_EUROPE              34
+
+#define TBX_ADDREMOVE           1
+#define IID_ADD                 1
+#define IID_REMOVE              2
+#define IID_INFO                3
+
+#endif
+

@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ *  $RCSfile: paragrph.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_PARAGRPH_HRC
+#define _SVX_PARAGRPH_HRC
+
+// StandardTabPage ----------------------------------------------------------
+
+#define FT_LEFTINDENT           10
+#define ED_LEFTINDENT           11
+#define FT_FLINEINDENT          12
+#define ED_FLINEINDENT          13
+#define FT_RIGHTINDENT          14
+#define ED_RIGHTINDENT          15
+#define GB_INDENT               16
+
+#define FT_TOPDIST              20
+#define ED_TOPDIST              21
+#define FT_BOTTOMDIST           22
+#define ED_BOTTOMDIST           23
+#define GB_DIST                 24
+
+#define BTN_LEFTALIGN           30
+#define BTN_RIGHTALIGN          31
+#define BTN_CENTERALIGN         32
+#define BTN_JUSTIFYALIGN        33
+#define GB_ALIGN                34
+
+#define LB_LINEDIST             40
+#define FT_LINEDIST             41
+#define ED_LINEDISTPERCENT      42
+#define ED_LINEDISTMETRIC       43
+#define GB_LINEDIST             44
+#define WN_EXAMPLE              46
+#define GB_EXAMPLE              47
+
+#define CB_AUTO                 48
+#define FT_LASTLINE                             49
+#define LB_LASTLINE                             50
+#define CB_EXPAND                               51
+#define ST_LINEDIST_ABS                         52
+
+// ExtendedTabPage ----------------------------------------------------------
+
+#define BTN_HYPHEN              50
+#define FT_BEFORE               51
+#define ED_HYPHENBEFORE         52
+#define FT_HYPHENBEFORE         53
+#define FT_AFTER                54
+#define ED_HYPHENAFTER          55
+#define FT_HYPHENAFTER          56
+#define GB_HYPHEN               57
+
+#define BTN_PAGEBREAK           60
+#define BTN_BREAKPAGE           61
+#define BTN_BREAKCOLUMN         62
+#define BTN_PAGEBREAKBEFORE     63
+#define BTN_PAGEBREAKAFTER      64
+#define BTN_PAGECOLL            65
+#define LB_PAGECOLL             66
+#define BTN_KEEPTOGETHER        67
+#define BTN_WIDOWS              68
+#define ED_WIDOWS               69
+#define FT_WIDOWS               70
+#define BTN_ORPHANS             71
+#define ED_ORPHANS              72
+#define FT_ORPHANS              73
+#define GB_OPTIONS              74
+#define FT_PAGENUM              75
+#define ED_PAGENUM              76
+
+#define CB_KEEPTOGETHER         80
+#define FT_MAXHYPH              81
+#define ED_MAXHYPH              83
+
+#define CB_REGISTER             84
+#define GB_REGISTER             85
+
+
+#endif
+

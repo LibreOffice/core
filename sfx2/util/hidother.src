@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hidother.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "../source/inc/helpid.hrc"         // HID_XXX
+#include "../inc/sfxsids.hrc"               // SID_XXX
+#include "../inc/sfx.hrc"
+#include "../source/expchaos/cntexp.hrc"
+
+hidspecial HID_APP_WIN                          { HelpID = HID_APP_WIN; };
+hidspecial HID_DESKTOP                          { HelpID = HID_DESKTOP; };
+hidspecial HID_DOCINFO_FRAME                    { HelpID = HID_DOCINFO_FRAME; };
+hidspecial HID_EXPLORER_FRAME                   { HelpID = HID_EXPLORER_FRAME; };
+hidspecial HID_FILEDLG_FILE                     { HelpID = HID_FILEDLG_FILE; };
+hidspecial HID_FILEDLG_MANAGER                  { HelpID = HID_FILEDLG_MANAGER; };
+hidspecial HID_FILEDLG_READ_ONLY                { HelpID = HID_FILEDLG_READ_ONLY; };
+hidspecial HID_FILEDLG_STANDARD                 { HelpID = HID_FILEDLG_STANDARD; };
+hidspecial HID_FILEDLG_URL                      { HelpID = HID_FILEDLG_URL; };
+hidspecial HID_FILEDLG_USE_PASSWD               { HelpID = HID_FILEDLG_USE_PASSWD; };
+hidspecial HID_INTERFACE_SFXMAILVIEW            { HelpID = HID_INTERFACE_SFXMAILVIEW; };
+hidspecial HID_INTERFACE_SFXEXPLVIEWSH          { HelpID = HID_INTERFACE_SFXEXPLVIEWSH; };
+hidspecial HID_INTERFACE_SFXFRAMESETVIEW        { HelpID = HID_INTERFACE_SFXFRAMESETVIEW; };
+hidspecial HID_INTERFACE_SFXFRAMESETSOURCEVIEW  { HelpID = HID_INTERFACE_SFXFRAMESETSOURCEVIEW; };
+hidspecial HID_INTERFACE_SFXHELP_VIEWSH         { HelpID = HID_INTERFACE_SFXHELP_VIEWSH; };
+hidspecial HID_PREVIEW_FRAME                    { HelpID = HID_PREVIEW_FRAME; };
+hidspecial HID_PRINT_OPTIONS                    { HelpID = HID_PRINT_OPTIONS; };
+hidspecial HID_TEMPLATE_FILTER                  { HelpID = HID_TEMPLATE_FILTER; };
+hidspecial HID_TEMPLATE_FMT                     { HelpID = HID_TEMPLATE_FMT; };
+hidspecial HID_SEARCH_DLG_TABLB                 { HelpID = HID_SEARCH_DLG_TABLB; };
+hidspecial SID_STYLE_FAMILY1                    { HelpID = SID_STYLE_FAMILY1; };
+hidspecial SID_STYLE_FAMILY2                    { HelpID = SID_STYLE_FAMILY2; };
+hidspecial SID_STYLE_FAMILY3                    { HelpID = SID_STYLE_FAMILY3; };
+hidspecial SID_STYLE_FAMILY4                    { HelpID = SID_STYLE_FAMILY4; };
+hidspecial SID_STYLE_FAMILY5                    { HelpID = SID_STYLE_FAMILY5; };
+hidspecial SID_FILTER_NAME                      { HelpID = SID_FILTER_NAME; };
+hidspecial HID_NAVIGATOR_WINDOW                 { HelpID = HID_NAVIGATOR_WINDOW; };
+hidspecial SID_EXPLORERCONTENT_OPEN             { HelpId = SID_EXPLORERCONTENT_OPEN; };
+hidspecial SID_EXPLORERCONTENT_OPEN_FOLDER      { HelpId = SID_EXPLORERCONTENT_OPEN_FOLDER; };
+hidspecial SID_EXPLORERCONTENT_OPEN_TEMPLATE    { HelpId = SID_EXPLORERCONTENT_OPEN_TEMPLATE; };
+hidspecial SID_EXPLORERCONTENT_OPEN_DOCUMENT    { HelpId = SID_EXPLORERCONTENT_OPEN_DOCUMENT; };
+hidspecial SID_EXPLORERCONTENT_OPEN_OBJECT      { HelpId = SID_EXPLORERCONTENT_OPEN_OBJECT; };
+hidspecial HID_HELPAGENT_TIP_BOX                { HelpId = HID_HELPAGENT_TIP_BOX; };
+hidspecial SID_EXPLORER_SEARCH_DLG              { HelpId = SID_EXPLORER_SEARCH_DLG; };
+hidspecial SID_TRASH_RECOVER                    { HelpId = SID_TRASH_RECOVER; };
+hidspecial SID_TRASH_AUTOEMPTY                  { HelpId = SID_TRASH_AUTOEMPTY; };
+hidspecial SID_TRASH_EMPTY                      { HelpId = SID_TRASH_EMPTY; };
+hidspecial SID_EXPLORERCONTENT_NEW              { HelpId = SID_EXPLORERCONTENT_NEW; };
+hidspecial SID_EXPLORERCONTENT_DESTROY          { HelpId = SID_EXPLORERCONTENT_DESTROY; };
+hidspecial SID_EXPLORERCONTENT_RENAME           { HelpId = SID_EXPLORERCONTENT_RENAME; };
+hidspecial SID_EXPLORERCONTENT_COPY             { HelpId = SID_EXPLORERCONTENT_COPY; };
+hidspecial SID_EXPLORERCONTENT_PASTE            { HelpId = SID_EXPLORERCONTENT_PASTE; };
+hidspecial SID_EXPLORERCONTENT_CREATELINK       { HelpId = SID_EXPLORERCONTENT_CREATELINK; };
+hidspecial SID_EXPLORERCONTENT_MAKEROOT         { HelpId = SID_EXPLORERCONTENT_MAKEROOT; };
+hidspecial SID_EXPLORERCONTENT_DEFAULTTEMPLATE  { HelpId = SID_EXPLORERCONTENT_DEFAULTTEMPLATE; };
+hidspecial SID_PROPERTIES                       { HelpId = SID_PROPERTIES; };
+hidspecial SID_EXPLORER_BOOKMARKDIR             { HelpId = SID_EXPLORER_BOOKMARKDIR; };
+hidspecial SID_EXPLORER_SEARCHORIG              { HelpId = SID_EXPLORER_SEARCHORIG; };
+hidspecial HID_TEMPLDLG_TOOLBOX_LEFT            { HelpId = HID_TEMPLDLG_TOOLBOX_LEFT;};
+hidspecial HID_EXPLORER_SRCH_COUNT              { HelpId = HID_EXPLORER_SRCH_COUNT;};
+hidspecial SID_EXPLORER_PASTE_ASLINK            { HelpId = SID_EXPLORER_PASTE_ASLINK;};
+hidspecial HID_INTERFACE_SFXPLUGINVIEW          { HelpID = HID_INTERFACE_SFXPLUGINVIEW; };
+hidspecial HID_TABDLG_RESET_BTN                 { HelpID = HID_TABDLG_RESET_BTN; };
+hidspecial HID_TABDLG_STANDARD_BTN              { HelpID = HID_TABDLG_STANDARD_BTN; };
+hidspecial SID_EXPLORER_RESETURL                { HelpID = SID_EXPLORER_RESETURL; };
+hidspecial SID_ORIG_PROPERTIES                  { HelpID = SID_ORIG_PROPERTIES; };
+hidspecial HID_CONFIG_EVENT_OFFICE_BASED        { HelpID = HID_CONFIG_EVENT_OFFICE_BASED; };
+hidspecial HID_CONFIG_EVENT_DOCUMENT_BASED      { HelpID = HID_CONFIG_EVENT_DOCUMENT_BASED; };
+hidspecial HID_EXPLORER_SRCH_LATEST_COUNT       { HelpID = HID_EXPLORER_SRCH_LATEST_COUNT; };
+hidspecial HID_EXPLORERMENU_ARRANGEICONS        { HelpID = HID_EXPLORERMENU_ARRANGEICONS; };
+hidspecial HID_EXPLORERMENU_STDTEMPLATE         { HelpID = HID_EXPLORERMENU_STDTEMPLATE; };
+hidspecial HID_EXPLORER_DOCVIEW_ICON            { HelpID = HID_EXPLORER_DOCVIEW_ICON; };
+hidspecial HID_EXPLORER_DOCVIEW_DETAILS         { HelpID = HID_EXPLORER_DOCVIEW_DETAILS; };
+hidspecial HID_CHAOSDOC_WIN                     { HelpID = HID_CHAOSDOC_WIN; };
+hidspecial HID_CHAOSDOC_WIN_HEADER              { HelpID = HID_CHAOSDOC_WIN_HEADER; };
+hidspecial HID_CHAOSDOC_WIN_PARTS               { HelpID = HID_CHAOSDOC_WIN_PARTS; };
+hidspecial HID_CHAOSDOC_WIN_BODY                { HelpID = HID_CHAOSDOC_WIN_BODY; };
+hidspecial HID_CNT_PAGE_PRECV_1                 { HelpID = HID_CNT_PAGE_PRECV_1; };
+hidspecial HID_CNT_PAGE_PRECV_2                 { HelpID = HID_CNT_PAGE_PRECV_2; };
+hidspecial HID_CNT_PAGE_PRECV_3                 { HelpID = HID_CNT_PAGE_PRECV_3; };
+hidspecial HID_CNT_PAGE_PRECV_4                 { HelpID = HID_CNT_PAGE_PRECV_4; };
+hidspecial HID_CNT_PAGE_PRECV_5                 { HelpID = HID_CNT_PAGE_PRECV_5; };
+hidspecial HID_CNT_PAGE_PRECV_6                 { HelpID = HID_CNT_PAGE_PRECV_6; };
+hidspecial HID_CNT_PAGE_PRECV_7                 { HelpID = HID_CNT_PAGE_PRECV_7; };
+hidspecial HID_CNT_PAGE_PRECV_8                 { HelpID = HID_CNT_PAGE_PRECV_8; };
+hidspecial HID_CNT_PAGE_PRECV_9                 { HelpID = HID_CNT_PAGE_PRECV_9; };
+hidspecial HID_CNT_PAGE_PSEND_1                 { HelpID = HID_CNT_PAGE_PSEND_1; };
+hidspecial HID_CNT_PAGE_PSEND_2                 { HelpID = HID_CNT_PAGE_PSEND_2; };
+hidspecial HID_CNT_PAGE_PSEND_3                 { HelpID = HID_CNT_PAGE_PSEND_3; };
+hidspecial HID_CNT_PAGE_PSEND_4                 { HelpID = HID_CNT_PAGE_PSEND_4; };
+hidspecial HID_CNT_PAGE_PSEND_5                 { HelpID = HID_CNT_PAGE_PSEND_5; };
+hidspecial HID_CNT_PAGE_PSEND_6                 { HelpID = HID_CNT_PAGE_PSEND_6; };
+hidspecial HID_CNT_PAGE_PSEND_7                 { HelpID = HID_CNT_PAGE_PSEND_7; };
+hidspecial HID_CNT_PAGE_PSEND_8                 { HelpID = HID_CNT_PAGE_PSEND_8; };
+hidspecial HID_CNT_PAGE_PSEND_9                 { HelpID = HID_CNT_PAGE_PSEND_9; };
+hidspecial SID_CHAOSDOC_LAYOUT1                 { HelpID = SID_CHAOSDOC_LAYOUT1; };
+hidspecial SID_CHAOSDOC_LAYOUT2                 { HelpID = SID_CHAOSDOC_LAYOUT2; };
+hidspecial SID_CHAOSDOC_LAYOUT3                 { HelpID = SID_CHAOSDOC_LAYOUT3; };
+hidspecial SID_CHAOSDOC_LAYOUT4                 { HelpID = SID_CHAOSDOC_LAYOUT4; };
+hidspecial HID_BRWBOX_HEADERBAR                 { HelpID = HID_BRWBOX_HEADERBAR; };
+hidspecial HID_TASKBAR                          { HelpID = HID_TASKBAR; };
+hidspecial HID_TASKBUTTONBAR                    { HelpID = HID_TASKBUTTONBAR; };
+hidspecial HID_TASKTOOLBAR                      { HelpID = HID_TASKTOOLBAR; };
+hidspecial HID_CHAOS_NEW_IMAP_BOX               { HelpID = HID_CHAOS_NEW_IMAP_BOX; };
+hidspecial HID_CHAOS_NEW_IMAP_MSG               { HelpID = HID_CHAOS_NEW_IMAP_MSG; };
+hidspecial HID_CHAOS_NEW_IMAP_FLD               { HelpID = HID_CHAOS_NEW_IMAP_FLD; };
+hidspecial HID_CHAOS_NEW_NEWS_BOX               { HelpID = HID_CHAOS_NEW_NEWS_BOX; };
+hidspecial HID_CHAOS_NEW_NEWS_MSG               { HelpID = HID_CHAOS_NEW_NEWS_MSG; };
+hidspecial HID_CHAOS_NEW_IMAP_BOX               { HelpID = HID_CHAOS_NEW_IMAP_BOX; };
+hidspecial HID_CHAOS_NEW_FSYS_FLD               { HelpID = HID_CHAOS_NEW_FSYS_FLD; };
+hidspecial HID_CHAOS_NEW_FSYS_LNK               { HelpID = HID_CHAOS_NEW_FSYS_LNK; };
+hidspecial HID_CHAOS_NEW_FTP_BOX                { HelpID = HID_CHAOS_NEW_FTP_BOX; };
+hidspecial HID_CHAOS_NEW_FTP_FLD                { HelpID = HID_CHAOS_NEW_FTP_FLD; };
+hidspecial HID_CHAOS_NEW_OUT_BOX                { HelpID = HID_CHAOS_NEW_OUT_BOX; };
+hidspecial HID_CHAOS_NEW_OUT_MSG                { HelpID = HID_CHAOS_NEW_OUT_MSG; };
+hidspecial HID_CHAOS_NEW_POP3_BOX               { HelpID = HID_CHAOS_NEW_POP3_BOX; };
+hidspecial HID_CHAOS_NEW_POP3_MSG               { HelpID = HID_CHAOS_NEW_POP3_MSG; };
+hidspecial HID_CHAOS_NEW_SEARCH                 { HelpID = HID_CHAOS_NEW_SEARCH; };
+hidspecial HID_CHAOS_NEW_VIM_BOX                { HelpID = HID_CHAOS_NEW_VIM_BOX; };
+hidspecial HID_CHAOS_NEW_VIM_MSG                { HelpID = HID_CHAOS_NEW_VIM_MSG; };
+hidspecial HID_CHAOS_NEW_SUBSCR_BOX             { HelpID = HID_CHAOS_NEW_SUBSCR_BOX; };
+hidspecial HID_CHAOS_NEW_BOOKMARK               { HelpID = HID_CHAOS_NEW_BOOKMARK; };
+hidspecial HID_CHAOS_NEW_PUB_BOX                { HelpID = HID_CHAOS_NEW_PUB_BOX; };
+hidspecial HID_UUI_END                          { HelpID = HID_UUI_END; }; // aka HID_CHAOS_NEW_DATABASE
+hidspecial SID_EXPLORER_SHOWEXTENSION           { HelpID = SID_EXPLORER_SHOWEXTENSION; };
+hidspecial SID_EXPLORER_MAIL_HEADER             { HelpID = SID_EXPLORER_MAIL_HEADER; };
+hidspecial SID_EXPLORER_MAIL_BODY               { HelpID = SID_EXPLORER_MAIL_BODY; };
+hidspecial HID_CNT_DLG_SEARCH_BT_SHOW           { HelpID = HID_CNT_DLG_SEARCH_BT_SHOW; };
+hidspecial HID_CNT_DLG_SEARCH_BT_UPDATE         { HelpID = HID_CNT_DLG_SEARCH_BT_UPDATE; };
+hidspecial HID_CNT_DLG_SEARCH_BT_SYNCHRONIZE    { HelpID = HID_CNT_DLG_SEARCH_BT_SYNCHRONIZE; };
+hidspecial HID_CNT_DLG_SEARCH_BT_STOP           { HelpID = HID_CNT_DLG_SEARCH_BT_STOP; };
+hidspecial HID_CNT_PAGE_HEADER                  { HelpID = HID_CNT_PAGE_HEADER; };
+hidspecial HID_CNT_PAGE_DESCRIPTION             { HelpID = HID_CNT_PAGE_DESCRIPTION; };
+hidspecial HID_CNT_LB_HEADER                    { HelpID = HID_CNT_LB_HEADER; };
+hidspecial HID_CNT_LB_DESCRIPTION               { HelpID = HID_CNT_LB_DESCRIPTION; };
+hidspecial SID_GROUPVIEW                        { HelpID = SID_GROUPVIEW; };
+hidspecial HID_GROUPVIEW_CONTENT_BIG            { HelpID = HID_GROUPVIEW_CONTENT_BIG; };
+hidspecial HID_GROUPVIEW_CONTENT_SMALL          { HelpID = HID_GROUPVIEW_CONTENT_SMALL; };
+hidspecial HID_GROUPVIEW_CONTENT_TREE           { HelpID = HID_GROUPVIEW_CONTENT_TREE; };
+hidspecial HID_FILEDLG_AUTOCOMPLETEBOX          { HelpID = HID_FILEDLG_AUTOCOMPLETEBOX; };
+hidspecial HID_FILEDLG_SAVE_BTN                 { HelpID = HID_FILEDLG_SAVE_BTN; };
+hidspecial HID_FILEDLG_SAVE_FILENAME            { HelpID = HID_FILEDLG_SAVE_FILENAME; };
+hidspecial HID_FILEDLG_SAVE_FILETYPE            { HelpID = HID_FILEDLG_SAVE_FILETYPE; };
+hidspecial HID_FILEDLG_INSERT_BTN               { HelpID = HID_FILEDLG_INSERT_BTN; };
+hidspecial HID_FILEDLG_PATH_BTN                 { HelpID = HID_FILEDLG_PATH_BTN; };
+hidspecial HID_FILEDLG_PATH_FILENAME            { HelpID = HID_FILEDLG_PATH_FILENAME; };
+hidspecial HID_FILEDLG_FOLDER_BTN               { HelpID = HID_FILEDLG_FOLDER_BTN; };
+hidspecial HID_FILEDLG_FOLDER_FILENAME          { HelpID = HID_FILEDLG_FOLDER_FILENAME; };
+hidspecial HID_FILEDLG_SRCHFOLDER_BTN           { HelpID = HID_FILEDLG_SRCHFOLDER_BTN; };
+hidspecial HID_CNT_PAGE_WEBVIEW                 { HelpID = HID_CNT_PAGE_WEBVIEW; };
+hidspecial HID_FILEDLG_EDIT_FAVORITES_LISTBOX   { HelpID = HID_FILEDLG_EDIT_FAVORITES_LISTBOX; };
+hidspecial HID_FILEDLG_EDIT_FAVORITES_HEADERBAR { HelpID = HID_FILEDLG_EDIT_FAVORITES_HEADERBAR; };
+hidspecial HID_BROWSERCONTROL                   { HelpID = HID_BROWSERCONTROL; };
+hidspecial HID_STATUSBAR                        { HelpID = HID_STATUSBAR; };
+hidspecial HID_TASKSTATUSBAR                    { HelpID = HID_TASKSTATUSBAR; };
+hidspecial HID_CNT_PAGE_HEADER_TABBAR           { HelpID = HID_CNT_PAGE_HEADER_TABBAR; };
+hidspecial HID_CNT_PAGE_SUBSCR_TABBAR           { HelpID = HID_CNT_PAGE_SUBSCR_TABBAR; };
+hidspecial HID_STATUSINDICATOR_TEXT             { HelpID = HID_STATUSINDICATOR_TEXT; };
+hidspecial HID_STATUSINDICATOR_PROGRESS         { HelpID = HID_STATUSINDICATOR_PROGRESS );
+hidspecial HID_CNT_VALUE_ADDED_NONE             { HelpID = HID_CNT_VALUE_ADDED_NONE );
+hidspecial HID_CNT_VALUE_ADDED_DOCINFO          { HelpID = HID_CNT_VALUE_ADDED_DOCINFO );
+hidspecial HID_CNT_VALUE_ADDED_FULL             { HelpID = HID_CNT_VALUE_ADDED_FULL );
+hidspecial HID_CNT_MESSAGE_STOREMODE_REMOTE     { HelpID = HID_CNT_MESSAGE_STOREMODE_REMOTE );
+hidspecial HID_CNT_MESSAGE_STOREMODE_LOCAL      { HelpID = HID_CNT_MESSAGE_STOREMODE_LOCAL );
+hidspecial HID_CNT_VIEW_ALL_ARTICLES            { HelpID = HID_CNT_VIEW_ALL_ARTICLES );
+hidspecial HID_CNT_VIEW_UNREAD_ARTICLES         { HelpID = HID_CNT_VIEW_UNREAD_ARTICLES );
+hidspecial HID_CNT_VIEW_READ_ARTICLES           { HelpID = HID_CNT_VIEW_READ_ARTICLES );
+hidspecial HID_CNT_VIEW_MARKED_ARTICLES         { HelpID = HID_CNT_VIEW_MARKED_ARTICLES );
+hidspecial HID_CNT_VIEW_MARKED_AND_UNREAD_ARTICLES  { HelpID = HID_CNT_VIEW_MARKED_AND_UNREAD_ARTICLES );
+hidspecial HID_CNT_VIEW_ALL_FOLDERS             { HelpID = HID_CNT_VIEW_ALL_FOLDERS );
+hidspecial HID_CNT_VIEW_SUBSCRIBED_FOLDERS      { HelpID = HID_CNT_VIEW_SUBSCRIBED_FOLDERS );
+hidspecial HID_CNT_VIEW_ACTIVE_FOLDERS          { HelpID = HID_CNT_VIEW_ACTIVE_FOLDERS );
+hidspecial HID_CNT_SENT_VIEW_ALL_ARTICLES       { HelpID = HID_CNT_SENT_VIEW_ALL_ARTICLES );
+hidspecial HID_CNT_SENT_VIEW_SENT_ARTICLES      { HelpID = HID_CNT_SENT_VIEW_SENT_ARTICLES );
+hidspecial HID_CNT_SENT_VIEW_UNSENT_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_UNSENT_ARTICLES );
+hidspecial HID_CNT_SENT_VIEW_MARKED_ARTICLES    { HelpID = HID_CNT_SENT_VIEW_MARKED_ARTICLES );
+

@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ *  $RCSfile: filtnav.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svxids.hrc"
+#include "fmresids.hrc"
+Menu RID_FM_FILTER_MENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_DELETE ;
+            HelpID = SID_FM_DELETE ;
+            Text = "~Lˆschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ english_us ] = "~Delete" ;
+            Text [ portuguese_brazilian ] = "Lˆschen" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ danish ] = "Slet" ;
+            Text [ italian ] = "~Elimina" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ dutch ] = "Wi~ssen" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text[ chinese_simplified ] = "…æ≥˝(~D)";
+            Text[ russian ] = "”‰‡ÎËÚ¸";
+            Text[ polish ] = "UsuÒ";
+            Text[ japanese ] = "çÌèú(~D)";
+            Text[ chinese_traditional ] = "ßR∞£(~D)";
+            Text[ arabic ] = "Õ–›";
+            Text[ greek ] = "ƒÈ·„Ò·~ˆﬁ";
+            Text[ korean ] = "ªË¡¶(~D)";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_EDIT ;
+            HelpID = SID_FM_FILTER_EDIT ;
+            Text = "~Bearbeiten" ;
+            Text [ english_us ] = "~Edit" ;
+            Text[ portuguese ] = "~Editar";
+            Text[ russian ] = "~œ‡‚Í‡";
+            Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+            Text[ dutch ] = "~Bewerken";
+            Text[ french ] = "~…diter";
+            Text[ spanish ] = "~Editar";
+            Text[ italian ] = "~Modifica";
+            Text[ danish ] = "~Rediger";
+            Text[ swedish ] = "~Redigera";
+            Text[ polish ] = "~Edytuj";
+            Text[ portuguese_brazilian ] = "~Edit";
+            Text[ japanese ] = "ï“èW(~E)";
+            Text[ korean ] = "∆Ì¡˝(~E)";
+            Text[ chinese_simplified ] = "±‡º≠(~E)";
+            Text[ chinese_traditional ] = "ΩsøË(~E)";
+            Text[ arabic ] = "~ Õ—Ì—";
+            Text[ turkish ] = "D¸zenle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_IS_NULL ;
+            HelpID = SID_FM_FILTER_IS_NULL ;
+            Text = "~Ist Leer" ;
+            Text [ english_us ] = "~Is Null" ;
+            Text [ ENGLISH ] = "~IS NULL" ;
+            Text[ portuguese ] = "~Vazio";
+            Text[ russian ] = "~œÛÒÚÓ";
+            Text[ greek ] = "≈ﬂÌ·~È ÍÂÌ¸";
+            Text[ dutch ] = "~Is leeg";
+            Text[ french ] = "~Est vide";
+            Text[ spanish ] = "~VacÌo";
+            Text[ italian ] = "» ~vuoto";
+            Text[ danish ] = "Er tom";
+            Text[ swedish ] = "~ƒr tom";
+            Text[ polish ] = "Jest pusty";
+            Text[ portuguese_brazilian ] = "~IS NULL";
+            Text[ japanese ] = "ãÛîí(~I)";
+            Text[ korean ] = "∫ÒæÓ ¿÷¿Ω(~I)";
+            Text[ chinese_simplified ] = " «ø’»±(~I)";
+            Text[ chinese_traditional ] = "¨O™≈Ø (~I)";
+            Text[ arabic ] = "Œ«·Ì";
+            Text[ turkish ] = "Bo˛";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_FILTER_IS_NOT_NULL ;
+            HelpID = SID_FM_FILTER_IS_NOT_NULL ;
+            Text = "~Ist nicht leer" ;
+            Text [ english_us ] = "I~s not Null" ;
+            Text [ ENGLISH ] = "~IS NOT NULL" ;
+            Text[ portuguese ] = "~N„o vazio";
+            Text[ russian ] = "~ÕÂ ÔÛÒÚÓ";
+            Text[ greek ] = "ƒÂÌ ÂﬂÌ·~È ÍÂÌ¸";
+            Text[ dutch ] = "~Is niet leeg";
+            Text[ french ] = "~N'est pas vide";
+            Text[ spanish ] = "~No VacÌo";
+            Text[ italian ] = "~Non Ë vuoto";
+            Text[ danish ] = "Er ikke tom";
+            Text[ swedish ] = "~ƒr inte tom";
+            Text[ polish ] = "Nie jest pusty";
+            Text[ portuguese_brazilian ] = "~IS NOT NULL";
+            Text[ japanese ] = "ãÛîíÇ≈Ç»Ç¢(~S)";
+            Text[ korean ] = "∫ÒæÓ ¿÷¡ˆ æ ¿Ω(~S)";
+            Text[ chinese_simplified ] = "≤ª «ø’»±(~S)";
+            Text[ chinese_traditional ] = "§£¨O™≈Ø (~S)";
+            Text[ arabic ] = "€Ì— Œ«·Ì";
+            Text[ turkish ] = "Bo˛ deil";
+        };
+    };
+};
+

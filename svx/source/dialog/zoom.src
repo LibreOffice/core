@@ -1,0 +1,296 @@
+/*************************************************************************
+ *
+ *  $RCSfile: zoom.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "zoom.hrc"
+ // RID_SVXDLG_ZOOM -------------------------------------------------------
+ModalDialog RID_SVXDLG_ZOOM
+{
+    HelpId = SID_ATTR_ZOOM ;
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 160 , 142 ) ;
+    Text = "Maﬂstab" ;
+    Text [ ENGLISH ] = "Zoom" ;
+    Text [ norwegian ] = "Zoom" ;
+    Text [ italian ] = "Zoom" ;
+    Text [ portuguese_brazilian ] = "Zoom" ;
+    Text [ portuguese ] = "Zoom" ;
+    Text [ finnish ] = "Zoomaus" ;
+    Text [ danish ] = "MÂlestok" ;
+    Text [ french ] = "Zoom" ;
+    Text [ swedish ] = "Skala" ;
+    Text [ dutch ] = "Zoom" ;
+    Text [ spanish ] = "Escala" ;
+    Text [ english_us ] = "Zoom" ;
+    Text[ chinese_simplified ] = "œ‘ æ±»¿˝";
+    Text[ russian ] = "Ã‡Ò¯Ú‡·";
+    Text[ polish ] = "Skala";
+    Text[ japanese ] = "Ωﬁ∞—";
+    Text[ chinese_traditional ] = "≈„•‹§Ò®“";
+    Text[ arabic ] = " ﬂ»Ì—/ ’€Ì—";
+    Moveable = TRUE ;
+    RadioButton BTN_200
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~200 %" ;
+    };
+    RadioButton BTN_150
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "15~0 %" ;
+    };
+    RadioButton BTN_100
+    {
+        Pos = MAP_APPFONT ( 12 , 40 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~100 %" ;
+    };
+    RadioButton BTN_75
+    {
+        Pos = MAP_APPFONT ( 12 , 53 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~75 %" ;
+    };
+    RadioButton BTN_50
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~50 %" ;
+    };
+    RadioButton BTN_OPTIMAL
+    {
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Optimal" ;
+        Text [ English ] = "~Optimal" ;
+        Text [ norwegian ] = "~Optimal" ;
+        Text [ italian ] = "~Ottimale" ;
+        Text [ portuguese_brazilian ] = "~Optimal" ;
+        Text [ portuguese ] = "~Optimizar" ;
+        Text [ finnish ] = "~Optimal" ;
+        Text [ danish ] = "Optimal" ;
+        Text [ french ] = "~Optimal" ;
+        Text [ swedish ] = "Optimal" ;
+        Text [ dutch ] = "~Optimaal" ;
+        Text [ spanish ] = "”~ptimo" ;
+        Text [ english_us ] = "~Optimal" ;
+        Text[ chinese_simplified ] = "◊Óº—(~O)";
+        Text[ russian ] = "ŒÔÚËÏ‡Î¸ÌÓÂ";
+        Text[ polish ] = "~Optymalnie";
+        Text[ japanese ] = "ç≈ìK(~O)";
+        Text[ chinese_traditional ] = "≥Ã”Ï(~O)";
+        Text[ arabic ] = "«·√„À·";
+        Text[ greek ] = "¬›ÎÙÈÛÙ·";
+        Text[ korean ] = "√÷¿˚(~O)";
+        Text[ turkish ] = "~Optimum";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_PAGE_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "Seiten~breite" ;
+        Text [ ENGLISH ] = "~Page width" ;
+        Text [ norwegian ] = "~Sidebredde" ;
+        Text [ italian ] = "Larg~h. pagina" ;
+        Text [ portuguese_brazilian ] = "~Largura da p·gina" ;
+        Text [ portuguese ] = "~Larg. de p·gina" ;
+        Text [ finnish ] = "~Sivun leveys" ;
+        Text [ danish ] = "Sidebredde" ;
+        Text [ french ] = "~Largeur de page" ;
+        Text [ swedish ] = "Sidbredd" ;
+        Text [ dutch ] = "~Paginabreedte" ;
+        Text [ spanish ] = "~Ancho de p·gina" ;
+        Text [ english_us ] = "~Page Width" ;
+        Text[ chinese_simplified ] = "“≥øÌ(~P)";
+        Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "SzerokoúÊ strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁïù(~P)";
+        Text[ chinese_traditional ] = "≠∂ºe(~P)";
+        Text[ arabic ] = "⁄—÷ «·’›Õ…";
+        Text[ greek ] = "–Î‹ÙÔÚ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ≥ ∫Ò(~P)";
+        Text[ turkish ] = "~Sayfa geni˛lii";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_WHOLE_PAGE
+    {
+        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Text = "~Ganze Seite" ;
+        Text [ ENGLISH ] = "~Whole page" ;
+        Text [ norwegian ] = "~Hele siden" ;
+        Text [ italian ] = "~Pagina intera" ;
+        Text [ portuguese_brazilian ] = "~P·gina inteira" ;
+        Text [ portuguese ] = "~P·gina inteira" ;
+        Text [ finnish ] = "~Koko sivu" ;
+        Text [ danish ] = "Hele siden" ;
+        Text [ french ] = "~Page entiËre" ;
+        Text [ swedish ] = "Hela sidan" ;
+        Text [ dutch ] = "~Hele pagina" ;
+        Text [ spanish ] = "~Toda la p·gina" ;
+        Text [ english_us ] = "~Entire Page" ;
+        Text[ chinese_simplified ] = "»´“≥(~E)";
+        Text[ russian ] = "Õ‡ ‚Ò˛ ÒÚ‡ÌËˆÛ";
+        Text[ polish ] = "Ca≥a strona";
+        Text[ japanese ] = "Õﬂ∞ºﬁëSëÃ(~E)";
+        Text[ chinese_traditional ] = "•˛≠∂(~E)";
+        Text[ arabic ] = "’›Õ… ﬂ«„·…";
+        Text[ greek ] = "œÎ¸ÍÎÁÒÁ ÛÂÎﬂ‰·";
+        Text[ korean ] = "¿¸√º ∆‰¿Ã¡ˆ(~E)";
+        Text[ turkish ] = "~Tam sayfa";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_USER
+    {
+        Pos = MAP_APPFONT ( 12 , 119 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "~Stufenlos" ;
+        Text [ ENGLISH ] = "~Custom" ;
+        Text [ norwegian ] = "~Tilpass" ;
+        Text [ italian ] = "~Variabile" ;
+        Text [ portuguese_brazilian ] = "~Pessoal" ;
+        Text [ portuguese ] = "~Vari·vel" ;
+        Text [ finnish ] = "~Mukautettu" ;
+        Text [ danish ] = "Variabel" ;
+        Text [ french ] = "~Autre" ;
+        Text [ swedish ] = "~Steglˆs" ;
+        Text [ dutch ] = "~Traploos" ;
+        Text [ spanish ] = "~Variable" ;
+        Text [ english_us ] = "~Variable" ;
+        Text[ chinese_simplified ] = "Œﬁº∂Àı∑≈(~V)";
+        Text[ russian ] = "œÎ‡‚ÌÓÂ";
+        Text[ polish ] = "~Zmiennie";
+        Text[ japanese ] = "îCà”(~V)";
+        Text[ chinese_traditional ] = "µLØ≈¡Y©Ò(~V)";
+        Text[ arabic ] = "„ €Ì—";
+        Text[ greek ] = "◊˘ÒﬂÚ ‚·ËÏﬂ‰Â~Ú";
+        Text[ korean ] = "¥‹∞Ëæ¯¿Ω(~V)";
+        Text[ turkish ] = "~Dei˛ken";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_USER
+    {
+        Pos = MAP_APPFONT ( 56 , 118 ) ;
+        Size = MAP_APPFONT ( 36 , 12 ) ;
+        Border = TRUE ;
+        Group = TRUE ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        SpinSize = 1 ;
+    };
+    GroupBox GB_ZOOM
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 92 , 133 ) ;
+        Text = "Skalierung" ;
+        Text [ ENGLISH ] = "Skalierung" ;
+        Text [ norwegian ] = "Forst¯rrelse" ;
+        Text [ italian ] = "Scala" ;
+        Text [ portuguese_brazilian ] = "MagnificaÁ„o" ;
+        Text [ portuguese ] = "Escala" ;
+        Text [ finnish ] = "Suurennus" ;
+        Text [ danish ] = "Skalering" ;
+        Text [ french ] = "Facteur" ;
+        Text [ swedish ] = "Skalning" ;
+        Text [ dutch ] = "Uitvergroting" ;
+        Text [ spanish ] = "Escala" ;
+        Text [ english_us ] = "Zoom to" ;
+        Text[ chinese_simplified ] = "øÃ∂»";
+        Text[ russian ] = "”‚ÂÎË˜ÂÌËÂ";
+        Text[ polish ] = "Skalowanie";
+        Text[ japanese ] = "Ωﬁ∞—";
+        Text[ chinese_traditional ] = "≈„•‹§Ò®“";
+        Text[ arabic ] = " ﬂ»Ì—";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "≈ÛÙﬂ·ÛÁ";
+        Text[ korean ] = "πË¿≤";
+        Text[ turkish ] = "Yak˝nla˛t˝r";
+    };
+    OKButton BTN_ZOOM_OK
+    {
+        Pos = MAP_APPFONT ( 104 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_ZOOM_CANCEL
+    {
+        Pos = MAP_APPFONT ( 104 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_ZOOM_HELP
+    {
+        Pos = MAP_APPFONT ( 104 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    Text[ greek ] = " ÎﬂÏ·Í·";
+    Text[ korean ] = "»Æ¥Î/√‡º“";
+    Text[ turkish ] = "÷lÁek";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ *  $RCSfile: doc.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_DOC_HRC
+#define _SFX_DOC_HRC
+
+#include "sfx.hrc"
+
+// #defines *****************************************************************
+
+#define STR_NODEFPRINTER                    (RID_SFX_DOC_START+ 0)
+#define STR_PRINTER_NOTAVAIL_1              (RID_SFX_DOC_START+ 1)
+#define STR_PRINTER_NOTAVAIL_2              (RID_SFX_DOC_START+ 2)
+#define STR_PRINTER_NOTAVAIL_3              (RID_SFX_DOC_START+ 3)
+#define STR_PRINTER_NOTAVAIL_4              (RID_SFX_DOC_START+ 4)
+#define STR_PRINTER_NOTAVAIL_5              (RID_SFX_DOC_START+ 5)
+#define STR_PRINT_OPTIONS                   (RID_SFX_DOC_START+ 6)
+#define STR_ERROR_PRINTER_BUSY              (RID_SFX_DOC_START+ 7)
+#define STR_NOSTARTPRINTER                  (RID_SFX_DOC_START+ 8)
+#define MSG_CONFIRM_FILTER                  (RID_SFX_DOC_START+11)
+#define MSG_CONFIRM_OVERWRITE_TEMPLATE      (RID_SFX_DOC_START+12)
+#define MSG_QUERY_LOAD_TEMPLATE             (RID_SFX_DOC_START+13)
+
+#define STR_DELETE_REGION                   (RID_SFX_DOC_START+14)
+#define STR_DELETE_TEMPLATE                 (RID_SFX_DOC_START+15)
+#define MSG_REGION_NOTEMPTY                 (RID_SFX_DOC_START+17)
+
+#define DLG_NEW_FILE                        (RID_SFX_DOC_START+1)
+#define DLG_DOC_TEMPLATE                    (RID_SFX_DOC_START+2)
+#define DLG_ORGANIZE                        (RID_SFX_DOC_START+3)
+
+#define BMP_STYLES_CLOSED                   (RID_SFX_DOC_START+ 0)
+#define BMP_STYLES_OPENED                   (RID_SFX_DOC_START+ 1)
+
+#define BMP_STYLES_FAMILY1                  (RID_SFX_DOC_START+ 2)
+#define BMP_STYLES_FAMILY2                  (RID_SFX_DOC_START+ 3)
+#define BMP_STYLES_FAMILY3                  (RID_SFX_DOC_START+ 4)
+#define BMP_STYLES_FAMILY4                  (RID_SFX_DOC_START+ 5)
+
+#define STR_STYLES                          (RID_SFX_DOC_START+ 18)
+#define STR_MACROS                          (RID_SFX_DOC_START+ 19)
+
+#define STR_PRINT_STYLES                    (RID_SFX_DOC_START+ 20)
+#define STR_PRINT_STYLES_HEADER             (RID_SFX_DOC_START+ 21)
+#define MSG_PRINT_ERROR                     (RID_SFX_DOC_START+ 22)
+#define STR_BACKUP_COPY                     (RID_SFX_DOC_START+ 23)
+#define MSG_WARNING_BACKUP                  (RID_SFX_DOC_START+ 24)
+#define MSG_CANT_OPEN_TEMPLATE              (RID_SFX_DOC_START+ 25)
+#define MSG_VIEW_OPEN_CANT_SAVE             (RID_SFX_DOC_START+ 26)
+#define STR_ERROR_SAVE                      (RID_SFX_DOC_START+ 27)
+#define STR_TEMPLATE_FILTER                 (RID_SFX_DOC_START+ 28)
+#define STR_ERROR_COPY_TEMPLATE             (RID_SFX_DOC_START+ 29)
+
+#define STR_ERROR_DELETE_TEMPLATE           (RID_SFX_DOC_START+ 30)
+#define STR_ERROR_MOVE_TEMPLATE             (RID_SFX_DOC_START+ 32)
+#define MSG_ERROR_RESCAN                    (RID_SFX_DOC_START+ 33)
+#define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_DOC_START+ 34)
+#define MSG_ERROR_RENAME_TEMPLATE           (RID_SFX_DOC_START+ 34)
+#define MSG_ERROR_RENAME_TEMPLATE_REGION    (RID_SFX_DOC_START+ 35)
+#define STR_CONFIG                          (RID_SFX_DOC_START+ 37)
+#define MSG_ERROR_EMPTY_NAME                (RID_SFX_DOC_START+ 37)
+#define MSG_ERROR_UNIQ_NAME                 (RID_SFX_DOC_START+ 38)
+#define STR_QUERY_DEFAULT_TEMPLATE          (RID_SFX_DOC_START+ 39)
+#define MSG_QUERY_RESET_DEFAULT_TEMPLATE    (RID_SFX_DOC_START+ 39)
+#define MSG_TEMPLATE_DIR_NOT_EXIST          (RID_SFX_DOC_START+ 40)
+#define MSG_DOCINFO_CANTREAD                (RID_SFX_DOC_START+ 41)
+#define STR_ERROR_NOSTORAGE                 (RID_SFX_DOC_START+ 42)
+#define STR_QUERY_SAVEOWNFORMAT             (RID_SFX_DOC_START+ 43)
+#define STR_QUERY_MUSTOWNFORMAT             (RID_SFX_DOC_START+ 44)
+#define STR_SAVEDOC                         (RID_SFX_DOC_START+ 45)
+#define STR_UPDATEDOC                       (RID_SFX_DOC_START+ 46)
+#define STR_SAVEASDOC                       (RID_SFX_DOC_START+ 47)
+#define STR_SAVECOPYDOC                     (RID_SFX_DOC_START+ 48)
+#define STR_CLOSEDOC                        (RID_SFX_DOC_START+ 49)
+#define STR_CLOSEDOC_ANDRETURN              (RID_SFX_DOC_START+ 50)
+#define STR_WIZARD                          (RID_SFX_DOC_START+ 51)
+#define RID_STR_FILTCONFIG                  (RID_SFX_DOC_START+ 52)
+#define RID_STR_FILTBASIC                   (RID_SFX_DOC_START+ 53)
+#define RID_STR_WARNSTYLEOVERWRITE          (RID_SFX_DOC_START+ 54)
+#define RID_DLSTATUS                        (RID_SFX_DOC_START+ 55)
+#define RID_DLSTATUS2                       (RID_SFX_DOC_START+ 56)
+
+#define STR_DOC_LOADING                     (RID_SFX_DOC_START+ 57)
+#define MSG_OPEN_READONLY                   (RID_SFX_DOC_START+ 58)
+
+#define RID_OFFICEFILTER                    (RID_SFX_DOC_START+ 59)
+#define RID_OFFICEFILTER_WILDCARD           (RID_SFX_DOC_START+ 60)
+#define RID_OFFICEFILTER_MACTYPE            (RID_SFX_DOC_START+ 61)
+#define RID_OFFICEFILTER_OS2TYPE            (RID_SFX_DOC_START+ 62)
+#define STR_FRAMEOBJECT_PROPERTIES          (RID_SFX_DOC_START+ 63)
+
+#define STR_FSET_FILTERNAME0                (RID_SFX_DOC_START+ 64)
+#define STR_FSET_FILTERNAME1                (RID_SFX_DOC_START+ 65)
+
+#define STR_TEMPL_MOVED                     (RID_SFX_DOC_START+ 66)
+#define STR_TEMPL_RESET                     (RID_SFX_DOC_START+ 67)
+#define STR_AUTOMATICVERSION                (RID_SFX_DOC_START+ 68)
+
+#define STR_DOCTYPENAME_SW                  (RID_SFX_DOC_START+ 69)
+#define STR_DOCTYPENAME_SWWEB               (RID_SFX_DOC_START+ 70)
+#define STR_DOCTYPENAME_SWGLOB              (RID_SFX_DOC_START+ 71)
+#define STR_DOCTYPENAME_SC                  (RID_SFX_DOC_START+ 72)
+#define STR_DOCTYPENAME_SI                  (RID_SFX_DOC_START+ 73)
+#define STR_DOCTYPENAME_SD                  (RID_SFX_DOC_START+ 74)
+#define STR_DOCTYPENAME_MESSAGE             (RID_SFX_DOC_START+ 75)
+#define RID_STR_NEW_TASK                    (RID_SFX_DOC_START+ 76)
+
+#define STR_SAVEANDCLOSE                    (RID_SFX_DOC_START+ 77)
+#define STR_NOSAVEANDCLOSE                  (RID_SFX_DOC_START+ 78)
+#define STR_PACKNGO_NOACCESS                (RID_SFX_DOC_START+ 79)
+#define STR_PACKNGO_NEWMEDIUM               (RID_SFX_DOC_START+ 80)
+
+#define DLOAD_URL 1
+#define DLOAD_STATUS 2
+#define DLOAD_NAME 3
+#define DLOAD_TEXT 4
+#define DLOAD_CANCEL 1
+
+
+#endif
+

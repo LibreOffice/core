@@ -1,0 +1,545 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mailwindow.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialog.hrc"
+#include "mailwindow.hrc"
+
+Window RID_MAIL_WINDOW
+{
+    HelpId = SID_MAIL_CHILDWIN ;
+    Pos = MAP_APPFONT( 0, 0 );
+    Size = MAP_APPFONT( 323, 87 );
+    DialogControl = TRUE ;
+    PushButton PB_MAILWIN_SEND
+    {
+        Pos = MAP_APPFONT( 6, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text = "~Senden";
+        Text[English] = "Send";
+        TabStop = TRUE;
+        Text[ english_us ] = "Send";
+        Text[ portuguese ] = "Send";
+        Text[ russian ] = "Send";
+        Text[ greek ] = "Send";
+        Text[ dutch ] = "Send";
+        Text[ french ] = "En~voyer";
+        Text[ spanish ] = "Send";
+        Text[ italian ] = "Send";
+        Text[ danish ] = "Send";
+        Text[ swedish ] = "~Skicka";
+        Text[ polish ] = "Send";
+        Text[ portuguese_brazilian ] = "Send";
+        Text[ japanese ] = "ëóêM";
+        Text[ korean ] = "Send";
+        Text[ chinese_simplified ] = "Send";
+        Text[ chinese_traditional ] = "µo∞e";
+        Text[ turkish ] = "Send";
+        Text[ arabic ] = "Send";
+    };
+    PushButton PB_MAILWIN_CLOSE
+    {
+        Pos = MAP_APPFONT( 6, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+        Text = "S~chlieﬂen";
+        Text[English] = "Close";
+        TabStop = TRUE;
+        Text[ english_us ] = "Close";
+        Text[ portuguese ] = "Close";
+        Text[ russian ] = "Close";
+        Text[ greek ] = "Close";
+        Text[ dutch ] = "Close";
+        Text[ french ] = "~Fermer";
+        Text[ spanish ] = "Close";
+        Text[ italian ] = "Close";
+        Text[ danish ] = "Luk";
+        Text[ swedish ] = "Close";
+        Text[ polish ] = "Close";
+        Text[ portuguese_brazilian ] = "Close";
+        Text[ japanese ] = "ï¬Ç∂ÇÈ";
+        Text[ korean ] = "Close";
+        Text[ chinese_simplified ] = "Close";
+        Text[ chinese_traditional ] = "√ˆ≥¨";
+        Text[ turkish ] = "Close";
+        Text[ arabic ] = "Close";
+    };
+    ListBox LB_MAILWIN_ROLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( 62, 6 );
+        Size = MAP_APPFONT( 42, 30 );
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "An" ; 1 ; > ;
+            < "Kopie" ; 2 ; > ;
+            < "Blindkopie" ; 3 ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "To" ; 1 ; > ;
+            < "Copy" ; 2 ; > ;
+            < "Blind copy" ; 3 ; > ;
+        };
+    StringList [ language_user1 ] =
+    {
+            < "An" ; 1 ; > ;
+        < "Kopie" ; 2 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "To" ; 3 ; > ;
+        < "Copy" ; 3 ; > ;
+        < "Blind Copy" ; 3 ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "¿" ; 3 ; > ;
+        < "Copie" ; 3 ; > ;
+        < "Copie cachÈe" ; 3 ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Til" ; 3 ; > ;
+        < "Kopi" ; 3 ; > ;
+        < "Blindkopi" ; 3 ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Till" ; 3 ; > ;
+        < "Kopia" ; 3 ; > ;
+        < "Blindkopia" ; 3 ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "à∂êÊ" ; 3 ; > ;
+        < "CC" ; 3 ; > ;
+        < "BCC" ; 3 ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¶¨•Û™Ã" ; 3 ; > ;
+        < "ß€∞e" ; 3 ; > ;
+        < "±Kß€" ; 3 ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "An" ; 3 ; > ;
+        < "Kopie" ; 3 ; > ;
+        < "Blindkopie" ; 3 ; > ;
+    };
+    };
+    Edit ED_MAILWIN_ROLE
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 107, 6 );
+        Size = MAP_APPFONT( 210, 12 );
+    };
+    ListBox LB_MAILWIN_ADDRESS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT( 107, 21 );
+        Size = MAP_APPFONT( 210, 30 );
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_MAILWIN_SUBJECT
+    {
+        Pos = MAP_APPFONT( 62, 55 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Betreff:";
+        Text[English] = "Subject:";
+        Text[ english_us ] = "Subject:";
+        Text[ portuguese ] = "Subject:";
+        Text[ russian ] = "Subject:";
+        Text[ greek ] = "Subject:";
+        Text[ dutch ] = "Subject:";
+        Text[ french ] = "O~bjet :";
+        Text[ spanish ] = "Subject:";
+        Text[ italian ] = "Subject:";
+        Text[ danish ] = "Emne:";
+        Text[ swedish ] = "Subject:";
+        Text[ polish ] = "Subject:";
+        Text[ portuguese_brazilian ] = "Subject:";
+        Text[ japanese ] = "åèñº:";
+        Text[ korean ] = "Subject:";
+        Text[ chinese_simplified ] = "Subject:";
+        Text[ chinese_traditional ] = "•D¶Æ°G";
+        Text[ turkish ] = "Subject:";
+        Text[ arabic ] = "Subject:";
+    };
+    Edit ED_MAILWIN_SUBJECT
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 107, 54 );
+        Size = MAP_APPFONT( 210, 12 );
+    };
+    FixedText FT_MAILWIN_FROM
+    {
+        Pos = MAP_APPFONT( 62, 70 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Von:";
+        Text[English] = "From:";
+        Text[ english_us ] = "From:";
+        Text[ portuguese ] = "From:";
+        Text[ russian ] = "From:";
+        Text[ greek ] = "From:";
+        Text[ dutch ] = "From:";
+        Text[ french ] = "~De :";
+        Text[ spanish ] = "From:";
+        Text[ italian ] = "From:";
+        Text[ danish ] = "Fra:";
+        Text[ swedish ] = "From:";
+        Text[ polish ] = "From:";
+        Text[ portuguese_brazilian ] = "From:";
+        Text[ japanese ] = "ç∑èoêl:";
+        Text[ korean ] = "From:";
+        Text[ chinese_simplified ] = "From:";
+        Text[ chinese_traditional ] = "±H•Û™Ã°G";
+        Text[ turkish ] = "From:";
+        Text[ arabic ] = "From:";
+    };
+    Edit ED_MAILWIN_FROM
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 107, 69 );
+        Size = MAP_APPFONT( 120, 12 );
+    };
+    FixedText FT_MAILWIN_PRIO
+    {
+        Pos = MAP_APPFONT( 230, 70 );
+        Size = MAP_APPFONT( 33, 10 );
+        Right = TRUE;
+        Text = "~Priorit‰t:";
+        Text[English] = "Priority:";
+        Text[ english_us ] = "Priority:";
+        Text[ portuguese ] = "Priority:";
+        Text[ russian ] = "Priority:";
+        Text[ greek ] = "Priority:";
+        Text[ dutch ] = "Priority:";
+        Text[ french ] = "~PrioritÈ :";
+        Text[ spanish ] = "Priority:";
+        Text[ italian ] = "Priority:";
+        Text[ danish ] = "Prioritet:";
+        Text[ swedish ] = "~Prioritet:";
+        Text[ polish ] = "Priority:";
+        Text[ portuguese_brazilian ] = "Priority:";
+        Text[ japanese ] = "èdóvìx:";
+        Text[ korean ] = "Priority:";
+        Text[ chinese_simplified ] = "Priority:";
+        Text[ chinese_traditional ] = "≠´≠n© °G";
+        Text[ turkish ] = "Priority:";
+        Text[ arabic ] = "Priority:";
+    };
+    ListBox LB_MAILWIN_PRIO
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 266, 69 );
+        Size = MAP_APPFONT( 51, 48 );
+        DropDown = TRUE;
+        StringList =
+        {
+            < "Sehr hoch" ; 1 ; > ;
+            < "Hoch" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Niedrig" ; 4 ; > ;
+            < "Sehr niedrig" ; 5 ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Highest" ; 1 ; > ;
+            < "High" ; 2 ; > ;
+            < "Normal" ; 3 ; > ;
+            < "Low" ; 4 ; > ;
+            < "Lowest" ; 5 ; > ;
+        };
+    StringList [ language_user1 ] =
+    {
+            < "Sehr hoch" ; 1 ; > ;
+        < "Hoch" ; 2 ; > ;
+        < "Normal" ; 3 ; > ;
+        < "Niedrig" ; 4 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ english_us ] =
+    {
+            < "Urgent" ; 5 ; > ;
+        < "Important" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Low" ; 5 ; > ;
+        < "Lowest" ; 5 ; > ;
+    };
+    StringList [ portuguese ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ dutch ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ french ] =
+    {
+            < "TrËs ÈlevÈe" ; 5 ; > ;
+        < "…levÈe" ; 5 ; > ;
+        < "Normale" ; 5 ; > ;
+        < "Faible" ; 5 ; > ;
+        < "TrËs faible" ; 5 ; > ;
+    };
+    StringList [ spanish ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ italian ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ danish ] =
+    {
+            < "Meget h¯j" ; 5 ; > ;
+        < "H¯j" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Lav" ; 5 ; > ;
+        < "Meget lav" ; 5 ; > ;
+    };
+    StringList [ swedish ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "çÇÇ¢" ; 5 ; > ;
+        < "Ç‚Ç‚çÇÇ¢" ; 5 ; > ;
+        < "ïWèÄ" ; 5 ; > ;
+        < "Ç‚Ç‚í·Ç¢" ; 5 ; > ;
+        < "í·Ç¢" ; 5 ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "´‹∞™" ; 5 ; > ;
+        < "∞™" ; 5 ; > ;
+        < "§@ØÎ" ; 5 ; > ;
+        < "ßC" ; 5 ; > ;
+        < "´‹ßC" ; 5 ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Sehr hoch" ; 5 ; > ;
+        < "Hoch" ; 5 ; > ;
+        < "Normal" ; 5 ; > ;
+        < "Niedrig" ; 5 ; > ;
+        < "Sehr niedrig" ; 5 ; > ;
+    };
+    };
+    Image IMG_MAILWIN_SEND
+    {
+        ImageBitmap = Bitmap { File = "sc05364.bmp" ; };
+        MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    };
+    Image IMG_MAILWIN_CLOSE
+    {
+        ImageBitmap = Bitmap { File = "sc05503.bmp" ; };
+        MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+    };
+};
+
+// ------------------------------------------------------------------- EOF
+

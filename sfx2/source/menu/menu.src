@@ -1,0 +1,344 @@
+/*************************************************************************
+ *
+ *  $RCSfile: menu.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:35 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "menu.hrc"
+#include "cntimage.hrc"
+
+String STR_MENU_CFGITEM
+{
+    TEXT = "Men¸" ;
+    TEXT [ English ] = "Menu" ;
+    TEXT [ norwegian ] = "Konfigurasjonsmeny" ;
+    TEXT [ italian ] = "Menu" ;
+    TEXT [ portuguese_brazilian ] = "Menu de ConfiguraÁ„o" ;
+    TEXT [ portuguese ] = "Menu de configuraÁ„o" ;
+    TEXT [ finnish ] = "M‰‰ritysvalikko" ;
+    TEXT [ danish ] = "Menu" ;
+    TEXT [ french ] = "Menu" ;
+    TEXT [ swedish ] = "Meny" ;
+    TEXT [ dutch ] = "Menu" ;
+    TEXT [ spanish ] = "Men˙" ;
+    TEXT [ english_us ] = "Configuration Menu" ;
+    TEXT[ chinese_simplified ] = "≤Àµ•√¸¡Ó";
+    TEXT[ russian ] = "ÃÂÌ˛";
+    TEXT[ polish ] = "Menu";
+    TEXT[ japanese ] = "“∆≠∞";
+    TEXT[ chinese_traditional ] = "•\\Ø‡™Ì";
+    TEXT[ arabic ] = "«·ﬁ«∆„…";
+    TEXT[ dutch ] = "Menu";
+    TEXT[ chinese_simplified ] = "≤Àµ•√¸¡Ó";
+    TEXT[ greek ] = "ÃÂÌÔ˝";
+    TEXT[ korean ] = "∏ﬁ¥∫";
+    TEXT[ turkish ] = "Mˆn¸";
+};
+
+Menu MN_CLIPBOARDFUNCS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_CUT ;
+            HelpID = SID_CUT ;
+            Text = "~Ausschneiden" ;
+            Text [ English ] = "Cu~t" ;
+            Text [ norwegian ] = "Klipp~ut" ;
+            Text [ italian ] = "Ta~glia" ;
+            Text [ portuguese_brazilian ] = "Co~rtar" ;
+            Text [ portuguese ] = "Co~rtar" ;
+            Text [ finnish ] = "~Leikkaa" ;
+            Text [ danish ] = "~Klip" ;
+            Text [ french ] = "~Couper" ;
+            Text [ swedish ] = "~Klipp ut" ;
+            Text [ dutch ] = "Kn~ippen" ;
+            Text [ spanish ] = "C~ortar" ;
+            Text [ english_us ] = "Cu~t" ;
+            Text[ chinese_simplified ] = "ºÙ≥˝";
+            Text[ russian ] = "¬˚ÂÁ‡Ú¸";
+            Text[ polish ] = "~Wytnij";
+            Text[ japanese ] = "êÿÇËéÊÇË(~T)";
+            Text[ chinese_traditional ] = "∞≈§U(~T)";
+            Text[ arabic ] = "ﬁ’";
+            Text[ dutch ] = "Kn~ippen";
+            Text[ chinese_simplified ] = "ºÙ≥˝";
+            Text[ greek ] = "~¡ÔÍÔﬁ";
+            Text[ korean ] = "¿ﬂ∂Û ≥ª±‚(~T)";
+            Text[ turkish ] = "Kes";
+        };
+        MenuItem
+        {
+            Identifier = SID_COPY ;
+            HelpID = SID_COPY ;
+            Text = "~Kopieren" ;
+            Text [ English ] = "~Copy" ;
+            Text [ norwegian ] = "~Kopier" ;
+            Text [ italian ] = "~Copia" ;
+            Text [ portuguese_brazilian ] = "~Copiar" ;
+            Text [ portuguese ] = "~Copiar" ;
+            Text [ finnish ] = "~Kopioi" ;
+            Text [ danish ] = "K~opier" ;
+            Text [ french ] = "Co~pier" ;
+            Text [ swedish ] = "K~opiera" ;
+            Text [ dutch ] = "~KopiÎren" ;
+            Text [ spanish ] = "~Copiar" ;
+            Text [ english_us ] = "~Copy" ;
+            Text[ chinese_simplified ] = "∏¥÷∆";
+            Text[ russian ] = " ÓÔËÓ‚‡Ú¸";
+            Text[ polish ] = "~Kopiuj";
+            Text[ japanese ] = "∫Àﬂ∞(~C)";
+            Text[ chinese_traditional ] = "Ω∆ªs(~C)";
+            Text[ arabic ] = "‰”Œ";
+            Text[ dutch ] = "~KopiÎren";
+            Text[ chinese_simplified ] = "∏¥÷∆";
+            Text[ greek ] = "¡ÌÙÈ~„Ò·ˆﬁ";
+            Text[ korean ] = "∫πªÁ(~C)";
+            Text[ turkish ] = "Kopyala";
+        };
+        MenuItem
+        {
+            Identifier = SID_PASTE ;
+            HelpID = SID_PASTE ;
+            Text = "E~inf¸gen" ;
+            Text [ English ] = "~Paste" ;
+            Text [ norwegian ] = "~Paste" ;
+            Text [ italian ] = "~Incolla" ;
+            Text [ portuguese_brazilian ] = "~Colar" ;
+            Text [ portuguese ] = "Co~lar" ;
+            Text [ finnish ] = "L~iit‰" ;
+            Text [ danish ] = "SÊt i~nd" ;
+            Text [ french ] = "C~oller" ;
+            Text [ swedish ] = "K~listra in" ;
+            Text [ dutch ] = "~Plakken" ;
+            Text [ spanish ] = "~Pegar" ;
+            Text [ english_us ] = "~Paste" ;
+            Text[ russian ] = "¬ÒÚ‡‚ËÚ¸";
+            Text[ polish ] = "~Wklej";
+            Text[ japanese ] = "ì\\ÇËïtÇØ(~P)";
+            Text[ chinese_simplified ] = "≤Â»Î(~P)";
+            Text[ chinese_traditional ] = "¥°§J(~P)";
+            Text[ arabic ] = "·’ﬁ";
+            Text[ dutch ] = "~Plakken";
+            Text[ chinese_simplified ] = "≤Â»Î(~P)";
+            Text[ greek ] = "≈~ÈÍ¸ÎÎÁÛÁ";
+            Text[ korean ] = "∫Ÿø© ≥÷±‚(~P)";
+            Text[ turkish ] = "Yap˝˛t˝r";
+        };
+    };
+};
+
+#define CNT_IMAGELIST \
+    CNT_IMG_CHECKMARK ; \
+    CNT_IMG_OPENED_FOLDER ; \
+    CNT_IMG_CLOSED_FOLDER ; \
+    CNT_IMG_IS_READ ; \
+    CNT_IMG_IS_UNREAD ; \
+    CNT_IMG_IS_MARKED ; \
+    CNT_IMG_IS_UNMARKED ; \
+    CNT_IMG_BOX_POP3 ; \
+    CNT_IMG_DOC_NEWS ; \
+    CNT_IMG_FOLDER_NEWS ; \
+    CNT_IMG_FOLDER_SEARCH ; \
+    CNT_IMG_BOX_NEWS ; \
+    CNT_IMG_DOC_NEWS_READ ; \
+    CNT_IMG_FOLDER_NEWS_SUBSCR ; \
+    CNT_IMG_DOC_POP3 ; \
+    CNT_IMG_DOC_POP3_READ ; \
+    CNT_IMG_BOX_TRASH ; \
+    CNT_IMG_DOC_OUT_COMPLETE_LOC_SENT ; \
+    CNT_IMG_DOC_OUT_PART_LOC_SENT ; \
+    CNT_IMG_DOC_OUT_WRITTEN ; \
+    CNT_IMG_DOC_OUT_RECOV_LOC_ERROR ; \
+    CNT_IMG_DOC_OUT_NONRECOV_LOC_ERROR ; \
+    CNT_IMG_DOC_OUT_EXT_ERROR ; \
+    CNT_IMG_DOC_OUT_CONFIRMED ; \
+    CNT_IMG_BOX_IMAP ; \
+    CNT_IMG_FOLDER_SOMEREADNEWS ; \
+    CNT_IMG_DEV_FIXED ; \
+    CNT_IMG_DEV_REMOVEABLE ; \
+    CNT_IMG_DEV_CDROM ; \
+    CNT_IMG_DEV_NETWORK ; \
+    CNT_IMG_DEV_RAM ; \
+    CNT_IMG_BOX_VIM ; \
+    CNT_IMG_FOLDER_VIM_BBOARD ; \
+    CNT_IMG_FOLDER_VIM_INBOX ; \
+    CNT_IMG_BOX_FSYS ; \
+    CNT_IMG_BOX_SUBSCRIBE ; \
+    CNT_IMG_BOX_FTP ; \
+    CNT_IMG_BOX_OUT ; \
+    CNT_IMG_BMK_SUBSCR_DEFAULT ; \
+    CNT_IMG_BMK_SUBSCR_ERROR ; \
+    CNT_IMG_BMK_SUBSCR_IN_PROGRESS ; \
+    CNT_IMG_BOX_PROJECT ; \
+    CNT_IMG_FILE_TEXTFILE ; \
+    CNT_IMG_FILE_APP ; \
+    CNT_IMG_FILE_BITMAP ; \
+    CNT_IMG_FILE_TABLE ; \
+    CNT_IMG_FILE_WORD ; \
+    CNT_IMG_FILE_DXF ; \
+    CNT_IMG_FILE_GIF ; \
+    CNT_IMG_FILE_HELP ; \
+    CNT_IMG_FILE_HTML ; \
+    CNT_IMG_FILE_JPG ; \
+    CNT_IMG_FILE_MET ; \
+    CNT_IMG_FILE_PCD ; \
+    CNT_IMG_FILE_PCT ; \
+    CNT_IMG_FILE_PCX ; \
+    CNT_IMG_FILE_PNG ; \
+    CNT_IMG_FILE_MACROLIB ; \
+    CNT_IMG_FILE_DRAW ; \
+    CNT_IMG_FILE_DATABASE ; \
+    CNT_IMG_FILE_CALC ; \
+    CNT_IMG_FILE_IMPRESS ; \
+    CNT_IMG_FILE_CHART ; \
+    CNT_IMG_FILE_WRITER ; \
+    CNT_IMG_FILE_FRAMESET ; \
+    CNT_IMG_FILE_GALLERY ; \
+    CNT_IMG_FILE_SGF ; \
+    CNT_IMG_FILE_GLOBAL_DOC ; \
+    CNT_IMG_FILE_SGV ; \
+    CNT_IMG_FILE_SIM ; \
+    CNT_IMG_FILE_MESSAGE ; \
+    CNT_IMG_FILE_MATH ; \
+    CNT_IMG_FILE_SVHELP ; \
+    CNT_IMG_FILE_SVM ; \
+    CNT_IMG_FILE_TIFF ; \
+    CNT_IMG_FILE_WRITERTEMPLATE ; \
+    CNT_IMG_FILE_WMF ; \
+    CNT_IMG_FILE_EXCEL ; \
+    CNT_IMG_FILE_EXCELTEMPLATE ; \
+    CNT_IMG_IS_LINK ; \
+    CNT_IMG_FILE_SCHEDULE_CMBVIEW ; \
+    CNT_IMG_FILE_SCHEDULE_TVIEW ; \
+    CNT_IMG_FILE_SCHEDULE_EFORM ; \
+    CNT_IMG_FILE_SCHEDULE_TFORM ; \
+    CNT_IMG_DOC_POP3_SOMEREAD ; \
+    CNT_IMG_EXPLORERROOT ; \
+    CNT_IMG_DESKTOP ; \
+    CNT_IMG_DESKTOP_ACTIVE ; \
+    CNT_IMG_GALLERY ; \
+    CNT_IMG_GALLERY_THEME ; \
+    CNT_IMG_CDF_ITEM ; \
+    CNT_IMG_CDF_CHANNEL ; \
+    CNT_IMG_CDF_SUBCHANNEL ; \
+    CNT_IMG_SDC_CHANNEL ; \
+    CNT_IMG_DEFAULT ; \
+    CNT_IMG_BOX_SCHEDULE ; \
+    CNT_IMG_FLD_SCHEDULE_TASK ; \
+    CNT_IMG_FLD_SCHEDULE_EVT ; \
+    CNT_IMG_SCHEDULE_EVT ; \
+    CNT_IMG_SCHEDULE_TASK ; \
+    CNT_IMG_FILE_VOR ; \
+    CNT_IMG_BOOKMARKS ; \
+    CNT_IMG_USER2 ; \
+    CNT_IMG_USER3 ; \
+    CNT_IMG_USER4 ; \
+    CNT_IMG_USER5 ; \
+    CNT_IMG_USER6 ; \
+    CNT_IMG_USER7 ; \
+    CNT_IMG_USER8 ; \
+    CNT_IMG_USER9 ; \
+    CNT_IMG_USER10 ; \
+    CNT_IMG_USER11 ; \
+    CNT_IMG_USER12 ; \
+    CNT_IMG_SCHEDULE_SERVERS ; \
+    CNT_IMG_SCHEDULE_SERVER ; \
+    CNT_IMG_SCHEDULE_USER ; \
+    CNT_IMG_FILE_POWERPOINT ; \
+    CNT_IMG_DOC_POP3_NO_BODY_READ ; \
+    CNT_IMG_DOC_NEWS_NO_BODY ; \
+    CNT_IMG_DOC_POP3_NO_BODY ; \
+    CNT_IMG_DOC_NEWS_NO_BODY_READ ; \
+    CNT_IMG_FOLDER_SOMEREADNEWS_NO_BODY ; \
+    CNT_IMG_DOC_POP3_SOMEREAD_NO_BODY ; \
+    CNT_IMG_FOLDER_FAVORITE ; \
+    CNT_IMG_MARKFLAG ; \
+    CNT_IMG_FILE_IMPRESSPACKED ;
+
+ImageList RID_IMGLST_SMALL
+{
+    ImageBitmap = Bitmap { File = "sn_cnt.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    IdList =
+    {
+        CNT_IMAGELIST
+    };
+    IdCount =
+    {
+        126;
+    };
+};
+
+ImageList RID_IMGLST_BIG
+{
+    ImageBitmap = Bitmap { File = "ln_cnt.bmp" ; };
+    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    IdList =
+    {
+        CNT_IMAGELIST
+    };
+    IdCount =
+    {
+        126;
+    };
+};
+
+// ******************************************************************* EOF
+

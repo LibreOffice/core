@@ -1,0 +1,305 @@
+/*************************************************************************
+ *
+ *  $RCSfile: postdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "postdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_POSTIT -----------------------------------------------------
+ModalDialog RID_SVXDLG_POSTIT
+{
+    HelpId = SID_POSTIT ;
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 198 , 117 ) ;
+    Text = "Notiz" ;
+    Text [ ENGLISH ] = "Note" ;
+    Text [ norwegian ] = "Merknad" ;
+    Text [ italian ] = "Nota" ;
+    Text [ portuguese_brazilian ] = "ObservaÁ„o" ;
+    Text [ portuguese ] = "ObservaÁ„o" ;
+    Text [ finnish ] = "Huomautus" ;
+    Text [ danish ] = "Note" ;
+    Text [ french ] = "Note" ;
+    Text [ swedish ] = "Anteckning" ;
+    Text [ dutch ] = "Aantekening" ;
+    Text [ spanish ] = "Nota" ;
+    Text [ english_us ] = "Note" ;
+    Moveable = TRUE ;
+    FixedText FT_LASTEDITLABEL
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 24 , 8 ) ;
+        Text = "Autor" ;
+        Text [ ENGLISH ] = "Author" ;
+        Text [ norwegian ] = "Forfatter" ;
+        Text [ italian ] = "Autore" ;
+        Text [ portuguese_brazilian ] = "Autor" ;
+        Text [ portuguese ] = "Autor" ;
+        Text [ finnish ] = "Tekij‰" ;
+        Text [ danish ] = "Forfatter" ;
+        Text [ french ] = "Auteur" ;
+        Text [ swedish ] = "Fˆrfattare" ;
+        Text [ dutch ] = "Auteur" ;
+        Text [ spanish ] = "Autor" ;
+        Text [ english_us ] = "Author" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊˜’ﬂ";
+        Text[ russian ] = "¿‚ÚÓ";
+        Text[ polish ] = "Autor";
+        Text[ japanese ] = "çÏê¨é“";
+        Text[ chinese_traditional ] = "ß@™Ã";
+        Text[ arabic ] = "«·„ƒ·›";
+        Text[ greek ] = "”ıÌÙ‹ÍÙÁÚ";
+        Text[ korean ] = "¿€º∫¿Œ";
+        Text[ turkish ] = "Yazan";
+    };
+    FixedText FT_LASTEDIT
+    {
+        Pos = MAP_APPFONT ( 38 , 14 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Left = TRUE ;
+    };
+    FixedText FT_EDIT
+    {
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 18 , 8 ) ;
+        Text = "~Text" ;
+        Text [ English ] = "~Text" ;
+        Text [ norwegian ] = "~Text" ;
+        Text [ italian ] = "~Testo" ;
+        Text [ portuguese_brazilian ] = "~Texto" ;
+        Text [ portuguese ] = "~Texto" ;
+        Text [ finnish ] = "~Teksti" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ french ] = "~Texte" ;
+        Text [ swedish ] = "~Text" ;
+        Text [ dutch ] = "~Tekst" ;
+        Text [ spanish ] = "Te~xto" ;
+        Text [ english_us ] = "~Text" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "Œƒ◊÷(~T)";
+        Text[ russian ] = "“ÂÍÒÚ";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "√∑Ωƒ(~T)";
+        Text[ chinese_traditional ] = "§Â¶r(~T)";
+        Text[ arabic ] = "«·‰’";
+        Text[ greek ] = " ÂﬂÏÂÌÔ";
+        Text[ korean ] = "≈ÿΩ∫∆Æ(~T)";
+        Text[ turkish ] = "~Metin";
+    };
+    MultiLineEdit ED_EDIT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 13 , 38 ) ;
+        Size = MAP_APPFONT ( 115 , 64 ) ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+    GroupBox GB_POSTIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 129 , 107 ) ;
+        Text = "Inhalt" ;
+        Text [ ENGLISH ] = "Contents" ;
+        Text [ norwegian ] = "Innhold  " ;
+        Text [ italian ] = "Contenuto" ;
+        Text [ portuguese_brazilian ] = "Conte˙do" ;
+        Text [ portuguese ] = "Conte˙do" ;
+        Text [ finnish ] = "Sis‰ltˆ" ;
+        Text [ danish ] = "Indhold" ;
+        Text [ french ] = "Contenu" ;
+        Text [ swedish ] = "InnehÂll" ;
+        Text [ dutch ] = "Inhoud" ;
+        Text [ spanish ] = "Contenido" ;
+        Text [ english_us ] = "Contents" ;
+        Text[ chinese_simplified ] = "ƒ⁄»›";
+        Text[ russian ] = "—Ó‰ÂÊËÏÓÂ";
+        Text[ polish ] = "TreúÊ";
+        Text[ japanese ] = "ì‡óe";
+        Text[ chinese_traditional ] = "§∫Æe";
+        Text[ arabic ] = "«·„Õ ÊÌ« ";
+        Text[ greek ] = "–ÂÒÈÂ˜¸ÏÂÌ·";
+        Text[ korean ] = "≥ªøÎ";
+        Text[ turkish ] = "›Áerik";
+    };
+    OKButton BTN_POST_OK
+    {
+        Pos = MAP_APPFONT ( 141 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_POST_CANCEL
+    {
+        Pos = MAP_APPFONT ( 141 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+    };
+    HelpButton BTN_POST_HELP
+    {
+        Pos = MAP_APPFONT ( 141 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+    };
+    ImageButton BTN_PREV
+    {
+        Pos = MAP_APPFONT ( 141 , 60 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT ;
+    };
+    ImageButton BTN_NEXT
+    {
+        Pos = MAP_APPFONT ( 167 , 60 ) ;
+        Size = MAP_APPFONT ( 24 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT ;
+    };
+    PushButton BTN_AUTHOR
+    {
+        Pos = MAP_APPFONT ( 141 , 95 ) ;
+        Size = MAP_APPFONT ( 50 , 15 ) ;
+        Text = "~Autor" ;
+        Text [ ENGLISH ] = "~Author" ;
+        Text [ norwegian ] = "~Forfatter" ;
+        Text [ italian ] = "Autore" ;
+        Text [ portuguese_brazilian ] = "~Autor" ;
+        Text [ portuguese ] = "~Autor" ;
+        Text [ finnish ] = "~Tekij‰" ;
+        Text [ danish ] = "Forfatter" ;
+        Text [ french ] = "~Auteur" ;
+        Text [ swedish ] = "Sk~apad av" ;
+        Text [ dutch ] = "~Auteur" ;
+        Text [ spanish ] = "~Autor" ;
+        Text [ english_us ] = "~Author" ;
+        Text[ chinese_simplified ] = "◊˜’ﬂ(~A)";
+        Text[ russian ] = "¿‚ÚÓ";
+        Text[ polish ] = "Autor";
+        Text[ japanese ] = "çÏê¨é“(~A)";
+        Text[ chinese_traditional ] = "ß@™Ã(~A)";
+        Text[ arabic ] = "«·„ƒ·›";
+        Text[ greek ] = "”ıÌÙ‹ÍÙÁÚ";
+        Text[ korean ] = "¿€º∫¿Œ(~A)";
+        Text[ turkish ] = "~Yazan";
+    };
+     // lokale Strings
+    String STR_NOTIZ_EDIT
+    {
+        Text = "Notiz bearbeiten" ;
+        Text [ English ] = "Edit Note" ;
+        Text [ norwegian ] = "Rediger Merknad" ;
+        Text [ italian ] = "Modifica nota" ;
+        Text [ portuguese_brazilian ] = "Editar ObservaÁ„o" ;
+        Text [ portuguese ] = "Editar anotaÁ„o" ;
+        Text [ finnish ] = "Muokkaa huomautusta" ;
+        Text [ danish ] = "Rediger note" ;
+        Text [ french ] = "…diter la note" ;
+        Text [ swedish ] = "Redigera anteckning" ;
+        Text [ dutch ] = "Aantekening bewerken" ;
+        Text [ spanish ] = "Editar nota" ;
+        Text [ english_us ] = "Edit Note" ;
+        Text[ chinese_simplified ] = "±‡º≠±∏◊¢";
+        Text[ russian ] = "Œ·‡·ÓÚÍ‡ ÔÓÏÂÚÍË";
+        Text[ polish ] = "Edytuj notatkÍ";
+        Text[ japanese ] = "“”ÇÃï“èW";
+        Text[ chinese_traditional ] = "ΩsøË≥∆™`";
+        Text[ arabic ] = " Õ—Ì— „·«ÕŸ…";
+        Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· ÛÁÏÂﬂ˘ÛÁÚ";
+        Text[ korean ] = "∏ﬁ∏ ∆Ì¡˝";
+        Text[ turkish ] = "Notu d¸zenle";
+    };
+    String STR_NOTIZ_INSERT
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Notiz einf¸gen : Notiz einf≥gen */
+        /* ### ACHTUNG: Neuer Text in Resource? Notiz einf¸gen : Notiz einf≥gen */
+        Text = "Notiz einf¸gen" ;
+        Text [ English ] = "Insert Note" ;
+        Text [ norwegian ] = "Sett inn Merknad" ;
+        Text [ italian ] = "Inserisci nota" ;
+        Text [ portuguese_brazilian ] = "Inserir ObservaÁ„o" ;
+        Text [ portuguese ] = "Inserir anotaÁ„o" ;
+        Text [ finnish ] = "Lis‰‰ huomautus" ;
+        Text [ danish ] = "IndsÊt note" ;
+        Text [ french ] = "InsÈrer une note" ;
+        Text [ swedish ] = "Infoga anteckning" ;
+        Text [ dutch ] = "Aantekening invoegen" ;
+        Text [ spanish ] = "Insertar nota" ;
+        Text [ english_us ] = "Insert note" ;
+        Text[ chinese_simplified ] = "≤Â»Î±∏◊¢";
+        Text[ russian ] = "¬ÒÚ‡‚ËÚ¸ ÔÓÏÂÚÍÛ";
+        Text[ polish ] = "Wstaw notatkÍ";
+        Text[ japanese ] = "“”ÇÃë}ì¸";
+        Text[ chinese_traditional ] = "¥°§J≥∆™`";
+        Text[ arabic ] = "≈œ—«Ã „·«ÕŸ…";
+        Text[ greek ] = "≈ÈÛ·„˘„ﬁ ÛÁÏÂﬂ˘ÛÁÚ";
+        Text[ korean ] = "∏ﬁ∏ ª¿‘";
+        Text[ turkish ] = "Not ekle";
+    };
+    Text[ chinese_simplified ] = "±∏◊¢";
+    Text[ russian ] = "œÓÏÂÚÍ‡";
+    Text[ polish ] = "Notatka";
+    Text[ japanese ] = "“”";
+    Text[ chinese_traditional ] = "≥∆™`";
+    Text[ arabic ] = "„·«ÕŸ…";
+    Text[ greek ] = "”ÁÏÂﬂ˘ÛÁ";
+    Text[ korean ] = "∏ﬁ∏";
+    Text[ turkish ] = "Not";
+};
+ // ********************************************************************** EOF

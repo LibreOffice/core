@@ -1,0 +1,15 @@
+dos: mkdir %_DEST%\inc%_EXT%\sj2
+..\%__SRC%\class\classes.jar %_DEST%\bin%_EXT%\classes.jar
+hedabu: ..\inc\sjapplet.hxx %_DEST%\inc%_EXT%\sj2\sjapplet.hxx
+
+..\%__SRC%\lib\sj.lib %_DEST%\lib%_EXT%\sj.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\slb\sj.lib %_DEST%\lib%_EXT%\xsj.lib
+..\%__SRC%\bin\j%UPD%*_g.dll %_DEST%\bin%_EXT%\j%UPD%*_g.dll
+
+dos: if "%GUI%" == "WIN" attrib -r %_DEST%\bin%_EXT%\sj%UPD%*.map
+dos: if "%GUI%" == "WIN" copy ..\%__SRC%\misc\sj%UPD%*.map %_DEST%\bin%_EXT%\sj2%UPD%*.map
+dos: if "%GUI%" == "WIN" attrib +r %_DEST%\bin%_EXT%\sj2%UPD%*.map
+dos: if "%GUI%" == "OS2" attrib -r %_DEST%\bin%_EXT%\sj2%UPD%*.map
+dos: if "%GUI%" == "OS2" copy ..\%__SRC%\misc\sj%UPD%*.map %_DEST%\bin%_EXT%\sj2%UPD%*.map
+dos: if "%GUI%" == "OS2" attrib +r %_DEST%\bin%_EXT%\sj2%UPD%*.map

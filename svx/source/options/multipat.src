@@ -1,0 +1,315 @@
+/*************************************************************************
+ *
+ *  $RCSfile: multipat.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include --------------------------------------------------------------
+#include "multipat.hrc"
+#include "helpid.hrc"
+#include "dialogs.hrc"
+ // pragma ---------------------------------------------------------------
+
+ // RID_SVXDLG_MULTIPATH --------------------------------------------------
+ModalDialog RID_SVXDLG_MULTIPATH
+{
+    HelpId = HID_MULTIPATH ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 256 , 90 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Pfade auswählen : Pfade auswõhlen */
+    /* ### ACHTUNG: Neuer Text in Resource? Pfade auswählen : Pfade auswõhlen */
+    Text = "Pfade auswählen" ;
+    Text [ English ] = "Select paths" ;
+    Text [ english_us ] = "Select Paths" ;
+    Text [ portuguese_brazilian ] = "Pfade auswählen" ;
+    Text [ swedish ] = "Välj sökvägar" ;
+    Text [ danish ] = "Vælg stier" ;
+    Text [ italian ] = "Seleziona percorsi" ;
+    Text [ spanish ] = "Seleccionar rutas" ;
+    Text [ french ] = "Sélection de chemins" ;
+    Text [ dutch ] = "Paden selecteren" ;
+    Text [ portuguese ] = "Seleccionar atalhos" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    ListBox LB_MULTIPATH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 120 , 64 ) ;
+        AutoHScroll = TRUE ;
+    };
+    PushButton BTN_ADD_MULTIPATH
+    {
+        Pos = MAP_APPFONT ( 138 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hi~nzufügen... : Hi~nzuf³gen... */
+        /* ### ACHTUNG: Neuer Text in Resource? Hi~nzufügen... : Hi~nzuf³gen... */
+        Text = "Hi~nzufügen..." ;
+        Text [ English ] = "Add..." ;
+        Text [ portuguese ] = "~Adicionar..." ;
+        Text [ english_us ] = "~Add..." ;
+        Text [ portuguese_brazilian ] = "Hi~nzufügen" ;
+        Text [ swedish ] = "Lägg t~ill..." ;
+        Text [ danish ] = "Tilføj..." ;
+        Text [ italian ] = "~Aggiungi..." ;
+        Text [ spanish ] = "~Añadir..." ;
+        Text [ french ] = "A~jouter..." ;
+        Text [ dutch ] = "Toe~voegen..." ;
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)...";
+        Text[ russian ] = "Äîáàâèòü...";
+        Text[ polish ] = "Dodaj...";
+        Text[ japanese ] = "’Ç‰Á(~A)...";
+        Text[ chinese_traditional ] = "¼W¥[(~A)...";
+        Text[ arabic ] = "...ÅÖÇİÉ";
+        Text[ dutch ] = "Toe~voegen...";
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)...";
+        Text[ greek ] = "ĞñïóèŞêç...";
+        Text[ korean ] = "Ãß°¡(~A)...";
+        Text[ turkish ] = "Ekle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_DEL_MULTIPATH
+    {
+        Pos = MAP_APPFONT ( 138 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        Text = "~Löschen" ;
+        Text [ English ] = "~Delete" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text [ english_us ] = "~Delete" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ dutch ] = "~Wissen";
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_MULTIPATH
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 188 , 81 ) ;
+        Text = "Pfade" ;
+        Text [ English ] = "Paths" ;
+        Text [ english_us ] = "Paths" ;
+        Text [ portuguese_brazilian ] = "Pfade" ;
+        Text [ swedish ] = "Sökvägar" ;
+        Text [ danish ] = "Stier" ;
+        Text [ italian ] = "Percorsi" ;
+        Text [ spanish ] = "Rutas" ;
+        Text [ french ] = "Chemins" ;
+        Text [ dutch ] = "Paden" ;
+        Text [ portuguese ] = "Atalhos" ;
+        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ russian ] = "Ïóòè";
+        Text[ polish ] = "Œcie¿ki";
+        Text[ japanese ] = "Êß½";
+        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ arabic ] = "ÇáãÓÇÑÇÊ";
+        Text[ dutch ] = "Paden";
+        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ greek ] = "Äéáäñïìİò";
+        Text[ korean ] = "°æ·Î";
+        Text[ turkish ] = "Veri yolları";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_MULTIPATH_OK
+    {
+        Pos = MAP_APPFONT ( 200 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton BTN_MULTIPATH_CANCEL
+    {
+        Pos = MAP_APPFONT ( 200 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_MULTIPATH_HELP
+    {
+        Pos = MAP_APPFONT ( 200 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
+    Text[ russian ] = "Âûáğàòü ïóòè";
+    Text[ polish ] = "Wybierz œcie¿ki";
+    Text[ japanese ] = "Êß½‚Ì‘I‘ğ";
+    Text[ chinese_traditional ] = "¿ï¾Ü¸ô®|";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáãÓÇÑÇÊ";
+    Text[ dutch ] = "Paden selecteren";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÂ·¾¶";
+    Text[ greek ] = "ÅğéëïãŞ äéáäñïìşí";
+    Text[ korean ] = "°æ·Î ¼±ÅÃ";
+    Text[ turkish ] = "Veri yollarını seç";
+    Text[ language_user1 ] = " ";
+};
+String RID_MULTIPATH_DBL_ERR
+{
+    Text = "Der Pfad %1 ist bereits vorhanden." ;
+    Text [ ENGLISH ] = "The path %1 is already defined." ;
+    Text [ english_us ] = "The path %1 already exists." ;
+    Text [ portuguese_brazilian ] = "Der Pfad %1 ist bereits vorhanden." ;
+    Text [ swedish ] = "Sökvägen %1 finns redan." ;
+    Text [ danish ] = "Stien %1 findes allerede." ;
+    Text [ italian ] = "Il percorso %1 esiste già." ;
+    Text [ spanish ] = "La ruta %1 ya existe." ;
+    Text [ french ] = "Le chemin %1 existe déjà." ;
+    Text [ dutch ] = "Pad %1 bestaat reeds." ;
+    Text [ portuguese ] = "O atalho %1 já existe." ;
+    Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ russian ] = "Ïóòü %1 óæå èìååòñÿ.";
+    Text[ polish ] = "Œcie¿ka %1 ju¿ istnieje.";
+    Text[ japanese ] = "%1‚ÌÊß½‚ÍŠù‚É‚ ‚è‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­Ó¸ô®| %1 ¤w¸g¦s¦b¡C";
+    Text[ arabic ] = "ÇáãÓÇÑ %1 ãæÌæÏ ãÓÈŞÇğ.";
+    Text[ dutch ] = "Pad %1 bestaat reeds.";
+    Text[ chinese_simplified ] = "Õâ¸öÂ·¾¶ %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ greek ] = "Ç äéáäñïìŞ %1 õğÜñ÷åé Şäç.";
+    Text[ korean ] = "°æ·Î%1°¡ ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Veri yolu %1 mevcut durumda";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_MULTIFILE_DBL_ERR
+{
+    Text = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ ENGLISH ] = "The file %1 is already defined." ;
+    Text [ english_us ] = "The file %1 already exists." ;
+    Text [ portuguese ] = "O ficheiro %1 já existe." ;
+    Text [ portuguese_brazilian ] = "Die Datei %1 ist bereits vorhanden." ;
+    Text [ swedish ] = "Filen %1 existerar redan." ;
+    Text [ danish ] = "Filen %1 findes allerede." ;
+    Text [ italian ] = "Il file %1 esiste già." ;
+    Text [ spanish ] = "El archivo %1 ya existe." ;
+    Text [ french ] = "Le fichier %1existe déjà." ;
+    Text [ dutch ] = "Bestand %1 bestaat reeds" ;
+    Text[ chinese_simplified ] = "Õâ¸öÎÄ¼ş %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ russian ] = "Ôàéë %1 óæå èìååòñÿ.";
+    Text[ polish ] = "Plik %1 ju¿ istnieje.";
+    Text[ japanese ] = "%1‚ÌÌ§²Ù‚ÍŠù‚É‚ ‚è‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­ÓÀÉ®× %1 ¤w¸g¦s¦b¡C";
+    Text[ arabic ] = "Çáãáİ %1 ãæÌæÏ ãÓÈŞÇğ.";
+    Text[ dutch ] = "Bestand %1 bestaat reeds";
+    Text[ chinese_simplified ] = "Õâ¸öÎÄ¼ş %1 ÒÑ¾­´æÔÚ¡£";
+    Text[ greek ] = "Ôï áñ÷åßï %1 õğÜñ÷åé Şäç.";
+    Text[ korean ] = "ÆÄÀÏ%1°¡ ÀÌ¹Ì ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Dosya %1 mevcut durumda.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FILE_TITLE
+{
+    Text = "Dateien auswählen" ;
+    Text [ English ] = "Select files" ;
+    Text [ english_us ] = "Select files" ;
+    Text [ portuguese ] = "Seleccionar ficheiros" ;
+    Text [ portuguese_brazilian ] = "Dateien auswählen" ;
+    Text [ swedish ] = "Välj ut filer" ;
+    Text [ danish ] = "Vælg filer" ;
+    Text [ italian ] = "Seleziona file" ;
+    Text [ spanish ] = "Seleccionar archivos" ;
+    Text [ french ] = "Sélectionner des fichiers" ;
+    Text [ dutch ] = "Bestanden selecteren" ;
+    Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş";
+    Text[ russian ] = "Âûáîğ ôàéëîâ";
+    Text[ polish ] = "Wybierz pliki";
+    Text[ japanese ] = "Ì§²Ù‚Ì‘I‘ğ";
+    Text[ chinese_traditional ] = "¿ï¾ÜÀÉ®×";
+    Text[ arabic ] = "ÇÎÊíÇÑ ÇáãáİÇÊ";
+    Text[ dutch ] = "Bestanden selecteren";
+    Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş";
+    Text[ greek ] = "ÅğéëïãŞ áñ÷åßùí";
+    Text[ korean ] = "ÆÄÀÏ ¼±ÅÃ";
+    Text[ turkish ] = "Dosyaları seç";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FILE_GB
+{
+    Text = "Dateien" ;
+    Text [ English ] = "Files" ;
+    Text [ english_us ] = "Files" ;
+    Text [ portuguese ] = "Ficheiros" ;
+    Text [ portuguese_brazilian ] = "Dateien" ;
+    Text [ swedish ] = "Filer" ;
+    Text [ danish ] = "Filer" ;
+    Text [ italian ] = "File" ;
+    Text [ spanish ] = "Archivos" ;
+    Text [ french ] = "Fichiers" ;
+    Text [ dutch ] = "Bestanden" ;
+    Text[ chinese_simplified ] = "ÎÄ¼ş";
+    Text[ russian ] = "Ôàéëû";
+    Text[ polish ] = "Pliki";
+    Text[ japanese ] = "Ì§²Ù";
+    Text[ chinese_traditional ] = "ÀÉ®×";
+    Text[ arabic ] = "ÇáãáİÇÊ";
+    Text[ dutch ] = "Bestanden";
+    Text[ chinese_simplified ] = "ÎÄ¼ş";
+    Text[ greek ] = "Áñ÷åßá";
+    Text[ korean ] = "ÆÄÀÏ";
+    Text[ turkish ] = "Dosyalar";
+    Text[ language_user1 ] = " ";
+};
+ // ******************************************************************* EOF

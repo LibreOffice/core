@@ -1,0 +1,283 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mgetempl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "helpid.hrc"
+#include "mgetempl.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // TP_MANAGE_STYLES ------------------------------------------------------
+TabPage TP_MANAGE_STYLES
+{
+    HelpId = HID_MANAGE_STYLES ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Text = "~Name" ;
+        Text [ English ] = "~Name" ;
+        Text [ english_us ] = "~Name" ;
+        Text [ italian ] = "~Nome" ;
+        Text [ spanish ] = "~Nombre" ;
+        Text [ french ] = "~Nom" ;
+        Text [ dutch ] = "~Naam" ;
+        Text [ swedish ] = "~Namn" ;
+        Text [ danish ] = "Navn" ;
+        Text [ portuguese ] = "~Nome" ;
+        Text [ portuguese_brazilian ] = "~Name" ;
+        Text[ chinese_simplified ] = "√˚≥∆(~N)";
+        Text[ russian ] = "»Ïˇ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "ñºëO(~N)";
+        Text[ chinese_traditional ] = "¶W∫Ÿ(~N)";
+        Text[ arabic ] = "«·«”„";
+        Text[ greek ] = "ºÌÔÏ·";
+        Text[ korean ] = "¿Ã∏ß(~N)";
+        Text[ turkish ] = "~Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 6 ) ;
+        Size = MAP_APPFONT ( 182 , 12 ) ;
+    };
+    CheckBox CB_AUTO
+    {
+        Pos = MAP_APPFONT ( 164 , 8 ) ;
+        Size = MAP_APPFONT ( 88 , 10 ) ;
+        Hide = TRUE ;
+        Text = "~Autom. aktualisieren" ;
+        Text [ ENGLISH ] = "~Automatically update" ;
+        Text [ english_us ] = "~AutoUpdate" ;
+        Text [ portuguese_brazilian ] = "~Autom. aktualisieren" ;
+        Text [ swedish ] = "~Autom. uppdatering" ;
+        Text [ danish ] = "Opdater automatisk" ;
+        Text [ italian ] = "~Aggiorna automaticamente" ;
+        Text [ spanish ] = "~Actualizar autom·ticamente" ;
+        Text [ french ] = "Actualisation ~automatique" ;
+        Text [ dutch ] = "~Autom. actualiseren" ;
+        Text [ portuguese ] = "Actualizar ~automaticamente" ;
+        Text[ chinese_simplified ] = "◊‘∂Ø∏¸–¬(~A)";
+        Text[ russian ] = "¿‚ÚÓÏ. Ó·ÌÓ‚ÎÂÌËÂ";
+        Text[ polish ] = "~Aktualizuj automatycznie";
+        Text[ japanese ] = "é©ìÆìIÇ…çXêV(~A)";
+        Text[ chinese_traditional ] = "¶€∞ ßÛ∑s(~A)";
+        Text[ arabic ] = " ÕœÌÀ  ·ﬁ«∆Ì";
+        Text[ greek ] = "¡ıÙ¸Ï·ÙÁ ÂÌÁÏ›Ò˘ÛÁ";
+        Text[ korean ] = "¿⁄µø æ˜µ•¿Ã∆Æ(~A)";
+        Text[ turkish ] = "~Otomatik g¸ncelleme";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Text = "~Folgevorlage" ;
+        Text [ ENGLISH ] = "~Next" ;
+        Text [ norwegian ] = "~Neste" ;
+        Text [ italian ] = "Modello ~successivo" ;
+        Text [ portuguese_brazilian ] = "~PrÛximo" ;
+        Text [ portuguese ] = "~Estilo seguinte" ;
+        Text [ finnish ] = "~Seuraava" ;
+        Text [ danish ] = "NÊste typografi" ;
+        Text [ french ] = "~Style suivant" ;
+        Text [ swedish ] = "N‰sta ~formatmall" ;
+        Text [ dutch ] = "~Volgend profiel" ;
+        Text [ spanish ] = "~Estilo siguiente" ;
+        Text [ english_us ] = "Ne~xt Style" ;
+        Text[ chinese_simplified ] = "œ¬“ª∏ˆ—˘ Ω(~X)";
+        Text[ russian ] = "—ÎÂ‰Û˛˘ËÈ ÒÚËÎ¸";
+        Text[ polish ] = "NastÍpny styl";
+        Text[ japanese ] = "éüÇ…ë±Ç≠Ω¿≤Ÿ(~X)";
+        Text[ chinese_traditional ] = "§U§@≠”ºÀ¶°(~X)";
+        Text[ arabic ] = "‰„ÿ  «·Ì";
+        Text[ greek ] = "≈¸ÏÂÌÔ Ò¸ÙıÔ";
+        Text[ korean ] = "¥Ÿ¿Ω ¿Ø«¸(~X)";
+        Text[ turkish ] = "Sonraki biÁim";
+        Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
+    };
+    ListBox LB_NEXT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 24 ) ;
+        Size = MAP_APPFONT ( 182 , 65 ) ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_BASE
+    {
+        Pos = MAP_APPFONT ( 6 , 44 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Verkn¸pft mit : ~Verkn≥pft mit */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Verkn¸pft mit : ~Verkn≥pft mit */
+        Text = "~Verkn¸pft mit" ;
+        Text [ ENGLISH ] = "~Based on" ;
+        Text [ norwegian ] = "~Basert pÂ" ;
+        Text [ italian ] = "~Basato su" ;
+        Text [ portuguese_brazilian ] = "~Baseado em" ;
+        Text [ portuguese ] = "~Baseado em" ;
+        Text [ finnish ] = "~Perustuu" ;
+        Text [ danish ] = "KÊdet med" ;
+        Text [ french ] = "~LiÈ ‡" ;
+        Text [ swedish ] = "~L‰nkad med" ;
+        Text [ dutch ] = "~Gebaseerd op" ;
+        Text [ spanish ] = "~Vinculado con" ;
+        Text [ english_us ] = "~Based on" ;
+        Text[ chinese_simplified ] = "¡¥Ω”µΩ(~B)";
+        Text[ russian ] = "—‚ˇÁ‡Ì Ò";
+        Text[ polish ] = "Po≥πczony z";
+        Text[ japanese ] = "ÿ›∏êÊ(~B)";
+        Text[ chinese_traditional ] = "≥sµ≤®Ï(~B)";
+        Text[ arabic ] = "„— »ÿ »‹";
+        Text[ greek ] = "~”˝Ì‰ÂÛÁ ÏÂ";
+        Text[ korean ] = "ø¨∞·µ» ¥ÎªÛ(~B)";
+        Text[ turkish ] = "~Balan˝lan";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_BASE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 42 ) ;
+        Size = MAP_APPFONT ( 182 , 65 ) ;
+        DropDown = TRUE ;
+        Sort = TRUE ;
+    };
+    FixedText FT_REGION
+    {
+        Pos = MAP_APPFONT ( 6 , 62 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Text = "~Bereich" ;
+        Text [ ENGLISH ] = "~Region" ;
+        Text [ norwegian ] = "~OmrÂde" ;
+        Text [ italian ] = "~Area" ;
+        Text [ portuguese_brazilian ] = "~Regi„o" ;
+        Text [ portuguese ] = "~Categoria" ;
+        Text [ finnish ] = "~Alue" ;
+        Text [ danish ] = "OmrÂde" ;
+        Text [ french ] = "~CatÈgorie" ;
+        Text [ swedish ] = "~OmrÂde" ;
+        Text [ dutch ] = "~Bereik" ;
+        Text [ spanish ] = "~¡rea" ;
+        Text [ english_us ] = "~Category" ;
+        Text[ chinese_simplified ] = "∑÷¿‡(~C)";
+        Text[ russian ] = " ‡ÚÂ„ÓËˇ";
+        Text[ polish ] = "Kategoria";
+        Text[ japanese ] = "îÕàÕ(~C)";
+        Text[ chinese_traditional ] = "§¿√˛(~C)";
+        Text[ arabic ] = "«·‰ÿ«ﬁ";
+        Text[ greek ] = " ·ÙÁ„ÔÒﬂ·";
+        Text[ korean ] = "ƒ´≈◊∞Ì∏Æ(~C)";
+        Text[ turkish ] = "~Kategori";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REGION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 70 , 60 ) ;
+        Size = MAP_APPFONT ( 182 , 65 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 234 , 32 ) ;
+        WordBreak = TRUE ;
+        Hide = TRUE ;
+    };
+    MultiLineEdit ED_DESC
+    {
+        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Size = MAP_APPFONT ( 234 , 32 ) ;
+        ReadOnly = TRUE ;
+    };
+    GroupBox GB_DESC
+    {
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
+        Size = MAP_APPFONT ( 246 , 52 ) ;
+        Text = "Enth‰lt" ;
+        Text [ ENGLISH ] = "Contains" ;
+        Text [ norwegian ] = "Inneholder" ;
+        Text [ italian ] = "Contiene" ;
+        Text [ portuguese_brazilian ] = "ContÈm" ;
+        Text [ portuguese ] = "ContÈm" ;
+        Text [ finnish ] = "Sis‰lt‰‰" ;
+        Text [ danish ] = "Indeholder" ;
+        Text [ french ] = "Contient" ;
+        Text [ swedish ] = "InnehÂller" ;
+        Text [ dutch ] = "Bevat" ;
+        Text [ spanish ] = "Contiene" ;
+        Text [ english_us ] = "Contains" ;
+        Text[ chinese_simplified ] = "∫¨”–";
+        Text[ russian ] = "—Ó‰ÂÊËÚ";
+        Text[ polish ] = "Zawiera";
+        Text[ japanese ] = "ê‡ñæ";
+        Text[ chinese_traditional ] = "ßt¶≥";
+        Text[ arabic ] = "ÌÕ ÊÌ ⁄·Ï";
+        Text[ greek ] = "–ÂÒÈÂ˜¸ÏÂÌ·";
+        Text[ korean ] = "∆˜«‘";
+        Text[ turkish ] = "›Áerik";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,526 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sfx.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "sfx.hrc"
+
+String STR_NONAME
+{
+    Text = "unbenannt" ;
+    Text [ ENGLISH ] = "noname" ;
+    Text [ norwegian ] = "noname" ;
+    Text [ italian ] = "Senza nome" ;
+    Text [ portuguese_brazilian ] = "Sem nome" ;
+    Text [ portuguese ] = "Sem nome" ;
+    Text [ finnish ] = "nimetön" ;
+    Text [ danish ] = "ikke-navngivet" ;
+    Text [ french ] = "Sans nom" ;
+    Text [ swedish ] = "namnlös" ;
+    Text [ dutch ] = "naamloos" ;
+    Text [ spanish ] = "Sin nombre" ;
+    Text [ english_us ] = "Untitled" ;
+    Text[ chinese_simplified ] = "Î´ÃüÃû";
+    Text[ russian ] = "áåç èìåíè";
+    Text[ polish ] = "Bez nazwy";
+    Text[ japanese ] = "–³–¼";
+    Text[ chinese_traditional ] = "¥¼©R¦W";
+    Text[ arabic ] = "ÈÏæä ÚäæÇä";
+    Text[ greek ] = "Äß÷ùò üíïìá";
+    Text[ korean ] = "Á¦¸ñ¾øÀ½";
+    Text[ turkish ] = "Adsız";
+};
+
+String STR_NONE
+{
+    Text = "- Keine -" ;
+    Text [ ENGLISH ] = "- None -" ;
+    Text [ norwegian ] = "- Ingen -" ;
+    Text [ italian ] = "- Senza -" ;
+    Text [ portuguese_brazilian ] = "- Nenhum -" ;
+    Text [ portuguese ] = "- Nenhum -" ;
+    Text [ finnish ] = "- Ei ole -" ;
+    Text [ danish ] = "- Ingen -" ;
+    Text [ french ] = "- Aucun(e) -" ;
+    Text [ swedish ] = "- Inga -" ;
+    Text [ dutch ] = "- Geen -" ;
+    Text [ spanish ] = "- Ninguno -" ;
+    Text [ english_us ] = "- None -" ;
+    Text[ chinese_simplified ] = "- ÎŞ -";
+    Text[ russian ] = "- Áåç -";
+    Text[ polish ] = "- Brak -";
+    Text[ japanese ] = "-‚È‚µ-";
+    Text[ chinese_traditional ] = "- µL -";
+    Text[ arabic ] = "- ÈÏæä -";
+    Text[ greek ] = "- Êáíİíá -";
+    Text[ korean ] = "- ¾øÀ½ -";
+    Text[ turkish ] = "- Yok -";
+};
+
+String STR_CLOSE
+{
+    Text = "Schließen" ;
+    Text [ ENGLISH ] = "Close" ;
+    Text [ norwegian ] = "Lukk" ;
+    Text [ italian ] = "Chiudi" ;
+    Text [ portuguese_brazilian ] = "Fechar" ;
+    Text [ portuguese ] = "Fechar" ;
+    Text [ finnish ] = "Sulje" ;
+    Text [ danish ] = "Luk" ;
+    Text [ french ] = "Fermer" ;
+    Text [ swedish ] = "Stäng" ;
+    Text [ dutch ] = "Sluiten" ;
+    Text [ spanish ] = "Cerrar" ;
+    Text [ english_us ] = "Close" ;
+    Text[ chinese_simplified ] = "¹Ø±Õ";
+    Text[ russian ] = "Çàêğûòü";
+    Text[ polish ] = "Zamknij";
+    Text[ japanese ] = "•Â‚¶‚é";
+    Text[ chinese_traditional ] = "Ãö³¬";
+    Text[ arabic ] = "ÅÛáÇŞ";
+    Text[ greek ] = "Êëåßóéìï";
+    Text[ korean ] = "´İ±â";
+    Text[ turkish ] = "Kapat";
+};
+
+String STR_STYLE_FILTER_AUTO
+{
+    TEXT = "Automatisch" ;
+    TEXT [ English ] = "Automatic" ;
+    TEXT [ norwegian ] = "Automatic" ;
+    TEXT [ italian ] = "Automatico" ;
+    TEXT [ portuguese_brazilian ] = "Automático" ;
+    TEXT [ portuguese ] = "Automático" ;
+    TEXT [ finnish ] = "Automaattinen" ;
+    TEXT [ danish ] = "Automatisk" ;
+    TEXT [ french ] = "Automatique" ;
+    TEXT [ swedish ] = "Automatisk" ;
+    TEXT [ dutch ] = "Automatisch" ;
+    TEXT [ spanish ] = "Automático" ;
+    TEXT [ english_us ] = "Automatic" ;
+    TEXT[ chinese_simplified ] = "×Ô¶¯";
+    TEXT[ russian ] = "Àâòîìàòè÷åñêè";
+    TEXT[ polish ] = "Automatycznie";
+    TEXT[ japanese ] = "©“®";
+    TEXT[ chinese_traditional ] = "¦Û°Ê";
+    TEXT[ arabic ] = "ÊáŞÇÆí";
+    TEXT[ greek ] = "Áõôüìáôá";
+    TEXT[ korean ] = "ÀÚµ¿";
+    TEXT[ turkish ] = "Otomatik";
+};
+
+String STR_STYLE_FILTER_USED
+{
+    TEXT = "Verwendete Vorlagen" ;
+    TEXT [ English ] = "Used styles" ;
+    TEXT [ norwegian ] = "Brukte stiler" ;
+    TEXT [ italian ] = "Modelli usati" ;
+    TEXT [ portuguese_brazilian ] = "Estilos usados" ;
+    TEXT [ portuguese ] = "Estilos usados" ;
+    TEXT [ finnish ] = "Käytetyt tyylit" ;
+    TEXT [ danish ] = "Anvendte typografier" ;
+    TEXT [ french ] = "Styles utilisés" ;
+    TEXT [ swedish ] = "Använda mallar" ;
+    TEXT [ dutch ] = "Gebruikte opmaakprofielen" ;
+    TEXT [ spanish ] = "Estilos utilizados" ;
+    TEXT [ english_us ] = "Applied Styles" ;
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃµÄÑùÊ½";
+    TEXT[ russian ] = "Ïğèìåíåííûå ñòèëè";
+    TEXT[ polish ] = "U¿ywane style";
+    TEXT[ japanese ] = "g—p‚µ‚½½À²Ù";
+    TEXT[ chinese_traditional ] = "¨Ï¥Îªº¼Ë¦¡";
+    TEXT[ arabic ] = "ÃäãÇØ ŞíÏ ÇáÇÓÊÎÏÇã";
+    TEXT[ greek ] = "Åöáñìïóìİíá ğñüôõğá";
+    TEXT[ korean ] = "À¯ÇüÀÌ Àû¿ëµÇ¾ú½À´Ï´Ù.";
+    TEXT[ turkish ] = "Kullanılan biçimler";
+};
+
+
+
+String STR_STYLE_FILTER_USERDEF
+{
+    TEXT = "Benutzervorlagen" ;
+    TEXT [ English ] = "User styles" ;
+    TEXT [ norwegian ] = "Brukerstiler" ;
+    TEXT [ italian ] = "Modelli utente" ;
+    TEXT [ portuguese_brazilian ] = "Estilos do usuário" ;
+    TEXT [ portuguese ] = "Estilos do utilizador" ;
+    TEXT [ finnish ] = "Käyttäjän tyylit" ;
+    TEXT [ danish ] = "Brugertypografier" ;
+    TEXT [ french ] = "Styles personnalisés" ;
+    TEXT [ swedish ] = "Användardefinierade formatmallar" ;
+    TEXT [ dutch ] = "Eigen opmaakprofielen" ;
+    TEXT [ spanish ] = "Estilos del usuario" ;
+    TEXT [ english_us ] = "Custom Styles" ;
+    TEXT[ chinese_simplified ] = "ÓÃ»§ÑùÊ½";
+    TEXT[ russian ] = "Ñòèëè ïîëüçîâàòåëÿ";
+    TEXT[ polish ] = "Style u¿ytkownika";
+    TEXT[ japanese ] = "Õ°»Ş°’è‹`‚Ì½À²Ù";
+    TEXT[ chinese_traditional ] = "¦Û­q¼Ë¦¡";
+    TEXT[ arabic ] = "ÃäãÇØ ãÎÕÕÉ";
+    TEXT[ greek ] = "Óôõë ÷ñŞóôç";
+    TEXT[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ À¯Çü";
+    TEXT[ turkish ] = "Kullanıcı tanımlı biçimler";
+};
+
+String STR_STYLE_FILTER_ALL
+{
+    TEXT = "Alle Vorlagen" ;
+    TEXT [ English ] = "All styles" ;
+    TEXT [ norwegian ] = "Alle stiler" ;
+    TEXT [ italian ] = "Tutti i modelli" ;
+    TEXT [ portuguese_brazilian ] = "Todos os estilos" ;
+    TEXT [ portuguese ] = "Estilos todos" ;
+    TEXT [ finnish ] = "Kaikki tyylit" ;
+    TEXT [ danish ] = "Alle typografier" ;
+    TEXT [ french ] = "Tous les styles" ;
+    TEXT [ swedish ] = "Alla mallar" ;
+    TEXT [ dutch ] = "Alle opmaakprofielen" ;
+    TEXT [ spanish ] = "Todos los estilos" ;
+    TEXT [ english_us ] = "All Styles" ;
+    TEXT[ chinese_simplified ] = "È«²¿ÑùÊ½";
+    TEXT[ russian ] = "Âñå ñòèëè";
+    TEXT[ polish ] = "Wszystkie style";
+    TEXT[ japanese ] = "‚·‚×‚Ä‚Ì½À²Ù";
+    TEXT[ chinese_traditional ] = "¥ş³¡¼Ë¦¡";
+    TEXT[ arabic ] = "ßá ÇáÃäãÇØ";
+    TEXT[ greek ] = "¼ëá ôá ğñüôõğá";
+    TEXT[ korean ] = "¸ğµç À¯Çü";
+    TEXT[ turkish ] = "Tüm biçimler";
+};
+
+String STR_STANDARD
+{
+    Text = "Standard" ;
+    Text [ English ] = "Standard" ;
+    Text [ english_us ] = "Standard" ;
+    Text[ portuguese ] = "Padrão";
+    Text[ russian ] = "Ñòàíäàğò";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ dutch ] = "Standaard";
+    Text[ french ] = "Par défaut";
+    Text[ spanish ] = "Predeterminado";
+    Text[ italian ] = "Standard";
+    Text[ danish ] = "Standard";
+    Text[ swedish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
+    Text[ portuguese_brazilian ] = "Standard";
+    Text[ japanese ] = "•W€";
+    Text[ korean ] = "Ç¥ÁØ";
+    Text[ chinese_simplified ] = "±ê×¼";
+    Text[ chinese_traditional ] = "¼Ğ­ã";
+    Text[ arabic ] = "ŞíÇÓí";
+    Text[ turkish ] = "Standart";
+};
+
+String STR_FILTERNAME_ALL
+{
+    TEXT = "<Alle>" ;
+    TEXT [ ENGLISH ] = "<All>" ;
+    TEXT [ norwegian ] = "<Alle>" ;
+    TEXT [ italian ] = "<tutto>" ;
+    TEXT [ portuguese_brazilian ] = "<Tudo>" ;
+    TEXT [ portuguese ] = "<Todos>" ;
+    TEXT [ finnish ] = "<All>" ;
+    TEXT [ danish ] = "<Alle>" ;
+    TEXT [ french ] = "<Tout>" ;
+    TEXT [ swedish ] = "<Alla>" ;
+    TEXT [ dutch ] = "<Alle>" ;
+    TEXT [ spanish ] = "<Todos>" ;
+    TEXT [ english_us ] = "<All>" ;
+    TEXT[ chinese_simplified ] = "<È«²¿>";
+    TEXT[ russian ] = "<Âñå>";
+    TEXT[ polish ] = "<Wszystkie>";
+    TEXT[ japanese ] = "<‚·‚×‚Ä>";
+    TEXT[ chinese_traditional ] = "<¥ş³¡>";
+    TEXT[ arabic ] = "<Çáßá>";
+    TEXT[ greek ] = "<¼ëá>";
+    TEXT[ korean ] = "<ÀüºÎ>";
+    TEXT[ turkish ] = "<Tümü>";
+};
+
+String STR_HUMAN_APPNAME
+{
+    TEXT = "StarOffice" ;
+};
+
+String STR_BYTES
+{
+    Text = "Bytes" ;
+    Text [ ENGLISH ] = "Bytes" ;
+    Text [ english_us ] = "Bytes" ;
+    Text [ portuguese_brazilian ] = "Bytes" ;
+    Text [ swedish ] = "Byte" ;
+    Text [ danish ] = "Bytes" ;
+    Text [ italian ] = "Byte" ;
+    Text [ spanish ] = "Bytes" ;
+    Text [ french ] = "Octet(s)" ;
+    Text [ dutch ] = "Bytes" ;
+    Text [ portuguese ] = "Bytes" ;
+    Text[ chinese_simplified ] = "×Ö½Ú";
+    Text[ russian ] = "áàéò";
+    Text[ polish ] = "Bajty";
+    Text[ japanese ] = "ÊŞ²Ä";
+    Text[ chinese_traditional ] = "Bytes";
+    Text[ arabic ] = "ÈÇíÊ";
+    Text[ greek ] = "Bytes";
+    Text[ korean ] = "¹ÙÀÌÆ®";
+    Text[ turkish ] = "Byte";
+};
+
+String STR_KB
+{
+    Text = "KB" ;
+    Text [ ENGLISH ] = "KB" ;
+    Text [ portuguese ] = "KB" ;
+    Text [ english_us ] = "KB" ;
+    Text [ portuguese_brazilian ] = "KB" ;
+    Text [ swedish ] = "kB" ;
+    Text [ danish ] = "kB" ;
+    Text [ italian ] = "KB" ;
+    Text [ spanish ] = "KB" ;
+    Text [ french ] = "Ko" ;
+    Text [ dutch ] = "KB" ;
+    Text[ chinese_simplified ] = "Ç§×Ö½Ú";
+    Text[ russian ] = "ÊÁ";
+    Text[ polish ] = "KB";
+    Text[ japanese ] = "·ÛÊŞ²Ä";
+    Text[ chinese_traditional ] = "KB";
+    Text[ arabic ] = "ßíáæÈÇíÊ";
+    Text[ greek ] = "KB";
+    Text[ korean ] = "KB";
+    Text[ turkish ] = "KB";
+};
+
+String STR_MB
+{
+    Text = "MB" ;
+    Text [ ENGLISH ] = "MB" ;
+    Text [ portuguese ] = "MB" ;
+    Text [ english_us ] = "MB" ;
+    Text [ portuguese_brazilian ] = "MB" ;
+    Text [ swedish ] = "MB" ;
+    Text [ danish ] = "MB" ;
+    Text [ italian ] = "MB" ;
+    Text [ spanish ] = "MB" ;
+    Text [ french ] = "Mo" ;
+    Text [ dutch ] = "MB" ;
+    Text[ chinese_simplified ] = "Õ××Ö½Ú";
+    Text[ russian ] = "ÌÁ";
+    Text[ polish ] = "MB";
+    Text[ japanese ] = "MB";
+    Text[ chinese_traditional ] = "MB";
+    Text[ arabic ] = "ãíÛÇÈÇíÊ";
+    Text[ greek ] = "MB";
+    Text[ korean ] = "MB";
+    Text[ turkish ] = "MB";
+};
+
+
+String STR_GB
+{
+    Text = "GB" ;
+    Text [ ENGLISH ] = "GB" ;
+    Text [ portuguese ] = "GB" ;
+    Text [ english_us ] = "GB" ;
+    Text [ portuguese_brazilian ] = "GB" ;
+    Text [ swedish ] = "GB" ;
+    Text [ danish ] = "GB" ;
+    Text [ italian ] = "GB" ;
+    Text [ spanish ] = "GB" ;
+    Text [ french ] = "Go" ;
+    Text [ dutch ] = "GB" ;
+    Text[ chinese_simplified ] = "Ç§Õ×";
+    Text[ russian ] = "ÃÁ";
+    Text[ polish ] = "GB";
+    Text[ japanese ] = "GB";
+    Text[ chinese_traditional ] = "GB";
+    Text[ arabic ] = "ÌíÌÇÈÇíÊ";
+    Text[ greek ] = "GB";
+    Text[ korean ] = "GB";
+    Text[ turkish ] = "GB";
+};
+
+String STR_UNDO
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Rückgängig:  : R³ckgõngig:  */
+    Text = "Rückgängig: " ;
+    Text [ English ] = "Undo " ;
+    Text [ norwegian ] = "Angre " ;
+    Text [ italian ] = "Annulla " ;
+    Text [ portuguese_brazilian ] = "Desfazer " ;
+    Text [ portuguese ] = "Desfazer: " ;
+    Text [ finnish ] = "Kumoa " ;
+    Text [ danish ] = "Fortryd: " ;
+    Text [ french ] = "Annuler : " ;
+    Text [ swedish ] = "Ångra:  " ;
+    Text [ dutch ] = "Ongedaan:  " ;
+    Text [ spanish ] = "Deshacer: " ;
+    Text [ english_us ] = "Undo: " ;
+    Text[ chinese_simplified ] = "³·ÏûÃüÁî£º ";
+    Text[ russian ] = "Îòìåíèòü:  ";
+    Text[ polish ] = "Cofnij:  ";
+    Text[ japanese ] = "Œ³‚É–ß‚·: ";
+    Text[ chinese_traditional ] = "ºM®ø©R¥O¡G ";
+    Text[ arabic ] = "ÊÑÇÌÚ: ";
+    Text[ greek ] = "Áíáßñåóç: ";
+    Text[ korean ] = "½ÇÇàÃë¼Ò: ";
+    Text[ turkish ] = "Geri al: ";
+};
+
+String STR_REDO
+{
+    Text = "Wiederherstellen: " ;
+    Text [ English ] = "Redo: " ;
+    Text [ english_us ] = "Re~do: " ;
+    Text [ portuguese ] = "Refazer: " ;
+    Text [ portuguese_brazilian ] = "Refazer " ;
+    Text [ swedish ] = "Återställ:  " ;
+    Text [ danish ] = "Gendan: " ;
+    Text [ italian ] = "Ripristina: " ;
+    Text [ spanish ] = "Restaurar: " ;
+    Text [ french ] = "Restaurer : " ;
+    Text [ dutch ] = "Herstellen:  " ;
+    Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî (~D)";
+    Text[ russian ] = "Âîññòàíîâèòü: ";
+    Text[ polish ] = "Ponów:  ";
+    Text[ japanese ] = "‚â‚è’¼‚µ: (~D)";
+    Text[ chinese_traditional ] = "«ì´_ºM®ø©R¥O (~D)";
+    Text[ arabic ] = "ÅÚÇÏÉ: ";
+    Text[ greek ] = "ÅğáíáöïñÜ: ";
+    Text[ korean ] = "´Ù½Ã ½ÇÇà: (~D)";
+    Text[ turkish ] = "~Yinele: ";
+};
+
+String STR_REPEAT
+{
+    Text = "Letzter ~Befehl: " ;
+    Text [ English ] = "~Repeat: " ;
+    Text [ english_us ] = "~Repeat: " ;
+    Text [ portuguese ] = "~Repetir: " ;
+    Text [ portuguese_brazilian ] = "Repetir " ;
+    Text [ swedish ] = "Senaste ~kommando:  " ;
+    Text [ danish ] = "Sidste ~kommado: " ;
+    Text [ italian ] = "Ultimo ~comando: " ;
+    Text [ spanish ] = "~Último comando: " ;
+    Text [ french ] = "~Répéter : " ;
+    Text [ dutch ] = "~Herhalen:  " ;
+    Text[ chinese_simplified ] = "ÉÏÒ»¸öÃüÁî(~R)";
+    Text[ russian ] = "Ïîâòîğèòü:  ";
+    Text[ polish ] = "Ostatnie polecenie:  ";
+    Text[ japanese ] = "ŒJ‚è•Ô‚µ:(~R) ";
+    Text[ chinese_traditional ] = "¤W¤@­Ó©R¥O(~R)";
+    Text[ arabic ] = "ÇáÃãÑ ÇáÃÎíÑ: ";
+    Text[ greek ] = "ÅğáíÜëçøç: ";
+    Text[ korean ] = "¹İº¹: (~R)";
+    Text[ turkish ] = "Son ~komutu yinele: ";
+};
+
+String RID_STR_NEW_TASK
+{
+    Text = "Neue Task";
+    Text [ english ] = "New task";
+    Text[ english_us ] = "New task";
+    Text[ portuguese ] = "Nova tarefa";
+    Text[ russian ] = "Íîâàÿ çàäà÷à";
+    Text[ dutch ] = "Nieuwe taak";
+    Text[ french ] = "Nouvelle tâche";
+    Text[ spanish ] = "Nueva tarea";
+    Text[ italian ] = "Nuovo compito";
+    Text[ danish ] = "Ny opgave";
+    Text[ swedish ] = "Ny aktivitet";
+    Text[ polish ] = "Nowe zadanie";
+    Text[ portuguese_brazilian ] = "New task";
+    Text[ japanese ] = "V‚µ‚¢³¨İÄŞ³";
+    Text[ chinese_simplified ] = "ĞÂÔöÊÓ´°";
+    Text[ chinese_traditional ] = "·s¼Wµ¡¤f";
+    Text[ arabic ] = "ãåãÉ ÌÏíÏÉ";
+    Text[ greek ] = "Íİá åñãáóßá";
+    Text[ korean ] = "»õ·Î¿î ÀÛ¾÷";
+    Text[ turkish ] = "Yeni görev";
+};
+QueryBox MSG_QUERY_LASTVERSION
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Alle Änderungen aufheben? : Alle nderungen aufheben? */
+    Message = "Alle Änderungen aufheben?" ;
+    Message [ English ] = "Cancel all changes?" ;
+    Message [ norwegian ] = "Slett alle endringer?" ;
+    Message [ italian ] = "Volete annullare tutte le modifiche?" ;
+    Message [ portuguese_brazilian ] = "Cancelar todas as modificações?" ;
+    Message [ portuguese ] = "Cancelar todas as modificações?" ;
+    Message [ finnish ] = "Kumotaanko kaikki muutokset?" ;
+    Message [ danish ] = "Vil du annullere alle ændringer?" ;
+    Message [ french ] = "Annuler toutes les modifications ?" ;
+    Message [ swedish ] = "Ångra alla ändringar?" ;
+    Message [ dutch ] = "Alle wijzigingen ongedaan maken?" ;
+    Message [ spanish ] = "¿Cancelar todos los cambios?" ;
+    Message [ english_us ] = "Cancel all changes?" ;
+    Message[ chinese_simplified ] = "ÒªÈ¡Ïû¸ü¸Ä?";
+    Message[ russian ] = "Îòìåíèòü âñå èçìåíåíèÿ?";
+    Message[ polish ] = "Usun¹æ wszystkie zmiany?";
+    Message[ japanese ] = "‚·‚×‚Ä‚Ì•ÏX‚ğ‰ğœ‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "¨ú®ø©Ò¦³ªºÅÜ§ó¡H";
+    Message[ greek ] = "Áêıñùóç üëùí ôùí áëëáãşí;";
+    Message[ korean ] = "¸ğµç º¯°æÀ» Ãë¼Ò ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ arabic ] = "åá ÊÑíÏ ÑİÖ ßá ÇáÊÛííÑÇÊ¿";
+    Message[ turkish ] = "Tüm değişiklikleri iptal et?";
+};
+

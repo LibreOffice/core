@@ -1,0 +1,844 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="StarOffice/4.0 (WinNT/Win95)">
+	<META NAME="AUTHOR" CONTENT=" ">
+	<META NAME="CREATED" CONTENT="19970401;13233926">
+	<META NAME="CHANGEDBY" CONTENT=" ">
+	<META NAME="CHANGED" CONTENT="19970529;8045806">
+</HEAD>
+<BODY>
+<H1>Stardivision erweiterte Java Grundkonzepte</H1>
+<H2><A NAME="Exceptions"></A>Exceptions:</H2>
+<P>Die Grundidee von Exceptions ist es einen Fehlerkontext
+aufzuspannen, der erst n&auml;her betrachtet werden mu&szlig;, wenn
+man Fehler korrigieren will. Der Programmcode sollte durch die
+Behandlung von Fehlern nicht undurchsichtig und unleserlich werden.
+Meiner Meinung nach sollten Exceptions deswegen auch nicht als
+zweiter Returnwert vergewaltigt werden.<BR><B>Ziel:</B> Nach dem
+Auftreten einer Exception sollte es m&ouml;glichst einfach sein das
+System in einen definierten arbeitsf&auml;higen Zustand zu
+versetzen.<BR>Es gibt grunds&auml;tzlich drei verschiedenen Arten von
+Exceptions. Diese unterscheiden sich durch den Zustand in dem sie das
+Objekt hinterlassen.</P>
+<OL>
+	<LI><P><A NAME="Undefined Exception"></A>Die von der Methode
+	benutzten Objekte sind in einem undefinierten Zustand. Jede auf dem
+	Objekt aufgerufene Methode mu&szlig; nach einer solchen Exception
+	nicht mehr ihre Spezifikation einhalten. Diese Exception wird im
+	folgenden mit &#132;Undefined Exception&#147; benannt. Dabei ist zu
+	beachten, da&szlig; keine weiteren <A HREF="#Resourcen">Resourcen</A>,
+	au&szlig;er die angegebenen, benutzt werden. Au&szlig;erdem werden
+	&#132;ReadOnly&#147; Resourcen nicht modifiziert.</P>
+	<LI><P><A NAME="Defined Exception"></A>Die von der Methode benutzten
+	Objekte sind in einem genau definierten Zustand, der aber von der
+	Zusicherung der Methode abweicht. Diese Exception wird im folgenden
+	mit &#132;Defined Exception&#147; benannt. Dabei ist zu beachten,
+	da&szlig; keine weiteren <A HREF="#Resourcen">Resourcen</A>, au&szlig;er
+	die angegebenen, benutzt werden. Au&szlig;erdem werden &#132;ReadOnly&#147;
+	Resourcen nicht modifiziert.</P>
+	<LI><P><A NAME="Transacted Exception"></A>Die von der Methode
+	benutzten Objekte sind in ihrem vorherigen Zustand, der aber von der
+	Zusicherung der Methode abweicht. Diese Exception wird im folgenden
+	mit &#132;Transacted Exception&#147; benannt. Dabei ist zu beachten,
+	da&szlig; keine weiteren <A HREF="#Resourcen">Resourcen</A>, au&szlig;er
+	die angegebenen, benutzt werden. Au&szlig;erdem werden &#132;ReadOnly&#147;
+	Resourcen nicht modifiziert. Diese Spezifikation trifft auch auf
+	&#132;Defined Exception&#147; zu, wegen ihrer Bedeutung f&uuml;hre
+	ich sie extra auf.</P>
+</OL>
+<P>Die Benutzbarkeit eines Objektes, nachdem eine Exception
+aufgetreten ist, ist vom obigen Typ der Exception abh&auml;ngig.</P>
+<P><FONT COLOR="#ff0000">Satz 1.1: Nachdem eine &#132;Undefined
+Exception&#147; aufgetreten ist, kann mit dem Objekt sowie allen
+&#132;ReadWrite&#147; Resourcen nicht mehr weiter gearbeitet werden.</FONT></P>
+<P><FONT COLOR="#ff0000">Satz 1.2: Nachdem eine &#132;Defined
+Exception&#147; aufgetreten ist, kann aufgrund des genau definierten
+Zustandes weiter gearbeitet werden.</FONT></P>
+<P><FONT COLOR="#ff0000">Satz 1.3: Nach einer &#132;Transacted
+Exception&#147; ist der gleiche Zustand wie vor dem Aufruf
+wiederhergestellt.</FONT></P>
+<P>Es sollten m&ouml;glichst nur &#132;Transacted Exception&#147;
+ausgel&ouml;st werden. Bei komplizierten Methoden l&auml;&szlig;t
+sich aber eine &#132;Defined Exception&#147; nicht immer vermeiden.
+Eine &#132;Undefined Exception&#147; deutet immer auf eine
+Programmierfehler hin. Der Typ der Exeption kann nur in Zusammenhang
+mit der Methode in der sie Auftritt ermittelt werden.</P>
+<P><FONT COLOR="#ff0000">Satz 1.4: Durch die Klasse der Exception
+kann niemals alleine der Typ (undefined, defined oder transacted)
+entschieden werden.</FONT></P>
+<H2><A NAME="Resourcen"></A>Resourcen (under construction)</H2>
+<P>Die Grundidee von Resourcen ist die Aufteilung eines Gebildes in
+weitere Einheiten. Auf diesen k&ouml;nnen dann verschiedene Auftr&auml;ge
+gleichzeitig arbeiten, wenn sie nicht dieselben Resourcen benutzen.
+Z.B. kann man in einer Textverarbeitung die einzelnen Dokumente als
+Einheiten betrachten. Auftr&auml;ge, die sich nur auf ein Dokument
+beziehen, k&ouml;nnen parallel zu anderen Dokumenten bearbeitet
+werden.<BR>Mit Resourcen sind im System bzw. der Applikation
+vorhandene Objekte, Services, Kan&auml;le ... gemeint, die zur Zeit
+nur von einem Thread benutzt werden k&ouml;nnen. Als Konsequenz
+m&uuml;ssen Resourcen einem Thread zugeordnet werden, bevor dieser
+sie benutzt.<BR><B>Ziel:</B> Es mu&szlig; m&ouml;glich sein, 1.
+Auftr&auml;ge parallel abzuarbeiten, 2. die Frage &#132;Warum k&ouml;nnen
+zwei Auftr&auml;ge nicht parallel arbeiten?&#147; beantwortet zu
+k&ouml;nnen.<BR>Es gibt verschiedene M&ouml;glichkeiten diese
+Zuordnung vorzunehmen. Zwei stelle ich kurz vor.</P>
+<OL>
+	<LI><P><A NAME="Prealloc Resource Konzept"></A>Eine Art der
+	Zuordnung ist das vorherige Anfordern aller f&uuml;r den Auftrag
+	ben&ouml;tigten Resourcen. Ist dies m&ouml;glich, kann der Auftrag
+	ohne weitere St&ouml;rungen ablaufen. Die Resourcen d&uuml;rfen
+	freigegeben werden, bevor der Auftrag beendet ist. Dies gilt
+	nat&uuml;rlich nur f&uuml;r nicht mehr verwendete Resourcen. Es darf
+	ebenfalls das Zuordnungsrecht von lesend und schreibend auf lesend
+	zur&uuml;ckgenommen werden. Diese Zuornungsart wird im weiteren mit
+	&#132;Prealloc Resource Konzept&#147; bezeichnet.</P>
+	<LI><P><A NAME="Ondemand Resource Konzept"></A>Eine andere Art der
+	Zuordnung ist das Anfordern der Resourcen, wenn sie ben&ouml;tigt
+	werden. Dabei kann es zu St&ouml;rungen kommen, wenn sich
+	verschiedene Auftr&auml;ge um die gleiche Resource bewerben. Die
+	Resourcen d&uuml;rfen freigegeben werden, bevor der Auftrag beendet
+	ist. Dies gilt nat&uuml;rlich nur f&uuml;r nicht mehr verwendete
+	Resourcen. Es darf ebenfalls das Zuordnungsrecht von lesend und
+	schreibend auf lesend zur&uuml;ckgenommen werden. Diese Zuornungsart
+	wird im weiteren mit &#132;Ondemand Resource Konzept&#147;
+	bezeichnet.</P>
+</OL>
+<P>Es gibt noch weitere M&ouml;glichkeiten Auftr&auml;ge zu
+bearbeiten, die die gleichen Resourcen benutzen. H&auml;ufig findet
+man solche L&ouml;sungen bei Datenbankanwendungen.<BR>In der
+folgenden Tabelle stehen sich die beiden Konzepte mit ihren Vor- und
+Nachteilen und ihren Anforderungen gegen&uuml;ber.</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=5 FRAME=BOX RULES=ALL>
+	<COLGROUP>
+		<COL WIDTH=85*>
+		<COL WIDTH=85*>
+		<COL WIDTH=85*>
+	</COLGROUP>
+	<THEAD>
+		<TR>
+			<TH WIDTH=33% VALIGN=TOP>
+				<P><BR></TH>
+			<TD WIDTH=33% VALIGN=TOP><DL>
+					<DD>Prealloc Resource Konzept </DD>
+				</DL>
+			</TD>
+			<TD WIDTH=33% VALIGN=TOP>
+				<DL>
+					<DD>Ondemand Resource Konzept </DD>
+				</DL>
+			</TD>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Alle Resourcen m&uuml;ssen vor der Auftragsausf&uuml;hrung
+				bekannt sein.</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+			<TD VALIGN=TOP>
+				<P>Nein</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Nicht mehr ben&ouml;tigte Resourcen d&uuml;rfen freigegeben
+				werden.</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Es kann zu Verklemmungen oder &#132;Races&#147; kommen.</TD>
+			<TD VALIGN=TOP>
+				<P>Nein</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>In Bearbeitung befindliche Auftr&auml;ge m&uuml;ssen, aufgrund
+				fehlender Resourcen, abgebrochen werden.</TD>
+			<TD VALIGN=TOP>
+				<P>Nein</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Der Zustand der Resourcen ist zu jedem Zeitpunkt der
+				Auftragsabarbeitung bekannt.</TD>
+			<TD VALIGN=TOP>
+				<P>Ja</TD>
+			<TD VALIGN=TOP>
+				<P>Nein</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Algorithmus zur Resourcevergabe.</TD>
+			<TD VALIGN=TOP>
+				<P>Einfach, da nur &uuml;berpr&uuml;ft werden mu&szlig;, ob alle
+				ben&ouml;tigten Resourcen verf&uuml;gbar sind.</TD>
+			<TD VALIGN=TOP>
+				<P>Komplex, da neben dem Anfordern von Resourcen auch noch
+				&uuml;berpr&uuml;ft werden mu&szlig;, ob das System <A HREF="#lebendig">lebendig</A>
+				ist.</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P>Parallelit&auml;t</TD>
+			<TD VALIGN=TOP>
+				<P>Hoch, da unabh&auml;ngige Auftr&auml;ge meistens nur lesend
+				auf gemeinsame Resourcen zugreifen.</TD>
+			<TD VALIGN=TOP>
+				<P>Sehr hoch, da die ben&ouml;tigten Resourcen erst angefordert
+				werden, wenn man sie braucht.</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P ALIGN=LEFT>Meiner Meinung nach ist nur das &#132;Prealloc Resource
+Konzept&#147; ohne richtige Programmierwerkzeuge zur Entwicklung
+paralleler Algorithmen (z.B. Netzprogrammierung) wenigstens ein
+bi&szlig;chen beherschbar.</P>
+<P ALIGN=LEFT>Es stellt sich die Frage wie das &#132;Prealloc
+Resource Konzept&#147; in einem Komponenten-Modell und in einem
+Objekt-Environment integriert werden kann. Ein Objekt-Environment ist
+ein mehr oder weniger dynamische Menge von Objekten die miteinander
+in Verbindung stehen. Aus dem obigen Beispiel k&ouml;nnte man die
+Verbindung der Textverarbeitung zu ihren Dokumenten als
+Objekt-Environment bezeichnen. Ein Objekt in diesem Environment kann
+nun &uuml;ber seine Verbindungen mit anderen Objekten kommunizieren.
+Die Schnittstellen mit denen &uuml;ber die Verbindung kommuniziert
+wird nennt man Komponenten-Modell. Die Idee des Objekt-Environments
+ist es weitere Objekte m&ouml;glichst einfach zu integrieren. So
+k&ouml;nnten in unserem Beispiel weitere Dokumenttypen wie ein
+HTML-Dokument eingebunden werden. Die Schittstellen m&uuml;&szlig;ten
+nur dem, von der Textverarbeitung geforderten, Komponenten-Modell
+gen&uuml;gen. Liefert aber das Modell, wie heute &uuml;blich, keine
+Information &uuml;ber die ben&ouml;tigten Resourcen bei Benutzung der
+Schnittstellen, dann k&ouml;nnen Verklemmungen bzw. Inkonsistenzen
+nicht vermieden werden. Aus diesem Grunde ist es notwendig, das
+Resource-Konzept in das Komponenten-Modell zu integrieren.<BR><B>Ziel:</B>
+Es mu&szlig; ein Kompromi&szlig; zwischen hoher Nebenl&auml;ufigkeit
+und der damit verbundenen Komplexit&auml;t, sowie einfacher
+Programmierung und geringer Nebenl&auml;ufigkeit gefunden
+werden.<BR><B>Folgen:</B> In einem Objekt-Environment m&uuml;ssen die
+einzelnen Objekte also dynamisch auf Verbindungen zu Objekten mit
+hoher oder geringer Nebenl&auml;ufigkeit reagieren. Die Komplexit&auml;t
+dieser Aufgabe darf aber nicht in die Objekte verlagert werden, da
+von einem seriellen Objekt (bzw. dessen Programmierer) nicht die
+Steuerung nebenl&auml;ufiger Auftr&auml;ge verlangt werden
+kann.<BR><B>L&ouml;sungsansatz:</B> Die Behandlung der
+Nebenl&auml;ufigkeit wird nicht in einer einfachen Komponente
+implementiert. Das bedeutet sie mu&szlig; mit einer
+Default-Behandlung zufrieden sein, die minimale Nebel&auml;ufigkeit
+nach sich zieht. Eine Komponente kann sich aber in die Vergabe der
+Resourcen einmischen. So kann sie ihren Grad der Nebenl&auml;ufigkeit
+erh&ouml;hen. Dies ist dann aber auch mit erh&ouml;htem
+Implementationsaufwand zu bezahlen. Auf der anderen Seite macht es
+aber keinen Sinn serielle oder Komponenten mit zu gro&szlig;em
+Resourcebedarf einzubinden, wenn das Objekt-Environment danach
+praktisch nicht mehr lauff&auml;hig ist. Das bedeutet, da&szlig; das
+Objekt-Environment auch Forderungen bez&uuml;glich des Resourcebedarf
+an die Komponenten stellen darf.</P>
+<H3>Anforderungen</H3>
+<OL>
+	<LI><P ALIGN=LEFT>Es mu&szlig; ein Modell geben, in dem alle
+	vorhandenen Resourcen und deren Beziehung zueinander eingetragen
+	werden. Dadurch kann abgesch&auml;tzt werden, welchen Resourcebedarf
+	eine Komponente hat. Das &#132;Sch&auml;tzen&#147; ist w&ouml;rtlich
+	zu nehmen. (Im Zusammenhang mit <A HREF="#Security">Security</A>
+	wird man aber auch noch sehen, da&szlig; der Zugriff auf bestimmte
+	Resourcen nicht m&ouml;glich ist.) F&uuml;r das &#132;Prealloc
+	Resource Konzept&#147; gilt, es m&uuml;ssen mindestens die
+	ben&ouml;tigten Resourcen verf&uuml;gbar sein. Zur Not sind diese
+	alle.</P>
+	<LI><P ALIGN=LEFT>Eine nebenl&auml;ufige Komponente mu&szlig; in
+	jeder ihrer von au&szlig;en erreichbaren Methoden kontrollieren, ob
+	die entsprechenden Resourcen f&uuml;r sie angefordert wurden. Damit
+	serielle Komponenten diese Methoden nutzen k&ouml;nnen, k&ouml;nnen
+	die ben&ouml;tigten Resourcen angefordert werden, wenn vorher noch
+	<B>keine einzige</B> durch den ausf&uuml;hrenden Auftrag belegt war.
+	Zur Erl&auml;uterung: Serielle Komponenten belegen keine Resourcen.
+	Damit w&uuml;rde jeder Aufruf einer nebenl&auml;ufigen Komponente
+	scheitern. Um dies zu vermeiden, werden die Resourcen in der
+	nebenl&auml;ufigen Komponente angefordert.</P>
+	<LI><P ALIGN=LEFT>Serielle Komponenten m&uuml;ssen also damit
+	rechnen eine Fehlermeldung &uuml;ber nicht verf&uuml;gbare Resourcen
+	zu bekommen.</P>
+</OL>
+<H3>Szenarien</H3>
+<P>Von unserem bisherigen Beispiel ausgehend, gibt es eine
+Applikation in der sich drei Dokumente befinden. Ein serielles
+Textdokument, ein nebenl&auml;ufiges Tabellendokument und ein
+nebenl&auml;ufiges Pr&auml;sentationsdokument. Die Applikation selbst
+ist nebenl&auml;ufig. Die Relationen gehen von der Applikation zu den
+Dokumenten und umgekehrt. Die Dokumente kennen sich nicht.</P>
+<P>Fall 1:<BR>In das serielle Textdokument soll eine Zeichenfolge
+eingef&uuml;gt werden. Da es sich um eine serielle Komponente
+handelt, kann dieses Einf&uuml;gen nicht von selbst ausgel&ouml;st
+werden, es mu&szlig; von einer nebenl&auml;ufigen Komponente, hier
+die Applikation, angesto&szlig;en werden. Die Applikation ist aber
+verpflichtet die Resourcen vorher zu reservieren. F&uuml;r diese
+Absch&auml;tzung gibt es drei realistische M&ouml;glichkeiten. 1. Sie
+reserviert nur das Textdokument selbst. Das bedeutet, das
+Textdokument kann mit keinem anderen Objekt, auch nicht mit der
+Applikation, kommunizieren. 2. Die Applikation und das Textdokument
+wird reserviert. Es ist also nur der Zugriff auf die anderen
+Dokumente verwehrt. 3. Alle Objekte werden reserviert. Geht es nach
+dem &#132;Prealloc Resource Konzept&#147; mu&szlig; 3. gew&auml;hlt
+werden. Aufgrund von Sicherheitsbeschr&auml;nkungen werden wir aber
+noch sehen, das serielle Komponenten in ihrer Auftragsbearbeitung
+gestoppt werden k&ouml;nnen. Wenn der Abbruch eines Auftrags m&ouml;glich
+ist, spielt es aber keine Rolle durch wen (Resourcen oder <A HREF="#Security">Security</A>)
+dies geschehen ist.</P>
+<P>Fall 2:<BR>In das nebenl&auml;ufige Tabellendokument soll eine
+Zeichenfolge eingef&uuml;gt werden. Dieser Auftrag kann von der
+Applikation oder der Komponente selbst ausgel&ouml;st werden. In
+jedem Fall m&uuml;ssen die Resourcen vor der Auftragsbearbeitung
+reserviert werden. Man kann dies auch der Komponente &uuml;berlassen
+(siehe Anforderung 2.), aber man scheitert, wenn zwei Auftr&auml;ge
+zu einem Auftrag zusammengefa&szlig;t werden sollen. Dies passiert
+z.B., wenn der Auftrag &#132;Text ersetzen&#147; aus den Auftr&auml;gen
+&#132;L&ouml;schen&#147; und &#132;Einf&uuml;gen&#147; besteht. Auf
+jeden Fall wird nur das Tabellendokument selbst reserviert, da das
+Einf&uuml;gen keine Auswirkung auf andere Komponenten hat.</P>
+<P>Fall 3:<BR>In das nebenl&auml;ufige Tabellendokument wird der
+Applikationsname aus der Applikation eingef&uuml;gt. Dazu fragt das
+Tabellendokument nach den ben&ouml;tigten Resourcen, um den Namen zu
+holen und ihn einzuf&uuml;gen. Zum Holen wird die Applikation
+ben&ouml;tigt und zum Einf&uuml;gen das Tabellendokument. Beide
+m&uuml;ssen vor der Auftragsausf&uuml;hrung reserviert werden.</P>
+<P>Fall 4:<BR>Das nebenl&auml;ufige Tabellendokument f&uuml;gt
+selektierten Text aus dem seriellen Textdokument ein. Da das
+Textdokument seinen Resourcebedarf nicht mitteilt, wird einer aus
+Fall eins abgesch&auml;tzte Bedarf genommen. Man kann sehen, da&szlig;
+der Auftrag f&uuml;r alle drei M&ouml;glichkeiten erteilt werden
+kann. Seine Nebenl&auml;ufigkeit wird dann durch die Absch&auml;tzung
+eingeschr&auml;nkt. Zus&auml;tzlich m&uuml;ssen nat&uuml;rlich die
+ben&ouml;tigten Resourcen f&uuml;r das Einf&uuml;gen geholt werden.
+Alle m&uuml;ssen vor der Auftragsausf&uuml;hrung reserviert werden.</P>
+<H3>Programmierkonzepte</H3>
+<P>Welche Konzepte k&ouml;nnen in einer objektorientierten Sprache
+wie c++ oder Java oder einer prozeduralen Sprache wie Fortran oder
+&#132;c&#147; eingesetzt werden, um Nebenl&auml;ufigkeit zu
+erreichen. </P>
+<OL>
+	<LI><P>Es gibt zwei M&ouml;glichkeiten eine Resource zu belegen. Das
+	ist Exclusive (lesen, schreiben) und &#132;ReadOnly&#147;. Eine
+	Resource kann von mehreren Auftr&auml;gen benutzt werden, wenn diese
+	nur &#132;ReadOnly&#147; ben&ouml;tigen.</P>
+	<LI><P>Es gibt Resourcen f&uuml;r die man die Resourceverteilung
+	optimieren kann. Ein Objekt welches nicht ge&auml;ndert werden kann
+	und das w&auml;hrend der Auftragsausf&uuml;hrung immer konsistent
+	ist kann die Anforderung &#132;Exclusiv&#147; automatisch auf
+	&#132;ReadOnly&#147; abschw&auml;chen. Dies lohnt sich, wenn man
+	serielle Komponenten hat, die nichts &uuml;ber die
+	Resourceanforderungen mitteilen. Als Beispiel m&ouml;chte ich eine
+	Instanz der Klasse String in Java nennen. Ein weitere Art von
+	Resourcen fordern bei Auftr&auml;gen an sie 1. keine weiteren
+	Auftr&auml;ge an, 2. beenden sie die Auftr&auml;ge schnell und 3.
+	die Reihenfolge der &Auml;nderung an ihnen ist f&uuml;r andere nicht
+	wichtig. Dies ist zum Beispiel bei der Speicherverwaltung in c der
+	Fall. Diese Art der Resource darf zu einem sp&auml;teren Zeitpunkt
+	angefordert werden. Sie mu&szlig; sofort benutzt und wieder
+	freigegeben werden. Aus diesem Grund erledigen solche Resourcen das
+	Anfordern und Freigeben selbst.</P>
+	<LI><P>Bevor ein Auftrag ausgef&uuml;hrt werden kann, m&uuml;ssen
+	alle von ihm ben&ouml;tigten Resourcen reserviert werden. Dies ist
+	f&uuml;r einen Auftrag, der aus mehreren Teilauftr&auml;gen besteht,
+	aufwendig. Eine Optimierung kann darin bestehen die Teilauftr&auml;ge
+	asynchron auszuf&uuml;hren. Allerdings dringt diese Verhaltensweise
+	nach au&szlig;en. Z.B. m&uuml;ssen Auftr&auml;ge, die diesen dann
+	asynchronen Auftrag nutzen, dann auch asynchron sein. Eine weitere
+	Optimierung in der Autragsvergabe gibt es, wenn ein Autrag die
+	Resourcervergabe nicht &auml;ndert. Es ist dann m&ouml;glich mehr
+	Auftr&auml;ge vorzuziehen.</P>
+	<LI><P>Es mu&szlig; eine Queue geben, in die Auftr&auml;ge eingef&uuml;gt
+	werden k&ouml;nnen. Konfliktfreie Auftr&auml;ge k&ouml;nnen parallel
+	ausgef&uuml;hrt werden. <B>Achtung:</B> Der Resourcebedarf eines
+	Auftrages kann nur bestimmt werden, wenn alle ben&ouml;tigten
+	Resourcen &#132;ReadOnly&#147; reserviert werden k&ouml;nnen, es sei
+	denn kein vor ihm laufender Auftrag &auml;ndert die Resourcevergabe.
+	Warum ist das so? Ein Auftrag kann eine Resource dahingehend &auml;ndern,
+	da&szlig; danach andere Resourcen ben&ouml;tigt werden als vorher.
+	Der vorher bestimmte Bedarf ist dann falsch.</P>
+	<LI><P>Das Modell der Resourcen kann vergr&ouml;bert oder verfeinert
+	werden. In einem Tabellendokument k&ouml;nnte man jede einzelne
+	Zelle zu einer Resource machen. Um die Komplexit&auml;t der
+	Resourcemodells zu vereinfachen kann man aber weiter alle Zellen der
+	Dokument-Resource zuordnen. Wird also aus einer anderen Komponente
+	die Zelle angefordert, wird automatisch das ganze Dokument
+	reserviert. Daraus ergeben sich zwei Vorteile: 1. F&uuml;r den
+	Auftraggeber ist die Vergr&ouml;berung transparent und 2. Kann die
+	Resource an dem Objekt reserviert werden, das man ohnehin kennt.</P>
+	<LI><P>Das Resource-Modell ist hierarchisch. Eine Resource kann nur
+	einer Vergr&ouml;berung zugeordnet werden. Die Tabellenzellen d&uuml;rfen
+	also nur dem Tabellendokument zugeordnet werden. Daraus ergibt sich,
+	da&szlig; innerhalb einer solchen Hierarchie nebenl&auml;ufig
+	gearbeitet werden kann. Es d&uuml;rfen dann aber keine Resourcen
+	au&szlig;erhalb der Hierarchie benutzt werden, selbst wenn diese
+	reserviert sind.</P>
+</OL>
+<H3>Probleme und L&ouml;sungen</H3>
+<P>&Uuml;ber den Benutzer m&uuml;ssen Daten abgefragt werden, die
+&uuml;ber die Benutzung von Resourcen entscheidet (z.B.
+Dateiname):<BR>Ein solcher Auftrag mu&szlig; in zwei Teilauftr&auml;ge
+unterteilt werden. Der erste erledigt die Abfrage. Danach werden alle
+Resourcen freigegeben und dann fordert der zweite seine Resourcen und
+wird bearbeitet. Eventuell kann ein solcher Auftrag den vorherigen
+ersetzten, um zu verhindern das andere abh&auml;ngige Auftr&auml;ge
+vor dem Aufgeteilten bearbeitet werden.</P>
+<P>Ich habe mich bei einem Objekt als Listener angemeldet:<BR>Es gibt
+zwei Arten von Benachrichtigungen die ich erhalte. 1. Aufgrund der
+Ausf&uuml;hrung eines Auftrages und 2. einen Event von einer
+nebenl&auml;ufigen Komponente. Im ersten Fall &uuml;berpr&uuml;fe ich
+den Resourcebedarf und f&uuml;hre dann den Auftrag aus. Im zweiten
+Fall reserviere ich die ben&ouml;tigten Resourcen und f&uuml;hren den
+Auftrag aus. Sind Resourcen reserviert, ist dies Fall eins, sonst
+Fall zwei.</P>
+<P>Ich bin Broadcaster:<BR>Broadcaste ich aufgrund eines Auftrags tue
+ich nichts weiter. L&ouml;se ich den Broadcast ohne Auftrag aus, mu&szlig;
+ich die Resourcen f&uuml;r die Listener bestimmen und sie vor dem
+Aufruf reservieren. Die einzelnen Listener werden als unabh&auml;ngig
+betrachtet. Im Detail findet folgender Ablauf statt. 1. Die Liste der
+Listener wird kopiert. 2. F&uuml;r den ersten Listener wird der
+Resourcebedarf ermittelt.</P>
+<H3>Implementation</H3>
+<P>Die Basis f&uuml;r die Implementation des Resourcekonzeptes legen
+die Klassen <A HREF="stardiv.resource.Resource.html#Resource">Resource</A>,
+<A HREF="stardiv.resource.ResourceList.html#ResourceList">ResourceList</A>,
+<A HREF="stardiv.resource.ResourceLockException.html#ResourceLockException">ResourceLockException</A>,
+<A HREF="stardiv.resource.Task.html#Task">Task</A>, <A HREF="stardiv.resource.TaskManager.html#TaskManager">TaskManager</A>,
+<A HREF="stardiv.resource.TaskThread.html#Task">TaskThread</A>,
+<A HREF="stardiv.resource.ThreadData.html#ThreadData">ThreadData</A>
+und das Interface <A HREF="stardiv.resource.Resourceable.html#Resourceable">Resourceable</A>
+fest. Um ein Objekt in das Resourcekonzept einbinden zu k&ouml;nnen
+sind folgende Schritte notwendig:<BR>1. Das Resourceable Interface
+mu&szlig; implementiert werden. 2. Ein Konstruktor mit der dem
+Objekte zugewiesenen Resource. 3. Jede public Methode bekommt eine
+*_Resource(...) Methode zur Seite, mit der der Resourcebedarf
+ermittelt werden kann. 4. Innerhalb der public Methode wird der
+Resourcebedarf ermittelt. 5. Mit dieser Information die als
+ResourceListe vorliegt, wird eine Auftrag (Task) erzeugt. 6. Dieser
+Auftrag wird beim TaskManager angemeldet. 7. Nach der Zuteilung durch
+den TaskManager wird der Auftrag ausgef&uuml;hrt. 8. Alle Resourcen
+und der Auftrag werden wieder freigegeben.<BR>Diese Liste ist
+detailliert aber nicht <B>vollst&auml;ndig</B>. In der Klasse
+Resource steht imm eine Beispiel, welches aktuell sein sollte.</P>
+<P>Folgende Programmierrichtlinien gibt es, um das &#132;Prealloc
+Resource Konzept&#147; in Java zu integrieren:</P>
+<OL>
+	<LI><P ALIGN=LEFT>Es mu&szlig; das Interface <A HREF="stardiv.resource.Resourceable.html#Resourceable">Resourceable</A>
+	implementiert werden. Mit Hilfe dieses Interfaces kann der
+	Resourcebedarf eines Objektes erfragt werden. Diese Richtlinien
+	gelten dann auch f&uuml;r die Superklasse.</P>
+	<LI><P ALIGN=LEFT>???Es mu&szlig; das Interface <A HREF="stardiv.concepts.ModifyTestable.html#ModifyTestable">ModifyTestable</A>
+	implementiert werden. Damit kann &uuml;berpr&uuml;ft werden, ob an
+	den Resourcen Ver&auml;nderungen vorgenommen wurden.</P>
+	<LI><P ALIGN=LEFT>Nur Methoden die &uuml;ber die Lebensdauer des
+	Objektes keine ver&auml;nderten Werte liefern d&uuml;rfen immer
+	gerufen werden. Das sind zum Beispiel alle Methoden der Klasse
+	java.lang.Object.</P>
+	<LI><P ALIGN=LEFT>Um den Resourcebedarf einzelner Methoden genauer
+	zu ermitteln kann eine Methode mit dem, um _Resource( ResourceList
+	aRL, boolean bCheck, ... ) erweiterten Namen, gerufen werden. Ein
+	Beispiel befindet sich in der Klasse <A HREF="stardiv.resource.Resource.html#Resource">Resource</A>.</P>
+</OL>
+<H2><A NAME="Security"></A>Security</H2>
+<H2><A NAME="Data Requests"></A>Data Requests</H2>
+<P>Diese Schnittstelle soll das Anfordern von Daten vereinheitlichen.
+Das Problem, welches zu diesem Ansatz f&uuml;hrte, ist das Lesen von
+Daten &uuml;ber einen &#132;langsamen&#147; Internet-Stream. Das
+bedeutet es werden Daten ben&ouml;tigt, die erst noch &uuml;bertragen
+werden m&uuml;ssen. Da das Pull-Modell immer einen eigenen Thread
+vorraussetzt, um die restliche Anwendung nicht zu blockieren, habe
+ich das Push-Modell gew&auml;hlt.<BR><B>Ziel:</B> F&uuml;r die
+Implementation sollte es m&ouml;glichst transparent sein, wie die
+Daten herangeschafft werden. Als zweites soll die Schnittstelle f&uuml;r
+denjenigen einfach sein, der alle Daten sofort bereith&auml;lt.<BR><B>L&ouml;sung:</B>
+Der Datenverarbeiter ist passiv. Das bedeutet, beim Entgegennehmen
+der Daten beginnt er nicht sie zu verarbeiten. Dies mu&szlig; extra
+angesto&szlig;en werden. Zweitens, der Datenverarbeiter h&auml;lt den
+Status des Datenlieferanten. Dies k&ouml;nnen EOF, f&uuml;r alle
+Daten gelesen, READY, f&uuml;r sind Daten da, PENDING, es kommen noch
+weitere Daten und NO_SOURCE, es wurden nicht alle Daten verarbeitet
+und es kommen keine weiteren Daten mehr. <B>Achtung</B> der Status
+ist nur zu bestimmten Zeitpunkten g&uuml;ltig. Der Datenverarbeiter
+darf nur im Zustand PENDING Daten bekommen. Diese Annahme sch&uuml;tzt
+ihn vor der Implementation eines Puffers. Das <A HREF="stardiv.concepts.QueryData.html#QueryData">QueryData</A>
+- Interface ist die Spezifikation f&uuml;r dieses Verhalten.</P>
+<H2><A NAME="Modify"></A>Modify</H2>
+<P>Das Ziel ist nur eine Schnittstelle zu erstellen, mit der ein
+Objekt auf &Auml;nderungen &uuml;berpr&uuml;ft werden kann. Da es f&uuml;r
+ein Objekt verschiedene M&ouml;glichkeiten gibt &Auml;nderungen an
+sich zu pr&uuml;fen (z.B. &Auml;nderungsz&auml;hler, Kopie), mu&szlig;
+die Schnittstelle m&ouml;glichst flexibel sein, um vielen
+Implementationen gerecht zu werden. Die L&ouml;sung sind zwei
+Methoden. Mit der einen (getModifyHandle()) kann der Zeitpunkt
+festgemacht werden, zu dem m&ouml;gliche &Auml;nderungen &uuml;berpr&uuml;ft
+werden sollen. Der R&uuml;ckgabewert ist eine beliebiges Objekt, so
+da&szlig; in ihm die ben&ouml;tigte &Uuml;berpr&uuml;fungsinformation
+(z.B. der &Auml;nderungsz&auml;hler) untergebracht werden kann.
+Danach kann mit der zweiten Methode (isModified(Object)) &uuml;berpr&uuml;ft
+werden, ob eine &Auml;nderung stattgefunden hat. Das Interface f&uuml;r
+dieses Konzept hei&szlig;t <A HREF="stardiv.concepts.ModifyTestable.html#ModifyTestable">ModifyTestable</A>
+.</P>
+<H2><A NAME="LifeConnect"></A>LifeConnect</H2>
+<P>LifeConnect ist die Kommunikation zwischen PlugIns, Applets und
+JavaScript. Die Kommunikation kann in beide Richtungen erfolgen.Unter
+JavaScript kann auf alle Systemklassen zugegriffen werden. Die
+Abbildung der JavaScript-Aufrufe nach Java ist die Aufgabe der Klasse
+<A HREF="stardiv.js.ip.CallJava.html#CallJava">CallJava</A>. Dazu
+wird das in Java 1.1 implementierte Package java.lang.reflect
+benutzt. Da JavaScript eine nicht typisierte Sprache ist, werden die
+Werte nach JavaScript-Regeln in die entsprechenden Javatypen
+umgesetzt. Bez&uuml;glich der Sicherheit wird ein JavaScript-Programm
+auf die gleiche Stufe wie ein Applet gestellt. Um den Zugriff der
+Applets auf JavaScript zu gestatten, mu&szlig; das HTML-Tag MYSCRIPT
+angegeben werden. Auf die Java-Klassen kann in JavaScript mit dem
+Prefix &#132;Package&#147; zugegriffen werden (sun, java und netscape
+ben&ouml;tigen keinen Prefix). Die Klassen netscape.plugin.Plugin,
+netscape.javascript.JSObject und netscape.javascript.JSException
+dienen zur Kommunikation von Java mit JavaScript.</P>
+<P>Konvertierungstabelle anhand der Spezifikation &#132;JavaScript
+Language Specifications&#147; 3.1.2 TypeConversion</P>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=5 CELLSPACING=0 FRAME=HSIDES RULES=ALL>
+	<COLGROUP>
+		<COL WIDTH=26*>
+		<COL WIDTH=40*>
+		<COL WIDTH=47*>
+		<COL WIDTH=47*>
+		<COL WIDTH=47*>
+		<COL WIDTH=47*>
+	</COLGROUP>
+	<THEAD>
+		<TR>
+			<TH WIDTH=10% VALIGN=TOP>
+				<P><BR></TH>
+			<TH WIDTH=16% VALIGN=TOP>
+				<P><I>byte</I></TH>
+			<TH WIDTH=19% VALIGN=TOP>
+				<P><I>short</I></TH>
+			<TH WIDTH=19% VALIGN=TOP>
+				<P><I>char</I></TH>
+			<TH WIDTH=19% VALIGN=TOP>
+				<P><I>int</I></TH>
+			<TH WIDTH=19% VALIGN=TOP>
+				<P><I>long</I></TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Undef.</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Function</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(10) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(12) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(13) valueOf/error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Object</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(10) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(12) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(13) valueOf/error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Object (null)</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(10) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(12) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(13) 0</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>double</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(10) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(12) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(13) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>boolean</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Leer String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(10) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(11) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(12) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(13) error/ Zahl</TD>
+		</TR>
+	</TBODY>
+</TABLE><DL>
+	<DT><BR></DT>
+</DL>
+<TABLE WIDTH=100% BORDER=1 CELLPADDING=5 CELLSPACING=0 FRAME=BOX RULES=ALL>
+	<COLGROUP>
+		<COL WIDTH=27*>
+		<COL WIDTH=59*>
+		<COL WIDTH=44*>
+		<COL WIDTH=35*>
+		<COL WIDTH=36*>
+		<COL WIDTH=55*>
+	</COLGROUP>
+	<THEAD>
+		<TR>
+			<TH WIDTH=10% VALIGN=TOP>
+				<P><BR></TH>
+			<TH WIDTH=23% VALIGN=TOP>
+				<P><I>float</I></TH>
+			<TH WIDTH=17% VALIGN=TOP>
+				<P><I>double</I></TH>
+			<TH WIDTH=14% VALIGN=TOP>
+				<P><I>boolean</I></TH>
+			<TH WIDTH=14% VALIGN=TOP>
+				<P><I>String</I></TH>
+			<TH WIDTH=22% VALIGN=TOP>
+				<P><I>Object</I></TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Undef.</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Fehler</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>false</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>&#132;undefined&#147;</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>null</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Function</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(14) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) valueOf/ true</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) JS-Code der Funktion</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) netscape .javascript. JSObject</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Object</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(14) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) valueOf/error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) valueOf/ true</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) valueOf / toString 
+			</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) Java-Cast/ error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Object (null)</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(14) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) false</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) &#132;null&#147;</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) null</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>double</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(14) Zahl oder Fehler, wenn Bereichs-&uuml;berschreitung</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(7) 0, NaN -&gt; false !0, -+Infinite -&gt; true</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(8) Zahl, NaN, Infinity oder -Infinity</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(9) Number/ error 
+			</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>boolean</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) 0/1</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) boolean</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) &#132;false&#147;/ &#147;true&#147;</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) Boolean/ error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>Leer String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>error</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) false</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) String/ error</TD>
+		</TR>
+		<TR>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(14) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) error/ Zahl</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) true</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(30) String</TD>
+			<TD VALIGN=TOP>
+				<P ALIGN=LEFT>(15) String/ error</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<P><BR></P>
+<P>Der Algorithmus zum mappen der polymorphen Methoden in Java:<BR>1.
+Die Anzahl der Parameter mu&szlig; &uuml;bereinstimmen.<BR>2. Die
+Parameter m&uuml;ssen, nach der obigen Tabelle, konvertiert werden
+k&ouml;nnen.<BR>3. Es gibt ein Punktesystem, nach dem die Methode
+ausgew&auml;hlt wird. Die Punkte stehen in Klammern in den
+Tabelleneintr&auml;gen. Die Konvertierungspunkte f&uuml;r Zahlen sind
+typabh&auml;ngig und nicht wertabh&auml;ngig. Dadurch ist
+sichergestellt, das nicht unterschiedliche Methoden bei sich
+&auml;ndernden Werten gerufen werden. Kommt es allerdings zu einem
+Konvertierungsfehler (&Uuml;berlauf), dann wird versucht eine andere
+Methode zu finden.<BR>4. Es wird vorausgesetzt, da&szlig; die
+Methoden &#132;valueOf&#147; und &#132;toString&#147; keine
+Seiteneffekte haben. Sie d&uuml;rfen also beliebig oft aufgerufen
+werden.<BR>5. Es wird nur null auf eine Java-Array abgebildet.</P>
+<H2><A NAME="Testen"></A>Testen</H2>
+<P>Das Ziel dieses Abschnitts ist es Vorgehensweisen zu entwickeln,
+mit denen sich die Java Grundkonzepte testen lassen. Folgende
+Checkliste ist f&uuml;r jede Methode abzuarbeiten.</P>
+<OL>
+	<LI><P>Zu jeder Klasse gibt es eine entsprechende Testklasse. Diese
+	steht im Package &#132;test&#147;.... Der Name der Klasse wird mit
+	&#132;Test&#147; erweitert. Beispiel: stardiv.memory.BitArray wird
+	zu test.memory.BitArrayTest. Jede dieser Klassen hat eine Methode
+	&#132;public static void main( String [] )&#147;. Diese Methode wird
+	aufgerufen, um den Test aller Methoden anzusto&szlig;en. Der Test
+	ist nicht interaktiv. Wird ein Fehler festgestellt, wird das
+	Programm mit exit( -1 ) verlassen.</P>
+	<LI><P>Jede Methode mu&szlig; unabh&auml;ngig von ihren Environment
+	getestet werden. Alle Resourcen f&uuml;r die Methode werden als
+	Dummy f&uuml;r den Test implementiert. Diese Forderung f&uuml;hrt zu
+	sauberen Schnittstellen, da ansonsten f&uuml;r den Test ja ganze
+	Objekte implementiert werden m&uuml;ssen.</P>
+	<LI><P>Das Testprotokoll protokolliert mit &#132;System.out.println&#147;.
+	Vor dem Test der einzelnen Methoden wird in einer Zeile kurz &uuml;ber
+	den Test informiert. Scheitert der Test, dann wird eine
+	Fehlermeldung ausgegeben in der &#132;failed&#147; enthalten sein
+	mu&szlig;. </P>
+	<LI><P>Um <A HREF="#Defined Exception">Defined Exception</A> und
+	<A HREF="#Transacted Exception">Transacted Exception</A> testen zu
+	k&ouml;nnen, sollten die <A HREF="stardiv.concepts.Resource.html#Resource">Resource</A>
+	und <A HREF="stardiv.concepts.ModifyTestable.html#ModifyTestable">ModifyTestable</A>
+	Interfaces implementiert werden. Es kann damit automatisch gepr&uuml;ft
+	werden, ob sich eine Resource unerlaubter Weise ge&auml;ndert hat.</P>
+</OL>
+<H2>Begriffe</H2>
+<P><A NAME="lebendig"></A>Lebendig: Ein System wird als lebendig
+bezeichnet, wenn alle in ihm befindlichen Auftr&auml;ge
+fertiggestellt werden k&ouml;nnen. Sie sich also nicht in einer
+Verklemmung oder einem &#132;Race&#147; befinden.</P>
+</BODY>
+</HTML>

@@ -1,0 +1,530 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabstpge.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "tabstpge.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXPAGE_TABULATOR -------------------------------------------------
+TabPage RID_SVXPAGE_TABULATOR
+{
+    HelpId = HID_TABULATOR ;
+    Hide = TRUE ;
+    Text = "Tabulatoren" ;
+    Text [ English ] = "Tabs" ;
+    Text [ norwegian ] = "Tabulatorer" ;
+    Text [ italian ] = "Tabulazioni" ;
+    Text [ portuguese_brazilian ] = "TabulaÁıes" ;
+    Text [ portuguese ] = "TabulaÁıes" ;
+    Text [ finnish ] = "Sarkaimet" ;
+    Text [ danish ] = "Tabulatorer" ;
+    Text [ french ] = "Tabulations" ;
+    Text [ swedish ] = "Tabulatorer" ;
+    Text [ dutch ] = "Tabstops" ;
+    Text [ spanish ] = "Tabulaciones" ;
+    Text [ english_us ] = "Tabs" ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    MetricBox ED_TABPOS
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 45 , 95 ) ;
+        Minimum = -5600 ;
+        Maximum = 5600 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+    };
+    GroupBox GB_TABPOS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 57 , 112 ) ;
+        Text = "Position" ;
+        Text [ ENGLISH ] = "Position" ;
+        Text [ norwegian ] = "Posisjon" ;
+        Text [ italian ] = "Posizione" ;
+        Text [ portuguese_brazilian ] = "PosiÁ„o" ;
+        Text [ portuguese ] = "PosiÁ„o" ;
+        Text [ finnish ] = "Sijainti" ;
+        Text [ danish ] = "Placering" ;
+        Text [ french ] = "Position" ;
+        Text [ swedish ] = "Position" ;
+        Text [ dutch ] = "Positie" ;
+        Text [ spanish ] = "PosiciÛn" ;
+        Text [ english_us ] = "Position" ;
+        Text[ chinese_simplified ] = "Œª÷√";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
+        Text[ polish ] = "Pozycja";
+        Text[ japanese ] = "à íu";
+        Text[ chinese_traditional ] = "¶Ï∏m";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "¿ßƒ°";
+        Text[ turkish ] = "Konum";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_TABTYPE_LEFT
+    {
+        Pos = MAP_APPFONT ( 75 , 14 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Links" ;
+        Text [ ENGLISH ] = "~Left" ;
+        Text [ norwegian ] = "~Left" ;
+        Text [ italian ] = "A ~sinistra" ;
+        Text [ portuguese_brazilian ] = "~Esquerda" ;
+        Text [ portuguese ] = "~Esquerda" ;
+        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ danish ] = "Venstre" ;
+        Text [ french ] = "~¿ gauche" ;
+        Text [ swedish ] = "~V‰nster" ;
+        Text [ dutch ] = "~Links" ;
+        Text [ spanish ] = "~Izquierda" ;
+        Text [ english_us ] = "~Left" ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "œÚ◊Û(~L)";
+        Text[ russian ] = "—ÎÂ‚‡";
+        Text[ polish ] = "Z l~ewej";
+        Text[ japanese ] = "ç∂ëµÇ¶(~L)";
+        Text[ chinese_traditional ] = "¶V•™(~L)";
+        Text[ arabic ] = "Ì”«—";
+        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
+        Text[ korean ] = "øﬁ¬ (~L)";
+        Text[ turkish ] = "~Sol";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_TABLEFT
+    {
+        Pos = MAP_APPFONT ( 116 , 14 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_RIGHT
+    {
+        Pos = MAP_APPFONT ( 75 , 28 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Rechts" ;
+        Text [ ENGLISH ] = "Ri~ght" ;
+        Text [ norwegian ] = "H¯~yre" ;
+        Text [ italian ] = "A dest~ra" ;
+        Text [ portuguese_brazilian ] = "Di~reita" ;
+        Text [ portuguese ] = "Di~reita" ;
+        Text [ finnish ] = "~Oikea" ;
+        Text [ danish ] = "H¯jre" ;
+        Text [ french ] = "~¿ droite" ;
+        Text [ swedish ] = "Hˆge~r" ;
+        Text [ dutch ] = "~Rechts" ;
+        Text [ spanish ] = "~Derecha" ;
+        Text [ english_us ] = "Righ~t" ;
+        Text[ chinese_simplified ] = "œÚ”“(~R)";
+        Text[ russian ] = "—Ô‡‚‡";
+        Text[ polish ] = "Z p~rawej";
+        Text[ japanese ] = "âEëµÇ¶(~R)";
+        Text[ chinese_traditional ] = "¶V•k(~R)";
+        Text[ arabic ] = "Ì„Ì‰";
+        Text[ greek ] = "ƒÂÓÈ‹";
+        Text[ korean ] = "ø¿∏•¬ (~T)";
+        Text[ turkish ] = "Sa~";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_TABRIGHT
+    {
+        Pos = MAP_APPFONT ( 116 , 28 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_CENTER
+    {
+        Pos = MAP_APPFONT ( 75 , 42 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "Z~entriert" ;
+        Text [ ENGLISH ] = "C~enter" ;
+        Text [ norwegian ] = "M~idtstill" ;
+        Text [ italian ] = "~Centrata" ;
+        Text [ portuguese_brazilian ] = "C~entro" ;
+        Text [ portuguese ] = "~Centrado" ;
+        Text [ finnish ] = "~Keski" ;
+        Text [ danish ] = "Centreret" ;
+        Text [ french ] = "~CentrÈ" ;
+        Text [ swedish ] = "C~entrerat" ;
+        Text [ dutch ] = "~Centreren" ;
+        Text [ spanish ] = "Cen~trado" ;
+        Text [ english_us ] = "C~entered" ;
+        Text[ chinese_simplified ] = "æ”÷–(~E)";
+        Text[ russian ] = "œÓ ˆÂÌÚÛ";
+        Text[ polish ] = "Wyúrodk.";
+        Text[ japanese ] = "íÜâõëµÇ¶(~E)";
+        Text[ chinese_traditional ] = "∏m§§(~E)";
+        Text[ arabic ] = " Ê”Ìÿ";
+        Text[ greek ] = " ÂÌÙÒ·ÒÈÛÏ›Ì·";
+        Text[ korean ] = "∞°øÓµ•(~E)";
+        Text[ turkish ] = "~Ortala";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_TABCENTER
+    {
+        Pos = MAP_APPFONT ( 116 , 42 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    RadioButton BTN_TABTYPE_DECIMAL
+    {
+        Pos = MAP_APPFONT ( 75 , 56 ) ;
+        Size = MAP_APPFONT ( 53 , 10 ) ;
+        Text = "~Dezimal" ;
+        Text [ ENGLISH ] = "Deci~mal" ;
+        Text [ norwegian ] = "Desi~mal" ;
+        Text [ italian ] = "~Decimale" ;
+        Text [ portuguese_brazilian ] = "Deci~mal" ;
+        Text [ portuguese ] = "Deci~mal" ;
+        Text [ finnish ] = "~Desimaali" ;
+        Text [ danish ] = "Decimal" ;
+        Text [ french ] = "DÈci~male" ;
+        Text [ swedish ] = "~Decimal" ;
+        Text [ dutch ] = "~Decimaal" ;
+        Text [ spanish ] = "Deci~mal" ;
+        Text [ english_us ] = "Deci~mal" ;
+        Text[ chinese_simplified ] = " ÆΩ¯÷∆µƒ(~M)";
+        Text[ russian ] = "ƒÂÒˇÚË˜Ì˚È";
+        Text[ polish ] = "DziesiÍ~tny";
+        Text[ japanese ] = "è¨êîì_ëµÇ¶(~M)";
+        Text[ chinese_traditional ] = "§pº∆¬I(~M)";
+        Text[ arabic ] = "⁄‘—Ì";
+        Text[ greek ] = "~ƒÂÍ·‰ÈÍ‹";
+        Text[ korean ] = "º“ºˆ¡°(~M)";
+        Text[ turkish ] = "O~ndal˝k";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_TABDECIMAL
+    {
+        Pos = MAP_APPFONT ( 116 , 56 ) ;
+        Size = MAP_APPFONT ( 7 , 10 ) ;
+    };
+    FixedText FT_TABTYPE_DECCHAR
+    {
+        Pos = MAP_APPFONT ( 85 , 70 ) ;
+        Size = MAP_APPFONT ( 32 , 9 ) ;
+        Text = "Zei~chen" ;
+        Text [ ENGLISH ] = "~Char" ;
+        Text [ norwegian ] = "~Tegn" ;
+        Text [ italian ] = "Cara~ttere" ;
+        Text [ portuguese_brazilian ] = "~Caracter" ;
+        Text [ portuguese ] = "~Caracteres" ;
+        Text [ finnish ] = "~Merkki" ;
+        Text [ danish ] = "Tegn" ;
+        Text [ french ] = "~CaractËre" ;
+        Text [ swedish ] = "Te~cken" ;
+        Text [ dutch ] = "T~eken" ;
+        Text [ spanish ] = "~Car·cter" ;
+        Text [ english_us ] = "~Character" ;
+        Text[ chinese_simplified ] = "◊÷∑˚(~C)";
+        Text[ russian ] = "«Ì‡Í";
+        Text[ polish ] = "Znak";
+        Text[ japanese ] = "ï∂éö(~C)";
+        Text[ chinese_traditional ] = "¶r§∏(~C)";
+        Text[ arabic ] = "Õ—›";
+        Text[ greek ] = "◊·Ò·ÍÙﬁÒÂÚ";
+        Text[ korean ] = "πÆ¿⁄(~C)";
+        Text[ turkish ] = "Ka~rakter";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TABTYPE_DECCHAR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 118 , 68 ) ;
+        Size = MAP_APPFONT ( 9 , 12 ) ;
+        Left = TRUE ;
+    };
+    GroupBox GB_TABTYPE
+    {
+        Pos = MAP_APPFONT ( 69 , 3 ) ;
+        Size = MAP_APPFONT ( 61 , 84 ) ;
+        Text = "Typ" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "Ca~ractËres" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ dutch ] = "Type" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ english_us ] = "Type" ;
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ";
+        Text[ chinese_traditional ] = "√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ korean ] = "¿Ø«¸";
+        Text[ turkish ] = "Tip";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_FILLCHAR_NO
+    {
+        Pos = MAP_APPFONT ( 142 , 14 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~Keine" ;
+        Text [ ENGLISH ] = "N~one" ;
+        Text [ norwegian ] = "I~ngen" ;
+        Text [ italian ] = "~Nessuno" ;
+        Text [ portuguese_brazilian ] = "N~enhum" ;
+        Text [ portuguese ] = "N~enhum" ;
+        Text [ finnish ] = "~Ei ole" ;
+        Text [ danish ] = "Ingen" ;
+        Text [ french ] = "A~ucun(e)" ;
+        Text [ swedish ] = "~Inga" ;
+        Text [ dutch ] = "~Geen" ;
+        Text [ spanish ] = "Nin~guno" ;
+        Text [ english_us ] = "N~one" ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "Œﬁ(~O)";
+        Text[ russian ] = "¡ÂÁ";
+        Text[ polish ] = "Brak";
+        Text[ japanese ] = "Ç»Çµ(~O)";
+        Text[ chinese_traditional ] = "µL(~O)";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ greek ] = " ·Ì›Ì·";
+        Text[ korean ] = "æ¯¿Ω(~O)";
+        Text[ turkish ] = "~Yok";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_FILLCHAR_POINTS
+    {
+        Pos = MAP_APPFONT ( 142 , 28 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~........" ;
+    };
+    RadioButton BTN_FILLCHAR_DASHLINE
+    {
+        Pos = MAP_APPFONT ( 142 , 42 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~--------" ;
+    };
+    RadioButton BTN_FILLCHAR_UNDERSCORE
+    {
+        Pos = MAP_APPFONT ( 142 , 56 ) ;
+        Size = MAP_APPFONT ( 54 , 10 ) ;
+        Text = "~_____" ;
+    };
+    RadioButton BTN_FILLCHAR_OTHER
+    {
+        Pos = MAP_APPFONT ( 142 , 70 ) ;
+        Size = MAP_APPFONT ( 46 , 10 ) ;
+        Text = "Ze~ichen" ;
+        Text [ ENGLISH ] = "Ch~ar" ;
+        Text [ norwegian ] = "Te~gn" ;
+        Text [ italian ] = "C~arattere" ;
+        Text [ portuguese_brazilian ] = "Ca~racter" ;
+        Text [ portuguese ] = "Carac~ter" ;
+        Text [ finnish ] = "Me~rkki" ;
+        Text [ danish ] = "Tegn" ;
+        Text [ french ] = "C~aractËre" ;
+        Text [ swedish ] = "Tec~ken" ;
+        Text [ dutch ] = "~Teken" ;
+        Text [ spanish ] = "C~ar·cter" ;
+        Text [ english_us ] = "Character" ;
+        Text[ chinese_simplified ] = "◊÷∑˚(~H)";
+        Text[ russian ] = "«Ì‡Í";
+        Text[ polish ] = "Znak";
+        Text[ japanese ] = "ï∂éö(~H)";
+        Text[ chinese_traditional ] = "¶r§∏(~H)";
+        Text[ arabic ] = "Õ—›";
+        Text[ greek ] = "◊·Ò·ÍÙﬁÒÂÚ";
+        Text[ korean ] = "πÆ¿⁄";
+        Text[ turkish ] = "Kara~kter";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FILLCHAR_OTHER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 189 , 69 ) ;
+        Size = MAP_APPFONT ( 9 , 12 ) ;
+        Left = TRUE ;
+    };
+    GroupBox GB_FILLCHAR
+    {
+        Pos = MAP_APPFONT ( 136 , 3 ) ;
+        Size = MAP_APPFONT ( 65 , 84 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? F¸llzeichen : F≥llzeichen */
+        /* ### ACHTUNG: Neuer Text in Resource? F¸llzeichen : F≥llzeichen */
+        Text = "F¸llzeichen" ;
+        Text [ ENGLISH ] = "Fill character" ;
+        Text [ norwegian ] = "Fylltegn" ;
+        Text [ italian ] = "Caratteri riempitivi" ;
+        Text [ portuguese_brazilian ] = "Caracter preenchido" ;
+        Text [ portuguese ] = "Car·cter de preenchimento" ;
+        Text [ finnish ] = "T‰ytemerkki" ;
+        Text [ danish ] = "Fyldtegn" ;
+        Text [ french ] = "CaractËres de remplissage" ;
+        Text [ swedish ] = "Utfyllnadstecken" ;
+        Text [ dutch ] = "Opvulteken" ;
+        Text [ spanish ] = "Car·cter de relleno" ;
+        Text [ english_us ] = "Fill character" ;
+        Text[ chinese_simplified ] = "«∞µº◊÷∑˚£∫";
+        Text[ russian ] = "«‡ÔÓÎÌËÚÂÎ¸";
+        Text[ polish ] = "Znaki wiodπce";
+        Text[ japanese ] = "ÿ∞¿ﬁ∞";
+        Text[ chinese_traditional ] = "§ﬁæ…Ωu";
+        Text[ arabic ] = "Õ—› ”«»ﬁ";
+        Text[ greek ] = "◊·Ò·ÍÙﬁÒ·Ú „ÂÏﬂÛÏ·ÙÔÚ";
+        Text[ korean ] = "√§øÚ±‚»£";
+        Text[ turkish ] = "÷nc¸";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_NEW
+    {
+        Pos = MAP_APPFONT ( 205 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Neu" ;
+        Text [ ENGLISH ] = "~New" ;
+        Text [ norwegian ] = "~New" ;
+        Text [ italian ] = "~Nuova" ;
+        Text [ portuguese_brazilian ] = "~Novo" ;
+        Text [ portuguese ] = "~Novo" ;
+        Text [ finnish ] = "~Uusi" ;
+        Text [ danish ] = "Ny" ;
+        Text [ french ] = "~Nouveau" ;
+        Text [ swedish ] = "~Ny" ;
+        Text [ dutch ] = "~Nieuw" ;
+        Text [ spanish ] = "~Nuevo" ;
+        Text [ english_us ] = "~New" ;
+        Text[ chinese_simplified ] = "–¬Ω®(~N)";
+        Text[ russian ] = "—ÓÁ‰~‡Ú¸";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "êVãKçÏê¨(~N)";
+        Text[ chinese_traditional ] = "ºW•[(~N)";
+        Text[ arabic ] = "ÃœÌœ";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+        Text[ korean ] = "ªı∑Œ(~N)";
+        Text[ turkish ] = "~Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_DEL
+    {
+        Pos = MAP_APPFONT ( 205 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Lˆ~schen : L˜~schen */
+        /* ### ACHTUNG: Neuer Text in Resource? Lˆ~schen : L˜~schen */
+        Text = "Lˆ~schen" ;
+        Text [ ENGLISH ] = "~Delete" ;
+        Text [ norwegian ] = "~Slett" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ portuguese_brazilian ] = "~Apagar" ;
+        Text [ portuguese ] = "~Apagar" ;
+        Text [ finnish ] = "~Poista" ;
+        Text [ danish ] = "Slet" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ swedish ] = "Ra~dera" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ english_us ] = "~Delete" ;
+        Text[ chinese_simplified ] = "…æ≥˝";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "~UsuÒ";
+        Text[ japanese ] = "çÌèú(~C)";
+        Text[ chinese_traditional ] = "ßR∞£(~C)";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶(~C)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_DELALL
+    {
+        Pos = MAP_APPFONT ( 205 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Alle lˆschen : ~Alle l˜schen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Alle lˆschen : ~Alle l˜schen */
+        Text = "~Alle lˆschen" ;
+        Text [ ENGLISH ] = "Dele~te all" ;
+        Text [ norwegian ] = "Sle~tt alle" ;
+        Text [ italian ] = "~Elimina tutti" ;
+        Text [ portuguese_brazilian ] = "Apag~ar tudo" ;
+        Text [ portuguese ] = "A~pagar todos" ;
+        Text [ finnish ] = "Po~ista kaikki" ;
+        Text [ danish ] = "Slet alle" ;
+        Text [ french ] = "Supprimer ~tout" ;
+        Text [ swedish ] = "Radera ~alla" ;
+        Text [ dutch ] = "~Alle verwijderen" ;
+        Text [ spanish ] = "E~liminar todas" ;
+        Text [ english_us ] = "Delete ~All" ;
+        Text[ chinese_simplified ] = "»´≤ø…æ≥˝(~A)";
+        Text[ russian ] = "”‰‡ÎËÚ¸ ‚ÒÂ";
+        Text[ polish ] = "WyczyúÊ w~szyst.";
+        Text[ japanese ] = "Ç∑Ç◊ÇƒçÌèú(~A)";
+        Text[ chinese_traditional ] = "•˛≥°ßR∞£(~A)";
+        Text[ arabic ] = "Õ–› «·ﬂ·";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ ¸Î~·";
+        Text[ korean ] = "∏µŒ ªË¡¶(~A)";
+        Text[ turkish ] = "~T¸m¸n¸ sil";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "÷∆±Ì∑˚";
+    Text[ russian ] = "“‡·ÛÎˇÚÓ˚";
+    Text[ polish ] = "Tabulatory";
+    Text[ japanese ] = "¿Ãﬁ";
+    Text[ chinese_traditional ] = "ªs™Ì≤≈";
+    Text[ arabic ] = "⁄·«„«  «·ÃœÊ·…";
+    Text[ greek ] = "”ÙÁÎÔË›ÙÂÚ";
+    Text[ korean ] = "≈«";
+    Text[ turkish ] = "Sekmeler";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

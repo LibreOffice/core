@@ -1,0 +1,498 @@
+/*************************************************************************
+ *
+ *  $RCSfile: impgrf.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // pragma -------------------------------------------------------------------
+
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+#include "impgrf.hrc"
+ // --------------------------------------------------------------------------
+String RID_SVXSTR_ALL_FILES
+{
+    Text = "<Alle Dateien>" ;
+    Text [ English ] = "<All files>" ;
+    Text [ english_us ] = "<All files>" ;
+    Text [ italian ] = "<Tutti i file>" ;
+    Text [ spanish ] = "<Todos los archivos>" ;
+    Text [ french ] = "<Tous les fichiers>" ;
+    Text [ dutch ] = "<Alle bestanden>" ;
+    Text [ swedish ] = "<Alla filer>" ;
+    Text [ danish ] = "<Alle filer>" ;
+    Text [ portuguese ] = "<Ficheiros todos>" ;
+    Text [ portuguese_brazilian ] = "<Alle Dateien>" ;
+    Text[ chinese_simplified ] = "<ËùÓĞµÄ¸ñÊ½>";
+    Text[ russian ] = "<Âñå ôàéëû>";
+    Text[ polish ] = "<Wszystkie pliki>";
+    Text[ japanese ] = "<‚·‚×‚Ä‚ÌÌ§²Ù>";
+    Text[ chinese_traditional ] = "<©Ò¦³ªº®æ¦¡>";
+    Text[ arabic ] = "<ßá ÇáãáİÇÊ>";
+    Text[ greek ] = "<¼ëá ôá áñ÷åßá>";
+    Text[ korean ] = "<¸ğµç ÆÄÀÏ>";
+    Text[ turkish ] = "<Tüm dosyalar>";
+    Text[ language_user1 ] = " ";
+};
+Resource RID_SVXRES_IMPORTGRAPHIC
+{
+    String STR_IMPORT_ALL
+    {
+        Text = "<Alle Formate>" ;
+        Text [ English ] = "<All formats>" ;
+        Text [ norwegian ] = "<All formats>" ;
+        Text [ italian ] = "<Tutti i formati>" ;
+        Text [ portuguese_brazilian ] = "<Todos os formatos>" ;
+        Text [ portuguese ] = "<Todos os formatos>" ;
+        Text [ finnish ] = "<All formats>" ;
+        Text [ danish ] = "<Alle formater>" ;
+        Text [ french ] = "<Tous les formats>" ;
+        Text [ swedish ] = "<Alla format>" ;
+        Text [ dutch ] = "<Alle formaten>" ;
+        Text [ spanish ] = "<Todos los formatos>" ;
+        Text [ english_us ] = "<All formats>" ;
+        Text[ chinese_simplified ] = "<ËùÓĞµÄ¸ñÊ½>";
+        Text[ russian ] = "<Âñå ôîğìàòû>";
+        Text[ polish ] = "<Wszystkie formaty>";
+        Text[ japanese ] = "<‚·‚×‚Ä‚Ì‘®>";
+        Text[ chinese_traditional ] = "<©Ò¦³ªº®æ¦¡>";
+        Text[ arabic ] = "<ßá ÇáÊäÓíŞÇÊ>";
+        Text[ greek ] = "<¼ëåò ïé ìïñöİò>";
+        Text[ korean ] = "<¸ğµç ¼­½Ä>";
+        Text[ turkish ] = "<Tüm formatlar>";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_UNKNOWN_FORMAT
+    {
+        Text = "Unbekanntes Dateiformat!" ;
+        Text [ English ] = "Unknown file format!" ;
+        Text [ norwegian ] = "Unknown file format!" ;
+        Text [ italian ] = "Formato file sconosciuto!" ;
+        Text [ portuguese_brazilian ] = "Formato de arquivo desconhecido!" ;
+        Text [ portuguese ] = "Formato de ficheiro desconhecido!" ;
+        Text [ finnish ] = "Tuntematon tiedostomuoto!" ;
+        Text [ danish ] = "Ukendt filformat!" ;
+        Text [ french ] = "Format de fichier inconnu !" ;
+        Text [ swedish ] = "Okänt filformat!" ;
+        Text [ dutch ] = "Onbekend bestandsformaat!" ;
+        Text [ spanish ] = "¡Formato de archivo desconocido!" ;
+        Text [ english_us ] = "Unknown file format!" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş¸ñÊ½²»Ã÷";
+        Text[ russian ] = "Íåèçâåñòíûé ôîğìàò ôàéëà!";
+        Text[ polish ] = "Nieznany format pliku!";
+        Text[ japanese ] = "•s–¾‚ÈÌ§²Ù‘®B";
+        Text[ chinese_traditional ] = "ÀÉ®×®æ¦¡¤£©ú";
+        Text[ arabic ] = "ÊäÓíŞ ãáİ ÛíÑ ãÚÑæİ!";
+        Text[ greek ] = "¢ãíùóôç ìïñöŞ áñ÷åßïõ!";
+        Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀº ÆÄÀÏ ¼­½Ä!";
+        Text[ turkish ] = "Bilinmeyen dosya formatı!";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_PATH_NOT_FOUND1
+    {
+        Text = "Das Verzeichnis '" ;
+        Text [ English ] = "The directory '" ;
+        Text [ norwegian ] = "The directory '" ;
+        Text [ italian ] = "La cartella '" ;
+        Text [ portuguese_brazilian ] = "O diretório" ;
+        Text [ portuguese ] = "O directório '" ;
+        Text [ finnish ] = "Hakemistoa '" ;
+        Text [ danish ] = "Biblioteket '" ;
+        Text [ french ] = "Le répertoire '" ;
+        Text [ swedish ] = "Mappen '" ;
+        Text [ dutch ] = "Map '" ;
+        Text [ spanish ] = "El directorio '" ;
+        Text [ english_us ] = "The directory '" ;
+        Text[ chinese_simplified ] = "Õâ¸öÄ¿Â¼ '";
+        Text[ russian ] = "Êàòàëîã '";
+        Text[ polish ] = "Katalog";
+        Text[ japanese ] = "ÃŞ¨Ú¸ÄØ'";
+        Text[ chinese_traditional ] = "³o­Ó¥Ø¿ı '";
+        Text[ arabic ] = "ÇáÏáíá '";
+        Text[ greek ] = "Ï êáôÜëïãïò '";
+        Text[ korean ] = "µğ·ºÅä¸® '";
+        Text[ turkish ] = "Dizin '";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_PATH_NOT_FOUND2
+    {
+        Text = "' existiert nicht." ;
+        Text [ English ] = "' does not exist." ;
+        Text [ norwegian ] = "' does not exist." ;
+        Text [ italian ] = "' non esiste." ;
+        Text [ portuguese_brazilian ] = "' não existe." ;
+        Text [ portuguese ] = "' não existe." ;
+        Text [ finnish ] = "' ei ole." ;
+        Text [ danish ] = "' findes ikke." ;
+        Text [ french ] = "' n'existe pas." ;
+        Text [ swedish ] = "' finns inte." ;
+        Text [ dutch ] = "' bestaat niet." ;
+        Text [ spanish ] = "' no existe." ;
+        Text [ english_us ] = "' does not exist" ;
+        Text[ chinese_simplified ] = "' ²»´æÔÚ¡£";
+        Text[ russian ] = "' íå ñóùåñòâóåò.";
+        Text[ polish ] = "nie istnieje.";
+        Text[ japanese ] = "'‚Í‘¶İ‚µ‚Ü‚¹‚ñB";
+        Text[ chinese_traditional ] = "' ¤£¦s¦b¡C";
+        Text[ arabic ] = "' ÛíÑ ãæÌæÏ";
+        Text[ greek ] = "' äåí õğÜñ÷åé.";
+        Text[ korean ] = "' °¡(ÀÌ) ¾ø½À´Ï´Ù.";
+        Text[ turkish ] = "' mevcut değil.";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_FLT_BMP
+    {
+        Text = "BMP - MS Windows,*.BMP,BMPp0" ;
+    };
+    String STR_FLT_SGF
+    {
+        Text = "SGF - StarWriter SGF,*.SGF,????0" ;
+    };
+    String STR_FLT_SGV
+    {
+        Text = "SGV - StarDraw 2.0,*.SGV,????0" ;
+    };
+    String STR_FLT_SVM
+    {
+        Text = "SVM - StarView Metafile,*.SVM,SVM 0" ;
+    };
+    String STR_GRFILTER_OPENERROR
+    {
+        TEXT = "Grafikdatei kann nicht geöffnet werden" ;
+        TEXT [ English ] = "Can't open graphic file" ;
+        TEXT [ norwegian ] = "Can't open graphic file" ;
+        TEXT [ italian ] = "Impossibile aprire il file grafico" ;
+        TEXT [ portuguese_brazilian ] = "Não consigo abrir arquivo gráfico" ;
+        TEXT [ portuguese ] = "Impossível abrir ficheiro gráfico" ;
+        TEXT [ finnish ] = "Grafiikkatiedostoa ei voi avata" ;
+        TEXT [ danish ] = "Det er ikke muligt at åbne grafikfilen" ;
+        TEXT [ french ] = "Ouverture du fichier graphique impossible" ;
+        TEXT [ swedish ] = "Grafikfil kan inte öppnas" ;
+        TEXT [ dutch ] = "Grafisch bestand kan niet worden geopend" ;
+        TEXT [ spanish ] = "No es posible abrir el archivo gráfico" ;
+        TEXT [ english_us ] = "Graphics file cannot be opened" ;
+        TEXT[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÍ¼ĞÎÎÄ¼ş";
+        TEXT[ russian ] = "Îòêğûòü ãğàôè÷åñêèé ôàéë íå óäàåòñÿ";
+        TEXT[ polish ] = "Pliku graficznego nie mo¿na otworzyæ";
+        TEXT[ japanese ] = "¸Ş×Ì¨¯¸ Ì§²Ù‚ğŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "µLªk¶}±Ò¹Ï§ÎÀÉ®×";
+        TEXT[ arabic ] = "áÇ íãßä İÊÍ ãáİ ÇáÑÓæãÇÊ";
+        TEXT[ greek ] = "Ôï áñ÷åßï ãñáöéêïı äåí åßíáé äõíáôüí íá áíïé÷ôåß";
+        TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù";
+        TEXT[ turkish ] = "Grafik dosyası açılamıyor";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_GRFILTER_IOERROR
+    {
+        TEXT = "Grafikdatei kann nicht gelesen werden" ;
+        TEXT [ English ] = "Can't read graphic file" ;
+        TEXT [ norwegian ] = "Can't read graphic file" ;
+        TEXT [ italian ] = "Impossibile leggere il file grafico" ;
+        TEXT [ portuguese_brazilian ] = "Não consigo ler arquivo gráfico" ;
+        TEXT [ portuguese ] = "Impossível ler ficheiro gráfico" ;
+        TEXT [ finnish ] = "Grafiikkatiedostoa ei voi lukea" ;
+        TEXT [ danish ] = "Det er ikke muligt at læse grafikfilen" ;
+        TEXT [ french ] = "Lecture du fichier graphique impossible" ;
+        TEXT [ swedish ] = "Grafikfil kan inte läsas" ;
+        TEXT [ dutch ] = "Grafisch bestand is onleesbaar" ;
+        TEXT [ spanish ] = "No es posible leer el archivo gráfico" ;
+        TEXT [ english_us ] = "Graphics file cannot be read" ;
+        TEXT[ chinese_simplified ] = "ÎŞ·¨¶Á³öÍ¼ĞÎÎÄ¼ş";
+        TEXT[ russian ] = "Ïğî÷èòàòü ãğàôè÷åñêèé ôàéë íå óäàåòñÿ";
+        TEXT[ polish ] = "Pliku graficznego nie mo¿na otworzyæ";
+        TEXT[ japanese ] = "¸Ş×Ì¨¯¸ Ì§²Ù‚ª“Ç‚ß‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "µLªkÅª¥X¹Ï¤ùÀÉ®×";
+        TEXT[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ãáİ ÇáÑÓæãÇÊ";
+        TEXT[ greek ] = "Ç áíÜãíùóç ôïõ áñ÷åßïõ ãñáöéêïı äåí åßíáé äõíáôŞ";
+        TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀ» ÀĞÀ» ¼ö ¾ø½À´Ï´Ù";
+        TEXT[ turkish ] = "Grafik dosyası okunamıyor";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_GRFILTER_FORMATERROR
+    {
+        TEXT = "Unbekanntes Grafikformat" ;
+        TEXT [ English ] = "Unknown graphic format" ;
+        TEXT [ norwegian ] = "Unknown graphic format" ;
+        TEXT [ italian ] = "Formato grafico sconosciuto" ;
+        TEXT [ portuguese_brazilian ] = "Formato gráfico desconhecido" ;
+        TEXT [ portuguese ] = "Formato gráfico desconhecido" ;
+        TEXT [ finnish ] = "Tuntematon grafiikkamuoto" ;
+        TEXT [ danish ] = "Ukendt grafikformat" ;
+        TEXT [ french ] = "Format d'image inconnu" ;
+        TEXT [ swedish ] = "Okänt grafikformat" ;
+        TEXT [ dutch ] = "Onbekend grafisch formaat" ;
+        TEXT [ spanish ] = "Formato de imagen desconocido" ;
+        TEXT [ english_us ] = "Unknown graphics format" ;
+        TEXT[ chinese_simplified ] = "²»Ã÷µÄÍ¼ĞÎ¸ñÊ½";
+        TEXT[ russian ] = "Íåèçâåñòíûé ãğàôè÷åñêèé ôîğìàò";
+        TEXT[ polish ] = "Nieznany format graficzny";
+        TEXT[ japanese ] = "•s–¾‚È¸Ş×Ì¨¯¸‘®";
+        TEXT[ chinese_traditional ] = "¤£©úªº¹Ï¤ù®æ¦¡";
+        TEXT[ arabic ] = "ÊäÓíŞ ÑÓæãÇÊ ÛíÑ ãÚÑæİ";
+        TEXT[ greek ] = "¢ãíùóôç ìïñöŞ ãñáöéêïı";
+        TEXT[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀº ±×·¡ÇÈ¼­½Ä";
+        TEXT[ turkish ] = "Bilinmeyen grafik formatı";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_GRFILTER_VERSIONERROR
+    {
+        TEXT = "Die Version der Grafikdatei wird nicht unterstützt" ;
+        TEXT [ English ] = "Version of graphic file not supported" ;
+        TEXT [ norwegian ] = "Version of graphic file not supported" ;
+        TEXT [ italian ] = "Versione del file grafico non supportata" ;
+        TEXT [ portuguese_brazilian ] = "Versão de arquivo gráfico não suportada" ;
+        TEXT [ portuguese ] = "Versão do ficheiro gráfico não tem suporte" ;
+        TEXT [ finnish ] = "Ei tukea grafiikkatiedoston versiolle" ;
+        TEXT [ danish ] = "Grafikfilens version understøttes ikke" ;
+        TEXT [ french ] = "Version du fichier graphique non supportée" ;
+        TEXT [ swedish ] = "Grafikfilens version stöds inte" ;
+        TEXT [ dutch ] = "Deze versie van het grafisch bestand wordt niet ondersteund" ;
+        TEXT [ spanish ] = "No se apoya la versión del archivo gráfico" ;
+        TEXT [ english_us ] = "Cannot support version of graphic file" ;
+        TEXT[ chinese_simplified ] = "²»Ö§³ÖÕâ¸öÍ¼ĞÎÎÄ¼ş°æ±¾";
+        TEXT[ russian ] = "Âåğñèÿ ãğàôè÷åñêîãî ôàéëà íå ïîääåğæèâàåòñÿ";
+        TEXT[ polish ] = "Wersja pliku graficznego nie bêdzie obs³ugiwana";
+        TEXT[ japanese ] = "¸Ş×Ì¨¯¸ Ì§²Ù‚ÌÊŞ°¼Ş®İ‚ª»Îß°Ä‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "¤£¤ä«ù³o­Ó¹Ï¤ùÀÉ®×ª©¥»";
+        TEXT[ arabic ] = "áä íÊã ÏÚã ÅÕÏÇÑ ãáİ ÇáÑÓæãÇÊ";
+        TEXT[ greek ] = "Äåí õğïóôçñßæåôáé ç İêäïóç áõôïı ôïõ ãñáöéêïı áñ÷åßïõ.";
+        TEXT[ korean ] = "±×·¡ÇÈÆÄÀÏÀÇ ¹öÀüÀ» Áö¿øÇÒ ¼ö ¾øÀ½";
+        TEXT[ turkish ] = "Grafik dosyasının sürümü desteklenmiyor";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_GRFILTER_FILTERERROR
+    {
+        TEXT = "Grafikfilter nicht gefunden" ;
+        TEXT [ English ] = "Graphic filter not found" ;
+        TEXT [ norwegian ] = "Graphic filter not found" ;
+        TEXT [ italian ] = "Filtro grafico non trovato" ;
+        TEXT [ portuguese_brazilian ] = "Filtro gráfico não encontrado" ;
+        TEXT [ portuguese ] = "Filtro gráfico não encontrado" ;
+        TEXT [ finnish ] = "Grafiikkasuodinta ei löydy" ;
+        TEXT [ danish ] = "Grafikfilter blev ikke fundet" ;
+        TEXT [ french ] = "Filtre graphique introuvable" ;
+        TEXT [ swedish ] = "Grafikfilter hittades inte" ;
+        TEXT [ dutch ] = "Grafische filter niet gevonden" ;
+        TEXT [ spanish ] = "No se encontró el filtro de imágenes" ;
+        TEXT [ english_us ] = "Graphics filter not found" ;
+        TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Í¼ĞÎ¹ıÂËÆ÷";
+        TEXT[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ íå íàéäåí";
+        TEXT[ polish ] = "Filtru graficznego nie znaleziono";
+        TEXT[ japanese ] = "¸Ş×Ì¨¯¸ Ì¨ÙÀ°‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB";
+        TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¹Ï¤ù¹LÂo¾¹";
+        TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì İáÊÑ ÇáÑÓæãÇÊ";
+        TEXT[ greek ] = "Ôï ößëôñï ãñáöéêşí äåí âñİèçêå";
+        TEXT[ korean ] = "±×·¡ÇÈÇÊÅÍ¸¦ Ã£Áö ¸øÇßÀ½";
+        TEXT[ turkish ] = "Grafik filtresi bulunamadı";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_GRFILTER_TOOBIG
+    {
+        TEXT = "Nicht genug Speicher zum Einfügen der Grafik" ;
+        TEXT [ English ] = "Not enough memory to insert graphic" ;
+        TEXT [ norwegian ] = "Not enough memory to insert graphic" ;
+        TEXT [ italian ] = "Memoria insufficiente per inserire l'immagine" ;
+        TEXT [ portuguese_brazilian ] = "Memória insuficiente para inserir o gráfico" ;
+        TEXT [ portuguese ] = "Memória insuficiente para inserir a imagem." ;
+        TEXT [ finnish ] = "Muisti ei riitä grafiikan lisäämiseen" ;
+        TEXT [ danish ] = "Ikke tilstrækkelig hukommelse til at indsætte grafik" ;
+        TEXT [ french ] = "Mémoire insuffisante pour l'insertion de l'image" ;
+        TEXT [ swedish ] = "Inte tillräckligt med minne för att infoga grafiken" ;
+        TEXT [ dutch ] = "Niet genoeg geheugen voor invoegen van grafische afbeelding." ;
+        TEXT [ spanish ] = "No hay suficiente memoria para insertar la imagen" ;
+        TEXT [ english_us ] = "Not enough memory to insert graphic" ;
+        TEXT[ chinese_simplified ] = "ÄÚ´æ²»×ã£¬ÎŞ·¨²åÈëÍ¼ĞÎ";
+        TEXT[ russian ] = "Íåäîñòàòî÷íî ïàìÿòè äëÿ âñòàâêè ğèñóíêà";
+        TEXT[ polish ] = "Brakuje pamiêci do wstawienia grafiki";
+        TEXT[ japanese ] = "¸Ş×Ì¨¯¸‘}“ü‚Ì‚½‚ß‚ÌÒÓØ‚ª•s[•ª‚Å‚·B";
+        TEXT[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬¡MµLªk´¡¤J¹Ï¤ù";
+        TEXT[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ áÅÏÑÇÌ ÇáÑÓã";
+        TEXT[ greek ] = "Äåí õğÜñ÷åé áñêåôŞ ìíŞìç ãéá ôçí åéóáãùãŞ ôïõ ãñáöéêïı";
+        TEXT[ korean ] = "±×·¡ÇÈ »ğÀÔÀ» À§ÇÑ ¸Ş¸ğ¸®°¡ ºÎÁ·ÇÕ´Ï´Ù";
+        TEXT[ turkish ] = "Grafiğin eklenmesi için yeterli bellek mevcut değil";
+        TEXT[ language_user1 ] = " ";
+    };
+    String STR_PROPERTIES
+    {
+        Text = "~Eigenschaften..." ;
+        Text [ English ] = "~Properties..." ;
+        Text [ norwegian ] = "~Properties..." ;
+        Text [ italian ] = "~Proprietà..." ;
+        Text [ portuguese_brazilian ] = "~Propriedades..." ;
+        Text [ portuguese ] = "~Propriedades..." ;
+        Text [ finnish ] = "~Ominaisuudet..." ;
+        Text [ danish ] = "Egenskaber..." ;
+        Text [ french ] = "~Propriétés..." ;
+        Text [ swedish ] = "~Egenskaper..." ;
+        Text [ dutch ] = "Eigens~chappen..." ;
+        Text [ spanish ] = "Prop~iedades..." ;
+        Text [ english_us ] = "~Properties..." ;
+        Text[ chinese_simplified ] = "ÊôĞÔ(~P)...";
+        Text[ russian ] = "Ñâîéñòâà...";
+        Text[ polish ] = "W³aœciwoœci...";
+        Text[ japanese ] = "ÌßÛÊßÃ¨(~P)...";
+        Text[ chinese_traditional ] = "Äİ©Ê(~P)...";
+        Text[ arabic ] = "ÎÕÇÆÕ...";
+        Text[ greek ] = "Éäéüôçôåò...";
+        Text[ korean ] = "µî·ÏÁ¤º¸(~P)...";
+        Text[ turkish ] = "~Özellikler...";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_HOME
+    {
+        Text = "~Standard" ;
+        Text [ English ] = "H~ome" ;
+        Text [ norwegian ] = "H~ome" ;
+        Text [ italian ] = "~Standard" ;
+        Text [ portuguese_brazilian ] = "C~asa" ;
+        Text [ portuguese ] = "~Padrão" ;
+        Text [ finnish ] = "~Vakio" ;
+        Text [ danish ] = "Standard" ;
+        Text [ french ] = "~Standard" ;
+        Text [ swedish ] = "~Standard" ;
+        Text [ dutch ] = "~Standaard" ;
+        Text [ spanish ] = "~Predeterminado" ;
+        Text [ english_us ] = "Standard" ;
+        Text[ chinese_simplified ] = "±ê×¼(~O)";
+        Text[ russian ] = "Ñòàíäàğò";
+        Text[ polish ] = "Standard";
+        Text[ japanese ] = "•W€(~O)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~O)";
+        Text[ arabic ] = "ŞíÇÓí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "È¨(~O)";
+        Text[ turkish ] = "~Standart";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_LINK
+    {
+        Text = "~Verknüpfen" ;
+        Text [ English ] = "~Link" ;
+        Text [ norwegian ] = "~Link" ;
+        Text [ italian ] = "~Collega" ;
+        Text [ portuguese_brazilian ] = "~Ligação" ;
+        Text [ portuguese ] = "~Ligar" ;
+        Text [ finnish ] = "~Linkki" ;
+        Text [ danish ] = "Kæd" ;
+        Text [ french ] = "~Lien" ;
+        Text [ swedish ] = "~Länka" ;
+        Text [ dutch ] = "~Koppelen" ;
+        Text [ spanish ] = "~Vincular" ;
+        Text [ english_us ] = "~Link" ;
+        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+        Text[ russian ] = "Ñâÿçàòü";
+        Text[ polish ] = "Po³¹cz";
+        Text[ japanese ] = "Øİ¸(~L)";
+        Text[ chinese_traditional ] = "³sµ²(~L)";
+        Text[ arabic ] = "ÑÈØ";
+        Text[ greek ] = "Óıíäåóç";
+        Text[ korean ] = "¿¬°á(~L)";
+        Text[ turkish ] = "~Bağlantı oluştur";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_PREVIEW
+    {
+        Text = "V~orschau" ;
+        Text [ English ] = "Pr~eview" ;
+        Text [ norwegian ] = "Pr~eview" ;
+        Text [ italian ] = "Ante~prima" ;
+        Text [ portuguese_brazilian ] = "Ex~aminar" ;
+        Text [ portuguese ] = "~Visualizar" ;
+        Text [ finnish ] = "~Esikatselu" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "A~perçu" ;
+        Text [ swedish ] = "~Förhandsvisning" ;
+        Text [ dutch ] = "~Voorbeeld" ;
+        Text [ spanish ] = "~Previsualización" ;
+        Text [ english_us ] = "Pr~eview" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ(~E)";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°(~E)";
+        Text[ chinese_traditional ] = "¹wÄı(~E)";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â(~E)";
+        Text[ turkish ] = "Ö~nizleme";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_FILTER
+    {
+        Text = "Fi~lter..." ;
+        Text [ English ] = "~Filter..." ;
+        Text [ english_us ] = "~Filter..." ;
+        Text [ italian ] = "Filtro..." ;
+        Text [ spanish ] = "~Filtro..." ;
+        Text [ french ] = "~Filtre..." ;
+        Text [ dutch ] = "~Filter..." ;
+        Text [ swedish ] = "~Filter..." ;
+        Text [ danish ] = "Filter..." ;
+        Text [ portuguese_brazilian ] = "~Filter..." ;
+        Text [ portuguese ] = "~Filtro..." ;
+        Text[ chinese_simplified ] = "É¸Ñ¡(~F)...";
+        Text[ russian ] = "Ôèëüòğ...";
+        Text[ polish ] = "Filtr...";
+        Text[ japanese ] = "Ì¨ÙÀ(~F)...";
+        Text[ chinese_traditional ] = "¿z¿ï(~F)...";
+        Text[ arabic ] = "İáÊÑ...";
+        Text[ greek ] = "Ößëôñï...";
+        Text[ korean ] = "ÇÊÅÍ(~F)...";
+        Text[ turkish ] = "Fi~ltre...";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,683 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbxdraw.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "tbxdraw.hrc"
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include <svxids.hrc>
+ // pragma ----------------------------------------------------------------
+
+ // -----------------------------------------------------------------------
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+FloatingWindow RID_SVXTBX_DRAW
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_DRAWTOOL_TBX ;
+    Text = "Zeichenfunktionen" ;
+    Text [ English ] = "Draw functions" ;
+    ToolBox TBX_DRAW
+    {
+        HelpId = HID_SVXTBX_DRAW ;
+        SVLook = TRUE ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_SELECT ;
+                HelpID = SID_OBJECT_SELECT ;
+                RadioCheck = TRUE ;
+                Text = "Auswahl" ;
+                Text [ ENGLISH ] = "Selection" ;
+                Text [ norwegian ] = "Selection" ;
+                Text [ italian ] = "Selezione" ;
+                Text [ portuguese_brazilian ] = "SeleÁ„o" ;
+                Text [ portuguese ] = "SelecÁ„o" ;
+                Text [ finnish ] = "Valinta" ;
+                Text [ danish ] = "Marker" ;
+                Text [ french ] = "SÈlection" ;
+                Text [ swedish ] = "Urval" ;
+                Text [ dutch ] = "Selectie" ;
+                Text [ spanish ] = "SelecciÛn" ;
+                Text [ english_us ] = "Selection" ;
+                Text[ chinese_simplified ] = "—°‘Ò";
+                Text[ russian ] = "¬˚‰ÂÎÂÌËÂ";
+                Text[ polish ] = "WybÛr";
+                Text[ japanese ] = "ëIë";
+                Text[ chinese_traditional ] = "øÔæ‹";
+                Text[ greek ] = "≈ÈÎÔ„ﬁ";
+                Text[ korean ] = "º±≈√";
+                Text[ arabic ] = " ÕœÌœ";
+                Text[ turkish ] = "SeÁim";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_LINE ;
+                HelpID = SID_DRAW_LINE ;
+                RadioCheck = TRUE ;
+                Text = "Linie" ;
+                Text [ ENGLISH ] = "Line" ;
+                Text [ norwegian ] = "Linje" ;
+                Text [ italian ] = "Linea" ;
+                Text [ portuguese_brazilian ] = "Linha" ;
+                Text [ portuguese ] = "Linha" ;
+                Text [ finnish ] = "Viiva" ;
+                Text [ danish ] = "Streg" ;
+                Text [ french ] = "Ligne" ;
+                Text [ swedish ] = "Linje" ;
+                Text [ dutch ] = "Lijn" ;
+                Text [ spanish ] = "LÌnea" ;
+                Text [ english_us ] = "Line" ;
+                Text[ chinese_simplified ] = "œﬂÃı";
+                Text[ russian ] = "ÀËÌËˇ";
+                Text[ polish ] = "Linia";
+                Text[ japanese ] = "ê¸";
+                Text[ chinese_traditional ] = "Ωu±¯";
+                Text[ greek ] = "√Ò·ÏÏﬁ";
+                Text[ korean ] = "º±";
+                Text[ arabic ] = "Œÿ";
+                Text[ turkish ] = "«izgi";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_RECT ;
+                HelpID = SID_DRAW_RECT ;
+                RadioCheck = TRUE ;
+                Text = "Rechteck" ;
+                Text [ ENGLISH ] = "Rectangle" ;
+                Text [ norwegian ] = "Rectangle" ;
+                Text [ italian ] = "Rettangolo" ;
+                Text [ portuguese_brazilian ] = "Ret‚ngulo" ;
+                Text [ portuguese ] = "Rect‚ngulo" ;
+                Text [ finnish ] = "Suorakulmio" ;
+                Text [ danish ] = "Rektangel" ;
+                Text [ french ] = "Rectangle" ;
+                Text [ swedish ] = "Rektangel" ;
+                Text [ dutch ] = "Rechthoek" ;
+                Text [ spanish ] = "Rect·ngulo" ;
+                Text [ english_us ] = "Rectangle" ;
+                Text[ chinese_simplified ] = "æÿ–Œ";
+                Text[ russian ] = "œˇÏÓÛ„ÓÎ¸ÌËÍ";
+                Text[ polish ] = "Prostokπt";
+                Text[ japanese ] = "éläpå`";
+                Text[ chinese_traditional ] = "ØxßŒ";
+                Text[ greek ] = "œÒËÔ„˛ÌÈÔ";
+                Text[ korean ] = "ªÁ∞¢«¸";
+                Text[ arabic ] = "„” ÿÌ·";
+                Text[ turkish ] = "Dikdˆrtgen";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_ELLIPSE ;
+                HelpID = SID_DRAW_ELLIPSE ;
+                RadioCheck = TRUE ;
+                Text = "Ellipse" ;
+                Text [ ENGLISH ] = "Ellipse" ;
+                Text [ norwegian ] = "Ellipse" ;
+                Text [ italian ] = "Ellisse" ;
+                Text [ portuguese_brazilian ] = "Elipse" ;
+                Text [ portuguese ] = "Elipse" ;
+                Text [ finnish ] = "Soikio" ;
+                Text [ danish ] = "Ellipse" ;
+                Text [ french ] = "Ellipse" ;
+                Text [ swedish ] = "Ellips" ;
+                Text [ dutch ] = "Ellips" ;
+                Text [ spanish ] = "Elipse" ;
+                Text [ english_us ] = "Ellipse" ;
+                Text [ dutch ] = "Ellips" ;
+                Text[ chinese_simplified ] = "Õ÷‘≤";
+                Text[ russian ] = "›ÎÎËÔÒ˚";
+                Text[ polish ] = "Elipsa";
+                Text[ japanese ] = "ë»â~å`";
+                Text[ chinese_traditional ] = "æÚ∂ÍßŒ";
+                Text[ greek ] = "∏ÎÎÂÈ¯Á";
+                Text[ korean ] = "≈∏ø¯";
+                Text[ arabic ] = "‘ﬂ· »Ì÷ÊÌ";
+                Text[ turkish ] = "Elips";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_POLYGON_NOFILL ;
+                HelpID = SID_DRAW_POLYGON_NOFILL ;
+                RadioCheck = TRUE ;
+                Text = "Polygon" ;
+                Text [ ENGLISH ] = "Polygon" ;
+                Text [ norwegian ] = "Polygon" ;
+                Text [ italian ] = "Poligono" ;
+                Text [ portuguese_brazilian ] = "PolÌgono" ;
+                Text [ portuguese ] = "PolÌgono" ;
+                Text [ finnish ] = "Murtoviiva" ;
+                Text [ danish ] = "Polygon" ;
+                Text [ french ] = "Polygone" ;
+                Text [ swedish ] = "Polygon" ;
+                Text [ dutch ] = "Veelhoek" ;
+                Text [ spanish ] = "PolÌgono" ;
+                Text [ english_us ] = "Polygon" ;
+                Text[ chinese_simplified ] = "∂‡±ﬂ–Œ";
+                Text[ russian ] = "ÃÌÓ„ÓÛ„ÓÎ¸ÌËÍ";
+                Text[ polish ] = "Wielokπt";
+                Text[ japanese ] = "ëΩäpå`";
+                Text[ chinese_traditional ] = "¶h√‰ßŒ";
+                Text[ greek ] = "–ÔÎ˝„˘ÌÔ";
+                Text[ korean ] = "¥Ÿ∞¢«¸";
+                Text[ arabic ] = "„÷·⁄";
+                Text[ turkish ] = "Poligon";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_BEZIER_NOFILL ;
+                HelpID = SID_DRAW_BEZIER_NOFILL ;
+                RadioCheck = TRUE ;
+                Text = "Bezier" ;
+                Text [ ENGLISH ] = "Bezier" ;
+                Text [ spanish ] = "BÈzier" ;
+                Text [ dutch ] = "BÈzier" ;
+                Text [ english_us ] = "BÈzier" ;
+                Text [ swedish ] = "BÈzier" ;
+                Text [ danish ] = "Bezier" ;
+                Text [ italian ] = "BÈzier" ;
+                Text [ french ] = "BÈzier" ;
+                Text [ portuguese ] = "BÈzier" ;
+                Text [ portuguese_brazilian ] = "Bezier" ;
+                Text[ chinese_simplified ] = "«˙œﬂ";
+                Text[ language_user1 ] = " ";
+                Text[ russian ] = "¡ÂÁ¸Â";
+                Text[ polish ] = "Krzywa Beziera";
+                Text[ japanese ] = "Õﬁºﬁ™ã»ê¸";
+                Text[ chinese_traditional ] = "¶±Ωu";
+                Text[ greek ] = "BÈzier";
+                Text[ korean ] = "∫£¡ˆæÓ";
+                Text[ arabic ] = "BÈzier";
+                Text[ turkish ] = "Bezier";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_FREELINE_NOFILL ;
+                HelpID = SID_DRAW_FREELINE_NOFILL ;
+                RadioCheck = TRUE ;
+                Text = "Freihand" ;
+                Text [ ENGLISH ] = "???" ;
+                Text [ portuguese ] = "Forma livre" ;
+                Text [ english_us ] = "Freeform" ;
+                Text [ portuguese_brazilian ] = "Freihand" ;
+                Text [ swedish ] = "Frihand" ;
+                Text [ danish ] = "FrihÂnd" ;
+                Text [ italian ] = "Mano libera" ;
+                Text [ spanish ] = "Mano alzada" ;
+                Text [ french ] = "¿ main levÈe" ;
+                Text [ dutch ] = "Vrije hand" ;
+                Text[ chinese_simplified ] = "◊‘”…–Œ Ω";
+                Text[ russian ] = "–ËÒÓ‚‡ÌÌ‡ˇ ÙÓÏ‡";
+                Text[ polish ] = "Dowolny kszta≥t";
+                Text[ japanese ] = "Ãÿ∞ ›ƒﬁ";
+                Text[ chinese_traditional ] = "¶€•—ßŒ";
+                Text[ greek ] = "≈ÎÂ˝ËÂÒÁ Û˜Â‰ﬂ·ÛÁ";
+                Text[ korean ] = "¿⁄¿Øº≠Ωƒ";
+                Text[ arabic ] = "Õ—";
+                Text[ turkish ] = "Serbest biÁim";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_ARC ;
+                HelpID = SID_DRAW_ARC ;
+                RadioCheck = TRUE ;
+                Text = "Kreisbogen" ;
+                Text [ ENGLISH ] = "Arc" ;
+                Text [ norwegian ] = "Arc" ;
+                Text [ italian ] = "Arco di cerchio" ;
+                Text [ portuguese_brazilian ] = "Arco" ;
+                Text [ portuguese ] = "Arco" ;
+                Text [ finnish ] = "Kaari" ;
+                Text [ danish ] = "Cirkelbue" ;
+                Text [ french ] = "Arc de cercle" ;
+                Text [ swedish ] = "CirkelbÂge" ;
+                Text [ dutch ] = "Cirkelboog" ;
+                Text [ spanish ] = "Arco de cÌrculo" ;
+                Text [ english_us ] = "Arc" ;
+                Text[ chinese_simplified ] = "‘≤ª°";
+                Text[ russian ] = "ƒÛ„‡";
+                Text[ polish ] = "£uk ko≥a";
+                Text[ japanese ] = "â~å ";
+                Text[ chinese_traditional ] = "∂Í©∑";
+                Text[ greek ] = "‘¸ÓÔ";
+                Text[ korean ] = "ø¯»£";
+                Text[ arabic ] = "ﬁÊ” œ«∆—Ì";
+                Text[ turkish ] = "Yay";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_PIE ;
+                HelpID = SID_DRAW_PIE ;
+                RadioCheck = TRUE ;
+                Text = "Ellipsensektor" ;
+                Text [ ENGLISH ] = "Pie" ;
+                Text [ portuguese ] = "Sectograma" ;
+                Text [ english_us ] = "Circle Pie" ;
+                Text [ portuguese_brazilian ] = "Torta" ;
+                Text [ swedish ] = "Ellipssektor" ;
+                Text [ danish ] = "Ellipsesektor" ;
+                Text [ italian ] = "Settore di cerchio" ;
+                Text [ spanish ] = "Sector de elipse" ;
+                Text [ french ] = "Secteur d'ellipse" ;
+                Text [ dutch ] = "Ellipssector" ;
+                Text[ chinese_simplified ] = "Õ÷‘≤…»–Œ";
+                Text[ russian ] = "—ÂÍÚÓ ˝ÎÎËÔÒ‡";
+                Text[ polish ] = "Wycinek elipsy";
+                Text[ japanese ] = "êÓå`";
+                Text[ chinese_traditional ] = "Æ∞ßŒ";
+                Text[ greek ] = "‘ÔÏ›·Ú ›ÎÎÂÈ¯ÁÚ";
+                Text[ korean ] = "ø¯π›";
+                Text[ arabic ] = "ﬁÿ«⁄ ‘ﬂ· »Ì÷ÊÌ";
+                Text[ turkish ] = "Elips dilimi";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_CIRCLECUT ;
+                HelpID = SID_DRAW_CIRCLECUT ;
+                RadioCheck = TRUE ;
+                Text = "Kreissegment" ;
+                Text [ ENGLISH ] = "Circlecut" ;
+                Text [ portuguese ] = "Segmento de cÌrculo" ;
+                Text [ english_us ] = "Circle Segment" ;
+                Text [ portuguese_brazilian ] = "Circlerecortar" ;
+                Text [ swedish ] = "Cirkelsegment" ;
+                Text [ danish ] = "Cirkelsegment" ;
+                Text [ italian ] = "Segmento di cerchio" ;
+                Text [ spanish ] = "Segmento de cÌrculo" ;
+                Text [ french ] = "Segment de cercle" ;
+                Text [ dutch ] = "Cirkelsegment" ;
+                Text[ chinese_simplified ] = "‘≤»±";
+                Text[ russian ] = "—Â„ÏÂÌÚ ÓÍÛÊÌÓÒÚË";
+                Text[ polish ] = "Odcinek ko≥a";
+                Text[ japanese ] = "â~ÇÃêÿï–";
+                Text[ chinese_traditional ] = "∂ÍØ ";
+                Text[ greek ] = "‘ÏﬁÏ· Í˝ÍÎÔı";
+                Text[ korean ] = "ø¯»£";
+                Text[ arabic ] = "ﬁÿ⁄… „‰ œ«∆—…";
+                Text[ turkish ] = "Yay dilimi";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_TEXT ;
+                HelpID = SID_DRAW_TEXT ;
+                RadioCheck = TRUE ;
+                Text = "Text" ;
+                Text [ ENGLISH ] = "Text" ;
+                Text [ norwegian ] = "Text" ;
+                Text [ italian ] = "Testo" ;
+                Text [ portuguese_brazilian ] = "Texto" ;
+                Text [ portuguese ] = "Texto" ;
+                Text [ finnish ] = "Teksti" ;
+                Text [ danish ] = "Tekst" ;
+                Text [ french ] = "Texte" ;
+                Text [ swedish ] = "Text" ;
+                Text [ dutch ] = "Tekst" ;
+                Text [ spanish ] = "Texto" ;
+                Text [ english_us ] = "Text" ;
+                Text[ chinese_simplified ] = "Œƒ◊÷";
+                Text[ russian ] = "“ÂÍÒÚ";
+                Text[ polish ] = "Tekst";
+                Text[ japanese ] = "√∑Ωƒ";
+                Text[ chinese_traditional ] = "§Â¶r";
+                Text[ greek ] = " ÂﬂÏÂÌÔ";
+                Text[ korean ] = "≈ÿΩ∫∆Æ";
+                Text[ arabic ] = "«·‰’";
+                Text[ turkish ] = "Metin";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_TEXT_MARQUEE ;
+                HelpID = SID_DRAW_TEXT_MARQUEE ;
+                RadioCheck = TRUE ;
+                Text = "Lauftext" ;
+                Text [ ENGLISH ] = "Marquee" ;
+                Text [ portuguese ] = "Texto animado" ;
+                Text [ english_us ] = "Text Animation" ;
+                Text [ portuguese_brazilian ] = "Lauftext" ;
+                Text [ swedish ] = "Lˆptext" ;
+                Text [ danish ] = "Animeret tekst" ;
+                Text [ italian ] = "Testo scorrevole" ;
+                Text [ spanish ] = "AnimaciÛn de texto" ;
+                Text [ french ] = "DÈfilement de texte" ;
+                Text [ dutch ] = "Tekstanimatie" ;
+                Text[ chinese_simplified ] = "ªÓ∂ØŒƒ◊÷";
+                Text[ russian ] = "¡Â„Û˘‡ˇ ÒÚÓÍ‡";
+                Text[ polish ] = "Animacje tekstu";
+                Text[ japanese ] = "√∑Ωƒ±∆“∞ºÆ›";
+                Text[ chinese_traditional ] = "¨°∞ §Â¶r";
+                Text[ greek ] = " ÈÌÔ˝ÏÂÌÔ ÍÂﬂÏÂÌÔ";
+                Text[ korean ] = "≈ÿΩ∫∆Æ æ÷¥œ∏ﬁ¿Ãº«";
+                Text[ arabic ] = "‰’ „ Õ—ﬂ";
+                Text[ turkish ] = "Metin canland˝rma";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_DRAW_CAPTION ;
+                HelpID = SID_DRAW_CAPTION ;
+                RadioCheck = TRUE ;
+                Text = "Legende" ;
+                Text [ ENGLISH ] = "Caption" ;
+                Text [ norwegian ] = "Bildetekst" ;
+                Text [ italian ] = "Legenda" ;
+                Text [ portuguese_brazilian ] = "Legenda" ;
+                Text [ portuguese ] = "Legenda" ;
+                Text [ finnish ] = "Selite" ;
+                Text [ danish ] = "Forklaring" ;
+                Text [ french ] = "LÈgende" ;
+                Text [ swedish ] = "Fˆrklaring" ;
+                Text [ dutch ] = "Legenda" ;
+                Text [ spanish ] = "Leyenda" ;
+                Text [ english_us ] = "Callouts" ;
+                Text[ chinese_simplified ] = "Õº¿˝";
+                Text[ russian ] = "ÀÂ„ÂÌ‰‡";
+                Text[ polish ] = "Legenda";
+                Text[ japanese ] = "êÅÇ´èoÇµ";
+                Text[ chinese_traditional ] = "πœ®“";
+                Text[ greek ] = "≈È„Ò·ˆﬁ";
+                Text[ korean ] = "π¸∑ ";
+                Text[ arabic ] = " ⁄·Ìﬁ  ›”Ì—Ì";
+                Text[ turkish ] = "Belirtme Áizgisi";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text [ portuguese ] = "FunÁıes de desenho" ;
+    Text [ english_us ] = "Draw Functions" ;
+    Text [ portuguese_brazilian ] = "Zeichenfunktionen" ;
+    Text [ swedish ] = "Ritfunktioner" ;
+    Text [ danish ] = "Tegnefunktioner" ;
+    Text [ italian ] = "Funzioni di disegno" ;
+    Text [ spanish ] = "Funciones de dibujo" ;
+    Text [ french ] = "Fonctions de dessin" ;
+    Text [ dutch ] = "Tekenfuncties" ;
+    Text[ chinese_simplified ] = "ªÊÕºπ¶ƒ‹";
+    Text[ russian ] = "‘ÛÌÍˆËË ËÒÓ‚‡ÌËˇ";
+    Text[ polish ] = "Funkcje rysowania";
+    Text[ japanese ] = "ê}å`ï`âÊã@î\\";
+    Text[ chinese_traditional ] = "√∏πœ•\\Ø‡";
+    Text[ greek ] = "ÀÂÈÙÔıÒ„ﬂÂÚ Û˜Â‰ﬂ·ÛÁÚ";
+    Text[ korean ] = "±◊∏Æ±‚ «‘ºˆ";
+    Text[ arabic ] = "ÊŸ«∆› —”„";
+    Text[ turkish ] = "«izim i˛levleri";
+    Text[ language_user1 ] = " ";
+};
+FloatingWindow RID_SVXTBX_ALIGNMENT
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    HelpID = HID_ALIGN_TBX ;
+    SVLook = TRUE ;
+    Text = "Ausrichtung" ;
+    Text [ ENGLISH ] = "Alignment" ;
+    Text [ norwegian ] = "Alignment" ;
+    Text [ italian ] = "Allineamento" ;
+    Text [ portuguese_brazilian ] = "Alinhamento" ;
+    Text [ portuguese ] = "Alinhar" ;
+    Text [ finnish ] = "Tasaus" ;
+    Text [ danish ] = "Justering" ;
+    Text [ french ] = "Alignement" ;
+    Text [ swedish ] = "Justering" ;
+    Text [ dutch ] = "Uitlijning" ;
+    Text [ spanish ] = "AlineaciÛn" ;
+    Text [ english_us ] = "Alignment" ;
+    ToolBox TBX_ALIGNMENT
+    {
+        HelpId = HID_SVXTBX_ALIGNMENT ;
+        SVLook = TRUE ;
+        HelpID = SID_OBJECT_ALIGN ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_LEFT ;
+                HelpID = SID_OBJECT_ALIGN_LEFT ;
+                Text = "Links" ;
+                Text [ ENGLISH ] = "Left" ;
+                Text [ norwegian ] = "Left" ;
+                Text [ italian ] = "Sinistra" ;
+                Text [ portuguese_brazilian ] = "A Esquerda" ;
+                Text [ portuguese ] = "Esquerda" ;
+                Text [ finnish ] = "Vasen" ;
+                Text [ danish ] = "Venstre" ;
+                Text [ french ] = "¿ gauche" ;
+                Text [ swedish ] = "V‰nster" ;
+                Text [ dutch ] = "Links" ;
+                Text [ spanish ] = "Izquierda" ;
+                Text [ english_us ] = "Left" ;
+                Text[ chinese_simplified ] = "œÚ◊Û";
+                Text[ russian ] = "—ÎÂ‚‡";
+                Text[ polish ] = "Z lewej";
+                Text[ japanese ] = "ç∂ëµÇ¶";
+                Text[ chinese_traditional ] = "¶V•™";
+                Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
+                Text[ korean ] = "øﬁ¬ ";
+                Text[ arabic ] = "Ì”«—";
+                Text[ turkish ] = "Sol";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_CENTER ;
+                HelpID = SID_OBJECT_ALIGN_CENTER ;
+                Text = "Zentriert" ;
+                Text [ ENGLISH ] = "Centered" ;
+                Text [ norwegian ] = "Centered" ;
+                Text [ italian ] = "Centrato" ;
+                Text [ portuguese_brazilian ] = "Centralizado" ;
+                Text [ portuguese ] = "Centrado" ;
+                Text [ finnish ] = "Keski" ;
+                Text [ danish ] = "Centreret" ;
+                Text [ french ] = "CentrÈ" ;
+                Text [ swedish ] = "Centrerat" ;
+                Text [ dutch ] = "Gecentreerd" ;
+                Text [ spanish ] = "Centrado" ;
+                Text [ english_us ] = "Center" ;
+                Text[ chinese_simplified ] = "æ”÷–";
+                Text[ russian ] = "œÓ ˆÂÌÚÛ";
+                Text[ polish ] = "Wyúrodkuj";
+                Text[ japanese ] = "íÜâõëµÇ¶";
+                Text[ chinese_traditional ] = "∏m§§";
+                Text[ greek ] = " ÂÌÙÒ·ÒÈÛÏ›Ì·";
+                Text[ korean ] = "∞°øÓµ•";
+                Text[ arabic ] = " Ê”Ìÿ";
+                Text[ turkish ] = "Ortala";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_RIGHT ;
+                HelpID = SID_OBJECT_ALIGN_RIGHT ;
+                Text = "Rechts" ;
+                Text [ ENGLISH ] = "Right" ;
+                Text [ norwegian ] = "Right" ;
+                Text [ italian ] = "Destra" ;
+                Text [ portuguese_brazilian ] = "A Direita" ;
+                Text [ portuguese ] = "Direita" ;
+                Text [ finnish ] = "Oikea" ;
+                Text [ danish ] = "H¯jre" ;
+                Text [ french ] = "¿ droite" ;
+                Text [ swedish ] = "Hˆger" ;
+                Text [ dutch ] = "Rechts" ;
+                Text [ spanish ] = "Derecha" ;
+                Text [ english_us ] = "Right" ;
+                Text[ chinese_simplified ] = "œÚ”“";
+                Text[ russian ] = "—Ô‡‚‡";
+                Text[ polish ] = "Z prawej";
+                Text[ japanese ] = "âEëµÇ¶";
+                Text[ chinese_traditional ] = "¶V•k";
+                Text[ greek ] = "ƒÂÓÈ‹";
+                Text[ korean ] = "ø¿∏•¬ ";
+                Text[ arabic ] = "Ì„Ì‰";
+                Text[ turkish ] = "Sa";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_UP ;
+                HelpID = SID_OBJECT_ALIGN_UP ;
+                Text = "Oben" ;
+                Text [ ENGLISH ] = "Top" ;
+                Text [ norwegian ] = "Top" ;
+                Text [ italian ] = "Sopra" ;
+                Text [ portuguese_brazilian ] = "Topo" ;
+                Text [ portuguese ] = "Em cima" ;
+                Text [ finnish ] = "Yl‰" ;
+                Text [ danish ] = "ÿverst" ;
+                Text [ french ] = "En haut" ;
+                Text [ swedish ] = "÷verst" ;
+                Text [ dutch ] = "Boven" ;
+                Text [ spanish ] = "Arriba" ;
+                Text [ english_us ] = "Top" ;
+                Text[ chinese_simplified ] = "œÚ…œ";
+                Text[ russian ] = "¬‚ÂıÛ";
+                Text[ polish ] = "W gÛrze";
+                Text[ japanese ] = "è„";
+                Text[ chinese_traditional ] = "¶V§W";
+                Text[ greek ] = "–‹Ì˘";
+                Text[ korean ] = "¿ß";
+                Text[ arabic ] = "√⁄·Ï";
+                Text[ turkish ] = "‹st";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_MIDDLE ;
+                HelpID = SID_OBJECT_ALIGN_MIDDLE ;
+                Text = "Mitte" ;
+                Text [ ENGLISH ] = "Centered" ;
+                Text [ norwegian ] = "Centered" ;
+                Text [ italian ] = "Centro" ;
+                Text [ portuguese_brazilian ] = "Centralizado" ;
+                Text [ portuguese ] = "Centro" ;
+                Text [ finnish ] = "Keski" ;
+                Text [ danish ] = "Centreret" ;
+                Text [ french ] = "Milieu" ;
+                Text [ swedish ] = "Mitten" ;
+                Text [ dutch ] = "Midden" ;
+                Text [ spanish ] = "Centro" ;
+                Text [ english_us ] = "Centered" ;
+                Text[ chinese_simplified ] = "÷––ƒ";
+                Text[ russian ] = "œÓ ÒÂÂ‰ËÌÂ";
+                Text[ polish ] = "årodek";
+                Text[ japanese ] = "íÜâõ";
+                Text[ chinese_traditional ] = "∏m§§";
+                Text[ greek ] = " ›ÌÙÒÔ";
+                Text[ korean ] = "∞°øÓµ•";
+                Text[ arabic ] = "«·Ê”ÿ";
+                Text[ turkish ] = "Orta";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_ALIGN_DOWN ;
+                HelpID = SID_OBJECT_ALIGN_DOWN ;
+                Text = "Unten" ;
+                Text [ ENGLISH ] = "Bottom" ;
+                Text [ norwegian ] = "Bottom" ;
+                Text [ italian ] = "Sotto" ;
+                Text [ portuguese_brazilian ] = "Base" ;
+                Text [ portuguese ] = "Em baixo" ;
+                Text [ finnish ] = "Ala" ;
+                Text [ danish ] = "Nederst" ;
+                Text [ french ] = "En bas" ;
+                Text [ swedish ] = "Nederst" ;
+                Text [ dutch ] = "Beneden" ;
+                Text [ spanish ] = "Abajo" ;
+                Text [ english_us ] = "Bottom" ;
+                Text[ chinese_simplified ] = "œÚœ¬";
+                Text[ russian ] = "¬ÌËÁÛ";
+                Text[ polish ] = "W dole";
+                Text[ japanese ] = "â∫";
+                Text[ chinese_traditional ] = "¶V§U";
+                Text[ greek ] = " ‹Ù˘";
+                Text[ korean ] = "πŸ¥⁄";
+                Text[ arabic ] = "√”›·";
+                Text[ turkish ] = "Alt";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "∂‘∆Î";
+    Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+    Text[ polish ] = "WyrÛwnanie";
+    Text[ japanese ] = "îzíu";
+    Text[ chinese_traditional ] = "πÔªÙ";
+    Text[ greek ] = "”ÙÔﬂ˜ÈÛÁ";
+    Text[ korean ] = "πËø≠";
+    Text[ arabic ] = "«·„Õ«–«…";
+    Text[ turkish ] = "Hizalama";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

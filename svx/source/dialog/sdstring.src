@@ -1,0 +1,4713 @@
+/*************************************************************************
+ *
+ *  $RCSfile: sdstring.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // Strings fuer die Draw-Dialoge --------------------------------------------
+String RID_SVXSTR_SOLID
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
+    Text = "Durchgängig" ;
+    Text [ ENGLISH ] = "Solid" ;
+    Text [ norwegian ] = "Solid" ;
+    Text [ italian ] = "Piena" ;
+    Text [ portuguese_brazilian ] = "Sólido" ;
+    Text [ portuguese ] = "Contínuo" ;
+    Text [ finnish ] = "Tasainen" ;
+    Text [ danish ] = "Gennemgående" ;
+    Text [ french ] = "Continu" ;
+    Text [ swedish ] = "Genomgående" ;
+    Text [ dutch ] = "Doorlopend" ;
+    Text [ spanish ] = "Continuo" ;
+    Text [ english_us ] = "Continuous" ;
+    Text[ chinese_simplified ] = "Á¬ĞøµÄ";
+    Text[ russian ] = "Ñïëîøíàÿ";
+    Text[ polish ] = "Ci¹g³y";
+    Text[ japanese ] = "Àü";
+    Text[ chinese_traditional ] = "«ùÄòªº";
+    Text[ arabic ] = "ãÊæÇÕá";
+    Text[ greek ] = "Óõíå÷üìåíá";
+    Text[ korean ] = "ÀÏ¹İ";
+    Text[ turkish ] = "Sürekli";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GRADIENT
+{
+    Text = "Farbverlauf" ;
+    Text [ ENGLISH ] = "Gradient" ;
+    Text [ norwegian ] = "Gradient" ;
+    Text [ italian ] = "Sfumatura" ;
+    Text [ portuguese_brazilian ] = "Dégradé" ;
+    Text [ portuguese ] = "Gradação" ;
+    Text [ finnish ] = "Liukuväri" ;
+    Text [ danish ] = "Farvegraduering" ;
+    Text [ french ] = "Dégradé" ;
+    Text [ swedish ] = "Färggradient" ;
+    Text [ dutch ] = "Kleurverloop" ;
+    Text [ spanish ] = "Gradiente de color" ;
+    Text [ english_us ] = "Gradient" ;
+    Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸";
+    Text[ russian ] = "Ãğàäèåíòíàÿ";
+    Text[ polish ] = "Gradient";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ";
+    Text[ chinese_traditional ] = "±m¦â¹Ï®×";
+    Text[ arabic ] = "ÊÏÑÌ Çááæä";
+    Text[ greek ] = "ÄéáâÜèìéóç ÷ñşìáôïò";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
+    Text[ turkish ] = "Gradyan";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den Farbverlauf ein: */
+    Text = "Geben Sie hier bitte den Namen für den Farbverlauf ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the Gradient:" ;
+    Text [ norwegian ] = "Please insert a Name for the Gradient:" ;
+    Text [ italian ] = "Digitate un nome per la sfumatura:" ;
+    Text [ portuguese_brazilian ] = "Please insert a Name for the Gradient:" ;
+    Text [ portuguese ] = "Introduza aqui um nome para a gradação:" ;
+    Text [ french ] = "Saisissez un nom pour le dégradé :" ;
+    Text [ dutch ] = "Typ hier een naam voor het kleurverloop:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el gradiente:" ;
+    Text [ danish ] = "Indtast venligst et navn til farvegradueringen:" ;
+    Text [ swedish ] = "Mata in ett namn för färggradienten här:" ;
+    Text [ finnish ] = "Please insert a Name for the Gradient:" ;
+    Text [ english_us ] = "Please enter a name for the gradient:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄ²ÊÉ«Í¼°¸ÊäÈëÒ»¸öÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîé ãğàäèåíòíîé:";
+    Text[ polish ] = "Podaj nazwê gradientu:";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº±m¦â¹Ï®×¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã áÊÏÑÌ Çááæä åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ãéá ôçí äéáâÜèìéóç ôïõ ÷ñşìáôïò:";
+    Text[ korean ] = "¿©±â¿¡ ±×¶óµ¥ÀÌ¼ÇÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Gradyan için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
+    Text = "Farbverlauf löschen" ;
+    Text [ ENGLISH ] = "Delete Gradient" ;
+    Text [ norwegian ] = "Slett+++ Gradient" ;
+    Text [ italian ] = "Elimina sfumatura" ;
+    Text [ portuguese_brazilian ] = "Apagar Dégradé" ;
+    Text [ portuguese ] = "Eliminar gradação" ;
+    Text [ finnish ] = "Poista liukuväri" ;
+    Text [ danish ] = "Slet farvegradueringen" ;
+    Text [ french ] = "Supprimer le dégradé" ;
+    Text [ swedish ] = "Radera färggradient" ;
+    Text [ dutch ] = "Kleurverloop wissen" ;
+    Text [ spanish ] = "Eliminar gradiente de color" ;
+    Text [ english_us ] = "Delete gradient" ;
+    Text[ chinese_simplified ] = "É¾³ı²ÊÉ«Í¼°¸";
+    Text[ russian ] = "Óäàëèòü ãğàäèåíòíóş";
+    Text[ polish ] = "Usuñ gradient";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£±m¦â¹Ï®×";
+    Text[ arabic ] = "ÍĞİ ÊÏÑÌ Çááæä";
+    Text[ greek ] = "ÄéáãñáöŞ äéáâÜèìéóç ÷ñşìáôïò";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç »èÁ¦";
+    Text[ turkish ] = "Gradyanı sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
+    Text = "Soll der Farbverlauf wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the Gradient?" ;
+    Text [ norwegian ] = "Vil du slette+++ Gradient?" ;
+    Text [ italian ] = "Eliminare la sfumatura?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o Dégradé?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar a gradação?" ;
+    Text [ finnish ] = "Poistetaanko liukuväri?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette farvegradueringen?" ;
+    Text [ french ] = "Voulez-vous supprimer le dégradé ?" ;
+    Text [ swedish ] = "Skall färggradienten verkligen raderas?" ;
+    Text [ dutch ] = "Wilt u het kleurverloop werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el gradiente de color?" ;
+    Text [ english_us ] = "Do you want to delete the gradient?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö²ÊÉ«Í¼°¸Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó ãğàäèåíòíóş?";
+    Text[ polish ] = "Czy chcesz na pewno usun¹æ gradient?";
+    Text[ japanese ] = "‚±‚Ì¸Ş×ÃŞ°¼®İ‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó±m¦â¹Ï®×¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÊÏÑÌ Çááæä¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá ãßíåé äéáãñáöŞ ôçò äéáâÜèìéóçò ÷ñşìáôïò;";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Gradyan gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_GRADIENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
+    Text = "Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen." ;
+    Text [ ENGLISH ] = "The Gradient was modified without Save? \nChange the selceted Gradient or add a new Gradient." ;
+    Text [ norwegian ] = "+++The Gradient ble endret uten å lagres? \nEndre den merkede +++Gradient eller legg til en ny +++Gradient." ;
+    Text [ italian ] = "La sfumatura è stata modificata ma non cambiata \nPotete cambiare la sfumatura selezionata \no aggiungerne una nuova." ;
+    Text [ portuguese_brazilian ] = "O Dégradé foi modificado sem Gravar? \nMude o Dégradé selecionado ou acrescente um novo Dégradé." ;
+    Text [ portuguese ] = "A gradação da cor foi modificada e não guardada.\nPoderá modificar a gradação seleccionada\nou adicionar uma nova." ;
+    Text [ finnish ] = "Muutettua liukuväriä ei ole tallennettu. \nVoit muokata valittua liukuväriä tai lisätä uuden." ;
+    Text [ danish ] = "Farvegradueringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farvegraduering \neller tilføje en ny." ;
+    Text [ french ] = "Le dégradé a été modifié sans avoir été sauvegardé.\nVous pouvez modifier le dégradé sélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Färggradienten ändrades utan att sparas.\nDu kan ändra den markerade färggradienten\neller lägga till en ny." ;
+    Text [ dutch ] = "In het kleurverloop werden wijzigingen aangebracht en niet opgeslagen. \\U kunt het geselecteerde kleurverloop wijzigen \nof een nieuw kleurverloop toevoegen." ;
+    Text [ spanish ] = "El gradiente de color ha sido modificado sin guardar.\nPuede modificarlo\no añadir uno nuevo." ;
+    Text [ english_us ] = "The gradient was modified without saving. \nModify the selected gradient or add a new gradient." ;
+    Text[ chinese_simplified ] = "Õâ¸ö²ÊÉ«Í¼°¸ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇ»¹Ã»ÓĞ±»±£´æ¡£\nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄ²ÊÉ«Í¼°¸\n»òÕßĞÂÔöÒ»¸öĞÂµÄ²ÊÉ«Í¼°¸¡£";
+    Text[ russian ] = "Ãğàäèåíòíàÿ áûëà èçìåíåíà. íî íå ñîõğàíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş ãğàäèåíòíóş \nèëè äîáàâèòü íîâóş ãğàäèåíòíóş.";
+    Text[ polish ] = "Gradient zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony gradient \nlub dodaæ nowy gradient.";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½¸Ş×ÃŞ°¼®İ‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢¸Ş×ÃŞ°¼®İ‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­Ó±m¦â¹Ï®×¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C\n±z¯à°÷ÅÜ§ó¿ï¨úªº±m¦â¹Ï®×\n©ÎªÌ¼W¥[¤@­Ó·sªº±m¦â¹Ï®×¡C";
+    Text[ arabic ] = "áã íÊã ÍİÙ ÊÏÑÌ Çááæä ÈÚÏ ÊÛííÑå. \níãßäß ÊÛííÑ ÊÏÑÌ Çááæä ÇáãÍÏÏ \nÃæ ÅÖÇİÉ ÊÏÑÌ áæä ÌÏíÏ.";
+    Text[ greek ] = "Ç äéáâÜèìéóç ôïõ ÷ñşìáôïò ôñïğïğïéŞèçêå êáé äåí áğïèçêåıôçêå. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç äéáâÜèìéóç ÷ñşìáôïò \nŞ íá ğñïóèİóåôå ìéá êáéíïıñéá.";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼ÇÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ ±×¶óµ¥ÀÌ¼ÇÀ» º¯°æÇÏ°Å³ª \n»õ ±×¶óµ¥ÀÌ¼ÇÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Gradyan değiştirildi ancak kaydedilmedi.\nSeçili gradyanı değiştirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BITMAP
+{
+    Text = "Bitmap" ;
+};
+String RID_SVXSTR_DESC_NEW_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Bitmap ein: : Geben Sie hier bitte den Namen f³r die Bitmap ein: */
+    Text = "Geben Sie hier bitte den Namen für die Bitmap ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the Bitmap:" ;
+    Text [ norwegian ] = "Please insert a Name for the Bitmap:" ;
+    Text [ italian ] = "Digitare un nome per la Bitmap:" ;
+    Text [ portuguese_brazilian ] = "Please insert a Name for the Bitmap:" ;
+    Text [ portuguese ] = "Por favor introduza um nome para o mapa de bits:" ;
+    Text [ french ] = "Saisissez un nom pour le bitmap :" ;
+    Text [ dutch ] = "Typ hier een naam voor de bitmap:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para la bitmap:" ;
+    Text [ danish ] = "Indtast venligst et navn til denne bitmap:" ;
+    Text [ swedish ] = "Ange ett namn för bitmappen:" ;
+    Text [ finnish ] = "Please insert a Name for the Bitmap:" ;
+    Text [ english_us ] = "Please enter a name for the bitmap:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÎ»Í¼ÊäÈëÒ»¸öÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîãî bitmap:";
+    Text[ polish ] = "Podaj nazwê mapy bitowej:";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº¦ì¹Ï¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôï Âitmap:";
+    Text[ korean ] = "¿©±â¿¡ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Bit eşlem için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_EXT_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
+    Text = "Geben Sie hier bitte den Namen für die externe Bitmap ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the external Bitmap:" ;
+    Text [ norwegian ] = "Sett inn Navn på den eksterne Punktmatrisen:" ;
+    Text [ italian ] = "Digitate il nome per la bitmap esterna:" ;
+    Text [ portuguese_brazilian ] = "Por favor insira um Nome para o Bitmap externo:" ;
+    Text [ portuguese ] = "Por favor introduza um nome para o mapa de bits externo:" ;
+    Text [ finnish ] = "Kirjoita ulkoisen bittikartan nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den eksterne bitmap:" ;
+    Text [ french ] = "Saisissez un nom pour le bitmap externe :" ;
+    Text [ swedish ] = "Ange namn för extern bitmap:" ;
+    Text [ dutch ] = "Typ hier een naam voor de externe bitmap:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para la bitmap externa:" ;
+    Text [ english_us ] = "Please enter a name for the external bitmap:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÍâÀ´Î»Í¼ÊäÈëÒ»¸öÃû³Æ:";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ íîâîãî bitmap :";
+    Text[ polish ] = "Podaj nazwê zewnêtrznej mapy bitowej:";
+    Text[ japanese ] = "ŠO•”ËŞ¯ÄÏ¯Ìß‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº¥~¨ÓÂI°}¹Ï¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáÕæÑÉ ÇáäŞØíÉ ÇáÎÇÑÌíÉ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôï åîùôåñéêü Âitmap:";
+    Text[ korean ] = "¿©±â¿¡ ¿ÜºÎ ºñÆ®¸ÊÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Dış bit eşlem için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
+    Text = "Bitmap löschen" ;
+    Text [ ENGLISH ] = "Delete Bitmap:" ;
+    Text [ norwegian ] = "Slett Punktmatrise:" ;
+    Text [ italian ] = "Cancella Bitmap" ;
+    Text [ portuguese_brazilian ] = "Apagar Bitmap:" ;
+    Text [ portuguese ] = "Eliminar Bitmap:" ;
+    Text [ finnish ] = "Poista bittikartta:" ;
+    Text [ danish ] = "Slet bitmap" ;
+    Text [ french ] = "Supprimer le bitmap" ;
+    Text [ swedish ] = "Radera bitmap" ;
+    Text [ dutch ] = "Bitmap wissen" ;
+    Text [ spanish ] = "Eliminar bitmap" ;
+    Text [ english_us ] = "Delete bitmap" ;
+    Text[ chinese_simplified ] = "É¾³ıÎ»Í¼";
+    Text[ russian ] = "Óäàëèòü bitmap";
+    Text[ polish ] = "Usuñ mapê bitow¹";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£ÂI°}¹Ï";
+    Text[ arabic ] = "ÍĞİ ÇáÕæÑÉ ÇáäŞØíÉ";
+    Text[ greek ] = "ÄéáãñáöŞ bitmap";
+    Text[ korean ] = "ºñÆ®¸Ê »èÁ¦";
+    Text[ turkish ] = "Bit eşlemi sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
+    Text = "Soll die Bitmap wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the Bitmap?" ;
+    Text [ norwegian ] = "Vil du slette Punktmatrisen?" ;
+    Text [ italian ] = "Eliminare la bitmap?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o Bitmap?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar o bitmap?" ;
+    Text [ finnish ] = "Poistetaanko bittikartta?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette denne bitmap?" ;
+    Text [ french ] = "Confirmez-vous la suppression du bitmap ?" ;
+    Text [ swedish ] = "Skall bitmappen verkligen raderas?" ;
+    Text [ dutch ] = "Wilt u de bitmap werkelijk verwijderen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el bitmap?" ;
+    Text [ english_us ] = "Are you sure you want to delete the bitmap?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÎ»Í¼Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò bitmap?";
+    Text[ polish ] = "Czy chcesz na pewno usun¹æ mapê bitow¹?";
+    Text[ japanese ] = "‚±‚ÌËŞ¯ÄÏ¯Ìß‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­ÓÂI°}¹Ï¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáÕæÑÉ ÇáäŞØíÉ¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñÜøåôå ôï Bitmap;";
+    Text[ korean ] = "ºñÆ®¸ÊÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bit eşlem gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_BITMAP
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
+    Text = "Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen." ;
+    Text [ ENGLISH ] = "The Bitmap was modified without Save? \nChange the selected Bitmap or add a new Bitmap." ;
+    Text [ norwegian ] = "Punktmatrisen ble endret uten å lagres? \nEndre den merkede Punktmatrisen eller legg til en ny Punktmatrise." ;
+    Text [ italian ] = "La bitmap è stata modificata ma non salvata \nPotete cambiare la bitmap selezionata \no naggiungerne una nuova." ;
+    Text [ portuguese_brazilian ] = "O Bitmap foi modificado sem Gravar? \nMude o Bitmap selecionado ou acrescente um novo Bitmap." ;
+    Text [ portuguese ] = "O bitmap foi alterado e não guardado? \nPoderá modificar o bitmap seleccionado \nou adicionar um novo." ;
+    Text [ finnish ] = "Muutettua bittikarttaa ei ole tallennettu? \nVoit muokata valittua bittikarttaa tai lisätä uuden." ;
+    Text [ danish ] = "Denne bitmap er blevet ændret, men ikke gemt. \nDu kan ændre den markerede bitmap\n eller tilføje en ny." ;
+    Text [ french ] = "Le bitmap a été modifié sans avoir été sauvegardé.\nVous pouvez modifier le bitmap sélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Bitmappen ändrades utan att sparas. \nDu kan ändra den markerade bitmappen\neller lägga till en ny." ;
+    Text [ dutch ] = "In de bitmap werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde bitmap wijzigen \nof een nieuwe bitmap toevoegen." ;
+    Text [ spanish ] = "El bitmap ha sido modificado sin guardar.\nPuede modificar el bitmap seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The bitmap was modified without saving. \nModify the selected bitmap or add a new bitmap." ;
+    Text[ chinese_simplified ] = "Õâ¸öÎ»Í¼ÑùÊ½ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÎ»Í¼\n»òÕßĞÂÔöÒ»¸öĞÂµÄÎ»Í¼¡£";
+    Text[ russian ] = "Bitmap áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé bitmap \nèëè äîáàâèòü íîâûé bitmap.";
+    Text[ polish ] = "Mapa bitowa zosta³a zmieniona i nie zapisana. \nMo¿esz zmieniæ zaznaczon¹ mapê bitow¹ \nlub dodaæ now¹ mapê bitow¹.";
+    Text[ japanese ] = "ËŞ¯ÄÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ËŞ¯ÄÏ¯Ìß‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢ËŞ¯ÄÏ¯Ìß‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­ÓÂI°}¹Ïªº¼Ë¦¡¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªºÂI°}¹Ï\n©ÎªÌ¼W¥[¤@­Ó·sªºÂI°}¹Ï¡C";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÕæÑÉ ÇáäŞØíÉ æáã íÊã ÍİÙåÇ ÈÚÏ.\níãßäß ÊÛííÑ ÇáÕæÑÉ ÇáäŞØíÉ ÇáãÍÏÏÉ¡\nÃæ ÅÖÇİÉ ÕæÑÉ äŞØíÉ ÌÏíÏÉ.";
+    Text[ greek ] = "Ôï bitmap ôñïğïğïéŞèçêå ÷ùñßò íá ãßíåé áğïèŞêåõóç. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç bitmap \nŞ íá ğñïóèİóåôå ìéá êáéíïıñéá bitmap.";
+    Text[ korean ] = "ºñÆ®¸ÊÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ºñÆ®¸ÊÀ» º¯°æÇÏ°Å³ª \n»õ ºñÆ®¸ÊÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Bit eşlem değiştirildi ancak kaydedilmedi.\nSeçili bit eşlemi değiştirebilir ya da\nyeni bir bit eşlem ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LINESTYLE
+{
+    Text = "Linienstil" ;
+    Text [ ENGLISH ] = "Linestyle" ;
+    Text [ norwegian ] = "Linestyle" ;
+    Text [ italian ] = "Stile linea" ;
+    Text [ portuguese_brazilian ] = "Estilo da Linha" ;
+    Text [ portuguese ] = "Estilo de linha" ;
+    Text [ finnish ] = "Viivan tyyli" ;
+    Text [ danish ] = "Stregtype" ;
+    Text [ french ] = "Style de ligne" ;
+    Text [ swedish ] = "Linjestil" ;
+    Text [ dutch ] = "Lijntype" ;
+    Text [ spanish ] = "Estilo de línea" ;
+    Text [ english_us ] = "Line Style" ;
+    Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù";
+    Text[ russian ] = "Ñòèëü ëèíèè";
+    Text[ polish ] = "Styl linii";
+    Text[ japanese ] = "ü½À²Ù";
+    Text[ chinese_traditional ] = "½u±ø¼Ë¦¡";
+    Text[ arabic ] = "äãØ ÇáÎØ";
+    Text[ greek ] = "Óôõë ãñáììŞò";
+    Text[ korean ] = "¼±ÀÇ À¯Çü";
+    Text[ turkish ] = "Çizgi biçimi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den Linienstil ein: : Geben Sie hier bitte den Namen f³r den Linienstil ein: */
+    Text = "Geben Sie hier bitte den Namen für den Linienstil ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the Linestyle:" ;
+    Text [ norwegian ] = "Please insert a Name for the Linestyle:" ;
+    Text [ italian ] = "Digitare un nome per lo stile di linea:" ;
+    Text [ portuguese_brazilian ] = "Please insert a Name for the Linestyle:" ;
+    Text [ portuguese ] = "Por favor introduza um nome para o estilo de linha:" ;
+    Text [ french ] = "Saisissez un nom pour le style de ligne :" ;
+    Text [ dutch ] = "Typ hier een naam voor het nieuwe lijntype:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el estilo de línea:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye stregtype:" ;
+    Text [ swedish ] = "Mata in namnet för linjestilen här:" ;
+    Text [ finnish ] = "Please insert a Name for the Linestyle:" ;
+    Text [ english_us ] = "Please enter a name for the line style:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÏßÌõÊ½ÑùÊäÈëÒ»¸öÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîãî ñòèëÿ ëèíèè:";
+    Text[ polish ] = "Wpisz tutaj nazwê dla nowego stylu linii:";
+    Text[ japanese ] = "ü½À²Ù‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº½u±ø¼Ë¦¡¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã äãØ ÇáÎØ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôï óôõë ãñáììŞò:";
+    Text[ korean ] = "¿©±â¿¡ »õ ¼± À¯ÇüÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Çizgi biçimi için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
+    Text = "Linienstil löschen" ;
+    Text [ ENGLISH ] = "Delete Linestyle:" ;
+    Text [ norwegian ] = "Slett Linjestil:" ;
+    Text [ italian ] = "Cancella stile linea" ;
+    Text [ portuguese_brazilian ] = "Apagar Estilo de linha:" ;
+    Text [ portuguese ] = "Eliminar estilo de linha" ;
+    Text [ finnish ] = "Poista viivatyyli" ;
+    Text [ danish ] = "Slet stregtype" ;
+    Text [ french ] = "Supprimer le style de ligne" ;
+    Text [ swedish ] = "Radera linjestil" ;
+    Text [ dutch ] = "Lijntype wissen" ;
+    Text [ spanish ] = "Eliminar estilo de línea" ;
+    Text [ english_us ] = "Delete line style" ;
+    Text[ chinese_simplified ] = "É¾³ıÏßÌõÊ½Ñù";
+    Text[ russian ] = "Óäàëèòü ñòèëü ëèíèè";
+    Text[ polish ] = "Usuñ styl linii";
+    Text[ japanese ] = "ü½À²Ù‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£½u±ø¼Ë¦¡";
+    Text[ arabic ] = "ÍĞİ äãØ ÇáÎØ";
+    Text[ greek ] = "ÄéáãñáöŞ óôõë ãñáììŞò";
+    Text[ korean ] = "¼± À¯Çü »èÁ¦";
+    Text[ turkish ] = "Çizgi biçimini sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
+    Text = "Soll der Linienstil wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the Linestyle?" ;
+    Text [ norwegian ] = "Vil du slette Linjestilen?" ;
+    Text [ italian ] = "Eliminare lo stile della linea?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o Estilo de linha?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar o estilo de linha?" ;
+    Text [ finnish ] = "Poistetaanko viivatyyli?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette stregtypen?" ;
+    Text [ french ] = "Voulez-vous supprimer le style de ligne ?" ;
+    Text [ swedish ] = "Skall linjestilen verkligen raderas?" ;
+    Text [ dutch ] = "Wilt u het lijntype werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el estilo de línea?" ;
+    Text [ english_us ] = "Do you want to delete the line style?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏßÌõÊ½ÑùÂğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòî ñòèëü ëèíèè?";
+    Text[ polish ] = "Czy styl linii ma na pewno zostaæ usuniêty?";
+    Text[ japanese ] = "‚±‚Ìü‚Ì½À²Ù‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½u±ø¼Ë¦¡¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äãØ ÇáÎØ¿";
+    Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï óôõë ãñáììŞò;";
+    Text[ korean ] = "¼± À¯ÇüÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Çizgi biçimi gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_LINESTYLE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
+    Text = "Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen." ;
+    Text [ ENGLISH ] = "The Linestyle was modified without Save? \nChange the selected Linestyle or add a new Linestyle." ;
+    Text [ norwegian ] = "Linjestilen ble endret uten å lagres\nEndre den merkede Linjestilen eller legg til en ny Linjestil." ;
+    Text [ italian ] = "Lo stile è stato modificato ma non salvato.\nPotetecambiare lo stile selezionato\\o aggiungerne uno nuovo." ;
+    Text [ portuguese_brazilian ] = "O Estilo de linha foi modificado sem Gravar? \nMude o Estilo de linha selecionado ou acrescente um novo Estilo de linha." ;
+    Text [ portuguese ] = "O fim de linha foi modificado e não guardado.\nPoderá modificar o fim de linha seleccionado\nou adicionar um novo." ;
+    Text [ finnish ] = "Muutettua viivatyyliä ei ole tallennettu. \nVoit muokata valittua viivatyyliä tai lisätä uuden." ;
+    Text [ danish ] = "Stregtypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede stregtype \neller tilføje en ny." ;
+    Text [ french ] = "Le style de ligne a été modifié sans avoir été sauvegardé. \nVous pouvez modifiez le style de ligne sélectionné ou en ajouter un nouveau." ;
+    Text [ swedish ] = "Linjestilen ändrades utan att sparas.\nDu kan ändra den markerade linjestilen eller\nlägga till en ny." ;
+    Text [ dutch ] = "In het lijntype werden wijzigingen aangebracht die niet werden opgeslagen \nU kunt het geselecteerde lijntype wijzigen \nof een nieuw lijntype toevoegen." ;
+    Text [ spanish ] = "El estilo de línea ha sido modificado sin guardar.\nPuede modificar el estilo de línea seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The line style was modified without saving. \nModify the selected line style or add a new line style." ;
+    Text[ chinese_simplified ] = "Õâ¸öÏßÌõÊ½ÑùÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÏßÌõÊ½Ñù\n»òÕßĞÂÔöÒ»¸öÏßÌõÊ½Ñù¡£";
+    Text[ russian ] = "Ñòèëü ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé\nèëè äîáàâèòü íîâûé ñòèëü ëèíèè.";
+    Text[ polish ] = "Styl linii zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony styl linii \nlub dodaæ nowy styl linii.";
+    Text[ japanese ] = "ü‚Ì½À²Ù‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½ü‚Ì½À²Ù‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢ü‚Ì½À²Ù‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­Ó½u±ø¼Ë¦¡¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªº½u±ø¼Ë¦¡\n©ÎªÌ¼W¥[¤@­Ó·sªº½u±ø¼Ë¦¡¡C";
+    Text[ arabic ] = "Êã ÊÛííÑ äãØ ÇáÎØ æáã íÊã ÍİÙå ÈÚÏ.\níãßäß ÊÛííÑ äãØ ÇáÎØ ÇáãÍÏÏ¡\nÃæ ÅÖÇİÉ äãØ ÎØ ÌÏíÏ.";
+    Text[ greek ] = "Ôï óôõë ãñáììŞò ôñïğïğïéŞèçêå ÷ùñßò íá ãßíåé áğïèŞêåõóç. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï óôõë \nŞ íá ğñïóèİóåôå İíá êáéíïıñéï óôõë ãñáììŞò.";
+    Text[ korean ] = "¼± À¯ÇüÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ ¼± À¯ÇüÀ» º¯°æÇÏ°Å³ª \n»õ ¼± À¯ÇüÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Çizgi biçimi değiştirildi ancak kaydedilmedi. \nSeçili çizgi biçimini değiştirebilir ya da \nyeni bir çizgi biçimi ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_INVISIBLE
+{
+    Text = "Unsichtbar" ;
+    Text [ ENGLISH ] = "Invisible" ;
+    Text [ norwegian ] = "Usynlig" ;
+    Text [ italian ] = "Invisibile" ;
+    Text [ portuguese_brazilian ] = "Invisível" ;
+    Text [ portuguese ] = "Invisível" ;
+    Text [ finnish ] = "Näkymätön" ;
+    Text [ danish ] = "Usynlig" ;
+    Text [ french ] = "Invisible" ;
+    Text [ swedish ] = "Osynlig" ;
+    Text [ dutch ] = "Onzichtbaar" ;
+    Text [ spanish ] = "Invisible" ;
+    Text [ english_us ] = "Invisible" ;
+    Text[ chinese_simplified ] = "ÒşÈëµÄ";
+    Text[ russian ] = "Íåâèäèìàÿ";
+    Text[ polish ] = "Niewidoczny";
+    Text[ japanese ] = "”ñ•\\¦";
+    Text[ chinese_traditional ] = "Áô¤Jªº";
+    Text[ arabic ] = "ÛíÑ ãÑÆí";
+    Text[ greek ] = "Ìç ïñáôÜ";
+    Text[ korean ] = "º¸ÀÌÁö ¾Ê°Ô";
+    Text[ turkish ] = "Gizle";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_COLOR
+{
+    Text = "Farbe" ;
+    Text [ ENGLISH ] = "Color" ;
+    Text [ norwegian ] = "Farge" ;
+    Text [ italian ] = "Colore" ;
+    Text [ portuguese_brazilian ] = "Cor" ;
+    Text [ portuguese ] = "Cor" ;
+    Text [ finnish ] = "Väri" ;
+    Text [ danish ] = "Farve" ;
+    Text [ french ] = "Couleur" ;
+    Text [ swedish ] = "Färg" ;
+    Text [ dutch ] = "Kleur" ;
+    Text [ spanish ] = "Color" ;
+    Text [ english_us ] = "Color" ;
+    Text[ chinese_simplified ] = "ÑÕÉ«";
+    Text[ russian ] = "Öâåò";
+    Text[ polish ] = "Kolor";
+    Text[ japanese ] = "F";
+    Text[ chinese_traditional ] = "ÃC¦â";
+    Text[ arabic ] = "Çááæä";
+    Text[ greek ] = "×ñşìá";
+    Text[ korean ] = "»ö";
+    Text[ turkish ] = "Renk";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HATCH
+{
+    Text = "Schraffur" ;
+    Text [ ENGLISH ] = "Hatch" ;
+    Text [ norwegian ] = "Hatch" ;
+    Text [ italian ] = "Tratteggio" ;
+    Text [ portuguese_brazilian ] = "Sombreado" ;
+    Text [ portuguese ] = "Tracejado" ;
+    Text [ finnish ] = "Viivoitus" ;
+    Text [ danish ] = "Skravering" ;
+    Text [ french ] = "Hachure" ;
+    Text [ swedish ] = "Skraffering" ;
+    Text [ dutch ] = "Arcering" ;
+    Text [ spanish ] = "Trama" ;
+    Text [ english_us ] = "Hatching" ;
+    Text[ chinese_simplified ] = "ÒõÓ°Ïß";
+    Text[ russian ] = "Øòğèõîâêà";
+    Text[ polish ] = "Kreskowanie";
+    Text[ japanese ] = "Ê¯Áİ¸Ş";
+    Text[ chinese_traditional ] = "³±¼v½u";
+    Text[ arabic ] = "äŞÔ";
+    Text[ greek ] = "ÃñáììïóêéÜ";
+    Text[ korean ] = "ÇØÄª";
+    Text[ turkish ] = "Desen";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_HATCH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die Schraffur ein: : Geben Sie hier bitte den Namen f³r die Schraffur ein: */
+    Text = "Geben Sie hier bitte den Namen für die Schraffur ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the hatch:" ;
+    Text [ norwegian ] = "Please insert a Name for the hatch:" ;
+    Text [ italian ] = "Digitare un nome per il tratteggio:" ;
+    Text [ portuguese_brazilian ] = "Please insert a Name for the hatch:" ;
+    Text [ portuguese ] = "Indique o nome para o tracejado:" ;
+    Text [ french ] = "Saisissez un nom pour la hachure :" ;
+    Text [ dutch ] = "Typ hier een naam voor de arcering:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para la trama:" ;
+    Text [ danish ] = "Indtast venligst et navn til skraveringen:" ;
+    Text [ swedish ] = "Mata in namnet för skrafferingen här:" ;
+    Text [ finnish ] = "Please insert a Name for the hatch:" ;
+    Text [ english_us ] = "Please enter a name for the hatching:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÒõÓ°ÊäÈëÒ»¸öÃû³Æ:";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîé øòğèõîâêè:";
+    Text[ polish ] = "Wpisz nazwê dla kreskowania:";
+    Text[ japanese ] = "Ê¯Áİ¸Ş‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº³±¼v½u¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ááäŞÔ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôç ãñáììïóêéÜ:";
+    Text[ korean ] = "¿©±â¿¡ ÇØÄªÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Desen için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_HATCH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Schraffur löschen : Schraffur l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Schraffur löschen : Schraffur l÷schen */
+    Text = "Schraffur löschen" ;
+    Text [ ENGLISH ] = "Delete hatch" ;
+    Text [ norwegian ] = "Slett skravering" ;
+    Text [ italian ] = "Elimina tratteggio" ;
+    Text [ portuguese_brazilian ] = "Apagar traço de sombreado" ;
+    Text [ portuguese ] = "Eliminar tracejado" ;
+    Text [ finnish ] = "Poista viivoitus" ;
+    Text [ danish ] = "Slet skravering" ;
+    Text [ french ] = "Supprimer les hachures" ;
+    Text [ swedish ] = "Radera skraffering" ;
+    Text [ dutch ] = "Arcering verwijderen" ;
+    Text [ spanish ] = "Eliminar trama" ;
+    Text [ english_us ] = "Delete hatching" ;
+    Text[ chinese_simplified ] = "É¾³ıÒõÓ°";
+    Text[ russian ] = "Óäàëèòü øòğèõîâêó";
+    Text[ polish ] = "Usuñ kreskowanie";
+    Text[ japanese ] = "Ê¯Áİ¸Ş‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£³±¼v½u";
+    Text[ arabic ] = "ÍĞİ ÇáäŞÔ";
+    Text[ greek ] = "ÄéáãñáöŞ ãñáììïóêéÜò";
+    Text[ korean ] = "ÇØÄª »èÁ¦";
+    Text[ turkish ] = "Deseni sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_HATCH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Schraffur wirklich gelöscht werden? : Soll die Schraffur wirklich gel÷scht werden? */
+    Text = "Soll die Schraffur wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the hatch?" ;
+    Text [ norwegian ] = "Vil du slette skraveringen?" ;
+    Text [ italian ] = "Eliminare il tratteggio?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar o traço de sombreado?" ;
+    Text [ portuguese ] = "Eliminar o tracejado?" ;
+    Text [ finnish ] = "Poistetaanko viivoitus?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette skraveringen?" ;
+    Text [ french ] = "Voulez-vous supprimer les hachures ?" ;
+    Text [ swedish ] = "Vill Du verkligen radera skraffering?" ;
+    Text [ dutch ] = "Wilt u de arcering werkelijk verwijderen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el entramado?" ;
+    Text [ english_us ] = "Do you want to delete the hatching?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÒõÓ°Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòó øòğèõîâêó?";
+    Text[ polish ] = "Czy na pewno usun¹æ kreskowanie?";
+    Text[ japanese ] = "‚±‚ÌÊ¯Áİ¸Ş‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó³±¼v½u¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáäŞÔ¿";
+    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ç ãñáììïóêéÜ;";
+    Text[ korean ] = "ÇØÄªÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Desen gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_HATCH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen. : Die Schraffur wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Schraffur õndern \noder eine neue Schraffur hinzuf³gen. */
+    Text = "Die Schraffur wurde geändert und nicht gesichert. \nSie können die selektierte Schraffur ändern \noder eine neue Schraffur hinzufügen." ;
+    Text [ ENGLISH ] = "The hatch was modified without Save? \nChange the selceted hatch or add a new hatch." ;
+    Text [ norwegian ] = "Skraveringen ble slettet uten å lagres\nEndre den merkede skraveringen eller legg til en ny skravering." ;
+    Text [ italian ] = "Il tratteggio è stato modificato ma non salvato \nPotete cambiare il tratteggio selezionato \noppure aggiungerne uno nuovo." ;
+    Text [ portuguese_brazilian ] = "The traço de sombreado foi modificado sem Gravar? \nMude o traço de sombreado selecionado ou acrescente um novo traço de sombreado." ;
+    Text [ portuguese ] = "Tracejado foi alterado e não guardado.\nPoderá alterar o tracejado seleccionado\nou adicionar um novo." ;
+    Text [ finnish ] = "Muutettua viivoitusta ei ole tallennettu. \nVoit muokata valittua viivoitusta tai lisätä uuden." ;
+    Text [ danish ] = "Skraveringen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede skravering\n eller tilføje en ny." ;
+    Text [ french ] = "Les hachures ont été modifiées sans avoir été sauvegardées. \nVous pouvez modifier les hachures sélectionnées ou en ajouter de nouvelles." ;
+    Text [ swedish ] = "Skrafferingen ändrades utan att sparas.\nDu kan ändra den markerade skrafferingen eller\nlägga till en ny." ;
+    Text [ dutch ] = "In de arcering werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde arcering wijzigen \nof een nieuwe arcering toevoegen." ;
+    Text [ spanish ] = "La trama ha sido modificada sin guardar.\nPuede modificar la trama seleccionada\no añadir una nueva." ;
+    Text [ english_us ] = "The hatching type was modified but not saved. \nModify the selected hatching type or add a new hatching type." ;
+    Text[ chinese_simplified ] = "Õâ¸öÒõÓ°ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÒõÓ°\n»òÕßĞÂÔöÒ»¸öĞÂµÄÒõÓ°¡£";
+    Text[ russian ] = "Øòğèõîâêà áûëà èçìåíåíà, íî íå ñîõğàíåíà. \nÂû ìîæåòå èçìåíèòü âûáğàííóş øòğèõîâêó \nèëè äîáàâèòü íîâóş øòğèõîâêó.";
+    Text[ polish ] = "Kreskowanie zosta³o zmienione i nie zapisane. \nMo¿esz zmieniæ zaznaczone kreskowanie \ni lub dodaæ nowe kreskowanie.";
+    Text[ japanese ] = "Ê¯Áİ¸Ş‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½Ê¯Áİ¸Ş‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢Ê¯Áİ¸Ş‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­Ó³±¼v¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªº³±¼v\n©ÎªÌ¼W¥[¤@­Ó·sªº³±¼v¡C";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáäŞÔ æáã íÊã ÍİÙå ÈÚÏ.\níãßäß ÊÛííÑ ÇáäŞÔ ÇáãÍÏÏ¡\nÃæ ÅÖÇİÉ äŞÔ ÌÏíÏ.";
+    Text[ greek ] = "Ç ãñáììïóêéÜ ôñïğïğïéŞèçêå ÷ùñßò íá ãßíåé áğïèŞêåõóç. \nÌğïñåßôå íá áëëÜîåôå ôçí åğéëåãìİíç ãñáììïóêéÜ \nŞ íá ğñïóèİóåôå ìéá êáéíïıñéá ãñáììïóêéÜ.";
+    Text[ korean ] = "ÇØÄªÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \n¼±ÅÃµÈ ÇØÄªÀ» º¯°æÇÏ°Å³ª \n»õ ÇØÄªÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Desen değiştirildi ancak kaydedilmedi.\nSeçili deseni değiştirebilir ya da\nyeni bir desen ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_CHANGE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Ändern : ndern */
+    /* ### ACHTUNG: Neuer Text in Resource? Ändern : ndern */
+    Text = "Ändern" ;
+    Text [ ENGLISH ] = "Modify" ;
+    Text [ norwegian ] = "Modify" ;
+    Text [ italian ] = "Modifica" ;
+    Text [ portuguese_brazilian ] = "Modificar" ;
+    Text [ portuguese ] = "Modificar" ;
+    Text [ finnish ] = "Muokkaa" ;
+    Text [ danish ] = "Modificer" ;
+    Text [ french ] = "Modifier" ;
+    Text [ swedish ] = "Ändra" ;
+    Text [ dutch ] = "Wijzigen" ;
+    Text [ spanish ] = "Modificar" ;
+    Text [ english_us ] = "Modify" ;
+    Text[ chinese_simplified ] = "ĞŞ¸Ä";
+    Text[ russian ] = "Èçìåíèòü";
+    Text[ polish ] = "Modyfikuj";
+    Text[ japanese ] = "•ÏX";
+    Text[ chinese_traditional ] = "­×§ï";
+    Text[ arabic ] = "ÊÚÏíá";
+    Text[ greek ] = "Ôñïğïğïßçóç";
+    Text[ korean ] = "º¯°æ";
+    Text[ turkish ] = "Değiştir";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ADD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
+    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
+    Text = "Hinzufügen" ;
+    Text [ ENGLISH ] = "Add" ;
+    Text [ norwegian ] = "Add" ;
+    Text [ italian ] = "Aggiungi" ;
+    Text [ portuguese_brazilian ] = "Acrescentar" ;
+    Text [ portuguese ] = "Adicionar" ;
+    Text [ finnish ] = "Lisää" ;
+    Text [ danish ] = "Tilføj" ;
+    Text [ french ] = "Ajouter" ;
+    Text [ swedish ] = "Lägg till" ;
+    Text [ dutch ] = "Toevoegen" ;
+    Text [ spanish ] = "Añadir" ;
+    Text [ english_us ] = "Add" ;
+    Text[ chinese_simplified ] = "ĞÂÔö";
+    Text[ russian ] = "Äîáàâèòü";
+    Text[ polish ] = "Dodaj";
+    Text[ japanese ] = "’Ç‰Á";
+    Text[ chinese_traditional ] = "¼W¥[";
+    Text[ arabic ] = "ÅÖÇİÉ";
+    Text[ greek ] = "ĞñïóèŞêç";
+    Text[ korean ] = "Ãß°¡";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_COLOR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Farbe ein: : Geben Sie hier bitte den Namen f³r die neue Farbe ein: */
+    Text = "Geben Sie hier bitte den Namen für die neue Farbe ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the new Color:" ;
+    Text [ norwegian ] = "Sett inn nytt Navn på den nye Fargen:" ;
+    Text [ italian ] = "Digitate il nome per il nuovo colore:" ;
+    Text [ portuguese_brazilian ] = "Por favor insira um Nome para a nova Cor:" ;
+    Text [ portuguese ] = "Por favor introduza um nome para a nova cor:" ;
+    Text [ finnish ] = "Kirjoita uuden värin nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye farve:" ;
+    Text [ french ] = "Saisissez un nom pour la nouvelle couleur :" ;
+    Text [ swedish ] = "Ange namn för den nya färgen:" ;
+    Text [ dutch ] = "Typ hier een naam voor de nieuwe kleur:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el nuevo color:" ;
+    Text [ english_us ] = "Please enter a name for the new color:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÑÕÉ«ÊäÈëÒ»¸öÃû³Æ£º";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîãî öâåòà:";
+    Text[ polish ] = "Wpisz nazwê nowego koloru:";
+    Text[ japanese ] = "V‚µ‚¢F‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢:";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªºÃC¦â¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã Çááæä ÇáÌÏíÏ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå ôï üíïìá ôïõ íİïõ ÷ñşìáôïò:";
+    Text[ korean ] = "¿©±â¿¡ »õ·Î¿î »öÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Yeni rengin adını girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_COLOR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Farbe löschen : Farbe l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Farbe löschen : Farbe l÷schen */
+    Text = "Farbe löschen" ;
+    Text [ ENGLISH ] = "Delete Color" ;
+    Text [ norwegian ] = "Slett Farge" ;
+    Text [ italian ] = "Cancella colore" ;
+    Text [ portuguese_brazilian ] = "Apagar Cor" ;
+    Text [ portuguese ] = "Eliminar cor" ;
+    Text [ finnish ] = "Poista väri" ;
+    Text [ danish ] = "Slet farve" ;
+    Text [ french ] = "Supprimer la couleur" ;
+    Text [ swedish ] = "Radera färg" ;
+    Text [ dutch ] = "Kleur verwijderen" ;
+    Text [ spanish ] = "Eliminar color" ;
+    Text [ english_us ] = "Delete color" ;
+    Text[ chinese_simplified ] = "É¾³ıÑÕÉ«";
+    Text[ russian ] = "Óäàëèòü öâåò";
+    Text[ polish ] = "Usuñ kolor";
+    Text[ japanese ] = "F‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£ÃC¦â";
+    Text[ arabic ] = "ÍĞİ Çááæä";
+    Text[ greek ] = "ÄéáãñáöŞ ÷ñşìáôïò";
+    Text[ korean ] = "»ö »èÁ¦";
+    Text[ turkish ] = "Rengi sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_COLOR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll die Farbe wirklich gelöscht werden? : Soll die Farbe wirklich gel÷scht werden? */
+    Text = "Soll die Farbe wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the Color?" ;
+    Text [ norwegian ] = "Vil du slette Fargen?" ;
+    Text [ italian ] = "Eliminare veramente il colore?" ;
+    Text [ portuguese_brazilian ] = "Deseja apagar a Cor?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar a cor?" ;
+    Text [ finnish ] = "Poistetaanko väri?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette farven?" ;
+    Text [ french ] = "Voulez-vous supprimer la couleur ?" ;
+    Text [ swedish ] = "Vill Du verkligen radera färgen?" ;
+    Text [ dutch ] = "Wilt u de kleur werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el color?" ;
+    Text [ english_us ] = "Do you want to delete the color?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÑÕÉ«Âğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò öâåò?";
+    Text[ polish ] = "Czy chcesz na pewno usun¹æ kolor?";
+    Text[ japanese ] = "‚±‚ÌF‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­ÓÃC¦â¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ Çááæä¿";
+    Text[ greek ] = "Èİëåôå óßãïõñá íá äéáãñáöåß ôï ÷ñşìá;";
+    Text[ korean ] = "»öÀ» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Renk gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_COLOR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen. : Die Farbe wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Farbe õndern \noder eine neue Farbe hinzuf³gen. */
+    Text = "Die Farbe wurde geändert und nicht gesichert. \nSie können die selektierte Farbe ändern \noder eine neue Farbe hinzufügen." ;
+    Text [ ENGLISH ] = "The Color was modified without Save? \nChange the selceted Color or add a new Color." ;
+    Text [ norwegian ] = "Fargen ble endret uten å lagres? \nEndre den merkede fargen eller legg til en ny Farge." ;
+    Text [ italian ] = "Il colore è stato modificato ma non salvato.\nPotete cambiare il colore selezionato \no aggiungerne\n uno nuovo." ;
+    Text [ portuguese_brazilian ] = "A Cor foi modificada sem Gravar? \nMude a Cor selecionada ou acrescente uma nova Cor." ;
+    Text [ portuguese ] = "A cor foi modificada e não guardada? \nPoderá modificar a cor seleccionada\nou adicionar uma nova." ;
+    Text [ finnish ] = "Muutettua väriä ei ole tallennettu. \nVoit muokata valittua väriä tai lisätä uuden." ;
+    Text [ danish ] = "Farven er blevet ændret, men ikke gemt. \nDu kan ændre den markerede farve\n eller tilføje en ny." ;
+    Text [ french ] = "La couleur a été modifiée sans avoir été sauvegardée.\nVous pouvez modifier la couleur sélectionnée ou en ajouter une nouvelle." ;
+    Text [ swedish ] = "Färgen ändrades utan att sparas.\nDu kan ändra den markerade färgen\neller lägga till en ny." ;
+    Text [ dutch ] = "In de kleur werden wijzigingen aangebracht en niet opgeslagen. \nU kunt de geselecteerde kleur wijzigen \nof een nieuwe kleur toevoegen." ;
+    Text [ spanish ] = "El color ha sido modificado sin guardar.\nPuede modificar el color seleccionado\no añadir uno nuevo." ;
+    Text [ english_us ] = "The color was modified without saving.\nModify the selected color or add a new color." ;
+    Text[ chinese_simplified ] = "Õâ¸öÑÕÉ«ÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÄÜ¹»¸ü¸ÄÑ¡ÖĞµÄÑÕÉ«\n»òÕßĞÂÔöÒ»¸öĞÂµÄÑÕÉ«¡£";
+    Text[ russian ] = "Öâåò áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû ìîæåòå èçìåíèòü âûáğàííûé öâåò \nèëè äîáàâèòü íîâûé öâåò.";
+    Text[ polish ] = "Kolor zosta³ zmieniony i nie zapisany. \nMo¿esz zmieniæ zaznaczony kolor \nlub dodaæ nowy kolor.";
+    Text[ japanese ] = "F‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‘I‘ğ‚µ‚½F‚Ì•ÏX‚Ü‚½‚Í\nV‚µ‚¢F‚Ì’Ç‰Á‚ª‚Å‚«‚Ü‚·B";
+    Text[ chinese_traditional ] = "³o­ÓÃC¦â¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C \n±z¯à°÷ÅÜ§ó¿ï¨úªºÃC¦â\n©ÎªÌ¼W¥[¤@­Ó·sªºÃC¦â¡C";
+    Text[ arabic ] = "Êã ÊÛííÑ Çááæä æáã íÊã ÍİÙå ÈÚÏ.\níãßäß ÊÛííÑ Çááæä ÇáãÍÏÏ¡\nÃæ ÅÖÇİÉ áæä ÌÏíÏ.";
+    Text[ greek ] = "Ôï ÷ñşìá ôñïğïğïéŞèçêå ÷ùñßò íá ãßíåé áğïèŞêåõóç. \nÌğïñåßôå íá áëëÜîåôå ôï åğéëåãìİíï ÷ñşìá \nŞ íá ğñïóèİóåôå İíá êáéíïıñéï ÷ñşìá.";
+    Text[ korean ] = "»öÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù.\n¼±ÅÃµÈ »öÀ» º¯°æÇÏ°Å³ª \n»õ·Î¿î »öÀ» Ãß°¡ÇÒ ¼ö ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Renk değiştirildi ancak kaydedilmedi.\nSeçili rengi değiştirebilir ya da\nyeni bir renk ekleyebilirsiniz.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_TABLE
+{
+    Text = "Tabelle" ;
+    Text [ ENGLISH ] = "List" ;
+    Text [ norwegian ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ portuguese_brazilian ] = "Tabela" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text [ finnish ] = "Taulukko" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ french ] = "Table" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ english_us ] = "Table" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "•\\";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Å×ÀÌºí";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_WRITE_DATA_ERROR
+{
+    Text = "Die Datei konnte nicht gesichert werden!" ;
+    Text [ ENGLISH ] = "The file couldn't be saved!" ;
+    Text [ norwegian ] = "The file couldn't be saved!" ;
+    Text [ italian ] = "Non è stato possibile salvare il file!" ;
+    Text [ portuguese_brazilian ] = "The file couldn't be saved!" ;
+    Text [ portuguese ] = "Foi impossível guardar o ficheiro!" ;
+    Text [ french ] = "Impossible de sauvegarder ce fichier." ;
+    Text [ dutch ] = "Het bestand kon niet worden opgeslagen!" ;
+    Text [ spanish ] = "¡No se pudo guardar el archivo!" ;
+    Text [ danish ] = "Det var ikke muligt at gemme filen!" ;
+    Text [ swedish ] = "Filen kunde inte sparas!" ;
+    Text [ finnish ] = "The file couldn't be saved!" ;
+    Text [ english_us ] = "The file could not be saved!" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨±£´æÕâ¸öÎÄ¼ş£¡";
+    Text[ russian ] = "Ñîõğàíèòü ôàéë íå óäàåòñÿ!";
+    Text[ polish ] = "Plik nie móg³ zostaæ zapisany!";
+    Text[ japanese ] = "Ì§²Ù‚ª•Û‘¶‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ chinese_traditional ] = "µLªkÀx¦s³o­ÓÀÉ®×¡I";
+    Text[ arabic ] = "ÊÚĞÑ ÍİÙ Çáãáİ!";
+    Text[ greek ] = "Äåí Şôáí äõíáôŞ ç áğïèŞêåõóç ôïõ áñ÷åßïõ!";
+    Text[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù!";
+    Text[ turkish ] = "Dosya kaydedilemedi!";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_READ_DATA_ERROR
+{
+    Text = "Die Datei konnte nicht geladen werden!" ;
+    Text [ ENGLISH ] = "The file couldn't be loaded!" ;
+    Text [ norwegian ] = "Filen kan ikke lastes inn!" ;
+    Text [ italian ] = "Impossibile caricare il file!" ;
+    Text [ portuguese_brazilian ] = "O arquivo não pode ser carregado!" ;
+    Text [ portuguese ] = "Foi impossível carregar o ficheiro!" ;
+    Text [ finnish ] = "Tiedostoa ei voi lukea!" ;
+    Text [ danish ] = "Det var ikke muligt at indlæse filen!" ;
+    Text [ french ] = "Impossible de charger le fichier !" ;
+    Text [ swedish ] = "Filen kunde inte laddas!" ;
+    Text [ dutch ] = "Het bestand kon niet worden geladen!" ;
+    Text [ spanish ] = "¡No se pudo cargar el archivo!" ;
+    Text [ english_us ] = "The file could not be loaded!" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨×°ÔØÕâ¸öÎÄ¼ş£¡";
+    Text[ russian ] = "Çàãğóçèòü ıòîò ôàéë íå óäàåòñÿ!";
+    Text[ polish ] = "Plik nie móg³ zostaæ za³adowany!";
+    Text[ japanese ] = "Ì§²Ù‚ª“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñ!";
+    Text[ chinese_traditional ] = "µLªk¸Ë¸ü³o­ÓÀÉ®×¡I";
+    Text[ arabic ] = "ÊÚĞÑ ÊÍãíá Çáãáİ!";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá öïñôùèåß ôï áñ÷åßï!";
+    Text[ korean ] = "ÆÄÀÏÀ» ·ÎµåÇÏÁö ¸øÇß½À´Ï´Ù!";
+    Text[ turkish ] = "Dosya yüklenemedi!";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_WARN_TABLE_OVERWRITE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? : Die Tabelle wurde geõndert und nicht gespeichert. \nSoll die Tabelle gespeichert werden? */
+    Text = "Die Tabelle wurde geändert und nicht gespeichert. \nSoll die Tabelle gespeichert werden?" ;
+    Text [ ENGLISH ] = "The table was modified without save. Would you like to save the table?" ;
+    Text [ norwegian ] = "Tabellen ble endret uten å lagres. Vil du lagre tabellen?" ;
+    Text [ italian ] = "La tabella è stata modificata senza salvare. \nSalvare la tabella?" ;
+    Text [ portuguese_brazilian ] = "A tabela foi modificada sem gravar. Gostaria de gravar a tabela?" ;
+    Text [ portuguese ] = "A tabela foi modificada e não guardada.\nGuardar agora?" ;
+    Text [ finnish ] = "Muutettua taulukkoa ei ole tallennettu. Haluatko tallentaa sen?" ;
+    Text [ danish ] = "Tabellen er blevet ændret, men ikke gemt.\nVil du gemme tabellen nu?" ;
+    Text [ french ] = "La table a été modifiée sans avoir été enregistrée. Voulez-vous enregistrer la table ?" ;
+    Text [ swedish ] = "Tabellen ändrades utan att sparas. \nVill Du spara tabellen?" ;
+    Text [ dutch ] = "In de tabel werden wijzigingen aangebracht en niet opgeslagen. \nWilt u de tabel opslaan?" ;
+    Text [ spanish ] = "La tabla ha sido modificada sin guardar.\n¿Desea guardarla?" ;
+    Text [ english_us ] = "The list was modified without saving. Would you like to save the list now?" ;
+    Text[ chinese_simplified ] = "Õâ¸ö±í¸ñÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£ \nÄúÒª±£´æÕâ¸ö±í¸ñÂğ£¿";
+    Text[ russian ] = "Òàáëèöà áûëà èçìåíåíà, íî íå ñîõğàíåíà. \nÑîõğàíèòü òàáëèöó ñåé÷àñ?";
+    Text[ polish ] = "Tabela zosta³a zmieniona i nie jest zapisana. \nCzy tabela ma byæ zapisana?";
+    Text[ japanese ] = "•\\‚ª•ÏX‚³‚ê•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n•\\‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "³o­Óªí®æ¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C \n±z­nÀx¦s³o­Óªí®æ¡H";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÌÏæá æáã íÊã ÍİÙå ÈÚÏ.\nåá ÊÑíÏ ÍİÙ ÇáÌÏæá ÇáÂä¿";
+    Text[ greek ] = "Ç ëßóôá ôñïğïğïéŞèçêå êáé äåí áğïèçêåıôçêå.\nÈİëåôå íá ôçí áğïèçêåıóåôå ôşñá;";
+    Text[ korean ] = "Å×ÀÌºíÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù. \nÅ×ÀÌºíÀ» ÀúÀåÇÒ±î¿ä?";
+    Text[ turkish ] = "Tablo değiştirildi ancak kaydedilmedi. Tablo \n kaydedilsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_WARN_NAME_DUPLICATE
+{
+    Text = "Der von Ihnen eingegebene Name ist schon vorhanden. \nGeben Sie bitte einen anderen Namen ein." ;
+    Text [ ENGLISH ] = "Your choosen Name already exists. \nPlease Choose another name." ;
+    Text [ norwegian ] = "Your choosen Name already exists. \nPlease Choose another name." ;
+    Text [ italian ] = "Il nome scelto è già esistente. \nScegliete un altro nome." ;
+    Text [ portuguese_brazilian ] = "O nome escolhido já existe. \nEscolha outro nome." ;
+    Text [ portuguese ] = "O nome indicado já existe. \nIndique um outro." ;
+    Text [ finnish ] = "Nimi on jo käytössä. \nKirjoita toinen nimi." ;
+    Text [ danish ] = "Det navn, du har indtastet, eksisterer allerede.\nIndtast venligst et andet navn." ;
+    Text [ french ] = "Le nom que vous avez saisi existe déjà. \nVeuillez en saisir un autre." ;
+    Text [ swedish ] = "Namnet Du valde finns redan. \nVälj ett annat namn." ;
+    Text [ dutch ] = "De door u gekozen naam bestaat reeds. \nKies een andere naam." ;
+    Text [ spanish ] = "Este nombre ya existe. \nIntroduzca otro nombre por favor." ;
+    Text [ english_us ] = "The name you have entered already exists. \nPlease choose another name." ;
+    Text[ chinese_simplified ] = "ÄúÊäÈëµÄÃû³ÆÒÑ¾­´æÔÚ¡£\nÇëÄúÊäÈëÒ»¸öÆäËûµÄÃû³Æ¡£";
+    Text[ russian ] = "Ââåäåííîå Âàìè èìÿ óæå èìååòñÿ. \nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
+    Text[ polish ] = "Wpisana przez ciebie nazwa ju¿ istnieje.\nWpisz inn¹ nazwê.";
+    Text[ japanese ] = "“ü—Í‚µ‚½–¼‘O‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\n•Ê‚Ì–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "±z¿é¤Jªº¦WºÙ¤w¸g¦s¦b¡C\n½Ğ±z¿é¤J¤@­Ó¨ä¥Lªº¦WºÙ¡C";
+    Text[ arabic ] = "ÇáÇÓã ÇáĞí ŞãÊ ÈÅÏÎÇáå ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
+    Text[ greek ] = "Ôï üíïìá ğïõ åéóÜãáôå õğÜñ÷åé Şäç. \nĞáñáêáëş åğéëİîôå İíá Üëëï.";
+    Text[ korean ] = "ÀÔ·ÂÇÑ ÀÌ¸§ÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù. \n´Ù¸¥ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Girdiğiniz ad zaten mevcut. Yeni bir \nad girin.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LINEEND
+{
+    Text = "Linienende" ;
+    Text [ ENGLISH ] = "Line end" ;
+    Text [ norwegian ] = "Line end" ;
+    Text [ italian ] = "Estremità linea" ;
+    Text [ portuguese_brazilian ] = "Fim de linha" ;
+    Text [ portuguese ] = "Fim de linha" ;
+    Text [ finnish ] = "Viivanpää" ;
+    Text [ danish ] = "Pile" ;
+    Text [ french ] = "Extrémité de ligne" ;
+    Text [ swedish ] = "Linjeslut" ;
+    Text [ dutch ] = "Lijnuiteinde" ;
+    Text [ spanish ] = "Fin de línea" ;
+    Text [ english_us ] = "Arrowheads" ;
+    Text[ chinese_simplified ] = "Ïß¶Ë";
+    Text[ russian ] = "Êîíåö ëèíèè";
+    Text[ polish ] = "Koñcówki linii";
+    Text[ japanese ] = "ü‚ÌI“_";
+    Text[ chinese_traditional ] = "½uºİ";
+    Text[ arabic ] = "äåÇíÉ ÇáÎØ";
+    Text[ greek ] = "Ôİëïò ãñáììŞò";
+    Text[ korean ] = "¼±ÀÇ ¾ç³¡";
+    Text[ turkish ] = "Çizgi ucu";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DESC_LINEEND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
+    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
+    Text = "Geben Sie hier bitte den Namen für das neue Linienende ein:" ;
+    Text [ ENGLISH ] = "Please insert a Name for the new line end:" ;
+    Text [ norwegian ] = "Please insert a Name for the new line end:" ;
+    Text [ italian ] = "Digitare un nome per la nuova estremità di linea:" ;
+    Text [ portuguese_brazilian ] = "Insira um nome para o novo fim de linha:" ;
+    Text [ portuguese ] = "Por favor introduza um nome para o novo fim de linha:" ;
+    Text [ finnish ] = "Kirjoita uuden viivanpään nimi:" ;
+    Text [ danish ] = "Indtast venligst et navn til den nye piltype:" ;
+    Text [ french ] = "Saisissez un nom pour la nouvelle extrémité de ligne :" ;
+    Text [ swedish ] = "Ange namn för nya linjeslutet:" ;
+    Text [ dutch ] = "Typ hier een naam voor het nieuwe lijnuiteinde:" ;
+    Text [ spanish ] = "Inserte aquí el nombre para el nuevo fin de línea:" ;
+    Text [ english_us ] = "Please enter a name for the new arrowhead:" ;
+    Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎªĞÂµÄÏß¶ËÊäÈëÒ»¸öÃû³Æ:";
+    Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, ñşäà íàçâàíèå íîâîãî êîíöà ëèíèè:";
+    Text[ polish ] = "Podaj nazwê dla nowych koñcówek linii:";
+    Text[ japanese ] = "V‚µ‚¢ü’[‚Ì–¼‘O‚ğ‚±‚±‚É“ü—Í‚µ‚Ä‰º‚³‚¢F";
+    Text[ chinese_traditional ] = "½Ğ±z¦b¦¹¬°·sªº½uºİ¿é¤J¤@­Ó¦WºÙ¡G";
+    Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáäåÇíÉ ÇáÌÏíÏÉ ááÎØ åäÇ:";
+    Text[ greek ] = "Ğáñáêáëş åéóÜãåôå İíá üíïìá ãéá ôï íİï ôİëïò ôçò ãñáììŞò:";
+    Text[ korean ] = "¿©±â¿¡ »õ ¼±ÀÇ ¾ç³¡ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À:";
+    Text[ turkish ] = "Yeni çizgi ucu için bir ad girin:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DEL_LINEEND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Linienende löschen : Linienende l÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Linienende löschen : Linienende l÷schen */
+    Text = "Linienende löschen" ;
+    Text [ ENGLISH ] = "Delete line end" ;
+    Text [ norwegian ] = "Slett Linjeslutt" ;
+    Text [ italian ] = "Cancella estremità linea" ;
+    Text [ portuguese_brazilian ] = "Delete line end" ;
+    Text [ portuguese ] = "Eliminar fim de linha" ;
+    Text [ finnish ] = "Delete line end" ;
+    Text [ danish ] = "Slet pil" ;
+    Text [ french ] = "Supprimer les extrémités" ;
+    Text [ swedish ] = "Radera linjeslut" ;
+    Text [ dutch ] = "Lijnuiteinde verwijderen" ;
+    Text [ spanish ] = "Eliminar fin de línea" ;
+    Text [ english_us ] = "Delete line ends" ;
+    Text[ chinese_simplified ] = "É¾³ıÏß¶Ë";
+    Text[ russian ] = "Óäàëèòü êîíåö ëèíèè";
+    Text[ polish ] = "Usuñ koñcówki linii";
+    Text[ japanese ] = "ü’[‚Ìíœ";
+    Text[ chinese_traditional ] = "§R°£½uºİ";
+    Text[ arabic ] = "ÍĞİ äåÇíÇÊ ÇáÎØæØ";
+    Text[ greek ] = "ÄéáãñáöŞ ôİëïõò ãñáììŞò";
+    Text[ korean ] = "¼±ÀÇ ¾ç³¡ »èÁ¦";
+    Text[ turkish ] = "Çizgi ucunu sil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_DEL_LINEEND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Soll das Linienende wirklich gelöscht werden? : Soll das Linienende wirklich gel÷scht werden? */
+    Text = "Soll das Linienende wirklich gelöscht werden?" ;
+    Text [ ENGLISH ] = "Do you want to delete the line end?" ;
+    Text [ norwegian ] = "Vil du slette linjeslutten?" ;
+    Text [ italian ] = "Cancellare l'estremità di linea?" ;
+    Text [ portuguese_brazilian ] = "Do you want to delete the line end?" ;
+    Text [ portuguese ] = "Deseja realmente eliminar o fim de linha?" ;
+    Text [ finnish ] = "Do you want to delete the line end?" ;
+    Text [ danish ] = "Er du sikker på, at du vil slette piltypen?" ;
+    Text [ french ] = "Voulez-vous supprimer l'extrémité de la ligne ?" ;
+    Text [ swedish ] = "Vill Du verkligen radera linjeslutet?" ;
+    Text [ dutch ] = "Wilt u het lijnuiteinde werkelijk wissen?" ;
+    Text [ spanish ] = "¿Desea realmente eliminar el final de línea?" ;
+    Text [ english_us ] = "Do you want to delete the arrowhead?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÏß¶ËÂğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıòîò òèï êîíöà ëèíèè?";
+    Text[ polish ] = "Czy chcesz na pewno usun¹æ koñcówki linii?";
+    Text[ japanese ] = "‚±‚Ìü’[‚ğ–{“–‚Éíœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Ó½uºİ¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ äåÇíÉ ÇáÎØ¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá äéáãñáöåß ôï ôİëïò ôçò ãñáììŞò;";
+    Text[ korean ] = "¼±ÀÇ ¾ç³¡À» Á¤¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Çizgi ucu gerçekten silinsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ASK_CHANGE_LINEEND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern? : Das Linienende wurde geõndert und nicht gesichert. \nM÷chten Sie das Linienende jetzt sichern? */
+    Text = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?" ;
+    Text [ ENGLISH ] = "The line end was modified without Save? \nWould you like to save the line end now?" ;
+    Text [ dutch ] = "In het lijnuiteinde werden wijzigingen aangebracht en niet opgeslagen.\nWilt u het einde van de lijn nu opslaan?" ;
+    Text [ english_us ] = "The arrowhead was modified without saving.\nWould you like to save the arrowhead now?" ;
+    Text [ italian ] = "L'estremità della linea è stata modificata ma non salvata \nSalvarla adesso?" ;
+    Text [ spanish ] = "El final de línea ha sido modificado pero no guardado. \n¿Desea guardar ahora el final de línea?" ;
+    Text [ french ] = "L'extrémité de la ligne a été modifiée sans avoir été sauvegardée.\nVoulez-vous la sauvegarder maintenant ?" ;
+    Text [ swedish ] = "Linjeslutet ändrades utan att sparas.\nVill Du spara det nu?" ;
+    Text [ danish ] = "Piltypen er blevet ændret, men ikke gemt. \nDu kan ændre den markerede pil\n eller tilføje en ny." ;
+    Text [ portuguese ] = "O fim de linha foi modificado e não guardado.\nGuardar agora?" ;
+    Text [ portuguese_brazilian ] = "Das Linienende wurde geändert und nicht gesichert. \nMöchten Sie das Linienende jetzt sichern?" ;
+    Text[ chinese_simplified ] = "Õâ¸öÏß¶ËÒÑ¾­±»¸ü¸Ä£¬µ«ÊÇÃ»ÓĞ±»±£´æ¡£\nÄúÒªÏÖÔÚ±£´æÕâ¸öÏß¶ËÂğ£¿";
+    Text[ russian ] = "Êîíåö ëèíèè áûë èçìåíåí, íî íå ñîõğàíåí. \nÂû õîòèòå ñåé÷àñ ñîõğàíèòü êîíåö ëèíèè?";
+    Text[ polish ] = "Koñcówki linii zosta³y zmienione i nie zapisane. \nCzy chcesz zmieniæ teraz koñcówki linii?";
+    Text[ japanese ] = "ü’[‚ª•ÏX‚³‚ê‚Ä•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‚±‚Ìü’[‚ğ¡•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "³o­Ó½uºİ¤w¸gÅÜ§ó¡M¦ı¬O©|¥¼Àx¦s¡C\n±z­n²{¦bÀx¦s³o­Ó½uºİ¡H";
+    Text[ arabic ] = "Êã ÊÛííÑ äåÇíÉ ÇáÎØ æáã íÊã ÍİÙåÇ ÈÚÏ.\nåá ÊÑíÏ ÍİÙ äåÇíÉ ÇáÎØ ÇáÂä¿";
+    Text[ greek ] = "Ôï ôİëïò ãñáììŞò ôñïğïğïéŞèçêå êáé äåí áğïèçêåıôçêå.\nÈİëåôå íá ôï áğïèçêåıóåôå ôşñá;";
+    Text[ korean ] = "¼±ÀÇ ¾ç³¡ÀÌ º¯°æµÇ¾úÀ¸³ª ÀúÀåµÇÁö ¾Ê¾Ò½À´Ï´Ù .\nÁö±İ ¼±ÀÇ ¾ç³¡À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Çizgi ucu değiştirildi ancak kaydedilmedi.\nÇizgi ucunu şimdi kaydetmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_CLOSE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+    /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
+    Text = "Schließen" ;
+    Text [ ENGLISH ] = "Close" ;
+    Text [ norwegian ] = "Lukk" ;
+    Text [ italian ] = "Chiudi" ;
+    Text [ portuguese_brazilian ] = "Fechar" ;
+    Text [ portuguese ] = "Fechar" ;
+    Text [ finnish ] = "Sulje" ;
+    Text [ danish ] = "Luk" ;
+    Text [ french ] = "Fermer" ;
+    Text [ swedish ] = "Stäng" ;
+    Text [ dutch ] = "Sluiten" ;
+    Text [ spanish ] = "Cerrar" ;
+    Text [ english_us ] = "Close" ;
+    Text[ chinese_simplified ] = "¹Ø±Õ";
+    Text[ russian ] = "Çàêğûòü";
+    Text[ polish ] = "Zamknij";
+    Text[ japanese ] = "I—¹";
+    Text[ chinese_traditional ] = "Ãö³¬";
+    Text[ arabic ] = "ÅÛáÇŞ";
+    Text[ greek ] = "Êëåßóéìï";
+    Text[ korean ] = "´İ±â";
+    Text[ turkish ] = "Kapat";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BLACK
+{
+    Text = "Schwarz" ;
+    Text [ ENGLISH ] = "Black" ;
+    Text [ norwegian ] = "Black" ;
+    Text [ italian ] = "Nero" ;
+    Text [ portuguese_brazilian ] = "Preto" ;
+    Text [ portuguese ] = "Preto" ;
+    Text [ french ] = "Noir" ;
+    Text [ dutch ] = "Zwart" ;
+    Text [ spanish ] = "Negro" ;
+    Text [ danish ] = "Sort" ;
+    Text [ swedish ] = "Svart" ;
+    Text [ finnish ] = "Black" ;
+    Text [ english_us ] = "Black" ;
+    Text[ chinese_simplified ] = "ºÚÉ«";
+    Text[ russian ] = "×åğíûé";
+    Text[ polish ] = "Czarny";
+    Text[ japanese ] = "•";
+    Text[ chinese_traditional ] = "¶Â¦â";
+    Text[ arabic ] = "ÃÓæÏ";
+    Text[ greek ] = "Ìáıñï";
+    Text[ korean ] = "°ËÀº»ö";
+    Text[ turkish ] = "Siyah";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BLUE
+{
+    Text = "Blau" ;
+    Text [ ENGLISH ] = "Blue" ;
+    Text [ norwegian ] = "Blue" ;
+    Text [ italian ] = "Blu" ;
+    Text [ portuguese_brazilian ] = "Azul" ;
+    Text [ portuguese ] = "Azul" ;
+    Text [ french ] = "Bleu" ;
+    Text [ dutch ] = "Blauw" ;
+    Text [ spanish ] = "Azul" ;
+    Text [ danish ] = "Blå" ;
+    Text [ swedish ] = "Blått" ;
+    Text [ finnish ] = "Blue" ;
+    Text [ english_us ] = "Blue" ;
+    Text[ chinese_simplified ] = "À¶É«";
+    Text[ russian ] = "Ñèíèé";
+    Text[ polish ] = "Nieb.";
+    Text[ japanese ] = "Â";
+    Text[ chinese_traditional ] = "ÂÅ¦â";
+    Text[ arabic ] = "ÃÒÑŞ";
+    Text[ greek ] = "Ìğëå";
+    Text[ korean ] = "Ã»»ö";
+    Text[ turkish ] = "Mavi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
+    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
+    Text = "Grün" ;
+    Text [ ENGLISH ] = "Green" ;
+    Text [ norwegian ] = "Green" ;
+    Text [ italian ] = "Verde" ;
+    Text [ portuguese_brazilian ] = "Verde" ;
+    Text [ portuguese ] = "Verde" ;
+    Text [ french ] = "Vert" ;
+    Text [ dutch ] = "Groen" ;
+    Text [ spanish ] = "Verde" ;
+    Text [ danish ] = "Grøn" ;
+    Text [ swedish ] = "Grönt" ;
+    Text [ finnish ] = "Green" ;
+    Text [ english_us ] = "Green" ;
+    Text[ chinese_simplified ] = "ÂÌÉ«";
+    Text[ russian ] = "Çåëåíûé";
+    Text[ polish ] = "Zielony";
+    Text[ japanese ] = "—Î";
+    Text[ chinese_traditional ] = "ºñ¦â";
+    Text[ arabic ] = "ÃÎÖÑ";
+    Text[ greek ] = "ĞñÜóéíï";
+    Text[ korean ] = "³ì»ö";
+    Text[ turkish ] = "Yeşil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_CYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? Türkis : T³rkis */
+    Text = "Türkis" ;
+    Text [ ENGLISH ] = "Cyan" ;
+    Text [ norwegian ] = "Cyan" ;
+    Text [ italian ] = "Ciano" ;
+    Text [ portuguese_brazilian ] = "Ciano" ;
+    Text [ portuguese ] = "Turquesa" ;
+    Text [ french ] = "Turquoise" ;
+    Text [ dutch ] = "Turkoois" ;
+    Text [ spanish ] = "Turquesa" ;
+    Text [ danish ] = "Turkis" ;
+    Text [ swedish ] = "Turkost" ;
+    Text [ finnish ] = "Cyan" ;
+    Text [ english_us ] = "Turquoise" ;
+    Text[ chinese_simplified ] = "À¶ÂÌÉ«";
+    Text[ russian ] = "Áèğşçîâûé";
+    Text[ polish ] = "Turkusowy";
+    Text[ japanese ] = "Â—Î";
+    Text[ chinese_traditional ] = "ÂÅ¥É¦â";
+    Text[ arabic ] = "ÊÑßæÇÒ";
+    Text[ greek ] = "ÔïõñêïõÜæ";
+    Text[ korean ] = "Ã»¿Á»ö";
+    Text[ turkish ] = "Türkuaz";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_RED
+{
+    Text = "Rot" ;
+    Text [ ENGLISH ] = "Red" ;
+    Text [ norwegian ] = "Red" ;
+    Text [ italian ] = "Rosso" ;
+    Text [ portuguese_brazilian ] = "Vermelho" ;
+    Text [ portuguese ] = "Vermelho" ;
+    Text [ french ] = "Rouge" ;
+    Text [ dutch ] = "Rood" ;
+    Text [ spanish ] = "Rojo" ;
+    Text [ danish ] = "Rød" ;
+    Text [ swedish ] = "Rött" ;
+    Text [ finnish ] = "Red" ;
+    Text [ english_us ] = "Red" ;
+    Text[ chinese_simplified ] = "ºìÉ«";
+    Text[ russian ] = "Êğàñíûé";
+    Text[ polish ] = "Czerw.";
+    Text[ japanese ] = "Ô";
+    Text[ chinese_traditional ] = "¬õ¦â";
+    Text[ arabic ] = "ÃÍãÑ";
+    Text[ greek ] = "Êüêêéíï";
+    Text[ korean ] = "Àû»ö";
+    Text[ turkish ] = "Kırmızı";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_MAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Magenta : Violett */
+    Text = "Magenta" ;
+    Text [ ENGLISH ] = "Magenta" ;
+    Text [ norwegian ] = "Magenta" ;
+    Text [ italian ] = "Magenta" ;
+    Text [ portuguese_brazilian ] = "Magenta" ;
+    Text [ portuguese ] = "Violeta" ;
+    Text [ french ] = "Magenta" ;
+    Text [ dutch ] = "Violet" ;
+    Text [ spanish ] = "Magenta" ;
+    Text [ danish ] = "Magenta" ;
+    Text [ swedish ] = "Magenta" ;
+    Text [ finnish ] = "Magenta" ;
+    Text [ english_us ] = "Magenta" ;
+    Text[ chinese_simplified ] = "×ÏºìÉ«";
+    Text[ russian ] = "Ëèëîâûé";
+    Text[ polish ] = "Purpurowy";
+    Text[ japanese ] = "Ï¾ŞİÀ";
+    Text[ chinese_traditional ] = "µµ¬õ¦â";
+    Text[ arabic ] = "ÃÑÌæÇäí";
+    Text[ greek ] = "Ìáôæİíôá";
+    Text[ korean ] = "¸¶Á¨Å¸»ö";
+    Text[ turkish ] = "Mor";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BROWN
+{
+    Text = "Braun" ;
+    Text [ ENGLISH ] = "Brown" ;
+    Text [ norwegian ] = "Brown" ;
+    Text [ italian ] = "Marrone" ;
+    Text [ portuguese_brazilian ] = "Marrom" ;
+    Text [ portuguese ] = "Castanho" ;
+    Text [ french ] = "Marron" ;
+    Text [ dutch ] = "Bruin" ;
+    Text [ spanish ] = "Marrón" ;
+    Text [ danish ] = "Brun" ;
+    Text [ swedish ] = "Brunt" ;
+    Text [ finnish ] = "Brown" ;
+    Text [ english_us ] = "Brown" ;
+    Text[ chinese_simplified ] = "×ØÉ«";
+    Text[ russian ] = "Êîğè÷íåâûé";
+    Text[ polish ] = "Br¹zowy";
+    Text[ japanese ] = "’ƒF";
+    Text[ chinese_traditional ] = "´Ä¦â";
+    Text[ arabic ] = "Èäí";
+    Text[ greek ] = "Êáöİ";
+    Text[ korean ] = "°¥»ö";
+    Text[ turkish ] = "Kahverengi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GREY
+{
+    Text = "Grau" ;
+    Text [ ENGLISH ] = "Grey" ;
+    Text [ norwegian ] = "Grey" ;
+    Text [ italian ] = "Grigio" ;
+    Text [ portuguese_brazilian ] = "Cinza" ;
+    Text [ portuguese ] = "Cinzento" ;
+    Text [ french ] = "Gris" ;
+    Text [ dutch ] = "Grijs" ;
+    Text [ spanish ] = "Gris" ;
+    Text [ danish ] = "Grå" ;
+    Text [ swedish ] = "Grått" ;
+    Text [ finnish ] = "Grey" ;
+    Text [ english_us ] = "Gray" ;
+    Text[ chinese_simplified ] = "»ÒÉ«";
+    Text[ russian ] = "Ñåğûé";
+    Text[ polish ] = "Szary";
+    Text[ japanese ] = "ŠDF";
+    Text[ chinese_traditional ] = "¦Ç¦â";
+    Text[ arabic ] = "ÑãÇÏí";
+    Text[ greek ] = "Ãêñé";
+    Text[ korean ] = "È¸»ö";
+    Text[ turkish ] = "Gri";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTGREY
+{
+    Text = "Hellgrau" ;
+    Text [ ENGLISH ] = "Lightgrey" ;
+    Text [ norwegian ] = "Lightgrey" ;
+    Text [ italian ] = "Grigio chiaro" ;
+    Text [ portuguese_brazilian ] = "Lightgrey" ;
+    Text [ portuguese ] = "Cinzento-claro" ;
+    Text [ french ] = "Gris clair" ;
+    Text [ dutch ] = "Lichtgrijs" ;
+    Text [ spanish ] = "Gris claro" ;
+    Text [ danish ] = "Lysegrå" ;
+    Text [ swedish ] = "Ljusgrått" ;
+    Text [ finnish ] = "Lightgrey" ;
+    Text [ english_us ] = "Light gray" ;
+    Text[ chinese_simplified ] = "Ç³»ÒÉ«";
+    Text[ russian ] = "Ñâåòëî-ñåğûé";
+    Text[ polish ] = "Jasnoszary";
+    Text[ japanese ] = "–¾‚é‚¢ŠDF";
+    Text[ chinese_traditional ] = "²L¦Ç¦â";
+    Text[ arabic ] = "ÑãÇÏí İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü ãêñé";
+    Text[ korean ] = "¹àÀº È¸»ö";
+    Text[ turkish ] = "Açık gri";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTBLUE
+{
+    Text = "Hellblau" ;
+    Text [ ENGLISH ] = "Lightblue" ;
+    Text [ norwegian ] = "Lys blå" ;
+    Text [ italian ] = "Blu chiaro" ;
+    Text [ portuguese_brazilian ] = "Azul claro" ;
+    Text [ portuguese ] = "Azul-claro" ;
+    Text [ french ] = "Bleu roi" ;
+    Text [ dutch ] = "Lichtblauw" ;
+    Text [ spanish ] = "Azul claro" ;
+    Text [ danish ] = "Lyseblå" ;
+    Text [ swedish ] = "Ljusblått" ;
+    Text [ finnish ] = "Lightblue" ;
+    Text [ english_us ] = "Light blue" ;
+    Text[ chinese_simplified ] = "Ç³À¶É«";
+    Text[ russian ] = "Ñâåòëî-ñèíèé";
+    Text[ polish ] = "Jasnoniebieski";
+    Text[ japanese ] = "–¾‚é‚¢Â";
+    Text[ chinese_traditional ] = "²LÂÅ¦â";
+    Text[ arabic ] = "ÃÒÑŞ İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü ìğëå";
+    Text[ korean ] = "¹àÀº Ã»»ö";
+    Text[ turkish ] = "Açık mavi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTGREEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
+    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
+    Text = "Hellgrün" ;
+    Text [ ENGLISH ] = "Lightgreen" ;
+    Text [ norwegian ] = "Lys grønn" ;
+    Text [ italian ] = "Verde chiaro" ;
+    Text [ portuguese_brazilian ] = "Verde claro" ;
+    Text [ portuguese ] = "Verde-claro" ;
+    Text [ french ] = "Vert clair" ;
+    Text [ dutch ] = "Lichtgroen" ;
+    Text [ spanish ] = "Verde claro" ;
+    Text [ danish ] = "Lysegrøn" ;
+    Text [ swedish ] = "Ljusgrönt" ;
+    Text [ finnish ] = "Lightgreen" ;
+    Text [ english_us ] = "Light green" ;
+    Text[ chinese_simplified ] = "Ç³ÂÌÉ«";
+    Text[ russian ] = "Ñâåòëî-çåëåíûé";
+    Text[ polish ] = "Jasnozielony";
+    Text[ japanese ] = "–¾‚é‚¢—Î";
+    Text[ chinese_traditional ] = "²Lºñ¦â";
+    Text[ arabic ] = "ÃÎÖÑ İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü ğñÜóéíï";
+    Text[ korean ] = "¹àÀº ³ì»ö";
+    Text[ turkish ] = "Açık yeşil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTCYAN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
+    /* ### ACHTUNG: Neuer Text in Resource? Helltürkis : Hellt³rkis */
+    Text = "Helltürkis" ;
+    Text [ ENGLISH ] = "Lightcyan" ;
+    Text [ norwegian ] = "Lys cyanfarge" ;
+    Text [ italian ] = "Ciano chiaro" ;
+    Text [ portuguese_brazilian ] = "Cian claro" ;
+    Text [ portuguese ] = "Turquesa-claro" ;
+    Text [ french ] = "Turquoise clair" ;
+    Text [ dutch ] = "Licht turkoois" ;
+    Text [ spanish ] = "Turquesa claro" ;
+    Text [ danish ] = "Lys turkis" ;
+    Text [ swedish ] = "Ljusturkost" ;
+    Text [ finnish ] = "Lightcyan" ;
+    Text [ english_us ] = "Light cyan" ;
+    Text[ chinese_simplified ] = "Ç³À¶ÂÌÉ«";
+    Text[ russian ] = "Ñâåòëî-áèğşçîâûé";
+    Text[ polish ] = "Jasnoturkusowy";
+    Text[ japanese ] = "–¾‚é‚¢Â—Î";
+    Text[ chinese_traditional ] = "²LÂÅºñ¦â";
+    Text[ arabic ] = "ÊÑßæÇÒ İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü êõáíü";
+    Text[ korean ] = "¹àÀº ¿Á»ö";
+    Text[ turkish ] = "Açık turkuaz";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTRED
+{
+    Text = "Hellrot" ;
+    Text [ ENGLISH ] = "Lightred" ;
+    Text [ norwegian ] = "Lys rød" ;
+    Text [ italian ] = "Rosso chiaro" ;
+    Text [ portuguese_brazilian ] = "Vermelho claro" ;
+    Text [ portuguese ] = "Vermelho-claro" ;
+    Text [ french ] = "Rouge clair" ;
+    Text [ dutch ] = "Lichtrood" ;
+    Text [ spanish ] = "Rojo claro" ;
+    Text [ danish ] = "Lys rød" ;
+    Text [ swedish ] = "Ljusrött" ;
+    Text [ finnish ] = "Lightred" ;
+    Text [ english_us ] = "Light red" ;
+    Text[ chinese_simplified ] = "Ç³ºìÉ«";
+    Text[ russian ] = "Ñâåòëî-êğàñíûé";
+    Text[ polish ] = "Jasnoczerwony";
+    Text[ japanese ] = "–¾‚é‚¢Ô";
+    Text[ chinese_traditional ] = "²L¬õ¦â";
+    Text[ arabic ] = "ÃÍãÑ İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü êüêêéíï";
+    Text[ korean ] = "¹àÀº Àû»ö";
+    Text[ turkish ] = "Açık kırmızı";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_LIGHTMAGENTA
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Hellmagenta : Hellviolett */
+    Text = "Hellmagenta" ;
+    Text [ ENGLISH ] = "Lightmagenta" ;
+    Text [ norwegian ] = "Lys magentarød" ;
+    Text [ italian ] = "Magenta chiaro" ;
+    Text [ portuguese_brazilian ] = "Magenta claro" ;
+    Text [ portuguese ] = "Violeta-claro" ;
+    Text [ french ] = "Magenta clair" ;
+    Text [ dutch ] = "Lichtviolet" ;
+    Text [ spanish ] = "Magenta claro" ;
+    Text [ danish ] = "Lys magenta" ;
+    Text [ swedish ] = "Ljus magenta" ;
+    Text [ finnish ] = "Lightmagenta" ;
+    Text [ english_us ] = "Light magenta" ;
+    Text[ chinese_simplified ] = "Ç³×ÏºìÉ«";
+    Text[ russian ] = "Ñâåòëî-ëèëîâûé";
+    Text[ polish ] = "Jasnopurpurowy";
+    Text[ japanese ] = "–¾‚é‚¢Ï¾ŞİÀ";
+    Text[ chinese_traditional ] = "²Lµµ¬õ¦â";
+    Text[ arabic ] = "ÃÑÌæÇäí İÇÊÍ";
+    Text[ greek ] = "Áíïé÷ôü ìáôæİíôá";
+    Text[ korean ] = "¹àÀº ¸¶Á¨Å¸»ö";
+    Text[ turkish ] = "Eflatun";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_YELLOW
+{
+    Text = "Gelb" ;
+    Text [ ENGLISH ] = "Yellow" ;
+    Text [ norwegian ] = "Yellow" ;
+    Text [ italian ] = "Giallo" ;
+    Text [ portuguese_brazilian ] = "Amarelo" ;
+    Text [ portuguese ] = "Amarelo" ;
+    Text [ french ] = "Jaune" ;
+    Text [ dutch ] = "Geel" ;
+    Text [ spanish ] = "Amarillo" ;
+    Text [ danish ] = "Gul" ;
+    Text [ swedish ] = "Gult" ;
+    Text [ finnish ] = "Yellow" ;
+    Text [ english_us ] = "Yellow" ;
+    Text[ chinese_simplified ] = "»ÆÉ«";
+    Text[ russian ] = "Æåëòûé";
+    Text[ polish ] = "¯ó³ty";
+    Text[ japanese ] = "‰©F";
+    Text[ chinese_traditional ] = "¶À¦â";
+    Text[ arabic ] = "ÃÕİÑ";
+    Text[ greek ] = "Êßôñéíï";
+    Text[ korean ] = "È²»ö";
+    Text[ turkish ] = "Sarı";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_WHITE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
+    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
+    Text = "Weiß" ;
+    Text [ ENGLISH ] = "White" ;
+    Text [ norwegian ] = "White" ;
+    Text [ italian ] = "Bianco" ;
+    Text [ portuguese_brazilian ] = "Branco" ;
+    Text [ portuguese ] = "Branco" ;
+    Text [ french ] = "Blanc" ;
+    Text [ dutch ] = "Wit" ;
+    Text [ spanish ] = "Blanco" ;
+    Text [ danish ] = "Hvid" ;
+    Text [ swedish ] = "Vitt" ;
+    Text [ finnish ] = "White" ;
+    Text [ english_us ] = "White" ;
+    Text[ chinese_simplified ] = "°×É«";
+    Text[ russian ] = "Áåëûé";
+    Text[ polish ] = "Bia³y";
+    Text[ japanese ] = "”’";
+    Text[ chinese_traditional ] = "¥Õ¦â";
+    Text[ arabic ] = "ÃÈíÖ";
+    Text[ greek ] = "Ëåõêü";
+    Text[ korean ] = "Èò»ö";
+    Text[ turkish ] = "Beyaz";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BLUEGREY
+{
+    Text = "Blaugrau" ;
+    Text [ ENGLISH ] = "Bluegrey" ;
+    Text [ norwegian ] = "Bluegrey" ;
+    Text [ italian ] = "Grigioblu" ;
+    Text [ portuguese_brazilian ] = "Bluegrey" ;
+    Text [ portuguese ] = "Azul acizentado" ;
+    Text [ french ] = "Gris bleu" ;
+    Text [ dutch ] = "Blauwgrijs" ;
+    Text [ spanish ] = "Gris azulado" ;
+    Text [ danish ] = "Blågrå" ;
+    Text [ swedish ] = "Blågrått" ;
+    Text [ finnish ] = "Bluegrey" ;
+    Text [ english_us ] = "Blue gray" ;
+    Text[ chinese_simplified ] = "À¶»ÒÉ«";
+    Text[ russian ] = "Ñèíå-ñåğûé";
+    Text[ polish ] = "Niebieskoszary";
+    Text[ japanese ] = "ÂŠDF";
+    Text[ chinese_traditional ] = "ÂÅ¦Ç¦â";
+    Text[ arabic ] = "ÑãÇÏí ãÒÑŞ";
+    Text[ greek ] = "Ìğëå-ãêñé";
+    Text[ korean ] = "È¸Ã»»ö";
+    Text[ turkish ] = "Mavi-gri";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ORANGE
+{
+    Text = "Orange" ;
+    Text [ ENGLISH ] = "Orange" ;
+    Text [ norwegian ] = "Orange" ;
+    Text [ italian ] = "Arancione" ;
+    Text [ portuguese_brazilian ] = "Orange" ;
+    Text [ portuguese ] = "Laranja" ;
+    Text [ french ] = "Orange" ;
+    Text [ dutch ] = "Oranje" ;
+    Text [ spanish ] = "Naranja" ;
+    Text [ danish ] = "Orange" ;
+    Text [ swedish ] = "Orange" ;
+    Text [ finnish ] = "Orange" ;
+    Text [ english_us ] = "Orange" ;
+    Text[ chinese_simplified ] = "³ÈÉ«";
+    Text[ russian ] = "Îğàíæåâûé";
+    Text[ polish ] = "Pomarañczowy";
+    Text[ japanese ] = "òF";
+    Text[ chinese_traditional ] = "®Ü¦â";
+    Text[ arabic ] = "ÈÑÊŞÇáí";
+    Text[ greek ] = "Ğïñôïêáëß";
+    Text[ korean ] = "ÁÖÈ²»ö";
+    Text[ turkish ] = "Turuncu";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_ARROW
+{
+    Text = "Pfeil" ;
+    Text [ ENGLISH ] = "Arrow" ;
+    Text [ norwegian ] = "Arrow" ;
+    Text [ italian ] = "Freccia" ;
+    Text [ portuguese_brazilian ] = "Arrow" ;
+    Text [ portuguese ] = "Seta" ;
+    Text [ french ] = "Flèche" ;
+    Text [ dutch ] = "Pijl" ;
+    Text [ spanish ] = "Flecha" ;
+    Text [ danish ] = "Pil" ;
+    Text [ swedish ] = "Pil" ;
+    Text [ finnish ] = "Arrow" ;
+    Text [ english_us ] = "Arrow" ;
+    Text[ chinese_simplified ] = "¼ıÍ·";
+    Text[ russian ] = "Ñòğåëêà";
+    Text[ polish ] = "Strza³ka";
+    Text[ japanese ] = "–îˆó";
+    Text[ chinese_traditional ] = "½bÀY";
+    Text[ arabic ] = "Óåã";
+    Text[ greek ] = "Âİëïò";
+    Text[ korean ] = "È­»ìÇ¥";
+    Text[ turkish ] = "Ok";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_SQUARE
+{
+    Text = "Quadrat" ;
+    Text [ ENGLISH ] = "Square" ;
+    Text [ norwegian ] = "Kvadratisk" ;
+    Text [ italian ] = "Quadrato" ;
+    Text [ portuguese_brazilian ] = "Quadrado" ;
+    Text [ portuguese ] = "Quadrado" ;
+    Text [ french ] = "Carré" ;
+    Text [ dutch ] = "Vierkant" ;
+    Text [ spanish ] = "Cuadrado" ;
+    Text [ danish ] = "Kvadrat" ;
+    Text [ swedish ] = "Kvadrat" ;
+    Text [ finnish ] = "Square" ;
+    Text [ english_us ] = "Square" ;
+    Text[ chinese_simplified ] = "Õı·½ĞÎ";
+    Text[ russian ] = "Êâàäğàò";
+    Text[ polish ] = "Kwadrat";
+    Text[ japanese ] = "³•ûŒ`";
+    Text[ chinese_traditional ] = "¥¿¤è§Î";
+    Text[ arabic ] = "ãÑÈÚ";
+    Text[ greek ] = "ÔåôñÜãùíï";
+    Text[ korean ] = "Á¤»ç°¢Çü";
+    Text[ turkish ] = "Kare";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_CIRCLE
+{
+    Text = "Kreis" ;
+    Text [ ENGLISH ] = "Circle" ;
+    Text [ norwegian ] = "Sirkel" ;
+    Text [ italian ] = "Cerchio" ;
+    Text [ portuguese_brazilian ] = "Círculo" ;
+    Text [ portuguese ] = "Círculo" ;
+    Text [ french ] = "Cercle" ;
+    Text [ dutch ] = "Cirkel" ;
+    Text [ spanish ] = "Círculo" ;
+    Text [ danish ] = "Cirkel" ;
+    Text [ swedish ] = "Cirkel" ;
+    Text [ finnish ] = "Circle" ;
+    Text [ english_us ] = "Circle" ;
+    Text[ chinese_simplified ] = "Ô²";
+    Text[ russian ] = "Êğóã";
+    Text[ polish ] = "Ko³o";
+    Text[ japanese ] = "‰~";
+    Text[ chinese_traditional ] = "¶ê§Î";
+    Text[ arabic ] = "ÏÇÆÑÉ";
+    Text[ greek ] = "Êıêëïò";
+    Text[ korean ] = "¿ø";
+    Text[ turkish ] = "Daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_NONE
+{
+    Text = "- kein -" ;
+    Text [ ENGLISH ] = "- none -" ;
+    Text [ english_us ] = "- none -" ;
+    Text [ italian ] = "- nessuno -" ;
+    Text [ spanish ] = "- sin -" ;
+    Text [ french ] = "- aucun(e)-" ;
+    Text [ dutch ] = "- geen -" ;
+    Text [ swedish ] = "- ingen -" ;
+    Text [ danish ] = "- ingen -" ;
+    Text [ portuguese ] = "- nenhum -" ;
+    Text [ portuguese_brazilian ] = "- kein -" ;
+    Text[ chinese_simplified ] = "- ÎŞ -";
+    Text[ russian ] = "- áåç -";
+    Text[ polish ] = "- brak -";
+    Text[ japanese ] = "- ‚È‚µ -";
+    Text[ chinese_traditional ] = "- µL -";
+    Text[ arabic ] = "- ÈÏæä -";
+    Text[ greek ] = "- êáíİíá -";
+    Text[ korean ] = "- ¾øÀ½ -";
+    Text[ turkish ] = "- yok -";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_TRANSPARENCE
+{
+    Text = "Transparenz" ;
+    Text [ ENGLISH ] = "Transparence" ;
+    Text [ english_us ] = "Transparency" ;
+    Text [ italian ] = "Trasparenza" ;
+    Text [ spanish ] = "Transparencia" ;
+    Text [ french ] = "Transparent" ;
+    Text [ dutch ] = "Transparant" ;
+    Text [ swedish ] = "Transparens" ;
+    Text [ danish ] = "Transparens" ;
+    Text [ portuguese ] = "Transparência" ;
+    Text [ portuguese_brazilian ] = "Transparenz" ;
+    Text[ chinese_simplified ] = "Í¸Ã÷";
+    Text[ russian ] = "Ïğîçğà÷íîñòü";
+    Text[ polish ] = "PrzeŸroczystoœæ";
+    Text[ japanese ] = "“§‰ß«";
+    Text[ chinese_traditional ] = "³z©ú";
+    Text[ arabic ] = "ÔÇİíÉ";
+    Text[ greek ] = "ÄéáöÜíåéá";
+    Text[ korean ] = "Åõ¸í";
+    Text[ turkish ] = "Saydamlık";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_CENTERED
+{
+    Text = "Zentriert" ;
+    Text [ ENGLISH ] = "Centered" ;
+    Text [ dutch ] = "Gecentreerd" ;
+    Text [ english_us ] = "Centered" ;
+    Text [ italian ] = "Centrato" ;
+    Text [ spanish ] = "Centrado" ;
+    Text [ french ] = "Centré" ;
+    Text [ swedish ] = "Centrerat" ;
+    Text [ danish ] = "Centreret" ;
+    Text [ portuguese ] = "Centrado" ;
+    Text [ portuguese_brazilian ] = "Zentriert" ;
+    Text[ chinese_simplified ] = "¾ÓÖĞ";
+    Text[ russian ] = "Ïî öåíòğó";
+    Text[ polish ] = "Wyœrodkowany";
+    Text[ japanese ] = "’†‰›‘µ‚¦";
+    Text[ chinese_traditional ] = "¸m¤¤";
+    Text[ arabic ] = "ÊæÓíØ";
+    Text[ greek ] = "Êåíôñáñéóìİíá";
+    Text[ korean ] = "°¡¿îµ¥";
+    Text[ turkish ] = "Ortala";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_NOTCENTERED
+{
+    Text = "Nicht Zentriert" ;
+    Text [ ENGLISH ] = "Not centered" ;
+    Text [ english_us ] = "Not centered" ;
+    Text [ italian ] = "non centrato" ;
+    Text [ spanish ] = "Sin centrar" ;
+    Text [ french ] = "Non centré" ;
+    Text [ dutch ] = "Niet gecentreerd" ;
+    Text [ swedish ] = "Inte centrerad" ;
+    Text [ danish ] = "Ikke centreret" ;
+    Text [ portuguese ] = "Não centrado" ;
+    Text [ portuguese_brazilian ] = "Nicht Zentriert" ;
+    Text[ chinese_simplified ] = "²»¾ÓÖĞ";
+    Text[ russian ] = "Íå ïî öåíòğó";
+    Text[ polish ] = "Nie wyœrodkowany";
+    Text[ japanese ] = "’†‰›‘µ‚¦‚Å‚È‚¢";
+    Text[ chinese_traditional ] = "¤£¸m¤¤";
+    Text[ arabic ] = "ÛíÑ ãæÓØ";
+    Text[ greek ] = "¼÷é êåíôñáñéóìİíá";
+    Text[ korean ] = "°¡¿îµ¥·Î ¸ÂÃßÁö ¾ÊÀ½";
+    Text[ turkish ] = "Ortalanmamış";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GRAFMODE_STANDARD
+{
+    Text = "Standard";
+    Text[ english ] = "Standard";
+    Text[ english_us ] = "Default";
+    Text[ portuguese ] = "Padrão";
+    Text[ russian ] = "Ñòàíäàğò";
+    Text[ greek ] = "ĞñïåğéëïãŞ";
+    Text[ dutch ] = "Standaard";
+    Text[ french ] = "Par défaut";
+    Text[ spanish ] = "Predeterminado";
+    Text[ italian ] = "Standard";
+    Text[ danish ] = "Standard";
+    Text[ swedish ] = "Standard";
+    Text[ polish ] = "Domyœlnie";
+    Text[ portuguese_brazilian ] = "Standard";
+    Text[ japanese ] = "•W€";
+    Text[ korean ] = "±âº»";
+    Text[ chinese_simplified ] = "±ê×¼";
+    Text[ chinese_traditional ] = "¼Ğ­ã";
+    Text[ arabic ] = "ŞíÇÓí";
+    Text[ turkish ] = "Standart";
+};
+String RID_SVXSTR_GRAFMODE_GREYS
+{
+    Text = "Graustufen";
+    Text[ english ] = "Greyscales";
+    Text[ english_us ] = "Grayscale";
+    Text[ portuguese ] = "Tons de cinzento";
+    Text[ russian ] = "Îòòåíêè ñåğîãî";
+    Text[ greek ] = "Äéáâáèìßóåéò ôïõ ãêñé";
+    Text[ dutch ] = "Grijswaarden";
+    Text[ french ] = "Niveaux de gris";
+    Text[ spanish ] = "Escala de grises";
+    Text[ italian ] = "Toni di grigio";
+    Text[ danish ] = "Gråtoner";
+    Text[ swedish ] = "Gråskalor";
+    Text[ polish ] = "Odcienie szaroœci";
+    Text[ portuguese_brazilian ] = "Greyscales";
+    Text[ japanese ] = "¸ŞÚ°½¹°Ù";
+    Text[ korean ] = "È¸»öÁ¶";
+    Text[ chinese_simplified ] = "»Ò¶È";
+    Text[ chinese_traditional ] = "¦Ç¶¥";
+    Text[ arabic ] = "ÏÑÌÇÊ ÇáÑãÇÏí";
+    Text[ turkish ] = "Gri tonlama";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GRAFMODE_MONO
+{
+    Text = "Schwarz/Weiß";
+    Text[ english ] = "Black/White";
+    Text[ english_us ] = "Black/White";
+    Text[ portuguese ] = "Preto/Branco";
+    Text[ russian ] = "×åğíî-áåëûé";
+    Text[ greek ] = "Ìáıñï/Ëåõêü";
+    Text[ dutch ] = "Zwart-wit";
+    Text[ french ] = "Noir/Blanc";
+    Text[ spanish ] = "Blanco/Negro";
+    Text[ italian ] = "Bianco/Nero";
+    Text[ danish ] = "Sort-hvid";
+    Text[ swedish ] = "Svartvitt";
+    Text[ polish ] = "Bia³y/Czarny";
+    Text[ portuguese_brazilian ] = "Black/White";
+    Text[ japanese ] = "”’•";
+    Text[ korean ] = "Èæ/ ¹é";
+    Text[ chinese_simplified ] = "ºÚ/°×";
+    Text[ chinese_traditional ] = "¶Â¥Õ";
+    Text[ arabic ] = "ÃÓæÏ/ÃÈíÖ";
+    Text[ turkish ] = "Siyah/Beyaz";
+};
+String RID_SVXSTR_GRAFMODE_WATERMARK
+{
+    Text = "Wasserzeichen";
+    Text[ english ] = "Watermark";
+    Text[ english_us ] = "Watermark";
+    Text[ portuguese ] = "Marca d'água";
+    Text[ russian ] = "Âîäÿíûå çíàêè";
+    Text[ greek ] = "Õäáôüóçìï";
+    Text[ dutch ] = "Watermerk";
+    Text[ french ] = "Filigrane";
+    Text[ spanish ] = "Marca de agua";
+    Text[ italian ] = "Filigrana";
+    Text[ danish ] = "Vandmærke";
+    Text[ swedish ] = "Vattenmärke";
+    Text[ polish ] = "Znak wodny";
+    Text[ portuguese_brazilian ] = "Watermark";
+    Text[ japanese ] = "“§‚©‚µ";
+    Text[ korean ] = "¿öÅÍ¸¶Å©";
+    Text[ chinese_simplified ] = "Ë®Ó¡";
+    Text[ chinese_traditional ] = "¥­·Æ";
+    Text[ arabic ] = "ÚáÇãÉ ãÇÆíÉ";
+    Text[ turkish ] = "Filigran";
+};
+String STR_INSERT_VIDEO_EXTFILTER_IVF
+{
+    Text = "Intel Indeo Video (*.ivf)" ;
+    Text [ ENGLISH ] = "Intel Indeo Video (*.ivf)" ;
+    Text [ english_us ] = "Intel Indeo Video (*.ivf)" ;
+    Text[ portuguese ] = "Intel Indeo Video (*.ivf)";
+    Text[ russian ] = "Intel Indeo Video (*.ivf)";
+    Text[ greek ] = "Intel Indeo Video (*.ivf)";
+    Text[ dutch ] = "Intel Indeo Video (*.ivf)";
+    Text[ french ] = "Intel Indeo Video (*.ivf)";
+    Text[ spanish ] = "Intel Indeo Video (*.ivf)";
+    Text[ italian ] = "Intel Indeo Video (*.ivf)";
+    Text[ danish ] = "Intel Indeo Video (*.ivf)";
+    Text[ swedish ] = "Intel Indeo Video (*.ivf)";
+    Text[ polish ] = "Intel Indeo Video (*.ivf)";
+    Text[ portuguese_brazilian ] = "Intel Indeo Video (*.ivf)";
+    Text[ japanese ] = "Intel Indeo Video (*.ivf)";
+    Text[ korean ] = "Intel Indeo Video (*.ivf)";
+    Text[ chinese_simplified ] = "Intel Indeo Video (*.ivf)";
+    Text[ chinese_traditional ] = "Intel Indeo Video (*.ivf)";
+    Text[ arabic ] = "Intel Indeo Video (*.ivf)";
+    Text[ turkish ] = "Intel Indeo Video (*.ivf)";
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_AVI
+{
+    Text = "Video für Windows (*.avi)" ;
+    Text [ ENGLISH ] = "Video for Windows (*.avi)" ;
+    Text [ english_us ] = "Video for Windows (*.avi)" ;
+    Text[ portuguese ] = "Vídeo para Windows (*.avi)";
+    Text[ russian ] = "Âèäåî äëÿ Windows (*.avi)";
+    Text[ greek ] = "Video ãéá Windows (*.avi)";
+    Text[ dutch ] = "Video voor Windows (*.avi)";
+    Text[ french ] = "Vidéo pour Windows (*.avi)";
+    Text[ spanish ] = "Vídeo para Windows (*.avi)";
+    Text[ italian ] = "Video per Windows (*.avi)";
+    Text[ danish ] = "Video til Windows (*.avi)";
+    Text[ swedish ] = "Video för Windows (*.avi)";
+    Text[ polish ] = "Video dla Windows (*.avi)";
+    Text[ portuguese_brazilian ] = "Video for Windows (*.avi)";
+    Text[ japanese ] = "Video for Windows (*.avi)";
+    Text[ korean ] = "Video for Windows (*.avi)";
+    Text[ chinese_simplified ] = "Video for Windows (*.avi)";
+    Text[ chinese_traditional ] = "Video for Windows (*.avi)";
+    Text[ arabic ] = "İíÏíæ áÜ (*.avi) Windows";
+    Text[ turkish ] = "Video for Windows (*.avi)";
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_MOV
+{
+    Text = "QuickTime Movie (*.mov)" ;
+    Text [ ENGLISH ] = "QuickTime Movie (*.mov)" ;
+    Text [ english_us ] = "QuickTime Movie (*.mov)" ;
+    Text[ portuguese ] = "QuickTime Movie (*.mov)";
+    Text[ russian ] = "QuickTime Movie (*.mov)";
+    Text[ greek ] = "QuickTime Movie (*.mov)";
+    Text[ dutch ] = "QuickTime Movie (*.mov)";
+    Text[ french ] = "QuickTime Movie (*.mov)";
+    Text[ spanish ] = "QuickTime Movie (*.mov)";
+    Text[ italian ] = "QuickTime Movie (*.mov)";
+    Text[ danish ] = "QuickTime Movie (*.mov)";
+    Text[ swedish ] = "QuickTime Movie (*.mov)";
+    Text[ polish ] = "QuickTime Movie (*.mov)";
+    Text[ portuguese_brazilian ] = "QuickTime Movie (*.mov)";
+    Text[ japanese ] = "QuickTime Movie (*.mov)";
+    Text[ korean ] = "QuickTime Movie (*.mov)";
+    Text[ chinese_simplified ] = "QuickTime Movie (*.mov)";
+    Text[ chinese_traditional ] = "QuickTime Movie (*.mov)";
+    Text[ arabic ] = "QuickTime Movie (*.mov)";
+    Text[ turkish ] = "QuickTime Movie (*.mov)";
+};
+
+String STR_INSERT_VIDEO_EXTFILTER_MPEG
+{
+    Text = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)" ;
+    Text [ ENGLISH ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)" ;
+    Text [ english_us ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)" ;
+    Text[ portuguese ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ russian ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ greek ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ dutch ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ french ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ spanish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ italian ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ danish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ swedish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ polish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ portuguese_brazilian ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ japanese ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ korean ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ chinese_simplified ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ chinese_traditional ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ arabic ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+    Text[ turkish ] = "MPEG - Motion Pictures Experts Group (*.mpe;*.mpeg;*.mpg)";
+};
+
+String STR_EXTFILTER_ALL
+{
+    Text = "<Alle>" ;
+    Text [ ENGLISH ] = "<All>" ;
+    Text [ english_us ] = "<All>" ;
+    Text[ portuguese ] = "<Todos>";
+    Text[ russian ] = "<Âñå>";
+    Text[ greek ] = "<¼ëá>";
+    Text[ dutch ] = "<Alle>";
+    Text[ french ] = "<Tous>";
+    Text[ spanish ] = "<Todos>";
+    Text[ italian ] = "<Tutti>";
+    Text[ danish ] = "<Alle>";
+    Text[ swedish ] = "<Alla>";
+    Text[ polish ] = "<Wszystkie>";
+    Text[ portuguese_brazilian ] = "<All>";
+    Text[ japanese ] = "<‚·‚×‚Ä>";
+    Text[ korean ] = "<¸ğµÎ>";
+    Text[ chinese_simplified ] = "<È«²¿l>";
+    Text[ chinese_traditional ] = "<¥ş³¡>";
+    Text[ arabic ] = "<Çáßá>";
+    Text[ turkish ] = "<Tümü>";
+};
+
+String STR_INSERT_SOUND_TITLE
+{
+    Text = "Klang einfügen" ;
+    Text [ ENGLISH ] = "Insert sound" ;
+    Text [ english_us ] = "Insert sound" ;
+    Text[ portuguese ] = "Inserir som";
+    Text[ russian ] = "Âñòàâèòü çâóê";
+    Text[ greek ] = "ÅéóáãùãŞ Ş÷ïõ";
+    Text[ dutch ] = "Geluid invoegen";
+    Text[ french ] = "Insérer un son";
+    Text[ spanish ] = "Insertar sonido";
+    Text[ italian ] = "Inserisci audio";
+    Text[ danish ] = "Indsæt lyd";
+    Text[ swedish ] = "Infoga ljud";
+    Text[ polish ] = "Wstaw dŸwiêk";
+    Text[ portuguese_brazilian ] = "Insert sound";
+    Text[ japanese ] = "»³İÄŞ‚Ì‘}“ü";
+    Text[ korean ] = "»ç¿îµå »ğÀÔ";
+    Text[ chinese_simplified ] = "²åÈëÉùÒô";
+    Text[ chinese_traditional ] = "´¡¤JÁn­µ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÕæÊ";
+    Text[ turkish ] = "Ses ekle";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_INSERT_VIDEO_TITLE
+{
+    Text = "Video einfügen" ;
+    Text [ ENGLISH ] = "Insert video" ;
+    Text [ english_us ] = "Insert video" ;
+    Text[ portuguese ] = "Inserir vídeo";
+    Text[ russian ] = "Âñòàâèòü âèäåî";
+    Text[ greek ] = "ÅéóáãùãŞ Video";
+    Text[ dutch ] = "Video invoegen";
+    Text[ french ] = "Insérer une vidéo";
+    Text[ spanish ] = "Insertar vídeo";
+    Text[ italian ] = "Inserisci video";
+    Text[ danish ] = "Indsæt video";
+    Text[ swedish ] = "Infoga video";
+    Text[ polish ] = "Wstaw video";
+    Text[ portuguese_brazilian ] = "Insert video";
+    Text[ japanese ] = "ËŞÃŞµ‚Ì‘}“ü";
+    Text[ korean ] = "ºñµğ¿À »ğÀÔ";
+    Text[ chinese_simplified ] = "²åÈëÂ¼Ïó";
+    Text[ chinese_traditional ] = "´¡¤J¼vµø";
+    Text[ arabic ] = "ÅÏÑÇÌ İíÏíæ";
+    Text[ turkish ] = "Film ekle";
+};
+
+
+// BM: some additional standard colors
+
+String RID_SVXSTR_VIOLET
+{
+    Text = "Lila";
+    Text [ english_us ] = "Violet";
+    Text [ ENGLISH ] = "Violet";
+    Text[ portuguese ] = "Violeta";
+    Text[ russian ] = "Ôèîëåòîâûé";
+    Text[ greek ] = "Âéïëåôß";
+    Text[ dutch ] = "Lila";
+    Text[ french ] = "Violet";
+    Text[ spanish ] = "Violeta";
+    Text[ italian ] = "Lilla";
+    Text[ danish ] = "Lilla";
+    Text[ swedish ] = "Lila";
+    Text[ polish ] = "Filolet";
+    Text[ portuguese_brazilian ] = "Violet";
+    Text[ japanese ] = "‡";
+    Text[ korean ] = "º¸¶ó»ö";
+    Text[ chinese_simplified ] = "×ÏÉ«";
+    Text[ chinese_traditional ] = "µµ¦â";
+    Text[ arabic ] = "ÈäİÓÌí";
+    Text[ turkish ] = "Menekşe";
+};
+
+String RID_SVXSTR_BORDEAUX
+{
+    Text = "Bordeaux";
+    Text [ english_us ] = "Bordeaux";
+    Text [ ENGLISH ] = "Bordeaux";
+    Text[ portuguese ] = "Bordeaux";
+    Text[ russian ] = "Áîğäîâûé";
+    Text[ greek ] = "Ìğïñíôş";
+    Text[ dutch ] = "Bordeaux";
+    Text[ french ] = "Bordeaux";
+    Text[ spanish ] = "Burdeos";
+    Text[ italian ] = "Bordeaux";
+    Text[ danish ] = "Bordeauxrød";
+    Text[ swedish ] = "Bordeaux";
+    Text[ polish ] = "Bordowy";
+    Text[ portuguese_brazilian ] = "Bordeaux";
+    Text[ japanese ] = "‚¦‚ñ‚¶";
+    Text[ korean ] = "º¸¸£µµ»ö";
+    Text[ chinese_simplified ] = "ÉîºìÉ«";
+    Text[ chinese_traditional ] = "²`¬õ¦â";
+    Text[ arabic ] = "ÃÍãÑ ŞÇäò";
+    Text[ turkish ] = "Bordo";
+};
+
+String RID_SVXSTR_PALE_YELLOW
+{
+    Text = "Blassgelb";
+    Text [ english_us ] = "Pale yellow";
+    Text [ ENGLISH ] = "Pale yellow";
+    Text[ portuguese ] = "Amarelo-claro";
+    Text[ russian ] = "Ñâåòëî-æåëòûé";
+    Text[ greek ] = "Ù÷ñü êßôñéíï";
+    Text[ dutch ] = "Geel pastel";
+    Text[ french ] = "Jaune pâle";
+    Text[ spanish ] = "Amarillo pastel";
+    Text[ italian ] = "Giallo chiaro";
+    Text[ danish ] = "Bleggul";
+    Text[ swedish ] = "Blekgul";
+    Text[ polish ] = "Blado¿ó³ty";
+    Text[ portuguese_brazilian ] = "Pale yellow";
+    Text[ japanese ] = "’W‰©F";
+    Text[ korean ] = "´ãÈ²»ö";
+    Text[ chinese_simplified ] = "Ç³»ÆÉ«";
+    Text[ chinese_traditional ] = "²L¶À¦â";
+    Text[ arabic ] = "ÃÕİÑ ÔÇÍÈ";
+    Text[ turkish ] = "Solgun sarı";
+};
+
+String RID_SVXSTR_PALE_GREEN
+{
+    Text = "Blassgrün";
+    Text [ english_us ] = "Pale green";
+    Text [ ENGLISH ] = "Pale green";
+    Text[ portuguese ] = "Verde-claro";
+    Text[ russian ] = "Ñâåòëî-çåëåíûé";
+    Text[ greek ] = "Ù÷ñü ğñÜóéíï";
+    Text[ dutch ] = "Groen pastel";
+    Text[ french ] = "Vert pâle";
+    Text[ spanish ] = "Verde pastel";
+    Text[ italian ] = "Verde chiaro";
+    Text[ danish ] = "Bleggrøn";
+    Text[ swedish ] = "Blekgrön";
+    Text[ polish ] = "Bladozielony";
+    Text[ portuguese_brazilian ] = "Pale green";
+    Text[ japanese ] = "’W—Î";
+    Text[ korean ] = "´ã³ì»ö";
+    Text[ chinese_simplified ] = "µ­ÂÌÉ«";
+    Text[ chinese_traditional ] = "²Lºñ¦â";
+    Text[ arabic ] = "ÃÎÖÑ ÔÇÍÈ";
+    Text[ turkish ] = "Solgun yeşil";
+};
+
+String RID_SVXSTR_DKVIOLET
+{
+    Text = "Dunkellila";
+    Text [ english_us ] = "Dark violet";
+    Text [ ENGLISH ] = "Dark violet";
+    Text[ portuguese ] = "Violeta escuro";
+    Text[ russian ] = "Òåìíî-ôèîëåòîâûé";
+    Text[ greek ] = "Óêïıñï âéïëåôß";
+    Text[ dutch ] = "Donker lila";
+    Text[ french ] = "Violet foncé";
+    Text[ spanish ] = "Violeta oscuro";
+    Text[ italian ] = "Lilla scuro";
+    Text[ danish ] = "Mørkelilla";
+    Text[ swedish ] = "Mörklila";
+    Text[ polish ] = "Ciemny filolet";
+    Text[ portuguese_brazilian ] = "Dark violet";
+    Text[ japanese ] = "”Z‡";
+    Text[ korean ] = "Áøº¸¶ó»ö";
+    Text[ chinese_simplified ] = "Éî×ÏÉ«";
+    Text[ chinese_traditional ] = "²`µµ¦â";
+    Text[ arabic ] = "ÈäİÓÌí ÛÇãŞ";
+    Text[ turkish ] = "Koyu lila";
+};
+
+String RID_SVXSTR_SALMON
+{
+    Text = "Lachs";
+    Text [ english_us ] = "Salmon";
+    Text [ ENGLISH ] = "Salmon";
+    Text[ portuguese ] = "Salmão";
+    Text[ russian ] = "Àëûé";
+    Text[ greek ] = "Óïëïìüò";
+    Text[ dutch ] = "Zalmkleur";
+    Text[ french ] = "Saumon";
+    Text[ spanish ] = "Salmón";
+    Text[ italian ] = "Salmone";
+    Text[ danish ] = "Laksefarvet";
+    Text[ swedish ] = "Lax";
+    Text[ polish ] = "£ososiowy";
+    Text[ portuguese_brazilian ] = "Salmon";
+    Text[ japanese ] = "»°ÓİËßİ¸";
+    Text[ korean ] = "¿¬¾î »ì»ö";
+    Text[ chinese_simplified ] = "³ÈºìÉ«";
+    Text[ chinese_traditional ] = "¾í¬õ¦â";
+    Text[ arabic ] = "ŞÑäİáí";
+    Text[ turkish ] = "Somon";
+};
+
+String RID_SVXSTR_SEABLUE
+{
+    Text = "Seeblau";
+    Text [ english_us ] = "Sea blue";
+    Text [ ENGLISH ] = "Sea blue";
+    Text[ portuguese ] = "Azul marinho";
+    Text[ russian ] = "Ìîğñêàÿ âîëíà";
+    Text[ greek ] = "ÃáëÜæéï";
+    Text[ dutch ] = "Zeeblauw";
+    Text[ french ] = "Azur";
+    Text[ spanish ] = "Azul marino";
+    Text[ italian ] = "Blu mare";
+    Text[ danish ] = "Azurblå";
+    Text[ swedish ] = "Havsblå";
+    Text[ polish ] = "Lazurowy";
+    Text[ portuguese_brazilian ] = "Sea blue";
+    Text[ japanese ] = "ŠC‚ÌÂ";
+    Text[ korean ] = "½ÉÃ»»ö";
+    Text[ chinese_simplified ] = "ºşÀ¶É«";
+    Text[ chinese_traditional ] = "®ü¤ôÂÅ";
+    Text[ arabic ] = "ÃÒÑŞ äíáí";
+    Text[ turkish ] = "Deniz mavisi";
+};
+
+String RID_SVXSTR_COLOR_SUN
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text = "Sun";
+    Text [ english_us ] = "Sun";
+    Text [ ENGLISH ] = "Sun";
+    Text [ dutch ] = "Sun" ;
+    Text [ english_us ] = "Sun" ;
+    Text [ italian ] = "Sun" ;
+    Text [ spanish ] = "Sun" ;
+    Text [ french ] = "Sun" ;
+    Text [ swedish ] = "Sun" ;
+    Text [ danish ] = "Sun" ;
+    Text [ portuguese ] = "Sun" ;
+    Text [ portuguese_brazilian ] = "Sun" ;
+    Text [ polish ] = "Sun";
+    Text[ russian ] = "Sun";
+    Text[ greek ] = "Sun";
+    Text[ japanese ] = "Sun";
+    Text[ korean ] = "Sun";
+    Text[ chinese_simplified ] = "Sun";
+    Text[ chinese_traditional ] = "¶§¬õ¦â";
+    Text[ arabic ] = "Sun";
+    Text[ turkish ] = "Sun";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXSTR_TBLAFMT_3D
+{
+    Text = "3D";
+    Text [ ENGLISH ] = "3D";
+    Text[ english_us ] = "3D";
+    Text[ portuguese ] = "3D";
+    Text[ russian ] = "3-Ì";
+    Text[ greek ] = "3Ä";
+    Text[ dutch ] = "3D";
+    Text[ french ] = "3D";
+    Text[ spanish ] = "3D";
+    Text[ italian ] = "3D";
+    Text[ danish ] = "3D";
+    Text[ swedish ] = "3D";
+    Text[ polish ] = "3-W";
+    Text[ portuguese_brazilian ] = "3D";
+    Text[ japanese ] = "3D";
+    Text[ korean ] = "3D";
+    Text[ chinese_simplified ] = "3 Î¬";
+    Text[ chinese_traditional ] = "3 ·L";
+    Text[ arabic ] = "ËáÇËí ÇáÃÈÚÇÏ";
+    Text[ turkish ] = "3B";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_TBLAFMT_BLACK1
+{
+    Text = "Schwarz 1";
+    Text [ ENGLISH ] = "Black 1";
+    Text[ english_us ] = "Black 1";
+    Text[ portuguese ] = "Preto 1";
+    Text[ russian ] = "×åğíûé 1";
+    Text[ greek ] = "Ìáıñï 1";
+    Text[ dutch ] = "Zwart 1";
+    Text[ french ] = "Noir 1";
+    Text[ spanish ] = "Negro 1";
+    Text[ italian ] = "Nero 1";
+    Text[ danish ] = "Sort 1";
+    Text[ swedish ] = "Svart 1";
+    Text[ polish ] = "Czarny 1";
+    Text[ portuguese_brazilian ] = "Black 1";
+    Text[ japanese ] = "• 1";
+    Text[ korean ] = "°ËÀº»ö 1";
+    Text[ chinese_simplified ] = "ºÚÉ« 1";
+    Text[ chinese_traditional ] = "¶Â¦â 1";
+    Text[ arabic ] = "ÃÓæÏ 1";
+    Text[ turkish ] = "Siyah 1";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_TBLAFMT_BLACK2
+{
+    Text = "Schwarz 2";
+    Text [ ENGLISH ] = "Black 2";
+    Text[ english_us ] = "Black 2";
+    Text[ portuguese ] = "Preto 2";
+    Text[ russian ] = "×åğíûé 2";
+    Text[ greek ] = "Ìáıñï 2";
+    Text[ dutch ] = "Zwart 2";
+    Text[ french ] = "Noir 2";
+    Text[ spanish ] = "Negro 2";
+    Text[ italian ] = "Nero 2";
+    Text[ danish ] = "Sort 2";
+    Text[ swedish ] = "Svart 2";
+    Text[ polish ] = "Czarny 2";
+    Text[ portuguese_brazilian ] = "Black 2";
+    Text[ japanese ] = "• 2";
+    Text[ korean ] = "°ËÀº»ö 2";
+    Text[ chinese_simplified ] = "ºÚÉ« 2";
+    Text[ chinese_traditional ] = "¶Â¦â 2";
+    Text[ arabic ] = "ÃÓæÏ 2";
+    Text[ turkish ] = "Siyah 2";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_TBLAFMT_BLUE
+{
+    Text = "Blau";
+    Text [ ENGLISH ] = "Blue";
+    Text[ english_us ] = "Blue";
+    Text[ portuguese ] = "Azul";
+    Text[ russian ] = "Ñèíèé";
+    Text[ greek ] = "Ìğëå";
+    Text[ dutch ] = "Blauw";
+    Text[ french ] = "Bleu";
+    Text[ spanish ] = "Azul";
+    Text[ italian ] = "Blu";
+    Text[ danish ] = "Blå";
+    Text[ swedish ] = "Blått";
+    Text[ polish ] = "Niebieski";
+    Text[ portuguese_brazilian ] = "Blue";
+    Text[ japanese ] = "Â";
+    Text[ korean ] = "Ã»»ö";
+    Text[ chinese_simplified ] = "À¶É«";
+    Text[ chinese_traditional ] = "ÂÅ¦â";
+    Text[ arabic ] = "ÃÒÑŞ";
+    Text[ turkish ] = "Mavi";
+};
+String RID_SVXSTR_TBLAFMT_BROWN
+{
+    Text = "Braun";
+    Text [ ENGLISH ] = "Brown";
+    Text[ english_us ] = "Brown";
+    Text[ portuguese ] = "Castanho";
+    Text[ russian ] = "Êîğè÷íåâûé";
+    Text[ greek ] = "Êáöİ";
+    Text[ dutch ] = "Bruin";
+    Text[ french ] = "Marron";
+    Text[ spanish ] = "Marrón";
+    Text[ italian ] = "Marrone";
+    Text[ danish ] = "Brun";
+    Text[ swedish ] = "Brunt";
+    Text[ polish ] = "Br¹zowy";
+    Text[ portuguese_brazilian ] = "Brown";
+    Text[ japanese ] = "’ƒF";
+    Text[ korean ] = "°¥»ö";
+    Text[ chinese_simplified ] = "×ØÉ«";
+    Text[ chinese_traditional ] = "´Ä¦â";
+    Text[ arabic ] = "Èäí";
+    Text[ turkish ] = "Kahverengi";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY
+{
+    Text = "Währung";
+    Text [ ENGLISH ] = "Currency";
+    Text[ english_us ] = "Currency";
+    Text[ portuguese ] = "Moeda";
+    Text[ russian ] = "Âàëşòà";
+    Text[ greek ] = "Íüìéóìá";
+    Text[ dutch ] = "Valuta";
+    Text[ french ] = "Monnaie";
+    Text[ spanish ] = "Moneda";
+    Text[ italian ] = "Valuta";
+    Text[ danish ] = "Valuta";
+    Text[ swedish ] = "Valuta";
+    Text[ polish ] = "Waluta";
+    Text[ portuguese_brazilian ] = "Currency";
+    Text[ japanese ] = "’Ê‰İ";
+    Text[ korean ] = "ÅëÈ­";
+    Text[ chinese_simplified ] = "»õ±Ò";
+    Text[ chinese_traditional ] = "³f¹ô";
+    Text[ arabic ] = "ÇáÚãáÉ";
+    Text[ turkish ] = "Para birimi";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_3D
+{
+    Text = "Währung 3D";
+    Text [ ENGLISH ] = "Currency 3D";
+    Text[ english_us ] = "Currency 3D";
+    Text[ portuguese ] = "Moeda 3D";
+    Text[ russian ] = "Âàëşòà 3-Ì";
+    Text[ greek ] = "Íüìéóìá 3Ä";
+    Text[ dutch ] = "Valuta 3D";
+    Text[ french ] = "Monnaie 3D";
+    Text[ spanish ] = "Moneda 3D";
+    Text[ italian ] = "Valuta 3D";
+    Text[ danish ] = "Valuta 3D";
+    Text[ swedish ] = "Valuta 3D";
+    Text[ polish ] = "Waluta 3-W";
+    Text[ portuguese_brazilian ] = "Currency 3D";
+    Text[ japanese ] = "’Ê‰İ 3D";
+    Text[ korean ] = "ÅëÈ­ 3D";
+    Text[ chinese_simplified ] = "»õ±Ò 3 Î¬";
+    Text[ chinese_traditional ] = "³f¹ô 3 ºû";
+    Text[ arabic ] = "ÚãáÉ ËáÇËíÉ ÇáÃÈÚÇÏ";
+    Text[ turkish ] = "Para birimi 3B";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_GRAY
+{
+    Text = "Währung Grau";
+    Text [ ENGLISH ] = "Currency Gray";
+    Text[ english_us ] = "Currency Gray";
+    Text[ portuguese ] = "Moeda em cinzento";
+    Text[ russian ] = "Âàëşòà ñåğàÿ";
+    Text[ greek ] = "Íüìéóìá Ãêñé";
+    Text[ dutch ] = "Valuta grijs";
+    Text[ french ] = "Monnaie grise";
+    Text[ spanish ] = "Moneda gris";
+    Text[ italian ] = "Valuta grigio";
+    Text[ danish ] = "Valuta grå";
+    Text[ swedish ] = "Valuta grått";
+    Text[ polish ] = "Waluta Szara";
+    Text[ portuguese_brazilian ] = "Currency Gray";
+    Text[ japanese ] = "’Ê‰İ ŠDF";
+    Text[ korean ] = "ÅëÈ­ È¸»ö";
+    Text[ chinese_simplified ] = "»õ±Ò »ÒÉ«";
+    Text[ chinese_traditional ] = "³f¹ô ¦Ç¦â";
+    Text[ arabic ] = "ÚãáÉ ÑãÇÏíÉ";
+    Text[ turkish ] = "Para birimi gri";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_LAVENDER
+{
+    Text = "Währung Flieder";
+    Text [ ENGLISH ] = "Currency Lavender";
+    Text[ english_us ] = "Currency Lavender";
+    Text[ portuguese ] = "Moeda em lilás";
+    Text[ russian ] = "Âàëşòà ôèîëåòîâàÿ";
+    Text[ greek ] = "Íüìéóìá ëåâÜíôá";
+    Text[ dutch ] = "Valuta lavendel";
+    Text[ french ] = "Monnaie lavande";
+    Text[ spanish ] = "Moneda lavanda";
+    Text[ italian ] = "Valuta lavanda";
+    Text[ danish ] = "Valuta lysviolet";
+    Text[ swedish ] = "Valuta syrenlila";
+    Text[ polish ] = "Waluta Fioletowa";
+    Text[ portuguese_brazilian ] = "Currency Lavender";
+    Text[ japanese ] = "’Ê‰İ ×ÍŞİÀŞ°";
+    Text[ korean ] = "ÅëÈ­ ´ãÀÚ»ö";
+    Text[ chinese_simplified ] = "»õ±Ò µ­×ÏÉ«";
+    Text[ chinese_traditional ] = "³f¹ô ²Hµµ¦â";
+    Text[ arabic ] = "ÚãáÉ ÃÑÌæÇäíÉ İÇÊÍ";
+    Text[ turkish ] = "Para birimi eflatun";
+};
+String RID_SVXSTR_TBLAFMT_CURRENCY_TURQUOISE
+{
+    Text = "Währung Türkis";
+    Text [ ENGLISH ] = "Currency Turquoise";
+    Text[ english_us ] = "Currency Turquoise";
+    Text[ portuguese ] = "Moeda em turquesa";
+    Text[ russian ] = "Âàëşòà áèğşçîâàÿ";
+    Text[ greek ] = "Íüìéóìá ôïõñêïõÜæ";
+    Text[ dutch ] = "Valuta turkoois";
+    Text[ french ] = "Monnaie turquoise";
+    Text[ spanish ] = "Moneda turquesa";
+    Text[ italian ] = "Valuta turchese";
+    Text[ danish ] = "Valuta turkis";
+    Text[ swedish ] = "Valuta turkost";
+    Text[ polish ] = "Waluta Turkusowa";
+    Text[ portuguese_brazilian ] = "Currency Turquoise";
+    Text[ japanese ] = "’Ê‰İ Â—Î";
+    Text[ korean ] = "ÅëÈ­ Ã»¿Á»ö";
+    Text[ chinese_simplified ] = "»õ±Ò À¶ÓñÉ«";
+    Text[ chinese_traditional ] = "³f¹ô ÂÅ¥É¦â";
+    Text[ arabic ] = "ÚãáÉ ÊÑßæÇÒ";
+    Text[ turkish ] = "Para birimi türkuaz";
+};
+String RID_SVXSTR_TBLAFMT_GRAY
+{
+    Text = "Grau";
+    Text [ ENGLISH ] = "Gray";
+    Text[ english_us ] = "Gray";
+    Text[ portuguese ] = "Cinzento";
+    Text[ russian ] = "Ñåğûé";
+    Text[ greek ] = "Ãêñé";
+    Text[ dutch ] = "Grijs";
+    Text[ french ] = "Gris";
+    Text[ spanish ] = "Gris";
+    Text[ italian ] = "Grigio";
+    Text[ danish ] = "Grå";
+    Text[ swedish ] = "Grått";
+    Text[ polish ] = "Szary";
+    Text[ portuguese_brazilian ] = "Gray";
+    Text[ japanese ] = "ŠDF";
+    Text[ korean ] = "È¸»ö";
+    Text[ chinese_simplified ] = "»ÒÉ«";
+    Text[ chinese_traditional ] = "¦Ç¦â";
+    Text[ arabic ] = "ÑãÇÏí";
+    Text[ turkish ] = "Gri";
+};
+String RID_SVXSTR_TBLAFMT_GREEN
+{
+    Text = "Grün";
+    Text [ ENGLISH ] = "Green";
+    Text[ english_us ] = "Green";
+    Text[ portuguese ] = "Verde";
+    Text[ russian ] = "Çåëåíûé";
+    Text[ greek ] = "ĞñÜóéíï";
+    Text[ dutch ] = "Groen";
+    Text[ french ] = "Vert";
+    Text[ spanish ] = "Verde";
+    Text[ italian ] = "Verde";
+    Text[ danish ] = "Grøn";
+    Text[ swedish ] = "Grönt";
+    Text[ polish ] = "Zielony";
+    Text[ portuguese_brazilian ] = "Green";
+    Text[ japanese ] = "—Î";
+    Text[ korean ] = "³ì»ö";
+    Text[ chinese_simplified ] = "ÂÌÉ«";
+    Text[ chinese_traditional ] = "ºñ¦â";
+    Text[ arabic ] = "ÃÎÖÑ";
+    Text[ turkish ] = "Yeşil";
+};
+String RID_SVXSTR_TBLAFMT_LAVENDER
+{
+    Text = "Flieder";
+    Text [ ENGLISH ] = "Lavender";
+    Text[ english_us ] = "Lavender";
+    Text[ portuguese ] = "Lilás";
+    Text[ russian ] = "Ôèîëåòîâûé";
+    Text[ greek ] = "ËåâÜíôá";
+    Text[ dutch ] = "Bordeaux";
+    Text[ french ] = "Lavande";
+    Text[ spanish ] = "Lavanda";
+    Text[ italian ] = "Lavanda";
+    Text[ danish ] = "Lysviolet";
+    Text[ swedish ] = "Syrenlila";
+    Text[ polish ] = "Fioletowy";
+    Text[ portuguese_brazilian ] = "Lavender";
+    Text[ japanese ] = "×ÍŞİÀŞ°";
+    Text[ korean ] = "´ãÀÚ»ö";
+    Text[ chinese_simplified ] = "µ­×ÏÉ«";
+    Text[ chinese_traditional ] = "²Hµµ¦â";
+    Text[ arabic ] = "ÃÑÌæÇäí İÇÊÍ";
+    Text[ turkish ] = "Eflatun";
+};
+String RID_SVXSTR_TBLAFMT_RED
+{
+    Text = "Rot";
+    Text [ ENGLISH ] = "Red";
+    Text[ english_us ] = "Red";
+    Text[ portuguese ] = "Vermelho";
+    Text[ russian ] = "Êğàñíûé";
+    Text[ greek ] = "Êüêêéíï";
+    Text[ dutch ] = "Rood";
+    Text[ french ] = "Rouge";
+    Text[ spanish ] = "Rojo";
+    Text[ italian ] = "Rosso";
+    Text[ danish ] = "Rød";
+    Text[ swedish ] = "Rött";
+    Text[ polish ] = "Czerwony";
+    Text[ portuguese_brazilian ] = "Red";
+    Text[ japanese ] = "Ô";
+    Text[ korean ] = "Àû»ö";
+    Text[ chinese_simplified ] = "ºìÉ«";
+    Text[ chinese_traditional ] = "¬õ¦â";
+    Text[ arabic ] = "ÃÍãÑ";
+    Text[ turkish ] = "Kırmızı";
+};
+String RID_SVXSTR_TBLAFMT_TURQUOISE
+{
+    Text = "Türkis";
+    Text [ ENGLISH ] = "Turquoise";
+    Text[ english_us ] = "Turquoise";
+    Text[ portuguese ] = "Turquesa";
+    Text[ russian ] = "Áèğşçîâûé";
+    Text[ greek ] = "ÔïõñêïõÜæ";
+    Text[ dutch ] = "Turkoois";
+    Text[ french ] = "Turquoise";
+    Text[ spanish ] = "Turquesa";
+    Text[ italian ] = "Turchese";
+    Text[ danish ] = "Turkis";
+    Text[ swedish ] = "Turkost";
+    Text[ polish ] = "Turkusowy";
+    Text[ portuguese_brazilian ] = "Turquoise";
+    Text[ japanese ] = "Â—Î";
+    Text[ korean ] = "Ã»¿Á»ö";
+    Text[ chinese_simplified ] = "À¶ÓñÉ«";
+    Text[ chinese_traditional ] = "ÂÅ¥É¦â";
+    Text[ arabic ] = "ÊÑßæÇÒ";
+    Text[ turkish ] = "Türkuaz";
+};
+String RID_SVXSTR_TBLAFMT_YELLOW
+{
+    Text = "Gelb";
+    Text [ ENGLISH ] = "Yellow";
+    Text[ english_us ] = "Yellow";
+    Text[ portuguese ] = "Amarelo";
+    Text[ russian ] = "Æåëòûé";
+    Text[ greek ] = "Êßôñéíï";
+    Text[ dutch ] = "Geel";
+    Text[ french ] = "Jaune";
+    Text[ spanish ] = "Amarillo";
+    Text[ italian ] = "Giallo";
+    Text[ danish ] = "Gul";
+    Text[ swedish ] = "Gult";
+    Text[ polish ] = "¯ó³ty";
+    Text[ portuguese_brazilian ] = "Yellow";
+    Text[ japanese ] = "‰©F";
+    Text[ korean ] = "È²»ö";
+    Text[ chinese_simplified ] = "»ÆÉ«";
+    Text[ chinese_traditional ] = "¶À¦â";
+    Text[ arabic ] = "ÃÕİÑ";
+    Text[ turkish ] = "Sarı";
+};
+
+String RID_SVXSTR_LINEJOINT_MIDDLE
+{
+    Text = "Linienübergang gemittelt";
+    Text[ ENGLISH ] = "Line joint middle";
+    Text[ english_us ] = "Line joint averaged";
+    Text[ portuguese ] = "Junção de linhas; mediana";
+    Text[ russian ] = "Öåíòğèğîâàííûé ïåğåõîä ëèíèè";
+    Text[ greek ] = "ÃñáììŞ ìåôÜâáóçò (ìİóïò üñïò)";
+    Text[ dutch ] = "Samenkomende lijnen, gemiddelde";
+    Text[ french ] = "Jointure de lignes, moyennée";
+    Text[ spanish ] = "Juntas de línea, media";
+    Text[ italian ] = "Giuntura, media";
+    Text[ danish ] = "Linjeovergang, middelværdi";
+    Text[ swedish ] = "Linjeövergång, medelvärde";
+    Text[ polish ] = "Wyœrodkowane po³¹czenie linii";
+    Text[ portuguese_brazilian ] = "Line joint middle";
+    Text[ japanese ] = "ü‚ÌŒp‚¬–Ú ‹Ï•ª";
+    Text[ korean ] = "¼± ÀÌÀ½ Áß°£";
+    Text[ chinese_simplified ] = "Æ½¾ùÖµĞÍÏßÌõ½ÓºÏ";
+    Text[ chinese_traditional ] = "¥­§¡­È«¬½u±ø±µ¦X";
+    Text[ arabic ] = "æÕáÉ ÎØæØ ãÊæÓØÉ";
+    Text[ turkish ] = "Ortalanmış çizgi geçişi";
+};
+String RID_SVXSTR_LINEJOINT_BEVEL
+{
+    Text = "Linienübergang verbunden";
+    Text[ ENGLISH ] = "Line joint bevel";
+    Text[ english_us ] = "Line joint bevel";
+    Text[ portuguese ] = "Junção de linhas, conjugada";
+    Text[ russian ] = "Íàêëîííûé ïåğåõîä ëèíèè";
+    Text[ greek ] = "ÃñáììŞ ìåôÜâáóçò (óıíäåóç)";
+    Text[ dutch ] = "Samenkomende lijnen, verbonden";
+    Text[ french ] = "Jointure de lignes, conjuguée";
+    Text[ spanish ] = "Junta de líneas unida";
+    Text[ italian ] = "Giuntura, unita";
+    Text[ danish ] = "Linjeovergang, forbundet";
+    Text[ swedish ] = "Linjeövergång, förbunden";
+    Text[ polish ] = "Powi¹zane po³¹czenie linii";
+    Text[ portuguese_brazilian ] = "Line joint bevel";
+    Text[ japanese ] = "ü‚ÌŒp‚¬–Ú ÎŠp";
+    Text[ korean ] = "¼± ÀÌÀ½, ÇÏ³ª·Î ¿¬°á";
+    Text[ chinese_simplified ] = "Áª½áĞÍÏßÌõ½ÓºÏ";
+    Text[ chinese_traditional ] = "Ápµ²«¬½u±ø±µ¦X";
+    Text[ arabic ] = "æÕáÉ ÎØæØ ãÊÕáÉ";
+    Text[ turkish ] = "Birleştirilmiş çizgi geçişi";
+};
+String RID_SVXSTR_LINEJOINT_MITER
+{
+    Text = "Linienübergang geschnitten";
+    Text[ ENGLISH ] = "Line joint miter";
+    Text[ english_us ] = "Line joint miter";
+    Text[ portuguese ] = "Junção de linhas, secante";
+    Text[ russian ] = "Óêîğî÷åííûé ïåğåõîä ëèíèè";
+    Text[ greek ] = "ÃñáììŞ ìåôÜâáóçò (ôïìŞ)";
+    Text[ dutch ] = "Samenkomende lijnen, snijdend";
+    Text[ french ] = "Jointure de lignes, sécante";
+    Text[ spanish ] = "Junta de líneas cortada";
+    Text[ italian ] = "Giuntura, secante";
+    Text[ danish ] = "Linjeovergang, skåret";
+    Text[ swedish ] = "Linjeövergång, klippt";
+    Text[ polish ] = "Przeciête po³¹czenie linii";
+    Text[ portuguese_brazilian ] = "Line joint miter";
+    Text[ japanese ] = "ü‚ÌŒp‚¬–Ú Œğ·";
+    Text[ korean ] = "¼± ÀÌÀ½, Á÷°¢À¸·Î ¿¬°á";
+    Text[ chinese_simplified ] = "¼ô½ÓĞÍÏßÌõ½ÓºÏ";
+    Text[ chinese_traditional ] = "°Å±µ«¬½u±ø±µ¦X";
+    Text[ arabic ] = "æÕáÉ ÎØæØ ãÊŞÇØÚÉ";
+    Text[ turkish ] = "Çizgi kesişme noktası";
+};
+String RID_SVXSTR_LINEJOINT_ROUND
+{
+    Text = "Linienübergang rund";
+    Text[ ENGLISH ] = "Line joint round";
+    Text[ english_us ] = "Line joint round";
+    Text[ portuguese ] = "Junção de linhas, redonda";
+    Text[ russian ] = "Çàêğóãëåííûé ïåğåõîä ëèíèè";
+    Text[ greek ] = "ÃñáììŞ ìåôÜâáóçò (óôñüããõëá)";
+    Text[ dutch ] = "Samenkomende lijnen, rond";
+    Text[ french ] = "Jointure de lignes, ronde";
+    Text[ spanish ] = "Junta de líneas redonda";
+    Text[ italian ] = "Giuntura, rotonda";
+    Text[ danish ] = "Linjeovergang, rund";
+    Text[ swedish ] = "Linjeövergång, rund";
+    Text[ polish ] = "Okr¹g³e po³¹czenie linii";
+    Text[ portuguese_brazilian ] = "Line joint round";
+    Text[ japanese ] = "ü‚ÌŒp‚¬–Ú ŠÛ‚­";
+    Text[ korean ] = "¼± ÀÌÀ½, µÕ±Û°Ô";
+    Text[ chinese_simplified ] = "Ô²ĞÎÏßÌõ½ÓºÏ";
+    Text[ chinese_traditional ] = "¶ê§Î½u±ø±µ¦X";
+    Text[ arabic ] = "æÕáÉ ÎØæØ¡ ÏÇÆÑíÉ";
+    Text[ turkish ] = "Yuvarlak çizgi geçişi";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standardcolor-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BLACK_DEF
+{
+    Text = "Black" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUE_DEF
+{
+    Text = "Blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREEN_DEF
+{
+    Text = "Green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_CYAN_DEF
+{
+    Text = "Turquoise" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_RED_DEF
+{
+    Text = "Red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_MAGENTA_DEF
+{
+    Text = "Magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BROWN_DEF
+{
+    Text = "Brown" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GREY_DEF
+{
+    Text = "Gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREY_DEF
+{
+    Text = "Light gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTBLUE_DEF
+{
+    Text = "Light blue" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTGREEN_DEF
+{
+    Text = "Light green" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTCYAN_DEF
+{
+    Text = "Light cyan" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTRED_DEF
+{
+    Text = "Light red" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LIGHTMAGENTA_DEF
+{
+    Text = "Light magenta" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_YELLOW_DEF
+{
+    Text = "Yellow" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_WHITE_DEF
+{
+    Text = "White" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BLUEGREY_DEF
+{
+    Text = "Blue gray" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_ORANGE_DEF
+{
+    Text = "Orange" ;
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_VIOLET_DEF
+{
+    Text = "Violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BORDEAUX_DEF
+{
+    Text = "Bordeaux";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_YELLOW_DEF
+{
+    Text = "Pale yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_PALE_GREEN_DEF
+{
+    Text = "Pale green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DKVIOLET_DEF
+{
+    Text = "Dark violet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SALMON_DEF
+{
+    Text = "Salmon";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_SEABLUE_DEF
+{
+    Text = "Sea blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_COLOR_SUN_DEF
+{
+    // attention: this is the color string for the Sun Microsystems specific colors !!!
+    Text = "Sun";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-gradient-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT0_DEF
+{
+    Text = "Gradient";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT1_DEF
+{
+    Text = "Linear blue/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT2_DEF
+{
+    Text = "Linear magenta/green";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT3_DEF
+{
+    Text = "Linear yellow/brown";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT4_DEF
+{
+    Text = "Radial green/black";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT5_DEF
+{
+    Text = "Radial red/yellow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT6_DEF
+{
+    Text = "Rectangular red/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT7_DEF
+{
+    Text = "Square yellow/white";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT8_DEF
+{
+    Text = "Ellipsoid blue grey/light blue";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_GRDT9_DEF
+{
+    Text = "Axial light red/white";
+};
+
+String RID_SVXSTR_GRDT0
+{
+    Text = "Farbverlauf";
+    Text [ ENGLISH ] = "Gradient";
+    Text[ english_us ] = "Gradient";
+    Text[ portuguese ] = "Gradação";
+    Text[ russian ] = "Ãğàäèåíòíàÿ";
+    Text[ greek ] = "ÄéáâÜèìéóç ÷ñşìáôïò";
+    Text[ dutch ] = "Kleurverloop";
+    Text[ french ] = "Dégradé";
+    Text[ spanish ] = "Gradiente";
+    Text[ italian ] = "Sfumatura";
+    Text[ danish ] = "Farvegraduering";
+    Text[ swedish ] = "Färggradient";
+    Text[ polish ] = "Gradient";
+    Text[ portuguese_brazilian ] = "Gradient";
+    Text[ japanese ] = "¸Ş×ÃŞ°¼®İ";
+    Text[ korean ] = "±×¶óµ¥ÀÌ¼Ç";
+    Text[ chinese_simplified ] = "²ÊÉ«Í¼°¸";
+    Text[ chinese_traditional ] = "±m¦â¹Ï®×";
+    Text[ arabic ] = "ÊÏÑÌ Çááæä";
+    Text[ turkish ] = "Gradyan";
+};
+String RID_SVXSTR_GRDT1
+{
+    Text = "Linear Blau/weiß";
+    Text [ ENGLISH ] = "Linear blue/white";
+    Text[ english_us ] = "Linear blue/white";
+    Text[ portuguese ] = "Linear azul/branco";
+    Text[ russian ] = "Ëèíåéíàÿ: ñèíèé/áåëûé";
+    Text[ greek ] = "ÃñáììéêÜ ìğëİ/ëåõêü";
+    Text[ dutch ] = "Lineair blauw/wit";
+    Text[ french ] = "Linéaire bleu/blanc";
+    Text[ spanish ] = "Lineal azul/blanco";
+    Text[ italian ] = "Lineare blu/bianco";
+    Text[ danish ] = "Lineær blå/hvid";
+    Text[ swedish ] = "Linjär blått/vitt";
+    Text[ polish ] = "Linearny niebieski/bia³y";
+    Text[ portuguese_brazilian ] = "Linear blue/white";
+    Text[ japanese ] = "üó Â/”’";
+    Text[ korean ] = "¼±Çü Ã»»ö/Èò»ö";
+    Text[ chinese_simplified ] = "ÏßĞÔ À¶/°×";
+    Text[ chinese_traditional ] = "½u±øÂÅ/¥Õ";
+    Text[ arabic ] = "ÎØí ÃÒÑŞ/ÃÈíÖ";
+    Text[ turkish ] = "Doğrusal mavi/beyaz";
+};
+String RID_SVXSTR_GRDT2
+{
+    Text = "Linear violett/grün";
+    Text [ ENGLISH ] = "Linear magenta/green";
+    Text[ english_us ] = "Linear magenta/green";
+    Text[ portuguese ] = "Linear violeta/verde";
+    Text[ russian ] = "Ëèíåéíàÿ: ôèîëåòîâûé/çåëåíûé";
+    Text[ greek ] = "ÃñáììéêÜ ìáôæİí./ğñÜóéíï";
+    Text[ dutch ] = "Lineair violet/groen";
+    Text[ french ] = "Linéaire violet/vert";
+    Text[ spanish ] = "Lineal magenta/verde";
+    Text[ italian ] = "Lineare magenta/verde";
+    Text[ danish ] = "Lineær violet/grøn";
+    Text[ swedish ] = "Linjär violett/grönt";
+    Text[ polish ] = "Linearny fioletowy/zielony";
+    Text[ portuguese_brazilian ] = "Linear magenta/green";
+    Text[ japanese ] = "üó ‡/—Î";
+    Text[ korean ] = "¼±Çü º¸¶ó»ö/³ì»ö";
+    Text[ chinese_simplified ] = "ÏßĞÔ ×Ï/ÂÌ";
+    Text[ chinese_traditional ] = "½u±ø¬õµµ¦â/ºñ¦â";
+    Text[ arabic ] = "ÎØí ÃÑÌæÇäí/ÃÎÖÑ";
+    Text[ turkish ] = "Doğrusal menekşe/yeşil";
+};
+String RID_SVXSTR_GRDT3
+{
+    Text = "Linear gelb/braun";
+    Text [ ENGLISH ] = "Linear yellow/brown";
+    Text[ english_us ] = "Linear yellow/brown";
+    Text[ portuguese ] = "Linear amarelo/castanho";
+    Text[ russian ] = "Ëèíåéíàÿ: æåëòûé/êîğè÷íåâûé";
+    Text[ greek ] = "ÃñáììéêÜ êßôñéíï/êáöİ";
+    Text[ dutch ] = "Lineair geel/bruin";
+    Text[ french ] = "Linéaire jaune/marron";
+    Text[ spanish ] = "Lineal amarillo/marrón";
+    Text[ italian ] = "Lineare giallo/marrone";
+    Text[ danish ] = "Lineær gul/brun";
+    Text[ swedish ] = "Linjär gult/brunt";
+    Text[ polish ] = "Linearny ¿ó³ty/br¹zowy";
+    Text[ portuguese_brazilian ] = "Linear yellow/brown";
+    Text[ japanese ] = "üó ‰©F/’ƒF";
+    Text[ korean ] = "¼±Çü È²»ö/°¥»ö";
+    Text[ chinese_simplified ] = "ÏßĞÔ »Æ/×ØÉ«";
+    Text[ chinese_traditional ] = "½u±ø¶À¦â/´Ä¦â";
+    Text[ arabic ] = "ÎØí ÃÕİÑ/Èäí";
+    Text[ turkish ] = "Doğrusal sarı/kahverengi";
+};
+String RID_SVXSTR_GRDT4
+{
+    Text = "Radial grün/schwarz";
+    Text [ ENGLISH ] = "Radial green/black";
+    Text[ english_us ] = "Radial green/black";
+    Text[ portuguese ] = "Radial verde/preto";
+    Text[ russian ] = "Êğóãîâàÿ: çåëåíûé/÷åğíûé";
+    Text[ greek ] = "ÁêôéíéêÜ ğñÜóéíï/ìáıñï";
+    Text[ dutch ] = "Radiaal groen/zwart";
+    Text[ french ] = "Radial vert/noir";
+    Text[ spanish ] = "Radial verde/negro";
+    Text[ italian ] = "Radiale verde/nero";
+    Text[ danish ] = "Radial grøn/sort";
+    Text[ swedish ] = "Radiellt grönt/svart";
+    Text[ polish ] = "Radialny zielony/czarny";
+    Text[ portuguese_brazilian ] = "Radial green/black";
+    Text[ japanese ] = "•úËó —Î/•";
+    Text[ korean ] = "¹æ»çÇü ³ì»ö/°ËÀº»ö";
+    Text[ chinese_simplified ] = "¾¶Ïò ÂÌ/ºÚ";
+    Text[ chinese_traditional ] = "¥ú½uª¬ºñ¦â/¶Â¦â";
+    Text[ arabic ] = "ÔÚÇÚí ÃÎÖÑ/ÃÓæÏ";
+    Text[ turkish ] = "Radyal yeşil/siyah";
+};
+String RID_SVXSTR_GRDT5
+{
+    Text = "Radial rot/gelb";
+    Text [ ENGLISH ] = "Radial red/yellow";
+    Text[ english_us ] = "Radial red/yellow";
+    Text[ portuguese ] = "Radial vermelho/amarelo";
+    Text[ russian ] = "Êğóãîâàÿ: êğàñíûé/æåëòûé";
+    Text[ greek ] = "ÁêôéíéêÜ êüêêéíï/êßôñéíï";
+    Text[ dutch ] = "Radiaal rood/geel";
+    Text[ french ] = "Radial rouge/jaune";
+    Text[ spanish ] = "Radial rojo/amarillo";
+    Text[ italian ] = "Radiale rosso/giallo";
+    Text[ danish ] = "Radial rød/gul";
+    Text[ swedish ] = "Radiellt rött/gult";
+    Text[ polish ] = "Radialny czerwony/¿ó³ty";
+    Text[ portuguese_brazilian ] = "Radial red/yellow";
+    Text[ japanese ] = "•úËó Ô/‰©F";
+    Text[ korean ] = "¹æ»çÇü Àû»ö/È²»ö";
+    Text[ chinese_simplified ] = "¾¶Ïò ºì/»Æ";
+    Text[ chinese_traditional ] = "¥ú½uª¬¬õ¦â/¶À¦â";
+    Text[ arabic ] = "ÔÚÇÚí ÃÍãÑ/ÃÕİÑ";
+    Text[ turkish ] = "Radyal kırmızı/sarı";
+};
+String RID_SVXSTR_GRDT6
+{
+    Text = "Rechteck rot/weiß";
+    Text [ ENGLISH ] = "Rectangular red/white";
+    Text[ english_us ] = "Rectangular red/white";
+    Text[ portuguese ] = "Rectangular vermelho/branco";
+    Text[ russian ] = "Ïğÿìîóãîëüíàÿ: êğàñíûé/áåëûé";
+    Text[ greek ] = "Ïñèïãşíéï êüêêéíï/ëåõêü";
+    Text[ dutch ] = "Rechthoek rood/wit";
+    Text[ french ] = "Rectangulaire rouge/blanc";
+    Text[ spanish ] = "Rectangular rojo/blanco";
+    Text[ italian ] = "Rettangolare rosso/bianco";
+    Text[ danish ] = "Rektangel rød/hvid";
+    Text[ swedish ] = "Rektangulär rött/vitt";
+    Text[ polish ] = "Prostok¹t czerwony/bia³y";
+    Text[ portuguese_brazilian ] = "Rectangular red/white";
+    Text[ japanese ] = "’·•ûŒ` Ô/”’";
+    Text[ korean ] = "Á÷»ç°¢Çü Àû»ö/Èò»ö";
+    Text[ chinese_simplified ] = "¾ØĞÎ ºì/°×";
+    Text[ chinese_traditional ] = "¯x§Î¬õ¦â/¥Õ¦â";
+    Text[ arabic ] = "ãÓÊØíá ÃÍãÑ/ÃÈíÖ";
+    Text[ turkish ] = "Dikdörtgen kırmızı/beyaz";
+};
+String RID_SVXSTR_GRDT7
+{
+    Text = "Quadratisch gelb/weiß";
+    Text [ ENGLISH ] = "Square yellow/white";
+    Text[ english_us ] = "Square yellow/white";
+    Text[ portuguese ] = "Quadrado amarelo/branco";
+    Text[ russian ] = "Êâàäğàòíàÿ: æåëòûé/áåëûé";
+    Text[ greek ] = "ÔåôñÜãùíï êßôñéíï/ëåõêü";
+    Text[ dutch ] = "Vierkant geel/wit";
+    Text[ french ] = "Carré jaune/blanc";
+    Text[ spanish ] = "Cuadrado amarillo/blanco";
+    Text[ italian ] = "Quadrato giallo/bianco";
+    Text[ danish ] = "Kvadratisk gul/hvid";
+    Text[ swedish ] = "Kvadratisk gult/vitt";
+    Text[ polish ] = "Kwadratowe ¿ó³te/bia³e";
+    Text[ portuguese_brazilian ] = "Square yellow/white";
+    Text[ japanese ] = "³•ûŒ` ‰©F/”’";
+    Text[ korean ] = "Á¤»ç°¢Çü È²»ö/Èò»ö";
+    Text[ chinese_simplified ] = "Õı·½ĞÎ »Æ/°×";
+    Text[ chinese_traditional ] = "¥¿¤è§Î¶À¦â/¥Õ¦â";
+    Text[ arabic ] = "ãÑÈÚ ÃÕİÑ/ÃÈíÖ";
+    Text[ turkish ] = "Kare sarı/beyaz";
+};
+String RID_SVXSTR_GRDT8
+{
+    Text = "Ellipsoid blaugrau/hellblau";
+    Text [ ENGLISH ] = "Ellipsoid blue gray/light blue";
+    Text[ english_us ] = "Ellipsoid blue gray/light blue";
+    Text[ portuguese ] = "Elipsoidal cinzento azulado/azul-claro";
+    Text[ russian ] = "İëëèïñîèäíàÿ: ñåğî-ãîëóáîé/ãîëóáîé";
+    Text[ greek ] = "Åëëåéø. ìğëå-ãêñé/ìğëå áíïé÷.";
+    Text[ dutch ] = "Ellips grijsblauw/lichtblauw";
+    Text[ french ] = "Ellipsoïde gris bleu/bleu roi";
+    Text[ spanish ] = "Elipsoide azul gris/azul claro";
+    Text[ italian ] = "Ellissoidale blu-grigio/celeste";
+    Text[ danish ] = "Ellipsoide blågrå/lyseblå";
+    Text[ swedish ] = "Ellipsoid blågrå/ljusblå";
+    Text[ polish ] = "Elips. niebiesko-szary/jasnoniebieski";
+    Text[ portuguese_brazilian ] = "Ellipsoid blue gray/light blue";
+    Text[ japanese ] = "‘È‰~‘Ì ÂŠDF/–¾‚é‚¢Â";
+    Text[ korean ] = "Å¸¿øÇü È¸Ã»»ö/¹àÀº Ã»»ö";
+    Text[ chinese_simplified ] = "ÍÖÔ²Ìå À¶»Ò/Ç³À¶";
+    Text[ chinese_traditional ] = "¾ò¶êÂÅ¦Ç¦â/²L¦Ç¦â";
+    Text[ arabic ] = "ÈíÖæí ÑãÇÏí ãÒÑŞ/ÃÒÑŞ İÇÊÍ";
+    Text[ turkish ] = "Elipsoid mavi gri/açık mavi";
+};
+String RID_SVXSTR_GRDT9
+{
+    Text = "Axial hellrot/weiß";
+    Text [ ENGLISH ] = "Axial light red/white";
+    Text[ english_us ] = "Axial light red/white";
+    Text[ portuguese ] = "Axial vermelho-claro/branco";
+    Text[ russian ] = "Îñåâàÿ: ñâåòëî-êğàñíûé/áåëûé";
+    Text[ greek ] = "Áîïíéêü ëåõêü/êüêêéíï áíïé÷.";
+    Text[ dutch ] = "Axiaal lichtrood/wit";
+    Text[ french ] = "Axial rouge clair/blanc";
+    Text[ spanish ] = "Axial rojo claro/blanco";
+    Text[ italian ] = "Assiale rosso chiaro/bianco";
+    Text[ danish ] = "Aksial lys rød/hvid";
+    Text[ swedish ] = "Axialt ljusrött/vitt";
+    Text[ polish ] = "Osiowy jasnoczerw./bia³y";
+    Text[ portuguese_brazilian ] = "Axial light red/white";
+    Text[ japanese ] = "²ó –¾‚é‚¢Ô/”’";
+    Text[ korean ] = "Ãà ¹àÀº Àû»ö/Èò»ö";
+    Text[ chinese_simplified ] = "ÖáÏò Ç³ºì/°×";
+    Text[ chinese_traditional ] = "¶b§Î²L¬õ¦â/¥Õ¦â";
+    Text[ arabic ] = "ãÍæÑí ÃÍãÑ İÇÊÍ/ÃÈíÖ";
+    Text[ turkish ] = "Eksen açık kırmızı/beyaz";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-hatch-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH0_DEF
+{
+    Text = "Black 45 Degrees Wide";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH1_DEF
+{
+    Text = "Black 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH2_DEF
+{
+    Text = "Black -45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH3_DEF
+{
+    Text = "Black 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH4_DEF
+{
+    Text = "Red Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH5_DEF
+{
+    Text = "Red Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH6_DEF
+{
+    Text = "Blue Crossed 45 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH7_DEF
+{
+    Text = "Blue Crossed 0 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH8_DEF
+{
+    Text = "Blue Triple 90 Degrees";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_HATCH9_DEF
+{
+    Text = "Black 0 Degrees";
+};
+
+String RID_SVXSTR_HATCH0
+{
+    Text = "Schwarz 45 Grad weit";
+    Text [ ENGLISH ] = "Black 45 Degrees Wide";
+    Text [ english_us ] = "Black 45 degrees wide";
+    Text[ portuguese ] = "Preto 45 graus de largura";
+    Text[ russian ] = "×åğíàÿ 45 ãğàäóñîâ, ğàçğåæåííàÿ";
+    Text[ greek ] = "Ìáıñï 45 ìïßñåò ğëáôéÜ";
+    Text[ dutch ] = "Zwart 45 graden breed";
+    Text[ french ] = "Noir 45 degrés de large";
+    Text[ spanish ] = "Negro 45 grados ancho";
+    Text[ italian ] = "Nero 45 gradi, ampio";
+    Text[ danish ] = "Sort 45 grader vidt";
+    Text[ swedish ] = "Svart 45 grader vid";
+    Text[ polish ] = "Czarny 45 stopni, rozci¹gniêty";
+    Text[ portuguese_brazilian ] = "Black 45 Degrees Wide";
+    Text[ japanese ] = "• 45“x •L";
+    Text[ korean ] = "°ËÀº»ö 45µµ ³ĞÀÌ";
+    Text[ chinese_simplified ] = "ºÚÉ« 45 ¶È(¿í¾à)";
+    Text[ chinese_traditional ] = "¶Â¦â 45 «×¼e";
+    Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ æÇÓÚ";
+    Text[ turkish ] = "Siyah 45 derece geniş";
+};
+String RID_SVXSTR_HATCH1
+{
+    Text = "Schwarz 45 Grad";
+    Text [ ENGLISH ] = "Black 45 Degrees";
+    Text [ english_us ] = "Black 45 degrees";
+    Text[ portuguese ] = "Preto 45 graus";
+    Text[ russian ] = "×åğíàÿ 45 ãğàäóñîâ";
+    Text[ greek ] = "Ìáıñï 45 ìïßñåò";
+    Text[ dutch ] = "Zwart 45 graden";
+    Text[ french ] = "Noir 45 degrés";
+    Text[ spanish ] = "Negro 45 grados";
+    Text[ italian ] = "Nero 45 gradi";
+    Text[ danish ] = "Sort 45 grader";
+    Text[ swedish ] = "Svart 45 grader";
+    Text[ polish ] = "Czarny 45 stopni";
+    Text[ portuguese_brazilian ] = "Black 45 Degrees";
+    Text[ japanese ] = "• 45“x";
+    Text[ korean ] = "°ËÀº»ö 45µµ ³ĞÀÌ";
+    Text[ chinese_simplified ] = "ºÚÉ« 45 ¶È";
+    Text[ chinese_traditional ] = "¶Â¦â 45 «×";
+    Text[ arabic ] = "ÃÓæÏ 45 ÏÑÌÉ";
+    Text[ turkish ] = "Siyah 45 derece";
+};
+String RID_SVXSTR_HATCH2
+{
+    Text = "Schwarz -45 Grad";
+    Text [ ENGLISH ] = "Black -45 Degrees";
+    Text [ english_us ] = "Black -45 degrees";
+    Text[ portuguese ] = "Preto -45 graus";
+    Text[ russian ] = "×åğíàÿ -45 ãğàäóñîâ";
+    Text[ greek ] = "Ìáıñï -45 ìïßñåò";
+    Text[ dutch ] = "Zwart -45 graden";
+    Text[ french ] = "Noir -45 degrés";
+    Text[ spanish ] = "Negro -45 grados";
+    Text[ italian ] = "Nero -45 gradi";
+    Text[ danish ] = "Sort -45 grader";
+    Text[ swedish ] = "Svart -45 grader";
+    Text[ polish ] = "Czarny -45 stopni";
+    Text[ portuguese_brazilian ] = "Black -45 Degrees";
+    Text[ japanese ] = "• -45“x";
+    Text[ korean ] = "°ËÀº»ö 45 µµ";
+    Text[ chinese_simplified ] = "ºÚÉ« -45 ¶È";
+    Text[ chinese_traditional ] = "¶Â¦â -45 «×";
+    Text[ arabic ] = "ÃÓæÏ -45 ÏÑÌÉ";
+    Text[ turkish ] = "Siyah -45 derece";
+};
+String RID_SVXSTR_HATCH3
+{
+    Text = "Schwarz 90 Grad";
+    Text [ ENGLISH ] = "Black 90 Degrees";
+    Text [ english_us ] = "Black 90 degrees";
+    Text[ portuguese ] = "Preto 90 graus";
+    Text[ russian ] = "×åğíàÿ 90 ãğàäóñîâ";
+    Text[ greek ] = "Ìáıñï 90 ìïßñåò";
+    Text[ dutch ] = "Zwart 90 graden";
+    Text[ french ] = "Noir 90 degrés";
+    Text[ spanish ] = "Negro 90 grados";
+    Text[ italian ] = "Nero 90 gradi";
+    Text[ danish ] = "Sort 90 grader";
+    Text[ swedish ] = "Svart 90 grader";
+    Text[ polish ] = "Czarny 90 stopni";
+    Text[ portuguese_brazilian ] = "Black 90 Degrees";
+    Text[ japanese ] = "• 90“x";
+    Text[ korean ] = "°ËÀº»ö 90 µµ";
+    Text[ chinese_simplified ] = "ºÚÉ« 90 ¶È";
+    Text[ chinese_traditional ] = "¶Â¦â 90 «×";
+    Text[ arabic ] = "ÃÓæÏ 90 ÏÑÌÉ";
+    Text[ turkish ] = "Siyah 90 derece";
+};
+String RID_SVXSTR_HATCH4
+{
+    Text = "Rot Netz 45 Grad";
+    Text [ ENGLISH ] = "Red Crossed 45 Degrees";
+    Text [ english_us ] = "Red crossed 45 degrees";
+    Text[ portuguese ] = "Vermelho cruzado 45 graus";
+    Text[ russian ] = "Êğàñíàÿ ñåòü 45 ãğàäóñîâ";
+    Text[ greek ] = "Êüêêéíï äßêôõï 45 ìïßñåò";
+    Text[ dutch ] = "Rood gekruisd 45 graden";
+    Text[ french ] = "Rouge double incliné 45 degrés";
+    Text[ spanish ] = "Rojo red 45 grados";
+    Text[ italian ] = "Rosso a rete 45 gradi";
+    Text[ danish ] = "Rødt gitter 45 grader";
+    Text[ swedish ] = "Rött nät 45 grader";
+    Text[ polish ] = "Czerw. siatka 45 stopni";
+    Text[ portuguese_brazilian ] = "Red Crossed 45 Degrees";
+    Text[ japanese ] = "Ô È 45“x";
+    Text[ korean ] = "Àû»ö ¸Á 45µµ";
+    Text[ chinese_simplified ] = "ºìÉ«Íø¸ñÏß 45 ¶È";
+    Text[ chinese_traditional ] = "¬õºôª¬ 45 «×";
+    Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 45 ÏÑÌÉ";
+    Text[ turkish ] = "Kırmızı ızgaralı 45 derece";
+};
+String RID_SVXSTR_HATCH5
+{
+    Text = "Rot Netz 0 Grad";
+    Text [ ENGLISH ] = "Red Crossed 0 Degrees";
+    Text [ english_us ] = "Red crossed 0 degrees";
+    Text[ portuguese ] = "Vermelho cruzado 0 graus";
+    Text[ russian ] = "Êğàñíàÿ ñåòü 0 ãğàäóñîâ";
+    Text[ greek ] = "Êüêêéíï äßêôõï 0 ìïßñåò";
+    Text[ dutch ] = "Rood gekruisd 0 graden";
+    Text[ french ] = "Rouge double incliné 0 degré";
+    Text[ spanish ] = "Rojo red 0 grados";
+    Text[ italian ] = "Rosso a rete 0 gradi";
+    Text[ danish ] = "Rødt gitter 0 grader";
+    Text[ swedish ] = "Rött nät 0 grader";
+    Text[ polish ] = "Czerw. siatka 0 stopni";
+    Text[ portuguese_brazilian ] = "Red Crossed 0 Degrees";
+    Text[ japanese ] = "Ô È 0“x";
+    Text[ korean ] = "Àû»ö ¸Á 0µµ";
+    Text[ chinese_simplified ] = "ºìÉ«Íø¸ñÏß 0 ¶È";
+    Text[ chinese_traditional ] = "¬õºô 0 «×";
+    Text[ arabic ] = "ÃÍãÑ ÔÈßÉ 0 ÏÑÌÉ";
+    Text[ turkish ] = "Kırmızı ızgaralı 0 derece";
+};
+String RID_SVXSTR_HATCH6
+{
+    Text = "Blau Netz 45 Grad";
+    Text [ ENGLISH ] = "Blue Crossed 45 Degrees";
+    Text [ english_us ] = "Blue crossed 45 degrees";
+    Text[ portuguese ] = "Azul cruzado 45 graus";
+    Text[ russian ] = "Ñèíÿÿ ñåòü 45 ãğàäóñîâ";
+    Text[ greek ] = "Ìğëå äßêôõï 45 ìïßñåò";
+    Text[ dutch ] = "Blauw gekruisd 45 graden";
+    Text[ french ] = "Bleu double incliné 45 degrés";
+    Text[ spanish ] = "Azul red 45 grados";
+    Text[ italian ] = "Blu a rete 45 gradi";
+    Text[ danish ] = "Blåt gitter 45 grader";
+    Text[ swedish ] = "Blått nät 45 grader";
+    Text[ polish ] = "Nieb. siatka 45 stopni";
+    Text[ portuguese_brazilian ] = "Blue Crossed 45 Degrees";
+    Text[ japanese ] = "Â È 45“x";
+    Text[ korean ] = "Ã»»ö ¸Á 45µµ";
+    Text[ chinese_simplified ] = "À¶É«Íø¸ñÏß 45 ¶È";
+    Text[ chinese_traditional ] = "ÂÅºô 45 «×";
+    Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 45 ÏÑÌÉ";
+    Text[ turkish ] = "Mavi ızgaralı 45 derece";
+};
+String RID_SVXSTR_HATCH7
+{
+    Text = "Blau Netz 0 Grad";
+    Text [ ENGLISH ] = "Blue Crossed 0 Degrees";
+    Text [ english_us ] = "Blue crossed 0 degrees";
+    Text[ portuguese ] = "Azul cruzado 0 graus";
+    Text[ russian ] = "Ñèíÿÿ ñåòü 0 ãğàäóñîâ";
+    Text[ greek ] = "Ìğëå äßêôõï 0 ìïßñåò";
+    Text[ dutch ] = "Bauw gekruisd 0 graden";
+    Text[ french ] = "Bleu double incliné 0 degré";
+    Text[ spanish ] = "Azul red 0 grados";
+    Text[ italian ] = "Blu a rete 0 gradi";
+    Text[ danish ] = "Blåt gitter 0 grader";
+    Text[ swedish ] = "Blått nät 0 grader";
+    Text[ polish ] = "Nieb. siatka 0 stopni";
+    Text[ portuguese_brazilian ] = "Blue Crossed 0 Degrees";
+    Text[ japanese ] = "Â È 0“x";
+    Text[ korean ] = "Ã»»ö ¸Á 0µµ";
+    Text[ chinese_simplified ] = "À¶É«Íø¸ñÏß 0 ¶È";
+    Text[ chinese_traditional ] = "ÂÅºô 0 «×";
+    Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ 0 ÏÑÌÉ";
+    Text[ turkish ] = "Mavi ızgaralı 0 derece";
+};
+String RID_SVXSTR_HATCH8
+{
+    Text = "Blau 3er Netz 90 Grad";
+    Text [ ENGLISH ] = "Blue Triple 90 Degrees";
+    Text [ english_us ] = "Blue triple 90 degrees";
+    Text[ portuguese ] = "Azul cruzado triplo 90 graus";
+    Text[ russian ] = "Ñèíÿÿ òğîéíàÿ ñåòü 90 ãğàäóñîâ";
+    Text[ greek ] = "Ìğëİ ôñéğëü 90 ìïßñåò";
+    Text[ dutch ] = "Blauw drievoudig gekruisd 90 graden";
+    Text[ french ] = "Bleu triple incliné 90 degrés";
+    Text[ spanish ] = "Azul red triple 90 grados";
+    Text[ italian ] = "Blu tripla rete 90 gradi";
+    Text[ danish ] = "Blåt 3'er gitter 90 grader";
+    Text[ swedish ] = "Blått trippelnät 90 grader";
+    Text[ polish ] = "Nieb. potrójna siatka 90 stopni";
+    Text[ portuguese_brazilian ] = "Blue Triple 90 Degrees";
+    Text[ japanese ] = "Â 3–{È 90“x";
+    Text[ korean ] = "Ã»»ö 3Áß¸Á 90µµ";
+    Text[ chinese_simplified ] = "À¶É«ÈıÖØÍø¸ñÏß 90 ¶È";
+    Text[ chinese_traditional ] = "ÂÅ¦â¤Tºô 90 «×";
+    Text[ arabic ] = "ÃÒÑŞ ÔÈßÉ ËáÇËíÉ 90 ÏÑÌÉ";
+    Text[ turkish ] = "Mavi 3'lü ızgaralı 90 derece";
+};
+String RID_SVXSTR_HATCH9
+{
+    Text = "Schwarz 0 Grad";
+    Text [ ENGLISH ] = "Black 0 Degrees";
+    Text [ english_us ] = "Black 0 degrees";
+    Text[ portuguese ] = "Preto 0 graus";
+    Text[ russian ] = "×åğíàÿ 0 ãğàäóñîâ";
+    Text[ greek ] = "Ìáıñï 0 ìïßñåò";
+    Text[ dutch ] = "Zwart 0 graden";
+    Text[ french ] = "Noir 0 degré";
+    Text[ spanish ] = "Negro 0 grados";
+    Text[ italian ] = "Nero 0 gradi";
+    Text[ danish ] = "Sort 0 grader";
+    Text[ swedish ] = "Svart 0 grader";
+    Text[ polish ] = "Czarny 0 stopni";
+    Text[ portuguese_brazilian ] = "Black 0 Degrees";
+    Text[ japanese ] = "• 0“x";
+    Text[ korean ] = "°ËÀº»ö 0µµ";
+    Text[ chinese_simplified ] = "ºÚÉ« 0 ¶È";
+    Text[ chinese_traditional ] = "¶Â¦â 0 «×";
+    Text[ arabic ] = "ÃÓæÏ 0 ÏÑÌÉ";
+    Text[ turkish ] = "Siyah 0 derece";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-bitmap-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP0_DEF
+{
+    Text = "Empty";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP1_DEF
+{
+    Text = "Sky";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP2_DEF
+{
+    Text = "Aqua";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP3_DEF
+{
+    Text = "Coarse";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP4_DEF
+{
+    Text = "Space Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP5_DEF
+{
+    Text = "Space";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP6_DEF
+{
+    Text = "Metal";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP7_DEF
+{
+    Text = "Wet";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP8_DEF
+{
+    Text = "Marble";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP9_DEF
+{
+    Text = "Linen";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP10_DEF
+{
+    Text = "Stone";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP11_DEF
+{
+    Text = "Pebbles";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP12_DEF
+{
+    Text = "Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP13_DEF
+{
+    Text = "Red Wall";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP14_DEF
+{
+    Text = "Pattern";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP15_DEF
+{
+    Text = "Leaves";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP16_DEF
+{
+    Text = "Lawn Artificial";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP17_DEF
+{
+    Text = "Daisy";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP18_DEF
+{
+    Text = "Orange";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP19_DEF
+{
+    Text = "Fiery";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_BMP20_DEF
+{
+    Text = "Roses";
+};
+
+String RID_SVXSTR_BMP0
+{
+    Text = "Leer";
+    Text [ ENGLISH ] = "Blank";
+    Text [ english_us ] = "Blank";
+    Text[ portuguese ] = "Vazio";
+    Text[ russian ] = "Ïóñòî";
+    Text[ greek ] = "Êåíü";
+    Text[ dutch ] = "Blanco";
+    Text[ french ] = "Vide";
+    Text[ spanish ] = "Vacío";
+    Text[ italian ] = "Vuoto";
+    Text[ danish ] = "Tomt";
+    Text[ swedish ] = "Tomt";
+    Text[ polish ] = "Pusty";
+    Text[ portuguese_brazilian ] = "Blank";
+    Text[ japanese ] = "‹ó”’";
+    Text[ korean ] = "¹éÁö";
+    Text[ chinese_simplified ] = "¿Õ°×";
+    Text[ chinese_traditional ] = "ªÅ¥Õ";
+    Text[ arabic ] = "İÇÑÛ";
+    Text[ turkish ] = "Boş";
+};
+String RID_SVXSTR_BMP1
+{
+    Text = "Himmel";
+    Text [ ENGLISH ] = "Sky";
+    Text [ english_us ] = "Sky";
+    Text[ portuguese ] = "Céu";
+    Text[ russian ] = "Íåáî";
+    Text[ greek ] = "Ïõñáíüò";
+    Text[ dutch ] = "Hemel";
+    Text[ french ] = "Ciel";
+    Text[ spanish ] = "Cielo";
+    Text[ italian ] = "Cielo";
+    Text[ danish ] = "Himmel";
+    Text[ swedish ] = "Himmel";
+    Text[ polish ] = "Niebo";
+    Text[ portuguese_brazilian ] = "Orange";
+    Text[ japanese ] = "‹ó";
+    Text[ korean ] = "ÇÏ´Ã";
+    Text[ chinese_simplified ] = "Ìì¿Õ";
+    Text[ chinese_traditional ] = "¤ÑªÅ";
+    Text[ arabic ] = "ÇáÓãÇÁ";
+    Text[ turkish ] = "Gökyüzü";
+};
+String RID_SVXSTR_BMP2
+{
+    Text = "Wasser";
+    Text [ ENGLISH ] = "Aqua";
+    Text [ english_us ] = "Water";
+    Text[ portuguese ] = "Água";
+    Text[ russian ] = "Âîäà";
+    Text[ greek ] = "Íåñü";
+    Text[ dutch ] = "Water";
+    Text[ french ] = "Eau";
+    Text[ spanish ] = "Agua";
+    Text[ italian ] = "Acqua";
+    Text[ danish ] = "Vand";
+    Text[ swedish ] = "Vatten";
+    Text[ polish ] = "Woda";
+    Text[ portuguese_brazilian ] = "Wallpaper";
+    Text[ japanese ] = "…–Ê";
+    Text[ korean ] = "¹°";
+    Text[ chinese_simplified ] = "Ë®";
+    Text[ chinese_traditional ] = "¤ô";
+    Text[ arabic ] = "ãíÇå";
+    Text[ turkish ] = "Su";
+};
+String RID_SVXSTR_BMP3
+{
+    Text = "Grobkörnig";
+    Text [ ENGLISH ] = "Coarse";
+    Text [ english_us ] = "Coarse grained";
+    Text[ portuguese ] = "Granulado grosso";
+    Text[ russian ] = "Êğóïíàÿ çåğíèñòîñòü";
+    Text[ greek ] = "×ïíôñüêïêêá";
+    Text[ dutch ] = "Grove korrel";
+    Text[ french ] = "Gros grain";
+    Text[ spanish ] = "Grano grueso";
+    Text[ italian ] = "Grana grossa";
+    Text[ danish ] = "Grynet";
+    Text[ swedish ] = "Grovkornig";
+    Text[ polish ] = "Gruboziarnisty";
+    Text[ portuguese_brazilian ] = "Texture";
+    Text[ japanese ] = "‚´‚ç‚´‚ç‚µ‚½–Ê";
+    Text[ korean ] = "°ÅÄ£ ¾Ë°»ÀÌ";
+    Text[ chinese_simplified ] = "´Ö¿ÅÁ£";
+    Text[ chinese_traditional ] = "²`ÂÅ";
+    Text[ arabic ] = "ÍõÈóíúÈöíø ÎÔä";
+    Text[ turkish ] = "İri taneler";
+};
+String RID_SVXSTR_BMP4
+{
+    Text = "Quecksilber";
+    Text [ ENGLISH ] = "Quicksilver";
+    Text [ english_us ] = "Mercury";
+    Text[ portuguese ] = "Mercúrio";
+    Text[ russian ] = "Ğòóòü";
+    Text[ greek ] = "ÕäñÜñãõñïò";
+    Text[ dutch ] = "Kwikzilver";
+    Text[ french ] = "Mercure";
+    Text[ spanish ] = "Mercurio";
+    Text[ italian ] = "Mercurio";
+    Text[ danish ] = "Kviksølv";
+    Text[ swedish ] = "Kvicksilver";
+    Text[ polish ] = "Rtêæ";
+    Text[ portuguese_brazilian ] = "Chocolate";
+    Text[ japanese ] = "½Íß°½ÒÀÙ";
+    Text[ korean ] = "¼öÀº";
+    Text[ chinese_simplified ] = "Ë®Òø";
+    Text[ chinese_traditional ] = "¤ô»È";
+    Text[ arabic ] = "ÒÆÈŞ";
+    Text[ turkish ] = "Çikolata";
+};
+String RID_SVXSTR_BMP5
+{
+    Text = "Weltraum";
+    Text [ ENGLISH ] = "Space";
+    Text [ english_us ] = "Space";
+    Text[ portuguese ] = "Espaço cósmico";
+    Text[ russian ] = "Êîñìîñ";
+    Text[ greek ] = "ÄéÜóôçìá";
+    Text[ dutch ] = "Heelal";
+    Text[ french ] = "Galaxie";
+    Text[ spanish ] = "Espacio";
+    Text[ italian ] = "Spazio";
+    Text[ danish ] = "Verdensrum";
+    Text[ swedish ] = "Världsrymd";
+    Text[ polish ] = "Kosmos";
+    Text[ portuguese_brazilian ] = "Metal";
+    Text[ japanese ] = "‹â‰Í¯‰_";
+    Text[ korean ] = "¿ìÁÖ";
+    Text[ chinese_simplified ] = "ÓîÖæ";
+    Text[ chinese_traditional ] = "¤ÓªÅ";
+    Text[ arabic ] = "ÇáİÖÇÁ";
+    Text[ turkish ] = "Uzay";
+};
+String RID_SVXSTR_BMP6
+{
+    Text = "Metall";
+    Text [ ENGLISH ] = "Metal";
+    Text [ english_us ] = "Metal";
+    Text[ portuguese ] = "Metal";
+    Text[ russian ] = "Ìåòàëë";
+    Text[ greek ] = "Ìİôáëëï";
+    Text[ dutch ] = "Metaal";
+    Text[ french ] = "Métal";
+    Text[ spanish ] = "Metal";
+    Text[ italian ] = "Metallo";
+    Text[ danish ] = "Metal";
+    Text[ swedish ] = "Metall";
+    Text[ polish ] = "Metal";
+    Text[ portuguese_brazilian ] = "Wet";
+    Text[ japanese ] = "‚Â‚Ô‚Â‚Ô‚µ‚½–Ê";
+    Text[ korean ] = "±İ¼Ó";
+    Text[ chinese_simplified ] = "½ğÊô";
+    Text[ chinese_traditional ] = "ª÷Äİ";
+    Text[ arabic ] = "ãÚÏä";
+    Text[ turkish ] = "Metal";
+};
+String RID_SVXSTR_BMP7
+{
+    Text = "Tropfen";
+    Text [ ENGLISH ] = "Wet";
+    Text [ english_us ] = "Droplets";
+    Text[ portuguese ] = "Gotas";
+    Text[ russian ] = "Êàïëè";
+    Text[ greek ] = "Óôáãüíåò";
+    Text[ dutch ] = "Druppels";
+    Text[ french ] = "Gouttelettes";
+    Text[ spanish ] = "Gota";
+    Text[ italian ] = "Gocce";
+    Text[ danish ] = "Dråber";
+    Text[ swedish ] = "Droppar";
+    Text[ polish ] = "Krople";
+    Text[ portuguese_brazilian ] = "Marble";
+    Text[ japanese ] = "‚µ‚¸‚­";
+    Text[ korean ] = "¹°¹æ¿ï";
+    Text[ chinese_simplified ] = "Ë®µÎ";
+    Text[ chinese_traditional ] = "¤ôºw";
+    Text[ arabic ] = "ŞØÑÇÊ";
+    Text[ turkish ] = "Damla";
+};
+String RID_SVXSTR_BMP8
+{
+    Text = "Marmor";
+    Text [ ENGLISH ] = "Marble";
+    Text [ english_us ] = "Marble";
+    Text[ portuguese ] = "Mármore";
+    Text[ russian ] = "Ìğàìîğ";
+    Text[ greek ] = "ÌÜñìáñï";
+    Text[ dutch ] = "Marmer";
+    Text[ french ] = "Marbre";
+    Text[ spanish ] = "Mármol";
+    Text[ italian ] = "Marmo";
+    Text[ danish ] = "Marmor";
+    Text[ swedish ] = "Marmor";
+    Text[ polish ] = "Marmur";
+    Text[ portuguese_brazilian ] = "Linen";
+    Text[ japanese ] = "”’‘å—Î";
+    Text[ korean ] = "´ë¸®¼®";
+    Text[ chinese_simplified ] = "´óÀíÊ¯";
+    Text[ chinese_traditional ] = "¤j²z¥Û";
+    Text[ arabic ] = "ÑÎÇã";
+    Text[ turkish ] = "Mermer";
+};
+String RID_SVXSTR_BMP9
+{
+    Text = "Leinen";
+    Text [ ENGLISH ] = "Linen";
+    Text [ english_us ] = "Linen";
+    Text[ portuguese ] = "Linho";
+    Text[ russian ] = "Ëåí";
+    Text[ greek ] = "Ëéíü";
+    Text[ dutch ] = "Linnen";
+    Text[ french ] = "Lin";
+    Text[ spanish ] = "Lino";
+    Text[ italian ] = "Lino";
+    Text[ danish ] = "Lærred";
+    Text[ swedish ] = "Linne";
+    Text[ polish ] = "Len";
+    Text[ portuguese_brazilian ] = "Stone";
+    Text[ japanese ] = "ØÈİ’n";
+    Text[ korean ] = "¾Æ¸¶Æ÷";
+    Text[ chinese_simplified ] = "Âé²¼";
+    Text[ chinese_traditional ] = "¨È³Â";
+    Text[ arabic ] = "ßÊøÇä";
+    Text[ turkish ] = "Keten";
+};
+String RID_SVXSTR_BMP10
+{
+    Text = "Stein";
+    Text [ ENGLISH ] = "Stone";
+    Text [ english_us ] = "Stone";
+    Text[ portuguese ] = "Pedra";
+    Text[ russian ] = "Êàìåíü";
+    Text[ greek ] = "Ğİôñá";
+    Text[ dutch ] = "Steen";
+    Text[ french ] = "Pierre";
+    Text[ spanish ] = "Piedra";
+    Text[ italian ] = "Pietra";
+    Text[ danish ] = "Sten";
+    Text[ swedish ] = "Sten";
+    Text[ polish ] = "Kamieñ";
+    Text[ portuguese_brazilian ] = "Quicksilver";
+    Text[ japanese ] = "‰Ô›¼Šâ";
+    Text[ korean ] = "µ¹";
+    Text[ chinese_simplified ] = "Ê¯±®";
+    Text[ chinese_traditional ] = "¥ÛÀY";
+    Text[ arabic ] = "ÍÌÑ";
+    Text[ turkish ] = "Taş";
+};
+String RID_SVXSTR_BMP11
+{
+    Text = "Schotter";
+    Text [ ENGLISH ] = "Pebbles";
+    Text [ english_us ] = "Gravel";
+    Text[ portuguese ] = "Cascalho";
+    Text[ russian ] = "Ãğàâèé";
+    Text[ greek ] = "×áëßêéá";
+    Text[ dutch ] = "Puin";
+    Text[ french ] = "Gravier";
+    Text[ spanish ] = "Grava";
+    Text[ italian ] = "Ghiaia";
+    Text[ danish ] = "Grus";
+    Text[ swedish ] = "Makadam";
+    Text[ polish ] = "¯wir";
+    Text[ portuguese_brazilian ] = "Pebbles";
+    Text[ japanese ] = "»—˜“¹";
+    Text[ korean ] = "ÀÚ°¥";
+    Text[ chinese_simplified ] = "ËéÊ¯";
+    Text[ chinese_traditional ] = "¸H¥Û";
+    Text[ arabic ] = "ÍÕì";
+    Text[ turkish ] = "Çakıl";
+};
+String RID_SVXSTR_BMP12
+{
+    Text = "Mauer";
+    Text [ ENGLISH ] = "Wall";
+    Text [ english_us ] = "Wall";
+    Text[ portuguese ] = "Parede";
+    Text[ russian ] = "Êàìåííàÿ ñòåíà";
+    Text[ greek ] = "Ôïß÷ïò";
+    Text[ dutch ] = "Muur";
+    Text[ french ] = "Muraille";
+    Text[ spanish ] = "Muralla";
+    Text[ italian ] = "Muro";
+    Text[ danish ] = "Mur";
+    Text[ swedish ] = "Mur";
+    Text[ polish ] = "Mur";
+    Text[ portuguese_brazilian ] = "Wall";
+    Text[ japanese ] = "ÎŠ_";
+    Text[ korean ] = "º®";
+    Text[ chinese_simplified ] = "Ç½";
+    Text[ chinese_traditional ] = "ùÙ";
+    Text[ arabic ] = "ÓæÑ";
+    Text[ turkish ] = "Duvar";
+};
+String RID_SVXSTR_BMP13
+{
+    Text = "Ziegelsteine";
+    Text [ ENGLISH ] = "Brownstone";
+    Text [ english_us ] = "Brownstone";
+    Text[ portuguese ] = "Tijolos";
+    Text[ russian ] = "Êèğïè÷è";
+    Text[ greek ] = "Ğõñßìá÷á ôïıâëá";
+    Text[ dutch ] = "Bakstenen";
+    Text[ french ] = "Briques";
+    Text[ spanish ] = "Ladrillo";
+    Text[ italian ] = "Mattoni";
+    Text[ danish ] = "Teglsten";
+    Text[ swedish ] = "Tegelstenar";
+    Text[ polish ] = "Ceg³y";
+    Text[ portuguese_brazilian ] = "Brownstone";
+    Text[ japanese ] = "‚ê‚ñ‚ª•»";
+    Text[ korean ] = "º®µ¹";
+    Text[ chinese_simplified ] = "ºì×©Ç½";
+    Text[ chinese_traditional ] = "¿j¥Û";
+    Text[ arabic ] = "ŞæÇáÈ ØæÈ";
+    Text[ turkish ] = "Tuğla";
+};
+String RID_SVXSTR_BMP14
+{
+    Text = "Geflecht";
+    Text [ ENGLISH ] = "Pattern";
+    Text [ english_us ] = "Netting";
+    Text[ portuguese ] = "Rede";
+    Text[ russian ] = "Ïîëîòíî";
+    Text[ greek ] = "Ğëİãìá";
+    Text[ dutch ] = "Vlechtwerk";
+    Text[ french ] = "Tresses";
+    Text[ spanish ] = "Malla";
+    Text[ italian ] = "Rete";
+    Text[ danish ] = "Fletværk";
+    Text[ swedish ] = "Flätverk";
+    Text[ polish ] = "Plecionka";
+    Text[ portuguese_brazilian ] = "Pattern";
+    Text[ japanese ] = "–ƒD•¨";
+    Text[ korean ] = "Æí¹°";
+    Text[ chinese_simplified ] = "±àÖ¯Îï";
+    Text[ chinese_traditional ] = "½sÂ´ª«";
+    Text[ arabic ] = "ÔÈßÉ";
+    Text[ turkish ] = "Hasır";
+};
+String RID_SVXSTR_BMP15
+{
+    Text = "Laub";
+    Text [ ENGLISH ] = "Leaves";
+    Text [ english_us ] = "Leaves";
+    Text[ portuguese ] = "Folhagem";
+    Text[ russian ] = "Ëèñòüÿ";
+    Text[ greek ] = "Öıëëùìá";
+    Text[ dutch ] = "Loof";
+    Text[ french ] = "Vigne vierge";
+    Text[ spanish ] = "Follaje";
+    Text[ italian ] = "Foglie";
+    Text[ danish ] = "Løv";
+    Text[ swedish ] = "Löv";
+    Text[ polish ] = "Liœcie";
+    Text[ portuguese_brazilian ] = "Leaves";
+    Text[ japanese ] = "’Ó";
+    Text[ korean ] = "³ª¹µÀÙ";
+    Text[ chinese_simplified ] = "Ê÷Ò¶";
+    Text[ chinese_traditional ] = "¾ğ¸­";
+    Text[ arabic ] = "æÑŞ ÃÔÌÇÑ";
+    Text[ turkish ] = "Yapraklar";
+};
+String RID_SVXSTR_BMP16
+{
+    Text = "Kunstrasen";
+    Text [ ENGLISH ] = "Artificial Lawn";
+    Text [ english_us ] = "Artificial Turf";
+    Text[ portuguese ] = "Relva artificial";
+    Text[ russian ] = "Èñêóññòâåííîå òğàâÿíîå ïîêğûòèå";
+    Text[ greek ] = "Ôå÷íçôüò ÷ïñôïôÜğçôáò";
+    Text[ dutch ] = "Kunstgras";
+    Text[ french ] = "Gazon artificiel";
+    Text[ spanish ] = "Césped sintético";
+    Text[ italian ] = "Prato artificiale";
+    Text[ danish ] = "Kunstig plæne";
+    Text[ swedish ] = "Konstgjord gräsmatta";
+    Text[ polish ] = "Sztuczny trawnik";
+    Text[ portuguese_brazilian ] = "Artificial Lawn";
+    Text[ japanese ] = "lHÅ¶";
+    Text[ korean ] = "ÀÎ°øÀÜµğ";
+    Text[ chinese_simplified ] = "ÈËÔì²İµØ";
+    Text[ chinese_traditional ] = "¤H³y¯ó¦a";
+    Text[ arabic ] = "äÌíá ÕäÇÚí";
+    Text[ turkish ] = "Yapay çim";
+};
+String RID_SVXSTR_BMP17
+{
+    Text = "Gänseblümchen";
+    Text [ ENGLISH ] = "Daisy";
+    Text [ english_us ] = "Daisy";
+    Text[ portuguese ] = "Margaridas";
+    Text[ russian ] = "Ìàğãàğèòêè";
+    Text[ greek ] = "Áóğñïëïıëïõäï";
+    Text[ dutch ] = "Madeliefjes";
+    Text[ french ] = "Marguerites";
+    Text[ spanish ] = "Margarita";
+    Text[ italian ] = "Margherite";
+    Text[ danish ] = "Tusindfryd";
+    Text[ swedish ] = "Tusenskönor";
+    Text[ polish ] = "Kaczeñce";
+    Text[ portuguese_brazilian ] = "Daisy";
+    Text[ japanese ] = "ÃŞ°¼Ş°";
+    Text[ korean ] = "µ¥ÀÌÁö²É";
+    Text[ chinese_simplified ] = "³û¾Õ";
+    Text[ chinese_traditional ] = "Âúµâ";
+    Text[ arabic ] = "ÒåÑÉ ÇáÑÈíÚ";
+    Text[ turkish ] = "Papatya";
+};
+String RID_SVXSTR_BMP18
+{
+    Text = "Orange";
+    Text [ ENGLISH ] = "Orange";
+    Text [ english_us ] = "Orange";
+    Text[ portuguese ] = "Laranja";
+    Text[ russian ] = "Àïåëüñèí";
+    Text[ greek ] = "Ğïñôïêáëß";
+    Text[ dutch ] = "Oranje";
+    Text[ french ] = "Rouille";
+    Text[ spanish ] = "Naranja";
+    Text[ italian ] = "Arancione";
+    Text[ danish ] = "Orange";
+    Text[ swedish ] = "Orange";
+    Text[ polish ] = "Pomarañczowy";
+    Text[ portuguese_brazilian ] = "Orange";
+    Text[ japanese ] = "µÚİ¼Ş";
+    Text[ korean ] = "¿À·»Áö";
+    Text[ chinese_simplified ] = "¸Ì½Û";
+    Text[ chinese_traditional ] = "¾í¦â";
+    Text[ arabic ] = "ÈÑÊŞÇáí";
+    Text[ turkish ] = "Turuncu";
+};
+String RID_SVXSTR_BMP19
+{
+    Text = "Feurig";
+    Text [ ENGLISH ] = "Fiery";
+    Text [ english_us ] = "Fiery";
+    Text[ portuguese ] = "Chamas";
+    Text[ russian ] = "Îãîíü";
+    Text[ greek ] = "Êáõôü";
+    Text[ dutch ] = "Vurig";
+    Text[ french ] = "Flamme";
+    Text[ spanish ] = "Fogoso";
+    Text[ italian ] = "Fiamma";
+    Text[ danish ] = "Flammende";
+    Text[ swedish ] = "Eldig";
+    Text[ polish ] = "Ognisty";
+    Text[ portuguese_brazilian ] = "Fiery";
+    Text[ japanese ] = "Ü”M";
+    Text[ korean ] = "ºÒ²É";
+    Text[ chinese_simplified ] = "»ğÑæ";
+    Text[ chinese_traditional ] = "¤õ¬õ¦â";
+    Text[ arabic ] = "äÇÑí";
+    Text[ turkish ] = "Ateş";
+};
+String RID_SVXSTR_BMP20
+{
+    Text = "Rosen";
+    Text [ ENGLISH ] = "Roses";
+    Text [ english_us ] = "Roses";
+    Text[ portuguese ] = "Rosas";
+    Text[ russian ] = "Ğîçû";
+    Text[ greek ] = "ÔñéáíôÜöõëëï";
+    Text[ dutch ] = "Rozen";
+    Text[ french ] = "Roses";
+    Text[ spanish ] = "Rosas";
+    Text[ italian ] = "Rose";
+    Text[ danish ] = "Roser";
+    Text[ swedish ] = "Rosor";
+    Text[ polish ] = "Ró¿e";
+    Text[ portuguese_brazilian ] = "Roses";
+    Text[ japanese ] = "^‚ÁÔ‚Èƒoƒ‰";
+    Text[ korean ] = "Àå¹Ì";
+    Text[ chinese_simplified ] = "Ãµ¹å";
+    Text[ chinese_traditional ] = "ª´ºÀ";
+    Text[ arabic ] = "æÑÏ";
+    Text[ turkish ] = "Gül";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-dash-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH0_DEF
+{
+    Text = "Ultrafine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH1_DEF
+{
+    Text = "Fine Dashed";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH2_DEF
+{
+    Text = "Ultrafine 2 Dots 3 Dashes";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH3_DEF
+{
+    Text = "Fine Dotted";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH4_DEF
+{
+    Text = "Line with Fine Dots";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH5_DEF
+{
+    Text = "Fine Dashed (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH6_DEF
+{
+    Text = "3 Dashes 3 Dots (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH7_DEF
+{
+    Text = "Ultrafine Dotted (var)";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH8_DEF
+{
+    Text = "Line Style 9";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH9_DEF
+{
+    Text = "2 Dots 1 Dash";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_DASH10_DEF
+{
+    Text = "Dashed (var)";
+};
+
+String RID_SVXSTR_DASH0
+{
+    Text = "Ultrafein gestrichelt";
+    Text [ ENGLISH ] = "Ultrafine Dashed";
+    Text [ english_us ] = "Ultrafine dashed";
+    Text[ portuguese ] = "Tracejado ultrafino";
+    Text[ russian ] = "Ñâåğõòîíêàÿ ïóíêòèğíàÿ";
+    Text[ greek ] = "Ğáıëåò (ğïëı ëåğôİò)";
+    Text[ dutch ] = "Ultrafijne streepjes";
+    Text[ french ] = "Ultrafine discontinue";
+    Text[ spanish ] = "Trazos ultrafinos";
+    Text[ italian ] = "A tratti finissimi";
+    Text[ danish ] = "Ultrafin stiplet";
+    Text[ swedish ] = "Mycket fint streckad";
+    Text[ polish ] = "Bardzo cienkie kreski";
+    Text[ portuguese_brazilian ] = "Ultrafine Dashed";
+    Text[ japanese ] = "‹É×‚Ì”jü";
+    Text[ korean ] = "¾ÆÁÖ °¡´Â ´ë½Ã";
+    Text[ chinese_simplified ] = "³¬Ï¸»®Ïß";
+    Text[ chinese_traditional ] = "¶W²ÓÂI¦E½u";
+    Text[ arabic ] = "ÔõÑØ ÑİíÚÉ ÌÏÇğ";
+    Text[ turkish ] = "Çok ince kesik çizgili";
+};
+String RID_SVXSTR_DASH1
+{
+    Text = "Fein gestrichelt";
+    Text [ ENGLISH ] = "Fine Dashed";
+    Text [ english_us ] = "Fine dashed";
+    Text[ portuguese ] = "Tracejado fino";
+    Text[ russian ] = "Òîíêàÿ ïóíêòèğíàÿ";
+    Text[ greek ] = "Ğáıëåò (ëåğôİò)";
+    Text[ dutch ] = "Fijne streepjes";
+    Text[ french ] = "Fine discontinue";
+    Text[ spanish ] = "Trazos finos";
+    Text[ italian ] = "A tratti fini";
+    Text[ danish ] = "Fin stiplet";
+    Text[ swedish ] = "Fint streckad";
+    Text[ polish ] = "Cienkie kreski";
+    Text[ portuguese_brazilian ] = "Fine Dashed";
+    Text[ japanese ] = "×‚©‚¢”jü";
+    Text[ korean ] = "°¡´Â ´ë½Ã";
+    Text[ chinese_simplified ] = "Ï¸»®Ïß";
+    Text[ chinese_traditional ] = "²ÓÂI¦E½u";
+    Text[ arabic ] = "ÔõÑØ ÑİíÚÉ";
+    Text[ turkish ] = "İnce kesik çizgili";
+};
+String RID_SVXSTR_DASH2
+{
+    Text = "Ultrafein 2 Punkte 3 Striche";
+    Text [ ENGLISH ] = "Ultrafine 2 Dots 3 Dashes";
+    Text [ english_us ] = "Ultrafine 2 dots 3 dashes";
+    Text[ portuguese ] = "3 traços 2 pontos ultrafino";
+    Text[ russian ] = "Ñâåğõòîíêàÿ 2 òî÷êè 3 øòğèõà";
+    Text[ greek ] = "2 ôåëåßåò - 3 ğáıëåò (ğïëı ëåğôİò)";
+    Text[ dutch ] = "Ultrafijn 2 puntjes 3 streepjes";
+    Text[ french ] = "Ultrafine 2 points 3 traits";
+    Text[ spanish ] = "Ultrafino 2 puntos 2 trazos";
+    Text[ italian ] = "A 2 punti 3 linee finissimi";
+    Text[ danish ] = "Ultrafin 2 punkter 3 streger";
+    Text[ swedish ] = "Mycket fint 2 prickar 3 streck";
+    Text[ polish ] = "Bardzo cienkie 2 kropki 3 kreski";
+    Text[ portuguese_brazilian ] = "Ultrafine 2 Dots 3 Dashes";
+    Text[ japanese ] = "‹É×‚Ì“ñ“_O”jü";
+    Text[ korean ] = "¹Ì¼¼ÇÑ 2 Á¡°ú 3 ´ë½Ã";
+    Text[ chinese_simplified ] = "³¬Ï¸2µã3»®Ïß";
+    Text[ chinese_traditional ] = "¶W²Ó¨âÂI¤T¦E½u";
+    Text[ arabic ] = "2 äŞØÉ 3 ÔÑØ¡ ÑİíÚÉ ÌÏÇğ";
+    Text[ turkish ] = "Çok ince 2 nokta 3 çizgi";
+};
+String RID_SVXSTR_DASH3
+{
+    Text = "Fein gepunktet";
+    Text [ ENGLISH ] = "Fine Dotted";
+    Text [ english_us ] = "Fine dotted";
+    Text[ portuguese ] = "Pontilhado fino";
+    Text[ russian ] = "Ìåëêèå òî÷êè";
+    Text[ greek ] = "Ôåëåßåò (ëåğôİò)";
+    Text[ dutch ] = "Fijn gestippeld";
+    Text[ french ] = "Fine pointillée";
+    Text[ spanish ] = "Punteado fino";
+    Text[ italian ] = "A punti fini";
+    Text[ danish ] = "Fin punkteret";
+    Text[ swedish ] = "Fint prickig";
+    Text[ polish ] = "Delikatne kropki";
+    Text[ portuguese_brazilian ] = "Fine Dotted";
+    Text[ japanese ] = "×‚©‚¢“_ü";
+    Text[ korean ] = "°¡´Â Á¡";
+    Text[ chinese_simplified ] = "Ï¸µãÏß";
+    Text[ chinese_traditional ] = "²ÓÂI";
+    Text[ arabic ] = "äŞÇØ ÑİíÚÉ";
+    Text[ turkish ] = "İnce noktalı";
+};
+String RID_SVXSTR_DASH4
+{
+    Text = "Strich mit feinen Punkten";
+    Text [ ENGLISH ] = "Line with Fine Dots";
+    Text [ english_us ] = "Line with fine dots";
+    Text[ portuguese ] = "Traço com pontos finos";
+    Text[ russian ] = "Ëèíèÿ ñ ìåëêèìè òî÷êàìè";
+    Text[ greek ] = "ÃñáììŞ ìå ëåğôİò ôåëåßåò";
+    Text[ dutch ] = "Lijn met fijne puntjes";
+    Text[ french ] = "Trait avec des points fins";
+    Text[ spanish ] = "Trazo con puntos finos";
+    Text[ italian ] = "Linea con punti fini";
+    Text[ danish ] = "Streg med fine prikker";
+    Text[ swedish ] = "Streck med fina prickar";
+    Text[ polish ] = "Kreska z delikatnymi kropkami";
+    Text[ portuguese_brazilian ] = "Line with Fine Dots";
+    Text[ japanese ] = "×‚©‚¢“_‚ÌW‚Ü‚Á‚½ü";
+    Text[ korean ] = "°¡´Â Á¡À¸·Î µÈ ¼±";
+    Text[ chinese_simplified ] = "Ï¸µã»®Ïß";
+    Text[ chinese_traditional ] = "²ÓÂI½u±ø";
+    Text[ arabic ] = "ÎØ Ğæ äŞÇØ ÑİíÚÉ";
+    Text[ turkish ] = "İnce noktalı çizgi";
+};
+String RID_SVXSTR_DASH5
+{
+    Text = "Fein gestrichelt (variabel)";
+    Text [ ENGLISH ] = "Fine Dashed (var)";
+    Text [ english_us ] = "Fine dashed (variable)";
+    Text[ portuguese ] = "Tracejado fino (variável)";
+    Text[ russian ] = "Òîíêàÿ ïóíêòèğíàÿ (èçì.)";
+    Text[ greek ] = "Ëåğôİò ğáıëåò (ìåôáâëçôÜ)";
+    Text[ dutch ] = "Fijne streepjes (variabel)";
+    Text[ french ] = "Fine discontinue (variable)";
+    Text[ spanish ] = "Trazos finos (variable)";
+    Text[ italian ] = "A tratti fini (var)";
+    Text[ danish ] = "Fin stiplet (variabel)";
+    Text[ swedish ] = "Fint streckad (variabel)";
+    Text[ polish ] = "Cienkie kreski (zmienne)";
+    Text[ portuguese_brazilian ] = "Fine Dashed (var)";
+    Text[ japanese ] = "×‚©‚¢”jü(‰Â•Ï)";
+    Text[ korean ] = "°¡´Â ´ë½Ã(À¯µ¿Àû)";
+    Text[ chinese_simplified ] = "Ï¸»®Ïß (¿É±ä)";
+    Text[ chinese_traditional ] = "²ÓÂI¦E½u(¥iÅÜ)";
+    Text[ arabic ] = "ÔõÑØ ÑİíÚÉ (ãÊÛíÑÉ)";
+    Text[ turkish ] = "İnce kesik çizgili (değişken)";
+};
+String RID_SVXSTR_DASH6
+{
+    Text = "3 Striche 3 Punkte (variabel)";
+    Text [ ENGLISH ] = "3 Dashes 3 Dots (var)";
+    Text [ english_us ] = "3 dashes 3 dots (variable)";
+    Text[ portuguese ] = "3 traços 3 pontos (variável)";
+    Text[ russian ] = "3 øòğèõà 3 òî÷êè (èçì.)";
+    Text[ greek ] = "3 ğáıëåò - 3 ôåëåßåò (ìåôáâëçôÜ)";
+    Text[ dutch ] = "3 streepjes 3 puntjes (variabel)";
+    Text[ french ] = "3 traits 3 points (variable)";
+    Text[ spanish ] = "3 trazos 3 puntos (variable)";
+    Text[ italian ] = "A 3 linee 3 punti (var)";
+    Text[ danish ] = "3 streger 3 punkter (variabel)";
+    Text[ swedish ] = "3 streck 3 prickar (variabel)";
+    Text[ polish ] = "3 kreski 3 kropki (zmienne)";
+    Text[ portuguese_brazilian ] = "3 Dashes 3 Dots (var)";
+    Text[ japanese ] = "3”jü3“_½ü(‰Â•Ï)";
+    Text[ korean ] = "3 ´ë½Ã 3 Á¡ (À¯µ¿Àû)";
+    Text[ chinese_simplified ] = "3 »® 3 µã (¿É±ä)";
+    Text[ chinese_traditional ] = "3 ¦E½u 3 ÂI(¥iÅÜ)";
+    Text[ arabic ] = "3 ÔõÑØ 3 äŞÇØ (ãÊÛíÑÉ)";
+    Text[ turkish ] = "3 çizgi 3 nokta (değişken)";
+};
+String RID_SVXSTR_DASH7
+{
+    Text = "Ultrafein gepunktet (variabel)";
+    Text [ ENGLISH ] = "Ultrafine Dotted (var)";
+    Text [ english_us ] = "Ultrafine dotted (variable)";
+    Text[ portuguese ] = "Pontilhado ultrafino (variável)";
+    Text[ russian ] = "Ìåëêèå òî÷êè (èçì.)";
+    Text[ greek ] = "Ôåëåßåò (ğïëı ëåğôİò) (ìåôáâëçôÜ)";
+    Text[ dutch ] = "Ultrafijn gestippeld (variabel)";
+    Text[ french ] = "Ultrafine pointillée (variable)";
+    Text[ spanish ] = "Punteado ultrafino (variable)";
+    Text[ italian ] = "A punti finissimi (var)";
+    Text[ danish ] = "Ultrafin punkteret (variabel)";
+    Text[ swedish ] = "Mycket fint prickig (variabel)";
+    Text[ polish ] = "Bardzo delikatne kropki (zmienne)";
+    Text[ portuguese_brazilian ] = "Ultrafine Dotted (var)";
+    Text[ japanese ] = "‹É×‚Ì“_ü(‰Â•Ï)";
+    Text[ korean ] = "¹Ì¼¼ÇÑ Á¡(À¯µ¿Àû)";
+    Text[ chinese_simplified ] = "³¬Ï¸µãÏß (¿É±ä)";
+    Text[ chinese_traditional ] = "¶W²ÓÂI(¥iÅÜ)";
+    Text[ arabic ] = "äŞÇØ ÑİíÚÉ ÌÏÇğ (ãÊÛíÑÉ)";
+    Text[ turkish ] = "Çok ince noktalı (değişken)";
+};
+String RID_SVXSTR_DASH8
+{
+    Text = "Linienstil 9";
+    Text [ ENGLISH ] = "Line Style 9";
+    Text [ english_us ] = "Line style 9";
+    Text[ portuguese ] = "Estilo de linha 9";
+    Text[ russian ] = "Ñòèëü ëèíèèè 9";
+    Text[ greek ] = "Óôõë ãñáììŞò 9";
+    Text[ dutch ] = "Lijntype 9";
+    Text[ french ] = "Style de ligne 9";
+    Text[ spanish ] = "Estilo de línea 9";
+    Text[ italian ] = "Stile linea 9";
+    Text[ danish ] = "Stregtype 9";
+    Text[ swedish ] = "Linjestil 9";
+    Text[ polish ] = "Styl linii 9";
+    Text[ portuguese_brazilian ] = "Line Style 9";
+    Text[ japanese ] = "ü‚Ì½À²Ù 9";
+    Text[ korean ] = "¼± À¯Çü 9";
+    Text[ chinese_simplified ] = "ÏßÌõÊ½Ñù 9";
+    Text[ chinese_traditional ] = "½u±ø­·®æ 9";
+    Text[ arabic ] = "äãØ ÇáÎØ 9";
+    Text[ turkish ] = "Çizgi biçimi 9";
+};
+String RID_SVXSTR_DASH9
+{
+    Text = "2 Punkte 1 Strich";
+    Text [ ENGLISH ] = "2 Dots 1 Dash";
+    Text [ english_us ] = "2 dots 1 dash";
+    Text[ portuguese ] = "2 pontos 1 traço";
+    Text[ russian ] = "2 òî÷êè 1 øòğèõ";
+    Text[ greek ] = "2 ôåëåßåò - 1 ğáıëá";
+    Text[ dutch ] = "2 puntjes 1 streepje";
+    Text[ french ] = "2 points 1 trait";
+    Text[ spanish ] = "2 puntos 1 trazo";
+    Text[ italian ] = "A 2 punti 1 linea";
+    Text[ danish ] = "2 punkter 1 streg";
+    Text[ swedish ] = "2 prickar 1 streck";
+    Text[ polish ] = "2 kropki 1 kreska";
+    Text[ portuguese_brazilian ] = "2 Dots 1 Dash";
+    Text[ japanese ] = "2“_ 1ÀŞ¯¼­";
+    Text[ korean ] = "2 Á¡ 1 ´ë½Ã";
+    Text[ chinese_simplified ] = "2 µã 1 »®";
+    Text[ chinese_traditional ] = "2 ÂI 1 ¦E½u";
+    Text[ arabic ] = "2 äŞØÉ 1 ÔÑØÉ";
+    Text[ turkish ] = "2 nokta 1 çizgi";
+};
+String RID_SVXSTR_DASH10
+{
+    Text = "Gestrichelt (variabel)";
+    Text [ ENGLISH ] = "Dashed (var)";
+    Text [ english_us ] = "Dashed (variable)";
+    Text[ portuguese ] = "Pontilhado (variável)";
+    Text[ russian ] = "Ïóíêòèğíàÿ (èçì.)";
+    Text[ greek ] = "Ğáıëåò (ìåôáâëçôÜ)";
+    Text[ dutch ] = "Streepjes (variabel)";
+    Text[ french ] = "Discontinue (variable)";
+    Text[ spanish ] = "Trazos (variable)";
+    Text[ italian ] = "A tratti (var)";
+    Text[ danish ] = "Stiplet (variabel)";
+    Text[ swedish ] = "Streckad (variabel)";
+    Text[ polish ] = "Kreski (zmienne)";
+    Text[ portuguese_brazilian ] = "Dashed (var)";
+    Text[ japanese ] = "”jü(‰Â•Ï)";
+    Text[ korean ] = "´ë½Ã (À¯µ¿Àû)";
+    Text[ chinese_simplified ] = "»®Ïß (¿É±ä)";
+    Text[ chinese_traditional ] = "ÂI¦E½u(¥iÅÜ)";
+    Text[ arabic ] = "ÔõÑØ (ãÊÛíÑÉ)";
+    Text[ turkish ] = "Kesik çizgili (değişken)";
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard-line-end-table
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND0_DEF
+{
+    Text = "Arrow concave";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND1_DEF
+{
+    Text = "Square 45";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND2_DEF
+{
+    Text = "Small Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND3_DEF
+{
+    Text = "Dimension Lines";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND4_DEF
+{
+    Text = "Double Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND5_DEF
+{
+    Text = "Rounded short Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND6_DEF
+{
+    Text = "Symmetric Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND7_DEF
+{
+    Text = "Line Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND8_DEF
+{
+    Text = "Rounded large Arrow";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND9_DEF
+{
+    Text = "Circle";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND10_DEF
+{
+    Text = "Square";
+};
+/* nicht uebersetzen */
+String RID_SVXSTR_LEND11_DEF
+{
+    Text = "Arrow";
+};
+
+String RID_SVXSTR_LEND0
+{
+    Text = "Pfeil konkav";
+    Text [ ENGLISH ] = "Arrow concave";
+    Text [ english_us ] = "Arrow concave";
+    Text[ portuguese ] = "Seta côncava";
+    Text[ russian ] = "Âîãíóòàÿ ñòğåëêà";
+    Text[ greek ] = "Âİëïò êïßëï";
+    Text[ dutch ] = "Pijl concave";
+    Text[ french ] = "Flèche concave";
+    Text[ spanish ] = "Flecha cóncava";
+    Text[ italian ] = "Freccia concava";
+    Text[ danish ] = "Pil konkav";
+    Text[ swedish ] = "Pil konkav";
+    Text[ polish ] = "Strza³ka wklês³a";
+    Text[ portuguese_brazilian ] = "Arrow concave";
+    Text[ japanese ] = "’†‚­‚Ú‚İ‚Ì–îˆó";
+    Text[ korean ] = "¿À¸ñ È­»ìÇ¥";
+    Text[ chinese_simplified ] = "°¼ĞÎ¼ıÍ·";
+    Text[ chinese_traditional ] = "½bÀY¥W§Î";
+    Text[ arabic ] = "Óåã ãŞÚÑ";
+    Text[ turkish ] = "İçbükey ok";
+};
+String RID_SVXSTR_LEND1
+{
+    Text = "Quadrat 45";
+    Text [ ENGLISH ] = "Square 45";
+    Text [ english_us ] = "Square 45";
+    Text[ portuguese ] = "Quadrado 45";
+    Text[ russian ] = "Êâàäğàò 45";
+    Text[ greek ] = "ÔåôñÜãùíï 45";
+    Text[ dutch ] = "Vierkant 45";
+    Text[ french ] = "Carré 45";
+    Text[ spanish ] = "Cuadrado 45";
+    Text[ italian ] = "Quadrato 45";
+    Text[ danish ] = "Kvadrat 45";
+    Text[ swedish ] = "Kvadrat 45";
+    Text[ polish ] = "Kwadrat 45";
+    Text[ portuguese_brazilian ] = "Square 45";
+    Text[ japanese ] = "^lŠp 45“xŒXÎ";
+    Text[ korean ] = "Á¤»ç°¢Çü 45";
+    Text[ chinese_simplified ] = "Õı·½ĞÎ 45 ¶È";
+    Text[ chinese_traditional ] = "¥¿¤è§Î 45 «×";
+    Text[ arabic ] = "ãÑÈÚ 45";
+    Text[ turkish ] = "Kare 45";
+};
+String RID_SVXSTR_LEND2
+{
+    Text = "Schmaler Pfeil";
+    Text [ ENGLISH ] = "Small Arrow";
+    Text [ english_us ] = "Small arrow";
+    Text[ portuguese ] = "Seta estreita";
+    Text[ russian ] = "Îñòğîêîíå÷íàÿ ñòğåëêà";
+    Text[ greek ] = "Ëåğôü âİëïò";
+    Text[ dutch ] = "Smalle pijl";
+    Text[ french ] = "Flèche étroite";
+    Text[ spanish ] = "Flecha estrecha";
+    Text[ italian ] = "Freccia piccola";
+    Text[ danish ] = "Smal pil";
+    Text[ swedish ] = "Smal pil";
+    Text[ polish ] = "Cienka strza³ka";
+    Text[ portuguese_brazilian ] = "Small Arrow";
+    Text[ japanese ] = "’·×‚¢–îˆó";
+    Text[ korean ] = "°¡´Â È­»ìÇ¥";
+    Text[ chinese_simplified ] = "Ï¸¼ıÍ·";
+    Text[ chinese_traditional ] = "²Ó¤p½bÀY";
+    Text[ arabic ] = "Óåã ÑİíÚ";
+    Text[ turkish ] = "İnce ok";
+};
+String RID_SVXSTR_LEND3
+{
+    Text = "Bemaßungsenden";
+    Text [ ENGLISH ] = "Dimension Lines";
+    Text [ english_us ] = "Dimension lines";
+    Text[ portuguese ] = "Linhas de dimensionamento";
+    Text[ russian ] = "Ëèíèÿ äëÿ ğàçìåğîâ";
+    Text[ greek ] = "Ãñáììİò äéáóôáóéïëüãçóçò";
+    Text[ dutch ] = "Afmetingseinden";
+    Text[ french ] = "Extrémités de cotation";
+    Text[ spanish ] = "Fines de dimensionamiento";
+    Text[ italian ] = "Estremità quotatura";
+    Text[ danish ] = "Dimensioneringsstreger";
+    Text[ swedish ] = "Dimensioneringsändar";
+    Text[ polish ] = "Koñce wymiarowania";
+    Text[ portuguese_brazilian ] = "Dimension Lines";
+    Text[ japanese ] = "¡–@ü‚ÌI“_";
+    Text[ korean ] = "Ä¡¼ö¼±";
+    Text[ chinese_simplified ] = "³ß´çÏßÌõ";
+    Text[ chinese_traditional ] = "¤Ø«×½u±ø";
+    Text[ arabic ] = "ÎØæØ ŞíÇÓ";
+    Text[ turkish ] = "Boyutlandırma çizgileri";
+};
+String RID_SVXSTR_LEND4
+{
+    Text = "Doppelpfeil";
+    Text [ ENGLISH ] = "Double Arrow";
+    Text [ english_us ] = "Double Arrow";
+    Text[ portuguese ] = "Seta dupla";
+    Text[ russian ] = "Äâîéíàÿ ñòğåëêà";
+    Text[ greek ] = "Äéğëü âİëïò";
+    Text[ dutch ] = "Dubbele pijl";
+    Text[ french ] = "Double flèche";
+    Text[ spanish ] = "Flecha doble";
+    Text[ italian ] = "Freccia doppia";
+    Text[ danish ] = "Dobbeltpil";
+    Text[ swedish ] = "Dubbel pil";
+    Text[ polish ] = "Podwójna strza³ka";
+    Text[ portuguese_brazilian ] = "Double Arrow";
+    Text[ japanese ] = "“ñd–îˆó";
+    Text[ korean ] = "ÀÌÁß È­»ìÇ¥";
+    Text[ chinese_simplified ] = "Ë«¼ıÍ·";
+    Text[ chinese_traditional ] = "Âù½bÀY";
+    Text[ arabic ] = "Óåã ãÒÏæÌ";
+    Text[ turkish ] = "İki uçlu ok";
+};
+String RID_SVXSTR_LEND5
+{
+    Text = "Abgerundeter kurzer Pfeil";
+    Text [ ENGLISH ] = "Rounded short Arrow";
+    Text [ english_us ] = "Rounded short arrow";
+    Text[ portuguese ] = "Seta curta arredondada";
+    Text[ russian ] = "Çàêğóãëåííàÿ êîğîòêàÿ ñòğåëêà";
+    Text[ greek ] = "Óôñïããõëåõìİíï êïíôü âİëïò";
+    Text[ dutch ] = "Afgeronde korte pijl";
+    Text[ french ] = "Flèche courte arrondie";
+    Text[ spanish ] = "Flecha corta redondeada";
+    Text[ italian ] = "Freccia corta arrotondata";
+    Text[ danish ] = "Afrundet kort pil";
+    Text[ swedish ] = "Avrundad kort pil";
+    Text[ polish ] = "Zaokr. krótka strza³ka";
+    Text[ portuguese_brazilian ] = "Rounded short Arrow";
+    Text[ japanese ] = "æ‚ÌŠÛ‚¢’Z‚©‚ß‚Ì–îˆó";
+    Text[ korean ] = "µÕ±Û¸° ÂªÀº È­»ìÇ¥";
+    Text[ chinese_simplified ] = "Ô²ĞÎ¶Ì¼ıÍ·";
+    Text[ chinese_traditional ] = "¶ê§Îµu½bÀY";
+    Text[ arabic ] = "Óåã ŞÕíÑ ãÓÊÏíÑ";
+    Text[ turkish ] = "Yuvarlatılmış kısa ok";
+};
+String RID_SVXSTR_LEND6
+{
+    Text = "Symmetrischer Pfeil";
+    Text [ ENGLISH ] = "Symmetric Arrow";
+    Text [ english_us ] = "Symmetric arrow";
+    Text[ portuguese ] = "Seta simétrica";
+    Text[ russian ] = "Ñèììåòğè÷íàÿ ñòğåëêà";
+    Text[ greek ] = "Óõììåôñéêü âİëïò";
+    Text[ dutch ] = "Symmetrische pijl";
+    Text[ french ] = "Flèche symétrique";
+    Text[ spanish ] = "Flecha simétrica";
+    Text[ italian ] = "Freccia simmetrica";
+    Text[ danish ] = "Symmetrisk pil";
+    Text[ swedish ] = "Symmetrisk pil";
+    Text[ polish ] = "Symetryczna strza³ka";
+    Text[ portuguese_brazilian ] = "Symmetric Arrow";
+    Text[ japanese ] = "ƒoƒ‰ƒ“ƒX‚Ì‚Æ‚ê‚½–îˆó";
+    Text[ korean ] = "´ëÄª È­»ìÇ¥";
+    Text[ chinese_simplified ] = "¶Ô³Æ¼ıÍ·";
+    Text[ chinese_traditional ] = "¹ïºÙ¦¡½bÀY";
+    Text[ arabic ] = "Óåã ãÊäÇÓŞ";
+    Text[ turkish ] = "Simetrik ok";
+};
+String RID_SVXSTR_LEND7
+{
+    Text = "Linien-Pfeil";
+    Text [ ENGLISH ] = "Line Arrow";
+    Text [ english_us ] = "Line arrow";
+    Text[ portuguese ] = "Linha-seta";
+    Text[ russian ] = "Ñòğåëêà â âèäå ëèíèè";
+    Text[ greek ] = "ÃñáììŞ-âİëïò";
+    Text[ dutch ] = "Lijn-pijl";
+    Text[ french ] = "Ligne fléchée";
+    Text[ spanish ] = "Flecha línea";
+    Text[ italian ] = "Linea freccia";
+    Text[ danish ] = "Streg-pil";
+    Text[ swedish ] = "Linjepil";
+    Text[ polish ] = "Strza³ka w postaci linii";
+    Text[ portuguese_brazilian ] = "Line Arrow";
+    Text[ japanese ] = "üó‚Ì–îˆó";
+    Text[ korean ] = "¼± È­»ìÇ¥";
+    Text[ chinese_simplified ] = "ÏßÌõ¼ıÍ·";
+    Text[ chinese_traditional ] = "¦E½u½bÀY";
+    Text[ arabic ] = "Óåã ÎØí";
+    Text[ turkish ] = "Çizgili ok";
+};
+String RID_SVXSTR_LEND8
+{
+    Text = "Abgerundeter langer Pfeil";
+    Text [ ENGLISH ] = "Rounded large Arrow";
+    Text [ english_us ] = "Rounded large arrow";
+    Text[ portuguese ] = "Seta longa arredondada";
+    Text[ russian ] = "Çàêğóãëåííàÿ äëèííàÿ ñòğåëêà";
+    Text[ greek ] = "Óôñïããõëåõìİíï ìáêñı âİëïò";
+    Text[ dutch ] = "Afgeronde lange pijl";
+    Text[ french ] = "Flèche longue arrondie";
+    Text[ spanish ] = "Flecha larga redondeada";
+    Text[ italian ] = "Freccia lunga arrotondata";
+    Text[ danish ] = "Afrundet lang pil";
+    Text[ swedish ] = "Avrundad stor pil";
+    Text[ polish ] = "Zaokr. d³uga strza³ka";
+    Text[ portuguese_brazilian ] = "Rounded large Arrow";
+    Text[ japanese ] = "æ‚ÌŠÛ‚¢’·‚ß‚Ì–îˆó";
+    Text[ korean ] = "µÕ±Û¸° ±ä È­»ìÇ¥";
+    Text[ chinese_simplified ] = "Ô²ĞÎ³¤¼ıÍ·";
+    Text[ chinese_traditional ] = "¶ê§Î¤j½bÀY";
+    Text[ arabic ] = "Óåã Øæíá ãÓÊÏíÑ";
+    Text[ turkish ] = "Yuvarlatılmış uzun ok";
+};
+String RID_SVXSTR_LEND9
+{
+    Text = "Kreis";
+    Text [ ENGLISH ] = "Circle";
+    Text [ english_us ] = "Circle";
+    Text[ portuguese ] = "Círculo";
+    Text[ russian ] = "Êğóã";
+    Text[ greek ] = "Êıêëïò";
+    Text[ dutch ] = "Circle";
+    Text[ french ] = "Cercle";
+    Text[ spanish ] = "Círculo";
+    Text[ italian ] = "Cerchio";
+    Text[ danish ] = "Cirkel";
+    Text[ swedish ] = "Cirkel";
+    Text[ polish ] = "Ko³o";
+    Text[ portuguese_brazilian ] = "Circle";
+    Text[ japanese ] = "ŠÛˆó";
+    Text[ korean ] = "¿ø";
+    Text[ chinese_simplified ] = "Ô²";
+    Text[ chinese_traditional ] = "¶ê§Î";
+    Text[ arabic ] = "ÏÇÆÑÉ";
+    Text[ turkish ] = "Daire";
+};
+String RID_SVXSTR_LEND10
+{
+    Text = "Quadrat";
+    Text [ ENGLISH ] = "Square";
+    Text [ english_us ] = "Square";
+    Text[ portuguese ] = "Quadrado";
+    Text[ russian ] = "Êâàäğàò";
+    Text[ greek ] = "ÔåôñÜãùíï";
+    Text[ dutch ] = "Vierkant";
+    Text[ french ] = "Carré";
+    Text[ spanish ] = "Cuadrado";
+    Text[ italian ] = "Quadrato";
+    Text[ danish ] = "Kvadrat";
+    Text[ swedish ] = "Kvadrat";
+    Text[ polish ] = "Kwadrat";
+    Text[ portuguese_brazilian ] = "Square";
+    Text[ japanese ] = "^lŠp";
+    Text[ korean ] = "Á¤»ç°¢Çü";
+    Text[ chinese_simplified ] = "Õı·½ĞÎ";
+    Text[ chinese_traditional ] = "¥¿¤è§Î";
+    Text[ arabic ] = "ãÑÈÚ";
+    Text[ turkish ] = "Kare";
+};
+String RID_SVXSTR_LEND11
+{
+    Text = "Pfeil";
+    Text [ ENGLISH ] = "Arrow";
+    Text [ english_us ] = "Arrow";
+    Text[ portuguese ] = "Seta";
+    Text[ russian ] = "Ñòğåëêà";
+    Text[ greek ] = "Âİëïò";
+    Text[ dutch ] = "Pijl";
+    Text[ french ] = "Flèche";
+    Text[ spanish ] = "Flecha";
+    Text[ italian ] = "Freccia";
+    Text[ danish ] = "Pil";
+    Text[ swedish ] = "Pil";
+    Text[ polish ] = "Strza³ka";
+    Text[ portuguese_brazilian ] = "Arrow";
+    Text[ japanese ] = "–îˆó";
+    Text[ korean ] = "È­»ìÇ¥";
+    Text[ chinese_simplified ] = "¼ıÍ·";
+    Text[ chinese_traditional ] = "½bÀY";
+    Text[ arabic ] = "Óåã";
+    Text[ turkish ] = "Ok";
+};
+
+
+ // ********************************************************************** EOF
+

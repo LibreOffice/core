@@ -1,0 +1,903 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optgenrl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// include ------------------------------------------------------------------
+
+#include <sfx2/sfx.hrc>
+
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "optgenrl.hrc"
+
+// RID_SFXPAGE_GENERAL ------------------------------------------------------
+
+TabPage RID_SFXPAGE_GENERAL
+{
+    HelpId = HID_OPTIONS_GENERAL ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Benutzerdaten" ;
+    Text [ ENGLISH ] = "User data" ;
+    Text [ english_us ] = "User Data" ;
+    Text [ swedish ] = "Användardata" ;
+    Text [ danish ] = "Brugerdata" ;
+    Text [ italian ] = "Dati utente" ;
+    Text [ spanish ] = "Datos del usuario" ;
+    Text [ french ] = "Données d'identité" ;
+    Text [ dutch ] = "Gebruikersgegevens" ;
+    Text [ portuguese_brazilian ] = "Benutzerdaten" ;
+    Text [ portuguese ] = "Dados sobre utilizador" ;
+    Text[ chinese_simplified ] = "ÓÃ»§×ÊÁÏ";
+    Text[ russian ] = "Äàííûå ïîëüçîâàòåëÿ";
+    Text[ polish ] = "Dane u¿ytkownika";
+    Text[ japanese ] = "Õ°»Ş°ÃŞ°À";
+    FixedText FT_COMPANY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "~Firma" ;
+        Text [ ENGLISH ] = "~Company" ;
+        Text [ norwegian ] = "~Firma" ;
+        Text [ italian ] = "~Ditta" ;
+        Text [ portuguese_brazilian ] = "~Empresa" ;
+        Text [ portuguese ] = "~Empresa" ;
+        Text [ finnish ] = "~Yritys" ;
+        Text [ danish ] = "Firma" ;
+        Text [ french ] = "~Société" ;
+        Text [ swedish ] = "~Företag" ;
+        Text [ dutch ] = "~Firma" ;
+        Text [ spanish ] = "E~mpresa" ;
+        Text [ english_us ] = "~Company" ;
+        Text[ chinese_simplified ] = "¹«Ë¾(~C)";
+        Text[ russian ] = "Îğãàíèçàöèÿ";
+        Text[ polish ] = "Firma";
+        Text[ japanese ] = "‰ïĞ–¼(~C)";
+        Text[ chinese_traditional ] = "¤½¥q(~C)";
+        Text[ arabic ] = "ÇáÔÑßÉ";
+        Text[ greek ] = "Å~ôáéñßá";
+        Text[ korean ] = "È¸»ç(~C)";
+        Text[ turkish ] = "Şirket";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COMPANY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 0 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "~Vor-/Name/Kürzel" ;
+        Text [ ENGLISH ] = "~First/Last/Id" ;
+        Text [ norwegian ] = "~For/Etter/Id" ;
+        Text [ italian ] = "~Nome/Cognome/Iniziali" ;
+        Text [ portuguese_brazilian ] = "~Primeiro/Último" ;
+        Text [ portuguese ] = "~Nome/Apelido/Iniciais" ;
+        Text [ finnish ] = "~First/Last/Id" ;
+        Text [ danish ] = "For-/Efternavn/Initialer" ;
+        Text [ french ] = "Prénom/~Nom/Initiales" ;
+        Text [ swedish ] = "För-/Efter~namn/Initialer" ;
+        Text [ dutch ] = "~Voor-/Naam/Initialen" ;
+        Text [ spanish ] = "Nom~bre/Apellidos/Iniciales" ;
+        Text [ english_us ] = "First/Last ~name/Initials" ;
+        Text[ chinese_simplified ] = "Ãû×Ö/ĞÕÊÏ/ËõĞ´(~N)";
+        Text[ russian ] = "Èìÿ/Ôàìèëèÿ/Èíèöèàëû";
+        Text[ polish ] = "I~miê/Nazwisko/Inicja³y";
+        Text[ japanese ] = "–¼/©/²Æ¼¬Ù(~N)";
+        Text[ chinese_traditional ] = "¦W¦r/©m¤ó/ÁY¼g(~N)";
+        Text[ arabic ] = "ÇáÇÓã/ÇÓã ÇáÚÇÆáÉ/ÇáÇÎÊÕÇÑ";
+        Text[ greek ] = "¼íïìá/Åğşíõìï/Áñ÷éêÜ";
+        Text[ korean ] = "ÀÌ¸§/¼º/ÀÌ´Ï¼È(~N)";
+        Text[ turkish ] = "~Ad/Soyad/Başharfler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_NAME_RUSS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text = "~Vor-/Vaters-/Name/Kürzel" ;
+        Text [ ENGLISH ] = "~First/Father/Last/Id" ;
+        Text[ russian ] = "ÔÈÎ/Èíèöèàëû";
+        Text[ greek ] = "~Father/First/Last/Id";
+        Text[ dutch ] = "-";
+        Text[ french ] = "~Father/First/Last/Id";
+        Text[ spanish ] = "~Father/First/Last/Id";
+        Text[ italian ] = "-";
+        Text[ danish ] = "~Father/First/Last/Id";
+        Text[ portuguese_brazilian ] = "~Father/First/Last/Id";
+        Text[ japanese ] = "~Father/First/Last/Id";
+        Text[ korean ] = "~Father/First/Last/Id";
+        Text[ chinese_traditional ] = "~Father/First/Last/Id";
+        Text[ turkish ] = "~Baba adı/Ad/Soyad/Başharfler";
+    };
+    Edit ED_FATHERNAME
+    {
+        Border = TRUE ;
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_FIRSTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-8+HSPACE , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-8 , LINEH ) ;
+    };
+    Edit ED_SHORTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+2* ( NAMELEN-8+HSPACE ) , LINE ( 1 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+2* ( NAMELEN-8+HSPACE ) ) , LINEH ) ;
+    };
+    FixedText FT_STREET
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "~Straße" ;
+        Text [ ENGLISH ] = "~Street" ;
+        Text [ norwegian ] = "~Gate" ;
+        Text [ italian ] = "Via" ;
+        Text [ portuguese_brazilian ] = "~Rua" ;
+        Text [ portuguese ] = "~Rua" ;
+        Text [ finnish ] = "~Lähiosoite" ;
+        Text [ danish ] = "Gade" ;
+        Text [ french ] = "~Rue" ;
+        Text [ swedish ] = "~Gata" ;
+        Text [ dutch ] = "~Straat" ;
+        Text [ spanish ] = "~Calle" ;
+        Text [ english_us ] = "~Street" ;
+        Text[ chinese_simplified ] = "½ÖµÀ(~S)";
+        Text[ russian ] = "Óëèöà";
+        Text[ polish ] = "Ulica";
+        Text[ japanese ] = "s’¬‘º–¼ ”Ô’n(~S)";
+        Text[ chinese_traditional ] = "µó¹D(~S)";
+        Text[ arabic ] = "ÇáÔÇÑÚ";
+        Text[ greek ] = "Ïäüò";
+        Text[ korean ] = "µ¿ ÀÌ¸§(~S)";
+        Text[ turkish ] = "Cadde";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_STREET_RUSS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Hide = TRUE;
+        Text = "~Straße/Wohnungsnummer" ;
+        Text [ ENGLISH ] = "~Street/Apartmentnumber" ;
+        Text[ russian ] = "~Óëèöà, ¹ äîìà/êâàğòèğû";
+        Text[ greek ] = "~Street/Apartmentnumber";
+        Text[ dutch ] = "-";
+        Text[ french ] = "~Street/Apartmentnumber";
+        Text[ spanish ] = "-";
+        Text[ italian ] = "-";
+        Text[ danish ] = "~Street/Apartmentnumber";
+        Text[ swedish ] = "-";
+        Text[ portuguese_brazilian ] = "~Street/Apartmentnumber";
+        Text[ japanese ] = "~Street/Apartmentnumber";
+        Text[ korean ] = "~Street/Apartmentnumber";
+        Text[ chinese_traditional ] = "~Street/Apartmentnumber";
+        Text[ turkish ] = "Cadde/No.";
+    };
+    Edit ED_STREET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    Edit ED_APARTMENTNR
+    {
+        Border = TRUE ;
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( MID , LINE ( 2 ) ) ;
+        Size = MAP_APPFONT ( RIGHT-MID , LINEH ) ;
+    };
+    FixedText FT_CITY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "PL~Z/Ort" ;
+        Text [ ENGLISH ] = "~Zip/City" ;
+        Text[ english_us ] = "Zip/City";
+        Text[ portuguese ] = "~CP/Cidade";
+        Text[ russian ] = "Ïî÷ò. èíäåêñ/Ãîğîä";
+        Text[ dutch ] = "~Postcode/Plaats";
+        Text[ french ] = "Code postal/Ville";
+        Text[ spanish ] = "CP/C~iudad";
+        Text[ italian ] = "C.A.P./Località";
+        Text[ danish ] = "Postnr./By";
+        Text[ swedish ] = "Postnr/~Ort";
+        Text[ polish ] = "Kod pocztowy/Miejscowoœæ";
+        Text[ portuguese_brazilian ] = "~Zip/City";
+        Text[ japanese ] = "—X•Ö”Ô†/“s“¹•{Œ§–¼";
+        Text[ chinese_simplified ] = "ÓÊ±à/³ÇÊĞ";
+        Text[ chinese_traditional ] = "¶l»¼°Ï¸¹/«°¥«";
+        Text[ arabic ] = "ÇáÑãÒ ÇáÈÑíÏí/ÇáãÏíäÉ";
+        Text[ greek ] = "Ô.Ê./Ğüëç";
+        Text[ korean ] = "¿ìÆí¹øÈ£/µµ½Ã";
+        Text[ turkish ] = "Posta kodu/şehir";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PLZ
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 24 , LINEH ) ;
+    };
+    Edit ED_CITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 24 + HSPACE , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - ( MID + 24 + HSPACE ) , LINEH ) ;
+    };
+    Edit ED_US_CITY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 90 , LINEH ) ;
+    };
+    Edit ED_US_STATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 90 + HSPACE, LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( 30 , LINEH ) ;
+    };
+    Edit ED_US_ZIPCODE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID + 90 + HSPACE + 30 + HSPACE, LINE ( 3 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - ( MID + 90 + HSPACE + 30 + HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_COUNTRY
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "~Land" ;
+        Text [ ENGLISH ] = "~Country" ;
+        Text[ english_us ] = "Country";
+        Text[ portuguese ] = "~País";
+        Text[ russian ] = "Ñòğàíà";
+        Text[ dutch ] = "~Land";
+        Text[ french ] = "Pays";
+        Text[ spanish ] = "~País";
+        Text[ italian ] = "Paese/~C.A.P./Città";
+        Text[ danish ] = "Land";
+        Text[ swedish ] = "~Land";
+        Text[ polish ] = "Pañstwo";
+        Text[ portuguese_brazilian ] = "País/~CEP/Cidade";
+        Text[ japanese ] = "‘–¼";
+        Text[ chinese_simplified ] = "¹ú¼Ò";
+        Text[ chinese_traditional ] = "°ê®a";
+        Text[ arabic ] = "ÇáÈáÏ";
+        Text[ greek ] = "×şñá";
+        Text[ korean ] = "±¹°¡";
+        Text[ turkish ] = "Ülke";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_COUNTRY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 4 ) ) ;
+        Size = MAP_APPFONT ( RIGHT - MID , LINEH ) ;
+    };
+    FixedText FT_TITLEPOS
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "~Titel/Position" ;
+        Text [ ENGLISH ] = "~Title/Position" ;
+        Text [ english_us ] = "~Title/Position" ;
+        Text [ italian ] = "~Titolo/Posizione" ;
+        Text [ spanish ] = "Título/p~osición" ;
+        Text [ french ] = "~Titre/Position" ;
+        Text [ dutch ] = "~Titel/Functie" ;
+        Text [ swedish ] = "Titel/~Befattning" ;
+        Text [ danish ] = "Titel/Stilling" ;
+        Text [ portuguese_brazilian ] = "~Titel/Position" ;
+        Text [ portuguese ] = "~Título/Posição" ;
+        Text[ chinese_simplified ] = "Í·ÏÎ/Ö°Îñ(~T)";
+        Text[ russian ] = "Òèòóë/Äîëæíîñòü";
+        Text[ polish ] = "Tytu³/Stanowisko";
+        Text[ japanese ] = "Œ¨‘‚«/–ğE(~T)";
+        Text[ chinese_traditional ] = "ÀY»Î/Â¾°È(~T)";
+        Text[ arabic ] = "ÇáãÓãì ÇáæÙíİí/ÇáãÑßÒ";
+        Text[ greek ] = "Ôßôëïò/Èİóç";
+        Text[ korean ] = "Á÷ÇÔ/Á÷À§(~T)";
+        Text[ turkish ] = "~Unvan/Pozisyon";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_POSITION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 5 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_PHONE
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        Text = "T~el. (Priv/Ge.)" ;
+        Text [ ENGLISH ] = "Pho~ne (Priv./Co.)" ;
+        Text [ norwegian ] = "Tele~fon (Priv./Arbeid.)" ;
+        Text [ italian ] = "Te~l. (Priv./Uff.)" ;
+        Text [ portuguese_brazilian ] = "Fo~ne (Priv./Co.)" ;
+        Text [ portuguese ] = "Tel. (~part./emprego)" ;
+        Text [ finnish ] = "~Puhelin (kotiin/Co.)" ;
+        Text [ danish ] = "Tlf. (priv./arb.)" ;
+        Text [ french ] = "Tél. (Domicile/Bureau)" ;
+        Text [ swedish ] = "Tfn.: (~Priv./Arb.)" ;
+        Text [ dutch ] = "Tel. (Priv/~Za)" ;
+        Text [ spanish ] = "~Tel. (Privado/trabajo)" ;
+        Text [ english_us ] = "Tel. (Home/Work)" ;
+        LeftLabel = TRUE ;
+        Text[ chinese_simplified ] = "µç»°";
+        Text[ russian ] = "Òåëåôîí (äîì./ñëóæ.)";
+        Text[ polish ] = "Tel. (pryw./s³u¿b.)";
+        Text[ japanese ] = "Tel.(©‘î/‰ïĞ)";
+        Text[ chinese_traditional ] = "¹q¸Ü";
+        Text[ arabic ] = "ÇáåÇÊİ (ãäÒá/Úãá)";
+        Text[ greek ] = "Ôçë. (Ïéêßá/Åñãáóßá)";
+        Text[ korean ] = "Tel. (Áı/È¸»ç)";
+        Text[ turkish ] = "Tlf. (Ev/İş)";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TELPRIVAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_TELCOMPANY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 6 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    FixedText FT_FAXMAIL
+    {
+        Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( MID-LEFT , FLINEH ) ;
+        LeftLabel = TRUE ;
+        Text = "Fa~x/E-Mail" ;
+        Text [ ENGLISH ] = "Fa~x" ;
+        Text [ norwegian ] = "~Faks" ;
+        Text [ italian ] = "Fa~x/eMail" ;
+        Text [ portuguese_brazilian ] = "Fa~x" ;
+        Text [ portuguese ] = "Fa~x/e-mail" ;
+        Text [ finnish ] = "Fa~x" ;
+        Text [ danish ] = "Fax/E-mail" ;
+        Text [ french ] = "~Fax/e-mail" ;
+        Text [ swedish ] = "Fa~x/e-post" ;
+        Text [ dutch ] = "Fa~x/e-mail" ;
+        Text [ spanish ] = "Fa~x/E-mail" ;
+        Text [ english_us ] = "Fa~x / E-mail" ;
+        Text[ chinese_simplified ] = "´«Õæ/µç×ÓÓÊ¼ş";
+        Text[ russian ] = "Ôàêñ ¹/Àäğåñ ıë. ïî÷òû";
+        Text[ polish ] = "Faks/e-mail";
+        Text[ japanese ] = "Fax/E-mail";
+        Text[ chinese_traditional ] = "¶Ç¯u/¹q¤l¶l¥ó";
+        Text[ arabic ] = "İÇßÓ/ÈÑíÏ ÅáßÊÑæäí";
+        Text[ greek ] = "Fax/E-mail";
+        Text[ korean ] = "ÆÑ½º/E-mail(~X)";
+        Text[ turkish ] = "Faks/e-posta";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_FAX
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID , LINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( NAMELEN-1 , LINEH ) ;
+    };
+    Edit ED_EMAIL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( MID+NAMELEN-1+HSPACE , LINE ( 7 ) ) ;
+        Size = MAP_APPFONT ( RIGHT- ( MID+NAMELEN-1+HSPACE ) , LINEH ) ;
+    };
+    GroupBox GB_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 2 ) ;
+        Size = MAP_APPFONT ( 248 , 129 ) ;
+        Text = " Anschrift " ;
+        Text [ ENGLISH ] = " Address " ;
+        Text [ norwegian ] = " Adresse " ;
+        Text [ italian ] = "Indirizzo " ;
+        Text [ portuguese_brazilian ] = "Endereço " ;
+        Text [ portuguese ] = "Endereço " ;
+        Text [ finnish ] = " Osoite " ;
+        Text [ danish ] = "Adresse " ;
+        Text [ french ] = "Adresse " ;
+        Text [ swedish ] = "Adress  " ;
+        Text [ dutch ] = "Adres  " ;
+        Text [ spanish ] = "Dirección  " ;
+        Text [ english_us ] = "Address " ;
+        Text[ chinese_simplified ] = "µØÖ· ";
+        Text[ russian ] = "Ïî÷òîâûé àäğåñ ";
+        Text[ polish ] = "Adres ";
+        Text[ japanese ] = "ZŠ ";
+        Text[ chinese_traditional ] = "¦a§} ";
+        Text[ arabic ] = "ÇáÚäæÇä ";
+        Text[ greek ] = "Äéåıèõíóç ";
+        Text[ korean ] = "ÁÖ¼Ò ";
+        Text[ turkish ] = "Adres ";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_USEDATA
+    {
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Hide = TRUE;
+        Text = "~Daten für Dokumenteigenschaften verwenden" ;
+        Text[ English ] = "Using ~data for document properties";
+        Text[ english_us ] = "Use data for document properties";
+        Text[ french ] = "~Utiliser les données pour les propriétés du document";
+        Text [ italian ] = "Usa i dati per le proprietà dei documenti" ;
+        Text [ dutch ] = "~Gegevens voor documenteigenschappen gebruiken" ;
+        Text [ spanish ] = "Usar ~datos para las propiedades del documento" ;
+        Text [ swedish ] = "Använd ~data för dokumentegenskaperna" ;
+        Text [ portuguese ] = "Usar ~dados para as propriedades do documento" ;
+        Text[ portuguese_brazilian ] = "~Daten für Dokumenteigenschaften verwenden";
+        Text[ danish ] = "Brug data for dokumentegenskaber";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÎÄµµÊôĞÔµÄÊı¾İ";
+        Text[ russian ] = "Èñïîëüçîâàòü äàííûå äëÿ ñâîéñòâ äîêóìåíòà";
+        Text[ polish ] = "U¿yj danych dla w³aœciwoœci dokumentów";
+        Text[ japanese ] = "ÄŞ·­ÒİÄÌßÛÊßÃ¨—p‚ÌÌ§²Ù‚ğg—p‚µ‚Ä‰º‚³‚¢B";
+        Text[ chinese_traditional ] = "¨Ï¥Î¤å¥óÄİ©Êªº¸ê®Æ";
+        Text[ arabic ] = "ÇÓÊÎÏÇã ÈíÇäÇÊ ÎÕÇÆÕ ÇáãÓÊäÏ";
+        Text[ greek ] = "×ñŞóç äåäïìİíùí ãéá ôéò éäéüôçôåò ôïõ åããñÜöïõ";
+        Text[ korean ] = "¹®¼­ µî·ÏÁ¤º¸¿ë µ¥ÀÌÅÍ »ç¿ë";
+        Text[ turkish ] = "Verileri belge özellikleri için kullan";
+        Text[ language_user1 ] = " ";
+    };
+
+     // extra Resourcen f"ur die amerikanische Postadresse
+    String STR_US_STATE
+    {
+        Text = "Stadt/Staat/PL~Z";
+        Text [ English ] = "City/State/~Zip" ;
+        Text[ english_us ] = "City/State/Zip";
+        Text[ portuguese ] = "~Cidade/País/CP";
+        Text[ russian ] = "Óëèöà/Îáëàñòü/Ïî÷òîâûé èíäåêñ";
+        Text[ dutch ] = "Plaats/~Straat/Postcode";
+        Text[ french ] = "Ville/Pays/Code postal";
+        Text[ spanish ] = "~Ciudad/País/CP";
+        Text[ italian ] = "Localià/Provincia/C.A.P.";
+        Text[ danish ] = "By/Land/Postnummer";
+        Text[ swedish ] = "~Ort/Land/Postnr";
+        Text[ polish ] = "Ulica/Województwo/Kod pocztowy";
+        Text[ portuguese_brazilian ] = "Staat/PLZ/~L.";
+        Text[ japanese ] = "“s“¹•{Œ§–¼/‘–¼/—X•Ö”Ô†";
+        Text[ chinese_simplified ] = "½ÖµÀ/¹ú¼Ò/ÓÊ±à(~S)";
+        Text[ chinese_traditional ] = "µó¹D/°ê®a/¶l»¼°Ï¸¹(~S)";
+        Text[ arabic ] = "ÇáãÏíäÉ/ÇáÈáÏ/ÇáÑãÒ ÇáÈÑíÏí";
+        Text[ greek ] = "Ğüëç/×şñá/Ô.Ê.";
+        Text[ korean ] = "µµ½Ã/±¹°¡/¿ìÆí¹øÈ£";
+        Text[ turkish ] = "Şehir/Ülke/Posta kodu";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_QUERY_REG
+    {
+        Text = "Bitte beachten Sie, dass Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?" ;
+        Text [ English ] = "Bitte beachten Sie, daß Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?" ;
+        Text[ english_us ] = "Note that street, Zip code and city are used for generating the registration key. Until the registration has been carried out successfully, user data cannot be changed. Do you want to modify personal data now?";
+        Text[ portuguese ] = "Não esqueça que a rua, o código postal e a localidade serão utilizados para calcular o seu código de registo. Não poderá modificar estes dados de utilizador até efectuar o seu registo. Ainda deseja modificar estes dados?";
+        Text[ russian ] = "Ïîæàëóéñòà, ó÷òèòå, ÷òî äàííûå ïî÷òîâîãî àäğåñà áóäò èñïîëüçîâàíû äëÿ ñîçäàíèÿ ğåãèñòğàöèîííîãî êëş÷à. Èçìåíÿòü ıòè äàííûå äî îñóùåñòâëåíèÿ ğåãèñòğàöèè íåëüçÿ. Âû õîòèå ñåé÷àñ èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
+        Text[ dutch ] = "Wij wijzen u erop dat straat, postcode en plaats worden gebruikt voor het berekenen van de registratiesleutel. Tot aan de registratie mag u deze gegevens niet meer veranderen. Wilt u ze nu nog veranderen?";
+        Text[ french ] = "Veuillez noter que le code d'enregistrement est généré à partir de vos données d'identité telles que rue, code postal et ville. Vous ne pourrez plus modifier ces données jusqu'à ce que vous vous fassiez enregistrer. Avez-vous une dernière modification à apporter avant de poursuivre ?";
+        Text[ spanish ] = "Tenga en cuenta que la calle, el código postal y la ciudad se tendrán en cuenta para determinar la clave de registro. Estos datos no podrán ser modificados hasta que se registre. ¿Desea modificar aún estos datos de usuario?";
+        Text[ italian ] = "Vi preghiamo di osservare che il codice di registrazione si basa sull'indirizzo (via, C.A.P. e città) specificato. Fino alla registrazione questi dati non potranno essere cambiati. Volete cambiarli adesso?";
+        Text[ danish ] = "Bemærk venligst, at gade, postnummer og by bruges til at beregne registreringsnøglen. Disse brugerdata kan ikke mere ændres indtil registreringen. Vil du endnu ændre dem nu?";
+        Text[ swedish ] = "Observera att gatu- och postadress används för beräkningen av registreringsnyckeln. Fram till registreringen kan Du inte ändra mer på de här användardata. Vill Du ändra de här användardata nu?";
+        Text[ polish ] = "Proszê uwzglêdnij, ¿e nazwa ulicy, kod pocztowy i miejscowoœæ s¹ wymagane do utworzenia klucza rejestracyjnego. Do czasu rejestracji te dane nie mog¹ byæ zmienione. Czy chcesz zmieniæ teraz dane u¿ytkownika?";
+        Text[ portuguese_brazilian ] = "Bitte beachten Sie, daß Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?";
+        Text[ japanese ] = "s’¬‘º–¼‚â—X•Ö”Ô†‚âB–¼A“s“¹•{Œ§–¼‚Í“o˜^·°‚ğ”­s‚·‚éè‚ª‚©‚è‚Æ‚È‚è‚Ü‚·B“o˜^‚ªÏ‚Ş‚Ü‚Å‚ÍÕ°»Ş°ÃŞ°À‚Í•ÏX‚Å‚«‚Ü‚¹‚ñB‚±‚ÌÕ°»Ş°ÃŞ°À‚ğ‚Ü‚¾•ÏX‚µ‚Ü‚·‚©H";
+        Text[ chinese_simplified ] = "Çë×¢Òâ£º½ÖµÀ£¬ÓÊ±àºÍ³ÇÊĞÊÇÓÃÀ´Éú³É×¢²áÃÜÂëµÄÊı¾İ¡£ÔÚÕıÊ½×¢²áÇ°Äú²»ÄÜÔÙ¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏ¡£ÄúÏÖÔÚÒª¸ü¸ÄÕâĞ©ÓÃ»§×ÊÁÏÂğ£¿";
+        Text[ chinese_traditional ] = "½Ğª`·N±z¿é¤Jªºµó¹D©M«°¥«¬O¥Î¨Ó¥Í¦¨µù¥UÁä½Xªº¸ê®Æ¡C¦b¥¿¦¡µù¥U®É±z¤£¯à­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡C±z²{¦b­n­×§ï³o¨Ç¨Ï¥ÎªÌ¸ê®Æ¡H";
+        Text[ arabic ] = "ÇáÑÌÇÁ ãáÇÍÙÉ Ãä ÇáÈíÇäÇÊ ÇáÎÇÕÉ ÈÇáÔÇÑÚ æÇáÑãÒ ÇáÈÑíÏí æÇáãÏíäÉ ÊÏÎá Öãä ÇáÈíÇäÇÊ ÇááÇÒãÉ áÅäÔÇÁ ãİÊÇÍ ÇáÊÓÌíá. áÇ íãßäß ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã ÍÊì ÅäåÇÁ ÚãáíÉ ÇáÊÓÌíá. åá ÊÑíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã åĞå ÇáÂä¿";
+        Text[ greek ] = "Ğáñáêáëş ğñïóİîôå üôé ç ïäüò, ï Ô.Ê. êáé ç ğüëç ÷ñçóéìïğïéïıíôáé ãéá ôïí äçìéïõñãßá ôïõ êëåéäéïı äŞëùóçò. ¸ùò ôçí äŞëùóç äåí èá ìğïñİóåôå íá áëëÜîåôå áõôÜ ôá äåäïìİíá. Èİëåôå íá áëëÜîåôå êÜğïéï áğü áõôÜ ôá äåäïìİíá ôïõ ÷ñŞóôç;";
+        Text[ korean ] = "ÁÖ¼Ò³ª ¿ìÆí¹øÈ£ µîÀº µî·Ï Å° ±¸¼º¿¡ ÀÌ¿ëµÈ´Ù´Â »ç½ÇÀ» ¸í½ÉÇÏ½Ê½Ã¿À. µî·ÏÀÌ ¿Ï·áµÉ ¶§±îÁö´Â ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ ´õ ÀÌ»ó ¹Ù²Ü ¼ö ¾ø½À´Ï´Ù. Áö±İÀÌ¶óµµ ÀÌ »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "Cadde, posta kodu ve şehir bilgilerinin kayıt kodunun oluşturulması için kullanıldığını dikkate alın. Kayıt yapılana kadar bu kullanıcı verileri değiştirilemez. Kullanıcı verilerini şimdi değiştirmek istiyor musunuz?";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¸ê®Æ";
+    Text[ arabic ] = "ÈíÇäÇÊ ÇáãÓÊÎÏã";
+    Text[ greek ] = "ĞñïóùğéêÜ äåäïìİíá";
+    Text[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ";
+    Text[ turkish ] = "Kullanıcı verileri";
+    Text[ language_user1 ] = " ";
+};
+
+// RID_SVXQB_CHANGEDATA ---------------------------------------------------
+
+QueryBox RID_SVXQB_CHANGEDATA
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    Message = "Sie haben die Benutzerdaten geändert.\nBitte bedenken Sie, dass dadurch die Registrierung verfällt.\nSie benötigen einen neuen Registrierungsschlüssel, der innerhalb der nächsten 30 Tage eingegeben werden muss.\nDas Registrierungsformular finden Sie im Menü Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ändern?";
+    Message [ English ] = "The user data have been changed.\nPlease note that in this way the registration will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change the user data?";
+    Message [ english_us ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
+    Message [ french ] = "Vous avez modifié vos données d'identité.\nVeuillez noter que cela va faire expirer votre enregistrement.\nVous devrez vous procurer un nouveau code d'enregistrement et le saisir dans un délai de 30 jours.\nVous trouverez le formulaire d'enregistrement au menu Aide - Enregistrement...\nVoulez-vous vraiment modifier vos données d'identité ?";
+    Message [ italian ] = "Avete modificato i dati utente.\nVi preghiamo di osservare che in questo modo la registrazione scadrà.\nEntro 30 giorni a partire da oggi dovrete inserire un nuovo codice di registrazione. Troverete il formulario di registrazione nel menu ? - Registrazione... \nVolete davvero cambiare i dati utente?" ;
+    Message [ dutch ] = "U heeft de gebruikersgegevens gewijzigd.\nWij maken u erop attent dat de registratie daardoor ongeldig wordt.\nU heeft een nieuwe registratiesleutel nodig, die binnen de volgende 30 dagen moet worden aangegeven.\\Het registratieformulier vindt u in het menu Help - Registratie...\nWilt u de gebruikersgegevens werkelijk veranderen?";
+    Message [ spanish ] = "Usted ha modificado los datos de usuario.\nTenga en cuenta que con ello expirará el registro.\nNecesita una nueva clave de registro que tiene que ser introducida en los próximos 30 días.\nEl formulario de registro lo encuentra en el menú Ayuda - Registro...\n¿Desea realmente modificar los datos de usuario?" ;
+    Message [ swedish ] = "Du har ändrat Dina användardata.\nTänk på att Din nuvarande registrering därmed löper ut.\nDu behöver en ny registreringsnyckel som måste matas in inom de närmaste 30 dagarna.\nRegistreringsformuläret hittar Du under menyn Hjälp - Registrering...\nVill Du verkligen ändra Dina användardata?" ;
+    Message [ portuguese ] = "Modificou os dados de utilizador.\nNão se esqueça de que o seu registo expirará.\nPor esta razão necessitará de um novo código de registo dentro do prazo de 30 dias.\nEncontrará o formulário de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
+    Message[ portuguese_brazilian ] = "Sie haben die Benutzerdaten geändert.\nBitte bedenken Sie, daß dadurch die Registrierung verfällt.\nSie benötigen einen neuen Registrierungsschlüssel, der innerhalb der nächsten 30 Tage eingegeben werden muß.\nDas Registrierungsformular finden Sie im Menü Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ändern?";
+    Message[ danish ] = "Du har ændret brugerdataene.\nBemærk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsnøgle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hjælp - Registrering...\nEr du sikker på, at du vil ændre brugerdataene?";
+    Message[ chinese_simplified ] = "ÄúÒÑ¾­¸ü¸ÄÁËÓÃ»§×ÊÁÏ¡£\nÕâÑùÄúµÄ×¢²á¾Í»áÎŞĞ§¡£\nÄú±ØĞëÔÚ½ñºó30ÌìÖ®ÄÚÊäÈëÒ»¸öĞÂµÄ×¢²áÃÜÂë¡£\nÄúÄÜ¹»ÔÚ²Ëµ¥ÃüÁî\"ÇóÖú - ×¢²á...\"´¦ÕÒµ½×¢²á±íµ¥¡£\nÄúÕæÒª¸ü¸ÄÓÃ»§×ÊÁÏ£¿";
+    Message[ russian ] = "Âû èçìåíèëè äàííûå ïîëüçîâàòåëÿ.\nÏîæàëóéñòà, ïîìíèòå, ÷òî èç-çà ıòîãî Âû óòğàòèòå ğåãèñòğàöèş.\nÂàì ïîíîäîáèòñÿ íîâûé ğåãèñòğàöèîííûé êëş÷, êîòîğûé íåîáõîäèìî áóäåò ââåñòè â òå÷åíèå 30 äíåé.\nĞåãèñòğàöèîííûé ôîğìóëÿğ Âû íàéäåòå â ìåíş Ïîìîùü - Ğåãèñòğàöèÿ...\nÂû äåéñòâèòåëüíî õîòèòå èçìåíèòü äàííûå ïîëüçîâàòåëÿ?";
+    Message[ polish ] = "Zmieni³eœ dane u¿ytkownika.\nProszê uwzglêdnij, ¿e przez to traci wa¿noœæ rejestracja.\nPotrzebujesz nowego klucza rejestracyjnego, który musi byæ wpisany w ci¹gu nastêpnych 30 dni.\nFormularz rejestracji znajdziesz w menu Pomoc - Rejestracja...\nChcesz na pewno zmieniæ dane u¿ytkownika?";
+    Message[ japanese ] = "Õ°»Ş°ÃŞ°À‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n‚»‚Ì‚½‚ß“o˜^‚ª¸Œø‚·‚é‚Ì‚Í–Æ‚ê‚Ü‚¹‚ñB\nV‚µ‚¢“o˜^·°‚ª•K—v‚Æ‚È‚è¤‚»‚ê‚ğ30“úˆÈ“à‚ÉÏ‚Ü‚³‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\n“o˜^—p†‚Í[ÒÆ­°ÍÙÌß/“o˜^...]‚É‚ ‚è‚Ü‚·B\nÕ°»Ş°ÃŞ°À‚ğ–{“–‚É•ÏX‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "±z¤w¸gÅÜ§ó¨Ï¥ÎªÌ¸ê®Æ¡C\n³o¼Ë±zªºµù¥U´N·|µL®Ä¡C\n±z»İ­n¤@­Ó·sªº¡M¥B¥²¶·¦b30¤Ñ¤§¤º¿é¤Jªºµù¥U±KÁä½X¡C\n±z¯à°÷¦b¥\\¯àªí»¡©ú¡Aµù¥U¤§¤U§ä¨ìµù¥Uªí®æ¡C\n¯u­n­×§ï¨Ï¥ÎªÌ¸ê®Æ¡H";
+    Message[ arabic ] = "áŞÏ ŞãÊ ÈÊÚÏíá ÈíÇäÇÊ ÇáãÓÊÎÏã.\nÇáÑÌÇÁ ãáÇÍÙÉ Ãä åĞÇ ÇáÊÚÏíá Óæİ íÌÚá ÇáÊÓÌíá ÛíÑ ÕÇáÍ.\nÓæİ ÊÍÊÇÌ Åáì ãİÊÇÍ ÊÓÌíá ÌÏíÏ¡ íÌÈ ÅÏÎÇáå ÎáÇá ÇáËáÇËíä íæãÇğ ÇáŞÇÏãíä.\níãßäß ÇáÍÕæá Úáì ÇÓÊãÇÑÉ ÇáÊÓÌíá İí ŞÇÆãÉ \"ãÓÇÚÏÉ\" ÊÍÊ \"ÊÓÌíá\"...\nåá ÊÑíÏ ÈÇáÊÃßíÏ ÊÛííÑ ÈíÇäÇÊ ÇáãÓÊÎÏã¿";
+    Message[ greek ] = "ÁëëÜîáôå ôá äåäïìİíá ôïõ ÷ñŞóôç.\nĞñïóİîôå üôé ìå áõôŞ ôçí åíİñãåéá ğáıåé íá éó÷ıåé ç äŞëùóç.\nÓå áõôŞ ôç ğåñßğôùóç èá ÷ñåéáóôåßôå İíá íİï êëåéäß äŞëùóçò, ôï ïğïßï èá ğñİğåé íá åéóá÷èåß ìİóá óôï ÷ñïíéêü äéÜóôçìá ôùí åğïìİíùí 30 çìåñşí.\nÔç öüñìá äŞëùóçò èá ôç âñåßôå óôï ìåíïı ÂïŞèåéá - ÄŞëùóç...\nÈİëåôå ğñáãìáôéêÜ íá áëëÜîåôå ôá äåäïìİíá ôïõ ÷ñŞóôç;";
+    Message[ korean ] = "»ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ¼Ì½À´Ï´Ù.\n±×·Î ÀÎÇØ µî·ÏÀÌ ¹«È¿È­µÈ´Ù´Â »ç½Ç¿¡ À¯ÀÇÇÏ½Ê½Ã¿À. \n±×·¯¸é ¾ÕÀ¸·Î 30ÀÏ³»¿¡ ÀÔ·ÂÇØ¾ß ÇÒ »õ µî·Ï Å°°¡ ÇÊ¿äÇÕ´Ï´Ù.\nµî·Ï ¾ç½ÄÀº µµ¿ò¸»-µî·Ï... ¸Ş´º¿¡¼­ Ã£À» ¼ö ÀÖ½À´Ï´Ù.\nÁ¤¸»·Î »ç¿ëÀÚ µ¥ÀÌÅÍ¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Kullanıcı verilerini değiştirdiniz.\nBu nedenle kayıt işlemi de iptal edilecektir.\nEn geç 30 gün içerisinde yeni bir kayıt koduı girmeniz gerekiyor.\nİlgili kayıt formunu mönüde, \"Yardım - Kayıt...\" altında bulabilirsiniz.\nKullanıcı verilerini gerçekten değiştirmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+
+ // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
+
+StringArray RID_SVXSTR_FIELDUNIT_TABLE
+{
+    ItemList =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Zentimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Zoll" ; FUNIT_INCH ; > ;
+        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Meilen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ English ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Zentimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Zoll" ; FUNIT_INCH ; > ;
+        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Meilen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ norwegian ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Zentimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Zoll" ; FUNIT_INCH ; > ;
+        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Meilen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ italian ] =
+    {
+        < "Millimetro" ; FUNIT_MM ; > ;
+        < "Centimetro" ; FUNIT_CM ; > ;
+        < "Metro" ; FUNIT_M ; > ;
+        < "Chilometro" ; FUNIT_KM ; > ;
+        < "Pollice" ; FUNIT_INCH ; > ;
+        < "piede" ; FUNIT_FOOT ; > ;
+        < "miglia" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Punti" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ portuguese_brazilian ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Zentimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Zoll" ; FUNIT_INCH ; > ;
+        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Meilen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Ponto" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ portuguese ] =
+    {
+        < "Milímetro" ; FUNIT_MM ; > ;
+        < "Centímetro" ; FUNIT_CM ; > ;
+        < "Metro" ; FUNIT_M ; > ;
+        < "Quilómetro" ; FUNIT_KM ; > ;
+        < "Polegada" ; FUNIT_INCH ; > ;
+        < "Pé" ; FUNIT_FOOT ; > ;
+        < "Milhas" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Ponto" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ french ] =
+    {
+        < "Millimètre" ; FUNIT_MM ; > ;
+        < "Centimètre" ; FUNIT_CM ; > ;
+        < "Mètre" ; FUNIT_M ; > ;
+        < "Kilomètre" ; FUNIT_KM ; > ;
+        < "Pouce" ; FUNIT_INCH ; > ;
+        < "Pied" ; FUNIT_FOOT ; > ;
+        < "Milles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ dutch ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Duim" ; FUNIT_INCH ; > ;
+        < "Voet" ; FUNIT_FOOT ; > ;
+        < "Mijlen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Punt" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ spanish ] =
+    {
+        < "Milímetro" ; FUNIT_MM ; > ;
+        < "Centímetro" ; FUNIT_CM ; > ;
+        < "Metro" ; FUNIT_M ; > ;
+        < "Kilómetro" ; FUNIT_KM ; > ;
+        < "Pulgadas" ; FUNIT_INCH ; > ;
+        < "Pie" ; FUNIT_FOOT ; > ;
+        < "Millas" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Punto" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ danish ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Tommer" ; FUNIT_INCH ; > ;
+        < "Fod" ; FUNIT_FOOT ; > ;
+        < "Mil" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Punkt" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ swedish ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Tum" ; FUNIT_INCH ; > ;
+        < "Fot" ; FUNIT_FOOT ; > ;
+        < "Mil" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Punkt" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ finnish ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Zentimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Zoll" ; FUNIT_INCH ; > ;
+        < "Fuß" ; FUNIT_FOOT ; > ;
+        < "Meilen" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ english_us ] =
+    {
+        < "Millimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Inch" ; FUNIT_INCH ; > ;
+        < "Foot" ; FUNIT_FOOT ; > ;
+        < "Miles" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ chinese_simplified ] =
+    {
+        < "ºÁÃ×" ; FUNIT_MM ; > ;
+        < "ÀåÃ×" ; FUNIT_CM ; > ;
+        < "Ã×" ; FUNIT_M ; > ;
+        < "¹«Àï" ; FUNIT_KM ; > ;
+        < "Ó¢´ç" ; FUNIT_INCH ; > ;
+        < "Ó¢³ß" ; FUNIT_FOOT ; > ;
+        < "Ó¢Àï" ; FUNIT_MILE ; > ;
+        < "Æ¤¿ÉĞÍ×Ö·û" ; FUNIT_PICA ; > ;
+        < "µã" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ russian ] =
+    {
+        < "Ìèëëèìåòğû" ; FUNIT_MM ; > ;
+        < "Ñàíòèìåòğû" ; FUNIT_CM ; > ;
+        < "Ìåòğû" ; FUNIT_M ; > ;
+        < "Êèëîìåòğû" ; FUNIT_KM ; > ;
+        < "Äşéìû" ; FUNIT_INCH ; > ;
+        < "Ôóòû" ; FUNIT_FOOT ; > ;
+        < "Ìèëè" ; FUNIT_MILE ; > ;
+        < "Ïèêè" ; FUNIT_PICA ; > ;
+        < "Ïóíêò" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ polish ] =
+    {
+        < "Milimetr" ; FUNIT_MM ; > ;
+        < "Centymetr" ; FUNIT_CM ; > ;
+        < "Metr" ; FUNIT_M ; > ;
+        < "Kilometr" ; FUNIT_KM ; > ;
+        < "Cal" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "Mile" ; FUNIT_MILE ; > ;
+        < "Cycero" ; FUNIT_PICA ; > ;
+        < "Point" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ japanese ] =
+    {
+        < "ĞØÒ°ÄÙ" ; FUNIT_MM ; > ;
+        < "¾İÁÒ°ÄÙ" ; FUNIT_CM ; > ;
+        < "Ò°ÄÙ" ; FUNIT_M ; > ;
+        < "·ÛÒ°ÄÙ" ; FUNIT_KM ; > ;
+        < "²İÁ" ; FUNIT_INCH ; > ;
+        < "Ì¨°Ä" ; FUNIT_FOOT ; > ;
+        < "Ï²Ù" ; FUNIT_MILE ; > ;
+        < "Êß²¶" ; FUNIT_PICA ; > ;
+        < "Îß²İÄ" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+        < "²@¦Ì" ; FUNIT_MM ; > ;
+        < "Íù¦Ì" ; FUNIT_CM ; > ;
+        < "¦Ì" ; FUNIT_M ; > ;
+        < "¤½¨½" ; FUNIT_KM ; > ;
+        < "­^¤o" ; FUNIT_INCH ; > ;
+        < "­^¤Ø" ; FUNIT_FOOT ; > ;
+        < "­^¨½" ; FUNIT_MILE ; > ;
+        < "¥Ö¥i«¬¦r¤¸" ; FUNIT_PICA ; > ;
+        < "ÂI" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ arabic ] =
+    {
+        < "ãáíãÊÑ" ; FUNIT_MM ; > ;
+        < "ÓäÊíãÊÑ" ; FUNIT_CM ; > ;
+        < "ãÊÑ" ; FUNIT_M ; > ;
+        < "ßíáæãÊÑ" ; FUNIT_KM ; > ;
+        < "ÈæÕÉ" ; FUNIT_INCH ; > ;
+        < "ŞÏã" ; FUNIT_FOOT ; > ;
+        < "ÃãíÇá" ; FUNIT_MILE ; > ;
+        < "ÈíßÇ" ; FUNIT_PICA ; > ;
+        < "äŞØÉ" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ greek ] =
+    {
+        < "×éëéïóôÜ" ; FUNIT_MM ; > ;
+        < "ÅêáôïóôÜ" ; FUNIT_CM ; > ;
+        < "Ìİôñá" ; FUNIT_M ; > ;
+        < "×éëéüìåôñï" ; FUNIT_KM ; > ;
+        < "ºíôóåò" ; FUNIT_INCH ; > ;
+        < "Ğüäé" ; FUNIT_FOOT ; > ;
+        < "Ìßëéá" ; FUNIT_MILE ; > ;
+        < "Pica" ; FUNIT_PICA ; > ;
+        < "Óçìåßï" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ korean ] =
+    {
+        < "¹Ğ¸®¹ÌÅÍ" ; FUNIT_MM ; > ;
+        < "¼¾Æ¼¹ÌÅÍ" ; FUNIT_CM ; > ;
+        < "¹ÌÅÍ" ; FUNIT_M ; > ;
+        < "Å³·Î¹ÌÅÍ" ; FUNIT_KM ; > ;
+        < "ÀÎÄ¡" ; FUNIT_INCH ; > ;
+        < "ÇÇÆ®" ; FUNIT_FOOT ; > ;
+        < "¸¶ÀÏ" ; FUNIT_MILE ; > ;
+        < "ÆÄÀÌÄ¿" ; FUNIT_PICA ; > ;
+        < "Æ÷ÀÎÆ®" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ turkish ] =
+    {
+        < "Milimetre" ; FUNIT_MM ; > ;
+        < "Santimetre" ; FUNIT_CM ; > ;
+        < "Metre" ; FUNIT_M ; > ;
+        < "Kilometre" ; FUNIT_KM ; > ;
+        < "İnç" ; FUNIT_INCH ; > ;
+        < "Ft" ; FUNIT_FOOT ; > ;
+        < "Mil" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Nokta" ; FUNIT_POINT ; > ;
+    };
+ ItemList [ language_user1 ] =
+    {
+            < " " ; FUNIT_MM ; > ;
+        < " " ; FUNIT_CM ; > ;
+        < " " ; FUNIT_M ; > ;
+        < " " ; FUNIT_KM ; > ;
+        < " " ; FUNIT_INCH ; > ;
+        < " " ; FUNIT_FOOT ; > ;
+        < " " ; FUNIT_MILE ; > ;
+        < " " ; FUNIT_PICA ; > ;
+        < " " ; FUNIT_POINT ; > ;
+    };
+    };
+
+ // ********************************************************************** EOF

@@ -1,0 +1,119 @@
+/*=========================================================================
+    module StarApplicationFrame
+
+    (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
+    $Author: hr $ $Date: 2000-09-18 16:52:26 $ $Revision: 1.1.1.1 $
+    $Logfile:   T:/sfx2/sdi/sfxslots.sdv  $ $Workfile:   SFXSLOTS.SDI  $
+=========================================================================*/
+
+module
+"384E40E0-1F22-101C-9961-04021C007002"
+"5A30E000-1F22-101C-9961-04021C007002"
+StarApplicationFrame
+[
+HelpText( "StarDivision Application Framework" ),
+SlotIdFile( "sfx.hrc" )
+TypeLibFile( "sfxslots.tlb" )
+]
+{
+    item void       SfxVoidItem;
+    item BOOL       SfxBoolItem;
+    item INT32      SfxUInt16Item;
+    item INT16      SfxInt16Item;
+    item INT32      SfxUInt32Item;
+    item INT32      SfxInt32Item;
+    item String     SfxStringItem;
+    item INT16      SfxByteItem;
+
+    item INT16      SfxEnumItem;
+    item INT16      SfxAllEnumItem;
+
+    item SbxObject  SfxObjectItem;
+
+    item String     SfxTemplateItem;        //! Dummy
+    item String     SfxMacroInfoItem;       //! Dummy
+
+    item BOOL       SfxBoolItem;
+
+    struct Point
+    {
+        INT32   X   MID_X;
+        INT32   Y   MID_Y;
+    };
+    item Point SfxPointItem;
+
+    struct Rectangle
+    {
+        INT32   Left    MID_LEFT;
+        INT32   Top     MID_TOP;
+        INT32   Width   MID_WIDTH;
+        INT32   Height  MID_HEIGHT;
+    };
+    item Rectangle SfxRectangleItem;
+
+    struct DocInfo
+    {
+        String      Author             MID_DOCINFO_AUTHOR;
+        String      CreationDate       MID_DOCINFO_CREATIONDATE;
+        String      CreationTime       MID_DOCINFO_CREATIONTIME;
+        String      Description        MID_DOCINFO_DESCRIPTION;
+        String      FileName           MID_DOCINFO_FILENAME;
+        String      Revision           MID_DOCINFO_REVISION;
+        String      EditTime           MID_DOCINFO_EDITTIME;
+        String      KeyWords           MID_DOCINFO_KEYWORDS;
+        String      ModificationAuthor MID_DOCINFO_MODIFICATIONAUTHOR;
+        String      ModificationDate   MID_DOCINFO_MODIFICATIONDATE;
+        String      ModificationTime   MID_DOCINFO_MODIFICATIONTIME;
+        String      Subject            MID_DOCINFO_SUBJECT;
+        String      Template           MID_DOCINFO_TEMPLATE;
+        String      Title              MID_DOCINFO_TITLE;
+        String      Field1Title        MID_DOCINFO_FIELD1TITLE;
+        String      Field2Title        MID_DOCINFO_FIELD2TITLE;
+        String      Field3Title        MID_DOCINFO_FIELD3TITLE;
+        String      Field4Title        MID_DOCINFO_FIELD4TITLE;
+        String      Field1             MID_DOCINFO_FIELD1;
+        String      Field2             MID_DOCINFO_FIELD2;
+        String      Field3             MID_DOCINFO_FIELD3;
+        String      Field4             MID_DOCINFO_FIELD4;
+    };
+    item DocInfo SfxDocumentInfoItem;
+
+    item    String          SbxItem;
+
+    item    INT16           TbxImageItem;
+
+    struct SvxSearch
+    {
+        BOOL        Backward        MID_SEARCH_BACKWARD;
+        BOOL        InSelection     MID_SEARCH_INSELECTION;
+        BOOL        CaseSensitive   MID_SEARCH_CASESENSITIVE;
+        BOOL        RegExp          MID_SEARCH_REGEXPR;
+        BOOL        WordOnly        MID_SEARCH_WORDONLY;
+        UINT16      Mode            MID_SEARCH_MODE;
+        UINT16      Order           MID_SEARCH_ORDER;
+        BOOL        AllTables       MID_SEARCH_ALLTABLES;
+        BOOL        Similarity      MID_SEARCH_LEV_ON;
+        BOOL        Relaxed         MID_SEARCH_LEV_RELAXED;
+        UINT16      Other           MID_SEARCH_LEV_OTHER;
+        UINT16      Shorter         MID_SEARCH_LEV_SHORTER;
+        UINT16      Longer          MID_SEARCH_LEV_LONGER;
+        BOOL        Pattern         MID_SEARCH_PATTERN;
+    };
+    item SvxSearch SvxSearchItem;
+
+
+    include "newslots.sdi"
+    include "sfx.sdi"
+    include "object.sdi"
+    include "progress.sdi"
+    include "options.sdi"
+    include "docslots.sdi"
+    include "frmslots.sdi"
+    include "viwslots.sdi"
+    include "pinslots.sdi"
+    include "mdislots.sdi"
+    include "ipfslots.sdi"
+    include "appslots.sdi"
+    include "frsslots.sdi"
+}
+

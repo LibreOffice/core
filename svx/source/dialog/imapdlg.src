@@ -1,0 +1,1355 @@
+/*************************************************************************
+ *
+ *  $RCSfile: imapdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "imapdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_IMAP ----------------------------------------------------
+FloatingWindow RID_SVXDLG_IMAP
+{
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 270 , 213 ) ;
+    Text = "ImageMap-Editor" ;
+    Text [ ENGLISH ] = "Image Map Editor" ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    ToolBox TBX_IMAPDLG1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        HelpId = HID_IMAPDLG_TOOLBOX ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_APPLY ;
+                HelpId = HID_IMAPDLG_APPLY ;
+                Text = "Zuweisen" ;
+                Text [ ENGLISH ] = "Apply" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "apply.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Apply" ;
+                Text [ italian ] = "Assegna" ;
+                Text [ spanish ] = "Asignar" ;
+                Text [ french ] = "Assigner" ;
+                Text [ dutch ] = "Toewijzen" ;
+                Text [ swedish ] = "Tilldela" ;
+                Text [ danish ] = "Tildel" ;
+                Text [ portuguese ] = "Aplicar" ;
+                Text [ portuguese_brazilian ] = "Zuweisen" ;
+                Text[ chinese_simplified ] = "Ó¦ÓÃ";
+                Text[ russian ] = "Ïğèìåíèòü";
+                Text[ polish ] = "Przypisz";
+                Text[ japanese ] = "“K—p";
+                Text[ chinese_traditional ] = "¨Ï¥Î";
+                Text[ arabic ] = "ÊØÈíŞ";
+                Text[ greek ] = "Áíôéóôïß÷éóç";
+                Text[ korean ] = "Àû¿ë";
+                Text[ turkish ] = "Uygula";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_OPEN ;
+                HelpId = HID_IMAPDLG_OPEN ;
+                /* ### ACHTUNG: Neuer Text in Resource? Öffnen... : Íffnen... */
+                /* ### ACHTUNG: Neuer Text in Resource? Öffnen... : Íffnen... */
+                Text = "Öffnen..." ;
+                Text [ ENGLISH ] = "Open..." ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05501.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Openen..." ;
+                Text [ english_us ] = "Open..." ;
+                Text [ italian ] = "Apri..." ;
+                Text [ spanish ] = "Abrir..." ;
+                Text [ french ] = "Ouvrir..." ;
+                Text [ swedish ] = "Öppna..." ;
+                Text [ danish ] = "Åbn" ;
+                Text [ portuguese ] = "Abrir..." ;
+                Text [ portuguese_brazilian ] = "Öffnen..." ;
+                Text[ chinese_simplified ] = "´ò¿ª...";
+                Text[ russian ] = "Îòêğûòü...";
+                Text[ polish ] = "Otwórz...";
+                Text[ japanese ] = "ŠJ‚­...";
+                Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ...";
+                Text[ arabic ] = "...İÊÍ";
+                Text[ greek ] = "¢íïéãìá...";
+                Text[ korean ] = "¿­±â...";
+                Text[ turkish ] = "Aç...";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SAVEAS ;
+                HelpId = HID_IMAPDLG_SAVEAS ;
+
+                Text= "Speichern...";
+                Text [ ENGLISH ] = "Save..." ;
+                Text [ english_us ] = "Save..." ;
+                Text [ dutch ] = "Opslaan..." ;
+                Text [ italian ] = "Salva..." ;
+                Text [ spanish ] = "Guardar..." ;
+                Text [ french ] = "Enregistrer..." ;
+                Text [ swedish ] = "Spara..." ;
+                Text [ danish ] = "Gem..." ;
+                Text [ portuguese ] = "Guardar..." ;
+                Text [ portuguese_brazilian ] = "Speichern..." ;
+                Text[ arabic ] = "ÍİÙ...";
+                Text[ chinese_simplified ] = "´æÅÌ...";
+                Text[ chinese_traditional ] = "Àx¦s...";
+                Text[ japanese ] = "•Û‘¶...";
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05502.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text[ russian ] = "Ñîõğàíèòü...";
+                Text[ greek ] = "ÁğïèŞêåõóç...";
+                Text[ polish ] = "Zapisz...";
+                Text[ korean ] = "ÀúÀå...";
+                Text[ turkish ] = "Kaydet...";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SELECT ;
+                HelpId = HID_IMAPDLG_SELECT ;
+                Text = "Auswahl" ;
+                Text [ ENGLISH ] = "Selection" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10128.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Selectie" ;
+                Text [ english_us ] = "Select" ;
+                Text [ italian ] = "Selezione" ;
+                Text [ spanish ] = "Selección" ;
+                Text [ french ] = "Sélection" ;
+                Text [ swedish ] = "Urval" ;
+                Text [ danish ] = "Marker" ;
+                Text [ portuguese ] = "Seleccionar" ;
+                Text [ portuguese_brazilian ] = "Auswahl" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Objekte auswählen : Objekte auswõhlen */
+                Text[ chinese_simplified ] = "Ñ¡Ôñ";
+                Text[ russian ] = "Âûáîğ";
+                Text[ polish ] = "Wybór";
+                Text[ japanese ] = "‘I‘ğ";
+                Text[ chinese_traditional ] = "¿ï¾Ü";
+                Text[ arabic ] = "ÊÍÏíÏ";
+                Text[ greek ] = "ÅğéëïãŞ";
+                Text[ korean ] = "¼±ÅÃ";
+                Text[ turkish ] = "Seçim";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_RECT ;
+                HelpId = HID_IMAPDLG_RECT ;
+                Text = "Rechteck" ;
+                Text [ ENGLISH ] = "Rectangle" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10104.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Rechthoek" ;
+                Text [ english_us ] = "Rectangle" ;
+                Text [ italian ] = "Rettangolo" ;
+                Text [ spanish ] = "Rectángulo" ;
+                Text [ french ] = "Rectangle" ;
+                Text [ swedish ] = "Rektangel" ;
+                Text [ danish ] = "Rektangel" ;
+                Text [ portuguese ] = "Rectângulo" ;
+                Text [ portuguese_brazilian ] = "Rechteck" ;
+                Text[ chinese_simplified ] = "³¤·½ĞÎ";
+                Text[ russian ] = "Ïğÿìîóãîëüíèê";
+                Text[ polish ] = "Prostok¹t";
+                Text[ japanese ] = "lŠpŒ`";
+                Text[ chinese_traditional ] = "ªø¤è§Î";
+                Text[ arabic ] = "ãÓÊØíá";
+                Text[ greek ] = "Ïñèïãşíéï";
+                Text[ korean ] = "»ç°¢Çü";
+                Text[ turkish ] = "Dikdörtgen";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_CIRCLE ;
+                HelpId = HID_IMAPDLG_CIRCLE ;
+                Text = "Ellipse" ;
+                Text [ ENGLISH ] = "Ellipse" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10110.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Ellips" ;
+                Text [ english_us ] = "Ellipse" ;
+                Text [ italian ] = "Ellisse" ;
+                Text [ spanish ] = "Elipse" ;
+                Text [ french ] = "Ellipse" ;
+                Text [ swedish ] = "Ellips" ;
+                Text [ danish ] = "Ellipse" ;
+                Text [ portuguese ] = "Elipse" ;
+                Text [ portuguese_brazilian ] = "Ellipse" ;
+                Text[ chinese_simplified ] = "ÍÖÔ²";
+                Text[ russian ] = "İëëèïñû";
+                Text[ polish ] = "Elipsa";
+                Text[ japanese ] = "‘È‰~";
+                Text[ chinese_traditional ] = "¾ò¶ê";
+                Text[ arabic ] = "Ôßá ÈíÖæí";
+                Text[ greek ] = "¸ëëåéøç";
+                Text[ korean ] = "Å¸¿ø";
+                Text[ turkish ] = "Elips";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLY ;
+                HelpId = HID_IMAPDLG_POLY ;
+                Text = "Polygon" ;
+                Text [ ENGLISH ] = "Polygon" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10117.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Polygon" ;
+                Text [ italian ] = "Poligono" ;
+                Text [ spanish ] = "Polígono" ;
+                Text [ french ] = "Polygone" ;
+                Text [ dutch ] = "Veelhoek" ;
+                Text [ swedish ] = "Polygon" ;
+                Text [ danish ] = "Polygon" ;
+                Text [ portuguese ] = "Polígono" ;
+                Text [ portuguese_brazilian ] = "Polygon" ;
+                Text[ chinese_simplified ] = "¶à±ßĞÎ";
+                Text[ russian ] = "Ìíîãîóãîëüíèê";
+                Text[ polish ] = "Wielok¹t";
+                Text[ japanese ] = "‘½ŠpŒ`";
+                Text[ chinese_traditional ] = "¦hÃä§Î";
+                Text[ arabic ] = "ãÖáÚ";
+                Text[ greek ] = "Ğïëıãùíï";
+                Text[ korean ] = "´Ù°¢Çü";
+                Text[ turkish ] = "Çokgen";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_FREEPOLY ;
+                HelpId = HID_IMAPDLG_FREEPOLY ;
+                Text = "Freihandpolygon" ;
+                Text [ ENGLISH ] = "Freeline polygon" ;
+                Text [ english_us ] = "Freeform Polygon" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10463.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "Polígono, forma livre" ;
+                Text [ portuguese_brazilian ] = "Freihandpolygon" ;
+                Text [ swedish ] = "Frihandspolygon" ;
+                Text [ danish ] = "Frihåndspolygon" ;
+                Text [ italian ] = "Poligono a mano libera" ;
+                Text [ spanish ] = "Polígono a mano alzada" ;
+                Text [ french ] = "Polygone à main levée" ;
+                Text [ dutch ] = "Vrije hand-veelhoek" ;
+                Text[ chinese_simplified ] = "×ÔÓÉ¶à±ßĞÎ";
+                Text[ russian ] = "Ğèñîâàííûé ìíîãîóãîëüíèê";
+                Text[ polish ] = "Dowolny wielok¹t";
+                Text[ japanese ] = "ÌØ°Ì«°Ñ‚Ì‘½ŠpŒ`";
+                Text[ chinese_traditional ] = "¦Û¥Ñ¦hÃä§Î";
+                Text[ arabic ] = "ãÖáÚ ÍÑ";
+                Text[ greek ] = "Ğïëıãïíï åëåıèåñçò ó÷åäßáóçò";
+                Text[ korean ] = "ÀÚÀ¯ ´Ù°¢Çü";
+                Text[ turkish ] = "Serbest çokgen";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYEDIT ;
+                HelpId = HID_IMAPDLG_POLYEDIT ;
+                Text = "Punkte bearbeiten" ;
+                Text [ norwegian ] = "Edit Points" ;
+                Text [ italian ] = "Modifica punti" ;
+                Text [ portuguese_brazilian ] = "Editar Pontos" ;
+                Text [ portuguese ] = "Editar pontos" ;
+                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ danish ] = "Rediger punkter" ;
+                Text [ french ] = "Éditer des points" ;
+                Text [ swedish ] = "Redigera punkter" ;
+                Text [ dutch ] = "Punten bewerken" ;
+                Text [ spanish ] = "Modificar puntos" ;
+                Text [ english_us ] = "Edit Points" ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10126.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text[ chinese_simplified ] = "±à¼­µã";
+                Text[ russian ] = "Ïğàâêà òî÷åê";
+                Text[ polish ] = "Edytuj punkty";
+                Text[ japanese ] = "§Œä“_‚Ì•ÒW";
+                Text[ chinese_traditional ] = "ÅÜ§óÂI";
+                Text[ arabic ] = "ÊÍÑíÑ ÇáäŞÇØ";
+                Text[ greek ] = "Åğåîåñãáóßá óçìåßùí";
+                Text[ korean ] = "Á¡ ÆíÁı";
+                Text[ turkish ] = "Noktaları düzenle";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYMOVE ;
+                HelpId = HID_IMAPDLG_POLYMOVE ;
+                Text = "Punkte verschieben" ;
+                Text [ ENGLISH ] = "Edit Points" ;
+                Text [ norwegian ] = "Edit Points" ;
+                Text [ italian ] = "Sposta punti" ;
+                Text [ portuguese_brazilian ] = "Editar Pontos" ;
+                Text [ portuguese ] = "Mover pontos" ;
+                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ danish ] = "Flyt punkter" ;
+                Text [ french ] = "Déplacer des points" ;
+                Text [ swedish ] = "Flytta punkter" ;
+                Text [ dutch ] = "Punten verplaatsen" ;
+                Text [ spanish ] = "Desplazar puntos" ;
+                Text [ english_us ] = "Move Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10121.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text[ chinese_simplified ] = "ÒÆ¶¯µã";
+                Text[ russian ] = "Ïåğåìåñòèòü òî÷êè";
+                Text[ polish ] = "Przenieœ punkty";
+                Text[ japanese ] = "§Œä“_‚ÌˆÚ“®";
+                Text[ chinese_traditional ] = "²¾°ÊÂI";
+                Text[ arabic ] = "ÊÍÑíß ÇáäŞÇØ";
+                Text[ greek ] = "Ìåôáêßíçóç óçìåßùí";
+                Text[ korean ] = "Á¡ ÀÌµ¿";
+                Text[ turkish ] = "Noktaları kaydır";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYINSERT ;
+                HelpId = HID_IMAPDLG_POLYINSERT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
+                Text = "Punkte einfügen" ;
+                Text [ ENGLISH ] = "Insert Points" ;
+                Text [ norwegian ] = "Insert Points" ;
+                Text [ italian ] = "Inserisci punti" ;
+                Text [ portuguese_brazilian ] = "Inserir Pontos" ;
+                Text [ portuguese ] = "Inserir pontos" ;
+                Text [ finnish ] = "Lisää pisteitä" ;
+                Text [ danish ] = "Indsæt punkter" ;
+                Text [ french ] = "Insérer des points" ;
+                Text [ swedish ] = "Infoga punkter" ;
+                Text [ dutch ] = "Punten invoegen" ;
+                Text [ spanish ] = "Insertar puntos" ;
+                Text [ english_us ] = "Insert Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10119.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                /* ### ACHTUNG: Neuer Text in Resource? Neue Punkte einfügen oder anhängen : Neue Punkte einf³gen oder anhõngen */
+                Text[ chinese_simplified ] = "²åÈëµã";
+                Text[ russian ] = "Âñòàâèòü òî÷êè";
+                Text[ polish ] = "Wstaw punkty";
+                Text[ japanese ] = "§Œä“_‚Ì‘}“ü";
+                Text[ chinese_traditional ] = "´¡¤JÂI";
+                Text[ arabic ] = "ÅÖÇİÉ äŞÇØ";
+                Text[ greek ] = "ĞñïóèŞêç óçìåßùí";
+                Text[ korean ] = "Á¡ »ğÀÔ";
+                Text[ turkish ] = "Nokta ekle";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYDELETE ;
+                HelpId = HID_IMAPDLG_POLYDELETE ;
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
+                Text = "Punkte löschen" ;
+                Text [ ENGLISH ] = "Delete Points" ;
+                Text [ norwegian ] = "Delete Points" ;
+                Text [ italian ] = "Elimina punti" ;
+                Text [ portuguese_brazilian ] = "Apagar Pontos" ;
+                Text [ portuguese ] = "Eliminar pontos" ;
+                Text [ finnish ] = "Poista pisteitä" ;
+                Text [ danish ] = "Slet punkter" ;
+                Text [ french ] = "Supprimer des points" ;
+                Text [ swedish ] = "Radera punkter" ;
+                Text [ dutch ] = "Punten verwijderen" ;
+                Text [ spanish ] = "Eliminar puntos" ;
+                Text [ english_us ] = "Delete Points" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10120.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                /* ### ACHTUNG: Neuer Text in Resource? Markierte Punkte löschen : Markierte Punkte l÷schen */
+                Text[ chinese_simplified ] = "É¾³ıµã";
+                Text[ russian ] = "Óäàëèòü òî÷êè";
+                Text[ polish ] = "Usuñ punkty";
+                Text[ japanese ] = "§Œä“_‚Ìíœ";
+                Text[ chinese_traditional ] = "§R°£ÂI";
+                Text[ arabic ] = "ÍĞİ äŞÇØ";
+                Text[ greek ] = "ÄéáãñáöŞ óçìåßùí";
+                Text[ korean ] = "Á¡ »èÁ¦";
+                Text[ turkish ] = "Noktaları sil";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_UNDO ;
+                HelpId = HID_IMAPDLG_UNDO ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05701.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+
+                Text = "Rückgängig " ;
+                Text [ English ] = "Undo " ;
+                Text [ norwegian ] = "Angre " ;
+                Text [ italian ] = "Annulla " ;
+                Text [ portuguese_brazilian ] = "Widerrufen" ;
+                Text [ portuguese ] = "Anular " ;
+                Text [ finnish ] = "Kumoa " ;
+                Text [ danish ] = "Fortryd " ;
+                Text [ french ] = "Annuler " ;
+                Text [ swedish ] = "Ångra " ;
+                Text [ dutch ] = "Ongedaan maken  " ;
+                Text [ spanish ] = "Deshacer " ;
+                Text [ english_us ] = "Undo " ;
+                Text[ chinese_simplified ] = "³·ÏûÃüÁî ";
+                Text[ russian ] = "Îòìåíèòü  ";
+                Text[ polish ] = "Cofnij ";
+                Text[ japanese ] = "Œ³‚É–ß‚· ";
+                Text[ chinese_traditional ] = "´_­ì ";
+                Text[ arabic ] = "ÊÑÇÌÚ";
+                Text[ greek ] = "Áíáßñåóç ";
+                Text[ korean ] = "ÀÛ¾÷Ãë¼Ò ";
+                Text[ turkish ] = "Geri al ";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_REDO ;
+                HelpId = HID_IMAPDLG_REDO ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+
+                Text = "Wiederherstellen " ;
+                Text [ English ] = "Redo " ;
+                Text [ english_us ] = "Restore " ;
+                Text [ portuguese ] = "Restaurar " ;
+                Text [ portuguese_brazilian ] = "Wiederholen" ;
+                Text [ swedish ] = "Återställ  " ;
+                Text [ danish ] = "Gendan " ;
+                Text [ italian ] = "Ripristina " ;
+                Text [ spanish ] = "Restaurar " ;
+                Text [ french ] = "Restaurer " ;
+                Text [ dutch ] = "Herstellen " ;
+                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî ";
+                Text[ russian ] = "Âåğíóòü  ";
+                Text[ polish ] = "Ponów ";
+                Text[ japanese ] = "•œŒ³‚·‚é ";
+                Text[ chinese_traditional ] = "«ì´_ ";
+                Text[ arabic ] = "ÇÓÊÚÇÏÉ";
+                Text[ greek ] = "ÅğáíáöïñÜ ";
+                Text[ korean ] = "º¹¿ø ";
+                Text[ turkish ] = "Yinele ";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_ACTIVE ;
+                HelpId = HID_IMAPDLG_ACTIVE ;
+                Text = "Aktiv" ;
+                Text [ ENGLISH ] = "Active" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "active.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Active" ;
+                Text [ italian ] = "Attivo" ;
+                Text [ spanish ] = "Activo" ;
+                Text [ french ] = "Actif" ;
+                Text [ dutch ] = "Actief" ;
+                Text [ swedish ] = "Aktiv" ;
+                Text [ danish ] = "Aktiv" ;
+                Text [ portuguese ] = "Activo" ;
+                Text [ portuguese_brazilian ] = "Aktiv" ;
+                Text[ chinese_simplified ] = "¼¤»î";
+                Text[ russian ] = "Â àêòèâíîì ğåæèìå";
+                Text[ polish ] = "Aktywny";
+                Text[ japanese ] = "±¸Ã¨ÌŞ";
+                Text[ chinese_traditional ] = "¿E¬¡";
+                Text[ arabic ] = "äÔØ";
+                Text[ greek ] = "ÅíåñãÜ";
+                Text[ korean ] = "È°¼º";
+                Text[ turkish ] = "Etkin";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_MACRO ;
+                HelpId = HID_IMAPDLG_MACRO ;
+                Text = "Makro..." ;
+                Text [ ENGLISH ] = "Macro..." ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "scmakrod.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Macro..." ;
+                Text [ dutch ] = "Macro..." ;
+                Text [ swedish ] = "Makro..." ;
+                Text [ danish ] = "Makro..." ;
+                Text [ italian ] = "Macro..." ;
+                Text [ spanish ] = "Macro..." ;
+                Text [ french ] = "Macro..." ;
+                Text [ portuguese ] = "Macro..." ;
+                Text [ portuguese_brazilian ] = "Makro..." ;
+                Text[ chinese_simplified ] = "ºê...";
+                Text[ russian ] = "Ìàêğîñ...";
+                Text[ polish ] = "Makro...";
+                Text[ japanese ] = "Ï¸Û...";
+                Text[ chinese_traditional ] = "¥¨¶°...";
+                Text[ arabic ] = "...ãÇßÑæ";
+                Text[ greek ] = "ÌáêñïåíôïëŞ...";
+                Text[ korean ] = "¸ÅÅ©·Î...";
+                Text[ turkish ] = "Makro...";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_PROPERTY ;
+                HelpId = HID_IMAPDLG_PROPERTY ;
+                Text = "Eigenschaften..." ;
+                Text [ ENGLISH ] = "Properties..." ;
+                Text [ english_us ] = "Properties..." ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc06350.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "Propriedades..." ;
+                Text [ portuguese_brazilian ] = "Eigenschaften..." ;
+                Text [ swedish ] = "Egenskaper..." ;
+                Text [ danish ] = "Egenskaber..." ;
+                Text [ italian ] = "Proprietà..." ;
+                Text [ spanish ] = "Propiedades..." ;
+                Text [ french ] = "Propriétés..." ;
+                Text [ dutch ] = "Eigenschappen..." ;
+                Text[ chinese_simplified ] = "ÊôĞÔ...";
+                Text[ russian ] = "Ñâîéñòâà...";
+                Text[ polish ] = "W³aœciwoœci...";
+                Text[ japanese ] = "ÌßÛÊßÃ¨...";
+                Text[ chinese_traditional ] = "Äİ©Ê...";
+                Text[ arabic ] = "...ÎÕÇÆÕ";
+                Text[ greek ] = "Éäéüôçôåò...";
+                Text[ korean ] = "µî·ÏÁ¤º¸...";
+                Text[ turkish ] = "Özellikler...";
+                Text[ language_user1 ] = " ";
+            };
+        };
+        Text[ english_us ] = "Image Map Editor";
+    Text[ portuguese ] = "Mapa de imagens Editor";
+    Text[ russian ] = "Ğåäàêòîğ Image Map";
+    Text[ dutch ] = "ImageMap-editor";
+    Text[ french ] = "Editeur ImageMap";
+    Text[ spanish ] = "Editor Image Map";
+    Text[ italian ] = "Editor ImageMap";
+    Text[ danish ] = "ImageMap-Editor";
+    Text[ swedish ] = "ImageMap-Editor";
+    Text[ polish ] = "Edytor mapy obrazkowej";
+    Text[ portuguese_brazilian ] = "ImageMap-Editor";
+    Text[ japanese ] = "ImageMap-´ÃŞ¨À";
+    Text[ chinese_simplified ] = "Í¼ÏñÓ³Éä±à¼­Æ÷";
+};
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Text = "Adresse:" ;
+        Text [ ENGLISH ] = "Address:" ;
+        Text [ english_us ] = "Address:" ;
+        Text [ italian ] = "Indirizzo:" ;
+        Text [ spanish ] = "Dirección:" ;
+        Text [ french ] = "Adresse :" ;
+        Text [ dutch ] = "Adres:" ;
+        Text [ swedish ] = "Adress:" ;
+        Text [ danish ] = "Adresse:" ;
+        Text [ portuguese ] = "Endereço:" ;
+        Text [ portuguese_brazilian ] = "Adresse:" ;
+        Text[ chinese_simplified ] = "µØÖ·:";
+        Text[ russian ] = "Àäğåñ:";
+        Text[ polish ] = "Adres:";
+        Text[ japanese ] = "±ÄŞÚ½:";
+        Text[ chinese_traditional ] = "¦a§}:";
+        Text[ arabic ] = ":ÇáÚäæÇä";
+        Text[ greek ] = "Äéåıèõíóç:";
+        Text[ korean ] = "ÁÖ¼Ò:";
+        Text[ turkish ] = "Adres:";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CBB_URL
+    {
+        Pos = MAP_APPFONT ( 39 , 23 ) ;
+        Size = MAP_APPFONT ( 225 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+    };
+    FixedText FT_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 43 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        Text = "Text:" ;
+        Text [ ENGLISH ] = "Text:" ;
+        Text [ english_us ] = "Text:" ;
+        Text [ italian ] = "Testo:" ;
+        Text [ spanish ] = "Texto:" ;
+        Text [ french ] = "Texte :" ;
+        Text [ dutch ] = "Tekst:" ;
+        Text [ swedish ] = "Text:" ;
+        Text [ danish ] = "Tekst:" ;
+        Text [ portuguese_brazilian ] = "Text:" ;
+        Text [ portuguese ] = "Texto:" ;
+        Text[ chinese_simplified ] = "ÎÄ±¾:";
+        Text[ russian ] = "Òåêñò:";
+        Text[ polish ] = "Tekst:";
+        Text[ japanese ] = "Ã·½Ä:";
+        Text[ chinese_traditional ] = "¤å¦r:";
+        Text[ arabic ] = ":ÇáäÕ";
+        Text[ greek ] = "Êåßìåíï:";
+        Text[ korean ] = "ÅØ½ºÆ®:";
+        Text[ turkish ] = "Metin:";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_TEXT
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 39 , 41 ) ;
+        Size = MAP_APPFONT ( 143 , 12 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+    };
+    Text [ english_us ] = "ImageMap Editor" ;
+    Text [ portuguese_brazilian ] = "ImageMap-Editor" ;
+    Text [ swedish ] = "ImageMap-Editor" ;
+    Text [ danish ] = "ImageMap-redigering" ;
+    Text [ italian ] = "Editor ImageMap" ;
+    Text [ spanish ] = "Editor ImageMap" ;
+    Text [ french ] = "Éditeur d'ImageMap" ;
+    Text [ dutch ] = "ImageMap-editor" ;
+    Text [ portuguese ] = "Mapa de imagens Editor" ;
+    Text[ chinese_simplified ] = "Í¼ÏñÓ³Éä±à¼­Æ÷";
+    Text[ russian ] = "Ğåäàêòîğ Image Map";
+    Text[ polish ] = "Edytor mapy obrazkowej";
+    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß ´ÃŞ¨À";
+    Text[ chinese_traditional ] = "¼v¹³¬M®g½s¿è¾¹";
+    Text[ arabic ] = "Image Map Editor";
+    Text[ greek ] = "ÅğåîåñãáóôŞò ImageMap";
+    Text[ korean ] = "ÀÌ¹ÌÁö ¸Ê ¿¡µğÅÍ";
+    Text[ turkish ] = "ImageMap editörü";
+    Text[ language_user1 ] = " ";
+};
+Control RID_SVXCTL_IMAP
+{
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 6 , 56 ) ;
+    HelpId = HID_IMAPDLG_GRAPHWND ;
+};
+ // nur temporaer
+FixedText RID_SVXCTL_FT_TARGET
+{
+    Pos = MAP_APPFONT ( 188 , 43 ) ;
+    Size = MAP_APPFONT ( 22 , 12 ) ;
+    Text = "Frame: " ;
+};
+ // nur temporaer
+ComboBox RID_SVXCTL_CBB_TARGET
+{
+    Border = TRUE ;
+    Sort = TRUE ;
+    Pos = MAP_APPFONT ( 213 , 41 ) ;
+    Size = MAP_APPFONT ( 51 , 50 ) ;
+    TabStop = TRUE ;
+    DropDown = TRUE ;
+    HScroll = TRUE ;
+};
+/******************************************************************************/
+Menu RID_SVXMN_IMAP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_URL ;
+            Text = "~Beschreibung..." ;
+            Text [ ENGLISH ] = "~Description..." ;
+            Text [ english_us ] = "Description..." ;
+            Text [ italian ] = "D~escrizione..." ;
+            Text [ spanish ] = "~Descripción..." ;
+            Text [ french ] = "~Description..." ;
+            Text [ dutch ] = "~Beschrijving..." ;
+            Text [ swedish ] = "~Beskrivning..." ;
+            Text [ danish ] = "Beskrivelse..." ;
+            Text [ portuguese_brazilian ] = "~Beschreibung..." ;
+            Text [ portuguese ] = "~Descrição..." ;
+            Text[ chinese_simplified ] = "ËµÃ÷...";
+            Text[ russian ] = "Îïèñàíèå...";
+            Text[ polish ] = "Opis...";
+            Text[ japanese ] = "à–¾...";
+            Text[ chinese_traditional ] = "´y­z...";
+            Text[ arabic ] = "...ÇáæÕİ";
+            Text[ greek ] = "~ĞåñéãñáöŞ...";
+            Text[ korean ] = "¼³¸í...";
+            Text[ turkish ] = "Açıklama...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_MACRO ;
+            Text = "Ma~kro..." ;
+            Text [ ENGLISH ] = "Ma~cro..." ;
+            Text [ english_us ] = "~Macro..." ;
+            Text [ swedish ] = "Ma~kro..." ;
+            Text [ danish ] = "Makro..." ;
+            Text [ italian ] = "Macro..." ;
+            Text [ spanish ] = "Ma~cro..." ;
+            Text [ french ] = "Ma~cro..." ;
+            Text [ dutch ] = "Ma~cro..." ;
+            Text [ portuguese_brazilian ] = "Ma~kro..." ;
+            Text [ portuguese ] = "Ma~cro..." ;
+            Text[ chinese_simplified ] = "ºê(~M)...";
+            Text[ russian ] = "Ìàêğîñ...";
+            Text[ polish ] = "Makro...";
+            Text[ japanese ] = "Ï¸Û(~M)...";
+            Text[ chinese_traditional ] = "¥¨¶°(~M)...";
+            Text[ arabic ] = "...ãÇßÑæ";
+            Text[ greek ] = "Ìá~êñïåíôïëŞ...";
+            Text[ korean ] = "¸ÅÅ©·Î(~M)...";
+            Text[ turkish ] = "Makro...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_ACTIVATE ;
+            Text = "~Aktiv" ;
+            Text [ ENGLISH ] = "~Activated" ;
+            Text [ dutch ] = "~Actief" ;
+            Text [ english_us ] = "Active" ;
+            Text [ italian ] = "~Attivo" ;
+            Text [ spanish ] = "~Activo" ;
+            Text [ french ] = "~Actif" ;
+            Text [ swedish ] = "~Aktiv" ;
+            Text [ danish ] = "Aktiv" ;
+            Text [ portuguese_brazilian ] = "~Aktiv" ;
+            Text [ portuguese ] = "~Activo" ;
+            Text[ chinese_simplified ] = "¼¤»î(~A)";
+            Text[ russian ] = "Â àêòèâíîì ğåæèìå";
+            Text[ polish ] = "Aktywny";
+            Text[ japanese ] = "±¸Ã¨ÌŞ";
+            Text[ chinese_traditional ] = "¿E¬¡(~A)";
+            Text[ arabic ] = "äÔØ";
+            Text[ greek ] = "Åíåñ~ãÜ";
+            Text[ korean ] = "È°¼º";
+            Text[ turkish ] = "Etkin";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_POSITION ;
+            Text = "A~nordnung" ;
+            Text [ ENGLISH ] = "~Arrange" ;
+            Text [ norwegian ] = "~Arrange" ;
+            Text [ italian ] = "~Disponi" ;
+            Text [ portuguese_brazilian ] = "~Organizar" ;
+            Text [ portuguese ] = "~Disposição" ;
+            Text [ finnish ] = "J~ärjestä" ;
+            Text [ danish ] = "Placering" ;
+            Text [ french ] = "~Disposition" ;
+            Text [ swedish ] = "~Placering" ;
+            Text [ dutch ] = "~Positie" ;
+            Text [ spanish ] = "~Posición" ;
+            Text [ english_us ] = "Arrange" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_TOP ;
+                        Text = "Ganz nach ~vorn" ;
+                        Text [ ENGLISH ] = "Bring to Front" ;
+                        Text [ norwegian ] = "Bring to Front" ;
+                        Text [ italian ] = "Porta in primo piano" ;
+                        Text [ portuguese_brazilian ] = "Trazer para a Frente" ;
+                        Text [ portuguese ] = "Trazer para a ~frente" ;
+                        Text [ finnish ] = "E~dustalle" ;
+                        Text [ danish ] = "~Placer forrest" ;
+                        Text [ french ] = "Tout à l'~avant" ;
+                        Text [ swedish ] = "Längst ~fram" ;
+                        Text [ dutch ] = "Helemaal ~vooraan" ;
+                        Text [ spanish ] = "Traer al ~frente" ;
+                        Text [ english_us ] = "Bring to Front" ;
+                        Text[ chinese_simplified ] = "ÖÃÓÚ¶¥²ã(~T)";
+                        Text[ russian ] = "Íà ~ïåğåäíèé ïëàí";
+                        Text[ polish ] = "Przesuñ na wierzch";
+                        Text[ japanese ] = "Å‘O–Ê‚ÖˆÚ“®(~F)";
+                        Text[ chinese_traditional ] = "¸m©ó³»¼h(~T)";
+                        Text[ arabic ] = "ÅÍÖÇÑ Åáì ÇáÃãÇã";
+                        Text[ greek ] = "ÌåôáöïñÜ óå ğ~ñşôï ğëÜíï";
+                        Text[ korean ] = "¸Ç ¾ÕÀ¸·Î";
+                        Text[ turkish ] = "En öne getir";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREFRONT ;
+                        Text = "W~eiter nach vorn" ;
+                        Text [ ENGLISH ] = "Bring ~Forward" ;
+                        Text [ norwegian ] = "Flytt ~Framover" ;
+                        Text [ italian ] = "Porta più avanti" ;
+                        Text [ portuguese_brazilian ] = "Tazer ~Para Frente" ;
+                        Text [ portuguese ] = "~Mais para a frente" ;
+                        Text [ finnish ] = "Yksi ~eteen" ;
+                        Text [ danish ] = "F~lyt fremad" ;
+                        Text [ french ] = "V~ers l'avant" ;
+                        Text [ swedish ] = "Längre fra~m" ;
+                        Text [ dutch ] = "Naar v~oren" ;
+                        Text [ spanish ] = "Traer ~más adelante" ;
+                        Text [ english_us ] = "Bring ~Forward" ;
+                        Text[ chinese_simplified ] = "ÔÙÇ°ÖÃ(~F)";
+                        Text[ russian ] = "Ïåğåìåñòèòü ~âïåğåä";
+                        Text[ polish ] = "Przesuñ do przodu";
+                        Text[ japanese ] = "‚³‚ç‚É‘O‚Ö(~F)";
+                        Text[ chinese_traditional ] = "¦A«e¸m(~F)";
+                        Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";
+                        Text[ greek ] = "Ì~åôáöïñÜ İíá åğßğåäï åìğñüò";
+                        Text[ korean ] = "¾ÕÀ¸·Î °¡Á®¿À±â(~F)";
+                        Text[ turkish ] = "Bir öne getir";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_MOREBACK ;
+                        Text = "Weiter ~nach hinten" ;
+                        Text [ ENGLISH ] = "Send ~Backward" ;
+                        Text [ norwegian ] = "Send ~Bakover" ;
+                        Text [ italian ] = "Porta più i~ndietro" ;
+                        Text [ portuguese_brazilian ] = "Enviar ~Para o Fundo" ;
+                        Text [ portuguese ] = "Mais para o f~undo" ;
+                        Text [ finnish ] = "Yksi ~taakse" ;
+                        Text [ danish ] = "Flyt bag~ud" ;
+                        Text [ french ] = "~Vers l'arrière" ;
+                        Text [ swedish ] = "Längre ba~k" ;
+                        Text [ dutch ] = "Naar a~chteren" ;
+                        Text [ spanish ] = "Enviar hacia a~trás" ;
+                        Text [ english_us ] = "Send Back~ward" ;
+                        Text[ chinese_simplified ] = "ÔÙºóÖÃ(~W)";
+                        Text[ russian ] = "Ïåğåìåñòèòü ~íàçàä";
+                        Text[ polish ] = "Przesuñ do ty³u";
+                        Text[ japanese ] = "‚³‚ç‚ÉŒã‚Ö(~W)";
+                        Text[ chinese_traditional ] = "¦A«á¸m(~W)";
+                        Text[ arabic ] = "ÅÑÓÇá ÎáİÇó";
+                        Text[ greek ] = "~ÌåôáöïñÜ ğßóù";
+                        Text[ korean ] = "µÚ·Î º¸³»±â(~W)";
+                        Text[ turkish ] = "Bir alta gönder";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_FRAME_TO_BOTTOM ;
+                        Text = "Ganz nach ~hinten" ;
+                        Text [ ENGLISH ] = "Send to Bac~k" ;
+                        Text [ norwegian ] = "Send to Bac~k" ;
+                        Text [ italian ] = "Porta in fondo" ;
+                        Text [ portuguese_brazilian ] = "Enviar para o Último ~Plano" ;
+                        Text [ portuguese ] = "Enviar para ~trás" ;
+                        Text [ finnish ] = "T~austalle" ;
+                        Text [ danish ] = "Placer ~bagest" ;
+                        Text [ french ] = "Tout à l'a~rrière" ;
+                        Text [ swedish ] = "Längst ~bak" ;
+                        Text [ dutch ] = "Helemaal~achteraan" ;
+                        Text [ spanish ] = "Enviar al ~fondo" ;
+                        Text [ english_us ] = "~Send to Back" ;
+                        Text[ chinese_simplified ] = "ÖÃÓÚµ×²ã(~S)";
+                        Text[ russian ] = "Íà ~çàäíèé ïëàí";
+                        Text[ polish ] = "Przesuñ na spód";
+                        Text[ japanese ] = "Å”w–Ê‚ÖˆÚ“®(~S)";
+                        Text[ chinese_traditional ] = "¸m©ó©³¼h(~S)";
+                        Text[ arabic ] = "ÅÑÓÇá Åáì ÇáÎáİ";
+                        Text[ greek ] = "ÌåôáöïñÜ óå ~äåıôåñï ğëÜíï";
+                        Text[ korean ] = "¸Ç µÚ·Î(~S)";
+                        Text[ turkish ] = "En alta gönder";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ÅÅĞò";
+            Text[ russian ] = "Ğàñïîëîæåíèå";
+            Text[ polish ] = "Rozmieszczenie";
+            Text[ japanese ] = "®—ñ";
+            Text[ chinese_traditional ] = "±Æ§Ç(~R)";
+            Text[ arabic ] = "ÊÑÊíÈ";
+            Text[ greek ] = "~Ôáêôïğïßçóç";
+            Text[ korean ] = "¹è¿­";
+            Text[ turkish ] = "Sıralama";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_MARK_ALL ;
+            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
+            /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
+            Text = "Alles ausw~ählen" ;
+            Text [ ENGLISH ] = "Select All" ;
+            Text [ norwegian ] = "Select All" ;
+            Text [ italian ] = "Seleziona tutto" ;
+            Text [ portuguese_brazilian ] = "Selecionar Tudo" ;
+            Text [ portuguese ] = "Seleccionar t~udo" ;
+            Text [ finnish ] = "~Valitse kaikki" ;
+            Text [ danish ] = "Marker alt" ;
+            Text [ french ] = "S~électionner tout" ;
+            Text [ swedish ] = "~Välj ut allt" ;
+            Text [ dutch ] = "Alles ~selecteren" ;
+            Text [ spanish ] = "~Seleccionar todo" ;
+            Text [ english_us ] = "Select ~All" ;
+            Text[ chinese_simplified ] = "È«²¿Ñ¡Ôñ(~A)";
+            Text[ russian ] = "Âûäåëèòü âñå";
+            Text[ polish ] = "Zaznacz wszystko";
+            Text[ japanese ] = "‚·‚×‚Ä‘I‘ğ(~A)";
+            Text[ chinese_traditional ] = "¥ş³¡¿ï¨ú(~A)";
+            Text[ arabic ] = "ÊÍÏíÏ Çáßá";
+            Text[ greek ] = "ÅğéëïãŞ üë~ùí";
+            Text[ korean ] = "ÀüÃ¼ ¼±ÅÃ(~A)";
+            Text[ turkish ] = "Tümünü seç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+            Text = "~Löschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ norwegian ] = "~Slett" ;
+            Text [ italian ] = "~Cancella" ;
+            Text [ portuguese_brazilian ] = "~Apagar" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text [ finnish ] = "~Poista" ;
+            Text [ danish ] = "~Slet" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ dutch ] = "~Wissen" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ english_us ] = "~Delete" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Die Selektion löschen : Die Selektion l÷schen */
+            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ russian ] = "Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+/******************************************************************************/
+ModalDialog RID_SVXDLG_IMAPURL
+{
+    SVLook = TRUE ;
+    OutputSize = TRUE ;
+    Closeable = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 214 , 81 ) ;
+    Text = "Beschreibung" ;
+    Text [ English ] = "Description" ;
+    Text [ english_us ] = "Description" ;
+    Text [ italian ] = "Descrizione" ;
+    Text [ spanish ] = "Descripción" ;
+    Text [ french ] = "Description" ;
+    Text [ dutch ] = "Beschrijving" ;
+    Text [ swedish ] = "Beskrivning" ;
+    Text [ danish ] = "Beskrivelse" ;
+    FixedText FT_URLDESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Size = MAP_APPFONT ( 47 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Alternativtext: : Text: */
+        /* ### ACHTUNG: Neuer Text in Resource? Alternativtext: : Text: */
+        Text = "Alternativtext:" ;
+        Text [ ENGLISH ] = "Alternative text:" ;
+        Text [ english_us ] = "Alternative Text:" ;
+        Text [ italian ] = "Testo alternativo:" ;
+        Text [ spanish ] = "Texto alternativo:" ;
+        Text [ french ] = "Texte (facultatif) :" ;
+        Text [ dutch ] = "Alternatieve tekst:" ;
+        Text [ swedish ] = "Alternativtext:" ;
+        Text [ danish ] = "Alternativtekst:" ;
+        Text [ portuguese_brazilian ] = "Alternativtext:" ;
+        Text [ portuguese ] = "Texto alternativo:" ;
+        Text[ chinese_simplified ] = "Ô¤±¸ÎÄ:";
+        Text[ russian ] = "Àëüòåğíàòèâíûé òåêñò:";
+        Text[ polish ] = "Tekst alternatywny:";
+        Text[ japanese ] = "‘ã—pÃ·½Ä:";
+        Text[ chinese_traditional ] = "¹w³Æ¤å:";
+        Text[ arabic ] = ":äÕ ÈÏíá";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "Åíáëëáêôéêü êåßìåíï:";
+        Text[ korean ] = "´ëÃ¼ ÅØ½ºÆ®:";
+        Text[ turkish ] = "Alternatif metin:";
+    };
+    Edit EDT_URLDESCRIPTION
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 27 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+    };
+    FixedText FT_URL1
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 47 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? URL: : Adresse: */
+        /* ### ACHTUNG: Neuer Text in Resource? URL: : Adresse: */
+        Text = "URL:" ;
+        Text [ English ] = "URL:" ;
+        Text [ dutch ] = "URL:" ;
+        Text [ english_us ] = "URL Text:" ;
+        Text [ italian ] = "URL:" ;
+        Text [ spanish ] = "URL:" ;
+        Text [ french ] = "URL :" ;
+        Text [ swedish ] = "URL:" ;
+        Text [ danish ] = "URL:" ;
+        Text [ portuguese_brazilian ] = "URL:" ;
+        Text [ portuguese ] = "Endereço (URL):" ;
+        Text[ chinese_simplified ] = "URL£º";
+        Text[ russian ] = "URL:";
+        Text[ polish ] = "Adres URL:";
+        Text[ japanese ] = "URL:";
+        Text[ chinese_traditional ] = "URL:";
+        Text[ arabic ] = ":URL äÕ";
+        Text[ greek ] = "URL:";
+        Text[ korean ] = "URL ÅØ½ºÆ®:";
+        Text[ turkish ] = "URL:";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_URL
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 12 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+    };
+    OKButton BTN_OK
+    {
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 158 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 158 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    GroupBox GRP_URL
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 146 , 72 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hyperlink : URL */
+        /* ### ACHTUNG: Neuer Text in Resource? Hyperlink : URL */
+        Text = "Hyperlink" ;
+        Text [ ENGLISH ] = "Hyperlink" ;
+        Text [ english_us ] = "Hyperlink" ;
+        Text [ italian ] = "Hyperlink" ;
+        Text [ spanish ] = "Hiperenlace" ;
+        Text [ french ] = "Hyperlien" ;
+        Text [ dutch ] = "Hyperlink" ;
+        Text [ swedish ] = "Hyperlänk" ;
+        Text [ danish ] = "Hyperlink" ;
+        Text [ portuguese_brazilian ] = "Hyperlink" ;
+        Text [ portuguese ] = "Hiperligação" ;
+        Text[ chinese_simplified ] = "³¬Á´½Ó";
+        Text[ russian ] = "Ãèïåğññûëêà";
+        Text[ polish ] = "Hiper³¹cze";
+        Text[ japanese ] = "Ê²Êß°Øİ¸";
+        Text[ chinese_traditional ] = "¶W³sµ²";
+        Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
+        Text[ greek ] = "Õğåñ-óıíäåóç";
+        Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+        Text[ turkish ] = "Hyperlink";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TARGET
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 47 , 10 ) ;
+        Text = "Frame:" ;
+        Text [ ENGLISH ] = "Frame:" ;
+        Text [ english_us ] = "Frame:" ;
+        Text [ portuguese_brazilian ] = "Frame:" ;
+        Text [ swedish ] = "Ram:" ;
+        Text [ danish ] = "Frame:" ;
+        Text [ italian ] = "Frame:" ;
+        Text [ spanish ] = "Frame:" ;
+        Text [ french ] = "Frame :" ;
+        Text [ dutch ] = "Frame:" ;
+        Text [ portuguese ] = "Frame:" ;
+        Text[ chinese_simplified ] = "¿ò£º";
+        Text[ russian ] = "Êàäğ:";
+        Text[ polish ] = "Frame:";
+        Text[ japanese ] = "ÌÚ°Ñ:";
+        Text[ chinese_traditional ] = "°T®Ø:";
+        Text[ arabic ] = "Frame:";
+        Text[ greek ] = "Ğëáßóéï:";
+        Text[ korean ] = "ÇÁ·¹ÀÓ:";
+        Text[ turkish ] = "Frame:";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CBB_TARGETS
+    {
+        Border = TRUE ;
+        Sort = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 42 ) ;
+        Size = MAP_APPFONT ( 84 , 50 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+    };
+    FixedText FT_NAME
+    {
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 47 , 10 ) ;
+        Text = "Name:" ;
+        Text [ English ] = "Name:" ;
+        Text [ english_us ] = "Name:" ;
+        Text [ portuguese ] = "Nome:" ;
+        Text [ portuguese_brazilian ] = "Name:" ;
+        Text [ swedish ] = "Namn:" ;
+        Text [ danish ] = "Navn:" ;
+        Text [ italian ] = "Nome:" ;
+        Text [ spanish ] = "Nombre:" ;
+        Text [ french ] = "Nom :" ;
+        Text [ dutch ] = "Naam:" ;
+        Text[ chinese_simplified ] = "Ãû³Æ:";
+        Text[ russian ] = "Èìÿ:";
+        Text[ polish ] = "Nazwa:";
+        Text[ japanese ] = "–¼‘O:";
+        Text[ chinese_traditional ] = "¦WºÙ:";
+        Text[ arabic ] = ":ÇáÇÓã";
+        Text[ greek ] = "¼íïìá:";
+        Text[ korean ] = "ÀÌ¸§:";
+        Text[ turkish ] = "Ad:";
+        Text[ language_user1 ] = " ";
+    };
+    Edit EDT_NAME
+    {
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 57 ) ;
+        Size = MAP_APPFONT ( 84 , 12 ) ;
+    };
+    Text [ portuguese ] = "Descrição" ;
+    Text [ portuguese_brazilian ] = "Beschreibung" ;
+    Text[ chinese_simplified ] = "ËµÃ÷";
+    Text[ russian ] = "Îïèñàíèå";
+    Text[ polish ] = "Opis";
+    Text[ japanese ] = "à–¾";
+    Text[ chinese_traditional ] = "´y­z";
+    Text[ arabic ] = "ÇáæÕİ";
+    Text[ greek ] = "ĞåñéãñáöŞ";
+    Text[ korean ] = "¼³¸í";
+    Text[ turkish ] = "Açıklama";
+    Text[ language_user1 ] = " ";
+};
+/******************************************************************************/
+String STR_IMAPDLG_SAVE
+{
+    Text= "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?";
+    Text [ English ] = "The ImageMap has been modified.\nDo you want to save your changes?" ;
+    Text[ english_us ] = "The ImageMap has been modified.\nDo you want to save the changes?";
+    Text[ chinese_simplified ] = "Í¼ÏñÓ³ÉäÒÑ¾­±»¸Ä¶¯¡£\nÄúÒª´æÅÌ¸ü¸ÄÂğ£¿";
+    Text[ russian ] = "Image Map èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
+    Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
+    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "¼v¹³¬M®g¤w¸g³QÅÜ§ó¡C\n±z­nÀx¦sÅÜ§ó¡H";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÜ ImageMap.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
+    Text [ italian ] = "L'ImageMap è stata cambiata.\nSalvare le modifiche?" ;
+    Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar los cambios?" ;
+    Text [ french ] = "L'imageMap a été modifiée.\nDésirez-vous sauvegarder les modifications?" ;
+    Text [ dutch ] = "De ImageMap werd gewijzigd.\nWilt u de wijzigingen opslaan?" ;
+    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die nderungen gespeichert werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die nderungen gespeichert werden? */
+    Text = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ swedish ] = "ImageMap har ändrats.\nSkall ändringarna sparas?" ;
+    Text [ danish ] = "ImageMap er blevet ændret.\nVil du gemme ændringerne?" ;
+    Text [ portuguese_brazilian ] = "Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
+    Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja guardar as modificações?" ;
+    Text[ greek ] = "Ôï ImageMap ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåõôïıí ïé áëëáãİò;";
+    Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "ImageMap değiştirildi.\nDeğişiklikler kaydedilsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String STR_IMAPDLG_MODIFY
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die nderungen ³bernommen werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die nderungen ³bernommen werden? */
+    Text = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ English ] = "The ImageMap has been modified.\nDo you want to take your changes?" ;
+    Text [ english_us ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
+    Text [ swedish ] = "ImageMap har ändrats.\nSkall ändringarna övertas?" ;
+    Text [ danish ] = "ImageMap er blevet ændret.\nSkal ændringerne overtages?" ;
+    Text [ italian ] = "La ImageMap è stata cambiata.\nAccettare le modifiche?" ;
+    Text [ spanish ] = "Se ha modificado el ImageMap.\n¿Desea guardar las modificaciones?" ;
+    Text [ french ] = "L'imageMap a été modifiée.\nAppliquer les modifications ?" ;
+    Text [ dutch ] = "De ImageMap werd gewijzigd.\nWilt u de wijzigingen overnemen?" ;
+    Text [ portuguese_brazilian ] = "Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ portuguese ] = "O ImageMap foi modificado.\nDeseja aplicar as modificações?" ;
+    Text[ chinese_simplified ] = "Í¼ÏñÓ³ÉäÒÑ¾­±»¸Ä¶¯¡£\nÄúÒª½ÓÊÜ¸ü¸ÄÂğ£¿";
+    Text[ russian ] = "Image Map èçìåíåí.\nÏğèíÿòü ıòè èçìåíåíèÿ?";
+    Text[ polish ] = "Mapa obrazkowa zosta³a zmieniona.\nCzy zmiany maj¹ byæ zapisane?";
+    Text[ japanese ] = "²Ò°¼ŞÏ¯Ìß‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "¼v¹³¬M®g¤w¸g³QÅÜ§ó¡C\n±z­n±µ¨üÅÜ§ó¡S";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÜ ImageMap.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
+    Text[ greek ] = "Ôï ImageMap ôñïğïğïéŞèçêå.\nÈİëåôå íá åöáñìïóôïıí ïé áëëáãİò;";
+    Text[ korean ] = "ÀÌ¹ÌÁö ¸ÊÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù.\nº¯°æµÈ ³»¿ëÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "ImageMap değiştirildi.\nDeğişiklikler kaydedilsin mi?";
+    Text[ language_user1 ] = " ";
+};
+/******************************************************************************/

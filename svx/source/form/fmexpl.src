@@ -1,0 +1,898 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fmexpl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "svxids.hrc"
+#include "fmresids.hrc"
+#include "fmexpl.hrc"
+Menu RID_FMEXPLORER_POPUPMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_NEW ;
+            HelpID = SID_FM_NEW ;
+            Text = "~Neu" ;
+            Text [ ENGLISH ] = "~New" ;
+            Text [ portuguese ] = "Novo" ;
+            Text [ english_us ] = "~New" ;
+            Text [ portuguese_brazilian ] = "Neu" ;
+            Text [ swedish ] = "~Nytt" ;
+            Text [ danish ] = "~Ny(t)" ;
+            Text [ italian ] = "Nuovo" ;
+            Text [ spanish ] = "N~uevo" ;
+            Text [ french ] = "Nouveau" ;
+            Text [ dutch ] = "~Nieuw" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NEW_FORM ;
+                        HelpID = SID_FM_NEW_FORM ;
+                        Text = "~Formular" ;
+                        Text [ ENGLISH ] = "~Form" ;
+                        Text [ english_us ] = "Form" ;
+                        Text [ portuguese_brazilian ] = "Formular" ;
+                        Text [ swedish ] = "~Formulär" ;
+                        Text [ danish ] = "~Formular" ;
+                        Text [ italian ] = "Formulario" ;
+                        Text [ spanish ] = "~Formulario" ;
+                        Text [ french ] = "~Formulaire" ;
+                        Text [ dutch ] = "~Formulier" ;
+                        Text [ portuguese ] = "~Formulário" ;
+                        Text[ chinese_simplified ] = "±íµ¥";
+                        Text[ russian ] = "~Ôîğìóëÿğ";
+                        Text[ polish ] = "Formularz";
+                        Text[ japanese ] = "Ì«°Ñ";
+                        Text[ chinese_traditional ] = "ªí³æ";
+                        Text[ arabic ] = "ÇÓÊãÇÑÉ";
+                        Text[ greek ] = "~Öüñìá";
+                        Text[ korean ] = "¿ëÁö";
+                        Text[ turkish ] = "Form";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NEW_HIDDEN ;
+                        HelpID = SID_FM_NEW_HIDDEN ;
+                        Text = "~verstecktes Control" ;
+                        Text [ ENGLISH ] = "~Hidden control" ;
+                        Text [ english_us ] = "Hidden Control" ;
+                        Text [ portuguese_brazilian ] = "Hidden Control" ;
+                        Text [ swedish ] = "~Dold kontroll" ;
+                        Text [ danish ] = "Skjult kontrol" ;
+                        Text [ italian ] = "Controllo nascosto" ;
+                        Text [ spanish ] = "~Control oculto" ;
+                        Text [ french ] = "C~ontrôle caché" ;
+                        Text [ dutch ] = "~verborgen controle" ;
+                        Text [ portuguese ] = "Controlo o~culto" ;
+                        Text[ chinese_simplified ] = "ÒşÈë¿ØÖÆ";
+                        Text[ russian ] = "Ñêğûòûé ıëåìåíò óïğàâëåíèÿ";
+                        Text[ polish ] = "Ukryty formant";
+                        Text[ japanese ] = "‰B‚µºİÄÛ°Ù";
+                        Text[ chinese_traditional ] = "Áô¤J±±¨î";
+                        Text[ arabic ] = "ÚäÕÑ ÊÍßã ãÎİí";
+                        Text[ greek ] = "Êñõ~öü óôïé÷åßï åëİã÷ïõ";
+                        Text[ korean ] = "¼û°ÜÁø ÄÁÆ®·Ñ";
+                        Text[ turkish ] = "Gizli komut alanı";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+            Text[ russian ] = "Ñîçä~àòü";
+            Text[ polish ] = "~Nowy";
+            Text[ japanese ] = "V‹Kì¬(~N)";
+            Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+            Text[ arabic ] = "~ÌÏíÏ";
+            Text[ greek ] = "~Äçìéïõñãßá";
+            Text[ korean ] = "»õ·Î(~N)";
+            Text[ turkish ] = "~Yeni";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Text = "Ersetzen durch";
+            Text [ ENGLISH ] = "Ersetzen durch";
+            Identifier = SID_FM_CHANGECONTROLTYPE ;
+            HelpID = SID_FM_CHANGECONTROLTYPE ;
+            Text[ english_us ] = "Replace with";
+            Text[ portuguese ] = "Substituir por";
+            Text[ russian ] = "Çàìåíèòü íà";
+            Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
+            Text[ dutch ] = "Vervangen door";
+            Text[ french ] = "Remplacer par";
+            Text[ spanish ] = "Reemplazar con";
+            Text[ italian ] = "Sostituisci con";
+            Text[ danish ] = "Erstat med";
+            Text[ swedish ] = "Ersätt med";
+            Text[ polish ] = "Zamieñ na";
+            Text[ portuguese_brazilian ] = "Ersetzen durch";
+            Text[ japanese ] = "’u‚«Š·‚¦";
+            Text[ korean ] = "´Ù¸¥ °ÍÀ¸·Î ¹Ù²Ù±â";
+            Text[ chinese_simplified ] = "Ìæ»»Îª";
+            Text[ chinese_traditional ] = "´À¥N¥Î";
+            Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
+            Text[ turkish ] = "Şununla değiştir...";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_DELETE ;
+            HelpID = SID_FM_DELETE ;
+            Text = "~Löschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ english_us ] = "~Delete" ;
+            Text [ portuguese_brazilian ] = "Löschen" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ danish ] = "~Slet" ;
+            Text [ italian ] = "Elimina" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ dutch ] = "Wi~ssen" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ russian ] = "Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_TAB_DIALOG ;
+            HelpID = SID_FM_TAB_DIALOG ;
+            Text = "~Aktivierungsreihenfolge ..." ;
+            Text [ ENGLISH ] = "~Tab order ..." ;
+            Text [ portuguese ] = "Sequência de ~activação..." ;
+            Text [ english_us ] = "Tab Order..." ;
+            Text [ portuguese_brazilian ] = "Sortierung" ;
+            Text [ swedish ] = "~Ordningsföljd för aktivering..." ;
+            Text [ danish ] = "Aktiveringsrækkefølge..." ;
+            Text [ italian ] = "Sequenza di attivazione..." ;
+            Text [ spanish ] = "~Secuencia de activación..." ;
+            Text [ french ] = "Séquence d'activation ..." ;
+            Text [ dutch ] = "Volgorde van a~ctivering" ;
+            Text[ chinese_simplified ] = "ÂÖ»»Ë³Ğò...";
+            Text[ russian ] = "Ïîğÿäîê àêòèâèğîâàíèÿ";
+            Text[ polish ] = "Kolejnoœæ aktywacji";
+            Text[ japanese ] = "ÀÌŞµ°ÀŞ°...";
+            Text[ chinese_traditional ] = "½ü´«¶¶§Ç...";
+            Text[ arabic ] = "ÊÑÊíÈ ÇáÊäÔíØ...";
+            Text[ greek ] = "Ó~åéñÜ åíåñãïğïßçóçò...";
+            Text[ korean ] = "ÅÇ ¼ø¼­...";
+            Text[ turkish ] = "Etkinleştirme sırası...";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RENAME_OBJECT ;
+            HelpID = SID_FM_RENAME_OBJECT ;
+            Text = "~Umbenennen" ;
+            Text [ ENGLISH ] = "~Rename" ;
+            Text [ portuguese ] = "Mudar ~nome" ;
+            Text [ english_us ] = "~Rename" ;
+            Text [ portuguese_brazilian ] = "Umbenennen" ;
+            Text [ swedish ] = "~Byt namn" ;
+            Text [ danish ] = "Omdøb" ;
+            Text [ italian ] = "Rinomina" ;
+            Text [ spanish ] = "~Cambiar nombre" ;
+            Text [ french ] = "~Renommer" ;
+            Text [ dutch ] = "~Naam wijzigen" ;
+            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+            Text[ russian ] = "Ïåğåèìåíîâàòü";
+            Text[ polish ] = "Zmieñ nazwê";
+            Text[ japanese ] = "–¼‘O‚Ì•ÏX(~R)";
+            Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
+            Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
+            Text[ greek ] = "~Ìåôïíïìáóßá";
+            Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
+            Text[ turkish ] = "Yeniden adlandır";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
+            HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
+            Text = "~Eigenschaften" ;
+            Text [ ENGLISH ] = "~Properties" ;
+            Text [ portuguese ] = "~Propriedades" ;
+            Text [ english_us ] = "Propert~ies" ;
+            Text [ portuguese_brazilian ] = "Eigenschaften" ;
+            Text [ swedish ] = "~Egenskaper" ;
+            Text [ danish ] = "Egenskaber" ;
+            Text [ italian ] = "Proprietà" ;
+            Text [ spanish ] = "~Propiedades" ;
+            Text [ french ] = "~Propriétés" ;
+            Text [ dutch ] = "~Eigenschappen" ;
+            Text[ chinese_simplified ] = "ÊôĞÔ(~I)";
+            Text[ russian ] = "Ñâîéñòâà";
+            Text[ polish ] = "W³aœciwoœci";
+            Text[ japanese ] = "ÌßÛÊßÃ¨(~I)";
+            Text[ chinese_traditional ] = "Äİ©Ê(~I)";
+            Text[ arabic ] = "ÎÕÇÆÕ";
+            Text[ greek ] = "Éäéüôçô~åò";
+            Text[ korean ] = "µî·ÏÁ¤º¸(~I)";
+            Text[ turkish ] = "Özellikler";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_OPEN_READONLY ;
+            HelpID = SID_FM_OPEN_READONLY ;
+            Text = "Im Ent~wurfsmodus öffnen" ;
+            Text [ ENGLISH ] = "Open in ~designmode" ;
+            Text [ portuguese ] = "Abrir no modo Es~boço" ;
+            Text [ english_us ] = "Open in Design Mode" ;
+            Text [ portuguese_brazilian ] = "Im Entwurfsmodus öffnen" ;
+            Text [ swedish ] = "Öppna i ~utkastläge" ;
+            Text [ danish ] = "Åbn i udkasttilstand" ;
+            Text [ italian ] = "Apri nel modo bozza" ;
+            Text [ spanish ] = "~Abrir en modo diseño" ;
+            Text [ french ] = "Ouvrir en mode C~onception" ;
+            Text [ dutch ] = "In ~ontwerpmodus openen" ;
+            Text[ chinese_simplified ] = "ÓÃÉè¼ÆÄ£Ê½´ò¿ª";
+            Text[ russian ] = "Îòêğûòü â ğåæèìå ïğîåêòà";
+            Text[ polish ] = "Otwórz w trybie projektu";
+            Text[ japanese ] = "‰º‘‚«Ó°ÄŞ‚ÅŠJ‚­";
+            Text[ chinese_traditional ] = "¶}±Ò³]­p¼Ò¦¡";
+            Text[ arabic ] = "İÊÍ İí æÖÚ ÇáÊÕãíã";
+            Text[ greek ] = "¢íïéãìá óå êáôÜóôáóç ó~÷åäéáóìïı";
+            Text[ korean ] = "¼³°è ¸ğµå¿¡¼­ ¿­±â";
+            Text[ turkish ] = "Tasarım kipinde aç";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+Menu RID_FMSHELL_CONVERSIONMENU
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_EDIT ;
+            HelpID = SID_FM_CONVERTTO_EDIT ;
+            Text = "~Textfeld" ;
+            Text [ ENGLISH ] = "~TextField" ;
+            Text[ english_us ] = "~Text Box";
+            Text[ portuguese ] = "~Campo de texto";
+            Text[ russian ] = "Òåêñòîâîå ïîëå";
+            Text[ greek ] = "Ğåäßï ~êåéìİíïõ";
+            Text[ dutch ] = "~Tekstveld";
+            Text[ french ] = "Zone de ~texte";
+            Text[ spanish ] = "~Campo de texto";
+            Text[ italian ] = "Campo di ~testo";
+            Text[ danish ] = "Tekstfelt";
+            Text[ swedish ] = "~Textfält";
+            Text[ polish ] = "Pole tekstowe";
+            Text[ portuguese_brazilian ] = "~TextField";
+            Text[ japanese ] = "Ã·½ÄÎŞ¯¸½(~T)";
+            Text[ korean ] = "ÅØ½ºÆ® »óÀÚ(~T)";
+            Text[ chinese_simplified ] = "ÎÄ±¾¿ò(~T)";
+            Text[ chinese_traditional ] = "¤å¦rÄæ(~T)";
+            Text[ arabic ] = "ÍŞá äÕ";
+            Text[ turkish ] = "Metin alanı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_BUTTON ;
+            HelpID = SID_FM_CONVERTTO_BUTTON ;
+            Text = "~Schältfläche" ;
+            Text [ ENGLISH ] = "~Button" ;
+            Text[ english_us ] = "~Button";
+            Text[ portuguese ] = "~Botão";
+            Text[ russian ] = "Êëàâèøà";
+            Text[ greek ] = "Ğåäßï åğéëïãŞ~ò";
+            Text[ dutch ] = "~Knop";
+            Text[ french ] = "~Bouton";
+            Text[ spanish ] = "~Botón";
+            Text[ italian ] = "~Pulsante";
+            Text[ danish ] = "Knap";
+            Text[ swedish ] = "~Kommandoknapp";
+            Text[ polish ] = "Przycisk";
+            Text[ portuguese_brazilian ] = "~Button";
+            Text[ japanese ] = "ÎŞÀİ(~B)";
+            Text[ korean ] = "¹öÆ°(~B)";
+            Text[ chinese_simplified ] = "°´Å¥(~B)";
+            Text[ chinese_traditional ] = "«ö¶s(~B)";
+            Text[ arabic ] = "ÒÑ ÖÛØ";
+            Text[ turkish ] = "Düğme";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FIXEDTEXT ;
+            HelpID = SID_FM_CONVERTTO_FIXEDTEXT ;
+            Text = "~Beschriftungsfeld" ;
+            Text [ ENGLISH ] = "~Label" ;
+            Text[ english_us ] = "La~bel field";
+            Text[ portuguese ] = "Campo de ~rótulo";
+            Text[ russian ] = "~Íàäïèñü";
+            Text[ greek ] = "Ğåäßï å~ğéãñáöŞò";
+            Text[ dutch ] = "~Titelveld";
+            Text[ french ] = "~Champ d'étiquette";
+            Text[ spanish ] = "~Campo de etiqueta";
+            Text[ italian ] = "Testo ~fisso";
+            Text[ danish ] = "Etiketfelt";
+            Text[ swedish ] = "~Etikettfält";
+            Text[ polish ] = "Pole etykiety";
+            Text[ portuguese_brazilian ] = "~Label";
+            Text[ japanese ] = "×ÍŞÙÌ¨°ÙÄŞ(~C)";
+            Text[ korean ] = "¶óº§ ÇÊµå(~B)";
+            Text[ chinese_simplified ] = "±êÇ©À¸(~B)";
+            Text[ chinese_traditional ] = "¼ĞÅÒÄæ¦ì(~C)";
+            Text[ arabic ] = "ÍŞá ÚäæäÉ";
+            Text[ turkish ] = "Etiket alanı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_GROUPBOX ;
+            HelpID = SID_FM_CONVERTTO_GROUPBOX ;
+            Text = "~Gruppierungsrahmen" ;
+            Text [ ENGLISH ] = "F~rameControl" ;
+            Text[ english_us ] = "G~roup Box";
+            Text[ portuguese ] = "Campo de g~rupo";
+            Text[ russian ] = "Ğàìêà ãğóïïû";
+            Text[ greek ] = "Ğëáßóéï ~ïìáäïğïßçóçò";
+            Text[ dutch ] = "~Groepskader";
+            Text[ french ] = "Zone de ~groupe";
+            Text[ spanish ] = "~Marco de grupo";
+            Text[ italian ] = "Casella di ~gruppo";
+            Text[ danish ] = "Gruppeboks";
+            Text[ swedish ] = "~Grupperingsram";
+            Text[ polish ] = "Pole grupy";
+            Text[ portuguese_brazilian ] = "F~rameControl";
+            Text[ japanese ] = "¸ŞÙ°ÌßÎŞ¯¸½(~R)";
+            Text[ korean ] = "±×·ì ¹Ú½º(~R)";
+            Text[ chinese_simplified ] = "Ğ¡×é¿ò(~R)";
+            Text[ chinese_traditional ] = "¸s²Õ®Ø(~R)";
+            Text[ arabic ] = "ÅØÇÑ ÊÌãíÚ";
+            Text[ turkish ] = "Grup çerçevesi";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_LISTBOX ;
+            HelpID = SID_FM_CONVERTTO_LISTBOX ;
+            Text = "~Listenfeld" ;
+            Text [ ENGLISH ] = "L~ist Box" ;
+            Text[ english_us ] = "L~ist Box";
+            Text[ portuguese ] = "Caixa de ~listagem";
+            Text[ russian ] = "Ñïèñîê";
+            Text[ greek ] = "Ğåäßï ~ëßóôáò";
+            Text[ dutch ] = "Ke~uzelijst";
+            Text[ french ] = "Zone de ~liste";
+            Text[ spanish ] = "L~istado";
+            Text[ italian ] = "~Casella di riepilogo";
+            Text[ danish ] = "Rulleliste";
+            Text[ swedish ] = "L~istruta";
+            Text[ polish ] = "Pole listy";
+            Text[ portuguese_brazilian ] = "L~ist Box";
+            Text[ japanese ] = "Ø½ÄÎŞ¯¸½(~I)";
+            Text[ korean ] = "¸ñ·Ï ÇÊµå(~I)";
+            Text[ chinese_simplified ] = "ÁĞ±í¿ò(~I)";
+            Text[ chinese_traditional ] = "²M³æ¤è®Ø(~I)";
+            Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
+            Text[ turkish ] = "Liste alanı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_CHECKBOX ;
+            HelpID = SID_FM_CONVERTTO_CHECKBOX ;
+            Text = "~Markierfeld" ;
+            Text [ ENGLISH ] = "~Check Box" ;
+            Text[ english_us ] = "~Check Box";
+            Text[ portuguese ] = "Caixa de ~verificação";
+            Text[ russian ] = "Îêíî ôëàæêà";
+            Text[ greek ] = "Ğåäßï óŞ~ìáíóçò";
+            Text[ dutch ] = "~Markeerveld";
+            Text[ french ] = "~Case à cocher";
+            Text[ spanish ] = "~Casilla de verificación";
+            Text[ italian ] = "Casella di controllo";
+            Text[ danish ] = "Afkrydsningsfelt";
+            Text[ swedish ] = "~Markeringsfält";
+            Text[ polish ] = "Pole wyboru";
+            Text[ portuguese_brazilian ] = "~Check Box";
+            Text[ japanese ] = "Áª¯¸ÎŞ¯¸½(~C)";
+            Text[ korean ] = "È®ÀÎ¶õ(~C)";
+            Text[ chinese_simplified ] = "¸´Ñ¡¿ò(~C)";
+            Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô(~C)";
+            Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
+            Text[ turkish ] = "Seçme kutusu";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_RADIOBUTTON ;
+            HelpID = SID_FM_CONVERTTO_RADIOBUTTON ;
+            Text = "~Optionsfeld" ;
+            Text [ ENGLISH ] = "~Option Button" ;
+            Text[ english_us ] = "~Radio Button";
+            Text[ portuguese ] = "Botão de ~selecção";
+            Text[ russian ] = "~Ïåğåêëş÷àòåëü";
+            Text[ greek ] = "Ğåäß~ï åğéëïãŞò";
+            Text[ dutch ] = "~Optieveld";
+            Text[ french ] = "Bouton ~radio";
+            Text[ spanish ] = "~Botón radio";
+            Text[ italian ] = "Pulsante di scelta";
+            Text[ danish ] = "Alternativknap";
+            Text[ swedish ] = "~Alternativfält";
+            Text[ polish ] = "Pole opcji";
+            Text[ portuguese_brazilian ] = "~Option Button";
+            Text[ japanese ] = "×¼ŞµÎŞÀİ(~R)";
+            Text[ korean ] = "¿É¼Ç ÇÊµå(~R)";
+            Text[ chinese_simplified ] = "Ñ¡Ïî°´Å¥(~R)";
+            Text[ chinese_traditional ] = "¿ï¶µÄæ(~R)";
+            Text[ arabic ] = "ÒÑ ÎíÇÑ";
+            Text[ turkish ] = "Seçenek düğmesi";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_COMBOBOX ;
+            HelpID = SID_FM_CONVERTTO_COMBOBOX ;
+            Text = "~Kombinationsfeld" ;
+            Text [ ENGLISH ] = "Combo Bo~x" ;
+            Text[ english_us ] = "Combo Bo~x";
+            Text[ portuguese ] = "Caixa de com~binação";
+            Text[ russian ] = "Ïîëå ñî ñïèñêîì";
+            Text[ greek ] = "Ğåäßï ~óõíäõáóìïı";
+            Text[ dutch ] = "~Combinatieveld";
+            Text[ french ] = "Zone ~combinée";
+            Text[ spanish ] = "Ca~mpo combinado";
+            Text[ italian ] = "Casella com~binata";
+            Text[ danish ] = "Kombinationsboks";
+            Text[ swedish ] = "~Kombinationsfält";
+            Text[ polish ] = "Pole kombi";
+            Text[ portuguese_brazilian ] = "Combo Bo~x";
+            Text[ japanese ] = "ºİÎŞÎŞ¯¸½(~X)";
+            Text[ korean ] = "ÄŞº¸ ¹Ú½º(~X)";
+            Text[ chinese_simplified ] = "×éºÏ¿ò(~X)";
+            Text[ chinese_traditional ] = "²Õ¦X¤è®Ø(~X)";
+            Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
+            Text[ turkish ] = "Kombinasyon alanı";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_IMAGEBUTTON ;
+            HelpID = SID_FM_CONVERTTO_IMAGEBUTTON ;
+            Text = "~Grafische Schaltfläche" ;
+            Text [ ENGLISH ] = "I~mage Button" ;
+            Text[ english_us ] = "I~mage Button";
+            Text[ portuguese ] = "Botão ~gráfico";
+            Text[ russian ] = "Ãğàôè÷åñêàÿ êíîïêà";
+            Text[ greek ] = "~Ãñáöéêü ğåäßï åíôïëŞò";
+            Text[ dutch ] = "~Afbeeldingenknop";
+            Text[ french ] = "Bouton ~imagé";
+            Text[ spanish ] = "Botón g~ráfico";
+            Text[ italian ] = "P~ulsante immagine";
+            Text[ danish ] = "Grafisk knap";
+            Text[ swedish ] = "G~rafisk knapp";
+            Text[ polish ] = "Przycisk graficzny";
+            Text[ portuguese_brazilian ] = "I~mage Button";
+            Text[ japanese ] = "²Ò°¼ŞÎŞÀİ(~M)";
+            Text[ korean ] = "ÀÌ¹ÌÁö ¹öÆ°(~M)";
+            Text[ chinese_simplified ] = "Í¼ĞÎ°´Å¥(~M)";
+            Text[ chinese_traditional ] = "¹Ï§Î«ö¶s(~M)";
+            Text[ arabic ] = "ãİÊÇÍ ãÕæøÑ";
+            Text[ turkish ] = "Grafiksel düğme";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FILECONTROL ;
+            HelpID = SID_FM_CONVERTTO_FILECONTROL ;
+            Text = "~Dateiauswahl" ;
+            Text [ ENGLISH ] = "~File Selection" ;
+            Text[ english_us ] = "~File Selection";
+            Text[ portuguese ] = "~Selecção de ficheiro";
+            Text[ russian ] = "~Âûáîğ ôàéëà";
+            Text[ greek ] = "ÅğéëïãŞ ~áñ÷åßïõ";
+            Text[ dutch ] = "~Bestandselectie";
+            Text[ french ] = "~Sélection de fichier";
+            Text[ spanish ] = "Selec~ción de archivo";
+            Text[ italian ] = "Scelta file";
+            Text[ danish ] = "Filudvalg";
+            Text[ swedish ] = "~Filurval";
+            Text[ polish ] = "Wybór plików";
+            Text[ portuguese_brazilian ] = "~File Selection";
+            Text[ japanese ] = "Ì§²Ù‘I‘ğ(~F)";
+            Text[ korean ] = "ÆÄÀÏ ¼±ÅÃ(~F)";
+            Text[ chinese_simplified ] = "Ñ¡ÔñÎÄ¼ş(~F)";
+            Text[ chinese_traditional ] = "¿ï¾ÜÀÉ®×(~F)";
+            Text[ arabic ] = "ÇÎÊíÇÑ Çáãáİ";
+            Text[ turkish ] = "Dosya seçimi";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_DATE ;
+            HelpID = SID_FM_CONVERTTO_DATE ;
+            Text = "D~atumsfeld" ;
+            Text [ ENGLISH ] = "~Date Field" ;
+            Text[ english_us ] = "~Date Field";
+            Text[ portuguese ] = "Campo de d~ata";
+            Text[ russian ] = "Ïîëå äàòû";
+            Text[ greek ] = "Ğåäßï çìåñïìçíß~áò";
+            Text[ dutch ] = "~Datumveld";
+            Text[ french ] = "Champ de ~date";
+            Text[ spanish ] = "Campo de ~fecha";
+            Text[ italian ] = "Campo ~data";
+            Text[ danish ] = "Datofelt";
+            Text[ swedish ] = "~Datumfält";
+            Text[ polish ] = "Pole daty";
+            Text[ portuguese_brazilian ] = "~Date Field";
+            Text[ japanese ] = "“ú•tÌ¨°ÙÄŞ(~D)";
+            Text[ korean ] = "³¯Â¥ ÇÊµå(~D)";
+            Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î(~D)";
+            Text[ chinese_traditional ] = "¤é´ÁÄæ(~D)";
+            Text[ arabic ] = "ÍŞá ÇáÊÇÑíÎ";
+            Text[ turkish ] = "Tarih alanı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_TIME ;
+            HelpID = SID_FM_CONVERTTO_TIME ;
+            Text = "~Zeitfeld" ;
+            Text [ ENGLISH ] = "Tim~e Field" ;
+            Text[ english_us ] = "Tim~e Field";
+            Text[ portuguese ] = "Campo ~horário";
+            Text[ russian ] = "Ïîëå âğåìåíè";
+            Text[ greek ] = "Ğåäßï ş~ñáò";
+            Text[ dutch ] = "~Tijdveld";
+            Text[ french ] = "Champ ~horaire";
+            Text[ spanish ] = "Campo ~horario";
+            Text[ italian ] = "Campo ~orario";
+            Text[ danish ] = "Klokkeslætsfelt";
+            Text[ swedish ] = "~Tidsfält";
+            Text[ polish ] = "Pole czasu";
+            Text[ portuguese_brazilian ] = "Tim~e Field";
+            Text[ japanese ] = "ŠÔÌ¨°ÙÄŞ(~E)";
+            Text[ korean ] = "½Ã°£ ÇÊµå(~E)";
+            Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î(~E)";
+            Text[ chinese_traditional ] = "®É¶¡Äæ(~E)";
+            Text[ arabic ] = "ÍŞá ÇáæŞÊ";
+            Text[ turkish ] = "Zaman alanı";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_NUMERIC ;
+            HelpID = SID_FM_CONVERTTO_NUMERIC ;
+            Text = "~Numerisches Feld" ;
+            Text [ ENGLISH ] = "~Numerical Field" ;
+            Text[ english_us ] = "~Numerical Field";
+            Text[ portuguese ] = "~Campo ~numérico";
+            Text[ russian ] = "×èñëîâîå ïîëå";
+            Text[ greek ] = "Áñé~èìçôéêü ğåäßï";
+            Text[ dutch ] = "~Numeriek veld";
+            Text[ french ] = "Champ ~numérique";
+            Text[ spanish ] = "C~ampo numérico";
+            Text[ italian ] = "Campo ~numerico";
+            Text[ danish ] = "Numerisk felt";
+            Text[ swedish ] = "~Numeriskt fält";
+            Text[ polish ] = "Pole numeryczne";
+            Text[ portuguese_brazilian ] = "~Numerical Field";
+            Text[ japanese ] = "”’lÌ¨°ÙÄŞ(~N)";
+            Text[ korean ] = "¼ıÀÚ ÇÊµå(~N)";
+            Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î(~N)";
+            Text[ chinese_traditional ] = "¼Æ¦rÄæ(~N)";
+            Text[ arabic ] = "ÍŞá ÑŞãí";
+            Text[ turkish ] = "Sayısal alan";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_CURRENCY ;
+            HelpID = SID_FM_CONVERTTO_CURRENCY ;
+            Text = "~Währungsfeld" ;
+            Text [ ENGLISH ] = "C~urrency Field" ;
+            Text[ english_us ] = "C~urrency Field";
+            Text[ portuguese ] = "Campo de moe~da";
+            Text[ russian ] = "Ïîëå äëÿ âàëşòû";
+            Text[ greek ] = "Ğå~äßï íïìßóìáôïò";
+            Text[ dutch ] = "~Valutaveld";
+            Text[ french ] = "Champ ~monétaire";
+            Text[ spanish ] = "Cam~po de moneda";
+            Text[ italian ] = "Campo di ~valuta";
+            Text[ danish ] = "Valutafelt";
+            Text[ swedish ] = "V~alutafält";
+            Text[ polish ] = "Pole walutowe";
+            Text[ portuguese_brazilian ] = "C~urrency Field";
+            Text[ japanese ] = "’Ê‰İÌ¨°ÙÄŞ(~U)";
+            Text[ korean ] = "ÅëÈ­ ÇÊµå(~U)";
+            Text[ chinese_simplified ] = "»õ±Ò×Ö¶Î(~U)";
+            Text[ chinese_traditional ] = "³f¹ôÄæ(~U)";
+            Text[ arabic ] = "ÍŞá ÇáÚãáÉ";
+            Text[ turkish ] = "Para birimi alanı";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_PATTERN ;
+            HelpID = SID_FM_CONVERTTO_PATTERN ;
+            Text = "Mask~iertes Feld" ;
+            Text [ ENGLISH ] = "~Pattern Field" ;
+            Text[ english_us ] = "~Pattern Field";
+            Text[ portuguese ] = "~Campo mascarado";
+            Text[ russian ] = "Ìàñêèğîâàííîå ïîëå";
+            Text[ greek ] = "Êáë~õììİíï ğåäßï";
+            Text[ dutch ] = "~Patroonveld";
+            Text[ french ] = "Champ ~masqué";
+            Text[ spanish ] = "Campo s~eleccionado";
+            Text[ italian ] = "Campo a ~maschera";
+            Text[ danish ] = "Maskeret felt";
+            Text[ swedish ] = "~Maskerat fält";
+            Text[ polish ] = "Pole wzorca";
+            Text[ portuguese_brazilian ] = "~Pattern Field";
+            Text[ japanese ] = "ÊßÀ°İÌ¨°ÙÄŞ(~P)";
+            Text[ korean ] = "ÆĞÅÏ ÇÊµå(~P)";
+            Text[ chinese_simplified ] = "ÑÚÂëÇø(~P)";
+            Text[ chinese_traditional ] = "±»½XÄæ(~P)";
+            Text[ arabic ] = "ÍŞá ãõŞäøóÚ";
+            Text[ turkish ] = "Maskelenmiş alan";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_IMAGECONTROL ;
+            HelpID = SID_FM_CONVERTTO_IMAGECONTROL ;
+            Text = "G~rafisches Kontrollfeld" ;
+            Text [ ENGLISH ] = "Ima~ge Control" ;
+            Text[ english_us ] = "Ima~ge Control";
+            Text[ portuguese ] = "Controlo de i~magem";
+            Text[ russian ] = "Ãğàôè÷åñêèé ıëåìåíò óïğàâëåíèÿ";
+            Text[ greek ] = "Ã~ñáöéêü ğåäßï åëİã÷ïõ";
+            Text[ dutch ] = "Grafisch c~ontroleveld";
+            Text[ french ] = "Champ de contrôle ~graphique";
+            Text[ spanish ] = "Control de ima~gen";
+            Text[ italian ] = "Campo di controllo ~immagine";
+            Text[ danish ] = "Grafisk kontrolelement";
+            Text[ swedish ] = "Gra~fiskt kontrollfält";
+            Text[ polish ] = "Pole graficzne kontrolne";
+            Text[ portuguese_brazilian ] = "Ima~ge Control";
+            Text[ japanese ] = "²Ò°¼ŞºİÄÛ°ÙÌ¨°ÙÄŞ(~G)";
+            Text[ korean ] = "ÀÌ¹ÌÁö ÄÁÆ®·Ñ ÇÊµå(~G)";
+            Text[ chinese_simplified ] = "Í¼Ê½¿ØÖÆ×Ö¶Î(~G)";
+            Text[ chinese_traditional ] = "¹Ï¦¡±±¨î¶µ(~G)";
+            Text[ arabic ] = "ÚäÕÑ ÊÍßã ÑÓæãí";
+            Text[ turkish ] = "Grafiksel komut alanı";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CONVERTTO_FORMATTED ;
+            HelpID = SID_FM_CONVERTTO_FORMATTED ;
+            Text = "~Formatiertes Feld" ;
+            Text [ ENGLISH ] = "Fo~rmatted Field" ;
+            Text[ english_us ] = "Fo~rmatted Field";
+            Text[ portuguese ] = "Campo ~formatado";
+            Text[ russian ] = "Îòôîğìàòèğîâàííîå ïîëå";
+            Text[ greek ] = "Ìïñ~öïğïéçìİíï ğåäßï";
+            Text[ dutch ] = "Opge~maakt veld";
+            Text[ french ] = "~Champ formaté";
+            Text[ spanish ] = "Campo for~mateado";
+            Text[ italian ] = "Campo fo~rmattato";
+            Text[ danish ] = "Formateret felt";
+            Text[ swedish ] = "Fo~rmaterat fält";
+            Text[ polish ] = "Pole formatowane";
+            Text[ portuguese_brazilian ] = "Fo~rmatted Field";
+            Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ(~R)";
+            Text[ korean ] = "¼­½ÄÀÌ µÈ ÇÊµå(~R)";
+            Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÇøÓò(~R)";
+            Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ(~R)";
+            Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
+            Text[ turkish ] = "Formatlı alan";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+ImageList RID_SVXIMGLIST_FMEXPL
+{
+    ImageBitmap = Bitmap { File = "sx_form.bmp" ; };
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    IdList =
+    {
+        RID_SVXIMG_BUTTON ;
+        RID_SVXIMG_RADIOBUTTON ;
+        RID_SVXIMG_CHECKBOX ;
+        RID_SVXIMG_FIXEDTEXT ;
+        RID_SVXIMG_GROUPBOX ;
+        RID_SVXIMG_EDIT ;
+        RID_SVXIMG_LISTBOX ;
+        RID_SVXIMG_COMBOBOX ;
+        RID_SVXIMG_URLBUTTON ;
+        RID_SVXIMG_CONTROL ;
+        RID_SVXIMG_FORM ;
+        RID_SVXIMG_FORMS ;
+        RID_SVXIMG_COLLAPSEDNODE ;
+        RID_SVXIMG_EXPANDEDNODE ;
+        RID_SVXIMG_IMAGEBUTTON ;
+        RID_SVXIMG_FILECONTROL ;
+        RID_SVXIMG_DATEFIELD ;
+        RID_SVXIMG_TIMEFIELD ;
+        RID_SVXIMG_NUMERICFIELD ;
+        RID_SVXIMG_CURRENCYFIELD ;
+        RID_SVXIMG_PATTERNFIELD ;
+        RID_SVXIMG_HIDDEN ;
+        RID_SVXIMG_IMAGECONTROL ;
+        RID_SVXIMG_GRID ;
+        RID_SVXIMG_FILTER ;
+        RID_SVXIMG_FORMATTEDFIELD ;
+        RID_SVXIMG_DATE_N_TIME_FIELDS ;
+        RID_SVXIMG_FIELD ;
+        RID_SVXIMG_ERROR ;
+        RID_SVXIMG_WARNING ;
+        RID_SVXIMG_INFO ;
+    };
+    IdCount = 31 ;
+};
+ModalDialog RID_SVXDLG_SETFORM
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 200 ) ;
+    Text = "Formularauswahl" ;
+    Text [ English ] = "Set form" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    GroupBox GB_PATH
+    {
+        Pos = MAP_APPFONT ( 6 , 149 ) ;
+        Size = MAP_APPFONT ( 188 , 25 ) ;
+        Text = "Pfad" ;
+        Text [ English ] = "Path" ;
+        Text [ portuguese ] = "Atalho" ;
+        Text [ english_us ] = "Path" ;
+        Text [ portuguese_brazilian ] = "Pfad" ;
+        Text [ swedish ] = "Sökväg" ;
+        Text [ danish ] = "Sti" ;
+        Text [ italian ] = "Percorso" ;
+        Text [ spanish ] = "Ruta" ;
+        Text [ french ] = "Chemin" ;
+        Text [ dutch ] = "Pad" ;
+        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ russian ] = "Ïóòü";
+        Text[ polish ] = "Œcie¿ka";
+        Text[ japanese ] = "Êß½";
+        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ arabic ] = "ÇáãÓÇÑ";
+        Text[ greek ] = "ÄéáäñïìŞ";
+        Text[ korean ] = "°æ·Î";
+        Text[ turkish ] = "Veri yolu";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PATH
+    {
+        Pos = MAP_APPFONT ( 12 , 155 ) ;
+        Size = MAP_APPFONT ( 156 , 15 ) ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 59 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 123 , 180 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ portuguese ] = "Seleccionar formulário" ;
+    Text [ english_us ] = "Select form" ;
+    Text [ portuguese_brazilian ] = "Formularauswahl" ;
+    Text [ swedish ] = "Formulärurval" ;
+    Text [ danish ] = "Formularudvalg" ;
+    Text [ italian ] = "Scelta formulario" ;
+    Text [ spanish ] = "Selección de formulario" ;
+    Text [ french ] = "Sélection de formulaire" ;
+    Text [ dutch ] = "Formulier selecteren" ;
+    Text[ chinese_simplified ] = "Ñ¡Ôñ±íµ¥";
+    Text[ russian ] = "Âûáîğ ôîğìóëÿğà";
+    Text[ polish ] = "Wybór formularza";
+    Text[ japanese ] = "Ì«°Ñ‚Ì‘I‘ğ";
+    Text[ chinese_traditional ] = "¿ï¾Üªí³æ";
+    Text[ arabic ] = "ÊÍÏíÏ ÇáÇÓÊãÇÑÉ";
+    Text[ greek ] = "ÅğéëïãŞ öüñìáò";
+    Text[ korean ] = "¿ëÁö ¼±ÅÃ";
+    Text[ turkish ] = "Form seçimi";
+    Text[ language_user1 ] = " ";
+};
+DockingWindow RID_SVX_FMEXPLORER
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 200 , 200 ) ;
+    Text = "Formular Navigator" ;
+    Text [ English ] = "Form Navigator" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ english_us ] = "Form Navigator" ;
+    Text [ portuguese_brazilian ] = "Formular Explorer" ;
+    Text [ swedish ] = "Formulär-Navigator" ;
+    Text [ danish ] = "Formular Navigator" ;
+    Text [ italian ] = "Navigatore formulario" ;
+    Text [ spanish ] = "Navegador de formulario" ;
+    Text [ french ] = "Navigateur de formulaires" ;
+    Text [ dutch ] = "Formuliernavigator" ;
+    Text [ portuguese ] = "Formulário Navegador" ;
+    Text[ chinese_simplified ] = "±íµ¥ÖúÊÖ";
+    Text[ russian ] = "Íàâèãàòîğ ôîğìóëÿğà";
+    Text[ polish ] = "Nawigator formularzy";
+    Text[ japanese ] = "Ì«°ÑÅËŞ¹Ş°À";
+    Text[ chinese_traditional ] = "ªí³æ§U¤â";
+    Text[ arabic ] = "äÇİíÌíÊæÑ ÇáÇÓÊãÇÑÉ";
+    Text[ greek ] = "Navigator öüñìáò";
+    Text[ korean ] = "¿ëÁö ³×ºñ°ÔÀÌÅÍ";
+    Text[ turkish ] = "Form navigatörü";
+    Text[ language_user1 ] = " ";
+};

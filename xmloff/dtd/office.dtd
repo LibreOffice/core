@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	$Id: office.dtd,v 1.1.1.1 2000-09-18 17:07:00 hr Exp $
+
+	Copyright 2000 Sun Microsystems Inc.
+-->
+
+<!ENTITY % dtypes-mod SYSTEM "dtypes.mod">
+%dtypes-mod;
+<!ENTITY % nmspace-mod SYSTEM "nmspace.mod">
+%nmspace-mod;
+<!ENTITY % style-mod SYSTEM "style.mod">
+%style-mod;
+<!ENTITY % office-mod SYSTEM "office.mod">
+%office-mod;
+<!ENTITY % meta-mod SYSTEM "meta.mod">
+%meta-mod;
+<!ENTITY % drawing-mod SYSTEM "drawing.mod">
+%drawing-mod;
+<!ENTITY % text-mod SYSTEM "text.mod">
+%text-mod;
+<!ENTITY % table-mod SYSTEM "table.mod">
+%table-mod;
+<!ENTITY % chart-mod SYSTEM "chart.mod">
+%chart-mod;
+<!ENTITY % datastyl-mod SYSTEM "datastyl.mod">
+%datastyl-mod;

@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chardlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_CHARDLG_HRC
+#define _SVX_CHARDLG_HRC
+
+// defines ------------------------------------------------------------------
+
+// StandardPage -------------------------------------------------------------
+
+#define FT_FONT         10
+#define LB_FONT         11
+#define FT_STYLE        12
+#define LB_STYLE        13
+#define FT_SIZE         14
+#define LB_SIZE         15
+
+#define BTN_OUTLINE     20
+#define BTN_SHADOW      21
+#define BTN_UNDERLINE   22
+#define BTN_STRIKEOUT   23
+#define GB_CASEMAP      24
+
+#define FT_COLOR        30
+#define LB_COLOR        31
+#define FT_LANGUAGE     32
+#define LB_LANGUAGE     33
+#define FT_FONTTYPE     34  // auch fuer ExtendedPage
+#define FT_FILLCOLOR    35
+#define LB_FILLCOLOR    36
+#define STR_TRANSPARENT 37
+#define STR_NOSTYLE     38
+
+#define WIN_EXAMPLE     40  // auch fuer ExtendedPage
+#define GB_EXAMPLE      41  // auch fuer ExtendedPage
+
+// ExtendedPage -------------------------------------------------------------
+
+#define BTN_NONE        50
+#define BTN_CAPS        51
+#define BTN_LOWERCASE   52
+#define BTN_SMALLCAPS   53
+#define BTN_TITEL       54
+#define GB_EFFECT       55
+#define LB_CAPS         56
+
+#define BTN_HIGH        60
+#define BTN_NORMAL      61
+#define BTN_DEEP        62
+#define GB_POSITION     63
+
+#define FT_ESCDEEPHIGH  70
+#define ED_ESCDEEPHIGH  71
+#define FT_ESCRELSIZE   72
+#define ED_ESCRELSIZE   73
+#define GB_POSEXT       74
+#define CB_AUTOPOS      75
+
+#define LB_KERNING      80
+#define FT_KERNING      81
+#define ED_KERNING      82
+#define BTN_AUTOKERN    83
+#define GB_KERNING      84
+
+#define FT_UNDERLINECNT 90
+#define LB_UNDERLINECNT 91
+#define FT_STRIKEOUTCNT 92
+#define LB_STRIKEOUTCNT 93
+#define CB_WORD         94
+#define CB_FLASH        95
+
+
+#endif
+

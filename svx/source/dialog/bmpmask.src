@@ -1,0 +1,466 @@
+/*************************************************************************
+ *
+ *  $RCSfile: bmpmask.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "bmpmask.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_BMPMASK ----------------------------------------------------
+DockingWindow RID_SVXDLG_BMPMASK
+{
+    HelpId = SID_BMPMASK ;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 163 , 133 ) ;
+    Text = "Pipette" ;
+    Text [ ENGLISH ] = "Eyedropper" ;
+    Sizeable = FALSE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    GroupBox GRP_Q
+    {
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 151 , 104 ) ;
+        Text = "Farben" ;
+        Text [ ENGLISH ] = "Colors" ;
+        Text [ dutch ] = "Kleuren" ;
+        Text [ english_us ] = "Colors" ;
+        Text [ italian ] = "Colori" ;
+        Text [ spanish ] = "Colores" ;
+        Text [ french ] = "Couleurs" ;
+        Text [ swedish ] = "F‰rger" ;
+        Text [ danish ] = "Farver" ;
+        Text [ portuguese_brazilian ] = "Farben" ;
+        Text [ portuguese ] = "Cores" ;
+        Text[ chinese_simplified ] = "—’…´";
+        Text[ russian ] = "÷‚ÂÚ‡";
+        Text[ polish ] = "Kolory";
+        Text[ japanese ] = "êF";
+        Text[ chinese_traditional ] = "√C¶‚";
+        Text[ arabic ] = "«·√·Ê«‰";
+        Text[ greek ] = "◊Ò˛Ï·Ù·";
+        Text[ korean ] = "ªˆªÛ";
+        Text[ turkish ] = "Renkler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_1
+    {
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 38 , 12 ) ;
+        Text = "Quellfarbe" ;
+        Text [ ENGLISH ] = "Source color" ;
+        Text [ dutch ] = "Uitgangskleur" ;
+        Text [ english_us ] = "Source color" ;
+        Text [ italian ] = "Colore origine" ;
+        Text [ spanish ] = "Color fuente" ;
+        Text [ french ] = "Couleur d'origine" ;
+        Text [ swedish ] = "K‰llf‰rg" ;
+        Text [ danish ] = "Kildefarve" ;
+        Text [ portuguese_brazilian ] = "Quellfarbe" ;
+        Text [ portuguese ] = "Cor-fonte" ;
+        Text[ chinese_simplified ] = "‘¥—’…´";
+        Text[ russian ] = "»ÒıÓ‰Ì˚È";
+        Text[ polish ] = "Kolor orygin.";
+        Text[ japanese ] = "ø∞Ω∂◊∞";
+        Text[ chinese_traditional ] = "∑Ω√C¶‚";
+        Text[ arabic ] = "«··Ê‰ «·√’·Ì";
+        Text[ greek ] = "¬·ÛÈÍ¸ ˜Ò˛Ï·";
+        Text[ korean ] = "º“Ω∫ ªˆªÛ";
+        Text[ turkish ] = "Kaynak renk";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_2
+    {
+        Pos = MAP_APPFONT ( 51 , 34 ) ;
+        Size = MAP_APPFONT ( 35 , 12 ) ;
+        Text = "Toleranz" ;
+        Text [ ENGLISH ] = "Tolerance" ;
+        Text [ english_us ] = "Tolerance" ;
+        Text [ italian ] = "Tolleranza" ;
+        Text [ spanish ] = "Tolerancia" ;
+        Text [ french ] = "TolÈrance" ;
+        Text [ dutch ] = "Tolerantie" ;
+        Text [ swedish ] = "Tolerans" ;
+        Text [ danish ] = "Tolerance" ;
+        Text [ portuguese_brazilian ] = "Toleranz" ;
+        Text [ portuguese ] = "Toler‚ncia" ;
+        Text[ chinese_simplified ] = "∆´≤Ó";
+        Text[ russian ] = "ƒÓÔÛÒÚËÏÓÒÚ¸";
+        Text[ polish ] = "Tolerancja";
+        Text[ japanese ] = "ãñóeîÕàÕ";
+        Text[ chinese_traditional ] = "∞æÆt";
+        Text[ arabic ] = "«· ”«„Õ";
+        Text[ greek ] = "¡ÌÔ˜ﬁ";
+        Text[ korean ] = "«„øÎ ø¿¬˜";
+        Text[ turkish ] = "Tolerans";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_3
+    {
+        Pos = MAP_APPFONT ( 87 , 34 ) ;
+        Size = MAP_APPFONT ( 64 , 12 ) ;
+        Text = "Ersetzen durch..." ;
+        Text [ ENGLISH ] = "Replace with..." ;
+        Text [ english_us ] = "Replace with..." ;
+        Text [ italian ] = "Sostituisci con..." ;
+        Text [ spanish ] = "Reemplazar con..." ;
+        Text [ french ] = "Remplacer par..." ;
+        Text [ dutch ] = "Vervangen door..." ;
+        Text [ swedish ] = "Ers‰tt med..." ;
+        Text [ danish ] = "Erstat med..." ;
+        Text [ portuguese_brazilian ] = "Ersetzen durch..." ;
+        Text [ portuguese ] = "Substituir por..." ;
+        Text[ chinese_simplified ] = "ÃÊªªŒ™...";
+        Text[ russian ] = "«‡ÏÂÌËÚ¸ Ì‡...";
+        Text[ polish ] = "ZamieÒ na...";
+        Text[ japanese ] = "íuä∑åÛï‚...";
+        Text[ chinese_traditional ] = "¥¿•N¶®...";
+        Text[ arabic ] = "«” »œ«· »‹...";
+        Text[ greek ] = "¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ ÏÂ...";
+        Text[ korean ] = "∑Œ πŸ≤Ÿ±‚...";
+        Text[ turkish ] = "Yeni renk...";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_1
+    {
+        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_2
+    {
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_3
+    {
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    CheckBox CBX_4
+    {
+        Pos = MAP_APPFONT ( 12 , 94 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    Control QCOL_1
+    {
+        HelpId = HID_BMPMASK_CTL_QCOL_1 ;
+        Pos = MAP_APPFONT ( 24 , 49 ) ;
+        Size = MAP_APPFONT ( 24 , 57 ) ;
+        Border = TRUE ;
+    };
+    CheckBox CBX_TRANS
+    {
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
+        Size = MAP_APPFONT ( 67 , 12 ) ;
+        Text = "Transparenz" ;
+        Text [ ENGLISH ] = "Transparency" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Tr~ansparency" ;
+        Text [ italian ] = "Trasparenza" ;
+        Text [ spanish ] = "Transparencia" ;
+        Text [ french ] = "Transparent" ;
+        Text [ dutch ] = "Transparantie" ;
+        Text [ swedish ] = "Transparens" ;
+        Text [ danish ] = "Transparens" ;
+        Text [ portuguese_brazilian ] = "Transparenz" ;
+        Text [ portuguese ] = "TransparÍncia" ;
+        Text[ chinese_simplified ] = "Õ∏√˜";
+        Text[ russian ] = "œÓÁ‡˜ÌÓÒÚ¸";
+        Text[ polish ] = "PrzezroczystoúÊ";
+        Text[ japanese ] = "ìßâﬂê´";
+        Text[ chinese_traditional ] = "≥z©˙";
+        Text[ arabic ] = "‘›«›Ì…";
+        Text[ greek ] = "ƒÈ·ˆ‹ÌÂÈ·";
+        Text[ korean ] = "≈ı∏Ì(~A)";
+        Text[ turkish ] = "Saydaml˝k";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField SP_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 49 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField SP_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 64 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField SP_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 79 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    MetricField SP_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 51 , 94 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+    };
+    PushButton BTN_EXEC
+    {
+        Pos = MAP_APPFONT ( 93 , 6 ) ;
+        Size = MAP_APPFONT ( 64 , 14 ) ;
+        Text = "Ersetzen" ;
+        Text [ ENGLISH ] = "Replace" ;
+        Text [ dutch ] = "Vervangen" ;
+        Text [ english_us ] = "~Replace" ;
+        Text [ italian ] = "Sostituisci" ;
+        Text [ spanish ] = "Reemplazar" ;
+        Text [ french ] = "Remplacer" ;
+        Text [ swedish ] = "Ers‰tt" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ portuguese ] = "Substituir" ;
+        Text [ portuguese_brazilian ] = "Ersetzen" ;
+        Text[ chinese_simplified ] = "∏¸ÃÊ";
+        Text[ russian ] = "«‡ÏÂÌËÚ¸";
+        Text[ polish ] = "ZamieÒ";
+        Text[ japanese ] = "íuä∑";
+        Text[ chinese_traditional ] = "¥¿•N";
+        Text[ arabic ] = "«” »œ«·";
+        Text[ greek ] = "¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "πŸ≤Ÿ±‚(~R)";
+        Text[ turkish ] = "Dei˛tir";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 87 , 49 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 87 , 64 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 87 , 79 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 87 , 94 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ListBox LB_TRANS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 87 , 109 ) ;
+        Size = MAP_APPFONT ( 64 , 75 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    ToolBox TBX_PIPETTE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_PIPETTE ;
+                HelpId = HID_BMPMASK_TBI_PIPETTE ;
+                Text = "Pipette" ;
+                Text [ ENGLISH ] = "Eyedropper" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Pipet" ;
+                Text [ english_us ] = "Eyedropper" ;
+                Text [ italian ] = "Contagocce" ;
+                Text [ spanish ] = "Pipeta" ;
+                Text [ french ] = "Pipette" ;
+                Text [ swedish ] = "Pipett" ;
+                Text [ danish ] = "Pipette" ;
+                Text [ portuguese ] = "Pipeta" ;
+                Text [ portuguese_brazilian ] = "Pipette" ;
+                Text[ chinese_simplified ] = "»°…´∆˜";
+                Text[ russian ] = "œËÔÂÚÍ‡";
+                Text[ polish ] = "Pipeta";
+                Text[ japanese ] = "ÀﬂÕﬂØƒ";
+                Text[ chinese_traditional ] = "®˙¶‚";
+                Text[ arabic ] = "ﬁÿ¯«—…";
+                Text[ greek ] = "”Ù·„ÔÌ¸ÏÂÙÒÔ";
+                Text[ korean ] = "ªˆ ∞Ò∂Û≥ª±‚";
+                Text[ turkish ] = "Renk ˆrnei al";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Control WND_PIPETTE
+    {
+        HelpId = HID_BMPMASK_CTL_PIPETTE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 23 , 6 ) ;
+        Size = MAP_APPFONT ( 43 , 14 ) ;
+    };
+    Text [ english_us ] = "Eyedropper" ;
+    Text [ italian ] = "Contagocce" ;
+    Text [ spanish ] = "Pipeta" ;
+    Text [ french ] = "Pipette" ;
+    Text [ dutch ] = "Pipet" ;
+    Text [ swedish ] = "Pipett" ;
+    Text [ danish ] = "Pipette" ;
+    Text [ portuguese_brazilian ] = "Pipette" ;
+    Text [ portuguese ] = "Pipeta" ;
+    Text[ chinese_simplified ] = "»°…´∆˜";
+    Text[ russian ] = "œËÔÂÚÍ‡";
+    Text[ polish ] = "Pipeta";
+    Text[ japanese ] = "ÀﬂÕﬂØƒ";
+    Text[ chinese_traditional ] = "®˙¶‚";
+    Text[ arabic ] = "ﬁÿ¯«—…";
+    Text[ greek ] = "”Ù·„ÔÌ¸ÏÂÙÒÔ";
+    Text[ korean ] = "ªˆ ∞Ò∂Û≥ª±‚";
+    Text[ turkish ] = "Renk ˆrnei al";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXDLG_BMPMASK_STR_TRANSP
+{
+    Text = "Transparent";
+    Text [ ENGLISH ] = "Transparent";
+    Text [ english_us ] = "Transparent";
+    Text[ portuguese ] = "Transparente";
+    Text[ russian ] = "œÓÁ‡˜Ì˚È";
+    Text[ greek ] = "ƒÈ·ˆ·Ì›Ú";
+    Text[ dutch ] = "Transparant";
+    Text[ french ] = "Transparent";
+    Text[ spanish ] = "Transparente";
+    Text[ italian ] = "Trasparente";
+    Text[ danish ] = "Transparent";
+    Text[ swedish ] = "Transparent";
+    Text[ polish ] = "Przeüroczysty";
+    Text[ portuguese_brazilian ] = "Transparent";
+    Text[ japanese ] = "ìhÇËÇ¬Ç‘ÇµÇ»Çµ";
+    Text[ korean ] = "Transparent";
+    Text[ chinese_simplified ] = "Õ∏√˜";
+    Text[ chinese_traditional ] = "≥z©˙";
+    Text[ turkish ] = "Saydam";
+    Text[ arabic ] = "‘›«›";
+};
+
+ // ********************************************************************** EOF

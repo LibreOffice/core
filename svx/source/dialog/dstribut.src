@@ -1,0 +1,514 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dstribut.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "dstribut.hrc"
+#include "helpid.hrc"
+
+// RID_SVXPAGE_DISTRIBUTE ---------------------------------------------------
+#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
+TabPage RID_SVXPAGE_DISTRIBUTE
+{
+    HelpId = HID_PAGE_DISTRIBUTE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Verteilung" ;
+    Text [ ENGLISH ] = "Distribution" ;
+    Text [ english_us ] = "Distribution" ;
+
+    GroupBox GRP_HORIZONTAL
+    {
+        Pos = MAP_APPFONT( 6 , 6 ) ;
+        Size = MAP_APPFONT( 248 , 37 ) ;
+        Text = "Horizontal" ;
+        Text [ ENGLISH ] = "Horizontal" ;
+        Text [ english_us ] = "Horizontally" ;
+        Text[ portuguese ] = "Horizontal";
+        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
+        Text[ dutch ] = "Horizontaal";
+        Text[ french ] = "Horizontalement";
+        Text[ spanish ] = "Horizontal";
+        Text[ italian ] = "Orizzontale";
+        Text[ danish ] = "Vandret";
+        Text[ swedish ] = "Horisontal";
+        Text[ polish ] = "Poziomo";
+        Text[ portuguese_brazilian ] = "Horizontal";
+        Text[ japanese ] = "â°";
+        Text[ korean ] = "∞°∑Œ";
+        Text[ chinese_simplified ] = "ÀÆ∆Ωµƒ";
+        Text[ chinese_traditional ] = "§Ù•≠";
+        Text[ arabic ] = "√›ﬁÌ";
+        Text[ turkish ] = "Yatay";
+    };
+
+    RadioButton BTN_HOR_NONE
+    {
+        Pos = MAP_APPFONT( 12 , 18 ) ;
+        Size = MAP_APPFONT( 48 , 12) ;
+        Text = "Keine" ;
+        Text [ ENGLISH ] = "None" ;
+        Text [ ENGLISH_US ] = "None" ;
+        Text[ portuguese ] = "Nenhuma";
+        Text[ russian ] = "¡ÂÁ";
+        Text[ greek ] = " ·Ì›Ì·";
+        Text[ dutch ] = "Geen";
+        Text[ french ] = "Aucune";
+        Text[ spanish ] = "Ninguno";
+        Text[ italian ] = "Senza";
+        Text[ danish ] = "Ingen";
+        Text[ swedish ] = "Ingen";
+        Text[ polish ] = "Brak";
+        Text[ portuguese_brazilian ] = "None";
+        Text[ japanese ] = "Ç»Çµ";
+        Text[ korean ] = "æ¯¿Ω";
+        Text[ chinese_simplified ] = "Œﬁ";
+        Text[ chinese_traditional ] = "µL";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ turkish ] = "Yok";
+    };
+
+    RadioButton BTN_HOR_LEFT
+    {
+        Pos = MAP_APPFONT( 7 + (1 * 49) , 28 ) ;
+        Size = MAP_APPFONT( 48 , 12) ;
+        Text = "Links" ;
+        Text [ ENGLISH ] = "Left" ;
+        Text [ ENGLISH_US ] = "Left" ;
+        Text[ portuguese ] = "Esquerda";
+        Text[ russian ] = "—ÎÂ‚‡";
+        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
+        Text[ dutch ] = "Links";
+        Text[ french ] = "¿ gauche";
+        Text[ spanish ] = "Izquierda";
+        Text[ italian ] = "Sinistra";
+        Text[ danish ] = "Venstre";
+        Text[ swedish ] = "V‰nster";
+        Text[ polish ] = "Z lewej";
+        Text[ portuguese_brazilian ] = "Left";
+        Text[ japanese ] = "ç∂";
+        Text[ korean ] = "øﬁ¬ ";
+        Text[ chinese_simplified ] = "◊Û";
+        Text[ chinese_traditional ] = "•™";
+        Text[ arabic ] = "Ì”«—";
+        Text[ turkish ] = "Sol";
+    };
+
+    RadioButton BTN_HOR_CENTER
+    {
+        Pos = MAP_APPFONT( 7 + (2 * 49) , 28 ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Mitte" ;
+        Text [ ENGLISH ] = "Center" ;
+        Text [ ENGLISH_US ] = "Center" ;
+        Text[ portuguese ] = "Centro";
+        Text[ russian ] = "¬ ˆÂÌÚÂ";
+        Text[ greek ] = " ›ÌÙÒÔ";
+        Text[ dutch ] = "Minnden";
+        Text[ french ] = "Au milieu";
+        Text[ spanish ] = "Centro";
+        Text[ italian ] = "Centro";
+        Text[ danish ] = "Midte";
+        Text[ swedish ] = "Mitten";
+        Text[ polish ] = "Poúrodku";
+        Text[ portuguese_brazilian ] = "Center";
+        Text[ japanese ] = "íÜâõ";
+        Text[ korean ] = "∞°øÓµ•";
+        Text[ chinese_simplified ] = "÷––ƒ";
+        Text[ chinese_traditional ] = "©~§§";
+        Text[ arabic ] = "Ê”ÿ";
+        Text[ turkish ] = "Orta";
+    };
+
+    RadioButton BTN_HOR_DISTANCE
+    {
+        Pos = MAP_APPFONT( 7 + (3 * 49) , 28 ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Abstand" ;
+        Text [ ENGLISH ] = "Distance" ;
+        Text [ ENGLISH_US ] = "Spacing" ;
+        Text[ portuguese ] = "Dist‚ncia";
+        Text[ russian ] = "»ÌÚÂ‚‡Î";
+        Text[ greek ] = "¡¸ÛÙ·ÛÁ";
+        Text[ dutch ] = "Afstand";
+        Text[ french ] = "…cart";
+        Text[ spanish ] = "Espacio";
+        Text[ italian ] = "Distanza";
+        Text[ danish ] = "Afstand";
+        Text[ swedish ] = "AvstÂnd";
+        Text[ polish ] = "OdstÍp";
+        Text[ portuguese_brazilian ] = "Distance";
+        Text[ japanese ] = "ä‘äu";
+        Text[ korean ] = "∞£∞›";
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ chinese_traditional ] = "∂°πj";
+        Text[ arabic ] = "«· »«⁄œ";
+        Text[ turkish ] = "Aral˝k";
+    };
+
+    RadioButton BTN_HOR_RIGHT
+    {
+        Pos = MAP_APPFONT( 7 + (4 * 49) , 28 ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Rechts" ;
+        Text [ ENGLISH ] = "Right" ;
+        Text [ ENGLISH_US ] = "Right" ;
+        Text[ portuguese ] = "Direita";
+        Text[ russian ] = "—Ô‡‚‡";
+        Text[ greek ] = "ƒÂÓÈ‹";
+        Text[ dutch ] = "Rechts";
+        Text[ french ] = "¿ droite";
+        Text[ spanish ] = "Derecha";
+        Text[ italian ] = "Destra";
+        Text[ danish ] = "H¯jre";
+        Text[ swedish ] = "Hˆger";
+        Text[ polish ] = "Z prawej";
+        Text[ portuguese_brazilian ] = "Right";
+        Text[ japanese ] = "âE";
+        Text[ korean ] = "ø¿∏•¬ ";
+        Text[ chinese_simplified ] = "”“";
+        Text[ chinese_traditional ] = "•k";
+        Text[ arabic ] = "Ì„Ì‰";
+        Text[ turkish ] = "Sa";
+    };
+
+    FixedImage IMG_HOR_LOW {
+        Pos = MAP_APPFONT( 7 + (1 * 49) + 9 , 14 );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dsth_low.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_HOR_CENTER {
+        Pos = MAP_APPFONT( 7 + (2 * 49) + 9 , 14 );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dsth_cen.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_HOR_DISTANCE {
+        Pos = MAP_APPFONT( 7 + (3 * 49) + 9 , 14 );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dsth_dst.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_HOR_HIGH {
+        Pos = MAP_APPFONT( 7 + (4 * 49) + 9 , 14 );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dsth_hig.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    GroupBox GRP_VERTICAL
+    {
+        Pos = MAP_APPFONT( 6, 51 ) ;
+        Size = MAP_APPFONT( 110 ,  76 ) ;
+        Text = "Vertikal" ;
+        Text [ ENGLISH ] = "Vertical" ;
+        Text [ english_us ] = "Vertically" ;
+        Text[ portuguese ] = "Vertical";
+        Text[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
+        Text[ greek ] = " ·Ù·Í¸Òıˆ·";
+        Text[ dutch ] = "Verticaal";
+        Text[ french ] = "Verticalement";
+        Text[ spanish ] = "Vertical";
+        Text[ italian ] = "Verticale";
+        Text[ danish ] = "Lodret";
+        Text[ swedish ] = "Vertikal";
+        Text[ polish ] = "Pionowo";
+        Text[ portuguese_brazilian ] = "Vertical";
+        Text[ japanese ] = "èc";
+        Text[ korean ] = "ºº∑Œ";
+        Text[ chinese_simplified ] = "¥π÷±µƒ";
+        Text[ chinese_traditional ] = "´´™Ω";
+        Text[ arabic ] = "—√”Ì";
+        Text[ turkish ] = "Dikey";
+    };
+
+    RadioButton BTN_VER_NONE
+    {
+        Pos = MAP_APPFONT( 12 , 63 ) ;
+        Size = MAP_APPFONT( 46 , 12 ) ;
+        Text = "Keine" ;
+        Text [ ENGLISH ] = "None" ;
+        Text [ ENGLISH_US ] = "None" ;
+        Text[ portuguese ] = "Nenhuma";
+        Text[ russian ] = "¡ÂÁ";
+        Text[ greek ] = " ·Ì›Ì·";
+        Text[ dutch ] = "Geen";
+        Text[ french ] = "Aucune";
+        Text[ spanish ] = "Ninguno";
+        Text[ italian ] = "Senza";
+        Text[ danish ] = "Ingen";
+        Text[ swedish ] = "Ingen";
+        Text[ polish ] = "Brak";
+        Text[ portuguese_brazilian ] = "None";
+        Text[ japanese ] = "Ç»Çµ";
+        Text[ korean ] = "æ¯¿Ω";
+        Text[ chinese_simplified ] = "Œﬁ";
+        Text[ chinese_traditional ] = "µL";
+        Text[ arabic ] = "»œÊ‰";
+        Text[ turkish ] = "Yok";
+    };
+
+    RadioButton BTN_VER_TOP
+    {
+        Pos = MAP_APPFONT( 56 , 63 ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Oben" ;
+        Text [ ENGLISH ] = "Top" ;
+        Text [ ENGLISH_US ] = "Top" ;
+        Text[ portuguese ] = "Em cima";
+        Text[ russian ] = "—‚ÂıÛ";
+        Text[ greek ] = "–‹Ì˘";
+        Text[ dutch ] = "Boven";
+        Text[ french ] = "En haut";
+        Text[ spanish ] = "Arriba";
+        Text[ italian ] = "Sopra";
+        Text[ danish ] = "Oppe";
+        Text[ swedish ] = "Uppe";
+        Text[ polish ] = "U gÛry";
+        Text[ portuguese_brazilian ] = "Top";
+        Text[ japanese ] = "è„";
+        Text[ korean ] = "¿ß";
+        Text[ chinese_simplified ] = "…œ∑Ω";
+        Text[ chinese_traditional ] = "§W";
+        Text[ arabic ] = "√⁄·Ï";
+        Text[ turkish ] = "‹st";
+    };
+
+    RadioButton BTN_VER_CENTER
+    {
+        Pos = MAP_APPFONT( 56 , 63 + (1 * 16) ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Mitte" ;
+        Text [ ENGLISH ] = "Center" ;
+        Text [ ENGLISH_US ] = "Center" ;
+        Text[ portuguese ] = "Centro";
+        Text[ russian ] = "¬ ˆÂÌÚÂ";
+        Text[ greek ] = " ›ÌÙÒÔ";
+        Text[ dutch ] = "Midden";
+        Text[ french ] = "Au milieu";
+        Text[ spanish ] = "Centro";
+        Text[ italian ] = "Centro";
+        Text[ danish ] = "Midte";
+        Text[ swedish ] = "Mitten";
+        Text[ polish ] = "Poúrodku";
+        Text[ portuguese_brazilian ] = "Center";
+        Text[ japanese ] = "íÜâõ";
+        Text[ korean ] = "∞°øÓµ•";
+        Text[ chinese_simplified ] = "÷––ƒ";
+        Text[ chinese_traditional ] = "©~§§";
+        Text[ arabic ] = "Ê”ÿ";
+        Text[ turkish ] = "Orta";
+    };
+
+    RadioButton BTN_VER_DISTANCE
+    {
+        Pos = MAP_APPFONT( 56 , 63 + (2 * 16) ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Abstand" ;
+        Text [ ENGLISH ] = "Distance" ;
+        Text [ ENGLISH_US ] = "Spacing" ;
+        Text[ portuguese ] = "Dist‚ncia";
+        Text[ russian ] = "»ÌÚÂ‚‡Î";
+        Text[ greek ] = "¡¸ÛÙ·ÛÁ";
+        Text[ dutch ] = "Afstand";
+        Text[ french ] = "…cart";
+        Text[ spanish ] = "Espacio";
+        Text[ italian ] = "Distanza";
+        Text[ danish ] = "Afstand";
+        Text[ swedish ] = "AvstÂnd";
+        Text[ polish ] = "OdstÍp";
+        Text[ portuguese_brazilian ] = "Distance";
+        Text[ japanese ] = "ä‘äu";
+        Text[ korean ] = "∞£∞›";
+        Text[ chinese_simplified ] = "º‰∏Ù";
+        Text[ chinese_traditional ] = "∂°πj";
+        Text[ arabic ] = "«· »«⁄œ";
+        Text[ turkish ] = "Aral˝k";
+    };
+
+    RadioButton BTN_VER_BOTTOM
+    {
+        Pos = MAP_APPFONT( 56 , 63 + (3 * 16) ) ;
+        Size = MAP_APPFONT( 48 , 12 ) ;
+        Text = "Unten" ;
+        Text [ ENGLISH ] = "Bottom" ;
+        Text [ ENGLISH_US ] = "Bottom" ;
+        Text[ portuguese ] = "Em baixo";
+        Text[ russian ] = "—ÌËÁÛ";
+        Text[ greek ] = " ‹Ù˘";
+        Text[ dutch ] = "Beneden";
+        Text[ french ] = "En bas";
+        Text[ spanish ] = "Abajo";
+        Text[ italian ] = "Sotto";
+        Text[ danish ] = "Nede";
+        Text[ swedish ] = "Nere";
+        Text[ polish ] = "Na dole";
+        Text[ portuguese_brazilian ] = "Bottom";
+        Text[ japanese ] = "â∫";
+        Text[ korean ] = "æ∆∑°";
+        Text[ chinese_simplified ] = "œ¬∑Ω";
+        Text[ chinese_traditional ] = "§U";
+        Text[ arabic ] = "√”›·";
+        Text[ turkish ] = "Alt";
+    };
+
+    FixedImage IMG_VER_HIGH {
+        Pos = MAP_APPFONT( 44 , 63 );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dstv_hig.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_VER_CENTER {
+        Pos = MAP_APPFONT( 44 , 63 + (1 * 16) );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dstv_cen.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_VER_DISTANCE {
+        Pos = MAP_APPFONT( 44 , 63 + (2 * 16) );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dstv_dst.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    FixedImage IMG_VER_LOW {
+        Pos = MAP_APPFONT( 44 , 63 + (3 * 16) );
+        Size = ( 15, 16 );
+        Hide = FALSE;
+        Fixed = Image {
+            ImageBitmap = Bitmap { File = "dstv_low.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+
+    GroupBox GRP_PREVIEW
+    {
+        Pos = MAP_APPFONT( 10, 10 ) ;
+        Size = MAP_APPFONT( 10 , 10 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ portuguese ] = "Previsualizar";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ dutch ] = "Voorbeeld";
+        Text[ french ] = "AperÁu";
+        Text[ spanish ] = "PrevisualizaciÛn";
+        Text[ italian ] = "Anteprima";
+        Text[ danish ] = "Eksempel";
+        Text[ swedish ] = "Fˆrhandsvisning";
+        Text[ polish ] = "Podglπd";
+        Text[ portuguese_brazilian ] = "Preview";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "«·„⁄«Ì‰…";
+        Text[ turkish ] = "÷nizleme";
+    };
+    Text[ portuguese ] = "DistribuiÁ„o...";
+    Text[ russian ] = "–‡ÒÔÂ‰ÂÎÂÌËÂ";
+    Text[ greek ] = " ·Ù·ÌÔÏﬁ..";
+    Text[ dutch ] = "Verdeling";
+    Text[ french ] = "RÈpartition";
+    Text[ spanish ] = "DistribuciÛn";
+    Text[ italian ] = "Distribuzione";
+    Text[ danish ] = "Distribution";
+    Text[ swedish ] = "Fˆrdelning";
+    Text[ polish ] = "Rozmieszczenie";
+    Text[ portuguese_brazilian ] = "Distribution..";
+    Text[ japanese ] = "ï™ïz...";
+    Text[ korean ] = "πË∫–";
+    Text[ chinese_simplified ] = "∑÷≤º";
+    Text[ chinese_traditional ] = "§¿•¨";
+    Text[ arabic ] = " Ê“Ì⁄";
+    Text[ turkish ] = "Da˝t˝m";
+};
+
+// ********************************************************************** EOF

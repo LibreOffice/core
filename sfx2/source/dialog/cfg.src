@@ -1,0 +1,1918 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cfg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialog.hrc"
+#include "cfg.hrc"
+ // pragma ----------------------------------------------------------------
+
+#define PUSHBUTTON_TEXT_SAVE \
+    Text = "~Speichern..." ; \
+    Text [ ENGLISH ] = "~Save" ; \
+    Text [ dutch ] = "O~pslaan..." ; \
+    Text [ english_us ] = "~Save..." ; \
+    Text [ italian ] = "~Salva..." ; \
+    Text [ spanish ] = "~Guardar..." ; \
+    Text [ french ] = "~Enregistrer..." ; \
+    Text [ swedish ] = "Spara..." ; \
+    Text [ danish ] = "~Gem..." ; \
+    Text [ portuguese_brazilian ] = "~Speichern..." ; \
+    Text [ portuguese ] = "~Guardar..." ; \
+    Text[ chinese_simplified ] = "´æÅÌ(~S)..."; \
+    Text[ russian ] = "Ñîõğàíèòü...";   \
+    Text[ polish ] = "Zapisz...";   \
+    Text[ japanese ] = "•Û‘¶(~S)...";   \
+    Text[ chinese_traditional ] = "Àx¦s(~S)...";    \
+    Text[ arabic ] = "ÍİÙ...";  \
+    Text[ greek ] = "ÁğïèŞêåõ~óç...";   \
+    Text[ korean ] = "ÀúÀå(~S)..."; \
+    Text[ turkish ] = "~Kaydet..."; \
+    Text[ language_user1 ] = " ";
+
+#define PUSHBUTTON_TEXT_RESET \
+    Text = "Zur~ücksetzen" ; \
+    Text [ ENGLISH ] = "R~eset" ; \
+    Text [ dutch ] = "~Terugzetten" ; \
+    Text [ english_us ] = "R~eset" ; \
+    Text [ italian ] = "Ripris~tina" ; \
+    Text [ spanish ] = "~Restablecer" ; \
+    Text [ french ] = "Re~staurer" ; \
+    Text [ swedish ] = "~Återställ" ; \
+    Text [ danish ] = "Nulstil" ; \
+    Text [ portuguese_brazilian ] = "~Zurücksetzen" ; \
+    Text [ portuguese ] = "~Restaurar" ; \
+    Text[ chinese_simplified ] = "ÖØÉè(~E)";    \
+    Text[ russian ] = "Âîññòàíîâèòü";   \
+    Text[ polish ] = "Zresetuj";    \
+    Text[ japanese ] = "Ø¾¯Ä(~E)";  \
+    Text[ chinese_traditional ] = "­«³](~E)";   \
+    Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä"; \
+    Text[ greek ] = "Åğáíáö~ïñÜ";   \
+    Text[ korean ] = "¿ø·¡´ë·Î(~E)";    \
+    Text[ turkish ] = "Başa al";    \
+    Text[ language_user1 ] = " ";
+
+#define PUSHBUTTON_TEXT_LOAD \
+/* ### ACHTUNG: Neuer Text in Resource? La~den... : ~Laden... */\
+    Text = "La~den..." ; \
+    Text [ ENGLISH ] = "~Load..." ; \
+    Text [ english_us ] = "~Load..." ; \
+    Text [ italian ] = "Ca~rica..." ; \
+    Text [ spanish ] = "~Cargar..." ; \
+    Text [ french ] = "~Charger..." ; \
+    Text [ dutch ] = "~Laden..." ; \
+    Text [ swedish ] = "La~dda..." ; \
+    Text [ danish ] = "Indlæs..." ; \
+    Text [ portuguese_brazilian ] = "~Laden..." ; \
+    Text [ portuguese ] = "~Carregar..." ; \
+    Text[ chinese_simplified ] = "×°ÔØ(~L)..."; \
+    Text[ russian ] = "Çàãğóçèòü...";   \
+    Text[ polish ] = "£aduj...";    \
+    Text[ japanese ] = "“Ç‚İ‚İ(~L)...";   \
+    Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";    \
+    Text[ arabic ] = "ÊÍãíá...";    \
+    Text[ greek ] = "Öüñ~ôùóç...";  \
+    Text[ korean ] = "·Îµå(~L)..."; \
+    Text[ turkish ] = "Yükle...";   \
+    Text[ language_user1 ] = " ";
+
+#define PUSHBUTTON_TEXT_REMOVE \
+/* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
+    Text = "~Löschen" ; \
+    Text [ ENGLISH ] = "~Remove" ; \
+    Text [ norwegian ] = "~Fjern" ; \
+    Text [ italian ] = "~Elimina" ; \
+    Text [ portuguese_brazilian ] = "~Remover" ; \
+    Text [ portuguese ] = "E~liminar" ; \
+    Text [ finnish ] = "~Poista" ; \
+    Text [ danish ] = "Slet" ; \
+    Text [ french ] = "~Supprimer" ; \
+    Text [ swedish ] = "~Radera" ; \
+    Text [ dutch ] = "~Wissen" ; \
+    Text [ spanish ] = "~Eliminar" ; \
+    Text [ english_us ] = "~Delete" ; \
+    Text[ chinese_simplified ] = "É¾³ı(~D)";    \
+    Text[ russian ] = "Óäàëèòü";    \
+    Text[ polish ] = "Usuñ";    \
+    Text[ japanese ] = "íœ(~D)";  \
+    Text[ chinese_traditional ] = "§R°£(~D)";   \
+    Text[ arabic ] = "ÍĞİ"; \
+    Text[ greek ] = "~ÄéáãñáöŞ";    \
+    Text[ korean ] = "»èÁ¦(~D)";    \
+    Text[ turkish ] = "Sil";    \
+    Text[ language_user1 ] = " ";
+
+#define PUSHBUTTON_TEXT_CHANGE \
+/* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */\
+    Text = "~Ändern" ; \
+    Text [ ENGLISH ] = "~Change" ; \
+    Text [ norwegian ] = "~Endre" ; \
+    Text [ italian ] = "~Cambia" ; \
+    Text [ portuguese_brazilian ] = "~Mudar" ; \
+    Text [ portuguese ] = "~Modificar" ; \
+    Text [ finnish ] = "~Muuta" ; \
+    Text [ danish ] = "Modificer" ; \
+    Text [ french ] = "~Modifier" ; \
+    Text [ swedish ] = "~Ändra" ; \
+    Text [ dutch ] = "Wij~zigen" ; \
+    Text [ spanish ] = "~Modificar" ; \
+    Text [ english_us ] = "~Modify" ; \
+    Text[ chinese_simplified ] = "¸ü¸Ä(~M)";    \
+    Text[ russian ] = "Èçìåíèòü";   \
+    Text[ polish ] = "Mo~dyfikuj";  \
+    Text[ japanese ] = "•ÏX(~M)";  \
+    Text[ chinese_traditional ] = "ÅÜ§ó(~M)";   \
+    Text[ arabic ] = "ÊÚÏíá";   \
+    Text[ greek ] = "~Ôñïğïğïßçóç"; \
+    Text[ korean ] = "º¯°æ(~M)";    \
+    Text[ turkish ] = "Değiştir";   \
+    Text[ language_user1 ] = " ";
+
+#define PUSHBUTTON_TEXT_NEW \
+    Text = "~Neu" ; \
+    Text [ ENGLISH ] = "~New" ; \
+    Text [ norwegian ] = "~New" ; \
+    Text [ italian ] = "~Nuovo" ; \
+    Text [ portuguese_brazilian ] = "~Novo" ; \
+    Text [ portuguese ] = "~Novo" ; \
+    Text [ finnish ] = "~Uusi" ; \
+    Text [ danish ] = "~Ny(t)" ; \
+    Text [ french ] = "Nou~veau" ; \
+    Text [ swedish ] = "~Nytt" ; \
+    Text [ dutch ] = "~Nieuw" ; \
+    Text [ spanish ] = "~Nuevo" ; \
+    Text [ english_us ] = "~New" ; \
+    Text[ chinese_simplified ] = "ĞÂ½¨(~N)";    \
+    Text[ russian ] = "Ñîçä~àòü";   \
+    Text[ polish ] = "Nowy";    \
+    Text[ japanese ] = "V‹Kì¬(~N)";  \
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";   \
+    Text[ arabic ] = "ÌÏíÏ";    \
+    Text[ greek ] = "Äç~ìéïõñãßá";  \
+    Text[ korean ] = "»õ·Î(~N)";    \
+    Text[ turkish ] = "~Yeni";  \
+    Text[ language_user1 ] = " ";
+
+#define FIXEDTEXT_TEXT_GROUP \
+    Text = "~Bereich" ; \
+    Text [ ENGLISH ] = "~Group" ; \
+    Text [ norwegian ] = "~Gruppe" ; \
+    Text [ italian ] = "Area" ; \
+    Text [ portuguese_brazilian ] = "~Agrupar" ; \
+    Text [ portuguese ] = "~Categoria" ; \
+    Text [ finnish ] = "~Ryhmitä" ; \
+    Text [ danish ] = "Område" ; \
+    Text [ french ] = "~Catégorie" ; \
+    Text [ swedish ] = "~Kategori" ; \
+    Text [ dutch ] = "~Bereik" ; \
+    Text [ spanish ] = "~Área" ; \
+    Text [ english_us ] = "~Category" ; \
+    Text[ chinese_simplified ] = "·¶Î§(~C)";    \
+    Text[ russian ] = "Êàòåãîğèÿ";  \
+    Text[ polish ] = "Obszar";  \
+    Text[ japanese ] = "”ÍˆÍ(~C)";  \
+    Text[ chinese_traditional ] = "­S³ò(~C)";   \
+    Text[ arabic ] = "ÇáİÆÉ";   \
+    Text[ greek ] = "~Êáôçãïñßá";   \
+    Text[ korean ] = "¿µ¿ª(~C)";    \
+    Text[ turkish ] = "Ka~tegori";  \
+    Text[ language_user1 ] = " ";
+
+#define FIXEDTEXT_TEXT_FUNCTION \
+    Text = "~Funktion" ; \
+    Text [ ENGLISH ] = "~Function" ; \
+    Text [ norwegian ] = "~Function" ; \
+    Text [ italian ] = "~Funzione" ; \
+    Text [ portuguese_brazilian ] = "~Função" ; \
+    Text [ portuguese ] = "~Função" ; \
+    Text [ finnish ] = "~Funktio" ; \
+    Text [ danish ] = "Funktion" ; \
+    Text [ french ] = "~Fonction" ; \
+    Text [ swedish ] = "~Funktion" ; \
+    Text [ dutch ] = "~Functie" ; \
+    Text [ spanish ] = "~Función" ; \
+    Text [ english_us ] = "Function" ; \
+    Text[ chinese_simplified ] = "¹¦ÄÜ(~F)";    \
+    Text[ russian ] = "Ôóíêöèÿ";    \
+    Text[ polish ] = "Funkcja"; \
+    Text[ japanese ] = "‹@”\\"; \
+    Text[ chinese_traditional ] = "¥\\¯à(~F)";  \
+    Text[ arabic ] = "ãåãÉ";    \
+    Text[ greek ] = "~ÓõíÜñôçóç";   \
+    Text[ korean ] = "±â´É";    \
+    Text[ turkish ] = "İşlev";  \
+    Text[ language_user1 ] = " ";
+
+#define GROUPBOX_TEXT_FUNCTIONS \
+    Text = "Funktionen" ; \
+    Text [ ENGLISH ] = "Functions" ; \
+    Text [ norwegian ] = "Funksjoner" ; \
+    Text [ italian ] = "Funzioni" ; \
+    Text [ portuguese_brazilian ] = "Funções" ; \
+    Text [ portuguese ] = "Funções" ; \
+    Text [ finnish ] = "Toiminnot" ; \
+    Text [ danish ] = "Funktioner" ; \
+    Text [ french ] = "Fonctions" ; \
+    Text [ swedish ] = "Funktioner" ; \
+    Text [ dutch ] = "Functies" ; \
+    Text [ spanish ] = "Funciones" ; \
+    Text [ english_us ] = "Functions" ; \
+    Text[ chinese_simplified ] = "¹¦ÄÜ";    \
+    Text[ russian ] = "Ôóíêöèè";    \
+    Text[ polish ] = "Funkcje"; \
+    Text[ japanese ] = "‹@”\\"; \
+    Text[ chinese_traditional ] = "¥\\¯à";  \
+    Text[ arabic ] = "ãåÇã";    \
+    Text[ greek ] = "Ëåéôïõñãßåò";  \
+    Text[ korean ] = "±â´Éµé";  \
+    Text[ turkish ] = "Fonksiyon";  \
+    Text[ language_user1 ] = " ";
+
+ // TP_CONFIG_MENU --------------------------------------------------------
+TabPage TP_CONFIG_MENU
+{
+    HelpId = HID_CONFIG_MENU ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 282 , 205 ) ;
+    PushButton BTN_MN_NEW
+    {
+        Pos = MAP_APPFONT ( 226 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        PUSHBUTTON_TEXT_NEW
+        Text [ english_us ] = "~New" ;
+        Text [ portuguese_brazilian ] = "~Novo" ;
+        Text = "~Neu" ;
+        Text [ swedish ] = "~Nytt" ;
+        Text [ danish ] = "Ny" ;
+        Text [ italian ] = "~Nuovo" ;
+        Text [ spanish ] = "~Nuevo" ;
+        Text [ french ] = "~Nouveau" ;
+        Text [ dutch ] = "~Nieuw" ;
+        Text [ portuguese ] = "~Novo" ;
+        Text[ chinese_simplified ] = "ĞÂ½¨(~N)";
+        Text[ russian ] = "Ñîçä~àòü";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "V‹Kì¬(~N)";
+        Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~N)";
+        Text[ arabic ] = "ÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "»õ·Î(~N)";
+        Text[ turkish ] = "~Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_MN_NEWPOPUP
+    {
+        Pos = MAP_APPFONT ( 226 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Neues ~Menü : Neues ~Men³ */
+        /* ### ACHTUNG: Neuer Text in Resource? Neues ~Menü : Neues ~Men³ */
+        Text = "Neues ~Menü" ;
+        Text [ ENGLISH ] = "New ~menu" ;
+        Text [ english_us ] = "New Men~u" ;
+        Text [ swedish ] = "Ny ~meny" ;
+        Text [ danish ] = "Ny menu" ;
+        Text [ italian ] = "Nuovo ~Menu" ;
+        Text [ spanish ] = "Nue~vo menú" ;
+        Text [ french ] = "Nouveau ~menu" ;
+        Text [ dutch ] = "Nieuw ~menu" ;
+        Text [ portuguese_brazilian ] = "Neues ~Menü" ;
+        Text [ portuguese ] = "Novo ~menu" ;
+        Text[ chinese_simplified ] = "ĞÂ²Ëµ¥ÃüÁî(~U)";
+        Text[ russian ] = "Íîâîå ìåíş";
+        Text[ polish ] = "Nowe menu";
+        Text[ japanese ] = "V‚µ‚¢ÒÆ­°(~U)";
+        Text[ chinese_traditional ] = "·s¥\\¯àªí(~U)";
+        Text[ arabic ] = "ŞÇÆãÉ ÌÏíÏÉ";
+        Text[ greek ] = "Íİï ~ìåíïı";
+        Text[ korean ] = "»õ ¸Ş´º(~U)";
+        Text[ turkish ] = "Yeni mönü";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_MN_CHANGE
+    {
+        Pos = MAP_APPFONT ( 226 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        PUSHBUTTON_TEXT_CHANGE
+        Text [ english_us ] = "~Modify" ;
+        Text [ portuguese_brazilian ] = "~Mudar" ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
+        Text = "~Ändern" ;
+        Text [ swedish ] = "~Ändra" ;
+        Text [ danish ] = "Modificer" ;
+        Text [ italian ] = "Modifica" ;
+        Text [ spanish ] = "~Personalizar" ;
+        Text [ french ] = "~Personnaliser" ;
+        Text [ dutch ] = "Wij~zigen" ;
+        Text [ portuguese ] = "~Modificar" ;
+        Text[ chinese_simplified ] = "¸ü¸Ä(~M)";
+        Text[ russian ] = "Èçìåíèòü";
+        Text[ polish ] = "Modyfikuj";
+        Text[ japanese ] = "•ÏX(~M)";
+        Text[ chinese_traditional ] = "ÅÜ§ó(~M)";
+        Text[ arabic ] = "ÊÚÏíá";
+        Text[ greek ] = "Ôñïğïğïßçóç";
+        Text[ korean ] = "º¯°æ(~M)";
+        Text[ turkish ] = "Değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_MN_REMOVE
+    {
+        Pos = MAP_APPFONT ( 226 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_REMOVE
+        Text [ english_us ] = "~Delete" ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        Text = "~Löschen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "Äéá~ãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    ImageButton BTN_MN_UP
+    {
+        Pos = MAP_APPFONT ( 244 , 77 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_UP ;
+    };
+    ImageButton BTN_MN_DOWN
+    {
+        Pos = MAP_APPFONT ( 244 , 94 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TabStop = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN ;
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT ( 226 , 189 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_RESET
+        Text [ english_us ] = "R~eset" ;
+        Text [ portuguese_brazilian ] = "~Zurücksetzen" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        Text = "Zur~ücksetzen" ;
+        Text [ swedish ] = "~Återställ" ;
+        Text [ danish ] = "Nulstil" ;
+        Text [ italian ] = "Ri~pristina" ;
+        Text [ spanish ] = "Res~tablecer" ;
+        Text [ french ] = "Re~staurer" ;
+        Text [ dutch ] = "~Terugzetten" ;
+        Text [ portuguese ] = "~Restaurar" ;
+        Text[ chinese_simplified ] = "ÖØÉè(~E)";
+        Text[ russian ] = "Âîññòàíîâèòü";
+        Text[ polish ] = "Zr~esetuj";
+        Text[ japanese ] = "Ø¾¯Ä(~E)";
+        Text[ chinese_traditional ] = "­«³](~E)";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
+        Text[ greek ] = "Åğáíáö~ïñÜ";
+        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
+        Text[ turkish ] = "Başa al";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 226 , 155 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_LOAD
+        Text [ english_us ] = "~Load" ;
+        Text [ portuguese_brazilian ] = "~Laden..." ;
+        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
+        Text = "L~aden..." ;
+        Text [ swedish ] = "L~adda..." ;
+        Text [ danish ] = "Indlæs..." ;
+        Text [ italian ] = "~Carica..." ;
+        Text [ spanish ] = "C~argar..." ;
+        Text [ french ] = "~Charger..." ;
+        Text [ dutch ] = "~Laden..." ;
+        Text [ portuguese ] = "~Carregar..." ;
+        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ russian ] = "Çàãğóçèòü...";
+        Text[ polish ] = "£aduj...";
+        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
+        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ arabic ] = "ÊÍãíá...";
+        Text[ greek ] = "Öüñôùóç...";
+        Text[ korean ] = "·Îµå(~L)";
+        Text[ turkish ] = "Yükle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_SAVE
+    {
+        TabStop = TRUE ;
+        Group = TRUE ;
+        Pos = MAP_APPFONT ( 226 , 172 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        PUSHBUTTON_TEXT_SAVE
+        Text [ english_us ] = "~Save..." ;
+        Text [ portuguese_brazilian ] = "~Speichern..." ;
+        Text = "~Speichern..." ;
+        Text [ swedish ] = "~Spara..." ;
+        Text [ danish ] = "Gem..." ;
+        Text [ italian ] = "Salva..." ;
+        Text [ spanish ] = "~Guardar..." ;
+        Text [ french ] = "En~registrer..." ;
+        Text [ dutch ] = "O~pslaan..." ;
+        Text [ portuguese ] = "~Guardar..." ;
+        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
+        Text[ russian ] = "Ñîõğàíèòü...";
+        Text[ polish ] = "Zapi~sz...";
+        Text[ japanese ] = "•Û‘¶(~S)...";
+        Text[ chinese_traditional ] = "Àx¦s(~S)...";
+        Text[ arabic ] = "ÍİÙ...";
+        Text[ greek ] = "ÁğïèŞêåõ~óç...";
+        Text[ korean ] = "ÀúÀå(~S)...";
+        Text[ turkish ] = "Kaydet...";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_MN_ENTRIES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 202 , 90 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_MENUCONFIG_LISTBOX ;
+    };
+    GroupBox GRP_MN_MENU
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 214 , 107 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
+        /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
+        Text = "Menü" ;
+        Text [ ENGLISH ] = "Menu" ;
+        Text [ norwegian ] = "Meny" ;
+        Text [ italian ] = "Menu" ;
+        Text [ portuguese_brazilian ] = "Menu" ;
+        Text [ portuguese ] = "Menu" ;
+        Text [ finnish ] = "Valikko" ;
+        Text [ danish ] = "Menu" ;
+        Text [ french ] = "Menu" ;
+        Text [ swedish ] = "Meny" ;
+        Text [ dutch ] = "Menu" ;
+        Text [ spanish ] = "Menú" ;
+        Text [ english_us ] = "Menu" ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+        Text[ russian ] = "Ìåíş";
+        Text[ polish ] = "Menu";
+        Text[ japanese ] = "ÒÆ­°";
+        Text[ chinese_traditional ] = "¥\\¯àªí";
+        Text[ arabic ] = "ÇáŞÇÆãÉ";
+        Text[ greek ] = "Ìåíïı";
+        Text[ korean ] = "¸Ş´º";
+        Text[ turkish ] = "Mönü";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText TXT_MN_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 93 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        FIXEDTEXT_TEXT_GROUP
+        Text [ english_us ] = "C~ategory" ;
+        Text [ portuguese_brazilian ] = "~Agrupar" ;
+        Text = "~Bereich" ;
+        Text [ swedish ] = "~Kategori" ;
+        Text [ danish ] = "Område" ;
+        Text [ italian ] = "Area" ;
+        Text [ spanish ] = "~Área" ;
+        Text [ french ] = "~Catégorie" ;
+        Text [ dutch ] = "~Bereik" ;
+        Text [ portuguese ] = "~Categoria" ;
+        Text[ chinese_simplified ] = "ÇøÓò(~A)";
+        Text[ russian ] = "Êàòåãîğèÿ";
+        Text[ polish ] = "Obszar";
+        Text[ japanese ] = "”ÍˆÍ(~A)";
+        Text[ chinese_traditional ] = "°Ï°ì(~A)";
+        Text[ arabic ] = "ÇáäØÇŞ";
+        Text[ greek ] = "Êáôçãïñßá";
+        Text[ korean ] = "¿µ¿ª(~A)";
+        Text[ turkish ] = "Ka~tegori";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_MN_GROUP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
+        Size = MAP_APPFONT ( 93 , 60 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_CONFIGGROUP_LISTBOX ;
+    };
+    FixedText TXT_MN_FUNCTION
+    {
+        Pos = MAP_APPFONT ( 111 , 124 ) ;
+        Size = MAP_APPFONT ( 103 , 8 ) ;
+        Left = TRUE ;
+        FIXEDTEXT_TEXT_FUNCTION
+        Text [ portuguese ] = "~Função" ;
+        Text [ english_us ] = "~Function" ;
+        Text [ portuguese_brazilian ] = "~Função" ;
+        Text = "~Funktion" ;
+        Text [ swedish ] = "~Funktion" ;
+        Text [ danish ] = "Funktion" ;
+        Text [ italian ] = "~Funzione" ;
+        Text [ spanish ] = "~Función" ;
+        Text [ french ] = "~Fonction" ;
+        Text [ dutch ] = "~Functie" ;
+        Text[ chinese_simplified ] = "¹¦ÄÜ(~C)";
+        Text[ russian ] = "Ôóíêöèÿ";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "‹@”\\(~C)";
+        Text[ chinese_traditional ] = "¥\\¯à(~C)";
+        Text[ arabic ] = "ãåãÉ";
+        Text[ greek ] = "ÅíôïëŞ";
+        Text[ korean ] = "¸í·É(~C)";
+        Text[ turkish ] = "İşlev";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_MN_FUNCTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 111 , 135 ) ;
+        Size = MAP_APPFONT ( 103 , 60 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_CONFIGFUNCTION_LISTBOX ;
+    };
+    GroupBox GRP_FUNCTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Size = MAP_APPFONT ( 214 , 87 ) ;
+        Group = TRUE ;
+        GROUPBOX_TEXT_FUNCTIONS
+        Text [ portuguese ] = "Funções" ;
+        Text [ english_us ] = "Functions" ;
+        Text [ portuguese_brazilian ] = "Funções" ;
+        Text = "Funktionen" ;
+        Text [ swedish ] = "Funktioner" ;
+        Text [ danish ] = "Funktioner" ;
+        Text [ italian ] = "Funzioni" ;
+        Text [ spanish ] = "Funciones" ;
+        Text [ french ] = "Ensemble de fonctions" ;
+        Text [ dutch ] = "Functies" ;
+        Text[ chinese_simplified ] = "¹¦ÄÜ";
+        Text[ russian ] = "Ôóíêöèè";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "‹@”\\";
+        Text[ chinese_traditional ] = "¥\\¯à";
+        Text[ arabic ] = "ãåÇã";
+        Text[ greek ] = "Ëåéôïõñãßåò";
+        Text[ korean ] = "±â´Éµé";
+        Text[ turkish ] = "İşlevler";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // TP_CONFIG_ACCEL -------------------------------------------------------
+TabPage TP_CONFIG_ACCEL
+{
+    HelpId = HID_CONFIG_ACCEL ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 282 , 205 ) ;
+    PushButton BTN_ACC_CHANGE
+    {
+        Pos = MAP_APPFONT ( 226 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        PUSHBUTTON_TEXT_CHANGE
+        Text [ portuguese ] = "~Modificar" ;
+        Text [ english_us ] = "Modify" ;
+        Text [ portuguese_brazilian ] = "~Mudar" ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~ndern */
+        Text = "~Ändern" ;
+        Text [ swedish ] = "~Ändra" ;
+        Text [ danish ] = "Modificer" ;
+        Text [ italian ] = "~Cambia" ;
+        Text [ spanish ] = "~Modificar" ;
+        Text [ french ] = "~Modifier" ;
+        Text [ dutch ] = "Wij~zigen" ;
+        Text[ chinese_simplified ] = "¸ü¸Ä(~A)";
+        Text[ russian ] = "Èçìåíèòü";
+        Text[ polish ] = "Modyfikuj";
+        Text[ japanese ] = "•ÏX(~A)";
+        Text[ chinese_traditional ] = "ÅÜ§ó(~A)";
+        Text[ arabic ] = "ÊÚÏíá";
+        Text[ greek ] = "~ÁëëáãŞ";
+        Text[ korean ] = "º¯°æ(~A)";
+        Text[ turkish ] = "Değiştir";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_ACC_REMOVE
+    {
+        Pos = MAP_APPFONT ( 226 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_REMOVE
+        Text [ english_us ] = "~Delete" ;
+        Text [ portuguese_brazilian ] = "~Remover" ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+        Text = "~Löschen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_ACC_ENTRIES
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 202 , 90 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        HelpId = HID_ACCELCONFIG_LISTBOX ;
+    };
+    GroupBox GRP_ACC_KEYBOARD
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 214 , 107 ) ;
+        Text = "Tastatur" ;
+        Text [ ENGLISH ] = "Keyboard" ;
+        Text [ norwegian ] = "Tastatur" ;
+        Text [ italian ] = "Tastiera" ;
+        Text [ portuguese_brazilian ] = "Teclado" ;
+        Text [ portuguese ] = "Teclado" ;
+        Text [ finnish ] = "Näppäimistö" ;
+        Text [ danish ] = "Tastatur" ;
+        Text [ french ] = "Clavier" ;
+        Text [ swedish ] = "Tangentbord" ;
+        Text [ dutch ] = "Toetsenbord" ;
+        Text [ spanish ] = "Teclado" ;
+        Text [ english_us ] = "Keyboard" ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "¼ü";
+        Text[ russian ] = "Êëàâèàòóğà";
+        Text[ polish ] = "Klawiatura";
+        Text[ japanese ] = "·°ÎŞ°ÄŞ";
+        Text[ chinese_traditional ] = "Áä";
+        Text[ arabic ] = "áæÍÉ ÇáãİÇÊíÍ";
+        Text[ greek ] = "Ğëçêôñïëüãéï";
+        Text[ korean ] = "Å°º¸µå";
+        Text[ turkish ] = "Klavye";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText TXT_ACC_GROUP
+    {
+        Pos = MAP_APPFONT ( 12 , 124 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Group = TRUE ;
+        Left = TRUE ;
+        FIXEDTEXT_TEXT_GROUP
+        Text [ english_us ] = "~Category" ;
+        Text [ portuguese_brazilian ] = "~Agrupar" ;
+        Text = "~Bereich" ;
+        Text [ swedish ] = "~Kategori" ;
+        Text [ danish ] = "Område" ;
+        Text [ italian ] = "Area" ;
+        Text [ spanish ] = "~Área" ;
+        Text [ french ] = "~Catégorie" ;
+        Text [ dutch ] = "~Bereik" ;
+        Text [ portuguese ] = "~Categoria" ;
+        Text[ chinese_simplified ] = "·¶Î§(~C)";
+        Text[ russian ] = "Êàòåãîğèÿ";
+        Text[ polish ] = "Obszar";
+        Text[ japanese ] = "”ÍˆÍ(~C)";
+        Text[ chinese_traditional ] = "­S³ò(~C)";
+        Text[ arabic ] = "ÇáİÆÉ";
+        Text[ greek ] = "Êáôçãïñßá";
+        Text[ korean ] = "¿µ¿ª(~C)";
+        Text[ turkish ] = "Ka~tegori";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_ACC_GROUP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 135 ) ;
+        Size = MAP_APPFONT ( 65 , 60 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_CONFIGGROUP_ACC_LISTBOX ;
+    };
+    FixedText TXT_ACC_FUNCTION
+    {
+        Pos = MAP_APPFONT ( 83 , 124 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
+        Left = TRUE ;
+        FIXEDTEXT_TEXT_FUNCTION
+        Text [ portuguese ] = "~Função" ;
+        Text [ english_us ] = "~Function" ;
+        Text [ portuguese_brazilian ] = "~Função" ;
+        Text = "~Funktion" ;
+        Text [ swedish ] = "~Funktion" ;
+        Text [ danish ] = "Funktion" ;
+        Text [ italian ] = "~Funzione" ;
+        Text [ spanish ] = "~Función" ;
+        Text [ french ] = "~Fonction" ;
+        Text [ dutch ] = "~Functie" ;
+        Text[ chinese_simplified ] = "¹¦ÄÜ(~O)";
+        Text[ russian ] = "Ôóíêöèÿ";
+        Text[ polish ] = "Funkcja";
+        Text[ japanese ] = "‹@”\\(~O)";
+        Text[ chinese_traditional ] = "¥\\¯à(~O)";
+        Text[ arabic ] = "ãåãÉ";
+        Text[ greek ] = "ÅíôïëŞ";
+        Text[ korean ] = "¸í·É(~O)";
+        Text[ turkish ] = "İşlev";
+        Text[ language_user1 ] = " ";
+    };
+    Control BOX_ACC_FUNCTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 83 , 135 ) ;
+        Size = MAP_APPFONT ( 75 , 60 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_CONFIGFUNCTION_ACC_LISTBOX ;
+    };
+    FixedText TXT_ACC_KEY
+    {
+        Pos = MAP_APPFONT ( 164 , 124 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text = "~Tasten" ;
+        Text [ ENGLISH ] = "~Keys" ;
+        Text [ norwegian ] = "~Taster" ;
+        Text [ italian ] = "~Tasti" ;
+        Text [ portuguese_brazilian ] = "~Teclas" ;
+        Text [ portuguese ] = "~Teclas" ;
+        Text [ finnish ] = "~Näppäimet" ;
+        Text [ danish ] = "Taster" ;
+        Text [ french ] = "~Clavier" ;
+        Text [ swedish ] = "~Tangenter" ;
+        Text [ dutch ] = "T~oetsen" ;
+        Text [ spanish ] = "~Teclas" ;
+        Text [ english_us ] = "~Keys" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "¼ü(~K)";
+        Text[ russian ] = "Êëàâèøè";
+        Text[ polish ] = "Klawisze";
+        Text[ japanese ] = "·°(~K)";
+        Text[ chinese_traditional ] = "Áä(~K)";
+        Text[ arabic ] = "ãİÇÊíÍ";
+        Text[ greek ] = "ĞëŞê~ôñá";
+        Text[ korean ] = "Å°(~K)";
+        Text[ turkish ] = "T~uşlar";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox BOX_ACC_KEY
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 135 ) ;
+        Size = MAP_APPFONT ( 50 , 60 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_ACC_FUNCTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Size = MAP_APPFONT ( 214 , 87 ) ;
+        Group = TRUE ;
+        GROUPBOX_TEXT_FUNCTIONS
+        Text [ english_us ] = "Functions" ;
+        Text [ portuguese_brazilian ] = "Funções" ;
+        Text = "Funktionen" ;
+        Text [ swedish ] = "Funktioner" ;
+        Text [ danish ] = "Funktioner" ;
+        Text [ italian ] = "Funzioni" ;
+        Text [ spanish ] = "Funciones" ;
+        Text [ french ] = "Ensemble de fonctions" ;
+        Text [ dutch ] = "Functies" ;
+        Text [ portuguese ] = "Funções" ;
+        Text[ chinese_simplified ] = "¹¦ÄÜ";
+        Text[ russian ] = "Ôóíêöèè";
+        Text[ polish ] = "Funkcje";
+        Text[ japanese ] = "‹@”\\";
+        Text[ chinese_traditional ] = "¥\\¯à";
+        Text[ arabic ] = "ãåÇã";
+        Text[ greek ] = "Ëåéôïõñãßåò";
+        Text[ korean ] = "±â´Éµé";
+        Text[ turkish ] = "İşlevler";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT ( 226 , 189 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_RESET
+        Text [ english_us ] = "R~eset" ;
+        Text [ portuguese_brazilian ] = "~Zurücksetzen" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        Text = "Zur~ücksetzen" ;
+        Text [ swedish ] = "~Återställ" ;
+        Text [ danish ] = "Nulstil" ;
+        Text [ italian ] = "Ri~pristina" ;
+        Text [ spanish ] = "~Restablecer" ;
+        Text [ french ] = "Re~staurer" ;
+        Text [ dutch ] = "~Terugzetten" ;
+        Text [ portuguese ] = "~Restaurar" ;
+        Text[ chinese_simplified ] = "ÖØÉè(~E)";
+        Text[ russian ] = "Âîññòàíîâèòü";
+        Text[ polish ] = "Zresetuj";
+        Text[ japanese ] = "Ø¾¯Ä(~E)";
+        Text[ chinese_traditional ] = "­«³](~E)";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
+        Text[ greek ] = "Åğáíáö~ïñÜ";
+        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
+        Text[ turkish ] = "Başa al";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 226 , 155 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_LOAD
+        Text [ english_us ] = "~Load..." ;
+        Text [ portuguese_brazilian ] = "~Laden..." ;
+        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
+        Text = "L~aden..." ;
+        Text [ swedish ] = "L~adda..." ;
+        Text [ danish ] = "Indlæs..." ;
+        Text [ italian ] = "~Carica..." ;
+        Text [ spanish ] = "C~argar..." ;
+        Text [ french ] = "~Charger..." ;
+        Text [ dutch ] = "~Laden..." ;
+        Text [ portuguese ] = "~Carregar..." ;
+        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ russian ] = "Çàãğóçèòü...";
+        Text[ polish ] = "£aduj...";
+        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
+        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ arabic ] = "ÊÍãíá...";
+        Text[ greek ] = "Öüñôùóç...";
+        Text[ korean ] = "·Îµå(~L)...";
+        Text[ turkish ] = "Yükle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 226 , 172 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_SAVE
+        Text [ english_us ] = "~Save..." ;
+        Text [ portuguese_brazilian ] = "~Speichern..." ;
+        Text = "~Speichern..." ;
+        Text [ swedish ] = "~Spara..." ;
+        Text [ danish ] = "Gem..." ;
+        Text [ italian ] = "Salva..." ;
+        Text [ spanish ] = "~Guardar..." ;
+        Text [ french ] = "~Enregistrer..." ;
+        Text [ dutch ] = "O~pslaan..." ;
+        Text [ portuguese ] = "~Guardar..." ;
+        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
+        Text[ russian ] = "Ñîõğàíèòü...";
+        Text[ polish ] = "Zapi~sz...";
+        Text[ japanese ] = "•Û‘¶(~S)...";
+        Text[ chinese_traditional ] = "Àx¦s(~S)...";
+        Text[ arabic ] = "ÍİÙ...";
+        Text[ greek ] = "ÁğïèŞêåõ~óç...";
+        Text[ korean ] = "ÀúÀå(~S)...";
+        Text[ turkish ] = "Kaydet...";
+        Text[ language_user1 ] = " ";
+    };
+};
+ // TP_CONFIG_STATBAR -----------------------------------------------------
+TabPage TP_CONFIG_STATBAR
+{
+    HelpId = HID_CONFIG_STATBAR ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 282 , 205 ) ;
+    Control BOX_STATBAR_ENTRIES
+    {
+        Border = TRUE ;
+        ClipChildren = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 202 , 185 ) ;
+        TabStop = TRUE ;
+        HelpId = HID_STATUSBARCONFIG_LISTBOX ;
+    };
+    GroupBox GRP_STATBAR
+    {
+        Group = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 214 , 199 ) ;
+        Text = "Statusleiste " ;
+        Text [ ENGLISH ] = "Statusbar " ;
+        Text [ norwegian ] = "Statuslinje" ;
+        Text [ italian ] = "Barra di stato " ;
+        Text [ portuguese_brazilian ] = "Barra de Status " ;
+        Text [ portuguese ] = "Barra de estado " ;
+        Text [ finnish ] = "Tilarivi" ;
+        Text [ danish ] = "Statuslinje " ;
+        Text [ french ] = "Barre d'état " ;
+        Text [ swedish ] = "Statuslist  " ;
+        Text [ dutch ] = "Statusbalk  " ;
+        Text [ spanish ] = "Barra de estado  " ;
+        Text [ english_us ] = "Status bar " ;
+        Text[ chinese_simplified ] = "×´Ì¬À¸ ";
+        Text[ russian ] = "Ñòğîêà ñîñòîÿíèÿ ";
+        Text[ polish ] = "Pasek stanu ";
+        Text[ japanese ] = "½Ã°À½ ÊŞ° ";
+        Text[ chinese_traditional ] = "ª¬ºA¦C ";
+        Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ ";
+        Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò ";
+        Text[ korean ] = "»óÅÂ ¸ğÀ½ ";
+        Text[ turkish ] = "Durum çubuğu ";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_RESET
+    {
+        Pos = MAP_APPFONT ( 226 , 189 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_RESET
+        Text [ english_us ] = "R~eset" ;
+        Text [ portuguese_brazilian ] = "~Zurücksetzen" ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : ~Zurücksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        /* ### ACHTUNG: Neuer Text in Resource? Zur~ücksetzen : Zur~³cksetzen */
+        Text = "Zur~ücksetzen" ;
+        Text [ swedish ] = "~Återställ" ;
+        Text [ danish ] = "Nulstil" ;
+        Text [ italian ] = "Ri~pristina" ;
+        Text [ spanish ] = "~Restablecer" ;
+        Text [ french ] = "Re~staurer" ;
+        Text [ dutch ] = "~Terugzetten" ;
+        Text [ portuguese ] = "~Restaurar" ;
+        Text[ chinese_simplified ] = "ÖØÉè(~E)";
+        Text[ russian ] = "Âîññòàíîâèòü";
+        Text[ polish ] = "Zresetuj";
+        Text[ japanese ] = "Ø¾¯Ä(~E)";
+        Text[ chinese_traditional ] = "­«³](~E)";
+        Text[ arabic ] = "ÅÚÇÏÉ ÊÚííä";
+        Text[ greek ] = "Åğáíáö~ïñÜ";
+        Text[ korean ] = "¿ø·¡´ë·Î(~E)";
+        Text[ turkish ] = "Başa al";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_LOAD
+    {
+        Pos = MAP_APPFONT ( 226 , 155 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_LOAD
+        Text [ english_us ] = "~Load..." ;
+        Text [ portuguese_brazilian ] = "~Laden..." ;
+        /* ### ACHTUNG: Neuer Text in Resource? L~aden... : ~Laden... */
+        Text = "L~aden..." ;
+        Text [ swedish ] = "L~adda..." ;
+        Text [ danish ] = "Indlæs..." ;
+        Text [ italian ] = "~Carica..." ;
+        Text [ spanish ] = "C~argar..." ;
+        Text [ french ] = "~Charger..." ;
+        Text [ dutch ] = "~Laden..." ;
+        Text [ portuguese ] = "~Carregar..." ;
+        Text[ chinese_simplified ] = "×°ÔØ(~L)...";
+        Text[ russian ] = "Çàãğóçèòü...";
+        Text[ polish ] = "£aduj...";
+        Text[ japanese ] = "“Ç‚İ‚İ(~L)...";
+        Text[ chinese_traditional ] = "¸Ë¸ü(~L)...";
+        Text[ arabic ] = "ÊÍãíá...";
+        Text[ greek ] = "Öüñôùóç...";
+        Text[ korean ] = "·Îµå(~L)...";
+        Text[ turkish ] = "Yükle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_SAVE
+    {
+        Pos = MAP_APPFONT ( 226 , 172 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        PUSHBUTTON_TEXT_SAVE
+        Text [ english_us ] = "~Save..." ;
+        Text [ portuguese_brazilian ] = "~Speichern..." ;
+        Text = "~Speichern..." ;
+        Text [ swedish ] = "~Spara..." ;
+        Text [ danish ] = "Gem..." ;
+        Text [ italian ] = "Salva..." ;
+        Text [ spanish ] = "~Guardar..." ;
+        Text [ french ] = "~Enregistrer..." ;
+        Text [ dutch ] = "O~pslaan..." ;
+        Text [ portuguese ] = "~Guardar..." ;
+        Text[ chinese_simplified ] = "´æÅÌ(~S)...";
+        Text[ russian ] = "Ñîõğàíèòü...";
+        Text[ polish ] = "Zapi~sz...";
+        Text[ japanese ] = "•Û‘¶(~S)...";
+        Text[ chinese_traditional ] = "Àx¦s(~S)...";
+        Text[ arabic ] = "ÍİÙ...";
+        Text[ greek ] = "ÁğïèŞêåõ~óç...";
+        Text[ korean ] = "ÀúÀå(~S)...";
+        Text[ turkish ] = "Kaydet...";
+        Text[ language_user1 ] = " ";
+    };
+    Bitmap CHKBTN_UNCHECKED { File = "chkun.bmp" ; };
+    Bitmap CHKBTN_CHECKED { File = "chkch.bmp" ; };
+    Bitmap CHKBTN_HICHECKED { File = "chkchhi.bmp" ; };
+    Bitmap CHKBTN_HIUNCHECKED { File = "chkunhi.bmp" ; };
+    Bitmap CHKBTN_TRISTATE { File = "chktri.bmp" ; };
+    Bitmap CHKBTN_HITRISTATE { File = "chktrihi.bmp" ; };
+};
+ // DLG_CONFIG ------------------------------------------------------------
+TabDialog DLG_CONFIG
+{
+    OutputSize = TRUE ;
+    Text = "Anpassen" ;
+    Text [ English ] = "Configuration" ;
+    Text [ norwegian ] = "Konfigurasjon" ;
+    Text [ italian ] = "Configura" ;
+    Text [ portuguese_brazilian ] = "Configuração" ;
+    Text [ portuguese ] = "Configuração" ;
+    Text [ finnish ] = "Asetukset" ;
+    Text [ danish ] = "Tilpas" ;
+    Text [ french ] = "Adaptation" ;
+    Text [ swedish ] = "Anpassa" ;
+    Text [ dutch ] = "Configureren" ;
+    Text [ spanish ] = "Configurar" ;
+    Text [ english_us ] = "Configuration" ;
+    Moveable = TRUE ;
+    SvLook = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = TP_CONFIG_MENU ;
+                /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
+                /* ### ACHTUNG: Neuer Text in Resource? Menü : Men³ */
+                Text = "Menü" ;
+                Text [ English ] = "Menu" ;
+                PageResID = 300 ;
+                Text [ dutch ] = "Menu" ;
+                Text [ english_us ] = "Menu" ;
+                Text [ italian ] = "Menu" ;
+                Text [ spanish ] = "Menú" ;
+                Text [ french ] = "Menu" ;
+                Text [ swedish ] = "Meny" ;
+                Text [ danish ] = "Menu" ;
+                Text [ portuguese_brazilian ] = "Menü" ;
+                Text [ portuguese ] = "Menu" ;
+                Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+                Text[ russian ] = "Ìåíş";
+                Text[ polish ] = "Menu";
+                Text[ japanese ] = "ÒÆ­°";
+                Text[ chinese_traditional ] = "¥\\¯àªí";
+                Text[ arabic ] = "ÇáŞÇÆãÉ";
+                Text[ greek ] = "Ìåíïı";
+                Text[ korean ] = "¸Ş´º";
+                Text[ turkish ] = "Mönü";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CONFIG_ACCEL ;
+                Text = "Tastatur" ;
+                Text [ English ] = "Keyboard" ;
+                Text [ norwegian ] = "Tastatur" ;
+                Text [ italian ] = "Tastiera" ;
+                Text [ portuguese_brazilian ] = "Teclado" ;
+                Text [ portuguese ] = "Teclado" ;
+                Text [ finnish ] = "Näppäimistö" ;
+                Text [ danish ] = "Tastatur" ;
+                Text [ french ] = "Clavier" ;
+                Text [ swedish ] = "Tangentbord" ;
+                Text [ dutch ] = "Toetsenbord" ;
+                Text [ spanish ] = "Teclado" ;
+                Text [ english_us ] = "Keyboard" ;
+                PageResID = 301 ;
+                Text[ chinese_simplified ] = "¼ü";
+                Text[ russian ] = "Êëàâèàòóğà";
+                Text[ polish ] = "Klawiatura";
+                Text[ japanese ] = "·°ÎŞ°ÄŞ";
+                Text[ chinese_traditional ] = "Áä";
+                Text[ arabic ] = "áæÍÉ ÇáãİÇÊíÍ";
+                Text[ greek ] = "Ğëçêôñïëüãéï";
+                Text[ korean ] = "Å°º¸µå";
+                Text[ turkish ] = "Klavye";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CONFIG_STATBAR ;
+                Text = "Statusleiste" ;
+                Text [ English ] = "Statusbar" ;
+                Text [ norwegian ] = "Statuslinje" ;
+                Text [ italian ] = "Barra di stato" ;
+                Text [ portuguese_brazilian ] = "Barra de Status" ;
+                Text [ portuguese ] = "Barra de estado" ;
+                Text [ finnish ] = "Tilarivi" ;
+                Text [ danish ] = "Statuslinje" ;
+                Text [ french ] = "Barre d'état" ;
+                Text [ swedish ] = "Statuslist" ;
+                Text [ dutch ] = "Statusbalk" ;
+                Text [ spanish ] = "Barra de estado" ;
+                Text [ english_us ] = "Status Bar" ;
+                PageResID = 302 ;
+                Text[ chinese_simplified ] = "×´Ì¬À¸";
+                Text[ russian ] = "Ñòğîêà ñîñòîÿíèÿ";
+                Text[ polish ] = "Pasek stanu";
+                Text[ japanese ] = "½Ã°À½ÊŞ°";
+                Text[ chinese_traditional ] = "ª¬ºA¦C";
+                Text[ arabic ] = "ÔÑíØ ÇáãÚáæãÇÊ";
+                Text[ greek ] = "ÃñáììŞ êáôÜóôáóçò";
+                Text[ korean ] = "»óÅÂ¸ğÀ½";
+                Text[ turkish ] = "Durum çubuğu";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CONFIG_OBJECTBAR ;
+                Text = "Symbolleisten" ;
+                Text [ ENGLISH ] = "Toolbox Options" ;
+                Text [ norwegian ] = "Verktøyalternativer" ;
+                Text [ italian ] = "Barre dei simboli" ;
+                Text [ portuguese_brazilian ] = "Opções do Quadro de Ferramentas" ;
+                Text [ portuguese ] = "Barras de ferramentas" ;
+                Text [ finnish ] = "Työkalurivin määritykset" ;
+                Text [ danish ] = "Ikonlinjer" ;
+                Text [ french ] = "Barres d'outils" ;
+                Text [ swedish ] = "Symbollister" ;
+                Text [ dutch ] = "Werkbalken" ;
+                Text [ spanish ] = "Barras de símbolos" ;
+                Text [ english_us ] = "Toolbars" ;
+                PageResID = 303 ;
+                Text[ chinese_simplified ] = "Í¼±êÀ¸";
+                Text[ russian ] = "Ïàíåëè ñèìâîëîâ";
+                Text[ polish ] = "Paski symboli";
+                Text[ japanese ] = "Â°ÙÊŞ°";
+                Text[ chinese_traditional ] = "¹Ï¥Ü¦C";
+                Text[ arabic ] = "ÃÔÑØÉ ÇáÑãæÒ";
+                Text[ greek ] = "Ãñáììİò óõìâüëùí";
+                Text[ korean ] = "µµ±¸¸ğÀ½";
+                Text[ turkish ] = "Araç çubukları";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = TP_CONFIG_EVENT ;
+                Text = "Ereignisse" ;
+                Text [ ENGLISH ] = "Events" ;
+                Text [ norwegian ] = "+++Events" ;
+                Text [ italian ] = "Eventi" ;
+                Text [ portuguese_brazilian ] = "Eventos" ;
+                Text [ portuguese ] = "Eventos" ;
+                Text [ finnish ] = "Tapahtumat" ;
+                Text [ danish ] = "Begivenheder" ;
+                Text [ french ] = "Événements" ;
+                Text [ swedish ] = "Händelser" ;
+                Text [ dutch ] = "Gebeurtenissen" ;
+                Text [ spanish ] = "Acontecimientos" ;
+                Text [ english_us ] = "Events" ;
+                PageResID = 304 ;
+                Text[ chinese_simplified ] = "ÊÂ¼ş";
+                Text[ russian ] = "Ñîáûòèÿ";
+                Text[ polish ] = "Wydarzenia";
+                Text[ japanese ] = "ÀsŒ_‹@";
+                Text[ chinese_traditional ] = "°Ê§@";
+                Text[ arabic ] = "ÇáÃÍÏÇË";
+                Text[ greek ] = "Ãåãïíüôá";
+                Text[ korean ] = "ÀÌº¥Æ®";
+                Text[ turkish ] = "İşlemler";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ russian ] = "Ñîãëàñîâàòü";
+    Text[ polish ] = "Konfiguracja";
+    Text[ japanese ] = "İ’è";
+    Text[ chinese_traditional ] = "°t¸m";
+    Text[ arabic ] = "ÊÎÕíÕ";
+    Text[ greek ] = "ĞñïóáñìïãŞ";
+    Text[ korean ] = "±¸¼º";
+    Text[ turkish ] = "Özelleştir";
+    Text[ language_user1 ] = " ";
+};
+ // Strings ---------------------------------------------------------------
+String STR_NEW
+{
+    Text = "Neu" ;
+    Text [ ENGLISH ] = "New" ;
+    Text [ norwegian ] = "Ny" ;
+    Text [ italian ] = "Nuovo" ;
+    Text [ portuguese_brazilian ] = "Novo" ;
+    Text [ portuguese ] = "Novo" ;
+    Text [ finnish ] = "Uusi" ;
+    Text [ danish ] = "Ny" ;
+    Text [ french ] = "Nouveau" ;
+    Text [ swedish ] = "Nytt" ;
+    Text [ dutch ] = "Nieuw" ;
+    Text [ spanish ] = "Nuevo" ;
+    Text [ english_us ] = "New" ;
+    Text[ chinese_simplified ] = "ĞÂ½¨";
+    Text[ russian ] = "Ñîçäàòü";
+    Text[ polish ] = "Nowy";
+    Text[ japanese ] = "V‹Kì¬";
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ";
+    Text[ arabic ] = "ÌÏíÏ";
+    Text[ greek ] = "Äçìéïõñãßá";
+    Text[ korean ] = "»õ·Î";
+    Text[ turkish ] = "Yeni";
+    Text[ language_user1 ] = " ";
+};
+String STR_OPEN
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Öffnen : Íffnen */
+    /* ### ACHTUNG: Neuer Text in Resource? Öffnen : Íffnen */
+    Text = "Öffnen" ;
+    Text [ ENGLISH ] = "Open" ;
+    Text [ norwegian ] = "Åpne" ;
+    Text [ italian ] = "Apri" ;
+    Text [ portuguese_brazilian ] = "Abrir" ;
+    Text [ portuguese ] = "Abrir" ;
+    Text [ finnish ] = "Avaa" ;
+    Text [ danish ] = "Åbn" ;
+    Text [ french ] = "Ouvrir" ;
+    Text [ swedish ] = "Öppna" ;
+    Text [ dutch ] = "Openen" ;
+    Text [ spanish ] = "Abrir" ;
+    Text [ english_us ] = "Open" ;
+    Text[ chinese_simplified ] = "´ò¿ª";
+    Text[ russian ] = "Îòêğûòü";
+    Text[ polish ] = "Otwórz";
+    Text[ japanese ] = "ŠJ‚­";
+    Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
+    Text[ arabic ] = "İÊÍ";
+    Text[ greek ] = "¢íïéãìá";
+    Text[ korean ] = "¿­±â";
+    Text[ turkish ] = "Aç";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVE
+{
+    Text = "Speichern" ;
+    Text [ ENGLISH ] = "Save" ;
+    Text [ norwegian ] = "Save" ;
+    Text [ italian ] = "Salva" ;
+    Text [ portuguese_brazilian ] = "Gravar" ;
+    Text [ portuguese ] = "Guardar" ;
+    Text [ finnish ] = "Tallennus" ;
+    Text [ danish ] = "Gem" ;
+    Text [ french ] = "Enregistrer" ;
+    Text [ swedish ] = "Spara" ;
+    Text [ dutch ] = "Opslaan" ;
+    Text [ spanish ] = "Guardar" ;
+    Text [ english_us ] = "Save" ;
+    Text[ chinese_simplified ] = "´æÅÌ";
+    Text[ russian ] = "Ñîõğàíèòü";
+    Text[ polish ] = "Zapisz";
+    Text[ japanese ] = "•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦s";
+    Text[ arabic ] = "ÍİÙ";
+    Text[ greek ] = "ÁğïèŞêåõóç";
+    Text[ korean ] = "ÀúÀå";
+    Text[ turkish ] = "Kaydet";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVEAS
+{
+    Text = "Speichern als" ;
+    Text [ ENGLISH ] = "Save as" ;
+    Text [ norwegian ] = "Lagre som" ;
+    Text [ italian ] = "Salva con nome" ;
+    Text [ portuguese_brazilian ] = "Gravar como" ;
+    Text [ portuguese ] = "Guardar como" ;
+    Text [ finnish ] = "Tallenna nimellä" ;
+    Text [ danish ] = "Gem som" ;
+    Text [ french ] = "Enregistrer sous" ;
+    Text [ swedish ] = "Spara som" ;
+    Text [ dutch ] = "Opslaan als" ;
+    Text [ spanish ] = "Guardar como" ;
+    Text [ english_us ] = "Save As" ;
+    Text[ chinese_simplified ] = "Áí´æÎª";
+    Text[ russian ] = "Ñîõğàíèòü êàê";
+    Text[ polish ] = "Zapisz jako";
+    Text[ japanese ] = "–¼‘O‚ğ•t‚¯‚Ä•Û‘¶";
+    Text[ chinese_traditional ] = "¥t¦s·sÀÉ";
+    Text[ arabic ] = "ÍİÙ ßÜ";
+    Text[ greek ] = "ÁğïèŞêåõóç ùò";
+    Text[ korean ] = "´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
+    Text[ turkish ] = "Farklı kaydet";
+    Text[ language_user1 ] = " ";
+};
+String STR_PRINT
+{
+    Text = "Drucken" ;
+    Text [ ENGLISH ] = "Print" ;
+    Text [ norwegian ] = "Skriv ut" ;
+    Text [ italian ] = "Stampa" ;
+    Text [ portuguese_brazilian ] = "Imprimir" ;
+    Text [ portuguese ] = "Imprimir" ;
+    Text [ finnish ] = "Tulosta" ;
+    Text [ danish ] = "Udskriv" ;
+    Text [ french ] = "Imprimer" ;
+    Text [ swedish ] = "Skriv ut" ;
+    Text [ dutch ] = "Afdrukken" ;
+    Text [ spanish ] = "Imprimir" ;
+    Text [ english_us ] = "Print" ;
+    Text[ chinese_simplified ] = "´òÓ¡";
+    Text[ russian ] = "Ïå÷àòü";
+    Text[ polish ] = "Drukuj";
+    Text[ japanese ] = "ˆóü";
+    Text[ chinese_traditional ] = "¦C¦L";
+    Text[ arabic ] = "ØÈÇÚÉ";
+    Text[ greek ] = "Åêôığùóç";
+    Text[ korean ] = "ÀÎ¼â";
+    Text[ turkish ] = "Yazdır";
+    Text[ language_user1 ] = " ";
+};
+String STR_QUIT
+{
+    Text = "Beenden" ;
+    Text [ ENGLISH ] = "Quit" ;
+    Text [ norwegian ] = "Avslutt" ;
+    Text [ italian ] = "Esci" ;
+    Text [ portuguese_brazilian ] = "Sair" ;
+    Text [ portuguese ] = "Sair" ;
+    Text [ finnish ] = "Lopeta" ;
+    Text [ danish ] = "Afslut" ;
+    Text [ french ] = "Quitter" ;
+    Text [ swedish ] = "Avsluta" ;
+    Text [ dutch ] = "Sluiten" ;
+    Text [ spanish ] = "Terminar" ;
+    Text [ english_us ] = "Exit" ;
+    Text[ chinese_simplified ] = "½áÊø";
+    Text[ russian ] = "Âûõîä";
+    Text[ polish ] = "Zakoñcz";
+    Text[ japanese ] = "I—¹";
+    Text[ chinese_traditional ] = "µ²§ô";
+    Text[ arabic ] = "ÅäåÇÁ";
+    Text[ greek ] = "¸îïäïò";
+    Text[ korean ] = "Á¾·á";
+    Text[ turkish ] = "Kapat";
+    Text[ language_user1 ] = " ";
+};
+String STR_CUT
+{
+    Text = "Ausschneiden" ;
+    Text [ ENGLISH ] = "Cut" ;
+    Text [ norwegian ] = "Cut" ;
+    Text [ italian ] = "Taglia" ;
+    Text [ portuguese_brazilian ] = "Recortar" ;
+    Text [ portuguese ] = "Cortar" ;
+    Text [ finnish ] = "Leikkaa" ;
+    Text [ danish ] = "Klip" ;
+    Text [ french ] = "Couper" ;
+    Text [ swedish ] = "Klipp ut" ;
+    Text [ dutch ] = "Knippen" ;
+    Text [ spanish ] = "Cortar" ;
+    Text [ english_us ] = "Cut" ;
+    Text[ chinese_simplified ] = "¼ô³ı";
+    Text[ russian ] = "Âûğåçàòü";
+    Text[ polish ] = "Wytnij";
+    Text[ japanese ] = "Ø‚èæ‚è";
+    Text[ chinese_traditional ] = "°Å¤U";
+    Text[ arabic ] = "ŞÕ";
+    Text[ greek ] = "ÁğïêïğŞ";
+    Text[ korean ] = "Àß¶ó³»±â";
+    Text[ turkish ] = "Kes";
+    Text[ language_user1 ] = " ";
+};
+String STR_COPY
+{
+    Text = "Kopieren" ;
+    Text [ ENGLISH ] = "Copy" ;
+    Text [ norwegian ] = "Kopi" ;
+    Text [ italian ] = "Copia" ;
+    Text [ portuguese_brazilian ] = "Copiar" ;
+    Text [ portuguese ] = "Copiar" ;
+    Text [ finnish ] = "Kopioi" ;
+    Text [ danish ] = "Kopier" ;
+    Text [ french ] = "Copier" ;
+    Text [ swedish ] = "Kopiera" ;
+    Text [ dutch ] = "Kopiëren" ;
+    Text [ spanish ] = "Copiar" ;
+    Text [ english_us ] = "Copy" ;
+    Text[ chinese_simplified ] = "¸´ÖÆ";
+    Text[ russian ] = "Êîïèğîâàòü";
+    Text[ polish ] = "Kopiuj";
+    Text[ japanese ] = "ºËß°";
+    Text[ chinese_traditional ] = "½Æ»s";
+    Text[ arabic ] = "äÓÎ";
+    Text[ greek ] = "ÁíôéãñáöŞ";
+    Text[ korean ] = "º¹»ç";
+    Text[ turkish ] = "Kopyala";
+    Text[ language_user1 ] = " ";
+};
+String STR_PASTE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+    Text = "Einfügen" ;
+    Text [ ENGLISH ] = "Paste" ;
+    Text [ norwegian ] = "Paste" ;
+    Text [ italian ] = "Incolla" ;
+    Text [ portuguese_brazilian ] = "Colar" ;
+    Text [ portuguese ] = "Colar" ;
+    Text [ finnish ] = "Liitä" ;
+    Text [ danish ] = "Indsæt" ;
+    Text [ french ] = "Coller" ;
+    Text [ swedish ] = "Klistra in" ;
+    Text [ dutch ] = "Invoegen" ;
+    Text [ spanish ] = "Pegar" ;
+    Text [ english_us ] = "Paste" ;
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ russian ] = "Âñòàâèòü";
+    Text[ polish ] = "Wklej";
+    Text[ japanese ] = "“\\‚è•t‚¯";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "áÕŞ";
+    Text[ greek ] = "Åğéêüëëçóç";
+    Text[ korean ] = "ºÙ¿© ³Ö±â";
+    Text[ turkish ] = "Yapıştır";
+    Text[ language_user1 ] = " ";
+};
+String STR_DELETE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
+    /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
+    Text = "Löschen" ;
+    Text [ ENGLISH ] = "Delete" ;
+    Text [ norwegian ] = "Slett" ;
+    Text [ italian ] = "Elimina" ;
+    Text [ portuguese_brazilian ] = "Apagar" ;
+    Text [ portuguese ] = "Eliminar" ;
+    Text [ finnish ] = "Poista" ;
+    Text [ danish ] = "Slet" ;
+    Text [ french ] = "Supprimer" ;
+    Text [ swedish ] = "Radera" ;
+    Text [ dutch ] = "Wissen" ;
+    Text [ spanish ] = "Eliminar" ;
+    Text [ english_us ] = "Delete" ;
+    Text[ chinese_simplified ] = "É¾³ı";
+    Text[ russian ] = "Óäàëèòü";
+    Text[ polish ] = "Usuñ";
+    Text[ japanese ] = "íœ";
+    Text[ chinese_traditional ] = "§R°£";
+    Text[ arabic ] = "ÍĞİ";
+    Text[ greek ] = "ÄéáãñáöŞ";
+    Text[ korean ] = "»èÁ¦";
+    Text[ turkish ] = "Sil";
+    Text[ language_user1 ] = " ";
+};
+String STR_FIND
+{
+    Text = "Suchen" ;
+    Text [ ENGLISH ] = "Find" ;
+    Text [ norwegian ] = "Søke" ;
+    Text [ italian ] = "Cerca" ;
+    Text [ portuguese_brazilian ] = "Procurar" ;
+    Text [ portuguese ] = "Localizar" ;
+    Text [ finnish ] = "Etsi" ;
+    Text [ danish ] = "Søg" ;
+    Text [ french ] = "Rechercher" ;
+    Text [ swedish ] = "Sök" ;
+    Text [ dutch ] = "Zoeken" ;
+    Text [ spanish ] = "Buscar" ;
+    Text [ english_us ] = "Search" ;
+    Text[ chinese_simplified ] = "ËÑÑ°";
+    Text[ russian ] = "Íàéòè";
+    Text[ polish ] = "Szukaj";
+    Text[ japanese ] = "ŒŸõ";
+    Text[ chinese_traditional ] = "´M§ä";
+    Text[ arabic ] = "ÈÍË";
+    Text[ greek ] = "ÁíáæŞôçóç";
+    Text[ korean ] = "Ã£±â";
+    Text[ turkish ] = "Ara";
+    Text[ language_user1 ] = " ";
+};
+String STR_FINDBACKWARD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Rückwärts suchen : R³ckwõrts suchen */
+    /* ### ACHTUNG: Neuer Text in Resource? Rückwärts suchen : R³ckwõrts suchen */
+    Text = "Rückwärts suchen" ;
+    Text [ ENGLISH ] = "Find backward" ;
+    Text [ norwegian ] = "Søk bakover" ;
+    Text [ italian ] = "Cerca all'indietro" ;
+    Text [ portuguese_brazilian ] = "Procurar Para Trás" ;
+    Text [ portuguese ] = "Localizar para trás" ;
+    Text [ finnish ] = "Etsi taaksepäin" ;
+    Text [ danish ] = "Søg baglæns" ;
+    Text [ french ] = "Recherche vers le haut" ;
+    Text [ swedish ] = "Sök bakåt" ;
+    Text [ dutch ] = "Achterwaarts zoeken" ;
+    Text [ spanish ] = "Buscar hacia atrás" ;
+    Text [ english_us ] = "Search backward" ;
+    Text[ chinese_simplified ] = "ÏòºóËÑÑ°";
+    Text[ russian ] = "Èñêàòü â îáğàòíîì ïîğÿäêå";
+    Text[ polish ] = "Szukaj wstecz";
+    Text[ japanese ] = "ŒŸõ –ß‚é";
+    Text[ chinese_traditional ] = "¦V«á´M§ä";
+    Text[ arabic ] = "ÇáÈÍË Åáì ÇáÎáİ";
+    Text[ greek ] = "ÁíáæŞôçóç ğßóù";
+    Text[ korean ] = "µÚ·Î Ã£±â";
+    Text[ turkish ] = "Geriye doğru ara";
+    Text[ language_user1 ] = " ";
+};
+String STR_PROPERTIES
+{
+    Text = "Eigenschaften" ;
+    Text [ ENGLISH ] = "Properties" ;
+    Text [ norwegian ] = "Egenskaper" ;
+    Text [ italian ] = "Proprietà" ;
+    Text [ portuguese_brazilian ] = "Propriedades" ;
+    Text [ portuguese ] = "Propriedades" ;
+    Text [ finnish ] = "Ominaisuudet" ;
+    Text [ danish ] = "Egenskaber" ;
+    Text [ french ] = "Propriétés" ;
+    Text [ swedish ] = "Egenskaper" ;
+    Text [ dutch ] = "Eigenschappen" ;
+    Text [ spanish ] = "Propiedades" ;
+    Text [ english_us ] = "Properties" ;
+    Text[ chinese_simplified ] = "ÊôĞÔ";
+    Text[ russian ] = "Ñâîéñòâà";
+    Text[ polish ] = "W³aœciwoœci";
+    Text[ japanese ] = "ÌßÛÊßÃ¨";
+    Text[ chinese_traditional ] = "Äİ©Ê";
+    Text[ arabic ] = "ÎÕÇÆÕ";
+    Text[ greek ] = "Éäéüôçôåò";
+    Text[ korean ] = "µî·ÏÁ¤º¸";
+    Text[ turkish ] = "Özellikler";
+    Text[ language_user1 ] = " ";
+};
+String STR_FRONT
+{
+    Text = "Nach vorn" ;
+    Text [ ENGLISH ] = "Front" ;
+    Text [ norwegian ] = "Foran" ;
+    Text [ italian ] = "In avanti" ;
+    Text [ portuguese_brazilian ] = "Primeiro plano" ;
+    Text [ portuguese ] = "Para a frente" ;
+    Text [ finnish ] = "Edustalle" ;
+    Text [ danish ] = "Fremad" ;
+    Text [ french ] = "Premier plan" ;
+    Text [ swedish ] = "Framåt" ;
+    Text [ dutch ] = "Naar voren" ;
+    Text [ spanish ] = "Primer plano" ;
+    Text [ english_us ] = "To front" ;
+    Text[ chinese_simplified ] = "ÏòÇ°";
+    Text[ russian ] = "Âïåğåä";
+    Text[ polish ] = "Do przodu";
+    Text[ japanese ] = "‘O‚Ö";
+    Text[ chinese_traditional ] = "¦V«e";
+    Text[ arabic ] = "Åáì ÇáÃãÇã";
+    Text[ greek ] = "Óå ğñşôï ğëÜíï";
+    Text[ korean ] = "¾ÕÀ¸·Î";
+    Text[ turkish ] = "İleri";
+    Text[ language_user1 ] = " ";
+};
+ // MessageBoxes ----------------------------------------------------------
+QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
+    Message = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ ENGLISH ] = "There are still undefined functions (???).\n\nContinue anyway?" ;
+    Message [ norwegian ] = "Det er fremdeles udefinerte funksjoner are still undefined functions (???).\n\nFortsett likevel?" ;
+    Message [ italian ] = "Vi sono ancora funzioni non definite (???).\n\nContinuare lo stesso?" ;
+    Message [ portuguese_brazilian ] = "Ainda existem Funções indefinidas (???).\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese ] = "Ainda existem funções indefinidas (???).\n\nDeseja continuar?" ;
+    Message [ finnish ] = "Määrittämättömiä toimintoja on vieläkin (???).\n\nJatketaanko silti?" ;
+    Message [ danish ] = "Der eksisterer stadig udefinerede funktioner (???).\n\nVil du overtage denne konfiguration alligevel?" ;
+    Message [ french ] = "Certaines fonctions n'ont pas été définies (???).\n\nPoursuivre malgré tout ?" ;
+    Message [ swedish ] = "Det finns fortfarande odefinierade funktioner (???). \n\nVill Du ändå överta den här konfigurationen?" ;
+    Message [ dutch ] = "Er zijn nog ongedefinieerde functies (???).\n\nWilt u deze configuratie toch overnemen?" ;
+    Message [ spanish ] = "Todavía hay funciones no definidas (???).\n\n¿Desea de todas formas aceptar esta configuración?" ;
+    Message [ english_us ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
+    Message[ chinese_simplified ] = "»¹´æÔÚÎ´¶¨ÒåµÄ¹¦ÄÜ¡£\n\nÄú»¹ÊÇÒª½ÓÊÜÕâ¸öÅäÖÃÂğ£¿";
+    Message[ russian ] = "Ñóùåñòâóşò ôóíêöèè, êîòîğûå åùå íåîïğåäåëåíû (???).\n\nÂû âñå ğàâíî õîòèòå ïğèíÿòü ıòè êîíôèãóğàöèè?";
+    Message[ polish ] = "Istniej¹ jeszcze nie zdefiniowane funkcje (???).\n\nCzy akceptujesz mimo to t¹ konfiguracjê?";
+    Message[ japanese ] = "‚Ü‚¾’è‹`‚³‚ê‚Ä‚¢‚È‚¢‹@”\\‚ª‚ ‚è‚Ü‚·(???)¡\n\n‚±‚Ìİ’è‚ğ“K‰‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©H";
+    Message[ chinese_traditional ] = "ÁÙ¦s¦b¥¼©w¸qªº¥\\¯à¡C\n\nÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
+    Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ãåÇã ÛíÑ ãÚÑİÉ (???).\n\nåá ÊÑíÏ ŞÈæá åĞÇ ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
+    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç ëåéôïõñãßåò ğïõ äåí İ÷ïõí ïñéóôåß (???).\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
+    Message[ korean ] = "Á¤ÀÇµÇÁö ¾ÊÀº ±â´ÉµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. (???).\n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Hala tanımlanmamış işlevler mevcut (???).\n\nBu konfigürasyonu yine de kabul etmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch Eintrõge mit Funktionen, die nur Popups zugewiesen werden k÷nnen.\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen? : Es existieren noch Eintrõge mit Funktionen, die nur Popups zugewiesen werden k÷nnen.\n\nWollen Sie diese Konfiguration trotzdem ³bernehmen? */
+    Message = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
+    Message [ ENGLISH ] = "There are still entries with functions that can only be assigned to popups.\n\nContinue anyway?" ;
+    Message [ norwegian ] = "Det er fremdeles oppføringer med funksjoner som bare kan tilordnes tilleggsmenyenps.\n\nFortsett likevel?" ;
+    Message [ italian ] = "Vi sono ancora voci con funzioni che possono essere assegnate solo a menu di scelta rapida.\n\nContinuare lo stesso?" ;
+    Message [ portuguese_brazilian ] = "Existem entradas com Funções que só podem ser atribuidas a popupps.\n\nContinuar de qualquer forma?" ;
+    Message [ portuguese ] = "Existem ainda entradas com funções que só podem ser atribuídas a janelas instantâneas.\n\nContinuar?" ;
+    Message [ finnish ] = "Luettelossa on vieläkin toimintoja, jotka voidaan liittää vain kohovalikoihin..\n\nJatketaanko silti?" ;
+    Message [ danish ] = "Der findes stadig elementer med funktioner, som kun kan tildeles popups.\n\nVil du overtage denne konfiguration alligevel?" ;
+    Message [ french ] = "Certaines entrées sont encore associées à des fonctions réservées à des menus déroulants\n\nPoursuivre malgré tout ?" ;
+    Message [ swedish ] = "Det finns fortfarande poster med funktioner som bara kan tilldelas popups.\n\nVill Du ändå överta den här konfigurationen?" ;
+    Message [ dutch ] = "Er zijn nog items met functies die alleen aan popups kunnen worden toegewezen.\n\nWilt u deze configuratie toch overnemen?" ;
+    Message [ spanish ] = "Todavía hay entradas con funciones que solo pueden ser asignadas a emergentes.\n\n¿Desea continuar de todos modos?" ;
+    Message [ english_us ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
+    Message[ chinese_simplified ] = "»¹´æÔÚÒ»Ğ©Ö»ÄÜÖ¸¶¨¸øµ¯³öÊ½²Ëµ¥ÃüÁîÖ´ĞĞµÄ¾ßÓĞÄ³ÖÖ¹¦ÄÜµÄÌõÄ¿¡£\nÄú»¹ÊÇÒª½ÓÊÜÕâ¸öÅäÖÃÂğ£¿";
+    Message[ russian ] = "Ñóùåñòâóşò çàïèñè ñ ôóíêöèÿìè, êîòîğûå ìîãóò áûòü ïğèñâîåíû òîëüêî âñïëûâàşùèì ìåíş.\n\nÂû âñå ğàâíî õîòèòå ïğèíÿòü ıòè êîíôèãóğàöèè?";
+    Message[ polish ] = "Istniej¹ jeszcze wpisy, które mog¹ zostaæ przypisane tylko oknom typu popup. n\nCzy chcesz mimo to zastosowaæ tê konfiguracjê?";
+    Message[ japanese ] = "‚Ü‚¾Îß¯Ìß±¯Ìß‚Ì‚İ‚ÉŠ„‚è“–‚Ä‚ç‚ê‚é‹@”\\‚Ì€–Ú‚ª‚ ‚è‚Ü‚·B\n\n‚±‚Ìİ’è‚ğ“K—p‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©?";
+    Message[ chinese_traditional ] = "ÁÙ¦s¦b¤@¨Ç¥u¯à«ü©wµ¹§Ö³t¥\\¯àªí°õ¦æªº¨ã¦³¬YºØ¥\\¯àªº¶µ¥Ø¡C\n±zÁÙ¬O­n±µ¨ü³o­Ó°t¸m¡H";
+    Message[ arabic ] = "ãÇÒÇáÊ åäÇáß ÅÏÎÇáÇÊ ÈåÇ ãåÇã áÇ íãßä ÊÚííäåÇ ÅáÇ áŞæÇÆã ÇäÈËÇŞíÉ İŞØ.\n\nåá ÊÑíÏ ŞÈæá ÇáÊßæíä Úáì ÇáÑÛã ãä Ğáß¿";
+    Message[ greek ] = "ÕğÜñ÷ïõí áêüìç åããñáöİò ìå ëåéôïõñãßåò ôùí ïğïßùí ìğïñåß íá ãßíåé ìüíï áíôéóôïß÷éóç ìå áíáäõüìåíá ğáñÜèõñá.\n\nÈİëåôå íá áğïäå÷ôåßôå ôç äéáìüñöùóç áõôŞ;";
+    Message[ korean ] = "ÆË¾÷¿¡¸¸ ÁöÁ¤µÉ ¼ö ÀÖ´Â ±â´ÉµéÀ» Áö´Ñ Ç×¸ñµéÀÌ ¾ÆÁ÷ ÀÖ½À´Ï´Ù. \n\n±×·¡µµ ÀÌ ±¸¼ºÀ» Àû¿ëÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Yalnızca açılan mönülere atanabilen işlevleri olan girişler mevcut.\n\nBu konfigürasyon ile devam etmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+InfoBox IBX_MNUCFG_ALREADY_INCLUDED
+{
+    Message = "Die Funktion ist bereits in diesem Popup enthalten." ;
+    Message [ ENGLISH ] = "Function is already included in this popup." ;
+    Message [ norwegian ] = "Funksjon er allerede inkludert i denne tilleggsmenyen." ;
+    Message [ italian ] = "Funzione già inclusa in questo elenco." ;
+    Message [ portuguese_brazilian ] = "A função já está incluída neste popup." ;
+    Message [ portuguese ] = "A função já está incluída neste menu instantâneo." ;
+    Message [ finnish ] = "Toiminto on jo lisätty tähän kohovalikkoon." ;
+    Message [ danish ] = "Funktionen er allerede indeholdt i denne popup." ;
+    Message [ french ] = "Cette fonction est déjà incluse dans la liste Menu." ;
+    Message [ swedish ] = "Funktionen ingår redan i denna snabbmeny." ;
+    Message [ dutch ] = "Deze functie komt al voor in dit menu." ;
+    Message [ spanish ] = "La función ya está incluida en este emergente." ;
+    Message [ english_us ] = "Function is already included in this popup." ;
+    Message[ chinese_simplified ] = "Õâ¸öµ¯³öÊ½²Ëµ¥ÃüÁîÒÑ¾­°üº¬ÁËÕâ¸ö¹¦ÄÜ¡£";
+    Message[ russian ] = "İòà ôóíêöèÿ óæå ñîäåğæèòñÿ â âñïëûâàşùåì ìåíş.";
+    Message[ polish ] = "Ta funkcja jest ju¿ zawarta w menu podrêcznym.";
+    Message[ japanese ] = "‹@”\\‚Í‚·‚Å‚É‚±‚ÌÎß¯Ìß±¯Ìß‚ÉŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B";
+    Message[ chinese_traditional ] = "³o­Ó§Ö³t¥\\¯àªí¤w¸g¥]§t¤F³o­Ó¥\\¯à¡C";
+    Message[ arabic ] = "ÇáãåãÉ ãæÌæÏÉ ãÓÈŞÇğ İí åĞå ÇáŞÇÆãÉ ÇáãäÈËŞÉ.";
+    Message[ greek ] = "Ç óõíÜñôçóç ğåñéİ÷åôáé Şäç óå áõôü ôï áíáäõüìåíï êåßìåíï.";
+    Message[ korean ] = "±â´ÉÀÌ ÀÌ¹Ì ÀÌ ÆË¾÷¿¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù.";
+    Message[ turkish ] = "İşlev zaten bu açılan mönüde mevcut.";
+    Message[ language_user1 ] = " ";
+};
+String STR_LOADMENUCONFIG
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Menükonfiguration laden : Men³konfiguration laden */
+    /* ### ACHTUNG: Neuer Text in Resource? Menükonfiguration laden : Men³konfiguration laden */
+    Text = "Menükonfiguration laden" ;
+    Text [ ENGLISH ] = "Load Menu Configuration" ;
+    Text [ english_us ] = "Load Menu Configuration" ;
+    Text [ italian ] = "Carica configurazione menu" ;
+    Text [ spanish ] = "Cargar configuración del menú" ;
+    Text [ french ] = "Charger config. du menu" ;
+    Text [ dutch ] = "Menuconfiguratie laden" ;
+    Text [ swedish ] = "Ladda menykonfiguration" ;
+    Text [ danish ] = "Indlæs menukonfiguration" ;
+    Text [ portuguese_brazilian ] = "Menükonfiguration laden" ;
+    Text [ portuguese ] = "Carregar configuração do menu" ;
+    Text[ chinese_simplified ] = "×°ÔØ²Ëµ¥ÃüÁîÅäÖÃ";
+    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ìåíş";
+    Text[ polish ] = "£aduj konfiguracjê menu";
+    Text[ japanese ] = "ÒÆ­°İ’è‚Ì“Ç‚İ‚İ";
+    Text[ chinese_traditional ] = "¸Ë¸ü¥\\¯àªí°t¸m";
+    Text[ arabic ] = "ÊÍãíá Êßæíä ÇáŞÇÆãÉ";
+    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ìåíïı";
+    Text[ korean ] = "¸Ş´º ±¸¼º ·Îµå";
+    Text[ turkish ] = "Mönü konfigürasyonunu yükle";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVEMENUCONFIG
+{
+    Text = "Menükonfiguration speichern" ;
+    Text [ ENGLISH ] = "Save Menu Configuration" ;
+    Text [ english_us ] = "Save Menu Configuration" ;
+    Text [ italian ] = "Salva configurazione menu" ;
+    Text [ spanish ] = "Guardar configuración del menú" ;
+    Text [ french ] = "Enregistrer la configuration du menu" ;
+    Text [ dutch ] = "Menuconfiguratie opslaan" ;
+    Text [ swedish ] = "Spara menykonfiguration" ;
+    Text [ danish ] = "Gem menukonfiguration" ;
+    Text [ portuguese_brazilian ] = "Menükonfiguration speichern" ;
+    Text [ portuguese ] = "Guardar configuração do menu" ;
+    Text[ chinese_simplified ] = "´æÅÌ²Ëµ¥ÅäÖÃ";
+    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ìåíş";
+    Text[ polish ] = "Zapisz konfiguracjê menu";
+    Text[ japanese ] = "ÒÆ­°İ’è‚Ìã‘‚«•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦sµæ³æ°t¸m";
+    Text[ arabic ] = "ÍİÙ Êßæíä ÇáŞÇÆãÉ";
+    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ìåíïı";
+    Text[ korean ] = "¸Ş´º±¸¼º ÀúÀå";
+    Text[ turkish ] = "Mönü konfigürasyonunu kaydet";
+};
+String STR_LOADACCELCONFIG
+{
+    Text = "Tastaturkonfiguration laden" ;
+    Text [ ENGLISH ] = "Load Keyboard Configuration" ;
+    Text [ dutch ] = "Tastatuurconfiguratie laden" ;
+    Text [ english_us ] = "Load Keyboard Configuration" ;
+    Text [ italian ] = "Carica configurazione tastiera" ;
+    Text [ spanish ] = "Cargar configuración del teclado" ;
+    Text [ french ] = "Charger configuration du clavier" ;
+    Text [ swedish ] = "Ladda tangentbordskonfiguration" ;
+    Text [ danish ] = "Indlæs tastaturkonfiguration" ;
+    Text [ portuguese_brazilian ] = "Tastaturkonfiguration laden" ;
+    Text [ portuguese ] = "Carregar configuração do teclado" ;
+    Text[ chinese_simplified ] = "×°ÔØ¼üÅÌÅäÖÃ";
+    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş êëàâèàòóğû";
+    Text[ polish ] = "£aduj konfiguracjê klawiatury";
+    Text[ japanese ] = "·°ÎŞ°ÄŞİ’è‚Ì“Ç‚İ‚İ";
+    Text[ chinese_traditional ] = "¸Ë¸üÁä½L°t¸m";
+    Text[ arabic ] = "ÊÍãíá Êßæíä áæÍÉ ÇáãİÇÊíÍ";
+    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ğëçêôñïëïãßïõ";
+    Text[ korean ] = "Å°º¸µå ±¸¼º ·Îµå";
+    Text[ turkish ] = "Klavye konfigürasyonunu yükle";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVEACCELCONFIG
+{
+    Text = "Tastaturkonfiguration speichern" ;
+    Text [ ENGLISH ] = "Save Keyboard Configuration" ;
+    Text [ english_us ] = "Save Keyboard Configuration" ;
+    Text [ italian ] = "Salva configurazione tastiera" ;
+    Text [ spanish ] = "Guardar configuración del teclado" ;
+    Text [ french ] = "Enregistrer la configuration du clavier" ;
+    Text [ dutch ] = "Toetsenbordconfiguratie opslaan" ;
+    Text [ swedish ] = "Spara tangentbordskonfiguration" ;
+    Text [ danish ] = "Gem tastaturkonfiguration" ;
+    Text [ portuguese_brazilian ] = "Tastaturkonfiguration speichern" ;
+    Text [ portuguese ] = "Guardar configuração do teclado" ;
+    Text[ chinese_simplified ] = "´æÅÌ¼üÅÌÅäÖÃ";
+    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş êëàâèàòóğû";
+    Text[ polish ] = "Zapisz konfiguracjê klawiatury";
+    Text[ japanese ] = "·°ÎŞ°ÄŞİ’è‚Ìã‘‚«•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦sÁä½L°t¸m";
+    Text[ arabic ] = "ÍİÙ Êßæíä áæÍÉ ÇáãİÇÊíÍ";
+    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ğëçêôñïëïãßïõ";
+    Text[ korean ] = "Å°º¸µå±¸¼º ÀúÀå";
+    Text[ turkish ] = "Klavye konfigürasyonunu kaydet";
+};
+String STR_LOADSTATBARCONFIG
+{
+    Text = "Statusleistenkonfiguration laden" ;
+    Text [ ENGLISH ] = "Load Statusbar Configuration" ;
+    Text [ dutch ] = "Statusballk-configuratie laden" ;
+    Text [ english_us ] = "Load Status Bar Configuration" ;
+    Text [ italian ] = "Carica configurazione barra di stato" ;
+    Text [ spanish ] = "Cargar configuración de la barra de estado" ;
+    Text [ french ] = "Chargement de la configuration de la barre d'état" ;
+    Text [ swedish ] = "Ladda statuslistkonfiguration" ;
+    Text [ danish ] = "Indlæs statuslinjekonfiguration" ;
+    Text [ portuguese_brazilian ] = "Statusleistenkonfiguration laden" ;
+    Text [ portuguese ] = "Carregar configuração da barra de estado" ;
+    Text[ chinese_simplified ] = "×°ÔØ×´Ì¬À¸ÅäÖÃ";
+    Text[ russian ] = "Çàãğóçèòü êîíôèãóğàöèş ñòğîêè ñîñòîÿíèÿ";
+    Text[ polish ] = "£aduj konfiguracjê paska stanu";
+    Text[ japanese ] = "½Ã°À½ ÊŞ°İ’è‚Ì“Ç‚İ‚İ";
+    Text[ chinese_traditional ] = "¸Ë¸üª¬ºA¦C°t¸m";
+    Text[ arabic ] = "ÊÍãíá Êßæíä ÔÑíØ ÇáãÚáæãÇÊ";
+    Text[ greek ] = "Öüñôùóç äéáìüñöùóçò ãñáììŞò êáôÜóôáóçò";
+    Text[ korean ] = "»óÅÂ¸ğÀ½ ±¸¼º ·Îµå";
+    Text[ turkish ] = "Durum çubuğu konfigürasyonunu yükle";
+    Text[ language_user1 ] = " ";
+};
+String STR_SAVESTATBARCONFIG
+{
+    Text = "Statusleistenkonfiguration speichern" ;
+    Text [ ENGLISH ] = "Save Statusbar Configuration" ;
+    Text [ english_us ] = "Save Status Bar Configuration" ;
+    Text [ italian ] = "Salva configurazione barra di stato" ;
+    Text [ spanish ] = "Guardar configuración de la barra de estado" ;
+    Text [ french ] = "Enregistrer la configuration de la barre d'état" ;
+    Text [ dutch ] = "Statusbalkconfiguratie opslaan" ;
+    Text [ swedish ] = "Spara statuslistkonfiguration" ;
+    Text [ danish ] = "Gem statuslinjekonfiguration" ;
+    Text [ portuguese_brazilian ] = "Statusleistenkonfiguration speichern" ;
+    Text [ portuguese ] = "Guardar configuração da barra de estado" ;
+    Text[ chinese_simplified ] = "´æÅÌ×´Ì¬À¸ÅäÖÃ";
+    Text[ russian ] = "Ñîõğàíèòü êîíôèãóğàöèş ñòğîêè ñîñòîÿíèÿ";
+    Text[ polish ] = "Zapisz konfiguracjê paska stanu";
+    Text[ japanese ] = "½Ã°À½ ÊŞ°İ’è‚Ìã‘‚«•Û‘¶";
+    Text[ chinese_traditional ] = "Àx¦sª¬ºAÄæ°t¸m";
+    Text[ arabic ] = "ÍİÙ Êßæíä ÔÑíØ ÇáãÚáæãÇÊ";
+    Text[ greek ] = "ÁğïèŞêåõóç äéáìüñöùóçò ãñáììŞò êáôÜóôáóçò";
+    Text[ korean ] = "»óÅÂ¸ğÀ½ ±¸¼º ÀúÀå";
+    Text[ turkish ] = "Durum çubuğu konfigürasyonunu kaydet";
+};
+String STR_MENU
+{
+    Text = "Menü" ;
+    Text [ ENGLISH ] = "Menu" ;
+    Text [ english_us ] = "Menu" ;
+    Text [ swedish ] = "Meny" ;
+    Text [ danish ] = "Menu" ;
+    Text [ italian ] = "Menu" ;
+    Text [ spanish ] = "Menú" ;
+    Text [ french ] = "Menu" ;
+    Text [ dutch ] = "Menu" ;
+    Text [ portuguese_brazilian ] = "Menü" ;
+    Text [ portuguese ] = "Menu" ;
+    Text[ chinese_simplified ] = "²Ëµ¥ÃüÁî";
+    Text[ russian ] = "Ìåíş";
+    Text[ polish ] = "Menu";
+    Text[ japanese ] = "ÒÆ­°";
+    Text[ chinese_traditional ] = "¥\\¯àªí";
+    Text[ arabic ] = "ÇáŞÇÆãÉ";
+    Text[ greek ] = "Ìåíïı";
+    Text[ korean ] = "¸Ş´º";
+    Text[ turkish ] = "Mönü";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,448 @@
+/*************************************************************************
+ *
+ *  $RCSfile: thesdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "thesdlg.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_THES -------------------------------------------------------
+ModalDialog RID_SVXDLG_THESAURUS
+{
+    HelpId = SID_THESAURUS ;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 285 , 116 ) ;
+    Text = "Thesaurus" ;
+    Text [ English ] = "Thesaurus" ;
+    Text [ norwegian ] = "Synonymordliste" ;
+    Text [ italian ] = "Sinonimi" ;
+    Text [ portuguese_brazilian ] = "Thesaurus" ;
+    Text [ portuguese ] = "SinÛnimos" ;
+    Text [ finnish ] = "Synonyymisanasto" ;
+    Text [ danish ] = "Synonymordbog" ;
+    Text [ french ] = "Dictionnaire des synonymes" ;
+    Text [ swedish ] = "Synonymordlista" ;
+    Text [ dutch ] = "Thesaurus" ;
+    Text [ spanish ] = "Diccionario de sinÛnimos" ;
+    Text [ english_us ] = "Thesaurus" ;
+    Moveable = TRUE ;
+    SvLook = TRUE ;
+    OkButton BTN_THES_OK
+    {
+        Pos = MAP_APPFONT ( 219 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_THES_CANCEL
+    {
+        Pos = MAP_APPFONT ( 219 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+    };
+    PushButton BTN_LOOKUP
+    {
+        Pos = MAP_APPFONT ( 219 , 40 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Nachschlagen" ;
+        Text [ English ] = "~Search" ;
+        Text [ norwegian ] = "~S¯ke" ;
+        Text [ italian ] = "~Cerca" ;
+        Text [ portuguese_brazilian ] = "~Buscar" ;
+        Text [ portuguese ] = "~Procurar" ;
+        Text [ finnish ] = "~Etsi" ;
+        Text [ danish ] = "SlÂ op" ;
+        Text [ french ] = "~Rechercher" ;
+        Text [ swedish ] = "~SlÂ upp" ;
+        Text [ dutch ] = "~Opzoeken" ;
+        Text [ spanish ] = "~Buscar" ;
+        Text [ english_us ] = "~Search" ;
+        Text[ chinese_simplified ] = "≤È—∞(~S)";
+        Text[ russian ] = "œÓËÒÍ";
+        Text[ polish ] = "Szukaj";
+        Text[ japanese ] = "åüçı(~S)";
+        Text[ chinese_traditional ] = "¨d¥M(~S)";
+        Text[ arabic ] = "»ÕÀ";
+        Text[ greek ] = "¡~Ì·ÊﬁÙÁÛÁ";
+        Text[ korean ] = "√£æ∆ ∫∏±‚(~S)";
+        Text[ turkish ] = "A~ra";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 219 , 57 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "S~prache..." ;
+        Text [ English ] = "~Language..." ;
+        Text [ english_us ] = "~Language..." ;
+        Text [ dutch ] = "~Taal..." ;
+        Text [ italian ] = "Lingua..." ;
+        Text [ spanish ] = "~Idioma..." ;
+        Text [ french ] = "~Langue..." ;
+        Text [ swedish ] = "S~prÂk..." ;
+        Text [ danish ] = "Sprog..." ;
+        Text [ portuguese ] = "LÌ~ngua..." ;
+        Text [ portuguese_brazilian ] = "S~prache..." ;
+        Text[ chinese_simplified ] = "”Ô—‘(~L)...";
+        Text[ russian ] = "ﬂÁ˚Í...";
+        Text[ polish ] = "JÍzyk...";
+        Text[ japanese ] = "åæåÍ(~L)...";
+        Text[ chinese_traditional ] = "ªy®•(~L)...";
+        Text[ arabic ] = "«··€…...";
+        Text[ greek ] = "√Î˛ÛÛ·...";
+        Text[ korean ] = "ææÓ(~L)...";
+        Text[ turkish ] = "D~il...";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton BTN_THES_HELP
+    {
+        Pos = MAP_APPFONT ( 219 , 77 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+    };
+    FixedText FT_WORD
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Text = "~Wort" ;
+        Text [ English ] = "~Word" ;
+        Text [ norwegian ] = "~Ord" ;
+        Text [ italian ] = "Parola" ;
+        Text [ portuguese_brazilian ] = "~Palavra" ;
+        Text [ portuguese ] = "~Palavra" ;
+        Text [ finnish ] = "~Sana" ;
+        Text [ danish ] = "Ord" ;
+        Text [ french ] = "~Mot" ;
+        Text [ swedish ] = "~Ord" ;
+        Text [ dutch ] = "~Woord" ;
+        Text [ spanish ] = "~Palabra" ;
+        Text [ english_us ] = "~Word" ;
+        LEFT = TRUE ;
+        Text[ chinese_simplified ] = "¥ (~W)";
+        Text[ russian ] = "—ÎÓ‚Ó";
+        Text[ polish ] = "S≥owo";
+        Text[ japanese ] = "íPåÍ(~W)";
+        Text[ chinese_traditional ] = "µ¸(~W)";
+        Text[ arabic ] = "«·ﬂ·„…";
+        Text[ greek ] = "À›ÓÁ";
+        Text[ korean ] = "¥‹æÓ(~W)";
+        Text[ turkish ] = "~Sˆzc¸k";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_WORD
+    {
+        DropDown = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 96 , 63 ) ;
+    };
+    FixedText FT_MEAN
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Text = "~Bedeutung " ;
+        Text [ English ] = "~Meaning" ;
+        Text [ norwegian ] = "~Mening" ;
+        Text [ italian ] = "~Significato " ;
+        Text [ portuguese_brazilian ] = "~Significado " ;
+        Text [ portuguese ] = "~Significado " ;
+        Text [ finnish ] = "~Merkitys" ;
+        Text [ danish ] = "Betydning " ;
+        Text [ french ] = "~Signification " ;
+        Text [ swedish ] = "~Betydelse  " ;
+        Text [ dutch ] = "~Betekenis  " ;
+        Text [ spanish ] = "~Significado  " ;
+        Text [ english_us ] = "~Meaning " ;
+        LEFT = TRUE ;
+        Text[ chinese_simplified ] = "∫¨“Â(~M) ";
+        Text[ russian ] = "«Ì‡˜ÂÌËÂ  ";
+        Text[ polish ] = "Znaczenie ";
+        Text[ japanese ] = "åÍã`(~M)";
+        Text[ chinese_traditional ] = "ßt∏q(~M)";
+        Text[ arabic ] = "«·„⁄‰Ï ";
+        Text[ greek ] = "∏~ÌÌÔÈ· ";
+        Text[ korean ] = "¿«πÃ (~M)";
+        Text[ turkish ] = "~Anlam˝ ";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_MEAN
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 96 , 48 ) ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_SYNON
+    {
+        Pos = MAP_APPFONT ( 111 , 43 ) ;
+        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Text = "~Synonym" ;
+        Text [ English ] = "Sy~nonym" ;
+        Text [ norwegian ] = "Sy~nonym" ;
+        Text [ italian ] = "Si~nonimo" ;
+        Text [ portuguese_brazilian ] = "Si~n‰nimo" ;
+        Text [ portuguese ] = "Si~nÛnimo" ;
+        Text [ finnish ] = "~Synonyymi" ;
+        Text [ danish ] = "Synonym" ;
+        Text [ french ] = "S~ynonyme" ;
+        Text [ swedish ] = "Sy~nonym" ;
+        Text [ dutch ] = "Sy~noniem" ;
+        Text [ spanish ] = "Si~nÛnimo" ;
+        Text [ english_us ] = "Sy~nonym" ;
+        LEFT = TRUE ;
+        Text[ chinese_simplified ] = "Õ¨“Â¥ (~N)";
+        Text[ russian ] = "—ËÌÓÌËÏ";
+        Text[ polish ] = "Synonim";
+        Text[ japanese ] = "óﬁã`åÍ(~N)";
+        Text[ chinese_traditional ] = "¶P∏qµ¸(~N)";
+        Text[ arabic ] = "«·„—«œ›";
+        Text[ greek ] = "~”ıÌ˛ÌıÏÔ";
+        Text[ korean ] = "µø¿«æÓ(~N)";
+        Text[ turkish ] = "~E˛anlaml˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SYNON
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 111 , 56 ) ;
+        Size = MAP_APPFONT ( 96 , 48 ) ;
+        AutoHScroll = TRUE ;
+    };
+    FixedText FT_REPL
+    {
+        Pos = MAP_APPFONT ( 111 , 14 ) ;
+        Size = MAP_APPFONT ( 96 , 10 ) ;
+        Text = "~Ersetzen" ;
+        Text [ English ] = "R~eplace" ;
+        Text [ norwegian ] = "E~statte" ;
+        Text [ italian ] = "Sostituisci" ;
+        Text [ portuguese_brazilian ] = "S~ubstituir" ;
+        Text [ portuguese ] = "S~ubstituir" ;
+        Text [ finnish ] = "~Korvaa" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ french ] = "R~emplacer par" ;
+        Text [ swedish ] = "~Ers‰tt" ;
+        Text [ dutch ] = "~Vervangen" ;
+        Text [ spanish ] = "~Reemplazar" ;
+        Text [ english_us ] = "~Replace" ;
+        LEFT = TRUE ;
+        Text[ chinese_simplified ] = "∏¸ÃÊ(~R)";
+        Text[ russian ] = "«‡ÏÂÌËÚ¸";
+        Text[ polish ] = "ZamieÒ";
+        Text[ japanese ] = "íuä∑(~R)";
+        Text[ chinese_traditional ] = "¥¿•N(~R)";
+        Text[ arabic ] = "«” »œ«·";
+        Text[ greek ] = "¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ";
+        Text[ korean ] = "¥Î√º(~R)";
+        Text[ turkish ] = "~Dei˛tir";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_REPL
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 111 , 27 ) ;
+        Size = MAP_APPFONT ( 96 , 12 ) ;
+        LEFT = TRUE ;
+    };
+    GroupBox GB_VAR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 207 , 107 ) ;
+        Text = "Variationen" ;
+        Text [ English ] = "Variations" ;
+        Text [ norwegian ] = "Variasjoner" ;
+        Text [ italian ] = "Alternative" ;
+        Text [ portuguese_brazilian ] = "VariaÁ‰es" ;
+        Text [ portuguese ] = "Alternativas" ;
+        Text [ finnish ] = "Muunnelmat" ;
+        Text [ danish ] = "Variationer" ;
+        Text [ french ] = "Suggestions" ;
+        Text [ swedish ] = "Variationer" ;
+        Text [ dutch ] = "Variaties" ;
+        Text [ spanish ] = "Variaciones" ;
+        Text [ english_us ] = "Variations" ;
+        Text[ chinese_simplified ] = "¡Ì—°◊÷¥ ";
+        Text[ russian ] = "¬‡Ë‡ÌÚ˚";
+        Text[ polish ] = "Odmiany";
+        Text[ japanese ] = " ﬁÿ¥∞ºÆ›";
+        Text[ chinese_traditional ] = "•tøÔ¶rµ¸";
+        Text[ arabic ] = " €ÌÌ—« ";
+        Text[ greek ] = "–·Ò·ÎÎ·„›Ú";
+        Text[ korean ] = "∫Ø«¸";
+        Text[ turkish ] = "Varyasyonlar";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_ERR_WORDNOTFOUND
+    {
+        Text = "Wort nicht im Thesaurus enthalten" ;
+        Text [ ENGLISH ] = "Word not found in Thesaurus" ;
+        Text [ norwegian ] = "Ordet finnes ikke I Synonymorlisten" ;
+        Text [ italian ] = "Parola non trovata nel dizionario dei sinonimi" ;
+        Text [ portuguese_brazilian ] = "Palavra n∆o encontrada no Thesaurus" ;
+        Text [ portuguese ] = "Palavra n„o se encontra no dicion·rio de sinÛnimos." ;
+        Text [ finnish ] = "Sanaa ei ole synonyymisanastossa" ;
+        Text [ danish ] = "Ordet findes ikke i synonymordbogen" ;
+        Text [ french ] = "Mot ne figurant pas dans le dictionnaire des synonymes" ;
+        Text [ swedish ] = "Ordet finns inte i synonymordlistan" ;
+        Text [ dutch ] = "Woord niet gevonden in de Thesaurus" ;
+        Text [ spanish ] = "Palabra no figura en el dic. de sinÛnimos" ;
+        Text [ english_us ] = "Word not found in thesaurus" ;
+        Text[ chinese_simplified ] = "◊÷¥ √ª”– ’¬º‘⁄¥ µ‰ƒ⁄";
+        Text[ russian ] = "—ÎÓ‚Ó ÌÂ ÒÓ‰ÂÊËÚÒˇ ‚ ÚÂÁ‡ÛÛÒÂ";
+        Text[ polish ] = "S≥owa nie ma w Tezaurusie";
+        Text[ japanese ] = "óﬁã`åÍé´ìTÇ…Ç»Ç¢íPåÍÇ≈Ç∑";
+        Text[ chinese_traditional ] = "¶rµ¸®S¶≥¶¨ø˝¶bµ¸®Â§∫";
+        Text[ arabic ] = "«·ﬂ·„… €Ì— „ÊÃÊœ… ›Ì ﬁ«„Ê” «·„—«œ›« ";
+        Text[ greek ] = "« Î›ÓÁ ‰ÂÌ ‚Ò›ËÁÍÂ ÛÙÔÌ ËÁÛ·ıÒ¸ Î›ÓÂ˘Ì";
+        Text[ korean ] = "µø¿«æÓ ªÁ¿¸ø° æ¯¥¬ ¥‹æÓ¿”";
+        Text[ turkish ] = "Sˆzc¸k, sˆzl¸kte bulunamad˝";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "¥ µ‰";
+    Text[ russian ] = "“ÂÁ‡ÛÛÒ";
+    Text[ polish ] = "Tezaurus";
+    Text[ japanese ] = "óﬁã`åÍé´ìT";
+    Text[ chinese_traditional ] = "µ¸®Â";
+    Text[ arabic ] = "ﬁ«„Ê” «·„—«œ›« ";
+    Text[ greek ] = "»ÁÛ·ıÒ¸Ú Î›ÓÂ˘Ì";
+    Text[ korean ] = "µø¿«æÓ ªÁ¿¸";
+    Text[ turkish ] = "E˛anlaml˝lar sˆzl¸¸";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
+ModalDialog RID_SVXDLG_THES_LANGUAGE
+{
+    HelpId = HID_THES_LANGUAGE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 170 , 86 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
+    /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
+    Text = "Sprache ausw‰hlen" ;
+    Text [ English ] = "Choose language" ;
+    Text [ english_us ] = "Select Language" ;
+    Text [ dutch ] = "Taal kiezen" ;
+    Text [ italian ] = "Seleziona lingua" ;
+    Text [ spanish ] = "Seleccionar idioma" ;
+    Text [ french ] = "SÈlection de la langue" ;
+    Text [ swedish ] = "V‰lj sprÂk" ;
+    Text [ danish ] = "VÊlg sprog" ;
+    Text [ portuguese_brazilian ] = "Sprache ausw‰hlen" ;
+    Text [ portuguese ] = "Seleccionar lÌngua" ;
+    Moveable = TRUE ;
+    ListBox LB_THES_LANGUAGE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 60 ) ;
+        Sort = TRUE ;
+    };
+    GroupBox GB_THES_LANGUAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 102 , 77 ) ;
+        Text = "Auswahl" ;
+        Text [ English ] = "Choice" ;
+        Text [ english_us ] = "Selection" ;
+        Text [ dutch ] = "Selectie" ;
+        Text [ italian ] = "Scelta" ;
+        Text [ spanish ] = "SelecciÛn" ;
+        Text [ french ] = "Langues installÈes" ;
+        Text [ swedish ] = "Urval" ;
+        Text [ danish ] = "Udvalg" ;
+        Text [ portuguese_brazilian ] = "Auswahl" ;
+        Text [ portuguese ] = "SelecÁ„o" ;
+        Text[ chinese_simplified ] = "—°‘Ò";
+        Text[ russian ] = "¬˚·Ó";
+        Text[ polish ] = "WybÛr";
+        Text[ japanese ] = "ëIë";
+        Text[ chinese_traditional ] = "øÔæ‹";
+        Text[ arabic ] = "«·«Œ Ì«—";
+        Text[ greek ] = "≈ÈÎÔ„ﬁ";
+        Text[ korean ] = "º±≈√";
+        Text[ turkish ] = "SeÁim";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_LANG_OK
+    {
+        Pos = MAP_APPFONT ( 114 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_LANG_CANCEL
+    {
+        Pos = MAP_APPFONT ( 114 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_LANG_HELP
+    {
+        Pos = MAP_APPFONT ( 114 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    Text[ chinese_simplified ] = "—°‘Ò”Ô—‘";
+    Text[ russian ] = "¬˚·Ó ˇÁ˚Í‡";
+    Text[ polish ] = "Wybierz jÍzyk";
+    Text[ japanese ] = "åæåÍÇÃëIë";
+    Text[ chinese_traditional ] = "øÔæ‹ªy®•";
+    Text[ arabic ] = "«Œ Ì«— «··€…";
+    Text[ greek ] = "≈ÈÎÔ„ﬁ „Î˛ÛÛ·Ú";
+    Text[ korean ] = "ææÓ º±≈√";
+    Text[ turkish ] = "Dil seÁimi";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

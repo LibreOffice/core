@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fontwork.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define VS_FORMS 1
+#define TBX_STYLE 1
+#define TBX_ADJUST 2
+#define TBX_SHADOW 3
+#define TBI_STYLE_OFF 1
+#define TBI_STYLE_ROTATE 2
+#define TBI_STYLE_UPRIGHT 3
+#define TBI_STYLE_SLANTX 4
+#define TBI_STYLE_SLANTY 5
+#define TBI_ADJUST_MIRROR 6
+#define TBI_ADJUST_LEFT 7
+#define TBI_ADJUST_CENTER 8
+#define TBI_ADJUST_RIGHT 9
+#define TBI_ADJUST_AUTOSIZE 10
+#define TBI_SHOWFORM 11
+#define TBI_OUTLINE 12
+#define TBI_SHADOW_OFF 13
+#define TBI_SHADOW_NORMAL 14
+#define TBI_SHADOW_SLANT 15
+#define FB_DISTANCE 1
+#define FB_TEXTSTART 2
+#define FB_SHADOW_X 3
+#define FB_SHADOW_Y 4
+#define MTR_FLD_DISTANCE 1
+#define MTR_FLD_TEXTSTART 2
+#define MTR_FLD_SHADOW_X 3
+#define MTR_FLD_SHADOW_Y 4
+#define CLB_SHADOW_COLOR 1

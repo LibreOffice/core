@@ -1,0 +1,53 @@
+import "sfxslots.ilb"
+
+module
+"BD25A480-30AB-101C-A17D-000024021828"
+"C049C7E0-30AB-101C-A17D-000024021828"
+SvxItems
+[
+HelpText( "Svx-Items" )
+SlotIdFile( "svxslots.hrc" )
+TypeLibFile( "svxslots.tlb" )
+]
+{
+    //=========================================================================
+
+    include "svxitems.sdi"
+    include "xoitems.sdi"
+    include "svxnew.sdi"
+    include "svx.sdi"
+    include "fmslots.sdi"
+
+/*  interface SearchSettings: Object
+    [
+        uuid = "19B54420-184C-101D-B8ED-3273768855A7";
+    ]
+    {
+        SID_SEARCH_ITEM
+        [
+            ExecMethod = _ExecSearch;
+            StateMethod = _StateSearch;
+        ]
+    }
+
+    interface Interior : Object
+    [
+        uuid ( "6CFA4FC0-608E-11cf-89CB-008029E4B0B1" )
+    ]
+    {
+        SID_ATTR_BRUSH // status(final|play)
+        [
+            ExecMethod = ExecBckCol ;
+            StateMethod = GetBckColState ;
+        ]
+    }
+     //============================================================================
+    interface OLEObjects : Collection
+    [
+        uuid = "BA338A43-064E-11d0-89CB-008029E4B0B1" ;
+    ]
+    {
+    }
+*/
+}
+

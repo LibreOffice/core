@@ -1,0 +1,210 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tabarea.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#define BTN_LOAD 5
+#define BTN_SAVE 6
+#define GRP_FILL 1
+#define GRP_SHADOW 2
+#define GRP_PREVIEW 3
+#define GRP_TRANSPARENT 4
+#define GRP_STEPCOUNT 5
+#define CTL_PREVIEW 1
+#define CTL_POSITION 2
+//#define CTL_GRADIENT_PREVIEW 3
+//#define CTL_HATCHING_PREVIEW 4
+#define CTL_COLOR_PREVIEW 5
+#define CTL_BITMAP_PREVIEW 6
+#define FT_POSITION 2
+#define FT_DISTANCE 1
+#define MTR_FLD_DISTANCE 1
+#define TSB_INVISIBLE 1
+#define TSB_SHOW_SHADOW 2
+#define TSB_STEPCOUNT 3
+#define TSB_TILE 4
+#define TSB_STRETCH 5
+#define TSB_ORIGINAL 6
+#define RBT_COLOR 1
+#define RBT_GRADIENT 2
+#define RBT_HATCHING 3
+#define RBT_BITMAP 4
+#define RBT_INVISIBLE 5
+#define LB_COLOR 1
+#define LB_GRADIENT 2
+#define LB_HATCHING 3
+#define LB_BITMAP 4
+//#define LB_TRANSPARENT 5
+#define GRP_BITMAPS 4
+#define LB_BITMAPS 4
+#define LB_BACKGROUND_COLOR 3
+#define GRP_COLOR 1
+#define BTN_ADD 1
+#define BTN_IMPORT 2
+#define BTN_MODIFY 3
+#define BTN_DELETE 4
+#define FT_COLOR 1
+#define FT_BACKGROUND_COLOR 2
+#define GRP_LINE 1
+#define GRP_DEFINITION 2
+#define GRP_HATCHINGS 5
+#define FT_LINE_COLOR 2
+#define FT_LINE_TYPE 1
+#define FT_LINE_DISTANCE 3
+#define FT_LINE_ANGLE 4
+#define MTR_FLD_ANGLE 3
+#define CTL_ANGLE 2
+#define LB_HATCHINGS 4
+#define LB_LINE_TYPE 1
+#define LB_LINE_COLOR 3
+#define GRP_GRADIENTS 4
+#define GRP_GRADIENT_TYPE 5
+#define LB_GRADIENTS 3
+#define LB_GRADIENT_TYPES 4
+#define LB_COLOR_FROM 1
+#define LB_COLOR_TO 2
+#define FT_COLOR_FROM 1
+#define FT_COLOR_TO 2
+#define FT_CENTER_X 3
+#define FT_CENTER_Y 5
+#define FT_ANGLE 4
+#define FT_BORDER 6
+#define MTR_COLOR_FROM 4
+#define MTR_COLOR_TO 5
+#define MTR_CENTER_X 2
+#define MTR_CENTER_Y 3
+#define MTR_BORDER 6
+#define MTR_ANGLE 1
+#define NUM_FLD_STEPCOUNT 1
+#define GRP_PIXEL_EDIT 2
+#define CTL_PIXEL 2
+#define FT_TYPE 7
+#define FT_SHADOW_COLOR 10
+#define LB_SHADOW_COLOR 10
+
+// Farben definieren TabPage
+// nur temporaer !!!
+// #define RID_SVXPAGE_COLOR 999
+
+#define GRP_COLORTABLE 1
+#define GRP_COLORMODEL 2
+#define BTN_WORK_ON 2
+#define CTL_COLORTABLE 3
+#define CTL_PREVIEW_OLD 1
+#define CTL_PREVIEW_NEW 2
+#define FT_NAME 2
+#define EDT_NAME 1
+// #define LB_COLOR 1
+#define LB_COLORMODEL 2
+#define FT_1 3
+#define FT_2 4
+#define FT_3 5
+#define FT_4 6
+#define MTR_FLD_1 1
+#define MTR_FLD_2 2
+#define MTR_FLD_3 3
+#define MTR_FLD_4 4
+
+#define MTR_FLD_X_SIZE 4
+#define MTR_FLD_Y_SIZE 5
+#define GRP_SIZE 6
+#define TSB_SCALE 1
+#define GRP_POSITION 7
+#define FT_X_OFFSET 1
+#define FT_Y_OFFSET 2
+#define MTR_FLD_X_OFFSET 1
+#define MTR_FLD_Y_OFFSET 2
+#define RBT_ROW 6
+#define RBT_COLUMN 7
+#define MTR_FLD_OFFSET 3
+#define GRP_OFFSET 8
+
+#define FT_TRANSPARENT 9
+#define FT_X_SIZE 10
+#define FT_Y_SIZE 11
+
+#define RBT_TRANS_OFF 8
+#define RBT_TRANS_LINEAR 9
+#define RBT_TRANS_GRADIENT 10
+#define GRP_TRANS_MODE 9
+#define GRP_TRANS_GRADIENT 10
+#define CTL_TRANS_PREVIEW   19
+
+#define FT_TRGR_TYPE 12
+#define LB_TRGR_GRADIENT_TYPES 3
+#define FT_TRGR_CENTER_X 13
+#define MTR_TRGR_CENTER_X 4
+#define FT_TRGR_CENTER_Y 14
+#define MTR_TRGR_CENTER_Y 5
+#define FT_TRGR_ANGLE 15
+#define MTR_TRGR_ANGLE 6
+#define FT_TRGR_BORDER 16
+#define MTR_TRGR_BORDER 7
+#define FT_TRGR_START_VALUE 17
+#define MTR_TRGR_START_VALUE 8
+#define FT_TRGR_END_VALUE 18
+#define MTR_TRGR_END_VALUE 9
+#define MTR_TRANSPARENT 10
+
+#define MTR_SHADOW_TRANSPARENT 11
+
+// Hatch-Background on Area-TabPage
+#define GRP_HATCHBCKGRD         20
+#define CB_HATCHBCKGRD          21
+#define LB_HATCHBCKGRDCOLOR     22
+

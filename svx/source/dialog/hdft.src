@@ -1,0 +1,863 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hdft.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "hdft.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXPAGE_HEADER ----------------------------------------------------
+TabPage RID_SVXPAGE_HEADER
+{
+    HelpId = HID_FORMAT_HEADER ;
+    Hide = TRUE ;
+    Text = "Kopfzeile" ;
+    Text [ English ] = "Header" ;
+    Text [ norwegian ] = "Header" ;
+    Text [ italian ] = "Intestazione" ;
+    Text [ portuguese_brazilian ] = "Cabeçalho" ;
+    Text [ portuguese ] = "Cabeçalho" ;
+    Text [ finnish ] = "Yläteksti" ;
+    Text [ danish ] = "Sidehoved" ;
+    Text [ french ] = "En-tête" ;
+    Text [ swedish ] = "Sidhuvud" ;
+    Text [ dutch ] = "Koptekst" ;
+    Text [ spanish ] = "Encabezamiento" ;
+    Text [ english_us ] = "Header" ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    CheckBox CB_TURNON
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        Text = "~Kopfzeile einschalten" ;
+        Text [ ENGLISH ] = "~Turn on header" ;
+        Text [ norwegian ] = "Header, ~with distance" ;
+        Text [ italian ] = "Attiva riga d'intestazione" ;
+        Text [ portuguese_brazilian ] = "Cabeçalho, ~com distância" ;
+        Text [ portuguese ] = "Activar ~cabeçalho" ;
+        Text [ finnish ] = "Yläteksti ~etäisyydellä" ;
+        Text [ danish ] = "Aktiver sidehoved" ;
+        Text [ french ] = "Activer l'~en-tête " ;
+        Text [ swedish ] = "~Sidhuvud på" ;
+        Text [ dutch ] = "~Koptekst inschakelen" ;
+        Text [ spanish ] = "~Activar encabezamiento" ;
+        Text [ english_us ] = "Hea~der on" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ò³Ã¼(~H)";
+        Text[ russian ] = "Âêë. âåğõíåãî êîëîíòèòóëà";
+        Text[ polish ] = "~W³¹cz nag³ówek";
+        Text[ japanese ] = "Í¯ÀŞ‚ğ•t‚¯‚é(~H)";
+        Text[ chinese_traditional ] = "Åã¥Ü­¶­º(~H)";
+        Text[ arabic ] = "ÅÙåÇÑ ÑÃÓ ÇáÕİÍÉ";
+        Text[ greek ] = "Åíåñãïğïßçóç êåöáëßäáò";
+        Text[ korean ] = "¸Ó¸®±Û »ğÀÔ(~D)";
+        Text[ turkish ] = "~Üstbilgi oluştur";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "A~bstand" ;
+        Text [ English ] = "~Distance" ;
+        Text [ english_us ] = "~Spacing" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "A~vstånd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ italian ] = "~Distanza" ;
+        Text [ spanish ] = "~Espacio" ;
+        Text [ french ] = "~Écart" ;
+        Text [ dutch ] = "~Afstand" ;
+        Text [ portuguese ] = "~Espaçamento" ;
+        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
+        Text[ russian ] = "Èíòåğâàë";
+        Text[ polish ] = "Odstêp";
+        Text[ japanese ] = "ŠÔŠu(~S)";
+        Text[ chinese_traditional ] = "¶¡¹j(~S)";
+        Text[ arabic ] = "ÇáÊÈÇÚÏ";
+        Text[ greek ] = "Á~ğüóôáóç";
+        Text[ korean ] = "°£°İ(~S)";
+        Text[ turkish ] = "U~zaklık";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_DIST
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        Text = "~Höhe" ;
+        Text [ ENGLISH ] = "~Height" ;
+        Text [ english_us ] = "~Height" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "~Höjd" ;
+        Text [ danish ] = "Højde" ;
+        Text [ italian ] = "~Altezza" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ dutch ] = "~Hoogte" ;
+        Text [ portuguese ] = "~Altura" ;
+        Text[ chinese_simplified ] = "¸ß¶È(~H)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ turkish ] = "Y~ükseklik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_HEIGHT
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 45 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 50 ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_HEIGHT_DYN
+    {
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        Text = "Höhe ~dynamisch anpassen" ;
+        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
+        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
+        Text [ english_us ] = "~AutoFit height" ;
+        Text [ swedish ] = "An~passa höjd dynamiskt" ;
+        Text [ danish ] = "Juster højde dynamisk" ;
+        Text [ italian ] = "Adatta altezza din~amicamente" ;
+        Text [ spanish ] = "Ajus~te dinámico de la altura" ;
+        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
+        Text [ portuguese ] = "Ajuste ~dinâmico da altura" ;
+        Text [ portuguese_brazilian ] = "Höhe ~dynamisch anpassen" ;
+        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
+        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
+        Text[ polish ] = "Autodopasowanie wysokoœci";
+        Text[ japanese ] = "‚‚³©“®’²®(~A)";
+        Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã°ª«×(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
+        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
+        Text[ korean ] = "³ôÀÌ ÀÚµ¿ ¸ÂÃã(~A)";
+        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_LMARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "~Linker Rand" ;
+        Text [ ENGLISH ] = "~Left Margin" ;
+        Text [ norwegian ] = "~Left Margin" ;
+        Text [ italian ] = "Margine sinistro" ;
+        Text [ portuguese_brazilian ] = "~Cabeçalho da Margem Esquerda" ;
+        Text [ portuguese ] = "Margem ~esquerda" ;
+        Text [ finnish ] = "~Vasemman reunan yläteksti" ;
+        Text [ danish ] = "Venstre margen" ;
+        Text [ french ] = "Marge ~gauche" ;
+        Text [ swedish ] = "Vänstermargina~l" ;
+        Text [ dutch ] = "~Linker marge" ;
+        Text [ spanish ] = "Margen ~izquierdo" ;
+        Text [ english_us ] = "~Left margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "×ó·½Ò³±ß¾à(~L)";
+        Text[ russian ] = "Ïîëå ñëåâà";
+        Text[ polish ] = "Lewy margines";
+        Text[ japanese ] = "¶—]”’(~L)";
+        Text[ chinese_traditional ] = "¥ªÃäªÅ¥Õ(~L)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
+        Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
+        Text[ turkish ] = "S~ol kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_LMARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 79 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        Minimum = 0 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_RMARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "~Rechter Rand" ;
+        Text [ ENGLISH ] = "R~ight Margin" ;
+        Text [ norwegian ] = "R~ight Margin" ;
+        Text [ italian ] = "~Margine destro" ;
+        Text [ portuguese_brazilian ] = "Margem Direita Cabeçalho" ;
+        Text [ portuguese ] = "Margem ~direita" ;
+        Text [ finnish ] = "~Oikean reunan yläteksti" ;
+        Text [ danish ] = "Højre margen" ;
+        Text [ french ] = "Marge ~droite" ;
+        Text [ swedish ] = "Höge~rmarginal" ;
+        Text [ dutch ] = "~Rechter marge" ;
+        Text [ spanish ] = "Margen ~derecho" ;
+        Text [ english_us ] = "R~ight margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ÓÒ·½Ò³±ß¾à(~I)";
+        Text[ russian ] = "Ïîëå ñïğàâà";
+        Text[ polish ] = "Prawy margines";
+        Text[ japanese ] = "‰E—]”’(~I)";
+        Text[ chinese_traditional ] = "¥kÃäªÅ¥Õ(~I)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";
+        Text[ greek ] = "Äåîéü ğåñéèşñéï";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
+        Text[ turkish ] = "~Sağ kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_RMARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 94 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_SHARED
+    {
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        Text = "~Inhalt links/rechts gleich" ;
+        Text [ ENGLISH ] = "Same ~content left/right" ;
+        Text [ norwegian ] = "Same ~content left/right" ;
+        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
+        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ danish ] = "Ens indhold venstre/højre" ;
+        Text [ french ] = "~Contenu identique gauche/droite" ;
+        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
+        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
+        Text [ spanish ] = "~Contenido a la izquierda/derecha igual" ;
+        Text [ english_us ] = "Same ~content left/right" ;
+        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
+        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
+        Text[ polish ] = "Zawarto~œæ z lewej i z prawej jest taka sama";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
+        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
+        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
+        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
+        Text[ turkish ] = "Sol/sağ içerik ay~nı";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 125 ) ;
+        Text = "Kopfzeile" ;
+        Text [ ENGLISH ] = "Header" ;
+        Text [ norwegian ] = "Header" ;
+        Text [ italian ] = "Intestazione" ;
+        Text [ portuguese_brazilian ] = "Cabeçalho" ;
+        Text [ portuguese ] = "Cabeçalho" ;
+        Text [ finnish ] = "Yläteksti" ;
+        Text [ danish ] = "Sidehoved" ;
+        Text [ french ] = "En-tête" ;
+        Text [ swedish ] = "Sidhuvud" ;
+        Text [ dutch ] = "Koptekst" ;
+        Text [ spanish ] = "Encabezamiento" ;
+        Text [ english_us ] = "Headers" ;
+        Text[ chinese_simplified ] = "Ò³Ã¼";
+        Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+        Text[ polish ] = "Nag³ówek";
+        Text[ japanese ] = "Í¯ÀŞ";
+        Text[ chinese_traditional ] = "­¶­º";
+        Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
+        Text[ greek ] = "Êåöáëßäá";
+        Text[ korean ] = "¸Ó¸®±Û";
+        Text[ turkish ] = "Üstbilgi";
+        Text[ language_user1 ] = " ";
+    };
+    Window WN_BSP
+    {
+        Pos = MAP_APPFONT ( 176 , 14 ) ;
+        Size = MAP_APPFONT ( 72 , 54 ) ;
+    };
+    GroupBox GB_BSP
+    {
+        Pos = MAP_APPFONT ( 171 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 71 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Example" ;
+        Text [ norwegian ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Exemplo" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Malli" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "Aperçu" ;
+        Text [ swedish ] = "Förhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "Previsualización" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â";
+        Text[ turkish ] = "Önizleme";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_EXTRAS
+    {
+        Pos = MAP_APPFONT ( 186 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
+        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
+        Text = "Zus~ätze..." ;
+        Text [ ENGLISH ] = "Option~s..." ;
+        Text [ norwegian ] = "Option~s..." ;
+        Text [ italian ] = "E~xtra..." ;
+        Text [ portuguese_brazilian ] = "Opçõe~s..." ;
+        Text [ portuguese ] = "~Outros..." ;
+        Text [ finnish ] = "~Määritykset..." ;
+        Text [ danish ] = "Flere..." ;
+        Text [ french ] = "~Options..." ;
+        Text [ swedish ] = "~Fler..." ;
+        Text [ dutch ] = "~Overige..." ;
+        Text [ spanish ] = "~Opciones..." ;
+        Text [ english_us ] = "~More..." ;
+        Text[ chinese_simplified ] = "ÆäËû(~M)...";
+        Text[ russian ] = "Äîïîëíåíèÿ...";
+        Text[ polish ] = "Dodatki...";
+        Text[ japanese ] = "µÌß¼®İ(~M)...";
+        Text[ chinese_traditional ] = "¨ä¥L(~M)...";
+        Text[ arabic ] = "ÅÖÇİÇÊ...";
+        Text[ greek ] = "Ğñüóèåôá...";
+        Text[ korean ] = "µ¡ºÙÀÓ(~M)...";
+        Text[ turkish ] = "Ayr~ıntılar...";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Ò³Ã¼";
+    Text[ russian ] = "Âåğõíèé êîëîíòèòóë";
+    Text[ polish ] = "Nag³ówek";
+    Text[ japanese ] = "Í¯ÀŞ";
+    Text[ chinese_traditional ] = "­¶­º";
+    Text[ arabic ] = "ÑÃÓ ÇáÕİÍÉ";
+    Text[ greek ] = "Êåöáëßäá";
+    Text[ korean ] = "¸Ó¸®±Û";
+    Text[ turkish ] = "Üstbilgi";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SVXPAGE_FOOTER ----------------------------------------------------
+TabPage RID_SVXPAGE_FOOTER
+{
+    HelpId = HID_FORMAT_FOOTER ;
+    Hide = TRUE ;
+    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+    /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+    Text = "Fußzeile" ;
+    Text [ English ] = "Footer" ;
+    Text [ norwegian ] = "Footer" ;
+    Text [ italian ] = "Piè di pagina" ;
+    Text [ portuguese_brazilian ] = "Rodapé" ;
+    Text [ portuguese ] = "Rodapé" ;
+    Text [ finnish ] = "Alateksti" ;
+    Text [ danish ] = "Sidefod" ;
+    Text [ french ] = "Pied de page" ;
+    Text [ swedish ] = "Sidfot" ;
+    Text [ dutch ] = "Voettekst" ;
+    Text [ spanish ] = "Pie de página" ;
+    Text [ english_us ] = "Footer" ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    CheckBox CB_TURNON
+    {
+        Pos = MAP_APPFONT ( 12 , 15 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fußzeile einschalten : ~Fu˜zeile einschalten */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fußzeile einschalten : ~Fu˜zeile einschalten */
+        Text = "~Fußzeile einschalten" ;
+        Text [ ENGLISH ] = "~Turn on Footer" ;
+        Text [ norwegian ] = "~Footer, with distance" ;
+        Text [ italian ] = "~Attiva piè di pagina" ;
+        Text [ portuguese_brazilian ] = "~Rodapé com distância" ;
+        Text [ portuguese ] = "Activar ~rodapé" ;
+        Text [ finnish ] = "~Alatekstin etäisyys" ;
+        Text [ danish ] = "Aktiver sidefod" ;
+        Text [ french ] = "~Activer le pied de page" ;
+        Text [ swedish ] = "Sid~fot på" ;
+        Text [ dutch ] = "~Voettekst inschakelen" ;
+        Text [ spanish ] = "~Activar pie de página" ;
+        Text [ english_us ] = "~Footer on" ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾Ò³½Å(~F)";
+        Text[ russian ] = "Âêë. íèæíèé êîëîíòèòóë";
+        Text[ polish ] = "W³¹cz stopkê";
+        Text[ japanese ] = "Ì¯À‚ğ•t‚¯‚é(~‚e)";
+        Text[ chinese_traditional ] = "Åã¥Ü­¶§À(~F)";
+        Text[ arabic ] = "ÅÙåÇÑ ÊĞííá ÇáÕİÍÉ";
+        Text[ greek ] = "Åíåñãïğïßçóç õğïóİëéäï";
+        Text[ korean ] = "¹Ù´Ú±Û »ğÀÔ(~F)";
+        Text[ turkish ] = "A~ltbilgi oluştur";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DIST
+    {
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "A~bstand" ;
+        Text [ English ] = "~Distance" ;
+        Text [ english_us ] = "~Spacing" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "A~vstånd" ;
+        Text [ danish ] = "Afstand" ;
+        Text [ italian ] = "~Distanza" ;
+        Text [ spanish ] = "Es~pacio" ;
+        Text [ french ] = "~Écart" ;
+        Text [ dutch ] = "~Afstand" ;
+        Text [ portuguese ] = "~Espaçamento" ;
+        Text[ chinese_simplified ] = "¼ä¸ô(~S)";
+        Text[ russian ] = "Èíòåğâàë";
+        Text[ polish ] = "Odstêp";
+        Text[ japanese ] = "ŠÔŠu(~S)";
+        Text[ chinese_traditional ] = "¶¡¹j(~S)";
+        Text[ arabic ] = "ÇáÊÈÇÚÏ";
+        Text[ greek ] = "Á~ğüóôáóç";
+        Text[ korean ] = "°£°İ(~S)";
+        Text[ turkish ] = "~Uzaklık";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_DIST
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Höhe : ~H÷he */
+        Text = "~Höhe" ;
+        Text [ ENGLISH ] = "~Height" ;
+        Disable = TRUE ;
+        Text [ english_us ] = "~Height" ;
+        Text [ portuguese_brazilian ] = "~Höhe" ;
+        Text [ swedish ] = "~Höjd" ;
+        Text [ danish ] = "Højde" ;
+        Text [ italian ] = "~Altezza" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ dutch ] = "~Hoogte" ;
+        Text [ portuguese ] = "~Altura" ;
+        Text[ chinese_simplified ] = "¸ß¶È(~H)";
+        Text[ russian ] = "Âûñîòà";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "‚‚³(~H)";
+        Text[ chinese_traditional ] = "°ª«×(~H)";
+        Text[ arabic ] = "ÇáÇÑÊİÇÚ";
+        Text[ greek ] = "¾øïò";
+        Text[ korean ] = "³ôÀÌ(~H)";
+        Text[ turkish ] = "Y~ükseklik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_HEIGHT
+    {
+        Disable = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 45 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 50 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        First = 50 ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_HEIGHT_DYN
+    {
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? Höhe ~dynamisch anpassen : H÷he ~dynamisch anpassen */
+        Text = "Höhe ~dynamisch anpassen" ;
+        Text [ ENGLISH ] = "~Dynamic height adjustment" ;
+        Text [ norwegian ] = "Footer height ~dynamic" ;
+        Text [ italian ] = "Adatta altezza din~amicamente" ;
+        Text [ portuguese_brazilian ] = "Rodapé dinâmica da ~altura" ;
+        Text [ portuguese ] = "Ajuste dinâmico da altura" ;
+        Text [ finnish ] = "Alatekstin korkeus ~dynaaminen" ;
+        Text [ danish ] = "Juster højde dynamisk" ;
+        Text [ french ] = "Adaptation ~dynamique de la hauteur" ;
+        Text [ swedish ] = "An~passa höjd dynamiskt" ;
+        Text [ dutch ] = "Hoogte ~dynamisch aanpassen" ;
+        Text [ spanish ] = "Aj~uste dinámico de la altura" ;
+        Text [ english_us ] = "~AutoFit height" ;
+        Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
+        Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
+        Text[ polish ] = "Autodopasowanie wysokoœci";
+        Text[ japanese ] = "‚‚³©“®’²®(~A)";
+        Text[ chinese_traditional ] = "¦Û°Ê½Õ¾ã°ª«×(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
+        Text[ greek ] = "ÄõíáìéêŞ ğñïóáñìïãŞ ıøïõò";
+        Text[ korean ] = "³ôÀÌ ÀÚµ¿Á¶Àı(~A)";
+        Text[ turkish ] = "Yüksekliği oto~matik olarak ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_LMARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 80 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "~Linker Rand" ;
+        Text [ ENGLISH ] = "~Left Margin" ;
+        Text [ norwegian ] = "~Left Margin" ;
+        Text [ italian ] = "Margine sinistro" ;
+        Text [ portuguese_brazilian ] = "~Rodapé da Margem Esquerda" ;
+        Text [ portuguese ] = "Margem ~esquerda" ;
+        Text [ finnish ] = "~Vasemman reunan alateksti" ;
+        Text [ danish ] = "Venstre margen" ;
+        Text [ french ] = "Marge ~gauche" ;
+        Text [ swedish ] = "Vänstermargina~l" ;
+        Text [ dutch ] = "~Linker marge" ;
+        Text [ spanish ] = "Margen ~izquierdo" ;
+        Text [ english_us ] = "~Left margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "×ó±ß¿Õ°×(~L)";
+        Text[ russian ] = "Ïîëå ñëåâà";
+        Text[ polish ] = "Lewy margines";
+        Text[ japanese ] = "¶—]”’(~L)";
+        Text[ chinese_traditional ] = "¥ªÃäªÅ¥Õ(~L)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
+        Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
+        Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
+        Text[ turkish ] = "S~ol kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_LMARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 79 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_RMARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 102 , 10 ) ;
+        Text = "~Rechter Rand" ;
+        Text [ ENGLISH ] = "R~ight Margin" ;
+        Text [ norwegian ] = "R~ight Margin" ;
+        Text [ italian ] = "Margine destro" ;
+        Text [ portuguese_brazilian ] = "M~argem Direita Rodapé" ;
+        Text [ portuguese ] = "Margem ~direita" ;
+        Text [ finnish ] = "~Oikean reunan alateksti" ;
+        Text [ danish ] = "Højre margen" ;
+        Text [ french ] = "Marge dro~ite" ;
+        Text [ swedish ] = "Höge~rmarginal" ;
+        Text [ dutch ] = "~Rechter marge" ;
+        Text [ spanish ] = "Margen ~derecho" ;
+        Text [ english_us ] = "R~ight margin" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "ÓÒ±ß¿Õ°×(~I)";
+        Text[ russian ] = "Ïîëå ñïğàâà";
+        Text[ polish ] = "Prawy margines";
+        Text[ japanese ] = "‰E—]”’(~I)";
+        Text[ chinese_traditional ] = "¥kÃäªÅ¥Õ(~I)";
+        Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";
+        Text[ greek ] = "Äåîéü ğåñéèşñéï";
+        Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
+        Text[ turkish ] = "~Sağ kenar";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_RMARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 117 , 94 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 0 ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    CheckBox CB_SHARED
+    {
+        Pos = MAP_APPFONT ( 12 , 112 ) ;
+        Size = MAP_APPFONT ( 145 , 10 ) ;
+        Text = "~Inhalt links/rechts gleich" ;
+        Text [ ENGLISH ] = "Same ~content left/right" ;
+        Text [ norwegian ] = "Same ~content left/right" ;
+        Text [ italian ] = "~Contenuto uguale destra/sinistra" ;
+        Text [ portuguese_brazilian ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ portuguese ] = "Mesmo ~conteúdo esquerda/direita" ;
+        Text [ finnish ] = "Sama ~sisältö vasemmalla/oikealla" ;
+        Text [ danish ] = "Ens indhold venstre/højre" ;
+        Text [ french ] = "~Contenu identique gauche/droite" ;
+        Text [ swedish ] = "Samma ~innehåll höger/vänster" ;
+        Text [ dutch ] = "Links/rechts dezelfde ~inhoud" ;
+        Text [ spanish ] = "Igual ~contenido a la izquierda/derecha" ;
+        Text [ english_us ] = "Same ~content left/right" ;
+        Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
+        Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
+        Text[ polish ] = "Zawartoœæ z prawej i z lewej jest ta~ka sama";
+        Text[ japanese ] = "¶‰EÍß°¼Ş“¯ˆê€–Ú(~C)";
+        Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
+        Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
+        Text[ greek ] = "ºäéï ğåñéå÷üìåíï áñéóôåñÜ/äåîéÜ";
+        Text[ korean ] = "³»¿ë ¿ŞÂÊ/¿À¸¥ÂÊ °°°Ô(~C)";
+        Text[ turkish ] = "Sol/sağ içerik ay~nı";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FRAME
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 157 , 125 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+        /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
+        Text = "Fußzeile" ;
+        Text [ ENGLISH ] = "Footer" ;
+        Text [ norwegian ] = "Footer" ;
+        Text [ italian ] = "Piè di pagina" ;
+        Text [ portuguese_brazilian ] = "Rodapé" ;
+        Text [ portuguese ] = "Rodapé" ;
+        Text [ finnish ] = "Alateksti" ;
+        Text [ danish ] = "Sidefod" ;
+        Text [ french ] = "Pied de page" ;
+        Text [ swedish ] = "Sidfot" ;
+        Text [ dutch ] = "Voettekst" ;
+        Text [ spanish ] = "Pie de página" ;
+        Text [ english_us ] = "Footer" ;
+        Text[ chinese_simplified ] = "Ò³½Å";
+        Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+        Text[ polish ] = "Stopka";
+        Text[ japanese ] = "Ì¯À";
+        Text[ chinese_traditional ] = "­¶§À";
+        Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
+        Text[ greek ] = "Õğïóİëéäï";
+        Text[ korean ] = "¹Ù´Ú±Û";
+        Text[ turkish ] = "Altbilgi";
+        Text[ language_user1 ] = " ";
+    };
+    Window WN_BSP
+    {
+        Pos = MAP_APPFONT ( 176 , 14 ) ;
+        Size = MAP_APPFONT ( 72 , 54 ) ;
+    };
+    GroupBox GB_BSP
+    {
+        Pos = MAP_APPFONT ( 171 , 3 ) ;
+        Size = MAP_APPFONT ( 83 , 71 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Example" ;
+        Text [ norwegian ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Exemplo" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Malli" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "Aperçu" ;
+        Text [ swedish ] = "Förhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "Previsualización" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°";
+        Text[ chinese_traditional ] = "¹wÄı";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â";
+        Text[ turkish ] = "Önizleme";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_EXTRAS
+    {
+        Pos = MAP_APPFONT ( 186 , 94 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Zus~ätze... : Zus~õtze... */
+        Text = "Zus~ätze..." ;
+        Text [ ENGLISH ] = "~Options..." ;
+        Text [ norwegian ] = "~Options..." ;
+        Text [ italian ] = "E~xtra..." ;
+        Text [ portuguese_brazilian ] = "~Opções..." ;
+        Text [ portuguese ] = "~Outros..." ;
+        Text [ finnish ] = "Määr~itykset..." ;
+        Text [ danish ] = "Flere..." ;
+        Text [ french ] = "~Options..." ;
+        Text [ swedish ] = "~Fler..." ;
+        Text [ dutch ] = "~Overige..." ;
+        Text [ spanish ] = "~Opciones..." ;
+        Text [ english_us ] = "~More..." ;
+        Text[ chinese_simplified ] = "ÆäËû(~M)...";
+        Text[ russian ] = "Äîïîëíåíèÿ...";
+        Text[ polish ] = "Dodatki...";
+        Text[ japanese ] = "µÌß¼®İ(~M)...";
+        Text[ chinese_traditional ] = "¨ä¥L(~M)...";
+        Text[ arabic ] = "ÅÖÇİÇÊ...";
+        Text[ greek ] = "Ğñüóèåôá...";
+        Text[ korean ] = "µ¡ºÙÀÓ(~M)...";
+        Text[ turkish ] = "Ayr~ıntılar...";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Ò³½Å";
+    Text[ russian ] = "Íèæíèé êîëîíòèòóë";
+    Text[ polish ] = "Stopka";
+    Text[ japanese ] = "Ì¯À";
+    Text[ chinese_traditional ] = "­¶§À";
+    Text[ arabic ] = "ÊĞííá ÇáÕİÍÉ";
+    Text[ greek ] = "Õğïóİëéäï";
+    Text[ korean ] = "¹Ù´Ú±Û";
+    Text[ turkish ] = "Altbilgi";
+    Text[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQBX_DELETE_HEADFOOT
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Text.\nMöchten Sie den Inhalt löschen? : Das Ausschalten der Kopf- oder Fu˜zeilen l÷scht vorhandenen Text.\nM÷chten Sie den Inhalt l÷schen? */
+    Message = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Text.\nMöchten Sie den Inhalt löschen?" ;
+    Message [ English ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this text?" ;
+    Message [ norwegian ] = "Turn off the header or footer delete its contents.\nAre you sure you want to delete this text?" ;
+    Message [ italian ] = "Disattivando l'intestazione o il piè di pagina il testo esistente verrà cancellato.\nCancellare il contenuto?" ;
+    Message [ portuguese_brazilian ] = "Desativar o cabeçalho ou o rodapé apagar seu conteúdo.\nTem certeza que deseja apagar este texto?" ;
+    Message [ portuguese ] = "Ao desactivar o cabeçalho ou o rodapé apaga o respectivo conteúdo.\nDeseja realmente eliminar o texto?" ;
+    Message [ finnish ] = "Jos poistat ylä/alatekstin, sen sisältö katoaa.\nHaluatko varmasti poistaa tämän tekstin?" ;
+    Message [ danish ] = "Hvis sidehoved eller sidefod deaktiveres, slettes indholdet.\nVil du slette indholdet?" ;
+    Message [ french ] = "Désactivez l'en-tête ou le pied de page pour supprimer son contenu.\nÊtes-vous sûr de vouloir supprimer ce texte ?" ;
+    Message [ swedish ] = "Deaktivering av sidhuvud eller sidfot raderar innehållet. \nVill Du radera innehållet?" ;
+    Message [ dutch ] = "Als u de kop- of voettekst uitschakelt, wordt de inhoud ervan verwijderd.\nWeet u zeker dat u deze tekst wilt verwijderen?" ;
+    Message [ spanish ] = "Al desactivar el encabezamiento o pie de página se eliminará su contenido.\n¿Desea eliminarlo?" ;
+    Message [ english_us ] = "Removing headers or footers deletes the contents.\nAre you sure you want to delete this text?" ;
+    Message[ chinese_simplified ] = "Ê§»îÒ³Ã¼»òÒ³½Å¾Í»áÉ¾³ıµ±Ç°ÏÖ´æµÄÎÄ×Ö¡£\nÄúÒªÉ¾³ıÕâĞ©ÎÄ×ÖÂğ£¿";
+    Message[ russian ] = "Îòêëş÷åíèå êîëîíòèòóëîâ âûçîâåò óäàëåíèå èìåşùåãîñÿ òåêñòà.\nÂû õîòèòå óäàëèòü ñîäåğæàíèå?";
+    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie istniej¹cego tekstu. \nChcesz skasowaæ ten tekst?";
+    Message[ japanese ] = "Í¯ÀŞ‚Ü‚½‚ÍÌ¯À‚ğŠO‚·‚ÆŠY“–•”•ª‚Ì“à—e‚àíœ‚³‚ê‚Ü‚·B\níœ‚µ‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Message[ chinese_traditional ] = "¥¢¬¡­¶­º©Î­¶§À´N·|§R°£·í«e²{¦sªº¤å¦r¡C\n±z­n§R°£³o¨Ç¤å¦r¡H";
+    Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ÇáäÕ ÇáãæÌæÏ İíå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ åĞÇ ÇáäÕ¿";
+    Message[ greek ] = "Ìå ôçí áğåíåñãïğïßçóç ôçò êåöáëßäáò Ş ôçò õğïêåöáëßäáò äéáãñÜöåôáé ôï õğÜñ÷ïí êåßìåíï. Èİëåôå íá \näéáãñáöåß ôï ğåñéå÷üìåíï;";
+    Message[ korean ] = "¸Ó¸®±ÛÀÌ³ª ¹Ù´Ú±ÛÀ» ¾ø¾Ö¸é ±âÁ¸ÀÇ ÅØ½ºÆ®°¡ »èÁ¦µË´Ï´Ù. \n³»¿ëÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Üstbilgi ve altbilginin kaldırılması ile mevcut metin silinecek.\nİçeriği silmek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+
+ // ********************************************************************** EOF

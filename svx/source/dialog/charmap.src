@@ -1,0 +1,234 @@
+/*************************************************************************
+ *
+ *  $RCSfile: charmap.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "charmap.hrc"
+#include "helpid.hrc"
+
+ // RID_SVXDLG_CHARMAP ----------------------------------------------------
+ModalDialog RID_SVXDLG_CHARMAP
+{
+    HelpId = SID_CHARMAP ;
+    SvLook = TRUE ;
+    Text= "Sonderzeichen";
+    Text[ italian ] = "Carattere speciale";
+    Text[ portuguese_brazilian ] = "SÌmbolo";
+    Text[ portuguese ] = "Caracteres especiais";
+    Text[ danish ] = "Specialtegn";
+    Text[ french ] = "CaractËres spÈciaux";
+    Text[ swedish ] = "Specialtecken";
+    Text[ dutch ] = "Speciale tekens";
+    Text[ spanish ] = "SÌmbolos";
+    Text[ english_us ] = "Special Character";
+    Text[ chinese_simplified ] = "Ãÿ ‚◊÷∑˚";
+    Text[ russian ] = "—ÔÂˆË‡Î¸Ì˚Â ÒËÏ‚ÓÎ˚";
+    Text[ polish ] = "Znaki specjalne";
+    Text[ japanese ] = "ãLçÜÇ∆ì¡éÍï∂éö";
+    Text[ chinese_traditional ] = "ØSÆÌ¶r§∏";
+    Text[ arabic ] = "—„Ê“ Œ«’…";
+    Size = MAP_APPFONT ( 346 , 141 ) ;
+    OutputSize = TRUE ;
+    Moveable = TRUE ;
+    Control CT_SHOWSET
+    {
+        HelpId = HID_CHARMAP_CTL_SHOWSET ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 278 , 95 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+    };
+    FixedText FT_FONT
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 28 , 8 ) ;
+        Text = "~Schrift" ;
+        Text [ ENGLISH ] = "~Font" ;
+        Text [ norwegian ] = "~Font" ;
+        Text [ italian ] = "~Font" ;
+        Text [ portuguese_brazilian ] = "~Fonte" ;
+        Text [ portuguese ] = "~Tipo de letra" ;
+        Text [ finnish ] = "~Fontti" ;
+        Text [ danish ] = "Skrifttype" ;
+        Text [ french ] = "~Police" ;
+        Text [ swedish ] = "Tecken~sn." ;
+        Text [ dutch ] = "~Lettertype" ;
+        Text [ spanish ] = "~Fuente" ;
+        Text [ english_us ] = "~Font" ;
+        Left = TRUE ;
+        Group = TRUE ;
+        Text[ chinese_simplified ] = "◊÷ÃÂ(~F)";
+        Text[ russian ] = "ÿËÙÚ";
+        Text[ polish ] = "Czcionka";
+        Text[ japanese ] = "Ã´›ƒ(~F)";
+        Text[ chinese_traditional ] = "¶r´¨(~F)";
+        Text[ arabic ] = "«·Œÿ";
+        Text[ greek ] = "√Ò·ÏÏ·ÙÔÛÂÈÒ‹";
+        Text[ korean ] = "±€≤√(~F)";
+        Text[ turkish ] = "~Yaz˝tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_FONT
+    {
+        Pos = MAP_APPFONT ( 36 , 6 ) ;
+        Size = MAP_APPFONT ( 110 , 68 ) ;
+        Sort = TRUE ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_SYMBOLE
+    {
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 38 , 8 ) ;
+        Left = TRUE ;
+        Text= "Zeichen:";
+        Text[ italian ] = "Caratteri:";
+        Text[ portuguese_brazilian ] = "Caracteres:";
+        Text[ portuguese ] = "Caracteres:";
+        Text[ danish ] = "Tegn:";
+        Text[ french ] = "CaractËres :";
+        Text[ swedish ] = "Tecken:";
+        Text[ dutch ] = "Tekens:";
+        Text[ spanish ] = "Car·cter:";
+        Text[ english_us ] = "Characters:";
+        Text[ chinese_simplified ] = "◊÷ÃÂ£∫";
+        Text[ russian ] = "«Ì‡ÍË:";
+        Text[ polish ] = "Znaki:";
+        Text[ japanese ] = "ï∂éö:";
+        Text[ chinese_traditional ] = "¶r§∏°G";
+        Text[ arabic ] = "«·—„Ê“:";
+        Text[ greek ] = "◊·Ò·ÍÙﬁÒÂÚ:";
+        Text[ korean ] = "πÆ¿⁄:";
+        Text[ turkish ] = "Karakter:";
+        Text[ language_user1 ] = " ";
+    };
+    Control CT_SHOWTEXT
+    {
+        HelpId = HID_CHARMAP_CTL_SHOWTEXT ;
+        Pos = MAP_APPFONT ( 53 , 121 ) ;
+        Size = MAP_APPFONT ( 284 , 18 ) ;
+        Group = TRUE ;
+    };
+    Control CT_SHOWCHAR
+    {
+        HelpId = HID_CHARMAP_CTL_SHOWCHAR ;
+        Pos = MAP_APPFONT ( 287 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 23 ) ;
+        Group = TRUE ;
+    };
+    FixedText FT_CHARCODE
+    {
+        Pos = MAP_APPFONT ( 287 , 105 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Center = TRUE ;
+    };
+    OKButton BTN_CHAR_OK
+    {
+        Pos = MAP_APPFONT ( 287 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CHAR_CANCEL
+    {
+        Pos = MAP_APPFONT ( 287 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_CHAR_HELP
+    {
+        Pos = MAP_APPFONT ( 287 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 287 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text= "~Lˆschen";
+        Text[ italian ] = "~Elimina";
+        Text[ portuguese_brazilian ] = "~Apagar";
+        Text[ portuguese ] = "E~liminar";
+        Text[ danish ] = "Slet";
+        Text[ french ] = "~Supprimer";
+        Text[ swedish ] = "~Radera";
+        Text[ dutch ] = "~Wissen";
+        Text[ spanish ] = "~Eliminar";
+        Text[ english_us ] = "~Delete";
+        Text[ chinese_simplified ] = "…æ≥˝(~D)";
+        Text[ russian ] = "”‰‡ÎËÚ¸";
+        Text[ polish ] = "UsuÒ";
+        Text[ japanese ] = "çÌèú(~D)";
+        Text[ chinese_traditional ] = "ßR∞£(~D)";
+        Text[ arabic ] = "Õ–›";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        Text[ korean ] = "ªË¡¶(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ greek ] = "≈È‰ÈÍÔﬂ ˜·Ò·ÍÙﬁÒÂÚ";
+    Text[ korean ] = "∆Øºˆ±‚»£";
+    Text[ turkish ] = "÷zel karakter";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

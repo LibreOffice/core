@@ -1,0 +1,3406 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ------------------------------------------------------------------
+
+#include "sfx.hrc"
+#include "app.hrc"
+#include "helpid.hrc"
+
+InfoBox RID_DOCALREADYLOADED_DLG
+{
+    Message = "Das Dokument war bereits geladen und wurde aktiviert." ;
+    Message [ ENGLISH ] = "Document was already open." ;
+    Message [ norwegian ] = "Dokumentet er allerede åpent." ;
+    Message [ italian ] = "Documento già aperto ed attivato." ;
+    Message [ portuguese_brazilian ] = "O documento já está aberto." ;
+    Message [ portuguese ] = "O documento já se encontra aberto e foi activado." ;
+    Message [ finnish ] = "Asiakirja on jo avoinna." ;
+    Message [ danish ] = "Dokumentet var allerede indlæst og blev aktiveret." ;
+    Message [ french ] = "Document déjà chargé et activé." ;
+    Message [ swedish ] = "Dokumentet var redan laddat och har aktiverats." ;
+    Message [ dutch ] = "Document is reeds geladen en geactiveerd." ;
+    Message [ spanish ] = "El documento ya está cargado y activado." ;
+    Message [ english_us ] = "Document already open." ;
+    Message[ chinese_simplified ] = "ÒÑ¾­×°ÔØÕâ¸öÎÄ¼ş²¢´¦ÓÚ¼¤»î×´Ì¬¡£";
+    Message[ russian ] = "Äîêóìåíò óæå çàïóùåí è àêòèâèğîâàí.";
+    Message[ polish ] = "Dokument zosta³ ju¿ za³adowany i uaktywniony.";
+    Message[ japanese ] = "ÄŞ·­ÒİÄ‚Í‚·‚Å‚É“Ç‚İ‚Ü‚ê±¸Ã¨ÌŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·B";
+    Message[ chinese_traditional ] = "¤w¸g¸Ë¸ü³o­ÓÀÉ®×¨Ã³B©ó¿E¬¡ª¬ºA¡C";
+    Message[ arabic ] = "Çáãáİ ßÇä ãÍãáÇğ ÈÇáİÚá æÊã ÊäÔíØå.";
+    Message[ dutch ] = "Document is reeds geladen en geactiveerd.";
+    Message[ chinese_simplified ] = "ÒÑ¾­×°ÔØÕâ¸öÎÄ¼ş²¢´¦ÓÚ¼¤»î×´Ì¬¡£";
+    Message[ greek ] = "Ôï İããñáöï åß÷å Şäç öïñôùèåß êáé åíåñãïğïéŞèçêå.";
+    Message[ korean ] = "¹®¼­°¡ ÀÌ¹Ì ¿­·ÁÀÖ½À´Ï´Ù.";
+    Message[ turkish ] = "Belge zaten yüklü ve açık.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox RID_CANTLOADDOC_DLG
+{
+    Message = "Das Dokument kann nicht geladen werden." ;
+    Message [ ENGLISH ] = "Cannot open document." ;
+    Message [ norwegian ] = "Kan ikke åpne dokument." ;
+    Message [ italian ] = "Impossibile aprire il documento." ;
+    Message [ portuguese_brazilian ] = "Não consigo abrir o documento." ;
+    Message [ portuguese ] = "Impossível abrir o documento." ;
+    Message [ finnish ] = "Asiakirjaa ei voi avata." ;
+    Message [ danish ] = "Det er ikke muligt at indlæse dokumentet." ;
+    Message [ french ] = "Impossible de charger le document." ;
+    Message [ swedish ] = "Dokumentet kan inte laddas." ;
+    Message [ dutch ] = "Het document kan niet worden geopend." ;
+    Message [ spanish ] = "No es posible cargar el documento." ;
+    Message [ english_us ] = "Cannot open document." ;
+    Message[ chinese_simplified ] = "ÎŞ·¨×°ÔØÕâ¸öÎÄµµ¡£";
+    Message[ russian ] = "Çàãğóçèòü äîêóìåíò íå óäàåòñÿ.";
+    Message[ polish ] = "Dokument nie mo¿e byæ za³adowany.";
+    Message[ japanese ] = "ÄŞ·­ÒİÄ‚Í“Ç‚İ‚İ‚Å‚«‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "µLªk¸Ë¸ü³o­ÓÀÉ®×¡C";
+    Message[ arabic ] = "áÇ íãßä ÊÍãíá ÇáãÓÊäÏ.";
+    Message[ dutch ] = "Het document kan niet worden geopend.";
+    Message[ chinese_simplified ] = "ÎŞ·¨×°ÔØÕâ¸öÎÄµµ¡£";
+    Message[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï İããñáöï.";
+    Message[ korean ] = "¹®¼­¸¦ ¿­ ¼ö ¾ø½À´Ï´Ù.";
+    Message[ turkish ] = "Belge yüklenemiyor.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_READ_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Fehler beim Lesen der Konfiguration." ;
+    Message [ ENGLISH ] = "Error reading configuration file." ;
+    Message [ norwegian ] = "Feil ved lesing av konfigurasjonsfil." ;
+    Message [ italian ] = "Errore durante la lettura del file di configurazione." ;
+    Message [ portuguese_brazilian ] = "Erro ao ler o arquivo de configuração." ;
+    Message [ portuguese ] = "Erro durante a leitura do ficheiro de configuração." ;
+    Message [ finnish ] = "Virhe asetustiedostoa luettaessa." ;
+    Message [ danish ] = "Fejl under læsning af konfiguration." ;
+    Message [ french ] = "Erreur de lecture de la configuration." ;
+    Message [ swedish ] = "Fel vid läsning av konfiguration." ;
+    Message [ dutch ] = "Fout bij het lezen van het configuratiebestand." ;
+    Message [ spanish ] = "Error al leer el archivo de configuración." ;
+    Message [ english_us ] = "Error reading configuration file." ;
+    Message[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
+    Message[ russian ] = "Îøèáêà ïğè ÷òåíèè ôàéëà êîíôèãóğàöèè.";
+    Message[ polish ] = "B³¹d przy odczycie konfiguracji.";
+    Message[ japanese ] = "İ’è‚ğ“Ç‚İæ‚éÛ‚Ì´×°¡";
+    Message[ chinese_traditional ] = "¦bÅª¨ú°t¸mÀÉ®×®Éµo¥Í¿ù»~¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ŞÑÇÁÉ ãáİ ÇáÊßæíä.";
+    Message[ dutch ] = "Fout bij het lezen van het configuratiebestand.";
+    Message[ chinese_simplified ] = "ÔÚ¶ÁÈ¡ÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
+    Message[ greek ] = "ÓöÜëìá êáôÜ ôçí áíÜãíùóç ôïõ áñ÷åßïõ äéáìüñöùóçò";
+    Message[ korean ] = "±¸¼º ÆÄÀÏ ÀĞ±â ¿À·ù.";
+    Message[ turkish ] = "Konfigürasyon dosyası okunurken hata oluştu.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_WRITE_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Fehler beim Schreiben der Konfiguration." ;
+    Message [ ENGLISH ] = "Error writing configuration file." ;
+    Message [ norwegian ] = "Feil ved skriving av konfigurasjonsfil." ;
+    Message [ italian ] = "Errore durante la scrittura del file di configurazione." ;
+    Message [ portuguese_brazilian ] = "Erro ao gravar o arquivo de configuração." ;
+    Message [ portuguese ] = "Erro ao gravar o ficheiro de configuração." ;
+    Message [ finnish ] = "Virhe asetustiedostoa kirjoitettaessa." ;
+    Message [ danish ] = "Fejl under skrivning af konfiguration." ;
+    Message [ french ] = "Erreur lors de l'écriture du fichier de configuration." ;
+    Message [ swedish ] = "Fel vid skrivning av konfigurationsfil." ;
+    Message [ dutch ] = "Fout bij het schrijven van het configuratiebestand." ;
+    Message [ spanish ] = "Error al escribir el archivo de configuración." ;
+    Message [ english_us ] = "Error writing configuration file." ;
+    Message[ chinese_simplified ] = "ÔÚĞ´ÈëÅäÖÃÎÄ¼şÊ±·¢³ö´íÎó¡£";
+    Message[ russian ] = "Îøèáêà ïğè çàïèñè êîíôèãóğàöèè.";
+    Message[ polish ] = "B³¹d przy zapisie konfiguracji.";
+    Message[ japanese ] = "İ’è‚Ì“Ç‚İ‚İ‚ÌÛ‚Ì´×°¡";
+    Message[ chinese_traditional ] = "¦b¼g¤J°t¸mÀÉ®×®Éµo¥X¿ù»~¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ãáİ ÇáÊßæíä.";
+    Message[ dutch ] = "Fout bij het schrijven van het configuratiebestand.";
+    Message[ chinese_simplified ] = "ÔÚĞ´ÈëÅäÖÃÎÄ¼şÊ±·¢³ö´íÎó¡£";
+    Message[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôïõ áñ÷åßïõ äéáìüñöùóçò.";
+    Message[ korean ] = "±¸¼º ÆÄÀÏ ¾²±â ¿À·ù.";
+    Message[ turkish ] = "Konfigürasyon dosyasına yazılırken hata oluştu.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_OPEN_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Fehler beim Öffnen der Konfiguration." ;
+    Message [ ENGLISH ] = "Error opening configuration file." ;
+    Message [ norwegian ] = "Feil ved åpning av konfigurasjonsfil." ;
+    Message [ italian ] = "Errore durante l'apertura del file di configurazione." ;
+    Message [ portuguese_brazilian ] = "Erro ao abrir o arquivo de configuração." ;
+    Message [ portuguese ] = "Erro ao abrir o ficheiro de configuração." ;
+    Message [ finnish ] = "Virhe asetustiedostoa avattaessa." ;
+    Message [ danish ] = "Fejl ved åbning af konfiguration." ;
+    Message [ french ] = "Erreur lors de l'ouverture du fichier de configuration." ;
+    Message [ swedish ] = "Fel vid öppning av konfiguration." ;
+    Message [ dutch ] = "Fout bij het openen van het configuratiebestand." ;
+    Message [ spanish ] = "Error al abrir el archivo de configuración." ;
+    Message [ english_us ] = "Error opening configuration file." ;
+    Message[ chinese_simplified ] = "ÔÚ´ò¿ªÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
+    Message[ russian ] = "Îøèáêà ïğè îòêğûòèè ôàéëà êîíôèãóğàöèè.";
+    Message[ polish ] = "B³¹d przy otwieraniu konfiguracji.";
+    Message[ japanese ] = "İ’è‚ğŠJ‚­Û‚Ì´×°¡";
+    Message[ chinese_traditional ] = "¦b¶}±Ò°t¸mÀÉ®Éµo¥Í¿ù»~¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ İÊÍ ãáİ ÇáÊßæíä.";
+    Message[ dutch ] = "Fout bij het openen van het configuratiebestand.";
+    Message[ chinese_simplified ] = "ÔÚ´ò¿ªÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
+    Message[ greek ] = "ÓöÜëìá êáôÜ ôï Üíïéãìá ôïõ áñ÷åßïõ äéáìüñöùóçò.";
+    Message[ korean ] = "±¸¼º ÆÄÀÏ ¿­±â ¿À·ù.";
+    Message[ turkish ] = "Konfigürasyon dosyası açılırken hata oluştu.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_FILETYPE_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Datei ist keine Konfigurationsdatei." ;
+    Message [ ENGLISH ] = "File is not a configuration file." ;
+    Message [ norwegian ] = "Filen er ikke en konfigurasjonsfil." ;
+    Message [ italian ] = "Il file non è un file di configurazione." ;
+    Message [ portuguese_brazilian ] = "O arquivo não é um arquivo de configuração." ;
+    Message [ portuguese ] = "Este ficheiro não é um ficheiro de configuração." ;
+    Message [ finnish ] = "Tiedosto ei ole asetustiedosto." ;
+    Message [ danish ] = "Filen er ikke en konfigurationsfil." ;
+    Message [ french ] = "Ce fichier n'est pas un fichier de configuration." ;
+    Message [ swedish ] = "Filen är inte en konfigurationsfil." ;
+    Message [ dutch ] = "Dit bestand is geen configuratiebestand." ;
+    Message [ spanish ] = "El archivo no es un archivo de configuración." ;
+    Message [ english_us ] = "File is not a configuration file." ;
+    Message[ chinese_simplified ] = "ÎÄ¼ş²»ÊÇÅäÖÃÎÄ¼ş¡£";
+    Message[ russian ] = "Ôàéë íå ÿâëÿåòñÿ êîíôèãóğàöèîííûì ôàéëîì.";
+    Message[ polish ] = "Ten plik nie jest plikiem konfiguracyjnym.";
+    Message[ japanese ] = "Ì§²Ù‚Íİ’èÌ§²Ù‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Message[ chinese_traditional ] = "ÀÉ®×¤£¬O°t¸mÀÉ®×¡C";
+    Message[ arabic ] = "åĞÇ Çáãáİ áíÓ ãáİ Êßæíä.";
+    Message[ dutch ] = "Dit bestand is geen configuratiebestand.";
+    Message[ chinese_simplified ] = "ÎÄ¼ş²»ÊÇÅäÖÃÎÄ¼ş¡£";
+    Message[ greek ] = "Ôï áñ÷åßï äåí åßíáé áñ÷åßï äéáìüñöùóçò.";
+    Message[ korean ] = "±¸¼º ÆÄÀÏÀÌ ¾Æ´Õ´Ï´Ù.";
+    Message[ turkish ] = "Dosya, konfigürasyon dosyası değil.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_VERSION_CFG
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Konfigurationsdatei hat falsche Version." ;
+    Message [ ENGLISH ] = "Configuration file has wrong version." ;
+    Message [ norwegian ] = "Konfigurasjonsfilen har feil versjon." ;
+    Message [ italian ] = "Il file di configurazione è di versione errata." ;
+    Message [ portuguese_brazilian ] = "Versão errada do arquivo de configuração." ;
+    Message [ portuguese ] = "Versão errada do ficheiro de configuração." ;
+    Message [ finnish ] = "Asetustiedoston versio on väärä." ;
+    Message [ danish ] = "Konfigurationsfilen indeholder forkert version." ;
+    Message [ french ] = "Version incorrecte du fichier de configuration." ;
+    Message [ swedish ] = "Konfigurationsfil har fel version." ;
+    Message [ dutch ] = "Verkeerde versie van configuratiebestand." ;
+    Message [ spanish ] = "El archivo de configuración tiene una versión falsa." ;
+    Message [ english_us ] = "Configuration file contains the wrong version." ;
+    Message[ chinese_simplified ] = "ÅäÖÃÎÄ¼ş°æ±¾´íÎó¡£";
+    Message[ russian ] = "Êîíôèãóğàöèîííûé ôàéë ñîäåğæèò íåïğàâèëüíóş âåğñèş.";
+    Message[ polish ] = "Plik konfiguracji zawiera nieprawid³ow¹ wersjê.";
+    Message[ japanese ] = "İ’èÌ§²Ù‚Í ³‚µ‚­‚È‚¢ÊŞ°¼Ş®İ‚Å‚·B";
+    Message[ chinese_traditional ] = "°t¸mÀÉ®×ª©¥»¿ù»~¡C";
+    Message[ arabic ] = "ÅÕÏÇÑ ÎÇØÆ áãáİ ÇáÊßæíä.";
+    Message[ dutch ] = "Verkeerde versie van configuratiebestand.";
+    Message[ chinese_simplified ] = "ÅäÖÃÎÄ¼ş°æ±¾´íÎó¡£";
+    Message[ greek ] = "ËÜèïò İêäïóç ôïõ áñ÷åßï äéáìüñöùóçò.";
+    Message[ korean ] = "±¸¼º ÆÄÀÏÀÌ Àß¸øµÈ ¹öÁ¯À» Æ÷ÇÔÇÏ°í ÀÖ½À´Ï´Ù.";
+    Message[ turkish ] = "Konfigürasyon dosyasının sürümü yanlış.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_WRITE_SBL
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Fehler beim Schreiben der BASIC-Bibliothek in\n'@'." ;
+    Message [ ENGLISH ] = "Error writing BASIC library to file\n'@'." ;
+    Message [ norwegian ] = "Feil oppstod ved skriving av BASIC bibliotek til fil\n'@'." ;
+    Message [ italian ] = "Errore durante la scrittura della libreria BASIC nel file\n'@'." ;
+    Message [ portuguese_brazilian ] = "Erro ao gravar a biblioteca BASICA no arquivo\n'@'." ;
+    Message [ portuguese ] = "Erro ao gravar a biblioteca BASIC em \n'@'." ;
+    Message [ finnish ] = "Virhe kirjoitettaessa BASIC-kirjastoa tiedostoon\n'@'." ;
+    Message [ danish ] = "Fejl under skrivning af BASIC-biblioteket til \n'@'." ;
+    Message [ french ] = "Erreur lors de l'écriture de la bibliothèque BASIC dans \n'@'." ;
+    Message [ swedish ] = "Fel vid skrivning av BASIC-bibliotek i\n'@'." ;
+    Message [ dutch ] = "Fout bij het schrijven van de BASIC-bibliotheek in\n'@'." ;
+    Message [ spanish ] = "Error al escribir la biblioteca BASIC en\n'@'." ;
+    Message [ english_us ] = "Error recording BASIC library in\n'@'." ;
+    Message[ chinese_simplified ] = "BASIC ¿âÔÚĞ´Èë\n'@' Ê±·¢Éú´íÎó¡£";
+    Message[ russian ] = "Îøèáêà ïğè çàïèñè áèáëèîòåêè BASIC â \n'@'.";
+    Message[ polish ] = "B³¹d przy zapisie biblioteki BASIC w in\n'@'.";
+    Message[ japanese ] = "\n'@'‚Å‚ÌBASIC ×²ÌŞ×Ø‚Ì“Ç‚İ‚İ‚ÌÛ‚Ì´×°¡";
+    Message[ chinese_traditional ] = "BASIC ®w¦b¼g¤J\n'@' ®Éµo¥Í¿ù»~¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ßÊÇÈÉ ãßÊÈÉ BASIC İí\n'@'.";
+    Message[ dutch ] = "Fout bij het schrijven van de BASIC-bibliotheek in\n'@'.";
+    Message[ chinese_simplified ] = "BASIC ¿âÔÚĞ´Èë\n'@' Ê±·¢Éú´íÎó¡£";
+    Message[ greek ] = "ÓöÜëìá êáôÜ ôçí åããñáöŞ ôçò âéâëéïèŞêçò BASIC óôï\n'@'.";
+    Message[ korean ] = "BASIC ¶óÀÌºê·¯¸®\n'@'¿¡ ±â·Ï ¿À·ù .";
+    Message[ turkish ] = "BASIC kitaplığı, \n'@' içine kaydedilirken hata oluştu.";
+    Message[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_SIGNAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    Message = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
+    Message [ ENGLISH ] = "-" ;
+    Message [ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen,\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de applicatie wordt beëindigd?" ;
+    Message [ swedish ] = "Ett oväntat programfel har uppstått!\nDu kan nu på eget bevåg försöka\nspara alla öppna dokument!\n\nVill Du försöka spara alla ändringar i dokumenten innan programmet avslutas?" ;
+    Message [ danish ] = "Der opstod en uventet programfejl\nDu kan på eget ansvar prøve på at\ngemme alle åbne dokumenter!\n\nVil du prøve på at gemme dine dokumenter, før programmet afsluttes?" ;
+    Message [ italian ] = "Nell'applicazione si è verificato un errore inatteso!\nAdesso potete provare, a proprio rischio, di\nsalvare tutti i documenti aperti!\n\nVolete che si provi a salvare il lavoro prima di chiudere l'applicazione?" ;
+    Message [ spanish ] = "¡Se ha producido un error inesperado de la aplicación!\nUsted puede ahora, a riesgo propio, intentar\nsalvar todos los documentos abiertos!\n\n¿Desea guardar su trabajo antes de cerrar la aplicación?" ;
+    Message [ french ] = "Erreur d'application inattendue !\nVous pouvez tout de même essayer de \nsauvegarder tous les documents ouverts !\n\nSauvegarder votre travail avant de fermer l'application ?" ;
+    Message [ english_us ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all nopen documents before the program is terminated?" ;
+    Message [ portuguese ] = "Surgiu um erro de programa inesperado!\n\nPoderá agora, sob o seu próprio risco, \ntentar guardar todos os documentos abertos.\nTentar guardar o seu trabalho antes que a aplicação seja fechada?" ;
+    Message [ portuguese_brazilian ] = "Es ist ein unerwarter Anwendungsfehler aufgetreten!\nSie können jetzt auf eigene Gefahr hin versuchen,\nalle offenen Dokumente zu sichern!\n\nSoll versucht werden, Ihre Arbeit zu sichern, bevor die Applikation beendet wird?" ;
+    Message[ chinese_simplified ] = "·¢ÉúÁËÒ»¸öÒâÍâµÄ³ÌĞò´íÎó£¡\nÄúÏÖÔÚ¿ÉÒÔ³¢ÊÔ±£´æËùÓĞ±»´ò¿ªµÄÎÄ¼ş£¡\nÄúÒªÔÚ¹Ø±ÕÕâ¸öÓ¦ÓÃ³ÌĞòÖ®Ç°±£´æËùÓĞµÄÎÄ¼şÂğ£¿";
+    Message[ russian ] = "Ïğîèçîøëà íåîæèäàííàÿ îøèáêà ïğèëîæåíèÿ!\nÂû ìîæåòå ñåé÷àñ ïîïûòàòüñÿ ïîä Âàøó îòâåòñòâåííîñòü,\n ñîõğàíèòü âñå îòêğûòûå äîêóìåíòû!\n\nÏîïûòàòüñÿ ñîõğàíèòü Âàøó ğàáîòó äî âûõîäà èç ïğèëîæåíèÿ?";
+    Message[ polish ] = "Wyst¹pi³ nieoczekiwany b³¹d w programie!\nNa w³asn¹ odpowiedzialnoœæ mo¿esz spróbowaæ \nzapisaæ wszystkie otwarte dokumenty!\n\nCzy spróbowaæ zapisaæ twojê pracê przed zamkniêciem aplikacji?";
+    Message[ japanese ] = "—\\Šú‚µ‚È‚¢ÌßÛ¸Ş×Ñ ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nØ½¸‚Í‚ ‚è‚Ü‚·‚ª\nŠJ‚©‚ê‚Ä‚¢‚éÄŞ·­ÒİÄ‚Í‚·‚×‚Ä•Û‘¶‚µ‚Ä‚İ‚Ä‚­‚¾‚³‚¢B\n\n±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‘O‚ÉAì‹Æ’†‚ÌÄŞ·­ÒİÄ‚ğ•Û‘¶‚µ‚Ä‚İ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "µo¥Í¤F¤@­Ó·N¥~ªºµ{¦¡¿ù»~¡I\n±z²{¦b¥i¥H¹Á¸Õ«O¦s©Ò¦³³Q¶}±ÒªºÀÉ®×¡I\n±z­n¦bÃö³¬³o­ÓÀ³¥Îµ{¦¡¤§«eÀx¦s©Ò¦³ªºÀÉ®×¡H";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÊØÈíŞ ÛíÑ ãÊæŞÚ!\níãßäß ÇáÂä¡ Úáì ãÓÆæáíÊß ÇáÎÇÕÉ¡ ãÍÇæáÉ ÍİÙ \nßá ÇáãÓÊäÏÇÊ ÇáãİÊæÍÉ!\n\nåá ÊÑíÏ ãÍÇæáÉ ÍİÙ Úãáß¡ ŞÈá ÅäåÇÁ ÇáÊØÈíŞ¿";
+    Message[ dutch ] = "Er is een onverwachte programmafout opgetreden!\nU kunt nu op eigen risico proberen,\nalle geopende documenten op te slaan!\n\nWilt u proberen uw werk op te slaan voordat de applicatie wordt beëindigd?";
+    Message[ chinese_simplified ] = "·¢ÉúÁËÒ»¸öÒâÍâµÄ³ÌĞò´íÎó£¡\nÄúÏÖÔÚ¿ÉÒÔ³¢ÊÔ±£´æËùÓĞ±»´ò¿ªµÄÎÄ¼ş£¡\nÄúÒªÔÚ¹Ø±ÕÕâ¸öÓ¦ÓÃ³ÌĞòÖ®Ç°±£´æËùÓĞµÄÎÄ¼şÂğ£¿";
+    Message[ greek ] = "ĞáñïõóéÜóôçêå ìç áíáìåíüìåíï óöÜëìá åöáñìïãŞò!\n\nÈİëåôå íá ãßíåé åğé÷åßñçóç (ìå äéêŞ óáò åõèıíç) íá áğïèçêåõôïıí üëá ôá áíïé÷ôÜ İããñáöá ğñéí ôåñìáôéóôåß ç åöáñìïãŞ;";
+    Message[ korean ] = "¿¹±âÄ¡ ¾ÊÀº ÀÀ¿ë ÇÁ·Î±×·¥ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\nÁö±İ À§ÇèÀ» ¹«¸¨¾²°í ¸ğµç ¿­¸° ¹®¼­ÀÇ ÀúÀåÀ» ½ÃµµÇØ º¼ ¼ö ÀÖ½À´Ï´Ù. ÀÀ¿ë ÇÁ·Î±×·¥À» Á¾·áÇÏ±â Àü¿¡ ÀÛ¾÷ÇÑ °ÍÀÇ ÀúÀåÀ» ½ÃµµÇØ º¸½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Beklenmeyen bir program hatası oluştu!\nŞu an açık olan tüm belgeleri\nkaydetmeyi deneyebilirsiniz!\n\nUygulama kapatılmadan önce belgeleriniz kaydedilmeye çalışılsın mı?";
+    Message[ language_user1 ] = " ";
+};
+
+Resource SID_UNKNOWN
+{
+    String 1 "-" ;
+};
+
+Resource BMP_SFX_COLOR
+{
+    ExtraData =
+    {
+        SID_NEWDOC;             // 043
+        SID_OPENDOC;            // 044
+        SID_CLOSEDOC;           // 045
+        SID_RELOAD;             // 046
+        SID_SAVEASDOC;          // 047
+        SID_PRINTDOC;           // 051
+        SID_SETUPPRINTER;       // 053
+        SID_QUITAPP;            // 054
+        SID_UNDO;               // 055
+        SID_REDO;               // 056
+        SID_REPEAT;             // 057
+        SID_CUT;                // 058
+        SID_COPY;               // 059
+        SID_PASTE;              // 060
+        SID_DELETE;             // 061
+        SID_SELECTALL;          // 062
+        SID_SAVEDOC;            // 063 vormals 046
+        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_RECORDMACRO;        // 095
+        SID_EDITMACRO;          // 096
+        SID_HELPMENU;           // 098
+        SID_CONFIG;             // 123
+        SID_CONFIGTOOLBOX;      // 124
+        0;
+    };
+    Bitmap BMP_SFX_SMALL { File = "sco.bmp" ; };
+    Bitmap BMP_SFX_LARGE { File = "lco.bmp" ; };
+};
+
+Resource BMP_SFX_MONO
+{
+    ExtraData =
+    {
+        SID_NEWDOC;             // 043
+        SID_OPENDOC;            // 044
+        SID_CLOSEDOC;           // 045
+        SID_RELOAD;             // 046
+        SID_SAVEASDOC;          // 047
+        SID_PRINTDOC;           // 051
+        SID_SETUPPRINTER;       // 053
+        SID_QUITAPP;            // 054
+        SID_UNDO;               // 055
+        SID_REDO;               // 056
+        SID_REPEAT;             // 057
+        SID_CUT;                // 058
+        SID_COPY;               // 059
+        SID_PASTE;              // 060
+        SID_DELETE;             // 061
+        SID_SELECTALL;          // 062
+        SID_SAVEDOC;            // 063 vormals 046
+        SID_EXITANDRETURN;      // 064 vormals 054
+        SID_RECORDMACRO;        // 095
+        SID_EDITMACRO;          // 096
+        SID_HELPMENU;           // 098
+        SID_CONFIG;             // 123
+        SID_CONFIGTOOLBOX;      // 124
+        0;
+    };
+    Bitmap BMP_SFX_SMALL { File = "smo.bmp" ; };
+    Bitmap BMP_SFX_LARGE { File = "lmo.bmp" ; };
+};
+
+WarningBox STR_RECOVER_PREPARED
+{
+    Message = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
+    Message [ ENGLISH ] = "An unrecoverable error has occured.\n\nAll modified files are saved and can\nprobably be recovered on application restart." ;
+    Message [ portuguese ] = "Surgiu um erro irrecuperável. Contudo, todos os ficheiros \nmodificados foram guardados e poderão provavelmente \nser recuperados ao reiniciar o programa." ;
+    Message [ english_us ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
+    Message [ portuguese_brazilian ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
+    Message [ swedish ] = "Ett icke reparerbart fel har uppträtt.\n\nAlla ändrade filer sparades\noch kan förmodligen återupprättas\nvid nästa programstart." ;
+    Message [ danish ] = "Der opstod en irreparabel fejl.\n\nAlle ændrede filer er dog\nblevet gemt og kan sandsynligvis gendannes\nved næste programstart." ;
+    Message [ italian ] = "Si è verificato un errore irrimediabile.\n\nTutti i file modificati sono stati \nsalvati e probabilmente verranno recuperati \nal prossimo avvio del programma." ;
+    Message [ spanish ] = "Ha ocurrido un error irreparable.\n\nSin embargo se guardaron todos los cambios realizados\nen los archivos y quizás podrán recuperarse\nal iniciar de nuevo el programa." ;
+    Message [ french ] = "Une erreur fatale est survenue.\n\nTous les fichiers édités ont été sauvegardés\net devraient être restaurés au\nredémarrage du programme." ;
+    Message [ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden." ;
+    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
+    Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
+    Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y jednak\nzabezpieczone i zostan¹ prawdopodobnie przywrócone przy nastêpnym rozpoczêciu programu.\n.";
+    Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½Ì§²Ù‚Ì‚·‚×‚Ä‚ª•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·‚©‚ç\nŸ‚ÉÌßÛ¸Ş×Ñ‚ğŠJn‚·‚éÛ‚É‚Í•œŒ³‚³‚ê‚é‚Í‚¸‚Å‚·B";
+    Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡M±zªº¾Ş§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n±z¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
+    Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
+    Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
+    Message[ greek ] = "ĞáñïõóéÜóôçêå áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí şóôå \níá åßíáé ğéèáíşò äõíáôŞ ç åğáíáöïñÜ ôïõò ìå ôçí åğüìåíç \nåêêßíçóç ôïõ ğñïãñÜììáôïò.";
+    Message[ korean ] = "±¸Á¦ ºÒ°¡´ÉÇÑ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\n±×·¯³ª º¯°æµÈ ÆÄÀÏÀº \nÀúÀåµÇ¾úÀ¸¹Ç·Î ¾Æ¸¶µµ ´ÙÀ½¿¡ \nÇÁ·Î±×·¥À» ½ÃÀÛÇÒ ¶§´Â º¹¿øµÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
+    Message[ turkish ] = "Düzeltilemeyen bir hata oluştu.\n\nDeğiştirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden başlatıldığında\nkurtarılabilecek.";
+    Message[ language_user1 ] = " ";
+};
+
+WarningBox RID_WARN_POST_MAILTO
+{
+    BUTTONS = WB_OK_CANCEL ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
+    Message [ english ] = "A form is to be posted by email.\nThe receiver will get your email-address." ;
+    Message [ portuguese ] = "O formulário será enviado por e-mail.\nO seu endereço electrónico será fornecido ao destinatário." ;
+    Message [ english_us ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
+    Message [ portuguese_brazilian ] = "Ein Formular soll per E-Mail versendet werden.\nDadurch wird dem Empfänger Ihre E-Mail-Adresse bekannt." ;
+    Message [ swedish ] = "Ett formulär skall skickas per e-post.\nDärigenom får mottagaren reda på Din e-postadress." ;
+    Message [ danish ] = "Du vil sende en formular via e-mail.\nBemærk at modtageren herved får din e-mail-adresse." ;
+    Message [ italian ] = "Un formulario deve essere inviato via eMail.\nIn tal modo il destinatario verrà a conoscenza dell'indirizzo eMail dell'utente." ;
+    Message [ spanish ] = "Se debe enviar un formulario por correo electrónico.\nCon ello se dará a conocer al destinatario su dirección electrónica." ;
+    Message [ french ] = "Vous voulez envoyer un formulaire par e-mail.\nVous communiquerez ainsi votre adresse e-mail au destinataire." ;
+    Message [ dutch ] = "Een formulier moet per e-mail gestuurd worden.\nDaardoor wordt uw e-mail adres door de ontvanger bekend." ;
+    Message[ chinese_simplified ] = "Ó¦¸Ã½èÖúµç×ÓÓÊ¼ş¼Ä·¢±íµ¥¡£\nÕâÑùÄúµÄµç×ÓÓÊ¼şµØÖ·Ò²¾Í´«µİ¸øÁËÊÕ¼şÈË¡£";
+    Message[ russian ] = "Ôîğìóëÿğ áóäåò îòïğàâëåí ïî ıëåêòğîííîé ïî÷òå.\nÁëàãîäàğÿ ıòîìó ïîëó÷àòåëü óçíàåò Âàø àäğåñ ıë. ïî÷òû.";
+    Message[ polish ] = "Formularz ma zostaæ wys³any jako e-mail.\nPrzez to adresat otrzyma twój adres e-mail.";
+    Message[ japanese ] = "—p†‚ªE-mail‚Å‘—M‚³‚ê‚Ü‚·B\n‚±‚ê‚ğ’Ê‚µ‚ÄóMÒ‚ÉÕ°»Ş°‚ÌE-mail±ÄŞÚ½‚ª’m‚ç‚ê‚é‚±‚Æ‚É‚È‚è‚Ü‚·B";
+    Message[ chinese_traditional ] = "À³¸Ó³z¹L¹q¤l¶l¥ó±Hµoªí³æ¡C\n³o¼Ë±zªº¹q¤l¶l¥ó¦a§}¤]´N¶Ç»¼µ¹¤F¦¬¥óªÌ¡C";
+    Message[ arabic ] = "íäÈÛí ÅÑÓÇá ÇÓÊãÇÑÉ ÈÇáÈÑíÏ ÇáÅáßÊÑæäí.\nÈåĞå ÇáØÑíŞÉ Óæİ íÚÑİ ÇáãÓÊáã ÚäæÇä ÇáÈÑíÏ ÇáÅáßÊÑæäí ÇáÎÇÕ Èß.";
+    Message[ dutch ] = "Een formulier moet per e-mail gestuurd worden.\nDaardoor wordt uw e-mail adres door de ontvanger bekend.";
+    Message[ chinese_simplified ] = "Ó¦¸Ã½èÖúµç×ÓÓÊ¼ş¼Ä·¢±íµ¥¡£\nÕâÑùÄúµÄµç×ÓÓÊ¼şµØÖ·Ò²¾Í´«µİ¸øÁËÊÕ¼şÈË¡£";
+    Message[ greek ] = "Ğñüêåéôáé íá áğïóôáëëåß ìéá öüñìá ìİóù e-mail.\nĞñïóİîôå üôé óå áõôŞ ôç ğåñßğôùóç ãíùóôïğïéåßôáé ç äéåıèõíóç óáò óôïí ğáñáëŞğôç";
+    Message[ korean ] = "¾ç½ÄÀº ÀüÀÚ¿ìÆíÀ¸·Î º¸³»Áú°Í ÀÔ´Ï´Ù .\n Áï ¹Ş´Â »ç¶÷¿¡°Ô ´ç½ÅÀÇ ÀüÀÚ¿ìÆí ÁÖ¼Ò°¡ º¸¿© Áú°Í ÀÔ´Ï´Ù.";
+    Message[ turkish ] = "E-posta ile form gönderilecek.\nBu şekilde alıcı e-posta adresinizi de görecektir.";
+    Message[ language_user1 ] = " ";
+};
+
+String STR_RECOVER_TITLE
+{
+    Text = "Datei-Wiederherstellung" ;
+    Text [ ENGLISH ] = "File Recovery" ;
+    Text [ english_us ] = "File Recovery" ;
+    Text [ portuguese_brazilian ] = "Datei-Wiederherstellung" ;
+    Text [ swedish ] = "Filåterställande" ;
+    Text [ danish ] = "Fil-gendannelse" ;
+    Text [ italian ] = "Recupero file" ;
+    Text [ spanish ] = "Recuperar archivo" ;
+    Text [ french ] = "Restauration de fichier" ;
+    Text [ dutch ] = "Herstel bestand" ;
+    Text [ portuguese ] = "Restaurar ficheiro" ;
+    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ russian ] = "Âîññòàíîâëåíèå ôàéëà";
+    Text[ polish ] = "Odtwarzanie plików";
+    Text[ japanese ] = "Ì§²Ù‚Ì•œŒ³";
+    Text[ chinese_traditional ] = "­×´_ÀÉ®×";
+    Text[ arabic ] = "ÇÓÊÚÇÏÉ ãáİ";
+    Text[ dutch ] = "Herstel bestand";
+    Text[ chinese_simplified ] = "ĞŞ¸´ÎÄ¼ş";
+    Text[ greek ] = "ÅğáíáöïñÜ áñ÷åßïõ";
+    Text[ korean ] = "ÆÄÀÏ º¹±¸";
+    Text[ turkish ] = "Dosya kurtarma";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_RECOVER_QUERY
+{
+    Text = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
+    Text [ ENGLISH ] = "Recover file $1?" ;
+    Text [ portuguese ] = "Deseja restaurar o ficheiro \"$1\"?" ;
+    Text [ english_us ] = "Should the file \"$1\" be restored?" ;
+    Text [ portuguese_brazilian ] = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
+    Text [ swedish ] = "Skall filen \"$1\" återskapas?" ;
+    Text [ danish ] = "Skal filen \"$1\" gendannes?" ;
+    Text [ italian ] = "Recuperare il file \"$1\"?" ;
+    Text [ spanish ] = "¿Desea restaurar el archivo \"$1\"?" ;
+    Text [ french ] = "Le fichier \"$1\" doit-il être restauré ?" ;
+    Text [ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?" ;
+    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ russian ] = "Âîññòàíîâèòü ôàéë \"$1\"?";
+    Text[ polish ] = "Odtworzyæ plik \"$1\"?";
+    Text[ japanese ] = "Ì§²Ù\"$1\"‚ğ•œŒ³‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z­n­×´_³o­ÓÀÉ®×";
+    Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÚÇÏÉ Çáãáİ \"$1\"¿";
+    Text[ dutch ] = "Wilt u dat het bestand \"$1\" hersteld wordt?";
+    Text[ chinese_simplified ] = "ÄúÒªĞŞ¸´Õâ¸öÎÄ¼ş \"$1\" Âğ£¿";
+    Text[ greek ] = "Íá ãßíåé åğáíáöïñÜ ôïõ áñ÷åßïõ \"$1\";";
+    Text[ korean ] = "ÆÄÀÏ \"$1\"À» º¹±¸ÇØ¾ß ÇÕ´Ï±î?";
+    Text[ turkish ] = "\"$1\" dosyası geri getirilsin mi?";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_INTERN
+{
+    Text = "Intern" ;
+    Text [ ENGLISH ] = "Internal" ;
+    Text [ norwegian ] = "Intern" ;
+    Text [ italian ] = "Interno" ;
+    Text [ portuguese_brazilian ] = "Aplicativo" ;
+    Text [ portuguese ] = "Interno" ;
+    Text [ finnish ] = "Sisäinen" ;
+    Text [ danish ] = "Intern" ;
+    Text [ french ] = "Interne" ;
+    Text [ swedish ] = "Internt" ;
+    Text [ dutch ] = "Intern" ;
+    Text [ spanish ] = "Interno" ;
+    Text [ english_us ] = "Internal" ;
+    Text[ chinese_simplified ] = "ÄÚ²¿";
+    Text[ russian ] = "Âíóòğåííèé";
+    Text[ polish ] = "Wewnêtrzny";
+    Text[ japanese ] = "“à•”";
+    Text[ chinese_traditional ] = "¤º³¡";
+    Text[ arabic ] = "ÏÇÎáí";
+    Text[ dutch ] = "Intern";
+    Text[ chinese_simplified ] = "ÄÚ²¿";
+    Text[ greek ] = "ÅóùôåñéêÜ";
+    Text[ korean ] = "³»ºÎÀÇ";
+    Text[ turkish ] = "İç";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_APPLICATION
+{
+    Text = "Applikation" ;
+    Text [ ENGLISH ] = "Application" ;
+    Text [ norwegian ] = "Applikasjon" ;
+    Text [ italian ] = "Applicazione" ;
+    Text [ portuguese_brazilian ] = "Interna" ;
+    Text [ portuguese ] = "Aplicação" ;
+    Text [ finnish ] = "Sovellus" ;
+    Text [ danish ] = "Applikation" ;
+    Text [ french ] = "Application" ;
+    Text [ swedish ] = "Tillämpning" ;
+    Text [ dutch ] = "Applicatie" ;
+    Text [ spanish ] = "Aplicación" ;
+    Text [ english_us ] = "Application" ;
+    Text[ chinese_simplified ] = "Ó¦ÓÃ³ÌĞò";
+    Text[ russian ] = "Ïğèëîæåíèå";
+    Text[ polish ] = "Aplikacja";
+    Text[ japanese ] = "±ÌßØ¹°¼®İ";
+    Text[ chinese_traditional ] = "À³¥Îµ{¦¡";
+    Text[ arabic ] = "ÊØÈíŞ";
+    Text[ dutch ] = "Applicatie";
+    Text[ chinese_simplified ] = "Ó¦ÓÃ³ÌĞò";
+    Text[ greek ] = "ÅöáñìïãŞ";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥";
+    Text[ turkish ] = "Uygulama";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_VIEW
+{
+    Text = "Ansicht" ;
+    Text [ ENGLISH ] = "View" ;
+    Text [ norwegian ] = "View" ;
+    Text [ italian ] = "Visualizza" ;
+    Text [ portuguese_brazilian ] = "Ver" ;
+    Text [ portuguese ] = "Visualizar" ;
+    Text [ finnish ] = "Näytä" ;
+    Text [ danish ] = "Vis" ;
+    Text [ french ] = "Affichage" ;
+    Text [ swedish ] = "Vy" ;
+    Text [ dutch ] = "Beeld" ;
+    Text [ spanish ] = "Ver" ;
+    Text [ english_us ] = "View" ;
+    Text[ chinese_simplified ] = "ÊÓÍ¼";
+    Text[ russian ] = "Âèä";
+    Text[ polish ] = "Widok";
+    Text[ japanese ] = "•\\¦";
+    Text[ chinese_traditional ] = "ÀËµø";
+    Text[ arabic ] = "ÚÑÖ";
+    Text[ dutch ] = "Beeld";
+    Text[ chinese_simplified ] = "ÊÓÍ¼";
+    Text[ greek ] = "ĞñïâïëŞ";
+    Text[ korean ] = "º¸±â";
+    Text[ turkish ] = "Görünüm";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_DOCUMENT
+{
+    Text = "Dokumente" ;
+    Text [ ENGLISH ] = "Documents" ;
+    Text [ norwegian ] = "Documents" ;
+    Text [ italian ] = "Documenti" ;
+    Text [ portuguese_brazilian ] = "Documentos" ;
+    Text [ portuguese ] = "Documentos" ;
+    Text [ finnish ] = "Asiakirjat" ;
+    Text [ danish ] = "Dokumenter" ;
+    Text [ french ] = "Documents" ;
+    Text [ swedish ] = "Dokument" ;
+    Text [ dutch ] = "Documenten" ;
+    Text [ spanish ] = "Documentos" ;
+    Text [ english_us ] = "Documents" ;
+    Text[ chinese_simplified ] = "ÎÄµµ";
+    Text[ russian ] = "Äîêóìåíòû";
+    Text[ polish ] = "Dokumenty";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ";
+    Text[ chinese_traditional ] = "¤å¥ó";
+    Text[ arabic ] = "ãÓÊäÏÇÊ";
+    Text[ dutch ] = "Documenten";
+    Text[ chinese_simplified ] = "ÎÄµµ";
+    Text[ greek ] = "¸ããñáöá";
+    Text[ korean ] = "¹®¼­";
+    Text[ turkish ] = "Belge";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_EDIT
+{
+    Text = "Bearbeiten" ;
+    Text [ ENGLISH ] = "Editing" ;
+    Text [ norwegian ] = "Redigering" ;
+    Text [ italian ] = "Modifica" ;
+    Text [ portuguese_brazilian ] = "Editando" ;
+    Text [ portuguese ] = "Editar" ;
+    Text [ finnish ] = "Muokkaus" ;
+    Text [ danish ] = "Rediger" ;
+    Text [ french ] = "Edition" ;
+    Text [ swedish ] = "Redigera" ;
+    Text [ dutch ] = "Bewerken" ;
+    Text [ spanish ] = "Editar" ;
+    Text [ english_us ] = "Edit" ;
+    Text[ chinese_simplified ] = "±à¼­";
+    Text[ russian ] = "Ïğàâêà";
+    Text[ polish ] = "Edytuj";
+    Text[ japanese ] = "•ÒW";
+    Text[ chinese_traditional ] = "½s¿è";
+    Text[ arabic ] = "ÊÍÑíÑ";
+    Text[ dutch ] = "Bewerken";
+    Text[ chinese_simplified ] = "±à¼­";
+    Text[ greek ] = "Åğåîåñãáóßá";
+    Text[ korean ] = "ÆíÁı";
+    Text[ turkish ] = "Düzenle";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_MACRO
+{
+    Text = "BASIC" ;
+    Text [ ENGLISH ] = "BASIC" ;
+    Text [ english_us ] = "BASIC" ;
+    Text [ italian ] = "BASIC" ;
+    Text [ spanish ] = "BASIC" ;
+    Text [ french ] = "BASIC" ;
+    Text [ dutch ] = "BASIC" ;
+    Text [ swedish ] = "BASIC" ;
+    Text [ danish ] = "BASIC" ;
+    Text [ portuguese ] = "BASIC" ;
+    Text [ portuguese_brazilian ] = "BASIC" ;
+    Text[ chinese_simplified ] = "BASIC";
+    Text[ russian ] = "BASIC";
+    Text[ polish ] = "BASIC";
+    Text[ japanese ] = "BASIC";
+    Text[ chinese_traditional ] = "BASIC";
+    Text[ arabic ] = "BASIC";
+    Text[ dutch ] = "BASIC";
+    Text[ chinese_simplified ] = "BASIC";
+    Text[ greek ] = "BASIC";
+    Text[ korean ] = "BASIC";
+    Text[ turkish ] = "BASIC";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_OPTIONS
+{
+    Text = "Extras" ;
+    Text [ ENGLISH ] = "Options" ;
+    Text [ norwegian ] = "Options" ;
+    Text [ italian ] = "Varie" ;
+    Text [ portuguese_brazilian ] = "Opções" ;
+    Text [ portuguese ] = "Ferramentas" ;
+    Text [ finnish ] = "Määritykset" ;
+    Text [ danish ] = "Funktioner" ;
+    Text [ french ] = "Options" ;
+    Text [ swedish ] = "Verktyg" ;
+    Text [ dutch ] = "Extra" ;
+    Text [ spanish ] = "Opciones" ;
+    Text [ english_us ] = "Options" ;
+    Text[ chinese_simplified ] = "ÆäËü";
+    Text[ russian ] = "Ñåğâèñ";
+    Text[ polish ] = "Narzêdzia";
+    Text[ japanese ] = "Ú×İ’è";
+    Text[ chinese_traditional ] = "¨ä¥¦";
+    Text[ arabic ] = "ÎíÇÑÇÊ";
+    Text[ dutch ] = "Extra";
+    Text[ chinese_simplified ] = "ÆäËü";
+    Text[ greek ] = "Åñãáëåßá";
+    Text[ korean ] = "¿É¼Ç";
+    Text[ turkish ] = "Araçlar";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_MATH
+{
+    Text = "Math" ;
+    Text [ ENGLISH ] = "Formula" ;
+    Text [ norwegian ] = "Formel" ;
+    Text [ italian ] = "Math" ;
+    Text [ portuguese_brazilian ] = "Fórmula" ;
+    Text [ portuguese ] = "Math" ;
+    Text [ finnish ] = "Kaava" ;
+    Text [ danish ] = "Math" ;
+    Text [ french ] = "Formule" ;
+    Text [ swedish ] = "Math" ;
+    Text [ dutch ] = "Math" ;
+    Text [ spanish ] = "Math" ;
+    Text [ english_us ] = "Math" ;
+    Text[ chinese_simplified ] = "ÊıÑ§";
+    Text[ russian ] = "Math";
+    Text[ polish ] = "Math";
+    Text[ japanese ] = "”Šw";
+    Text[ chinese_traditional ] = "¼Æ¾Ç";
+    Text[ arabic ] = "Math";
+    Text[ dutch ] = "Math";
+    Text[ chinese_simplified ] = "ÊıÑ§";
+    Text[ greek ] = "Math";
+    Text[ korean ] = "¼öÇĞ";
+    Text[ turkish ] = "Math";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_NAVIGATOR
+{
+    Text = "Navigieren" ;
+    Text [ english ] = "Navigator" ;
+    Text [ english_us ] = "Navigate" ;
+    Text [ italian ] = "Naviga" ;
+    Text [ spanish ] = "Navegar" ;
+    Text [ french ] = "Navigation" ;
+    Text [ dutch ] = "Navigeren" ;
+    Text [ swedish ] = "Navigera" ;
+    Text [ danish ] = "Naviger" ;
+    Text [ portuguese ] = "Navegar" ;
+    Text [ portuguese_brazilian ] = "Navigieren" ;
+    Text[ chinese_simplified ] = "ä¯ÀÀ";
+    Text[ russian ] = "Íàâèãèğîâàòü";
+    Text[ polish ] = "Nawigacja";
+    Text[ japanese ] = "ÅËŞ¹Ş°Ä";
+    Text[ chinese_traditional ] = "ÂsÄı";
+    Text[ arabic ] = "ãáÇÍÉ";
+    Text[ dutch ] = "Navigeren";
+    Text[ chinese_simplified ] = "ä¯ÀÀ";
+    Text[ greek ] = "ĞëïŞãçóç";
+    Text[ korean ] = "Å½»ö";
+    Text[ turkish ] = "Dolaş";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_INSERT
+{
+    Text = "Einfügen" ;
+    Text [ english ] = "Insert" ;
+    Text [ dutch ] = "Invoegen" ;
+    Text [ english_us ] = "Insert" ;
+    Text [ italian ] = "Inserisci" ;
+    Text [ spanish ] = "Insertar" ;
+    Text [ french ] = "Insérer" ;
+    Text [ swedish ] = "Infoga" ;
+    Text [ danish ] = "Indsæt" ;
+    Text [ portuguese ] = "Inserir" ;
+    Text [ portuguese_brazilian ] = "Einfügen" ;
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ russian ] = "Âñòàâèòü";
+    Text[ polish ] = "Wstaw";
+    Text[ japanese ] = "‘}“ü";
+    Text[ chinese_traditional ] = "´¡¤J";
+    Text[ arabic ] = "ÅÏÑÇÌ";
+    Text[ dutch ] = "Invoegen";
+    Text[ chinese_simplified ] = "²åÈë";
+    Text[ greek ] = "ÅéóáãùãŞ";
+    Text[ korean ] = "»ğÀÔ";
+    Text[ turkish ] = "Ekle";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_FORMAT
+{
+    Text = "Format" ;
+    Text [ english ] = "Format" ;
+    Text [ dutch ] = "Formaat" ;
+    Text [ english_us ] = "Format" ;
+    Text [ italian ] = "Formato" ;
+    Text [ spanish ] = "Formato" ;
+    Text [ french ] = "Format" ;
+    Text [ swedish ] = "Format" ;
+    Text [ danish ] = "Format" ;
+    Text [ portuguese ] = "Formato" ;
+    Text [ portuguese_brazilian ] = "Format" ;
+    Text[ chinese_simplified ] = "¸ñÊ½";
+    Text[ russian ] = "Ôîğìàò";
+    Text[ polish ] = "Format";
+    Text[ japanese ] = "‘®";
+    Text[ chinese_traditional ] = "®æ¦¡";
+    Text[ arabic ] = "ÊäÓíŞ";
+    Text[ dutch ] = "Formaat";
+    Text[ chinese_simplified ] = "¸ñÊ½";
+    Text[ greek ] = "ÌïñöŞ";
+    Text[ korean ] = "¼­½Ä";
+    Text[ turkish ] = "Format";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_TEMPLATE
+{
+    Text = "Vorlagen" ;
+    Text [ english ] = "Template" ;
+    Text [ english_us ] = "Templates" ;
+    Text [ italian ] = "Modelli" ;
+    Text [ spanish ] = "Plantillas" ;
+    Text [ french ] = "Modèles" ;
+    Text [ dutch ] = "Sjablonen" ;
+    Text [ swedish ] = "Mallar" ;
+    Text [ danish ] = "Skabeloner" ;
+    Text [ portuguese ] = "Modelos" ;
+    Text [ portuguese_brazilian ] = "Vorlagen" ;
+    Text[ chinese_simplified ] = "ÑùÊ½";
+    Text[ russian ] = "Øàáëîíû";
+    Text[ polish ] = "Szablony";
+    Text[ japanese ] = "ÃİÌßÚ°Ä";
+    Text[ chinese_traditional ] = "¼Ë¦¡";
+    Text[ arabic ] = "ŞæÇáÈ";
+    Text[ dutch ] = "Sjablonen";
+    Text[ chinese_simplified ] = "ÑùÊ½";
+    Text[ greek ] = "Ğñüôõğá";
+    Text[ korean ] = "ÅÛÇÃ¸®Æ®";
+    Text[ turkish ] = "Şablon";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_TEXT
+{
+    Text = "Text" ;
+    Text [ english ] = "Text" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese ] = "Texto" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ russian ] = "Òåêñò";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "Ã·½Ä";
+    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ arabic ] = "äÕ";
+    Text[ dutch ] = "Tekst";
+    Text[ chinese_simplified ] = "ÎÄ×Ö";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_FRAME
+{
+    Text = "Rahmen" ;
+    Text [ english ] = "Frame" ;
+    Text [ dutch ] = "Kader" ;
+    Text [ english_us ] = "Frame" ;
+    Text [ italian ] = "Cornice" ;
+    Text [ spanish ] = "Marco" ;
+    Text [ french ] = "Cadre" ;
+    Text [ swedish ] = "Ram" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ portuguese ] = "Moldura" ;
+    Text [ portuguese_brazilian ] = "Rahmen" ;
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ russian ] = "Ğàìêà";
+    Text[ polish ] = "Ramka";
+    Text[ japanese ] = "˜g";
+    Text[ chinese_traditional ] = "°T®Ø";
+    Text[ arabic ] = "ÅØÇÑ";
+    Text[ dutch ] = "Kader";
+    Text[ chinese_simplified ] = "¿ò";
+    Text[ greek ] = "Ğåñßãñáììá";
+    Text[ korean ] = "ÇÁ·¹ÀÓ";
+    Text[ turkish ] = "Çerçeve";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_GRAPHIC
+{
+    Text = "Grafik" ;
+    Text [ english ] = "Graphic" ;
+    Text [ english_us ] = "Graphic" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ danish ] = "Grafik" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ portuguese_brazilian ] = "Grafik" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ russian ] = "Ãğàôèêà";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸½";
+    Text[ chinese_traditional ] = "¹Ï§Î";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ dutch ] = "Afbeelding";
+    Text[ chinese_simplified ] = "Í¼ĞÎ";
+    Text[ greek ] = "Ãñáöéêü";
+    Text[ korean ] = "±×·¡ÇÈ";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_TABLE
+{
+    Text = "Tabelle" ;
+    Text [ english ] = "Table" ;
+    Text [ english_us ] = "Table" ;
+    Text [ italian ] = "Tabella" ;
+    Text [ spanish ] = "Tabla" ;
+    Text [ french ] = "Table" ;
+    Text [ dutch ] = "Tabel" ;
+    Text [ swedish ] = "Tabell" ;
+    Text [ danish ] = "Tabel" ;
+    Text [ portuguese ] = "Tabela" ;
+    Text [ portuguese_brazilian ] = "Tabelle" ;
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ russian ] = "Òàáëèöà";
+    Text[ polish ] = "Tabela";
+    Text[ japanese ] = "Ã°ÌŞÙ";
+    Text[ chinese_traditional ] = "ªí®æ";
+    Text[ arabic ] = "ÌÏæá";
+    Text[ dutch ] = "Tabel";
+    Text[ chinese_simplified ] = "±í¸ñ";
+    Text[ greek ] = "Ğßíáêáò";
+    Text[ korean ] = "Å×ÀÌºí";
+    Text[ turkish ] = "Tablo";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_ENUMERATION
+{
+    Text = "Nummerierung" ;
+    Text [ english ] = "Enumeration" ;
+    Text [ dutch ] = "Nummering" ;
+    Text [ english_us ] = "Numbering" ;
+    Text [ italian ] = "Numerazione" ;
+    Text [ spanish ] = "Numeración" ;
+    Text [ french ] = "Numérotation" ;
+    Text [ swedish ] = "Numrering" ;
+    Text [ danish ] = "Nummerering" ;
+    Text [ portuguese ] = "Numeração" ;
+    Text [ portuguese_brazilian ] = "Numerierung" ;
+    Text[ chinese_simplified ] = "±àºÅ";
+    Text[ russian ] = "Íóìåğàöèÿ";
+    Text[ polish ] = "Numeracja";
+    Text[ japanese ] = "”Ô†•t‚¯";
+    Text[ chinese_traditional ] = "½s¸¹";
+    Text[ arabic ] = "ÇáÊÑŞíã";
+    Text[ dutch ] = "Nummering";
+    Text[ chinese_simplified ] = "±àºÅ";
+    Text[ greek ] = "Áñßèìçóç";
+    Text[ korean ] = "¹øÈ£";
+    Text[ turkish ] = "Numaralama";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_DATA
+{
+    Text = "Daten" ;
+    Text [ english ] = "Data" ;
+    Text [ dutch ] = "Gegevens" ;
+    Text [ english_us ] = "Data" ;
+    Text [ italian ] = "Dati" ;
+    Text [ spanish ] = "Datos" ;
+    Text [ french ] = "Données" ;
+    Text [ swedish ] = "Data" ;
+    Text [ danish ] = "Data" ;
+    Text [ portuguese ] = "Dados" ;
+    Text [ portuguese_brazilian ] = "Daten" ;
+    Text[ chinese_simplified ] = "Êı¾İ";
+    Text[ russian ] = "Äàííûå";
+    Text[ polish ] = "Dane";
+    Text[ japanese ] = "ÃŞ°À";
+    Text[ chinese_traditional ] = "¸ê®Æ";
+    Text[ arabic ] = "ÈíÇäÇÊ";
+    Text[ dutch ] = "Gegevens";
+    Text[ chinese_simplified ] = "Êı¾İ";
+    Text[ greek ] = "Äåäïìİíá";
+    Text[ korean ] = "µ¥ÀÌÅÍ";
+    Text[ turkish ] = "Veri";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_SPECIAL
+{
+    Text = "Sonderfunktionen" ;
+    Text [ english ] = "Special" ;
+    Text [ english_us ] = "Special Functions" ;
+    Text [ italian ] = "Funzioni speciali" ;
+    Text [ spanish ] = "Funciones especiales" ;
+    Text [ french ] = "Fonctions spéciales" ;
+    Text [ dutch ] = "Speciale functies" ;
+    Text [ swedish ] = "Specialfunktioner" ;
+    Text [ danish ] = "Specialfunktioner" ;
+    Text [ portuguese ] = "Funções especiais" ;
+    Text [ portuguese_brazilian ] = "Sonderfunktionen" ;
+    Text[ chinese_simplified ] = "ÌØÊâ¹¦ÄÜ";
+    Text[ russian ] = "Ñïåöèàëüíûå ôóíêöèè";
+    Text[ polish ] = "Funkcje specjalne";
+    Text[ japanese ] = "“Áê‹@”\\";
+    Text[ chinese_traditional ] = "¯S®í¥\\¯à";
+    Text[ arabic ] = "ãåÇã ÎÇÕÉ";
+    Text[ dutch ] = "Speciale functies";
+    Text[ chinese_simplified ] = "ÌØÊâ¹¦ÄÜ";
+    Text[ greek ] = "Åéäéêİò ëåéôïõñãßåò";
+    Text[ korean ] = "Æ¯¼ö ÇÔ¼ö";
+    Text[ turkish ] = "Özel işlevler";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_IMAGE
+{
+    Text = "Image" ;
+    Text [ english ] = "Image" ;
+    Text [ dutch ] = "Image" ;
+    Text [ english_us ] = "Image" ;
+    Text [ italian ] = "Image" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ french ] = "Image" ;
+    Text [ swedish ] = "Bild" ;
+    Text [ danish ] = "Billede" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ portuguese_brazilian ] = "Image" ;
+    Text[ chinese_simplified ] = "Í¼Ïñ";
+    Text[ russian ] = "Êàğòèíà";
+    Text[ polish ] = "Obraz";
+    Text[ japanese ] = "²Ò°¼Ş";
+    Text[ chinese_traditional ] = "¼v¹³";
+    Text[ arabic ] = "ÕæÑÉ";
+    Text[ dutch ] = "Image";
+    Text[ chinese_simplified ] = "Í¼Ïñ";
+    Text[ greek ] = "Åéêüíá";
+    Text[ korean ] = "ÀÌ¹ÌÁö";
+    Text[ turkish ] = "Resim";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_CHART
+{
+    Text = "Chart" ;
+    Text [ english ] = "Chart" ;
+    Text [ dutch ] = "Chart" ;
+    Text [ english_us ] = "Chart" ;
+    Text [ italian ] = "Diagramma" ;
+    Text [ spanish ] = "Diagrama" ;
+    Text [ french ] = "Diagramme" ;
+    Text [ swedish ] = "Chart" ;
+    Text [ danish ] = "Diagram" ;
+    Text [ portuguese ] = "Chart" ;
+    Text [ portuguese_brazilian ] = "Chart" ;
+    Text[ chinese_simplified ] = "Í¼±í";
+    Text[ russian ] = "Äèàãğàììà";
+    Text[ polish ] = "Wykres";
+    Text[ japanese ] = "¸Ş×Ì";
+    Text[ chinese_traditional ] = "¹Ïªí";
+    Text[ arabic ] = "ÑÓã ÈíÇäí";
+    Text[ dutch ] = "Chart";
+    Text[ chinese_simplified ] = "Í¼±í";
+    Text[ greek ] = "ÄéÜãñáììá";
+    Text[ korean ] = "Â÷Æ®";
+    Text[ turkish ] = "Şema";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_EXPLORER
+{
+    Text = "Explorer" ;
+    Text [ english ] = "Explorer" ;
+    Text [ english_us ] = "Explorer" ;
+    Text [ italian ] = "Explorer" ;
+    Text [ spanish ] = "Explorador" ;
+    Text [ french ] = "Explorer" ;
+    Text [ dutch ] = "Explorer" ;
+    Text [ swedish ] = "Explorer" ;
+    Text [ danish ] = "Explorer" ;
+    Text [ portuguese ] = "Explorer" ;
+    Text [ portuguese_brazilian ] = "Explorer" ;
+    Text[ chinese_simplified ] = "×ÊÔ´¹ÜÀíÆ÷";
+    Text[ russian ] = "Ïğîâîäíèê";
+    Text[ polish ] = "Eksplorator";
+    Text[ japanese ] = "´¸½ÌßÛ°×";
+    Text[ language_user1 ] = " ";
+    Text[ chinese_traditional ] = "ÀÉ®×Á`ºŞ";
+    Text[ arabic ] = "ÇáãÓÊßÔİ";
+    Text[ dutch ] = "Explorer";
+    Text[ chinese_simplified ] = "×ÊÔ´¹ÜÀíÆ÷";
+    Text[ greek ] = "Explorer";
+    Text[ korean ] = "ÀÍ½ºÇÃ·Î·¯";
+    Text[ turkish ] = "Explorer";
+};
+
+String GID_CONNECTOR
+{
+    Text = "Verbinder" ;
+    Text [ english ] = "Connector" ;
+    Text [ portuguese ] = "Conectores" ;
+    Text [ english_us ] = "Connector" ;
+    Text [ portuguese_brazilian ] = "Verbinder" ;
+    Text [ swedish ] = "Förbindelse" ;
+    Text [ danish ] = "Forbindelse" ;
+    Text [ italian ] = "Connettore" ;
+    Text [ spanish ] = "Conector" ;
+    Text [ french ] = "Connecteur" ;
+    Text [ dutch ] = "Verbinding" ;
+    Text[ chinese_simplified ] = "Á¬½Ó·û";
+    Text[ russian ] = "Ñîåäèíèòåëüíàÿ ëîìàíàÿ ëèíèÿ";
+    Text[ polish ] = "£¹cznik";
+    Text[ japanese ] = "ºÈ¸À°";
+    Text[ chinese_traditional ] = "³s±µ²Å";
+    Text[ arabic ] = "ÇáÑÇÈØ";
+    Text[ dutch ] = "Verbinding";
+    Text[ chinese_simplified ] = "Á¬½Ó·û";
+    Text[ greek ] = "Óıíäåóç";
+    Text[ korean ] = "Ä¿³ØÅÍ";
+    Text[ turkish ] = "Bağlayıcı";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_MODIFY
+{
+    Text = "Ändern" ;
+    Text [ english ] = "Modify" ;
+    Text [ portuguese ] = "Alterar" ;
+    Text [ english_us ] = "Modify" ;
+    Text [ portuguese_brazilian ] = "Ändern" ;
+    Text [ swedish ] = "Ändra" ;
+    Text [ danish ] = "Modificer" ;
+    Text [ italian ] = "Modifica" ;
+    Text [ spanish ] = "Modificar" ;
+    Text [ french ] = "Modifier" ;
+    Text [ dutch ] = "Wijzigen" ;
+    Text[ chinese_simplified ] = "¸ü¸Ä";
+    Text[ russian ] = "Èçìåíèòü";
+    Text[ polish ] = "Modyfikuj";
+    Text[ japanese ] = "•ÏX";
+    Text[ chinese_traditional ] = "­×§ï";
+    Text[ arabic ] = "ÊÚÏíá";
+    Text[ dutch ] = "Wijzigen";
+    Text[ chinese_simplified ] = "¸ü¸Ä";
+    Text[ greek ] = "Ôñïğïğïßçóç";
+    Text[ korean ] = "¼öÁ¤";
+    Text[ turkish ] = "Değiştir";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_DRAWING
+{
+    Text = "Zeichnen" ;
+    Text [ english ] = "Drawing" ;
+    Text [ portuguese ] = "Desenhar" ;
+    Text [ english_us ] = "Drawing" ;
+    Text [ portuguese_brazilian ] = "Zeichnen" ;
+    Text [ swedish ] = "Rita" ;
+    Text [ danish ] = "Tegn" ;
+    Text [ italian ] = "Disegna" ;
+    Text [ spanish ] = "Dibujar" ;
+    Text [ french ] = "Dessiner" ;
+    Text [ dutch ] = "Tekenen" ;
+    Text[ chinese_simplified ] = "»æÍ¼";
+    Text[ russian ] = "Ğèñîâàíèå";
+    Text[ polish ] = "Rysowanie";
+    Text[ japanese ] = "•`‰æ";
+    Text[ chinese_traditional ] = "Ã¸¹Ï";
+    Text[ arabic ] = "ÑÓã";
+    Text[ dutch ] = "Tekenen";
+    Text[ chinese_simplified ] = "»æÍ¼";
+    Text[ greek ] = "Ó÷åäßáóç";
+    Text[ korean ] = "±×¸®±â";
+    Text[ turkish ] = "Çizim";
+    Text[ language_user1 ] = " ";
+};
+
+String GID_CONTROLS
+{
+    Text = "Kontrollelemente" ;
+    Text [ english ] = "Controls" ;
+    Text [ portuguese ] = "Controlos" ;
+    Text [ english_us ] = "Controls" ;
+    Text [ italian ] = "Elementi di controllo" ;
+    Text [ spanish ] = "Elementos de control" ;
+    Text [ french ] = "Éléments de contrôle" ;
+    Text [ dutch ] = "Controle-elementen" ;
+    Text [ portuguese_brazilian ] = "Kontrollelemente" ;
+    Text [ swedish ] = "Kontrollelement" ;
+    Text [ danish ] = "Kontrolelementer" ;
+    Text[ chinese_simplified ] = "¿Ø¼ş";
+    Text[ russian ] = "Êîíòğîëüíûå ıëåìåíòû";
+    Text[ polish ] = "Formanty";
+    Text[ japanese ] = "ºİÄÛ°Ù";
+    Text[ chinese_traditional ] = "±±¥ó¶µ";
+    Text[ arabic ] = "ÚäÇÕÑ ÊÍßã";
+    Text[ dutch ] = "Controle-elementen";
+    Text[ chinese_simplified ] = "¿Ø¼ş";
+    Text[ greek ] = "Óôïé÷åßá åëİã÷ïõ";
+    Text[ korean ] = "ÄÁÆ®·Ñ";
+    Text[ turkish ] = "Kumanda öğeleri";
+    Text[ language_user1 ] = " ";
+};
+
+TabDialog SID_OPTIONS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 244 , 155 ) ;
+    Text = "Optionen" ;
+    Text [ English ] = "Options" ;
+    Text [ norwegian ] = "Options" ;
+    Text [ italian ] = "Opzioni" ;
+    Text [ portuguese_brazilian ] = "Opções" ;
+    Text [ portuguese ] = "Opções" ;
+    Text [ finnish ] = "Määritykset" ;
+    Text [ danish ] = "Indstillinger" ;
+    Text [ french ] = "Options" ;
+    Text [ swedish ] = "Alternativ" ;
+    Text [ dutch ] = "Opties" ;
+    Text [ spanish ] = "Opciones" ;
+    Text [ english_us ] = "Options" ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    TabControl 1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 15 ) ;
+        Size = MAP_APPFONT ( 221 , 130 ) ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_GENERAL ;
+                Text = "Allgemeines" ;
+                Text [ English ] = "General" ;
+                Text [ norwegian ] = "Generell" ;
+                Text [ italian ] = "Generale" ;
+                Text [ portuguese_brazilian ] = "Geral" ;
+                Text [ portuguese ] = "Geral" ;
+                Text [ finnish ] = "Yleiset" ;
+                Text [ danish ] = "Generelt" ;
+                Text [ french ] = "En général" ;
+                Text [ swedish ] = "Allmänt" ;
+                Text [ dutch ] = "Algemeen" ;
+                Text [ spanish ] = "General" ;
+                Text [ english_us ] = "General" ;
+                PageResID = 256 ;
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ russian ] = "Îáùåå";
+                Text[ polish ] = "Ogólne";
+                Text[ japanese ] = "ˆê”Ê";
+                Text[ chinese_traditional ] = "¤@¯ë";
+                Text[ arabic ] = "ÚÇã";
+                Text[ dutch ] = "Algemeen";
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ greek ] = "ÃåíéêÜ";
+                Text[ korean ] = "ÀÏ¹İ";
+                Text[ turkish ] = "Genel";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_SAVE ;
+                Text = "Speichern" ;
+                Text [ English ] = "Save" ;
+                Text [ norwegian ] = "Save" ;
+                Text [ italian ] = "Salva" ;
+                Text [ portuguese_brazilian ] = "Gravar" ;
+                Text [ portuguese ] = "Guardar" ;
+                Text [ finnish ] = "Tallennus" ;
+                Text [ danish ] = "Gem" ;
+                Text [ french ] = "Enregistrer" ;
+                Text [ swedish ] = "Spara" ;
+                Text [ dutch ] = "Opslaan" ;
+                Text [ spanish ] = "Guardar" ;
+                Text [ english_us ] = "Save" ;
+                PageResID = 257 ;
+                Text[ chinese_simplified ] = "´æÅÌ";
+                Text[ russian ] = "Ñîõğàíèòü";
+                Text[ polish ] = "Zapisz";
+                Text[ japanese ] = "•Û‘¶";
+                Text[ chinese_traditional ] = "Àx¦s";
+                Text[ arabic ] = "ÍİÙ";
+                Text[ dutch ] = "Opslaan";
+                Text[ chinese_simplified ] = "´æÅÌ";
+                Text[ greek ] = "ÁğïèŞêåõóç";
+                Text[ korean ] = "ÀúÀå";
+                Text[ turkish ] = "Kaydet";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_PATH ;
+                Text = "Pfade" ;
+                Text [ English ] = "Path" ;
+                Text [ norwegian ] = "Bane" ;
+                Text [ italian ] = "Percorsi" ;
+                Text [ portuguese_brazilian ] = "Caminho" ;
+                Text [ portuguese ] = "Atalhos" ;
+                Text [ finnish ] = "Polku" ;
+                Text [ danish ] = "Stier" ;
+                Text [ french ] = "Chemins" ;
+                Text [ swedish ] = "Sökvägar" ;
+                Text [ dutch ] = "Pad" ;
+                Text [ spanish ] = "Rutas" ;
+                Text [ english_us ] = "Paths" ;
+                PageResID = 258 ;
+                Text[ chinese_simplified ] = "Â·¾¶";
+                Text[ russian ] = "Ïóòè";
+                Text[ polish ] = "Œcie¿ki";
+                Text[ japanese ] = "Êß½";
+                Text[ chinese_traditional ] = "¸ô®|";
+                Text[ arabic ] = "ãÓÇÑÇÊ";
+                Text[ dutch ] = "Pad";
+                Text[ chinese_simplified ] = "Â·¾¶";
+                Text[ greek ] = "Äéáäñïìİò";
+                Text[ korean ] = "°æ·Î";
+                Text[ turkish ] = "Veri yolu";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SFXPAGE_SPELL ;
+                Text = "Rechtschreibprüfung" ;
+                Text [ English ] = "Spellchecker" ;
+                Text [ norwegian ] = "Spellchecker" ;
+                Text [ italian ] = "Controllo ortografico" ;
+                Text [ portuguese_brazilian ] = "Corretor Ortográfico" ;
+                Text [ portuguese ] = "Verificar ortografia" ;
+                Text [ finnish ] = "Korjausluku" ;
+                Text [ danish ] = "Stavekontrol" ;
+                Text [ french ] = "Vérification orthographique" ;
+                Text [ swedish ] = "Rättstavningskontroll" ;
+                Text [ dutch ] = "Spellingcontrole" ;
+                Text [ spanish ] = "Revisión ortográfica" ;
+                Text [ english_us ] = "Spellcheck" ;
+                PageResID = 259 ;
+                Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é";
+                Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè";
+                Text[ polish ] = "Sprawdzanie pisowni";
+                Text[ japanese ] = "•¶ÍZ³";
+                Text[ chinese_traditional ] = "«÷¦r";
+                Text[ arabic ] = "ÇáÊÏŞíŞ ÇáÅãáÇÆí";
+                Text[ dutch ] = "Spellingcontrole";
+                Text[ chinese_simplified ] = "Õı×Ö·¨¼ì²é";
+                Text[ greek ] = "Ïñèïãñáöéêüò İëåã÷ïò";
+                Text[ korean ] = "¸ÂÃã¹ı";
+                Text[ turkish ] = "Yazım denetimi";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "Ñ¡Ïî";
+    Text[ russian ] = "Ïàğàìåòğû";
+    Text[ polish ] = "Opcje";
+    Text[ japanese ] = "µÌß¼®İ";
+    Text[ chinese_traditional ] = "¿ï¶µ";
+    Text[ arabic ] = "ÎíÇÑÇÊ";
+    Text[ dutch ] = "Opties";
+    Text[ chinese_simplified ] = "Ñ¡Ïî";
+    Text[ greek ] = "Åğéëïãİò";
+    Text[ korean ] = "¿É¼Ç";
+    Text[ turkish ] = "Seçenekler";
+    Text[ language_user1 ] = " ";
+};
+
+InfoBox MSG_CANT_QUIT
+{
+    Message = "Die Anwendung kann zur Zeit nicht beendet werden.\nBitte warten Sie das Ende aller Druckaufträge und/oder\nOLE-Aktivierungen ab und schließen Sie alle Dialoge." ;
+    Message [ English ] = "Can't quit the application at this moment.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
+    Message [ norwegian ] = "Kan ikke avslutte applikasjonen for øyeblikket.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
+    Message [ italian ] = "Impossibile uscire dall'applicazione in questo momento.\nAttendendete la concluisione della stampa e/o\n tutte le attivazioni OLE, quindi chiudete\ntutti i dialoghi." ;
+    Message [ portuguese_brazilian ] = "Não consigo sair do aplicativo neste momento.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
+    Message [ portuguese ] = "De momento é impossível sair desta aplicação.\nAguarde a impressão de todos os documentos\n e/ou o fim das activações OLE e feche todos os diálogos." ;
+    Message [ french ] = "Impossible de quitter l'application maintenant.\nVeuillez attendre la fin des activités d'impression et/ou des activations OLE\net fermez tous les dialogues." ;
+    Message [ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen." ;
+    Message [ spanish ] = "La aplicación no se puede cerrar por el momento. \nPor favor espere hasta que finalice la impresión de\n todos los documentos y/o activaciones OLE\ny cierre todos los diálogos." ;
+    Message [ danish ] = "Det er for tiden ikke muligt at afslutte programmet.\nVent venligst til alle udskriftsjob og/eller \nOLE-handlinger er afslutte og luk så alle dialoger." ;
+    Message [ swedish ] = "Programmet kan inte avslutas för tillfället.\nVänta tills alla utskriftsuppdrag och/eller\nOLE-aktiveringar är utförda och stäng alla dialoger." ;
+    Message [ finnish ] = "Can't quit the application at this moment.\nPlease wait until all print jobs and/or\nOLE-activations are terminated and close\nall dialogs." ;
+    Message [ english_us ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
+    Message[ chinese_simplified ] = "ÏÖÔÚÎŞ·¨½áÊøÕâ¸öÓ¦ÓÃ³ÌĞò¡£\nÇëÄúÉÔµÈÖ±µ½³ÌĞòÍê³ÉËùÓĞ´òÓ¡ÈÎÎñ»òOLE¼¤»î×´Ì¬½áÊø£¬\nÈ»ºóÔÙ¹Ø±ÕËùÓĞ¶Ô»°¿ò¡£";
+    Message[ russian ] = "Âûõîä èç ïğèëîæåíèÿ ñåé÷àñ íåâîçìîæåí.\nÏîäîæäèòå, ïîæàëóéñòà, îêîí÷àíèÿ âñåõ çàäàíèé ïå÷àòè è/èëè\n äåéñòâèÿ OLE è çàêğîéòå âñå äèàëîãè.";
+    Message[ polish ] = "Aplikacji nie mo¿na zakoñczyæ.\nProszê zaczekaæ na koniec zadañ wydruku i/lub\nakcji OLE i zamkn¹æ wszystkie aplikacje.";
+    Message[ japanese ] = "ÌßÛ¸Ş×Ñ‚ğ‚½‚¾‚¢‚ÜI—¹‚Å‚«‚Ü‚¹‚ñB\n‚·‚×‚Ä‚Ìˆóü¼Ş®ÌŞ ‚»‚µ‚Ä/‚Ü‚½‚Í \nOLE ±¸¼®İ ‚ÌI—¹‚Ü‚Å‘Ò‚Á‚Ä ‚·‚×‚Ä‚ÌÀŞ²±Û¸Ş‚ğ•Â‚¶‚Ä‰º‚³‚¢B";
+    Message[ chinese_traditional ] = "²{¦bµLªkµ²§ô³o­ÓÀ³¥Îµ{¦¡¡C\n½Ğµ¥­Ô©Ò¦³¦C¦L¥ô°È©ÎOLE¿E¬¡ª¬ºA¤w¸gµ²§ô¡M\nµM«á¦AÃö³¬©Ò¦³ªº¹ï¸Ü¤è¶ô¡C";
+    Message[ arabic ] = "áÇ íãßä ÅäåÇÁ ÇáÊØÈíŞ ÍÇáíÇğ.\nÇáÑÌÇÁ ÇáÇäÊÙÇÑ ÍÊì ÇäÊåÇÁ ßá ãåÇã ÇáØÈÇÚÉ¡ æ/Ãæ\nÊäÔíØÇÊ OLE¡ Ëã Şã ÈÅÛáÇŞ ßá ãÑÈÚÇÊ ÇáÍæÇÑ.";
+    Message[ dutch ] = "De applicatie kan op dit moment niet worden beëindigd.\nWacht tot alle drukopdrachten en/of\nOLE-activiteiten zijn beëindigd en \nsluit alle dialogen.";
+    Message[ chinese_simplified ] = "ÏÖÔÚÎŞ·¨½áÊøÕâ¸öÓ¦ÓÃ³ÌĞò¡£\nÇëÄúÉÔµÈÖ±µ½³ÌĞòÍê³ÉËùÓĞ´òÓ¡ÈÎÎñ»òOLE¼¤»î×´Ì¬½áÊø£¬\nÈ»ºóÔÙ¹Ø±ÕËùÓĞ¶Ô»°¿ò¡£";
+    Message[ greek ] = "Ğñïò ôï ğáñüí åßíáé áäıíáôïí íá ôåñìáôéóôåß áõôŞ ç åöáñìïãŞ.\nĞáñáêáëş ğåñéìİíåôå ìİ÷ñé íá åêôåëåóôïıí üëåò ïé åñãáóßåò åêôığùóçò êáé/Ş\nïé åíİñãåéåò ôïõ OLE êáé êëåßóôå üëïõò ôïõò äéáëüãïõò.";
+    Message[ korean ] = "ÀÀ¿ë ÇÁ·Î±×·¥À» ÇöÀç Á¾·áÇÒ ¼ö ¾ø½À´Ï´Ù.\nÀÎ¼â ÀÛ¾÷ÀÌ ¸ğµÎ ³¡³¯ ¶§±îÁö ±×¸®°í/¶Ç´Â \nOLE°¡ È°¼ºÈ­µÉ ¶§±îÁö ±â´Ù·È´Ù°¡ ¸ğµç ´ëÈ­»óÀÚ¸¦ ´İÀ¸½Ê½Ã¿À.";
+    Message[ turkish ] = "Şu an uygulamadan çıkılamıyor.\nTüm yazdırma işlerinin ve/veya\nOLE işlemlerinin bitmesini bekleyip tüm diyalogları kapatınız.";
+    Message[ language_user1 ] = " ";
+};
+
+QueryBox MSG_IS_SERVER
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    Message = "Die Applikation ist noch als Objekt- oder Druck-Server aktiv.\nSoll sie trotzdem geschlossen werden?" ;
+    Message [ English ] = "This application is an active object- or printserver.\nTerminata nevertheless?" ;
+    Message [ norwegian ] = "Denne applikasjonen er en aktiv server.\nAvslutt likevel?" ;
+    Message [ italian ] = "Questa applicazione è un server attivo.\nTerminare in ogni caso?" ;
+    Message [ portuguese_brazilian ] = "Este aplicativo é um ativo no servidor.\nTerminar assim mesmo?" ;
+    Message [ portuguese ] = "Esta aplicação está ainda activa como servidor de objecto ou da impressora.\nMesmo assim, finalizar?" ;
+    Message [ finnish ] = "Tämä sovellus on aktiivinen lähdesovellus.\nLopetetaanko silti?" ;
+    Message [ danish ] = "Denne applikation er stadig aktiv som objekt- eller printserver.\nSkal der lukkes alligevel?" ;
+    Message [ french ] = "Cette application est encore active en tant que serveur d'objets ou d'imprimante.\nInterrompre malgré tout ?" ;
+    Message [ swedish ] = "Tillämpningen är fortfarande aktiv antingen som objekt- eller skrivarserver.\nVill Du trots det stänga den?" ;
+    Message [ dutch ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten ?" ;
+    Message [ spanish ] = "Esta aplicación está aún activa como servidor de objeto o de impresión.\n¿Desea finalizarla?" ;
+    Message [ english_us ] = "This application is as object or print server active.\nDo you want to terminate anyway?" ;
+    Message[ chinese_simplified ] = "Õâ¸öÓ¦ÓÃ³ÌĞò×÷Îª¶ÔÏó»ò´òÓ¡·şÎñÆ÷»¹´¦ÓÚ¼¤»î×´Ì¬¡£\nÄú»¹ÊÇÒª¹Ø±ÕËü?";
+    Message[ russian ] = "Ïğèëîæåíèå åùå îòêğûòî êàê ñåğâåğ îáúåêòà èëè ïå÷àòè.\nÇàêğûòü åãî íåñìîòğÿ íà ıòî?";
+    Message[ polish ] = "Aplikacja jest jeszcze aktywna jako obiekt lub serwer wydruku.\nCzy j¹ mimo to zamkn¹æ?";
+    Message[ japanese ] = "±ÌßØ¹°¼®İ‚Í ‚Ü‚¾µÌŞ¼Şª¸Ä‚Ü‚½‚ÍÌßØİÄ »°ÊŞ°‚Æ‚µ‚Ä±¸Ã¨ÌŞ‚Å‚·B\n•Â‚¶‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
+    Message[ chinese_traditional ] = "³o­ÓÀ³¥Îµ{¦¡§@¬°ª«¥ó©Î¦C¦L¦øªA¾¹ÁÙ³B©ó¿E¬¡ª¬ºA¡C\n±zÁÙ¬O­nÃö³¬¥¦¡H";
+    Message[ arabic ] = "ãÇ ÒÇá åĞÇ ÇáÊØÈíŞ äÔØÇğ ßãÒæøÏ ßÇÆä Ãæ ãÒæÏ ØÈÇÚÉ.\nåá ÊÑíÏ ÛáŞå Úáì ÇáÑÛã ãä Ğáß¿";
+    Message[ dutch ] = "Deze toepassing is nog actief als object- of afdrukserver.\nToch afsluiten ?";
+    Message[ chinese_simplified ] = "Õâ¸öÓ¦ÓÃ³ÌĞò×÷Îª¶ÔÏó»ò´òÓ¡·şÎñÆ÷»¹´¦ÓÚ¼¤»î×´Ì¬¡£\nÄú»¹ÊÇÒª¹Ø±ÕËü?";
+    Message[ greek ] = "Ç åöáñìïãŞ åßíáé áêüìç åíåñãŞ ùò äéáêïìéóôŞò áíôéêåéìİíïõ Ş åêôığùóçò.\nÈİëåôå íá ôåñìáôéóôåß;";
+    Message[ korean ] = "°³Ã¼¶Ç´Â ÇÁ¸°ÅÍ ¼­¹ö·Î¼­ ÀÌ ÀÀ¿ëÇÁ·Î±×·¥Àº È°¼ºÈ­µÇ¾î ÀÖ½À´Ï´Ù.\n»èÁ¦ ÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Uygulama şu an nesne ya da yazdırma sunucusu olarak çalışıyor.\nYine de kapatılsın mı?";
+    Message[ language_user1 ] = " ";
+};
+
+String STR_NODOUBLE
+{
+    TEXT = "StarOffice kann nicht mehrfach gestartet werden." ;
+    TEXT [ English ] = "StarOffice cannot be started multiply." ;
+    Text [ english_us ] = "StarOffice cannot be started more than once." ;
+    Text [ portuguese_brazilian ] = "StarOffice Applikationen können nicht mehrfach\ngestartet werden." ;
+    Text [ swedish ] = "StarOffice kan inte startas flera gånger samtidigt." ;
+    Text [ danish ] = "Det er ikke muligt at starte StarOffice flere gange." ;
+    Text [ italian ] = "StarOffice non può essere avviato più volte" ;
+    Text [ spanish ] = "StarOffice no se puede iniciar más de una vez." ;
+    Text [ french ] = "Impossible de lancer plusieurs applications de \nStarOffice à la fois." ;
+    Text [ dutch ] = "StarOffice kan maar één keer tegelijk worden gestart." ;
+    Text [ portuguese ] = "O StarOffice não pode ser inicializado mais do que uma vez." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ StarOffice ¡£";
+    Text[ russian ] = "Ìíîãîêğàòíûé çàïóñê StarOffice íåâîçìîæåí.";
+    Text[ polish ] = "StarOffice nie mo¿na kilkakrotnie uruchomiæ.";
+    Text[ japanese ] = "StarOffice‚Í ‰½‰ñ‚à½À°Ä‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¦P®É¦h¦¸±Ò°ÊStarOffice¡C";
+    Text[ arabic ] = "áÇ íãßä ÈÏÁ StarOffice ÃßËÑ ãä ãÑÉ.";
+    Text[ dutch ] = "StarOffice kan maar één keer tegelijk worden gestart.";
+    Text[ chinese_simplified ] = "ÎŞ·¨Í¬Ê±¶à´ÎÆô¶¯ StarOffice ¡£";
+    Text[ greek ] = "¸÷åôå ôç äõíáôüôçôá íá åêêéíŞóåôå ôï StarOffice ìüíï ìéá öïñÜ ôáõôü÷ñïíá.";
+    Text[ korean ] = "StarOffice´Â ÇÑ¹øÀÌ»ó ½ÃÀÛµÇÁö ¸øÇÕ´Ï´Ù .";
+    Text[ turkish ] = "StarOffice için birden fazla oturum açılamaz.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_NOPRINTER
+{
+    TEXT = "Einige StarOffice-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    TEXT [ English ] = "Some StarOffice functions are not available without printer driver.\nPlease install a priter driver." ;
+    Text [ english_us ] = "Some StarOffice functions will not work properly without a printer driver.\nPlease install a printer driver." ;
+    Text [ swedish ] = "Några StarOffice-funktioner kan inte arbeta korrekt utan en skrivardrivrutin.\nVar vänlig och installera en skrivardrivrutin." ;
+    Text [ danish ] = "Enkelte StarOffice-funktioner kanl ikke arbejde korrekt uden en printerdriver.\nInstaller venligst en printerdriver." ;
+    Text [ italian ] = "Alcune funzioni StarOffice non funzionano correttamente senza il driver stampante.\nInstallatene uno." ;
+    Text [ spanish ] = "Algunas funciones de StarOffice no pueden trabajar correctamente sin un controlador para la impresora.\nPor favor instale uno." ;
+    Text [ french ] = "Certaines fonctions StarOffice ne peuvent pas travailler correctement sans pilote d'imprimante.\nVeuillez installer un pilote d'imprimante." ;
+    Text [ dutch ] = "Enkele StarOffice-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver." ;
+    Text [ portuguese_brazilian ] = "Einige StarOffice-Funktionen können ohne Druckertreiber nicht korrekt arbeiten.\nBitte installieren Sie einen Druckertreiber." ;
+    Text [ portuguese ] = "Algumas das funções do StarOffice não podem funcionar correctamente sem um controlador de impressora.\nFaça a respectiva instalação." ;
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©StarOffice¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
+    Text[ russian ] = "Áåç äğàéâåğà ïå÷àòè íåêîòîğûå ôóíêöèè StarOffice ìîãóò íåïğàâèëüíî ğàáîòàòü.\nÈíñòàëëèğóéòå, ïîæàëóéñòà, äğàéâåğ ïå÷àòè.";
+    Text[ polish ] = "Niektóre funkcje w StarOffice nie mog¹ poprawnie pracowaæ bez sterownika drukarki.\nZainstaluj sterownik drukarki.";
+    Text[ japanese ] = "StarOffice ‚Ì‚¢‚­‚Â‚©‚Ì‹@”\\‚Í ÌßØİÀ ÄŞ×²ÌŞ‚È‚µ‚Å³‚µ‚­‹N“®‚µ‚Ü‚¹‚ñB\nÌßØİÀ ÄŞ×²ÊŞ‚ğ²İ½Ä°Ù‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "¨S¦³¦w¸Ë¦C¦LÅX°Êµ{¦¡¡M¤@¨ÇStarOffice¥\\¯à¹BÂà¤£·|¥¿±`¡C\n½Ğ±z¦w¸Ë¤@­Ó¦C¦LÅX°Êµ{¦¡¡C";
+    Text[ arabic ] = "áÇ íãßä ÊÔÛíá ÈÚÖ ãåÇã StarOffice ÈÔßá ÕÍíÍ ÈÏæä ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.\náåĞÇ íÑÌì ÊËÈíÊ ÈÑäÇãÌ ÊÔÛíá ÇáØÇÈÚÉ.";
+    Text[ dutch ] = "Enkele StarOffice-functies kunnen zonder printerdriver niet correct werken.\nInstalleer een printerdriver.";
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ°²×°´òÓ¡»úÇı¶¯³ÌĞò£¬Ò»Ğ©StarOffice¹¦ÄÜ¿ÉÄÜ²»»áÕı³£ÔË×ª¡£\nÇëÄú°²×°Ò»¸ö´òÓ¡»úÇı¶¯³ÌĞò¡£";
+    Text[ greek ] = "Ìåñéêİò áğü ôéò ëåéôïõñãßåò ôïõ StarOffice äåí èá ëåéôïõñãŞóïõí óùóôÜ ÷ùñßò ôï ğñüãñáììá ïäŞãçóçò ôïõ åêôõğùôŞ.\nĞáñáêáëş íá ãßíåé åãêáôÜóôáóç åíüò ğñïãñÜììáôïò ïäŞãçóçò åêôõğùôŞ.";
+    Text[ korean ] = "¸î¸îÀÇ  StarOffice ±â´ÉÀº ÇÁ¸°ÅÍ µå¶óÀÌ¹ö ¾øÀÌ´Â ÀûÀıÈ÷ ÀÛµ¿µÇÁö ¾Ê½À´Ï´Ù.\nÇÁ¸°ÅÍ µå¶óÀÌ¹ö¸¦ ¼³Ä¡ ÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bazı StarOffice işlevleri yazıcı sürücüsü olmadan doğru çalışamaz.\nBir yazıcı sürücüsü kurun.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_NOMODUL
+{
+    TEXT = "Applikationsmodule können nicht als Applikationen\ngestartet werden, wenn der StarDesktop aktiv ist." ;
+    TEXT [ English ] = "Application modules may not be started\nif StarDesktop is active." ;
+    Text [ english_us ] = "Application modules may not be started\n when StarOffice Desktop is active." ;
+    Text [ italian ] = "Se lo StarOffice Desktop è attivo i moduli applicativi\n non possono essere avviati come apllicazioni." ;
+    Text [ spanish ] = "Los módulos de aplicación no pueden ser\niniciados como aplicaciones si el escritorio (StarOffice Desktop) está activo." ;
+    Text [ french ] = "Impossible de démarrer les modules d'application comme applications,\n si le StarOffice Desktop est actif." ;
+    Text [ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is." ;
+    Text [ swedish ] = "Tillämpningsmoduler kan inte startas som\ntillämpningar när StarOffice Desktop är aktiv." ;
+    Text [ danish ] = "Det er ikke muligt at starte applikationsmoduler som applikationer,\når StarOffice Desktop er aktiv." ;
+    Text [ portuguese_brazilian ] = "Applikationsmodule können nicht als Applikationen\ngestartet werden, wenn der StarOffice Desktop aktiv ist." ;
+    Text [ portuguese ] = "Impossível iniciar os módulos como aplicações quando o StarOffice Desktop se encontra activo." ;
+    Text[ chinese_simplified ] = "Èç¹ûStarOffice Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
+    Text[ russian ] = "Çàïóñê ìîäóëåé ïğèëîæåíèÿ â êà÷åñòâå ïğèëîæåíèé íåâîçìîæåí,\nåñëè àêòèâèğîâàí StarDesktoğ.";
+    Text[ polish ] = "Modu³y aplikacji nie mog¹ zostaæ uruchomione jako aplikacje\n, jeœli jest w³¹czony pulpit StarOffice Desktop.";
+    Text[ japanese ] = "StarOffice Desktop ‚ª±¸Ã¨ÌŞ‚Ì‚Æ‚«‚ÍA±ÌßØ¹°¼®İ‚Æ‚µ‚Ä±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ğ\nŠJn‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦bStarOffice Desktop³B¤_¿E¬¡ª¬ºA®É\n¡MÀ³¥Îµ{§Çªº¼Ò¶ô¤£¯à°÷·í§@À³¥Îµ{¦¡±Ò°Ê¹B¦æ¡C";
+    Text[ arabic ] = "áÇ íãßä ÈÏÁ æÍÏÇÊ ÇáÊØÈíŞÇÊ ÇáäãØíÉ ßÊØÈíŞÇÊ¡\nÅĞÇ ßÇä StarOffice Desktop äÔØÇğ.";
+    Text[ dutch ] = "Applicatiemodules kunnen niet als applicaties\nworden gestart als StarDesktop actief is.";
+    Text[ chinese_simplified ] = "Èç¹ûStarOffice Desktop´¦ÓÚ¼¤»î×´Ì¬\n£¬Ó¦ÓÃ³ÌĞòµÄÄ£¿é²»ÄÜ¹»µ±×÷Ó¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêôåëåóôïıí ïé ëåéôïõñãéêİò ìïíÜäåò åöáñìïãşí\nüôáí åßíáé åíåñãïğïéçìİíï ôï StarOffice Desktop.";
+    Text[ korean ] = "StarOffice µ¥½ºÅ© Å¾ÀÌ È°¼ºÈ­ µÇ¾îÀÖÀ»¶§.\n ÀÀ¿ëÇÁ·Î±×·¥ ¸ğµâÀÌ ½ÃÀÛ µÉ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "Uygulama modülleri, StarOffice masaüstü etkinken uygulama olarak\nçalıştırılamaz.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_NOOFFICE
+{
+    TEXT = "Der StarDesktop kann nicht gestartet werden,\nwenn das StarWriter Applikationsmodul als\nApplikation gestartet wurde." ;
+    TEXT [ English ] = "StarDesktop  may not be started if StarWriter\napplication module is active in application mode\n" ;
+    Text [ english_us ] = "StarOffice Desktop cannot be started if the StarOffice Writer\napplication module has been started\nas an application." ;
+    Text [ italian ] = "Se il modulo di applicazione StarOffice Writer è stato avviato\ncome applicazione non è possibile\navviare lo StarOffice Desktop." ;
+    Text [ spanish ] = "No se pude iniciar el escritorio\nsi se ha iniciado StarOffice Writer\ncomo aplicación." ;
+    Text [ french ] = "Impossible de lancer le StarOffice Desktop,\nsi le module d'application StarOffice Writer a été lancé\ncomme application." ;
+    Text [ dutch ] = "StarOffice Desktop kan niet worden gestart\nals een StarOffice Writer applicatiemodule als\napplicatie werd gestart." ;
+    Text [ swedish ] = "StarOffice Desktop kan inte startas\nnär StarOffice Writer-tillämpningsmodulen\nhar startats som tillämpning." ;
+    Text [ danish ] = "Det er ikke muligt at starte StarOffice Desktop,\nnår StarOffice Writer applikationsmodulet er blevet startet \nsom applikation." ;
+    Text [ portuguese_brazilian ] = "Der StarOffice Desktop kann nicht gestartet werden,\nwenn das StarOffice Writer Applikationsmodul als\nApplikation gestartet wurde." ;
+    Text [ portuguese ] = "Impossível iniciar o StarOffice Desktop quando o módulo da\naplicação StarOffice Writer é iniciado\ncomo aplicação." ;
+    Text[ chinese_simplified ] = "ÔÚStarOffice WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯StarOffice Desktop ¡£";
+    Text[ russian ] = "Çàïóñòèòü StarOffice Desktop íåâîçìîæíî,\nåñëè ìîäóëü ïğèëîæåíèÿ StarOffice Writer çàïóùåí â êà÷åñòâå\nïğèëîæåíèÿ.";
+    Text[ polish ] = "Pulpitu StarOffice Desktop nie mo¿na uruchomiæ, \njeœli modu³ aplikacji StarOffice Writer \nzosta³ uruchomiony jako aplikacja.";
+    Text[ japanese ] = "StarOffice Writer ±ÌßØ¹°¼®İ Ó¼Ş­°Ù‚ª\n±ÌßØ¹°¼®İ‚Æ‚µ‚ÄŠJn‚³‚ê‚Ä‚¢‚é‚ÍA\nStarOffice Desktop‚ÍŠJn‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦bStarOffice WriterÀ³¥Îµ{¦¡¼Ò¶ô³Q·í§@\nÀ³¥Îµ{¦¡±Ò°Ê¹B¦æ®ÉµLªk±Ò°ÊStarOffice Desktop¡C";
+    Text[ arabic ] = "áÇ íãßäß ÈÏÁ StarOffice Desktop¡\nÅĞÇ ßäÊ ŞÏ ÈÏÃÊ æÍÏÉ ÇáÊØÈíŞ ÇáäãØíÉ áÜ StarOffice Writer ŞÈá Ğáß\nßÊØÈíŞ.";
+    Text[ dutch ] = "StarOffice Desktop kan niet worden gestart\nals een StarOffice Writer applicatiemodule als\napplicatie werd gestart.";
+    Text[ chinese_simplified ] = "ÔÚStarOffice WriterÓ¦ÓÃ³ÌĞòÄ£¿é±»µ±×÷\nÓ¦ÓÃ³ÌĞòÆô¶¯ÔËĞĞÊ±ÎŞ·¨Æô¶¯StarOffice Desktop ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá åêêéíŞóåé ôï StarOffice Desktop\náí åêêßíçóå ç ëåéôïõñãéêŞ ìïíÜäá ôçò åöáñìïãŞò\n ôïõ StarOffice Writer ùò åöáñíïãŞ.";
+    Text[ korean ] = "StarOffice WriterÀÀ¿ë ÇÁ·Î±×·¥ ¸ğµâÀÌ\n ÀÀ¿ëÇÁ·Î±×·¥À¸·Î¼­ ½ÃÀÛµÇ¾ú´Ù¸é,\n StarOffice µ¥½ºÅ© Å¾Àº ½ÃÀÛ µÉ¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "StarOffice masaüstü, StarOffice Writer uygulama modulü\nuygulama olarak çalıştırılmışsa başlatılamaz.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_ISMODIFIED
+{
+    TEXT[ language_user1 ] = "PB: waren frueher zwei String";
+    TEXT = "Sollen Änderungen in %1 gespeichert werden?" ;
+    TEXT [ English ] = "Should the changes to %1 be saved?" ;
+    TEXT [ norwegian ] = "Lagre endringer som " ;
+    TEXT [ italian ] = "Volete salvare le modifiche apportate a %1?" ;
+    TEXT [ portuguese_brazilian ] = "Gravar modificações como " ;
+    TEXT [ portuguese ] = "Guardar modificações em %1?" ;
+    TEXT [ finnish ] = "Tallenetaanko muutokset" ;
+    TEXT [ danish ] = "Skal ændringer gemmes i %1?" ;
+    TEXT [ french ] = "Souhaitez-vous enregistrer les modifications apportées à %1 ?" ;
+    TEXT [ swedish ] = "Skall ändringar sparas i %1?" ;
+    TEXT [ dutch ] = "Wijzigingen opslaan in %1?" ;
+    TEXT [ spanish ] = "¿Desea guardar las modificaciones en %1?" ;
+    TEXT [ english_us ] = "Do you want to save the changes to %1?" ;
+    TEXT[ chinese_simplified ] = "Òª´æÅÌ¸ü¸Ä %1 £¿";
+    TEXT[ russian ] = "Ñîõğàíèòü èçìåíåíèÿ â %1 ?";
+    TEXT[ polish ] = "Zapisaæ modyfikacje w %1 ?";
+    TEXT[ japanese ] = "•ÏX‚ğ %1 ‚É•Û‘¶‚µ‚Ü‚·‚©H";
+    TEXT[ chinese_traditional ] = "Àx¦sÅÜ§ó %1 ¡H";
+    TEXT[ arabic ] = "åá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ İí %1¿";
+    TEXT[ dutch ] = "Wijzigingen opslaan in %1?";
+    TEXT[ chinese_simplified ] = "Òª´æÅÌ¸ü¸Ä %1 £¿";
+    TEXT[ greek ] = "Èİëåôå íá áğïèçêåõôïıí ïé áëëáãİò óôï %1;";
+    TEXT[ korean ] = "%1ÀÇ º¯°æ»çÇ×À» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    TEXT[ turkish ] = "%1 içinde yapılan değişiklikler kaydedilsin mi?";
+};
+
+String STR_AUTOSAVE
+{
+    TEXT = "Automatisch speichern" ;
+    TEXT [ English ] = "Automatic save" ;
+    TEXT [ norwegian ] = "Automatisk lagring" ;
+    TEXT [ italian ] = "Salva automaticamente" ;
+    TEXT [ portuguese_brazilian ] = "Gravação Automática" ;
+    TEXT [ portuguese ] = "Guardar automaticamente" ;
+    TEXT [ finnish ] = "Automaattitallennus" ;
+    TEXT [ danish ] = "Gem automatisk" ;
+    TEXT [ french ] = "Enregistrement automatique" ;
+    TEXT [ swedish ] = "Spara automatiskt" ;
+    TEXT [ dutch ] = "Automatisch opslaan" ;
+    TEXT [ spanish ] = "Guardar automáticamente" ;
+    TEXT [ english_us ] = "AutoSave" ;
+    TEXT[ chinese_simplified ] = "×Ô¶¯´æÅÌ";
+    TEXT[ russian ] = "Ñîõğàíèòü àâòîìàòè÷åñêè";
+    TEXT[ polish ] = "Zapisz automatycznie";
+    TEXT[ japanese ] = "©“®“I‚É•Û‘¶";
+    TEXT[ chinese_traditional ] = "¦Û°ÊÀx¦s";
+    TEXT[ arabic ] = "ÍİÙ ÊáŞÇÆí";
+    TEXT[ dutch ] = "Automatisch opslaan";
+    TEXT[ chinese_simplified ] = "×Ô¶¯´æÅÌ";
+    TEXT[ greek ] = "Áõôüìáôç áğïèŞêåõóç";
+    TEXT[ korean ] = "ÀÚµ¿ ÀúÀå";
+    TEXT[ turkish ] = "Otomatik kayıt";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_RESWARNING
+{
+    TEXT = "Die Systemresourcen werden knapp. Bitte beenden Sie andere Applikationen oder schließen Sie einige Fenster, bevor Sie weiterarbeiten." ;
+    TEXT [ English ] = "Not enough resources. Please quit other applications or close some windows before continuing." ;
+    TEXT [ norwegian ] = "Ikke nok ressurser. Avslutt andre applikasjoner eller lukk noen vinduer før du fortsetter." ;
+    TEXT [ italian ] = "Risorse insufficienti. Uscire dalle altre applicazioni o chiudere alcune finestre prima di continuare." ;
+    TEXT [ portuguese_brazilian ] = "Não há recursos suficientes. Sai de outros aplicativos ou feche algumas janelas antes de continuar." ;
+    TEXT [ portuguese ] = "Recursos do sistema insuficientes. Por favor, saia dos outros programas ou feche algumas janelas antes de continuar." ;
+    TEXT [ finnish ] = "Resurssit eivät riitä. Lopeta muita sovelluksia tai sulje ikkunoita ennen kuin jatkat." ;
+    TEXT [ danish ] = "Begrænsede systemressourcer. Afslut venligst andre applikationer eller luk nogle vinduer, før du fortsætter." ;
+    TEXT [ french ] = "Ressources insuffisantes. Veuillez quitter les autres applications ou fermer certaines fenêtres avant de continuer." ;
+    TEXT [ swedish ] = "Inte tillräckligt med resurser. Stäng andra program eller stäng några fönster innan Du fortsätter." ;
+    TEXT [ dutch ] = "Onvoldoende systeemgeheugen beschikbaar. Sluit andere toepassingen af.of sluit een aantal vensters voordat u uw werkvoortzet." ;
+    TEXT [ spanish ] = "No hay suficientes recursos del sistema. Por favor, elimine otras aplicaciones o cierre algunas ventanas antes de continuar." ;
+    TEXT [ english_us ] = "Limited system resources. Please quit other applications or close some windows before continuing." ;
+    TEXT[ chinese_simplified ] = "ÏµÍ³×ÊÔ´²»×ã¡£ÇëÄú¹Ø±ÕÆäËüµÄ³ÌĞò»òÕß¹Ø±ÕÒ»Ğ©ÊÓ´°£¬È»ºóÖØĞÂ³¢ÊÔÖ´ĞĞÃüÁî¡£";
+    TEXT[ russian ] = "Ğåñóğñû ñèñòåìû îãğàíè÷åíû. Ïğåæäå ÷åì ïğîäîëæèòü ğàáîòó, âûéäèòå, ïîæàëóéñòà, èç äğóãèõ ïğèëîæåíèé èëè çàêğîéòå íåêîòîğûå îêíà.";
+    TEXT[ polish ] = "Zasoby systemu s¹ ograniczone. Przed kontynuacj¹ pracy zakoñcz kilka aplikacji lub zamknij kilka okien.";
+    TEXT[ japanese ] = "¼½ÃÑ Ø¿°½‚ª‚¬‚è‚¬‚è‚Å‚·Bì‹Æ‚ğ‘±‚¯‚é‘O‚É¤‘¼‚Ì±ÌßØ¹°¼®İ‚ğI—¹‚·‚é‚© ‚¢‚­‚Â‚©‚Ì³¨İÄŞ³‚ğ•Â‚¶‚Ä‰º‚³‚¢B";
+    TEXT[ chinese_traditional ] = "¨t²Î¸ê·½¤£¨¬¡C½ĞÃö³¬¨ä¥¦ªºµ{¦¡©ÎªÌÃö³¬¤@¨Çµøµ¡¡MµM«á­«·s¹Á¸Õ°õ¦æ©R¥O¡C";
+    TEXT[ arabic ] = "ãÕÇÏÑ ÇáäÕ ÊÊÖÇÁá. ÇáÑÌÇÁ ÅäåÇÁ ÊØÈíŞÇÊ ÃÎÑì¡ Ãæ ÅÛáÇŞ ÈÚÖ ÇáäæÇİĞ¡ ŞÈá ãæÇÕáÉ ÇáÚãá.";
+    TEXT[ dutch ] = "Onvoldoende systeemgeheugen beschikbaar. Sluit andere toepassingen af.of sluit een aantal vensters voordat u uw werkvoortzet.";
+    TEXT[ chinese_simplified ] = "ÏµÍ³×ÊÔ´²»×ã¡£ÇëÄú¹Ø±ÕÆäËüµÄ³ÌĞò»òÕß¹Ø±ÕÒ»Ğ©ÊÓ´°£¬È»ºóÖØĞÂ³¢ÊÔÖ´ĞĞÃüÁî¡£";
+    TEXT[ greek ] = "Ïé ğüñïé ôïõ óõóôŞìáôïò åßíáé åëÜ÷éóôïé. Ğáñáêáëş ôåñìáôßóôå Üëëåò åöáñìïãİò Ş êëåßóôå ìåñéêÜ ğáñÜèõñá ğñéí óõíå÷ßóåôå.";
+    TEXT[ korean ] = "½Ã½ºÅÛ ÀÚ¿øÀÌ ºÎÁ·ÇÕ´Ï´Ù .°è¼Ó ÇÏ½Ã±âÀü¿¡ ´Ù¸¥ ÀÀ¿ëÇÁ·Î±×·¥À» ÁßÁöÇÏ°Å³ª ¿­·ÁÀÖ´Â Ã¢À» ´İÀ¸½Ê½Ã¿À.";
+    TEXT[ turkish ] = "Sistem kaynakları azalıyor. Çalışmaya devam etmeden önce diğer uygulamaları ya da bir kaç pencere kapatın.";
+    TEXT[ language_user1 ] = " ";
+};
+String STR_RESEXCEPTION
+{
+    TEXT = "Wichtige Programmteile nicht gefunden. Bitte überprüfen Sie Ihre Installation." ;
+    TEXT [ ENGLISH ] = "There are files missing. Please check application setup." ;
+    TEXT [ norwegian ] = "Filer mangler. Kontroller applikasjonsoppsett." ;
+    TEXT [ italian ] = "Mancano alcuni file. Verificare la configurazione dell'applicazione." ;
+    TEXT [ portuguese_brazilian ] = "Faltam arquivos. Verifique a configuração do aplicativo." ;
+    TEXT [ portuguese ] = "Faltam alguns ficheiros importantes. Por favor, verifique a configuração do programa." ;
+    TEXT [ finnish ] = "Tiedostoja puuttuu. Tarkista sovelluksen asetukset." ;
+    TEXT [ danish ] = "Vigtige programdele blev ikke fundet. Kontroller venligst din installation." ;
+    TEXT [ french ] = "Certains fichiers sont manquants. Veuillez vérifier le paramétrage de l'application." ;
+    TEXT [ swedish ] = "Viktiga programdelar hittades inte. Kontrollera Din installation." ;
+    TEXT [ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd." ;
+    TEXT [ spanish ] = "No se encuentran archivos importantes del programa. Compruebe la instalación." ;
+    TEXT [ english_us ] = "There are files missing. Please check application setup." ;
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
+    TEXT[ russian ] = "Íå íàéäåíû âàæíûå ÷àñòè ïğîãğàììû. Ïğîâåğüòå, ïîæàëóéñòà, óñòàíîâêó ïğèëîæåíèÿ.";
+    TEXT[ polish ] = "Wa¿ne czêœci programu nie zosta³y znalezione.SprawdŸ instalacjê aplikacji.";
+    TEXT[ japanese ] = "d—v‚ÈÌßÛ¸Ş×Ñ‚Ìˆê•”‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‰º‚³‚¢B";
+    TEXT[ chinese_traditional ] = "¨S¦³§ä¨ì¥²­nªºµ{¦¡³¡¥ó¡C½ĞÀË¬d±zªº¦w¸Ë¡C";
+    TEXT[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÃÌÒÇÁ åÇãÉ ãä ÇáÈÑäÇãÌ. ÇáÑÌÇÁ ÇáÊÍŞŞ ãä ÕÍÉ ÚãáíÉ ÇáÊËÈíÊ ÚäÏß.";
+    TEXT[ dutch ] = "Er ontbreken belangrijke programmaonderdelen. Controleer of de installatie juist is doorgevoerd.";
+    TEXT[ chinese_simplified ] = "Ã»ÓĞÕÒµ½±ØÒªµÄ³ÌĞò²¿¼ş¡£Çë¼ì²éÄúµÄ°²×°¡£";
+    TEXT[ greek ] = "Äåí âñİèçêáí ïñéóìİíá óçìáíôéêÜ ôìŞìáôá ôïõ ğñïãñÜììáôïò. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóŞ óáò.";
+    TEXT[ korean ] = "»ç¶óÁø ÆÄÀÏÀÌ ÀÖ½À´Ï´Ù. ¼³Á¤À» È®ÀÎÇÏ½Ê½Ã¿À.";
+    TEXT[ turkish ] = "Önemli program öğeleri bulunamadı. Kurulumunuzu kontrol edin.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_DOUBLEEXCEPTION
+{
+    Text = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert.";
+    Text[English] = "Within the emergency save a second system error has occured.\The data may be saved incompletely.";
+    TEXT[ italian ] = "Durante il backup di sicurezza si è verificato un altro errore di sistema.\nI dati salvati potrebbero essere incompleti.";
+    TEXT[ portuguese_brazilian ] = "Während der Alarmdatensicherung ist ein weiterer Systemfehler aufgetreten.\nDie Daten sind evtl. unvollständig gesichert.";
+    TEXT[ portuguese ] = "Surgiu mais um erro no sistema enquanto se executava o backup de segurança.\nProvavelmente, foi impossível guardar os dados de forma completa.";
+    TEXT[ danish ] = "Der opstod en yderligere systemfejl ved alarmdatasikringen.\nAlle data er muligvis ikke gemt fuldstændigt.";
+    TEXT[ french ] = "Au cours de la sauvegarde, une nouvelle erreur système s'est produite.\nIl n'est par certain que toutes les données aient pas pu être enregistrées correctement.";
+    TEXT[ swedish ] = "Ytterligare ett systemfel uppstod när alarmdata sparades.\nEventuellt har inte alla data sparats fullständigt.";
+    TEXT[ dutch ] = "Tijdens het opslaan van alarmgegevens is nog een systeemfout opgetreden.\nDe gegevens werden evtl. niet compleet opgeslagen.";
+    TEXT[ spanish ] = "Ha ocurrido otro error en el sistema mientras se guardaban los datos.\nEs posible que no se hayan guardado completamente.";
+    TEXT[ english_us ] = "Another error occurred during the save recovery.\nPossibly, the data could not be entirely saved.";
+    TEXT[ chinese_simplified ] = "ÔÚĞŞ¸´´æÅÌÊ±·¢ÉúÁËÒ»¸ö´íÎó¡£\nÊı¾İ´æÅÌºÜÓĞ¿ÉÄÜ²»ÍêÕû¡£";
+    TEXT[ russian ] = "Âî âğåìÿ ñîõğàíåíèÿ àâàğèéíîãî âîññòàíîâëåíèÿ ïğîèçîøëà äîïîëíèòåëüíàÿ îøèáêà â ñèñòåìå.\nÂîçìîæíî ÷òî äàííûå ñîõğàíåíû íåïîëíîñòüş.";
+    TEXT[ polish ] = "Podczas alarmowego zabezpieczenia danych wyst¹pi³ dalszy b³¹d w systemie.\nDane s¹ event. niekompletnie zabezpieczone.";
+    TEXT[ japanese ] = "ŒxÌ§²Ù•ÛŒì‚ÌÛ‚É‘¼‚Ì¼½ÃÑ´×°‚ª”­¶‚µ‚Ü‚µ‚½B\nÃŞ°À‚Í‚¨‚»‚ç‚­Š®‘S‚É•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    TEXT[ chinese_traditional ] = "¦b­×´_Àx¦s®Éµo¥Í¤F¤@­Ó¿ù»~¡C\n¸ê®ÆÀx¦s«Ü¦³¥i¯à¤£§¹¾ã¡C";
+    TEXT[ arabic ] = "ÍÏË ÎØÃ ÂÎÑ ÃËäÇÁ ÚãáíÉ ÍİÙ ÇáÇÓÊÑÏÇÏ.\nãä ÇáãÍÊãá Ãä ÇáÈíÇäÇÊ áã ÊõÍİÙ ÈÔßá ßÇãá.";
+    TEXT[ dutch ] = "Tijdens het opslaan van alarmgegevens is nog een systeemfout opgetreden.\nDe gegevens werden evtl. niet compleet opgeslagen.";
+    TEXT[ chinese_simplified ] = "ÔÚĞŞ¸´´æÅÌÊ±·¢ÉúÁËÒ»¸ö´íÎó¡£\nÊı¾İ´æÅÌºÜÓĞ¿ÉÄÜ²»ÍêÕû¡£";
+    TEXT[ greek ] = "ÊáôÜ ôçí áğïèŞêåõóç áóöáëåßáò ôùí äåäïìİíùí åìöáíßóôçêå êáé Üëëï óöÜëìá óõóôŞìáôïò.\nĞéèáíşí íá ìçí ïëïêëçñşèçêå ç áğïèŞêåõóç áóöáëåßáò.";
+    TEXT[ korean ] = "º¹±¸¸¦ ÀúÀåÇÏ´Â µ¿¾È ´Ù¸¥ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n¾Æ¸¶µµ, µ¥ÀÌÅÍ°¡ ¿ÏÀüÈ÷ ÀúÀåµÇÁö ¾Ê¾ÒÀ» °ÍÀÔ´Ï´Ù.";
+    TEXT[ turkish ] = "Alarm verileri kaydı sırasında başka bir sistem hatası oluştu.\nVeriler tam olarak kaydedilmemiş olabilir.";
+    TEXT[ language_user1 ] = " ";
+};
+
+String STR_SYSRESEXCEPTION
+{
+    TEXT = "Die Systemresourcen sind verbraucht. Bitte starten Sie die Anwendung neu." ;
+    TEXT [ English ] = "Not enough system resources. Please restart the application." ;
+    Text [ english_us ] = "System resources exhausted. Please restart the application." ;
+    Text [ italian ] = "Le risorse del sistema sono esaurite. Riavviare l'applicazione." ;
+    Text [ spanish ] = "Los recursos del sistema se han acabado. Por favor reinicie la aplicación." ;
+    Text [ french ] = "Les ressources du système sont épuisées. Veuillez relancer l'application ." ;
+    Text [ dutch ] = "De systeemresources zijn verbruikt. Start de applicatie opnieuw." ;
+    Text [ swedish ] = "Inte tillräckligt med systemresurser. Starta om programmet." ;
+    Text [ danish ] = "Systemressourcerne er opbrugt. Genstart venligst denne applikation." ;
+    Text [ portuguese_brazilian ] = "Die Systemresourcen sind verbraucht. Bitte starten Sie die Anwendung neu." ;
+    Text [ portuguese ] = "Recursos do sistema esgotados. Reinicie a aplicação." ;
+    Text[ chinese_simplified ] = "ÏµÍ³×ÊÔ´ÒÑ¾­ÓÃÍê¡£ÇëÄúÖØĞÂÆô¶¯Ó¦ÓÃ³ÌĞò¡£";
+    Text[ russian ] = "Ñèñòåìíûå ğåñóğñû èçğàñõîäîâàíû. Ïåğåçàïóñòèòå ïğèëîæåíèå.";
+    Text[ polish ] = "Zasoby systemu s¹ zu¿yte. Rozpocznij aplikacjê ponownie.";
+    Text[ japanese ] = "¼½ÃÑ Ø¿°½‚ª‚¢‚Á‚Ï‚¢‚Å‚·BÌßÛ¸Ş×Ñ‚ğV‚µ‚­½À°Ä‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "¨t²Î¸ê·½¤w¸g¥Î§¹¡C½Ğ±z­«·s±Ò°ÊÀ³¥Îµ{¦¡¡C";
+    Text[ arabic ] = "Êã ÇÓÊåáÇß ßá ãÕÇÏÑ ÇáäÙÇã. ÇáÑÌÇÁ ÈÏÁ ÇáÊØÈíŞ ãä ÌÏíÏ.";
+    Text[ dutch ] = "De systeemresources zijn verbruikt. Start de applicatie opnieuw.";
+    Text[ chinese_simplified ] = "ÏµÍ³×ÊÔ´ÒÑ¾­ÓÃÍê¡£ÇëÄúÖØĞÂÆô¶¯Ó¦ÓÃ³ÌĞò¡£";
+    Text[ greek ] = "Ïé ğüñïé ôïõ óõóôŞìáôïò åîáíôëŞèçêáí. Ğáñáêáëş åğáíåêêéíŞóôå ôçí åöáñìïãŞ.";
+    Text[ korean ] = "½Ã½ºÅÛ ÀÚ¿øÀÌ ¼Ò¸ğµÇ¾ú½À´Ï´Ù. ÀÀ¿ëÇÁ·Î±×·¥À» ´Ù½Ã ½ÃÀÛ ÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Sistem kaynakları tükendi. Uygulamayı yeniden başlatınız.";
+    Text[ language_user1 ] = " ";
+};
+
+ErrorBox MSG_ERR_SOINIT
+{
+    Message = "Fehler beim Initialisieren des Objekt-Systems." ;
+    Message [ ENGLISH ] = "Error initializing object-system." ;
+    Message [ norwegian ] = "Feil ved start av objekt-system." ;
+    Message [ italian ] = "Errore durante l'inizializzazione del sistema oggetto." ;
+    Message [ portuguese_brazilian ] = "Erro ao inicializar o objeto-systema." ;
+    Message [ portuguese ] = "Erro ao inicializar o sistema de objectos." ;
+    Message [ finnish ] = "Virhe objektijärjestelmää alustettaessa." ;
+    Message [ danish ] = "Fejl ved initialisering af objekt-systemet." ;
+    Message [ french ] = "Erreur lors de l'initialisation du système d'objets." ;
+    Message [ swedish ] = "Fel vid initiering av objektsystem." ;
+    Message [ dutch ] = "Fout bij de initialisatie van het objectsysteem." ;
+    Message [ spanish ] = "Error al inicializar el sistema objeto." ;
+    Message [ english_us ] = "Error initializing object-system." ;
+    Message[ chinese_simplified ] = "ÔÚ³õÊ¼»¯¶ÔÏóÏµÍ³Ê±·¢Éú´íÎó¡£";
+    Message[ russian ] = "Îøèáêà ïğè èíèöèàëèçàöèè ñèñòåìû îáúåêòà.";
+    Message[ polish ] = "B³¹d inicjalizacji systemu obiektów.";
+    Message[ japanese ] = "µÌŞ¼Şª¸Ä ¼½ÃÑ‚Ì‰Šú‰»‚ÌÛ‚Ì´×°¡";
+    Message[ chinese_traditional ] = "¦bªì©l¤Æª«¥ó¨t²Î®Éµo¥Í¿ù»~¡C";
+    Message[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊåíÆÉ äÙÇã ÇáßÇÆäÇÊ.";
+    Message[ dutch ] = "Fout bij de initialisatie van het objectsysteem.";
+    Message[ chinese_simplified ] = "ÔÚ³õÊ¼»¯¶ÔÏóÏµÍ³Ê±·¢Éú´íÎó¡£";
+    Message[ greek ] = "ÓöÜëìá êáôÜ ôçí áñ÷éêïğïßçóç ôïõ óõóôŞìáôïò áíôéêåéìİíùí.";
+    Message[ korean ] = "°´Ã¼ ½Ã½ºÅÛ ÃÊ±âÈ­  ¿À·ù.";
+    Message[ turkish ] = "Nesne sistemi başlatılırken hata oluştu.";
+    Message[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_FILE_NOT_FOUND
+{
+    Text = "Die Datei $(FILE) existiert nicht." ;
+    Text [ English ] = "The file $(FILE) doesn't exist." ;
+    Text [ norwegian ] = "Filen $(FIL) finnes ikke." ;
+    Text [ italian ] = "Il file $(FILE) non esiste." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não existe." ;
+    Text [ portuguese ] = "O ficheiro $(FILE) não existe." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei ole." ;
+    Text [ danish ] = "Filen $(FILE) eksisterer ikke." ;
+    Text [ french ] = "Le fichier $(FILE) n'existe pas." ;
+    Text [ swedish ] = "Filen $(FILE) finns inte." ;
+    Text [ dutch ] = "Bestand $(FILE) bestaat niet." ;
+    Text [ spanish ] = "No existe el archivo $(FILE)." ;
+    Text [ english_us ] = "The file $(FILE) doesn't exist." ;
+    Text[ chinese_simplified ] = "ÎÄ¼ş$(FILE)²»´æÔÚ¡£";
+    Text[ russian ] = "Ôàéë $(FILE) íå ñóùåñòâóåò.";
+    Text[ polish ] = "Plik $(FILE) nie istnieje.";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "ÀÉ®×$(FILE)¤£¦s¦b¡C";
+    Text[ arabic ] = "Çáãáİ $(FILE) ÛíÑ ãæÌæÏ.";
+    Text[ dutch ] = "Bestand $(FILE) bestaat niet.";
+    Text[ chinese_simplified ] = "ÎÄ¼ş$(FILE)²»´æÔÚ¡£";
+    Text[ greek ] = "Ôï áñ÷åßï $(FILE) äåí õğÜñ÷åé.";
+    Text[ korean ] = "ÆÄÀÏ $(FILE) °¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyası mevcut değil.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_PATH_NOT_FOUND
+{
+    Text = "Der Pfad zu der Datei $(FILE) existiert nicht." ;
+    Text [ English ] = "The path to file $(FILE) doesn't exist." ;
+    Text [ norwegian ] = "Banen til filen $(FIL) finnes ikke." ;
+    Text [ italian ] = "Il percorso per il file $(FILE) non esiste." ;
+    Text [ portuguese_brazilian ] = "O caminho do arquivo $(FILE) não existe." ;
+    Text [ portuguese ] = "O atalho para o ficheiro $(FILE) não existe." ;
+    Text [ finnish ] = "Polkua tiedostoon $(FILE) ei ole." ;
+    Text [ danish ] = "Stien til filen $(FILE) eksisterer ikke." ;
+    Text [ french ] = "Chemin au fichier $(FILE) inexistant." ;
+    Text [ swedish ] = "Sökvägen till filen $(FILE) existerar inte." ;
+    Text [ dutch ] = "Pad naar bestand $(FILE) bestaat niet." ;
+    Text [ spanish ] = "No existe la ruta de acceso al archivo $(FILE)." ;
+    Text [ english_us ] = "The path to file $(FILE) doesn't exist." ;
+    Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼ş $(FILE) µÄÂ·¾¶²»´æÔÚ¡£";
+    Text[ russian ] = "Ïóòü ê ôàéëó $(FILE) íå ñóùåñòâóåò.";
+    Text[ polish ] = "Œcie¿ka do pliku $(FILE) nie istnieje.";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚Ö‚ÌÊß½‚Í‚ ‚è‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "«ü¦VÀÉ®× $(FILE) ªº¸ô®|¤£¦s¦b¡C";
+    Text[ arabic ] = "ÇáãÓÇÑ Åáì Çáãáİ $(FILE) ÛíÑ ãæÌæÏ.";
+    Text[ dutch ] = "Pad naar bestand $(FILE) bestaat niet.";
+    Text[ chinese_simplified ] = "Ö¸ÏòÎÄ¼ş $(FILE) µÄÂ·¾¶²»´æÔÚ¡£";
+    Text[ greek ] = "Ç äéáäñïìŞ ğñïò ôï áñ÷åßï $(FILE) äåí õğÜñ÷åé.";
+    Text[ korean ] = "ÆÄÀÏ $(FILE)ÀÇ °æ·Î°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyasının veri yolu mevcut değil.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_TOO_MANY_OPEN_FILES
+{
+    Text = "Die Datei $(FILE) konnte nicht geöffnet werden,\nda zur Zeit zu viele Dateien offen sind.\nSchließen Sie einige Dateien und versuchen Sie es erneut." ;
+    Text [ English ] = "The file $(FILE) could not be opened,\nbecause there are no more file handles available.\nPlease close some files and try again." ;
+    Text [ norwegian ] = "Filen $(FILE) kan ikke åpnes,\ndet er ikke flere filhåndtak tilgjengelig.\nLukk noen filer og prøv igjen." ;
+    Text [ italian ] = "Impossibile aprire il file $(FILE),\nin quando vi sono troppi file aperti.\nChiudete i file e riprovate." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser aberto\npor que não existem mais alças de arquivo disponíveis.\nFeche alguns arquivos e tent" ;
+    Text [ portuguese ] = "Foi impossível abrir o ficheiro $(FILE), já que de\nmomento se encontram demasiados ficheiros abertos.\nFeche alguns destes ficheiros e tente novamente." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei voi avata,\nkoska tiedostokahvoja ei ole vapaana.\nSulje tiedostoja ja yritä uudelleen." ;
+    Text [ danish ] = "Det var ikke muligt at åbne filen $(FILE),\nda der for tiden er for mange åbne filer.\nLuk nogle filer og prøv igen." ;
+    Text [ french ] = "Impossible d'ouvrir le fichier $(FILE)\nà cause d'un trop grand nombre de fichiers ouverts\n.Fermez en quelques-uns avant de réessayer." ;
+    Text [ swedish ] = "Filen $(FILE) kunde inte öppnas\npå grund av att för många filer är öppna för tillfället.\nStäng några filer och försök igen." ;
+    Text [ dutch ] = "Bestand $(FILE) kon niet worden geopend \nomdat er teveel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeert u het opnieuw." ;
+    Text [ spanish ] = "No se pudo abrir el archivo $(FILE)\nya que hay muchos archivos abiertos.\nCierre algunos archivos e inténtelo otra vez." ;
+    Text [ english_us ] = "The file $(FILE) could not be opened,\nbecause too many files are open.\nPlease close some files and try again." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş$(FILE) £¬\nÒòÎªÒÑ¾­´ò¿ªÁËÌ«¶àµÄÎÄ¼ş¡£\nÇë¹Ø±ÕÒ»Ğ©ÎÄ¼ş£¬È»ºóÔÚÖØĞÂ³¢ÊÔ¡£";
+    Text[ russian ] = "Îòêğûòü ôàéë $(FILE) íå óäàåòñÿ,\nò.ê. â íàñòîÿùèé ìîìåíò îòêğûòî ñëèøêîì ìíîãî ôàéëîâ.\nÇàêğîéòå íåêîòîğûå ôàéëû è ïîïğîáóéòå åùå ğàç.";
+    Text[ polish ] = "Plik $(FILE) nie móg³ zostaæ otwarty,\nponiewa¿ w tym czasie by³o otwarte za du¿o plików.\nZamknij kilka plików i spróbuj je otworzyæ ponownie.";
+    Text[ japanese ] = "\n‚½‚¾‚¢‚Ü‚½‚­‚³‚ñ‚ÌÌ§²Ù‚ªŠJ‚©‚ê‰ß‚¬‚ÅAÌ§²Ù$(FILE)‚ÍŠJ‚©‚ê‚Ü‚¹‚ñB\n‚¢‚­‚Â‚©‚ÌÌ§²Ù‚ğ•Â‚¶ Ä“x‚İ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "µLªk¶}±ÒÀÉ®×$(FILE) ¡M\n¦]¬°¤w¸g¶}±Ò¤Ó¦hªºÀÉ®×¡C\n½ĞÃö³¬¤@¨ÇÀÉ®×¡MµM«á¦b­«·s¹Á¸Õ¡C";
+    Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ$(FILE) ¡\náÃä åäÇáß ãáİÇÊ ßËíÑÉ ÌÏÇğ ãİÊæÍÉ.\nŞã ÈÅÛáÇŞ ÈÚÖ ÇáãáİÇÊ¡ Ëã ÍÇæá ãÌÏÏÇğ.";
+    Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend \nomdat er teveel bestanden gelijktijdig geopend zijn.\nSluit enkele bestanden en probeert u het opnieuw.";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş$(FILE) £¬\nÒòÎªÒÑ¾­´ò¿ªÁËÌ«¶àµÄÎÄ¼ş¡£\nÇë¹Ø±ÕÒ»Ğ©ÎÄ¼ş£¬È»ºóÔÚÖØĞÂ³¢ÊÔ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï $(FILE),\nåğåéäŞ İ÷ïõí áíïé÷ôåß ğÜñá ğïëëÜ áñ÷åßá ôáõôü÷ñïíá.\nĞáñáêáëş êëåßóôå ìåñéêÜ áğü áõôÜ ôá áñ÷åßá êáé îáíáğñïóğáèŞóôå.";
+    Text[ korean ] = "ÇöÀç ³Ê¹« ¸¹Àº ÆÄÀÏÀÌ ¿­·Á ÀÖ±â ¶§¹®¿¡ \nÆÄÀÏ$(FILE)À» ¿­Áö ¸øÇß½À´Ï´Ù. \n¸î °¡Áö ÆÄÀÏÀ» ´İ°í »õ·Î ½ÃµµÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "$(FILE) dosyası, şu an çok fazla dosya açık olduğu\niçin açılamıyor.\nBirkaç dosyayı kapatıp yeniden deneyin.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_ACCESS_DENIED
+{
+    Text = "Auf die Datei $(FILE) konnte wegen fehlender Zugriffsrechte nicht zugegriffen werden." ;
+    Text [ English ] = "The file $(FILE) could not be accessed because of missing access rights." ;
+    Text [ norwegian ] = "The file $(FILE) could not be accessed because of missing access rights." ;
+    Text [ italian ] = "Non è stato possibile accedere al file $(FILE) per mancanza dei diritti." ;
+    Text [ portuguese_brazilian ] = "The file $(FILE) could not be accessed because of missing access rights." ;
+    Text [ portuguese ] = "Impossível o acesso ao ficheiro $(FILE) devido a direitos de acesso inexistentes." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei voi avata, koska käyttöoikeudet puuttuvat." ;
+    Text [ danish ] = "Det var ikke muligt at åbne filen $(FILE) pga. manglende adgangsrettigheder." ;
+    Text [ french ] = "Le fichier $(FILE) n'a pas pu être ouvert du fait de droits d'accès manquants." ;
+    Text [ swedish ] = "Filen $(FILE) kunde inte öppnas eftersom åtkomsträttigheter saknas." ;
+    Text [ dutch ] = "Bestand $(FILE) kon niet worden geopend omdat toegangsrechten ontbreken." ;
+    Text [ spanish ] = "No se pudo se abrir el archivo $(FILE) por falta de derechos." ;
+    Text [ english_us ] = "The file $(FILE) could not be opened due to missing access rights." ;
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ¶ÁÈ¡È¨Àû¶ø·¨¶ÁÈ¡ÎÄ¼ş$(FILE)¡£";
+    Text[ russian ] = "Èç-çà îòñóòñòâóşùèõ ïğàâ äîñòóïà, äîñòóï ê ôàéëó $(FILE) íåâîçìîæåí.";
+    Text[ polish ] = "Brak dostêpu do pliku $(FILE) z powodu brakuj¹cych praw dostêpu.";
+    Text[ japanese ] = "Ì§²Ù $(FILE)‚É‚Í Œ —˜‚ª‚È‚¢‚Ì‚Å±¸¾½‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦]¬°¨S¦³Åª¨úÅv§Q¦ÓµLªkÅª¨úÀÉ®×$(FILE)¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÇáæÕæá Åáì Çáãáİ $(FILE) ÈÓÈÈ ÚÏã ÊæİÑ ÍŞæŞ ÇáæÕæá.";
+    Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend omdat toegangsrechten ontbreken.";
+    Text[ chinese_simplified ] = "ÒòÎªÃ»ÓĞ¶ÁÈ¡È¨Àû¶ø·¨¶ÁÈ¡ÎÄ¼ş$(FILE)¡£";
+    Text[ greek ] = "Ç ğñüóâáóç óôï áñ÷åßï $(FILE) äåí Şôáí äõíáôŞ, ëüãù İëëåéøçò äéêáéùìÜôùí ğñüóâáóçò.";
+    Text[ korean ] = "Á¢±Ù ±ÇÇÑÀÇ ºÎÁ·À¸·Î ÆÄÀÏ $(FILE) ÀÌ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyası, erişim haklarının olmaması nedeniyle açılamadı.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_INVALID_ACCESS
+{
+    Text = "Auf Datei $(FILE) konnte nicht zugegriffen werden." ;
+    Text [ English ] = "The file $(FILE) could not be accessed." ;
+    Text [ norwegian ] = "The file $(FILE) could not be accessed." ;
+    Text [ italian ] = "Non è stato possibile accedere al file $(FILE)." ;
+    Text [ portuguese_brazilian ] = "The file $(FILE) could not be accessed." ;
+    Text [ portuguese ] = "Impossível o acesso ao ficheiro $(FILE)." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei voi avata, koska käyttöoikeudet eivät kelpaa." ;
+    Text [ danish ] = "Det var ikke muligt at få adgang til filen $(FILE)." ;
+    Text [ french ] = "Le fichier $(FILE) n'a pas pu être ouvert du fait de droits d'accès incorrects." ;
+    Text [ swedish ] = "Det var inte möjligt att få åtkomst till filen $(FILE)." ;
+    Text [ dutch ] = "Bestand $(FILE) kon niet worden geopend." ;
+    Text [ spanish ] = "No se pudo acceder al archivo $(FILE)." ;
+    Text [ english_us ] = "The file $(FILE) could not be accessed." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡ÎÄ¼ş $(FILE) ¡£";
+    Text[ russian ] = "Äîñòóï ê ôàéëó $(FILE) íåâîçìîæåí.";
+    Text[ polish ] = "Brak dostêpu do pliku $(FILE).";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚É‚Í±¸¾½‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªkÅª¨úÀÉ®× $(FILE) ¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÇáæÕæá Åáì Çáãáİ $(FILE).";
+    Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend.";
+    Text[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡ÎÄ¼ş $(FILE) ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôŞ ç ğñüóâáóç óôï áñ÷åßï $(FILE).";
+    Text[ korean ] = "ÆÄÀÏ $(FILE) ¿¡ Á¢±ÙµÇÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyasına erişilemedi.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_INVALID_HANDLE
+{
+    Text = "Die Datei $(FILE) konnte wegen einer ungültiger Dateidescriptors nicht geöffnet werden." ;
+    Text [ English ] = "The file $(FILE) could not be opened because of an invalid file handle." ;
+    Text [ norwegian ] = "+++The file $(FILE) could not be opened because of an invalid file handle." ;
+    Text [ italian ] = "Impossibile aprire il file $(FILE) in quando l'handle di file non è valido." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser aberto devido a uma alça de arquivo inválida." ;
+    Text [ portuguese ] = "Foi impossível abrir o ficheiro $(FILE) devido a uma guia de ficheiro incorrecta." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei voi avata, koska tiedostokahva on virheellinen." ;
+    Text [ danish ] = "Det var ikke muligt at åbne filen $(FILE) pga. en ugyldig filhandle." ;
+    Text [ french ] = "Le fichier $(FILE) n'a pas pu être ouvert suite à une erreur de numérisation." ;
+    Text [ swedish ] = "Filen $(FILE) kunde inte öppnas på grund av en ogiltig Fildescriptor." ;
+    Text [ dutch ] = "Bestand $(FILE) kon niet worden geopend als gevolg van ongeldige filedescriptor." ;
+    Text [ spanish ] = "No se pudo abrir el archivo $(FILE) debido a un controlador de archivos no válido." ;
+    Text [ english_us ] = "The file $(FILE) could not be opened due to an invalid file handle." ;
+    Text[ chinese_simplified ] = "ÒòÎŞĞ§µÄÎÄ¼ş±êÊ¶Öµ¶øÎŞ·¨´ò¿ªÎÄ¼ş $(FILE) ¡£";
+    Text[ russian ] = "Èç-çà íåäîñòóïíîãî äåñêğèïòîğà ôàéëà, ôàéë $(FILE) îòêğûòü íåâîçìîæíî.";
+    Text[ polish ] = "Pliku $(FILE) nie mo¿na by³o otworzyæ z powodu nieprawid³owego dojœcia.";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚Í–³Œø‚ÈÌ§²Ù‹LqŒê‚Ì‚½‚ß‚ÉŠJ‚©‚ê‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¦]µL®ÄªºÀÉ®×¼ĞÃÑ­È¦ÓµLªk¶}±ÒÀÉ®×$(FILE) ¡C";
+    Text[ arabic ] = "ÊÚĞÑ İÊÍ Çáãáİ $(FILE)¡ áÃä æÕİ Çáãáİ ÛíÑ ÕÇáÍ.";
+    Text[ dutch ] = "Bestand $(FILE) kon niet worden geopend als gevolg van ongeldige filedescriptor.";
+    Text[ chinese_simplified ] = "ÒòÎŞĞ§µÄÎÄ¼ş±êÊ¶Öµ¶øÎŞ·¨´ò¿ªÎÄ¼ş $(FILE) ¡£";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá áíïé÷ôåß ôï áñ÷åßï $(FILE) ëüãù ìŞ İãêõñïõ ÷åéñéóìïı ôïõ áñ÷åßïõ.";
+    Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ÇÚµé·Î ÆÄÀÏ $(FILE)°¡ ¿­¸®Áö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyası geçersiz bir dosya tutamacı nedeniyle açılamadı.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_CANNOT_MAKE
+{
+    Text = "Die Datei $(FILE) konnte nicht angelegt werden." ;
+    Text [ English ] = "The file $(FILE) could not be created." ;
+    Text [ norwegian ] = "+++The file $(FILE) could not be created." ;
+    Text [ italian ] = "Impossibile creare il file $(FILE)." ;
+    Text [ portuguese_brazilian ] = "O arquivo $(FILE) não pode ser criado." ;
+    Text [ portuguese ] = "Foi impossível criar o  ficheiro $(FILE)." ;
+    Text [ finnish ] = "Tiedostoa $(FILE) ei voi luoda." ;
+    Text [ danish ] = "Det var ikke muligt at oprette filen $(FILE)." ;
+    Text [ french ] = "Le fichier $(FILE) n'a pas pu être créé." ;
+    Text [ swedish ] = "Filen $(FILE) kunde inte skapas." ;
+    Text [ dutch ] = "Bestand $(FILE) kon niet worden gemaakt." ;
+    Text [ spanish ] = "No se pudo crear el archivo $(FILE)." ;
+    Text [ english_us ] = "The file $(FILE) could not be created." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢ÎÄ¼ş $(FILE)¡£";
+    Text[ russian ] = "Íå óäàåòñÿ ñîõğàíèòü ôàéë $(FILE).";
+    Text[ polish ] = "Pliku $(FILE) nie mo¿na by³o utworzyæ.";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò·sÀÉ$(FILE)¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÅäÔÇÁ Çáãáİ $(FILE).";
+    Text[ dutch ] = "Bestand $(FILE) kon niet worden gemaakt.";
+    Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢ÎÄ¼ş $(FILE)¡£";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá äçìéïõñãçèåß ôï áñ÷åßï $(FILE).";
+    Text[ korean ] = "ÆÄÀÏ $(FILE) °¡ ¸¸µé¾îÁöÁö ¾Ê½À´Ï´Ù.";
+    Text[ turkish ] = "$(FILE) dosyası oluşturulamadı.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_SHARING
+{
+    Text = "Fehler beim gemeinsamen Zugriff auf die Datei $(FILE)." ;
+    Text [ English ] = "Sharing violation while accessing $(FILE)." ;
+    Text [ norwegian ] = "+++Sharing violation while accessing $(FILE)." ;
+    Text [ italian ] = "Violazione di condivisione durante l'accesso al $(FILE)." ;
+    Text [ portuguese_brazilian ] = "Violação de compartilhamento durante o acesso do $(FILE)." ;
+    Text [ portuguese ] = "Erro durante o acesso compartilhado ao ficheiro $(FILE)." ;
+    Text [ finnish ] = "Yhteiskäyttövirhe tiedostossa $(FILE)." ;
+    Text [ danish ] = "Fejl under fælles adgang til filen $(FILE)." ;
+    Text [ french ] = "Violation du partage pendant l'accès au $(FILE)." ;
+    Text [ swedish ] = "Fel vid gemensam åtkomst till filen $(FILE)." ;
+    Text [ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE)." ;
+    Text [ spanish ] = "Error durante el acceso compartido al archivo $(FILE)." ;
+    Text [ english_us ] = "Error by shared access to $(FILE)." ;
+    Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡ÎÄ¼ş $(FILE) Ê±·¢Éú´íÎó¡£";
+    Text[ russian ] = "Îøèáêà ïğè êîëëåêòèâíîì äîñòóïå ê ôàéëó $(FILE).";
+    Text[ polish ] = "Brak wspólnego dostêpu do pliku $(FILE).";
+    Text[ japanese ] = "Ì§²Ù$(FILE)‚Ö‚Ì‹¤—L±¸¾½‚ÌÛ‚Ì´×°¡";
+    Text[ chinese_traditional ] = "¦b¦P®ÉÅª¨úÀÉ®×$(FILE) ®Éµo¥Í¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÇáæÕæá ÇáãÔÊÑß Åáì Çáãáİ $(FILE).";
+    Text[ dutch ] = "Fout bij gelijktijdige toegang tot $(FILE).";
+    Text[ chinese_simplified ] = "ÔÚÍ¬Ê±¶ÁÈ¡ÎÄ¼ş $(FILE) Ê±·¢Éú´íÎó¡£";
+    Text[ greek ] = "ÓöÜëìá êáôÜ ôçí êïéíŞ ğñüóâáóç óôï áñ÷åßï $(FILE).";
+    Text[ korean ] = "$(FILE)¿¡ °øÀ¯ Á¢±Ù¿¡ÀÇÇÑ ¿À·ù .";
+    Text[ turkish ] = "$(FILE) dosyasına paylaşılan erişimde hata oluştu.";
+    Text[ language_user1 ] = " ";
+};
+
+String MSG_IOERR_INVALID_PARAMETER
+{
+    Text = "" ;
+    Text [ English ] = "" ;
+    Text [ norwegian ] = "" ;
+    Text [ italian ] = "" ;
+    Text [ portuguese_brazilian ] = "" ;
+    Text [ portuguese ] = "" ;
+    Text [ finnish ] = "" ;
+    Text [ danish ] = "" ;
+    Text [ french ] = "" ;
+    Text [ swedish ] = "" ;
+    Text [ dutch ] = "" ;
+    Text [ spanish ] = "" ;
+    Text [ english_us ] = "" ;
+};
+
+String MSG_IOERR_GENERAL
+{
+    Text = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(FILE)." ;
+    Text [ English ] = "General I/O Error accessing $(FILE)." ;
+    Text [ norwegian ] = "" ;
+    Text [ italian ] = "Errore generale di I/O nell'accesso a $(FILE)." ;
+    Text [ portuguese_brazilian ] = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(FILE)." ;
+    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès au fichier $(FILE)." ;
+    Text [ swedish ] = "Allmänt input/outputfel vid åtkomst av $(FILE)." ;
+    Text [ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE)." ;
+    Text [ spanish ] = "Error general de entrada/salida al acceder a $(FILE)." ;
+    Text [ english_us ] = "General I/O error accessing $(FILE)." ;
+    Text [ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE)." ;
+    Text [ italian ] = "Errore generale di I/O nell'accesso a $(FILE)." ;
+    Text [ french ] = "Erreur d'entrée/sortie générale lors de l'accès au fichier $(FILE)." ;
+    Text [ danish ] = "Generel I/O fejl ved adgang til $(FILE)." ;
+    Text [ portuguese ] = "Erro geral de acesso/saída ao tentar entrar em $(FILE)." ;
+    Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡$(FILE)Ê±·¢ÉúÒ»¸öÒ»°ãµÄÊäÈë/Êä³ö´íÎó¡£";
+    Text[ russian ] = "Îáùàÿ îøèáêà ââîäà âûâîäà ïğè äîñòóïå ê ôàéëó $(FILE).";
+    Text[ polish ] = "Ogólny b³¹d dostêpu We/Wy podczas dostêpu do $(FILE).";
+    Text[ japanese ] = "$(FILE)‚Ö‚Ì±¸¾½‚ÌÛ‚Ìˆê”Ê“I‚ÈI/O´×°B";
+    Text[ chinese_traditional ] = "¦bÅª¨ú$(FILE)®Éµo¥Í¤@­Ó¤@¯ëªº¿é¤J/¿é¥X¿ù»~¡C";
+    Text[ arabic ] = "ÍÏË ÎØÃ ÅÏÎÇá æÅÎÑÇÌ ÚÇã ÃËäÇÁ ãÍÇæáÉ ÇáæÕæá Åáì$(FILE).";
+    Text[ dutch ] = "Algemene in-/uitvoerfout bij toegang op $(FILE).";
+    Text[ chinese_simplified ] = "ÔÚ¶ÁÈ¡$(FILE)Ê±·¢ÉúÒ»¸öÒ»°ãµÄÊäÈë/Êä³ö´íÎó¡£";
+    Text[ greek ] = "Ãåíéêü óöÜëìá åéóáãùãŞò/åîáãùãŞò êáôÜ ôçí ğñüóâáóç óôï $(FILE).";
+    Text[ korean ] = "ÆÄÀÏ $(FILE) Á¢±Ù ÀÏ¹İ ÀÔÃâ·Â ¿À·ù .";
+    Text[ turkish ] = "$(FILE) dosyasına erişimde genel girdi/çıktı hatası oluştu..";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_FULLSCREENTOOLBOX
+{
+    Text = "" ;
+    /*
+    Text = "Gesamtbild";
+    Text [ENGLISH] = "Full screen";
+    Text [norwegian] = "Fullt skjermbilde";
+    Text [italian] = "Schermo intero";
+    Text [portuguese_brazilian] = "Tela completa";
+    Text [portuguese] = "Ecrã inteiro";
+    Text [finnish] = "Koko näyttö";
+    Text [danish] = "Helskærm";
+    Text [french] = "Plein écran";
+    Text [swedish] = "Helskärm";
+    Text [dutch] = "Volledig scherm";
+    Text [spanish] = "Pantalla completa";
+    Text [english_us] = "Full screen";
+*/
+};
+
+ToolBox RID_FULLSCREENTOOLBOX
+{
+    HelpId = HID_FULLSCREENTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    FloatingMode = TRUE ;
+    Hide = TRUE ;
+    _FloatingPosMapMode = MAP_APPFONT ;
+    _FloatingPosX = -50 ;
+    _FloatingPosY = -70 ;
+    FloatingLines = 1 ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+        };
+    };
+};
+
+String RID_RECORDINGTOOLBOX
+{
+    Text = "" ;
+    /*
+    Text = "Makro Aufzeichnung";
+    Text [ENGLISH] = "Macro Recorder";
+    Text [english_us] = "Macro Recorder";
+*/
+};
+
+ToolBox RID_RECORDINGTOOLBOX
+{
+    HelpId = HID_RECORDINGTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = FALSE ;
+    Zoomable = TRUE ;
+    Customize = FALSE ;
+    FloatingMode = TRUE ;
+    Hide = TRUE ;
+    _FloatingPosMapMode = MAP_APPFONT ;
+    _FloatingPosX = -50 ;
+    _FloatingPosY = -70 ;
+    FloatingLines = 1 ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_RECORDMACRO ;
+        };
+    };
+};
+
+String STR_EVENT_NEWMESSAGE
+{
+    Text = "Nachricht eingetroffen" ;
+    Text [ ENGLISH ] = "Message arrived" ;
+    Text [ english_us ] = "Message received" ;
+    Text [ portuguese_brazilian ] = "Nachricht eingetroffen" ;
+    Text [ swedish ] = "Meddelande har kommit" ;
+    Text [ danish ] = "Modtaget meddelelse" ;
+    Text [ italian ] = "Messaggio arrivato" ;
+    Text [ spanish ] = "Mensaje recibido" ;
+    Text [ french ] = "Message reçu" ;
+    Text [ dutch ] = "Bericht ontvangen" ;
+    Text [ portuguese ] = "Mensagem recebida" ;
+    Text[ chinese_simplified ] = "ĞÂµÄµç×ÓÓÊ¼ş";
+    Text[ russian ] = "Ñîîáùåíèå ïîëó÷åíî";
+    Text[ polish ] = "Nadesz³a wiadomoœæ";
+    Text[ japanese ] = "Ò¯¾°¼Ş‚ÌóM";
+    Text[ chinese_traditional ] = "·sªº¹q¤l¶l¥ó";
+    Text[ arabic ] = "æÕáÊ ÑÓÇáÉ";
+    Text[ dutch ] = "Bericht ontvangen";
+    Text[ chinese_simplified ] = "ĞÂµÄµç×ÓÓÊ¼ş";
+    Text[ greek ] = "ËŞøç ìçíıìáôïò";
+    Text[ korean ] = "¸Ş¼¼Áö°¡ ¼ö½ÅµÇ¾ú½À´Ï´Ù.";
+    Text[ turkish ] = "İleti alındı";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_STARTAPP
+{
+    Text = "Programmstart" ;
+    Text [ ENGLISH ] = "Start Application" ;
+    Text [ norwegian ] = "Start Applikasjon" ;
+    Text [ italian ] = "Avvia applicazione" ;
+    Text [ portuguese_brazilian ] = "Início Aplicativo" ;
+    Text [ portuguese ] = "Iniciar programa" ;
+    Text [ finnish ] = "Start Application" ;
+    Text [ danish ] = "Programstart" ;
+    Text [ french ] = "Lancer l'application" ;
+    Text [ swedish ] = "Programstart" ;
+    Text [ dutch ] = "Programma starten" ;
+    Text [ spanish ] = "Iniciar aplicación" ;
+    Text [ ENGLISH_US ] = "Start Application" ;
+    Text[ chinese_simplified ] = "Æô¶¯³ÌĞò";
+    Text[ russian ] = "Çàïóñê ïğîãğàììû";
+    Text[ polish ] = "Pocz¹tek programu";
+    Text[ japanese ] = "ÌßÛ¸Ş×Ñ‚ÌŠJn";
+    Text[ chinese_traditional ] = "±Ò°Êµ{¦¡";
+    Text[ arabic ] = "ÈÏÁ ÇáÈÑäÇãÌ";
+    Text[ dutch ] = "Programma starten";
+    Text[ chinese_simplified ] = "Æô¶¯³ÌĞò";
+    Text[ greek ] = "Åêêßíçóç åöáñìïãŞò";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ½ÃÀÛ";
+    Text[ turkish ] = "Programı çalıştır";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_ONERROR
+{
+    Text = "Javascript-Laufzeitfehler" ;
+    Text [ ENGLISH ] = "Javascript runtime error" ;
+    Text [ english_us ] = "JavaScript runtime error" ;
+    Text [ portuguese_brazilian ] = "Programm- / Ausführungsfehler" ;
+    Text [ swedish ] = "Javascript runtime error" ;
+    Text [ danish ] = "JavaScript-runtimefejl" ;
+    Text [ italian ] = "Errore di runtime JavaScript" ;
+    Text [ spanish ] = "Error de ejecución Javascript" ;
+    Text [ french ] = "Runtime error JavaScript" ;
+    Text [ dutch ] = "Javascript runtime error" ;
+    Text [ portuguese ] = "Erro na execução de JavaScript" ;
+    Text[ chinese_simplified ] = "Javascript-ÔËĞĞÊ±¼ä´íÎó";
+    Text[ russian ] = "Îøèáêà ïğè âûïîëíåíèè Javascript";
+    Text[ polish ] = "B³¹d czasu przeb. w Javascript";
+    Text[ japanese ] = "JavaScript runtime ´×°•\\¦‚Ì";
+    Text[ chinese_traditional ] = "Javascript ¹B¦æ®É¶¡¿ù»~";
+    Text[ arabic ] = "ÎØÃ İí æŞÊ ÊÔÛíáJavaScript ";
+    Text[ dutch ] = "Javascript runtime error";
+    Text[ chinese_simplified ] = "Javascript-ÔËĞĞÊ±¼ä´íÎó";
+    Text[ greek ] = "ÓöÜëìá ÷ñüíïõ åêôİë. JavaScript";
+    Text[ korean ] = "JavaScript  ·± Å¸ÀÓ ¿À·ù";
+    Text[ turkish ] = "Javascript yürütüm süresi hatası";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_CLOSEAPP
+{
+    Text = "Programmende" ;
+    Text [ ENGLISH ] = "Close Application" ;
+    Text [ norwegian ] = "Lukk Applikasjon" ;
+    Text [ italian ] = "Chiudi applicazione" ;
+    Text [ portuguese_brazilian ] = "Fechar Aplicativo" ;
+    Text [ portuguese ] = "Sair do programa" ;
+    Text [ finnish ] = "Close Application" ;
+    Text [ danish ] = "Luk programmet" ;
+    Text [ french ] = "Fermer l'application" ;
+    Text [ swedish ] = "Programslut" ;
+    Text [ dutch ] = "Programma beëindigen" ;
+    Text [ spanish ] = "Cerrar aplicación" ;
+    Text [ ENGLISH_US ] = "Close Application" ;
+    Text[ chinese_simplified ] = "½áÊø³ÌĞò";
+    Text[ russian ] = "Çàêğûòü ïğèëîæåíèå";
+    Text[ polish ] = "Koniec programu";
+    Text[ japanese ] = "ÌßÛ¸Ş×ÑI—¹";
+    Text[ chinese_traditional ] = "µ²§ôµ{¦¡";
+    Text[ arabic ] = "äåÇíÉ ÇáÈÑäÇãÌ";
+    Text[ dutch ] = "Programma beëindigen";
+    Text[ chinese_simplified ] = "½áÊø³ÌĞò";
+    Text[ greek ] = "Ôåñìáôéóìüò ğñïãñÜììáôïò";
+    Text[ korean ] = "ÀÀ¿ëÇÁ·Î±×·¥ ´İ±â";
+    Text[ turkish ] = "Programdan çıkış";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_CREATEDOC
+{
+    Text = "Dokument erzeugen" ;
+    Text [ ENGLISH ] = "Create Document" ;
+    Text [ norwegian ] = "Lag Dokument" ;
+    Text [ italian ] = "Crea documento" ;
+    Text [ portuguese_brazilian ] = "Criar Documento" ;
+    Text [ portuguese ] = "Criar documento" ;
+    Text [ finnish ] = "Create Document" ;
+    Text [ danish ] = "Opret dokument" ;
+    Text [ french ] = "Créer le document" ;
+    Text [ swedish ] = "Skapa dokument" ;
+    Text [ dutch ] = "Document maken" ;
+    Text [ spanish ] = "Crear documento" ;
+    Text [ ENGLISH_US ] = "Create Document" ;
+    Text[ chinese_simplified ] = "½¨Á¢ÎÄµµ";
+    Text[ russian ] = "Ñîçäàòü äîêóìåíò";
+    Text[ polish ] = "Utwórz dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìì¬";
+    Text[ chinese_traditional ] = "«Ø¥ß¤å¥ó";
+    Text[ arabic ] = "ÅäÔÇÁ ãÓÊäÏ";
+    Text[ dutch ] = "Document maken";
+    Text[ chinese_simplified ] = "½¨Á¢ÎÄµµ";
+    Text[ greek ] = "Äçìéïõñãßá åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ¸¸µé±â";
+    Text[ turkish ] = "Belge oluştur";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_CLOSEDOC
+{
+    Text = "Dokument wird geschlossen" ;
+    Text [ ENGLISH ] = "Document closes" ;
+    Text [ ENGLISH_US ] = "Close Document" ;
+    Text [ portuguese_brazilian ] = "Close Document" ;
+    Text [ swedish ] = "Dokumentet stängs" ;
+    Text [ danish ] = "Programmet lukkes" ;
+    Text [ italian ] = "Il documento viene chiuso" ;
+    Text [ spanish ] = "El documento se va a cerrar" ;
+    Text [ french ] = "Le document va être fermé" ;
+    Text [ dutch ] = "Document sluiten" ;
+    Text [ portuguese ] = "Fechar documento" ;
+    Text[ chinese_simplified ] = "ÏÖÔÚ¹Ø±ÕÎÄµµ";
+    Text[ russian ] = "Äîêóìåíò áóäåò çàêğûò";
+    Text[ polish ] = "Zamknij dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ•Â‚¶‚é";
+    Text[ chinese_traditional ] = "²{¦bÃö³¬¤å¥ó";
+    Text[ arabic ] = "Óæİ íÊã ÅÛáÇŞ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document sluiten";
+    Text[ chinese_simplified ] = "ÏÖÔÚ¹Ø±ÕÎÄµµ";
+    Text[ greek ] = "Êëåßóéìï åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ´İ±â";
+    Text[ turkish ] = "Belgeyi kapat";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_PREPARECLOSEDOC
+{
+    Text = "Dokument schließen" ;
+    Text [ ENGLISH ] = "Close Document" ;
+    Text [ norwegian ] = "Close Document" ;
+    Text [ italian ] = "Chiudi documento" ;
+    Text [ portuguese_brazilian ] = "Close Document" ;
+    Text [ portuguese ] = "Fechar documento" ;
+    Text [ french ] = "Fermer le document" ;
+    Text [ dutch ] = "Document sluiten" ;
+    Text [ spanish ] = "Cerrar documento" ;
+    Text [ danish ] = "Luk dokument" ;
+    Text [ swedish ] = "Stäng dokument" ;
+    Text [ finnish ] = "Close Document" ;
+    Text [ ENGLISH_US ] = "Close Document" ;
+    Text[ chinese_simplified ] = "¹Ø±ÕÎÄµµ";
+    Text[ russian ] = "Çàêğûòü äîêóìåíò";
+    Text[ polish ] = "Zamknij dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ•Â‚¶‚½";
+    Text[ chinese_traditional ] = "Ãö³¬¤å¥ó";
+    Text[ arabic ] = "ÅÛáÇŞ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document sluiten";
+    Text[ chinese_simplified ] = "¹Ø±ÕÎÄµµ";
+    Text[ greek ] = "Êëåßóéìï åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ´İ±â";
+    Text[ turkish ] = "Belgeyi kapat";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_OPENDOC
+{
+    Text = "Dokument öffnen" ;
+    Text [ ENGLISH ] = "Open Document" ;
+    Text [ norwegian ] = "Åpne Dokument" ;
+    Text [ italian ] = "Apri documento" ;
+    Text [ portuguese_brazilian ] = "Abrir Documento" ;
+    Text [ portuguese ] = "Abrir documento" ;
+    Text [ finnish ] = "Open Document" ;
+    Text [ danish ] = "Åbn dokument" ;
+    Text [ french ] = "Ouvrir un document" ;
+    Text [ swedish ] = "Öppna dokument" ;
+    Text [ dutch ] = "Document openen" ;
+    Text [ spanish ] = "Abrir documento" ;
+    Text [ ENGLISH_US ] = "Open Document" ;
+    Text[ chinese_simplified ] = "´ò¿ªÎÄµµ";
+    Text[ russian ] = "Îòêğûòü äîêóìåíò";
+    Text[ polish ] = "Otwórz dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğŠJ‚­";
+    Text[ chinese_traditional ] = "¶}±Ò¤å¥ó";
+    Text[ arabic ] = "İÊÍ ãÓÊäÏ";
+    Text[ dutch ] = "Document openen";
+    Text[ chinese_simplified ] = "´ò¿ªÎÄµµ";
+    Text[ greek ] = "¢íïéãìá åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ¿­±â";
+    Text[ turkish ] = "Belge aç";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_SAVEDOC
+{
+    Text = "Dokument sichern" ;
+    Text [ ENGLISH ] = "Save Document" ;
+    Text [ norwegian ] = "Save Document" ;
+    Text [ italian ] = "Salva documento" ;
+    Text [ portuguese_brazilian ] = "Save Document" ;
+    Text [ portuguese ] = "Guardar documento" ;
+    Text [ french ] = "Sauvegarder le document" ;
+    Text [ dutch ] = "Document opslaan" ;
+    Text [ spanish ] = "Guardar documento" ;
+    Text [ danish ] = "Gem dokument" ;
+    Text [ swedish ] = "Spara dokument" ;
+    Text [ finnish ] = "Save Document" ;
+    Text [ ENGLISH_US ] = "Save Document" ;
+    Text[ chinese_simplified ] = "±£´æÎÄµµ";
+    Text[ russian ] = "Ñîõğàíèòü äîêóìåíò";
+    Text[ polish ] = "Zapisz dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ì•Û‘¶";
+    Text[ chinese_traditional ] = "«O¦s¤å¥ó";
+    Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document opslaan";
+    Text[ chinese_simplified ] = "±£´æÎÄµµ";
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ÀúÀå";
+    Text[ turkish ] = "Belgeyi kaydet";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_SAVEASDOC
+{
+    Text = "Dokument sichern als" ;
+    Text [ ENGLISH ] = "Save Document As" ;
+    Text [ norwegian ] = "Save Document As" ;
+    Text [ italian ] = "Salva documento con nome" ;
+    Text [ portuguese_brazilian ] = "Save Document As" ;
+    Text [ portuguese ] = "Guardar como" ;
+    Text [ french ] = "Sauvegarder le document sous" ;
+    Text [ dutch ] = "Document opslaan als" ;
+    Text [ spanish ] = "Guardar documento como" ;
+    Text [ danish ] = "Gem dokument som" ;
+    Text [ swedish ] = "Spara dokument som" ;
+    Text [ finnish ] = "Save Document As" ;
+    Text [ ENGLISH_US ] = "Save Document As" ;
+    Text[ chinese_simplified ] = "ÎÄµµÁí´æÎª";
+    Text[ russian ] = "Ñîõğàíèòü äîêóìåíò êàê";
+    Text[ polish ] = "Zapisz dokument jako";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶‚·‚é";
+    Text[ chinese_traditional ] = "¥t¦s¤å¥ó";
+    Text[ arabic ] = "ÍİÙ ÇáãÓÊäÏ ßÜ";
+    Text[ dutch ] = "Document opslaan als";
+    Text[ chinese_simplified ] = "ÎÄµµÁí´æÎª";
+    Text[ greek ] = "ÁğïèŞêåõóç åããñÜöïõ ùò";
+    Text[ korean ] = "¹®¼­¸¦ ´Ù¸¥ÀÌ¸§À¸·Î ÀúÀå";
+    Text[ turkish ] = "Belgeyi farklı kaydet";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_SAVEDOCDONE
+{
+    Text = "Dokument wurde gesichert" ;
+    Text [ ENGLISH ] = "Document was saved" ;
+    Text [ ENGLISH_US ] = "Document has been saved" ;
+    Text[ portuguese ] = "O documento foi guardado";
+    Text[ russian ] = "Äîêóìåíò ñîõğàíåí";
+    Text[ greek ] = "Ôï İããñáöï áğïèçêåıôçêå";
+    Text[ dutch ] = "Document is opgeslagen";
+    Text[ french ] = "Le document a bien été enregistré";
+    Text[ spanish ] = "El documento se guardó";
+    Text[ italian ] = "Il documento è stato salvato";
+    Text[ danish ] = "Dokumentet er blevet gemt";
+    Text[ swedish ] = "Dokument har sparats";
+    Text[ polish ] = "Dokument zapisany";
+    Text[ portuguese_brazilian ] = "Document was saved";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ª•Û‘¶‚³‚ê‚½";
+    Text[ korean ] = "¹®¼­°¡  ÀúÀåµÇ¾ú½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÎÄµµÒÑ¾­´æÅÌ";
+    Text[ chinese_traditional ] = "¤å¥ó¤w¸gÀx¦s";
+    Text[ arabic ] = "Êã ÍİÙ ÇáãÓÊäÏ";
+    Text[ turkish ] = "Belge kaydedildi";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_SAVEASDOCDONE
+{
+    Text = "Dokument wurde gesichert als" ;
+    Text [ ENGLISH ] = "Document was saved as" ;
+    Text [ ENGLISH_US ] = "Document has been saved as" ;
+    Text[ portuguese ] = "O documento foi guardado como";
+    Text[ russian ] = "Äîêóìåíò ñîõğàíåí êàê";
+    Text[ greek ] = "Ôï İããñáöï áğïèçêåıôçêå ùò";
+    Text[ dutch ] = "Document is opgeslagen als";
+    Text[ french ] = "Le document a été enregistré en tant que";
+    Text[ spanish ] = "El documento se guardó como";
+    Text[ italian ] = "Il documento è stato salvato con il nome";
+    Text[ danish ] = "Dokumentet er blevet gemt som";
+    Text[ swedish ] = "Dokument har sparats som";
+    Text[ polish ] = "Dokument zapisany jako";
+    Text[ portuguese_brazilian ] = "Document was saved as";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚É–¼‘O‚ğ•t‚¯‚Ä•Û‘¶‚µ‚½";
+    Text[ korean ] = "¹®¼­°¡ ´ÙÀ½ÀÇ ÀÌ¸§À¸·Î ÀúÀåµÇ¾ú½À´Ï´Ù";
+    Text[ chinese_simplified ] = "ÎÄµµÒÑ¾­´æÅÌÎª";
+    Text[ chinese_traditional ] = "¤å¥ó¤w¸gÀx¦s¬°";
+    Text[ arabic ] = "Êã ÍİÙ ÇáãÓÊäÏ ßÜ";
+    Text[ turkish ] = "Belge farklı kaydedildi";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_ACTIVATEDOC
+{
+    Text = "Dokument aktivieren" ;
+    Text [ ENGLISH ] = "Activate Document" ;
+    Text [ norwegian ] = "Activate Document" ;
+    Text [ italian ] = "Attiva documento" ;
+    Text [ portuguese_brazilian ] = "Activate Document" ;
+    Text [ portuguese ] = "Activar documento" ;
+    Text [ french ] = "Activer document" ;
+    Text [ dutch ] = "Document activeren" ;
+    Text [ spanish ] = "Activar documento" ;
+    Text [ danish ] = "Aktiver dokument" ;
+    Text [ swedish ] = "Aktivera dokument" ;
+    Text [ finnish ] = "Activate Document" ;
+    Text [ ENGLISH_US ] = "Activate Document" ;
+    Text[ chinese_simplified ] = "¼¤»îÎÄµµ";
+    Text[ russian ] = "Àêòèâèğîâàòü äîêóìåíò";
+    Text[ polish ] = "Uaktywnij dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ±¸Ã¨ÌŞ‚É‚µ‚½";
+    Text[ chinese_traditional ] = "¿E¬¡¤å¥ó";
+    Text[ arabic ] = "ÊäÔíØ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document activeren";
+    Text[ chinese_simplified ] = "¼¤»îÎÄµµ";
+    Text[ greek ] = "Åíåñãïğïßçóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ È°¼ºÈ­";
+    Text[ turkish ] = "Belgeyi etkinleştir";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_DEACTIVATEDOC
+{
+    Text = "Dokument deaktivieren" ;
+    Text [ ENGLISH ] = "Deactivate Document" ;
+    Text [ norwegian ] = "Deactivate Document" ;
+    Text [ italian ] = "Disattiva documento" ;
+    Text [ portuguese_brazilian ] = "Deactivate Document" ;
+    Text [ portuguese ] = "Desactivar documento" ;
+    Text [ french ] = "Désactiver le document" ;
+    Text [ dutch ] = "Document deactiveren" ;
+    Text [ spanish ] = "Desactivar documento" ;
+    Text [ danish ] = "Deaktiver dokument" ;
+    Text [ swedish ] = "Deaktivera dokument" ;
+    Text [ finnish ] = "Deactivate Document" ;
+    Text [ ENGLISH_US ] = "Deactivate Document" ;
+    Text[ chinese_simplified ] = "Ê§»îÎÄµµ";
+    Text[ russian ] = "Äåàêòèâèğîâàòü äîêóìåíò";
+    Text[ polish ] = "Dezaktywuj dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚ğ”ñ±¸Ã¨ÌŞ‚É‚µ‚½";
+    Text[ chinese_traditional ] = "¥¢¬¡¤å¥ó";
+    Text[ arabic ] = "ÅáÛÇÁ ÊäÔíØ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document deactiveren";
+    Text[ chinese_simplified ] = "Ê§»îÎÄµµ";
+    Text[ greek ] = "Áğåíåñãïğïßçóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ºñÈ°¼ºÈ­";
+    Text[ turkish ] = "Belgeyi  devreden çıkart";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EVENT_PRINTDOC
+{
+    Text = "Dokument drucken" ;
+    Text [ ENGLISH ] = "Print Document" ;
+    Text [ english_us ] = "Print Document" ;
+    Text [ italian ] = "Stampa documento" ;
+    Text [ spanish ] = "Imprimir documento" ;
+    Text [ french ] = "Imprimer le document" ;
+    Text [ dutch ] = "Document afdrukken" ;
+    Text [ swedish ] = "Skriv ut dokument" ;
+    Text [ danish ] = "Udskriv dokument" ;
+    Text [ portuguese_brazilian ] = "Dokument drucken" ;
+    Text [ portuguese ] = "Imprimir documento" ;
+    Text[ chinese_simplified ] = "´òÓ¡ÎÄµµ";
+    Text[ russian ] = "Ïå÷àòü äîêóìåíòà";
+    Text[ polish ] = "Drukuj dokument";
+    Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìˆóü";
+    Text[ chinese_traditional ] = "¦C¦L¤å¥ó";
+    Text[ arabic ] = "ØÈÇÚÉ ÇáãÓÊäÏ";
+    Text[ dutch ] = "Document afdrukken";
+    Text[ chinese_simplified ] = "´òÓ¡ÎÄµµ";
+    Text[ greek ] = "Åêôığùóç åããñÜöïõ";
+    Text[ korean ] = "¹®¼­ ÀÎ¼â";
+    Text[ turkish ] = "Belgeyi yazdır";
+    Text[ language_user1 ] = " ";
+};
+
+
+String STR_ERR_NOTEMPLATE
+{
+    Text = "Die Vorlage hat ein falsches Format" ;
+    Text [ ENGLISH ] = "Chosen template has wrong format" ;
+    Text [ dutch ] = "De geselecteerde sjabloon heeft een verkeerd formaat" ;
+    Text [ english_us ] = "The selected template has an incorrect format" ;
+    Text [ italian ] = "Il modello ha un formato errato" ;
+    Text [ spanish ] = "La plantilla tiene un formato incorrecto" ;
+    Text [ french ] = "Le format du modèle est incorrect" ;
+    Text [ swedish ] = "Mallen har ett felaktigt format" ;
+    Text [ danish ] = "Skabelonen har et forkert format" ;
+    Text [ portuguese_brazilian ] = "Die Vorlage hat ein falsches Format" ;
+    Text [ portuguese ] = "O modelo seleccionado tem um formato errado" ;
+    Text[ chinese_simplified ] = "ÑùÊ½¸ñÊ½´íÎó¡£";
+    Text[ russian ] = "Ó ıòîãî øàáëîíà íåïğàâèëüíûé ôîğìàò";
+    Text[ polish ] = "Szablon ma nieprawid³owy format";
+    Text[ japanese ] = "ÃİÌßÚ°Ä‚Í‘®‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
+    Text[ chinese_traditional ] = "¼Ë¦¡®æ¦¡¿ù»~¡C";
+    Text[ arabic ] = "ÊäÓíŞ ÇáŞÇáÈ ÛíÑ ÕÍíÍ";
+    Text[ dutch ] = "De geselecteerde sjabloon heeft een verkeerd formaat";
+    Text[ chinese_simplified ] = "ÑùÊ½¸ñÊ½´íÎó¡£";
+    Text[ greek ] = "Ôï ğñüôõğï İ÷åé ëÜèïò ìïñöŞ";
+    Text[ korean ] = "¼±ÅÃµÈ ÅÛÇÃ¸®Æ®´Â Àß¸øµÈ ¼­½ÄÀ» °¡Áö°í ÀÖ½À´Ï´Ù.";
+    Text[ turkish ] = "Seçilen şablonun formatı yanlış";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_ERR_NOFILE
+{
+    Text = "Die Datei $ kann nicht geöffnet werden." ;
+    Text [ ENGLISH ] = "Can't open file $." ;
+    Text [ dutch ] = "Het bestand $ kan niet worden geopend." ;
+    Text [ english_us ] = "Can't open file $." ;
+    Text [ italian ] = "Non è possibile aprire il file  $." ;
+    Text [ spanish ] = "El archivo $ no se puede abrir." ;
+    Text [ french ] = "Impossible d'ouvrir le fichier $ ." ;
+    Text [ swedish ] = "Filen $ kan inte öppnas." ;
+    Text [ danish ] = "Det er ikke muligt at åbne filen $." ;
+    Text [ portuguese_brazilian ] = "Die Datei $ kann nicht geöffnet werden." ;
+    Text [ portuguese ] = "Foi impossível abrir o ficheiro $." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş $ ¡£";
+    Text[ russian ] = "Ôàéë $ îòêğûòü íå óäàåòñÿ.";
+    Text[ polish ] = "Plik $ nie mo¿e zostaæ otworzony.";
+    Text[ japanese ] = "Ì§²Ù$‚ÍŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¶}±ÒÀÉ®× $ ¡C";
+    Text[ arabic ] = "áÇ íãßä İÊÍ Çáãáİ $.";
+    Text[ dutch ] = "Het bestand $ kan niet worden geopend.";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÎÄ¼ş $ ¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß ôï áñ÷åßï $.";
+    Text[ korean ] = "ÆÄÀÏ $¸¦ ¿­¼ö ¾ø½À´Ï´Ù.";
+    Text[ turkish ] = "$ dosyası açılamıyor.";
+    Text[ language_user1 ] = " ";
+};
+
+
+String STR_QUITAPP
+{
+    Text = "~Beenden" ;
+    Text [ ENGLISH ] = "E~xit" ;
+    Text [ english_us ] = "E~xit" ;
+    Text [ italian ] = "~Esci" ;
+    Text [ spanish ] = "~Terminar" ;
+    Text [ french ] = "~Quitter" ;
+    Text [ dutch ] = "~Beëindigen" ;
+    Text [ swedish ] = "A~vsluta" ;
+    Text [ danish ] = "Afslut" ;
+    Text [ portuguese_brazilian ] = "~Beenden" ;
+    Text [ portuguese ] = "~Sair" ;
+    Text[ chinese_simplified ] = "½áÊø(~X)";
+    Text[ russian ] = "Âûõîä";
+    Text[ polish ] = "Za~koñcz";
+    Text[ japanese ] = "I—¹(~X)";
+    Text[ chinese_traditional ] = "µ²§ô(~X)";
+    Text[ arabic ] = "ÅäåÇÁ";
+    Text[ dutch ] = "~Beëindigen";
+    Text[ chinese_simplified ] = "½áÊø(~X)";
+    Text[ greek ] = "¸îïäïò";
+    Text[ korean ] = "Á¾·á(~X)";
+    Text[ turkish ] = "~Çıkış";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EXITANDRETURN
+{
+    Text = "~Beenden & zurück zu " ;
+    Text [ ENGLISH ] = "E~xit & return to " ;
+    Text [ dutch ] = "~Beëindigen & terug naar  " ;
+    Text [ english_us ] = "E~xit & return to " ;
+    Text [ italian ] = "~Esci e ritorna a " ;
+    Text [ spanish ] = "~Terminar y regresar a  " ;
+    Text [ french ] = "~Quitter & retourner à " ;
+    Text [ swedish ] = "~Avsluta och tillbaka till " ;
+    Text [ danish ] = "Afslut og gå tilbage til " ;
+    Text [ portuguese_brazilian ] = "~Beenden & zurück zu " ;
+    Text [ portuguese ] = "~Sair & Regressar a " ;
+    Text[ chinese_simplified ] = "½áÊøºÍ·µ»Ø(~X)";
+    Text[ russian ] = "Âûõîä & íàçàä ê  ";
+    Text[ polish ] = "Zakoñcz & Powróæ do  ";
+    Text[ japanese ] = "I—¹&–ß‚é(~X)";
+    Text[ chinese_traditional ] = "µ²§ô©Mªğ¦^(~X)";
+    Text[ arabic ] = "ÅäåÇÁ æÇáÚæÏÉ Åáì ";
+    Text[ dutch ] = "~Beëindigen & terug naar  ";
+    Text[ chinese_simplified ] = "½áÊøºÍ·µ»Ø(~X)";
+    Text[ greek ] = "¸~îïäïò êáé åğéóôñïöŞ óå ";
+    Text[ korean ] = "³¡³»±â & µ¹¾Æ°¡±â (~X)";
+    Text[ turkish ] = "~Çık ve dön: ";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EXTHELPSTATUS
+{
+    Text = "Wählen Sie einen Befehl oder klicken Sie, um ein Thema auszuwählen." ;
+    Text [ English ] = "Select a command or click for a overview." ;
+    Text [ english_us ] = "Select a command or click to select a theme." ;
+    Text [ italian ] = "Scegliete un comando o cliccate per scegliere un argomento." ;
+    Text [ spanish ] = "Seleccione un comando o pulse para seleccionar un tema." ;
+    Text [ french ] = "Sélectionnez une commande ou cliquez pour choisir une rubrique." ;
+    Text [ dutch ] = "Kies een optie of klik om een onderwerp te kiezen." ;
+    Text [ swedish ] = "Välj ett kommando eller klicka för att välja ett tema." ;
+    Text [ danish ] = "Vælg en kommando eller klik for udvælge et emne." ;
+    Text [ portuguese_brazilian ] = "Wählen Sie einen Befehl oder klicken Sie, um ein Thema auszuwählen." ;
+    Text [ portuguese ] = "Seleccione um comando ou clique para escolher um tema." ;
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡Ôñ»òÕß°´»÷Ò»¸öÃüÁî£¬Ñ¡ÔñÒ»¸öÖ÷Ìâ¡£";
+    Text[ russian ] = "Âûáåğèòå êîìàíäó èëè íàæìèòå äëÿ âûáîğà òåìû.";
+    Text[ polish ] = "Wybierz polecenie lub kliknij, by wybraæ temat.";
+    Text[ japanese ] = "ºÏİÄŞ‚ğ‘I‚Ô‚© ‚Ü‚½‚ÍÃ°Ï‚ğ‘I‘ğ‚·‚é‚½‚ß‚É¸Ø¯¸‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "½Ğ±z¿ï¾Ü©ÎªÌ«ö¤@­Ó©R¥O¡M¿ï¾Ü¤@­Ó¥DÃD¡C";
+    Text[ arabic ] = "ÇÎÊÑ ÃÍÏ ÇáÃæÇãÑ¡ Ãæ ÇäŞÑ¡ áÇÎÊíÇÑ ÃÍÏ ÇáãæÇÖíÚ.";
+    Text[ dutch ] = "Kies een optie of klik om een onderwerp te kiezen.";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡Ôñ»òÕß°´»÷Ò»¸öÃüÁî£¬Ñ¡ÔñÒ»¸öÖ÷Ìâ¡£";
+    Text[ greek ] = "Åğéëİîôå ìéá åíôïëŞ Ş êÜíôå êëéê ãéá ôçí åğéëïãŞ åíüò èİìáôïò.";
+    Text[ korean ] = "¸í·É¾î¸¦ ¼±ÅÃÇÏ°Å³ª ¼±ÅÃµÈ ÁÖÁ¦¸¦ Å¬¸¯ÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bir komut seçin ya da bir konu seçmek için tıklayın.";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_MAIL
+{
+    Text = "Post" ;
+    Text [ English ] = "Mail" ;
+    Text [ norwegian ] = "Mail" ;
+    Text [ italian ] = "Posta" ;
+    Text [ portuguese_brazilian ] = "Correio" ;
+    Text [ portuguese ] = "Correio" ;
+    Text [ finnish ] = "Sähköposti" ;
+    Text [ danish ] = "Post" ;
+    Text [ french ] = "Courrier" ;
+    Text [ swedish ] = "Post" ;
+    Text [ dutch ] = "Post" ;
+    Text [ spanish ] = "Correo" ;
+    Text [ english_us ] = "Mail" ;
+    Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
+    Text[ russian ] = "Ïî÷òà";
+    Text[ polish ] = "Poczta";
+    Text[ japanese ] = "Ò°Ù";
+    Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
+    Text[ arabic ] = "ÈÑíÏ";
+    Text[ dutch ] = "Post";
+    Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
+    Text[ greek ] = "Áëëçëïãñáößá";
+    Text[ korean ] = "ÀüÀÚ¿ìÆí";
+    Text[ turkish ] = "Posta";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_ADDRESS_NAME
+{
+    TEXT = "Adressen" ;
+    Text [ English ] = "Address" ;
+    Text [ english_us ] = "Addresses" ;
+    Text [ dutch ] = "Adressen" ;
+    Text [ italian ] = "Indirizzi" ;
+    Text [ spanish ] = "Direcciones" ;
+    Text [ french ] = "Adresses" ;
+    Text [ swedish ] = "Adresser" ;
+    Text [ danish ] = "Adresser" ;
+    Text [ portuguese_brazilian ] = "Adressen" ;
+    Text [ portuguese ] = "Endereços" ;
+    Text[ chinese_simplified ] = "µØÖ·";
+    Text[ russian ] = "Àäğåñà";
+    Text[ polish ] = "Adresy";
+    Text[ japanese ] = "±ÄŞÚ½";
+    Text[ chinese_traditional ] = "¦a§}";
+    Text[ arabic ] = "ÚäÇæíä";
+    Text[ dutch ] = "Adressen";
+    Text[ chinese_simplified ] = "µØÖ·";
+    Text[ greek ] = "Äéåõèıíóåéò";
+    Text[ korean ] = "ÁÖ¼Ò";
+    Text[ turkish ] = "Adres";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_STR_HELP
+{
+    TEXT = "Hilfe" ;
+    TEXT [ english ] = "help" ;
+    Text [ portuguese ] = "Ajuda" ;
+    Text [ english_us ] = "Help" ;
+    Text [ portuguese_brazilian ] = "Hilfe" ;
+    Text [ swedish ] = "Hjälp" ;
+    Text [ danish ] = "Hjælp" ;
+    Text [ italian ] = "Guida" ;
+    Text [ spanish ] = "Ayuda" ;
+    Text [ french ] = "Aide" ;
+    Text [ dutch ] = "Help" ;
+    Text[ chinese_simplified ] = "ÇóÖú";
+    Text[ russian ] = "Ñïğàâêà";
+    Text[ polish ] = "Pomoc";
+    Text[ japanese ] = "ÍÙÌß";
+    Text[ chinese_traditional ] = "»¡©ú";
+    Text[ arabic ] = "ãÓÇÚÏÉ";
+    Text[ dutch ] = "Help";
+    Text[ chinese_simplified ] = "ÇóÖú";
+    Text[ greek ] = "ÂïŞèåéá";
+    Text[ korean ] = "µµ¿ò¸»";
+    Text[ turkish ] = "Yardım";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_STR_NOAUTOSTARTHELPAGENT
+{
+    TEXT = "Bei 'XX' nicht automatisch starten" ;
+    TEXT [ English ] = "Bei 'XX' nicht automatisch starten" ;
+    Text [ english_us ] = "No automatic start at 'XX'" ;
+    Text [ portuguese_brazilian ] = "Bei ''XX'' nicht automatisch starten" ;
+    Text [ swedish ] = "Ingen automatisk start vid 'XX'" ;
+    Text [ danish ] = "Start ikke automatisk ved ''XX''" ;
+    Text [ italian ] = "Non avviare automaticamente con  'XX'" ;
+    Text [ spanish ] = "No iniciar automáticamente con 'XX'" ;
+    Text [ french ] = "Ne pas lancer automatiquement pour la fonction 'XX'" ;
+    Text [ dutch ] = "Bij 'XX' niet automatisch starten" ;
+    Text [ portuguese ] = "Não iniciar 'XX' automaticamente." ;
+    Text[ chinese_simplified ] = "ÔÚ 'XX' Ê±²»×Ô¶¯ÔËĞĞ¡£";
+    Text[ russian ] = "Íåàâòîìàòè÷åñêèé çàïóñê ïğè 'XX'";
+    Text[ polish ] = "Przy 'XX' nie startuj automatycznie";
+    Text[ japanese ] = "'XX'‚Å©“®“I‚ÉŠJn‚µ‚È‚¢B";
+    Text[ chinese_traditional ] = "¦b 'XX' ®É¤£¦Û°Ê¹B¦æ¡C";
+    Text[ arabic ] = "ÚÏã ÈÏÁ ÊáŞÇÆíÇğ ÚäÏ 'XX'";
+    Text[ dutch ] = "Bij 'XX' niet automatisch starten";
+    Text[ chinese_simplified ] = "ÔÚ 'XX' Ê±²»×Ô¶¯ÔËĞĞ¡£";
+    Text[ greek ] = "¼÷é áõôüìáôç åêêßíçóç óôï 'XX'";
+    Text[ korean ] = "'XX'¿¡¼­ ÀÚµ¿ ½ÃÀÛÀÌ ¾ÈµË´Ï´Ù.";
+    Text[ turkish ] = "'XX' olduğunda otomatik başlatma yapılmasın";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_STR_NOWELCOMESCREEN
+{
+    TEXT = "Tipps nicht mehr anzeigen" ;
+    TEXT [ English ] = "Tips nicht mehr anzeigen" ;
+    Text [ english_us ] = "Don't display tips" ;
+    Text [ portuguese_brazilian ] = "Tips nicht mehr anzeigen" ;
+    Text [ swedish ] = "Visa inte tips mer" ;
+    Text [ danish ] = "Vis ikke flere tip" ;
+    Text [ italian ] = "Non mostrare più i suggerimenti" ;
+    Text [ spanish ] = "No mostrar más las sugerencias" ;
+    Text [ french ] = "Ne plus afficher les astuces" ;
+    Text [ dutch ] = "Tips niet meer weergeven" ;
+    Text [ portuguese ] = "Não mostrar sugestões" ;
+    Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾ÌáÊ¾";
+    Text[ russian ] = "Ñîâåòû áîëüøå íå ïîêàçûâàòü";
+    Text[ polish ] = "Nie wyœwietlaj porad";
+    Text[ japanese ] = "ËİÄ‚ğ•\\¦‚µ‚È‚¢";
+    Text[ chinese_traditional ] = "¤£­n¦AÅã¥Ü´£¥Ü";
+    Text[ arabic ] = "ÚÏã ÅÙåÇÑ ÇáÊáãíÍÇÊ ãÑÉ ÃÎÑì";
+    Text[ dutch ] = "Tips niet meer weergeven";
+    Text[ chinese_simplified ] = "²»ÔÙÏÔÊ¾ÌáÊ¾";
+    Text[ greek ] = "Íá ìçí åìöáíéóôïıí Üëëåò õğïäåßîåéò";
+    Text[ korean ] = "ÆÁÀ» Ç¥½ÃÇÏÁö ¾ÊÀ½";
+    Text[ turkish ] = "Öneri görüntüleme";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_HELPBAR
+{
+    TEXT = "Hilfe-Leiste" ;
+    TEXT [ English ] = "Hilfe-Leiste" ;
+    Text [ portuguese ] = "Barra da Ajuda" ;
+    Text [ english_us ] = "Help Bar" ;
+    Text [ portuguese_brazilian ] = "Hilfe-Leiste" ;
+    Text [ swedish ] = "Hjälplist" ;
+    Text [ danish ] = "Hjælp-linje" ;
+    Text [ italian ] = "Barra della Guida" ;
+    Text [ spanish ] = "Barra de ayuda" ;
+    Text [ french ] = "Barre de l'aide" ;
+    Text [ dutch ] = "Helpbalk" ;
+    Text[ chinese_simplified ] = "ÇóÖúÀ¸";
+    Text[ russian ] = "Ïàíåëü ñïğàâêè";
+    Text[ polish ] = "Pasek pomocy";
+    Text[ japanese ] = "ÍÙÌß ÊŞ°";
+    Text[ chinese_traditional ] = "»¡©ú¦C";
+    Text[ arabic ] = "ÔÑíØ ÇáãÓÇÚÏÉ";
+    Text[ dutch ] = "Helpbalk";
+    Text[ chinese_simplified ] = "ÇóÖúÀ¸";
+    Text[ greek ] = "ÃñáììŞ âïŞèåéáò";
+    Text[ korean ] = "µµ¿ò¸» ¸ğÀ½";
+    Text[ turkish ] = "Yardım çubuğu";
+    Text[ language_user1 ] = " ";
+};
+
+ToolBox RID_HELPBAR
+{
+    HelpId = HID_HELPBAR ;
+    Hide = TRUE ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_INDEX ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_HELPFILEBOX ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ZOOMOUT;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ZOOMIN;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_SEARCH ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_BOOKMARK ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_ANNOTATE ;
+        };
+        /*
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HELP_DOWNLOAD ;
+        };
+*/
+    };
+};
+
+String RID_STR_HLPFILENOTEXIST
+{
+    TEXT = "Es ist zu diesem Thema keine Hilfe installiert." ;
+    TEXT [ english ] = "Es ist zu diesem Thema keine Hilfe installiert." ;
+    Text [ english_us ] = "The help file for this topic is not installed." ;
+    Text [ portuguese_brazilian ] = "Die Hilfedatei 'XX' existiert nicht" ;
+    Text [ swedish ] = "Det finns ingen hjälp installerad för detta ämne." ;
+    Text [ danish ] = "Der er ikke installeret Hjælp til dette emne." ;
+    Text [ italian ] = "La Guida relativa a questo argomento non è stata installata." ;
+    Text [ spanish ] = "El archivo de ayuda para este tema no ha sido instalado." ;
+    Text [ french ] = "Vous n'avez pas installé l'aide correspondant à ce sujet." ;
+    Text [ dutch ] = "Bij dit onderwerp werd geen Help geïnstalleerd." ;
+    Text [ portuguese ] = "O ficheiro de ajuda para este tópico não está instalado." ;
+    Text[ chinese_simplified ] = "Ã»ÓĞ°²×°ÓĞ¹ØÕâ¸öÖ÷ÌâµÄÇóÖúÎÄ¼ş¡£";
+    Text[ russian ] = "Ïî ıòîé òåìå ñïğàâêà íå èíñòàëëèğîâàíà.";
+    Text[ polish ] = "Dla tego tematu nie zainstalowano pliku pomocy.";
+    Text[ japanese ] = "‚±‚ÌÃ°Ï‚ÉŠÖ‚·‚éÍÙÌß‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "¨S¦³¦w¸ËÃö©ó³o­Ó¥DÃDªº»¡©úÀÉ®×¡C";
+    Text[ arabic ] = "ãáİ ÇáãÓÇÚÏÉ ÇáÎÇÕ ÈåĞÇ ÇáãæÖæÚ ÛíÑ ãËÈÊ.";
+    Text[ dutch ] = "Bij dit onderwerp werd geen Help geïnstalleerd.";
+    Text[ chinese_simplified ] = "Ã»ÓĞ°²×°ÓĞ¹ØÕâ¸öÖ÷ÌâµÄÇóÖúÎÄ¼ş¡£";
+    Text[ greek ] = "Äåí İ÷åé ãßíåé åãêáôÜóôáóç ôçò âïŞèåéáò ãéá áõôü ôï èİìá.";
+    Text[ korean ] = "ÀÌ ÁÖÁ¦ÀÇ µµ¿ò¸» ÆÄÀÏÀÌ ¼³Ä¡µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Text[ turkish ] = "Bu konu ile ilgili yardım kurulmadı.";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_STR_HLPAPPNOTSTARTED
+{
+    TEXT = "Die Hilfeapplikation konnte nicht gestartet werden" ;
+    TEXT [ english ] = "The help application could not be started" ;
+    Text [ dutch ] = "De Help-applicatie kon niet worden opgestart" ;
+    Text [ english_us ] = "The help system could not be started" ;
+    Text [ italian ] = "Non è stato possibile avviare l'applicazione ausiliaria" ;
+    Text [ spanish ] = "No se pudo iniciar la aplicación de ayuda." ;
+    Text [ french ] = "Impossible de lancer l'application d'aide" ;
+    Text [ swedish ] = "Hjälptillämpningen kunde inte startas" ;
+    Text [ danish ] = "Det var ikke muligt at starte Hjælp-applikationen" ;
+    Text [ portuguese ] = "Foi impossível iniciar o sistema de ajuda." ;
+    Text [ portuguese_brazilian ] = "Die Hilfeapplikation konnte nicht gestartet werden" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨Æô¶¯ÇóÖúÓ¦ÓÃ³ÌĞò¡£";
+    Text[ russian ] = "Íå óäàåòñÿ çàïóñòèòü ïğèëîæåíèå ñïğàâêè";
+    Text[ polish ] = "Systemu pomocy nie mo¿na by³o uruchomiæ";
+    Text[ japanese ] = "ÍÙÌß±ÌßØ¹°¼®İ‚ğŠJn‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
+    Text[ chinese_traditional ] = "µLªk±Ò°Ê»¡©úÀ³¥Îµ{¦¡¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÈÏÁ ÊØÈíŞ ÇáãÓÇÚÏÉ";
+    Text[ dutch ] = "De Help-applicatie kon niet worden opgestart";
+    Text[ chinese_simplified ] = "ÎŞ·¨Æô¶¯ÇóÖúÓ¦ÓÃ³ÌĞò¡£";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá åêêéíŞóåé ç åöáñìïãŞ âïŞèåéáò";
+    Text[ korean ] = "µµ¿ò¸» ½Ã½ºÅÛÀÌ ½ÃÀÛµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
+    Text[ turkish ] = "Yardım uygulaması başlatılamadı";
+    Text[ language_user1 ] = " ";
+};
+
+ //----------------------------------------------------------------------------
+
+String RID_ENVTOOLBOX
+{
+    TEXT = "Funktionsleiste" ;
+    TEXT [ english ] = "Function bar" ;
+    Text [ dutch ] = "Werkbalk" ;
+    Text [ english_us ] = "Function Bar" ;
+    Text [ italian ] = "Barra delle funzioni" ;
+    Text [ spanish ] = "Barra de funciones" ;
+    Text [ french ] = "Barre de fonctions" ;
+    Text [ swedish ] = "Funktionslist" ;
+    Text [ danish ] = "Funktionslinje" ;
+    Text [ portuguese_brazilian ] = "Funktionsleiste" ;
+    Text [ portuguese ] = "Barra de funções" ;
+    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
+    Text[ russian ] = "Ïàíåëü ôóíêöèé";
+    Text[ polish ] = "Pasek funkcji";
+    Text[ japanese ] = "Ì§İ¸¼®İ ÊŞ°";
+    Text[ chinese_traditional ] = "¤u¨ã¦C";
+    Text[ arabic ] = "ÔÑíØ ÇáãåÇã";
+    Text[ dutch ] = "Werkbalk";
+    Text[ chinese_simplified ] = "¹¤¾ßÀ¸";
+    Text[ greek ] = "ÃñáììŞ ëåéôïõñãéşí";
+    Text[ korean ] = "±â´É ¸ğÀ½";
+    Text[ turkish ] = "İşlev çubuğu";
+    Text[ language_user1 ] = " ";
+};
+
+ToolBox RID_ENVTOOLBOX
+{
+    HelpId = RID_ENVTOOLBOX ;
+    ButtonType = BUTTON_SYMBOL ;
+    LineSpacing = TRUE ;
+    Border = TRUE ;
+    Scroll = TRUE ;
+    SVLook = TRUE ;
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Customize = TRUE ;
+    FloatingMode = FALSE ;
+    Hide = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    Align = BOXALIGN_TOP ;
+    ItemList =
+    {
+        ToolBoxItem
+        {
+            Identifier = SID_TOPDOC ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_OPENURL ;
+        };*/
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_BROWSE_BACKWARD ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_BROWSE_FORWARD ;
+        };*/
+        ToolBoxItem
+        {
+            Identifier = SID_BROWSE_STOP ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_RELOAD ;
+        };*/
+        ToolBoxItem
+        {
+            Identifier = SID_EDITDOC ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NEWDOC ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_OPENDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEDOC ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_SAVEASDOC ;
+            Hide = TRUE;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_MAIL_SEND ;
+        };*/
+        ToolBoxItem
+        {
+            Identifier = SID_PRINTDOCDIRECT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = FN_FAX ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_CUT ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_COPY ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_PASTE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_UNDO ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_REDO ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_NAVIGATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_STYLE_DESIGNER ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_HYPERLINK_DIALOG ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_HELP_PI ;
+        };*/
+        ToolBoxItem
+        {
+            Identifier = SID_WIN_FULLSCREEN ;
+            Hide = TRUE;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+/*      ToolBoxItem
+        {
+            Identifier = SID_INTERNET_ONLINE ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };*/
+        ToolBoxItem
+        {
+            Identifier = SID_CLOSEDOC;
+            Hide = TRUE;
+        };
+    };
+};
+
+ // Image-Listen ----------------------------------------------------------
+
+#define IMAGE_ID_LIST\
+    IdList = {\
+        SID_OPENURL;\
+        SID_BROWSE_BACKWARD;\
+        SID_BROWSE_FORWARD;\
+        SID_BROWSE_STOP;\
+        SID_BROWSE_HOME;\
+        SID_RELOAD;\
+        SID_EDITDOC;\
+        SID_SAVEDOC;\
+        SID_SAVEDOCTOBOOKMARK;\
+        SID_CREATELINK;\
+        SID_MAIL_SEND;\
+        SID_PRINTDOCDIRECT;\
+        SID_CUT;\
+        SID_COPY;\
+        SID_UNDO;\
+        SID_REDO;\
+        SID_EXPLORER;\
+        SID_BROWSER;\
+        SID_NAVIGATOR;\
+        SID_STYLE_DESIGNER;\
+        SID_AUTOMAIL;\
+        SID_AUTOBROWSE;\
+        SID_EXPLORER_CREATEFOLDER;\
+        SID_EXPLORER_CREATEBOOKMARK;\
+        SID_EXPLORER_CREATEWORKPLACE;\
+        SID_EXPLORER_CREATELINK;\
+        SID_EXPLORER_CREATEMAILINTRAY;\
+        SID_EXPLORER_CREATENEWSSERVER;\
+        SID_EXPLORER_CREATEFTPSERVER;\
+        SID_EXPLORER_CREATEDATABASE;\
+        SID_EXPLORER_CREATEGALLERY;\
+        SID_PROPERTIES;\
+        SID_EXPLORER_MAKEROOT;\
+        SID_EXPLORER_MAKEBMKDIR;\
+        SID_EXPLORER_PREVLEVEL;\
+        SID_EXPLORER_IMPORTBOOKMARKS;\
+        SID_EDIT_FRAMESET;\
+        SID_SPLIT_HORIZONTAL;\
+        SID_SPLIT_VERTICAL;\
+        SID_SPLIT_PARENT_HORIZONTAL;\
+        SID_SPLIT_PARENT_VERTICAL;\
+        SID_MODIFY_FRAME;\
+        SID_EXPLORER_SEARCHORIGINAL;\
+        SID_EXPLORER_DETAILS;\
+        SID_EXPLORER_ICONS;\
+    };\
+    IdCount = {\
+        45;\
+    };
+
+#ifndef IMAGE_STDBTN_COLOR
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+#endif
+
+ImageList RID_DEFAULTIMAGELIST_SC
+{
+    ImageBitmap = Bitmap { FILE = "sc_out.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+ImageList RID_DEFAULTIMAGELIST_LC
+{
+    ImageBitmap = Bitmap { FILE = "lc_out.bmp" ; };
+    MaskColor = IMAGE_STDBTN_COLOR ;
+    IMAGE_ID_LIST
+};
+
+String RID_SPECIALCONFIG_ERROR
+{
+    Text[ language_user1 ] = " "; \
+    Text = "In der Spezialkonfiguration wurde ein Fehler festgestellt.\nBitte wenden Sie sich an Ihren Administrator!" ;
+    Text [ English ] = "An error has occurred in the special configuration.\nPlease contact your administrator!" ;
+    Text [ portuguese ] = "Foi detectado um erro na configuração especial. Queira contactar o seu Administrador!" ;
+    Text [ english_us ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
+    Text [ portuguese_brazilian ] = "In der Spezialkonfiguration wurde ein Fehler festgestellt. Bitte wenden Sie sich an Ihren Administrator!" ;
+    Text [ swedish ] = "Ett fel har upptäckts i specialkonfigurationen.\nKontakta Din administratör!" ;
+    Text [ danish ] = "Der blev opdaget en fejl i specialkonfigurationen.\nHenvend dig venligst til din administrator!" ;
+    Text [ italian ] = "Nella configurazione speciale è stato trovato un errore.\nRivolgetevi al vostro amministratore!" ;
+    Text [ spanish ] = "En la configuración especial se ha detectado un error.\nPóngase por favor en contacto con su administrador." ;
+    Text [ french ] = "Une erreur a été détectée dans la configuration spéciale.\nVeuillez consulter l'administrateur !" ;
+    Text [ dutch ] = "In de speciale configuratie is een fout opgetreden. Wendt u zich s.v.p. aan uw administrator!" ;
+    Text[ chinese_simplified ] = "ÔÚÒ»¸öÌØÊâµÄÅäÖÃÎÄ¼şÄÚ·¢ÏÖÒ»¸ö´íÎó¡£\nÇëºÍÄúµÄ¹ÜÀíÔ±ÁªÏµ£¡";
+    Text[ russian ] = "Â ñïåöèàëüíîé êîíôèãóğàöèè îáíàğóæåíà îøèáêà.\nÎáğàòèòåñü, ïîæàëóéñòà ê Âàøåìó àäìèíèñòğàòîğó!";
+    Text[ polish ] = "W konfiguracji specjalnej stwierdzono b³¹d.\nZwróæ siê do swojego administratora!";
+    Text[ japanese ] = "“Áê‚Èİ’è‚Å´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n±ÄŞĞÆ½ÄÚ°À‚É˜A—‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "¦b¤@­Ó¯S®íªº°t¸mÀÉ®×¤ºµo²{¤@­Ó¿ù»~¡C½Ğ©MºŞ²z­ûÁpµ¸¡T";
+    Text[ arabic ] = "Êã ÇßÊÔÇİ ÎØÃ İí ÇáÊßæíä ÇáÎÇÕ.\nÇáÑÌÇÁ ÇáÇÊÕÇá ÈãÏíÑ ÇáäÙÇã !";
+    Text[ dutch ] = "In de speciale configuratie is een fout opgetreden. Wendt u zich s.v.p. aan uw administrator!";
+    Text[ chinese_simplified ] = "ÔÚÒ»¸öÌØÊâµÄÅäÖÃÎÄ¼şÄÚ·¢ÏÖÒ»¸ö´íÎó¡£\nÇëºÍÄúµÄ¹ÜÀíÔ±ÁªÏµ£¡";
+    Text[ greek ] = "ĞáñïõóéÜóôçêå óöÜëìá óôçí åéäéêŞ äéáìüñöùóç.\nĞáñáêáëş áğåõèõíèåßôå óôïí äéá÷åéñéóôŞ ôïõ äéêôıïõ!";
+    Text[ korean ] = "Æ¯º° ±¸¼º¿¡¼­¿À·ù°¡ ¹ß»õµÇ¾ú½À´Ï´Ù. °ü¸®ÀÚ¿¡°Ô ¹®ÀÇÇÏ½Ã±â ¹Ù¶ø´Ï´Ù !";
+    Text[ turkish ] = "Özel konfigürasyonda bir hata bulundu.\nLütfen sistem yöneticinize başvurun!";
+};
+
+
+String STR_MEMINFO_HEADER
+{
+    Text = "In der Applikation existieren derzeit $(TOTAL) Dokumente. Davon sind $(VISIBLE) Dokumente sichtbar. Im Memory Cache befinden sich $(CACHE) Dokumente.<BR><BR><b>Dokumente:</b><BR><table width=100%><tr><td >Sicht.</td><td>Cached</td><td>Exp.</td><td>Dirty</td><td>Exec</td><td>Forb</td><td>Dokumenttyp</td><td>URL</td><td>PreRedirect URL</td><td>Poststring</td></tr>" ;
+};
+
+String STR_MEMINFO_FOOTER
+{
+    Text = "</table>" ;
+};
+
+String STR_MEMINFO_OBJINFO
+{
+    Text = "<tr><td >$(VISIBLE)</td><td>$(CACHED)</td><td>$(EXPIRE)</td><td>$(JSDIRTY)</td><td>$(JSEXEC)</td><td>$(FORBID)</td><td>$(FACTORY)</td><td>$(URL)</td><td>$(ORIGURL)</td><td>$(POSTSTRING)</td></tr>" ;
+};
+
+String RID_PLUGIN
+{
+    Text = "PlugIn Aktivierung" ;
+    Text [ English ] = "PlugIn activation" ;
+    Text [ portuguese ] = "Activar PlugIn" ;
+    Text [ english_us ] = "Enable plug-ins" ;
+    Text [ portuguese_brazilian ] = "PlugIn Aktivierung" ;
+    Text [ swedish ] = "Aktivera PlugIn" ;
+    Text [ danish ] = "Aktiver PlugIns" ;
+    Text [ italian ] = "Attivazione PlugIn " ;
+    Text [ spanish ] = "Activar Plug-in" ;
+    Text [ french ] = "Activer Plug-In" ;
+    Text [ dutch ] = "PlugIn-activering" ;
+    Text[ chinese_simplified ] = "¼¤»î Plug-In";
+    Text[ russian ] = "Àêòèâèğîâàòü Plug-In";
+    Text[ polish ] = "W³¹cz PlugIn";
+    Text[ japanese ] = "Ìß×¸Ş²İ‚ğ±¸Ã¨ÌŞ‚É‚·‚é";
+    Text[ chinese_traditional ] = "¿E¬¡ Plug-In";
+    Text[ arabic ] = "ÊäÔíØ Plug-In";
+    Text[ dutch ] = "PlugIn-activering";
+    Text[ chinese_simplified ] = "¼¤»î Plug-In";
+    Text[ greek ] = "Åíåñãïğïßçóç PlugIn";
+    Text[ korean ] = "ÇÃ·¯±× ÀÎ °¡´É";
+    Text[ turkish ] = "Plug-In'leri etkinleştir";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_EDITOBJECT
+{
+    Text = "~Bearbeiten";
+    Text [ English ] = "~Edit";
+    Text [ English_us ] = "~Edit";
+    Text[ portuguese ] = "~Editar";
+    Text[ russian ] = "Ïğàâêà";
+    Text[ dutch ] = "~Bewerken";
+    Text[ french ] = "~Éditer";
+    Text[ spanish ] = "~Editar";
+    Text[ italian ] = "~Modifica";
+    Text[ danish ] = "Rediger";
+    Text[ swedish ] = "~Redigera";
+    Text[ polish ] = "~Edytuj";
+    Text[ portuguese_brazilian ] = "~Edit";
+    Text[ japanese ] = "•ÒW(~E)";
+    Text[ chinese_simplified ] = "±à¼­(~E)";
+    Text[ chinese_traditional ] = "½s¿è(~E)";
+    Text[ arabic ] = "ÊÍÑíÑ";
+    Text[ dutch ] = "~Bewerken";
+    Text[ chinese_simplified ] = "±à¼­(~E)";
+    Text[ greek ] = "~Åğåîåñãáóßá";
+    Text[ korean ] = "ÆíÁı(~E)";
+    Text[ turkish ] = "~Düzenle";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_OPENOBJECT
+{
+    Text = "~Öffnen";
+    Text [ English ] = "~Open";
+    Text [ English_us ] = "~Open";
+    Text[ portuguese ] = "~Abrir";
+    Text[ russian ] = "Îòêğûòü";
+    Text[ dutch ] = "~Openen";
+    Text[ french ] = "~Ouvrir";
+    Text[ spanish ] = "~Abrir";
+    Text[ italian ] = "~Apri";
+    Text[ danish ] = "Åbn";
+    Text[ swedish ] = "~Öppna";
+    Text[ polish ] = "Otwórz";
+    Text[ portuguese_brazilian ] = "~Open";
+    Text[ japanese ] = "ŠJ‚­(~O)";
+    Text[ chinese_simplified ] = "´ò¿ª(~O)";
+    Text[ chinese_traditional ] = "¶}±Ò·sÀÉ(~O)";
+    Text[ arabic ] = "İÊÍ";
+    Text[ dutch ] = "~Openen";
+    Text[ chinese_simplified ] = "´ò¿ª(~O)";
+    Text[ greek ] = "¢íïéãìá";
+    Text[ korean ] = "¿­±â(~O)";
+    Text[ turkish ] = "~Aç";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_CORRUPT_INSTALLATION
+{
+    Text = "Wichtige Programmteile konnten nicht korrekt initialisiert werden.\nBitte starten sie Setup mit der Option /repair.";
+    Text [ English ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
+    Text [ English_us ] = "Important program components could not be initialized correctly.\nPlease start the setup program with the option /Repair.";
+    Text[ portuguese ] = "Foi impossível iniciar a importação dos componentes do programa correctamente.\nInicie o programa de instalação (Setup) com a opção /repair.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé óùóôŞ áíáãíşñéóç ïñéóìİíùí óçìáíôéêşí óôïé÷åßùí ôïõ ğñïãñÜììáôïò.\nĞáñáêáëş åêêéíŞóôå ôï ğñüãñáììá åãêáôÜóôáóçò ìå ôçí åğéëïãŞ /repair..";
+    Text[ dutch ] = "Belangrijke programmaonderdelen konden niet correct worden geïnitialiseerd.\nStart het setup programma met de optie /Repareren.";
+    Text[ french ] = "Certains composants importants du programme n'ont pas pu être initialisés. Veuillez activer le programme d'installation (Setup) et y activer l'option de réparation (Repair).";
+    Text[ spanish ] = "Algunos componentes importantes del programa no se pudieron instalar.\nInicie por favor el programa de instalación con la opción /repair.";
+    Text[ swedish ] = "Viktiga programdelar kunde inte initialiseras korrekt.\nVar vänlig och starta setupen med alternativet /repair.";
+    Text[ russian ] = "Íå óäàåòñÿ ïğàâèëüíî èíèöèàëèçèğîâàòü âàæíûå êîìïîíåíòû ïğîãğàììû.\nÍà÷íèòå, ïîæàëóéñòà, èíñòàëëÿöèîííóş ïğîãğàììó ñ ïàğàìåòğà /repair.";
+    Text[ italian ] = "Impossibile inizializzare importanti componenti del programma.\nAvviate il setup con l'opzione /Riparazione.";
+    Text[ danish ] = "Det var ikke muligt at initialisere vigtige programdele korrekt.\nStart venligst installationsprogrammet (Setup) med alternativet / reparation.";
+    Text[ polish ] = "Wa¿ne czêœci programu nie mog³y zostaæ prawid³owo zainstalowane.\nProszê uruchomiæ program instalacyjny u¿ywaj¹c opcji / repair";
+    Text[ portuguese_brazilian ] = "Important program components could not be initialized correctly. Please start the setup program with the option /repair.";
+    Text[ japanese ] = "‘åØ‚ÈÌßÛ¸Ş×Ñ‚Ì•”•ª‚ª³í‚É‰Šú‰»‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B\n¾¯Ä±¯Ìß‚ğµÌß¼®İ/C•œ‚ÅŠJn‚µ‚Ä‰º‚³‚¢B";
+    Text[ korean ] = "ÇÁ·Î±×·¥ÀÇ Áß¿ä ºÎºĞÀ» Á¦´ë·Î ÃÊ±âÈ­ÇÏÁö ¸øÇß½À´Ï´Ù. \n¿É¼Ç/º¹±¸·Î SetupÀ» ½ÃÀÛÇÏ½Ê½Ã¿À.";
+    Text[ chinese_simplified ] = "ÎŞ·¨ÕıÈ·³õÊ¼»¯ÖØÒªµÄ³Ì²¿¼ş¡£\nÇëÄúÆô¶¯°²×°³ÌĞò£¬Ö´ĞĞÑ¡ÏîĞŞ²¹¡£";
+    Text[ chinese_traditional ] = "µLªk¥¿ÚÌªì©l¤Æ­«­nªºµ{¦¡³¡¥ó¡C½Ğ±z±Ò°Ê¦w¸Ëµ{¦¡¡A°õ¦æ­×Î`¿ï¶µ¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÊËÈíÊ ÈÚÖ ÚäÇÕÑ ÇáÈÑäÇãÌ ÇáåÇãÉ ÈÔßá ÕÍíÍ.\nÇáÑÌÇÁ ÈÏÁ ÈÑäÇãÌ ÇáÅÚÏÇÏ ÈÇáÎíÇÑ /repair.";
+    Text[ turkish ] = "Önemli program öğeleri doğru bir şekilde başlatılamadı.\nKurulumu /repair seçeneği ile başlatın.";
+};
+
+String IDS_SBERR_STOREREF
+{
+    Text = "Referenz wird nicht gespeichert: ";
+    Text [ italian ] = "Il riferimento non viene salvato: ";
+    Text [ portuguese_brazilian ] = "reference will not be saved: ";
+    Text [ portuguese ] = "A referência não será guardada:  ";
+    Text [ danish ] = "Referencen bliver ikke gemt: ";
+    Text [ french ] = "Impossible d'enregistrer la référence : ";
+    Text [ swedish ] = "Referens sparas inte:  ";
+    Text [ dutch ] = "Verwijzing wordt niet opgeslagen:  ";
+    Text [ spanish ] = "No se guardará la referencia:  ";
+    Text [ english_us ] = "Reference will not be saved: ";
+    Text[ chinese_simplified ] = "²»»á±£´æÒıÓÃ ";
+    Text[ language_user1 ] = " ";
+    Text[ russian ] = "Ññûëêà ñîõğàíåíà íå áóäåò: ";
+    Text[ polish ] = "Odwo³anie nie zosta³o zapisane: ";
+    Text[ japanese ] = "QÆ‚Í•Û‘¶‚³‚ê‚Ü‚¹‚ñ: ";
+    Text[ chinese_traditional ] = "¤£Àx¦s°Ñ·Ó¡G ";
+    Text[ arabic ] = "áä íÊã ÍİÙ ÇáãÑÌÚ:";
+    Text[ dutch ] = "Verwijzing wordt niet opgeslagen:  ";
+    Text[ chinese_simplified ] = "²»»á±£´æÒıÓÃ ";
+    Text[ greek ] = "Ç áíáöïñÜ äåí èá áğïèçêåõôåß: ";
+    Text[ korean ] = "ÂüÁ¶°¡ ÀúÀåµÇÁö ¾ÊÀ»°Í ÀÔ´Ï´Ù: ";
+    Text[ turkish ] = "Referans kaydedilmeyecek: ";
+};
+
+ // ********************************************************************** EOF
+

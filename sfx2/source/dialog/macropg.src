@@ -1,0 +1,502 @@
+/*************************************************************************
+ *
+ *  $RCSfile: macropg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "macropg.hrc"
+#include "dialog.hrc"
+#include "helpid.hrc"
+TabPage RID_SFX_TP_MACROASSIGN
+{
+     // HelpID = HID_MACROASSIGN ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 176 ) ;
+    Text = "Makro zuweisen" ;
+    Text [ English ] = "Assign macro" ;
+    Text [ english_us ] = "Assign Macro" ;
+    Text [ italian ] = "Assegna macro" ;
+    Text [ spanish ] = "Asignar macro" ;
+    Text [ french ] = "Assignation de macro" ;
+    Text [ dutch ] = "Macro toewijzen" ;
+    Text [ swedish ] = "Tilldela makro" ;
+    Text [ danish ] = "Tildel makro" ;
+    Text [ portuguese_brazilian ] = "Makro zuweisen" ;
+    Text [ portuguese ] = "Atribuir macro" ;
+    GroupBox GB_EVENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 192 , 68 ) ;
+        Text = "Ereignis" ;
+        Text [ ENGLISH ] = "Event" ;
+        Group = TRUE ;
+        Text [ english_us ] = "Event" ;
+        Text [ italian ] = "Evento" ;
+        Text [ spanish ] = "Acontecimiento" ;
+        Text [ french ] = "…vÈnement" ;
+        Text [ dutch ] = "Gebeurtenis" ;
+        Text [ swedish ] = "H‰ndelse" ;
+        Text [ danish ] = "Begivenhed" ;
+        Text [ portuguese_brazilian ] = "Ereignis" ;
+        Text [ portuguese ] = "Acontecimento" ;
+        Text[ chinese_simplified ] = " ¬º˛";
+        Text[ russian ] = "—Ó·˚ÚËÂ";
+        Text[ polish ] = "Wydarzenie";
+        Text[ japanese ] = "é¿çsçÄñ⁄";
+        Text[ chinese_traditional ] = "∞ ß@";
+        Text[ arabic ] = "«·ÕœÀ";
+        Text[ greek ] = "√Â„ÔÌ¸Ú";
+        Text[ korean ] = "¿Ã∫•∆Æ";
+        Text[ turkish ] = "Olay";
+    };
+    Control LB_EVENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 180 , 51 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Disable = TRUE ;
+        HelpID = HID_MACRO_LB_EVENT ;
+    };
+    GroupBox GB_MACRO
+    {
+        Pos = MAP_APPFONT ( 6 , 77 ) ;
+        Size = MAP_APPFONT ( 248 , 93 ) ;
+        Group = TRUE ;
+    };
+    Control LB_GROUP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 111 , 76 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        HelpId = HID_MACRO_GROUP ;
+    };
+    Control LB_MACROS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 129 , 88 ) ;
+        Size = MAP_APPFONT ( 119 , 76 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        HelpId = HID_MACRO_MACROS ;
+    };
+    PushButton PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
+        Text = "Z~uweisen" ;
+        Text [ English ] = "Assign" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Assign" ;
+        Text [ italian ] = "Assegna" ;
+        Text [ spanish ] = "~Asignar" ;
+        Text [ french ] = "~Assigner" ;
+        Text [ dutch ] = "T~oewijzen" ;
+        Text [ swedish ] = "Till~dela" ;
+        Text [ danish ] = "Tildel" ;
+        Text [ portuguese_brazilian ] = "Z~uweisen" ;
+        Text [ portuguese ] = "~Atribuir" ;
+        Text[ chinese_simplified ] = "÷∏∂®(~A)";
+        Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸";
+        Text[ polish ] = "P~rzypisz";
+        Text[ japanese ] = "äÑÇËìñÇƒ(~A)";
+        Text[ chinese_traditional ] = "´¸©w(~A)";
+        Text[ arabic ] = " ⁄ÌÌ‰";
+        Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ";
+        Text[ korean ] = "¡ˆ¡§(~A)";
+        Text[ turkish ] = "A~ta";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Aufheben" ;
+        Text [ English ] = "~Dismiss" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Remove" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~…liminer" ;
+        Text [ dutch ] = "~Opheffen" ;
+        Text [ swedish ] = "~Upph‰v" ;
+        Text [ danish ] = "Oph~Êv" ;
+        Text [ portuguese_brazilian ] = "~Aufheben" ;
+        Text [ portuguese ] = "~Limpar" ;
+        Text[ chinese_simplified ] = "»°œ˚(~R)";
+        Text[ russian ] = "ŒÚÏÂÌËÚ¸";
+        Text[ polish ] = "UsuÒ";
+        Text[ japanese ] = "âèú(~R)";
+        Text[ chinese_traditional ] = "®˙Æ¯(~R)";
+        Text[ arabic ] = "≈“«·…";
+        Text[ greek ] = " ·Ù‹Ò„ÁÛÁ";
+        Text[ korean ] = "«ÿ¡¶(~R)";
+        Text[ turkish ] = "~Kald˝r";
+    };
+    ListBox LB_SCRIPTTYPE
+    {
+        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 30 ) ;
+        Text = "~Scriptsprache" ;
+        TabStop = TRUE ;
+        Disable = FALSE ;
+        DropDown = TRUE ;
+    };
+    String STR_MACROS
+    {
+        Text = "Makros" ;
+        Text [ ENGLISH ] = "Macros" ;
+        Text [ dutch ] = "Macro¥s" ;
+        Text [ english_us ] = "Macros" ;
+        Text [ italian ] = "Macro" ;
+        Text [ spanish ] = "Macros" ;
+        Text [ french ] = "Macros" ;
+        Text [ swedish ] = "Makron" ;
+        Text [ danish ] = "Makroer" ;
+        Text [ portuguese_brazilian ] = "Makros" ;
+        Text [ portuguese ] = "Macros" ;
+        Text[ chinese_simplified ] = "∫Í";
+        Text[ russian ] = "Ã‡ÍÓÒ˚";
+        Text[ polish ] = "Makra";
+        Text[ japanese ] = "œ∏€";
+        Text[ chinese_traditional ] = "•®∂∞";
+        Text[ arabic ] = "ÊÕœ«  «·„«ﬂ—Ê";
+        Text[ greek ] = "Ã·ÍÒÔÂÌÙÔÎ›Ú";
+        Text[ korean ] = "∏≈≈©∑Œ";
+        Text[ turkish ] = "Makro";
+    };
+    Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
+    Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
+    Text[ polish ] = "Przypisz makro";
+    Text[ japanese ] = "œ∏€ÇÃäÑÇËìñÇƒ";
+    Text[ korean ] = "∏≈≈©∑Œ ¡ˆ¡§";
+    Text[ chinese_simplified ] = "÷∏∂®∫Í";
+    Text[ chinese_traditional ] = "´¸©w•®∂∞";
+    Text[ turkish ] = "Makro ata";
+    Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
+#if SUPD<582
+    String STR_JAVASCRIPT
+    {
+        Text = "JavaScript" ;
+        Text [ ENGLISH ] = "JavaScript" ;
+        Text [ english_us ] = "JavaScript" ;
+        Text [ swedish ] = "JavaScript" ;
+        Text [ danish ] = "JavaScript" ;
+        Text [ italian ] = "JavaScript" ;
+        Text [ spanish ] = "JavaScript" ;
+        Text [ french ] = "JavaScript" ;
+        Text [ dutch ] = "JavaScript" ;
+        Text [ portuguese_brazilian ] = "JavaScript" ;
+        Text [ portuguese ] = "JavaScript" ;
+        Text[ chinese_simplified ] = "JavaScript";
+        Text[ russian ] = "JavaScript";
+        Text[ polish ] = "JavaScript";
+        Text[ japanese ] = "JavaScript";
+        Text[ chinese_traditional ] = "JavaScript";
+        Text[ arabic ] = "JavaScript";
+        Text[ greek ] = "JavaScript";
+        Text[ korean ] = "JavaScript";
+        Text[ turkish ] = "JavaScript";
+    };
+    MultiLineEdit ED_JAVASCRIPT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 236 , 76 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        Hide = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+#endif
+    Text[ chinese_simplified ] = "÷∏∂®∫Í";
+    Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
+    Text[ polish ] = "Przypisz makro";
+    Text[ japanese ] = "œ∏€ÇÃäÑÇËìñÇƒ";
+    Text[ chinese_traditional ] = "´¸©w•®∂∞";
+    Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
+    Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
+    Text[ korean ] = "Assign Macro";
+};
+TabPage RID_SFX_SMALLTP_MACROASSIGN
+{
+     // HelpID = HID_MACROASSIGN ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Makro zuweisen" ;
+    Text [ English ] = "Assign macro" ;
+    Text [ english_us ] = "Assign Macro" ;
+    Text [ italian ] = "Assegna macro" ;
+    Text [ spanish ] = "Asignar macro" ;
+    Text [ french ] = "Assignation de macro" ;
+    Text [ dutch ] = "Macro toewijzen" ;
+    Text [ swedish ] = "Tilldela makro" ;
+    Text [ danish ] = "Tildel makro" ;
+    Text [ portuguese_brazilian ] = "Makro zuweisen" ;
+    Text [ portuguese ] = "Atribuir macro" ;
+    GroupBox GB_EVENT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 192 , 57 ) ;
+        Text = "Ereignis" ;
+        Text [ ENGLISH ] = "Event" ;
+        Group = TRUE ;
+        Text [ english_us ] = "Event" ;
+        Text [ italian ] = "Evento" ;
+        Text [ spanish ] = "Acontecimiento" ;
+        Text [ french ] = "…vÈnement" ;
+        Text [ dutch ] = "Gebeurtenis" ;
+        Text [ swedish ] = "H‰ndelse" ;
+        Text [ danish ] = "Begivenhed" ;
+        Text [ portuguese_brazilian ] = "Ereignis" ;
+        Text [ portuguese ] = "Acontecimento" ;
+        Text[ chinese_simplified ] = " ¬º˛";
+        Text[ russian ] = "—Ó·˚ÚËÂ";
+        Text[ polish ] = "Wydarzenie";
+        Text[ japanese ] = "é¿çsçÄñ⁄";
+        Text[ chinese_traditional ] = "∞ ß@";
+        Text[ arabic ] = "«·ÕœÀ";
+        Text[ greek ] = "√Â„ÔÌ¸Ú";
+        Text[ korean ] = "¿Ã∫•∆Æ";
+        Text[ turkish ] = "Olay";
+    };
+    Control LB_EVENT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 180 , 40 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+        Disable = TRUE ;
+        HelpID = HID_MACRO_LB_EVENT ;
+    };
+    PushButton PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+         // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
+        Text = "Z~uweisen" ;
+        Text [ English ] = "Assign" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Assign" ;
+        Text [ italian ] = "A~ssegna" ;
+        Text [ spanish ] = "~Asignar" ;
+        Text [ french ] = "~Assigner" ;
+        Text [ dutch ] = "T~oewijzen" ;
+        Text [ swedish ] = "Till~dela" ;
+        Text [ danish ] = "Tildel" ;
+        Text [ portuguese_brazilian ] = "Z~uweisen" ;
+        Text [ portuguese ] = "~Atribuir" ;
+        Text[ chinese_simplified ] = "÷∏∂®(~A)";
+        Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸";
+        Text[ polish ] = "P~rzypisz";
+        Text[ japanese ] = "äÑÇËìñÇƒ(~A)";
+        Text[ chinese_traditional ] = "´¸©w(~A)";
+        Text[ arabic ] = " ⁄ÌÌ‰";
+        Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ";
+        Text[ korean ] = "¡ˆ¡§(~A)";
+        Text[ turkish ] = "A~ta";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 204 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Aufheben" ;
+        Text [ English ] = "~Dismiss" ;
+        Disable = TRUE ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Remove" ;
+        Text [ italian ] = "~Rimuovi" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~…liminer" ;
+        Text [ dutch ] = "~Opheffen" ;
+        Text [ swedish ] = "~Upph‰v" ;
+        Text [ danish ] = "Oph~Êv" ;
+        Text [ portuguese_brazilian ] = "~Aufheben" ;
+        Text [ portuguese ] = "~Limpar" ;
+        Text[ chinese_simplified ] = "»°œ˚(~R)";
+        Text[ russian ] = "ŒÚÏÂÌËÚ¸";
+        Text[ polish ] = "~UsuÒ";
+        Text[ japanese ] = "âèú(~R)";
+        Text[ chinese_traditional ] = "®˙Æ¯(~R)";
+        Text[ arabic ] = "≈“«·…";
+        Text[ greek ] = " ·Ù‹Ò„ÁÛÁ";
+        Text[ korean ] = "«ÿ¡¶(~R)";
+        Text[ turkish ] = "~Kald˝r";
+    };
+    ListBox LB_SCRIPTTYPE
+    {
+        Pos = MAP_APPFONT ( 204 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 30 ) ;
+        Text = "~Scriptsprache" ;
+        TabStop = TRUE ;
+        Disable = FALSE ;
+        DropDown = TRUE ;
+    };
+    GroupBox GB_MACRO
+    {
+        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Size = MAP_APPFONT ( 248 , 63 ) ;
+        Group = TRUE ;
+    };
+    Control LB_GROUP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 111 , 44 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        HelpId = HID_MACRO_GROUP ;
+    };
+    Control LB_MACROS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 129 , 77 ) ;
+        Size = MAP_APPFONT ( 119 , 44 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        HelpId = HID_MACRO_MACROS ;
+    };
+    String STR_MACROS
+    {
+        Text = "Makros" ;
+        Text [ ENGLISH ] = "Macros" ;
+        Text [ dutch ] = "Macro's" ;
+        Text [ english_us ] = "Macros" ;
+        Text [ italian ] = "Macro" ;
+        Text [ spanish ] = "Macros" ;
+        Text [ french ] = "Macros" ;
+        Text [ swedish ] = "Makron" ;
+        Text [ danish ] = "Makroer" ;
+        Text [ portuguese_brazilian ] = "Makros" ;
+        Text [ portuguese ] = "Macros" ;
+        Text[ chinese_simplified ] = "∫Í";
+        Text[ russian ] = "Ã‡ÍÓÒ˚";
+        Text[ polish ] = "Makra";
+        Text[ japanese ] = "œ∏€";
+        Text[ chinese_traditional ] = "•®∂∞";
+        Text[ arabic ] = "ÊÕœ«  «·„«ﬂ—Ê";
+        Text[ greek ] = "Ã·ÍÒÔÂÌÙÔÎ›Ú";
+        Text[ korean ] = "∏≈≈©∑Œ";
+        Text[ turkish ] = "Makro";
+    };
+    Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
+    Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
+    Text[ polish ] = "Przypisz makro";
+    Text[ japanese ] = "œ∏€ÇÃäÑÇËìñÇƒ";
+    Text[ korean ] = "∏≈≈©∑Œ ¡ˆ¡§";
+    Text[ chinese_simplified ] = "÷∏∂®∫Í";
+    Text[ chinese_traditional ] = "´¸©w•®∂∞";
+    Text[ turkish ] = "Makro ata";
+    Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
+#if SUPD<582
+    String STR_JAVASCRIPT
+    {
+        Text = "JavaScript" ;
+        Text [ ENGLISH ] = "JavaScript" ;
+        Text [ english_us ] = "JavaScript" ;
+        Text [ swedish ] = "JavaScript" ;
+        Text [ danish ] = "JavaScript" ;
+        Text [ italian ] = "JavaScript" ;
+        Text [ spanish ] = "JavaScript" ;
+        Text [ french ] = "JavaScript" ;
+        Text [ dutch ] = "JavaScript" ;
+        Text [ portuguese_brazilian ] = "JavaScript" ;
+        Text [ portuguese ] = "JavaScript" ;
+        Text[ chinese_simplified ] = "JavaScript";
+        Text[ russian ] = "JavaScript";
+        Text[ polish ] = "JavaScript";
+        Text[ japanese ] = "JavaScript";
+        Text[ chinese_traditional ] = "JavaScript";
+        Text[ arabic ] = "JavaScript";
+        Text[ greek ] = "JavaScript";
+        Text[ korean ] = "JavaScript";
+        Text[ turkish ] = "JavaScript";
+    };
+    MultiLineEdit ED_JAVASCRIPT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 236 , 44 ) ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        VScroll = TRUE ;
+        HScroll = TRUE ;
+        Hide = TRUE ;
+        IgnoreTab = TRUE ;
+    };
+#endif
+    Text[ chinese_simplified ] = "÷∏∂®∫Í";
+    Text[ russian ] = "Õ‡ÁÌ‡˜ËÚ¸ Ï‡ÍÓÒ";
+    Text[ polish ] = "Przypisz makro";
+    Text[ japanese ] = "œ∏€ÇÃäÑÇËìñÇƒ";
+    Text[ chinese_traditional ] = "´¸©w•®∂∞";
+    Text[ arabic ] = " ⁄ÌÌ‰ ÊÕœ… „«ﬂ—Ê";
+    Text[ greek ] = "¡ÌÙÈÛÙÔﬂ˜ÈÛÁ Ï·ÍÒÔÂÌÙÔÎﬁÚ";
+    Text[ korean ] = "Assign Macro";
+};

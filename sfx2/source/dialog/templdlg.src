@@ -1,0 +1,435 @@
+/*************************************************************************
+ *
+ *  $RCSfile: templdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "dialog.hrc"
+#include "templdlg.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_TEMPLATE ----------------------------------------------------------
+ImageList DLG_STYLE_DESIGNER
+{
+    ImageBitmap = Bitmap { File = "sc_tdlg.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    IdList =
+    {
+        SID_STYLE_WATERCAN ; SID_STYLE_NEW_BY_EXAMPLE ;
+        SID_STYLE_UPDATE_BY_EXAMPLE ;
+    };
+    IdCount = { 3 ; };
+};
+ // RID_STYLECATALOG ------------------------------------------------------
+ModalDialog RID_STYLECATALOG
+{
+    HelpId = SID_STYLE_CATALOG ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 181 , 134 ) ;
+    Text = "Vorlagenkatalog" ;
+    Text [ English ] = "Stylesheet Catalogue" ;
+    Text [ norwegian ] = "Stylesheet Catalogue" ;
+    Text [ italian ] = "Catalogo modelli" ;
+    Text [ portuguese_brazilian ] = "Stylesheet Catalogue" ;
+    Text [ portuguese ] = "Cat·logo de estilos" ;
+    Text [ french ] = "Catalogue de styles" ;
+    Text [ dutch ] = "Catalogus opmaakprofielen" ;
+    Text [ spanish ] = "Cat·logo de estilos" ;
+    Text [ danish ] = "Typografi-katalog" ;
+    Text [ swedish ] = "Mallkatalog" ;
+    Text [ finnish ] = "Stylesheet Catalogue" ;
+    Text [ english_us ] = "Style Catalog" ;
+    Moveable = TRUE ;
+     // Closeable = TRUE;   // Dialog hat Cancel oder OK - Button !
+    OKButton BT_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 123 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 123 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BT_ORG
+    {
+        Pos = MAP_APPFONT ( 123 , 97 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Verwalten..." ;
+        Text [ English ] = "~Organize..." ;
+        Text [ norwegian ] = "~Organize..." ;
+        Text [ italian ] = "Gestisci..." ;
+        Text [ portuguese_brazilian ] = "~Organize..." ;
+        Text [ portuguese ] = "~Gerir..." ;
+        Text [ french ] = "~GÈrer..." ;
+        Text [ dutch ] = "Be~heren..." ;
+        Text [ spanish ] = "~Administrar..." ;
+        Text [ danish ] = "Administrer..." ;
+        Text [ swedish ] = "~Fˆrvalta..." ;
+        Text [ finnish ] = "~Organize..." ;
+        Text [ english_us ] = "~Organizer..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "π‹¿Ì(~O)...";
+        Text[ russian ] = "Œ„‡ÌËÁ‡ˆËˇ...";
+        Text[ polish ] = "Zarzπdzaj...";
+        Text[ japanese ] = "ä«óù(~O)...";
+        Text[ chinese_traditional ] = "∫ﬁ≤z(~O)...";
+        Text[ arabic ] = "«·≈œ«—…...";
+        Text[ greek ] = "ƒÈ·˜ÂﬂÒÈÛÁ...";
+        Text[ korean ] = "∞¸∏Æ(~O)...";
+        Text[ turkish ] = "~Yˆnet...";
+    };
+    PushButton BT_DEL
+    {
+        Pos = MAP_APPFONT ( 123 , 78 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen... : ~L˜schen... */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen... : ~L˜schen... */
+        Text = "~Lˆschen..." ;
+        Text [ English ] = "~Delete..." ;
+        Text [ norwegian ] = "~Delete..." ;
+        Text [ italian ] = "Elimina..." ;
+        Text [ portuguese_brazilian ] = "~Apagar..." ;
+        Text [ portuguese ] = "E~liminar..." ;
+        Text [ french ] = "~Supprimer..." ;
+        Text [ dutch ] = "~Wissen..." ;
+        Text [ spanish ] = "~Eliminar..." ;
+        Text [ danish ] = "Slet..." ;
+        Text [ swedish ] = "~Radera..." ;
+        Text [ finnish ] = "~Delete..." ;
+        Text [ english_us ] = "~Delete..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "…æ≥˝(~D)...";
+        Text[ russian ] = "”‰‡ÎËÚ¸...";
+        Text[ polish ] = "UsuÒ...";
+        Text[ japanese ] = "çÌèú(~D)...";
+        Text[ chinese_traditional ] = "ßR∞£(~D)...";
+        Text[ arabic ] = "Õ–›...";
+        Text[ greek ] = "ƒÈ·„Ò·ˆﬁ...";
+        Text[ korean ] = "ªË¡¶(~D)...";
+        Text[ turkish ] = "~Sil...";
+    };
+    PushButton BT_EDIT
+    {
+        Pos = MAP_APPFONT ( 123 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~ƒndern... : ~éndern... */
+        /* ### ACHTUNG: Neuer Text in Resource? ~ƒndern... : ~éndern... */
+        Text = "ƒn~dern..." ;
+        Text [ English ] = "~Change..." ;
+        Text [ norwegian ] = "~Change..." ;
+        Text [ italian ] = "Mo~difica..." ;
+        Text [ portuguese_brazilian ] = "~Change..." ;
+        Text [ portuguese ] = "~Modificar..." ;
+        Text [ french ] = "~Personnaliser..." ;
+        Text [ dutch ] = "~Wijzigen..." ;
+        Text [ spanish ] = "~Modificar..." ;
+        Text [ danish ] = "Modificer..." ;
+        Text [ swedish ] = "ƒn~dra..." ;
+        Text [ finnish ] = "~Change..." ;
+        Text [ english_us ] = "~Modify..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∏¸∏ƒ(~M)...";
+        Text[ russian ] = "»ÁÏÂÌËÚ¸...";
+        Text[ polish ] = "Modyfikuj...";
+        Text[ japanese ] = "ïœçX(~M)...";
+        Text[ chinese_traditional ] = "≈‹ßÛ(~M)...";
+        Text[ arabic ] = " ⁄œÌ·...";
+        Text[ greek ] = "‘ÒÔÔÔﬂÁÛÁ...";
+        Text[ korean ] = "∫Ø∞Ê(~M)...";
+        Text[ turkish ] = "~Dei˛tir...";
+    };
+    PushButton BT_NEW
+    {
+        Pos = MAP_APPFONT ( 123 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Neu..." ;
+        Text [ English ] = "~New..." ;
+        Text [ norwegian ] = "~New..." ;
+        Text [ italian ] = "Nuovo..." ;
+        Text [ portuguese_brazilian ] = "~Novo..." ;
+        Text [ portuguese ] = "~Novo..." ;
+        Text [ english_us ] = "~New..." ;
+        Text [ finnish ] = "~Uusi..." ;
+        Text [ danish ] = "Ny..." ;
+        Text [ french ] = "~Nouveau..." ;
+        Text [ swedish ] = "~Nytt..." ;
+        Text [ dutch ] = "~Nieuw.." ;
+        Text [ spanish ] = "~Nuevo..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "–¬Ω®(~N)...";
+        Text[ russian ] = "—ÓÁ‰‡Ú¸...";
+        Text[ polish ] = "Nowy...";
+        Text[ japanese ] = "êVãKçÏê¨(~N)...";
+        Text[ chinese_traditional ] = "∂}±“∑s¿…(~N)...";
+        Text[ arabic ] = "...ÃœÌœ";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·...";
+        Text[ korean ] = "ªı∑Œ(~N)...";
+        Text[ turkish ] = "~Yeni...";
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 123 , 114 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox BT_TOOL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 110 , 55 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    Control BT_VLIST
+    {
+        HelpId = HID_TEMPLATE_FMT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 110 , 89 ) ;
+        TabStop = TRUE ;
+    };
+    ListBox BT_FLIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 114 ) ;
+        Size = MAP_APPFONT ( 110 , 55 ) ;
+        TabStop = TRUE ;
+        Hide = TRUE ;
+        DropDown = TRUE ;
+    };
+    Text[ chinese_simplified ] = "—˘ Ωƒø¬º";
+    Text[ russian ] = "—ÔËÒÓÍ ÒÚËÎÂÈ";
+    Text[ polish ] = "Katalog stylÛw";
+    Text[ japanese ] = "Ω¿≤ŸÇÃ∂¿€∏ﬁ";
+    Text[ chinese_traditional ] = "ºÀ¶°•ÿø˝";
+    Text[ arabic ] = "ﬂ «·ÊÃ «·√‰„«ÿ";
+    Text[ greek ] = " ·Ù‹ÎÔ„ÔÚ ÒÔÙ˝˘Ì";
+    Text[ korean ] = "¿Ø«¸ ƒ´≈ª∑Œ±◊";
+    Text[ turkish ] = "BiÁim katalou";
+};
+ // Strings ---------------------------------------------------------------
+String DLG_STYLE_DESIGNER
+{
+    Text = "Stylist" ;
+    Text [ English ] = "Stylist" ;
+    Text [ english_us ] = "Stylist" ;
+    Text [ portuguese_brazilian ] = "Designer" ;
+    Text [ swedish ] = "Stylist" ;
+    Text [ danish ] = "Stylist" ;
+    Text [ italian ] = "Stilista" ;
+    Text [ spanish ] = "Estilista" ;
+    Text [ french ] = "Styliste" ;
+    Text [ dutch ] = "Stylist" ;
+    Text [ portuguese ] = "Estilista" ;
+    Text[ chinese_simplified ] = "∏˜¿‡—˘ Ω";
+    Text[ russian ] = "—ÚËÎËÒÚ";
+    Text[ polish ] = "Stylista";
+    Text[ japanese ] = "Ω¿≤ÿΩƒ";
+    Text[ chinese_traditional ] = "¶U√˛ºÀ¶°";
+    Text[ arabic ] = "«·„ı’„„";
+    Text[ greek ] = "Stylist";
+    Text[ korean ] = "Stylist";
+    Text[ turkish ] = "Stylist";
+};
+String STR_STYLE_FILTER_HIERARCHICAL
+{
+    TEXT = "Hierarchisch" ;
+    TEXT [ English ] = "Hierarchical" ;
+    TEXT [ norwegian ] = "Hierarkisk" ;
+    TEXT [ italian ] = "Gerarchico" ;
+    TEXT [ portuguese_brazilian ] = "Hierarchical" ;
+    TEXT [ portuguese ] = "Hier·rquico" ;
+    TEXT [ finnish ] = "Hierarchical" ;
+    TEXT [ danish ] = "Hierarkisk" ;
+    TEXT [ french ] = "HiÈrarchique" ;
+    TEXT [ swedish ] = "Hierarkiskt" ;
+    TEXT [ dutch ] = "HiÎrarchisch" ;
+    TEXT [ spanish ] = "Jer·rquico" ;
+    TEXT [ english_us ] = "Hierarchical" ;
+    TEXT[ chinese_simplified ] = "µ»º∂ Ω";
+    TEXT[ russian ] = "œÓ ËÂ‡ıËË";
+    TEXT[ polish ] = "Hierarchiczny";
+    TEXT[ japanese ] = "äKëw";
+    TEXT[ chinese_traditional ] = "µ•Ø≈¶°";
+    TEXT[ arabic ] = "ÂÌﬂ·Ì";
+    TEXT[ greek ] = "…ÂÒ·Ò˜ÈÍ‹";
+    TEXT[ korean ] = "∞Ë√˛¿˚";
+    TEXT[ turkish ] = "Hiyerar˛ik";
+};
+ // DLG_STYLE_DESIGNER ----------------------------------------------------
+DockingWindow DLG_STYLE_DESIGNER
+{
+    HelpId = SID_STYLE_DESIGNER ;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 116 , 215 ) ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Sizeable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+     // HideWhenDeactivate = TRUE;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    ToolBox TB_ACTION
+    {
+        Pos = MAP_APPFONT ( 3 , 3 ) ;
+        Size = MAP_APPFONT ( 57 , 42 ) ;
+        LineCount = 1 ;
+        ItemImageList = DLG_STYLE_DESIGNER ;
+        HelpId = HID_TEMPLDLG_TOOLBOX_RIGHT ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                HelpId = HID_TEMPLDLG_WATERCAN ;
+                Identifier = SID_STYLE_WATERCAN ;
+                /* ### ACHTUNG: Neuer Text in Resource? Gieﬂkannenmodus : Gieòkannenmodus */
+                /* ### ACHTUNG: Neuer Text in Resource? Gieﬂkannenmodus : Gieòkannenmodus */
+                Text = "Gieﬂkannenmodus" ;
+                Text [ English ] = "Watercan" ;
+                Text [ norwegian ] = "Rammefyll" ;
+                Text [ italian ] = "Modo riempimento" ;
+                Text [ portuguese_brazilian ] = "Watercan" ;
+                Text [ portuguese ] = "Preenchimento completo" ;
+                Text [ english_us ] = "Fill Format Mode" ;
+                Text [ finnish ] = "Ruisku" ;
+                Text [ danish ] = "Fyldmodus" ;
+                Text [ french ] = "Mode Remplir tout" ;
+                Text [ swedish ] = "Vattenkannel‰ge" ;
+                Text [ dutch ] = "Gietermodus" ;
+                Text [ spanish ] = "Modo regadera" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gieﬂkannenmodus anwenden : Vorlagen im Gieòkannenmodus anwenden */
+                /* ### ACHTUNG: Neuer Text in Resource? Vorlagen im Gieòkannenmodus anwenden : Vorlagen im Gie√kannenmodus anwenden */
+                Text[ chinese_simplified ] = "≥‰ÃÓƒ£ Ω";
+                Text[ russian ] = "–ÂÊËÏ Á‡ÎË‚ÍË";
+                Text[ polish ] = "Tryb polewaczki";
+                Text[ japanese ] = "êÖÇ‚ÇË”∞ƒﬁ";
+                Text[ chinese_traditional ] = "•R∂Òº“¶°";
+                Text[ arabic ] = "Ê÷⁄ «·—‘«‘…";
+                Text[ greek ] = " ·Ù‹ÛÙ·ÛÁ „ÂÏﬂÛÏ·ÙÔÚ";
+                Text[ korean ] = "º≠Ωƒ ∏µÂ √§øÏ±‚";
+                Text[ turkish ] = "Doldur kipi";
+            };
+            ToolBoxItem
+            {
+                HelpId = HID_TEMPLDLG_NEWBYEXAMPLE ;
+                Identifier = SID_STYLE_NEW_BY_EXAMPLE ;
+                Text = "Neue Vorlage aus Selektion" ;
+                Text [ English ] = "New style by example" ;
+                Text [ norwegian ] = "Ny mal etter eksempel" ;
+                Text [ italian ] = "Nuovo modello dalla selezione" ;
+                Text [ portuguese_brazilian ] = "Novo estilo por exemplo" ;
+                Text [ portuguese ] = "Novo estilo a partir da selecÁ„o" ;
+                Text [ english_us ] = "New Style from Selection" ;
+                Text [ finnish ] = "Uusi tyyli esimerkin mukaan" ;
+                Text [ danish ] = "Ny typografi fra markeringen" ;
+                Text [ french ] = "Nouveau style ‡ partir de la sÈlection" ;
+                Text [ swedish ] = "Ny formatmall frÂn markeringen" ;
+                Text [ dutch ] = "Nieuw opmaakprofiel uit selectie" ;
+                Text [ spanish ] = "Nuevo estilo a partir de selecciÛn" ;
+                Text[ chinese_simplified ] = "—°÷–µƒ–¬—˘ Ω";
+                Text[ russian ] = "—ÓÁ‰‡Ú¸ ÒÚËÎ¸ ËÁ ‚˚·‡ÌÌÓ„Ó";
+                Text[ polish ] = "Nowy styl z selekcji";
+                Text[ japanese ] = "ëIëΩ¿≤ŸÇ©ÇÁêVãKçÏê¨";
+                Text[ chinese_traditional ] = "∑sºÀ¶°±qøÔæ‹";
+                Text[ arabic ] = "‰„ÿ ÃœÌœ „‰ «· ÕœÌœ";
+                Text[ greek ] = "Õ›Ô Ò¸ÙıÔ ·¸ ÂÈÎÔ„ﬁ";
+                Text[ korean ] = "º±≈√øµø™¿« ªı ¿Ø«¸";
+                Text[ turkish ] = "Yeni biÁim seÁimi";
+            };
+            ToolBoxItem
+            {
+                HelpId = HID_TEMPLDLG_UPDATEBYEXAMPLE ;
+                Identifier = SID_STYLE_UPDATE_BY_EXAMPLE ;
+                Text = "Vorlage aktualisieren" ;
+                Text [ English ] = "Update style by example" ;
+                Text [ norwegian ] = "Oppdater mal etter eksempel" ;
+                Text [ italian ] = "Aggiorna modello" ;
+                Text [ portuguese_brazilian ] = "Atualizar estilo por exemplo" ;
+                Text [ portuguese ] = "Actualizar modelo" ;
+                Text [ english_us ] = "Update Style" ;
+                Text [ finnish ] = "P‰ivit‰ tyyli esimerkin mukaan" ;
+                Text [ danish ] = "Opdater typografi" ;
+                Text [ french ] = "Actualiser le style" ;
+                Text [ swedish ] = "Uppdatera formatmall" ;
+                Text [ dutch ] = "Opmaakprofiel actualiseren" ;
+                Text [ spanish ] = "Actualizar estilo" ;
+                Text[ chinese_simplified ] = "∏¸–¬—˘ Ω";
+                Text[ russian ] = "Œ·ÌÓ‚ËÚ¸ ÒÚËÎ¸";
+                Text[ polish ] = "Aktualizuj styl";
+                Text[ japanese ] = "Ω¿≤ŸÇÃçXêV";
+                Text[ chinese_traditional ] = "ßÛ∑sºÀ¶°";
+                Text[ arabic ] = " ÕœÌÀ «·‰„ÿ";
+                Text[ greek ] = "≈ÌÁÏ›Ò˘ÛÁ ÒÔÙ˝Ôı";
+                Text[ korean ] = "¿Ø«¸ æ˜µ•¿Ã∆Æ";
+                Text[ turkish ] = "BiÁimi g¸ncelle";
+            };
+        };
+    };
+};
+ // ********************************************************************** EOF

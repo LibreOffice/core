@@ -1,0 +1,1348 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fontwork.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "svxids.hrc"
+#include "dialogs.hrc"
+#include "fontwork.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_FONTWORK ---------------------------------------------------
+DockingWindow RID_SVXDLG_FONTWORK
+{
+    HelpId = SID_FONTWORK ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 89 , 193 ) ;
+    Text = "FontWork" ;
+    Text [ ENGLISH ] = "FontWork" ;
+    Text [ norwegian ] = "FontWork" ;
+    Text [ italian ] = "FontWork" ;
+    Text [ portuguese_brazilian ] = "FontWork" ;
+    Text [ portuguese ] = "FontWork" ;
+    Text [ french ] = "FontWork" ;
+    Text [ dutch ] = "FontWork" ;
+    Text [ spanish ] = "FontWork" ;
+    Text [ danish ] = "FontWork" ;
+    Text [ swedish ] = "FontWork" ;
+    Text [ finnish ] = "FontWork" ;
+    Text [ english_us ] = "FontWork" ;
+    Moveable = TRUE ;
+    Zoomable = TRUE ;
+    Closeable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+    Control VS_FORMS
+    {
+        HelpId = HID_FONTWORK_CTL_FORMS ;
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 71 , 30 ) ;
+        Border = TRUE ;
+    };
+    ToolBox TBX_STYLE
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 41 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Identifier = TBI_STYLE_OFF ;
+                HelpId = HID_FONTWORK_TBI_STYLE_OFF ;
+                Text = "Aus" ;
+                Text [ ENGLISH ] = "Off" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftoff.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Uit" ;
+                Text [ english_us ] = "Off" ;
+                Text [ italian ] = "Off" ;
+                Text [ spanish ] = "Desactivado" ;
+                Text [ french ] = "Désactivé" ;
+                Text [ swedish ] = "Av" ;
+                Text [ danish ] = "Deaktiver" ;
+                Text [ portuguese ] = "Desactivar" ;
+                Text [ portuguese_brazilian ] = "Aus" ;
+                Text[ chinese_simplified ] = "Ê§»î";
+                Text[ russian ] = "Âûêë.";
+                Text[ polish ] = "Wy³¹cz";
+                Text[ japanese ] = "µÌ";
+                Text[ chinese_traditional ] = "¥¢¬¡";
+                Text[ arabic ] = "ÅíŞÇİ";
+                Text[ greek ] = "¼÷é";
+                Text[ korean ] = "ÇØÁ¦";
+                Text[ turkish ] = "Kapalı";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_ROTATE ;
+                HelpId = HID_FONTWORK_TBI_STYLE_ROTATE ;
+                Text = "Drehen" ;
+                Text [ ENGLISH ] = "Rotate" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftrotate.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Draaien" ;
+                Text [ english_us ] = "Rotate" ;
+                Text [ italian ] = "Ruota" ;
+                Text [ spanish ] = "Rodar" ;
+                Text [ french ] = "Rotation" ;
+                Text [ swedish ] = "Rotera" ;
+                Text [ danish ] = "Roter" ;
+                Text [ portuguese ] = "Rodar" ;
+                Text [ portuguese_brazilian ] = "Drehen" ;
+                Text[ chinese_simplified ] = "Ğı×ª";
+                Text[ russian ] = "Ïîâîğîò";
+                Text[ polish ] = "Obróæ";
+                Text[ japanese ] = "‰ñ“]";
+                Text[ chinese_traditional ] = "±ÛÂà";
+                Text[ arabic ] = "ÏæÑÇä";
+                Text[ greek ] = "ĞåñéóôñïöŞ";
+                Text[ korean ] = "È¸Àü";
+                Text[ turkish ] = "Çevir";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_UPRIGHT ;
+                HelpId = HID_FONTWORK_TBI_STYLE_UPRIGHT ;
+                Text = "Aufrecht" ;
+                Text [ ENGLISH ] = "Upright" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftuprght.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Rechtop" ;
+                Text [ english_us ] = "Upright" ;
+                Text [ italian ] = "In piedi" ;
+                Text [ spanish ] = "Derecho" ;
+                Text [ french ] = "Debout" ;
+                Text [ swedish ] = "Upprätt" ;
+                Text [ danish ] = "Opret" ;
+                Text [ portuguese ] = "Direito" ;
+                Text [ portuguese_brazilian ] = "Aufrecht" ;
+                Text[ chinese_simplified ] = "Ö±Á¢";
+                Text[ russian ] = "Ïğÿìî";
+                Text[ polish ] = "Prosto";
+                Text[ japanese ] = "’¼—§";
+                Text[ chinese_traditional ] = "ª½¥ß";
+                Text[ arabic ] = "ÚãæÏí";
+                Text[ greek ] = "ÏñèÜ";
+                Text[ korean ] = "¶È¹Ù·Î";
+                Text[ turkish ] = "Dik";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_SLANTX ;
+                HelpId = HID_FONTWORK_TBI_STYLE_SLANTX ;
+                Text = "Horizontal kippen" ;
+                Text [ ENGLISH ] = "Slant horizontal" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftslantx.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Horizontaal kantelen" ;
+                Text [ english_us ] = "Slant Horizontal" ;
+                Text [ italian ] = "Inclina orizzontalmente" ;
+                Text [ spanish ] = "Inclinar horizontalmente" ;
+                Text [ french ] = "Basculer à l'horizontale" ;
+                Text [ swedish ] = "Tippa horisontellt" ;
+                Text [ danish ] = "Hæld vandret" ;
+                Text [ portuguese ] = "Inclinar na horizontal" ;
+                Text [ portuguese_brazilian ] = "Horizontal kippen" ;
+                Text[ chinese_simplified ] = "Ë®Æ½ÇãĞ±";
+                Text[ russian ] = "Íàêëîí ïî ãîğèçîíòàëè";
+                Text[ polish ] = "Przerzuæ w poziomie";
+                Text[ japanese ] = "‰¡‚ÉŒXÎ";
+                Text[ chinese_traditional ] = "¤ô¥­¶b¦V¶É±×";
+                Text[ arabic ] = "ÅãÇáÉ ÃİŞíÉ";
+                Text[ greek ] = "ÁíáôñïğŞ ïñéæüíôéá";
+                Text[ korean ] = "¼öÆòÀ¸·Î ±â¿ï±â";
+                Text[ turkish ] = "Yatay eğim";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_STYLE_SLANTY ;
+                HelpId = HID_FONTWORK_TBI_STYLE_SLANTY ;
+                Text = "Vertikal kippen" ;
+                Text [ ENGLISH ] = "Slant vertical" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftslanty.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Slant Vertical" ;
+                Text [ italian ] = "Inclina verticalmente" ;
+                Text [ spanish ] = "Inclinar verticalmente" ;
+                Text [ french ] = "Basculer à la verticale" ;
+                Text [ dutch ] = "Verticaal kantelen" ;
+                Text [ swedish ] = "Tippa vertikalt" ;
+                Text [ danish ] = "Hæld lodret" ;
+                Text [ portuguese ] = "Inclinar na vertical" ;
+                Text [ portuguese_brazilian ] = "Vertikal kippen" ;
+                Text[ chinese_simplified ] = "´¹Ö±ÇãĞ±";
+                Text[ russian ] = "Íàêëîí ïî âåğòèêàëè";
+                Text[ polish ] = "Przerzuæ w pionie";
+                Text[ japanese ] = "c‚ÉŒXÎ";
+                Text[ chinese_traditional ] = "««ª½¶b¦V¶É±×";
+                Text[ arabic ] = "ÅãÇáÉ ÑÃÓíÉ";
+                Text[ greek ] = "ÁíáôñïğŞ êáôáêüñõöá";
+                Text[ korean ] = "¼öÁ÷À¸·Î ±â¿ï±â";
+                Text[ turkish ] = "Dikey eğim";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    ToolBox TBX_ADJUST
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 63 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_ADJUST_MIRROR ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_MIRROR ;
+                Text = "Laufrichtung" ;
+                Text [ ENGLISH ] = "Text direction" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftmirror.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Looprichting" ;
+                Text [ english_us ] = "Orientation" ;
+                Text [ italian ] = "Direzione di scorrimento" ;
+                Text [ spanish ] = "Orientación" ;
+                Text [ french ] = "Orientation" ;
+                Text [ swedish ] = "Löpriktning" ;
+                Text [ danish ] = "Retning" ;
+                Text [ portuguese ] = "Orientação" ;
+                Text [ portuguese_brazilian ] = "Laufrichtung" ;
+                Text[ chinese_simplified ] = "·½Ïò";
+                Text[ russian ] = "Íàïğàâëåíèå";
+                Text[ polish ] = "Orientacja";
+                Text[ japanese ] = "•ûŒü";
+                Text[ chinese_traditional ] = "¤è¦V";
+                Text[ arabic ] = "ÇáÇÊÌÇå";
+                Text[ greek ] = "Êáôåıèõíóç ñïŞò";
+                Text[ korean ] = "¹æÇâ";
+                Text[ turkish ] = "Metin yönü";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_LEFT ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
+                /* ### ACHTUNG: Neuer Text in Resource? Linksbündig : Linksb³ndig */
+                Text = "Linksbündig" ;
+                Text [ ENGLISH ] = "Left aligned" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftleft.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Links uitgelijnd" ;
+                Text [ english_us ] = "Align Left" ;
+                Text [ italian ] = "Allineato a sinistra" ;
+                Text [ spanish ] = "Alineado a la izquierda" ;
+                Text [ french ] = "Aligné à gauche" ;
+                Text [ swedish ] = "Vänsterjusterad" ;
+                Text [ danish ] = "Venstrejusteret" ;
+                Text [ portuguese ] = "À esquerda" ;
+                Text [ portuguese_brazilian ] = "Linksbündig" ;
+                Text[ chinese_simplified ] = "Ïò×ó¶ÔÆë";
+                Text[ russian ] = "Âûğîâíÿòü ïî ëåâîìó êğàş";
+                Text[ polish ] = "Wyrównaj do lewej";
+                Text[ japanese ] = "¶‘µ‚¦";
+                Text[ chinese_traditional ] = "¦V¥ª¹ï»ô";
+                Text[ arabic ] = "ãÍÇĞÇÉ Åáì ÇáíÓÇÑ";
+                Text[ greek ] = "Óôïß÷éóç áñéóôåñÜ";
+                Text[ korean ] = "¿ŞÂÊ ¹è¿­";
+                Text[ turkish ] = "Sola hizala";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_CENTER ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_CENTER ;
+                Text = "Zentriert" ;
+                Text [ ENGLISH ] = "Centered" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftcenter.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Centreren" ;
+                Text [ english_us ] = "Center" ;
+                Text [ italian ] = "Centrato" ;
+                Text [ spanish ] = "Centrado" ;
+                Text [ french ] = "Centré" ;
+                Text [ swedish ] = "Centrera" ;
+                Text [ danish ] = "Centreret" ;
+                Text [ portuguese ] = "Centrado" ;
+                Text [ portuguese_brazilian ] = "Zentriert" ;
+                Text[ chinese_simplified ] = "¾ÓÖĞ";
+                Text[ russian ] = "Ïî öåíòğó";
+                Text[ polish ] = "Wyœrodkuj";
+                Text[ japanese ] = "’†‰›‘µ‚¦";
+                Text[ chinese_traditional ] = "¸m¤¤";
+                Text[ arabic ] = "ÊæÓíØ";
+                Text[ greek ] = "Êåíôñáñéóìİíá";
+                Text[ korean ] = "°¡¿îµ¥";
+                Text[ turkish ] = "Ortala";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_RIGHT ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
+                /* ### ACHTUNG: Neuer Text in Resource? Rechtsbündig : Rechtsb³ndig */
+                Text = "Rechtsbündig" ;
+                Text [ ENGLISH ] = "Right aligned" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftright.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Align Right" ;
+                Text [ italian ] = "Allineato a destra" ;
+                Text [ spanish ] = "Alinear a la derecha" ;
+                Text [ french ] = "Aligné à droite" ;
+                Text [ dutch ] = "Rechtslijnend" ;
+                Text [ swedish ] = "Högerjusterad" ;
+                Text [ danish ] = "Højrejusteret" ;
+                Text [ portuguese ] = "À direita" ;
+                Text [ portuguese_brazilian ] = "Rechtsbündig" ;
+                Text[ chinese_simplified ] = "ÓÒ¶ÔÆë";
+                Text[ russian ] = "Âûğîâíÿòü ïî ïğàâîìó êğàş";
+                Text[ polish ] = "Wyrównaj do prawej";
+                Text[ japanese ] = "‰E‘µ‚¦";
+                Text[ chinese_traditional ] = "¦V¥k¹ï»ô";
+                Text[ arabic ] = "ãÍÇĞÇÉ Åáì Çáíãíä";
+                Text[ greek ] = "Óôïß÷éóç äåîéÜ";
+                Text[ korean ] = "¿À¸¥ÂÊ ¹è¿­";
+                Text[ turkish ] = "Sağa hizala";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_ADJUST_AUTOSIZE ;
+                HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
+                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
+                /* ### ACHTUNG: Neuer Text in Resource? Auto-Textgröße : Auto-Textgr÷˜e */
+                Text = "Auto-Textgröße" ;
+                Text [ ENGLISH ] = "Autosize" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftautosz.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "AutoTekstgrootte" ;
+                Text [ english_us ] = "AutoSize Text" ;
+                Text [ italian ] = "Dimensione testo automatico" ;
+                Text [ spanish ] = "Tamaño automático de texto" ;
+                Text [ french ] = "Taille du texte adaptée" ;
+                Text [ swedish ] = "AutoTextstorlek" ;
+                Text [ danish ] = "AutoTekststørrelse" ;
+                Text [ portuguese ] = "Tamanho automático - texto" ;
+                Text [ portuguese_brazilian ] = "Auto-Textgröße" ;
+                Text[ chinese_simplified ] = "×Ô¶¯µ÷ÕûÎÄ×Ö´óĞ¡";
+                Text[ russian ] = "Àâòîğàçìåğ òåêñòà";
+                Text[ polish ] = "Rozmiar autotekstu";
+                Text[ japanese ] = "©“®Ã·½Ä»²½Ş";
+                Text[ chinese_traditional ] = "¦Û°Ê¤å¦r¤j¤p";
+                Text[ arabic ] = "ÍÌã äÕ ÊáŞÇÆí";
+                Text[ greek ] = "Áõôüìáôï ìİãåèïò êåéìİíïõ";
+                Text[ korean ] = "ÀÚµ¿ Å©±âÁ¶Àı  ÅØ½ºÆ®";
+                Text[ turkish ] = "Otomatik metin boyu";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    FixedBitmap FB_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 10 , 84 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+        Fixed = Bitmap
+        {
+            File = "ftdist.bmp" ;
+        };
+    };
+    MetricField MTR_FLD_DISTANCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 85 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText = "Abstand" ;
+        QuickHelpText [ ENGLISH ] = "Distance" ;
+        QuickHelpText [ dutch ] = "Afstand" ;
+        QuickHelpText [ english_us ] = "Distance" ;
+        CustomUnitText [ italian ] = "-" ;
+        QuickHelpText [ italian ] = "Distanza" ;
+        QuickHelpText [ spanish ] = "Distancia" ;
+        CustomUnitText [ french ] = "-" ;
+        QuickHelpText [ french ] = "Distance" ;
+        QuickHelpText [ portuguese ] = "Distância" ;
+        QuickHelpText [ portuguese_brazilian ] = "Abstand" ;
+        QuickHelpText [ swedish ] = "Avstånd" ;
+        QuickHelpText[ russian ] = "Èíòåğâàë";
+        QuickHelpText[ danish ] = "Afstand";
+        QuickHelpText[ polish ] = "Abstand";
+        QuickHelpText[ japanese ] = "ŠÔŠu";
+        QuickHelpText[ chinese_simplified ] = "¼ä¸ô";
+        QuickHelpText[ chinese_traditional ] = "¶¡¹j";
+        QuickHelpText[ arabic ] = "ÇáãÓÇİÉ";
+        QuickHelpText[ greek ] = "Áğüóôáóç";
+        QuickHelpText[ korean ] = "Distance";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    FixedBitmap FB_TEXTSTART
+    {
+        Pos = MAP_APPFONT ( 10 , 99 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+        Fixed = Bitmap
+        {
+            File = "ftstart.bmp" ;
+        };
+    };
+    MetricField MTR_FLD_TEXTSTART
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 100 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText = "Einzug" ;
+        QuickHelpText [ ENGLISH ] = "Indention" ;
+        QuickHelpText [ english_us ] = "Indent" ;
+        QuickHelpText [ italian ] = "Rientro" ;
+        QuickHelpText [ spanish ] = "Sangría" ;
+        CustomUnitText [ french ] = "-" ;
+        QuickHelpText [ french ] = "Retrait" ;
+        QuickHelpText [ dutch ] = "1e regel inspringen" ;
+        QuickHelpText [ portuguese ] = "Avanço" ;
+        QuickHelpText [ portuguese_brazilian ] = "Einzug" ;
+        QuickHelpText [ swedish ] = "Indrag" ;
+        QuickHelpText[ russian ] = "Îòñòóï";
+        QuickHelpText[ danish ] = "Indrykning";
+        QuickHelpText[ polish ] = "Einzug";
+        QuickHelpText[ japanese ] = "²İÃŞİÄ";
+        QuickHelpText[ chinese_simplified ] = "Ëõ½ø";
+        QuickHelpText[ chinese_traditional ] = "ÁY±Æ";
+        QuickHelpText[ arabic ] = "ÇáÅÒÇÍÉ";
+        QuickHelpText[ greek ] = "Åóï÷Ş";
+        QuickHelpText[ korean ] = "Indent";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    ToolBox TBX_SHADOW
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 122 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_SHOWFORM ;
+                HelpId = HID_FONTWORK_TBI_SHOWFORM ;
+                Text = "Kontur" ;
+                Text [ ENGLISH ] = "Outline" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftshowfm.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Contour" ;
+                Text [ italian ] = "Bordo" ;
+                Text [ spanish ] = "Contorno" ;
+                Text [ french ] = "Contour" ;
+                Text [ dutch ] = "Contour" ;
+                Text [ swedish ] = "Kontur" ;
+                Text [ danish ] = "Kontur" ;
+                Text [ portuguese ] = "Contorno" ;
+                Text [ portuguese_brazilian ] = "Kontur" ;
+                Text[ chinese_simplified ] = "ÂÖÀª";
+                Text[ russian ] = "Êîíòóğ";
+                Text[ polish ] = "Kontur";
+                Text[ japanese ] = "’†”²‚«";
+                Text[ chinese_traditional ] = "½ü¹ø";
+                Text[ arabic ] = "ÇáÎØ ÇáßİÇİí";
+                Text[ greek ] = "Ğåñßãñáììá";
+                Text[ korean ] = "¿ÜÇü¼±";
+                Text[ turkish ] = "Kontur";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                Checkable = TRUE ;
+                Identifier = TBI_OUTLINE ;
+                HelpId = HID_FONTWORK_TBI_OUTLINE ;
+                Text = "Buchstabenumrandung" ;
+                Text [ ENGLISH ] = "Character outlines" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftoutlin.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Letteromranding" ;
+                Text [ english_us ] = "Text Contour" ;
+                Text [ italian ] = "Bordo dei caratteri" ;
+                Text [ spanish ] = "Contorno de caracteres" ;
+                Text [ french ] = "Contour de lettres" ;
+                Text [ swedish ] = "Bokstavskontur" ;
+                Text [ danish ] = "Bogstavramme" ;
+                Text [ portuguese ] = "Contorno de caracteres" ;
+                Text [ portuguese_brazilian ] = "Buchstabenumrandung" ;
+                Text[ chinese_simplified ] = "×ÖÄ¸ÂÖÀª";
+                Text[ russian ] = "Êîíòóğû áóêâ";
+                Text[ polish ] = "Obramowanie liter";
+                Text[ japanese ] = "•¶š‚Ì—ÖŠs";
+                Text[ chinese_traditional ] = "¦r¥À½ü¹ø";
+                Text[ arabic ] = "ÇáÎØ ÇáãÍíØ ááßÊÇÈÉ";
+                Text[ greek ] = "Ğåñßãñáììá ÷áñáêôŞñùí";
+                Text[ korean ] = "ÅØ½ºÆ® ¿ÜÇü¼±";
+                Text[ turkish ] = "Metin konturu";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_OFF ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_OFF ;
+                Text = "Aus" ;
+                Text [ ENGLISH ] = "Off" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftshdoff.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "No Shadow" ;
+                Text [ italian ] = "Senza ombre" ;
+                Text [ spanish ] = "Sin sombra" ;
+                Text [ french ] = "Désactivé" ;
+                Text [ dutch ] = "Uit" ;
+                Text [ swedish ] = "Av" ;
+                Text [ danish ] = "Deaktiver" ;
+                Text [ portuguese ] = "Desactivar" ;
+                Text [ portuguese_brazilian ] = "Aus" ;
+                Text[ chinese_simplified ] = "È¡ÏûÒõÓ°";
+                Text[ russian ] = "Âûêë.";
+                Text[ polish ] = "Wy³¹cz";
+                Text[ japanese ] = "‰e‚È‚µ";
+                Text[ chinese_traditional ] = "¨ú®ø³±¼v";
+                Text[ arabic ] = "ÅíŞÇİ";
+                Text[ greek ] = "Áğåíåñãïğïßçóç";
+                Text[ korean ] = "±×¸²ÀÚ ¾ø¾Ö±â";
+                Text[ turkish ] = "Kapalı";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_NORMAL ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_NORMAL ;
+                Text = "Senkrecht" ;
+                Text [ ENGLISH ] = "Vertical" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftshdwnm.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Verticaal" ;
+                Text [ english_us ] = "Vertical" ;
+                Text [ italian ] = "Verticale" ;
+                Text [ spanish ] = "Vertical" ;
+                Text [ french ] = "Vertical" ;
+                Text [ swedish ] = "Lodrätt" ;
+                Text [ danish ] = "Lodret" ;
+                Text [ portuguese ] = "Vertical" ;
+                Text [ portuguese_brazilian ] = "Senkrecht" ;
+                Text[ chinese_simplified ] = "´¹Ö±·½Ïò";
+                Text[ russian ] = "Âåğòèêàëüíî";
+                Text[ polish ] = "Pionowo";
+                Text[ japanese ] = "³Ë‰e";
+                Text[ chinese_traditional ] = "««ª½¤è¦V";
+                Text[ arabic ] = "ÑÃÓí";
+                Text[ greek ] = "Êáôáêüñõöá";
+                Text[ korean ] = "¼öÁ÷";
+                Text[ turkish ] = "Dikey";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                AutoCheck = TRUE ;
+                RadioCheck = TRUE ;
+                Identifier = TBI_SHADOW_SLANT ;
+                HelpId = HID_FONTWORK_TBI_SHADOW_SLANT ;
+                Text = "Kippen" ;
+                Text [ ENGLISH ] = "Slant" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "ftshdwsl.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Slant" ;
+                Text [ italian ] = "Inclina" ;
+                Text [ spanish ] = "Inclinar" ;
+                Text [ french ] = "Basculer" ;
+                Text [ dutch ] = "Kantelen" ;
+                Text [ swedish ] = "Tippa" ;
+                Text [ danish ] = "Hæld" ;
+                Text [ portuguese ] = "Inclinar" ;
+                Text [ portuguese_brazilian ] = "Kippen" ;
+                Text[ chinese_simplified ] = "ÇãĞ±";
+                Text[ russian ] = "Ãîğèçîíòàëüíî";
+                Text[ polish ] = "Przerzuæ";
+                Text[ japanese ] = "Î“Š‰e";
+                Text[ chinese_traditional ] = "¶É±×";
+                Text[ arabic ] = "Êãííá";
+                Text[ greek ] = "ÁíáôñïğŞ";
+                Text[ korean ] = "±â¿ì¸®±â";
+                Text[ turkish ] = "Eğim";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    FixedBitmap FB_SHADOW_X
+    {
+        Pos = MAP_APPFONT ( 10 , 143 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_SHADOW_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 144 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = -5000000 ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        CustomUnitText = " Grad" ;
+        CustomUnitText [ ENGLISH ] = "Degrees" ;
+        CustomUnitText [ norwegian ] = "Degrees" ;
+        CustomUnitText [ italian ] = "gradi" ;
+        CustomUnitText [ portuguese_brazilian ] = "Degrees" ;
+        CustomUnitText [ portuguese ] = "Graus" ;
+        CustomUnitText [ french ] = "degrés" ;
+        CustomUnitText [ dutch ] = "graden" ;
+        CustomUnitText [ spanish ] = "Grados" ;
+        CustomUnitText [ danish ] = "grader" ;
+        CustomUnitText [ swedish ] = "grader" ;
+        CustomUnitText [ finnish ] = "Degrees" ;
+        CustomUnitText [ english_us ] = "degrees" ;
+        First = -5000000 ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        QuickHelpText = "Abstand X" ;
+        QuickHelpText [ ENGLISH ] = "Distance X" ;
+        QuickHelpText [ dutch ] = "Afstand X" ;
+        QuickHelpText [ english_us ] = "Distance X" ;
+        QuickHelpText [ italian ] = "Distanza X" ;
+        QuickHelpText [ spanish ] = "Distancia X" ;
+        QuickHelpText [ french ] = "Distance X" ;
+        QuickHelpText [ danish ] = "Afstand X" ;
+        QuickHelpText [ portuguese ] = "Distância X" ;
+        QuickHelpText [ portuguese_brazilian ] = "Abstand X" ;
+        QuickHelpText [ swedish ] = "Avstånd X" ;
+        CustomUnitText[ chinese_simplified ] = "¶È";
+        CustomUnitText[ russian ] = "Ãğàäóñ";
+        CustomUnitText[ polish ] = "Stopieñ";
+        CustomUnitText[ japanese ] = "“x";
+        CustomUnitText[ chinese_traditional ] = "«×";
+        CustomUnitText[ arabic ] = "ÏÑÌÉ/ÏÑÌÇÊ";
+        QuickHelpText[ russian ] = "Èíòåğâàë X";
+        QuickHelpText[ polish ] = "Abstand X";
+        QuickHelpText[ japanese ] = "Abstand X";
+        QuickHelpText[ chinese_simplified ] = "¼ä¸ô X";
+        QuickHelpText[ chinese_traditional ] = "¶¡¹j X";
+        QuickHelpText[ arabic ] = "ÇáãÓÇİÉ Ó";
+        CustomUnitText[ greek ] = "ìïßñåò";
+        CustomUnitText[ korean ] = "µî±Ş";
+        QuickHelpText[ greek ] = "Distance X";
+        QuickHelpText[ korean ] = "Distance X";
+        CustomUnitText[ turkish ] = "Derece";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    FixedBitmap FB_SHADOW_Y
+    {
+        Pos = MAP_APPFONT ( 10 , 158 ) ;
+        Size = MAP_APPFONT ( 14 , 15 ) ;
+    };
+    MetricField MTR_FLD_SHADOW_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 29 , 159 ) ;
+        Size = MAP_APPFONT ( 48 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 5000000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Last = 5000000 ;
+        SpinSize = 50 ;
+        CustomUnitText = " %" ;
+        QuickHelpText = "Abstand Y" ;
+        QuickHelpText [ ENGLISH ] = "Distance Y" ;
+        QuickHelpText [ english_us ] = "Distance Y" ;
+        QuickHelpText [ italian ] = "Distanza Y" ;
+        QuickHelpText [ spanish ] = "Distancia Y" ;
+        QuickHelpText [ french ] = "Distance Y" ;
+        QuickHelpText [ dutch ] = "Afstand Y" ;
+        QuickHelpText [ danish ] = "Afstand Y" ;
+        QuickHelpText [ portuguese ] = "Distância Y" ;
+        QuickHelpText [ portuguese_brazilian ] = "Abstand Y" ;
+        CustomUnitText [ portuguese ] = "%" ;
+        CustomUnitText [ english_us ] = "%" ;
+        CustomUnitText [ portuguese_brazilian ] = "%" ;
+        CustomUnitText [ swedish ] = "%" ;
+        QuickHelpText [ swedish ] = "Avstånd Y" ;
+        CustomUnitText [ danish ] = "%" ;
+        CustomUnitText [ italian ] = "%" ;
+        CustomUnitText [ spanish ] = "%" ;
+        CustomUnitText [ french ] = "%" ;
+        CustomUnitText [ dutch ] = "%" ;
+        CustomUnitText[ chinese_simplified ] = "%";
+        CustomUnitText[ russian ] = "%";
+        CustomUnitText[ polish ] = "%";
+        CustomUnitText[ japanese ] = "%";
+        CustomUnitText[ chinese_traditional ] = "%";
+        CustomUnitText[ arabic ] = "%";
+        QuickHelpText[ russian ] = "Abstand Y";
+        QuickHelpText[ polish ] = "Abstand Y";
+        QuickHelpText[ japanese ] = "ŠÔŠu Y";
+        QuickHelpText[ chinese_simplified ] = "¼ä¸ô Y";
+        QuickHelpText[ chinese_traditional ] = "¶¡¹j Y";
+        QuickHelpText[ arabic ] = "Distance Y";
+        CustomUnitText[ greek ] = "%";
+        CustomUnitText[ korean ] = "%";
+        QuickHelpText[ greek ] = "Áğüóôáóç Y";
+        QuickHelpText[ korean ] = "Distance Y";
+        CustomUnitText[ turkish ] = "%";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    ListBox CLB_SHADOW_COLOR
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 174 ) ;
+        Size = MAP_APPFONT ( 71 , 60 ) ;
+        DropDown = TRUE ;
+        QuickHelpText = "Schattenfarbe" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ english_us ] = "Shadow Color" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ spanish ] = "Color sombra" ;
+        QuickHelpText [ french ] = "Couleur d'ombre" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ dutch ] = "Schaduwkleur" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ swedish ] = "Skuggans färg" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ italian ] = "Colore dell'ombra" ;
+        QuickHelpText [ portuguese ] = "Cor do sombreado" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbe" ;
+        QuickHelpText [ danish ] = "Skyggefarve" ;
+            Text[ portuguese_brazilian ] = "Farbe";
+        Text[ danish ] = "-";
+    QuickHelpText[ russian ] = "Öâåò òåíè";
+        QuickHelpText[ polish ] = "Schattenfarbe";
+        QuickHelpText[ japanese ] = "‰e‚ÌF";
+        QuickHelpText[ chinese_simplified ] = "ÒõÓ°ÑÕÉ«";
+        QuickHelpText[ chinese_traditional ] = "³±¼vÃC¦â";
+        QuickHelpText[ arabic ] = "áæä ÇáÙá";
+        QuickHelpText[ greek ] = "Shadow Color";
+        QuickHelpText[ korean ] = "Shadow Color";
+        Text[ greek ] = "×ñşìá óêéÜò";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "ÃÀ¹¤×ÖÌå";
+    Text[ russian ] = "FontWork";
+    Text[ polish ] = "FontWork";
+    Text[ japanese ] = "Ì«İÄÜ°¸";
+    Text[ chinese_traditional ] = "¬ü³N¦r«¬";
+    Text[ arabic ] = "FontWork";
+    Text[ greek ] = "FontWork";
+    Text[ korean ] = "FontWork";
+    Text[ turkish ] = "FontWork";
+    Text[ language_user1 ] = " ";
+};
+ // Bitmaps ---------------------------------------------------------------
+Bitmap RID_SVXBMP_FONTWORK_FORM1
+{
+    File = "fwthcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM2
+{
+    File = "fwbhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM3
+{
+    File = "fwlhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM4
+{
+    File = "fwrhcirc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM5
+{
+    File = "fwtoparc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM6
+{
+    File = "fwbotarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM7
+{
+    File = "fwlftarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM8
+{
+    File = "fwrgtarc.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM9
+{
+    File = "fwbuttn1.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM10
+{
+    File = "fwbuttn2.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM11
+{
+    File = "fwbuttn3.bmp" ;
+};
+Bitmap RID_SVXBMP_FONTWORK_FORM12
+{
+    File = "fwbuttn4.bmp" ;
+};
+Bitmap RID_SVXBMP_SHADOW_XDIST
+{
+    File = "ftshdwx.bmp" ;
+};
+Bitmap RID_SVXBMP_SHADOW_YDIST
+{
+    File = "ftshdwy.bmp" ;
+};
+Bitmap RID_SVXBMP_SHADOW_ANGLE
+{
+    File = "ftshdang.bmp" ;
+};
+Bitmap RID_SVXBMP_SHADOW_SIZE
+{
+    File = "ftshdsiz.bmp" ;
+};
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_FONTWORK_FORM1
+{
+    Text = "Oberer Halbkreis" ;
+    Text [ ENGLISH ] = "Top half circle" ;
+    Text [ norwegian ] = "Top half circle" ;
+    Text [ italian ] = "Semicerchio superiore" ;
+    Text [ portuguese_brazilian ] = "Top half circle" ;
+    Text [ portuguese ] = "Semi-círculo superior" ;
+    Text [ french ] = "Demi-cercle supérieur" ;
+    Text [ dutch ] = "Bovenste halve cirkel" ;
+    Text [ spanish ] = "Semicírculo superior" ;
+    Text [ danish ] = "Halvcirkel" ;
+    Text [ swedish ] = "Övre halvcirkel" ;
+    Text [ finnish ] = "Top half circle" ;
+    Text [ english_us ] = "Upper Semicircle" ;
+    Text[ chinese_simplified ] = "ÉÏ°ëÔ²";
+    Text[ russian ] = "Âåğõíèé ïîëóêğóã";
+    Text[ polish ] = "Górne pó³kole";
+    Text[ japanese ] = "ã”¼‰~";
+    Text[ chinese_traditional ] = "¤W¥b¶ê";
+    Text[ arabic ] = "äÕİ ÇáÏÇÆÑÉ ÇáÃÚáì";
+    Text[ greek ] = "¢íù çìéêıêëéï";
+    Text[ korean ] = "À§ÂÊ ¹İ¿ø";
+    Text[ turkish ] = "Üst yarım daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM2
+{
+    Text = "Unterer Halbkreis" ;
+    Text [ ENGLISH ] = "Bottom half circle" ;
+    Text [ norwegian ] = "Bottom half circle" ;
+    Text [ italian ] = "Semicerchio inferiore" ;
+    Text [ portuguese_brazilian ] = "Bottom half circle" ;
+    Text [ portuguese ] = "Semi-círculo inferior" ;
+    Text [ french ] = "Demi-cercle inférieur" ;
+    Text [ dutch ] = "Onderste halve cirkel" ;
+    Text [ spanish ] = "Semicírculo inferior" ;
+    Text [ danish ] = "Buet nedad" ;
+    Text [ swedish ] = "Undre halvcirkel" ;
+    Text [ finnish ] = "Bottom half circle" ;
+    Text [ english_us ] = "Lower Semicircle" ;
+    Text[ chinese_simplified ] = "ÏÂ°ëÔ²";
+    Text[ russian ] = "Íèæíèé ïîëóêğóã";
+    Text[ polish ] = "Dolne pó³kole";
+    Text[ japanese ] = "‰º”¼‰~";
+    Text[ chinese_traditional ] = "¤U¥b¶ê";
+    Text[ arabic ] = "äÕİ ÇáÏÇÆÑÉ ÇáÃÏäì";
+    Text[ greek ] = "ÊÜôù çìéêıêëéï";
+    Text[ korean ] = "¾Æ·¡ÂÊ ¹İ¿ø";
+    Text[ turkish ] = "Alt yarım daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM3
+{
+    Text = "Linker Halbkreis" ;
+    Text [ ENGLISH ] = "Left half circle" ;
+    Text [ norwegian ] = "Left half circle" ;
+    Text [ italian ] = "Semicerchio sinistro" ;
+    Text [ portuguese_brazilian ] = "Left half circle" ;
+    Text [ portuguese ] = "Semi-círculo esquerdo" ;
+    Text [ french ] = "Demi-cercle gauche" ;
+    Text [ dutch ] = "Linker halve cirkel" ;
+    Text [ spanish ] = "Semicírculo izquierdo" ;
+    Text [ danish ] = "Venstre halvcirkel" ;
+    Text [ swedish ] = "Vänster halvcirkel" ;
+    Text [ finnish ] = "Left half circle" ;
+    Text [ english_us ] = "Left Semicircle" ;
+    Text[ chinese_simplified ] = "×ó°ëÔ²";
+    Text[ russian ] = "Ëåâûé ïîëóêğóã";
+    Text[ polish ] = "Lewe pó³kole";
+    Text[ japanese ] = "¶”¼‰~";
+    Text[ chinese_traditional ] = "¥ª¥b¶ê";
+    Text[ arabic ] = "äÕİ ÏÇÆÑÉ ÃíÓÑ";
+    Text[ greek ] = "Áñéóôåñü çìéêıêëéï";
+    Text[ korean ] = "¿ŞÂÊ ¹İ¿ø";
+    Text[ turkish ] = "Sol yarım daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM4
+{
+    Text = "Rechter Halbkreis" ;
+    Text [ ENGLISH ] = "Right half circle" ;
+    Text [ norwegian ] = "Right half circle" ;
+    Text [ italian ] = "Semicerchio destro" ;
+    Text [ portuguese_brazilian ] = "Right half circle" ;
+    Text [ portuguese ] = "Semi-círculo direito" ;
+    Text [ french ] = "Demi-cercle droit" ;
+    Text [ dutch ] = "Rechter halve cirkel" ;
+    Text [ spanish ] = "Semicírculo derecho" ;
+    Text [ danish ] = "Højre halvcirkel" ;
+    Text [ swedish ] = "Höger halvcirkel" ;
+    Text [ finnish ] = "Right half circle" ;
+    Text [ english_us ] = "Right Semicircle" ;
+    Text[ chinese_simplified ] = "ÓÒ°ëÔ²";
+    Text[ russian ] = "Ïğàâûé ïîëóêğóã";
+    Text[ polish ] = "Prawe pó³kole";
+    Text[ japanese ] = "‰E”¼‰~";
+    Text[ chinese_traditional ] = "¥k¥b¶ê";
+    Text[ arabic ] = "äÕİ ÏÇÆÑÉ Ãíãä";
+    Text[ greek ] = "Äåîéü çìéêıêëéï";
+    Text[ korean ] = "¿À¸¥ÂÊ ¹İ¿ø";
+    Text[ turkish ] = "Sağ yarım daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM5
+{
+    Text = "Oberer Kreisbogen" ;
+    Text [ ENGLISH ] = "Top arc" ;
+    Text [ norwegian ] = "Top arc" ;
+    Text [ italian ] = "Arco superiore" ;
+    Text [ portuguese_brazilian ] = "Top arc" ;
+    Text [ portuguese ] = "Arco superior" ;
+    Text [ french ] = "Arc supérieur" ;
+    Text [ dutch ] = "Bovenste boog" ;
+    Text [ spanish ] = "Arco superior de círculo" ;
+    Text [ danish ] = "Buet opad" ;
+    Text [ swedish ] = "Övre cirkelbåge" ;
+    Text [ finnish ] = "Top arc" ;
+    Text [ english_us ] = "Upper Arc" ;
+    Text[ chinese_simplified ] = "ÉÏÔ²»¡";
+    Text[ russian ] = "Âåğõíÿÿ äóãà";
+    Text[ polish ] = "Górny ³uk ko³a";
+    Text[ japanese ] = "ã‰~ŒÊ";
+    Text[ chinese_traditional ] = "¤W¶ê©·";
+    Text[ arabic ] = "ŞæÓ Úáæí";
+    Text[ greek ] = "¢íù êõêëéêü ôüîï";
+    Text[ korean ] = "À§ÂÊ ¿øÈ£";
+    Text[ turkish ] = "Üst yay";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM6
+{
+    Text = "Unterer Kreisbogen" ;
+    Text [ ENGLISH ] = "Bottom arc" ;
+    Text [ norwegian ] = "Bottom arc" ;
+    Text [ italian ] = "Arco di cerchio inferiore" ;
+    Text [ portuguese_brazilian ] = "Bottom arc" ;
+    Text [ portuguese ] = "Arco inferior" ;
+    Text [ french ] = "Arc inférieur" ;
+    Text [ dutch ] = "Onderste boog" ;
+    Text [ spanish ] = "Arco inferior de círculo" ;
+    Text [ danish ] = "Buet nedad" ;
+    Text [ swedish ] = "Undre cirkelbåge" ;
+    Text [ finnish ] = "Bottom arc" ;
+    Text [ english_us ] = "Lower Arc" ;
+    Text[ chinese_simplified ] = "ÏÂÔ²»¡";
+    Text[ russian ] = "Íèæíÿÿ äóãà";
+    Text[ polish ] = "Dolny ³uk ko³a";
+    Text[ japanese ] = "‰º‰~ŒÊ";
+    Text[ chinese_traditional ] = "¤U¶ê©·";
+    Text[ arabic ] = "ŞæÓ Óİáí";
+    Text[ greek ] = "ÊÜôù êõêëéêü ôüîï";
+    Text[ korean ] = "¾Æ·¡ÂÊ ¿øÈ£";
+    Text[ turkish ] = "Alt yay";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM7
+{
+    Text = "Linker Kreisbogen" ;
+    Text [ ENGLISH ] = "Left arc" ;
+    Text [ norwegian ] = "Left arc" ;
+    Text [ italian ] = "Arco sinistro" ;
+    Text [ portuguese_brazilian ] = "Left arc" ;
+    Text [ portuguese ] = "Arco esquerdo" ;
+    Text [ french ] = "Arc gauche" ;
+    Text [ dutch ] = "Linker boog" ;
+    Text [ spanish ] = "Arco izquierdo de círculo" ;
+    Text [ danish ] = "Venstre bue" ;
+    Text [ swedish ] = "Vänster cirkelbåge" ;
+    Text [ finnish ] = "Left arc" ;
+    Text [ english_us ] = "Left Arc" ;
+    Text[ chinese_simplified ] = "×óÔ²»¡";
+    Text[ russian ] = "Ëåâàÿ äóãà";
+    Text[ polish ] = "Lewy ³uk ko³a";
+    Text[ japanese ] = "¶‰~ŒÊ";
+    Text[ chinese_traditional ] = "¥ª¶ê©·";
+    Text[ arabic ] = "ŞæÓ ÃíÓÑ";
+    Text[ greek ] = "Áñéóôåñü ôüîï";
+    Text[ korean ] = "¿ŞÂÊ ¿øÈ£";
+    Text[ turkish ] = "Sol yay";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM8
+{
+    Text = "Rechter Kreisbogen" ;
+    Text [ ENGLISH ] = "Right arc" ;
+    Text [ norwegian ] = "Right arc" ;
+    Text [ italian ] = "Arco destro" ;
+    Text [ portuguese_brazilian ] = "Right arc" ;
+    Text [ portuguese ] = "Arco direito" ;
+    Text [ french ] = "Arc droit" ;
+    Text [ dutch ] = "Rechter boog" ;
+    Text [ spanish ] = "Arco derecho de círculo" ;
+    Text [ danish ] = "Højre bue" ;
+    Text [ swedish ] = "Höger cirkelbåge" ;
+    Text [ finnish ] = "Right arc" ;
+    Text [ english_us ] = "Right Arc" ;
+    Text[ chinese_simplified ] = "ÓÒÔ²»¡";
+    Text[ russian ] = "Ïğàâàÿ äóãà";
+    Text[ polish ] = "Prawy ³uk ko³a";
+    Text[ japanese ] = "‰E‰~ŒÊ";
+    Text[ chinese_traditional ] = "¥k¶ê©·";
+    Text[ arabic ] = "ŞæÓ Ãíãä";
+    Text[ greek ] = "Äåîéü ôüîï";
+    Text[ korean ] = "¿À¸¥ÂÊ ¿øÈ£";
+    Text[ turkish ] = "Sağ yay";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM9
+{
+    Text = "Offener Kreis" ;
+    Text [ ENGLISH ] = "Open circle" ;
+    Text [ norwegian ] = "Open circle" ;
+    Text [ italian ] = "Cerchio aperto" ;
+    Text [ portuguese_brazilian ] = "Open circle" ;
+    Text [ portuguese ] = "Círculo aberto" ;
+    Text [ french ] = "Cercle ouvert" ;
+    Text [ dutch ] = "Open cirkel" ;
+    Text [ spanish ] = "Circulo abierto" ;
+    Text [ danish ] = "Åben cirkel" ;
+    Text [ swedish ] = "Öppen cirkel" ;
+    Text [ finnish ] = "Open circle" ;
+    Text [ english_us ] = "Open Circle" ;
+    Text[ chinese_simplified ] = "²»·â±ÕµÄÔ²ĞÎ";
+    Text[ russian ] = "Íåçàìêíóòûé êğóã";
+    Text[ polish ] = "Otwarte ko³o";
+    Text[ japanese ] = "ã‰º‰~ŒÊ";
+    Text[ chinese_traditional ] = "¤£«Ê³¬ªº¶ê§Î";
+    Text[ arabic ] = "ÏÇÆÑÉ ãİÊæÍÉ";
+    Text[ greek ] = "Áíïé÷ôüò êıêëïò";
+    Text[ korean ] = "¿­¸° ¿ø";
+    Text[ turkish ] = "Açık daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM10
+{
+    Text = "Geschlossener Kreis" ;
+    Text [ ENGLISH ] = "Closed circle" ;
+    Text [ norwegian ] = "Closed circle" ;
+    Text [ italian ] = "Cerchio chiuso" ;
+    Text [ portuguese_brazilian ] = "Closed circle" ;
+    Text [ portuguese ] = "Circulo fechado" ;
+    Text [ french ] = "Cercle fermé" ;
+    Text [ dutch ] = "Gesloten cirkel" ;
+    Text [ spanish ] = "Círculo cerrado" ;
+    Text [ danish ] = "Cirkulær" ;
+    Text [ swedish ] = "Stängd cirkel" ;
+    Text [ finnish ] = "Closed circle" ;
+    Text [ english_us ] = "Closed Circle" ;
+    Text[ chinese_simplified ] = "·â±ÕµÄÔ²ĞÎ";
+    Text[ russian ] = "Çàìêíóòûé êğóã";
+    Text[ polish ] = "Zamkniête ko³o";
+    Text[ japanese ] = "‰~";
+    Text[ chinese_traditional ] = "«Ê³¬ªº¶ê§Î";
+    Text[ arabic ] = "ÏÇÆÑÉ ãÛáŞÉ";
+    Text[ greek ] = "Êëåéóôüò êıêëïò";
+    Text[ korean ] = "´İÈù ¿ø";
+    Text[ turkish ] = "Kapalı daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM11
+{
+    Text = "Geschlossener Kreis II" ;
+    Text [ ENGLISH ] = "Closed circle II" ;
+    Text [ norwegian ] = "Closed circle II" ;
+    Text [ italian ] = "Cerchio chiuso II" ;
+    Text [ portuguese_brazilian ] = "Closed circle II" ;
+    Text [ portuguese ] = "Círculo fechado II" ;
+    Text [ french ] = "Cercle fermé II" ;
+    Text [ dutch ] = "Gesloten cirkel II" ;
+    Text [ spanish ] = "Círculo cerrado II" ;
+    Text [ danish ] = "Cirkulær II" ;
+    Text [ swedish ] = "Stängd cirkel II" ;
+    Text [ finnish ] = "Closed circle II" ;
+    Text [ english_us ] = "Closed Circle II" ;
+    Text[ chinese_simplified ] = "·â±ÕµÄÔ² II";
+    Text[ russian ] = "Çàìêíóòûé êğóã II";
+    Text[ polish ] = "Zamkniête ko³o II";
+    Text[ japanese ] = "‰~II";
+    Text[ chinese_traditional ] = "«Ê³¬ªº¶ê II";
+    Text[ arabic ] = "ÏÇÆÑÉ ãÛáŞÉ II";
+    Text[ greek ] = "Êëåéóôüò êıêëïò II";
+    Text[ korean ] = "´İÈù ¿ø II";
+    Text[ turkish ] = "Kapalı daire II";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_FORM12
+{
+    Text = "Offener Kreis senkrecht" ;
+    Text [ ENGLISH ] = "Open circle vertical" ;
+    Text [ norwegian ] = "Open circle vertical" ;
+    Text [ italian ] = "Cerchio aperto verticale" ;
+    Text [ portuguese_brazilian ] = "Open circle vertical" ;
+    Text [ portuguese ] = "Círculo aberto vertical" ;
+    Text [ french ] = "Cercle ouvert vertical" ;
+    Text [ dutch ] = "Open cirkel verticaal" ;
+    Text [ spanish ] = "Círculo abierto vertical" ;
+    Text [ danish ] = "Åben cirkel lodret" ;
+    Text [ swedish ] = "Öppen cirkel lodrätt" ;
+    Text [ finnish ] = "Open circle vertical" ;
+    Text [ english_us ] = "Open Circle Vertical" ;
+    Text[ chinese_simplified ] = "´¹Ö±·½Ïò²»·â±ÕµÄÔ²ĞÎ";
+    Text[ russian ] = "Âåğòèêàëüíûé íåçàìêíóòûé êğóã";
+    Text[ polish ] = "Otwarte ko³o w pionie";
+    Text[ japanese ] = "¶‰E‰~ŒÊ";
+    Text[ chinese_traditional ] = "««ª½ªº¤£«Ê³¬ªº¶ê§Î";
+    Text[ arabic ] = "ÏÇÆÑÉ ãİÊæÍÉ ÑÃÓíÇğ";
+    Text[ greek ] = "Áíïé÷ôüò êıêëïò êáôáêüñõöá";
+    Text[ korean ] = "¼öÁ÷ ¿­¸° ¿ø";
+    Text[ turkish ] = "Dikey açık daire";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FONTWORK_UNDOCREATE
+{
+    Text = "FontWork-Objekt erzeugen" ;
+    Text [ ENGLISH ] = "create FontWork object" ;
+    Text [ english_us ] = "Create FontWork object" ;
+    Text [ italian ] = "Crea un oggetto FontWork" ;
+    Text [ spanish ] = "Crear objeto FontWork" ;
+    Text [ french ] = "Créer un objet FontWork" ;
+    Text [ dutch ] = "FontWork-object maken" ;
+    Text [ swedish ] = "Skapa FontWork-objekt" ;
+    Text [ danish ] = "Opret FontWork-objekt" ;
+    Text [ portuguese_brazilian ] = "FontWork-Objekt erzeugen" ;
+    Text [ portuguese ] = "Criar objecto FontWork" ;
+    Text[ chinese_simplified ] = "Éú³ÉÃÀ¹¤×ÖÌå¶ÔÏó";
+    Text[ russian ] = "Ñîçäàòü îáúåêò FontWork";
+    Text[ polish ] = "Utwórz obiekt FontWork";
+    Text[ japanese ] = "Ì«İÄÜ°¸ µÌŞ¼Şª¸Ä‚Ìì¬";
+    Text[ chinese_traditional ] = "¥Í¦¨¬ü³N¦r«¬ª«¥ó";
+    Text[ arabic ] = "ÅäÔÇÁ ßÇÆä FontWork";
+    Text[ greek ] = "Äçìéïõñãßá áíôéêåéìİíïõ FontWork";
+    Text[ korean ] = "FontWork °³Ã¼ »ı¼º";
+    Text[ turkish ] = "FontWork nesnesi oluştur";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

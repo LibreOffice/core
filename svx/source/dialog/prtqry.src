@@ -1,0 +1,157 @@
+/*************************************************************************
+ *
+ *  $RCSfile: prtqry.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <dialogs.hrc>
+
+
+String RID_SVXSTR_QRY_PRINT_TITLE
+{
+    Text = "Drucken der Selektion" ;
+    Text [ English ] = "Printing of selection" ;
+    Text[ italian ] = "Stampa la selezione";
+    Text[ portuguese_brazilian ] = "Drucken der Selektion";
+    Text[ portuguese ] = "A imprimir selecção";
+    Text[ danish ] = "Udskriv det markerede";
+    Text[ french ] = "Imprimer la sélection";
+    Text[ swedish ] = "Skriv ut markering";
+    Text[ dutch ] = "Afdrukken van de selectie";
+    Text[ spanish ] = "Imprimir la selección";
+    Text[ english_us ] = "Printing selection";
+    Text[ chinese_simplified ] = "´òÓ¡Ñ¡ÖĞµÄ²¿·Ö";
+    Text[ russian ] = "Ïå÷àòü âûäåëåííîãî ôğàãìåíòà";
+    Text[ polish ] = "Drukuj zaznaczony obszar";
+    Text[ japanese ] = "‘I‘ğ‚µ‚½•”•ª‚Ìˆóü";
+    Text[ chinese_traditional ] = "¦C¦L¿ï¨ú³¡¥÷";
+    Text[ arabic ] = "ØÈÇÚÉ ÇáÊÍÏíÏ";
+    Text[ greek ] = "Åêôığùóç åğéëïãŞò";
+    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§ ÀÎ¼â";
+    Text[ turkish ] = "Seçilen aralık yazdırılıyor";
+};
+String RID_SVXSTR_QRY_PRINT_MSG
+{
+    Text = "Wollen Sie die Selektion oder das gesamte Dokument drucken?" ;
+    Text [ English ] = "Print selection or whole document?" ;
+    Text[ italian ] = "Volete stampare la selezione o l'intero documento?";
+    Text[ portuguese_brazilian ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?";
+    Text[ portuguese ] = "Deseja imprimir a selecção ou o documento inteiro?";
+    Text[ danish ] = "Vil du udskrive det markerede eller hele dokumentet?";
+    Text[ french ] = "Souhaitez vous imprimer uniquement la sélection ou bien le document entier ?";
+    Text[ swedish ] = "Vill Du skriva ut det markerade eller hela dokumentet?";
+    Text[ dutch ] = "Wilt u de selectie of het hele document afdrukken?";
+    Text[ spanish ] = "¿Desea imprimir solo la selección o todo el documento?";
+    Text[ english_us ] = "Do you want to print the selection or the entire document?";
+    Text[ chinese_simplified ] = "ÄúÒª´òÓ¡Ñ¡ÖĞµÄ²¿·Ö»¹ÊÇÒª´òÓ¡Õû¸öÎÄµµ£¿";
+    Text[ russian ] = "Âû õîòèòå íàïå÷àòàòü âåñü äîêóìåíò èëè òîëüêî âûäåëåíííûé ôğàãìåíò?";
+    Text[ polish ] = "Czy chcesz wydrukowaæ zaznaczony obszar, czy ca³y dokument?";
+    Text[ japanese ] = "ˆóü‚Í‘I‘ğ‚µ‚½•”•ª‚É‚µ‚Ü‚·‚©AÄŞ·­ÒİÄ‘S‘Ì‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "­n¦C¦L¿ï¨úªº³¡¥÷ÁÙ¬O­n¦C¦L¾ã­Ó¤å¥ó¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ØÈÇÚÉ ÇáÊÍÏíÏ İŞØ¡ Ãã ÇáãÓÊäÏ ÈÃßãáå¿";
+    Text[ greek ] = "Èİëåôå íá åêôõğşóåôå ôçí åğéëåãìİíç ğåñéï÷Ş Ş ïëüêëçñï ôï İããñáöï;";
+    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§ È¤Àº ¹®¼­ ÀüÃ¼¸¦ ÀÎ¼âÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Seçilen aralık ya da belgenin tümü mü yazdırılsın?";
+};
+String RID_SVXSTR_QRY_PRINT_ALL
+{
+    Text = "~Alles" ;
+    Text [ English ] = "All" ;
+    Text[ italian ] = "~Tutto";
+    Text[ portuguese_brazilian ] = "Alles";
+    Text[ portuguese ] = "~Tudo";
+    Text[ danish ] = "~Alt";
+    Text[ french ] = "~Tout";
+    Text[ swedish ] = "~Allt";
+    Text[ dutch ] = "~Alles";
+    Text[ spanish ] = "~Todo";
+    Text[ english_us ] = "~All";
+    Text[ chinese_simplified ] = "È«²¿";
+    Text[ russian ] = "Âñå";
+    Text[ polish ] = "Wszystko";
+    Text[ japanese ] = "‚·‚×‚Ä";
+    Text[ chinese_traditional ] = "¥ş³¡";
+    Text[ arabic ] = "Çáßá";
+    Text[ greek ] = "¼ë~á";
+    Text[ korean ] = "ÀüÃ¼(~A)";
+    Text[ turkish ] = "~Tümü";
+};
+String RID_SVXSTR_QRY_PRINT_SELECTION
+{
+    Text = "~Selektion" ;
+    Text [ English ] = "Selection" ;
+    Text[ italian ] = "~Selezione";
+    Text[ portuguese_brazilian ] = "Selektion";
+    Text[ portuguese ] = "~Selecção";
+    Text[ danish ] = "Markering";
+    Text[ french ] = "~Sélection";
+    Text[ swedish ] = "~Markering";
+    Text[ dutch ] = "~Selectie";
+    Text[ spanish ] = "Sele~cción";
+    Text[ english_us ] = "~Selection";
+    Text[ chinese_simplified ] = "Ñ¡ÖĞ";
+    Text[ russian ] = "Âûäåëåíèå";
+    Text[ polish ] = "Selekcja";
+    Text[ japanese ] = "‘I‘ğ”ÍˆÍ";
+    Text[ chinese_traditional ] = "¿ï¨ú";
+    Text[ arabic ] = "ÇáÊÍÏíÏ";
+    Text[ greek ] = "ÅğéëïãŞ";
+    Text[ korean ] = "¼±ÅÃÇÑ ¹üÀ§(~S)";
+    Text[ turkish ] = "~Seçilen aralık";
+};
+

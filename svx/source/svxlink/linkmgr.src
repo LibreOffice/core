@@ -1,0 +1,178 @@
+/*************************************************************************
+ *
+ *  $RCSfile: linkmgr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "dialogs.hrc"
+String RID_SVXSTR_FILELINK
+{
+    Text = "Dokument" ;
+    Text [ ENGLISH ] = "Document" ;
+    Text [ norwegian ] = "Dokument" ;
+    Text [ italian ] = "Documento" ;
+    Text [ portuguese_brazilian ] = "Documento" ;
+    Text [ portuguese ] = "Documento" ;
+    Text [ finnish ] = "Asiakirja" ;
+    Text [ danish ] = "Dokument" ;
+    Text [ french ] = "Document" ;
+    Text [ swedish ] = "Dokument" ;
+    Text [ dutch ] = "Document" ;
+    Text [ spanish ] = "Documento" ;
+    Text [ english_us ] = "Document" ;
+    Text[ chinese_simplified ] = "Œƒµµ";
+    Text[ russian ] = "ƒÓÍÛÏÂÌÚ";
+    Text[ polish ] = "Dokument";
+    Text[ japanese ] = "ƒﬁ∑≠“›ƒ";
+    Text[ chinese_traditional ] = "§Â•Û";
+    Text[ arabic ] = "«·„” ‰œ";
+    Text[ dutch ] = "Document";
+    Text[ chinese_simplified ] = "Œƒµµ";
+    Text[ greek ] = "∏„„Ò·ˆÔ";
+    Text[ korean ] = "πÆº≠";
+    Text[ turkish ] = "Belge";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GRAFIKLINK
+{
+    Text = "Grafik" ;
+    Text [ ENGLISH ] = "Graphic" ;
+    Text [ norwegian ] = "Graphic" ;
+    Text [ italian ] = "Immagine" ;
+    Text [ portuguese_brazilian ] = "Gr·fico" ;
+    Text [ portuguese ] = "Imagem" ;
+    Text [ finnish ] = "Kuva" ;
+    Text [ danish ] = "Grafik" ;
+    Text [ french ] = "Image" ;
+    Text [ swedish ] = "Grafik" ;
+    Text [ dutch ] = "Afbeelding" ;
+    Text [ spanish ] = "Imagen" ;
+    Text [ english_us ] = "Graphic" ;
+    Text[ chinese_simplified ] = "Õº–Œ";
+    Text[ russian ] = "√‡ÙËÍ‡";
+    Text[ polish ] = "Grafika";
+    Text[ japanese ] = "ê}";
+    Text[ chinese_traditional ] = "πœßŒ";
+    Text[ arabic ] = "’Ê—…";
+    Text[ dutch ] = "Afbeelding";
+    Text[ chinese_simplified ] = "Õº–Œ";
+    Text[ greek ] = "√Ò·ˆÈÍ¸";
+    Text[ korean ] = "±◊∑°«»";
+    Text[ turkish ] = "Grafik";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_EDITGRFLINK
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Grafik Verkn¸pfen : Grafik Verkn≥pfen */
+    /* ### ACHTUNG: Neuer Text in Resource? Grafik Verkn¸pfen : Grafik Verkn≥pfen */
+    Text = "Grafik Verkn¸pfen" ;
+    Text [ ENGLISH ] = "Link to Graphic" ;
+    Text [ norwegian ] = "Koble til Grafikk" ;
+    Text [ italian ] = "Collega immagine" ;
+    Text [ portuguese_brazilian ] = "Ligar a Gr·fico" ;
+    Text [ portuguese ] = "Ligar imagem" ;
+    Text [ finnish ] = "Linkki kuvaan" ;
+    Text [ danish ] = "KÊd grafik" ;
+    Text [ french ] = "Image du lien" ;
+    Text [ swedish ] = "L‰nka till grafik" ;
+    Text [ dutch ] = "Afbeelding koppelen" ;
+    Text [ spanish ] = "Enlazar imagen" ;
+    Text [ english_us ] = "Link graphics" ;
+    Text[ chinese_simplified ] = "¡¥Ω”Õº–Œ";
+    Text[ russian ] = "—‚ˇÁ‡Ú¸ „‡ÙËÍÛ";
+    Text[ polish ] = "Po≥πcz grafikÍ";
+    Text[ japanese ] = "∏ﬁ◊Ã®Ø∏Çÿ›∏Ç∑ÇÈ";
+    Text[ chinese_traditional ] = "≥sµ≤πœßŒ";
+    Text[ arabic ] = "—»ÿ «·—”Ê„« ";
+    Text[ language_user1 ] = "LS 09.08.99 Wir wollen in der franz?ischen Version m?lichst Substantive als Dialog?erschriften haben. Hier wird die bestehende Verkn?fung ge?dert, d.h., es wird eine neue Grafik ausgew?lt";
+    Text[ dutch ] = "Afbeelding koppelen";
+    Text[ chinese_simplified ] = "¡¥Ω”Õº–Œ";
+    Text[ greek ] = "”˝Ì‰ÂÛÁ „Ò·ˆÈÍÔ˝";
+    Text[ korean ] = "±◊∑°«» ø¨∞·";
+    Text[ turkish ] = "Grafik balant˝s˝ olu˛tur";
+};
+String RID_SVXSTR_GRFLINKPROGRESS
+{
+    Text = "Importiere Grafik..." ;
+    Text [ English ] = "Importing graphic..." ;
+    Text [ dutch ] = "Bezig met het importeren van afbeelding..." ;
+    Text [ english_us ] = "Importing graphic..." ;
+    Text [ italian ] = "Importazione immagine..." ;
+    Text [ spanish ] = "Importando imagen..." ;
+    Text [ french ] = "Import d'image en cours..." ;
+    Text [ swedish ] = "Importerar grafik..." ;
+    Text [ danish ] = "Importerer grafik..." ;
+    Text [ portuguese ] = "A importar imagem..." ;
+    Text [ portuguese_brazilian ] = "Importiere Grafik..." ;
+    Text[ chinese_simplified ] = " ‰»ÎÕº–Œ...";
+    Text[ russian ] = "»ÏÔÓÚ „‡ÙËÍË...";
+    Text[ polish ] = "Importuj grafikÍ...";
+    Text[ japanese ] = "∏ﬁ◊Ã®Ø∏Ç≤›Œﬂ∞ƒÇ∑ÇÈ...";
+    Text[ chinese_traditional ] = "øÈ§JπœßŒ...";
+    Text[ arabic ] = "«” Ì—«œ —”Ê„« ...";
+    Text[ dutch ] = "Bezig met het importeren van afbeelding...";
+    Text[ chinese_simplified ] = " ‰»ÎÕº–Œ...";
+    Text[ greek ] = "≈ÈÛ·„˘„ﬁ „Ò·ˆÈÍÔ˝...";
+    Text[ korean ] = "±◊∑°«» ∞°¡Æ ø¿¥¬ ¡ﬂ...";
+    Text[ turkish ] = "›Áe aktar (grafik)...";
+    Text[ language_user1 ] = " ";
+};
+Bitmap RID_SVXGRF_GRAPHICLOAD
+{
+    File = "grfload.bmp" ;
+};

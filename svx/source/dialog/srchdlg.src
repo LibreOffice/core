@@ -1,0 +1,1112 @@
+/*************************************************************************
+ *
+ *  $RCSfile: srchdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "srchdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_SEARCH_STYLES
+{
+    Text = "einschließlich ~Vorlagen" ;
+    Text [ ENGLISH ] = "including st~ylesheets" ;
+    Text [ norwegian ] = "inkludert stilark" ;
+    Text [ italian ] = "Includi modelli" ;
+    Text [ portuguese_brazilian ] = "Inclusive folhas de estilo" ;
+    Text [ portuguese ] = "Incluindo ~estilos" ;
+    Text [ finnish ] = "myös tyylitiedostot" ;
+    Text [ danish ] = "Inklusive typografier" ;
+    Text [ french ] = "Y compris les styles" ;
+    Text [ swedish ] = "Inklusive ~mallar" ;
+    Text [ dutch ] = "Inclusief ~opmaakprofielen" ;
+    Text [ spanish ] = "Incluir ~estilos" ;
+    Text [ english_us ] = "Including Styles" ;
+    Text[ chinese_simplified ] = "°üÀ¨ÑùÊ½";
+    Text[ russian ] = "Âêëş÷àÿ ñòèëè";
+    Text[ polish ] = "W³¹cznie ze stylami";
+    Text[ japanese ] = "½À²Ù‚ğŠÜ‚Ş";
+    Text[ chinese_traditional ] = "¥]¬A¼Ë¦¡";
+    Text[ arabic ] = "ÈãÇ İí Ğáß ÇáÃäãÇØ";
+    Text[ greek ] = "óõìğåñéëáìâ. ğñüôõğá";
+    Text[ korean ] = "¼­½ÄÆÄÀÏ Æ÷ÇÔ";
+    Text[ turkish ] = "Bi~çimler dahil";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_SEARCH
+{
+    Text = " (Suchen)" ;
+    Text [ ENGLISH ] = " (Search)" ;
+    Text [ norwegian ] = " (Søk)" ;
+    Text [ italian ] = "(Cerca)" ;
+    Text [ portuguese_brazilian ] = "(Buscar)" ;
+    Text [ portuguese ] = "(Localizar)" ;
+    Text [ finnish ] = " (Etsi)" ;
+    Text [ danish ] = "(Søg)" ;
+    Text [ french ] = "(Rechercher)" ;
+    Text [ swedish ] = "(Sök)" ;
+    Text [ dutch ] = "(Zoeken)" ;
+    Text [ spanish ] = "(Buscar)" ;
+    Text [ english_us ] = "(Search)" ;
+    Text[ chinese_simplified ] = "(ËÑÑ°)";
+    Text[ russian ] = "(Íàéòè)";
+    Text[ polish ] = "(Szukaj)";
+    Text[ japanese ] = "(ŒŸõ)";
+    Text[ chinese_traditional ] = "(´M§ä)";
+    Text[ arabic ] = "(ÈÍË)";
+    Text[ greek ] = "(ÁíáæŞôçóç)";
+    Text[ korean ] = "(Ã£±â)";
+    Text[ turkish ] = "(Ara)";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_REPLACE
+{
+    Text = " (Ersetzen)" ;
+    Text [ ENGLISH ] = " (Replace)" ;
+    Text [ norwegian ] = " (Erstatt)" ;
+    Text [ italian ] = "(Sostituisci)" ;
+    Text [ portuguese_brazilian ] = "(Substituir)" ;
+    Text [ portuguese ] = "(Substituir)" ;
+    Text [ finnish ] = " (Korvaa)" ;
+    Text [ danish ] = "(Erstat)" ;
+    Text [ french ] = "(Remplacer)" ;
+    Text [ swedish ] = "(Ersätt)" ;
+    Text [ dutch ] = "(Vervangen)" ;
+    Text [ spanish ] = "(Reemplazar)" ;
+    Text [ english_us ] = "(Replace)" ;
+    Text[ chinese_simplified ] = "(¸üÌæ)";
+    Text[ russian ] = "(Çàìåíèòü)";
+    Text[ polish ] = "(Zamieñ)";
+    Text[ japanese ] = "(’uŠ·)";
+    Text[ chinese_traditional ] = "(´À¥N)";
+    Text[ arabic ] = "(ÇÓÊÈÏÇá)";
+    Text[ greek ] = "(ÁíôéêáôÜóôáóç)";
+    Text[ korean ] = "(´ëÃ¼)";
+    Text[ turkish ] = "(Değiştir)";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SVXDLG_SEARCH -----------------------------------------------------
+ModelessDialog RID_SVXDLG_SEARCH
+{
+    HelpId = SID_SEARCH_DLG ;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 302 , 152 ) ;
+    Text = "Suchen & Ersetzen" ;
+    Text [ ENGLISH ] = "Search & Replace" ;
+    Text [ norwegian ] = "Søk og Erstatt" ;
+    Text [ italian ] = "Cerca e sostituisci" ;
+    Text [ portuguese_brazilian ] = "Procurar & Substituir" ;
+    Text [ portuguese ] = "Localizar & Substituir" ;
+    Text [ finnish ] = "Etsi & korvaa" ;
+    Text [ danish ] = "Søg og erstat" ;
+    Text [ french ] = "Rechercher & remplacer" ;
+    Text [ swedish ] = "Sök och ersätt" ;
+    Text [ dutch ] = "Zoeken & vervangen" ;
+    Text [ spanish ] = "Buscar y reemplazar" ;
+    Text [ english_us ] = "Find & Replace" ;
+    Moveable = TRUE ;
+    FixedText FT_SEARCH
+    {
+        Pos = MAP_APPFONT ( 6 , 7 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "S~uchen nach" ;
+        Text [ ENGLISH ] = "S~earch for" ;
+        Text [ norwegian ] = "S~øk etter" ;
+        Text [ italian ] = "C~erca" ;
+        Text [ portuguese_brazilian ] = "P~rocurar por" ;
+        Text [ portuguese ] = "L~ocalizar" ;
+        Text [ finnish ] = "~Etsittävä" ;
+        Text [ danish ] = "Søg efter" ;
+        Text [ french ] = "R~echercher" ;
+        Text [ swedish ] = "S~ök efter" ;
+        Text [ dutch ] = "Zoeken ~naar" ;
+        Text [ spanish ] = "B~uscar" ;
+        Text [ english_us ] = "Searc~h for" ;
+        Text[ chinese_simplified ] = "ËÑÑ°ÄÚÈİ(~H)";
+        Text[ russian ] = "Íàéòè";
+        Text[ polish ] = "Szukaj";
+        Text[ japanese ] = "ŒŸõ€–Ú(~H)";
+        Text[ chinese_traditional ] = "´M§ä¤º®e(~H)";
+        Text[ arabic ] = "ÇáÈÍË Úä";
+        Text[ greek ] = "AíáæŞôçóç ãéá";
+        Text[ korean ] = "Ã£À» ´ë»ó(~H)";
+        Text[ turkish ] = "Arana~n";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox ED_SEARCH
+    {
+        Pos = MAP_APPFONT ( 62 , 6 ) ;
+        Size = MAP_APPFONT ( 123 , 98 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_SEARCH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 6 ) ;
+        Size = MAP_APPFONT ( 123 , 98 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        Sort = TRUE ;
+    };
+    GroupBox GB_SEARCH_ATTR
+    {
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 179 , 24 ) ;
+    };
+    FixedText FT_SEARCH_ATTR
+    {
+        Pos = MAP_APPFONT ( 10 , 24 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
+        WordBreak = TRUE ;
+#ifndef VCL
+        Hide = TRUE ;
+#endif
+    };
+    MultiLineEdit ED_SEARCH_FORMATS
+    {
+        Pos = MAP_APPFONT ( 10 , 24 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
+        ReadOnly = TRUE ;
+        IgnoreTab = TRUE ;
+#ifdef VCL
+        Hide = TRUE ;
+#endif
+    };
+    FixedText FT_REPLACE
+    {
+        Pos = MAP_APPFONT ( 6 , 49 ) ;
+        Size = MAP_APPFONT ( 55 , 10 ) ;
+        Text = "Ersetzen ~durch" ;
+        Text [ ENGLISH ] = "Replace ~with" ;
+        Text [ norwegian ] = "Erstatt ~med" ;
+        Text [ italian ] = "Sostituisci ~con" ;
+        Text [ portuguese_brazilian ] = "Substituir ~por" ;
+        Text [ portuguese ] = "~Substituir por" ;
+        Text [ finnish ] = "~Korvaava" ;
+        Text [ danish ] = "Erstat med" ;
+        Text [ french ] = "Remplacer ~par" ;
+        Text [ swedish ] = "Ersätt me~d" ;
+        Text [ dutch ] = "Vervangen ~door" ;
+        Text [ spanish ] = "Reemplazar ~con" ;
+        Text [ english_us ] = "Replace ~with" ;
+        Text[ chinese_simplified ] = "Ìæ»»Îª(~W)";
+        Text[ russian ] = "Çàìåíèòü íà";
+        Text[ polish ] = "Zamieñ na";
+        Text[ japanese ] = "’uŠ·Œó•â(~W)";
+        Text[ chinese_traditional ] = "§ó´À¦¨(~W)";
+        Text[ arabic ] = "ÇáßáãÉ ÇáÈÏíáÉ";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç ìå";
+        Text[ korean ] = "(~W)";
+        Text[ turkish ] = "Yeni de~ğer";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox ED_REPLACE
+    {
+        Pos = MAP_APPFONT ( 62 , 48 ) ;
+        Size = MAP_APPFONT ( 123 , 98 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    ListBox LB_REPLACE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 62 , 48 ) ;
+        Size = MAP_APPFONT ( 123 , 98 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        Sort = TRUE ;
+    };
+    GroupBox GB_REPLACE_ATTR
+    {
+        Pos = MAP_APPFONT ( 6 , 60 ) ;
+        Size = MAP_APPFONT ( 179 , 24 ) ;
+    };
+    FixedText FT_REPLACE_ATTR
+    {
+        Pos = MAP_APPFONT ( 10 , 66 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
+        WordBreak = TRUE ;
+#ifndef VCL
+        Hide = TRUE ;
+#endif
+    };
+    MultiLineEdit ED_REPLACE_FORMATS
+    {
+        Pos = MAP_APPFONT ( 10 , 66 ) ;
+        Size = MAP_APPFONT ( 171 , 16 ) ;
+        ReadOnly = TRUE ;
+        IgnoreTab = TRUE ;
+#ifdef VCL
+        Hide = TRUE ;
+#endif
+    };
+    CheckBox BTN_CELLS
+    {
+        Pos = MAP_APPFONT ( 12 , 103 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Nur ganze W~örter : Nur ganze W~÷rter */
+        Text = "Nur ganze W~örter" ;
+        Text [ ENGLISH ] = "Whole Wor~ds Only" ;
+        Text [ norwegian ] = "Kun Hele O~rd" ;
+        Text [ italian ] = "Solo ~parole intere" ;
+        Text [ portuguese_brazilian ] = "Apenas Palavras Int~eiras" ;
+        Text [ portuguese ] = "Apenas palavras int~eiras" ;
+        Text [ finnish ] = "Vain kokonaiset ~sanat" ;
+        Text [ danish ] = "Kun hele ord" ;
+        Text [ french ] = "~Mots entiers" ;
+        Text [ swedish ] = "Endast hela ~ord" ;
+        Text [ dutch ] = "Alleen hele ~woorden" ;
+        Text [ spanish ] = "Solo pa~labras completas" ;
+        Text [ english_us ] = "Whole wor~ds only" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ö»ÔÊĞíÕû¸ö´Ê(~D)";
+        Text[ russian ] = "Òîëüêî âñå ñëîâî";
+        Text[ polish ] = "Tylko ca³e s³owa";
+        Text[ japanese ] = "’PŒê‚Æ‚µ‚Ä(~D)";
+        Text[ chinese_traditional ] = "¥u¤¹³\\¾ã­Óµü(~D)";
+        Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";
+        Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";
+        Text[ korean ] = "ÀüÃ¼ ´Ü¾î¸¸(~D)";
+        Text[ turkish ] = "Yalnızca tam s~özcük";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_EXACT
+    {
+        Pos = MAP_APPFONT ( 102 , 103 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        Text = "E~xakte Suche" ;
+        Text [ ENGLISH ] = "Ma~tch Case" ;
+        Text [ norwegian ] = "Jam~før Tilfelle" ;
+        Text [ italian ] = "Ricerca esatta" ;
+        Text [ portuguese_brazilian ] = "Igua~lar Caixa" ;
+        Text [ portuguese ] = "Localizar e~xacto" ;
+        Text [ finnish ] = "Kir~jainkoko vaikuttaa" ;
+        Text [ danish ] = "Søg eksakt" ;
+        Text [ french ] = "Respecter la ~casse" ;
+        Text [ swedish ] = "Sök e~xakt" ;
+        Text [ dutch ] = "E~xact dezelfde tekens" ;
+        Text [ spanish ] = "Coincidencia e~xacta" ;
+        Text [ english_us ] = "Ma~tch case" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";
+        Text[ russian ] = "Òî÷íûé ïîèñê";
+        Text[ polish ] = "Dok³adne wyszukiwanie";
+        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";
+        Text[ chinese_traditional ] = "ºë½T´M§ä(~T)";
+        Text[ arabic ] = "ÈÍË ÏŞíŞ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";
+        Text[ korean ] = "»ó¼¼ÇÏ°Ô Ã£±â(~T)";
+        Text[ turkish ] = "~BÜYÜK/küçük harf duyarlı";
+    };
+    CheckBox BTN_BACKWARDS
+    {
+        Pos = MAP_APPFONT ( 12 , 116 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Rüc~kwärts : R³c~kwõrts */
+        Text = "Rüc~kwärts" ;
+        Text [ ENGLISH ] = "Bac~kwards" ;
+        Text [ norwegian ] = "Bako~ver" ;
+        Text [ italian ] = "I~ndietro" ;
+        Text [ portuguese_brazilian ] = "Para átr~s" ;
+        Text [ portuguese ] = "~Para trás" ;
+        Text [ finnish ] = "~Taaksepäin" ;
+        Text [ danish ] = "Tilbage" ;
+        Text [ french ] = "~Vers le haut" ;
+        Text [ swedish ] = "Ba~klänges" ;
+        Text [ dutch ] = "Ac~hterwaarts" ;
+        Text [ spanish ] = "Retroce~der" ;
+        Text [ english_us ] = "Bac~kward" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ïòºó(~K)";
+        Text[ russian ] = "Îáğàòíûé ïîèñê";
+        Text[ polish ] = "Wstecz";
+        Text[ japanese ] = "Œ³‚É–ß‚é(~K)";
+        Text[ chinese_traditional ] = "¦V«á(~K)";
+        Text[ arabic ] = "ááÎáİ";
+        Text[ greek ] = "~Ğßóù";
+        Text[ korean ] = "µÚ·Î(~K)";
+        Text[ turkish ] = "~Geri";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_SELECTIONS
+    {
+        Pos = MAP_APPFONT ( 102 , 116 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        Text = "~Nur in Selektion" ;
+        Text [ ENGLISH ] = "Select~ions" ;
+        Text [ norwegian ] = "Alternativ~er" ;
+        Text [ italian ] = "Solo nella selez~ione" ;
+        Text [ portuguese_brazilian ] = "Sele~ções" ;
+        Text [ portuguese ] = "Apenas ~selecção activa" ;
+        Text [ finnish ] = "~Vain valittu alue" ;
+        Text [ danish ] = "Kun det markerede" ;
+        Text [ french ] = "Rechercher dans la ~sélection" ;
+        Text [ swedish ] = "Endast mar~kering" ;
+        Text [ dutch ] = "Alleen in sele~ctie" ;
+        Text [ spanish ] = "Solo e~n la selección" ;
+        Text [ english_us ] = "Current selection ~only" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Ö»ÔÊĞíµ±Ç°µÄÑ¡Ôñ(~O)";
+        Text[ russian ] = "Òîëüêî â âûäåëåíèè";
+        Text[ polish ] = "Tylko w selek~cji";
+        Text[ japanese ] = "‘I‘ğ”ÍˆÍ‚Ì‚İ(~O)";
+        Text[ chinese_traditional ] = "¥u¤¹³\\·í«eªº¿ï¾Ü(~O)";
+        Text[ arabic ] = "ÇáÊÍÏíÏ İŞØ";
+        Text[ greek ] = "Ìü~íï óôçí åğéëïãŞ";
+        Text[ korean ] = "ÇöÀç ¼±ÅÃ»çÇ×¸¸(~O)";
+        Text[ turkish ] = "~Yalnızca seçilen aralık içinde";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_REGEXP
+    {
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Re~gulärer Ausdruck : Re~gulõrer Ausdruck */
+        Text = "Re~gulärer Ausdruck" ;
+        Text [ ENGLISH ] = "Re~gular Expressions" ;
+        Text [ norwegian ] = "Va~nlige Uttrykk" ;
+        Text [ italian ] = "Espressione re~golare" ;
+        Text [ portuguese_brazilian ] = "Express es Re~gulares" ;
+        Text [ portuguese ] = "~Expressão regular" ;
+        Text [ finnish ] = "S~äännönmukaiset lausekkeet" ;
+        Text [ danish ] = "Regulært udtryk" ;
+        Text [ french ] = "Caractère ~générique" ;
+        Text [ swedish ] = "Reguljärt uttr~yck" ;
+        Text [ dutch ] = "Gangbare ~uitdrukking" ;
+        Text [ spanish ] = "Expresión re~gular" ;
+        Text [ english_us ] = "Regular e~xpressions" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "³£¹æ±í´ï(~X)";
+        Text[ russian ] = "Ğåãóëÿğíîå âûğàæåíèå";
+        Text[ polish ] = "Wyra¿enie regularne";
+        Text[ japanese ] = "Ü²ÙÄŞ¶°ÄŞ•¶š(~X)";
+        Text[ chinese_traditional ] = "±`³Wªí¹F(~X)";
+        Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
+        Text[ greek ] = "ÊáíïíéêŞ ğáñÜóôáóç";
+        Text[ korean ] = "º¸Åë Ç¥Çö(~X)";
+        Text[ turkish ] = "Genel a~rama karakteri";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_LAYOUTS
+    {
+        Pos = MAP_APPFONT ( 102 , 129 ) ;
+        Size = MAP_APPFONT ( 87 , 10 ) ;
+        Text = "Suche nach ~Vorlagen" ;
+        Text [ ENGLISH ] = "Search for St~ylesheets" ;
+        Text [ norwegian ] = "Søk etter St~ilark" ;
+        Text [ italian ] = "Cerca modelli" ;
+        Text [ portuguese_brazilian ] = "Procurar por Fo~lhas de estilo" ;
+        Text [ portuguese ] = "Locali~zar estilos" ;
+        Text [ finnish ] = "Etsi t~yylitiedostoja" ;
+        Text [ danish ] = "Søg efter typografier" ;
+        Text [ french ] = "Rechercher des st~yles" ;
+        Text [ swedish ] = "Sök efter ~formatmallar" ;
+        Text [ dutch ] = "O~pmaakprofielen" ;
+        Text [ spanish ] = "Buscar ~estilos" ;
+        Text [ english_us ] = "Search for St~yles" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ËÑÑ°ÑùÊ½(~Y)";
+        Text[ russian ] = "Ïîèñê ñòèëåé";
+        Text[ polish ] = "Szu~kaj szablonów";
+        Text[ japanese ] = "½À²Ù‚ÌŒŸõ(~Y)";
+        Text[ chinese_traditional ] = "´M§ä¼Ë¦¡(~Y)";
+        Text[ arabic ] = "ÇáÈÍË Úä ÃäãÇØ";
+        Text[ greek ] = "AíáæŞôçóç ğñïôığùí";
+        Text[ korean ] = "¼­½ÄÆÄÀÏ Ã£±â(~Y)";
+        Text[ language_user1 ] = " ";
+        Text[ turkish ] = "~Biçim ara";
+    };
+    CheckBox CB_SIMILARITY
+    {
+        Pos = MAP_APPFONT ( 192 , 103 ) ;
+        Size = MAP_APPFONT ( 81 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Ähnlichkeitssuche : ~hnlichkeitssuche */
+        Text = "~Ähnlichkeitssuche" ;
+        Text [ English ] = "Similarity Search" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Overeen~komsten" ;
+        Text [ english_us ] = "S~imilarity search" ;
+        Text [ italian ] = "Ricerca per simili" ;
+        Text [ spanish ] = "Búsqueda por se~mejanza" ;
+        Text [ french ] = "R~echerche de similarité" ;
+        Text [ swedish ] = "L~ikhetssökning" ;
+        Text [ danish ] = "Søg lignende" ;
+        Text [ portuguese_brazilian ] = "~Ähnlichkeitssuche" ;
+        Text [ portuguese ] = "Pro~cura por semelhança" ;
+        Text[ chinese_simplified ] = "ÀàËÆËÑÑ°(~I)";
+        Text[ russian ] = "Ïîèñê ïîõîæèõ";
+        Text[ polish ] = "Szukaj podo~bnych";
+        Text[ japanese ] = "—Ş—½ÍßÙ‚ÌŒŸõ(~I)";
+        Text[ chinese_traditional ] = "Ãş¦ü´M§ä(~I)";
+        Text[ arabic ] = "ÇáÈÍË Úä ßáãÇÊ ãÊÔÇÈåÉ";
+        Text[ greek ] = "ÁíáæŞôçóç ïìïéüôçôáò";
+        Text[ korean ] = "À¯»ç¼º Ã£±â(~I)";
+        Text[ turkish ] = "~Benzerleri ara";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_SIMILARITY
+    {
+        Pos = MAP_APPFONT ( 276 , 101 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~..." ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
+        Size = MAP_APPFONT ( 290 , 55 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ norwegian ] = "Options" ;
+        Text [ italian ] = "Opzioni" ;
+        Text [ portuguese_brazilian ] = "Opções" ;
+        Text [ portuguese ] = "Opções" ;
+        Text [ finnish ] = "Määritykset" ;
+        Text [ danish ] = "Indstillinger" ;
+        Text [ french ] = "Options" ;
+        Text [ swedish ] = "Alternativ" ;
+        Text [ dutch ] = "Opties" ;
+        Text [ spanish ] = "Opciones" ;
+        Text [ english_us ] = "Options" ;
+        Text[ chinese_simplified ] = "Ñ¡Ïî";
+        Text[ russian ] = "Ïàğàìåòğû";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "µÌß¼®İ";
+        Text[ chinese_traditional ] = "¿ï¶µ";
+        Text[ arabic ] = "ÇáÎíÇÑÇÊ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "Åğéëïãİò";
+        Text[ korean ] = "¿É¼Ç";
+        Text[ turkish ] = "Seçenekler";
+    };
+    RadioButton BTN_FORMULAS
+    {
+        Pos = MAP_APPFONT ( 12 , 163 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text = "F~ormeln" ;
+        Text [ ENGLISH ] = "F~ormulas" ;
+        Text [ norwegian ] = "F~ormler" ;
+        Text [ italian ] = "F~ormule" ;
+        Text [ portuguese_brazilian ] = "F~órmulas" ;
+        Text [ portuguese ] = "F~órmulas" ;
+        Text [ finnish ] = "K~aavat" ;
+        Text [ danish ] = "Formler" ;
+        Text [ french ] = "F~ormules" ;
+        Text [ swedish ] = "F~ormler" ;
+        Text [ dutch ] = "~Formules" ;
+        Text [ spanish ] = "~Fórmulas" ;
+        Text [ english_us ] = "Formulas" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "³ÌÊ½(~O)";
+        Text[ russian ] = "ôîğìóëàõ";
+        Text[ polish ] = "~formu³ach";
+        Text[ japanese ] = "”®";
+        Text[ chinese_traditional ] = "¤½¦¡(~F)";
+        Text[ arabic ] = "ÇáÕíÛ";
+        Text[ greek ] = "Ôığïé";
+        Text[ korean ] = "¼ö½Ä";
+        Text[ turkish ] = "F~ormül";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_VALUES
+    {
+        Pos = MAP_APPFONT ( 12 , 176 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text = "~Werten" ;
+        Text [ ENGLISH ] = "~Values" ;
+        Text [ norwegian ] = "~Verdier" ;
+        Text [ italian ] = "~Valori" ;
+        Text [ portuguese_brazilian ] = "~Valores" ;
+        Text [ portuguese ] = "~Valores" ;
+        Text [ finnish ] = "Ar~vot" ;
+        Text [ danish ] = "Værdier" ;
+        Text [ french ] = "V~aleurs" ;
+        Text [ swedish ] = "~Värden" ;
+        Text [ dutch ] = "~Waarden" ;
+        Text [ spanish ] = "~Valores" ;
+        Text [ english_us ] = "~Values" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "ÊıÖµ(~V)";
+        Text[ russian ] = "çíà÷åíèÿõ";
+        Text[ polish ] = "wartoœc~iach";
+        Text[ japanese ] = "’l(~V)";
+        Text[ chinese_traditional ] = "¼Æ­È(~V)";
+        Text[ arabic ] = "ÇáŞíã";
+        Text[ greek ] = "Ôéìİò";
+        Text[ korean ] = "°ª(~V)";
+        Text[ turkish ] = "~Değer";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_NOTES
+    {
+        Pos = MAP_APPFONT ( 12 , 189 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
+        Text = "No~tizen" ;
+        Text [ ENGLISH ] = "~Notes" ;
+        Text [ norwegian ] = "~Notes" ;
+        Text [ italian ] = "~Note" ;
+        Text [ portuguese_brazilian ] = "~Observações" ;
+        Text [ portuguese ] = "~Observações" ;
+        Text [ finnish ] = "~Huomautukset" ;
+        Text [ danish ] = "Noter" ;
+        Text [ french ] = "~Notes" ;
+        Text [ swedish ] = "Antecknin~gar" ;
+        Text [ dutch ] = "Aan~tekeningen" ;
+        Text [ spanish ] = "Not~as" ;
+        Text [ english_us ] = "~Notes" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "±¸×¢(~N)";
+        Text[ russian ] = "ïğèìå÷àíèÿõ";
+        Text[ polish ] = "~notatkach";
+        Text[ japanese ] = "ÒÓ’ (~N)";
+        Text[ chinese_traditional ] = "³Æª`(~N)";
+        Text[ arabic ] = "ÇáãáÇÍÙÇÊ";
+        Text[ greek ] = "Óçìåéşóåéò";
+        Text[ korean ] = "¸Ş¸ğ(~N)";
+        Text[ turkish ] = "No~t";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_SEARCH
+    {
+        Pos = MAP_APPFONT ( 6 , 152 ) ;
+        Size = MAP_APPFONT ( 86 , 54 ) ;
+        Text = "Suchen in" ;
+        Text [ ENGLISH ] = "Search In" ;
+        Text [ norwegian ] = "Søk i" ;
+        Text [ italian ] = "Cerca in" ;
+        Text [ portuguese_brazilian ] = "Buscar Em" ;
+        Text [ portuguese ] = "Localizar em" ;
+        Text [ finnish ] = "Tutkittava" ;
+        Text [ danish ] = "Søg i" ;
+        Text [ french ] = "Où chercher ?" ;
+        Text [ swedish ] = "Sök i" ;
+        Text [ dutch ] = "Zoeken in" ;
+        Text [ spanish ] = "Buscar en" ;
+        Text [ english_us ] = "Search in" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "ËÑÑ°Î»ÖÃ";
+        Text[ russian ] = "Íàéòè â";
+        Text[ polish ] = "Szukaj w";
+        Text[ japanese ] = "ŒŸõêŠ";
+        Text[ chinese_traditional ] = "´M§ä¦ì¸m";
+        Text[ arabic ] = "ÇáÈÍË İí";
+        Text[ greek ] = "ÁíáæŞôçóç óôï";
+        Text[ korean ] = "Ã£À» ¹üÀ§";
+        Text[ turkish ] = "Bakılacak yerler";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_ROWS
+    {
+        Pos = MAP_APPFONT ( 104 , 163 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "Zeilenwe~ise" ;
+        Text [ ENGLISH ] = "~Rows" ;
+        Text [ norwegian ] = "~Rows" ;
+        Text [ italian ] = "A riga" ;
+        Text [ portuguese_brazilian ] = "Filei~ras" ;
+        Text [ portuguese ] = "~Linhas" ;
+        Text [ finnish ] = "~Rivit" ;
+        Text [ danish ] = "Rækkevis" ;
+        Text [ french ] = "~Ligne par ligne" ;
+        Text [ swedish ] = "Radv~is" ;
+        Text [ dutch ] = "~Rijen" ;
+        Text [ spanish ] = "Por f~ilas" ;
+        Text [ english_us ] = "Ro~ws" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "°´ÕÕĞĞ(~W)";
+        Text[ russian ] = "Ïî ñòğîêàì";
+        Text[ polish ] = "Wierszami";
+        Text[ japanese ] = "s(~W)";
+        Text[ chinese_traditional ] = "«ö·ÓÄæ(~W)";
+        Text[ arabic ] = "ÇáÕİæİ";
+        Text[ greek ] = "ÊáôÜ ãñáììİò";
+        Text[ korean ] = "Çà(~W)";
+        Text[ turkish ] = "Sat~ır";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_COLUMNS
+    {
+        Pos = MAP_APPFONT ( 104 , 176 ) ;
+        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Text = "S~paltenweise" ;
+        Text [ ENGLISH ] = "Col~umns" ;
+        Text [ norwegian ] = "Kolo~nner" ;
+        Text [ italian ] = "Per col~onne" ;
+        Text [ portuguese_brazilian ] = "Col~unas" ;
+        Text [ portuguese ] = "Col~unas" ;
+        Text [ finnish ] = "~Sarakkeet" ;
+        Text [ danish ] = "Kolonnevis" ;
+        Text [ french ] = "Col~onne par colonne" ;
+        Text [ swedish ] = "Kol~umnvis" ;
+        Text [ dutch ] = "K~olommen" ;
+        Text [ spanish ] = "Por columna~s" ;
+        Text [ english_us ] = "Col~umns" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "°´ÕÕÁĞ(~U)";
+        Text[ russian ] = "Ïî ñòîëáöàì";
+        Text[ polish ] = "Kolumnami";
+        Text[ japanese ] = "—ñ(~U)";
+        Text[ chinese_traditional ] = "«ö·ÓÄæ(~U)";
+        Text[ arabic ] = "ÇáÃÚãÏÉ";
+        Text[ greek ] = "ÊáôÜ óôŞëåò";
+        Text[ korean ] = "¿­(~U)";
+        Text[ turkish ] = "S~ütun";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_SEARCHDIR
+    {
+        Pos = MAP_APPFONT ( 98 , 152 ) ;
+        Size = MAP_APPFONT ( 87 , 54 ) ;
+        Text = "Suchrichtung" ;
+        Text [ ENGLISH ] = "Search Direction" ;
+        Text [ norwegian ] = "Søk Retning" ;
+        Text [ italian ] = "Modo ricerca" ;
+        Text [ portuguese_brazilian ] = "Direção de Busca" ;
+        Text [ portuguese ] = "Direcção de procura" ;
+        Text [ finnish ] = "Etsintäsuunta" ;
+        Text [ danish ] = "Søgeretning" ;
+        Text [ french ] = "Sens" ;
+        Text [ swedish ] = "Sökriktning" ;
+        Text [ dutch ] = "Zoekrichting" ;
+        Text [ spanish ] = "Dirección de búsqueda" ;
+        Text [ english_us ] = "Search direction" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "ËÑÑ°·½Ïò";
+        Text[ russian ] = "Íàïğàâëåíèå ïîèñêà";
+        Text[ polish ] = "Kierunek wyszukiwania";
+        Text[ japanese ] = "ŒŸõ•ûŒü";
+        Text[ chinese_traditional ] = "´M§ä¤è¦V";
+        Text[ arabic ] = "ÇÊÌÇå ÇáÈÍË";
+        Text[ greek ] = "Êáôåıèõíóç áíáæŞôçóçò";
+        Text[ korean ] = "Ã£À» ¹æÇâ";
+        Text[ turkish ] = "Arama yönü";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_ALLTABLES
+    {
+        Pos = MAP_APPFONT ( 197 , 163 ) ;
+        Size = MAP_APPFONT ( 93 , 10 ) ;
+        Text = "~In allen Tabellen suchen" ;
+        Text [ ENGLISH ] = "~Search in all tables" ;
+        Hide = TRUE ;
+        Text [ portuguese ] = "~Procurar em todas as folhas" ;
+        Text [ english_us ] = "~Search in all sheets" ;
+        Text [ portuguese_brazilian ] = "~In allen Tabellen suchen" ;
+        Text [ swedish ] = "Sök i alla ta~beller" ;
+        Text [ danish ] = "Søg i alle tabeller" ;
+        Text [ italian ] = "~Cerca in tutte le tabelle" ;
+        Text [ spanish ] = "~Buscar en todas las hojas" ;
+        Text [ french ] = "~Rechercher dans toutes les feuilles" ;
+        Text [ dutch ] = "~In alle werkbladen zoeken" ;
+        Text[ chinese_simplified ] = "ÔÚËùÓĞ±í¸ñÖĞËÑÑ°(~S)";
+        Text[ russian ] = "Ïîèñê âî âñåõ òàáëèöàõ";
+        Text[ polish ] = "Szukaj we wszystkich arkuszach";
+        Text[ japanese ] = "‚·‚×‚Ä‚Ì•\\‚ğŒŸõ(~S)";
+        Text[ chinese_traditional ] = "´M§ä¥ş³¡ªºªí®æ(~S)";
+        Text[ arabic ] = "ÇáÈÍË İí ßá ÇáÌÏÇæá";
+        Text[ greek ] = "ÁíáæŞôçóç óå üëïõò ôïõò ğßíáêåò";
+        Text[ korean ] = "ÀüÃ¼ ½ÃÆ®¿¡¼­ Ã£±â(~S)";
+        Text[ turkish ] = "~Tüm tablolarda ara";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_CALCEXTRAS
+    {
+        Pos = MAP_APPFONT ( 191 , 152 ) ;
+        Size = MAP_APPFONT ( 105 , 54 ) ;
+        Text = "Extras" ;
+        Text [ ENGLISH ] = "Extras" ;
+        Hide = TRUE ;
+        Text [ english_us ] = "Extras" ;
+        Text [ portuguese_brazilian ] = "Extras" ;
+        Text [ swedish ] = "Verktyg" ;
+        Text [ danish ] = "Supplerende" ;
+        Text [ italian ] = "Extra" ;
+        Text [ spanish ] = "Considerar todas las hojas" ;
+        Text [ french ] = "Classeur à plusieurs feuilles" ;
+        Text [ dutch ] = "Extra" ;
+        Text [ portuguese ] = "Ferramentas" ;
+        Text[ chinese_simplified ] = "¹¤¾ß";
+        Text[ russian ] = "Ñåğâèñ";
+        Text[ polish ] = "Narzêdzia";
+        Text[ japanese ] = "Ú×İ’è";
+        Text[ chinese_traditional ] = "¤u¨ã";
+        Text[ arabic ] = "ÅÖÇİÉ";
+        Text[ greek ] = "Ğñüóèåôá";
+        Text[ korean ] = "º°µµ Ãß°¡";
+        Text[ turkish ] = "Tablo seçenekleri";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_SEARCH_ALL
+    {
+        Pos = MAP_APPFONT ( 192 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Suche ~alle" ;
+        Text [ ENGLISH ] = "Search ~All" ;
+        Text [ norwegian ] = "Søk ~Alle" ;
+        Text [ italian ] = "Cerca ~tutto" ;
+        Text [ portuguese_brazilian ] = "Buscar ~Tudo" ;
+        Text [ portuguese ] = "Localizar ~tudo" ;
+        Text [ finnish ] = "E~tsi kaikki" ;
+        Text [ danish ] = "Søg alle" ;
+        Text [ french ] = "Rechercher ~tout" ;
+        Text [ swedish ] = "Sök ~alla" ;
+        Text [ dutch ] = "~Alles zoeken" ;
+        Text [ spanish ] = "Buscar ~todo" ;
+        Text [ english_us ] = "Find ~All" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ËÑÑ°È«²¿(~A)";
+        Text[ russian ] = "Íàéòè âñå";
+        Text[ polish ] = "~ZnajdŸ wszystkie";
+        Text[ japanese ] = "‚·‚×‚ÄŒŸõ(~A)";
+        Text[ chinese_traditional ] = "´M§ä¥ş³¡(~A)";
+        Text[ arabic ] = "ÇáÈÍË Úä Çáßá";
+        Text[ greek ] = "AíáæŞôçóç üëá";
+        Text[ korean ] = "¸ğµÎ Ã£±â(~A)";
+        Text[ turkish ] = "Tümünü a~ra";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_SEARCH
+    {
+        Pos = MAP_APPFONT ( 246 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Suchen" ;
+        Text [ ENGLISH ] = "~Search" ;
+        Text [ norwegian ] = "~Søke" ;
+        Text [ italian ] = "~Cerca" ;
+        Text [ portuguese_brazilian ] = "~Buscar" ;
+        Text [ portuguese ] = "~Localizar" ;
+        Text [ finnish ] = "~Etsi" ;
+        Text [ danish ] = "Søg" ;
+        Text [ french ] = "~Rechercher" ;
+        Text [ swedish ] = "~Sök" ;
+        Text [ dutch ] = "~Zoeken" ;
+        Text [ spanish ] = "~Buscar" ;
+        Text [ english_us ] = "~Find" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "ËÑÑ°(~F)";
+        Text[ russian ] = "Íàéòè";
+        Text[ polish ] = "Szukaj";
+        Text[ japanese ] = "ŒŸõ(~S)";
+        Text[ chinese_traditional ] = "´M§ä(~S)";
+        Text[ arabic ] = "ÈÍË";
+        Text[ greek ] = "AíáæŞôçóç";
+        Text[ korean ] = "Ã£±â(~F)";
+        Text[ turkish ] = "~Ara";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_REPLACE_ALL
+    {
+        Pos = MAP_APPFONT ( 192 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "E~rsetze alle" ;
+        Text [ ENGLISH ] = "Replace A~ll" ;
+        Text [ norwegian ] = "Erstat A~lle" ;
+        Text [ italian ] = "Sostituisci t~utto" ;
+        Text [ portuguese_brazilian ] = "Substituir T~udo" ;
+        Text [ portuguese ] = "Substituir t~udo" ;
+        Text [ finnish ] = "K~orvaa kaikki" ;
+        Text [ danish ] = "Erstat alle" ;
+        Text [ french ] = "Remplacer t~out" ;
+        Text [ swedish ] = "E~rsätt alla" ;
+        Text [ dutch ] = "A~lles vervangen" ;
+        Text [ spanish ] = "Reemplazar t~odo" ;
+        Text [ english_us ] = "Replace A~ll" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "È«²¿¸üÌæ(~L)";
+        Text[ russian ] = "Çàìåíèòü âñå";
+        Text[ polish ] = "Zamieñ wszyst.";
+        Text[ japanese ] = "‚·‚×‚Ä’uŠ·(~L)";
+        Text[ chinese_traditional ] = "¥ş³¡´À¥N(~L)";
+        Text[ arabic ] = "ÇÓÊÈÏÇá Çáßá";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç üëá";
+        Text[ korean ] = "¸ğµÎ ´ëÃ¼(~L)";
+        Text[ turkish ] = "Tümünü değiş~tir";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_REPLACE
+    {
+        Pos = MAP_APPFONT ( 246 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Ersetzen" ;
+        Text [ ENGLISH ] = "Re~place" ;
+        Text [ norwegian ] = "Er~statte" ;
+        Text [ italian ] = "So~stituisci" ;
+        Text [ portuguese_brazilian ] = "Su~bstituir" ;
+        Text [ portuguese ] = "~Substituir" ;
+        Text [ finnish ] = "~Korvaa" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ french ] = "R~emplacer" ;
+        Text [ swedish ] = "~Ersätt" ;
+        Text [ dutch ] = "~Vervangen" ;
+        Text [ spanish ] = "~Reemplazar" ;
+        Text [ english_us ] = "~Replace" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¸üÌæ(~R)";
+        Text[ russian ] = "Çàìåíèòü";
+        Text[ polish ] = "Zamieñ";
+        Text[ japanese ] = "’uŠ·(~R)";
+        Text[ chinese_traditional ] = "´À¥N(~R)";
+        Text[ arabic ] = "ÇÓÊÈÏÇá";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç";
+        Text[ korean ] = "´ëÃ¼ÇÏ±â(~R)";
+        Text[ turkish ] = "Deği~ştir";
+        Text[ language_user1 ] = " ";
+    };
+    CancelButton BTN_CLOSE
+    {
+        Pos = MAP_APPFONT ( 246 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? S~chließen : S~chlie˜en */
+        Text = "S~chließen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        Text [ norwegian ] = "~Lukk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text [ finnish ] = "~Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ swedish ] = "S~täng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "~Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "~Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 246 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    MoreButton BTN_MORE
+    {
+        Pos = MAP_APPFONT ( 246 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Zusätze : ~Zusõtze */
+        Text = "~Zusätze" ;
+        Text [ English ] = "~More" ;
+        Text [ norwegian ] = "~Mer" ;
+        Text [ italian ] = "E~xtra" ;
+        Text [ portuguese_brazilian ] = "~Mais" ;
+        Text [ portuguese ] = "~Opções" ;
+        Text [ finnish ] = "~Enemmän" ;
+        Text [ danish ] = "Flere" ;
+        Text [ french ] = "O~ptions" ;
+        Text [ swedish ] = "~Fler" ;
+        Text [ dutch ] = "Over~ige" ;
+        Text [ spanish ] = "~Opciones" ;
+        Text [ english_us ] = "~More" ;
+        Hide = TRUE ;
+        TabStop = TRUE ;
+        MapUnit = MAP_APPFONT ;
+        Delta = 60 ;
+        Text[ chinese_simplified ] = "¸½¼Ó(~M)";
+        Text[ russian ] = "Áîëüøå";
+        Text[ polish ] = "~Dodatki";
+        Text[ japanese ] = "µÌß¼®İ(~M)";
+        Text[ chinese_traditional ] = "ªş¥[(~M)";
+        Text[ arabic ] = "ÅÖÇİÇÊ";
+        Text[ greek ] = "Ğñüóèåôá";
+        Text[ korean ] = "µ¡ºÙÀÓ(~M)";
+        Text[ turkish ] = "~Diğer seçenekl.";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_ATTRIBUTE
+    {
+        Pos = MAP_APPFONT ( 192 , 40 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Attri~bute..." ;
+        Text [ English ] = "Attri~butes..." ;
+        Text [ norwegian ] = "Attri~butter..." ;
+        Text [ italian ] = "Attri~buti..." ;
+        Text [ portuguese_brazilian ] = "Atri~butos..." ;
+        Text [ portuguese ] = "Atri~butos..." ;
+        Text [ finnish ] = "~Määritteet..." ;
+        Text [ danish ] = "Attributter..." ;
+        Text [ french ] = "Attri~buts..." ;
+        Text [ swedish ] = "Attri~but..." ;
+        Text [ dutch ] = "A~ttributen..." ;
+        Text [ spanish ] = "~Atributos..." ;
+        Text [ english_us ] = "Attri~butes..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÊôĞÔ(~B)...";
+        Text[ russian ] = "Àòğèáóòû...";
+        Text[ polish ] = "Atrybuty...";
+        Text[ japanese ] = "‘®«(~B)...";
+        Text[ chinese_traditional ] = "Äİ©Ê(~B)...";
+        Text[ arabic ] = "ÇáÓãÇÊ...";
+        Text[ greek ] = "Éäéüôçôåò...";
+        Text[ korean ] = "¼Ó¼º(~B)...";
+        Text[ turkish ] = "Öznitelik~ler...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_FORMAT
+    {
+        Pos = MAP_APPFONT ( 192 , 57 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Format..." ;
+        Text [ English ] = "~Format..." ;
+        Text [ norwegian ] = "~Format..." ;
+        Text [ italian ] = "F~ormato..." ;
+        Text [ portuguese_brazilian ] = "~Formatar..." ;
+        Text [ portuguese ] = "Fo~rmatar..." ;
+        Text [ finnish ] = "~Muoto..." ;
+        Text [ danish ] = "Format..." ;
+        Text [ french ] = "~Format..." ;
+        Text [ swedish ] = "~Format..." ;
+        Text [ dutch ] = "~Opmaak..." ;
+        Text [ spanish ] = "~Formato..." ;
+        Text [ english_us ] = "~Format..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "¸ñÊ½(~F)...";
+        Text[ russian ] = "Ôîğìàò...";
+        Text[ polish ] = "Format...";
+        Text[ japanese ] = "‘®(~F)...";
+        Text[ chinese_traditional ] = "®æ¦¡(~F)...";
+        Text[ arabic ] = "ÇáÊäÓíŞ...";
+        Text[ greek ] = "Ìïñ~öŞ...";
+        Text[ korean ] = "¼­½Ä(~F)...";
+        Text[ turkish ] = "~Format...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_NOFORMAT
+    {
+        Pos = MAP_APPFONT ( 192 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Kein For~mat" ;
+        Text [ English ] = "~No format" ;
+        Text [ norwegian ] = "~Ingen format" ;
+        Text [ italian ] = "Senza formato" ;
+        Text [ portuguese_brazilian ] = "~Nenhum formato" ;
+        Text [ portuguese ] = "~Sem formato" ;
+        Text [ finnish ] = "~Ei muotoa" ;
+        Text [ danish ] = "Intet format" ;
+        Text [ french ] = "Aucu~n attribut" ;
+        Text [ swedish ] = "Inget for~mat" ;
+        Text [ dutch ] = "~Geen opmaak" ;
+        Text [ spanish ] = "S~in formato" ;
+        Text [ english_us ] = "~No Format" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "ÎŞ¸ñÊ½(~N)";
+        Text[ russian ] = "Ñíÿòü ôîğìàò";
+        Text[ polish ] = "Bez f~ormatu";
+        Text[ japanese ] = "‘®‚È‚µ(~N)";
+        Text[ chinese_traditional ] = "µL®æ¦¡(~N)";
+        Text[ arabic ] = "ÈÏæä ÊäÓíŞ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "×ùñßò ~ìïñöŞ";
+        Text[ korean ] = "¼­½Ä ¾øÀ½(~N)";
+        Text[ turkish ] = "For~matsız";
+    };
+    String STR_WORDCALC
+    {
+        Text = "Nur ganze Ze~llen" ;
+        Text [ ENGLISH ] = "Comple~te Cells" ;
+        Text [ norwegian ] = "Fullf~ør Celler" ;
+        Text [ italian ] = "Celle intere" ;
+        Text [ portuguese_brazilian ] = "Células Comple~tas" ;
+        Text [ portuguese ] = "Só células com~pletas" ;
+        Text [ finnish ] = "~Kokonaiset solut" ;
+        Text [ danish ] = "Kun hele rækker" ;
+        Text [ french ] = "Cellules entières" ;
+        Text [ swedish ] = "Endast hela ce~ller" ;
+        Text [ dutch ] = "Alleen hele c~ellen" ;
+        Text [ spanish ] = "Solo cel~das completas" ;
+        Text [ english_us ] = "~Entire cells" ;
+        Text[ chinese_simplified ] = "Ö»ÊÇÕû¸öµ¥Ôª¸ñÄÚÈİ(~E)";
+        Text[ russian ] = "Òîëüêî ñòğîêó öåëèêîì";
+        Text[ polish ] = "Tylko ca³e komórki";
+        Text[ japanese ] = "¾Ù‘S‘Ì(~E)";
+        Text[ chinese_traditional ] = "¥u¬O¾ã­ÓÀx¦s®æ(~E)";
+        Text[ arabic ] = "ÎáÇíÇ ßÇãáÉ İŞØ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "Ìüíï ïëüêëçñá êåëéÜ";
+        Text[ korean ] = "ÀüÃ¼ ¼¿¸¸(~E)";
+        Text[ turkish ] = "Yalnızca ~tam hücreler";
+    };
+    Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
+    Text[ russian ] = "Íàéòè è Çàìåíèòü";
+    Text[ polish ] = "ZnajdŸ & Zamieñ";
+    Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
+    Text[ chinese_traditional ] = "´M§ä©M´À¥N";
+    Text[ arabic ] = "ÈÍË æÇÓÊÈÏÇá";
+    Text[ greek ] = "ÁíáæŞôçóç & ÁíôéêáôÜóôáóç";
+    Text[ korean ] = "Ã£±â¿Í ¹Ù²Ù±â";
+    Text[ turkish ] = "Ara ve değiştir";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

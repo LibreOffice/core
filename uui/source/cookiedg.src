@@ -1,0 +1,393 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cookiedg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:04:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef UUI_COOKIEDG_HRC
+#include <cookiedg.hrc>
+#endif
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+
+ModalDialog DLG_COOKIES
+{
+    HelpId = HID_DLG_COOKIES ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 295 , 193 ) ;
+    Moveable = TRUE ;
+    FixedBitmap FB_COOKIES
+    {
+        Border = True ;
+        Hide = TRUE ;
+        Fixed = Bitmap
+        {
+            File = "cookie.bmp" ;
+        };
+    };
+    FixedText FT_COOKIES
+    {
+        SVLook = TRUE ;
+        WordBreak = True ;
+        Pos = MAP_APPFONT ( 65 , 6 ) ;
+        Size = MAP_APPFONT ( 224 , 145 ) ;
+    };
+    FixedLine FL_COOKIES
+    {
+        Pos = MAP_APPFONT ( 6 , 155 ) ;
+        Size = MAP_APPFONT ( 283 , 1 ) ;
+    };
+    RadioButton RB_INFUTURE_SEND
+    {
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text = "Üb~ermitteln" ;
+        Text [ English ] = "~Transmit" ;
+        Text [ portuguese ] = "~Enviar" ;
+        Text [ english_us ] = "~Send" ;
+        Text [ portuguese_brazilian ] = "Ãbermitteln" ;
+        Text [ swedish ] = "~Acceptera" ;
+        Text [ danish ] = "Accepter" ;
+        Text [ italian ] = "Trasm~etti" ;
+        Text [ spanish ] = "~Aceptar" ;
+        Text [ french ] = "~Accepter" ;
+        Text [ dutch ] = "~Zenden" ;
+        Text[ chinese_simplified ] = "´«ËÍ(~S)";
+        Text[ russian ] = "Ïğèíÿòü";
+        Text[ polish ] = "Wyœlij";
+        Text[ japanese ] = "ó‚¯“ü‚ê‚é(~S)";
+        Text[ chinese_traditional ] = "±µ¨ü(~S)";
+        Text[ greek ] = "ÁğïóôïëŞ";
+        Text[ korean ] = "Àü´Ş(~S)";
+        Text[ arabic ] = "ÅÑÓÇá";
+        Text[ turkish ] = "Gönder";
+    };
+    RadioButton RB_INFUTURE_IGNORE
+    {
+        Pos = MAP_APPFONT ( 67 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text = "I~gnorieren" ;
+        Text [ English ] = "I~gnore" ;
+        Text [ english_us ] = "I~gnore" ;
+        Text [ portuguese_brazilian ] = "Ignorieren" ;
+        Text [ swedish ] = "I~gnorera" ;
+        Text [ danish ] = "Ignorer" ;
+        Text [ italian ] = "I~gnora" ;
+        Text [ spanish ] = "I~gnorar" ;
+        Text [ french ] = "I~gnorer" ;
+        Text [ dutch ] = "~Negeren" ;
+        Text [ portuguese ] = "I~gnorar" ;
+        Text[ chinese_simplified ] = "ºöÂÔ(~G)";
+        Text[ russian ] = "Èãíîğèğîâàòü";
+        Text[ polish ] = "Ignoruj";
+        Text[ japanese ] = "–³‹‚·‚é(~G)";
+        Text[ chinese_traditional ] = "©¿²¤(~G)";
+        Text[ greek ] = "ĞáñÜâëåøç";
+        Text[ korean ] = "¹«½Ã(~G)";
+        Text[ arabic ] = "ÊÌÇåá";
+        Text[ turkish ] = "Yok say";
+    };
+    RadioButton RB_INFUTURE_INTERACTIVE
+    {
+        Pos = MAP_APPFONT ( 122 , 171 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
+        Text = "I~nteraktiv" ;
+        Text [ English ] = "I~nteractive" ;
+        Text [ portuguese ] = "In~teractivo" ;
+        Text [ english_us ] = "I~nteractive" ;
+        Text [ portuguese_brazilian ] = "Interaktiv" ;
+        Text [ swedish ] = "I~nteraktiv" ;
+        Text [ danish ] = "Interaktiv" ;
+        Text [ italian ] = "I~nterattivo" ;
+        Text [ spanish ] = "~Interactivo" ;
+        Text [ french ] = "~Avertir" ;
+        Text [ dutch ] = "In~teractief" ;
+        Text[ chinese_simplified ] = "½»»¥Ê½(~N)";
+        Text[ russian ] = "Èíòåğàêòèâíî";
+        Text[ polish ] = "Interaktywny";
+        Text[ japanese ] = "–ˆ‰ñŠm”F‚·‚é(~N)";
+        Text[ chinese_traditional ] = "½T»{(~N)";
+        Text[ greek ] = "ÄéáëïãéêÜ";
+        Text[ korean ] = "´ëÈ­½Ä(~N)";
+        Text[ arabic ] = "ÊİÇÚá";
+        Text[ turkish ] = "Etkileşimli";
+    };
+    GroupBox GB_INFUTURE
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 174 , 27 ) ;
+        Text = "Zukünftige Handhabung für diese Cookies" ;
+        Text [ English ] = "Allgemeine Handhabung" ;
+        Text [ english_us ] = "Future Cookie Handling" ;
+        Text [ portuguese_brazilian ] = "Zuk³nftige Handhabung" ;
+        Text [ swedish ] = "Framtida hantering av dessa cookies" ;
+        Text [ danish ] = "Fremtidig håndtering af disse cookies" ;
+        Text [ italian ] = "Gestione futura dei cookies" ;
+        Text [ spanish ] = "Futuro tratamiento de estas cookies" ;
+        Text [ french ] = "Traitement futur des présents Cookies" ;
+        Text [ dutch ] = "Toekomstige handhaving voor deze cookies" ;
+        Text [ portuguese ] = "Tratamento futuro para estes cookies" ;
+        Text[ chinese_simplified ] = "½ñºó´¦ÀíÕâĞ© Cookie µÄ·½Ê½";
+        Text[ russian ] = "Áóäóùåå îáñëóæèâàíèå äëÿ ıòèõ Cookies ";
+        Text[ polish ] = "Obs³uga tych plików cookie w przysz³oœci";
+        Text[ japanese ] = "¸¯·°‚Ì¡Œã‚Ì‘€ìè‡";
+        Text[ chinese_traditional ] = "¤µ«á³B²z Cookie ªº¤è¦¡";
+        Text[ greek ] = "ÌåëëïíôéêŞ ìåôá÷åßñçóç ãéá áõôÜ ôá Cookies";
+        Text[ korean ] = "¾ÕÀ¸·ÎÀÇ Cookie Ãë±Ş";
+        Text[ arabic ] = "ØÑíŞÉ ÇáÊÚÇãá ãÚ åĞå ÇáÜßæßíÒ (ı(Cookies ãÓÊŞÈáíÇğ";
+        Text[ turkish ] = "Cookie'lerde uygulanacak kurallar";
+    };
+    PushButton BTN_COOKIES_CANCEL
+    {
+        Pos = MAP_APPFONT ( 186 , 173 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Ignorieren" ;
+        Text [ English ] = "~Ignorieren" ;
+        Text [ english_us ] = "~Ignore" ;
+        Text [ portuguese_brazilian ] = "~Ignorieren" ;
+        Text [ swedish ] = "~Ignorera" ;
+        Text [ danish ] = "Ignorer" ;
+        Text [ italian ] = "~Ignora" ;
+        Text [ spanish ] = "~Ignorar" ;
+        Text [ french ] = "~Ignorer" ;
+        Text [ dutch ] = "N~egeren" ;
+        Text [ portuguese ] = "~Ignorar" ;
+        Text[ chinese_simplified ] = "ºöÂÔ(~I)";
+        Text[ russian ] = "Ïğîïóñòèòü";
+        Text[ polish ] = "Zignoruj";
+        Text[ japanese ] = "–³‹‚·‚é(~I)";
+        Text[ chinese_traditional ] = "©¿²¤(~I)";
+        Text[ greek ] = "ĞáñÜâëåøç";
+        Text[ korean ] = "¹«½Ã(~I)";
+        Text[ arabic ] = "ÊÌÇåá";
+        Text[ turkish ] = "Yok say";
+    };
+    PushButton BTN_COOKIES_OK
+    {
+        Pos = MAP_APPFONT ( 239 , 173 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        Text = "Ü~bermitteln" ;
+        Text [ English ] = "~Accept" ;
+        Text [ portuguese ] = "~Enviar" ;
+        Text [ english_us ] = "~Send" ;
+        Text [ portuguese_brazilian ] = "~Ãbermitteln" ;
+        Text [ swedish ] = "~Acceptera" ;
+        Text [ danish ] = "Accepter" ;
+        Text [ italian ] = "~Trasmetti" ;
+        Text [ spanish ] = "~Aceptar" ;
+        Text [ french ] = "~Accepter" ;
+        Text [ dutch ] = "~Zenden" ;
+        Text[ chinese_simplified ] = "´«ËÍ(~S)";
+        Text[ russian ] = "Ïğèíÿòü";
+        Text[ polish ] = "Wyœlij";
+        Text[ japanese ] = "ó‚¯“ü‚ê‚é(~S)";
+        Text[ chinese_traditional ] = "±µ¨ü(~S)";
+        Text[ greek ] = "Á~ğïóôïëŞ";
+        Text[ korean ] = "Àü´Ş(~S)";
+        Text[ arabic ] = "ÅÑÓÇá";
+        Text[ turkish ] = "Gönder";
+    };
+};
+
+String STR_COOKIES_RECV_START
+{
+    Text = "Der Server '${HOST}' möchte ein oder mehrere Cookies setzen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Fordert StarOffice später ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von StarOffice an den Server gesendet. So können sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ English ] = "The '${HOST}' server wishes to set one or more cookies. Cookies contain information referring to certain classes of URLs. If  StarOffice later requests a document with a URL which corresponds to the class of a previously set cookie, StarOffice will send the information to the server. In this way, the server can recognize the status of a WWW application.\n\nThe following cookies will be set:\n\n" ;
+    Text [ portuguese ] = "O servidor '${HOST}' deseja instalar um ou mais cookies.\nCookies são informações que se referem a determinadas classes de URLs. Se o StarOffice pedir mais tarde um documento com um URL correspondente a uma classe de um cookie previamente instalado, essa informação será enviada pelo StarOffice ao servidor. Desta forma os servidores poderão reconhecer o estado de uma aplicação WWW (por ex. artigos colocados no cesto de mercadorias num sistema de compras).\n\nSerão definidos os seguintes cookies:\n\n" ;
+    Text [ english_us ] = "The '${HOST}' server wishes to set one or more cookies.\nCookies contain information referring to certain URL classes. If StarOffice later requests a document with a URL corresponding to the class of a previously set cookie, StarOffice will send this information to the server. This allows a server to recognize the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
+    Text [ portuguese_brazilian ] = "Der Server '${HOST}' m÷chte ein oder mehrere Cookies setzen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Fordert StarOffice spaeter ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von StarOffice an den Server gesendet. So k÷nnen sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ swedish ] = "Servern '${HOST}' vill sätta en eller flera cookies.\nCookies innehåller information som refererar till vissa URL-klasser. Denna information sänds från StarOffice till servern om StarOffice vid ett senare tillfälle kräver ett dokument som motsvarar webbadressen (URL) enligt en klass för en tidigare mottagen cookie. På så sätt kan servern känna igen tillståndet hos en WWW-tillämpning (t.ex. varor i en varukorg när Du handlar online).\n\nFöljande cookies skall tilldelas:\n\n" ;
+    Text [ danish ] = "Serveren '${HOST}' ønsker at sætte en eller flere cookies.\nCookies er informationer, som relaterer til bestemte URL-klasser. Læser StarOffice senere et dokument, hvis URLs klasse svarer til en før modtaget cookie, sender StarOffice denne information til serveren. Således kan serveren kontrollere en WWW-applikations tilstand (f.eks. varer i din indkøbskurv når du handler online).\n\nFølgende cookies skal sættes:\n\n" ;
+    Text [ italian ] = "Il server '${HOST}' vorrebbe impostare uno o più cookies.\nI cookies sono informazioni che si riferiscono a determinate classi di URL. Se in seguito StarOffice richiede un documento, che corrisponde all'URL secondo una classe di un cookie precedentemente ricevuto, questa informazione viene inviata al server. In tal modo i server è possono memorizzare lo stato di un'applicazione WWW (ad esempio gli articoli introdotti nel \"carrello\" di un supermercato elettronico).\n\nÈ necessario impostare i seguenti cookies:\n\n" ;
+    Text [ spanish ] = "El servidor '${HOST}' desea instalar una o más cookies.\nLas cookies son informaciones referentes a determinadas clases de URLs. Si StarOffice solicita más tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, StarOffice enviará esta información al servidor. De esta forma los servidores pueden recordar el estado de una aplicación www (p.ej. los artículos de una cesta de compra en un sistema de compras).\n\nLas siguientes cookies se deberán instalar:\n\n" ;
+    Text [ french ] = "Le serveur '${HOST}' tente d'envoyer un ou plusieurs Cookies.\nLes Cookies sont des informations se rapportant à certaines classes d'URL. Plus tard, si StarOffice requiert un document dont l'URL correspond à la classe d'un Cookie déjà reçu, cette information est envoyée au serveur. Ceci permet aux serveurs de reconnaître l'état d'une application WWW (par ex. les articles placés dans le panier d'un système d'achat).\n\nLes Cookies suivants vont être placés :\n\n" ;
+    Text [ dutch ] = "Server '${HOST}' wil een of meer cookies zetten.\nCookies zijn gegevens die betrekking hebben op bepaalde klassen van URLs. Vraagt StarOffice later een document op dat wat URL betreft met de klasse van een eerder ontvangen cookie overeenkomt, dan wordt deze informatie aan de server gezonden. Zo kan een server de toestand van een WWW-toepassing (zoals bijv. de in een boodschappenmand gelegde artikelen in een winkel) onthouden.\n\nDe volgende cookies moeten worden gezet:\n\n" ;
+    Text[ chinese_simplified ] = "·şÎñÆ÷ '${HOST}' Òª½¨Á¢Ò»¸ö»ò¶à¸öCookies¡£\nCookies°üº¬ÓĞ¹ØÌØ¶¨URLs¿âµÄĞÅÏ¢¡£Èç¹ûStarOfficeÒÔºóĞèÒªÒ»¸öº¬ÓĞÉÏÒ»´Î½ÓÊÜµÄcookie¿âµÄURLÎÄµµ£¬ÄÇÃ´StarOffice¾Í»á½«Õâ¸öĞÅÏ¢´«µİ¸ø·şÎñÆ÷¡£ÕâÑù·şÎñÆ÷¾ÍÄÜ¹»ÈÏ³öÍòÎ¬ÍøÓ¦ÓÃ³ÌĞòµÄ×´Ì¬(ÈçÁª»úÏµÍ³²É¹ºÀºÄÚµÄÉÌÆ·)¡£\n\nÏÖÔÚÒª½¨Á¢ÒÔÏÂµÄCookies:\n\n";
+    Text[ russian ] = "Ñåğâåğ '${HOST}' ïûòàåòñÿ óñòàíîâèòü îäèí èëè íåñêîëüêî ôàéëîâ Cookiå.\nÔàéëû Cookie ÿâëÿşòñÿ èíôîğìàöèåé, êîòîğàÿ îòíîñèòñÿ ê îïğåäåëåííûì êëàññàì URL. Åñëè StarOffice çàòğåáóåò êîãäà-íèáóäü äîêóìåíò ñ URL, êîòîğûé ñîîòâåòñòâóåò êëàññó ğàíåå óñòàíîâëåííîãî Cookie, òî StarOffice íàïğàâèò ıòó èíôîğìàöèş íà ñåğâåğ. Òàêèì îáğàçîì, ñåğâåğû ìîãóò êîíòğîëèğîâàòü ñîñòîÿíèå ïğèëîæåíèÿ WWW (íàïğ. âî âğåìÿ Âàøèõ çàêóïîê ÷åğåç online).\n\nÍåîáõîäèìî óñòàíîâèòü ñëåäóşùèå ôàéëû Cookie:\n\n";
+    Text[ polish ] = "Serwer '${HOST}' chce osadziæ jeden lub wiêcej plików typu Cookies.\nCookies s¹ to informacje, które odnosz¹ siê do okreœlonych klas URL. Jeœli StarOffice za¿¹da póŸniej dokumentu, który odpowiada URL wed³ug klasy wczeœniej odbieranego pliku Cookies, to ta informacja zostanie przes³ana przez StarOffice do serwera. W ten sposób serwer zapamiêtuje stan aplikacji WWW (n.p. wrzucone do koszyka artyku³y w systemie zakupów.\n\nNastêpuj¹ce Cookies maj¹ zostaæ osadzone:\n\n";
+    Text[ japanese ] = "»°ÊŞ° '${HOST}' ‚Í1‚ÂˆÈã‚Ì¸¯·°‚Ìİ’è‚ª•K—v‚Å‚·B\n¸¯·°‚ÍURL‚Ì‚ ‚é¸×½‚ÉŠÖ˜A‚·‚éî•ñ‚Å‚·B‚·‚Å‚ÉóM‚µ‚Ä‚¢‚é¸¯·°‚Æ“¯‚¶URL‚ÌÄŞ·­ÒİÄ‚ğ StarOffice ‚ª—v‹‚µ‚½‚Æ‚«A‚±‚Ìî•ñ‚ª StarOffice ‚©‚ç»°ÊŞ°‚É‘—‚ç‚ê‚Ü‚·B‚»‚µ‚Ä»°ÊŞ°‚ª WWW ‚Ìg—pó‘Ô(µİ×²İw”ƒ‚ÌÛ‚É”ƒ‚¢•¨‚©‚²‚Ì’†‚É“ü‚ê‚½¤•i‚È‚Ç)‚ğŠo‚¦‚Ä‚¨‚«‚Ü‚·B\n\nˆÈ‰º‚Ì¸¯·°‚ğİ’è‚µ‚Ü‚·B\n\n";
+    Text[ chinese_traditional ] = "¦øªA¾¹'${HOST}' ­n¶Ç°e¤@­Ó©Î¦h­Ó cookie ¡C\ncookie §t¦³¦³ÃöURLµ{¦¡®wªº°T®§¡CStarOffice ¦b¤U¤@¦¸½Ğ¨D¸Ë¸ü¬Û¦Pªº¸ê®Æ®É´N·|«ö·Óµ{¦¡®wÀË¬dURL¬Û²Åªºcookie¦}±N¦³Ãö°T®§¶Ç°eµ¹¹ï¤è¦øªA¾¹¡C³o¼Ë¡A¹ï¤è¦øªA¾¹´N¯à°÷ª¾¹D±z¨Ï¥ÎªºÂsÄı¾¹ªº¦³Ãö¸ê®Æ(¦p½u¤W¾P°â¨t²ÎªºªöÁÊÄx§t¦³ªºª««~¦WºÙ)¡C\n\n²{¦b­n«Ø¥ß¦p¤Uªº cookie:\n\n";
+    Text[ greek ] = "Ï äéáêïìéóôŞò '${HOST}' åğéèõìåß íá ôïğïèåôŞóåé İíá Ş ğåñéóóüôåñá cookies. \nÔá Cookies åßíáé ğëçñïöïñßåò, ğïõ áíáöİñïíôáé óå óõãêåêñéìİíåò êëÜóçò ôùí URL. Áí ãßíåé áñãüôåñá ç æŞôçóç êÜğïéïõ åããñÜöïõ áğü ôï StarOffice, ôï ïğïßï áíôéóôïé÷åß óå ìéá êëÜóç URL åíüò Cookie ğïõ İãéíå äåêôü ğñïçãïõìİíùò, ôï StarOffice áğïóôİëëåé áõôŞ ôçí ğëçñïöïñßá ğñïò ôïí äéáêïìéóôŞ. ¸ôóé ï äéáêïìéóôŞò İ÷åé ôçí äõíáôüôçôá íá 'èõìÜôáé' ôçí êáôÜóôáóç ìéáò åöáñìïãŞò WWW üğùò ğ.÷. üôáí êÜíåôå áãïñİò online.\n\nÔá áêüëïõèá Cookie ğñüêåéôáé íá ôïğïèåôçèïıí:\n\n";
+    Text[ korean ] = "'${HOST}' ¼­¹ö´Â ÇÏ³ª ¶Ç´Â ±× ÀÌ»óÀÇ Cookie¸¦ ¿øÇÕ´Ï´Ù.\nCookieµéÀº URLÀÇ Æ¯Á¤ Å¬·¡½º¿¡ °ü·ÃµÈ Á¤º¸µéÀÔ´Ï´Ù. ³ªÁß¿¡ StarOffice°¡ URL¿¡ µû¶ó ÀÌÀü¿¡ ¹ŞÀº CookieÀÇ Å¬·¡½º¿¡ ¸Â´Â ¹®¼­¸¦ ¿ä±¸ÇÏ¸é StarOffice°¡ ±× Á¤º¸¸¦ ¼­¹ö¿¡ º¸³¾ °ÍÀÔ´Ï´Ù. ±×·¯¸é ¼­¹ö´Â WWW Àû¿ë »óÅÂ(¿¹¸¦ µé¾î ¿Â¶óÀÎ ¼îÇÎ¿¡¼­)¸¦ ÀÎ½ÄÇÒ ¼ö ÀÖ½À´Ï´Ù. \n\n´ÙÀ½ CookieµéÀÌ ÁöÁ¤µÇ¾î¾ß ÇÕ´Ï´Ù:\n\n";
+    Text[ arabic ] = "íÑíÏ ÇáãÒæÏ '${HOST}' ÊÚííä ßæßí æÇÍÏ Ãæ ÃßËÑ.\nÇáßæßíÒ (Cookies) åí ãÚáæãÇÊ ÎÇÕÉ ÈİÆÇÊ ãÚíäÉ ãä ÇáÚäÇæíä (URLs). ÅĞÇ ØáÈ StarOffice áÇÍŞÇğ ãÓÊäÏÇğ íÊØÇÈŞ ÚäæÇäå ãÚ İÆÉ ßæßíÒ Êã ÇÓÊŞÈÇáåÇ ãä ŞÈá¡ íŞæã StarOffice ÈÅÑÓÇá åĞå ÇáãÚáæãÇÊ Åáì ÇáãÒæÏ. ÈåĞå ÇáØÑíŞÉ íãßä ááãÒæÏÇÊ ãÚÑİÉ ÈíÇäÇÊ Úä ÇÓÊÎÏÇãÇÊ WWW (ãËáÇğ ÇáãÔÊÑíÇÊ ÇáãæÌæÏÉ İí ÍŞíÈÉ ÇáÔÑÇÁ ÃËäÇÁ ÇáÊÓæŞ ÚÈÑ ÇáÅäÊÑäÊ).\n\níõÑÇÏ ÊÚííä ÇáÜßæßíÒ ÇáÊÇáíÉ:\n\n";
+    Text[ turkish ] = "Sunucu '${HOST}' bir ya da birden çok Cookie göndermek istiyor.\nCookie'ler, belirli URL sınıflarına ilişkin bilgilerdir. StarOffice ileride daha önceden alınmış bir Cookie sınıfının URL'si ile örtüşen bir belge talep ettiğinde, bu bilgi StarOffice tarafından ilgili sunucuya gönderilir. Böylece sunucu, bir WWW uygulamasının son durumunu (örn. bir alışveriş sisteminde, sepete konulan ürünleri) kaydedebilir. \n\nŞu Cookie'ler bilgisayarınızda belirlenmiş olmalı:\n\n";
+};
+
+String STR_COOKIES_RECV_COOKIES
+{
+    Text = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    text [ English ] = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ portuguese ] = "Domínio: ${DOMAIN}, Atalho: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ english_us ] = "Domain: ${DOMAIN}, Path: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ portuguese_brazilian ] = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ swedish ] = "Domän: ${DOMAIN}, Sökväg: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ danish ] = "Domæne: ${DOMAIN}, Sti: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ italian ] = "Domain: ${DOMAIN}, Percorso: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ spanish ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ french ] = "Domaine : ${DOMAIN}, Chemin : ${PATH}, Cookie : ${COOKIE}.\n" ;
+    Text [ dutch ] = "Domein: ${DOMAIN}, Pad: ${PATH}, Cookie: ${COOKIE}\n" ;
+    Text[ chinese_simplified ] = "Óò£º${DOMAIN}£¬ Â·¾¶£º${PATH}£¬Cookie£º${COOKIE}¡£\n";
+    Text[ russian ] = "Äîìåí: ${DOMAIN}, Ïóòü: ${PATH}, Ôàéë Cookie: ${COOKIE}.\n";
+    Text[ polish ] = "Domena: ${DOMAIN}, Œcie¿ka: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ japanese ] = "ÄŞÒ²İ: ${DOMAIN}¤Êß½: ${PATH}A¸¯·°: ${COOKIE}B\n";
+    Text[ chinese_traditional ] = "°ì¡G${DOMAIN}¡A¸ô®|¡G${PATH}, Cookie¡G${COOKIE}¡C\n";
+    Text[ greek ] = "Ôïìİáò: ${DOMAIN}, ÄéáäñïìŞ: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ korean ] = "µµ¸ŞÀÎ: ${DOMAIN}, °æ·Î: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ arabic ] = "ÇáäØÇŞ: ${DOMAIN}, ÇáãÓÇÑ: ${PATH}, Çáßæßí: ${COOKIE}.\n";
+    Text[ turkish ] = "Etki alanı: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
+};
+
+String STR_COOKIES_RECV_TITLE
+{
+    Text = "Cookieempfang" ;
+    Text [ English ] = "Cookieempfang" ;
+    Text [ portuguese ] = "Recepção de cookies" ;
+    Text [ english_us ] = "Cookie Reception" ;
+    Text [ portuguese_brazilian ] = "Cookieempfang" ;
+    Text [ swedish ] = "Cookiemottagning" ;
+    Text [ danish ] = "Cookiemodtagelse" ;
+    Text [ italian ] = "Ricevimento cookie" ;
+    Text [ spanish ] = "Recepción de cookies" ;
+    Text [ french ] = "Réception de Cookies" ;
+    Text [ dutch ] = "Cookieontvangst" ;
+    Text[ chinese_simplified ] = "½ÓÊÜ Cookie";
+    Text[ russian ] = "Ïğèåì ôàéëîâ Cookie";
+    Text[ polish ] = "Pobieranie plików cookie";
+    Text[ japanese ] = "¸¯·°‚ÌóM";
+    Text[ chinese_traditional ] = "±µ¨ü Cookie";
+    Text[ greek ] = "ËŞøç ôùí Cookie";
+    Text[ korean ] = "Cookie ¼ö½Å";
+    Text[ arabic ] = "ÇÓÊŞÈÇá ßæßí";
+    Text[ turkish ] = "Cookie al";
+};
+
+String STR_COOKIES_SEND_START
+{
+    Text = "StarOffice hat für den Server '${HOST}' Cookies gespeichert, die beim Anfordern des Dokumentes ${PATH} verschickt werden sollen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Sie werden von manchen Servern beim Aufruf bestimmter Dokumente an StarOffice geschickt und dort gespeichert. Fordert StarOffice später ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von StarOffice an den Server gesendet. So können sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ English ] = "StarOffice has saved cookies for the '${HOST}' server, which will be set when the document ${PATH} is requested.\n Cookies contain information referring to certain classes of URLs. They are sent by some servers to StarOffice when certain documents are activated. If  StarOffice later requests a document with a URL which corresponds to the class of a previously set cookie, StarOffice will send the information to the server. In this way, the server can recognize the status of a WWW application. \n\nThe following cookies will be set:\n\n" ;
+    Text [ portuguese ] = "O StarOffice guardou cookies para o servidor '${HOST}'. Estes serão enviados quando o documento  ${PATH} for aberto.\nCookies são informações sobre determinadas classes de URLs. Estes serão enviados por alguns servidores para o StarOffice quando aí se abrirem ou se guardarem determinados documentos. Se o StarOffice carregar um documento que, de acordo com o URL, corresponda a uma das classes de cookies recebidas anteriormente. Esta informação será enviada pelo StarOffice ao servidor correspondente. Desta forma os servidores poderão controlar o estado de uma aplicação WWW (por ex. os artigos colocados num cesto de mercadorias quando faz compras online).\n Deverão ser instalados os seguintes cookies:\n\n" ;
+    Text [ english_us ] = "StarOffice has saved cookies for the server '${HOST}' which will be sent when requesting the document ${PATH}.\nCookies contain information which refers to certain URL classes. They are sent by some servers to StarOffice where they are saved when certain documents are accessed. If StarOffice loads a document that, according to the URL, corresponds to a class of one of the previously received Cookies, StarOffice will send this information to that server. This enables a server to keep track of the status of a WWW application, e.g., when shopping online.\n\nThe following Cookies should be set:\n\n" ;
+    Text [ portuguese_brazilian ] = "StarOffice hat f³r den Server '${HOST}' Cookies gespeichert, die beim Anfordern des Dokumentes ${PATH} verschickt werden sollen.\nCookies sind Informationen, die sich auf bestimmte Klassen von URLs beziehen. Sie werden von manchen Servern beim Aufruf bestimmter Dokumente an StarOffice geschickt und dort gespeichert. Fordert StarOffice spaeter ein Dokument an, welches der URL nach einer Klasse eines vorher empfangenen Cookies entspricht, wird diese Information von StarOffice an den Server gesendet. So k÷nnen sich Server den Zustand einer WWW Anwendung (z.B. in den Warenkorb gelegte Artikel in einem Einkaufssystem) merken.\n\nFolgende Cookies sollen gesetzt werden:\n\n" ;
+    Text [ swedish ] = "StarOffice har sparat cookies för servern '${HOST}, som skall skickas då dokumentet ${PATH} krävs.\nCookies är information som refererar till vissa URL-klasser. De skickas av vissa servrar till StarOffice och sparas där när vissa dokument öppnas. Denna information skickas av StarOffice till servern om StarOffice vid ett senare tillfälle kräver ett dokument, som motsvarar en klass hos en tidigare tilldelad cookie. På så sätt kan servern känna igen tillståndet för en WWW-tillämpning (t.ex. varor i en varukorg när Du handlar online).\n\nFöljande cookies skall tilldelas:\n\n" ;
+    Text [ danish ] = "StarOffice har gemt cookies for serveren '${HOST}', som skal sendes, når dokmentet ${PATH} læses.\nCookies er informationer, som relaterer til bestemte URL-klasser. De bliver sendt til StarOffice af nogle servere og gemt der, når bestemte dokumenter læses. Læser StarOffice senere et dokument, hvis URLs klasse svarer til en før modtaget cookie, sender StarOffice denne information til serveren. Således kan serveren kontrollere en WWW-applikations tilstand (f.eks. varer i din indkøbskurv når du handler online).\n\nFølgende cookies skal sættes:\n\n" ;
+    Text [ italian ] = "StarOffice ha salvato per il server '${HOST}' dei cookies da inviare al momento della richiesta del documento ${PATH}.\nI cookies sono informazioni che si riferiscono a determinate classi di URL. Vengono inviati da alcuni server quando si richiamano determinati documenti a StarOffice e qui salvati. Se StarOffice in seguito richiede un documento che corrisponde all'URL di una classe di un cookie precedentemente ricevuto, tale informazione viene inviata da StarOffice al server. In tal modo i server possono memorizzare lo stato di un'applicazione WWW (ad esempio gli articoli introdotti nel \"carrello\" di un supermercato elettronico).\n\nÈ necessarion impostare i seguenti cookies:\n\n" ;
+    Text [ spanish ] = "StarOffice ha guardado cookies para el servidor '${HOST}' que serán enviadas cuando se solicite el documento ${PATH}.\nLas cookies son informaciones referentes a determinadas clases de URLs. Cuando se solicita un documento, algunos servidores las envían a StarOffice y las guardan allí. Si StarOffice solicita más tarde un documento que de acuerdo con su URL corresponda a una clase de una cookie recibida anteriormente, StarOffice enviará esta información al servidor. Así, los servidores pueden recordar el estado de una aplicación www, como por ejemplo los artículos en la cesta de un sistema de compras.\n\nEstas son las cookies a instalar:\n\n" ;
+    Text [ french ] = "StarOffice a enregistré des Cookies pour le serveur '${HOST}', qui seront envoyés au moment de la requête du document ${PATH}.\nLes Cookies sont des informations se rapportant à certaines classes d'URL. Plus tard, si StarOffice requiert un document dont l'URL correspond à la classe d'un Cookie déjà reçu, cette information est envoyée au serveur. Ceci permet aux serveurs de reconnaître l'état d'une application WWW (par ex. les articles placés dans le panier d'un système d'achat).\n\nLes Cookies suivants vont être placés : \n\n" ;
+    Text [ dutch ] = "StarOffice heeft voor server '${HOST}' cookies opgeslagen die bij het opvragen van het document ${PATH} worden verzonden.\nCookies zijn gegevens die betrekking hebben op bepaalde klassen van URLs . Ze worden door enkele servers bij het oproepen van bepaalde documenten aan StarOffice gezonden en daar opgeslagen. Vraagt StarOffice later een document op dat wat de URL betreft overeenkomt met een klasse van een eerder ontvangen cookie, dan wordt deze informatie door StarOffice aan de server gezonden. Zo kunnen servers de toestand van een WWW-applicatie (zoals bijv. de in een boodschappenmand gelegde artikelen in een winkel) onthouden.\n\nDe volgende cookies moeten worden gezet:\n\n" ;
+    Text[ chinese_simplified ] = "StarOfficeÎª·şÎñÆ÷'${HOST}'±£´æÁËCookie£¬ÔÚÏÂ´ÎÇëÇóÎÄµµ${PATH}Ê±³ÌĞò¾Í»á·¢³öÕâĞ©Cookies¡£\nCookie°üº¬ÓĞ¹ØÌØ¶¨URLs¿âµÄĞÅÏ¢¡£ÔÚµ÷ÓÃÌØ¶¨µÄÎÄµµÊ±ÓĞĞ©·şÎñÆ÷¾Í»áÏòStarOffice·¢³öCookies²¢ÓÉStarOffice±£´æÆä¡£Èç¹ûStarOfficeÒÔºóĞèÒªÒ»¸öº¬ÓĞÒÔÇ°½ÓÊÜµÄCookies¿âµÄULRÎÄµµ£¬ÄÇÃ´StarOffice¾Í»á½«Õâ¸öĞÅÏ¢´«µİ¸ø·şÎñÆ÷¡£ÕâÑù·şÎñÆ÷¾ÍÄÜ¹»ÈÏ³öÍòÎ¬ÍøÓ¦ÓÃ³ÌĞòµÄ×´Ì¬(ÈçÁª»úÏµÍ³²É¹ºÀºÄÚµÄÉÌÆ·)¡£\n\nÏÖÔÚÒªÉè¶¨ÒÔÏÂµÄCookies:\n\n";
+    Text[ russian ] = "StarOffice ñîõğàíèë äëÿ ñåğâåğà '${HOST}' ôàéëû Cookie, êîòîğûå íåîáõîäèìî îòïğàâèòü ïğè òğåáîâàíèè äîêóìåíòà ${PATH}.\nÔàéëû Cookie ñîäåğæàò èíôîğìàöèş, êîòîğàÿ îòíîñèòñÿ ê îïğåäåëåííûì êëàññàì URL. Ïğè âûçîâå îïğåäåëåííûõ äîêóìåíòîâ îíè îòïğàâëÿşòñÿ íåêîòîğûìè ñåğâåğàìè â StarOffice è òàì ñîõğàíÿşòñÿ. Åñëè StarOffice çàòğåáóåò êîãäà-íèáóäü äîêóìåíò ñ URL, êîòîğûé ñîîòâåòñòâóåò êëàññó ğàíåå óñòàíîâëåííîãî Cookie, òî StarOffice íàïğàâèò ıòó èíôîğìàöèş íà ñåğâåğ. Òàêèì îáğàçîì, ñåğâåğû ìîãóò êîíòğîëèğîâàòü ñîñòîÿíèå ïğèëîæåíèÿ WWW (íàïğ. âî âğåìÿ Âàøèõ çàêóïîê ÷åğåç online).\n\nÍåîáõîäèìî óñòàíîâèòü ñëåäóşùèå ôàéëû Cookie:\n\n";
+    Text[ polish ] = "StarOffice zapisa³ dla serwera '${HOST}' Cookies, które zostan¹ wys³ane przy za¿¹daniu dokumentu ${PATH}.\nCookies s¹ informacjami, które odnosz¹ siê do okreœlonych klas URL. Bêd¹ one wysy³ane do StarOffice przez niektóre serwery przy wywo³aniu okreœlonych dokumentów i zostan¹ tam zapisane. Jeœli StarOffice za¿¹da póŸniej dokumentu, który odpowiada URL wed³ug klasy wczeœniej otrzymywanego Cookies, to ta informacja zostanie przekazana przez StarOffice do serwera. W ten sposób serwer mo¿e zapamiêtaæ stan aplikacji WWW (n.p. w³o¿one do koszyka artyku³y w systemie zakupów).\n\nOsadzone maj¹ byæ nastêpuj¹ce Cookies:\n\n\\";
+    Text[ japanese ] = "StarOffice ‚Í»°ÊŞ° '${HOST}' —p‚ÉAÄŞ·­ÒİÄ ${PATH} —v‹‚ÌÛ‚É‘—M‚³‚ê‚é¸¯·°‚ğ•Û‘¶‚µ‚Ü‚µ‚½B\n¸¯·°‚Í UR L‚Ì‚ ‚é¸×½‚ÉŠÖ˜A‚·‚éî•ñ‚ÅA‚ ‚éÄŞ·­ÒİÄ‚ª‚¢‚­‚Â‚©‚Ì»°ÊŞ°‚©‚çŒÄ‚Ño‚³‚ê‚½Û‚É StarOffice ‚É‘—M‚³‚êA‚»‚±‚Å•Û‘¶‚³‚ê‚Ü‚·B‚·‚Å‚ÉóM‚µ‚½¸¯·°‚Æ“¯‚¶ URL ‚ÌÄŞ·­ÒİÄ‚ğ StarOffice ‚ª—v‹‚µ‚½‚Æ‚«A‚±‚Ìî•ñ‚ª StarOffice ‚©‚ç»°ÊŞ°‚É‘—‚ç‚ê‚Ü‚·B‚»‚µ‚Ä»°ÊŞ°‚ª WWW ‚Ìg—pó‘Ô(µİ×²İw”ƒ‚ÌÛ‚É”ƒ‚¢•¨‚©‚²‚Ì’†‚É“ü‚ê‚½¤•i‚È‚Ç)‚ğŠo‚¦‚Ä‚¨‚«‚Ü‚·B\n\nˆÈ‰º‚Ì¸¯·°‚ğİ’è‚µ‚Ü‚·B\n\n";
+    Text[ chinese_traditional ] = "StarOffice ¤w¸g«O¦s¤F¦øªA¾¹'${HOST}' ¶Ç°eªº cookie ¡CStarOffice ¦b¤U¤@¦¸½Ğ¨D¸Ë¸ü¬Û¦Pªº¤å¥ó¸ê®Æ${PATH}®É´N·|«ö·Óµ{¦¡®wÀË¬dURL¬Û²Åªºcookie¦}±N¦³Ãö°T®§¶Ç°eµ¹¹ï¤è¦øªA¾¹¡C³o¼Ë¡A¹ï¤è¦øªA¾¹´N¯à°÷ª¾¹D±z¨Ï¥ÎªºÂsÄı¾¹ªº¦³Ãö¸ê®Æ(¦p½u¤W¾P°â¨t²ÎªºªöÁÊÄx§t¦³ªºª««~¦WºÙ)¡C\n\n²{¦b­n«Ø¥ß¦p¤Uªº cookie:\n\n";
+    Text[ greek ] = "Ôï StarOffice İ÷åé áğïèçêåıóåé cookies ãéá ôïí äéáêïìéóôŞ '${HOST}', ôá ïğïßá èá áğïóôáëïıí êáôÜ ôçí æŞôçóç ôïõ åããñÜöïõ ${PATH}.\nÔá Cookies åßíáé ğëçñïöïñßåò, ğïõ áíáöİñïíôáé óå óõãêåêñéìİíåò êëÜóçò ôùí URL. Ìå ôçí æŞôçóç óõãêåêñéìİíùí åããñÜöùí áğïóôİëëïíôáé áğü ïñéóìİíïõò äéáêïìéóôİò ğñïò ôï StarOffice êáé áğïèçêåıïíôáé åêåß. Áí ãßíåé áñãüôåñá æŞôçóç áğü ôï StarOffice êÜğïéïõ åããñÜöïõ, ôï ïğïßï áíôéóôïé÷åß óå ìéá êëÜóç URL åíüò Cookie ğïõ İãéíå äåêôü ğñïçãïõìİíùò, ôï StarOffice áğïóôİëëåé áõôŞ ôçí ğëçñïöïñßá ğñïò ôïí äéáêïìéóôŞ. ¸ôóé ï äéáêïìéóôŞò İ÷åé ôçí äõíáôüôçôá íá 'èõìÜôáé' ôçí êáôÜóôáóç ìéáò åöáñìïãŞò WWW üğùò ğ.÷. üôáí êÜíåôå áãïñİò online.\n\nÔá áêüëïõèá Cookie ğñüêåéôáé íá ôïğïèåôçèïıí:\n\n";
+    Text[ korean ] = "StarOffice´Â ¼­¹ö'$(HOST)'¸¦ À§ÇØ ¹®¼­${PATH} ¿ä±¸½Ã º¸³»Á®¾ß ÇÒ CookieµéÀ» ÀúÀåÇÏ¿´½À´Ï´Ù .\nCookieµéÀº URLÀÇ Æ¯Á¤ Å¬·¡½º¿¡ °ü·ÃµÈ Á¤º¸µéÀÔ´Ï´Ù. CookieµéÀº Æ¯Á¤ ¹®¼­µéÀ» ºÒ·¯ ¿Ã ¶§ ¿©·¯ ¼­¹öµé¿¡ ÀÇÇØ StarOffice¿¡ º¸³»Á®¼­ °Å±â¿¡ ÀúÀåµË´Ï´Ù. ³ªÁß¿¡ StarOffice°¡ URL¿¡ µû¶ó ÀÌÀü¿¡ ¹ŞÀº CookieÀÇ Å¬·¡½º¿¡ ¸Â´Â ¹®¼­¸¦ ¿ä±¸ÇÏ¸é StarOffice°¡ ±× Á¤º¸¸¦ ¼­¹ö¿¡ º¸³¾ °ÍÀÔ´Ï´Ù. ±×·¯¸é ¼­¹ö´Â WWW Àû¿ë »óÅÂ(¿¹¸¦ µé¾î ¿Â¶óÀÎ ¼îÇÎ¿¡¼­)¸¦ ÀÎ½ÄÇÒ ¼ö ÀÖ½À´Ï´Ù. \n\n´ÙÀ½ CookieµéÀÌ ÁöÁ¤µÇ¾î¾ß ÇÕ´Ï´Ù:\n\n";
+    Text[ arabic ] = "ŞÇã StarOffice ÈÊÎÒí ßæßíÒ (Cookies) ááãÒæÏ '${HOST}'. Óæİ íÊã ÅÑÓÇá åĞå ÇáÜßæßíÒ ÚäÏ ØáÈ ÇáãÓÊäÏ.${PATH}\nÇáßæßíÒ åí ãÚáæãÇÊ ÎÇÕÉ ÈİÆÇÊ ãÚíäÉ ãä ÇáÚäÇæíä .(URLs) íÊã ÅÑÓÇá åĞå ÇáãÚáæãÇÊ ãä ŞÈá ÈÚÖ ÇáãÒæÏÇÊ Åáì StarOffice ÚäÏ ÇÓÊÏÚÇÁ ãÓÊäÏÇÊ ÎÇÕÉ¡ ÍíË íÊã ÊÎÒíä åĞå ÇáãÚáæãÇÊ İí StarOffice. ÅĞÇ ØáÈ StarOffice áÇÍŞÇğ ãÓÊäÏÇğ íÊØÇÈŞ ÚäæÇäå ãÚ İÆÉ ßæßíÒ Êã ÇÓÊŞÈÇáåÇ ãä ŞÈá¡ íŞæã StarOffice ÈÅÑÓÇá åĞå ÇáãÚáæãÇÊ Åáì ÇáãÒæÏ. ÈåĞå ÇáØÑíŞÉ íãßä ááãÒæÏÇÊ ãÚÑİÉ ÈíÇäÇÊ Úä ÇÓÊÎÏÇãÇÊ WWW (ãËáÇğ ÇáãÔÊÑíÇÊ ÇáãæÌæÏÉ İí ÍŞíÈÉ ÇáÔÑÇÁ ÃËäÇÁ ÇáÊÓæŞ ÚÈÑ ÇáÅäÊÑäÊ).\n\níõÑÇÏ ÊÚííä ÇáÜßæßíÒ ÇáÊÇáíÉ:\n\n";
+    Text[ turkish ] = "StarOffice, sunucu '${HOST}' için Cookie'ler kaydetti.  Bunlar, ${PATH} belgesi talep edildiğinde StarOffice tarafından gönderilir.\nCookie'ler, belirli URL sınıflarına ilişkin bilgilerdir. StarOffice ileride daha önceden alınmış bir Cookie sınıfının URL'si ile örtüşen bir belge talep ettiğinde, bu bilgi StarOffice tarafından ilgili sunucuya gönderilir. Böylece sunucu, bir WWW uygulamasının son durumunu (örn. bir alışveriş sisteminde, sepete konulan ürünleri) kaydedebilir. \n\nŞu Cookie'ler bilgisayarınızda belirlenecek:\n\n";
+};
+
+String STR_COOKIES_SEND_COOKIES
+{
+    Text = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ English ] = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ portuguese ] = "Domínio: ${DOMAIN}, Atalho: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ english_us ] = "Domain: ${DOMAIN}, Path: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ portuguese_brazilian ] = "Domain: ${DOMAIN}, Pfad: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ swedish ] = "Domän: ${DOMAIN}, Sökväg: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ danish ] = "Domæne: ${DOMAIN}, Sti: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ italian ] = "Dominio: ${DOMAIN}, Percorso: ${PATH}, cookie: ${COOKIE}.\n" ;
+    Text [ spanish ] = "Dominio: ${DOMAIN}, Ruta: ${PATH}, Cookie: ${COOKIE}.\n" ;
+    Text [ french ] = "Domaine : ${DOMAIN}, Chemin : ${PATH}, Cookie : ${COOKIE}.\n" ;
+    Text [ dutch ] = "Domein: ${DOMAIN}, Pad: ${PATH}, Cookie: ${COOKIE}\n" ;
+    Text[ chinese_simplified ] = "Óò£º${DOMAIN}£¬Â·¾¶£º${PATH}£¬Cookie£º${COOKIE}¡£\n";
+    Text[ russian ] = "Äîìåí: ${DOMAIN}, Ïóòü: ${PATH}, Ôàéë Cookie: ${COOKIE}.\n";
+    Text[ polish ] = "Domena: ${DOMAIN}, Œcie¿ka: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ japanese ] = "ÄŞÒ²İ: ${DOMAIN}AÊß½: ${PATH}A¸¯·°: ${COOKIE}B\n";
+    Text[ chinese_traditional ] = "°ì¡G${DOMAIN}¡A¸ô®|¡G${PATH}¡ACookie ¡G${COOKIE}¡C\n";
+    Text[ greek ] = "Ôïìİáò: ${DOMAIN}, ÄéáäñïìŞ: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ korean ] = "µµ¸ŞÀÎ: ${DOMAIN}, °æ·Î: ${PATH}, Cookie: ${COOKIE}.\n";
+    Text[ arabic ] = "ÇáäØÇŞ: ${DOMAIN}, ÇáãÓÇÑ: ${PATH}, Çáßæßí: ${COOKIE}.\n";
+    Text[ turkish ] = "Etki alanı: ${DOMAIN}, Veri yolu: ${PATH}, Cookie: ${COOKIE}.\n";
+};
+
+String STR_COOKIES_SEND_TITLE
+{
+    Text = "Cookies versenden" ;
+    Text [ English ] = "Cookies versenden" ;
+    Text [ portuguese ] = "Enviar cookies" ;
+    Text [ english_us ] = "Send Cookies" ;
+    Text [ portuguese_brazilian ] = "Cookies versenden" ;
+    Text [ swedish ] = "Skicka cookies" ;
+    Text [ danish ] = "Send cookies" ;
+    Text [ italian ] = "Trasmetti cookie" ;
+    Text [ spanish ] = "Enviar cookies" ;
+    Text [ french ] = "Envoi de Cookies" ;
+    Text [ dutch ] = "Cookies verzenden" ;
+    Text[ chinese_simplified ] = "¼Ä·¢ Cookie";
+    Text[ russian ] = "Îòïğàâèòü Cookies";
+    Text[ polish ] = "Wyœlij pliki cookie";
+    Text[ japanese ] = "¸¯·°‚Ì‘—M";
+    Text[ chinese_traditional ] = "¶Ç°e Cookie";
+    Text[ greek ] = "ÁğïóôïëŞ Cookies";
+    Text[ korean ] = "Cookies º¸³»±â";
+    Text[ arabic ] = "ÅÑÓÇá ÇáßæßíÒ";
+    Text[ turkish ] = "Cookies gönder";
+};
+

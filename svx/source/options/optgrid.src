@@ -1,0 +1,587 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optgrid.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "optgrid.hrc"
+ // pragma ----------------------------------------------------------------
+
+TabPage RID_SVXPAGE_GRID
+{
+    HelpId = HID_OPTIONS_GRID ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    CheckBox CBX_USE_GRIDSNAP
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
+        TabStop = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fangraster benutzen : ~Rasterfang benutzen */
+        Text = "~Fangraster benutzen" ;
+        Text [ ENGLISH ] = "Snap to ~Grid" ;
+        Text [ NORWEGIAN ] = "Snap to ~Grid" ;
+        Text [ DANISH ] = "Fastg¯r til gitter" ;
+        Text [ ENGLISH_US ] = "~Snap to grid" ;
+        Text [ SPANISH ] = "~Usar cuadrÌcula de captura" ;
+        Text [ FINNISH ] = "Kohdista ~ruudukkoon" ;
+        Text [ FRENCH ] = "Utiliser la ~grille de capture" ;
+        Text [ ITALIAN ] = "Applica ~griglia" ;
+        Text [ DUTCH ] = "Va~ngraster gebruiken" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Fixar na ~Grade" ;
+        Text [ SWEDISH ] = "~F‰st mot stˆdraster" ;
+        Text [ PORTUGUESE ] = "Fixar na ~quadrÌcula" ;
+        Text[ chinese_simplified ] = " π”√Õ¯∏Ò◊¯±Í(~S)";
+        Text[ russian ] = "œË‚ˇÁ‡Ú¸ Í Â¯ÂÚÍÂ";
+        Text[ polish ] = "Uøyj siatki zaczepu";
+        Text[ japanese ] = "Ω≈ØÃﬂñ‘ñ⁄Ω∏ÿ∞›ÇÃégóp(~S)";
+        Text[ chinese_traditional ] = "®œ•Œ∫ÙÆÊß§º–(~S)";
+        Text[ arabic ] = "«” Œœ«„ ‘»ﬂ… «·Õ»”";
+        Text[ greek ] = "◊ÒﬁÛÁ Î›„Ï·ÙÔÚ ~ÒÔÛÍ¸ÎÎÁÛÁÚ";
+        Text[ korean ] = "∏¬√„ ¥´±› ªÁøÎ(~S)";
+        Text[ turkish ] = "Kavrama k˝lavuz Áizgileri kullan";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_SNAP_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 87 ) ;
+        Size = MAP_APPFONT ( 43 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
+    };
+    MetricField MTR_FLD_SNAP_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 199 , 102 ) ;
+        Size = MAP_APPFONT ( 43 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
+    };
+    FixedText FT_SNAP_X
+    {
+        Pos = MAP_APPFONT ( 162 , 89 ) ;
+        Size = MAP_APPFONT ( 29 , 10 ) ;
+        Text = "X-A~chse" ;
+        Text [ ENGLISH ] = "X-Ax~is" ;
+        Text [ NORWEGIAN ] = "X-Ax~is" ;
+        Text [ DANISH ] = "X-akse" ;
+        Text [ ENGLISH_US ] = "X ax~is" ;
+        Text [ SPANISH ] = "~Eje X" ;
+        Text [ FINNISH ] = "X-~akseli" ;
+        Text [ FRENCH ] = "~Axe X" ;
+        Text [ ITALIAN ] = "As~se X" ;
+        Text [ DUTCH ] = "X - A~s" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Eix~o X" ;
+        Text [ SWEDISH ] = "X-axe~l" ;
+        Text [ PORTUGUESE ] = "Eix~o X" ;
+        Text[ chinese_simplified ] = "X ÷·(~I)";
+        Text[ russian ] = "ŒÒ¸ X";
+        Text[ polish ] = "Oú X";
+        Text[ japanese ] = "Xé≤(~I)";
+        Text[ chinese_traditional ] = "X-∂b(~I)";
+        Text[ arabic ] = "«·„ÕÊ— ”";
+        Text[ greek ] = "¢ÓÔÌ·Ú X";
+        Text[ korean ] = "X √‡(~I)";
+        Text[ turkish ] = "X ekseni";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SNAP_Y
+    {
+        Pos = MAP_APPFONT ( 162 , 104 ) ;
+        Size = MAP_APPFONT ( 27 , 10 ) ;
+        Text = "Y-Achs~e" ;
+        Text [ ENGLISH ] = "Y-Axi~s" ;
+        Text [ NORWEGIAN ] = "Y-Axi~s" ;
+        Text [ DANISH ] = "Y-akse" ;
+        Text [ ENGLISH_US ] = "Y ~axis" ;
+        Text [ SPANISH ] = "E~je Y" ;
+        Text [ FINNISH ] = "Y-a~kseli" ;
+        Text [ FRENCH ] = "A~xe Y" ;
+        Text [ ITALIAN ] = "Ass~e Y" ;
+        Text [ DUTCH ] = "Y - ~as" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Eix~o Y" ;
+        Text [ SWEDISH ] = "Y-ax~el" ;
+        Text [ PORTUGUESE ] = "Eix~o Y" ;
+        Text[ chinese_simplified ] = "Y ÷·(~A)";
+        Text[ russian ] = "ŒÒ¸ Y";
+        Text[ polish ] = "Oú Y";
+        Text[ japanese ] = "Yé≤(~A)";
+        Text[ chinese_traditional ] = "Y-∂b(~A)";
+        Text[ arabic ] = "«·„ÕÊ— ’";
+        Text[ greek ] = "¢ÓÔÌ~·Ú ’";
+        Text[ korean ] = "Y √‡(~A)";
+        Text[ turkish ] = "Y ekseni";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_DIVISION_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 87 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Punkte" ;
+        CustomUnitText [ ENGLISH ] = " Points" ;
+        CustomUnitText [ NORWEGIAN ] = " Punkter" ;
+        CustomUnitText [ DANISH ] = "punkter" ;
+        CustomUnitText [ ENGLISH_US ] = "Points" ;
+        CustomUnitText [ SPANISH ] = "Puntos" ;
+        CustomUnitText [ FINNISH ] = " Pisteet" ;
+        CustomUnitText [ FRENCH ] = "Points" ;
+        CustomUnitText [ ITALIAN ] = "Punti" ;
+        CustomUnitText [ DUTCH ] = "Punten" ;
+        CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
+        CustomUnitText [ SWEDISH ] = "punkter" ;
+        CustomUnitText [ PORTUGUESE ] = "Pontos" ;
+        SpinSize = 1 ;
+        CustomUnitText[ chinese_simplified ] = "µ„";
+        CustomUnitText[ russian ] = "œÛÌÍÚ˚";
+        CustomUnitText[ polish ] = "Punkty";
+        CustomUnitText[ japanese ] = "Œﬂ≤›ƒ";
+        CustomUnitText[ chinese_traditional ] = "¬I";
+        CustomUnitText[ arabic ] = "‰ﬁÿ…/‰ﬁ«ÿ";
+        CustomUnitText[ greek ] = "”ÁÏÂﬂ·";
+        CustomUnitText[ korean ] = "¡°";
+        CustomUnitText[ turkish ] = "Noktalar";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    FixedText FT_RESOLUTION
+    {
+        Pos = MAP_APPFONT ( 48 , 74 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Aufl~ˆsung : Aufl~˜sung */
+        /* ### ACHTUNG: Neuer Text in Resource? Aufl~ˆsung : Aufl~˜sung */
+        Text = "Aufl~ˆsung" ;
+        Text [ ENGLISH ] = "~Resolution" ;
+        Text [ NORWEGIAN ] = "~Resolution" ;
+        Text [ DANISH ] = "Opl¯sning" ;
+        Text [ ENGLISH_US ] = "Resolution" ;
+        Text [ SPANISH ] = "R~esoluciÛn" ;
+        Text [ FINNISH ] = "~Tarkkuus" ;
+        Text [ FRENCH ] = "~RÈsolution" ;
+        Text [ ITALIAN ] = "~Risoluzione" ;
+        Text [ DUTCH ] = "Resol~utie" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Resolu˛“o" ;
+        Text [ SWEDISH ] = "Uppl~ˆsning" ;
+        Text [ PORTUGUESE ] = "~ResoluÁ„o" ;
+        Text[ chinese_simplified ] = "∑÷±Ê¬ ";
+        Text[ russian ] = "–‡ÁÂ¯ÂÌËÂ";
+        Text[ polish ] = "RozdzielczoúÊ";
+        Text[ japanese ] = "âëúìx";
+        Text[ chinese_traditional ] = "∏—™R´◊";
+        Text[ arabic ] = "«·«” »«‰…";
+        Text[ greek ] = "¡Ì‹ÎıÛÁ";
+        Text[ korean ] = "«ÿªÛµµ";
+        Text[ turkish ] = "«ˆz¸n¸rl¸k";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DIVISION
+    {
+        Pos = MAP_APPFONT ( 99 , 74 ) ;
+        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Text = "~Unterteilung" ;
+        Text [ ENGLISH ] = "~Division" ;
+        Text [ NORWEGIAN ] = "~Division" ;
+        Text [ DANISH ] = "Inddeling" ;
+        Text [ ENGLISH_US ] = "~Subdivision" ;
+        Text [ SPANISH ] = "S~ubdivisiÛn" ;
+        Text [ FINNISH ] = "~Jako" ;
+        Text [ FRENCH ] = "~Finesse" ;
+        Text [ ITALIAN ] = "Suddivisione" ;
+        Text [ DUTCH ] = "~Onderverdeling" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis“o" ;
+        Text [ SWEDISH ] = "Indelning" ;
+        Text [ PORTUGUESE ] = "~Subdivis„o" ;
+        Text[ chinese_simplified ] = "œﬂµ„º‰∏Ù(~S)";
+        Text[ russian ] = "œÓ‰‡Á‰ÂÎÂÌËÂ";
+        Text[ polish ] = "Podpodzia≥";
+        Text[ japanese ] = "ì_ÇÃä‘äu(~S)";
+        Text[ chinese_traditional ] = "Ωu¬I∂°πj(~S)";
+        Text[ arabic ] = "«· ﬁ”Ì„ «·›—⁄Ì";
+        Text[ greek ] = "~’Ô‰È·ﬂÒÂÛÁ";
+        Text[ korean ] = "ºº∫–»≠(~S)";
+        Text[ turkish ] = "Bˆl¸mleme";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_DIVISION_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 99 , 102 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " Punkte" ;
+        CustomUnitText [ ENGLISH ] = " Points" ;
+        CustomUnitText [ NORWEGIAN ] = " Punkter" ;
+        CustomUnitText [ DANISH ] = "punkter" ;
+        CustomUnitText [ ENGLISH_US ] = "Points" ;
+        CustomUnitText [ SPANISH ] = "Puntos" ;
+        CustomUnitText [ FINNISH ] = " Pisteet" ;
+        CustomUnitText [ FRENCH ] = "Points" ;
+        CustomUnitText [ ITALIAN ] = "Punti" ;
+        CustomUnitText [ DUTCH ] = "Punten" ;
+        CustomUnitText [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
+        CustomUnitText [ SWEDISH ] = "punkter" ;
+        CustomUnitText [ PORTUGUESE ] = "Pontos" ;
+        SpinSize = 1 ;
+        CustomUnitText[ chinese_simplified ] = "µ„";
+        CustomUnitText[ russian ] = "œÛÌÍÚ˚";
+        CustomUnitText[ polish ] = "Punkty";
+        CustomUnitText[ japanese ] = "Œﬂ≤›ƒ";
+        CustomUnitText[ chinese_traditional ] = "¬I";
+        CustomUnitText[ arabic ] = "‰ﬁÿ…/‰ﬁ«ÿ";
+        CustomUnitText[ greek ] = "”ÁÏÂﬂ·";
+        CustomUnitText[ korean ] = "¡°";
+        CustomUnitText[ turkish ] = "Noktalar";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    CheckBox CBX_SYNCHRONIZE
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Achsen ~synchronisieren" ;
+        Text [ ENGLISH ] = "~Synchronize axis" ;
+        Text [ NORWEGIAN ] = "~Synchronize axis" ;
+        Text [ DANISH ] = "Synkroniser akser" ;
+        Text [ ENGLISH_US ] = "Sy~nchronize axes" ;
+        Text [ SPANISH ] = "~Sincronizar ejes" ;
+        Text [ FINNISH ] = "Tah~dista akseli" ;
+        Text [ FRENCH ] = "~Synchroniser les axes" ;
+        Text [ ITALIAN ] = "~Sincronizza assi" ;
+        Text [ DUTCH ] = "Assen s~ynchroniseren" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Sincronizar eixo" ;
+        Text [ SWEDISH ] = "~Synkronisera axlar" ;
+        Text [ PORTUGUESE ] = "~Sincronizar eixos" ;
+        Text[ chinese_simplified ] = "Õ¨≤ΩªØ÷· ˝÷µ(~A)";
+        Text[ russian ] = "—ËÌıÓÌËÁËÓ‚‡Ú¸ ÓÒË";
+        Text[ polish ] = "Synchronizuj osie";
+        Text[ japanese ] = "é≤ÇìØä˙Ç∑ÇÈ(~A)";
+        Text[ chinese_traditional ] = "∂b¶P®B§∆(~A)";
+        Text[ arabic ] = " “«„‰ «·„Õ«Ê—";
+        Text[ greek ] = "”ı„˜ÒÔÌÈÛÏ¸Ú ·Ó¸Ì˘Ì";
+        Text[ korean ] = "√‡ µø±‚»≠(~N)";
+        Text[ turkish ] = "Eksenleri e˛itle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_GRID_VISIBLE
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 102 , 12 ) ;
+        TabStop = TRUE ;
+        Text = "Ras~ter sichtbar" ;
+        Text [ ENGLISH ] = "~Visible grid" ;
+        Text [ NORWEGIAN ] = "~Visible grid" ;
+        Text [ DANISH ] = "Synligt gitter" ;
+        Text [ ENGLISH_US ] = "~Visible grid" ;
+        Text [ SPANISH ] = "~CuadrÌcula visible" ;
+        Text [ FINNISH ] = "~Visible grid" ;
+        Text [ FRENCH ] = "Grille ~visible" ;
+        Text [ ITALIAN ] = "Griglia ~visibile" ;
+        Text [ DUTCH ] = "~Raster zichtbaar" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Visible grid" ;
+        Text [ SWEDISH ] = "Synligt ~raster" ;
+        Text [ PORTUGUESE ] = "~QuadrÌcula visÌvel" ;
+        Text[ chinese_simplified ] = "œ‘ æÕ¯∏Òœﬂ(~V)";
+        Text[ russian ] = "œÓÍ‡Á‡Ú¸ Â¯ÂÚÍÛ";
+        Text[ polish ] = "Raster widoczny";
+        Text[ japanese ] = "∏ﬁÿØƒﬁÇï\\é¶Ç∑ÇÈ(~V)";
+        Text[ chinese_traditional ] = "≈„•‹∫ÙÆÊΩu(~V)";
+        Text[ arabic ] = "‘»ﬂ… „—∆Ì…";
+        Text[ greek ] = "–Î›„Ï· (ÍÔıÍﬂ‰ÂÚ) ÔÒ·Ù¸";
+        Text[ korean ] = "¥´±›¿ª ∫∏¿Ã∞‘(~V)";
+        Text[ turkish ] = "K˝lavuz Áizgileri gˆster";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_EQUAL_GRID
+    {
+        Pos = MAP_APPFONT ( 162 , 74 ) ;
+        Size = MAP_APPFONT ( 83 , 12 ) ;
+        Text = "Mit Raster ~abgleichen" ;
+        Text [ ENGLISH ] = "E~qual snapgrid" ;
+        Text [ NORWEGIAN ] = "E~qual snapgrid" ;
+        Text [ DANISH ] = "Tilpas til gitter" ;
+        Text [ ENGLISH_US ] = "Si~ze to grid" ;
+        Text [ SPANISH ] = "Aj~ustar a la cuadrÌcula" ;
+        Text [ FINNISH ] = "Y~ht‰ suuri kohdistusruudukko" ;
+        Text [ FRENCH ] = "~Synchroniser avec la grille" ;
+        Text [ ITALIAN ] = "Adatta alla griglia" ;
+        Text [ DUTCH ] = "S~ynchroon met raster" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Grade fixa I~gual" ;
+        Text [ SWEDISH ] = "~Anpassa till raster" ;
+        Text [ PORTUGUESE ] = "Ajustar ‡ quadrÌcula" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "∫ÕÕ¯∏Ò◊¯±ÍÕ¨≤Ω(~T)";
+        Text[ russian ] = "œÓ ‡ÁÏÂÛ Â¯ÂÚÍË";
+        Text[ polish ] = "Ustaw wed≥ug rastra";
+        Text[ japanese ] = "∏ﬁÿØƒﬁÇ…çáÇÌÇπÇÈ(~T)";
+        Text[ chinese_traditional ] = "©M∫ÙÆÊß§º–¶P®B(~T)";
+        Text[ arabic ] = "„·«∆„… «·ÕÃ„ ··‘»ﬂ…";
+        Text[ greek ] = "–ÒÔÛ·ÒÏÔ„ﬁ ÛÂ Î›„Ï·";
+        Text[ korean ] = "≈©±‚∏¶ ¥´±›ø° ∏¬√„(~Z)";
+        Text[ turkish ] = "K˝lavuz Áizgilere gˆre hizala";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DRAW_X
+    {
+        Pos = MAP_APPFONT ( 12 , 89 ) ;
+        Size = MAP_APPFONT ( 29 , 10 ) ;
+        Text = "~X-Achse" ;
+        Text [ ENGLISH ] = "~X-Axis" ;
+        Text [ NORWEGIAN ] = "~X-Axis" ;
+        Text [ DANISH ] = "X-akse" ;
+        Text [ ENGLISH_US ] = "~X axis" ;
+        Text [ SPANISH ] = "Eje ~X" ;
+        Text [ FINNISH ] = "~X-akseli" ;
+        Text [ FRENCH ] = "Axe ~X" ;
+        Text [ ITALIAN ] = "Asse ~X" ;
+        Text [ DUTCH ] = "~X-as" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo X" ;
+        Text [ SWEDISH ] = "~X-axel" ;
+        Text [ PORTUGUESE ] = "~Eixo X" ;
+        Text[ chinese_simplified ] = "~X ÷·";
+        Text[ russian ] = "ŒÒ¸ X";
+        Text[ polish ] = "Oú X";
+        Text[ japanese ] = "Xé≤(~X)";
+        Text[ chinese_traditional ] = "~X-∂b";
+        Text[ arabic ] = "«·„ÕÊ— ”";
+        Text[ greek ] = "¢ÓÔÌ·Ú X";
+        Text[ korean ] = "X √‡(~X)";
+        Text[ turkish ] = "X ekseni";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DRAW_Y
+    {
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
+        Size = MAP_APPFONT ( 29 , 10 ) ;
+        Text = "~Y-Achse" ;
+        Text [ ENGLISH ] = "~Y-Axis" ;
+        Text [ NORWEGIAN ] = "~Y-Axis" ;
+        Text [ DANISH ] = "Y-akse" ;
+        Text [ ENGLISH_US ] = "~Y axis" ;
+        Text [ SPANISH ] = "Eje ~Y" ;
+        Text [ FINNISH ] = "~Y-akseli" ;
+        Text [ FRENCH ] = "Axe ~Y" ;
+        Text [ ITALIAN ] = "Asse ~Y" ;
+        Text [ DUTCH ] = "~Y-as" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Eixo Y" ;
+        Text [ SWEDISH ] = "~Y-axel" ;
+        Text [ PORTUGUESE ] = "~Eixo Y" ;
+        Text[ chinese_simplified ] = "~Y ÷·";
+        Text[ russian ] = "ŒÒ¸ Y";
+        Text[ polish ] = "Oú Y";
+        Text[ japanese ] = "Yé≤(~Y)";
+        Text[ chinese_traditional ] = "~Y-∂b";
+        Text[ arabic ] = "«·„ÕÊ— ’";
+        Text[ greek ] = "¢ÓÔÌ·Ú ~’";
+        Text[ korean ] = "Y √‡(~Y)";
+        Text[ turkish ] = "Y ekseni";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_DRAW_Y
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 47 , 102 ) ;
+        Size = MAP_APPFONT ( 43 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
+    };
+    MetricField MTR_FLD_DRAW_X
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 47 , 87 ) ;
+        Size = MAP_APPFONT ( 43 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 10 ;
+        First = 10 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        StrictFormat = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        SpinSize = 50 ;
+    };
+    GroupBox GRP_DRAWGRID
+    {
+        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Size = MAP_APPFONT ( 144 , 64 ) ;
+        Text = "Raster" ;
+        Text [ ENGLISH ] = "Drawgrid" ;
+        Text [ NORWEGIAN ] = "Drawgrid" ;
+        Text [ DANISH ] = "Gitter" ;
+        Text [ ENGLISH_US ] = "Grid" ;
+        Text [ SPANISH ] = "CuadrÌcula" ;
+        Text [ FINNISH ] = "Piirtoruudukko" ;
+        Text [ FRENCH ] = "Grille" ;
+        Text [ ITALIAN ] = "Griglia" ;
+        Text [ DUTCH ] = "Raster" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Grade de desenho" ;
+        Text [ SWEDISH ] = "Raster" ;
+        Text [ PORTUGUESE ] = "Grelha" ;
+        Text[ chinese_simplified ] = "Õ¯∏Ò";
+        Text[ russian ] = "–Â¯ÂÚÍ‡";
+        Text[ polish ] = "Raster";
+        Text[ japanese ] = "∏ﬁÿØƒﬁ";
+        Text[ chinese_traditional ] = "∫ÙÆÊ";
+        Text[ arabic ] = "«·‘»ﬂ…";
+        Text[ greek ] = "–Î›„Ï· (ÍÔıÍﬂ‰ÂÚ)";
+        Text[ korean ] = "¥´±›";
+        Text[ turkish ] = "K˝lavuz Áizgiler";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_SNAPGRID
+    {
+        Pos = MAP_APPFONT ( 156 , 65 ) ;
+        Size = MAP_APPFONT ( 98 , 64 ) ;
+        Text = "Fangraster" ;
+        Text [ ENGLISH ] = "Snapgrid" ;
+        Text [ NORWEGIAN ] = "Snapgrid" ;
+        Text [ DANISH ] = "Fanggitter" ;
+        Text [ ENGLISH_US ] = "Snap grid" ;
+        Text [ SPANISH ] = "CuadrÌcula fija" ;
+        Text [ FINNISH ] = "Kohdistusruudukko" ;
+        Text [ FRENCH ] = "Grille de capture" ;
+        Text [ ITALIAN ] = "Griglia" ;
+        Text [ DUTCH ] = "Vangraster" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Grade fixa" ;
+        Text [ SWEDISH ] = "Stˆdraster" ;
+        Text [ PORTUGUESE ] = "Grelha fixa" ;
+        Text[ chinese_simplified ] = "Õ¯∏Ò◊¯±Í";
+        Text[ russian ] = "—ÂÚÍ‡ ÔË‚ˇÁÍË";
+        Text[ polish ] = "Siatka zaczepu";
+        Text[ japanese ] = "Ω≈ØÃﬂñ‘ñ⁄Ω∏ÿ∞›";
+        Text[ chinese_traditional ] = "∫ÙÆÊß§º–";
+        Text[ arabic ] = "‘»ﬂ… «·Õ»”";
+        Text[ greek ] = "–Î›„Ï· ÒÔÛÍ¸ÎÎÁÛÁÚ";
+        Text[ korean ] = "∏¬√„ ¥´±›º±";
+        Text[ turkish ] = "Kavrama k˝lavuz Áizgileri";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 58 ) ;
+        Text = "Optionen" ;
+        Text [ ENGLISH ] = "Options" ;
+        Text [ NORWEGIAN ] = "Options" ;
+        Text [ DANISH ] = "Indstillinger" ;
+        Text [ ENGLISH_US ] = "Options" ;
+        Text [ SPANISH ] = "Opciones" ;
+        Text [ FINNISH ] = "M‰‰ritykset" ;
+        Text [ FRENCH ] = "Options" ;
+        Text [ ITALIAN ] = "Opzioni" ;
+        Text [ DUTCH ] = "Opties" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Op˛ßes" ;
+        Text [ SWEDISH ] = "Alternativ" ;
+        Text [ PORTUGUESE ] = "OpÁıes" ;
+        Text[ chinese_simplified ] = "—°œÓ";
+        Text[ russian ] = "œ‡‡ÏÂÚ˚";
+        Text[ polish ] = "Opcje";
+        Text[ japanese ] = "µÃﬂºÆ›";
+        Text[ chinese_traditional ] = "øÔ∂µ";
+        Text[ arabic ] = "«·ŒÌ«—« ";
+        Text[ greek ] = "≈ÈÎÔ„›Ú";
+        Text[ korean ] = "ø…º«";
+        Text[ turkish ] = "SeÁenekler";
+        Text[ language_user1 ] = " ";
+    };
+};

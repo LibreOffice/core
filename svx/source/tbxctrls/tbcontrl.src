@@ -1,0 +1,310 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbcontrl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <dialogs.hrc>
+#include <helpid.hrc>
+ // pragma ----------------------------------------------------------------
+
+/*
+ * Bitmaps f"ur SvxFrameWindow
+ */
+Image RID_SVX_RELOAD_NORMAL
+{
+    ImageBitmap = Bitmap { File = "reload.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVX_RELOAD_SPECIAL
+{
+    ImageBitmap = Bitmap { File = "reloads.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+ImageList RID_SVXIL_FRAME
+{
+    ImageBitmap = Bitmap { File = "frames.bmp" ; };
+    IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
+    IdCount = { 12 ; };
+};
+String RID_SVXSTR_TRANSPARENT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Keine F¸llung : Transparent */
+    /* ### ACHTUNG: Neuer Text in Resource? Keine F¸llung : Keine F≥llung */
+    /* ### ACHTUNG: Neuer Text in Resource? Keine F¸llung : Keine F≥llung */
+    Text = "Keine F¸llung" ;
+    Text [ ENGLISH ] = "No filling" ;
+    Text [ dutch ] = "Geen vulling" ;
+    Text [ english_us ] = "No Fill" ;
+    Text [ italian ] = "Trasparente" ;
+    Text [ spanish ] = "Sin relleno" ;
+    Text [ french ] = "Sans remplissage" ;
+    Text [ swedish ] = "Transparent" ;
+    Text [ danish ] = "Ingen fyld" ;
+    Text [ portuguese ] = "Sem preenchimento" ;
+    Text [ portuguese_brazilian ] = "Keine F¸llung" ;
+    Text[ chinese_simplified ] = "≤ªÃÓ≥‰";
+    Text[ russian ] = "¡ÂÁ Á‡ÎË‚ÍË";
+    Text[ polish ] = "Brak wype≥nienia";
+    Text[ japanese ] = "ìhÇËÇ¬Ç‘ÇµÇ»Çµ";
+    Text[ chinese_traditional ] = "§£•R∂Ò";
+    Text[ arabic ] = "»œÊ‰  ⁄»∆…";
+    Text[ greek ] = "◊˘ÒﬂÚ „›ÏÈÛÏ·";
+    Text[ korean ] = "√§øÏ±‚ æ¯¿Ω";
+    Text[ turkish ] = "Dolgu yok";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FILLPATTERN
+{
+    Text = "Muster" ;
+    Text [ ENGLISH ] = "Pattern" ;
+    Text [ norwegian ] = "M¯nster" ;
+    Text [ italian ] = "Modello" ;
+    Text [ portuguese_brazilian ] = "Padr„o" ;
+    Text [ portuguese ] = "Modelo" ;
+    Text [ finnish ] = "Kuvio" ;
+    Text [ danish ] = "M¯nster" ;
+    Text [ french ] = "Motif" ;
+    Text [ swedish ] = "Mˆnster" ;
+    Text [ dutch ] = "Patroon" ;
+    Text [ spanish ] = "Modelo" ;
+    Text [ english_us ] = "Pattern" ;
+    Text[ chinese_simplified ] = "Õº∞∏";
+    Text[ russian ] = "Œ·‡ÁÂˆ";
+    Text[ polish ] = "DeseÒ";
+    Text[ japanese ] = " ﬂ¿∞›";
+    Text[ chinese_traditional ] = "πœÆ◊";
+    Text[ arabic ] = "‰ﬁ‘";
+    Text[ greek ] = "ÃÔÙﬂ‚Ô";
+    Text[ korean ] = "π´¥Ã";
+    Text[ turkish ] = "Desen";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FRAME
+{
+    Text = "Umrandung" ;
+    Text [ ENGLISH ] = "Border" ;
+    Text [ norwegian ] = "Border" ;
+    Text [ italian ] = "Bordo" ;
+    Text [ portuguese_brazilian ] = "Borda" ;
+    Text [ portuguese ] = "Contornos" ;
+    Text [ finnish ] = "Reunaviiva" ;
+    Text [ danish ] = "Ramme" ;
+    Text [ french ] = "Bordure" ;
+    Text [ swedish ] = "Inramning" ;
+    Text [ dutch ] = "Omranding" ;
+    Text [ spanish ] = "Borde" ;
+    Text [ english_us ] = "Borders" ;
+    Text[ chinese_simplified ] = "±ﬂøÚ";
+    Text[ russian ] = "Œ·‡ÏÎÂÌËÂ";
+    Text[ polish ] = "Obramowanie";
+    Text[ japanese ] = "äOòg";
+    Text[ chinese_traditional ] = "√‰Æÿ";
+    Text[ arabic ] = "«·ÕœÊœ";
+    Text[ greek ] = "–ÂÒﬂ„Ò·ÏÏ·";
+    Text[ korean ] = "≈◊µŒ∏Æ";
+    Text[ turkish ] = "Kenarl˝k";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FRAME_STYLE
+{
+    Text = "Umrandungsstil" ;
+    Text [ ENGLISH ] = "Border Style" ;
+    Text [ norwegian ] = "Kantlinje mal" ;
+    Text [ italian ] = "Stile bordo" ;
+    Text [ portuguese_brazilian ] = "Estilo da Borda" ;
+    Text [ portuguese ] = "Estilo do contorno" ;
+    Text [ finnish ] = "Reunaviivan tyyli" ;
+    Text [ danish ] = "Rammetype" ;
+    Text [ french ] = "Style de bordure" ;
+    Text [ swedish ] = "Inramningsstil" ;
+    Text [ dutch ] = "Omrandingstype" ;
+    Text [ spanish ] = "Estilo de borde" ;
+    Text [ english_us ] = "Border Style" ;
+    Text[ chinese_simplified ] = "±ﬂæ‡—˘ Ω";
+    Text[ russian ] = "—ÚËÎ¸ Ó·‡ÏÎÂÌËˇ";
+    Text[ polish ] = "Styl obramowania";
+    Text[ japanese ] = "äOògΩ¿≤Ÿ";
+    Text[ chinese_traditional ] = "√‰¨…ºÀ¶°";
+    Text[ arabic ] = "‰„ÿ «·ÕœÊœ";
+    Text[ greek ] = "”ÙıÎ ÂÒÈ„Ò‹ÏÏ·ÙÔÚ";
+    Text[ korean ] = "≈◊µŒ∏Æ ¿Ø«¸";
+    Text[ turkish ] = "Kenarl˝k biÁimi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_FRAME_COLOR
+{
+    Text = "Umrandungsfarbe" ;
+    Text [ ENGLISH ] = "Border Color" ;
+    Text [ norwegian ] = "Kantlinjefarge" ;
+    Text [ italian ] = "Colore bordo" ;
+    Text [ portuguese_brazilian ] = "Cor da Borda" ;
+    Text [ portuguese ] = "Cor do contorno" ;
+    Text [ finnish ] = "Reunaviivan v‰ri" ;
+    Text [ danish ] = "Rammefarve" ;
+    Text [ french ] = "Couleur de bordure" ;
+    Text [ swedish ] = "Inramningsf‰rg" ;
+    Text [ dutch ] = "Omrandingskleur" ;
+    Text [ spanish ] = "Color del borde" ;
+    Text [ english_us ] = "Border Color" ;
+    Text[ chinese_simplified ] = "±ﬂøÚ—’…´";
+    Text[ russian ] = "÷‚ÂÚ Ó·‡ÏÎÂÌËˇ";
+    Text[ polish ] = "Kolor obramowania";
+    Text[ japanese ] = "äOògÇÃêF";
+    Text[ chinese_traditional ] = "√‰Æÿ√C¶‚";
+    Text[ arabic ] = "·Ê‰ «·ÕœÊœ";
+    Text[ greek ] = "◊Ò˛Ï·Ù· ÂÒÈ„Ò·ÏÏ‹Ù˘Ì";
+    Text[ korean ] = "≈◊µŒ∏Æ ªˆ";
+    Text[ turkish ] = "Kenarl˝k rengi";
+    Text[ language_user1 ] = " ";
+};
+ListBox RID_SVXTBX_STYLE
+{
+    HelpId = HID_STYLE_LISTBOX ;
+    Size = MAP_APPFONT ( 67 , 86 ) ;
+    DropDown = TRUE ;
+    Sort = TRUE ;
+    AutoHScroll = TRUE ;
+    DDExtraWidth = TRUE ;
+    Border = TRUE ;
+    Hide = TRUE ;
+};
+String RID_SVXSTR_EXTRAS_CHARBACKGROUND
+{
+    Text = "Zeichenhintergrund" ;
+    Text [ English ] = "Character background" ;
+    Text [ english_us ] = "Highlighting" ;
+    Text [ portuguese_brazilian ] = "Zeichenhintergrund" ;
+    Text [ swedish ] = "Teckenbakgrund" ;
+    Text [ danish ] = "Tegnbaggrund" ;
+    Text [ italian ] = "Sfondo caratteri" ;
+    Text [ spanish ] = "Fondo de car·cter" ;
+    Text [ french ] = "Trame de fond" ;
+    Text [ dutch ] = "Tekenachtergrond" ;
+    Text [ portuguese ] = "Destacar caracteres" ;
+    Text[ chinese_simplified ] = "◊÷∑˚±≥æ∞";
+    Text[ russian ] = "‘ÓÌ ÁÌ‡ÍÓ‚";
+    Text[ polish ] = "T≥o znakÛw";
+    Text[ japanese ] = "ï∂éöÇÃîwåi";
+    Text[ chinese_traditional ] = "¶r§∏≠I¥∫";
+    Text[ arabic ] = "Œ·›Ì… «·Œÿ";
+    Text[ greek ] = "÷¸ÌÙÔ ˜·Ò·ÍÙﬁÒ˘Ì";
+    Text[ korean ] = "∞≠¡∂";
+    Text[ turkish ] = "Vurgu";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_BACKGROUND
+{
+    Text = "Hintergrund" ;
+    Text [ English ] = "Background" ;
+    Text[ english_us ] = "Background";
+    Text[ portuguese ] = "Plano de fundo";
+    Text[ russian ] = "‘ÓÌ";
+    Text[ greek ] = "÷¸ÌÙÔ";
+    Text[ dutch ] = "Achtergrond";
+    Text[ french ] = "ArriËre-plan";
+    Text[ spanish ] = "Fondo";
+    Text[ italian ] = "Background";
+    Text[ danish ] = "Baggrund";
+    Text[ swedish ] = "Bakgrund";
+    Text[ polish ] = "T≥o";
+    Text[ portuguese_brazilian ] = "Background";
+    Text[ japanese ] = "îwåi";
+    Text[ korean ] = "πË∞Ê";
+    Text[ chinese_simplified ] = "±≥æ∞";
+    Text[ chinese_traditional ] = "≠I¥∫";
+    Text[ arabic ] = "«·Œ·›Ì…";
+    Text[ turkish ] = "Artalan";
+};
+Image RID_SVXIMG_GRAF_RED
+{
+    ImageBitmap = Bitmap { File = "sc10865.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_GREEN
+{
+    ImageBitmap = Bitmap { File = "sc10866.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_BLUE
+{
+    ImageBitmap = Bitmap { File = "sc10867.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_LUMINANCE
+{
+    ImageBitmap = Bitmap { File = "sc10863.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_CONTRAST
+{
+    ImageBitmap = Bitmap { File = "sc10864.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_GAMMA
+{
+    ImageBitmap = Bitmap { File = "sc10868.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+Image RID_SVXIMG_GRAF_TRANSPARENCE
+{
+    ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
+    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+};
+
+// ********************************************************************** EOF

@@ -1,0 +1,73 @@
+mkdir: %_DEST%\inc%_EXT%\xmloff
+
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+
+hedabu: ..\inc\attrlist.hxx %_DEST%\inc%_EXT%\xmloff\attrlist.hxx
+hedabu: ..\inc\i18nmap.hxx %_DEST%\inc%_EXT%\xmloff\i18nmap.hxx
+hedabu: ..\inc\nmspmap.hxx %_DEST%\inc%_EXT%\xmloff\nmspmap.hxx
+hedabu: ..\inc\unoatrcn.hxx %_DEST%\inc%_EXT%\xmloff\unoatrcn.hxx
+hedabu: ..\inc\xmlcnimp.hxx %_DEST%\inc%_EXT%\xmloff\xmlcnimp.hxx
+hedabu: ..\inc\xmlbrshi.hxx %_DEST%\inc%_EXT%\xmloff\xmlbrshi.hxx
+hedabu: ..\inc\xmlbrshe.hxx %_DEST%\inc%_EXT%\xmloff\xmlbrshe.hxx
+hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\xmloff\xmlcnitm.hxx
+hedabu: ..\inc\xmlement.hxx %_DEST%\inc%_EXT%\xmloff\xmlement.hxx
+hedabu: ..\inc\xmlexpit.hxx %_DEST%\inc%_EXT%\xmloff\xmlexpit.hxx
+hedabu: ..\inc\xmlictxt.hxx %_DEST%\inc%_EXT%\xmloff\xmlictxt.hxx
+hedabu: ..\inc\xmlimp.hxx %_DEST%\inc%_EXT%\xmloff\xmlimp.hxx
+hedabu: ..\inc\xmlitmap.hxx %_DEST%\inc%_EXT%\xmloff\xmlitmap.hxx
+hedabu: ..\inc\xmlkywd.hxx %_DEST%\inc%_EXT%\xmloff\xmlkywd.hxx
+hedabu: ..\inc\xmlmetae.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetae.hxx
+hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\xmloff\xmlmetai.hxx
+hedabu: ..\inc\hxx %_DEST%\inc%_EXT%\xmloff\hxx.hxx
+hedabu: ..\inc\xmlstyle.hxx %_DEST%\inc%_EXT%\xmloff\xmlstyle.hxx
+hedabu: ..\inc\xmltkmap.hxx %_DEST%\inc%_EXT%\xmloff\xmltkmap.hxx
+hedabu: ..\inc\xmluconv.hxx %_DEST%\inc%_EXT%\xmloff\xmluconv.hxx
+hedabu: ..\inc\xmlnmspe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnmspe.hxx
+hedabu: ..\inc\xmlnumfi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfi.hxx
+hedabu: ..\inc\xmlnumfe.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumfe.hxx
+hedabu: ..\inc\xmlexp.hxx %_DEST%\inc%_EXT%\xmloff\xmlexp.hxx
+hedabu: ..\inc\xmlastpl.hxx %_DEST%\inc%_EXT%\xmloff\xmlastpl.hxx
+hedabu: ..\inc\xmlitem.hxx %_DEST%\inc%_EXT%\xmloff\xmlitem.hxx
+hedabu: ..\inc\xmlimpit.hxx %_DEST%\inc%_EXT%\xmloff\xmlimpit.hxx
+hedabu: ..\inc\xmlnumi.hxx %_DEST%\inc%_EXT%\xmloff\xmlnumi.hxx
+hedabu: ..\inc\xmlnume.hxx %_DEST%\inc%_EXT%\xmloff\xmlnume.hxx
+hedabu: ..\inc\xmltabi.hxx %_DEST%\inc%_EXT%\xmloff\xmltabi.hxx
+hedabu: ..\inc\xmltabe.hxx %_DEST%\inc%_EXT%\xmloff\xmltabe.hxx
+hedabu: ..\inc\maptype.hxx %_DEST%\inc%_EXT%\xmloff\maptype.hxx
+hedabu: ..\inc\uniref.hxx %_DEST%\inc%_EXT%\xmloff\uniref.hxx
+hedabu: ..\inc\xmlaustp.hxx %_DEST%\inc%_EXT%\xmloff\xmlaustp.hxx
+hedabu: ..\inc\xmlexppr.hxx %_DEST%\inc%_EXT%\xmloff\xmlexppr.hxx
+hedabu: ..\inc\xmlimppr.hxx %_DEST%\inc%_EXT%\xmloff\xmlimppr.hxx
+hedabu: ..\inc\xmlprcon.hxx %_DEST%\inc%_EXT%\xmloff\xmlprcon.hxx
+hedabu: ..\inc\xmlprhdl.hxx %_DEST%\inc%_EXT%\xmloff\xmlprhdl.hxx
+hedabu: ..\inc\xmlprmap.hxx %_DEST%\inc%_EXT%\xmloff\xmlprmap.hxx
+hedabu: ..\inc\xmltypes.hxx %_DEST%\inc%_EXT%\xmloff\xmltypes.hxx
+hedabu: ..\inc\families.hxx %_DEST%\inc%_EXT%\xmloff\families.hxx
+hedabu: ..\inc\styleexp.hxx %_DEST%\inc%_EXT%\xmloff\styleexp.hxx
+hedabu: ..\inc\txtstyle.hxx %_DEST%\inc%_EXT%\xmloff\txtstyle.hxx
+hedabu: ..\inc\prstylei.hxx %_DEST%\inc%_EXT%\xmloff\prstylei.hxx
+hedabu: ..\inc\txtstyli.hxx %_DEST%\inc%_EXT%\xmloff\txtstyli.hxx
+hedabu: ..\inc\txtprmap.hxx %_DEST%\inc%_EXT%\xmloff\txtprmap.hxx
+hedabu: ..\inc\pkgurl.hxx %_DEST%\inc%_EXT%\xmloff\pkgurl.hxx
+hedabu: ..\inc\txtflde.hxx %_DEST%\inc%_EXT%\xmloff\txtflde.hxx
+hedabu: ..\inc\txtfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtfldi.hxx
+hedabu: ..\inc\txtvfldi.hxx %_DEST%\inc%_EXT%\xmloff\txtvfldi.hxx
+hedabu: ..\inc\txtparae.hxx %_DEST%\inc%_EXT%\xmloff\txtparae.hxx
+hedabu: ..\inc\txtimp.hxx %_DEST%\inc%_EXT%\xmloff\txtimp.hxx
+hedabu: ..\inc\prhdlfac.hxx %_DEST%\inc%_EXT%\xmloff\prhdlfac.hxx
+hedabu: ..\inc\EnumPropertyHdl.hxx %_DEST%\inc%_EXT%\xmloff\EnumPropertyHdl.hxx
+hedabu: ..\inc\NamedBoolPropertyHdl.hxx %_DEST%\inc%_EXT%\xmloff\NamedBoolPropertyHdl.hxx
+hedabu: ..\inc\numehelp.hxx %_DEST%\inc%_EXT%\xmloff\numehelp.hxx
+hedabu: ..\inc\sdxmlimp.hxx %_DEST%\inc%_EXT%\xmloff\sdxmlimp.hxx
+hedabu: ..\inc\sdxmlexp.hxx %_DEST%\inc%_EXT%\xmloff\sdxmlexp.hxx
+hedabu: ..\inc\XMLTextListAutoStylePool.hxx %_DEST%\inc%_EXT%\xmloff\XMLTextListAutoStylePool.hxx
+hedabu: ..\inc\SchXMLExport.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLExport.hxx
+hedabu: ..\inc\SchXMLImport.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLImport.hxx
+hedabu: ..\inc\SchXMLTableAddresses.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLTableAddresses.hxx
+hedabu: ..\inc\shapeexport.hxx %_DEST%\inc%_EXT%\xmloff\shapeexport.hxx
+hedabu: ..\inc\shapeimport.hxx %_DEST%\inc%_EXT%\xmloff\shapeimport.hxx
+hedabu: ..\inc\SchXMLExportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLExportHelper.hxx
+hedabu: ..\inc\SchXMLImportHelper.hxx %_DEST%\inc%_EXT%\xmloff\SchXMLImportHelper.hxx

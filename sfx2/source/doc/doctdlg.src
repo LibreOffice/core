@@ -1,0 +1,298 @@
+/*************************************************************************
+ *
+ *  $RCSfile: doctdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include --------------------------------------------------------------
+#include "sfx.hrc"
+#include "doc.hrc"
+#include "doctdlg.hrc"
+ // pragma ---------------------------------------------------------------
+
+ // DLG_DOC_TEMPLATE -----------------------------------------------------
+ModalDialog DLG_DOC_TEMPLATE
+{
+    HelpId = SID_DOCTEMPLATE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 280 , 140 ) ;
+    Text = "Dokumentvorlagen" ;
+    Text [ ENGLISH ] = "document templates" ;
+    Text [ norwegian ] = "Rediger dokumetmal" ;
+    Text [ italian ] = "Modelli" ;
+    Text [ portuguese_brazilian ] = "Editar o modelo do documento" ;
+    Text [ portuguese ] = "Modelos de documentos" ;
+    Text [ finnish ] = "Muokkaa asiakirjamallia" ;
+    Text [ danish ] = "Rediger dokumentskabelon" ;
+    Text [ french ] = "ModËles de document" ;
+    Text [ swedish ] = "Dokumentmallar" ;
+    Text [ dutch ] = "Sjablonen" ;
+    Text [ spanish ] = "Plantilla de documento" ;
+    Text [ english_us ] = "Templates" ;
+    Moveable = TRUE ;
+    Edit ED_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 200 , 12 ) ;
+    };
+    GroupBox GB_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 212 , 29 ) ;
+        Text = "Neue Dokumentvorlage" ;
+        Text [ English ] = "New Template" ;
+        Text [ dutch ] = "Nieuw sjabloon" ;
+        Text [ english_us ] = "New template" ;
+        Text [ italian ] = "Nuovo modello" ;
+        Text [ spanish ] = "Nueva plantilla" ;
+        Text [ french ] = "Nouveau modËle de document" ;
+        Text [ swedish ] = "Ny dokumentmall" ;
+        Text [ danish ] = "Ny dokumentskabelon" ;
+        Text [ portuguese_brazilian ] = "Neue Dokumentvorlage" ;
+        Text [ portuguese ] = "Novo modelo" ;
+        Text[ chinese_simplified ] = "–¬Ω®Œƒµµ—˘ Ω";
+        Text[ russian ] = "ÕÓ‚˚È ¯‡·ÎÓÌ";
+        Text[ polish ] = "Nowy szablon dokumentu";
+        Text[ japanese ] = "êVÇµÇ¢√›Ãﬂ⁄∞ƒ";
+        Text[ chinese_traditional ] = "∂}±“∑s§Â•ÛºÀ¶°";
+        Text[ arabic ] = "ﬁ«·» „” ‰œ ÃœÌœ";
+        Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ· ÒÔÙ˝Ôı Â„„Ò‹ˆÔı";
+        Text[ korean ] = "ªı º≠Ωƒ∆ƒ¿œ";
+        Text[ turkish ] = "Yeni belge ˛ablonu";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SECTION
+    {
+        Pos = MAP_APPFONT ( 12 , 49 ) ;
+        Size = MAP_APPFONT ( 97 , 10 ) ;
+        Text = "~Bereiche" ;
+        Text [ ENGLISH ] = "~Groups" ;
+        Text [ norwegian ] = "~Grupper" ;
+        Text [ italian ] = "~Categorie" ;
+        Text [ portuguese_brazilian ] = "~Grupos" ;
+        Text [ portuguese ] = "~Categorias" ;
+        Text [ finnish ] = "~Ryhm‰t" ;
+        Text [ danish ] = "OmrÂder" ;
+        Text [ french ] = "~CatÈgories" ;
+        Text [ swedish ] = "~Kategorier" ;
+        Text [ dutch ] = "~Bereiken" ;
+        Text [ spanish ] = "~¡reas" ;
+        Text [ english_us ] = "~Categories" ;
+        Text[ chinese_simplified ] = "∑÷¿‡(~C)";
+        Text[ russian ] = " ‡ÚÂ„ÓËË";
+        Text[ polish ] = "Obszary";
+        Text[ japanese ] = "îÕàÕ(~C)";
+        Text[ chinese_traditional ] = "§¿√˛(~C)";
+        Text[ arabic ] = "‰ÿ«ﬁ« ";
+        Text[ greek ] = " ·ÙÁ„ÔÒﬂÂÚ";
+        Text[ korean ] = "øµø™(~C)";
+        Text[ turkish ] = "~Kategori";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SECTION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 62 ) ;
+        Size = MAP_APPFONT ( 97 , 66 ) ;
+    };
+    FixedText FT_STYLESHEETS
+    {
+        Pos = MAP_APPFONT ( 115 , 49 ) ;
+        Size = MAP_APPFONT ( 97 , 10 ) ;
+        Text = "~Vorlagen" ;
+        Text [ ENGLISH ] = "~Templates" ;
+        Text [ norwegian ] = "~Maler" ;
+        Text [ italian ] = "~Modelli" ;
+        Text [ portuguese_brazilian ] = "~Modelos" ;
+        Text [ portuguese ] = "Modelos" ;
+        Text [ finnish ] = "~Mallit" ;
+        Text [ danish ] = "Skabeloner" ;
+        Text [ french ] = "~Noms de modËles" ;
+        Text [ swedish ] = "~Mallar" ;
+        Text [ dutch ] = "S~jablonen" ;
+        Text [ spanish ] = "P~lantillas" ;
+        Text [ english_us ] = "~Templates" ;
+        Text[ chinese_simplified ] = "—˘ Ω(~T)";
+        Text[ russian ] = "ÿ‡·ÎÓÌ˚";
+        Text[ polish ] = "Szablony";
+        Text[ japanese ] = "√›Ãﬂ⁄∞ƒ(~T)";
+        Text[ chinese_traditional ] = "ºÀ¶°(~T)";
+        Text[ arabic ] = "ﬁÊ«·»";
+        Text[ greek ] = "–Ò¸Ùı·";
+        Text[ korean ] = "º≠Ωƒ ∆ƒ¿œ(~T)";
+        Text[ turkish ] = "~ﬁablon";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_STYLESHEETS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 115 , 62 ) ;
+        Size = MAP_APPFONT ( 97 , 66 ) ;
+    };
+    GroupBox GB_STYLESHEETS
+    {
+        Pos = MAP_APPFONT ( 6 , 38 ) ;
+        Size = MAP_APPFONT ( 212 , 96 ) ;
+        Text = "Vorlagen" ;
+        Text [ ENGLISH ] = "Templates" ;
+        Text [ norwegian ] = "Maler" ;
+        Text [ italian ] = "Modelli" ;
+        Text [ portuguese_brazilian ] = "Modelos" ;
+        Text [ portuguese ] = "Modelos" ;
+        Text [ finnish ] = "Mallit" ;
+        Text [ danish ] = "Skabeloner" ;
+        Text [ french ] = "ModËles existants" ;
+        Text [ swedish ] = "Mallar" ;
+        Text [ dutch ] = "Sjablonen" ;
+        Text [ spanish ] = "Plantillas" ;
+        Text [ english_us ] = "Templates" ;
+        Text[ chinese_simplified ] = "—˘ Ω";
+        Text[ russian ] = "ÿ‡·ÎÓÌ˚";
+        Text[ polish ] = "Szablony";
+        Text[ japanese ] = "√›Ãﬂ⁄∞ƒ";
+        Text[ chinese_traditional ] = "ºÀ¶°";
+        Text[ arabic ] = "ﬁÊ«·»";
+        Text[ greek ] = "–Ò¸Ùı·";
+        Text[ korean ] = "º≠Ωƒ ∆ƒ¿œ";
+        Text[ turkish ] = "ﬁablon";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 224 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+        Disable = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 224 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 224 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    PushButton BT_EDIT
+    {
+        Pos = MAP_APPFONT ( 224 , 62 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Bearbeiten" ;
+        Text [ English ] = "~Edit" ;
+        Text [ english_us ] = "~Edit" ;
+        Text [ dutch ] = "Be~werken" ;
+        Text [ italian ] = "Modifica" ;
+        Text [ spanish ] = "~Editar" ;
+        Text [ french ] = "~Personnaliser" ;
+        Text [ swedish ] = "~Redigera" ;
+        Text [ danish ] = "Rediger" ;
+        Text [ portuguese ] = "~Editar" ;
+        Text [ portuguese_brazilian ] = "~Bearbeiten" ;
+        Text[ chinese_simplified ] = "±‡º≠(~E)";
+        Text[ russian ] = "~œ‡‚Í‡";
+        Text[ polish ] = "~Edytuj";
+        Text[ japanese ] = "ï“èW(~EÅj";
+        Text[ chinese_traditional ] = "ΩsøË(~E)";
+        Text[ arabic ] = " Õ—Ì—";
+        Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+        Text[ korean ] = "∆Ì¡˝(~E)";
+        Text[ turkish ] = "~D¸zenle";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BT_ORGANIZE
+    {
+        Pos = MAP_APPFONT ( 224 , 79 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Ver~walten..." ;
+        Text [ English ] = "~Manage..." ;
+        Text [ norwegian ] = "~Styre..." ;
+        Text [ italian ] = "Gestisci..." ;
+        Text [ portuguese_brazilian ] = "~Gerenciar..." ;
+        Text [ portuguese ] = "~Gerir..." ;
+        Text [ finnish ] = "~K‰sittele..." ;
+        Text [ danish ] = "Administrer..." ;
+        Text [ french ] = "~GÈrer..." ;
+        Text [ swedish ] = "~Fˆrvalta..." ;
+        Text [ dutch ] = "Be~heren..." ;
+        Text [ spanish ] = "~Administrar..." ;
+        Text [ english_us ] = "~Organizer..." ;
+        Text[ chinese_simplified ] = "π‹¿Ì(~O)...";
+        Text[ russian ] = "Œ„‡ÌËÁÓ‚‡Ú¸...";
+        Text[ polish ] = "Zarzπdzaj...";
+        Text[ japanese ] = "ä«óù(~O)...";
+        Text[ chinese_traditional ] = "∫ﬁ≤z(~O)...";
+        Text[ arabic ] = "«·≈œ—«…...";
+        Text[ greek ] = "ƒÈ·˜ÂﬂÒÈÛÁ...";
+        Text[ korean ] = "∞¸∏Æ(~O)...";
+        Text[ turkish ] = "Yˆnet...";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Œƒµµ—˘ Ω";
+    Text[ russian ] = "ÿ‡·ÎÓÌ˚ ‰ÓÍÛÏÂÌÚ‡";
+    Text[ polish ] = "Szablony dokumentu";
+    Text[ japanese ] = "ƒﬁ∑≠“›ƒÇÃ√›Ãﬂ⁄∞ƒ";
+    Text[ chinese_traditional ] = "§Â•ÛºÀ¶°";
+    Text[ arabic ] = "ﬁÊ«·» „” ‰œ";
+    Text[ greek ] = "–Ò¸Ùı· Â„„Ò‹ˆ˘Ì";
+    Text[ korean ] = "πÆº≠ º≠Ωƒ∆ƒ¿œ";
+    Text[ turkish ] = "Belge ˛ablonu";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

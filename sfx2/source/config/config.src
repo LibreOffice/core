@@ -1,0 +1,291 @@
+/*************************************************************************
+ *
+ *  $RCSfile: config.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:29 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "config.hrc"
+
+String RID_STR_NAME_MISCCFG
+{
+    Text = "Sonstiges" ;
+    Text [ English ] = "Miscellaneous" ;
+    Text [ english_us ] = "Other" ;
+    Text [ swedish ] = "Övrigt" ;
+    Text [ danish ] = "Andet" ;
+    Text [ italian ] = "Altro" ;
+    Text [ spanish ] = "Otros" ;
+    Text [ french ] = "Autres" ;
+    Text [ dutch ] = "Overige" ;
+    Text [ portuguese ] = "Outros" ;
+    Text [ portuguese_brazilian ] = "Sonstiges" ;
+    Text[ chinese_simplified ] = "ÆäËü";
+    Text[ russian ] = "Ïğî÷åå";
+    Text[ polish ] = "Inne";
+    Text[ japanese ] = "‚»‚Ì‘¼";
+    Text[ chinese_traditional ] = "¨ä¥L";
+    Text[ arabic ] = "ÛíÑ Ğáß";
+    Text[ dutch ] = "Overige";
+    Text[ chinese_simplified ] = "ÆäËü";
+    Text[ greek ] = "¢ëëá";
+    Text[ korean ] = "±âÅ¸";
+    Text[ turkish ] = "Diğer";
+    Text[ language_user1 ] = " ";
+};
+String STR_EVENTCONFIG
+{
+    Text = "Ereigniszuordnung" ;
+    Text [ ENGLISH ] = "Event assignments" ;
+    Text [ english_us ] = "Assign events" ;
+    Text [ italian ] = "Correlazione eventi" ;
+    Text [ spanish ] = "Asignar acontecimientos" ;
+    Text [ french ] = "Attribution événement" ;
+    Text [ dutch ] = "Gebeurtenis toewijzen" ;
+    Text [ swedish ] = "Händelsetilldelning" ;
+    Text [ danish ] = "Tildel begivenheder" ;
+    Text [ portuguese ] = "Atribuir eventos" ;
+    Text [ portuguese_brazilian ] = "Ereigniszuordnung" ;
+    Text[ chinese_simplified ] = "Ö¸¶¨ÊÂ¼ş";
+    Text[ russian ] = "Óïîğÿäî÷åíèå ñîáûòèÿ";
+    Text[ polish ] = "Przyporz¹dkowanie wydarzeñ";
+    Text[ japanese ] = "ÀsŒ_‹@‚Ì”z’u";
+    Text[ chinese_traditional ] = "³]©w°Ê§@";
+    Text[ arabic ] = "ÊÚííä ÇáÃÍÏÇË";
+    Text[ dutch ] = "Gebeurtenis toewijzen";
+    Text[ chinese_simplified ] = "Ö¸¶¨ÊÂ¼ş";
+    Text[ greek ] = "Áíôéóôïß÷éóç ãåãïíüôïò";
+    Text[ korean ] = "ÀÌº¥Æ® ¹èÁ¤";
+    Text[ turkish ] = "Olay ata";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILTERNAME_CFG
+{
+    Text = "Konfiguration" ;
+    Text [ ENGLISH ] = "Configuration" ;
+    Text [ english_us ] = "Configuration" ;
+    Text [ italian ] = "Configurazione" ;
+    Text [ spanish ] = "Configuración" ;
+    Text [ french ] = "Configuration" ;
+    Text [ dutch ] = "Configuratie" ;
+    Text [ swedish ] = "Konfiguration" ;
+    Text [ danish ] = "Konfiguration" ;
+    Text [ portuguese ] = "Configuração" ;
+    Text [ portuguese_brazilian ] = "Konfiguration" ;
+    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ russian ] = "Êîíôèãóğàöèÿ";
+    Text[ polish ] = "Konfiguracja";
+    Text[ japanese ] = "İ’è";
+    Text[ chinese_traditional ] = "°t¸m";
+    Text[ arabic ] = "Êßæíä";
+    Text[ dutch ] = "Configuratie";
+    Text[ chinese_simplified ] = "ÅäÖÃ";
+    Text[ greek ] = "ĞáñÜìåôñïé";
+    Text[ korean ] = "±¸¼º";
+    Text[ turkish ] = "Konfigürasyon";
+    Text[ language_user1 ] = " ";
+};
+ModalDialog DLG_MACROQUERY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 163 , 94 ) ;
+    Text = "Makro ausführen" ;
+    Text [ english ] = "Execute Macro" ;
+    Text [ english_us ] = "Execute Macro" ;
+    Text [ french ] = "Exécuter la macro" ;
+    TEXT[ italian ] = "Esegui macro";
+    TEXT[ portuguese_brazilian ] = "Makro ausführen";
+    TEXT[ portuguese ] = "Executar macro";
+    TEXT[ danish ] = "Udfør makro";
+    TEXT[ swedish ] = "Utför makro";
+    TEXT[ dutch ] = "Macro uitvoeren";
+    TEXT[ spanish ] = "Ejecutar macro";
+    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
+    TEXT[ russian ] = "Âûïîëíèòü ìàêğîñ";
+    TEXT[ polish ] = "Wykonaj makro";
+    TEXT[ japanese ] = "Ï¸Û‚ÌÀs";
+    TEXT[ chinese_traditional ] = "°õ¦æ¥¨¶°";
+    TEXT[ arabic ] = "ÊäİíĞ ÇáãÇßÑæ";
+    FixedImage ICN_MESSAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 30 , 30 ) ;
+    };
+    FixedText FT_MESSAGE
+    {
+        WordBreak = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 6 ) ;
+        Size = MAP_APPFONT ( 115 , 46 ) ;
+        Text = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
+        Text [ English ] = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
+        Text [ english_us ] = "An event to which a macro is configured has been started.  Do you want to execute the macro?" ;
+        Text [ portuguese_brazilian ] = "Es wurde ein Ereignis ausgelöst, auf das ein Makro konfiguriert wurde. Möchten Sie dieses Makro ausführen?" ;
+        Text [ swedish ] = "En händelse utlöstes för vilket ett makro konfigurerades. Skall detta makro utföras?" ;
+        Text [ danish ] = "Der blev udløst en handling, som en makro er konfigureret til. Vil du udføre denne makro?" ;
+        Text [ italian ] = "È stato attivato un evento che è stato configurato su una macro. Esguire la macro?" ;
+        Text [ spanish ] = "Se ha iniciado un acontecimiento en el cual se ha configurado una macro. ¿Desea que se ejecute esta macro?" ;
+        Text [ french ] = "Un événement s'est produit pour lequel une macro a été configurée. Désirez-vous l'exécuter?" ;
+        Text [ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?" ;
+        Text [ portuguese ] = "Foi produzido um acontecimento para o qual foi configurada uma macro. Deseja executá-la?" ;
+        Text[ chinese_simplified ] = "²Ù×÷ÃüÁîÖ±½ÓÀ´×ÔÒ»¸öºê£¬ÄúÒªÖ´ĞĞÕâ¸öºê£¿";
+        Text[ russian ] = "Çàïóùåíî ñîáûòèå, äëÿ êîòîğîãî ñêîíôèãóğèğîâàí ìàêğîñ. Âû õîòèòå âûïîëíèòü ıòîò ìàêğîñ?";
+        Text[ polish ] = "Zosta³o uruchomione wydarzenie, do którego zosta³o skonfigurowane makro. Czy chcesz wykonaæ to makro?";
+        Text[ japanese ] = "Ï¸Û‚Åİ’è‚µ‚½ÀsŒ_‹@‚ªŠJn‚³‚ê‚Ü‚µ‚½B‚±‚ÌÏ¸Û‚ğÀs‚µ‚Ü‚·‚©?";
+        Text[ chinese_traditional ] = "¾Ş§@«ü¥Oª½±µ¨Ó¦Û¤@­Ó¥¨¶°¡M±z­n°õ¦æ³o­Ó¥¨¶°¡H";
+        Text[ arabic ] = "Êã ÈÏÁ ÍÏË ãõßæøä Úáíå ãÇßÑæ. åá ÊÑíÏ ÊäİíĞ åĞÇ ÇáãÇßÑæ¿";
+        Text[ dutch ] = "Er werd een gebeurtenis veroorzaakt, waarop een macro werd geconfigureerd. Wilt u dit macro uitvoeren?";
+        Text[ chinese_simplified ] = "²Ù×÷ÃüÁîÖ±½ÓÀ´×ÔÒ»¸öºê£¬ÄúÒªÖ´ĞĞÕâ¸öºê£¿";
+        Text[ greek ] = "Åêôåëİóôçêå İíá ãåãïíüò, ğÜíù óôï ïğïßï ñõèìßóôçêå ìéá ìáêñïåíôïëŞ. Èİëåôå íá åêôåëåóôåß ç ìáêñïåíôïëŞ áõôŞ;";
+        Text[ korean ] = "¸ÅÅ©·Î°¡ ±¸¼ºµÈ ÀÌº¥Æ®°¡ ½ÃÇàµÇ¾ú½À´Ï´Ù. ÀÌ ¸ÅÅ©·Î¸¦ ½ÇÇàÇÏ½Ã°Ú½À´Ï±î?";
+        Text[ turkish ] = "Başlatılan olay ile ilgili bir yapılandırılmış bir makro mevcut. Bu makroyu çalıştırmak istiyor musunuz?";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_WARNING
+    {
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
+        Size = MAP_APPFONT ( 151 , 10 ) ;
+        Text = " Für dieses Dokument nicht mehr warnen" ;
+        Text [ ENGLISH ] = " Für dieses Dokument nicht mehr warnen" ;
+        Text [ portuguese ] = "Não avisar mais para este documento" ;
+        Text [ english_us ] = "Do not warn again for this document" ;
+        Text [ portuguese_brazilian ] = "Für dieses Dokument nicht mehr warnen" ;
+        Text [ swedish ] = "Varna inte mer för det här dokumentet" ;
+        Text [ danish ] = "Advar ikke igen for dette dokument" ;
+        Text [ italian ] = "Non avvertire più per il documento corrente" ;
+        Text [ spanish ] = "Desactivar las advertencias para este documento" ;
+        Text [ french ] = "Ne plus afficher d'avertissement pour ce document" ;
+        Text [ dutch ] = "Voor dit document niet meer waarschuwen" ;
+        Text[ chinese_simplified ] = "²»ÒªÔÙ´ÎÎªÕâ¸öÎÄµµÌá³ö¾¯¸æ";
+        Text[ russian ] = "Áîëüøå íå ïğåäóïğåæäàòü äëÿ ıòîãî äîêóìåíòà";
+        Text[ polish ] = "Nie pokazuj wiêcej ostrze¿enia dla tego dokumentu";
+        Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Ì‚½‚ß‚É‚à‚¤Œx‚Í‚µ‚È‚¢‚Å‰º‚³‚¢";
+        Text[ chinese_traditional ] = "¤£­n¦A¦¸¬°³o­Ó¤å¥ó´£¥XÄµ§i";
+        Text[ arabic ] = "ÚÏã ÇáÊÍĞíÑ ãÑÉ ÃÎÑì ÈÇáäÓÈÉ áåĞÇ ÇáãÓÊäÏ";
+        Text[ dutch ] = "Voor dit document niet meer waarschuwen";
+        Text[ chinese_simplified ] = "²»ÒªÔÙ´ÎÎªÕâ¸öÎÄµµÌá³ö¾¯¸æ";
+        Text[ greek ] = "¼÷é Üëëç ğñïåéäïğïßçóç ãéá áõôü ôï İããñáöï";
+        Text[ korean ] = "ÀÌ ¹®¼­¿¡´Â ´õ ÀÌ»ó °æ°í ¾ÈÇÔ";
+        Text[ turkish ] = "Bu belge için bir daha uyarı görüntüleme";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 44 , 74 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Ausführen" ;
+        Text [ ENGLISH ] = "Execute" ;
+        Text [ portuguese ] = "Executar" ;
+        Text [ english_us ] = "Execute" ;
+        Text [ portuguese_brazilian ] = "Ausführen" ;
+        Text [ swedish ] = "Utför" ;
+        Text [ danish ] = "Udfør" ;
+        Text [ italian ] = "Esegui" ;
+        Text [ spanish ] = "Ejecutar" ;
+        Text [ french ] = "Exécuter" ;
+        Text [ dutch ] = "Uitvoeren" ;
+        Text[ chinese_simplified ] = "Ö´ĞĞ";
+        Text[ russian ] = "Âûïîëíèòü";
+        Text[ polish ] = "Wykonaj";
+        Text[ japanese ] = "Às";
+        Text[ chinese_traditional ] = "°õ¦æ";
+        Text[ arabic ] = "ÊäİíĞ";
+        Text[ dutch ] = "Uitvoeren";
+        Text[ chinese_simplified ] = "Ö´ĞĞ";
+        Text[ greek ] = "Åêôİëåóç";
+        Text[ korean ] = "½ÇÇà";
+        Text[ turkish ] = "Çalıştır";
+        Text[ language_user1 ] = " ";
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 97 , 74 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "Nicht Ausführen" ;
+        Text [ ENGLISH ] = "Don't execute" ;
+        Text [ english_us ] = "Don't execute" ;
+        Text [ portuguese_brazilian ] = "Nicht Ausführen" ;
+        Text [ swedish ] = "Utför inte" ;
+        Text [ danish ] = "Udfør ikke" ;
+        Text [ italian ] = "Non eseguire" ;
+        Text [ spanish ] = "No ejecutar" ;
+        Text [ french ] = "Ne pas lancer" ;
+        Text [ dutch ] = "Niet uitvoeren" ;
+        Text [ portuguese ] = "Não executar" ;
+        Text[ chinese_simplified ] = "²»Ö´ĞĞ";
+        Text[ russian ] = "Íå âûïîëíÿòü";
+        Text[ polish ] = "Nie wykonuj";
+        Text[ japanese ] = "Às‚µ‚È‚¢";
+        Text[ chinese_traditional ] = "¤£­n°õ¦æ";
+        Text[ arabic ] = "ÚÏã ÇáÊäİíĞ";
+        Text[ dutch ] = "Niet uitvoeren";
+        Text[ chinese_simplified ] = "²»Ö´ĞĞ";
+        Text[ greek ] = "Íá ìçí åêôåëåóôåß";
+        Text[ korean ] = "½ÇÇà ¾ÈÇÔ";
+        Text[ turkish ] = "Çalıştırma";
+        Text[ language_user1 ] = " ";
+    };
+    TEXT[ dutch ] = "Macro uitvoeren";
+    TEXT[ chinese_simplified ] = "Ö´ĞĞºê";
+    TEXT[ greek ] = "Åêôİëåóç ìáêñïåíôïëşí";
+    TEXT[ korean ] = "¸ÅÅ©·Î ½ÇÇà";
+    TEXT[ turkish ] = "Makroyu çalıştır";
+    TEXT[ language_user1 ] = " ";
+};
+
+

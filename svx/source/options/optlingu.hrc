@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optlingu.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+// defines ---------------------------------------------------------------
+
+#define BTN_CAPS                10
+#define BTN_NUMS                11
+#define BTN_UPLOW               12
+#define BTN_SPELL_SPECIAL       13
+#define BTN_ALL_LANG            14
+#define GB_AUDIT                15
+
+#define LB_DICTS                20
+#define BTN_NEW                 21
+#define BTN_EDIT                22
+#define BTN_DELETE              23
+#define TB_DICTS                24
+#define GB_DICTS                25
+
+#define BTN_AUTO_SPELLING       30
+#define BTN_MARK_OFF            31
+#define GB_AUTO_SPELLING        32
+#define PB_EXT_LINGU            33
+#define FT_EXT_LINGU            34
+
+#define FT_PREBREAK             40
+#define ED_PREBREAK             41
+#define FT_AFTERBREAK           42
+#define ED_AFTERBREAK           43
+#define BTN_AUTO                44
+#define BTN_SPECIAL             45
+#define GB_RULES                46
+
+#define FT_LANGUAGE             51
+#define LB_LANGUAGE             52
+
+#define TID_NEW                 60
+#define TID_EDIT                61
+#define TID_DELETE              62
+#define STR_WARNING             63
+
+#define PB_OK                   70
+#define PB_CANCEL               71
+#define PB_HELP                 72
+#define GB_LINGU                73
+#define LB_LINGU                74
+#define PB_OPTIONS              75
+#define CB_STDSPELL             76
+#define CB_STDTHES              77
+#define CB_STDHYPH              78
+#define GB_SETTINGS             79
+
+#define GB_GERMAN_SPELLING      80
+#define BTN_GERMAN_PRE_REFORM   81
+
+
+

@@ -1,0 +1,775 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docvor.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "doc.hrc"
+#include "docvor.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // DLG_ORGANIZE ----------------------------------------------------------
+ModalDialog DLG_ORGANIZE
+{
+    HelpId = SID_ORGANIZER ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 271 , 162 ) ;
+    Text = "Dokumentvorlagen verwalten" ;
+    Text [ English ] = "Manage document templates" ;
+    Text [ norwegian ] = "Rediger dokumentmaler" ;
+    Text [ italian ] = "Gestione dei modelli" ;
+    Text [ portuguese_brazilian ] = "Editar os modelos do documento" ;
+    Text [ portuguese ] = "Gerir modelos de documentos" ;
+    Text [ finnish ] = "Muokkaa asiakirjamalleja" ;
+    Text [ danish ] = "Administrer dokumentskabeloner" ;
+    Text [ french ] = "Gestion des modËles de documents" ;
+    Text [ swedish ] = "Fˆrvalta dokumentmallar" ;
+    Text [ dutch ] = "Sjablonen beheren" ;
+    Text [ spanish ] = "Administrar plantillas" ;
+    Text [ english_us ] = "Template Management" ;
+    Moveable = TRUE ;
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 205 , 43 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 205 , 6 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Schlieﬂen : Schlieòen */
+        /* ### ACHTUNG: Neuer Text in Resource? Schlieﬂen : Schlieòen */
+        Text = "Schlieﬂen" ;
+        Text [ English ] = "Close" ;
+        Text [ norwegian ] = "Lukk" ;
+        Text [ italian ] = "Chiudi" ;
+        Text [ portuguese_brazilian ] = "Fechar" ;
+        Text [ portuguese ] = "Fechar" ;
+        Text [ finnish ] = "Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "Fermer" ;
+        Text [ swedish ] = "St‰ng" ;
+        Text [ dutch ] = "Sluiten" ;
+        Text [ spanish ] = "Cerrar" ;
+        Text [ english_us ] = "Close" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text[ chinese_simplified ] = "πÿ±’";
+        Text[ russian ] = "«‡Í˚Ú¸";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "ï¬Ç∂ÇÈ";
+        Text[ chinese_traditional ] = "√ˆ≥¨";
+        Text[ arabic ] = "≈€·«ﬁ";
+        Text[ greek ] = " ÎÂﬂÛÈÏÔ";
+        Text[ korean ] = "¥›±‚";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_FILES
+    {
+        Pos = MAP_APPFONT ( 205 , 143 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Datei..." ;
+        Text [ English ] = "~Files..." ;
+        Text [ norwegian ] = "~Filer..." ;
+        Text [ italian ] = "~File..." ;
+        Text [ portuguese_brazilian ] = "~Arquivos..." ;
+        Text [ portuguese ] = "~Ficheiro..." ;
+        Text [ finnish ] = "~Tiedostot..." ;
+        Text [ danish ] = "~Fil..." ;
+        Text [ french ] = "~Fichier..." ;
+        Text [ swedish ] = "~Arkiv..." ;
+        Text [ dutch ] = "~Bestand..." ;
+        Text [ spanish ] = "~Archivo..." ;
+        Text [ english_us ] = "~File..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "Œƒº˛(~F)...";
+        Text[ russian ] = "‘‡ÈÎ...";
+        Text[ polish ] = "Pli~k...";
+        Text[ japanese ] = "Ãß≤ŸÅi~F)...";
+        Text[ chinese_traditional ] = "¿…Æ◊(~F)...";
+        Text[ arabic ] = "...„·›";
+        Text[ greek ] = "~¡Ò˜ÂﬂÔ...";
+        Text[ korean ] = "∆ƒ¿œ(~F)...";
+        Text[ turkish ] = "Dosya";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_LEFT_TYP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 144 ) ;
+        Size = MAP_APPFONT ( 94 , 55 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 0 ;
+        StringList =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ English ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Modelli" ; Default ; > ;
+            < "Documenti" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Arquivos" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Modelos de documentos" ; Default ; > ;
+            < "Documentos" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Dokumentskabelon" ; Default ; > ;
+            < "Dokumenter" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "ModËles de document" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Dokumentmallar" ; Default ; > ;
+            < "Dokument" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Sjablonen" ; Default ; > ;
+            < "Documenten" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Plantillas de documento" ; Default ; > ;
+            < "Documentos" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Templates" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "Œƒµµ—˘ Ω" ; Default ; > ;
+        < "Œƒµµ" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ÿ‡·ÎÓÌ˚ ‰ÓÍÛÏÂÌÚ‡" ; Default ; > ;
+        < "ƒÓÍÛÏÂÌÚ˚" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Szablony dokumentÛw" ; Default ; > ;
+        < "Dokumenty" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ƒﬁ∑≠“›ƒÇÃ√›Ãﬂ⁄∞ƒ" ; Default ; > ;
+        < "ƒﬁ∑≠“›ƒ" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "§Â•ÛºÀ¶°" ; Default ; > ;
+        < "§Â•Û" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁÊ«·» „” ‰œ" ; Default ; > ;
+        < "„” ‰œ« " ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "–Ò¸Ùı· Â„„Ò‹ˆ˘Ì" ; Default ; > ;
+        < "∏„„Ò·ˆ·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "πÆº≠ º≠Ωƒ∆ƒ¿œ" ; Default ; > ;
+        < "πÆº≠" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Belge ˛ablonlar˝" ; Default ; > ;
+        < "Belgeler" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    ListBox LB_RIGHT_TYP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 144 ) ;
+        Size = MAP_APPFONT ( 94 , 55 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        CurPos = 1 ;
+        StringList =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ English ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Modelli" ; Default ; > ;
+            < "Documenti" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Arquivos" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Modelos de documentos" ; Default ; > ;
+            < "Documentos" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Dokumentvorlagen" ; Default ; > ;
+            < "Dokumente" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Dokumentskabeloner" ; Default ; > ;
+            < "Dokumenter" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "ModËles de document" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Dokumentmallar" ; Default ; > ;
+            < "Dokument" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Sjablonen" ; Default ; > ;
+            < "Documenten" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Plantillas de documento" ; Default ; > ;
+            < "Documentos" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "Templates" ; Default ; > ;
+            < "Documents" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "Œƒµµ—˘ Ω" ; Default ; > ;
+        < "Œƒµµ" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ÿ‡·ÎÓÌ˚ ‰ÓÍÛÏÂÌÚ‡" ; Default ; > ;
+        < "ƒÓÍÛÏÂÌÚ˚" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Szablony dokumentÛw" ; Default ; > ;
+        < "Dokumenty" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "ƒﬁ∑≠“›ƒÇÃ√›Ãﬂ⁄∞ƒ" ; Default ; > ;
+        < "ƒﬁ∑≠“›ƒ" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "§Â•ÛºÀ¶°" ; Default ; > ;
+        < "§Â•Û" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "ﬁÊ«·» „” ‰œ" ; Default ; > ;
+        < "„” ‰œ« " ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "–Ò¸Ùı· Â„„Ò‹ˆ˘Ì" ; Default ; > ;
+        < "∏„„Ò·ˆ·" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "πÆº≠ º≠Ωƒ∆ƒ¿œ" ; Default ; > ;
+        < "π»º≠" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Belge ˛ablonlar˝" ; Default ; > ;
+        < "Belgeler" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    Control LB_LEFT
+    {
+        HelpId = HID_CTL_ORGANIZER_LEFT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 3 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 132 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+    };
+    Control LB_RIGHT
+    {
+        HelpId = HID_CTL_ORGANIZER_RIGHT ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 103 , 6 ) ;
+        Size = MAP_APPFONT ( 94 , 132 ) ;
+        TabStop = TRUE ;
+        ClipChildren = TRUE ;
+    };
+    Accelerator ACC_EDIT
+    {
+        ItemList =
+        {
+            AcceleratorItem
+            {
+                Identifier = ID_NEW ;
+                Key = KeyCode
+                {
+                    Code = KEY_INSERT ;
+                };
+            };
+            AcceleratorItem
+            {
+                Identifier = ID_DELETE ;
+                Key = KeyCode
+                {
+                    Code = KEY_DELETE ;
+                };
+            };
+        };
+    };
+    MenuButton BTN_EDIT
+    {
+        Pos = MAP_APPFONT ( 205 , 23 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "~Befehle" ;
+        Text [ English ] = "~Commands" ;
+        Text [ norwegian ] = "~Rediger" ;
+        Text [ italian ] = "Comandi" ;
+        Text [ portuguese_brazilian ] = "~Editar" ;
+        Text [ portuguese ] = "~Comandos" ;
+        Text [ finnish ] = "~Muokkaa" ;
+        Text [ danish ] = "Kommandoer" ;
+        Text [ french ] = "~Commandes" ;
+        Text [ swedish ] = "~Kommandon" ;
+        Text [ dutch ] = "~Opdrachten" ;
+        Text [ spanish ] = "~Comandos" ;
+        Text [ english_us ] = "Commands" ;
+        TabStop = TRUE ;
+        ButtonMenu = Menu
+        {
+            ItemList =
+            {
+                MenuItem
+                {
+                    Identifier = ID_NEW ;
+                    HelpId = HID_ORGANIZE_NEW ;
+                    Text = "~Neu" ;
+                    Text [ English ] = "~New" ;
+                    Text [ norwegian ] = "~New" ;
+                    Text [ italian ] = "~Nuovo" ;
+                    Text [ portuguese_brazilian ] = "~Novo" ;
+                    Text [ portuguese ] = "~Novo" ;
+                    Text [ finnish ] = "~Uusi" ;
+                    Text [ danish ] = "~Ny(t)" ;
+                    Text [ french ] = "~Nouveau" ;
+                    Text [ swedish ] = "~Nytt" ;
+                    Text [ dutch ] = "~Nieuw" ;
+                    Text [ spanish ] = "~Nuevo" ;
+                    Text [ english_us ] = "~New" ;
+                    AccelKey = KeyCode
+                    {
+                        Code = KEY_INSERT ;
+                    };
+                    Text[ chinese_simplified ] = "–¬Ω®(~N)";
+                    Text[ russian ] = "—ÓÁ‰~‡Ú¸";
+                    Text[ polish ] = "Nowy";
+                    Text[ japanese ] = "êVãKçÏê¨(~N)";
+                    Text[ chinese_traditional ] = "∂}±“∑s¿…(~N)";
+                    Text[ arabic ] = "ÃœÌœ";
+                    Text[ greek ] = "~ƒÁÏÈÔıÒ„ﬂ·";
+                    Text[ korean ] = "ªı∑Œ ∏∏µÈ±‚(~N)";
+                    Text[ turkish ] = "Y~eni";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Identifier = ID_DELETE ;
+                    HelpId = HID_ORGANIZE_DELETE ;
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
+                    /* ### ACHTUNG: Neuer Text in Resource? ~Lˆschen : ~L˜schen */
+                    Text = "~Lˆschen" ;
+                    Text [ English ] = "~Delete" ;
+                    Text [ norwegian ] = "~Slett" ;
+                    Text [ italian ] = "~Elimina" ;
+                    Text [ portuguese_brazilian ] = "~Apagar" ;
+                    Text [ portuguese ] = "E~liminar" ;
+                    Text [ finnish ] = "~Poista" ;
+                    Text [ danish ] = "~Slet" ;
+                    Text [ french ] = "~Supprimer" ;
+                    Text [ swedish ] = "~Radera" ;
+                    Text [ dutch ] = "~Wissen" ;
+                    Text [ spanish ] = "~Eliminar" ;
+                    Text [ english_us ] = "~Delete" ;
+                    AccelKey = KeyCode
+                    {
+                        Code = KEY_DELETE ;
+                    };
+                    Text[ chinese_simplified ] = "…æ≥˝(~D)";
+                    Text[ russian ] = "”‰‡ÎËÚ¸";
+                    Text[ polish ] = "UsuÒ";
+                    Text[ japanese ] = "çÌèú(~D)";
+                    Text[ chinese_traditional ] = "ßR∞£(~D)";
+                    Text[ arabic ] = "Õ–›";
+                    Text[ greek ] = "ƒÈ·„Ò·~ˆﬁ";
+                    Text[ korean ] = "ªË¡¶(~D)";
+                    Text[ turkish ] = "~Sil";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Identifier = ID_EDIT ;
+                    HelpId = HID_ORGANIZE_EDIT ;
+                    Text = "~Bearbeiten" ;
+                    Text [ English ] = "~Edit" ;
+                    Text [ norwegian ] = "~Rediger" ;
+                    Text [ italian ] = "~Modifica" ;
+                    Text [ portuguese_brazilian ] = "~Editar" ;
+                    Text [ portuguese ] = "~Editar" ;
+                    Text [ finnish ] = "~Muokkaa" ;
+                    Text [ danish ] = "~Rediger" ;
+                    Text [ french ] = "~Edition" ;
+                    Text [ swedish ] = "~Redigera" ;
+                    Text [ dutch ] = "~Bewerken" ;
+                    Text [ spanish ] = "E~ditar" ;
+                    Text [ english_us ] = "~Edit" ;
+                    Text[ chinese_simplified ] = "±‡º≠(~E)";
+                    Text[ russian ] = "~œ‡‚Í‡";
+                    Text[ polish ] = "~Edytuj";
+                    Text[ japanese ] = "ï“èWÅi~ÇdÅj";
+                    Text[ chinese_traditional ] = "ΩsøË(~E)";
+                    Text[ arabic ] = "~ Õ—Ì—";
+                    Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
+                    Text[ korean ] = "∆Ì¡˝(~E)";
+                    Text[ turkish ] = "~D¸zenle";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_COPY_FROM ;
+                    HelpId = HID_ORGANIZE_COPY_FROM ;
+                    Text = "Vorlage ~importieren..." ;
+                    Text [ English ] = "Import from..." ;
+                    Text [ norwegian ] = "Kopier til..." ;
+                    Text [ italian ] = "~Importa modello..." ;
+                    Text [ portuguese_brazilian ] = "Copiar para..." ;
+                    Text [ portuguese ] = "I~mportar modelo..." ;
+                    Text [ finnish ] = "Kopioi mihin..." ;
+                    Text [ danish ] = "Importer skabelon..." ;
+                    Text [ french ] = "I~mporter un modËle..." ;
+                    Text [ swedish ] = "~Importera mall..." ;
+                    Text [ dutch ] = "Sjabloon ~importeren..." ;
+                    Text [ spanish ] = "I~mportar plantilla..." ;
+                    Text [ english_us ] = "Import Template..." ;
+                    Text[ chinese_simplified ] = " ‰»Î—˘ Ω(~M)...";
+                    Text[ russian ] = "»ÏÔÓÚ ¯‡·ÎÓÌ‡...";
+                    Text[ polish ] = "Importuj szablon...";
+                    Text[ japanese ] = "√›Ãﬂ⁄∞ƒÇÃ≤›Œﬂ∞ƒ...";
+                    Text[ chinese_traditional ] = "øÈ§JºÀ¶°(~M)...";
+                    Text[ arabic ] = "«” Ì—«œ ﬁ«·»...";
+                    Text[ greek ] = "≈~ÈÛ·„˘„ﬁ ÒÔÙ˝Ôı...";
+                    Text[ korean ] = "º≠Ωƒ∆ƒ¿œ ∞°¡Æø¿±‚...";
+                    Text[ turkish ] = "ﬁablonu iÁe aktar...";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Identifier = ID_COPY_TO ;
+                    HelpId = HID_ORGANIZE_COPY_TO ;
+                    Text = "Vorlage ~exportieren..." ;
+                    Text [ English ] = "Export to..." ;
+                    Text [ norwegian ] = "Kopier fra..." ;
+                    Text [ italian ] = "Esporta modello..." ;
+                    Text [ portuguese_brazilian ] = "Copiar de..." ;
+                    Text [ portuguese ] = "E~xportar modelo..." ;
+                    Text [ finnish ] = "Kopioi mist‰..." ;
+                    Text [ danish ] = "Eksporter skabelon..." ;
+                    Text [ french ] = "E~xporter un modËle..." ;
+                    Text [ swedish ] = "~Exportera mall..." ;
+                    Text [ dutch ] = "Sjabloon ~exporteren..." ;
+                    Text [ spanish ] = "E~xportar plantilla..." ;
+                    Text [ english_us ] = "Export Template..." ;
+                    Text[ chinese_simplified ] = " ‰≥ˆ—˘ Ω(~X)...";
+                    Text[ russian ] = "›ÍÒÔÓÚ ¯‡·ÎÓÌ‡...";
+                    Text[ polish ] = "Eksportuj szablon...";
+                    Text[ japanese ] = "√›Ãﬂ⁄∞ƒÇÃ¥∏ΩŒﬂ∞ƒ...";
+                    Text[ chinese_traditional ] = "øÈ•XºÀ¶°(~X)...";
+                    Text[ arabic ] = " ’œÌ— ﬁ«·»...";
+                    Text[ greek ] = "~≈Ó·„˘„ﬁ ÒÔÙ˝˘Ì...";
+                    Text[ korean ] = "º≠Ωƒ∆ƒ¿œ ∫∏≥ª±‚...";
+                    Text[ turkish ] = "ﬁablonu d˝˛a aktar...";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_PRINT ;
+                    HelpId = HID_ORGANIZE_PRINT ;
+                    Text = "~Drucken" ;
+                    Text [ English ] = "~Print" ;
+                    Text [ norwegian ] = "~Skriv ut" ;
+                    Text [ italian ] = "Stam~pa" ;
+                    Text [ portuguese_brazilian ] = "~Imprimir" ;
+                    Text [ portuguese ] = "~Imprimir" ;
+                    Text [ finnish ] = "Tul~osta" ;
+                    Text [ danish ] = "~Udskriv" ;
+                    Text [ french ] = "~Imprimer" ;
+                    Text [ swedish ] = "Skriv ~ut" ;
+                    Text [ dutch ] = "Af~drukken" ;
+                    Text [ spanish ] = "~Imprimir" ;
+                    Text [ english_us ] = "~Print" ;
+                    Text[ chinese_simplified ] = "¥Ú”°(~P)";
+                    Text[ russian ] = "œÂ˜‡Ú¸";
+                    Text[ polish ] = "Drukuj";
+                    Text[ japanese ] = "àÛç¸(~P)";
+                    Text[ chinese_traditional ] = "¶C¶L(~P)";
+                    Text[ arabic ] = "ÿ»«⁄…";
+                    Text[ greek ] = "≈Í~Ù˝˘ÛÁ";
+                    Text[ korean ] = "¿Œº‚(~P)";
+                    Text[ turkish ] = "~Yazd˝r";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Identifier = ID_PRINTER_SETUP ;
+                    HelpId = HID_ORGANIZE_PRINTER_SETUP ;
+                    Text = "Druckereinstellun~gen..." ;
+                    Text [ English ] = "Printer ~Setup..." ;
+                    Text [ norwegian ] = "~Printer Setup..." ;
+                    Text [ italian ] = "I~mpostazioni stampante..." ;
+                    Text [ portuguese_brazilian ] = "~Printer Setup..." ;
+                    Text [ portuguese ] = "~ConfiguraÁ„o da impressora..." ;
+                    Text [ french ] = "~ParamËtres de l'imprimante..." ;
+                    Text [ dutch ] = "Printerinstellin~gen..." ;
+                    Text [ spanish ] = "~ConfiguraciÛn de la impresora..." ;
+                    Text [ danish ] = "Udskriftsindstillin~ger..." ;
+                    Text [ swedish ] = "~Skrivarinst‰llningar..." ;
+                    Text [ finnish ] = "~Printer Setup..." ;
+                    Text [ english_us ] = "Printer Settings..." ;
+                    Text[ chinese_simplified ] = "…Ë∂®¥Ú”°ª˙...";
+                    Text[ russian ] = "Õ‡ÒÚÓÈÍË ÔËÌÚÂ‡...";
+                    Text[ polish ] = "Ustawienia drukarki...";
+                    Text[ japanese ] = "Ãﬂÿ›¿ÇÃê›íË...";
+                    Text[ chinese_traditional ] = "≥]©w¶L™Ìæ˜...";
+                    Text[ arabic ] = "≈⁄œ«œ«  «·ÿ«»⁄…...";
+                    Text[ greek ] = "—ıËÏﬂÛÂÈÚ Â~ÍÙı˘Ùﬁ...";
+                    Text[ korean ] = "«¡∏∞≈Õ º≥¡§...";
+                    Text[ turkish ] = "Yaz˝c˝ ayarlar˝";
+                    Text[ language_user1 ] = " ";
+                };
+                MenuItem
+                {
+                    Separator = TRUE ;
+                };
+                MenuItem
+                {
+                    Identifier = ID_RESCAN ;
+                    HelpId = HID_ORGANIZE_RESCAN ;
+                    Text = "~Aktualisieren" ;
+                    Text [ English ] = "~Update" ;
+                    Text [ norwegian ] = "~Update" ;
+                    Text [ italian ] = "~Aggiorna" ;
+                    Text [ portuguese_brazilian ] = "~Atualizar" ;
+                    Text [ portuguese ] = "~Actualizar" ;
+                    Text [ finnish ] = "~Laske uudelleen" ;
+                    Text [ danish ] = "Opdater" ;
+                    Text [ french ] = "~Actualiser" ;
+                    Text [ swedish ] = "Upp~datera" ;
+                    Text [ dutch ] = "~Actualiseren" ;
+                    Text [ spanish ] = "~Actualizar" ;
+                    Text [ english_us ] = "Update" ;
+                    Text[ chinese_simplified ] = "∏¸–¬(~U)";
+                    Text[ russian ] = "Œ·ÌÓ‚ËÚ¸";
+                    Text[ polish ] = "Aktualizuj";
+                    Text[ japanese ] = "çXêV";
+                    Text[ chinese_traditional ] = "ßÛ∑s(~U)";
+                    Text[ arabic ] = " ÕœÌÀ";
+                    Text[ greek ] = "~≈ÌÁÏ›Ò˘ÛÁ";
+                    Text[ korean ] = "æ˜µ•¿Ã∆Æ";
+                    Text[ turkish ] = "G¸ncelle";
+                    Text[ language_user1 ] = " ";
+                };
+            };
+        };
+        Text[ chinese_simplified ] = "√¸¡Ó";
+        Text[ russian ] = " ÓÏ‡Ì‰˚";
+        Text[ polish ] = "Pole~cenia";
+        Text[ japanese ] = "∫œ›ƒﬁ";
+        Text[ chinese_traditional ] = "©R•O";
+        Text[ arabic ] = "√Ê«„—";
+        Text[ greek ] = "≈~ÌÙÔÎ›Ú";
+        Text[ korean ] = "∏Ì∑…";
+        Text[ turkish ] = "Komutlar";
+        Text[ language_user1 ] = " ";
+    };
+    Bitmap BMP_OPENED_FOLDER
+    {
+        File = "folderop.bmp" ;
+    };
+    Bitmap BMP_CLOSED_FOLDER
+    {
+        File = "foldercl.bmp" ;
+    };
+    Bitmap BMP_OPENED_DOC
+    {
+        File = "doccl.bmp" ;
+    };
+    Bitmap BMP_CLOSED_DOC
+    {
+        File = "doccl.bmp" ;
+    };
+    /*    FixedText FT_DEFAULT_TEMPLATE_LABEL
+    {
+        Pos = MAP_APPFONT ( 3 , 161 ) ;
+        Size = MAP_APPFONT ( 61 , 10 ) ;
+        Text = "Standardvorlage:" ;
+        Text [ English ] = "Default template:" ;
+        Text [ norwegian ] = "Standardmal:" ;
+        Text [ italian ] = "Modello standard:" ;
+        Text [ portuguese_brazilian ] = "Modelo padr„o:" ;
+        Text [ portuguese ] = "Modelo padr„o:" ;
+        Text [ finnish ] = "Oletusmalli:" ;
+        Text [ danish ] = "Standardskabelon:" ;
+        Text [ french ] = "ModËle par dÈfaut :" ;
+        Text [ swedish ] = "Standardmall:" ;
+        Text [ dutch ] = "Standaardsjabloon:" ;
+        Text [ spanish ] = "Plantilla est·ndar:" ;
+        Text [ english_us ] = "Default template:" ;
+    };
+    FixedText FT_DEFAULT_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 66 , 161 ) ;
+        Size = MAP_APPFONT ( 131 , 10 ) ;
+    };*/
+    Text[ chinese_simplified ] = "π‹¿ÌŒƒµµ—˘ Ω";
+    Text[ russian ] = "Œ„‡ÌËÁÓ‚‡Ú¸ ¯‡·ÎÓÌ˚ ‰ÓÍÛÏÂÌÚ‡";
+    Text[ polish ] = "Zarzπdzaj szablonami dokumentÛw";
+    Text[ japanese ] = "ƒﬁ∑≠“›ƒ√›Ãﬂ⁄∞ƒÇÃä«óù";
+    Text[ chinese_traditional ] = "∫ﬁ≤z§Â•ÛºÀ¶°";
+    Text[ arabic ] = "≈œ«—… ﬁÊ«·» «·„” ‰œ";
+    Text[ greek ] = "ƒÈ·˜ÂﬂÒÁÛÁ ÒÔÙ˝˘Ì Â„„Ò‹ˆ˘Ì";
+    Text[ korean ] = "πÆº≠ º≠Ωƒ∆ƒ¿œ ∞¸∏Æ";
+    Text[ turkish ] = "Belge ˛ablonlar˝";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

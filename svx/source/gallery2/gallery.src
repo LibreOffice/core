@@ -1,0 +1,2342 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gallery.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <sfx2/sfxsids.hrc>
+#include "helpid.hrc"
+#include "gallery.hrc"
+
+/******************************************************************************/
+
+DockingWindow RID_SVXDLG_GALLERYBROWSER
+{
+    HelpId = SID_GALLERY;
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 211, 150 ) ;
+    Text = "Gallery";
+    Text [ ENGLISH ] = "Gallery";
+    Sizeable = TRUE;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    Dockable = TRUE ;
+    EnableResizing = TRUE ;
+
+    Control GALLERY_BROWSER1
+    {
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 69, 150 ) ;
+        Border = FALSE;
+    };
+
+    Splitter GALLERY_SPLITTER
+    {
+        Pos = MAP_APPFONT ( 70 , 0 ) ;
+        Size = MAP_APPFONT ( 3, 150 ) ;
+        HScroll = TRUE;
+    };
+
+    Control GALLERY_BROWSER2
+    {
+        Pos = MAP_APPFONT ( 73, 0 ) ;
+        Size = MAP_APPFONT ( 138, 150 ) ;
+        Border = FALSE;
+    };
+};
+
+
+/******************************************************************************/
+
+TabDialog RID_SVXTABDLG_GALLERY
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Eigenschaften von " ;
+    Text [ ENGLISH ] = "Settings of " ;
+    Text [ dutch ] = "Eigenschappen van  " ;
+    Text [ english_us ] = "Properties of " ;
+    Text [ italian ] = "Proprietà di " ;
+    Text [ spanish ] = "Propiedades de  " ;
+    Text [ french ] = "Propriétés de " ;
+    Text [ swedish ] = "Egenskaper för  " ;
+    Text [ danish ] = "Egenskaber af " ;
+    Text [ portuguese ] = "Propriedades de " ;
+    Text [ portuguese_brazilian ] = "Eigenschaften von " ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
+                Text = "Allgemein" ;
+                Text [ ENGLISH ] = "Common" ;
+                Text [ english_us ] = "General" ;
+                Text [ dutch ] = "Algemeen" ;
+                Text [ italian ] = "Generale" ;
+                Text [ spanish ] = "General" ;
+                Text [ french ] = "Général" ;
+                Text [ swedish ] = "Allmän" ;
+                Text [ danish ] = "Generelt" ;
+                Text [ portuguese ] = "Geral" ;
+                Text [ portuguese_brazilian ] = "Allgemein" ;
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ russian ] = "Îáùèå";
+                Text[ polish ] = "Ogólne";
+                Text[ japanese ] = "‘S”Ê";
+                Text[ chinese_traditional ] = "¤@¯ë";
+                Text[ arabic ] = "ÚÇã";
+                Text[ dutch ] = "Algemeen";
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ greek ] = "ÃåíéêÜ";
+                Text[ korean ] = "ÀÏ¹İ";
+                Text[ turkish ] = "Genel";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "ÊôĞÔ: ";
+    Text[ russian ] = "Ñâîéñòâà ";
+    Text[ polish ] = "W³aœciwoœci  ";
+    Text[ japanese ] = "‘®« ";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G ";
+    Text[ arabic ] = "ÎÕÇÆÕ";
+    Text[ dutch ] = "Eigenschappen van  ";
+    Text[ chinese_simplified ] = "ÊôĞÔ: ";
+    Text[ greek ] = "Éäéüôçôåò ôïõ ";
+    Text[ korean ] = "µî·ÏÁ¤º¸ ";
+    Text[ turkish ] = "Özellikler: ";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+TabDialog RID_SVXTABDLG_GALLERYTHEME
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Text = "Eigenschaften von " ;
+    Text [ ENGLISH ] = "Settings of " ;
+    Text [ dutch ] = "Eigenschappen van  " ;
+    Text [ english_us ] = "Properties of " ;
+    Text [ italian ] = "Proprietà di " ;
+    Text [ spanish ] = "Propiedades de  " ;
+    Text [ french ] = "Propriétés de " ;
+    Text [ swedish ] = "Egenskaper för  " ;
+    Text [ danish ] = "Egenskaber af " ;
+    Text [ portuguese ] = "Propriedades de " ;
+    Text [ portuguese_brazilian ] = "Eigenschaften von " ;
+    Moveable = TRUE ;
+    TabControl 1
+    {
+        OutputSize = TRUE ;
+        PageList =
+        {
+            PageItem
+            {
+                Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
+                Text = "Allgemein" ;
+                Text [ ENGLISH ] = "Common" ;
+                Text [ english_us ] = "General" ;
+                Text [ dutch ] = "Algemeen" ;
+                Text [ italian ] = "Generale" ;
+                Text [ spanish ] = "General" ;
+                Text [ french ] = "Général" ;
+                Text [ swedish ] = "Allmän" ;
+                Text [ danish ] = "Generelt" ;
+                Text [ portuguese ] = "Geral" ;
+                Text [ portuguese_brazilian ] = "Allgemein" ;
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ russian ] = "Îáùèå";
+                Text[ polish ] = "Ogólne";
+                Text[ japanese ] = "‘S”Ê";
+                Text[ chinese_traditional ] = "¤@¯ë";
+                Text[ arabic ] = "ÚÇã";
+                Text[ dutch ] = "Algemeen";
+                Text[ chinese_simplified ] = "³£¹æ";
+                Text[ greek ] = "ÃåíéêÜ";
+                Text[ korean ] = "ÀÏ¹İ";
+                Text[ turkish ] = "Genel";
+                Text[ language_user1 ] = " ";
+            };
+            PageItem
+            {
+                Identifier = RID_SVXTABPAGE_GALLERYTHEME_FILES ;
+                Text = "Dateien" ;
+                Text [ ENGLISH ] = "Files" ;
+                Text [ english_us ] = "Files" ;
+                Text [ dutch ] = "Bestanden" ;
+                Text [ italian ] = "File" ;
+                Text [ spanish ] = "Archivos" ;
+                Text [ french ] = "Fichiers" ;
+                Text [ swedish ] = "Filer" ;
+                Text [ danish ] = "Filer" ;
+                Text [ portuguese ] = "Ficheiros" ;
+                Text [ portuguese_brazilian ] = "Dateien" ;
+                Text[ chinese_simplified ] = "ÎÄ¼ş";
+                Text[ russian ] = "Ôàéëû";
+                Text[ polish ] = "Pliki";
+                Text[ japanese ] = "Ì§²Ù";
+                Text[ chinese_traditional ] = "ÀÉ®×";
+                Text[ arabic ] = "ãáİÇÊ";
+                Text[ dutch ] = "Bestanden";
+                Text[ chinese_simplified ] = "ÎÄ¼ş";
+                Text[ greek ] = "Áñ÷åßá";
+                Text[ korean ] = "ÆÄÀÏµé";
+                Text[ turkish ] = "Dosyalar";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text[ chinese_simplified ] = "ÊôĞÔ: ";
+    Text[ russian ] = "Ñâîéñòâà ";
+    Text[ polish ] = "W³aœciwoœci  ";
+    Text[ japanese ] = "‘®« ";
+    Text[ chinese_traditional ] = "Äİ©Ê¡G ";
+    Text[ arabic ] = "ÎÕÇÆÕ";
+    Text[ dutch ] = "Eigenschappen van  ";
+    Text[ chinese_simplified ] = "ÊôĞÔ: ";
+    Text[ greek ] = "Éäéüôçôåò ôïõ ";
+    Text[ korean ] = "µî·ÏÁ¤º¸ ";
+    Text[ turkish ] = "Özellikler: ";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+TabPage RID_SVXTABPAGE_GALLERY_GENERAL
+{
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedImage FI_MS_IMAGE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 20 , 20 ) ;
+    };
+    Edit EDT_MS_NAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 194 , 12 ) ;
+    };
+    FixedLine FL_MS_GENERAL_FIRST
+    {
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 248 , 1 ) ;
+    };
+    FixedText FT_MS_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 39 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "Typ:" ;
+        Text [ English ] = "Type:" ;
+        LeftLabel = TRUE ;
+        Text [ english_us ] = "Type:" ;
+        Text [ italian ] = "Tipo:" ;
+        Text [ spanish ] = "Tipo:" ;
+        Text [ french ] = "Type :" ;
+        Text [ dutch ] = "Type:" ;
+        Text [ swedish ] = "Typ:" ;
+        Text [ danish ] = "Type:" ;
+        Text [ portuguese_brazilian ] = "Typ:" ;
+        Text [ portuguese ] = "Tipo:" ;
+        Text[ chinese_simplified ] = "ÀàĞÍ:";
+        Text[ russian ] = "Òèï:";
+        Text[ polish ] = "Typ:";
+        Text[ japanese ] = "í—Ş:";
+        Text[ chinese_traditional ] = "Ãş«¬¡G";
+        Text[ arabic ] = ":ÇáäæÚ";
+        Text[ dutch ] = "Type:";
+        Text[ chinese_simplified ] = "ÀàĞÍ:";
+        Text[ greek ] = "Ôığïò:";
+        Text[ korean ] = "ÇüÅÂ:";
+        Text[ turkish ] = "Tip:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MS_SHOW_TYPE
+    {
+        Pos = MAP_APPFONT ( 60 , 39 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+    };
+    FixedText FT_MS_PATH
+    {
+        Pos = MAP_APPFONT ( 6 , 52 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "Ort:" ;
+        Text [ English ] = "Path:" ;
+        LeftLabel = TRUE ;
+        Text [ english_us ] = "Location:" ;
+        Text [ italian ] = "Luogo:" ;
+        Text [ spanish ] = "Ubicación:" ;
+        Text [ french ] = "Emplacement :" ;
+        Text [ dutch ] = "Plaats:" ;
+        Text [ swedish ] = "Placering:" ;
+        Text [ danish ] = "Placering:" ;
+        Text [ portuguese_brazilian ] = "Ort:" ;
+        Text [ portuguese ] = "Local:" ;
+        Text[ chinese_simplified ] = "Î»ÖÃ:";
+        Text[ russian ] = "Ìåñòîíàõîæäåíèå:";
+        Text[ polish ] = "Lokalizacja:";
+        Text[ japanese ] = "êŠ:";
+        Text[ chinese_traditional ] = "¦ì¸m¡G";
+        Text[ arabic ] = ":ÇáãæŞÚ";
+        Text[ dutch ] = "Plaats:";
+        Text[ chinese_simplified ] = "Î»ÖÃ:";
+        Text[ greek ] = "Ôïğïèåóßá:";
+        Text[ korean ] = "Àå¼Ò:";
+        Text[ turkish ] = "Yer:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MS_SHOW_PATH
+    {
+        Pos = MAP_APPFONT ( 60 , 52 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+    };
+    FixedText FT_MS_CONTENT
+    {
+        Pos = MAP_APPFONT ( 6 , 65 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "Inhalt:" ;
+        Text [ English ] = "Content:" ;
+        LeftLabel = TRUE ;
+        Text [ english_us ] = "Contents:" ;
+        Text [ italian ] = "Contenuto:" ;
+        Text [ spanish ] = "Contenido:" ;
+        Text [ french ] = "Contenu :" ;
+        Text [ dutch ] = "Inhoud:" ;
+        Text [ swedish ] = "Innehåll:" ;
+        Text [ danish ] = "Indhold:" ;
+        Text [ portuguese_brazilian ] = "Inhalt:" ;
+        Text [ portuguese ] = "Conteúdo:" ;
+        Text[ chinese_simplified ] = "ÄÚÈİ:";
+        Text[ russian ] = "Ñîäåğæàíèå:";
+        Text[ polish ] = "Zawartoœæ:";
+        Text[ japanese ] = "“à—e:";
+        Text[ chinese_traditional ] = "¤º®e¡G";
+        Text[ arabic ] = ":ÇáãÍÊæíÇÊ";
+        Text[ dutch ] = "Inhoud:";
+        Text[ chinese_simplified ] = "ÄÚÈİ:";
+        Text[ greek ] = "Ğåñéå÷üìåíï:";
+        Text[ korean ] = "³»¿ë:";
+        Text[ turkish ] = "İçerik:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MS_SHOW_CONTENT
+    {
+        Pos = MAP_APPFONT ( 60 , 65 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+    };
+    FixedLine FL_MS_GENERAL_SECOND
+    {
+        Pos = MAP_APPFONT ( 6 , 81 ) ;
+        Size = MAP_APPFONT ( 248 , 1 ) ;
+    };
+    FixedText FT_MS_CREATEDATE
+    {
+        Pos = MAP_APPFONT ( 6 , 88 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "Erstellt am:" ;
+        Text [ English ] = "Created:" ;
+        LeftLabel = TRUE ;
+        Text [ english_us ] = "Created:" ;
+        Text [ italian ] = "Creato il:" ;
+        Text [ spanish ] = "Creado el:" ;
+        Text [ french ] = "Créé le :" ;
+        Text [ dutch ] = "Gemaakt op:" ;
+        Text [ swedish ] = "Skapad den:" ;
+        Text [ danish ] = "Oprettet den:" ;
+        Text [ portuguese_brazilian ] = "Erstellt am:" ;
+        Text [ portuguese ] = "Criado em:" ;
+        Text[ chinese_simplified ] = "½¨Á¢ÈÕÆÚ:";
+        Text[ russian ] = "Äàòà ñîçäàíèÿ:";
+        Text[ polish ] = "Utworzono:";
+        Text[ japanese ] = "ì¬“ú:";
+        Text[ chinese_traditional ] = "«Ø¥ß¤é´Á¡G";
+        Text[ arabic ] = ":ÊÇÑíÎ ÇáÅäÔÇÁ";
+        Text[ dutch ] = "Gemaakt op:";
+        Text[ chinese_simplified ] = "½¨Á¢ÈÕÆÚ:";
+        Text[ greek ] = "ÄçìéïõñãŞèçêå ôç:";
+        Text[ korean ] = "ÀÛ¼º³¯Â¥:";
+        Text[ turkish ] = "Oluşturma tarihi:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MS_SHOW_CREATEDATE
+    {
+        Pos = MAP_APPFONT ( 60 , 88 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+    };
+    FixedText FT_MS_CHANGEDATE
+    {
+        Pos = MAP_APPFONT ( 6 , 101 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Geändert am: : Geõndert am: */
+        /* ### ACHTUNG: Neuer Text in Resource? Geändert am: : Geõndert am: */
+        Text = "Geändert am:" ;
+        Text [ English ] = "Changed:" ;
+        LeftLabel = TRUE ;
+        Text [ dutch ] = "Gewijzigd op:" ;
+        Text [ english_us ] = "Modified:" ;
+        Text [ italian ] = "Modificato il:" ;
+        Text [ spanish ] = "Modificado el:" ;
+        Text [ french ] = "Modifié le :" ;
+        Text [ swedish ] = "Ändrad den:" ;
+        Text [ danish ] = "Ændret den:" ;
+        Text [ portuguese ] = "Alterado em:" ;
+        Text [ portuguese_brazilian ] = "Geändert am:" ;
+        Text[ chinese_simplified ] = "¸ü¸ÄÈÕÆÚ:";
+        Text[ russian ] = "Äàòà èçìåíåíèÿ:";
+        Text[ polish ] = "Zmieniono:";
+        Text[ japanese ] = "•ÏX“ú:";
+        Text[ chinese_traditional ] = "ÅÜ§ó¤é´Á¡G";
+        Text[ arabic ] = ":ÊÇÑíÎ ÇáÊÚÏíá";
+        Text[ dutch ] = "Gewijzigd op:";
+        Text[ chinese_simplified ] = "¸ü¸ÄÈÕÆÚ:";
+        Text[ greek ] = "Ôñïğïğïßçóç:";
+        Text[ korean ] = "º¯°æ ³¯Â¥:";
+        Text[ turkish ] = "Değişiklik tarihi:";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_MS_SHOW_CHANGEDATE
+    {
+        Pos = MAP_APPFONT ( 60 , 101 ) ;
+        Size = MAP_APPFONT ( 194 , 10 ) ;
+    };
+};
+
+/******************************************************************************/
+
+TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
+{
+    HelpId = HID_GALLERY_BROWSER ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_FILETYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 35 , 10 ) ;
+        Text = "Dateityp" ;
+        Text [ ENGLISH ] = "Filetype" ;
+        Text [ english_us ] = "File Type" ;
+        Text [ italian ] = "Tipo file" ;
+        Text [ spanish ] = "Tipo de archivo" ;
+        Text [ french ] = "Type" ;
+        Text [ dutch ] = "Bestandstype" ;
+        Text [ swedish ] = "Filtyp" ;
+        Text [ danish ] = "Filtype" ;
+        Text [ portuguese_brazilian ] = "Dateityp" ;
+        Text [ portuguese ] = "Tipo de ficheiro" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
+        Text[ russian ] = "Òèï ôàéëà";
+        Text[ polish ] = "Typ pliku";
+        Text[ japanese ] = "Ì§²Ù‚Ìí—Ş";
+        Text[ chinese_traditional ] = "ÀÉ®×Ãş«¬";
+        Text[ arabic ] = "äæÚ Çáãáİ";
+        Text[ dutch ] = "Bestandstype";
+        Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
+        Text[ greek ] = "Ôığïò áñ÷åßïõ";
+        Text[ korean ] = "ÆÄÀÏ ÇüÅÂ";
+        Text[ turkish ] = "Dosya tipi";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CBB_FILETYPE
+    {
+        Pos = MAP_APPFONT ( 44 , 6 ) ;
+        Size = MAP_APPFONT ( 134 , 69 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+    };
+    MultiListBox LBX_FOUND
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 172 , 106 ) ;
+        TabStop = TRUE ;
+        SimpleMode = TRUE ;
+    };
+    PushButton BTN_SEARCH
+    {
+        Pos = MAP_APPFONT ( 184 , 6 ) ;
+        Size = MAP_APPFONT ( 70 , 14 ) ;
+        Text = "Dateien su~chen..." ;
+        Text [ ENGLISH ] = "~Search files..." ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Find files..." ;
+        Text [ italian ] = "~Cerca file..." ;
+        Text [ spanish ] = "Bus~car archivos..." ;
+        Text [ french ] = "~Recherche de fichiers..." ;
+        Text [ dutch ] = "~Bestanden zoeken..." ;
+        Text [ swedish ] = "Sö~k filer..." ;
+        Text [ danish ] = "Søg filer..." ;
+        Text [ portuguese_brazilian ] = "Dateien su~chen..." ;
+        Text [ portuguese ] = "~Localizar ficheiros..." ;
+        Text[ chinese_simplified ] = "ËÑÑ°ÎÄ¼ş(~F)...";
+        Text[ russian ] = "Íàéòè ôàéëû...";
+        Text[ polish ] = "Szukaj plików...";
+        Text[ japanese ] = "Ì§²Ù‚ÌŒŸõ(~F)...";
+        Text[ chinese_traditional ] = "´M§äÀÉ®×(~F)...";
+        Text[ arabic ] = "...ÈÍË Úä ãáİÇÊ";
+        Text[ dutch ] = "~Bestanden zoeken...";
+        Text[ chinese_simplified ] = "ËÑÑ°ÎÄ¼ş(~F)...";
+        Text[ greek ] = "Åıñåóç áñ÷åßùí...";
+        Text[ korean ] = "ÆÄÀÏ Ã£±â(~F)...";
+        Text[ turkish ] = "Dosyayı bul";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_TAKE
+    {
+        Pos = MAP_APPFONT ( 184 , 23 ) ;
+        Size = MAP_APPFONT ( 70 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+        Text = "~Hinzufügen" ;
+        Text [ ENGLISH ] = "~Add" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "Toe~voegen" ;
+        Text [ english_us ] = "~Add" ;
+        Text [ italian ] = "A~ggiungi" ;
+        Text [ spanish ] = "~Añadir" ;
+        Text [ french ] = "~Ajouter" ;
+        Text [ swedish ] = "~Lägg till" ;
+        Text [ danish ] = "Tilføj" ;
+        Text [ portuguese_brazilian ] = "~Hinzufügen" ;
+        Text [ portuguese ] = "~Adicionar" ;
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ russian ] = "Äîáàâèòü";
+        Text[ polish ] = "Dodaj";
+        Text[ japanese ] = "’Ç‰Á(~A)";
+        Text[ chinese_traditional ] = "¥[¤J(~A)";
+        Text[ arabic ] = "ÅÖÇİÉ";
+        Text[ dutch ] = "Toe~voegen";
+        Text[ chinese_simplified ] = "ĞÂÔö(~A)";
+        Text[ greek ] = "ĞñïóèŞêç";
+        Text[ korean ] = "Ãß°¡(~A)";
+        Text[ turkish ] = "Ekle";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_TAKEALL
+    {
+        Pos = MAP_APPFONT ( 184 , 40 ) ;
+        Size = MAP_APPFONT ( 70 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Alle hinzufügen : ~Alle hinzuf³gen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Alle hinzufügen : ~Alle hinzuf³gen */
+        Text = "~Alle hinzufügen" ;
+        Text [ ENGLISH ] = "A~dd all" ;
+        TabStop = TRUE ;
+        Text [ dutch ] = "~Alle toevoegen" ;
+        Text [ english_us ] = "A~dd All" ;
+        Text [ italian ] = "Aggiungi tutti" ;
+        Text [ spanish ] = "Añadir ~todos" ;
+        Text [ french ] = "Ajouter ~tout" ;
+        Text [ swedish ] = "Lägg till ~alla" ;
+        Text [ danish ] = "Tilføj alle" ;
+        Text [ portuguese_brazilian ] = "~Alle hinzufügen" ;
+        Text [ portuguese ] = "~A~dicionar todos" ;
+        Text[ chinese_simplified ] = "È«²¿¼ÓÈë(~D)";
+        Text[ russian ] = "Äîáàâèòü âñå";
+        Text[ polish ] = "Dodaj wszystkie";
+        Text[ japanese ] = "‚·‚×‚Ä’Ç‰Á(~D)";
+        Text[ chinese_traditional ] = "¥ş³¡¥[¤J(~D)";
+        Text[ arabic ] = "ÅÖÇİÉ Çáßá";
+        Text[ dutch ] = "~Alle toevoegen";
+        Text[ chinese_simplified ] = "È«²¿¼ÓÈë(~D)";
+        Text[ greek ] = "ĞñïóèŞêç üëùí";
+        Text[ korean ] = "¸ğµÎ Ãß°¡(~D)";
+        Text[ turkish ] = "Tümünü ekle";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CBX_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 184 , 57 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
+        Text = "V~orschau" ;
+        Text [ ENGLISH ] = "Pr~eview" ;
+        Text [ NORWEGIAN ] = "Pr~eview" ;
+        Text [ DANISH ] = "Eksempel" ;
+        Text [ ENGLISH_US ] = "Pr~eview" ;
+        Text [ SPANISH ] = "Pr~evisualización" ;
+        Text [ FINNISH ] = "~Esikatselu" ;
+        Text [ FRENCH ] = "~Aperçu" ;
+        Text [ ITALIAN ] = "Ant~eprima" ;
+        Text [ DUTCH ] = "~Voorbeeld" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Ex~aminar" ;
+        Text [ SWEDISH ] = "~Förhandsvisning" ;
+        Text [ PORTUGUESE ] = "Previsualizar" ;
+        Text[ chinese_simplified ] = "Ô¤ÊÓ(~E)";
+        Text[ russian ] = "Ïğîñìîòğ";
+        Text[ polish ] = "Podgl¹d";
+        Text[ japanese ] = "ÌßÚËŞ­°(~E)";
+        Text[ chinese_traditional ] = "¹wÄı(~E)";
+        Text[ arabic ] = "ãÚÇíäÉ";
+        Text[ dutch ] = "~Voorbeeld";
+        Text[ chinese_simplified ] = "Ô¤ÊÓ(~E)";
+        Text[ greek ] = "Ğñïåğéóêüğçóç";
+        Text[ korean ] = "¹Ì¸® º¸±â(~E)";
+        Text[ turkish ] = "Ön izleme";
+        Text[ language_user1 ] = " ";
+    };
+    Window WND_BRSPRV
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 184 , 72 ) ;
+        Size = MAP_APPFONT ( 70 , 57 ) ;
+    };
+    PushButton BTN_MADDIN1
+    {
+        Pos = MAP_APPFONT ( 220 , 63 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Maddin1" ;
+        Text [ ENGLISH ] = "Maddin1" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Maddin1" ;
+        Text [ italian ] = "Maddin1" ;
+        Text [ spanish ] = "Maddin1" ;
+        Text [ french ] = "Maddin1" ;
+        Text [ dutch ] = "Maddin1" ;
+        Text [ swedish ] = "Maddin1" ;
+        Text [ danish ] = "Maddin1" ;
+        Text [ portuguese_brazilian ] = "Maddin1" ;
+        Text [ portuguese ] = "Maddin1" ;
+        Text[ chinese_simplified ] = "Maddin1";
+        Text[ russian ] = "Maddin1";
+        Text[ polish ] = "Maddin1";
+        Text[ japanese ] = "Maddin1";
+        Text[ chinese_traditional ] = "Maddin1";
+        Text[ arabic ] = "Maddin1";
+        Text[ dutch ] = "Maddin1";
+        Text[ chinese_simplified ] = "Maddin1";
+        Text[ greek ] = "Maddin1";
+        Text[ korean ] = "Maddin1";
+        Text[ turkish ] = "Maddin1";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_MADDIN2
+    {
+        Pos = MAP_APPFONT ( 220 , 80 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Maddin2" ;
+        Text [ ENGLISH ] = "Maddin2" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Maddin2" ;
+        Text [ italian ] = "Maddin2" ;
+        Text [ spanish ] = "Maddin2" ;
+        Text [ french ] = "Maddin2" ;
+        Text [ dutch ] = "Maddin2" ;
+        Text [ swedish ] = "Maddin2" ;
+        Text [ danish ] = "Maddin2" ;
+        Text [ portuguese_brazilian ] = "Maddin2" ;
+        Text [ portuguese ] = "Maddin2" ;
+        Text[ chinese_simplified ] = "Maddin2";
+        Text[ russian ] = "Maddin2";
+        Text[ polish ] = "Maddin2";
+        Text[ japanese ] = "Maddin2";
+        Text[ chinese_traditional ] = "Maddin2";
+        Text[ arabic ] = "Maddin2";
+        Text[ dutch ] = "Maddin2";
+        Text[ chinese_simplified ] = "Maddin2";
+        Text[ greek ] = "Maddin2";
+        Text[ korean ] = "Maddin2";
+        Text[ turkish ] = "Maddin2";
+        Text[ language_user1 ] = " ";
+    };
+};
+
+/******************************************************************************/
+
+ModalDialog RID_SVXDLG_GALLERY_TITLE
+{
+    HelpId = HID_GALLERY_TITLE;
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 168 , 63 ) ;
+    Text = "Titel eingeben" ;
+    Text [ ENGLISH ] = "Edit title" ;
+    Text [ english_us ] = "Enter title" ;
+    Moveable = TRUE ;
+
+    OkButton BTN_OK
+    {
+        DefButton = TRUE ;
+        Pos = MAP_APPFONT ( 112 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 112 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 112 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+
+    GroupBox GRP_TITLE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 100 , 30 ) ;
+        Text = "Titel" ;
+        Text [ ENGLISH ] = "Title" ;
+        Text [ english_us ] = "Title" ;
+        Text[ portuguese ] = "Título";
+        Text[ russian ] = "Çàãîëîâîê";
+        Text[ greek ] = "Ôßôëïò";
+        Text[ dutch ] = "Titel";
+        Text[ french ] = "Titre";
+        Text[ spanish ] = "Título";
+        Text[ italian ] = "Titolo";
+        Text[ danish ] = "Titel";
+        Text[ swedish ] = "Titel";
+        Text[ polish ] = "Tytu³";
+        Text[ portuguese_brazilian ] = "Title";
+        Text[ japanese ] = "À²ÄÙ";
+        Text[ korean ] = "Á¦¸ñ";
+        Text[ chinese_simplified ] = "±êÌâ";
+        Text[ chinese_traditional ] = "¼ĞÃD";
+        Text[ arabic ] = "ÚäæÇä";
+        Text[ turkish ] = "Başlık";
+    };
+    Edit EDT_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 18 ) ;
+        Size = MAP_APPFONT ( 88, 12 ) ;
+    };
+    Text[ portuguese ] = "Indicar título";
+    Text[ russian ] = "Ââåñòè çàãîëîâîê";
+    Text[ greek ] = "ÅéóáãùãŞ ôßôëïõ";
+    Text[ dutch ] = "Titel invoeren";
+    Text[ french ] = "Saisir le titre";
+    Text[ spanish ] = "Introducir título";
+    Text[ italian ] = "Indicazione titolo";
+    Text[ danish ] = "Indtast titel";
+    Text[ swedish ] = "Mata in titel";
+    Text[ polish ] = "Wpisz tytu³";
+    Text[ portuguese_brazilian ] = "Edit title";
+    Text[ japanese ] = "À²ÄÙ‚Ì“ü—Í";
+    Text[ korean ] = "Á¦¸ñ ÀÔ·Â";
+    Text[ chinese_simplified ] = "ÊäÈë±êÌâ";
+    Text[ chinese_traditional ] = "Áä¤J¼ĞÃD";
+    Text[ arabic ] = "ÅÏÎÇá ÇáÚäæÇä";
+    Text[ turkish ] = "Başlık gir";
+};
+
+/******************************************************************************/
+
+ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
+{
+    HelpId = HID_GALLERY_SEARCH ;
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 124 , 86 ) ;
+    Text = "Suchen" ;
+    Text [ ENGLISH ] = "Searching" ;
+    Moveable = TRUE ;
+    GroupBox GRP_SEARCH_DIR
+    {
+        Pos = MAP_APPFONT ( 6 , 33 ) ;
+        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Text = "Verzeichnis" ;
+        Text [ ENGLISH ] = "Directory" ;
+        Text [ dutch ] = "Map" ;
+        Text [ english_us ] = "Directory" ;
+        Text [ italian ] = "Cartella" ;
+        Text [ spanish ] = "Directorio" ;
+        Text [ french ] = "Répertoire" ;
+        Text [ swedish ] = "Katalog" ;
+        Text [ danish ] = "Bibliotek" ;
+        Text [ portuguese ] = "Directório" ;
+        Text [ portuguese_brazilian ] = "Verzeichnis" ;
+        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ russian ] = "Êàòàëîã";
+        Text[ polish ] = "Spis";
+        Text[ japanese ] = "ÃŞ¨Ú¸ÄØ";
+        Text[ chinese_traditional ] = "¥Ø¿ı";
+        Text[ arabic ] = "ÇáÏáíá";
+        Text[ dutch ] = "Map";
+        Text[ chinese_simplified ] = "Ä¿Â¼";
+        Text[ greek ] = "ÊáôÜëïãïò";
+        Text[ korean ] = "µğ·ºÅÍ¸®";
+        Text[ turkish ] = "Dizin";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SEARCH_DIR
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 37 , 66 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_SEARCH_TYPE
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Text = "Dateityp" ;
+        Text [ ENGLISH ] = "Type of file" ;
+        Text [ english_us ] = "File type" ;
+        Text [ italian ] = "Tipo di file" ;
+        Text [ spanish ] = "Tipo de archivo" ;
+        Text [ french ] = "Type de fichier" ;
+        Text [ dutch ] = "Bestandstype" ;
+        Text [ swedish ] = "Filtyp" ;
+        Text [ danish ] = "Filtype" ;
+        Text [ portuguese_brazilian ] = "Dateityp" ;
+        Text [ portuguese ] = "Tipo de ficheiro" ;
+        Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
+        Text[ russian ] = "Òèï ôàéëà";
+        Text[ polish ] = "Typ pliku";
+        Text[ japanese ] = "Ì§²Ù‚Ìí—Ş";
+        Text[ chinese_traditional ] = "ÀÉ®×Ãş«¬";
+        Text[ arabic ] = "äæÚ Çáãáİ";
+        Text[ dutch ] = "Bestandstype";
+        Text[ chinese_simplified ] = "ÎÄ¼şÀàĞÍ";
+        Text[ greek ] = "Ôığïò áñ÷åßïõ";
+        Text[ korean ] = "ÆÄÀÏ ÇüÅÂ";
+        Text[ turkish ] = "Dosya tipi";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SEARCH_TYPE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+    };
+    Text [ english_us ] = "Search" ;
+    Text [ italian ] = "Cerca" ;
+    Text [ spanish ] = "Buscar" ;
+    Text [ french ] = "Rechercher" ;
+    Text [ dutch ] = "Zoeken" ;
+    Text [ swedish ] = "Sök" ;
+    Text [ danish ] = "Søg" ;
+    Text [ portuguese ] = "Procurar" ;
+    Text [ portuguese_brazilian ] = "Suchen" ;
+    Text[ chinese_simplified ] = "ËÑÑ°";
+    Text[ russian ] = "Íàéòè";
+    Text[ polish ] = "Szukaj";
+    Text[ japanese ] = "ŒŸõ";
+    Text[ chinese_traditional ] = "´M§ä";
+    Text[ arabic ] = "ÈÍË";
+    Text[ dutch ] = "Zoeken";
+    Text[ chinese_simplified ] = "ËÑÑ°";
+    Text[ greek ] = "ÁíáæŞôçóç";
+    Text[ korean ] = "Ã£±â";
+    Text[ turkish ] = "Ara";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
+{
+    HelpId = HID_GALLERY_APPLY ;
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 124 , 56 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
+    /* ### ACHTUNG: Neuer Text in Resource? Übernehmen : šbernehmen */
+    Text = "Übernehmen" ;
+    Text [ ENGLISH ] = "Apply" ;
+    Moveable = TRUE ;
+    GroupBox GRP_TAKE_PROGRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Text = "Datei" ;
+        Text [ ENGLISH ] = "File" ;
+        Text [ dutch ] = "Bestand" ;
+        Text [ english_us ] = "File" ;
+        Text [ italian ] = "File" ;
+        Text [ spanish ] = "Archivo" ;
+        Text [ french ] = "Fichier" ;
+        Text [ swedish ] = "Fil" ;
+        Text [ danish ] = "Fil" ;
+        Text [ portuguese ] = "Ficheiro" ;
+        Text [ portuguese_brazilian ] = "Datei" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ russian ] = "Ôàéë";
+        Text[ polish ] = "Plik";
+        Text[ japanese ] = "Ì§²Ù";
+        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ arabic ] = "ãáİ";
+        Text[ dutch ] = "Bestand";
+        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ greek ] = "Áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ";
+        Text[ turkish ] = "Dosya";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TAKE_FILE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 37 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Apply" ;
+    Text [ italian ] = "Applica" ;
+    Text [ spanish ] = "Aplicar" ;
+    Text [ french ] = "Appliquer" ;
+    Text [ dutch ] = "Overnemen" ;
+    Text [ swedish ] = "Överta" ;
+    Text [ danish ] = "Anvend" ;
+    Text [ portuguese ] = "Aplicar" ;
+    Text [ portuguese_brazilian ] = "Übernehmen" ;
+    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ russian ] = "Ïğèíÿòü";
+    Text[ polish ] = "Zastosuj";
+    Text[ japanese ] = "“K—p";
+    Text[ chinese_traditional ] = "¨Ï¥Î";
+    Text[ arabic ] = "ÊØÈíŞ";
+    Text[ dutch ] = "Overnemen";
+    Text[ chinese_simplified ] = "Ì×ÓÃ";
+    Text[ greek ] = "ÅöáñìïãŞ";
+    Text[ korean ] = "Àû¿ë";
+    Text[ turkish ] = "Kullan";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
+{
+    HelpId = HID_GALLERY_ACTUALIZE ;
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 124 , 56 ) ;
+    Text = "Aktualisieren" ;
+    Text [ ENGLISH ] = "Actualize" ;
+    Text [ english_us ] = "Update" ;
+    Moveable = TRUE ;
+    GroupBox GRP_ACTUALIZE_PROGRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 27 ) ;
+        Text = "Datei" ;
+        Text [ ENGLISH ] = "File" ;
+        Text [ dutch ] = "Bestand" ;
+        Text [ english_us ] = "File" ;
+        Text [ italian ] = "File" ;
+        Text [ spanish ] = "Archivo" ;
+        Text [ french ] = "Fichier" ;
+        Text [ swedish ] = "Fil" ;
+        Text [ danish ] = "Fil" ;
+        Text [ portuguese_brazilian ] = "Datei" ;
+        Text [ portuguese ] = "Ficheiro" ;
+        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ russian ] = "Ôàéë";
+        Text[ polish ] = "Plik";
+        Text[ japanese ] = "Ì§²Ù";
+        Text[ chinese_traditional ] = "ÀÉ®×";
+        Text[ arabic ] = "ãáİ";
+        Text[ dutch ] = "Bestand";
+        Text[ chinese_simplified ] = "ÎÄ¼ş";
+        Text[ greek ] = "Áñ÷åßï";
+        Text[ korean ] = "ÆÄÀÏ";
+        Text[ turkish ] = "Dosya";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_ACTUALIZE_FILE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 37 , 36 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ italian ] = "Aggiorna" ;
+    Text [ spanish ] = "Actualizar" ;
+    Text [ french ] = "Actualiser" ;
+    Text [ dutch ] = "Actualiseren" ;
+    Text [ swedish ] = "Uppdatera" ;
+    Text [ danish ] = "Opdater" ;
+    Text [ portuguese_brazilian ] = "Aktualisieren" ;
+    Text [ portuguese ] = "Actualizar" ;
+    Text[ chinese_simplified ] = "¸üĞÂ";
+    Text[ russian ] = "Îáíîâèòü";
+    Text[ polish ] = "Aktualizuj";
+    Text[ japanese ] = "XV";
+    Text[ chinese_traditional ] = "§ó·s";
+    Text[ arabic ] = "ÊÍÏíË";
+    Text[ dutch ] = "Actualiseren";
+    Text[ chinese_simplified ] = "¸üĞÂ";
+    Text[ greek ] = "Åíçìİñùóç";
+    Text[ korean ] = "¾÷µ¥ÀÌÆ®";
+    Text[ turkish ] = "Güncelle";
+    Text[ language_user1 ] = " ";
+};
+
+ModalDialog RID_SVXDLG_GALLERY_THEMEID
+{
+    OutputSize = TRUE ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 63 ) ;
+    Text = "Themen-ID" ;
+    Text [ ENGLISH ] = "Theme ID" ;
+    Text [ english_us ] = "Theme ID" ;
+    Moveable = TRUE ;
+    OkButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 124 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 124 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GRP_ID
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 112 , 54 ) ;
+        Text = "ID" ;
+        Text[ ENGLISH ] = "ID";
+        Text[ english_us ] = "ID";
+        Text[ portuguese ] = "ID";
+        Text[ russian ] = "ID";
+        Text[ dutch ] = "ID";
+        Text[ french ] = "ID";
+        Text[ spanish ] = "ID";
+        Text[ italian ] = "ID";
+        Text[ danish ] = "ID";
+        Text[ swedish ] = "ID";
+        Text[ polish ] = "ID";
+        Text[ portuguese_brazilian ] = "ID";
+        Text[ japanese ] = "ID";
+        Text[ chinese_simplified ] = "ID";
+        Text[ chinese_traditional ] = "ID";
+        Text[ arabic ] = "ÊÚÑíİ";
+        Text[ dutch ] = "ID";
+        Text[ chinese_simplified ] = "ID";
+        Text[ greek ] = "Ôáõôüôçôá (ID)";
+        Text[ korean ] = "ID";
+        Text[ turkish ] = "Tanıtıcı";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_RESNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        HScroll = TRUE ;
+        VScroll = TRUE ;
+    };
+    Text[ portuguese ] = "ID Tema";
+    Text[ russian ] = "ID Òåìû";
+    Text[ dutch ] = "Onderwerp ID";
+    Text[ french ] = "Thème ID";
+    Text[ spanish ] = "Temas ID";
+    Text[ italian ] = "ID tema";
+    Text[ danish ] = "Emne-ID";
+    Text[ swedish ] = "Tema ID";
+    Text[ polish ] = "Identyfikator tematów";
+    Text[ portuguese_brazilian ] = "Theme ID";
+    Text[ japanese ] = "Ã°ÏID";
+    Text[ chinese_simplified ] = "Ö÷Ìâ - ID";
+    Text[ chinese_traditional ] = "¥DÃD - ID";
+    Text[ arabic ] = "ÊÚÑíİ ÇáãæÇÖíÚ";
+    Text[ dutch ] = "Onderwerp ID";
+    Text[ chinese_simplified ] = "Ö÷Ìâ - ID";
+    Text[ greek ] = "Ôáõôüôçôá (ID) èİìáôïò";
+    Text[ korean ] = "ÁÖÁ¦ ID";
+    Text[ turkish ] = "Konu tanıtıcısı";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+CheckBox RID_SVXDLG_GALLERY_CBX
+{
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 120 , 12 ) ;
+    Text = "~Unterverzeichnisse";
+    Text [ ENGLISH ] = "~Subdirectories" ;
+    TabStop = TRUE ;
+    Text [ dutch ] = "~Submappen" ;
+    Text [ english_us ] = "~Subdirectories" ;
+    Text [ italian ] = "~Sottocartelle" ;
+    Text [ spanish ] = "~Subdirectorios" ;
+    Text [ french ] = "~Sous-répertoires" ;
+    Text [ swedish ] = "~Underordnade kataloger" ;
+    Text [ danish ] = "Underbiblioteker" ;
+    Text [ portuguese_brazilian ] = "~Unterverzeichnisse" ;
+    Text [ portuguese ] = "~Subdirectórios" ;
+    Text[ chinese_simplified ] = "·ÖÄ¿Â¼(~S)";
+    Text[ russian ] = "Ïîäêàòàëîãè";
+    Text[ polish ] = "Podkatalogi";
+    Text[ japanese ] = "»ÌŞÃŞ¨Ú¸ÄØ(~S)";
+    Text[ chinese_traditional ] = "¤À¥Ø¿ı(~S)";
+    Text[ arabic ] = "ÏáÇÆá İÑÚíÉ";
+    Text[ dutch ] = "~Submappen";
+    Text[ chinese_simplified ] = "·ÖÄ¿Â¼(~S)";
+    Text[ greek ] = "ÕğïêáôÜëïãïé";
+    Text[ korean ] = "¼­ºêµğ·ºÅä¸®(~S)";
+    Text[ turkish ] = "Alt dizinler";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
+{
+    Text = "Aktualisieren" ;
+    Text [ ENGLISH ] = "Update";
+    Text [ dutch ] = "Actualiseren";
+    Text [ english_us ] = "Update";
+    Text [ italian ] = "Aggiorna";
+    Text [ spanish ] = "Actualizar";
+    Text [ french ] = "Mise à jour";
+    Text [ swedish ] = "Uppdatera";
+    Text [ danish ] = "Opdater";
+    Text [ portuguese ] = "Actualizar";
+    Text [ portuguese_brazilian ] = "Aktualisieren";
+    Text[ chinese_simplified ] = "¸üĞÂ";
+    Text[ russian ] = "Îáíîâèòü";
+    Text[ polish ] = "Aktualizuj";
+    Text[ japanese ] = "XV";
+    Text[ chinese_traditional ] = "§ó·s";
+    Text[ arabic ] = "ÊÍÏíË";
+    Text[ dutch ] = "Actualiseren";
+    Text[ chinese_simplified ] = "¸üĞÂ";
+    Text[ greek ] = "Åíçìİñùóç";
+    Text[ korean ] = "¾÷µ¥ÀÌÆ®";
+    Text[ turkish ] = "Güncelle";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_FOPENERROR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Datei kann nicht geöffnet werden : Diese Datei kann nicht ge÷ffnet werden */
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Datei kann nicht geöffnet werden : Diese Datei kann nicht ge÷ffnet werden */
+    Text = "Diese Datei kann nicht geöffnet werden" ;
+    Text [ ENGLISH ] = "This file can not be opened" ;
+    Text [ dutch ] = "Dit bestand kan niet worden geopend" ;
+    Text [ english_us ] = "This file cannot be opened" ;
+    Text [ italian ] = "Il file non può essere aperto" ;
+    Text [ spanish ] = "No se puede abrir este archivo" ;
+    Text [ french ] = "Impossible d'ouvrir ce fichier." ;
+    Text [ swedish ] = "Denna fil kan inte öppnas" ;
+    Text [ danish ] = "Denne fil kan ikke åbnes" ;
+    Text [ portuguese ] = "Impossível abrir este ficheiro." ;
+    Text [ portuguese_brazilian ] = "Diese Datei kann nicht geöffnet werden" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£";
+    Text[ russian ] = "Îòêğûòü ıòîò ôàéë íå óäàåòñÿ";
+    Text[ polish ] = "Pliku nie mo¿na otworzyæ";
+    Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ğŠJ‚­‚±‚Æ‚Í‚Å‚«‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C";
+    Text[ arabic ] = "áÇ íãßä İÊÍ åĞÇ Çáãáİ";
+    Text[ dutch ] = "Dit bestand kan niet worden geopend";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß áõôü ôï áñ÷åßï";
+    Text[ korean ] = "ÀÌ ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù";
+    Text[ turkish ] = "Bu dosya açılamıyor";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_NOFILES
+{
+    Text = "<Keine Dateien>" ;
+    Text [ ENGLISH ] = "<No files>" ;
+    Text [ dutch ] = "<Geen bestanden>" ;
+    Text [ english_us ] = "<No files>" ;
+    Text [ italian ] = "<nessun file>" ;
+    Text [ spanish ] = "<Ningún archivo>" ;
+    Text [ french ] = "<Aucun fichier>" ;
+    Text [ swedish ] = "<Inga filer>" ;
+    Text [ danish ] = "<Ingen filer>" ;
+    Text [ portuguese ] = "<Sem ficheiros>" ;
+    Text [ portuguese_brazilian ] = "<Keine Dateien>" ;
+    Text[ chinese_simplified ] = "<ÎŞÎÄ¼ş>";
+    Text[ russian ] = "<Áåç ôàéëîâ>";
+    Text[ polish ] = "<Brak plików>";
+    Text[ japanese ] = "<Ì§²Ù ‚È‚µ>";
+    Text[ chinese_traditional ] = "<µLÀÉ®×>";
+    Text[ arabic ] = "<ÈÏæä ãáİÇÊ>";
+    Text[ dutch ] = "<Geen bestanden>";
+    Text[ chinese_simplified ] = "<ÎŞÎÄ¼ş>";
+    Text[ greek ] = "<Êáíİíá áñ÷åßï>";
+    Text[ korean ] = "<ÆÄÀÏ¾øÀ½>";
+    Text[ turkish ] = "<Dosya yok>";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_NOTHEME
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Der Themenname ist ungültig! : Der Themenname ist ung³ltig! */
+    /* ### ACHTUNG: Neuer Text in Resource? Der Themenname ist ungültig! : Der Themenname ist ung³ltig! */
+    Text = "Der Themenname ist ungültig!" ;
+    Text [ ENGLISH ] = "Not a valid themename!" ;
+    Text [ dutch ] = "De naam van het onderwerp is ongeldig!" ;
+    Text [ english_us ] = "Theme name invalid!" ;
+    Text [ italian ] = "Il nome dell'argomento non è valido!" ;
+    Text [ spanish ] = "¡El nombre del tema no es válido!" ;
+    Text [ french ] = "Aucun thème de ce nom !" ;
+    Text [ swedish ] = "Temanamnet är ogiltigt!" ;
+    Text [ danish ] = "Emnenavnet er ugyldigt!" ;
+    Text [ portuguese ] = "O nome do tema não é válido!" ;
+    Text [ portuguese_brazilian ] = "Der Themenname ist ungültig!" ;
+    Text[ chinese_simplified ] = "Õâ¸öÖ÷ÌâÃû³ÆÎŞĞ§£¡";
+    Text[ russian ] = "Íåïğàâèëüíîå íàçâàíèå òåìû!";
+    Text[ polish ] = "Nazwa tematu jest nieprawid³owa!";
+    Text[ japanese ] = "Ã°Ï–¼‚ª•s“KØ‚Å‚·!";
+    Text[ chinese_traditional ] = "³o­Ó¥DÃD¦WºÙµL®Ä¡T";
+    Text[ arabic ] = "!ÇÓã ÇáãæÖæÚ ÛíÑ ÕÇáÍ";
+    Text[ dutch ] = "De naam van het onderwerp is ongeldig!";
+    Text[ chinese_simplified ] = "Õâ¸öÖ÷ÌâÃû³ÆÎŞĞ§£¡";
+    Text[ greek ] = "Ìç áğïäåêôü üíïìá èİìáôïò!";
+    Text[ korean ] = "ÁÖÁ¦¸íÀÌ À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù!";
+    Text[ turkish ] = "Bu konu adı geçerli değil!";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_DELETEOBJ
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie dieses Objekt\nwirklich löschen? : M÷chten Sie dieses Objekt\nwirklich l÷schen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie dieses Objekt\nwirklich löschen? : M÷chten Sie dieses Objekt\nwirklich l÷schen? */
+    Text = "Möchten Sie dieses Objekt\nwirklich löschen?" ;
+    Text [ ENGLISH ] = "Do you really want to\n delete this object?" ;
+    Text [ dutch ] = "Wilt u dit object\nwerkelijk wissen?" ;
+    Text [ english_us ] = "Do you really want to\n delete this object?" ;
+    Text [ italian ] = "Cancellare veramente\nl'oggetto?" ;
+    Text [ spanish ] = "¿Desea realmente\neliminar este objeto?" ;
+    Text [ french ] = "Voulez-vous vraiment\nsupprimer cet objet ?" ;
+    Text [ swedish ] = "Vill Du verkligen radera\ndetta objekt?" ;
+    Text [ danish ] = "Er du sikker på,\nat du vil slette dette objekt?" ;
+    Text [ portuguese ] = "Eliminar realmente\neste objecto?" ;
+    Text [ portuguese_brazilian ] = "Möchten Sie dieses Objekt\nwirklich löschen?" ;
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö¶ÔÏóÂğ£¿";
+    Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü\nıòîò îáúåêò?";
+    Text[ polish ] = "Chcesz na pewno usun¹æ ten obiekt\n?";
+    Text[ japanese ] = "–{“–‚É‚±‚ÌµÌŞ¼Şª¸Ä‚ğ\níœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z¯u­n§R°£³o­Óª«¥ó¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÈÇáİÚá ÍĞİ\nåĞÇ ÇáßÇÆä¿";
+    Text[ dutch ] = "Wilt u dit object\nwerkelijk wissen?";
+    Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸ö¶ÔÏóÂğ£¿";
+    Text[ greek ] = "Èİëåôå ğñáãìáôéêÜ íá\näéáãñáöåß áõôü ôï áíôéêåßìåíï;";
+    Text[ korean ] = "ÀÌ °³Ã¼¸¦\n Á´¸»·Î »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bu nesneyi gerçekten\nsilmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_EXTFORMAT1_SYS
+{
+    Text = "wav" ;
+};
+String RID_SVXSTR_EXTFORMAT1_UI
+{
+    Text = "Wave - Klangdatei" ;
+    Text [ ENGLISH ] = "Wave - Soundfile" ;
+    Text [ dutch ] = "Wave - geluidsbestand" ;
+    Text [ english_us ] = "Wave - Sound File" ;
+    Text [ italian ] = "File wave o di suono" ;
+    Text [ spanish ] = "Wave - archivo de sonido" ;
+    Text [ french ] = "Wave - Fichier des sons" ;
+    Text [ swedish ] = "Wave - ljudfil" ;
+    Text [ danish ] = "Wave - lydfil" ;
+    Text [ portuguese ] = "Onda - Ficheiro de som" ;
+    Text [ portuguese_brazilian ] = "Wave - Klangdatei" ;
+    Text[ chinese_simplified ] = "Wave - ÒôÆµÎÄ¼ş";
+    Text[ russian ] = "Wave - Ôàéë çâóêîâ";
+    Text[ polish ] = "Plik dŸwiêkowy typu Wave";
+    Text[ japanese ] = "Wave »³İÄŞÌ§²Ù";
+    Text[ chinese_traditional ] = "Wave - Án­µÀÉ®×";
+    Text[ arabic ] = "Wave - Sound ãáİ";
+    Text[ dutch ] = "Wave - geluidsbestand";
+    Text[ chinese_simplified ] = "Wave - ÒôÆµÎÄ¼ş";
+    Text[ greek ] = "Wave - Áñ÷åßï Ş÷ïõ";
+    Text[ korean ] = "¿şÀÌºê »ç¿îµå ÆÄÀÏ";
+    Text[ turkish ] = "Wave - Ses dosyası";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_EXTFORMAT2_SYS
+{
+    Text = "aif" ;
+};
+String RID_SVXSTR_EXTFORMAT2_UI
+{
+    Text = "Audio Interchange File Format" ;
+    Text [ ENGLISH ] = "Audio Interchange File Format" ;
+    Text [ english_us ] = "Audio Interchange File Format" ;
+    Text [ italian ] = "Audio Interchange File Format" ;
+    Text [ spanish ] = "Audio Interchange File Format" ;
+    Text [ french ] = "Format Fichier Audio Interchange" ;
+    Text [ dutch ] = "Audio Interchange bestandsformaat" ;
+    Text [ swedish ] = "Audio Interchange File Format" ;
+    Text [ danish ] = "Audio Interchange filformat" ;
+    Text [ portuguese ] = "Formato Ficheiro Intercâmbio de Audio" ;
+    Text [ portuguese_brazilian ] = "Audio Interchange File Format" ;
+    Text[ chinese_simplified ] = "ÒôÆµ½»»»ÎÄ¼ş¸ñÊ½(AIFF)";
+    Text[ russian ] = "Ôîğìàò ôàéëà Audio Interchange";
+    Text[ polish ] = "Format pliku Audio Interchange";
+    Text[ japanese ] = "µ°ÃŞ¨µ ²İÀ°Áªİ¼Ş Ì§²Ù Ì«°Ï¯Ä(AIFF)";
+    Text[ chinese_traditional ] = "Án­µ¥æ´«ÀÉ®×®æ¦¡(AIFF)";
+    Text[ arabic ] = "ÊäÓíŞ ãáİ ÊÈÇÏá ÓãÚí";
+    Text[ dutch ] = "Audio Interchange bestandsformaat";
+    Text[ chinese_simplified ] = "ÒôÆµ½»»»ÎÄ¼ş¸ñÊ½(AIFF)";
+    Text[ greek ] = "ÌïñöŞ áñ÷åßïõ Audio Interchange";
+    Text[ korean ] = "¿Àµğ¿À ±³È¯ ÆÄÀÏ ¼­½Ä";
+    Text[ turkish ] = "Audio Interchange dosya formatı";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_EXTFORMAT3_SYS
+{
+    Text = "au" ;
+};
+String RID_SVXSTR_EXTFORMAT3_UI
+{
+    Text = "AU - Klangdatei" ;
+    Text [ ENGLISH ] = "AU - Soundfile" ;
+    Text [ english_us ] = "AU - Sound File" ;
+    Text[ portuguese ] = "AU - ficheiro áudio";
+    Text[ russian ] = "Ôàéë çâóêîâ AU";
+    Text[ greek ] = "Áñ÷åßï Ş÷ïõ AU";
+    Text[ dutch ] = "AU - geluidsbestand";
+    Text[ french ] = "Fichier son - AU";
+    Text[ spanish ] = "Archivo audio AU";
+    Text[ italian ] = "File sound - AU";
+    Text[ danish ] = "AU - lydfil";
+    Text[ swedish ] = "AU - ljudfil";
+    Text[ polish ] = "Plik dŸwiêkowy AU";
+    Text[ portuguese_brazilian ] = "AU - Sound File";
+    Text[ japanese ] = "AU »³İÄŞ Ì§²Ù";
+    Text[ korean ] = "AU - »ç¿îµå ÆÄÀÏ";
+    Text[ chinese_simplified ] = "AU ÉùÒôÎÄ¼ş";
+    Text[ chinese_traditional ] = "AU - Án­µÀÉ®×";
+    Text[ arabic ] = "ãáİ ÕæÊíAU ";
+    Text[ turkish ] = "AU - Ses dosyası";
+};
+String RID_SVXSTR_GALLERY_FILTER
+{
+    Text = "Grafikfilter" ;
+    Text [ ENGLISH ] = "Graphicsfilter" ;
+    Text [ english_us ] = "Graphics filter" ;
+    Text [ italian ] = "Filtro grafico" ;
+    Text [ spanish ] = "Filtro de imagen" ;
+    Text [ french ] = "Filtre d'image" ;
+    Text [ dutch ] = "Grafische filter" ;
+    Text [ swedish ] = "Grafikfilter" ;
+    Text [ danish ] = "Grafikfilter" ;
+    Text [ portuguese ] = "Filtro gráfico" ;
+    Text [ portuguese_brazilian ] = "Grafikfilter" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂË";
+    Text[ russian ] = "Ãğàôè÷åñêèé ôèëüòğ";
+    Text[ polish ] = "Filtr graficzny";
+    Text[ japanese ] = "¸Ş×Ì¨¯¸ Ì¨ÙÀ";
+    Text[ chinese_traditional ] = "¹Ï¤ù¹LÂo";
+    Text[ arabic ] = "İáÊÑ ÇáÑÓæãÇÊ";
+    Text[ dutch ] = "Grafische filter";
+    Text[ chinese_simplified ] = "Í¼ĞÎ¹ıÂË";
+    Text[ greek ] = "Ößëôñï ãñáöéêşí";
+    Text[ korean ] = "±×·¡ÇÈ ÇÊÅÍ";
+    Text[ turkish ] = "Grafik filtresi";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_LENGTH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Länge: : Lõnge: */
+    /* ### ACHTUNG: Neuer Text in Resource? Länge: : Lõnge: */
+    Text = "Länge:" ;
+    Text [ ENGLISH ] = "Length:" ;
+    Text [ english_us ] = "Length:" ;
+    Text [ italian ] = "Lunghezza:" ;
+    Text [ spanish ] = "Longitud:" ;
+    Text [ french ] = "Longueur :" ;
+    Text [ dutch ] = "Lengte:" ;
+    Text [ swedish ] = "Längd:" ;
+    Text [ danish ] = "Længde:" ;
+    Text [ portuguese ] = "Comprimento:" ;
+    Text [ portuguese_brazilian ] = "Länge:" ;
+    Text[ chinese_simplified ] = "³¤¶È:";
+    Text[ russian ] = "Äëèíà:";
+    Text[ polish ] = "D³ugoœæ:";
+    Text[ japanese ] = "’·‚³:";
+    Text[ chinese_traditional ] = "ªø«×:";
+    Text[ arabic ] = ":ÇáØæá";
+    Text[ dutch ] = "Lengte:";
+    Text[ chinese_simplified ] = "³¤¶È:";
+    Text[ greek ] = "ÌŞêïò:";
+    Text[ korean ] = "±æÀÌ:";
+    Text[ turkish ] = "Uzunluk:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_SIZE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Größe: : Gr÷˜e: */
+    /* ### ACHTUNG: Neuer Text in Resource? Größe: : Gr÷˜e: */
+    Text = "Größe:" ;
+    Text [ ENGLISH ] = "Size:" ;
+    Text [ dutch ] = "Grootte:" ;
+    Text [ english_us ] = "Size:" ;
+    Text [ italian ] = "Dimensione:" ;
+    Text [ spanish ] = "Tamaño:" ;
+    Text [ french ] = "Taille :" ;
+    Text [ swedish ] = "Storlek:" ;
+    Text [ danish ] = "Størrelse:" ;
+    Text [ portuguese ] = "Tamanho:" ;
+    Text [ portuguese_brazilian ] = "Größe:" ;
+    Text[ chinese_simplified ] = "´óĞ¡:";
+    Text[ russian ] = "Ğàçìåğ:";
+    Text[ polish ] = "Rozmiar:";
+    Text[ japanese ] = "»²½Ş:";
+    Text[ chinese_traditional ] = "¤j¤p:";
+    Text[ arabic ] = ":ÇáÍÌã";
+    Text[ dutch ] = "Grootte:";
+    Text[ chinese_simplified ] = "´óĞ¡:";
+    Text[ greek ] = "Ìİãåèïò:";
+    Text[ korean ] = "Å©±â:";
+    Text[ turkish ] = "Büyüklük:";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_DELETEDD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die verknüpfte Datei löschen? : M÷chten Sie die verkn³pfte Datei l÷schen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die verknüpfte Datei löschen? : M÷chten Sie die verkn³pfte Datei l÷schen? */
+    Text = "Möchten Sie die verknüpfte Datei löschen?" ;
+    Text [ ENGLISH ] = "Do you want to delete the linked file?" ;
+    Text [ dutch ] = "Wilt u het gekoppelde bestand wissen ?" ;
+    Text [ english_us ] = "Do you want to delete the linked file?" ;
+    Text [ italian ] = "Eliminare il file collegato?" ;
+    Text [ spanish ] = "¿Desea eliminar el archivo enlazado?" ;
+    Text [ french ] = "Voulez-vous supprimer le fichier lié?" ;
+    Text [ swedish ] = "Vill Du radera den länkade filen?" ;
+    Text [ danish ] = "Vil du slette den kædede fil?" ;
+    Text [ portuguese ] = "Deseja eliminar o ficheiro ligado?" ;
+    Text [ portuguese_brazilian ] = "Möchten Sie die verknüpfte Datei löschen?" ;
+    Text[ chinese_simplified ] = "ÄúÒªÉ¾³ıÁ´½ÓµÄÎÄ¼şÂğ£¿";
+    Text[ russian ] = "Âû õîòèòå óäàëèòü ñâÿçàííûé ôàéë?";
+    Text[ polish ] = "Chcesz na pewno usun¹æ po³¹czony plik?";
+    Text[ japanese ] = "Øİ¸‚µ‚½Ì§²Ù‚ğíœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z­n§R°£³sµ²ªºÀÉ®×¡S";
+    Text[ arabic ] = "åá ÊÑíÏ ÍĞİ Çáãáİ ÇáãÑÊÈØ¿";
+    Text[ dutch ] = "Wilt u het gekoppelde bestand wissen ?";
+    Text[ chinese_simplified ] = "ÄúÒªÉ¾³ıÁ´½ÓµÄÎÄ¼şÂğ£¿";
+    Text[ greek ] = "Èİëåôå íá äéáãñáöåß ôï óõíäåäåìİíï áñ÷åßï;";
+    Text[ korean ] = "¿¬°áµÈ ÆÄÀÏÀ» »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bağlantı oluşturduğunuz dosyayı silmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_SEARCH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Dateiliste aktualisieren? : M÷chten Sie die Dateiliste aktualisieren? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Dateiliste aktualisieren? : M÷chten Sie die Dateiliste aktualisieren? */
+    Text = "Möchten Sie die Dateiliste aktualisieren?" ;
+    Text [ ENGLISH ] = "Do you want to search again for files?" ;
+    Text [ english_us ] = "Do you want to update the file list?" ;
+    Text [ italian ] = "Aggiornare l'elenco dei file?" ;
+    Text [ spanish ] = "¿Desea actualizar la lista de archivos?" ;
+    Text [ french ] = "Voulez-vous actualiser la liste des fichiers ?" ;
+    Text [ dutch ] = "Wilt u de bestandslijst actualiseren ?" ;
+    Text [ swedish ] = "Vill Du uppdatera fillistan?" ;
+    Text [ danish ] = "Vil du opdatere fillisten?" ;
+    Text [ portuguese ] = "Deseja actualizar a lista de ficheiros?" ;
+    Text [ portuguese_brazilian ] = "Möchten Sie die Dateiliste aktualisieren?" ;
+    Text[ chinese_simplified ] = "ÄúÒª¸üĞÂÕâ¸öÎÄ¼şÁĞµ¥Âğ£¿";
+    Text[ russian ] = "Âû õîòèòå îáíîâèòü ñïèñîê ôàéëà?";
+    Text[ polish ] = "Czy chcesz aktualizowaæ listê plików?";
+    Text[ japanese ] = "Ì§²ÙØ½Ä‚ğXV‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "±z­n§ó·s³o­ÓÀÉ®×²M³æ¡S";
+    Text[ arabic ] = "åá ÊÑíÏ ÊÍÏíË ŞÇÆãÉ ÇáãáİÇÊ¿";
+    Text[ dutch ] = "Wilt u de bestandslijst actualiseren ?";
+    Text[ chinese_simplified ] = "ÄúÒª¸üĞÂÕâ¸öÎÄ¼şÁĞµ¥Âğ£¿";
+    Text[ greek ] = "Èİëåôå íá åíçìåñùèåß ç ëßóôá áñ÷åßùí;";
+    Text[ korean ] = "ÆÄÀÏ¸ñ·ÏÀ» ¾÷µ¥ÀÌÆ®ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Dosya listesini güncellemek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_SGIERROR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Datei kann nicht geöffnet werden.\nMöchten Sie einen anderen Suchpfad angeben?  : Diese Datei kann nicht ge÷ffnet werden.\nM÷chten Sie einen anderen Suchpfad angeben?  */
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Datei kann nicht geöffnet werden.\nMöchten Sie einen anderen Suchpfad angeben?  : Diese Datei kann nicht ge÷ffnet werden.\nM÷chten Sie einen anderen Suchpfad angeben?  */
+    Text = "Diese Datei kann nicht geöffnet werden.\nMöchten Sie einen anderen Suchpfad angeben? " ;
+    Text [ ENGLISH ] = "This file can not be opened.\nDo you want to set a new search path?" ;
+    Text [ english_us ] = "This file cannot be opened. \nDo you want to enter a different search path? " ;
+    Text [ italian ] = "Questo file non può essere aperto.\nDigitare un nuovo percorso di ricerca?  " ;
+    Text [ spanish ] = "No se puede abrir este archivo. \n¿Desea usted establecer otra ruta de búsqueda? " ;
+    Text [ french ] = "Impossible d'ouvrir ce fichier.\nVoulez-vous indiquer un nouveau chemin de recherche ?  " ;
+    Text [ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??  " ;
+    Text [ swedish ] = "Denna fil kan inte öppnas.\nVill Du ange en annan sökväg? " ;
+    Text [ danish ] = "Denne fil kan ikke åbnes.\nVil du prøve en ny søgesti? " ;
+    Text [ portuguese ] = "Impossível abrir este ficheiro.\nDeseja indicar outro atalho de localização? " ;
+    Text [ portuguese_brazilian ] = "Diese Datei kann nicht geöffnet werden. \nMöchten Sie einen anderen Suchpfad angeben? " ;
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒª¸ø¶¨Ò»¸öÆäËûµÄÂ·¾¶Âğ£¿ ";
+    Text[ russian ] = "Îòêğûòü ıòîò ôàéë íå óäàåòñÿ.\nÂû õîòèòå çàäàòü äğóãîé ïóòü ïîèñêà?  ";
+    Text[ polish ] = "Tego pliku nie mo¿na otworzyæ.\nCzy chcesz podaæ inn¹ œcie¿kê wyszukiwania?   ";
+    Text[ japanese ] = "‚±‚ÌÌ§²Ù‚ÍŠJ‚­‚±‚Æ‚ª‚Å‚«‚Ü‚¹‚ñB\n•Ê‚ÌŒŸõÊß½–¼‚ğ“ü—Í‚µ‚Ü‚·‚©? ";
+    Text[ chinese_traditional ] = "µLªk¶}±Ò³o­ÓÀÉ®×¡C\n±z­n¿é¤J¤@­Ó¨ä¥Lªº¸ô®|¡S ";
+    Text[ arabic ] = "áÇ íãßä İÊÍ åĞÇ Çáãáİ.\nåá ÊÑíÏ ÅÏÎÇá ãÓÇÑ ÈÍË ÂÎÑ¿ ";
+    Text[ dutch ] = "Dit bestand kan niet worden geopend. \nWilt u een ander zoekpad aangeven??  ";
+    Text[ chinese_simplified ] = "ÎŞ·¨´ò¿ªÕâ¸öÎÄ¼ş¡£\nÄúÒª¸ø¶¨Ò»¸öÆäËûµÄÂ·¾¶Âğ£¿ ";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá áíïé÷èåß áõôü ôï áñ÷åßï.\nÈİëåôå íá åéóÜãåôå ìéá äéáöïñåôéêŞ äéáäñïìŞ áíáæŞôçóçò; ";
+    Text[ korean ] = "ÀÌ ÆÄÀÏÀ» ¿­ ¼ö ¾ø½À´Ï´Ù. \n´Ù¸¥ °Ë»ö°æ·Î¸¦ ÀÔ·ÂÇÏ½Ã°Ú½À´Ï±î? ";
+    Text[ turkish ] = "Bu dosya açılamıyor.\nBaşka bir veri yolu girmek istiyor musunuz? ";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_NEWTHEME
+{
+    Text = "Neues Thema" ;
+    Text [ ENGLISH ] = "New theme" ;
+    Text [ english_us ] = "New Theme" ;
+    Text [ dutch ] = "Nieuw onderwerp" ;
+    Text [ swedish ] = "Nytt tema" ;
+    Text [ danish ] = "Nyt emne" ;
+    Text [ italian ] = "Nuovo argomento" ;
+    Text [ spanish ] = "Nuevo Tema" ;
+    Text [ french ] = "Nouveau thème" ;
+    Text [ portuguese ] = "Novo tema" ;
+    Text [ portuguese_brazilian ] = "~Thema" ;
+    Text[ chinese_simplified ] = "ĞÂÖ÷Ìâ";
+    Text[ russian ] = "Íîâàÿ òåìà";
+    Text[ polish ] = "Nowy temat";
+    Text[ japanese ] = "V‚µ‚¢Ã°Ï";
+    Text[ chinese_traditional ] = "·s«Ø¥DÃD";
+    Text[ arabic ] = "ãæÖæÚ ÌÏíÏ";
+    Text[ dutch ] = "Nieuw onderwerp";
+    Text[ chinese_simplified ] = "ĞÂÖ÷Ìâ";
+    Text[ greek ] = "Íİï èİìá";
+    Text[ korean ] = "»õ ÁÖÁ¦";
+    Text[ turkish ] = "Yeni konu";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_BROWSER
+{
+    Text = "~Verwaltung..." ;
+    Text [ ENGLISH ] = "~Browser..." ;
+    Text [ dutch ] = "~Beheer...." ;
+    Text [ english_us ] = "~Organizer..." ;
+    Text [ italian ] = "~Gestisci..." ;
+    Text [ spanish ] = "~Administración..." ;
+    Text [ french ] = "~Organiser..." ;
+    Text [ swedish ] = "~Förvalta..." ;
+    Text [ danish ] = "Administration..." ;
+    Text [ portuguese ] = "~Organizador..." ;
+    Text [ portuguese_brazilian ] = "~Verwaltung..." ;
+    Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
+    Text[ russian ] = "Îğãàíèçîâàòü...";
+    Text[ polish ] = "Zarz¹dzanie...";
+    Text[ japanese ] = "ŠÇ—(~O)...";
+    Text[ chinese_traditional ] = "ºŞ²z(~O)...";
+    Text[ arabic ] = "...ÊäÙíã";
+    Text[ dutch ] = "~Beheer....";
+    Text[ chinese_simplified ] = "¹ÜÀí(~O)...";
+    Text[ greek ] = "Äéá÷åßñéóç...";
+    Text[ korean ] = "°ü¸®(~O)...";
+    Text[ turkish ] = "Yönet...";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_THEMEERR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen. : Dieser Themenname existiert bereits.\nBitte wõhlen Sie einen anderen Namen. */
+    /* ### ACHTUNG: Neuer Text in Resource? Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen. : Dieser Themenname existiert bereits.\nBitte wõhlen Sie einen anderen Namen. */
+    Text = "Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
+    Text [ ENGLISH ] = "This themename already exists.\nPlease choose a different name." ;
+    Text [ dutch ] = "Deze naam bestaat reeds.\nKies een andere." ;
+    Text [ english_us ] = "This theme name already exists.\nPlease choose a different name." ;
+    Text [ italian ] = "Il nome dell'argomento esiste già.\nScegliere un altro." ;
+    Text [ spanish ] = "Este nombre de tema ya existe.\nPor favor elija otro nombre." ;
+    Text [ french ] = "Le nom de ce thème existe déjà.\nVeuillez choisir un autre nom." ;
+    Text [ swedish ] = "Detta temanamn finns redan.\nVälj ett annat namn." ;
+    Text [ danish ] = "Dette emnenavn eksisterer allerede.\nVælg venligst et andet navn." ;
+    Text [ portuguese ] = "Este nome do tema já existe.\nEscolha outro." ;
+    Text [ portuguese_brazilian ] = "Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
+    Text[ chinese_simplified ] = "Õâ¸öÖ÷ÌâÃû³ÆÒÑ¾­´æÔÚ¡£\nÇëÄúÑ¡ÔñÒ»¸öÆäËûµÄÃû³Æ¡£";
+    Text[ russian ] = "Òàêîå íàçâàíèå òåìû óæå ñóùåñòâóåò.\nÂûáåğèòå, ïîæàëóéñòà, äğóãîå íàçâàíèå.";
+    Text[ polish ] = "Ta nazwa tematu ju¿ istnieje.\nWybierz inn¹ nazwê.";
+    Text[ japanese ] = "‚±‚ÌÃ°Ï–¼‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\n•Ê‚Ì–¼‘O‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B";
+    Text[ chinese_traditional ] = "³o­Ó¥DÃD¦WºÙ¤w¸g¦s¦b¡C\n½Ğ±z¿ï¾Ü¤@­Ó¨ä¥Lªº¦WºÙ¡C";
+    Text[ arabic ] = "ÇÓã ÇáãæÖæÚ åĞÇ ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ÇÓã ÂÎÑ.";
+    Text[ dutch ] = "Deze naam bestaat reeds.\nKies een andere.";
+    Text[ chinese_simplified ] = "Õâ¸öÖ÷ÌâÃû³ÆÒÑ¾­´æÔÚ¡£\nÇëÄúÑ¡ÔñÒ»¸öÆäËûµÄÃû³Æ¡£";
+    Text[ greek ] = "Áõôü ôï üíïìá èİìáôïò õğÜñ÷åé Şäç.\nĞáñáêáëş åğéëİîôå İíá Üëëï üíïìá.";
+    Text[ korean ] = "ÀÌ ÁÖÁ¦¸íÀº ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n´Ù¸¥ ÀÌ¸§À» ¼±ÅÃÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Bu konu adı mevcut durumda.\nBaşka bir ad seçin.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERYPROPS_THEME
+{
+    Text = "Thema;Themen" ;
+    Text [ ENGLISH ] = "Theme;Themes" ;
+    Text [ english_us ] = "Theme;Themes" ;
+    Text [ italian ] = "Argomento;Argomenti" ;
+    Text [ spanish ] = "Tema;Temas" ;
+    Text [ french ] = "Thème;Thèmes" ;
+    Text [ dutch ] = "Onderwerp;Onderwerpen" ;
+    Text [ swedish ] = "Tema;Teman" ;
+    Text [ danish ] = "Emne;Emner" ;
+    Text [ portuguese_brazilian ] = "Thema;Themen" ;
+    Text [ portuguese ] = "Tema;Temas" ;
+    Text[ chinese_simplified ] = "Ö÷Ìâ;Ö÷Ìâ";
+    Text[ russian ] = "Òåìà;Òåìû";
+    Text[ polish ] = "Temat;Tematy";
+    Text[ japanese ] = "Ã°Ï";
+    Text[ chinese_traditional ] = "¥DÃD;¥DÃD";
+    Text[ arabic ] = "ãæÖæÚ;ãæÖæÚÇÊ";
+    Text[ dutch ] = "Onderwerp;Onderwerpen";
+    Text[ chinese_simplified ] = "Ö÷Ìâ;Ö÷Ìâ";
+    Text[ greek ] = "Èİìá, Èİìáôá";
+    Text[ korean ] = "ÁÖÁ¦;ÁÖÁ¦µé";
+    Text[ turkish ] = "Konu;Konular";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERYPROPS_OBJECT
+{
+    Text = "Objekt;Objekte" ;
+    Text [ ENGLISH ] = "Object;Objects" ;
+    Text [ english_us ] = "Object;Objects" ;
+    Text [ italian ] = "Oggetto;oggetti" ;
+    Text [ spanish ] = "Objeto;Objetos" ;
+    Text [ french ] = "Objet;Objets" ;
+    Text [ dutch ] = "Object;Objecten" ;
+    Text [ swedish ] = "Objekt;Objekt" ;
+    Text [ danish ] = "Objekt;Objekter" ;
+    Text [ portuguese_brazilian ] = "Objekt;Objekte" ;
+    Text [ portuguese ] = "Objecto;Objectos" ;
+    Text[ chinese_simplified ] = "¶ÔÏó;¶ÔÏó";
+    Text[ russian ] = "Îáúåêò;Îáúåêòû";
+    Text[ polish ] = "Obiekt;Obiekty";
+    Text[ japanese ] = "µÌŞ¼Şª¸Ä;µÌŞ¼Şª¸Ä";
+    Text[ chinese_traditional ] = "ª«¥ó;ª«¥ó";
+    Text[ arabic ] = "ßÇÆä;ßÇÆäÇÊ";
+    Text[ dutch ] = "Object;Objecten";
+    Text[ chinese_simplified ] = "¶ÔÏó;¶ÔÏó";
+    Text[ greek ] = "Áíôéêåßìåíï, Áíôéêåßìåíá";
+    Text[ korean ] = "°³Ã¼ ; °³Ã¼µé";
+    Text[ turkish ] = "Nesne;Nesneler";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERYPROPS_GALTHEME
+{
+    Text = "Gallery-Thema" ;
+    Text [ ENGLISH ] = "Gallery theme" ;
+    Text [ english_us ] = "Gallery Theme" ;
+    Text [ dutch ] = "Gallery-onderwerp" ;
+    Text [ italian ] = "Argomento Gallery" ;
+    Text [ spanish ] = "Tema Gallery" ;
+    Text [ french ] = "Thème Gallery" ;
+    Text [ swedish ] = "Gallery-tema" ;
+    Text [ danish ] = "Gallery-emne" ;
+    Text [ portuguese ] = "Tema da Gallery" ;
+    Text [ portuguese_brazilian ] = "Gallery-Thema" ;
+    Text[ chinese_simplified ] = "»­ÀÈ-Ö÷Ìâ";
+    Text[ russian ] = "Òåìà ãàëåğåè";
+    Text[ polish ] = "Temat galerii";
+    Text[ japanese ] = "·Ş¬×Ø° Ã°Ï";
+    Text[ chinese_traditional ] = "µe´Y¥DÃD";
+    Text[ arabic ] = "ãæÖæÚ ÇáÌÇáíÑí";
+    Text[ dutch ] = "Gallery-onderwerp";
+    Text[ chinese_simplified ] = "»­ÀÈ-Ö÷Ìâ";
+    Text[ greek ] = "Èİìá Gallery";
+    Text[ korean ] = "Gallery ÁÖÁ¦";
+    Text[ turkish ] = "Galleri konusu";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_IMPORTTHEME
+{
+    Text = "~Importieren..." ;
+    Text [ English ] = "~Import..." ;
+    Text [ english_us ] = "I~mport..." ;
+    Text [ dutch ] = "Im~porteren..." ;
+    Text [ swedish ] = "~Importera..." ;
+    Text [ danish ] = "Importer..." ;
+    Text [ italian ] = "Im~porta..." ;
+    Text [ spanish ] = "Im~portar..." ;
+    Text [ french ] = "Im~porter..." ;
+    Text [ portuguese ] = "Im~portar..." ;
+    Text [ portuguese_brazilian ] = "Im~portieren..." ;
+    Text[ chinese_simplified ] = "ÊäÈë(~M)...";
+    Text[ russian ] = "Èìïîğò...";
+    Text[ polish ] = "Importuj..";
+    Text[ japanese ] = "²İÎß°Ä(~M)...";
+    Text[ chinese_traditional ] = "¿é¤J(~M)...";
+    Text[ arabic ] = "...ÇÓÊíÑÇÏ";
+    Text[ dutch ] = "Im~porteren...";
+    Text[ chinese_simplified ] = "ÊäÈë(~M)...";
+    Text[ greek ] = "ÅéóáãùãŞ...";
+    Text[ korean ] = "°¡Á® ¿À±â(~M)...";
+    Text[ turkish ] = "İç~e aktar...";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_GALLERY_CREATETHEME
+{
+    Text = "Neues Thema..." ;
+    Text [ ENGLISH ] = "New theme..." ;
+    Text [ english_us ] = "New Theme..." ;
+    Text [ dutch ] = "Nieuw onderwerp..." ;
+    Text [ swedish ] = "Nytt tema..." ;
+    Text [ danish ] = "Nyt emne..." ;
+    Text [ italian ] = "Nuovo argomento..." ;
+    Text [ spanish ] = "Nuevo tema..." ;
+    Text [ french ] = "Nouveau thème..." ;
+    Text [ portuguese ] = "Novo tema..." ;
+    Text [ portuguese_brazilian ] = "Neues Thema" ;
+    Text[ chinese_simplified ] = "ĞÂ½¨Ö÷Ìâ...";
+    Text[ russian ] = "Íîâàÿ òåìà";
+    Text[ polish ] = "Nowy temat";
+    Text[ japanese ] = "V‚µ‚¢Ã°Ï";
+    Text[ chinese_traditional ] = "·s«Ø¥DÃD...";
+    Text[ arabic ] = "...ãæÖæÚ ÌÏíÏ";
+    Text[ dutch ] = "Nieuw onderwerp...";
+    Text[ chinese_simplified ] = "ĞÂ½¨Ö÷Ìâ...";
+    Text[ greek ] = "Íİï èİìá...";
+    Text[ korean ] = "»õ ÁÖÁ¦...";
+    Text[ turkish ] = "Yeni konu...";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXSTR_GALLERY_READONLY
+{
+    Text = " (schreibgeschützt)" ;
+    Text [ English ] = " (read only)" ;
+    Text [ norwegian ] = " (skrivebeskyttet)" ;
+    Text [ italian ] = "(sola lettura)" ;
+    Text [ portuguese_brazilian ] = "(só leitura)" ;
+    Text [ portuguese ] = "(só leitura)" ;
+    Text [ finnish ] = " (vain luku)" ;
+    Text [ danish ] = "(skrivebeskyttet)" ;
+    Text [ french ] = "(en lecture seule)" ;
+    Text [ swedish ] = "(skrivskyddad)" ;
+    Text [ dutch ] = "(alleen lezen)" ;
+    Text [ spanish ] = "(solo lectura)" ;
+    Text [ english_us ] = "(read only)" ;
+    Text[ chinese_simplified ] = "(·À¸²Ğ´)";
+    Text[ russian ] = "(òîëüêî äëÿ ÷òåíèÿ)";
+    Text[ polish ] = "(tylko do odczytu)";
+    Text[ japanese ] = "(“Ç‚İæ‚èê—p)";
+    Text[ chinese_traditional ] = "(°ßÅª)";
+    Text[ arabic ] = "(ãÍãí ÖÏ ÇáßÊÇÈÉ)";
+    Text[ dutch ] = "(alleen lezen)";
+    Text[ chinese_simplified ] = "(·À¸²Ğ´)";
+    Text[ greek ] = "(ìüíï ãéá áíÜãíùóç)";
+    Text[ korean ] = "(¾²±âº¸È£)";
+    Text[ turkish ] = "(Salt okunur)";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXSTR_GALLERY_ALLFILES
+{
+    Text = "<Alle Dateien>" ;
+    Text [ English ] = "<All files>" ;
+    Text [ english_us ] = "<All files>" ;
+    Text [ italian ] = "<Tutti i file>" ;
+    Text [ spanish ] = "<Todos los archivos>" ;
+    Text [ french ] = "<Tous les fichiers>" ;
+    Text [ dutch ] = "<Alle bestanden>" ;
+    Text [ swedish ] = "<Alla filer>" ;
+    Text [ danish ] = "<Alle filer>" ;
+    Text [ portuguese ] = "<Ficheiros todos>" ;
+    Text [ portuguese_brazilian ] = "<Alle Dateien>" ;
+    Text[ chinese_simplified ] = "<È«²¿µÄÎÄ¼ş>";
+    Text[ russian ] = "<Âñå ôàéëû>";
+    Text[ polish ] = "<Wszystkie pliki>";
+    Text[ japanese ] = "<‚·‚×‚Ä‚ÌÌ§²Ù>";
+    Text[ chinese_traditional ] = "<¥ş³¡ÀÉ®×>";
+    Text[ arabic ] = "<ßá ÇáãáİÇÊ>";
+    Text[ dutch ] = "<Alle bestanden>";
+    Text[ chinese_simplified ] = "<È«²¿µÄÎÄ¼ş>";
+    Text[ greek ] = "<¼ëá ôá áñ÷åßá>";
+    Text[ korean ] = "<¸ğµç ÆÄÀÏ>";
+    Text[ turkish ] = "<Tüm dosyalar>";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXSTR_GALLERY_DIALOGID
+{
+    Text = "ID vergeben" ;
+    Text [ English ] = "Assign ID" ;
+    Text [ english_us ] = "Assign ID" ;
+    Text[ portuguese ] = "Atribuir ID";
+    Text[ russian ] = "Íàçíà÷èòü ID";
+    Text[ dutch ] = "ID bezet";
+    Text[ french ] = "Attribuer un ID";
+    Text[ spanish ] = "Asignar ID";
+    Text[ italian ] = "Attribuisci ID";
+    Text[ danish ] = "Tildel ID";
+    Text[ swedish ] = "Tilldela ID";
+    Text[ polish ] = "Przypisz identyfikator";
+    Text[ portuguese_brazilian ] = "Assign ID";
+    Text[ japanese ] = "ID ‚ÌŠ„‚è“–‚Ä";
+    Text[ chinese_simplified ] = "·ÖÅä ID";
+    Text[ chinese_traditional ] = "¤À°t ID";
+    Text[ arabic ] = "ÊÚííä ÇáÊÚÑíİ";
+    Text[ dutch ] = "ID bezet";
+    Text[ chinese_simplified ] = "·ÖÅä ID";
+    Text[ greek ] = "ÁğïíïìŞ ôáõôüôçôáò (ID)";
+    Text[ korean ] = "ID ÁöÁ¤";
+    Text[ turkish ] = "Tanıtıcı ata";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXSTR_GALLERY_ID_EXISTS
+{
+    Text = "Diese ID existiert bereits..." ;
+    Text [ English ] = "This ID already exists..." ;
+    Text [ english_us ] = "This ID already exists..." ;
+    Text[ portuguese ] = "Este ID já existe...";
+    Text[ russian ] = "İòà ID óæå ñóùåñòâóåò...";
+    Text[ dutch ] = "ID bestaat reeds...";
+    Text[ french ] = "Cet ID existe déjà...";
+    Text[ spanish ] = "Esta ID ya existe...";
+    Text[ italian ] = "Questo ID esiste già...";
+    Text[ danish ] = "Denne ID eksisterer allerede...";
+    Text[ swedish ] = "Det här ID existerar redan...";
+    Text[ polish ] = "Ten ID ju¿ istnieje...";
+    Text[ portuguese_brazilian ] = "This ID already exists...";
+    Text[ japanese ] = "‚±‚Ì ID ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·...";
+    Text[ chinese_simplified ] = "Õâ¸ö ID ÒÑ¾­´æÔÚ...";
+    Text[ chinese_traditional ] = "³o­Ó ID ¤w¸g¦s¦b...";
+    Text[ arabic ] = "...åĞÇ ÇáÊÚÑíİ ãæÌæÏ ãÓÈŞÇğ";
+    Text[ dutch ] = "ID bestaat reeds...";
+    Text[ chinese_simplified ] = "Õâ¸ö ID ÒÑ¾­´æÔÚ...";
+    Text[ greek ] = "ÁõôŞ ç ôáõôüôçôá ( ID) õğÜñ÷åé Şäç...";
+    Text[ korean ] = "ÀÌ ID´Â ÀÌ¹Ì ÀÖ½À´Ï´Ù ...";
+    Text[ turkish ] = "Bu tanıtıcı mevcut durumda...";
+    Text[ language_user1 ] = " ";
+};
+
+/******************************************************************************/
+
+Bitmap RID_SVXBMP_GALLERY
+{
+    File = "lx03135.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_NORMAL
+{
+    File = "galnors.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_NORMAL_BIG
+{
+    File = "galnorl.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_IMPORTED
+{
+    File = "galimps.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_IMPORTED_BIG
+{
+    File = "galimpl.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_READONLY
+{
+    File = "galrdos.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_READONLY_BIG
+{
+    File = "galrdol.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_DEFAULT
+{
+    File = "galdefs.bmp" ;
+};
+
+Bitmap RID_SVXBMP_THEME_DEFAULT_BIG
+{
+    File = "galdefl.bmp" ;
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_0
+{
+    File = "galsnd0.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_1
+{
+    File = "galsnd1.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_2
+{
+    File = "galsnd2.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_3
+{
+    File = "galsnd3.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_4
+{
+    File = "galsnd4.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_5
+{
+    File = "galsnd5.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_6
+{
+    File = "galsnd6.bmp";
+};
+
+Bitmap RID_SVXBMP_GALLERY_SOUND_7
+{
+    File = "galsnd7.bmp";
+};
+
+/******************************************************************************/
+
+Menu RID_SVXMN_GALLERY1
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_ACTUALIZE;
+            HelpId = HID_GALLERY_ACTUALIZE;
+            Text = "~Aktualisieren" ;
+            Text [ ENGLISH ] = "~Update";
+            Text [ dutch ] = "~Actualiseren";
+            Text [ english_us ] = "Update ";
+            Text [ italian ] = "Aggiorna";
+            Text [ spanish ] = "Actuali~zar";
+            Text [ french ] = "Mise à jour";
+            Text [ swedish ] = "Uppd~atera";
+            Text [ danish ] = "Opdater";
+            Text [ portuguese ] = "Actualizar";
+            Text [ portuguese_brazilian ] = "Aktualisieren";
+            Text[ chinese_simplified ] = "¸üĞÂ";
+            Text[ russian ] = "Îáíîâèòü";
+            Text[ polish ] = "Aktualizuj";
+            Text[ japanese ] = "XV";
+            Text[ chinese_traditional ] = "§ó·s";
+            Text[ arabic ] = "ÊÍÏíË";
+            Text[ dutch ] = "~Actualiseren";
+            Text[ chinese_simplified ] = "¸üĞÂ";
+            Text[ greek ] = "~Åíçìİñùóç";
+            Text[ korean ] = "¾÷µ¥ÀÌÆ®";
+            Text[ turkish ] = "Güncelle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            HelpId = HID_GALLERY_MN_DELETE ;
+            Text = "~Löschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ dutch ] = "~Wissen" ;
+            Text [ english_us ] = "~Delete" ;
+            Text [ italian ] = "~Elimina" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ danish ] = "~Slet" ;
+            Text [ portuguese_brazilian ] = "~Löschen" ;
+            Text [ portuguese ] = "E~liminar" ;
+            Text[ russian ] = "Óäàëèòü";
+            Text[ polish ] = "Usuñ";
+            Text[ japanese ] = "íœ(~D)";
+            Text[ chinese_simplified ] = "É¾³ı(~D)";
+            Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_RENAME;
+            HelpId = HID_GALLERY_RENAME;
+            Text = "~Umbenennen" ;
+            Text [ English ] = "~Rename" ;
+            Text [ english_us ] = "~Rename" ;
+            Text [ portuguese_brazilian ] = "~Umbenennen" ;
+            Text [ swedish ] = "~Byt namn" ;
+            Text [ danish ] = "O~mdøb" ;
+            Text [ italian ] = "~Rinomina" ;
+            Text [ spanish ] = "~Cambiar nombre" ;
+            Text [ french ] = "~Renommer" ;
+            Text [ dutch ] = "~Naam wijzigen" ;
+            Text [ portuguese ] = "~Mudar nome" ;
+            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+            Text[ russian ] = "Ïåğåèìåíîâàòü";
+            Text[ polish ] = "Zmieñ nazwê";
+            Text[ japanese ] = "‰ü–¼(~R)";
+            Text[ chinese_traditional ] = "­«·s©R¦W(~R)";
+            Text[ arabic ] = "ÅÚÇÏÉ ÊÓãíÉ";
+            Text[ dutch ] = "~Naam wijzigen";
+            Text[ chinese_simplified ] = "ÖØÃüÃû(~R)";
+            Text[ greek ] = "~Ìåôïíïìáóßá";
+            Text[ korean ] = "ÀÌ¸§ º¯°æ(~R)";
+            Text[ turkish ] = "Ye~niden adlandır";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_PROPERTIES;
+            HelpId = HID_GALLERY_PROPERTIES;
+            Text = "~Eigenschaften ..." ;
+            Text [ ENGLISH ] = "~Properties ..." ;
+            Text [ english_us ] = "Propert~ies ..." ;
+            Text [ swedish ] = "~Egenskaper..." ;
+            Text [ danish ] = "Egenskaber ..." ;
+            Text [ italian ] = "Propri~età..." ;
+            Text [ spanish ] = "Prop~iedades..." ;
+            Text [ french ] = "~Propriétés ..." ;
+            Text [ dutch ] = "~Eigenschappen ..." ;
+            Text [ portuguese_brazilian ] = "~Eigenschaften ..." ;
+            Text [ portuguese ] = "~Propriedades ..." ;
+            Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
+            Text[ russian ] = "Ñâîéñòâà ...";
+            Text[ polish ] = "W³aœciwoœci ...";
+            Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
+            Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
+            Text[ arabic ] = "...ÎÕÇÆÕ";
+            Text[ dutch ] = "~Eigenschappen ...";
+            Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
+            Text[ greek ] = "Éäéüôçôåò ...";
+            Text[ korean ] = "µî·ÏÁ¤º¸(~I)...";
+            Text[ turkish ] = "~Özellikler ...";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+
+/******************************************************************************/
+
+Menu RID_SVXMN_GALLERY2
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_ADDMENU ;
+            HelpId = HID_GALLERY_MN_ADDMENU ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+            Text = "~Hinzufügen" ;
+            Text [ ENGLISH ] = "~Add" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = MN_ADD ;
+                        HelpId = HID_GALLERY_MN_ADD ;
+                        Text = "~Kopie" ;
+                        Text [ ENGLISH ] = "~Copy" ;
+                        Text [ english_us ] = "~Copy" ;
+                        Text [ italian ] = "~Copia" ;
+                        Text [ spanish ] = "~Copia" ;
+                        Text [ french ] = "C~opie" ;
+                        Text [ dutch ] = "~Kopie" ;
+                        Text [ swedish ] = "~Kopia" ;
+                        Text [ danish ] = "Kopi" ;
+                        Text [ portuguese ] = "~Cópia" ;
+                        Text [ portuguese_brazilian ] = "~Kopie" ;
+                        /* ### ACHTUNG: Neuer Text in Resource? Fügt das gewählte Objekt\nals Kopie in das Dokument ein : F³gt das gewõhlte Objekt\nals Kopie in das Dokument ein */
+                        Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+                        Text[ russian ] = "Êîïèÿ";
+                        Text[ polish ] = "Kopia";
+                        Text[ japanese ] = "ºËß°(~C)";
+                        Text[ chinese_traditional ] = "½Æ»s(~C)";
+                        Text[ arabic ] = "äÓÎÉ";
+                        Text[ dutch ] = "~Kopie";
+                        Text[ chinese_simplified ] = "¸´ÖÆ(~C)";
+                        Text[ greek ] = "Áíôß~ãñáöï";
+                        Text[ korean ] = "º¹»ç(~C)";
+                        Text[ turkish ] = "Kopya";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_ADD_LINK ;
+                        HelpId = HID_GALLERY_MN_ADD_LINK ;
+                        /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung : ~Verkn³pfung */
+                        /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfung : ~Verkn³pfung */
+                        Text = "~Verknüpfung" ;
+                        Text [ ENGLISH ] = "~Linkage" ;
+                        Text [ english_us ] = "Link" ;
+                        Text [ italian ] = "C~ollegamento" ;
+                        Text [ spanish ] = "~Vínculo" ;
+                        Text [ french ] = "~Lien" ;
+                        Text [ dutch ] = "~Koppeling" ;
+                        Text [ swedish ] = "Lä~nk" ;
+                        Text [ danish ] = "Kæde" ;
+                        Text [ portuguese_brazilian ] = "~Verknüpfung" ;
+                        Text [ portuguese ] = "~Ligação" ;
+                        /* ### ACHTUNG: Neuer Text in Resource? Fügt das gewählte Objekt als\nVerknüpfung in das Dokument ein : F³gt das gewõhlte Objekt als\nVerkn³pfung in das Dokument ein */
+                        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+                        Text[ russian ] = "Ññûëêà";
+                        Text[ polish ] = "£¹cze";
+                        Text[ japanese ] = "Øİk";
+                        Text[ chinese_traditional ] = "±¶®|(~L)";
+                        Text[ arabic ] = "ÇÑÊÈÇØ";
+                        Text[ dutch ] = "~Koppeling";
+                        Text[ chinese_simplified ] = "Á´½Ó(~L)";
+                        Text[ greek ] = "Óı~íäåóç";
+                        Text[ korean ] = "¿¬°á";
+                        Text[ turkish ] = "Bağlantı";
+                        Text[ language_user1 ] = " ";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = MN_BACKGROUND ;
+                        HelpId = HID_GALLERY_MN_BACKGROUND ;
+                        Text = "~Hintergrund" ;
+                        Text [ ENGLISH ] = "~Background" ;
+                        Text [ english_us ] = "Bac~kground" ;
+                        Text [ portuguese_brazilian ] = "~Hintergrund" ;
+                        Text [ swedish ] = "~Bakgrund" ;
+                        Text [ danish ] = "Baggrund" ;
+                        Text [ italian ] = "Sfondo" ;
+                        Text [ spanish ] = "~Fondo" ;
+                        Text [ french ] = "~Arrière-plan" ;
+                        Text [ dutch ] = "~Achtergrond" ;
+                        Text [ portuguese ] = "~Plano de fundo" ;
+                        /* ### ACHTUNG: Neuer Text in Resource? Fügt das gewählte Objekt in\nden Hintergrund des Dokumentes ein : F³gt das gewõhlte Objekt in\nden Hintergrund des Dokumentes ein */
+                        Text[ chinese_simplified ] = "±³¾°(~K)";
+                        Text[ russian ] = "Ôîí";
+                        Text[ polish ] = "T³o";
+                        Text[ japanese ] = "”wŒi(~K)";
+                        Text[ chinese_traditional ] = "­I´º(~K)";
+                        Text[ arabic ] = "ÇáÎáİíÉ";
+                        Text[ dutch ] = "~Achtergrond";
+                        Text[ chinese_simplified ] = "±³¾°(~K)";
+                        Text[ greek ] = "~Öüíôï";
+                        Text[ korean ] = "¹è°æ(~K)";
+                        Text[ turkish ] = "Artalan";
+                        Text[ language_user1 ] = " ";
+                    };
+                };
+            };
+            Text [ dutch ] = "~Toevoegen" ;
+            Text [ english_us ] = "~Insert" ;
+            Text [ italian ] = "A~ggiungi" ;
+            Text [ spanish ] = "~Añadir" ;
+            Text [ french ] = "~Ajouter" ;
+            Text [ swedish ] = "~Lägg till" ;
+            Text [ danish ] = "Tilføj" ;
+            Text [ portuguese_brazilian ] = "~Hinzufügen" ;
+            Text [ portuguese ] = "~Adicionar" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Fügt das gewählte Objekt\nin das Dokument ein : F³gt das gewõhlte Objekt\nin das Dokument ein */
+            Text[ chinese_simplified ] = "¼ÓÈë(~I)";
+            Text[ russian ] = "Äîáàâèòü";
+            Text[ polish ] = "Dodaj";
+            Text[ japanese ] = "‘}“ü(~I)";
+            Text[ chinese_traditional ] = "¥[¤J(~I)";
+            Text[ arabic ] = "ÅÖÇİÉ";
+            Text[ dutch ] = "~Toevoegen";
+            Text[ chinese_simplified ] = "¼ÓÈë(~I)";
+            Text[ greek ] = "ĞñïóèŞê~ç";
+            Text[ korean ] = "»ğÀÔ(~I)";
+            Text[ turkish ] = "Ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+            Text [ english_us ] = "~Insert" ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
+            Text = "~Hinzufügen" ;
+            Text [ swedish ] = "~Lägg till" ;
+            Text [ danish ] = "Tilføj" ;
+            Text [ italian ] = "A~ggiungi" ;
+            Text [ spanish ] = "~Añadir" ;
+            Text [ french ] = "~Ajouter" ;
+            Text [ dutch ] = "~Toevoegen" ;
+            Text [ portuguese_brazilian ] = "~Hinzufügen" ;
+            Text [ portuguese ] = "~Adicionar" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Fügt das gewählte Objekt\nin das Dokument ein : F³gt das gewõhlte Objekt\nin das Dokument ein */
+            Text[ english_us ] = "~Insert";
+            Text[ chinese_simplified ] = "¼ÓÈë(~I)";
+            Text[ russian ] = "Äîáàâèòü";
+            Text[ polish ] = "Dodaj";
+            Text[ japanese ] = "‘}“ü(~I)";
+            Text[ chinese_traditional ] = "¥[¤J(~I)";
+            Text[ arabic ] = "ÅÖÇİÉ";
+            Text[ dutch ] = "~Toevoegen";
+            Text[ chinese_simplified ] = "¼ÓÈë(~I)";
+            Text[ greek ] = "ĞñïóèŞê~ç";
+            Text[ korean ] = "»ğÀÔ(~I)";
+            Text[ turkish ] = "Ekle";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_PREVIEW ;
+            HelpId = HID_GALLERY_MN_PREVIEW ;
+            Text = "~Vorschau" ;
+            Text [ ENGLISH ] = "~Preview" ;
+            Text [ english_us ] = "~Preview" ;
+            Text [ italian ] = "Ante~prima" ;
+            Text [ spanish ] = "~Previsualización" ;
+            Text [ french ] = "~Aperçu" ;
+            Text [ dutch ] = "~Voorbeeld" ;
+            Text [ swedish ] = "Förhands~visning" ;
+            Text [ danish ] = "Eksempel" ;
+            Text [ portuguese_brazilian ] = "~Vorschau" ;
+            Text [ portuguese ] = "~Previsualizar" ;
+            Text[ russian ] = "Ïğåäâàğèòåëüíûé ïğîñìîòğ";
+    Text[ polish ] = "Podgl¹~d";
+    Text[ japanese ] = "ÌßÚËŞ­°(~P)";
+    Text[ chinese_simplified ] = "Ô¤ÊÓ(~P)";
+    Text[ greek ] = "~Ğñïåğéóêüğçóç";
+            Text[ korean ] = "¹Ì¸® º¸±â(~P)";
+            Text[ chinese_traditional ] = "¹wÄı(~P)";
+            Text[ arabic ] = "ãÚÇíäÉ";
+            Text[ turkish ] = "Önizleme";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_TITLE ;
+            HelpId = HID_GALLERY_TITLE;
+            Text = "~Titel" ;
+            Text [ ENGLISH ] = "~Title" ;
+            Text [ english_us ] = "~Title" ;
+            Text[ portuguese ] = "~Título";
+            Text[ russian ] = "~Çàãîëîâîê";
+            Text[ greek ] = "~Ôßôëïò";
+            Text[ dutch ] = "~Titel";
+            Text[ french ] = "~Titre";
+            Text[ spanish ] = "~Título";
+            Text[ italian ] = "~Titolo";
+            Text[ danish ] = "~Titel";
+            Text[ swedish ] = "~Titel";
+            Text[ polish ] = "~Tytu³";
+            Text[ portuguese_brazilian ] = "~Title";
+            Text[ japanese ] = "À²ÄÙ(~T)";
+            Text[ korean ] = "Á¦¸ñ(~T)";
+            Text[ chinese_simplified ] = "±êÌâ";
+            Text[ chinese_traditional ] = "¼ĞÃD(~T)";
+            Text[ arabic ] = "ÚäæÇä";
+            Text[ turkish ] = "Başlık";
+        };
+        MenuItem
+        {
+            Separator = TRUE ;
+        };
+        MenuItem
+        {
+            Identifier = MN_DELETE ;
+            HelpId = HID_GALLERY_MN_DELETE ;
+            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+            /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
+            Text = "~Löschen" ;
+            Text [ ENGLISH ] = "~Delete" ;
+            Text [ dutch ] = "~Wissen" ;
+            Text [ english_us ] = "~Delete" ;
+            Text [ italian ] = "~Elimina" ;
+            Text [ spanish ] = "~Eliminar" ;
+            Text [ french ] = "~Supprimer" ;
+            Text [ swedish ] = "~Radera" ;
+            Text [ danish ] = "~Slet" ;
+            Text [ portuguese_brazilian ] = "~Löschen" ;
+            Text [ portuguese ] = "E~liminar" ;
+            /* ### ACHTUNG: Neuer Text in Resource? Entfernt das gewählte Objekt : Entfernt das gewõhlte Objekt */
+            Text[ russian ] = "Óäàëèòü";
+    Text[ polish ] = "Usuñ";
+    Text[ japanese ] = "íœ(~D)";
+    Text[ chinese_simplified ] = "É¾³ı(~D)";
+    Text[ greek ] = "Äéáãñá~öŞ";
+            Text[ korean ] = "»èÁ¦(~D)";
+            Text[ chinese_traditional ] = "§R°£(~D)";
+            Text[ arabic ] = "ÍĞİ";
+            Text[ turkish ] = "Sil";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};

@@ -1,0 +1,344 @@
+/*************************************************************************
+ *
+ *  $RCSfile: helpid.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_HELPID_HRC
+#define _SFX_HELPID_HRC
+
+// include ------------------------------------------------------------------
+
+#include <svtools/solar.hrc>
+
+// Help-Ids -----------------------------------------------------------------
+
+#define HID_FILTER_SELECT                           (HID_SFX_START +   0)
+#define HID_USERDEFBMP                              (HID_SFX_START +   1)
+#define HID_DOCINFO_EDT                             (HID_SFX_START +   2)
+#define HID_PASSWD                                  (HID_SFX_START +   3)
+#define HID_PRINTMONITOR                            (HID_SFX_START +   4)
+#define HID_CONFIG_OBJECTBAR                        (HID_SFX_START +   5)
+#define HID_MANAGE_STYLES                           (HID_SFX_START +   6)
+#define HID_CONFIG_EVENT                            (HID_SFX_START +   7)
+#define HID_DOCINFODESC                             (HID_SFX_START +   8)
+#define HID_DOCINFODOC                              (HID_SFX_START +   9)
+#define HID_DOCINFOUSER                             (HID_SFX_START +  10)
+#define HID_CONFIG_MENU                             (HID_SFX_START +  11)
+#define HID_CONFIG_ACCEL                            (HID_SFX_START +  12)
+#define HID_CONFIG_STATBAR                          (HID_SFX_START +  13)
+#define HID_BOOKMARKPROPS                           (HID_SFX_START +  14)
+#define HID_BOOKGROUPPROPS                          (HID_SFX_START +  15)
+#define HID_BOOKFILEPROPS                           (HID_SFX_START +  16)
+#define HID_NEWS_SERVERPROPS                        (HID_SFX_START +  20)
+#define HID_NEWS_RULEPAGE                           (HID_SFX_START +  21)
+#define HID_MAILINTRAYPROPS                         (HID_SFX_START +  23)
+#define HID_DOCINFORELOAD                           (HID_SFX_START +  24)
+#define HID_NEWS_GROUPPAGE                          (HID_SFX_START +  25)
+#define HID_NEWS_SERVERPAGE                         (HID_SFX_START +  26)
+#define HID_FILEDLG_STANDARD                        (HID_SFX_START +  27)
+#define HID_FILEDLG_MANAGER                         (HID_SFX_START +  28)
+#define HID_FILEDLG_URL                             (HID_SFX_START +  29)
+#define HID_FILEDLG_FILE                            (HID_SFX_START +  30)
+#define HID_FILEDLG_USE_PASSWD                      (HID_SFX_START +  31)
+#define HID_FILEDLG_READ_ONLY                       (HID_SFX_START +  32)
+#define HID_EXPLORERCONTROL                         (HID_SFX_START +  33)
+#define HID_BROWSERCONTROL                          (HID_SFX_START +  34)
+#define HID_CTL_ORGANIZER_LEFT                      (HID_SFX_START +  35)
+#define HID_CTL_ORGANIZER_RIGHT                     (HID_SFX_START +  36)
+#define HID_EXPLMAILSRV_GENERAL_PAGE                (HID_SFX_START +  37)
+#define HID_EXPLMAILSRV_PROTOCOL_PAGE               (HID_SFX_START +  38)
+#define HID_EXPLMAILSRV_DATAMATCH_PAGE              (HID_SFX_START +  39)
+#define HID_EXPLMAILSRV_SENDJOURNAL_PAGE            (HID_SFX_START +  40)
+#define HID_EXPLMAIL_GENERAL_PAGE                   (HID_SFX_START +  41)
+#define HID_NEWS_CTL_RULES                          (HID_SFX_START +  42)
+#define HID_NEWS_CTL_GROUPS                         (HID_SFX_START +  43)
+#define HID_CONFIG_OBJECTBAR_CTL                    (HID_SFX_START +  44)
+#define HID_NEWS_QUICKSEARCH                        (HID_SFX_START +  45)
+#define HID_NEWS_SERVERVIEWPROPS                    (HID_SFX_START +  46)
+#define HID_NEWS_SHOWARTICLEPROPS                   (HID_SFX_START +  47)
+#define HID_NEWS_SHOWGROUPPROPS                     (HID_SFX_START +  48)
+#define HID_NEWS_USER                               (HID_SFX_START +  49)
+#define HID_MULTISELECTION_GENERAL_PAGE             (HID_SFX_START +  50)
+#define HID_LINK_GENERAL_PAGE                       (HID_SFX_START +  51)
+#define HID_LINK_ADDRESS_PAGE                       (HID_SFX_START +  52)
+#define HID_FOLDER_GENERAL_PAGE                     (HID_SFX_START +  53)
+#define HID_FILE_GENERAL_PAGE                       (HID_SFX_START +  54)
+#define HID_FTP_GENERAL_PAGE                        (HID_SFX_START +  55)
+#define HID_PRINT_OPTIONS                           (HID_SFX_START +  56)
+#define HID_PREVIEW_FRAME                           (HID_SFX_START +  57)
+#define HID_DOCINFO_FRAME                           (HID_SFX_START +  58)
+#define HID_EXPLORER_FRAME                          (HID_SFX_START +  59)
+#define HID_APP_WIN                                 (HID_SFX_START +  60)
+#define HID_TEMPLATE_FMT                            (HID_SFX_START +  61)
+#define HID_TEMPLATE_FILTER                         (HID_SFX_START +  62)
+#define HID_FTPSERVER_PAGE                          (HID_SFX_START +  63)
+#define HID_MACRO_LB_EVENT                          (HID_SFX_START +  64)
+#define HID_DLG_SFX_EXP_SEARCH                      (HID_SFX_START +  65)
+#define HID_TP_SFX_EXP_SEARCH_CRITERIA              (HID_SFX_START +  66)
+#define HID_TP_SFX_EXP_SEARCH_PLACE                 (HID_SFX_START +  67)
+#define HID_SEARCH_DLG_TABLB                        (HID_SFX_START +  68)
+#define HID_TEMPLDLG_NEWBYEXAMPLE                   (HID_SFX_START +  69)
+#define HID_TEMPLDLG_UPDATEBYEXAMPLE                (HID_SFX_START +  70)
+#define HID_TEMPLDLG_WATERCAN                       (HID_SFX_START +  71)
+#define HID_CONFIGFUNCTION_LISTBOX                  (HID_SFX_START +  72)
+#define HID_CONFIGGROUP_LISTBOX                     (HID_SFX_START +  73)
+#define HID_STATUSBARCONFIG_LISTBOX                 (HID_SFX_START +  74)
+#define HID_ACCELCONFIG_LISTBOX                     (HID_SFX_START +  75)
+#define HID_MENUCONFIG_LISTBOX                      (HID_SFX_START +  76)
+#define HID_TOOLBOXCONFIG_LISTBOX                   (HID_SFX_START +  77)
+#define HID_DESKTOP                                 (HID_SFX_START +  78)
+#define HID_EXPLORERTOOLSTOOLBOX                    (HID_SFX_START +  79)
+#define HID_EXPLOREROBJECTTOOLBOX                   (HID_SFX_START +  80)
+#define HID_RECORDINGTOOLBOX                        (HID_SFX_START +  81)
+#define HID_FULLSCREENTOOLBOX                       (HID_SFX_START +  82)
+#define HID_HELPBAR                                 (HID_SFX_START +  83)
+#define HID_ENVTOOLBOX                              (HID_SFX_START +  84)
+#define HID_FRAMESETEDIT_TOOLBOX                    (HID_SFX_START +  85)
+#define HID_NAVIGATOR_WINDOW                        (HID_SFX_START +  86)
+#define HID_MACRO_GROUP                             (HID_SFX_START +  87)
+#define HID_MACRO_MACROS                            (HID_SFX_START +  88)
+#define HID_TABDLG_RESET_BTN                        (HID_SFX_START +  89)
+#define HID_TABDLG_STANDARD_BTN                     (HID_SFX_START +  90)
+#define HID_HELPAGENT_TIP_BOX                       (HID_SFX_START +  91)
+#define HID_TEMPLDLG_TOOLBOX_LEFT                   (HID_SFX_START +  92)
+#define HID_TEMPLDLG_TOOLBOX_RIGHT                  (HID_SFX_START +  93)
+#define HID_EXPLORER_SRCH_COUNT                     (HID_SFX_START +  94)
+#define HID_BEAMER_SORT_ASCENDING                   (HID_SFX_START +  95)
+#define HID_BEAMER_SORT_DESCENDING                  (HID_SFX_START +  96)
+#define HID_EXPLORER_SRCH_LATEST_COUNT              (HID_SFX_START +  97)
+#define HID_CONFIG_EVENT_OFFICE_BASED               (HID_SFX_START +  98)
+#define HID_CONFIG_EVENT_DOCUMENT_BASED             (HID_SFX_START +  99)
+#define HID_ORGANIZE_NEW                            (HID_SFX_START + 100)
+#define HID_ORGANIZE_DELETE                         (HID_SFX_START + 101)
+#define HID_ORGANIZE_EDIT                           (HID_SFX_START + 102)
+#define HID_ORGANIZE_COPY_FROM                      (HID_SFX_START + 103)
+#define HID_ORGANIZE_COPY_TO                        (HID_SFX_START + 104)
+#define HID_ORGANIZE_PRINT                          (HID_SFX_START + 105)
+#define HID_ORGANIZE_PRINTER_SETUP                  (HID_SFX_START + 106)
+#define HID_ORGANIZE_RESCAN                         (HID_SFX_START + 107)
+#define HID_STYLIST_NEW                             (HID_SFX_START + 108)
+#define HID_STYLIST_EDIT                            (HID_SFX_START + 109)
+#define HID_STYLIST_DELETE                          (HID_SFX_START + 110)
+#define HID_EXPLORERMENU_ARRANGEICONS               (HID_SFX_START + 111)
+#define HID_EXPLORERMENU_ARRANGEICONS_ONGRID        (HID_SFX_START + 112)
+#define HID_EXPLORERMENU_FIXEDICONPOS               (HID_SFX_START + 113)
+#define HID_EXPLORERMENU_OPEN                       (HID_SFX_START + 114)
+#define HID_EXPLORERMENU_PRINT                      (HID_SFX_START + 115)
+#define HID_EXPLORERMENU_SEARCH                     (HID_SFX_START + 116)
+#define HID_EXPLORERMENU_COPY                       (HID_SFX_START + 117)
+#define HID_EXPLORERMENU_DELETE                     (HID_SFX_START + 118)
+#define HID_EXPLORERMENU_CREATELINK                 (HID_SFX_START + 119)
+#define HID_EXPLORERMENU_EDITPROPERTIES             (HID_SFX_START + 120)
+#define HID_EXPLORERMENU_DOWNLOAD                   (HID_SFX_START + 121)
+#define HID_EXPLORERMENU_STDTEMPLATE                (HID_SFX_START + 122)
+#define HID_EXPLORERDLG_FILE                        (HID_SFX_START + 123)
+#define HID_EXPLORERDLG_FILELIST                    (HID_SFX_START + 124)
+#define HID_PDFOLDERS_WORKPLACE                     (HID_SFX_START + 125)
+#define HID_PDFOLDERS_EXPLORER                      (HID_SFX_START + 126)
+#define HID_PDFOLDERS_STANDARD                      (HID_SFX_START + 127)
+#define HID_PDFOLDERS_ROOT                          (HID_SFX_START + 128)
+#define HID_PDFOLDERS_DESKTOP                       (HID_SFX_START + 129)
+#define HID_CNTMENU_REMOVE_GROUP                    (HID_SFX_START + 130)
+#define HID_CNTMENU_CLEAR_CACHE                     (HID_SFX_START + 131)
+#define HID_CNT_SYNC_INFO_DLG                       (HID_SFX_START + 132)
+#define HID_CNT_REMOVE_REMOVEDLIST                  (HID_SFX_START + 133)
+#define HID_CNT_ABORT_DIALOG                        (HID_SFX_START + 134)
+#define HID_CNT_PAGE_PRJ_DATAEXCHANGE               (HID_SFX_START + 135)
+#define HID_CHAOSDOC_OBJECTBAR_FILE                 (HID_SFX_START + 136)
+#define HID_CHAOSDOC_OBJECTBAR_MESSAGE              (HID_SFX_START + 137)
+#define HID_CHAOSDOC_MN_PART_OPEN                   (HID_SFX_START + 138)
+#define HID_CHAOSDOC_MN_PART_DELETE                 (HID_SFX_START + 139)
+#define HID_CHAOSDOC_MN_PART_RENAME                 (HID_SFX_START + 140)
+#define HID_CHAOSDOC_MN_PART_SAVEAS                 (HID_SFX_START + 141)
+#define HID_EXPLORER_DOCVIEW_ICON                   (HID_SFX_START + 142)
+#define HID_EXPLORER_DOCVIEW_DETAILS                (HID_SFX_START + 143)
+#define HID_CHAOSDOC_WIN                            (HID_SFX_START + 144)
+#define HID_CHAOSDOC_WIN_HEADER                     (HID_SFX_START + 145)
+#define HID_CHAOSDOC_WIN_PARTS                      (HID_SFX_START + 146)
+#define HID_CHAOSDOC_WIN_BODY                       (HID_SFX_START + 147)
+#define HID_CNT_INSERT_COLUMN                       (HID_SFX_START + 148)
+#define HID_CNT_REMOVE_COLUMN                       (HID_SFX_START + 149)
+#define HID_CNT_OPT_WIDTH                           (HID_SFX_START + 150)
+#define HID_CNT_SORT_ASC                            (HID_SFX_START + 151)
+#define HID_CNT_SORT_DESC                           (HID_SFX_START + 152)
+#define HID_CNT_RULEPG_OPEN_DIR                     (HID_SFX_START + 153)
+#define HID_CHAOSDOC_MN_HEADER_ADDRESSBOOK          (HID_SFX_START + 154)
+#define HID_CHAOSDOC_MN_HEADER_COPYLINK             (HID_SFX_START + 155)
+#define HID_CLEAN_CACHE                             (HID_SFX_START + 156)
+#define HID_SBOX_LOCATION                           (HID_SFX_START + 157)
+#define HID_SBOX_SUBSCRIBTION                       (HID_SFX_START + 158)
+#define HID_SBOX_CDF_SUBSCRIBTION                   (HID_SFX_START + 159)
+#define HID_SBOX_SCHEDULE                           (HID_SFX_START + 160)
+#define HID_SBOX_NOTIFICATION                       (HID_SFX_START + 161)
+#define HID_SBOX_SDC_GENERAL                        (HID_SFX_START + 162)
+#define HID_BRWBOX_HEADERBAR                        (HID_SFX_START + 163)
+#define HID_CANNOT_CREATE_BMK_HERE                  (HID_SFX_START + 164)
+#define HID_CREATE_BOOKMARK                         (HID_SFX_START + 165)
+#define HID_TASKBAR                                 (HID_SFX_START + 166)
+#define HID_TASKBUTTONBAR                           (HID_SFX_START + 167)
+#define HID_TASKTOOLBAR                             (HID_SFX_START + 168)
+#define HID_CHAOSDOC_SHOW_FSYS_EXTENSION            (HID_SFX_START + 169)
+#define HID_CNT_FILE                                (HID_SFX_START + 170)
+#define HID_CHAOSDOC_MN_BODY_OPENLINK               (HID_SFX_START + 171)
+#define HID_CHAOSDOC_MN_BODY_OPENLINK_BLANK         (HID_SFX_START + 172)
+#define HID_CHAOSDOC_MN_BODY_DOWNLOAD               (HID_SFX_START + 173)
+#define HID_CHAOSDOC_MN_BODY_ADDBOOKMARK            (HID_SFX_START + 174)
+#define HID_OPEN_MENU_CNT                           (HID_SFX_START + 175)
+#define HID_CNT_OPEN_AS_TEMPLATE                    (HID_SFX_START + 176)
+#define HID_CNT_OPEN_AS_DOC                         (HID_SFX_START + 177)
+#define HID_PDFOLDERS_TEMPLATE                      (HID_SFX_START + 178)
+#define HID_EXPLORER_ROOT                           (HID_SFX_START + 179)
+#define HID_RESET_URL                               (HID_SFX_START + 180)
+#define HID_PHONE_DIALOG                            (HID_SFX_START + 181)
+#define HID_QB_RESOLVE_LINK                         (HID_SFX_START + 182)
+#define HID_CHAOSDOC_MN_HEADER_FLAG_BOLD            (HID_SFX_START + 183)
+#define HID_CHAOSDOC_MN_HEADER_FLAG_ITALIC          (HID_SFX_START + 184)
+#define HID_CHAOSDOC_MN_HEADER_BIG_HEADER           (HID_SFX_START + 185)
+#define HID_CHAOSDOC_MN_HEADER_TEMPLATE_HEADER      (HID_SFX_START + 186)
+#define HID_CNT_MARK_THREAD_MARKED                  (HID_SFX_START + 187)
+#define HID_CNT_MARK_THREAD_UNMARKED                (HID_SFX_START + 188)
+#define HID_CNT_DLG_SEARCH_BT_SHOW                  (HID_SFX_START + 189)
+#define HID_CNT_DLG_SEARCH_BT_UPDATE                (HID_SFX_START + 190)
+#define HID_CNT_DLG_SEARCH_BT_SYNCHRONIZE           (HID_SFX_START + 191)
+#define HID_CNT_DLG_SEARCH_BT_STOP                  (HID_SFX_START + 192)
+#define HID_CNT_PAGE_HEADER                         (HID_SFX_START + 193)
+#define HID_CNT_DLG_ADDRESS                         (HID_SFX_START + 194)
+#define HID_EXPLORERMENU_AUTO_ARRANGEICONS          (HID_SFX_START + 195)
+#define HID_EXPLORERMENU_AUTO_ADJUSTICONS           (HID_SFX_START + 196)
+#define HID_EXPLORERMENU_FREE_POSITIONING           (HID_SFX_START + 197)
+#define HID_CNT_TARGET_MENU                         (HID_SFX_START + 198)
+#define HID_CNT_PAGE_DESCRIPTION                    (HID_SFX_START + 199)
+#define HID_CNT_LB_HEADER                           (HID_SFX_START + 200)
+#define HID_CNT_LB_DESCRIPTION                      (HID_SFX_START + 201)
+#define HID_GROUPVIEW_BIG_SYMBOLS                   (HID_SFX_START + 202)
+#define HID_GROUPVIEW_SMALL_SYMBOLS                 (HID_SFX_START + 203)
+#define HID_GROUPVIEW_ADD_GROUP                     (HID_SFX_START + 204)
+#define HID_GROUPVIEW_REMOVE_GROUP                  (HID_SFX_START + 205)
+#define HID_GROUPVIEW_RENAME_GROUP                  (HID_SFX_START + 206)
+#define HID_GROUPVIEW_ADD_BOOKMARK                  (HID_SFX_START + 207)
+#define HID_GROUPVIEW_TREE                          (HID_SFX_START + 208)
+#define HID_GROUPVIEW_ADD_AS_FOLDER                 (HID_SFX_START + 209)
+#define HID_GROUPVIEW_ADD_AS_BMK                    (HID_SFX_START + 210)
+#define HID_GROUPVIEW_REMOVE_BMK                    (HID_SFX_START + 211)
+#define HID_GROUPVIEW_CONTENT_BIG                   (HID_SFX_START + 212)
+#define HID_GROUPVIEW_CONTENT_SMALL                 (HID_SFX_START + 213)
+#define HID_GROUPVIEW_CONTENT_TREE                  (HID_SFX_START + 214)
+#define HID_GROUPVIEW_SHOW_DOCS                     (HID_SFX_START + 215)
+#define HID_EDIT_TEMPLATE                           (HID_SFX_START + 216)
+#define HID_PDFOLDERS_GRAPHICS                      (HID_SFX_START + 217)
+#define HID_FILEDLG_AUTOCOMPLETEBOX                 (HID_SFX_START + 218)
+#define HID_FILEDLG_SAVE_BTN                        (HID_SFX_START + 219)
+#define HID_FILEDLG_SAVE_FILENAME                   (HID_SFX_START + 220)
+#define HID_FILEDLG_SAVE_FILETYPE                   (HID_SFX_START + 221)
+#define HID_FILEDLG_INSERT_BTN                      (HID_SFX_START + 222)
+#define HID_FILEDLG_PATH_BTN                        (HID_SFX_START + 223)
+#define HID_FILEDLG_PATH_FILENAME                   (HID_SFX_START + 224)
+#define HID_FILEDLG_FOLDER_BTN                      (HID_SFX_START + 225)
+#define HID_FILEDLG_FOLDER_FILENAME                 (HID_SFX_START + 226)
+#define HID_FILEDLG_SRCHFOLDER_BTN                  (HID_SFX_START + 227)
+#define HID_PDFOLDERS_GROUPS                        (HID_SFX_START + 228)
+#define HID_OPEN_CHOOSE_FILTER                      (HID_SFX_START + 229)
+#define HID_PDFOLDERS_BOOKMARKS                     (HID_SFX_START + 230)
+#define HID_PDFOLDERS_FAVORITES_ADD                 (HID_SFX_START + 231)
+#define HID_PDFOLDERS_FAVORITES_REMOVE              (HID_SFX_START + 232)
+#define HID_PDFOLDERS_HISTORY                       (HID_SFX_START + 233)
+#define HID_FILEDLG_EDIT_FAVORITES                  (HID_SFX_START + 234)
+#define HID_FILEDLG_NEW_FAVORITE                    (HID_SFX_START + 235)
+#define HID_FILEDLG_EDIT_FAVORITES_LISTBOX          (HID_SFX_START + 236)
+#define HID_FILEDLG_EDIT_FAVORITES_HEADERBAR        (HID_SFX_START + 237)
+#define HID_CONFIGFUNCTION_ACC_LISTBOX              (HID_SFX_START + 238)
+#define HID_CONFIGGROUP_ACC_LISTBOX                 (HID_SFX_START + 239)
+#define HID_CNT_CB_FORCE_BODY_EXPORT                (HID_SFX_START + 240)
+#define HID_CNT_PAGE_REPSTATE_CONTROL               (HID_SFX_START + 241)
+#define HID_TASKSTATUSBAR                           (HID_SFX_START + 242)
+#define HID_STATUSBAR                               (HID_SFX_START + 243)
+#define HID_CNT_PAGE_HEADER_TABBAR                  (HID_SFX_START + 244)
+#define HID_CNT_PAGE_SUBSCR_TABBAR                  (HID_SFX_START + 245)
+#define HID_CHAOSDOC_MN_PART_PRINT                  (HID_SFX_START + 246)
+#define HID_STATUSINDICATOR_TEXT                    (HID_SFX_START + 247)
+#define HID_STATUSINDICATOR_PROGRESS                (HID_SFX_START + 248)
+#define HID_CNT_VALUE_ADDED_NONE                    (HID_SFX_START + 249)
+#define HID_CNT_VALUE_ADDED_DOCINFO                 (HID_SFX_START + 250)
+#define HID_CNT_VALUE_ADDED_FULL                    (HID_SFX_START + 251)
+#define HID_CNT_MESSAGE_STOREMODE_REMOTE            (HID_SFX_START + 252)
+#define HID_CNT_MESSAGE_STOREMODE_LOCAL             (HID_SFX_START + 253)
+#define HID_CNT_VIEW_ALL_ARTICLES                   (HID_SFX_START + 254)
+#define HID_CNT_VIEW_UNREAD_ARTICLES                (HID_SFX_START + 255)
+#define HID_CNT_VIEW_READ_ARTICLES                  (HID_SFX_START + 256)
+#define HID_CNT_VIEW_MARKED_ARTICLES                (HID_SFX_START + 257)
+#define HID_CNT_VIEW_MARKED_AND_UNREAD_ARTICLES     (HID_SFX_START + 258)
+#define HID_CNT_VIEW_ALL_FOLDERS                    (HID_SFX_START + 259)
+#define HID_CNT_VIEW_SUBSCRIBED_FOLDERS             (HID_SFX_START + 260)
+#define HID_CNT_VIEW_ACTIVE_FOLDERS                 (HID_SFX_START + 261)
+#define HID_CNT_SENT_VIEW_ALL_ARTICLES              (HID_SFX_START + 262)
+#define HID_CNT_SENT_VIEW_SENT_ARTICLES             (HID_SFX_START + 263)
+#define HID_CNT_SENT_VIEW_UNSENT_ARTICLES           (HID_SFX_START + 264)
+#define HID_CNT_SENT_VIEW_MARKED_ARTICLES           (HID_SFX_START + 265)
+
+#define ACT_SFX_HID_END     HID_CNT_SENT_VIEW_MARKED_ARTICLES
+
+// "Uberlaufpr"ufung --------------------------------------------------------
+
+#if ACT_SFX_HID_END > HID_SFX_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+#endif // #ifndef _SFX_HELPID_HRC
+
+// ******************************************************************* EOF
+

@@ -1,0 +1,388 @@
+/*************************************************************************
+ *
+ *  $RCSfile: logindlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:04:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef UUI_IDS_HRC
+#include <ids.hrc>
+#endif
+#ifndef UUI_LOGINDLG_HRC
+#include <logindlg.hrc>
+#endif
+
+ModalDialog DLG_LOGIN
+{
+    HelpId = HID_DLG_LOGIN ;
+    Border = TRUE ;
+    Moveable = TRUE ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 265 , 158 ) ;
+    Text = "Benutzername und Passwort erforderlich" ;
+    Text [ English ] = "User Name and Password required" ;
+    FixedText INFO_LOGIN_ERROR
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 185 , 18 ) ;
+        WordBreak = TRUE ;
+    };
+    GroupBox GB_LOGIN_ERROR
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 197 , 35 ) ;
+        Text = "Meldung vom Server" ;
+        Text [ English ] = "Report from server" ;
+        Text [ english_us ] = "Message from server" ;
+        Text [ portuguese_brazilian ] = "Meldung vom Server" ;
+        Text [ swedish ] = "Meddelande från servern" ;
+        Text [ danish ] = "Melding fra serveren" ;
+        Text [ italian ] = "Segnalazione dal server" ;
+        Text [ spanish ] = "Mensaje del servidor" ;
+        Text [ french ] = "Message en provenance du serveur" ;
+        Text [ dutch ] = "Melding van de server" ;
+        Text [ portuguese ] = "Mensagem do servidor" ;
+        Text[ chinese_simplified ] = "·şÎñÆ÷±¨¸æ";
+        Text[ russian ] = "Ñîîáùåíèå ñ ñåğâåğà";
+        Text[ polish ] = "Wiadomoœæ z serwera";
+        Text[ japanese ] = "»°ÊŞ°‚©‚ç‚ÌÒ¯¾°¼Ş";
+        Text[ chinese_traditional ] = "¦øªA¾¹³ø§i";
+        Text[ greek ] = "ÌŞíõìá ôïõ äéáêïìéóôŞ";
+        Text[ korean ] = "¼­¹ö·ÎºÎÅÍÀÇ ¸Ş½ÃÁö";
+        Text[ arabic ] = "ÑÓÇáÉ ãä ÇáãÒæøÏ";
+        Text[ turkish ] = "Sunucudan ileti";
+    };
+    FixedText INFO_LOGIN_REQUEST
+    {
+        Pos = MAP_APPFONT ( 12 , 55 ) ;
+        Size = MAP_APPFONT ( 185 , 18 ) ;
+        WordBreak = TRUE ;
+        Text = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
+        Text [ English ] = "Please enter user name and password here for %1." ;
+        Text [ portuguese ] = "Especifique o nome do utilizador e a senha para %1." ;
+        Text [ english_us ] = "Please enter user name and password for %1 here." ;
+        Text [ portuguese_brazilian ] = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
+        Text [ swedish ] = "Var vänlig och mata in användarnamn och lösenord här för %1." ;
+        Text [ danish ] = "Indtast her venligst brugernavnet og adgangkoden for %1." ;
+        Text [ italian ] = "Digitate qui il nome dell'utente e la password per %1." ;
+        Text [ spanish ] = "Especifique su nombre de usuario y su contraseña para %1." ;
+        Text [ french ] = "Veuilez saisir votre nom d'utilisateur et votre mot de passe pour %1." ;
+        Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
+        Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎª %1 ÊäÈëÓÃ»§ÃûºÍ¿ÚÁî¡£";
+        Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïîëüçîâàòåëÿ è ïàğîëü äëÿ %1.";
+        Text[ polish ] = "Wpisz nazwisko u¿ytkownika i has³o dla %1";
+        Text[ japanese ] = "‚±‚±‚É %1 ‚ÌÕ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        Text[ chinese_traditional ] = "½Ğ¬° %1 ¿é¤J¨Ï¥Î¦W©M±K½X¡C";
+        Text[ greek ] = "Ğáñáêáëş åéóÜãåôå åäş ôï üíïìá ÷ñŞóôç êáé ôïí êùäéêü ğñüóâáóçò ãéá ôï %1.";
+        Text[ korean ] = "¿©±â¿¡ »ç¿ëÀÚ ÀÌ¸§°ú %1ÀÇ ÆĞ½º¿öµå¸¦ ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+        Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ áÜ %1 åäÇ.";
+        Text[ turkish ] = "%1 için buraya kullanıcı adı ve şifre girin.";
+    };
+    FixedText FT_LOGIN_PATH
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "~Pfad" ;
+        Text [ English ] = "~Path" ;
+        Text [ english_us ] = "~Path" ;
+        Text [ portuguese_brazilian ] = "~Pfad" ;
+        Text [ swedish ] = "Sö~kväg" ;
+        Text [ danish ] = "Sti" ;
+        Text [ italian ] = "~Percorso" ;
+        Text [ spanish ] = "~Ruta" ;
+        Text [ french ] = "~Chemin" ;
+        Text [ dutch ] = "~Pad" ;
+        Text [ portuguese ] = "~Atalho" ;
+        Text[ chinese_simplified ] = "Â·¾¶(~P)";
+        Text[ russian ] = "Ïóòü";
+        Text[ polish ] = "Œcie¿ka";
+        Text[ japanese ] = "Êß½(~H)";
+        Text[ chinese_traditional ] = "¸ô®|(~H)";
+        Text[ greek ] = "ÄéáäñïìŞ";
+        Text[ korean ] = "°æ·Î(~H)";
+        Text[ arabic ] = "ÇáãÓÇÑ";
+        Text[ turkish ] = "Veri yolu";
+    };
+    Edit ED_LOGIN_PATH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 76 ) ;
+        Size = MAP_APPFONT ( 114 , 12 ) ;
+    };
+    FixedText INFO_LOGIN_PATH
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 77 ) ;
+        Size = MAP_APPFONT ( 131 , 10 ) ;
+    };
+    PushButton BTN_LOGIN_PATH
+    {
+        Pos = MAP_APPFONT ( 183 , 75 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Text = "~..." ;
+    };
+    FixedText FT_LOGIN_USERNAME
+    {
+        Pos = MAP_APPFONT ( 12 , 92 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "~Benutzername" ;
+        Text [ English ] = "~Username" ;
+        Text [ english_us ] = "~User name" ;
+        Text [ portuguese_brazilian ] = "~Benutzername" ;
+        Text [ swedish ] = "~Användarnamn" ;
+        Text [ danish ] = "Brugernavn" ;
+        Text [ italian ] = "Nome utente" ;
+        Text [ spanish ] = "~Nombre de usuario" ;
+        Text [ french ] = "~Nom d'utilisateur" ;
+        Text [ dutch ] = "Naam ~gebruiker" ;
+        Text [ portuguese ] = "~Nome do utilizador" ;
+        Text[ chinese_simplified ] = "ÓÃ»§Ãû(~U)";
+        Text[ russian ] = "Ïîëüçîâàòåëü";
+        Text[ polish ] = "Nazwisko u¿ytkownika";
+        Text[ japanese ] = "Õ°»Ş°–¼(~U)";
+        Text[ chinese_traditional ] = "¨Ï¥Î¦W(~U)";
+        Text[ greek ] = "¼íïìá ÷ñŞóôç";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
+        Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
+        Text[ turkish ] = "Kullanıcı adı";
+    };
+    Edit ED_LOGIN_USERNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 91 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+    };
+    FixedText INFO_LOGIN_USERNAME
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 92 ) ;
+        Size = MAP_APPFONT ( 131 , 10 ) ;
+    };
+    FixedText FT_LOGIN_PASSWORD
+    {
+        Pos = MAP_APPFONT ( 12 , 107 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "P~asswort" ;
+        Text [ English ] = "P~assword" ;
+        Text [ english_us ] = "Pass~word" ;
+        Text [ portuguese_brazilian ] = "P~asswort" ;
+        Text [ swedish ] = "Lösen~ord" ;
+        Text [ danish ] = "Adgangskode" ;
+        Text [ italian ] = "P~assword" ;
+        Text [ spanish ] = "~Contraseña" ;
+        Text [ french ] = "~Mot de passe" ;
+        Text [ dutch ] = "W~achtwoord" ;
+        Text [ portuguese ] = "~Senha" ;
+        Text[ chinese_simplified ] = "¿ÚÁî(~W)";
+        Text[ russian ] = "Ïàğîëü";
+        Text[ polish ] = "Has³o";
+        Text[ japanese ] = "Êß½Ü°ÄŞ(~W)";
+        Text[ chinese_traditional ] = "±K½X(~W)";
+        Text[ greek ] = "Êùäéêüò ğñüóâ~áóçò";
+        Text[ korean ] = "ÆĞ½º¿öµå(~W)";
+        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "Şifre";
+    };
+    Edit ED_LOGIN_PASSWORD
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 106 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+        PassWord = TRUE ;
+    };
+    FixedText FT_LOGIN_ACCOUNT
+    {
+        Pos = MAP_APPFONT ( 12 , 122 ) ;
+        Size = MAP_APPFONT ( 51 , 10 ) ;
+        Text = "A~ccount" ;
+        Text [ English ] = "A~ccount" ;
+        Text[ english_us ] = "A~ccount";
+        Text[ portuguese ] = "~Conta";
+        Text[ russian ] = "Ó÷åòíàÿ çàïèñü";
+        Text[ dutch ] = "A~ccount";
+        Text[ french ] = "C~ompte";
+        Text[ spanish ] = "~Cuenta";
+        Text[ italian ] = "A~ccount";
+        Text[ danish ] = "Konto";
+        Text[ swedish ] = "~Konto";
+        Text[ polish ] = "Konto";
+        Text[ portuguese_brazilian ] = "A~ccount";
+        Text[ japanese ] = "±¶³İÄ(~C)";
+        Text[ chinese_simplified ] = "ÕÊºÅ(~C)";
+        Text[ chinese_traditional ] = "±b¸¹(~C)";
+        Text[ greek ] = "Ëïãáñéáóìü~ò";
+        Text[ korean ] = "°èÁ¤(~C)";
+        Text[ arabic ] = "ÇÔÊÑÇß";
+        Text[ turkish ] = "Hesap";
+    };
+    Edit ED_LOGIN_ACCOUNT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 66 , 121 ) ;
+        Size = MAP_APPFONT ( 131 , 12 ) ;
+        PassWord = TRUE ;
+    };
+    CheckBox CB_LOGIN_SAVEPASSWORD
+    {
+        Pos = MAP_APPFONT ( 12 , 136 ) ;
+        Size = MAP_APPFONT ( 185 , 10 ) ;
+        Text = "Passwort ~speichern" ;
+        Text [ English ] = "~Save password" ;
+        Text [ english_us ] = "~Save password" ;
+        Text [ italian ] = "Salva pa~ssword" ;
+        Text [ spanish ] = "Guardar ~contraseña" ;
+        Text [ french ] = "~Enregistrer le mot de passe" ;
+        Text [ dutch ] = "Wachtwoord ~opslaan" ;
+        Text [ swedish ] = "~Spara lösenord" ;
+        Text [ danish ] = "Gem adgangskode" ;
+        Text [ portuguese ] = "Guardar ~senha" ;
+        Text [ portuguese_brazilian ] = "Passwort ~speichern" ;
+        Text[ chinese_simplified ] = "´æÅÌ¿ÚÁî(~S)";
+        Text[ russian ] = "Ñîõğàíèòü ïàğîëü";
+        Text[ polish ] = "Zapisz has³o";
+        Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•Û‘¶(~S)";
+        Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
+        Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
+        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå(~S)";
+        Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "Şifreyi kaydet";
+    };
+    GroupBox GB_LOGIN_LOGIN
+    {
+        Pos = MAP_APPFONT ( 7 , 44 ) ;
+        Size = MAP_APPFONT ( 197 , 108 ) ;
+        Text = "Anmelden" ;
+        Text [ English ] = "Connect" ;
+        Text [ english_us ] = "Login" ;
+        Text [ portuguese_brazilian ] = "Anmelden" ;
+        Text [ swedish ] = "Logga in" ;
+        Text [ danish ] = "Login" ;
+        Text [ italian ] = "Login" ;
+        Text [ spanish ] = "Registrar" ;
+        Text [ french ] = "Login" ;
+        Text [ dutch ] = "Aanmelden" ;
+        Text [ portuguese ] = "Login" ;
+        Text[ chinese_simplified ] = "Ç©µ½";
+        Text[ russian ] = "Âõîä â ñèñòåìó";
+        Text[ polish ] = "Zarejestruj";
+        Text[ japanese ] = "Û¸Ş²İ";
+        Text[ chinese_traditional ] = "µn¤J";
+        Text[ greek ] = "Óıíäåóç";
+        Text[ korean ] = "·Î±×ÀÎ";
+        Text[ arabic ] = "ÊÓÌíá";
+        Text[ turkish ] = "Oturum aç";
+    };
+    OKButton BTN_LOGIN_OK
+    {
+        Pos = MAP_APPFONT ( 209 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_LOGIN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 209 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_LOGIN_HELP
+    {
+        Pos = MAP_APPFONT ( 209 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_LOGIN_AT
+    {
+        Text = "auf " ;
+        Text [ English ] = "at " ;
+        Text [ portuguese ] = "em  " ;
+        Text [ english_us ] = "to " ;
+        Text [ portuguese_brazilian ] = "auf " ;
+        Text [ swedish ] = "på   " ;
+        Text [ danish ] = "på " ;
+        Text [ italian ] = "su  " ;
+        Text [ spanish ] = "en  " ;
+        Text [ french ] = "sur  " ;
+        Text [ dutch ] = "op   " ;
+        Text[ chinese_simplified ] = "ÔÚ ";
+        Text[ russian ] = "íà ";
+        Text[ polish ] = "na  ";
+        Text[ japanese ] = "Û¸Ş²İæ ";
+        Text[ chinese_traditional ] = "¦b ";
+        Text[ greek ] = "óôï ";
+        Text[ korean ] = "¿¡ ";
+        Text[ arabic ] = "Úáì ";
+        Text[ turkish ] = "yeri ";
+    };
+    Text [ english_us ] = "User Name and Password Required" ;
+    Text [ portuguese_brazilian ] = "Benutzername und Passwort erforderlich" ;
+    Text [ swedish ] = "Användarnamn och lösenord nödvändigt" ;
+    Text [ danish ] = "Brugernavn og adgangskode påkrævet" ;
+    Text [ italian ] = "Nome utente e password sono necessari" ;
+    Text [ spanish ] = "Se requieren el nombre de usuario y la contraseña" ;
+    Text [ french ] = "Nom d'utilisateur et mot de passe requis" ;
+    Text [ dutch ] = "Naam gebruiker en wachtwoord vereist" ;
+    Text [ portuguese ] = "Requere-se nome de utilizador e senha" ;
+    Text[ chinese_simplified ] = "ÒªÇóÊäÈëÓÃ»§ÃûºÍ¿ÚÁî";
+    Text[ russian ] = "Íåîáõîäèìû èìÿ ïîëüçîâàòåëÿ è ïàğîëü";
+    Text[ polish ] = "Wymagane nazwisko u¿ytkownika i has³o";
+    Text[ japanese ] = "Õ°»Ş°–¼‚ÆÊß½Ü°ÄŞ‚ª•K—v";
+    Text[ chinese_traditional ] = "½Ğ¿é¤J¨Ï¥Î¦W©M±K½X";
+    Text[ greek ] = "Áğáéôåßôáé ôï üíïìá ÷ñŞóôç êáé ï êùäéêüò ğñüóâáóçò";
+    Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§°ú ÆĞ½º¿öµå°¡ ÇÊ¿äÇÕ´Ï´Ù.";
+    Text[ arabic ] = "ãØáæÈ ÅÏÎÇá ÇÓã ÇáãÓÊÎÏã æßáãÉ ÇáÓÑ";
+    Text[ turkish ] = "Kullanıcı adı ve şifre gerekli";
+};
+

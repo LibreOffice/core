@@ -1,0 +1,3091 @@
+/*************************************************************************
+ *
+ *  $RCSfile: docfile.cxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <stdio.h>
+
+#include <uno/mapping.hxx>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+
+#ifndef _EXTATTR_HXX
+#include <svtools/extattr.hxx>
+#endif
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
+
+#ifndef _EXCHANGE_HXX //autogen
+#include <vcl/exchange.hxx>
+#endif
+#ifndef _CACHESTR_HXX //autogen
+#include <tools/cachestr.hxx>
+#endif
+#ifndef _UNDO_HXX //autogen
+#include <svtools/undo.hxx>
+#endif
+#ifndef _SFXSTRITEM_HXX //autogen
+#include <svtools/stritem.hxx>
+#endif
+#ifndef _SFXENUMITEM_HXX //autogen
+#include <svtools/eitem.hxx>
+#endif
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+#ifndef _BUTTON_HXX //autogen
+#include <vcl/button.hxx>
+#endif
+#ifndef _DIALOG_HXX //autogen
+#include <vcl/dialog.hxx>
+#endif
+#ifndef _SVSTOR_HXX //autogen
+#include <so3/svstor.hxx>
+#endif
+#ifndef _FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
+#endif
+#ifndef _URLOBJ_HXX //autogen
+#include <tools/urlobj.hxx>
+#endif
+
+#ifndef _INET_CONFIG_HXX
+#include <inet/inetcfg.hxx>
+#endif
+
+#ifndef  _UNOTOOLS_STREAMHELPER_HXX_
+#include <unotools/streamhelper.hxx>
+#endif
+
+#include <svtools/intitem.hxx>
+
+#include <tools/zcodec.hxx>
+#ifndef _TOOLS_TEMPFILE_HXX
+#include <tools/tempfile.hxx>
+#endif
+
+#define _SVSTDARR_STRINGSDTOR
+#include <svtools/svstdarr.hxx>
+
+#ifndef _COM_SUN_STAR_UTIL_DISKFULLEXCEPTION_HPP_
+#include <com/sun/star/util/DiskFullException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_FILEIOEXCEPTION_HPP_
+#include <com/sun/star/util/FileIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XARCHIVER_HPP_
+#include <com/sun/star/util/XArchiver.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XCONNECTABLE_HPP_
+#include <com/sun/star/io/XConnectable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XDATAOUTPUTSTREAM_HPP_
+#include <com/sun/star/io/XDataOutputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATACONTROL_HPP_
+#include <com/sun/star/io/XActiveDataControl.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XDATAINPUTSTREAM_HPP_
+#include <com/sun/star/io/XDataInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
+#include <com/sun/star/io/XMarkableStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSTREAMLISTENER_HPP_
+#include <com/sun/star/io/XStreamListener.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
+#include <com/sun/star/io/XActiveDataSink.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
+#include <com/sun/star/io/XActiveDataSource.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+
+#ifndef  _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
+#include <com/sun/star/ucb/InsertCommandArgument.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_NAMECLASH_HPP_
+#include <com/sun/star/ucb/NameClash.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UCB_TRANSFERINFO_HPP_
+#include <com/sun/star/ucb/TransferInfo.hpp>
+#endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
+#include <unotools/processfactory.hxx>
+#endif
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/ucb/XContent.hpp>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::ucb;
+
+#include <svtools/lckbitem.hxx>
+
+#ifndef _SFXECODE_HXX
+#include <svtools/sfxecode.hxx>
+#endif
+
+#pragma hdrstop
+
+#include "appdata.hxx"
+#include "app.hxx"
+#include "sfxtypes.hxx"
+#include "openflag.hxx"
+#include "docfile.hxx"
+#include "docfilt.hxx"
+#include "docfac.hxx"
+#include "fltfnc.hxx"
+#include "sfxresid.hxx"
+#include "doc.hrc"
+#include "progress.hxx"
+#include "doctempl.hxx"
+#include "request.hxx"
+#include "dataurl.hxx"
+#include "ucbhelp.hxx"
+#include "inimgr.hxx"
+#include "helper.hxx"
+
+#define MAX_REDIRECT 5
+
+#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
+#include <com/sun/star/io/XInputStream.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
+#endif
+
+#define staruno ::com::sun::star::uno
+#define stario ::com::sun::star::io
+
+typedef ::cppu::WeakImplHelper2<com::sun::star::io::XInputStream, com::sun::star::io::XSeekable> InputStreamHelper_Base;
+class OInputStreamHelper : public InputStreamHelper_Base
+{
+    ::osl::Mutex    m_aMutex;
+    SvLockBytesRef  m_xLockBytes;
+    sal_uInt32      m_nActPos;
+    sal_Int32       m_nAvailable;   // this is typically the chunk(buffer) size
+
+public:
+    OInputStreamHelper(const SvLockBytesRef& _xLockBytes,
+                       sal_uInt32 _nAvailable,
+                       sal_uInt32 _nPos = 0)
+        :m_xLockBytes(_xLockBytes)
+        ,m_nActPos(_nPos)
+        ,m_nAvailable(_nAvailable){}
+
+// stario::XInputStream
+    virtual sal_Int32 SAL_CALL readBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
+    virtual sal_Int32 SAL_CALL readSomeBytes( staruno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException);
+    virtual sal_Int32 SAL_CALL available(  ) throw(stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
+    virtual void SAL_CALL closeInput(  ) throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException);
+
+// stario::XSeekable
+    virtual void SAL_CALL seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Int64 SAL_CALL getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+};
+
+//------------------------------------------------------------------------------
+sal_Int32 SAL_CALL OInputStreamHelper::readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
+    throw(stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
+{
+    if (!m_xLockBytes.Is())
+        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    if (nBytesToRead < 0)
+        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    aData.realloc(nBytesToRead);
+
+    sal_uInt32 nRead;
+    ErrCode nError = m_xLockBytes->ReadAt(m_nActPos, (void*)aData.getArray(), nBytesToRead, &nRead);
+    m_nActPos += nRead;
+
+    if (nError != ERRCODE_NONE)
+        throw stario::IOException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    // adjust sequence if data read is lower than the desired data
+    if (nRead < (sal_uInt32)nBytesToRead)
+        aData.realloc( nRead );
+
+    return nRead;
+}
+
+void SAL_CALL OInputStreamHelper::seek( sal_Int64 location ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_nActPos = location;
+}
+
+sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+{
+    return m_nActPos;
+}
+
+sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
+{
+    if (!m_xLockBytes.Is())
+        return 0;
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    SvLockBytesStat aStat;
+    m_xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
+    m_nActPos = aStat.nSize;
+    return m_nActPos;
+}
+
+//------------------------------------------------------------------------------
+sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(staruno::Sequence< sal_Int8 >& aData,
+                                                     sal_Int32 nMaxBytesToRead)
+    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
+{
+    // read all data desired
+    return readBytes(aData, nMaxBytesToRead);
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
+    throw (stario::NotConnectedException, stario::BufferSizeExceededException, stario::IOException, staruno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (!m_xLockBytes.Is())
+        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    if (nBytesToSkip < 0)
+        throw stario::BufferSizeExceededException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    m_nActPos += nBytesToSkip;
+}
+
+//------------------------------------------------------------------------------
+sal_Int32 SAL_CALL OInputStreamHelper::available()
+    throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (!m_xLockBytes.Is())
+        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    return m_nAvailable;
+}
+
+//------------------------------------------------------------------------------
+void SAL_CALL OInputStreamHelper::closeInput()
+    throw (stario::NotConnectedException, stario::IOException, staruno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if (!m_xLockBytes.Is())
+        throw stario::NotConnectedException(::rtl::OUString(), static_cast<staruno::XWeak*>(this));
+
+    m_xLockBytes = NULL;
+}
+
+
+
+
+class FileSource_Impl   :   public ::com::sun::star::lang::XTypeProvider    ,
+                            public ::com::sun::star::io::XActiveDataSource  ,
+                            public ::com::sun::star::io::XActiveDataControl ,
+                            public ::com::sun::star::lang::XInitialization  ,
+                            public ::cppu::OWeakObject
+{
+private:
+    SvStream*           pStream;
+    SfxMedium*          pMedium;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener >   m_xListener;
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >     m_xSink;
+
+public:
+
+    SFX_DECL_XINTERFACE_XTYPEPROVIDER
+
+                    FileSource_Impl();
+                    FileSource_Impl( SfxMedium* );
+    virtual         ~FileSource_Impl();
+
+    void            ResetMedium()
+                    { pMedium = NULL; pStream = NULL;}
+    DECL_LINK(      DataAvailableHdl, void* );
+
+                    // ::com::sun::star::io::XActiveDataControl
+    virtual void SAL_CALL   addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   removeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   start(void) throw( ::com::sun::star::uno::RuntimeException );
+    virtual void SAL_CALL   terminate(void) throw( ::com::sun::star::uno::RuntimeException );
+
+                    // ::com::sun::star::io::XActiveDataSource
+    virtual void SAL_CALL   setOutputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > & aStream) throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL    getOutputStream(void) throw( ::com::sun::star::uno::RuntimeException );
+
+                    // ::com::sun::star::lang::XInitialization
+    virtual void SAL_CALL   initialize(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException );
+
+};
+
+class FileSink_Impl :   public ::com::sun::star::lang::XTypeProvider    ,
+                        public ::com::sun::star::io::XOutputStream      ,
+                        public ::cppu::OWeakObject
+{
+private:
+    SvStream*       pStream;
+    SfxMedium*      pMedium;
+
+public:
+    SFX_DECL_XINTERFACE_XTYPEPROVIDER
+
+                    FileSink_Impl( SfxMedium* );
+    virtual         ~FileSink_Impl();
+
+    void            ResetMedium()
+                    { pMedium = NULL; pStream = NULL;}
+
+                    // ::com::sun::star::io::XOutputStream
+    virtual void  SAL_CALL  writeBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& aData) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
+    virtual void  SAL_CALL  flush(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
+    virtual void  SAL_CALL  closeOutput(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException );
+};
+
+SFX_IMPL_XINTERFACE_1( FileSink_Impl, OWeakObject, ::com::sun::star::io::XOutputStream )
+SFX_IMPL_XTYPEPROVIDER_1( FileSink_Impl, ::com::sun::star::io::XOutputStream )
+
+FileSink_Impl::FileSink_Impl( SfxMedium* pMed )
+    : pMedium( pMed )
+    , pStream( NULL )
+{
+}
+
+FileSink_Impl::~FileSink_Impl()
+{
+    if ( pMedium )
+    {
+        pMedium->ResetDataSink();
+        pMedium->ReleaseRef();
+    }
+}
+
+void SAL_CALL FileSink_Impl::writeBytes(const ::com::sun::star::uno::Sequence< sal_Int8 >& Buffer) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
+{
+    if ( !pStream && pMedium )
+        pStream = pMedium->GetOutStream();
+
+    if ( pStream )
+        pStream->Write( Buffer.getConstArray(), (sal_uInt32) Buffer.getLength() );
+}
+
+void SAL_CALL  FileSink_Impl::flush(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
+{
+    if ( pMedium )
+        pMedium->GetOutStream()->Flush();
+}
+
+void SAL_CALL  FileSink_Impl::closeOutput(void) throw( ::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::uno::RuntimeException )
+{
+    if ( pMedium )
+        pMedium->Close();
+}
+
+SFX_IMPL_XINTERFACE_3( FileSource_Impl, OWeakObject, ::com::sun::star::io::XActiveDataSource, ::com::sun::star::io::XActiveDataControl, ::com::sun::star::lang::XInitialization )
+SFX_IMPL_XTYPEPROVIDER_3( FileSource_Impl, ::com::sun::star::io::XActiveDataSource, ::com::sun::star::io::XActiveDataControl, ::com::sun::star::lang::XInitialization )
+
+FileSource_Impl::FileSource_Impl()
+    : pMedium( NULL )
+    , pStream( NULL )
+{
+}
+
+void SAL_CALL  FileSource_Impl::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+{
+    const ::com::sun::star::uno::Any *pArr = Arguments.getConstArray();
+    ::rtl::OUString aName ;
+    pArr[0] >>= aName ;
+    if ( aName.len() )
+    {
+        pMedium = new SfxMedium( aName, STREAM_STD_READ, sal_True );
+        pMedium->SetTransferPriority( SFX_TFPRIO_SYNCHRON );
+        pMedium->SetDataAvailableLink( LINK( this, FileSource_Impl, DataAvailableHdl ) );
+        pMedium->SetDoneLink( LINK( this, FileSource_Impl, DataAvailableHdl ) );
+        pMedium->AddRef();
+    }
+}
+
+FileSource_Impl::FileSource_Impl( SfxMedium* pMed )
+    : pMedium( pMed )
+    , pStream( NULL )
+{
+}
+
+FileSource_Impl::~FileSource_Impl()
+{
+    if ( pMedium )
+    {
+        pMedium->ResetDataSource();
+        pMedium->ReleaseRef();
+    }
+}
+
+void SAL_CALL  FileSource_Impl::addListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+{
+    if( m_xListener.is() )
+        fprintf( stderr, "Warning: addSourceControllerListener called when already having a listener\n" );
+    m_xListener = aListener;
+}
+
+void SAL_CALL  FileSource_Impl::removeListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > & aListener) throw( ::com::sun::star::uno::RuntimeException )
+{
+    m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
+}
+
+void SAL_CALL  FileSource_Impl::setOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > & Listener )throw( ::com::sun::star::uno::RuntimeException )
+{
+    m_xSink = Listener;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  SAL_CALL  FileSource_Impl::getOutputStream(void) throw( ::com::sun::star::uno::RuntimeException )
+{
+    return m_xSink;
+}
+
+IMPL_LINK( FileSource_Impl, DataAvailableHdl, void*, pVoid )
+{
+    if ( !pStream )
+        pStream = pMedium->GetInStream();
+
+    if ( pStream && m_xSink.is() )
+    {
+        sal_Int8 buf[ 65536 ];
+        sal_uInt32 nBytes = 1;
+        while( nBytes && pStream->GetError() != ERRCODE_IO_PENDING )
+        {
+            nBytes = pStream->Read( buf, (sal_uInt32) sizeof( buf ) );
+            if ( nBytes )
+                m_xSink->writeBytes( ::com::sun::star::uno::Sequence<sal_Int8>( buf, nBytes ) );
+        }
+
+        if ( pStream->GetError() == ERRCODE_IO_PENDING )
+            pStream->ResetError();
+        else
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xRef( this );
+            m_xSink->closeOutput();
+            m_xSink = ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > ();
+            if( m_xListener.is() )
+                m_xListener->closed();
+            m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
+            pMedium->GetItemSet()->ClearItem( SID_LOADENVIRONMENT );
+        }
+    }
+
+    return 0;
+}
+
+void SAL_CALL  FileSource_Impl::start() throw( ::com::sun::star::uno::RuntimeException )
+{
+    pStream = pMedium->GetInStream();
+    if ( pStream && m_xSink.is() )
+        DataAvailableHdl( 0 );
+}
+
+void SAL_CALL  FileSource_Impl::terminate() throw( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  xRef( this );
+    if ( m_xSink.is() )
+        m_xSink->closeOutput();
+
+    m_xSink = ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > ();
+    if( m_xListener.is() )
+        m_xListener->closed();
+    m_xListener = ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener > ();
+    pMedium->CancelTransfers();
+    pMedium->GetItemSet()->ClearItem( SID_LOADENVIRONMENT );
+    pMedium->Close();
+}
+
+String ConvertDateTime_Impl(const SfxStamp &rTime);
+
+//----------------------------------------------------------------
+SfxPoolCancelManager::SfxPoolCancelManager(
+    SfxCancelManager* pParent, const String& rName )
+    : SfxCancelManager( pParent ),
+      SfxCancellable( pParent ? pParent : this, rName ),
+      wParent( pParent )
+{
+    if( pParent )
+    {
+        StartListening( *this );
+        SetManager( 0 );
+    }
+}
+
+//----------------------------------------------------------------
+SfxPoolCancelManager::~SfxPoolCancelManager()
+{
+    for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
+    {
+        // nicht an Parent uebernehmen!
+        SfxCancellable* pCbl = GetCancellable( nPos );
+        if ( pCbl )
+            pCbl->SetManager( 0 );
+    }
+}
+
+
+//----------------------------------------------------------------
+void SfxPoolCancelManager::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    if( !GetCancellableCount() ) SetManager( 0 );
+    else if( !GetManager() )
+    {
+        if( !wParent.Is() ) wParent = SFX_APP()->GetCancelManager();
+        SetManager( wParent );
+    }
+}
+
+//----------------------------------------------------------------
+void SfxPoolCancelManager::Cancel()
+{
+    SfxPoolCancelManagerRef xThis = this;
+    for( sal_uInt16 nPos = GetCancellableCount(); nPos--; )
+    {
+        SfxCancellable* pCbl = GetCancellable( nPos );
+        // Wenn wir nicht im Button stehen
+        if( pCbl && pCbl != this )
+            pCbl->Cancel();
+        if( GetCancellableCount() < nPos )
+            nPos = GetCancellableCount();
+    }
+}
+
+//----------------------------------------------------------------
+class SfxMedium_Impl : public SvCompatWeakBase
+{
+public:
+    Reference < XContent > xContent;
+    sal_Bool bUpdatePickList : 1;
+    sal_Bool bIsTemp        : 1;
+    sal_Bool bUsesCache     : 1;
+    sal_Bool bForceSynchron : 1;
+    sal_Bool bDontCreateCancellable : 1;
+    sal_Bool bDownloadDone          : 1;
+
+    sal_uInt16       nPrio;
+
+    SfxPoolCancelManagerRef xCancelManager;
+    SfxMedium*       pAntiImpl;
+    SvEaMgr*         pEaMgr;
+
+    long             nFileVersion;
+
+    const SfxFilter* pOrigFilter;
+    String           aOrigURL;
+    String           aPreRedirectionURL;
+    String           aReferer;
+    DateTime         aExpireTime;
+    SfxFrameWeak     wLoadTargetFrame;
+    LoadEnvironment_Impl* pLoadEnv;
+    SvKeyValueIteratorRef xAttributes;
+
+    AsynchronLink       aDoneLink;
+    AsynchronLink       aAvailableLink;
+    UCB_Link_HelperRef  aLinkList;
+
+    DECL_LINK(          Done_Impl, void* );
+    DECL_LINK(          DataAvailable_Impl, void* );
+    DECL_LINK(          Cancel_Impl, void* );
+
+    SfxVersionTableDtor*    pVersions;
+    FileSource_Impl*    pSource;
+    FileSink_Impl*      pSink;
+    TempFile*           pTempDir;
+    TempFile*           pTempFile;
+
+    SfxPoolCancelManager* GetCancelManager();
+
+    SfxMedium_Impl( SfxMedium* pAntiImplP );
+    ~SfxMedium_Impl();
+};
+
+IMPL_LINK( SfxMedium_Impl, Done_Impl, void*, pVoid )
+{
+    bDownloadDone = sal_True;
+
+    if ( pAntiImpl->GetErrorCode() == ERRCODE_NONE )
+        pAntiImpl->GetInStream();
+
+    // Don't call because it will crash !!
+//    if ( aAvailableLink.IsSet() )
+//        aAvailableLink.Call( pVoid );
+
+    aDoneLink.ClearPendingCall();
+    aDoneLink.Call( pVoid );
+
+    return 0;
+}
+
+IMPL_LINK( SfxMedium_Impl, DataAvailable_Impl, void*, pVoid )
+{
+    // ???? why?
+    pAntiImpl->GetInStream();
+
+    aAvailableLink.ClearPendingCall();
+    aAvailableLink.Call( pVoid );
+
+    return 0;
+}
+
+IMPL_LINK( SfxMedium_Impl, Cancel_Impl, void*, pVoid )
+{
+    pAntiImpl->SetError( ERRCODE_IO_GENERAL );
+    return 0;
+}
+
+SfxPoolCancelManager* SfxMedium_Impl::GetCancelManager()
+{
+    if( !xCancelManager.Is() )
+    {
+        if( !bDontCreateCancellable )
+            xCancelManager = new SfxPoolCancelManager(
+                wLoadTargetFrame ? wLoadTargetFrame->GetCancelManager() :
+                SFX_APP()->GetCancelManager(),
+                pAntiImpl->GetURLObject().GetURLNoPass() );
+        else
+            xCancelManager = new SfxPoolCancelManager(
+                0, pAntiImpl->GetURLObject().GetURLNoPass() );
+    }
+    return xCancelManager;
+}
+
+//------------------------------------------------------------------
+SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
+ :
+    SvCompatWeakBase( pAntiImplP ),
+    bUpdatePickList(sal_True), bIsTemp( sal_False ), pOrigFilter( 0 ),
+    bUsesCache(sal_True),
+    nPrio( 99 ), aExpireTime( Date() + 10, Time() ),
+    bForceSynchron( sal_False ),
+    pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
+    bDontCreateCancellable( sal_False ), pSource( NULL ), pSink( NULL ), pTempDir( NULL ),
+    bDownloadDone( sal_True ), nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL )
+{
+}
+
+//------------------------------------------------------------------
+SfxMedium_Impl::~SfxMedium_Impl()
+{
+    if ( aLinkList.Is() )
+        aLinkList->Clear();
+
+    aDoneLink.ClearPendingCall();
+    aAvailableLink.ClearPendingCall();
+
+    delete pEaMgr;
+    delete pVersions;
+
+    if ( pSource )
+    {
+        pSource->ResetMedium();
+        pSource->release();
+    }
+
+    if ( pSink )
+    {
+        pSink->ResetMedium();
+        pSink->release();
+    }
+
+    if ( pTempFile )
+        delete pTempFile;
+
+    if ( pTempDir )
+        delete pTempDir;
+}
+
+//================================================================
+
+#define IMPL_CTOR()                         \
+     eError( SVSTREAM_OK ),                 \
+                                            \
+     bDirect( sal_False ),                  \
+     bTriedStorage( sal_False ),            \
+     bSetFilter( sal_False ),               \
+                                            \
+     nStorOpenMode( SFX_STREAM_READWRITE ), \
+     pInStream(0),                          \
+     pOutStream( 0 )
+
+//------------------------------------------------------------------
+const SvGlobalName&  SfxMedium::GetClassFilter()
+{
+    GetMedium_Impl();
+    if( GetError() )
+        return aFilterClass;
+    if( !bSetFilter && GetStorage() )
+        SetClassFilter( GetStorage()->GetClassName() );
+    return aFilterClass;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::ResetError()
+{
+    eError = SVSTREAM_OK;
+    if( aStorage.Is() )
+        aStorage->ResetError();
+    if( pInStream )
+        pInStream->ResetError();
+    if( pOutStream )
+        pOutStream->ResetError();
+}
+
+//------------------------------------------------------------------
+sal_uInt32 SfxMedium::GetErrorCode() const
+{
+    sal_uInt32 lError=eError;
+    if(!lError && pInStream)
+        lError=pInStream->GetErrorCode();
+    if(!lError && pOutStream)
+        lError=pOutStream->GetErrorCode();
+    if(!lError && aStorage.Is())
+        lError=aStorage->GetErrorCode();
+    return lError;
+}
+
+//------------------------------------------------------------------
+long SfxMedium::GetFileVersion() const
+{
+    if ( !pImp->nFileVersion && pFilter )
+        return pFilter->GetVersion();
+    else
+        return pImp->nFileVersion;
+}
+
+//------------------------------------------------------------------
+Reference < XContent > SfxMedium::GetContent() const
+{
+    if ( !pImp->xContent.is() && GetName().Len() )
+    {
+        String aURL     = GetURLObject().GetMainURL();
+        pImp->xContent  = UCB_Helper::CreateContent( aURL );
+    }
+
+    if ( pImp->xContent.is() )
+        return pImp->xContent;
+    else
+        return NULL;
+}
+
+//------------------------------------------------------------------
+SvStream* SfxMedium::GetInStream()
+{
+    if ( pInStream )
+        return pInStream;
+
+    if ( pImp->pTempFile )
+    {
+        pInStream = new SvFileStream( aName, nStorOpenMode );
+
+        eError = pInStream->GetError();
+
+        if( !eError && (nStorOpenMode & STREAM_WRITE)
+                    && ! pInStream->IsWritable() )
+        {
+            eError = ERRCODE_IO_ACCESSDENIED;
+            delete pInStream;
+            pInStream = NULL;
+        }
+        else
+            return pInStream;
+    }
+
+    GetMedium_Impl();
+
+    if ( !pInStream && eError == ERRCODE_IO_PENDING )
+        eError = SVSTREAM_OK;
+
+    return pInStream;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::CloseInStream()
+{
+    CloseInStream_Impl();
+}
+
+void SfxMedium::CloseInStream_Impl()
+{
+    // if there is a storage based on the InStream, we have to
+    // close the storage, too, because otherwise the storage
+    // would use an invalid ( deleted ) stream.
+    if ( pInStream && aStorage.Is() )
+    {
+        const SvStream *pStorage = aStorage->GetSvStream();
+        if ( pStorage == pInStream )
+        {
+            CloseStorage();
+        }
+    }
+
+    delete pInStream;
+    pInStream = NULL;
+}
+
+//------------------------------------------------------------------
+SvStream* SfxMedium::GetOutStream()
+{
+    if ( !pOutStream )
+    {
+        // Create a temp. file if there is none because we always
+        // need one.
+        if ( !pImp->pTempFile )
+            CreateTempFile();
+
+        if ( pImp->pTempFile )
+        {
+            pOutStream = new SvFileStream( aName, STREAM_STD_READWRITE );
+            CloseStorage();
+        }
+    }
+
+    return pOutStream;
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::CloseOutStream()
+{
+    CloseOutStream_Impl();
+    return sal_True;
+}
+
+sal_Bool SfxMedium::CloseOutStream_Impl()
+{
+    if ( pOutStream )
+    {
+        // if there is a storage based on the OutStream, we have to
+        // close the storage, too, because otherwise the storage
+        // would use an invalid ( deleted ) stream.
+
+        if ( aStorage.Is() )
+        {
+            const SvStream *pStorage = aStorage->GetSvStream();
+            if ( pStorage == pOutStream )
+                CloseStorage();
+        }
+
+        delete pOutStream;
+        pOutStream = NULL;
+    }
+
+    return sal_True;
+}
+
+//------------------------------------------------------------------
+const String& SfxMedium::GetPhysicalName() const
+{
+    if ( !pImp->pTempFile && (INET_PROT_FILE != GetURLObject().GetProtocol() ) )
+        (( SfxMedium*)this)->CreateFileStream();
+
+    // return the name then
+    return aName;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::CreateFileStream()
+{
+    GetMedium_Impl();
+
+    if( pInStream && ! pImp->pTempFile )
+    {
+        DBG_WARNING( "W1: erzeuge FileStream" );
+
+        pImp->pTempFile = new TempFile;
+        pImp->pTempFile->EnableKillingFile( sal_True );
+
+        aName = pImp->pTempFile->GetName();
+
+        SvFileStream aTmpStream( aName, STREAM_STD_WRITE );
+        char        *pBuf = new char [8192];
+        sal_uInt32   nErr = ERRCODE_NONE;
+
+        pInStream->Seek( 0L );
+
+        // Stream synchron downloaden
+        while( !pInStream->IsEof() &&
+               ( nErr == ERRCODE_NONE || nErr == ERRCODE_IO_PENDING ) )
+        {
+            sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
+            nErr = pInStream->GetError();
+            aTmpStream.Write( pBuf, nRead );
+            if( nErr == ERRCODE_IO_PENDING )
+            {
+                Application::Yield();
+                pInStream->ResetError();
+            }
+        }
+        delete pBuf;
+        pImp->bIsTemp = sal_True;
+
+        CloseInStream_Impl();
+    }
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::Commit()
+{
+    if( aStorage.Is() )
+    {
+        // StorageStream immer direkt
+        if( !aStorage->Commit() )
+            eError = aStorage->GetError();
+    }
+    else if( pOutStream  )
+        pOutStream->Flush();
+    else if( pInStream  )
+        pInStream->Flush();
+
+    if ( ( GetError() == SVSTREAM_OK ) && pImp->pTempFile )
+        Transfer_Impl();
+
+    return GetError() == SVSTREAM_OK;
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::IsStorage() const
+{
+    (const_cast< SfxMedium* > (this))->GetStorage();
+    (const_cast< SfxMedium* > (this))->ResetError();
+    return aStorage.Is();
+}
+
+//------------------------------------------------------------------
+Link SfxMedium::GetDataAvailableLink() const
+{
+    return pImp->aAvailableLink.GetLink();
+}
+
+//------------------------------------------------------------------
+Link SfxMedium::GetDoneLink() const
+{
+    return pImp->aDoneLink.GetLink();
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::IsPreview_Impl()
+{
+    sal_Bool bPreview = sal_False;
+    SFX_ITEMSET_ARG( GetItemSet(), pPreview, SfxBoolItem, SID_PREVIEW, sal_False);
+    if ( pPreview )
+        bPreview = pPreview->GetValue();
+    else
+    {
+        SFX_ITEMSET_ARG( GetItemSet(), pFlags, SfxStringItem, SID_OPTIONS, sal_False);
+        if ( pFlags )
+        {
+            String aFileFlags = pFlags->GetValue();
+            aFileFlags.ToUpperAscii();
+            if ( STRING_NOTFOUND != aFileFlags.Search( 'B' ) )
+                bPreview = sal_True;
+        }
+    }
+
+    return bPreview;
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::TryStorage()
+{
+    GetStorage();
+
+    if ( aStorage.Is() )
+        return sal_True;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMgr( ::utl::getProcessServiceFactory() );
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XArchiver >
+            xPacker( xSMgr->createInstance( DEFINE_CONST_UNICODE( "com.sun.star.util.Archiver" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+    if( !xPacker.is() )
+        return sal_False;
+
+    // extract extra data
+    ::rtl::OUString aPath = GetURLObject().PathToFileName();
+    ::rtl::OUString aExtraData = xPacker->getExtraData( aPath );
+    const ::rtl::OUString aSig1( DEFINE_CONST_UNICODE( "private:" ) );
+    String aTmp( '?' );
+    aTmp += pFilter->GetFilterContainer()->GetName();
+    const ::rtl::OUString aSig2( aTmp );
+    sal_Int32 nIndex1 = aExtraData.indexOf( aSig1 );
+    sal_Int32 nIndex2 = aExtraData.indexOf( aSig2 );
+
+    if( nIndex1 != 0 || nIndex2 == -1 )
+        return sal_False;
+
+    nIndex1 += aSig1.getLength();
+    ::rtl::OUString aTempDoku = aExtraData.copy( nIndex1, nIndex2 - nIndex1 );
+
+    // create a temp dir to unpack to
+    pImp->pTempDir = new TempFile( NULL, sal_True );
+    pImp->pTempDir->EnableKillingFile( sal_True );
+
+    // unpack all files to temp dir
+
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xFactory = ::utl::getProcessServiceFactory();
+    com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > xInteractionHandler(
+                xFactory->createInstance( DEFINE_CONST_UNICODE("com.sun.star.uui.InteractionHandler") ), UNO_QUERY );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs(1);
+    aArgs.getArray()[0].Name = DEFINE_CONST_UNICODE( "InteractionHandler" );
+    aArgs.getArray()[0].Value <<= xInteractionHandler ;
+
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > files(0);
+
+    if( !xPacker->unpack( pImp->pTempDir->GetName(), aPath, files, aArgs ) )
+        return sal_False;
+
+    String aNewName = pImp->pTempDir->GetName();
+    aNewName += '/';
+    aNewName += String( aTempDoku );
+    CloseInStream_Impl();
+    SetPhysicalName( aNewName );
+    GetStorage();
+
+    if ( aStorage.Is() )
+    {
+        const SfxFilter *pRealFilter = SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( aStorage->GetFormat() );
+        if ( pRealFilter )
+        {
+            pImp->nFileVersion = pRealFilter->GetVersion();
+            aStorage->SetVersion( pImp->nFileVersion );
+        }
+
+        DBG_ASSERT( pRealFilter, "Unknown storage format!" );
+    }
+
+    return aStorage.Is();
+}
+
+ErrCode SfxMedium::Unpack_Impl( const String& rDest )
+{
+    ErrCode nRet = ERRCODE_NONE;
+    if ( pImp->pTempDir )
+    {
+/*
+        DirEntry aDestEntry( rDest );
+        Dir aDir( pImp->pTempDir->GetName(), FSYS_KIND_FILE );
+        sal_uInt16 nCount = aDir.Count();
+        for ( sal_uInt16 n=0; n<nCount; n++ )
+        {
+            DirEntry aDest( aDestEntry.GetPath() );
+            DirEntry aTmp = aDir[n];
+            aDest += aTmp.GetName();
+            if ( aDir[n] == DirEntry( GetPhysicalName() ) )
+                continue;
+
+            nRet = aTmp.CopyTo( aDest, FSYS_ACTION_COPYFILE );
+            if ( nRet != ERRCODE_NONE )
+                break;
+        }
+ */
+    }
+
+    return nRet;
+}
+
+//------------------------------------------------------------------
+SvStorage* SfxMedium::GetOutputStorage()
+{
+    if ( !pImp->pTempFile )
+        CreateTempFile();
+    return GetStorage();
+}
+
+SvStorage* SfxMedium::GetStorage()
+{
+    if ( aStorage.Is() || bTriedStorage )
+        return aStorage;
+
+    BOOL bResetSorage = FALSE;
+    SvStream *pStream;
+
+    INetURLObject aStorageName;
+    if ( pImp->pTempFile )
+    {
+        aStorageName.SetURL( pImp->pTempFile->GetName() );
+        pStream = GetOutStream();
+    }
+    else
+    {
+        aStorageName = GetURLObject();
+        pStream = GetInStream();
+        if ( pStream )
+        {
+            pStream->GetLockBytes()->SetSynchronMode( sal_True );
+            if ( !pImp->aDoneLink.IsSet() )
+                DownLoad();
+        }
+    }
+
+    bTriedStorage = sal_True;
+
+    if( !pStream || ( GetError() != SVSTREAM_OK ) )
+        return aStorage;
+
+    aStorage = new SvStorage( pStream, FALSE );
+    if ( INET_PROT_FILE == aStorageName.GetProtocol() )
+        aStorage->SetName( aStorageName.PathToFileName() );
+
+    if ( aStorage->GetError() == SVSTREAM_OK )
+        GetVersionList();
+
+    // ???? wird das noch gebraucht?
+//  GetMedium_Impl();
+//  if ( !aStorage.Is() )
+//      CreateFileStream();
+
+    SFX_ITEMSET_ARG( pSet, pVersion, SfxInt16Item, SID_VERSION, sal_False);
+
+    if ( pVersion )
+    {
+        // Alle verf"ugbaren Versionen einlesen
+        if ( pImp->pVersions )
+        {
+            // Die zum Kommentar passende Version suchen
+            // Die Versionen sind von 1 an durchnumeriert, mit negativen
+            // Versionsnummern werden die Versionen von der aktuellen aus
+            // r"uckw"arts gez"ahlt
+            short nVersion = pVersion ? pVersion->GetValue() : 0;
+            if ( nVersion<0 )
+                nVersion = ( (short) pImp->pVersions->Count() ) + nVersion;
+            else if ( nVersion )
+                nVersion--;
+
+            SfxVersionInfo* pInfo = nVersion>=0 ? pImp->pVersions->GetObject( nVersion ) : NULL;
+            if ( pInfo )
+            {
+                String aVersionStream = pInfo->aName;
+
+                // SubStorage f"ur alle Versionen "offnen
+                SvStorageRef aSub =
+                    aStorage->OpenStorage( DEFINE_CONST_UNICODE( "Versions" ), SFX_STREAM_READONLY );
+
+                DBG_ASSERT( aSub.Is() && !aSub->GetError(), "Versionsliste, aber keine Versionen!" );
+
+                // Dort ist die Version als gepackter Stream gespeichert
+                SvStorageStreamRef aStream =
+                    aSub->OpenStream( aVersionStream, SFX_STREAM_READONLY );
+
+                if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+                {
+                        // Stream ins TempDir auspacken
+                    TempFile        aTempFile;
+                    String          aTmpName = aTempFile.GetName();
+                    SvFileStream    aTmpStream( aTmpName, SFX_STREAM_READWRITE );
+
+                    ZCodec aCodec;
+                    aCodec.BeginCompression();
+                    aCodec.Decompress( *aStream, aTmpStream );
+                    aCodec.EndCompression();
+                    aTmpStream.Close();
+
+                    // Datei als Storage "offnen
+                    nStorOpenMode = SFX_STREAM_READONLY;
+                    aStorage = new SvStorage( aTmpName, nStorOpenMode );
+                    SetPhysicalName( aTmpName );
+                    pImp->bIsTemp = sal_True;
+                    GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+                    DELETEZ( pImp->pVersions );
+                }
+                else
+                    bResetSorage = TRUE;
+            }
+            else
+                bResetSorage = TRUE;
+        }
+        else
+            bResetSorage = TRUE;
+    }
+
+    if ( aStorage.Is() )
+    {
+        if( aStorage->GetError() != SVSTREAM_OK )
+            bResetSorage = TRUE;
+        else if ( GetFilter() )
+            aStorage->SetVersion( GetFilter()->GetVersion() );
+    }
+
+    if ( bResetSorage )
+    {
+        SetError( aStorage->GetError() );
+        aStorage.Clear();
+        pStream->Seek( 0L );
+    }
+
+    return aStorage;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::CloseStorage()
+{
+    aStorage.Clear();
+    bTriedStorage = sal_False;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::SetOpenMode( StreamMode nStorOpen,
+                             sal_Bool bDirectP,
+                             sal_Bool bDontClose )
+{
+    if ( nStorOpenMode != nStorOpen )
+    {
+        nStorOpenMode = nStorOpen;
+
+        if( !bDontClose )
+            Close();
+    }
+
+    bDirect     = bDirectP;
+    bSetFilter  = sal_False;
+}
+
+//------------------------------------------------------------------
+void SfxMedium::Transfer_Impl()
+{
+    if( pImp->pTempFile && !eError )
+    {
+        Reference < XContent > xContent = GetContent();
+        if ( ! xContent.is() )
+            return;
+
+        sal_Bool bSuccess;
+
+        // check wether the the temp file has the same protocol
+        // scheme as the destination, wether the destination supports
+        // the transfer command and wether or not the command
+        // executed successfully
+
+        BOOL            bTryTransfer = FALSE;
+        String          aName;
+        INetURLObject   aDest = GetURLObject();
+        INetURLObject   aSource( pImp->pTempFile->GetName() );
+
+        aName = GetLongName();
+        if ( !aName.Len() )
+            aName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
+                                   INetURLObject::DECODE_WITH_CHARSET );
+
+        if ( aDest.GetProtocol() == aSource.GetProtocol() )
+        {
+            bTryTransfer = UCB_Helper::HasCommand( xContent,
+                                                   WID_TRANSFER );
+        }
+
+        if ( bTryTransfer && aDest.removeSegment() )
+        {
+            TransferInfo    aInfo;
+            String          aParentURL = aDest.GetMainURL();
+            Any             aAny;
+
+            aInfo.MoveData = sal_True;
+            aInfo.SourceURL = aSource.GetMainURL();
+            aInfo.NewTitle = aName;
+
+            SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
+            SFX_ITEMSET_ARG( GetItemSet(), pOverWrite, SfxBoolItem, SID_OVERWRITE, sal_False );
+
+            if ( pOverWrite && !pOverWrite->GetValue() )
+            {
+                aInfo.NameClash = NameClash::ERROR;
+            }
+            else if ( pRename && pRename->GetValue() )
+            {
+                aInfo.NameClash = NameClash::RENAME;
+            }
+            else
+            {
+                aInfo.NameClash = NameClash::OVERWRITE;
+            }
+
+            aAny <<= aInfo;
+            Close();
+            UCB_Helper::ExecuteCommand( aParentURL, WID_TRANSFER,
+                                        aAny, &bSuccess );
+            if ( bSuccess )
+            {
+                // when the transfer command executed successful
+                // there will be no tempfile anymore so we have
+                // to get rid of it
+                pImp->pTempFile->EnableKillingFile( sal_False );
+                delete pImp->pTempFile;
+                pImp->pTempFile = NULL;
+                bDownLoad = TRUE;
+                return;
+            }
+        }
+
+        SvStream *pStream = GetOutStream();
+        SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
+        Reference < ::com::sun::star::io::XInputStream > xStream
+            = new OInputStreamHelper( xLockBytes, 8192 );
+
+        Any aAny;
+        InsertCommandArgument aArg;
+
+        aArg.Data = xStream;
+        aArg.ReplaceExisting = sal_True;
+        aAny <<= aArg;
+
+        UCB_Helper::ExecuteCommand( xContent, WID_INSERT,
+                                    aAny, &bSuccess );
+
+        if ( !bSuccess )
+            eError = ERRCODE_IO_GENERAL;
+    }
+}
+
+//------------------------------------------------------------------
+void SfxMedium::DoBackup_Impl()
+{
+    INetURLObject   aDest;
+    INetURLObject   aSource = GetURLObject();
+    String          aParentURL;
+    String          aName;
+    String          aBakDir = SFX_INIMANAGER()->Get(SFX_KEY_BACKUP_PATH);
+    BOOL            bTryTransfer = FALSE;
+    sal_Bool        bSuccess = sal_False;
+    Reference < XContent > xContent;
+
+    // Backup Path gesetzt ? Dann diesen benutzen.
+    if( aBakDir.Len() )
+    {
+        aDest.SetSmartProtocol( INET_PROT_FILE );
+        aDest.SetSmartURL( aBakDir );
+        aDest.insertName( aSource.getName() );
+    }
+    else
+    {
+        aDest = GetURLObject();
+    }
+
+    // Derzeit immer bak dranhaengen (MAC ???)
+#ifndef MAC
+    // *.bak
+    aDest.setExtension( DEFINE_CONST_UNICODE( "bak" ) );
+#else
+    // * Kopie
+    aDest.setName( aDest.getName( INetURLObject::LAST_SEGMENT,
+                                  true,
+                                  INetURLObject::DECODE_WITH_CHARSET )
+                   + String(SfxResId(STR_BACKUP_COPY)) );
+#endif
+
+    aName = aDest.getName( INetURLObject::LAST_SEGMENT, true,
+                           INetURLObject::DECODE_WITH_CHARSET );
+
+    // check wether the the temp file has the same protocol
+    // scheme as the destination, wether the destination supports
+    // the transfer command and wether or not the command
+    // executed successfully
+
+    if ( aDest.GetProtocol() == aSource.GetProtocol() )
+    {
+        INetURLObject aDestDir = aDest;
+        if ( aDestDir.removeSegment() )
+        {
+            aParentURL = aDestDir.GetMainURL();
+            xContent = UCB_Helper::CreateContent( aParentURL );
+            if ( xContent.is() )
+            {
+                bTryTransfer = UCB_Helper::HasCommand( xContent,
+                                               WID_TRANSFER );
+            }
+        }
+    }
+
+    if ( bTryTransfer )
+    {
+        TransferInfo    aInfo;
+        Any             aAny;
+
+        aInfo.MoveData = sal_True;
+        aInfo.SourceURL = aSource.GetMainURL();
+        aInfo.NewTitle = aName;
+        aInfo.NameClash = NameClash::OVERWRITE;
+
+        aAny <<= aInfo;
+        Close();
+        UCB_Helper::ExecuteCommand( xContent, WID_TRANSFER,
+                                    aAny, &bSuccess );
+    }
+
+    if ( !bSuccess )
+    {
+        xContent = UCB_Helper::CreateContent( aDest.GetMainURL() );
+        if ( xContent.is() )
+        {
+            SvStream *pStream = GetInStream();
+            SvLockBytesRef xLockBytes = new SvLockBytes( pStream );
+            Reference < ::com::sun::star::io::XInputStream > xStream
+                    = new OInputStreamHelper( xLockBytes, 8192 );
+
+            Any aAny;
+            InsertCommandArgument aArg;
+
+            aArg.Data = xStream;
+            aArg.ReplaceExisting = sal_True;
+            aAny <<= aArg;
+
+            UCB_Helper::ExecuteCommand( xContent, WID_INSERT, aAny, &bSuccess );
+        }
+    }
+
+    if ( ! bSuccess )
+        WarningBox( NULL, SfxResId( MSG_WARNING_BACKUP ) ).Execute();
+}
+
+//----------------------------------------------------------------
+void SfxMedium::GetMedium_Impl()
+{
+    if ( !pInStream )
+    {
+        DBG_ASSERT( bDownLoad, "Medium without DownloadFlag!" );
+        pImp->bDownloadDone = sal_False;
+
+        SvLockBytesRef xLockBytes;
+        if ( !pImp->aLinkList.Is() )
+        {
+            pImp->aLinkList = new UCB_Link_Helper;
+            pImp->aLinkList->SetDoneLink( LINK( pImp, SfxMedium_Impl, Done_Impl ) );
+            pImp->aLinkList->SetDataAvailLink( LINK( pImp, SfxMedium_Impl, DataAvailable_Impl ) );
+            pImp->aLinkList->SetCancelLink( LINK( pImp, SfxMedium_Impl, Cancel_Impl ) );
+        }
+
+        SFX_ITEMSET_ARG( pSet, pStreamItem, SfxUsrAnyItem, SID_INPUTSTREAM, sal_False);
+
+        if ( pStreamItem )
+        {
+            Reference < ::com::sun::star::io::XInputStream > xStream;
+            if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
+                xLockBytes = UCB_Helper::CreateInputLockBytes(
+                        xStream, pImp->aLinkList,
+                        pImp->GetCancelManager() );
+        }
+        else
+        {
+            xLockBytes = UCB_Helper::CreateInputLockBytes(
+                        GetContent(),
+                        pImp->aLinkList,
+                        pImp->GetCancelManager() );
+        }
+
+        if ( xLockBytes.Is() )
+        {
+            if ( pImp->bForceSynchron || ! pImp->aDoneLink.IsSet() )
+                xLockBytes->SetSynchronMode( sal_True );
+            else
+                xLockBytes->SetSynchronMode( sal_False );
+
+            pInStream = new SvStream( xLockBytes );
+        }
+    }
+
+#ifdef OLD_CODE_FOR_POSTING
+
+    SFX_ITEMSET_ARG( pSet, pContentType, SfxStringItem, SID_CONTENTTYPE, sal_False);
+    if( pContentType ) pImp->xBinding->SetSendMimeType(
+        pContentType->GetValue() );
+    pImp->xBinding->SetReferer( pImp->aReferer );
+    pImp->xBinding->SetPriority( pImp->nPrio );
+    const SfxPoolItem *pItem = 0;
+    if( pSet )
+    {
+        pSet->GetItemState( SID_POSTSTRING, sal_False, &pItem );
+        if( !pItem )
+            pSet->GetItemState( SID_POSTLOCKBYTES, sal_False, &pItem );
+    }
+
+    if( pItem )
+    {
+        if( pItem->ISA( SfxStringItem ))
+        {
+            SvCacheStream* pCacheStr = new SvCacheStream( 8192 );
+            pCacheStr->WriteByteString( ((SfxStringItem*)pItem)->GetValue(), RTL_TEXTENCODING_UTF8 );
+            SvLockBytesRef xRef (new SvLockBytes(pCacheStr, sal_True));
+            pImp->xBinding->GetBindContext().SetPostLockBytes ( xRef);
+        }
+        else if( pItem->ISA( SfxRefItem ))
+        {
+            SvLockBytes* pBytes = new SvLockBytes;
+            int nDiff = (char*)pBytes - (char*)(SvRefBase*)pBytes;
+            SvLockBytes* pLB = (SvLockBytes*)(
+                    (char*)(SvRefBase*)&((SfxRefItem*)pItem )->GetValue() + nDiff );
+            delete pBytes;
+            SvLockBytesRef rTmpLB ( pLB );
+            pImp->xBinding->GetBindContext().SetPostLockBytes ( rTmpLB );
+        }
+        else if( pItem->ISA( SfxLockBytesItem ))
+        {
+            // f"ur sp"ater ...
+            SvLockBytes* pBytes = ((SfxLockBytesItem*)pItem)->GetValue();
+            SvLockBytesRef rTmpLB ( pBytes );
+            pImp->xBinding->GetBindContext().SetPostLockBytes ( rTmpLB );
+        }
+    }
+#endif
+}
+
+//------------------------------------------------------------------
+SfxPoolCancelManager* SfxMedium::GetCancelManager_Impl() const
+{
+    return pImp->GetCancelManager();
+}
+
+//------------------------------------------------------------------
+void SfxMedium::SetCancelManager_Impl( SfxPoolCancelManager* pMgr )
+{
+    pImp->xCancelManager = pMgr;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::CancelTransfers()
+{
+    if( pImp->xCancelManager.Is() )
+        pImp->xCancelManager->Cancel();
+}
+
+//----------------------------------------------------------------
+void AddNumber_Impl( String& aNumber, sal_uInt32 nArg )
+{
+    if ( nArg >= 10240 )
+    {
+        aNumber += String::CreateFromInt32( (sal_uInt16)( ( nArg + 512 ) / 1024 ) );
+        aNumber += ' ';
+        aNumber += SfxResId( STR_KB );
+    }
+    else
+    {
+        aNumber += String::CreateFromInt32( nArg );
+        aNumber += ' ';
+        aNumber += SfxResId( STR_BYTES );
+    }
+}
+
+//----------------------------------------------------------------
+
+String SfxMedium::GetStatusString( const SvProgressArg* pArg )
+{
+    String aString;
+/*
+    StringList_Impl aSL( SfxResId( RID_DLSTATUS2 ), (USHORT)pArg->eStatus );
+    USHORT nTotal = 0;
+
+    if ( pArg->eStatus == SVBINDSTATUS_ENDDOWNLOADDATA && nTotal <= 1 )
+        return aString;
+
+    if( aSL )
+    {
+        INetURLObject aObj( pArg->rStatus );
+        aString = aSL.GetString();
+        aString.SearchAndReplaceAscii( "$(HOST)", aObj.GetHost() );
+        String aTarget = aObj.GetFull();
+        if( aTarget.Len() <= 1 && pArg->eStatus != SVBINDSTATUS_CONNECTING )
+            aTarget = aObj.GetHost();
+        if( pArg->nMax )
+        {
+            aTarget += DEFINE_CONST_UNICODE( " (" );
+            AddNumber_Impl( aTarget, pArg->nMax );
+            aTarget += ')';
+        }
+
+        aString.SearchAndReplaceAscii( "$(TARGET)",aTarget );
+        String aNumber;
+        AddNumber_Impl( aNumber, pArg->nProgress );
+        if( pArg->nRate )
+        {
+            aNumber+= DEFINE_CONST_UNICODE( " (" );
+            AddNumber_Impl( aNumber, (ULONG)pArg->nRate );
+            aNumber+= DEFINE_CONST_UNICODE( "/s)" );
+        }
+        if( pArg->nMax && pArg->nProgress && pArg->nMax != pArg->nProgress )
+        {
+            aNumber += DEFINE_CONST_UNICODE( " [" );
+            float aPerc = pArg->nProgress / (float)pArg->nMax;
+            aNumber += String::CreateFromInt32( (USHORT)(aPerc * 100) );
+            aNumber += DEFINE_CONST_UNICODE( "%]" );
+        }
+        aString.SearchAndReplaceAscii( "$(BYTE)", aNumber );
+    }
+ */
+    return aString;
+}
+
+sal_Bool SfxMedium::IsRemote()
+{
+    return bRemote;
+}
+
+//------------------------------------------------------------------
+
+void SfxMedium::SetUpdatePickList(sal_Bool bVal)
+{
+    if(!pImp)
+        pImp = new SfxMedium_Impl( this );
+    pImp->bUpdatePickList = bVal;
+}
+//------------------------------------------------------------------
+
+sal_Bool SfxMedium::IsUpdatePickList() const
+{
+    return pImp? pImp->bUpdatePickList: sal_True;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetDoneLink( const Link& rLink )
+{
+    pImp->aDoneLink = rLink;
+}
+
+//----------------------------------------------------------------
+
+void SfxMedium::SetDataAvailableLink( const Link& rLink )
+{
+    pImp->aAvailableLink = rLink;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::StartDownload()
+{
+    GetMedium_Impl();
+    GetInStream();
+}
+
+void SfxMedium::DownLoad( const Link& aLink )
+{
+    SetDoneLink( aLink );
+    GetInStream();
+    if ( !aLink.IsSet() )
+    {
+        while( !pImp->bDownloadDone )
+            Application::Yield();
+    }
+}
+
+//------------------------------------------------------------------
+void SfxMedium::Init_Impl()
+/*  [Beschreibung]
+    Setzt in den Lo.Ischen Namen eine gueltige ::com::sun::star::util::URL (Falls zuvor ein Filename
+    drin war) und setzt den physikalschen Namen auf den Filenamen, falls
+    vorhanden.
+ */
+
+{
+    pImp->pVersions = NULL;
+    INetURLObject aUrl;
+    aUrl.SetSmartProtocol( INET_PROT_FILE );
+    aUrl.SetSmartURL( aLogicName );
+
+    // Ein leerer LogicName soll auch einen leeren Namen ergeben
+    if( aUrl.GetProtocol() == INET_PROT_FILE && aLogicName.Len() )
+    {
+        String aTemp( aUrl.GetMainURL() );
+        INetURLObject aObj( aTemp );
+        if ( INET_PROT_FTP == aObj.GetProtocol() )
+        {
+#if 0   //(dv)
+            CntINetConfig::load (NULL, NULL);
+            INetProxyConfig aProxyConfig;
+            if (CntINetConfig::shouldUseProxy (NULL, aTemp, aProxyConfig) &&
+                aProxyConfig.hasFtpProxy())
+                // ::com::sun::star::chaos::Anchor wird on demand erzeugt
+                aLogicName = aTemp;
+            else
+                pImp->xAnchor = xAnchor;
+#endif
+        }
+        else
+        {
+            aLogicName = aUrl.GetMainURL();
+            if ( aObj.GetProtocol() == INET_PROT_FILE )
+            {
+                if( !pImp->bIsTemp )
+                    aName = aUrl.PathToFileName();
+                else
+                    DBG_ERROR( "What name ?!" );
+            }
+            else
+            {
+                if( aName == aLogicName || !aName.Len() )
+                    aName = aUrl.PathToFileName();
+            }
+        }
+    }
+    else if( aLogicName.Len() )
+        // Falls ein FileName reinkam
+        aLogicName = aUrl.GetMainURL();
+
+    SetIsRemote_Impl();
+
+    // Recover-Files sind immer temp
+    SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False);
+    if ( pSalvageItem )
+        pImp->bIsTemp = sal_True;
+}
+//------------------------------------------------------------------
+
+SfxMedium::SfxMedium()
+:   IMPL_CTOR(),
+    bRoot( sal_False ),
+    pURLObj(0),
+    pSet(0),
+    pImp(new SfxMedium_Impl( this )),
+    pFilter(0)
+{
+    bDownLoad = sal_True;
+    Init_Impl();
+}
+//------------------------------------------------------------------
+
+SfxMedium::SfxMedium( const SfxMedium& rMedium, sal_Bool bTemporary )
+:   IMPL_CTOR(),
+    bRoot(sal_True),
+    pURLObj( rMedium.pURLObj ? new INetURLObject(*rMedium.pURLObj) : 0 ),
+    pImp(new SfxMedium_Impl( this ))
+{
+    bDirect       = rMedium.IsDirect();
+    nStorOpenMode = rMedium.GetOpenMode();
+    if ( bTemporary )
+        CreateTempFile();
+    else
+        aName = rMedium.GetName();
+
+    pImp->bIsTemp = bTemporary;
+    DBG_ASSERT( ! rMedium.pImp->bIsTemp,
+                "Temporaeres Medium darf nicht kopiert werden" );
+    aLogicName = rMedium.aLogicName;
+    pSet =  rMedium.GetItemSet() ? new SfxItemSet(*rMedium.GetItemSet()) : 0;
+    pFilter = rMedium.pFilter;
+    Init_Impl();
+    if( bTemporary )
+    {
+        if ( !SfxContentHelper::CopyTo( rMedium.GetName(), GetPhysicalName() ) )
+            SetError( ERRCODE_IO_GENERAL );
+    }
+
+    bDownLoad       = sal_True;
+
+    if ( rMedium.pImp->pEaMgr )
+        GetEaMgr();
+}
+//------------------------------------------------------------------
+
+void SfxMedium::SetFilter( const SfxObjectFactory& rFact, const String & rFilter )
+{
+    SetFilter(  rFact.GetFilterContainer()->GetFilter(rFilter) );
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetFilter( const SfxFilter* pFilterP, sal_Bool bResetOrig )
+{
+    pFilter = pFilterP;
+    pImp->nFileVersion = 0;
+}
+//----------------------------------------------------------------
+
+const SfxFilter* SfxMedium::GetOrigFilter( sal_Bool bNotCurrent ) const
+{
+    return ( pImp->pOrigFilter || bNotCurrent ) ? pImp->pOrigFilter : pFilter;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetOrigFilter_Impl( const SfxFilter* pFilter )
+{
+    pImp->pOrigFilter = pFilter;
+}
+//------------------------------------------------------------------
+
+void SfxMedium::Close()
+{
+    if ( aStorage.Is() )
+    {
+        // don't close the streams if they belong to the
+        // storage
+
+        const SvStream *pStream = aStorage->GetSvStream();
+        if ( pStream == pInStream )
+        {
+            pInStream = NULL;
+            aStorage->SetDeleteStream( TRUE );
+        }
+        if ( pStream == pOutStream )
+        {
+            pOutStream = NULL;
+            aStorage->SetDeleteStream( TRUE );
+        }
+
+        CloseStorage();
+    }
+
+    if ( pInStream )
+        CloseInStream_Impl();
+
+    if ( pOutStream )
+        CloseOutStream_Impl();
+}
+
+#if SUPD<605
+sal_uInt32 SfxMedium::UrlToAbs( String& rAbsUrl, const String& rUrl,
+                           SfxObjectShell* pSh )
+{
+    String aMedName( pSh->GetMedium()->GetName() );
+    INetURLObject aAktUrl;
+    INetURLObject aTargetUrl;
+    if ( aMedName.Len() )
+    {
+        aAktUrl.SetSmartProtocol( INET_PROT_FILE );
+        aAktUrl.SetSmartURL( aMedName );
+    }
+
+    sal_Bool bTargetSet = sal_False;
+    sal_uInt32 nErr = ERRCODE_NONE;
+
+    // Absolutes File Protokoll testen
+    bool bWasAbsolute = FALSE;
+    INetURLObject aFileObj( aAktUrl );
+    aFileObj.smartRel2Abs( rUrl, bWasAbsolute );
+
+    if( bWasAbsolute && SfxContentHelper::Exists( aFileObj.GetURLNoMark() ) )
+    {
+        rAbsUrl = aFileObj.GetMainURL();
+        return ERRCODE_NONE;
+    }
+
+    // Ist aktuelles Doc unbenamt?
+    if( !aMedName.Len() )
+    {
+        if( bWasAbsolute )
+        {
+            rAbsUrl = aFileObj.GetMainURL();
+            return ERRCODE_NONE;
+        }
+        else
+        {
+            rAbsUrl = rUrl;
+            return ERRCODE_SFX_ISRELATIVE;
+        }
+    }
+
+    // Falls File Protokoll, testen ob DirEntry vorhanden (relativ)
+    if( aAktUrl.GetProtocol() == INET_PROT_FILE )
+    {
+        INetURLObject aFileObj;
+        aFileObj.SetSmartProtocol( INET_PROT_FILE );
+        if( aAktUrl.GetNewAbsURL( rUrl, &aFileObj ) )
+        {
+            String aFileName = aFileObj.PathToFileName();
+            //Relativ zum Dokument testen!
+            if( SfxContentHelper::Exists( aFileName ) )
+            {
+                // File e.Istiert, also als FileUrl Parsen
+                rAbsUrl = aFileObj.GetMainURL();
+                return ERRCODE_NONE;
+            }
+        }
+    }
+
+    if( !aAktUrl.GetNewAbsURL( rUrl, &aTargetUrl ) )
+        nErr = ERRCODE_IO_GENERAL;
+    rAbsUrl = aTargetUrl.GetMainURL();
+    return nErr;
+}
+#endif
+
+//------------------------------------------------------------------
+
+void SfxMedium::RefreshName_Impl()
+{
+#if 0   //(dv)
+    if ( pImp->xContent.is() )
+    {
+        String aNameP = pImp->xAnchor->GetViewURL();
+        pImp->aOrigURL = aNameP;
+        aLogicName = aNameP;
+        DELETEZ( pURLObj );
+        if (aLogicName.Len())
+            aLogicName = GetURLObject().GetMainURL();
+        SetIsRemote_Impl();
+    }
+#endif  //(dv)
+}
+
+void SfxMedium::SetIsRemote_Impl()
+{
+    INetURLObject aObj( GetName() );
+    switch( aObj.GetProtocol() )
+    {
+        case INET_PROT_FTP:
+        case INET_PROT_HTTP:
+        case INET_PROT_HTTPS:
+        case INET_PROT_POP3:
+        case INET_PROT_NEWS:
+        case INET_PROT_IMAP:
+//        case INET_PROT_OUT:
+        case INET_PROT_VIM:
+            bRemote = TRUE; break;
+        default:
+            bRemote = ( GetName().CompareToAscii( "private:msgid", 13 ) == COMPARE_EQUAL );
+            break;
+    }
+
+    // Da Dateien, die Remote geschrieben werden zur Uebertragung auch
+    // gelesen werden koennen muessen
+    if( bRemote )
+        nStorOpenMode |= STREAM_READ;
+}
+
+
+
+void SfxMedium::SetName( const String& aNameP, sal_Bool bSetOrigURL )
+{
+    if( !pImp->aOrigURL.Len() )
+        pImp->aOrigURL = aLogicName;
+    if( bSetOrigURL )
+        pImp->aOrigURL = aNameP;
+    aLogicName = aNameP;
+    DELETEZ( pURLObj );
+
+//(dv)  if ( pImp->xAnchor.Is() && aNameP != pImp->xAnchor->GetViewURL() )
+//(dv)      pImp->xAnchor = NULL;
+
+    if ( aLogicName.Len() )
+    {
+        INetURLObject aUrl;
+        aUrl.SetSmartProtocol( INET_PROT_FILE );
+        aUrl.SetSmartURL( aLogicName );
+        String aTemp( aUrl.GetMainURL() );
+        INetURLObject aObj( aTemp );
+
+        if ( INET_PROT_FTP == aObj.GetProtocol() )
+        {
+#if 0   //(dv)
+            CntINetConfig::load (NULL, NULL);
+            INetProxyConfig aProxyConfig;
+            if (CntINetConfig::shouldUseProxy (NULL, aTemp, aProxyConfig))
+                if (aProxyConfig.hasFtpProxy())
+                    aLogicName = aTemp;
+#endif  //(dv)
+        }
+
+        aLogicName = GetURLObject().GetMainURL();
+    }
+
+    SetIsRemote_Impl();
+}
+
+//----------------------------------------------------------------
+const String& SfxMedium::GetOrigURL() const
+{
+    return !pImp->aOrigURL.Len() ? (String &)aLogicName : pImp->aOrigURL;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::SetPhysicalName( const String& rNameP )
+{
+    if( pImp->pTempFile )
+    {
+        delete pImp->pTempFile;
+        pImp->pTempFile = NULL;
+    }
+
+    aName = rNameP;
+    bTriedStorage = sal_False;
+
+    if ( aName.Len() )
+    {
+        INetURLObject aURL;
+        Reference < XContent > xContent;
+
+        aURL.SetSmartProtocol( INET_PROT_FILE );
+        aURL.SetSmartURL( aName );
+
+        xContent = UCB_Helper::CreateContent( aURL.GetMainURL() );
+        if ( xContent.is() )
+            pImp->xContent = xContent;
+    }
+}
+
+//------------------------------------------------------------------
+void SfxMedium::SetTemporary( sal_Bool bTemp )
+{
+    pImp->bIsTemp = bTemp;
+}
+
+//------------------------------------------------------------------
+sal_Bool SfxMedium::IsTemporary() const
+{
+    return pImp->bIsTemp;
+}
+
+//------------------------------------------------------------------
+
+sal_Bool SfxMedium::Exists( sal_Bool bForceSession )
+{
+    DBG_ERROR( "Not implemented!" );
+    return sal_False;
+}
+
+//------------------------------------------------------------------
+
+void SfxMedium::ReOpen()
+{
+    DBG_ASSERT( pFilter, "Kein Filter, aber ReOpen!" );
+    if( pFilter )
+    {
+        if( pFilter->UsesStorage() )
+            GetStorage();
+        else
+            GetInStream();
+    }
+}
+//------------------------------------------------------------------
+SfxMedium::SfxMedium
+(
+    const String &rName, StreamMode nOpenMode,  sal_Bool bDirectP,
+    sal_Bool bDownLoadP, const SfxFilter *pFlt, SfxItemSet *pInSet
+)
+:   IMPL_CTOR(),
+    bRoot( sal_False ),
+    pFilter(pFlt),
+    pURLObj(0),
+    pImp(new SfxMedium_Impl( this )),
+    pSet( pInSet )
+{
+    aName = aLogicName = rName;
+    nStorOpenMode = nOpenMode;
+    bDirect = bDirectP;
+    bDownLoad = bDownLoadP;
+    Init_Impl();
+}
+//------------------------------------------------------------------
+
+SfxMedium::SfxMedium( SvStorage *pStorage, sal_Bool bRootP )
+:   IMPL_CTOR(),
+    bRoot( bRootP ),
+    aStorage(pStorage),
+    pURLObj(0),
+    pImp( new SfxMedium_Impl( this )),
+    pSet(0)
+{
+    SfxApplication* pApp = SFX_APP();
+    sal_uInt32 nFormat = pStorage->GetFormat();
+    if( !nFormat )
+    {
+#ifdef DBG_UTIL
+        if( aLogicName.Len() )
+            DBG_ERROR( "Unbekanntes StorageFormat, versuche eigenes Format" );
+#endif
+        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->
+            GetFilter( 0 );
+    }
+    else
+        pFilter = pApp->GetFilterMatcher().GetFilter4ClipBoardId( nFormat, 0, 0 );
+    if( pFilter )
+        pFilter = pApp->GetFilterMatcher().ResolveRedirection( pFilter, *this );
+    if( !pFilter && nFormat )
+    {
+#ifdef DBG_UTIL
+        ByteString aErr( U2S( Exchange::GetFormatName( nFormat ) ) );
+        aErr += " leider kein Filter vorhanden";
+        DBG_ERROR( aErr.GetBuffer() );
+#endif
+        pFilter = SfxObjectFactory::GetDefaultFactory().GetFilterContainer()->
+            GetFilter( 0 );
+    }
+
+    bDownLoad = sal_False;
+    Init_Impl();
+}
+//------------------------------------------------------------------
+
+SfxMedium::~SfxMedium()
+{
+//  CancelTransfers();
+    Close();
+
+    delete pSet;
+
+    if( pImp->bIsTemp && GetPhysicalName().Len() )
+    {
+        INetURLObject aObj( GetPhysicalName(), INET_PROT_FILE );
+        SfxContentHelper::Kill( aObj.GetMainURL() );
+    }
+
+    pFilter = 0;
+
+    delete pURLObj;
+    delete pImp;
+}
+//------------------------------------------------------------------
+
+void SfxMedium::SetItemSet(SfxItemSet *pNewSet)
+{
+    delete pSet;
+    pSet = pNewSet;
+}
+//------------------------------------------------------------------
+
+void SfxMedium::SetClassFilter( const SvGlobalName & rFilterClass )
+{
+    bSetFilter = sal_True;
+    aFilterClass = rFilterClass;
+}
+//----------------------------------------------------------------
+
+#if defined SINIX && defined GCC && defined C272
+const INetURLObject& SfxMedium::GetURLObject()
+{
+    if( !pURLObj )
+    {
+        pURLObj = new INetURLObject();
+        if ( GetName().Len() )
+        {
+            pURLObj->SetSmartProtocol( INET_PROT_FILE );
+            pURLObj->SetSmartURL( GetName() );
+        }
+    }
+    return *pURLObj;
+}
+#else
+const INetURLObject& SfxMedium::GetURLObject() const
+{
+    if( !pURLObj )
+    {
+        SfxMedium* pThis = (SfxMedium*)this;
+        pThis->pURLObj = new INetURLObject();
+        if ( GetName().Len() )
+        {
+            pThis->pURLObj->SetSmartProtocol( INET_PROT_FILE );
+            pThis->pURLObj->SetSmartURL( GetName() );
+        }
+    }
+    return *pURLObj;
+}
+#endif
+//----------------------------------------------------------------
+
+const String& SfxMedium::GetPreRedirectedURL() const
+{
+    return pImp->aPreRedirectionURL;
+}
+//----------------------------------------------------------------
+
+sal_uInt32 SfxMedium::GetMIMEAndRedirect( String &rName )
+{
+/* dv !!!! not needed any longer ?
+    INetProtocol eProt = GetURLObject().GetProtocol();
+    if( eProt == INET_PROT_FTP && SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL() ) )
+    {
+        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
+        sal_Bool bIsFolder = FALSE;
+        if ( ( aAny >>= bIsFolder ) && bIsFolder )
+            return ERRCODE_NONE;
+    }
+
+    GetMedium_Impl();
+    if( !eError && pImp->xBinding.Is() )
+    {
+        eError = pImp->xBinding->GetMimeType( rName );
+
+        // Wir koennen keine Parameter wie CharSets usw.
+        rName = rName.GetToken( 0, ';' );
+        if( !eError )
+        {
+            if( !pImp->aPreRedirectionURL.Len() )
+                pImp->aPreRedirectionURL = aLogicName;
+            SetName( pImp->xBinding->GetRedirectedURL() );
+        }
+        pImp->aExpireTime = pImp->xBinding->GetExpireDateTime();
+    }
+    return eError;
+*/
+    return 0;
+}
+
+//----------------------------------------------------------------
+
+void SfxMedium::SetUsesCache( sal_Bool bUse )
+{
+    pImp->bUsesCache = bUse;
+}
+//----------------------------------------------------------------
+
+sal_Bool SfxMedium::UsesCache() const
+{
+    return pImp->bUsesCache;
+}
+//----------------------------------------------------------------
+
+//----------------------------------------------------------------
+
+void SfxMedium::SetReferer( const String& rRefer )
+{
+    pImp->aReferer = rRefer;
+}
+//----------------------------------------------------------------
+
+const String& SfxMedium::GetReferer( ) const
+{
+    return pImp->aReferer;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetTransferPriority( sal_uInt16 nPrio )
+{
+    pImp->nPrio = nPrio;
+}
+//----------------------------------------------------------------
+
+sal_uInt16 SfxMedium::GetTransferPriority( ) const
+{
+    return pImp->nPrio;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetExpired_Impl( const DateTime& rDateTime )
+{
+    pImp->aExpireTime = rDateTime;
+}
+//----------------------------------------------------------------
+
+sal_Bool SfxMedium::IsExpired() const
+{
+    return pImp->aExpireTime.IsValid() && pImp->aExpireTime < DateTime();
+}
+//----------------------------------------------------------------
+
+ErrCode SfxMedium::CheckOpenMode_Impl( sal_Bool bSilent, sal_Bool bAllowModeChange )
+{
+    sal_uInt32 nErr = 0;
+    switch( GetURLObject().GetProtocol() )
+    {
+        case INET_PROT_FILE:
+        {
+            Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
+            sal_Bool bIsFolder = FALSE;
+            if ( ( aAny >>= bIsFolder ) && bIsFolder )
+                break;
+#if 0       // Don't use FSYS !!!!
+            // first check if file is a directory
+            if ( IsDirectory )
+                return ERRCODE_IO_NOTEXISTS;
+#endif
+            sal_Bool bTriesCopy(sal_False);
+            sal_Bool bReadOnly = GetOpenMode() == SFX_STREAM_READONLY;
+            if( !bReadOnly )
+            {
+                // Fuer MS und FL und Konsorten noch ueber die
+                // Dokumente huehnern wg. w95 Bug auf Netware-Servern
+                // bereits zum Schreiben ge"offnete Dokumente lassen sich
+                // nochmal zum Schreiben "offnen
+                for( SfxObjectShell* pFirst = SfxObjectShell::GetFirst();
+                     pFirst; pFirst = SfxObjectShell::GetNext( *pFirst ) )
+                {
+                    SfxMedium* pMed = pFirst->GetMedium();
+                    if( pMed->GetName() == GetName() && pMed->GetOpenMode() != SFX_STREAM_READONLY )
+                    {
+                        // ggf. r/o oeffnen
+                        if ( bAllowModeChange )
+                        {
+                            bReadOnly = sal_True;
+                            GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
+                            SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                        }
+                        else
+                            nErr = ERRCODE_IO_ACCESSDENIED;
+                        break;
+                    }
+                }
+            }
+            while(1)
+            {
+                // erst der Zugriff auf den Storage erzeugt den Fehlercode
+                SvStorageRef aStor;
+                if (  IsStorage() )
+                    aStor = GetStorage();
+                else
+                    GetInStream();
+
+                if( aStor.Is() && bReadOnly && !bTriesCopy && !pImp->bIsTemp )
+                {
+                    SfxApplication *pSfxApp = SFX_APP();
+                    const SfxFilter* pFilter = pSfxApp->GetFilterMatcher().
+                            GetFilter4ClipBoardId( aStor->GetFormat() );
+                    if ( pFilter )
+                        pFilter = pSfxApp->GetFilterMatcher().
+                            ResolveRedirection( pFilter, *this );
+                    // Eigenes Storageformat readonly per Kopie oeffnen
+                    if( pFilter && pFilter->IsOwnFormat() )
+                    {
+                        nErr = ERRCODE_IO_ACCESSDENIED;
+                        Close();
+                    }
+                    else nErr = GetError();
+                }
+                else nErr = GetError();
+                switch ( nErr )
+                {
+                    default: return nErr;
+                    case ERRCODE_IO_LOCKVIOLATION:
+                        // Wg. Win95 Netware
+                    case ERRCODE_IO_NOTEXISTS:
+                    case ERRCODE_IO_ACCESSDENIED:
+                    {
+                        // Zur Zeit soll nicht nachgefragt werden
+                        bSilent = sal_True;
+                        if(!bReadOnly )
+                        {
+                            if( bAllowModeChange )
+                            {
+                                QueryBox aBox( 0, SfxResId(MSG_OPEN_READONLY) );
+                                if ( bSilent || RET_YES == aBox.Execute() )
+                                {
+                                    bReadOnly = sal_True;
+                                    if( GetItemSet() )
+                                        GetItemSet()->Put(
+                                            SfxBoolItem(SID_DOC_READONLY, sal_True));
+                                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                                    ResetError();
+                                }
+                                else
+                                    return ERRCODE_ABORT;
+                            }
+                            else
+                                return nErr;
+                        }
+                        else
+                        {
+                            if( !bTriesCopy )
+                            {
+                                String aOldName( aName );
+                                CreateTempFile();
+                                if ( !SfxContentHelper::CopyTo( aOldName, aName ) )
+                                    nErr = ERRCODE_IO_GENERAL;
+                                ResetError();
+                                pImp->bIsTemp = sal_True;
+                                bTriesCopy = sal_True;
+                                CloseInStream_Impl();
+                            }
+                            else
+                                return nErr;
+                        }
+                    }
+                }
+            }
+            break;
+        }
+
+        case INET_PROT_DATA:
+        case INET_PROT_PRIVATE:
+        {
+            // Images und Docinfo nicht editieren
+            const INetURLObject& rObj = GetURLObject();
+            String aPath = rObj.GetURLPath();
+            if( rObj.GetProtocol() == INET_PROT_PRIVATE  &&
+                aPath.CompareIgnoreCaseToAscii( "image/", 6 ) !=
+                COMPARE_EQUAL &&
+                aPath.CompareIgnoreCaseToAscii( "docinfo/", 8 ) !=
+                COMPARE_EQUAL &&
+                aPath.CompareIgnoreCaseToAscii( "info/", 5 ) !=
+                COMPARE_EQUAL )
+                return 0;
+
+            if( GetOpenMode() & STREAM_WRITE )
+            {
+                if( bAllowModeChange )
+                    SetOpenMode(SFX_STREAM_READONLY, sal_False);
+                else
+                    return ERRCODE_IO_ACCESSDENIED;
+            }
+        }
+    }
+    return nErr;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::ForceSynchronStream_Impl( sal_Bool bForce )
+{
+    if( pInStream )
+    {
+        SvLockBytes* pBytes = pInStream->GetLockBytes();
+        if( pBytes )
+            pBytes->SetSynchronMode( bForce );
+    }
+    pImp->bForceSynchron = bForce;
+}
+//----------------------------------------------------------------
+/* Kann der URL ein MIME Type zugeordnent werden? */
+sal_Bool SfxMedium::SupportsMIME_Impl() const
+{
+    INetProtocol eProt = GetURLObject().GetProtocol();
+    if( eProt == INET_PROT_HTTPS || eProt == INET_PROT_HTTP  )
+        return sal_True;
+
+    if( eProt == INET_PROT_NOT_VALID )
+        return sal_False;
+
+    if( eProt == INET_PROT_FTP )
+    {
+        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
+        sal_Bool bIsFolder = FALSE;
+        if ( ( aAny >>= bIsFolder ) && bIsFolder )
+            return SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL() );
+        else
+            return sal_False;
+    }
+
+    return sal_False;
+}
+
+sal_Bool SfxMedium::IsAllowedForExternalBrowser() const
+{
+    if ( pFilter && !pFilter->GetFilterName().EqualsAscii( "ExternBrowser" ) )
+        return sal_False;
+
+    sal_Bool bCheckExternBrowser = SFX_APP()->ShouldUseExternalBrowser( aLogicName );
+    if ( bCheckExternBrowser )
+    {
+        // Wenn Reload eines mit dem Office geladenen Dokuments gemacht wird oder nicht readonly geladen wird,
+        // soll kein externer Browser benutzt werden
+        SFX_ITEMSET_ARG( GetItemSet(), pReloadItem, SfxBoolItem, SID_RELOAD, sal_False );
+        SFX_ITEMSET_ARG( GetItemSet(), pReadonlyItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
+        SFX_ITEMSET_ARG( GetItemSet(), pHidden, SfxBoolItem, SID_HIDDEN, sal_False);
+        if ( pReloadItem || ( pReadonlyItem && !pReadonlyItem->GetValue() ) || pHidden && pHidden->GetValue() )
+            bCheckExternBrowser = sal_False;
+    }
+
+    return bCheckExternBrowser;
+}
+
+//----------------------------------------------------------------
+
+/* Kann der URL eine lokale Datei zugeordnet werden? */
+
+sal_Bool SfxMedium::ProvidesFile_Impl() const
+{
+    INetProtocol eProt = GetURLObject().GetProtocol();
+    return eProt == INET_PROT_FILE;
+}
+//----------------------------------------------------------------
+
+/* Liefert die ::com::sun::star::util::URL direkt einen Storage oder Stream? Hierzu z"ahlen
+   nicht Executable Filter, die ja erst in der n"achsten Runde einen
+   Stream liefern */
+
+sal_Bool SfxMedium::ProvidesData_Impl() const
+{
+    // perhaps this medium was constructed for an embedded object
+    if ( aStorage.Is() )
+        return sal_True;
+
+    if( pFilter )
+    {
+        if ( pFilter->GetFilterContainer()->GetName().EqualsAscii( "plugin" ) )
+            return sal_True;
+
+        if ( ( pFilter->GetFilterFlags() & SFX_FILTER_EXECUTABLE ) || pFilter->GetFilterName().EqualsAscii( SFX_FILTER_DOWNLOAD ) )
+            return sal_False;
+    }
+    else
+    {
+        const SfxFilter* pProtoFilter = SFX_APP()->GetFilterMatcher().GetFilter4Protocol( *(SfxMedium*)this );
+        if( pProtoFilter && (pProtoFilter->GetFilterFlags() & SFX_FILTER_EXECUTABLE ) )
+            return sal_False;
+    }
+
+    INetProtocol eProt;
+    if ( GetContent().is() )
+    {
+        const INetURLObject& aObj= GetURLObject();
+        eProt = aObj.GetProtocol();
+        if ( INET_PROT_FTP == eProt )
+        {
+#if 0                                   // (dv)
+            const String &rUrl = aObj.GetMainURL();
+            CntINetConfig::load (NULL, NULL);
+            INetProxyConfig aProxyConfig;
+            if (CntINetConfig::shouldUseProxy (NULL, rUrl, aProxyConfig))
+                if (aProxyConfig.hasFtpProxy())
+#endif
+                    return sal_True;
+        }
+        else if( eProt == INET_PROT_HTTPS || eProt == INET_PROT_HTTP )
+            return sal_True;
+
+        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
+        sal_Bool bIsFolder = FALSE;
+        if ( ( aAny >>= bIsFolder ) && bIsFolder )
+            return sal_False;
+    }
+    else
+        eProt = GetURLObject().GetProtocol();
+
+    if ( eProt == INET_PROT_FILE )
+    {
+        if ( aLogicName.Search('{') != STRING_NOTFOUND )
+            return sal_False;
+        else
+            return sal_True;
+    }
+    else if ( INET_PROT_FTP == eProt )
+        return sal_True;
+    else if ( eProt == INET_PROT_NOT_VALID )
+        return sal_False;
+
+  return sal_False;
+}
+
+//----------------------------------------------------------------
+SfxFrame* SfxMedium::GetLoadTargetFrame() const
+{
+    return pImp->wLoadTargetFrame;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetLoadTargetFrame(SfxFrame* pFrame )
+{
+    pImp->wLoadTargetFrame = pFrame;
+}
+//----------------------------------------------------------------
+
+SvStream* SfxMedium::RemoveStream_Impl()
+{
+    SvStream* pRet = GetInStream();
+    pInStream = 0;
+    return pRet;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetStream_Impl( SvStream* pStrm )
+{
+    CloseInStream_Impl();
+    pInStream = pStrm;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetStorage_Impl( SvStorage* pStor )
+{
+    aStorage = pStor;
+}
+//----------------------------------------------------------------
+
+SfxItemSet* SfxMedium::GetItemSet() const
+{
+    if( !pSet ) ((SfxMedium*)this)->pSet =
+                    new SfxAllItemSet( SFX_APP()->GetPool() );
+    return pSet;
+}
+//----------------------------------------------------------------
+
+void SfxMedium::SetLoadEnvironment_Impl( LoadEnvironment_Impl* pEnv )
+{
+    pImp->pLoadEnv = pEnv;
+}
+//----------------------------------------------------------------
+
+LoadEnvironment_Impl* SfxMedium::GetLoadEnvironment_Impl() const
+{
+    return pImp->pLoadEnv;
+}
+//----------------------------------------------------------------
+
+SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
+{
+    if( !pImp->xAttributes.Is() )
+/*!!!!      if ( pImp->xBinding.Is() )
+            pImp->xAttributes = pImp->xBinding->GetHeaders();
+        else
+*/          pImp->xAttributes = SvKeyValueIteratorRef( new SvKeyValueIterator );
+
+    return pImp->xAttributes;
+}
+//----------------------------------------------------------------
+
+SvCompatWeakHdl* SfxMedium::GetHdl()
+{
+    return pImp->GetHdl();
+}
+
+sal_Bool SfxMedium::IsDownloadDone_Impl()
+{
+    return pImp->bDownloadDone;
+}
+
+SvEaMgr* SfxMedium::GetEaMgr()
+{
+    if ( !pImp->pEaMgr && ProvidesData_Impl() && pFilter )
+    {
+        /* the stream in the storage is probably not a filestream ( the stream is
+            closed anyway! ). Therefor we will always use GetPhysicalName to
+            create the SvEaMgr. */
+        //  SvStream *pStream = aStorage.Is() ? aStorage->GetTargetSvStream() : NULL;
+        //  if ( pStream && pStream->IsA() == ID_FILESTREAM )
+        //      pImp->pEaMgr = new SvEaMgr(*(SvFileStream *)pStream);
+        //  else
+        pImp->pEaMgr = new SvEaMgr( GetPhysicalName() );
+    }
+
+    return pImp->pEaMgr;
+}
+
+//----------------------------------------------------------------
+
+void SfxMedium::SetDontCreateCancellable( )
+{
+    pImp->bDontCreateCancellable = sal_True;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource >  SfxMedium::GetDataSource()
+{
+    if ( !pImp->pSource )
+        CreateDataSource();
+    return pImp->pSource;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >  SfxMedium::GetDataSink()
+{
+    if ( !pImp->pSink )
+        CreateDataSink();
+    return pImp->pSink;
+}
+
+void SfxMedium::CreateDataSource()
+{
+    if ( ProvidesData_Impl() )
+    {
+        SfxLoadEnvironment *pEnv = NULL;
+        if ( pImp->pLoadEnv )
+        {
+            pEnv = new SfxLoadEnvironment( pImp->pLoadEnv );
+            SfxRefItem aItem( SID_LOADENVIRONMENT, pEnv );
+            GetItemSet()->Put( aItem );
+        }
+
+        pImp->pSource = new FileSource_Impl( this );
+        pImp->pSource->acquire();
+        if ( pEnv )
+            pEnv->SetDataAvailableLink( LINK( pImp->pSource, FileSource_Impl, DataAvailableHdl ) );
+    }
+}
+
+void SfxMedium::CreateDataSink()
+{
+    pImp->pSink = new FileSink_Impl( this );
+    pImp->pSink->acquire();
+}
+
+void SfxMedium::ResetDataSource()
+{
+    if ( pImp->pSource )
+    {
+        pImp->pSource->ResetMedium();
+        pImp->pSource->release();
+    }
+}
+
+void SfxMedium::ResetDataSink()
+{
+    if ( pImp->pSink )
+    {
+        pImp->pSink->ResetMedium();
+        pImp->pSink->release();
+    }
+}
+
+const SfxVersionTableDtor* SfxMedium::GetVersionList()
+{
+    if ( !pImp->pVersions && IsStorage() )
+    {
+        SvStorageStreamRef aStream =
+            GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "VersionList" ), SFX_STREAM_READONLY | STREAM_NOCREATE );
+        if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+        {
+            pImp->pVersions = new SfxVersionTableDtor;
+            pImp->pVersions->Read( *aStream );
+        }
+    }
+
+    return pImp->pVersions;
+}
+
+sal_uInt16 SfxMedium::AddVersion_Impl( SfxVersionInfo& rInfo )
+{
+    if ( IsStorage() )
+    {
+        if ( !pImp->pVersions )
+            pImp->pVersions = new SfxVersionTableDtor;
+
+        // Einen eindeutigen Namen f"ur den Stream ermitteln
+        SvULongs aLongs;
+        SfxVersionInfo* pInfo = pImp->pVersions->First();
+        while ( pInfo )
+        {
+            sal_uInt32 nVer = (sal_uInt32) pInfo->aName.Copy(7).ToInt32();
+            sal_uInt16 n;
+            for ( n=0; n<aLongs.Count(); n++ )
+                if ( nVer<aLongs[n] )
+                    break;
+
+            aLongs.Insert( nVer, n );
+            pInfo = pImp->pVersions->Next();
+        }
+
+        sal_uInt16 nKey;
+        for ( nKey=0; nKey<aLongs.Count(); nKey++ )
+            if ( aLongs[nKey] > nKey+1 )
+                break;
+
+        rInfo.aName = DEFINE_CONST_UNICODE( "Version" );
+        rInfo.aName += String::CreateFromInt32( nKey + 1 );
+        pInfo = new SfxVersionInfo( rInfo );
+        pImp->pVersions->Insert( pInfo, LIST_APPEND );
+        return nKey;
+    }
+
+    return 0;
+}
+
+sal_Bool SfxMedium::RemoveVersion_Impl( const SfxVersionInfo& rInfo )
+{
+    if ( !pImp->pVersions )
+        return sal_False;
+
+    SfxVersionInfo* pInfo = pImp->pVersions->First();
+    while( pInfo )
+    {
+        if ( pInfo->aName == rInfo.aName )
+        {
+            pImp->pVersions->Remove( pInfo );
+            delete pInfo;
+            return sal_True;
+        }
+
+        pInfo = pImp->pVersions->Next();
+    }
+
+    return sal_False;
+}
+
+sal_Bool SfxMedium::TransferVersionList_Impl( SfxMedium& rMedium )
+{
+    if ( rMedium.pImp->pVersions )
+    {
+        delete pImp->pVersions;
+        pImp->pVersions = new SfxVersionTableDtor( *rMedium.pImp->pVersions );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
+sal_Bool SfxMedium::SaveVersionList_Impl()
+{
+    if ( IsStorage() )
+    {
+        if ( !pImp->pVersions )
+            return sal_True;
+
+        SvStorageStreamRef aStream =
+            GetStorage()->OpenStream( DEFINE_CONST_UNICODE( "Version.Ist" ), SFX_STREAM_READWRITE );
+        if ( aStream.Is() && aStream->GetError() == SVSTREAM_OK )
+        {
+            pImp->pVersions->Write( *aStream );
+            return sal_True;
+        }
+    }
+
+    return sal_False;
+}
+
+//----------------------------------------------------------------
+sal_Bool SfxMedium::IsReadOnly()
+{
+    sal_Bool bReadOnly = !( GetOpenMode() & STREAM_WRITE );
+/*(dv)  if ( bReadOnly && pURLObj && CntAnchor::IsViewURL( pURLObj->GetMainURL() ) )
+        // Chaos-Storages sind niemals als readonly anzusehen!
+        return sal_False;
+*/
+    if ( !bReadOnly )
+    {
+        // lo.Isch readonly ge"offnet
+        SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
+        if ( pItem )
+            bReadOnly = pItem->GetValue();
+    }
+
+    return bReadOnly;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::CreateTempFile()
+{
+    if ( pImp->pTempFile )
+        delete pImp->pTempFile;
+
+    String          aParentName;
+    INetURLObject   aParent = GetURLObject();
+
+    if ( aParent.removeSegment() )
+        aParentName = aParent.GetMainURL();
+
+    pImp->pTempFile = new TempFile( &aParentName );
+    pImp->pTempFile->EnableKillingFile( sal_True );
+
+    aName = pImp->pTempFile->GetName();
+
+    CloseOutStream_Impl();
+    CloseStorage();
+}
+
+//----------------------------------------------------------------
+#define nActVersion 1
+
+SvStream& SfxVersionTableDtor::Read( SvStream& rStrm )
+{
+    sal_uInt16 nCount = 0, nVersion = 0;
+
+    rStrm >> nVersion;
+    rStrm >> nCount;
+
+    for( sal_uInt16 i=0; i<nCount; ++i )
+    {
+        SfxVersionInfo *pNew = new SfxVersionInfo;
+        rStrm.ReadByteString( pNew->aComment, RTL_TEXTENCODING_UTF8 );
+        rStrm.ReadByteString( pNew->aName, RTL_TEXTENCODING_UTF8 );
+        pNew->aCreateStamp.Load( rStrm );
+        Insert( pNew, LIST_APPEND );
+    }
+
+    return rStrm;
+}
+
+SvStream& SfxVersionTableDtor::Write( SvStream& rStream ) const
+{
+    rStream << (sal_uInt16) nActVersion;
+    rStream << (sal_uInt16) Count();
+
+    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*)this)->First();
+    while( pInfo && rStream.GetError() == SVSTREAM_OK )
+    {
+        rStream.WriteByteString( pInfo->aComment, RTL_TEXTENCODING_UTF8 );
+        rStream.WriteByteString( pInfo->aName, RTL_TEXTENCODING_UTF8 );
+        pInfo->aCreateStamp.Save( rStream );
+        pInfo = ((SfxVersionTableDtor*)this)->Next();
+    }
+
+    return rStream;
+}
+
+void SfxVersionTableDtor::DelDtor()
+{
+    SfxVersionInfo* pTmp = First();
+    while( pTmp )
+    {
+        delete pTmp;
+        pTmp = Next();
+    }
+    Clear();
+}
+
+SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& rTbl )
+{
+    DelDtor();
+    SfxVersionInfo* pTmp = ((SfxVersionTableDtor&)rTbl).First();
+    while( pTmp )
+    {
+        SfxVersionInfo *pNew = new SfxVersionInfo( *pTmp );
+        Insert( pNew, LIST_APPEND );
+        pTmp = ((SfxVersionTableDtor&)rTbl).Next();
+    }
+    return *this;
+}
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+SfxVersionInfo::SfxVersionInfo()
+{
+}
+
+SvStringsDtor* SfxVersionTableDtor::GetVersions() const
+{
+    SvStringsDtor *pList = new SvStringsDtor;
+    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*) this)->First();
+    while ( pInfo )
+    {
+        String *pString = new String( pInfo->aComment );
+        (*pString) += DEFINE_CONST_UNICODE( "; " );
+        (*pString) += ConvertDateTime_Impl( pInfo->aCreateStamp );
+        pList->Insert( pString, pList->Count() );
+        pInfo = ((SfxVersionTableDtor*) this)->Next();
+    }
+
+    return pList;
+}
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxDataSourceFactory::createInstance(const ::rtl::OUString& ServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+{
+    INetProtocol eProt = INetURLObject::CompareProtocolScheme( U2S( ServiceSpecifier ) );
+    switch ( eProt )
+    {
+        case INET_PROT_FTP :
+        case INET_PROT_HTTP :
+        case INET_PROT_FILE :
+        case INET_PROT_HTTPS :
+        case INET_PROT_NEWS :
+        case INET_PROT_PRIV_SOFFICE :
+        case INET_PROT_IMAP :
+        case INET_PROT_POP3 :
+        case INET_PROT_VIM :
+            break;
+        default:
+            return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+            break;
+    }
+
+    return (::cppu::OWeakObject*) new FileSource_Impl;
+}
+
+SFX_IMPL_XINTERFACE_2( SfxDataSourceFactory, OWeakObject, ::com::sun::star::lang::XMultiServiceFactory, ::com::sun::star::lang::XServiceInfo )
+SFX_IMPL_XTYPEPROVIDER_2( SfxDataSourceFactory, ::com::sun::star::lang::XMultiServiceFactory, ::com::sun::star::lang::XServiceInfo )
+SFX_IMPL_XSERVICEINFO( SfxDataSourceFactory, "com.sun.star.frame.DataSourceFactory", "com.sun.star.comp.sfx2.DataSourceFactory" )
+SFX_IMPL_SINGLEFACTORY( SfxDataSourceFactory )
+
+SfxDataSourceFactory::SfxDataSourceFactory( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory> const & )
+{
+    DBG_ERRORFILE( "NIJ!" );
+}
+
+SfxDataSourceFactory::~SfxDataSourceFactory()
+{
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SfxDataSourceFactory::createInstanceWithArguments(const ::rtl::OUString& ServiceSpecifier, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Arguments) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
+{
+    INetProtocol eProt = INetURLObject::CompareProtocolScheme( U2S( ServiceSpecifier ) );
+    switch ( eProt )
+    {
+        case INET_PROT_FTP :
+        case INET_PROT_HTTP :
+        case INET_PROT_FILE :
+        case INET_PROT_HTTPS :
+        case INET_PROT_NEWS :
+        case INET_PROT_PRIV_SOFFICE :
+        case INET_PROT_IMAP :
+        case INET_PROT_POP3 :
+        case INET_PROT_VIM :
+            break;
+        default:
+            return ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ();
+            break;
+    }
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
+    FileSource_Impl* pSource = new FileSource_Impl();
+    xRet = (::cppu::OWeakObject*) pSource;
+    pSource->initialize( Arguments );
+    return xRet;
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SfxDataSourceFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(9);
+    ::rtl::OUString *pArr = aRet.getArray();
+    pArr[0] = DEFINE_CONST_UNICODE( "ftp:" );
+    pArr[1] = DEFINE_CONST_UNICODE( "http:" );
+    pArr[2] = DEFINE_CONST_UNICODE( "https:" );
+    pArr[3] = DEFINE_CONST_UNICODE( "file:" );
+    pArr[4] = DEFINE_CONST_UNICODE( "news:" );
+    pArr[5] = DEFINE_CONST_UNICODE( "staroffice.private:" );
+    pArr[6] = DEFINE_CONST_UNICODE( "imap:" );
+    pArr[7] = DEFINE_CONST_UNICODE( "pop3:" );
+    pArr[8] = DEFINE_CONST_UNICODE( "vim:" );
+
+    return aRet;
+}
+
+#if SUPD<604
+void SfxMedium::SetReloadAvailableLink(  const Link& rLink )
+{
+}
+#endif
+
+

@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ *  $RCSfile: outliner.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <outliner.hrc>
+String RID_OUTLUNDO_HEIGHT
+{
+    TEXT = "Verschieben" ;
+    TEXT [ English ] = "Move" ;
+    TEXT [ norwegian ] = "Flytt" ;
+    TEXT [ italian ] = "Sposta" ;
+    TEXT [ portuguese_brazilian ] = "Mover" ;
+    TEXT [ portuguese ] = "Mover" ;
+    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ danish ] = "Flyt" ;
+    TEXT [ french ] = "Déplacer" ;
+    TEXT [ swedish ] = "Flytta" ;
+    TEXT [ dutch ] = "Verplaatsen" ;
+    TEXT [ spanish ] = "Desplazar" ;
+    TEXT [ english_us ] = "Move" ;
+    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ russian ] = "Ïåğåìåñòèòü";
+    TEXT[ polish ] = "Przesuñ";
+    TEXT[ japanese ] = "ˆÚ“®";
+    TEXT[ chinese_traditional ] = "²¾°Ê";
+    TEXT[ arabic ] = "ÅÒÇÍÉ";
+    TEXT[ dutch ] = "Verplaatsen";
+    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ greek ] = "Ìåôáêßíçóç";
+    TEXT[ korean ] = "ÀÌµ¿";
+    TEXT[ turkish ] = "Taşı";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_OUTLUNDO_DEPTH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Einrücken : Einr³cken */
+    /* ### ACHTUNG: Neuer Text in Resource? Einrücken : Einr³cken */
+    TEXT = "Einrücken" ;
+    TEXT [ English ] = "Indent" ;
+    Text [ english_us ] = "Indent" ;
+    Text [ italian ] = "Rientra" ;
+    Text [ spanish ] = "Sangría" ;
+    Text [ french ] = "Mettre en retrait" ;
+    Text [ dutch ] = "Inspringen" ;
+    Text [ swedish ] = "Dra in" ;
+    Text [ danish ] = "Indryk" ;
+    Text [ portuguese ] = "Avançar" ;
+    Text [ portuguese_brazilian ] = "Einrücken" ;
+    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ russian ] = "Îòñóï";
+    Text[ polish ] = "Wysuniêcie";
+    Text[ japanese ] = "²İÃŞİÄ";
+    Text[ chinese_traditional ] = "ÁY±Æ";
+    Text[ arabic ] = "ÅÒÇÍÉ";
+    Text[ dutch ] = "Inspringen";
+    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ greek ] = "Åóï÷Ş";
+    Text[ korean ] = "µé¿© ¾²±â";
+    Text[ turkish ] = "Girinti";
+    Text[ language_user1 ] = " ";
+};
+String RID_OUTLUNDO_EXPAND
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze zeigen : Unterabsõtze zeigen */
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze zeigen : Unterabsõtze zeigen */
+    TEXT = "Unterabsätze zeigen" ;
+    TEXT [ English ] = "Expand" ;
+    Text [ english_us ] = "Show subpoints" ;
+    Text [ italian ] = "Mostra i sottoparagrafi" ;
+    Text [ spanish ] = "Mostrar subpárrafos" ;
+    Text [ french ] = "Afficher sous-paragraphes" ;
+    Text [ dutch ] = "Subalinea´s weergeven" ;
+    Text [ swedish ] = "Visa understycken" ;
+    Text [ danish ] = "Vis underafsnit" ;
+    Text [ portuguese ] = "Mostrar subparágrafos" ;
+    Text [ portuguese_brazilian ] = "Unterabsätze zeigen" ;
+    Text[ chinese_simplified ] = "ÏÔÊ¾·Ö¶ÎÂä";
+    Text[ russian ] = "Ğàçâåğóíòü ïîäàáçàöû";
+    Text[ polish ] = "Poka¿ akapity podrzêdne";
+    Text[ japanese ] = "‰ºˆÊ’i—‚Ì•\\¦";
+    Text[ chinese_traditional ] = "Åã¥Ü¤À¬q¸¨";
+    Text[ arabic ] = "ÅÙåÇÑ ÇáİŞÑÇÊ ÇáİÑÚíÉ";
+    Text[ dutch ] = "Subalinea´s weergeven";
+    Text[ chinese_simplified ] = "ÏÔÊ¾·Ö¶ÎÂä";
+    Text[ greek ] = "ÅìöÜíéóç õğïğáñáãñÜöùí";
+    Text[ korean ] = "ºÎ´Ü¶ô Ç¥½Ã";
+    Text[ turkish ] = "Alt bölümleri göster";
+    Text[ language_user1 ] = " ";
+};
+String RID_OUTLUNDO_COLLAPSE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze verstecken : Unterabsõtze verstecken */
+    /* ### ACHTUNG: Neuer Text in Resource? Unterabsätze verstecken : Unterabsõtze verstecken */
+    TEXT = "Unterabsätze verstecken" ;
+    TEXT [ English ] = "Collapse" ;
+    Text [ english_us ] = "Collapse" ;
+    Text [ italian ] = "Nascondi i sottoparagrafi" ;
+    Text [ spanish ] = "Ocultar subpárrafos" ;
+    Text [ french ] = "Masquer sous-paragraphes" ;
+    Text [ dutch ] = "Subalinea´s verbergen" ;
+    Text [ swedish ] = "Göm understycken" ;
+    Text [ danish ] = "Skjul underafsnit" ;
+    Text [ portuguese ] = "Ocultar subparágrafos" ;
+    Text [ portuguese_brazilian ] = "Unterabsätze verstecken" ;
+    Text[ chinese_simplified ] = "ÒşÈë·Ö¶ÎÂä";
+    Text[ russian ] = "Ñâåğíóòü ïîäàáçàöû";
+    Text[ polish ] = "Zwiñ akapity podrzêdne";
+    Text[ japanese ] = "‰ºˆÊ’i—‚Ì”ñ•\\¦";
+    Text[ chinese_traditional ] = "Áô¤J¤À¬q¸¨";
+    Text[ arabic ] = "ÇÎÊİÇÁ ÇáİŞÑÇÊ ÇáİÑÚíÉ";
+    Text[ dutch ] = "Subalinea´s verbergen";
+    Text[ chinese_simplified ] = "ÒşÈë·Ö¶ÎÂä";
+    Text[ greek ] = "Áğüêñõøç õğïğáñáãñÜöùí";
+    Text[ korean ] = "ºÎ´Ü¶ô ¼û±â±â";
+    Text[ turkish ] = "Alt bölümleri gizle";
+    Text[ language_user1 ] = " ";
+};
+String RID_OUTLUNDO_ATTR
+{
+    TEXT = "Attribute anwenden" ;
+    TEXT [ English ] = "Apply attributes" ;
+    TEXT [ norwegian ] = "Bruk attributter" ;
+    TEXT [ italian ] = "Applica attributi" ;
+    TEXT [ portuguese_brazilian ] = "Aplicar atributos" ;
+    TEXT [ portuguese ] = "Aplicar atributos" ;
+    TEXT [ finnish ] = "Käytä määritteitä" ;
+    TEXT [ danish ] = "Anvend attributter" ;
+    TEXT [ french ] = "Appliquer les attributs" ;
+    TEXT [ swedish ] = "Använd attribut" ;
+    TEXT [ dutch ] = "Attributen toepassen" ;
+    TEXT [ spanish ] = "Aplicar atributos" ;
+    TEXT [ english_us ] = "Apply attributes" ;
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
+    TEXT[ polish ] = "Zastosuj atrybuty";
+    TEXT[ japanese ] = "‘®«‚Ì“K—p";
+    TEXT[ chinese_traditional ] = "¨Ï¥ÎÄİ©Ê";
+    TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
+    TEXT[ dutch ] = "Attributen toepassen";
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
+    TEXT[ korean ] = "¼Ó¼º Àû¿ë";
+    TEXT[ turkish ] = "Öznitelikleri uygula";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_OUTLUNDO_INSERT
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+    /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
+    TEXT = "Einfügen" ;
+    TEXT [ English ] = "Insert" ;
+    TEXT [ norwegian ] = "Sett inn" ;
+    TEXT [ italian ] = "Inserisci" ;
+    TEXT [ portuguese_brazilian ] = "Inserir" ;
+    TEXT [ portuguese ] = "Inserir" ;
+    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ danish ] = "Indsæt" ;
+    TEXT [ french ] = "Insérer" ;
+    TEXT [ swedish ] = "Infoga" ;
+    TEXT [ dutch ] = "Invoegen" ;
+    TEXT [ spanish ] = "Insertar" ;
+    TEXT [ english_us ] = "Insert" ;
+    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ russian ] = "Âñòàâèòü";
+    TEXT[ polish ] = "Wstaw";
+    TEXT[ japanese ] = "‘}“ü";
+    TEXT[ chinese_traditional ] = "´¡¤J";
+    TEXT[ arabic ] = "ÅÏÑÇÌ";
+    TEXT[ dutch ] = "Invoegen";
+    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ greek ] = "ÅéóáãùãŞ";
+    TEXT[ korean ] = "»ğÀÔ";
+    TEXT[ turkish ] = "Ekle";
+    TEXT[ language_user1 ] = " ";
+};

@@ -1,0 +1,408 @@
+/*************************************************************************
+ *
+ *  $RCSfile: editeng.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:13 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include <editeng.hrc>
+#include <helpid.hrc>
+
+String RID_EDITUNDO_DEL
+{
+    TEXT = "Löschen" ;
+    TEXT [ English ] = "Delete" ;
+    TEXT [ norwegian ] = "Slett" ;
+    TEXT [ italian ] = "Elimina" ;
+    TEXT [ portuguese_brazilian ] = "Apagar" ;
+    TEXT [ portuguese ] = "Eliminar" ;
+    TEXT [ finnish ] = "Poista" ;
+    TEXT [ danish ] = "Slet" ;
+    TEXT [ french ] = "Supprimer" ;
+    TEXT [ swedish ] = "Radera" ;
+    TEXT [ dutch ] = "Wissen" ;
+    TEXT [ spanish ] = "Eliminar" ;
+    TEXT [ english_us ] = "Delete" ;
+    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ russian ] = "Óäàëèòü";
+    TEXT[ polish ] = "Usuñ";
+    TEXT[ japanese ] = "íœ";
+    TEXT[ chinese_traditional ] = "§R°£";
+    TEXT[ arabic ] = "ÍĞİ";
+    TEXT[ dutch ] = "Wissen";
+    TEXT[ chinese_simplified ] = "É¾³ı";
+    TEXT[ greek ] = "ÄéáãñáöŞ";
+    TEXT[ korean ] = "»èÁ¦";
+    TEXT[ turkish ] = "Sil";
+};
+
+String RID_EDITUNDO_MOVE
+{
+    TEXT = "Verschieben" ;
+    TEXT [ English ] = "Move" ;
+    TEXT [ norwegian ] = "Flytt" ;
+    TEXT [ italian ] = "Sposta" ;
+    TEXT [ portuguese_brazilian ] = "Mover" ;
+    TEXT [ portuguese ] = "Mover" ;
+    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ danish ] = "Flyt" ;
+    TEXT [ french ] = "Déplacer" ;
+    TEXT [ swedish ] = "Flytta" ;
+    TEXT [ dutch ] = "Verplaatsen" ;
+    TEXT [ spanish ] = "Desplazar" ;
+    TEXT [ english_us ] = "Move" ;
+    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ russian ] = "Ïåğåìåñòèòü";
+    TEXT[ polish ] = "Przesuñ";
+    TEXT[ japanese ] = "ˆÚ“®";
+    TEXT[ chinese_traditional ] = "²¾°Ê";
+    TEXT[ arabic ] = "ÅÒÇÍÉ";
+    TEXT[ dutch ] = "Verplaatsen";
+    TEXT[ chinese_simplified ] = "ÒÆ¶¯";
+    TEXT[ greek ] = "Ìåôáêßíçóç";
+    TEXT[ korean ] = "ÀÌµ¿";
+    TEXT[ turkish ] = "Taşı";
+};
+
+String RID_EDITUNDO_INSERT
+{
+    TEXT = "Einfügen" ;
+    TEXT [ English ] = "Insert" ;
+    TEXT [ norwegian ] = "Sett inn" ;
+    TEXT [ italian ] = "Inserisci" ;
+    TEXT [ portuguese_brazilian ] = "Inserir" ;
+    TEXT [ portuguese ] = "Inserir" ;
+    TEXT [ finnish ] = "Lisää" ;
+    TEXT [ danish ] = "Indsæt" ;
+    TEXT [ french ] = "Insérer" ;
+    TEXT [ swedish ] = "Infoga" ;
+    TEXT [ dutch ] = "Invoegen" ;
+    TEXT [ spanish ] = "Insertar" ;
+    TEXT [ english_us ] = "Insert" ;
+    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ russian ] = "Âñòàâèòü";
+    TEXT[ polish ] = "Wstaw";
+    TEXT[ japanese ] = "‘}“ü";
+    TEXT[ chinese_traditional ] = "´¡¤J";
+    TEXT[ arabic ] = "ÅÏÑÇÌ";
+    TEXT[ dutch ] = "Invoegen";
+    TEXT[ chinese_simplified ] = "²åÈë";
+    TEXT[ greek ] = "ÅéóáãùãŞ";
+    TEXT[ korean ] = "»ğÀÔ";
+    TEXT[ turkish ] = "Ekle";
+};
+
+String RID_EDITUNDO_REPLACE
+{
+    TEXT = "Ersetzen" ;
+    TEXT [ English ] = "Replace" ;
+    TEXT [ norwegian ] = "Replace" ;
+    TEXT [ italian ] = "Sostituisci" ;
+    TEXT [ portuguese_brazilian ] = "Substituir" ;
+    TEXT [ portuguese ] = "Substituir" ;
+    TEXT [ finnish ] = "Korvaa" ;
+    TEXT [ danish ] = "Erstat" ;
+    TEXT [ french ] = "Remplacer" ;
+    TEXT [ swedish ] = "Ersätt" ;
+    TEXT [ dutch ] = "Vervangen" ;
+    TEXT [ spanish ] = "Reemplazar" ;
+    TEXT [ english_us ] = "Replace" ;
+    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ russian ] = "Çàìåíèòü";
+    TEXT[ polish ] = "Zamieñ";
+    TEXT[ japanese ] = "’uŠ·";
+    TEXT[ chinese_traditional ] = "¥N´À";
+    TEXT[ arabic ] = "ÇÓÊÈÏÇá";
+    TEXT[ dutch ] = "Vervangen";
+    TEXT[ chinese_simplified ] = "¸üÌæ";
+    TEXT[ greek ] = "ÁíôéêáôÜóôáóç";
+    TEXT[ korean ] = "¹Ù²Ù±â";
+    TEXT[ turkish ] = "Değiştir";
+};
+
+String RID_EDITUNDO_SETATTRIBS
+{
+    TEXT = "Attribute anwenden" ;
+    TEXT [ English ] = "Apply attributes" ;
+    TEXT [ norwegian ] = "Bruk attributter" ;
+    TEXT [ italian ] = "Applica attributi" ;
+    TEXT [ portuguese_brazilian ] = "Aplicar atributos" ;
+    TEXT [ portuguese ] = "Aplicar atributos" ;
+    TEXT [ finnish ] = "Käytä määritteitä" ;
+    TEXT [ danish ] = "Anvend attributter" ;
+    TEXT [ french ] = "Appliquer les attributs" ;
+    TEXT [ swedish ] = "Använd attribut" ;
+    TEXT [ dutch ] = "Attributen toepassen" ;
+    TEXT [ spanish ] = "Aplicar atributos" ;
+    TEXT [ english_us ] = "Apply attributes" ;
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ russian ] = "Ïğèìåíèòü àòğèáóòû";
+    TEXT[ polish ] = "Zastosuj atrybuty";
+    TEXT[ japanese ] = "‘®«‚ğ“K—p";
+    TEXT[ chinese_traditional ] = "¨Ï¥ÎÄİ©Ê";
+    TEXT[ arabic ] = "ÇÓÊÎÏÇã ÇáÓãÇÊ";
+    TEXT[ dutch ] = "Attributen toepassen";
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÊôĞÔ";
+    TEXT[ greek ] = "ÅöáñìïãŞ éäéïôŞôùí";
+    TEXT[ korean ] = "¼Ó¼º Àû¿ë";
+    TEXT[ turkish ] = "Öznitelikleri kullan";
+};
+
+String RID_EDITUNDO_RESETATTRIBS
+{
+    TEXT = "Attribute zurücksetzen" ;
+    TEXT [ English ] = "Reset attributes" ;
+    TEXT [ norwegian ] = "Sett attributter på nytt" ;
+    TEXT [ italian ] = "Reimposta attributi" ;
+    TEXT [ portuguese_brazilian ] = "Redefinir atributos" ;
+    TEXT [ portuguese ] = "Repor atributos" ;
+    TEXT [ finnish ] = "Palauta määritteet" ;
+    TEXT [ danish ] = "Nulstil attributer" ;
+    TEXT [ french ] = "Restaurer les attributs" ;
+    TEXT [ swedish ] = "Återställ attribut" ;
+    TEXT [ dutch ] = "Attributen terugzetten" ;
+    TEXT [ spanish ] = "Restablecer atributos" ;
+    TEXT [ english_us ] = "Reset attributes" ;
+    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ russian ] = "Âîññòàíîâèòü àòğèáóòû";
+    TEXT[ polish ] = "Zresetuj atrybuty";
+    TEXT[ japanese ] = "‘®«‚ğØ¾¯Ä";
+    TEXT[ chinese_traditional ] = "­«³]Äİ©Ê";
+    TEXT[ arabic ] = "ÅÚÇÏÉ ÊÚííä ÇáÓãÇÊ";
+    TEXT[ dutch ] = "Attributen terugzetten";
+    TEXT[ chinese_simplified ] = "ÖØÉèÊôĞÔ";
+    TEXT[ greek ] = "ÅğáíáöïñÜ éäéïôŞôùí";
+    TEXT[ korean ] = "¼Ó¼º ¿ø·¡´ë·Î";
+    TEXT[ turkish ] = "Öznitelikleri başa al";
+};
+
+String RID_EDITUNDO_INDENT
+{
+    TEXT = "Einrücken" ;
+    TEXT [ English ] = "Einrücken" ;
+    Text [ portuguese ] = "Avançar" ;
+    Text [ english_us ] = "Indent" ;
+    Text [ portuguese_brazilian ] = "Einrücken" ;
+    Text [ swedish ] = "Dra in" ;
+    Text [ danish ] = "Indryk" ;
+    Text [ italian ] = "Rientro" ;
+    Text [ spanish ] = "Sangría" ;
+    Text [ french ] = "Augmenter retrait" ;
+    Text [ dutch ] = "Inspringen" ;
+    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ russian ] = "Îòñòóï";
+    Text[ polish ] = "Wysuniêcie";
+    Text[ japanese ] = "‘}“ü";
+    Text[ chinese_traditional ] = "ÁY±Æ";
+    Text[ arabic ] = "ÅÒÇÍÉ";
+    Text[ dutch ] = "Inspringen";
+    Text[ chinese_simplified ] = "Ëõ½ø";
+    Text[ greek ] = "Åóï÷Ş";
+    Text[ korean ] = "µé¿©¾²±â";
+    Text[ turkish ] = "Girinti";
+};
+
+String RID_EDITUNDO_SETSTYLE
+{
+    TEXT = "Vorlagen anwenden" ;
+    TEXT [ English ] = "Apply styles" ;
+    TEXT [ norwegian ] = "Bruk maler" ;
+    TEXT [ italian ] = "Applica modelli" ;
+    TEXT [ portuguese_brazilian ] = "Apicar estilos" ;
+    TEXT [ portuguese ] = "Aplicar estilos" ;
+    TEXT [ finnish ] = "Käytä tyylejä" ;
+    TEXT [ danish ] = "Anvend typografier" ;
+    TEXT [ french ] = "Appliquer les styles" ;
+    TEXT [ swedish ] = "Använd mallar" ;
+    TEXT [ dutch ] = "Opmaakprofielen toepassen" ;
+    TEXT [ spanish ] = "Aplicar estilos" ;
+    TEXT [ english_us ] = "Apply Styles" ;
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ russian ] = "Ïğèìåíèòü ñòèëè";
+    TEXT[ polish ] = "Zastosuj style";
+    TEXT[ japanese ] = "½À²Ù‚ğ“K—p";
+    TEXT[ chinese_traditional ] = "¨Ï¥Î¼Ë¦¡";
+    TEXT[ arabic ] = "ÇÓÊÎÏÇã äãÇĞÌ";
+    TEXT[ dutch ] = "Opmaakprofielen toepassen";
+    TEXT[ chinese_simplified ] = "Ê¹ÓÃÑùÊ½";
+    TEXT[ greek ] = "ÅöáñìïãŞ óôõë";
+    TEXT[ korean ] = "À¯Çü Àû¿ë";
+    TEXT[ turkish ] = "Şablonları kullan";
+};
+
+Menu RID_MENU_SPELL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_SPELLING ;
+            HelpId = HID_EDITENG_SPELLER_START;
+            Text = "~Rechtschreibung" ;
+            Text [ English ] = "~Spelling" ;
+            Text [ english_us ] = "~Spellcheck" ;
+            Text [ italian ] = "Controllo ~ortografico" ;
+            Text [ spanish ] = "~Ortografía" ;
+            Text [ french ] = "~Orthographe" ;
+            Text [ dutch ] = "~Spellingcontrole" ;
+            Text [ swedish ] = "~Rättstavning" ;
+            Text [ danish ] = "Stavekont~rol" ;
+            Text [ portuguese ] = "Or~tografia" ;
+            Text [ portuguese_brazilian ] = "~Rechtschreibung" ;
+            Text [ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ russian ] = "~Ïğàâîïèñàíèå";
+            Text[ polish ] = "~Pisownia";
+            Text[ japanese ] = "•¶ÍZ³(~S)";
+            Text[ chinese_traditional ] = "«÷¦r(~S)";
+            Text[ arabic ] = "ÊÏ~ŞíŞ ÅãáÇÆí";
+            Text[ dutch ] = "~Spellingcontrole";
+            Text[ chinese_simplified ] = "Õı×Ö·¨(~S)";
+            Text[ greek ] = "Ï~ñèïãñáößá";
+            Text[ korean ] = "¸ÂÃã¹ı(~S)";
+            Text[ turkish ] = "~Yazım kılavuzu";
+        };
+        MenuItem
+        {
+            Identifier = MN_INSERT ;
+            HelpId = HID_EDITENG_SPELLER_ADDWORD;
+            SubMenu = Menu
+            {
+            };
+            Text = "~Aufnehmen" ;
+            Text [ English ] = "~Insert" ;
+            Text [ english_us ] = "~Add" ;
+            Text [ italian ] = "A~ggiungi" ;
+            Text [ spanish ] = "~Incluir" ;
+            Text [ french ] = "~Ajouter" ;
+            Text [ dutch ] = "~Toevoegen" ;
+            Text [ swedish ] = "~Lägg till" ;
+            Text [ danish ] = "Tilføj" ;
+            Text [ portuguese ] = "~Adicionar" ;
+            Text [ portuguese_brazilian ] = "~Aufnehmen" ;
+            Text [ chinese_simplified ] = "¼ÓÈë(~A)";
+            Text[ russian ] = "Äîáàâèòü";
+            Text[ polish ] = "Dodaj";
+            Text[ japanese ] = "’Ç‰Á(~A)";
+            Text[ chinese_traditional ] = "¥[¤J(~A)";
+            Text[ arabic ] = "ÅÖÇİÉ";
+            Text[ dutch ] = "~Toevoegen";
+            Text[ chinese_simplified ] = "¼ÓÈë(~A)";
+            Text[ greek ] = "Ğñ~ïóèŞêç";
+            Text[ korean ] = "Ãß°¡(~A)";
+            Text[ turkish ] = "Ekle";
+        };
+        MenuItem
+        {
+            Identifier = MN_IGNORE ;
+            HelpId = HID_EDITENG_SPELLER_IGNORE;
+            Text = "Alle i~gnorieren" ;
+            Text [ ENGLISH ] = "I~gnore all" ;
+            Text [ norwegian ] = "I~gnorer alle" ;
+            Text [ italian ] = "~Ignora tutto" ;
+            Text [ portuguese_brazilian ] = "I~gnorar tudo" ;
+            Text [ portuguese ] = "I~gnorar tudo" ;
+            Text [ finnish ] = "O~hita kaikki" ;
+            Text [ danish ] = "Ignorer alle" ;
+            Text [ french ] = "~Ignorer tout" ;
+            Text [ swedish ] = "~Ignorera alla" ;
+            Text [ dutch ] = "Alle ~negeren" ;
+            Text [ spanish ] = "I~gnorar todo" ;
+            Text [ english_us ] = "Ignore All" ;
+            Text [ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text[ russian ] = "Ïğîïóñòèòü âñå";
+            Text[ polish ] = "Ignoruj wszystkie";
+            Text[ japanese ] = "‚·‚×‚Ä–³‹‚·‚é";
+            Text[ chinese_traditional ] = "¥ş³¡©¿²¤(~I)";
+            Text[ arabic ] = "ÊÌÇåá Çáßá";
+            Text[ dutch ] = "Alle ~negeren";
+            Text[ chinese_simplified ] = "È«²¿ºöÂÔ(~I)";
+            Text[ greek ] = "ĞáñÜ~âëåøç üëùí";
+            Text[ korean ] = "¸ğµÎ ¹«½Ã";
+            Text[ turkish ] = "Tümünü yok say";
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpId = HID_EDITENG_SPELLER_AUTOCORRECT;
+            SubMenu = Menu
+            {
+            };
+            Text = "Auto~Korrektur" ;
+            Text [ English ] = "~AutoCorrect" ;
+            Text [ english_us ] = "AutoCorrect" ;
+            Text [ portuguese_brazilian ] = "Auto~Korrektur" ;
+            Text [ swedish ] = "Auto~Korrigering" ;
+            Text [ danish ] = "AutoKorrektur" ;
+            Text [ italian ] = "~Correzione automatica" ;
+            Text [ spanish ] = "Auto~Corrección" ;
+            Text [ french ] = "AutoCo~rrection" ;
+            Text [ dutch ] = "~AutoCorrectie" ;
+            Text [ portuguese ] = "Auto~Correcção" ;
+            Text [ chinese_simplified ] = "×Ô¶¯¸üÕı(~A)";
+            Text[ russian ] = "Àâòîçàìåíà";
+            Text[ polish ] = "Autokorekta";
+            Text[ japanese ] = "µ°ÄºÚ¸Ä";
+            Text[ chinese_traditional ] = "¦Û°Ê®Õ¥¿(~A)";
+            Text[ arabic ] = "ÊÕÍíÍ ÊáŞÇÆí";
+            Text[ dutch ] = "~AutoCorrectie";
+            Text[ chinese_simplified ] = "×Ô¶¯¸üÕı(~A)";
+            Text[ greek ] = "Áõôï~Äéüñèùóç";
+            Text[ korean ] = "ÀÚµ¿°íÄ§";
+            Text[ turkish ] = "Otomatik düzeltme";
+        };
+    };
+};

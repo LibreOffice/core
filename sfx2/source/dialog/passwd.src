@@ -1,0 +1,269 @@
+/*************************************************************************
+ *
+ *  $RCSfile: passwd.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialog.hrc"
+#include "passwd.hrc"
+
+ // DLG_PASSWD ------------------------------------------------------------
+ModalDialog DLG_PASSWD
+{
+    HelpId = HID_PASSWD ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 200, 68 );
+    Text = "Passwort eingeben" ;
+    Text [ ENGLISH ] = "Enter password" ;
+    Text [ norwegian ] = "Skriv inn passord" ;
+    Text [ italian ] = "Digita password" ;
+    Text [ portuguese_brazilian ] = "Digitar senha" ;
+    Text [ portuguese ] = "Digitar senha" ;
+    Text [ finnish ] = "Kirjoita salasana" ;
+    Text [ danish ] = "Indtast adgangskode" ;
+    Text [ french ] = "Saisie du mot de passe" ;
+    Text [ swedish ] = "Mata in lösenord" ;
+    Text [ dutch ] = "Wachtwoord invoeren" ;
+    Text [ spanish ] = "Introduzca la contraseña" ;
+    Text [ english_us ] = "Enter Password" ;
+    Text[ chinese_simplified ] = "ÊäÈë¿ÚÁî";
+    Text[ russian ] = "Ââåñòè ïàðîëü";
+    Text[ polish ] = "WprowadŸ has³o";
+    Text[ japanese ] = "Êß½Ü°ÄÞ‚Ì“ü—Í";
+    Text[ chinese_traditional ] = "¿é¤J±K½X";
+    Text[ arabic ] = "ÅÏÎÇá ßáãÉ ÇáÓÑ";
+    Text[ greek ] = "ÅéóáãùãÞ êùäéêïý ðñüóâáóçò";
+    Text[ korean ] = "ÆÐ½º¿öµå ÀÔ·Â";
+    Moveable = TRUE ;
+    FixedText FT_PASSWD_USER
+    {
+        Pos = MAP_APPFONT( 12, 15 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Benutzer";
+        Text[English] = "User";
+        Text[ english_us ] = "~User";
+        Text[ portuguese ] = "~Utilizador";
+        Text[ russian ] = "Ïîëüçîâàòåëü";
+        Text[ greek ] = "×ñÞóôçò";
+        Text[ dutch ] = "~Gebruiker";
+        Text[ french ] = "~Utilisateur";
+        Text[ spanish ] = "Usuar~io";
+        Text[ italian ] = "Utente";
+        Text[ danish ] = "Bruger";
+        Text[ swedish ] = "Användare";
+        Text[ polish ] = "U¿ytkownik";
+        Text[ portuguese_brazilian ] = "User";
+        Text[ japanese ] = "Õ°»Þ°(~U)";
+        Text[ korean ] = "»ç¿ëÀÚ(~U)";
+        Text[ chinese_simplified ] = "Ê¹ÓÃÃû(~U)";
+        Text[ chinese_traditional ] = "¨Ï¥ÎªÌ(~U)";
+        Text[ arabic ] = "ÇáãÓÊÎÏã";
+        Text[ turkish ] = "~Kullanýcý";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PASSWD_USER
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT( 57, 14 );
+        Size = MAP_APPFONT( 75, 12 );
+    };
+    FixedText FT_PASSWD_PASSWORD
+    {
+        Pos = MAP_APPFONT( 12, 30 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Passwort";
+        Text[English] = "Password";
+        Text[ english_us ] = "~Password";
+        Text[ portuguese ] = "~Senha";
+        Text[ russian ] = "Ïàðîëü";
+        Text[ greek ] = "Êùäéêüò ðñüóâáóçò";
+        Text[ dutch ] = "~Wachtwoord";
+        Text[ french ] = "~Mot de passe";
+        Text[ spanish ] = "~Contraseña";
+        Text[ italian ] = "~Password";
+        Text[ danish ] = "Adgangskode";
+        Text[ swedish ] = "Lösenord";
+        Text[ polish ] = "Has³o";
+        Text[ portuguese_brazilian ] = "Password";
+        Text[ japanese ] = "Êß½Ü°ÄÞ(~P)";
+        Text[ korean ] = "ÆÐ½º¿öµå(~P)";
+        Text[ chinese_simplified ] = "¿ÚÁî(~P)";
+        Text[ chinese_traditional ] = "±K½X(~P)";
+        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+        Text[ turkish ] = "~Þifre";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_PASSWD_PASSWORD
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT( 57, 29 );
+        Size = MAP_APPFONT( 75, 12 );
+    };
+    FixedText FT_PASSWD_CONFIRM
+    {
+        Pos = MAP_APPFONT( 12, 45 );
+        Size = MAP_APPFONT( 42, 10 );
+        Text = "~Bestätigen";
+        Text[English] = "Confirm";
+        Text[ english_us ] = "~Confirm";
+        Text[ portuguese ] = "~Confirmar";
+        Text[ russian ] = "Ïîäòâåðäèòü";
+        Text[ greek ] = "Åðéâåâáßùóç";
+        Text[ dutch ] = "~Bevestigen";
+        Text[ french ] = "~Confirmer";
+        Text[ spanish ] = "~Confirmar";
+        Text[ italian ] = "Conferma";
+        Text[ danish ] = "Bekræft";
+        Text[ swedish ] = "Bekräfta";
+        Text[ polish ] = "PotwierdŸ";
+        Text[ portuguese_brazilian ] = "Confirm";
+        Text[ japanese ] = "Šm”F(~C)";
+        Text[ korean ] = "È®ÀÎ(~C)";
+        Text[ chinese_simplified ] = "È·ÈÏ(~C)";
+        Text[ chinese_traditional ] = "½T»{(~C)";
+        Text[ arabic ] = "ÊÃßíÏ";
+        Text[ turkish ] = "~Onayla";
+    };
+    Edit ED_PASSWD_CONFIRM
+    {
+        Border = TRUE;
+        PassWord = TRUE;
+        Pos = MAP_APPFONT( 57, 44 );
+        Size = MAP_APPFONT( 75, 12 );
+    };
+    GroupBox GB_PASSWD_PASSWORD
+    {
+        Pos = MAP_APPFONT( 6, 3 );
+        Size = MAP_APPFONT( 132, 59 );
+        Text = "Passwort" ;
+        Text [ ENGLISH ] = "Password" ;
+        Text [ norwegian ] = "Passord" ;
+        Text [ italian ] = "Password" ;
+        Text [ portuguese_brazilian ] = "Senha" ;
+        Text [ portuguese ] = "Senha" ;
+        Text [ finnish ] = "Salasana" ;
+        Text [ danish ] = "Adgangskode" ;
+        Text [ french ] = "Mot de passe" ;
+        Text [ swedish ] = "Lösenord" ;
+        Text [ dutch ] = "Wachtwoord" ;
+        Text [ spanish ] = "Contraseña" ;
+        Text [ english_us ] = "Password" ;
+        Text[ chinese_simplified ] = "¿ÚÁî";
+        Text[ russian ] = "Ïàðîëü";
+        Text[ polish ] = "Has³o";
+        Text[ japanese ] = "Êß½Ü°ÄÞ";
+        Text[ chinese_traditional ] = "±K½X";
+        Text[ arabic ] = "ßáãÉ ÇáÓÑ";
+        Text[ greek ] = "Êùäéêüò ðñüóâáóçò";
+        Text[ korean ] = "ÆÐ½º¿öµå";
+        Text[ turkish ] = "Þifre";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_PASSWD_OK
+    {
+        Disable = TRUE;
+        Pos = MAP_APPFONT( 144, 6 );
+        Size = MAP_APPFONT( 50, 14 );
+        DefButton = TRUE;
+    };
+    CancelButton BTN_PASSWD_CANCEL
+    {
+        Pos = MAP_APPFONT( 144, 23 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    HelpButton BTN_PASSWD_HELP
+    {
+        Pos = MAP_APPFONT( 144, 43 );
+        Size = MAP_APPFONT( 50, 14 );
+    };
+    String STR_PASSWD_CONFIRM
+    {
+        Text = "Passwort bestätigen" ;
+        Text [ ENGLISH ] = "Confirm password" ;
+        Text [ norwegian ] = "Bekrefte passord" ;
+        Text [ italian ] = "Conferma password" ;
+        Text [ portuguese_brazilian ] = "Confirmar senha" ;
+        Text [ portuguese ] = "Confirmar senha" ;
+        Text [ finnish ] = "Varmista salasana" ;
+        Text [ danish ] = "Bekræft adgangskode" ;
+        Text [ french ] = "Confirmer le mot de passe" ;
+        Text [ swedish ] = "Bekräfta lösenord" ;
+        Text [ dutch ] = "Wachtwoord bevestigen" ;
+        Text [ spanish ] = "Confirmar contraseña" ;
+        Text [ english_us ] = "Confirm password" ;
+        Text[ chinese_simplified ] = "È·ÈÏ¿ÚÁî";
+        Text[ russian ] = "Ïîäòâåðäèòü ïàðîëü";
+        Text[ polish ] = "PotwierdŸ has³o";
+        Text[ japanese ] = "Êß½Ü°ÄÞ‚ÌŠm”F";
+        Text[ chinese_traditional ] = "½T»{±K½X";
+        Text[ arabic ] = "ÊÃßíÏ ßáãÉ ÇáÓÑ";
+        Text[ greek ] = "Åðéâåâáßùóç êùäéêïý ðñüóâáóçò";
+        Text[ korean ] = "ÆÐ½º¿öµå È®ÀÎ";
+        Text[ turkish ] = "Þifreyi onayla";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ turkish ] = "Þifreyi girin";
+    Text[ language_user1 ] = " ";
+};
+
+// ********************************************************************** EOF
+

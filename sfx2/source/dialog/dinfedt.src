@@ -1,0 +1,174 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dinfedt.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "helpid.hrc"
+#include "dinfedt.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // DLG_DOCINFO_EDT -------------------------------------------------------
+ModalDialog DLG_DOCINFO_EDT
+{
+    HelpId = HID_DOCINFO_EDT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 166 , 83 ) ;
+    Text = "Infonamen bearbeiten" ;
+    Text [ ENGLISH ] = "Edit info names" ;
+    Text [ norwegian ] = "Rediger informasjonnavn" ;
+    Text [ italian ] = "Modifica informazioni nomi" ;
+    Text [ portuguese_brazilian ] = "Editar nomes de info" ;
+    Text [ portuguese ] = "Editar nomes das informaÁıes" ;
+    Text [ finnish ] = "Muokkaa tietonimi‰" ;
+    Text [ danish ] = "Rediger infonavne" ;
+    Text [ french ] = "…dition des noms de champs" ;
+    Text [ swedish ] = "Redigera informationsnamn" ;
+    Text [ dutch ] = "Labels bewerken" ;
+    Text [ spanish ] = "Editar nombres informaciones" ;
+    Text [ english_us ] = "Edit Labels" ;
+    Moveable = TRUE ;
+    Edit ED_INFO1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        MaxTextLength = 19 ;
+    };
+    Edit ED_INFO2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 29 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        MaxTextLength = 19 ;
+    };
+    Edit ED_INFO3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        MaxTextLength = 19 ;
+    };
+    Edit ED_INFO4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Size = MAP_APPFONT ( 86 , 12 ) ;
+        MaxTextLength = 19 ;
+    };
+    GroupBox GB_INFO
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 98 , 74 ) ;
+        Text = "Namen" ;
+        Text [ English ] = "Names" ;
+        Text [ norwegian ] = "Names" ;
+        Text [ italian ] = "Nomi" ;
+        Text [ portuguese_brazilian ] = "Nomes" ;
+        Text [ portuguese ] = "Nomes" ;
+        Text [ finnish ] = "~Nimet" ;
+        Text [ danish ] = "Navne" ;
+        Text [ french ] = "Noms" ;
+        Text [ swedish ] = "Namn" ;
+        Text [ dutch ] = "Namen" ;
+        Text [ spanish ] = "Nombres" ;
+        Text [ english_us ] = "Names" ;
+        Text[ chinese_simplified ] = "√˚≥∆";
+        Text[ russian ] = "»ÏÂÌ‡";
+        Text[ polish ] = "Nazwy";
+        Text[ japanese ] = "ñºëO";
+        Text[ chinese_traditional ] = "¶W∫Ÿ";
+        Text[ arabic ] = "«·√”„«¡";
+        Text[ greek ] = "œÌ¸Ï·Ù·";
+        Text[ korean ] = "¿Ã∏ß";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 110 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 110 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 110 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text[ chinese_simplified ] = "±‡º≠±ÍÃ‚";
+    Text[ russian ] = "œ‡‚Í‡ ËÏÂÌ ËÌÙÓÏ‡ˆËË";
+    Text[ polish ] = "Edytuj nazwy informacji";
+    Text[ japanese ] = "èÓïÒñºÇï“èW";
+    Text[ chinese_traditional ] = "ΩsøËº–√D";
+    Text[ arabic ] = " Õ—Ì— »ÿ«ﬁ«  «·„⁄·Ê„« ";
+    Text[ greek ] = "≈ÂÓÂÒ„·Ûﬂ· ÔÌ¸Ï·ÙÔÚ ÎÁÒÔˆÔÒﬂ·Ú";
+    Text[ korean ] = "¡§∫∏¿Ã∏ß ∆Ì¡˝";
+    Text[ turkish ] = "Etiketleri d¸zenle";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

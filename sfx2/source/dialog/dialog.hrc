@@ -1,0 +1,184 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dialog.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_DIALOG_HRC
+#define _SFX_DIALOG_HRC
+
+#include "sfx.hrc"
+
+// defines ---------------------------------------------------------------
+
+#define ID_NEW                          1
+#define ID_EDIT                         2
+#define ID_DELETE                       3
+
+#define RC_DIALOG_BEGIN                 RID_SFX_DIALOG_START
+
+#define STR_RESET                       ( RC_DIALOG_BEGIN + 0)
+#define STR_BASEFMT                     ( RC_DIALOG_BEGIN + 1)
+
+#define CB_USE_PASSWD                   ( RC_DIALOG_BEGIN + 2)
+#define CB_READ_ONLY                    ( RC_DIALOG_BEGIN + 3)
+#define BTN_MANAGER                     ( RC_DIALOG_BEGIN + 4)
+#define BTN_STANDARD                    ( RC_DIALOG_BEGIN + 5)
+#define STR_PATH_NOT_FOUND1             ( RC_DIALOG_BEGIN + 6)
+#define STR_PATH_NOT_FOUND2             ( RC_DIALOG_BEGIN + 7)
+#define DLG_PASSWD                      ( RC_DIALOG_BEGIN + 8)
+#define STR_FILEDLG_INSERT              ( RC_DIALOG_BEGIN + 10)
+#define STR_TABPAGE_MANAGESTYLES        ( RC_DIALOG_BEGIN + 12)
+#define MSG_TABPAGE_INVALIDNAME         ( RC_DIALOG_BEGIN + 13)
+#define MSG_TABPAGE_INVALIDSTYLE        ( RC_DIALOG_BEGIN + 14)
+#define DLG_NEW_STYLE_BY_EXAMPLE        ( RC_DIALOG_BEGIN + 15)
+#define MSG_POOL_STYLE_NAME             ( RC_DIALOG_BEGIN + 16)
+#define MSG_OVERWRITE_STYLE             ( RC_DIALOG_BEGIN + 17)
+#define MSG_TABPAGE_INVALIDPARENT       ( RC_DIALOG_BEGIN + 18)
+
+#define STR_DELETE_STYLE                ( RC_DIALOG_BEGIN + 18)
+#define STR_DELETE_STYLE_USED           ( RC_DIALOG_BEGIN + 20)
+
+#define BMP_COLLAPSED                   ( RC_DIALOG_BEGIN + 18)
+#define BMP_EXPANDED                    ( RC_DIALOG_BEGIN + 19)
+
+#define TP_CONFIG_ACCEL                 ( RC_DIALOG_BEGIN + 20)
+#define TP_CONFIG_MENU                  ( RC_DIALOG_BEGIN + 21)
+#define TP_CONFIG_STATBAR               ( RC_DIALOG_BEGIN + 22)
+#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
+#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
+#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
+
+#define IBX_MNUCFG_ALREADY_INCLUDED     ( RC_DIALOG_BEGIN + 24)
+#define QBX_MNUCFG_UNDEFINED_FUNCTIONS  ( RC_DIALOG_BEGIN + 25)
+#define QBX_MNUCFG_POPUP_FUNCTIONS      ( RC_DIALOG_BEGIN + 26)
+
+#define STR_NEW                         ( RC_DIALOG_BEGIN + 27)
+#define STR_OPEN                        ( RC_DIALOG_BEGIN + 28)
+#define STR_SAVE                        ( RC_DIALOG_BEGIN + 29)
+#define STR_SAVEAS                      ( RC_DIALOG_BEGIN + 30)
+#define STR_PRINT                       ( RC_DIALOG_BEGIN + 32)
+#define STR_QUIT                        ( RC_DIALOG_BEGIN + 33)
+#define STR_CUT                         ( RC_DIALOG_BEGIN + 34)
+#define STR_COPY                        ( RC_DIALOG_BEGIN + 35)
+#define STR_PASTE                       ( RC_DIALOG_BEGIN + 36)
+#define STR_DELETE                      ( RC_DIALOG_BEGIN + 39)
+#define STR_FIND                        ( RC_DIALOG_BEGIN + 41)
+#define STR_FINDBACKWARD                ( RC_DIALOG_BEGIN + 42)
+#define STR_PROPERTIES                  ( RC_DIALOG_BEGIN + 43)
+#define STR_FRONT                       ( RC_DIALOG_BEGIN + 44)
+#define STR_BASICMACROS                 ( RC_DIALOG_BEGIN + 45)
+#define STR_MENU                        ( RC_DIALOG_BEGIN + 46)
+
+#define LOGO_IMAGELIST                  ( RC_DIALOG_BEGIN + 45)
+#define MN_CONTEXT_TEMPLDLG             ( RC_DIALOG_BEGIN + 46)
+
+#define MSG_LAYOUT_NOT_LOADING          ( RC_DIALOG_BEGIN + 49)
+#define ACC_LAYOUT_NOT_LOADING          ( RC_DIALOG_BEGIN + 50)
+
+#define STR_LOADMENUCONFIG              ( RC_DIALOG_BEGIN + 53)
+#define STR_SAVEMENUCONFIG              ( RC_DIALOG_BEGIN + 54)
+
+#define STR_LOADACCELCONFIG             ( RC_DIALOG_BEGIN + 55)
+#define STR_SAVEACCELCONFIG             ( RC_DIALOG_BEGIN + 56)
+
+#define STR_LOADSTATBARCONFIG           ( RC_DIALOG_BEGIN + 57)
+#define STR_SAVESTATBARCONFIG           ( RC_DIALOG_BEGIN + 58)
+
+#define MSG_ERR_CANT_EDIT_OLD_FORMAT    ( RC_DIALOG_BEGIN + 60 )
+#define MSG_ERR_CANT_EDIT_OPEN_DOCS     ( RC_DIALOG_BEGIN + 61 )
+
+#define RID_URLOPEN                     ( RC_DIALOG_BEGIN + 62 )
+#define RID_URLOPEN_OK                  1
+#define RID_URLOPEN_CANCEL              2
+#define RID_URLOPEN_URL                 3
+
+#define CB_FILE                         ( RC_DIALOG_BEGIN + 63 )
+#define CB_URL                          ( RC_DIALOG_BEGIN + 64 )
+
+#define STR_INTERNET                    ( RC_DIALOG_BEGIN + 65 )
+#define RID_AUTOHIDE                    ( RC_DIALOG_BEGIN + 66 )
+
+#define RID_SFX_TP_MACROASSIGN          ( RC_DIALOG_BEGIN + 67 )
+
+#define DLG_ONLINE_REGISTER             ( RC_DIALOG_BEGIN + 68 )
+#define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )
+#define DLG_COMMENTS                    ( RC_DIALOG_BEGIN + 70 )
+
+#define RID_SFX_SMALLTP_MACROASSIGN     ( RC_DIALOG_BEGIN + 71 )
+#define DLG_RUN                         ( RC_DIALOG_BEGIN + 72 )
+#define RID_REGISTER_DLG                ( RC_DIALOG_BEGIN + 73 )
+#define DLG_PHONE_CONFIGURATION         ( RC_DIALOG_BEGIN + 74 )
+#define DLG_RECOGNIZER_ENGINEMODE       ( RC_DIALOG_BEGIN + 75 )
+#define MSG_ERROR_WRONG_CONFIRM         ( RC_DIALOG_BEGIN + 76 )
+#define DLG_RECOGNIZER_SPEAKER          ( RC_DIALOG_BEGIN + 77 )
+
+// mail
+#define RID_MAIL_WINDOW                 ( RC_DIALOG_BEGIN + 78 )
+#define RID_ERRBOX_NO_SMTPSERVER        ( RC_DIALOG_BEGIN + 79 )
+#define RID_INFBOX_SEND_SUCCESS         ( RC_DIALOG_BEGIN + 80 )
+#define RID_ERRBOX_SEND_FAILED          ( RC_DIALOG_BEGIN + 81 )
+#define RID_STR_CLOSE_TITLE             ( RC_DIALOG_BEGIN + 82 )
+#define RID_STR_CLOSE_MESSAGE           ( RC_DIALOG_BEGIN + 83 )
+#define RID_STR_CLOSE_BTN_SEND          ( RC_DIALOG_BEGIN + 84 )
+#define RID_STR_CLOSE_BTN_REJECT        ( RC_DIALOG_BEGIN + 85 )
+#define RID_STR_CLOSE_BTN_BACKTOMSG     ( RC_DIALOG_BEGIN + 86 )
+
+#endif // #ifndef _SFX_DIALOG_HRC
+
+// eof ------------------------------------------------------------------------
+

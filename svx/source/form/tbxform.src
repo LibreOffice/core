@@ -1,0 +1,616 @@
+/*************************************************************************
+ *
+ *  $RCSfile: tbxform.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:18 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "svxids.hrc"
+#include "fmresids.hrc"
+
+#define IMAGE_STDBTN_COLOR Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; }
+
+String RID_SVXTBX_FORM_FILTER
+{
+    Text = "Filterleiste" ;
+    Text [ English ] = "Filter toolbox" ;
+    Text [ english_us ] = "Filter bar" ;
+    Text[ portuguese ] = "Barra de filtros";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ÙËÎ¸ÚÓ‚";
+    Text[ greek ] = "√Ò·ÏÏﬁ ˆﬂÎÙÒÔı";
+    Text[ dutch ] = "Filterbalk";
+    Text[ french ] = "Barre de filtres";
+    Text[ spanish ] = "Barra de filtros";
+    Text[ italian ] = "Barra dei filtri";
+    Text[ danish ] = "Filterlinje";
+    Text[ swedish ] = "Filterlist";
+    Text[ polish ] = "Pasek filtru";
+    Text[ portuguese_brazilian ] = "Filter toolbox";
+    Text[ japanese ] = "Ã®Ÿ¿ ﬁ∞";
+    Text[ korean ] = "« ≈Õ µµ±∏∏¿Ω";
+    Text[ chinese_simplified ] = "…∏—°¿∏";
+    Text[ chinese_traditional ] = "πL¬oæπ≤M≥Ê";
+    Text[ arabic ] = "‘—Ìÿ «·›· —";
+    Text[ turkish ] = "Filtre Áubuu";
+    Text[ language_user1 ] = " ";
+};
+
+ //------------------------------------------------------------------------
+ // Navigation bar
+ToolBox RID_SVXTBX_FORM_FILTER
+{
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Text = "Filterleiste" ;
+    Text [ English ] = "Filter toolbox" ;
+    Text [ english_us ] = "Filter bar" ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 16 ) ;
+    ButtonType = BUTTON_SYMBOL ;
+     // die Images stehen in der Ofa-DLL
+    ItemList =
+    {
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_NAVIGATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_EXECUTE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_EXIT ;
+        };
+        /*ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_REMOVE ;
+        };*/
+    };
+    Scroll = TRUE ;
+    Text[ portuguese ] = "Barra de filtros";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ÙËÎ¸ÚÓ‚";
+    Text[ greek ] = "√Ò·ÏÏﬁ ˆﬂÎÙÒÔı";
+    Text[ dutch ] = "Filterbalk";
+    Text[ french ] = "Barre de filtres";
+    Text[ spanish ] = "Barra de filtros";
+    Text[ italian ] = "Barra dei filtri";
+    Text[ danish ] = "Filterlinje";
+    Text[ swedish ] = "Filterlist";
+    Text[ polish ] = "Pasek filtru";
+    Text[ portuguese_brazilian ] = "Filter toolbox";
+    Text[ japanese ] = "Ã®Ÿ¿ ﬁ∞";
+    Text[ korean ] = "« ≈Õ µµ±∏∏¿Ω";
+    Text[ chinese_simplified ] = "…∏—°¿∏";
+    Text[ chinese_traditional ] = "πL¬oæπ≤M≥Ê";
+    Text[ arabic ] = "‘—Ìÿ «·›· —";
+    Text[ turkish ] = "Filtre Áubuu";
+    Text[ language_user1 ] = " ";
+};
+
+String RID_SVXTBX_FORM_NAVIGATION
+{
+    Text = "Datenbankleiste" ;
+    Text [ English ] = "Database toolbox" ;
+    Text [ english_us ] = "Database bar" ;
+    Text[ italian ] = "Barra degli strumenti per database";
+    Text[ portuguese_brazilian ] = "Database toolbox";
+    Text[ portuguese ] = "Barra de ferramentas da base de dados";
+    Text[ danish ] = "Databaselinje";
+    Text[ french ] = "Barre de base de donnÈes";
+    Text[ swedish ] = "Databaslist";
+    Text[ dutch ] = "Database-balk";
+    Text[ spanish ] = "Barra de base de datos";
+    Text[ chinese_simplified ] = " ˝æ›ø‚π§æﬂ¿∏";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ËÌÒÚÛÏÂÌÚÓ‚ ·‡Á˚ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "Przybornik bazy danych";
+    Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω ﬁ∞";
+    Text[ chinese_traditional ] = "∏ÍÆ∆Æw§u®„¶C";
+    Text[ greek ] = "√Ò·ÏÏﬁ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ µµ±∏∏¿Ω";
+    Text[ arabic ] = "‘—Ìÿ ﬁ«⁄œ… «·»Ì«‰« ";
+    Text[ turkish ] = "Veritaban˝ Áubuu";
+    Text[ language_user1 ] = " ";
+};
+
+ //------------------------------------------------------------------------
+ // Navigation bar
+ToolBox RID_SVXTBX_FORM_NAVIGATION
+{
+    Dockable = TRUE ;
+    Moveable = TRUE ;
+    Sizeable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    HideWhenDeactivate = TRUE ;
+    LineSpacing = TRUE ;
+    Text = "Datenbankleiste" ;
+    Text [ English ] = "Database toolbox" ;
+    Text [ english_us ] = "Database Bar" ;
+    Border = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 200 , 16 ) ;
+    ButtonType = BUTTON_SYMBOL ;
+     // die Images stehen in der Ofa-DLL
+    ItemList =
+    {
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_TEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_ABSOLUTE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_FROM_TEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_TOTAL ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_FIRST ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_PREV ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_NEXT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_LAST ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_SAVE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_UNDO ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_NEW ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_RECORD_DELETE ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_REFRESH ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_SEARCH ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTUP ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_SORTDOWN ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_AUTOFILTER ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FILTER_START ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_ORDERCRIT ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_REMOVE_FILTER_SORT ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_FM_VIEW_AS_GRID ;
+        };
+        ToolBoxItem
+        {
+            Type = TOOLBOXITEM_SEPARATOR ;
+        };
+        ToolboxItem
+        {
+            Identifier = SID_FM_FORM_FILTERED ;
+        };
+    };
+    Scroll = TRUE ;
+    Text [ portuguese ] = "Barra de base de dados" ;
+    Text [ english_us ] = "Database Bar" ;
+    Text [ portuguese_brazilian ] = "Navigation" ;
+    Text [ swedish ] = "Databaslist" ;
+    Text [ danish ] = "Databaselinje" ;
+    Text [ italian ] = "Barra database" ;
+    Text [ spanish ] = "Barra de base de datos" ;
+    Text [ french ] = "Barre de base de donnÈes" ;
+    Text [ dutch ] = "Database-balk" ;
+    Text[ chinese_simplified ] = " ˝æ›ø‚π§æﬂ¿∏";
+    Text[ russian ] = "œ‡ÌÂÎ¸ ·‡Á˚ ‰‡ÌÌ˚ı";
+    Text[ polish ] = "Pasek bazy danych";
+    Text[ japanese ] = "√ﬁ∞¿Õﬁ∞Ω ﬁ∞";
+    Text[ chinese_traditional ] = "∏ÍÆ∆Æw§u®„¶C";
+    Text[ greek ] = "√Ò·ÏÏﬁ ‚‹ÛÁÚ ‰Â‰ÔÏ›Ì˘Ì";
+    Text[ korean ] = "µ•¿Ã≈Õ∫£¿ÃΩ∫ ∏¿Ω";
+    Text[ arabic ] = "‘—Ìÿ ﬁ«⁄œ… «·»Ì«‰« ";
+    Text[ turkish ] = "Veritaban˝ Áubuu";
+    Text[ language_user1 ] = " ";
+};
+
+ //------------------------------------------------------------------------
+ // Controller fuer controls
+FloatingWindow RID_SVXTBX_FORM
+{
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Text = "Formularfunktionen" ;
+    Text [ English ] = "Form functions" ;
+    ToolBox TBX_FORM
+    {
+        SVLook = TRUE ;
+        LineCount = 2 ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PUSHBUTTON ;
+                HelpID = SID_FM_PUSHBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_RADIOBUTTON ;
+                HelpID = SID_FM_RADIOBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CHECKBOX ;
+                HelpID = SID_FM_CHECKBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FIXEDTEXT ;
+                HelpID = SID_FM_FIXEDTEXT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_GROUPBOX ;
+                HelpID = SID_FM_GROUPBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_EDIT ;
+                HelpID = SID_FM_EDIT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_LISTBOX ;
+                HelpID = SID_FM_LISTBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_COMBOBOX ;
+                HelpID = SID_FM_COMBOBOX ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_IMAGEBUTTON ;
+                HelpID = SID_FM_IMAGEBUTTON ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_IMAGECONTROL ;
+                HelpID = SID_FM_IMAGECONTROL ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FILECONTROL ;
+                HelpID = SID_FM_FILECONTROL ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DATEFIELD ;
+                HelpID = SID_FM_DATEFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_TIMEFIELD ;
+                HelpID = SID_FM_TIMEFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_NUMERICFIELD ;
+                HelpID = SID_FM_NUMERICFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_FORMATTEDFIELD ;
+                HelpID = SID_FM_FORMATTEDFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CURRENCYFIELD ;
+                HelpID = SID_FM_CURRENCYFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PATTERNFIELD ;
+                HelpID = SID_FM_PATTERNFIELD ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DBGRID ;
+                HelpID = SID_FM_DBGRID ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_OBJECT_SELECT ;
+                HelpID = SID_OBJECT_SELECT ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+            };
+            ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_CTL_PROPERTIES ;
+                HelpID = SID_FM_CTL_PROPERTIES ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_PROPERTIES ;
+                HelpID = SID_FM_PROPERTIES ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_TAB_DIALOG ;
+                HelpID = SID_FM_TAB_DIALOG ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_ADD_FIELD ;
+                HelpID = SID_FM_ADD_FIELD ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_SHOW_FMEXPLORER ;
+                HelpID = SID_FM_SHOW_FMEXPLORER ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_DESIGN_MODE ;
+                HelpID = SID_FM_DESIGN_MODE ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_OPEN_READONLY ;
+                HelpID = SID_FM_OPEN_READONLY ;
+            };
+            ToolBoxItem
+            {
+                Identifier = SID_FM_USE_WIZARDS ;
+                HelpID = SID_FM_USE_WIZARDS ;
+            };
+        };
+    };
+    Text [ english_us ] = "Form Functions" ;
+    Text [ portuguese_brazilian ] = "Formular Funktionen" ;
+    Text [ swedish ] = "Formul‰rfunktioner" ;
+    Text [ danish ] = "Formularfunktioner" ;
+    Text [ italian ] = "Funzioni formulario" ;
+    Text [ spanish ] = "Funciones formulario" ;
+    Text [ french ] = "Fonctions de formulaire" ;
+    Text [ dutch ] = "Formulierfuncties" ;
+    Text [ portuguese ] = "FunÁıes de formul·rio" ;
+    Text[ chinese_simplified ] = "±Ìµ•π¶ƒ‹";
+    Text[ russian ] = "‘ÛÌÍˆËË ÙÓÏÛÎˇ‡";
+    Text[ polish ] = "Funkcje formularza";
+    Text[ japanese ] = "Ã´∞—ÇÃã@î\\";
+    Text[ chinese_traditional ] = "™Ì≥Ê•\\Ø‡";
+    Text[ greek ] = "ÀÂÈÙÔıÒ„ﬂÂÚ ˆ¸ÒÏ·Ú";
+    Text[ korean ] = "æÁΩƒ ±‚¥…";
+    Text[ arabic ] = "„Â«„ «·«” „«—…";
+    Text[ turkish ] = "Form i˛levleri";
+    Text[ language_user1 ] = " ";
+};
+
+ModalDialog RID_SVX_DLG_INPUTRECORDNO
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 130 , 45 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text = "Datensatznummer" ;
+    Text [ english ] =  "Absolute Record";
+    Text [ english_us ] = "Record Number";
+    Text [ portuguese ] = "N˙mero de registos";
+    Text [ russian ] = "ÕÓÏÂ Á‡ÔËÒË";
+    Text [ dutch ] = "Recordnummer";
+    Text [ french ] = "NumÈro d'enregistrement";
+    Text [ spanish ] = "N˙mero de registro";
+    Text [ italian ] = "Numero record dati";
+    Text [ danish ] = "Datapostnummer";
+    Text [ swedish ] = "Datapostnummer";
+    Text [ polish ] = "Numer rekordu";
+    Text [ portuguese_brazilian ] = "AbsoluteRecord";
+    Text [ japanese ] = "⁄∫∞ƒﬁî‘çÜ";
+    Text [ chinese_simplified ] = " ˝æ›Ãıƒø±‡∫≈";
+
+    FixedText 1
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 70 , 12 ) ;
+        Text = "gehe zu Datensatz";
+        Text [ ENGLISH ] = "go to record";
+        Text[ english_us ] = "go to record";
+        Text[ portuguese ] = "ir para registo";
+        Text[ russian ] = "ÔÂÂÈÚË Í Á‡ÔËÒË";
+        Text[ greek ] = "ÏÂÙ‹‚·ÛÁ ÛÙÁÌ Â„„Ò·ˆﬁ";
+        Text[ dutch ] = "ga naar record";
+        Text[ french ] = "Passer ‡ l'enregistrement";
+        Text[ spanish ] = "ir a registro";
+        Text[ italian ] = "Vai al record di dati";
+        Text[ danish ] = "gÂ til datapost";
+        Text[ swedish ] = "gÂ till datapost";
+        Text[ polish ] = "przejdü do rekordu";
+        Text[ portuguese_brazilian ] = "go to record";
+        Text[ japanese ] = "⁄∫∞ƒﬁÇ÷";
+        Text[ korean ] = "∑πƒ⁄µÂ∑Œ ∞°±‚";
+        Text[ chinese_simplified ] = "◊™µΩ ˝æ›Ãıƒø";
+        Text[ chinese_traditional ] = "¬‡®Ïº∆’u±¯•ÿ";
+        Text[ arabic ] = "«·«‰ ﬁ«· ≈·Ï «·”Ã·";
+        Text[ turkish ] = "Veri k¸mesine git";
+    };
+    NumericField 1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 79 , 6 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton 1
+    {
+        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton 1
+    {
+        Pos = MAP_APPFONT ( 74 , 25 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text[ greek ] = "¡ÒÈËÏ¸Ú Â„„Ò·ˆﬁÚ";
+    Text[ korean ] = "µ•¿Ã≈Õ ∑πƒ⁄µÂ π¯»£";
+    Text[ chinese_traditional ] = "º∆’u±¯•ÿΩs∏π";
+    Text[ arabic ] = "—ﬁ„ «·”Ã·";
+    Text[ turkish ] = "Veri k¸mesi no.";
+};
+

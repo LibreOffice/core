@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dinfdlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _DINFDLG_HRC
+#define _DINFDLG_HRC
+
+// defines ---------------------------------------------------------------
+
+#define FT_FILE             1
+#define FT_FILE_VAL         2
+#define FT_CHANGE           3
+#define FT_CHANGE_VAL       4
+#define FT_CREATE           7
+#define FT_CREATE_VAL       8
+#define FT_TITLE            9
+#define ED_TITLE            10
+#define FT_THEMA            11
+#define ED_THEMA            12
+#define FT_KEYWORDS         13
+#define ED_KEYWORDS         14
+#define FT_INFO1            15
+#define ED_INFO1            16
+#define FT_INFO2            17
+#define ED_INFO2            18
+#define FT_INFO3            19
+#define ED_INFO3            20
+#define FT_INFO4            21
+#define ED_INFO4            22
+#define FT_COMMENT          23
+#define ED_COMMENT          24
+#define GB_INFO             30
+#define FT_TEMPL            32
+#define FT_TEMPL_VAL        33
+#define BTN_EDITLABEL       34
+#define FT_TIMELOG          35
+#define FT_TIMELOG_VAL      36
+#define FT_DOCNO            37
+#define FT_DOCNO_VAL        38
+#define CB_AUTORELOAD       39
+#define ED_SECONDS          41
+#define FT_SECONDS          42
+#define FT_URL              43
+#define ED_URL              44
+#define LB_DEFAULT          46
+#define FT_DEFAULT          47
+#define CB_FILE_READONLY    48
+#define CB_USE_USERDATA     49
+#define BMP_FILE_1          50
+#define ED_FILE_NAME        51
+#define FL_FILE_1           52
+#define FT_FILE_TYP         53
+#define FT_FILE_SHOW_TYP    54
+#define FT_FILE_SIZE        55
+#define FT_FILE_SHOW_SIZE   56
+#define FL_FILE_2           57
+#define FT_PRINT            58
+#define FT_PRINT_VAL        59
+#define STR_UNKNOWNSIZE     60
+#define FL_FILE_3           61
+#define BTN_DELETE          62
+
+
+#endif
+

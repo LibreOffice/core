@@ -1,0 +1,165 @@
+/*************************************************************************
+ *
+ *  $RCSfile: dlgname.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "dlgname.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // RID_SVXDLG_NAME ----------------------------------------------------------
+ModalDialog RID_SVXDLG_NAME
+{
+    HelpId = HID_DLG_NAME ;
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 165 , 63 ) ;
+    Text = "Name" ;
+    Text [ English ] = "Name" ;
+    Text [ norwegian ] = "Navn" ;
+    Text [ italian ] = "Nome" ;
+    Text [ portuguese_brazilian ] = "Nomear" ;
+    Text [ portuguese ] = "Nome" ;
+    Text [ finnish ] = "Nimi" ;
+    Text [ danish ] = "Navn" ;
+    Text [ french ] = "Nom" ;
+    Text [ swedish ] = "Namn" ;
+    Text [ dutch ] = "Naam" ;
+    Text [ spanish ] = "Nombre" ;
+    Text [ english_us ] = "Name" ;
+    Moveable = TRUE ;
+    Edit EDT_STRING
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 45 ) ;
+        Size = MAP_APPFONT ( 97 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 109 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 109 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 109 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 98 , 31 ) ;
+        WordBreak = TRUE ;
+    };
+    Text[ chinese_simplified ] = "√˚≥∆";
+    Text[ russian ] = "»Ïˇ";
+    Text[ polish ] = "Nazwa";
+    Text[ japanese ] = "ñºëO";
+    Text[ chinese_traditional ] = "¶W∫Ÿ";
+    Text[ arabic ] = "«·«”„";
+    Text[ greek ] = "ºÌÔÏ·";
+    Text[ korean ] = "¿Ã∏ß";
+    Text[ turkish ] = "Ad";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SVXDLG_MESSBOX -------------------------------------------------------
+ModalDialog RID_SVXDLG_MESSBOX
+{
+    HelpId = HID_DLG_MESSBOX ;
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Size = MAP_APPFONT ( 212 , 64 ) ;
+    Text = "" ;
+    Moveable = TRUE ;
+    PushButton BTN_1
+    {
+        Pos = MAP_APPFONT ( 25 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_2
+    {
+        Pos = MAP_APPFONT ( 78 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 131 , 44 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_DESCRIPTION
+    {
+        Pos = MAP_APPFONT ( 28 , 6 ) ;
+        Size = MAP_APPFONT ( 200 , 35 ) ;
+        WordBreak = TRUE ;
+    };
+};
+ // ********************************************************************** EOF

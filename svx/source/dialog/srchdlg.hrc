@@ -1,0 +1,115 @@
+/*************************************************************************
+ *
+ *  $RCSfile: srchdlg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_SRCHDLG_HRC
+#define _SVX_SRCHDLG_HRC
+
+// defines ------------------------------------------------------------------
+
+#define FT_SEARCH       10
+#define ED_SEARCH       11
+#define LB_SEARCH       12
+#define GB_SEARCH_ATTR  13
+#define FT_SEARCH_ATTR  14
+#define FT_REPLACE      15
+#define ED_REPLACE      16
+#define LB_REPLACE      17
+#define GB_REPLACE_ATTR 18
+#define FT_REPLACE_ATTR 19
+
+#define BTN_CELLS       20
+#define BTN_LAYOUTS     21
+#define BTN_SELECTIONS  22
+#define BTN_EXACT       23
+#define BTN_REGEXP      24
+#define BTN_BACKWARDS   25
+#define GB_OPTIONS      26
+
+#define BTN_FORMULAS    30
+#define BTN_VALUES      31
+#define BTN_NOTES       32
+#define GB_SEARCH       33
+#define BTN_ROWS        34
+#define BTN_COLUMNS     35
+#define GB_SEARCHDIR    36
+#define CB_ALLTABLES    37
+#define GB_CALCEXTRAS   38
+
+#define BTN_SEARCH      40
+#define BTN_SEARCH_ALL  41
+#define BTN_REPLACE     42
+#define BTN_REPLACE_ALL 43
+#define BTN_CLOSE       44
+#define BTN_HELP        45
+#define BTN_MORE        46
+#define STR_WORDCALC    47
+#define BTN_FORMAT      48
+#define BTN_NOFORMAT    49
+#define BTN_ATTRIBUTE   50
+
+#define CB_SIMILARITY   51
+#define PB_SIMILARITY   52
+
+#define ED_SEARCH_FORMATS   60
+#define ED_REPLACE_FORMATS  61
+
+
+#endif
+

@@ -1,0 +1,689 @@
+/*************************************************************************
+ *
+ *  $RCSfile: gridctrl.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "fmresids.hrc"
+#include "svxids.hrc"
+#include "globlmn.hrc"
+#include "fmhelp.hrc"
+Menu RID_SVXMNU_ROWS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_DELETEROWS ;
+            HelpID = SID_FM_DELETEROWS ;
+            Text = "Zeilen löschen" ;
+            Text [ ENGLISH ] = "Delete rows" ;
+            Text [ english_us ] = "Delete Rows" ;
+            Text [ portuguese_brazilian ] = "Zeilen löschen" ;
+            Text [ swedish ] = "Radera rader" ;
+            Text [ danish ] = "Slet rækker" ;
+            Text [ italian ] = "Elimina riga" ;
+            Text [ spanish ] = "Eliminar filas" ;
+            Text [ french ] = "Supprimer des lignes" ;
+            Text [ dutch ] = "Rijen wissen" ;
+            Text [ portuguese ] = "Eliminar linhas" ;
+            Text[ chinese_simplified ] = "É¾³ıĞĞ";
+            Text[ russian ] = "Óäàëèòü ñòğîêè";
+            Text[ polish ] = "Usuñ wiersze";
+            Text[ japanese ] = "s‚Ìíœ";
+            Text[ chinese_traditional ] = "§R°£¦æ";
+            Text[ dutch ] = "Rijen wissen";
+            Text[ chinese_simplified ] = "É¾³ıĞĞ";
+            Text[ greek ] = "ÄéáãñáöŞ óôçëşí";
+            Text[ korean ] = "Çà »èÁ¦";
+            Text[ arabic ] = "ÍĞİ Õİæİ";
+            Text[ turkish ] = "Satırları sil";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RECORD_SAVE ;
+            HelpID = SID_FM_RECORD_SAVE ;
+            Text = "Datensatz speichern" ;
+            Text [ ENGLISH ] = "Save record" ;
+            Text [ portuguese ] = "Guardar registo" ;
+            Text [ english_us ] = "Save Record" ;
+            Text [ portuguese_brazilian ] = "Datensatz speichern" ;
+            Text [ swedish ] = "Spara datapost" ;
+            Text [ danish ] = "Gem datapost" ;
+            Text [ italian ] = "Salva record di dati" ;
+            Text [ spanish ] = "Guardar registro" ;
+            Text [ french ] = "Enregistrer l'enregistrement" ;
+            Text [ dutch ] = "Record opslaan" ;
+            Text[ chinese_simplified ] = "´æÅÌÊı¾İ¼ÇÂ¼";
+            Text[ russian ] = "Ñîõğàíèòü çàïèñü äàííûõ";
+            Text[ polish ] = "Zapisz rekord";
+            Text[ japanese ] = "Úº°ÄŞ‚ğ•Û‘¶";
+            Text[ chinese_traditional ] = "Àx¦s¸ê®Æ¶µ¥Ø";
+            Text[ dutch ] = "Record opslaan";
+            Text[ chinese_simplified ] = "´æÅÌÊı¾İ¼ÇÂ¼";
+            Text[ greek ] = "ÁğïèŞêåõóç åããñáöŞò äåäïìİíùí";
+            Text[ korean ] = "·¹ÄÚµå ÀúÀå";
+            Text[ arabic ] = "ÍİÙ ÓÌá";
+            Text[ turkish ] = "Veri kümesini kaydet";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_RECORD_UNDO ;
+            HelpID = SID_FM_RECORD_UNDO ;
+            Text = "Rückgängig: Dateneingabe" ;
+            Text [ ENGLISH ] = "Undo: Data entry" ;
+            Text [ english_us ] = "Undo: Data entry" ;
+            Text [ portuguese ] = "Anular: entrada de dados" ;
+            Text [ portuguese_brazilian ] = "Rückgängig: Dateneingabe" ;
+            Text [ swedish ] = "Ångra: datainmatning" ;
+            Text [ danish ] = "Fortryd: Datainput" ;
+            Text [ italian ] = "Annulla: Immissione dati" ;
+            Text [ spanish ] = "Deshacer: entrada de datos" ;
+            Text [ french ] = "Annuler : saisie de données" ;
+            Text [ dutch ] = "Ongedaan: Gegevensinvoer" ;
+            Text[ chinese_simplified ] = "³·ÏûÃüÁî: ÊäÈëÊı¾İ";
+            Text[ russian ] = "Îòìåíèòü: ââîä äàííûõ";
+            Text[ polish ] = "Cofnij: Wprowadzanie danych";
+            Text[ japanese ] = "Œ³‚É–ß‚·: ÃŞ°À‚Ì“ü—Í";
+            Text[ chinese_traditional ] = "´_­ì¡G¿é¤J¸ê®Æ";
+            Text[ dutch ] = "Ongedaan: Gegevensinvoer";
+            Text[ chinese_simplified ] = "³·ÏûÃüÁî: ÊäÈëÊı¾İ";
+            Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí";
+            Text[ korean ] = "½ÇÇà Ãë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
+            Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
+            Text[ turkish ] = "Geri al: Veri girişi";
+        };
+    };
+};
+Menu RID_SVXMNU_COLS
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = SID_FM_INSERTCOL ;
+            HelpID = SID_FM_INSERTCOL ;
+            Text = "~Spalte einfügen" ;
+            Text [ ENGLISH ] = "~Insert column" ;
+            Text [ english_us ] = "Insert ~Column" ;
+            Text [ portuguese ] = "~Inserir coluna" ;
+            Text [ portuguese_brazilian ] = "~Spalte einfügen" ;
+            Text [ swedish ] = "I~nfoga kolumn" ;
+            Text [ danish ] = "Indsæt kolonne" ;
+            Text [ italian ] = "~Inserisci colonna" ;
+            Text [ spanish ] = "~Insertar columna" ;
+            Text [ french ] = "Insérer une colonne" ;
+            Text [ dutch ] = "~Kolom invoegen" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_EDIT ;
+                        HelpID = SID_FM_EDIT ;
+                        Text = "Textfeld" ;
+                        Text [ ENGLISH ] = "TextField" ;
+                        Text [ portuguese ] = "Campo de texto" ;
+                        Text [ english_us ] = "Text Box" ;
+                        Text [ portuguese_brazilian ] = "Edit" ;
+                        Text [ swedish ] = "Textfält" ;
+                        Text [ danish ] = "Tekstfelt" ;
+                        Text [ italian ] = "Campo di testo" ;
+                        Text [ spanish ] = "Cuadro de texto" ;
+                        Text [ french ] = "Zone de texte" ;
+                        Text [ dutch ] = "Tekstveld" ;
+                        Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
+                        Text[ russian ] = "Òåêñòîâîå ïîëå";
+                        Text[ polish ] = "Pole tekstowe";
+                        Text[ japanese ] = "Ã·½ÄÎŞ¯¸½";
+                        Text[ chinese_traditional ] = "¤å¦r¤è¶ô";
+                        Text[ dutch ] = "Tekstveld";
+                        Text[ chinese_simplified ] = "ÎÄ±¾¿ò";
+                        Text[ greek ] = "Ğëáßóéï êåéìİíïõ";
+                        Text[ korean ] = "ÅØ½ºÆ® ÇÊµå";
+                        Text[ arabic ] = "ÍŞá äÕ";
+                        Text[ turkish ] = "Metin alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_CHECKBOX ;
+                        HelpID = SID_FM_CHECKBOX ;
+                        Text = "Markierfeld" ;
+                        Text [ ENGLISH ] = "CheckBox" ;
+                        Text [ portuguese ] = "Caixa de verificação" ;
+                        Text [ english_us ] = "Check Box" ;
+                        Text [ portuguese_brazilian ] = "Checkbox" ;
+                        Text [ swedish ] = "Markeringsfält" ;
+                        Text [ danish ] = "Afkrydsningsfelt" ;
+                        Text [ italian ] = "Casella di controllo" ;
+                        Text [ spanish ] = "Casilla de verificación" ;
+                        Text [ french ] = "Case à cocher" ;
+                        Text [ dutch ] = "Markeerveld" ;
+                        Text[ chinese_simplified ] = "¸´Ñ¡¿ò";
+                        Text[ russian ] = "Îêíî ôëàæêà";
+                        Text[ polish ] = "Pole wyboru";
+                        Text[ japanese ] = "Áª¯¸ÎŞ¯¸½";
+                        Text[ chinese_traditional ] = "®Ö¨ú¤è¶ô";
+                        Text[ dutch ] = "Markeerveld";
+                        Text[ chinese_simplified ] = "¸´Ñ¡¿ò";
+                        Text[ greek ] = "Ğåäßï óŞìáíóçò";
+                        Text[ korean ] = "È®ÀÎ¶õ";
+                        Text[ arabic ] = "ÎÇäÉ ÇÎÊíÇÑ";
+                        Text[ turkish ] = "Seçme kutusu";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_COMBOBOX ;
+                        HelpID = SID_FM_COMBOBOX ;
+                        Text = "Kombinationsfeld" ;
+                        Text [ ENGLISH ] = "ComboBox" ;
+                        Text [ portuguese ] = "Caixa de combinação" ;
+                        Text [ english_us ] = "Combo Box" ;
+                        Text [ portuguese_brazilian ] = "Combobox" ;
+                        Text [ swedish ] = "Kombinationsfält" ;
+                        Text [ danish ] = "Kombinationsboks" ;
+                        Text [ italian ] = "Casella combinata" ;
+                        Text [ spanish ] = "Campo combinado" ;
+                        Text [ french ] = "Zone combinée" ;
+                        Text [ dutch ] = "Combinatieveld" ;
+                        Text[ chinese_simplified ] = "×éºÏ¿ò";
+                        Text[ russian ] = "Ïîëå ñî ñïèñêîì";
+                        Text[ polish ] = "Pole kombi";
+                        Text[ japanese ] = "ºİÎŞÎŞ¯¸½";
+                        Text[ chinese_traditional ] = "²Õ¦X¤è¶ô";
+                        Text[ dutch ] = "Combinatieveld";
+                        Text[ chinese_simplified ] = "×éºÏ¿ò";
+                        Text[ greek ] = "Ğåäßï óõíäõáóìïı";
+                        Text[ korean ] = "ÄŞº¸ ¹Ú½º";
+                        Text[ arabic ] = "ãÑÈÚ ÊÍÑíÑ æÓÑÏ";
+                        Text[ turkish ] = "Kombinasyon alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_LISTBOX ;
+                        HelpID = SID_FM_LISTBOX ;
+                        Text = "Listenfeld" ;
+                        Text [ ENGLISH ] = "ListBox" ;
+                        Text [ portuguese ] = "Caixa de listagem" ;
+                        Text [ english_us ] = "List Box" ;
+                        Text [ portuguese_brazilian ] = "Listbox" ;
+                        Text [ swedish ] = "Listruta" ;
+                        Text [ danish ] = "Rulleliste" ;
+                        Text [ italian ] = "Casella di riepilogo" ;
+                        Text [ spanish ] = "Listado" ;
+                        Text [ french ] = "Zone de liste" ;
+                        Text [ dutch ] = "Keuzelijst" ;
+                        Text[ chinese_simplified ] = "ÁĞ±í¿ò";
+                        Text[ russian ] = "Ñïèñîê";
+                        Text[ polish ] = "Pole listy";
+                        Text[ japanese ] = "Ø½ÄÎŞ¯¸½";
+                        Text[ chinese_traditional ] = "²M³æ¤è¶ô";
+                        Text[ dutch ] = "Keuzelijst";
+                        Text[ chinese_simplified ] = "ÁĞ±í¿ò";
+                        Text[ greek ] = "Ğåäßï ëßóôáò";
+                        Text[ korean ] = "¸ñ·Ï ÇÊµå";
+                        Text[ arabic ] = "ãÑÈÚ ŞÇÆãÉ";
+                        Text[ turkish ] = "Liste alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_DATEFIELD ;
+                        HelpID = SID_FM_DATEFIELD ;
+                        Text = "Datumsfeld" ;
+                        Text [ ENGLISH ] = "DateField" ;
+                        Text [ portuguese ] = "Campo para data" ;
+                        Text [ english_us ] = "Date Field" ;
+                        Text [ portuguese_brazilian ] = "Datumsfeld" ;
+                        Text [ swedish ] = "Datumfält" ;
+                        Text [ danish ] = "Datofelt" ;
+                        Text [ italian ] = "Campo data" ;
+                        Text [ spanish ] = "Campo de fecha" ;
+                        Text [ french ] = "Champ de date" ;
+                        Text [ dutch ] = "Datumveld" ;
+                        Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
+                        Text[ russian ] = "Ïîëå äàòû";
+                        Text[ polish ] = "Pole daty";
+                        Text[ japanese ] = "“ú•tÌ¨°ÙÄŞ";
+                        Text[ chinese_traditional ] = "¤é´ÁÄæ¦ì";
+                        Text[ dutch ] = "Datumveld";
+                        Text[ chinese_simplified ] = "ÈÕÆÚ×Ö¶Î";
+                        Text[ greek ] = "Ğåäßï çìåñïìçíßáò";
+                        Text[ korean ] = "³¯Â¥ ÇÊµå";
+                        Text[ arabic ] = "ÍŞá ÇáÊÇÑíÎ";
+                        Text[ turkish ] = "Tarih alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_TIMEFIELD ;
+                        HelpID = SID_FM_TIMEFIELD ;
+                        Text = "Zeitfeld" ;
+                        Text [ ENGLISH ] = "TimeField" ;
+                        Text [ portuguese ] = "Campo horário" ;
+                        Text [ english_us ] = "Time Field" ;
+                        Text [ portuguese_brazilian ] = "Zeitfeld" ;
+                        Text [ swedish ] = "Tidsfält" ;
+                        Text [ danish ] = "Klokkeslætsfelt" ;
+                        Text [ italian ] = "Campo orario" ;
+                        Text [ spanish ] = "Campo horario" ;
+                        Text [ french ] = "Champ horaire" ;
+                        Text [ dutch ] = "Tijdveld" ;
+                        Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î";
+                        Text[ russian ] = "Ïîëå âğåìåíè";
+                        Text[ polish ] = "Pole czasu";
+                        Text[ japanese ] = "ŠÔÌ¨°ÙÄŞ";
+                        Text[ chinese_traditional ] = "®É¶¡Äæ¦ì";
+                        Text[ dutch ] = "Tijdveld";
+                        Text[ chinese_simplified ] = "Ê±¼ä×Ö¶Î";
+                        Text[ greek ] = "Ğåäßï şñáò";
+                        Text[ korean ] = "½Ã°£ ÇÊµå";
+                        Text[ arabic ] = "ÍŞá ÇáæŞÊ";
+                        Text[ turkish ] = "Zaman alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_NUMERICFIELD ;
+                        HelpID = SID_FM_NUMERICFIELD ;
+                        Text = "Numerisches Feld" ;
+                        Text [ ENGLISH ] = "NumericField" ;
+                        Text [ portuguese ] = "Campo numérico" ;
+                        Text [ english_us ] = "Numeric Field" ;
+                        Text [ portuguese_brazilian ] = "Numerisches Feld" ;
+                        Text [ swedish ] = "Numeriskt fält" ;
+                        Text [ danish ] = "Numerisk felt" ;
+                        Text [ italian ] = "Campo numerico" ;
+                        Text [ spanish ] = "Campo numérico" ;
+                        Text [ french ] = "Champ numérique" ;
+                        Text [ dutch ] = "Numeriek veld" ;
+                        Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
+                        Text[ russian ] = "×èñëîâîå ïîëå";
+                        Text[ polish ] = "Pole numeryczne";
+                        Text[ japanese ] = "”Ô†Ì¨°ÙÄŞ";
+                        Text[ chinese_traditional ] = "¼Æ¦rÄæ¦ì";
+                        Text[ dutch ] = "Numeriek veld";
+                        Text[ chinese_simplified ] = "Êı×Ö×Ö¶Î";
+                        Text[ greek ] = "Áñéèìçôéêü ğåäßï";
+                        Text[ korean ] = "¼ıÀÚ ÇÊµå";
+                        Text[ arabic ] = "ÍŞá ÑŞãí";
+                        Text[ turkish ] = "Sayısal alan";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_CURRENCYFIELD ;
+                        HelpID = SID_FM_CURRENCYFIELD ;
+                        Text = "Währungsfeld" ;
+                        Text [ ENGLISH ] = "CurrencyField" ;
+                        Text [ portuguese ] = "Campo para moeda" ;
+                        Text [ english_us ] = "Currency Field" ;
+                        Text [ portuguese_brazilian ] = "Währungsfeld" ;
+                        Text [ swedish ] = "Valutafält" ;
+                        Text [ danish ] = "Valutafelt" ;
+                        Text [ italian ] = "Campo di valuta" ;
+                        Text [ spanish ] = "Campo de moneda" ;
+                        Text [ french ] = "Champ monétaire" ;
+                        Text [ dutch ] = "Valutaveld" ;
+                        Text[ chinese_simplified ] = "µ±Ç°µÄÇøÓò";
+                        Text[ russian ] = "Îêíî äëÿ âàëşòû";
+                        Text[ polish ] = "Pole walutowe";
+                        Text[ japanese ] = "’Ê‰İÌ¨°ÙÄŞ";
+                        Text[ chinese_traditional ] = "·í«eªºÄæ¦ì";
+                        Text[ dutch ] = "Valutaveld";
+                        Text[ chinese_simplified ] = "µ±Ç°µÄÇøÓò";
+                        Text[ greek ] = "Ğåäßï íïìßóìáôïò";
+                        Text[ korean ] = "ÅëÈ­ ÇÊµå";
+                        Text[ arabic ] = "ÍŞá ÇáÚãáÉ";
+                        Text[ turkish ] = "Para birimi alanı";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_PATTERNFIELD ;
+                        HelpID = SID_FM_PATTERNFIELD ;
+                        Text = "Maskiertes Feld" ;
+                        Text [ ENGLISH ] = "PatternField" ;
+                        Text [ portuguese ] = "Campo mascarado" ;
+                        Text [ english_us ] = "Pattern Field" ;
+                        Text [ portuguese_brazilian ] = "Maskiertes Feld" ;
+                        Text [ swedish ] = "Maskerat fält" ;
+                        Text [ danish ] = "Maskeret felt" ;
+                        Text [ italian ] = "Campo a maschera" ;
+                        Text [ spanish ] = "Campo enmascarado" ;
+                        Text [ french ] = "Champ masqué" ;
+                        Text [ dutch ] = "Patroonveld" ;
+                        Text[ chinese_simplified ] = "ÑÚÂëÇø";
+                        Text[ russian ] = "Ïîëå îáğàçöà";
+                        Text[ polish ] = "Pole wzorca";
+                        Text[ japanese ] = "ÊßÀ°İÌ¨°ÙÄŞ";
+                        Text[ chinese_traditional ] = "±»½XÄæ¦ì";
+                        Text[ dutch ] = "Patroonveld";
+                        Text[ chinese_simplified ] = "ÑÚÂëÇø";
+                        Text[ greek ] = "Êáëõììİíï ğåäßï";
+                        Text[ korean ] = "ÆĞÅÏ ÇÊµå";
+                        Text[ arabic ] = "ÍŞá ãõŞäøóÚ";
+                        Text[ turkish ] = "Maskelenmiş alan";
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_FORMATTEDFIELD ;
+                        HelpID = SID_FM_FORMATTEDFIELD ;
+                        Text = "Formatiertes Feld" ;
+                        Text [ ENGLISH ] = "FormattedField" ;
+                        Text [ english_us ] = "Formatted Field" ;
+                        Text[ portuguese ] = "Campo formatado";
+                        Text[ greek ] = "Ìïñöïğïéçìİíï ğåäßï";
+                        Text[ dutch ] = "Opgemaakt veld";
+                        Text[ french ] = "Champ formaté";
+                        Text[ spanish ] = "Campo formateado";
+                        Text[ swedish ] = "Formaterat fält";
+                        Text[ russian ] = "Îòôîğìàòèğîâàííîå ïîëå";
+                        Text[ italian ] = "Campo formattato";
+                        Text[ danish ] = "Formateret felt";
+                        Text[ polish ] = "Formatowane pole";
+                        Text[ portuguese_brazilian ] = "Formatted Field";
+                        Text[ japanese ] = "‘®İ’è‚³‚ê‚½Ì¨°ÙÄŞ";
+                        Text[ korean ] = "¼­½ÄÀÌ µÈ ÇÊµå";
+                        Text[ chinese_simplified ] = "¸ñÊ½»¯µÄÇøÓò";
+                        Text[ chinese_traditional ] = "®æ¦¡¤ÆªºÄæ¦ì";
+                        Text[ arabic ] = "ÍŞá ãõäÓøóŞ";
+                        Text[ turkish ] = "Formatlı alan";
+                    };
+                    MenuItem
+                    {
+                        // this is a dummy which is never used herein but for copy to newly built menus
+                        Identifier = SID_FM_TWOFIELDS_DATE_N_TIME;
+                        HelpId = HID_CONTROLS_DATE_N_TIME;
+                        Text = "Datums- und Zeit-Feld" ;
+                        Text [ english_us ] = "Date and Time Field" ;
+                        Disable = True;
+                        Text[ portuguese ] = "Campo para data e hora";
+                        Text[ greek ] = "Ğåäßï çìåñïìçíßáò êáé şñáò";
+                        Text[ dutch ] = "Datum- en tijdveld";
+                        Text[ french ] = "Champ de date et heure";
+                        Text[ spanish ] = "Campo de fecha y hora";
+                        Text[ swedish ] = "Datum- och klockslagsfält";
+                        Text[ russian ] = "Ïîëå äàòû è âğåìåíè";
+                        Text[ italian ] = "Campo data e orario";
+                        Text[ danish ] = "Dato- og klokkeslætsfelt";
+                        Text[ polish ] = "pole na datê i godzinê";
+                        Text[ portuguese_brazilian ] = "date and time field";
+                        Text[ japanese ] = "“ú•t‚ÆŠÔ‚ÌÌ¨°ÙÄŞ";
+                        Text[ korean ] = "³¯Â¥¿Í ½Ã°£ ÇÊµå";
+                        Text[ chinese_simplified ] = "ÈÕÆÚºÍÊ±¼äÇøÓò";
+                        Text[ chinese_traditional ] = "¤é´Á©M®É¶¡Äæ";
+                        Text[ arabic ] = "ÍŞá ÊÇÑíÎ ææŞÊ";
+                        Text[ turkish ] = "Tarih ve zaman alanı";
+                    };
+                };
+            };
+            Text[ chinese_simplified ] = "²åÈëÁĞ(~C)";
+            Text[ russian ] = "Âñòàâèòü êîëîíêó";
+            Text[ polish ] = "W~staw kolumnê";
+            Text[ japanese ] = "—ñ‚Ì‘}“ü(~C)";
+            Text[ chinese_traditional ] = "´¡¤JÄæ(~C)";
+            Text[ dutch ] = "~Kolom invoegen";
+            Text[ chinese_simplified ] = "²åÈëÁĞ(~C)";
+            Text[ greek ] = "ÅéóáãùãŞ ~óôŞëçò";
+            Text[ korean ] = "¿­ »ğÀÔ(~C)";
+            Text[ arabic ] = "ÅÏÑÇÌ ÚãæÏ";
+            Text[ turkish ] = "Sütun ekle";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_CHANGECOL ;
+            HelpID = SID_FM_CHANGECOL ;
+            Text = "~Ersetzen durch" ;
+            Text [ ENGLISH ] = "~Replace with" ;
+            Text [ english_us ] = "~Replace with" ;
+            Text [ portuguese_brazilian ] = "~¦ndern zu" ;
+            Text [ swedish ] = "Ersätt med" ;
+            Text [ danish ] = "Erstat med" ;
+            Text [ italian ] = "~Sostituisci con" ;
+            Text [ spanish ] = "~Reemplazar con" ;
+            Text [ french ] = "~Remplacer par" ;
+            Text [ dutch ] = "~Vervangen door" ;
+            Text [ portuguese ] = "~Substituir por" ;
+            Text[ chinese_simplified ] = "Ìæ»»Îª(~R)";
+            Text[ russian ] = "Çàìåíèòü íà";
+            Text[ polish ] = "Zmieñ na";
+            Text[ japanese ] = "’u‚«Š·‚¦(~R)";
+            Text[ chinese_traditional ] = "´À¥N¥Î(~R)";
+            Text[ dutch ] = "~Vervangen door";
+            Text[ chinese_simplified ] = "Ìæ»»Îª(~R)";
+            Text[ greek ] = "ÁíôéêáôÜóôáóç ì~å";
+            Text[ korean ] = "´Ù¸¥ °ÍÀ¸·Î ¹Ù²Ù±â(~R)";
+            Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ";
+            Text[ turkish ] = "Şununla değiştir...";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_DELETECOL ;
+            HelpID = SID_FM_DELETECOL ;
+            Text = "Spalte ~löschen" ;
+            Text [ ENGLISH ] = "~Delete column" ;
+            Text [ english_us ] = "Delete Column" ;
+            Text [ portuguese_brazilian ] = "Spalte ~löschen" ;
+            Text [ swedish ] = "Radera ~kolumn" ;
+            Text [ danish ] = "Slet kolonne" ;
+            Text [ italian ] = "Elimina colonna" ;
+            Text [ spanish ] = "~Eliminar columna" ;
+            Text [ french ] = "Supprimer la ~colonne" ;
+            Text [ dutch ] = "Kolom ~wissen" ;
+            Text [ portuguese ] = "E~liminar coluna" ;
+            Text[ chinese_simplified ] = "É¾³ıÁĞ(~D)";
+            Text[ russian ] = "Óäàëèòü ñòîëáåö";
+            Text[ polish ] = "Usuñ kolumnê";
+            Text[ japanese ] = "—ñ‚Ìíœ";
+            Text[ chinese_traditional ] = "§R°£Äæ(~D)";
+            Text[ dutch ] = "Kolom ~wissen";
+            Text[ chinese_simplified ] = "É¾³ıÁĞ(~D)";
+            Text[ greek ] = "ÄéáãñáöŞ óôŞ~ëçò";
+            Text[ korean ] = "¿­ »èÁ¦";
+            Text[ arabic ] = "ÍĞİ ÚãæÏ";
+            Text[ turkish ] = "Sütunu sil";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_HIDECOL ;
+            HelpID = SID_FM_HIDECOL ;
+            Text = "Spalte ~ausblenden" ;
+            Text [ ENGLISH ] = "~Hide column" ;
+            Text[ english_us ] = "~Hide Columns";
+            Text[ portuguese ] = "~Ocultar coluna";
+            Text[ greek ] = "~Áğüêñõøç óôŞëçò";
+            Text[ dutch ] = "~Kolom verbergen";
+            Text[ french ] = "~Masquer la colonne";
+            Text[ spanish ] = "~Ocultar columna";
+            Text[ swedish ] = "Dölj kolumn";
+            Text[ russian ] = "Ñêğûòü êîëîíêè";
+            Text[ italian ] = "~Nascondi colonne";
+            Text[ danish ] = "Skjul kolonne";
+            Text[ polish ] = "Ukryj kolumnê";
+            Text[ portuguese_brazilian ] = "~Hide column";
+            Text[ japanese ] = "—ñ‚ğ•\\¦‚µ‚È‚¢(~H)";
+            Text[ korean ] = "¿­ ¼û±â±â(~H)";
+            Text[ chinese_simplified ] = "ÒşÈëÁĞ(~H)";
+            Text[ chinese_traditional ] = "Áô¤JÄæ(~H)";
+            Text[ arabic ] = "ÅÎİÇÁ ÇáÚãæÏ";
+            Text[ turkish ] = "Sütunu gizle";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOWCOLS ;
+            HelpID = SID_FM_SHOWCOLS ;
+            Text = "Spalten ~einblenden" ;
+            Text [ ENGLISH ] = "~Show columns" ;
+            SubMenu = Menu
+            {
+                ItemList =
+                {
+                    MenuItem
+                    {
+                        Identifier = SID_FM_SHOWCOLS_MORE ;
+                        HelpID = SID_FM_SHOWCOLS_MORE ;
+                        Text = "~Mehr ..." ;
+                        Text [ ENGLISH ] = "~More ..." ;
+                        Text[ english_us ] = "~More ...";
+                        Text[ portuguese ] = "~Mais...";
+                        Text[ greek ] = "~Ğåñéóóüôåñá ...";
+                        Text[ dutch ] = "~Meer ...";
+                        Text[ french ] = "~Plus ...";
+                        Text[ spanish ] = "~Más ...";
+                        Text[ swedish ] = "Mer ...";
+                        Text[ russian ] = "~Áîëüøå ...";
+                        Text[ italian ] = "~Più ...";
+                        Text[ danish ] = "Flere ...";
+                        Text[ polish ] = "Wiêcej ...";
+                        Text[ portuguese_brazilian ] = "~More ...";
+                        Text[ japanese ] = "‚»‚Ì‘¼(~M)...";
+                        Text[ korean ] = "ÀÚ¼¼È÷ (~M)...";
+                        Text[ chinese_simplified ] = "ÆäËü(~M)...";
+                        Text[ chinese_traditional ] = "¨ä¥L(~M)...";
+                        Text[ arabic ] = "ÇáãÒíÏ ...";
+                        Text[ language_user1 ] = "(ÄÄ): Ş Ğåñéóóüôåñá Ş åğéğñüóèåôá; - - - -";
+                        Text[ turkish ] = "Diğer...";
+                    };
+                    MenuItem
+                    {
+                        Separator = TRUE ;
+                    };
+                    MenuItem
+                    {
+                        Identifier = SID_FM_SHOWALLCOLS ;
+                        HelpID = SID_FM_SHOWALLCOLS ;
+                        Text = "~Alle" ;
+                        Text [ ENGLISH ] = "~All" ;
+                        Text[ english_us ] = "~All";
+                        Text[ portuguese ] = "~Todas";
+                        Text[ greek ] = "¼ë~á";
+                        Text[ dutch ] = "~Alle";
+                        Text[ french ] = "~Toutes";
+                        Text[ spanish ] = "~Todas";
+                        Text[ swedish ] = "Alla";
+                        Text[ russian ] = "~Âñå";
+                        Text[ italian ] = "~Tutte";
+                        Text[ danish ] = "Alle";
+                        Text[ polish ] = "Wszystkie";
+                        Text[ portuguese_brazilian ] = "~All";
+                        Text[ japanese ] = "‚·‚×‚Ä(~A)";
+                        Text[ korean ] = "ÀüÃ¼(~A)";
+                        Text[ chinese_simplified ] = "È«²¿(~A)";
+                        Text[ chinese_traditional ] = "¥ş³¡(~A)";
+                        Text[ arabic ] = "Çáßá";
+                        Text[ turkish ] = "Tümü";
+                    };
+                };
+            };
+            Text[ english_us ] = "~Show Columns";
+            Text[ portuguese ] = "~Mostrar colunas";
+            Text[ greek ] = "~ÅìöÜíéóç óôçëşí";
+            Text[ dutch ] = "~Kolommen weergeven";
+            Text[ french ] = "~Afficher les colonnes";
+            Text[ spanish ] = "~Mostrar columnas";
+            Text[ swedish ] = "Visa kolumner";
+            Text[ russian ] = "Ïîêàçàòü êîëîíêè";
+            Text[ italian ] = "~Mostra colonne";
+            Text[ danish ] = "Vis kolonner";
+            Text[ polish ] = "Wyœwietl kolumny";
+            Text[ portuguese_brazilian ] = "~Show columns";
+            Text[ japanese ] = "—ñ‚ğ•\\¦‚·‚é(~S)";
+            Text[ korean ] = "¿­ ³ªÅ¸³»±â(~S)";
+            Text[ chinese_simplified ] = "ÏÔÊ¾ÁĞ(~S)";
+            Text[ chinese_traditional ] = "Åã¥ÜÄæ(~S)";
+            Text[ arabic ] = "ÅÙåÇÑ ÇáÃÚãÏÉ";
+            Text[ turkish ] = "Sütunları göster";
+        };
+        MenuItem
+        {
+            Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
+            HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
+            Text = "~Spalte..." ;
+            Text [ ENGLISH ] = "~Column..." ;
+            Text [ english_us ] = "Column..." ;
+            Text[ italian ] = "~Colonna...";
+            Text[ portuguese_brazilian ] = "~Column...";
+            Text[ portuguese ] = "~Coluna...";
+            Text[ danish ] = "Kolonne...";
+            Text[ french ] = "~Colonne...";
+            Text[ swedish ] = "~Kolumn...";
+            Text[ dutch ] = "~Kolom...";
+            Text[ spanish ] = "~Columna...";
+            Text[ chinese_simplified ] = "ÁĞ(~C)...";
+            Text[ russian ] = "Êîëîíêà...";
+            Text[ polish ] = "Kolumna...";
+            Text[ japanese ] = "—ñ...";
+            Text[ chinese_traditional ] = "Äæ(~C)...";
+            Text[ dutch ] = "~Kolom...";
+            Text[ chinese_simplified ] = "ÁĞ(~C)...";
+            Text[ greek ] = "~ÓôŞëç...";
+            Text[ korean ] = "¿­...";
+            Text[ arabic ] = "...ÚãæÏ";
+            Text[ turkish ] = "Sütun...";
+        };
+    };
+};
+
+Menu RID_SVXMNU_CELL
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            ITEM_EDIT_COPY
+        };
+    };
+};
+

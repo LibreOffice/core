@@ -1,0 +1,108 @@
+Erkenntnisse aus sj/sj1, die in sj2 beachtet werden müssen
+
+
+- Call von C++
+"javascript: ..." nicht wie event behandeln, insbesondere werden
+this und document nicht implizit als Search-Objekte gesetzt.
+
+
+- prototype Eigenschaft von Objekten:
+Manipuliert Klassen-Informationen, falls an einem beliebigen Objekt
+eine Property mit gleichem Namen angelegt wird, so gilt dieses
+Ueberschreiben jedoch nur fuer dieses eine Objekt !!!
+Im Sj/Sj1 Projekt ist dies jedoch nicht erfuellt !
+
+Beispiel:
+function Ctor() { ... }
+
+obj1 = new Ctor();						// obj1  		obj2
+obj2 = new Ctor();						//-------------------------
+Ctor.prototype.toString = myToString;	// myToString   myToString
+obj1.toString = myToString2;			// myToString2	myToString
+Ctor.prototype.toString = myToString3;	// myToString2  myToString3
+
+
+- toString() und valueOf() Behandlung des BaseObj bei Type-Konversion
+
+========================================================================
+
+Bemerkungen zur Suchreihenfolge und zum Ueberladen von Funktionen:
+
+* fuer jede 'Klasse' (z.B. Math, Date, String) gibt es ein Konstruktor-
+  Objekt in der JavaScript-Umgebung.
+  In dem Konstruktor-Objekt werden die Properties der Klasse angelegt,
+  z.B. sin, cos.
+  Der Konstruktor setzt seine Properties an jedem neu erzeugten
+  Objekt. Daher hat z.B. jedes Date-Objekt eine (default-behandelte)
+  Property setMonth.
+  Zum Setzten der Properties des Konstruktor an das neu erzeugte
+  Objekt sollte die initProp()-Methode noch einen Bereich der zu
+  kopierenden Properties bekommen, damit nicht alle nachtraeglich
+  am Konstruktor-Objekt angelegten Properties auch am Objekt gesetzt
+  werden.
+
+* jedes Objekt haelt eine Referenz auf seinen Konstruktor (entweder die
+  vordefinierten Klassen wie Math, Date oder die Funktion mit der das
+  Objekt erzeugt wurde).
+
+* fuer die Suchreihenfolge gibt es folgende drei Moeglichkeiten:
+
+  - Default-behandelte Property:
+		aStrg = new String( "gulp" );
+		aStrg.toString()  // --> verwendet toString-Property am
+						  // String-Konstruktor (default-Behandlung)
+
+  - Default-Behandlung ueberladen am Konstruktor:
+		aStrg = new String( "gulp" );
+		String.prototype.toString = myToString;	// UEBERLADEN !
+		aStrg.toString()  // --> verwendet myToString-Funktion.
+						  // Das prototype-Objekt wird am String-Ctor.
+						  // angelegt und ueberschreibt daher die
+						  // default-behandelte Property am Objekt !!!
+						  // Der Interpreter muss dann noch an einem
+						  // ggf. vorhandenen prototype-Objekt am
+						  // Konstruktor nach der Property suchen.
+
+  - ueberladen am Objekt:
+		aStrg = new String( "gulp" );
+		String.prototype.toString = myToString;	// am Ctor. ueberladen
+		aStrg.toString = myToString2;
+		aStrg.toString()  // --> verwendet myToString2-Funktion.
+						  // Die Property toString wird am Objekt
+						  // ueberschrieben und somit das Flag, dass
+						  // die default-Behandlung anzeigt, zurueck
+						  // gesetzt. D.h. der Interpreter muss das
+						  // prototype-Objekt des Konstruktors NICHT
+						  // durchsuchen.
+
+
+========================================================================
+
+DEMNAECHST:
+
+Die Properties der Standard-Objekte (z.B. setSeconds() am Date)
+werden am prototype-Objekt des Konstruktors (z.B. DateCtor) angelegt.
+Bei der Suche nach Properties an einem beliebigen Objekt wird erst
+das Objekt durchsucht und anschliessend das prototype-Objekt des
+Konstruktors fuer das Objekt durchsucht. Dieses Verhalten gleicht
+dem Netscape-Verhalten (Stand 2.7.1997).
+
+ACHTUNG, AB 11.8:
+Das ist so nicht korrekt, da die entsprechenden Properties direkt
+am prototype-Objekt nicht bekannt sind. Die an den Objekten als
+Default geflagten Properties bilden daher das Netscape-Verhalten
+besser ab.
+
+
+========================================================================
+
+WEITERE OFFENE PROBLEME:
+------------------------
+
+  * this auf der Wiese funktioniert noch nicht korrekt
+
+  * Konversion von Typen ?
+
+
+
+

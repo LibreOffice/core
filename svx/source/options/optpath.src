@@ -1,0 +1,274 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optpath.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include --------------------------------------------------------------
+#include "optpath.hrc"
+#include "dialogs.hrc"
+#ifndef _SFX_HRC
+#include <sfx2/sfx.hrc>
+#endif
+#include "helpid.hrc"
+
+ // RID_SFXPAGE_PATH -----------------------------------------------------
+TabPage RID_SFXPAGE_PATH
+{
+    HelpId = HID_OPTIONS_PATH ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Pfade" ;
+    Text [ English ] = "Paths" ;
+    Text [ norwegian ] = "Baner" ;
+    Text [ italian ] = "Percorsi" ;
+    Text [ portuguese_brazilian ] = "Caminhos" ;
+    Text [ portuguese ] = "Atalhos" ;
+    Text [ finnish ] = "Polut" ;
+    Text [ danish ] = "Stier" ;
+    Text [ french ] = "Chemins" ;
+    Text [ swedish ] = "Sökvägar" ;
+    Text [ dutch ] = "Paden" ;
+    Text [ spanish ] = "Rutas" ;
+    Text [ english_us ] = "Paths" ;
+    Text[ chinese_simplified ] = "Â·¾¶";
+    Text[ russian ] = "Ïóòè";
+    Text[ polish ] = "Œcie¿ki";
+    Text[ japanese ] = "Êß½";
+    FixedText FT_TYPE
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Typ" ;
+        Text [ English ] = "Type" ;
+        Text [ norwegian ] = "Type" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text [ finnish ] = "Laji" ;
+        Text [ danish ] = "Type" ;
+        Text [ french ] = "Type" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ dutch ] = "Type" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ english_us ] = "Type" ;
+        Text[ chinese_simplified ] = "ÀàĞÍ";
+        Text[ russian ] = "Òèï";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "í—Ş";
+        Text[ chinese_traditional ] = "Ãş«¬";
+        Text[ arabic ] = "ÇáäæÚ";
+        Text[ greek ] = "Ôığïò";
+        Text[ korean ] = "À¯Çü";
+        Text[ turkish ] = "Tip";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PATH
+    {
+        Hide = TRUE;
+        Pos = MAP_APPFONT ( 110 , 14 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "Pfad" ;
+        Text [ English ] = "Path" ;
+        Text [ norwegian ] = "Bane" ;
+        Text [ italian ] = "Percorso" ;
+        Text [ portuguese_brazilian ] = "Caminho" ;
+        Text [ portuguese ] = "Atalho" ;
+        Text [ finnish ] = "Polku" ;
+        Text [ danish ] = "Sti" ;
+        Text [ french ] = "Chemin" ;
+        Text [ swedish ] = "Sökväg" ;
+        Text [ dutch ] = "Pad" ;
+        Text [ spanish ] = "Ruta" ;
+        Text [ english_us ] = "Path" ;
+        Text[ chinese_simplified ] = "Â·¾¶";
+        Text[ russian ] = "Ïóòü";
+        Text[ polish ] = "Œcie¿ka";
+        Text[ japanese ] = "Êß½";
+        Text[ chinese_traditional ] = "¸ô®|";
+        Text[ arabic ] = "ÇáãÓÇÑ";
+        Text[ greek ] = "ÄéáäñïìŞ";
+        Text[ korean ] = "°æ·Î";
+        Text[ turkish ] = "Veri yolu";
+        Text[ language_user1 ] = " ";
+    };
+    Control LB_PATH
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 236 , 89 ) ;
+        Border = TRUE ;
+        TabStop = TRUE;
+    };
+    PushButton BTN_PATH
+    {
+        Pos = MAP_APPFONT ( 183 , 110 ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Text = "~Bearbeiten..." ;
+        Text [ English ] = "~Edit..." ;
+        Text [ norwegian ] = "~Rediger..." ;
+        Text [ italian ] = "~Modifica..." ;
+        Text [ portuguese_brazilian ] = "~Editar..." ;
+        Text [ portuguese ] = "~Editar..." ;
+        Text [ finnish ] = "~Muokkaa..." ;
+        Text [ danish ] = "Rediger..." ;
+        Text [ french ] = "~Personnaliser..." ;
+        Text [ swedish ] = "~Redigera..." ;
+        Text [ dutch ] = "Be~werken..." ;
+        Text [ spanish ] = "~Editar..." ;
+        Text [ english_us ] = "~Edit..." ;
+        Text[ chinese_simplified ] = "±à¼­(~E)...";
+        Text[ russian ] = "Ïğàâêà...";
+        Text[ polish ] = "Edytuj...";
+        Text[ japanese ] = "•ÒW(~E)...";
+        Text[ chinese_traditional ] = "½s¿è(~E)...";
+        Text[ arabic ] = "ÊÍÑíÑ...";
+        Text[ greek ] = "~Åğåîåñãáóßá...";
+        Text[ korean ] = "ÆíÁı(~E)...";
+        Text[ turkish ] = "Düzenle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_STANDARD
+    {
+        Pos = MAP_APPFONT ( 115 , 110 ) ;
+        Size = MAP_APPFONT ( 65 , 14 ) ;
+        Text = "~Standard" ;
+        Text [ English ] = "~Standard" ;
+        Text [ english_us ] = "~Default" ;
+        Text [ italian ] = "~Standard" ;
+        Text [ spanish ] = "~Predeterminado" ;
+        Text [ french ] = "Par ~défaut" ;
+        Text [ dutch ] = "~Standaard" ;
+        Text [ swedish ] = "~Standard" ;
+        Text [ danish ] = "Standard" ;
+        Text [ portuguese_brazilian ] = "~Standard" ;
+        Text [ portuguese ] = "~Padrão" ;
+        Text[ chinese_simplified ] = "±ê×¼(~D)";
+        Text[ russian ] = "Ñòàíäàğò";
+        Text[ polish ] = "Domyœlnie";
+        Text[ japanese ] = "•W€(~D)";
+        Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
+        Text[ arabic ] = "ÇİÊÑÇÖí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "±âº»(~D)";
+        Text[ turkish ] = "Standart";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_STD
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 126 ) ;
+        Text = "Standard" ;
+        Text [ English ] = "Standard" ;
+        Text [ norwegian ] = "Standard" ;
+        Text [ italian ] = "Standard" ;
+        Text [ portuguese_brazilian ] = "Padrão" ;
+        Text [ portuguese ] = "Padrão" ;
+        Text [ finnish ] = "Vakio" ;
+        Text [ danish ] = "Standard" ;
+        Text [ french ] = "Liste des chemins" ;
+        Text [ swedish ] = "Standard" ;
+        Text [ dutch ] = "Standaard" ;
+        Text [ spanish ] = "Predeterminado" ;
+        Text [ english_us ] = "Default" ;
+        Text[ chinese_simplified ] = "±ê×¼";
+        Text[ russian ] = "Ñòàíäàğò";
+        Text[ polish ] = "Domyœlnie";
+        Text[ japanese ] = "•W€";
+        Text[ chinese_traditional ] = "¼Ğ·Ç";
+        Text[ arabic ] = "ÇİÊÑÇÖí";
+        Text[ greek ] = "ĞñïåğéëïãŞ";
+        Text[ korean ] = "±âº»";
+        Text[ turkish ] = "Standart";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_traditional ] = "¸ô®|";
+    Text[ arabic ] = "ÇáãÓÇÑÇÊ";
+    Text[ greek ] = "Äéáäñïìİò";
+    Text[ korean ] = "°æ·Î";
+    Text[ turkish ] = "Veri yolları";
+    Text[ language_user1 ] = " ";
+};
+ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
+{
+    BUTTONS = WB_OK ;
+    DEFBUTTON = WB_DEF_OK ;
+    Message = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
+    Message [ English ] = "The paths of configuration and mail storages have to be different.\nPlease choose a new path." ;
+    Message [ english_us ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
+    Message [ portuguese_brazilian ] = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
+    Message [ swedish ] = "Katalogerna för konfigurationen och meddelandelagret\nmåste vara olika.\nVälj en ny sökväg." ;
+    Message [ danish ] = "Konfiguratationens og meddelelseslagerets biblioteker må ikke være ens.\nVælg venligst en ny sti." ;
+    Message [ italian ] = "La cartella della configurazione deve essere diversa da quella per il salvataggio \ndei messaggi.\nScegliere un nuovo percorso." ;
+    Message [ spanish ] = "La configuración y los directorios de correo electrónico\ndeben especificarse como directorios separados.\nPor favor elija una nueva ruta." ;
+    Message [ french ] = "Les répertoires pour la configuration et l'enregistrement des messages\ndoivent être différents.\nVeuillez sélectionner un nouveau chemin." ;
+    Message [ dutch ] = "De mappen voor de configuratie en  voor het opslaan van berichten\nmogen niet hetzelfde zijn.\nSelecteer een nieuw pad." ;
+    Message [ portuguese ] = "Especifique os directórios de configuração e de correio como directórios separados.\nSeleccione um novo atalho." ;
+    Message[ chinese_simplified ] = "ÅäÖÃºÍ±£´æÓÊ¼şµÄÄ¿Â¼²»ÄÜÏàÍ¬¡£\nÇëÄúÑ¡ÔñÒ»¸öĞÂµÄÄ¿Â¼¡£";
+    Message[ russian ] = "Êîíôèãóğàöèè è ñîõğàíåíèå ñîîáùåíèé äîëæíû íàõîäèòüñÿ\nâ ğàçíûõ êàòàëîãàõ.\nÂûáåğèòå, ïîæàëóéñòà, íîâûé ïóòü.";
+    Message[ polish ] = "Katalogi dla konfiguracji i dla zapisu wiadomoœci \nmusz¹ byæ ró¿ne.\nProszê wybraæ now¹ œcie¿kê.";
+    Message[ japanese ] = "İ’è‚ÌÃŞ¨Ú¸ÄØ‚ÆÒ°Ù•Û‘¶‚ÌÃŞ¨Ú¸ÄØ‚Í\n•Ê‚Ì‚à‚Ì‚Å‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB\nV‚µ‚¢Êß½‚ğ‘I‘ğ‚µ‚Ä‰º‚³‚¢B";
+    Message[ chinese_traditional ] = "°t¸m©MÀx¦s¶l¥óªº¥Ø¿ı¤£¯à¬Û¦P¡C\n½Ğ±z¿ï¾Ü¤@­Ó·sªº¥Ø¿ı¡C";
+    Message[ arabic ] = "íÌÈ Ãä Êßæä ÏáÇÆá ÇáÊßæíä æÇáÈÑíÏ ãÎÊáİÉ.\nÇáÑÌÇÁ ÇÎÊíÇÑ ãÓÇÑ ÌÏíÏ.";
+    Message[ greek ] = "Ïé êáôÜëïãïé ãéá ôçí äéáìüñöùóç êáé ôçí áğïèŞêåõóç ôùí ìçíõìÜôùí\nğñİğåé íá åßíáé äéáöïñåôéêïß.\nĞáñáêáëş åëİãîôå ìéá íİá äéáäñïìŞ.";
+    Message[ korean ] = "±¸¼º¿ë µğ·ºÅä¸®¿Í ¸ŞÀÏÀúÀå µğ·ºÅä¸®´Â ±¸ºĞµÇ¾î¾ß ÇÕ´Ï´Ù.\n»õ °æ·Î¸¦ ¼±ÅÃÇÏ½Ê½Ã¿À.";
+    Message[ turkish ] = "Konfigürasyon ve ileti dizinlerinin ayrı dizinler olarak\nbelirlenmesi gerekir.\nLütfen yeni bir veri yolu seçin.";
+    Message[ language_user1 ] = " ";
+};
+ // ******************************************************************* EOF

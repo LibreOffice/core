@@ -1,0 +1,1 @@
+nmake product=full TCV_CORE=t

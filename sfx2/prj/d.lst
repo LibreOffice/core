@@ -1,0 +1,148 @@
+mkdir: %_DEST%\inc\sfx2
+mkdir: %_DEST%\inc\enus
+mkdir: %_DEST%\inc\fren
+mkdir: %_DEST%\inc\dtch
+mkdir: %_DEST%\inc\ital
+mkdir: %_DEST%\inc\swed
+mkdir: %_DEST%\inc\port
+mkdir: %_DEST%\inc\dan
+mkdir: %_DEST%\inc\span
+mkdir: %_DEST%\inc\chinsim
+mkdir: %_DEST%\inc\japn
+mkdir: %_DEST%\inc\russ
+mkdir: %_DEST%\inc\pol
+
+touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
+
+..\%__SRC%\inc\sfxslots.ilb %_DEST%\inc%_EXT%\sfxslots.ilb
+..\%__SRC%\inc\sfxslots.ilb* %_DEST%\inc%_EXT%\sfxslots.ilb*
+..\%__SRC%\lib\sfx.lib %_DEST%\lib%_EXT%\sfx.lib
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\sfx.lib %_DEST%\lib%_EXT%\xsfx.lib
+..\%__SRC%\obj\appctor.obj %_DEST%\lib%_EXT%\xsfxapp.obj
+..\%__SRC%\lib\isfx.lib %_DEST%\lib%_EXT%\isfx.lib
+..\%__SRC%\lib\debug.lib %_DEST%\lib%_EXT%\sfxdebug.lib
+..\%__SRC%\bin\sfx?????.sym %_DEST%\bin%_EXT%\sfx?????.sym
+..\%__SRC%\bin\sfx?????.dll %_DEST%\bin%_EXT%\sfx?????.dll
+..\%__SRC%\bin\sfx???[0-9][0-9].dll %_DEST%\bin%_EXT%\sfx?????.dll
+..\%__SRC%\bin\sfx?????.res %_DEST%\bin%_EXT%\sfx?????.res
+..\%__SRC%\bin\sfx?????.sym %_DEST%\bin%_EXT%\sfx?????.sym
+..\%__SRC%\misc\sfx?????.map %_DEST%\bin%_EXT%\sfx?????.map
+..\%__SRC%\bin\elc?????.dll %_DEST%\bin%_EXT%\elc?????.dll
+..\%__SRC%\srs\sfx.srs %_DEST%\res%_EXT%\sfx.srs
+..\%__SRC%\srs\sfxslots.srs %_DEST%\res%_EXT%\sfxslots.srs
+..\%__SRC%\res\sfx.srs %_DEST%\res%_EXT%\sfx.srs
+..\util\svdbt.dll %_DEST%\bin%_EXT%\svdbt.dll
+..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
+..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
+..\%__SRC%\bin\odk?????.dll %_DEST%\odk\bin%_EXT%\odk?????.dll
+..\%__SRC%\bin\cli?????.dll %_DEST%\odk\bin%_EXT%\cli?????.dll
+
+hedabu: ..\inc\inettbc.hxx %_DEST%\inc%_EXT%\sfx2\inettbc.hxx
+hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\sfx2\accmgr.hxx
+hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
+hedabu: ..\inc\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
+hedabu: ..\inc\bindings.hxx %_DEST%\inc%_EXT%\sfx2\bindings.hxx
+hedabu: ..\inc\clientsh.hxx %_DEST%\inc%_EXT%\sfx2\clientsh.hxx
+hedabu: ..\inc\cfgitem.hxx %_DEST%\inc%_EXT%\sfx2\cfgitem.hxx
+hedabu: ..\inc\configmgr.hxx %_DEST%\inc%_EXT%\sfx2\configmgr.hxx
+hedabu: ..\inc\chalign.hxx %_DEST%\inc%_EXT%\sfx2\chalign.hxx
+hedabu: ..\inc\childwin.hxx %_DEST%\inc%_EXT%\sfx2\childwin.hxx
+hedabu: ..\inc\ctrlitem.hxx %_DEST%\inc%_EXT%\sfx2\ctrlitem.hxx
+hedabu: ..\inc\dispatch.hxx %_DEST%\inc%_EXT%\sfx2\dispatch.hxx
+hedabu: ..\inc\dinfdlg.hxx %_DEST%\inc%_EXT%\sfx2\dinfdlg.hxx
+hedabu: ..\inc\dinfedt.hxx %_DEST%\inc%_EXT%\sfx2\dinfedt.hxx
+hedabu: ..\inc\docinf.hxx %_DEST%\inc%_EXT%\sfx2\docinf.hxx
+hedabu: ..\inc\docfac.hxx %_DEST%\inc%_EXT%\sfx2\docfac.hxx
+hedabu: ..\inc\docfile.hxx %_DEST%\inc%_EXT%\sfx2\docfile.hxx
+hedabu: ..\inc\docfilt.hxx %_DEST%\inc%_EXT%\sfx2\docfilt.hxx
+hedabu: ..\inc\dockwin.hxx %_DEST%\inc%_EXT%\sfx2\dockwin.hxx
+hedabu: ..\inc\doctempl.hxx %_DEST%\inc%_EXT%\sfx2\doctempl.hxx
+hedabu: ..\inc\doctdlg.hxx %_DEST%\inc%_EXT%\sfx2\doctdlg.hxx
+hedabu: ..\inc\event.hxx %_DEST%\inc%_EXT%\sfx2\event.hxx
+hedabu: ..\inc\evntconf.hxx %_DEST%\inc%_EXT%\sfx2\evntconf.hxx
+hedabu: ..\inc\exchobj.hxx %_DEST%\inc%_EXT%\sfx2\exchobj.hxx
+hedabu: ..\inc\expfile.hxx %_DEST%\inc%_EXT%\sfx2\expfile.hxx
+hedabu: ..\inc\explorer.hxx %_DEST%\inc%_EXT%\sfx2\explorer.hxx
+hedabu: ..\inc\exptypes.hxx %_DEST%\inc%_EXT%\sfx2\exptypes.hxx
+hedabu: ..\inc\fcontnr.hxx %_DEST%\inc%_EXT%\sfx2\fcontnr.hxx
+hedabu: ..\inc\frame.hxx %_DEST%\inc%_EXT%\sfx2\frame.hxx
+hedabu: ..\inc\frameobj.hxx %_DEST%\inc%_EXT%\sfx2\frameobj.hxx
+hedabu: ..\inc\frmdescr.hxx %_DEST%\inc%_EXT%\sfx2\frmdescr.hxx
+hedabu: ..\inc\frmhtml.hxx %_DEST%\inc%_EXT%\sfx2\frmhtml.hxx
+hedabu: ..\inc\frmhtmlw.hxx %_DEST%\inc%_EXT%\sfx2\frmhtmlw.hxx
+hedabu: ..\inc\frmload.hxx %_DEST%\inc%_EXT%\sfx2\frmload.hxx
+hedabu: ..\inc\genlink.hxx %_DEST%\inc%_EXT%\sfx2\genlink.hxx
+hedabu: ..\inc\hintpost.hxx %_DEST%\inc%_EXT%\sfx2\hintpost.hxx
+hedabu: ..\inc\interno.hxx %_DEST%\inc%_EXT%\sfx2\interno.hxx
+hedabu: ..\inc\inimgr.hxx %_DEST%\inc%_EXT%\sfx2\inimgr.hxx
+hedabu: ..\inc\imgmgr.hxx %_DEST%\inc%_EXT%\sfx2\imgmgr.hxx
+hedabu: ..\inc\imgdef.hxx %_DEST%\inc%_EXT%\sfx2\imgdef.hxx
+hedabu: ..\inc\interno.hxx %_DEST%\inc%_EXT%\sfx2\interno.hxx
+hedabu: ..\inc\ipfrm.hxx %_DEST%\inc%_EXT%\sfx2\ipfrm.hxx
+hedabu: ..\inc\linkhdl.hxx %_DEST%\inc%_EXT%\sfx2\linkhdl.hxx
+hedabu: ..\inc\macrconf.hxx %_DEST%\inc%_EXT%\sfx2\macrconf.hxx
+hedabu: ..\inc\macropg.hxx %_DEST%\inc%_EXT%\sfx2\macropg.hxx
+hedabu: ..\inc\mailitem.hxx %_DEST%\inc%_EXT%\sfx2\mailitem.hxx
+hedabu: ..\inc\topfrm.hxx %_DEST%\inc%_EXT%\sfx2\topfrm.hxx
+hedabu: ..\inc\mfldmgr.hxx %_DEST%\inc%_EXT%\sfx2\mfldmgr.hxx
+hedabu: ..\inc\mgetempl.hxx %_DEST%\inc%_EXT%\sfx2\mgetempl.hxx
+hedabu: ..\inc\mieclip.hxx %_DEST%\inc%_EXT%\sfx2\mieclip.hxx
+hedabu: ..\inc\minarray.hxx %_DEST%\inc%_EXT%\sfx2\minarray.hxx
+hedabu: ..\inc\minfitem.hxx %_DEST%\inc%_EXT%\sfx2\minfitem.hxx
+hedabu: ..\inc\minfstack.hxx %_DEST%\inc%_EXT%\sfx2\minfstack.hxx
+hedabu: ..\inc\minstack.hxx %_DEST%\inc%_EXT%\sfx2\minstack.hxx
+hedabu: ..\inc\mnuitem.hxx %_DEST%\inc%_EXT%\sfx2\mnuitem.hxx
+hedabu: ..\inc\module.hxx %_DEST%\inc%_EXT%\sfx2\module.hxx
+hedabu: ..\inc\msg.hxx %_DEST%\inc%_EXT%\sfx2\msg.hxx
+hedabu: ..\inc\mnumgr.hxx %_DEST%\inc%_EXT%\sfx2\mnumgr.hxx
+hedabu: ..\inc\newstyle.hxx %_DEST%\inc%_EXT%\sfx2\newstyle.hxx
+hedabu: ..\inc\new.hxx %_DEST%\inc%_EXT%\sfx2\new.hxx
+hedabu: ..\inc\navigat.hxx %_DEST%\inc%_EXT%\sfx2\navigat.hxx
+hedabu: ..\inc\msgdescr.hxx %_DEST%\inc%_EXT%\sfx2\msgdescr.hxx
+hedabu: ..\inc\msgpool.hxx %_DEST%\inc%_EXT%\sfx2\msgpool.hxx
+hedabu: ..\inc\passwd.hxx %_DEST%\inc%_EXT%\sfx2\passwd.hxx
+hedabu: ..\inc\prnmon.hxx %_DEST%\inc%_EXT%\sfx2\prnmon.hxx
+hedabu: ..\inc\objface.hxx %_DEST%\inc%_EXT%\sfx2\objface.hxx
+hedabu: ..\inc\objitem.hxx %_DEST%\inc%_EXT%\sfx2\objitem.hxx
+hedabu: ..\inc\objsh.hxx %_DEST%\inc%_EXT%\sfx2\objsh.hxx
+hedabu: ..\inc\printer.hxx %_DEST%\inc%_EXT%\sfx2\printer.hxx
+hedabu: ..\inc\progress.hxx %_DEST%\inc%_EXT%\sfx2\progress.hxx
+hedabu: ..\inc\request.hxx %_DEST%\inc%_EXT%\sfx2\request.hxx
+hedabu: ..\inc\saveopt.hxx %_DEST%\inc%_EXT%\sfx2\saveopt.hxx
+hedabu: ..\inc\sfx.hrc %_DEST%\inc%_EXT%\sfx2\sfx.hrc
+hedabu: ..\inc\sfxdefs.hxx %_DEST%\inc%_EXT%\sfx2\sfxdefs.hxx
+hedabu: ..\inc\sfxdir.hxx %_DEST%\inc%_EXT%\sfx2\sfxdir.hxx
+hedabu: ..\inc\sfxhelp.hxx %_DEST%\inc%_EXT%\sfx2\sfxhelp.hxx
+hedabu: ..\inc\sfxhtml.hxx %_DEST%\inc%_EXT%\sfx2\sfxhtml.hxx
+hedabu: ..\inc\sfxsids.hrc %_DEST%\inc%_EXT%\sfx2\sfxsids.hrc
+hedabu: ..\inc\shell.hxx %_DEST%\inc%_EXT%\sfx2\shell.hxx
+hedabu: ..\inc\stbitem.hxx %_DEST%\inc%_EXT%\sfx2\stbitem.hxx
+hedabu: ..\inc\stbmgr.hxx %_DEST%\inc%_EXT%\sfx2\stbmgr.hxx
+hedabu: ..\inc\styfitem.hxx %_DEST%\inc%_EXT%\sfx2\styfitem.hxx
+hedabu: ..\inc\styledlg.hxx %_DEST%\inc%_EXT%\sfx2\styledlg.hxx
+hedabu: ..\inc\tabdlg.hxx %_DEST%\inc%_EXT%\sfx2\tabdlg.hxx
+hedabu: ..\inc\tbxctrl.hxx %_DEST%\inc%_EXT%\sfx2\tbxctrl.hxx
+hedabu: ..\inc\tbxmgr.hxx %_DEST%\inc%_EXT%\sfx2\tbxmgr.hxx
+hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\sfx2\templdlg.hxx
+hedabu: ..\inc\tplpitem.hxx %_DEST%\inc%_EXT%\sfx2\tplpitem.hxx
+hedabu: ..\inc\viewfrm.hxx %_DEST%\inc%_EXT%\sfx2\viewfrm.hxx
+hedabu: ..\inc\viewsh.hxx %_DEST%\inc%_EXT%\sfx2\viewsh.hxx
+hedabu: ..\inc\viewfac.hxx %_DEST%\inc%_EXT%\sfx2\viewfac.hxx
+hedabu: ..\inc\iodlg.hxx %_DEST%\inc%_EXT%\sfx2\iodlg.hxx
+hedabu: ..\inc\appuno.hxx %_DEST%\inc%_EXT%\sfx2\appuno.hxx
+hedabu: ..\inc\sfxuno.hxx %_DEST%\inc%_EXT%\sfx2\sfxuno.hxx
+hedabu: ..\inc\sfxbasemodel.hxx %_DEST%\inc%_EXT%\sfx2\sfxbasemodel.hxx
+hedabu: ..\inc\sfxbasecontroller.hxx %_DEST%\inc%_EXT%\sfx2\sfxbasecontroller.hxx
+hedabu: ..\inc\unoctitm.hxx %_DEST%\inc%_EXT%\sfx2\unoctitm.hxx
+hedabu: ..\inc\objuno.hxx %_DEST%\inc%_EXT%\sfx2\objuno.hxx
+hedabu: ..\inc\viewuno.hxx %_DEST%\inc%_EXT%\sfx2\viewuno.hxx
+hedabu: ..\inc\misccfg.hxx %_DEST%\inc%_EXT%\sfx2\misccfg.hxx
+hedabu: ..\inc\srchitem.hxx %_DEST%\inc%_EXT%\sfx2\srchitem.hxx
+hedabu: ..\inc\fontitem.hxx %_DEST%\inc%_EXT%\sfx2\fontitem.hxx
+hedabu: ..\inc\xmlmetae.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetae.hxx
+hedabu: ..\inc\xmlmetai.hxx %_DEST%\inc%_EXT%\sfx2\xmlmetai.hxx
+hedabu: ..\inc\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
+hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
+

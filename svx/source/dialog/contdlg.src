@@ -1,0 +1,783 @@
+/*************************************************************************
+ *
+ *  $RCSfile: contdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:07 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "contdlg.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_CONTOUR ----------------------------------------------------
+FloatingWindow RID_SVXDLG_CONTOUR
+{
+    OutputSize = TRUE ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Pos = MAP_APPFONT ( 0 , 0 ) ;
+    Size = MAP_APPFONT ( 270 , 213 ) ;
+    Text = "Kontur-Editor" ;
+    Text [ ENGLISH ] = "Contour editor" ;
+    Text [ english_us ] = "Contour Editor" ;
+    Sizeable = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Zoomable = TRUE ;
+    ToolBox TBX1
+    {
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        HelpId = HID_CONTDLG_TOOLBOX ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = TBI_APPLY ;
+                HelpId = HID_CONTDLG_APPLY ;
+                Text = "Zuweisen" ;
+                Text [ ENGLISH ] = "Apply" ;
+                Text [ english_us ] = "Apply" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "apply.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "Aplicar" ;
+                Text [ portuguese_brazilian ] = "Zuweisen" ;
+                Text [ swedish ] = "Tilldela" ;
+                Text [ danish ] = "Tildel" ;
+                Text [ italian ] = "Assegna" ;
+                Text [ spanish ] = "Asignar" ;
+                Text [ french ] = "Assigner" ;
+                Text [ dutch ] = "Toewijzen" ;
+                Text[ chinese_simplified ] = "Ê¹ÓÃ";
+                Text[ russian ] = "Ïğèìåíèòü";
+                Text[ polish ] = "Przypisz";
+                Text[ japanese ] = "“K—p";
+                Text[ chinese_traditional ] = "¨Ï¥Î";
+                Text[ arabic ] = "ÊÚííä";
+                Text[ greek ] = "Áíôéóôïß÷éóç";
+                Text[ korean ] = "Àû¿ë";
+                Text[ turkish ] = "Uygula";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_WORKPLACE ;
+                HelpId = HID_CONTDLG_WORKPLACE ;
+                Text = "Arbeitsbereich" ;
+                Text [ ENGLISH ] = "Workplace" ;
+                Text [ english_us ] = "Workspace" ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "scarb.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "Área de ajuste" ;
+                Text [ portuguese_brazilian ] = "Arbeitsbereich" ;
+                Text [ swedish ] = "Arbetsområde" ;
+                Text [ danish ] = "Arbejdsområde" ;
+                Text [ italian ] = "Area di lavoro" ;
+                Text [ spanish ] = "Área de trabajo" ;
+                Text [ french ] = "Zone de travail" ;
+                Text [ dutch ] = "Werkbereik" ;
+                Text[ chinese_simplified ] = "±à¼­ÇøÓò";
+                Text[ russian ] = "Ğàáî÷àÿ îáëàñòü";
+                Text[ polish ] = "Obszar roboczy";
+                Text[ japanese ] = "ì‹Æ—Ìˆæ";
+                Text[ chinese_traditional ] = "½s¿è°Ï°ì";
+                Text[ arabic ] = "ãÓÇÍÉ ÇáÚãá";
+                Text[ greek ] = "Ğåñéï÷Ş åñãáóßáò";
+                Text[ korean ] = "ÀÛ¾÷¿µ¿ª";
+                Text[ turkish ] = "Çalışma alanı";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_SELECT ;
+                HelpId = HID_CONTDLG_SELECT ;
+                Text = "Auswahl" ;
+                Text [ ENGLISH ] = "Selection" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10128.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Selectie" ;
+                Text [ english_us ] = "Select" ;
+                Text [ italian ] = "Selezione" ;
+                Text [ spanish ] = "Selección" ;
+                Text [ french ] = "Sélection" ;
+                Text [ swedish ] = "Urval" ;
+                Text [ danish ] = "Marker" ;
+                Text [ portuguese ] = "Seleccionar" ;
+                Text [ portuguese_brazilian ] = "Auswahl" ;
+                /* ### ACHTUNG: Neuer Text in Resource? Objekte auswählen : Objekte auswõhlen */
+                Text[ chinese_simplified ] = "Ñ¡Ôñ";
+                Text[ russian ] = "Âûáîğ";
+                Text[ polish ] = "Wybór";
+                Text[ japanese ] = "‘I‘ğ";
+                Text[ chinese_traditional ] = "¿ï¾Ü";
+                Text[ arabic ] = "ÇÎÊíÇÑ";
+                Text[ greek ] = "ÅğéëïãŞ";
+                Text[ korean ] = "¼±ÅÃ";
+                Text[ turkish ] = "Seçim";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_RECT ;
+                HelpId = HID_CONTDLG_RECT ;
+                Text = "Rechteck" ;
+                Text [ ENGLISH ] = "Rectangle" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10104.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Rechthoek" ;
+                Text [ english_us ] = "Rectangle" ;
+                Text [ italian ] = "Rettangolo" ;
+                Text [ spanish ] = "Rectángulo" ;
+                Text [ french ] = "Rectangle" ;
+                Text [ swedish ] = "Rektangel" ;
+                Text [ danish ] = "Rektangel" ;
+                Text [ portuguese ] = "Rectângulo" ;
+                Text [ portuguese_brazilian ] = "Rechteck" ;
+                Text[ chinese_simplified ] = "¾ØĞÎ";
+                Text[ russian ] = "Ïğÿìîóãîëüíèê";
+                Text[ polish ] = "Prostok¹t";
+                Text[ japanese ] = "lŠpŒ`";
+                Text[ chinese_traditional ] = "¯x§Î";
+                Text[ arabic ] = "ãÓÊØíá";
+                Text[ greek ] = "Ïñèïãşíéï";
+                Text[ korean ] = "»ç°¢Çü";
+                Text[ turkish ] = "Dikdörtgen";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_CIRCLE ;
+                HelpId = HID_CONTDLG_CIRCLE ;
+                Text = "Ellipse" ;
+                Text [ ENGLISH ] = "Ellipse" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10110.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ dutch ] = "Ellips" ;
+                Text [ english_us ] = "Ellipse" ;
+                Text [ italian ] = "Ellisse" ;
+                Text [ spanish ] = "Elipse" ;
+                Text [ french ] = "Ellipse" ;
+                Text [ swedish ] = "Ellips" ;
+                Text [ danish ] = "Ellipse" ;
+                Text [ portuguese ] = "Elipse" ;
+                Text [ portuguese_brazilian ] = "Ellipse" ;
+                Text[ chinese_simplified ] = "ÍÖÔ²";
+                Text[ russian ] = "İëëèïñû";
+                Text[ polish ] = "Elipsa";
+                Text[ japanese ] = "‘È‰~";
+                Text[ chinese_traditional ] = "¾ò¶ê";
+                Text[ arabic ] = "Ôßá ÈíÖæí";
+                Text[ greek ] = "¸ëëåéøç";
+                Text[ korean ] = "Å¸¿ø";
+                Text[ turkish ] = "Elips";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLY ;
+                HelpId = HID_CONTDLG_POLY ;
+                Text = "Polygon" ;
+                Text [ ENGLISH ] = "Polygon" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10117.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ english_us ] = "Polygon" ;
+                Text [ italian ] = "Poligono" ;
+                Text [ spanish ] = "Polígono" ;
+                Text [ french ] = "Polygone" ;
+                Text [ dutch ] = "Veelhoek" ;
+                Text [ swedish ] = "Polygon" ;
+                Text [ danish ] = "Polygon" ;
+                Text [ portuguese ] = "Polígono" ;
+                Text [ portuguese_brazilian ] = "Polygon" ;
+                Text[ chinese_simplified ] = "¶à±ßĞÎ";
+                Text[ russian ] = "Ìíîãîóãîëüíèê";
+                Text[ polish ] = "Wielok¹t";
+                Text[ japanese ] = "‘½ŠpŒ`";
+                Text[ chinese_traditional ] = "¦hÃä§Î";
+                Text[ arabic ] = "ãÖáÚ";
+                Text[ greek ] = "Ğïëıãùíï";
+                Text[ korean ] = "´Ù°¢Çü";
+                Text[ turkish ] = "Çokgen";
+                Text[ language_user1 ] = " ";
+            };
+            /*
+            ToolBoxItem
+            {
+                Identifier = TBI_FREEPOLY ;
+                HelpId = HID_CONTDLG_FREEPOLY;
+                Text = "Freihandpolygon" ;
+                Text [ ENGLISH ] = "Freeline polygon" ;
+                Text [ english_us ] = "Freeline polygon" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10463.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+            };
+*/
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYEDIT ;
+                HelpId = HID_CONTDLG_POLYEDIT ;
+                Text = "Punkte bearbeiten" ;
+                Text [ norwegian ] = "Edit Points" ;
+                Text [ italian ] = "Modifica punti" ;
+                Text [ portuguese_brazilian ] = "Editar Pontos" ;
+                Text [ portuguese ] = "Editar pontos" ;
+                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ danish ] = "Rediger punkter" ;
+                Text [ french ] = "Éditer des points" ;
+                Text [ swedish ] = "Redigera punkter" ;
+                Text [ dutch ] = "Punten bewerken" ;
+                Text [ spanish ] = "Modificar puntos" ;
+                Text [ english_us ] = "Edit Points" ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10126.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text[ chinese_simplified ] = "±à¼­µã";
+                Text[ russian ] = "Ïğàâêà òî÷åê";
+                Text[ polish ] = "Edytuj punkty";
+                Text[ japanese ] = "§Œä“_‚Ì•ÒW";
+                Text[ chinese_traditional ] = "­×§ïÂI";
+                Text[ arabic ] = "ÊÍÑíÑ ÇáäŞÇØ";
+                Text[ greek ] = "Åğåîåñãáóßá óçìåßùí";
+                Text[ korean ] = "Á¡ ÆíÁı";
+                Text[ turkish ] = "Nokta düzenle";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYMOVE ;
+                HelpId = HID_CONTDLG_POLYMOVE ;
+                Text = "Punkte verschieben" ;
+                Text [ ENGLISH ] = "Edit Points" ;
+                Text [ norwegian ] = "Edit Points" ;
+                Text [ italian ] = "Sposta punti" ;
+                Text [ portuguese_brazilian ] = "Editar Pontos" ;
+                Text [ portuguese ] = "Mover pontos" ;
+                Text [ finnish ] = "Muokkaa pisteitä" ;
+                Text [ danish ] = "Flyt punkter" ;
+                Text [ french ] = "Déplacer des points" ;
+                Text [ swedish ] = "Flytta punkter" ;
+                Text [ dutch ] = "Punten verplaatsen" ;
+                Text [ spanish ] = "Desplazar puntos" ;
+                Text [ english_us ] = "Move Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10121.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text[ chinese_simplified ] = "ÒÆ¶¯µã";
+                Text[ russian ] = "Ïåğåìåñòèòü òî÷êè";
+                Text[ polish ] = "Przesuñ punkty";
+                Text[ japanese ] = "§Œä“_‚ÌˆÚ“®";
+                Text[ chinese_traditional ] = "²¾°ÊÂI";
+                Text[ arabic ] = "ÅÒÇÍÉ ÇáäŞÇØ";
+                Text[ greek ] = "Ìåôáêßíçóç óçìåßùí";
+                Text[ korean ] = "Á¡ ÀÌµ¿";
+                Text[ turkish ] = "Nokta taşı";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYINSERT ;
+                HelpId = HID_CONTDLG_POLYINSERT ;
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
+                Text = "Punkte einfügen" ;
+                Text [ ENGLISH ] = "Insert Points" ;
+                Text [ norwegian ] = "Insert Points" ;
+                Text [ italian ] = "Inserisci punti" ;
+                Text [ portuguese_brazilian ] = "Inserir Pontos" ;
+                Text [ portuguese ] = "Inserir pontos" ;
+                Text [ finnish ] = "Lisää pisteitä" ;
+                Text [ danish ] = "Indsæt punkter" ;
+                Text [ french ] = "Insérer des points" ;
+                Text [ swedish ] = "Infoga punkter" ;
+                Text [ dutch ] = "Punten invoegen" ;
+                Text [ spanish ] = "Insertar puntos" ;
+                Text [ english_us ] = "Insert Points" ;
+                RadioCheck = TRUE ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10119.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                /* ### ACHTUNG: Neuer Text in Resource? Neue Punkte einfügen oder anhängen : Neue Punkte einf³gen oder anhõngen */
+                Text[ chinese_simplified ] = "²åÈëµã";
+                Text[ russian ] = "Âñòàâèòü òî÷êè";
+                Text[ polish ] = "Wstaw punkty";
+                Text[ japanese ] = "§Œä“_‚Ì‘}“ü";
+                Text[ chinese_traditional ] = "´¡¤JÂI";
+                Text[ arabic ] = "ÅÏÑÇÌ äŞÇØ";
+                Text[ greek ] = "ĞñïóèŞêç óçìåßùí";
+                Text[ korean ] = "Á¡ »ğÀÔ";
+                Text[ turkish ] = "Nokta ekle";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_POLYDELETE ;
+                HelpId = HID_CONTDLG_POLYDELETE ;
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
+                /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
+                Text = "Punkte löschen" ;
+                Text [ ENGLISH ] = "Delete Points" ;
+                Text [ norwegian ] = "Delete Points" ;
+                Text [ italian ] = "Elimina punti" ;
+                Text [ portuguese_brazilian ] = "Apagar Pontos" ;
+                Text [ portuguese ] = "Eliminar pontos" ;
+                Text [ finnish ] = "Poista pisteitä" ;
+                Text [ danish ] = "Slet punkter" ;
+                Text [ french ] = "Supprimer des points" ;
+                Text [ swedish ] = "Radera punkter" ;
+                Text [ dutch ] = "Punten verwijderen" ;
+                Text [ spanish ] = "Eliminar puntos" ;
+                Text [ english_us ] = "Delete Points" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10120.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                /* ### ACHTUNG: Neuer Text in Resource? Markierte Punkte löschen : Markierte Punkte l÷schen */
+                Text[ chinese_simplified ] = "É¾³ıµã";
+                Text[ russian ] = "Óäàëèòü òî÷êè";
+                Text[ polish ] = "Usuñ punkty";
+                Text[ japanese ] = "§Œä“_‚Ìíœ";
+                Text[ chinese_traditional ] = "§R°£ÂI";
+                Text[ arabic ] = "ÍĞİ äŞÇØ";
+                Text[ greek ] = "ÄéáãñáöŞ óçìåßùí";
+                Text[ korean ] = "Á¡ »èÁ¦";
+                Text[ turkish ] = "Nokta sil";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_AUTOCONTOUR ;
+                HelpId = HID_CONTDLG_AUTOCONTOUR ;
+                /* ### ACHTUNG: Neuer Text in Resource? AutoKontur : Autokontur */
+                /* ### ACHTUNG: Neuer Text in Resource? AutoKontur : Autokontur */
+                Text = "AutoKontur" ;
+                Text [ ENGLISH ] = "Auto contour" ;
+                Text [ english_us ] = "AutoContour" ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "scautoko.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "AutoContorno" ;
+                Text [ portuguese_brazilian ] = "Autokontur" ;
+                Text [ swedish ] = "AutoKontur" ;
+                Text [ danish ] = "AutoKontur" ;
+                Text [ italian ] = "Contorno automatico" ;
+                Text [ spanish ] = "Contorno automático" ;
+                Text [ french ] = "AutoContour" ;
+                Text [ dutch ] = "AutoContour" ;
+                Text[ chinese_simplified ] = "×Ô¶¯ÂÖÀª";
+                Text[ russian ] = "Àâòîêîíòóğ";
+                Text[ polish ] = "Autokontur";
+                Text[ japanese ] = "µ°Ä—ÖŠs";
+                Text[ chinese_traditional ] = "¦Û°Ê½ü¹ø";
+                Text[ arabic ] = "ÎØ ßİÇİí ÊáŞÇÆí";
+                Text[ greek ] = "ÁõôïĞåñßãñáììá";
+                Text[ korean ] = "ÀÚµ¿ ¿ÜÇü¼±";
+                Text[ turkish ] = "Otomatik kontur";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Type = TOOLBOXITEM_SEPARATOR ;
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_UNDO ;
+                HelpId = HID_CONTDLG_UNDO ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05701.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+
+                Text = "Rückgängig " ;
+                Text [ English ] = "Undo " ;
+                Text [ norwegian ] = "Angre " ;
+                Text [ italian ] = "Annulla " ;
+                Text [ portuguese_brazilian ] = "Widerrufen" ;
+                Text [ portuguese ] = "Anular " ;
+                Text [ finnish ] = "Kumoa " ;
+                Text [ danish ] = "Fortryd " ;
+                Text [ french ] = "Annuler " ;
+                Text [ swedish ] = "Ångra " ;
+                Text [ dutch ] = "Ongedaan. " ;
+                Text [ spanish ] = "Deshacer " ;
+                Text [ english_us ] = "Undo " ;
+                Text[ chinese_simplified ] = "³·ÏûÃüÁî ";
+                Text[ russian ] = "Îòìåíèòü  ";
+                Text[ polish ] = "Cofnij ";
+                Text[ japanese ] = "Œ³‚É–ß‚· ";
+                Text[ chinese_traditional ] = "´_­ì ";
+                Text[ arabic ] = "ÊÑÇÌÚ ";
+                Text[ greek ] = "Áíáßñåóç ";
+                Text[ korean ] = "½ÇÇà Ãë¼Ò ";
+                Text[ turkish ] = "Geri al ";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_REDO ;
+                HelpId = HID_CONTDLG_REDO ;
+
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+
+                Text = "Wiederherstellen " ;
+                Text [ English ] = "Redo " ;
+                Text [ english_us ] = "Redo " ;
+                Text [ portuguese ] = "Restaurar " ;
+                Text [ portuguese_brazilian ] = "Wiederholen" ;
+                Text [ swedish ] = "Upprepa " ;
+                Text [ danish ] = "Gendan " ;
+                Text [ italian ] = "Ripristina " ;
+                Text [ spanish ] = "Restaurar " ;
+                Text [ french ] = "Restaurer " ;
+                Text [ dutch ] = "Herstellen " ;
+                Text[ chinese_simplified ] = "»Ö¸´³·ÏûÃüÁî ";
+                Text[ russian ] = "Âåğíóòü  ";
+                Text[ polish ] = "Przywróæ ";
+                Text[ japanese ] = "‚â‚è’¼‚µ ";
+                Text[ chinese_traditional ] = "«ì´_ºM®ø©R¥O ";
+                Text[ arabic ] = "ÅÚÇÏÉ ";
+                Text[ greek ] = "ÅğáíáöïñÜ ";
+                Text[ korean ] = "´Ù½ÃÇÏ±â ";
+                Text[ turkish ] = "Yinele ";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = TBI_PIPETTE ;
+                HelpId = HID_CONTDLG_PIPETTE ;
+                Text = "Pipette" ;
+                Text [ ENGLISH ] = "Eyedropper" ;
+                Text [ english_us ] = "Eyedropper" ;
+                AutoCheck = TRUE ;
+                ItemImage = Image
+                {
+                    ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
+                    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+                };
+                Text [ portuguese ] = "Pipeta" ;
+                Text [ portuguese_brazilian ] = "Pipette" ;
+                Text [ swedish ] = "Pipett" ;
+                Text [ danish ] = "Pipette" ;
+                Text [ italian ] = "Contagocce" ;
+                Text [ spanish ] = "Pipeta" ;
+                Text [ french ] = "Pipette" ;
+                Text [ dutch ] = "Pipet" ;
+                Text[ chinese_simplified ] = "È¡É«Æ÷";
+                Text[ russian ] = "Ïèïåòêà";
+                Text[ polish ] = "Pipeta";
+                Text[ japanese ] = "ËßÍß¯Ä";
+                Text[ chinese_traditional ] = "¨ú¦â";
+                Text[ arabic ] = "ŞØøÇÑÉ";
+                Text[ greek ] = "Óôáãïíüìåôñï";
+                Text[ korean ] = "»ö °ñ¶ó³»±â";
+                Text[ turkish ] = "Renk örneği al";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    MetricField MTF_TOLERANCE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 28 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 99 ;
+        Last = 99 ;
+        SpinSize = 1 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        QuickHelpText = "Farbtoleranz" ;
+        QuickHelpText [ ENGLISH ] = "Color tolerance" ;
+        QuickHelpText [ english_us ] = "Color Tolerance" ;
+        CustomUnitText [ portuguese ] = "%" ;
+        QuickHelpText [ portuguese ] = "Tolerância de cor" ;
+        CustomUnitText [ portuguese_brazilian ] = "%" ;
+        QuickHelpText [ portuguese_brazilian ] = "Farbtoleranz" ;
+        CustomUnitText [ swedish ] = "%" ;
+        QuickHelpText [ swedish ] = "Färgtolerans" ;
+        CustomUnitText [ danish ] = "%" ;
+        QuickHelpText [ danish ] = "Farbtoleranz" ;
+        CustomUnitText [ italian ] = "%" ;
+        QuickHelpText [ italian ] = "Tolleranza colore" ;
+        CustomUnitText [ spanish ] = "%" ;
+        QuickHelpText [ spanish ] = "Tolerancia del color" ;
+        CustomUnitText [ french ] = "%" ;
+        QuickHelpText [ french ] = "Tolérance chromatique" ;
+        CustomUnitText [ dutch ] = "%" ;
+        QuickHelpText [ dutch ] = "Kleurtolerantie" ;
+        CustomUnitText [ english_us ] = "%" ;
+        CustomUnitText[ chinese_simplified ] = "%";
+        CustomUnitText[ russian ] = "%";
+        CustomUnitText[ polish ] = "%";
+        CustomUnitText[ japanese ] = "%";
+        CustomUnitText[ chinese_traditional ] = "%";
+        CustomUnitText[ arabic ] = "%";
+        QuickHelpText[ russian ] = "Farbtoleranz";
+        QuickHelpText[ polish ] = "Farbtoleranz";
+        QuickHelpText[ japanese ] = "F‚Ì‹–—e";
+        QuickHelpText[ chinese_simplified ] = "ÑÕÉ«Æ«²î";
+        QuickHelpText[ chinese_traditional ] = "ÃC¦â°¾®t";
+        QuickHelpText[ arabic ] = "Color Tolerance";
+        CustomUnitText[ greek ] = "%";
+        CustomUnitText[ korean ] = "%";
+        QuickHelpText[ greek ] = "Color Tolerance";
+        QuickHelpText[ korean ] = "Color Tolerance";
+        CustomUnitText[ turkish ] = "%";
+        CustomUnitText[ language_user1 ] = " ";
+    };
+    Control CTL_CONTOUR
+    {
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        HelpId = HID_CONTDLG_GRAPHWND ;
+    };
+    Text [ portuguese_brazilian ] = "Kontur-Editor" ;
+    Text [ swedish ] = "Kontur-editor" ;
+    Text [ danish ] = "Kontur-redigering" ;
+    Text [ italian ] = "Editor contorno" ;
+    Text [ spanish ] = "Editor de contornos" ;
+    Text [ french ] = "Editeur de contours" ;
+    Text [ dutch ] = "Contoureneditor" ;
+    Text [ portuguese ] = "Editor de contornos" ;
+    Text[ chinese_simplified ] = "Í¼ĞÎÂÖÀª±à¼­Æ÷";
+    Text[ russian ] = "Ğåäàêòîğ êîíòóğà";
+    Text[ polish ] = "Edytor konturów";
+    Text[ japanese ] = "—ÖŠs´ÃŞ¨À";
+    Text[ chinese_traditional ] = "¹Ï¤ù½ü¹ø½s¿è¾¹";
+    Text[ arabic ] = "ãÍÑÑ ÇáÎØ ÇáßİÇİí";
+    Text[ greek ] = "ÅğåîåñãáóôŞò ğåñéãñÜììáôïò";
+    Text[ korean ] = "¿ÜÇü¼± ÆíÁı±â";
+    Text[ turkish ] = "Kontur editörü";
+    Text[ language_user1 ] = " ";
+};
+/******************************************************************************/
+String STR_CONTOURDLG_MODIFY
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden? : Die Kontur wurde geõndert.\nSollen die nderungen ³bernommen werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden? : Die Kontur wurde geõndert.\nSollen die nderungen ³bernommen werden? */
+    Text = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ English ] = "The contour has been modified.\nDo you want to take your changes?" ;
+    Text [ english_us ] = "The contour has been modified.\nDo you want to save the changes?" ;
+    Text [ portuguese_brazilian ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ swedish ] = "Konturen har ändrats.\nSkall ändringarna övertas?" ;
+    Text [ danish ] = "Konturen er blevet ændret.\nSkal ændringerne overtages?" ;
+    Text [ italian ] = "Il contorno è stato modificato.\nAccettate le modifiche?" ;
+    Text [ spanish ] = "Se ha modificado el contorno de la imagen.\n¿Desea guardar las modificaciones?" ;
+    Text [ french ] = "Le contour de l'image a été modifié.\nAppliquer les modifications ?" ;
+    Text [ dutch ] = "De contour werd gewijzigd.\nWilt u de veranderingen overnemen?" ;
+    Text [ portuguese ] = "O contorno foi modificado.\nDeseja aplicarr as modificações?" ;
+    Text[ chinese_simplified ] = "Õâ¸öÂÖÀªÒÑ¾­±»¸ü¸Ä¡£\nÄúÒª½ÓÊÜÕâ¸ö¸ü¸ÄÂğ£¿";
+    Text[ russian ] = "Êîíòóğ èçìåíåí.\nÏğèíÿòü èçìåíåíèÿ?";
+    Text[ polish ] = "Kontur zosta³ zmieniony.\nCzy zapisaæ zmiany?";
+    Text[ japanese ] = "—ÖŠsü‚ª•ÏX‚³‚ê‚Ü‚µ‚½B\n•ÏX‚ğˆø‚«Œp‚¬‚Ü‚·‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "³o­Ó¹Ï¤ù½ü¹ø¤w¸gÅÜ§ó¡C\n±z­n±µ¨ü³o­ÓÅÜ§ó¡H";
+    Text[ arabic ] = "Êã ÊÛííÑ ÇáÎØ ÇáßİÇİí.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
+    Text[ greek ] = "Ôï ğåñßãñáììá ôñïğïğïéŞèçêå.\nÈİëåôå íá áğïèçêåıóåôå ôéò áëëáãİò;";
+    Text[ korean ] = "¿ÜÇü¼±ÀÌ ¼öÁ¤µÇ¾ú½À´Ï´Ù. \nº¯°æÀ» ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Kontur değiştirildi.\nDeğişiklikler kaydedilsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTOURDLG_NEWPIPETTE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie eine neue Kontur erzeugen? : M÷chten Sie eine neue Kontur erzeugen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie eine neue Kontur erzeugen? : M÷chten Sie eine neue Kontur erzeugen? */
+    Text = "Möchten Sie eine neue Kontur erzeugen?" ;
+    Text [ English ] = "Do you want to create a new contour?" ;
+    Text [ english_us ] = "Do you want to create a new contour?" ;
+    Text [ portuguese_brazilian ] = "Möchten Sie eine neue Kontur erzeugen?" ;
+    Text [ swedish ] = "Vill Du skapa en ny kontur?" ;
+    Text [ danish ] = "Vil du skabe en ny kontur?" ;
+    Text [ italian ] = "Creare un nuovo contorno?" ;
+    Text [ spanish ] = "¿Desea crear un contorno nuevo?" ;
+    Text [ french ] = "Souhaitez-vous créer un nouveau contour ?" ;
+    Text [ dutch ] = "Wilt u een nieuw contour maken?" ;
+    Text [ portuguese ] = "Deseja criar um novo contorno?" ;
+    Text[ chinese_simplified ] = "ÄúÒª½¨Á¢Ò»¸öĞÂµÄÂÖÀªÂğ£¿";
+    Text[ russian ] = "Âû õîòèòå ñîçäàòü íîâûé êîíòóğ?";
+    Text[ polish ] = "Czy chcesz utworzyæ nowy kontur?";
+    Text[ japanese ] = "V‚µ‚­—ÖŠsü‚ğì¬‚µ‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "±z­n¨î§@¤@­Ó·sªº½ü¹ø¡H";
+    Text[ arabic ] = "åá ÊÑíÏ ÅäÔÇÁ ÎØ ßİÇİí ÌÏíÏ¿";
+    Text[ greek ] = "Èİëåôå íá äçìéïõñãŞóåôå İíá íİï ğåñßãñáììá;";
+    Text[ korean ] = "»õ·Î¿î ¿ÜÇü¼±À» ¸¸µå½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Yeni bir kontur oluşturmak istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTOURDLG_WORKPLACE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren? : Das Setzen eines neuen Arbeitsbereiches\nf³hrt zu einem L÷schen der Kontur.\nM÷chten sie wirklich fortfahren? */
+    /* ### ACHTUNG: Neuer Text in Resource? Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren? : Das Setzen eines neuen Arbeitsbereiches\nf³hrt zu einem L÷schen der Kontur.\nM÷chten sie wirklich fortfahren? */
+    Text = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
+    Text [ English ] = "Setting a new working area will\ncause a removal of the contour.\nDo you really want to continue?" ;
+    Text [ english_us ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
+    Text [ portuguese_brazilian ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
+    Text [ swedish ] = "Definition av ett nytt arbetsområde\nleder till att konturen raderas.\nVill Du fortsätta ändå?" ;
+    Text [ danish ] = "Hvis du definerer et nyt arbejdsområde\nbliver konturen slettet.\nEr du sikker på at du vil fortsætte?" ;
+    Text [ italian ] = "L'impostazione di una nuova area di lavoro\ncauserà la cancellazione del contorno.\nVolete proseguire?" ;
+    Text [ spanish ] = "Al establecer una nueva área de trabajo\nse eliminará el contorno.\n¿Desea realmente continuar?" ;
+    Text [ french ] = "Assigner une nouvelle zone de travail\nsupprime le contour.\nSouhaitez-vous continuer ?" ;
+    Text [ dutch ] = "Door het vastleggen van een nieuw werkbereik \nwordt de contour gewist.\nWilt u werkelijk doorgaan?" ;
+    Text [ portuguese ] = "Ao definir uma nova área de\ntrabalho eliminará o contorno.\nDeseja continuar?" ;
+    Text[ chinese_simplified ] = "¶¨ÒåÒ»¸öĞÂµÄ±à¼­ÇøÓò»áÉ¾³ıµôÂÖÀª¡£\\ÄúÕæÒª¼ÌĞø£¿";
+    Text[ russian ] = "Óñòàíîâêà íîâîé ğàáî÷åé îáëàñòè\nïğèâåäåò ê ïîòåğå êîíòóğà.\nÂû äåéñòâèòåëüíî õîòèòå ïğîäîëæèòü?";
+    Text[ polish ] = "Ustawienie nowego obszaru roboczego \nprowadzi do usuniêcia konturu.\nCzy chcesz kontynuowaæ?";
+    Text[ japanese ] = "V‚µ‚¢ì‹Æ—Ìˆæ‚Ìİ’è‚É‚æ‚Á‚ÄA\n—ÖŠsü‚ªíœ‚³‚ê‚Ü‚·B\n‘±s‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "©w¸q¤@­Ó·sªº½s¿è°Ï°ì·|²M°£½ü¹ø¡C\n±z¯u­nÄ~Äò¡H";
+    Text[ arabic ] = "ÊÚííä ãÓÇÍÉ Úãá ÌÏíÏÉ Óæİ\níÄÏí Åáì ÍĞİ ÇáÎØ ÇáßİÇİí. \nåá ÊÑíÏ ÇáãÊÇÈÚÉ ÈÇáİÚá¿";
+    Text[ greek ] = "Ï ïñéóìüò ìéáò íİáò ğåñéï÷Şò åñãáóßáò\nİ÷åé ùò áğïôİëåóìá ôç äéáãñáöŞ ôïõ ğåñéãñÜììáôïò.\nÈİëåôå ğñáãìáôéêÜ íá óõíå÷ßóåôå;";
+    Text[ korean ] = "»õÀÛ¾÷¿µ¿ªÀ» ¼³Á¤ÇÏ°Ô µÇ¸é\n À±°ûÀÌ »èÁ¦µË´Ï´Ù. ±×·¡µµ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Yeni bir çalışma alanı belirlenmesi durumunda\nkontur silinecek.\nDevam etmek istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+String STR_CONTOURDLG_LINKED
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn³pft. M÷chten Sie die Verkn³pfung aufheben, um die Grafik zu bearbeiten? */
+    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn³pft. M÷chten Sie die Verkn³pfung aufheben, um die Grafik zu bearbeiten? */
+    Text = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?" ;
+    Text [ English ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Text [ norwegian ] = "Dette er +++linked grafikk. Ønsker du å +++unlink the graphic for å redigere?" ;
+    Text [ italian ] = "Questra immagine è collegata con il documento. Desiderate scollegare l'immagine per poterla modificare?" ;
+    Text [ portuguese_brazilian ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Text [ portuguese ] = "Esta imagem está ligada ao documento. Deseja remover a ligação para poder editar a imagem?" ;
+    Text [ english_us ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
+    Text [ finnish ] = "This is a linked graphic. Do you want to unlink the graphic in order to edit the graphic?" ;
+    Text [ danish ] = "Denne grafik er kædet til dokumentet. Vil du ophæve kæden for at redigere denne grafik?" ;
+    Text [ french ] = "Cette image est liée à un document. Désirez-vous supprimer le lien pour pouvoir éditer l'image ?" ;
+    Text [ swedish ] = "Den här grafiken är länkad till ett dokument. Vill Du upphäva länken för att kunna redigera grafiken?" ;
+    Text [ dutch ] = "Deze afbeelding is met het document gekoppeld. Wilt u de koppeling opheffen om de afbeelding te bewerken?" ;
+    Text [ spanish ] = "Esta imagen está vinculada al documento. ¿Desea deshacer el vínculo para editar la imagen?" ;
+    Text[ chinese_simplified ] = "Õâ¸öÍ¼ĞÎÊÇºÍÎÄµµÁ´½ÓµÄ¡£ÄúÒªÈ¡ÏûÕâ¸öÁ´½Ó£¬±à¼­Õâ¸öÍ¼ĞÎÂğ£¿";
+    Text[ russian ] = "İòîò ğèñóíîê ññûëàåòñÿ íà äîêóìåíò. Âû õîòèòå ñíÿòü ññûëêó, ÷òîáû îòğåäàêòèğîâàòü ğèñóíîê?";
+    Text[ polish ] = "Grafika jest po³¹czona z dokumentem. Czy chcesz usun¹æ ³¹cze, aby edytowaæ grafikê?";
+    Text[ japanese ] = "‚±‚Ì¸Ş×Ì¨¯¸‚ÍÄŞ·­ÒİÄ‚ÉØİ¸‚µ‚Ä‚¢‚Ü‚·B¸Ş×Ì¨¯¸‚ğ•ÒW‚·‚é‚½‚ß‚ÉØİ¸‚ğ‰ğœ‚µ‚Ü‚·‚©H";
+    Text[ chinese_traditional ] = "³o­Ó¹Ï¤ù¬O©M¤å¥ó³sµ²ªº¡C±z­n¨ú®ø³o­Ó³sµ²¡M½s¿è³o­Ó¹Ï¤ù¡H";
+    Text[ arabic ] = "åĞå ÇáÑÓãÉ ãÑÊÈØÉ ÈÇáãÓÊäÏ. åá ÊÑíÏ ÅÒÇáÉ ÇáÇÑÊÈÇØ áßí ÊÊãßä ãä ÊÍÑíÑ ÇáÑÓãÉ¿";
+    Text[ greek ] = "Ôï ãñáöéêü áõôü åßíáé óõíäåäåìİíï ìå ôï İããñáöï. Èİëåôå íá êáôáñãçèåß ç óıíäåóç ãéá íá åğåîåñãÜóåôå ôï ãñáöéêü;";
+    Text[ korean ] = "ÀÌ ±×·¡ÇÈÀº ¹®¼­¿¡ ¿¬°áµÇ¾î ÀÖ½À´Ï´Ù. ÆíÁıÀ» À§ÇÏ¿© ±×·¡ÇÈ ¿¬°áÀ» ÇØÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bu grafik, belge ile bağlantılı. Grafiği düzenlemek için bu bağlantıyı kaldırmak istiyor musunuz?";
+    Text[ language_user1 ] = " ";
+};
+/******************************************************************************/

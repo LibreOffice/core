@@ -1,0 +1,287 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optspell.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include "optspell.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // RID_SFXPAGE_SPELL --------------------------------------------------------
+TabPage RID_SFXPAGE_SPELL
+{
+    HelpId = HID_OPTIONS_SPELL ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 221 , 135 ) ;
+    Text = "Rechtschreibung" ;
+    Text [ ENGLISH ] = "Spell checking" ;
+    Text [ norwegian ] = "Stavekontroll" ;
+    Text [ italian ] = "Controllo ortografico" ;
+    Text [ portuguese_brazilian ] = "Verificação de ortográfica" ;
+    Text [ portuguese ] = "Correcção ortográfica" ;
+    Text [ finnish ] = "Korjausluku" ;
+    Text [ danish ] = "Stavekontrol" ;
+    Text [ french ] = "Orthographe" ;
+    Text [ swedish ] = "Rättstavning" ;
+    Text [ dutch ] = "Spellingcontrole" ;
+    Text [ spanish ] = "Ortografía" ;
+    Text [ english_us ] = "Spellcheck" ;
+    PushButton BTN_BOOK
+    {
+        Pos = MAP_APPFONT ( 128 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Bearbeiten..." ;
+        Text [ ENGLISH ] = "~Edit..." ;
+        Text [ norwegian ] = "~Edit..." ;
+        Text [ italian ] = "Modifica..." ;
+        Text [ portuguese_brazilian ] = "~Editar..." ;
+        Text [ portuguese ] = "~Editar..." ;
+        Text [ finnish ] = "~Muokkaa..." ;
+        Text [ danish ] = "Rediger..." ;
+        Text [ french ] = "~Modifier..." ;
+        Text [ swedish ] = "~Redigera..." ;
+        Text [ dutch ] = "Be~werken..." ;
+        Text [ spanish ] = "~Editar..." ;
+        Text [ english_us ] = "~Edit..." ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "±à¼­(~E)...";
+        Text[ russian ] = "Ïğàâêà...";
+        Text[ polish ] = "Edytuj...";
+        Text[ japanese ] = "•ÒW(~E)...";
+        Text[ chinese_traditional ] = "½s¿è(~E)...";
+        Text[ arabic ] = "ÊÍÑíÑ...";
+        Text[ greek ] = "~Åğåîåñãáóßá...";
+        Text[ korean ] = "ÆíÁı(~E)...";
+        Text[ turkish ] = "Düzenle...";
+        Text[ language_user1 ] = " ";
+    };
+    MultiListBox LB_BOOK
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 103 , 47 ) ;
+        TabStop = TRUE ;
+        AutoHScroll = TRUE ;
+    };
+    GroupBox GB_BOOK
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 115 , 66 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbücher : W÷rterb³cher */
+        Text = "Wörterbücher" ;
+        Text [ ENGLISH ] = "Dictionaries" ;
+        Text [ norwegian ] = "Ordlister" ;
+        Text [ italian ] = "Dizionari" ;
+        Text [ portuguese_brazilian ] = "Dicionários" ;
+        Text [ portuguese ] = "Dicionários" ;
+        Text [ finnish ] = "Sanastot" ;
+        Text [ danish ] = "Ordbøger" ;
+        Text [ french ] = "Dictionnaires" ;
+        Text [ swedish ] = "Ordböcker" ;
+        Text [ dutch ] = "Woordenboeken" ;
+        Text [ spanish ] = "Diccionarios" ;
+        Text [ english_us ] = "Dictionaries" ;
+        Text[ chinese_simplified ] = "×Öµä";
+        Text[ russian ] = "Ñëîâàğè";
+        Text[ polish ] = "S³owniki";
+        Text[ japanese ] = "«‘";
+        Text[ chinese_traditional ] = "¦r¨å";
+        Text[ arabic ] = "ÇáŞæÇãíÓ";
+        Text[ greek ] = "ËåîéêÜ";
+        Text[ korean ] = "»çÀü";
+        Text[ turkish ] = "Sözlükler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_CAPS
+    {
+        Pos = MAP_APPFONT ( 12 , 82 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Großgeschriebene Wörter : ~Gro˜geschriebene W÷rter */
+        Text = "~Großgeschriebene Wörter" ;
+        Text [ ENGLISH ] = "~Capital words" ;
+        Text [ norwegian ] = "~Ord med store bokstaver" ;
+        Text [ italian ] = "~Parole maiuscole" ;
+        Text [ portuguese_brazilian ] = "~Palavras em maiúsculas" ;
+        Text [ portuguese ] = "~Palavras maiúsculas" ;
+        Text [ finnish ] = "~Isolla kirjoitetut sanat" ;
+        Text [ danish ] = "Ord med store bogstaver" ;
+        Text [ french ] = "les mots écrits en ~majuscules" ;
+        Text [ swedish ] = "Or~d med stora bokstäver" ;
+        Text [ dutch ] = "~Woorden met hoofdletters" ;
+        Text [ spanish ] = "~Palabras en mayúscula" ;
+        Text [ english_us ] = "~Capital words" ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "´óĞ´µ¥´Ê(~C)";
+        Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
+        Text[ polish ] = "S³owa napisane du¿ymi literami";
+        Text[ japanese ] = "‚·‚×‚Ä‘å•¶š‚Ì’PŒê(~C)";
+        Text[ chinese_traditional ] = "¤j¼g¦r(~C)";
+        Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
+        Text[ greek ] = "Ëİîåéò ìå êåöáëáßá ãñÜììáôá";
+        Text[ korean ] = "´ë¹®ÀÚ·Î ¾²ÀÎ ´Ü¾î(~C)";
+        Text[ turkish ] = "Büyük harfli sözcükler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_NUMS
+    {
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Wörter mit Ziffern  : ~W÷rter mit Ziffern  */
+        Text = "~Wörter mit Ziffern " ;
+        Text [ ENGLISH ] = "~Words with numbers " ;
+        Text [ norwegian ] = "~Ord med tall " ;
+        Text [ italian ] = "Parole con ~numeri " ;
+        Text [ portuguese_brazilian ] = "~Palavras com números " ;
+        Text [ portuguese ] = "~Palavras com números " ;
+        Text [ finnish ] = "~Numeroita sisältävät sanat" ;
+        Text [ danish ] = "Ord med tal " ;
+        Text [ french ] = "les mots comportant des ~chiffres  " ;
+        Text [ swedish ] = "Ord med s~iffror  " ;
+        Text [ dutch ] = "~Woorden met cijfers  " ;
+        Text [ spanish ] = "P~alabras con números  " ;
+        Text [ english_us ] = "~Words with numbers " ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "º¬ÓĞÊı×ÖµÄ´Ê(~W)";
+        Text[ russian ] = "Ñëîâà ñ öèôğàìè ";
+        Text[ polish ] = "S³owa z cyframi ";
+        Text[ japanese ] = "”š‚ğŠÜ‚Ş’PŒê(~W)";
+        Text[ chinese_traditional ] = "§t¦³¼Æ¦rªºµü(~W)";
+        Text[ arabic ] = "ÇáßáãÇÊ ÇáÊí ÊÍÊæí Úáì ÃÑŞÇã ";
+        Text[ greek ] = "Ëİîåéò ìå áñéèìïıò ";
+        Text[ korean ] = "¼ıÀÚ°¡ ÀÖ´Â ´Ü¾î (~W)";
+        Text[ turkish ] = "Rakamlı sözcükler ";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_UPLOW
+    {
+        Pos = MAP_APPFONT ( 12 , 108 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
+        /* ### ACHTUNG: Neuer Text in Resource? Groß- u. ~Kleinschreibung  : Gro˜- u. ~Kleinschreibung  */
+        Text = "Groß- u. ~Kleinschreibung " ;
+        Text [ ENGLISH ] = "~Upper and lower case " ;
+        Text [ norwegian ] = "~Stor og liten skrift " ;
+        Text [ italian ] = "Mai~uscole e minuscole " ;
+        Text [ portuguese_brazilian ] = "~Caixa alta e baixa " ;
+        Text [ portuguese ] = "~Maiúsculas & Minúsculas " ;
+        Text [ finnish ] = "~Isot ja pienet kirjaimet" ;
+        Text [ danish ] = "Store og små bogstaver " ;
+        Text [ french ] = "la ~casse  " ;
+        Text [ swedish ] = "Stora och små bo~kstäver " ;
+        Text [ dutch ] = "~Hoofd-/kleine letters belangrijk " ;
+        Text [ spanish ] = "~Mayúsculas y minúsculas  " ;
+        Text [ english_us ] = "~Case sensitive " ;
+        TabStop = TRUE ;
+        Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C) ";
+        Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ ";
+        Text[ polish ] = "Ma³e i du¿e litery  ";
+        Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C) ";
+        Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
+        Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ ";
+        Text[ greek ] = "ĞåæÜ-Êåöáëáßá ";
+        Text[ korean ] = "´ë¹®ÀÚ¿Í ¼Ò¹®ÀÚ (~C)";
+        Text[ turkish ] = "Büyük/küçük yazım ";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_AUDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 71 ) ;
+        Size = MAP_APPFONT ( 115 , 53 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
+        /* ### ACHTUNG: Neuer Text in Resource? Prüfen : Pr³fen */
+        Text = "Prüfen" ;
+        Text [ ENGLISH ] = "Check" ;
+        Text [ norwegian ] = "Kontroller" ;
+        Text [ italian ] = "Verifica" ;
+        Text [ portuguese_brazilian ] = "Verificar" ;
+        Text [ portuguese ] = "Verificar" ;
+        Text [ finnish ] = "Tarkistus" ;
+        Text [ danish ] = "Kontroller" ;
+        Text [ french ] = "Vérifier" ;
+        Text [ swedish ] = "Kontrollera" ;
+        Text [ dutch ] = "Controleren" ;
+        Text [ spanish ] = "Revisar" ;
+        Text [ english_us ] = "Check" ;
+        Text[ chinese_simplified ] = "¼ì²é";
+        Text[ russian ] = "Ïğîâåğÿòü";
+        Text[ polish ] = "SprawdŸ";
+        Text[ japanese ] = "½ÍßÙÁª¯¸";
+        Text[ chinese_traditional ] = "ÀË¬d";
+        Text[ arabic ] = "ÇáÊÏŞíŞ";
+        Text[ greek ] = "¸ëåã÷ïò";
+        Text[ korean ] = "°Ë»ç";
+        Text[ turkish ] = "Denetim";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "Õı×Ö·¨";
+    Text[ russian ] = "Ïğàâîïèñàíèå";
+    Text[ polish ] = "Pisownia";
+    Text[ japanese ] = "•¶ÍZ³";
+    Text[ chinese_traditional ] = "«÷¦r";
+    Text[ arabic ] = "ÊÏŞíŞ ÅãáÇÆí";
+    Text[ greek ] = "Ïñèïãñáößá";
+    Text[ korean ] = "¸ÂÃã¹ı °Ë»ç";
+    Text[ turkish ] = "Yazım kılavuzu";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,186 @@
+/*************************************************************************
+ *
+ *  $RCSfile: fltfnc.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "bastyp.hrc"
+#include "helpid.hrc"
+String STR_FILTER_CHANNELON_OFFLINE
+{
+    Text = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas StarOffice befindet sich aber im Online Modus. Möchten Sie StarOffice jetzt in den Offline Modus umschalten?" ;
+    Text [ english_us ] = "This subscription is set to be read in the offline mode.\n\nStarOffice is presently in the online mode. Switch to offline mode now?" ;
+    Text [ portuguese_brazilian ] = "Dieses Abonnement soll gemäß Einstellung im Offline Modus gelesen werden.\n\nDas StarOffice befindet sich aber im Online Modus. Möchten Sie StarOffice jetzt in den Offline Modus umschalten?" ;
+    Text [ swedish ] = "Denna prenumeration skall enligt inställningarna läsas i offlineläget.\n\nMen StarOffice är i onlineläge. Vill Du växla till offlineläget nu?" ;
+    Text [ danish ] = "Dette abonnement skal ifølge indstillingerne læses i offlinetilstand.\n\nDit StarOffice befinder sig for tiden i onlinetilstand. Vil du skifte til offlinetilstand nu?" ;
+    Text [ italian ] = "Questa sottoscrizione deve essere letta nel modo offline conformemente all'impostazione. \n\nStarOffice attualmente si trova nel modo online. Volete passare al modo offline?" ;
+    Text [ spanish ] = "Esta suscripción se debe poder leer en modo desconectado (Offline).\n\nStarOffice se encuentra sin embargo en modo en línea. ¿Desea cambiar StarOffice al modo desconectado?" ;
+    Text [ french ] = "Cet abonnement ne peut être lu que hors connexion.\n\nStarOffice est cependant en ligne. Souhaitez-vous déconnecter  StarOffice maintenant?" ;
+    Text [ dutch ] = "Dit abonnement moet in offline modus worden gelezen.\n\nStarOffice bevindt zich echter in de online-modus. Wilt u omschakelen naar offline-modus?" ;
+    Text [ portuguese ] = "Esta subscrição foi definida para ser lida em offline.\n\nDe momento o StarOffice encontra-se no modo online. Deseja passar ao modo offline? " ;
+    Text[ chinese_simplified ] = "°´ÕÕÉè¶¨ÓÃ»§Ê¹ÓÃÍÑ»úÔÄ¶ÁÄ£Ê½¡£\n\nStarOffice ÏÖÔÚ´¦ÓÚÁª»ú×´Ì¬¡£ÄúÒªÈÃ StarOffice ×ªµ½ÍÑ»úÄ£Ê½£¿";
+    Text[ russian ] = "İòà ïîäïèñêà äîëæíà ÷èòàòüñÿ, ñîãëàñíî óñòàíîâêå, â ğåæèìå Offline.\n\nStarOffice íàõîäèòñÿ â ğåæèìå Online. Âû õîòèòå ïåğåêëş÷èòü ñåé÷àñ StarOffice â ğåæèì Offline?";
+    Text[ polish ] = "Wed³ug ustawieñ ta subskrypcja ma zostaæ odczytana w trybie offline.\n\n StarOffice znajduje siê w trybie online. Czy prze³¹czyæ na tryb offline?";
+    Text[ japanese ] = "‚±‚Ìw“Ç‚ÍµÌ×²İ Ó°ÄŞ‚Å‚Ìİ’è‚É]‚Á‚Ä“Ç‚İæ‚ç‚ê‚Ü‚·B\n\nStarOffice‚Í Œ»İµİ×²İ Ó°ÄŞ‚É‚È‚Á‚Ä‚¢‚Ü‚·BStarOffice‚ğ¡ µÌ×²İ Ó°ÄŞ‚ÉØ‚èŠ·‚¦‚Ü‚·‚©?";
+    Text[ chinese_traditional ] = "«ö·Ó³]©w¨Ï¥ÎªÌ¨Ï¥Î³s½u¾\\Åª¼Ò¦¡¡C\n\nStarOffice ²{¦b³B©ó½u¤Wª¬ºA¡C±z­nÅı StarOffice Âà¨ì³s½u¼Ò¦¡¡H";
+    Text[ arabic ] = "íÌÈ Ãä íŞÑÃ åĞÇ ÇáÇÔÊÑÇß¡ ÍÓÈ ÇáÅÚÏÇÏÇÊ¡ İí æÖÚ ÇáÇäİÕÇá.\n\nStarOfficeÍÇáíÇğ İí æÖÚ ÇáÇÊÕÇá. åá ÊÑíÏ ÊÛííÑ StarOffice ÇáÂä Åáì æÖÚ ÇáÇäİÕÇá¿";
+    Text[ greek ] = "¸÷åé ïñéóôåß ç áíÜãíùóç áõôŞò ôçò óõíäñïìŞò íá ãßíåôáé óå êáôÜóôáóç åêôüò óıíäåóçò.\n\nÔï StarOffice âñßóêåôáé üìùò óå êáôÜóôáóç áğ' åõèåßáò óıíäåóçò. Èİëåôå íá ãßíåé ç áëëáãŞ óå êáôÜóôáóç ÷ùñßò óıíäåóç ôşñá;";
+    Text[ korean ] = "¾Ë¸²½ÅÃ»Àº ¿ÀÇÁ¶óÀÎ ¸ğµå¿¡¼­¸¸ ÀĞ±â ¼³Á¤ÀÌ µË´Ï´Ù.\n\nStarOffice ÇöÀç ¿Â¶óÀÎ¸ğµåÀÔ´Ï´Ù.Áö±İ ¿ÀÇÁ¶óÀÎ ¸ğµå·Î ÀüÈ¯ÇÏ½Ã°Ú½À´Ï±î?";
+    Text[ turkish ] = "Bu üyelik, çevrimdışı kipte okunmak üzere ayarlanmıştır.\n\nStarOffice şu an çevrimiçi kipinde. StarOffice, çevrimdışı kipe geçsin mi?";
+    Text[ language_user1 ] = " ";
+};
+String STR_FILTER_EXTERNAL
+{
+    Text = "Andere Anwendung" ;
+    Text [ english ] = "Other application" ;
+    Text [ english_us ] = "Other application" ;
+    Text [ portuguese ] = "Outra aplicação" ;
+    Text [ portuguese_brazilian ] = "Andere Anwendung" ;
+    Text [ swedish ] = "Annan tillämpning" ;
+    Text [ danish ] = "Anden applikation" ;
+    Text [ italian ] = "Altra applicazione" ;
+    Text [ spanish ] = "Otra aplicación" ;
+    Text [ french ] = "Autres applications" ;
+    Text [ dutch ] = "Andere toepassing" ;
+    Text[ chinese_simplified ] = "ÆäËûµÄÓ¦ÓÃ³ÌĞò";
+    Text[ russian ] = "Äğóãîå ïğèëîæåíèå";
+    Text[ polish ] = "Inna aplikacja";
+    Text[ japanese ] = "‚Ù‚©‚Ì±ÌßØ¹°¼®İ";
+    Text[ chinese_traditional ] = "¨ä¥¦ªºÀ³¥Îµ{§Ç";
+    Text[ arabic ] = "ÊØÈíŞ ÂÎÑ";
+    Text[ greek ] = "¢ëëç åöáñìïãŞ";
+    Text[ korean ] = "±âÅ¸ ÀÀ¿ëÇÁ·Î±×·¥";
+    Text[ turkish ] = "Diğer uygulama";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_FILTER_COMPONENT
+{
+    Text = "StarOffice Komponente" ;
+    Text [ english ] = "StarOffice Component" ;
+    Text [ english_us ] = "StarOffice Component" ;
+    Text[ portuguese ] = "Componentes StarOffice";
+    Text[ russian ] = "StarOffice - Êîìïîíåíòû";
+    Text[ greek ] = "StarOffice - Óôïé÷åßï";
+    Text[ dutch ] = "StarOffice component";
+    Text[ french ] = "Composants de StarOffice";
+    Text[ spanish ] = "StarOffice Componentes";
+    Text[ italian ] = "Componenti StarOffice";
+    Text[ danish ] = "StarOffice komponent";
+    Text[ swedish ] = "StarOffice-komponent";
+    Text[ polish ] = "Sk³adnik StarOffice ";
+    Text[ portuguese_brazilian ] = "StarOffice Component";
+    Text[ japanese ] = "StarOffice ºİÎß°ÈİÄ";
+    Text[ korean ] = "StarOffice ÄŞÆ÷³ÍÆ®";
+    Text[ chinese_simplified ] = "StarOffice ²¿¼ş";
+    Text[ chinese_traditional ] = "StarOffice ³¡¥ó";
+    Text[ arabic ] = "ÅÍÏì ãßæäÇÊ  StarOffice";
+    Text[ turkish ] = "StarOffice bileşeni";
+};
+
+String STR_FILTER_NOT_INSTALLED
+{
+    Text = "Der ausgewählte Filter $(FILTER) ist nicht installiert.\nMöchten Sie das nachholen ?";
+    Text [ English ] = " The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
+    Text[ english_us ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
+    Text[ portuguese ] = "O filtro seleccionado $(FILTER) não está instalado.\nInstalar agora?";
+    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå èíñòàëëèğîâàí.\nÂû õîòèòå ñåé÷àñ ıòî ñäåëàòü ?";
+    Text[ dutch ] = "De gekozen filter $(FILTER) is niet geïnstalleerd.\nWilt u dat nu doen ?";
+    Text[ french ] = "Le filtre $(FILTER) que vous avez sélectionné n'est pas installé\nSouhaitez-vous l'installer ?";
+    Text[ spanish ] = "El filtro seleccionado $(FILTER) no ha sido instalado.\n¿Desea instalarlo?";
+    Text[ italian ] = "Il filtro selezionato $(FILTER) non è stato instalalto.\nVolete installarlo adesso?";
+    Text[ danish ] = "Det udvalgte filter $(FILTER) er ikke installeret.\nVil du installere det nu?";
+    Text[ swedish ] = "Det utvalda filtret $(FILTER) är inte installerat.\nVill Du göra det nu?";
+    Text[ polish ] = "Wybrany filtr $(FILTER) nie jest zainstalowany.\nCzy to teraz zrobiæ ?";
+    Text[ portuguese_brazilian ] = "The selected filter $(FILTER) has not been installed.\nWould you like to do this now ?";
+    Text[ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨ÙÀ$(FILTER)‚Í²İ½Ä°Ù‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n‚±‚ê‚ğ²İ½Ä°Ù‚³‚ê‚½‚¢‚Å‚·‚©?";
+    Text[ chinese_simplified ] = "ÄúÑ¡ÔñµÄ¹ıÂËÆ÷ $(FILTER)»¹Ã»ÓĞ±»°²×°ºÃ¡£\nÄúÏÖÔÚÒª°²×°Âğ£¿";
+    Text[ chinese_traditional ] = "±z¿ï¾Üªº¹LÂo¾¹ $(FILTER)ÁÙ¨S¦³¦w¸Ë¦n¡C\n²{¦b­n¦w¸Ë¡H";
+    Text[ arabic ] = "ÇáİáÊÑ $(FILTER)¡ ÇáĞí Êã ÇÎÊíÇÑå¡ ÛíÑ ãËÈÊ.\nåá ÊÑíÏ ÅÌÑÇÁ ÇáÊËÈíÊ ÇáÂä¿";
+    Text[ greek ] = "Ôï åğéëåãìİíï ößëôñï $(FILTER) äåí İ÷åé åãêáôáóôáèåß.\nÈİëåôå íá åãêáôáóôáèåß ôşñá;";
+    Text[ korean ] = "¼±ÅÃµÈ ÇÊÅÍ $(FILTER)´Â ¼³Ä¡µÇ¾î ÀÕÁö ¾Ê½À´Ï´Ù.\nÁö±İ ¼³Ä¡ ÇÏ½Ã°Ú½À´Ï±î ?";
+    Text[ turkish ] = "Seçilen $(FILTER) filtresi kurulu değil.\nŞimdi kurmak ister misiniz ?";
+    Text[ language_user1 ] = " ";
+};
+
+String STR_FILTER_CONSULT_SERVICE
+{
+    Text = "Der ausgewählte Filter $(FILTER) ist in Ihrer Edition nicht enthalten.\nInformationen zu Bestellmöglichkeiten finden Sie auf unserer Homepage.";
+    Text [ English ] = "The selected filter $(FILTER) is not included in your edition.\nOrdering informations can be found on our website.";
+    Text[ english_us ] = "The selected filter $(FILTER) is not included in your edition.\nYou can find information about orders on our homepage.";
+    Text[ portuguese ] = "O filtro seleccionado $(FILTER) não está incluído na sua versão.\nEncontrará as informações necessárias para uma possível encomenda na nossa página principal.";
+    Text[ russian ] = "Âûáğàííûé ôèëüòğ $(FILTER) íå ñîäåğæèòñÿ â Âàøåé âåğñèè.\nÈíôîğìàöèş î âîçìîæíîñòÿõ çàêàçà Âû íàéäåòå íà íàøåé äîìàøíåé ñòğàíèöå.";
+    Text[ dutch ] = "De geselecteerde filter $(FILTER) komt in uw versie niet voor.\nVoor informatie over bestelmogelijkheden zie onze homepage.";
+    Text[ french ] = "Le filtre $(FILTER) que vous avez sélectionné n'est pas inclus dans votre version.\nVous trouverez les renseignements nécessaires à une éventuelle commande sur notre page d'accueil.";
+    Text[ spanish ] = "El filtro seleccionado $(FILTER) no está incluido en su edición.\nEn nuestra página de Internet encontrará las informaciones para poder pedirlos.";
+    Text[ italian ] = "Il filtro selezionato $(FILTER) non è incluso nella vostra versione.\nTroverete informazioni su eventuali ordini sulla nostra home page.";
+    Text[ danish ] = "De udvalgte filter $(FILTER) er ikke indeholdt i din version.\nDu kan finde informationer omkring ordremuligheder på vores hjemmeside.";
+    Text[ swedish ] = "Det utvalda filtret $(FILTER) är inte inkluderat i Din version.\nDu hittar information om beställningsmöjligheter på vår hemsida.";
+    Text[ polish ] = "Wybrany filtr $(FILTER) nie jest zawarty w twoim edytorze. \nInformacje dotycz¹ce zamówienia znajdziesz na naszej stronie macierzystej.";
+    Text[ portuguese_brazilian ] = "The selected filter $(FILTER) is not included in your version.\nPlease contact our sales department.";
+    Text[ japanese ] = "‘I‘ğ‚³‚ê‚½Ì¨ÙÀ$(FILTER)‚ÍÕ°»Ş°‚Ìg—p”Å‚ÉŠÜ‚Ü‚ê‚Ä‚Ü‚¹‚ñB\n’•¶‰Â”\\‚Èî•ñ‚Í‚í‚ªĞ‚ÌÎ°ÑÍß°¼‚Åè‚É“ü‚ê‚ç‚ê‚Ü‚·B";
+    Text[ chinese_simplified ] = "Õâ¸ö°æ±¾»¹Ã»ÓĞÌá¹©ÄúËùÑ¡ÔñµÄ¹ıÂËÆ÷ $(FILTER)¡£\nÄú²ÎÔÄÎÒÃÇ¹«Ë¾µÄÍøÒ³Ìá¹©¶¨¹ºÈí¼şµÄĞÅÏ¢¡£";
+    Text[ chinese_traditional ] = "³o­Óª©¥»ÁÙ¨S¦³´£¨Ñ±z©Ò¿ï¾Üªº¹LÂo¾¹ $(FILTER)¡C\n½Ğ°Ñ¾\\§Ú­Ìªººô­¶´£¨Ñªº©wÁÊ³nÅéªº¸ê°T¡C";
+    Text[ arabic ] = "áÇ ÊÍÊæí äÓÎÊß Úáì ÇáİáÊÑ $(FILTER)¡ ÇáĞí Êã ÇÎÊíÇÑå.\níãßäß ÇáÍÕæá Úáì ãÚáæãÇÊ Úä ÅãßÇäíÉ ØáÈ ÇáİáÊÑ İí ãæŞÚäÇ Úáì ÇáÅäÊÑäÊ.";
+    Text[ greek ] = "Ôï åğéëåãìİíï ößëôñï $(FILTER) äåí ğåñéİ÷åôáé óôçí İêäïóŞ óáò.\nĞëçñïöïñßåò ãéá äõíáôüôçôåò ğáñáããåëßáò èá âñåßôå óôçí êåíôñéêŞ ìáò óåëßäá.";
+    Text[ korean ] = "¼±ÅÃÇÑ ÇÊÅÍ$(FILTER)´Â ÀÌ ¹öÀü¿¡ µé¾î ÀÖÁö ¾Ê½À´Ï´Ù.\nÁÖ¹® ½ÅÃ» °¡´É¼º¿¡ ´ëÇÑ Á¤º¸¸¦ ¾òÀ¸·Á¸é ÀúÈñ È¨ÆäÀÌÁö¸¦ º¸½Ê½Ã¿À.";
+    Text[ turkish ] = "Seçilen $(FILTER) filtresi sürümünüzde bulunmuyor.\nSipariş etmek için gereken bilgileri web sitemizde bulabilirsiniz.";
+    Text[ language_user1 ] = " ";
+};

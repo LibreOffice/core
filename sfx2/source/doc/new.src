@@ -1,0 +1,439 @@
+/*************************************************************************
+ *
+ *  $RCSfile: new.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "sfx.hrc"
+#include "doc.hrc"
+#include "new.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // DLG_NEW_FILE ----------------------------------------------------------
+ModalDialog DLG_NEW_FILE
+{
+    HelpId = SID_NEWDOC ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 330 , 96 ) ;
+    Text = "Neu" ;
+    Text [ ENGLISH ] = "New" ;
+    Text [ norwegian ] = "Ny" ;
+    Text [ italian ] = "Nuovo" ;
+    Text [ portuguese_brazilian ] = "Novo" ;
+    Text [ portuguese ] = "Novo" ;
+    Text [ finnish ] = "Uusi" ;
+    Text [ danish ] = "Ny" ;
+    Text [ french ] = "Nouveau" ;
+    Text [ swedish ] = "Nytt" ;
+    Text [ dutch ] = "Nieuw" ;
+    Text [ spanish ] = "Nuevo" ;
+    Text [ english_us ] = "New" ;
+    Moveable = TRUE ;
+    OKButton BT_OK
+    {
+        Pos = MAP_APPFONT ( 274 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        DefButton = TRUE ;
+    };
+    CancelButton BT_CANCEL
+    {
+        Pos = MAP_APPFONT ( 274 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BT_HELP
+    {
+        Pos = MAP_APPFONT ( 274 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    ListBox LB_REGION
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 18 ) ;
+        Size = MAP_APPFONT ( 127 , 72 ) ;
+        CurPos = 0 ;
+    };
+    FixedText FT_REGION
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 97 , 10 ) ;
+        Text = "~Bereiche" ;
+        Text [ ENGLISH ] = "~Regions" ;
+        Text [ norwegian ] = "~OmrÂder" ;
+        Text [ italian ] = "~Categorie" ;
+        Text [ portuguese_brazilian ] = "~Regiıes" ;
+        Text [ portuguese ] = "~Categorias" ;
+        Text [ finnish ] = "~Alueet" ;
+        Text [ danish ] = "OmrÂder" ;
+        Text [ french ] = "~CatÈgories" ;
+        Text [ swedish ] = "~Kategorier" ;
+        Text [ dutch ] = "~Bereiken" ;
+        Text [ spanish ] = "~¡reas" ;
+        Text [ english_us ] = "~Categories" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "∑÷¿‡(~C)";
+        Text[ russian ] = " ‡ÚÂ„ÓËË";
+        Text[ polish ] = "Obszary";
+        Text[ japanese ] = "îÕàÕ(~C)";
+        Text[ chinese_traditional ] = "§¿√˛(~C)";
+        Text[ arabic ] = "‰ÿ«ﬁ« ";
+        Text[ greek ] = " ·ÙÁ„ÔÒﬂÂÚ";
+        Text[ korean ] = "øµø™(~C)";
+        Text[ turkish ] = "~Kategori";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TEMPLATE
+    {
+        Pos = MAP_APPFONT ( 139 , 6 ) ;
+        Size = MAP_APPFONT ( 97 , 10 ) ;
+        Text = "~Vorlagen" ;
+        Text [ ENGLISH ] = "~Templates" ;
+        Text [ norwegian ] = "~Maler" ;
+        Text [ italian ] = "~Modelli" ;
+        Text [ portuguese_brazilian ] = "~Modelos" ;
+        Text [ portuguese ] = "~Modelos" ;
+        Text [ finnish ] = "~Mallit" ;
+        Text [ danish ] = "Skabeloner" ;
+        Text [ french ] = "~ModËles" ;
+        Text [ swedish ] = "~Mallar" ;
+        Text [ dutch ] = "S~jablonen" ;
+        Text [ spanish ] = "P~lantillas" ;
+        Text [ english_us ] = "~Templates" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "—˘ Ω(~T)";
+        Text[ russian ] = "ÿ‡·ÎÓÌ˚";
+        Text[ polish ] = "Szablony";
+        Text[ japanese ] = "√›Ãﬂ⁄∞ƒ(~T)";
+        Text[ chinese_traditional ] = "ºÀ¶°(~T)";
+        Text[ arabic ] = "ﬁÊ«·»";
+        Text[ greek ] = "–Ò¸Ùı·";
+        Text[ korean ] = "º≠Ωƒ ∆ƒ¿œ(~T)";
+        Text[ turkish ] = "~ﬁablon";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_TEMPLATE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 139 , 18 ) ;
+        Size = MAP_APPFONT ( 127 , 72 ) ;
+        CurPos = 0 ;
+    };
+    MoreButton BT_MORE
+    {
+        Pos = MAP_APPFONT ( 274 , 70 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Zus‰tze : ~Zusıtze */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Zus‰tze : ~Zusıtze */
+        Text = "~Zus‰tze" ;
+        Text [ ENGLISH ] = "~More" ;
+        Text [ norwegian ] = "~Mer" ;
+        Text [ italian ] = "E~xtra" ;
+        Text [ portuguese_brazilian ] = "~Mais" ;
+        Text [ portuguese ] = "~Outros" ;
+        Text [ finnish ] = "~Enemm‰n" ;
+        Text [ danish ] = "Flere" ;
+        Text [ french ] = "O~ptions" ;
+        Text [ swedish ] = "~Fler" ;
+        Text [ dutch ] = "~Overige" ;
+        Text [ spanish ] = "~Opciones" ;
+        Text [ english_us ] = "~More" ;
+        Delta = 148 ;
+        MapUnit = MAP_APPFONT ;
+        Text[ chinese_simplified ] = "∏Ωº”(~M)";
+        Text[ russian ] = "~¡ÓÎ¸¯Â";
+        Text[ polish ] = "~Dodatki";
+        Text[ japanese ] = "è⁄ç◊(~M)";
+        Text[ chinese_traditional ] = "™˛•[(~M)";
+        Text[ arabic ] = "≈÷«›« ";
+        Text[ greek ] = "–Ò¸ÛËÂÙ·";
+        Text[ korean ] = "µ°∫Ÿ¿”(~M)";
+        Text[ turkish ] = "~AraÁlar";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_PREVIEW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 110 ) ;
+        Size = MAP_APPFONT ( 127 , 129 ) ;
+        Hide = TRUE ;
+        SVLook = FALSE ;
+    };
+    CheckBox BTN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Size = MAP_APPFONT ( 97 , 10 ) ;
+        Text = "Vor~schau" ;
+        Text [ ENGLISH ] = "Pre~view" ;
+        Text [ norwegian ] = "For~hÂndsvisning" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "E~xaminar" ;
+        Text [ portuguese ] = "~PrevisualizaÁ„o" ;
+        Text [ finnish ] = "~Esikatselu" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "~AperÁu" ;
+        Text [ swedish ] = "Fˆrhandsvi~sning" ;
+        Text [ dutch ] = "~Voorbeeld" ;
+        Text [ spanish ] = "Pre~visualizaciÛn" ;
+        Text [ english_us ] = "Pre~view" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "‘§ ”(~V)";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Po~dglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞(~V)";
+        Text[ chinese_traditional ] = "¿Àµ¯(~V)";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚(~V)";
+        Text[ turkish ] = "÷~nizleme";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_DOCINFO
+    {
+        Pos = MAP_APPFONT ( 139 , 97 ) ;
+        Size = MAP_APPFONT ( 186 , 143 ) ;
+        Text = "Beschreibung" ;
+        Text [ English ] = "Description" ;
+        Hide = TRUE ;
+        Text [ english_us ] = "Description" ;
+        Text [ italian ] = "Descrizione" ;
+        Text [ spanish ] = "DescripciÛn" ;
+        Text [ french ] = "Description" ;
+        Text [ dutch ] = "Beschrijving" ;
+        Text [ swedish ] = "Beskrivning" ;
+        Text [ danish ] = "Beskrivelse" ;
+        Text [ portuguese_brazilian ] = "Beschreibung" ;
+        Text [ portuguese ] = "DescriÁ„o" ;
+        Text[ chinese_simplified ] = "Àµ√˜";
+        Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+        Text[ polish ] = "Opis";
+        Text[ japanese ] = "óvñÒ";
+        Text[ chinese_traditional ] = "¥y≠z";
+        Text[ arabic ] = "«·Ê’›";
+        Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
+        Text[ korean ] = "º≥∏Ì";
+        Text[ turkish ] = "Tan˝m";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TITLE
+    {
+        Pos = MAP_APPFONT ( 145 , 108 ) ;
+        Size = MAP_APPFONT ( 175 , 10 ) ;
+        Text = "~Titel" ;
+        Text [ ENGLISH ] = "T~itle" ;
+        Text [ norwegian ] = "Tittel" ;
+        Text [ italian ] = "~Titolo" ;
+        Text [ portuguese_brazilian ] = "TÌtulo" ;
+        Text [ portuguese ] = "~TÌtulo" ;
+        Text [ finnish ] = "Otsikko" ;
+        Text [ danish ] = "Titel" ;
+        Text [ french ] = "~Titre" ;
+        Text [ swedish ] = "~Rubrik" ;
+        Text [ dutch ] = "~Titel" ;
+        Text [ spanish ] = "~TÌtulo" ;
+        Text [ english_us ] = "~Title" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "±ÍÃ‚(~T)";
+        Text[ russian ] = "«‡„ÓÎÓ‚ÓÍ";
+        Text[ polish ] = "Tytu≥";
+        Text[ japanese ] = "¿≤ƒŸ(~T)";
+        Text[ chinese_traditional ] = "º–√D(~T)";
+        Text[ arabic ] = "«·⁄‰Ê«‰";
+        Text[ greek ] = "~‘ﬂÙÎÔÚ";
+        Text[ korean ] = "¡¶∏Ò(~T)";
+        Text[ turkish ] = "~Ba˛l˝k";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_TITLE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 121 ) ;
+        Size = MAP_APPFONT ( 175 , 12 ) ;
+        ReadOnly = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedText FT_THEMA
+    {
+        Pos = MAP_APPFONT ( 145 , 135 ) ;
+        Size = MAP_APPFONT ( 175 , 10 ) ;
+        Text = "The~ma" ;
+        Text [ ENGLISH ] = "Th~eme" ;
+        Text [ norwegian ] = "Tema" ;
+        Text [ italian ] = "Argomento" ;
+        Text [ portuguese_brazilian ] = "Tema" ;
+        Text [ portuguese ] = "~Assunto" ;
+        Text [ finnish ] = "Aihe" ;
+        Text [ danish ] = "Emne" ;
+        Text [ french ] = "S~ujet" ;
+        Text [ swedish ] = "~Tema" ;
+        Text [ dutch ] = "~Onderwerp" ;
+        Text [ spanish ] = "~Tema" ;
+        Text [ english_us ] = "Subject" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "÷˜Ã‚";
+        Text[ russian ] = "“ÂÏ‡";
+        Text[ polish ] = "Temat";
+        Text[ japanese ] = "√∞œ";
+        Text[ chinese_traditional ] = "•D√D";
+        Text[ arabic ] = "«·„Ê÷Ê⁄";
+        Text[ greek ] = "»›Ï·";
+        Text[ korean ] = "¡÷¡¶";
+        Text[ turkish ] = "Konu";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_THEMA
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 148 ) ;
+        Size = MAP_APPFONT ( 175 , 12 ) ;
+        ReadOnly = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedText FT_KEYWORDS
+    {
+        Pos = MAP_APPFONT ( 145 , 162 ) ;
+        Size = MAP_APPFONT ( 175 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? S~chl¸sselworte : S~chl≥sselworte */
+        /* ### ACHTUNG: Neuer Text in Resource? S~chl¸sselworte : S~chl≥sselworte */
+        Text = "S~chl¸sselworte" ;
+        Text [ ENGLISH ] = "~Keywords" ;
+        Text [ norwegian ] = "N¯kkelord" ;
+        Text [ italian ] = "Parole chiave" ;
+        Text [ portuguese_brazilian ] = "Palavras-chave" ;
+        Text [ portuguese ] = "~Palavras-chave" ;
+        Text [ finnish ] = "Avainsanat" ;
+        Text [ danish ] = "N¯gleord" ;
+        Text [ french ] = "Mots-cl~Ès" ;
+        Text [ swedish ] = "~Nyckelord" ;
+        Text [ dutch ] = "S~leutelwoorden" ;
+        Text [ spanish ] = "Palabras ~clave" ;
+        Text [ english_us ] = "~Key words" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "πÿº¸◊÷(~K)";
+        Text[ russian ] = " Î˛˜Â‚˚Â ÒÎÓ‚‡";
+        Text[ polish ] = "S≥owa kluczowe";
+        Text[ japanese ] = "∑∞‹∞ƒﬁ(~K)";
+        Text[ chinese_traditional ] = "√ˆ¡‰¶r(~K)";
+        Text[ arabic ] = "«·ﬂ·„«  «·√”«”Ì…";
+        Text[ greek ] = "À›ÓÂÈÚ-ÍÎÂÈ‰È‹";
+        Text[ korean ] = "≈∞øˆµÂ(~K)";
+        Text[ turkish ] = "A~nahtar sˆzc¸kler";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_KEYWORDS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 145 , 175 ) ;
+        Size = MAP_APPFONT ( 175 , 12 ) ;
+        ReadOnly = TRUE ;
+        Hide = TRUE ;
+    };
+    FixedText FT_DESC
+    {
+        Pos = MAP_APPFONT ( 145 , 189 ) ;
+        Size = MAP_APPFONT ( 175 , 10 ) ;
+        Text = "B~eschreibung" ;
+        Text [ ENGLISH ] = "~Description" ;
+        Text [ norwegian ] = "Beskrivelse" ;
+        Text [ italian ] = "Descrizione" ;
+        Text [ portuguese_brazilian ] = "DescriÁ„o" ;
+        Text [ portuguese ] = "~DescriÁ„o" ;
+        Text [ finnish ] = "Kuvaus" ;
+        Text [ danish ] = "Beskrivelse" ;
+        Text [ french ] = "~Description" ;
+        Text [ swedish ] = "B~eskrivning" ;
+        Text [ dutch ] = "Be~schrijving" ;
+        Text [ spanish ] = "~DescripciÛn" ;
+        Text [ english_us ] = "~Description" ;
+        Hide = TRUE ;
+        Text[ chinese_simplified ] = "Àµ√˜(~D)";
+        Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+        Text[ polish ] = "Opis";
+        Text[ japanese ] = "óvñÒ(~D)";
+        Text[ chinese_traditional ] = "¥y≠z(~D)";
+        Text[ arabic ] = "«·Ê’›";
+        Text[ greek ] = "–ÂÒÈ„Ò·ˆﬁ";
+        Text[ korean ] = "º≥∏Ì(~D)";
+        Text[ turkish ] = "~Tan˝m";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit ED_DESC
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 144 , 202 ) ;
+        Size = MAP_APPFONT ( 175 , 32 ) ;
+        IgnoreTab = TRUE ;
+        ReadOnly = TRUE ;
+        Hide = TRUE ;
+    };
+    ExtraData =
+    {
+    103;
+    44;
+    };
+    Text[ chinese_simplified ] = "–¬Ω®";
+    Text[ russian ] = "—ÓÁ‰‡Ú¸";
+    Text[ polish ] = "Nowy";
+    Text[ japanese ] = "êVãKçÏê¨";
+    Text[ chinese_traditional ] = "∂}±“∑s¿…";
+    Text[ arabic ] = "ÃœÌœ";
+    Text[ greek ] = "ƒÁÏÈÔıÒ„ﬂ·";
+    Text[ korean ] = "ªı∑Œ";
+    Text[ turkish ] = "Yeni";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

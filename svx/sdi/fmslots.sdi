@@ -1,0 +1,639 @@
+/*------------------------------------------------------------------------
+    $Workfile:   FMSLOTS.SDI  $
+    $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/sdi/fmslots.sdi,v 1.1.1.1 2000-09-18 17:01:06 hr Exp $
+    Beschreibung:   IDL - File FormularShell
+
+    (c) Copyright 1989 - 2000, Star Division GmbH, Hamburg
+------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+interface Form : Object
+[
+    uuid = "F38D29A3-9EDA-11d1-AAF5-00A0248A7FBC"
+]
+{
+    SID_FM_CONFIG // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        Export = FALSE ;
+    ]
+    SID_FM_PUSHBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RADIOBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CHECKBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FIXEDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_GROUPBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_LISTBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_COMBOBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_URLBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DBGRID
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_IMAGEBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_IMAGECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DATEFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_TIMEFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_NUMERICFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CURRENCYFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_PATTERNFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FORMATTEDFIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CTL_PROPERTIES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_PROPERTIES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_TAB_DIALOG
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_ADD_FIELD
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_DESIGN_MODE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_OPEN_READONLY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_USE_WIZARDS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SHOW_FMEXPLORER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SHOW_PROPERTY_BROWSER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_FIRST
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_NEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_PREV
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_LAST
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_NEW
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_DELETE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_ABSOLUTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_TEXT
+    [
+    ]
+    SID_FM_RECORD_FROM_TEXT
+    [
+    ]
+    SID_FM_RECORD_TOTAL
+    [
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_SAVE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_RECORD_UNDO
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FORM_FILTERED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REMOVE_FILTER_SORT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SORTUP
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SORTDOWN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_ORDERCRIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_START
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_AUTOFILTER
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_REFRESH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_SEARCH
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_NAVIGATOR
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_EXIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_FILTER_EXECUTE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    /*SID_FM_FILTER_REMOVE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]*/
+     //--------------------------------------------------------------------------
+    SID_FM_FMEXPLORER_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_FIELDS_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_PROPERTY_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+    //--------------------------------------------------------------------------
+    SID_FM_FILTER_NAVIGATOR_CONTROL
+    [
+        StateMethod = GetState ;
+    ]
+     //--------------------------------------------------------------------------
+    SID_FM_SHOW_PROPERTIES
+    [
+        StateMethod = GetState ;
+        ExecMethod = Execute ;
+    ]
+
+    SID_FM_VIEW_AS_GRID
+    [
+        StateMethod = GetState ;
+        ExecMethod = Execute ;
+    ]
+}
+
+shell FmFormShell
+{
+                                    import Form [Automation];
+    SID_FM_CONFIG // ole : no, status : ?
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_LEAVE_CREATE
+    [
+        ExecMethod = Execute ;
+    ]
+    SID_FM_CHANGECONTROLTYPE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_EDIT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_BUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FIXEDTEXT
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_LISTBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_CHECKBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_RADIOBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_GROUPBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_COMBOBOX
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_GRID
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_IMAGEBUTTON
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FILECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_DATE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_TIME
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_NUMERIC
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_CURRENCY
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_PATTERN
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_IMAGECONTROL
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+    SID_FM_CONVERTTO_FORMATTED
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+}
+
+
+/*------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.58  1999/10/04 06:38:46  dg
+    #68564# Usage of Filters modified
+
+    Revision 1.57  1999/08/30 14:57:11  dg
+     FILTER_REMOVE notused
+
+    Revision 1.56  1999/08/30 13:33:41  dg
+     new slots
+
+    Revision 1.55  1999/08/09 07:28:49  fs
+    SID_FM_VIEW_AS_GRID
+
+    Revision 1.54  1999/06/14 09:20:16  DG
+    new Formslot
+
+
+      Rev 1.53   14 Jun 1999 11:20:16   DG
+   new Formslot
+
+      Rev 1.52   09 Jun 1999 08:54:36   DG
+   Neue Formularslots
+
+      Rev 1.51   31 May 1999 10:54:22   FS
+   #65629# FOrmShell verantwortlich fuer FormattedField-Slot
+
+      Rev 1.50   25 May 1999 15:10:06   FS
+   #66282# FmFormShell verantworklich fuer Control-Konvertierungs-Slots
+
+      Rev 1.49   15 Mar 1999 21:44:42   HJS
+   Merge SRC515: 15.03.99 - 21.44.24 (NoBranch)
+
+      Rev 1.48   12 Mar 1999 20:15:34   HJS
+   Merge SRC515: 12.03.99 - 20.15.18 (NoBranch)
+
+      Rev 1.47   11 Mar 1999 19:37:08   HJS
+   Merge SRC515: 11.03.99 - 19.36.51 (NoBranch)
+
+      Rev 1.46   10 Mar 1999 02:48:28   HJS
+   Merge SRC515: 10.03.99 - 02.48.05 (NoBranch)
+
+      Rev 1.45   04 Mar 1999 14:01:10   FS
+   #62286# Y2K-Verantwortlichkeit wieder entfernt
+
+      Rev 1.44   27 Feb 1999 00:25:34   HJS
+   Merge SRC514: 27.02.99 - 00.25.16 (NoBranch)
+
+      Rev 1.43   22 Feb 1999 22:21:10   HJS
+   Merge SRC514: 22.02.99 - 22.20.53 (NoBranch)
+
+      Rev 1.42   16 Feb 1999 16:47:30   FS
+   #61027# Y2K-Behandlung
+
+      Rev 1.41   10 Feb 1999 20:09:56   HJS
+   Merge SRC513: 10.02.99 - 20.09.29 (NoBranch)
+
+      Rev 1.40   09 Feb 1999 20:33:36   HJS
+   Merge SRC513: 09.02.99 - 20.33.17 (NoBranch)
+
+      Rev 1.39   18 Nov 1998 16:59:42   DG
+   #59280# CreateMode neu
+
+      Rev 1.38   16 Nov 1998 16:14:44   FS
+   #59472# zwei neue Slots fuer FormShell
+
+      Rev 1.37   03 Nov 1998 17:18:56   FS
+   #58826# neuer Slot SID_FM_SEARCH
+
+      Rev 1.36   02 Nov 1998 10:39:18   DG
+   #56606# Filternslots angepasst
+
+      Rev 1.35   28 Oct 1998 10:45:24   OJ
+   #58248# asserts und sid von offmgr transferiert
+
+      Rev 1.34   15 Oct 1998 11:49:36   FS
+   #57870# SID_FM_CONFIG jetzt ToolBoxConfig==TRUE
+
+      Rev 1.33   30 Sep 1998 14:16:50   HJS
+   merge prt505 new 30.09.98
+
+      Rev 1.32   29 Sep 1998 20:58:00   HJS
+   merge prt505 new 29.09.98
+
+      Rev 1.31   29 Sep 1998 14:51:46   HJS
+   merge prt505 new 29.09.98
+
+      Rev 1.30   29 Sep 1998 02:00:26   HJS
+   merge prt505 new 29.09.98
+
+      Rev 1.29   16 Sep 1998 16:32:18   DG
+   #56576# FmFormInfo erweitert
+
+      Rev 1.28   10 Sep 1998 18:12:42   HJS
+   merge prt504 new 10.09.98
+
+      Rev 1.27   08 Sep 1998 20:58:04   HJS
+   merge prt504 new 08.09.98
+
+      Rev 1.26   31 Aug 1998 21:32:58   HJS
+   merge prt503 old 31.08.98
+
+      Rev 1.25   12 Aug 1998 16:23:32   HJS
+   handmerge prt503
+
+      Rev 1.24   23 Jul 1998 16:00:34   MIB
+   #53239#: Deutsche Konfig-Namen
+
+      Rev 1.23   13 Jul 1998 14:00:20   AWO
+   #51529# SID_FM_SHOW_PROPERTY_BROWSER
+
+      Rev 1.22   07 Jul 1998 16:49:20   AWO
+   SID_FM_IMAGE_CONTROL
+
+      Rev 1.21   11 Jun 1998 12:10:42   AWO
+   Spezielle Edits
+
+      Rev 1.20   10 Jun 1998 18:58:14   MIB
+   FileControl
+
+      Rev 1.19   05 Jun 1998 10:26:46   MIB
+   Image-Button
+
+      Rev 1.18   24 Apr 1998 14:33:58   DG
+   neuer slotdie 2.
+
+      Rev 1.17   24 Apr 1998 14:23:04   DG
+   neuer slot
+
+      Rev 1.16   18 Mar 1998 13:42:38   DG
+   readonlydoc falsch
+
+      Rev 1.15   16 Mar 1998 12:10:52   DG
+   erweitert
+
+      Rev 1.14   14 Mar 1998 14:07:10   AWO
+   SID_FM_SHOW_FMEXPLORER
+
+      Rev 1.13   13 Mar 1998 23:38:06   DG
+   neuer slot
+
+      Rev 1.12   12 Mar 1998 12:53:06   AWO
+   Neu: SID_FM_SHOW_FMEXPLORER
+
+      Rev 1.11   10 Mar 1998 14:47:02   DG
+   erweitert
+
+      Rev 1.10   05 Mar 1998 15:06:24   AWO
+   SID_FM_DESIGN_MODE
+
+      Rev 1.9   02 Mar 1998 08:48:40   AWO
+   SID_FM_CREATE_CONTROL
+
+      Rev 1.8   27 Feb 1998 10:00:32   AWO
+   Control Slots wieder aufgenommen
+
+      Rev 1.7   23 Feb 1998 08:56:08   AWO
+   SID_FM_CTL_PROPERTIES
+
+      Rev 1.6   20 Feb 1998 09:31:36   AWO
+   Neue Slots fuer NavBar
+
+      Rev 1.5   17 Feb 1998 15:49:38   AWO
+   SID_FM_ADD_TABLE
+
+      Rev 1.4   16 Feb 1998 11:32:06   AWO
+   Neue Slots
+
+      Rev 1.3   12 Feb 1998 16:03:56   AWO
+   Neue Slots
+
+      Rev 1.2   09 Feb 1998 16:37:30   AWO
+   SID_FM_RECORD_ABSOLUTE
+
+      Rev 1.1   09 Feb 1998 10:27:00   AWO
+
+      Rev 1.0   06 Feb 1998 13:02:34   DG
+   Initial revision.
+
+------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

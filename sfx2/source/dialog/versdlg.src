@@ -1,0 +1,581 @@
+/*************************************************************************
+ *
+ *  $RCSfile: versdlg.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "versdlg.hrc"
+ModalDialog DLG_VERSIONS
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 340 , 184 ) ;
+    Text = "Versionen in" ;
+    Text [ English ] = "Versions in" ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    GroupBox GB_NEWVERSIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 272 , 31 ) ;
+        Text = "Neue Versionen" ;
+        Text [ English ] = "New versions" ;
+        Text [ english_us ] = "New versions" ;
+        Text [ portuguese_brazilian ] = "Neue Versionen" ;
+        Text [ swedish ] = "Nya versioner" ;
+        Text [ danish ] = "Ny version" ;
+        Text [ italian ] = "Nuove versioni" ;
+        Text [ spanish ] = "Nuevas versiones" ;
+        Text [ french ] = "Nouvelles versions" ;
+        Text [ dutch ] = "Nieuwe versies" ;
+        Text [ portuguese ] = "Novas versões" ;
+        Text[ chinese_simplified ] = "ĞÂ°æ±¾";
+        Text[ russian ] = "Íîâûå âåğñèè";
+        Text[ polish ] = "Nowe wersje";
+        Text[ japanese ] = "V‚µ‚¢ÊŞ°¼Ş®İ";
+        Text[ chinese_traditional ] = "·sª©¥»";
+        Text[ arabic ] = "ÅÕÏÇÑÇÊ ÌÏíÏÉ";
+        Text[ greek ] = "Íİåò åêäüóåéò";
+        Text[ korean ] = "»õ ¹öÀü";
+        Text[ turkish ] = "Yeni sürümler";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_SAVE
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 80 , 14 ) ;
+        Text = "~Neue Version speichern" ;
+        Text [ English ] = "~Save new version" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Save ~New Version" ;
+        Text [ portuguese_brazilian ] = "~Neue Version speichern" ;
+        Text [ swedish ] = "Spara ~ny version" ;
+        Text [ danish ] = "Gem ny version" ;
+        Text [ italian ] = "~Salva la versione nuova" ;
+        Text [ spanish ] = "~Guardar versión nueva" ;
+        Text [ french ] = "~Enregistrer une nouvelle version" ;
+        Text [ dutch ] = "~Nieuwe versie opslaan" ;
+        Text [ portuguese ] = "~Guardar nova versão" ;
+        Text[ chinese_simplified ] = "±£´æĞÂ°æ±¾(~S)";
+        Text[ russian ] = "Ñîõğàíèòü íîâóş âåğñèş";
+        Text[ polish ] = "Zapisz now¹ wersjê";
+        Text[ japanese ] = "V‚µ‚¢ÊŞ°¼Ş®İ‚Ì•Û‘¶(~S)";
+        Text[ chinese_traditional ] = "«O¦s·sª©¥»(~S)";
+        Text[ arabic ] = "ÍİÙ ÇáÅÕÏÇÑ ÇáÌÏíÏ";
+        Text[ greek ] = "ÁğïèŞêåõóç íİáò İêäïóçò";
+        Text[ korean ] = "»õ ¹öÀü ÀúÀå(~N)";
+        Text[ turkish ] = "~Yeni sürümü kaydet";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_SAVEONCLOSE
+    {
+        Pos = MAP_APPFONT ( 131 , 16 ) ;
+        Size = MAP_APPFONT ( 144 , 10 ) ;
+        Text = "~Beim Schließen immer Version speichern" ;
+        Text [ English ] = "~Always save a version on closing" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Always save a version on closing" ;
+        Text [ portuguese_brazilian ] = "~Beim Schließen immer Version speichern" ;
+        Text [ swedish ] = "~Spara alltid en version vid stängning" ;
+        Text [ danish ] = "Gem version altid ved lukning" ;
+        Text [ italian ] = "~Salva sempre la versione quando chiudi" ;
+        Text [ spanish ] = "Guardar ~versión siempre al cerrar" ;
+        Text [ french ] = "~Toujours enregistrer une version lors de la fermeture" ;
+        Text [ dutch ] = "~Bij sluiten altijd versie opslaan" ;
+        Text [ portuguese ] = "~Guardar sempre uma versão ao fechar" ;
+        Text[ chinese_simplified ] = "ÔÚ¹Ø±ÕÊ±×ÜÊÇ±£´æ°æ±¾ĞÅÏ¢(~A)";
+        Text[ russian ] = "Ïğè çàêğûòèè âñåãäà ñîõğàíÿòü âåğñèş";
+        Text[ polish ] = "Zawsze zapisuj wersjê przy zamykaniu";
+        Text[ japanese ] = "•Â‚¶‚é‚Æ‚«Aí‚ÉÊŞ°¼Ş®İ‚Ì•Û‘¶(~A)";
+        Text[ chinese_traditional ] = "¦bÃö³¬®ÉÁ`¬O«O¦sª©¥»¸ê°T(~A)";
+        Text[ arabic ] = "ÍİÙ ÇáÅÕÏÇÑ ÏÇÆãÇğ ÚäÏ ÇáÅÛáÇŞ";
+        Text[ greek ] = "ÊáôÜ ôï êëåßóéìï íá áğïèçêåıåôáé ğÜíôá ç İêäïóç";
+        Text[ korean ] = "´İÀ» ¶§ Ç×»ó ¹öÀü ÀúÀå(~A)";
+        Text[ turkish ] = "~Kapatırken daima sürümü kaydet";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_OLDVERSIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 40 ) ;
+        Size = MAP_APPFONT ( 272 , 138 ) ;
+        Text = "Vorhandene Versionen" ;
+        Text [ English ] = "Existing versions" ;
+        Text [ english_us ] = "Existing versions" ;
+        Text [ portuguese_brazilian ] = "Vorhandene Versionen" ;
+        Text [ swedish ] = "Befintliga versioner" ;
+        Text [ danish ] = "Eksisterende version" ;
+        Text [ italian ] = "Versioni esistenti" ;
+        Text [ spanish ] = "Versiones existentes" ;
+        Text [ french ] = "Versions existantes" ;
+        Text [ dutch ] = "Bestaande versies" ;
+        Text [ portuguese ] = "Versões existentes" ;
+        Text[ chinese_simplified ] = "ÏÖ´æµÄ°æ±¾";
+        Text[ russian ] = "Èìåşùàÿñÿ âåğñèÿ";
+        Text[ polish ] = "Istniej¹ce wersje";
+        Text[ japanese ] = "Šù¬‚ÌÊŞ°¼Ş®İ";
+        Text[ chinese_traditional ] = "²{¦sªºª©¥»";
+        Text[ arabic ] = "ÇáÅÕÏÇÑÇÊ ÇáãæÌæÏÉ";
+        Text[ greek ] = "ÕğÜñ÷ïõóåò åêäüóåéò";
+        Text[ korean ] = "±âÁ¸ ¹öÀü";
+        Text[ turkish ] = "Mevcut sürümler";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_DATETIME
+    {
+        Pos = MAP_APPFONT ( 15 , 51 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Datum und Uhrzeit" ;
+        Text [ English ] = "Date and time" ;
+        Text [ english_us ] = "Date and time" ;
+        Text [ portuguese_brazilian ] = "Datum und Uhrzeit" ;
+        Text [ swedish ] = "Datum och tid" ;
+        Text [ danish ] = "Dato og klokkeslæt" ;
+        Text [ italian ] = "Data e ora" ;
+        Text [ spanish ] = "Fecha y hora" ;
+        Text [ french ] = "Date et heure" ;
+        Text [ dutch ] = "Datum en tijd" ;
+        Text [ portuguese ] = "Data e horas" ;
+        Text[ chinese_simplified ] = "ÈÕÆÚºÍÊ±¼ä";
+        Text[ russian ] = "Äàòà è âğåìÿ";
+        Text[ polish ] = "Data i godzina";
+        Text[ japanese ] = "“ú•t‚Æ";
+        Text[ chinese_traditional ] = "¤é´Á©M®É¶¡";
+        Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ";
+        Text[ greek ] = "Çìåñïìçíßá êáé şñá";
+        Text[ korean ] = "³¯Â¥¿Í ½Ã°£";
+        Text[ turkish ] = "Tarih ve saat";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SAVEDBY
+    {
+        Pos = MAP_APPFONT ( 76 , 51 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "gespeichert von" ;
+        Text [ English ] = "Saved by" ;
+        Text [ english_us ] = "Saved by" ;
+        Text [ portuguese_brazilian ] = "gespeichert von" ;
+        Text [ swedish ] = "Sparad av" ;
+        Text [ danish ] = "gemt af" ;
+        Text [ italian ] = "salvato da" ;
+        Text [ spanish ] = "Guardado por" ;
+        Text [ french ] = "Enregistrée par" ;
+        Text [ dutch ] = "opgeslagen door" ;
+        Text [ portuguese ] = "Guardado por" ;
+        Text[ chinese_simplified ] = "×÷Õß";
+        Text[ russian ] = "ñîõğàíåíî";
+        Text[ polish ] = "Zapisana przez";
+        Text[ japanese ] = "•Û‘¶Ò";
+        Text[ chinese_traditional ] = "§@ªÌ";
+        Text[ arabic ] = "ŞÇã ÈÚãáíÉ ÇáÍİÙ";
+        Text[ greek ] = "áğïèŞêåõóç áğü";
+        Text[ korean ] = "ÀúÀå ÁÖÃ¼";
+        Text[ turkish ] = "Kaydeden";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_COMMENTS
+    {
+        Pos = MAP_APPFONT ( 138 , 51 ) ;
+        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Text = "Kommentar" ;
+        Text [ English ] = "Comments" ;
+        Text [ english_us ] = "Comments" ;
+        Text [ portuguese_brazilian ] = "Kommentar" ;
+        Text [ swedish ] = "Kommentar" ;
+        Text [ danish ] = "Kommentar" ;
+        Text [ italian ] = "Commento" ;
+        Text [ spanish ] = "Comentario" ;
+        Text [ french ] = "Commentaire" ;
+        Text [ dutch ] = "Commentaar" ;
+        Text [ portuguese ] = "Comentário" ;
+        Text[ chinese_simplified ] = "×¢½â";
+        Text[ russian ] = "Êîììåíòàğèé";
+        Text[ polish ] = "Komentarz";
+        Text[ japanese ] = "ºÒİÄ";
+        Text[ chinese_traditional ] = "ª`¸Ñ";
+        Text[ arabic ] = "ÊÚáíŞ";
+        Text[ greek ] = "Ó÷üëéï";
+        Text[ korean ] = "¼³¸í";
+        Text[ turkish ] = "Açıklama";
+        Text[ language_user1 ] = " ";
+    };
+    Control TLB_VERSIONS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 64 ) ;
+        Size = MAP_APPFONT ( 260 , 108 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 284 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Schließen" ;
+        Text [ English ] = "Close" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Close" ;
+        Text [ portuguese_brazilian ] = "Schließen" ;
+        Text [ swedish ] = "Stäng" ;
+        Text [ danish ] = "Luk" ;
+        Text [ italian ] = "Chiudi" ;
+        Text [ spanish ] = "Cerrar" ;
+        Text [ french ] = "Fermer" ;
+        Text [ dutch ] = "Sluiten" ;
+        Text [ portuguese ] = "Fechar" ;
+        Text[ chinese_simplified ] = "¹Ø±Õ";
+        Text[ russian ] = "Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é";
+        Text[ chinese_traditional ] = "Ãö³¬";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_OPEN
+    {
+        Pos = MAP_APPFONT ( 284 , 26 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Öffnen" ;
+        Text [ English ] = "Open" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Open" ;
+        Text [ portuguese_brazilian ] = "Öffnen" ;
+        Text [ swedish ] = "Öppna" ;
+        Text [ danish ] = "Åbn" ;
+        Text [ italian ] = "Apri" ;
+        Text [ spanish ] = "Abrir" ;
+        Text [ french ] = "Ouvrir" ;
+        Text [ dutch ] = "Openen" ;
+        Text [ portuguese ] = "Abrir" ;
+        Text[ chinese_simplified ] = "´ò¿ª";
+        Text[ russian ] = "Îòêğûòü";
+        Text[ polish ] = "Otwórz";
+        Text[ japanese ] = "ŠJ‚­";
+        Text[ chinese_traditional ] = "¶}±ÒÂÂÀÉ";
+        Text[ arabic ] = "İÊÍ";
+        Text[ greek ] = "¢íïéãìá";
+        Text[ korean ] = "¿­±â";
+        Text[ turkish ] = "Aç";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_VIEW
+    {
+        Pos = MAP_APPFONT ( 284 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Anzeigen..." ;
+        Text [ English ] = "~View" ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ english_us ] = "~Show..." ;
+        Text [ portuguese_brazilian ] = "~Anzeigen..." ;
+        Text [ swedish ] = "Vis~a..." ;
+        Text [ danish ] = "Vis..." ;
+        Text [ italian ] = "~Mostra..." ;
+        Text [ spanish ] = "~Mostrar..." ;
+        Text [ french ] = "~Afficher..." ;
+        Text [ dutch ] = "~Weergeven..." ;
+        Text [ portuguese ] = "~Mostrar..." ;
+        Text[ chinese_simplified ] = "ÏÔÊ¾(~S)...";
+        Text[ russian ] = "Ïîêàçàòü...";
+        Text[ polish ] = "Po~ka¿...";
+        Text[ japanese ] = "•\\¦(~S)...";
+        Text[ chinese_traditional ] = "Åã¥Ü(~S)...";
+        Text[ arabic ] = "ÅÙåÇÑ...";
+        Text[ greek ] = "ÅìöÜíéóç...";
+        Text[ korean ] = "Ç¥½Ã(~S)...";
+        Text[ turkish ] = "~Görüntüle...";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 284 , 60 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Löschen" ;
+        Text [ English ] = "~Delete" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Delete" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ italian ] = "~Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "~Sil";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_COMPARE
+    {
+        Pos = MAP_APPFONT ( 284 , 77 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "Vergleichen" ;
+        Text [ English ] = "Compare" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "Compare" ;
+        Text [ portuguese_brazilian ] = "Vergleichen" ;
+        Text [ swedish ] = "~Jämför" ;
+        Text [ danish ] = "Sammenlign" ;
+        Text [ italian ] = "Confronta" ;
+        Text [ spanish ] = "Comparar" ;
+        Text [ french ] = "Comparer" ;
+        Text [ dutch ] = "Vergelijken" ;
+        Text [ portuguese ] = "Comparar" ;
+        Text[ chinese_simplified ] = "±È½Ï";
+        Text[ russian ] = "Ñğàâíèòü";
+        Text[ polish ] = "Porów~naj";
+        Text[ japanese ] = "”äŠr";
+        Text[ chinese_traditional ] = "¤ñ¸û";
+        Text[ arabic ] = "ãŞÇÑäÉ";
+        Text[ greek ] = "Óıãêñéóç";
+        Text[ korean ] = "ºñ±³";
+        Text[ turkish ] = "Karşılaştır";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 284 , 97 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ portuguese ] = "Versões em" ;
+    Text [ english_us ] = "Versions of" ;
+    Text [ portuguese_brazilian ] = "Versionen in" ;
+    Text [ swedish ] = "Versioner i" ;
+    Text [ danish ] = "Versioner i" ;
+    Text [ italian ] = "Versioni in" ;
+    Text [ spanish ] = "Versiones en" ;
+    Text [ french ] = "Versions de" ;
+    Text [ dutch ] = "Versies in" ;
+    Text[ chinese_simplified ] = "°æ±¾";
+    Text[ russian ] = "Âåğñèè â";
+    Text[ polish ] = "Wersje w";
+    Text[ japanese ] = "ÊŞ°¼Ş®İ";
+    Text[ chinese_traditional ] = "ª©¥»¦b";
+    Text[ arabic ] = "ÅÕÏÇÑÇÊ İí";
+    Text[ language_user1 ] = "LS 16.07.99: Erkl?ung laut Help Agent: In der Titelleiste des Dialogs sehen Sie hinter \"Versionen in\" den Dateinamen ohne Pfad oder (wenn gesetzt) den Titel des Dokuments. (z.B. \"Versionen in brief.sdw\". (Warum nicht eher Versionen VON?)";
+    Text[ greek ] = "Åêäüóåéò óå";
+    Text[ korean ] = "¹öÀü";
+    Text[ turkish ] = "Mevcut sürümler:";
+};
+ModalDialog DLG_COMMENTS
+{
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( 180 , 118 ) ;
+    Text = "Versionskommentar eingeben" ;
+    Text [ English ] = "Input version comment" ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    FixedText FT_DATETIME
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Text = "Datum und Uhrzeit : " ;
+        Text [ English ] = "Date and time : " ;
+        Text [ english_us ] = "Date and time : " ;
+        Text [ portuguese_brazilian ] = "Datum und Uhrzeit : " ;
+        Text [ swedish ] = "Datum och tid :   " ;
+        Text [ danish ] = "Dato og klokkeslæt: " ;
+        Text [ italian ] = "Data e ora : " ;
+        Text [ spanish ] = "Fecha y hora:  " ;
+        Text [ french ] = "Date et heure : " ;
+        Text [ dutch ] = "Datum en tijd :  " ;
+        Text [ portuguese ] = "Data e horas : " ;
+        Text[ chinese_simplified ] = "ÈÕÆÚºÍÊ±¼ä£º ";
+        Text[ russian ] = "Äàòà è âğåìÿ :  ";
+        Text[ polish ] = "Data i godzina :  ";
+        Text[ japanese ] = "“ú•t‚Æ: ";
+        Text[ chinese_traditional ] = "¤é´Á©M®É¶¡¡G ";
+        Text[ arabic ] = "ÇáÊÇÑíÎ æÇáæŞÊ : ";
+        Text[ greek ] = "Çìåñïìçíßá êáé şñá : ";
+        Text[ korean ] = "³¯Â¥¿Í ½Ã°£ : ";
+        Text[ turkish ] = "Tarih ve saat : ";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_SAVEDBY
+    {
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 168 , 10 ) ;
+        Text = "gespeichert von " ;
+        Text [ English ] = "Saved by " ;
+        Text [ english_us ] = "Saved by " ;
+        Text [ portuguese_brazilian ] = "gespeichert von " ;
+        Text [ swedish ] = "sparat av " ;
+        Text [ danish ] = "gemt af " ;
+        Text [ italian ] = "salvato da " ;
+        Text [ spanish ] = "guardado por  " ;
+        Text [ french ] = "Enregistré par  " ;
+        Text [ dutch ] = "opgeslagen door  " ;
+        Text [ portuguese ] = "Guardado por " ;
+        Text[ chinese_simplified ] = "×÷Õß ";
+        Text[ russian ] = "ñîõğàíåíî ";
+        Text[ polish ] = "zapisany przez  ";
+        Text[ japanese ] = "•Û‘¶Ò ";
+        Text[ chinese_traditional ] = "§@ªÌ ";
+        Text[ arabic ] = "ŞÇã ÈÚãáíÉ ÇáÍİÙ";
+        Text[ greek ] = "áğïèŞêåõóç áğü ";
+        Text[ korean ] = "ÀúÀå ÁÖÃ¼ ";
+        Text[ turkish ] = "Kaydeden ";
+        Text[ language_user1 ] = " ";
+    };
+    MultiLineEdit ME_VERSIONS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 32 ) ;
+        Size = MAP_APPFONT ( 168 , 60 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT ( 15 , 98 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 68 , 98 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton PB_CLOSE
+    {
+        Pos = MAP_APPFONT ( 68 , 98 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Schließen" ;
+        Text [ English ] = "~Close" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Close" ;
+        Text [ portuguese_brazilian ] = "~Schließen" ;
+        Text [ swedish ] = "~Stäng" ;
+        Text [ danish ] = "Luk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ portuguese ] = "~Fechar" ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "~Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    HelpButton PB_HELP
+    {
+        Pos = MAP_APPFONT ( 124 , 98 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ english_us ] = "Insert Version Comment" ;
+    Text [ portuguese_brazilian ] = "Versionskommentar eingeben" ;
+    Text [ swedish ] = "Mata in versionskommentar" ;
+    Text [ danish ] = "Indsæt versionskommentar" ;
+    Text [ italian ] = "Inserisci commento versioni" ;
+    Text [ spanish ] = "Escribir comentario sobre la versión" ;
+    Text [ french ] = "Saisie du commentaire de version (facultatif)" ;
+    Text [ dutch ] = "Versiecommentaar invoeren" ;
+    Text [ portuguese ] = "Inserir comentário sobre versão" ;
+    Text[ chinese_simplified ] = "¼üÈë°æ±¾×¢½â";
+    Text[ russian ] = "Ââåñòè êîììåíòàğèé ê âåğñèè";
+    Text[ polish ] = "WprowadŸ komentarz do wersji";
+    Text[ japanese ] = "ÊŞ°¼Ş®İºÒİÄ‚Ì“ü—Í";
+    Text[ chinese_traditional ] = "Áä¤Jª©¥»ª`¸Ñ";
+    Text[ arabic ] = "ÅÏÑÇÌ ÊÚáíŞ ÇáÅÕÏÇÑ";
+    Text[ greek ] = "ÅéóáãùãŞ ó÷ïëßïõ İêäïóçò";
+    Text[ korean ] = "¹öÀü ¼³¸í ÀÔ·Â";
+    Text[ turkish ] = "Sürüm açıklaması ekle";
+    Text[ language_user1 ] = " ";
+};
+String DLG_COMMENTS
+{
+    Text = "Versionskommentar" ;
+    Text [ English ] = "Version comment" ;
+    Text [ portuguese ] = "Comentário sobre versão" ;
+    Text [ english_us ] = "Version comment" ;
+    Text [ portuguese_brazilian ] = "Versionskommentar" ;
+    Text [ swedish ] = "Versionskommentar" ;
+    Text [ danish ] = "Versionskommentar" ;
+    Text [ italian ] = "Commento versioni" ;
+    Text [ spanish ] = "Comentario sobre la versión" ;
+    Text [ french ] = "Commentaire de version" ;
+    Text [ dutch ] = "Versiecommentaar" ;
+    Text[ chinese_simplified ] = "°æ±¾×¢½â";
+    Text[ russian ] = "Êîììåíòàğèé ê âåğñèè";
+    Text[ polish ] = "Komentarz do wersji";
+    Text[ japanese ] = "ÊŞ°¼Ş®İºÒİÄ";
+    Text[ chinese_traditional ] = "ª©¥»ª`¸Ñ";
+    Text[ arabic ] = "ÊÚáíŞ ÇáÅÕÏÇÑ";
+    Text[ greek ] = "Ó÷üëéï İêäïóçò";
+    Text[ korean ] = "¹öÀü ¼³¸í";
+    Text[ turkish ] = "Sürüm açıklaması";
+    Text[ language_user1 ] = " ";
+};

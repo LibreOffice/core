@@ -1,0 +1,189 @@
+/*************************************************************************
+ *
+ *  $RCSfile: app.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:26 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_APP_HRC
+#define _SFX_APP_HRC
+
+#include "sfx.hrc"
+
+// #defines *****************************************************************
+
+#define ACC_IBM                                 (RID_SFX_APP_START+2)
+#define MSG_ERR_WRITE_CFG                       (RID_SFX_APP_START+2)
+#define MSG_ERR_READ_CFG                        (RID_SFX_APP_START+3)
+#define MSG_ERR_OPEN_CFG                        (RID_SFX_APP_START+4)
+#define MSG_ERR_FILETYPE_CFG                    (RID_SFX_APP_START+5)
+#define MSG_ERR_VERSION_CFG                     (RID_SFX_APP_START+6)
+
+#define MSG_ISPRINTING_QUERYABORT               (RID_SFX_APP_START+9)
+#define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
+#define STR_ISMODIFIED                          (RID_SFX_APP_START+11)
+#define STR_AUTOSAVE                            (RID_SFX_APP_START+12)
+#define STR_MAIL                                (RID_SFX_APP_START+13)
+#define MSG_ERR_WRITE_SBL                       (RID_SFX_APP_START+14)
+#define MSG_IS_SERVER                           (RID_SFX_APP_START+15)
+
+#define STR_RESEXCEPTION                        (RID_SFX_APP_START+21)
+#define STR_SYSRESEXCEPTION                     (RID_SFX_APP_START+22)
+#define STR_DOUBLEEXCEPTION                     (RID_SFX_APP_START+23)
+#define STR_RESWARNING                          (RID_SFX_APP_START+24)
+#define STR_ERR_NOTEMPLATE                      (RID_SFX_APP_START+27)
+#define STR_RECOVER_TITLE                       (RID_SFX_APP_START+28)
+#define STR_RECOVER_QUERY                       (RID_SFX_APP_START+29)
+#define STR_RECOVER_PREPARED                    (RID_SFX_APP_START+30)
+#define MSG_ERR_SOINIT                          (RID_SFX_APP_START+31)
+
+#define MSG_IOERR_FILE_NOT_FOUND                (RID_SFX_APP_START+32)
+#define MSG_IOERR_PATH_NOT_FOUND                (RID_SFX_APP_START+33)
+#define MSG_IOERR_TOO_MANY_OPEN_FILES           (RID_SFX_APP_START+34)
+#define MSG_IOERR_ACCESS_DENIED                 (RID_SFX_APP_START+35)
+#define MSG_IOERR_INVALID_ACCESS                (RID_SFX_APP_START+36)
+#define MSG_IOERR_INVALID_HANDLE                (RID_SFX_APP_START+37)
+#define MSG_IOERR_CANNOT_MAKE                   (RID_SFX_APP_START+38)
+#define MSG_IOERR_SHARING                       (RID_SFX_APP_START+39)
+#define MSG_IOERR_INVALID_PARAMETER             (RID_SFX_APP_START+40)
+#define MSG_IOERR_GENERAL                       (RID_SFX_APP_START+41)
+
+#define RID_FULLSCREENTOOLBOX                   (RID_SFX_APP_START+42)
+#define RID_RECORDINGTOOLBOX                    (RID_SFX_APP_START+43)
+#define RID_ENVTOOLBOX                          (RID_SFX_APP_START+44)
+
+#define STR_EVENT_STARTAPP                      (RID_SFX_APP_START+50)
+#define STR_EVENT_CLOSEAPP                      (RID_SFX_APP_START+51)
+#define STR_EVENT_CREATEDOC                     (RID_SFX_APP_START+52)
+#define STR_EVENT_OPENDOC                       (RID_SFX_APP_START+53)
+#define STR_EVENT_CLOSEDOC                      (RID_SFX_APP_START+54)
+#define STR_EVENT_SAVEDOC                       (RID_SFX_APP_START+55)
+#define STR_EVENT_SAVEASDOC                     (RID_SFX_APP_START+56)
+#define STR_EVENT_ACTIVATEDOC                   (RID_SFX_APP_START+57)
+#define STR_EVENT_DEACTIVATEDOC                 (RID_SFX_APP_START+58)
+#define STR_EVENT_ONERROR                       (RID_SFX_APP_START+78)
+#define STR_EVENT_PREPARECLOSEDOC               (RID_SFX_APP_START+89)
+#define STR_EVENT_NEWMESSAGE                    (RID_SFX_APP_START+90)
+#define STR_EVENT_SAVEDOCDONE                   (RID_SFX_APP_START+95)
+#define STR_EVENT_SAVEASDOCDONE                 (RID_SFX_APP_START+96)
+
+#define STR_QUITAPP                             (RID_SFX_APP_START+59)
+#define STR_EXITANDRETURN                       (RID_SFX_APP_START+60)
+#define STR_ERR_NOFILE                          (RID_SFX_APP_START+61)
+#define STR_EXTHELPSTATUS                       (RID_SFX_APP_START+62)
+
+#define STR_EVENT_PRINTDOC                      (RID_SFX_APP_START+64)
+#define STR_ADDRESS_NAME                        (RID_SFX_APP_START+65)
+
+#define RID_MAIL_INBOX                          (RID_SFX_APP_START+66)
+#define RID_DELETE_MAIL_QBX                     (RID_SFX_APP_START+67)
+
+#define RID_STR_HLPFILENOTEXIST                 (RID_SFX_APP_START+68)
+#define RID_STR_HLPAPPNOTSTARTED                (RID_SFX_APP_START+69)
+
+#define STR_NOMODUL                             (RID_SFX_APP_START+73)
+#define STR_NOOFFICE                            (RID_SFX_APP_START+74)
+#define STR_NODOUBLE                            (RID_SFX_APP_START+75)
+#define STR_NOPRINTER                           (RID_SFX_APP_START+76)
+
+#define MSG_SIGNAL                              (RID_SFX_APP_START+77)
+
+#define RID_STR_HELP                            (RID_SFX_APP_START+79)
+#define RID_STR_NOAUTOSTARTHELPAGENT            (RID_SFX_APP_START+80)
+#define RID_HELPBAR                             (RID_SFX_APP_START+81)
+#define RID_SPECIALCONFIG_ERROR                 (RID_SFX_APP_START+82)
+
+#define RID_IMAGE_RES                           (RID_SFX_APP_START+83)
+
+#define STR_MEMINFO_HEADER                  (RID_SFX_APP_START+84)
+#define STR_MEMINFO_FOOTER                  (RID_SFX_APP_START+85)
+#define STR_MEMINFO_OBJINFO                 (RID_SFX_APP_START+86)
+
+#define RID_PLUGIN                          (RID_SFX_APP_START+87)
+
+#define RID_WARN_POST_MAILTO                (RID_SFX_APP_START+88)
+
+#define RID_STR_NOWELCOMESCREEN             (RID_SFX_APP_START+91)
+
+#define STR_EDITOBJECT                      (RID_SFX_APP_START+92)
+#define STR_OPENOBJECT                      (RID_SFX_APP_START+93)
+#define STR_CORRUPT_INSTALLATION            (RID_SFX_APP_START+94)
+#define IDS_SBERR_STOREREF                  (RID_SFX_APP_START+97)
+
+#define RID_IMAGE_USER1                        1
+#define RID_IMAGE_USER2                        2
+#define RID_IMAGE_USER3                        3
+#define RID_IMAGE_USER4                        4
+#define RID_IMAGE_BADDATA                      5
+#define RID_IMAGE_BINARY                       6
+#define RID_IMAGE_DELAYED                      7
+#define RID_IMAGE_EMBED                        8
+#define RID_IMAGE_IMAGE                        9
+#define RID_IMAGE_INDEX                        10
+#define RID_IMAGE_MENU                         11
+#define RID_IMAGE_MOVIE                        12
+#define RID_IMAGE_NOTFOUND                     13
+#define RID_IMAGE_SOUND                        14
+#define RID_IMAGE_TELNET                       15
+#define RID_IMAGE_TEXT                         16
+#define RID_IMAGE_UNKNOWN                      17
+#define RID_IMAGE_UNSECURE                     18
+#define RID_IMAGE_SPECIAL                      19
+
+#endif // #ifndef _SFX_APP_HRC
+
+// ******************************************************************* EOF
+

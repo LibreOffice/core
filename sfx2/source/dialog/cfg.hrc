@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ *  $RCSfile: cfg.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#define BTN_MN_OK 1
+#define BTN_MN_CANCEL 2
+#define BTN_MN_NEWPOPUP 6
+#define BTN_MN_NEW 7
+#define BTN_MN_CHANGE 8
+#define BTN_MN_REMOVE 9
+#define BOX_MN_ENTRIES 10
+#define TXT_MN_FUNCTIONTEXT 13
+#define TXT_MN_FUNCTIONINFO 14
+#define TXT_MN_DESCRIPTIONTEXT 15
+#define TXT_MN_DESCRIPTIONINFO 16
+#define GRP_MN_MENU 17
+#define TXT_MN_GROUP 18
+#define BOX_MN_GROUP 19
+#define TXT_MN_FUNCTION 20
+#define BOX_MN_FUNCTION 21
+#define GRP_FUNCTIONS 22
+#define BTN_ACC_OK 1
+#define BTN_ACC_CANCEL 2
+#define BTN_ACC_CHANGE 3
+#define BTN_ACC_REMOVE 4
+#define BOX_ACC_ENTRIES 5
+#define TXT_ACC_DESCRIPTIONTEXT 6
+#define TXT_ACC_DESCRIPTIONINFO 7
+#define GRP_ACC_KEYBOARD 8
+#define TXT_ACC_GROUP 9
+#define BOX_ACC_GROUP 10
+#define TXT_ACC_FUNCTION 11
+#define BOX_ACC_FUNCTION 12
+#define TXT_ACC_KEY 13
+#define BOX_ACC_KEY 14
+#define GRP_ACC_FUNCTIONS 15
+#define TAB_CONTROL 12
+#define BOX_STATBAR_ENTRIES 5
+#define TXT_STATBAR_DESCRIPTIONTEXT 6
+#define TXT_STATBAR_DESCRIPTIONINFO 7
+#define GRP_STATBAR 8
+#define BTN_RESET   20
+#define BTN_LOAD 40
+#define BTN_SAVE 41
+#define BTN_MN_UP 42
+#define BTN_MN_DOWN 43
+
+#define CHKBTN_UNCHECKED   30001
+#define CHKBTN_CHECKED     30002
+#define CHKBTN_HICHECKED   30003
+#define CHKBTN_HIUNCHECKED 30004
+#define CHKBTN_TRISTATE    30005
+#define CHKBTN_HITRISTATE  30006

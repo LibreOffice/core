@@ -1,0 +1,565 @@
+/*************************************************************************
+ *
+ *  $RCSfile: stbctrls.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "stbctrls.h"
+ // pragma ----------------------------------------------------------------
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_INSERT_TEXT
+{
+     // 'Einf"ugen' bzw. 'Insert' abgek"urzt auf h"ochstens 5 Zeichen
+    Text = "EINFG" ;
+    Text [ English ] = "INSRT" ;
+    Text [ norwegian ] = "SETT INN INSRT" ;
+    Text [ italian ] = "INS" ;
+    Text [ portuguese_brazilian ] = "INSERIR" ;
+    Text [ portuguese ] = "INSER" ;
+    Text [ finnish ] = "LIS" ;
+    Text [ danish ] = "IND" ;
+    Text [ french ] = "INS" ;
+    Text [ swedish ] = "INFGA" ;
+    Text [ dutch ] = "INSRT" ;
+    Text [ spanish ] = "INSERT" ;
+    Text [ english_us ] = "INSRT" ;
+    Text[ chinese_simplified ] = "≤Â»Î";
+    Text[ russian ] = "¬—“¿¬ ";
+    Text[ polish ] = "WSTAW";
+    Text[ japanese ] = "ë}ì¸";
+    Text[ chinese_traditional ] = "¥°§J";
+    Text[ arabic ] = "≈œ—«Ã";
+    Text[ dutch ] = "INSRT";
+    Text[ chinese_simplified ] = "≤Â»Î";
+    Text[ greek ] = "≈…”¡√Ÿ√«";
+    Text[ korean ] = "ª¿‘";
+    Text[ turkish ] = "EKLE";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_OVERWRITE_TEXT
+{
+     // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
+    Text = "‹BER" ;
+    Text [ English ] = "OVER" ;
+    Text [ norwegian ] = "OVER" ;
+    Text [ italian ] = "SSC" ;
+    Text [ portuguese_brazilian ] = "SOBRE" ;
+    Text [ portuguese ] = "SUB" ;
+    Text [ finnish ] = "KORV" ;
+    Text [ danish ] = "OVR" ;
+    Text [ french ] = "RFP" ;
+    Text [ swedish ] = "÷VER" ;
+    Text [ dutch ] = "OVER" ;
+    Text [ spanish ] = "SOBRE" ;
+    Text [ english_us ] = "OVER" ;
+    Text[ chinese_simplified ] = "∏≤–¥";
+    Text[ russian ] = "«¿Ã≈Õ¿";
+    Text[ polish ] = "NAD";
+    Text[ japanese ] = "è„èëÇ´";
+    Text[ chinese_traditional ] = "¬–ºg";
+    Text[ arabic ] = "›Êﬁ";
+    Text[ dutch ] = "OVER";
+    Text[ chinese_simplified ] = "∏≤–¥";
+    Text[ greek ] = "¡Õ‘… ¡‘";
+    Text[ korean ] = "√ ∞˙";
+    Text[ turkish ] = "‹ZR";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_SELMODE_STD
+{
+     // 'Standard' abgek"urzt auf h"ochstens 3 Zeichen
+    TEXT = "STD" ;
+    TEXT [ English ] = "STD" ;
+    Text [ portuguese ] = "PAD" ;
+    Text [ english_us ] = "STD" ;
+    Text [ portuguese_brazilian ] = "STD" ;
+    Text [ swedish ] = "STD" ;
+    Text [ danish ] = "STD" ;
+    Text [ italian ] = "STD" ;
+    Text [ spanish ] = "STD" ;
+    Text [ french ] = "STD" ;
+    Text [ dutch ] = "STD" ;
+    Text[ chinese_simplified ] = "±Í◊º";
+    Text[ russian ] = "—“¿Õ";
+    Text[ polish ] = "STD";
+    Text[ japanese ] = "ïWèÄ";
+    Text[ chinese_traditional ] = "º–∑«";
+    Text[ arabic ] = "ﬁÌ«”Ì";
+    Text[ dutch ] = "STD";
+    Text[ chinese_simplified ] = "±Í◊º";
+    Text[ greek ] = "–—œ≈–";
+    Text[ korean ] = "«•¡ÿ";
+    Text[ turkish ] = "STD";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_SELMODE_ER
+{
+     // 'Erweitert' bzw. 'Extended' abgek"urzt auf h"ochstens 3 Zeichen
+    TEXT = "ER" ;
+    TEXT [ English ] = "EXT" ;
+    TEXT [ norwegian ] = "G≈ UT EXT" ;
+    TEXT [ italian ] = "EXT" ;
+    TEXT [ portuguese_brazilian ] = "EXT" ;
+    TEXT [ portuguese ] = "EXT" ;
+    TEXT [ finnish ] = "LAAJ" ;
+    TEXT [ danish ] = "UDV" ;
+    TEXT [ french ] = "EXT" ;
+    TEXT [ swedish ] = "UTV" ;
+    TEXT [ dutch ] = "EXT" ;
+    TEXT [ spanish ] = "EXT" ;
+    TEXT [ english_us ] = "EXT" ;
+    TEXT[ chinese_simplified ] = "¿©’π";
+    TEXT[ russian ] = "–¿—ÿ";
+    TEXT[ polish ] = "ROZ";
+    TEXT[ japanese ] = "ägí£";
+    TEXT[ chinese_traditional ] = "¬XÆi";
+    TEXT[ arabic ] = " Ê”Ì⁄";
+    TEXT[ dutch ] = "EXT";
+    TEXT[ chinese_simplified ] = "¿©’π";
+    TEXT[ greek ] = "≈–≈ ‘";
+    TEXT[ korean ] = "»Æ¿Â";
+    TEXT[ turkish ] = "UZN";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_SELMODE_ERG
+{
+     // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
+    TEXT = "ERG" ;
+    TEXT [ English ] = "ADD" ;
+    TEXT [ norwegian ] = "LEGG TIL" ;
+    TEXT [ italian ] = "RIS" ;
+    TEXT [ portuguese_brazilian ] = "ACR" ;
+    TEXT [ portuguese ] = "ADI" ;
+    TEXT [ finnish ] = "LIS" ;
+    TEXT [ danish ] = "TLF" ;
+    TEXT [ french ] = "AJT" ;
+    TEXT [ swedish ] = "TLF" ;
+    TEXT [ dutch ] = "ADD" ;
+    TEXT [ spanish ] = "AGR" ;
+    TEXT [ english_us ] = "ADD" ;
+    TEXT[ chinese_simplified ] = "≤π≥‰";
+    TEXT[ russian ] = "ƒŒ¡¿¬";
+    TEXT[ polish ] = "DODAJ";
+    TEXT[ japanese ] = "äÆê¨";
+    TEXT[ chinese_traditional ] = "∏…•R";
+    TEXT[ arabic ] = " ﬂ„·…";
+    TEXT[ dutch ] = "ADD";
+    TEXT[ chinese_simplified ] = "≤π≥‰";
+    TEXT[ greek ] = "–—œ”»";
+    TEXT[ korean ] = "∫∏√Ê";
+    TEXT[ turkish ] = "TAML";
+    TEXT[ language_user1 ] = " ";
+};
+ // PopupMenu -------------------------------------------------------------
+Menu RID_SVXMNU_ZOOM
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ZOOM_200 ;
+            HelpId = HID_MNU_ZOOM_200 ;
+            Text = "200%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_150 ;
+            HelpId = HID_MNU_ZOOM_150 ;
+            Text = "150%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_100 ;
+            HelpId = HID_MNU_ZOOM_100 ;
+            Text = "100%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_75 ;
+            HelpId = HID_MNU_ZOOM_75 ;
+            Text = "75%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_50 ;
+            HelpId = HID_MNU_ZOOM_50 ;
+            Text = "50%" ;
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_OPTIMAL ;
+            HelpId = HID_MNU_ZOOM_OPTIMAL ;
+            Text = "Optimal" ;
+            Text [ English ] = "Optimal" ;
+            text [ english_us ] = "Optimal" ;
+            Text [ portuguese ] = "Optimizado" ;
+            Text [ portuguese_brazilian ] = "Optimal" ;
+            Text [ swedish ] = "Optimal" ;
+            Text [ danish ] = "Optimal" ;
+            Text [ italian ] = "Ottimale" ;
+            Text [ spanish ] = "”ptimo" ;
+            Text [ french ] = "Optimal" ;
+            Text [ dutch ] = "Optimaal" ;
+            Text[ chinese_simplified ] = "◊Óº—";
+            Text[ russian ] = "ŒÔÚËÏ‡Î¸ÌÓ";
+            Text[ polish ] = "Optymalny";
+            Text[ japanese ] = "ç≈ìK";
+            Text[ chinese_traditional ] = "≥Ã®Œ";
+            Text[ arabic ] = "«·√„À·";
+            Text[ dutch ] = "Optimaal";
+            Text[ chinese_simplified ] = "◊Óº—";
+            Text[ greek ] = "¬›ÎÙÈÛÙ·";
+            Text[ korean ] = "√÷¿˚";
+            Text[ turkish ] = "Optimum";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_PAGE_WIDTH ;
+            HelpId = HID_MNU_ZOOM_PAGE_WIDTH ;
+            Text = "Seitenbreite" ;
+            Text [ ENGLISH ] = "Page width" ;
+            Text [ norwegian ] = "Sidebredde" ;
+            Text [ italian ] = "Larghezza pagina" ;
+            Text [ portuguese_brazilian ] = "Largura de p·gina" ;
+            Text [ portuguese ] = "Larg. de p·gina" ;
+            Text [ finnish ] = "Sivun leveys" ;
+            Text [ danish ] = "Sidebredde" ;
+            Text [ french ] = "Largeur de page" ;
+            Text [ swedish ] = "Sidbredd" ;
+            Text [ dutch ] = "Paginabreedte" ;
+            Text [ spanish ] = "Ancho de p·gina" ;
+            Text [ english_us ] = "Page Width" ;
+            Text[ chinese_simplified ] = "“≥øÌ";
+            Text[ russian ] = "œÓ ¯ËËÌÂ ÒÚ‡ÌËˆ˚";
+            Text[ polish ] = "SzerokoúÊ strony";
+            Text[ japanese ] = "Õﬂ∞ºﬁïù";
+            Text[ chinese_traditional ] = "≠∂ºe";
+            Text[ arabic ] = "⁄—÷ «·’›Õ…";
+            Text[ dutch ] = "Paginabreedte";
+            Text[ chinese_simplified ] = "“≥øÌ";
+            Text[ greek ] = "–Î‹ÙÔÚ ÛÂÎﬂ‰·Ú";
+            Text[ korean ] = "∆‰¿Ã¡ˆ ≥ ∫Ò";
+            Text[ turkish ] = "Sayfa geni˛lii";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ZOOM_WHOLE_PAGE ;
+            HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
+            Text = "Ganze Seite" ;
+            Text [ ENGLISH ] = "Whole page" ;
+            Text [ norwegian ] = "Hele siden" ;
+            Text [ italian ] = "Pagina intera" ;
+            Text [ portuguese_brazilian ] = "P·gina inteira" ;
+            Text [ portuguese ] = "P·gina inteira" ;
+            Text [ finnish ] = "Koko sivu" ;
+            Text [ danish ] = "Hele siden" ;
+            Text [ french ] = "Page entiËre" ;
+            Text [ swedish ] = "Hela sidan" ;
+            Text [ dutch ] = "Hele pagina" ;
+            Text [ spanish ] = "Toda la p·gina" ;
+            Text [ english_us ] = "Entire Page" ;
+            Text[ chinese_simplified ] = "’˚“≥";
+            Text[ russian ] = "Õ‡ ‚Ò˛ ÒÚ‡ÌËˆÛ";
+            Text[ polish ] = "Ca≥a strona";
+            Text[ japanese ] = "Õﬂ∞ºﬁëSëÃ";
+            Text[ chinese_traditional ] = "æ„≠∂";
+            Text[ arabic ] = "’›Õ… ﬂ«„·…";
+            Text[ dutch ] = "Hele pagina";
+            Text[ chinese_simplified ] = "’˚“≥";
+            Text[ greek ] = "œÎ¸ÍÎÁÒÁ ÛÂÎﬂ‰·";
+            Text[ korean ] = "∆‰¿Ã¡ˆ ¿¸√º";
+            Text[ turkish ] = "T¸m sayfa";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+ // Funktionsauswahl auf dem SvxPosSizeStatusBarControl fuer Calc
+Menu RID_SVXMNU_PSZ_FUNC
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_AVG ;
+            HelpId = HID_MNU_FUNC_AVG ;
+            Text = "Mittelwert" ;
+            Text [ ENGLISH ] = "Average" ;
+            Text [ english_us ] = "Average" ;
+            Text [ italian ] = "Valore medio" ;
+            Text [ spanish ] = "Promedio" ;
+            Text [ french ] = "Moyenne" ;
+            Text [ dutch ] = "Gemiddelde" ;
+            Text [ swedish ] = "Medelv‰rde" ;
+            Text [ danish ] = "Middel" ;
+            Text [ portuguese_brazilian ] = "Mittelwert" ;
+            Text [ portuguese ] = "Valor mÈdio" ;
+            Text[ chinese_simplified ] = "∆Ωæ˘÷µ";
+            Text[ russian ] = "—Â‰ÌÂÂ ÁÌ‡˜ÂÌËÂ";
+            Text[ polish ] = "årednia wartoúÊ";
+            Text[ japanese ] = "ïΩãœíl";
+            Text[ chinese_traditional ] = "•≠ß°≠»";
+            Text[ arabic ] = "«·„⁄œ·";
+            Text[ dutch ] = "Gemiddelde";
+            Text[ chinese_simplified ] = "∆Ωæ˘÷µ";
+            Text[ greek ] = "Ã›ÛÁ ÙÈÏﬁ";
+            Text[ korean ] = "¡ﬂ∞£∞™";
+            Text[ turkish ] = "Ortalama";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_COUNT2 ;
+            HelpId = HID_MNU_FUNC_COUNT2 ;
+            Text = "Anzahl2" ;
+            Text [ ENGLISH ] = "Count2" ;
+            Text [ dutch ] = "Aantal2" ;
+            Text [ english_us ] = "CountA" ;
+            Text [ italian ] = "Numero2" ;
+            Text [ spanish ] = "Cantidad2" ;
+            Text [ french ] = "Nombre2" ;
+            Text [ swedish ] = "Antal2" ;
+            Text [ danish ] = "TÊlv" ;
+            Text [ portuguese ] = "Contar" ;
+            Text [ portuguese_brazilian ] = "Anzahl2" ;
+            Text[ chinese_simplified ] = " ˝ƒø2";
+            Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó2";
+            Text[ polish ] = "Liczba2";
+            Text[ japanese ] = "êî2";
+            Text[ chinese_traditional ] = "º∆•ÿ2";
+            Text[ arabic ] = "⁄œœ2";
+            Text[ dutch ] = "Aantal2";
+            Text[ chinese_simplified ] = " ˝ƒø2";
+            Text[ greek ] = "–ÎﬁËÔÚ2";
+            Text[ korean ] = "ºˆ2";
+            Text[ turkish ] = "Say˝2";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_COUNT ;
+            HelpId = HID_MNU_FUNC_COUNT ;
+            Text = "Anzahl" ;
+            Text [ ENGLISH ] = "Count" ;
+            Text [ dutch ] = "Aantal" ;
+            Text [ english_us ] = "Count" ;
+            Text [ italian ] = "Numero" ;
+            Text [ spanish ] = "Cantidad" ;
+            Text [ french ] = "Nombre" ;
+            Text [ swedish ] = "Antal" ;
+            Text [ danish ] = "TÊl" ;
+            Text [ portuguese ] = "Quantidade" ;
+            Text [ portuguese_brazilian ] = "Anzahl" ;
+            Text[ chinese_simplified ] = " ˝ƒø";
+            Text[ russian ] = " ÓÎË˜ÂÒÚ‚Ó";
+            Text[ polish ] = "Liczba";
+            Text[ japanese ] = "êî";
+            Text[ chinese_traditional ] = "º∆•ÿ";
+            Text[ arabic ] = "⁄œœ";
+            Text[ dutch ] = "Aantal";
+            Text[ chinese_simplified ] = " ˝ƒø";
+            Text[ greek ] = "–ÎﬁËÔÚ";
+            Text[ korean ] = "ºˆ";
+            Text[ turkish ] = "Say˝";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_MAX ;
+            HelpId = HID_MNU_FUNC_MAX ;
+            Text = "Maximum" ;
+            Text [ ENGLISH ] = "Maximum" ;
+            Text [ dutch ] = "Maximum" ;
+            Text [ english_us ] = "Maximum" ;
+            Text [ italian ] = "Massimo" ;
+            Text [ spanish ] = "M·ximo" ;
+            Text [ french ] = "Maximum" ;
+            Text [ swedish ] = "Maximum" ;
+            Text [ danish ] = "Maksimum" ;
+            Text [ portuguese ] = "M·ximo" ;
+            Text [ portuguese_brazilian ] = "Maximum" ;
+            Text[ chinese_simplified ] = "◊Ó¥Û";
+            Text[ russian ] = "Ã‡ÍÒËÏÛÏ";
+            Text[ polish ] = "Maksimum";
+            Text[ japanese ] = "ç≈ëÂíl";
+            Text[ chinese_traditional ] = "≥Ã§j";
+            Text[ arabic ] = "«·Õœ «·√ﬁ’Ï";
+            Text[ dutch ] = "Maximum";
+            Text[ chinese_simplified ] = "◊Ó¥Û";
+            Text[ greek ] = "Ã›„ÈÛÙÔ";
+            Text[ korean ] = "√÷¥Î";
+            Text[ turkish ] = "Azami";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_MIN ;
+            HelpId = HID_MNU_FUNC_MIN ;
+            Text = "Minimum" ;
+            Text [ ENGLISH ] = "Minimum" ;
+            Text [ dutch ] = "Minimum" ;
+            Text [ english_us ] = "Minimum" ;
+            Text [ italian ] = "Minimo" ;
+            Text [ spanish ] = "MÌnimo" ;
+            Text [ french ] = "Minimum" ;
+            Text [ swedish ] = "Minimum" ;
+            Text [ danish ] = "Minimum" ;
+            Text [ portuguese ] = "MÌnimo" ;
+            Text [ portuguese_brazilian ] = "Minimum" ;
+            Text[ chinese_simplified ] = "◊Ó–°";
+            Text[ russian ] = "ÃËÌËÏÛÏ";
+            Text[ polish ] = "Minimum";
+            Text[ japanese ] = "ç≈è¨";
+            Text[ chinese_traditional ] = "≥Ã§p";
+            Text[ arabic ] = "«·Õœ «·√œ‰Ï";
+            Text[ dutch ] = "Minimum";
+            Text[ chinese_simplified ] = "◊Ó–°";
+            Text[ greek ] = "≈Î‹˜ÈÛÙÔ";
+            Text[ korean ] = "√÷º“";
+            Text[ turkish ] = "Asgari";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_SUM ;
+            HelpId = HID_MNU_FUNC_SUM ;
+            Text = "Summe" ;
+            Text [ ENGLISH ] = "Sum" ;
+            Text [ dutch ] = "Som" ;
+            Text [ english_us ] = "Sum" ;
+            Text [ italian ] = "Somma" ;
+            Text [ spanish ] = "Suma" ;
+            Text [ french ] = "Somme" ;
+            Text [ swedish ] = "Summa" ;
+            Text [ danish ] = "Sum" ;
+            Text [ portuguese ] = "Soma" ;
+            Text [ portuguese_brazilian ] = "Summe" ;
+            Text[ chinese_simplified ] = "◊‹º∆";
+            Text[ russian ] = "—ÛÏÏ‡";
+            Text[ polish ] = "Suma";
+            Text[ japanese ] = "çáåv";
+            Text[ chinese_traditional ] = "§p≠p";
+            Text[ arabic ] = "«·„Ã„Ê⁄";
+            Text[ dutch ] = "Som";
+            Text[ chinese_simplified ] = "◊‹º∆";
+            Text[ greek ] = "¢ËÒÔÈÛÏ·";
+            Text[ korean ] = "«’∞Ë";
+            Text[ turkish ] = "Toplam";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = PSZ_FUNC_NONE ;
+            HelpId = HID_MNU_FUNC_NONE ;
+            Text = "Keine" ;
+            Text [ ENGLISH ] = "None" ;
+            Text [ dutch ] = "Geen" ;
+            Text [ english_us ] = "None" ;
+            Text [ italian ] = "Senza" ;
+            Text [ spanish ] = "Ninguno" ;
+            Text [ french ] = "Aucun(e)" ;
+            Text [ swedish ] = "Inga" ;
+            Text [ danish ] = "Ingen" ;
+            Text [ portuguese ] = "Nenhuma" ;
+            Text [ portuguese_brazilian ] = "Keine" ;
+            Text[ chinese_simplified ] = "Œﬁ";
+            Text[ russian ] = "¡ÂÁ";
+            Text[ polish ] = "Brak";
+            Text[ japanese ] = "Ç»Çµ";
+            Text[ chinese_traditional ] = "µL";
+            Text[ arabic ] = "»œÊ‰";
+            Text[ dutch ] = "Geen";
+            Text[ chinese_simplified ] = "Œﬁ";
+            Text[ greek ] = " ·Ì›Ì·";
+            Text[ korean ] = "æ¯¿Ω";
+            Text[ turkish ] = "Yok";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+ // Images ----------------------------------------------------------------
+Image RID_SVXBMP_POSITION
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc10223.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};
+Image RID_SVXBMP_SIZE
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sc10224.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xC000 ;
+        Green = 0xC000 ;
+        Blue = 0xC000 ;
+    };
+};

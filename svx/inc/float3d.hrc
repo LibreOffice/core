@@ -1,0 +1,198 @@
+/*************************************************************************
+ *
+ *  $RCSfile: float3d.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialogs.hrc"
+
+//#define FLT_WIN_3D                827
+
+#define BTN_FAVORITES           1
+#define BTN_GEO                 2
+#define BTN_REPRESENTATION      3
+#define BTN_LIGHT               4
+#define BTN_TEXTURE             5
+#define BTN_MATERIAL            6
+#define BTN_UPDATE              7
+#define BTN_ASSIGN              8
+
+// Unterer Teil
+#define BTN_PERSPECTIVE         9
+#define BTN_CHANGE_TO_3D        10
+#define BTN_LATHE_OBJ           11
+#define CTL_PREVIEW             12
+#define CTL_LIGHT_PREVIEW       13
+#define GRP_PREVIEW             14
+
+// Favoriten
+#define CTL_FAVORITES           20
+#define GRP_FAVORITES           21
+#define BTN_ONLY_3D             22
+#define BTN_ALL_ATTRIBUTES      23
+
+// Geometrie
+#define FT_HORIZONTAL           24
+#define NUM_HORIZONTAL          25
+#define FT_VERTICAL             26
+#define NUM_VERTICAL            27
+#define GRP_SEGMENTS            28
+#define FT_PERCENT_DIAGONAL     29
+#define MTR_PERCENT_DIAGONAL    30
+#define FT_BACKSCALE            31
+#define MTR_BACKSCALE           32
+#define FT_END_ANGLE            33
+#define MTR_END_ANGLE           34
+#define FT_DEPTH                35
+#define MTR_DEPTH               36
+#define GRP_GEOMETRIE           37
+
+#define BTN_NORMALS_OBJ         38
+#define BTN_NORMALS_FLAT        39
+#define BTN_NORMALS_SPHERE      40
+#define BTN_TWO_SIDED_LIGHTING  41
+#define BTN_NORMALS_INVERT      42
+#define GRP_NORMALS             43
+
+#define BTN_DOUBLE_SIDED        44
+
+// Darstellung
+#define FT_SHADEMODE            45
+#define LB_SHADEMODE            46
+#define BTN_SHADOW_3D           47
+#define FT_SLANT                48
+#define MTR_SLANT               49
+#define GRP_SHADOW              50
+#define FT_DISTANCE             51
+#define MTR_DISTANCE            52
+#define FT_FOCAL_LENGTH         53
+#define MTR_FOCAL_LENGTH        54
+#define GRP_CAMERA              55
+#define GRP_REPRESENTATION      56
+
+// Beleuchtung
+#define BTN_LIGHT_1             60
+#define BTN_LIGHT_2             61
+#define BTN_LIGHT_3             62
+#define BTN_LIGHT_4             63
+#define BTN_LIGHT_5             64
+#define BTN_LIGHT_6             65
+#define BTN_LIGHT_7             66
+#define BTN_LIGHT_8             67
+#define LB_LIGHT_1              68
+#define LB_LIGHT_2              69
+#define LB_LIGHT_3              70
+#define LB_LIGHT_4              71
+#define LB_LIGHT_5              72
+#define LB_LIGHT_6              73
+#define LB_LIGHT_7              74
+#define LB_LIGHT_8              75
+#define BTN_LIGHT_COLOR         76
+#define GRP_LIGHTSOURCE         77
+#define LB_AMBIENTLIGHT         78
+#define BTN_AMBIENT_COLOR       79
+#define GRP_AMBIENTLIGHT        80
+#define GRP_LIGHT               81
+#define FT_LIGHT_X              82
+#define FT_LIGHT_Y              83
+#define FT_LIGHT_Z              84
+#define GRP_LIGHT_INFO          85
+
+// Texturen
+#define FT_TEX_KIND             90
+#define BTN_TEX_LUMINANCE       91
+#define BTN_TEX_COLOR           92
+#define FT_TEX_MODE             93
+#define BTN_TEX_REPLACE         94
+#define BTN_TEX_MODULATE        95
+#define BTN_TEX_BLEND           96
+#define FT_TEX_PROJECTION_X     97
+#define BTN_TEX_PARALLEL_X      98
+#define BTN_TEX_CIRCLE_X        99
+#define BTN_TEX_OBJECT_X        100
+#define FT_TEX_PROJECTION_Y     101
+#define BTN_TEX_PARALLEL_Y      102
+#define BTN_TEX_CIRCLE_Y        103
+#define BTN_TEX_OBJECT_Y        104
+#define FT_TEX_FILTER           105
+#define BTN_TEX_FILTER          106
+#define GRP_TEXTURE             107
+
+// Material
+//#define CTL_MATERIAL              110
+#define GRP_MATERIAL                111
+
+#define FT_MAT_COLOR                112
+#define LB_MAT_COLOR                113
+#define BTN_MAT_COLOR               114
+#define FT_MAT_EMISSION             115
+#define LB_MAT_EMISSION             116
+#define BTN_EMISSION_COLOR          117
+#define FT_MAT_SPECULAR             118
+#define LB_MAT_SPECULAR             119
+#define BTN_SPECULAR_COLOR          120
+#define FT_MAT_SPECULAR_INTENSITY   121
+#define MTR_MAT_SPECULAR_INTENSITY  122
+#define GRP_MAT_SPECULAR            123
+#define FT_MAT_FAVORITES            124
+#define LB_MAT_FAVORITES            125
+
+
+//#define BTN_MAT_FAVORITES         125
+//#define BTN_MAT_EDITOR            126
+
+

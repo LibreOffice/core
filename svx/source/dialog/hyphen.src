@@ -1,0 +1,248 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hyphen.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "hyphen.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXDLG_HYPHENATE --------------------------------------------------
+ModalDialog RID_SVXDLG_HYPHENATE
+{
+    HelpId = HID_HYPHENATE ;
+    Size = MAP_APPFONT ( 245 , 63 ) ;
+    OutputSize = TRUE ;
+    SvLook = TRUE ;
+    Text = "Silbentrennung" ;
+    Text [ English ] = "Hypenation" ;
+    Text [ norwegian ] = "Hypenation" ;
+    Text [ italian ] = "Sillabazione" ;
+    Text [ portuguese_brazilian ] = "HifenaÁ„o" ;
+    Text [ portuguese ] = "Divis„o sil·bica" ;
+    Text [ finnish ] = "Tavutus" ;
+    Text [ danish ] = "Orddeling" ;
+    Text [ french ] = "Coupure de mots" ;
+    Text [ swedish ] = "Avstavning" ;
+    Text [ dutch ] = "Woordafbreking" ;
+    Text [ spanish ] = "SeparaciÛn sil·bica" ;
+    Text [ english_us ] = "Hyphenation" ;
+    Moveable = TRUE ;
+    Edit ED_WORD
+    {
+        BORDER = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 16 ) ;
+        Size = MAP_APPFONT ( 109 , 12 ) ;
+        TABSTOP = TRUE ;
+        LEFT = TRUE ;
+    };
+    ImageButton BTN_LEFT
+    {
+        Pos = MAP_APPFONT ( 47 , 35 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TABSTOP = TRUE ;
+        SYMBOL = IMAGEBUTTON_ARROW_LEFT ;
+    };
+    ImageButton BTN_RIGHT
+    {
+        Pos = MAP_APPFONT ( 72 , 35 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        TABSTOP = TRUE ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT ;
+    };
+    GroupBox GB_WORD
+    {
+        SVLOOK = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 121 , 51 ) ;
+        TEXT = "Wort" ;
+        TEXT [ English ] = "Word" ;
+        TEXT [ norwegian ] = "Word" ;
+        TEXT [ italian ] = "Parola" ;
+        TEXT [ portuguese_brazilian ] = "Palavra" ;
+        TEXT [ portuguese ] = "Palavra" ;
+        TEXT [ finnish ] = "Sana" ;
+        TEXT [ danish ] = "Ord" ;
+        TEXT [ french ] = "Mot" ;
+        TEXT [ swedish ] = "Ord" ;
+        TEXT [ dutch ] = "Woord" ;
+        TEXT [ spanish ] = "Palabra" ;
+        TEXT [ english_us ] = "Word" ;
+        TEXT[ chinese_simplified ] = "◊÷";
+        TEXT[ russian ] = "—ÎÓ‚Ó";
+        TEXT[ polish ] = "S≥owo";
+        TEXT[ japanese ] = "íPåÍ";
+        TEXT[ chinese_traditional ] = "¶r";
+        TEXT[ arabic ] = "«·ﬂ·„…";
+        TEXT[ greek ] = "À›ÓÁ";
+        TEXT[ korean ] = "¥‹æÓ";
+        TEXT[ turkish ] = "Sˆzc¸k";
+        TEXT[ language_user1 ] = " ";
+    };
+    PushButton BTN_HYPH_CONTINUE
+    {
+        Pos = MAP_APPFONT ( 133 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TEXT = "~Weiter" ;
+        TEXT [ English ] = "~Continue" ;
+        TEXT [ english_us ] = "~Next" ;
+        TABSTOP = TRUE ;
+        Text [ dutch ] = "~Verder" ;
+        Text [ italian ] = "Avanti" ;
+        Text [ spanish ] = "~Siguiente" ;
+        Text [ french ] = "~Suivant" ;
+        Text [ swedish ] = "~N‰sta" ;
+        Text [ danish ] = "NÊste" ;
+        Text [ portuguese ] = "~Continuar" ;
+        Text [ portuguese_brazilian ] = "~Weiter" ;
+        Text[ chinese_simplified ] = "ºÃ–¯(~N)";
+        Text[ russian ] = "ƒ‡ÎÂÂ";
+        Text[ polish ] = "Dalej";
+        Text[ japanese ] = "éüÇ÷(~N)";
+        Text[ chinese_traditional ] = "ƒ~ƒÚ(~N)";
+        Text[ arabic ] = "«· «·Ì";
+        Text[ greek ] = "≈¸ÏÂÌÔ";
+        Text[ korean ] = "∞Ëº”(~N)";
+        Text[ turkish ] = "~Sonraki";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_HYPH_DELETE
+    {
+        Pos = MAP_APPFONT ( 133 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TEXT = "~Entfernen" ;
+        TEXT [ English ] = "~Erase" ;
+        TEXT [ norwegian ] = "~Erase" ;
+        TEXT [ italian ] = "~Rimuovi" ;
+        TEXT [ portuguese_brazilian ] = "~Apagar" ;
+        TEXT [ portuguese ] = "~Remover" ;
+        TEXT [ finnish ] = "~Poista" ;
+        TEXT [ danish ] = "Slet" ;
+        TEXT [ french ] = "~Supprimer" ;
+        TEXT [ swedish ] = "Ta ~bort" ;
+        TEXT [ dutch ] = "Ver~wijderen" ;
+        TEXT [ spanish ] = "~Eliminar" ;
+        TEXT [ english_us ] = "~Remove" ;
+        TABSTOP = TRUE ;
+        TEXT[ chinese_simplified ] = "…æ≥˝(~R)";
+        TEXT[ russian ] = "”·‡Ú¸";
+        TEXT[ polish ] = "UsuÒ";
+        TEXT[ japanese ] = "çÌèú(~R)";
+        TEXT[ chinese_traditional ] = "ßR∞£(~R)";
+        TEXT[ arabic ] = "≈“«·…";
+        TEXT[ greek ] = "ƒÈ·„Ò·ˆﬁ";
+        TEXT[ korean ] = "¡¶∞≈(~R)";
+        TEXT[ turkish ] = "~Kald˝r";
+        TEXT[ language_user1 ] = " ";
+    };
+    OKButton BTN_HYPH_CUT
+    {
+        Pos = MAP_APPFONT ( 189 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TEXT = "~Trennen" ;
+        TEXT [ English ] = "Hyphe~nate" ;
+        TEXT [ norwegian ] = "Hyphe~nate" ;
+        TEXT [ italian ] = "Si~llabazione" ;
+        TEXT [ portuguese_brazilian ] = "Hife~nar" ;
+        TEXT [ portuguese ] = "~Separar" ;
+        TEXT [ finnish ] = "~Tavuta" ;
+        TEXT [ danish ] = "Del ord" ;
+        TEXT [ french ] = "~Couper" ;
+        TEXT [ swedish ] = "A~vstava" ;
+        TEXT [ dutch ] = "~Afbreken" ;
+        TEXT [ spanish ] = "~Dividir" ;
+        TEXT [ english_us ] = "~Hyphenate" ;
+        TABSTOP = TRUE ;
+        DEFBUTTON = TRUE ;
+        TEXT[ chinese_simplified ] = "¡¨◊÷∑˚(~H)";
+        TEXT[ russian ] = "œÂÂÌÂÒÚË";
+        TEXT[ polish ] = "Podziel";
+        TEXT[ japanese ] = " ≤Ã»∞ºÆ›(~H)";
+        TEXT[ chinese_traditional ] = "≥s¶r≤≈(~H)";
+        TEXT[ arabic ] = "›’· «·„ﬁ«ÿ⁄";
+        TEXT[ greek ] = "”ıÎÎ·‚ÈÛÏ¸Ú";
+        TEXT[ korean ] = "«œ¿Ã«¬ ≥÷±‚(~H)";
+        TEXT[ turkish ] = "~Ay˝r";
+        TEXT[ language_user1 ] = " ";
+    };
+    CancelButton BTN_HYPH_CANCEL
+    {
+        Pos = MAP_APPFONT ( 189 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TABSTOP = TRUE ;
+    };
+    HelpButton BTN_HYPH_HELP
+    {
+        Pos = MAP_APPFONT ( 189 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TABSTOP = TRUE ;
+    };
+    Text[ chinese_simplified ] = "¡¨◊÷∑˚";
+    Text[ russian ] = "–‡ÒÒÚ‡ÌÓ‚Í‡ ÔÂÂÌÓÒÓ‚";
+    Text[ polish ] = "Dzielenie wyrazÛw";
+    Text[ japanese ] = " ≤Ã»∞ºÆ›";
+    Text[ chinese_traditional ] = "≥s¶r≤≈";
+    Text[ arabic ] = "›’· «·„ﬁ«ÿ⁄";
+    Text[ greek ] = "”ıÎÎ·‚ÈÛÏ¸Ú";
+    Text[ korean ] = "«œ¿Ã«¬ ≥÷±‚";
+    Text[ turkish ] = "Heceleme";
+    Text[ language_user1 ] = " ";
+};
+ // ******************************************************************* EOF

@@ -1,0 +1,910 @@
+/*************************************************************************
+ *
+ *  $RCSfile: backgrnd.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "backgrnd.hrc"
+ // define ----------------------------------------------------------------
+#define UNLINKED_IMAGE                      \
+    Text = "unverkn¸pfte Grafik" ; \
+    Text [ ENGLISH ] = "unlinked image" ; \
+    Text [ ENGLISH_US ] = "Unlinked graphic" ; \
+    text [ italian ] = "Immagine non collegata" ; \
+    text [ spanish ] = "Imagen no vinculada" ; \
+    text [ french ] = "Image non liÈe" ; \
+    text [ dutch ] = "Niet-gekoppelde afbeelding" ; \
+    text [ swedish ] = "ej l‰nkad grafik" ; \
+    text [ danish ] = "Ikke-kÊdet grafik" ; \
+    text [ portuguese_brazilian ] = "unverkn¸pfte Grafik" ; \
+    text [ portuguese ] = "Imagem n„o ligada" ; \
+    text[ chinese_simplified ] = "Œ¥¡¥Ω”µƒÕº–Œ";    \
+    text[ russian ] = "ÕÂÒ‚ˇÁ‡ÌÌ‡ˇ „‡ÙËÍ‡";    \
+    text[ polish ] = "Nie po≥πczona grafika";   \
+    text[ japanese ] = "ÿ›∏Ç≥ÇÍÇƒÇ¢Ç»Ç¢∏ﬁ◊Ã®Ø∏";    \
+    text[ chinese_traditional ] = "•º≥sµ≤™∫πœ§˘";   \
+    text[ arabic ] = "’Ê—… €Ì— „— »ÿ…"; \
+    text[ greek ] = "√Ò·ˆÈÍ¸ ˜˘ÒﬂÚ Û˝Ì‰ÂÛÁ";    \
+    text[ korean ] = "ø¨∞·µ«¡ˆ æ ¿∫ ±◊∑°«»";    \
+    text[ turkish ] = "Balant˝s˝z grafik"; \
+    text[ language_user1 ] = " ";
+
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXPAGE_BACKGROUND ------------------------------------------------
+TabPage RID_SVXPAGE_BACKGROUND
+{
+    HelpId = HID_BACKGROUND ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Hintergrund" ;
+    Text [ ENGLISH ] = "Background" ;
+    Text [ NORWEGIAN ] = "Background" ;
+    Text [ DANISH ] = "Baggrund" ;
+    Text [ ENGLISH_US ] = "Background" ;
+    Text [ SPANISH ] = "Fondo" ;
+    Text [ FINNISH ] = "Tausta" ;
+    Text [ FRENCH ] = "ArriËre-plan" ;
+    Text [ ITALIAN ] = "Sfondo" ;
+    Text [ DUTCH ] = "Achtergrond" ;
+    Text [ PORTUGUESE_BRAZILIAN ] = "Fundo" ;
+    Text [ SWEDISH ] = "Bakgrund" ;
+    Text [ PORTUGUESE ] = "Plano de fundo" ;
+    FixedText FT_SELECTOR
+    {
+        Pos = MAP_APPFONT ( 6 , 4 ) ;
+        Size = MAP_APPFONT ( 24 , 10 ) ;
+        Hide = TRUE ;
+        LeftLabel = TRUE ;
+        Text = "~Als" ;
+        Text [ English ] = "A~s" ;
+        Text [ english_us ] = "A~s" ;
+        Text [ dutch ] = "~Als" ;
+        Text [ italian ] = "Come" ;
+        Text [ spanish ] = "~Como" ;
+        Text [ french ] = "~Type" ;
+        Text [ swedish ] = "~som" ;
+        Text [ danish ] = "Som" ;
+        Text [ portuguese_brazilian ] = "~Als" ;
+        Text [ portuguese ] = "~Como" ;
+        Text[ chinese_simplified ] = "µ±◊˜(~S)";
+        Text[ russian ] = " ‡Í";
+        Text[ polish ] = "Jako";
+        Text[ japanese ] = "óléÆ(~S)";
+        Text[ chinese_traditional ] = "∑Ìß@(~S)";
+        Text[ arabic ] = "ﬂ‹";
+        Text[ greek ] = "ŸÚ";
+        Text[ korean ] = "«¸≈¬(~S)";
+        Text[ turkish ] = "~Artalan";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_SELECTOR
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 33 , 3 ) ;
+        Size = MAP_APPFONT ( 82 , 48 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Farbe" ; Default ; > ;
+            < "Grafik" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Farbe" ; Default ; > ;
+            < "Grafik" ; Default ; > ;
+        };
+        StringList [ ENGLISH_US ] =
+        {
+            < "Color" ; Default ; > ;
+            < "Graphic" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Farbe" ; Default ; > ;
+            < "Grafik" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "F‰rg" ; Default ; > ;
+            < "Grafik" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Farve" ; Default ; > ;
+            < "Grafik" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Colore" ; Default ; > ;
+            < "Immagine" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Color" ; Default ; > ;
+            < "Imagen" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Couleur" ; Default ; > ;
+            < "Image" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Kleur" ; Default ; > ;
+            < "Afbeelding" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Cor" ; Default ; > ;
+            < "Imagem" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "—’…´" ; Default ; > ;
+        < "Õº–Œ" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "÷‚ÂÚ" ; Default ; > ;
+        < "√‡ÙËÍ‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Kolor" ; Default ; > ;
+        < "Grafika" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "êF" ; Default ; > ;
+        < "∏ﬁ◊Ã®Ø∏" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "√C¶‚" ; Default ; > ;
+        < "πœ§˘" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "·Ê‰" ; Default ; > ;
+        < "’Ê—…" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "◊Ò˛Ï·" ; Default ; > ;
+        < "√Ò·ˆÈÍ¸" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ªˆ" ; Default ; > ;
+        < "±◊∑°«»" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Renk" ; Default ; > ;
+        < "Grafik" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    FixedText FT_TBL_DESC
+    {
+        Pos = MAP_APPFONT ( 145 , 5 ) ;
+        Size = MAP_APPFONT ( 24 , 10 ) ;
+        Hide = TRUE ;
+        LeftLabel = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? F¸~r : F≥~r */
+        Text = "F¸~r" ;
+        Text [ English ] = "F~or" ;
+        Text [ english_us ] = "F~or" ;
+        Text [ italian ] = "Per" ;
+        Text [ spanish ] = "Pa~ra" ;
+        Text [ french ] = "Pou~r" ;
+        Text [ dutch ] = "~Voor" ;
+        Text [ swedish ] = "F~ˆr" ;
+        Text [ danish ] = "For" ;
+        Text [ portuguese_brazilian ] = "F¸~r" ;
+        Text [ portuguese ] = "~Para" ;
+        Text[ chinese_simplified ] = "”√”⁄(~O)";
+        Text[ russian ] = "ƒÎˇ";
+        Text[ polish ] = "Dla";
+        Text[ japanese ] = "ópìr(~O)";
+        Text[ chinese_traditional ] = "•Œ©Û(~O)";
+        Text[ arabic ] = "·‹";
+        Text[ greek ] = "√È·";
+        Text[ korean ] = "¥ÎªÛ(~O)";
+        Text[ turkish ] = "He~def";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_TBL_BOX
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 172 , 3 ) ;
+        Size = MAP_APPFONT ( 82 , 48 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Zelle" ; > ;
+            < "Zeile" ; > ;
+            < "Tabelle" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Zelle" ; > ;
+            < "Zeile" ; > ;
+            < "Tabelle" ; > ;
+        };
+        StringList [ ENGLISH_US ] =
+        {
+            < "Cell" ; > ;
+            < "Row" ; > ;
+            < "Table" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Zelle" ; > ;
+            < "Zeile" ; > ;
+            < "Tabelle" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Cell" ; > ;
+            < "Rad" ; > ;
+            < "Tabell" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Celle" ; > ;
+            < "RÊkke" ; > ;
+            < "Tabel" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Cella" ; > ;
+            < "Riga" ; > ;
+            < "Tabella" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "Celda" ; > ;
+            < "Fila" ; > ;
+            < "Tabla" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Cellule" ; > ;
+            < "Ligne" ; > ;
+            < "Tableau" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Cel" ; > ;
+            < "Rij" ; > ;
+            < "Tabel" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "CÈlula" ; > ;
+            < "Linha" ; > ;
+            < "Tabela" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "µ•‘™∏Ò" ; > ;
+        < "––" ; > ;
+        < "±Ì∏Ò" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "ﬂ˜ÂÈÍ‡" ; > ;
+        < "—ÚÓÍ‡" ; > ;
+        < "“‡·ÎËˆ‡" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "KomÛrka" ; > ;
+        < "Wiersz" ; > ;
+        < "Tabela" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "æŸ" ; > ;
+        < "çs" ; > ;
+        < "ï\\" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¿x¶sÆÊ" ; > ;
+        < "¿x¶sÆÊ" ; > ;
+        < "™ÌÆÊ" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "Œ·Ì…" ; > ;
+        < "’›" ; > ;
+        < "ÃœÊ·" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < " ÂÎﬂ" ; > ;
+        < "√Ò·ÏÏﬁ" ; > ;
+        < "–ﬂÌ·Í·Ú" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "ºø" ; > ;
+        < "«‡" ; > ;
+        < "≈◊¿Ã∫Ì" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "H¸cre" ; > ;
+        < "Sat˝r" ; > ;
+        < "Tablo" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+        < " " ; > ;
+    };
+    };
+    ListBox LB_PARA_BOX
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 172 , 3 ) ;
+        Size = MAP_APPFONT ( 82 , 48 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Absatz" ; > ;
+            < "Zeichen" ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Absatz" ; > ;
+            < "Zeichen" ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "Paragraph" ; > ;
+            < "Character" ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "Absatz" ; > ;
+            < "Zeichen" ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "Stycke" ; > ;
+            < "Tecken" ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "Afsnit" ; > ;
+            < "Tegn" ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "Paragrafo" ; > ;
+            < "Carattere" ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "P·rrafo" ; > ;
+            < "Car·cter" ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "Paragraphe" ; > ;
+            < "CaractËre" ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "Alinea" ; > ;
+            < "Teken" ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "Par·grafo" ; > ;
+            < "Caracteres" ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "∂Œ¬‰" ; > ;
+        < "◊÷∑˚" ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¿·Á‡ˆ" ; > ;
+        < "«Ì‡Í" ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Akapit" ; > ;
+        < "Znak" ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "íióé" ; > ;
+        < "ï∂éö" ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "¨q∏®" ; > ;
+        < "¶r§∏" ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "›ﬁ—…" ; > ;
+        < "Õ—›" ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "–·Ò‹„Ò·ˆÔÚ" ; > ;
+        < "◊·Ò·ÍÙﬁÒÂÚ" ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "¥‹∂Ù" ; > ;
+        < "πÆ¿⁄" ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "Paragraf" ; > ;
+        < "Karakter" ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; > ;
+        < " " ; > ;
+    };
+    };
+     // Hintergrund-Brush  ----------------------------------------------------
+    Control SET_BGDCOLOR
+    {
+        HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 22 , 32 ) ;
+        Size = MAP_APPFONT ( 116 , 95 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_BGDCOLOR
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 21 ) ;
+        Size = MAP_APPFONT ( 148 , 109 ) ;
+        Text = "Hintergrundfarbe" ;
+        Text [ ENGLISH ] = "Background Color" ;
+        Text [ NORWEGIAN ] = "Background Color" ;
+        Text [ DANISH ] = "Baggrundsfarve" ;
+        Text [ ENGLISH_US ] = "Background color" ;
+        Text [ SPANISH ] = "C~olor de fondo" ;
+        Text [ FINNISH ] = "Background Color" ;
+        Text [ FRENCH ] = "Couleur d'arriËre-plan" ;
+        Text [ ITALIAN ] = "Colore di sfondo" ;
+        Text [ DUTCH ] = "Achtergrondkleur" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Background Color" ;
+        Text [ SWEDISH ] = "Bakgrundsf‰rg" ;
+        Text [ PORTUGUESE ] = "Cor de fundo" ;
+        Text[ chinese_simplified ] = "±≥æ∞—’…´";
+        Text[ russian ] = "÷‚ÂÚ ÙÓÌ‡";
+        Text[ polish ] = "Kolor t≥a";
+        Text[ japanese ] = "îwåiêF";
+        Text[ chinese_traditional ] = "≠I¥∫√C¶‚";
+        Text[ arabic ] = "·Ê‰ «·Œ·›Ì…";
+        Text[ greek ] = "◊Ò˛Ï· ˆ¸ÌÙÔı";
+        Text[ korean ] = "πË∞Êªˆ";
+        Text[ turkish ] = "Artalan rengi";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_COL_PREVIEW
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 160 , 21 ) ;
+        Size = MAP_APPFONT ( 94 , 109 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Preview" ;
+        Text [ NORWEGIAN ] = "Preview" ;
+        Text [ DANISH ] = "Eksempel" ;
+        Text [ ENGLISH_US ] = "Preview" ;
+        Text [ SPANISH ] = "PrevisualizaciÛn" ;
+        Text [ FINNISH ] = "Esikatselu" ;
+        Text [ FRENCH ] = "AperÁu" ;
+        Text [ ITALIAN ] = "Anteprima" ;
+        Text [ DUTCH ] = "Voorbeeld" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Examinar" ;
+        Text [ SWEDISH ] = "Fˆrhandsvisning" ;
+        Text [ PORTUGUESE ] = "Previsualizar" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_PREVIEW1
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 166 , 32 ) ;
+        Size = MAP_APPFONT ( 82 , 92 ) ;
+    };
+     // Hintergrund-Bitmap ----------------------------------------------------
+    FixedText FT_FILE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 34 ) ;
+        Size = MAP_APPFONT ( 141 , 10 ) ;
+        UNLINKED_IMAGE
+    };
+    CheckBox BTN_LINK
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 48 ) ;
+        Size = MAP_APPFONT ( 78 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Verkn¸pfen : ~Verkn≥pfen */
+        Text = "~Verkn¸pfen" ;
+        Text [ ENGLISH ] = "~Link" ;
+        Text [ ENGLISH_US ] = "~Link" ;
+        Text [ dutch ] = "~Koppelen" ;
+        Text [ italian ] = "Collega" ;
+        Text [ spanish ] = "~Vincular" ;
+        Text [ french ] = "~Lien" ;
+        Text [ swedish ] = "L‰n~ka" ;
+        Text [ danish ] = "KÊd" ;
+        Text [ portuguese_brazilian ] = "~Verkn¸pfen" ;
+        Text [ portuguese ] = "~Ligar" ;
+        Text[ chinese_simplified ] = "¡¥Ω”(~L)";
+        Text[ russian ] = "—‚ˇÁ‡Ú¸";
+        Text[ polish ] = "Po~≥πcz";
+        Text[ japanese ] = "ÿ›∏(~L)";
+        Text[ chinese_traditional ] = "±∂Æ|(~L)";
+        Text[ arabic ] = "—»ÿ";
+        Text[ greek ] = "”˝Ì‰ÂÛÁ";
+        Text[ korean ] = "ø¨∞·(~L)";
+        Text[ turkish ] = "Bala";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox BTN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 141 , 10 ) ;
+        Text = "V~orschau" ;
+        Text [ ENGLISH ] = "P~review" ;
+        Text [ ENGLISH_US ] = "Pre~view" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ spanish ] = "Previsuali~zaciÛn" ;
+        Text [ french ] = "A~perÁu" ;
+        Text [ dutch ] = "V~oorbeeld" ;
+        Text [ swedish ] = "Fˆ~rhandsvisning" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ portuguese ] = "~Previsualizar" ;
+        Text [ portuguese_brazilian ] = "V~orschau" ;
+        Text[ chinese_simplified ] = "‘§ ”(~R)";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "P~odglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞(~R)";
+        Text[ chinese_traditional ] = "πwƒ˝(~R)";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚(~V)";
+        Text[ turkish ] = "÷~nizleme";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton BTN_BROWSE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 93 , 46 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text = "Au~sw‰hlen..." ;
+        Text [ ENGLISH ] = "~Select..." ;
+        Text [ english_us ] = "~Browse..." ;
+        Text [ portuguese_brazilian ] = "~Durchsuchen..." ;
+        Text [ swedish ] = "~V‰lj ut..." ;
+        Text [ danish ] = "Gennemse..." ;
+        Text [ italian ] = "~Sfoglia..." ;
+        Text [ spanish ] = "Seleccio~nar..." ;
+        Text [ french ] = "~Parcourir..." ;
+        Text [ dutch ] = "~Doorzoeken..." ;
+        Text [ portuguese ] = "~Pesquisar..." ;
+        Text[ chinese_simplified ] = "‰Ø¿¿(~B)...";
+        Text[ russian ] = "¬˚·‡Ú¸...";
+        Text[ polish ] = "Przeglπd~aj...";
+        Text[ japanese ] = "ëIë(~B)...";
+        Text[ chinese_traditional ] = "¬sƒ˝(~B)...";
+        Text[ arabic ] = "«” ⁄—«÷...";
+        Text[ greek ] = "≈ÈÎÔ„ﬁ...";
+        Text[ korean ] = "º±≈√«œ±‚(~B)...";
+        Text[ turkish ] = "SeÁ...";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_FILE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 23 ) ;
+        Size = MAP_APPFONT ( 153 , 51 ) ;
+        Text = "Datei" ;
+        Text [ ENGLISH ] = "~File" ;
+        Text [ ENGLISH_US ] = "File" ;
+        Text [ dutch ] = "Bestand" ;
+        Text [ italian ] = "File" ;
+        Text [ spanish ] = "Archivo" ;
+        Text [ french ] = "Fichier" ;
+        Text [ swedish ] = "Fil" ;
+        Text [ danish ] = "Fil" ;
+        Text [ portuguese_brazilian ] = "Datei" ;
+        Text [ portuguese ] = "Ficheiro" ;
+        Text[ chinese_simplified ] = "Œƒº˛";
+        Text[ russian ] = "‘‡ÈÎ";
+        Text[ polish ] = "Plik";
+        Text[ japanese ] = "Ãß≤Ÿ";
+        Text[ chinese_traditional ] = "¿…Æ◊";
+        Text[ arabic ] = "„·›";
+        Text[ greek ] = "¡Ò˜ÂﬂÔ";
+        Text[ korean ] = "∆ƒ¿œ";
+        Text[ turkish ] = "Dosya";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_POSITION
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Position" ;
+        Text [ ENGLISH ] = "~Position" ;
+        Text [ ENGLISH_US ] = "~Position" ;
+        Text [ italian ] = "~Posizione" ;
+        Text [ spanish ] = "~PosiciÛn" ;
+        Text [ french ] = "P~osition" ;
+        Text [ dutch ] = "~Positie" ;
+        Text [ swedish ] = "~Position" ;
+        Text [ danish ] = "Placering" ;
+        Text [ portuguese_brazilian ] = "~Position" ;
+        Text [ portuguese ] = "~PosiÁ„o" ;
+        Text[ chinese_simplified ] = "Œª÷√(~P)";
+        Text[ russian ] = "œÓÎÓÊÂÌËÂ";
+        Text[ polish ] = "Pozy~cja";
+        Text[ japanese ] = "à íu(~P)";
+        Text[ chinese_traditional ] = "¶Ï∏m(~P)";
+        Text[ arabic ] = "«·„Ê÷⁄";
+        Text[ greek ] = "»›ÛÁ";
+        Text[ korean ] = "¿ßƒ°(~P)";
+        Text[ turkish ] = "O~rtala";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_AREA
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Fl‰che : ~Flıche */
+        Text = "~Fl‰che" ;
+        Text [ ENGLISH ] = "~Area" ;
+        Text [ ENGLISH_US ] = "Ar~ea" ;
+        Text [ dutch ] = "Vla~k" ;
+        Text [ italian ] = "~Area" ;
+        Text [ spanish ] = "~¡rea" ;
+        Text [ french ] = "~Remplissage" ;
+        Text [ swedish ] = "~Yta" ;
+        Text [ danish ] = "F~lade" ;
+        Text [ portuguese_brazilian ] = "~Fl‰che" ;
+        Text [ portuguese ] = "~Preenchimento" ;
+        Text[ chinese_simplified ] = "∆Ω√Ê(~A)";
+        Text[ russian ] = "Œ·Î‡ÒÚ¸";
+        Text[ polish ] = "Obsza~r";
+        Text[ japanese ] = "ï\\ñ (~A)";
+        Text[ chinese_traditional ] = "•≠≠±(~A)";
+        Text[ arabic ] = "„”«Õ…";
+        Text[ greek ] = "≈Èˆ‹ÌÂÈ·";
+        Text[ korean ] = "øµø™(~E)";
+        Text[ turkish ] = "Ser";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton BTN_TILE
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Kachel" ;
+        Text [ ENGLISH ] = "~Tile" ;
+        Text [ ENGLISH_US ] = "~Tile" ;
+        Text [ italian ] = "Affianca" ;
+        Text [ spanish ] = "~Mosaico" ;
+        Text [ french ] = "Ca~rrelage" ;
+        Text [ dutch ] = "~Tegel" ;
+        Text [ swedish ] = "Sida vid sida" ;
+        Text [ danish ] = "Side om side" ;
+        Text [ portuguese_brazilian ] = "~Kachel" ;
+        Text [ portuguese ] = "~Azulejo" ;
+        Text[ chinese_simplified ] = "∆Ω∆Ã(~T)";
+        Text[ russian ] = "œÎËÚÍ‡";
+        Text[ polish ] = "P≥yt~ka";
+        Text[ japanese ] = "¿≤Ÿ(~T)";
+        Text[ chinese_traditional ] = "•≠æQ(~T)";
+        Text[ arabic ] = "»·«ÿ…";
+        Text[ greek ] = "”Â ·Ò‹ËÂÛÁ";
+        Text[ korean ] = "πŸµœ∆«Ωƒ(~T)";
+        Text[ turkish ] = "~Dˆ˛e";
+        Text[ language_user1 ] = " ";
+    };
+    Control WND_POSITION
+    {
+        HelpId = HID_BACKGROUND_CTL_POSITION ;
+        Hide = TRUE ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 64 , 88 ) ;
+        Size = MAP_APPFONT ( 90 , 35 ) ;
+        TabStop = TRUE ;
+    };
+    GroupBox GB_POSITION
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 75 ) ;
+        Size = MAP_APPFONT ( 153 , 54 ) ;
+        Text = "Art" ;
+        Text [ ENGLISH ] = "Type" ;
+        Text [ ENGLISH_US ] = "Type" ;
+        Text [ dutch ] = "Soort" ;
+        Text [ italian ] = "Tipo" ;
+        Text [ spanish ] = "Tipo" ;
+        Text [ french ] = "Type" ;
+        Text [ swedish ] = "Typ" ;
+        Text [ danish ] = "Type" ;
+        Text [ portuguese_brazilian ] = "Art" ;
+        Text [ portuguese ] = "Tipo" ;
+        Text[ chinese_simplified ] = "¿‡–Õ";
+        Text[ russian ] = "“ËÔ";
+        Text[ polish ] = "Typ";
+        Text[ japanese ] = "éÌóﬁ";
+        Text[ chinese_traditional ] = "√˛´¨";
+        Text[ arabic ] = "«·‰Ê⁄";
+        Text[ greek ] = "‘˝ÔÚ";
+        Text[ korean ] = "«¸Ωƒ";
+        Text[ turkish ] = "T¸r";
+        Text[ language_user1 ] = " ";
+    };
+    Window WIN_PREVIEW2
+    {
+        Hide = TRUE ;
+        Border = TRUE ;
+        SVLook = TRUE ;
+        Pos = MAP_APPFONT ( 170 , 34 ) ;
+        Size = MAP_APPFONT ( 81 , 89 ) ;
+    };
+    GroupBox GB_PREVIEW
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 165 , 23 ) ;
+        Size = MAP_APPFONT ( 91 , 106 ) ;
+        Text = "Grafikvorschau" ;
+        Text [ ENGLISH ] = "Image Preview" ;
+        Text [ ENGLISH_US ] = "Preview" ;
+        Text [ italian ] = "Anteprima immagine" ;
+        Text [ spanish ] = "PrevisualizaciÛn" ;
+        Text [ french ] = "AperÁu" ;
+        Text [ dutch ] = "Afbeeldingvoorbeeld" ;
+        Text [ swedish ] = "Grafikfˆrhandsvisning" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ portuguese_brazilian ] = "Grafikvorschau" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text[ chinese_simplified ] = "Õº–Œ‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ „‡ÙËÍË";
+        Text[ polish ] = "Podglπd grafiki";
+        Text[ japanese ] = "∏ﬁ◊Ã®Ø∏ Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πœ§˘πwƒ˝";
+        Text[ arabic ] = "„⁄«Ì‰… «·’Ê—…";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "±◊∑°«» πÃ∏Æ ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+    };
+    String STR_BROWSE
+    {
+        Text = "Grafik suchen" ;
+        Text [ ENGLISH ] = "Browse Image" ;
+        Text [ ENGLISH_US ] = "Find graphics" ;
+        Text [ italian ] = "Cerca immagine" ;
+        Text [ spanish ] = "Buscar imagen" ;
+        Text [ french ] = "Rechercher un image" ;
+        Text [ dutch ] = "Afbeelding zoeken" ;
+        Text [ swedish ] = "Sˆk grafik" ;
+        Text [ danish ] = "S¯g grafik" ;
+        Text [ portuguese_brazilian ] = "Grafik suchen" ;
+        Text [ portuguese ] = "Localizar imagem" ;
+        Text[ chinese_simplified ] = "—∞’“Õº–Œ";
+        Text[ russian ] = "Õ‡ÈÚË „‡ÙËÍÛ";
+        Text[ polish ] = "Szukaj grafiki";
+        Text[ japanese ] = "∏ﬁ◊Ã®Ø∏Çåüçı";
+        Text[ chinese_traditional ] = "¥Mß‰πœ§˘";
+        Text[ arabic ] = "«·»ÕÀ ⁄‰ —”„";
+        Text[ greek ] = "¡Ì·ÊﬁÙÁÛÁ „Ò·ˆÈÍÔ˝";
+        Text[ korean ] = "±◊∑°«» √£±‚";
+        Text[ turkish ] = "Grafik bul";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_UNLINKED
+    {
+        UNLINKED_IMAGE
+    };
+    Text[ chinese_simplified ] = "±≥æ∞";
+    Text[ russian ] = "‘ÓÌ";
+    Text[ polish ] = "T≥o";
+    Text[ japanese ] = "îwåi";
+    Text[ chinese_traditional ] = "≠I¥∫";
+    Text[ arabic ] = "«·Œ·›Ì…";
+    Text[ greek ] = "÷¸ÌÙÔ";
+    Text[ korean ] = "πË∞Ê";
+    Text[ turkish ] = "Artalan";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,393 @@
+/*************************************************************************
+ *
+ *  $RCSfile: ruler.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include "dialogs.hrc"
+#include "ruler.hrc"
+
+Menu RID_SVXMN_RULER
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = ID_MM ;
+            Checkable = TRUE ;
+            Text = "Millimeter" ;
+            Text [ English ] = "Millimeter" ;
+            Text [ dutch ] = "Millimeter" ;
+            Text [ english_us ] = "Millimeter" ;
+            Text [ italian ] = "Millimetro" ;
+            Text [ spanish ] = "Milímetros" ;
+            Text [ french ] = "Millimètre" ;
+            Text [ swedish ] = "Millimeter" ;
+            Text [ danish ] = "Millimeter" ;
+            Text [ portuguese ] = "Milímetro" ;
+            Text [ portuguese_brazilian ] = "Millimeter" ;
+            Text[ chinese_simplified ] = "ºÁÃ×";
+            Text[ russian ] = "Ìèëëèìåòğû";
+            Text[ polish ] = "Milimetr";
+            Text[ japanese ] = "ĞØÒ°ÄÙ";
+            Text[ chinese_traditional ] = "²@¦Ì";
+            Text[ arabic ] = "ãíáíãÊÑ";
+            Text[ greek ] = "×éëéïóôÜ";
+            Text[ korean ] = "¹Ğ¸®¹ÌÅÍ";
+            Text[ turkish ] = "Milimetre";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_CM ;
+            Checkable = TRUE ;
+            Text = "Zentimeter" ;
+            Text [ English ] = "Centimeter" ;
+            Text [ norwegian ] = "Centimeter" ;
+            Text [ italian ] = "Centimetro" ;
+            Text [ portuguese_brazilian ] = "Centímetro" ;
+            Text [ portuguese ] = "Centímetro" ;
+            Text [ finnish ] = "Senttimetri" ;
+            Text [ danish ] = "Centimeter" ;
+            Text [ french ] = "Centimètre" ;
+            Text [ swedish ] = "Centimeter" ;
+            Text [ dutch ] = "Centimeter" ;
+            Text [ spanish ] = "Centímetro" ;
+            Text [ english_us ] = "Centimeter" ;
+            Text[ chinese_simplified ] = "ÀåÃ×";
+            Text[ russian ] = "Ñàíòèìåòğû";
+            Text[ polish ] = "Centymetr";
+            Text[ japanese ] = "¾İÁÒ°ÄÙ";
+            Text[ chinese_traditional ] = "Íù¦Ì";
+            Text[ arabic ] = "ÓäÊíãÊÑ";
+            Text[ greek ] = "ÅêáôïóôÜ";
+            Text[ korean ] = "¼¾Æ¼¹ÌÅÍ";
+            Text[ turkish ] = "Santimetre";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_M ;
+            Checkable = TRUE ;
+            Text = "Meter" ;
+            Text [ English ] = "Meter" ;
+            Text [ dutch ] = "Meter" ;
+            Text [ english_us ] = "Meter" ;
+            Text [ italian ] = "Metro" ;
+            Text [ spanish ] = "Metro" ;
+            Text [ french ] = "Mètre" ;
+            Text [ swedish ] = "Meter" ;
+            Text [ danish ] = "Meter" ;
+            Text [ portuguese ] = "Metro" ;
+            Text [ portuguese_brazilian ] = "Meter" ;
+            Text[ chinese_simplified ] = "Ã×";
+            Text[ russian ] = "Ìåòğû";
+            Text[ polish ] = "Metr";
+            Text[ japanese ] = "Ò°ÄÙ";
+            Text[ chinese_traditional ] = "¦Ì";
+            Text[ arabic ] = "ãÊÑ";
+            Text[ greek ] = "Ìİôñá";
+            Text[ korean ] = "¹ÌÅÍ";
+            Text[ turkish ] = "Metre";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_KM ;
+            Checkable = TRUE ;
+            Text = "Kilometer" ;
+            Text [ English ] = "Kilometer" ;
+            Text [ dutch ] = "Kilometer" ;
+            Text [ english_us ] = "Kilometer" ;
+            Text [ italian ] = "Chilometro" ;
+            Text [ spanish ] = "Kilómetro" ;
+            Text [ french ] = "Kilomètre" ;
+            Text [ swedish ] = "Kilometer" ;
+            Text [ danish ] = "Kilometer" ;
+            Text [ portuguese ] = "Quilómetro" ;
+            Text [ portuguese_brazilian ] = "Kilometer" ;
+            Text[ chinese_simplified ] = "¹«Àï";
+            Text[ russian ] = "Êèëîìåòğû";
+            Text[ polish ] = "Kilometr";
+            Text[ japanese ] = "·ÛÒ°ÄÙ";
+            Text[ chinese_traditional ] = "¤½¨½";
+            Text[ arabic ] = "ßíáæãÊÑ";
+            Text[ greek ] = "×éëéüìåôñï";
+            Text[ korean ] = "Å³·Î¹ÌÅÍ";
+            Text[ turkish ] = "Kilometre";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_INCH ;
+            Checkable = TRUE ;
+            Text = "Zoll" ;
+            Text [ English ] = "Inch" ;
+            Text [ dutch ] = "Inch" ;
+            Text [ english_us ] = "Inch" ;
+            Text [ italian ] = "Pollice" ;
+            Text [ spanish ] = "Pulgadas" ;
+            Text [ french ] = "Pouce" ;
+            Text [ swedish ] = "Tum" ;
+            Text [ danish ] = "Tommer" ;
+            Text [ portuguese ] = "Polegada" ;
+            Text [ portuguese_brazilian ] = "Zoll" ;
+            Text[ chinese_simplified ] = "Ó¢´ç";
+            Text[ russian ] = "Äşéìû";
+            Text[ polish ] = "Cal";
+            Text[ japanese ] = "²İÁ";
+            Text[ chinese_traditional ] = "­^¤o";
+            Text[ arabic ] = "ÈæÕÉ";
+            Text[ greek ] = "ºíôóá";
+            Text[ korean ] = "ÀÎÄ¡";
+            Text[ turkish ] = "Inç";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_FOOT ;
+            Checkable = TRUE ;
+            /* ### ACHTUNG: Neuer Text in Resource? Fuß : Fu˜ */
+            /* ### ACHTUNG: Neuer Text in Resource? Fuß : Fu˜ */
+            Text = "Fuß" ;
+            Text [ English ] = "Foot" ;
+            Text [ dutch ] = "Voet" ;
+            Text [ english_us ] = "Foot" ;
+            Text [ italian ] = "Piede" ;
+            Text [ spanish ] = "Pie" ;
+            Text [ french ] = "Pied" ;
+            Text [ swedish ] = "Fot" ;
+            Text [ danish ] = "Fod" ;
+            Text [ portuguese ] = "Pés" ;
+            Text [ portuguese_brazilian ] = "Fuß" ;
+            Text[ chinese_simplified ] = "Ó¢³ß";
+            Text[ russian ] = "Ôóòû";
+            Text[ polish ] = "Stopa";
+            Text[ japanese ] = "Ì¨°Ä";
+            Text[ chinese_traditional ] = "­^¤Ø";
+            Text[ arabic ] = "ŞÏã";
+            Text[ greek ] = "Ğüäé";
+            Text[ korean ] = "ÇÇÆ®";
+            Text[ turkish ] = "Ft";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_MILE ;
+            Checkable = TRUE ;
+            Text = "Meilen" ;
+            Text [ English ] = "Miles" ;
+            Text [ dutch ] = "Mijlen" ;
+            Text [ english_us ] = "Miles" ;
+            Text [ italian ] = "Miglia" ;
+            Text [ spanish ] = "Millas" ;
+            Text [ french ] = "Miles" ;
+            Text [ swedish ] = "Miles" ;
+            Text [ danish ] = "Mil" ;
+            Text [ portuguese ] = "Milhas" ;
+            Text [ portuguese_brazilian ] = "Meilen" ;
+            Text[ chinese_simplified ] = "Ó¢Àï";
+            Text[ russian ] = "Ìèëè";
+            Text[ polish ] = "Mile";
+            Text[ japanese ] = "Ï²Ù";
+            Text[ chinese_traditional ] = "­^¨½";
+            Text[ arabic ] = "ÃãíÇá";
+            Text[ greek ] = "Ìßëéá";
+            Text[ korean ] = "¸¶ÀÏ";
+            Text[ turkish ] = "Mil";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_POINT ;
+            Checkable = TRUE ;
+            Text = "Punkt" ;
+            Text [ English ] = "Point" ;
+            Text [ norwegian ] = "Punkt" ;
+            Text [ italian ] = "Punto" ;
+            Text [ portuguese_brazilian ] = "Ponto" ;
+            Text [ portuguese ] = "Ponto" ;
+            Text [ finnish ] = "Piste" ;
+            Text [ danish ] = "Punkt" ;
+            Text [ french ] = "Point" ;
+            Text [ swedish ] = "Punkt" ;
+            Text [ dutch ] = "Punt" ;
+            Text [ spanish ] = "Punto" ;
+            Text [ english_us ] = "Point" ;
+            Text[ chinese_simplified ] = "µã";
+            Text[ russian ] = "Ïóíêò";
+            Text[ polish ] = "Punkt";
+            Text[ japanese ] = "Îß²İÄ";
+            Text[ chinese_traditional ] = "ÂI";
+            Text[ arabic ] = "äŞØÉ";
+            Text[ greek ] = "Óçìåßï";
+            Text[ korean ] = "Á¡";
+            Text[ turkish ] = "Nokta";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = ID_PICA ;
+            Checkable = TRUE ;
+            Text = "Pica" ;
+        };
+    };
+};
+String RID_SVXSTR_RULER_TAB_LEFT
+{
+    TEXT = "Links" ;
+    TEXT [ English ] = "Left" ;
+    TEXT [ norwegian ] = "Left" ;
+    TEXT [ italian ] = "Sinistra" ;
+    TEXT [ portuguese_brazilian ] = "A Esquerda" ;
+    TEXT [ portuguese ] = "Esquerda" ;
+    TEXT [ finnish ] = "Vasen" ;
+    TEXT [ danish ] = "Venstre" ;
+    TEXT [ french ] = "À gauche" ;
+    TEXT [ swedish ] = "Vänster" ;
+    TEXT [ dutch ] = "Links" ;
+    TEXT [ spanish ] = "Izquierda" ;
+    TEXT [ english_us ] = "Left" ;
+    TEXT[ chinese_simplified ] = "×ó";
+    TEXT[ russian ] = "Ñëåâà";
+    TEXT[ polish ] = "Z lewej";
+    TEXT[ japanese ] = "¶‘µ‚¦";
+    TEXT[ chinese_traditional ] = "¥ª";
+    TEXT[ arabic ] = "íÓÇÑ";
+    TEXT[ greek ] = "ÁñéóôåñÜ";
+    TEXT[ korean ] = "¿ÂÂÊ";
+    TEXT[ turkish ] = "Sol";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_RULER_TAB_RIGHT
+{
+    TEXT = "Rechts" ;
+    TEXT [ English ] = "Right" ;
+    TEXT [ norwegian ] = "Right" ;
+    TEXT [ italian ] = "Destra" ;
+    TEXT [ portuguese_brazilian ] = "A Direita" ;
+    TEXT [ portuguese ] = "Direita" ;
+    TEXT [ finnish ] = "Oikea" ;
+    TEXT [ danish ] = "Højre" ;
+    TEXT [ french ] = "À droite" ;
+    TEXT [ swedish ] = "Höger" ;
+    TEXT [ dutch ] = "Rechts" ;
+    TEXT [ spanish ] = "Derecha" ;
+    TEXT [ english_us ] = "Right" ;
+    TEXT[ chinese_simplified ] = "ÏòÓÒ";
+    TEXT[ russian ] = "Ñïğàâà";
+    TEXT[ polish ] = "Z prawej";
+    TEXT[ japanese ] = "‰E‘µ‚¦";
+    TEXT[ chinese_traditional ] = "¦V¥k";
+    TEXT[ arabic ] = "íãíä";
+    TEXT[ greek ] = "ÄåîéÜ";
+    TEXT[ korean ] = "¿À¸¥ÂÊ";
+    TEXT[ turkish ] = "Sağ";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_RULER_TAB_DECIMAL
+{
+    TEXT = "Dezimal" ;
+    TEXT [ English ] = "Decimal" ;
+    TEXT [ norwegian ] = "Desimal" ;
+    TEXT [ italian ] = "Decimale" ;
+    TEXT [ portuguese_brazilian ] = "Decimal" ;
+    TEXT [ portuguese ] = "Decimal" ;
+    TEXT [ finnish ] = "Desimaali" ;
+    TEXT [ danish ] = "Decimal" ;
+    TEXT [ french ] = "Décimal" ;
+    TEXT [ swedish ] = "Decimal" ;
+    TEXT [ dutch ] = "Decimaal" ;
+    TEXT [ spanish ] = "Decimal" ;
+    TEXT [ english_us ] = "Decimal" ;
+    TEXT[ chinese_simplified ] = "Ê®½øÎ»µÄ";
+    TEXT[ russian ] = "Äåñÿòè÷íûé";
+    TEXT[ polish ] = "Dziesiêtny";
+    TEXT[ japanese ] = "¬”“_‘µ‚¦";
+    TEXT[ chinese_traditional ] = "¤Q¶i¦ìªº";
+    TEXT[ arabic ] = "ÚÔÑí";
+    TEXT[ greek ] = "ÄåêáäéêÜ";
+    TEXT[ korean ] = "¼Ò¼ö";
+    TEXT[ turkish ] = "Ondalık";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_RULER_TAB_CENTER
+{
+    TEXT = "Zentriert" ;
+    TEXT [ English ] = "Centered" ;
+    TEXT [ norwegian ] = "Centered" ;
+    TEXT [ italian ] = "Centrato" ;
+    TEXT [ portuguese_brazilian ] = "Centralizado" ;
+    TEXT [ portuguese ] = "Centrado" ;
+    TEXT [ finnish ] = "Keski" ;
+    TEXT [ danish ] = "Centreret" ;
+    TEXT [ french ] = "Centré" ;
+    TEXT [ swedish ] = "Centrerat" ;
+    TEXT [ dutch ] = "Gecentreerd" ;
+    TEXT [ spanish ] = "Centrado" ;
+    TEXT [ english_us ] = "Center" ;
+    TEXT[ chinese_simplified ] = "¾ÓÖĞ";
+    TEXT[ russian ] = "Ïî öåíòğó";
+    TEXT[ polish ] = "Wyœrodkuj";
+    TEXT[ japanese ] = "’†‰›‘µ‚¦";
+    TEXT[ chinese_traditional ] = "¸m¤¤";
+    TEXT[ arabic ] = "ÊæÓíØ";
+    TEXT[ greek ] = "Êåíôñáñéóìİíá";
+    TEXT[ korean ] = "°¡¿îµ¥";
+    TEXT[ turkish ] = "Orta";
+    TEXT[ language_user1 ] = " ";
+};

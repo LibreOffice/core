@@ -1,0 +1,613 @@
+/*************************************************************************
+ *
+ *  $RCSfile: optdict.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:22 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include <sfx2/sfx.hrc>
+#include "helpid.hrc"
+#include "dialogs.hrc"
+#include "optdict.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SFXDLG_NEWDICT ----------------------------------------------------
+ModalDialog RID_SFXDLG_NEWDICT
+{
+    HelpId = HID_OPTIONS_DICT_NEW ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 213 , 66 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
+    Text = "Benutzerwörterbuch anlegen" ;
+    Text [ ENGLISH ] = "New dictionary" ;
+    Text [ norwegian ] = "Ny katalog" ;
+    Text [ italian ] = "Nuovo dizionario" ;
+    Text [ portuguese_brazilian ] = "New dictionary" ;
+    Text [ portuguese ] = "Novo dicionário" ;
+    Text [ finnish ] = "New dictionary" ;
+    Text [ danish ] = "Opret brugerordbog" ;
+    Text [ french ] = "Nouveau dictionnaire de l'utilisateur" ;
+    Text [ swedish ] = "Skapa användarordbok" ;
+    Text [ dutch ] = "Nieuw woordenboek" ;
+    Text [ spanish ] = "Crear diccionario de usuario" ;
+    Text [ english_us ] = "New Dictionary" ;
+    Moveable = TRUE ;
+    FixedText FT_DICTNAME
+    {
+        Pos = MAP_APPFONT ( 11 , 15 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Name" ;
+        Text [ ENGLISH ] = "~Name" ;
+        Text [ norwegian ] = "~Navn" ;
+        Text [ italian ] = "~Nome" ;
+        Text [ portuguese_brazilian ] = "~Nome" ;
+        Text [ portuguese ] = "~Nome" ;
+        Text [ finnish ] = "~Nimi" ;
+        Text [ danish ] = "Navn" ;
+        Text [ french ] = "~Nom" ;
+        Text [ swedish ] = "~Namn" ;
+        Text [ dutch ] = "~Naam" ;
+        Text [ spanish ] = "~Nombre" ;
+        Text [ english_us ] = "~Name" ;
+        LeftLabel = TRUE ;
+        Text[ chinese_simplified ] = "Ãû³Æ(~N)";
+        Text[ russian ] = "Èìÿ";
+        Text[ polish ] = "Nazwa";
+        Text[ japanese ] = "–¼‘O(~N)";
+        Text[ chinese_traditional ] = "¦WºÙ(~N)";
+        Text[ arabic ] = "ÇáÇÓã";
+        Text[ greek ] = "¼íïìá";
+        Text[ korean ] = "ÀÌ¸§(~N)";
+        Text[ turkish ] = "Ad";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_DICTNAME
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
+        MaxTextLength = 32 ;
+    };
+    FixedText FT_DICTLANG
+    {
+        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Text = "~Sprache" ;
+        Text [ ENGLISH ] = "~Language" ;
+        Text [ norwegian ] = "~Language" ;
+        Text [ italian ] = "~Lingua" ;
+        Text [ portuguese_brazilian ] = "~Idioma" ;
+        Text [ portuguese ] = "~Língua" ;
+        Text [ finnish ] = "K~ieli" ;
+        Text [ danish ] = "Sprog" ;
+        Text [ french ] = "~Langue" ;
+        Text [ swedish ] = "~Språk" ;
+        Text [ dutch ] = "~Taal" ;
+        Text [ spanish ] = "I~dioma" ;
+        Text [ english_us ] = "~Language" ;
+        LeftLabel = TRUE ;
+        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ russian ] = "ßçûê";
+        Text[ polish ] = "Jêzyk";
+        Text[ japanese ] = "Œ¾Œê(~L)";
+        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ arabic ] = "ÇááÛÉ";
+        Text[ greek ] = "Ãëşóóá";
+        Text[ korean ] = "¾ğ¾î(~L)";
+        Text[ turkish ] = "Dil";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DICTLANG
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 55 , 30 ) ;
+        Size = MAP_APPFONT ( 90 , 66 ) ;
+        DropDown = TRUE ;
+    };
+    CheckBox BTN_EXCEPT
+    {
+        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Size = MAP_APPFONT ( 57 , 10 ) ;
+        Text = "~Ausnahme (-)" ;
+        Text [ ENGLISH ] = "~Exception (-)" ;
+        Text [ norwegian ] = "~Unntak (-)" ;
+        Text [ italian ] = "~Eccezione (-)" ;
+        Text [ portuguese_brazilian ] = "~Exceção (-)" ;
+        Text [ portuguese ] = "~Excepção (-)" ;
+        Text [ finnish ] = "Po~ikkeus (-)" ;
+        Text [ danish ] = "Undtagelse (-)" ;
+        Text [ french ] = "~Exception (-)" ;
+        Text [ swedish ] = "~Undantag (-)" ;
+        Text [ dutch ] = "~Uitzondering (-)" ;
+        Text [ spanish ] = "~Excepción (-)" ;
+        Text [ english_us ] = "~Exception (-)" ;
+        Text[ chinese_simplified ] = "ÀıÍâ(-)";
+        Text[ russian ] = "Èñêëş÷åíèå (-)";
+        Text[ polish ] = "Wyj¹tek (-)";
+        Text[ japanese ] = "—áŠO(-) (~E)";
+        Text[ chinese_traditional ] = "¨Ò¥~(-)";
+        Text[ arabic ] = "ÇÓÊËäÇÁ (-)";
+        Text[ greek ] = "Åî~áßñåóç (-)";
+        Text[ korean ] = "¿¹¿Ü (-)(~E)";
+        Text[ turkish ] = "İstisna (-)";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GB_NEWDICT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 145 , 57 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
+        /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
+        Text = "Wörterbuch" ;
+        Text [ ENGLISH ] = "Dictionary" ;
+        Text [ norwegian ] = "Ordliste" ;
+        Text [ italian ] = "Dizionario" ;
+        Text [ portuguese_brazilian ] = "Dicionário" ;
+        Text [ portuguese ] = "Dicionário" ;
+        Text [ finnish ] = "Dictionary" ;
+        Text [ danish ] = "Ordbog" ;
+        Text [ french ] = "Dictionnaire" ;
+        Text [ swedish ] = "Ordbok" ;
+        Text [ dutch ] = "Woordenboek" ;
+        Text [ spanish ] = "Diccionario" ;
+        Text [ english_us ] = "Dictionary" ;
+        Text[ chinese_simplified ] = "´Êµä";
+        Text[ russian ] = "Ñëîâàğü";
+        Text[ polish ] = "S³ownik";
+        Text[ japanese ] = "«‘";
+        Text[ chinese_traditional ] = "µü¨å";
+        Text[ arabic ] = "ÇáŞÇãæÓ";
+        Text[ greek ] = "Ëåîéêü";
+        Text[ korean ] = "»çÀü";
+        Text[ turkish ] = "Sözlük";
+        Text[ language_user1 ] = " ";
+    };
+    OKButton BTN_NEWDICT_OK
+    {
+        Pos = MAP_APPFONT ( 157 , 6 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Disable = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_NEWDICT_ESC
+    {
+        Pos = MAP_APPFONT ( 157 , 23 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton BTN_NEWDICT_HLP
+    {
+        Pos = MAP_APPFONT ( 157 , 43 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    Text[ chinese_simplified ] = "½¨Á¢ÓÃ»§´Êµä";
+    Text[ russian ] = "Ñîçäàòü ñëîâàğü ïîëüçîâàòåëÿ";
+    Text[ polish ] = "Utwórz w³asny s³ownik";
+    Text[ japanese ] = "Õ°»Ş°«‘‚Ìì¬";
+    Text[ chinese_traditional ] = "¦Û­qµü¨å";
+    Text[ arabic ] = "ÅäÔÇÁ ŞÇãæÓ ÇáãÓÊÎÏã";
+    Text[ greek ] = "Äçìéïõñãßá ëåîéêïı";
+    Text[ korean ] = "»õ »ç¿ëÀÚ»çÀü";
+    Text[ turkish ] = "Kullanıcı sözlüğü oluştur";
+    Text[ language_user1 ] = " ";
+};
+
+ // RID_SFXDLG_EDITDICT ---------------------------------------------------
+ModalDialog RID_SFXDLG_EDITDICT
+{
+    HelpId = HID_OPTIONS_DICT_EDIT ;
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT( 270, 161 );
+
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
+    /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
+    Text = "Benutzerwörterbuch bearbeiten" ;
+    Text [ ENGLISH ] = "Edit dictionary" ;
+    Text [ norwegian ] = "Rediger ordliste" ;
+    Text [ italian ] = "Modifica dizionario" ;
+    Text [ portuguese_brazilian ] = "Edit dictionary" ;
+    Text [ portuguese ] = "Editar dicionário do utilizador" ;
+    Text [ finnish ] = "Edit dictionary" ;
+    Text [ danish ] = "Rediger brugerordbog" ;
+    Text [ french ] = "Édition du dictionnaire de l'utilisateur" ;
+    Text [ swedish ] = "Redigera användarordbok" ;
+    Text [ dutch ] = "Gebruikerswoordenboek bewerken" ;
+    Text [ spanish ] = "Editar diccionario de usuario" ;
+    Text [ english_us ] = "Edit Custom Dictionary" ;
+    Text[ chinese_simplified ] = "±à¼­ÓÃ»§´Êµä";
+
+    Moveable = TRUE ;
+    FixedText FT_BOOK
+    {
+        Pos = MAP_APPFONT ( 12 , 10 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "~Buch" ;
+        Text [ ENGLISH ] = "~Book" ;
+        Text [ english_us ] = "~Book" ;
+        Text [ dutch ] = "~Boek" ;
+        Text [ italian ] = "Libro" ;
+        Text [ spanish ] = "~Libro" ;
+        Text [ french ] = "~Livre" ;
+        Text [ swedish ] = "~Bok" ;
+        Text [ danish ] = "Bog" ;
+        Text [ portuguese ] = "~Livro" ;
+        Text [ portuguese_brazilian ] = "~Buch" ;
+        Text[ chinese_simplified ] = "Êé¼®(~B)";
+        Text[ russian ] = "~Êíèãà";
+        Text[ polish ] = "Ksi¹¿ka";
+        Text[ japanese ] = "ÌŞ¯¸(~B)";
+        Text[ chinese_traditional ] = "®Ñ(~B)";
+        Text[ arabic ] = "ÇáßÊÇÈ";
+        Text[ greek ] = "Âéâëßï";
+        Text[ korean ] = "Ã¥(~B)";
+        Text[ turkish ] = "Kitap";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_ALLDICTS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 9 ) ;
+        Size = MAP_APPFONT ( 121 , 62 ) ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_DICTLANG
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 86 , 10 ) ;
+        Text = "S~prache" ;
+        Text [ English ] = "~Language" ;
+        Text [ english_us ] = "~Language" ;
+        Text [ dutch ] = "T~aal" ;
+        Text [ italian ] = "Lingua" ;
+        Text [ spanish ] = "I~dioma" ;
+        Text [ french ] = "~Langue" ;
+        Text [ swedish ] = "S~pråk" ;
+        Text [ danish ] = "Sprog" ;
+        Text [ portuguese_brazilian ] = "S~prache" ;
+        Text [ portuguese ] = "~Língua" ;
+        Text[ chinese_simplified ] = "ÓïÑÔ(~L)";
+        Text[ russian ] = "ßçûê";
+        Text[ polish ] = "Jêzyk";
+        Text[ japanese ] = "Œ¾Œê(~L)";
+        Text[ chinese_traditional ] = "»y¨¥(~L)";
+        Text[ arabic ] = "ÇááÛÉ";
+        Text[ greek ] = "Ãëşóóá";
+        Text[ korean ] = "¾ğ¾î(~L)";
+        Text[ turkish ] = "Dil";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_DICTLANG
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 82 , 25 ) ;
+        Size = MAP_APPFONT ( 121 , 66 ) ;
+        DropDown = TRUE ;
+    };
+
+    GroupBox GB_EDITDICTS
+    {
+        Pos = MAP_APPFONT( 1, 1 );
+        Size = MAP_APPFONT( 268, 138 );
+        Hide=TRUE;
+    };
+
+    FixedText FT_WORD
+    {
+        Pos = MAP_APPFONT ( 13 , 46 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Text = "~Wort" ;
+        Text [ English ] = "Word" ;
+        Text[ english_us ] = "~Word";
+        Text[ portuguese ] = "~Palavra";
+        Text[ russian ] = "Ñëîâî";
+        Text[ dutch ] = "~Woord";
+        Text[ french ] = "Mot";
+        Text[ spanish ] = "~Palabra";
+        Text[ italian ] = "Parola";
+        Text[ danish ] = "Ord";
+        Text[ swedish ] = "~Ord";
+        Text[ polish ] = "S³owo";
+        Text[ portuguese_brazilian ] = "Word";
+        Text[ japanese ] = "’PŒê(~W)";
+        Text[ chinese_simplified ] = "×Ö(~W)";
+        Text[ chinese_traditional ] = "¦r(~W)";
+        Text[ arabic ] = "ÇáßáãÉ";
+        Text[ greek ] = "Ëİîç";
+        Text[ korean ] = "´Ü¾î(~W)";
+        Text[ turkish ] = "Sözcük";
+        Text[ language_user1 ] = " ";
+    };
+    Edit ED_WORD
+    {
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    FixedText FT_REPLACE
+    {
+        Pos = MAP_APPFONT ( 84 , 46 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text = "~Vorschlag" ;
+        Text [ English ] = "Replace ~By:" ;
+        Text[ english_us ] = "Replace ~By:";
+        Text[ portuguese ] = "~Sugestão";
+        Text[ russian ] = "Âàğèàíòû";
+        Text[ dutch ] = "~Voorstel";
+        Text[ french ] = "Suggestion";
+        Text[ spanish ] = "~Sugerencia";
+        Text[ italian ] = "Proposta";
+        Text[ danish ] = "Forslag";
+        Text[ swedish ] = "~Förslag";
+        Text[ polish ] = "Propozycja";
+        Text[ portuguese_brazilian ] = "Replace ~By:";
+        Text[ japanese ] = "’ñˆÄ:(~B)";
+        Text[ chinese_simplified ] = "½¨Òé(~B)";
+        Text[ chinese_traditional ] = "«ØÄ³(~B)";
+        Text[ arabic ] = "ÇáÇŞÊÑÇÍ";
+        Text[ language_user1 ] = " ";
+        Text[ greek ] = "Ğñïôåéíüìåíá:";
+        Text[ korean ] = "Á¦¾È:(~B)";
+        Text[ turkish ] = "Öneri";
+    };
+
+    Edit ED_REPLACE
+    {
+        Pos = MAP_APPFONT ( 83 , 56 ) ;
+        Size = MAP_APPFONT ( 120 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+
+    PushButton PB_NEW_REPLACE
+    {
+        Pos = MAP_APPFONT ( 209 , 56 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Text = "~Neu" ;
+        Text [ English ] = "New" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~New" ;
+        Text [ italian ] = "Nuovo" ;
+        Text [ spanish ] = "~Nuevo" ;
+        Text [ french ] = "~Nouveau" ;
+        Text [ dutch ] = "~Nieuw" ;
+        Text [ swedish ] = "~Nytt" ;
+        Text [ danish ] = "Ny" ;
+        Text [ portuguese_brazilian ] = "~Neu" ;
+        Text [ portuguese ] = "~Novo" ;
+        Text[ chinese_simplified ] = "ĞÂ×Ö´Ê(~N)";
+        Text[ russian ] = "Ñîçä~àòü";
+        Text[ polish ] = "Nowy";
+        Text[ japanese ] = "V‹Kì¬(~N)";
+        Text[ chinese_traditional ] = "·s¦rµü(~N)";
+        Text[ arabic ] = "ÌÏíÏ";
+        Text[ greek ] = "Äçìéïõñãßá";
+        Text[ korean ] = "»õ·Î(~N)";
+        Text[ turkish ] = "Yeni";
+        Text[ language_user1 ] = " ";
+    };
+    PushButton PB_DELETE_REPLACE
+    {
+        Pos = MAP_APPFONT ( 209 , 71 ) ;
+        Size = MAP_APPFONT ( 55 , 12 ) ;
+        Text = "~Löschen" ;
+        Text [ English ] = "Delete" ;
+        TabStop = TRUE ;
+        Text [ english_us ] = "~Delete" ;
+        Text [ italian ] = "Elimina" ;
+        Text [ spanish ] = "~Eliminar" ;
+        Text [ french ] = "~Supprimer" ;
+        Text [ dutch ] = "~Wissen" ;
+        Text [ swedish ] = "~Radera" ;
+        Text [ danish ] = "Slet" ;
+        Text [ portuguese_brazilian ] = "~Löschen" ;
+        Text [ portuguese ] = "E~liminar" ;
+        Text[ chinese_simplified ] = "É¾³ı(~D)";
+        Text[ russian ] = "Óäàëèòü";
+        Text[ polish ] = "Usuñ";
+        Text[ japanese ] = "íœ(~D)";
+        Text[ chinese_traditional ] = "§R°£(~D)";
+        Text[ arabic ] = "ÍĞİ";
+        Text[ greek ] = "ÄéáãñáöŞ";
+        Text[ korean ] = "»èÁ¦(~D)";
+        Text[ turkish ] = "Sil";
+        Text[ language_user1 ] = " ";
+    };
+    Control TLB_REPLACE
+    {
+        //HelpId = HID_OFACTL_AUTOCORR_REPLACE ;
+        Pos = MAP_APPFONT ( 12 , 71 ) ;
+        Size = MAP_APPFONT ( 191 , 58 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+    };
+    String STR_MODIFY
+    {
+        Text = "~Ersetzen" ;
+        Text [ English ] = "~Replace" ;
+        Text [ norwegian ] = "~Erstatte" ;
+        Text [ italian ] = "Sostituisci" ;
+        Text [ portuguese_brazilian ] = "~Substituir" ;
+        Text [ portuguese ] = "~Substituir" ;
+        Text [ finnish ] = "~Korvaa" ;
+        Text [ danish ] = "Erstat" ;
+        Text [ french ] = "~Remplacer" ;
+        Text [ swedish ] = "~Ersätt" ;
+        Text [ dutch ] = "~Vervangen" ;
+        Text [ spanish ] = "~Reemplazar" ;
+        Text [ english_us ] = "~Replace" ;
+        Text[ chinese_simplified ] = "¸üÌæ(~R)";
+        Text[ russian ] = "Çàìåíèòü";
+        Text[ polish ] = "Zamieñ";
+        Text[ japanese ] = "’uŠ·(~R)";
+        Text[ chinese_traditional ] = "´À¥N(~R)";
+        Text[ arabic ] = "ÇÓÊÈÏÇá";
+        Text[ greek ] = "ÁíôéêáôÜóôáóç";
+        Text[ korean ] = "´ëÃ¼(~R)";
+        Text[ turkish ] = "Değiştir";
+        Text[ language_user1 ] = " ";
+    };
+
+
+
+    HelpButton BTN_EDITHELP
+    {
+        Pos = MAP_APPFONT( 145, 143 );
+        Size = MAP_APPFONT( 55, 14 );
+    };
+
+    CancelButton BTN_EDITCLOSE
+    {
+        Pos = MAP_APPFONT ( 209 , 143 ) ;
+        Size = MAP_APPFONT ( 55 , 14 ) ;
+
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
+        Text = "~Schließen" ;
+        Text [ ENGLISH ] = "~Close" ;
+        Text [ norwegian ] = "~Lukk" ;
+        Text [ italian ] = "~Chiudi" ;
+        Text [ portuguese_brazilian ] = "~Fechar" ;
+        Text [ portuguese ] = "Fechar" ;
+        Text [ finnish ] = "~Sulje" ;
+        Text [ danish ] = "Luk" ;
+        Text [ french ] = "~Fermer" ;
+        Text [ swedish ] = "~Stäng" ;
+        Text [ dutch ] = "~Sluiten" ;
+        Text [ spanish ] = "~Cerrar" ;
+        Text [ english_us ] = "~Close" ;
+        Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
+        Text[ russian ] = "Çàêğûòü";
+        Text[ polish ] = "Zamknij";
+        Text[ japanese ] = "•Â‚¶‚é(~C)";
+        Text[ chinese_traditional ] = "Ãö³¬(~C)";
+        Text[ arabic ] = "ÅÛáÇŞ";
+        Text[ greek ] = "Êëåßóéìï";
+        Text[ korean ] = "´İ±â(~C)";
+        Text[ turkish ] = "Kapat";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ russian ] = "Ïğàâêà ñëîâàğÿ ïîëüçîâàòåëÿ";
+    Text[ polish ] = "Edytuj s³ownik u¿ytkownika";
+    Text[ japanese ] = "Õ°»Ş°«‘‚Ì•ÒW";
+    Text[ chinese_traditional ] = "½s¿è¦Û­qµü¨å";
+    Text[ arabic ] = "ÊÍÑíÑ ŞÇãæÓ ÇáãÓÊÎÏã";
+    Text[ greek ] = "Åğåîåñãáóßá ëåîéêïı";
+    Text[ korean ] = "»ç¿ëÀÚ»çÀü ÆíÁı";
+    Text[ turkish ] = "Kullanıcı sözlüğünü düzenle";
+    Text[ language_user1 ] = " ";
+};
+
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_OPT_DOUBLE_DICTS
+{
+    Text = "Der angegebene Name ist schon vorhanden.\nBitte geben Sie einen neuen Namen ein." ;
+    Text [ English ] = "The name already exists.\nPlease give a new name." ;
+    Text [ dutch ] = "Deze naam bestaat reeds.\nTyp een nieuwe naam." ;
+    Text [ english_us ] = "The specified name already exists.\nPlease enter a new name." ;
+    Text [ italian ] = "Il nome dato esiste già.\nDigitarne uno nuovo." ;
+    Text [ spanish ] = "Este nombre ya existe.\nPor favor escriba otro nombre." ;
+    Text [ french ] = "Le nom indiqué existe déjà.\nVeuillez saisir un autre nom." ;
+    Text [ swedish ] = "Det angivna namnet finns redan.\nMata in ett nytt namn." ;
+    Text [ danish ] = "Det angivne navn findes allerede.\nIndtast venligst et nyt navn." ;
+    Text [ portuguese ] = "O nome fornecido já existe.\nPor favor introduza outro nome." ;
+    Text [ portuguese_brazilian ] = "Der angegebene Name ist schon vorhanden.\nBitte geben Sie einen neuen Namen ein." ;
+    Text[ chinese_simplified ] = "Õâ¸ö¸ø¶¨µÄÃû³ÆÒÑ¾­´æÔÚ¡£\nÇëÄúÊäÈëÒ»¸öĞÂÃû³Æ¡£";
+    Text[ russian ] = "Çàäàííîå èìÿ óæå èìååòñÿ.\nÂâåäèòå, ïîæàëóéñòà, íîâîå èìÿ.";
+    Text[ polish ] = "Podana nazwa ju¿ istnieje.\nProszê wpisaæ now¹ nazwê.";
+    Text[ japanese ] = "“ü—Í‚µ‚½–¼‘O‚Í‚·‚Å‚É‚ ‚è‚Ü‚·B\nV‚µ‚¢–¼‘O‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "³o­Ó¿é¤Jªº¦WºÙ¤w¸g¦s¦b¡C\n½Ğ±z¿é¤J¤@­Ó·s¦WºÙ¡C";
+    Text[ arabic ] = "ÇáÇÓã ÇáĞí ÃÏÎáÊå ãæÌæÏ ãÓÈŞÇğ.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
+    Text[ greek ] = "Ôï üíïìá õğÜñ÷åé Şäç.\nĞáñáêáëş åğéëİîôå İíá Üëëï üíïìá.";
+    Text[ korean ] = "ÁöÁ¤µÈ ÀÌ¸§ÀÌ ÀÌ¹Ì ÀÖ½À´Ï´Ù.\n»õ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ turkish ] = "Girilen ad mevcut durumda.\nLütfen başka bir ad girin.";
+    Text[ language_user1 ] = " ";
+};
+ // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
+QueryBox RID_SFXQB_SET_LANGUAGE
+{
+    Buttons = WB_YES_NO ;
+    DefButton = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
+    Message = "Möchten Sie die Sprache des Wörterbuches '%1' ändern?" ;
+    Message [ English ] = "Do you want to replace the language of the dictionary '%1'?" ;
+    Message [ dutch ] = "Wilt u de taal van het woordenboek '%1' veranderen?" ;
+    Message [ english_us ] = "Do you want to change the '%1' dictionary language?" ;
+    Message [ italian ] = "Cambiare la lingua del dizionario '%1' ?" ;
+    Message [ spanish ] = "¿Desea cambiar el idioma del diccionario '%1' ?" ;
+    Message [ french ] = "Désirez-vous changer la langue du dictionnaire '%1' ?" ;
+    Message [ swedish ] = "Vill Du ändra språket i ordboken '%1'?" ;
+    Message [ danish ] = "Vil du ændre sproget i ordbogen '%1'?" ;
+    Message [ portuguese ] = "Deseja mudar a língua do dicionário '%1'?" ;
+    Message [ portuguese_brazilian ] = "Möchten Sie die Sprache des Wörterbuches '%1' ändern?" ;
+    Message[ chinese_simplified ] = "ÄúÒª¸ü¸Ä´Êµä '%1' µÄÓïÑÔÂğ£¿";
+    Message[ russian ] = "Âû õîòèòå èçìåíèòü ÿçûê ñëîàâğÿ '%1'?";
+    Message[ polish ] = "Czy chcesz zmieniæ jêzyk s³ownika '%1'?";
+    Message[ japanese ] = "«‘'%1' ‚ÌŒ¾Œê‚ğ•ÏX‚µ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "±z­nªí®æµü¨å'%1'ªº»y¨¥¡H";
+    Message[ arabic ] = "åá ÊÑíÏ ÊÛííÑ áÛÉ ÇáŞÇãæÓ '%1'¿";
+    Message[ greek ] = "Èİëåôå íá áëëÜîåôå ôçí ãëşóóá ôïõ ëåîéêïı '%1';";
+    Message[ korean ] = "»çÀü'%1'ÀÇ ¾ğ¾î¸¦ º¯°æÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "'%1' sözlüğünün dilini değiştirmek isityor musunuz?";
+    Message[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

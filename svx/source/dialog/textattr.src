@@ -1,0 +1,492 @@
+/*************************************************************************
+ *
+ *  $RCSfile: textattr.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+#include "textattr.hrc"
+#include "helpid.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // RID_SVXPAGE_TEXTATTR --------------------------------------------------
+TabPage RID_SVXPAGE_TEXTATTR
+{
+    HelpId = HID_PAGE_TEXTATTR ;
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Text = "Text" ;
+    Text [ ENGLISH ] = "Text" ;
+    Text [ english_us ] = "Text" ;
+    Text [ italian ] = "Testo" ;
+    Text [ spanish ] = "Texto" ;
+    Text [ french ] = "Texte" ;
+    Text [ dutch ] = "Tekst" ;
+    Text [ swedish ] = "Text" ;
+    Text [ danish ] = "Tekst" ;
+    Text [ portuguese_brazilian ] = "Text" ;
+    Text [ portuguese ] = "Texto" ;
+    TriStateBox TSB_AUTOGROW_WIDTH
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Text = "Br~eite an Text anpassen" ;
+        Text [ ENGLISH ] = "Fit ~width to text" ;
+        Text [ english_us ] = "Fit wi~dth to text" ;
+        Text [ dutch ] = "Br~eedte aan tekst aanpassen" ;
+        Text [ italian ] = "~Adatta larghezza a testo" ;
+        Text [ spanish ] = "Ajus~tar ancho al texto" ;
+        Text [ french ] = "Adapter ~largeur au texte" ;
+        Text [ swedish ] = "Anpassa br~edd till text" ;
+        Text [ danish ] = "Tilpas bredde til tekst" ;
+        Text [ portuguese ] = "Adaptar ~largura ao texto" ;
+        Text [ portuguese_brazilian ] = "Br~eite an Text anpassen" ;
+        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¿í¶È¶ÔÓ¦(~W)";
+        Text[ russian ] = "Âûğîâíÿòü øèğèíó ïî òåêñòó";
+        Text[ polish ] = "Dopasuj szeroko~œæ do tekstu";
+        Text[ japanese ] = "Ã·½Ä‚É•‚ğ‡‚í‚¹‚é(~W)";
+        Text[ chinese_traditional ] = "¼e«×©M¤º¤å¹ï»ô(~W)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÚÑÖ ááäÕ";
+        Text[ greek ] = "ĞñïóáñìïãŞ ğëÜôïõò ùò ğñïò êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®¿¡ ³Êºñ ¸ÂÃã(~D)";
+        Text[ turkish ] = "~Genişliği metne göre ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_AUTOGROW_HEIGHT
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? H~öhe an Text anpassen : H~÷he an Text anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? H~öhe an Text anpassen : H~÷he an Text anpassen */
+        Text = "H~öhe an Text anpassen" ;
+        Text [ ENGLISH ] = "Fit ~height to text" ;
+        Text [ english_us ] = "Fit h~eight to text" ;
+        Text [ dutch ] = "Hoogte ~aan tekst aanpassen" ;
+        Text [ italian ] = "A~datta altezza a testo" ;
+        Text [ spanish ] = "~Ajustar altura al texto" ;
+        Text [ french ] = "Adapter la h~auteur au texte" ;
+        Text [ swedish ] = "Anpassa höjd ~till text" ;
+        Text [ danish ] = "Tilpas højde til tekst" ;
+        Text [ portuguese ] = "Adaptar ~altura ao texto" ;
+        Text [ portuguese_brazilian ] = "H~öhe an Text anpassen" ;
+        Text[ chinese_simplified ] = "ºÍÎÄ×Ö¸ß¶È¶ÔÓ¦(~H)";
+        Text[ russian ] = "Âûğîâíÿòü âûñîòó ïî òåêñòó";
+        Text[ polish ] = "Dopas~uj wysokoœæ do tekstu";
+        Text[ japanese ] = "Ã·½Ä‚É‚‚³‚ğ‡‚í‚¹‚é(~H)";
+        Text[ chinese_traditional ] = "°ª«×©M¤º¤å¹ï»ô(~H)";
+        Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ááäÕ";
+        Text[ greek ] = "ĞñïóáñìïãŞ ıøïõò ùò ğñïò êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®¿¡ ³ôÀÌ ¸ÂÃã(~E)";
+        Text[ turkish ] = "~Yüksekliği metne göre ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_FIT_TO_SIZE
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 14 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        Text = "Am R~ahmen anpassen" ;
+        Text [ ENGLISH ] = "~Fit to size" ;
+        Text [ dutch ] = "Aan ~kader aanpassen" ;
+        Text [ english_us ] = "~Fit to frame" ;
+        Text [ italian ] = "Adatta alla cornice" ;
+        Text [ spanish ] = "Aju~star al marco" ;
+        Text [ french ] = "Adapter au ca~dre" ;
+        Text [ swedish ] = "Anpassa till r~am" ;
+        Text [ danish ] = "Tilpas til rammen" ;
+        Text [ portuguese ] = "Adaptar à ~moldura" ;
+        Text [ portuguese_brazilian ] = "Am R~ahmen anpassen" ;
+        Text[ chinese_simplified ] = "ºÍ±ß¿ò´óĞ¡Ïà¶ÔÓ¦(~Z)";
+        Text[ russian ] = "Ïîäáîğ ïîä ğàìêó";
+        Text[ polish ] = "Dopasuj do ramki";
+        Text[ japanese ] = "˜g‚É‡‚í‚¹‚é(~S)";
+        Text[ chinese_traditional ] = "©MÃä®Ø¹ï»ô(~S)";
+        Text[ arabic ] = "ãáÇÁãÉ ááÅØÇÑ";
+        Text[ greek ] = "ĞñïóáñìïãŞ óå ğëáßóéï";
+        Text[ korean ] = "Å©±â¿¡ ¸ÂÃã(~Z)";
+        Text[ turkish ] = "Metni ~çerçeveye uydur";
+        Text[ language_user1 ] = " ";
+    };
+    TriStateBox TSB_CONTOUR
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 27 ) ;
+        Size = MAP_APPFONT ( 100 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~Konturfluß : ~Konturflu˜ */
+        /* ### ACHTUNG: Neuer Text in Resource? ~Konturfluß : ~Konturflu˜ */
+        Text = "~Konturfluss" ;
+        Text [ ENGLISH ] = "~Contour" ;
+        Text [ portuguese ] = "Ajustar ao ~contorno" ;
+        Text [ english_us ] = "~Adjust to contour" ;
+        Text [ portuguese_brazilian ] = "~Konturfluß" ;
+        Text [ swedish ] = "~Konturflöde" ;
+        Text [ danish ] = "Konturforløb" ;
+        Text [ italian ] = "Flusso di contorno" ;
+        Text [ spanish ] = "Ajustar al ~contorno" ;
+        Text [ french ] = "Adapter au ~contour" ;
+        Text [ dutch ] = "~Contourverloop" ;
+        Text[ chinese_simplified ] = "ÎÄ×ÖÁ÷¶ÔÓ¦ÂÖÀª(~A)";
+        Text[ russian ] = "~Âûğàâíèâàíèå ïî êîíòóğó";
+        Text[ polish ] = "Obieg konturu";
+        Text[ japanese ] = "—ÖŠs‚É‡‚í‚¹‚é(~A)";
+        Text[ chinese_traditional ] = "©M½ü¹ø¹ï»ô(~A)";
+        Text[ arabic ] = "ãáÇÁãÉ ááÎØ ÇáßİÇİí";
+        Text[ greek ] = "ÑïŞ ğåñé~ãñÜììáôïò";
+        Text[ korean ] = "À±°û¿¡ ¸ÂÃã(~A)";
+        Text[ turkish ] = "~Kontur akışı";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_TEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 38 ) ;
+        Text = "Text" ;
+        Text [ ENGLISH ] = "Text" ;
+        Text [ english_us ] = "Text" ;
+        Text [ italian ] = "Testo" ;
+        Text [ spanish ] = "Texto" ;
+        Text [ french ] = "Texte" ;
+        Text [ dutch ] = "Tekst" ;
+        Text [ swedish ] = "Text" ;
+        Text [ danish ] = "Tekst" ;
+        Text [ portuguese_brazilian ] = "Text" ;
+        Text [ portuguese ] = "Texto" ;
+        Text[ chinese_simplified ] = "ÕıÎÄ";
+        Text[ russian ] = "Òåêñò";
+        Text[ polish ] = "Tekst";
+        Text[ japanese ] = "•¶š—ñ";
+        Text[ chinese_traditional ] = "¤º¦r";
+        Text[ arabic ] = "ÇáäÕ";
+        Text[ greek ] = "Êåßìåíï";
+        Text[ korean ] = "ÅØ½ºÆ®";
+        Text[ turkish ] = "Metin";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_LEFT
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Links" ;
+        Text [ ENGLISH ] = "~Left" ;
+        Text [ english_us ] = "~Left" ;
+        Text [ italian ] = "A sinistra" ;
+        Text [ spanish ] = "~Izquierda" ;
+        Text [ french ] = "~À gauche" ;
+        Text [ dutch ] = "~Links" ;
+        Text [ swedish ] = "~Vänster" ;
+        Text [ danish ] = "Venstre" ;
+        Text [ portuguese_brazilian ] = "~Links" ;
+        Text [ portuguese ] = "~Esquerda" ;
+        Text[ chinese_simplified ] = "×ó(~L)";
+        Text[ russian ] = "Ñëåâà";
+        Text[ polish ] = "Z lewej";
+        Text[ japanese ] = "¶(~L)";
+        Text[ chinese_traditional ] = "¦V¥ª(~L)";
+        Text[ arabic ] = "íÓÇÑ";
+        Text[ greek ] = "ÁñéóôåñÜ";
+        Text[ korean ] = "¿ŞÂÊ(~L)";
+        Text[ turkish ] = "~Sol";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_RIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Rechts" ;
+        Text [ ENGLISH ] = "~Right" ;
+        Text [ english_us ] = "~Right" ;
+        Text [ italian ] = "A destra" ;
+        Text [ spanish ] = "~Derecha" ;
+        Text [ french ] = "~À droite" ;
+        Text [ dutch ] = "~Rechts" ;
+        Text [ swedish ] = "~Höger" ;
+        Text [ danish ] = "Højre" ;
+        Text [ portuguese_brazilian ] = "~Rechts" ;
+        Text [ portuguese ] = "~Direita" ;
+        Text[ chinese_simplified ] = "ÓÒ(~R)";
+        Text[ russian ] = "Ñïğàâà";
+        Text[ polish ] = "Z prawej";
+        Text[ japanese ] = "‰E(~R)";
+        Text[ chinese_traditional ] = "¦V¥k(~R)";
+        Text[ arabic ] = "íãíä";
+        Text[ greek ] = "ÄåîéÜ";
+        Text[ korean ] = "¿À¸¥ÂÊ(~R)";
+        Text[ turkish ] = "Sa~ğ";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_TOP
+    {
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Oben" ;
+        Text [ ENGLISH ] = "~Top" ;
+        Text [ english_us ] = "~Top" ;
+        Text [ italian ] = "In alto" ;
+        Text [ spanish ] = "Arri~ba" ;
+        Text [ french ] = "~En haut" ;
+        Text [ dutch ] = "~Boven" ;
+        Text [ swedish ] = "~Överkant" ;
+        Text [ danish ] = "Top" ;
+        Text [ portuguese_brazilian ] = "~Oben" ;
+        Text [ portuguese ] = "~Superior" ;
+        Text[ chinese_simplified ] = "ÉÏ(~T)";
+        Text[ russian ] = "Ââåğõó";
+        Text[ polish ] = "W górze";
+        Text[ japanese ] = "ã(~T)";
+        Text[ chinese_traditional ] = "¦V¤W(~T)";
+        Text[ arabic ] = "ÃÚáì";
+        Text[ greek ] = "ĞÜíù";
+        Text[ korean ] = "À§(~T)";
+        Text[ turkish ] = "~Üst";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_BOTTOM
+    {
+        Pos = MAP_APPFONT ( 12 , 109 ) ;
+        Size = MAP_APPFONT ( 49 , 10 ) ;
+        Text = "~Unten" ;
+        Text [ ENGLISH ] = "~Bottom" ;
+        Text [ english_us ] = "~Bottom" ;
+        Text [ italian ] = "In basso" ;
+        Text [ spanish ] = "A~bajo" ;
+        Text [ french ] = "En ~bas" ;
+        Text [ dutch ] = "~Onder" ;
+        Text [ swedish ] = "~Underkant" ;
+        Text [ danish ] = "Bund" ;
+        Text [ portuguese_brazilian ] = "~Unten" ;
+        Text [ portuguese ] = "~Inferior" ;
+        Text[ chinese_simplified ] = "ÏÂ(~B)";
+        Text[ russian ] = "Âíèçó";
+        Text[ polish ] = "W dole";
+        Text[ japanese ] = "‰º(~B)";
+        Text[ chinese_traditional ] = "¦V¤U(~B)";
+        Text[ arabic ] = "ÃÓİá";
+        Text[ greek ] = "ÊÜôù";
+        Text[ korean ] = "¾Æ·¡(~B)";
+        Text[ turkish ] = "~Alt";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField MTR_FLD_LEFT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 59 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Minimum = -10000 ;
+        First = -10000 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    MetricField MTR_FLD_RIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 75 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+         //Pos = MAP_APPFONT ( 50 , 72 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Minimum = -10000 ;
+        First = -10000 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    MetricField MTR_FLD_TOP
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 91 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+         //Pos = MAP_APPFONT ( 50 , 87 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Minimum = -10000 ;
+        First = -10000 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    MetricField MTR_FLD_BOTTOM
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 107 ) ;
+        Size = MAP_APPFONT ( 45 , 12 ) ;
+         //Pos = MAP_APPFONT ( 50 , 102 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_MM ;
+        Minimum = -10000 ;
+        First = -10000 ;
+        Maximum = 10000 ;
+        Last = 10000 ;
+        SpinSize = 10 ;
+    };
+    GroupBox GRP_DISTANCE
+    {
+        Pos = MAP_APPFONT ( 6 , 45 ) ;
+        Size = MAP_APPFONT ( 113 , 84 ) ;
+         //Size = MAP_APPFONT ( 98 , 75 ) ;
+        Text = "Abstand vom Rahmen" ;
+        Text [ ENGLISH ] = "Distance from border" ;
+        Text [ english_us ] = "Spacing to borders" ;
+        Text [ italian ] = "Distanza dalla cornice" ;
+        Text [ spanish ] = "Distancia al marco" ;
+        Text [ french ] = "Écart du cadre" ;
+        Text [ dutch ] = "Afstand tot kader" ;
+        Text [ swedish ] = "Avstånd till ram" ;
+        Text [ danish ] = "Afstand fra rammen" ;
+        Text [ portuguese_brazilian ] = "Abstand vom Rahmen" ;
+        Text [ portuguese ] = "Espaço até moldura" ;
+        Text[ chinese_simplified ] = "Óë±ß¿òµÄ¾àÀë";
+        Text[ russian ] = "Ğàññòîÿíèå îò ğàìêè";
+        Text[ polish ] = "Odleg³oœæ od ramki";
+        Text[ japanese ] = "˜g‚©‚ç‚ÌŠÔŠu";
+        Text[ chinese_traditional ] = "Ãä®Øªº¶¡¹j";
+        Text[ arabic ] = "ÇáãÓÇİÉ ÍÊì ÇáÅØÇÑ";
+        Text[ greek ] = "Áğüóôáóç áğü ğëáßóéï";
+        Text[ korean ] = "Å×µÎ¸®¿ÍÀÇ °£°İ";
+        Text[ turkish ] = "Çerçeveye uzaklık";
+        Text[ language_user1 ] = " ";
+    };
+    Control CTL_POSITION
+    {
+        HelpId = HID_TEXTATTR_CTL_POSITION ;
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 57 ) ;
+        Size = MAP_APPFONT ( 115 , 52 ) ;
+        TabStop = TRUE ;
+    };
+    TriStateBox TSB_FULL_WIDTH
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 132 , 112 ) ;
+        Size = MAP_APPFONT ( 115 , 12 ) ;
+        Text = "Ganze ~Breite" ;
+        Text [ ENGLISH ] = "Full ~width" ;
+        Text [ dutch ] = "Volle~dige breedte" ;
+        Text [ english_us ] = "Full ~width" ;
+        Text [ italian ] = "A tutta larghezza" ;
+        Text [ spanish ] = "Todo el a~ncho" ;
+        Text [ french ] = "Sur toute la ~largeur" ;
+        Text [ swedish ] = "Hel ~bredd" ;
+        Text [ danish ] = "Hele bredden" ;
+        Text [ portuguese ] = "~Largura toda" ;
+        Text [ portuguese_brazilian ] = "Ganze ~Breite" ;
+        Text[ chinese_simplified ] = "Õû¸ö¿í¶È(~W)";
+        Text[ russian ] = "Ïîëíàÿ øèğèíà";
+        Text[ polish ] = "Ca³a szerokoœæ";
+        Text[ japanese ] = "‘S•(~W)";
+        Text[ chinese_traditional ] = "¾ã­Ó¼e«×(~W)";
+        Text[ arabic ] = "ÇáÚÑÖ ßáå";
+        Text[ greek ] = "ĞëŞñåò ~ğëÜôïò";
+        Text[ korean ] = "ÀüÃ¼ ³Êºñ(~W)";
+        Text[ turkish ] = "Metni, ~nesne genişliğine göre ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    GroupBox GRP_POSITION
+    {
+        Pos = MAP_APPFONT ( 126 , 45 ) ;
+        Size = MAP_APPFONT ( 128 , 84 ) ;
+        Text = "Textverankerung" ;
+        Text [ ENGLISH ] = "Anchor text" ;
+        Text [ dutch ] = "Tekstverankering" ;
+        Text [ english_us ] = "Text anchor" ;
+        Text [ italian ] = "Ancoraggio testo" ;
+        Text [ spanish ] = "Anclaje del texto" ;
+        Text [ french ] = "Ancrage de texte" ;
+        Text [ swedish ] = "Textförankring" ;
+        Text [ danish ] = "Tekstforankring" ;
+        Text [ portuguese_brazilian ] = "Textverankerung" ;
+        Text [ portuguese ] = "Âncora do texto" ;
+        Text[ chinese_simplified ] = "ÎÄ×ÖËø¶¨";
+        Text[ russian ] = "Ïğèâÿçêà òåêñòà";
+        Text[ polish ] = "Zakotwiczenie tekstu";
+        Text[ japanese ] = "Ã·½Ä‚Ì±İ¶°";
+        Text[ chinese_traditional ] = "¤å¦rÂê©w";
+        Text[ arabic ] = "ãÑÓÇÉ ÇáäÕ";
+        Text[ greek ] = "Áãêıñùóç êåéìİíïõ";
+        Text[ korean ] = "ÅØ½ºÆ® À§Ä¡ °íÁ¤";
+        Text[ turkish ] = "Metin sabitleme";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_simplified ] = "ÕıÎÄ";
+    Text[ russian ] = "Òåêñò";
+    Text[ polish ] = "Tekst";
+    Text[ japanese ] = "Ã·½Ä";
+    Text[ chinese_traditional ] = "¤å¦r";
+    Text[ arabic ] = "ÇáäÕ";
+    Text[ greek ] = "Êåßìåíï";
+    Text[ korean ] = "ÅØ½ºÆ®";
+    Text[ turkish ] = "Metin";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,390 @@
+/*************************************************************************
+ *
+ *  $RCSfile: hyprlink.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:09 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ------------------------------------------------------------------
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "hyprlink.hrc"
+ // pragma -------------------------------------------------------------------
+
+ // RID_SVXDLG_HYPERLINK ------------------------------------------------------
+DockingWindow RID_SVXDLG_HYPERLINK
+{
+    OutputSize = TRUE ;
+    Dockable = TRUE ;
+    Closeable = TRUE ;
+    Sizeable = TRUE ;
+    EnableResizing = TRUE ;
+    SVLook = TRUE ;
+    Moveable = TRUE ;
+    Size = MAP_APPFONT ( 370 , 17 ) ;
+    /* ### ACHTUNG: Neuer Text in Resource? Hyperlink einfügen : Hyperlink einf³gen */
+    /* ### ACHTUNG: Neuer Text in Resource? Hyperlink einfügen : Hyperlink einf³gen */
+    Text = "Hyperlink einfügen" ;
+    Text [ ENGLISH ] = "Insert Hyperlink" ;
+    ComboBox CB_NAME
+    {
+        Pos = MAP_APPFONT ( 2 , 2 ) ;
+        Size = MAP_APPFONT ( 100 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+        QuickHelpText = "Name der URL" ;
+        QuickHelpText [ English ] = "URL name" ;
+        QuickHelpText [ english_us ] = "URL Name" ;
+        QuickHelpText [ italian ] = "Nome di URL" ;
+        QuickHelpText [ spanish ] = "Nombre del URL" ;
+        QuickHelpText [ french ] = "Nom de l'URL" ;
+        QuickHelpText [ dutch ] = "URL-naam" ;
+        QuickHelpText [ portuguese_brazilian ] = "Name der URL" ;
+        QuickHelpText [ portuguese ] = "Nome do URL" ;
+        QuickHelpText [ swedish ] = "URL-namn" ;
+        QuickHelpText[ russian ] = "Èìÿ URL";
+        QuickHelpText[ danish ] = "URL navn";
+        QuickHelpText[ polish ] = "Nazwa URL";
+        QuickHelpText[ japanese ] = "URL‚Ì–¼‘O";
+        QuickHelpText[ chinese_simplified ] = "URL Ãû³Æ";
+        QuickHelpText[ chinese_traditional ] = "URL ¦WºÙ";
+        QuickHelpText[ arabic ] = "URL ÇÓã ÇáÜ";
+        QuickHelpText[ greek ] = "¼íïìá ôïõ URL";
+        QuickHelpText[ korean ] = "URL Name";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    FixedText FT_URL
+    {
+        Pos = MAP_APPFONT ( 105 , 4 ) ;
+        Size = MAP_APPFONT ( 16 , 10 ) ;
+        Text = "URL:" ;
+        Text [ ENGLISH ] = "URL:" ;
+        Text [ dutch ] = "URL:" ;
+        Text [ english_us ] = "URL:" ;
+        Text [ italian ] = "URL:" ;
+        Text [ spanish ] = "URL:" ;
+        Text [ french ] = "URL :" ;
+        Text [ swedish ] = "URL:" ;
+        Text [ danish ] = "URL:" ;
+        Text [ portuguese ] = "URL:" ;
+        Text [ portuguese_brazilian ] = "URL:" ;
+        Text[ chinese_simplified ] = "URL:";
+        Text[ russian ] = "URL:";
+        Text[ polish ] = "URL:";
+        Text[ japanese ] = "URL:";
+        Text[ chinese_traditional ] = "URL:";
+        Text[ arabic ] = ":URL";
+        Text[ greek ] = "URL:";
+        Text[ korean ] = "URL:";
+        Text[ turkish ] = "URL:";
+        Text[ language_user1 ] = " ";
+    };
+    ComboBox CB_URL
+    {
+        Pos = MAP_APPFONT ( 121 , 2 ) ;
+        Size = MAP_APPFONT ( 204 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        AutoSize = TRUE ;
+        AutoHScroll = TRUE ;
+        /* ### ACHTUNG: Neuer Text in Resource? Sammelbox für Internet-URLs : Sammelbox f³r Internet-URLs */
+        /* ### ACHTUNG: Neuer Text in Resource? Sammelbox für Internet-URLs : Sammelbox f³r Internet-URLs */
+        QuickHelpText = "Sammelbox für Internet-URLs" ;
+        QuickHelpText [ English ] = "Internet URLs" ;
+        QuickHelpText [ dutch ] = "Verzamelbox voor Internet-URLs" ;
+        QuickHelpText [ english_us ] = "Internet URLs" ;
+        QuickHelpText [ italian ] = "Casella di raccolta per gli URL di Internet" ;
+        QuickHelpText [ spanish ] = "URLs de Internet" ;
+        QuickHelpText [ french ] = "Boîte centrale pour les URLs d'Internet" ;
+        QuickHelpText [ portuguese_brazilian ] = "Sammelbox für Internet-URLs" ;
+        QuickHelpText [ portuguese ] = "Caixa para URLs da Internet" ;
+        QuickHelpText [ swedish ] = "Samlingsbox till webbadresser" ;
+        QuickHelpText[ russian ] = "Íàêîïèòåëü URL Èíòåğíåòà";
+        QuickHelpText[ danish ] = "Samleboks til Internet URL";
+        QuickHelpText[ polish ] = "Skrzynka zbiorcza dla URL Internetu";
+        QuickHelpText[ japanese ] = "²İÀ°È¯ÄURL‚ÌûWÎŞ¯¸½";
+        QuickHelpText[ chinese_simplified ] = "¹ú¼Ê»¥ÁªÍø URL µØÖ·À¸";
+        QuickHelpText[ chinese_traditional ] = "Internet URL ¦ì§}¦C";
+        QuickHelpText[ arabic ] = "ÇáÅäÊÑäÊ URLs ÕäÏæŞ ÌãÚ";
+        QuickHelpText[ greek ] = "Ğëáßóéï óõëëïãŞò ãéá URL ôïõ Internet";
+        QuickHelpText[ korean ] = "Internet URLs";
+        QuickHelpText[ language_user1 ] = " ";
+    };
+    ToolBox TB
+    {
+        Pos = MAP_PIXEL ( 328 , 2 ) ;
+        Size = MAP_PIXEL ( 39 , 13 ) ;
+        ItemList =
+        {
+            ToolBoxItem
+            {
+                Identifier = BTN_LINK ;
+                ItemBitmap = Bitmap { File = "link.bmp" ; };
+                Disable = TRUE ;
+                Text = "Link" ;
+                Text [ English ] = "Link" ;
+                Text [ dutch ] = "Link" ;
+                Text [ english_us ] = "Hyperlink" ;
+                Text [ italian ] = "Link" ;
+                Text [ spanish ] = "Hiperenlace" ;
+                Text [ french ] = "Lien" ;
+                Text [ swedish ] = "Länk" ;
+                Text [ danish ] = "Kæde" ;
+                Text [ portuguese ] = "Hiperligação" ;
+                Text [ portuguese_brazilian ] = "Link" ;
+                Text[ chinese_simplified ] = "³¬Á´½Ó";
+                Text[ russian ] = "Ãèïåğññûëêà";
+                Text[ polish ] = "£¹cze";
+                Text[ japanese ] = "Øİ¸";
+                Text[ chinese_traditional ] = "¶W³sµ²";
+                Text[ arabic ] = "ÇÑÊÈÇØ";
+                Text[ language_user1 ] = " ";
+                Text[ greek ] = "Õğåñ-óıíäåóç";
+                Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ©";
+                Text[ turkish ] = "Hyperlink";
+            };
+            ToolBoxItem
+            {
+                Identifier = BTN_INSERT_BOOKMARK ;
+                ItemBitmap = Bitmap { File = "addbookm.bmp" ; };
+                Disable = TRUE ;
+                Text = "Bookmark" ;
+                Text [ English ] = "Bookmark" ;
+                Text [ dutch ] = "Bookmark" ;
+                Text [ english_us ] = "Bookmark" ;
+                Text [ italian ] = "Bookmark" ;
+                Text [ spanish ] = "Marcador" ;
+                Text [ french ] = "Bookmark" ;
+                Text [ swedish ] = "Bokmärke" ;
+                Text [ danish ] = "Bogmærke" ;
+                Text [ portuguese ] = "Marcador" ;
+                Text [ portuguese_brazilian ] = "Bookmark" ;
+                Text[ chinese_simplified ] = "ÊéÇ©";
+                Text[ russian ] = "Çàêëàäêà";
+                Text[ polish ] = "Zak³adka";
+                Text[ japanese ] = "ÌŞ¯¸Ï°¸";
+                Text[ chinese_traditional ] = "®ÑÅÒ";
+                Text[ arabic ] = "ÅÔÇÑÉ ãÑÌÚíÉ";
+                Text[ greek ] = "Óåëéäïäåßêôçò";
+                Text[ korean ] = "Ã¥ °¥ÇÇ";
+                Text[ turkish ] = "Yer işareti";
+                Text[ language_user1 ] = " ";
+            };
+            ToolBoxItem
+            {
+                Identifier = BTN_INET_SEARCH ;
+                ItemBitmap = Bitmap { File = "find.bmp" ; };
+                Disable = TRUE ;
+                Text = "Search" ;
+                Text [ English ] = "Search" ;
+                Text [ dutch ] = "Zoeken" ;
+                Text [ english_us ] = "Search" ;
+                Text [ italian ] = "Cerca" ;
+                Text [ spanish ] = "Buscar" ;
+                Text [ french ] = "Rechercher" ;
+                Text [ swedish ] = "Sök" ;
+                Text [ danish ] = "Søg" ;
+                Text [ portuguese ] = "Localizar" ;
+                Text [ portuguese_brazilian ] = "Search" ;
+                Text[ chinese_simplified ] = "ËÑÑ°";
+                Text[ russian ] = "Ïîèñê";
+                Text[ polish ] = "Szukaj";
+                Text[ japanese ] = "ŒŸõ";
+                Text[ chinese_traditional ] = "´M§ä";
+                Text[ arabic ] = "ÈÍË";
+                Text[ greek ] = "ÁíáæŞôçóç";
+                Text[ korean ] = "°Ë»ö";
+                Text[ turkish ] = "Ara";
+                Text[ language_user1 ] = " ";
+            };
+        };
+    };
+    Text [ english_us ] = "Insert Hyperlink" ;
+    Text [ italian ] = "Aggiungi Hyperlink" ;
+    Text [ spanish ] = "Insertar hiperenlace" ;
+    Text [ french ] = "Insérer un hyperlien" ;
+    Text [ dutch ] = "Hyperlink invoegen" ;
+    Text [ swedish ] = "Infoga hyperlänk" ;
+    Text [ danish ] = "Indsæt hyperlink" ;
+    Text [ portuguese_brazilian ] = "Hyperlink einfügen" ;
+    Text [ portuguese ] = "Inserir hiperligação" ;
+    Text[ chinese_simplified ] = "ĞÂÔö³¬Á´½Ó";
+    Text[ russian ] = "Âñòàâèòü ãèïåğññûëêó";
+    Text[ polish ] = "Wstaw hiper³¹cze";
+    Text[ japanese ] = "Ê²Êß°Øİ¸‚Ì‘}“ü";
+    Text[ chinese_traditional ] = "·s¼W¶W³sµ²";
+    Text[ arabic ] = "ÅÏÑÇÌ ÇÑÊÈÇØ ÊÔÚÈí";
+    Text[ greek ] = "ÅéóáãùãŞ õğåñ-óıíäåóçò";
+    Text[ korean ] = "ÇÏÀÌÆÛ¸µÅ© »ğÀÔ";
+    Text[ turkish ] = "Hyperlink ekle";
+    Text[ language_user1 ] = " ";
+};
+ // PopupMenu -------------------------------------------------------------
+Menu RID_SVXMN_HYPERLINK
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_FIELD ;
+            Text = "Als ~Text" ;
+            Text [ ENGLISH ] = "As ~text" ;
+            Text [ dutch ] = "Als ~tekst" ;
+            Text [ english_us ] = "As Text" ;
+            Text [ italian ] = "Come ~testo" ;
+            Text [ spanish ] = "Como ~texto" ;
+            Text [ french ] = "Comme ~texte" ;
+            Text [ swedish ] = "Som ~text" ;
+            Text [ danish ] = "Som tekst" ;
+            Text [ portuguese_brazilian ] = "Als ~Text" ;
+            Text [ portuguese ] = "Como ~texto" ;
+            Text[ chinese_simplified ] = "µ±×÷ÎÄ±¾";
+            Text[ russian ] = "Êàê òåêñò";
+            Text[ polish ] = "Jako tekst";
+            Text[ japanese ] = "Ã·½Ä‚Æ‚µ‚Ä";
+            Text[ chinese_traditional ] = "·í§@¤å¦r";
+            Text[ arabic ] = "ßäÕ";
+            Text[ greek ] = "Ùò ~êåßìåíï";
+            Text[ korean ] = "ÅØ½ºÆ®·Î";
+            Text[ turkish ] = "Metin olarak";
+            Text[ language_user1 ] = " ";
+        };
+        MenuItem
+        {
+            Identifier = MN_BUTTON ;
+            Text = "Als ~Button" ;
+            Text [ English ] = "As ~button" ;
+            Text [ dutch ] = "Als ~button" ;
+            Text [ english_us ] = "As ~Button" ;
+            Text [ italian ] = "Come ~pulsante" ;
+            Text [ spanish ] = "Como ~botón" ;
+            Text [ french ] = "Comme bouton" ;
+            Text [ swedish ] = "Som ~knapp" ;
+            Text [ danish ] = "Som knap" ;
+            Text [ portuguese ] = "Como ~botão" ;
+            Text [ portuguese_brazilian ] = "Als ~Button" ;
+            Text[ russian ] = "Êàê êíîïêà";
+            Text[ polish ] = "Jako klawisz";
+            Text[ japanese ] = "ÎŞÀİ‚Æ‚µ‚Ä(~B)";
+            Text[ chinese_simplified ] = "µ±×÷°´Å¥(~B)";
+            Text[ chinese_traditional ] = "·í§@«ö¶s(~B)";
+            Text[ arabic ] = "ßãİÊÇÍ";
+            Text[ greek ] = "Ùò ~ğåäßï åğéëïãŞò";
+            Text[ korean ] = "¹öÆ°À¸·Î(~B)";
+            Text[ turkish ] = "Düğme olarak";
+            Text[ language_user1 ] = " ";
+        };
+    };
+};
+ // Strings ---------------------------------------------------------------
+QueryBox RID_SVXQB_NOCONNECT
+{
+    BUTTONS = WB_YES_NO_CANCEL ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden? : Die URL kann erst nach Aufbau einer Verbindung gepr³ft werden.\nSoll die Verbindung aufgebaut werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden? : Die URL kann erst nach Aufbau einer Verbindung gepr³ft werden.\nSoll die Verbindung aufgebaut werden? */
+    MESSAGE = "Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden?" ;
+    MESSAGE [ English ] = "???" ;
+    Message [ english_us ] = "This URL can only be proofed after a connection has been made. Establish connection?" ;
+    Message [ italian ] = "L'URL può essere verificato solo dopo una connessione.\nVolete effettuare la connessione?" ;
+    Message [ spanish ] = "La URL solo puede ser verificada después de haberse establecido una conexión.\n¿Desea establecer la conexión?" ;
+    Message [ french ] = "L'URL ne peut être vérifié qu'après connexion.\n Voulez-vous établir la connexion?" ;
+    Message [ dutch ] = "Deze URL kan pas na het tot stand brengen van een verbinding getest worden.\nWilt u de verbinding tot stand brengen?" ;
+    Message [ swedish ] = "Denna URL kan först prövas när en förbindelse har upprättats.\nSka en förbindelse upprättas?" ;
+    Message [ danish ] = "URL kan først testes når en forbindelse er blevet oprettet.\nSkal der oprettes en forbindelse?" ;
+    Message [ portuguese_brazilian ] = "Die URL kann erst nach Aufbau einer Verbindung geprüft werden.\nSoll die Verbindung aufgebaut werden?" ;
+    Message [ portuguese ] = "O URL pode apenas ser verificado depois de  efectuar uma ligação.\nDeseja iniciá-la?" ;
+    Message[ chinese_simplified ] = "Ö»ÓĞÔÚ½¨Á¢Á¬½Óºó²ÅÄÜÈ·¶¨Õâ¸ö URL ÊÇ·ñÕıÈ·¡£\nÄúÒªÏÖÔÚ½¨Á¢Á¬½ÓÂğ£¿";
+    Message[ russian ] = "Ïğîâåğèòü URL âîçìîæíî òîëüêî ïîñëå ïîäêëş÷åíèÿ.nÓñòàíîâèòü ïîäêëş÷åíèå?";
+    Message[ polish ] = "URL mo¿e zostaæ sprawdzony dopiero po ustanowieniu po³¹czenia.\nCzy utworzyæ po³¹czenie?";
+    Message[ japanese ] = "‚±‚ÌURL‚ÍÚ‘±İ’èŒã‚É‚µ‚©Ã½Ä‚Å‚«‚Ü‚¹‚ñB\nÚ‘±‚ğİ’è‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "¥u¦³¦b«Ø¥ß³s½u«á¤~¯à½T©w³o­Ó URL ¬O§_¥¿½T¡C\n±z­n²{¦b³s½u¨ì Internet¡S";
+    Message[ arabic ] = "áÇ íãßä İÍÕ ÇáÚäæÇä (URL)¡ ÅáÇ ÈÚÏ ÅŞÇãÉ ÇáÇÊÕÇá.\nåá ÊÑíÏ ÅŞÇãÉ ÇáÇÊÕÇá¿";
+    Message[ greek ] = "Ï İëåã÷ïò áõôïı ôïõ URL åßíáé äõíáôüí íá ãßíåé ìåôÜ ôçí óıíäåóç.\nÈİëåôå íá óõíäåèåßôå;";
+    Message[ korean ] = "ÀÌ URL Á¢¼ÓÀÌ ÀÌ·ç¾îÁø ÀÌÈÄ¿¡ À¯È¿¼ºÀÌ ÀÔÁõµÉ ¼ö ÀÖ½À´Ï´Ù.Á¢¼ÓÀ» ¸¸µå½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Bu URL bağlantı kurulduktan sonra kontrol edilebilir.\nBağlantı kurulsun mu?";
+    Message[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_DONTEXIST
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden? : Die URL existiert nicht.\nSoll sie trotzdem eingef³gt werden? */
+    /* ### ACHTUNG: Neuer Text in Resource? Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden? : Die URL existiert nicht.\nSoll sie trotzdem eingef³gt werden? */
+    MESSAGE = "Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden?" ;
+    MESSAGE [ English ] = "???" ;
+    Message [ dutch ] = "URL bestaat niet.\nToch invoegen?" ;
+    Message [ english_us ] = "This URL does not exist. Insert anyway?" ;
+    Message [ italian ] = "L'URL non esiste.\nVolete inserirlo lo stesso?" ;
+    Message [ spanish ] = "La URL no existe.\n¿Desea insertarla de todas formas?" ;
+    Message [ french ] = "L'URL n'existe pas.\nVoulez-vous l'insérer tout de même ?" ;
+    Message [ swedish ] = "Denna URL existerar inte.\nSka den infogas ändå?" ;
+    Message [ danish ] = "URL eksisterer ikke.\nSkal den tilføjes alligevel?" ;
+    Message [ portuguese_brazilian ] = "Die URL existiert nicht.\nSoll sie trotzdem eingefügt werden?" ;
+    Message [ portuguese ] = "O URL não existe.\nDeseja inseri-lo?" ;
+    Message[ chinese_simplified ] = "Õâ¸ö URL ²»´æÔÚ¡£\nÄú»¹ÊÇÒª¼ÓÈëËü£¿";
+    Message[ russian ] = "İòîò URL íå ñóùåñòâóåò.\nÂñå ğàâíî âñòàâèòü?";
+    Message[ polish ] = "URL nie istnieje.\nCzy ma on zostaæ mimo to wstawiony?";
+    Message[ japanese ] = "‚±‚ÌURL‚Í‘¶İ‚µ‚Ü‚¹‚ñB\n‚»‚ê‚Å‚à‘}“ü‚µ‚Ü‚·‚©?";
+    Message[ chinese_traditional ] = "³o­Ó URL ¤£¦s¦b¡C\n±zÁÙ¬O­n¥[¤J¥¦¡S";
+    Message[ arabic ] = "åĞÇ ÇáÜ URL ÛíÑ ãæÌæÏ.\nåá ÊÑíÏ ÅÏÎÇáå Úáì ÇáÑÛã ãä Ğáß¿";
+    Message[ greek ] = "Ôï URL äåí õğÜñ÷åé.\nÈİëåôå íá åéóá÷èåß ğáñ´ üëá áõôÜ;";
+    Message[ korean ] = "ÀÌ URLÀº Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.±×·¡µµ »ğÀÔÇÏ½Ã°Ú½À´Ï±î?";
+    Message[ turkish ] = "Bu URL mevcut değil.\nYine de URL'yi eklemek istiyor musunuz?";
+    Message[ language_user1 ] = " ";
+};

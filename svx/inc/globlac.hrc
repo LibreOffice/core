@@ -1,0 +1,245 @@
+/*************************************************************************
+ *
+ *  $RCSfile: globlac.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _GLOBALACC_SRC
+#define _GLOBALACC_SRC
+
+#define ACC_CODE( Id, c, bSh, bM1, bM2 ) \
+                    AcceleratorItem { Identifier = Id; \
+                            Key = KeyCode { Code = c ; \
+                                Shift = bSh ; Modifier1 = bM1 ; Modifier2 = bM2 ; }; };
+
+#define ACC_FUNC( Id, f ) \
+                AcceleratorItem { Identifier = Id; \
+                    Key = KeyCode { Function = f ; }; };
+
+#define ACC_KEY( language, c, bSh, bM1, bM2 ) \
+                    Key[ language ] = KeyCode { Code = c ; \
+                                Shift = bSh ; Modifier1 = bM1 ; Modifier2 = bM2 ; };
+
+#define ACC_DEF_KEY( c, bSh, bM1, bM2 ) \
+                    Key = KeyCode { Code = c ; \
+                                Shift = bSh ; Modifier1 = bM1 ; Modifier2 = bM2 ; };
+
+
+#define AI_HELPINDEX                ACC_CODE( SID_HELPINDEX, KEY_F1, FALSE, TRUE, FALSE )
+
+#define AI_ATTR_CHAR                ACC_CODE( SID_ATTR_CHAR, KEY_F2, FALSE, FALSE, FALSE )
+#define AI_PRESENTATION             ACC_CODE( SID_PRESENTATION, KEY_F2, FALSE, TRUE, FALSE )
+#define AI_ENTER_GROUP              ACC_CODE( SID_ENTER_GROUP, KEY_F3, FALSE, FALSE, FALSE )
+#define AI_COPYOBJECTS              ACC_CODE( SID_COPYOBJECTS, KEY_F3, TRUE, FALSE, FALSE )
+#define AI_LEAVE_GROUP              ACC_CODE( SID_LEAVE_GROUP, KEY_F3, FALSE, TRUE, FALSE )
+#define AI_ATTR_TRANSFORM           ACC_CODE( SID_ATTR_TRANSFORM, KEY_F4, FALSE, FALSE, FALSE )
+#define AI_NAVIGATOR                ACC_CODE( SID_NAVIGATOR, KEY_F5, FALSE, FALSE, FALSE )
+#define AI_SPELLING                 ACC_CODE( SID_SPELLING, KEY_F7, FALSE, FALSE, FALSE )
+#define AI_THESAURUS                ACC_CODE( SID_THESAURUS, KEY_F7, FALSE, TRUE, FALSE )
+#define AI_BEZIER_EDIT              ACC_CODE( SID_BEZIER_EDIT, KEY_F8, FALSE, FALSE, FALSE )
+#define AI_ATTR_TEXT_FITTOSIZE      ACC_CODE( SID_ATTR_TEXT_FITTOSIZE, KEY_F8, TRUE, TRUE, FALSE )
+#define AI_STYLE_DESIGNER           ACC_CODE( SID_STYLE_DESIGNER, KEY_F11, FALSE, FALSE, FALSE )
+#define AI_OUTLINEMODE              ACC_CODE( SID_OUTLINEMODE, KEY_F12, FALSE, FALSE, FALSE )
+#define AI_DRAWINGMODE              ACC_CODE( SID_DRAWINGMODE, KEY_F12, FALSE, TRUE, FALSE )
+
+#define AI_ATTR_PARA_LINESPACE_10   ACC_CODE( SID_ATTR_PARA_LINESPACE_10, KEY_1, FALSE, TRUE, FALSE )
+#define AI_ATTR_PARA_LINESPACE_20   ACC_CODE( SID_ATTR_PARA_LINESPACE_20, KEY_2, FALSE, TRUE, FALSE )
+#define AI_ATTR_PARA_LINESPACE_15   ACC_CODE( SID_ATTR_PARA_LINESPACE_15, KEY_5, FALSE, TRUE, FALSE )
+#define AI_SHOW_ITEMBROWSER         ACC_CODE( SID_SHOW_ITEMBROWSER, KEY_9, TRUE, TRUE, TRUE )
+
+#define AI_ATTR_PARA_ADJUST_BLOCK   AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_BLOCK;\
+                                        ACC_DEF_KEY(            KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( polish,        KEY_J, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( russian,       KEY_J, FALSE, TRUE, FALSE ) };
+
+#define AI_ATTR_PARA_ADJUST_CENTER  AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_CENTER;\
+                                        ACC_DEF_KEY(            KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_E, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_C, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_J, FALSE, TRUE, FALSE ) };
+
+#define AI_ATTR_CHAR_WEIGHT         AcceleratorItem { Identifier = SID_ATTR_CHAR_WEIGHT;\
+                                        ACC_DEF_KEY(            KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_N, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( danish,        KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( polish,        KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( russian,       KEY_B, FALSE, TRUE, FALSE ) };
+
+#define AI_SEARCH_DLG               AcceleratorItem { Identifier = SID_SEARCH_DLG;\
+                                        ACC_DEF_KEY(            KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_B, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_G, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_F, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_F, FALSE, TRUE, FALSE ) };
+
+#define AI_GROUP                    ACC_CODE( SID_GROUP, KEY_G, TRUE, TRUE, FALSE )
+#define AI_UNGROUP                  ACC_CODE( SID_UNGROUP, KEY_G, TRUE, TRUE, TRUE )
+
+// Weitersuchen ...
+#define AI_SET_SUPER_SCRIPT         AcceleratorItem { Identifier = SID_SET_SUPER_SCRIPT;\
+                                        ACC_DEF_KEY(            KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_P, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_H, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_H, FALSE, TRUE, FALSE ) };
+
+#define AI_ATTR_CHAR_POSTURE        AcceleratorItem { Identifier = SID_ATTR_CHAR_POSTURE;\
+                                        ACC_DEF_KEY(            KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( danish,        KEY_K, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( polish,        KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( russian,       KEY_I, FALSE, TRUE, FALSE ) };
+
+#define AI_COMBINE                  ACC_CODE( SID_COMBINE, KEY_K, TRUE, TRUE, FALSE )
+#define AI_DISMANTLE                ACC_CODE( SID_DISMANTLE, KEY_K, TRUE, TRUE, TRUE )
+#define AI_ATTR_PARA_ADJUST_LEFT    AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_LEFT;\
+                                        ACC_DEF_KEY(            KEY_L, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_L, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_I, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_G, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_L, FALSE, TRUE, FALSE ) };
+
+#define AI_ATTR_PARA_ADJUST_RIGHT   AcceleratorItem { Identifier = SID_ATTR_PARA_ADJUST_RIGHT;\
+                                        ACC_DEF_KEY(            KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_R, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_D, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_D, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_R, FALSE, TRUE, FALSE ) };
+
+#define AI_SET_SUB_SCRIPT           AcceleratorItem { Identifier = SID_SET_SUB_SCRIPT;\
+                                        ACC_DEF_KEY(            KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_B, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_B, TRUE,  TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_T, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_P, TRUE,  TRUE, FALSE ) };
+
+#define AI_ATTR_CHAR_UNDERLINE      AcceleratorItem { Identifier = SID_ATTR_CHAR_UNDERLINE;\
+                                        ACC_DEF_KEY(            KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( English_us,    KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Italian,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Spanish,       KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( French,        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( Dutch,         KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( danish,        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( polish,        KEY_U, FALSE, TRUE, FALSE ) \
+                                        ACC_KEY( russian,       KEY_U, FALSE, TRUE, FALSE ) };
+
+#define AI_STYLE_CATALOG            ACC_CODE( SID_STYLE_CATALOG, KEY_Y, FALSE, TRUE, FALSE )
+#define AI_WIN_FULLSCREEN           ACC_CODE( SID_WIN_FULLSCREEN, KEY_J, TRUE, TRUE, FALSE )
+#define AI_DESKTOPMODE              ACC_CODE( SID_DESKTOPMODE, KEY_I, TRUE, TRUE, FALSE )
+#define AI_FOCUSURLBOX              ACC_CODE( SID_FOCUSURLBOX, KEY_O, TRUE, TRUE, FALSE )
+#define AI_SELECTALL                ACC_CODE( SID_SELECTALL, KEY_A, FALSE, TRUE, FALSE )
+
+// Anordnung
+#define AI_FRAME_TO_TOP             ACC_CODE( SID_FRAME_TO_TOP, KEY_ADD, TRUE, TRUE, FALSE )
+#define AI_MOREFRONT                ACC_CODE( SID_MOREFRONT, KEY_ADD, FALSE, TRUE, FALSE )
+#define AI_FRAME_TO_BOTTOM          ACC_CODE( SID_FRAME_TO_BOTTOM, KEY_SUBTRACT, TRUE, TRUE, FALSE )
+#define AI_MOREBACK                 ACC_CODE( SID_MOREBACK, KEY_SUBTRACT, FALSE, TRUE, FALSE )
+
+// Explorer / Beamer
+#define AI_FOCUS_EXPLORER           ACC_CODE( SID_FOCUS_EXPLORER, KEY_E, TRUE, TRUE, FALSE )
+#define AI_FOCUS_BEAMER             ACC_CODE( SID_FOCUS_BEAMER, KEY_B, TRUE, TRUE, FALSE )
+
+// sonstige Acceleratoren
+#define AI_NEWDOC                   ACC_FUNC( SID_NEWDOC, KEYFUNC_NEW )
+#define AI_OPENDOC                  ACC_FUNC( SID_OPENDOC, KEYFUNC_OPEN )
+
+// Mac
+#define AI_CLOSEWIN                 ACC_FUNC( SID_CLOSEWIN, KEYFUNC_CLOSE )
+
+#define AI_SAVEDOC                  ACC_FUNC( SID_SAVEDOC, KEYFUNC_SAVE )
+#define AI_SAVEASDOC                ACC_FUNC( SID_SAVEASDOC, KEYFUNC_SAVEAS )
+#define AI_PRINTDOC                 ACC_FUNC( SID_PRINTDOC, KEYFUNC_PRINT )
+#define AI_QUITAPP                  ACC_FUNC( SID_QUITAPP, KEYFUNC_QUIT )
+#define AI_CUT                      ACC_FUNC( SID_CUT, KEYFUNC_CUT )
+#define AI_COPY                     ACC_FUNC( SID_COPY, KEYFUNC_COPY )
+#define AI_PASTE                    ACC_FUNC( SID_PASTE, KEYFUNC_PASTE )
+#define AI_UNDO                     ACC_FUNC( SID_UNDO, KEYFUNC_UNDO )
+#define AI_REDO                     ACC_FUNC( SID_REDO, KEYFUNC_REDO )
+#define AI_REPEAT                   ACC_FUNC( SID_REPEAT, KEYFUNC_REPEAT )
+#define AI_DELETE                   ACC_FUNC( SID_DELETE, KEYFUNC_DELETE )
+
+// Non Product
+#define AI_PIXELMODE                ACC_CODE( SID_PIXELMODE, KEY_P, TRUE, TRUE, TRUE )
+#define AI_ANIMATIONMODE            ACC_CODE( SID_ANIMATIONMODE, KEY_A, TRUE, TRUE, TRUE )
+
+#endif // _GLOBLACC_SRC
+
+
+
+

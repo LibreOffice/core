@@ -1,0 +1,1145 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xmlkywd.hxx,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:07:02 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _XMLOFF_XMLKYWD_HXX
+#define _XMLOFF_XMLKYWD_HXX
+
+#ifndef _STRING_HXX //autogen
+#include <tools/string.hxx>
+#endif
+
+/* if XML_DEFINE_KEYWORDS is defined the variables are
+   defined rather than declared. So this file MUST be included
+   WITHOUT this define.
+
+   (Except the xmlkywd.cxx file that actually defines the
+    variables which sets this define.)
+ */
+
+#ifndef XML_DEFINE_KEYWORDS
+#define XML_CONSTASCII_ACTION( n, s ) extern sal_Char __FAR_DATA n[sizeof(s)]
+#else
+#define XML_CONSTASCII_ACTION( n, s ) sal_Char __FAR_DATA n[sizeof(s)] = s
+#endif
+
+// common XML
+XML_CONSTASCII_ACTION( sXML_CDATA, "CDATA" );
+XML_CONSTASCII_ACTION( sXML_WS, " " );
+XML_CONSTASCII_ACTION( sXML_xml, "xml" );
+XML_CONSTASCII_ACTION( sXML_xmlns, "xmlns" );
+XML_CONSTASCII_ACTION( sXML_xml_pi, "version=\"1.0\" encoding=\"UTF-8\"" );
+XML_CONSTASCII_ACTION( sXML_id, "id" );
+
+// namespace prefixes and names
+XML_CONSTASCII_ACTION( sXML_np_office, "office" );
+XML_CONSTASCII_ACTION( sXML_n_office, "http://openoffice.org/2000/office" );
+XML_CONSTASCII_ACTION( sXML_n_office_old, "http://sun.com/xmlns/staroffice/office" );
+XML_CONSTASCII_ACTION( sXML_np_meta, "meta" );
+XML_CONSTASCII_ACTION( sXML_n_meta, "http://openoffice.org/2000/meta" );
+XML_CONSTASCII_ACTION( sXML_n_meta_old, "http://sun.com/xmlns/staroffice/meta" );
+XML_CONSTASCII_ACTION( sXML_np_style, "style" );
+XML_CONSTASCII_ACTION( sXML_n_style, "http://openoffice.org/2000/style" );
+XML_CONSTASCII_ACTION( sXML_n_style_old, "http://sun.com/xmlns/staroffice/style" );
+XML_CONSTASCII_ACTION( sXML_np_number, "number" );
+XML_CONSTASCII_ACTION( sXML_n_number, "http://openoffice.org/2000/datastyle" );
+XML_CONSTASCII_ACTION( sXML_n_number_old, "http://sun.com/xmlns/staroffice/number" );
+XML_CONSTASCII_ACTION( sXML_np_text, "text" );
+XML_CONSTASCII_ACTION( sXML_n_text, "http://openoffice.org/2000/text" );
+XML_CONSTASCII_ACTION( sXML_n_text_old, "http://sun.com/xmlns/staroffice/text" );
+XML_CONSTASCII_ACTION( sXML_np_table, "table" );
+XML_CONSTASCII_ACTION( sXML_n_table, "http://openoffice.org/2000/table" );
+XML_CONSTASCII_ACTION( sXML_n_table_old, "http://sun.com/xmlns/staroffice/table" );
+XML_CONSTASCII_ACTION( sXML_np_draw, "draw" );
+XML_CONSTASCII_ACTION( sXML_n_draw, "http://openoffice.org/2000/drawing" );
+XML_CONSTASCII_ACTION( sXML_n_draw_old, "http://sun.com/xmlns/staroffice/draw" );
+XML_CONSTASCII_ACTION( sXML_np_presentation, "presentation" );
+XML_CONSTASCII_ACTION( sXML_n_presentation, "http://openoffice.org/2000/presentation" );
+XML_CONSTASCII_ACTION( sXML_n_presentation_old, "http://sun.com/xmlns/staroffice/presentation" );
+XML_CONSTASCII_ACTION( sXML_np_chart, "chart" );
+XML_CONSTASCII_ACTION( sXML_n_chart, "http://openoffice.org/2000/chart" );
+XML_CONSTASCII_ACTION( sXML_n_chart_old, "http://sun.com/xmlns/staroffice/chart" );
+XML_CONSTASCII_ACTION( sXML_np_fo, "fo" );
+XML_CONSTASCII_ACTION( sXML_n_fo_old, "http://www.w3.org/1999/XSL/Format/" );
+XML_CONSTASCII_ACTION( sXML_n_fo, "http://www.w3.org/1999/XSL/Format" );
+XML_CONSTASCII_ACTION( sXML_np_xlink, "xlink" );
+XML_CONSTASCII_ACTION( sXML_n_xlink, "http://www.w3.org/1999/xlink" );
+XML_CONSTASCII_ACTION( sXML_n_xlink_old, "http://www.w3.org/1999/xlink/namespace" );
+XML_CONSTASCII_ACTION( sXML_np_dc, "dc" );
+XML_CONSTASCII_ACTION( sXML_n_dc, "http://purl.org/dc/elements/1.1/" );
+XML_CONSTASCII_ACTION( sXML_np_svg, "svg" );
+XML_CONSTASCII_ACTION( sXML_n_svg, "http://www.w3.org/2000/svg" );
+
+// ids and hrefs
+XML_CONSTASCII_ACTION( sXML_styles_id, "styles" );
+XML_CONSTASCII_ACTION( sXML_styles_href, "#styles" );
+XML_CONSTASCII_ACTION( sXML_auto_styles_id, "astyles" );
+XML_CONSTASCII_ACTION( sXML_auto_styles_href, "#astyles" );
+
+// units
+XML_CONSTASCII_ACTION( sXML_unit_mm, "mm" );
+XML_CONSTASCII_ACTION( sXML_unit_cm, "cm" );
+XML_CONSTASCII_ACTION( sXML_unit_pt, "pt" );
+XML_CONSTASCII_ACTION( sXML_unit_pc, "pc" );
+XML_CONSTASCII_ACTION( sXML_unit_inch, "inch" );
+
+// booleans
+XML_CONSTASCII_ACTION( sXML_true, "true" );
+XML_CONSTASCII_ACTION( sXML_false, "false" );
+XML_CONSTASCII_ACTION( sXML_none, "none" );
+XML_CONSTASCII_ACTION( sXML_no_limit, "no-limit" );
+
+// office namespace
+XML_CONSTASCII_ACTION( sXML_document, "document" );
+XML_CONSTASCII_ACTION( sXML_body, "body" );
+XML_CONSTASCII_ACTION( sXML_class, "class" );
+XML_CONSTASCII_ACTION( sXML_meta, "meta" );
+XML_CONSTASCII_ACTION( sXML_version, "version" );
+XML_CONSTASCII_ACTION( sXML_annotation, "annotation" );
+XML_CONSTASCII_ACTION( sXML_author, "author" );
+XML_CONSTASCII_ACTION( sXML_create_date, "create-date" );
+
+// meta namespace
+XML_CONSTASCII_ACTION( sXML_keywords, "keywords" );
+XML_CONSTASCII_ACTION( sXML_keyword, "keyword" );
+XML_CONSTASCII_ACTION( sXML_user_defined, "user-defined" );
+XML_CONSTASCII_ACTION( sXML_initial_creator, "initial-creator" );
+XML_CONSTASCII_ACTION( sXML_creation_date, "creation-date" );
+XML_CONSTASCII_ACTION( sXML_printed_by, "printed-by" );
+XML_CONSTASCII_ACTION( sXML_print_date, "print-date" );
+XML_CONSTASCII_ACTION( sXML_template, "template" );
+XML_CONSTASCII_ACTION( sXML_editing_cycles, "editing-cycles" );
+XML_CONSTASCII_ACTION( sXML_editing_duration, "editing-duration" );
+XML_CONSTASCII_ACTION( sXML_auto_reload, "auto-reload" );
+XML_CONSTASCII_ACTION( sXML_delay, "delay" );
+XML_CONSTASCII_ACTION( sXML_hyperlink_behaviour, "hyperlink-behaviour" );
+XML_CONSTASCII_ACTION( sXML_target_frame_name, "target-frame-name" );
+XML_CONSTASCII_ACTION( sXML_generator, "generator" );
+
+// style namespace
+XML_CONSTASCII_ACTION( sXML_properties, "properties" );
+XML_CONSTASCII_ACTION( sXML_styles, "styles" );
+XML_CONSTASCII_ACTION( sXML_automatic_styles, "automatic-styles" );
+XML_CONSTASCII_ACTION( sXML_master_styles, "master-styles" );
+XML_CONSTASCII_ACTION( sXML_use_styles, "use-styles" );
+XML_CONSTASCII_ACTION( sXML_style, "style" );
+XML_CONSTASCII_ACTION( sXML_stylesheet, "stylesheet" );
+XML_CONSTASCII_ACTION( sXML_map, "map" );
+
+XML_CONSTASCII_ACTION( sXML_name, "name" );
+XML_CONSTASCII_ACTION( sXML_parent_style_name, "parent-style-name" );
+XML_CONSTASCII_ACTION( sXML_next_style_name, "next-style-name" );
+XML_CONSTASCII_ACTION( sXML_family, "family" );
+XML_CONSTASCII_ACTION( sXML_data_style, "data-style" );
+XML_CONSTASCII_ACTION( sXML_pool_id, "pool-id" );
+XML_CONSTASCII_ACTION( sXML_help_file_name, "help-file-name" );
+XML_CONSTASCII_ACTION( sXML_help_id, "help-id" );
+XML_CONSTASCII_ACTION( sXML_auto_update, "auto-update" );
+XML_CONSTASCII_ACTION( sXML_apply_style_name, "apply-style-name" );
+
+XML_CONSTASCII_ACTION( sXML_font_family_generic, "font-family-generic" );
+XML_CONSTASCII_ACTION( sXML_font_style_name, "font-style-name" );
+XML_CONSTASCII_ACTION( sXML_font_pitch, "font-pitch" );
+XML_CONSTASCII_ACTION( sXML_font_charset, "font-charset" );
+
+XML_CONSTASCII_ACTION( sXML_vertical_pos, "vertical-pos" );
+XML_CONSTASCII_ACTION( sXML_vertical_rel, "vertical-rel" );
+
+XML_CONSTASCII_ACTION( sXML_register_true, "register-true" );
+XML_CONSTASCII_ACTION( sXML_drop_cap, "drop-cap" );
+
+XML_CONSTASCII_ACTION( sXML_lines, "lines" );
+XML_CONSTASCII_ACTION( sXML_length, "length" );
+XML_CONSTASCII_ACTION( sXML_distance, "distance" );
+XML_CONSTASCII_ACTION( sXML_rel_width, "rel-width" );
+XML_CONSTASCII_ACTION( sXML_may_break_between_rows, "may-break-between-rows" );
+XML_CONSTASCII_ACTION( sXML_column_width, "column-width" );
+XML_CONSTASCII_ACTION( sXML_rel_column_width, "rel-column-width" );
+XML_CONSTASCII_ACTION( sXML_row_height, "row-height" );
+XML_CONSTASCII_ACTION( sXML_min_row_height, "min-row-height" );
+XML_CONSTASCII_ACTION( sXML_use_optimal_column_width, "use-optimal-column-width");
+XML_CONSTASCII_ACTION( sXML_use_optimal_row_height, "use-optimal-row-height");
+
+XML_CONSTASCII_ACTION( sXML_word, "word" );
+
+XML_CONSTASCII_ACTION( sXML_num_format, "num-format" );
+XML_CONSTASCII_ACTION( sXML_num_letter_sync, "num-letter-sync" );
+XML_CONSTASCII_ACTION( sXML_num_prefix, "num-prefix" );
+XML_CONSTASCII_ACTION( sXML_num_suffix, "num-suffix" );
+
+XML_CONSTASCII_ACTION( sXML_decorative, "decorative" );
+XML_CONSTASCII_ACTION( sXML_modern, "modern" );
+XML_CONSTASCII_ACTION( sXML_roman, "roman" );
+XML_CONSTASCII_ACTION( sXML_script, "script" );
+XML_CONSTASCII_ACTION( sXML_swiss, "swiss" );
+XML_CONSTASCII_ACTION( sXML_system, "system" );
+
+XML_CONSTASCII_ACTION( sXML_fixed, "fixed" );
+XML_CONSTASCII_ACTION( sXML_variable, "variable" );
+
+XML_CONSTASCII_ACTION( sXML_text, "text" );
+XML_CONSTASCII_ACTION( sXML_paragraph, "paragraph" );
+XML_CONSTASCII_ACTION( sXML_frame, "frame" );
+
+XML_CONSTASCII_ACTION( sXML_ISO_8859_1, "ISO-8859-1" );
+XML_CONSTASCII_ACTION( sXML_x_mac_roman, "x-mac-roman" );
+XML_CONSTASCII_ACTION( sXML_IBM437, "IBM437" );
+XML_CONSTASCII_ACTION( sXML_IBM850, "IBM850" );
+XML_CONSTASCII_ACTION( sXML_IBM860, "IBM860" );
+XML_CONSTASCII_ACTION( sXML_IBM861, "IBM861" );
+XML_CONSTASCII_ACTION( sXML_IBM863, "IBM863" );
+XML_CONSTASCII_ACTION( sXML_IBM865, "IBM865" );
+XML_CONSTASCII_ACTION( sXML_x_system, "x-system" );
+XML_CONSTASCII_ACTION( sXML_x_symbol, "x-symbol" );
+
+XML_CONSTASCII_ACTION( sXML_top, "top" );
+XML_CONSTASCII_ACTION( sXML_middle, "middle" );
+XML_CONSTASCII_ACTION( sXML_bottom, "bottom" );
+XML_CONSTASCII_ACTION( sXML_left, "left" );
+XML_CONSTASCII_ACTION( sXML_right, "right" );
+XML_CONSTASCII_ACTION( sXML_center, "center" );
+
+XML_CONSTASCII_ACTION( sXML_page, "page" );
+XML_CONSTASCII_ACTION( sXML_page_content, "page-content" );
+//char __FAR_DATA XML_CONSTASCII_ACTION( sXML_frame, "frame" );
+XML_CONSTASCII_ACTION( sXML_frame_content, "frame-content" );
+//char __FAR_DATA XML_CONSTASCII_ACTION( sXML_paragraph, "paragraph" );
+XML_CONSTASCII_ACTION( sXML_paragraph_content, "paragraph-content" );
+XML_CONSTASCII_ACTION( sXML_line, "line" );
+XML_CONSTASCII_ACTION( sXML_baseline, "baseline" );
+XML_CONSTASCII_ACTION( sXML_char, "char" );
+XML_CONSTASCII_ACTION( sXML_as_char, "as_char" );
+
+XML_CONSTASCII_ACTION( sXML_A, "A" );
+XML_CONSTASCII_ACTION( sXML_a, "a" );
+XML_CONSTASCII_ACTION( sXML_I, "I" );
+XML_CONSTASCII_ACTION( sXML_i, "i" );
+XML_CONSTASCII_ACTION( sXML_1, "1" );
+XML_CONSTASCII_ACTION( sXML__empty, "" );
+
+XML_CONSTASCII_ACTION( sXML_opaque_foreground, "foreground" );
+XML_CONSTASCII_ACTION( sXML_opaque_background, "background" );
+
+XML_CONSTASCII_ACTION( sXML_columnsplit_auto, "auto" );
+XML_CONSTASCII_ACTION( sXML_columnsplit_avoid, "avoid" );
+
+XML_CONSTASCII_ACTION( sXML_protect_content, "content" );
+XML_CONSTASCII_ACTION( sXML_protect_position, "position" );
+XML_CONSTASCII_ACTION( sXML_protect_size, "size" );
+
+
+XML_CONSTASCII_ACTION( sXML_text_outline, "text-outline" );
+XML_CONSTASCII_ACTION( sXML_text_crossing_out, "text-crossing-out" );
+XML_CONSTASCII_ACTION( sXML_text_position, "text-position" );
+XML_CONSTASCII_ACTION( sXML_text_underline, "text-underline" );
+XML_CONSTASCII_ACTION( sXML_decorate_words_only, "decorate-words-only" );
+XML_CONSTASCII_ACTION( sXML_score_spaces, "score-spaces" );
+XML_CONSTASCII_ACTION( sXML_letter_kerning, "letter-kerning" );
+XML_CONSTASCII_ACTION( sXML_text_blinking, "text-blinking" );
+XML_CONSTASCII_ACTION( sXML_text_background_color, "text-background-color" );
+XML_CONSTASCII_ACTION( sXML_min_line_height, "min-line-height" );
+XML_CONSTASCII_ACTION( sXML_line_height_at_least, "line-height-at-least" );
+XML_CONSTASCII_ACTION( sXML_line_spacing, "line-spacing" );
+XML_CONSTASCII_ACTION( sXML_break_inside, "break-inside" );
+XML_CONSTASCII_ACTION( sXML_border_line_width, "border-line-width" );
+XML_CONSTASCII_ACTION( sXML_border_line_width_top, "border-line-width-top" );
+XML_CONSTASCII_ACTION( sXML_border_line_width_bottom, "border-line-width-bottom" );
+XML_CONSTASCII_ACTION( sXML_border_line_width_left, "border-line-width-left" );
+XML_CONSTASCII_ACTION( sXML_border_line_width_right, "border-line-width-right" );
+XML_CONSTASCII_ACTION( sXML_shadow, "shadow" );
+XML_CONSTASCII_ACTION( sXML_text_align_last, "text-align-last" );
+XML_CONSTASCII_ACTION( sXML_justify_single_word, "justify-single-word" );
+
+XML_CONSTASCII_ACTION( sXML_tabstop_tab_stops, "tab-stops" );
+XML_CONSTASCII_ACTION( sXML_tabstop_tab_stop, "tab-stop" );
+XML_CONSTASCII_ACTION( sXML_tabstop_position, "position" );
+XML_CONSTASCII_ACTION( sXML_tabstop_type, "type" );
+XML_CONSTASCII_ACTION( sXML_tabstop_char, "char" );
+XML_CONSTASCII_ACTION( sXML_tabstop_leader, "leader-char" );
+
+XML_CONSTASCII_ACTION( sXML_solid, "solid" );
+XML_CONSTASCII_ACTION( sXML_double, "double" );
+XML_CONSTASCII_ACTION( sXML_dotted, "dotted" );
+XML_CONSTASCII_ACTION( sXML_dashed, "dashed" );
+XML_CONSTASCII_ACTION( sXML_groove, "groove" );
+XML_CONSTASCII_ACTION( sXML_ridge, "ridge" );
+XML_CONSTASCII_ACTION( sXML_inset, "inset" );
+XML_CONSTASCII_ACTION( sXML_outset, "outset" );
+
+XML_CONSTASCII_ACTION( sXML_thin, "thin" );
+XML_CONSTASCII_ACTION( sXML_thick, "thick" );
+
+XML_CONSTASCII_ACTION( sXML_column, "column" );
+XML_CONSTASCII_ACTION( sXML_columns, "columns" );
+XML_CONSTASCII_ACTION( sXML_even_page, "even-page" );
+XML_CONSTASCII_ACTION( sXML_odd_page, "odd_page" );
+
+XML_CONSTASCII_ACTION( sXML_outline_level, "outline-level" );
+XML_CONSTASCII_ACTION( sXML_list_level, "list-level" );
+XML_CONSTASCII_ACTION( sXML_table_header, "table-header" );
+XML_CONSTASCII_ACTION( sXML_header, "header" );
+XML_CONSTASCII_ACTION( sXML_footer, "footer" );
+XML_CONSTASCII_ACTION( sXML_footnote, "footnote" );
+XML_CONSTASCII_ACTION( sXML_endnote, "endnote" );
+
+XML_CONSTASCII_ACTION( sXML_presentation_page_layout, "presentation-page-layout" );
+XML_CONSTASCII_ACTION( sXML_master_page, "master-page" );
+XML_CONSTASCII_ACTION( sXML_page_master_name, "page-master-name" );
+XML_CONSTASCII_ACTION( sXML_page_master, "page-master" );
+
+XML_CONSTASCII_ACTION( sXML_cell_protect, "cell-protect");
+XML_CONSTASCII_ACTION( sXML_hidden_and_protected, "hidden-and-protected");
+XML_CONSTASCII_ACTION( sXML_formula_hidden, "formula_hidden");
+XML_CONSTASCII_ACTION( sXML_print_content, "print-content");
+XML_CONSTASCII_ACTION( sXML_direction, "direction");
+XML_CONSTASCII_ACTION( sXML_ltr, "ltr");
+XML_CONSTASCII_ACTION( sXML_ttb, "ttb");
+XML_CONSTASCII_ACTION( sXML_rotation_angle, "rotation-angle" );
+XML_CONSTASCII_ACTION( sXML_rotation_align, "rotation-align" );
+XML_CONSTASCII_ACTION( sXML_text_align_source, "text-align-source" );
+XML_CONSTASCII_ACTION( sXML_fix, "fix" );
+
+XML_CONSTASCII_ACTION( sXML_horizontal_pos, "horizontal-pos" );
+XML_CONSTASCII_ACTION( sXML_horizontal_rel, "horizontal-rel" );
+XML_CONSTASCII_ACTION( sXML_mirror, "mirror" );
+XML_CONSTASCII_ACTION( sXML_clip, "clip" );
+XML_CONSTASCII_ACTION( sXML_horizontal, "horizontal" );
+XML_CONSTASCII_ACTION( sXML_horizontal_on_left_pages, "horizontal-on-left-pages" );
+XML_CONSTASCII_ACTION( sXML_horizontal_on_right_pages, "horizontal-on-right-pages" );
+
+XML_CONSTASCII_ACTION( sXML_from_left, "from-left" );
+XML_CONSTASCII_ACTION( sXML_from_inside, "from-inside" );
+XML_CONSTASCII_ACTION( sXML_from_top, "from-top" );
+XML_CONSTASCII_ACTION( sXML_inside, "inside" );
+
+XML_CONSTASCII_ACTION( sXML_paragraph_start_margin, "paragraph-start-margin" );
+XML_CONSTASCII_ACTION( sXML_paragraph_end_margin, "paragraph-end-margin" );
+XML_CONSTASCII_ACTION( sXML_page_start_margin, "page-start-margin" );
+XML_CONSTASCII_ACTION( sXML_page_end_margin, "page-end-margin" );
+XML_CONSTASCII_ACTION( sXML_frame_start_margin, "frame-start-margin" );
+XML_CONSTASCII_ACTION( sXML_frame_end_margin, "frame-end-margin" );
+
+
+// text namespace
+XML_CONSTASCII_ACTION( sXML_p, "p" );
+XML_CONSTASCII_ACTION( sXML_h, "h" );
+XML_CONSTASCII_ACTION( sXML_section_desc, "section-desc" );
+XML_CONSTASCII_ACTION( sXML_section, "section" );
+XML_CONSTASCII_ACTION( sXML_span, "span" );
+XML_CONSTASCII_ACTION( sXML_s, "s" );
+XML_CONSTASCII_ACTION( sXML_tab_stop, "tab-stop" );
+XML_CONSTASCII_ACTION( sXML_line_break, "line-break" );
+XML_CONSTASCII_ACTION( sXML_list_style, "list-style" );
+XML_CONSTASCII_ACTION( sXML_list_level_style_number, "list-level-style-number" );
+XML_CONSTASCII_ACTION( sXML_list_level_style_bullet, "list-level-style-bullet" );
+XML_CONSTASCII_ACTION( sXML_list_level_style_image, "list-level-style-image" );
+
+XML_CONSTASCII_ACTION( sXML_outline_style, "outline-style" );
+XML_CONSTASCII_ACTION( sXML_outline_level_style, "outline-level-style" );
+
+XML_CONSTASCII_ACTION( sXML_style_name, "style-name" );
+XML_CONSTASCII_ACTION( sXML_cond_style_name, "cond-style-name" );
+XML_CONSTASCII_ACTION( sXML_section_name, "section-name" );
+XML_CONSTASCII_ACTION( sXML_hidden, "hidden" );
+XML_CONSTASCII_ACTION( sXML_condition, "condition" );
+XML_CONSTASCII_ACTION( sXML_protected, "protected" );
+XML_CONSTASCII_ACTION( sXML_c, "c" );
+
+XML_CONSTASCII_ACTION( sXML_consecutive_numbering, "consecutive-numbering" );
+XML_CONSTASCII_ACTION( sXML_level, "level" );
+XML_CONSTASCII_ACTION( sXML_display_levels, "display-levels" );
+XML_CONSTASCII_ACTION( sXML_start_value, "start-value" );
+XML_CONSTASCII_ACTION( sXML_bullet_char, "bullet-char" );
+
+XML_CONSTASCII_ACTION( sXML_space_before, "space-before" );
+XML_CONSTASCII_ACTION( sXML_min_label_width, "min-label-width" );
+XML_CONSTASCII_ACTION( sXML_min_label_distance, "min-label-distance" );
+
+XML_CONSTASCII_ACTION( sXML_list_info, "list-info" );
+XML_CONSTASCII_ACTION( sXML_list_block, "list-block" );
+XML_CONSTASCII_ACTION( sXML_ordered_list, "ordered-list" );
+XML_CONSTASCII_ACTION( sXML_unordered_list, "unordered-list" );
+XML_CONSTASCII_ACTION( sXML_list_item, "list-item" );
+XML_CONSTASCII_ACTION( sXML_list_header, "list-header" );
+XML_CONSTASCII_ACTION( sXML_list_style_name, "list-style-name" );
+XML_CONSTASCII_ACTION( sXML_display_label, "display-label" );
+XML_CONSTASCII_ACTION( sXML_restart_numbering, "restart-numbering" );
+XML_CONSTASCII_ACTION( sXML_continue_numbering, "continue-numbering" );
+
+XML_CONSTASCII_ACTION( sXML_underline_none, "none" );
+XML_CONSTASCII_ACTION( sXML_underline_single, "single" );
+XML_CONSTASCII_ACTION( sXML_underline_double, "double" );
+XML_CONSTASCII_ACTION( sXML_underline_dotted, "dotted" );
+XML_CONSTASCII_ACTION( sXML_underline_dash, "dash" );
+XML_CONSTASCII_ACTION( sXML_underline_long_dash, "long-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_dot_dash, "dot-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_dot_dot_dash, "dot-dot-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_wave, "wave" );
+XML_CONSTASCII_ACTION( sXML_underline_bold, "bold" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_dotted, "bold-dotted" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_dash, "bold-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_long_dash, "bold-long-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_dot_dash, "bold-dot-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_dot_dot_dash, "bold-dot-dot-dash" );
+XML_CONSTASCII_ACTION( sXML_underline_bold_wave, "bold-wave" );
+XML_CONSTASCII_ACTION( sXML_underline_double_wave, "double-wave" );
+XML_CONSTASCII_ACTION( sXML_underline_small_wave, "small-wave" );
+
+XML_CONSTASCII_ACTION( sXML_crossedout_none, "none" );
+XML_CONSTASCII_ACTION( sXML_crossedout_single, "single-line" );
+XML_CONSTASCII_ACTION( sXML_crossedout_double, "double-line" );
+XML_CONSTASCII_ACTION( sXML_crossedout_thick, "thick-line" );
+XML_CONSTASCII_ACTION( sXML_crossedout_slash, "slash" );
+XML_CONSTASCII_ACTION( sXML_crossedout_cross, "X" );
+XML_CONSTASCII_ACTION( sXML_text_box, "text-box" );
+XML_CONSTASCII_ACTION( sXML_run_through, "run-through" );
+XML_CONSTASCII_ACTION( sXML_wrap, "wrap" );
+XML_CONSTASCII_ACTION( sXML_number_wrapped_paragraphs, "number-wrapped-paragraphs" );
+XML_CONSTASCII_ACTION( sXML_wrap_contour, "wrap-contour" );
+XML_CONSTASCII_ACTION( sXML_wrap_contour_mode, "wrap-contour-mode" );
+XML_CONSTASCII_ACTION( sXML_background, "background" );
+XML_CONSTASCII_ACTION( sXML_foreground, "foreground" );
+XML_CONSTASCII_ACTION( sXML_outside, "outside" );
+XML_CONSTASCII_ACTION( sXML_parallel, "parallel" );
+XML_CONSTASCII_ACTION( sXML_protect, "protect" );
+XML_CONSTASCII_ACTION( sXML_dynamic, "dynamic" );
+XML_CONSTASCII_ACTION( sXML_content, "content" );
+XML_CONSTASCII_ACTION( sXML_size, "size" );
+XML_CONSTASCII_ACTION( sXML_editable, "editable" );
+XML_CONSTASCII_ACTION( sXML_anchor_type, "anchor-type" );
+XML_CONSTASCII_ACTION( sXML_anchor_page_number, "anchor-page-number" );
+
+// fo namespace
+XML_CONSTASCII_ACTION( sXML_margin_top, "margin-top" );
+XML_CONSTASCII_ACTION( sXML_margin_bottom, "margin-bottom" );
+XML_CONSTASCII_ACTION( sXML_margin_left, "margin-left" );
+XML_CONSTASCII_ACTION( sXML_margin_right, "margin-right" );
+XML_CONSTASCII_ACTION( sXML_text_indent, "text-indent" );
+XML_CONSTASCII_ACTION( sXML_auto_text_indent, "auto-text-indent" );
+XML_CONSTASCII_ACTION( sXML_vertical_align, "vertical-align" );
+
+XML_CONSTASCII_ACTION( sXML_font_family, "font-family" );
+XML_CONSTASCII_ACTION( sXML_font_size, "font-size" );
+XML_CONSTASCII_ACTION( sXML_font_variant, "font-variant" );
+XML_CONSTASCII_ACTION( sXML_text_transform, "text-transform" );
+XML_CONSTASCII_ACTION( sXML_color, "color" );
+XML_CONSTASCII_ACTION( sXML_letter_spacing, "letter-spacing" );
+XML_CONSTASCII_ACTION( sXML_font_style, "font-style" );
+XML_CONSTASCII_ACTION( sXML_font_weight, "font-weight" );
+XML_CONSTASCII_ACTION( sXML_text_shadow, "text-shadow" );
+XML_CONSTASCII_ACTION( sXML_language, "language" );
+XML_CONSTASCII_ACTION( sXML_country, "country" );
+XML_CONSTASCII_ACTION( sXML_line_height, "line-height" );
+XML_CONSTASCII_ACTION( sXML_widows, "widows" );
+XML_CONSTASCII_ACTION( sXML_orphans, "orphans" );
+XML_CONSTASCII_ACTION( sXML_hyphenate, "hyphenate" );
+XML_CONSTASCII_ACTION( sXML_hyphenation_keep, "hyphenation-keep" );
+XML_CONSTASCII_ACTION( sXML_hyphenation_remain_char_count, "hyphenation-remain-char-count" );
+XML_CONSTASCII_ACTION( sXML_hyphenation_push_char_count, "hyphenation-push-char-count" );
+XML_CONSTASCII_ACTION( sXML_hyphenation_ladder_count, "hyphenation-ladder-count" );
+XML_CONSTASCII_ACTION( sXML_break_before, "break-before" );
+XML_CONSTASCII_ACTION( sXML_break_after, "break-after" );
+XML_CONSTASCII_ACTION( sXML_background_color, "background-color" );
+XML_CONSTASCII_ACTION( sXML_background_image, "background-image" );
+XML_CONSTASCII_ACTION( sXML_repeat, "repeat" );
+XML_CONSTASCII_ACTION( sXML_position, "position" );
+XML_CONSTASCII_ACTION( sXML_filter_name, "filter-name" );
+XML_CONSTASCII_ACTION( sXML_border, "border" );
+XML_CONSTASCII_ACTION( sXML_border_top, "border-top" );
+XML_CONSTASCII_ACTION( sXML_border_bottom, "border-bottom" );
+XML_CONSTASCII_ACTION( sXML_border_left, "border-left" );
+XML_CONSTASCII_ACTION( sXML_border_right, "border-right" );
+XML_CONSTASCII_ACTION( sXML_padding, "padding" );
+XML_CONSTASCII_ACTION( sXML_padding_top, "padding-top" );
+XML_CONSTASCII_ACTION( sXML_padding_bottom, "padding-bottom" );
+XML_CONSTASCII_ACTION( sXML_padding_left, "padding-left" );
+XML_CONSTASCII_ACTION( sXML_padding_right, "padding-right" );
+XML_CONSTASCII_ACTION( sXML_keep_with_next, "keep-with-next" );
+
+XML_CONSTASCII_ACTION( sXML_text_align, "text-align" );
+XML_CONSTASCII_ACTION( sXML_width, "width" );
+XML_CONSTASCII_ACTION( sXML_height, "height" );
+XML_CONSTASCII_ACTION( sXML_min_height, "min-height" );
+XML_CONSTASCII_ACTION( sXML_chain_next_name, "chain-next-name" );
+
+XML_CONSTASCII_ACTION( sXML_start, "start" );
+XML_CONSTASCII_ACTION( sXML_end, "end" );
+XML_CONSTASCII_ACTION( sXML_justify, "justify" );
+XML_CONSTASCII_ACTION( sXML_justified, "justified" );
+XML_CONSTASCII_ACTION( sXML_relative, "relative" ) ;
+
+XML_CONSTASCII_ACTION( sXML_transparent, "transparent" );
+XML_CONSTASCII_ACTION( sXML_background_repeat, "repeat" );
+XML_CONSTASCII_ACTION( sXML_background_no_repeat, "no-repeat" );
+XML_CONSTASCII_ACTION( sXML_background_stretch, "stretch" );
+
+XML_CONSTASCII_ACTION( sXML_casemap_normal, "normal" );
+XML_CONSTASCII_ACTION( sXML_casemap_small_caps, "small-caps" );
+XML_CONSTASCII_ACTION( sXML_casemap_lowercase, "lowercase" );
+XML_CONSTASCII_ACTION( sXML_casemap_uppercase, "uppercase" );
+XML_CONSTASCII_ACTION( sXML_casemap_capitalize, "capitalize" );
+
+XML_CONSTASCII_ACTION( sXML_escapement_sub, "sub" );
+XML_CONSTASCII_ACTION( sXML_escapement_super, "super" );
+
+XML_CONSTASCII_ACTION( sXML_kerning_normal, "normal" );
+
+XML_CONSTASCII_ACTION( sXML_posture_normal, "normal" );
+XML_CONSTASCII_ACTION( sXML_posture_italic, "italic" );
+XML_CONSTASCII_ACTION( sXML_posture_oblique, "oblique" );
+
+XML_CONSTASCII_ACTION( sXML_weight_normal, "normal" );
+XML_CONSTASCII_ACTION( sXML_weight_bold, "bold" );
+
+XML_CONSTASCII_ACTION( sXML_number_columns_repeated, "number-columns-repeated" );
+XML_CONSTASCII_ACTION( sXML_number_rows_repeated, "number-rows-repeated" );
+XML_CONSTASCII_ACTION( sXML_number_columns_spanned, "number-columns-spanned" );
+XML_CONSTASCII_ACTION( sXML_number_rows_spanned, "number-rows-spanned" );
+
+XML_CONSTASCII_ACTION( sXML_page_width, "page-width" );
+XML_CONSTASCII_ACTION( sXML_page_height, "page-height" );
+XML_CONSTASCII_ACTION( sXML_page_orientation, "page-orientation" );
+XML_CONSTASCII_ACTION( sXML_orientation_portrait, "orientation-portrait" );
+XML_CONSTASCII_ACTION( sXML_orientation_landscape, "orientation-landscape" );
+
+
+XML_CONSTASCII_ACTION( sXML_sender_firstname, "sender-firstname" );
+XML_CONSTASCII_ACTION( sXML_sender_lastname, "sender-lastname" );
+XML_CONSTASCII_ACTION( sXML_sender_initials, "sender-initials" );
+XML_CONSTASCII_ACTION( sXML_sender_title, "sender-title" );
+XML_CONSTASCII_ACTION( sXML_sender_position, "sender-position" );
+XML_CONSTASCII_ACTION( sXML_sender_email, "sender-email" );
+XML_CONSTASCII_ACTION( sXML_sender_phone_private, "sender-phone-private" );
+XML_CONSTASCII_ACTION( sXML_sender_fax, "sender-fax" );
+XML_CONSTASCII_ACTION( sXML_sender_company, "sender-company" );
+XML_CONSTASCII_ACTION( sXML_sender_phone_work, "sender-phone-work" );
+XML_CONSTASCII_ACTION( sXML_sender_street, "sender-street" );
+XML_CONSTASCII_ACTION( sXML_sender_city, "sender-city" );
+XML_CONSTASCII_ACTION( sXML_sender_postal_code, "sender-postal-code" );
+XML_CONSTASCII_ACTION( sXML_sender_country, "sender-country" );
+XML_CONSTASCII_ACTION( sXML_sender_state_or_province, "sender-state-or-province" );
+XML_CONSTASCII_ACTION( sXML_author_name, "author-name" );
+XML_CONSTASCII_ACTION( sXML_author_initials, "author-initials" );
+XML_CONSTASCII_ACTION( sXML_placeholder_type, "placeholder-type" );
+XML_CONSTASCII_ACTION( sXML_variable_decl, "variable-decl" );
+XML_CONSTASCII_ACTION( sXML_variable_decls, "variable-decls" );
+XML_CONSTASCII_ACTION( sXML_variable_set, "variable-set" );
+XML_CONSTASCII_ACTION( sXML_variable_get, "variable-get" );
+XML_CONSTASCII_ACTION( sXML_image, "image" );
+XML_CONSTASCII_ACTION( sXML_desc, "desc" );
+XML_CONSTASCII_ACTION( sXML_display, "display" );
+XML_CONSTASCII_ACTION( sXML_variable_input, "variable-input" );
+XML_CONSTASCII_ACTION( sXML_user_field_decl, "user-field-decl" );
+XML_CONSTASCII_ACTION( sXML_user_field_decls, "user-field-decls" );
+XML_CONSTASCII_ACTION( sXML_user_field_get, "user-field-get" );
+XML_CONSTASCII_ACTION( sXML_user_field_input, "user-field-input" );
+XML_CONSTASCII_ACTION( sXML_sequence_decl, "sequence-decl" );
+XML_CONSTASCII_ACTION( sXML_sequence_decls, "sequence-decls" );
+XML_CONSTASCII_ACTION( sXML_sequence, "sequence" );
+XML_CONSTASCII_ACTION( sXML_display_name, "display-name" );
+XML_CONSTASCII_ACTION( sXML_text_input, "text-input" );
+XML_CONSTASCII_ACTION( sXML_display_formula, "display-formula" );
+XML_CONSTASCII_ACTION( sXML_data_style_name, "data-style-name" );
+XML_CONSTASCII_ACTION( sXML_display_outline_level, "display-outline-level" );
+XML_CONSTASCII_ACTION( sXML_separation_character, "separation-character" );
+XML_CONSTASCII_ACTION( sXML_row_number, "row-number" );
+XML_CONSTASCII_ACTION( sXML_database_row_number, "database-row-number" );
+XML_CONSTASCII_ACTION( sXML_column_name, "column-name" );
+XML_CONSTASCII_ACTION( sXML_database_next, "database-next" );
+XML_CONSTASCII_ACTION( sXML_database_select, "database-select" );
+XML_CONSTASCII_ACTION( sXML_database_display, "database-display" );
+XML_CONSTASCII_ACTION( sXML_time_adjust, "time-adjust" );
+XML_CONSTASCII_ACTION( sXML_date_adjust, "date-adjust" );
+XML_CONSTASCII_ACTION( sXML_page_number, "page-number" );
+XML_CONSTASCII_ACTION( sXML_page_continuation_string, "page-continuation-string" );
+XML_CONSTASCII_ACTION( sXML_page_adjust, "page-adjust" );
+XML_CONSTASCII_ACTION( sXML_select_page, "select-page" );
+XML_CONSTASCII_ACTION( sXML_previous, "previous" );
+XML_CONSTASCII_ACTION( sXML_next, "next" );
+XML_CONSTASCII_ACTION( sXML_current, "current" );
+XML_CONSTASCII_ACTION( sXML_conditional_text, "conditional-text" );
+XML_CONSTASCII_ACTION( sXML_hidden_text, "hidden-text" );
+XML_CONSTASCII_ACTION( sXML_hidden_paragraph, "hidden-paragraph" );
+XML_CONSTASCII_ACTION( sXML_string_value_if_true, "string-value-if-true" );
+XML_CONSTASCII_ACTION( sXML_string_value_if_false, "string-value-if-false" );
+XML_CONSTASCII_ACTION( sXML_user_info_0, "user-info-0" );
+XML_CONSTASCII_ACTION( sXML_user_info_1, "user-info-1" );
+XML_CONSTASCII_ACTION( sXML_user_info_2, "user-info-2" );
+XML_CONSTASCII_ACTION( sXML_user_info_3, "user-info-3" );
+XML_CONSTASCII_ACTION( sXML_revision, "revision" );
+XML_CONSTASCII_ACTION( sXML_creation_time, "creation-time" );
+XML_CONSTASCII_ACTION( sXML_print_time, "print-time" );
+XML_CONSTASCII_ACTION( sXML_modification_time, "modification-time" );
+XML_CONSTASCII_ACTION( sXML_modification_date, "modification-date" );
+XML_CONSTASCII_ACTION( sXML_file_name, "file-name" );
+XML_CONSTASCII_ACTION( sXML_template_name, "template-name" );
+XML_CONSTASCII_ACTION( sXML_full, "full" );
+XML_CONSTASCII_ACTION( sXML_name_and_extension, "name-and-extension" );
+XML_CONSTASCII_ACTION( sXML_number_and_name, "number-and-name" );
+XML_CONSTASCII_ACTION( sXML_plain_number, "plain-number" );
+XML_CONSTASCII_ACTION( sXML_plain_number_and_name, "plain-number-and-name" );
+XML_CONSTASCII_ACTION( sXML_citation, "citation");
+XML_CONSTASCII_ACTION( sXML_paragraph_count, "paragraph-count" );
+XML_CONSTASCII_ACTION( sXML_word_count, "word-count" );
+XML_CONSTASCII_ACTION( sXML_character_count, "character-count" );
+XML_CONSTASCII_ACTION( sXML_page_count, "page-count" );
+XML_CONSTASCII_ACTION( sXML_table_count, "table-count" );
+XML_CONSTASCII_ACTION( sXML_image_count, "image-count" );
+XML_CONSTASCII_ACTION( sXML_object_count, "object-count" );
+XML_CONSTASCII_ACTION( sXML_active, "active" );
+XML_CONSTASCII_ACTION( sXML_page_variable_set, "page-variable-set" );
+XML_CONSTASCII_ACTION( sXML_page_variable_get, "page-variable-get" );
+XML_CONSTASCII_ACTION( sXML_execute_macro, "execute-macro" );
+XML_CONSTASCII_ACTION( sXML_reference_get, "reference-get" );
+XML_CONSTASCII_ACTION( sXML_sequence_ref, "sequence-ref" );
+XML_CONSTASCII_ACTION( sXML_bookmark_ref, "bookmark-ref" );
+XML_CONSTASCII_ACTION( sXML_footnote_ref, "footnote-ref" );
+XML_CONSTASCII_ACTION( sXML_endnote_ref, "endnote-ref" );
+XML_CONSTASCII_ACTION( sXML_reference_type, "reference-type" );
+XML_CONSTASCII_ACTION( sXML_category_and_value, "category-and-value" );
+XML_CONSTASCII_ACTION( sXML_dde_connection_decls, "dde-connection-decls" );
+XML_CONSTASCII_ACTION( sXML_dde_connection_decl, "dde-connection-decl" );
+XML_CONSTASCII_ACTION( sXML_dde_connection, "dde-connection" );
+XML_CONSTASCII_ACTION( sXML_command, "command" );
+XML_CONSTASCII_ACTION( sXML_dde_target, "dde-target" );
+XML_CONSTASCII_ACTION( sXML_dde_file, "dde-file" );
+XML_CONSTASCII_ACTION( sXML_dde_command, "dde-command" );
+XML_CONSTASCII_ACTION( sXML_automatic_update, "automatic-update" );
+XML_CONSTASCII_ACTION( sXML_bookmark, "bookmark" );
+XML_CONSTASCII_ACTION( sXML_bookmark_start, "bookmark-start" );
+XML_CONSTASCII_ACTION( sXML_bookmark_end, "bookmark-end" );
+XML_CONSTASCII_ACTION( sXML_reference, "reference" );
+XML_CONSTASCII_ACTION( sXML_reference_start, "reference-start" );
+XML_CONSTASCII_ACTION( sXML_reference_end, "reference-end" );
+XML_CONSTASCII_ACTION( sXML_label, "label" );
+XML_CONSTASCII_ACTION( sXML_quo_vadis, "quo-vadis" );
+XML_CONSTASCII_ACTION( sXML_ergo_sum, "ergo-sum" );
+XML_CONSTASCII_ACTION( sXML_footnotes_configuration, "footnotes-configuration");
+XML_CONSTASCII_ACTION( sXML_endnotes_configuration, "endnotes-configuration");
+XML_CONSTASCII_ACTION( sXML_citation_style_name, "citation-style-name" );
+XML_CONSTASCII_ACTION( sXML_default_style_name, "default-style-name" );
+XML_CONSTASCII_ACTION( sXML_prefix, "prefix" );
+XML_CONSTASCII_ACTION( sXML_suffix, "suffix" );
+XML_CONSTASCII_ACTION( sXML_footnotes_position, "footnotes-position" );
+XML_CONSTASCII_ACTION( sXML_start_numbering_at, "start-numbering-at" );
+XML_CONSTASCII_ACTION( sXML_offset, "offset" );
+
+XML_CONSTASCII_ACTION( sXML_chapter, "chapter");
+XML_CONSTASCII_ACTION( sXML_list, "list");
+XML_CONSTASCII_ACTION( sXML_index, "index");
+XML_CONSTASCII_ACTION( sXML_extra, "extra");
+XML_CONSTASCII_ACTION( sXML_html, "html");
+
+// table namespace
+XML_CONSTASCII_ACTION( sXML_table, "table" );
+XML_CONSTASCII_ACTION( sXML_sub_table, "sub-table" );
+XML_CONSTASCII_ACTION( sXML_table_page, "table-page" );
+XML_CONSTASCII_ACTION( sXML_page_style_name, "page-style-name" );
+XML_CONSTASCII_ACTION( sXML_use_cell_protection, "use-cell-protection" );
+XML_CONSTASCII_ACTION( sXML_table_header_columns, "table-header-columns" );
+XML_CONSTASCII_ACTION( sXML_table_columns, "table-columns" );
+XML_CONSTASCII_ACTION( sXML_table_column, "table-column" );
+XML_CONSTASCII_ACTION( sXML_visibility, "visibility" );
+XML_CONSTASCII_ACTION( sXML_collapse, "collapse" );
+XML_CONSTASCII_ACTION( sXML_table_header_rows, "table-header-rows" );
+XML_CONSTASCII_ACTION( sXML_table_rows, "table-rows" );
+XML_CONSTASCII_ACTION( sXML_table_row, "table-row" );
+XML_CONSTASCII_ACTION( sXML_table_cell, "table-cell" );
+XML_CONSTASCII_ACTION( sXML_covered_table_cell, "covered-table-cell" );
+XML_CONSTASCII_ACTION( sXML_align, "align" );
+XML_CONSTASCII_ACTION( sXML_value_type, "value-type");
+XML_CONSTASCII_ACTION( sXML_float, "float");
+XML_CONSTASCII_ACTION( sXML_time, "time");
+XML_CONSTASCII_ACTION( sXML_percentage, "percentage");
+XML_CONSTASCII_ACTION( sXML_currency, "currency");
+XML_CONSTASCII_ACTION( sXML_boolean, "boolean");
+XML_CONSTASCII_ACTION( sXML_string, "string");
+XML_CONSTASCII_ACTION( sXML_formula, "formula");
+XML_CONSTASCII_ACTION( sXML_value, "value");
+XML_CONSTASCII_ACTION( sXML_date_value, "date-value");
+XML_CONSTASCII_ACTION( sXML_time_value, "time-value");
+XML_CONSTASCII_ACTION( sXML_boolean_value, "boolean-value");
+XML_CONSTASCII_ACTION( sXML_string_value, "string-value");
+XML_CONSTASCII_ACTION( sXML_margins, "margins" );
+XML_CONSTASCII_ACTION( sXML_number_matrix_columns_spanned, "number-matrix-columns-spanned" );
+XML_CONSTASCII_ACTION( sXML_number_matrix_rows_spanned, "number-matrix-rows-spanned" );
+
+XML_CONSTASCII_ACTION( sXML_named_expressions, "named-expressions");
+XML_CONSTASCII_ACTION( sXML_named_range, "named-range");
+XML_CONSTASCII_ACTION( sXML_cell_range_address, "cell-range-address");
+XML_CONSTASCII_ACTION( sXML_base_cell_address, "base-cell-address");
+XML_CONSTASCII_ACTION( sXML_range_usable_as, "range-usable-as");
+XML_CONSTASCII_ACTION( sXML_named_expression, "named-expression");
+XML_CONSTASCII_ACTION( sXML_expression, "expression");
+XML_CONSTASCII_ACTION( sXML_repeat_column, "repeat-column");
+XML_CONSTASCII_ACTION( sXML_repeat_row, "repeat-row");
+XML_CONSTASCII_ACTION( sXML_print_range, "print-range");
+
+XML_CONSTASCII_ACTION( sXML_filter, "filter");
+XML_CONSTASCII_ACTION( sXML_target_range_address, "target-range-address");
+XML_CONSTASCII_ACTION( sXML_condition_source_range_address, "condition-source-range-address");
+XML_CONSTASCII_ACTION( sXML_condition_source, "condition-source");
+XML_CONSTASCII_ACTION( sXML_display_duplicates, "display-duplicates");
+XML_CONSTASCII_ACTION( sXML_filter_and, "filter-and");
+XML_CONSTASCII_ACTION( sXML_filter_or, "filter-or");
+XML_CONSTASCII_ACTION( sXML_filter_condition, "filter-condition");
+XML_CONSTASCII_ACTION( sXML_field_number, "field-number");
+XML_CONSTASCII_ACTION( sXML_case_sensitive, "case-sensitive");
+XML_CONSTASCII_ACTION( sXML_data_type, "data-type");
+XML_CONSTASCII_ACTION( sXML_operator, "operator");
+
+XML_CONSTASCII_ACTION( sXML_database_ranges, "database-ranges");
+XML_CONSTASCII_ACTION( sXML_database_range, "database-range");
+XML_CONSTASCII_ACTION( sXML_is_selection, "is-selection");
+XML_CONSTASCII_ACTION( sXML_on_update_keep_styles, "on-update-keep-styles");
+XML_CONSTASCII_ACTION( sXML_on_update_keep_size, "on-update-keep-size");
+XML_CONSTASCII_ACTION( sXML_has_persistent_data, "has-persistent-data");
+XML_CONSTASCII_ACTION( sXML_orientation, "orientation");
+XML_CONSTASCII_ACTION( sXML_contains_header, "contains-header");
+XML_CONSTASCII_ACTION( sXML_display_filter_buttons, "display-filter-buttons");
+XML_CONSTASCII_ACTION( sXML_range_address, "range-address");
+XML_CONSTASCII_ACTION( sXML_database_source_sql, "database-source-sql");
+XML_CONSTASCII_ACTION( sXML_database_name, "database-name");
+XML_CONSTASCII_ACTION( sXML_sql_statement, "sql-statement");
+XML_CONSTASCII_ACTION( sXML_parse_sql_statement, "parse-sql-statement");
+XML_CONSTASCII_ACTION( sXML_database_source_table, "database-source-table");
+XML_CONSTASCII_ACTION( sXML_table_name, "table-name");
+XML_CONSTASCII_ACTION( sXML_database_source_query, "database-source-query");
+XML_CONSTASCII_ACTION( sXML_query_name, "query-name");
+XML_CONSTASCII_ACTION( sXML_sort, "sort");
+XML_CONSTASCII_ACTION( sXML_bind_styles_to_content, "bind-styles-to-content");
+XML_CONSTASCII_ACTION( sXML_sort_by, "sort-by");
+XML_CONSTASCII_ACTION( sXML_order, "order");
+XML_CONSTASCII_ACTION( sXML_subtotal_rules, "subtotal-rules");
+XML_CONSTASCII_ACTION( sXML_page_breaks_on_group_change, "page-breaks-on-group-change");
+XML_CONSTASCII_ACTION( sXML_sort_groups, "sort-groups");
+XML_CONSTASCII_ACTION( sXML_subtotal_rule, "subtotal-rule");
+XML_CONSTASCII_ACTION( sXML_group_by_field_number, "group-by-field-number");
+XML_CONSTASCII_ACTION( sXML_subtotal_field, "subtotal-field");
+XML_CONSTASCII_ACTION( sXML_function, "function");
+XML_CONSTASCII_ACTION( sXML_match, "match");
+XML_CONSTASCII_ACTION( sXML_nomatch, "!match");
+XML_CONSTASCII_ACTION( sXML_empty, "empty");
+XML_CONSTASCII_ACTION( sXML_noempty, "!empty");
+XML_CONSTASCII_ACTION( sXML_bottom_percent, "bottom percent");
+XML_CONSTASCII_ACTION( sXML_bottom_values, "bottom values");
+XML_CONSTASCII_ACTION( sXML_top_percent, "top percent");
+XML_CONSTASCII_ACTION( sXML_top_values, "top values");
+XML_CONSTASCII_ACTION( sXML_descending, "descending");
+XML_CONSTASCII_ACTION( sXML_ascending, "ascending");
+XML_CONSTASCII_ACTION( sXML_automatic, "automatic");
+XML_CONSTASCII_ACTION( sXML_row, "row");
+
+XML_CONSTASCII_ACTION( sXML_data_pilot_tables, "data-pilot-tables");
+XML_CONSTASCII_ACTION( sXML_application_data, "application-data");
+XML_CONSTASCII_ACTION( sXML_buttons, "buttons");
+XML_CONSTASCII_ACTION( sXML_grand_total, "grand-total");
+XML_CONSTASCII_ACTION( sXML_both, "both");
+XML_CONSTASCII_ACTION( sXML_ignore_empty_rows, "ignore-empty-rows");
+XML_CONSTASCII_ACTION( sXML_identify_categories, "identify-categories");
+XML_CONSTASCII_ACTION( sXML_data_pilot_table, "data-pilot-table");
+XML_CONSTASCII_ACTION( sXML_source_cell_range, "source-cell-range");
+XML_CONSTASCII_ACTION( sXML_source_name, "source-name");
+XML_CONSTASCII_ACTION( sXML_source_service, "source-service");
+XML_CONSTASCII_ACTION( sXML_object_name, "object-name");
+XML_CONSTASCII_ACTION( sXML_username, "username");
+XML_CONSTASCII_ACTION( sXML_passwort, "passwort");
+XML_CONSTASCII_ACTION( sXML_source_field_name, "source-field-name");
+XML_CONSTASCII_ACTION( sXML_is_data_layout_field, "is-data-layout-field");
+XML_CONSTASCII_ACTION( sXML_data, "data");
+XML_CONSTASCII_ACTION( sXML_used_hierarchy, "used-hierarchy");
+XML_CONSTASCII_ACTION( sXML_data_pilot_field, "data-pilot-field");
+XML_CONSTASCII_ACTION( sXML_display_empty, "display-empty");
+XML_CONSTASCII_ACTION( sXML_data_pilot_level, "data-pilot-level");
+XML_CONSTASCII_ACTION( sXML_data_pilot_subtotals, "data-pilot-subtotals");
+XML_CONSTASCII_ACTION( sXML_data_pilot_subtotal, "data-pilot-subtotal");
+XML_CONSTASCII_ACTION( sXML_data_pilot_members, "data-pilot-members");
+XML_CONSTASCII_ACTION( sXML_display_details, "display-details");
+XML_CONSTASCII_ACTION( sXML_data_pilot_member, "data-pilot-member");
+
+// draw namespace
+XML_CONSTASCII_ACTION( sXML_draw, "draw" );
+XML_CONSTASCII_ACTION( sXML_master_page_name , "master-page-name" );
+XML_CONSTASCII_ACTION( sXML_g , "g" );
+XML_CONSTASCII_ACTION( sXML_rect , "rect" );
+XML_CONSTASCII_ACTION( sXML_polyline , "polyline" );
+XML_CONSTASCII_ACTION( sXML_polygon , "polygon" );
+XML_CONSTASCII_ACTION( sXML_path , "path" );
+XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
+XML_CONSTASCII_ACTION( sXML_transform , "transform" );
+XML_CONSTASCII_ACTION( sXML_corner_radius , "corner-radius" );
+XML_CONSTASCII_ACTION( sXML_drawpool , "drawpool" );
+XML_CONSTASCII_ACTION( sXML_graphic , "graphic" );
+XML_CONSTASCII_ACTION( sXML_spreadsheet , "spreadsheet" );
+XML_CONSTASCII_ACTION( sXML_marker_start , "marker-start" );
+XML_CONSTASCII_ACTION( sXML_marker_end , "marker-end" );
+XML_CONSTASCII_ACTION( sXML_marker_start_width , "marker-start-width" );
+XML_CONSTASCII_ACTION( sXML_marker_end_width , "marker-end-width" );
+XML_CONSTASCII_ACTION( sXML_marker_start_center , "marker-start-center" );
+XML_CONSTASCII_ACTION( sXML_marker_end_center , "marker-end-center" );
+XML_CONSTASCII_ACTION( sXML_stroke_linejoin , "stroke-linejoin" );
+XML_CONSTASCII_ACTION( sXML_stroke_width, "stroke-width" );
+XML_CONSTASCII_ACTION( sXML_fill, "fill" );
+XML_CONSTASCII_ACTION( sXML_fill_color , "fill-color" );
+XML_CONSTASCII_ACTION( sXML_gradient_step_count , "gradient-step-count" );
+XML_CONSTASCII_ACTION( sXML_shadow_offset_x , "shadow-offset-x" );
+XML_CONSTASCII_ACTION( sXML_shadow_offset_y , "shadow-offset-y" );
+XML_CONSTASCII_ACTION( sXML_shadow_color , "shadow-color" );
+XML_CONSTASCII_ACTION( sXML_shadow_transparency , "shadow-transparency" );
+XML_CONSTASCII_ACTION( sXML_color_mode , "color-mode" );
+XML_CONSTASCII_ACTION( sXML_luminance , "luminance" );
+XML_CONSTASCII_ACTION( sXML_contrast , "contrast" );
+XML_CONSTASCII_ACTION( sXML_gamma , "gamma" );
+XML_CONSTASCII_ACTION( sXML_red , "red" );
+XML_CONSTASCII_ACTION( sXML_green , "green" );
+XML_CONSTASCII_ACTION( sXML_blue , "blue" );
+XML_CONSTASCII_ACTION( sXML_greyscale, "greyscale" );
+XML_CONSTASCII_ACTION( sXML_mono, "mono" );
+XML_CONSTASCII_ACTION( sXML_watermark, "watermark" );
+XML_CONSTASCII_ACTION( sXML_standard, "standard" );
+XML_CONSTASCII_ACTION( sXML_visible, "visible" );
+XML_CONSTASCII_ACTION( sXML_OLE2, "ole2" );
+XML_CONSTASCII_ACTION( sXML_fill_gradient_name, "fill-gradient-name" );
+XML_CONSTASCII_ACTION( sXML_fill_hatch_name, "fill-hatch-name" );
+XML_CONSTASCII_ACTION( sXML_fill_image_name, "fill-image-name" );
+XML_CONSTASCII_ACTION( sXML_transparency_name, "transparency-name" );
+XML_CONSTASCII_ACTION( sXML_fill_image, "fill-image" );
+XML_CONSTASCII_ACTION( sXML_transparency, "transparency" );
+XML_CONSTASCII_ACTION( sXML_marker, "marker" );
+
+
+XML_CONSTASCII_ACTION( sXML__unknown_, "_unknown_" );
+
+XML_CONSTASCII_ACTION( sXML_3DCube, "3dcube" );
+XML_CONSTASCII_ACTION( sXML_3DSphere, "3dsphere" );
+XML_CONSTASCII_ACTION( sXML_3DLathe, "3dlathe" );
+XML_CONSTASCII_ACTION( sXML_3DExtrude, "3dextrude" );
+XML_CONSTASCII_ACTION( sXML_3DPolygon, "3dpolygon" );
+
+XML_CONSTASCII_ACTION( sXML_gradient_style, "gradient-style" );
+XML_CONSTASCII_ACTION( sXML_start_color, "start-color" );
+XML_CONSTASCII_ACTION( sXML_end_color, "end-color" );
+XML_CONSTASCII_ACTION( sXML_start_intensity, "start-intensity" );
+XML_CONSTASCII_ACTION( sXML_end_intensity, "end-intensity" );
+XML_CONSTASCII_ACTION( sXML_gradient_angel, "gradient-angel" );
+XML_CONSTASCII_ACTION( sXML_gradient_border, "gradient-border" );
+
+XML_CONSTASCII_ACTION( sXML_hatch_style, "style" );
+XML_CONSTASCII_ACTION( sXML_hatch_distance, "hatch-distance" );
+XML_CONSTASCII_ACTION( sXML_rotation, "rotation" );
+XML_CONSTASCII_ACTION( sXML_hatchstyle_single, "single" );
+XML_CONSTASCII_ACTION( sXML_hatchstyle_double, "double" );
+XML_CONSTASCII_ACTION( sXML_hatchstyle_triple, "triple" );
+
+XML_CONSTASCII_ACTION( sXML_gradientstyle_linear, "linear" );
+XML_CONSTASCII_ACTION( sXML_gradientstyle_axial, "axial" );
+XML_CONSTASCII_ACTION( sXML_gradientstyle_radial, "radial" );
+XML_CONSTASCII_ACTION( sXML_gradientstyle_ellipsoid, "ellipsoid" );
+XML_CONSTASCII_ACTION( sXML_gradientstyle_square, "square" );
+XML_CONSTASCII_ACTION( sXML_gradientstyle_rectangular, "rectangular" );
+
+XML_CONSTASCII_ACTION( sXML_start_transparency, "start-transparency" );
+XML_CONSTASCII_ACTION( sXML_end_transparency, "end-transparency" );
+
+XML_CONSTASCII_ACTION( sXML_control, "control" );
+XML_CONSTASCII_ACTION( sXML_connector, "connector" );
+XML_CONSTASCII_ACTION( sXML_measure, "measure" );
+XML_CONSTASCII_ACTION( sXML_caption, "caption" );
+
+// presentation namespace
+XML_CONSTASCII_ACTION( sXML_notes, "notes" );
+XML_CONSTASCII_ACTION( sXML_presentation_page_layout_name, "presentation-page-layout-name" );
+XML_CONSTASCII_ACTION( sXML_placeholder, "placeholder" );
+XML_CONSTASCII_ACTION( sXML_object, "object" );
+XML_CONSTASCII_ACTION( sXML_presentation_title , "title" );
+XML_CONSTASCII_ACTION( sXML_presentation_outline , "outline" );
+XML_CONSTASCII_ACTION( sXML_presentation_notes , "notes" );
+XML_CONSTASCII_ACTION( sXML_presentation_subtitle , "subtitle" );
+XML_CONSTASCII_ACTION( sXML_presentation_object , "object" );
+XML_CONSTASCII_ACTION( sXML_presentation_chart , "chart" );
+XML_CONSTASCII_ACTION( sXML_presentation_table , "table" );
+XML_CONSTASCII_ACTION( sXML_presentation_orgchart , "orgchart" );
+XML_CONSTASCII_ACTION( sXML_presentation_page , "page" );
+XML_CONSTASCII_ACTION( sXML_presentation_graphic , "graphic" );
+XML_CONSTASCII_ACTION( sXML_manual, "manual" );
+XML_CONSTASCII_ACTION( sXML_semi_automatic, "semi-automatic" );
+XML_CONSTASCII_ACTION( sXML_slow, "slow" );
+XML_CONSTASCII_ACTION( sXML_medium, "medium" );
+XML_CONSTASCII_ACTION( sXML_fast, "fast" );
+XML_CONSTASCII_ACTION( sXML_user_transformed, "user-transformed" );
+
+// svg namespace
+XML_CONSTASCII_ACTION( sXML_x, "x" );
+XML_CONSTASCII_ACTION( sXML_y, "y" );
+XML_CONSTASCII_ACTION( sXML_r, "r" );
+XML_CONSTASCII_ACTION( sXML_x1, "x1" );
+XML_CONSTASCII_ACTION( sXML_y1, "y1" );
+XML_CONSTASCII_ACTION( sXML_x2, "x2" );
+XML_CONSTASCII_ACTION( sXML_y2, "y2" );
+XML_CONSTASCII_ACTION( sXML_cx, "cx" );
+XML_CONSTASCII_ACTION( sXML_cy, "cy" );
+XML_CONSTASCII_ACTION( sXML_rx, "rx" );
+XML_CONSTASCII_ACTION( sXML_ry, "ry" );
+XML_CONSTASCII_ACTION( sXML_viewBox, "viewBox" );
+XML_CONSTASCII_ACTION( sXML_points, "points" );
+XML_CONSTASCII_ACTION( sXML_d, "d" );
+
+// xlink namespace
+XML_CONSTASCII_ACTION( sXML_type, "type" );
+XML_CONSTASCII_ACTION( sXML_show, "show" );
+XML_CONSTASCII_ACTION( sXML_actuate, "actuate" );
+XML_CONSTASCII_ACTION( sXML_href, "href" );
+XML_CONSTASCII_ACTION( sXML_role, "role" );
+
+XML_CONSTASCII_ACTION( sXML_simple, "simple" );
+XML_CONSTASCII_ACTION( sXML_embed, "embed" );
+XML_CONSTASCII_ACTION( sXML_onLoad, "onLoad" );
+XML_CONSTASCII_ACTION( sXML_onRequest, "onRequest" );
+XML_CONSTASCII_ACTION( sXML_auto, "auto" );
+XML_CONSTASCII_ACTION( sXML_parsed, "parsed" );
+
+// dc namespace
+XML_CONSTASCII_ACTION( sXML_title, "title" );
+XML_CONSTASCII_ACTION( sXML_description, "description" );
+XML_CONSTASCII_ACTION( sXML_subject, "subject" );
+XML_CONSTASCII_ACTION( sXML_creator, "creator" );
+XML_CONSTASCII_ACTION( sXML_date, "date" );
+//char __FAR_DATA XML_CONSTASCII_ACTION( sXML_language, "language" );
+
+// number namespace
+
+XML_CONSTASCII_ACTION( sXML_number_style, "number-style" );
+XML_CONSTASCII_ACTION( sXML_currency_style, "currency-style" );
+XML_CONSTASCII_ACTION( sXML_percentage_style, "percentage-style" );
+XML_CONSTASCII_ACTION( sXML_date_style, "date-style" );
+XML_CONSTASCII_ACTION( sXML_time_style, "time-style" );
+XML_CONSTASCII_ACTION( sXML_boolean_style, "boolean-style" );
+XML_CONSTASCII_ACTION( sXML_text_style, "text-style" );
+XML_CONSTASCII_ACTION( sXML_number, "number" );
+XML_CONSTASCII_ACTION( sXML_scientific_number, "scientific-number" );
+XML_CONSTASCII_ACTION( sXML_fraction, "fraction" );
+XML_CONSTASCII_ACTION( sXML_currency_symbol, "currency-symbol" );
+XML_CONSTASCII_ACTION( sXML_text_content, "text-content" );
+XML_CONSTASCII_ACTION( sXML_day, "day" );
+XML_CONSTASCII_ACTION( sXML_month, "month" );
+XML_CONSTASCII_ACTION( sXML_year, "year" );
+XML_CONSTASCII_ACTION( sXML_day_of_week, "day-of-week" );
+XML_CONSTASCII_ACTION( sXML_week_of_year, "week-of-year" );
+XML_CONSTASCII_ACTION( sXML_quarter, "quarter" );
+XML_CONSTASCII_ACTION( sXML_hours, "hours" );
+XML_CONSTASCII_ACTION( sXML_minutes, "minutes" );
+XML_CONSTASCII_ACTION( sXML_seconds, "seconds" );
+XML_CONSTASCII_ACTION( sXML_am_pm, "am-pm" );
+XML_CONSTASCII_ACTION( sXML_short, "short" );
+XML_CONSTASCII_ACTION( sXML_long, "long" );
+XML_CONSTASCII_ACTION( sXML_automatic_order, "automatic-order" );
+XML_CONSTASCII_ACTION( sXML_format_source, "format-source" );
+XML_CONSTASCII_ACTION( sXML_truncate_on_overflow, "truncate-on-overflow" );
+XML_CONSTASCII_ACTION( sXML_volatile, "volatile" );
+XML_CONSTASCII_ACTION( sXML_decimal_places, "decimal-places" );
+XML_CONSTASCII_ACTION( sXML_min_integer_digits, "min-integer-digits" );
+XML_CONSTASCII_ACTION( sXML_min_exponent_digits, "min-exponent-digits" );
+XML_CONSTASCII_ACTION( sXML_min_numerator_digits, "min-numerator-digits" );
+XML_CONSTASCII_ACTION( sXML_min_denominator_digits, "min-denominator-digits" );
+XML_CONSTASCII_ACTION( sXML_grouping, "grouping" );
+XML_CONSTASCII_ACTION( sXML_decimal_replacement, "decimal-replacement" );
+XML_CONSTASCII_ACTION( sXML_textual, "textual" );
+
+XML_CONSTASCII_ACTION( sXML_fade_from_left, "fade-from-left" );
+XML_CONSTASCII_ACTION( sXML_fade_from_top, "fade-from-top" );
+XML_CONSTASCII_ACTION( sXML_fade_from_right, "fade-from-right" );
+XML_CONSTASCII_ACTION( sXML_fade_from_bottom, "fade-from-bottom" );
+XML_CONSTASCII_ACTION( sXML_fade_to_center, "fade-to-center" );
+XML_CONSTASCII_ACTION( sXML_fade_from_center, "fade-from-center" );
+XML_CONSTASCII_ACTION( sXML_move_from_left, "move-from-left" );
+XML_CONSTASCII_ACTION( sXML_move_from_top, "move-from-top" );
+XML_CONSTASCII_ACTION( sXML_move_from_right, "move-from-right" );
+XML_CONSTASCII_ACTION( sXML_move_from_bottom, "move-from-bottom" );
+XML_CONSTASCII_ACTION( sXML_roll_from_left, "roll-from-left" );
+XML_CONSTASCII_ACTION( sXML_roll_from_right, "roll-from-right" );
+XML_CONSTASCII_ACTION( sXML_roll_from_bottom, "roll-from-bottom" );
+XML_CONSTASCII_ACTION( sXML_vertical_stripes, "vertical-stripes" );
+XML_CONSTASCII_ACTION( sXML_horizontal_stripes, "horizontal-stripes" );
+XML_CONSTASCII_ACTION( sXML_clockwise, "clockwise" );
+XML_CONSTASCII_ACTION( sXML_counterclockwise, "counterclockwise" );
+XML_CONSTASCII_ACTION( sXML_fade_from_upperleft, "fade-from-upperleft" );
+XML_CONSTASCII_ACTION( sXML_fade_from_upperright, "fade-from-upperright" );
+XML_CONSTASCII_ACTION( sXML_fade_from_lowerleft, "fade-from-lowerleft" );
+XML_CONSTASCII_ACTION( sXML_fade_from_lowerright, "fade-from-lowerright" );
+XML_CONSTASCII_ACTION( sXML_close_vertical, "close-vertical" );
+XML_CONSTASCII_ACTION( sXML_close_horizontal, "close-horizontal" );
+XML_CONSTASCII_ACTION( sXML_open_vertical, "open-vertical" );
+XML_CONSTASCII_ACTION( sXML_open_horizontal, "open-horizontal" );
+XML_CONSTASCII_ACTION( sXML_spiralin_left, "spiralin-left" );
+XML_CONSTASCII_ACTION( sXML_spiralin_right, "spiralin-right" );
+XML_CONSTASCII_ACTION( sXML_spiralout_left, "spiralout-left" );
+XML_CONSTASCII_ACTION( sXML_spiralout_right, "spiralout-right" );
+XML_CONSTASCII_ACTION( sXML_dissolve, "dissolve" );
+XML_CONSTASCII_ACTION( sXML_wavyline_from_left, "wavyline-from-left" );
+XML_CONSTASCII_ACTION( sXML_wavyline_from_top, "wavyline-from-top" );
+XML_CONSTASCII_ACTION( sXML_wavyline_from_right, "wavyline-from-right" );
+XML_CONSTASCII_ACTION( sXML_wavyline_from_bottom, "wavyline-from-bottom" );
+XML_CONSTASCII_ACTION( sXML_random, "random" );
+XML_CONSTASCII_ACTION( sXML_stretch_from_left, "stretch-from-left" );
+XML_CONSTASCII_ACTION( sXML_stretch_from_top, "stretch-from-top" );
+XML_CONSTASCII_ACTION( sXML_stretch_from_right, "stretch-from-right" );
+XML_CONSTASCII_ACTION( sXML_stretch_from_bottom, "stretch-from-bottom" );
+XML_CONSTASCII_ACTION( sXML_vertical_lines, "vertical-lines" );
+XML_CONSTASCII_ACTION( sXML_horizontal_lines, "horizontal-lines" );
+
+// svg namespace
+XML_CONSTASCII_ACTION( sXML_miter , "miter" );
+XML_CONSTASCII_ACTION( sXML_round , "round" );
+XML_CONSTASCII_ACTION( sXML_bevel , "bevel" );
+XML_CONSTASCII_ACTION( sXML_bitmap , "bitmap" );
+XML_CONSTASCII_ACTION( sXML_gradient , "gradient" );
+XML_CONSTASCII_ACTION( sXML_hatch , "hatch" );
+XML_CONSTASCII_ACTION( sXML_dash, "dash" );
+XML_CONSTASCII_ACTION( sXML_stroke , "stroke" );
+XML_CONSTASCII_ACTION( sXML_stroke_dasharray , "stroke-dasharray" );
+XML_CONSTASCII_ACTION( sXML_stroke_color , "stroke-color" );
+
+// chart namespace
+// elements
+XML_CONSTASCII_ACTION( sXML_chart, "chart" );
+XML_CONSTASCII_ACTION( sXML_plot_area, "plot-area" );
+XML_CONSTASCII_ACTION( sXML_subtitle, "subtitle" );
+XML_CONSTASCII_ACTION( sXML_legend, "legend" );
+XML_CONSTASCII_ACTION( sXML_wall, "wall" );
+XML_CONSTASCII_ACTION( sXML_floor, "floor" );
+XML_CONSTASCII_ACTION( sXML_axis, "axis" );
+XML_CONSTASCII_ACTION( sXML_grid, "grid" );
+XML_CONSTASCII_ACTION( sXML_series, "series" );
+XML_CONSTASCII_ACTION( sXML_domain, "domain" );
+XML_CONSTASCII_ACTION( sXML_categories, "categories" );
+XML_CONSTASCII_ACTION( sXML_data_point, "data-point" );
+XML_CONSTASCII_ACTION( sXML_statistics, "statistics" );
+// attributes
+XML_CONSTASCII_ACTION( sXML_scale_text, "scale-text" );
+XML_CONSTASCII_ACTION( sXML_legend_position, "legend-position" );
+XML_CONSTASCII_ACTION( sXML_repeated, "repeated" );
+XML_CONSTASCII_ACTION( sXML_attached_axis, "attached-axis" );
+XML_CONSTASCII_ACTION( sXML_values_cell_range_address, "values-cell-range-address" );
+XML_CONSTASCII_ACTION( sXML_label_cell_address, "label-cell-address" );
+// entity values
+XML_CONSTASCII_ACTION( sXML_area, "area" );
+XML_CONSTASCII_ACTION( sXML_circle, "circle" );
+XML_CONSTASCII_ACTION( sXML_ring, "ring" );
+XML_CONSTASCII_ACTION( sXML_scatter, "scatter" );
+XML_CONSTASCII_ACTION( sXML_radar, "radar" );
+XML_CONSTASCII_ACTION( sXML_bar, "bar" );
+XML_CONSTASCII_ACTION( sXML_stock, "stock" );
+XML_CONSTASCII_ACTION( sXML_bubble, "bubble" );
+XML_CONSTASCII_ACTION( sXML_category, "category" );
+XML_CONSTASCII_ACTION( sXML_major, "major" );
+XML_CONSTASCII_ACTION( sXML_minor, "minor" );
+// properties
+XML_CONSTASCII_ACTION( sXML_stock_updown_bars, "stock-updown-bars" );
+XML_CONSTASCII_ACTION( sXML_stock_with_volume, "stock-with-volume" );
+XML_CONSTASCII_ACTION( sXML_three_dimensional, "three-dimensional" );
+XML_CONSTASCII_ACTION( sXML_deep, "deep" );
+XML_CONSTASCII_ACTION( sXML_shape, "shape" );
+XML_CONSTASCII_ACTION( sXML_splines, "splines" );
+XML_CONSTASCII_ACTION( sXML_stacked, "stacked" );
+XML_CONSTASCII_ACTION( sXML_symbol, "symbol" );
+XML_CONSTASCII_ACTION( sXML_vertical, "vertical" );
+XML_CONSTASCII_ACTION( sXML_minimum, "minimum" );
+XML_CONSTASCII_ACTION( sXML_maximum, "maximum" );
+XML_CONSTASCII_ACTION( sXML_interval_major, "interval-major" );
+XML_CONSTASCII_ACTION( sXML_interval_minor, "interval-minor" );
+XML_CONSTASCII_ACTION( sXML_origin, "origin" );
+XML_CONSTASCII_ACTION( sXML_logarithmic, "logarithmic" );
+XML_CONSTASCII_ACTION( sXML_tick_marks_major_inner, "tick-marks-major-inner" );
+XML_CONSTASCII_ACTION( sXML_tick_marks_major_outer, "tick-marks-major-outer" );
+XML_CONSTASCII_ACTION( sXML_tick_marks_minor_inner, "tick-marks-minor-inner" );
+XML_CONSTASCII_ACTION( sXML_tick_marks_minor_outer, "tick-marks-minor-outer" );
+XML_CONSTASCII_ACTION( sXML_gap_width, "gap-width" );
+XML_CONSTASCII_ACTION( sXML_overlap, "overlap" );
+XML_CONSTASCII_ACTION( sXML_label_arrangement, "label-arrangement" );
+XML_CONSTASCII_ACTION( sXML_side_by_side, "side-by-side" );
+XML_CONSTASCII_ACTION( sXML_stagger_odd, "stagger-odd" );
+XML_CONSTASCII_ACTION( sXML_stagger_even, "stagger-even" );
+XML_CONSTASCII_ACTION( sXML_variance, "variance" );
+XML_CONSTASCII_ACTION( sXML_mean_value, "mean-value" );
+XML_CONSTASCII_ACTION( sXML_standard_deviation, "standard-deviation" );
+XML_CONSTASCII_ACTION( sXML_error_margin, "error-margin" );
+XML_CONSTASCII_ACTION( sXML_error_upper_limit, "error-upper-limit" );
+XML_CONSTASCII_ACTION( sXML_error_lower_limit, "error-lower-limit" );
+XML_CONSTASCII_ACTION( sXML_error_upper_indicator, "error-upper-indicator" );
+XML_CONSTASCII_ACTION( sXML_error_lower_indicator, "error-lower-indicator" );
+XML_CONSTASCII_ACTION( sXML_constant, "constant" );
+XML_CONSTASCII_ACTION( sXML_linear, "linear" );
+XML_CONSTASCII_ACTION( sXML_exponential, "exponential" );
+XML_CONSTASCII_ACTION( sXML_polynomial, "polynomial" );
+XML_CONSTASCII_ACTION( sXML_power, "power" );
+XML_CONSTASCII_ACTION( sXML_data_label_number, "data-label-number" );
+XML_CONSTASCII_ACTION( sXML_data_label_text, "data-label-text" );
+XML_CONSTASCII_ACTION( sXML_data_label_symbol, "data-label-symbol" );
+XML_CONSTASCII_ACTION( sXML_solid_type, "solid-type" );
+XML_CONSTASCII_ACTION( sXML_cuboid, "cuboid" );
+XML_CONSTASCII_ACTION( sXML_cylinder, "cylinder" );
+XML_CONSTASCII_ACTION( sXML_cone, "cone" );
+XML_CONSTASCII_ACTION( sXML_pyramid, "pyramid" );
+XML_CONSTASCII_ACTION( sXML_connect_bars, "connect-bars" );
+XML_CONSTASCII_ACTION( sXML_lines_used, "lines-used" );
+XML_CONSTASCII_ACTION( sXML_pie_offset, "pie-offset" );
+
+#endif
+

@@ -1,0 +1,696 @@
+/*=========================================================================
+    shell SfxViewFrame
+
+    (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
+    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
+=========================================================================*/
+
+interface Window : Object
+[
+    Automation = FALSE ;
+]
+{
+    SID_CUSTOMIZETOOLBOX // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    //----------------------------------------------------------------------
+    SID_HYPERLINK_INSERT
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    //----------------------------------------------------------------------
+    SID_HYPERLINK_DIALOG
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    //----------------------------------------------------------------------
+    SID_NAVIGATOR // status(final|play)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_SHOW_BROWSER // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_NEXTWINDOW
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_PREVWINDOW
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_BROWSER // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_PARTWIN // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_MAIL_CHILDWIN // ole(no) api()
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    SID_TIPWINDOW
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SEARCH_DLG // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_HELP_PI // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    SID_TOGGLECOMMONTASKBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+    SID_TOGGLENAVBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+    SID_TOGGLEMACROBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+    SID_TOGGLEOPTIONBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_TOGGLEFUNCTIONBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_TOGGLEOBJECTBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_TOGGLETOOLBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ToolboxExec_Impl ;
+        StateMethod = ToolboxState_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_TOGGLESTATUSBAR // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+    SID_STYLE_DESIGNER // ole(no) api(final/play/rec)
+    [
+        ReadOnlyDoc = FALSE ;
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+
+    // Window.Document
+    SID_DOCUMENT
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.GetTopWindow
+    SID_TOPWINDOW
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.ParentWindow
+    SID_PARENTFRAME
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.IsTopWindow
+    SID_ISTOP
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.GetActiveFrameWindow
+    SfxObjectItem ActiveFrameWindow SID_ACTIVEWINDOW
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.GetFrameCount
+    SID_FRAMECOUNT
+    [
+        StateMethod = PropState_Impl;
+    ]
+
+    // Window.GetFrameWindow( "Name" )
+    SID_FILLFRAME
+    [
+        ExecMethod = ExecView_Impl;
+    ]
+
+    // Nur f"ur Gestalter: Slot mu\s vorhanden sein
+    SID_STYLE_NEW
+    [
+        Export = FALSE;
+    ]
+
+    // Nur f"ur Gestalter: Slot mu\s vorhanden sein
+    SID_STYLE_DRAGHIERARCHIE
+    [
+        Export = FALSE;
+    ]
+
+    SID_CLEARHISTORY // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+
+    SID_UNDO // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+
+    SID_REDO // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+
+    SID_REPEAT // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecHistory_Impl ;
+        StateMethod = StateHistory_Impl ;
+    ]
+
+    // Basic-only property Window.Selection
+    SbxObject Selection SID_SELECTION // ole(no) api(final/play/rec)
+    [
+    ]
+
+    // Basic-only property: Window.View
+    SbxObject View SID_VIEW
+    [
+    ]
+
+    // Stringlist mit den Verben( SFX only )
+    SID_OBJECT // ole(no) api(no)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+
+    // F"ur slots.sdc-Macros eingebaut
+    SfxStringItem ConvertString SID_CONVERTSTRING
+    (
+        SfxStringItem Which SID_CONVERTSTRING
+    )
+    [
+        ExecMethod = ExecView_Impl ;
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Synchron;
+        Container = TRUE,
+        PlugComm = FALSE,
+        Export = TRUE,
+        Hidden = TRUE,
+        IsCollection = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+    ]
+/*
+    SfxStringItem GetHelpText SID_HELP_STRING
+    (
+        SfxUInt16Item Which SID_CONFIGITEMID
+    )
+    [
+        ExecMethod = ExecView_Impl ;
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Synchron;
+        Container = TRUE,
+        PlugComm = FALSE,
+        Export = TRUE,
+        Hidden = TRUE,
+        IsCollection = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+    ]
+
+    SfxStringItem GetFunctionName SID_METHODNAME
+    (
+        SfxUInt16Item Which SID_CONFIGITEMID
+    )
+    [
+        ExecMethod = ExecView_Impl ;
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Synchron;
+        Container = TRUE,
+        PlugComm = FALSE,
+        Export = TRUE,
+        Hidden = TRUE,
+        IsCollection = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+    ]
+
+    SfxBoolItem IsToolboxConfig SID_CONFIGITEMID
+    (
+        SfxUInt16Item Which SID_CONFIGITEMID
+    )
+    [
+        ExecMethod = ExecView_Impl ;
+        AutoUpdate = FALSE,
+        Cachable = Cachable,
+        FastCall = FALSE,
+        HasCoreId = FALSE,
+        HasDialog = FALSE,
+        ReadOnlyDoc = TRUE,
+        Toggle = FALSE,
+        Synchron;
+        Container = TRUE,
+        PlugComm = FALSE,
+        Export = TRUE,
+        Hidden = TRUE,
+        IsCollection = FALSE,
+        RecordAbsolute = FALSE,
+        RecordPerSet;
+        AccelConfig = FALSE,
+        MenuConfig = FALSE,
+        StatusBarConfig = FALSE,
+        ToolBoxConfig = FALSE,
+        GroupId = GID_APPLICATION;
+    ]
+*/
+}
+
+interface BrowseWindow : Window
+[
+    Automation = FALSE ;
+]
+{
+    SID_ACTIVATE // ole(no) api(final/play/rec)
+    [
+        // Implementierung in Subklassen
+    ]
+
+    SID_NEWWINDOW // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_EDITDOC // ole(?opt) api(play/rec)
+    [
+        ExecMethod = ExecReload_Impl ;
+        StateMethod = StateReload_Impl ;
+    ]
+
+    SID_RELOAD // ole(?opt) api(play/rec)
+    [
+        ExecMethod = ExecReload_Impl ;
+        StateMethod = StateReload_Impl ;
+    ]
+
+    SID_VIEWSHELL // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_VIEWSHELL0 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_VIEWSHELL1 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_VIEWSHELL2 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_VIEWSHELL3 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+
+    SID_VIEWSHELL4 // ole(no) api(no)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+        ]
+}
+
+interface TopWindow : BrowseWindow
+[
+    Automation = FALSE ;
+]
+{
+    SID_WIN_FULLSCREEN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+
+    SID_FRAMETITLE // ole(no) api(play/rec)
+    [
+        StateMethod = StateView_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_WIN_POSSIZE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------{
+    SID_OPTIMIZEWIN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------{
+    SID_WIN_MINIMIZED // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------{
+    SID_WIN_MAXIMIZED // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------{
+    SID_RESTOREWIN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_CLOSEWIN // ole(no) api(final/play/rec)
+    [
+        ExecMethod = Exec_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_BROWSE_FORWARD // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_BROWSE_BACKWARD // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_BROWSE_HOME // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+
+    //---------------------------------------------------------------------
+    SID_CREATELINK // ole(no) api()
+    [
+        ExecMethod = INetExecute_Impl ;
+        StateMethod = INetState_Impl ;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxViewFrame
+
+/*  [Beschreibung]
+
+    Funktionalit"at jedes Fensters, in dem spezifische Views (Ansichten)
+    eines Dokuments dargestellt werden. Angesprochen werden diese Objekte
+    entweder als 'ActiveWindow' oder mit dem Namen des Dokuments (i.d.R.
+    der Dateiname) ohne Pfad aber mit der Nummer des Fensters, alles in eckigen Klammern (z.B. als
+    '[unbenannt1:1]' oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der
+    Caption-Bar (solange nur ein Fenster f"ur das betreffende Dokument
+    existiert) darf die Nummer niemals ausgelassen werden. Die Numerierung
+    beginnt bei 1 und ist f"ur die Existenz des Fensters stabil.
+
+
+    [Anmerkung]
+
+    Im StarWriter ist das Verhalten einiger dieser Funktionen nicht definiert,
+    da dieser seinen eigenen History-Mechanismus hat.
+*/
+
+
+{
+        import BrowseWindow [Automation];
+}
+
+/*-------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.48  2000/09/12 10:42:32  mba
+    ChildWindow slot all in SfxViewFrame
+
+    Revision 1.47  2000/09/01 17:32:04  mba
+    some slots moved from appslots
+
+    Revision 1.46  1998/07/29 09:42:28  MI
+    #53054# Bookmarks auch ohne alten Explorer ablegbar
+
+
+      Rev 1.45   29 Jul 1998 11:42:28   MI
+   #53054# Bookmarks auch ohne alten Explorer ablegbar
+
+      Rev 1.44   16 Jan 1998 11:34:08   MBA
+   Topframe und Taskframe zusammengefasst
+
+      Rev 1.43   13 Nov 1997 12:51:56   MBA
+   Property Name gehoert in base class
+
+      Rev 1.42   28 Aug 1997 12:22:30   MBA
+   Neue Interface-Namen; BrowseWindow
+
+      Rev 1.40   28 May 1997 15:14:42   TLX
+   DOCFRAME war doppelt
+
+      Rev 1.39   13 May 1997 17:52:40   MBA
+   SID_VIEW fuer OLE-Automation
+
+      Rev 1.38   09 May 1997 18:15:16   MBA
+   Neue Slots fuer Frames-Handling ( BASIC, C-API )
+
+      Rev 1.37   06 Apr 1997 12:38:48   NF
+   syntax
+
+      Rev 1.36   05 Apr 1997 20:51:16   NF
+   Syntax
+
+      Rev 1.35   06 Mar 1997 12:38:06   MBA
+   Slots fuer Bmp-Listen
+
+      Rev 1.34   04 Mar 1997 12:37:54   MI
+   SID_TOPWINDOW
+
+      Rev 1.33   23 Feb 1997 21:20:50   MBA
+   SID_RELOAD, SID_EDITDOC raus
+
+      Rev 1.32   18 Dec 1996 15:57:42   MI
+   SID_LASTVERSIONDOC
+
+      Rev 1.31   09 Dec 1996 12:04:50   MBA
+   Helptext,Configname raus
+
+      Rev 1.30   06 Dec 1996 10:44:34   MI
+   Document-Property (SID_DOCUMENT)
+
+      Rev 1.29   28 Nov 1996 09:58:58   MBA
+   Voruebergehend: SID_CONVERTSTRING
+
+      Rev 1.28   06 Nov 1996 10:55:50   TLX
+   Gestalter Defaults
+
+      Rev 1.27   24 Oct 1996 13:49:36   MI
+   #32691# (OLE)-Object-Menu auch in plugins enablen
+
+      Rev 1.26   22 Oct 1996 20:10:16   HJS
+   merge 22.10.96
+
+      Rev 1.25   08 Oct 1996 14:30:36   HJS
+   merge 08.10.96
+
+      Rev 1.24   24 Sep 1996 16:37:54   MBA
+   SID_FRAME_TITLE in newslots.idl
+
+      Rev 1.23   12 Sep 1996 17:32:28   TLX
+   FRAMETITLE
+
+      Rev 1.22   12 Sep 1996 15:44:50   MBA
+
+
+      Rev 1.21   11 Sep 1996 13:09:58   TLX
+   LASTVERSION und EDITDOC in den ViewFrame
+
+      Rev 1.20   09 Sep 1996 16:42:40   MBA
+   Neue Slotfiles
+
+      Rev 1.19   30 Aug 1996 13:42:26   HJS
+   eu...
+
+      Rev 1.18   27 Aug 1996 18:55:42   MBA
+   SID_VIEWSHELL etc. an ViewFrame
+
+      Rev 1.17   30 Jul 1996 15:41:02   MI
+   fix #29879# Undo/Redo waren beim asynch laden enabled
+
+      Rev 1.16   16 Jul 1996 13:14:04   TLX
+   PlugComm eingetragen
+
+      Rev 1.15   12 Jul 1996 13:51:30   MI
+   fix #29412# Redo/Repeat waren Method+R/W-Prop daher GPF aus BASIC
+
+      Rev 1.14   08 Jul 1996 16:50:16   HJS
+   uebersetzung
+
+      Rev 1.13   30 Mar 1996 21:13:40   MI
+   Selection-Object jetzt per Property (effizienter)
+
+      Rev 1.12   20 Feb 1996 17:29:38   MI
+   Selection-Property
+
+      Rev 1.11   12 Dec 1995 18:50:54   MI
+   Ableitung von _Object
+
+      Rev 1.10   05 Dec 1995 10:46:30   MI
+   Fix #22800 Rechtschreibfehler
+
+      Rev 1.9   05 Dec 1995 09:36:16   MI
+   interne Interfaces nicht exportieren
+
+      Rev 1.8   28 Nov 1995 17:34:16   MI
+   neue Tags
+
+      Rev 1.7   23 Nov 1995 17:29:56   MI
+   neue IDL
+
+      Rev 1.6   18 Oct 1995 09:00:48   MI
+   Properties und Methoden duerfen nicht den gleichen Namen haben
+
+      Rev 1.5   17 Oct 1995 16:14:52   KL
+   Ueberarbeitung nach MS-Standard
+
+      Rev 1.4   11 Oct 1995 18:16:02   MI
+   undo: MS-kompatible Namen
+
+      Rev 1.3   06 Oct 1995 15:51:08   MI
+   HelpTexts scharfgeschaltet
+
+      Rev 1.2   29 Aug 1995 14:06:52   MI
+   Checkliste eingebaut
+
+-------------------------------------------------------------------------*/
+
+
+
+
+

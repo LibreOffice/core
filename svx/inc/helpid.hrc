@@ -1,0 +1,461 @@
+/*************************************************************************
+ *
+ *  $RCSfile: helpid.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:00:56 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SVX_HELPID_HRC
+#define _SVX_HELPID_HRC
+
+// include ---------------------------------------------------------------
+
+#include <svtools/solar.hrc>
+
+// Help-Ids --------------------------------------------------------------
+
+#define HID_GALLERY_BROWSER                     (HID_SVX_START +   0)
+#define HID_GALLERY_THEME                       (HID_SVX_START +   1)
+#define HID_GALLERY_NEW_THEME                   (HID_SVX_START +   2)
+#define HID_GALLERY_RENAME_THEME                (HID_SVX_START +   3)
+#define HID_GALLERY_SEARCH                      (HID_SVX_START +   4)
+#define HID_GALLERY_APPLY                       (HID_SVX_START +   5)
+#define HID_GALLERY_ACTUALIZE                   (HID_SVX_START +   6)
+#define HID_GALLERY_WINDOW                      (HID_SVX_START +   7)
+#define HID_GALLERY_RENAME                      (HID_SVX_START +   8)
+#define HID_GALLERY_PROPERTIES                  (HID_SVX_START +   9)
+
+#define HID_TRANS_POSITION                      (HID_SVX_START +  10)
+#define HID_TRANS_SIZE                          (HID_SVX_START +  11)
+#define HID_TRANS_ANGLE                         (HID_SVX_START +  12)
+#define HID_TRANS_SLANT                         (HID_SVX_START +  13)
+
+#define HID_TABULATOR                           (HID_SVX_START +  14)
+#define HID_BORDER                              (HID_SVX_START +  15)
+#define HID_BACKGROUND                          (HID_SVX_START +  16)
+#define HID_ALIGNMENT                           (HID_SVX_START +  17)
+#define HID_NUMBERFORMAT                        (HID_SVX_START +  18)
+#define HID_CAPTION                             (HID_SVX_START +  19)
+
+#define HID_FORMAT_PAGE                         (HID_SVX_START +  20)
+#define HID_FORMAT_HEADER                       (HID_SVX_START +  21)
+#define HID_FORMAT_FOOTER                       (HID_SVX_START +  22)
+#define HID_FORMAT_CHAR_STD                     (HID_SVX_START +  23)
+#define HID_FORMAT_CHAR_EXT                     (HID_SVX_START +  24)
+#define HID_FORMAT_PARAGRAPH_STD                (HID_SVX_START +  25)
+#define HID_FORMAT_PARAGRAPH_EXT                (HID_SVX_START +  26)
+#define HID_FORMAT_PARAGRAPH_ALIGN              (HID_SVX_START +  27)
+
+#define HID_AREA_AREA                           (HID_SVX_START +  30)
+#define HID_AREA_HATCH                          (HID_SVX_START +  31)
+#define HID_AREA_BITMAP                         (HID_SVX_START +  32)
+#define HID_AREA_GRADIENT                       (HID_SVX_START +  33)
+#define HID_LINE_LINE                           (HID_SVX_START +  34)
+#define HID_LINE_DEF                            (HID_SVX_START +  35)
+#define HID_LINE_ENDDEF                         (HID_SVX_START +  36)
+#define HID_AREA_SHADOW                         (HID_SVX_START +  37)
+#define HID_AREA_TRANSPARENCE                   (HID_SVX_START +  38)
+
+#define HID_OPTIONS_COLOR                       (HID_SVX_START +  40)
+#define HID_OPTIONS_SAVE                        (HID_SVX_START +  41)
+#define HID_OPTIONS_PATH                        (HID_SVX_START +  42)
+#define HID_OPTIONS_GENERAL                     (HID_SVX_START +  43)
+#define HID_OPTIONS_LINGU                       (HID_SVX_START +  44)
+#define HID_OPTIONS_SPELL                       (HID_SVX_START +  45)
+#define HID_OPTIONS_DICT_NEW                    (HID_SVX_START +  46)
+#define HID_OPTIONS_DICT_EDIT                   (HID_SVX_START +  47)
+#define HID_OPTIONS_GRID                        (HID_SVX_START +  48)
+#define HID_OPTIONS_INET                        (HID_SVX_START +  49)
+
+#define HID_DLG_NAME                            (HID_SVX_START +  50)
+#define HID_DLG_MESSBOX                         (HID_SVX_START +  51)
+#define HID_SEARCHATTR                          (HID_SVX_START +  52)
+#define HID_HYPHENATE                           (HID_SVX_START +  53)
+#define HID_SPELLCHECK                          (HID_SVX_START +  54)
+#define HID_SEARCHSIMILARITY                    (HID_SVX_START +  55)
+#define HID_PASSWORD                            (HID_SVX_START +  56)
+#define HID_MULTIPATH                           (HID_SVX_START +  57)
+
+//#define HID_BASICIDE_TOOLBOX                  (HID_SVX_START +  58)
+//#define HID_BASICIDE_OBJECTS                  (HID_SVX_START +  59)
+//#define HID_MACRO_OPTIONS                     (HID_SVX_START +  60)
+//#define HID_BASICIDE_BRKPNTS                  (HID_SVX_START +  61)
+//#define HID_BASICIDE_MODULS                       (HID_SVX_START +  62)
+//#define HID_BASICIDE_LIBS_TP                  (HID_SVX_START +  63)
+//#define HID_BASICIDE_LIBS_DLG                 (HID_SVX_START +  64)
+//#define HID_BASICIDE_CONTROLS                 (HID_SVX_START +  65)
+//#define HID_BASICIDE_MACROS                       (HID_SVX_START +  66)
+//#define HID_BASICIDE_LIBS                     (HID_SVX_START +  67)
+//#define HID_BASICIDE_ORG_TC                       (HID_SVX_START +  68)
+
+#define HID_POPUP_COLOR                         (HID_SVX_START +  70)
+#define HID_POPUP_BRUSH                         (HID_SVX_START +  71)
+#define HID_POPUP_FRAME                         (HID_SVX_START +  72)
+#define HID_POPUP_LINE                          (HID_SVX_START +  73)
+
+#define HID_OPTIONS_MAIL                        (HID_SVX_START +  74)
+#define HID_THES_LANGUAGE                       (HID_SVX_START +  75)
+
+#define HID_OPTIONS_PROXY                       (HID_SVX_START +  76)
+#define HID_OPTIONS_CACHE                       (HID_SVX_START +  77)
+#define HID_OPTIONS_TYPE                        (HID_SVX_START +  78)
+#define HID_OPTIONS_SEARCH                      (HID_SVX_START +  79)
+
+//#define HID_BASICIDE_MODULES_TREE             (HID_SVX_START +  80)
+//#define HID_BASICIDE_LIBS_TREE                    (HID_SVX_START +  81)
+//#define HID_BASICIDE_LIBSDLG_TREE             (HID_SVX_START +  82)
+//#define HID_BASICIDE_OBJECTCAT                    (HID_SVX_START +  83)
+
+#define HID_PAGE_LIGHT3D                        (HID_SVX_START +  84)
+#define HID_PAGE_MEASURE                        (HID_SVX_START +  85)
+#define HID_PAGE_TEXTATTR                       (HID_SVX_START +  86)
+#define HID_PAGE_3DATTR                         (HID_SVX_START +  87)
+#define HID_CTRL_COLOR                          (HID_SVX_START +  88)
+#define HID_PAGE_CONNECTION                     (HID_SVX_START +  89)
+#define HID_PAGE_CONNECTION_CTL_PREVIEW         (HID_SVX_START +  90)
+#define HID_PAGE_DISTRIBUTE                     (HID_SVX_START +  91)
+
+#define HID_BACKGROUND_CTL_BGDCOLORSET          (HID_SVX_START + 100)
+#define HID_BACKGROUND_CTL_PATTERNSET           (HID_SVX_START + 101)
+#define HID_BACKGROUND_CTL_PATCOLORSET          (HID_SVX_START + 102)
+#define HID_BACKGROUND_CTL_POSITION             (HID_SVX_START + 103)
+#define HID_BMPMASK_CTL_QCOL_1                  (HID_SVX_START + 104)
+#define HID_BMPMASK_CTL_PIPETTE                 (HID_SVX_START + 105)
+#define HID_BORDER_CTL_PRESETS                  (HID_SVX_START + 106)
+#define HID_BORDER_CTL_SHADOWS                  (HID_SVX_START + 107)
+#define HID_CHARMAP_CTL_SHOWSET                 (HID_SVX_START + 108)
+#define HID_CHARMAP_CTL_SHOWTEXT                (HID_SVX_START + 109)
+#define HID_CHARMAP_CTL_SHOWCHAR                (HID_SVX_START + 110)
+#define HID_FONTWORK_CTL_FORMS                  (HID_SVX_START + 111)
+#define HID_LIGHT3D_CTL_LIGHT                   (HID_SVX_START + 112)
+#define HID_MEASURE_CTL_POSITION                (HID_SVX_START + 113)
+#define HID_MEASURE_CTL_PREVIEW                 (HID_SVX_START + 114)
+#define HID_SEARCHATTR_CTL_ATTR                 (HID_SVX_START + 115)
+#define HID_TEXTATTR_CTL_POSITION               (HID_SVX_START + 116)
+#define HID_3DATTR_CTL_DISTANCE                 (HID_SVX_START + 117)
+#define HID_3DATTR_CTL_FOCALLENGTH              (HID_SVX_START + 118)
+#define HID_COLOR_CTL_COLORS                    (HID_SVX_START + 119)
+#define HID_OPTPATH_CTL_PATH                    (HID_SVX_START + 120)
+#define HID_OPTLINGU_CTL_DICTS                  (HID_SVX_START + 121)
+#define HID_OPTINET2_CTL_TYPES                  (HID_SVX_START + 122)
+#define HID_OPTIONS_DICT_DELETE                 (HID_SVX_START + 123)
+
+#define HID_TPCOLOR_RGB_1                       (HID_SVX_START + 124)
+#define HID_TPCOLOR_RGB_2                       (HID_SVX_START + 125)
+#define HID_TPCOLOR_RGB_3                       (HID_SVX_START + 126)
+#define HID_TPCOLOR_CMYK_1                      (HID_SVX_START + 127)
+#define HID_TPCOLOR_CMYK_2                      (HID_SVX_START + 128)
+#define HID_TPCOLOR_CMYK_3                      (HID_SVX_START + 129)
+
+#define HID_BMPMASK_TBI_PIPETTE                 (HID_SVX_START + 130)
+//#define HID_BASICIDE_PROP_BROWSER             (HID_SVX_START + 131)
+#define HID_STYLE_LISTBOX                       (HID_SVX_START + 132)
+
+#define HID_FONTWORK_TBI_STYLE_OFF              (HID_SVX_START + 133)
+#define HID_FONTWORK_TBI_STYLE_ROTATE           (HID_SVX_START + 134)
+#define HID_FONTWORK_TBI_STYLE_UPRIGHT          (HID_SVX_START + 135)
+#define HID_FONTWORK_TBI_STYLE_SLANTX           (HID_SVX_START + 136)
+#define HID_FONTWORK_TBI_STYLE_SLANTY           (HID_SVX_START + 137)
+#define HID_FONTWORK_TBI_ADJUST_MIRROR          (HID_SVX_START + 138)
+#define HID_FONTWORK_TBI_ADJUST_LEFT            (HID_SVX_START + 139)
+#define HID_FONTWORK_TBI_ADJUST_CENTER          (HID_SVX_START + 140)
+#define HID_FONTWORK_TBI_ADJUST_RIGHT           (HID_SVX_START + 141)
+#define HID_FONTWORK_TBI_ADJUST_AUTOSIZE        (HID_SVX_START + 142)
+#define HID_FONTWORK_TBI_SHOWFORM               (HID_SVX_START + 143)
+#define HID_FONTWORK_TBI_OUTLINE                (HID_SVX_START + 144)
+#define HID_FONTWORK_TBI_SHADOW_OFF             (HID_SVX_START + 145)
+#define HID_FONTWORK_TBI_SHADOW_NORMAL          (HID_SVX_START + 146)
+#define HID_FONTWORK_TBI_SHADOW_SLANT           (HID_SVX_START + 147)
+
+#define HID_NUMBERFORMAT_TBI_ADD                (HID_SVX_START + 148)
+#define HID_NUMBERFORMAT_TBI_REMOVE             (HID_SVX_START + 149)
+
+#define HID_CONTDLG_APPLY                       (HID_SVX_START + 150)
+#define HID_CONTDLG_WORKPLACE                   (HID_SVX_START + 151)
+#define HID_CONTDLG_SELECT                      (HID_SVX_START + 152)
+#define HID_CONTDLG_RECT                        (HID_SVX_START + 153)
+#define HID_CONTDLG_CIRCLE                      (HID_SVX_START + 154)
+#define HID_CONTDLG_POLY                        (HID_SVX_START + 155)
+#define HID_CONTDLG_FREEPOLY                    (HID_SVX_START + 156)
+#define HID_CONTDLG_POLYEDIT                    (HID_SVX_START + 157)
+#define HID_CONTDLG_POLYMOVE                    (HID_SVX_START + 158)
+#define HID_CONTDLG_POLYINSERT                  (HID_SVX_START + 159)
+#define HID_CONTDLG_POLYDELETE                  (HID_SVX_START + 160)
+#define HID_CONTDLG_UNDO                        (HID_SVX_START + 161)
+#define HID_CONTDLG_REDO                        (HID_SVX_START + 162)
+#define HID_CONTDLG_AUTOCONTOUR                 (HID_SVX_START + 163)
+#define HID_CONTDLG_PIPETTE                     (HID_SVX_START + 164)
+
+//#define HID_BASICIDE_PROP_BROWSER_LBOX            (HID_SVX_START + 165)
+#define HID_DRAWTOOL_TBX                        (HID_SVX_START + 166)
+#define HID_ALIGN_TBX                           (HID_SVX_START + 167)
+
+#define HID_IMAPDLG_APPLY                       (HID_SVX_START + 168)
+#define HID_IMAPDLG_OPEN                        (HID_SVX_START + 169)
+#define HID_IMAPDLG_SAVEAS                      (HID_SVX_START + 170)
+#define HID_IMAPDLG_SELECT                      (HID_SVX_START + 171)
+#define HID_IMAPDLG_RECT                        (HID_SVX_START + 172)
+#define HID_IMAPDLG_CIRCLE                      (HID_SVX_START + 173)
+#define HID_IMAPDLG_POLY                        (HID_SVX_START + 174)
+#define HID_IMAPDLG_FREEPOLY                    (HID_SVX_START + 175)
+#define HID_IMAPDLG_POLYEDIT                    (HID_SVX_START + 176)
+#define HID_IMAPDLG_POLYMOVE                    (HID_SVX_START + 177)
+#define HID_IMAPDLG_POLYINSERT                  (HID_SVX_START + 178)
+#define HID_IMAPDLG_POLYDELETE                  (HID_SVX_START + 179)
+#define HID_IMAPDLG_UNDO                        (HID_SVX_START + 180)
+#define HID_IMAPDLG_REDO                        (HID_SVX_START + 181)
+#define HID_IMAPDLG_ACTIVE                      (HID_SVX_START + 182)
+#define HID_IMAPDLG_MACRO                       (HID_SVX_START + 183)
+#define HID_IMAPDLG_PROPERTY                    (HID_SVX_START + 184)
+
+#define HID_SVXTBX_ALIGNMENT                    (HID_SVX_START + 185)
+#define HID_SVXTBX_DRAW                         (HID_SVX_START + 186)
+
+#define HID_GALLERY_MN_ADDMENU                  (HID_SVX_START + 187)
+#define HID_GALLERY_MN_ADD                      (HID_SVX_START + 188)
+#define HID_GALLERY_MN_ADD_LINK                 (HID_SVX_START + 189)
+#define HID_GALLERY_MN_BACKGROUND               (HID_SVX_START + 190)
+#define HID_GALLERY_MN_PREVIEW                  (HID_SVX_START + 191)
+#define HID_GALLERY_MN_DELETE                   (HID_SVX_START + 192)
+#define HID_GALLERY_TITLE                       (HID_SVX_START + 193)
+
+//#define HID_BASICIDE_OBJCAT_SHOW              (HID_SVX_START + 195)
+//#define HID_BASICIDE_OBJCAT_PROPS                 (HID_SVX_START + 196)
+//#define HID_BASICIDE_OBJCAT_HELP              (HID_SVX_START + 197)
+
+#define HID_IMPGRF_BTN_STANDARD                 (HID_SVX_START + 198)
+#define HID_IMPGRF_BTN_INTERNET                 (HID_SVX_START + 199)
+#define HID_IMPGRF_BTN_PROPERTIES               (HID_SVX_START + 200)
+#define HID_IMPGRF_BTN_FILTER                   (HID_SVX_START + 201)
+#define HID_IMPGRF_CB_LINK                      (HID_SVX_START + 202)
+#define HID_IMPGRF_CB_PREVIEW                   (HID_SVX_START + 203)
+
+//#define HID_BASICIDE_BRKDLG                       (HID_SVX_START + 204)
+//#define HID_BASICIDE_ACTIV                        (HID_SVX_START + 205)
+//#define HID_BASICIDE_BRKPROPS                 (HID_SVX_START + 206)
+//#define HID_BASICIDE_REMOVEWATCH              (HID_SVX_START + 207)
+//#define HID_BASICIDE_GOTOALL                  (HID_SVX_START + 208)
+
+#define HID_SVX_OPT_EXT_LINGU                   (HID_SVX_START + 209)
+#define HID_CACHE_EXTRA_DLG                     (HID_SVX_START + 210)
+
+#define HID_CONTDLG_TOOLBOX                     (HID_SVX_START + 211)
+#define HID_CONTDLG_GRAPHWND                    (HID_SVX_START + 212)
+
+#define HID_IMAPDLG_TOOLBOX                     (HID_SVX_START + 213)
+#define HID_IMAPDLG_GRAPHWND                    (HID_SVX_START + 214)
+
+#define HID_OPTLINGU_TOOLBOX                    (HID_SVX_START + 215)
+
+#define HID_OPTLDAP_SERVERLIST                  (HID_SVX_START + 216)
+#define HID_OPTLDAP_EDITSERVER                  (HID_SVX_START + 217)
+
+#define HID_SPELLDLG_EXTRAS_AUDIT               (HID_SVX_START + 218)
+#define HID_SPELLDLG_EXTRAS_AUTOCORR            (HID_SVX_START + 219)
+#define HID_SPELLDLG_EXTRAS_THESAURUS           (HID_SVX_START + 220)
+#define HID_SPELLDLG_EXTRAS_OPTIONS             (HID_SVX_START + 221)
+
+#define HID_TPSHADOW_CTRL                       (HID_SVX_START + 222)
+#define HID_TPHATCH_CTRL                        (HID_SVX_START + 223)
+#define HID_TPPOSITION_CTRL                     (HID_SVX_START + 224)
+#define HID_TPSIZE_CTRL                         (HID_SVX_START + 225)
+#define HID_TPROTATION_CTRL1                    (HID_SVX_START + 226)
+#define HID_TPROTATION_CTRL2                    (HID_SVX_START + 227)
+
+#define HID_OPTIONS_SSLSITE                     (HID_SVX_START + 228)
+#define HID_OPTIONS_SSLPERSONAL                 (HID_SVX_START + 229)
+#define HID_OPTIONS_COOKIES                     (HID_SVX_START + 230)
+#define HID_OPTINET2_CTL_COOKIES                (HID_SVX_START + 231)
+#define HID_OPTIONS_CHANNELS                    (HID_SVX_START + 232)
+#define HID_OPTINET2_CTL_CHANNELS               (HID_SVX_START + 233)
+
+#define HID_CAPTION_CTL_TYPE                    (HID_SVX_START + 234)
+
+#define HID_NUMBERFORMAT_TBI_INFO               (HID_SVX_START + 235)
+#define HID_NUMBERFORMAT_LB_FORMAT              (HID_SVX_START + 236)
+
+#define HID_ALIGNMENT_CTR_DIAL                  (HID_SVX_START + 237)
+#define HID_ALIGNMENT_CTR_BORDER_LOCK           (HID_SVX_START + 238)
+
+#define HID_REDLINING_FILTER_PAGE               (HID_SVX_START + 239)
+#define HID_REDLINING_FILTER_CB_DATE            (HID_SVX_START + 240)
+#define HID_REDLINING_FILTER_LB_DATE            (HID_SVX_START + 241)
+#define HID_REDLINING_FILTER_DF_DATE            (HID_SVX_START + 242)
+#define HID_REDLINING_FILTER_TF_DATE            (HID_SVX_START + 243)
+#define HID_REDLINING_FILTER_IB_CLOCK           (HID_SVX_START + 244)
+#define HID_REDLINING_FILTER_DF_DATE2           (HID_SVX_START + 245)
+#define HID_REDLINING_FILTER_TF_DATE2           (HID_SVX_START + 246)
+#define HID_REDLINING_FILTER_IB_CLOCK2          (HID_SVX_START + 247)
+#define HID_REDLINING_FILTER_CB_AUTOR           (HID_SVX_START + 248)
+#define HID_REDLINING_FILTER_LB_AUTOR           (HID_SVX_START + 249)
+#define HID_REDLINING_FILTER_CB_RANGE           (HID_SVX_START + 250)
+#define HID_REDLINING_FILTER_ED_RANGE           (HID_SVX_START + 251)
+#define HID_REDLINING_FILTER_LB_ACTION          (HID_SVX_START + 252)
+#define HID_REDLINING_FILTER_BTN_REF            (HID_SVX_START + 253)
+
+#define HID_REDLINING_VIEW_PAGE                 (HID_SVX_START + 254)
+#define HID_REDLINING_VIEW_DG_VIEW              (HID_SVX_START + 255)
+#define HID_REDLINING_VIEW_PB_ACCEPT            (HID_SVX_START + 256)
+#define HID_REDLINING_VIEW_PB_ACCEPTALL         (HID_SVX_START + 257)
+#define HID_REDLINING_VIEW_PB_REJECT            (HID_SVX_START + 258)
+#define HID_REDLINING_VIEW_PB_REJECTALL         (HID_SVX_START + 259)
+
+#define HID_MNU_ZOOM_200                        (HID_SVX_START + 260)
+#define HID_MNU_ZOOM_150                        (HID_SVX_START + 261)
+#define HID_MNU_ZOOM_100                        (HID_SVX_START + 262)
+#define HID_MNU_ZOOM_75                         (HID_SVX_START + 263)
+#define HID_MNU_ZOOM_50                         (HID_SVX_START + 264)
+#define HID_MNU_ZOOM_OPTIMAL                    (HID_SVX_START + 265)
+#define HID_MNU_ZOOM_PAGE_WIDTH                 (HID_SVX_START + 266)
+#define HID_MNU_ZOOM_WHOLE_PAGE                 (HID_SVX_START + 267)
+
+#define HID_MNU_FUNC_AVG                        (HID_SVX_START + 268)
+#define HID_MNU_FUNC_COUNT2                     (HID_SVX_START + 269)
+#define HID_MNU_FUNC_COUNT                      (HID_SVX_START + 270)
+#define HID_MNU_FUNC_MAX                        (HID_SVX_START + 271)
+#define HID_MNU_FUNC_MIN                        (HID_SVX_START + 272)
+#define HID_MNU_FUNC_SUM                        (HID_SVX_START + 273)
+#define HID_MNU_FUNC_NONE                       (HID_SVX_START + 274)
+#define HID_REDLINING_FILTER_CB_ACTION          (HID_SVX_START + 275)
+
+#define HID_REDLINING_DLG                       (HID_SVX_START + 276)
+#define HID_REDLINING_EDIT                      (HID_SVX_START + 277)
+#define HID_REDLINING_PREV                      (HID_SVX_START + 278)
+#define HID_REDLINING_NEXT                      (HID_SVX_START + 279)
+#define HID_REDLINING_TABCONTROL                (HID_SVX_START + 280)
+
+#define HID_VALUESET_SINGLENUM                  (HID_SVX_START + 281)
+#define HID_VALUESET_BULLET                     (HID_SVX_START + 282)
+#define HID_VALUESET_NUM                        (HID_SVX_START + 283)
+#define HID_VALUESET_NUMBMP                     (HID_SVX_START + 284)
+#define HID_SVXPAGE_PICK_NUM                    (HID_SVX_START + 285)
+#define HID_SVXPAGE_PICK_SINGLE_NUM             (HID_SVX_START + 286)
+#define HID_SVXPAGE_PICK_BMP                    (HID_SVX_START + 287)
+#define HID_SVXPAGE_PICK_BULLET                 (HID_SVX_START + 288)
+#define HID_SVXPAGE_NUM_OPTIONS                 (HID_SVX_START + 289)
+#define HID_SVXPAGE_NUM_POSITION                (HID_SVX_START + 290)
+
+//#define HID_BASICIDE_MODULWINDOW              (HID_SVX_START + 291)
+//#define HID_BASICIDE_DIALOGWINDOW             (HID_SVX_START + 292)
+
+#define HID_REDLINING_FILTER_CB_COMMENT         (HID_SVX_START + 293)
+#define HID_REDLINING_FILTER_ED_COMMENT         (HID_SVX_START + 294)
+#define HID_REDLINING_VIEW_PB_UNDO              (HID_SVX_START + 295)
+
+#define HID_OPTIONS_EXTERN_BROWSER              (HID_SVX_START + 296)
+
+#define HID_EDITENG_SPELLER_START               (HID_SVX_START + 297)
+#define HID_EDITENG_SPELLER_ADDWORD             (HID_SVX_START + 298)
+#define HID_EDITENG_SPELLER_IGNORE              (HID_SVX_START + 299)
+#define HID_EDITENG_SPELLER_AUTOCORRECT         (HID_SVX_START + 300)
+
+#define HID_OPTPATH_HEADERBAR                   (HID_SVX_START + 301)
+#define HID_OPTCOOKIES_HEADERBAR                (HID_SVX_START + 302)
+
+#define HID_TPPAGE_FULLSIZE                     (HID_SVX_START + 303)
+
+#define HID_POPUP_LINEEND                       (HID_SVX_START + 304)
+#define HID_POPUP_LINEEND_CTRL                  (HID_SVX_START + 305)
+
+#define HID_SPELLDLG_SETWORD                    (HID_SVX_START + 306)
+
+#define HID_BORDER_DISTANCE_DLG                 (HID_SVX_START + 307)
+#define HID_BORDER_DISTANCE_DLG_LEFT            (HID_SVX_START + 308)
+#define HID_BORDER_DISTANCE_DLG_RIGHT           (HID_SVX_START + 309)
+#define HID_BORDER_DISTANCE_DLG_TOP             (HID_SVX_START + 310)
+#define HID_BORDER_DISTANCE_DLG_BOTTOM          (HID_SVX_START + 311)
+#define HID_BORDER_DISTANCE_DLG_HELP_PB         (HID_SVX_START + 312)
+#define HID_BORDER_DISTANCE_DLG_SYNC_CB         (HID_SVX_START + 313)
+#define HID_BORDER_DISTANCE_DLG_EXAMPLE         (HID_SVX_START + 314)
+
+#define HID_HYPERLINK_INTERNET                  (HID_SVX_START + 315)
+#define HID_HYPERLINK_MAIL                      (HID_SVX_START + 316)
+#define HID_HYPERLINK_DOCUMENT                  (HID_SVX_START + 317)
+#define HID_HYPERLINK_NEWDOCUMENT               (HID_SVX_START + 318)
+#define HID_HYPERLINK_MARKWND                   (HID_SVX_START + 319)
+
+#define HID_ICCDIALOG_RESET_BTN                 (HID_SVX_START + 320)
+#define HID_ICCDIALOG_CHOICECTRL                (HID_SVX_START + 321)
+
+#define HID_HYPERDLG_INET_PATH                  (HID_SVX_START + 322)
+#define HID_HYPERDLG_MAIL_PATH                  (HID_SVX_START + 323)
+#define HID_HYPERDLG_DOC_PATH                   (HID_SVX_START + 324)
+#define HID_ICCDIALOG_OK_BTN                    (HID_SVX_START + 325)
+#define HID_ICCDIALOG_CANCEL_BTN                (HID_SVX_START + 326)
+
+#define HID_HYPERLINK_MARKWND_APPLY             (HID_SVX_START + 327)
+#define HID_HYPERLINK_MARKWND_CLOSE             (HID_SVX_START + 328)
+#define HID_HYPERLINK_MARKWND_TREE              (HID_SVX_START + 329)
+#define HID_OPTIONS_EXTERNAL_LINGU              (HID_SVX_START + 330)
+
+#define HID_AUTOCORR_HELP_START                 (HID_SVX_START + 331)
+#define HID_AUTOCORR_HELP_END                   (HID_SVX_START + 350)
+
+#define HID_SVXPAGE_GRFCROP                     (HID_SVX_START + 355)
+
+// -----------------------------------------------------------------------
+// "Uberlaufpr"ufung -----------------------------------------------------
+// -----------------------------------------------------------------------
+
+#define ACT_SVX_HID_END     HID_SVXPAGE_GRFCROP
+
+#if ACT_SVX_HID_END > HID_SVX_END
+#error Resource-Ueberlauf in #line, #file
+#endif
+
+
+#endif
+

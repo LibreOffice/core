@@ -1,0 +1,154 @@
+ //=========================================================================
+ // interface View
+ // shell SfxViewShell
+ //
+ // (C) 1996 StarDivision GmbH, Hamburg, Germany
+ // $Author: hr $ $Date: 2000-09-18 16:52:26 $  $Revision: 1.1.1.1 $
+ // $Logfile:   T:/sfx2/sdi/viwslots.sdv  $ $Workfile:   viwslots.sdi  $
+ //-------------------------------------------------------------------------
+interface View : Object
+[
+    Automation = FALSE ;
+]
+{
+     //---------------------------------------------------------------------
+    SbxObject UNO SID_UNO // ole(no) api(final/play/norec)
+    [Readonly;]
+     //---------------------------------------------------------------------
+    SID_MAIL_SENDDOC // ole(no) api(todo)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTDOC // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTDOCDIRECT // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SETUPPRINTER // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTER_NAME // ole(no) api(play/norec)
+    [
+        ExecMethod = ExecPrint_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_STYLE_CATALOG // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PLUGINS_ACTIVE // ole(no) api(play/rec)
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SELECTION_TEXT // ole(no) api(play/norec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SELECTION_TEXT_EXT // ole(no) api(play/norec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+
+    SID_STYLE_FAMILY
+    [
+        ExecMethod = ExecMisc_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxViewShell
+
+/*
+    Funktionalit"at jeder View (Ansicht) eines SFx-Dokuments. Angesprochen
+    werden diese Objekte entweder als 'ActiveWindow' oder mit dem Namen
+    des Dokuments (i.d.R. der Dateiname) ohne Pfad aber mit der Nummer
+    des Fensters, alles in eckigen Klammern (z.B. als '[unbenannt1:1]'
+    oder '[brief6.sdw:4]'). Im Ggs. zur Anzeige in der Caption-Bar (solange
+    nur ein Fenster f"ur das betreffende Dokument existiert) darf die
+    Nummer niemals ausgelassen werden. Die Numerierung beginnt bei 1 und
+    ist f"ur die Existenz des Fensters stabil.
+
+    Falls es Konflikte mit anderen "uber den Namen des Fensters
+    angesprochenen Objekten gibt (z.B. dem Window selbst oder
+    Selektionsmodi), kann der Name der spezifischen View zus"atzlich
+    qualifiziert werden (z.B. '[demo.sdd:2].Outliner').
+*/
+
+
+{
+                import View [Automation];
+}
+
+
+/*-------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.36  1998/10/26 14:49:02  MBA
+    Fix #58128#: SID_STYLE_FAMILY
+
+
+      Rev 1.35   26 Oct 1998 15:49:02   MBA
+   Fix #58128#: SID_STYLE_FAMILY
+
+      Rev 1.34   12 Jun 1998 15:56:08   MI
+   UNO-Objekt Zugriff
+
+      Rev 1.33   28 Aug 1997 12:24:20   MBA
+   Neue Interface-Namen
+
+      Rev 1.32   09 Dec 1996 12:07:46   MBA
+   Helptext,Configname raus
+
+      Rev 1.31   13 Nov 1996 12:45:24   MI
+   MUSS/SFx/345-346: SIDs aufgeraeumt
+
+      Rev 1.30   22 Oct 1996 20:10:20   HJS
+   merge 22.10.96
+
+      Rev 1.29   08 Oct 1996 14:30:42   HJS
+   merge 08.10.96
+
+      Rev 1.28   12 Sep 1996 15:44:34   MBA
+
+
+      Rev 1.27   09 Sep 1996 16:42:30   MBA
+   Neue Slotfiles
+
+      Rev 1.26   30 Aug 1996 13:41:46   HJS
+   eu...
+
+      Rev 1.25   16 Jul 1996 17:22:32   MBA
+   SID_PLUGINSACTIVE kein ReadOnlyDoc
+
+      Rev 1.24   11 Jul 1996 10:39:16   MI
+   SID_SELECTION_TEXT
+
+      Rev 1.23   08 Jul 1996 16:50:04   HJS
+   uebersetzung
+
+-------------------------------------------------------------------------*/
+
+
+
+
+

@@ -1,0 +1,408 @@
+/*=========================================================================
+    shell SfxObjectShell
+
+    (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
+    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Logfile:   T:/sfx2/sdi/docslots.sdv  $ $Workfile:   DOCSLOTS.SDI  $
+=========================================================================*/
+
+
+
+
+interface Documents : Collection
+[
+    uuid = "61753B60-1114-101D-B8ED-3273768855A7" ;
+]
+{
+     //---------------------------------------------------------------------
+    SID_NEWDOC // ole(opt) api(final/play/rec)
+    [
+        ExecMethod = NewDocExec_Impl ;
+        StateMethod = CreateDocState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_OPENDOC // ole(no) api(final/play/rec)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+        StateMethod = CreateDocState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_OPENURL // ole(no) api(no)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+        StateMethod = CreateDocState_Impl ;
+    ]
+
+        SID_CURRENT_URL // ole(no) api(no)
+    [
+        StateMethod = CreateDocState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_OPENTEMPLATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = OpenDocExec_Impl ;
+        StateMethod = CreateDocState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_CLOSEDOCS // ole(req) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SAVEDOCS // ole(no) api(final/play/rec)
+    [
+        ExecMethod = MiscExec_Impl ;
+        StateMethod = MiscState_Impl ;
+    ]
+}
+
+ //=========================================================================
+
+interface DocumentInfo : Object
+[
+    uuid = "11A1EDE0-1308-101D-B8ED-3273768855A7"
+]
+{
+     //---------------------------------------------------------------------
+    SID_DOCINFO // ole(no) api(final/play)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    BOOL Load SID_DOCINFO_LOAD ( String FileName SID_FILE_NAME ) ;
+     //---------------------------------------------------------------------
+    BOOL Save SID_DOCINFO_SAVE () ;
+}
+
+ //=========================================================================
+
+interface Document : Object
+[
+    Automation = FALSE ;
+]
+{
+     //---------------------------------------------------------------------
+    String Name // ole(no) api(final/play/norec)
+    [Readonly;]
+     //---------------------------------------------------------------------
+    SbxObject UNO SID_UNO // ole(no) api(final/play/norec)
+    [Readonly;]
+      //---------------------------------------------------------------------
+    SID_DOCTITLE // ole(opt) api(final/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCPATH // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCFULLNAME // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_CLOSEDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_CLOSING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ACTIVATE // ole(no) api(final/play/norec)
+    [
+        ExecMethod = ExecView_Impl ;
+        StateMethod = StateView_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_CREATEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_OPENDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_PREPARECLOSEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_CLOSEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_SAVEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_SAVEASDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+
+    SID_ON_SAVEDOCDONE // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+
+     //---------------------------------------------------------------------
+    SID_ON_SAVEASDOCDONE // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_ACTIVATEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_DEACTIVATEDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_ON_PRINTDOC // ole(no) api(final/play)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SfxObjectItem Module SID_ACTIVEMODULE
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+}
+
+interface OfficeDocument : Document
+[
+    Automation = FALSE
+]
+{
+     //---------------------------------------------------------------------
+    SbxObject DocumentInfo // ole(no) api(final/plac/norec)
+    [
+        Readonly ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCINFO_AUTHOR // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCINFO_COMMENTS // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCINFO_KEYWORDS // ole(opt) api(todo)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOC_READONLY // ole(opt) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOC_SAVED // ole(req) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOC_MODIFIED // ole(no) api(final/noplay/norec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_MODIFIED // ole(no) api(final/noplay/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SAVEDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SAVEASDOC // ole(req) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_SAVEASURL // ole(no) api()
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOCTEMPLATE // ole(no) api(final/play/rec)
+    [
+        ExecMethod = ExecFile_Impl ;
+        StateMethod = GetState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTDOC //ole(req) api(final/play/norec)
+    [
+        ExecMethod = PrintExec_Impl ;
+        StateMethod = NoState ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PRINTOUT // ole(opt) api(final/play/norec)
+    [
+        ExecMethod = PrintExec_Impl ;
+        StateMethod = PrintState_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_DOC_LOADING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_IMG_LOADING // ole(no) api(final/play/norec)
+    [
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_PLAYMACRO // ole(no) api(final/play/norec)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+    SID_VERSION
+    [
+    ExecMethod = ExecFile_Impl;
+    StateMethod = GetState_Impl;
+    ]
+}
+
+ //=========================================================================
+
+shell SfxObjectShell
+
+/*  [Beschreibung]
+
+    Funktionalit"at aller 'Dokumente' in SFx-Applikationen. Angesprochen
+    werden diese Objekte entweder als 'ActiveDocument' oder mit dem
+    Namen des Dokuments (i.d.R. der Dateiname) ohne Pfad in eckigen
+    Klammern (z.B. als '[unbenannt1]' oder '[brief6.sdw]').
+*/
+
+
+
+
+{
+                import OfficeDocument [Automation];
+                import DocumentInfo ".DocumentInfo";
+     //---------------------------------------------------------------------
+    SID_THISDOCUMENT // ole(no) api(no)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_THISWINDOW // ole(no) api(no)
+    [
+        ExecMethod = ExecProps_Impl ;
+        StateMethod = StateProps_Impl ;
+    ]
+     //---------------------------------------------------------------------
+    SID_FILE_NAME // ole(no) api(final/play/rec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+    SID_DOCINFO_TITLE // ole(no) api(final/play/rec)
+    [
+        StateMethod = GetState_Impl ;
+    ]
+} ;
+
+/*-------------------------------------------------------------------------
+
+    $Log: not supported by cvs2svn $
+    Revision 1.82  2000/07/26 19:10:04  mba
+    LoadLibrary only in App
+
+    Revision 1.81  2000/03/09 15:34:31  mba
+    #70338#: use SID_CURRENT_URL / CurrentURL
+
+    Revision 1.80  1999/10/06 15:19:52  mba
+    #68854#: Events nach Speichern
+
+    Revision 1.79  1998/06/23 10:30:40  MBA
+    SID_VERSION
+
+
+      Rev 1.78   23 Jun 1998 12:30:40   MBA
+   SID_VERSION
+
+      Rev 1.77   12 Jun 1998 15:56:06   MI
+   UNO-Objekt Zugriff
+
+      Rev 1.76   13 Nov 1997 12:50:08   MBA
+   Save an DocInfo ohne Parameter
+
+      Rev 1.75   28 Oct 1997 15:33:24   MBA
+   Bugfix #45146#: Author, Comments und Keywords implementiert
+
+      Rev 1.74   04 Sep 1997 13:20:06   MBA
+   OfficeDocument eingefuehrt
+
+      Rev 1.72   28 Aug 1997 12:20:44   MBA
+   Neue Interface-Namen
+
+      Rev 1.71   05 Aug 1997 17:36:36   MI
+   #42439# Module-Property war kaputt-gespielt
+
+      Rev 1.70   08 Jul 1997 19:34:36   MI
+   Flags bei ObjShells: InCloseEvent+HiddenLocked (#40060#)
+
+      Rev 1.69   03 Jul 1997 16:45:28   MBA
+   SID_MODIFIED
+
+      Rev 1.68   01 Jul 1997 12:45:54   MBA
+   LOAD/UNLOAD/ADD/REMOVE-Library
+
+      Rev 1.67   01 Jul 1997 12:38:32   MI
+   Modified-Property setzbar
+
+      Rev 1.66   12 May 1997 13:53:30   MBA
+   Seitenansicht raus
+
+-------------------------------------------------------------------------*/
+
+
+
+

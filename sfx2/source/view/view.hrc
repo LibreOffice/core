@@ -1,0 +1,196 @@
+/*************************************************************************
+ *
+ *  $RCSfile: view.hrc,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _SFX_VIEW_HRC
+#define _SFX_VIEW_HRC
+
+#include "sfx.hrc"
+
+// #defines *****************************************************************
+
+#define STR_NODEFPRINTER                    (RID_SFX_VIEW_START+ 0)
+#define STR_PRINTER_NOTAVAIL                (RID_SFX_VIEW_START+ 1)
+
+#define STR_PRINT_OPTIONS                   (RID_SFX_VIEW_START+ 6)
+#define STR_PRINT_OPTIONS_TITLE             (RID_SFX_VIEW_START+ 7)
+#define STR_ERROR_PRINTER_BUSY              (RID_SFX_VIEW_START+ 8)
+#define STR_NOSTARTPRINTER                  (RID_SFX_VIEW_START+ 9)
+#define STR_PRINTING                        (RID_SFX_VIEW_START+10)
+
+#ifndef STR_UNDO
+#define STR_UNDO                            (RID_SFX_VIEW_START+11)
+#define STR_REDO                            (RID_SFX_VIEW_START+12)
+#define STR_REPEAT                          (RID_SFX_VIEW_START+13)
+#endif
+
+#define STR_PLUGINVIEW                      (RID_SFX_VIEW_START+14)
+#define STR_FRAMESETVIEW                    (RID_SFX_VIEW_START+15)
+#define RID_FRAMESET_MENU                   (RID_SFX_VIEW_START+16)
+#define STR_GENERICVIEW                     (RID_SFX_VIEW_START+17)
+#define STR_FRAMESIZE                       (RID_SFX_VIEW_START+18)
+
+#define DLG_PRINTMONITOR                    (RID_SFX_VIEW_START)
+#define FT_DOCNAME                      1
+#define FT_PRINTING                     2
+#define FT_PRINTER                      3
+#define FT_PRINTINFO                    4
+#define PB_CANCELPRNMON                 5
+#define STR_PAGE                            (RID_SFX_VIEW_START+20)
+#define STR_ERROR_PRINT                     (RID_SFX_VIEW_START+21)
+#define STR_PRINT_NEWORI                    (RID_SFX_VIEW_START+22)
+#define STR_PRINT_NEWSIZE                   (RID_SFX_VIEW_START+23)
+#define STR_PRINT_NEWORISIZE                (RID_SFX_VIEW_START+24)
+
+#define STR_PREVIEW_DOCINFO                 (RID_SFX_VIEW_START+25)
+#define STR_PREVIEW_NODOCINFO               (RID_SFX_VIEW_START+26)
+
+#define RID_MAILATTACHDOC_DLG               (RID_SFX_VIEW_START+30)
+#define FT_DOC                          10
+#define BTN_ATTACH                      11
+#define BTN_SAVE_AND_ATTACH             12
+#define BTN_MAILBODY                    13
+#define BTN_SAVE_AND_MAILBODY           14
+#define BTN_SELECTION                   15
+#define BTN_NO_ATTACH                   16
+#define GB_DOC                          17
+#define BTN_OK                          18
+#define BTN_CANCEL                      19
+#define BTN_HELP                        20
+
+
+#define MSG_ERROR_SEND_MAIL                 (RID_SFX_VIEW_START+31)
+
+#define STR_MDIFRAME_INTERFACE              (RID_SFX_VIEW_START+32)
+#define STR_ERROR_SAVE_TEMPLATE             (RID_SFX_VIEW_START+33)
+#define STR_READONLY                        (RID_SFX_VIEW_START+34)
+
+#define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
+#define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
+
+#define RID_FRAMEDLG                        (RID_SFX_VIEW_START+43)
+#define TP_FRAMEPROPERTIES                  (RID_SFX_VIEW_START+44)
+#define TP_FRAMESIZE                        (RID_SFX_VIEW_START+45)
+#define TP_FRAMESPACING                     (RID_SFX_VIEW_START+46)
+
+#define FT_FRAMENAME                    3
+#define ED_FRAMENAME                    4
+#define FT_URL                          5
+#define ED_URL                          6
+#define BT_FILEOPEN                     7
+#define NM_MARGINHEIGHT                 8
+#define FT_MARGINHEIGHT                 9
+#define NM_MARGINWIDTH                  10
+#define FT_MARGINWIDTH                  11
+#define GB_MARGIN                       12
+#define RB_SCROLLINGON                  13
+#define RB_SCROLLINGOFF                 14
+#define RB_SCROLLINGAUTO                15
+#define GB_SCROLLING                    16
+#define GB_BORDER                       17
+#define RB_FRMBORDER_ON                 18
+#define RB_FRMBORDER_INHERIT            19
+#define RB_FRMBORDER_OFF                20
+#define CB_MARGINWIDTHDEFAULT           21
+#define CB_MARGINHEIGHTDEFAULT          22
+
+#define GB_WIDTH                        23
+#define GB_HEIGHT                       24
+#define RB_PIXELWIDTH                   25
+#define RB_PERCENTWIDTH                 26
+#define RB_RELATIVEWIDTH                27
+#define RB_PIXELHEIGHT                  28
+#define RB_PERCENTHEIGHT                29
+#define RB_RELATIVEHEIGHT               30
+#define FT_WIDTHCOMMENT                 31
+#define FT_HEIGHTCOMMENT                32
+#define FT_WIDTH                        33
+#define NM_WIDTH                        34
+#define CB_WIDTHFIXED                   35
+#define CB_HEIGHTFIXED                  36
+#define FT_HEIGHT                       37
+#define NM_HEIGHT                       38
+
+#define FT_FRAMESPACING                 39
+#define NM_FRAMESPACING                 40
+#define CB_FRAMESPACING_INHERIT         41
+#define FT_FRAMESPACINGCOLOR            42
+#define ED_FRAMESPACINGCOLOR            43
+#define CB_FRAMESPACINGCOLOR_INHERIT    44
+#define GB_FRAMESET                     45
+
+#define STR_FRAME_FILEDLG                   (RID_SFX_VIEW_START+46)
+#define STR_SAVE_FRAMESET                   (RID_SFX_VIEW_START+47)
+#define STR_SAVE_FRAMESETAS                 (RID_SFX_VIEW_START+48)
+#define STR_FRAME_DEFAULT                   (RID_SFX_VIEW_START+49)
+
+#define MSG_QUERY_INCOMPLETEFRAME           (RID_SFX_VIEW_START+50)
+#define STR_URL_CHANGED                     (RID_SFX_VIEW_START+51)
+
+#define RID_EXPLORERTOOLSTOOLBOX            (RID_SFX_VIEW_START+52)
+#define RID_EXPLOREROBJECTTOOLBOX           (RID_SFX_VIEW_START+53)
+#define RID_FRAMESETEDIT_TOOLBOX            (RID_SFX_VIEW_START+54)
+#define STR_EXPLORERVIEW                    (RID_SFX_VIEW_START+55)
+#define STR_SOURCEMODIFIED                  (RID_SFX_VIEW_START+56)
+#define STR_FRAMESETVIEWSHELL               (RID_SFX_VIEW_START+57)
+#define STR_FORWARDMAIL                     (RID_SFX_VIEW_START+58)
+
+
+#endif
+

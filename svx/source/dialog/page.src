@@ -1,0 +1,2848 @@
+/*************************************************************************
+ *
+ *  $RCSfile: page.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+
+#include "dialogs.hrc"
+#include "helpid.hrc"
+#include "page.hrc"
+#include "page.h"
+
+ // RID_SVXPAGE_PAGE ------------------------------------------------------
+
+TabPage RID_SVXPAGE_PAGE
+{
+    HelpId = HID_FORMAT_PAGE ;
+    Hide = TRUE ;
+    Text = "Seite" ;
+    Text [ English ] = "Page" ;
+    Text [ norwegian ] = "Page" ;
+    Text [ italian ] = "Pagina" ;
+    Text [ portuguese_brazilian ] = "P·gina" ;
+    Text [ portuguese ] = "P·gina" ;
+    Text [ finnish ] = "Sivu" ;
+    Text [ danish ] = "Side" ;
+    Text [ french ] = "Page" ;
+    Text [ swedish ] = "Sida" ;
+    Text [ dutch ] = "Pagina" ;
+    Text [ spanish ] = "P·gina" ;
+    Text [ english_us ] = "Page" ;
+    Text[ chinese_simplified ] = "“≥";
+    Text[ russian ] = "—Ú‡ÌËˆ‡";
+    Text[ polish ] = "Strona";
+    Text[ japanese ] = "Õﬂ∞ºﬁ";
+    Size = MAP_APPFONT ( 260 , 135 ) ;
+    FixedText FT_LEFT_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 11 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Text = "~Links" ;
+        Text [ ENGLISH ] = "~Left" ;
+        Text [ norwegian ] = "~Left" ;
+        Text [ italian ] = "A sinistra" ;
+        Text [ portuguese_brazilian ] = "~Esquerda" ;
+        Text [ portuguese ] = "~Esquerda" ;
+        Text [ finnish ] = "~Vasemmalle" ;
+        Text [ danish ] = "Venstre" ;
+        Text [ french ] = "~¿ gauche" ;
+        Text [ swedish ] = "~V‰nster" ;
+        Text [ dutch ] = "~Links" ;
+        Text [ spanish ] = "~Izquierda" ;
+        Text [ english_us ] = "~Left" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "◊Û(~L)";
+        Text[ russian ] = "—ÎÂ‚‡";
+        Text[ polish ] = "Z lewej";
+        Text[ japanese ] = "ç∂(~L)";
+        Text[ chinese_traditional ] = "¶V•™(~L)";
+        Text[ arabic ] = "Ì”«—";
+        Text[ greek ] = "¡ÒÈÛÙÂÒ‹";
+        Text[ korean ] = "øﬁ¬ (~L)";
+        Text[ turkish ] = "~Sol";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_LEFT_MARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 10 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_RIGHT_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 26 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Text = "~Rechts" ;
+        Text [ ENGLISH ] = "Ri~ght" ;
+        Text [ norwegian ] = "H¯~yre" ;
+        Text [ italian ] = "A destra" ;
+        Text [ portuguese_brazilian ] = "Di~reita" ;
+        Text [ portuguese ] = "Di~reita" ;
+        Text [ finnish ] = "~Oikea" ;
+        Text [ danish ] = "H¯jre" ;
+        Text [ french ] = "~¿ droite" ;
+        Text [ swedish ] = "~Hˆger" ;
+        Text [ dutch ] = "Re~chts" ;
+        Text [ spanish ] = "~Derecha" ;
+        Text [ english_us ] = "~Right" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "”“(~R)";
+        Text[ russian ] = "—Ô‡‚‡";
+        Text[ polish ] = "Z prawej";
+        Text[ japanese ] = "âE(~R)";
+        Text[ chinese_traditional ] = "¶V•k(~R)";
+        Text[ arabic ] = "Ì„Ì‰";
+        Text[ greek ] = "ƒÂÓÈ‹";
+        Text[ korean ] = "ø¿∏•¬ (~R)";
+        Text[ turkish ] = "~Sa";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_RIGHT_MARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 25 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_TOP_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 41 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Text = "~Oben" ;
+        Text [ ENGLISH ] = "T~op" ;
+        Text [ norwegian ] = "T~opp" ;
+        Text [ italian ] = "In alto" ;
+        Text [ portuguese_brazilian ] = "T~opo" ;
+        Text [ portuguese ] = "~Superior" ;
+        Text [ finnish ] = "~Yl‰" ;
+        Text [ danish ] = "Top" ;
+        Text [ french ] = "~En haut" ;
+        Text [ swedish ] = "÷~vre" ;
+        Text [ dutch ] = "~Boven" ;
+        Text [ spanish ] = "~Arriba" ;
+        Text [ english_us ] = "~Top" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "…œ(~T)";
+        Text[ russian ] = "—‚ÂıÛ";
+        Text[ polish ] = "W gÛrze";
+        Text[ japanese ] = "è„(~T)";
+        Text[ chinese_traditional ] = "¶V§W(~T)";
+        Text[ arabic ] = "√⁄·Ï";
+        Text[ greek ] = "–‹Ì˘";
+        Text[ korean ] = "¿ß(~T)";
+        Text[ turkish ] = "~‹st";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_TOP_MARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 40 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_BOTTOM_MARGIN
+    {
+        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Size = MAP_APPFONT ( 29 , 8 ) ;
+        Text = "~Unten" ;
+        Text [ ENGLISH ] = "~Bottom" ;
+        Text [ norwegian ] = "~Bottom" ;
+        Text [ italian ] = "In basso" ;
+        Text [ portuguese_brazilian ] = "~Base" ;
+        Text [ portuguese ] = "~Inferior" ;
+        Text [ finnish ] = "~Alas" ;
+        Text [ danish ] = "Bund" ;
+        Text [ french ] = "En ~bas" ;
+        Text [ swedish ] = "~Nedre" ;
+        Text [ dutch ] = "B~eneden" ;
+        Text [ spanish ] = "A~bajo" ;
+        Text [ english_us ] = "~Bottom" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "œ¬(~B)";
+        Text[ russian ] = "¬ÌËÁÛ";
+        Text[ polish ] = "W dole";
+        Text[ japanese ] = "â∫(~B)";
+        Text[ chinese_traditional ] = "¶V§U(~B)";
+        Text[ arabic ] = "√”›·";
+        Text[ greek ] = " ‹Ù˘";
+        Text[ korean ] = "æ∆∑°(~B)";
+        Text[ turkish ] = "~Alt";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_BOTTOM_MARGIN
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 42 , 55 ) ;
+        Size = MAP_APPFONT ( 40 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 9999 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 9999 ;
+        SpinSize = 10 ;
+    };
+    GroupBox GB_MARGIN
+    {
+        Pos = MAP_APPFONT ( 6 , 1 ) ;
+        Size = MAP_APPFONT ( 79 , 71 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? R‰nder : Rınder */
+        /* ### ACHTUNG: Neuer Text in Resource? R‰nder : Rınder */
+        Text = "R‰nder" ;
+        Text [ ENGLISH ] = "Margins" ;
+        Text [ norwegian ] = "Margins" ;
+        Text [ italian ] = "Margini" ;
+        Text [ portuguese_brazilian ] = "Margens" ;
+        Text [ portuguese ] = "Margens" ;
+        Text [ finnish ] = "Reunukset" ;
+        Text [ danish ] = "Margener" ;
+        Text [ french ] = "Marges" ;
+        Text [ swedish ] = "Marginaler" ;
+        Text [ dutch ] = "Marges" ;
+        Text [ spanish ] = "M·rgenes" ;
+        Text [ english_us ] = "Margins" ;
+        Text[ chinese_simplified ] = "±ﬂæ‡";
+        Text[ russian ] = "œÓÎˇ";
+        Text[ polish ] = "Marginesy";
+        Text[ japanese ] = "ó]îí";
+        Text[ chinese_traditional ] = "√‰¨…";
+        Text[ arabic ] = "«·ÂÊ«„‘";
+        Text[ greek ] = "–ÂÒÈË˛ÒÈ·";
+        Text[ korean ] = "ø©πÈ";
+        Text[ turkish ] = "Marjlar";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_LAYOUT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 96 , 14 ) ;
+        Size = MAP_APPFONT ( 64 , 44 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegelt" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Links" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegelt" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Links" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegelt" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Links" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "Tutti" ; Default ; > ;
+            < "Rispecchiato" ; Default ; > ;
+            < "Destra" ; Default ; > ;
+            < "Sinistra" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegelt" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "A Direita" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "Tudo" ; Default ; > ;
+            < "Invertido" ; Default ; > ;
+            < "Direita" ; Default ; > ;
+            < "Esquerda" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegelt" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Links" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Spejlvendt" ; Default ; > ;
+            < "H¯jre" ; Default ; > ;
+            < "Venstre" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "Toutes les pages" ; Default ; > ;
+            < "Pages en vis-‡-vis" ; Default ; > ;
+            < "¿ droite" ; Default ; > ;
+            < "¿ gauche" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "Alla" ; Default ; > ;
+            < "Spegelv‰nd" ; Default ; > ;
+            < "Hˆger" ; Default ; > ;
+            < "V‰nster" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "Alle" ; Default ; > ;
+            < "Gespiegeld" ; Default ; > ;
+            < "Rechts" ; Default ; > ;
+            < "Links" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "Todos" ; Default ; > ;
+            < "Reflejado" ; Default ; > ;
+            < "Derecha" ; Default ; > ;
+            < "Izquierda" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "All" ; Default ; > ;
+            < "Mirrored" ; Default ; > ;
+            < "Right" ; Default ; > ;
+            < "Left" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "»´≤ø" ; Default ; > ;
+        < "∑¥”≥µƒ" ; Default ; > ;
+        < "”“" ; Default ; > ;
+        < "◊Û" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "¬ÒÂ" ; Default ; > ;
+        < "ŒÚ‡ÊÂÌËÂ" ; Default ; > ;
+        < "—Ô‡‚‡" ; Default ; > ;
+        < "—ÎÂ‚‡" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "Wszystkie" ; Default ; > ;
+        < "Odbity" ; Default ; > ;
+        < "Z prawej" ; Default ; > ;
+        < "Z lewej" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "Ç∑Ç◊Çƒ" ; Default ; > ;
+        < "ç∂âEëŒèÃ" ; Default ; > ;
+        < "âE" ; Default ; > ;
+        < "ç∂" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "•˛≥°" ; Default ; > ;
+        < "§œ¨M™∫" ; Default ; > ;
+        < "•k" ; Default ; > ;
+        < "•™" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "«·ﬂ·" ; Default ; > ;
+        < "„‰⁄ﬂ”" ; Default ; > ;
+        < "Ì„Ì‰" ; Default ; > ;
+        < "Ì”«—" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "ºÎ·" ; Default ; > ;
+        < "ÃÂ Í·Ù¸ÙÒÈÛÁ" ; Default ; > ;
+        < "ƒÂÓÈ‹" ; Default ; > ;
+        < "¡ÒÈÛÙÂÒ‹" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "∏µŒ" ; Default ; > ;
+        < "¥Îƒ™" ; Default ; > ;
+        < "ø¿∏•¬ " ; Default ; > ;
+        < "øﬁ¬ " ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "T¸m¸" ; Default ; > ;
+        < "Yans˝t" ; Default ; > ;
+        < "Sa" ; Default ; > ;
+        < "Sol" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    GroupBox GB_PAGE
+    {
+        Pos = MAP_APPFONT ( 90 , 1 ) ;
+        Size = MAP_APPFONT ( 76 , 34 ) ;
+        Text = "Seitenlayout" ;
+        Text [ ENGLISH ] = "Page layout" ;
+        Text [ norwegian ] = "Side oppsett" ;
+        Text [ italian ] = "Layout di pagina" ;
+        Text [ portuguese_brazilian ] = "Layout da p·gina" ;
+        Text [ portuguese ] = "Configurar p·gina" ;
+        Text [ finnish ] = "Sivun asettelu" ;
+        Text [ danish ] = "Sidelayout" ;
+        Text [ french ] = "Mise en page" ;
+        Text [ swedish ] = "Sidlayout" ;
+        Text [ dutch ] = "Paginalay-out" ;
+        Text [ spanish ] = "DiseÒo de p·gina" ;
+        Text [ english_us ] = "Page layout" ;
+        Text[ chinese_simplified ] = "“≥√Ê∞Ê Ω";
+        Text[ russian ] = "–‡ÁÏÂÚÍ‡ ÒÚ‡ÌËˆ˚";
+        Text[ polish ] = "Widok uk≥adu strony";
+        Text[ japanese ] = "Õﬂ∞ºﬁ ⁄≤±≥ƒ";
+        Text[ chinese_traditional ] = "≠∂≠±™©¶°";
+        Text[ arabic ] = " ŒÿÌÿ «·’›Õ…";
+        Text[ greek ] = "ƒÈ‹Ù·ÓÁ ÛÂÎﬂ‰·Ú";
+        Text[ korean ] = "∆‰¿Ã¡ˆ ∑π¿Ãæ∆øÙ";
+        Text[ turkish ] = "Sayfa d¸zeni";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_NUMBER_FORMAT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 96 , 51 ) ;
+        Size = MAP_APPFONT ( 64 , 64 ) ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ohne" ; Default ; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ohne" ; Default ; > ;
+        };
+        StringList [ norwegian ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ohne" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Senza" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Nenhum" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Sem" ; Default ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ohne" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Uden" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Aucun(e)" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ingen" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Zonder" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "Ninguno" ; Default ; > ;
+        };
+        StringList [ english_us ] =
+        {
+            < "A, B, C, ..." ; Default ; > ;
+            < "a, b, c, ..." ; Default ; > ;
+            < "I, II, III, ..." ; Default ; > ;
+            < "i, ii, iii, ..." ; Default ; > ;
+            < "1, 2, 3, ..." ; Default ; > ;
+            < "None" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "Œﬁ" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "¡ÂÁ" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "Bez" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "Ç»Çµ" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "µL" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "... ,A, B, C" ; Default ; > ;
+        < "... ,a, b, c" ; Default ; > ;
+        < "... ,I, II, III" ; Default ; > ;
+        < "... ,i, ii, iii" ; Default ; > ;
+        < "... ,3 ,2 ,1" ; Default ; > ;
+        < "»œÊ‰" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "◊˘ÒﬂÚ" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "æ¯¿Ω" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "A, B, C, ..." ; Default ; > ;
+        < "a, b, c, ..." ; Default ; > ;
+        < "I, II, III, ..." ; Default ; > ;
+        < "i, ii, iii, ..." ; Default ; > ;
+        < "1, 2, 3, ..." ; Default ; > ;
+        < "Yok" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    GroupBox GB_NUMBER_FORMAT
+    {
+        Pos = MAP_APPFONT ( 90 , 38 ) ;
+        Size = MAP_APPFONT ( 76 , 34 ) ;
+        Text = "Nummerierung" ;
+        Text [ ENGLISH ] = "Numbering" ;
+        Text [ norwegian ] = "Nummering" ;
+        Text [ italian ] = "Numerazione" ;
+        Text [ portuguese_brazilian ] = "NumeraÁ„o" ;
+        Text [ portuguese ] = "NumeraÁ„o" ;
+        Text [ finnish ] = "Numerointi" ;
+        Text [ danish ] = "Nummerering" ;
+        Text [ french ] = "NumÈrotation" ;
+        Text [ swedish ] = "Numrering" ;
+        Text [ dutch ] = "Nummering" ;
+        Text [ spanish ] = "NumeraciÛn" ;
+        Text [ english_us ] = "Numbering" ;
+        Text[ chinese_simplified ] = "±‡∫≈";
+        Text[ russian ] = "ÕÛÏÂ‡ˆËˇ";
+        Text[ polish ] = "Numeracja";
+        Text[ japanese ] = "î‘çÜïtÇØ";
+        Text[ chinese_traditional ] = "≠∂º∆";
+        Text[ arabic ] = "«· —ﬁÌ„";
+        Text[ greek ] = "¡ÒﬂËÏÁÛÁ";
+        Text[ korean ] = "π¯»£ ∏≈±‚±‚";
+        Text[ turkish ] = "Numaralama";
+        Text[ language_user1 ] = " ";
+    };
+    Window WN_BSP
+    {
+        Pos = MAP_APPFONT ( 176 , 13 ) ;
+        Size = MAP_APPFONT ( 72 , 53 ) ;
+    };
+    GroupBox GB_BSP
+    {
+        Pos = MAP_APPFONT ( 171 , 1 ) ;
+        Size = MAP_APPFONT ( 83 , 71 ) ;
+        Text = "Vorschau" ;
+        Text [ ENGLISH ] = "Example" ;
+        Text [ norwegian ] = "Eksempel" ;
+        Text [ italian ] = "Anteprima" ;
+        Text [ portuguese_brazilian ] = "Exemplo" ;
+        Text [ portuguese ] = "Previsualizar" ;
+        Text [ finnish ] = "Malli" ;
+        Text [ danish ] = "Eksempel" ;
+        Text [ french ] = "AperÁu" ;
+        Text [ swedish ] = "Fˆrhandsvisning" ;
+        Text [ dutch ] = "Voorbeeld" ;
+        Text [ spanish ] = "PrevisualizaciÛn" ;
+        Text [ english_us ] = "Preview" ;
+        Text[ chinese_simplified ] = "‘§ ”";
+        Text[ russian ] = "œÓÒÏÓÚ";
+        Text[ polish ] = "Podglπd";
+        Text[ japanese ] = "Ãﬂ⁄Àﬁ≠∞";
+        Text[ chinese_traditional ] = "πwƒ˝";
+        Text[ arabic ] = "„⁄«Ì‰…";
+        Text[ greek ] = "–ÒÔÂÈÛÍ¸ÁÛÁ";
+        Text[ korean ] = "πÃ∏Æ ∫∏±‚";
+        Text[ turkish ] = "÷nizleme";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_PAPER_SIZE
+    {
+        Pos = MAP_APPFONT ( 12 , 83 ) ;
+        Size = MAP_APPFONT ( 69 , 47 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    RadioButton RB_PORTRAIT
+    {
+        Pos = MAP_APPFONT ( 84 , 84 ) ;
+        Size = MAP_APPFONT ( 36 , 10 ) ;
+        Text = "Ho~ch" ;
+        Text [ ENGLISH ] = "~Portrait" ;
+        Text [ norwegian ] = "~Portrett" ;
+        Text [ italian ] = "~Verticale" ;
+        Text [ portuguese_brazilian ] = "~Vertical" ;
+        Text [ portuguese ] = "~Vertical" ;
+        Text [ finnish ] = "~Pysty" ;
+        Text [ danish ] = "StÂende" ;
+        Text [ french ] = "~Portrait" ;
+        Text [ swedish ] = "~StÂende" ;
+        Text [ dutch ] = "~Staand" ;
+        Text [ spanish ] = "~Vertical" ;
+        Text [ english_us ] = "~Portrait" ;
+        Check = TRUE ;
+        Text[ chinese_simplified ] = "◊›œÚ(~P)";
+        Text[ russian ] = " ÌËÊÌ˚È";
+        Text[ polish ] = "Pionowo";
+        Text[ japanese ] = "ècèëÇ´(~P)";
+        Text[ chinese_traditional ] = "™Ω¶°(~P)";
+        Text[ arabic ] = "»«·ÿÊ·";
+        Text[ greek ] = "~ ·Ù·Í¸Òıˆ·";
+        Text[ korean ] = "ºº∑Œ(~P)";
+        Text[ turkish ] = "Di~key";
+        Text[ language_user1 ] = " ";
+    };
+    RadioButton RB_LANDSCAPE
+    {
+        Pos = MAP_APPFONT ( 122 , 84 ) ;
+        Size = MAP_APPFONT ( 42 , 10 ) ;
+        Text = "~Quer" ;
+        Text [ ENGLISH ] = "Lan~d." ;
+        Text [ norwegian ] = "+++Lan~d." ;
+        Text [ italian ] = "~Orizzont." ;
+        Text [ portuguese_brazilian ] = "PaÌ~s." ;
+        Text [ portuguese ] = "Hori~zontal" ;
+        Text [ finnish ] = "~Vaaka" ;
+        Text [ danish ] = "Liggende" ;
+        Text [ french ] = "Pa~ysage" ;
+        Text [ swedish ] = "L~iggande" ;
+        Text [ dutch ] = "L~iggend" ;
+        Text [ spanish ] = "~Horizontal" ;
+        Text [ english_us ] = "L~andscape" ;
+        Text[ chinese_simplified ] = "∫·œÚ(~A)";
+        Text[ russian ] = "¿Î¸·ÓÏÌ˚È";
+        Text[ polish ] = "Poziomo";
+        Text[ japanese ] = "â°èëÇ´(~L)";
+        Text[ chinese_traditional ] = "æÓ¶V(~L)";
+        Text[ arabic ] = "»«·⁄—÷";
+        Text[ greek ] = "œÒÈ~Ê¸ÌÙÈ·";
+        Text[ korean ] = "∞°∑Œ(~A)";
+        Text[ turkish ] = "~Yatay";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PAPER_WIDTH
+    {
+        Pos = MAP_APPFONT ( 12 , 99 ) ;
+        Size = MAP_APPFONT ( 26 , 10 ) ;
+        Text = "~Breite" ;
+        Text [ ENGLISH ] = "~Width" ;
+        Text [ norwegian ] = "~Bredde" ;
+        Text [ italian ] = "~Largh." ;
+        Text [ portuguese_brazilian ] = "~Largura" ;
+        Text [ portuguese ] = "~Largura" ;
+        Text [ finnish ] = "~Leveys" ;
+        Text [ danish ] = "Bredde" ;
+        Text [ french ] = "~Largeur" ;
+        Text [ swedish ] = "~Bredd" ;
+        Text [ dutch ] = "B~reedte" ;
+        Text [ spanish ] = "A~ncho" ;
+        Text [ english_us ] = "~Width" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "øÌ∂»(~W)";
+        Text[ russian ] = "ÿËËÌ‡";
+        Text[ polish ] = "Szer.";
+        Text[ japanese ] = "ïù(~W)";
+        Text[ chinese_traditional ] = "ºe´◊(~W)";
+        Text[ arabic ] = "«·⁄—÷";
+        Text[ greek ] = "~–Î‹ÙÔÚ";
+        Text[ korean ] = "≥ ∫Ò(~W)";
+        Text[ turkish ] = "~Geni˛lik";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_PAPER_WIDTH
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 39 , 98 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 12000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 12000 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_PAPER_HEIGHT
+    {
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
+        Size = MAP_APPFONT ( 26 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Hˆh~e : H˜h~e */
+        /* ### ACHTUNG: Neuer Text in Resource? Hˆh~e : H˜h~e */
+        Text = "Hˆh~e" ;
+        Text [ ENGLISH ] = "H~eight" ;
+        Text [ norwegian ] = "H~eight" ;
+        Text [ italian ] = "Al~tezza" ;
+        Text [ portuguese_brazilian ] = "A~ltura" ;
+        Text [ portuguese ] = "A~ltura" ;
+        Text [ finnish ] = "~Korkeus" ;
+        Text [ danish ] = "H¯jde" ;
+        Text [ french ] = "~Hauteur" ;
+        Text [ swedish ] = "Hˆj~d" ;
+        Text [ dutch ] = "H~oogte" ;
+        Text [ spanish ] = "A~ltura" ;
+        Text [ english_us ] = "~Height" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "∏ﬂ∂»(~H)";
+        Text[ russian ] = "¬˚ÒÓÚ‡";
+        Text[ polish ] = "Wys.";
+        Text[ japanese ] = "çÇÇ≥(~H)";
+        Text[ chinese_traditional ] = "∞™´◊(~H)";
+        Text[ arabic ] = "«·«— ›«⁄";
+        Text[ greek ] = "æ¯ÔÚ";
+        Text[ korean ] = "≥Ù¿Ã(~H)";
+        Text[ turkish ] = "Y¸~k.";
+        Text[ language_user1 ] = " ";
+    };
+    MetricField ED_PAPER_HEIGHT
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 39 , 113 ) ;
+        Size = MAP_APPFONT ( 42 , 12 ) ;
+        Left = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 12000 ;
+        DecimalDigits = 2 ;
+        Unit = FUNIT_CM ;
+        Last = 12000 ;
+        SpinSize = 10 ;
+    };
+    FixedText FT_PAPER_TRAY
+    {
+        Pos = MAP_APPFONT ( 84 , 99 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "~Schacht" ;
+        Text [ ENGLISH ] = "~Tray" ;
+        Text [ norwegian ] = "~Skuff" ;
+        Text [ italian ] = "Ca~ssetto" ;
+        Text [ portuguese_brazilian ] = "~Bandeja" ;
+        Text [ portuguese ] = "~Tabuleiro" ;
+        Text [ finnish ] = "L~okero" ;
+        Text [ danish ] = "Papirkilde" ;
+        Text [ french ] = "Ba~c" ;
+        Text [ swedish ] = "Fac~k" ;
+        Text [ dutch ] = "~Papierlade" ;
+        Text [ spanish ] = "~Origen del papel" ;
+        Text [ english_us ] = "Paper ~source" ;
+        Left = TRUE ;
+        Text[ chinese_simplified ] = "÷Ω’≈¿¥‘¥(~S)";
+        Text[ russian ] = "œÓ‰‡˜‡ ·ÛÏ‡„Ë";
+        Text[ polish ] = "Zasobnik papieru";
+        Text[ japanese ] = "ããéÜï˚ñ@(~S)";
+        Text[ chinese_traditional ] = "Ø»∑Ω(~S)";
+        Text[ arabic ] = "œ—Ã «·Ê—ﬁ";
+        Text[ greek ] = "ƒﬂ~ÛÍÔÚ ˜·ÒÙÈÔ˝";
+        Text[ korean ] = "øÎ¡ˆ ∞¯±ﬁ(~S)";
+        Text[ turkish ] = "~Ka˝t kayna˝";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_PAPER_TRAY
+    {
+        Pos = MAP_APPFONT ( 84 , 112 ) ;
+        Size = MAP_APPFONT ( 76 , 49 ) ;
+        DropDown = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    GroupBox GB_PAPER_SIZE
+    {
+        Pos = MAP_APPFONT ( 6 , 74 ) ;
+        Size = MAP_APPFONT ( 160 , 56 ) ;
+        Text = "Papierformat" ;
+        Text [ ENGLISH ] = "Paper format" ;
+        Text [ norwegian ] = "Papir format" ;
+        Text [ italian ] = "Formato foglio" ;
+        Text [ portuguese_brazilian ] = "Formato de papel" ;
+        Text [ portuguese ] = "Formato de papel" ;
+        Text [ finnish ] = "Paperin muoto" ;
+        Text [ danish ] = "Papirformat" ;
+        Text [ french ] = "Format de papier" ;
+        Text [ swedish ] = "Pappersformat" ;
+        Text [ dutch ] = "Papierformaat" ;
+        Text [ spanish ] = "Formato de papel" ;
+        Text [ english_us ] = "Paper format" ;
+        Text[ chinese_simplified ] = "÷Ω’≈∏Ò Ω";
+        Text[ russian ] = "‘ÓÏ‡Ú ·ÛÏ‡„Ë";
+        Text[ polish ] = "Format papieru";
+        Text[ japanese ] = "ópéÜª≤Ωﬁ";
+        Text[ chinese_traditional ] = "Ø»±iÆÊ¶°";
+        Text[ arabic ] = "ÕÃ„ «·Ê—ﬁ";
+        Text[ greek ] = "ÃÔÒˆﬁ ˜·ÒÙÈÔ˝";
+        Text[ korean ] = "øÎ¡ˆ º≠Ωƒ";
+        Text[ turkish ] = "Ka˝t format˝";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_HORZ
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 83 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Text = "Hor~izontal" ;
+        Text [ ENGLISH ] = "Hor~izontal" ;
+        Text [ norwegian ] = "Hor~izontal" ;
+        Text [ italian ] = "~Orizzontale" ;
+        Text [ portuguese_brazilian ] = "Hor~izontal" ;
+        Text [ portuguese ] = "Hor~izontal" ;
+        Text [ french ] = "Hor~izontal" ;
+        Text [ dutch ] = "Hor~izontaal" ;
+        Text [ spanish ] = "Hori~zontal" ;
+        Text [ danish ] = "Vandret" ;
+        Text [ swedish ] = "H~orisontellt" ;
+        Text [ finnish ] = "Hor~izontal" ;
+        Text [ english_us ] = "Hori~zontal" ;
+        Text[ chinese_simplified ] = "ÀÆ∆Ω∑ΩœÚ(~Z)";
+        Text[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
+        Text[ polish ] = "Poziomo";
+        Text[ japanese ] = "â°íÜâõ(~Z)";
+        Text[ chinese_traditional ] = "§Ù•≠§Ë¶V(~Z)";
+        Text[ arabic ] = "√›ﬁÌ";
+        Text[ greek ] = "œÒÈÊ¸ÌÙÈ·";
+        Text[ korean ] = "∞°∑Œ(~Z)";
+        Text[ turkish ] = "Ya~tay";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_VERT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 96 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Text = "~Vertikal" ;
+        Text [ ENGLISH ] = "~Vertical" ;
+        Text [ norwegian ] = "~Vertikal" ;
+        Text [ italian ] = "~Verticale" ;
+        Text [ portuguese_brazilian ] = "~Vertical" ;
+        Text [ portuguese ] = "~Vertical" ;
+        Text [ finnish ] = "~Rinnakkain" ;
+        Text [ danish ] = "Lodret" ;
+        Text [ french ] = "~Vertical" ;
+        Text [ swedish ] = "Ve~rtikalt" ;
+        Text [ dutch ] = "~Verticaal" ;
+        Text [ spanish ] = "Ver~tical" ;
+        Text [ english_us ] = "~Vertical" ;
+        Text[ chinese_simplified ] = "¥π÷±∑ΩœÚ(~V)";
+        Text[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
+        Text[ polish ] = "Pionowo";
+        Text[ japanese ] = "ècíÜâõ(~V)";
+        Text[ chinese_traditional ] = "´´™Ω§Ë¶V(~V)";
+        Text[ arabic ] = "—√”Ì";
+        Text[ greek ] = " ·Ù·Í¸Òıˆ·";
+        Text[ korean ] = "ºº∑Œ(~V)";
+        Text[ turkish ] = "~Dikey";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox CB_ADAPT
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 96 ) ;
+        Size = MAP_APPFONT ( 77 , 10 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? ~An Grˆﬂe anpassen : ~An Gr˜òe anpassen */
+        /* ### ACHTUNG: Neuer Text in Resource? ~An Grˆﬂe anpassen : ~An Gr˜òe anpassen */
+        Text = "~An Grˆﬂe anpassen" ;
+        Text [ ENGLISH ] = "~Fit to size" ;
+        Text [ norwegian ] = "~Fit to size" ;
+        Text [ italian ] = "Dimensioni pagina" ;
+        Text [ portuguese_brazilian ] = "~Fit to size" ;
+        Text [ portuguese ] = "~Ajustar ao tamanho" ;
+        Text [ french ] = "~Adapter ‡ la taille" ;
+        Text [ dutch ] = "~Aan grootte aanpassen" ;
+        Text [ spanish ] = "~Ajustar al tamaÒo" ;
+        Text [ danish ] = "Tilpas til st¯rrelse" ;
+        Text [ swedish ] = "~Anpassa till storlek" ;
+        Text [ finnish ] = "~Fit to size" ;
+        Text [ english_us ] = "~Fit to size" ;
+        Text[ chinese_simplified ] = "µ˜’˚¥Û–°(~F)";
+        Text[ russian ] = "—Ó„Î‡ÒÌÓ ‡ÁÏÂ‡";
+        Text[ polish ] = "Dostosuj do rozmiaru";
+        Text[ japanese ] = "ª≤ΩﬁÇ…ìKçá(~F)";
+        Text[ chinese_traditional ] = "Ω’æ„§j§p(~F)";
+        Text[ arabic ] = "„·«¡„… ··ÕÃ„";
+        Text[ greek ] = "–ÒÔÛ·ÒÏÔ„ﬁ ÛÂ Ï›„ÂËÔÚ";
+        Text[ korean ] = "≈©±‚ø° ∏¬√ﬂ±‚(~F)";
+        Text[ turkish ] = "~Boya gˆre ayarla";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_PAGE_NAME
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 177 , 92 ) ;
+        Size = MAP_APPFONT ( 71 , 10 ) ;
+        Center = TRUE ;
+    };
+    GroupBox GB_EXTRA
+    {
+        Pos = MAP_APPFONT ( 171 , 74 ) ;
+        Size = MAP_APPFONT ( 83 , 56 ) ;
+        Text = "Folgevorlage" ;
+        Text [ ENGLISH ] = "Page" ;
+        Text [ norwegian ] = "Page" ;
+        Text [ italian ] = "Modello successivo" ;
+        Text [ portuguese_brazilian ] = "P·gina" ;
+        Text [ portuguese ] = "Estilo seguinte" ;
+        Text [ finnish ] = "Sivu" ;
+        Text [ danish ] = "NÊste typografi" ;
+        Text [ french ] = "Style suivant" ;
+        Text [ swedish ] = "N‰sta formatmall" ;
+        Text [ dutch ] = "Volgend profiel" ;
+        Text [ spanish ] = "Estilo siguiente" ;
+        Text [ english_us ] = "Next Style" ;
+        Text[ chinese_simplified ] = "œ¬“ª∏ˆ—˘ Ω";
+        Text[ russian ] = "—ÎÂ‰Û˛˘ËÈ ÒÚËÎ¸";
+        Text[ polish ] = "NastÍpny styl";
+        Text[ japanese ] = "éüÇÃΩ¿≤Ÿ";
+        Text[ chinese_traditional ] = "§U§@≠”ºÀ¶°";
+        Text[ arabic ] = "‰„ÿ  «·Ì";
+        Text[ greek ] = "≈¸ÏÂÌÔ Ò¸ÙıÔ";
+        Text[ korean ] = "¥Ÿ¿Ω ¿Ø«¸";
+        Text[ turkish ] = "Sonraki biÁim";
+        Text[ language_user1 ] = " ";
+    };
+    /* Registerhaltigkeit (fuer SW) */
+    CheckBox CB_REGISTER
+    {
+        Pos = MAP_APPFONT ( 175 , 85 ) ;
+        Size = MAP_APPFONT ( 76 , 12 ) ;
+        /* ### ACHTUNG: Neuer Text in Resource? Einsch~alten : Ein~schalten */
+        Text = "Einsch~alten" ;
+        Text [ ENGLISH ] = "Acti~vate" ;
+        Text [ dutch ] = "~Activeren" ;
+        Text [ english_us ] = "~Activate" ;
+        Text [ italian ] = "~Attiva" ;
+        Text [ spanish ] = "Ac~tivar" ;
+        Text [ french ] = "Act~iver" ;
+        Text [ swedish ] = "~Aktivera" ;
+        Text [ danish ] = "Aktiver" ;
+        Hide = TRUE ;
+        Text [ portuguese_brazilian ] = "Einsch~alten" ;
+        Text [ portuguese ] = "~Activar correspondÍncia" ;
+        Text[ chinese_simplified ] = "º§ªÓ(~A)";
+        Text[ russian ] = "¬ÍÎ˛˜ËÚ¸";
+        Text[ polish ] = "W≥πcz";
+        Text[ japanese ] = "çáÇÌÇπÇÈ(~A)";
+        Text[ chinese_traditional ] = "øE¨°(~A)";
+        Text[ arabic ] = " ‘€Ì·";
+        Text[ greek ] = "~≈ÌÂÒ„ÔÔﬂÁÛÁ";
+        Text[ korean ] = "»∞º∫»≠(~A)";
+        Text[ turkish ] = "«al˝~˛t˝r";
+        Text[ language_user1 ] = " ";
+    };
+    FixedText FT_REGISTER
+    {
+        Pos = MAP_APPFONT ( 175 , 100 ) ;
+        Size = MAP_APPFONT ( 76 , 10 ) ;
+        Text = "Referenzabsa~tzvorlage" ;
+        Text [ ENGLISH ] = "Reference style sheet" ;
+        Text [ english_us ] = "Reference ~Style" ;
+        Text [ italian ] = "~Modello di paragr.di rifer." ;
+        Text [ spanish ] = "Estilo de ~referencia" ;
+        Text [ french ] = "Style de ~paragraphe rÈf." ;
+        Text [ dutch ] = "Re~ferentie-alineaprofiel" ;
+        Text [ swedish ] = "Referenss~tyckeformatmall" ;
+        Text [ danish ] = "Reference-afsnitstypografi" ;
+        Hide = TRUE ;
+        Text [ portuguese_brazilian ] = "Referenzabsa~tzvorlage" ;
+        Text [ portuguese ] = "Estilo da referÍncia" ;
+        Text[ chinese_simplified ] = "Àµ√˜Œƒ∂Œ¬‰—˘ Ω(~S)";
+        Text[ russian ] = "—ÚËÎ¸ ÒÒ˚ÎÍË";
+        Text[ polish ] = "Szablon akapitu odwo≥ania";
+        Text[ japanese ] = "ìKópíióéΩ¿≤Ÿ(~S)";
+        Text[ chinese_traditional ] = "∞—∑”§Â¨q∏®ºÀ¶°(~S)";
+        Text[ arabic ] = "‰„ÿ ›ﬁ—… „—Ã⁄Ì";
+        Text[ greek ] = "–Ò¸~ÙıÔ ·Ò·„Ò‹ˆÔı ·Ì·ˆÔÒ‹Ú";
+        Text[ korean ] = "¬¸¡∂ ¿Ø«¸(~S)";
+        Text[ turkish ] = "Referans par~agraf biÁimi";
+        Text[ language_user1 ] = " ";
+    };
+    ListBox LB_REGISTER
+    {
+        Pos = MAP_APPFONT ( 175 , 113 ) ;
+        Size = MAP_APPFONT ( 73 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        Sort = TRUE ;
+        HScroll = TRUE ;
+        DDExtraWidth = TRUE ;
+    };
+    GroupBox GB_REGISTER
+    {
+        Pos = MAP_APPFONT ( 171 , 74 ) ;
+        Size = MAP_APPFONT ( 83 , 56 ) ;
+        Text = "Registerhaltigkeit" ;
+        Text [ ENGLISH ] = "" ;
+        Text [ italian ] = "Conformit‡ registro" ;
+        Text [ spanish ] = "Conformidad registro" ;
+        Text [ french ] = "ContrÙle de repÈrage" ;
+        Text [ dutch ] = "Registeren" ;
+        Text [ english_us ] = "Register-true" ;
+        Text [ swedish ] = "Register" ;
+        Text [ danish ] = "Hold register" ;
+        Hide = TRUE ;
+        Text [ portuguese_brazilian ] = "Registerhaltigkeit" ;
+        Text [ portuguese ] = "Registo" ;
+        Text[ chinese_simplified ] = "’˝∑¥“≥––æ‡œ‡µ»";
+        Text[ russian ] = "œË‚Ó‰Í‡";
+        Text[ polish ] = "Jedn. wys. wierszy";
+        Text[ japanese ] = "àÛç¸å©ìñ";
+        Text[ chinese_traditional ] = "•ø§œ≠∂¶Ê∂Z¨€µ•";
+        Text[ arabic ] = "«·«‰ Ÿ«„";
+        Text[ greek ] = "≈È‚Â‚·ﬂ˘ÛÁ Â„„Ò·ˆﬁÚ";
+        Text[ korean ] = "µÓ∑œ »Æ¿Œ";
+        Text[ turkish ] = "E˛it sat˝r y¸kseklii";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_INSIDE
+    {
+        Text = "I~nnen" ;
+        Text [ ENGLISH ] = "I~nner" ;
+        Text [ english_us ] = "I~nner" ;
+        Text [ italian ] = "Interno" ;
+        Text [ spanish ] = "Int~erior" ;
+        Text [ french ] = "I~ntÈrieure" ;
+        Text [ dutch ] = "Bi~nnen" ;
+        Text [ swedish ] = "I~nre" ;
+        Text [ danish ] = "Indre" ;
+        Text [ portuguese_brazilian ] = "I~nnen" ;
+        Text [ portuguese ] = "I~nterior" ;
+        Text[ chinese_simplified ] = "ƒ⁄≤ø(~N)";
+        Text[ russian ] = "¬ÌÛÚË";
+        Text[ polish ] = "Wewnπtrz";
+        Text[ japanese ] = "ì‡ë§(~N)";
+        Text[ chinese_traditional ] = "¶V§∫(~N)";
+        Text[ arabic ] = "œ«Œ·";
+        Text[ greek ] = "≈Û˘ÙÂÒÈÍ‹";
+        Text[ korean ] = "æ»(~N)";
+        Text[ turkish ] = "›~Á";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_OUTSIDE
+    {
+        /* ### ACHTUNG: Neuer Text in Resource? Au~ﬂen : Au~òen */
+        /* ### ACHTUNG: Neuer Text in Resource? Au~ﬂen : Au~òen */
+        Text = "Au~ﬂen" ;
+        Text [ ENGLISH ] = "O~uter" ;
+        Text [ english_us ] = "O~uter" ;
+        Text [ italian ] = "Esterno" ;
+        Text [ spanish ] = "E~xterior" ;
+        Text [ french ] = "E~xtÈrieure" ;
+        Text [ dutch ] = "B~uiten" ;
+        Text [ swedish ] = "~Yttre" ;
+        Text [ danish ] = "Ydre" ;
+        Text [ portuguese_brazilian ] = "Au~ﬂen" ;
+        Text [ portuguese ] = "E~xterior" ;
+        Text[ chinese_simplified ] = "Õ‚≤ø(~U)";
+        Text[ russian ] = "—Ì‡ÛÊË";
+        Text[ polish ] = "Na zewnπtrz";
+        Text[ japanese ] = "äOë§(~U)";
+        Text[ chinese_traditional ] = "¶V•~(~U)";
+        Text[ arabic ] = "Œ«—Ã";
+        Text[ greek ] = "≈Ó˘ÙÂÒÈÍ‹";
+        Text[ korean ] = "π€(~U)";
+        Text[ turkish ] = "D~˝˛";
+        Text[ language_user1 ] = " ";
+    };
+    String STR_QUERY_PRINTRANGE
+    {
+        Text = "Ihre Einstellungen f¸r die R‰nder liegen auﬂerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen ¸bernehmen?" ;
+        Text [ ENGLISH ] = "Ihre Einstellungen f¸r die R‰nder liegen auﬂerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen ¸bernehmen?" ;
+        Text[ english_us ] = "The margin settings are out of print range.\n\nDo you still want to apply these settings?";
+        Text[ portuguese ] = "As predefiniÁıes das margens encontram-se fora da ·rea de impress„o.\n\nMesmo assim, aplicar?";
+        Text[ russian ] = "¬‡¯Ë ÛÒÚ‡ÌÓ‚ÍË ‰Îˇ ÔÓÎÂÈ Ì‡ıÓ‰ˇÚÒˇ Á‡ ÔÂ‰ÂÎ‡ÏË Ó·Î‡ÒÚË ÔÂ˜‡ÚË.\n\n¬˚ ıÓÚËÚÂ ÔËÌˇÚ¸ ˝ÚË ÛÒÚ‡ÌÓ‚ÍË ÌÂÒÏÓÚˇ Ì‡ ˝ÚÓ?";
+        Text[ dutch ] = "Uw instellingen voor de marges bevinden zich buiten het afdrukbereik.\n\nWilt u deze toch overnemen?";
+        Text[ french ] = "Les paramËtres que vous avez dÈfinis pour les marges dÈpassent la zone d'impression.\n\nVoulez-vous quand mÍme appliquer ces paramËtres ?";
+        Text[ spanish ] = "Con esta definiciÛn, los m·rgenes quedar·n fuera del ·rea de impresiÛn.\n\nøDesea aplicar esta definiciÛn de m·rgenes?";
+        Text[ italian ] = "Le impostazioni per i margini sono al di fuori dell'area di stampa.\n\nVolete applicare queste impostazioni lo stesso?";
+        Text[ danish ] = "Dine margenindstillinger ligger udenfor udskriftsomrÂdet.\n\nVil du overtage disse indstillinger alligevel?";
+        Text[ swedish ] = "Dina inst‰llningar fˆr mariginalerna ligger utanfˆr utskriftsomrÂdet.\n\nVill Du trots det ˆverta inst‰llningarna?";
+        Text[ polish ] = "Twoje ustawienia krawÍdzi znajdujπ siÍ poza obszarem wydruku.\n\nCzy chcesz mimo to zastosowaÊ te ustawienia?";
+        Text[ portuguese_brazilian ] = "Ihre Einstellungen f¸r die R‰nder liegen auﬂerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen ¸bernehmen?";
+        Text[ japanese ] = "àÛç¸îÕàÕäOÇ…ó]îíÇ™ê›íËÇ≥ÇÍÇƒÇ¢Ç‹Ç∑ÅB\n\nÇªÇÍÇ≈Ç‡Ç±ÇÃê›íËÇìKópÇµÇ‹Ç∑Ç©ÅH";
+        Text[ chinese_simplified ] = "ƒ˙µƒ“≥±ﬂ…Ë∂®”–ŒÛ£¨“≥±ﬂ≤ª‘⁄¥Ú”°∑∂Œß÷Æƒ⁄°£\n\nƒ˙ªπ «“™Ω” ‹’‚∏ˆ…Ë∂®¬£ø";
+        Text[ chinese_traditional ] = "±z™∫≠∂√‰≥]©w¶≥ª~°M≠∂√‰§£¶b¶C¶LΩd≥Ú§ß§∫°C\n\n±z¡Ÿ¨O≠n±µ®¸≥o≠”≥]©w°H";
+        Text[ arabic ] = " ﬁ⁄ ≈⁄œ«œ«  «·ÂÊ«„‘ Œ«—Ã ‰ÿ«ﬁ «·ÿ»«⁄….\n\nÂ·  —Ìœ  ÿ»Ìﬁ Â–Â «·≈⁄œ«œ«  ⁄·Ï «·—€„ „‰ –·ﬂø";
+        Text[ greek ] = "œÈ ÒıËÏﬂÛÂÈÚ Ù˘Ì ÂÒÈË˘Òﬂ˘Ì ÂﬂÌ·È ÂÍÙ¸Ú ÙÁÚ ÂÒÈÔÛﬁÚ ÂÍÙ˝˘ÛÁÚ.\n\n»›ÎÂÙÂ Ì· Âˆ·ÒÏÔÛÙÔ˝Ì ÔÈ ÒıËÏﬂÛÂÈÚ ·Ò¥¸Î· ·ıÙ‹;";
+        Text[ korean ] = "ø©πÈ º≥¡§¿Ã ¿Œº‚ π¸¿ß∏¶ π˛æÓ≥µΩ¿¥œ¥Ÿ.\n\n±◊∑°µµ ¿Ã º≥¡§¿ª ¿˚øÎ«œΩ√∞⁄Ω¿¥œ±Ó?";
+        Text[ turkish ] = "Marj ayarlar˝n˝z, yazd˝rma aral˝˝n˝n d˝˛˝nda.\n\nBu ayarlar˝ yine de uygulamak istiyor musunuz?";
+        Text[ language_user1 ] = " ";
+    };
+    Text[ chinese_traditional ] = "≠∂";
+    Text[ arabic ] = "«·’›Õ…";
+    Text[ greek ] = "”ÂÎﬂ‰·";
+    Text[ korean ] = "∆‰¿Ã¡ˆ";
+    Text[ turkish ] = "Sayfa";
+    Text[ language_user1 ] = " ";
+};
+ // App-spezifische Res
+String RID_SVXSTR_CALC_PAGE
+{
+    Text = "Ausrichtung" ;
+    Text [ ENGLISH ] = "Orientation" ;
+    Text [ norwegian ] = "Orientation" ;
+    Text [ italian ] = "Allineamento" ;
+    Text [ portuguese_brazilian ] = "OrientaÁ„o" ;
+    Text [ portuguese ] = "OrientaÁ„o" ;
+    Text [ finnish ] = "Suunta" ;
+    Text [ danish ] = "Justering" ;
+    Text [ french ] = "Alignement" ;
+    Text [ swedish ] = "Orientering" ;
+    Text [ dutch ] = "OriÎntatie" ;
+    Text [ spanish ] = "OrientaciÛn" ;
+    Text [ english_us ] = "Alignment" ;
+    Text[ chinese_simplified ] = "∂‘∆Î";
+    Text[ russian ] = "¬˚‡‚ÌË‚‡ÌËÂ";
+    Text[ polish ] = "WyrÛwnanie";
+    Text[ japanese ] = "îzíu";
+    Text[ chinese_traditional ] = "πÔªÙ";
+    Text[ arabic ] = "«·« Ã«Â";
+    Text[ greek ] = "–ÒÔÛ·Ì·ÙÔÎÈÛÏ¸Ú";
+    Text[ korean ] = "πÊ«‚";
+    Text[ turkish ] = "Hizalama";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DRAW_PAGE
+{
+    Text = "Extras" ;
+    Text [ ENGLISH ] = "Extras" ;
+    Text [ norwegian ] = "Ekstra" ;
+    Text [ italian ] = "Varie" ;
+    Text [ portuguese_brazilian ] = "Extras" ;
+    Text [ portuguese ] = "OpÁıes" ;
+    Text [ french ] = "Options" ;
+    Text [ dutch ] = "Extra" ;
+    Text [ spanish ] = "Opciones" ;
+    Text [ danish ] = "Supplerende" ;
+    Text [ swedish ] = "Verktyg" ;
+    Text [ finnish ] = "Extras" ;
+    Text [ english_us ] = "Options" ;
+    Text[ chinese_simplified ] = "∆‰À˚";
+    Text[ russian ] = "ƒÓÔÓÎÌËÚÂÎ¸ÌÓ";
+    Text[ polish ] = "NarzÍdzia";
+    Text[ japanese ] = "è⁄ç◊ê›íË";
+    Text[ chinese_traditional ] = "®‰•L";
+    Text[ arabic ] = "ŒÌ«—« ";
+    Text[ greek ] = "≈Ò„·ÎÂﬂ·";
+    Text[ korean ] = "ø…º«";
+    Text[ turkish ] = "SeÁenekler";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_WRITER_PAGE
+{
+    Text = "Folgeseite" ;
+    Text [ ENGLISH ] = "Next Page" ;
+    Text [ norwegian ] = "Neste side" ;
+    Text [ italian ] = "Pagina successiva" ;
+    Text [ portuguese_brazilian ] = "PrÛxima P·gina" ;
+    Text [ portuguese ] = "P·gina seguinte" ;
+    Text [ finnish ] = "Seuraava sivu" ;
+    Text [ danish ] = "NÊste side" ;
+    Text [ french ] = "Page suivante" ;
+    Text [ swedish ] = "Fˆljande sida" ;
+    Text [ dutch ] = "Volgende pagina" ;
+    Text [ spanish ] = "P·gina siguiente" ;
+    Text [ english_us ] = "Continuation page" ;
+    Text[ chinese_simplified ] = "œ¬“ª“≥";
+    Text[ russian ] = "—ÎÂ‰Û˛˘‡ˇ ÒÚ‡ÌËˆ‡";
+    Text[ polish ] = "NastÍpna strona";
+    Text[ japanese ] = "2Õﬂ∞ºﬁñ⁄à»ç~";
+    Text[ chinese_traditional ] = "§U§@≠∂";
+    Text[ arabic ] = "«·’›Õ… «· «·Ì…";
+    Text[ greek ] = "≈¸ÏÂÌÁ ÛÂÎﬂ‰·";
+    Text[ korean ] = "¥Ÿ¿Ω ∆‰¿Ã¡ˆ";
+    Text[ turkish ] = "Sonraki sayfa";
+    Text[ language_user1 ] = " ";
+};
+ // Papierformate
+String RID_SVXSTR_PAPER_A0
+{
+    Text = "A0" ;
+};
+String RID_SVXSTR_PAPER_A1
+{
+    Text = "A1" ;
+};
+String RID_SVXSTR_PAPER_A2
+{
+    Text = "A2" ;
+};
+String RID_SVXSTR_PAPER_A3
+{
+    Text = "A3" ;
+};
+String RID_SVXSTR_PAPER_A4
+{
+    Text = "A4" ;
+};
+String RID_SVXSTR_PAPER_A5
+{
+    Text = "A5" ;
+};
+String RID_SVXSTR_PAPER_B4
+{
+    Text = "B4" ;
+};
+String RID_SVXSTR_PAPER_B5
+{
+    Text = "B5" ;
+};
+String RID_SVXSTR_PAPER_LETTER
+{
+    Text = "Letter" ;
+};
+String RID_SVXSTR_PAPER_LEGAL
+{
+    Text = "Legal" ;
+};
+String RID_SVXSTR_PAPER_TABLOID
+{
+    Text = "Tabloid" ;
+};
+String RID_SVXSTR_PAPER_USER
+{
+    Text = "Benutzer" ;
+    Text [ English ] = "Custom" ;
+    Text [ norwegian ] = "Tilpasse" ;
+    Text [ italian ] = "Personalizzata" ;
+    Text [ portuguese_brazilian ] = "Pessoal" ;
+    Text [ portuguese ] = "Personalizar" ;
+    Text [ finnish ] = "Mukautettu" ;
+    Text [ danish ] = "Bruger" ;
+    Text [ french ] = "Utilisateur" ;
+    Text [ swedish ] = "Anv‰ndare" ;
+    Text [ dutch ] = "Gebruiker" ;
+    Text [ spanish ] = "Usuario" ;
+    Text [ english_us ] = "User Defined" ;
+    Text[ chinese_simplified ] = " π”√’ﬂ…Ë∂®";
+    Text[ russian ] = "œÓÎ¸ÁÓ‚‡ÚÂÎ¸";
+    Text[ polish ] = "Uøytkownik";
+    Text[ japanese ] = "’∞ªﬁ∞";
+    Text[ chinese_traditional ] = "¶€≠q";
+    Text[ arabic ] = "«·„” Œœ„";
+    Text[ greek ] = "◊ÒﬁÛÙÁÚ";
+    Text[ korean ] = "ªÁøÎ¿⁄ ¡§¿«";
+    Text[ turkish ] = "Kullan˝c˝";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_PAPER_B6
+{
+    Text = "B6" ;
+};
+String RID_SVXSTR_PAPER_C4
+{
+    Text = "C4" ;
+};
+String RID_SVXSTR_PAPER_C5
+{
+    Text = "C5" ;
+};
+String RID_SVXSTR_PAPER_C6
+{
+    Text = "C6" ;
+};
+String RID_SVXSTR_PAPER_C65
+{
+    Text = "C65" ;
+};
+String RID_SVXSTR_PAPER_DL
+{
+    Text = "DL" ;
+};
+String RID_SVXSTR_PAPER_DIA
+{
+    Text = "Dia" ;
+};
+String RID_SVXSTR_PAPER_SCREEN
+{
+    Text = "Bildschirm" ;
+    Text [ English ] = "Screen" ;
+    Text [ norwegian ] = "Skjerm" ;
+    Text [ italian ] = "Schermo" ;
+    Text [ portuguese_brazilian ] = "Tela" ;
+    Text [ portuguese ] = "Ecr„" ;
+    Text [ finnish ] = "N‰yttˆ" ;
+    Text [ danish ] = "SkÊrm" ;
+    Text [ french ] = "…cran" ;
+    Text [ swedish ] = "Bildsk‰rm" ;
+    Text [ dutch ] = "Scherm" ;
+    Text [ spanish ] = "Pantalla" ;
+    Text [ english_us ] = "Screen" ;
+    Text[ chinese_simplified ] = "∆¡ƒª";
+    Text[ russian ] = "›Í‡Ì";
+    Text[ polish ] = "Ekran";
+    Text[ japanese ] = "âÊñ ";
+    Text[ chinese_traditional ] = "ø√πı";
+    Text[ arabic ] = "«·‘«‘…";
+    Text[ greek ] = "œË¸ÌÁ";
+    Text[ korean ] = "»≠∏È";
+    Text[ turkish ] = "Ekran";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_PAPER_A
+{
+    Text = "A" ;
+};
+String RID_SVXSTR_PAPER_B
+{
+    Text = "B" ;
+};
+String RID_SVXSTR_PAPER_C
+{
+    Text = "C" ;
+};
+String RID_SVXSTR_PAPER_D
+{
+    Text = "D" ;
+};
+String RID_SVXSTR_PAPER_E
+{
+    Text = "E" ;
+};
+String RID_SVXSTR_PAPER_EXECUTIVE
+{
+    Text = "Executive" ;
+};
+String RID_SVXSTR_PAPER_LEGAL2
+{
+    Text = "Legal" ;
+};
+String RID_SVXSTR_PAPER_MONARCH
+{
+    Text = "Monarch" ;
+};
+String RID_SVXSTR_PAPER_COM675
+{
+    Text = "Env. 6æ" ;
+};
+String RID_SVXSTR_PAPER_COM9
+{
+    Text = "Env. 9" ;
+};
+String RID_SVXSTR_PAPER_COM10
+{
+    Text = "Env. 10" ;
+};
+String RID_SVXSTR_PAPER_COM11
+{
+    Text = "Env. 11" ;
+};
+String RID_SVXSTR_PAPER_COM12
+{
+    Text = "Env. 12" ;
+};
+String RID_SVXSTR_PAPER_KAI16
+{
+    Text = "16 kai" ;
+};
+String RID_SVXSTR_PAPER_KAI32
+{
+    Text = "32 kai" ;
+};
+String RID_SVXSTR_PAPER_KAI32BIG
+{
+    Text = "32 kai big" ;
+};
+StringArray RID_SVXSTRARY_PAPERSIZE_STD
+{
+    ItemList =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ english ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ english_us ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8.5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "User" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ portuguese_brazilian ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ swedish ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Anv‰ndare" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ danish ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Bruger" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ italian ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utente" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Busta #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Busta Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Busta #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Busta #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Busta #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Busta #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ spanish ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Carta 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
+        < "Oficio 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloide" ; PAPERSIZE_TABLOID ; > ;
+        < "Usuario" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Sobre #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Sobre Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Sobre #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Sobre #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Sobre #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Sobre #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ french ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utilisateur" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ dutch ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Gebruiker" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groot 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ portuguese ] =
+    {
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utilizador" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Env. #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+ItemList [ chinese_simplified ] =
+    {
+            < "A3 297 x 420 ∫¡√◊" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ∫¡√◊" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ∫¡√◊" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ∫¡√◊" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ∫¡√◊" ; PAPERSIZE_B5 ; > ;
+        < "√¿ ΩπÊ∏Ò 8,5 x 11 ”¢¥Á" ; PAPERSIZE_LETTER ; > ;
+        < "√¿ ΩπÊ∏Ò 8,5 x 14 ”¢¥Á" ; PAPERSIZE_LEGAL ; > ;
+        < "Œƒ’™" ; PAPERSIZE_TABLOID ; > ;
+        < "”√ªß…Ë∂®" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ∫¡√◊" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ∫¡√◊" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ∫¡√◊" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ∫¡√◊" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ∫¡√◊" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ∫¡√◊" ; PAPERSIZE_DL ; > ;
+        < "–≈∑‚∏Ò Ω #6?3,625 x 6,5 ”¢¥Á" ; PAPERSIZE_COM675; > ;
+        < "√¿ Ω–≈∑‚ 3,875 x 7,5 ”¢¥Á" ; PAPERSIZE_MONARCH; > ;
+        < "–≈∑‚∏Ò Ω #9 3,875 x 8,875 ”¢¥Á" ; PAPERSIZE_COM9; > ;
+        < "–≈∑‚∏Ò Ω #10 4,125 x 9,5 ”¢¥Á" ; PAPERSIZE_COM10; > ;
+        < "–≈∑‚∏Ò Ω #11 4,5 x 10,375 ”¢¥Á" ; PAPERSIZE_COM11; > ;
+        < "–≈∑‚∏Ò Ω #12 4,75 x 11 ”¢¥Á" ; PAPERSIZE_COM12; > ;
+        < "16 ø™ 184 x 260 ∫¡√◊" ; PAPERSIZE_KAI16; > ;
+        < "32 ø™ 130 x 184 ∫¡√◊" ; PAPERSIZE_KAI32; > ;
+        < "32 ø™ 140 x 203 ∫¡√◊" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ russian ] =
+    {
+            < "A3 297 x 420 ÏÏ" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ÏÏ" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ÏÏ" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ÏÏ" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ÏÏ" ; PAPERSIZE_B5 ; > ;
+        < "œËÒ¸ÏÓ 8,5 x 11 ‰˛ÈÏ." ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 ‰˛ÈÏ." ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "œÓÎ¸ÁÓ‚‡ÚÂÎ¸" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ÏÏ" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ÏÏ" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ÏÏ" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ÏÏ" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ÏÏ" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ÏÏ" ; PAPERSIZE_DL ; > ;
+        < " ÓÌ‚. #6æ 3,625 x 6,5 ‰˛ÈÏ." ; PAPERSIZE_COM675; > ;
+        < " ÓÌ‚. Monarch 3,875 x 7,5 ‰˛ÈÏ." ; PAPERSIZE_MONARCH; > ;
+        < " ÓÌ‚. #9 3,875 x 8,875 ‰˛ÈÏ." ; PAPERSIZE_COM9; > ;
+        < " ÓÌ‚. #10 4,125 x 9,5 ‰˛ÈÏ." ; PAPERSIZE_COM10; > ;
+        < " ÓÌ‚. #11 4,5 x 10,375 ‰˛ÈÏ." ; PAPERSIZE_COM11; > ;
+        < " ÓÌ‚. #12 4,75 x 11 ‰˛ÈÏ." ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 ÏÏ" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 ÏÏ" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ·ÓÎ¸¯ÓÈ 140 x 203 ÏÏ" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ polish ] =
+    {
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 cali" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 cali" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Uøytkownik" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Kop. #6æ 3,625 x 6,5 cali" ; PAPERSIZE_COM675; > ;
+        < "Kop. Monarch 3,875 x 7,5 cali" ; PAPERSIZE_MONARCH; > ;
+        < "Kop. #9 ,875 x 8,875 cali" ; PAPERSIZE_COM9; > ;
+        < "Kop. #10 4,125 x 9,5 cali" ; PAPERSIZE_COM10; > ;
+        < "Kop. #11 4,5 x 10,375 cali" ; PAPERSIZE_COM11; > ;
+        < "Kop. #12 4,75 x 11 cali" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai wielkoúÊ140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ japanese ] =
+    {
+            < "A3 297x420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210x297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
+        < "éËéÜ 8.5x11 ≤›¡" ; PAPERSIZE_LETTER ; > ;
+        < "ãKíËª≤Ωﬁ8.5x14 ≤›¡" ; PAPERSIZE_LEGAL ; > ;
+        < "¿Ãﬁ€≤ƒﬁ" ; PAPERSIZE_TABLOID ; > ;
+        < "’∞ªﬁ∞" ; PAPERSIZE_USER ; > ;
+        < "B6 125x176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229x324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162x229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114x162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114x227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110x220 mm" ; PAPERSIZE_DL ; > ;
+        < "ïïìõ #6æ 3.625x6.5 ≤›¡" ; PAPERSIZE_COM675; > ;
+        < "ïïìõ Monarch 3.875x7.5 ≤›¡" ; PAPERSIZE_MONARCH; > ;
+        < "ïïìõ #9 3.875x8.875 ≤›¡" ; PAPERSIZE_COM9; > ;
+        < "ïïìõ #10 4.125x9.5 ≤›¡" ; PAPERSIZE_COM10; > ;
+        < "ïïìõ #11 4.5x10.375 ≤›¡" ; PAPERSIZE_COM11; > ;
+        < "ïïìõ #12 4.75x11 ≤›¡" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184x260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130x184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kaiëÂ 140x203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+            < "A3 297 x 420 ≤@¶Ã" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ≤@¶Ã" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ≤@¶Ã" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ≤@¶Ã" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ≤@¶Ã" ; PAPERSIZE_B5 ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^§o" ; PAPERSIZE_LETTER ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^§o" ; PAPERSIZE_LEGAL ; > ;
+        < "§Â∫K" ; PAPERSIZE_TABLOID ; > ;
+        < "¶€≠q" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ≤@¶Ã" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ≤@¶Ã" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ≤@¶Ã" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ≤@¶Ã" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ≤@¶Ã" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ≤@¶Ã" ; PAPERSIZE_DL ; > ;
+        < "´H´ ÆÊ¶° #6?3,625 x 6,5 ≠^§o" ; PAPERSIZE_COM675; > ;
+        < "¨¸¶°´H´  3,875 x 7,5 ≠^§o" ; PAPERSIZE_MONARCH; > ;
+        < "´H´ ÆÊ¶° #9 3,875 x 8,875 ≠^§o" ; PAPERSIZE_COM9; > ;
+        < "´H´ ÆÊ¶° #10 4,125 x 9,5 ≠^§o" ; PAPERSIZE_COM10; > ;
+        < "´H´ ÆÊ¶° #11 4,5 x 10,375 ≠^§o" ; PAPERSIZE_COM11; > ;
+        < "´H´ ÆÊ¶° #12 4,75 x 11 ≠^§o" ; PAPERSIZE_COM12; > ;
+        < "16 ∂} 184 x 260 ≤@¶Ã" ; PAPERSIZE_KAI16; > ;
+        < "32 ∂} 130 x 184 ≤@¶Ã" ; PAPERSIZE_KAI32; > ;
+        < "32 ∂} 140 x 203 ≤@¶Ã" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "A3 (297 ◊ 420 „„)" ; PAPERSIZE_A3 ; > ;
+        < "A4 (210 ◊ 297 „„)" ; PAPERSIZE_A4 ; > ;
+        < "A5 (148 ◊ 210 „„)" ; PAPERSIZE_A5 ; > ;
+        < "B4 (250 ◊ 353 „„)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (176 ◊ 250 „„)" ; PAPERSIZE_B5 ; > ;
+        < "(˛1/2 8 ◊ 11 »Ê’…) Letter" ; PAPERSIZE_LETTER ; > ;
+        < "(˛1/2 8 ◊ 14 »Ê’…) Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "ÕÃ„ „Œ’’" ; PAPERSIZE_USER ; > ;
+        < "B6 (125 ◊ 176 „„)" ; PAPERSIZE_B6 ; > ;
+        < "C4 (229 ◊ 324 „„)" ; PAPERSIZE_C4 ; > ;
+        < "C5 (162 ◊ 229 „„)" ; PAPERSIZE_C5 ; > ;
+        < "C6 (114 ◊ 162 „„)" ; PAPERSIZE_C6 ; > ;
+        < "C65 (114 ◊ 227 „„)" ; PAPERSIZE_C65 ; > ;
+        < "DL (110 ◊ 220 „„)" ; PAPERSIZE_DL ; > ;
+        < "Ÿ—› #æ6 3,625 ◊ 6,5 »Ê’…" ; PAPERSIZE_COM675; > ;
+        < "Ÿ—› Monarch 245◊234" ; PAPERSIZE_MONARCH; > ;
+        < "Ÿ—› #9 3,875 ◊ 8,875 »Ê’…" ; PAPERSIZE_COM9; > ;
+        < "Ÿ—› #10 4,125 ◊ 9,5 »Ê’…" ; PAPERSIZE_COM10; > ;
+        < "Ÿ—› #11 4,5 ◊ 10,375 »Ê’…" ; PAPERSIZE_COM11; > ;
+        < "Ÿ—› #12 4,75 ◊ 11 »Ê’…" ; PAPERSIZE_COM12; > ;
+        < "16 kai (184 ◊ 260 „„)" ; PAPERSIZE_KAI16; > ;
+        < "32 kai (130 ◊ 184 „„)" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ﬂ»Ì— (140 ◊ 203 „„)" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ˜ÈÎ" ; PAPERSIZE_B5 ; > ;
+        < "≈ÈÛÙÔÎﬁ 8.5 x 11 ÈÌÙÛ." ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 ÈÌÙÛ." ; PAPERSIZE_LEGAL ; > ;
+        < "ƒÈÛÍﬂÔ" ; PAPERSIZE_TABLOID ; > ;
+        < "◊ÒﬁÛÙÁÚ" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ˜ÈÎ" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ˜ÈÎ" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ˜ÈÎ" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ˜ÈÎ" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ˜ÈÎ" ; PAPERSIZE_DL ; > ;
+        < "÷·Í. #6æ 3,625 x 6,5 ÈÌÙÛ." ; PAPERSIZE_COM675; > ;
+        < "÷·Í. Monarch 3,875 x 7,5 ﬂÌÙÛÂÚ" ; PAPERSIZE_MONARCH; > ;
+        < "÷·Í. #9 3,875 x 8,875 ÈÌÙÛ." ; PAPERSIZE_COM9; > ;
+        < "÷·Í. #10 4,125 x 9,5 ÈÌÙÛ." ; PAPERSIZE_COM10; > ;
+        < "÷·Í. #11 4,5 x 10,375 ÈÌÙÛ." ; PAPERSIZE_COM11; > ;
+        < "÷·Í.. #12 4,75 x 11 ÈÌÙÛ." ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8.5 x 11 ¿Œƒ°" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 ¿Œƒ°" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "ªÁøÎ¿⁄" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Envelope #6?3,625 x 6,5 ¿Œƒ°" ; PAPERSIZE_COM675; > ;
+        < "Envelope Monarch 3,875 x 7,5 ¿Œƒ°" ; PAPERSIZE_MONARCH; > ;
+        < "Envelope #9 3,875 x 8,875 ¿Œƒ°" ; PAPERSIZE_COM9; > ;
+        < "Envelope #10 4,125 x 9,5 ¿Œƒ°" ; PAPERSIZE_COM10; > ;
+        < "Envelope #11 4,5 x 10,375 ¿Œƒ°" ; PAPERSIZE_COM11; > ;
+        < "Envelope #12 4,75 x 11 ¿Œƒ°" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ≈©±‚140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Kullan˝c˝" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Zarf #6æ 3,625 x 6,5 in" ; PAPERSIZE_COM675; > ;
+        < "Zarf Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Zarf #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Zarf #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Zarf #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Zarf #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ language_user1 ] =
+    {
+            < " " ; PAPERSIZE_A3 ; > ;
+        < " " ; PAPERSIZE_A4 ; > ;
+        < " " ; PAPERSIZE_A5 ; > ;
+        < " " ; PAPERSIZE_B4 ; > ;
+        < " " ; PAPERSIZE_B5 ; > ;
+        < " " ; PAPERSIZE_LETTER ; > ;
+        < " " ; PAPERSIZE_LEGAL ; > ;
+        < " " ; PAPERSIZE_TABLOID ; > ;
+        < " " ; PAPERSIZE_USER ; > ;
+        < " " ; PAPERSIZE_B6 ; > ;
+        < " " ; PAPERSIZE_C4 ; > ;
+        < " " ; PAPERSIZE_C5 ; > ;
+        < " " ; PAPERSIZE_C6 ; > ;
+        < " " ; PAPERSIZE_C65 ; > ;
+        < " " ; PAPERSIZE_DL ; > ;
+        < " " ; PAPERSIZE_COM675; > ;
+        < "Env. Monarch 3,875 x 7,5 in" ; PAPERSIZE_MONARCH; > ;
+        < "Env. #9 3,875 x 8,875 in" ; PAPERSIZE_COM9; > ;
+        < "Env. #10 4,125 x 9,5 in" ; PAPERSIZE_COM10; > ;
+        < "Env. #11 4,5 x 10,375 in" ; PAPERSIZE_COM11; > ;
+        < "Env. #12 4,75 x 11 in" ; PAPERSIZE_COM12; > ;
+        < " " ; PAPERSIZE_KAI16; > ;
+        < " " ; PAPERSIZE_KAI32; > ;
+        < " " ; PAPERSIZE_KAI32BIG; > ;
+    };
+    };
+StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
+{
+    ItemList =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        /* ### ACHTUNG: Neuer Eintrag in Liste? 17 : C65 114 x 227 mm*/
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dia" ; PAPERSIZE_DIA ; > ;
+        < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ english ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dia" ; PAPERSIZE_DIA ; > ;
+        < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ portuguese ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utilizador" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diapositivo" ; PAPERSIZE_DIA ; > ;
+        < "Ecr„" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ english_us ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8.5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "User" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Slide" ; PAPERSIZE_DIA ; > ;
+        < "Screen" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8.5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ portuguese_brazilian ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Benutzer" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dia" ; PAPERSIZE_DIA ; > ;
+        < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ swedish ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Anv‰ndare" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diabild" ; PAPERSIZE_DIA ; > ;
+        < "Bildsk‰rm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ danish ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Bruger" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dias" ; PAPERSIZE_DIA ; > ;
+        < "SkÊrm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai stor 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ italian ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utente" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diapositiva" ; PAPERSIZE_DIA ; > ;
+        < "Schermo" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ spanish ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Carta 8,5 x 11 pulgadas" ; PAPERSIZE_LETTER ; > ;
+        < "Oficio 8,5 x 14 pulgadas" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloide" ; PAPERSIZE_TABLOID ; > ;
+        < "Usuario" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diapositiva" ; PAPERSIZE_DIA ; > ;
+        < "Pantalla" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 pulgadas" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 pulgadas" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 pulgadas" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 pulgadas" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 pulgadas" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai grande 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ french ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Utilisateur" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Diapo" ; PAPERSIZE_DIA ; > ;
+        < "…cran" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    itemlist [ dutch ] =
+    {
+        < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Gebruiker" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mmm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Dia" ; PAPERSIZE_DIA ; > ;
+        < "Scherm" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groot 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+ItemList [ chinese_simplified ] =
+    {
+            < "A0 841 x 1189 ∫¡√◊" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 ∫¡√◊" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 ∫¡√◊" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 ∫¡√◊" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ∫¡√◊" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ∫¡√◊" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ∫¡√◊" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ∫¡√◊" ; PAPERSIZE_B5 ; > ;
+        < "√¿ ΩπÊ∏Ò 8,5 x 11 ”¢¥Á" ; PAPERSIZE_LETTER ; > ;
+        < "√¿ ΩπÊ∏Ò 8,5 x 14 ”¢¥Á" ; PAPERSIZE_LEGAL ; > ;
+        < "Œƒ’™" ; PAPERSIZE_TABLOID ; > ;
+        < "”√ªß…Ë∂®" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ∫¡√◊" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ∫¡√◊" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ∫¡√◊" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ∫¡√◊" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ∫¡√◊" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ∫¡√◊" ; PAPERSIZE_DL ; > ;
+        < "ª√µ∆∆¨" ; PAPERSIZE_DIA ; > ;
+        < "∆¡ƒª" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 ”¢¥Á" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 ”¢¥Á" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 ”¢¥Á" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 ”¢¥Á" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 ”¢¥Á" ; PAPERSIZE_E ; > ;
+        < "16 ø™ 184 x 260 ∫¡√◊" ; PAPERSIZE_KAI16; > ;
+        < "32 ø™ 130 x 184 ∫¡√◊" ; PAPERSIZE_KAI32; > ;
+        < "32 ø™ 140 x 203 ∫¡√◊" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ russian ] =
+    {
+            < "A0 841 x 1189 ÏÏ" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 ÏÏ" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 ÏÏ" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 ÏÏ" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ÏÏ" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ÏÏ" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ÏÏ" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ÏÏ" ; PAPERSIZE_B5 ; > ;
+        < "œËÒ¸ÏÓ 8,5 x 11 ‰˛ÈÏ." ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 ‰˛ÈÏ." ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "œÓÎ¸ÁÓ‚‡ÚÂÎ¸" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ÏÏ" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ÏÏ" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ÏÏ" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ÏÏ" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ÏÏ" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ÏÏ" ; PAPERSIZE_DL ; > ;
+        < "—Î‡È‰" ; PAPERSIZE_DIA ; > ;
+        < "›Í‡Ì" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 ‰˛ÈÏ." ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 ‰˛ÈÏ." ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 ‰˛ÈÏ." ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 ‰˛ÈÏ." ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 ‰˛ÈÏ." ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 ÏÏ" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 ÏÏ" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ·ÓÎ¸¯ÓÈ 140 x 203 ÏÏ" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ polish ] =
+    {
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 cali" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 cali" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Uøytkownik" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Slajd" ; PAPERSIZE_DIA ; > ;
+        < "Ekran" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 cali" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 cali" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 cali" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 cali" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 cali" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai wielkoúÊ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ japanese ] =
+    {
+            < "A0 841x1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594x841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420x594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297x420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210x297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148x210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250x353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176x250 mm" ; PAPERSIZE_B5 ; > ;
+        < "éËéÜ 8.5x11 ≤›¡" ; PAPERSIZE_LETTER ; > ;
+        < "ãKíËª≤Ωﬁ8.5x14 ≤›¡" ; PAPERSIZE_LEGAL ; > ;
+        < "¿Ãﬁ€≤ƒﬁ" ; PAPERSIZE_TABLOID ; > ;
+        < "’∞ªﬁ∞" ; PAPERSIZE_USER ; > ;
+        < "B6 125x176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229x324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162x229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114x162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114x227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110x220 mm" ; PAPERSIZE_DL ; > ;
+        < "Ω◊≤ƒﬁ" ; PAPERSIZE_DIA ; > ;
+        < "âÊñ " ; PAPERSIZE_SCREEN ; > ;
+        < "A 8.5x11 ≤›¡" ; PAPERSIZE_A ; > ;
+        < "B 11x17 ≤›¡" ; PAPERSIZE_B ; > ;
+        < "C 17x22 ≤›¡" ; PAPERSIZE_C ; > ;
+        < "D 22x34 ≤›¡" ; PAPERSIZE_D ; > ;
+        < "E 34x44 ≤›¡" ; PAPERSIZE_E ; > ;
+        < "16 kai 184x260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130x184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kaiëÂ 140x203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ chinese_traditional ] =
+    {
+            < "A0 841 x 1189 ≤@¶Ã" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 ≤@¶Ã" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 ≤@¶Ã" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 ≤@¶Ã" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 ≤@¶Ã" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 ≤@¶Ã" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 ≤@¶Ã" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ≤@¶Ã" ; PAPERSIZE_B5 ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 11 ≠^§o" ; PAPERSIZE_LETTER ; > ;
+        < "¨¸¶°≥WÆÊ 8,5 x 14 ≠^§o" ; PAPERSIZE_LEGAL ; > ;
+        < "§Â∫K" ; PAPERSIZE_TABLOID ; > ;
+        < "¶€≠q" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ≤@¶Ã" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 ≤@¶Ã" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ≤@¶Ã" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ≤@¶Ã" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ≤@¶Ã" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ≤@¶Ã" ; PAPERSIZE_DL ; > ;
+        < "ßÎºv§˘" ; PAPERSIZE_DIA ; > ;
+        < "ø√πı" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 ≠^§o" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 ≠^§o" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 ≠^§o" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 ≠^§o" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 ≠^§o" ; PAPERSIZE_E ; > ;
+        < "16 ∂} 184 x 260 ≤@¶Ã" ; PAPERSIZE_KAI16; > ;
+        < "32 ∂} 130 x 184 ≤@¶Ã" ; PAPERSIZE_KAI32; > ;
+        < "32 ∂} 140 x 203 ≤@¶Ã" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ arabic ] =
+    {
+            < "A0 (841 ◊ 1189 „„)" ; PAPERSIZE_A0 ; > ;
+        < "A1 (594 ◊ 841 „„)" ; PAPERSIZE_A1 ; > ;
+        < "A2 (420 ◊ 594 „„)" ; PAPERSIZE_A2 ; > ;
+        < "A3 (297 ◊ 420 „„)" ; PAPERSIZE_A3 ; > ;
+        < "A4 (210 ◊ 297 „„)" ; PAPERSIZE_A4 ; > ;
+        < "A5 (148 ◊ 210 „„)" ; PAPERSIZE_A5 ; > ;
+        < "B4 (250 ◊ 353 „„)" ; PAPERSIZE_B4 ; > ;
+        < "B5 (176 ◊ 250 „„)" ; PAPERSIZE_B5 ; > ;
+        < "(˛1/2 8 ◊ 11 »Ê’…) Letter" ; PAPERSIZE_LETTER ; > ;
+        < "(˛1/2 8 ◊ 14 »Ê’…) Legal" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "ÕÃ„ „Œ’’" ; PAPERSIZE_USER ; > ;
+        < "B6 (125 ◊ 176 „„)" ; PAPERSIZE_B6 ; > ;
+        < "C4 (229 ◊ 324 „„)" ; PAPERSIZE_C4 ; > ;
+        < "C5 (162 ◊ 229 „„)" ; PAPERSIZE_C5 ; > ;
+        < "C6 (114 ◊ 162 „„)" ; PAPERSIZE_C6 ; > ;
+        < "C65 (114 ◊ 227 „„)" ; PAPERSIZE_C65 ; > ;
+        < "DL (110 ◊ 220 „„)" ; PAPERSIZE_DL ; > ;
+        < "«·‘—ÌÕ…" ; PAPERSIZE_DIA ; > ;
+        < "«·‘«‘…" ; PAPERSIZE_SCREEN ; > ;
+        < "A (˛1/2 8 ◊ 11 »Ê’…)" ; PAPERSIZE_A ; > ;
+        < "B (11 ◊ 17 »Ê’…)" ; PAPERSIZE_B ; > ;
+        < "C (17 ◊ 22 »Ê’…)" ; PAPERSIZE_C ; > ;
+        < "D (22 ◊ 34 »Ê’…)" ; PAPERSIZE_D ; > ;
+        < "E (34 ◊ 44 »Ê’…)" ; PAPERSIZE_E ; > ;
+        < "16 kai (184 ◊ 260 „„)" ; PAPERSIZE_KAI16; > ;
+        < "32 kai (130 ◊ 184 „„)" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ﬂ»Ì— (140 ◊ 203 „„)" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ greek ] =
+    {
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 ˜ÈÎ" ; PAPERSIZE_B5 ; > ;
+        < "≈ÈÛÙÔÎﬁ 8.5 x 11 ÈÌÙÛ." ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 ÈÌÙÛ." ; PAPERSIZE_LEGAL ; > ;
+        < "ƒÈÛÍﬂÔ" ; PAPERSIZE_TABLOID ; > ;
+        < "◊ÒﬁÛÙÁÚ" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 ˜ÈÎ" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 ˜ÈÎ" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 ˜ÈÎ" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 ˜ÈÎ" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 ˜ÈÎ" ; PAPERSIZE_DL ; > ;
+        < "ƒÈ·ˆ‹ÌÂÈ·" ; PAPERSIZE_DIA ; > ;
+        < "œË¸ÌÁ" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8.5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 ÈÌÙÛ." ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai groﬂ 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ korean ] =
+    {
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8.5 x 11 ¿Œƒ°" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8.5 x 14 ¿Œƒ°" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "ªÁøÎ¿⁄" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "ΩΩ∂Û¿ÃµÂ" ; PAPERSIZE_DIA ; > ;
+        < "»≠∏È" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8.5 x 11 ¿Œƒ°" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 ¿Œƒ°" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 ¿Œƒ°" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 ¿Œƒ°" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 ¿Œƒ°" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai ≈©±‚140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ turkish ] =
+    {
+            < "A0 841 x 1189 mm" ; PAPERSIZE_A0 ; > ;
+        < "A1 594 x 841 mm" ; PAPERSIZE_A1 ; > ;
+        < "A2 420 x 594 mm" ; PAPERSIZE_A2 ; > ;
+        < "A3 297 x 420 mm" ; PAPERSIZE_A3 ; > ;
+        < "A4 210 x 297 mm" ; PAPERSIZE_A4 ; > ;
+        < "A5 148 x 210 mm" ; PAPERSIZE_A5 ; > ;
+        < "B4 250 x 353 mm" ; PAPERSIZE_B4 ; > ;
+        < "B5 176 x 250 mm" ; PAPERSIZE_B5 ; > ;
+        < "Letter 8,5 x 11 in" ; PAPERSIZE_LETTER ; > ;
+        < "Legal 8,5 x 14 in" ; PAPERSIZE_LEGAL ; > ;
+        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
+        < "Kullan˝c˝" ; PAPERSIZE_USER ; > ;
+        < "B6 125 x 176 mm" ; PAPERSIZE_B6 ; > ;
+        < "C4 229 x 324 mm" ; PAPERSIZE_C4 ; > ;
+        < "C5 162 x 229 mm" ; PAPERSIZE_C5 ; > ;
+        < "C6 114 x 162 mm" ; PAPERSIZE_C6 ; > ;
+        < "C65 114 x 227 mm" ; PAPERSIZE_C65 ; > ;
+        < "DL 110 x 220 mm" ; PAPERSIZE_DL ; > ;
+        < "Slayt" ; PAPERSIZE_DIA ; > ;
+        < "Ekran" ; PAPERSIZE_SCREEN ; > ;
+        < "A 8,5 x 11 in" ; PAPERSIZE_A ; > ;
+        < "B 11 x 17 in" ; PAPERSIZE_B ; > ;
+        < "C 17 x 22 in" ; PAPERSIZE_C ; > ;
+        < "D 22 x 34 in" ; PAPERSIZE_D ; > ;
+        < "E 34 x 44 in" ; PAPERSIZE_E ; > ;
+        < "16 kai 184 x 260 mm" ; PAPERSIZE_KAI16; > ;
+        < "32 kai 130 x 184 mm" ; PAPERSIZE_KAI32; > ;
+        < "32 kai boyu 140 x 203 mm" ; PAPERSIZE_KAI32BIG; > ;
+    };
+    ItemList [ language_user1 ] =
+    {
+            < " " ; PAPERSIZE_A0 ; > ;
+        < " " ; PAPERSIZE_A1 ; > ;
+        < " " ; PAPERSIZE_A2 ; > ;
+        < " " ; PAPERSIZE_A3 ; > ;
+        < " " ; PAPERSIZE_A4 ; > ;
+        < " " ; PAPERSIZE_A5 ; > ;
+        < " " ; PAPERSIZE_B4 ; > ;
+        < " " ; PAPERSIZE_B5 ; > ;
+        < " " ; PAPERSIZE_LETTER ; > ;
+        < " " ; PAPERSIZE_LEGAL ; > ;
+        < " " ; PAPERSIZE_TABLOID ; > ;
+        < " " ; PAPERSIZE_USER ; > ;
+        < " " ; PAPERSIZE_B6 ; > ;
+        < " " ; PAPERSIZE_C4 ; > ;
+        < " " ; PAPERSIZE_C5 ; > ;
+        < " " ; PAPERSIZE_C6 ; > ;
+        < " " ; PAPERSIZE_C65 ; > ;
+        < " " ; PAPERSIZE_DL ; > ;
+        < " " ; PAPERSIZE_DIA ; > ;
+        < " " ; PAPERSIZE_SCREEN ; > ;
+        < " " ; PAPERSIZE_A ; > ;
+        < " " ; PAPERSIZE_B ; > ;
+        < " " ; PAPERSIZE_C ; > ;
+        < " " ; PAPERSIZE_D ; > ;
+        < " " ; PAPERSIZE_E ; > ;
+        < " " ; PAPERSIZE_KAI16; > ;
+        < " " ; PAPERSIZE_KAI32; > ;
+        < " " ; PAPERSIZE_KAI32BIG; > ;
+    };
+    };
+String RID_SVXSTR_PAPERBIN
+{
+    Text = "Schacht" ;
+    Text [ ENGLISH ] = "Tray" ;
+    Text [ norwegian ] = "Skuff" ;
+    Text [ italian ] = "Cassetto" ;
+    Text [ portuguese_brazilian ] = "Bandeja" ;
+    Text [ portuguese ] = "Origem do papel" ;
+    Text [ finnish ] = "Lokero" ;
+    Text [ danish ] = "Papirkilde" ;
+    Text [ french ] = "Bac" ;
+    Text [ swedish ] = "Fack" ;
+    Text [ dutch ] = "Papierlade" ;
+    Text [ spanish ] = "Origen del papel" ;
+    Text [ english_us ] = "Paper source" ;
+    Text[ chinese_simplified ] = "÷Ω’≈¿¥‘¥";
+    Text[ russian ] = "œÓ‰‡˜‡ ·ÛÏ‡„Ë";
+    Text[ polish ] = "Zasobnik papieru";
+    Text[ japanese ] = "ããéÜï˚ñ@";
+    Text[ chinese_traditional ] = "Ø»±i®”∑Ω";
+    Text[ arabic ] = "œ—Ã «·Ê—ﬁ";
+    Text[ greek ] = "ƒﬂÛÍÔÚ ˜·ÒÙÈÔ˝";
+    Text[ korean ] = "øÎ¡ˆ ∞¯±ﬁ";
+    Text[ turkish ] = "Ka˝t kayna˝";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_PAPERBIN_SETTINGS
+{
+    Text = "[Aus Druckereinstellung]" ;
+    Text [ ENGLISH ] = "[From printer settings]" ;
+    Text [ english_us ] = "[From printer settings]" ;
+    Text[ italian ] = "[Da impostazione stampante]";
+    Text[ portuguese_brazilian ] = "[From printer settings]";
+    Text[ portuguese ] = "[da configuraÁ„o da impressora]";
+    Text[ danish ] = "[Fra udskriftsindstillingerne]";
+    Text[ french ] = "[D'aprËs les paramËtres de l'imprimante]";
+    Text[ swedish ] = "[FrÂn skrivarinst‰llning]";
+    Text[ dutch ] = "[Uit printerinstelling]";
+    Text[ spanish ] = "[De la configuraciÛn de impresora]";
+    Text[ chinese_simplified ] = "[≤…”√¥Ú”°ª˙…Ë∂®]";
+    Text[ russian ] = "[»Á Ì‡ÒÚÓÂÍ ÔËÌÚÂ‡]";
+    Text[ polish ] = "[Z ustawienia drukarki]";
+    Text[ japanese ] = "[Ãﬂÿ›¿ÇÃê›íËÇ©ÇÁ]";
+    Text[ greek ] = "[¡¸ ÒıËÏﬂÛÂÈÚ ÂÍÙı˘Ùﬁ]";
+    Text[ korean ] = "[¿Œº‚ º≥¡§¿∏∑Œ ∫Œ≈Õ]";
+    Text[ chinese_traditional ] = "[±ƒ•Œ¶L™Ìæ˜≥]©w]";
+    Text[ arabic ] = "[„‰ ≈⁄œ«œ«  «·ÿ«»⁄…]";
+    Text[ turkish ] = "[Yaz˝c˝ ayarlar˝ndan]";
+};
+String RID_SVXSTR_FULLSIZE
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Seite ganz f¸llen : Seite ganz f≥llen */
+    /* ### ACHTUNG: Neuer Text in Resource? Seite ganz f¸llen : Seite ganz f≥llen */
+    Text = "Seite ganz f¸llen" ;
+    Text [ ENGLISH ] = "Fill fullsize" ;
+    Text [ dutch ] = "Hele pagina opvullen" ;
+    Text [ english_us ] = "Fill entire page" ;
+    Text [ italian ] = "Pagina intera" ;
+    Text [ spanish ] = "Llenar p·gina completa" ;
+    Text [ french ] = "Remplir toute la page" ;
+    Text [ swedish ] = "Fyll hela sidan" ;
+    Text [ danish ] = "Fyld hele siden" ;
+    Text [ portuguese_brazilian ] = "Seite ganz f¸llen" ;
+    Text [ portuguese ] = "P·gina inteira" ;
+    Text[ chinese_simplified ] = "≥‰ÃÓ’˚“≥";
+    Text[ russian ] = "Õ‡ ‚Ò˛ ÒÚ‡ÌËˆÛ";
+    Text[ polish ] = "Wype≥nij ca≥π stronÍ";
+    Text[ japanese ] = "Õﬂ∞ºﬁÇ¢Ç¡ÇœÇ¢";
+    Text[ chinese_traditional ] = "•R∂Òæ„≠∂";
+    Text[ arabic ] = " ⁄»∆… ﬂ· «·’›Õ…";
+    Text[ greek ] = "√›ÏÈÛÏ· ÔÎ¸ÍÎÁÒÁÚ ÛÂÎﬂ‰·Ú";
+    Text[ korean ] = "¿¸√º ∆‰¿Ã¡ˆ √§øÏ±‚";
+    Text[ turkish ] = "Sayfay˝ tam doldur";
+    Text[ language_user1 ] = " ";
+};
+ // ********************************************************************** EOF

@@ -1,0 +1,556 @@
+/*************************************************************************
+ *
+ *  $RCSfile: lingu.src,v $
+ *
+ *  $Revision: 1.1.1.1 $
+ *
+ *  last change: $Author: hr $ $Date: 2000-09-18 17:01:10 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+ // include ---------------------------------------------------------------
+#include "dialogs.hrc"
+ // pragma ----------------------------------------------------------------
+
+ // QueryBoxen ---------------------------------------------------------------
+QueryBox RID_SVXQB_THESAURUS
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+     // ### ACHTUNG: Neuer Text in Resource? Dieses Wort sollten Sie vermeiden! Thesaurus starten? : Dieses Wort sollten sie vermeiden! Thesaurus starten?
+    MESSAGE = "Dieses Wort sollten Sie vermeiden! Thesaurus starten?" ;
+    MESSAGE [ English ] = "Please avoid this word! Start thesaurus?" ;
+    MESSAGE [ norwegian ] = "Please avoid this word! Start thesaurus?" ;
+    MESSAGE [ italian ] = "Questo termine andrebbe evitato. Avviare il dizionario dei sinonimi?" ;
+    MESSAGE [ portuguese_brazilian ] = "Por favor evite esta palavra!Iniciar thesaurus?" ;
+    MESSAGE [ portuguese ] = "Evite esta palavra! Iniciar o dicionário de sinónimos?" ;
+    MESSAGE [ finnish ] = "Vältä tätä sanaa! Käytetäänkö synonyymisanastoa?" ;
+    MESSAGE [ danish ] = "Undgå venligst dette ord! Vil du bruge synonymordbogen?" ;
+    MESSAGE [ french ] = "Evitez l'utilisation de ce mot ! Lancer le dictionnaire des synonymes ?" ;
+    MESSAGE [ swedish ] = "Undvik det här ordet! Starta synonymordbok?" ;
+    MESSAGE [ dutch ] = "Dit woord is niet zo geschikt. Thesaurus starten?" ;
+    MESSAGE [ spanish ] = "¡Evite por favor esta palabra! ¿Desea iniciar la búsqueda de sinónimos?" ;
+    MESSAGE [ english_us ] = "This word appears in the list of words you want to avoid. Start thesaurus?" ;
+    MESSAGE[ chinese_simplified ] = "ÄúÓ¦¸Ã±ÜÃâÊ¹ÓÃÕâ¸ö×Ö£¡ÄúÒªÆô¶¯´ÊµäÂğ£¿";
+    MESSAGE[ russian ] = "İòî ñëîâî íåîáõîäèìî èçáåãàòü! Çàïóñòèòü òåçàóğóñ?";
+    MESSAGE[ polish ] = "Proszê unikaæ tego s³owa! W³¹czyæ Tezaurus?";
+    MESSAGE[ japanese ] = "‚±‚Ì’PŒê‚Í”ğ‚¯‚Ä‰º‚³‚¢!@—ŞŒê«“T‚ğ‹N“®‚µ‚Ü‚·‚©?";
+    MESSAGE[ chinese_traditional ] = "±zÀ³¸ÓÁ×§K¨Ï¥Î³o­Ó¦r¡T­n±Ò°Êµü¨å¡H";
+    MESSAGE[ arabic ] = "íÌÈ Úáíß ÊÌäÈ ÇÓÊÎÏÇã åĞå ÇáßáãÉ! åá ÊÑíÏ ÈÏÁ ÊÔÛíá ŞÇãæÓ ÇáãÑÇÏİÇÊ¿";
+    MESSAGE[ greek ] = "Ç ëİîç áõôŞ áíŞêåé óå áõôİò ğïõ èİëåôå íá áğïöıãåôå! Íá åêêéíŞóåé ï èçóáõñüò ëİîåùí;";
+    MESSAGE[ korean ] = "ÀÌ ´Ü¾î´Â È¸ÇÇ´Ü¾î ¸ñ·Ï¿¡ ÀÖ½À´Ï´Ù. µ¿ÀÇ¾î »çÀüÀ» ½ÃÀÛÇÒ±î¿ä?";
+    MESSAGE[ turkish ] = "Bu sözcüğü kullanmaktan kaçınmalısınız! Eş anlamlılar sözlüğü başlatılsın mı?";
+    MESSAGE[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_CONTINUE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Anfang des Dokumentes fortsetzen? : šberpr³fung am Anfang des Dokumentes fortsetzen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Anfang des Dokumentes fortsetzen? : šberpr³fung am Anfang des Dokumentes fortsetzen? */
+    MESSAGE = "Überprüfung am Anfang des Dokumentes fortsetzen?" ;
+    MESSAGE [ English ] = "Do you want to continue checking at the start of the document?" ;
+    MESSAGE [ norwegian ] = "Do you want to continue checking at the start of the document?" ;
+    MESSAGE [ italian ] = "Continuare a controllare dall'inizio del documento?" ;
+    MESSAGE [ portuguese_brazilian ] = "Deseja continuar a verificação no início do documento?" ;
+    MESSAGE [ portuguese ] = "Deseja continuar com a verificação no início do documento?" ;
+    MESSAGE [ finnish ] = "Jatketaanko tarkistamista asiakirjan alusta?" ;
+    MESSAGE [ danish ] = "Vil du fortsætte kontrollen fra dokumentets begyndelse?" ;
+    MESSAGE [ french ] = "Voulez-vous continuer la vérification depuis le début du document?" ;
+    MESSAGE [ swedish ] = "Fortsätta kontroll i början på dokumentet?" ;
+    MESSAGE [ dutch ] = "Controle aan het begin van het document voortzetten ?" ;
+    MESSAGE [ spanish ] = "¿Desea continuar la revisión desde el inicio del documento?" ;
+    MESSAGE [ english_us ] = "Continue checking at beginning of document?" ;
+    MESSAGE[ chinese_simplified ] = "´ÓÎÄµµ¿ª¶Ë¼ÌĞøËÑÑ°£¿";
+    MESSAGE[ russian ] = "Ïğîäîëæèòü ïğîâåğêó â íà÷àëå äîêóìåíòà?";
+    MESSAGE[ polish ] = "Kontuynuowaæ sprawdzanie na pocz¹tku dokumentu?";
+    MESSAGE[ japanese ] = "•¶“ª‚ÅÁª¯¸‚ğ‘±s‚µ‚Ü‚·‚©H";
+    MESSAGE[ chinese_traditional ] = "±q¤å¥ó¶}ºİÄ~Äò´M§ä¡H";
+    MESSAGE[ arabic ] = "åá ÊÑíÏ ãÊÇÈÚÉ ÇáÊÏŞíŞ ÚäÏ ÈÏÇíÉ ÇáãÓÊäÏ¿";
+    MESSAGE[ greek ] = "Íá óõíå÷éóôåß ï İëåã÷ïò áğü ôçí áñ÷Ş ôïõ åããñÜöïõ;";
+    MESSAGE[ korean ] = "¹®¼­ Ã³À½¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÒ±î¿ä?";
+    MESSAGE[ turkish ] = "Denetlemeye, belge başında devam edilsin mi?";
+    MESSAGE[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_BW_CONTINUE
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_YES ;
+    /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Ende des Dokumentes fortsetzen? : šberpr³fung am Ende des Dokumentes fortsetzen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Überprüfung am Ende des Dokumentes fortsetzen? : šberpr³fung am Ende des Dokumentes fortsetzen? */
+    MESSAGE = "Überprüfung am Ende des Dokumentes fortsetzen?" ;
+    MESSAGE [ English ] = "Do you want to continue checking at the end of the document?" ;
+    Message [ english_us ] = "Continue checking at end of document?" ;
+    Message [ italian ] = "Continuare il controllo alla fine del documento?" ;
+    Message [ spanish ] = "¿Desea continuar la revisión al final del documento?" ;
+    Message [ french ] = "Continuer la vérification à la fin du document ?" ;
+    Message [ dutch ] = "Controle aan het einde van het document voortzetten?" ;
+    Message [ swedish ] = "Fortsätta kontroll vid slutet av dokumentet?" ;
+    Message [ danish ] = "Vil du fortsætte kontrollen fra dokumentets slutning?" ;
+    Message [ portuguese ] = "Continuar a verificação no fim do documento?" ;
+    Message [ portuguese_brazilian ] = "Überprüfung am Ende des Dokumentes fortsetzen?" ;
+    Message[ chinese_simplified ] = "´ÓÎÄµµÎ²¶Ë¼ÌĞøËÑÑ°£¿";
+    Message[ russian ] = "Ïğîäîëæèòü ïğîâåğêó â êîíöå äîêóìåíòà?";
+    Message[ polish ] = "Kontynuowaæ sprawdzanie na koñcu dokumentu?";
+    Message[ japanese ] = "ÄŞ·­ÒİÄ‚ÌÅŒã‚ÅÁª¯¸‚µ‚Ü‚·‚©H";
+    Message[ chinese_traditional ] = "±q¤å¥ó§ÀºİÄ~Äò´M§ä¡H";
+    Message[ arabic ] = "åá ÊÑíÏ ãÊÇÈÚÉ ÇáÊÏŞíŞ ÚäÏ äåÇíÉ ÇáãÓÊäÏ¿";
+    Message[ greek ] = "Íá óõíå÷éóôåß ï İëåã÷ïò áğü ôï ôİëïò ôïõ åããñÜöïõ;";
+    Message[ korean ] = "¹®¼­ ³¡¿¡¼­ °Ë»ç¸¦ °è¼ÓÇÒ±î¿ä?";
+    Message[ turkish ] = "Denetlemeye, belge sonunda devam edilsin mi?";
+    Message[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_BODYTEXT
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+     // ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : Wollen Sie den Haupttext prüfen?
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : M÷chten Sie den Haupttext pr³fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie den Haupttext prüfen? : M÷chten Sie den Haupttext pr³fen? */
+    MESSAGE = "Möchten Sie den Haupttext prüfen?" ;
+    MESSAGE [ English ] = "Do you want to check the Bodytext?" ;
+    MESSAGE [ norwegian ] = "Do you want to check the Bodytext?" ;
+    MESSAGE [ italian ] = "Controllare il testo principale?" ;
+    MESSAGE [ portuguese_brazilian ] = "Deseja verificar o corpo do documento?" ;
+    MESSAGE [ portuguese ] = "Deseja verificar o texto principal?" ;
+    MESSAGE [ finnish ] = "Haluatko tarkistaa runkotekstin?" ;
+    MESSAGE [ danish ] = "Vil du kontrollere brødteksten?" ;
+    MESSAGE [ french ] = "Voulez-vous vérifier le texte principal ?" ;
+    MESSAGE [ swedish ] = "Vill Du kontrollera huvudtexten?" ;
+    MESSAGE [ dutch ] = "Wilt u de hoofdtekst controleren?" ;
+    MESSAGE [ spanish ] = "¿Desea verificar el texto principal?" ;
+    MESSAGE [ english_us ] = "Do you want to check the main text?" ;
+    MESSAGE[ chinese_simplified ] = "ÄúÏëÒª¼ì²éÕıÎÄÂğ£¿";
+    MESSAGE[ russian ] = "Âû õîòèòå ïğîâåğèòü îñíîâíîé òåêñò?";
+    MESSAGE[ polish ] = "Czy chcesz sprawdziæ tekst g³ówny?";
+    MESSAGE[ japanese ] = "Ò²İ Ã·½Ä‚ğÁª¯¸‚µ‚Ü‚·‚©?";
+    MESSAGE[ chinese_traditional ] = "±z·Q­nÀË¬d¤º¤å¡H";
+    MESSAGE[ arabic ] = "åá ÊÑíÏ ÇáÊÏŞíŞ İí ÇáäÕ ÇáÑÆíÓí¿";
+    MESSAGE[ greek ] = "Èİëåôå íá ãßíåé İëåã÷ïò ôïõ êıñéïõ êåéìİíïõ;";
+    MESSAGE[ korean ] = "ÁÖ ÅØ½ºÆ®¸¦ °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ turkish ] = "Ana metni denetlemek istiyor musunuz?";
+    MESSAGE[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_SPECIAL
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche prüfen? : Sonderbereiche pr³fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereiche prüfen? : Sonderbereiche pr³fen? */
+    MESSAGE = "Sonderbereiche prüfen?" ;
+    MESSAGE [ English ] = "Do you want check the special regions?" ;
+    MESSAGE [ norwegian ] = "Do you want check the special regions?" ;
+    MESSAGE [ italian ] = "Controllare le aree speciali?" ;
+    MESSAGE [ portuguese_brazilian ] = "Deseja verificar Regiões especiais?" ;
+    MESSAGE [ portuguese ] = "Deseja verificar as regiões especiais?" ;
+    MESSAGE [ finnish ] = "Haluatko tarkistaa erikoisalueet?" ;
+    MESSAGE [ danish ] = "Vil du kontrollere særområderne?" ;
+    MESSAGE [ french ] = "Voulez-vous vérifier les zones spéciales?" ;
+    MESSAGE [ swedish ] = "Vill Du kontrollera specialområden?" ;
+    MESSAGE [ dutch ] = "Wilt u de speciale bereiken controleren?" ;
+    MESSAGE [ spanish ] = "¿Desea verificar las áreas especiales?" ;
+    MESSAGE [ english_us ] = "Do you want check the special regions?" ;
+    MESSAGE[ chinese_simplified ] = "ÄúÒª¼ì²éÌØÊâÇøÓòÂğ£¿";
+    MESSAGE[ russian ] = "Ïğîâåğèòü ñïåöèàëüíûå îáëàñòè?";
+    MESSAGE[ polish ] = "Sprawdzaæ obszary specjalne?";
+    MESSAGE[ japanese ] = "“Áê’nˆæ‚ğÁª¯¸‚µ‚Ü‚·‚©?";
+    MESSAGE[ chinese_traditional ] = "ÀË¬d¯S®í°Ï°ì¡H";
+    MESSAGE[ arabic ] = "åá ÊÑíÏ ÇáÊÏŞíŞ İí ÇáãäÇØŞ ÇáÎÇÕÉ¿";
+    MESSAGE[ greek ] = "Èİëåôå íá ãßíåé İëåã÷ïò ôùí åéäéêşí ğåñéï÷şí;";
+    MESSAGE[ korean ] = "Æ¯¼ö ¿µ¿ªÀ» °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ turkish ] = "Özel bölümler denetlensin mi?";
+    MESSAGE[ language_user1 ] = " ";
+};
+QueryBox RID_SVXQB_SPECIAL_FORCED
+{
+    BUTTONS = WB_YES_NO ;
+    DEFBUTTON = WB_DEF_NO ;
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen? : Sonderbereichpr³fung ist ausgeschaltet, Trotzdem pr³fen? */
+    /* ### ACHTUNG: Neuer Text in Resource? Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen? : Sonderbereichpr³fung ist ausgeschaltet, Trotzdem pr³fen? */
+    MESSAGE = "Sonderbereichprüfung ist ausgeschaltet, Trotzdem prüfen?" ;
+    MESSAGE [ English ] = "Check in Special regions is turned off, Proof anyway?" ;
+    MESSAGE [ norwegian ] = "Check in Special regions is turned off, Proof anyway?" ;
+    MESSAGE [ italian ] = "Il controllo delle aree speciali non è attivo, controllare lo stesso?" ;
+    MESSAGE [ portuguese_brazilian ] = "Verificação de Regiões especiais está desativada, Verificar assim mesmo?" ;
+    MESSAGE [ portuguese ] = "A revisão de áreas especiais está desactivada. Mesmo assim prosseguir?" ;
+    MESSAGE [ finnish ] = "Erikoisalueiden tarkistus ei ole käytössä. Korjausluetaanko silti?" ;
+    MESSAGE [ danish ] = "Stavekontrol i særområder er slået fra, skal der kontrolleres alligevel?" ;
+    MESSAGE [ french ] = "La vérification dans les zones spéciales est désactivée. Vérifier tout de même ?" ;
+    MESSAGE [ swedish ] = "Kontroll av specialområden är avstängd. Kontrollera ändå?" ;
+    MESSAGE [ dutch ] = "De functie 'Speciale bereiken controleren' is uitgeschakeld. Controle toch uitvoeren?" ;
+    MESSAGE [ spanish ] = "La verificación de las áreas especiales está desactivada, ¿Desea verificar de todas maneras?" ;
+    MESSAGE [ english_us ] = "Check special regions is deactivated. Check anyway?" ;
+    MESSAGE[ chinese_simplified ] = "ÒÑ¾­Ê§»îÌØÊâÇøÓòµÄ¼ì²é£¬Äú»¹ÊÇÒªÖ´ĞĞ¼ì²é£¿";
+    MESSAGE[ russian ] = "Ïğîâåğêà ñïåöèàëüíûõ îáëàñòåé îòêëş÷åíà. Âñå ğàâíî ïğîâåğèòü?";
+    MESSAGE[ polish ] = "Sprawdzanie obszarów specjalnych jest wy³¹czone. Mimo to sprawdzaæ?";
+    MESSAGE[ japanese ] = "“Áê’nˆæ‚ÌÁª¯¸‚ªµÌ‚É‚È‚Á‚Ä‚¢‚Ü‚·B‚»‚ê‚Å‚àÁª¯¸‚µ‚Ü‚·‚©?";
+    MESSAGE[ chinese_traditional ] = "¤w¸g¥¢¬¡ÀË¬d¯S®í°Ï°ì¡M±zÁÙ¬O­n°õ¦æÀË¬d¡H";
+    MESSAGE[ arabic ] = "ÊÏŞíŞ ÇáãäÇØŞ ÇáÎÇÕÉ ÛíÑ äÔØ. åá ÊÑíÏ ÇáÊÏŞíŞ ÈÇáÑÛã ãä Ğáß¿";
+    MESSAGE[ greek ] = "Ï İëåã÷ïò åéäéêşí ğåñéï÷şí åßíáé áğåíåñãïğïéçìİíïò. Èİëåôå íá ãßíåé ï İëåã÷ïò ğáñ´üëá áõôÜ;";
+    MESSAGE[ korean ] = "Æ¯¼ö¿µ¿ªÀÌ ºñÈ°¼º»óÅÂÀÔ´Ï´Ù. ±×·¡µµ °Ë»çÇÏ½Ã°Ú½À´Ï±î?";
+    MESSAGE[ turkish ] = "Özel bölüm denetleme etkin değil, yine de denetlensin mi?";
+    MESSAGE[ language_user1 ] = " ";
+};
+ // Strings ---------------------------------------------------------------
+String RID_SVXSTR_HMSTATUS_OK
+{
+    Text = "Das Wort ist korrekt geschrieben" ;
+    Text [ ENGLISH ] = "The spelled word is correct" ;
+    Text [ norwegian ] = "The spelled word is correct" ;
+    Text [ italian ] = "La parola sottoposta a controllo ortografico è corretta" ;
+    Text [ portuguese_brazilian ] = "A palavra soletrada está correta" ;
+    Text [ portuguese ] = "A palavra está correcta." ;
+    Text [ finnish ] = "Sana on kirjoitettu oikein" ;
+    Text [ danish ] = "Ordet er stavet rigtigt" ;
+    Text [ french ] = "Mot correctement orthographié" ;
+    Text [ swedish ] = "Ordet är riktigt stavat" ;
+    Text [ dutch ] = "Dit woord is correct geschreven" ;
+    Text [ spanish ] = "La palabra está escrita correctamente" ;
+    Text [ english_us ] = "The word is spelled correctly" ;
+    Text[ chinese_simplified ] = "Õâ¸ö×ÖµÄĞ´·¨ÕıÈ·";
+    Text[ russian ] = "İòî ñëîâî íàïèñàíî ïğàâèëüíî";
+    Text[ polish ] = "S³owo jest napisane poprawnie";
+    Text[ japanese ] = "‚±‚Ì’PŒê‚Ì½ÍßÙ‚Í³Šm‚Å‚·B";
+    Text[ chinese_traditional ] = "³o­Ó¦rªº¼gªk¥¿½T";
+    Text[ arabic ] = "ÇáßáãÉ ãßÊæÈÉ ÈÔßá ÕÍíÍ";
+    Text[ greek ] = "Ç ïñèïãñáößá åßíáé óùóôŞ";
+    Text[ korean ] = "´Ü¾îÀÇ ¸ÂÃã¹ıÀÌ Á¤È®ÇÕ´Ï´Ù";
+    Text[ turkish ] = "Sözcüğün imlası doğru";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMSTATUS_DONTUSE
+{
+    Text = "Dieses Wort sollten Sie vermeiden" ;
+    Text [ ENGLISH ] = "Don't use this word" ;
+    Text [ norwegian ] = "Don't use this word" ;
+    Text [ italian ] = "Questa parola andrebbe evitata" ;
+    Text [ portuguese_brazilian ] = "Não use esta palavra" ;
+    Text [ portuguese ] = "Tente evitar esta palavra." ;
+    Text [ finnish ] = "Älä käytä tätä sanaa" ;
+    Text [ danish ] = "Undgå venligst dette ord" ;
+    Text [ french ] = "N'utilisez pas ce mot" ;
+    Text [ swedish ] = "Undvik det här ordet" ;
+    Text [ dutch ] = "Vermijd het gebruik van dit woord" ;
+    Text [ spanish ] = "Debería evitar esta palabra" ;
+    Text [ english_us ] = "Avoid using this word" ;
+    Text[ chinese_simplified ] = "½¨ÒéÄú²»ÒªÊ¹ÓÃÕâ¸ö×Ö";
+    Text[ russian ] = "İòî ñëîâî íåîáõîäèìî èçáåãàòü";
+    Text[ polish ] = "Proszê unikaæ tego s³owa";
+    Text[ japanese ] = "‚±‚Ì’PŒê‚Ìg—p‚Í”ğ‚¯‚Ä‚­‚¾‚³‚¢B";
+    Text[ chinese_traditional ] = "«ØÄ³±z¤£­n¨Ï¥Î³o­Ó¦r";
+    Text[ arabic ] = "íÌÈ Úáíß ÊÌäÈ ÇÓÊÎÏÇã åĞå ÇáßáãÉ";
+    Text[ greek ] = "Åßíáé ğñïôéìüôåñï íá áğïöåõ÷èåß ç ÷ñŞóç áõôŞò ôçò ëİîçò";
+    Text[ korean ] = "ÀÌ ´Ü¾î »ç¿ëÀ» ÇÇÇÏ½Ê½Ã¿À";
+    Text[ turkish ] = "Bu sözcüğü kullanmaktan kaçınmalısınız";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMSTATUS_WRONG
+{
+    Text = "Das Wort ist unbekannt." ;
+    Text [ ENGLISH ] = "Unknown word." ;
+    Text [ norwegian ] = "Unknown word." ;
+    Text [ italian ] = "Parola sconosciuta." ;
+    Text [ portuguese_brazilian ] = "Palavra desconhecida" ;
+    Text [ portuguese ] = "Palavra desconhecida." ;
+    Text [ finnish ] = "Tuntematon sana." ;
+    Text [ danish ] = "Ukendt ord." ;
+    Text [ french ] = "Mot inconnu" ;
+    Text [ swedish ] = "Okänt ord." ;
+    Text [ dutch ] = "Onbekend woord." ;
+    Text [ spanish ] = "Palabra desconocida." ;
+    Text [ english_us ] = "Unknown word." ;
+    Text[ chinese_simplified ] = "Õâ¸ö×Ö²»Ã÷¡£";
+    Text[ russian ] = "İòî ñëîâî íåçíàêîìî.";
+    Text[ polish ] = "Nieznane s³owo.";
+    Text[ japanese ] = "‚±‚Ì’PŒê‚Í•s–¾‚Å‚·B";
+    Text[ chinese_traditional ] = "³o­Ó¦r¤£©ú¡C";
+    Text[ arabic ] = "ÇáßáãÉ ÛíÑ ãÚÑæİÉ.";
+    Text[ greek ] = "Ç ëİîç åßíáé Üãíùóôç.";
+    Text[ korean ] = "¾Ë·ÁÁöÁö ¾ÊÀº ´Ü¾îÀÔ´Ï´Ù.";
+    Text[ turkish ] = "Sözcük bilinmiyor.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMSTATUS_CAPERROR
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
+    /* ### ACHTUNG: Neuer Text in Resource? Groß- / Kleinschreibungs - Fehler : Gro˜- / Kleinschreibungs - Fehler */
+    Text = "Groß- / Kleinschreibungs - Fehler" ;
+    Text [ ENGLISH ] = "Capitalization Error" ;
+    Text [ norwegian ] = "Capitalization Error" ;
+    Text [ italian ] = "Errore relativo alle lettere maiuscole" ;
+    Text [ portuguese_brazilian ] = "Erro de maiúsculas" ;
+    Text [ portuguese ] = "Erro de maiúsculas/minúsculas" ;
+    Text [ finnish ] = "Väärä iso kirjain" ;
+    Text [ danish ] = "Retskrivningsfejl store/små bogstaver" ;
+    Text [ french ] = "Erreur majuscule/minuscule" ;
+    Text [ swedish ] = "Fel användning av versaler" ;
+    Text [ dutch ] = "Fout bij gebruik hoofdletter/kleine letters" ;
+    Text [ spanish ] = "Error de mayúsculas/minúsculas" ;
+    Text [ english_us ] = "Capitalization error" ;
+    Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´ - ´íÎó";
+    Text[ russian ] = "Îøèáêà â íàïèñàíèè ïğîïèñíûõ è ñòğî÷íûõ áóêâ";
+    Text[ polish ] = "B³êdy w pisowni du¿ych i ma³ych liter";
+    Text[ japanese ] = "‘å•¶š/¬•¶š‚Ì´×°";
+    Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g¿ù»~";
+    Text[ arabic ] = "ÎØÃ İí ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ/ÕÛíÑÉ";
+    Text[ greek ] = "ÓöÜëìá ãñáöŞò (ĞåæÜ-Êåöáëáßá)";
+    Text[ korean ] = "´ë/¼Ò¹®ÀÚ ¿À·ù";
+    Text[ turkish ] = "Büyük /küçük harf hatası";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMSTATUS_INVALID_LANG
+{
+    Text = "Sprache wird nicht unterstützt" ;
+    Text [ ENGLISH ] = "Language is not supported" ;
+    Text[ english_us ] = "Language not supported";
+    Text[ portuguese ] = "Língua sem suporte";
+    Text[ russian ] = "ßçûê íå ïîääåğæèâàåòñÿ";
+    Text[ greek ] = "Ç ãëşóóá äåí õğïóôçñßæåôáé";
+    Text[ dutch ] = "Taal wordt niet ondersteund";
+    Text[ french ] = "Cette langue n'est pas supportée";
+    Text[ spanish ] = "No se apoya este idioma";
+    Text[ italian ] = "La lingua non viene supportata";
+    Text[ danish ] = "Sproget understøttes ikke";
+    Text[ swedish ] = "Språket går inte att använda";
+    Text[ polish ] = "Jêzyk nie jest obs³ugiwany";
+    Text[ portuguese_brazilian ] = "Language is not supported";
+    Text[ japanese ] = "Œ¾Œê‚Íx‰‡‚³‚ê‚Ü‚¹‚ñ";
+    Text[ korean ] = "¾ğ¾î°¡ Áö¿øµÇÁö ¾ÊÀ½";
+    Text[ chinese_simplified ] = "²»Ö§³ÖÓïÑÔ¹¦ÄÜ";
+    Text[ chinese_traditional ] = "»y¨¥¤£¨ü¤ä´©";
+    Text[ arabic ] = "áÇ íÊã ÏÚã åĞå ÇááÛÉ";
+    Text[ turkish ] = "Dil desteklenmiyor.";
+};
+String RID_SVXSTR_HMERR_CHECKINSTALL
+{
+    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
+    /* ### ACHTUNG: Neuer Text in Resource?  ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache :  ist f³r die Pr³fung nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
+    TEXT = " ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+    TEXT [ English ] = " is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
+    TEXT [ norwegian ] = " is not available for spellchecking\nKontroller innstalleringen og installer det språket du ønsker\n" ;
+    TEXT [ italian ] = "non è disponibile per il controllo ortografico\nVerificare l'installazione ed installare la lingua desiderata" ;
+    TEXT [ portuguese_brazilian ] = "não está disponível para verificação de ortografia\nPor favor confira sua instalação e instale o idioma desejado\n" ;
+    TEXT [ portuguese ] = "não está disponível para a verificação ortográfica.\nConfira a sua instalação e, se necessário, instale a língua desejada\n" ;
+    TEXT [ finnish ] = " ei ole käytettävissä korjauslukua varten\nTarkista asennus ja asenna tarvitsemasi kieli\n" ;
+    TEXT [ danish ] = "står ikke til rådighed for stavekontrollen.\nKontroller venligst din installation og installer i\ngivet fald det ønskede sprog" ;
+    TEXT [ french ] = "n'est pas disponible pour la vérification. Veuillez vérifier l'installation et installer, le cas échéant, la langue souhaitée" ;
+    TEXT [ swedish ] = "är inte tillgänglig för stavningskontroll\nKontrollera Din installation och installera\neventuellt önskat språk" ;
+    TEXT [ dutch ] = "is niet beschikbaar voor spellingcontrole\nControleer uw installatie en installeer\neventueel de gewenste taal." ;
+    TEXT [ spanish ] = "no está disponible para la revisión ortográfica.\nRevise su instalación e instale,\nsi es necesario, el idioma deseado" ;
+    TEXT [ english_us ] = "is not available for spellchecking\nPlease check your installation and install the desired language\n" ;
+    TEXT[ chinese_simplified ] = "ÎŞ·¨Ìá¹©Õı×Ö·¨¹¦ÄÜ¡£\nÇëÄú¼ì²é°²×°µÄ³ÌĞò£¬ÈçÓĞ±ØÒª£¬\nÇëÄú°²×°ÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
+    TEXT[ russian ] = "äëÿ ïğîâåğêè íåäîñòóïíî. \nÏğîâåğüòå, ïîæàëóéñòà, Âàøó èíñòàëëÿöèş è â ñëó÷àå íåîáõîäèìîñòè\nèñòàëëèğóéòå æåëàåìûé ÿçûê";
+    TEXT[ polish ] = "jest niedostêpne do sprawdzania. \nProszê sprawdziæ instalacjê i zainstalowaæ \n ewentualnie potrzebny jêzyk.";
+    TEXT[ japanese ] = "‚Í½ÍßÙÁª¯¸‚Ég—p‚Å‚«‚Ü‚¹‚ñB\nÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä\nê‡‚É‚æ‚Á‚Ä‚Í‚²Šó–]‚ÌŒ¾Œê‚ğ²İ½Ä°Ù‚µ‚Ä‚­‚¾‚³‚¢B";
+    TEXT[ chinese_traditional ] = "µLªk´£¨Ñ«÷¦r¥\\¯à¡C\n½Ğ±zÀË¬d¦w¸Ëªºµ{¦¡¡M­Y¦³¥²­n¡M\n½Ğ±z¦w¸Ë­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
+    TEXT[ arabic ] = "ÛíÑ ãÊæİÑÉ ááÊÏŞíŞ ÇáÅãáÇÆí. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
+    TEXT[ greek ] = "äåí åßíáé äéáèİóéìïò ãéá ôïí İëåã÷ï. \nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß, \nåêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
+    TEXT[ korean ] = "¸ÂÃã¹ı °Ë»ç¿¡ »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÏ°í \nÇÊ¿ä¿¡ µû¶ó ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+    TEXT[ turkish ] = "denetlenemiyor. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yükleyin.";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMERR_ADDWORD
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
+    /* ### ACHTUNG: Neuer Text in Resource? Das Wort konnte nicht ins Wörterbuch aufgenommen werden. : Das Wort konnte nicht ins W÷rterbuch aufgenommen werden. */
+    Text = "Das Wort konnte nicht ins Wörterbuch aufgenommen werden." ;
+    Text [ ENGLISH ] = "Can't add word to dictionary" ;
+    Text [ norwegian ] = "Kan ikke legge til ord I ordliste" ;
+    Text [ italian ] = "Impossibile aggiungere parola al dizionario." ;
+    Text [ portuguese_brazilian ] = "Não é possível acrescentar palavra ao dicionário" ;
+    Text [ portuguese ] = "Foi impossível acrescentar a palavra no dicionário." ;
+    Text [ finnish ] = "Sanastoon ei voi lisätä" ;
+    Text [ danish ] = "Det var ikke muligt at tilføje dette ord til ordbogen." ;
+    Text [ french ] = "Impossible d'ajouter ce mot au dictionnaire" ;
+    Text [ swedish ] = "Ordet kunde inte läggas in i ordboken." ;
+    Text [ dutch ] = "Woord kan niet in woordenboek worden opgenomen" ;
+    Text [ spanish ] = "No se pudo añadir la palabra al diccionario." ;
+    Text [ english_us ] = "The word could not be added to dictionary" ;
+    Text[ chinese_simplified ] = "ÎŞ·¨ÊÕÂ¼Õâ¸ö×Ö¡£";
+    Text[ russian ] = "Âêëş÷èòü ıòî ñëîâî â ñëîâàğü íåâîçìîæíî.";
+    Text[ polish ] = "To s³owo nie mog³o zostaæ wpisane do s³ownika.";
+    Text[ japanese ] = "‚±‚Ì’PŒê‚Í«‘‚É‰Á‚¦‚ç‚ê‚Ü‚¹‚ñB";
+    Text[ chinese_traditional ] = "µLªk¦¬¿ı³o­Ó¦r¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÅÖÇİÉ ÇáßáãÉ Åáì ÇáŞÇãæÓ.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá êáôá÷ùñçèåß ç ëİîç óôï ëåîéêü";
+    Text[ korean ] = "´Ü¾î¸¦ »çÀü¿¡ Ãß°¡ÇÏÁö ¸øÇß½À´Ï´Ù.";
+    Text[ turkish ] = "Sözcük, sözlüğe eklenemedi.";
+    Text[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMERR_HYPH
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
+    /* ### ACHTUNG: Neuer Text in Resource? Die Trennhilfe ist nicht verfügbar : Die Trennhilfe ist nicht verf³gbar */
+    TEXT = "Die Trennhilfe ist nicht verfügbar" ;
+    TEXT [ English ] = "Hyphenation is not available" ;
+    TEXT [ norwegian ] = "Orddeling er ikke tilgjengelig" ;
+    TEXT [ italian ] = "La sillabazione non è disponibile" ;
+    TEXT [ portuguese_brazilian ] = "Hifenação não está disponível" ;
+    TEXT [ portuguese ] = "Divisão silábica não se encontra disponível" ;
+    TEXT [ finnish ] = "Tavutus ei ole käytettävissä" ;
+    TEXT [ danish ] = "Orddelingen står ikke til rådighed" ;
+    TEXT [ french ] = "Césure non disponible" ;
+    TEXT [ swedish ] = "Avstavningshjälpen är inte tillgänglig" ;
+    TEXT [ dutch ] = "Afbrekingshulp is niet beschikbaar" ;
+    TEXT [ spanish ] = "No está disponible la separación silábica" ;
+    TEXT [ english_us ] = "Hyphenation not available" ;
+    TEXT[ chinese_simplified ] = "Á¬×Ö·û²»´æÔÚ";
+    TEXT[ russian ] = "Ïîìîùü â ğàññòàíîâêå ïåğåíîñîâ íåäîñòóïíà";
+    TEXT[ polish ] = "Dzielenie wyrazów nie jest mo¿liwe";
+    TEXT[ japanese ] = "Ê²ÌÈ°¼®İ‚ªg—p‚Å‚«‚Ü‚¹‚ñB";
+    TEXT[ chinese_traditional ] = "³s¦r²Å¤£¦s¦b";
+    TEXT[ arabic ] = "ãÓÇÚÏÉ İÕá ÇáãŞÇØÚ ÛíÑ ãÊæİÑÉ";
+    TEXT[ greek ] = "Ç âïŞèåéá óõëëáâéóìïı äåí åßíáé äéáèİóéìç";
+    TEXT[ korean ] = "ÇÏÀÌÇÂ »ç¿ë ºÒ°¡´É";
+    TEXT[ turkish ] = "Heceleme kullanılamıyor";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_HMERR_THESAURUS
+{
+    /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
+    /* ### ACHTUNG: Neuer Text in Resource? Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache : Ein Thesaurus f³r die eingestellte Sprache ist nicht verf³gbar. \nšberpr³fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew³nschte Sprache */
+    TEXT = "Ein Thesaurus für die eingestellte Sprache ist nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+    TEXT [ English ] = "For the current Language no Thesaurus is available. \nPlease check your installation and install the desired language\n" ;
+    TEXT [ norwegian ] = "Synonymordliste er ikke tilgjengelig for det gjeldende programmet. \nKontroller innstalleringen og installer det språket du ønsker\n" ;
+    TEXT [ italian ] = "Per la lingua corrente non è disponibile il dizionario dei sinonimi.\nVerificare l'installazione ed installare la lingua desiderata" ;
+    TEXT [ portuguese_brazilian ] = "Para o Idioma atual não há Thesaurus disponível. \nPor favor confira sua instalação e instale o idioma desejado\n" ;
+    TEXT [ portuguese ] = "O dicionário de sinónimos não está disponível para a língua seleccionada. \nConfira a sua instalação e, se necessário, instale a língua desejada.\n" ;
+    TEXT [ finnish ] = "Nykyiselle kielelle ei ole synonyymisanastoa. \nTarkista asennus ja asenna tarvitsemasi kieli\n" ;
+    TEXT [ danish ] = "Synonymordbogen står ikke til rådighed for det angivne sprog.\nKontroller venligst din installation og installer i\ngivet fald det ønskede sprog" ;
+    TEXT [ french ] = "Aucun dictionnaire des synonymes n'est disponible pour la langue sélectionnée.\nVeuillez vérifiez l'installation et installer\nle cas échéant la langue concernée." ;
+    TEXT [ swedish ] = "Ingen synonymordbok är tillgänglig för det inställda språket. \nKontrollera Din installation och installera\neventuellt önskat språk." ;
+    TEXT [ dutch ] = "Voor de ingestelde taal is geen Thesaurus beschikbaar. \nControleer uw installatie en\ninstalleer eventueel de gewenste taal." ;
+    TEXT [ spanish ] = "No existe un diccionario de sinónimos para el idioma seleccionado. \nCompruebe por favor su instalación\n e instale, si es necesario, el idioma deseado" ;
+    TEXT [ english_us ] = "No thesaurus is available for the selected language. \nPlease check your installation and install the desired language\n" ;
+    TEXT[ chinese_simplified ] = "ÄúÉè¶¨µÄÓïÑÔÃ»ÓĞ¸½¼Ó´Êµä¹¦ÄÜ¡£\nÇëÄú¼ì²éµÄ°²×°³ÌĞò¡£\nÈçÓĞ±ØÒª£¬ÇëÄú°²×°ÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
+    TEXT[ russian ] = "Òåçàóğóñ äëÿ âûáğàííîãî ÿçûêà íåäîñòóïåí. \nÏğîâåğüòå, ïîæàëóéñòà, Âàøó èíñòàëëÿöèş è â ñëó÷àå íåîáõîäèìîñòè\nèñòàëëèğóéòå æåëàåìûé ÿçûê";
+    TEXT[ polish ] = "Tezaurus jest niedostêpny dla wybranego jêzyka. \nProszê sprawdziæ instalacjê i zainstalowaæ \newentualnie potrzebny jêzyk.";
+    TEXT[ japanese ] = "‘I‘ğ‚³‚ê‚½Œ¾Œê—p‚Ì—ŞŒê«“T‚Íg—p‚Å‚«‚Ü‚¹‚ñB\nÌßÛ¸Ş×Ñ‚Ì²İ½Ä°Ù‚ğÁª¯¸‚µ‚ÄA\nê‡‚É‚æ‚Á‚Ä‚Í‚²Šó–]‚ÌŒ¾Œê‚ğ²İ½Ä°Ù‚µ‚Ä‰º‚³‚¢B";
+    TEXT[ chinese_traditional ] = "±z³]©wªº»y¨¥ª©¥»¨S¦³ªş¥[µü¨å¥\\¯à¡C\n½Ğ±zÀË¬d¦w¸Ëªºµ{¦¡¡C\n­Y¦³¥²­n¡M½Ğ±z¦w¸Ë­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
+    TEXT[ arabic ] = "áÇ íæÌÏ ŞÇãæÓ ãÑÇÏİÇÊ ááÛÉ ÇáÊí Êã ÊÍÏíÏåÇ. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡\nËã ÇáŞíÇã ÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
+    TEXT[ greek ] = "Äåí õğÜñ÷åé äéáèİóéìïò èçóáõñüò ëİîåùí ãéá ôçí åğéëåãìİíç \nãëşóóá. Ğáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé, áí ÷ñåéáóôåß,\n åêôåëİóôå ôçí åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
+    TEXT[ korean ] = "¼³Á¤µÈ ¾ğ¾î¿¡ µ¿ÀÇ¾î»çÀüÀ» »ç¿ëÇÒ ¼ö ¾ø½À´Ï´Ù. \n¼³Ä¡ »óÅÂ¸¦ Á¡°ËÇÏ°í \nÇÊ¿ä¿¡ µû¶ó ¿øÇÏ´Â ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
+    TEXT[ turkish ] = "Ayarlanan dil için eş anlamlılar sözlüğü mevcut değil. \nKurulumunuzu kontrol edip gerekirse\nistenen dili yükleyin.";
+    TEXT[ language_user1 ] = " ";
+};
+String RID_SVXSTR_DIC_ERR_UNKNOWN
+{
+    Text = "Das Wort konnte aus einem unbekanntem Grund\nnicht ins Wörterbuch aufgenommen werden." ;
+    Text [ ENGLISH ] = "Failed to add word to dictionary\n for an unknown reason." ;
+    Text[ english_us ] = "Word cannot be added to dictionary\ndue to unknown reason.";
+    Text[ portuguese ] = "Foi impossível adicionar a palavra ao\ndicionário por razões desconhecidas.";
+    Text[ russian ] = "Ïî íåèçâåñòíûì ïğè÷èíàì ïğèíÿòü\nıòî ñëîâî â ñëîâàğü íåâîçìîæíî.";
+    Text[ greek ] = "Äåí Şôáí äõíáôüí íá åéóá÷èåß ç ëİîç óôï ëåîéêü\n for an unknown reason.";
+    Text[ dutch ] = "Om onbekende redenen kon het woord\nniet worden opgenomen in het woordenboek.";
+    Text[ french ] = "Pour une raison inconnue,\n il a été impossible d'insérer le mot dans le dictionnaire.";
+    Text[ spanish ] = "No se puede recoger en el diccionario la\npalabra debido a una razón desconocida.";
+    Text[ italian ] = "Non è stato possibile inserire la parola nel dizionario.\nErrore sconosciuto.";
+    Text[ danish ] = "Det var af en ukendt grund ikke muligt\nat tilføje ordet til ordbogen.";
+    Text[ swedish ] = "Ordet kunde av okänd anledning\ninte tas upp i ordboken.";
+    Text[ polish ] = "Z nieznanej przyczyny\nwyrazu nie mo¿na by³o przej¹æ do s³ownika.";
+    Text[ portuguese_brazilian ] = "Failed to add word to dictionary\n for an unknown reason.";
+    Text[ japanese ] = "’PŒê‚ÍŒ´ˆö‚ª•s–¾‚È‚Ü‚Ü\n«‘‚É’Ç‰Á‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Text[ korean ] = "ÀÌ ´Ü¾î´Â ¾Ë·Á ÁöÁö ¾ÊÀº ÀÌÀ¯·Î \n»çÀü¿¡ Ãß°¡ÇÒ ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "ÓÉÓÚ²»Ã÷µÄÔ­ÒòÎŞ·¨½«\nÕâ¸ö´ÊÌí¼Óµ½´ÊµäÖĞÈ¥¡£";
+    Text[ chinese_traditional ] = "¦r¨åµLªk¦¬¿ı³o­Ó¦r¡A­ì¦]¤£©ú¡C";
+    Text[ arabic ] = "ÊÚĞÑ ÅÖÇİÉ ÇáßáãÉ Åáì ÇáŞÇãæÓ\náÓÈÈ ÛíÑ ãÚÑæİ.";
+    Text[ turkish ] = "Sözcük bilinmeyen bir nedenden dolayı\nsözlüğe eklenemedi.";
+};
+String RID_SVXSTR_DIC_ERR_FULL
+{
+    Text = "Das Wörterbuch ist bereits voll." ;
+    Text [ ENGLISH ] = "The dictionary is already full." ;
+    Text[ english_us ] = "The dictionary is already full.";
+    Text[ portuguese ] = "O dicionário já está cheio!";
+    Text[ russian ] = "İòîò ñëîâàğü óæå çàïîëíåí.";
+    Text[ greek ] = "Äåí õğÜñ÷åé ÷şñïò ãéá åããñáöŞ óôï ëåîéêü.";
+    Text[ dutch ] = "Woordenboek is vol";
+    Text[ french ] = "Le dictionnaire est plein !";
+    Text[ spanish ] = "El diccionario está lleno.";
+    Text[ italian ] = "Il dizionario è pino.";
+    Text[ danish ] = "Ordbogen er allerede fuld.";
+    Text[ swedish ] = "Ordboken är redan full.";
+    Text[ polish ] = "S³ownik jest przepe³niony.";
+    Text[ portuguese_brazilian ] = "The dictionary is already full.";
+    Text[ japanese ] = "«‘‚Í‚·‚Å‚É‚¢‚Á‚Ï‚¢‚Å‚·B";
+    Text[ korean ] = "»çÀüÀÌ ÀÌ¹Ì ²Ë Â÷ ÀÖ½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "´ÊµäÒÑ¾­×°Âú¡£";
+    Text[ chinese_traditional ] = "¦r¨å¤wº¡¡C";
+    Text[ arabic ] = "ÇáŞÇãæÓ ããÊáÆ ÈÇáİÚá.";
+    Text[ turkish ] = "Sözlük doldu.";
+};
+String RID_SVXSTR_DIC_ERR_READONLY
+{
+    Text = "Das Wörterbuch ist schreibgeschützt." ;
+    Text [ ENGLISH ] = "The dictionary is readonly." ;
+    Text[ english_us ] = "The dictionary is read only.";
+    Text[ portuguese ] = "O dicionário é só de leitura.";
+    Text[ russian ] = "İòîò ñëîâàğü ïğåäíàçíà÷åí òîëüêî äëÿ ÷òåíèÿ.";
+    Text[ greek ] = "Ôï ëåîéêü åßíáé ìüíï ãéá áíÜãíùóç.";
+    Text[ dutch ] = "Woordenboek is schrijfbeveiligd.";
+    Text[ french ] = "Le dictionnaire est en lecture seule !";
+    Text[ spanish ] = "El diccionario es solo de lectura.";
+    Text[ italian ] = "Il dizionario è a sola lettura.";
+    Text[ danish ] = "Ordbogen er skrivebeskyttet.";
+    Text[ swedish ] = "Ordboken är skrivskyddad.";
+    Text[ polish ] = "S³ownik jest tylko do odczytu.";
+    Text[ portuguese_brazilian ] = "The dictionary is readonly.";
+    Text[ japanese ] = "«‘‚Í“Ç‚İæ‚èê—p‚Å‚·B";
+    Text[ korean ] = "»çÀüÀº ¾²±â º¸È£µÇ¾î ÀÖ½À´Ï´Ù.";
+    Text[ chinese_simplified ] = "Õâ¸ö´ÊµäÊÇ·À¸²Ğ´µÄ(Ö»¹©¶ÁÈ¡)¡£";
+    Text[ chinese_traditional ] = "¦r¨å¬O°ßÅªªº¡C";
+    Text[ arabic ] = "ÇáŞÇãæÓ ãÍãí ÖÏ ÇáßÊÇÈÉ.";
+    Text[ turkish ] = "Sözlük yazmaya karşı korumalıdır.";
+};
+
+ // ********************************************************************** EOF
