@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:04:12 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,10 +66,6 @@
 #include <sal/types.h>
 #endif
 
-// (0x001C) NOTE ==============================================================
-
-#define EXC_NOTE5_MAXTEXT           2048
-
 // (0x0031) FONT ==============================================================
 
 // color
@@ -121,36 +117,6 @@
 
 #define EXC_SCEN_MAXCELL            32
 
-// (0x00E5) CELLMERGING =======================================================
-
-#define EXC_MERGE_MAXCOUNT          1024
-
-// (0x0208) ROW ===============================================================
-
-// flags
-#define EXC_ROW_COLLAPSED           0x0010
-#define EXC_ROW_ZEROHEIGHT          0x0020
-#define EXC_ROW_UNSYNCED            0x0040
-#define EXC_ROW_GHOSTDIRTY          0x0080
-#define EXC_ROW_XFMASK              0x0FFF
-
-// outline
-#define EXC_ROW_LEVELFLAGS(nOL)     (nOL & 0x0007)
-#define EXC_ROW_GETLEVEL(nFlag)     (nFlag & 0x0007)
-
-// unknown, always save
-#define EXC_ROW_FLAGCOMMON          0x0100
-
-// row height
-#define EXC_ROW_VALZEROHEIGHT       0x00FF
-#define EXC_ROW_FLAGDEFHEIGHT       0x8000
-
-// (0x0236) TABLE =============================================================
-
-#define EXC_TABOP_CALCULATE         0x0003
-#define EXC_TABOP_ROW               0x0004
-#define EXC_TABOP_BOTH              0x0008
-
 // (0x023E) WINDOW2 ===========================================================
 
 #define EXC_WIN2_SHOWFORMULAS       0x0001
@@ -164,11 +130,6 @@ const sal_uInt16 EXC_WIN2_MIRRORED          = 0x0040;
 #define EXC_WIN2_FROZENNOSPLIT      0x0100
 #define EXC_WIN2_SELECTED           0x0200
 #define EXC_WIN2_DISPLAYED          0x0400
-
-// Specials for outlines ======================================================
-
-#define EXC_OUTLINE_MAX             7
-#define EXC_OUTLINE_COUNT           (EXC_OUTLINE_MAX + 1)
 
 // defines for change tracking ================================================
 
