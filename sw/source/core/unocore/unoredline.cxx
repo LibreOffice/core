@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 08:59:51 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 14:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,13 @@ SwXRedlineText::SwXRedlineText(SwDoc* pDoc, SwNodeIndex aIndex) :
     SwXText(pDoc, CURSOR_REDLINE),
     aNodeIndex(aIndex)
 {
+}
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
+const SwStartNode* SwXRedlineText::GetStartNode() const
+{
+    return aNodeIndex.GetNode().GetStartNode();
 }
 /* ---------------------------------------------------------------------------
 

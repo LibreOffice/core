@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:47:04 $
+ *  last change: $Author: dvo $ $Date: 2001-06-25 14:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class SwXRedlineText :
     public ::com::sun::star::container::XEnumerationAccess
 {
     SwNodeIndex aNodeIndex;
+    virtual const SwStartNode *GetStartNode() const;
 
 public:
     SwXRedlineText(SwDoc* pDoc, SwNodeIndex aNodeIndex);
