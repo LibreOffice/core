@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,7 +260,7 @@ void BibBookContainer::createTopFrame(const ::rtl::OUString & rURL )
 
     xTopPeerRef=uno::Reference< awt::XWindow > (GetTopComponentInterface(), UNO_QUERY );
 
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
     xNewFrame = uno::Reference< frame::XFrame > ( xMgr->createInstance( C2U("com.sun.star.frame.Frame") ), UNO_QUERY );
     uno::Reference< frame::XDispatchProvider >  xDSP( xNewFrame, UNO_QUERY );
@@ -302,7 +302,7 @@ void BibBookContainer::createBottomFrame(const ::rtl::OUString & rURL )
 
     xBottomPeerRef=uno::Reference< awt::XWindow > (GetBottomComponentInterface(), UNO_QUERY );
 
-    uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
     xNewFrame = uno::Reference< frame::XFrame > ( xMgr->createInstance( C2U("com.sun.star.frame.Frame") ), UNO_QUERY );
     uno::Reference< frame::XDispatchProvider >  xDSP( xNewFrame, UNO_QUERY );

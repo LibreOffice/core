@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,8 +81,8 @@
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _CPPUHELPER_FACTORY_HXX_
 #include <cppuhelper/factory.hxx>   // helper for factories
@@ -453,7 +453,7 @@ void BibliographyLoader::loadView(const Reference< frame::XFrame > & rFrame, con
         util::URL aURL;
         aURL.Complete = aMenuRes;
 
-        Reference< XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
         if( xTrans.is() )
         {
@@ -498,7 +498,7 @@ Reference< container::XNameAccess >  BibliographyLoader::GetDataColumns() const
 {
     if (!xColumns.is())
     {
-        Reference< XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         Reference< XRowSet >  xRowSet(xMgr->createInstance(C2U("com.sun.star.sdb.RowSet")), UNO_QUERY);
         Reference< XPropertySet >  xResultSetProps(xRowSet, UNO_QUERY);
         DBG_ASSERT(xResultSetProps.is() , "BibliographyLoader::GetDataCursor : invalid row set (no XResultSet or no XPropertySet) !");

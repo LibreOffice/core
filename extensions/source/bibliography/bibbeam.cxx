@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-13 11:41:26 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
@@ -142,7 +142,7 @@ void BibGridwin::createGridWin(const uno::Reference< XControlModel > & xGModel)
 
     if( aCtrContainer.is())
     {
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
 
         if ( xGridModel.is() && xMgr.is())
         {
@@ -286,7 +286,7 @@ void BibBeamer::SetXController(const uno::Reference< frame::XController > & xCtr
     if(xController.is())
     {
         uno::Reference< frame::XDispatch >  xDisp(xController, UNO_QUERY);
-        uno::Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        uno::Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         uno::Reference< util::XURLTransformer >  xTrans ( xMgr->createInstance( C2U("com.sun.star.util.URLTransformer") ), UNO_QUERY );
         if( xTrans.is() && xDisp.is())
         {

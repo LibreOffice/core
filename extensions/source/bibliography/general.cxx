@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 
 #pragma hdrstop
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_POSSIZE_HPP_
 #include <com/sun/star/awt/PosSize.hpp>
@@ -384,7 +384,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
 
     xCtrlContnr = VCLUnoHelper::CreateControlContainer(&aControlParentWin);
 
-    xMgr = utl::getProcessServiceFactory();
+    xMgr = comphelper::getProcessServiceFactory();
 
     AddControlWithError(
         lcl_GetColumnName(pMapping, IDENTIFIER_POS),

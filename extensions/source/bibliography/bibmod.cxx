@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibmod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,6 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
-#endif
 #include "bibmod.hxx"
 #include "bibresid.hxx"
 #include "registry.hxx"
@@ -155,7 +152,7 @@ BibDataManager*  BibModul::createDataManager()
 //-----------------------------------------------------------------------------
 BibConfig*  BibModul::GetConfig()
 {
-    if(!pBibConfig)
+    if(! pBibConfig)
         pBibConfig = new BibConfig;
     return pBibConfig;
 }

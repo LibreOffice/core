@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-14 08:43:41 $
+ *  last change: $Author: os $ $Date: 2000-11-14 11:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
-#include <unotools/processfactory.hxx>
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 #ifndef _COM_SUN_STAR_IO_XPERSISTOBJECT_HPP_
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -258,7 +258,7 @@ BOOL lcl_IsCaseSensitive(const String& rPathURL)
         bFirstCall = FALSE;
     }
 #endif
-/*  Reference< lang::XMultiServiceFactory > xMSF = utl::getProcessServiceFactory();
+/*  Reference< lang::XMultiServiceFactory > xMSF = comphelper::getProcessServiceFactory();
     INetURLObject aTempObj(rPathURL);
     try
     {
@@ -283,7 +283,7 @@ Reference< sdbc::XConnection >  getConnection(const rtl::OUString& _rURL)
     // first get the sdb::DataSource corresponding to the url
     Reference< sdbc::XDataSource >  xDataSource;
     // is it a favorite title ?
-    Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
     Reference<XInterface> xNamingContextIfc = xMgr->createInstance(C2U("com.sun.star.sdb.DatabaseContext"));
     Reference< XNameAccess >  xNamingContext(xNamingContextIfc, UNO_QUERY);
     if (xNamingContext.is() && xNamingContext->hasByName(_rURL))
@@ -760,7 +760,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     aSelectionLB.SetDoubleClickHdl( LINK(this, DBChangeDialog_Impl, DoubleClickHdl));
     try
     {
-        Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         Reference< data::XDatabaseFavorites >  xFav(xMgr->createInstance( C2U("com.sun.star.data.DatabaseEngine") ), UNO_QUERY );
         // TODO : XDatabaseFavorites is an obsolete interface, the whole dialog has to be based on
         // the sdb::DatabaseAccessContext service
@@ -1001,7 +1001,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     Reference< XForm >  xResult;
     try
     {
-        Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+        Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         xForm = Reference< XForm > (xMgr->createInstance( C2U("com.sun.star.form.component.Form") ),
                                                                             UNO_QUERY );
 
@@ -1471,7 +1471,7 @@ Reference< awt::XControlModel >  BibDataManager::loadGridModel(const rtl::OUStri
 
     try
     {
-    Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+    Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
         Reference< XInterface >  xObject = xMgr->createInstance(C2U("com.sun.star.form.component.GridControl"));
         xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
         Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
@@ -1732,7 +1732,7 @@ Reference< awt::XControlModel >  BibDataManager::loadControlModel(const rtl::OUS
                 else
                     aInstanceName += getControlName(nFormatKey);
 
-                Reference< lang::XMultiServiceFactory >  xMgr = utl::getProcessServiceFactory();
+                Reference< lang::XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
                 Reference< XInterface >  xObject = xMgr->createInstance(aInstanceName);
                 xModel=Reference< awt::XControlModel > ( xObject, UNO_QUERY );
                 Reference< XPropertySet >  xPropSet( xModel, UNO_QUERY );
