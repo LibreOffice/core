@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:58:20 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,7 +317,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     }
 }
 
-static bool passFileToCommandLine( const String& rFilename, const String& rCommandLine )
+static bool passFileToCommandLine( const String& rFilename, const String& rCommandLine, bool bRemoveFile = true )
 {
     bool bSuccess = false;
 
@@ -390,38 +390,70 @@ static bool passFileToCommandLine( const String& rFilename, const String& rComma
         fprintf( stderr, "failed to fork\n" );
 
     // clean up the mess
-    unlink( aFilename.GetBuffer() );
+    if( bRemoveFile )
+        unlink( aFilename.GetBuffer() );
 
     return bSuccess;
 }
 
 static bool sendAFax( const String& rFaxNumber, const String& rFileName, const String& rCommand )
 {
-    String aFaxNumber( rFaxNumber );
-    String aCmdLine( rCommand );
-    if( ! aFaxNumber.Len() )
+    std::list< OUString > aFaxNumbers;
+
+    if( ! rFaxNumber.Len() )
     {
         getPaLib();
         if( pFaxNrFunction )
         {
             String aNewNr;
             if( pFaxNrFunction( aNewNr ) )
-                aFaxNumber = aNewNr;
+                aFaxNumbers.push_back( OUString( aNewNr ) );
         }
-    }
-
-    bool bSuccess = false;
-    if( aFaxNumber.Len() )
-    {
-        while( aCmdLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber ) != STRING_NOTFOUND )
-        ;
-        bSuccess = passFileToCommandLine( rFileName, aCmdLine );
     }
     else
     {
-        // clean up temp file; passFileToCommandLine would have done this
-        unlink( ByteString( rFileName, osl_getThreadTextEncoding() ).GetBuffer() );
+        sal_Int32 nIndex = 0;
+        OUString aFaxes( rFaxNumber );
+        OUString aBeginToken( RTL_CONSTASCII_USTRINGPARAM("<Fax#>") );
+        OUString aEndToken( RTL_CONSTASCII_USTRINGPARAM("</Fax#>") );
+        while( nIndex != -1 )
+        {
+            nIndex = aFaxes.indexOf( aBeginToken, nIndex );
+            if( nIndex != -1 )
+            {
+                sal_Int32 nBegin = nIndex + aBeginToken.getLength();
+                nIndex = aFaxes.indexOf( aEndToken, nIndex );
+                if( nIndex != -1 )
+                {
+                    aFaxNumbers.push_back( aFaxes.copy( nBegin, nIndex-nBegin ) );
+                    nIndex += aEndToken.getLength();
+                }
+            }
+        }
     }
+
+    bool bSuccess = true;
+    if( aFaxNumbers.begin() != aFaxNumbers.end() )
+    {
+        while( aFaxNumbers.begin() != aFaxNumbers.end() && bSuccess )
+        {
+            String aCmdLine( rCommand );
+            String aFaxNumber( aFaxNumbers.front() );
+            aFaxNumbers.pop_front();
+            while( aCmdLine.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "(PHONE)" ) ), aFaxNumber ) != STRING_NOTFOUND )
+                ;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
+#endif
+            bSuccess = passFileToCommandLine( rFileName, aCmdLine, false );
+        }
+    }
+    else
+        bSuccess = false;
+
+    // clean up temp file
+    unlink( ByteString( rFileName, osl_getThreadTextEncoding() ).GetBuffer() );
+
     return bSuccess;
 }
 
