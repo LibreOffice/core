@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 13:30:42 $
+ *  last change: $Author: fs $ $Date: 2001-03-21 13:34:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,7 +1289,7 @@ void OTableController::alterColumns()
 
     sal_Bool bReload = sal_False; // refresh the data
 
-    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : NULL;
+    Reference< XDatabaseMetaData> xMetaData = m_xConnection.is() ? m_xConnection->getMetaData() : Reference< XDatabaseMetaData>();
     ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aColumns(xMetaData.is() ? xMetaData->storesMixedCaseQuotedIdentifiers() : sal_True);
     ::std::vector<OTableRow*>::iterator aIter = m_vRowList.begin();
     for(;aIter != m_vRowList.end();++aIter)
