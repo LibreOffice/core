@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2002-04-05 13:42:58 $
+ *  last change: $Author: hdu $ $Date: 2002-04-11 15:49:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,17 +541,17 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
     // layout script items
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
-        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
-
-        int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
         mpGlyphCounts[ nItem ] = 0;
 
+        SCRIPT_ITEM& rScriptItem = mpScriptItems[ nItem ];
+        int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
+
         // shortcut for skipped items
-        if( rArgs.mnEndCharIndex <= rScriptItem.iCharPos
-        || rArgs.mnFirstCharIndex > rScriptItem.iCharPos+nCharCount )
+        if( (rArgs.mnEndCharIndex <= rScriptItem.iCharPos)
+         || (rArgs.mnFirstCharIndex >= nCharIndexLimit) )
         {
-            for( int i = 0; i < nCharCount; ++i )
-                mpLogClusters[ i + rScriptItem.iCharPos ] = 0;
+            for( int i = rScriptItem.iCharPos; i < nCharIndexLimit; ++i )
+                mpLogClusters[ i ] = 0;
             continue;
         }
 
@@ -559,8 +559,10 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             rScriptItem.a.fRTL = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) );
 
         int nGlyphCount = 0;
+        int nCharCount = nCharIndexLimit - rScriptItem.iCharPos;
         HRESULT nRC = (*pScriptShape)( mhDC, &maScriptCache,
-            rArgs.mpStr + rScriptItem.iCharPos, nCharCount,
+            rArgs.mpStr + rScriptItem.iCharPos,
+            nCharCount,
             mnGlyphCapacity - nGlyphsProcessed,
             &rScriptItem.a,
             mpOutGlyphs + nGlyphsProcessed,
@@ -574,7 +576,8 @@ bool UniscribeLayout::LayoutText( const ImplLayoutArgs& rArgs )
             // fall back to default layout
             rScriptItem.a.eScript = SCRIPT_UNDEFINED;
             nRC = (*pScriptShape)( mhDC, &maScriptCache,
-                rArgs.mpStr + rScriptItem.iCharPos, nCharCount,
+                rArgs.mpStr + rScriptItem.iCharPos,
+                nCharCount,
                 mnGlyphCapacity - nGlyphsProcessed,
                 &rScriptItem.a,
                 mpOutGlyphs + nGlyphsProcessed,
@@ -659,10 +662,9 @@ bool UniscribeLayout::GetItemSubrange( int nItem, int& nMinIndex, int& nEndIndex
         // test only needed when rightmost glyph isn't referenced
         if( nMaxIndex + 1 < mpGlyphCounts[ nItem ] )
         {
-            int nCharCount = mpScriptItems[ nItem+1 ].iCharPos - rScriptItem.iCharPos;
-            for( int i = 0; i < nCharCount; ++i )
+            for( int i = rScriptItem.iCharPos; i < nCharIndexLimit; ++i )
             {
-                int n = mpLogClusters[ rScriptItem.iCharPos + i ];
+                int n = mpLogClusters[ i ];
                 if( (n < nEndIndex) && (n > nMaxIndex) )
                     nEndIndex = n;
             }
@@ -700,13 +702,13 @@ void UniscribeLayout::Draw() const
                     aRelPos += Point( mpCharWidths[i], 0 );
             }
 
-            int* pJustifications = mpJustifications;
-            if( pJustifications )
-                pJustifications += nStartIndex;
-
             // now draw the matching glyphs in this item
             nStartIndex += nGlyphsProcessed;
             nEndIndex += nGlyphsProcessed;
+
+            int* pJustifications = mpJustifications;
+            if( pJustifications )
+                pJustifications += nStartIndex;
 
             Point aPos = GetDrawPosition( aRelPos );
             HRESULT nRC = (*pScriptTextOut)( mhDC, &maScriptCache,
@@ -717,8 +719,12 @@ void UniscribeLayout::Draw() const
                 pJustifications,
                 mpGlyphOffsets + nStartIndex );
 
-            for( i = nStartIndex; i < nEndIndex; ++i )
-                aRelPos += Point( mpGlyphAdvances[ i ], 0 );
+            if( !pJustifications )
+                for( i = nStartIndex; i < nEndIndex; ++i )
+                    aRelPos += Point( mpGlyphAdvances[ i ], 0 );
+            else
+                for( i = nStartIndex; i < nEndIndex; ++i )
+                    aRelPos += Point( mpJustifications[ i ], 0 );
         }
 
         nGlyphsProcessed += mpGlyphCounts[ nItem ];
@@ -830,7 +836,7 @@ Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
         int nCharIndexLimit = mpScriptItems[ nItem+1 ].iCharPos;
 
         if( (rScriptItem.iCharPos <= nCharIndex) && (nCharIndex < nCharIndexLimit) )
-            nGlyphIndex = mpLogClusters[ nCharIndex - rScriptItem.iCharPos ] + nGlyphsProcessed;
+            nGlyphIndex = mpLogClusters[ nCharIndex ] + nGlyphsProcessed;
 
         // display if there is something to display
         int nMinIndex, nMaxIndex;
@@ -863,6 +869,8 @@ Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
     }
     else        // relative to right edge?
     {
+        if( nGlyphIndex < nStartIndex )
+            nGlyphIndex = nStartIndex;
         for( int i = nGlyphIndex; i < nEndIndex; ++i )
             nXPos -= mpGlyphAdvances[ i ];
     }
