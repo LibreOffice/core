@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfly.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-26 10:32:52 $
+ *  last change: $Author: ama $ $Date: 2001-07-16 14:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,6 +735,8 @@ BOOL SwDoc::ChgAnchor( const SdrMarkList& rMrkList, int eAnchorId,
             case FLY_AT_CNTNT:
             case FLY_AUTO_CNTNT:
                 pNewAnch = ::FindAnchor( pOldAnch, aPt, TRUE );
+                if( pNewAnch->IsTxtFrm() && ((SwTxtFrm*)pNewAnch)->IsFollow() )
+                    pNewAnch = ((SwTxtFrm*)pNewAnch)->FindMaster();
                 if( pNewAnch->IsProtected() )
                     pNewAnch = 0;
                 else
