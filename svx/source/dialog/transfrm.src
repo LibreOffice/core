@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 15:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 #include "transfrm.hrc"
  // pragma -------------------------------------------------------------------
 
-#define MA_TABPAGE_HEIGHT       82 + 22 + 48 + RSC_MA_TABPAGE_INNERBORDER_BOTTOM
+#define MA_TABPAGE_HEIGHT       82 + 22 + 48 + RSC_SP_TBPG_INNERBORDER_BOTTOM
 
  // RID_SVXPAGE_POSITION -----------------------------------------------------
 TabPage RID_SVXPAGE_POSITION
@@ -89,7 +89,7 @@ TabPage RID_SVXPAGE_POSITION
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
         Text [ norwegian ] = "Posisjon" ;
@@ -276,7 +276,7 @@ TabPage RID_SVXPAGE_POSITION
     FixedLine FL_ANCHOR
     {
         Pos = MAP_APPFONT ( 6 , 71 + 11  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Verankerung" ;
         Text [ ENGLISH ] = "Anchor" ;
         Hide = TRUE ;
@@ -846,7 +846,7 @@ TabPage RID_SVXPAGE_SIZE
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Größe" ;
         Text [ ENGLISH ] = "Size" ;
         Text [ norwegian ] = "Størrelse" ;
@@ -1062,7 +1062,7 @@ TabPage RID_SVXPAGE_SIZE
     FixedLine FL_ADJUST
     {
         Pos = MAP_APPFONT ( 6 , 79 + 11  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Anpassen" ;
         Text [ ENGLISH ] = "Adjust" ;
         Text [ english_us ] = "Adapt" ;
@@ -1179,7 +1179,7 @@ TabPage RID_SVXPAGE_ANGLE
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Drehpunkt" ;
         Text [ ENGLISH ] = "Pivot" ;
         Text [ norwegian ] = "Pivot" ;
@@ -1334,7 +1334,7 @@ TabPage RID_SVXPAGE_ANGLE
     FixedLine FL_ANGLE
     {
         Pos = MAP_APPFONT ( 6 , 71 + 11 ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Drehwinkel" ;
         Text [ ENGLISH ] = "Angle" ;
         Text [ norwegian ] = "Vinkel" ;
@@ -1476,7 +1476,7 @@ TabPage RID_SVXPAGE_SLANT
     FixedLine FL_RADIUS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Eckenradius" ;
         Text [ ENGLISH ] = "Edge radius" ;
         Text [ dutch ] = "Hoekafronding" ;
@@ -1547,7 +1547,7 @@ TabPage RID_SVXPAGE_SLANT
     FixedLine FL_SLANT
     {
         Pos = MAP_APPFONT ( 6 , 35  ) ;
-        Size = MAP_APPFONT ( 248 , RSC_MA_FIXEDLINE_HEIGHT ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text = "Schräg stellen" ;
         Text [ ENGLISH ] = "Slant" ;
         Text [ english_us ] = "Slant" ;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-17 14:08:54 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 15:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,10 +617,10 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
         {
             long nY(LogicToPixel(Point(11,14), MAP_APPFONT).X());
             long nX(LogicToPixel(Point(11,14), MAP_APPFONT).Y());
-            Point aPos(aBackgroundColorSet.GetPosPixel());
+            Point aPos(aBorderWin.GetPosPixel());
             aPos.X() = nX;
             aPos.Y() = nY;
-            aBackgroundColorSet.SetPosPixel(aPos);
+            aBorderWin.SetPosPixel(aPos);
             aPos = pPreviewWin1->GetPosPixel();
             aPos.Y()  = nY;
             pPreviewWin1->SetPosPixel(aPos);
