@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:22:46 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,11 +128,11 @@ Menu RID_FMEXPLORER_POPUPMENU
                         Text [ french ] = "C~ontrτle cachι" ;
                         Text [ dutch ] = "~verborgen controle" ;
                         Text [ portuguese ] = "Controlo o~culto" ;
-                        Text[ chinese_simplified ] = "ÒώΘλΏΨΦΖ";
+                        Text[ chinese_simplified ] = "ÒώΘλµΔΏΨΦΖ";
                         Text[ russian ] = "Ρκπϋςϋι ύλεμενς σοπΰβλενθÿ";
                         Text[ polish ] = "Ukryty formant";
                         Text[ japanese ] = "‰B‚µΊέΔΫ°Ω";
-                        Text[ chinese_traditional ] = "Ατ¤J±±»s¶µ";
+                        Text[ chinese_traditional ] = "Ατ¤JªΊ±±»s¶µ";
                         Text[ arabic ] = "ΪδΥΡ ΚΝίγ γΞέν";
                         Text[ greek ] = "Κρυ~φό στοιχείο ελέγχου";
                         Text[ korean ] = "Όϋ°άΑψ ΔΑΖ®·Ρ";
@@ -755,7 +755,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Text[ greek ] = "Καλ~υμμένο πεδίο";
             Text[ dutch ] = "~Patroonveld";
             Text[ french ] = "Champ ~masquι";
-            Text[ spanish ] = "Campo s~eleccionado";
+            Text[ spanish ] = "Campo enmascarado";
             Text[ italian ] = "Campo a ~maschera";
             Text[ danish ] = "Maskeret felt";
             Text[ swedish ] = "~Maskerat fδlt";
@@ -981,6 +981,7 @@ DockingWindow RID_SVX_FMEXPLORER
     Text[ catalan ] = "Navegador de formulario";
     Text[ finnish ] = "Lomakkeen siirtymδvalikko";
 };
+
 
 
 
