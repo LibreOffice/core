@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:24:25 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ FRENCH ] = "Rιsolution" ;
         Text [ ITALIAN ] = "Risoluzione" ;
         Text [ DUTCH ] = "Resol~utie" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Resolu??o" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Resoluηγo" ;
         Text [ SWEDISH ] = "Upplφsning" ;
         Text [ PORTUGUESE ] = "~Resoluηγo" ;
         Text[ chinese_simplified ] = "ε†θΎ¨η‡";
@@ -251,7 +251,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ english_us ] = "~Vertical";
         Text[ portuguese ] = "~Vertical";
         Text[ russian ] = "Βεπςθκΰλόνξ";
-        Text[ greek ] = "Κατακόρ~υφα";
+        Text[ greek ] = "Κατακόρυ~φα";
         Text[ dutch ] = "Verti~caal";
         Text[ french ] = "Vertical";
         Text[ spanish ] = "~Vertical";
@@ -323,7 +323,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ FRENCH ] = "Finesse" ;
         Text [ ITALIAN ] = "Suddivisione" ;
         Text [ DUTCH ] = "~Onderverdeling" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Divis?o" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Divisγo" ;
         Text [ SWEDISH ] = "Indelning" ;
         Text [ PORTUGUESE ] = "~Subdivisγo" ;
         Text[ chinese_simplified ] = "ηΊΏη‚Ήι—΄ι”";
@@ -360,10 +360,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ danish ] = "X-akse";
         Text[ swedish ] = "H~orisontellt";
         Text[ polish ] = "Poziomo";
-        Text[ portuguese_brazilian ] = "~Eixo X";
-        Text[ japanese ] = "ζ¨ªγ«";
-        Text[ korean ] = "κ°€λ΅";
-        Text[ chinese_simplified ] = "ζ°΄εΉ³ζ–Ήε‘";
+        Text[ portuguese_brazilian ] = "Eixo ~X";
+        Text[ japanese ] = "ζ¨ªγ«(~A)";
+        Text[ korean ] = "κ°€λ΅(~A)";
+        Text[ chinese_simplified ] = "ζ°΄εΉ³ζ–Ήε‘(~A)";
         Text[ chinese_traditional ] = "ζ°΄εΉ³ζ–Ήε‘(~A)";
         Text[ turkish ] = "   ~Yatay";
         Text[ arabic ] = "Γέήν";
@@ -393,10 +393,10 @@ TabPage RID_SVXPAGE_GRID
         Text[ danish ] = "Y-akse";
         Text[ swedish ] = "~Vertikalt";
         Text[ polish ] = "~Pionowo";
-        Text[ portuguese_brazilian ] = "~Eixo Y";
-        Text[ japanese ] = "ηΈ¦γ«";
-        Text[ korean ] = "μ„Έλ΅";
-        Text[ chinese_simplified ] = "ε‚η›΄ζ–Ήε‘";
+        Text[ portuguese_brazilian ] = "Eixo ~Y";
+        Text[ japanese ] = "ηΈ¦γ«(~E)";
+        Text[ korean ] = "μ„Έλ΅(~E)";
+        Text[ chinese_simplified ] = "ε‚η›΄ζ–Ήε‘(~E)";
         Text[ chinese_traditional ] = "ε‚η›΄ζ–Ήε‘(~E)";
         Text[ turkish ] = "~Dikey";
         Text[ arabic ] = "~ΡΓΣν";
@@ -436,7 +436,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ FRENCH ] = "Points" ;
         Text [ ITALIAN ] = "Punti" ;
         Text [ DUTCH ] = "Punten" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "point(s)" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "Pontos" ;
         Text [ SWEDISH ] = "punkter" ;
         Text [ PORTUGUESE ] = "Pontos" ;
         Text[ chinese_simplified ] = "ζ¥η‚Ή";
@@ -571,7 +571,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "γ‚Ήγƒγƒƒγƒ—γƒ©γ‚¤γƒ³γ«";
         Text[ chinese_traditional ] = "εΊ§ζ¨™η·";
         Text[ arabic ] = "έν ΞΨζΨ ΗαΝΘΣ";
-        Text[ greek ] = "Σε γραμμές προσκόλλησης";
+        Text[ greek ] = "Σε γραμμές συγκράτησης";
         Text[ korean ] = "λ§μ¶¤μ„ μ—μ„";
         Text[ turkish ] = "Kopma ηizgileri";
         Text[ language_user1 ] = " ";
@@ -605,7 +605,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "γƒγƒΌγ‚Έδ½™η™½γ«(~P)";
         Text[ chinese_traditional ] = "ε°ζΊ–ι ι‚(~P)";
         Text[ arabic ] = "έν εζΗγΤ ΗαΥέΝΙ";
-        Text[ greek ] = "~Στα περιθώρια της σελίδας";
+        Text[ greek ] = "Στα πε~ριθώρια των σελίδων";
         Text[ korean ] = "νμ΄μ§€μ—μ„ λ³€κ²½(~P)";
         Text[ turkish ] = "~Sayfa kenar boώluklarύna";
         Text[ language_user1 ] = " ";
@@ -642,7 +642,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒζ γ«(~F)";
         Text[ chinese_traditional ] = "η‰©δ»¶ζ΅†(~F)";
         Text[ arabic ] = "έν ίΗΟΡ ΗαίΗΖδ";
-        Text[ greek ] = "Στο πλαίσι~ο αντικειμένου";
+        Text[ greek ] = "Στο πλαίσιο του αντικε~ιμένου";
         Text[ korean ] = "κ°μ²΄ ν…λ‘λ¦¬μ—(~F)";
         Text[ turkish ] = "Nesne ~ηerηevesine";
         Text[ language_user1 ] = " ";
@@ -678,7 +678,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "γ‚ªγƒ–γ‚Έγ‚§γ‚―γƒε¶εΎ΅η‚Ήγ«(~C)";
         Text[ chinese_traditional ] = "η‰©δ»¶ι»(~C)";
         Text[ arabic ] = "έν δήΗΨ ΗαίΗΖδ";
-        Text[ greek ] = "Στ~α σημεία αντικειμένου";
+        Text[ greek ] = "Στα σημεία αντικειμέ~νου";
         Text[ korean ] = "κ°μ²΄ μ μ—(~C)";
         Text[ turkish ] = "Nesne noktalarύna";
         Text[ language_user1 ] = " ";
@@ -713,7 +713,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "δ½η½®εγ‚γ›(~S)";
         Text[ chinese_traditional ] = "ε°ι½η―„ε(~S)";
         Text[ arabic ] = "δΨΗή ΗαΝΘΣ";
-        Text[ greek ] = "Εύρος προσκόλλησης";
+        Text[ greek ] = "Εύρος προσκό~λλησης";
         Text[ korean ] = "λ§μ¶¤ λ²”μ„(~S)";
         Text[ turkish ] = "~Kopma aralύπύ";
         Text[ language_user1 ] = " ";
@@ -863,7 +863,7 @@ TabPage RID_SVXPAGE_GRID
         Text [ FRENCH ] = "Arκtes plus ~longues" ;
         Text [ ITALIAN ] = "Bordo piω lungo" ;
         Text [ DUTCH ] = "~Langere zijden" ;
-        Text [ PORTUGUESE_BRAZILIAN ] = "~Extender arestas" ;
+        Text [ PORTUGUESE_BRAZILIAN ] = "~Estender arestas" ;
         Text [ SWEDISH ] = "~Lδngre kantlδngd" ;
         Text [ PORTUGUESE ] = "A~largar arestas" ;
         Text[ chinese_simplified ] = "θΎƒι•Ώη„ε›Ύε½ΆθΎΉ(~E)";
@@ -872,7 +872,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "θ§’γ‹γ‚‰ε»¶γ°γ™ι•·γ•(~E)";
         Text[ chinese_traditional ] = "θΌƒι•·η„ε–ε½Άι‚(~E)";
         Text[ arabic ] = "ÒνΗΟΙ Ψζα ΗαΝζΗέ";
-        Text[ greek ] = "Μεγα~λύτερο μήκος άκρου";
+        Text[ greek ] = "Επιμήκ~υνση άκρων";
         Text[ korean ] = "κ°€μ¥μλ¦¬ κΈΈμ΄ λμ„(~E)";
         Text[ turkish ] = "~Kenarlarύ Geniώlet";
         Text[ language_user1 ] = " ";
@@ -909,7 +909,7 @@ TabPage RID_SVXPAGE_GRID
         Text[ japanese ] = "ε›θ»Άζ™‚(~T)";
         Text[ chinese_traditional ] = "ε¨ζ—‹θ½‰ζ™‚(~T)";
         Text[ arabic ] = "ΓΛδΗΑ ΗαΟζΡΗδ";
-        Text[ greek ] = "Κατά τη περιστροφή";
+        Text[ greek ] = "Με περιστρ~οφή";
         Text[ korean ] = "νμ „ν•  λ•(~T)";
         Text[ turkish ] = "Eπer ηev~rilirse";
         Text[ language_user1 ] = " ";
@@ -1044,6 +1044,7 @@ TabPage RID_SVXPAGE_GRID
         CustomUnitText[ slovak ] = " stupΕov";
     };
 };
+
 
 
 
