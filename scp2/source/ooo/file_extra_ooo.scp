@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_extra_ooo.scp,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: rt $ $Date: 2005-01-31 09:28:43 $
+*  last change: $Author: vg $ $Date: 2005-03-24 02:59:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -61,11 +61,10 @@
 
 #include "macros.inc"
 
-File gid_File_Extra_Autocorr_Lang
+File gid_File_Extra_Autocorr
     Dir = gid_Dir_Share_Autocorr;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE);
-    EXTRA_ALL_LANG(autocorr);
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "autocorr.zip";
 End
 
 File gid_File_Extra_Autotextshare_Lang
