@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-29 11:46:46 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 18:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3442,7 +3442,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text = "~Oberer Zeile" ;
         Text [ ENGLISH ] = "First row" ;
         Text [ dutch ] = "~Koptekst" ;
-        Text [ english_us ] = "H~eader" ;
+        Text [ english_us ] = "~Top row" ;
         Text [ italian ] = "Riga d'intestazione" ;
         Text [ spanish ] = "~Encabezamiento" ;
         Text [ french ] = "~En-tête" ;
@@ -3502,7 +3502,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Text = "~Unterer Zeile" ;
         Text [ ENGLISH ] = "Last row" ;
         Text [ dutch ] = "~Voettekst" ;
-        Text [ english_us ] = "~Footer" ;
+        Text [ english_us ] = "~Bottom row" ;
         Text [ italian ] = "Piè di pagina" ;
         Text [ spanish ] = "~Pie de página" ;
         Text [ french ] = "~Pied de page" ;
@@ -3579,7 +3579,7 @@ ModalDialog RID_SCDLG_NAMES_CREATE
         Size = MAP_APPFONT ( 104 , 8 ) ;
         Text = "Namen erzeugen aus" ;
         Text [ ENGLISH ] = "Create names from" ;
-        Text [ english_us ] = "Create name from" ;
+        Text [ english_us ] = "Create names from" ;
         Text [ italian ] = "Generare i nomi da" ;
         Text [ spanish ] = "Nombre a partir de" ;
         Text [ french ] = "Créer un nom à partir de" ;
@@ -3724,7 +3724,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     };
     Text = "Namen einfügen" ;
     Text [ ENGLISH ] = "Paste Name" ;
-    Text [ english_us ] = "Paste Name" ;
+    Text [ english_us ] = "Insert Name" ;
     Text [ italian ] = "Inserisci nomi" ;
     Text [ spanish ] = "Insertar nombre" ;
     Text [ french ] = "Insérer un nom" ;
