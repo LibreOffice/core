@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:15:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 12:31:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef DBAUI_ADTABDLG_HRC
 #include "adtabdlg.hrc"
 #endif
-#ifndef DBAUI_DLGERR_HXX
-#include "dlgerr.hxx"
+#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "sqlmessage.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
