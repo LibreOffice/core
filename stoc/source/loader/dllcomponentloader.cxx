@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-11-07 14:50:01 $
+ *  last change: $Author: dbo $ $Date: 2000-11-08 09:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,9 +294,24 @@ static oslModule loadModule( const OUString & rLibName, sal_Int32 nMode )
         {
             OUString aBaseDir( *iPos );
             OUString aAbs;
-            if (osl_File_E_None == ::osl_getAbsolutePath(
-                aBaseDir.pData, rLibName.pData, &aAbs.pData )) // file exists
+
+            if (rLibName.getLength() > 2 &&
+                rLibName.getStr()[0] == '/' &&
+                rLibName.getStr()[1] == '/') // absolute unc path given?
             {
+                aAbs = rLibName;
+#ifdef TRACE_CPLD
+                out( "> cpld takes path: \"" );
+                out( aAbs );
+#endif
+            }
+            else
+            {
+                if (osl_File_E_None != ::osl_getAbsolutePath(
+                    aBaseDir.pData, rLibName.pData, &aAbs.pData ))
+                {
+                    continue;
+                }
 #ifdef TRACE_CPLD
                 out( "> cpld found path: \"" );
                 out( aBaseDir );
@@ -305,28 +320,33 @@ static oslModule loadModule( const OUString & rLibName, sal_Int32 nMode )
                 out( "\" => \"" );
                 out( aAbs );
 #endif
-                if (0 == aAbs.indexOf( aBaseDir )) // still part of it?
-                {
-                    // load from absolute path
-                    oslModule lib = ::osl_loadModule( aAbs.pData, nMode );
-#ifdef TRACE_CPLD
-                    out( lib ? "\" ...loaded!\n" : "\" ...loading failed!\n" );
-#endif
-                    return lib;
-                }
-#ifdef TRACE_CPLD
-                else
-                {
-                    out( "\" ...does not match given path.\n" );
-                }
-#endif
             }
+
+            if (0 == aAbs.indexOf( aBaseDir )) // still part of it?
+            {
+                // load from absolute path
+                oslModule lib = ::osl_loadModule( aAbs.pData, nMode );
+#ifdef TRACE_CPLD
+                out( lib ? "\" ...loaded!\n" : "\" ...loading failed!\n" );
+#endif
+                return lib;
+            }
+#ifdef TRACE_CPLD
+            else
+            {
+                out( "\" ...does not match given path \"" );
+                out( aBaseDir );
+                out( "\".\n" );
+            }
+#endif
         }
         return 0;
     }
-
-    // no path set
-    return ::osl_loadModule( rLibName.pData, nMode );
+    else
+    {
+        // no path set
+        return ::osl_loadModule( rLibName.pData, nMode );
+    }
 }
 
 //*************************************************************************
