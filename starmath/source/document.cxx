@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-30 09:28:13 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:36:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -663,7 +663,7 @@ BOOL SmDocShell::SetData( const String& rData )
     return TRUE;
 }
 
-void SmDocShell::Convert40To50Txt()
+void SmDocShell::Convert40To50Txt( String &rText )
     // adapts the text 'aText' to be parsed from 4.0 version, to changes made
     // in 5.0 version. (Namely that functions do not need arguments any more)
     // Example: "2 over sin x" acts very different in 4.0 and 5.0
@@ -674,16 +674,56 @@ void SmDocShell::Convert40To50Txt()
     // parse in old 4.0 style and make changes for 5.0 style
     BOOL  bVal = aInterpreter.IsConvert40To50();
     aInterpreter.SetConvert40To50(TRUE);
-    pTree = aInterpreter.Parse(aText);
+    pTree = aInterpreter.Parse(rText);
     aInterpreter.SetConvert40To50(bVal);
 
     // get new to 5.0 version converted text
-    aText = aInterpreter.GetText();
+    rText = aInterpreter.GetText();
 
     // clean up tree parsed in old style
     if (pTree)
     {   delete pTree;
         pTree = NULL;
+    }
+}
+
+
+void SmDocShell::Convert50To60Txt( String &rText )
+{
+    // change french 50 symbol-names to their 60 equivalent
+    // even in strings ("") and comments (%%).
+    // Thus a simple text replacement should work.
+    if (LANGUAGE_FRENCH == Application::GetSettings().GetUILanguage())
+    {
+        const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+        const ResStringArray &rFrench50 = rData.GetFrench50NamesArray();
+        const ResStringArray &rFrench60 = rData.GetFrench60NamesArray();
+        USHORT nCount = rFrench50.Count();
+        for (USHORT i = 0;  i < nCount;  ++i)
+        {
+            rText.SearchAndReplaceAll( rFrench50.GetString(i),
+                                       rFrench60.GetString(i) );
+        }
+    }
+}
+
+
+void SmDocShell::Convert60To50Txt( String &rText )
+{
+    // change french 60 symbol-names to their 50 equivalent
+    // even in strings ("") and comments (%%).
+    // Thus a simple text replacement should work.
+    if (LANGUAGE_FRENCH == Application::GetSettings().GetUILanguage())
+    {
+        const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+        const ResStringArray &rFrench50 = rData.GetFrench50NamesArray();
+        const ResStringArray &rFrench60 = rData.GetFrench60NamesArray();
+        USHORT nCount = rFrench60.Count();
+        for (USHORT i = 0;  i < nCount;  ++i)
+        {
+            rText.SearchAndReplaceAll( rFrench60.GetString(i),
+                                       rFrench50.GetString(i) );
+        }
     }
 }
 
@@ -799,8 +839,15 @@ BOOL SmDocShell::Load(SvStorage *pStor)
             }
             else
             {
-                if ( pStor->GetVersion() <= SOFFICE_FILEFORMAT_40 )
-                    Convert40To50Txt();
+                long nVersion = pStor->GetVersion();
+                if ( nVersion <= SOFFICE_FILEFORMAT_40 )
+                    Convert40To50Txt( aText );
+                if ( nVersion <= SOFFICE_FILEFORMAT_50 )
+                    Convert50To60Txt( aText );
+                if (pTree)
+                {   delete pTree;
+                    pTree = NULL;
+                }
             }
         }
     }
@@ -845,8 +892,13 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
         aTemp += aText;
         aText  = aTemp;
 
-        if( bChkOldVersion && SOFFICE_FILEFORMAT_40 >= pStor->GetVersion() )
-            Convert40To50Txt();
+        if( bChkOldVersion )
+        {
+            if( SOFFICE_FILEFORMAT_40 >= pStor->GetVersion() )
+                Convert40To50Txt( aText );
+            if( SOFFICE_FILEFORMAT_50 >= pStor->GetVersion() )
+                Convert50To60Txt( aText );
+        }
 
         Parse();
         SetModified(TRUE);
@@ -865,7 +917,10 @@ BOOL SmDocShell::Insert(SvStorage *pStor)
 
 void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 {
-    ByteString exString (ExportString(aText));
+    String aTmp( aText );
+    if (SOFFICE_FILEFORMAT_50 >= xStrm->GetVersion())
+        Convert60To50Txt( aTmp );
+    ByteString exString( ExportString( aTmp ) );
 
     *xStrm  << SM304AIDENT << SM50VERSION
             << 'T';
@@ -879,15 +934,6 @@ void SmDocShell::ImplSave( SvStorageStreamRef xStrm )
 
 BOOL SmDocShell::Save()
 {
-#if 0
-    if ( SfxInPlaceObject::Save() && aDocStream.Is() )
-    {
-        aDocStream->Seek(0);
-        ImplSave( aDocStream );
-        return TRUE;
-    }
-#endif
-
     //! apply latest changes if necessary
     UpdateText();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-17 08:28:21 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,7 @@
 #endif
 
 #ifndef _SV_RESARY_HXX
-#if SUPD >= 637
 #include <tools/resary.hxx>
-#else
-#include <vcl/resary.hxx>
-#endif
 #endif
 
 #ifndef _SFXDISPATCH_HXX //autogen
@@ -130,45 +126,14 @@ long                SF_Ident = SF_IDENT;
 
 /**************************************************************************/
 
-class SmMathConfigResource : public Resource
-{
-    ResStringArray      aUiSymbolNamesAry;
-    ResStringArray      aExportSymbolNamesAry;
-    ResStringArray      aUiSymbolSetNamesAry;
-    ResStringArray      aExportSymbolSetNamesAry;
-
-public:
-    SmMathConfigResource();
-
-    ResStringArray& GetUiSymbolNamesArray()     { return aUiSymbolNamesAry; }
-    ResStringArray& GetExportSymbolNamesArray() { return aExportSymbolNamesAry; }
-
-    ResStringArray& GetUiSymbolSetNamesArray()     { return aUiSymbolSetNamesAry; }
-    ResStringArray& GetExportSymbolSetNamesArray() { return aExportSymbolSetNamesAry; }
-};
-
-
-SmMathConfigResource::SmMathConfigResource() :
-    Resource( SmResId(RID_LOCALIZED_NAMES) ),
-    aUiSymbolNamesAry       ( ResId(RID_UI_SYMBOL_NAMES) ),
-    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) ),
-    aUiSymbolSetNamesAry    ( ResId(RID_UI_SYMBOLSET_NAMES) ),
-    aExportSymbolSetNamesAry( ResId(RID_EXPORT_SYMBOLSET_NAMES) )
-{
-    FreeResource();
-}
-
-/**************************************************************************/
-
 String GetExportSymbolName( const String &rUiSymbolName )
 {
     String aRes;
 
-    SmMathConfigResource aCfgRes;
-    ResStringArray &rUiNames = aCfgRes.GetUiSymbolNamesArray();
-    ResStringArray &rExportNames = aCfgRes.GetExportSymbolNamesArray();
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = rUiNames.Count();
-
     for (USHORT i = 0;  i < nCount;  ++i)
     {
         if (rUiSymbolName == rUiNames.GetString(i))
@@ -186,11 +151,10 @@ String GetUiSymbolName( const String &rExportSymbolName )
 {
     String aRes;
 
-    SmMathConfigResource aCfgRes;
-    ResStringArray &rUiNames = aCfgRes.GetUiSymbolNamesArray();
-    ResStringArray &rExportNames = aCfgRes.GetExportSymbolNamesArray();
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = rExportNames.Count();
-
     for (USHORT i = 0;  i < nCount;  ++i)
     {
         if (rExportSymbolName == rExportNames.GetString(i))
@@ -207,11 +171,10 @@ String GetExportSymbolSetName( const String &rUiSymbolSetName )
 {
     String aRes;
 
-    SmMathConfigResource aCfgRes;
-    ResStringArray &rUiNames = aCfgRes.GetUiSymbolSetNamesArray();
-    ResStringArray &rExportNames = aCfgRes.GetExportSymbolSetNamesArray();
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = rUiNames.Count();
-
     for (USHORT i = 0;  i < nCount;  ++i)
     {
         if (rUiSymbolSetName == rUiNames.GetString(i))
@@ -229,11 +192,10 @@ String GetUiSymbolSetName( const String &rExportSymbolSetName )
 {
     String aRes;
 
-    SmMathConfigResource aCfgRes;
-    ResStringArray &rUiNames = aCfgRes.GetUiSymbolSetNamesArray();
-    ResStringArray &rExportNames = aCfgRes.GetExportSymbolSetNamesArray();
+    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
+    const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = rExportNames.Count();
-
     for (USHORT i = 0;  i < nCount;  ++i)
     {
         if (rExportSymbolSetName == rExportNames.GetString(i))

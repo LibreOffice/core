@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 13:02:28 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:37:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,27 @@ TYPEINIT1( SmModule, SmModuleDummy );
 #define SmModule
 #include "smslots.hxx"
 
+/////////////////////////////////////////////////////////////////
+
+SmLocalizedSymbolData::SmLocalizedSymbolData() :
+    Resource( SmResId(RID_LOCALIZED_NAMES) ),
+    aUiSymbolNamesAry       ( ResId(RID_UI_SYMBOL_NAMES) ),
+    aExportSymbolNamesAry   ( ResId(RID_EXPORT_SYMBOL_NAMES) ),
+    aUiSymbolSetNamesAry    ( ResId(RID_UI_SYMBOLSET_NAMES) ),
+    aExportSymbolSetNamesAry( ResId(RID_EXPORT_SYMBOLSET_NAMES) ),
+    aFrench50NamesAry       ( ResId(RID_FRENCH_50_NAMES) ),
+    aFrench60NamesAry       ( ResId(RID_FRENCH_60_NAMES) )
+{
+    FreeResource();
+}
+
+
+SmLocalizedSymbolData::~SmLocalizedSymbolData()
+{
+}
+
+/////////////////////////////////////////////////////////////////
+
 SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 {
     SFX_STATUSBAR_REGISTRATION(SmResId(RID_STATUSBAR));
@@ -131,6 +152,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 SmModule::SmModule(SvFactory* pObjFact) :
     SmModuleDummy(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact),
     pConfig( 0 ),
+    pLocSymbolData( 0 ),
     pRectCache( new SmRectCache ),
     pSysLocale( 0 )
 {
@@ -141,6 +163,7 @@ SmModule::SmModule(SvFactory* pObjFact) :
 SmModule::~SmModule()
 {
     delete pConfig;
+    delete pLocSymbolData;
     delete pRectCache;
     delete pSysLocale;
 }
@@ -158,6 +181,12 @@ SmConfig * SmModule::GetConfig()
     return pConfig;
 }
 
+const SmLocalizedSymbolData & SmModule::GetLocSymbolData() const
+{
+    if (!pLocSymbolData)
+        ((SmModule *) this)->pLocSymbolData = new SmLocalizedSymbolData;
+    return *pLocSymbolData;
+}
 
 void SmModule::GetState(SfxItemSet &rSet)
 {

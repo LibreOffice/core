@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-06 13:02:49 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:32:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _SMMOD_HXX
 #define _SMMOD_HXX
 
+#ifndef _SV_RESARY_HXX
+#include <tools/resary.hxx>
+#endif
 
 #ifndef _SMDLL_HXX
 #define _SM_DLL             // fuer SD_MOD()
@@ -89,11 +92,39 @@ class SmModule;
 class SmRectCache;
 class SvtSysLocale;
 
+/////////////////////////////////////////////////////////////////
+
+class SmLocalizedSymbolData : public Resource
+{
+    ResStringArray      aUiSymbolNamesAry;
+    ResStringArray      aExportSymbolNamesAry;
+    ResStringArray      aUiSymbolSetNamesAry;
+    ResStringArray      aExportSymbolSetNamesAry;
+    ResStringArray      aFrench50NamesAry;
+    ResStringArray      aFrench60NamesAry;
+
+public:
+    SmLocalizedSymbolData();
+    ~SmLocalizedSymbolData();
+
+    const ResStringArray& GetUiSymbolNamesArray() const     { return aUiSymbolNamesAry; }
+    const ResStringArray& GetExportSymbolNamesArray() const { return aExportSymbolNamesAry; }
+
+    const ResStringArray& GetUiSymbolSetNamesArray() const     { return aUiSymbolSetNamesAry; }
+    const ResStringArray& GetExportSymbolSetNamesArray() const { return aExportSymbolSetNamesAry; }
+
+    const ResStringArray& GetFrench50NamesArray() const     { return aFrench50NamesAry; }
+    const ResStringArray& GetFrench60NamesArray() const     { return aFrench60NamesAry; }
+};
+
+/////////////////////////////////////////////////////////////////
+
 class SmModule : public SmModuleDummy
 {
-    SmConfig            *pConfig;
-    SmRectCache         *pRectCache;
-    SvtSysLocale        *pSysLocale;
+    SmConfig                *pConfig;
+    SmLocalizedSymbolData   *pLocSymbolData;
+    SmRectCache             *pRectCache;
+    SvtSysLocale            *pSysLocale;
 
     virtual void FillStatusBar(StatusBar &rBar);
     void _CreateSysLocale() const;
@@ -110,6 +141,8 @@ public:
 
     SmConfig *          GetConfig();
     SmRectCache *       GetRectCache()     { return pRectCache; }
+
+    const SmLocalizedSymbolData &   GetLocSymbolData() const;
 
     void GetState(SfxItemSet&);
 

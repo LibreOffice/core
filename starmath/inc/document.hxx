@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-05 10:52:21 $
+ *  last change: $Author: tl $ $Date: 2001-08-02 15:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,7 +212,9 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
 
     Printer            *GetPrt();
 
-    void                Convert40To50Txt();
+    void                Convert40To50Txt( String &rText );
+    void                Convert50To60Txt( String &rText );
+    void                Convert60To50Txt( String &rText );
 
     BOOL                IsFormulaArranged() const { return bIsFormulaArranged; }
     void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
