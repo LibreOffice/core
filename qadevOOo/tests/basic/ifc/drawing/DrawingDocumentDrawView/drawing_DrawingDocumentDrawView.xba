@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: drawing_DrawingDocumentDrawView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:47:17 $ 
+'*  last change:$Date: 2003-10-06 13:22:49 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -91,6 +91,13 @@ On Error Goto ErrHndl
 
     oObj.IsMasterPageMode = false
     oObj.IsLayerMode = false
+
+    PropertyTester.TestProperty("ZoomType")
+
+    PropertyTester.TestProperty("ZoomValue")
+
+    PropertyTester.TestProperty("ViewOffset")
+
 Exit Sub
 ErrHndl:
     Test.Exception()
