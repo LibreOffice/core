@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colorcfg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:24:09 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:15:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,17 +302,19 @@ ColorConfig_Impl::~ColorConfig_Impl()
 // -----------------------------------------------------------------------------
 void ColorConfig_Impl::DisableBroadcast()
 {
-    ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
+    if ( ColorConfig::m_pImpl )
+        ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_False;
 }
 // -----------------------------------------------------------------------------
 void ColorConfig_Impl::EnableBroadcast()
 {
-    ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
+    if ( ColorConfig::m_pImpl )
+        ColorConfig::m_pImpl->m_bIsBroadcastEnabled = sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ColorConfig_Impl::IsEnableBroadcast()
 {
-    return ColorConfig::m_pImpl->m_bIsBroadcastEnabled;
+    return ColorConfig::m_pImpl ? ColorConfig::m_pImpl->m_bIsBroadcastEnabled : sal_False;
 }
 /* -----------------------------22.03.2002 14:38------------------------------
 
