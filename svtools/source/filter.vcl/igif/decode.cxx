@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decode.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:28:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,14 +130,14 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, BYTE cBufSize,
             ULONG   nOffset = pTmpTarget - pTarget;
             HPBYTE  pTmp = (HPBYTE) SvMemAlloc( nNewSize );
 
-            HMEMCPY( pTmp, pTarget, nTargetSize );
+            memcpy( pTmp, pTarget, nTargetSize );
             SvMemFree( pTarget );
 
             nTargetSize = nNewSize;
             pTmpTarget = ( pTarget = pTmp ) + nOffset;
         }
 
-        HMEMCPY( pTmpTarget, pOutBufData, nOutBufDataLen );
+        memcpy( pTmpTarget, pOutBufData, nOutBufDataLen );
         pTmpTarget += nOutBufDataLen;
         pOutBufData += nOutBufDataLen;
         nOutBufDataLen = 0;

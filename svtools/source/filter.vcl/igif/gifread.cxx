@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gifread.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:59 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,10 +507,10 @@ void GIFReader::FillImages( HPBYTE pBytes, ULONG nCount )
 
                         for( long j = nMinY; j <= nMaxY; j++ )
                         {
-                            HMEMCPY( pAcc8->GetScanline( j ), pScanline8, nSize8 );
+                            memcpy( pAcc8->GetScanline( j ), pScanline8, nSize8 );
 
                             if( bGCTransparent )
-                                HMEMCPY( pAcc1->GetScanline( j ), pScanline1, nSize1 );
+                                memcpy( pAcc1->GetScanline( j ), pScanline1, nSize1 );
                         }
                     }
                 }
