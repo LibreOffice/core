@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:40:59 $
+ *  last change: $Author: nn $ $Date: 2000-10-09 10:26:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,6 +239,13 @@ void ScDocShell::ErrorMessage( USHORT nGlobStrId )
     aBox.Execute();
     if (bFocus)
         pParent->GrabFocus();
+}
+
+BOOL ScDocShell::IsEditable() const
+{
+    // import into read-only document is possible - must be extended if other filters use api
+
+    return !IsReadOnly() || aDocument.IsImportingXML();
 }
 
 void ScDocShell::DBAreaDeleted( USHORT nTab, USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2 )
