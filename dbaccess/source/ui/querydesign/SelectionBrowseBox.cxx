@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:31:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2040,20 +2040,20 @@ void OSelectionBrowseBox::Command(const CommandEvent& rEvt)
                     {
                         case ID_QUERY_FUNCTION:
                             SetRowVisible(BROW_FUNCTION_ROW, !IsRowVisible(BROW_FUNCTION_ROW));
-                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_FUNCTIONS );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( SID_QUERY_VIEW_FUNCTIONS );
                             break;
                         case ID_QUERY_TABLENAME:
                             SetRowVisible(BROW_TABLE_ROW, !IsRowVisible(BROW_TABLE_ROW));
-                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_TABLES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( SID_QUERY_VIEW_TABLES );
                             break;
                         case ID_QUERY_ALIASNAME:
                             SetRowVisible(BROW_COLUMNALIAS_ROW, !IsRowVisible(BROW_COLUMNALIAS_ROW));
-                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_VIEW_ALIASES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( SID_QUERY_VIEW_ALIASES );
                             break;
                         case ID_QUERY_DISTINCT:
                             static_cast<OQueryController*>(getDesignView()->getController())->setDistinct(!static_cast<OQueryController*>(getDesignView()->getController())->isDistinct());
                             static_cast<OQueryController*>(getDesignView()->getController())->setModified();
-                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( ID_BROWSER_QUERY_DISTINCT_VALUES );
+                            static_cast<OQueryController*>(getDesignView()->getController())->InvalidateFeature( SID_QUERY_DISTINCT_VALUES );
                             break;
                     }
 
