@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XController.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,8 @@
 
  module com {  module sun {  module star {  module frame {
 
-interface XFrame;
-interface XModel;
+ published interface XFrame;
+ published interface XModel;
 
 //=============================================================================
 /** With this interface, components viewed in a <type>Frame</type> can serve
@@ -80,7 +80,7 @@ interface XModel;
     @see com::sun::star::awt::XWindow
     @see XModel
  */
-interface XController: com::sun::star::lang::XComponent
+published interface XController: com::sun::star::lang::XComponent
 {
     //-------------------------------------------------------------------------
     /** is called to attach the controller with its managing frame.
