@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-05 13:29:35 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 10:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4646,6 +4646,11 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
     case LANGUAGE_ARABIC_BAHRAIN:
     case LANGUAGE_ARABIC_QATAR:
     case LANGUAGE_HEBREW:
+    case LANGUAGE_URDU:
+    case LANGUAGE_URDU_PAKISTAN:
+    case LANGUAGE_URDU_INDIA:
+    case LANGUAGE_THAI:
+    case LANGUAGE_VIETNAMESE:
         nScript = SCRIPTTYPE_COMPLEX;
         break;
 
@@ -4690,16 +4695,11 @@ USHORT GetScriptTypeOfLanguage( USHORT nLang )
 #define LANGUAGE_TAMIL                      0x0449
 #define LANGUAGE_TATAR                      0x0444
 #define LANGUAGE_TELUGU                     0x044A
-#define LANGUAGE_THAI                       0x041E
 #define LANGUAGE_TURKISH                    0x041F
 #define LANGUAGE_UKRAINIAN                  0x0422
-#define LANGUAGE_URDU                       0x0020
-#define LANGUAGE_URDU_PAKISTAN              0x0420
-#define LANGUAGE_URDU_INDIA                 0x0820
 #define LANGUAGE_UZBEK                      0x0043
 #define LANGUAGE_UZBEK_LATIN                0x0443
 #define LANGUAGE_UZBEK_CYRILLIC             0x0843
-#define LANGUAGE_VIETNAMESE                 0x042a
 */
 
     default:
