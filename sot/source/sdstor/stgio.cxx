@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgio.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:56:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 12:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ EasyFat::EasyFat( StgIo& rIo, StgStrm* pFatStream, INT32 nPSize )
     pFat = new INT32[ nPages ];
     pFree = new BOOL[ nPages ];
 
-    StgPage *pPage;
+    StgPage *pPage = NULL;
     INT32 nFatPageSize = 1 << rIo.aHdr.GetPageSize() - 2;
 
     for( INT32 nPage = 0; nPage < nPages; nPage++ )
