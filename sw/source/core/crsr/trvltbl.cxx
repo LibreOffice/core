@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 09:13:38 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:03:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
