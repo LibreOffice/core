@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imgcons.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ka $ $Date: 2001-01-26 15:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <tools/stream.hxx>
 #include <bmpacc.hxx>
 #include <bitmapex.hxx>
 #include <image.hxx>
@@ -180,7 +181,7 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
     if( nPalEntries )
     {
         BitmapColor aCol;
-        const ULONG* pTmp = pRGBAPal;
+        const sal_Int32* pTmp = (sal_Int32*) pRGBAPal;
 
         delete mpMapper;
         mpMapper = NULL;
@@ -193,22 +194,25 @@ void ImageConsumer::SetColorModel( USHORT nBitCount,
             Color&  rCol = mpPal[ i ];
             BYTE    cVal;
 
-            cVal = (BYTE) ( ( *pTmp & 0xff000000UL ) >> 24UL );
+            cVal = (BYTE) ( ( *pTmp & 0xff000000UL ) >> 24L );
             rCol.SetRed( cVal );
-            if( i < 256UL )
+
+            if( i < (ULONG) aPal.GetEntryCount() )
                 aPal[ (USHORT) i ].SetRed( cVal );
 
-            cVal = (BYTE) ( ( *pTmp & 0x00ff0000UL ) >> 16UL );
+            cVal = (BYTE) ( ( *pTmp & 0x00ff0000UL ) >> 16L );
             rCol.SetGreen( cVal );
-            if( i < 256UL )
+
+            if( i < (ULONG) aPal.GetEntryCount() )
                 aPal[ (USHORT) i ].SetGreen( cVal );
 
-            cVal = (BYTE) ( ( *pTmp & 0x0000ff00UL ) >> 8UL );
+            cVal = (BYTE) ( ( *pTmp & 0x0000ff00UL ) >> 8L );
             rCol.SetBlue( cVal );
-            if( i < 256UL )
+
+            if( i < (ULONG) aPal.GetEntryCount() )
                 aPal[ (USHORT) i ].SetBlue( cVal );
 
-            rCol.SetTransparency( (BYTE) ( ( *pTmp & 0x000000ffUL ) ) );
+            rCol.SetTransparency( (BYTE) ( ( *pTmp & 0x000000ffL ) ) );
         }
 
         if( nBitCount <= 1 )
@@ -249,8 +253,9 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
 {
     DBG_ASSERT( !!maBitmap && !!maMask, "Missing call to ImageConsumer::SetColorModel(...)!" );
 
-    BitmapWriteAccess* pBmpAcc = maBitmap.AcquireWriteAccess();
-    BitmapWriteAccess* pMskAcc = maMask.AcquireWriteAccess();
+    BitmapWriteAccess*  pBmpAcc = maBitmap.AcquireWriteAccess();
+    BitmapWriteAccess*  pMskAcc = maMask.AcquireWriteAccess();
+    sal_Bool            bDataChanged = sal_False;
 
     if( pBmpAcc && pMskAcc )
     {
@@ -296,7 +301,7 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() <= 8 ) )
             {
@@ -326,7 +331,7 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() > 8 ) )
             {
@@ -358,7 +363,7 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else
             {
@@ -372,6 +377,9 @@ void ImageConsumer::SetPixelsByBytes( ULONG nConsX, ULONG nConsY,
 
     maBitmap.ReleaseAccess( pBmpAcc );
     maMask.ReleaseAccess( pMskAcc );
+
+    if( bDataChanged )
+        DataChanged();
 }
 
 // -----------------------------------------------------------------------------
@@ -382,8 +390,9 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 {
     DBG_ASSERT( !!maBitmap && !!maMask, "Missing call to ImageConsumer::SetColorModel(...)!" );
 
-    BitmapWriteAccess* pBmpAcc = maBitmap.AcquireWriteAccess();
-    BitmapWriteAccess* pMskAcc = maMask.AcquireWriteAccess();
+    BitmapWriteAccess*  pBmpAcc = maBitmap.AcquireWriteAccess();
+    BitmapWriteAccess*  pMskAcc = maMask.AcquireWriteAccess();
+    sal_Bool            bDataChanged = sal_False;
 
     if( pBmpAcc && pMskAcc )
     {
@@ -407,7 +416,7 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const ULONG* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_Int32* pTmp = (sal_Int32*) pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
@@ -429,7 +438,7 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() <= 8 ) )
             {
@@ -438,11 +447,11 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const ULONG* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_Int32* pTmp = (sal_Int32*) pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        const ULONG     nIndex = *pTmp++;
+                        const sal_Int32 nIndex = *pTmp++;
                         const Color&    rCol = mpPal[ nIndex ];
 
                         // 0: Transparent; >0: Non-Transparent
@@ -459,7 +468,7 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else if( mpPal && ( pBmpAcc->GetBitCount() > 8 ) )
             {
@@ -468,11 +477,11 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 
                 for( long nY = nStartY; nY <= nEndY; nY++ )
                 {
-                    const ULONG* pTmp = pData + ( nY - nStartY ) * nScanSize + nOffset;
+                    const sal_Int32* pTmp = (sal_Int32*) pData + ( nY - nStartY ) * nScanSize + nOffset;
 
                     for( long nX = nStartX; nX <= nEndX; nX++ )
                     {
-                        const ULONG     nIndex = *pTmp++;
+                        const sal_Int32 nIndex = *pTmp++;
                         const Color&    rCol = mpPal[ nIndex ];
 
                         // 0: Transparent; >0: Non-Transparent
@@ -491,7 +500,7 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
                     }
                 }
 
-                DataChanged();
+                bDataChanged = sal_True;
             }
             else
             {
@@ -505,6 +514,9 @@ void ImageConsumer::SetPixelsByLongs( ULONG nConsX, ULONG nConsY,
 
     maBitmap.ReleaseAccess( pBmpAcc );
     maMask.ReleaseAccess( pMskAcc );
+
+    if( bDataChanged )
+        DataChanged();
 }
 
 // -----------------------------------------------------------------------------
