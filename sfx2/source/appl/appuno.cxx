@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-07 15:22:36 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,9 @@ using namespace ::com::sun::star::io;
 #include "brokenpackageint.hxx"
 #include "eventsupplier.hxx"
 #include "xpackcreator.hxx"
+#include "applet.hxx"
+#include "plugin.hxx"
+#include "iframe.hxx"
 
 #define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
@@ -253,6 +256,7 @@ static const String sMediaType      = String::CreateFromAscii( "MediaType"    );
 static const String sPostData       = String::CreateFromAscii( "PostData"       );
 static const String sCharacterSet   = String::CreateFromAscii( "CharacterSet"   );
 static const String sInputStream    = String::CreateFromAscii( "InputStream"    );
+static const String sStream         = String::CreateFromAscii( "Stream"    );
 static const String sOutputStream   = String::CreateFromAscii( "OutputStream"    );
 static const String sHidden         = String::CreateFromAscii( "Hidden"         );
 static const String sPreview        = String::CreateFromAscii( "Preview"        );
@@ -279,6 +283,8 @@ static const String sRepairPackage  = String::CreateFromAscii( "RepairPackage" )
 static const String sDocumentTitle  = String::CreateFromAscii( "DocumentTitle" );
 static const String sComponentData  = String::CreateFromAscii( "ComponentData" );
 static const String sComponentContext = String::CreateFromAscii( "ComponentContext" );
+static const String sDocumentBaseURL = String::CreateFromAscii( "DocumentBaseURL" );
+static const String sHierarchicalDocumentName = String::CreateFromAscii( "HierarchicalDocumentName" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -610,6 +616,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxUnoAnyItem( SID_INPUTSTREAM, rProp.Value ) );
                 }
+                else if ( aName == sStream )
+                {
+                    Reference< XInputStream > xVal;
+                    sal_Bool bOK = ((rProp.Value >>= xVal) && xVal.is());
+                    DBG_ASSERT( bOK, "invalid type for Stream" )
+                    if (bOK)
+                        rSet.Put( SfxUnoAnyItem( SID_STREAM, rProp.Value ) );
+                }
                 else if ( aName == sUCBContent )
                 {
                     Reference< XContent > xVal;
@@ -850,6 +864,23 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOCINFO_TITLE, sVal ) );
                 }
+                else if ( aName == sDocumentBaseURL )
+                {
+                    ::rtl::OUString sVal;
+                    // the base url can be set to empty ( for embedded objects for example )
+                    sal_Bool bOK = (rProp.Value >>= sVal);
+                    DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_DOC_BASEURL, sVal ) );
+                }
+                else if ( aName == sHierarchicalDocumentName )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = ((rProp.Value >>= sVal) && sVal.getLength());
+                    DBG_ASSERT( bOK, "invalid type or value for HierarchicalDocumentName" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_DOC_HIERARCHICALNAME, sVal ) );
+                }
             }
         }
 #ifdef DB_UTIL
@@ -955,6 +986,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_STREAM ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_OUTPUTSTREAM ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_TEMPLATE ) == SFX_ITEM_SET )
@@ -1019,6 +1052,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_COMPONENTCONTEXT ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_BASEURL ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME ) == SFX_ITEM_SET )
+                nAdditional++;
 
             // consider additional arguments
             nProps += nAdditional;
@@ -1078,6 +1115,8 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                         continue;
                     if ( nId == SID_INPUTSTREAM )
                         continue;
+                    if ( nId == SID_STREAM )
+                        continue;
                     if ( nId == SID_OUTPUTSTREAM )
                         continue;
                     if ( nId == SID_POSTDATA )
@@ -1135,6 +1174,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_COMPONENTDATA )
                         continue;
                     if ( nId == SID_COMPONENTCONTEXT )
+                        continue;
+                    if ( nId == SID_DOC_BASEURL )
+                        continue;
+                    if ( nId == SID_DOC_HIERARCHICALNAME )
                         continue;
 
                     // used only internally
@@ -1306,6 +1349,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = sInputStream;
                 pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
             }
+            if ( rSet.GetItemState( SID_STREAM, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sStream;
+                pValue[nActProp++].Value = ( ((SfxUnoAnyItem*)pItem)->GetValue() );
+            }
             if ( rSet.GetItemState( SID_OUTPUTSTREAM, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sOutputStream;
@@ -1446,6 +1494,16 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOCINFO_TITLE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sDocumentTitle;
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_DOC_BASEURL, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sDocumentBaseURL;
+                pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_DOC_HIERARCHICALNAME, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sHierarchicalDocumentName;
                 pValue[nActProp++].Value <<= ( ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
         }
@@ -1922,6 +1980,33 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     Reference< XRegistryKey > xNewKey;
     Reference< XRegistryKey > xLoaderKey;
 
+    // PluginObject
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::PluginObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+
+    // AppletObject
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::AppletObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+
+    // IFrameObject
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += ::sfx2::IFrameObject::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
+
     // global app event broadcaster
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxGlobalEvents_Impl::impl_getStaticImplementationName();
@@ -2076,6 +2161,9 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
+        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::AppletObject )
+        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
+        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
 
         // Factory is valid - service was found.
         if ( xFactory.is() )
