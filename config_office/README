@@ -28,3 +28,6 @@ pathname select the directory in a window and right-click and choose properties.
 directory to the top level directory when run. If you are not running configure and
 are using a pre-generated winenv.bat to set up the build environment, then you must 
 manually copy the makefile.rc file in config_office to the top level directory.
+
+* It is recommended that you close the Cygnus bash shell before you start the
+build as it might cause problems later on.
