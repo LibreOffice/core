@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-23 14:13:40 $
+ *  last change: $Author: mba $ $Date: 2002-07-03 16:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,8 @@ using namespace ucb;
 
 #define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
 #define TYPEDETECTION_PARAMETER         "FileName"
-#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
-#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
+//#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
+//#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 #define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
 
