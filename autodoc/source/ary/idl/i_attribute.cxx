@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i_attribute.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:12:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:13:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <ary/idl/ihost_ce.hxx>
+#include <sci_impl.hxx>
 
 
 namespace ary
@@ -75,15 +76,19 @@ namespace idl
 
 
 Attribute::Attribute( const String &      i_sName,
-                    Ce_id               i_nService,
-                    Ce_id               i_nModule,
-                    Type_id             i_nType,
-                    bool                i_bReadonly )
+                      Ce_id               i_nService,
+                      Ce_id               i_nModule,
+                      Type_id             i_nType,
+                      bool                i_bReadonly,
+                      bool                i_bBound )
     :   sName(i_sName),
         nOwner(i_nService),
         nNameRoom(i_nModule),
         nType(i_nType),
-        bReadonly(i_bReadonly)
+        aGetExceptions(),
+        aSetExceptions(),
+        bReadonly(i_bReadonly),
+        bBound(i_bBound)
 {
 }
 
@@ -139,9 +144,22 @@ attribute_cast( const CodeEntity &  i_ce )
 }
 
 bool
+attr::HasAnyStereotype( const CodeEntity & i_ce )
+{
+    const Attribute & rAttr = attribute_cast(i_ce);
+    return rAttr.bReadonly OR rAttr.bBound;
+}
+
+bool
 attr::IsReadOnly( const CodeEntity & i_ce )
 {
     return attribute_cast(i_ce).bReadonly;
+}
+
+bool
+attr::IsBound( const CodeEntity & i_ce )
+{
+    return attribute_cast(i_ce).bBound;
 }
 
 Type_id
@@ -149,6 +167,23 @@ attr::Type( const CodeEntity & i_ce )
 {
     return attribute_cast(i_ce).nType;
 }
+
+void
+attr::Get_GetExceptions( Dyn_TypeIterator &  o_result,
+                         const CodeEntity &  i_ce )
+{
+    o_result
+        = new SCI_Vector<Type_id>( attribute_cast(i_ce).aGetExceptions );
+}
+
+void
+attr::Get_SetExceptions( Dyn_TypeIterator &  o_result,
+                         const CodeEntity &  i_ce )
+{
+    o_result
+        = new SCI_Vector<Type_id>( attribute_cast(i_ce).aSetExceptions );
+}
+
 
 } // namespace ifc_attribute
 
