@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 14:13:54 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 21:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
     Text[ japanese ] = "‚±‚ÌºİÄÛ°Ù‚Ì“Ç‚İ‚İ’†‚É´×°‚ª”­¶‚µ‚Ü‚µ‚½B‚»‚ê‚ªŒ´ˆö‚ÅÜ²ÙÄŞ¶°ÄŞ‚É’uŠ·‚³‚ê‚Ü‚µ‚½B";
     Text[ korean ] = "ÀÌ ÄÁÆ®·Ñ ·Îµå½Ã¿¡ ¿À·ù°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù. ±×·¯¹Ç·Î ÇÃ·¹ÀÌ½ºÈ¦´õ·Î ´ëÃ¼µÇ¾ú½À´Ï´Ù.";
     Text[ chinese_simplified ] = "×°ÈëÕâ¸ö×Ö¶ÎÊ±³öÏÖÁËÒ»¸ö´íÎó£¬Òò´ËÓÃÍ¨Åä·û´úÌæ×Ö¶Î¡£";
-    Text[ chinese_traditional ] = "¸ü¤J³o­Ó±±¨î¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¦ı¤w¸g¥Î¤@­Ó³q°t²Å´À¥N¥¦¡C";
+    Text[ chinese_traditional ] = "¸ü¤J³o­Ó±±»s¶µ®Éµo¥Í¤@­Ó¿ù»~¡C¦ı¤w¸g¥Î¤@­Ó³q°t²Å´À¥N¥¦¡C";
     Text[ arabic ] = "ÍÏË ÎØÃ ÃËäÇÁ ÊÍãíá ÚäÕÑ ÇáÊÍßã åĞÇ. áåĞÇ Êã ÇÓÊÈÏÇáå ÈÚäÕÑ äÇÆÈ.";
     Text[ turkish ] = "While loading this control an error occured. Therefore, it was replaced with a placeholder.";
     Text[ catalan ] = "Ha ocurrido un error al cargar este Control. Por ello se ha reemplazado con un comodín.";
@@ -383,4 +383,24 @@ String RID_STR_NEED_NON_NULL_OBJECT
     Text = "Das Objekt darf nicht NULL sein.";
     Text [ english ] = "The object must not be NULL.";
     Text [ english_us ] = "The object must not be NULL.";
+    Text[ portuguese ] = "O objecto não pode ser NULL.";
+    Text[ russian ] = "Îáúåêò íå ìîæåò áûòü ÍÓËÅÌ.";
+    Text[ greek ] = "The object must not be NULL.";
+    Text[ dutch ] = "Het object mag niet NUL zijn.";
+    Text[ french ] = "The object must not be NULL.";
+    Text[ spanish ] = "El objeto no puede ser NULL.";
+    Text[ finnish ] = "The object must not be NULL.";
+    Text[ italian ] = "The object must not be NULL.";
+    Text[ danish ] = "The object must not be NULL.";
+    Text[ swedish ] = "Objektet får inte vara NULL.";
+    Text[ polish ] = "Obiekt nie mo¿e byæ ZEREM.";
+    Text[ portuguese_brazilian ] = "The object must not be NULL.";
+    Text[ japanese ] = "The object must not be NULL.";
+    Text[ korean ] = "The object must not be NULL.";
+    Text[ chinese_simplified ] = "The object must not be NULL.";
+    Text[ chinese_traditional ] = "The object must not be NULL.";
+    Text[ turkish ] = "The object must not be NULL.";
+    Text[ arabic ] = "The object must not be NULL.";
+    Text[ catalan ] = "The object must not be NULL.";
 };
+
