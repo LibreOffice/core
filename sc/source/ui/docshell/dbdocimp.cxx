@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:12:22 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
+BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         const uno::Reference< sdbc::XResultSet >& xResultSet,
         const SbaSelectionList* pSelection, BOOL bRecord, BOOL bAddrInsert )
 {
@@ -275,10 +275,10 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
     USHORT nErrStringId = 0;
     String aErrorMessage;
 
-    USHORT nCol = rParam.nCol1;
-    USHORT nRow = rParam.nRow1;
-    USHORT nEndCol = nCol;                  // end of resulting database area
-    USHORT nEndRow = nRow;
+    SCCOL nCol = rParam.nCol1;
+    SCROW nRow = rParam.nRow1;
+    SCCOL nEndCol = nCol;                   // end of resulting database area
+    SCROW nEndRow = nRow;
     long i;
 
     BOOL bDoSelection = FALSE;
@@ -381,7 +381,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
             uno::Reference<sdbc::XRow> xRow( xRowSet, uno::UNO_QUERY );
             if ( nColCount > 0 && xRow.is() )
             {
-                nEndCol = (USHORT)( rParam.nCol1 + nColCount - 1 );
+                nEndCol = (SCCOL)( rParam.nCol1 + nColCount - 1 );
 
                 uno::Sequence<sal_Int32> aColTypes( nColCount );    // column types
                 uno::Sequence<sal_Bool> aColCurr( nColCount );      // currency flag is not in types
@@ -434,7 +434,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
 
                     if ( !bEnd )
                     {
-                        if ( nRow <= MAXROW )
+                        if ( ValidRow(nRow) )
                         {
                             nCol = rParam.nCol1;
                             for (i=0; i<nColCount; i++)
@@ -499,14 +499,14 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
 
     BOOL bKeepFormat = !bAddrInsert && pDBData->IsKeepFmt();
     BOOL bMoveCells = !bAddrInsert && pDBData->IsDoSize();
-    USHORT nFormulaCols = 0;    // columns to be filled with formulas
+    SCCOL nFormulaCols = 0; // columns to be filled with formulas
     if (bMoveCells && nEndCol == rParam.nCol2)
     {
         //  if column count changes, formulas would become invalid anyway
         //  -> only set nFormulaCols for unchanged column count
 
-        USHORT nTestCol = rParam.nCol2 + 1;     // right of the data
-        USHORT nTestRow = rParam.nRow1 + 1;     // below the title row
+        SCCOL nTestCol = rParam.nCol2 + 1;      // right of the data
+        SCROW nTestRow = rParam.nRow1 + 1;      // below the title row
         while ( nTestCol <= MAXCOL &&
                 pDoc->GetCellType(ScAddress( nTestCol, nTestRow, nTab )) == CELLTYPE_FORMULA )
             ++nTestCol, ++nFormulaCols;
@@ -554,15 +554,15 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
             //  keep formatting of title and first data row from the document
             //  CopyToDocument also copies styles, Apply... needs separate calls
 
-            USHORT nMinEndCol = Min( rParam.nCol2, nEndCol );   // not too much
+            SCCOL nMinEndCol = Min( rParam.nCol2, nEndCol );    // not too much
             nMinEndCol += nFormulaCols;                         // only if column count unchanged
             pImportDoc->DeleteAreaTab( 0,0, MAXCOL,MAXROW, nTab, IDF_ATTRIB );
             pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                     nMinEndCol, rParam.nRow1, nTab,
                                     IDF_ATTRIB, FALSE, pImportDoc );
 
-            USHORT nDataStartRow = rParam.nRow1+1;
-            for (USHORT nCopyCol=rParam.nCol1; nCopyCol<=nMinEndCol; nCopyCol++)
+            SCROW nDataStartRow = rParam.nRow1+1;
+            for (SCCOL nCopyCol=rParam.nCol1; nCopyCol<=nMinEndCol; nCopyCol++)
             {
                 const ScPatternAttr* pSrcPattern = pDoc->GetPattern(
                                                     nCopyCol, nDataStartRow, nTab );
@@ -587,8 +587,8 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         //  copy old data for undo
         //
 
-        USHORT nUndoEndCol = Max( nEndCol, rParam.nCol2 );      // rParam = old end
-        USHORT nUndoEndRow = Max( nEndRow, rParam.nRow2 );
+        SCCOL nUndoEndCol = Max( nEndCol, rParam.nCol2 );       // rParam = old end
+        SCROW nUndoEndRow = Max( nEndRow, rParam.nRow2 );
 
         ScDocument* pUndoDoc = NULL;
         ScDBData* pUndoDBData = NULL;
@@ -649,7 +649,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         //  #41216# remove each column from ImportDoc after copying to reduce memory usage
         BOOL bOldAutoCalc = pDoc->GetAutoCalc();
         pDoc->SetAutoCalc( FALSE );             // outside of the loop
-        for (USHORT nCopyCol = rParam.nCol1; nCopyCol <= nEndCol; nCopyCol++)
+        for (SCCOL nCopyCol = rParam.nCol1; nCopyCol <= nEndCol; nCopyCol++)
         {
             pImportDoc->CopyToDocument( nCopyCol, rParam.nRow1, nTab, nCopyCol, nEndRow, nTab,
                                         IDF_ALL, FALSE, pDoc );
@@ -658,7 +658,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
         }
         pDoc->SetAutoCalc( bOldAutoCalc );
 
-        if (nFormulaCols)               // copy formulas
+        if (nFormulaCols > 0)               // copy formulas
         {
             if (bKeepFormat)            // formats for formulas
                 pImportDoc->CopyToDocument( nEndCol+1, rParam.nRow1, nTab,
@@ -698,7 +698,7 @@ BOOL ScDBDocFunc::DoImport( USHORT nTab, const ScImportParam& rParam,
             ScDocument* pRedoDoc = pImportDoc;
             pImportDoc = NULL;
 
-            if (nFormulaCols)                       // include filled formulas for redo
+            if (nFormulaCols > 0)                   // include filled formulas for redo
                 pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                         nEndCol+nFormulaCols, nEndRow, nTab,
                                         IDF_ALL, FALSE, pRedoDoc );
