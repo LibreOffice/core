@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 11:59:12 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 12:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,9 @@
 #ifndef _COM_SUN_STAR_FRAME_FRAMESEARCHFLAG_HPP_
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #endif
+#ifndef _DBACCESS_SLOTID_HRC_
+#include "dbaccess_slotid.hrc"
+#endif
 
 #include <algorithm>
 #include <functional>
@@ -279,14 +282,6 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::datatransfer;
 
-//------------------------------------------------------------------------------
-const SfxFilter* OApplicationController::getStandardFilter()
-{
-    static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-    const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
-    OSL_ENSURE(pFilter,"Filter: StarOffice XML (Base) could not be found!");
-    return pFilter;
-}
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException )
 {
@@ -419,8 +414,8 @@ void SAL_CALL OApplicationController::disposing()
                 if ( sUrl.getLength() )
                 {
                     ::rtl::OUString     aFilter;
-                    INetURLObject       aURL( sUrl );
-                    const SfxFilter* pFilter = getStandardFilter();
+                    INetURLObject       aURL( xModel->getURL() );
+                    const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                         aFilter = pFilter->GetFilterName();
 
@@ -431,7 +426,6 @@ void SAL_CALL OApplicationController::disposing()
                             getStrippedDatabaseName(),
                             ::rtl::OUString() );
                 }
-
                 xModel->disconnectController( this );
             }
             Reference < XFrame > xFrame;
@@ -673,8 +667,8 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = eType == E_REPORT || eType == E_FORM;
                 }
                 break;
+            case SID_FORM_NEW_PILOT_PRE_SEL:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
-            case SID_FORM_CREATE_REPWIZ_PRE_SEL:
                 aReturn.bEnabled = !isDataSourceReadOnly()
                                     && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER)
                                     && getContainer()->isALeafSelected();
@@ -935,7 +929,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     ::sfx2::FileDialogHelper aFileDlg( ::sfx2::FILESAVE_AUTOEXTENSION,static_cast<sal_uInt32>(nBits) ,getView());
                     aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
 
-                    const SfxFilter* pFilter = getStandardFilter();
+                    const SfxFilter* pFilter = getStandardDatabaseFilter();
                     if ( pFilter )
                     {
                         aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
@@ -970,11 +964,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
 
             case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
-                OSL_ENSURE(0,"NYI");
-                break;
             case ID_NEW_VIEW_DESIGN_AUTO_PILOT:
-                OSL_ENSURE(0,"NYI");
-                break;
             case ID_APP_NEW_QUERY_AUTO_PILOT:
             case ID_FORM_NEW_PILOT:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
@@ -1013,6 +1003,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case ID_NEW_QUERY_DESIGN:
                             eType = E_QUERY;
                             break;
+                         case ID_NEW_TABLE_DESIGN_AUTO_PILOT:
+                             bAutoPilot = sal_True;
+                             // run through
                         case ID_NEW_TABLE_DESIGN:
                             break;
                         default:
@@ -1626,6 +1619,26 @@ void OApplicationController::newElement(ElementType _eType,sal_Bool _bAutoPilot,
             } // run through
         case E_TABLE:
             {
+                 if ( _bAutoPilot )
+                 {
+                     ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+                     Reference< XComponent > xComponent,xDefinition;
+                     Reference<XConnection> xConnection;
+                     try
+                     {
+                         ensureConnection(xConnection,sal_True);
+                         if ( E_QUERY == _eType )
+                             aHelper->newQueryWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
+                         else
+                             aHelper->newTableWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
+
+                         addDocumentListener(xComponent,xDefinition);
+                     }
+                     catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
+                     catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
+                     catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
+                     break;
+                 }
                 ::std::auto_ptr< ODesignAccess> pDispatcher;
                 Reference<XConnection> xConnection;
                 ensureConnection(xConnection);
