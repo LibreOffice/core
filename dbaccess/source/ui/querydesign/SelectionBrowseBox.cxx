@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    ,m_bOrderByUnRelated(sal_True)
                    ,m_bGroupByUnRelated(sal_True)
                    ,m_bStopTimer(sal_False)
+                   ,m_bWasEditing(sal_False)
 {
     DBG_CTOR(OSelectionBrowseBox,NULL);
     SetHelpId(HID_CTL_QRYDGNCRIT);
@@ -334,12 +335,6 @@ void OSelectionBrowseBox::PreFill()
     RemoveColumns();
     InsertHandleColumn( 70 );
     SetUpdateMode(sal_True);
-
-
-#if defined (OS2)
-    Invalidate();
-#endif
-
 }
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::ClearAll()
@@ -1254,8 +1249,8 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
         sal_uInt16 nColId = GetCurColumnId();
         sal_uInt32 nRow = GetCurRow();
 
-        sal_Bool bWasEditing = IsEditing();
-        if (bWasEditing)
+        m_bWasEditing = IsEditing();
+        if (m_bWasEditing)
             DeactivateCell();
 
         OTableFields::reverse_iterator aIter = getFields().rbegin();
@@ -1267,8 +1262,9 @@ void OSelectionBrowseBox::DeleteFields(const String& rAliasName)
                 RemoveField((sal_uInt16)nPos, sal_False);
         }
 
-        if (bWasEditing)
+        if (m_bWasEditing)
             ActivateCell(nRow , nColId);
+        m_bWasEditing = sal_False;
     }
 }
 
@@ -1294,8 +1290,8 @@ void OSelectionBrowseBox::SetColWidth()
 void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    sal_Bool bWasEditing = IsEditing();
-    if (bWasEditing)
+    m_bWasEditing = IsEditing();
+    if (m_bWasEditing)
         DeactivateCell();
 
     // die Basisklasse machen lassen
@@ -1306,8 +1302,9 @@ void OSelectionBrowseBox::SetColWidth(sal_uInt16 nColId, long nNewWidth)
     if (pEntry.isValid())
         pEntry->SetColWidth(sal_uInt16(GetColumnWidth(nColId)));
 
-    if (bWasEditing)
+    if (m_bWasEditing)
         ActivateCell(GetCurRow(), GetCurColumnId());
+    m_bWasEditing = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -1789,8 +1786,8 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis)
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
     DBG_ASSERT(_nWhich>=0 && _nWhich<m_bVisibleRow.size(), "OSelectionBrowseBox::SetRowVisible : invalid parameter !");
 
-    sal_Bool bWasEditing = IsEditing();
-    if (bWasEditing)
+    m_bWasEditing = IsEditing();
+    if (m_bWasEditing)
         DeactivateCell();
 
     // do this before removing or inserting rows, as this triggers ActivateCell-calls, which rely on m_bVisibleRow
@@ -1800,16 +1797,17 @@ void OSelectionBrowseBox::SetRowVisible(sal_uInt16 _nWhich, sal_Bool _bVis)
     if (_bVis)
     {
         RowInserted(nId,1);
-        m_nVisibleCount++;
+        ++m_nVisibleCount;
     }
     else
     {
         RowRemoved(nId,1);
-        m_nVisibleCount--;
+        --m_nVisibleCount;
     }
 
-    if (bWasEditing)
+    if (m_bWasEditing)
         ActivateCell();
+    m_bWasEditing = sal_False;
 }
 
 //------------------------------------------------------------------------------
@@ -1858,7 +1856,7 @@ static long nVisibleRowMask[] =
 sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 {
     sal_Int32 nErg(0);
-    // only the foirst 11 row are interesting
+    // only the first 11 row are interesting
     sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
     for(sal_Int32 i=0;i<nSize;i++)
     {
@@ -1870,7 +1868,7 @@ sal_Int32 OSelectionBrowseBox::GetNoneVisibleRows() const
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::SetNoneVisbleRow(long nRows)
 {
-    // only the foirst 11 row are interesting
+    // only the first 11 row are interesting
     sal_Int32 nSize = sizeof(nVisibleRowMask) / sizeof(nVisibleRowMask[0]);
     for(sal_Int32 i=0;i< nSize;i++)
         m_bVisibleRow[i] = !(nRows & nVisibleRowMask[i]);
@@ -1987,8 +1985,8 @@ String OSelectionBrowseBox::GetCellContents(sal_uInt16 nCellIndex, long nColId)
 void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const String& strNewText)
 {
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    sal_Bool bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && IsRowVisible(nRow) && (GetCurRow() == GetBrowseRow(nRow));
-    if (bWasEditing)
+    m_bWasEditing = IsEditing() && (GetCurColumnId() == nColId) && IsRowVisible(nRow) && (GetCurRow() == GetBrowseRow(nRow));
+    if (m_bWasEditing)
         DeactivateCell();
 
     OTableFieldDescRef pEntry = getEntry(nColId - 1);
@@ -2035,9 +2033,10 @@ void OSelectionBrowseBox::SetCellContents(sal_uInt16 nRow, long nColId, const St
     if (pEntry->IsEmpty())
         pEntry->SetVisible(sal_False);
 
-    if (bWasEditing)
+    if (m_bWasEditing)
         ActivateCell(nCellIndex, (sal_uInt16)nColId);
 
+    m_bWasEditing = sal_False;
     static_cast<OQueryController*>(getDesignView()->getController())->setModified();
 }
 //------------------------------------------------------------------------------
@@ -2265,7 +2264,7 @@ OTableFieldDescRef OSelectionBrowseBox::getEntry(OTableFields::size_type _nPos)
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::GetFocus()
 {
-    if(!IsEditing())
+    if(!IsEditing() && !m_bWasEditing)
         ActivateCell();
     EditBrowseBox::GetFocus();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:25:16 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ namespace dbaui
         void switchView();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
+        void     setNoneVisbleRow(sal_Int32 _nRows);
         // returs the add table dialog from the design view
         OAddTableDlg* getAddTableDialog();
         BOOL IsAddAllowed();
@@ -109,6 +110,7 @@ namespace dbaui
         void SaveUIConfig();
         void clearDesignView();
         void GetFocus();
+        void reset();
 
         OQueryDesignView*       getDesignView() const { return m_pDesignView; }
         OQueryContainerWindow*  getContainer() const;

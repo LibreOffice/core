@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 13:38:18 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -262,9 +262,6 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId)
     aReturn.bEnabled = m_bRelationsPossible;
     switch (_nId)
     {
-        case ID_BROWSER_EDITDOC:
-            aReturn.aState = ::cppu::bool2any(m_bEditable);
-            break;
         case ID_REALTION_ADD_RELATION:
             aReturn.bEnabled = m_vTableData.size() > 1 && isConnected() && m_bEditable;
             aReturn.aState = ::cppu::bool2any(sal_False);
@@ -327,30 +324,6 @@ void ORelationController::Execute(sal_uInt16 _nId)
         case ID_REALTION_ADD_RELATION:
             static_cast<ORelationTableView*>(static_cast<ORelationDesignView*>(m_pView)->getTableView())->AddNewRelation();
             break;
-        case ID_BROWSER_EDITDOC:
-            if(m_bEditable)
-            { // the state should be changed to not editable
-                switch (saveModified())
-                {
-                    case RET_CANCEL:
-                        // don't change anything here so return
-                        return;
-                        break;
-                    case RET_NO:
-                        loadLayoutInformation();
-                        getView()->initialize();
-                        getView()->Invalidate(INVALIDATE_NOERASE);
-                        setModified(sal_False);     // and we are not modified yet
-                        break;
-                    default:
-                        break;
-                }
-            }
-            OJoinController::Execute(_nId);
-            InvalidateAll();
-            return;
-            break;
-            // run through
         default:
             OJoinController::Execute(_nId);
             return;
@@ -423,7 +396,6 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
     loadLayoutInformation();
     try
     {
-
         loadData();
         getView()->initialize();    // show the windows and fill with our informations
         getView()->Invalidate(INVALIDATE_NOERASE);
@@ -456,11 +428,6 @@ sal_Bool ORelationController::Construct(Window* pParent)
 //  m_pView->Construct();
 //  m_pView->Show();
     return sal_True;
-}
-// -----------------------------------------------------------------------------
-sal_Bool SAL_CALL ORelationController::suspend(sal_Bool bSuspend) throw( RuntimeException )
-{
-    return saveModified() != RET_CANCEL;
 }
 // -----------------------------------------------------------------------------
 short ORelationController::saveModified()
@@ -674,3 +641,18 @@ void ORelationController::loadLayoutInformation()
     {
     }
 }
+// -----------------------------------------------------------------------------
+void ORelationController::reset()
+{
+    loadLayoutInformation();
+    ODataView* pView = getView();
+    OSL_ENSURE(pView,"No current view!");
+    if(pView)
+    {
+        pView->initialize();
+        pView->Invalidate(INVALIDATE_NOERASE);
+    }
+}
+// -----------------------------------------------------------------------------
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:21 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ namespace dbaui
         virtual void            reconnect( sal_Bool _bUI );
 
 
-        OQueryContainerWindow*  getContainer() { return static_cast< OQueryContainerWindow* >( getView() ); }
+        OQueryContainerWindow*  getContainer() const { return static_cast< OQueryContainerWindow* >( getView() ); }
 
     public:
         OQueryController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
@@ -209,8 +209,6 @@ namespace dbaui
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
         // ::com::sun::star::lang::XComponent
         virtual void        SAL_CALL disposing();
 
@@ -232,6 +230,10 @@ namespace dbaui
     protected:
         virtual OTableWindowData* createTableWindowData();
         virtual OJoinDesignView*  getJoinView();
+        // ask the user if the design should be saved when it is modified
+        virtual short saveModified();
+        virtual void reset();
+        void        resetImpl();
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:32:57 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,7 @@ namespace dbaui
         ORelationDesignView*    getRelationView() { return static_cast<ORelationDesignView*>(m_pView); }
         void loadData();
         sal_Bool existsTable(const ::rtl::OUString& _rComposedTableName) const;
-        // ask the user if the design should be saved when it is modified
-        short saveModified();
+
         // load the window positions out of the datasource
         void loadLayoutInformation();
         void loadTableData(const ::com::sun::star::uno::Any& _aTable);
@@ -106,9 +105,6 @@ namespace dbaui
         void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
 
         virtual sal_Bool Construct(Window* pParent);
-
-        // ::com::sun::star::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
 
         // XServiceInfo
         virtual ::rtl::OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
@@ -123,6 +119,9 @@ namespace dbaui
 
     protected:
         virtual OTableWindowData* createTableWindowData();
+        // ask the user if the design should be saved when it is modified
+        virtual short saveModified();
+        virtual void reset();
     };
 }
 #endif // DBAUI_RELATIONCONTROLLER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,8 +338,26 @@ void OJoinController::Execute(sal_uInt16 _nId)
             return;
             break;
         case ID_BROWSER_EDITDOC:
+            if(m_bEditable)
+            { // the state should be changed to not editable
+                switch (saveModified())
+                {
+                    case RET_CANCEL:
+                        // don't change anything here so return
+                        return;
+                        break;
+                    case RET_NO:
+                        reset();
+                        setModified(sal_False);     // and we are not modified yet
+                        break;
+                    default:
+                        break;
+                }
+            }
             m_bEditable = !m_bEditable;
             getJoinView()->setReadOnly(!m_bEditable);
+            InvalidateAll();
+            return;
             break;
         case ID_BROWSER_UNDO:
             m_aUndoManager.Undo();
@@ -397,6 +415,11 @@ void OJoinController::AddSupportedFeatures()
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Save")]        = ID_BROWSER_SAVEDOC;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Undo")]        = ID_BROWSER_UNDO;
     m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DB/Close")]    = SID_CLOSEDOC;
+}
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL OJoinController::suspend(sal_Bool bSuspend) throw( RuntimeException )
+{
+    return saveModified() != RET_CANCEL;
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 09:57:52 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ namespace dbaui
         BOOL IsAddAllowed();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
+        void setNoneVisbleRow(sal_Int32 _nRows);
 
         ::com::sun::star::lang::Locale      getLocale() const           { return m_aLocale;}
         ::rtl::OUString                     getDecimalSeparator() const { return m_sDecimalSep;}
@@ -226,6 +227,7 @@ namespace dbaui
         void SaveUIConfig();
         void stopTimer();
         void startTimer();
+        void reset();
 
         ::connectivity::OSQLParseNode* getPredicateTreeFromEntry(   OTableFieldDescRef pEntry,
                                                                     const String& _sCriteria,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-27 06:19:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ namespace dbaui
         void clear()                                                        { m_pViewSwitch->clear(); }
         sal_Bool isSlotEnabled( sal_Int32 _nSlotId )                        { return m_pViewSwitch->isSlotEnabled( _nSlotId ); }
         void     setSlotEnabled( sal_Int32 _nSlotId, sal_Bool _bEnable )    { m_pViewSwitch->setSlotEnabled( _nSlotId, _bEnable ); }
+        void     setNoneVisbleRow(sal_Int32 _nRows)                         { m_pViewSwitch->setNoneVisbleRow( _nRows); }
 
         void setReadOnly( sal_Bool _bReadOnly )                             { m_pViewSwitch->setReadOnly( _bReadOnly ); }
 
@@ -148,6 +149,7 @@ namespace dbaui
 
         void initialize()                                                   { m_pViewSwitch->initialize(); }
         void SaveUIConfig()                                                 { m_pViewSwitch->SaveUIConfig(); }
+        void reset()                                                        { m_pViewSwitch->reset(); }
 
         void switchView();
         virtual void GetFocus();
@@ -170,6 +172,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/09/27 06:19:05  oj
+ *  #92325# impl new sql functions
+ *
  *  Revision 1.1  2001/08/23 14:25:36  fs
  *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
  *

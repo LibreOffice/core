@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 14:18:41 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@ namespace dbaui
 
         // ::com::sun::star::lang::XComponent
         virtual void    SAL_CALL disposing();
+        // ::com::sun::star::frame::XController
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( ::com::sun::star::uno::RuntimeException );
+
 
         //
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
@@ -171,6 +174,10 @@ namespace dbaui
         }
     protected:
         virtual OTableWindowData* createTableWindowData() = 0;
+        // ask the user if the design should be saved when it is modified
+        virtual short saveModified() = 0;
+        // called when the orignal state should be reseted (first time load)
+        virtual void reset()         = 0;
         virtual void AddSupportedFeatures();
 
         virtual OJoinDesignView*    getJoinView();

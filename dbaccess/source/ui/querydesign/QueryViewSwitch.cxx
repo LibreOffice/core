@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-15 13:42:05 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,18 @@ void OQueryViewSwitch::switchView()
     ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
     DBG_ASSERT( pToolBox, "OQueryViewSwitch::switchView: no toolbox!" );
 
+    if ( pToolBox )
+    {
+        pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES,bGraphicalDesign);
+        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES,bGraphicalDesign);
+        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES,bGraphicalDesign);
+        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS,bGraphicalDesign);
+        pToolBox->ShowItem(ID_BROWSER_ADDTABLE,bGraphicalDesign);
+        pToolBox->ShowItem(ID_QUERY_ZOOM_IN,bGraphicalDesign);
+        pToolBox->ShowItem(ID_QUERY_ZOOM_OUT,bGraphicalDesign);
+        pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING,!bGraphicalDesign);
+    }
+
     if ( m_pTextView->IsVisible() )
     {
         m_pDesignView->stopTimer();
@@ -257,36 +269,11 @@ void OQueryViewSwitch::switchView()
 
         m_pTextView->clear();
         m_pTextView->setStatement(static_cast<OQueryController*>(m_pDesignView->getController())->getStatement());
-
-        if ( pToolBox )
-        {
-            pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_TABLES);
-            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-            pToolBox->HideItem(ID_BROWSER_ADDTABLE);
-            pToolBox->HideItem(ID_QUERY_ZOOM_IN);
-            pToolBox->HideItem(ID_QUERY_ZOOM_OUT);
-            pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING);
-        }
     }
     else
     {
         // we have to stop the sqledit from our textview
         m_pTextView->getSqlEdit()->stopTimer();
-
-        if ( pToolBox )
-        {
-            pToolBox->HideItem(ID_BROWSER_ESACPEPROCESSING);
-            pToolBox->ShowItem(ID_BROWSER_ADDTABLE);
-            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES);
-            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-            pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-            pToolBox->ShowItem(ID_QUERY_ZOOM_IN);
-            pToolBox->ShowItem(ID_QUERY_ZOOM_OUT);
-        }
-
         getAddTableDialog()->Update();
         m_pDesignView->InitFromParseNode();
 
@@ -350,4 +337,15 @@ Reference< XMultiServiceFactory > OQueryViewSwitch::getORB() const
     return m_pDesignView->getORB();
 }
 // -----------------------------------------------------------------------------
-
+void OQueryViewSwitch::reset()
+{
+    m_pDesignView->reset();
+    switchView();
+}
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::setNoneVisbleRow(sal_Int32 _nRows)
+{
+    if(m_pDesignView)
+        m_pDesignView->setNoneVisbleRow(_nRows);
+}
+// -----------------------------------------------------------------------------

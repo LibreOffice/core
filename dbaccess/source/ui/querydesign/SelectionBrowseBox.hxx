@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ namespace dbaui
         sal_Bool                            m_bOrderByUnRelated;
         sal_Bool                            m_bGroupByUnRelated;
         sal_Bool                            m_bStopTimer;
+        sal_Bool                            m_bWasEditing;
 
         DECL_LINK(OnInvalidateTimer, void*);
     public:                         OSelectionBrowseBox( Window* pParent );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-22 09:57:51 $
+ *  last change: $Author: oj $ $Date: 2001-10-23 12:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,7 @@ OQueryDesignView::OQueryDesignView(OQueryContainerWindow* _pParent, OQueryContro
     }
 
     m_pSelectionBox = new OSelectionBrowseBox(this);
-    m_pSelectionBox->SetNoneVisbleRow(static_cast<OQueryController*>(getController())->getVisibleRows());
+    setNoneVisbleRow(static_cast<OQueryController*>(getController())->getVisibleRows());
     m_pSelectionBox->Show();
     // Splitter einrichten
     m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
@@ -230,9 +230,7 @@ void OQueryDesignView::initialize()
         m_aSplitter.SetSplitPosPixel(static_cast<OQueryController*>(getController())->getSplitPos());
     }
     m_pSelectionBox->initialize();
-    m_pSelectionBox->PreFill();
-    m_pSelectionBox->SetReadOnly(static_cast<OQueryController*>(getController())->isReadOnly());
-    m_pSelectionBox->Fill();
+    reset();
 }
 // -------------------------------------------------------------------------
 void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
@@ -282,9 +280,7 @@ void OQueryDesignView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryDesignView::clear()
 {
-
     m_pSelectionBox->ClearAll(); // clear the whole selection
-    //  m_pSelectionBox->Fill();    // fill with empty the fields
     m_pTableView->ClearAll();
 }
 // -----------------------------------------------------------------------------
@@ -2665,6 +2661,18 @@ void OQueryDesignView::GetFocus()
     }
 }
 // -----------------------------------------------------------------------------
-
-
+void OQueryDesignView::reset()
+{
+    m_pTableView->ClearAll();
+    m_pTableView->ReSync();
+    m_pSelectionBox->PreFill();
+    m_pSelectionBox->SetReadOnly(static_cast<OQueryController*>(getController())->isReadOnly());
+    m_pSelectionBox->Fill();
+}
+// -----------------------------------------------------------------------------
+void OQueryDesignView::setNoneVisbleRow(sal_Int32 _nRows)
+{
+    m_pSelectionBox->SetNoneVisbleRow(_nRows);
+}
+// -----------------------------------------------------------------------------
 
