@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:42:55 $
+ *  last change: $Author: rt $ $Date: 2004-10-28 16:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,8 +497,6 @@ CommandLineArgs* Desktop::GetCommandLineArgs()
 
     return pArgs;
 }
-
-Desktop aDesktop;
 
 sal_Bool InitConfiguration()
 {
