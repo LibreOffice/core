@@ -2,9 +2,9 @@
  *
  *  $RCSfile: common_gfx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-21 17:18:03 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -944,6 +944,25 @@ PrinterGfx::PSShowText (const sal_uChar* pStr, sal_Int16 nGlyphs, sal_Int16 nByt
     // restore the user coordinate system
     if (mnTextAngle != 0)
         PSGRestore ();
+}
+
+void
+PrinterGfx::PSComment( const sal_Char* pComment )
+{
+    const sal_Char* pLast = pComment;
+    while( pComment && *pComment )
+    {
+        while( *pComment && *pComment != '\n' && *pComment != '\r' )
+            pComment++;
+        if( pComment - pLast > 1 )
+        {
+            WritePS( mpPageBody, "% ", 2 );
+            WritePS( mpPageBody, pLast, pComment - pLast );
+            WritePS( mpPageBody, "\n", 1 );
+        }
+        if( *pComment )
+            pLast = ++pComment;
+    }
 }
 
 sal_Bool

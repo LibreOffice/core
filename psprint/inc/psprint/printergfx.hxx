@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printergfx.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-21 17:17:58 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 16:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,6 +342,7 @@ public:
     void            PSShowText (const sal_uChar* pString,
                                 sal_Int16 nGlyphs, sal_Int16 nBytes,
                                 const sal_Int32* pDeltaArray = NULL);
+    void            PSComment (const sal_Char* pComment );
 
     void            OnEndPage ();
     PrintFontManager& GetFontMgr () { return mrFontMgr; }

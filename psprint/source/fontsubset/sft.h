@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-28 09:58:53 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.2 2001-05-28 09:58:53 pl Exp $ */
+/* $Id: sft.h,v 1.3 2001-06-08 16:32:30 pl Exp $ */
 
 /**
  *
@@ -320,6 +320,7 @@ extern "C" {
         uint32 ur3;               /**< bits 64 - 95 of Unicode Range flags                     */
         uint32 ur4;               /**< bits 96 - 127 of Unicode Range flags                    */
         byte   panose[10];        /**< PANOSE classification number                            */
+        uint16 typeFlags;
     } TTGlobalFontInfo;
 
 /** Structure used by KernGlyphs()      */

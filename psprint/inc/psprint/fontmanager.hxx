@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-05 17:32:28 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 16:32:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,19 +288,20 @@ class PrintFontManager
         /* note: m_aFontFile and Metric file are not atoms
            because they should be fairly unique */
 
-        Type1FontFile() : PrintFont( fonttype::Type1 ) {}
+        Type1FontFile() : PrintFont( fonttype::Type1 ), m_nDirectory( 0 ) {}
         virtual ~Type1FontFile();
         virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
     };
 
     struct TrueTypeFontFile : public PrintFont
     {
-        int                 m_nDirectory;       // atom containing system dependent path
-        ::rtl::OString      m_aFontFile;        // relative to directory
-        ::rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
-        int                 m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
+        int                     m_nDirectory;       // atom containing system dependent path
+        ::rtl::OString          m_aFontFile;        // relative to directory
+        ::rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+        int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
+        unsigned int           m_nTypeFlags;        // from TrueType file; only known use is for copyright flags
 
-        TrueTypeFontFile() : PrintFont( fonttype::TrueType ) {}
+        TrueTypeFontFile() : PrintFont( fonttype::TrueType ), m_nDirectory( 0 ), m_nCollectionEntry(-1), m_nTypeFlags( 0x80000000 ) {}
         virtual ~TrueTypeFontFile();
         virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
     };
@@ -482,6 +483,11 @@ public:
     // to get font substitution transparently use the
     // getKernPairs method of PrinterGfx
     const ::std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
+
+    // evaluates copyright flags for TrueType fonts
+    // type1 fonts do not have such a feature, so return for them is true
+    // returns true for builtin fonts (surprise!)
+    bool isFontDownloadingAllowed( fontID nFont ) const;
 
     // font administration functions
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cp $ $Date: 2001-06-08 11:13:19 $
+ *  last change: $Author: pl $ $Date: 2001-06-08 16:32:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.c,v 1.3 2001-06-08 11:13:19 cp Exp $
+/* $Id: sft.c,v 1.4 2001-06-08 16:32:30 pl Exp $
  * Sun Font Tools
  *
  * Author: Alexander Gelfenbain
@@ -2463,6 +2463,7 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
             info->ur4 = GetUInt32(table, 54, 1);
         }
         memcpy(info->panose, table + 32, 10);
+        info->typeFlags = GetUInt16( table, 8, 1 );
     }
 
 
