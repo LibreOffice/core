@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:16:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:36:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
     CheckBox CB_PERSONALIZED                                                    \
     {                                                                               \
         Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 17 + TOP_OFFSET ) ;                  \
-        Size = MAP_APPFONT ( 236 , 10 ) ;                                           \
+        Size = MAP_APPFONT ( 226 , 10 ) ;                                           \
         Text [ de ] = "Personalisierte Briefanrede einfügen" ;                              \
         Text[ en-US ] = "Insert personalized salutation";                    \
     };                                                                              \
@@ -114,21 +114,21 @@
     };                                                                              \
     FixedText   FI_FEMALE                                                       \
     {                                                                               \
-        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 63 + TOP_OFFSET ) ;                                             \
-        Size = MAP_APPFONT ( 230 , 8 ) ;                                            \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 67 + TOP_OFFSET ) ;                                             \
+        Size = MAP_APPFONT ( 225 , 8 ) ;                                            \
         Text [ de ] = "Adresslistenwert für einen weiblichen Empfänger" ;                     \
         Text[ en-US ] = "Address list field indicating a female recipient";     \
     };                                                                              \
     FixedText   FT_FEMALECOLUMN                                                     \
     {                                                                               \
-        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 76 + TOP_OFFSET ) ;                  \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 80 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
         Text [ de ] = "Spaltentitel" ;                     \
         Text[ en-US ] = "Field name";           \
     };                                                                              \
     ListBox LB_FEMALECOLUMN                                                         \
     {                                                                               \
-        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 74 + TOP_OFFSET ) ;                  \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 78 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
@@ -143,28 +143,28 @@
     };                                                                              \
     FixedText   FT_FEMALEFIELD                                                       \
     {                                                                               \
-        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 91 + TOP_OFFSET ) ;                  \
+        Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 95 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
         Text [ de ] = "Feldinhalt" ;                     \
         Text[ en-US ] = "Field value";           \
     };                                                                              \
     ComboBox CB_FEMALEFIELD                                                         \
     {                                                                               \
-        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 89 + TOP_OFFSET ) ;                                             \
+        Pos = MAP_APPFONT ( 71 + LEFT_OFFSET , 93 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
     };                                                                              \
     FixedText   FT_NEUTRAL                                                       \
     {                                                                               \
-        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 105 + TOP_OFFSET ) ;                                             \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 113 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 180 , 8 ) ;                                            \
         Text [ de ] = "Allgemeine Briefanrede";                     \
         Text[ en-US ] = "General salutation";           \
     };                                                                              \
     ComboBox     CB_NEUTRAL                                                         \
     {                                                                               \
-        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 116 + TOP_OFFSET ) ;                 \
+        Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 124 + TOP_OFFSET ) ;                 \
         Size = MAP_APPFONT ( 180 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
@@ -174,22 +174,22 @@
 TabPage DLG_MM_GREETINGS_PAGE
 {
     HelpID = HID_MM_GREETINGSPAGE ;
-    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Size = MAP_APPFONT ( 260 , 230 ) ;
     Hide = TRUE ;
 
     FixedText FI_HEADER
     {
-        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ de ] = "Briefanrede erstellen";
         Text [ en-US ] = "Create a salutation";
     };
-    #define TOP_OFFSET 20
+    #define TOP_OFFSET 24
     #define LEFT_OFFSET 6
 
     CheckBox    CB_GREETINGLINE                                                     \
     {                                                                               \
-        Pos = MAP_APPFONT ( 6 + LEFT_OFFSET , 3 + TOP_OFFSET ) ;                    \
+        Pos = MAP_APPFONT ( 12 , 27 ) ;                    \
         Size = MAP_APPFONT ( 242 , 10 ) ;                                           \
         Text [ de ] = "Eine Briefanrede in das Dokument einfügen" ;                        \
         Text[ en-US ] = "This document should contain a salutation";         \
@@ -199,32 +199,33 @@ TabPage DLG_MM_GREETINGS_PAGE
     #undef LEFT_OFFSET
     FixedText       FI_PREVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 160 ) ;
+        Pos = MAP_APPFONT ( 12 , 168 ) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
         Text [ de ] = "Vorschau" ;
         Text[ en-US ] = "Preview";
     };
     Window          WIN_PREVIEW
     {
-        Pos = MAP_APPFONT ( 12 , 171 );
+        Pos = MAP_APPFONT ( 12 , 179 );
         Size = MAP_APPFONT ( 186 , 21 ) ;
+        Border = TRUE;
     };
     PushButton      PB_ASSIGN
     {
-        Pos = MAP_APPFONT ( 204 , 171 ) ;
+        Pos = MAP_APPFONT ( 204 , 179 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ de ] = "Felder wählen..." ;
         Text[ en-US ] = "~Match fields...";
     };
     FixedText       FI_DOCINDEX
     {
-        Pos = MAP_APPFONT ( 121 , 197 ) ;
+        Pos = MAP_APPFONT ( 121 , 206 ) ;
         Size = MAP_APPFONT (  50, 8 ) ;
         Right = TRUE;
     };
     ImageButton     IB_PREVSET
     {
-        Pos = MAP_APPFONT ( 177 , 195 ) ;
+        Pos = MAP_APPFONT ( 177 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
         QuickHelpText [ de ] = "Vorige Briefanrede ansehen" ;
@@ -232,7 +233,7 @@ TabPage DLG_MM_GREETINGS_PAGE
     };
     ImageButton     IB_NEXTSET
     {
-        Pos = MAP_APPFONT ( 188 , 195 ) ;
+        Pos = MAP_APPFONT ( 188 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
         QuickHelpText [ de ] = "Nächste Briefanrede ansehen" ;
@@ -248,7 +249,7 @@ TabPage DLG_MM_GREETINGS_PAGE
 ModalDialog DLG_MM_MAILBODY
 {
     HelpID = HID_MM_MAILBODY;
-    Size = MAP_APPFONT ( 254 , 225 ) ;
+    Size = MAP_APPFONT ( 254 , 238 ) ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -267,14 +268,14 @@ ModalDialog DLG_MM_MAILBODY
     GREETINGS_BODY
     FixedText           FT_BODY
     {
-        Pos = MAP_APPFONT ( 12 , 132 ) ;
+        Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
         Text [ de ] = "Schreiben Sie Ihre Nachricht hier" ;
         Text[ en-US ] = "Write your message here";
     };
     MultiLineEdit MLE_BODY
     {
-        Pos = MAP_APPFONT ( 12,   143 ) ;
+        Pos = MAP_APPFONT ( 12,   151 ) ;
         Size = MAP_APPFONT ( 180 , 50 ) ;
         Border = TRUE;
         TabStop = TRUE ;
@@ -285,22 +286,22 @@ ModalDialog DLG_MM_MAILBODY
     };
     FixedLine           FL_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 0 , 199 ) ;
+        Pos = MAP_APPFONT ( 0 , 207 ) ;
         Size = MAP_APPFONT ( 254 , 8 ) ;
     };
     OKButton            PB_OK
     {
-        Pos = MAP_APPFONT ( 89, 205 ) ;
+        Pos = MAP_APPFONT ( 89, 218 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     CancelButton        PB_CANCEL
     {
-        Pos = MAP_APPFONT ( 142 , 205 ) ;
+        Pos = MAP_APPFONT ( 142 , 218 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton          PB_HELP
     {
-        Pos = MAP_APPFONT ( 198 , 205 ) ;
+        Pos = MAP_APPFONT ( 198 , 218 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
