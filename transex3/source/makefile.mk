@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2002-08-26 17:09:02 $
+#   last change: $Author: vg $ $Date: 2003-04-01 13:37:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,12 +65,10 @@ PRJ=..
 PRJNAME=transex
 TARGET=transex3
 TARGETTYPE=CUI
-NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  static.mk
 
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
 
@@ -94,65 +92,86 @@ LIB1FILES=  $(LB)$/transex3.lib
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=	$(TARGET)
-APP1STACK=	16000
 APP1OBJS=   $(OBJ)$/src_yy.obj
-APP1STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
+APP1STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 
 #APP2TARGET= termilo
 #APP2STACK=  16000
 #APP2OBJS=   $(OBJ)$/termino.obj
-#APP2STDLIBS=$(STATIC_LIBS) $(L)$/bootstrp.lib
+#APP2STDLIBS=$(TOOLSLIBST) $(L)$/bootstrp.lib
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= lngex
-APP3STACK=  16000
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
-APP3STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+APP3STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
-APP4STACK=  16000
 APP4OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/gsiconv.obj
-APP4STDLIBS=$(STATIC_LIBS)
+APP4STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 # tag checker for *.gsi
 APP5TARGET= gsicheck
-APP5STACK=  16000
 APP5OBJS=   $(OBJ)$/gsicheck.obj $(OBJ)$/tagtest.obj
-APP5STDLIBS=$(STATIC_LIBS)
+APP5STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
-APP6STACK=  16000
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP6STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+APP6STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
-APP7STACK=  16000
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy.obj $(OBJ)$/hw2fw.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+APP7STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 #APP8TARGET= xgfconv
 #APP8STACK=  16000
 #APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
-#APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
+#APP8STDLIBS=$(BTSTRPLIB) $(TOOLSLIBST)
 
 # encoding converter for text files
 #APP9TARGET= txtconv
 #APP9STACK=  16000
 #APP9OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/txtconv.obj $(OBJ)$/hw2fw.obj
-#APP9STDLIBS=$(STATIC_LIBS)
+#APP9STDLIBS=$(TOOLSLIBST)
 
 # localizer for l10n framework
 APP9TARGET= localize
-APP9STACK=  16000
 EXCEPTIONSFILES=                            \
                     $(OBJ)$/localize.obj
 APP9OBJS=   $(OBJ)$/localize.obj $(OBJ)$/utf8conv.obj $(OBJ)$/srciter.obj $(OBJ)$/export2.obj
-APP9STDLIBS+=$(BTSTRPLIB) $(STATIC_LIBS)
+APP9STDLIBS+= \
+            $(BTSTRPLIB) \
+            $(TOOLSLIB) \
+            $(VOSLIB) \
+            $(SALLIB)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)
 
@@ -172,3 +191,4 @@ $(MISC)$/xrm_yy.c : xrmlex.l
 
 $(MISC)$/cfg_yy.c : cfglex.l
     +flex -l -8 -o$(MISC)$/cfg_yy.c cfglex.l
+
