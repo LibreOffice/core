@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygoncutter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:33 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,13 +679,13 @@ namespace basegfx
                 do {
                     pB->calcMinMaxX(fMaxBX, fMinBX);
 
-                    if(fTools::more(fMaxBX, fMinAX)
-                        && fTools::more(fMaxAX, fMinBX))
+                    if(fTools::moreOrEqual(fMaxBX, fMinAX) // #116732#
+                        && fTools::moreOrEqual(fMaxAX, fMinBX)) // #116732#
                     {
                         pB->calcMinMaxY(fMaxBY, fMinBY);
 
-                        if(fTools::more(fMaxBY, fMinAY)
-                            && fTools::more(fMaxAY, fMinBY))
+                        if(fTools::moreOrEqual(fMaxBY, fMinAY) // #116732#
+                            && fTools::moreOrEqual(fMaxAY, fMinBY)) // #116732#
                         {
                             if(!isSamePos(pA->getPosition(), pB->getPosition()))
                             {
@@ -928,13 +928,13 @@ namespace basegfx
                         do {
                             pB->calcMinMaxX(fMaxBX, fMinBX);
 
-                            if(fTools::more(fMaxBX, fMinAX)
-                                && fTools::more(fMaxAX, fMinBX))
+                            if(fTools::moreOrEqual(fMaxBX, fMinAX) // #116732#
+                                && fTools::moreOrEqual(fMaxAX, fMinBX)) // #116732#
                             {
                                 pB->calcMinMaxY(fMaxBY, fMinBY);
 
-                                if(fTools::more(fMaxBY, fMinAY)
-                                    && fTools::more(fMaxAY, fMinBY))
+                                if(fTools::moreOrEqual(fMaxBY, fMinAY) // #116732#
+                                    && fTools::moreOrEqual(fMaxAY, fMinBY)) // #116732#
                                 {
                                     if(!isSamePos(pA->getPosition(), pB->getPosition()))
                                     {
