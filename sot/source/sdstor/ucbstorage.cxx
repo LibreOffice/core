@@ -2005,11 +2005,13 @@ String UCBStorage::GetLinkedFile( SvStream &rStream )
     rStream >> nBytes;
     if( nBytes == 0x04034b50 )
     {
-        rStream.ReadByteString( aString, RTL_TEXTENCODING_UTF8 );
-        if ( aString.CompareToAscii( "ContentURL=", 11 ) == COMPARE_EQUAL )
-            aString.Erase( 0, 11 );
-        else
-            aString.Erase();
+        ByteString aTmp;
+        rStream.ReadByteString( aTmp );
+        if ( aTmp.CompareTo( "ContentURL=", 11 ) == COMPARE_EQUAL )
+        {
+            aTmp.Erase( 0, 11 );
+            aString = String( aTmp, RTL_TEXTENCODING_UTF8 );
+        }
     }
 
     rStream.Seek( nPos );
