@@ -2,8 +2,8 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.9 $
-#   last change: $Author: rt $ $Date: 2004-07-29 16:11:13 $
+#   $Revision: 1.10 $
+#   last change: $Author: hr $ $Date: 2004-08-02 14:19:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -170,7 +170,7 @@ BEGIN
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno" );
     @selfreglibraries = ("shlxthdl.dll");               # to be removed after scp changes, see parameter.pm
-    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca");   # to be removed after scp changes, see parameter.pm
+    @binarytablefiles = ("gid_File_Lib_Reg4msdocmsi", "gid_File_Lib_Regactivex_Msi", "gid_File_Lib_Jfregca", "gid_File_Lib_Netframework");  # to be removed after scp changes, see parameter.pm
     @msiassemblyfiles = ("cli_types.dll", "cli_cppuhelper.dll", "cli_ure.dll"); # to be removed after scp changes
     @msiassemblynamecontent = ("cli_types.dll", "cli_types", "ce2cb7e279207b9e", "1.0.0.0", "cli_cppuhelper.dll", "cli_cppuhelper", "ce2cb7e279207b9e", "1.0.0.0", "cli_ure.dll", "cli_ure", "ce2cb7e279207b9e", "1.0.0.0");    # to be removed after scp changes
 
