@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyphenimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:02:08 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@
 #include <tools/table.hxx>
 #endif
 
+#include <unotools/charclass.hxx>
+
 #include <linguistic/misc.hxx>
 #include "hprophelp.hxx"
 #include <stdio.h>
@@ -115,6 +117,7 @@ struct HDInfo {
   OUString         aName;
   Locale           aLoc;
   rtl_TextEncoding aEnc;
+  CharClass *      apCC;
 };
 
 
@@ -236,6 +239,12 @@ public:
         getImplementationName_Static() throw();
     static Sequence< OUString >
         getSupportedServiceNames_Static() throw();
+
+
+
+private:
+        OUString SAL_CALL makeLowerCase(const OUString&, CharClass *);
+
 };
 
 inline OUString Hyphenator::getImplementationName_Static() throw()
