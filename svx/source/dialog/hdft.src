@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 15:50:52 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 20:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ english_us ] = "Same ~content left/right" ;
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Taka sama zawarto?æ na stronie parzystej/nieparzystej";
+        Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
         Text[ japanese ] = "¶‰EÍß°¼Ş“¯‚¶“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
@@ -339,7 +339,7 @@ TabPage RID_SVXPAGE_HEADER
         Text [ portuguese_brazilian ] = "H?e ~dynamisch anpassen" ;
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
         Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "Autodopasowanie wysoko?ci";
+        Text[ polish ] = "Automat. dopasowanie wysokoœci";
         Text[ japanese ] = "‚‚³©“®’²®(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
@@ -492,7 +492,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "Same ~content left/right" ;
         Text[ chinese_simplified ] = "×óÓÒÄÚÈİÏàÍ¬(~C)";
         Text[ russian ] = "Îäèíàêîâîå ñîäåğæèìîå ñëåâà/ñïğàâà";
-        Text[ polish ] = "Taka sama zawarto?æ na stronie parzystej/nieparzystej";
+        Text[ polish ] = "Taka sama zawartoœæ na stronie parzystej/nieparzystej";
         Text[ japanese ] = "¶‰EÍß°¼Ş“¯‚¶“à—e(~C)";
         Text[ chinese_traditional ] = "¤º®e¥ª¥k¬Û¦P(~C)";
         Text[ arabic ] = "äİÓ ÇáãÍÊæíÇÊ Úáì ÇáíÓÇÑ/Çáíãíä";
@@ -702,7 +702,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ english_us ] = "~AutoFit height" ;
         Text[ chinese_simplified ] = "×Ô¶¯µ÷Õû¸ß¶È(~A)";
         Text[ russian ] = "Àâòîïîäáîğ âûñîòû";
-        Text[ polish ] = "Autodopasowanie wysoko?ci";
+        Text[ polish ] = "Automat. dopasowanie wysokoœci";
         Text[ japanese ] = "‚‚³©“®’²®(~A)";
         Text[ chinese_traditional ] = "¦Û°Ê³Ì¾A½Õ¾ã°ª«×(~A)";
         Text[ arabic ] = "ãáÇÁãÉ ÇáÇÑÊİÇÚ ÊáŞÇÆíÇğ";
@@ -808,7 +808,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
     Message [ english_us ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
     Message[ chinese_simplified ] = "²»ÓÃÒ³Ã¼ºÍÒ³½Å¹¦ÄÜ¾Í»áÉ¾³ıÏÖ´æµÄÎÄ×Ö¡£\nÒªÉ¾³ıÕâĞ©ÎÄ×Ö£¿";
     Message[ russian ] = "Îòêëş÷åíèå êîëîíòèòóëîâ âûçîâåò óäàëåíèå èìåşùåãîñÿ òåêñòà.\nÂû õîòèòå óäàëèòü ñîäåğæèìîå?";
-    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie zawarto?ci. \nUsun¹æ zawarto?æ?";
+    Message[ polish ] = "Wy³¹czenie stopki i nag³ówka spowoduje usuniêcie zawartoœci. \nUsun¹æ zawartoœæ?";
     Message[ japanese ] = "Í¯ÀŞ‚Ü‚½‚ÍÌ¯À‚Ì‹@”\\‚ğµÌ‚É‚·‚é‚ÆA‚»‚±‚É‚ ‚é“à—e‚àíœ‚³‚ê‚Ü‚·B\níœ‚µ‚Ä‚à‚¢‚¢‚Å‚·‚©B";
     Message[ chinese_traditional ] = "¤£±Ä¥Î­¶­º©Î­¶§À´N·|§R°£·í«eªº¤å¦r¡C\n­n§R°£³o¨Ç¤å¦r¡H";
     Message[ arabic ] = "ÅÎİÇÁ ÑÃÓ/ ÊĞííá ÇáÕİÍÉ Óæİ íÄÏí Åáì ÍĞİ ãÍÊæíÇÊå.\nåá ÊÑíÏ ÈÇáİÚá ÍĞİ ÇáãÍÊæíÇÊ¿";
