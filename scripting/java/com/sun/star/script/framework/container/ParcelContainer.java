@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContainer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 13:58:38 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 13:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,7 +431,16 @@ public class ParcelContainer implements XNameAccess
                     // TODO remove this once ucb workarounds are removed
                     if (  !children[ i ].endsWith("this_is_a_dummy_stream_just_there_as_a_workaround_for_a_temporary_limitation_of_the_storage_api_implementation" ) )
                     {
-                        loadParcel( children[ i ] );
+                        try
+                        {
+                            loadParcel( children[ i ] );
+                        }
+                        catch (java.lang.Exception e)
+                        {
+                            // print an error message and move on to
+                            // the next parcel
+                            LogUtils.DEBUG("ParcelContainer.loadParcels caught " + e.getClass().getName() + " exception loading parcel " + children[i] + ": " + e.getMessage() );
+                        }
                     }
                 }
             }
@@ -545,7 +554,6 @@ public class ParcelContainer implements XNameAccess
             }
             else
             {
-                LogUtils.DEBUG( parcelDescUrl + " does NOT exist!" );
                 throw new java.io.IOException( parcelDescUrl + " does NOT exist!");
             }
         }
@@ -557,8 +565,7 @@ public class ParcelContainer implements XNameAccess
         }
         catch ( java.io.IOException e )
         {
-
-            LogUtils.DEBUG("loadParcel() Exception while accessing filesystem url = " + parcelDescUrl + e );
+            LogUtils.DEBUG("ParcelContainer.loadParcel() caught IOException while accessing " + parcelDescUrl + ": " + e );
             throw  new com.sun.star.lang.WrappedTargetException( e.toString() );
         }
         catch (  com.sun.star.uno.Exception e )
