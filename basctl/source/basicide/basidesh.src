@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:29:09 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 06:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <baside2.hrc>
 #include <helpid.hrc>
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
 String RID_STR_IDENAME
 {
     Text = "BasicIDE" ;
@@ -1818,7 +1821,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     ButtonImage = Image
     {
         ImageBitmap = Bitmap { File = "baswatr.bmp" ; };
-        MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+        MASKCOLOR
     };
     QuickHelpText = "Beobachter entfernen" ;
     QuickHelpText [ ENGLISH ] = "Remove watch" ;
@@ -1849,7 +1852,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
 Image RID_IMG_REMOVEWATCH_HC
 {
     ImageBitmap = Bitmap { File = "baswatr_h.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
 };
 ImageButton RID_IMGBTN_GOTOCALL
 {
@@ -1953,7 +1956,7 @@ String RID_STR_OVERWRITEMODE
 ImageList RID_DEFAULTIMAGELIST_SC
 {
     ImageBitmap = Bitmap { FILE = "sc_ide.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
     IdList =
     {
         SID_BASICLOAD ;
@@ -2007,7 +2010,7 @@ ImageList RID_DEFAULTIMAGELIST_SC
 ImageList RID_DEFAULTIMAGELIST_LC
 {
     ImageBitmap = Bitmap { FILE = "lc_ide.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
     IdList =
     {
         SID_BASICLOAD ;
@@ -3038,7 +3041,7 @@ Menu RID_POPUP_DLGED
 ImageList RID_IMGLST_OBJECTS
 {
     ImageBitmap = Bitmap { FILE = "im_ges.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
     IdList =
     {
         IMGID_APPICON ;
@@ -3055,7 +3058,7 @@ ImageList RID_IMGLST_OBJECTS
 ImageList RID_IMGLST_OBJECTS_HC
 {
     ImageBitmap = Bitmap { FILE = "imh_ges.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
     IdList =
     {
         IMGID_APPICON ;
@@ -3072,7 +3075,7 @@ ImageList RID_IMGLST_OBJECTS_HC
 ImageList RID_IMGLST_LAYOUT
 {
     ImageBitmap = Bitmap { FILE = "im_ges2.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+    MASKCOLOR
     IdList =
     {
         IMGID_BRKENABLED ;
@@ -3084,7 +3087,7 @@ ImageList RID_IMGLST_LAYOUT
 ImageList RID_IMGLST_LAYOUT_HC
 {
     ImageBitmap = Bitmap { FILE = "imh_ges2.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+    MASKCOLOR
     IdList =
     {
         IMGID_BRKENABLED ;
@@ -3096,12 +3099,12 @@ ImageList RID_IMGLST_LAYOUT_HC
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
-    MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
+    MASKCOLOR
 };
 Image RID_IMG_LOCKED_HC
 {
     ImageBitmap = Bitmap { File = "locked_h.bmp" ; };
-    MaskColor = Color { Red = 0x0000 ; Green = 0x0000 ; Blue = 0x0000 ; };
+    MASKCOLOR
 };
 String RID_STR_QUERYREPLACEMACRO
 {

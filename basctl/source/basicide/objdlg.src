@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:53:24 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 06:27:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #include <objdlg.hrc>
 #include <helpid.hrc>
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
+
 FloatingWindow RID_BASICIDE_OBJCAT
 {
     OutputSize = TRUE ;
@@ -150,7 +153,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
         ItemImageList = ImageList
         {
             ImageBitmap = Bitmap { FILE = "im_ges3.bmp" ; };
-            MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+            MASKCOLOR
             IdList =
             {
                 TBITEM_SHOW ;
@@ -250,7 +253,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
     ImageList RID_IMGLST_TB_HC
     {
         ImageBitmap = Bitmap { FILE = "imh_ges3.bmp" ; };
-        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+        MASKCOLOR
         IdList =
         {
             TBITEM_SHOW ;
