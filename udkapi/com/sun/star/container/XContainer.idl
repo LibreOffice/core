@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XContainer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:36:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {  module sun {  module star {  module container {
     @see XNameAcces
     @see XEnumerationAccess
  */
-interface XContainer: com::sun::star::uno::XInterface
+published interface XContainer: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
