@@ -1,11 +1,10 @@
-#include <cstdio>
 /*************************************************************************
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sb $ $Date: 2002-08-15 11:14:18 $
+ *  last change: $Author: hdu $ $Date: 2002-08-16 12:50:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +74,7 @@
 #include <sallayout.hxx>
 #endif // _SV_SALLAYOUT_HXX
 
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
-#endif // _SV_POLY_HXX
-
+#include <cstdio>
 #include <malloc.h>
 #define alloca _alloca
 
@@ -169,6 +165,8 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // layout text
     int nMaxGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+    DWORD nGcpOption = 0;
+
     mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
     mpGlyphAdvances = new int[ nMaxGlyphCount ];
     mnGlyphCount    = 0;
@@ -189,7 +187,6 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     else
         aGCP.lpOutString = mpOutGlyphs;
 
-    DWORD nGcpOption = 0;   // TODO: decide if GCP_DISPLAYZWG
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
@@ -203,11 +200,19 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 
         // LLA: #100683# gpf in setup, looks like memory overwriter
         //      we set lpClass to size of nMaxGlyphCount
-        pGcpClass = new char[ nMaxGlyphCount ];
-        pGcpClass[0] = (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) ?
-            GCPCLASS_PREBOUNDLTR : GCPCLASS_PREBOUNDRTL;
-        nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
+        pGcpClass = new char[ nMaxGlyphCount+1 ];
         aGCP.lpClass = pGcpClass;
+        nGcpOption  |= (GCP_REORDER | GCP_CLASSIN);
+        if( rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL )
+        {
+            pGcpClass[0] = GCPCLASS_PREBOUNDRTL;
+            pGcpClass[1] = GCPCLASS_POSTBOUNDRTL;
+        }
+        else
+        {
+            pGcpClass[0] = (char)GCPCLASS_PREBOUNDLTR;
+            pGcpClass[1] = GCPCLASS_POSTBOUNDLTR;
+        }
     }
 
     DWORD nRC;
@@ -238,7 +243,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     delete[] pGcpClass;
 
     // cache essential layout properties
-    mnGlyphCount = aGCP.nMaxFit;
+    mnGlyphCount = mbEnableGlyphs ? aGCP.nGlyphs : aGCP.nMaxFit;
     mnWidth = nRC & 0xFFFF; // TODO: check API docs for clarification
 
     if( !nRC )
@@ -393,8 +398,16 @@ void SimpleWinLayout::Draw() const
 #ifndef DEBUG_GETNEXTGLYPHS
     Point aPos = GetDrawPosition();
 
-    ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-        mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+    if( mbEnableGlyphs || aSalShlData.mbWNT )
+    {
+        ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
+            mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+    }
+    else
+    {
+        ::ExtTextOutA( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
+            (char*)mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+    }
 #else // DEBUG_GETNEXTGLYPHS
     #define MAXGLYPHCOUNT 12
     long pLGlyphs[ MAXGLYPHCOUNT ];
@@ -579,7 +592,6 @@ public:
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
     virtual void    Draw() const;
-//  virtual bool    GetOutline( SalGraphics&, PolyPolygon& ) const;
     virtual int     GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int&,
                         long* pGlyphAdvances, int* pCharIndexes ) const;
 
@@ -625,8 +637,8 @@ private:
 // -----------------------------------------------------------------------
 // dynamic loading of usp library
 
-static bool bUspEnabled = true;
 static HMODULE aUspModule;
+static bool bUspEnabled = true;
 
 static HRESULT ((WINAPI *pScriptIsComplex)( const WCHAR*, int, DWORD ));
 static HRESULT ((WINAPI *pScriptItemize)( const WCHAR*, int, int,
@@ -702,6 +714,12 @@ static bool InitUSP()
     pScriptFreeCache = (HRESULT (WINAPI*)(SCRIPT_CACHE*))
         ::GetProcAddress( aUspModule, "ScriptFreeCache" );
     bUspEnabled &= (NULL != pScriptFreeCache);
+
+    if( !bUspEnabled )
+    {
+        FreeLibrary( aUspModule );
+        aUspModule = NULL;
+    }
 
     return bUspEnabled;
 }
@@ -928,7 +946,7 @@ bool UniscribeLayout::GetItemSubrange( const VisualItem& rVisualItem,
         // test only needed when rightmost glyph isn't referenced
         if( rEndGlyphPos > nMaxGlyphPos + 1 )
         {
-            // glyph index above currently selected range is new end index
+            // find cluster end
             // TODO: optimize for case that LTR/RTL correspond to monotonous glyph indexes
             for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
             {
@@ -1147,9 +1165,9 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth, long nCharExtra ) const
         nWidth += mpCharWidths[ i ];
         if( nWidth >= nMaxWidth )
         {
-            for(; i >= mnFirstCharIndex; --i )
-                if( mpVisualAttrs[ mpLogClusters[i] ].fClusterStart )
-                    break;
+            // go back to cluster start
+            while( !mpVisualAttrs[ mpLogClusters[i] ].fClusterStart
+                && (--i > mnFirstCharIndex) );
             return i;
         }
         nWidth += nCharExtra;
@@ -1336,7 +1354,7 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         if( !bEnableGlyphs )
         {
             TEXTMETRICA aTextMetricA;
-            if( GetTextMetricsA( maGraphicsData.mhDC, &aTextMetricA )
+            if( ::GetTextMetricsA( maGraphicsData.mhDC, &aTextMetricA )
             &&  (aTextMetricA.tmPitchAndFamily & TMPF_TRUETYPE )
             && !(aTextMetricA.tmPitchAndFamily & TMPF_DEVICE ) )
                 bEnableGlyphs = true;
