@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tcvtutf7.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-10-17 14:35:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:52:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,8 +191,8 @@ sal_Size ImplUTF7ToUnicode( const ImplTextConverterData* pData, void* pContext,
                             sal_Size* pSrcCvtBytes )
 {
     ImplUTF7ToUCContextData*    pContextData = (ImplUTF7ToUCContextData*)pContext;
-    sal_uChar                   c;
-    sal_uChar                   nBase64Value;
+    sal_uChar                   c ='\0';
+    sal_uChar                   nBase64Value = 0;
     int                         bEnd = sal_False;
     int                         bShifted;
     int                         bFirst;
@@ -485,7 +485,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
                             sal_Size* pSrcCvtChars )
 {
     ImplUTF7FromUCContextData*  pContextData = (ImplUTF7FromUCContextData*)pContext;
-    sal_Unicode                 c;
+    sal_Unicode                 c = '\0';
     int                         bEnd = sal_False;
     int                         bShifted;
     int                         bNeedShift;
