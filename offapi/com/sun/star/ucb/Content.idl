@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Content.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-20 15:32:12 $
+ *  last change: $Author: kso $ $Date: 2002-08-09 12:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,6 +617,18 @@ service Content
         </pre>
      */
     interface com::sun::star::ucb::XCommandProcessor;
+
+    //-------------------------------------------------------------------------
+    /** is an enhanced version of <type>XCommandProcessor</type> that has an
+        additional method for releasing command identifiers obtained via
+        <member>XCommandProcessor::createCommandIdentifier</member> to avoid
+        resource leaks. For a detailed description of the problem refer to
+        <member>XCommandProcessor2::releaseCommandIdentifier</member>.
+
+        <p>Where many existing <type>Content</type> implementations do not
+        (yet), every new implementation should support this interface.
+     */
+    [optional] interface com::sun::star::ucb::XCommandProcessor2;
 
     //-------------------------------------------------------------------------
     /** notifies changes of property values to listeners registered for
