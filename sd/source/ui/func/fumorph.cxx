@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fumorph.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:47:13 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:04:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ FuMorph::FuMorph (
     SfxRequest& rReq )
     :   FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    const SdrMarkList&  rMarkList = pView->GetMarkList();
+    const SdrMarkList&  rMarkList = pView->GetMarkedObjectList();
 
     if(rMarkList.GetMarkCount() == 2)
     {
@@ -187,7 +187,7 @@ FuMorph::FuMorph (
 
                 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, pDlg->GetFadeSteps(), aPolyPolyList3D)) //CHINA001 if(ImpMorphPolygons(aPolyPoly1, aPolyPoly2, aDlg.GetFadeSteps(), aPolyPolyList3D))
                 {
-                    String aString(pView->GetMarkDescription());
+                    String aString(pView->GetDescriptionOfMarkedObjects());
 
                     aString.Append(sal_Unicode(' '));
                     aString.Append(String(SdResId(STR_UNDO_MORPHING)));
