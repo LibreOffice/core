@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolayer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-08-02 12:09:48 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include "unolayer.hxx"
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -79,8 +80,8 @@
 #endif
 
 #ifndef SVX_LIGHT
-#ifndef _SD_DOCSHELL_HXX
-#include <docshell.hxx>
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
 #endif
 #endif
 
@@ -89,9 +90,6 @@
 #endif
 #ifndef _UNOMODEL_HXX
 #include <unomodel.hxx>
-#endif
-#ifndef _UNOLAYER_HXX
-#include <unolayer.hxx>
 #endif
 
 #ifndef _SD_UNOPRNMS_HXX
@@ -103,11 +101,19 @@
 #endif
 
 #include "unohelp.hxx"
-#include "frmview.hxx"
-#include "drviewsh.hxx"
-#include "sdview.hxx"
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
 
-#include "viewshel.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
@@ -350,7 +356,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
     if(pLayer&&pLayerManager)
     {
         // Versuch 1. ist eine beliebige Seite geoeffnet?
-        SdView *pView = pLayerManager->GetView();
+        ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
             pSdrPageView = pView->GetPageViewPvNum(0);
@@ -370,7 +376,7 @@ sal_Bool SdLayer::get( LayerAttribute what ) throw()
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
-            FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
+            ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
             if(pFrameView)
                 switch(what)
                 {
@@ -389,7 +395,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
     if(pLayer&&pLayerManager)
     {
         // Versuch 1. ist eine beliebige Seite geoeffnet?
-        SdView *pView = pLayerManager->GetView();
+        ::sd::View *pView = pLayerManager->GetView();
         SdrPageView* pSdrPageView = NULL;
         if(pView)
             pSdrPageView = pView->GetPageViewPvNum(0);
@@ -412,7 +418,7 @@ void SdLayer::set( LayerAttribute what, sal_Bool flag ) throw()
         // Versuch 2. Info von der FrameView besorgen
         if(pLayerManager->GetDocShell())
         {
-            FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
+            ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
 
             if(pFrameView)
             {
@@ -713,8 +719,8 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 #ifndef SVX_LIGHT
     if(rModel.pDocShell)
     {
-        SdDrawViewShell* pDrViewSh =
-            PTR_CAST(SdDrawViewShell, rModel.pDocShell->GetViewShell());
+        ::sd::DrawViewShell* pDrViewSh =
+            PTR_CAST(::sd::DrawViewShell, rModel.pDocShell->GetViewShell());
 
         if(pDrViewSh)
         {
@@ -730,12 +736,12 @@ void SdLayerManager::UpdateLayerView( sal_Bool modify ) const throw()
 }
 
 /** */
-SdView* SdLayerManager::GetView() const throw()
+::sd::View* SdLayerManager::GetView() const throw()
 {
 #ifndef SVX_LIGHT
     if( rModel.pDocShell )
     {
-        SdViewShell* pViewSh = rModel.pDocShell->GetViewShell();
+        ::sd::ViewShell* pViewSh = rModel.pDocShell->GetViewShell();
         if(pViewSh)
             return pViewSh->GetView();
     }
