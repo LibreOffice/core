@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   inv </module-name>
+    <module-name>   invocation.uno  </module-name>
     <component-description>
         <author> Daniel Boelzle </author>
         <name>  com.sun.star.comp.stoc.Invocation   </name>
@@ -71,7 +71,7 @@ XNameContainer and XEnumerationContainer
     <project-build-dependency>  cppuhelper  </project-build-dependency>
     <project-build-dependency>  cppu        </project-build-dependency>
     <project-build-dependency>  sal         </project-build-dependency>
-    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
-    <runtime-module-dependency> cppu2       </runtime-module-dependency>
-    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu3       </runtime-module-dependency>
+    <runtime-module-dependency> sal3        </runtime-module-dependency>
 </module-description>
