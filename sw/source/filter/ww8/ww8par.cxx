@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:51:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 10:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,6 +389,76 @@ void SwWW8FltControlStack::SetAttr(const SwPosition& rPos, USHORT nAttrId,
         SwFltControlStack::SetAttr(rPos, nAttrId, bTstEnde, nHand);
 }
 
+long GetListFirstLineIndent(const SwNumFmt &rFmt)
+{
+    SvxAdjust eAdj = rFmt.GetNumAdjust();
+    long nReverseListIndented;
+    if (eAdj == SVX_ADJUST_RIGHT)
+        nReverseListIndented = -rFmt.GetCharTextDistance();
+    else if (eAdj == SVX_ADJUST_CENTER)
+        nReverseListIndented = rFmt.GetFirstLineOffset()/2;
+    else
+        nReverseListIndented = rFmt.GetFirstLineOffset();
+    return nReverseListIndented;
+}
+
+long lcl_GetTrueMargin(const SvxLRSpaceItem &rLR, const SwNumFmt &rFmt,
+    long &rFirstLinePos, long &rPseudoListFirstLine)
+{
+    long nBodyIndent = rLR.GetTxtLeft();
+    long nFirstLineDiff = rLR.GetTxtFirstLineOfst();
+    rFirstLinePos = nBodyIndent + nFirstLineDiff;
+    long nPseudoListBodyIndent = rFmt.GetAbsLSpace();
+    long nReverseListIndented = GetListFirstLineIndent(rFmt);
+    rPseudoListFirstLine = nPseudoListBodyIndent + nReverseListIndented;
+    return nReverseListIndented;
+}
+
+void SyncStyleIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
+{
+    long nFirstLinePos, nPseudoListFirstLine;
+    lcl_GetTrueMargin(rLR, rFmt, nFirstLinePos, nPseudoListFirstLine);
+    nFirstLinePos -= nPseudoListFirstLine;
+    rLR.SetTxtLeft(nFirstLinePos);
+    rLR.SetTxtFirstLineOfst(0);
+}
+
+const SwNumFmt* GetNumFmtFromTxtNode(const SwTxtNode &rTxtNode,
+        const SwDoc &rDoc)
+{
+    const SwNumFmt *pRet = 0;
+    const SwNumRule *pRule = 0;
+    const SwNodeNum* pNum;
+    if (
+        (pNum = rTxtNode.GetNum()) &&
+        (MAXLEVEL > pNum->GetLevel()) &&
+        (pRule = rTxtNode.GetNumRule())
+       )
+    {
+        pRet = &(pRule->Get(pNum->GetLevel()));
+    }
+    else if (
+              (pNum = rTxtNode.GetOutlineNum()) &&
+              (MAXLEVEL > pNum->GetLevel()) &&
+              (pRule = rDoc.GetOutlineNumRule())
+            )
+    {
+        pRet = &(pRule->Get(pNum->GetLevel()));
+    }
+    return pRet;
+}
+
+void SyncParagraphIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt)
+{
+    long nFirstLinePos, nPseudoListFirstLine;
+    long nReverseListIndented = lcl_GetTrueMargin(rLR, rFmt, nFirstLinePos,
+        nPseudoListFirstLine);
+    if (nFirstLinePos < nPseudoListFirstLine)
+        nFirstLinePos -= nPseudoListFirstLine;
+    rLR.SetTxtLeft(nFirstLinePos-nReverseListIndented);
+    rLR.SetTxtFirstLineOfst(nReverseListIndented);
+}
+
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry* pEntry)
 {
@@ -400,33 +470,21 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 if (pEntry->MakeRegion(pDoc, aRegion, false))
                 {
                     SvxLRSpaceItem aLR( *(SvxLRSpaceItem*)pEntry->pAttr );
-                    bool bChange1stLine = 1 == aLR.GetTxtFirstLineOfst();
                     ULONG nStart = aRegion.Start()->nNode.GetIndex();
                     ULONG nEnd   = aRegion.End()->nNode.GetIndex();
                     const SwNumRule* pRule;
-                    const SwNodeNum* pNum;
                     for(; nStart <= nEnd; ++nStart)
                     {
                         SwNode* pNode = pDoc->GetNodes()[ nStart ];
                         if (pNode->IsTxtNode())
                         {
-                            if( bChange1stLine )
-                            {
-                                if ( (pNum = ((SwTxtNode*)pNode)->GetNum()) &&
-                                    (MAXLEVEL > pNum->GetLevel()) &&
-                                    (pRule = ((SwTxtNode*)pNode)->GetNumRule())
-                                   )
-                                {
-                                    const SwNumFmt rNumFmt =
-                                        pRule->Get(pNum->GetLevel());
-                                    aLR.SetTxtFirstLineOfst(
-                                        rNumFmt.GetFirstLineOffset());
-                                }
-                                else
-                                    aLR.SetTxtFirstLineOfst( 0 );
-                            }
+                            pNode->SetNumLSpace(false);
+                            SwTxtNode *pTxtNode = (SwTxtNode*)pNode;
+                            const SwNumFmt *pNumFmt =
+                                GetNumFmtFromTxtNode(*pTxtNode, *pDoc);
+                            if (pNumFmt)
+                                SyncParagraphIndentWithList(aLR, *pNumFmt);
                             ((SwCntntNode*)pNode)->SetAttr( aLR );
-
                             // wenn wir dies nicht tun, ueberschreibt die
                             // NumRule uns alle harten L-Randeinstellungen
                             pNode->SetNumLSpace(false);
@@ -952,6 +1010,7 @@ WW8ReaderSave::WW8ReaderSave(SwWW8ImplReader* pRdr ,WW8_CP nStartCp)
     mbInHyperlink(pRdr->bInHyperlink), mbPgSecBreak(pRdr->bPgSecBreak),
     mbWasParaEnd(pRdr->bWasParaEnd), mbHasBorder(pRdr->bHasBorder)
 {
+    pRdr->bSymbol = false;
     pRdr->bHdFtFtnEdn = true;
     pRdr->bTxbxFlySection = pRdr->bAnl = pRdr->bPgSecBreak = pRdr->bWasParaEnd
         = pRdr->bHasBorder = false;
@@ -2617,6 +2676,9 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                                             pWwFib->lcbSttbfRMark, rDoc );
             }
 
+            ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
+            pLstManager = new WW8ListManager( *pTableStream, *this );
+
             /*
                 zuerst(!) alle Styles importieren   (siehe WW8PAR2.CXX)
                     VOR dem Import der Listen !!
@@ -2624,17 +2686,6 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
             pStyles = new WW8RStyle( *pWwFib, this );   // Styles
             pStyles->Import();
-            ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
-
-
-
-            /*
-                jetzt erst alle Listen importieren  (siehe WW8PAR3.CXX)
-                    NACH dem Import der Styles !!
-            */
-            pLstManager = new WW8ListManager( *pTableStream, *this );
-            ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
-
 
             /*
                 zu guter Letzt: (siehe ebenfalls WW8PAR3.CXX)
@@ -2643,7 +2694,11 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
                 anhaengen NACH dem Import der Styles und NACH dem Import der
                 Listen !!
             */
+            ::SetProgressState( nProgress, rDoc.GetDocShell() );    // Update
             pStyles->PostProcessStyles();
+
+            if (pCollA)
+                SetOutLineStyles();
 
             pSBase = new WW8ScannerBase(pStrm,pTableStream,pDataStream,pWwFib);
 
@@ -2843,10 +2898,7 @@ ULONG SwWW8ImplReader::LoadDoc1( SwPaM& rPaM ,WW8Glossary *pGloss)
             maSectionManager.InsertSegments(mbNewDoc);
 
             if (pCollA)
-            {
-                SetOutLineStyles();
                 delete[] pCollA;
-            }
 
             DELETEZ( pStyles );
 
@@ -2984,7 +3036,7 @@ void SwWW8ImplReader::SetOutLineStyles()
                             SwNumRuleItem( rSI.pOutlineNumrule->GetName() ) );
                     ((SwTxtFmtColl*)rSI.pFmt)->SetOutlineLevel(NO_NUMBERING);
                 }
-                else if (nJ || rSI.pFmt->GetDepends())
+                else
                 {
                     /*
                     If there is a style already set for this outline
