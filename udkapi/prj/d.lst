@@ -55,13 +55,5 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\uri
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%
 
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\Currency.urd %_DEST%\bin%_EXT%\Currency.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\Date.urd %_DEST%\bin%_EXT%\Date.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\Decimal.urd %_DEST%\bin%_EXT%\Decimal.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\SCode.urd %_DEST%\bin%_EXT%\SCode.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\NamedArgument.urd %_DEST%\bin%_EXT%\NamedArgument.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\PropertyPutArgument.urd %_DEST%\bin%_EXT%\PropertyPutArgument.urd
-..\%__SRC%\ucr\com\sun\star\bridge\oleautomation\XAutomationObject.urd %_DEST%\bin%_EXT%\XAutomationObject.urd
-
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
