@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSimpleFileAccess.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 01:43:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,19 @@ published interface XSimpleFileAccess: com::sun::star::uno::XInterface
         raises( com::sun::star::ucb::CommandAbortedException, com::sun::star::uno::Exception );
 
     //-------------------------------------------------------------------------
-    /**
+    /** Sets an interaction handler to be used for further operations.
+
+        <p>
+        A default interaction handler is available as service
+        <type scope="com::sun::star::task">InteractionHandler</type>.
+        The documentation of this service also contains further
+        information about the interaction handler concept.
+        </p>
+
+        @see com::sun::star::task::InteractionHandler
+
+        @param Handler
+        The interaction handler to be set
     */
     void setInteractionHandler( [in] com::sun::star::task::XInteractionHandler Handler );
 
