@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-06 14:55:57 $
+ *  last change: $Author: dv $ $Date: 2001-07-10 10:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ Reference < XContent > SfxMedium::GetContent() const
 {
     if ( !pImp->xContent.is() && GetName().Len() )
     {
-        String aURL     = GetURLObject().GetMainURL();
+        String aURL     = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
         pImp->xContent  = UCB_Helper::CreateContent( aURL );
     }
 
@@ -817,8 +817,9 @@ SvStream* SfxMedium::GetOutStream()
 
         if ( pImp->pTempFile )
         {
+            INetURLObject aURL( aName, INET_PROT_FILE );
 //            pOutStream = ::utl::UcbStreamHelper::CreateStream( pImp->pTempFile->GetURL(), nStorOpenMode );
-            pOutStream = new SvFileStream( aName, STREAM_STD_READWRITE );
+            pOutStream = new SvFileStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READWRITE );
             CloseStorage();
         }
     }
@@ -1091,7 +1092,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     }
     else
     {
-        aStorageName = GetURLObject().GetMainURL();
+        aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
         pStream = GetInStream();
         if ( pStream )
         {
@@ -1348,11 +1349,11 @@ void SfxMedium::Transfer_Impl()
         {
             // content says: direct transfer is possible
             TransferInfo    aInfo;
-            String          aParentURL = aDest.GetMainURL();
+            String          aParentURL = aDest.GetMainURL( INetURLObject::NO_DECODE );
             Any             aAny;
 
             aInfo.MoveData = sal_True;
-            aInfo.SourceURL = aSource.GetMainURL();
+            aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
             aInfo.NewTitle = aName;
 
             SFX_ITEMSET_ARG( GetItemSet(), pRename, SfxBoolItem, SID_RENAME, sal_False );
@@ -1443,7 +1444,7 @@ void SfxMedium::DoBackup_Impl()
         INetURLObject aDestDir = aDest;
         if ( aDestDir.removeSegment() )
         {
-            aParentURL = aDestDir.GetMainURL();
+            aParentURL = aDestDir.GetMainURL( INetURLObject::NO_DECODE );
             xContent = UCB_Helper::CreateContent( aParentURL );
             if ( xContent.is() )
             {
@@ -1459,7 +1460,7 @@ void SfxMedium::DoBackup_Impl()
         Any             aAny;
 
         aInfo.MoveData = sal_True;
-        aInfo.SourceURL = aSource.GetMainURL();
+        aInfo.SourceURL = aSource.GetMainURL( INetURLObject::NO_DECODE );
         aInfo.NewTitle = aName;
         aInfo.NameClash = NameClash::OVERWRITE;
 
@@ -1471,7 +1472,7 @@ void SfxMedium::DoBackup_Impl()
 
     if ( !bSuccess )
     {
-        xContent = UCB_Helper::CreateContent( aDest.GetMainURL() );
+        xContent = UCB_Helper::CreateContent( aDest.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( xContent.is() )
         {
             SvStream *pStream = GetInStream();
@@ -1879,7 +1880,7 @@ void SfxMedium::RefreshName_Impl()
         aLogicName = aNameP;
         DELETEZ( pURLObj );
         if (aLogicName.Len())
-            aLogicName = GetURLObject().GetMainURL();
+            aLogicName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
         SetIsRemote_Impl();
     }
 #endif  //(dv)
@@ -2094,7 +2095,7 @@ sal_uInt32 SfxMedium::GetMIMEAndRedirect( String &rName )
 {
 /* dv !!!! not needed any longer ?
     INetProtocol eProt = GetURLObject().GetProtocol();
-    if( eProt == INET_PROT_FTP && SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL() ) )
+    if( eProt == INET_PROT_FTP && SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
     {
         Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
         sal_Bool bIsFolder = FALSE;
@@ -2200,7 +2201,7 @@ sal_Bool SfxMedium::SupportsMIME_Impl() const
         Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
         sal_Bool bIsFolder = FALSE;
         if ( ( aAny >>= bIsFolder ) && bIsFolder )
-            return SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL() );
+            return SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
         else
             return sal_False;
     }
@@ -2458,7 +2459,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool bUseXML )
 sal_Bool SfxMedium::IsReadOnly()
 {
     sal_Bool bReadOnly = !( GetOpenMode() & STREAM_WRITE );
-/*(dv)  if ( bReadOnly && pURLObj && CntAnchor::IsViewURL( pURLObj->GetMainURL() ) )
+/*(dv)  if ( bReadOnly && pURLObj && CntAnchor::IsViewURL( pURLObj->GetMainURL( INetURLObject::NO_DECODE ) ) )
         // Chaos-Storages sind niemals als readonly anzusehen!
         return sal_False;
 */
@@ -2496,7 +2497,7 @@ void SfxMedium::CreateTempFile()
         String          aParentName;
         INetURLObject   aParent = GetURLObject();
         if ( aParent.removeSegment() )
-            aParentName = aParent.GetMainURL();
+            aParentName = aParent.GetMainURL( INetURLObject::NO_DECODE );
         pImp->pTempFile = new ::utl::TempFile( &aParentName );
     }
 
@@ -2549,7 +2550,7 @@ void SfxMedium::CreateTempFileNoCopy()
         String          aParentName;
         INetURLObject   aParent = GetURLObject();
         if ( aParent.removeSegment() )
-            aParentName = aParent.GetMainURL();
+            aParentName = aParent.GetMainURL( INetURLObject::NO_DECODE );
         pImp->pTempFile = new ::utl::TempFile( &aParentName );
     }
 

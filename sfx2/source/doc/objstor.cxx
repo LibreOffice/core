@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 15:11:25 $
+ *  last change: $Author: dv $ $Date: 2001-07-10 10:38:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1559,7 +1559,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
                         aObj.setFinalSlash();
                         aObj = INetURLObject( aObj.RelToAbs( aPath, bWasAbsolute ) );
                         aObj.SetExtension( pFilt->GetDefaultExtension().Copy(2) );
-                        aFileDlg.SetDisplayDirectory( aObj.GetMainURL() );
+                        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
                     }
 
                     aFileDlg.SetCurrentFilter( pFilt->GetName() );
@@ -1587,21 +1587,26 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             aURL.SetURL( aFileDlg.GetPath() );
 
             // gibt es schon ein Doc mit dem Namen?
-            const String aName(aURL.GetMainURL());
-            SfxObjectShell* pDoc = 0;
-            for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
-                  pTmp && !pDoc;
-                  pTmp = SfxObjectShell::GetNext(*pTmp) )
-                //! fsys bug op==
-                if ( pTmp->GetMedium() )
-                    // ??? HasName() MM
-                    if(pTmp != this && pTmp->GetMedium()->GetName() == aName )
-                        pDoc = pTmp;
-            if ( pDoc )
+            if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
             {
-                // dann Fehlermeldeung: "schon offen"
-                SetError(ERRCODE_SFX_ALREADYOPEN);
-                return sal_False;
+                SfxObjectShell* pDoc = 0;
+                for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst();
+                      pTmp && !pDoc;
+                      pTmp = SfxObjectShell::GetNext(*pTmp) )
+                {
+                    if( ( pTmp != this ) && pTmp->GetMedium() )
+                    {
+                        INetURLObject aCompare( pTmp->GetMedium()->GetName() );
+                        if ( aCompare == aURL )
+                            pDoc = pTmp;
+                    }
+                }
+                if ( pDoc )
+                {
+                    // dann Fehlermeldeung: "schon offen"
+                    SetError(ERRCODE_SFX_ALREADYOPEN);
+                    return sal_False;
+                }
             }
 
             // --**-- pParams->Put( *pDlg->GetItemSet() );
@@ -1632,7 +1637,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
         }
 
         // Request mit Dateiname und Filter vervollst"andigen
-        pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL()) );
+        pRequest->AppendItem(SfxStringItem( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE )) );
         pRequest->AppendItem(SfxStringItem( SID_FILTER_NAME, aFilterName));
         const SfxPoolItem* pItem=0;
         pRequest->GetArgs()->GetItemState( SID_FILE_NAME, sal_False, &pItem );
@@ -1640,7 +1645,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     }
 
     // neuen Namen an der Object-Shell merken
-    SfxSaveAsContext_Impl aSaveAsCtx( pImp->aNewName, aURL.GetMainURL() );
+    SfxSaveAsContext_Impl aSaveAsCtx( pImp->aNewName, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
     // now we can get the filename from the SfxRequest
     DBG_ASSERT( pRequest->GetArgs() != 0, "fehlerhafte Parameter");
@@ -1726,7 +1731,7 @@ sal_Bool SfxObjectShell::SaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( SvtSaveOptions().IsSaveUnpacked() )
         pParams->Put( SfxBoolItem( SID_PACK, FALSE ) );
 
-    if ( PreDoSaveAs_Impl(aURL.GetMainURL(),aFilterName,pParams))
+    if ( PreDoSaveAs_Impl(aURL.GetMainURL( INetURLObject::NO_DECODE ),aFilterName,pParams))
     {
         pImp->bWaitingForPicklist = sal_True;
         if (!pImp->bSetStandardName)
