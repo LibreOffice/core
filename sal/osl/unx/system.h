@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:10:06 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:23:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,10 @@
 #endif
 
 #ifdef LINUX
-#ifndef __USE_GNU
-#define __USE_GNU
-#endif
+#   ifndef __USE_GNU
+#   define __USE_GNU
+#   endif
+
 #if GLIBC >= 2
 #   include <shadow.h>
 #   if !defined(SPARC)
