@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2003-05-27 13:27:13 $
+ *  last change:$Date: 2003-09-08 12:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,7 @@
 package mod._sm;
 
 import java.io.PrintWriter;
-import com.sun.star.lang.XMultiServiceFactory;
 
-import com.sun.star.awt.XWindow;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.XModel;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import com.sun.star.accessibility.AccessibleRole;
-import com.sun.star.accessibility.XAccessible;
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -80,6 +70,16 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.SOfficeFactory;
 import util.utils;
+
+import com.sun.star.accessibility.AccessibleRole;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.awt.XWindow;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XModel;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 
 
@@ -113,7 +113,7 @@ public class SmGraphicAccessible extends TestCase {
      */
     protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
 
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)  Param.getMSF() );
         try {
             xMathDoc = SOF.openDoc("smath","_blank");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
@@ -152,11 +152,10 @@ public class SmGraphicAccessible extends TestCase {
         XModel aModel = (XModel)
             UnoRuntime.queryInterface(XModel.class, xMathDoc);
 
-        XController xController = aModel.getCurrentController();
 
         AccessibilityTools at = new AccessibilityTools();
 
-        XWindow xWindow = at.getCurrentWindow((XMultiServiceFactory)Param.getMSF(), aModel);
+        XWindow xWindow = at.getCurrentWindow( (XMultiServiceFactory) Param.getMSF(), aModel);
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
         oObj = at.getAccessibleObjectForRole
@@ -169,8 +168,6 @@ public class SmGraphicAccessible extends TestCase {
         tEnv.addObjRelation("EditOnly",
                     "This method isn't supported in this dialog");
 
-        tEnv.addObjRelation("LimitedBounds",
-                    "only delivers senseful values for getCharacterBounds(0,length-1)");
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
