@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-09-26 14:05:01 $
+ *  last change: $Author: jsc $ $Date: 2001-10-18 14:29:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ OString Options::prepareHelp()
     help += "                is specified the comparison starts with the root key.\n";
     help += "    -x<name>  = name specifies the name of a key which won't be compared.\n";
     help += "    -f        = force the detailed output of any diffenrences. Default\n";
-    help += "                is that only the the number of differences is returned.\n";
+    help += "                is that only the number of differences is returned.\n";
     help += "    -c        = make a complete check, that means any differences will be\n";
     help += "                detected. Default is only a compatibility check that means\n";
     help += "                only UNO typelibrary entries will be checked.\n";
