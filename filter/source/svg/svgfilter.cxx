@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2003-12-15 13:57:22 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:25:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,12 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     if( pFocusWindow )
         pFocusWindow->EnterWait();
 
+#ifdef SOLAR_JAVA
     if( mxDstDoc.is() )
         bRet = implImport( rDescriptor );
-    else if( mxSrcDoc.is() )
+    else
+#endif
+    if( mxSrcDoc.is() )
         bRet = implExport( rDescriptor );
     else
         bRet = sal_False;
@@ -127,11 +130,13 @@ void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc 
 
 // -----------------------------------------------------------------------------
 
+#ifdef SOLAR_JAVA
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDstDoc = xDoc;
 }
+#endif
 
 // -----------------------------------------------------------------------------
 
