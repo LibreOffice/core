@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XEmbeddedObjectSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:03:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 18:48:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com {   module sun {   module star {   module document {
 
 /** represents something that provides an embedded object.
  */
-interface XEmbeddedObjectSupplier: com::sun::star::uno::XInterface
+published interface XEmbeddedObjectSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** returns the object which is embedded into this object.
