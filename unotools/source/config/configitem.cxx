@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configitem.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: os $ $Date: 2002-09-25 07:51:42 $
+ *  last change: $Author: jb $ $Date: 2002-12-03 12:29:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,30 @@ public:
                 rCnt--;
             }
 };
+/* -----------------------------03.12.02 -------------------------------------
+
+ ---------------------------------------------------------------------------*/
+namespace
+{
+    // helper to achieve exception - safe handling of an Item under construction
+    template <class TYP>
+    class AutoDeleter // : Noncopyable
+    {
+        TYP* pItem;
+    public:
+        AutoDeleter(TYP * pItem)
+        : pItem(pItem)
+        {
+        }
+
+        ~AutoDeleter()
+        {
+            delete pItem;
+        }
+
+        void keep() { pItem = 0; }
+    };
+}
 /* -----------------------------29.08.00 16:34--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -268,12 +292,18 @@ ConfigItem::ConfigItem(const OUString rSubTree, sal_Int16 nSetMode ) :
     pImpl(new ConfigItem_Impl),
     sSubTree(rSubTree)
 {
+    AutoDeleter<ConfigItem_Impl> aNewImpl(pImpl);
+
     pImpl->pManager = ConfigManager::GetConfigManager();
     pImpl->nMode = nSetMode;
     if(0 != (nSetMode&CONFIG_MODE_RELEASE_TREE))
         pImpl->pManager->AddConfigItem(*this);
     else
         m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
+
+    // no more exceptions after c'tor has finished
+    aNewImpl.keep();
+    pImpl->nMode &= ~CONFIG_MODE_PROPAGATE_ERRORS;
 }
 /* -----------------------------17.11.00 13:53--------------------------------
 
@@ -283,7 +313,7 @@ ConfigItem::ConfigItem(utl::ConfigManager&  rManager, const rtl::OUString rSubTr
     sSubTree(rSubTree)
 {
     pImpl->pManager = &rManager;
-    pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE;
+    pImpl->nMode = CONFIG_MODE_IMMEDIATE_UPDATE; // does not allow exceptions
     m_xHierarchyAccess = pImpl->pManager->AddConfigItem(*this);
 }
 //---------------------------------------------------------------------
