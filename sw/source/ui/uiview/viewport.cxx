@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-02 18:35:33 $
+ *  last change: $Author: jp $ $Date: 2001-11-22 18:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,9 +606,13 @@ BOOL SwView::GetPageScrollUpOffset( SwTwips &rOff ) const
 {
     if ( !aVisArea.Top() || !aVisArea.GetHeight() )
         return FALSE;
-    rOff = -(aVisArea.GetHeight() - (GetYScroll() / 2));
+    long nYScrl = GetYScroll() / 2;
+    rOff = -(aVisArea.GetHeight() - nYScrl);
     //nicht vor den Dokumentanfang scrollen
-    rOff = aVisArea.Top() - rOff < 0 ? rOff - aVisArea.Top() : rOff;
+    if( aVisArea.Top() - rOff < 0 )
+        rOff = rOff - aVisArea.Top();
+    else if( GetWrtShell().GetCharRect().Top() < (aVisArea.Top() + nYScrl))
+        rOff += nYScrl;
     return TRUE;
 }
 
@@ -618,10 +622,14 @@ BOOL SwView::GetPageScrollDownOffset( SwTwips &rOff ) const
     if ( !aVisArea.GetHeight() ||
          (aVisArea.GetHeight() > aDocSz.Height()) )
         return FALSE;
-    rOff = aVisArea.GetHeight() - (GetYScroll() / 2);
+    long nYScrl = GetYScroll() / 2;
+    rOff = aVisArea.GetHeight() - nYScrl;
     //nicht hinter das Dokumentende scrollen
     if ( aVisArea.Top() + rOff > aDocSz.Height() )
         rOff = aDocSz.Height() - aVisArea.Bottom();
+    else if( GetWrtShell().GetCharRect().Bottom() >
+                                            ( aVisArea.Bottom() - nYScrl ))
+        rOff -= nYScrl;
     return rOff > 0;
 }
 
