@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-31 09:10:25 $
+ *  last change: $Author: mib $ $Date: 2001-06-20 12:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,6 +723,7 @@ XMLPropertyMapEntry aXMLSectionPropMap[] =
 XMLPropertyMapEntry aXMLRubyPropMap[] =
 {
     M_E( "RubyAdjust",  STYLE, ruby_align, XML_TYPE_TEXT_RUBY_ADJUST, 0 ),
+    M_E( "RubyIsAbove", STYLE, ruby_position, XML_TYPE_TEXT_RUBY_POSITION, 0 ),
     { 0, 0, 0, 0 }
 };
 
