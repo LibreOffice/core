@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-29 08:02:02 $
+ *  last change: $Author: vg $ $Date: 2001-04-04 13:00:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -801,7 +801,7 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
  *                  lcl_InitHyphValues()
  *************************************************************************/
 
-static lcl_InitHyphValues( PropertyValues &rVals,
+static void lcl_InitHyphValues( PropertyValues &rVals,
             INT16 nMinLeading, INT16 nMinTrailing )
 {
     INT32 nLen = rVals.getLength();
