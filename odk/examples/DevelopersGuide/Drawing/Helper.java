@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:23:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:23:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,57 +40,48 @@
 
 // __________ Imports __________
 
-// base classes
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.*;
-
-// factory for creating components
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.frame.XComponentLoader;
-
-// property access
-import com.sun.star.beans.*;
 
 public class Helper
 {
     // __________ static helper methods __________
 
-    /** Connect to a running office that is accepting connections
-        and return the ServiceManager to instantiate office components
+    /** Connect to an office, if no office is running a new instance is started.
+     * A new connection is established and the service manger from the running
+     * offic eis returned.
      */
-    static public XMultiServiceFactory connect( String sConnection )
+    static public com.sun.star.uno.XComponentContext connect()
         throws Exception
     {
-        XMultiServiceFactory xMultiServiceFactory = null;
-        XMultiServiceFactory xLocalServiceManager =
-            com.sun.star.comp.helper.Bootstrap.createSimpleServiceManager();
+        // get the remote office component context
+        com.sun.star.uno.XComponentContext xOfficeContext =
+            com.sun.star.comp.helper.Bootstrap.bootstrap();
 
-        XUnoUrlResolver aURLResolver = (XUnoUrlResolver)UnoRuntime.queryInterface(
-            XUnoUrlResolver.class,
-            xLocalServiceManager.createInstance( "com.sun.star.bridge.UnoUrlResolver" ) );
+        // if connection fails an exception is thrown
+        System.out.println("Connected to a running office ...");
 
-        xMultiServiceFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-            XMultiServiceFactory.class,
-            aURLResolver.resolve( sConnection ) );
-        if ( xMultiServiceFactory == null )
-            throw new Exception( "couldn't not connect to:'" + sConnection + "'" );
-        return xMultiServiceFactory;
+        return xOfficeContext;
     }
 
     /** creates and instantiates new document
     */
-    static public XComponent createDocument( XMultiServiceFactory xMultiServiceFactory,
-        String sURL, String sTargetFrame, int nSearchFlags, PropertyValue[] aArgs )
+    static public com.sun.star.lang.XComponent createDocument(
+        com.sun.star.uno.XComponentContext xOfficeContext,
+        String sURL, String sTargetFrame, int nSearchFlags,
+        com.sun.star.beans.PropertyValue[] aArgs )
             throws Exception
     {
-        XComponent xComponent = null;
-        XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
-            XComponentLoader.class,
-                xMultiServiceFactory.createInstance( "com.sun.star.frame.Desktop" ) );
+        com.sun.star.lang.XComponent xComponent = null;
+        com.sun.star.frame.XComponentLoader aLoader =
+            (com.sun.star.frame.XComponentLoader)UnoRuntime.queryInterface(
+                com.sun.star.frame.XComponentLoader.class,
+                xOfficeContext.getServiceManager().createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", xOfficeContext));
 
-        xComponent = (XComponent)UnoRuntime.queryInterface( XComponent.class,
-            aLoader.loadComponentFromURL(
+        xComponent = (com.sun.star.lang.XComponent)UnoRuntime.queryInterface(
+            com.sun.star.lang.XComponent.class, aLoader.loadComponentFromURL(
                 sURL, sTargetFrame, nSearchFlags, aArgs ) );
+
         if ( xComponent == null )
             throw new Exception( "could not create document: " + sURL );
         return xComponent;
