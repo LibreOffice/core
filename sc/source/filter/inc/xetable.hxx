@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:19:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:08:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,31 +113,26 @@ private:
 class XclExpRangeFmlaBase : public XclExpRecord
 {
 public:
-    /** Returns the number of FORMULA records referring to this record. */
-    inline sal_uInt32   GetUsedCount() const { return mnUsedCount; }
+    /** Returns true, if the passed cell position is equal to own base position. */
+    bool                IsBasePos( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
 
-    /** Derived classes write the token array for a corresponding FORMULA cell record. */
-    virtual void        WriteCellTokenArray( XclExpStream& rStrm,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const = 0;
+    /** Derived classes create the token array for a corresponding FORMULA cell record. */
+    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const = 0;
+    /** Derived classes return true, if the own formula contains volatile functions. */
+    virtual bool        IsVolatile() const = 0;
 
 protected:
     /** Constructs the record with a single cell. */
     explicit            XclExpRangeFmlaBase(
-                            sal_uInt16 nRecId, sal_uInt32 nRecSize,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+                            sal_uInt16 nRecId, sal_uInt32 nRecSize, const ScAddress& rScPos );
     /** Constructs the record with a cell range. */
     explicit            XclExpRangeFmlaBase(
-                            sal_uInt16 nRecId, sal_uInt32 nRecSize,
-                            sal_uInt16 nFirstXclCol, sal_uInt16 nFirstXclRow,
-                            sal_uInt16 nLastXclCol, sal_uInt16 nLastXclRow );
+                            sal_uInt16 nRecId, sal_uInt32 nRecSize, const ScRange& rScRange );
 
-    /** Extends the cell range to include the passed cell address, updates used count. */
-    void                Extend( sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    /** Extends the cell range to include the passed cell address. */
+    void                Extend( const ScAddress& rScPos );
 
-    /** Returns true, if the passed cell address is part of the own cell range. */
-    bool                Contains( sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
-
-    /** Writes the token array for a corresponding FORMULA cell record. */
+    /** Writes the range address covered by this record. */
     void                WriteRangeAddress( XclExpStream& rStrm ) const;
 
 protected:
@@ -147,16 +142,14 @@ protected:
     sal_uInt16          mnLastXclRow;   /// Row index of last cell of this range.
     sal_uInt16          mnBaseXclCol;   /// Column index of base cell (first FORMULA record).
     sal_uInt16          mnBaseXclRow;   /// Row index of base cell (first FORMULA record).
-
-private:
-    sal_uInt32          mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
 typedef ScfRef< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 
 // Array formulas =============================================================
 
-class ExcUPN;
+class ScTokenArray;
+class XclExpTokenArray;
 
 /** Represents an ARRAY record that contains the token array of a matrix formula.
 
@@ -168,19 +161,38 @@ class ExcUPN;
 class XclExpArray : public XclExpRangeFmlaBase
 {
 public:
-    explicit            XclExpArray( const ExcUPN& rXclTokArr,
-                            sal_uInt16 nFirstXclCol, sal_uInt16 nFirstXclRow,
-                            sal_uInt16 nLastXclCol, sal_uInt16 nLastXclRow );
+    explicit            XclExpArray( XclExpTokenArrayRef xTokArr, const ScRange& rScRange );
 
-    /** Writes the token array for a corresponding FORMULA cell record. */
-    virtual void        WriteCellTokenArray( XclExpStream& rStrm,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
+    /** Creates and returns the token array for a corresponding FORMULA cell record. */
+    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    /** Returns true, if the array formula contains volatile functions. */
+    virtual bool        IsVolatile() const;
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    ScfUInt8Vec         maFmlaData;     /// The token array of a matrix formula.
+    XclExpTokenArrayRef mxTokArr;       /// The token array of a matrix formula.
+};
+
+typedef ScfRef< XclExpArray > XclExpArrayRef;
+
+// ----------------------------------------------------------------------------
+
+/** Caches all ARRAY records. */
+class XclExpArrayBuffer : protected XclExpRoot
+{
+public:
+    explicit            XclExpArrayBuffer( const XclExpRoot& rRoot );
+
+    /** Inserts a new ARRAY record into the buffer and returns it. */
+    XclExpArrayRef      CreateArray( const ScTokenArray& rScTokArr, const ScRange& rScRange );
+    /** Tries to find an ARRAY record that corresponds to an ocMatRef token. */
+    XclExpArrayRef      FindArray( const ScTokenArray& rScTokArr ) const;
+
+private:
+    typedef ::std::map< ScAddress, XclExpArrayRef > XclExpArrayMap;
+    XclExpArrayMap      maRecMap;       /// Map containing the ARRAY records.
 };
 
 // Shared formulas ============================================================
@@ -196,29 +208,27 @@ class XclExpShrfmla : public XclExpRangeFmlaBase
 {
 public:
     /** Creates a SHRFMLA record that consists of the passed cell address only. */
-    explicit            XclExpShrfmla( const ExcUPN& rXclTokArr,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    explicit            XclExpShrfmla( XclExpTokenArrayRef xTokArr, const ScAddress& rScPos );
 
     /** Extends the cell range to include the passed cell address. */
-    void                ExtendRange( sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+    void                ExtendRange( const ScAddress& rScPos );
 
-    /** Writes the token array for a corresponding FORMULA cell record. */
-    virtual void        WriteCellTokenArray( XclExpStream& rStrm,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
+    /** Creates and returns the token array for a corresponding FORMULA cell record. */
+    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    /** Returns true, if the shared formula contains volatile functions. */
+    virtual bool        IsVolatile() const;
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    ScfUInt8Vec         maFmlaData;     /// The token array of a shared formula.
+    XclExpTokenArrayRef mxTokArr;       /// The token array of a shared formula.
+    sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
 typedef ScfRef< XclExpShrfmla > XclExpShrfmlaRef;
 
 // ----------------------------------------------------------------------------
-
-class ScTokenArray;
-class ScRangeData;
 
 /** Caches all SHRFMLA records and provides functions to update their ranges. */
 class XclExpShrfmlaBuffer : protected XclExpRoot
@@ -226,18 +236,17 @@ class XclExpShrfmlaBuffer : protected XclExpRoot
 public:
     explicit            XclExpShrfmlaBuffer( const XclExpRoot& rRoot );
 
-    /** Creates a new or updates an existing SHRFMLA record.
-        @descr  If a SHRFMLA record for the passed token array exists, this
-            function updates its cell range to include the passed cell position.
-            Otherwise a new SHRFMLA record is created.
-        @return  The created or updated SHRFMLA record. */
+    /** Tries to create a new or to update an existing SHRFMLA record.
+        @return  An empty reference, if the passed token array does not contain
+            a shared formula. If the token array is a shared formula, this
+            function updates its cell range to include the passed cell position,
+            if there is a SHRFMLA record for the passed token array; otherwise
+            this function creates and returns a new SHRFMLA record. */
     XclExpShrfmlaRef    CreateOrExtendShrfmla(
-                            const ScTokenArray& rScTokArr, const ExcUPN& rXclTokArr,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow );
+                            const ScTokenArray& rScTokArr, const ScAddress& rScPos );
 
 private:
-    typedef ::std::map< const ScRangeData*, XclExpShrfmlaRef > XclExpShrfmlaMap;
-
+    typedef ::std::map< const ScTokenArray*, XclExpShrfmlaRef > XclExpShrfmlaMap;
     XclExpShrfmlaMap    maRecMap;       /// Map containing the SHRFMLA records.
 };
 
@@ -259,9 +268,10 @@ public:
     /** Finalizes the record. Tests on valid cell range and reference addresses. */
     void                Finalize();
 
-    /** Writes the token array for a corresponding FORMULA cell record. */
-    virtual void        WriteCellTokenArray( XclExpStream& rStrm,
-                            sal_uInt16 nXclCol, sal_uInt16 nXclRow ) const;
+    /** Creates and returns the token array for a corresponding FORMULA cell record. */
+    virtual XclExpTokenArrayRef CreateCellTokenArray( const XclExpRoot& rRoot ) const;
+    /** Returns true, if the multiple operations range is volatile. */
+    virtual bool        IsVolatile() const;
     /** Writes the record if it is valid. */
     virtual void        Save( XclExpStream& rStrm );
 
@@ -293,10 +303,12 @@ class XclExpTableopBuffer : protected XclExpRoot
 public:
     explicit            XclExpTableopBuffer( const XclExpRoot& rRoot );
 
-    /** Tries to updates an existing or to create a new TABLEOP record.
-        @descr  Returns an empty reference, if rScTokArr does not contain a multiple
+    /** Tries to update an existing or to create a new TABLEOP record.
+        @return  Reference to the TABLEOP record for this cell (existing or new),
+            or an empty reference, if rScTokArr does not contain a multiple
             operations formula. */
-    XclExpTableopRef    CreateOrExtendTableop( const ScTokenArray& rScTokArr, const ScAddress& rScPos );
+    XclExpTableopRef    CreateOrExtendTableop(
+                            const ScTokenArray& rScTokArr, const ScAddress& rScPos );
 
     /** Finalizes all contained TABLEOP records. */
     void                Finalize();
@@ -521,6 +533,7 @@ public:
                             sal_uInt16 nXclCol, sal_uInt16 nXclRow,
                             const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId,
                             const ScFormulaCell& rScFmlaCell,
+                            XclExpArrayBuffer& rArrayBfr,
                             XclExpShrfmlaBuffer& rShrfmlaBfr,
                             XclExpTableopBuffer& rTableopBfr );
 
@@ -532,10 +545,9 @@ private:
 
 private:
     ScFormulaCell&      mrScFmlaCell;   /// The Calc formula cell.
-    ScfUInt8Vec         maFmlaData;     /// The token array of the formula.
+    XclExpTokenArrayRef mxTokArr;       /// The token array of the formula.
     XclExpRangeFmlaRef  mxAddRec;       /// Additional record for matrix/shared formulas.
     XclExpRecordRef     mxStringRec;    /// STRING record for string result.
-    bool                mbFirstAddRec;  /// true = This FORMULA used mxAddRec the first time.
 };
 
 // Multiple cell records ======================================================
@@ -1058,22 +1070,21 @@ class XclExpDval;
 
     The constructor does all the work creating the cell table. It reads the
     Calc sheet and converts all columns, rows, and cells to Excel record data.
-    Additioanlly, hyperlink records, note records and additional records for
-    formula cells are created.
+    Additioanlly, hyperlink records, note records, additional records for
+    formula cells, data validation records, and outline records are created.
 
-    The Save() function (automatically called from the containing instance)
-    does even more work. It calculates default column settings and removes
-    column records that are equal to this default. The same happens with rows:
-    a default format is calculated for each row, and all blank cells in this
-    row that have the same format are removed. Then, the most used row settings
-    are calculated, and all empty rows that have the same settings are removed
-    too.
+    The Finalize() function does even more work. It calculates default column
+    settings and removes column records that are equal to this default. The
+    same happens with rows: A default format is calculated for each row, and
+    all blank cells in this row that have the same format are removed. Then,
+    the most used row settings are calculated, and all empty rows that have the
+    same settings are removed too.
 
     Records that are not stored inside the cell table area in an Excel file
     (i.e. DEFROWHEIGHT record, NOTE records, MERGEDCELLS record, HLINK records,
     DVAL and DV records for data validation) can be accessed with the function
-    CreateRecord(). It returns the reference to the respective record which can
-    be inserted into a record list.
+    CreateRecord(). It returns the reference to the respective record (or
+    record list) which can be inserted into a record list.
  */
 class XclExpCellTable : public XclExpRecordBase, protected XclExpRoot
 {
@@ -1103,6 +1114,7 @@ private:
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.
+    XclExpArrayBuffer   maArrayBfr;         /// Buffer for ARRAY records.
     XclExpShrfmlaBuffer maShrfmlaBfr;       /// Buffer for SHRFMLA records.
     XclExpTableopBuffer maTableopBfr;       /// Buffer for TABLEOP records.
     XclExpDefrowhRef    mxDefrowheight;     /// DEFROWHEIGHT record for default row format.
