@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-16 08:46:45 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:45:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -563,9 +563,9 @@ public:
     inline void SetDerivedR2L( BOOL bNew ) { bDerivedR2L  = bNew ? 1 : 0; }
     inline void SetInvalidR2L( BOOL bNew ) { bInvalidR2L  = bNew ? 1 : 0; }
     void CheckDirChange();
-    Point   GetAnchorPos() const;           // returns upper left frame position
-                                            // for LTR and upper right frame
-                                            // position for Asian / RTL frames
+    // returns upper left frame position for LTR and
+    // upper right frame position for Asian / RTL frames
+    Point   GetFrmAnchorPos( sal_Bool bIgnoreFlysAnchoredAtThisFrame ) const;
     BOOL IsMoveable() const;
 
     //Ist es fuer den (Txt)Frm in der aktuellen Umgebung erlaubt eine
