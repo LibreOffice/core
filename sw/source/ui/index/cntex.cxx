@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cntex.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-11-02 12:57:07 $
+ *  last change: $Author: os $ $Date: 2002-10-22 07:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,9 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
         if(!pxIndexSectionsArr[nTOXIndex]->xDocumentIndex.is())
         {
             bInitialCreate = sal_True;
-         uno::Reference< text::XTextRange >  xAnchor = pxIndexSectionsArr[nTOXIndex]->xContainerSection->getAnchor();
+            if(!pxIndexSectionsArr[nTOXIndex]->xContainerSection.is())
+                throw uno::RuntimeException();
+            uno::Reference< text::XTextRange >  xAnchor = pxIndexSectionsArr[nTOXIndex]->xContainerSection->getAnchor();
             xAnchor = xAnchor->getStart();
          uno::Reference< text::XTextCursor >  xCrsr = xAnchor->getText()->createTextCursorByRange(xAnchor);
 
