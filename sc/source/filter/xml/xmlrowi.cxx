@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:09:26 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,6 +207,9 @@ void ScXMLTableRowContext::EndElement()
             uno::Reference<table::XTableRows> xTableRows = xColumnRowRange->getRows();
             if (xTableRows.is())
             {
+                XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
+                XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
+                    XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
                 for (sal_Int32 i = nCurrentRow - nRepeatedRows + 1; i <= nCurrentRow; i++)
                 {
                     uno::Any aRow;
@@ -220,35 +223,34 @@ void ScXMLTableRowContext::EndElement()
                         uno::Reference <beans::XPropertySet> xRowProperties(xTableRow, uno::UNO_QUERY);
                         if (xRowProperties.is())
                         {
-                            XMLTableStylesContext *pStyles = (XMLTableStylesContext *)&rXMLImport.GetAutoStyles();
-                            XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
-                                XML_STYLE_FAMILY_TABLE_ROW, sStyleName, sal_True);
                             if (pStyle)
                             {
                                 pStyle->FillPropertySet(xRowProperties);
                             }
-                            uno::Any aVisibleAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
-                            uno::Any aFilteredAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
+                            uno::Any aVisibleAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)));
+                            uno::Any aFilteredAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
+                            sal_Bool bVisible (sal_True);
+                            sal_Bool bFiltered (sal_False);
                             if (sVisibility.compareToAscii(sXML_collapse) == 0)
                             {
-                                sal_Bool bValue = sal_False;
-                                aVisibleAny <<= bValue;
-                                aFilteredAny <<= bValue;
+                                bVisible = sal_False;
+                                aVisibleAny <<= bVisible;
+                                aFilteredAny <<= bFiltered;
                             }
                             else if (sVisibility.compareToAscii(sXML_filter) == 0)
                             {
-                                sal_Bool bValue = sal_False;
-                                aVisibleAny <<= bValue;
-                                bValue = sal_True;
-                                aFilteredAny <<= bValue;
+                                bVisible = sal_False;
+                                aVisibleAny <<= bVisible;
+                                bFiltered = sal_True;
+                                aFilteredAny <<= bFiltered;
                             }
-                            else
+                            /*else
                             {
                                 sal_Bool bValue = sal_True;
                                 aVisibleAny <<= bValue;
                                 bValue = sal_False;
                                 aFilteredAny <<= bValue;
-                            }
+                            }*/
                             /*uno::Any aAny = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_OPTIMALHEIGHT)));
                             if (sOptimalHeight.compareToAscii(sXML_true) != 0)
                             {
@@ -260,8 +262,10 @@ void ScXMLTableRowContext::EndElement()
                                 sal_Bool bValue = sal_True;
                                 aAny <<= bValue;
                             }*/
-                            xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), aVisibleAny);
-                            xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), aFilteredAny);
+                            if (!bVisible)
+                                xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISVISIBLE)), aVisibleAny);
+                            if (bFiltered)
+                                xRowProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)), aFilteredAny);
                         }
                     }
                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-08 14:40:18 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     SvXMLImportPropertyMapper::finished(rProperties, nStartIndex, nEndIndex);
     XMLPropertyState* pHeight = NULL;
     XMLPropertyState* pOptimalHeight = NULL;
+    XMLPropertyState* pPageBreak = NULL;
     ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
     for (property; property != rProperties.end(); property++)
     {
@@ -243,6 +244,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         {
             case CTF_SC_ROWHEIGHT                   : pHeight = property; break;
             case CTF_SC_ROWOPTIMALHEIGHT            : pOptimalHeight = property; break;
+            case CTF_SC_ROWBREAKBEFORE              : pPageBreak = property; break;
         }
     }
     if (pOptimalHeight)
@@ -260,6 +262,11 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         pOptimalHeight = new XMLPropertyState(0, ::cppu::bool2any( sal_False ));
         rProperties.push_back(*pOptimalHeight);
         delete pOptimalHeight;
+    }
+    if (pPageBreak)
+    {
+        if(!(::cppu::any2bool(pPageBreak->maValue)))
+            pPageBreak->mnIndex = -1;
     }
 }
 

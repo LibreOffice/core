@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:11:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ const XMLPropertyMapEntry aXMLScRowStylesProperties[] =
     { "OptimalHeight", XML_NAMESPACE_STYLE, sXML_use_optimal_row_height, XML_TYPE_BOOL, CTF_SC_ROWOPTIMALHEIGHT}, // This Position in the Map should not be changed
     // This Position in the Map should not be changed
     { "Height", XML_NAMESPACE_STYLE, sXML_row_height, XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT},
-    { "IsManualPageBreak", XML_NAMESPACE_FO, sXML_break_before, XML_SC_TYPE_BREAKBEFORE, 0},
+    { "IsManualPageBreak", XML_NAMESPACE_FO, sXML_break_before, XML_SC_TYPE_BREAKBEFORE, CTF_SC_ROWBREAKBEFORE},
     { 0L }
 };
 
@@ -1537,13 +1537,13 @@ sal_Bool XmlScPropHdl_BreakBefore::importXML(
     if (rStrImpValue.compareToAscii(sXML_auto) == 0)
     {
         bValue = sal_False;
-        rValue <<= bValue;
+        rValue = ::cppu::bool2any(bValue);
         bRetval = sal_True;
     }
     else if (rStrImpValue.compareToAscii(sXML_page) == 0)
     {
         bValue = sal_True;
-        rValue <<= bValue;
+        rValue = ::cppu::bool2any(bValue);
         bRetval = sal_True;
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-28 16:18:57 $
+ *  last change: $Author: sab $ $Date: 2000-12-13 17:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ extern const XMLPropertyMapEntry aXMLScTableStylesProperties[];
 
 #define CTF_SC_ROWHEIGHT                            50
 #define CTF_SC_ROWOPTIMALHEIGHT                     51
+#define CTF_SC_ROWBREAKBEFORE                       52
 
 //ColumnStyles
 #define XML_SC_TYPE_BREAKBEFORE                     (XML_SC_TYPES_START + 50)
