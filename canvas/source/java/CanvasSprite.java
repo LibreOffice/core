@@ -67,8 +67,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -80,7 +80,7 @@ import sun.awt.*;
 
 public class CanvasSprite
     extends com.sun.star.lib.uno.helper.ComponentBase
-    implements drafts.com.sun.star.rendering.XAnimatedSprite,
+    implements com.sun.star.rendering.XAnimatedSprite,
                 com.sun.star.lang.XServiceInfo,
                 SpriteBase
 {
@@ -216,9 +216,9 @@ public class CanvasSprite
         }
     }
 
-    public synchronized void move( drafts.com.sun.star.geometry.RealPoint2D     _aNewPos,
-                                   drafts.com.sun.star.rendering.ViewState      _viewState,
-                                   drafts.com.sun.star.rendering.RenderState    _renderState )
+    public synchronized void move( com.sun.star.geometry.RealPoint2D    _aNewPos,
+                                   com.sun.star.rendering.ViewState         _viewState,
+                                   com.sun.star.rendering.RenderState   _renderState )
     {
         // transform given point with concatenated transformation
         AffineTransform transform = CanvasUtils.ViewConcatRenderTransform( _viewState, _renderState );
@@ -310,7 +310,7 @@ public class CanvasSprite
     private void setupSpriteBuffering( AffineTransform _viewTransform )
     {
         // determine bounds of view-transformed animation output rectangle
-        drafts.com.sun.star.geometry.RealSize2D animSize = getAnimationAttributes().UntransformedSize;
+        com.sun.star.geometry.RealSize2D animSize = getAnimationAttributes().UntransformedSize;
 
         java.awt.geom.Rectangle2D.Double aTransformedBounds =
             CanvasUtils.calcTransformedRectBounds( new java.awt.geom.Rectangle2D.Double(0.0,0.0,
@@ -328,7 +328,7 @@ public class CanvasSprite
     //----------------------------------------------------------------------------------
 
     private static final String s_implName = "XSprite.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.Sprite";
+    private static final String s_serviceName = "com.sun.star.rendering.Sprite";
 
     //----------------------------------------------------------------------------------
 
