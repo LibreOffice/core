@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.71 $
+#   $Revision: 1.72 $
 #
-#   last change: $Author: vg $ $Date: 2002-12-05 15:55:24 $
+#   last change: $Author: vg $ $Date: 2002-12-06 11:07:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,16 +73,18 @@ use Cwd;
 use File::Path;
 #use Thread 'yield';    # Should be uncommented if you have Thread.pm (untested)
 
-use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
-use Cws;
-use CvsModule;
-use GenInfoParser;
+if (defined $ENV{CWS_WORK_STAMP}) {
+    use lib ("$ENV{SOLARENV}/bin/modules", "$ENV{COMMON_ENV_TOOLS}/modules");
+    use Cws;
+    use CvsModule;
+    use GenInfoParser;
+};
 
 #### script id #####
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.71 $ ';
+$id_str = ' $Revision: 1.72 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
