@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,12 @@ class   SalBitmapList;
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
+
+#include <vector>
+#ifndef _GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   BitmapPalette;
 class   SalImage;
@@ -394,9 +400,12 @@ class SalDisplay
 
     ::vcl_sal::WMAdaptor*   m_pWMAdaptor;
 
+    bool            m_bXinerama;
+    std::vector< Rectangle > m_aXineramaScreens;
+
     void            DestroyFontCache();
     long            Dispatch( XEvent *pEvent );
-
+    void            InitXinerama();
 public:
     static  SalDisplay     *GetSalDisplay( Display* display );
     static  BOOL            BestVisual( Display     *pDisp,
@@ -498,6 +507,8 @@ public:
     { mpKbdExtension = pKbdExtension; }
     const char* GetKeyboardName( BOOL bRefresh = FALSE );
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
+    bool            IsXinerama() const { return m_bXinerama; }
+    const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
