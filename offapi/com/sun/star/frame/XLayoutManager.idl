@@ -1,0 +1,106 @@
+#ifndef __com_sun_star_frame_XLayoutManager_idl__
+#define __com_sun_star_frame_XLayoutManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Size_idl__
+#include <com/sun/star/awt/Size.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_ui_XUIElement_idl__
+#include <com/sun/star/ui/XUIElement.idl>
+#endif
+
+#ifndef __com_sun_star_frame_DockingArea_idl__
+#include <com/sun/star/frame/DockingArea.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module frame {
+
+//=============================================================================
+
+interface XLayoutManager : com::sun::star::uno::XInterface
+{
+    /* Starting point */
+    void attachFrame( [in] com::sun::star::frame::XFrame Frame );
+
+    /* LayoutManager rebuild ui element list */
+    void rebuild();
+
+    /* attach document window */
+    void attachDocumentWindow( [in] com::sun::star::awt::XWindow xDocumentWindow );
+
+    /* Creates a new ui element */
+    void createElement( [in] string aName );
+
+    /* Destroys an ui element */
+    void destroyElement( [in] string aName );
+
+    /* Retrieves an ui element with the specified name */
+    com::sun::star::ui::XUIElement getElement( [in] string aName );
+
+    /* Shows the specified ui element */
+    boolean show( [in] string aName );
+
+    /* Hides the specified ui element */
+    boolean hide( [in] string aName );
+
+    /* Docks a window based ui element to a specified docking area */
+    boolean dockWindow( [in] string aName, [in] com::sun::star::frame::DockingArea DockingArea, [in] com::sun::star::awt::Point Pos );
+
+    /* Let a window based ui element float if it was docked before */
+    boolean floatWindow( [in] string aName );
+
+    /* Set a new size to a window based ui element */
+    void setSize( [in] string aName, [in] com::sun::star::awt::Size aSize );
+
+    /* Set a new position to a window based ui element */
+    void setPos( [in] string aName, [in] com::sun::star::awt::Point aPos );
+
+    void setPosSize( [in] string aName, [in] com::sun::star::awt::Point aPos, [in] com::sun::star::awt::Size aSize );
+
+    /* Retrieves the visibility state of an ui element */
+    boolean isVisible( [in] string aName );
+
+    /* Retrieves the floating state of an ui element */
+    boolean isFloating( [in] string aName );
+
+    /* Retrieves the docked state of an ui element */
+    boolean isDocked( [in] string aName );
+
+    /* Get size of ui element called aName */
+    com::sun::star::awt::Size getSize( [in] string aName );
+
+    /* Get position of ui element called aName */
+    com::sun::star::awt::Point getPos( [in] string aName );
+
+    /* Lock layout updates until unlock is called */
+    void lock();
+
+    /* Start to layout */
+    void unlock();
+
+    /* Force a complete recalculation of the layout */
+    void doLayout();
+
+};
+
+}; }; }; };
+
+#endif
