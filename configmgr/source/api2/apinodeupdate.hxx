@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:47:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 15:37:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,8 @@ namespace configmgr
             osl::MutexGuard             m_aViewLock;
             NodeAccess&                 m_rNode;
         public:
-            UpdateGuardImpl(NodeGroupAccess& rNode) throw();
-            UpdateGuardImpl(NodeSetAccess& rNode) throw();
+            UpdateGuardImpl(NodeGroupAccess& rNode);
+            UpdateGuardImpl(NodeSetAccess& rNode);
             ~UpdateGuardImpl() throw ();
         public:
             NodeAccess& get()        const { return m_rNode; }
@@ -176,7 +176,7 @@ namespace configmgr
         {
             UpdateGuardImpl m_aImpl;
         public:
-            GuardedNodeUpdate(Access& rNode) throw() : m_aImpl(rNode) {}
+            GuardedNodeUpdate(Access& rNode) : m_aImpl(rNode) {}
         public:
             Access& get()        const { return static_cast<Access&>(m_aImpl.get()); }
 
