@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-22 08:51:30 $
+#   last change: $Author: kz $ $Date: 2001-05-22 09:08:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -239,11 +239,11 @@ $(SHL1TARGETN) : $(OUT)$/inc$/udkversion.h
 $(OUT)$/inc$/udkversion.h: 
     echo #ifndef _SAL_UDKVERSION_H_           >  $@
     echo #define _SAL_UDKVERSION_H_           >> $@
-    echo                                      >> $@
+    echo.                                     >> $@
     echo #define SAL_UDK_MAJOR "$(UDK_MAJOR)" >> $@
     echo #define SAL_UDK_MINOR "$(UDK_MINOR)" >> $@
     echo #define SAL_UDK_MICRO "$(UDK_MICRO)" >> $@
-    echo                                      >> $@
+    echo.                                     >> $@
     echo #endif                               >> $@
 
 .ELSE
