@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jbu $ $Date: 2001-10-24 10:49:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,7 @@ typedef struct oslSocketSetImpl * oslSocketSet;
 /** Creates a set of sockets to be used with osl_demultiplexSocketEvents().
     @return A oslSocketSet or 0 if creation failed.
 */
-oslSocketSet SAL_CALL osl_createSocketSet();
+oslSocketSet SAL_CALL osl_createSocketSet(void);
 
 /** Destroys a oslSocketSet.
 */
