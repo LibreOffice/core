@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-13 11:34:00 $
+ *  last change: $Author: mtg $ $Date: 2001-07-24 21:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,11 +120,128 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _COMPHELPER_TYPEGENERATION_HXX_
+#include <comphelper/TypeGeneration.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COMPHELPER_CHAINABLEPROPERTYSETINFO_HXX_
+#include <comphelper/ChainablePropertySetInfo.hxx>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
+using namespace ::comphelper;
 using namespace ::rtl;
+
+enum SwViewSettingsPropertyHandles
+{
+    HANDLE_VIEWSET_ANNOTATIONS,
+    HANDLE_VIEWSET_BREAKS,
+    HANDLE_VIEWSET_DRAWINGS,
+    HANDLE_VIEWSET_FIELD_COMMANDS,
+    HANDLE_VIEWSET_FOOTNOTE_BACKGROUND,
+    HANDLE_VIEWSET_GRAPHICS,
+    HANDLE_VIEWSET_HIDDEN_PARAGRAPHS,
+    HANDLE_VIEWSET_HIDDEN_TEXT,
+    HANDLE_VIEWSET_HRULER,
+    HANDLE_VIEWSET_HSCROLL,
+    HANDLE_VIEWSET_INDEX_MARK_BACKGROUND,
+    HANDLE_VIEWSET_ONLINE_LAYOUT,
+    HANDLE_VIEWSET_PARA_BREAKS,
+    HANDLE_VIEWSET_PROTECTED_SPACES,
+    HANDLE_VIEWSET_SOFT_HYPHENS,
+    HANDLE_VIEWSET_SPACES,
+    HANDLE_VIEWSET_TABLE_BOUNDARIES,
+    HANDLE_VIEWSET_TABLES,
+    HANDLE_VIEWSET_TABSTOPS,
+    HANDLE_VIEWSET_TEXT_BOUNDARIES,
+    HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND,
+    HANDLE_VIEWSET_VRULER,
+    HANDLE_VIEWSET_VSCROLL,
+    HANDLE_VIEWSET_SMOOTH_SCROLLING,
+    HANDLE_VIEWSET_SOLID_MARK_HANDLES,
+    HANDLE_VIEWSET_ZOOM_TYPE,
+    HANDLE_VIEWSET_ZOOM
+};
+enum SwPrintSettingsPropertyHandles
+{
+    HANDLE_PRINTSET_ANNOTATION_MODE,
+    HANDLE_PRINTSET_BLACK_FONTS,
+    HANDLE_PRINTSET_CONTROLS,
+    HANDLE_PRINTSET_DRAWINGS,
+    HANDLE_PRINTSET_GRAPHICS,
+    HANDLE_PRINTSET_LEFT_PAGES,
+    HANDLE_PRINTSET_PAGE_BACKGROUND,
+    HANDLE_PRINTSET_PROSPECT,
+    HANDLE_PRINTSET_REVERSED,
+    HANDLE_PRINTSET_RIGHT_PAGES,
+    HANDLE_PRINTSET_FAX_NAME,
+    HANDLE_PRINTSET_PAPER_FROM_SETUP,
+    HANDLE_PRINTSET_TABLES,
+    HANDLE_PRINTSET_SINGLE_JOBS
+};
+
+ChainablePropertySetInfo * lcl_createViewSettingsInfo()
+{
+    static PropertyInfo aViewSettingsMap_Impl[] =
+    {
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowFieldCommands"),    HANDLE_VIEWSET_FIELD_COMMANDS       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowFootnoteBackground"),HANDLE_VIEWSET_FOOTNOTE_BACKGROUND , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowGraphics"),         HANDLE_VIEWSET_GRAPHICS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenParagraphs"), HANDLE_VIEWSET_HIDDEN_PARAGRAPHS    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHiddenText"),       HANDLE_VIEWSET_HIDDEN_TEXT          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriRuler"),        HANDLE_VIEWSET_HRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowHoriScrollBar"),    HANDLE_VIEWSET_HSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowIndexMarkBackground"),HANDLE_VIEWSET_INDEX_MARK_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowOnlineLayout"),     HANDLE_VIEWSET_ONLINE_LAYOUT        , CPPUTYPE_BOOLEAN, PropertyAttribute::MAYBEVOID,   0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowParaBreaks"),       HANDLE_VIEWSET_PARA_BREAKS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowProtectedSpaces"),  HANDLE_VIEWSET_PROTECTED_SPACES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowSoftHyphens"),      HANDLE_VIEWSET_SOFT_HYPHENS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowSpaces"),           HANDLE_VIEWSET_SPACES               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTableBoundaries"),  HANDLE_VIEWSET_TABLE_BOUNDARIES     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTables"),           HANDLE_VIEWSET_TABLES               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTabstops"),         HANDLE_VIEWSET_TABSTOPS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextBoundaries"),   HANDLE_VIEWSET_TEXT_BOUNDARIES      , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowTextFieldBackground"),HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND, CPPUTYPE_BOOLEAN,PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowVertRuler"),        HANDLE_VIEWSET_VRULER               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowVertScrollBar"),    HANDLE_VIEWSET_VSCROLL              , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "SmoothScrolling"),      HANDLE_VIEWSET_SMOOTH_SCROLLING     , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "SolidMarkHandles"),     HANDLE_VIEWSET_SOLID_MARK_HANDLES   , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ZoomType"),             HANDLE_VIEWSET_ZOOM_TYPE            , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ZoomValue"),            HANDLE_VIEWSET_ZOOM                 , CPPUTYPE_INT16,   PROPERTY_NONE, 0},
+        { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
+    };
+    return new ChainablePropertySetInfo ( aViewSettingsMap_Impl );
+}
+ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
+{
+    static PropertyInfo aPrintSettingsMap_Impl[] =
+    {
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintAnnotationMode" ), HANDLE_PRINTSET_ANNOTATION_MODE , CPPUTYPE_INT16,   PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintBlackFonts" ),      HANDLE_PRINTSET_BLACK_FONTS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintControls" ),        HANDLE_PRINTSET_CONTROLS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" ),        HANDLE_PRINTSET_DRAWINGS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" ),        HANDLE_PRINTSET_GRAPHICS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" ),       HANDLE_PRINTSET_LEFT_PAGES         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" ),  HANDLE_PRINTSET_PAGE_BACKGROUND    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" ),        HANDLE_PRINTSET_PROSPECT           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" ),        HANDLE_PRINTSET_REVERSED           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" ),      HANDLE_PRINTSET_RIGHT_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" ),         HANDLE_PRINTSET_FAX_NAME           , CPPUTYPE_OUSTRING, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
+    };
+    return new ChainablePropertySetInfo ( aPrintSettingsMap_Impl );
+}
 
 /******************************************************************
  * SwXModule
@@ -173,12 +290,12 @@ SwXModule::~SwXModule()
 /*-- 17.12.98 12:19:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeException )
+Reference< XPropertySet >  SwXModule::getViewSettings(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!pxViewSettings)
     {
-        ((SwXModule*)this)->pxViewSettings = new Reference< beans::XPropertySet > ;
+        ((SwXModule*)this)->pxViewSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
         *pxViewSettings = new SwXViewSettings(sal_False, 0);
     }
@@ -187,12 +304,12 @@ Reference< beans::XPropertySet >  SwXModule::getViewSettings(void) throw( uno::R
 /*-- 17.12.98 12:19:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Reference< beans::XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::RuntimeException )
+Reference< XPropertySet >  SwXModule::getPrintSettings(void) throw( uno::RuntimeException )
 {
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!pxPrintSettings)
     {
-        ((SwXModule*)this)->pxPrintSettings = new Reference< beans::XPropertySet > ;
+        ((SwXModule*)this)->pxPrintSettings = new Reference< XPropertySet > ;
         DBG_ERROR("Web oder Text?")
         *pxPrintSettings = new SwXPrintSettings(sal_False);
     }
@@ -208,7 +325,7 @@ OUString SwXModule::getImplementationName(void) throw( RuntimeException )
 /* -----------------------------06.04.00 10:59--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     const Sequence< OUString > aNames = SwXModule_getSupportedServiceNames();
     for(sal_Int32 nService = 0; nService < aNames.getLength(); nService++)
@@ -233,154 +350,145 @@ Sequence< OUString > SwXModule::getSupportedServiceNames(void) throw( RuntimeExc
 /*-- 17.12.98 12:54:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXPrintSettings::SwXPrintSettings(sal_Bool bWebView) :
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PRINT_SETTINGS)),
-    bWeb(bWebView)
+SwXPrintSettings::SwXPrintSettings(sal_Bool bWebView)
+: ChainablePropertySet ( lcl_createPrintSettingsInfo (), &Application::GetSolarMutex() )
+, bWeb(bWebView)
+, pPrtOpt ( NULL )
 {
-
 }
 /*-- 17.12.98 12:54:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 SwXPrintSettings::~SwXPrintSettings()
 {
-
 }
-/*-- 17.12.98 12:54:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-Reference< beans::XPropertySetInfo >  SwXPrintSettings::getPropertySetInfo(void)
-    throw( uno::RuntimeException )
+Any SAL_CALL SwXPrintSettings::queryInterface( const Type& rType )
+    throw(RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(_pMap);
-    return aRef;
+        return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // my own interfaces
+                                        static_cast< XServiceInfo*      > ( this )  ,
+                                        static_cast< XPropertySet*      > ( this )  ,
+                                        static_cast< XMultiPropertySet*     > ( this ) );
 }
-/*-- 17.12.98 12:54:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXPrintSettings::setPropertyValue(const OUString& rPropertyName,
-                    const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-                lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException )
+void SwXPrintSettings::acquire ()
+    throw ()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    sal_Bool bVal = sal_False;
-
-    if( !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_PRINT_ANNOTATION_MODE))
-       && !rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_PRINT_FAX_NAME) ))
-        bVal = *(sal_Bool*)aValue.getValue();
-
-    SwPrintOptions* pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
-    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(pCur)
-        switch( pCur->nWID )
-        {
-            case WID_PRTSET_LEFT_PAGES     : pPrtOpt->SetPrintLeftPage(bVal);       break;
-            case WID_PRTSET_RIGHT_PAGES    : pPrtOpt->SetPrintRightPage(bVal);  break;
-            case WID_PRTSET_REVERSED       : pPrtOpt->SetPrintReverse(bVal);        break;
-            case WID_PRTSET_PROSPECT       : pPrtOpt->SetPrintProspect(bVal);  break;
-            case WID_PRTSET_GRAPHICS       : pPrtOpt->SetPrintGraphic(bVal);  break;
-            case WID_PRTSET_TABLES         : pPrtOpt->SetPrintTable(bVal);  break;
-            case WID_PRTSET_DRAWINGS       : pPrtOpt->SetPrintDraw(bVal);  break;
-            case WID_PRTSET_CONTROLS       : pPrtOpt->SetPrintControl(bVal);  break;
-            case WID_PRTSET_PAGE_BACKGROUND: pPrtOpt->SetPrintPageBackground(bVal);  break;
-            case WID_PRTSET_BLACK_FONTS    : pPrtOpt->SetPrintBlackFont(bVal);  break;
-            case WID_PRTSET_PAPER_FROM_SETUP: pPrtOpt->SetPaperFromSetup(bVal);  break;
-            case WID_PRTSET_ANNOTATION_MODE:
-            {
-                sal_Int16 nVal;
-                aValue >>= nVal;
-                if(nVal <= text::NotePrintMode_PAGE_END)
-                    pPrtOpt->SetPrintPostIts(nVal);
-                else
-                    throw lang::IllegalArgumentException();
-            }
-            break;
-            case WID_PRTSET_FAX_NAME:
-            {
-                OUString sString;
-                if (aValue >>= sString)
-                    pPrtOpt->SetFaxName(sString);
-                else
-                    throw lang::IllegalArgumentException();
-            }
-            break;
-            default: DBG_ERROR("Diese Id gibt's nicht!");
-        }
-    else
-        throw beans::UnknownPropertyException();
+    OWeakObject::acquire();
 }
-/*-- 17.12.98 12:54:06---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-uno::Any SwXPrintSettings::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXPrintSettings::release ()
+    throw ()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    SwPrintOptions* pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
-    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(pCur)
+    OWeakObject::release();
+}
+
+void SwXPrintSettings::_preSetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
+    pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
+}
+
+void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
+    sal_Bool bVal;
+    if ( rInfo.mnHandle != HANDLE_PRINTSET_ANNOTATION_MODE &&
+         rInfo.mnHandle != HANDLE_PRINTSET_FAX_NAME )
+        bVal = *(sal_Bool*)rValue.getValue();
+
+    switch( rInfo.mnHandle )
     {
-        sal_Bool bBool = TRUE;
-        sal_Bool bBoolVal;
-        switch( pCur->nWID )
+        case HANDLE_PRINTSET_LEFT_PAGES     : pPrtOpt->SetPrintLeftPage(bVal);      break;
+        case HANDLE_PRINTSET_RIGHT_PAGES    : pPrtOpt->SetPrintRightPage(bVal);     break;
+        case HANDLE_PRINTSET_REVERSED       : pPrtOpt->SetPrintReverse(bVal);       break;
+        case HANDLE_PRINTSET_PROSPECT       : pPrtOpt->SetPrintProspect(bVal);      break;
+        case HANDLE_PRINTSET_GRAPHICS       : pPrtOpt->SetPrintGraphic(bVal);       break;
+        case HANDLE_PRINTSET_TABLES         : pPrtOpt->SetPrintTable(bVal);         break;
+        case HANDLE_PRINTSET_DRAWINGS       : pPrtOpt->SetPrintDraw(bVal);          break;
+        case HANDLE_PRINTSET_CONTROLS       : pPrtOpt->SetPrintControl(bVal);       break;
+        case HANDLE_PRINTSET_PAGE_BACKGROUND: pPrtOpt->SetPrintPageBackground(bVal);break;
+        case HANDLE_PRINTSET_BLACK_FONTS    : pPrtOpt->SetPrintBlackFont(bVal);     break;
+        case HANDLE_PRINTSET_SINGLE_JOBS    : pPrtOpt->SetPrintSingleJobs(bVal);    break;
+        case HANDLE_PRINTSET_PAPER_FROM_SETUP: pPrtOpt->SetPaperFromSetup(bVal);    break;
+        case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
-            case WID_PRTSET_LEFT_PAGES      : bBoolVal = pPrtOpt->IsPrintLeftPage();        break;
-            case WID_PRTSET_RIGHT_PAGES     : bBoolVal = pPrtOpt->IsPrintRightPage();   break;
-            case WID_PRTSET_REVERSED        : bBoolVal = pPrtOpt->IsPrintReverse();     break;
-            case WID_PRTSET_PROSPECT       : bBoolVal = bBoolVal = pPrtOpt->IsPrintProspect();  break;
-            case WID_PRTSET_GRAPHICS       : bBoolVal = pPrtOpt->IsPrintGraphic();  break;
-            case WID_PRTSET_TABLES         : bBoolVal = pPrtOpt->IsPrintTable();  break;
-            case WID_PRTSET_DRAWINGS       : bBoolVal = pPrtOpt->IsPrintDraw();  break;
-            case WID_PRTSET_CONTROLS       : bBoolVal = pPrtOpt->IsPrintControl();  break;
-            case WID_PRTSET_PAGE_BACKGROUND: bBoolVal = pPrtOpt->IsPrintPageBackground();  break;
-            case WID_PRTSET_BLACK_FONTS    : bBoolVal = pPrtOpt->IsPrintBlackFont();  break;
-            case WID_PRTSET_PAPER_FROM_SETUP: bBoolVal = pPrtOpt->IsPaperFromSetup();  break;
-            case WID_PRTSET_ANNOTATION_MODE: bBool = FALSE; aRet <<= (sal_Int16)pPrtOpt->GetPrintPostIts();  break;
-            case WID_PRTSET_FAX_NAME :
-            {
-                bBool = FALSE;
-                aRet <<= pPrtOpt->GetFaxName();
-            }
-            break;
-            default: DBG_ERROR("Diese Id gibt's nicht!");
+            sal_Int16 nVal;
+            rValue >>= nVal;
+            if(nVal <= text::NotePrintMode_PAGE_END)
+                pPrtOpt->SetPrintPostIts(nVal);
+            else
+                throw lang::IllegalArgumentException();
         }
-        if(bBool)
-            aRet.setValue(&bBoolVal, ::getBooleanCppuType());
+        break;
+        case HANDLE_PRINTSET_FAX_NAME:
+        {
+            OUString sString;
+            if ( rValue >>= sString)
+                pPrtOpt->SetFaxName(sString);
+            else
+                throw lang::IllegalArgumentException();
+        }
+        break;
+        default:
+            throw UnknownPropertyException();
     }
-    else
-        throw beans::UnknownPropertyException();
-    return aRet;
 }
-/*-- 17.12.98 12:54:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXPrintSettings::addPropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXPrintSettings::_postSetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    DBG_WARNING("not implemented")
+    pPrtOpt = NULL;
 }
-/*-- 17.12.98 12:54:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXPrintSettings::removePropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXPrintSettings::_preGetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    DBG_WARNING("not implemented")
+    pPrtOpt = SW_MOD()->GetPrtOptions(bWeb);
 }
-/*-- 17.12.98 12:54:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXPrintSettings::addVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    DBG_WARNING("not implemented")
+    sal_Bool bBool = TRUE;
+    sal_Bool bBoolVal;
+    switch( rInfo.mnHandle )
+    {
+        case HANDLE_PRINTSET_LEFT_PAGES     : bBoolVal = pPrtOpt->IsPrintLeftPage();        break;
+        case HANDLE_PRINTSET_RIGHT_PAGES    : bBoolVal = pPrtOpt->IsPrintRightPage();   break;
+        case HANDLE_PRINTSET_REVERSED       : bBoolVal = pPrtOpt->IsPrintReverse();     break;
+        case HANDLE_PRINTSET_PROSPECT       : bBoolVal = bBoolVal = pPrtOpt->IsPrintProspect();  break;
+        case HANDLE_PRINTSET_GRAPHICS       : bBoolVal = pPrtOpt->IsPrintGraphic();  break;
+        case HANDLE_PRINTSET_TABLES         : bBoolVal = pPrtOpt->IsPrintTable();  break;
+        case HANDLE_PRINTSET_DRAWINGS       : bBoolVal = pPrtOpt->IsPrintDraw();  break;
+        case HANDLE_PRINTSET_CONTROLS       : bBoolVal = pPrtOpt->IsPrintControl();  break;
+        case HANDLE_PRINTSET_PAGE_BACKGROUND: bBoolVal = pPrtOpt->IsPrintPageBackground();  break;
+        case HANDLE_PRINTSET_BLACK_FONTS    : bBoolVal = pPrtOpt->IsPrintBlackFont();  break;
+        case HANDLE_PRINTSET_SINGLE_JOBS    : bBoolVal = pPrtOpt->IsPrintSingleJobs();  break;
+        case HANDLE_PRINTSET_PAPER_FROM_SETUP: bBoolVal = pPrtOpt->IsPaperFromSetup();  break;
+        case HANDLE_PRINTSET_ANNOTATION_MODE:
+        {
+            bBool = FALSE;
+            rValue <<= static_cast < sal_Int16 > ( pPrtOpt->GetPrintPostIts() );
+        }
+        break;
+        case HANDLE_PRINTSET_FAX_NAME :
+        {
+            bBool = FALSE;
+            rValue <<= pPrtOpt->GetFaxName();
+        }
+        break;
+        default:
+            throw UnknownPropertyException();
+    }
+    if(bBool)
+        rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
-/*-- 17.12.98 12:54:07---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXPrintSettings::removeVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXPrintSettings::_postGetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    DBG_WARNING("not implemented")
+    pPrtOpt = NULL;
 }
 /* -----------------------------06.04.00 11:02--------------------------------
 
@@ -392,7 +500,7 @@ OUString SwXPrintSettings::getImplementationName(void) throw( RuntimeException )
 /* -----------------------------06.04.00 11:02--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.PrintSettings") == rServiceName;
 }
@@ -414,11 +522,13 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames(void) throw( Run
 /*-- 18.12.98 11:01:10---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw) :
-    _pMap(aSwMapProvider.GetPropertyMap(PROPERTY_MAP_VIEW_SETTINGS)),
-    pView(pVw),
-    bWeb(bWebView),
-    bObjectValid(sal_True)
+SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
+: ChainablePropertySet ( lcl_createViewSettingsInfo (), &Application::GetSolarMutex() )
+, pView(pVw)
+, bWeb(bWebView)
+, bObjectValid(sal_True)
+, mpViewOption ( NULL )
+, mpConstViewOption ( NULL )
 {
 
 }
@@ -429,24 +539,31 @@ SwXViewSettings::~SwXViewSettings()
 {
 
 }
-/*-- 18.12.98 11:01:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-Reference< beans::XPropertySetInfo >  SwXViewSettings::getPropertySetInfo(void) throw( uno::RuntimeException )
+Any SAL_CALL SwXViewSettings::queryInterface( const Type& rType )
+    throw(RuntimeException)
 {
-    static Reference< beans::XPropertySetInfo >  aRef = new SfxItemPropertySetInfo(_pMap);
-    return aRef;
+        return ::cppu::queryInterface ( rType                                       ,
+                                        // OWeakObject interfaces
+                                        reinterpret_cast< XInterface*       > ( this )  ,
+                                        static_cast< XWeak*         > ( this )  ,
+                                        // my own interfaces
+                                        static_cast< XServiceInfo*      > ( this )  ,
+                                        static_cast< XPropertySet*      > ( this )  ,
+                                        static_cast< XMultiPropertySet*     > ( this ) );
 }
-/*-- 18.12.98 11:01:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
-    const uno::Any& aValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException,
-            uno::RuntimeException )
+void SwXViewSettings::acquire ()
+    throw ()
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
+    OWeakObject::acquire();
+}
+void SwXViewSettings::release ()
+    throw ()
+{
+    OWeakObject::release();
+}
+void SwXViewSettings::_preSetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
     sal_Bool bApply = sal_True;
     sal_Bool bApplyZoom = sal_False;
 
@@ -458,236 +575,208 @@ void SwXViewSettings::setPropertyValue(const OUString& rPropertyName,
         pVOpt = pView->GetWrtShell().GetViewOptions();
     }
     else
-    {
         pVOpt = SW_MOD()->GetViewOption(bWeb);
-    }
-    SwViewOption aVOpt(*pVOpt);
-    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(
-                                            _pMap, rPropertyName);
-    if(pCur)
+
+    mpViewOption = new SwViewOption (*pVOpt);
+    mbApplyZoom = sal_False;
+    if(pView)
+        mpViewOption->SetStarOneSetting(sal_True);
+}
+void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const ::com::sun::star::uno::Any &rValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
+    sal_Bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
+        *(sal_Bool*)rValue.getValue() : sal_False;
+    // the API flag should not be set to the application's view settings
+    switch( rInfo.mnHandle )
     {
-        sal_Bool bVal = WID_VIEWSET_ZOOM != pCur->nWID ?
-            *(sal_Bool*)aValue.getValue() : sal_False;
-        // the API flag should not be set to the application's view settings
-        if(pView)
-            aVOpt.SetStarOneSetting(sal_True);
-        switch( pCur->nWID )
+        case  HANDLE_VIEWSET_HRULER                :   mpViewOption->SetViewTabwin(bVal);   break;
+        case  HANDLE_VIEWSET_VRULER                :   mpViewOption->SetViewVLin(bVal);break;
+        case  HANDLE_VIEWSET_HSCROLL               :   mpViewOption->SetViewHScrollBar(bVal);break;
+        case  HANDLE_VIEWSET_VSCROLL               :   mpViewOption->SetViewVScrollBar(bVal);break;
+        case  HANDLE_VIEWSET_GRAPHICS              :   mpViewOption->SetGraphic(bVal);break;
+        case  HANDLE_VIEWSET_TABLES                :   mpViewOption->SetTable(bVal);    break;
+        case  HANDLE_VIEWSET_DRAWINGS              :   mpViewOption->SetDraw(bVal); break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   mpViewOption->SetFldName(bVal);  break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           :   mpViewOption->SetPostIts(bVal);  break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   mpViewOption->SetTox(bVal);  break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   mpViewOption->SetFootNote(bVal); break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   mpViewOption->SetField(bVal);    break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :   mpViewOption->SetParagraph(bVal);    break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   mpViewOption->SetSoftHyph(bVal); break;
+        case  HANDLE_VIEWSET_SPACES                :   mpViewOption->SetBlank(bVal);    break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   mpViewOption->SetHardBlank(bVal);    break;
+        case  HANDLE_VIEWSET_TABSTOPS              :   mpViewOption->SetTab(bVal);  break;
+        case  HANDLE_VIEWSET_BREAKS                :   mpViewOption->SetLineBreak(bVal); break;
+        case  HANDLE_VIEWSET_HIDDEN_TEXT           :   mpViewOption->SetHidden(bVal);   break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   mpViewOption->SetShowHiddenPara(bVal);   break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   mpViewOption->SetSubsTable(bVal);    break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetSubsLines(bVal);    break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
+        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
+        case  HANDLE_VIEWSET_ZOOM                   :
         {
-            case  WID_VIEWSET_HRULER :                  aVOpt.SetViewTabwin(bVal);  break;
-            case  WID_VIEWSET_VRULER :                  aVOpt.SetViewVLin(bVal);break;
-            case  WID_VIEWSET_HSCROLL:                  aVOpt.SetViewHScrollBar(bVal);break;
-            case  WID_VIEWSET_VSCROLL:                  aVOpt.SetViewVScrollBar(bVal);break;
-            case  WID_VIEWSET_GRAPHICS              :   aVOpt.SetGraphic(bVal);break;
-            case  WID_VIEWSET_TABLES                :   aVOpt.SetTable(bVal);   break;
-            case  WID_VIEWSET_DRAWINGS              :   aVOpt.SetDraw(bVal);    break;
-            case  WID_VIEWSET_FIELD_COMMANDS        :   aVOpt.SetFldName(bVal); break;
-            case  WID_VIEWSET_ANNOTATIONS           :   aVOpt.SetPostIts(bVal); break;
-            case  WID_VIEWSET_INDEX_MARK_BACKGROUND :   aVOpt.SetTox(bVal); break;
-            case  WID_VIEWSET_FOOTNOTE_BACKGROUND   :   aVOpt.SetFootNote(bVal);    break;
-            case  WID_VIEWSET_TEXT_FIELD_BACKGROUND :   aVOpt.SetField(bVal);   break;
-            case  WID_VIEWSET_PARA_BREAKS           :   aVOpt.SetParagraph(bVal);   break;
-            case  WID_VIEWSET_SOFT_HYPHENS          :   aVOpt.SetSoftHyph(bVal);    break;
-            case  WID_VIEWSET_SPACES                :   aVOpt.SetBlank(bVal);   break;
-            case  WID_VIEWSET_PROTECTED_SPACES      :   aVOpt.SetHardBlank(bVal);   break;
-            case  WID_VIEWSET_TABSTOPS              :   aVOpt.SetTab(bVal); break;
-            case  WID_VIEWSET_BREAKS                :   aVOpt.SetLineBreak(bVal); break;
-            case  WID_VIEWSET_HIDDEN_TEXT           :   aVOpt.SetHidden(bVal);  break;
-            case  WID_VIEWSET_HIDDEN_PARAGRAPHS     :   aVOpt.SetShowHiddenPara(bVal);  break;
-            case  WID_VIEWSET_TABLE_BOUNDARIES      :   aVOpt.SetSubsTable(bVal);   break;
-            case  WID_VIEWSET_TEXT_BOUNDARIES       :   aVOpt.SetSubsLines(bVal);   break;
-            case  WID_VIEWSET_SMOOTH_SCROLLING      :   aVOpt.SetSmoothScroll(bVal);    break;
-            case  WID_VIEWSET_SOLID_MARK_HANDLES    :   aVOpt.SetSolidMarkHdl(bVal);    break;
-            case  WID_VIEWSET_ZOOM                  :
-            {
-                sal_Int16 nZoom = *(sal_Int16*)aValue.getValue();
-                if(nZoom > 1000 || nZoom < 5)
-                    throw lang::IllegalArgumentException();
-                aVOpt.SetZoom((sal_uInt16)nZoom);
-                bApplyZoom = sal_True;
-            }
-            break;
-            case WID_VIEWSET_ZOOM_TYPE:
-            {
-                sal_Int16 nZoom = *(sal_Int16*)aValue.getValue();
-                SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
-                switch(nZoom)
-                {
-                    case /*DocumentZoomType_OPTIMAL       */0:
-                        eZoom = SVX_ZOOM_OPTIMAL;
-                    break;
-                    case /*DocumentZoomType_PAGE_WIDTH  */  1:
-                        eZoom = SVX_ZOOM_PAGEWIDTH;
-                    break;
-                    case /*DocumentZoomType_ENTIRE_PAGE */  2:
-                        eZoom = SVX_ZOOM_WHOLEPAGE;
-                    break;
-                    case /*DocumentZoomType_BY_VALUE    */  3:
-                        eZoom = SVX_ZOOM_PERCENT;
-                    break;
-#if SUPD<631
-                    case 4:
-                        eZoom = (SvxZoomType)4;
-                    break;
-#else
-                    case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
-                        eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
-                    break;
-#endif
-                }
-                if(eZoom < USHRT_MAX)
-                {
-                    aVOpt.SetZoomType( eZoom );
-                    bApplyZoom = sal_True;
-                }
-            }
-            break;
-            case WID_VIEWSET_ONLINE_LAYOUT :
-            {
-                bApply = sal_False;
-                if( pView && bVal != pView->GetWrtShell().IsBrowseMode() )
-                    pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
-            }
-            break;
-            default:
-                bApply = sal_False;
-                DBG_ERROR("Diese Id gibt's nicht!")
+            sal_Int16 nZoom = *(sal_Int16*)rValue.getValue();
+            if(nZoom > 1000 || nZoom < 5)
+                throw lang::IllegalArgumentException();
+            mpViewOption->SetZoom((sal_uInt16)nZoom);
+            mbApplyZoom = sal_True;
         }
+        break;
+        case HANDLE_VIEWSET_ZOOM_TYPE:
+        {
+            sal_Int16 nZoom = *(sal_Int16*)rValue.getValue();
+            SvxZoomType eZoom = (SvxZoomType)USHRT_MAX;
+            switch(nZoom)
+            {
+                case /*DocumentZoomType_OPTIMAL       */0:
+                    eZoom = SVX_ZOOM_OPTIMAL;
+                break;
+                case /*DocumentZoomType_PAGE_WIDTH  */  1:
+                    eZoom = SVX_ZOOM_PAGEWIDTH;
+                break;
+                case /*DocumentZoomType_ENTIRE_PAGE */  2:
+                    eZoom = SVX_ZOOM_WHOLEPAGE;
+                break;
+                case /*DocumentZoomType_BY_VALUE    */  3:
+                    eZoom = SVX_ZOOM_PERCENT;
+                break;
+#if SUPD<631
+                case 4:
+                    eZoom = (SvxZoomType)4;
+                break;
+#else
+                case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
+                    eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
+                break;
+#endif
+            }
+            if(eZoom < USHRT_MAX)
+            {
+                mpViewOption->SetZoomType( eZoom );
+                mbApplyZoom = sal_True;
+            }
+        }
+        break;
+        case HANDLE_VIEWSET_ONLINE_LAYOUT :
+        {
+            if( pView && bVal != pView->GetWrtShell().IsBrowseMode() )
+                pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
+        }
+        break;
+        default:
+            throw UnknownPropertyException();
     }
-    else
-        throw beans::UnknownPropertyException();
+}
 
-    if(bApplyZoom && pView)
-        pView->SetZoom( (SvxZoomType)aVOpt.GetZoomType(),
-                        aVOpt.GetZoom(), sal_True );
+void SwXViewSettings::_postSetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
+    if(mbApplyZoom && pView)
+        pView->SetZoom( (SvxZoomType)mpViewOption->GetZoomType(),
+                        mpViewOption->GetZoom(), sal_True );
 
-    SW_MOD()->ApplyUsrPref( aVOpt, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
+    SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? VIEWOPT_DEST_VIEW_ONLY
                                                   : bWeb ? VIEWOPT_DEST_WEB
                                                           : VIEWOPT_DEST_TEXT );
+    delete mpViewOption;
+    mpViewOption = NULL;
 }
-/*-- 18.12.98 11:01:12---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-uno::Any SwXViewSettings::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXViewSettings::_preGetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    ::vos::OGuard aGuard(Application::GetSolarMutex());
-    uno::Any aRet;
-    const SwViewOption* pVOpt = 0;
     if(pView)
     {
         if(!IsValid())
-            return uno::Any();
-        pVOpt = pView->GetWrtShell().GetViewOptions();
+            return;
+        mpConstViewOption = pView->GetWrtShell().GetViewOptions();
     }
     else
-        pVOpt = SW_MOD()->GetViewOption(bWeb);
-    const SfxItemPropertyMap* pCur = SfxItemPropertyMap::GetByName(_pMap, rPropertyName);
-    if(pCur)
+        mpConstViewOption = SW_MOD()->GetViewOption(bWeb);
+}
+void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, ::com::sun::star::uno::Any & rValue )
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
+{
+    sal_Bool bBool = TRUE;
+    sal_Bool bBoolVal;
+    switch( rInfo.mnHandle )
     {
-        sal_Bool bBool = TRUE;
-        sal_Bool bBoolVal;
-        switch( pCur->nWID )
-        {
-            case  WID_VIEWSET_HRULER :                  bBoolVal = pVOpt->IsViewTabwin();   break;
-            case  WID_VIEWSET_VRULER :                  bBoolVal = pVOpt->IsViewVLin();break;
-            case  WID_VIEWSET_HSCROLL:                  bBoolVal = pVOpt->IsViewHScrollBar();break;
-            case  WID_VIEWSET_VSCROLL:                  bBoolVal = pVOpt->IsViewVScrollBar();break;
-            case  WID_VIEWSET_GRAPHICS              :   bBoolVal = pVOpt->IsGraphic();break;
-            case  WID_VIEWSET_TABLES                :   bBoolVal = pVOpt->IsTable();    break;
-            case  WID_VIEWSET_DRAWINGS              :   bBoolVal = pVOpt->IsDraw(); break;
-            case  WID_VIEWSET_FIELD_COMMANDS        :   bBoolVal = pVOpt->IsFldName();  break;
-            case  WID_VIEWSET_ANNOTATIONS           :   bBoolVal = pVOpt->IsPostIts();  break;
-            case  WID_VIEWSET_INDEX_MARK_BACKGROUND :   bBoolVal = pVOpt->IsTox();  break;
-            case  WID_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = pVOpt->IsFootNote(); break;
-            case  WID_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = pVOpt->IsField();    break;
-            case  WID_VIEWSET_PARA_BREAKS           :   bBoolVal = pVOpt->IsParagraph(sal_True);    break;
-            case  WID_VIEWSET_SOFT_HYPHENS          :   bBoolVal = pVOpt->IsSoftHyph(); break;
-            case  WID_VIEWSET_SPACES                :   bBoolVal = pVOpt->IsBlank(sal_True);    break;
-            case  WID_VIEWSET_PROTECTED_SPACES      :   bBoolVal = pVOpt->IsHardBlank();    break;
-            case  WID_VIEWSET_TABSTOPS              :   bBoolVal = pVOpt->IsTab(sal_True);  break;
-            case  WID_VIEWSET_BREAKS                :   bBoolVal = pVOpt->IsLineBreak(sal_True); break;
-            case  WID_VIEWSET_HIDDEN_TEXT           :   bBoolVal = pVOpt->IsHidden();   break;
-            case  WID_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = pVOpt->IsShowHiddenPara();   break;
-            case  WID_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = pVOpt->IsSubsTable();    break;
-            case  WID_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = pVOpt->IsSubsLines();    break;
-            case  WID_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = pVOpt->IsSmoothScroll(); break;
-            case  WID_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = pVOpt->IsSolidMarkHdl(); break;
-            case  WID_VIEWSET_ZOOM                  :
-                    bBool = FALSE;
-                    aRet <<= (sal_Int16)pVOpt->GetZoom();
-            break;
-            case WID_VIEWSET_ZOOM_TYPE:
-            {
+        case  HANDLE_VIEWSET_HRULER :                   bBoolVal = mpConstViewOption->IsViewTabwin();   break;
+        case  HANDLE_VIEWSET_VRULER :                   bBoolVal = mpConstViewOption->IsViewVLin();break;
+        case  HANDLE_VIEWSET_HSCROLL:                   bBoolVal = mpConstViewOption->IsViewHScrollBar();break;
+        case  HANDLE_VIEWSET_VSCROLL:                   bBoolVal = mpConstViewOption->IsViewVScrollBar();break;
+        case  HANDLE_VIEWSET_GRAPHICS              :    bBoolVal = mpConstViewOption->IsGraphic();break;
+        case  HANDLE_VIEWSET_TABLES                :   bBoolVal = mpConstViewOption->IsTable(); break;
+        case  HANDLE_VIEWSET_DRAWINGS              :   bBoolVal = mpConstViewOption->IsDraw();  break;
+        case  HANDLE_VIEWSET_FIELD_COMMANDS        :   bBoolVal = mpConstViewOption->IsFldName();   break;
+        case  HANDLE_VIEWSET_ANNOTATIONS           :   bBoolVal = mpConstViewOption->IsPostIts();   break;
+        case  HANDLE_VIEWSET_INDEX_MARK_BACKGROUND :   bBoolVal = mpConstViewOption->IsTox();   break;
+        case  HANDLE_VIEWSET_FOOTNOTE_BACKGROUND   :   bBoolVal = mpConstViewOption->IsFootNote();  break;
+        case  HANDLE_VIEWSET_TEXT_FIELD_BACKGROUND :   bBoolVal = mpConstViewOption->IsField(); break;
+        case  HANDLE_VIEWSET_PARA_BREAKS           :   bBoolVal = mpConstViewOption->IsParagraph(sal_True); break;
+        case  HANDLE_VIEWSET_SOFT_HYPHENS          :   bBoolVal = mpConstViewOption->IsSoftHyph();  break;
+        case  HANDLE_VIEWSET_SPACES                :   bBoolVal = mpConstViewOption->IsBlank(sal_True); break;
+        case  HANDLE_VIEWSET_PROTECTED_SPACES      :   bBoolVal = mpConstViewOption->IsHardBlank(); break;
+        case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);   break;
+        case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(sal_True); break;
+        case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsHidden();    break;
+        case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
+        case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = mpConstViewOption->IsSubsTable(); break;
+        case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = mpConstViewOption->IsSubsLines(); break;
+        case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
+        case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();  break;
+        case  HANDLE_VIEWSET_ZOOM                   :
                 bBool = FALSE;
-                sal_Int16 nRet;
-                switch(pVOpt->GetZoomType())
-                {
-                    case SVX_ZOOM_OPTIMAL:
-                        nRet = /*DocumentZoomType_OPTIMAL*/ 0;
-                    break;
-                    case SVX_ZOOM_PAGEWIDTH:
-                        nRet = /*DocumentZoomType_PAGE_WIDTH    */1;
-                    break;
-                    case SVX_ZOOM_WHOLEPAGE:
-                        nRet = /*DocumentZoomType_ENTIRE_PAGE */  2;
-                    break;
-                    case SVX_ZOOM_PERCENT:
-                        nRet = /*DocumentZoomType_BY_VALUE  */  3;
-                    break;
-                }
-                aRet <<= nRet;
+                rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
+        break;
+        case HANDLE_VIEWSET_ZOOM_TYPE:
+        {
+            bBool = FALSE;
+            sal_Int16 nRet;
+            switch(mpConstViewOption->GetZoomType())
+            {
+                case SVX_ZOOM_OPTIMAL:
+                    nRet = /*DocumentZoomType_OPTIMAL*/ 0;
+                break;
+                case SVX_ZOOM_PAGEWIDTH:
+                    nRet = /*DocumentZoomType_PAGE_WIDTH    */1;
+                break;
+                case SVX_ZOOM_WHOLEPAGE:
+                    nRet = /*DocumentZoomType_ENTIRE_PAGE */  2;
+                break;
+                case SVX_ZOOM_PERCENT:
+                    nRet = /*DocumentZoomType_BY_VALUE  */  3;
+                break;
             }
-            break;
-            case WID_VIEWSET_ONLINE_LAYOUT:
-                if(pView)
-                    bBoolVal = pView->GetWrtShell().GetDoc()->IsBrowseMode();
-            break;
-            default: DBG_ERROR("Diese Id gibt's nicht!");
+            rValue <<= nRet;
         }
-        if(bBool)
-            aRet.setValue(&bBoolVal, ::getBooleanCppuType());
+        break;
+        case HANDLE_VIEWSET_ONLINE_LAYOUT:
+            if(pView)
+                bBoolVal = pView->GetWrtShell().GetDoc()->IsBrowseMode();
+        break;
+        default: DBG_ERROR("Diese Id gibt's nicht!");
     }
-    else
-        throw beans::UnknownPropertyException();
-
-    return aRet;
+    if(bBool)
+        rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
-/*-- 18.12.98 11:01:12---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXViewSettings::addPropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXViewSettings::_postGetValues ()
+    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
-    DBG_WARNING("not implemented")
+    mpConstViewOption = NULL;
 }
-/*-- 18.12.98 11:01:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-void SwXViewSettings::removePropertyChangeListener(const OUString& PropertyName, const Reference< beans::XPropertyChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-    DBG_WARNING("not implemented")
-}
-/*-- 18.12.98 11:01:13---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXViewSettings::addVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-    DBG_WARNING("not implemented")
-}
-/*-- 18.12.98 11:01:14---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void SwXViewSettings::removeVetoableChangeListener(const OUString& PropertyName, const Reference< beans::XVetoableChangeListener > & aListener) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
-{
-    DBG_WARNING("not implemented")
-}
 OUString SwXViewSettings::getImplementationName(void) throw( RuntimeException )
 {
     return C2U("SwXViewSettings");
 }
-BOOL SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
+
+sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.ViewSettings") == rServiceName;
 }
+
 Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( RuntimeException )
 {
     Sequence< OUString > aRet(1);
@@ -695,157 +784,3 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
     pArray[0] = C2U("com.sun.star.text.ViewSettings");
     return aRet;
 }
-
-/******************************************************************
- *
- ******************************************************************/
-
-/*------------------------------------------------------------------------
-    $Log: not supported by cvs2svn $
-    Revision 1.6  2001/05/29 13:39:52  jp
-    Bug #87355#: setPropertyValue - call ToggleBrowseMode only if it needed
-
-    Revision 1.5  2001/04/27 10:51:54  os
-    new zoom type for preview added
-
-    Revision 1.4  2001/04/17 11:44:03  os
-    #84807# SwXModule and SwXAutoTextContainer correctly registered
-
-    Revision 1.3  2001/04/03 14:55:05  mtg
-    #78699# add support for paper from setup and fax name
-
-    Revision 1.2  2001/01/25 10:06:05  os
-    #82876# support of com.sun.star.text.GlobalSettings
-
-    Revision 1.1.1.1  2000/09/18 17:14:49  hr
-    initial import
-
-    Revision 1.40  2000/09/18 16:06:15  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.39  2000/05/31 12:02:13  os
-    SAL_CALL
-
-    Revision 1.38  2000/04/11 08:05:00  os
-    UNICODE
-
-    Revision 1.37  2000/04/05 10:03:10  os
-    #67584# scroll bar settings in read-only documents corrected
-
-    Revision 1.36  2000/03/27 10:36:31  os
-    UNO III
-
-    Revision 1.35  2000/03/21 15:39:44  os
-    UNOIII
-
-    Revision 1.34  2000/02/11 14:59:53  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.33  1999/12/16 14:18:17  hjs
-    includes
-
-    Revision 1.32  1999/12/14 16:11:33  os
-    #70234# Set Browser Mode via API
-
-    Revision 1.31  1999/11/22 10:37:38  os
-    missing headers added
-
-    Revision 1.30  1999/11/19 16:38:03  os
-    modules renamed
-
-    Revision 1.29  1999/07/20 07:48:06  OS
-    #67585# ZoomValue/ZoomType :SetZoom changed
-
-
-      Rev 1.28   20 Jul 1999 09:48:06   OS
-   #67585# ZoomValue/ZoomType :SetZoom changed
-
-      Rev 1.27   20 Jul 1999 09:04:56   OS
-   #67585# ZoomType/ZoomValue
-
-      Rev 1.26   13 Jul 1999 08:50:56   OS
-   #67584# Scrollbar settings via StarOne; #67585# Zoom-Property
-
-      Rev 1.25   22 Apr 1999 16:09:04   OS
-   #65194# throw -> throw
-
-      Rev 1.24   22 Apr 1999 15:28:52   OS
-   #65124# not implemented - nur noch DBG_WARNING
-
-      Rev 1.23   30 Mar 1999 15:28:12   OS
-   #63930# Services am ProcessServiceManager anmelden
-
-      Rev 1.22   15 Mar 1999 14:38:24   OS
-   #62845# Makro fuer ServiceInfo jetzt auch fuer OS/2
-
-      Rev 1.21   12 Mar 1999 09:57:04   OS
-   #62845# lang::XServiceInfo impl.
-
-      Rev 1.20   09 Mar 1999 12:38:34   OS
-   #62008# Solar-Mutex
-
-      Rev 1.19   05 Mar 1999 14:27:26   OS
-   #62874# Schreibfehler
-
-      Rev 1.18   04 Mar 1999 15:04:12   OS
-   #62191# UINT nicht mehr verwenden
-
-      Rev 1.17   23 Feb 1999 16:19:56   OS
-   #62281# UsrPrefs per UNO nur auf aktuelle sdbcx::View anwenden
-
-      Rev 1.16   28 Jan 1999 16:27:50   OS
-   #56371# keine Objekte fuer DEBUG anlegen
-
-      Rev 1.15   27 Jan 1999 12:06:06   OS
-   #56371# TF_ONE51
-
-      Rev 1.14   18 Dec 1998 11:40:32   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.13   10 Dec 1998 15:54:04   OS
-   #56371# TF_ONE51 Zwischenstand
-
-      Rev 1.12   23 Nov 1998 17:37:22   JP
-   Bug #59754#: TerminateHdl wird nicht mehr fuers Clipboard benoetigt
-
-      Rev 1.11   04 Nov 1998 10:24:56   OS
-   #58315# im disposing beim frame::XDesktop abmelden
-
-      Rev 1.10   01 Oct 1998 11:40:24   HR
-   Typo beseitigt
-
-      Rev 1.9   24 Sep 1998 13:33:14   OS
-   #52654# #56685# frame::XTerminateListener fuer die Anmeldung an der Application
-
-      Rev 1.8   10 Jul 1998 18:10:04   OS
-   PropertySetInfo und IdlClass static
-
-      Rev 1.7   17 Jun 1998 11:40:12   MH
-   tmp fuer ICC
-
-      Rev 1.6   04 Jun 1998 09:40:30   OS
-// automatisch auskommentiert - [getIdlClass(es) or queryInterface] - Bitte XTypeProvider benutzen!
-//   getIdlClasses
-
-
-      Rev 1.5   14 May 1998 17:49:52   OS
-   div. Namensaenderungen
-
-      Rev 1.4   09 Apr 1998 15:10:34   OS
-   Uno-Umstellung
-
-      Rev 1.3   08 Apr 1998 12:51:08   OS
-   text::ViewSettings auch fuer die TextView
-
-      Rev 1.2   16 Mar 1998 12:38:54   OS
-   ; im default
-
-      Rev 1.1   16 Mar 1998 10:31:08   OS
-   sdbcx::View- und PrintSettings vervollstaendigt
-
-      Rev 1.0   15 Mar 1998 15:22:24   OS
-   Initial revision.
-
-
-------------------------------------------------------------------------*/
-
