@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 11:00:17 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,3 +141,6 @@
 #define CB_PRINT_FRAME          124
 #define FL_EXT                  125
 #define FL_TYPE_SEP             126
+#define FT_TEXTFLOW             127
+#define LB_TEXTFLOW             128
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-12-12 16:17:19 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:52:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 
 #ifndef _FMTURL_HXX //autogen
@@ -2621,6 +2624,8 @@ SwFrmAddPage::SwFrmAddPage(Window *pParent, const SfxItemSet &rSet ) :
     aNextFT            (this, SW_RES(FT_NEXT)),
     aNextED            (this, SW_RES(ED_NEXT)),
     aNamesFL           (this, SW_RES(FL_NAME)),
+    aTextFlowFT        (this, SW_RES(FT_TEXTFLOW)),
+    aTextFlowLB        (this, SW_RES(LB_TEXTFLOW)),
 
     aProtectContentCB  (this, SW_RES(CB_PROTECT_CONTENT)),
     aProtectFrameCB    (this, SW_RES(CB_PROTECT_FRAME)),
@@ -2781,6 +2786,30 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
     // drucken
     const SvxPrintItem& rPrt = (const SvxPrintItem&)rSet.Get(RES_PRINT);
     aPrintFrameCB.Check(rPrt.GetValue());               aPrintFrameCB.SaveValue();
+
+    // textflow
+    SfxItemState eState;
+    if( DLG_FRM_GRF != nDlgType && DLG_FRM_OLE != nDlgType &&
+        SFX_ITEM_UNKNOWN != ( eState = rSet.GetItemState(
+                        GetWhich( SID_ATTR_FRAMEDIRECTION ), TRUE, &pItem )) )
+    {
+        aTextFlowFT.Show();
+        aTextFlowLB.Show();
+
+        sal_uInt16 nPos, nVal = SFX_ITEM_SET == eState
+                                ? ((SvxFrameDirectionItem*)pItem)->GetValue()
+                                : 0;
+        for( nPos = aTextFlowLB.GetEntryCount(); nPos; )
+            if( (sal_uInt16)(long*)aTextFlowLB.GetEntryData( --nPos ) == nVal )
+                break;
+        aTextFlowLB.SelectEntryPos( nPos );
+        aTextFlowLB.SaveValue();
+    }
+    else
+    {
+        aTextFlowFT.Hide();
+        aTextFlowLB.Hide();
+    }
 }
 
 /*-----------------13.11.96 13.20-------------------
@@ -2810,6 +2839,18 @@ BOOL SwFrmAddPage::FillItemSet(SfxItemSet &rSet)
 
     if ( (bChecked = aPrintFrameCB.IsChecked()) != aPrintFrameCB.GetSavedValue() )
         bRet |= 0 != rSet.Put( SvxPrintItem( RES_PRINT, bChecked));
+
+    // textflow
+    if( aTextFlowLB.IsVisible() )
+    {
+        sal_uInt16 nPos = aTextFlowLB.GetSelectEntryPos();
+        if( nPos != aTextFlowLB.GetSavedValue() )
+        {
+            nPos = (sal_uInt16)(long*)aTextFlowLB.GetEntryData( nPos );
+            bRet |= 0 != rSet.Put( SvxFrameDirectionItem(
+                                    (SvxFrameDirection)nPos, RES_FRAMEDIR ));
+        }
+    }
 
     return bRet;
 }

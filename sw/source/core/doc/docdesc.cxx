@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-15 15:18:13 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
     USHORT __READONLY_DATA aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
                                         RES_BACKGROUND, RES_SHADOW,
                                         RES_COL, RES_COL,
+                                        RES_FRAMEDIR, RES_FRAMEDIR,
                                            RES_UNKNOWNATR_CONTAINER,
                                                 RES_UNKNOWNATR_CONTAINER,
                                         0 };

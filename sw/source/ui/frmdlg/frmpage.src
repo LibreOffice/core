@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-21 21:27:05 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:55:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2533,6 +2533,40 @@ TabPage TP_FRM_ADD
         Text[ turkish ] = "Additional Setting";
         Text[ arabic ] = "Additional Setting";
         Text[ catalan ] = "Additional Setting";
+    };
+
+    FixedText FT_TEXTFLOW
+    {
+        Pos = MAP_APPFONT ( 12 , 174 ) ;
+        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Left = TRUE ;
+        Hide = TRUE ;
+        Text = "~Textfluss" ;
+        Text [ ENGLISH ] = "~Text flow" ;
+    };
+    ListBox LB_TEXTFLOW
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 81 , 172 ) ;
+        Size = MAP_APPFONT ( 167 , 50 ) ;
+        DropDown = TRUE ;
+        Hide = TRUE ;
+        StringList =
+        {
+            < "Horizontal von links" ; 0; > ;
+//          < "Horizontal von rechts" ; 1; > ;
+            < "Vertikal von rechts" ; 2; > ;
+//          < "Vertikal von links" ; 3; > ;
+            < "Wie die Umgebung" ; 4; > ;
+        };
+        StringList [ ENGLISH ] =
+        {
+            < "Horizontal from left" ; 0; > ;
+//          < "Horizontal from right" ; 1; > ;
+            < "Vertical from right" ; 2; > ;
+//          < "Vertical from left" ; 3; > ;
+            < "Like the environment" ; 4; > ;
+        };
     };
 };
 

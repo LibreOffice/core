@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 07:38:05 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 17:56:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,9 @@ class SwFrmAddPage : public SfxTabPage
 
     CheckBox    aEditInReadonlyCB;
     CheckBox    aPrintFrameCB;
+    FixedText   aTextFlowFT;
+    ListBox     aTextFlowLB;
+
     FixedLine   aExtFL;
 
     SwWrtShell* pWrtSh;
