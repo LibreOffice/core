@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2004-01-05 11:39:38 $
+#   last change: $Author: kz $ $Date: 2004-02-25 15:44:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,8 @@ EXCEPTIONSFILES=\
         $(SLO)$/filedlghelper.obj	\
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/cfg.obj				\
-        $(SLO)$/partwnd.obj
+        $(SLO)$/partwnd.obj         \
+        $(SLO)$/menucfg.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -112,13 +113,13 @@ SLOFILES =\
         $(SLO)$/tplpitem.obj		\
         $(SLO)$/versdlg.obj			\
         $(SLO)$/printopt.obj		\
-        $(SLO)$/recfloat.obj		\
+      $(SLO)$/recfloat.obj		\
         $(SLO)$/cfgtreelstbox.obj	\
         $(SLO)$/itemconnect.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =\
-                recfloat.src                       \
+        recfloat.src        \
         about.src			\
         cfg.src				\
         dialog.src			\
