@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:16:14 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,10 @@
 #include <tools/isolang.hxx>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
@@ -104,6 +108,7 @@ using namespace vcl;
 using namespace rtl;
 using namespace utl;
 using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 
 struct KeyMap
@@ -216,36 +221,41 @@ void DefaultFontConfigItem::Commit()
 
     int i, nKeys = sizeof(aKeyMap)/sizeof(aKeyMap[0]);
 
-    ::std::map< int, ::std::map< int, OUString > >::const_iterator lang;
+    std::hash_map< Locale, std::hash_map< int, OUString >, LocaleHash >::const_iterator lang;
 
     for( lang = m_aDefaults.begin(); lang != m_aDefaults.end(); ++lang )
     {
-        int nLanguage = lang->first;
-        if( nLanguage == LANGUAGE_DONTKNOW      ||
-            nLanguage == LANGUAGE_NONE          ||
-            nLanguage == LANGUAGE_SYSTEM        ||
-            ( nLanguage >= LANGUAGE_USER1 && nLanguage <= LANGUAGE_USER9 )
-            )
-            continue;
-        String aLanguage( ConvertLanguageToIsoString( nLanguage, '-' ).ToLowerAscii() );
-        if( ! aLanguage.Len() )
+        OUStringBuffer aLanguage(16);
+        aLanguage.append( lang->first.Language.toAsciiLowerCase() );
+        if( lang->first.Country.getLength() )
+        {
+            aLanguage.append( sal_Unicode('-') );
+            aLanguage.append( lang->first.Country.toAsciiLowerCase() );
+            if( lang->first.Variant.getLength() )
+            {
+                aLanguage.append( sal_Unicode('-') );
+                aLanguage.append( lang->first.Variant.toAsciiLowerCase() );
+            }
+        }
+        if( ! aLanguage.getLength() )
             continue;
 
-        String aKeyName( aLanguage );
-        AddNode( OUString(), aLanguage ); // defaults for a not yet configured language may be added
+        OUString aKeyName = aLanguage.makeStringAndClear();
+        AddNode( OUString(), aKeyName ); // defaults for a not yet configured language may be added
         Sequence< PropertyValue > aValues( nKeys );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
         for( i = 0; i < nKeys; i++ )
         {
-            ::std::map< int, OUString >::const_iterator it = lang->second.find( aKeyMap[i].nEnum );
+            std::hash_map< int, OUString >::const_iterator it = lang->second.find( aKeyMap[i].nEnum );
             if( it == lang->second.end() )
                 continue;
 
-            String aName( aKeyName );
-            aName.Append( '/' );
-            aName.AppendAscii( aKeyMap[i].pName, aKeyMap[i].nLen );
-            pValues[nIndex].Name    = aName;
+            OUStringBuffer aName( 64 );
+            aName.append( aKeyName );
+            aName.append( sal_Unicode('/') );
+            aName.appendAscii( aKeyMap[i].pName, aKeyMap[i].nLen );
+            pValues[nIndex].Name    = aName.makeStringAndClear();
             pValues[nIndex].Handle  = it->first;
             pValues[nIndex].Value <<= it->second;
             pValues[nIndex].State   = PropertyState_DIRECT_VALUE;
@@ -280,11 +290,6 @@ void DefaultFontConfigItem::getValues()
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
     for( j = 0; j < aNames.getLength(); j++ )
     {
-#if OSL_DEBUG_LEVEL > 2
-        fprintf( stderr, "found localized default font data for \"%s\"\n",
-                 OUStringToOString( aNames.getConstArray()[j], osl_getThreadTextEncoding() ).getStr()
-                 );
-#endif
         String aKeyName( aNames.getConstArray()[j] );
         Sequence< OUString > aKeys( GetNodeNames( aKeyName ) );
         Sequence< OUString > aLocaleKeys( aKeys.getLength() );
@@ -298,7 +303,25 @@ void DefaultFontConfigItem::getValues()
             pTo[m] = aName;
         }
         Sequence< Any > aValues( GetProperties( aLocaleKeys ) );
-        int nLanguageType = ConvertIsoStringToLanguage( aNames.getConstArray()[j], '-' );
+        Locale aLocale;
+        sal_Int32 nIndex = 0;
+        const OUString* pIso = aNames.getConstArray() + j;
+        aLocale.Language = pIso->getToken( 0, '-', nIndex ).toAsciiLowerCase();
+        if( nIndex > 0 )
+        {
+            aLocale.Country = pIso->getToken( 0, '-', nIndex ).toAsciiLowerCase();
+            if( nIndex > 0 )
+                aLocale.Variant = pIso->copy( nIndex ).toAsciiLowerCase();
+        }
+#if OSL_DEBUG_LEVEL > 2
+        fprintf( stderr, "found localized default font data for \"%s\" = %s-%s-%s\n",
+                 OUStringToOString( *pIso, osl_getThreadTextEncoding() ).getStr(),
+                 OUStringToOString( aLocale.Language, osl_getThreadTextEncoding() ).getStr(),
+                 OUStringToOString( aLocale.Country, osl_getThreadTextEncoding() ).getStr(),
+                 OUStringToOString( aLocale.Variant, osl_getThreadTextEncoding() ).getStr()
+
+                 );
+#endif
         const Any* pValue = aValues.getConstArray();
         for( i = 0; i < aValues.getLength(); i++, pValue++ )
         {
@@ -306,7 +329,7 @@ void DefaultFontConfigItem::getValues()
             {
                 const OUString* pLine = (const OUString*)pValue->getValue();
                 if( pLine->getLength() )
-                    m_aDefaults[ nLanguageType ][ getKeyType( aKeys.getConstArray()[i] ) ] = *pLine;
+                    m_aDefaults[ aLocale ][ getKeyType( aKeys.getConstArray()[i] ) ] = *pLine;
 #if OSL_DEBUG_LEVEL > 2
                 fprintf( stderr, "   \"%s\"=\"%.30s\"\n",
                          OUStringToOString( aKeys.getConstArray()[i], RTL_TEXTENCODING_ASCII_US ).getStr(),
@@ -322,23 +345,31 @@ void DefaultFontConfigItem::getValues()
  *  DefaultFontConfigItem::getDefaultFont
  */
 
-const OUString& DefaultFontConfigItem::getDefaultFont( int nLanguage, int nType ) const
+const OUString& DefaultFontConfigItem::getDefaultFont( const Locale& rLocale, int nType ) const
 {
-    ::std::map< int, ::std::map< int, OUString > >::const_iterator lang = m_aDefaults.find( nLanguage );
+    Locale aLocale;
+    aLocale.Language = rLocale.Language.toAsciiLowerCase();
+    aLocale.Country = rLocale.Country.toAsciiLowerCase();
+    aLocale.Variant = rLocale.Variant.toAsciiLowerCase();
+    std::hash_map< Locale, std::hash_map< int, OUString >, vcl::LocaleHash >::const_iterator lang = m_aDefaults.find( aLocale );
     if( lang == m_aDefaults.end() || lang->second.find( nType ) == lang->second.end() )
     {
-        String aLang, aCountry;
-        ConvertLanguageToIsoNames( nLanguage, aLang, aCountry );
-        nLanguage = ConvertIsoStringToLanguage( aLang );
-        lang = m_aDefaults.find( nLanguage );
+        aLocale.Variant = OUString();
+        lang = m_aDefaults.find( aLocale );
         if( lang == m_aDefaults.end() || lang->second.find( nType ) == lang->second.end() )
         {
-            nLanguage = LANGUAGE_ENGLISH;
-            lang = m_aDefaults.find( nLanguage );
+            aLocale.Country = OUString();
+
+            lang = m_aDefaults.find( aLocale );
             if( lang == m_aDefaults.end() || lang->second.find( nType ) == lang->second.end() )
             {
-                static OUString aEmpty;
-                return aEmpty;
+                aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
+                lang = m_aDefaults.find( aLocale );
+                if( lang == m_aDefaults.end() || lang->second.find( nType ) == lang->second.end() )
+                {
+                    static OUString aEmpty;
+                    return aEmpty;
+                }
             }
         }
     }
@@ -349,11 +380,17 @@ const OUString& DefaultFontConfigItem::getDefaultFont( int nLanguage, int nType 
  *  DefaultFontConfigItem::getUserInterfaceFont
  */
 
-const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) const
+const OUString& DefaultFontConfigItem::getUserInterfaceFont( const Locale& rLocale ) const
 {
-    if( nLanguage == LANGUAGE_SYSTEM )
-        nLanguage = Application::GetSettings().GetUILanguage();
-    const OUString& aUIFont = getDefaultFont( nLanguage, DEFAULTFONT_UI_SANS );
+    Locale aLocale;
+    aLocale.Language = rLocale.Language.toAsciiLowerCase();
+    aLocale.Country = rLocale.Country.toAsciiLowerCase();
+    aLocale.Variant = rLocale.Variant.toAsciiLowerCase();
+
+    if( ! aLocale.Language.getLength() )
+        aLocale = Application::GetSettings().GetUILocale();
+
+    const OUString& aUIFont = getDefaultFont( aLocale, DEFAULTFONT_UI_SANS );
 
     if( aUIFont.getLength() )
         return aUIFont;
@@ -409,63 +446,43 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
     static const OUString aFallBackKorean( aFallBackKoreanLocalized );
 
     // optimize font list for some locales, as long as Andale Sans UI does not support them
-    switch( nLanguage )
+    if( aLocale.Language.equalsAscii( "ar" ) ||
+        aLocale.Language.equalsAscii( "he" ) ||
+        aLocale.Language.equalsAscii( "iw" ) )
     {
-       case LANGUAGE_ARABIC:
-       case LANGUAGE_ARABIC_SAUDI_ARABIA:
-       case LANGUAGE_ARABIC_IRAQ:
-       case LANGUAGE_ARABIC_EGYPT:
-       case LANGUAGE_ARABIC_LIBYA:
-       case LANGUAGE_ARABIC_ALGERIA:
-       case LANGUAGE_ARABIC_MOROCCO:
-       case LANGUAGE_ARABIC_TUNISIA:
-       case LANGUAGE_ARABIC_OMAN:
-       case LANGUAGE_ARABIC_YEMEN:
-       case LANGUAGE_ARABIC_SYRIA:
-       case LANGUAGE_ARABIC_JORDAN:
-       case LANGUAGE_ARABIC_LEBANON:
-       case LANGUAGE_ARABIC_KUWAIT:
-       case LANGUAGE_ARABIC_UAE:
-       case LANGUAGE_ARABIC_BAHRAIN:
-       case LANGUAGE_ARABIC_QATAR:
-       case LANGUAGE_HEBREW:
-           return aFallBackArabic;
-           break;
-       case LANGUAGE_THAI:
-           return aFallBackThai;
-           break;
-       case LANGUAGE_KOREAN:
-       case LANGUAGE_KOREAN_JOHAB:
-           return aFallBackKorean;
-           break;
-            // latin-2 (use luxi before vera)
-       case LANGUAGE_CZECH:
-       case LANGUAGE_HUNGARIAN:
-       case LANGUAGE_POLISH:
-       case LANGUAGE_ROMANIAN:
-       case LANGUAGE_CROATIAN:
-       case LANGUAGE_SLOVAK:
-       case LANGUAGE_SLOVENIAN:
-       case LANGUAGE_SORBIAN:
-           return aFallbackLatin2;
-           break;
-
-       case LANGUAGE_CHINESE:
-       case LANGUAGE_CHINESE_SIMPLIFIED:
+        return aFallBackArabic;
+    }
+    else if( aLocale.Language.equalsAscii( "th" ) )
+    {
+        return aFallBackThai;
+    }
+    else if( aLocale.Language.equalsAscii( "ko" ) )
+    {
+        return aFallBackKorean;
+    }
+    else if( aLocale.Language.equalsAscii( "cs" ) ||
+             aLocale.Language.equalsAscii( "hu" ) ||
+             aLocale.Language.equalsAscii( "pl" ) ||
+             aLocale.Language.equalsAscii( "ro" ) ||
+             aLocale.Language.equalsAscii( "rm" ) ||
+             aLocale.Language.equalsAscii( "hr" ) ||
+             aLocale.Language.equalsAscii( "sk" ) ||
+             aLocale.Language.equalsAscii( "sl" ) ||
+             aLocale.Language.equalsAscii( "sb" ) )
+    {
+        return aFallbackLatin2;
+    }
+    else if( aLocale.Language.equalsAscii( "zh" ) )
+    {
+        if( ! aLocale.Country.equalsAscii( "cn" ) )
+            return aFallBackChineseTRD;
+        else
             return aFallBackChineseSIM;
-            break;
-       case LANGUAGE_CHINESE_TRADITIONAL:
-       case LANGUAGE_CHINESE_HONGKONG:
-       case LANGUAGE_CHINESE_SINGAPORE:
-       case LANGUAGE_CHINESE_MACAU:
-           return aFallBackChineseTRD;
-           break;
-       case LANGUAGE_JAPANESE:
-           return aFallBackJapanese;
-           break;
-       default:
-           break;
-   }
+    }
+    else if( aLocale.Language.equalsAscii( "ja" ) )
+    {
+        return aFallBackJapanese;
+    }
 
    return aFallback;
 }
@@ -474,12 +491,17 @@ const OUString& DefaultFontConfigItem::getUserInterfaceFont( int nLanguage ) con
  *  DefaultFontConfigItem::setDefaultFont
  */
 
-void DefaultFontConfigItem::setDefaultFont( int nLanguage, int nType, const OUString& rFont )
+void DefaultFontConfigItem::setDefaultFont( const Locale& rLocale, int nType, const OUString& rFont )
 {
-    bool bModified = m_aDefaults[ nLanguage ][ nType ] != rFont;
+    Locale aLocale;
+    aLocale.Language = rLocale.Language.toAsciiLowerCase();
+    aLocale.Country = rLocale.Country.toAsciiLowerCase();
+    aLocale.Variant = rLocale.Variant.toAsciiLowerCase();
+
+    bool bModified = m_aDefaults[ aLocale ][ nType ] != rFont;
     if( bModified )
     {
-        m_aDefaults[ nLanguage ][ nType ] = rFont;
+        m_aDefaults[ aLocale ][ nType ] = rFont;
         SetModified();
     }
 }
@@ -1020,34 +1042,58 @@ void FontSubstConfigItem::getValues()
     Sequence< OUString > aLocales( GetNodeNames( OUString( ) ) );
     for( int j = 0; j < aLocales.getLength(); j++ )
     {
-        String aKeyName( aLocales.getConstArray()[j] );
-        int nLanguageType = ConvertIsoStringToLanguage( aLocales.getConstArray()[j], '-' );
-        Sequence< OUString > aSubstFonts( GetNodeNames( aKeyName ) );
+        const OUString* pIso = aLocales.getConstArray() +j;
+        Locale aLocale;
+        sal_Int32 nIndex = 0;
+        aLocale.Language = pIso->getToken( 0, '-', nIndex ).toAsciiLowerCase();
+        if( nIndex > 0 )
+        {
+            aLocale.Country = pIso->getToken( 0, '-', nIndex ).toAsciiLowerCase();
+            if( nIndex > 0 )
+                aLocale.Variant = pIso->copy( nIndex ).toAsciiLowerCase();
+        }
+        Sequence< OUString > aSubstFonts( GetNodeNames( *pIso ) );
 #if OSL_DEBUG_LEVEL > 2
         fprintf( stderr, "reading %d font substitutions for locale %s\n",
                  aSubstFonts.getLength(),
-                 ByteString( aKeyName, RTL_TEXTENCODING_ASCII_US ).GetBuffer() );
+                 OUStringToOString( *pIso, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
         for( int i = 0; i < aSubstFonts.getLength(); i++ )
         {
             FontNameAttr aAttributes;
             aAttributes.Name = aSubstFonts.getConstArray()[i];
 
-            String aFontKey( aKeyName );
-            aFontKey.Append( '/' );
+            OUStringBuffer aFontKey( 128 );
+            aFontKey.append( *pIso );
+            aFontKey.append( sal_Unicode('/') );
             // must use the wrapped name in config paths due to non-ASCII chars (eg korean font names) !!!
-            String wrappedName = wrapConfigurationElementName( aAttributes.Name );
-            aFontKey.Append( wrappedName );
+            OUString wrappedName = wrapConfigurationElementName( aAttributes.Name );
+            aFontKey.append( wrappedName );
             Sequence< OUString > aKeys( 7 );
             OUString* pKeys = aKeys.getArray();
-            aFontKey.Append( '/' );
-            pKeys[0] = aFontKey.Copy().AppendAscii( "SubstFonts" );
-            pKeys[1] = aFontKey.Copy().AppendAscii( "SubstFontsMS" );
-            pKeys[2] = aFontKey.Copy().AppendAscii( "SubstFontsPS" );
-            pKeys[3] = aFontKey.Copy().AppendAscii( "SubstFontsHTML" );
-            pKeys[4] = aFontKey.Copy().AppendAscii( "FontWidth" );
-            pKeys[5] = aFontKey.Copy().AppendAscii( "FontWeight" );
-            pKeys[6] = aFontKey.Copy().AppendAscii( "FontType" );
+            aFontKey.append( sal_Unicode('/') );
+            OUString aPath = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "SubstFonts" );
+            pKeys[0] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "SubstFontsMS" );
+            pKeys[1] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "SubstFontsPS" );
+            pKeys[2] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "SubstFontsHTML" );
+            pKeys[3] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "FontWidth" );
+            pKeys[4] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "FontWeight" );
+            pKeys[5] = aFontKey.makeStringAndClear();
+            aFontKey.append( aPath );
+            aFontKey.appendAscii( "FontType" );
+            pKeys[6] = aFontKey.makeStringAndClear();
             Sequence< Any > aValues( GetProperties( aKeys ) );
             const Any* pValues = aValues.getConstArray();
             sal_Int32 nIndex = 0, width = -1, weight = -1, type = 0;
@@ -1155,13 +1201,13 @@ void FontSubstConfigItem::getValues()
             }
             aAttributes.Type = type;
 
-            m_aSubstitutions[nLanguageType].push_back( aAttributes );
+            m_aSubstitutions[aLocale].push_back( aAttributes );
         }
-        ::std::sort( m_aSubstitutions[nLanguageType].begin(), m_aSubstitutions[nLanguageType].end(), StrictStringSort() );
+        std::sort( m_aSubstitutions[aLocale].begin(), m_aSubstitutions[aLocale].end(), StrictStringSort() );
     }
 }
 
-const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, int nLanguage ) const
+const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, const Locale& rLocale ) const
 {
     if( !rFontName.Len() )
         return NULL;
@@ -1172,9 +1218,18 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
     aSearchFont.ToLowerAscii();
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
-    for( int i = 0; i < 3; i++ )
+
+    Locale aLocale;
+    aLocale.Language = rLocale.Language.toAsciiLowerCase();
+    aLocale.Country = rLocale.Country.toAsciiLowerCase();
+    aLocale.Variant = rLocale.Variant.toAsciiLowerCase();
+
+    if( ! aLocale.Language.getLength() )
+        aLocale = Application::GetSettings().GetUILocale();
+
+    while( aLocale.Language.getLength() )
     {
-        ::std::map< int, ::std::vector< FontNameAttr > >::const_iterator lang = m_aSubstitutions.find( nLanguage );
+        std::hash_map< Locale, std::vector< FontNameAttr >, LocaleHash >::const_iterator lang = m_aSubstitutions.find( aLocale );
         if( lang != m_aSubstitutions.end() )
         {
             // try to find an exact match
@@ -1183,22 +1238,15 @@ const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( cons
             if( it != lang->second.end() && aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
                 return &(*it);
         }
-        switch( i )
-        {
-            case 0:
-            {
-                String aLang, aCountry;
-                ConvertLanguageToIsoNames( nLanguage, aLang, aCountry );
-                int nNewLanguage = ConvertIsoStringToLanguage( aLang );
-                if( nNewLanguage == nLanguage || nNewLanguage == LANGUAGE_DONTKNOW || nNewLanguage == LANGUAGE_NONE )
-                    nNewLanguage = LANGUAGE_ENGLISH;
-                nLanguage = nNewLanguage;
-            }
-            break;
-            case 1:
-                nLanguage = LANGUAGE_ENGLISH;
-                break;
-        }
+        // gradually become more unspecific
+        if( aLocale.Variant.getLength() )
+            aLocale.Variant = OUString();
+        else if( aLocale.Country.getLength() )
+            aLocale.Country = OUString();
+        else if( ! aLocale.Language.equalsAscii( "en" ) )
+            aLocale.Language = OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
+        else
+            aLocale.Language = OUString();
     }
     return NULL;
 }
@@ -1246,7 +1294,7 @@ void SettingsConfigItem::Commit()
     if( ! IsValidConfigMgr() )
         return;
 
-    ::std::hash_map< OUString, ::std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
+    std::hash_map< OUString, std::hash_map< OUString, OUString, OUStringHash >, OUStringHash >::const_iterator group;
 
     for( group = m_aSettings.begin(); group != m_aSettings.end(); ++group )
     {
@@ -1255,7 +1303,7 @@ void SettingsConfigItem::Commit()
         Sequence< PropertyValue > aValues( group->second.size() );
         PropertyValue* pValues = aValues.getArray();
         int nIndex = 0;
-        ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
         for( it = group->second.begin(); it != group->second.end(); ++it )
         {
             String aName( aKeyName );
