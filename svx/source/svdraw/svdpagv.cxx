@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:40:00 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:33:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,8 @@ void SdrPageViewWindow::Redraw(const Region& rReg, sal_uInt16 nPaintMode, const 
         else
         {
             // Draw/Impress
-            aDisplayInfo.SetPreRenderingAllowed(sal_True);
+            // #114898#
+            aDisplayInfo.SetPreRenderingAllowed(rView.IsBufferedOutputAllowed());
             aDisplayInfo.SetPagePainting(sal_True);
         }
 
@@ -1082,8 +1083,10 @@ SdrPageViewWindow* SdrPageView::RemoveWindow(sal_uInt32 nPos)
     if(nPos < maWindowVector.size())
     {
         SdrPageViewWindowVector::iterator aAccess = maWindowVector.begin() + nPos;
+        // #114376# remember return value
+        SdrPageViewWindow* pErasedSdrPageViewWindow = *aAccess;
         maWindowVector.erase(aAccess);
-        return *aAccess;
+        return pErasedSdrPageViewWindow;
     }
 
     return 0L;
@@ -1095,8 +1098,10 @@ SdrPageViewWindow* SdrPageView::RemoveWindow(SdrPageViewWindow& rOld)
 
     if(aFindResult != maWindowVector.end())
     {
+        // #114376# remember return value
+        SdrPageViewWindow* pErasedSdrPageViewWindow = *aFindResult;
         maWindowVector.erase(aFindResult);
-        return *aFindResult;
+        return pErasedSdrPageViewWindow;
     }
 
     return 0L;
@@ -2656,9 +2661,33 @@ sal_Bool SdrPageView::IsObjMarkable(SdrObject* pObj) const
             return sal_False;
         }
 
-        // Der Layer muss sichtbar und darf nicht gesperrt sein
-        SdrLayerID nL = pObj->GetLayer();
-        return (aLayerVisi.IsSet(BYTE(nL)) && !aLayerLock.IsSet(BYTE(nL)));
+        // #112440#
+        if(pObj->ISA(SdrObjGroup))
+        {
+            // If object is a Group object, visibility depends evtl. on
+            // multiple layers. If one object is markable, Group is markable.
+            SdrObjList* pObjList = ((SdrObjGroup*)pObj)->GetSubList();
+            sal_Bool bGroupIsMarkable(sal_False);
+
+            for(sal_uInt32 a(0L); !bGroupIsMarkable && a < pObjList->GetObjCount(); a++)
+            {
+                SdrObject* pCandidate = pObjList->GetObj(a);
+
+                // call recursively
+                if(IsObjMarkable(pCandidate))
+                {
+                    bGroupIsMarkable = sal_True;
+                }
+            }
+
+            return bGroupIsMarkable;
+        }
+        else
+        {
+            // Der Layer muss sichtbar und darf nicht gesperrt sein
+            SdrLayerID nL = pObj->GetLayer();
+            return (aLayerVisi.IsSet(BYTE(nL)) && !aLayerLock.IsSet(BYTE(nL)));
+        }
     }
 
     return sal_False;
