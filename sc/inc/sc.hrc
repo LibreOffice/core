@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 12:53:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -506,7 +506,7 @@
 #define SID_SCATTR_HOR_JUSTIFY  (SC_VIEW_START + 30)    // Alignment-Page
 #define SID_SCATTR_VER_JUSTIFY  (SC_VIEW_START + 31)
 #define SID_SCATTR_MARGIN       (SC_VIEW_START + 32)
-#define SID_SCATTR_ORIENTATION  (SC_VIEW_START + 33)
+#define SID_SCATTR_STACKED      (SC_VIEW_START + 33)
 #define SID_SCATTR_LINEBREAK    (SC_VIEW_START + 35)
 #define SID_SCATTR_PROTECTION   (SC_VIEW_START + 36)    // Protection-Page
 
