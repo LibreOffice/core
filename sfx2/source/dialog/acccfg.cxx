@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccfg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-02 14:02:20 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,20 +96,20 @@
 #include <com/sun/star/form/XReset.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
-#include <drafts/com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPLLIER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
-#include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
+#ifndef _COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
@@ -168,23 +168,17 @@
     namespace css = ::com::sun::star;
 #endif
 
-#ifdef dcss
-    #error "ambigous praeprozessor directive for dcss ..."
-#else
-    namespace dcss = ::drafts::com::sun::star;
-#endif
-
 //-----------------------------------------------
 // definitions
 
 //-----------------------------------------------
 static ::rtl::OUString SERVICE_STORAGEFACTORY           = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory"                          );
-static ::rtl::OUString SERVICE_UICONFIGMGR              = ::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.UIConfigurationManager"              );
+static ::rtl::OUString SERVICE_UICONFIGMGR              = ::rtl::OUString::createFromAscii("com.sun.star.ui.UIConfigurationManager"              );
 static ::rtl::OUString SERVICE_DESKTOP                  = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"                                 );
-static ::rtl::OUString SERVICE_MODULEMANAGER            = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.ModuleManager"                    );
-static ::rtl::OUString SERVICE_GLOBALACCCFG             = ::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.GlobalAcceleratorConfiguration"      );
-static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   = ::rtl::OUString::createFromAscii("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
-static ::rtl::OUString SERVICE_UICMDDESCRIPTION         = ::rtl::OUString::createFromAscii("drafts.com.sun.star.frame.UICommandDescription"             );
+static ::rtl::OUString SERVICE_MODULEMANAGER            = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"                    );
+static ::rtl::OUString SERVICE_GLOBALACCCFG             = ::rtl::OUString::createFromAscii("com.sun.star.ui.GlobalAcceleratorConfiguration"      );
+static ::rtl::OUString SERVICE_MODULEUICONFIGSUPPLIER   = ::rtl::OUString::createFromAscii("com.sun.star.ui.ModuleUIConfigurationManagerSupplier");
+static ::rtl::OUString SERVICE_UICMDDESCRIPTION         = ::rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription"             );
 
 static ::rtl::OUString MODULEPROP_SHORTNAME             = ::rtl::OUString::createFromAscii("ooSetupFactoryShortName"                                    );
 static ::rtl::OUString MODULEPROP_UINAME                = ::rtl::OUString::createFromAscii("ooSetupFactoryUIName"                                       );
@@ -627,7 +621,7 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_xFrame = xDesktop->getActiveFrame();
 
         // identify module
-        css::uno::Reference< dcss::frame::XModuleManager > xModuleManager    (m_xSMGR->createInstance(SERVICE_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XModuleManager > xModuleManager    (m_xSMGR->createInstance(SERVICE_MODULEMANAGER), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xModuleManagerCont(xModuleManager                                , css::uno::UNO_QUERY_THROW);
         m_sModuleLongName = xModuleManager->identify(m_xFrame);
         ::comphelper::SequenceAsHashMap lModuleProps(xModuleManagerCont->getByName(m_sModuleLongName));
@@ -635,12 +629,12 @@ void SfxAcceleratorConfigPage::InitAccCfg()
         m_sModuleUIName    = lModuleProps.getUnpackedValueOrDefault(MODULEPROP_UINAME   , ::rtl::OUString());
 
         // get global accelerator configuration
-        m_xGlobal = css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(m_xSMGR->createInstance(SERVICE_GLOBALACCCFG), css::uno::UNO_QUERY_THROW);
+        m_xGlobal = css::uno::Reference< css::ui::XAcceleratorConfiguration >(m_xSMGR->createInstance(SERVICE_GLOBALACCCFG), css::uno::UNO_QUERY_THROW);
 
         // get module accelerator configuration
-        css::uno::Reference< dcss::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(m_xSMGR->createInstance(SERVICE_MODULEUICONFIGSUPPLIER), css::uno::UNO_QUERY_THROW);
-        css::uno::Reference< dcss::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
-        m_xModule = css::uno::Reference< dcss::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xModuleCfgSupplier(m_xSMGR->createInstance(SERVICE_MODULEUICONFIGSUPPLIER), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::ui::XUIConfigurationManager > xUICfgManager = xModuleCfgSupplier->getUIConfigurationManager(m_sModuleLongName);
+        m_xModule = css::uno::Reference< css::ui::XAcceleratorConfiguration >(xUICfgManager->getShortCutManager(), css::uno::UNO_QUERY_THROW);
     }
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
@@ -665,7 +659,7 @@ void SfxAcceleratorConfigPage::CreateCustomItems(      SvLBoxEntry* pEntry,
 }
 
 //-----------------------------------------------
-void SfxAcceleratorConfigPage::Init(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xAccMgr)
+void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
         return;
@@ -750,7 +744,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< dcss::ui::XAccele
 }
 
 //-----------------------------------------------
-void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xAccMgr)
+void SfxAcceleratorConfigPage::Apply(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xAccMgr)
 {
     if (!xAccMgr.is())
         return;
@@ -820,7 +814,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
     GetTabDialog()->EnterWait();
 
     css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< dcss::ui::XUIConfigurationManager > xCfgMgr     ;
+    css::uno::Reference< css::ui::XUIConfigurationManager > xCfgMgr     ;
     css::uno::Reference< css::embed::XStorage >              xRootStorage; // we must hold the root storage alive, if xCfgMgr is used!
 
     try
@@ -830,7 +824,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
         if (xDoc.is())
         {
             // Get ui config manager. There should always be one at the model.
-            css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
@@ -846,8 +840,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
             css::uno::Reference< css::embed::XStorage > xUIConfig = xRootStorage->openStorageElement(FOLDERNAME_UICONFIG, css::embed::ElementModes::READ);
             if (xUIConfig.is())
             {
-                xCfgMgr = css::uno::Reference< dcss::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
-                css::uno::Reference< dcss::ui::XUIConfigurationStorage > xCfgMgrStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
+                xCfgMgr = css::uno::Reference< css::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
+                css::uno::Reference< css::ui::XUIConfigurationStorage > xCfgMgrStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
                 xCfgMgrStore->setStorage(xUIConfig);
             }
         }
@@ -855,7 +849,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Load, Button*, pButton)
         if (xCfgMgr.is())
         {
             // open the configuration and update our UI
-            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
             aEntriesBox.SetUpdateMode(FALSE);
             ResetConfig();
@@ -899,7 +893,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
     GetTabDialog()->EnterWait();
 
     css::uno::Reference< css::frame::XModel >                xDoc        ;
-    css::uno::Reference< dcss::ui::XUIConfigurationManager > xCfgMgr     ;
+    css::uno::Reference< css::ui::XUIConfigurationManager > xCfgMgr     ;
     css::uno::Reference< css::embed::XStorage >              xRootStorage;
 
     try
@@ -909,7 +903,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
         if (xDoc.is())
         {
             // get config manager, force creation if there was none before
-            css::uno::Reference< dcss::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xCfgSupplier(xDoc, css::uno::UNO_QUERY_THROW);
             xCfgMgr = xCfgSupplier->getUIConfigurationManager();
         }
         else
@@ -937,8 +931,8 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
             if (!sMediaType.getLength())
                 xUIConfigProps->setPropertyValue(MEDIATYPE_PROPNAME, css::uno::makeAny(MEDIATYPE_UICONFIG));
 
-            xCfgMgr = css::uno::Reference< dcss::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< dcss::ui::XUIConfigurationStorage > xUICfgStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
+            xCfgMgr = css::uno::Reference< css::ui::XUIConfigurationManager >(m_xSMGR->createInstance(SERVICE_UICONFIGMGR), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XUIConfigurationStorage > xUICfgStore(xCfgMgr, css::uno::UNO_QUERY_THROW);
             xUICfgStore->setStorage(xUIConfig);
         }
 
@@ -946,15 +940,15 @@ IMPL_LINK(SfxAcceleratorConfigPage, Save, Button*, pButton)
         {
             // get target accelerator manager ...
             // and source accelerator manager.
-            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xSourceAccMgr(m_xAct                       , css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > xTargetAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XAcceleratorConfiguration > xSourceAccMgr(m_xAct                       , css::uno::UNO_QUERY_THROW);
 
             // copy the whole configuration set from source to target!
             CopySource2Target(xSourceAccMgr, xTargetAccMgr);
 
             // commit (order is important!)
-            css::uno::Reference< dcss::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
-            css::uno::Reference< dcss::ui::XUIConfigurationPersistence > xCommit2(xCfgMgr      , css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit1(xTargetAccMgr, css::uno::UNO_QUERY_THROW);
+            css::uno::Reference< css::ui::XUIConfigurationPersistence > xCommit2(xCfgMgr      , css::uno::UNO_QUERY_THROW);
             xCommit1->store();
             xCommit2->store();
 
@@ -1133,7 +1127,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, pBtn )
 {
-    css::uno::Reference< dcss::ui::XAcceleratorConfiguration > xOld = m_xAct;
+    css::uno::Reference< css::ui::XAcceleratorConfiguration > xOld = m_xAct;
 
     if (aOfficeButton.IsChecked())
         m_xAct = m_xGlobal;
@@ -1299,8 +1293,8 @@ void SfxAcceleratorConfigPage::SelectMacro(const SfxMacroInfoItem *pItem)
 }
 
 //-----------------------------------------------
-void SfxAcceleratorConfigPage::CopySource2Target(const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xSourceAccMgr,
-                                                 const css::uno::Reference< dcss::ui::XAcceleratorConfiguration >& xTargetAccMgr)
+void SfxAcceleratorConfigPage::CopySource2Target(const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xSourceAccMgr,
+                                                 const css::uno::Reference< css::ui::XAcceleratorConfiguration >& xTargetAccMgr)
 {
     const css::uno::Sequence< css::awt::KeyEvent > lKeys = xSourceAccMgr->getAllKeyEvents();
           sal_Int32                                c     = lKeys.getLength();
