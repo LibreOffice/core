@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 18:18:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:14:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_RANGEUTL_HXX
 #define SC_RANGEUTL_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
@@ -72,8 +76,6 @@ class SvStream;
 
 class ScArea;
 class ScDocument;
-class ScRefTripel;
-class ScTripel;
 class ScRange;
 class ScRangeName;
 class ScDBCollection;
@@ -91,7 +93,7 @@ public:
     BOOL    MakeArea            ( const String&     rAreaStr,
                                   ScArea&           rArea,
                                   ScDocument*       pDoc,
-                                  USHORT            nTab ) const;
+                                  SCTAB         nTab ) const;
 
     void    CutPosString        ( const String&     theAreaStr,
                                   String&           thePosStr ) const;
@@ -104,27 +106,27 @@ public:
 
     BOOL    IsAbsArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
-                                  USHORT        nTab,
+                                  SCTAB     nTab,
                                   String*       pCompleteStr = 0,
-                                  ScRefTripel*  pStartPos    = 0,
-                                  ScRefTripel*  pEndPos      = 0 ) const;
+                                  ScRefAddress* pStartPos    = 0,
+                                  ScRefAddress* pEndPos      = 0 ) const;
 
     BOOL    IsRefArea           ( const String& rAreaStr,
                                   ScDocument*   pDoc,
-                                  USHORT        nTab,
+                                  SCTAB     nTab,
                                   String*       pCompleteStr = 0,
-                                  ScRefTripel*  pPosTripel   = 0 ) const
+                                  ScRefAddress* pPosTripel   = 0 ) const
                                       { return FALSE; }
 
     BOOL    IsAbsPos            ( const String& rPosStr,
                                   ScDocument*   pDoc,
-                                  USHORT        nTab,
+                                  SCTAB     nTab,
                                   String*       pCompleteStr = 0,
-                                  ScRefTripel*  pPosTripel   = 0 ) const;
+                                  ScRefAddress* pPosTripel   = 0 ) const;
 
     BOOL    MakeRangeFromName   ( const String& rName,
                                     ScDocument*     pDoc,
-                                    USHORT          nCurTab,
+                                    SCTAB           nCurTab,
                                     ScRange&        rRange,
                                     RutlNameScope eScope=RUTL_NAMES
                                   ) const;
@@ -135,11 +137,11 @@ public:
 class ScArea
 {
 public:
-            ScArea( USHORT tab      = 0,
-                    USHORT colStart = 0,
-                    USHORT rowStart = 0,
-                    USHORT colEnd   = 0,
-                    USHORT rowEnd   = 0 );
+            ScArea( SCTAB tab      = 0,
+                    SCCOL colStart = 0,
+                    SCROW rowStart = 0,
+                    SCCOL colEnd   = 0,
+                    SCROW rowEnd   = 0 );
 
             ScArea( const ScArea& r );
 
@@ -151,11 +153,11 @@ public:
                           BOOL bAbsolute = TRUE, ScDocument* pDoc = NULL ) const;
 
 public:
-    USHORT nTab;
-    USHORT nColStart;
-    USHORT nRowStart;
-    USHORT nColEnd;
-    USHORT nRowEnd;
+    SCTAB nTab;
+    SCCOL nColStart;
+    SCROW nRowStart;
+    SCCOL nColEnd;
+    SCROW nRowEnd;
 };
 
 SvStream& operator<< ( SvStream& rStream, const ScArea& rArea );
