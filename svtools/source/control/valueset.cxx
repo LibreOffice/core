@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2002-11-21 12:50:41 $
+ *  last change: $Author: af $ $Date: 2002-11-25 12:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2190,20 +2190,23 @@ void ValueSet::SelectItem( USHORT nItemId )
             }
 
             // focus event (select)
-            if( mnSelItemId )
+            if (mnSelItemId >= 0)
             {
                 const USHORT nPos = GetItemPos( mnSelItemId );
 
+                ValueSetItem* pItem;
                 if( nPos != VALUESET_ITEM_NOTFOUND )
-                {
-                    ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation( mpItemList->GetObject( nPos )->GetAccessible() );
+                    pItem = mpItemList->GetObject(nPos);
+                else
+                    pItem = mpNoneItem;
 
-                    if( pItemAcc )
-                    {
-                        ::com::sun::star::uno::Any aOldAny, aNewAny;
-                        aNewAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
-                        pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
-                    }
+                ValueItemAcc* pItemAcc = ValueItemAcc::getImplementation(pItem->GetAccessible() );
+
+                if( pItemAcc )
+                {
+                    ::com::sun::star::uno::Any aOldAny, aNewAny;
+                    aNewAny <<= ::drafts::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
+                    pItemAcc->FireAccessibleEvent( ::drafts::com::sun::star::accessibility::AccessibleEventId::ACCESSIBLE_STATE_EVENT, aOldAny, aNewAny );
                 }
             }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: af $ $Date: 2002-11-20 16:35:31 $
+ *  last change: $Author: af $ $Date: 2002-11-25 12:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,11 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleChildCount()
     throw (uno::RuntimeException)
 {
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    return( mpParent->ImplGetVisibleItemCount() );
+    sal_Int32 nCount = 0;
+    if ((mpParent->GetStyle() & ~WB_NONEFIELD) != 0)
+        nCount += 1;
+    nCount += mpParent->ImplGetVisibleItemCount();
+    return nCount;
 }
 
 // -----------------------------------------------------------------------------
@@ -223,7 +227,17 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessible
 {
     const vos::OGuard                               aSolarGuard( Application::GetSolarMutex() );
     uno::Reference< accessibility::XAccessible >    xRet;
-    ValueSetItem*                                   pItem = mpParent->ImplGetVisibleItem( static_cast< USHORT >( i ) );
+    ValueSetItem* pItem = NULL;
+
+    if ((mpParent->GetStyle() & ~WB_NONEFIELD) != 0)
+        if (i == 0)
+            // When present the first item is the then allways visible none field.
+            pItem = mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
+        else
+            // Shift down the index to compensate for the none field.
+            i -= 1;
+    if (pItem == NULL)
+        pItem = mpParent->ImplGetVisibleItem( static_cast< USHORT >( i ) );
 
     if( pItem )
         xRet = pItem->GetAccessible();
