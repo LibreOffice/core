@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 15:36:44 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,7 @@
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::xmloff::token::GetXMLToken;
-using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_XMLNS;
-using ::xmloff::token::XML_URN_OASIS_NAMES_TC;
-using ::xmloff::token::XML_OPENDOCUMENT;
-using ::xmloff::token::XML_1_0;
+using namespace ::xmloff::token;
 
 /* The basic idea of this class is that we have two two ways to search our
  * data...by prefix and by key. We use an STL hash_map for fast prefix
@@ -493,6 +488,39 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             USHORT nIdxGuess ) const
 {
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
+}
+
+sal_Bool SvXMLNamespaceMap::NormalizeURI( ::rtl::OUString& rName )
+{
+    // try OASIS + W3 URI normalization
+    sal_Bool bSuccess = NormalizeOasisURN( rName );
+    if( ! bSuccess )
+        bSuccess = NormalizeW3URI( rName );
+    return bSuccess;
+}
+
+sal_Bool SvXMLNamespaceMap::NormalizeW3URI( ::rtl::OUString& rName )
+{
+    // check if URI matches:
+    // http://www.w3.org/[0-9]*/[:letter:]*
+    //                   (year)/(WG name)
+    // For the following WG/standards names:
+    // - xforms
+
+    sal_Bool bSuccess = sal_False;
+    const OUString sURIPrefix = GetXMLToken( XML_URI_W3_PREFIX );
+    if( rName.compareTo( sURIPrefix, sURIPrefix.getLength() ) == 0 )
+    {
+        const OUString sURISuffix = GetXMLToken( XML_URI_XFORMS_SUFFIX );
+        sal_Int32 nCompareFrom = rName.getLength() - sURISuffix.getLength();
+        if( rName.copy( nCompareFrom ).equals( sURISuffix ) )
+        {
+            // found W3 prefix, and xforms suffix
+            rName = GetXMLToken( XML_N_XFORMS_1_0 );
+            bSuccess = sal_True;
+        }
+    }
+    return bSuccess;
 }
 
 sal_Bool SvXMLNamespaceMap::NormalizeOasisURN( ::rtl::OUString& rName )
