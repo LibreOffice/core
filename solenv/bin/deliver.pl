@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.50 $
+#   $Revision: 1.51 $
 #
-#   last change: $Author: hr $ $Date: 2003-07-16 18:19:10 $
+#   last change: $Author: rt $ $Date: 2003-08-21 15:14:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.50 $ ';
+$id_str = ' $Revision: 1.51 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -986,6 +986,7 @@ sub zip_files
 
     foreach my $zip_file ( $platform_zip_file, $common_zip_file) {
         print "ZIP: updating $zip_file\n";
+        next if ( $opt_check );
         # zip content has to be relative to $dest_dir
         chdir($dest_dir{$zip_file});
         my $this_ref = $list_ref{$zip_file};
