@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:53:18 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 12:59:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,11 +283,13 @@ NWPixmapCache::NWPixmapCache()
     m_idx = 0;
     m_size = 0;
     pData = NULL;
-    gNWPixmapCacheList->AddCache(this);
+    if( gNWPixmapCacheList )
+        gNWPixmapCacheList->AddCache(this);
 }
 NWPixmapCache::~NWPixmapCache()
 {
-    gNWPixmapCacheList->RemoveCache(this);
+    if( gNWPixmapCacheList )
+        gNWPixmapCacheList->RemoveCache(this);
     delete[] pData;
 }
 void NWPixmapCache::ThemeChanged()
@@ -408,11 +410,14 @@ void GtkData::deInitNWF( void )
     // free up global widgets
     // gtk_widget_destroy will in turn destroy the child hierarchy
     // so only destroy disjunct hierachies
-    gtk_widget_destroy( gCacheWindow );
-    gtk_widget_destroy( gMenuWidget );
+    if( gCacheWindow )
+        gtk_widget_destroy( gCacheWindow );
+    if( gMenuWidget )
+        gtk_widget_destroy( gMenuWidget );
 
     delete pWidgetMutex;
     delete gNWPixmapCacheList;
+    gNWPixmapCacheList = NULL;
 }
 
 
@@ -547,7 +552,7 @@ BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
 
         rIsInside = FALSE;
 
-        ControlPart nCounterPart;
+        ControlPart nCounterPart = 0;
         if ( nPart == PART_BUTTON_UP )
             nCounterPart = PART_BUTTON_DOWN;
         else if ( nPart == PART_BUTTON_DOWN )
@@ -2336,7 +2341,11 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         if( aValue.getTristateVal() == BUTTONVALUE_ON )
         {
             pButtonWidget = gToolbarToggleWidget;
-            shadowType =GTK_SHADOW_IN;
+            shadowType = GTK_SHADOW_IN;
+            // special case stateType value for depressed toggle buttons
+            // cf. gtk+/gtk/gtktogglebutton.c (gtk_toggle_button_update_state)
+            if( ! (nState & (CTRL_STATE_PRESSED|CTRL_STATE_ROLLOVER)) )
+                stateType = GTK_STATE_ACTIVE;
             pButtonDetail = "togglebutton";
             bPaintButton = true;
         }
