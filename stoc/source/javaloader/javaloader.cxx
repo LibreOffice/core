@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaloader.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:31:10 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
             // We must not throw a RuntimeException, because this might end the applications.
             // It is ok if java components
             // are not working because the office can be installed without Java support.
-            return css::uno::Reference<XImplementationLoader>();
+            return m_javaLoader; // null-ref
 
         try
         {
