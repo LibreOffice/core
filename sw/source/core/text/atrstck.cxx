@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:31:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 10:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
+#endif
+#ifndef _OUTDEV_HXX //autogen
+#include <vcl/outdev.hxx>
 #endif
 #ifndef _SVX_CMAPITEM_HXX
 #include <svx/cmapitem.hxx>
@@ -267,19 +270,77 @@ const SfxPoolItem* lcl_GetItem( const SwTxtAttr& rAttr, USHORT nWhich )
 
 /*************************************************************************
  *                      lcl_ChgHyperLinkColor
- * returns if the color attribute has to be changed for hyperlinks
+ * The color of hyperlinks is taken from the associated character attribute,
+ * depending on its 'visited' state. There are actually two cases, which
+ * should override the colors from the character attribute:
+ * 1. We never take the 'visited' color during printing/pdf export/preview
+ * 2. The user has choosen to override these colors in the view options
  *************************************************************************/
 
-sal_Bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
-                                const SfxPoolItem& rItem,
-                                const ViewShell* pShell )
+bool lcl_ChgHyperLinkColor( const SwTxtAttr& rAttr,
+                            const SfxPoolItem& rItem,
+                            const ViewShell* pShell,
+                            Color* pColor )
 {
-    return pShell && pShell->GetWin() &&
-           ! pShell->GetViewOptions()->IsPagePreview() &&
-           RES_TXTATR_INETFMT == rAttr.Which() &&
-           RES_CHRATR_COLOR == rItem.Which() &&
-           ( ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks() ||
-           ! ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks() );
+    if ( !pShell ||
+         RES_TXTATR_INETFMT != rAttr.Which() ||
+         RES_CHRATR_COLOR != rItem.Which() )
+        return false;
+
+    // --> FME 2004-09-13 #i15455#
+    // 1. case:
+    // We do not want to show visited links:
+    // (printing, pdf export, page preview)
+    //
+    if ( pShell->GetOut()->GetOutDevType() == OUTDEV_PRINTER ||
+         pShell->GetViewOptions()->IsPDFExport() ||
+         pShell->GetViewOptions()->IsPagePreview() )
+    {
+        if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
+        {
+            if ( pColor )
+            {
+                // take color from character format 'unvisited link'
+                ((SwTxtINetFmt&)rAttr).SetVisited( FALSE );
+                const SwCharFmt* pTmpFmt = ((SwTxtINetFmt&)rAttr).GetCharFmt();
+                const SfxPoolItem* pItem;
+                pTmpFmt->GetItemState( RES_CHRATR_COLOR, TRUE, &pItem );
+                *pColor = ((SvxColorItem*)pItem)->GetValue();
+                ((SwTxtINetFmt&)rAttr).SetVisited( TRUE );
+            }
+            return true;
+        }
+
+        return false;
+    }
+    // <--
+
+    //
+    // 2. case:
+    // We do not want to apply the color set in the hyperlink
+    // attribute, instead we take the colors from the view options:
+    //
+    if ( pShell->GetWin() &&
+        (  ((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsVisitedLinks() ||
+          !((SwTxtINetFmt&)rAttr).IsVisited() && SwViewOption::IsLinks() ) )
+    {
+        if ( pColor )
+        {
+            if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
+            {
+                // take color from view option 'visited link color'
+                *pColor = SwViewOption::GetVisitedLinksColor();
+            }
+            else
+            {
+                // take color from view option 'unvisited link color'
+                *pColor = SwViewOption::GetLinksColor();
+            }
+        }
+        return true;
+    }
+
+    return false;
 }
 
 
@@ -488,16 +549,9 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
                 if ( Push( rAttr, *pItem , rFnt ) )
                 {
                     // we let pItem change rFnt
-                    if ( lcl_ChgHyperLinkColor( rAttr, *pItem, pShell ) )
+                    Color aColor;
+                    if ( lcl_ChgHyperLinkColor( rAttr, *pItem, pShell, &aColor ) )
                     {
-                        // for hyperlinks we still have to evaluate
-                        // the appearence settings
-                        Color aColor;
-                        if ( ((SwTxtINetFmt&)rAttr).IsVisited() )
-                            aColor = SwViewOption::GetVisitedLinksColor();
-                        else
-                            aColor = SwViewOption::GetLinksColor();
-
                         SvxColorItem aItemNext( aColor );
                         FontChg( aItemNext, rFnt, sal_True );
                     }
@@ -539,7 +593,7 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem, 
     const SwTxtAttr* pTopAttr = aAttrStack[ nStack ].Top();
     if ( !pTopAttr || rAttr.IsPriorityAttr() ||
             ( !pTopAttr->IsPriorityAttr() &&
-              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell ) ) )
+              !lcl_ChgHyperLinkColor( *pTopAttr, rItem, pShell, 0 ) ) )
     {
         aAttrStack[ nStack ].Push( rAttr );
         return sal_True;
@@ -640,16 +694,9 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
             const SfxPoolItem* pItemNext;
             pFmtNext->GetItemState( nAttr, TRUE, &pItemNext );
 
-            if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, pShell ) )
+            Color aColor;
+            if ( lcl_ChgHyperLinkColor( *pTopAt, *pItemNext, pShell, &aColor ) )
             {
-                // for hyperlinks we still have to evaluate
-                // the appearence settings
-                Color aColor;
-                if ( ((SwTxtINetFmt*)pTopAt)->IsVisited() )
-                    aColor = SwViewOption::GetVisitedLinksColor();
-                else
-                    aColor = SwViewOption::GetLinksColor();
-
                 SvxColorItem aItemNext( aColor );
                 FontChg( aItemNext, rFnt, sal_False );
             }
