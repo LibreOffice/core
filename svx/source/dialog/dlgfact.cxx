@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:46:42 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:37:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1243,6 +1243,7 @@ VclAbstractDialog * AbstractDialogFactory_Impl::CreateSvxScriptOrgDialog( Window
 {
     OSL_TRACE("in ADF_Impl::CreateSvxScriptOrgDialog");
     Dialog* pDlg=NULL;
+
     pDlg = new SvxScriptOrgDialog( pParent, rLanguage);
 
     if ( pDlg )
