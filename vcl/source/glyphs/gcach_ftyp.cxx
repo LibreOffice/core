@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.88 $
- *  last change: $Author: hr $ $Date: 2003-03-27 17:58:13 $
+ *  $Revision: 1.89 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,7 +650,6 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     const FT_Size_Metrics& rMetrics = maFaceFT->size->metrics;
     rTo.mnAscent            = (+rMetrics.ascender + 32) >> 6;
 #if (FTVERSION < 2000)
-
     rTo.mnDescent           = (+rMetrics.descender + 32) >> 6;
 #else
     rTo.mnDescent           = (-rMetrics.descender + 32) >> 6;
@@ -679,9 +678,15 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
     if( pOS2 && (~pOS2->version != 0) )
     {
         const double fScale = (double)GetFontSelData().mnHeight / maFaceFT->units_per_EM;
-        rTo.mnAscent        = (long)( +pOS2->usWinAscent * fScale + 0.5 );
-        rTo.mnDescent       = (long)( +pOS2->usWinDescent * fScale + 0.5 );
-        rTo.mnLeading       = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
+        long nAscent = (long)pOS2->usWinAscent;
+        long nDescent = (long)pOS2->usWinDescent;
+        // sanity check, some fonts treat this as negative signed !!!
+        if( nDescent > 5*maFaceFT->units_per_EM )
+            nDescent = (long)(short)pOS2->usWinDescent;
+
+        rTo.mnAscent        = (long)( +nAscent * fScale + 0.5 );
+        rTo.mnDescent       = (long)( +nDescent * fScale + 0.5 );
+        rTo.mnLeading       = (long)( (+nAscent + nDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
 
         rTo.mnFirstChar     = pOS2->usFirstCharIndex;
         rTo.mnLastChar      = pOS2->usLastCharIndex;
@@ -807,7 +812,14 @@ int FreetypeServerFont::GetRawGlyphIndex( sal_Unicode aChar ) const
             aChar = aChar*256 + (aTempArray[i] & 0xFF);
     }
 
-    int nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+    // cache glyph indexes in font info to share between different sizes
+    int nGlyphIndex = mpFontInfo->GetGlyphIndex( aChar );
+    if( nGlyphIndex < 0 )
+    {
+        nGlyphIndex = FT_Get_Char_Index( maFaceFT, aChar );
+        mpFontInfo->CacheGlyphIndex( aChar, nGlyphIndex );
+    }
+
     return nGlyphIndex;
 }
 
