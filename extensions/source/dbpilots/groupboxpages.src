@@ -2,9 +2,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-21 21:44:46 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,6 +589,9 @@ String RID_STR_GROUPWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/06/21 21:44:46  kz
+ *  Merge SRC633: 06/21/01 - 23:44:44
+ *
  *  Revision 1.12  2001/06/13 22:49:56  kz
  *  Merge SRC633: 06/14/01 - 00:49:13
  *
@@ -628,6 +631,7 @@ String RID_STR_GROUPWIZ_DBFIELD
  *
  *  Revision 1.0 14.02.01 12:47:37  fs
  ************************************************************************/
+
 
 
 
