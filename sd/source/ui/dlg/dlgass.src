@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:45:51 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:32:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Önizleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Pre~visualización";
+        Text[ finnish ] = "~Esikatselu";
     };
 
     CheckBox CB_STARTWITH
@@ -137,6 +138,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bu pencereyi artýk görüntüleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No mostrar más este diálogo";
+        Text[ finnish ] = "~Älä näytä tätä valintaikkunaa uudelleen";
     };
 
     // Seite 1
@@ -178,6 +180,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipo";
+        Text[ finnish ] = "Tyyppi";
     };
 
     RadioButton RB_PAGE1_EMPTY
@@ -207,6 +210,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Boþ sunu";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Presentación vacía";
+        Text[ finnish ] = "~Tyhjennä esitys";
     };
 
     RadioButton RB_PAGE1_TEMPLATE
@@ -235,6 +239,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Þablon";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~De plantilla";
+        Text[ finnish ] = "~Mallipohjasta";
     };
 
     RadioButton RB_PAGE1_OPEN
@@ -263,6 +268,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Mevcut bir sunuyu aç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Abrir una presentación existente";
+        Text[ finnish ] = "~Avaa valmis esitys";
     };
 
     ListBox LB_PAGE1_REGION
@@ -330,6 +336,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bir sayfa biçimi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un ~estilo de página";
+        Text[ finnish ] = "~Valitse sivun tyyli";
     };
 
     ListBox LB_PAGE2_REGION
@@ -376,6 +383,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bir çýktý ortamý seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un medio de presentación";
+        Text[ finnish ] = "Valitse tulostusväline";
     };
 
     RadioButton RB_PAGE2_MEDIUM5
@@ -405,6 +413,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Aslý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Original";
+        Text[ finnish ] = "~Alkuperäinen";
     };
 
     RadioButton RB_PAGE2_MEDIUM1
@@ -434,6 +443,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ekran";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "P~antalla";
+        Text[ finnish ] = "~Näyttö";
     };
 
     RadioButton RB_PAGE2_MEDIUM2
@@ -464,6 +474,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Slayt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Diapositiva";
+        Text[ finnish ] = "~Diakuva";
     };
 
     RadioButton RB_PAGE2_MEDIUM3
@@ -494,6 +505,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Tepegöz";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Transparencia";
+        Text[ finnish ] = "~Piirtoheitinkalvo";
     };
 
     RadioButton RB_PAGE2_MEDIUM4
@@ -524,6 +536,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Kaðýt";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Papel";
+        Text[ finnish ] = "~Paperi";
     };
 
     // Seite 3
@@ -564,6 +577,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Bir slayt geçiþi seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija un cambio de diapositiva";
+        Text[ finnish ] = "Vaihtumistyypin valinta";
     };
 
     FixedText FT_PAGE3_EFFECT
@@ -593,6 +607,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Efekt:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Efecto:";
+        Text[ finnish ] = "~Vaikutus:";
     };
 
     ListBox LB_PAGE3_EFFECT
@@ -632,6 +647,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Hýz:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Vel~ocidad:";
+        Text[ finnish ] = "~Nopeus:";
     };
 
     ListBox LB_PAGE3_SPEED
@@ -671,6 +687,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Sunu türünü seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Elija el tipo de presentación";
+        Text[ finnish ] = "Esitystyypin valinta";
     };
 
     RadioButton RB_PAGE3_LIVE
@@ -700,6 +717,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Predeterminado";
+        Text[ finnish ] = "~Oletusarvo";
     };
 
     RadioButton RB_PAGE3_KIOSK
@@ -729,6 +747,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Automático";
+        Text[ finnish ] = "~Automaattinen";
     };
 
     FixedText FT_PAGE3_TIME
@@ -758,6 +777,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Durma süresi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Duració~n página";
+        Text[ finnish ] = "~Sivun kesto";
     };
 
     TimeField TMF_PAGE3_TIME
@@ -812,6 +832,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ara verme sü.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Duración pausa";
+        Text[ finnish ] = "~Tauon kesto";
     };
 
     TimeField TMF_PAGE3_BREAK
@@ -867,6 +888,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Logo görüntüle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar logotipo";
+        Text[ finnish ] = "~Näytä logo";
     };
 
     // Seite 4
@@ -907,6 +929,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Temel düþüncelerinizi belirtin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nombre sus ideas principales";
+        Text[ finnish ] = "Kuvaile perusajatuksesi";
     };
 
     FixedText FT_PAGE4_ASKNAME
@@ -937,6 +960,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Adýnýz ya da firmanýzýn adý nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Cuál es su nombre o el nombre de su empresa?";
+        Text[ finnish ] = "Mikä on yrityksesi nimi?";
     };
     Edit EDT_PAGE4_ASKNAME
     {
@@ -973,6 +997,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Sununuzun konusu nedir?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Cuál es la temática de su presentación?";
+        Text[ finnish ] = "Mikä on esityksen aihe?";
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
@@ -1009,6 +1034,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Eklemek istediðiniz diðer düþünceler?";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "¿Otras ideas a presentar?";
+        Text[ finnish ] = "Muita esiteltäviä ajatuksia?";
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
@@ -1058,6 +1084,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ýstediðiniz sayfalarý seçin";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Elija las páginas que desee";
+        Text[ finnish ] = "~Valitse sivut";
     };
 
     Control CT_PAGE5_PAGELIST
@@ -1076,7 +1103,7 @@ ModalDialog DLG_ASS
         Text = "~Zusammenfassung erstellen";
         Text [ ENGLISH ] = "~Create summary";
         Text[ english_us ] = "C~reate summary";
-        Text[ portuguese ] = "~Criar sumário";
+        Text[ portuguese ] = "~Criar resumo";
         Text[ russian ] = "~Ñîçäàòü ðåçþìå";
         Text[ dutch ] = "~Samenvatting maken";
         Text[ french ] = "~Créer un récapitulatif";
@@ -1095,6 +1122,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Özet oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear resumen";
+        Text[ finnish ] = "~Luo yhteenveto";
     };
 
     // generell
@@ -1142,6 +1170,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "<< Geri";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "<< ~Regresar";
+        Text[ finnish ] = "<< Edellinen";
     };
 
     PushButton BUT_NEXT
@@ -1173,6 +1202,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Ýleri >>";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Siguiente >>";
+        Text[ finnish ] = "~Seuraava >>";
     };
 
     OKButton BUT_FINISH
@@ -1203,6 +1233,7 @@ ModalDialog DLG_ASS
         Text[ turkish ] = "Oluþtur";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Crear";
+        Text[ finnish ] = "~Luo";
     };
     Text[ english_us ] = "AutoPilot Presentation";
     Text[ portuguese ] = "AutoPiloto Apresentação";
@@ -1224,6 +1255,7 @@ ModalDialog DLG_ASS
     Text[ turkish ] = "Sunu OtoPilotu";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPiloto Presentación";
+    Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
 
 
