@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 07:55:13 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,11 +205,7 @@
 #ifndef _XMLOFF_XMLEMBEDDEDOBJECTIMPORTCONTEXT_HXX
 #include "XMLEmbeddedObjectImportContext.hxx"
 #endif
-// --> OD 2004-08-10 #i28749#
-#ifndef _COM_SUN_STAR_TEXT_POSITIONLAYOUTDIR_HPP_
-#include <com/sun/star/text/PositionLayoutDir.hpp>
-#endif
-// <--
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -603,30 +599,6 @@ void SdXMLShapeContext::SetTransformation()
 
             xPropSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation")), aAny);
-
-            // --> OD 2004-08-10 #i28749# - set property <PositionLayoutDir> to
-            // <PositionInHoriL2R>, if it exists and the import states that
-            // the shape positioning attributes are in horizontal left-to-right
-            // layout. This is the case for the OpenOffice.org file format.
-            // This setting is done for Writer documents, because the property
-            // only exists at service com::sun::star::text::Shape - the Writer
-            // UNO service for shapes.
-            // The value indicates that the positioning attributes are given
-            // in horizontal left-to-right layout. The property is evaluated
-            // during the first positioning of the shape in order to convert
-            // the shape position given in the OpenOffice.org file format to
-            // the one for the OASIS Open Office file format.
-            if ( GetImport().IsShapePositionInHoriL2R() &&
-                 xPropSet->getPropertySetInfo()->hasPropertyByName(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir"))) )
-            {
-                uno::Any aPosLayoutDir;
-                aPosLayoutDir <<= text::PositionLayoutDir::PositionInHoriL2R;
-                xPropSet->setPropertyValue(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PositionLayoutDir")),
-                    aPosLayoutDir );
-            }
-            // <--
         }
     }
 }
@@ -892,10 +864,18 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
         else if( IsXMLToken( rLocalName, XML_WIDTH ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Width, rValue);
+            if( maSize.Width > 0 )
+                maSize.Width += 1;
+            else if( maSize.Width < 0 )
+                maSize.Width -= 1;
         }
         else if( IsXMLToken( rLocalName, XML_HEIGHT ) )
         {
             GetImport().GetMM100UnitConverter().convertMeasure(maSize.Height, rValue);
+            if( maSize.Height > 0 )
+                maSize.Height += 1;
+            else if( maSize.Height < 0 )
+                maSize.Height -= 1;
         }
         else if( IsXMLToken( rLocalName, XML_TRANSFORM ) )
         {
