@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisdefs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-09-26 09:51:58 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,8 @@
 #define THROW_IAE           throw CSS::lang::IllegalArgumentException()
 
 #define CHK_Freq            ( nFreq != 1 && nFreq != 2 && nFreq != 4 )
-#define CHK_FINITE(d)       if( !SOMA_FINITE( d ) ) THROW_IAE
-#define RETURN_FINITE(d)    if( SOMA_FINITE( d ) ) return d; else THROW_IAE
+#define CHK_FINITE(d)       if( !::rtl::math::isFinite( d ) ) THROW_IAE
+#define RETURN_FINITE(d)    if( ::rtl::math::isFinite( d ) ) return d; else THROW_IAE
 
 #endif
 

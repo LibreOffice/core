@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-09 11:09:01 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,7 @@
 
 #include "analysis.hxx"
 #include "analysishelper.hxx"
-#include <tools/solmath.hxx>
-
+#include <rtl/math.hxx>
 
 
 
@@ -489,77 +488,61 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
 }
 
 
+double lcl_Sca_Analysis_CalcXirrDiff( const ScaDoubleList& rValues, const ScaDoubleList& rDates, double fGuessInt )
+{
+    double fFirstDate = *rDates.Get( 0 );
+    double fIntRate = fGuessInt + 1.0;
+    double fXirrDiff = 0.0;
+    for( sal_uInt32 nIndex = 0, nCount = rValues.Count(); nIndex < nCount; ++nIndex )
+        fXirrDiff += *rValues.Get( nIndex ) / pow( fIntRate, (*rDates.Get( nIndex ) - fFirstDate) / 365.0 );
+    return fXirrDiff;
+}
+
 double SAL_CALL AnalysisAddIn::getXirr(
     constREFXPS& xOpt, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE
 {
+    ScaDoubleList aValues, aDates;
+    aValues.Append( rValues );
+    aDates.Append( rDates );
 
-    double              fGuess = aAnyConv.getDouble( xOpt, rGuess, 0.1 );
-
-    ScaDoubleList aValList;
-    ScaDoubleList aDateList;
-
-    aValList.Append( rValues );
-    aDateList.Append( rDates );
-
-    sal_Int32           nNum = aValList.Count();
-
-    if( nNum != sal_Int32( aDateList.Count() ) || nNum < 2 )
+    if( (aValues.Count() < 2) || (aValues.Count() != aDates.Count()) )
         THROW_IAE;
 
-    double              f, fG, fK;
-    sal_Int32           nMax = 200;
+    // result interest rate, initialized with passed guessed rate, or 10%
+    double fResultInt = aAnyConv.getDouble( xOpt, rGuess, 0.1 );
+    // lower boundary for iteration -> lowest possible is -100%
+    double fLowerInt = -1;
+    // upper boundary is open end -> try to find appropriate limit, start with 100%
+    double fUpperInt = 1;
+    while( (fUpperInt < 1e20) && (lcl_Sca_Analysis_CalcXirrDiff( aValues, aDates, fUpperInt ) > 0.0) )
+        fUpperInt *= 1e2;
 
-    double              fYld = fGuess;
-    double              fDiff = fYld;
-    double              fOld = 0.0;
-    sal_Int32           n = 1;
-    sal_Int32           nNew = 0;
-    double              fNull = *aDateList.Get( 0 );
+    // maximum epsilon (upper-lower difference) for end of iteration
+    static const double fMaxEpsilon = 1e-10;
+    // maximum XIRR result for end of iteration (ideal result is 0.0)
+    static const double fMaxXirrDiff = 1e-13;
+    // true = a result has been found
+    bool bResultReached = false;
 
+    // iteration counter
+    sal_Int32 nIteration = 0;
+    // maximum number of iterations
+    static const sal_Int32 nMaxIterations = 200;
 
-    while( fabs( fDiff ) > 1E-10 && n <= nMax )
+    while( !bResultReached && (++nIteration <= nMaxIterations) )
     {
-        f = 0.0;
-        n++;
-        for( sal_Int32 i = 0 ; i < nNum ; i++ )
-            f += *aValList.Get( i ) / pow( 1.0 + fYld, ( *aDateList.Get( i ) - fNull ) / 365.0 );
-
-        if( ( ( fOld < 0.0 && f > 0.0 ) || ( fOld > 0.0 && f < 0.0 ) ) && nNew == 0 )
-        {
-            if( f < 0.0 )
-            {
-                fG = fYld;
-                fK = fYld - 0.1;
-            }
-            else
-            {
-                fG = fYld - 0.1;
-                fK = fYld;
-            }
-            fYld = 0.5 * ( fG + fK );
-            nNew = 1;
-        }
-        else if( nNew == 0 )
-        {
-            fYld += 0.1;
-            fOld = f;
-        }
-        else
-        {
-            if( f < 0.0 )
-                fG = fYld;
-            else
-                fK = fYld;
-            double      fTmp = 0.5 * ( fG + fK );
-            fDiff = fYld - fTmp;
-            fYld = fTmp;
-        }
+        double fXirrDiff = lcl_Sca_Analysis_CalcXirrDiff( aValues, aDates, fResultInt );
+        if( fXirrDiff < 0.0 )
+            fUpperInt = fResultInt;
+        else if( fXirrDiff > 0.0 )
+            fLowerInt = fResultInt;
+        fResultInt = (fUpperInt + fLowerInt) / 2.0;
+        bResultReached = (fabs( fUpperInt - fLowerInt ) <= fMaxEpsilon) || (fabs( fXirrDiff ) <= fMaxXirrDiff);
     }
 
-    if( floor( f ) == 0.0 || fabs( fDiff ) <= 1e-10 )
-        RETURN_FINITE( fYld );
-    else
+    if( !bResultReached )
         THROW_IAE;
+    RETURN_FINITE( fResultInt );
 }
 
 

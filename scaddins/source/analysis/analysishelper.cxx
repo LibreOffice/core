@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-08 11:28:10 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <tools/resary.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
@@ -184,56 +184,6 @@ const FuncDataBase pFuncDatas[] =
     FUNCDATA( Fvschedule,       UNIQUE,     STDPAR,     2,          FDCat_Finance )
 };
 #undef FUNCDATA
-
-
-static const double nKorrVal[] = {
-    0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, 9e-8,
-    9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15
-};
-
-static const double f_Ret = 0.0;
-
-
-double Round( double fVal, short nDec )
-{
-    if ( fVal == 0.0  )
-        return fVal;
-
-    // sign adjustment
-    sal_Bool bSign = fVal < 0.0;
-    if ( bSign )
-        fVal = -fVal;
-
-    double fFac;
-    if ( nDec != 0 )
-    {
-        // max 20 decimals, we don't have unlimited precision
-        // #38810# and no overflow on fVal*=fFac
-        if ( nDec < -20 || 20 < nDec || fVal > (1.7976931348623158e+308 / 1e20) )
-            return bSign ? -fVal : fVal;
-
-        fFac = pow( 10.0, nDec );
-        fVal *= fFac;
-    }
-    //else  //! uninitialized fFac, not needed
-
-            int nExp;       // exponent for correction
-            if ( fVal > 0.0 )
-                nExp = (int) floor( log10( fVal ) );
-            else
-                nExp = 0;
-            int nIndex = 15 - nExp;
-            if ( nIndex > 15 )
-                nIndex = 15;
-            else if ( nIndex <= 1 )
-                nIndex = 0;
-            fVal = floor( fVal + 0.5 + nKorrVal[nIndex] );
-
-    if ( nDec != 0 )
-        fVal /= fFac;
-
-    return bSign ? -fVal : fVal;
-}
 
 
 /*double _Test( sal_Int32 nMode, double f1, double f2, double f3 )
@@ -1382,7 +1332,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
     if( nLog10 + nExp > nMaxExp )
         return sal_False;
 
-    fInt *= pow( 10.0, nExp );
+    fInt = ::rtl::math::pow10Exp( fInt, nExp );
 
     if( bNegNum )
         fInt = -fInt;
@@ -1396,21 +1346,17 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 STRING GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
 {
     const int       nBuff = 256;
-    sal_Char*       pBuff = new sal_Char[ nBuff + 1 ];
+    sal_Char        aBuff[ nBuff + 1 ];
     const char*     pFormStr = bLeadingSign? "%+.*g" : "%.*g";
-    int             nLen = sprintf( pBuff, pFormStr, int( nMaxDig ), f );
+    int             nLen = snprintf( aBuff, nBuff, pFormStr, int( nMaxDig ), f );
+                    // you never know which underlying implementation you get ...
+                    aBuff[nBuff] = 0;
+                    if ( nLen < 0 || nLen > nBuff )
+                        nLen = strlen( aBuff );
 
-    STRING          aRet( pBuff, nLen, RTL_TEXTENCODING_MS_1252 );
-
-    delete pBuff;
+    STRING          aRet( aBuff, nLen, RTL_TEXTENCODING_MS_1252 );
 
     return aRet;
-}
-
-
-inline double Exp10( sal_Int16 n )
-{
-    return pow( 10.0, double( n ) );
 }
 
 
@@ -1434,13 +1380,13 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
         fAmorCoeff = 2.5;
 
     fRate *= fAmorCoeff;
-    double      fNRate = Round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
+    double      fNRate = ::rtl::math::round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
     fCost -= fNRate;
     double      fRest = fCost - fRestVal;   // Anschaffungskosten - Restwert - Summe aller Abschreibungen
 
     for( sal_uInt32 n = 0 ; n < nPer ; n++ )
     {
-        fNRate = Round( fRate * fCost, 0 );
+        fNRate = ::rtl::math::round( fRate * fCost, 0 );
         fRest -= fNRate;
 
         if( fRest < 0.0 )
@@ -1449,7 +1395,7 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
             {
                 case 0:
                 case 1:
-                    return Round( fCost * 0.5, 0 );
+                    return ::rtl::math::round( fCost * 0.5, 0 );
                     break;
                 default:
                     return 0.0;
@@ -2862,7 +2808,7 @@ double ConvertData::Convert(
     f *= r.fConst / fConst;
 
     if( nLevFrom )
-        f *= Exp10( nLevFrom );
+        f = ::rtl::math::pow10Exp( f, nLevFrom );
 
     return f;
 }
@@ -2870,13 +2816,13 @@ double ConvertData::Convert(
 
 double ConvertData::ConvertToBase( double f, sal_Int16 n ) const
 {
-    return f / fConst * Exp10( n );
+    return ::rtl::math::pow10Exp( f / fConst, n );
 }
 
 
 double ConvertData::ConvertFromBase( double f, sal_Int16 n ) const
 {
-    return f * fConst * Exp10( -n );
+    return ::rtl::math::pow10Exp( f * fConst, -n );
 }
 
 
@@ -2888,7 +2834,7 @@ double ConvertDataLinear::Convert(
     if( Class() != r.Class() )
         THROW_IAE;
 
-//  return Round( r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo ), 13 );
+//  return ::rtl::math::round( r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo ), 13 );
     return r.ConvertFromBase( ConvertToBase( f, nLevFrom ), nLevTo );
 }
 
@@ -2896,7 +2842,7 @@ double ConvertDataLinear::Convert(
 double ConvertDataLinear::ConvertToBase( double f, sal_Int16 n ) const
 {
     if( n )
-        f *= Exp10( n );
+        f = ::rtl::math::pow10Exp( f, n );
 
     f /= fConst;
     f -= fOffs;
@@ -2911,7 +2857,7 @@ double ConvertDataLinear::ConvertFromBase( double f, sal_Int16 n ) const
     f *= fConst;
 
     if( n )
-        f *= Exp10( -n );
+        f = ::rtl::math::pow10Exp( f, -n );
 
     return f;
 }
@@ -3382,10 +3328,10 @@ double ScaAnyConverter::convertToDouble( const OUString& rString ) const throw( 
     }
     else
     {
-        int nErrorNum;
-        const sal_Unicode* pLastChar;
-        fValue = SolarMath::StringToDouble( rString.getStr(), ',', '.', nErrorNum, &pLastChar );
-        if( (nErrorNum != 0) || (*pLastChar != '\0') )
+        rtl_math_ConversionStatus eStatus;
+        sal_Int32 nEnd;
+        fValue = ::rtl::math::stringToDouble( rString, '.', ',', &eStatus, &nEnd );
+        if( (eStatus != rtl_math_ConversionStatus_Ok) || (nEnd < rString.getLength()) )
             throw lang::IllegalArgumentException();
     }
     return fValue;

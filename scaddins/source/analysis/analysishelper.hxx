@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-25 11:08:29 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1114,7 +1114,7 @@ private:
     sal_Bool                    bHasValidFormat;
 
                                 /** Converts a string to double using the number formatter. If the formatter is not
-                                    valid, SolarMath::StringToDouble() with english separators will be used.
+                                    valid, ::rtl::math::stringToDouble() with english separators will be used.
                                     @throws com::sun::star::lang::IllegalArgumentException
                                         on strings not representing any double value.
                                     @return  the converted double value. */

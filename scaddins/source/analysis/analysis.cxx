@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: dr $ $Date: 2001-10-12 09:27:13 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <cppuhelper/factory.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
-#include <tools/solmath.hxx>
+#include <rtl/math.hxx>
 #include <string.h>
 
 #include <tools/resmgr.hxx>
@@ -848,7 +848,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 
 double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE
 {
-    double fRet = SolarMath::ApproxFloor( fNum / fDenum );
+    double fRet = ::rtl::math::approxFloor( fNum / fDenum );
     RETURN_FINITE( fRet );
 }
 
@@ -858,7 +858,7 @@ double SAL_CALL AnalysisAddIn::getMround( double fNum, double fMult ) THROWDEF_R
     if( fMult == 0.0 )
         return fMult;
 
-    double fRet = fMult * SolarMath::Round( fNum / fMult );
+    double fRet = fMult * ::rtl::math::round( fNum / fMult );
     RETURN_FINITE( fRet );
 }
 
@@ -872,9 +872,9 @@ double SAL_CALL AnalysisAddIn::getSqrtpi( double fNum ) THROWDEF_RTE_IAE
 
 double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWDEF_RTE_IAE
 {
-    const SolarMathRoundingMode     eRM = SolarMathRoundUp;
-    fMin = SolarMath::Round( fMin, 0, eRM );
-    fMax = SolarMath::Round( fMax, 0, eRM );
+    const rtl_math_RoundingMode eRM = rtl_math_RoundingMode_Up;
+    fMin = ::rtl::math::round( fMin, 0, eRM );
+    fMax = ::rtl::math::round( fMax, 0, eRM );
 
     if( fMin > fMax )
         THROW_IAE;
@@ -883,7 +883,7 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) THROWD
     fMax -= fMin;
     fMax /= double( RAND_MAX );
 
-    double fRet = SolarMath::Round( fMin + fMax * double( rand() ) );
+    double fRet = ::rtl::math::round( fMin + fMax * double( rand() ) );
     RETURN_FINITE( fRet );
 }
 
