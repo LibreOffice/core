@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 09:48:14 $
+ *  last change: $Author: pb $ $Date: 2001-06-18 11:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ public:
 
     virtual XubString   GetHelpText( ULONG nHelpId, const Window* pWindow );
     void            OpenHelpAgent( SfxFrame* pFrame, sal_Int32 nHelpId );
-    String          CreateHelpURL( sal_Int32 nHelpId, const String& rModuleName );
+    String          CreateHelpURL( ULONG nHelpId, const String& rModuleName );
 };
 
 #endif // #ifndef _SFX_HELP_HXX
