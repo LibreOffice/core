@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-03-21 20:54:04 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1394,7 +1394,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "¤j¤p¼g(~S)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "Êåöáëáßá/ĞåæÜ";
-        Text[ korean ] = "´ë/¼Ò¹®ÀÚ";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ(~S)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
     };
     CheckBox BTN_REGEXP
@@ -1424,7 +1424,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö";
+        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -1455,7 +1455,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "°Ï°ì¥]§tÄæ¼ĞÃD(~C)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¹üÀ§¿¡ ¿­ ¸Ó¸®±Û Æ÷ÇÔ";
+        Text[ korean ] = "¹üÀ§¿¡ ¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
         Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1485,7 +1485,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "Áßº¹ ¾øÀ½";
+        Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
     };
@@ -1515,7 +1515,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "½Æ»s¿z¿ïµ²ªG¨ì(~R)...";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáÊÕİíÉ Åáì";
         Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí óôï";
-        Text[ korean ] = "ÇÊÅÍ°á°ú¡¡Ãâ·Â";
+        Text[ korean ] = "ÇÊÅÍ°á°ú¡¡Ãâ·Â(~R)";
         Text[ turkish ] = "Sonuçların görüntüleneceği ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -1543,7 +1543,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "«O¯d¿z¿ï±ø¥ó(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
         Text[ greek ] = "ÄéáôŞñçóç ~êñéôçñßùí ößëôñïõ";
-        Text[ korean ] = "À¯Áö";
+        Text[ korean ] = "À¯Áö(~K)";
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
     };
@@ -1765,7 +1765,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "¿z¿ï±ø¥ó¨Ó¦Û(~F)";
         Text[ arabic ] = "ãÚÇííÑ ÇáÊÕİíÉ ÊæÌÏ İí";
         Text[ greek ] = "Ôá êñéôŞñéá áíáæŞôçóçò âñßóêïíôáé óôï";
-        Text[ korean ] = "ÇÊÅÍ±âÁØÀº£®£®¿¡¡¡ÀÖÀ½";
+        Text[ korean ] = "ÇÊÅÍ±âÁØÀº£®£®¿¡¡¡ÀÖÀ½(~F)";
         Text[ turkish ] = "~Filtre ölçütlerinin bulunduğu yer";
         Text[ language_user1 ] = " ";
     };
@@ -1840,7 +1840,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
     };
     CheckBox BTN_REGEXP
@@ -1870,7 +1870,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~E)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö";
+        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~E)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -1894,14 +1894,14 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ spanish ] = "Area contiene títulos de ~columnas" ;
         Text [ english_us ] = "C~ontains column headers" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "ÇøÓò°üº¬ÁĞ±êÌâ(~H)";
+        Text[ chinese_simplified ] = "ÇøÓò°üº¬ÁĞ±êÌâ(~O)";
         Text[ russian ] = "Çàãîëîâêè ñòîëáöîâ â îáëàñòè";
         Text[ polish ] = "Obszar zawiera nag³ówki kolumn";
-        Text[ japanese ] = "”ÍˆÍ‚É—ñ‚Ì€–Ú—“‚ğŠÜ‚Ş(~H)";
-        Text[ chinese_traditional ] = "°Ï°ì¥]§tÄæ¼ĞÃD(~H)";
+        Text[ japanese ] = "”ÍˆÍ‚É—ñ‚Ì€–Ú—“‚ğŠÜ‚Ş(~O)";
+        Text[ chinese_traditional ] = "°Ï°ì¥]§tÄæ¼ĞÃD(~O)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ";
+        Text[ korean ] = "¿­ ¸Ó¸®±Û Æ÷ÇÔ(~O)";
         Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
     };
@@ -1931,7 +1931,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "Áßº¹ ¾øÀ½";
+        Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
     };
@@ -1954,14 +1954,14 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text [ spanish ] = "Escribi~r resultados en..." ;
         Text [ english_us ] = "Co~py results to" ;
         TabStop = TRUE ;
-        Text[ chinese_simplified ] = "¸´ÖÆÉ¸Ñ¡½á¹ûµ½(~R)...";
+        Text[ chinese_simplified ] = "¸´ÖÆÉ¸Ñ¡½á¹ûµ½(~P)...";
         Text[ russian ] = "Ğåçóëüòàò ôèëüòğà â";
         Text[ polish ] = "Kopiuj rezultaty filtrowania do";
-        Text[ japanese ] = "Ì¨ÙÀŒ‹‰Ê‚Ì“\\‚è•t‚¯æ(~R)";
-        Text[ chinese_traditional ] = "½Æ»s¿z¿ïµ²ªG¨ì(~R)...";
+        Text[ japanese ] = "Ì¨ÙÀŒ‹‰Ê‚Ì“\\‚è•t‚¯æ(~P)";
+        Text[ chinese_traditional ] = "½Æ»s¿z¿ïµ²ªG¨ì(~P)...";
         Text[ arabic ] = "äÓÎ äÊíÌÉ ÇáÊÕİíÉ Åáì";
         Text[ greek ] = "ÁíôéãñáöŞ áğïôåëåóìÜôùí óôï";
-        Text[ korean ] = "ÇÊÅÍ°á°ú¸¦ Ãâ·Â";
+        Text[ korean ] = "ÇÊÅÍ°á°ú¸¦ Ãâ·Â(~P)";
         Text[ turkish ] = "Sonuçların görüntüleneceği ~yer";
         Text[ language_user1 ] = " ";
     };
@@ -1989,7 +1989,7 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Text[ chinese_traditional ] = "«O¯d¿z¿ï±ø¥ó(~K)";
         Text[ arabic ] = "ÇÓÊãÑÇÑ ãÚÇííÑ ÇáİáÊÑ";
         Text[ greek ] = "ÄéáôŞñçóç ~êñéôçñßùí ößëôñïõ";
-        Text[ korean ] = "À¯Áö";
+        Text[ korean ] = "À¯Áö(~K)";
         Text[ turkish ] = "~Filtre ölçütlerini koru";
         Text[ language_user1 ] = " ";
     };
@@ -3295,7 +3295,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
         Text[ greek ] = "ĞåæÜ-Êåöáëáßá";
-        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ";
+        Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~C)";
         Text[ turkish ] = "~Büyük/Küçük harf duyarlı";
     };
     CheckBox BTN_REGEXP
@@ -3325,7 +3325,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "±`³Wªí¹F(~R)";
         Text[ arabic ] = "ÊÚÈíÑ ÇÚÊíÇÏí";
         Text[ greek ] = "ÊáíïíéêŞ ğá~ñÜóôáóç";
-        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö";
+        Text[ korean ] = "ÀÏ¹İÀû Ç¥Çö(~R)";
         Text[ turkish ] = "~Genel arama karakteri";
         Text[ language_user1 ] = " ";
     };
@@ -3355,7 +3355,7 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Text[ chinese_traditional ] = "¤£²£¥Í³Æ¥÷(~N)";
         Text[ arabic ] = "ÈÏæä äõÓÎ ØÈŞ ÇáÃÕá";
         Text[ greek ] = "¼÷é äéğëÜ óôïé÷åßá";
-        Text[ korean ] = "Áßº¹ ¾øÀ½";
+        Text[ korean ] = "Áßº¹ ¾øÀ½(~N)";
         Text[ turkish ] = "Aynı sonuçları ~ayıkla";
         Text[ language_user1 ] = " ";
     };
