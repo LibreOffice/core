@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2001-12-14 18:47:00 $
+ *  last change: $Author: os $ $Date: 2001-12-17 12:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,7 +888,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_PGRF
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Grafiken" ;
         Text [ ENGLISH ] = "~Graphics" ;
         Text [ norwegian ] = "~Graphics" ;
@@ -919,7 +919,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_PTAB
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Tabellen" ;
         Text [ ENGLISH ] = "~Tables" ;
         Text [ norwegian ] = "~Tables" ;
@@ -948,7 +948,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_PDRAW
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Zei~chnungen" ;
         Text [ ENGLISH ] = "~Drawings" ;
         Text [ norwegian ] = "~Drawings" ;
@@ -977,7 +977,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_CTRLFLD
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Kontroll~felder" ;
         Text [ ENGLISH ] = "Controls" ;
         Text [ norwegian ] = "Kontroller" ;
@@ -1006,7 +1006,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_BACKGROUND
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "H~intergrund" ;
         Text [ ENGLISH ] = "Background" ;
         Text [ dutch ] = "A~chtergrond" ;
@@ -1034,7 +1034,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_BLACK_FONT
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Sch~warz drucken" ;
         Text [ ENGLISH ] = "Print black" ;
         Text [ english_us ] = "Print blac~k" ;
@@ -1098,7 +1098,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_LEFTP
     {
         Pos = MAP_APPFONT ( 96 , 14 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Linke Seiten" ;
         Text [ ENGLISH ] = "~Left pages" ;
         Text [ norwegian ] = "~Left pages" ;
@@ -1129,7 +1129,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_RIGHTP
     {
         Pos = MAP_APPFONT ( 96 , 27 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Rechte Seiten" ;
         Text [ ENGLISH ] = "~Right pages" ;
         Text [ norwegian ] = "~Right pages" ;
@@ -1158,7 +1158,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_REVERSE
     {
         Pos = MAP_APPFONT ( 96 , 40 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "~Umgekehrt" ;
         Text [ ENGLISH ] = "Re~versed" ;
         Text [ norwegian ] = "Re~versed" ;
@@ -1187,7 +1187,7 @@ TabPage TP_OPTPRINT_PAGE
     CheckBox CB_PROSPECT
     {
         Pos = MAP_APPFONT ( 96 , 53 ) ;
-        Size = MAP_APPFONT ( 66 , 10 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
         Text = "Pr~ospekt" ;
         Text [ ENGLISH ] = "Pr~ospectus" ;
         Text [ dutch ] = "~Prospectus" ;
@@ -1215,7 +1215,7 @@ TabPage TP_OPTPRINT_PAGE
     RadioButton RB_NO
     {
         Pos = MAP_APPFONT ( 180 , 14 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Keine" ;
         Text [ ENGLISH ] = "~None" ;
         Text [ norwegian ] = "~Ingen " ;
@@ -1246,7 +1246,7 @@ TabPage TP_OPTPRINT_PAGE
     RadioButton RB_ONLY
     {
         Pos = MAP_APPFONT ( 180 , 27 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Nur Notizen" ;
         Text [ ENGLISH ] = "~Notes only" ;
         Text [ norwegian ] = "~Notes only" ;
@@ -1275,7 +1275,7 @@ TabPage TP_OPTPRINT_PAGE
     RadioButton RB_END
     {
         Pos = MAP_APPFONT ( 180 , 40 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "Dokument~ende" ;
         Text [ ENGLISH ] = "End of ~document" ;
         Text [ norwegian ] = "End of ~document" ;
@@ -1304,7 +1304,7 @@ TabPage TP_OPTPRINT_PAGE
     RadioButton RB_PAGEEND
     {
         Pos = MAP_APPFONT ( 180 , 53 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Size = MAP_APPFONT ( 74 , 10 ) ;
         Text = "~Seitenende" ;
         Text [ ENGLISH ] = "End of ~page" ;
         Text [ norwegian ] = "End of ~page" ;
