@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:38:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:07:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,9 @@ sal_Char __READONLY_DATA sXML_np__math[] = "_math";
 sal_Char __READONLY_DATA sXML_np__script[] = "_script";
 sal_Char __READONLY_DATA sXML_np__config[] = "_config";
 sal_Char __READONLY_DATA sXML_np__db[] = "_db";
+sal_Char __READONLY_DATA sXML_np__xforms[] = "_xforms";
+sal_Char __READONLY_DATA sXML_np__xsd[] = "_xsd";
+sal_Char __READONLY_DATA sXML_np__xsi[] = "_xsi";
 
 sal_Char __READONLY_DATA sXML_np__fo_old[] = "__fo";
 sal_Char __READONLY_DATA sXML_np__xlink_old[] = "__xlink";
@@ -358,6 +361,15 @@ void SvXMLImport::_InitCtor()
         pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__config) ),
                             GetXMLToken(XML_N_CONFIG),
                             XML_NAMESPACE_CONFIG );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xforms) ),
+                            GetXMLToken(XML_N_XFORMS_1_0),
+                            XML_NAMESPACE_XFORMS );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsd) ),
+                            GetXMLToken(XML_N_XSD),
+                            XML_NAMESPACE_XSD );
+        pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__xsi) ),
+                            GetXMLToken(XML_N_XSI),
+                            XML_NAMESPACE_XFORMS );
         pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__ooow ) ), GetXMLToken(XML_N_OOOW), XML_NAMESPACE_OOOW );
         pNamespaceMap->Add( OUString( RTL_CONSTASCII_USTRINGPARAM ( sXML_np__oooc ) ), GetXMLToken(XML_N_OOOC), XML_NAMESPACE_OOOC );
     }
@@ -1639,6 +1651,65 @@ void SvXMLImport::SetError(
     SetError( nId, rMsgParams, sEmpty, NULL );
 }
 
+void SvXMLImport::SetError(
+    sal_Int32 nId)
+{
+    Sequence<OUString> aSeq(0);
+    SetError( nId, aSeq );
+}
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const OUString& rMsg1)
+{
+    Sequence<OUString> aSeq(1);
+    OUString* pSeq = aSeq.getArray();
+    pSeq[0] = rMsg1;
+    SetError( nId, aSeq );
+}
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const OUString& rMsg1,
+    const OUString& rMsg2)
+{
+    Sequence<OUString> aSeq(2);
+    OUString* pSeq = aSeq.getArray();
+    pSeq[0] = rMsg1;
+    pSeq[1] = rMsg2;
+    SetError( nId, aSeq );
+}
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const OUString& rMsg1,
+    const OUString& rMsg2,
+    const OUString& rMsg3)
+{
+    Sequence<OUString> aSeq(3);
+    OUString* pSeq = aSeq.getArray();
+    pSeq[0] = rMsg1;
+    pSeq[1] = rMsg2;
+    pSeq[2] = rMsg3;
+    SetError( nId, aSeq );
+}
+
+void SvXMLImport::SetError(
+    sal_Int32 nId,
+    const OUString& rMsg1,
+    const OUString& rMsg2,
+    const OUString& rMsg3,
+    const OUString& rMsg4)
+{
+    Sequence<OUString> aSeq(4);
+    OUString* pSeq = aSeq.getArray();
+    pSeq[0] = rMsg1;
+    pSeq[1] = rMsg2;
+    pSeq[2] = rMsg3;
+    pSeq[3] = rMsg4;
+    SetError( nId, aSeq );
+}
+
 XMLErrors* SvXMLImport::GetErrors()
 {
     return pXMLErrors;
@@ -1665,10 +1736,15 @@ void SvXMLImport::DisposingModel()
     return mxServiceFactory;
 }
 
+
 // --> OD 2004-08-10 #i28749#
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return pImpl->mbShapePositionInHoriL2R;
 }
 // <--
-// eof
+
+void SvXMLImport::initXForms()
+{
+    // dummy method; to be implemented by derived classes supporting XForms
+}
