@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.3 $
+#*  $Revision: 1.4 $
 #*
-#*  last change: $Author: hr $ $Date: 2003-03-26 10:54:34 $
+#*  last change: $Author: vg $ $Date: 2003-04-15 14:25:52 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -56,11 +56,12 @@ CDEFS+=-Zm300
 # --- Files --------------------------------------------------------
 # Japanese dictionary
 SHL1TARGET=dict_ja
-SHL1IMPLIB= 	i$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=	$(SHL1TARGET)
-DEFLIB1NAME=	$(SHL1TARGET)
+SHL1IMPLIB=i$(SHL1TARGET)
+
+SHL1VERSIONMAP=$(TARGET).map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
+
 SHL1OBJS= \
     $(SLO)$/dict_ja.obj
 
@@ -69,11 +70,12 @@ LIB1OBJFILES=$(SHL1OBJS)
 
 # Chinese dictionary
 SHL2TARGET=dict_zh
-SHL2IMPLIB= 	i$(SHL2TARGET)
-DEF2DEPN=	$(MISC)$/$(SHL2TARGET).flt
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-DEF2NAME=	$(SHL2TARGET)
-DEFLIB2NAME=	$(SHL2TARGET)
+SHL2IMPLIB=i$(SHL2TARGET)
+
+SHL2VERSIONMAP=$(TARGET).map
+SHL2DEF=$(MISC)$/$(SHL2TARGET).def
+DEF2NAME=$(SHL2TARGET)
+
 SHL2OBJS= \
     $(SLO)$/dict_zh.obj
 
@@ -85,13 +87,3 @@ LIB2OBJFILES=$(SHL2OBJS)
 
 $(MISC)$/dict_%.cxx : %.dic $(BIN)$/gendict
     +$(BIN)$/gendict $< $@
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
-
-$(MISC)$/$(SHL2TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo Provider>> $@
