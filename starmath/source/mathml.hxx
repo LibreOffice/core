@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@ class SmXMLWrapper
 {
 public:
     SmXMLWrapper(com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rRef) : rModel(rRef) {};
-    SmNode *SmXMLWrapper::Import(SfxMedium &rMedium);
-    sal_Bool Export(SfxMedium &rMedium,SmNode *pTree);
+    sal_Bool Import(SfxMedium &rMedium);
+    sal_Bool Export(SfxMedium &rMedium);
 private:
     com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel;
 
@@ -89,14 +89,27 @@ private:
 class SmXMLImport : public SvXMLImport
 {
 public:
+    SmXMLImport() :
+    pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
+        pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
+        pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
+        pOperatorAttrTokenMap(0),pColorTokenMap(0),bSuccess(sal_False)
+        {}
     SmXMLImport(
         com::sun::star::uno::Reference<com::sun::star::frame::XModel> &rModel,
         const rtl::OUString &rFileName) : SvXMLImport(rModel) ,
         pMathElemTokenMap(0), pPresLayoutElemTokenMap(0), pPresElemTokenMap(0),
         pPresScriptEmptyElemTokenMap(0), pPresTableElemTokenMap(0),
         pPresLayoutAttrTokenMap(0),pFencedAttrTokenMap(0),
-        pOperatorAttrTokenMap(0),pColorTokenMap(0)
+        pOperatorAttrTokenMap(0),pColorTokenMap(0),bSuccess(sal_False)
         {}
+    void SAL_CALL endDocument(void)
+        throw( ::com::sun::star::xml::sax::SAXException,
+        ::com::sun::star::uno::RuntimeException );
+    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+        sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId()
+        throw();
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference <
@@ -233,6 +246,7 @@ public:
     virtual ~SmXMLImport();
     SmNodeStack & GetNodeStack() {return aNodeStack;}
     SmNode *GetTree() { return aNodeStack.Pop();}
+    sal_Bool GetSuccess() { return bSuccess; }
 private:
         SvXMLTokenMap *pMathElemTokenMap;
         SvXMLTokenMap *pPresLayoutElemTokenMap;
@@ -245,6 +259,7 @@ private:
         SvXMLTokenMap *pColorTokenMap;
 
         SmNodeStack aNodeStack;
+        sal_Bool bSuccess;
 };
 
 enum SmXMLMathElemTokenMap
@@ -322,16 +337,24 @@ enum SmXMLOperatorAttrTokenMap
 class SmXMLExport : public SvXMLExport
 {
 public:
+    SmXMLExport();
     SmXMLExport(const SmNode *pIn,const rtl::OUString &rFileName,
         com::sun::star::uno::Reference<
         com::sun::star::xml::sax::XDocumentHandler> &rHandler) :
-        SvXMLExport(rFileName,rHandler), pTree(pIn) {}
+        SvXMLExport(rFileName,rHandler), pTree(pIn), bSuccess(sal_False) {}
     virtual ~SmXMLExport() {};
 
     void _ExportAutoStyles() {}
     void _ExportMasterStyles() {}
     void _ExportContent();
     sal_uInt32 exportDoc(const sal_Char *pClass);
+
+    sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+        sal_Int8 >& rId ) throw(::com::sun::star::uno::RuntimeException);
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId()
+        throw();
+
+    sal_Bool GetSuccess() {return bSuccess;}
 
 protected:
     void ExportNodes(const SmNode *pIn,int nLevel);
@@ -353,5 +376,6 @@ protected:
     void ExportMatrix(const SmNode *pNode, int nLevel);
 private:
     const SmNode *pTree;
+    sal_Bool bSuccess;
 };
 #endif

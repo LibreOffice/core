@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:24 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ public:
     void            Parse();
     SmParser &      GetParser() { return aInterpreter; }
     const SmNode *  GetFormulaTree() const  { return pTree; }
+    void SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
 
     void        Draw(OutputDevice &rDev, Point &rPosition);
     Size        GetSize();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cmc $ $Date: 2001-01-18 14:57:19 $
+ *  last change: $Author: cmc $ $Date: 2001-02-02 10:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -629,26 +629,15 @@ void SmDocShell::Convert40To50Txt()
 BOOL SmDocShell::ConvertFrom(SfxMedium &rMedium)
 {
     BOOL     bSuccess = FALSE;
-    if (rMedium.GetFilter()->GetFilterName().EqualsAscii(
-                    "MathML XML (Math)" ))
+    if (rMedium.GetFilter()->GetFilterName().EqualsAscii("MathML XML (Math)"))
     {
-        SmXMLWrapper aEquation(GetModel());
-        DBG_ASSERT(!pTree,"pTree not NULL");
-        if (pTree)
-            delete pTree;
-        pTree = aEquation.Import(rMedium);
         if (pTree)
         {
-            pTree->CreateTextFromNode(aText);
-            aText.EraseTrailingChars();
-            while((aText.GetChar(0) == '{') &&
-                (aText.GetChar(aText.Len()-1) == '}'))
-            {
-                aText.Erase(0,1);
-                aText.Erase(aText.Len()-1,1);
-            }
-            bSuccess = TRUE;
+            delete pTree;
+            pTree = 0;
         }
+        SmXMLWrapper aEquation(GetModel());
+        bSuccess = aEquation.Import(rMedium);
     }
     else if( rMedium.IsStorage() && rMedium.GetStorage()->IsStream(
         C2S( "Equation Native" )))
@@ -834,7 +823,7 @@ BOOL SmDocShell::ConvertTo( SfxMedium &rMedium )
             "MathML XML (Math)" ))
         {
             SmXMLWrapper aEquation(GetModel());
-            bRet = aEquation.Export(rMedium,pTree);
+            bRet = aEquation.Export(rMedium);
         }
         else if( pFlt->GetFilterName().EqualsAscii("MathType 3.x"))
             bRet = WriteAsMathType3( rMedium );
