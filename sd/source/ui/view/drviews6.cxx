@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:24:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
 
     CheckLineTo (rReq);
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
 
     if ( rMarkList.GetMarkCount() == 1 && rReq.GetArgs() &&
          !pDrView->IsPresObjSelected() )
@@ -225,7 +225,7 @@ void DrawViewShell::ExecFormText(SfxRequest& rReq)
 
 void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
 {
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     const SdrObject* pObj = NULL;
     SvxFontWorkDialog* pDlg = NULL;
 
@@ -357,7 +357,7 @@ void DrawViewShell::GetAnimationWinState( SfxItemSet& rSet )
     // Hier koennten Buttons etc. disabled werden
     UINT16 nValue;
 
-    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount == 0 )
@@ -479,7 +479,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
         case ( SID_BMPMASK_EXEC ) :
         {
-            SdrGrafObj* pObj = (SdrGrafObj*) pDrView->GetMarkList().GetMark(0)->GetObj();
+            SdrGrafObj* pObj = (SdrGrafObj*) pDrView->GetMarkedObjectList().GetMark(0)->GetObj();
 
             if ( pObj && !pDrView->IsTextEdit() )
             {
@@ -516,7 +516,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
                                              SvxBmpMaskChildWindow::GetChildWindowId() )->GetWindow() )->
                                              Mask( pNewObj->GetGraphic() ) );
 
-                        String aStr( pDrView->GetMarkDescription() );
+                        String aStr( pDrView->GetDescriptionOfMarkedObjects() );
                         aStr += (sal_Unicode)( ' ' ), aStr += String( SdResId( STR_EYEDROPPER ) );
 
                         pDrView->BegUndo( aStr );
@@ -541,7 +541,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
-    const SdrMarkList&  rMarkList = pDrView->GetMarkList();
+    const SdrMarkList&  rMarkList = pDrView->GetMarkedObjectList();
     const SdrObject*    pObj = NULL;
     USHORT              nId = SvxBmpMaskChildWindow::GetChildWindowId();
     SvxBmpMask*         pDlg = NULL;
