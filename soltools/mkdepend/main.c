@@ -27,9 +27,27 @@ in this Software without prior written authorization from the X Consortium.
 
 */
 
-#if defined(FREEBSD)
+#if defined(FREEBSD) || defined(MACOSX)
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
+
+#ifdef _MSC_VER     /* Define ssize_t */
+
+#if !defined(_W64)
+#if !defined(__midl) && (defined(_X86_) || defined(_M_IX86)) && _MSC_VER >= 1300
+#define _W64 __w64
+#else
+#define _W64
+#endif
+#endif
+
+#ifdef  _WIN64
+typedef __int64    ssize_t;
+#else
+typedef _W64 int   ssize_t;
+#endif
+
 #endif
 
 #include "def.h"
@@ -432,28 +450,44 @@ struct filepointer *getfile(file)
     register int    fd;
     struct filepointer  *content;
     struct stat st;
-    size_t size_backup;
+    off_t       size_backup;
+    ssize_t     bytes_read;
+    size_t      malloc_size;
 
     content = (struct filepointer *)malloc(sizeof(struct filepointer));
     if ((fd = open(file, O_RDONLY)) < 0) {
-        warning("cannot open \"%s\"\n", file);
+        warning("makedepend:  Cannot open file \"%s\"\n", file);
         content->f_p = content->f_base = content->f_end = (char *)malloc(1);
         *content->f_p = '\0';
         return(content);
     }
     fstat(fd, &st);
-    content->f_base = (char *)malloc(st.st_size+1);
-    if (content->f_base == NULL)
-        fatalerr("cannot allocate mem\n");
+
     size_backup = st.st_size;
-    if ((st.st_size = read(fd, content->f_base, size_backup)) < 0)
+    malloc_size = size_backup;
+    /* Since off_t is larger than size_t, need to test for
+     * truncation.
+     */
+    if ( malloc_size != size_backup )
+    {
+        close( fd );
+        warning("makedepend:  File \"%s\" size larger than can fit in size_t.  Cannot allocate memory for contents.\n", file);
+        content->f_p = content->f_base = content->f_end = (char *)malloc(1);
+        *content->f_p = '\0';
+        return(content);
+    }
+
+    content->f_base = (char *)malloc(malloc_size+1);
+    if (content->f_base == NULL)
+        fatalerr("makedepend:  Cannot allocate memory to process file \"%s\"\n", file);
+    if ((bytes_read = read(fd, content->f_base, malloc_size)) < 0)
         if ( st.st_mode & S_IFREG )
-            fatalerr("failed to read %s\n", file);
+            fatalerr("makedepend:  Failed to read file \"%s\"\n", file);
 
     close(fd);
-    content->f_len = st.st_size+1;
+    content->f_len = bytes_read+1;
     content->f_p = content->f_base;
-    content->f_end = content->f_base + st.st_size;
+    content->f_end = content->f_base + bytes_read;
     *content->f_end = '\0';
     content->f_line = 0;
     return(content);
