@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2000-12-13 12:43:43 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -698,12 +698,12 @@ void ScDocument::UpdateChartListenerCollection()
                                     if (bEnabled)
                                         aIPObj->EnableSetModified(TRUE);
 #ifndef PRODUCT
-                                    static BOOL bShown74046 = 0;
-                                    if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-                                    {
-                                        bShown74046 = 1;
-                                        DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
-                                    }
+//                                  static BOOL bShown74046 = 0;
+//                                  if ( !bShown74046 && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
+//                                  {
+//                                      bShown74046 = 1;
+//                                      DBG_ERRORFILE( "on incompatible file format save number formatter standard precision in chart" );
+//                                  }
 #endif
 #endif
                                 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,12 +989,12 @@ BOOL ScDocument::Load( SvStream& rStream, ScProgress* pProgress )
 // hier einmal eingespart werden kann und somit nicht mehr alle Charts
 // angefasst werden muessen. Die ChartListenerCollection muss dann zum Master
 // der Referenzen werden.
-        static BOOL bShown = 0;
-        if ( !bShown && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-        {
-            bShown = 1;
-            DBG_ERRORFILE( "bei inkompatiblem FileFormat ChartListenerCollection speichern!" );
-        }
+//      static BOOL bShown = 0;
+//      if ( !bShown && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
+//      {
+//          bShown = 1;
+//          DBG_ERRORFILE( "bei inkompatiblem FileFormat ChartListenerCollection speichern!" );
+//      }
 #endif
         UpdateChartListenerCollection();
         if (pDrawLayer)

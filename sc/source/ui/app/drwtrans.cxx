@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-08 15:58:43 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,11 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 SdrModel* pDrawModel = (SdrModel*)pUserObject;
 
                 pDrawModel->SetStreamingSdrModel(TRUE);
-                rxOStm->SetVersion(SOFFICE_FILEFORMAT_NOW);
+
+                //  SdrModel stream operator doesn't support XML
+                //! call XML export here!
+                rxOStm->SetVersion(SOFFICE_FILEFORMAT_50);
+
                 rxOStm->SetBufferSize( 0xff00 );
                 pDrawModel->PreSave();
                 pDrawModel->GetItemPool().SetFileFormatVersion( (USHORT)rxOStm->GetVersion() );

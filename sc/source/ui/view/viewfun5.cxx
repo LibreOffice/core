@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-29 10:21:10 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,11 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId, SvDataObject* pObject,
                                         aPath, NULL, GetViewData()->GetDocShell() );
                 pModel->GetItemPool().FreezeIdRanges();
                 aStrm->Seek(0);
-                aStrm->SetVersion(SOFFICE_FILEFORMAT_NOW);
+
+                //  SdrModel stream operator doesn't support XML
+                //! call XML export here!
+                aStrm->SetVersion(SOFFICE_FILEFORMAT_50);
+
                 pModel->SetStreamingSdrModel(TRUE);
                 pModel->GetItemPool().Load(*aStrm);
                 *aStrm >> *pModel;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-09 14:24:08 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,12 +764,12 @@ ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
         BYTE cData;
         rStream >> cData;
 #ifndef PRODUCT
-        static BOOL bShown = 0;
-        if ( !bShown && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
-        {
-            bShown = 1;
-            DBG_ERRORFILE( "bei inkompatiblem FileFormat den FormatIndex umheben!" );
-        }
+//      static BOOL bShown = 0;
+//      if ( !bShown && SOFFICE_FILEFORMAT_NOW > SOFFICE_FILEFORMAT_50 )
+//      {
+//          bShown = 1;
+//          DBG_ERRORFILE( "bei inkompatiblem FileFormat den FormatIndex umheben!" );
+//      }
 #endif
         if( cData & 0x0F )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-03 19:23:10 $
+ *  last change: $Author: nn $ $Date: 2001-02-09 18:03:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ public:
                                String * pAppName,
                                String * pFullTypeName,
                                String * pShortTypeName,
-                               long nFileFormat = SOFFICE_FILEFORMAT_NOW ) const;
+                               long nFileFormat = SOFFICE_FILEFORMAT_CURRENT ) const;
 
     virtual BOOL    InitNew( SvStorage * );
     virtual BOOL    Load( SvStorage * );
