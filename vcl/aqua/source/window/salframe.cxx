@@ -2,15 +2,15 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-22 02:43:50 $
+ *  last change: $Author: pluby $ $Date: 2000-11-22 02:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
  *
- *         - GNU Lesser General Public License Version 2.1
- *         - Sun Industry Standards Source License Version 1.1
+ *           - GNU Lesser General Public License Version 2.1
+ *           - Sun Industry Standards Source License Version 1.1
  *
  *  Sun Microsystems Inc., October, 2000
  *
@@ -337,10 +337,10 @@ void SalFrame::Show( BOOL bVisible )
             pixelColor.blue  = pixelYCoor + pixelXCoor + pixelColor.blue;
 
             VCLGraphics_DrawColorPixel ( hView,
-                                         pixelXCoor,
-                                         pixelYCoor,
-                                         &pixelColor
-                                       );
+                                           pixelXCoor,
+                                           pixelYCoor,
+                                           &pixelColor
+                                         );
         } // for
     } // for
 } // SalFrame::Show
@@ -361,7 +361,7 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 void SalFrame::SetClientSize( long nWidth, long nHeight )
 {
-  // VCLWindow_SetSize( maFrameData.mhWnd, nWidth, nHeight );
+    // VCLWindow_SetSize( maFrameData.mhWnd, nWidth, nHeight );
 }
 
 // -----------------------------------------------------------------------
@@ -369,9 +369,9 @@ void SalFrame::SetClientSize( long nWidth, long nHeight )
 void SalFrame::GetClientSize( long& rWidth, long& rHeight )
 {
 
-  // Copied from Windows version: not sure if it is correct for Aqua
-  // rWidth  = maFrameData.mnWidth;
-  // rHeight = maFrameData.mnHeight;
+    // Copied from Windows version: not sure if it is correct for Aqua
+    // rWidth  = maFrameData.mnWidth;
+    // rHeight = maFrameData.mnHeight;
 
 }
 
