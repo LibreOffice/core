@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:40:35 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,9 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             bAlter = sal_True;
             alterColumns();
         }
+        Reference<XFlushable> xFlush(m_xTable,UNO_QUERY);
+        if(xFlush.is())
+            xFlush->flush();
         reSyncRows();
     }
     catch(SQLContext& e)
@@ -837,7 +840,7 @@ void OTableController::losingConnection( )
     Reference< XComponent >  xComponent(m_xTable, UNO_QUERY);
     if (xComponent.is())
     {
-        Reference<XEventListener> xEvtL( static_cast<::cppu::OWeakObject*>(this), UNO_QUERY);
+        Reference<XEventListener> xEvtL( static_cast< ::cppu::OWeakObject*>(this), UNO_QUERY);
         xComponent->removeEventListener(xEvtL);
     }
     stopTableListening();
@@ -922,12 +925,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_
                 {
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                    {
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                            xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                            xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-                    }
+                        dbaui::setColumnUiProperties(xColumn,pField);
                 }
                 else
                 {
@@ -1039,8 +1037,8 @@ void OTableController::loadData()
             xColumn->getPropertyValue(PROPERTY_PRECISION)       >>= nPrecision;
 
 
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                xColumn->getPropertyValue(PROPERTY_DESCRIPTION) >>= sDescription;
+            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+                xColumn->getPropertyValue(PROPERTY_HELPTEXT)    >>= sDescription;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
                 xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE)>>= sDefaultValue;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
@@ -1286,8 +1284,8 @@ void OTableController::alterColumns()
             xColumn->getPropertyValue(PROPERTY_ISNULLABLE)      >>= nNullable;
             bAutoIncrement = ::cppu::any2bool(xColumn->getPropertyValue(PROPERTY_ISAUTOINCREMENT));
             //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
-            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                xColumn->getPropertyValue(PROPERTY_DESCRIPTION) >>= sDescription;
+            if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+                xColumn->getPropertyValue(PROPERTY_HELPTEXT) >>= sDescription;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
                 xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sDefaultValue;
             if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
@@ -1301,7 +1299,6 @@ void OTableController::alterColumns()
                 nScale != pField->GetScale()                ||
                 nNullable != pField->GetIsNullable()        ||
                 bAutoIncrement != pField->IsAutoIncrement() ||
-                sDescription != pField->GetDescription()    ||
                 sDefaultValue != pField->GetDefaultValue()) &&
                 xColumnFactory.is())
             {
@@ -1354,10 +1351,15 @@ void OTableController::alterColumns()
                 if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
                     xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             }
-            if(nAlignment != (sal_Int32)pField->GetHorJustify())
+            if(nAlignment != dbaui::mapTextAllign(pField->GetHorJustify()))
             {
                 if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                    xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(nAlignment));
+                    xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
+            }
+            if(sDescription != pField->GetDescription())
+            {
+                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+                    xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetDescription()));
             }
         }
         else if(xColumnFactory.is() && xAlter.is() && nPos < nColumnCount)
@@ -1373,12 +1375,7 @@ void OTableController::alterColumns()
                     aColumns[pField->GetName()] = sal_True;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                    {
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                            xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                            xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-                    }
+                        dbaui::setColumnUiProperties(xColumn,pField);
                 }
                 else
                 {
@@ -1451,12 +1448,7 @@ void OTableController::alterColumns()
                     aColumns[pField->GetName()] = sal_True;
                     xColumns->getByName(pField->GetName()) >>= xColumn;
                     if(xColumn.is())
-                    {
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                            xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-                        if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                            xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-                    }
+                        dbaui::setColumnUiProperties(xColumn,pField);
                 }
                 else
                 {

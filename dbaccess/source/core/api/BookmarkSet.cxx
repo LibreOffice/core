@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:26 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                 case DataType::NUMERIC:
                     _xParameter->updateString(nPos,_rValue);
                     break;
+                case DataType::BIGINT:
+                    _xParameter->updateLong(nPos,_rValue);
+                    break;
                 case DataType::BIT:
                     _xParameter->updateBoolean(nPos,_rValue);
                     break;
@@ -209,6 +212,9 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/07/24 13:25:26  oj
+    #89430# move ORowSetValue into dbtools
+
     Revision 1.5  2001/05/03 07:15:56  oj
     #86526# fetch decimal and numeric as string
 

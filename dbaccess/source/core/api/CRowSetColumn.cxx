@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetColumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-24 06:25:57 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,12 +119,13 @@ Any SAL_CALL ORowSetColumn::queryInterface( const Type & _rType ) throw (Runtime
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* ORowSetColumn::createArrayHelper( ) const
 {
-    BEGIN_PROPERTY_HELPER(27)
+    BEGIN_PROPERTY_HELPER(28)
         DECL_PROP1(ALIGN,                   sal_Int32,          MAYBEVOID);
         DECL_PROP1(CATALOGNAME,             ::rtl::OUString,    READONLY);
         DECL_PROP0_IFACE(CONTROLMODEL,      XPropertySet                );
         DECL_PROP1(DISPLAYSIZE,             sal_Int32,          READONLY);
         DECL_PROP1(NUMBERFORMAT,            sal_Int32,          MAYBEVOID);
+        DECL_PROP0(HELPTEXT,                ::rtl::OUString     );
         DECL_PROP0_BOOL(HIDDEN                                          );
         DECL_PROP1_BOOL(ISAUTOINCREMENT,                        READONLY);
         DECL_PROP1_BOOL(ISCASESENSITIVE,                        READONLY);
@@ -167,6 +168,7 @@ void SAL_CALL ORowSetColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandl
         case PROPERTY_ID_WIDTH:
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
+        case PROPERTY_ID_HELPTEXT:
             OColumnSettings::getFastPropertyValue( rValue, nHandle );
             break;
         case PROPERTY_ID_VALUE:
@@ -188,6 +190,7 @@ void SAL_CALL ORowSetColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,
         case PROPERTY_ID_WIDTH:
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
+        case PROPERTY_ID_HELPTEXT:
             OColumnSettings::setFastPropertyValue_NoBroadcast( nHandle, rValue );
             break;
         case PROPERTY_ID_VALUE:
@@ -211,6 +214,7 @@ sal_Bool SAL_CALL ORowSetColumn::convertFastPropertyValue( Any & rConvertedValue
         case PROPERTY_ID_WIDTH:
         case PROPERTY_ID_HIDDEN:
         case PROPERTY_ID_CONTROLMODEL:
+        case PROPERTY_ID_HELPTEXT:
             bModified = OColumnSettings::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
             break;
         case PROPERTY_ID_VALUE:

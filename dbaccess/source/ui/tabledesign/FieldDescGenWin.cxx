@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescGenWin.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:55:35 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@ OFieldDescGenWin::~OFieldDescGenWin()
 {
     DBG_DTOR(OFieldDescGenWin,NULL);
     delete m_pFieldControl;
+    m_pFieldControl = NULL;
 }
 //------------------------------------------------------------------------------
 void OFieldDescGenWin::Init()
@@ -173,7 +174,8 @@ void OFieldDescGenWin::GetFocus()
     //////////////////////////////////////////////////////////////////////
     // Setzt den Focus auf das zuletzt aktive Control
     TabPage::GetFocus();
-    m_pFieldControl->GetFocus();
+    if(m_pFieldControl)
+        m_pFieldControl->GetFocus();
 
 }
 //------------------------------------------------------------------------------

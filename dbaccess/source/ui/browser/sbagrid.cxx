@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:15:52 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,9 @@
 #endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
+#endif
+#ifndef DBAUI_TOOLS_HXX
+#include "UITools.hxx"
 #endif
 
 using namespace ::com::sun::star::ui::dialogs;
@@ -1293,21 +1296,7 @@ void SbaGridControl::SetColAttrs(sal_uInt16 nColId)
                 // horizontal justify
                 SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, sal_True);
 
-                SvxCellHorJustify   eHorJustify = (SvxCellHorJustify)pHorJustify->GetValue();
-                Any aTextAlign;
-                switch (eHorJustify)
-                {
-                    case SVX_HOR_JUSTIFY_LEFT:
-                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::LEFT;
-                        break;
-                    case SVX_HOR_JUSTIFY_CENTER:
-                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::CENTER;
-                        break;
-                    case SVX_HOR_JUSTIFY_RIGHT:
-                        aTextAlign <<= (sal_Int16)::com::sun::star::awt::TextAlign::RIGHT;
-                        break;
-                }
-                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, aTextAlign);
+                xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(dbaui::mapTextAllign((SvxCellHorJustify)pHorJustify->GetValue())));
 
                 // format key
                 if (nFlags & TP_ATTR_NUMBER)

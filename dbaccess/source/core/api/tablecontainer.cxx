@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 13:20:46 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,8 +620,8 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
                         {
                             ::rtl::OUString sTypeName2Cmp = xRow->getString(1);
                             sal_Int32 nType = xRow->getShort(2);
-                            ::rtl::OUString sLiteralPre = xRow->getString(4);
-                            if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sLiteralPre.getLength() && !xRow->wasNull())
+                            ::rtl::OUString sCreateParams = xRow->getString(6);
+                            if( sTypeName.equalsIgnoreAsciiCase(sTypeName2Cmp) && nType == nDataType && sCreateParams.getLength() && !xRow->wasNull())
                             {
                                 bUseLiteral = sal_True;
                                 break;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 09:11:36 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,10 @@ OFieldDescControl::~OFieldDescControl()
 
     delete m_pVertScroll;
     delete m_pHorzScroll;
+
+    m_pVertScroll    = NULL;
+    m_pHorzScroll    = NULL;
+    pLastFocusWindow = NULL;
 
     //////////////////////////////////////////////////////////////////////
     // Childs zerstoeren

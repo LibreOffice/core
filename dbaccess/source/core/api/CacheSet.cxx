@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-24 13:25:25 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:59:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,6 +477,9 @@ void OCacheSet::setParameter(sal_Int32 nPos,Reference< XParameters > _xParameter
             case DataType::NUMERIC:
                 _xParameter->setString(nPos,_rValue);
                 break;
+            case DataType::BIGINT:
+                _xParameter->setLong(nPos,_rValue);
+                break;
             case DataType::BIT:
                 _xParameter->setBoolean(nPos,_rValue);
                 break;
@@ -550,6 +553,9 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
         case DataType::DECIMAL:
         case DataType::NUMERIC:
             (*aIter) = getString(i);
+            break;
+        case DataType::BIGINT:
+            (*aIter) = getLong(i);
             break;
         case DataType::FLOAT:
             (*aIter) = getFloat(i);

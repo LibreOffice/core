@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-19 13:20:12 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,9 +759,10 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 // ... the 'comment' property as helptext (will usually be shown as header-tooltip)
 
                 Any aDescription; aDescription <<= ::rtl::OUString();
-                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-                    aDescription <<= comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
-                xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
+                if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+                    aDescription <<= comphelper::getString(xColumn->getPropertyValue(PROPERTY_HELPTEXT));
+
+                xCurrentCol->setPropertyValue(PROPERTY_HELPTEXT, aDescription);
 
                 xColContainer->insertByName(*pBegin, makeAny(xCurrentCol));
             }
@@ -776,13 +777,6 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
     return sal_True;
 }
-
-//------------------------------------------------------------------------------
-ToolBox* SbaTableQueryBrowser::CreateToolBox(Window* _pParent)
-{
-    return new ToolBox( _pParent, ModuleRes( RID_BRW_QRY_TOOLBOX ) );
-}
-
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> getColumnHelper(SvLBoxEntry* _pCurrentlyDisplayed,const Reference<XPropertySet>& _rxSource)
 {
@@ -1388,12 +1382,6 @@ void SbaTableQueryBrowser::ColumnChanged()
     }
     SbaXDataBrowserController::ColumnChanged();
 }
-
-// -------------------------------------------------------------------------
-String SbaTableQueryBrowser::getURL() const
-{
-    return String();
-}
 // -----------------------------------------------------------------------
 void SbaTableQueryBrowser::InvalidateFeature(sal_uInt16 nId, const Reference< ::com::sun::star::frame::XStatusListener > & xListener)
 {
@@ -1450,28 +1438,6 @@ void SbaTableQueryBrowser::LoadFinished(sal_Bool _bWasSynch)
     while (aIter.hasMoreElements())
         static_cast< XSelectionChangeListener* >(aIter.next())->selectionChanged(aEvt);
 }
-
-//------------------------------------------------------------------------------
-void SbaTableQueryBrowser::AddSupportedFeatures()
-{
-    SbaXDataBrowserController::AddSupportedFeatures();
-
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:Title")]               = ID_BROWSER_TITLE;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/FormLetter")]    = ID_BROWSER_FORMLETTER;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertColumns")] = ID_BROWSER_INSERTCOLUMNS;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/InsertContent")] = ID_BROWSER_INSERTCONTENT;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/ToggleExplore")] = ID_BROWSER_EXPLORER;
-    m_aSupportedFeatures[ ::rtl::OUString::createFromAscii(".uno:DataSourceBrowser/DocumentDataSource")] = ID_BROWSER_DOCUMENT_DATASOURCE;
-
-            // TODO reenable our own code if we really have a handling for the formslots
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToFirst"),        SID_FM_RECORD_FIRST     ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToLast"),     SID_FM_RECORD_LAST      ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNew"),      SID_FM_RECORD_NEW       ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToNext"),     SID_FM_RECORD_NEXT      ),
-//  ControllerFeature( ::rtl::OUString::createFromAscii("private:FormSlot/moveToPrev"),     SID_FM_RECORD_PREV      )
-
-}
-
 //------------------------------------------------------------------------------
 FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId)
 {
@@ -2115,41 +2081,6 @@ sal_Bool SbaTableQueryBrowser::ensureEntryObject( SvLBoxEntry* _pEntry )
 
     return pEntryData->xObject.is();
 }
-
-//------------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::isSelected(SvLBoxEntry* _pEntry) const
-{
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
-    if (pTextItem)
-        return static_cast<OBoldListboxString*>(pTextItem)->isEmphasized();
-    else
-        DBG_ERROR("SbaTableQueryBrowser::isSelected: invalid entry!");
-    return sal_False;
-}
-
-//------------------------------------------------------------------------------
-void SbaTableQueryBrowser::select(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
-{
-    SvLBoxItem* pTextItem = _pEntry ? _pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING) : NULL;
-    if (pTextItem)
-    {
-        static_cast<OBoldListboxString*>(pTextItem)->emphasize(_bSelect);
-        m_pTreeModel->InvalidateEntry(_pEntry);
-    }
-    else
-        DBG_ERROR("SbaTableQueryBrowser::select: invalid entry!");
-}
-
-//------------------------------------------------------------------------------
-void SbaTableQueryBrowser::selectPath(SvLBoxEntry* _pEntry, sal_Bool _bSelect)
-{
-    while (_pEntry)
-    {
-        select(_pEntry, _bSelect);
-        _pEntry = m_pTreeModel->GetParent(_pEntry);
-    }
-}
-
 //------------------------------------------------------------------------------
 IMPL_LINK(SbaTableQueryBrowser, OnEntryDoubleClicked, SvLBoxEntry*, _pEntry)
 {
@@ -3900,70 +3831,6 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     return sal_True;    // handled
 }
 
-// -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry )
-{
-    DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
-    switch (getEntryType(_pEntry))
-    {
-        case etTableContainer:
-            return etTable;
-        case etQueryContainer:
-            return etQuery;
-        case etBookmarkContainer:
-            return etBookmark;
-    }
-    return etUnknown;
-}
-
-// -----------------------------------------------------------------------------
-String SbaTableQueryBrowser::GetEntryText( SvLBoxEntry* _pEntry )
-{
-    return m_pTreeView->getListBox()->GetEntryText(_pEntry);
-}
-
-// -----------------------------------------------------------------------------
-SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType( SvLBoxEntry* _pEntry )
-{
-    if (!_pEntry)
-        return etUnknown;
-
-    SvLBoxEntry* pRootEntry     = m_pTreeView->getListBox()->GetRootLevelParent(_pEntry);
-    SvLBoxEntry* pEntryParent   = m_pTreeView->getListBox()->GetParent(_pEntry);
-    SvLBoxEntry* pTables        = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_TABLES);
-    SvLBoxEntry* pQueries       = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_QUERIES);
-    SvLBoxEntry* pBookmarks     = m_pTreeView->getListBox()->GetEntry(pRootEntry, CONTAINER_BOOKMARKS);
-
-#ifdef DBG_UTIL
-    String sTest;
-    if (pTables) sTest = m_pTreeView->getListBox()->GetEntryText(pTables);
-    if (pQueries) sTest = m_pTreeView->getListBox()->GetEntryText(pQueries);
-    if (pBookmarks) sTest = m_pTreeView->getListBox()->GetEntryText(pBookmarks);
-#endif
-
-    if (pRootEntry == _pEntry)
-        return etDatasource;
-
-    if (pTables == _pEntry)
-        return etTableContainer;
-
-    if (pQueries == _pEntry)
-        return etQueryContainer;
-
-    if (pBookmarks == _pEntry)
-        return etBookmarkContainer;
-
-    if (pTables == pEntryParent)
-        return etTable;
-
-    if (pQueries == pEntryParent)
-        return etQuery;
-
-    if (pBookmarks == pEntryParent)
-        return etBookmark;
-
-    return etUnknown;
-}
 
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::setDefaultTitle() const

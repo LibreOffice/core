@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbastrings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 16:13:59 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ namespace dbaccess
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_FORMATLOCALE, "FormatLocale");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_RELPOSITION, "Position");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HIDDEN, "Hidden");
+    IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_COLUMN_HELPTEXT, "HelpText");
 
     //============================================================
     //= SQLSTATE

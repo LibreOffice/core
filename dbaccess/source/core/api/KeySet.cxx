@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 10:38:45 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -862,6 +862,9 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::NUMERIC:
             xParameter->setString(nPos,*aExternParamIter);
             break;
+        case DataType::BIGINT:
+            xParameter->setLong(nPos,*aExternParamIter);
+            break;
         case DataType::FLOAT:
             xParameter->setFloat(nPos,*aExternParamIter);
             break;
@@ -923,6 +926,9 @@ void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException)
         case DataType::DECIMAL:
         case DataType::NUMERIC:
             xParameter->setString(nPos,*aIter);
+            break;
+        case DataType::BIGINT:
+            xParameter->setLong(nPos,*aIter);
             break;
         case DataType::FLOAT:
             xParameter->setFloat(nPos,*aIter);
@@ -1003,6 +1009,9 @@ sal_Bool OKeySet::fetchRow()
             case DataType::DECIMAL:
             case DataType::NUMERIC:
                 (*aIter) = m_xDriverRow->getString(aPosIter->second);
+                break;
+            case DataType::BIGINT:
+                (*aIter) = m_xDriverRow->getLong(aPosIter->second);
                 break;
             case DataType::FLOAT:
                 (*aIter) = m_xDriverRow->getFloat(aPosIter->second);
@@ -1254,6 +1263,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.25  2001/09/13 10:38:45  hr
+    #92075#: can't take address from temporary
+
     Revision 1.24  2001/08/14 11:51:34  oj
     #91006# check index values as well
 

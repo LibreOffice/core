@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowTitle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,13 +130,15 @@ OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
 //------------------------------------------------------------------------------
 OTableWindowTitle::~OTableWindowTitle()
 {
+    m_pTabWin = NULL;
     DBG_DTOR(OTableWindowTitle,NULL);
 }
 
 //------------------------------------------------------------------------------
 void OTableWindowTitle::GetFocus()
 {
-    m_pTabWin->GetFocus();
+    if(m_pTabWin)
+        m_pTabWin->GetFocus();
 }
 
 //------------------------------------------------------------------------------

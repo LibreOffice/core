@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:54:53 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ namespace dbaccess
         ::com::sun::star::uno::Any  m_aFormatKey;   // sal_Int32 or void
         ::com::sun::star::uno::Any  m_aRelativePosition;    // sal_Int32 or void
         ::com::sun::star::uno::Any  m_aAlignment;   // sal_Int32 (::com::sun::star::awt::TextAlign) or void
+        ::com::sun::star::uno::Any  m_aHelpText;    // the description of the column which is visible in the helptext of the column
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                                     m_xControlModel;
 

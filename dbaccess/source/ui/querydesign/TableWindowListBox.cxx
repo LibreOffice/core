@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:51:05 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,6 +128,7 @@ OTableWindowListBox::~OTableWindowListBox()
 {
     if( m_aScrollTimer.IsActive() )
         m_aScrollTimer.Stop();
+    m_pTabWin = NULL;
     DBG_DTOR(OTableWindowListBox,NULL);
 }
 
@@ -374,7 +375,8 @@ void OTableWindowListBox::LoseFocus()
 //------------------------------------------------------------------------------
 void OTableWindowListBox::GetFocus()
 {
-    m_pTabWin->GetFocus();
+    if(m_pTabWin)
+        m_pTabWin->GetFocus();
     SvTreeListBox::GetFocus();
     if (GetCurEntry() != NULL)
         if (GetSelectionCount() == 0)

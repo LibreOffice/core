@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-08 08:24:54 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,12 +686,7 @@ void OCopyTableWizard::appendColumns(Reference<XColumnsSupplier>& _rxColSup,cons
             {
                 xColumns->getByName(pField->GetName()) >>= xColumn;
                 if(xColumn.is())
-                {
-                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
-                        xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
-                    if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
-                        xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny((sal_Int32)pField->GetHorJustify()));
-                }
+                    dbaui::setColumnUiProperties(xColumn,pField);
             }
             else
             {

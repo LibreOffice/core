@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:23 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_TEXTALIGN_HPP_
+#include <com/sun/star/awt/TextAlign.hpp>
+#endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
@@ -169,10 +172,10 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 // -----------------------------------------------------------------------------
 
 SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
-                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
-                                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
+                                     const Reference< ::com::sun::star::container::XNameAccess >& _xDatabaseContext,
+                                    const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rMF,
+                                    Reference< ::com::sun::star::lang::XEventListener>& _rEvtLst,
+                                    Reference< ::com::sun::star::sdbc::XConnection>& _rOUTConnection )
 {
     Any aValue;
     try
@@ -359,7 +362,7 @@ const OTypeInfo* getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 
     return pTypeInfo;
 }
-void fillTypeInfo(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
+void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxConnection,
                     const String& _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
                     ::std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
@@ -514,8 +517,6 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
     _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
     //  _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
-    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
-        _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
     if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DEFAULTVALUE))
         _rxColumn->setPropertyValue(PROPERTY_DEFAULTVALUE,makeAny(_pFieldDesc->GetDefaultValue()));
 }
@@ -558,7 +559,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     return sDefaultName;
 }
 // -----------------------------------------------------------------------------
-sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
+sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB)
 {
     sal_Bool bRet = sal_False;
     Reference< XNameAccess > xDataBaseContext(_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
@@ -566,7 +567,30 @@ sal_Bool checkDataSourceAvailable(const ::rtl::OUString& _sDataSourceName,const 
         bRet = xDataBaseContext->hasByName(_sDataSourceName);
     return bRet;
 }
-
+// -----------------------------------------------------------------------------
+sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment)
+{
+    sal_Int32 nAlignment = com::sun::star::awt::TextAlign::LEFT;
+    switch (_eAlignment)
+    {
+        case SVX_HOR_JUSTIFY_LEFT:      nAlignment = ::com::sun::star::awt::TextAlign::LEFT;    break;
+        case SVX_HOR_JUSTIFY_CENTER:    nAlignment = ::com::sun::star::awt::TextAlign::CENTER;  break;
+        case SVX_HOR_JUSTIFY_RIGHT:     nAlignment = ::com::sun::star::awt::TextAlign::RIGHT;   break;
+        default:
+            OSL_ENSURE(0,"Invalid TextAlign!");
+    }
+    return nAlignment;
+}
+// -----------------------------------------------------------------------------
+void setColumnUiProperties( const Reference< XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
+{
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_FORMATKEY))
+        _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_pFieldDesc->GetFormatKey()));
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ALIGN))
+        _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(_pFieldDesc->GetHorJustify())));
+    if(_rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_HELPTEXT))
+        _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_pFieldDesc->GetDescription()));
+}
 // .........................................................................
 }
 // .........................................................................

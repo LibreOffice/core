@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 13:30:50 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,7 +177,7 @@ OTableWindow::~OTableWindow()
     if (m_pListBox)
     {
         EmptyListBox();
-        delete m_pListBox;
+        DELETEZ(m_pListBox);
     }
     DBG_DTOR(OTableWindow,NULL);
 }

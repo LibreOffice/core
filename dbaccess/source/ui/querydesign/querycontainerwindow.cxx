@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainerwindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-07 10:05:58 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,8 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OQueryContainerWindow::GetFocus()
     {
-        m_pViewSwitch->GetFocus();
+        if(m_pViewSwitch)
+            m_pViewSwitch->GetFocus();
     }
     // -----------------------------------------------------------------------------
     IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, p )
@@ -280,6 +281,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/09/07 10:05:58  fs
+ *  #65293# syntax
+ *
  *  Revision 1.1  2001/08/23 14:39:40  fs
  *  initial checkin - outsourced from QueryTextView.hxx (the container window for the query design)
  *

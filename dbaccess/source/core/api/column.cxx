@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 14:51:08 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,9 @@ void OColumnSettings::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
         case PROPERTY_ID_CONTROLMODEL:
             rValue <<= m_xControlModel;
             break;
+        case PROPERTY_ID_HELPTEXT:
+            rValue = m_aHelpText;
+            break;
     }
 }
 
@@ -405,6 +408,10 @@ sal_Bool OColumnSettings::convertFastPropertyValue(
             }
         }
         break;
+        case PROPERTY_ID_HELPTEXT:
+            bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_aHelpText,
+                ::getCppuType(static_cast< ::rtl::OUString* >(NULL)));
+            break;
     }
     return bModified;
 }
@@ -443,6 +450,11 @@ void OColumnSettings::setFastPropertyValue_NoBroadcast(
                 "OColumnSettings::setFastPropertyValue_NoBroadcast(HIDDEN) : invalid value !");
             m_bHidden = ::comphelper::getBOOL(rValue);
             break;
+        case PROPERTY_ID_HELPTEXT:
+            OSL_ENSURE(!rValue.hasValue() || rValue.getValueType().equals(::getCppuType(static_cast< ::rtl::OUString* >(NULL))),
+                "OColumnSettings::setFastPropertyValue_NoBroadcast(ID_RELATIVEPOSITION) : invalid value !");
+            m_aHelpText = rValue;
+            break;
     }
 }
 
@@ -454,6 +466,7 @@ sal_Bool OColumnSettings::isDefaulted() const
         &&  !m_aWidth.hasValue()
         &&  !m_aFormatKey.hasValue()
         &&  !m_aRelativePosition.hasValue()
+        &&  !m_aHelpText.hasValue()
         &&  !m_bHidden;
 }
 
@@ -535,6 +548,8 @@ sal_Bool OColumnSettings::writeUITo(const OConfigurationNode& _rConfigNode, cons
     _rConfigNode.setNodeValue( CONFIGKEY_FORMATSTRING, aPersistentFormatString );
     _rConfigNode.setNodeValue( CONFIGKEY_FORMATLOCALE, aPersistentFomatLocale );
 
+    _rConfigNode.setNodeValue( CONFIGKEY_COLUMN_HELPTEXT, m_aHelpText );
+
     return sal_True;
 }
 
@@ -549,11 +564,13 @@ void OColumnSettings::readUIFrom(const OConfigurationNode& _rConfigNode, const R
     m_aFormatKey.clear();
     m_aWidth.clear();
     m_aAlignment.clear();
+    m_aHelpText.clear();
 
     m_aAlignment        = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_ALIGNMENT);
     m_aWidth            = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_WIDTH);
     m_aRelativePosition = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_RELPOSITION);
     m_bHidden           = ::cppu::any2bool(_rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HIDDEN));
+    m_aHelpText         = _rConfigNode.getNodeValue(CONFIGKEY_COLUMN_HELPTEXT);
 
     // the format key is somewhat more complicated
     m_aFormatKey        = _rConfigNode.getNodeValue( CONFIGKEY_COLUMN_NUMBERFORMAT );

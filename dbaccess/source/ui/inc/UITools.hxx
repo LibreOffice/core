@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-18 08:51:09 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ namespace com { namespace sun { namespace star {
 }}}
 
 class Window;
+enum SvxCellHorJustify;
 // .........................................................................
 namespace dbaui
 {
@@ -162,6 +163,18 @@ namespace dbaui
     */
     sal_Bool checkDataSourceAvailable(  const ::rtl::OUString& _sDataSourceName,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory_xORB);
+
+    /** maps SvxCellHorJustify to com::sun::star::awt::TextAlign
+        @param SvxCellHorJustify& _eAlignment
+        @return the corresponding com::sun::star::awt::TextAlign
+    */
+    sal_Int32 mapTextAllign(const SvxCellHorJustify& _eAlignment);
+    /** fill a column with ui data of a field description
+        @param  _rxColumn   the column which should be filled
+        @param  _pFieldDesc the source of the data
+    */
+    void setColumnUiProperties( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
+                                const OFieldDescription* _pFieldDesc);
 // .........................................................................
 }
 // .........................................................................

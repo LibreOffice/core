@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2001-08-30 15:07:14 $
+#   last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,7 +72,6 @@ IMGLST_SRS=$(SRS)$/$(TARGET).srs
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
-            $(SLO)$/dbtreemodel.obj				\
             $(SLO)$/dsbrowserDnD.obj			\
             $(SLO)$/dataview.obj				\
             $(SLO)$/genericcontroller.obj		\
@@ -90,7 +89,9 @@ EXCEPTIONSFILES=\
 
 SLOFILES =\
             $(EXCEPTIONSFILES)\
-            $(SLO)$/AsyncronousLink.obj			
+            $(SLO)$/dsEntriesNoExp.obj			\
+            $(SLO)$/dbtreemodel.obj				\
+            $(SLO)$/AsyncronousLink.obj
 
 SRCFILES =  sbabrw.src	\
             sbagrid.src

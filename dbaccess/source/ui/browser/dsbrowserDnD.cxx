@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-27 06:57:24 $
+ *  last change: $Author: oj $ $Date: 2001-09-20 12:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -858,8 +858,10 @@ namespace dbaui
                         break;
                     case DataType::DECIMAL:
                     case DataType::NUMERIC:
-                    case DataType::BIGINT:
                         xParameter->setDouble(nPos,xRow->getDouble(i));
+                        break;
+                    case DataType::BIGINT:
+                        xParameter->setLong(nPos,xRow->getLong(i));
                         break;
                     case DataType::FLOAT:
                         xParameter->setFloat(nPos,xRow->getFloat(i));
@@ -1076,6 +1078,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.27  2001/08/27 06:57:24  oj
+ *  #90015# some speedup's
+ *
  *  Revision 1.26  2001/08/24 06:31:34  oj
  *  #90015# code corrcetions for some speedup's
  *
