@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 21:04:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ private:
     USHORT              nCurTabPos;
 
     WinBits             nWinBits;
+    ExtendedWinBits     nExtendedWinBits;
     BOOL                bSimpleTravel : 1; // ist TRUE bei SINGLE_SELECTION
     BOOL                bUpdateMode : 1;
     BOOL                bInVScrollHdl : 1;
@@ -293,6 +294,8 @@ public:
 
     void                Clear();
     void                SetWindowBits( WinBits nWinStyle );
+    void                SetExtendedWindowBits( ExtendedWinBits _nBits );
+    ExtendedWinBits     GetExtendedWindowBits() const { return nExtendedWinBits; }
     void                SetModel( SvLBoxTreeList* pModel ) { pTree = pModel;}
 
     void                EntryInserted( SvLBoxEntry*);
