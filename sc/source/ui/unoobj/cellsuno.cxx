@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-02 14:42:40 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "ui_pch.hxx"
 #endif
@@ -9115,10 +9114,122 @@ void ScUniqueCellFormatsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
+//
+//  Fill the list of formats from the document
+//
+
+// hash code to access the range lists by ScPatternAttr pointer
+struct ScPatternHashCode
+{
+    size_t operator()( const ScPatternAttr* pPattern ) const
+    {
+        return reinterpret_cast<size_t>(pPattern);
+    }
+};
+
+// Hash map entry.
+// Keeps track of column positions and calls Join only for ranges between empty columns.
+class ScUniqueFormatsEntry
+{
+    ScRangeListRef  aCompletedRanges;
+    ScRangeListRef  aJoinedRanges;
+    SCCOL           nLastColumn;
+    SCCOL           nLastStart;
+
+    void            MoveToCompleted();
+
+public:
+                        ScUniqueFormatsEntry() : nLastColumn(0), nLastStart(0) {}
+                        ScUniqueFormatsEntry( const ScUniqueFormatsEntry& r ) :
+                            aCompletedRanges( r.aCompletedRanges ),
+                            aJoinedRanges( r.aJoinedRanges ),
+                            nLastColumn( r.nLastColumn ),
+                            nLastStart( r.nLastStart ) {}
+                        ~ScUniqueFormatsEntry() {}
+
+    void                Join( const ScRange& rRange );
+    const ScRangeList&  GetRanges();
+    void                Clear()
+                        {
+                            aCompletedRanges.Clear();
+                            aJoinedRanges.Clear();
+                        }
+};
+
+void ScUniqueFormatsEntry::MoveToCompleted()
+{
+    if ( !aCompletedRanges.Is() )
+        aCompletedRanges = new ScRangeList;
+
+    if ( aJoinedRanges.Is() )
+    {
+        for ( const ScRange* pRange = aJoinedRanges->First(); pRange; pRange = aJoinedRanges->Next() )
+            aCompletedRanges->Append( *pRange );
+        aJoinedRanges->RemoveAll();
+    }
+}
+
+void ScUniqueFormatsEntry::Join( const ScRange& rRange )
+{
+    if ( !aJoinedRanges.Is() )
+    {
+        // first range - store and initialize columns
+        aJoinedRanges = new ScRangeList;
+        aJoinedRanges->Append( rRange );
+        nLastColumn = rRange.aEnd.Col();
+        nLastStart = rRange.aStart.Col();
+    }
+    else
+    {
+        // This works only if the start columns never go back
+        DBG_ASSERT( rRange.aStart.Col() >= nLastStart, "wrong column order in ScUniqueFormatsEntry" );
+
+        if ( rRange.aStart.Col() <= nLastColumn + 1 )
+        {
+            // The new range may touch one of the existing ranges, have to use Join.
+            aJoinedRanges->Join( rRange );
+        }
+        else
+        {
+            // The new range starts right of all existing ranges.
+            // The existing ranges can be ignored for all future Join calls.
+
+            MoveToCompleted();                  // aJoinedRanges is emptied
+            aJoinedRanges->Append( rRange );
+        }
+
+        if ( rRange.aEnd.Col() > nLastColumn )
+            nLastColumn = rRange.aEnd.Col();
+        nLastStart = rRange.aStart.Col();
+    }
+}
+
+const ScRangeList& ScUniqueFormatsEntry::GetRanges()
+{
+    if ( aJoinedRanges.Is() && !aCompletedRanges.Is() )
+        return *aJoinedRanges;
+
+    MoveToCompleted();          // aCompletedRanges is always set after this
+    return *aCompletedRanges;
+}
+
+typedef ::std::hash_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
+
+// function object to sort the range lists by start of first range
+struct ScUniqueFormatsOrder
+{
+    bool operator()( const ScRangeList& rList1, const ScRangeList& rList2 ) const
+    {
+        // all range lists have at least one entry
+        DBG_ASSERT( rList1.Count() > 0 && rList2.Count() > 0, "ScUniqueFormatsOrder: empty list" );
+
+        // compare start positions using ScAddress comparison operator
+        return ( rList1.GetObject(0)->aStart < rList2.GetObject(0)->aStart );
+    }
+};
+
 void ScUniqueCellFormatsObj::GetObjects_Impl()
 {
-    //! direkt auf die AttrArrays zugreifen !!!!
-
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -9129,51 +9240,36 @@ void ScUniqueCellFormatsObj::GetObjects_Impl()
                                     aTotalRange.aEnd.Col(), aTotalRange.aEnd.Row() );
         SCCOL nCol1, nCol2;
         SCROW nRow1, nRow2;
-        std::list<ScRange> aList;
-        ScRange aFirst;
-        if (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
+
+        // Collect the ranges for each format in a hash map, to avoid nested loops
+
+        ScUniqueFormatsHashMap aHashMap;
+        while (aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
         {
-            aFirst = ScRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
-            aRangeLists.push_back(ScRangeList());
-            aRangeLists[0].Join(aFirst);
+            ScRange aRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+            const ScPatternAttr* pPattern = pDoc->GetPattern(nCol1, nRow1, nTab);
+            aHashMap[pPattern].Join( aRange );
         }
-        while ( aIter.GetNext( nCol1, nCol2, nRow1, nRow2 ) )
+
+        // Fill the vector aRangeLists with the range lists from the hash map
+
+        aRangeLists.reserve( aHashMap.size() );
+        ScUniqueFormatsHashMap::iterator aMapIter( aHashMap.begin() );
+        ScUniqueFormatsHashMap::iterator aMapEnd( aHashMap.end() );
+        while ( aMapIter != aMapEnd )
         {
-            ScRange aNext( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
-            if (pDoc->GetPattern(nCol1, nRow1, nTab) == pDoc->GetPattern(aFirst.aStart.Col(), aFirst.aStart.Row(), aFirst.aStart.Tab()) )
-                aRangeLists[0].Join(aNext);
-            else
-                aList.push_back(aNext);
+            ScUniqueFormatsEntry& rEntry = aMapIter->second;
+            const ScRangeList& rRanges = rEntry.GetRanges();
+            aRangeLists.push_back( rRanges );       // copy ScRangeList
+            rEntry.Clear();                         // free memory, don't hold both copies of all ranges
+            ++aMapIter;
         }
-        if (!aList.empty())
-        {
-            std::list<ScRange>::iterator aItr = aList.begin();
-            aRangeLists.push_back(ScRangeList());
-            sal_Int32 nIndex(1);
-            aFirst = *aItr;
-            aRangeLists[nIndex].Join(aFirst);
-            aItr = aList.erase(aItr);
-            while (!aList.empty())
-            {
-                if (pDoc->GetPattern(aItr->aStart.Col(), aItr->aStart.Row(), aItr->aStart.Tab()) ==
-                    pDoc->GetPattern(aFirst.aStart.Col(), aFirst.aStart.Row(), aFirst.aStart.Tab()) )
-                {
-                    aRangeLists[nIndex].Join(*aItr);
-                    aItr = aList.erase(aItr);
-                }
-                else
-                    aItr++;
-                if (aItr == aList.end() && !aList.empty())
-                {
-                    aItr = aList.begin();
-                    aRangeLists.push_back(ScRangeList());
-                    nIndex++;
-                    aFirst = *aItr;
-                    aRangeLists[nIndex].Join(aFirst);
-                    aItr = aList.erase(aItr);
-                }
-            }
-        }
+
+        // Sort the vector by first range's start position, to avoid random shuffling
+        // due to using the ScPatterAttr pointers
+
+        ScUniqueFormatsOrder aComp;
+        ::std::sort( aRangeLists.begin(), aRangeLists.end(), aComp );
     }
 }
 
