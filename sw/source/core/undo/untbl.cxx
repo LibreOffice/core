@@ -2,9 +2,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:23:56 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1128,13 +1128,20 @@ void _SaveTable::NewFrmFmt( const SwClient* pLnBx, BOOL bIsLine,
     //Erstmal die Frms ummelden.
     SwClientIter aIter( *pOldFmt );
     for( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+    {
         if( bIsLine ? pLnBx == ((SwRowFrm*)pLast)->GetTabLine()
                     : pLnBx == ((SwCellFrm*)pLast)->GetTabBox() )
         {
             pFmt->Add( pLast );
             ((SwFrm*)pLast)->InvalidateAll();
             ((SwFrm*)pLast)->ReinitializeFrmSizeAttrFlags();
+            if ( !bIsLine )
+            {
+                ((SwCellFrm*)pLast)->SetDerivedVert( FALSE );
+                ((SwCellFrm*)pLast)->CheckDirChange();
+            }
         }
+    }
 
     //Jetzt noch mich selbst ummelden.
     pFmt->Add( (SwClient*)pLnBx );
