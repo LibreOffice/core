@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccessibility.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:14:40 $
+ *  last change:$Date: 2003-02-26 12:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,10 +404,13 @@ public class ConnectionLineAccessibility extends TestCase {
 
         log.println( "    creating a new environment for object" );
         TestEnvironment tEnv = new TestEnvironment( oObj );
+        final XAccessibleComponent acc = (XAccessibleComponent)
+                UnoRuntime.queryInterface(XAccessibleComponent.class, oObj);
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
                 public void fireEvent() {
+                    acc.grabFocus();
                 }
             });
 
