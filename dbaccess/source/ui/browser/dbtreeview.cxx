@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-03 12:54:05 $
+ *  last change: $Author: rt $ $Date: 2001-07-12 08:42:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ namespace dbaui
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-DBG_NAME(DBTreeView);
+DBG_NAME(DBTreeView)
 //========================================================================
 // class DBTreeView
 //========================================================================
