@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:57:56 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:35:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage TP_NUM_POSITION
         Text [ ENGLISH ] = "Level" ;
         Text [ norwegian ] = "Level" ;
         Text [ italian ] = "Livello" ;
-        Text [ portuguese_brazilian ] = "Nível" ;
+        Text [ portuguese_brazilian ] = "N?vel" ;
         Text [ portuguese ] = "Nível" ;
         Text [ finnish ] = "Taso " ;
         Text [ danish ] = "Niveau" ;
@@ -233,7 +233,7 @@ TabPage TP_NUM_POSITION
         Text [ spanish ] = "~Distancia al texto" ;
         Text [ french ] = "~Écart du texte" ;
         Text [ dutch ] = "Afstand tot ~tekst" ;
-        Text [ portuguese_brazilian ] = "Einr~ückung" ;
+        Text [ portuguese_brazilian ] = "Einr~?kung" ;
         Text [ portuguese ] = "~Distância do texto" ;
         Text[ chinese_simplified ] = "ÖÁÕıÎÄµÄ¾àÀë(~X)";
         Text[ russian ] = "Ğàññòîÿíèå îò òåêñòà";
@@ -427,7 +427,7 @@ TabPage TP_NUM_POSITION
     StringList [ polish ] =
     {
             < "Z lewej" ; > ;
-        < "Wyœrodkowany" ; > ;
+        < "Wy?rodkowany" ; > ;
         < "Z prawej" ; > ;
     };
     StringList [ japanese ] =
@@ -502,7 +502,7 @@ TabPage TP_NUM_POSITION
         Text [ portuguese ] = "~Padrão" ;
         Text[ chinese_simplified ] = "±ê×¼(~D)";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€(~D)";
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "¼Ğ·Ç(~D)";
@@ -771,7 +771,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
         Text[ catalan ] = "~Eliminar";
     };
     Text [ english_us ] = "Numbering/Bullets" ;
-    Text [ portuguese_brazilian ] = "Numerierung/Aufzählung" ;
+    Text [ portuguese_brazilian ] = "Numerierung/Aufz?hlung" ;
     Text [ swedish ] = "Numrering/punktuppställning" ;
     Text [ danish ] = "Nummerering/punkttegn" ;
     Text [ italian ] = "Elenchi puntati e numerati" ;
