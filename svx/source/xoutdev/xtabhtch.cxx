@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtabhtch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:11:22 $
+ *  last change: $Author: hr $ $Date: 2004-12-13 12:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,8 @@ BOOL XHatchList::Load()
 
         aURL.Append( aName );
 
-        if( !aURL.getExtension().Len() )
-            aURL.setExtension( String( pszExtHatch, 3 ) );
+        if( !aURL.getExtension().getLength() )
+            aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
 
 //BFS01     // check if file exists, SfxMedium shows an errorbox else
 //BFS01     {
@@ -413,8 +413,8 @@ BOOL XHatchList::Save()
 
     aURL.Append( aName );
 
-    if( !aURL.getExtension().Len() )
-        aURL.setExtension( String( pszExtHatch, 3 ) );
+    if( !aURL.getExtension().getLength() )
+        aURL.setExtension( rtl::OUString( pszExtHatch, 3 ) );
 
     uno::Reference< container::XNameContainer > xTable( SvxUnoXHatchTable_createInstance( this ), uno::UNO_QUERY );
     return SvxXMLXTableExportComponent::save( aURL.GetMainURL( INetURLObject::NO_DECODE ), xTable );
