@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:02:47 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 12:27:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,41 +203,44 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 if(xKeys.is())
                 {
                     Reference< XIndexAccess> xKeyIndex = xKeys->getKeys();
-                    Reference<XColumnsSupplier> xColumnsSupplier;
-                    // search the one and only primary key
-                    for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
+                    if ( xKeyIndex.is() )
                     {
-                        Reference<XPropertySet> xProp;
-                        ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
-                        sal_Int32 nKeyType = 0;
-                        xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                        if(KeyType::PRIMARY == nKeyType)
+                        Reference<XColumnsSupplier> xColumnsSupplier;
+                        // search the one and only primary key
+                        for(sal_Int32 i=0;i< xKeyIndex->getCount();++i)
                         {
-                            xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
-                            break;
+                            Reference<XPropertySet> xProp;
+                            ::cppu::extractInterface(xProp,xKeyIndex->getByIndex(i));
+                            sal_Int32 nKeyType = 0;
+                            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
+                            if(KeyType::PRIMARY == nKeyType)
+                            {
+                                xColumnsSupplier = Reference<XColumnsSupplier>(xProp,UNO_QUERY);
+                                break;
+                            }
                         }
-                    }
 
-                    if(xColumnsSupplier.is())
-                    {
-                        // first we need a connection
-                        Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
-                        if(xStmt.is())
-                            xConnection = xStmt->getConnection();
-                        else
+                        if(xColumnsSupplier.is())
                         {
-                            Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
-                            xConnection = xPrepStmt->getConnection();
+                            // first we need a connection
+                            Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
+                            if(xStmt.is())
+                                xConnection = xStmt->getConnection();
+                            else
+                            {
+                                Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
+                                xConnection = xPrepStmt->getConnection();
+                            }
+                            OSL_ENSURE(xConnection.is(),"No connection!");
+
+                            Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
+                            Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
+                            Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+
+                            OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
+                            ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+                            bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                         }
-                        OSL_ENSURE(xConnection.is(),"No connection!");
-
-                        Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                        Reference<XColumnsSupplier> xColSup(_xComposer,UNO_QUERY);
-                        Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-
-                        OColumnNamePos aColumnNames(xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers() ? true : false);
-                        ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                        bAllKeysFound = sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
                     }
                 }
             }
