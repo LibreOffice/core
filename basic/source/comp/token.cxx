@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:42:14 $
+ *  last change: $Author: rt $ $Date: 2004-12-10 17:20:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,12 +625,17 @@ special:
             eCurTok = SYMBOL;
     }
 
-    // ENUM and PROPERTY token only visible in compatible mode
+    // CLASSMODULE, PROPERTY, GET, ENUM token only visible in compatible mode
     if( !bCompatible )
     {
         SbiToken eTok = tp->t;
-        if( eTok == ENUM || eTok == PROPERTY )
+        if( eTok == CLASSMODULE ||
+            eTok == ENUM ||
+            eTok == PROPERTY ||
+            eTok == GET )
+        {
             eCurTok = SYMBOL;
+        }
     }
 
     bEos = IsEoln( eCurTok );
