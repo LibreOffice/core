@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueimp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 10:47:50 $
+ *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,28 @@
  *
  ************************************************************************/
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
 #ifndef _IMAGE_HXX
 #include <vcl/image.hxx>
 #endif
+#ifndef _RTL_UUID_H_
+#include <rtl/uuid.h>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
+#endif
 
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -77,6 +89,12 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
+#endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 #endif
 
 #include <vector>
@@ -95,12 +113,140 @@
 #define VALUESET_ITEM_NONEITEM      0xFFFE
 #define VALUESET_SCROLL_OFFSET      4
 
+// --------------------
+// - ValueSetItemType -
+// --------------------
+
+enum ValueSetItemType
+{
+    VALUESETITEM_NONE,
+    VALUESETITEM_IMAGE,
+    VALUESETITEM_COLOR,
+    VALUESETITEM_USERDRAW,
+    VALUESETITEM_SPACE
+};
+
+// ----------------
+// - ValueSetItem -
+// ----------------
+
+struct ValueSetItem
+{
+private:
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >* mpxAcc;
+
+
+                        ValueSetItem();
+                        ValueSetItem( const ValueSetItem& rItem );
+
+    ValueSetItem&       operator=( const ValueSetItem& );
+
+public:
+
+    ValueSet&           mrParent;
+    USHORT              mnId;
+    USHORT              mnBits;
+    ValueSetItemType    meType;
+    Image               maImage;
+    Color               maColor;
+    XubString           maText;
+    void*               mpData;
+    Rectangle           maRect;
+
+                        ValueSetItem( ValueSet& rParent );
+                        ~ValueSetItem();
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >    GetAccessible();
+     void                                                                                       ClearAccessible();
+};
+
+// -----------------------------------------------------------------------------
+
+DECLARE_LIST( ValueItemList, ValueSetItem* );
+
+// ---------------
+// - ValueSetAcc -
+// ---------------
+
+class ValueSetAcc : public ::cppu::WeakImplHelper6< ::drafts::com::sun::star::accessibility::XAccessible,
+                                                    ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
+                                                    ::drafts::com::sun::star::accessibility::XAccessibleContext,
+                                                    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+                                                    ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+                                                    ::com::sun::star::lang::XUnoTunnel >
+{
+private:
+
+    ::vos::OMutex                                                                                                           maMutex;
+    ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >  mxEventListeners;
+    ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener > >                              mxFocusListeners;
+    ValueSet*                                                                                                               mpParent;
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+public:
+
+                        ValueSetAcc( ValueSet* pParent );
+                        ~ValueSetAcc();
+
+    void                FireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue );
+    BOOL                HasAccessibleListeners() const { return( mxEventListeners.size() > 0 ); }
+
+    static ValueSetAcc* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& rxData ) throw();
+
+public:
+
+    // XAccessible
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleEventBroadcaster
+    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleContext
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleDescription(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getAccessibleName(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::lang::Locale SAL_CALL getLocale(  ) throw (::drafts::com::sun::star::accessibility::IllegalAccessibleComponentStateException, ::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleComponent
+    virtual sal_Bool SAL_CALL contains( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getAccessibleAt( const ::com::sun::star::awt::Point& aPoint ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Rectangle SAL_CALL getBounds(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocation(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Point SAL_CALL getLocationOnScreen(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::Size SAL_CALL getSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isShowing(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isVisible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isFocusTraversable(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAccessibleSelection
+    virtual void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL clearAccessibleSelection(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL selectAllAccessible(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw( ::com::sun::star::uno::RuntimeException );
+};
 
 // ----------------
 // - ValueItemAcc -
 // ----------------
-
-struct ValueSetItem;
 
 class ValueItemAcc : public ::cppu::WeakImplHelper4< ::drafts::com::sun::star::accessibility::XAccessible,
                                                      ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster,
@@ -156,55 +302,3 @@ public:
     virtual void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
 };
-
-// --------------------
-// - ValueSetItemType -
-// --------------------
-
-enum ValueSetItemType
-{
-    VALUESETITEM_NONE,
-    VALUESETITEM_IMAGE,
-    VALUESETITEM_COLOR,
-    VALUESETITEM_USERDRAW,
-    VALUESETITEM_SPACE
-};
-
-// ----------------
-// - ValueSetItem -
-// ----------------
-
-struct ValueSetItem
-{
-private:
-
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >* mpxAcc;
-
-
-                        ValueSetItem();
-                        ValueSetItem( const ValueSetItem& rItem );
-
-    ValueSetItem&       operator=( const ValueSetItem& );
-
-public:
-
-    ValueSet&           mrParent;
-    USHORT              mnId;
-    USHORT              mnBits;
-    ValueSetItemType    meType;
-    Image               maImage;
-    Color               maColor;
-    XubString           maText;
-    void*               mpData;
-    Rectangle           maRect;
-
-                        ValueSetItem( ValueSet& rParent );
-                        ~ValueSetItem();
-
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >    GetAccessible();
-     void                                                                                       ClearAccessible();
-};
-
-// -----------------------------------------------------------------------------
-
-DECLARE_LIST( ValueItemList, ValueSetItem* );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 10:52:14 $
+ *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,6 +348,13 @@ void ValueSet::ImplFormatItem( ValueSetItem* pItem )
             }
         }
     }
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ValueSet::CreateAccessible()
+{
+    return new ValueSetAcc( this );
 }
 
 // -----------------------------------------------------------------------
@@ -1197,28 +1204,18 @@ ValueSetItem* ValueSet::ImplGetVisibleItem( USHORT nVisiblePos )
 
 void ValueSet::ImplFireAccessibleEvent( short nEventId, const ::com::sun::star::uno::Any& rOldValue, const ::com::sun::star::uno::Any& rNewValue )
 {
-    if( nEventId )
-    {
-           ::std::vector< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleEventListener > >::const_iterator aIter = mxEventListeners.begin();
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
 
-        while( aIter != mxEventListeners.end() )
-        {
-            ::drafts::com::sun::star::accessibility::AccessibleEventObject aEvtObject;
-
-            aEvtObject.EventId = nEventId;
-            aEvtObject.NewValue = rNewValue;
-            aEvtObject.OldValue = rOldValue;
-
-            (*aIter++)->notifyEvent( aEvtObject );
-        }
-    }
+    if( pAcc )
+        pAcc->FireAccessibleEvent( nEventId, rOldValue, rNewValue );
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ValueSet::ImplHasAccessibleListeners() const
+BOOL ValueSet::ImplHasAccessibleListeners()
 {
-    return( mxEventListeners.size() > 0 );
+    ValueSetAcc* pAcc = ValueSetAcc::getImplementation( GetAccessible( FALSE ) );
+    return( pAcc && pAcc->HasAccessibleListeners() );
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-02-25 10:47:50 $
+ *  last change: $Author: ka $ $Date: 2002-02-25 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,18 +115,80 @@ void ValueSetItem::ClearAccessible()
 }
 
 
-// ------------
-// - Valueset -
-// ------------
+// ---------------
+// - ValueSetAcc -
+// ---------------
 
-uno::Reference< accessibility::XAccessible > ValueSet::CreateAccessible()
+ValueSetAcc::ValueSetAcc( ValueSet* pParent ) :
+    mpParent( pParent )
 {
-    return this;
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSet::getAccessibleContext()
+ValueSetAcc::~ValueSetAcc()
+{
+}
+
+// -----------------------------------------------------------------------
+
+void ValueSetAcc::FireAccessibleEvent( short nEventId, const uno::Any& rOldValue, const uno::Any& rNewValue )
+{
+    if( nEventId )
+    {
+        maMutex.acquire();
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > > aTmpListeners( mxEventListeners );
+        maMutex.release();
+
+        ::std::vector< uno::Reference< accessibility::XAccessibleEventListener > >::const_iterator  aIter( aTmpListeners.begin() );
+        accessibility::AccessibleEventObject                                                        aEvtObject;
+
+        aEvtObject.EventId = nEventId;
+        aEvtObject.NewValue = rNewValue;
+        aEvtObject.OldValue = rOldValue;
+
+        while( aIter != aTmpListeners.end() )
+            (*aIter++)->notifyEvent( aEvtObject );
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+const uno::Sequence< sal_Int8 >& ValueSetAcc::getUnoTunnelId()
+{
+    static uno::Sequence< sal_Int8 > aSeq;
+
+    if( !aSeq.getLength() )
+    {
+        static osl::Mutex           aCreateMutex;
+        osl::Guard< osl::Mutex >    aGuard( aCreateMutex );
+
+        aSeq.realloc( 16 );
+        rtl_createUuid( reinterpret_cast< sal_uInt8* >( aSeq.getArray() ), 0, sal_True );
+    }
+
+    return aSeq;
+}
+
+// -----------------------------------------------------------------------------
+
+ValueSetAcc* ValueSetAcc::getImplementation( const uno::Reference< uno::XInterface >& rxData )
+    throw()
+{
+    try
+    {
+        uno::Reference< lang::XUnoTunnel > xUnoTunnel( rxData, uno::UNO_QUERY );
+        return( xUnoTunnel.is() ? ( (ValueSetAcc*)(void*) xUnoTunnel->getSomething( ValueSetAcc::getUnoTunnelId() ) ) : NULL );
+    }
+    catch( const ::com::sun::star::uno::Exception& )
+    {
+        return NULL;
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSetAcc::getAccessibleContext()
     throw (uno::RuntimeException)
 {
     return this;
@@ -134,21 +196,21 @@ uno::Reference< accessibility::XAccessibleContext > SAL_CALL ValueSet::getAccess
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ValueSet::getAccessibleChildCount()
+sal_Int32 SAL_CALL ValueSetAcc::getAccessibleChildCount()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    return( ImplGetVisibleItemCount() );
+    return( mpParent->ImplGetVisibleItemCount() );
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessibleChild( sal_Int32 i )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleChild( sal_Int32 i )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const ::vos::OGuard                             aGuard( maMutex );
     uno::Reference< accessibility::XAccessible >    xRet;
-    ValueSetItem*                                   pItem = ImplGetVisibleItem( static_cast< USHORT >( i ) );
+    ValueSetItem*                                   pItem = mpParent->ImplGetVisibleItem( static_cast< USHORT >( i ) );
 
     if( pItem )
         xRet = pItem->GetAccessible();
@@ -160,11 +222,11 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessibleChi
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessibleParent()
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleParent()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard                             aGuard( maMutex );
-    Window*                                         pParent = GetParent();
+    Window*                                         pParent = mpParent->GetParent();
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( pParent )
@@ -175,11 +237,11 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessiblePar
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ValueSet::getAccessibleIndexInParent()
+sal_Int32 SAL_CALL ValueSetAcc::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard     aGuard( maMutex );
-    Window*                 pParent = GetParent();
+    Window*                 pParent = mpParent->GetParent();
     sal_Int32               nRet = 0;
 
     if( pParent )
@@ -188,7 +250,7 @@ sal_Int32 SAL_CALL ValueSet::getAccessibleIndexInParent()
 
         for( USHORT i = 0, nCount = pParent->GetChildCount(); ( i < nCount ) && !bFound; i++ )
         {
-            if( pParent->GetChild( i ) == this )
+            if( pParent->GetChild( i ) == mpParent )
             {
                 nRet = i;
                 bFound = sal_True;
@@ -201,7 +263,7 @@ sal_Int32 SAL_CALL ValueSet::getAccessibleIndexInParent()
 
 // -----------------------------------------------------------------------------
 
-sal_Int16 SAL_CALL ValueSet::getAccessibleRole()
+sal_Int16 SAL_CALL ValueSetAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     return accessibility::AccessibleRole::UNKNOWN;
@@ -209,16 +271,16 @@ sal_Int16 SAL_CALL ValueSet::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueSet::getAccessibleDescription()
+::rtl::OUString SAL_CALL ValueSetAcc::getAccessibleDescription()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    return GetText();
+    return mpParent->GetText();
 }
 
 // -----------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL ValueSet::getAccessibleName()
+::rtl::OUString SAL_CALL ValueSetAcc::getAccessibleName()
     throw (uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii( "ValueSet" );
@@ -226,7 +288,7 @@ sal_Int16 SAL_CALL ValueSet::getAccessibleRole()
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSet::getAccessibleRelationSet()
+uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSetAcc::getAccessibleRelationSet()
     throw (uno::RuntimeException)
 {
     // !!!
@@ -235,7 +297,7 @@ uno::Reference< accessibility::XAccessibleRelationSet > SAL_CALL ValueSet::getAc
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSet::getAccessibleStateSet()
+uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSetAcc::getAccessibleStateSet()
     throw (uno::RuntimeException)
 {
     // !!!
@@ -244,7 +306,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ValueSet::getAcces
 
 // -----------------------------------------------------------------------------
 
-lang::Locale SAL_CALL ValueSet::getLocale()
+lang::Locale SAL_CALL ValueSetAcc::getLocale()
     throw (accessibility::IllegalAccessibleComponentStateException, uno::RuntimeException)
 {
     const ::vos::OGuard                             aGuard( maMutex );
@@ -265,7 +327,7 @@ lang::Locale SAL_CALL ValueSet::getLocale()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ValueSetAcc::addEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
@@ -288,7 +350,7 @@ void SAL_CALL ValueSet::addEventListener( const uno::Reference< accessibility::X
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
+void SAL_CALL ValueSetAcc::removeEventListener( const uno::Reference< accessibility::XAccessibleEventListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
@@ -313,31 +375,31 @@ void SAL_CALL ValueSet::removeEventListener( const uno::Reference< accessibility
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSet::contains( const awt::Point& aPoint )
+sal_Bool SAL_CALL ValueSetAcc::contains( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Rectangle     aOutRect( Point(), GetOutputSizePixel() );
+    const Rectangle     aOutRect( Point(), mpParent->GetOutputSizePixel() );
 
     return aOutRect.IsInside( Point( aPoint.X, aPoint.Y ) );
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessibleAt( const awt::Point& aPoint )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getAccessibleAt( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard                             aGuard( maMutex );
-    const USHORT                                    nItemId = GetItemId( Point( aPoint.X, aPoint.Y ) );
+    const USHORT                                    nItemId = mpParent->GetItemId( Point( aPoint.X, aPoint.Y ) );
     uno::Reference< accessibility::XAccessible >    xRet;
 
     if( VALUESET_ITEM_NOTFOUND != nItemId )
     {
-        const USHORT nItemPos = GetItemPos( nItemId );
+        const USHORT nItemPos = mpParent->GetItemPos( nItemId );
 
         if( VALUESET_ITEM_NONEITEM != nItemPos )
         {
-            ValueSetItem* pItem = mpItemList->GetObject( nItemPos );
+            ValueSetItem* pItem = mpParent->mpItemList->GetObject( nItemPos );
 
             if( ( pItem->meType != VALUESETITEM_SPACE ) && !pItem->maRect.IsEmpty() )
                 xRet = pItem->GetAccessible();
@@ -349,12 +411,12 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getAccessibleAt(
 
 // -----------------------------------------------------------------------------
 
-awt::Rectangle SAL_CALL ValueSet::getBounds()
+awt::Rectangle SAL_CALL ValueSetAcc::getBounds()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Point         aOutPos( GetPosPixel() );
-    const Size          aOutSize( GetOutputSizePixel() );
+    const Point         aOutPos( mpParent->GetPosPixel() );
+    const Size          aOutSize( mpParent->GetOutputSizePixel() );
     awt::Rectangle      aRet;
 
     aRet.X = aOutPos.X();
@@ -367,11 +429,11 @@ awt::Rectangle SAL_CALL ValueSet::getBounds()
 
 // -----------------------------------------------------------------------------
 
-awt::Point SAL_CALL ValueSet::getLocation()
+awt::Point SAL_CALL ValueSetAcc::getLocation()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Point         aOutPos( GetPosPixel() );
+    const Point         aOutPos( mpParent->GetPosPixel() );
     awt::Point          aRet;
 
     aRet.X = aOutPos.X();
@@ -382,11 +444,11 @@ awt::Point SAL_CALL ValueSet::getLocation()
 
 // -----------------------------------------------------------------------------
 
-awt::Point SAL_CALL ValueSet::getLocationOnScreen()
+awt::Point SAL_CALL ValueSetAcc::getLocationOnScreen()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Point         aScreenPos( OutputToAbsoluteScreenPixel( Point() ) );
+    const Point         aScreenPos( mpParent->OutputToAbsoluteScreenPixel( Point() ) );
     awt::Point          aRet;
 
     aRet.X = aScreenPos.X();
@@ -397,11 +459,11 @@ awt::Point SAL_CALL ValueSet::getLocationOnScreen()
 
 // -----------------------------------------------------------------------------
 
-awt::Size SAL_CALL ValueSet::getSize()
+awt::Size SAL_CALL ValueSetAcc::getSize()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    const Size          aOutSize( GetOutputSizePixel() );
+    const Size          aOutSize( mpParent->GetOutputSizePixel() );
     awt::Size           aRet;
 
     aRet.Width = aOutSize.Width();
@@ -412,25 +474,25 @@ awt::Size SAL_CALL ValueSet::getSize()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSet::isShowing()
+sal_Bool SAL_CALL ValueSetAcc::isShowing()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    return IsVisible();
+    return mpParent->IsVisible();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSet::isVisible()
+sal_Bool SAL_CALL ValueSetAcc::isVisible()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    return IsVisible();
+    return mpParent->IsVisible();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSet::isFocusTraversable()
+sal_Bool SAL_CALL ValueSetAcc::isFocusTraversable()
     throw (uno::RuntimeException)
 {
     return sal_True;
@@ -438,7 +500,7 @@ sal_Bool SAL_CALL ValueSet::isFocusTraversable()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::addFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
+void SAL_CALL ValueSetAcc::addFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
@@ -460,7 +522,7 @@ void SAL_CALL ValueSet::addFocusListener( const uno::Reference< awt::XFocusListe
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL ValueSet::removeFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
+void SAL_CALL ValueSetAcc::removeFocusListener( const uno::Reference< awt::XFocusListener >& rxListener )
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
@@ -485,15 +547,15 @@ void SAL_CALL ValueSet::removeFocusListener( const uno::Reference< awt::XFocusLi
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::grabFocus()
+void SAL_CALL ValueSetAcc::grabFocus()
     throw (uno::RuntimeException)
 {
-    GrabFocus();
+    mpParent->GrabFocus();
 }
 
 // -----------------------------------------------------------------------------
 
-uno::Any SAL_CALL ValueSet::getAccessibleKeyBinding()
+uno::Any SAL_CALL ValueSetAcc::getAccessibleKeyBinding()
     throw (uno::RuntimeException)
 {
     return uno::Any();
@@ -501,29 +563,29 @@ uno::Any SAL_CALL ValueSet::getAccessibleKeyBinding()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::selectAccessibleChild( sal_Int32 nChildIndex )
+void SAL_CALL ValueSetAcc::selectAccessibleChild( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    ValueSetItem*       pItem = ImplGetVisibleItem( static_cast< USHORT >( nChildIndex ) );
+    ValueSetItem*       pItem = mpParent->ImplGetVisibleItem( static_cast< USHORT >( nChildIndex ) );
 
     if( pItem )
-        SelectItem( pItem->mnId );
+        mpParent->SelectItem( pItem->mnId );
     else
         throw lang::IndexOutOfBoundsException();
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SAL_CALL ValueSet::isAccessibleChildSelected( sal_Int32 nChildIndex )
+sal_Bool SAL_CALL ValueSetAcc::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    ValueSetItem*       pItem = ImplGetVisibleItem( static_cast< USHORT >( nChildIndex ) );
+    ValueSetItem*       pItem = mpParent->ImplGetVisibleItem( static_cast< USHORT >( nChildIndex ) );
     sal_Bool            bRet = sal_False;
 
     if( pItem )
-        bRet = IsItemSelected( pItem->mnId );
+        bRet = mpParent->IsItemSelected( pItem->mnId );
     else
         throw lang::IndexOutOfBoundsException();
 
@@ -532,16 +594,16 @@ sal_Bool SAL_CALL ValueSet::isAccessibleChildSelected( sal_Int32 nChildIndex )
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::clearAccessibleSelection()
+void SAL_CALL ValueSetAcc::clearAccessibleSelection()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
-    SetNoSelection();
+    mpParent->SetNoSelection();
 }
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::selectAllAccessible()
+void SAL_CALL ValueSetAcc::selectAllAccessible()
     throw (uno::RuntimeException)
 {
     // unsupported due to single selection only
@@ -549,17 +611,17 @@ void SAL_CALL ValueSet::selectAllAccessible()
 
 // -----------------------------------------------------------------------------
 
-sal_Int32 SAL_CALL ValueSet::getSelectedAccessibleChildCount()
+sal_Int32 SAL_CALL ValueSetAcc::getSelectedAccessibleChildCount()
     throw (uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
     sal_Int32           nRet = 0;
 
-    for( USHORT i = 0, nCount = ImplGetVisibleItemCount(); i < nCount; i++ )
+    for( USHORT i = 0, nCount = mpParent->ImplGetVisibleItemCount(); i < nCount; i++ )
     {
-        ValueSetItem* pItem = ImplGetVisibleItem( i );
+        ValueSetItem* pItem = mpParent->ImplGetVisibleItem( i );
 
-        if( pItem && IsItemSelected( pItem->mnId ) )
+        if( pItem && mpParent->IsItemSelected( pItem->mnId ) )
             ++nRet;
     }
 
@@ -568,17 +630,17 @@ sal_Int32 SAL_CALL ValueSet::getSelectedAccessibleChildCount()
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+uno::Reference< accessibility::XAccessible > SAL_CALL ValueSetAcc::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const ::vos::OGuard                             aGuard( maMutex );
     uno::Reference< accessibility::XAccessible >    xRet;
 
-    for( USHORT i = 0, nCount = ImplGetVisibleItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
+    for( USHORT i = 0, nCount = mpParent->ImplGetVisibleItemCount(), nSel = 0; ( i < nCount ) && !xRet.is(); i++ )
     {
-        ValueSetItem* pItem = ImplGetVisibleItem( i );
+        ValueSetItem* pItem = mpParent->ImplGetVisibleItem( i );
 
-        if( pItem && IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
+        if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
             xRet = pItem->GetAccessible();
     }
 
@@ -587,22 +649,36 @@ uno::Reference< accessibility::XAccessible > SAL_CALL ValueSet::getSelectedAcces
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ValueSet::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+void SAL_CALL ValueSetAcc::deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const ::vos::OGuard aGuard( maMutex );
     sal_Bool            bDone = sal_False;
 
-    for( USHORT i = 0, nCount = ImplGetVisibleItemCount(), nSel = 0; ( i < nCount ) && !bDone; i++ )
+    for( USHORT i = 0, nCount = mpParent->ImplGetVisibleItemCount(), nSel = 0; ( i < nCount ) && !bDone; i++ )
     {
-        ValueSetItem* pItem = ImplGetVisibleItem( i );
+        ValueSetItem* pItem = mpParent->ImplGetVisibleItem( i );
 
-        if( pItem && IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
+        if( pItem && mpParent->IsItemSelected( pItem->mnId ) && ( nSelectedChildIndex == static_cast< sal_Int32 >( nSel++ ) ) )
         {
-            SetNoSelection();
+            mpParent->SetNoSelection();
             bDone = sal_True;
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int64 SAL_CALL ValueSetAcc::getSomething( const uno::Sequence< sal_Int8 >& rId ) throw( uno::RuntimeException )
+{
+    sal_Int64 nRet;
+
+    if( ( rId.getLength() == 16 ) && ( 0 == rtl_compareMemory( ValueSetAcc::getUnoTunnelId().getConstArray(), rId.getConstArray(), 16 ) ) )
+        nRet = reinterpret_cast< sal_Int64 >( this );
+    else
+        nRet = 0;
+
+    return nRet;
 }
 
 // ----------------
