@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Date: 2004-03-09 12:25:22 $
+#   last change: $Date: 2004-07-23 15:12:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,6 @@ OWNCOPY         =   \
                     $(MISC)$/$(TARGET)_copied.done
 
 JARFILES        =   \
-                    sandbox.jar     \
                     ridl.jar        \
                     unoil.jar       \
                     jurt.jar        \
