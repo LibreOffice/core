@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@ void ScTabPageSortFields::Init()
 
     DBG_ASSERT( pViewData, "ViewData not found!" );
 
-    nFieldArr[0] = nFirstCol = nFirstRow = 0;
+    nFieldArr[0] = 0;
+    nFirstCol = 0;
+    nFirstRow = 0;
 
     aLbSort1.SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
     aLbSort2.SetSelectHdl( LINK( this, ScTabPageSortFields, SelectHdl ) );
@@ -323,7 +325,9 @@ BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
         {
             theSortData.nField[0] =
             theSortData.nField[1] =
-            theSortData.nField[2] = ( bSortByRows ? nFirstRow : nFirstCol );
+            theSortData.nField[2] = ( bSortByRows ?
+                    static_cast<SCCOLROW>(nFirstRow) :
+                    static_cast<SCCOLROW>(nFirstCol) );
         }
         else
         {
@@ -441,16 +445,16 @@ void ScTabPageSortFields::FillFieldLists()
             aLbSort2.InsertEntry( aStrUndefined, 0 );
             aLbSort3.InsertEntry( aStrUndefined, 0 );
 
-            USHORT  nFirstCol   = rSortData.nCol1;
-            USHORT  nFirstRow   = rSortData.nRow1;
-            USHORT  nTab        = pViewData->GetTabNo();
+            SCCOL   nFirstCol   = rSortData.nCol1;
+            SCROW   nFirstRow   = rSortData.nRow1;
+            SCTAB   nTab        = pViewData->GetTabNo();
             USHORT  i           = 1;
 
             if ( bSortByRows )
             {
                 String  aFieldName;
-                USHORT  nMaxCol = rSortData.nCol2;
-                USHORT  col;
+                SCCOL   nMaxCol = rSortData.nCol2;
+                SCCOL   col;
 
                 for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
                 {
@@ -471,8 +475,8 @@ void ScTabPageSortFields::FillFieldLists()
             else
             {
                 String  aFieldName;
-                USHORT  nMaxRow = rSortData.nRow2;
-                USHORT  row;
+                SCROW   nMaxRow = rSortData.nRow2;
+                SCROW   row;
 
                 for ( row=nFirstRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
                 {
@@ -497,7 +501,7 @@ void ScTabPageSortFields::FillFieldLists()
 
 //------------------------------------------------------------------------
 
-USHORT ScTabPageSortFields::GetFieldSelPos( USHORT nField )
+USHORT ScTabPageSortFields::GetFieldSelPos( SCCOLROW nField )
 {
     USHORT  nFieldPos   = 0;
     BOOL    bFound      = FALSE;
@@ -653,7 +657,7 @@ void ScTabPageSortOptions::Init()
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
         String          theDbArea;
         String          theDbName   = aStrNoName;
-        const USHORT    nCurTab     = pViewData->GetTabNo();
+        const SCTAB nCurTab     = pViewData->GetTabNo();
 
         aLbOutPos.Clear();
         aLbOutPos.InsertEntry( aStrUndefined, 0 );
