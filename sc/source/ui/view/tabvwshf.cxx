@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:50 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include "scitems.hxx"
 #include <sfx2/request.hxx>
 #include <basic/sbstar.hxx>
+#include <svtools/languageoptions.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -84,6 +85,7 @@
 #include "globstr.hrc"
 #include "strindlg.hxx"
 #include "mvtabdlg.hxx"
+#include "docfunc.hxx"
 
 
 
@@ -658,6 +660,33 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TAB_RTL:
+            {
+                ScDocShell* pDocSh = pViewData->GetDocShell();
+                ScDocFunc aFunc(*pDocSh);
+                BOOL bSet = !pDoc->IsLayoutRTL( nCurrentTab );
+
+                const ScMarkData& rMark = pViewData->GetMarkData();
+                if ( rMark.GetSelectCount() )
+                {
+                    //  handle several sheets
+
+                    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+                    String aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
+                    pUndoMgr->EnterListAction( aUndo, aUndo );
+
+                    USHORT nTabCount = pDoc->GetTableCount();
+                    for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                        if ( rMark.GetTableSelect(nTab) )
+                            aFunc.SetLayoutRTL( nTab, bSet, FALSE );
+
+                    pUndoMgr->LeaveListAction();
+                }
+                else
+                    aFunc.SetLayoutRTL( nCurrentTab, bSet, FALSE );
+            }
+            break;
+
         default:
             DBG_ERROR("Unbekannte Message bei ViewShell");
             break;
@@ -764,6 +793,16 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
 
                     rSet.Put( SfxStringItem( nWhich, aTabName ));
 
+                }
+                break;
+
+            case FID_TAB_RTL:
+                {
+                    SvtLanguageOptions aLangOpt;
+                    if ( !aLangOpt.IsCTLFontEnabled() )
+                        rSet.DisableItem( nWhich );
+                    else
+                        rSet.Put( SfxBoolItem( nWhich, pDoc->IsLayoutRTL( nTab ) ) );
                 }
                 break;
         }
