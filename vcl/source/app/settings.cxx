@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:06:23 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_SETTINGS_CXX
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
@@ -495,60 +493,60 @@ ImplStyleData::ImplStyleData()
 // -----------------------------------------------------------------------
 
 ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
-    maFaceColor( rData.maFaceColor ),
-    maCheckedColor( rData.maCheckedColor ),
-    maLightColor( rData.maLightColor ),
-    maLightBorderColor( rData.maLightBorderColor ),
-    maShadowColor( rData.maShadowColor ),
-    maDarkShadowColor( rData.maDarkShadowColor ),
-    maButtonTextColor( rData.maButtonTextColor ),
-    maRadioCheckTextColor( rData.maRadioCheckTextColor ),
-    maGroupTextColor( rData.maGroupTextColor ),
-    maLabelTextColor( rData.maLabelTextColor ),
-    maInfoTextColor( rData.maInfoTextColor ),
-    maWindowColor( rData.maWindowColor ),
-    maWindowTextColor( rData.maWindowTextColor ),
-    maDialogColor( rData.maDialogColor ),
-    maDialogTextColor( rData.maDialogTextColor ),
-    maWorkspaceColor( rData.maWorkspaceColor ),
-    maFieldColor( rData.maFieldColor ),
-    maFieldTextColor( rData.maFieldTextColor ),
+    maActiveBorderColor( rData.maActiveBorderColor ),
     maActiveColor( rData.maActiveColor ),
     maActiveColor2( rData.maActiveColor2 ),
     maActiveTextColor( rData.maActiveTextColor ),
-    maActiveBorderColor( rData.maActiveBorderColor ),
+    maButtonTextColor( rData.maButtonTextColor ),
+    maCheckedColor( rData.maCheckedColor ),
+    maDarkShadowColor( rData.maDarkShadowColor ),
+    maDeactiveBorderColor( rData.maDeactiveBorderColor ),
     maDeactiveColor( rData.maDeactiveColor ),
     maDeactiveColor2( rData.maDeactiveColor2 ),
     maDeactiveTextColor( rData.maDeactiveTextColor ),
-    maDeactiveBorderColor( rData.maDeactiveBorderColor ),
-    maMenuColor( rData.maMenuColor ),
-    maMenuBarColor( rData.maMenuBarColor ),
-    maMenuBorderColor( rData.maMenuBorderColor ),
-    maMenuTextColor( rData.maMenuTextColor ),
-    maMenuHighlightColor( rData.maMenuHighlightColor ),
-    maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
-    maHighlightColor( rData.maHighlightColor ),
-    maHighlightTextColor( rData.maHighlightTextColor ),
+    maDialogColor( rData.maDialogColor ),
+    maDialogTextColor( rData.maDialogTextColor ),
     maDisableColor( rData.maDisableColor ),
+    maFaceColor( rData.maFaceColor ),
+    maFieldColor( rData.maFieldColor ),
+    maFieldTextColor( rData.maFieldTextColor ),
+    maFontColor( rData.maFontColor ),
+    maGroupTextColor( rData.maGroupTextColor ),
     maHelpColor( rData.maHelpColor ),
     maHelpTextColor( rData.maHelpTextColor ),
-    maLinkColor( rData.maLinkColor ),
-    maVisitedLinkColor( rData.maLinkColor ),
+    maHighlightColor( rData.maHighlightColor ),
     maHighlightLinkColor( rData.maLinkColor ),
+    maHighlightTextColor( rData.maHighlightTextColor ),
+    maInfoTextColor( rData.maInfoTextColor ),
+    maLabelTextColor( rData.maLabelTextColor ),
+    maLightBorderColor( rData.maLightBorderColor ),
+    maLightColor( rData.maLightColor ),
+    maLinkColor( rData.maLinkColor ),
+    maMenuBarColor( rData.maMenuBarColor ),
+    maMenuBorderColor( rData.maMenuBorderColor ),
+    maMenuColor( rData.maMenuColor ),
+    maMenuHighlightColor( rData.maMenuHighlightColor ),
+    maMenuHighlightTextColor( rData.maMenuHighlightTextColor ),
+    maMenuTextColor( rData.maMenuTextColor ),
+    maRadioCheckTextColor( rData.maRadioCheckTextColor ),
+    maShadowColor( rData.maShadowColor ),
+    maVisitedLinkColor( rData.maLinkColor ),
+    maWindowColor( rData.maWindowColor ),
+    maWindowTextColor( rData.maWindowTextColor ),
+    maWorkspaceColor( rData.maWorkspaceColor ),
     maAppFont( rData.maAppFont ),
     maHelpFont( rData.maAppFont ),
     maTitleFont( rData.maTitleFont ),
     maFloatTitleFont( rData.maFloatTitleFont ),
     maMenuFont( rData.maMenuFont ),
     maToolFont( rData.maToolFont ),
-    maGroupFont( rData.maGroupFont ),
     maLabelFont( rData.maLabelFont ),
+    maGroupFont( rData.maGroupFont ),
     maInfoFont( rData.maInfoFont ),
     maRadioCheckFont( rData.maRadioCheckFont ),
     maPushButtonFont( rData.maPushButtonFont ),
     maFieldFont( rData.maFieldFont ),
-    maIconFont( rData.maIconFont ),
-    maFontColor( rData.maFontColor )
+    maIconFont( rData.maIconFont )
 {
     mnRefCount                  = 1;
     mnBorderSize                = rData.mnBorderSize;
