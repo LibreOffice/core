@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SystemDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 12:38:00 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ public class SystemDialog {
     }
 
     //("writer_StarOffice_XML_Writer_Template")    'StarOffice XML (Writer)
-    private void addFilterToDialog(String sExtension, String filterName, boolean setToDefault) {
+    public void addFilterToDialog(String sExtension, String filterName, boolean setToDefault) {
         try {
             //get the localized filtername
             String uiName = getFilterUIName(filterName);
