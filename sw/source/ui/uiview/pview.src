@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:43:16 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:26:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ swedish ] = "R~ader";
         TEXT[ dutch ] = "~Rijen";
         TEXT[ spanish ] = "~Filas";
-        TEXT[ english_us ] = "~Rows";
+        TEXT[ english_us ] = "Ro~ws";
     TEXT[ chinese_simplified ] = "––(~R)";
         TEXT[ russian ] = "—ÚÓÍË";
         TEXT[ polish ] = "Wiersze";
@@ -203,7 +203,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ English ] = "Margins" ;
 
             TEXT[ italian ] = "Margini";
-        TEXT[ portuguese_brazilian ] = "R‰nder";
+        TEXT[ portuguese_brazilian ] = "R?nder";
         TEXT[ portuguese ] = "Margens";
         TEXT[ danish ] = "Margener";
         TEXT[ french ] = "Marges";
@@ -241,7 +241,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ swedish ] = "V~‰nster";
         TEXT[ dutch ] = "~Links";
         TEXT[ spanish ] = "~Izquierda";
-        TEXT[ english_us ] = "~Left";
+        TEXT[ english_us ] = "L~eft";
     TEXT[ chinese_simplified ] = "◊Û(~L)";
         TEXT[ russian ] = "—ÎÂ‚‡";
         TEXT[ polish ] = "Z lewej";
@@ -460,7 +460,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ swedish ] = "H~orisontellt";
         TEXT[ dutch ] = "~Horizontaal";
         TEXT[ spanish ] = "~Horizontal";
-        TEXT[ english_us ] = "~Horizontal";
+        TEXT[ english_us ] = "Hori~zontal";
     TEXT[ chinese_simplified ] = "∫·œÚ(~H)";
         TEXT[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
         TEXT[ polish ] = "Poziomo";
@@ -706,7 +706,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Default";
     TEXT[ chinese_simplified ] = "ƒ¨»œ(~D)";
         TEXT[ russian ] = "—Ú‡Ì‰‡Ú";
-        TEXT[ polish ] = "Domyúlnie";
+        TEXT[ polish ] = "Domy?lnie";
         TEXT[ japanese ] = "ïWèÄ(~D)";
         TEXT[ language_user1 ] = " ";
         TEXT[ chinese_traditional ] = "¿qª{(~D)";
