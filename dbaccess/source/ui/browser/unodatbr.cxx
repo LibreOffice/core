@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-17 13:06:16 $
+ *  last change: $Author: fs $ $Date: 2001-07-18 10:42:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1930,43 +1930,56 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         }
         if(xConnection.is())
         {
-            Reference< XWarningsSupplier > xWarnings(xConnection, UNO_QUERY);
-            if (xWarnings.is())
-                xWarnings->clearWarnings();
-
-            // first insert the views because the tables can also include
-            // views but that time the bitmap is the wrong one
-            // the nameaccess will be overwriten in populateTree
-            Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
-            if(xViewSup.is())
-                populateTree(xViewSup->getViews(),_pParent,etView);
-
-            Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
-            if(xTabSup.is())
+            SQLExceptionInfo aInfo;
+            try
             {
-                populateTree(xTabSup->getTables(),_pParent,etTable);
-                Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
-                if(xCont.is())
-                    // add as listener to know when elements are inserted or removed
-                    xCont->addContainerListener(this);
-            }
+                Reference< XWarningsSupplier > xWarnings(xConnection, UNO_QUERY);
+                if (xWarnings.is())
+                    xWarnings->clearWarnings();
 
-            if (xWarnings.is())
-            {
-                SQLExceptionInfo aInfo(xWarnings->getWarnings());
-                if (aInfo.isValid() && sal_False)
+                // first insert the views because the tables can also include
+                // views but that time the bitmap is the wrong one
+                // the nameaccess will be overwriten in populateTree
+                Reference<XViewsSupplier> xViewSup(xConnection,UNO_QUERY);
+                if(xViewSup.is())
+                    populateTree(xViewSup->getViews(),_pParent,etView);
+
+                Reference<XTablesSupplier> xTabSup(xConnection,UNO_QUERY);
+                if(xTabSup.is())
                 {
-                    SQLContext aContext;
-                    aContext.Message = String(ModuleRes(STR_OPENTABLES_WARNINGS));
-                    aContext.Details = String(ModuleRes(STR_OPENTABLES_WARNINGS_DETAILS));
-                    aContext.NextException = aInfo.get();
-                    aInfo = aContext;
-                    showError(aInfo);
+                    populateTree(xTabSup->getTables(),_pParent,etTable);
+                    Reference<XContainer> xCont(xTabSup->getTables(),UNO_QUERY);
+                    if(xCont.is())
+                        // add as listener to know when elements are inserted or removed
+                        xCont->addContainerListener(this);
                 }
-                // TODO: we need a better concept for these warnings:
-                // something like "don't show any warnings for this datasource, again" would be nice
-                // But this requires an extension of the InteractionHandler and an additional property on the data source
+
+                if (xWarnings.is())
+                {
+                    SQLExceptionInfo aInfo(xWarnings->getWarnings());
+                    if (aInfo.isValid() && sal_False)
+                    {
+                        SQLContext aContext;
+                        aContext.Message = String(ModuleRes(STR_OPENTABLES_WARNINGS));
+                        aContext.Details = String(ModuleRes(STR_OPENTABLES_WARNINGS_DETAILS));
+                        aContext.NextException = aInfo.get();
+                        aInfo = aContext;
+                        showError(aInfo);
+                    }
+                    // TODO: we need a better concept for these warnings:
+                    // something like "don't show any warnings for this datasource, again" would be nice
+                    // But this requires an extension of the InteractionHandler and an additional property on the data source
+                }
             }
+            catch(const SQLContext& e) { aInfo = e; }
+            catch(const SQLWarning& e) { aInfo = e; }
+            catch(const SQLException& e) { aInfo = e; }
+            catch(const Exception&)
+            {
+                OSL_ENSURE(sal_False, "SbaTableQueryBrowser, OnExpandEntry: caught an unknown exception while populating the tables!");
+            }
+            if (aInfo.isValid())
+                showError(aInfo);
         }
         else
             return 0L;
@@ -2179,6 +2192,7 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
                 LoadFinished(sal_True);
             }
 
+            InvalidateAll();
             return bSuccess;
         }
         catch(SQLException& e)
@@ -2190,6 +2204,8 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             OSL_ENSURE(sal_False, "SbaTableQueryBrowser::implLoadAnything: something strange happended!");
         }
     }
+
+    InvalidateAll();
     return sal_False;
 }
 
@@ -3657,10 +3673,10 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                     aHelper.drop(sSelectedObject);
                     break;
 
+                case ID_FORM_NEW_PILOT:
                 case ID_FORM_NEW_TEXT:
                 case ID_FORM_NEW_CALC:
                 case ID_FORM_NEW_IMPRESS:
-                case ID_FORM_NEW_PILOT:
                 case ID_FORM_NEW_TEMPLATE:
                     aHelper.newForm(nPos);
                     break;
