@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _basesh.sdi,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:41:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,13 +282,25 @@ interface BaseTextSelection : Selection
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_CONVERT_TEXT_TABLE // status(final|play)
+    FN_CONVERT_TABLE_TO_TEXT
     [
         ExecMethod = Execute ;
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    FN_CONVERT_TEXT_TO_TABLE
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    FN_CONVERT_TEXT_TABLE // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     FN_FORMAT_BORDER_DLG // status(final|play)
     [
         ExecMethod = ExecDlg ;
