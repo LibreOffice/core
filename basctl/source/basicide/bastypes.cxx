@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
+ *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,7 +1060,7 @@ BOOL QueryDelModule( const String& rName, Window* pParent )
     return QueryDel( rName, IDEResId( RID_STR_QUERYDELMODULE ), pParent );
 }
 
-BOOL QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, BOOL bRepeat, BOOL bNewTitle )
+BOOL QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer, const String& rLibName, String& rPassword, BOOL bRepeat, BOOL bNewTitle )
 {
     BOOL bOK = FALSE;
     USHORT nRet = 0;
@@ -1091,7 +1091,8 @@ BOOL QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    ::rtl::OUString aOUPassword( pDlg->GetPassword() );
+                    rPassword = pDlg->GetPassword();
+                    ::rtl::OUString aOUPassword( rPassword );
                     bOK = xPasswd->verifyLibraryPassword( aOULibName, aOUPassword );
 
                     if ( !bOK )

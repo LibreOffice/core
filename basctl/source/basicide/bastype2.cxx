@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bastype2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:27:59 $
+ *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,8 @@ long BasicTreeListBox::ExpandingHdl()
                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
                 {
-                    bOK = QueryPassword( xModLibContainer, aLibName );
+                    String aPassword;
+                    bOK = QueryPassword( xModLibContainer, aLibName, aPassword );
                 }
             }
          }

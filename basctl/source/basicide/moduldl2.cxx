@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tbe $ $Date: 2001-12-13 18:29:39 $
+ *  last change: $Author: tbe $ $Date: 2001-12-18 11:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,12 +1065,14 @@ void LibPage::InsertLib()
                             }
 
                             // check, if the library is password protected
+                            BOOL bOK = FALSE;
+                            String aPassword;
                             if ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) )
                             {
                                 Reference< script::XLibraryContainerPassword > xPasswd( xModLibContImport, UNO_QUERY );
-                                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) )
+                                if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aOULibName ) && !xPasswd->isLibraryPasswordVerified( aOULibName ) && !bReference )
                                 {
-                                    BOOL bOK = QueryPassword( xModLibContImp, aLibName, TRUE, TRUE );
+                                    bOK = QueryPassword( xModLibContImp, aLibName, aPassword, TRUE, TRUE );
 
                                     if ( !bOK )
                                     {
@@ -1106,14 +1108,15 @@ void LibPage::InsertLib()
                                 if ( bReference )
                                 {
                                     // storage URL
+                                    INetURLObject aModStorageURLObj( aModURLObj );
                                     if ( aExtension == aContExtension )
                                     {
-                                        sal_Int32 nCount = aModURLObj.getSegmentCount();
-                                        aModURLObj.insertName( aLibName, false, nCount-1 );
-                                        aModURLObj.setExtension( aLibExtension );
-                                        aModURLObj.setFinalSlash();
+                                        sal_Int32 nCount = aModStorageURLObj.getSegmentCount();
+                                        aModStorageURLObj.insertName( aLibName, false, nCount-1 );
+                                        aModStorageURLObj.setExtension( aLibExtension );
+                                        aModStorageURLObj.setFinalSlash();
                                     }
-                                    ::rtl::OUString aModStorageURL( aModURLObj.GetMainURL() );
+                                    ::rtl::OUString aModStorageURL( aModStorageURLObj.GetMainURL() );
 
                                     // create library link
                                     xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aOULibName, aModStorageURL, TRUE ), UNO_QUERY);
@@ -1145,6 +1148,23 @@ void LibPage::InsertLib()
                                                 Any aElement = xModLibImport->getByName( aOUModName );
                                                 xModLib->insertByName( aOUModName, aElement );
                                             }
+
+                                            // set password
+                                            if ( bOK )
+                                            {
+                                                Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
+                                                if ( xPasswd.is() )
+                                                {
+                                                    try
+                                                    {
+                                                        ::rtl::OUString aOUPassword( aPassword );
+                                                        xPasswd->changeLibraryPassword( aOULibName, ::rtl::OUString(), aOUPassword );
+                                                    }
+                                                    catch (...)
+                                                    {
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -1157,14 +1177,15 @@ void LibPage::InsertLib()
                                 if ( bReference )
                                 {
                                     // storage URL
+                                    INetURLObject aDlgStorageURLObj( aDlgURLObj );
                                     if ( aExtension == aContExtension )
                                     {
-                                        sal_Int32 nCount = aDlgURLObj.getSegmentCount();
-                                        aDlgURLObj.insertName( aLibName, false, nCount - 1 );
-                                        aDlgURLObj.setExtension( aLibExtension );
-                                        aDlgURLObj.setFinalSlash();
+                                        sal_Int32 nCount = aDlgStorageURLObj.getSegmentCount();
+                                        aDlgStorageURLObj.insertName( aLibName, false, nCount - 1 );
+                                        aDlgStorageURLObj.setExtension( aLibExtension );
+                                        aDlgStorageURLObj.setFinalSlash();
                                     }
-                                    ::rtl::OUString aDlgStorageURL( aDlgURLObj.GetMainURL() );
+                                    ::rtl::OUString aDlgStorageURL( aDlgStorageURLObj.GetMainURL() );
 
                                     // create library link
                                     xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aOULibName, aDlgStorageURL, TRUE ), UNO_QUERY);
