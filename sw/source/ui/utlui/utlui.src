@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:28:29 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 20:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ russian ] = "Ïğèìåíèòü òàáëèöó çàìåí";
         Text[ polish ] = "U¿yj tabeli zamian";
         Text[ japanese ] = "’uŠ·Ã°ÌŞÙ‚Ìg—p";
-        Text[ chinese_traditional ] = "¨Ï¥Î¥N´Àªí";
+        Text[ chinese_traditional ] = "¨Ï¥Î´À¥N²M³æ";
         Text[ arabic ] = "ÇÓÊÎÏÇã ŞÇÆãÉ ÇáÇÓÊÈÏÇá";
         Text[ greek ] = "ÅöáñìïãŞ ôïõ ğßíáêá áíôéêáôÜóôáóçò";
         Text[ korean ] = "´ëÃ¼ Ç¥ Àû¿ë";
@@ -165,7 +165,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text [ english_us ] = "Capitalize first letter of sentences" ;
         Text[ chinese_simplified ] = "Ã¿¸ö¾äÊ×²ÉÓÃ´óĞ´×ÖÄ¸";
         Text[ russian ] = "Íà÷èíàòü êàæäîå ïğåäëîæåíèå ñ ïğîïèñíîé áóêâû";
-        Text[ polish ] = "Pocz¹tek zdania z du¿ej litery";
+        Text[ polish ] = "Pocz¹tek zdania z wielkiej litery";
         Text[ japanese ] = "‚·‚×‚Ä‚Ì•¶‚ğ‘å•¶š‚Ån‚ß‚é";
         Text[ chinese_traditional ] = "¨C­Ó¥y­º±Ä¥Î¤j¼g¦r¥À";
         Text[ arabic ] = "ÈÏÁ ßá ÌãáÉ ÈÍÑİ ÇÓÊåáÇáí";
@@ -219,7 +219,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ polish ] = "Zamieñ style indywidualne";
         Text[ japanese ] = "Õ°»Ş°İ’è‚Ì½À²Ù‚É’u‚«Š·‚¦‚é";
         Text[ language_user1 ] = " ";
-        Text[ chinese_traditional ] = "¥N´À¦Û­q¼Ë¦¡";
+        Text[ chinese_traditional ] = "´À¥N¦Û­q¼Ë¦¡";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÇáÃäãÇØ ÇáãÎÕÕÉ";
         Text[ greek ] = "ÁíôéêáôÜóôáóç ğñïóáñìïóìİíùí ğñïôığùí";
         Text[ korean ] = "»ç¿ëÀÚ ¼­½ÄÆÄÀÏ ´ëÃ¼";
@@ -325,7 +325,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "¥Î ? ... ¥N´À 1/2 ...";
         Text[ arabic ] = "ÇÓÊÈÏÇá 1/2 ... ÈÜ ½...";
         Text[ greek ] = "ÁíôéêáôÜóôáóç 1/2 ... ìå ½ ...";
-        Text[ korean ] = "1/2 ...À»£¨¸¦£©...·Î ´ëÃ¼";
+        Text[ korean ] = "1/2 ...À»(¸¦)...·Î ´ëÃ¼";
         Text[ turkish ] = "1/2 ... yazıldığında ½ ... ile değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1/2 ... por ½ ...";
@@ -403,7 +403,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ chinese_traditional ] = "¥Î 1^st... ¥N´À 1st...";
         Text[ arabic ] = "ÇÓÊÈÏÇá 1st ... ÈÜ 1^st ...";
         Text[ greek ] = "ÁíôéêáôÜóôáóç 1ï... ìå 1^ï...";
-        Text[ korean ] = "1st...À»£¨¸¦£©1^st...·Î ´ëÃ¼";
+        Text[ korean ] = "1st...À»(¸¦£©1^st...·Î ´ëÃ¼";
         Text[ turkish ] = "1st ... yazıldığında 1^st ... ile değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar 1st ... con 1^st ...";
@@ -424,7 +424,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ english_us ] = "Combine single line paragraphs";
         Text[ chinese_simplified ] = "ºÏ²¢µ¥ĞĞ¶ÎÂä";
         Text[ russian ] = "Îáúåäèíåíèå îäíîñòğî÷íûõ àáçàöåâ";
-        Text[ polish ] = "Po³¹czenie akapitów jednowierszowych";
+        Text[ polish ] = "£¹czenie akapitów jednowierszowych";
         Text[ japanese ] = "1s’i—‚ÌŒ‹‡";
         Text[ chinese_traditional ] = "¦X¨Ö³æ¦æ¬q¸¨";
         Text[ arabic ] = "ÏãÌ ÇáİŞÑÇÊ ÃÍÇÏíÉ ÇáÃÓØÑ";
@@ -608,7 +608,7 @@ Resource RID_SHELLRES_AUTOFMTSTRS
         Text[ english_us ] = "Combine paragraphs";
         Text[ chinese_simplified ] = "ºÏ²¢¶ÎÂä";
         Text[ russian ] = "Îáúåäèíåíèå àáçàöåâ";
-        Text[ polish ] = "Po³¹czenie akapitów";
+        Text[ polish ] = "£¹czenie akapitów";
         Text[ japanese ] = "’i—‚ÌŒ‹‡";
         Text[ chinese_traditional ] = "¦X¨Ö¬q¸¨";
         Text[ arabic ] = "Öã ÇáİŞÑÇÊ";
@@ -642,7 +642,7 @@ String STR_EVENT_OBJECT_SELECT
     Text[ russian ] = "Âûáîğ îáúåêòà";
     Text[ polish ] = "Kliknij obiekt";
     Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ì¸Ø¯¸";
-    Text[ chinese_traditional ] = "¥Î·Æ¹««öÀ»ª«¥ó";
+    Text[ chinese_traditional ] = "«ö¤@¤Uª«¥ó";
     Text[ arabic ] = "ÇáäŞÑ İæŞ ÇáßÇÆä";
     Text[ greek ] = "ÅğéëïãŞ áíôéêåéìİíïõ";
     Text[ korean ] = "°³Ã¼ ¼±ÅÃ";
@@ -669,7 +669,7 @@ String STR_EVENT_START_INS_GLOSSARY
     TEXT[ polish ] = "Wstaw przed autotekstem";
     TEXT[ portuguese_brazilian ] = "Vor AutoText einf?en";
     TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚·‚é‘O";
-    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ Àü¿¡";
+    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ Àü";
     TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®Ç°";
     TEXT[ chinese_traditional ] = "¦b´¡¤J¦Û°Ê¹Ï¤å¶°¤§«e";
     TEXT[ arabic ] = "ŞÈá ÅÏÑÇÌ ÇáäÕ ÇáÊáŞÇÆí";
@@ -696,7 +696,7 @@ String STR_EVENT_END_INS_GLOSSARY
     TEXT[ polish ] = "Wstaw za autotekstem";
     TEXT[ portuguese_brazilian ] = "Nach AutoText einf?en";
     TEXT[ japanese ] = "“ü—Íx‰‡‚ğ‘}“ü‚µ‚½Œã";
-    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ ÈÄ¿¡";
+    TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® »ğÀÔ ÈÄ";
     TEXT[ chinese_simplified ] = "ÔÚ²åÈë×Ô¶¯Í¼ÎÄ¼¯Ö®ºó";
     TEXT[ chinese_traditional ] = "¦b¦Û°Ê¹Ï¤å¶°´¡¤J¤§«á";
     TEXT[ arabic ] = "ÈÚÏ ÅÏÑÇÌ ÇáäÕ ÇáÊáŞÇÆí";
@@ -990,7 +990,7 @@ String STR_CONTENT_TYPE_OUTLINE
     Text[ chinese_traditional ] = "¼ĞÃD";
     Text[ arabic ] = "ÚäÇæíä";
     Text[ greek ] = "Åğéêåöáëßäåò";
-    Text[ korean ] = "Ç¥Á¦";
+    Text[ korean ] = "Á¦¸ñ";
     Text[ turkish ] = "Başlık";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encabezados";
@@ -1746,6 +1746,7 @@ String STR_HYPH_TITLE
     Text[ catalan ] = "Separación silábica";
     Text[ finnish ] = "Tavutus";
 };
+
 
 
 
