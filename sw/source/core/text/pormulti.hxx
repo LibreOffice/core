@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:13:14 $
+ *  last change: $Author: fme $ $Date: 2002-06-18 09:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,17 +259,18 @@ class SwRubyPortion : public SwMultiPortion
     USHORT nAdjustment;
     void _Adjust( SwTxtFormatInfo &rInf);
 public:
+#ifdef BIDI
+    SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd );
+#else
     SwRubyPortion( xub_StrLen nEnd, USHORT nAdj, USHORT nPos, xub_StrLen nOfst )
         : SwMultiPortion( nEnd ), nRubyOffset( nOfst ), nAdjustment( nAdj )
         { SetRuby(); SetTop(!nPos); }
-#ifdef VERTICAL_LAYOUT
-    SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-        const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
-        const sal_Bool* pForceRubyPos );
-#else
-    SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-        const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs = 0 );
 #endif
+
+    SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
+                   const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
+                   const sal_Bool* pForceRubyPos );
+
     void CalcRubyOffset();
     inline void Adjust( SwTxtFormatInfo &rInf )
         { if(nAdjustment && GetRoot().GetNext()) _Adjust(rInf); }
@@ -280,9 +281,9 @@ public:
 class SwRotatedPortion : public SwMultiPortion
 {
 public:
-    SwRotatedPortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
     SwRotatedPortion( xub_StrLen nEnd, sal_uInt8 nDir = 1 )
         : SwMultiPortion( nEnd ) { SetDirection( nDir ); }
+    SwRotatedPortion( const SwMultiCreator& rCreate, xub_StrLen nEnd );
 };
 
 #ifdef BIDI

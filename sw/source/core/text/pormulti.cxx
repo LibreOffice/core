@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: fme $ $Date: 2002-05-30 12:44:25 $
+ *  last change: $Author: fme $ $Date: 2002-06-18 09:13:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,14 +142,11 @@
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
 #endif
-
-#ifdef VERTICAL_LAYOUT
 #ifndef _PAGEDESC_HXX
 #include <pagedesc.hxx> // SwPageDesc
 #endif
 #ifndef SW_TGRDITEM_HXX
 #include <tgrditem.hxx>
-#endif
 #endif
 
 using namespace ::com::sun::star;
@@ -310,6 +307,11 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
 }
 
 #ifdef BIDI
+
+/*---------------------------------------------------
+ * SwBidiPortion::SwBidiPortion(..)
+ * --------------------------------------------------*/
+
 SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, BYTE nLv )
     : SwMultiPortion( nEnd ), nLevel( nLv )
 {
@@ -350,8 +352,13 @@ sal_Bool SwBidiPortion::ChgSpaceAdd( SwLineLayout* pCurr, short nSpaceAdd ) cons
  * --------------------------------------------------*/
 
 SwDoubleLinePortion::SwDoubleLinePortion( SwDoubleLinePortion& rDouble,
-    xub_StrLen nEnd ) : SwMultiPortion( nEnd ), pBracket( 0 )
+                                          xub_StrLen nEnd ) :
+    SwMultiPortion( nEnd ),
+    pBracket( 0 )
 {
+#ifdef BIDI
+    SetDirection( rDouble.GetDirection() );
+#endif
     SetDouble();
     if( rDouble.GetBrackets() )
     {
@@ -434,6 +441,14 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
         delete pBracket;
         pBracket = 0;
     }
+
+#ifdef BIDI
+    // double line portions have the same direction as the frame directions
+    if ( rCreate.nLevel % 2 )
+        SetDirection( DIR_RIGHT2LEFT );
+    else
+        SetDirection( DIR_LEFT2RIGHT );
+#endif
 }
 
 
@@ -668,21 +683,35 @@ SwDoubleLinePortion::~SwDoubleLinePortion()
     delete pBracket;
 }
 
+#ifdef BIDI
 /*-----------------13.11.00 14:50-------------------
  * SwRubyPortion::SwRubyPortion(..)
  * constructs a ruby portion, i.e. an additional text is displayed
  * beside the main text, e.g. phonetic characters.
  * --------------------------------------------------*/
 
-#ifdef VERTICAL_LAYOUT
-SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-    const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
-    const sal_Bool* pForceRubyPos )
-     : SwMultiPortion( nEnd )
-#else
-SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
-    const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs ) : SwMultiPortion( nEnd )
+
+SwRubyPortion::SwRubyPortion( const SwRubyPortion& rRuby, xub_StrLen nEnd ) :
+    SwMultiPortion( nEnd ),
+    nRubyOffset( rRuby.GetRubyOffset() ),
+    nAdjustment( rRuby.GetAdjustment() )
+{
+    SetDirection( rRuby.GetDirection() ),
+    SetTop( rRuby.OnTop() );
+    SetRuby();
+}
 #endif
+
+/*-----------------13.11.00 14:50-------------------
+ * SwRubyPortion::SwRubyPortion(..)
+ * constructs a ruby portion, i.e. an additional text is displayed
+ * beside the main text, e.g. phonetic characters.
+ * --------------------------------------------------*/
+
+SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
+                              const SwDoc& rDoc, xub_StrLen nEnd, xub_StrLen nOffs,
+                              const sal_Bool* pForceRubyPos )
+     : SwMultiPortion( nEnd )
 {
     SetRuby();
     ASSERT( SW_MC_RUBY == rCreate.nId, "Ruby expected" );
@@ -691,15 +720,11 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     nAdjustment = rRuby.GetAdjustment();
     nRubyOffset = nOffs;
 
-#ifdef VERTICAL_LAYOUT
     // in grid mode we force the ruby text to the upper or lower line
     if ( pForceRubyPos )
         SetTop( *pForceRubyPos );
     else
         SetTop( ! rRuby.GetPosition() );
-#else
-    SetTop( !rRuby.GetPosition() );
-#endif
 
     const SwCharFmt* pFmt = ((SwTxtRuby*)rCreate.pAttr)->GetCharFmt();
     SwFont *pRubyFont;
@@ -708,13 +733,9 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
         const SwAttrSet& rSet = pFmt->GetAttrSet();
          pRubyFont = new SwFont( rFnt );
         pRubyFont->SetDiffFnt( &rSet, &rDoc );
-        // we do not allow a vertical font for the ruby text
 
-#ifdef VERTICAL_LAYOUT
+        // we do not allow a vertical font for the ruby text
         pRubyFont->SetVertical( rFnt.GetOrientation() );
-#else
-        pRubyFont->SetVertical( 0 );
-#endif
     }
     else
         pRubyFont = NULL;
@@ -722,17 +743,30 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     SwFldPortion *pFld = new SwFldPortion( aStr, pRubyFont );
     pFld->SetNextOffset( nOffs );
     pFld->SetFollow( sal_True );
-#ifdef VERTICAL_LAYOUT
+
     if( OnTop() )
-#else
-    if( !rRuby.GetPosition() )
-#endif
         GetRoot().SetPortion( pFld );
     else
     {
         GetRoot().SetNext( new SwLineLayout() );
         GetRoot().GetNext()->SetPortion( pFld );
     }
+
+#ifdef BIDI
+    // ruby portions have the same direction as the frame directions
+    if ( rCreate.nLevel % 2 )
+    {
+        // switch right and left ruby adjustment in rtl environment
+        if ( 0 == nAdjustment )
+            nAdjustment = 2;
+        else if ( 2 == nAdjustment )
+            nAdjustment = 0;
+
+        SetDirection( DIR_RIGHT2LEFT );
+    }
+    else
+        SetDirection( DIR_LEFT2RIGHT );
+#endif
 }
 
 /*-----------------13.11.00 14:56-------------------
@@ -1098,6 +1132,9 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         pRet->pItem = NULL;
         pRet->pAttr = pRuby;
         pRet->nId = SW_MC_RUBY;
+#ifdef BIDI
+        pRet->nLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
+#endif
         return pRet;
     }
     if( n2Lines < nCount || ( pItem && pItem == p2Lines &&
@@ -1135,6 +1172,10 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
             aEnd.Insert( GetTxt().Len(), 0 );
         }
         pRet->nId = SW_MC_DOUBLE;
+#ifdef BIDI
+        pRet->nLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
+#endif
+
         // n2Lines is the index of the last 2-line-attribute, which contains
         // the actual position.
         i = 0;
@@ -1466,7 +1507,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti )
 #endif
 {
-#ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
     USHORT nGridWidth = 0;
@@ -1491,7 +1531,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         GetInfo().SetSnapToGrid( ! bRubyTop );
         rMulti.Height( pCurr->Height() );
     }
-#endif
 
 #ifdef BIDI
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
@@ -1514,10 +1553,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 #endif
         GetInfo().DrawViewOpt( rMulti, POR_FLD );
 
-#ifdef VERTICAL_LAYOUT
     if ( bRubyInGrid )
         rMulti.Height( nOldHeight );
-#endif
 
     // do we have to repaint a post it portion?
     if( GetInfo().OnWin() && rMulti.GetPortion() &&
@@ -1616,7 +1653,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 
     do
     {
-#ifdef VERTICAL_LAYOUT
         if ( bHasGrid )
         {
             if( rMulti.HasRotation() )
@@ -1655,17 +1691,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         }
         else
             GetInfo().Y( nOfst + AdjustBaseLine( *pLay, pPor ) );
-#else
-        if( rMulti.HasRotation() )
-        {
-            if( rMulti.IsRevers() )
-                GetInfo().X( nOfst - AdjustBaseLine( *pLay, *pPor, sal_True ) );
-            else
-                GetInfo().X( nOfst + AdjustBaseLine( *pLay, *pPor ) );
-        }
-        else
-            GetInfo().Y( nOfst + AdjustBaseLine( *pLay, *pPor ) );
-#endif
 
         sal_Bool bSeeked = sal_True;
         GetInfo().SetLen( pPor->GetLen() );
@@ -1756,7 +1781,6 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                     GetInfo().Y( nOldY - rMulti.GetAscent() + rMulti.Height() );
                 }
             }
-#ifdef VERTICAL_LAYOUT
             else if ( bHasGrid && rMulti.IsRuby() )
             {
                 GetInfo().X( nTmpX );
@@ -1770,9 +1794,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
                     nOfst += pCurr->Height() - nRubyHeight;
                     GetInfo().SetSnapToGrid( sal_False );
                 }
-            }
-#endif
-            else
+            } else
             {
                 GetInfo().X( nTmpX );
                 // We switch to the baseline of the next inner line
@@ -1781,10 +1803,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         }
     } while( pPor );
 
-#ifdef VERTICAL_LAYOUT
     if ( bRubyInGrid )
         GetInfo().SetSnapToGrid( bOldGridModeAllowed );
-#endif
 
     // delete underline font
     delete GetInfo().GetUnderFnt();
@@ -1892,14 +1912,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         ASSERT( pPage, "No page in frame!");
 
         const SwLayoutFrm* pBody = pPage->FindBodyCont();
-#ifdef VERTICAL_LAYOUT
         nMaxWidth = pBody ? ( rInf.GetTxtFrm()->IsVertical() ?
                               pBody->Prt().Width() :
                               pBody->Prt().Height() ) :
                     USHRT_MAX;
-#else
-        nMaxWidth = pBody ? pBody->Prt().Height() : USHRT_MAX;
-#endif
     }
     else
         nTmpX = rInf.X();
@@ -1956,7 +1972,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwLinePortion *pNextSecond = NULL;
     BOOL bRet = FALSE;
 
-#ifdef VERTICAL_LAYOUT
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
@@ -1970,7 +1985,6 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
     }
-#endif
 
     do
     {
@@ -1994,20 +2008,17 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             aInf.SetRest( pFld );
         }
         aInf.SetRuby( rMulti.IsRuby() && rMulti.OnTop() );
-#ifdef VERTICAL_LAYOUT
 
         // in grid mode we temporarily have to disable the grid for the ruby line
         const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
         if ( bHasGrid && aInf.IsRuby() && bRubyTop )
             aInf.SetSnapToGrid( sal_False );
-#endif
+
         // If there's no more rubytext, then buildportion is forbidden
         if( pFirstRest || !aInf.IsRuby() )
             BuildPortions( aInf );
 
-#ifdef VERTICAL_LAYOUT
         aInf.SetSnapToGrid( bOldGridModeAllowed );
-#endif
 
         rMulti.CalcSize( *this, aInf );
         pCurr->SetRealHeight( pCurr->Height() );
@@ -2051,16 +2062,13 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
                 aTmp.SetRest( aInf.GetRest() );
             aInf.SetRest( NULL );
 
-#ifdef VERTICAL_LAYOUT
             // in grid mode we temporarily have to disable the grid for the ruby line
             if ( bHasGrid && aTmp.IsRuby() && ! bRubyTop )
                 aTmp.SetSnapToGrid( sal_False );
-#endif
+
             BuildPortions( aTmp );
 
-#ifdef VERTICAL_LAYOUT
             aTmp.SetSnapToGrid( bOldGridModeAllowed );
-#endif
 
             rMulti.CalcSize( *this, aInf );
             rMulti.GetRoot().SetRealHeight( rMulti.GetRoot().Height() );
@@ -2213,9 +2221,15 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
             if ( rInf.GetIdx() == rInf.GetLineStart() )
             {
                 // the ruby portion has to be split in two portions
+#ifdef BIDI
+                pTmp = new SwRubyPortion( ((SwRubyPortion&)rMulti),
+                                          nMultiLen + rInf.GetIdx() );
+#else
                 pTmp = new SwRubyPortion( nMultiLen + rInf.GetIdx(),
                     ((SwRubyPortion&)rMulti).GetAdjustment(), !rMulti.OnTop(),
                     ((SwRubyPortion&)rMulti).GetRubyOffset() );
+#endif
+
                 if( pNextSecond )
                 {
                     pTmp->GetRoot().SetNext( new SwLineLayout() );
@@ -2417,7 +2431,6 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
             pTmp = new SwBidiPortion( nMultiPos, pCreate->nLevel );
 #endif
         else if( pMulti->IsRuby() )
-#ifdef VERTICAL_LAYOUT
         {
             sal_Bool bRubyTop;
             sal_Bool* pRubyPos = 0;
@@ -2436,12 +2449,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
                     *GetInfo().GetDoc(), nMultiPos,
                     ((SwRubyPortion*)pMulti)->GetRubyOffset(), pRubyPos );
         }
-#else
-            pTmp = new SwRubyPortion( *pCreate, *GetInfo().GetFont(),
-                    *GetInfo().GetDoc(), nMultiPos,
-                    ((SwRubyPortion*)pMulti)->GetRubyOffset() );
-#endif
-        else if( pMulti->GetDirection() )
+        else if( pMulti->HasRotation() )
             pTmp = new SwRotatedPortion( nMultiPos, pMulti->GetDirection() );
         else
         {
