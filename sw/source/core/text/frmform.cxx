@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-31 14:27:48 $
+ *  last change: $Author: od $ $Date: 2002-08-22 09:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2272,6 +2272,16 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
 #else
                                     SwTwips nOldTop = pFly->Frm().Top();
 #endif
+                                    /// OD 23.07.2002 #101612#: calculation of fly
+                                    ///     frame can cause grow of the text frame
+                                    ///     and thus probably the section, the text
+                                    ///     frame is in.
+                                    ///     Thus, do *not* ColLock() the section the
+                                    ///     text frame is in, for calculating its
+                                    ///     fly frames.
+                                    ///     NOTE: This locking was introduced for
+                                    ///     fixing part of bug #99066#, which is still open.
+                                    /*
                                     SwSectionFrm* pSect = FindSctFrm();
                                     if( pSect )
                                     {
@@ -2280,9 +2290,17 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                         else
                                             pSect->ColLock();
                                     }
+                                    */
                                     pFly->Calc();
+                                    /// OD 23.07.2002 #101612#: no pSect.ColLock()
+                                    ///     performed.
+                                    ///     Thus, ColUnLock() not necessary.
+                                    ///     NOTE: Introduced for fixing part of
+                                    ///     bug #99066# - see above
+                                    /*
                                     if( pSect )
                                         pSect->ColUnlock();
+                                    */
                                     bRepeat = sal_True;
 #ifdef VERTICAL_LAYOUT
                                     if( !nRepAdd && nOldTop >= (pFly->Frm().*fnRect->fnGetTop)() )
