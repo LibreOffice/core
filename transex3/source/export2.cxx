@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-30 12:10:22 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,8 @@
  ************************************************************************/
 #include "export.hxx"
 #include "utf8conv.hxx"
+#include <tools/datetime.hxx>
+#include <bootstrp/appdef.hxx>
 
 //
 // class ResData();
@@ -523,4 +525,76 @@ void Export::FillInListFallbacks(
                     UTF8Converter::ConvertToUTF8(
                     ( *pEntry )[ nFallback ], eSource ), eDest );
     }
+}
+
+/*****************************************************************************/
+ByteString Export::GetTimeStamp()
+/*****************************************************************************/
+{
+//  return "xx.xx.xx";
+
+       Time aTime;
+    ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
+    sTimeStamp += " ";
+    sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
+    sTimeStamp += ":";
+    sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
+    sTimeStamp += ":";
+    sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+    return sTimeStamp;
+}
+
+/*****************************************************************************/
+BOOL Export::ConvertLineEnds(
+    ByteString sSource, ByteString sDestination )
+/*****************************************************************************/
+{
+    String sSourceFile( sSource, RTL_TEXTENCODING_ASCII_US );
+    String sDestinationFile( sDestination, RTL_TEXTENCODING_ASCII_US );
+
+    SvFileStream aSource( sSourceFile, STREAM_READ );
+    if ( !aSource.IsOpen())
+        return FALSE;
+    SvFileStream aDestination( sDestinationFile, STREAM_STD_WRITE | STREAM_TRUNC );
+    if ( !aDestination.IsOpen()) {
+        aSource.Close();
+        return FALSE;
+    }
+
+    ByteString sLine;
+
+    while ( !aSource.IsEof()) {
+        aSource.ReadLine( sLine );
+        sLine.EraseAllChars( '\r' );
+        aDestination.WriteLine( sLine );
+    }
+
+    aSource.Close();
+    aDestination.Close();
+}
+
+/*****************************************************************************/
+ByteString Export::GetNativeFile( ByteString sSource )
+/*****************************************************************************/
+{
+    DirEntry aTemp( GetTempFile());
+    ByteString sReturn( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
+
+    if ( ConvertLineEnds( sSource, sReturn ))
+        return sReturn;
+
+    return "";
+}
+
+/*****************************************************************************/
+DirEntry Export::GetTempFile()
+/*****************************************************************************/
+{
+#ifdef WNT
+    String sTempDir( GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
+#else
+    String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
+#endif
+    DirEntry aTemp( sTempDir );
+    return aTemp.TempName();
 }

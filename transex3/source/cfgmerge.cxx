@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-06 08:12:57 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -653,14 +653,7 @@ void CfgExport::WorkOnRessourceEnd()
                 sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
             }
 
-            Time aTime;
-            ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
-            sTimeStamp += " ";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
-            sTimeStamp += ":";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
-            sTimeStamp += ":";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+            ByteString sTimeStamp( Export::GetTimeStamp());
 
             for ( ULONG i = 0; i < LANGUAGES; i++ ) {
                 if ( LANGUAGE_ALLOWED( i )) {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-06 08:12:57 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,9 @@ ByteString sPrjRoot;
 ByteString sActFileName;
 ByteString sOutputFile;
 ByteString sMergeSrc;
+ByteString sTempFile;
 MergeDataFile *pMergeDataFile;
+FILE *pTempFile;
 
 extern "C" {
 // the whole interface to lexer is in this extern "C" section
@@ -118,6 +120,8 @@ extern char *GetOutputFile( int argc, char* argv[])
     sPrjRoot = "";
     sActFileName = "";
     Export::sLanguages = "";
+    sTempFile = "";
+    pTempFile = NULL;
 
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
@@ -242,10 +246,29 @@ extern FILE *GetNextFile()
 /*****************************************************************************/
 {
     // look for next valid filename in input file list
+    if ( sTempFile.Len()) {
+        fclose( pTempFile );
+        String sTemp( sTempFile, RTL_TEXTENCODING_ASCII_US );
+        DirEntry aTemp( sTemp );
+        aTemp.Kill();
+    }
+
     while ( aInputFileList.Count()) {
         ByteString sFileName( *(aInputFileList.GetObject( 0 )));
+
+        ByteString sOrigFile( sFileName );
+
+        sFileName = Export::GetNativeFile( sFileName );
         delete aInputFileList.GetObject(( ULONG ) 0 );
         aInputFileList.Remove(( ULONG ) 0 );
+
+        if ( sFileName == "" ) {
+            fprintf( stderr, "ERROR: Could not precompile File %s\n",
+                sOrigFile.GetBuffer());
+            return GetNextFile();
+        }
+
+        sTempFile = sFileName;
 
         // able to open file?
         FILE *pFile = fopen( sFileName.GetBuffer(), "r" );
@@ -253,9 +276,11 @@ extern FILE *GetNextFile()
             fprintf( stderr, "Error: Could not open File %s\n",
                 sFileName.GetBuffer());
         else {
+            pTempFile = pFile;
+
             // this is a valid file which can be opened, so
             // create path to project root
-            DirEntry aEntry( String( sFileName, RTL_TEXTENCODING_ASCII_US ));
+            DirEntry aEntry( String( sOrigFile, RTL_TEXTENCODING_ASCII_US ));
             aEntry.ToAbs();
             ByteString sFullEntry( aEntry.GetFull(), RTL_TEXTENCODING_ASCII_US );
             aEntry += DirEntry( String( "..", RTL_TEXTENCODING_ASCII_US ));
@@ -267,7 +292,7 @@ extern FILE *GetNextFile()
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
             sActFileName.ToLowerAscii();
 
-            fprintf( stdout, "\nProcessing File %s ...\n", sFileName.GetBuffer());
+            fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
@@ -381,6 +406,7 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
     if ( bEnableExport ) {
         aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
         aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        aOutput.SetLineDelimiter( LINEEND_CRLF );
 //      aOutput.SetTargetCharSet( RTL_TEXTENCODING_MS_1252 );
     }
 
@@ -422,8 +448,11 @@ Export::Export( const ByteString &rOutput, BOOL bWrite,
     // used when merge is enabled
 
     // open output stream
-    if ( bEnableExport )
+    if ( bEnableExport ) {
         aOutput.Open( String( rOutput, RTL_TEXTENCODING_ASCII_US ), STREAM_STD_WRITE | STREAM_TRUNC );
+        aOutput.SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
+        aOutput.SetLineDelimiter( LINEEND_CRLF );
+    }
 
     // looking in environment for given transformation file for german text
     ByteString sTransformFile( GetEnv( "TRANSEXTRANSFORM" ));
@@ -609,6 +638,7 @@ int Export::Execute( int nToken, char * pToken )
             aResStack.Insert( pResData, LIST_APPEND );
             ByteString sBackup( sToken );
             sToken.EraseAllChars( '\n' );
+            sToken.EraseAllChars( '\r' );
             sToken.EraseAllChars( '{' );
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             sToken.EraseTrailingChars( ' ' );
@@ -655,6 +685,7 @@ int Export::Execute( int nToken, char * pToken )
             pResData = new ResData( sActPForm, FullId());
             aResStack.Insert( pResData, LIST_APPEND );
             sToken.EraseAllChars( '\n' );
+            sToken.EraseAllChars( '\r' );
             sToken.EraseAllChars( '{' );
             sToken.EraseAllChars( '\t' );
             sToken.EraseAllChars( ' ' );
@@ -1019,6 +1050,7 @@ int Export::Execute( int nToken, char * pToken )
         break;
         case CONDITION: {
             bDontWriteOutput = FALSE;
+            while( sToken.SearchAndReplace( "\r", " " ) != STRING_NOTFOUND ) {};
             while( sToken.SearchAndReplace( "\t", " " ) != STRING_NOTFOUND ) {};
             while( sToken.SearchAndReplace( "  ", " " ) != STRING_NOTFOUND ) {};
             ByteString sCondition = sToken.GetToken( 0, ' ' );
@@ -1266,14 +1298,7 @@ BOOL Export::WriteData( ResData *pResData, BOOL bCreateNew )
         ByteString sXQHText;
         ByteString sXTitle;
 
-        Time aTime;
-        ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
-        sTimeStamp += " ";
-        sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
-        sTimeStamp += ":";
-        sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
-        sTimeStamp += ":";
-        sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+        ByteString sTimeStamp( Export::GetTimeStamp());
 
         for ( USHORT i = 0; i < LANGUAGES; i++ ) {
             if ( LANGUAGE_ALLOWED( i )) {
@@ -1412,14 +1437,7 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
         sGID.EraseTrailingChars( '.' );
     }
 
-    Time aTime;
-    ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
-    sTimeStamp += " ";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
-    sTimeStamp += ":";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
-    sTimeStamp += ":";
-    sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+    ByteString sTimeStamp( Export::GetTimeStamp());
 
     for ( ULONG i = 0; i < pExportList->Count(); i++ ) {
         ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
@@ -1560,7 +1578,8 @@ void Export::CleanValue( ByteString &rValue )
         for ( USHORT i = rValue.Len() - 1; i > 0; i-- ) {
             if (( rValue.GetChar( i ) == ' ' ) || ( rValue.GetChar( i ) == '\t' ) ||
                 ( rValue.GetChar( i ) == '\n' ) || ( rValue.GetChar( i ) == ';' ) ||
-                ( rValue.GetChar( i ) == '{' ) || ( rValue.GetChar( i ) == '\\' ))
+                ( rValue.GetChar( i ) == '{' ) || ( rValue.GetChar( i ) == '\\' ) ||
+                ( rValue.GetChar( i ) == '\r' ))
                 rValue.Erase( i );
             else
                 break;
@@ -1583,6 +1602,7 @@ ByteString Export::GetText( const ByteString &rSource, USHORT nToken )
             ByteString sTmp( rSource.Copy( rSource.Search( "=" )));
             CleanValue( sTmp );
             sTmp.EraseAllChars( '\n' );
+            sTmp.EraseAllChars( '\r' );
 
             while ( sTmp.SearchAndReplace( "\\\\\"", "-=<[BSlashBSlashHKom]>=-\"" )
                 != STRING_NOTFOUND ) {};

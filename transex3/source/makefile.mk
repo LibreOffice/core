@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: nf $ $Date: 2001-06-05 07:54:07 $
+#   last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -104,7 +104,7 @@ APP1DEPN=   $(OBJ)$/src_yy.obj $(LB)$/$(TARGET).lib
 APP3TARGET= lngex
 APP3STACK=  16000
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
-APP3STDLIBS=$(STATIC_LIBS)
+APP3STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
@@ -122,18 +122,18 @@ APP5STDLIBS=$(STATIC_LIBS)
 APP6TARGET= xmlex
 APP6STACK=  16000
 APP6OBJS=   $(OBJ)$/xmlmerge.obj $(OBJ)$/xml_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP6STDLIBS=$(STATIC_LIBS)
+APP6STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 # extractor and merger for *.cfg
 APP7TARGET= cfgex
 APP7STACK=  16000
 APP7OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-APP7STDLIBS=$(STATIC_LIBS)
+APP7STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS)
 
 APP8TARGET= xgfconv
 APP8STACK=  16000
 APP8OBJS=   $(OBJ)$/utf8conv.obj $(OBJ)$/xgfconv.obj $(OBJ)$/export2.obj
-APP8STDLIBS=$(STATIC_LIBS)
+APP8STDLIBS=$(BTSTRPLIB) $(STATIC_LIBS) 
 
 # encoding converter for text files
 #APP9TARGET= txtconv

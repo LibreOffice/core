@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-06 08:12:57 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,14 +214,7 @@ BOOL LngParser::CreateSDF(
             ( Text[ ENGLISH_INDEX ].Len() || Text[ ENGLISH_US_INDEX ].Len());
         if ( bExport ) {
 
-            Time aTime;
-            ByteString sTimeStamp( ByteString::CreateFromInt64( Date().GetDate()));
-            sTimeStamp += " ";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetHour());
-            sTimeStamp += ":";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetMin());
-            sTimeStamp += ":";
-            sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
+            ByteString sTimeStamp( Export::GetTimeStamp());
 
             FillInFallbacks( Text );
 

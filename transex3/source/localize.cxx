@@ -1,11 +1,10 @@
-
 /*************************************************************************
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nf $ $Date: 2001-06-05 07:54:07 $
+ *  last change: $Author: nf $ $Date: 2001-06-07 13:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +113,6 @@ private:
     ByteString sLanguageRestriction;
     ByteString sIsoCode99;
 
-    const DirEntry GetTempFile();
     const ByteString GetProjectName( BOOL bAbs = FALSE );
     const ByteString GetProjectRootRel();
 
@@ -229,19 +227,6 @@ const ByteString SourceTreeLocalizer::GetProjectRootRel()
 }
 
 /*****************************************************************************/
-const DirEntry SourceTreeLocalizer::GetTempFile()
-/*****************************************************************************/
-{
-#ifdef WNT
-    String sTempDir( GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
-#else
-    String sTempDir( GetEnv( "HOME" ), RTL_TEXTENCODING_ASCII_US );
-#endif
-    DirEntry aTemp( sTempDir );
-    return aTemp.TempName();
-}
-
-/*****************************************************************************/
 void SourceTreeLocalizer::WorkOnFile(
     const ByteString &rFileName, const ByteString &rExecutable,
     const ByteString &rParameter, const ByteString &rIso )
@@ -262,7 +247,7 @@ void SourceTreeLocalizer::WorkOnFile(
             ByteString sRoot( GetProjectRootRel());
 
             // get temp file
-            DirEntry aTemp( GetTempFile());
+            DirEntry aTemp( Export::GetTempFile());
             ByteString sTempFile( aTemp.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
             ByteString sExecutable( rExecutable );
@@ -298,7 +283,10 @@ void SourceTreeLocalizer::WorkOnFile(
 
             system( sCommand.GetBuffer());
 
-            SvFileStream aSDFIn( aTemp.GetFull(), STREAM_STD_READ );
+            fprintf( stdout, "Executed: %s\n", sCommand.GetBuffer());
+
+            SvFileStream aSDFIn( aTemp.GetFull(), STREAM_READ );
+            fprintf( stdout, "Open\n" );
             ByteString sLine;
             while ( !aSDFIn.IsEof()) {
                 aSDFIn.ReadLine( sLine );
@@ -306,6 +294,8 @@ void SourceTreeLocalizer::WorkOnFile(
                     aSDF.WriteLine( sLine );
             }
             aSDFIn.Close();
+
+            fprintf( stdout, "Copied\n" );
 
             aTemp.Kill();
         }
@@ -453,6 +443,7 @@ BOOL SourceTreeLocalizer::Extract( const ByteString &rDestinationFile )
     nMode = LOCALIZE_EXTRACT;
     aSDF.Open( String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),
         STREAM_STD_WRITE | STREAM_TRUNC );
+    aSDF.SetLineDelimiter( LINEEND_CRLF );
 
     BOOL bReturn = aSDF.IsOpen();
     if ( bReturn ) {
@@ -498,7 +489,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
     ByteString sIso( ExeTable[ nIndex ][ 4 ] );
     if ( sCandidate != "NULL" && aEntry.Exists()) {
-        DirEntry aOut( GetTempFile());
+        DirEntry aOut( Export::GetTempFile());
         ByteString sOutput( aOut.GetFull(), RTL_TEXTENCODING_ASCII_US );
 
         ByteString sCommand( ExeTable[ nIndex ][ 1 ] );
@@ -525,11 +516,34 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 
         system( sCommand.GetBuffer());
 
-        FileCopier aCopier( aOut, aEntry );
-        if( aCopier.Execute() != FSYS_ERR_OK )
+        fprintf( stdout, "Executed: %s\n", sCommand.GetBuffer());
+
+        SvFileStream aInStream( aOut.GetFull(), STREAM_READ );
+        if ( !aInStream.IsOpen()) {
             fprintf( stderr,
                 "ERROR: Unable to open file %s for modification!\n",
-                sFile.GetBuffer());
+                sOutput.GetBuffer());
+        }
+        else {
+            SvFileStream aOutStream( aEntry.GetFull(), STREAM_STD_WRITE | STREAM_TRUNC );
+            if ( !aOutStream.IsOpen()) {
+                fprintf( stderr,
+                    "ERROR: Unable to open file %s for modification!\n",
+                    sFile.GetBuffer());
+                aInStream.Close();
+            }
+            else {
+                ByteString sLine;
+                aOutStream.SetLineDelimiter( LINEND_CRLF );
+                while ( !aInStream.IsEof()) {
+                    aInStream.ReadLine( sLine );
+                    sLine.EraseAllChars( '\r' );
+                    aOutStream.WriteLine( sLine );
+                }
+                aInStream.Close();
+                aOutStream.CLose();
+            }
+        }
 
         aOldCWD.SetCWD();
         aOut.Kill();
@@ -542,7 +556,7 @@ BOOL SourceTreeLocalizer::MergeSingleFile(
 BOOL SourceTreeLocalizer::ExecuteMerge()
 /*****************************************************************************/
 {
-    DirEntry aEntry( GetTempFile());
+    DirEntry aEntry( Export::GetTempFile());
     BOOL bReturn = TRUE;
 
     ByteString sFileName;
@@ -720,6 +734,9 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
+    String sTempBase( String::CreateFromAscii( "loc" ));
+    DirEntry::SetTempNameBase( sTempBase );
+
     USHORT nState = STATE_NONE;
 
     BOOL bExport = FALSE;
