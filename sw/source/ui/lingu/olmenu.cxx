@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:50:48 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:01:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,8 @@ sal_uInt16  SwSpellPopup::Execute( Window* pWin, const Point& rWordPos )
             pSh->StartAction();
             pSh->DelLeft();
 
-            const OUString *pString = xSpellAlt->getAlternatives().getConstArray();
+            const Sequence< OUString > aAlts( xSpellAlt->getAlternatives() );
+            const OUString *pString = aAlts.getConstArray();
             DBG_ASSERT( 0 <= nAltIdx && nAltIdx <= xSpellAlt->getAlternativesCount(),
                     "index out of range");
             String aTmp( pString[ nAltIdx ] );
