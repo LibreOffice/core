@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:06:50 $
+ *  last change: $Author: mba $ $Date: 2001-06-21 15:36:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,10 +309,8 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
             SfxViewFrame* pView = GetFrame();
             if ( !pView )
                 pView = SfxViewFrame::Current();
-
-//            Help* pHelp = Application::GetHelp();
-//            if ( pHelp && pView )
-//              ((SfxHelp_Impl*)pHelp)->OpenHelpAgent( pView->GetFrame(), rReq.GetSlot() );
+            if ( pView )
+              SfxHelp::OpenHelpAgent( pView->GetFrame(), rReq.GetSlot() );
 
             SfxExecFunc pFunc = rSlot.GetExecFnc();
             rShell.CallExec( pFunc, rReq );
