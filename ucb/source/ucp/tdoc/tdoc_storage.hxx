@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_storage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:40:24 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,7 @@ namespace tdoc_ucp {
 
     enum StorageAccessMode
     {
-        READ,       // storage might be writable as well
-        READ_ONLY,  // storage must not be writable
+        READ, // Note: might be writable as well
         READ_WRITE_NOCREATE,
         READ_WRITE_CREATE
     };
@@ -117,13 +116,26 @@ namespace tdoc_ucp {
 
         com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
         createOutputStream( const rtl::OUString & rUri,
-                            const rtl::OUString & rPassword )
+                            const rtl::OUString & rPassword,
+                            bool bTruncate )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
                     com::sun::star::embed::StorageWrappedTargetException,
                     com::sun::star::packages::WrongPasswordException,
                     com::sun::star::uno::RuntimeException );
+
+        com::sun::star::uno::Reference< com::sun::star::io::XStream >
+        createStream( const rtl::OUString & rUri,
+                      const rtl::OUString & rPassword,
+                      bool bTruncate )
+            throw ( com::sun::star::embed::InvalidStorageException,
+                    com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::io::IOException,
+                    com::sun::star::embed::StorageWrappedTargetException,
+                    com::sun::star::packages::WrongPasswordException,
+                    com::sun::star::uno::RuntimeException );
+
     private:
         friend class Storage;
 
@@ -154,7 +166,8 @@ namespace tdoc_ucp {
                         com::sun::star::embed::XStorage > & xParentStorage,
                      const rtl::OUString & rPassword,
                      const rtl::OUString & rUri,
-                     StorageAccessMode eMode )
+                     StorageAccessMode eMode,
+                     bool bTruncate /* ignored for read-only streams */ )
             throw ( com::sun::star::embed::InvalidStorageException,
                     com::sun::star::lang::IllegalArgumentException,
                     com::sun::star::io::IOException,
