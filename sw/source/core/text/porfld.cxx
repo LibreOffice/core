@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 16:08:57 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:48:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -623,6 +623,9 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
             nDiff = 0;
         else if ( nDiff > rInf.X() )
             nDiff -= rInf.X();
+        else
+            nDiff = 0;
+
         if( nDiff < nFixWidth + nMinDist )
             nDiff = nFixWidth + nMinDist;
         // 2739: Numerierung weicht Fly aus, kein nDiff in der zweiten Runde
