@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: er $ $Date: 2002-10-29 18:28:56 $
+ *  last change: $Author: er $ $Date: 2002-10-30 10:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3035,6 +3035,8 @@ ExcFormat::~ExcFormat()
         DBG_ASSERT( pFormatter, "*ExcFormat::~ExcFormat(): multiple delete!" );
         delete pFormatter;
         pFormatter = NULL;
+        delete [] pKeywordTable;
+        pKeywordTable = NULL;
     }
 }
 
