@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:29 $
+ *  last change: $Author: mba $ $Date: 2000-11-27 11:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,6 +1172,51 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, SfxPoolItem **pArgs
             _Execute( *pShell, *pSlot, aReq, eCall );
             bDone = aReq.IsDone();
         }
+    }
+
+    return nRet;
+}
+
+sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& rArgs,
+                                       sal_uInt16 nMode )
+{
+    if ( !nMode )
+        nMode = pImp->nStandardMode;
+
+/*
+    // at the moment not implemented
+    // via Bindings/Interceptor? (dann ist der Returnwert nicht exakt)
+    sal_Bool bViaBindings = SFX_USE_BINDINGS == ( nMode & SFX_USE_BINDINGS );
+    nMode &= ~sal_uInt16(SFX_USE_BINDINGS);
+    if ( bViaBindings && GetBindings() )
+        return GetBindings()->Execute( nSlot, rArgs, nMode )
+                ? EXECUTE_POSSIBLE
+                : EXECUTE_NO;
+*/
+    // sonst via Dispatcher
+    if ( IsLocked(nSlot) )
+        return 0;
+    SfxShell *pShell = 0;
+    SfxCallMode eCall = SFX_CALLMODE_SYNCHRON;
+    sal_uInt16 nRet = EXECUTE_NO;
+    const SfxSlot *pSlot = 0;
+    if ( GetShellAndSlot_Impl( nSlot, &pShell, &pSlot, sal_False, sal_False ) )
+    {
+        // Ausf"uhrbarkeit vorher testen
+        if ( pSlot->IsMode( SFX_SLOT_FASTCALL ) ||
+            pShell->CanExecuteSlot_Impl( *pSlot ) )
+                nRet = EXECUTE_POSSIBLE;
+
+        if ( nMode == EXECUTEMODE_ASYNCHRON )
+            eCall = SFX_CALLMODE_ASYNCHRON;
+        else if ( nMode == EXECUTEMODE_DIALOGASYNCHRON && pSlot->IsMode( SFX_SLOT_HASDIALOG ) )
+            eCall = SFX_CALLMODE_ASYNCHRON;
+        else if ( pSlot->GetMode() & SFX_SLOT_ASYNCHRON )
+            eCall = SFX_CALLMODE_ASYNCHRON;
+        sal_Bool bDone = sal_False;
+            SfxRequest aReq( nSlot, eCall, rArgs );
+            _Execute( *pShell, *pSlot, aReq, eCall );
+            bDone = aReq.IsDone();
     }
 
     return nRet;
