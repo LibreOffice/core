@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TerminationTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:43:23 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 20:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -80,7 +80,7 @@ public class TerminationTest extends java.lang.Object {
             XUnoUrlResolver xUnoUrlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
                 XUnoUrlResolver.class, urlResolver );
             Object initialObject = xUnoUrlResolver.resolve(
-                "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
+                "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" );
             XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, initialObject);
             Object context = xPropertySet.getPropertyValue("DefaultContext");
