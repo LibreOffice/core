@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-14 18:03:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ portuguese_brazilian ] = "Search for";
         Text[ japanese ] = "ŒŸõğŒ";
         Text[ korean ] = "Ã£À» ´ë»ó";
-        Text[ chinese_simplified ] = "ËÑÑ°";
+        Text[ chinese_simplified ] = "ËÑÑ°Ä¿±ê";
         Text[ chinese_traditional ] = "·j´M¤º®e";
         Text[ arabic ] = "ÇáÈÍË Úä";
         Text[ turkish ] = "Ara:";
@@ -108,7 +108,26 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Size = MAP_APPFONT( 50, 10 );
         Group = TRUE;
         Text = "~Text";
-        Text[ english_us ] = "~Text :";
+        Text[ english_us ] = "~Text";
+        Text[ portuguese ] = "~Texto :";
+        Text[ russian ] = "Òåêñò :";
+        Text[ greek ] = "Êåßìåíï :";
+        Text[ dutch ] = "~Tekst :";
+        Text[ french ] = "~Texte :";
+        Text[ spanish ] = "~Texto";
+        Text[ finnish ] = "~Teksti:";
+        Text[ italian ] = "~Testo";
+        Text[ danish ] = "Tekst :";
+        Text[ swedish ] = "~Text";
+        Text[ polish ] = "Tekst";
+        Text[ portuguese_brazilian ] = "~Text :";
+        Text[ japanese ] = "•¶š—ñ(~T)";
+        Text[ korean ] = "ÅØ½ºÆ®(~T):";
+        Text[ chinese_simplified ] = "ÎÄ×Ö";
+        Text[ chinese_traditional ] = "¤å¦r(~T)";
+        Text[ turkish ] = "Metin:";
+        Text[ arabic ] = "ÇáäÕ :";
+        Text[ catalan ] = "~Texto :";
     };
     RadioButton RB_SEARCHFORNULL
     {
@@ -192,7 +211,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ english_us ] = "Where to search";
         Text[ chinese_simplified ] = "ÇøÓò";
         Text[ russian ] = "Îáëàñòü ïîèñêà";
-        Text[ polish ] = "Obszar";
+        Text[ polish ] = "Przeszukiwany obszar";
         Text[ japanese ] = "”ÍˆÍ";
         Text[ chinese_traditional ] = "°Ï°ì";
         Text[ arabic ] = "äØÇŞ ÇáÈÍË";
@@ -208,7 +227,26 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 12, 77 );
         Size = MAP_APPFONT( 87, 10 );
         Text = "~Formular";
-        Text[ english_us ] = "Form:";
+        Text[ english_us ] = "Form";
+        Text[ portuguese ] = "~Formulário:";
+        Text[ russian ] = "Ôîğìóëÿğ :";
+        Text[ greek ] = "Öüñìá:";
+        Text[ dutch ] = "~Formulier :";
+        Text[ french ] = "~Formulaire :";
+        Text[ spanish ] = "~Formulario";
+        Text[ finnish ] = "Lomake:";
+        Text[ italian ] = "Formulario";
+        Text[ danish ] = "~Formular :";
+        Text[ swedish ] = "~Formulär";
+        Text[ polish ] = "Formularz";
+        Text[ portuguese_brazilian ] = "~Formular :";
+        Text[ japanese ] = "Ì«°Ñ";
+        Text[ korean ] = "¾ç½Ä:";
+        Text[ chinese_simplified ] = "±íµ¥";
+        Text[ chinese_traditional ] = "ªí³æ";
+        Text[ turkish ] = "Form:";
+        Text[ arabic ] = "ÇáÇÓÊãÇÑÉ:";
+        Text[ catalan ] = "~Formulario :";
     };
     ListBox LB_FORM
     {
@@ -254,6 +292,25 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Size = MAP_APPFONT( 75, 10 );
         Text = "Ein~zelnes Feld";
         Text[ english_us ] = "Single field";
+        Text[ portuguese ] = "Campo ú~nico:";
+        Text[ russian ] = "Â îòäåëüíîì ïîëå :";
+        Text[ greek ] = "Ìåìïíùìİíï ğåäßï:";
+        Text[ dutch ] = "~Een enkel veld :";
+        Text[ french ] = "Champ individuel :";
+        Text[ spanish ] = "~Campo individual";
+        Text[ finnish ] = "Yksittäinen kenttä:";
+        Text[ italian ] = "Campo singolo";
+        Text[ danish ] = "Enkelt felt :";
+        Text[ swedish ] = "~Enskilt fält";
+        Text[ polish ] = "Pojedyncze pole";
+        Text[ portuguese_brazilian ] = "ein~zelnes Feld :";
+        Text[ japanese ] = "ŒÂX‚ÌÌ¨°ÙÄŞ";
+        Text[ korean ] = "°³º° ÇÊµå:";
+        Text[ chinese_simplified ] = "µ¥¸ö×Ö¶Î";
+        Text[ chinese_traditional ] = "³æ­ÓÄæ¦ì";
+        Text[ turkish ] = "Tek alan:";
+        Text[ arabic ] = "ÍŞá İÑÏí :";
+        Text[ catalan ] = "~Campo individual :";
     };
     ListBox LB_FIELD
     {
@@ -298,6 +355,25 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Size = MAP_APPFONT( 40, 8 );
         Text = "~Position";
         Text[ english_us ] = "Position";
+        Text[ portuguese ] = "~Posição:";
+        Text[ russian ] = "Ïîçèöèÿ :";
+        Text[ greek ] = "Èİóç :";
+        Text[ dutch ] = "~Positie :";
+        Text[ french ] = "~Position :";
+        Text[ spanish ] = "~Posición";
+        Text[ finnish ] = "Sijainti:";
+        Text[ italian ] = "~Posizione";
+        Text[ danish ] = "Placering :";
+        Text[ swedish ] = "~Position";
+        Text[ polish ] = "Pozycja";
+        Text[ portuguese_brazilian ] = "~Position :";
+        Text[ japanese ] = "ˆÊ’u";
+        Text[ korean ] = "À§Ä¡:";
+        Text[ chinese_simplified ] = "Î»ÖÃ";
+        Text[ chinese_traditional ] = "¦ì¸m";
+        Text[ turkish ] = "Konum:";
+        Text[ arabic ] = "ÇáãæÖÚ:";
+        Text[ catalan ] = "~Posición :";
     };
     ListBox LB_POSITION
     {
@@ -976,6 +1052,7 @@ String RID_STR_SEARCH_COUNTING
     Text[ catalan ] = "contando registros de datos";
     Text[ finnish ] = "lasketaan tietueet";
 };
+
 
 
 
