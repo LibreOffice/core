@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_res.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-28 16:45:23 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:22:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,7 +70,11 @@ $(RCTARGET): $(RCFILES) 		\
 .IF "$(NO_REC_RES)"!=""
     @+-$(MKDIR) $(@:d:d) >& $(NULLDEV)
 .ENDIF
+.IF "$(COMEX)"=="8"
+    $(RC) $(INCLUDE) -I$(SOLARRESDIR) -I$(ATL_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+.ELSE
     $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+.ENDIF
 .IF "$(NO_REC_RES)"!=""
     @+echo > $(RES)$/$(@:f)
 .ENDIF
