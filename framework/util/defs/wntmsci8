@@ -4265,3 +4265,4 @@ __CTA2?AVbad_alloc@std@@
 ?acquire@ActionTriggerContainer@framework@@WEM@AAXXZ
 ?queryInterface@ActionTriggerContainer@framework@@WEM@AA?AVAny@uno@star@sun@com@@ABVType@4567@@Z
 ?release@ActionTriggerContainer@framework@@WEM@AAXXZ
+?exists@HandlerCache@framework@@QBEEABVOUString@rtl@@@Z
