@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:58:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:26:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,7 +696,7 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
                     pBuffer, nBufferSize, nEncoding);
 
     sal_Char *pTextChars = (sal_Char*)pTextItem->chars;
-    int n = 0, m = 0;
+    unsigned int n = 0, m = 0;
 
     if (   nEncoding == RTL_TEXTENCODING_GB_2312
         || nEncoding == RTL_TEXTENCODING_GBT_12345
@@ -745,7 +745,7 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
     if (   (nEncoding == RTL_TEXTENCODING_GB_2312)
         || (nEncoding == RTL_TEXTENCODING_EUC_KR) )
     {
-        for (int n_char = 0; n_char < m; n_char++ )
+        for (unsigned int n_char = 0; n_char < m; n_char++ )
             pTextChars[ n_char ] &= 0x7F;
     }
 }
@@ -863,7 +863,7 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     Display* pDisplay = GetXDisplay();
 
     XRectangle aXRect;
-    unsigned long nWidth = 1, nHeight = 1;
+    long nWidth = 1, nHeight = 1;
     if( m_pFrame )
         nWidth = m_pFrame->maGeometry.nWidth, nHeight = m_pFrame->maGeometry.nHeight;
     else if( m_pVDev )
@@ -915,10 +915,52 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
     if( nYmin > nYmax )
         return false;
 
-    XImage* const pImg = XGetImage( pDisplay, hDrawable_,
-        nXmin, nYmin, (nXmax-nXmin+1), (nYmax-nYmin+1), ~0, ZPixmap );
+    XImage* pImg = XGetImage( pDisplay, hDrawable_,
+                              nXmin, nYmin,
+                              (nXmax-nXmin+1), (nYmax-nYmin+1),
+                              ~0, ZPixmap );
     if( pImg == NULL )
-        return false;
+    {
+        if( m_pFrame )
+        {
+            // the reason we did not get an image could be that the frame
+            // geometry changed in the meantime; lets get the current geometry
+            // and clip against the current window size as well as the screen
+            // with the current frame position
+            int nScreenW = GetDisplay()->GetScreenSize().Width();
+            int nScreenH = GetDisplay()->GetScreenSize().Height();
+            XLIB_Window aRoot = None;
+            int x = 0, y = 0;
+            unsigned int w = 0, h = 0, bw = 0, d;
+            XGetGeometry( pDisplay, hDrawable_, &aRoot, &x, &y, &w, &h, &bw, &d );
+            XTranslateCoordinates( pDisplay, hDrawable_, aRoot, 0, 0, &x, &y, &aRoot );
+            if( nXmin + x < 0 ) // clip on left screen edge
+                nXmin += x-nXmin;
+            if( nYmin + y < 0 ) // clip on top screen edge
+                nYmin += y-nYmin;
+            if( nXmax >= int(w) ) // clip on right window egde
+                nXmax = w-1;
+            if( nYmax >= int(h) ) // clip on bottom window edge
+                nYmax = h-1;
+            if( nXmax + x >= nScreenW ) // clip on right screen edge
+                nXmax -= (nXmax + x - nScreenW)+1;
+            if( nYmax + y >= nScreenH ) // clip on bottom screen edge
+                nYmax -= (nYmax + y - nScreenH)+1;
+            if( nXmax >= nXmin && nYmax >= nYmin )
+            {
+                // try again to get the image
+                pImg = XGetImage( pDisplay, hDrawable_,
+                                  nXmin, nYmin,
+                                  (nXmax-nXmin+1), (nYmax-nYmin+1),
+                                  ~0, ZPixmap );
+            }
+        }
+        if( pImg == NULL )
+        {
+            GetDisplay()->GetXLib()->SetIgnoreXErrors( bOldXErrorEnabled );
+            return false;
+        }
+    }
 
     // prepare context
     GC nGC = SelectFont();
@@ -945,8 +987,8 @@ bool X11SalGraphics::DrawServerAAForcedString( const ServerFontLayout& rLayout )
         const int nX1 = aPos.X() + pRawBitmap->mnXOffset;
         const int nY1 = aPos.Y() + pRawBitmap->mnYOffset;
 
-        if( (nX1 <= nXmax) && ((nX1 + pRawBitmap->mnWidth) > nXmin)
-        &&  (nY1 <= nYmax) && ((nY1 + pRawBitmap->mnHeight) > nYmin) )
+        if( (nX1 <= nXmax) && (int(nX1 + pRawBitmap->mnWidth) > nXmin)
+        &&  (nY1 <= nYmax) && (int(nY1 + pRawBitmap->mnHeight) > nYmin) )
         {
             const unsigned char* p10 = pRawBitmap->mpBits;
             unsigned char* p20 = (unsigned char*)pImg->data;                // dest left limit
@@ -1290,7 +1332,7 @@ X11SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData *pKernPairs )
         {
             ImplKernPairData* pTmpKernPairs;
             ULONG nGotPairs = mpServerFont[0]->GetKernPairs( &pTmpKernPairs );
-            for( int i = 0; i < nPairs && i < nGotPairs; ++i )
+            for( unsigned int i = 0; i < nPairs && i < nGotPairs; ++i )
                 pKernPairs[ i ] = pTmpKernPairs[ i ];
             delete[] pTmpKernPairs;
             return nGotPairs;
