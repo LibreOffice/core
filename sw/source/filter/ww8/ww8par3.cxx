@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:45:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:28:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,11 +248,6 @@
 #define C2U(s) rtl::OUString::createFromAscii(s)
 #endif
 
-#define WW8_DFLT_EDIT_WIDTH 2750
-#define WW8_DFLT_EDIT_HEIGHT 500
-#define WW8_DFLT_CHECKBOX_WIDTH 320
-#define WW8_DFLT_CHECKBOX_HEIGHT 320
-
 using namespace com::sun::star;
 //-----------------------------------------
 //            UNO-Controls
@@ -360,7 +355,6 @@ struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
 };
 
 #define nIStDNil 0x0FFF // d.h. KEIN Style ist an den Level gelinkt
-#define nSizeOfLST 0x1C
 
 struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 {
@@ -493,18 +487,31 @@ public:
 // Zugriff ueber die List-Id des LST Eintrags
 WW8LSTInfo* WW8ListManager::GetLSTByListId( sal_uInt32 nIdLst ) const
 {
-    ::std::vector<WW8LSTInfo *>::const_iterator aResult =
-        ::std::find_if(maLSTInfos.begin(),maLSTInfos.end(),ListWithId(nIdLst));
+    std::vector<WW8LSTInfo *>::const_iterator aResult =
+        std::find_if(maLSTInfos.begin(),maLSTInfos.end(),ListWithId(nIdLst));
     if (aResult == maLSTInfos.end())
         return 0;
     return *aResult;
 }
 
+void lcl_CopyGreaterEight(String &rDest, String &rSrc,
+    xub_StrLen nStart, xub_StrLen nLen = STRING_LEN)
+{
+    if (nLen == STRING_LEN)
+        nLen = rSrc.Len();
+    for (xub_StrLen nI = nStart; nI < nLen; ++nI)
+    {
+        sal_Unicode nChar = rSrc.GetChar(nI);
+        if (nChar > WW8ListManager::nMaxLevel)
+            rDest.Append(nChar);
+    }
+}
+
 bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
-    sal_uInt16 nLevelStyle, bool bSetStartNo)
+    sal_uInt16 nLevelStyle, bool bSetStartNo,
+    std::deque<bool> &rNotReallyThere, sal_uInt16 nLevel)
 {
     sal_uInt8       aBits1;
-    sal_uInt8       nUpperLevel = 0;    // akt. Anzeigetiefe fuer den Writer
     sal_uInt16      nStartNo    = 0;    // Start-Nr. fuer den Writer
     SvxExtNumType   eType;              // Writer-Num-Typ
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
@@ -525,7 +532,8 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = true;
     if( aBits1 & 0x40 ) aLVL.bV6        = true;
     bool bLVLOkB = true;
-    for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+    sal_uInt8 nLevelB = 0;
+    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
         rSt >> aLVL.aOfsNumsXCH[ nLevelB ];
         if( 0 != rSt.GetError() )
@@ -533,20 +541,10 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             bLVLOkB = false;
             break;
         }
-        if( !nUpperLevel && !aLVL.aOfsNumsXCH[ nLevelB ] )
-        {
-            nUpperLevel = nLevelB;
-        }
     }
+
     if( !bLVLOkB )
         return false;
-
-    // falls kein NULL als Terminierungs-Char kam,
-    // ist die Liste voller Indices, d.h. alle Plaetze sind besetzt,
-    // also sind alle Level anzuzeigen
-    if( !nUpperLevel )
-        nUpperLevel = nMaxLevel;
-
 
     rSt.SeekRel( 1 );
     rSt >> aLVL.nV6DxaSpace;
@@ -693,34 +691,90 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             break;
     }
 
+    //If a number level is not going to be used, then record this fact
+    if (SVX_NUM_NUMBER_NONE == eType)
+        rNotReallyThere[nLevel] = true;
+
+    /*
+     If a number level was not used (i.e. is in NotReallyThere), and that
+     number level appears at one of the positions in the display string of the
+     list, then it effectively is not there at all. So remove that level entry
+     from a copy of the aOfsNumsXCH.
+    */
+    std::vector<sal_uInt8> aOfsNumsXCH;
+    typedef std::vector<sal_uInt8>::iterator myIter;
+    aOfsNumsXCH.reserve(nMaxLevel);
+
+    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+        aOfsNumsXCH.push_back(aLVL.aOfsNumsXCH[nLevelB]);
+
+    for(nLevelB = 0; nLevelB <= nLevel; ++nLevelB)
+    {
+        sal_uInt8 nPos = aOfsNumsXCH[nLevelB];
+        if (nPos && sNumString.GetChar(nPos-1) < nMaxLevel)
+        {
+            if (rNotReallyThere[nLevelB])
+                aOfsNumsXCH[nLevelB] = 0;
+        }
+    }
+
+    myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
+    myIter aEnd = aOfsNumsXCH.end();
+    while (aIter++ != aEnd)
+        (*aIter) = 0;
+
+    sal_uInt8 nUpperLevel = 0;  // akt. Anzeigetiefe fuer den Writer
+    for(nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
+    {
+        if (!nUpperLevel && !aOfsNumsXCH[nLevelB])
+            nUpperLevel = nLevelB;
+    }
+
+    // falls kein NULL als Terminierungs-Char kam,
+    // ist die Liste voller Indices, d.h. alle Plaetze sind besetzt,
+    // also sind alle Level anzuzeigen
+    if (!nUpperLevel)
+        nUpperLevel = nMaxLevel;
+
     if (SVX_NUM_CHAR_SPECIAL == eType)
     {
         cBullet = sNumString.Len() ? sNumString.GetChar(0) : 0x2190;
 
         if (!cBullet)  // unsave control code?
             cBullet = 0x2190;
-
-        sPrefix  = aEmptyStr;
-        sPostfix = aEmptyStr;
     }
     else
     {
         /*
-        #83154#, #82192#, ##173##
+        #83154#, #82192#, #i173#, #109158#
         Our aOfsNumsXCH seems generally to be an array that contains the
         offset into sNumString of locations where the numbers should be
         filled in, so if the first "fill in a number" slot is greater than
         1 there is a "prefix" before the number
         */
-        if(aLVL.aOfsNumsXCH[0] <= 1)
-            sPrefix = aEmptyStr;
-        else
-            sPrefix = sNumString.Copy(0,aLVL.aOfsNumsXCH[0]-1);
+        //First number appears at
+        sal_uInt8 nOneBasedFirstNoIndex = aOfsNumsXCH[0];
+        xub_StrLen nFirstNoIndex =
+            nOneBasedFirstNoIndex > 0 ? nOneBasedFirstNoIndex -1 : STRING_LEN;
+        lcl_CopyGreaterEight(sPrefix, sNumString, 0, nFirstNoIndex);
 
-        if(nUpperLevel && (sNumString.Len() > aLVL.aOfsNumsXCH[nUpperLevel-1]))
-            sPostfix = sNumString.Copy(aLVL.aOfsNumsXCH[nUpperLevel-1]);
-        else
-            sPostfix.Erase();
+        //Next number appears at
+        if (nUpperLevel)
+        {
+            sal_uInt8 nOneBasedNextNoIndex = aOfsNumsXCH[nUpperLevel-1];
+            xub_StrLen nNextNoIndex =
+                nOneBasedNextNoIndex > 0 ? nOneBasedNextNoIndex -1 : STRING_LEN;
+            if (nNextNoIndex != STRING_LEN)
+                ++nNextNoIndex;
+            if (sNumString.Len() > nNextNoIndex)
+                lcl_CopyGreaterEight(sPostfix, sNumString, nNextNoIndex);
+        }
+
+        /*
+         We use lcl_CopyGreaterEight because once if we have removed unused
+         number indexes from the aOfsNumsXCH then placeholders remain in
+         sNumString which must not be copied into the final numbering strings
+        */
     }
 
     switch( aLVL.nAlign )
@@ -889,49 +943,6 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
     rNumRule.Set(nLevel, aNumFmt);
 }
 
-bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
-{
-    bool bRes = false;
-    WW8LSTInfo* pLSTInfo = GetLSTByListId( rLFOInfo.nIdLst );
-    if (pLSTInfo && pLSTInfo->pNumRule && rLFOInfo.pNumRule &&
-       (rLFOInfo.nLfoLvl <= (pLSTInfo->bSimpleList ? nMinLevel : nMaxLevel)))
-    {
-        const SwNumRule& rLSTRule = *pLSTInfo->pNumRule;
-        const SwNumRule& rLFORule = *rLFOInfo.pNumRule;
-        bRes = true;
-        for (sal_uInt16 nLevel = 0; bRes && (nLevel < rLFOInfo.nLfoLvl); ++nLevel)
-        {
-            const SwNumFmt& rLSTNumFmt = rLSTRule.Get( nLevel );
-            const SwNumFmt& rLFONumFmt = rLFORule.Get( nLevel );
-            const SwCharFmt* pLSTCharFmt = rLSTNumFmt.GetCharFmt();
-            const SwCharFmt* pLFOCharFmt = rLFONumFmt.GetCharFmt();
-            if( pLSTCharFmt && pLFOCharFmt )
-            {
-                // erst Char-Styles inhaltlich vergleichen,
-                // ( siehe: ...\svtools\source\items\itemset.cxx )
-                // falls identische Einstellungen, kurz den LFO-Style umhaengen,
-                // damit '( rLSTNumFmt == rLFONumFmt )' funktioniert
-                if( pLSTCharFmt->GetAttrSet() == pLFOCharFmt->GetAttrSet() )
-                    ((SwNumFmt&)rLFONumFmt).SetCharFmt((SwCharFmt*)pLSTCharFmt);
-                else
-                {
-                    bRes = false;
-                    break;
-                }
-            }
-            if(     (    (0 == pLSTCharFmt)
-                      != (0 == pLFOCharFmt)
-                    )
-                ||  !(rLSTNumFmt == rLFONumFmt) )
-                bRes = false;
-            // vermurksten LFO-Style wieder zuruecksetzen
-            if( pLFOCharFmt )
-                ((SwNumFmt&)rLFONumFmt).SetCharFmt( (SwCharFmt*)pLFOCharFmt );
-        }
-    }
-    return bRes;
-}
-
 SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
 {
     // wird erstmal zur Bildung des Style Namens genommen
@@ -1044,12 +1055,14 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             // 1.2.1 betreffende(n) LVL(s) fuer diese aLST einlesen
             //
             sal_uInt16 nLvlCount=pListInfo->bSimpleList ? nMinLevel : nMaxLevel;
+            std::deque<bool> aNotReallyThere;
+            aNotReallyThere.resize(nMaxLevel);
             for (nLevel = 0; nLevel < nLvlCount; ++nLevel)
             {
                 SwNumFmt aNumFmt( rMyNumRule.Get( nLevel ) );
                 // LVLF einlesen
                 bLVLOk = ReadLVL( aNumFmt, pListInfo->aItemSet[nLevel],
-                    pListInfo->aIdSty[nLevel], true);
+                    pListInfo->aIdSty[nLevel], true, aNotReallyThere, nLevel);
                 if( !bLVLOk )
                     break;
                 // und in die rMyNumRule aufnehmen
@@ -1186,6 +1199,9 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 memset(&aItemSet, 0,  sizeof( aItemSet ));
                 memset(&aCharFmt, 0,  sizeof( aCharFmt ));
 
+                std::deque<bool> aNotReallyThere;
+                aNotReallyThere.resize(WW8ListManager::nMaxLevel);
+
                 for (sal_uInt8 nLevel = 0; nLevel < pLFOInfo->nLfoLvl; ++nLevel)
                 {
                     bLVLOk = false;
@@ -1239,7 +1255,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                             // einlesen
                             bLVLOk= ReadLVL(aNumFmt, aItemSet[nLevel],
                                 pParentListInfo->aIdSty[nLevel],
-                                aLFOLVL.bStartAt );
+                                aLFOLVL.bStartAt, aNotReallyThere, nLevel);
 
                             if( !bLVLOk )
                                 break;
