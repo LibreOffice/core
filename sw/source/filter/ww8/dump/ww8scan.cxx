@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:14:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@
 #ifdef DUMP
 
 #define ERR_SWG_READ_ERROR 1234
-#include <assert.h>
 #define ASSERT( a, b )
 
 #else                       // dump
