@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-19 13:31:39 $
+ *  last change: $Author: nn $ $Date: 2002-10-30 15:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,10 @@ void ScHeaderControl::StopMarking()
 
     SetMarking( FALSE );
     bIgnoreMove = TRUE;
-    pSelEngine->Reset();
+
+    //  #86260# don't call pSelEngine->Reset, so selection across the parts of
+    //  a split/frozen view is possible
+
     ReleaseMouse();
 }
 
