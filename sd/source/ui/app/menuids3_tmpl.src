@@ -1,0 +1,307 @@
+/*************************************************************************
+ *
+ *  $RCSfile: menuids3_tmpl.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 14:30:23 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _GLOBLMN_HRC
+#include <svx/globlmn.hrc>
+#endif
+#define MN_CHANGEBEZIER \
+    MenuItem\
+    {\
+        Identifier = SID_CHANGEBEZIER ; \
+        HelpID = SID_CHANGEBEZIER ; \
+        Text [ de ] = "In ~Kurve" ; \
+        Text [ en-US ] = "To ~Curve" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CHANGEPOLYGON \
+    MenuItem\
+    {\
+        Identifier = SID_CHANGEPOLYGON ; \
+        HelpID = SID_CHANGEPOLYGON ; \
+        Text [ de ] = "In ~Polygon" ; \
+        Text [ en-US ] = "To ~Polygon" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_CONTOUR \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_CONTOUR ; \
+        HelpID = SID_CONVERT_TO_CONTOUR ; \
+        Text [ de ] = "In K~ontur" ; \
+        Text [ en-US ] = "To C~ontour";\
+    };
+
+#define MN_CONVERT_TO_3D \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_3D ; \
+        HelpID = SID_CONVERT_TO_3D ; \
+        Text [ de ] = "In ~3D" ; \
+        Text [ en-US ] = "To 3~D" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_BITMAP \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_BITMAP ; \
+        HelpID = SID_CONVERT_TO_BITMAP ; \
+        Text [ de ] = "In ~Bitmap" ; \
+        Text [ en-US ] = "To ~Bitmap" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_METAFILE \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_METAFILE ; \
+        HelpID = SID_CONVERT_TO_METAFILE ; \
+        Text [ de ] = "In ~MetaFile" ; \
+        Text [ en-US ] = "To ~Metafile" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_CONVERT_TO_3D_LATHE_FAST \
+    MenuItem\
+    {\
+        Identifier = SID_CONVERT_TO_3D_LATHE_FAST ; \
+        HelpID = SID_CONVERT_TO_3D_LATHE_FAST ; \
+        /* ### ACHTUNG: Neuer Text in Resource? In 3~D-Rotationskörper : In 3~D-Rotationsk÷rper */\
+        Text [ de ] = "In 3~D-Rotationskörper" ; \
+        Text [ en-US ] = "To 3D ~Rotation Object" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_VERTICAL \
+    MenuItem\
+    {\
+        Identifier = SID_VERTICAL ; \
+        HelpID = SID_VERTICAL ; \
+        Text [ de ] = "~Vertikal" ; \
+        Text [ en-US ] = "~Vertically" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_HORIZONTAL \
+    MenuItem\
+    {\
+        Identifier = SID_HORIZONTAL ; \
+        HelpID = SID_HORIZONTAL ; \
+        Text [ de ] = "~Horizontal" ; \
+        Text [ en-US ] = "~Horizontally" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_3D_WIN \
+    MenuItem\
+    {\
+        Identifier = SID_3D_WIN ; \
+        HelpID = SID_3D_WIN ; \
+        Text [ de ] = "~3D-Effekte" ; \
+        Text [ en-US ] = "~3D Effects" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_PRESENTATION_LAYOUT \
+    MenuItem\
+    {\
+        Identifier = SID_PRESENTATION_LAYOUT ; \
+        HelpID = SID_PRESENTATION_LAYOUT ; \
+        Text [ de ] = "~Seitenvorlage..." ; \
+        Text [ en-US ] = "~Slide Design..." ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_DIA \
+    MenuItem\
+    {\
+        Identifier = SID_SLIDE_CHANGE_WIN ; \
+        HelpID = SID_SLIDE_CHANGE_WIN ; \
+        Text [ de ] = "Dia~wechsel" ; \
+        Text [ en-US ] = "Slide ~Transition" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_HIDE_SLIDE \
+    MenuItem\
+    {\
+        Identifier = SID_HIDE_SLIDE ; \
+        HelpID = SID_HIDE_SLIDE ; \
+        Text [ de ] = "~Dia anzeigen" ; \
+        Text [ en-US ] = "~Show/Hide Slide" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_GROUP ; \
+        HelpID = SID_GROUP ; \
+        Text [ de ] = "~Gruppieren" ; \
+        Text [ en-US ] = "~Group" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_UNGROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_UNGROUP ; \
+        HelpID = SID_UNGROUP ; \
+        Text [ de ] = "~Aufheben" ; \
+        Text [ en-US ] = "~Ungroup" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_ENTER_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_ENTER_GROUP ; \
+        HelpID = SID_ENTER_GROUP ; \
+        Text [ de ] = "~Betreten" ; \
+        Text [ en-US ] = "~Edit Group" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MN_LEAVE_GROUP_IMPRESS \
+    MenuItem\
+    {\
+        Identifier = SID_LEAVE_GROUP ; \
+        HelpID = SID_LEAVE_GROUP ; \
+        Text [ de ] = "~Verlassen" ; \
+        Text [ en-US ] = "E~xit group" ; \
+        Text [ x-comment ] = " ";\
+    };
+
+#define MNSUB_GROUP \
+    MenuItem\
+    {\
+        Identifier = MN_SUB_GROUP ; \
+        HelpID = MN_SUB_GROUP ; \
+        Command = ".uno:GroupMenu" ; \
+        Text [ de ] = "~Gruppe" ; \
+        Text [ en-US ] = "~Group" ; \
+        SubMenu = Menu\
+        {\
+            ItemList = \
+            {\
+                MN_GROUP_IMPRESS\
+                MN_UNGROUP_IMPRESS\
+                MN_ENTER_GROUP_IMPRESS\
+                MN_LEAVE_GROUP_IMPRESS\
+            };\
+        };\
+        Text [ x-comment ] = " ";\
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
