@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:27:11 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,105 +77,10 @@
 #endif
 
 
-#define IL_TOOL \
-\
-    IdList = {\
-        ID_BROWSER_EXPLORER;\
-        ID_BROWSER_SEARCH;\
-        ID_BROWSER_REFRESH;\
-        ID_BROWSER_SORTUP;\
-        ID_BROWSER_SORTDOWN;\
-        ID_BROWSER_ORDERCRIT;\
-        ID_BROWSER_FILTERCRIT;\
-        ID_BROWSER_AUTOFILTER;\
-        ID_BROWSER_COUNTALL;\
-        ID_BROWSER_INSERTCOLUMNS;\
-        ID_BROWSER_INSERTCONTENT;\
-        ID_BROWSER_FORMLETTER;\
-        ID_BROWSER_SQL;\
-        ID_BROWSER_ADDTABLE;\
-        ID_BROWSER_DESIGN;\
-        ID_BROWSER_REMOVEFILTER;\
-        ID_BROWSER_UNDO;\
-        ID_BROWSER_SAVEDOC;\
-        ID_BROWSER_EDITDOC;\
-        ID_BROWSER_CUT;\
-        ID_BROWSER_COPY;\
-        ID_BROWSER_PASTE;\
-        SID_WIN_FULLSCREEN;\
-        SID_NEWDOC;\
-        SID_PRINTDOCDIRECT;\
-        ID_BROWSER_REDO;\
-        ID_BROWSER_FILTERED;\
-        ID_BROWSER_QUERY_EXECUTE;\
-        ID_BROWSER_CLEAR_QUERY;\
-        ID_BROWSER_QUERY_VIEW_FUNCTIONS;\
-        ID_BROWSER_QUERY_VIEW_TABLES;\
-        ID_BROWSER_QUERY_VIEW_ALIASES;\
-        ID_BROWSER_QUERY_DISTINCT_VALUES;\
-        ID_BROWSER_ESACPEPROCESSING;\
-        ID_BROWSER_SAVEASDOC;\
-        ID_QUERY_ZOOM_IN;\
-        ID_QUERY_ZOOM_OUT;\
-        ID_RELATION_ADD_RELATION;\
-        SID_INDEXDESIGN; \
-        ID_BROWSER_DOCUMENT_DATASOURCE;\
-        ID_BROWSER_SAVERECORD; \
-        ID_BROWSER_UNDORECORD; \
-        ID_BROWSER_CLOSE; \
-    };\
-    IdCount = {\
-    43;\
-    }
-
- // Default Image-Liste ----------------------------------------------------------------
-
-ImageList RID_DEFAULTIMAGELIST_SC
-{
-    Prefix = "sc";
-    MaskColor   = Color {\
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
-    };\
-    IL_TOOL ;
-};
-
-ImageList RID_DEFAULTIMAGELIST_LC
-{
-    Prefix = "lc";
-    MaskColor   = Color {\
-    Red   = 0xFFFF;\
-    Green = 0x0000;\
-    Blue  = 0xFFFF;\
-    };\
-    IL_TOOL ;
-};
-
-ImageList RID_DEFAULTIMAGELIST_SCH
-{
-    Prefix = "sch";
-    MaskColor   = Color {\
-    Red   = 0xffff;\
-    Green = 0x0000;\
-    Blue  = 0xffff;\
-    };\
-    IL_TOOL ;
-};
-
-ImageList RID_DEFAULTIMAGELIST_LCH
-{
-    Prefix = "lch";
-    MaskColor   = Color {\
-    Red   = 0xffff;\
-    Green = 0x0000;\
-    Blue  = 0xffff;\
-    };\
-    IL_TOOL ;
-};
-
-
-
+#define MN_SORT     23
+#define MN_EXTRA    24
+#define MN_WIN      30
+#define MN_HELP     31
  // Toolbox----------------------------------------------------------------------------
 
 
@@ -191,6 +96,7 @@ ToolBox RID_BRW_QRY_TOOLBOX
     HideWhenDeactivate = TRUE ;
     ItemImageList = RID_DEFAULTIMAGELIST_SC ;
     HelpId = HID_TLB_TABBROWSER ;
+    Border = TRUE;
     ItemList =
     {
     CUR_ITEM
@@ -252,15 +158,18 @@ ToolBox RID_BRW_QRY_TOOLBOX
     CUR_ITEM
     {
         MID_SBA_QRY_EDIT
+        Hide = FALSE ;
         HelpId = SID_EDITDOC ;
     };
     CUR_ITEM
     {
         MID_SAVE_RECORD
+        Hide = FALSE ;
     };
     CUR_ITEM
     {
         MID_UNDO_RECORD
+        Hide = FALSE ;
     };
 
     CUR_SEPARATOR ;
@@ -283,21 +192,25 @@ ToolBox RID_BRW_QRY_TOOLBOX
     CUR_ITEM
     {
         MID_BROWSER_INSERTCOLUMNS
+        Hide = TRUE ;
         HelpId = SID_SBA_BRW_INSERT ;
     };
     CUR_ITEM
     {
         MID_BROWSER_INSERTCONTENT
+        Hide = TRUE ;
         HelpId = SID_SBA_BRW_UPDATE ;
     };
     CUR_ITEM
     {
         MID_BROWSER_FORMLETTER
+        Hide = TRUE ;
         HelpId = SID_SBA_BRW_MERGE ;
     };
     CUR_ITEM
     {
         MID_BROWSER_DOCUMENT_DATASOURCE
+        Hide = TRUE ;
         HelpId = SID_DOCUMENT_DATA_SOURCE;
     };
     CUR_ITEM
@@ -373,18 +286,6 @@ Image QUERY_TREE_ICON
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
-Image BOOKMARKFOLDER_TREE_ICON
-{
-    ImageBitmap = Bitmap { File = "bookmarkcontainer_sx.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-
-Image BOOKMARK_TREE_ICON
-{
-    ImageBitmap = Bitmap { File = "bookmark_sx.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-
 Image QUERYFOLDER_TREE_ICON_SCH
 {
     ImageBitmap = Bitmap { File = "sxh03201.bmp"; };
@@ -394,18 +295,6 @@ Image QUERYFOLDER_TREE_ICON_SCH
 Image QUERY_TREE_ICON_SCH
 {
     ImageBitmap = Bitmap { File = "sxh03202.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-
-Image BOOKMARKFOLDER_TREE_ICON_SCH
-{
-    ImageBitmap = Bitmap { File = "bookmarkcontainer_sxh.bmp"; };
-    MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
-};
-
-Image BOOKMARK_TREE_ICON_SCH
-{
-    ImageBitmap = Bitmap { File = "bookmark_sxh.bmp"; };
     MaskColor = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
 
@@ -421,23 +310,11 @@ String RID_STR_TABLES_CONTAINER
     Text [ en-US ] = "Tables";
 };
 
-String RID_STR_BOOKMARKS_CONTAINER
-{
-    Text [ de ] = "Verknüpfungen";
-    Text [ en-US ] = "Links";
-};
-
 #define MID_ADMINISTRATE    \
     Identifier = ID_TREE_ADMINISTRATE ; \
     HelpId = HID_BROWSER_DSADMINISTRATE ;   \
-    Text [ de ] = "~Datenquellen verwalten ..." ;   \
-    Text [ en-US ] = "Administrate ~Data Sources..." ;
-
-#define MID_DIRECT_SQL  \
-    Identifier = ID_DIRECT_SQL ;    \
-    HelpId = HID_DSBROWSER_DIRECTSQL ; \
-    Text [ de ] = "SQL..." ; \
-    Text [ en-US ] = "SQL..." ;
+    Text [ de ] = "~Datenbankdatei bearbeiten ..." ;    \
+    Text [ en-US ] = "Edit ~Data Base File..." ;
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
@@ -462,10 +339,6 @@ String RID_STR_BOOKMARKS_CONTAINER
     };  \
     MenuItem    \
     {   \
-        MID_DIRECT_SQL  \
-    };  \
-    MenuItem    \
-    {   \
         MID_CLOSECONN   \
     };  \
     MenuItem    \
@@ -482,182 +355,9 @@ Menu MENU_BROWSER_DEFAULTCONTEXT
     ItemList =
     {
         MITEMS_DEFAULT
-    };
-};
-
-Menu MENU_BROWSER_BOOKMARKCONTEXT
-{
-    ItemList =
-    {
-        MITEMS_DEFAULT
-
-        MenuItem
-        {
-            MID_LINK_NEW
-        };
-        MenuItem
-        {
-            MID_LINK_EDIT
-        };
-        MenuItem { MID_EDIT_DELETE      };
-
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_OPEN
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_EDIT
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_CREATE_NEW
-        };
-    };
-};
-
-Menu MENU_BROWSER_QUERYCONTEXT
-{
-    ItemList =
-    {
-        MITEMS_DEFAULT
-
-        MenuItem
-        {
-            MID_QUERY_NEW_DESIGN
-        };
-        MenuItem
-        {
-            MID_QUERY_NEW_SQL
-        };
-        MenuItem
-        {
-            MID_QUERY_EDIT_DESIGN
-         };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_QUERY_WIZARD
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_NEW_AUTOPILOT
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_CREATE_REPWIZ
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem { MID_RENAME_ENTRY     };
-        MenuItem { MID_EDIT_DELETE      };
         MenuItem { ITEM_EDIT_COPY       };
-        MenuItem { ITEM_EDIT_PASTE      };
-
     };
 };
-
-Menu MENU_BROWSER_TABLECONTEXT
-{
-    ItemList =
-    {
-        MITEMS_DEFAULT
-
-        MenuItem { MID_NEW_TABLE_DESIGN };
-        MenuItem { MID_EDIT_TABLE       };
-        MenuItem { MID_NEW_VIEW_DESIGN  };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_RELATION_DESIGN ;
-            HelpId = HID_BROWSER_RELATION_DESIGN ;
-            Text [ de ] = "Relatio~nenentwurf" ;
-            Text [ en-US ] = "Rel~ation Design" ;
-            };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_NEW_AUTOPILOT
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_CREATE_REPWIZ
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem { MID_EDIT_DELETE      };
-        MenuItem { MID_RENAME_ENTRY     };
-        MenuItem { ITEM_EDIT_COPY       };
-        MenuItem { ITEM_EDIT_PASTE      };
-
-
-    };
-};
-Menu MENU_BROWSER_VIEWCONTEXT
-{
-    ItemList =
-    {
-        MITEMS_DEFAULT
-
-        MenuItem { MID_NEW_TABLE_DESIGN };
-        MenuItem { MID_NEW_VIEW_DESIGN  };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = ID_TREE_RELATION_DESIGN ;
-            HelpId = HID_BROWSER_RELATION_DESIGN ;
-            Text [ de ] = "Relatio~nenentwurf" ;
-            Text [ en-US ] = "Rel~ation Design" ;
-            };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_NEW_AUTOPILOT
-        };
-        MenuItem
-        {
-            MID_DOCUMENT_CREATE_REPWIZ
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem { MID_EDIT_DELETE      };
-        MenuItem { MID_RENAME_ENTRY     };
-        MenuItem { ITEM_EDIT_COPY       };
-        MenuItem { ITEM_EDIT_PASTE      };
-
-
-    };
-};
-
 
 String STR_TITLE_CONFIRM_DELETION
 {
@@ -667,15 +367,15 @@ String STR_TITLE_CONFIRM_DELETION
 
 String STR_QUERY_DELETE_QUERY
 {
-    Text [ de ] = "Soll die Abfrage '$name$' gelöscht werden?" ;
-    Text [ en-US ] = "Do you want to delete the query '$name$'?" ;
-    };
+    Text [ de ] = "Soll die Abfrage '%1' gelöscht werden?" ;
+    Text [ en-US ] = "Do you want to delete the query '%1'?" ;
+};
 
 String STR_QUERY_DELETE_TABLE
 {
     Text [ de ] = "Soll die Tabelle '%1' gelöscht werden?" ;
     Text [ en-US ] = "Do you want to delete the table '%1'?" ;
-    };
+};
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
 {
@@ -757,58 +457,5 @@ Menu RID_MENU_REFRESH_DATA
             };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
