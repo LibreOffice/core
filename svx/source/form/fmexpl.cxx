@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-20 14:18:56 $
+ *  last change: $Author: fs $ $Date: 2000-10-20 16:27:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1913,6 +1913,8 @@ void FmExplorer::Command( const CommandEvent& rEvt )
 
                 // der Reandonly-Eintrag ist nur auf der Root erlaubt
                 aContextMenu.EnableItem( SID_FM_OPEN_READONLY, m_bRootSelected );
+                // the same for automatic control focus
+                aContextMenu.EnableItem( SID_FM_AUTOCONTROLFOCUS, m_bRootSelected );
 
                 // die ConvertTo-Slots sind enabled, wenn genau ein Control selektiert ist, der
                 // dem Control entsprechende Slot ist disabled
@@ -1932,8 +1934,8 @@ void FmExplorer::Command( const CommandEvent& rEvt )
                 //////////////////////////////////////////////////////////
                 // OpenReadOnly setzen
 
-                sal_Bool bOpenDesignMode = pFormModel->GetOpenInDesignMode();
-                aContextMenu.CheckItem( SID_FM_OPEN_READONLY, bOpenDesignMode );
+                aContextMenu.CheckItem( SID_FM_OPEN_READONLY, pFormModel->GetOpenInDesignMode() );
+                aContextMenu.CheckItem( SID_FM_AUTOCONTROLFOCUS, pFormModel->GetAutoControlFocus() );
 
                 sal_uInt16 nSlotId = aContextMenu.Execute( this, ptWhere );
                 switch( nSlotId )
@@ -1998,12 +2000,14 @@ void FmExplorer::Command( const CommandEvent& rEvt )
                     break;
                     case SID_FM_OPEN_READONLY:
                     {
-                        if( pFormModel )
-                        {
-                            sal_Bool bOpenDesignMode = pFormModel->GetOpenInDesignMode();
-                            pFormModel->SetOpenInDesignMode( !bOpenDesignMode );
-                            pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
-                        }
+                        pFormModel->SetOpenInDesignMode( !pFormModel->GetOpenInDesignMode() );
+                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_OPEN_READONLY);
+                    }
+                    break;
+                    case SID_FM_AUTOCONTROLFOCUS:
+                    {
+                        pFormModel->SetAutoControlFocus( !pFormModel->GetAutoControlFocus() );
+                        pFormShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(SID_FM_AUTOCONTROLFOCUS);
                     }
                     break;
                     default:
