@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_content.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 12:31:36 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 10:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,8 @@ private:
                     com::sun::star::ucb::XCommandEnvironment > & xEnv );
     virtual ::rtl::OUString getParentURL();
 
+    bool isContentCreator();
+
     static bool hasData( ContentProvider* pProvider, const Uri & rUri );
     bool hasData( const Uri & rUri ) { return hasData( m_pProvider, rUri ); }
 
@@ -253,9 +255,8 @@ private:
                        ContentProvider* pProvider,
                        const ::rtl::OUString& rContentId );
 
-    inline bool isContentCreator() const;
 
-    bool commitStorage(
+    static bool commitStorage(
         const com::sun::star::uno::Reference<
             com::sun::star::embed::XStorage > & xStorage );
 
@@ -266,14 +267,14 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >
     getInputStream( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment > &
-                            xEnv ) const
+                            xEnv )
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >
     getTruncatedOutputStream(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::ucb::XCommandEnvironment > & xEnv ) const
+            ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
 
@@ -282,7 +283,7 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >
     getStream( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv ) const
+                    ::com::sun::star::ucb::XCommandEnvironment > & xEnv )
         throw ( ::com::sun::star::ucb::CommandFailedException,
                 ::com::sun::star::task::DocumentPasswordRequest );
 
@@ -375,12 +376,6 @@ public:
     rtl::Reference< ContentProvider > getContentProvider() const
     { return rtl::Reference< ContentProvider >( m_pProvider ); }
 };
-
-inline bool Content::isContentCreator() const
-{
-    return
-        ( m_aProps.getType() == FOLDER ) || ( m_aProps.getType() == DOCUMENT );
-}
 
 } // namespace tdoc_ucp
 
