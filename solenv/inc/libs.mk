@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.64 $
+#   $Revision: 1.65 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-17 17:18:10 $
+#   last change: $Author: vg $ $Date: 2003-06-10 11:31:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-LIBSMKREV!:="$$Revision: 1.64 $$"
+LIBSMKREV!:="$$Revision: 1.65 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -299,7 +299,7 @@ BTSTRPLIB=$(LIBPRE) bootstrp.lib
 TRANSEXLIB=$(LIBPRE) transex.lib
 ICOLIB= $(LIBPRE) icom.lib
 SVTOOLLIB=$(LIBPRE) svtool.lib
-AUTOMATIONLIB=$(LIBPRE) automation.lib
+AUTOMATIONLIB=$(LIBPRE) ists.lib
 SVLLIB=$(LIBPRE) isvl.lib
 PLUGCTORLIB=$(LIBPRE) plugctor.lib
 PLUGAPPLIB=$(LIBPRE) plugapp.lib
