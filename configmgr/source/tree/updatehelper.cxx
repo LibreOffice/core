@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:01:16 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
 
             INode const* pNewChild = m_pNewNode->getChild(aNodeName);
 
-            OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New (value) node is missing !");
+            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New (value) node is missing !");
 
             // if (!pNewChild) return DONE; // error stop !
 
@@ -718,10 +718,10 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
             OUString aNodeName = _aCacheNode.getName().toString();
 
             INode const* pNewChild = m_pNewNode->getChild(aNodeName);
-            OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New node is missing !");
+            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: New node is missing !");
 
             ISubtree const * pNewTree = pNewChild ? pNewChild->asISubtree() : NULL;
-            OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: Inner node expected !");
+            //OSL_ENSURE(pNewChild, "BackwardTreeDifferenceBuilder: Inner node expected !");
 
             if (pNewTree)
             {
