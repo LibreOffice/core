@@ -36,7 +36,7 @@
     <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:SpacePara2"/>
     <accel:item accel:code="KEY_F4" xlink:href=".uno:TransformDialog"/>
     <accel:item accel:code="KEY_F8" xlink:href=".uno:ToggleObjectBezierMode"/>
-    <accel:item accel:code="KEY_F7" xlink:href=".uno:Spelling"/>
+    <accel:item accel:code="KEY_F7" xlink:href=".uno:SpellDialog"/>
     <accel:item accel:code="KEY_F7" accel:mod1="true" xlink:href=".uno:Thesaurus"/>
     <accel:item accel:code="KEY_ADD" accel:shift="true" accel:mod1="true" xlink:href=".uno:BringToFront"/>
     <accel:item accel:code="KEY_SUBTRACT" accel:shift="true" accel:mod1="true" xlink:href=".uno:SendToBack"/>
