@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XWordCursor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:13:06 $
+ *  last change:$Date: 2003-09-08 11:22:38 $
  *
  *  The Contents of this file are made availab
  *  le subject to the terms of
@@ -62,8 +62,9 @@
 
 package ifc.text;
 
-import com.sun.star.text.XWordCursor;
 import lib.MultiMethodTest;
+
+import com.sun.star.text.XWordCursor;
 
 /**
  * Testing <code>com.sun.star.text.XWordCursor</code>
