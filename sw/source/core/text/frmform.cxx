@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:07:13 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:14:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ void SwTxtFrm::ValidateFrm()
 {
     // Umgebung validieren, um Oszillationen zu verhindern.
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
 #endif
 
     if ( !IsInFly() )
@@ -242,7 +242,7 @@ void SwTxtFrm::ValidateFrm()
     pPara->SetPrepMustFit( bMustFit );
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 }
 
@@ -276,7 +276,7 @@ void _ValidateBodyFrm( SwFrm *pFrm )
 void SwTxtFrm::ValidateBodyFrm()
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
 #endif
 
      //siehe Kommtar in ValidateFrm()
@@ -284,7 +284,7 @@ void SwTxtFrm::ValidateBodyFrm()
         _ValidateBodyFrm( GetUpper() );
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 }
 
@@ -295,7 +295,7 @@ void SwTxtFrm::ValidateBodyFrm()
 sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED
+    SWAP_IF_NOT_SWAPPED( this )
 #endif
 
     ASSERT( HasPara(), "SwTxtFrm::_GetDropRect: try again next year." );
@@ -311,11 +311,15 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 #ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
             SwitchHorizontalToVertical( rRect );
+        UNDO_SWAP( this )
 #endif
-        UNDO_SWAP
         return sal_True;
     }
-    UNDO_SWAP
+
+#ifdef VERTICAL_LAYOUT
+    UNDO_SWAP( this )
+#endif
+
     return sal_False;
 }
 
@@ -342,7 +346,7 @@ const SwBodyFrm *SwTxtFrm::FindBodyFrm() const
 sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
 #endif
 
     ASSERT( HasFollow(), "CalcFollow: missing Follow." );
@@ -369,7 +373,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 #ifdef VERTICAL_LAYOUT
         SWRECTFN ( this )
         SwTwips nOldBottom = (GetUpper()->Frm().*fnRect->fnGetBottom)();
-        SwTwips nMyPos = (GetUpper()->Frm().*fnRect->fnGetTop)();
+        SwTwips nMyPos = (Frm().*fnRect->fnGetTop)();
 #else
         SwTwips nOldBottom = GetUpper()->Frm().Bottom();
         SwTwips nMyPos = Frm().Top();
@@ -404,7 +408,11 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
 
         ((SwTxtFrm*)pFollow)->CalcFtnFlag();
         if ( !pFollow->GetNext() && !pFollow->HasFtn() )
+#ifdef VERTICAL_LAYOUT
+            nOldBottom = bVert ? 0 : LONG_MAX;
+#else
             nOldBottom = LONG_MAX;
+#endif
 
         while( sal_True )
         {
@@ -484,7 +492,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
                               nMyPos - Frm().Right() :
                               Frm().Top() - nMyPos ) )
         {
-            UNDO_SWAP
+            UNDO_SWAP( this )
             return sal_True;
         }
 #else
@@ -495,7 +503,7 @@ sal_Bool SwTxtFrm::CalcFollow( const xub_StrLen nTxtOfst )
     }
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 
     return sal_False;
@@ -517,7 +525,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 #ifdef VERTICAL_LAYOUT
     // AdjustFrm is called with a swapped frame during
     // formatting but the frame is not swapped during FormatEmpty
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
     SWRECTFN ( this )
 #endif
 
@@ -542,7 +550,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                         Frm().SSize().Height() += nChgHght;
                         Prt().SSize().Height() += nChgHght;
 #ifdef VERTICAL_LAYOUT
-                        UNDO_SWAP
+                        UNDO_SWAP( this )
 #endif
 
                         return;
@@ -689,7 +697,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         Shrink( -nChgHght PHEIGHT );
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 }
 
@@ -709,7 +717,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
                              const sal_uInt8 nMode )
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
 #endif
     // Wir haben den Rest der Textmasse: alle Follows loeschen
     // Sonderfall sind DummyPortions()
@@ -721,14 +729,14 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             {
                 ASSERT( sal_False, "+SwTxtFrm::JoinFrm: Follow ist locked." );
 #ifdef VERTICAL_LAYOUT
-                UNDO_SWAP
+                UNDO_SWAP( this )
 #endif
                 return;
             }
             JoinFrm();
         }
 #ifdef VERTICAL_LAYOUT
-        UNDO_SWAP
+        UNDO_SWAP( this )
 #endif
         return;
     }
@@ -765,7 +773,7 @@ void SwTxtFrm::_AdjustFollow( SwTxtFormatter &rLine,
             rLine.SetOnceMore( sal_True );
     }
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 }
 
@@ -1067,7 +1075,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             }
 
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED
+    SWAP_IF_NOT_SWAPPED( this )
 #endif
 
             SwTxtFormatInfo aInf( this );
@@ -1118,7 +1126,7 @@ sal_Bool SwTxtFrm::CalcPreps()
             }
 
 #ifdef VERTICAL_LAYOUT
-            UNDO_SWAP
+            UNDO_SWAP( this )
 #endif
             // Eine letzte Ueberpruefung, falls das FormatAdjust() nichts
             // brachte, muessen wir amputieren.
@@ -1182,7 +1190,7 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
                              const xub_StrLen nStrLen, const sal_Bool bDummy )
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED
+    SWAP_IF_NOT_SWAPPED( this )
 #endif
 
     SwParaPortion *pPara = rLine.GetInfo().GetParaPortion();
@@ -1280,7 +1288,7 @@ void            SwTxtFrm::FormatAdjust( SwTxtFormatter &rLine,
     pPara->SetPrepMustFit( sal_False );
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 }
 

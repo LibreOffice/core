@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-12 13:09:41 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,7 +1693,7 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit )
 KSHORT SwTxtFrm::GetParHeight() const
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_NOT_SWAPPED
+    SWAP_IF_NOT_SWAPPED( this )
 #endif
 
     if( !HasPara() )
@@ -1708,7 +1708,7 @@ KSHORT SwTxtFrm::GetParHeight() const
                 ++nRet;
         }
 #ifdef VERTICAL_LAYOUT
-        UNDO_SWAP
+        UNDO_SWAP( this )
 #endif
         return nRet;
     }
@@ -1722,7 +1722,7 @@ KSHORT SwTxtFrm::GetParHeight() const
         nHeight += aLine.GetLineHeight();
 
 #ifdef VERTICAL_LAYOUT
-        UNDO_SWAP
+        UNDO_SWAP( this )
 #endif
 
     return nHeight;
@@ -1737,7 +1737,7 @@ KSHORT SwTxtFrm::GetParHeight() const
 SwTxtFrm *SwTxtFrm::GetFormatted()
 {
 #ifdef VERTICAL_LAYOUT
-    SWAP_IF_SWAPPED
+    SWAP_IF_SWAPPED( this )
 #endif
 
     //Kann gut sein, dass mir der IdleCollector mir die gecachten
@@ -1758,7 +1758,7 @@ SwTxtFrm *SwTxtFrm::GetFormatted()
     }
 
 #ifdef VERTICAL_LAYOUT
-    UNDO_SWAP
+    UNDO_SWAP( this )
 #endif
 
     return this;

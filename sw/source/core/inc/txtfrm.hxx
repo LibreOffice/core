@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:16:40 $
+ *  last change: $Author: fme $ $Date: 2001-10-29 11:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,25 +93,25 @@ struct SwFillData;
 
 #ifdef VERTICAL_LAYOUT
 
-#define SWAP_IF_SWAPPED\
+#define SWAP_IF_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;   \
-    if ( IsVertical() && IsSwapped() )\
+    if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
     {                                 \
         bUndoSwap = sal_True;         \
-        ((SwTxtFrm*)this)->SwapWidthAndHeight();         \
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
     }
 
-#define SWAP_IF_NOT_SWAPPED\
+#define SWAP_IF_NOT_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;     \
-    if ( IsVertical() && ! IsSwapped() )\
+    if ( pFrm->IsVertical() && ! pFrm->IsSwapped() )\
     {                                   \
         bUndoSwap = sal_True;           \
-        ((SwTxtFrm*)this)->SwapWidthAndHeight();         \
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();         \
     }
 
-#define UNDO_SWAP\
-    if ( IsVertical() && bUndoSwap )\
-        ((SwTxtFrm*)this)->SwapWidthAndHeight();
+#define UNDO_SWAP( pFrm )\
+    if ( pFrm->IsVertical() && bUndoSwap )\
+        ((SwTxtFrm*)pFrm)->SwapWidthAndHeight();
 
 #endif
 
