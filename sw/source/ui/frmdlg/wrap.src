@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 21:46:30 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@ TabPage TP_FRM_WRAP
     SVLook = TRUE ;
     HelpID = HID_FRM_EXT ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     GroupBox C_WRAP_BOX
     {
@@ -218,8 +218,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 214 , 10 ) ;
         Size = MAP_APPFONT ( 37 , 37 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? D~ynamisch : ~Optimal */
-        /* ### ACHTUNG: Neuer Text in Resource? D~ynamisch : ~Optimal */
         Text = "D~ynamisch" ;
         Text [ ENGLISH ] = "D~ynamic Wrap" ;
         TopImage = True ;
@@ -269,11 +267,8 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_TRANSPARENT
     {
-        Pos = MAP_APPFONT ( 12 , 81 ) ;
+        Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Im Hin~tergrund : ~Transparent */
-        /* ### ACHTUNG: Neuer Text in Resource? Im Hin~tergrund : ~Transparent */
-        /* ### ACHTUNG: Neuer Text in Resource? Im Hin~tergrund : ~Transparent */
         Text = "Im Hin~tergrund" ;
         Text [ ENGLISH ] = "To background" ;
         Text [ dutch ] = "~Op achtergrond" ;
@@ -297,7 +292,7 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_OUTLINE
     {
-        Pos = MAP_APPFONT ( 12 , 97 ) ;
+        Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "Kont~ur" ;
         Text [ ENGLISH ] = "Contou~r" ;
@@ -323,9 +318,8 @@ TabPage TP_FRM_WRAP
     };
     CheckBox CB_ONLYOUTSIDE
     {
-        Pos = MAP_APPFONT ( 22 , 110 ) ;
+        Pos = MAP_APPFONT ( 18 , 107 ) ;
         Size = MAP_APPFONT ( 99 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Nur auﬂen : Nur auòen */
         Text = "~Nur auﬂen" ;
         Text [ ENGLISH ] = "Only outside" ;
         Hide = TRUE ;
@@ -351,7 +345,7 @@ TabPage TP_FRM_WRAP
     GroupBox GB_OPTION
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
-        Size = MAP_APPFONT ( 121 , 75 ) ;
+        Size = MAP_APPFONT ( 121 , 71 ) ;
         Text = "Optionen" ;
         Text [ ENGLISH ] = "Options" ;
         Text [ dutch ] = "Opties" ;
@@ -548,8 +542,7 @@ TabPage TP_FRM_WRAP
     GroupBox GB_MARGIN
     {
         Pos = MAP_APPFONT ( 133 , 54 ) ;
-        Size = MAP_APPFONT ( 121 , 75 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Abst‰nde : Abstınde */
+        Size = MAP_APPFONT ( 121 , 71 ) ;
         Text = "Abst‰nde" ;
         Text [ ENGLISH ] = "Margins" ;
         Text [ norwegian ] = "Margins" ;

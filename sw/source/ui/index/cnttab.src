@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 16:27:51 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,7 +412,7 @@ TabDialog DLG_MULTI_TOX
 TabPage TP_TOX_SELECT
 {
     HelpID =  HID_TP_TOX_SELECT;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
 
     FixedText       FT_TYPE
@@ -687,7 +687,7 @@ TabPage TP_TOX_SELECT
     };
     FixedText       FT_TITLE
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 30 ,10 ) ;
         Text = "T~itel" ;
         Text [ ENGLISH ] = "Title" ;
@@ -713,14 +713,14 @@ TabPage TP_TOX_SELECT
     };
     Edit            ED_TITLE
     {
-        Pos = MAP_APPFONT ( 45 , 29 ) ;
+        Pos = MAP_APPFONT ( 45 , 30 ) ;
         Size = MAP_APPFONT ( 203 , 12 ) ;
         Border = TRUE;
     };
     GroupBox        GB_TYPETITLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248, 41 ) ;
+        Size = MAP_APPFONT ( 248, 42 ) ;
         Text = "Typ und Titel" ;
         Text [ ENGLISH ] = "Type and title" ;
         Text[ english_us ] = "Type and title";
@@ -745,7 +745,7 @@ TabPage TP_TOX_SELECT
     };
     ListBox         LB_AREA
     {
-        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 113 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -857,8 +857,8 @@ TabPage TP_TOX_SELECT
     };
     FixedText       FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 145 , 59 ) ;
-        Size = MAP_APPFONT ( 80 , 10 ) ;
+        Pos = MAP_APPFONT ( 145 , 61 ) ;
+        Size = MAP_APPFONT ( 80 , 8 ) ;
         Text = "A~uswerten bis Ebene" ;
         Text [ ENGLISH ] = "Evaluation level" ;
         Text[ english_us ] = "Evaluation level";
@@ -897,8 +897,8 @@ TabPage TP_TOX_SELECT
     };
     GroupBox        GB_AREA
     {
-        Pos = MAP_APPFONT ( 6 , 47 ) ;
-        Size = MAP_APPFONT ( 248, 27 ) ;
+        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Size = MAP_APPFONT ( 248, 26 ) ;
         Text = "~Verzeichnis erstellen f¸r" ;
         Text [ ENGLISH ] = "Create index of" ;
         Text[ english_us ] = "Create index for";
@@ -923,8 +923,8 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_FROMHEADINGS
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
-        Size = MAP_APPFONT ( 95 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 90 ) ;
+        Size = MAP_APPFONT ( 95 , 8 ) ;
         Check = TRUE;
         Text = "~Gliederung" ;
         Text [ ENGLISH ] = "Outline" ;
@@ -950,15 +950,14 @@ TabPage TP_TOX_SELECT
     };
     PushButton  PB_CHAPTERDLG
     {
-        Pos = MAP_APPFONT ( 115 , 85 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
+        Pos = MAP_APPFONT ( 115 , 88 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "~..." ;
-        //Text [ ENGLISH ] = "" ;
         TabStop = TRUE ;
     };
     CheckBox CB_ADDSTYLES
     {
-        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 75 , 10  ) ;
         Text = "~weiteren Vorlagen" ;
         Text [ ENGLISH ] = "additional styles" ;
@@ -1008,15 +1007,39 @@ TabPage TP_TOX_SELECT
     };
     PushButton      PB_ADDSTYLES
     {
-        Pos = MAP_APPFONT ( 115 , 98 ) ;
-        Size = MAP_APPFONT ( 10 , 10 ) ;
+        Pos = MAP_APPFONT ( 115 , 104 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
         Text = "..." ;
-        //Text [ ENGLISH ] = "" ;
         TabStop = TRUE ;
+    };
+    CheckBox        CB_TOXMARKS
+    {
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        Text = "Verzeichnism~arkierungen" ;
+        Text [ ENGLISH ] = "Index entries" ;
+        Text[ english_us ] = "Inde~x marks";
+        Text[ portuguese ] = "~Marcas do Ìndice";
+        Text[ russian ] = "ÃÂÚÍË ÛÍ‡Á‡ÚÂÎˇ";
+        Text[ greek ] = "”ÁÏ‹ÌÛÂÈÚ ÂıÒÂÙÁÒﬂÔı";
+        Text[ dutch ] = "~indexmarkeringen";
+        Text[ french ] = "~Marques d'index";
+        Text[ spanish ] = "Mar~cas del Ìndice";
+        Text[ italian ] = "Contrasse~gni indice";
+        Text[ danish ] = "Indeksmarkeringer";
+        Text[ swedish ] = "Fˆrteckningsm~arkeringar";
+        Text[ polish ] = "Zaz~naczanie indeksÛw";
+        Text[ portuguese_brazilian ] = "Index entries";
+        Text[ japanese ] = "çıà¯ëIëçÄñ⁄";
+        Text[ korean ] = "ªˆ¿Œ ∏∂≈©";
+        Text[ chinese_simplified ] = "±Íº«ƒø¬ºÃıƒø";
+        Text[ chinese_traditional ] = "•ÿø˝º–∞O";
+        Text[ arabic ] = " ÕœÌœ«  «·›Â—”";
+        Text[ turkish ] = "Dizin ~i˛aretleri";
     };
     RadioButton     RB_FROMCAPTIONS
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Bes~chriftungen" ;
         Text [ ENGLISH ] = "Captions" ;
@@ -1042,7 +1065,7 @@ TabPage TP_TOX_SELECT
     };
     FixedText FT_CAPTIONSEQUENCE
     {
-        Pos = MAP_APPFONT ( 12 , 101 ) ;
+        Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Kategorie" ;
         Text [ ENGLISH ] = "Category" ;
@@ -1068,14 +1091,14 @@ TabPage TP_TOX_SELECT
     };
     ListBox LB_CAPTIONSEQUENCE
     {
-        Pos = MAP_APPFONT ( 55 , 99 ) ;
+        Pos = MAP_APPFONT ( 55 , 102 ) ;
         Size = MAP_APPFONT ( 70 , 40 ) ;
         DropDown = TRUE;
         TabStop = TRUE;
     };
     FixedText FT_DISPLAYTYPE
     {
-        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         Text = "~Anzeige" ;
         Text [ ENGLISH ] = "Display" ;
@@ -1101,7 +1124,7 @@ TabPage TP_TOX_SELECT
     };
     ListBox LB_DISPLAYTYPE
     {
-        Pos = MAP_APPFONT ( 55 , 114 ) ;
+        Pos = MAP_APPFONT ( 55 , 118 ) ;
         Size = MAP_APPFONT ( 70 , 40 ) ;
         DropDown = TRUE;
         TabStop = TRUE;
@@ -1234,7 +1257,7 @@ TabPage TP_TOX_SELECT
     };
     RadioButton        RB_FROMOBJECTNAMES
     {
-        Pos = MAP_APPFONT ( 156 , 87 ) ;
+        Pos = MAP_APPFONT ( 156 , 88 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text = "Obje~ktnamen" ;
         Text [ ENGLISH ] = "Object names" ;
@@ -1257,31 +1280,6 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "√”„«¡ «·ﬂ«∆‰";
         Text[ turkish ] = "Nesne adlar˝";
         Text[ language_user1 ] = " ";
-    };
-    CheckBox        CB_TOXMARKS
-    {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text = "Verzeichnism~arkierungen" ;
-        Text [ ENGLISH ] = "Index entries" ;
-        Text[ english_us ] = "Inde~x marks";
-        Text[ portuguese ] = "~Marcas do Ìndice";
-        Text[ russian ] = "ÃÂÚÍË ÛÍ‡Á‡ÚÂÎˇ";
-        Text[ greek ] = "”ÁÏ‹ÌÛÂÈÚ ÂıÒÂÙÁÒﬂÔı";
-        Text[ dutch ] = "~indexmarkeringen";
-        Text[ french ] = "~Marques d'index";
-        Text[ spanish ] = "Mar~cas del Ìndice";
-        Text[ italian ] = "Contrasse~gni indice";
-        Text[ danish ] = "Indeksmarkeringer";
-        Text[ swedish ] = "Fˆrteckningsm~arkeringar";
-        Text[ polish ] = "Zaz~naczanie indeksÛw";
-        Text[ portuguese_brazilian ] = "Index entries";
-        Text[ japanese ] = "çıà¯ëIëçÄñ⁄";
-        Text[ korean ] = "ªˆ¿Œ ∏∂≈©";
-        Text[ chinese_simplified ] = "±Íº«ƒø¬ºÃıƒø";
-        Text[ chinese_traditional ] = "•ÿø˝º–∞O";
-        Text[ arabic ] = " ÕœÌœ«  «·›Â—”";
-        Text[ turkish ] = "Dizin ~i˛aretleri";
     };
     GroupBox        GB_CREATEFROM
     {
@@ -1311,7 +1309,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_COLLECTSAME
     {
-        Pos = MAP_APPFONT ( 12 , 86 ) ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 121 , 10 ) ;
         Text = "Zusammenfassen ~gleicher Eintr‰ge" ;
         Text [ ENGLISH ] = "Combine identical entries" ;
@@ -1336,7 +1334,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_USEFF
     {
-        Pos = MAP_APPFONT ( 18 ,  98 ) ;
+        Pos = MAP_APPFONT ( 18 ,  101 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Zusammenfassen mit ~f oder ff" ;
         Text [ english ] = "Combine identical entries with ~pp." ;
@@ -1361,7 +1359,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox CB_USE_DASH
     {
-        Pos = MAP_APPFONT ( 18 , 110 ) ;
+        Pos = MAP_APPFONT ( 18 , 114 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Zusammenfassen ~mit -" ;
         Text [ english ] = "Combine identical entries with -" ;
@@ -1386,7 +1384,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_CASESENSITIVE
     {
-        Pos = MAP_APPFONT ( 18 , 122 ) ;
+        Pos = MAP_APPFONT ( 18 , 127 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Groﬂ- und ~Kleinschreibung beachten" ;
         Text [ ENGLISH ] = "Case sensitive" ;
@@ -1412,7 +1410,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_INITIALCAPS
     {
-        Pos = MAP_APPFONT ( 136 , 86 ) ;
+        Pos = MAP_APPFONT ( 136 , 88 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "Eintr‰ge ~automatisch groﬂschreiben";
         Text [ ENGLISH ] = "Capitalize entries";
@@ -1438,7 +1436,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox        CB_KEYASENTRY
     {
-        Pos = MAP_APPFONT ( 136, 98 ) ;
+        Pos = MAP_APPFONT ( 136, 102 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "~Schl¸ssel als eigener Eintrag" ;
         Text [ ENGLISH ] = "Keys as separate entries" ;
@@ -1463,8 +1461,8 @@ TabPage TP_TOX_SELECT
     };
     CheckBox    CB_FROMFILE
     {
-        Pos = MAP_APPFONT ( 136 , 110 ) ;
-        Size = MAP_APPFONT ( 73 , 10 ) ;
+        Pos = MAP_APPFONT ( 136 , 116 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         Text = "Konko~rdanzdatei" ;
         Text [ ENGLISH ] = "...file??" ;
         Text[ english_us ] = "~Concordance file";
@@ -1486,139 +1484,10 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "„·› ›Â—” √»ÃœÌ";
         Text[ turkish ] = "Uyumluluk dosyas˝";
     };
-    CheckBox    CB_FROMTABLES
-    {
-        Pos = MAP_APPFONT ( 112 , 87 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text = "~Tabellen" ;
-        Text [ ENGLISH ] = "Tables" ;
-        Text[ english_us ] = "Tables";
-        Text[ portuguese ] = "~Tabelas";
-        Text[ russian ] = "“‡·ÎËˆ˚";
-        Text[ greek ] = "–ﬂÌ·ÍÂÚ";
-        Text[ dutch ] = "~Tabellen";
-        Text[ french ] = "~Tables";
-        Text[ spanish ] = "~Tablas";
-        Text[ italian ] = "Ta~belle";
-        Text[ danish ] = "Tabeller";
-        Text[ swedish ] = "~Tabeller";
-        Text[ polish ] = "Tabele";
-        Text[ portuguese_brazilian ] = "Tables";
-        Text[ japanese ] = "ï\\";
-        Text[ korean ] = "«•";
-        Text[ chinese_simplified ] = "±Ì∏Ò";
-        Text[ chinese_traditional ] = "™ÌÆÊ";
-        Text[ arabic ] = "Ãœ«Ê·";
-        Text[ turkish ] = "Tablolar";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox    CB_FROMFRAMES
-    {
-        Pos = MAP_APPFONT ( 182 , 87 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text = "Te~xtrahmen" ;
-        Text [ ENGLISH ] = "Text frames" ;
-        Text[ english_us ] = "Te~xt frames";
-        Text[ portuguese ] = "~Molduras de texto";
-        Text[ russian ] = "“ÂÍÒÚÓ‚˚Â ‡ÏÍË";
-        Text[ greek ] = "–Î·ﬂÛÈÔ ÍÂÈÏ›ÌÔı";
-        Text[ dutch ] = "~Tekstkaders";
-        Text[ french ] = "Cadre ~texte";
-        Text[ spanish ] = "Marco de te~xto";
-        Text[ italian ] = "Cornici";
-        Text[ danish ] = "Tekstboks";
-        Text[ swedish ] = "Textramar";
-        Text[ polish ] = "Ramki tekstu";
-        Text[ portuguese_brazilian ] = "Text frames";
-        Text[ japanese ] = "√∑Ωƒòg(~X)";
-        Text[ korean ] = "≈ÿΩ∫∆Æ «¡∑π¿”(~X)";
-        Text[ chinese_simplified ] = "Œƒ±æøÚ(~X)";
-        Text[ chinese_traditional ] = "§Â¶r§ËÆÿ(~X)";
-        Text[ arabic ] = "ﬂÊ«œ— ‰’";
-        Text[ turkish ] = "Metin ÁerÁevesi";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox    CB_FROMGRAPHICS
-    {
-        Pos = MAP_APPFONT ( 112 , 100 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text = "~Grafiken" ;
-        Text [ ENGLISH ] = "Graphics" ;
-        Text[ english_us ] = "Graphics";
-        Text[ portuguese ] = "~Imagens";
-        Text[ russian ] = "–ËÒÛÌÍË";
-        Text[ greek ] = "√Ò·ˆÈÍ‹";
-        Text[ dutch ] = "~Afbeeldingen";
-        Text[ french ] = "~Images";
-        Text[ spanish ] = "Im·gene~s";
-        Text[ italian ] = "~Immagini";
-        Text[ danish ] = "Grafik";
-        Text[ swedish ] = "~Grafik";
-        Text[ polish ] = "Grafiki";
-        Text[ portuguese_brazilian ] = "Graphics";
-        Text[ japanese ] = "ê}";
-        Text[ korean ] = "±◊∑°«»";
-        Text[ chinese_simplified ] = "Õº–Œ";
-        Text[ chinese_traditional ] = "πœßŒ";
-        Text[ arabic ] = "’Ê—";
-        Text[ turkish ] = "Grafikler";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox        CB_FROMOLE
-    {
-        Pos = MAP_APPFONT ( 182 , 100 ) ;
-        Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text = "~OLE-Objekten" ;
-        Text [ ENGLISH ] = "OLE objects" ;
-        Text[ english_us ] = "OLE objects";
-        Text[ portuguese ] = "~Objectos OLE";
-        Text[ russian ] = "Œ·˙ÂÍÚ˚ OLE";
-        Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌ· OLE";
-        Text[ dutch ] = "~OLE-objecten";
-        Text[ french ] = "Objets ~OLE";
-        Text[ spanish ] = "Objetos O~LE";
-        Text[ italian ] = "O~ggetti OLE";
-        Text[ danish ] = "OLE-objekter";
-        Text[ swedish ] = "~OLE-objekt";
-        Text[ polish ] = "Obiekty OLE";
-        Text[ portuguese_brazilian ] = "OLE objects";
-        Text[ japanese ] = "OLEµÃﬁºﬁ™∏ƒ";
-        Text[ korean ] = "OLE ∞≥√º";
-        Text[ chinese_simplified ] = "OLE ∂‘œÛ";
-        Text[ chinese_traditional ] = "OLE ™´•Û";
-        Text[ arabic ] = "ﬂ«∆‰«  OLE";
-        Text[ turkish ] = "OLE nesneleri";
-        Text[ language_user1 ] = " ";
-    };
-    CheckBox        CB_LEVELFROMCHAPTER
-    {
-        Pos = MAP_APPFONT ( 118 ,  113 ) ;
-        Size = MAP_APPFONT ( 103 , 10 ) ;
-        Text = "Ebene aus Urs~prungskapitel" ;
-        Text [ ENGLISH ] = "Use level from source" ;
-        Text[ english_us ] = "Use level from source chapter";
-        Text[ portuguese ] = "NÌvel do ~capÌtulo de origem";
-        Text[ russian ] = "”Ó‚ÂÌ¸ ËÁ ËÒıÓ‰ÌÓÈ „Î‡‚˚";
-        Text[ greek ] = "≈ﬂÂ‰Ô ˘Ú ÍÂˆ‹Î·ÈÔ ~ÒÔ›ÎÂıÛÁÚ";
-        Text[ dutch ] = "Niveau als ~oorsprongshoofdstuk";
-        Text[ french ] = "Niveau du chapitre d'~origine";
-        Text[ spanish ] = "Nivel del capÌtulo orige~n";
-        Text[ italian ] = "Livello dal capitolo ~sorgente";
-        Text[ danish ] = "Niveau fra kildekapitel";
-        Text[ swedish ] = "NivÂ frÂn urs~prungskapitel";
-        Text[ polish ] = "Poziom ze ürÛd≥a";
-        Text[ portuguese_brazilian ] = "Use level from source";
-        Text[ japanese ] = "Ç‡Ç∆ÇÃèÕÇÃ⁄ÕﬁŸ";
-        Text[ korean ] = "ø¯∑° ¿Âø°º≠¿« ºˆ¡ÿ ªÁøÎ";
-        Text[ chinese_simplified ] = " π”√‘¥’¬Ω⁄µƒº∂";
-        Text[ chinese_traditional ] = "Ø≈±q∑Ω≥π∏`";
-        Text[ arabic ] = "«” Œœ«„ „” ÊÏ „‰ «·›’· «·„’œ—Ì";
-        Text[ turkish ] = "Kaynak bˆl¸mdeki d¸zeyi kullan";
-    };
     MenuButton  MB_AUTOMARK
     {
-        Pos = MAP_APPFONT ( 210 , 110 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 144 , 129 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Datei" ;
         Text [ ENGLISH ] = "File" ;
         TabStop = TRUE ;
@@ -1719,37 +1588,140 @@ TabPage TP_TOX_SELECT
         Text[ arabic ] = "„·›";
         Text[ turkish ] = "Dosya";
     };
-/*  PushButton      PB_FILE
+    CheckBox    CB_FROMTABLES
     {
-        Pos = MAP_APPFONT ( 234 , 110 ) ;
-        Size = MAP_APPFONT ( 12 , 12 ) ;
-        Text = "~..." ;
-        //Text [ ENGLISH ] = "" ;
-        TabStop = TRUE ;
-        QuickHelpText = "÷ffnen";
-        QuickHelpText[English] = "Open";
+        Pos = MAP_APPFONT ( 112 , 88 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text = "~Tabellen" ;
+        Text [ ENGLISH ] = "Tables" ;
+        Text[ english_us ] = "Tables";
+        Text[ portuguese ] = "~Tabelas";
+        Text[ russian ] = "“‡·ÎËˆ˚";
+        Text[ greek ] = "–ﬂÌ·ÍÂÚ";
+        Text[ dutch ] = "~Tabellen";
+        Text[ french ] = "~Tables";
+        Text[ spanish ] = "~Tablas";
+        Text[ italian ] = "Ta~belle";
+        Text[ danish ] = "Tabeller";
+        Text[ swedish ] = "~Tabeller";
+        Text[ polish ] = "Tabele";
+        Text[ portuguese_brazilian ] = "Tables";
+        Text[ japanese ] = "ï\\";
+        Text[ korean ] = "«•";
+        Text[ chinese_simplified ] = "±Ì∏Ò";
+        Text[ chinese_traditional ] = "™ÌÆÊ";
+        Text[ arabic ] = "Ãœ«Ê·";
+        Text[ turkish ] = "Tablolar";
+        Text[ language_user1 ] = " ";
     };
-    PushButton PB_CREATE_AUTOMARK
+    CheckBox    CB_FROMFRAMES
     {
-        Pos = MAP_APPFONT ( 143 , 125 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "~Neu..." ;
-        Text [ ENGLISH ] = "New..." ;
-        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 182 , 88 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text = "Te~xtrahmen" ;
+        Text [ ENGLISH ] = "Text frames" ;
+        Text[ english_us ] = "Te~xt frames";
+        Text[ portuguese ] = "~Molduras de texto";
+        Text[ russian ] = "“ÂÍÒÚÓ‚˚Â ‡ÏÍË";
+        Text[ greek ] = "–Î·ﬂÛÈÔ ÍÂÈÏ›ÌÔı";
+        Text[ dutch ] = "~Tekstkaders";
+        Text[ french ] = "Cadre ~texte";
+        Text[ spanish ] = "Marco de te~xto";
+        Text[ italian ] = "Cornici";
+        Text[ danish ] = "Tekstboks";
+        Text[ swedish ] = "Textramar";
+        Text[ polish ] = "Ramki tekstu";
+        Text[ portuguese_brazilian ] = "Text frames";
+        Text[ japanese ] = "√∑Ωƒòg(~X)";
+        Text[ korean ] = "≈ÿΩ∫∆Æ «¡∑π¿”(~X)";
+        Text[ chinese_simplified ] = "Œƒ±æøÚ(~X)";
+        Text[ chinese_traditional ] = "§Â¶r§ËÆÿ(~X)";
+        Text[ arabic ] = "ﬂÊ«œ— ‰’";
+        Text[ turkish ] = "Metin ÁerÁevesi";
+        Text[ language_user1 ] = " ";
     };
-    PushButton PB_EDIT_AUTOMARK
+    CheckBox    CB_FROMGRAPHICS
     {
-        Pos = MAP_APPFONT ( 196 , 125 ) ;
-        Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text = "~Bearbeiten..." ;
-        Text [ ENGLISH ] = "Edit..." ;
-        TabStop = TRUE ;
-    };*/
+        Pos = MAP_APPFONT ( 112 , 102 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text = "~Grafiken" ;
+        Text [ ENGLISH ] = "Graphics" ;
+        Text[ english_us ] = "Graphics";
+        Text[ portuguese ] = "~Imagens";
+        Text[ russian ] = "–ËÒÛÌÍË";
+        Text[ greek ] = "√Ò·ˆÈÍ‹";
+        Text[ dutch ] = "~Afbeeldingen";
+        Text[ french ] = "~Images";
+        Text[ spanish ] = "Im·gene~s";
+        Text[ italian ] = "~Immagini";
+        Text[ danish ] = "Grafik";
+        Text[ swedish ] = "~Grafik";
+        Text[ polish ] = "Grafiki";
+        Text[ portuguese_brazilian ] = "Graphics";
+        Text[ japanese ] = "ê}";
+        Text[ korean ] = "±◊∑°«»";
+        Text[ chinese_simplified ] = "Õº–Œ";
+        Text[ chinese_traditional ] = "πœßŒ";
+        Text[ arabic ] = "’Ê—";
+        Text[ turkish ] = "Grafikler";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox        CB_FROMOLE
+    {
+        Pos = MAP_APPFONT ( 182 , 102 ) ;
+        Size = MAP_APPFONT ( 68 , 10 ) ;
+        Text = "~OLE-Objekten" ;
+        Text [ ENGLISH ] = "OLE objects" ;
+        Text[ english_us ] = "OLE objects";
+        Text[ portuguese ] = "~Objectos OLE";
+        Text[ russian ] = "Œ·˙ÂÍÚ˚ OLE";
+        Text[ greek ] = "¡ÌÙÈÍÂﬂÏÂÌ· OLE";
+        Text[ dutch ] = "~OLE-objecten";
+        Text[ french ] = "Objets ~OLE";
+        Text[ spanish ] = "Objetos O~LE";
+        Text[ italian ] = "O~ggetti OLE";
+        Text[ danish ] = "OLE-objekter";
+        Text[ swedish ] = "~OLE-objekt";
+        Text[ polish ] = "Obiekty OLE";
+        Text[ portuguese_brazilian ] = "OLE objects";
+        Text[ japanese ] = "OLEµÃﬁºﬁ™∏ƒ";
+        Text[ korean ] = "OLE ∞≥√º";
+        Text[ chinese_simplified ] = "OLE ∂‘œÛ";
+        Text[ chinese_traditional ] = "OLE ™´•Û";
+        Text[ arabic ] = "ﬂ«∆‰«  OLE";
+        Text[ turkish ] = "OLE nesneleri";
+        Text[ language_user1 ] = " ";
+    };
+    CheckBox        CB_LEVELFROMCHAPTER
+    {
+        Pos = MAP_APPFONT ( 118 ,  115 ) ;
+        Size = MAP_APPFONT ( 103 , 10 ) ;
+        Text = "Ebene aus Urs~prungskapitel" ;
+        Text [ ENGLISH ] = "Use level from source" ;
+        Text[ english_us ] = "Use level from source chapter";
+        Text[ portuguese ] = "NÌvel do ~capÌtulo de origem";
+        Text[ russian ] = "”Ó‚ÂÌ¸ ËÁ ËÒıÓ‰ÌÓÈ „Î‡‚˚";
+        Text[ greek ] = "≈ﬂÂ‰Ô ˘Ú ÍÂˆ‹Î·ÈÔ ~ÒÔ›ÎÂıÛÁÚ";
+        Text[ dutch ] = "Niveau als ~oorsprongshoofdstuk";
+        Text[ french ] = "Niveau du chapitre d'~origine";
+        Text[ spanish ] = "Nivel del capÌtulo orige~n";
+        Text[ italian ] = "Livello dal capitolo ~sorgente";
+        Text[ danish ] = "Niveau fra kildekapitel";
+        Text[ swedish ] = "NivÂ frÂn urs~prungskapitel";
+        Text[ polish ] = "Poziom ze ürÛd≥a";
+        Text[ portuguese_brazilian ] = "Use level from source";
+        Text[ japanese ] = "Ç‡Ç∆ÇÃèÕÇÃ⁄ÕﬁŸ";
+        Text[ korean ] = "ø¯∑° ¿Âø°º≠¿« ºˆ¡ÿ ªÁøÎ";
+        Text[ chinese_simplified ] = " π”√‘¥’¬Ω⁄µƒº∂";
+        Text[ chinese_traditional ] = "Ø≈±q∑Ω≥π∏`";
+        Text[ arabic ] = "«” Œœ«„ „” ÊÏ „‰ «·›’· «·„’œ—Ì";
+        Text[ turkish ] = "Kaynak bˆl¸mdeki d¸zeyi kullan";
+    };
 
     GroupBox        GB_IDXOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 77 ) ;
-        Size = MAP_APPFONT ( 248, 56 ) ;
+        Size = MAP_APPFONT ( 248, 69 ) ;
         Text = "Zus‰tze" ;
         Text [ ENGLISH ] = "Options" ;
         Text[ english_us ] = "Options";
@@ -1774,8 +1746,8 @@ TabPage TP_TOX_SELECT
     };
     Control CLB_FROMOBJ
     {
-        Pos = MAP_APPFONT ( 12 , 87 ) ;
-        Size = MAP_APPFONT ( 236 , 43 ) ;
+        Pos = MAP_APPFONT ( 12 , 88 ) ;
+        Size = MAP_APPFONT ( 236 , 55 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
@@ -1964,7 +1936,7 @@ TabPage TP_TOX_SELECT
     GroupBox GB_FROMOBJ
     {
         Pos = MAP_APPFONT ( 6 , 77) ;
-        Size = MAP_APPFONT ( 248, 56 ) ;
+        Size = MAP_APPFONT ( 248, 69 ) ;
         Text = "Aus folgenden Objekten erzeugen" ;
         Text [ ENGLISH ] = "Create from the following objects" ;
         Text[ english_us ] = "Create from the following objects";
@@ -1989,7 +1961,7 @@ TabPage TP_TOX_SELECT
     };
     CheckBox CB_SEQUENCE
     {
-        Pos = MAP_APPFONT ( 12, 57) ;
+        Pos = MAP_APPFONT ( 12, 59) ;
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text = "~Eintr‰ge nummerieren" ;
         Text [ ENGLISH ] = "Number entries" ;
@@ -2015,8 +1987,8 @@ TabPage TP_TOX_SELECT
     };
     FixedText FT_BRACKET
     {
-        Pos = MAP_APPFONT ( 12, 70) ;
-        Size = MAP_APPFONT ( 60, 10 ) ;
+        Pos = MAP_APPFONT ( 12, 75) ;
+        Size = MAP_APPFONT ( 60, 8 ) ;
         Text = "~Klammern" ;
         Text [ ENGLISH ] = "Brackets" ;
         Text[ english_us ] = "~Brackets";
@@ -2041,7 +2013,7 @@ TabPage TP_TOX_SELECT
     };
     ListBox LB_BRACKET
     {
-        Pos = MAP_APPFONT ( 75, 70) ;
+        Pos = MAP_APPFONT ( 75, 73) ;
         Size = MAP_APPFONT ( 20, 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
@@ -2055,8 +2027,8 @@ TabPage TP_TOX_SELECT
     };
     GroupBox GB_AUTHORITY
     {
-        Pos = MAP_APPFONT ( 6 , 47) ;
-        Size = MAP_APPFONT ( 248, 86 ) ;
+        Pos = MAP_APPFONT ( 6 , 48) ;
+        Size = MAP_APPFONT ( 248, 40 ) ;
         Text = "Formatierung der Eintr‰ge" ;
         Text [ ENGLISH ] = "Formatting of the marks" ;
         Text[ english_us ] = "Formatting of the entries";
@@ -2107,30 +2079,8 @@ TabPage TP_TOX_SELECT
 TabPage TP_TOX_ENTRY
 {
     HelpID =  HID_TP_TOX_ENTRY;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    Control LB_LEVEL
-    {
-        Pos = MAP_APPFONT (  6, 15 ) ;
-        Size = MAP_APPFONT ( 25, 118 ) ;
-        TabStop = TRUE ;
-        Border = TRUE;
-//      HScroll = TRUE;
-/*      StringList =
-        {
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "5" ; > ;
-            < "6" ; > ;
-            < "7" ; > ;
-            < "8" ; > ;
-            < "9" ; > ;
-            < "10" ; > ;
-            < "1-10" ; > ;
-        };*/
-    };
     FixedText FT_LEVEL
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
@@ -2157,6 +2107,13 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "D¸zey";
         Text[ language_user1 ] = " ";
     };
+    Control LB_LEVEL
+    {
+        Pos = MAP_APPFONT (  6, 15 ) ;
+        Size = MAP_APPFONT ( 25, 167 ) ;
+        TabStop = TRUE ;
+        Border = TRUE;
+    };
     String ST_AUTHTYPE
     {
         Text = "~Art";
@@ -2182,7 +2139,7 @@ TabPage TP_TOX_ENTRY
     };
     Window WIN_TOKEN
     {
-        Pos = MAP_APPFONT (  37, 12 ) ;
+        Pos = MAP_APPFONT (  37, 16 ) ;
         Size = MAP_APPFONT ( 159, 12 ) ;
         ImageButton WIN_LEFT_SCROLL
         {
@@ -2636,8 +2593,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_ALL_LEVELS
     {
-        Pos = MAP_APPFONT ( 199 , 12 ) ;
-        Size = MAP_APPFONT ( 50, 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 14 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text = "~Alle Ebenen" ;
         Text [ ENGLISH ] = "All levels" ;
         Text[ english_us ] = "~All levels";
@@ -2661,8 +2618,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_ENTRYNO
     {
-        Pos = MAP_APPFONT ( 37 , 25 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT ( 37 , 31 ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "~Kapitelnr." ;
         Text [ ENGLISH ] = "Chapter no." ;
         Text[ english_us ] = "Chapter no.";
@@ -2687,8 +2644,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_ENTRY
     {
-        Pos = MAP_APPFONT (  80, 25 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT (  80, 31 ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "~Eintragstext" ;
         Text [ ENGLISH ] = "Entry text" ;
         Text[ english_us ] = "Entry text";
@@ -2713,8 +2670,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_CHAPTERINFO
     {
-        Pos = MAP_APPFONT ( 123 , 25 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT ( 123 , 31 ) ;
+        Size = MAP_APPFONT ( 40, 14) ;
         Text = "~Kapitelinfo" ;
         Text [ ENGLISH ] = "Chapter info" ;
         Text[ english_us ] = "~Chapter info";
@@ -2739,8 +2696,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_PAGENO
     {
-        Pos = MAP_APPFONT ( 166 , 25 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT ( 166 , 31 ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "~Seitennr." ;
         Text [ ENGLISH ] = "Page no." ;
         Text[ english_us ] = "Page no.";
@@ -2765,8 +2722,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_TAB
     {
-        Pos = MAP_APPFONT ( 209 ,25  ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT ( 209 ,31  ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "~Tabulator" ;
         Text [ ENGLISH ] = "Tab stop" ;
         Text[ english_us ] = "Tab stop";
@@ -2791,8 +2748,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_HYPERLINK
     {
-        Pos = MAP_APPFONT ( 209 , 25 ) ;
-        Size = MAP_APPFONT ( 40, 12 ) ;
+        Pos = MAP_APPFONT ( 209 , 31 ) ;
+        Size = MAP_APPFONT ( 40, 14 ) ;
         Text = "H~yperlink" ;
         Text [ ENGLISH ] = "Hyperlink" ;
         Text[ english_us ] = "~Hyperlink";
@@ -2817,7 +2774,7 @@ TabPage TP_TOX_ENTRY
     };
     ListBox LB_AUTHFIELD
     {
-        Pos = MAP_APPFONT ( 37 , 25 ) ;
+        Pos = MAP_APPFONT ( 37 , 32 ) ;
         Size = MAP_APPFONT ( 59, 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
@@ -2825,8 +2782,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_AUTHINSERT
     {
-        Pos = MAP_APPFONT ( 99 , 25 ) ;
-        Size = MAP_APPFONT ( 39, 12 ) ;
+        Pos = MAP_APPFONT ( 99 , 31 ) ;
+        Size = MAP_APPFONT ( 39, 14 ) ;
         Text = "~Einf¸gen" ;
         Text [ ENGLISH ] = "Insert" ;
         Text[ english_us ] = "~Insert";
@@ -2851,8 +2808,8 @@ TabPage TP_TOX_ENTRY
     };
     PushButton PB_AUTHREMOVE
     {
-        Pos = MAP_APPFONT ( 142 , 25 ) ;
-        Size = MAP_APPFONT ( 39, 12 ) ;
+        Pos = MAP_APPFONT ( 142 , 31 ) ;
+        Size = MAP_APPFONT ( 39, 14 ) ;
         Text = "~Entfernen" ;
         Text [ ENGLISH ] = "Remove" ;
         Text[ english_us ] = "~Remove";
@@ -2875,13 +2832,9 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Kald˝r";
         Text[ language_user1 ] = " ";
     };
-
-
-
-
     FixedText FT_CHARSTYLE
     {
-        Pos = MAP_APPFONT ( 37 , 42 ) ;
+        Pos = MAP_APPFONT ( 37 , 51 ) ;
         Size = MAP_APPFONT (60 , 10 ) ;
         Text = "Zeichen~vorlage" ;
         Text [ ENGLISH ] = "Character style" ;
@@ -2907,15 +2860,15 @@ TabPage TP_TOX_ENTRY
     };
     ListBox LB_CHARSTYLE
     {
-        Pos = MAP_APPFONT ( 100 , 40 ) ;
+        Pos = MAP_APPFONT ( 100 , 49 ) ;
         Size = MAP_APPFONT ( 98, 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     PushButton PB_EDITSTYLE
     {
-        Pos = MAP_APPFONT ( 199 , 40 ) ;
-        Size = MAP_APPFONT ( 50, 12 ) ;
+        Pos = MAP_APPFONT ( 199 , 48 ) ;
+        Size = MAP_APPFONT ( 50, 14 ) ;
         Text = "~Bearbeiten..." ;
         Text [ ENGLISH ] = "Edit..." ;
         Text[ english_us ] = "~Edit...";
@@ -2940,8 +2893,8 @@ TabPage TP_TOX_ENTRY
     };
     FixedText FT_FILLCHAR
     {
-        Pos = MAP_APPFONT ( 37 , 57 ) ;
-        Size = MAP_APPFONT (60 , 10 ) ;
+        Pos = MAP_APPFONT ( 37 , 67 ) ;
+        Size = MAP_APPFONT (60 , 8 ) ;
         Text = "~F¸llzeichen" ;
         Text [ ENGLISH ] = "Fill character" ;
         Text[ english_us ] = "Fill character";
@@ -2966,14 +2919,14 @@ TabPage TP_TOX_ENTRY
     };
     ComboBox CB_FILLCHAR
     {
-        Pos = MAP_APPFONT ( 100 , 55 ) ;
+        Pos = MAP_APPFONT ( 100 , 65 ) ;
         Size = MAP_APPFONT ( 20, 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_CHAPTERENTRY
     {
-        Pos = MAP_APPFONT ( 37 , 57 ) ;
+        Pos = MAP_APPFONT ( 37 , 67 ) ;
         Size = MAP_APPFONT ( 60, 10 ) ;
         Text = "Ka~piteleintrag" ;
         Text [ ENGLISH ] = "Chapter entry" ;
@@ -2999,7 +2952,7 @@ TabPage TP_TOX_ENTRY
     };
     ListBox LB_CHAPTERENTRY
     {
-        Pos = MAP_APPFONT ( 100 , 55 ) ;
+        Pos = MAP_APPFONT ( 100 , 65 ) ;
         Size = MAP_APPFONT ( 98, 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -3130,34 +3083,10 @@ TabPage TP_TOX_ENTRY
         < "Numara aral˝˝ ve aÁ˝klama" ; > ;
     };
     };
-/*  FixedText FT_SORTING
+    FixedText FT_TABPOS
     {
-        Pos = MAP_APPFONT ( 43 , 85 ) ;
-        Size = MAP_APPFONT ( 60, 10 ) ;
-        Text = "Sortierung" ;
-        Text [ ENGLISH ] = "Sorting" ;
-    };
-    ListBox LB_SORTING
-    {
-        Pos = MAP_APPFONT ( 100 , 85 ) ;
-        Size = MAP_APPFONT ( 100, 40 ) ;
-        DropDown = TRUE;
-        TabStop = TRUE;
-        StringList =
-        {
-            < "Alphabetisch" ; > ;
-            < "Fortlaufend" ; > ;
-        };
-        StringList [English]=
-        {
-            < "Alphabetical" ; > ;
-            < "Consecutively" ; > ;
-        };
-    };
-*/  FixedText FT_TABPOS
-    {
-        Pos = MAP_APPFONT ( 37 , 70 ) ;
-        Size = MAP_APPFONT ( 60, 10 ) ;
+        Pos = MAP_APPFONT ( 37 , 83 ) ;
+        Size = MAP_APPFONT ( 60, 8 ) ;
         Text = "Tab~ulatorposition" ;
         Text [ ENGLISH ] = "Tab stop position" ;
         Text[ english_us ] = "Tab stop position";
@@ -3182,7 +3111,7 @@ TabPage TP_TOX_ENTRY
     };
     MetricField MF_TABPOS
     {
-        Pos = MAP_APPFONT ( 100 , 70 ) ;
+        Pos = MAP_APPFONT ( 100 , 81 ) ;
         Size = MAP_APPFONT ( 40, 10 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -3200,7 +3129,7 @@ TabPage TP_TOX_ENTRY
     };
     CheckBox CB_AUTORIGHT
     {
-        Pos = MAP_APPFONT ( 143 , 70 ) ;
+        Pos = MAP_APPFONT ( 143 , 83 ) ;
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text = "Am ~rechten Rand" ;
         Text [ ENGLISH ] = "Right border" ;
@@ -3227,7 +3156,7 @@ TabPage TP_TOX_ENTRY
     GroupBox GB_ENTRY
     {
         Pos = MAP_APPFONT ( 34 , 3 ) ;
-        Size = MAP_APPFONT ( 220, 80 ) ;
+        Size = MAP_APPFONT ( 220, 93 ) ;
         Text = "Aufbau" ;
         Text [ ENGLISH ] = "Structure" ;
         Text[ english_us ] = "Structure";
@@ -3250,16 +3179,9 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Yap˝";
         Text[ language_user1 ] = " ";
     };
-/*  CheckBox CB_RECALCTAB
+    CheckBox CB_RELTOSTYLE
     {
-        Pos = MAP_APPFONT ( 37 , 98 ) ;
-        Size = MAP_APPFONT ( 200, 10 ) ;
-        Text = "Tabulatorposition immer neu berechnen" ;
-        Text [ ENGLISH ] = "Recalculate tab stop position" ;
-    };
-*/  CheckBox CB_RELTOSTYLE
-    {
-        Pos = MAP_APPFONT ( 37 , 96 ) ;
+        Pos = MAP_APPFONT ( 37 , 110 ) ;
         Size = MAP_APPFONT ( 200, 10 ) ;
         Text = "P~osition der Tabulatoren relativ zum Einzug aus der Absatzvorlage" ;
         Text [ ENGLISH ] = "Position of tab stops relativ to the paragraph style indent" ;
@@ -3283,17 +3205,9 @@ TabPage TP_TOX_ENTRY
         Text[ turkish ] = "Paragraf biÁimi girintisine gˆre orant˝l˝ sekme konumu";
         Text[ language_user1 ] = " ";
     };
-/*  CheckBox CB_NUMSTYLEFROMPDESC
-    {
-        Pos = MAP_APPFONT ( 37 , 119 ) ;
-        Size = MAP_APPFONT ( 200, 10 ) ;
-        Text = "Zahlenformat aus der Seitenvorlage" ;
-        Text [ ENGLISH ] = "Numbering type from page style" ;
-    };
-*/
     FixedText FT_MAIN_ENTRY_STYLE
     {
-        Pos = MAP_APPFONT ( 37 , 95 ) ;
+        Pos = MAP_APPFONT ( 37 , 112 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "Zeichenvorla~ge f¸r Haupteintr‰ge" ;
         Text [ ENGLISH ] = "Character style of main entries" ;
@@ -3319,15 +3233,15 @@ TabPage TP_TOX_ENTRY
     };
     ListBox LB_MAIN_ENTRY_STYLE
     {
-        Pos = MAP_APPFONT ( 144 , 93 ) ;
-        Size = MAP_APPFONT ( 100, 40 ) ;
+        Pos = MAP_APPFONT ( 144 , 110 ) ;
+        Size = MAP_APPFONT ( 100, 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
 
     CheckBox CB_ALPHADELIM
     {
-        Pos = MAP_APPFONT ( 37 , 108 ) ;
+        Pos = MAP_APPFONT ( 37 , 126 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "Alphabet~isches Trennzeichen" ;
         Text [ ENGLISH ] = "Alphabetical delimiter" ;
@@ -3353,7 +3267,7 @@ TabPage TP_TOX_ENTRY
     };
     CheckBox CB_COMMASEPARATED
     {
-        Pos = MAP_APPFONT ( 144 , 108 ) ;
+        Pos = MAP_APPFONT ( 37 , 140 ) ;
         Size = MAP_APPFONT ( 105, 10 ) ;
         Text = "S~chl¸ssel kommasepariert" ;
         Text [ ENGLISH ] = "Comma separated keys" ;
@@ -3379,8 +3293,8 @@ TabPage TP_TOX_ENTRY
     };
     GroupBox GB_FORMAT
     {
-        Pos = MAP_APPFONT ( 34 , 84 ) ;
-        Size = MAP_APPFONT ( 220, 49  ) ;
+        Pos = MAP_APPFONT ( 34 , 99 ) ;
+        Size = MAP_APPFONT ( 220, 83  ) ;
         Text = "Formatierung" ;
         Text [ ENGLISH ] = "Format" ;
         Text[ english_us ] = "Format";
@@ -3405,8 +3319,8 @@ TabPage TP_TOX_ENTRY
     };
     RadioButton RB_DOCPOS
     {
-        Pos = MAP_APPFONT ( 40 , 97) ;
-        Size = MAP_APPFONT ( 110, 10  ) ;
+        Pos = MAP_APPFONT ( 40 , 110) ;
+        Size = MAP_APPFONT ( 80, 10  ) ;
         Text = "Dokument~position " ;
         Text [ ENGLISH ] = "document position" ;
         Text[ english_us ] = "Document ~position ";
@@ -3430,8 +3344,8 @@ TabPage TP_TOX_ENTRY
     };
     RadioButton RB_SORTCONTENT
     {
-        Pos = MAP_APPFONT ( 40 , 110 ) ;
-        Size = MAP_APPFONT ( 110, 10  ) ;
+        Pos = MAP_APPFONT ( 134 , 110 ) ;
+        Size = MAP_APPFONT ( 80, 10  ) ;
         Text = "~Inhalt" ;
         Text [ ENGLISH ] = "content" ;
         Text[ english_us ] = "~Content";
@@ -3456,8 +3370,8 @@ TabPage TP_TOX_ENTRY
     };
     GroupBox GB_SORTING
     {
-        Pos = MAP_APPFONT ( 34 , 84 ) ;
-        Size = MAP_APPFONT ( 117, 49  ) ;
+        Pos = MAP_APPFONT ( 34 , 99 ) ;
+        Size = MAP_APPFONT ( 220, 24  ) ;
         Text = "Sortierung nach" ;
         Text [ ENGLISH ] = "Sort by" ;
         Text[ english_us ] = "Sort by";
@@ -3482,20 +3396,20 @@ TabPage TP_TOX_ENTRY
     };
     FixedText FT_FIRSTKEY
     {
-        Pos = MAP_APPFONT ( 160 , 94 ) ;
+        Pos = MAP_APPFONT ( 40 , 140 ) ;
         Size = MAP_APPFONT ( 10, 8  ) ;
         Text = "~1" ;
     };
     ListBox LB_FIRSTKEY
     {
-        Pos = MAP_APPFONT ( 171 , 93 ) ;
-        Size = MAP_APPFONT ( 50, 50  ) ;
+        Pos = MAP_APPFONT ( 60 , 138 ) ;
+        Size = MAP_APPFONT ( 159, 50  ) ;
         Border = TRUE;
         DropDown = TRUE;
     };
     ImageRadioButton RB_SORTUP1
     {
-        Pos = MAP_APPFONT ( 223 , 93 ) ;
+        Pos = MAP_APPFONT ( 222 , 138 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3529,7 +3443,7 @@ TabPage TP_TOX_ENTRY
     };
     ImageRadioButton RB_SORTDOWN1
     {
-        Pos = MAP_APPFONT ( 237 , 93 ) ;
+        Pos = MAP_APPFONT ( 237 , 138 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3562,7 +3476,7 @@ TabPage TP_TOX_ENTRY
     };
     ImageRadioButton RB_SORTUP2
     {
-        Pos = MAP_APPFONT ( 223 , 106 ) ;
+        Pos = MAP_APPFONT ( 222 , 153 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3596,7 +3510,7 @@ TabPage TP_TOX_ENTRY
     };
     ImageRadioButton RB_SORTDOWN2
     {
-        Pos = MAP_APPFONT ( 237 , 106 ) ;
+        Pos = MAP_APPFONT ( 237 , 153 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3629,7 +3543,7 @@ TabPage TP_TOX_ENTRY
     };
     ImageRadioButton RB_SORTUP3
     {
-        Pos = MAP_APPFONT ( 223 , 119 ) ;
+        Pos = MAP_APPFONT ( 222 , 168 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3663,7 +3577,7 @@ TabPage TP_TOX_ENTRY
     };
     ImageRadioButton RB_SORTDOWN3
     {
-        Pos = MAP_APPFONT ( 237 ,119 ) ;
+        Pos = MAP_APPFONT ( 237 ,168 ) ;
         Size = MAP_APPFONT ( 12, 12  ) ;
         RadioButtonImage =
             Image
@@ -3696,34 +3610,34 @@ TabPage TP_TOX_ENTRY
     };
     FixedText FT_SECONDKEY
     {
-        Pos = MAP_APPFONT ( 160 , 107 ) ;
+        Pos = MAP_APPFONT ( 40 , 155 ) ;
         Size = MAP_APPFONT ( 10, 8  ) ;
         Text = "~2" ;
     };
     ListBox LB_SECONDKEY
     {
-        Pos = MAP_APPFONT ( 171 , 106 ) ;
-        Size = MAP_APPFONT ( 50, 50  ) ;
+        Pos = MAP_APPFONT ( 60 , 153 ) ;
+        Size = MAP_APPFONT ( 159, 50  ) ;
         Border = TRUE;
         DropDown = TRUE;
     };
     FixedText FT_THIRDDKEY
     {
-        Pos = MAP_APPFONT ( 160 , 120 ) ;
+        Pos = MAP_APPFONT ( 40 , 170 ) ;
         Size = MAP_APPFONT ( 10, 8  ) ;
         Text = "~3" ;
     };
     ListBox LB_THIRDKEY
     {
-        Pos = MAP_APPFONT ( 171 , 119 ) ;
-        Size = MAP_APPFONT ( 50, 50  ) ;
+        Pos = MAP_APPFONT ( 60 , 168 ) ;
+        Size = MAP_APPFONT ( 159, 50  ) ;
         Border = TRUE;
         DropDown = TRUE;
     };
     GroupBox GB_SORTKEY
     {
-        Pos = MAP_APPFONT ( 154 , 84 ) ;
-        Size = MAP_APPFONT ( 100, 49  ) ;
+        Pos = MAP_APPFONT ( 34 , 126) ;
+        Size = MAP_APPFONT ( 220, 56  ) ;
         Text = "Sortierschl¸ssel" ;
         Text [ ENGLISH ] = "Sort keys" ;
         Text[ english_us ] = "Sort keys";
@@ -3822,11 +3736,11 @@ TabPage TP_TOX_ENTRY
 TabPage TP_TOX_STYLES
 {
     HelpID =  HID_TOX_STYLES_PAGE;
-    Size = MAP_APPFONT ( 260 , 135 ) ;
+    Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
     FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 11 , 15 ) ;
+        Pos = MAP_APPFONT ( 11 , 14 ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
         Text = "Stu~fen" ;
         Text [ ENGLISH ] = "~Levels" ;
@@ -3857,13 +3771,13 @@ TabPage TP_TOX_STYLES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 25 ) ;
-        Size = MAP_APPFONT ( 115 , 81 ) ;
+        Size = MAP_APPFONT ( 115 , 131 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
     };
     FixedText FT_TEMPLATE
     {
-        Pos = MAP_APPFONT ( 133 , 15 ) ;
+        Pos = MAP_APPFONT ( 133 , 14 ) ;
         Size = MAP_APPFONT ( 54 , 8 ) ;
         Text = "~Absatzvorlagen" ;
         Text [ ENGLISH ] = "~Paragraph styles" ;
@@ -3894,14 +3808,14 @@ TabPage TP_TOX_STYLES
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 133 , 25 ) ;
-        Size = MAP_APPFONT ( 110 , 81 ) ;
+        Size = MAP_APPFONT ( 110 , 131 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         AutoHScroll = TRUE ;
     };
     PushButton BT_STD
     {
-        Pos = MAP_APPFONT ( 32 , 112 ) ;
+        Pos = MAP_APPFONT ( 32 , 162 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "Sta~ndard" ;
         Text [ ENGLISH ] = "Sta~ndard" ;
@@ -3928,7 +3842,7 @@ TabPage TP_TOX_STYLES
     };
     PushButton BT_ASSIGN
     {
-        Pos = MAP_APPFONT ( 133 , 112 ) ;
+        Pos = MAP_APPFONT ( 133 , 162 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "<- ~Zuordnen" ;
         Text [ ENGLISH ] = "<- ~Assign" ;
@@ -3957,7 +3871,7 @@ TabPage TP_TOX_STYLES
     };
     PushButton BT_EDIT_STYLE
     {
-        Pos = MAP_APPFONT ( 186 , 112 ) ;
+        Pos = MAP_APPFONT ( 186 , 162 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Bearbeiten" ;
         Text [ ENGLISH ] = "~Edit" ;
@@ -3985,7 +3899,7 @@ TabPage TP_TOX_STYLES
     GroupBox GB_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 248 , 129 ) ;
+        Size = MAP_APPFONT ( 248 , 179 ) ;
         Text = "Zuordnung" ;
         Text [ ENGLISH ] = "Assignment" ;
         Text[ english_us ] = "Assignment";

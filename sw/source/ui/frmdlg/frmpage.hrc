@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,16 @@
  *
  *
  ************************************************************************/
+#define RB_ANCHOR_PAGE          1
+#define RB_ANCHOR_PARA          2
+#define RB_ANCHOR_AT_CHAR       3
+#define RB_ANCHOR_AS_CHAR       4
+#define RB_ANCHOR_FRAME         5
 #define WN_BSP                  21
 #define FT_BSP                  22
-#define RB_ANCHOR_TYPE          23
-#define LB_ANCHOR_TYPE          24
-#define RB_ANCHOR_CHAR          25
+
+
+
 #define GB_TYPE                 26
 #define FT_WIDTH                27
 #define ED_WIDTH                28

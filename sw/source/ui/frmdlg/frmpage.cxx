@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 10:16:48 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,10 +544,11 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAutoHeightCB   (this, SW_RES(CB_AUTOHEIGHT)),
     aFixedRatioCB   (this, SW_RES(CB_FIXEDRATIO)),
     aSizeGB         (this, SW_RES(GB_SIZE)),
-
-    aAnchorTypeRB   (this, SW_RES(RB_ANCHOR_TYPE)),
-    aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_CHAR)),
-    aAnchorTypeLB   (this, SW_RES(LB_ANCHOR_TYPE)),
+    aAnchorAtPageRB (this, SW_RES(RB_ANCHOR_PAGE)),
+    aAnchorAtParaRB (this, SW_RES(RB_ANCHOR_PARA)),
+    aAnchorAtCharRB (this, SW_RES(RB_ANCHOR_AT_CHAR)),
+    aAnchorAsCharRB (this, SW_RES(RB_ANCHOR_AS_CHAR)),
+    aAnchorAtFrameRB(this, SW_RES(RB_ANCHOR_FRAME)),
     aTypeGB         (this, SW_RES(GB_TYPE)),
 
     aHorizontalFT   (this, SW_RES(FT_HORIZONTAL)),
@@ -597,15 +598,12 @@ SwFrmPage::SwFrmPage ( Window *pParent, const SfxItemSet &rSet ) :
     aAtHorzPosED.SetModifyHdl( aLk );
     aAtVertPosED.SetModifyHdl( aLk );
 
-    aLk = LINK(this, SwFrmPage, TypHdl);
-    aAnchorTypeRB.SetClickHdl( aLk );
+    aLk = LINK(this, SwFrmPage, AnchorTypeHdl);
+    aAnchorAtPageRB.SetClickHdl( aLk );
+    aAnchorAtParaRB.SetClickHdl( aLk );
+    aAnchorAtCharRB.SetClickHdl( aLk );
     aAnchorAsCharRB.SetClickHdl( aLk );
-    aAnchorTypeLB.SetSelectHdl( aLk );
-    aAnchorTypeLB.SelectEntryPos(0);
-    aAnchorTypeLB.SetEntryData(0, (void*)FLY_PAGE);
-    aAnchorTypeLB.SetEntryData(1, (void*)FLY_AT_CNTNT);
-    aAnchorTypeLB.SetEntryData(2, (void*)FLY_AUTO_CNTNT);
-    aAnchorTypeLB.SetEntryData(3, (void*)FLY_AT_FLY);
+    aAnchorAtFrameRB.SetClickHdl( aLk );
 
     aHorizontalDLB.SetSelectHdl(LINK(this, SwFrmPage, PosHdl));
     aVerticalDLB.  SetSelectHdl(LINK(this, SwFrmPage, PosHdl));
@@ -660,14 +658,16 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     if (bFormat)
     {
         // Bei Formaten keine Ankerbearbeitung
-        aAnchorTypeRB.Enable( FALSE );
-        aAnchorTypeLB.Enable( FALSE );
+        aAnchorAtPageRB.Enable( FALSE );
+        aAnchorAtParaRB.Enable( FALSE );
+        aAnchorAtCharRB.Enable( FALSE );
         aAnchorAsCharRB.Enable( FALSE );
+        aAnchorAtFrameRB.Enable( FALSE );
         aTypeGB.Enable( FALSE );
         aFixedRatioCB.Enable(FALSE);
     }
     else if (rAnchor.GetAnchorId() != FLY_AT_FLY && !pSh->IsFlyInFly())
-        aAnchorTypeLB.RemoveEntry(3);
+        aAnchorAtFrameRB.Hide();
 
     if ( nDlgType == DLG_FRM_GRF || nDlgType == DLG_FRM_OLE )
     {
@@ -684,8 +684,8 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
             aRealSizeBT.Show();
             aRealSizeBT.SetClickHdl(LINK(this, SwFrmPage, RealSizeHdl));
         }
-        else
-            aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
+//      else
+//          aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
 
         if ( nDlgType == DLG_FRM_GRF )
             aFixedRatioCB.Check( FALSE );
@@ -699,7 +699,7 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
     }
     else
     {
-        aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
+//      aTypeGB.SetSizePixel(Size(aTypeGB.GetSizePixel().Width(), aSizeGB.GetSizePixel().Height()));
         aGrfSize = ((const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE)).GetSize();
     }
 
@@ -709,15 +709,13 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
 
     // Allgemeiner Initialisierungteil
     USHORT nPos = 0;
-    if (rAnchor.GetAnchorId() == FLY_IN_CNTNT)
-        aAnchorAsCharRB.Check();
-    else
+    switch(rAnchor.GetAnchorId())
     {
-        aAnchorTypeRB.Check();
-
-        while ((USHORT)(ULONG)aAnchorTypeLB.GetEntryData(nPos) != rAnchor.GetAnchorId())
-            nPos++;
-        aAnchorTypeLB.SelectEntryPos(nPos);
+        case FLY_PAGE: aAnchorAtPageRB.Check(); break;
+        case FLY_AT_CNTNT: aAnchorAtParaRB.Check(); break;
+        case FLY_AUTO_CNTNT: aAnchorAtCharRB.Check(); break;
+        case FLY_IN_CNTNT: aAnchorAsCharRB.Check(); break;
+        case FLY_AT_FLY: aAnchorAtFrameRB.Check();break;
     }
 
     if(bHtmlMode)
@@ -731,14 +729,11 @@ void SwFrmPage::Reset( const SfxItemSet &rSet )
         }
         if( 0 == (nHtmlMode & HTMLMODE_SOME_ABS_POS))
         {
-            if (GetAnchor() == FLY_PAGE )
+            if(GetAnchor() == FLY_PAGE)
             {
-                nPos = 0;
-                while ((USHORT)(ULONG)aAnchorTypeLB.GetEntryData(nPos) != FLY_AT_CNTNT)
-                    nPos++;
-                aAnchorTypeLB.SelectEntryPos(nPos);
+                aAnchorAtParaRB.Check();
             }
-            aAnchorTypeLB.RemoveEntry(0);
+            aAnchorAtPageRB.Enable(FALSE);
         }
         aAutoHeightCB.Enable(FALSE);
         aMirrorPagesCB.Show(FALSE);
@@ -1357,10 +1352,16 @@ USHORT SwFrmPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
 
 USHORT SwFrmPage::GetAnchor()
 {
-    if (aAnchorTypeRB.IsChecked())
-        return (USHORT)(ULONG)aAnchorTypeLB.GetEntryData(aAnchorTypeLB.GetSelectEntryPos());
-    else
-        return FLY_IN_CNTNT;
+    USHORT nRet = FLY_PAGE;
+    if(aAnchorAtParaRB.IsChecked())
+        nRet = FLY_AT_CNTNT;
+    else if(aAnchorAtCharRB.IsChecked())
+        nRet = FLY_AUTO_CNTNT;
+    else if(aAnchorAsCharRB.IsChecked())
+        nRet = FLY_IN_CNTNT;
+    else if(aAnchorAtFrameRB.IsChecked())
+        nRet = FLY_AT_FLY;
+    return nRet;
 }
 
 /*--------------------------------------------------------------------
@@ -1559,18 +1560,14 @@ IMPL_LINK( SwFrmPage, RangeModifyHdl, Edit *, pEdit )
     return 0;
 }
 
-IMPL_LINK( SwFrmPage, TypHdl, ListBox *, pLB )
+IMPL_LINK( SwFrmPage, AnchorTypeHdl, RadioButton *, pButton )
 {
-    if (pLB == &aAnchorTypeLB)
-        aAnchorTypeRB.Check();
-
-    aMirrorPagesCB.Enable(aAnchorTypeRB.IsChecked());
+    aMirrorPagesCB.Enable(!aAnchorAsCharRB.IsChecked());
 
     USHORT nId = GetAnchor();
 
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
-    if (pLB)    // Nur wenn Handler durch Aenderung des Controllers gerufen wurde
-        RangeModifyHdl(0);
+    RangeModifyHdl(0);
 
     if(bHtmlMode)
     {
@@ -2068,10 +2065,11 @@ void SwFrmPage::SetFormatUsed(BOOL bFmt)
     bFormat     = bFmt;
     if(bFormat)
     {
-        aAnchorTypeRB   .Show(FALSE);
-        aAnchorAsCharRB .Show(FALSE);
-        aAnchorTypeLB   .Show(FALSE);
-        aTypeGB         .Show(FALSE);
+        aAnchorAtPageRB.Show(FALSE);
+        aAnchorAtParaRB.Show(FALSE);
+        aAnchorAtCharRB.Show(FALSE);
+        aAnchorAsCharRB.Show(FALSE);
+        aAnchorAtFrameRB.Show(FALSE);
 
         Point aSizePos = aSizeGB.GetPosPixel();
         Size aSizeSize = aSizeGB.GetSizePixel();
@@ -2650,7 +2648,10 @@ void SwFrmAddPage::Reset(const SfxItemSet &rSet )
         aProtectGB.Hide();
     }
     if ( DLG_FRM_GRF == nDlgType || DLG_FRM_OLE == nDlgType )
+    {
         aEditInReadonlyCB.Hide();
+        aPrintFrameCB.SetPosPixel(aEditInReadonlyCB.GetPosPixel());
+    }
 
     if(SFX_ITEM_SET == rSet.GetItemState(FN_SET_FRM_ALT_NAME, FALSE, &pItem))
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-02-06 08:13:38 $
+ *  last change: $Author: os $ $Date: 2001-02-09 07:50:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2790,6 +2790,19 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
             lcl_ChgWidth(aSortingGB,    -nDiff);
             lcl_ChgXPos(aEntryGB,   nDiff);
             lcl_ChgWidth(aEntryGB,  -nDiff);
+
+            lcl_ChgXPos(aFirstKeyFT, nDiff);
+            lcl_ChgXPos(aFirstKeyLB, nDiff);
+            lcl_ChgXPos(aSecondKeyFT, nDiff);
+            lcl_ChgXPos(aSecondKeyLB, nDiff);
+            lcl_ChgXPos(aThirdKeyFT, nDiff);
+            lcl_ChgXPos(aThirdKeyLB, nDiff);
+            lcl_ChgXPos(aSortKeyGB,     nDiff);
+
+            lcl_ChgWidth(aFirstKeyLB, -nDiff);
+            lcl_ChgWidth(aSecondKeyLB, -nDiff);
+            lcl_ChgWidth(aThirdKeyLB, -nDiff);
+            lcl_ChgWidth(aSortKeyGB, -nDiff);
         }
         Link aLink = aLevelLB.GetSelectHdl();
         aLevelLB.SetSelectHdl(Link());
