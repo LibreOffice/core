@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2004-01-28 15:01:23 $
+#   last change: $Date: 2004-03-19 14:18:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,14 +109,12 @@ CT_APP      = org.openoffice.Runner
         $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedType.csv \
         $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv \
-        $(CLASSDIR)$/$(PACKAGE)$/streamFileTypes.csv \
         $(CLASSDIR)$/$(PACKAGE)$/files.csv : ALLTAR
 .ELSE
         $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedFilter.csv \
         $(CLASSDIR)$/$(PACKAGE)$/preselectedType.csv \
         $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv \
-        $(CLASSDIR)$/$(PACKAGE)$/streamFileTypes.csv \
         $(CLASSDIR)$/$(PACKAGE)$/files.csv : ALLDEP
 .ENDIF
 
@@ -140,10 +138,6 @@ $(CLASSDIR)$/$(PACKAGE)$/serviceName.csv : serviceName.csv
 $(CLASSDIR)$/$(PACKAGE)$/files.csv : files.csv
     cp files.csv $(CLASSDIR)$/$(PACKAGE)$/files.csv  
     jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/files.csv
-
-$(CLASSDIR)$/$(PACKAGE)$/streamFileTypes.csv : streamFileTypes.csv
-    cp streamFileTypes.csv $(CLASSDIR)$/$(PACKAGE)$/streamFileTypes.csv
-    jar uf $(CLASSDIR)$/$(JARTARGET) -C $(CLASSDIR) $(PACKAGE)$/streamFileTypes.csv
 
 $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props : TypeDetection.props
     cp TypeDetection.props $(CLASSDIR)$/$(PACKAGE)$/TypeDetection.props
