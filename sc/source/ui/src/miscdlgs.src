@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscdlgs.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:45:47 $
+ *  last change: $Author: kz $ $Date: 2001-08-29 21:34:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ italian ] = "Sposta celle a ~sinistra" ;
         Text [ portuguese_brazilian ] = "Mover c?lulas para a ~esquerda" ;
         Text [ portuguese ] = "Mover células para a ~esquerda" ;
-        Text [ finnish ] = "Siirrä ~solut vasemmalle" ;
+        Text [ finnish ] = "Siirr? ~solut vasemmalle" ;
         Text [ danish ] = "Flyt celler mod venstre" ;
         Text [ french ] = "Déplacer les cellules vers la g~auche" ;
         Text [ swedish ] = "Flytta celler åt ~vänster" ;
@@ -205,7 +205,7 @@ ModalDialog RID_SCDLG_DELCELL
         Text [ italian ] = "Sposta celle in ~alto" ;
         Text [ portuguese_brazilian ] = "Mover c?lulas para ~cima" ;
         Text [ portuguese ] = "Mover células para ~cima" ;
-        Text [ finnish ] = "Siirrä ~solut ylös" ;
+        Text [ finnish ] = "Siirr? ~solut yl?" ;
         Text [ danish ] = "Flyt celler opad" ;
         Text [ french ] = "Déplacer les cellules vers le ~haut" ;
         Text [ swedish ] = "Flytta celler ~uppåt" ;
@@ -279,7 +279,7 @@ ModalDialog RID_SCDLG_INSCELL
     Text [ italian ] = "Inserisci celle" ;
     Text [ portuguese_brazilian ] = "Inserir C?lulas" ;
     Text [ portuguese ] = "Inserir células" ;
-    Text [ finnish ] = "Lisää solut" ;
+    Text [ finnish ] = "Lis?? solut" ;
     Text [ danish ] = "Indsæt celler" ;
     Text [ french ] = "Insertion de cellules" ;
     Text [ swedish ] = "Infoga celler" ;
@@ -379,7 +379,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ italian ] = "Sposta celle a de~stra" ;
         Text [ portuguese_brazilian ] = "Mover c?lulas para a di~reita" ;
         Text [ portuguese ] = "Mover células para a ~direita" ;
-        Text [ finnish ] = "Siirrä ~solut oikealle" ;
+        Text [ finnish ] = "Siirr? ~solut oikealle" ;
         Text [ danish ] = "Flyt celler mod højre" ;
         Text [ french ] = "Déplacer les cellules vers la ~droite" ;
         Text [ swedish ] = "Flytta celler åt höge~r" ;
@@ -409,7 +409,7 @@ ModalDialog RID_SCDLG_INSCELL
         Text [ italian ] = "Sposta celle in ~basso" ;
         Text [ portuguese_brazilian ] = "Mover c?lulas para ~baixo" ;
         Text [ portuguese ] = "Mover células para ~baixo" ;
-        Text [ finnish ] = "Siirrä ~solut alas" ;
+        Text [ finnish ] = "Siirr? ~solut alas" ;
         Text [ danish ] = "Flyt celler nedad" ;
         Text [ french ] = "Déplacer les cellules vers le ~bas" ;
         Text [ swedish ] = "Flytta celler ne~dåt" ;
@@ -489,7 +489,7 @@ ModalDialog RID_SCDLG_DELCONT
     Text [ italian ] = "Cancella contenuto" ;
     Text [ portuguese_brazilian ] = "Apagar Conte?o" ;
     Text [ portuguese ] = "Eliminar conteúdo" ;
-    Text [ finnish ] = "Poista sisällöt" ;
+    Text [ finnish ] = "Poista sis?ll?" ;
     Text [ danish ] = "Slet indhold" ;
     Text [ french ] = "Supprimer du contenu" ;
     Text [ swedish ] = "Radera innehåll" ;
@@ -618,7 +618,7 @@ ModalDialog RID_SCDLG_DELCONT
         Text [ italian ] = "~Data & Ora" ;
         Text [ portuguese_brazilian ] = "~Data e Hora" ;
         Text [ portuguese ] = "~Data & Hora" ;
-        Text [ finnish ] = "~Päivämäärä ja kellonaika" ;
+        Text [ finnish ] = "~P?iv?m??r? ja kellonaika" ;
         Text [ danish ] = "~Dato og klokkeslæt" ;
         Text [ french ] = "~Date & heure" ;
         Text [ swedish ] = "~Datum och tid" ;
@@ -813,7 +813,7 @@ ModalDialog RID_SCDLG_INSCONT
     Text [ italian ] = "Incolla speciale" ;
     Text [ portuguese_brazilian ] = "Inserir Conte?o" ;
     Text [ portuguese ] = "Inserir conteúdo" ;
-    Text [ finnish ] = "Liitä määräten" ;
+    Text [ finnish ] = "Liit? m??r?ten" ;
     Text [ danish ] = "Indsæt indhold" ;
     Text [ french ] = "Collage spécial" ;
     Text [ swedish ] = "Infoga innehåll" ;
@@ -852,7 +852,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ italian ] = "Incolla ~tutto" ;
         Text [ portuguese_brazilian ] = "Inserir ~tudo" ;
         Text [ portuguese ] = "Inserir ~tudo" ;
-        Text [ finnish ] = "~Liitä kaikki" ;
+        Text [ finnish ] = "~Liit? kaikki" ;
         Text [ danish ] = "Indsæt alt" ;
         Text [ french ] = "~Insérer tout" ;
         Text [ swedish ] = "Klistra in ~allt" ;
@@ -942,7 +942,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ italian ] = "~Data & Ora" ;
         Text [ portuguese_brazilian ] = "~Data e Hora" ;
         Text [ portuguese ] = "~Data & Hora" ;
-        Text [ finnish ] = "~Päivämäärä ja kellonaika" ;
+        Text [ finnish ] = "~P?iv?m??r? ja kellonaika" ;
         Text [ danish ] = "~Dato og klokkeslæt" ;
         Text [ french ] = "~Date & heure" ;
         Text [ swedish ] = "~Datum och tid" ;
@@ -972,7 +972,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text [ italian ] = "~Formule" ;
         Text [ portuguese_brazilian ] = "~F?mulas" ;
         Text [ portuguese ] = "~Fórmulas" ;
-        Text [ finnish ] = "Kaa~vat" ;
+        Text [ finnish ] = "~Kaavat" ;
         Text [ danish ] = "~Formler" ;
         Text [ french ] = "~Formules" ;
         Text [ swedish ] = "~Formler" ;
@@ -1107,7 +1107,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ning~una";
-        Text[ finnish ] = "Ei ~mitään";
+        Text[ finnish ] = "Ei ~mit??n";
     };
     RadioButton BTN_OP_ADD
     {
@@ -1135,7 +1135,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Topla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Sumar";
-        Text[ finnish ] = "~Lisää";
+        Text[ finnish ] = "~Lis??";
     };
     RadioButton BTN_OP_SUB
     {
@@ -1163,7 +1163,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "S~il";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "S~ustraer";
-        Text[ finnish ] = "Vä~hennä";
+        Text[ finnish ] = "V?~henn?";
     };
     RadioButton BTN_OP_MUL
     {
@@ -1276,7 +1276,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Boþ hücreleri atla";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ignorar ~celdas vacías";
-        Text[ finnish ] = "O~hita tyhjät solut";
+        Text[ finnish ] = "O~hita tyhj?t solut";
     };
     CheckBox BTN_TRANSPOSE
     {
@@ -1389,7 +1389,7 @@ ModalDialog RID_SCDLG_INSCONT
         Text[ turkish ] = "~Taþýma";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~No desplazar";
-        Text[ finnish ] = "Älä siir~rä";
+        Text[ finnish ] = "?l? siir~r?";
     };
     RadioButton BTN_MV_DOWN
     {
@@ -1509,7 +1509,7 @@ ModalDialog RID_SCDLG_MOVETAB
     Text [ italian ] = "Sposta o copia tabella" ;
     Text [ portuguese_brazilian ] = "Mover/Copiar tabela" ;
     Text [ portuguese ] = "Mover/Copiar folha" ;
-    Text [ finnish ] = "Siirrä/kopioi taulukko" ;
+    Text [ finnish ] = "Siirr?/kopioi taulukko" ;
     Text [ danish ] = "Flyt/kopier ark" ;
     Text [ french ] = "Déplacer/copier la feuille" ;
     Text [ swedish ] = "Kopiera/flytta tabell" ;
@@ -1585,7 +1585,7 @@ ModalDialog RID_SCDLG_MOVETAB
         Text [ italian ] = "Prima del foglio" ;
         Text [ portuguese_brazilian ] = "I~nserir antes" ;
         Text [ portuguese ] = "I~nserir antes" ;
-        Text [ finnish ] = "~Lisää eteen" ;
+        Text [ finnish ] = "~Lis?? eteen" ;
         Text [ danish ] = "Indsæt før" ;
         Text [ french ] = "I~nsérer avant" ;
         Text [ swedish ] = "I~nfoga framför" ;
@@ -1917,7 +1917,7 @@ ModalDialog RID_SCDLG_COL_OPT
     Text [ italian ] = "Larghezza colonna ottimale" ;
     Text [ portuguese_brazilian ] = "Largura ?ima da coluna" ;
     Text [ portuguese ] = "Optimizar largura da coluna" ;
-    Text [ finnish ] = "Optimaalinen sarakkeen leveys" ;
+    Text [ finnish ] = "Optimaalinen palstaleveys" ;
     Text [ danish ] = "Optimal kolonnebredde" ;
     Text [ french ] = "Largeur de colonne optimale" ;
     Text [ swedish ] = "Optimal kolumnbredd" ;
@@ -1959,7 +1959,7 @@ ModalDialog RID_SCDLG_COL_OPT
         Text [ italian ] = "Extra" ;
         Text [ portuguese_brazilian ] = "Extra" ;
         Text [ portuguese ] = "Adicional" ;
-        Text [ finnish ] = "Lisää" ;
+        Text [ finnish ] = "Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "Marges" ;
         Text [ swedish ] = "Extra" ;
@@ -2209,7 +2209,7 @@ ModalDialog RID_SCDLG_ROW_OPT
         Text [ italian ] = "Extra" ;
         Text [ portuguese_brazilian ] = "Extra" ;
         Text [ portuguese ] = "Adicional" ;
-        Text [ finnish ] = "Lisää" ;
+        Text [ finnish ] = "Lis??" ;
         Text [ danish ] = "Tilføj" ;
         Text [ french ] = "Marges" ;
         Text [ swedish ] = "Extra" ;
@@ -2367,7 +2367,7 @@ ModalDialog RID_SCDLG_SHOW_TAB
     Text [ italian ] = "Mostra tabella" ;
     Text [ portuguese_brazilian ] = "Mostrar tabela" ;
     Text [ portuguese ] = "Mostrar folha" ;
-    Text [ finnish ] = "Näytä lomake" ;
+    Text [ finnish ] = "N?yt? lomake" ;
     Text [ danish ] = "Vis ark" ;
     Text [ french ] = "Afficher la feuille" ;
     Text [ swedish ] = "Visa tabell" ;
@@ -2460,7 +2460,7 @@ ModalDialog RID_SCDLG_FILLSERIES
     Text [ italian ] = "Serie" ;
     Text [ portuguese_brazilian ] = "S?ries de Preenchimento" ;
     Text [ portuguese ] = "Preencher séries" ;
-    Text [ finnish ] = "Täyttösarjat" ;
+    Text [ finnish ] = "T?ytt?arjat" ;
     Text [ danish ] = "Fyld serier" ;
     Text [ french ] = "Remplir la série" ;
     Text [ swedish ] = "Fyll serie" ;
@@ -2479,7 +2479,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ italian ] = "~Giorno" ;
         Text [ portuguese_brazilian ] = "~Dia" ;
         Text [ portuguese ] = "~Dia" ;
-        Text [ finnish ] = "Päi~vä" ;
+        Text [ finnish ] = "P?i~v?" ;
         Text [ danish ] = "Dag" ;
         Text [ french ] = "~Jour" ;
         Text [ swedish ] = "~Dag" ;
@@ -2509,7 +2509,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ italian ] = "Giorno feriale" ;
         Text [ portuguese_brazilian ] = "Dia da ~Semana" ;
         Text [ portuguese ] = "Dia da ~semana" ;
-        Text [ finnish ] = "~Viikonpäivä" ;
+        Text [ finnish ] = "~Viikonp?iv?" ;
         Text [ danish ] = "Ugedag" ;
         Text [ french ] = "Jour ~de la semaine" ;
         Text [ swedish ] = "Vec~kodag" ;
@@ -2688,7 +2688,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ italian ] = "In alto" ;
         Text [ portuguese_brazilian ] = "~Para Cima" ;
         Text [ portuguese ] = "~Superior" ;
-        Text [ finnish ] = "~Ylös" ;
+        Text [ finnish ] = "~Yl?" ;
         Text [ danish ] = "Øverst" ;
         Text [ french ] = "~En haut" ;
         Text [ swedish ] = "~Uppåt" ;
@@ -2837,7 +2837,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ italian ] = "~Data" ;
         Text [ portuguese_brazilian ] = "Da~ta" ;
         Text [ portuguese ] = "Da~ta" ;
-        Text [ finnish ] = "Päivä~määrä" ;
+        Text [ finnish ] = "P?iv?~m??r?" ;
         Text [ danish ] = "~Dato" ;
         Text [ french ] = "~Date" ;
         Text [ swedish ] = "Da~tum" ;
@@ -2868,7 +2868,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ italian ] = "Compilazione ~autom." ;
         Text [ portuguese_brazilian ] = "~PreenchimentoAutom?tico" ;
         Text [ portuguese ] = "AutoPreenchimento" ;
-        Text [ finnish ] = "~Automaattinen täyttö" ;
+        Text [ finnish ] = "~Automaattinen t?ytt?" ;
         Text [ danish ] = "AutoFyld" ;
         Text [ french ] = "~Rempl. automatique" ;
         Text [ swedish ] = "Auto~Fyll" ;
@@ -3008,7 +3008,7 @@ ModalDialog RID_SCDLG_FILLSERIES
         Text [ DANISH ] = "Inkrement" ;
         Text [ ENGLISH_US ] = "In~crement" ;
         Text [ SPANISH ] = "I~ncremento" ;
-        Text [ FINNISH ] = "Li~säys" ;
+        Text [ FINNISH ] = "Li~s?ys" ;
         Text [ FRENCH ] = "In~crément" ;
         Text [ ITALIAN ] = "In~cremento" ;
         Text [ DUTCH ] = "~Stap" ;
@@ -3207,7 +3207,7 @@ ModalDialog RID_SCDLG_GROUP
         Text [ italian ] = "Attiva per" ;
         Text [ portuguese_brazilian ] = "Ativar em" ;
         Text [ portuguese ] = "Activar para" ;
-        Text [ finnish ] = "Sisällytä" ;
+        Text [ finnish ] = "Sis?llyt?" ;
         Text [ danish ] = "Aktiver for" ;
         Text [ french ] = "Activer pour" ;
         Text [ swedish ] = "Aktivera för" ;
@@ -3235,7 +3235,7 @@ ModalDialog RID_SCDLG_GROUP
         Text [ italian ] = "Disattiva per" ;
         Text [ portuguese_brazilian ] = "Desativar em" ;
         Text [ portuguese ] = "Desactivar para" ;
-        Text [ finnish ] = "Poista käytöstä" ;
+        Text [ finnish ] = "Poista k?yt?t?" ;
         Text [ danish ] = "Ophæv for" ;
         Text [ french ] = "Désactiver pour" ;
         Text [ swedish ] = "Upphäv för" ;
@@ -3260,7 +3260,7 @@ ModalDialog RID_SCDLG_GROUP
     Text [ italian ] = "Raggruppa" ;
     Text [ portuguese_brazilian ] = "Grupo" ;
     Text [ portuguese ] = "Grupo" ;
-    Text [ finnish ] = "Ryhmä" ;
+    Text [ finnish ] = "Ryhm?" ;
     Text [ danish ] = "Gruppering" ;
     Text [ french ] = "Grouper" ;
     Text [ swedish ] = "Gruppering" ;
@@ -3563,7 +3563,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ turkish ] = "Ad yapýþtýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Insertar nombre";
-        Text[ finnish ] = "Liitä nimi";
+        Text[ finnish ] = "Liit? nimi";
     };
     ListBox LB_ENTRYLIST
     {
@@ -3620,7 +3620,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text[ turkish ] = "~Liste";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Lista";
-        Text[ finnish ] = "Liitä ~luettelo";
+        Text[ finnish ] = "Liit? ~luettelo";
     };
     /* ### ACHTUNG: Neuer Text in Resource? Namen einfügen : Namen einf³gen */
     Text = "Namen einfügen" ;
@@ -3645,7 +3645,7 @@ ModalDialog RID_SCDLG_NAMES_PASTE
     Text[ turkish ] = "Ad yapýþtýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar nombre";
-    Text[ finnish ] = "Liitä nimi";
+    Text[ finnish ] = "Liit? nimi";
 };
 
 FloatingWindow RID_SCDLG_TEAM
@@ -3679,7 +3679,7 @@ FloatingWindow RID_SCDLG_TEAM
     Text[ turkish ] = "StarCalc Ekibi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El equipo de %PRODUCTNAME Calc";
-    Text[ finnish ] = "%PRODUCTNAME Calc -ryhmä";
+    Text[ finnish ] = "%PRODUCTNAME Calc -ryhm?";
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW
@@ -3714,7 +3714,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ turkish ] = "Etiket olarak ilk~sütun";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Primera c~olumna como etiqueta";
-        Text[ finnish ] = "Ensimmäinen ~sarake nimiönä";
+        Text[ finnish ] = "Ensimm?inen ~sarake nimi??";
     };
     CheckBox 2
     {
@@ -3742,7 +3742,7 @@ ModalDialog RID_SCDLG_CHARTCOLROW
         Text[ turkish ] = "Etiket olarak ilk~satýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Primera ~fila como etiqueta";
-        Text[ finnish ] = "Ensimmäinen ~rivi nimiönä";
+        Text[ finnish ] = "Ensimm?inen ~rivi nimi??";
     };
     FixedLine 6
     {
@@ -3811,8 +3811,9 @@ ModalDialog RID_SCDLG_CHARTCOLROW
     Text[ turkish ] = "Kaynak verileri aralýðýný deðiþtir";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Modificar datos fuente";
-    Text[ finnish ] = "Vaihda lähdetietoalue";
+    Text[ finnish ] = "Vaihda l?hdetietoalue";
 };
+
 
 
 
