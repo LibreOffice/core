@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:13:27 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:20:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,6 @@
  *
  *
  ************************************************************************/
-
-#define _SV_ILSTBOX_CXX
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -819,8 +817,6 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
     {
         if ( mbStackMode && IsMouseMoveSelect() && IsReallyVisible() )
         {
-            Size aSz = GetOutputSizePixel();
-//          if ( ( rMEvt.GetPosPixel().X() < 0 ) || ( rMEvt.GetPosPixel().X() > aSz.Width() ) )
             if ( rMEvt.GetPosPixel().Y() < 0 )
             {
                 DeselectAll();
@@ -1525,8 +1521,6 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         DBG_ASSERT( (nSelect != mnCurrentPos) || mbMulti, "ImplListBox: Selecting same Entry" );
         if( nSelect >= mpEntryList->GetEntryCount() )
             nSelect = mpEntryList->GetEntryCount()-1;
-        else if (nSelect < 0 )
-            nSelect = 0;
         mnCurrentPos = nSelect;
         if ( SelectEntries( nSelect, eLET, bShift, bCtrl ) )
         {
