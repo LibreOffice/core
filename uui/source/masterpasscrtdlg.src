@@ -2,9 +2,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:41:12 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:13:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,41 +76,13 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 265 , 64 ) ;
-    Text = "Hauptkennwort festlegen";
-    Text [ English ] = "Please enter master password";
+    Text [ de ] = "Hauptkennwort festlegen";
     FixedText FT_MASTERPASSWORD_CRT
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
-        Text = "Hauptkennwort" ;
-        Text [ English ] = "Master ~password" ;
-        Text[ english_us ] = "Master password";
-        Text[ portuguese ] = "Senha principal";
-        Text[ russian ] = "Îñíîâíîé ïàğîëü";
-        Text[ greek ] = "Master ~password";
-        Text[ dutch ] = "Hoofdwachtwoord";
-        Text[ french ] = "Mot de passe principal";
-        Text[ spanish ] = "Contraseña principal";
-        Text[ finnish ] = "Master ~password";
-        Text[ italian ] = "Password principale";
-        Text[ danish ] = "Hovedadgangskode";
-        Text[ swedish ] = "Huvudlösenord";
-        Text[ polish ] = "Has³o g³ówne";
-        Text[ portuguese_brazilian ] = "Senha ~principal";
-        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰";
-        Text[ korean ] = "ë§ˆìŠ¤í„° ì•”í˜¸";
-        Text[ chinese_simplified ] = "ä¸»å¯†ç ";
-        Text[ chinese_traditional ] = "ä¸»å¯†ç¢¼";
-        Text[ turkish ] = "Ana Parola";
-        Text[ arabic ] = "Master ~password";
-        Text[ catalan ] = "Contrasenya ~mestra";
-        Text[ thai ] = "à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¸«à¸¥à¸±à¸";
-        Text[ czech ] = "HlavnÃ­ heslo";
-        Text[ hebrew ] = "Hauptkennwort";
-        Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦";
-        Text[ slovak ] = "HlavnÃ© heslo";
-        Text[ hungarian ] = "MesterjelszÃ³";
-        Text[ slovenian ] = "Glavno geslo";
+        Text [ de ] = "Hauptkennwort" ;
+        Text [ en-US ] = "Master password";
     };
     Edit ED_MASTERPASSWORD_CRT
     {
@@ -123,35 +95,8 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
     {
         Pos = MAP_APPFONT ( 12 , 37 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
-        Text = "Hauptkennwort ~bestätigen" ;
-        Text [ English ] = "~Confirm master password" ;
-        Text[ english_us ] = "~Confirm master password";
-        Text[ portuguese ] = "~Confirmar senha principal";
-        Text[ russian ] = "~Ïîäòâåğäèòü îñíîâíîé ïàğîëü";
-        Text[ greek ] = "~Confirm master password";
-        Text[ dutch ] = "~Hoofdwachtwoord bevestigen";
-        Text[ french ] = "Confirmation du mot de passe principal";
-        Text[ spanish ] = "~Confirme la contraseña principal";
-        Text[ finnish ] = "Vahvista ~pääsalasana";
-        Text[ italian ] = "~Conferma password principale";
-        Text[ danish ] = "~Bekræft hovedadgangskode";
-        Text[ swedish ] = "~Bekräfta huvudlösenord";
-        Text[ polish ] = "~PotwierdŸ has³o g³ówne";
-        Text[ portuguese_brazilian ] = "~Confirme a senha principal";
-        Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ç¢ºèª(~C)";
-        Text[ korean ] = "ë§ˆìŠ¤í„° ì•”í˜¸ í™•ì¸(~C)";
-        Text[ chinese_simplified ] = "ç¡®è®¤ä¸»å¯†ç (~C)";
-        Text[ chinese_traditional ] = "ç¢ºèªä¸»å¯†ç¢¼(~C)";
-        Text[ turkish ] = "~Ana parolayı onaylayın";
-        Text[ arabic ] = "~Confirm master password";
-        Text[ catalan ] = "~Verificació de la contrasenya";
-        Text[ thai ] = "~Confirm master password";
-        Text[ czech ] = "Potvrdit hlavnÃ­ heslo";
-        Text[ hebrew ] = "Hauptkennwort ~bestÃ¤tigen";
-        Text[ hindi ] = "à¤®à¤¾à¤¸à¥à¤Ÿà¤° à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤•à¥‹ ~à¤¦à¥ƒà¤¢à¤¼ à¤•à¤°à¥‹";
-        Text[ slovak ] = "PotvrÄte hl~avnÃ© heslo";
-        Text[ hungarian ] = "~MesterjelszÃ³ megerÅ‘sÃ­tÃ©se";
-        Text[ slovenian ] = "Po~trdite glavno geslo";
+        Text [ de ] = "Hauptkennwort ~bestätigen" ;
+        Text [ en-US ] = "~Confirm master password";
     };
     Edit ED_MASTERPASSWORD_REPEAT
     {
@@ -177,33 +122,7 @@ ModalDialog DLG_UUI_MASTERPASSWORD_CRT
         Pos = MAP_APPFONT ( 209 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ english_us ] = "Enter Master Password";
-    Text[ portuguese ] = "Indique a senha principal.";
-    Text[ russian ] = "Ââåñòè îñíîâíîé ïàğîëü";
-    Text[ greek ] = "Please enter master password";
-    Text[ dutch ] = "Hoofwachtwoord invoeren";
-    Text[ french ] = "Saisie du mot de passe principal";
-    Text[ spanish ] = "Introduzca la contraseña principal";
-    Text[ finnish ] = "Please enter master password";
-    Text[ italian ] = "Digitate la password principale";
-    Text[ danish ] = "Indtast hovedadgangskode";
-    Text[ swedish ] = "Definiera huvudlösenord";
-    Text[ polish ] = "Zdefiniuj has³o g³ówne";
-    Text[ portuguese_brazilian ] = "Digite a senha principal";
-    Text[ japanese ] = "ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å…¥åŠ›";
-    Text[ korean ] = "ë§ˆìŠ¤í„° ì•”í˜¸ ì…ë ¥";
-    Text[ chinese_simplified ] = "è¾“å…¥ä¸»å¯†ç ";
-    Text[ chinese_traditional ] = "è¼¸å…¥ä¸»å¯†ç¢¼";
-    Text[ turkish ] = "Ana Parolayı Girin";
-    Text[ arabic ] = "Please enter master password";
-    Text[ catalan ] = "Introduïu la contrasenya mestra";
-    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™à¸«à¸¥à¸±à¸";
-    Text[ czech ] = "Zadat hlavnÃ­ heslo";
-    Text[ hebrew ] = "Hauptkennwort festlegen";
-    Text[ hindi ] = "Enter Master Password";
-    Text[ slovak ] = "Zadajte hlavnÃ© heslo";
-    Text[ hungarian ] = "MesterjelszÃ³ bevitele";
-    Text[ slovenian ] = "Vnesite glavno geslo";
+    Text [ en-US ] = "Enter Master Password";
 };
 
 
