@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-22 07:55:53 $
+ *  last change: $Author: oj $ $Date: 2001-03-23 09:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,7 @@ FeatureState ORelationController::GetState(sal_uInt16 _nId)
             aReturn.aState = ::cppu::bool2any(m_bEditable);
             break;
         case ID_REALTION_ADD_RELATION:
+            aReturn.bEnabled = m_vTableData.size() > 1;
             aReturn.aState = ::cppu::bool2any(sal_False);
             break;
         default:

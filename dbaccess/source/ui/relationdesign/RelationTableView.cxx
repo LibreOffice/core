@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:26:07 $
+ *  last change: $Author: oj $ $Date: 2001-03-23 09:08:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -449,12 +449,19 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 
         m_pView->getController()->setModified( sal_True );
         m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
+        m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
     }
     else
     {
         delete pNewTabWinData;
         delete pNewTabWin;
     }
+}
+// -----------------------------------------------------------------------------
+void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
+{
+    OJoinTableView::RemoveTabWin( pTabWin );
+    m_pView->getController()->InvalidateFeature(ID_REALTION_ADD_RELATION);
 }
 // -----------------------------------------------------------------------------
 
