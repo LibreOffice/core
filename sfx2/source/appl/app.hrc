@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-09-28 15:18:32 $
+ *  last change: $Author: cd $ $Date: 2001-11-01 16:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #define MSG_ERR_OPEN_CFG                        (RID_SFX_APP_START+4)
 #define MSG_ERR_FILETYPE_CFG                    (RID_SFX_APP_START+5)
 #define MSG_ERR_VERSION_CFG                     (RID_SFX_APP_START+6)
+#define MSG_ERR_WEBBROWSER_NOT_STARTED          (RID_SFX_APP_START+7)
+#define MSG_ERR_EXTERNAL_APP_NOT_FOUND          (RID_SFX_APP_START+8)
 
 #define MSG_ISPRINTING_QUERYABORT               (RID_SFX_APP_START+9)
 #define MSG_CANT_QUIT                           (RID_SFX_APP_START+10)
