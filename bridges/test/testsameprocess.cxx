@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:28:51 $
+ *  last change: $Author: jbu $ $Date: 2000-09-29 12:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,13 +161,8 @@ void main( int argc, char *argv[] )
     }
 
     {
-#if SUPD>582
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "client.rdb" )  ) );
-#else
-        Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory( "client.rdb" );
-#endif
-
 
         Reference < XConnector > rConnector(
             createComponent( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")),
