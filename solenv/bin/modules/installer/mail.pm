@@ -2,9 +2,9 @@
 #
 #   $RCSfile: mail.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:16:16 $
+#   last change: $Author: rt $ $Date: 2004-07-06 14:58:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,8 +93,8 @@ sub send_mail
 
     my $subject = "";
     my $basestring = $installer::globals::product . " " . $installer::globals::compiler . $installer::globals::productextension . " " . $installer::globals::build. " " . $installer::globals::buildid . " " . $$languagesref . "\n";
-    if ( $message eq "Error" ) { $subject = "Error: $basestring" }
-    if ( $message eq "Success" ) { $subject = "Success: $basestring" }
+    if ( $message eq "ERROR" ) { $subject = "ERROR: $basestring" }
+    if ( $message eq "SUCCESS" ) { $subject = "SUCCESS: $basestring" }
 
     my @message = ();
 
@@ -102,7 +102,7 @@ sub send_mail
     push(@message, "\n");
     push(@message, "Located at $destdir");
 
-    if ( $message eq "Error" )
+    if ( $message eq "ERROR" )
     {
         for ( my $j = 0; $j <= $#installer::globals::errorlogfileinfo; $j++ )
         {
@@ -142,7 +142,7 @@ sub send_fail_mail
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
-        if ( $mailinfo ) { send_mail("Error", $listener, $mailinfo, $languagestringref, $errordir); }
+        if ( $mailinfo ) { send_mail("ERROR", $listener, $mailinfo, $languagestringref, $errordir); }
         else { installer::exiter::exit_program("ERROR: Could not read mailinfo in list file!", "send_fail_mail"); }
     }
 }
@@ -159,7 +159,7 @@ sub send_success_mail
     {
         my $mailinfo = installer::ziplist::getinfofromziplist($allsettingsarrayref, "mailinfo");
 
-        if ( $mailinfo ) { send_mail("Success", $listener, $mailinfo, $languagestringref, $completeshipinstalldir); }
+        if ( $mailinfo ) { send_mail("SUCCESS", $listener, $mailinfo, $languagestringref, $completeshipinstalldir); }
         else { installer::exiter::exit_program("ERROR: Could not read mailinfo in list file!", "send_success_mail"); }
 
     }
