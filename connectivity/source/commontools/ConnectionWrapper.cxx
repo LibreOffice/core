@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 10:23:56 $
+ *  last change: $Author: oj $ $Date: 2002-08-23 09:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,12 @@ void OConnectionWrapper::setDelegation(Reference< XAggregation >& _rxProxyConnec
         // transfer the (one and only) real ref to the aggregate to our member
         m_xProxyConnection = _rxProxyConnection;
         _rxProxyConnection = NULL;
-        ::comphelper::query_aggregation(m_xProxyConnection,m_xConnection);
+
         // set ourself as delegator
         Reference<XInterface> xIf = static_cast< XUnoTunnel* >( this );
         m_xProxyConnection->setDelegator( xIf );
+
+        ::comphelper::query_aggregation(m_xProxyConnection,m_xConnection);
     }
     osl_decrementInterlockedCount( &_rRefCount );
 }
