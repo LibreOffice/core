@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dindexnode.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,7 +306,7 @@ BOOL ONDXPage::Insert(ONDXNode& rNode, sal_uInt32 nRowsLeft)
             if (rIndex.isUnique())
                 aInnerNode.GetKey().ResetRecord();
 
-            // neue Seite zeigt nun auf Seite des herausgelösten Knoten
+            // neue Seite zeigt nun auf Seite des herausgeloesten Knoten
             if (!IsLeaf())
                 aNewPage->SetChild(aInnerNode.GetChild());
         }
@@ -483,7 +483,7 @@ BOOL ONDXPage::Delete(USHORT nNodePos)
         }
         else // Sonderbehandlung
         {
-            // Page ist aChild Page vom Parent => erste Page aus ppNodes an aChild anhängen
+            // Page ist aChild Page vom Parent => erste Page aus ppNodes an aChild anhaengen
             Merge(0,(*aParent)[0].GetChild(&rIndex,aParent));
             nParentNodePos = 0;
         }
@@ -538,7 +538,7 @@ ONDXNode ONDXPage::Split(ONDXPage& rPage)
         aResultNode = (*this)[(nCount + 1) / 2];
         nCount = (nCount + 1) / 2;
 
-        // neue Seite zeigt nun auf Seite des herausgelösten Knoten
+        // neue Seite zeigt nun auf Seite des herausgeloesten Knoten
         rPage.SetChild(aResultNode.GetChild());
     }
     // Knoten zeigt auf neue Seite
@@ -574,8 +574,8 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             USHORT nLastNode = bRight ? Count() - 1 : xPage->Count() - 1;
             if (bRight)
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
-                // alle Knoten aus xPage auf den linken Knoten verschieben (anhängen)
+                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
+                // alle Knoten aus xPage auf den linken Knoten verschieben (anhaengen)
                 while (xPage->Count())
                 {
                     Append((*xPage)[0]);
@@ -584,7 +584,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // xPage ist die linke Page und THIS die rechte
                 while (xPage->Count())
                 {
@@ -625,7 +625,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
         {
             if (bRight)
             {
-                // alle Knoten aus xPage auf den linken Knoten verschieben (anhängen)
+                // alle Knoten aus xPage auf den linken Knoten verschieben (anhaengen)
                 ONDXNode aReplaceNode = (*this)[nCount - 1];
                 while (nCount < nMaxNodes_2)
                 {
@@ -637,7 +637,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                // alle Knoten aus this vor die xPage Knoten einfügen
+                // alle Knoten aus this vor die xPage Knoten einfuegen
                 ONDXNode aReplaceNode = (*this)[nCount - 1];
                 while (xPage->Count() < nMaxNodes_2)
                 {
@@ -656,7 +656,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
         {
             if (bRight)
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // Vaterknoten wird mit integriert
                 // erhaelt zunaechst Child von xPage
                 (*aParent)[nParentNodePos].SetChild(xPage->GetChild(),aParent);
@@ -666,11 +666,11 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             }
             else
             {
-                DBG_ASSERT(&xPage != this,"xPage und THIS dürfen nicht gleich sein: Endlosschleife");
+                DBG_ASSERT(&xPage != this,"xPage und THIS duerfen nicht gleich sein: Endlosschleife");
                 // Vaterknoten wird mit integriert
                 // erhaelt zunaechst Child
                 (*aParent)[nParentNodePos].SetChild(GetChild(),aParent); // Parent merkt sich mein Child
-                Insert(0,(*aParent)[nParentNodePos]); // Node vom Parent bei mir einfügen
+                Insert(0,(*aParent)[nParentNodePos]); // Node vom Parent bei mir einfuegen
                 while (xPage->Count())
                 {
                     Insert(0,(*xPage)[xPage->Count()-1]);
@@ -700,7 +700,7 @@ void ONDXPage::Merge(USHORT nParentNodePos, ONDXPagePtr xPage)
             else if(nParentNodePos)
                 // Austauschen des KnotenWertes
                 // beim Append wird der Bereich erweitert, beim INsert verweist der alte Knoten von xPage auf this
-                // deshalb muß der Knoten auch hier aktualisiert werden
+                // deshalb muss der Knoten auch hier aktualisiert werden
                 aParent->SearchAndReplace((*aParent)[nParentNodePos-1].GetKey(),(*aParent)[nParentNodePos].GetKey());
 
             xPage->SetModified(FALSE);
