@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-08 16:47:35 $
+ *  last change: $Author: sj $ $Date: 2000-12-11 14:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,19 +132,132 @@ EscherExClientAnchor_Base::~EscherExClientAnchor_Base()
 
 struct EscherPropSortStruct
 {
-    BYTE*       pBuf;
-    UINT32      nPropSize;
-    UINT32      nPropValue;
-    UINT16      nPropId;
+    sal_uInt8*  pBuf;
+    sal_uInt32  nPropSize;
+    sal_uInt32  nPropValue;
+    sal_uInt16  nPropId;
 };
 
-
-struct ESCHER_GDIStruct
+EscherPropertyContainer::EscherPropertyContainer() :
+    nSortCount      ( 0 ),
+    nCountCount     ( 0 ),
+    nCountSize      ( 0 ),
+    nSortBufSize    ( 64 ),
+    bHasComplexData ( sal_False ),
+    pSortStruct     ( new EscherPropSortStruct[ 64 ] )
 {
-    Rectangle   GDIBoundRect;
-    Size        GDISize;
-    UINT32      GDIUncompressedSize;
 };
+
+EscherPropertyContainer::~EscherPropertyContainer()
+{
+    if ( bHasComplexData )
+    {
+        while ( nSortCount-- )
+            delete( pSortStruct[ nSortCount ].pBuf );
+    }
+    delete  pSortStruct;
+};
+
+void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_uInt32 nPropValue, sal_Bool bBlib )
+{
+    AddOpt( nPropID, bBlib, nPropValue, NULL, 0 );
+}
+
+void EscherPropertyContainer::AddOpt( sal_uInt16 nPropID, sal_Bool bBlib, sal_uInt32 nPropValue, sal_uInt8* pProp, sal_uInt32 nPropSize )
+{
+    if ( bBlib )                // bBlib is only valid when fComplex = 0
+        nPropID |= 0x4000;
+    if ( pProp )
+        nPropID |= 0x8000;      // fComplex = TRUE;
+
+    sal_uInt32 i;
+    for( i = 0; i < nSortCount; i++ )
+    {
+        if ( ( pSortStruct[ i ].nPropId &~0xc000 ) == ( nPropID &~0xc000 ) )    // pruefen, ob Property nur ersetzt wird
+        {
+            pSortStruct[ i ].nPropId = nPropID;
+            if ( pSortStruct[ i ].pBuf )
+            {
+                nCountSize -= pSortStruct[ i ].nPropSize;
+                delete pSortStruct[ i ].pBuf;
+            }
+            pSortStruct[ i ].pBuf = pProp;
+            pSortStruct[ i ].nPropSize = nPropSize;
+            pSortStruct[ i ].nPropValue = nPropValue;
+            if ( pProp )
+                nCountSize += nPropSize;
+            return;
+        }
+    }
+    nCountCount++;
+    nCountSize += 6;
+    if ( nSortCount == nSortBufSize )                                           // buffer vergroessern
+    {
+        nSortBufSize <<= 1;
+        EscherPropSortStruct* pTemp = new EscherPropSortStruct[ nSortBufSize ];
+        for( i = 0; i < nSortCount; i++ )
+        {
+            pTemp[ i ] = pSortStruct[ i ];
+        }
+        delete pSortStruct;
+        pSortStruct = pTemp;
+    }
+    pSortStruct[ nSortCount ].nPropId = nPropID;                                // property einfuegen
+    pSortStruct[ nSortCount ].pBuf = pProp;
+    pSortStruct[ nSortCount ].nPropSize = nPropSize;
+    pSortStruct[ nSortCount++ ].nPropValue = nPropValue;
+
+    if ( pProp )
+    {
+        nCountSize += nPropSize;
+        bHasComplexData = sal_True;
+    }
+}
+
+extern "C" int __LOADONCALLAPI EscherPropSortFunc( const void* p1, const void* p2 )
+{
+    INT16   nID1 = ((EscherPropSortStruct*)p1)->nPropId &~0xc000;
+    INT16   nID2 = ((EscherPropSortStruct*)p2)->nPropId &~0xc000;
+
+    if( nID1  < nID2 )
+        return -1;
+    else if( nID1 > nID2 )
+        return 1;
+    else
+        return 0;
+}
+
+void EscherPropertyContainer::Commit( SvStream& rSt, sal_uInt16 nVersion )
+{
+    rSt << (sal_uInt16)( ( nCountCount << 4 ) | ( nVersion & 0xf ) ) << (sal_uInt16)ESCHER_OPT << nCountSize;
+    if ( nSortCount )
+    {
+        qsort( pSortStruct, nSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
+        sal_Bool bComplex = sal_False;
+        sal_uInt32 i;
+
+        for ( i = 0; i < nSortCount; i++ )
+        {
+            rSt << pSortStruct[ i ].nPropId
+                << pSortStruct[ i ].nPropValue;
+            if ( pSortStruct[ i ].pBuf )
+                bComplex = sal_True;
+        }
+        if ( bComplex )
+        {
+            for ( i = 0; i < nSortCount; i++ )
+            {
+                if ( pSortStruct[ i ].pBuf )
+                {
+                    rSt.Write( pSortStruct[ i ].pBuf, pSortStruct[ i ].nPropSize );
+                    delete pSortStruct[ i ].pBuf;
+                }
+            }
+        }
+        nSortCount = 0;
+    }
+}
+
 
 // ---------------------------------------------------------------------------------------------
 
@@ -763,20 +876,17 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
 EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
     EscherGraphicProvider   ( _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ),
     mpOutStrm               ( &rOutStrm ),
-    mpOffsets               ( new UINT32[ 32 ] ),
-    mpSizes                 ( new UINT32[ 32 ] ),
-    mpRecTypes              ( new UINT16[ 32 ] ),
+    mpOffsets               ( new sal_uInt32[ 32 ] ),
+    mpRecTypes              ( new sal_uInt16[ 32 ] ),
     mnDrawings              ( nDrawings ),
     mnLevel                 ( 0 ),
     mbEscherSpgr            ( FALSE ),
     mbEscherDgg             ( FALSE ),                                      // TRUE, wenn jemals ein ESCHER_Dgg angelegt wurde, dieser wird dann im Dest. aktualisiert
     mbEscherDg              ( FALSE ),
     mbOleEmf                ( FALSE ),
-    mpSortStruct            ( NULL ),
     mnGroupLevel            ( 0 ),
     mnHellLayerId           ( USHRT_MAX )
 {
-    mpSizes[ 0 ] = 0;
     mnStrmStartOfs = mpOutStrm->Tell();
     mpImplEscherExSdr = new ImplEscherExSdr( *this );
 }
@@ -812,14 +922,19 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 
 EscherEx::~EscherEx()
 {
-    delete[] mpSortStruct;
     delete[] mpRecTypes;
-    delete[] mpSizes;
     delete[] mpOffsets;
     delete mpImplEscherExSdr;
 }
 
 // ---------------------------------------------------------------------------------------------
+
+struct ESCHER_GDIStruct
+{
+    Rectangle   GDIBoundRect;
+    Size        GDISize;
+    UINT32      GDIUncompressedSize;
+};
 
 UINT32 EscherEx::ImplGetBlibID( SvStream& rPicOutStrm, SvMemoryStream& rSource, ESCHER_BlibType eBlibType, const ESCHER_GDIStruct* pGDI )
 {
@@ -1004,13 +1119,8 @@ BOOL EscherEx::InsertAtPersistOffset( UINT32 nKey, UINT32 nValue )
 
 void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 {
-    if ( mnLevel == 0 )
-        mpSizes[ 0 ] = 0;
-
-    mpSizes[ mnLevel++ ] += 8;
     *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | 0xf  ) << nEscherContainer << (UINT32)0;
-    mpOffsets[ mnLevel ] = mpOutStrm->Tell() - 4;
-    mpSizes[ mnLevel ] = 0;
+    mpOffsets[ ++mnLevel ] = mpOutStrm->Tell() - 4;
     mpRecTypes[ mnLevel ] = nEscherContainer;
 
     switch( nEscherContainer )
@@ -1082,10 +1192,11 @@ void EscherEx::OpenContainer( UINT16 nEscherContainer, int nRecInstance )
 
 void EscherEx::CloseContainer()
 {
-    UINT32 nOldPos = mpOutStrm->Tell();
+    sal_uInt32 nSize, nPos = mpOutStrm->Tell();
+    nSize = ( nPos - mpOffsets[ mnLevel ] ) - 4;
     mpOutStrm->Seek( mpOffsets[ mnLevel ] );
-    UINT32 nSize = mpSizes[ mnLevel ];
     *mpOutStrm << nSize;
+
     switch( mpRecTypes[ mnLevel ] )
     {
         case ESCHER_DgContainer :
@@ -1112,8 +1223,8 @@ void EscherEx::CloseContainer()
                                 UINT32 i, nFIDCL = ( ( mnTotalShapeIdUsedDg - 1 ) / 0x400 );
                                 if ( nFIDCL )
                                 {
-                                    if ( nOldPos > mpOutStrm->Tell() )
-                                        nOldPos += ( nFIDCL << 3 );
+                                    if ( nPos > mpOutStrm->Tell() )
+                                        nPos += ( nFIDCL << 3 );
 
                                     mnFIDCLs += nFIDCL;
                                     InsertAtCurrentPos( nFIDCL << 3 );          // platz schaffen fuer weitere FIDCL's
@@ -1153,8 +1264,8 @@ void EscherEx::CloseContainer()
         default:
         break;
     }
-    mpSizes[ --mnLevel ] += nSize;
-    mpOutStrm->Seek( nOldPos );
+    mnLevel--;
+    mpOutStrm->Seek( nPos );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1171,9 +1282,8 @@ void EscherEx::EndAtom( UINT16 nRecType, int nRecVersion, int nRecInstance )
 {
     UINT32  nOldPos = mpOutStrm->Tell();
     mpOutStrm->Seek( mnCountOfs );
-    mnCountSize = nOldPos - mnCountOfs;
-    mpSizes[ mnLevel ] += mnCountSize;
-    *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << (UINT32)( mnCountSize - 8 );
+    sal_uInt32 nSize = nOldPos - mnCountOfs;
+    *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << (UINT32)( nSize - 8 );
     mpOutStrm->Seek( nOldPos );
 }
 
@@ -1181,7 +1291,6 @@ void EscherEx::EndAtom( UINT16 nRecType, int nRecVersion, int nRecInstance )
 
 void EscherEx::AddAtom( UINT32 nAtomSize, UINT16 nRecType, int nRecVersion, int nRecInstance )
 {
-    mpSizes[ mnLevel ] += nAtomSize + 8;
     *mpOutStrm << (UINT16)( ( nRecInstance << 4 ) | ( nRecVersion & 0xf ) ) << nRecType << nAtomSize;
 }
 
@@ -1220,10 +1329,7 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
 
     UINT32 nShapeId = GetShapeID();
     if ( !mnGroupLevel )
-    {
         AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
-        CloseContainer();                                               // ESCHER_SpContainer
-    }
     else
     {
         AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
@@ -1235,9 +1341,9 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
         *mpOutStrm << (INT16)aRect.Top() << (INT16)aRect.Left()
                    << (INT16)aRect.Right() << (INT16)aRect.Bottom();
 #else // !EES_WRITE_EPP
-        BeginCount();
-        AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
-        EndCount( ESCHER_OPT, 3 );
+        EscherPropertyContainer aPropOpt;
+        aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x00040004 );
+        aPropOpt.Commit( *mpOutStrm );
         if ( mnGroupLevel > 1 )
         {
             AddAtom( 16, ESCHER_ChildAnchor );
@@ -1255,8 +1361,8 @@ UINT32 EscherEx::EnterGroup( const Rectangle* pBoundRect )
         }
 #endif // EES_WRITE_EPP
 
-        CloseContainer();                                               // ESCHER_SpContainer
     }
+    CloseContainer();                                               // ESCHER_SpContainer
     mnGroupLevel++;
     return nShapeId;
 }
@@ -1340,137 +1446,6 @@ UINT32 EscherEx::GetShapeID()
 
 // ---------------------------------------------------------------------------------------------
 
-extern "C" int __LOADONCALLAPI EscherPropSortFunc( const void* p1, const void* p2 )
-{
-    INT16   nID1 = ((EscherPropSortStruct*)p1)->nPropId &~0xc000;
-    INT16   nID2 = ((EscherPropSortStruct*)p2)->nPropId &~0xc000;
-
-    if( nID1  < nID2 )
-        return -1;
-    else if( nID1 > nID2 )
-        return 1;
-    else
-        return 0;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::BeginCount()
-{
-    mnCountOfs = mpOutStrm->Tell();
-    *mpOutStrm << (UINT32)0 << (UINT32)0;       // record header wird spaeter geschrieben
-    mnSortCount = 0;                            // normale Properties werden automatisch sortiert
-    mnCountCount = 0;
-    mnCountSize = 8;
-
-    if ( !mpSortStruct )
-        mpSortStruct = new EscherPropSortStruct[ mnSortBufSize = 64 ];
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::AddOpt( UINT16 nPropID, UINT32 nPropValue, BOOL bBlib )
-{
-    AddOpt( nPropID, bBlib, nPropValue, NULL, 0 );
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::AddOpt( UINT16 nPropID, BOOL bBlib, UINT32 nPropValue, BYTE* pProp, UINT32 nPropSize )
-{
-    if ( bBlib )                // bBlib is only valid when fComplex = 0
-        nPropID |= 0x4000;
-    if ( pProp )
-        nPropID |= 0x8000;      // fComplex = TRUE;
-
-    UINT32 i;
-    for( i = 0; i < mnSortCount; i++ )
-    {
-        if ( ( mpSortStruct[ i ].nPropId &~0xc000 ) == ( nPropID &~0xc000 ) )   // pruefen, ob Property nur ersetzt wird
-        {
-            mpSortStruct[ i ].nPropId = nPropID;
-            if ( mpSortStruct[ i ].pBuf )
-            {
-                mnCountSize -= mpSortStruct[ i ].nPropSize;
-                delete mpSortStruct[ i ].pBuf;
-            }
-            mpSortStruct[ i ].pBuf = pProp;
-            mpSortStruct[ i ].nPropSize = nPropSize;
-            mpSortStruct[ i ].nPropValue = nPropValue;
-            if ( pProp )
-                mnCountSize += nPropSize;
-            return;
-        }
-    }
-    mnCountCount++;
-    mnCountSize += 6;
-    if ( mnSortCount == mnSortBufSize )                                         // buffer vergroessern
-    {
-        mnSortBufSize <<= 1;
-        EscherPropSortStruct* pTemp = new EscherPropSortStruct[ mnSortBufSize ];
-        for( i = 0; i < mnSortCount; i++ )
-        {
-            pTemp[ i ] = mpSortStruct[ i ];
-        }
-        delete mpSortStruct;
-        mpSortStruct = pTemp;
-    }
-    mpSortStruct[ mnSortCount ].nPropId = nPropID;                              // property einfuegen
-    mpSortStruct[ mnSortCount ].pBuf = pProp;
-    mpSortStruct[ mnSortCount ].nPropSize = nPropSize;
-    mpSortStruct[ mnSortCount++ ].nPropValue = nPropValue;
-
-    if ( pProp )
-        mnCountSize += nPropSize;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::AddColor( UINT32 nColor )
-{
-    mnCountCount++;
-    mnCountSize += 4;
-    *mpOutStrm << nColor;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void EscherEx::EndCount( UINT16 nRecType, UINT16 nRecVersion )
-{
-    UINT32  nOldPos = mpOutStrm->Tell();
-    mpOutStrm->Seek( mnCountOfs );
-    mpSizes[ mnLevel ] += mnCountSize;
-    *mpOutStrm << (UINT16)( ( mnCountCount << 4 ) | ( nRecVersion & 0xf ) ) << (UINT16)nRecType << (UINT32)( mnCountSize - 8 );
-    mpOutStrm->Seek( nOldPos );
-    if ( mnSortCount )
-    {
-        qsort( mpSortStruct, mnSortCount, sizeof( EscherPropSortStruct ), EscherPropSortFunc );
-        BOOL bComplex = FALSE;
-        UINT32 i;
-        for ( i = 0; i < mnSortCount; i++ )
-        {
-            *mpOutStrm << (UINT16)mpSortStruct[ i ].nPropId
-                       << (UINT32)mpSortStruct[ i ].nPropValue;
-            if ( mpSortStruct[ i ].pBuf )
-                bComplex = TRUE;
-        }
-        if ( bComplex )
-        {
-            for ( i = 0; i < mnSortCount; i++ )
-            {
-                if ( mpSortStruct[ i ].pBuf )
-                {
-                    mpOutStrm->Write( mpSortStruct[ i ].pBuf, mpSortStruct[ i ].nPropSize );
-                    delete mpSortStruct[ i ].pBuf;
-                }
-            }
-        }
-        mnSortCount = 0;
-    }
-}
-
-// ---------------------------------------------------------------------------------------------
-
 UINT32 EscherEx::GetColor( const UINT32 nSOColor, BOOL bSwap )
 {
     if ( bSwap )
@@ -1522,7 +1497,7 @@ UINT32 EscherEx::GetGradientColor( const awt::Gradient* pVCLGradient, UINT32 nSt
 
 // ---------------------------------------------------------------------------------------------
 
-void EscherEx::WriteGradient( const awt::Gradient* pVCLGradient )
+void EscherEx::WriteGradient( EscherPropertyContainer& rPropOpt, const awt::Gradient* pVCLGradient )
 {
     UINT32 nFillFocus = 0x64;
     UINT32 nFirstColor = 0;
@@ -1558,11 +1533,11 @@ void EscherEx::WriteGradient( const awt::Gradient* pVCLGradient )
         }
         break;
     }
-    AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
-    AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + pVCLGradient->Angle ) << 16 ) / 10 );
-    AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pVCLGradient, nFirstColor ) );
-    AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pVCLGradient, nFirstColor ^ 1 ) );
-    AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
+    rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillShadeScale );
+    rPropOpt.AddOpt( ESCHER_Prop_fillAngle, ( ( -3600 + pVCLGradient->Angle ) << 16 ) / 10 );
+    rPropOpt.AddOpt( ESCHER_Prop_fillColor, GetGradientColor( pVCLGradient, nFirstColor ) );
+    rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, GetGradientColor( pVCLGradient, nFirstColor ^ 1 ) );
+    rPropOpt.AddOpt( ESCHER_Prop_fillFocus, nFillFocus );
 };
 
 // ---------------------------------------------------------------------------------------------
