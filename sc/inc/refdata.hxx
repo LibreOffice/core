@@ -2,9 +2,9 @@
  *
  *  $RCSfile: refdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:03:36 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ struct ComplRefData         // Complex reference (a range) into the sheet
         { Ref1.CalcRelFromAbs( rPos ); Ref2.CalcRelFromAbs( rPos ); }
     inline  void CalcAbsIfRel( const ScAddress& rPos )
         { Ref1.CalcAbsIfRel( rPos ); Ref2.CalcAbsIfRel( rPos ); }
+    inline  BOOL IsDeleted() const
+        { return Ref1.IsDeleted() || Ref2.IsDeleted(); }
     inline  BOOL Valid() const
         { return Ref1.Valid() && Ref2.Valid(); }
             void PutInOrder();
