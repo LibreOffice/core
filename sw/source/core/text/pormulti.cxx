@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-26 10:37:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-03 11:54:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@
 #endif
 #ifndef _BREAKIT_HXX
 #include <breakit.hxx>
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
 #endif
 
 using namespace ::com::sun::star;
@@ -1520,8 +1523,15 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     }
     else
         pFontSave = NULL;
+
     if( rMulti.HasRotation() )
-        nMaxWidth = USHRT_MAX;
+    {
+        const SwPageFrm* pPage = pFrm->FindPageFrm();
+        ASSERT( pPage, "No page in frame!");
+
+        const SwLayoutFrm* pBody = pPage->FindBodyCont();
+        nMaxWidth = pBody ? pBody->Prt().Height() : USHRT_MAX;
+    }
 
     SwTwips nTmpX = rInf.X();
 
