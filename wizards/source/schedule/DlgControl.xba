@@ -57,7 +57,7 @@ Dim ListIndex as Integer
 		Case  cLANGUAGE_GERMAN
 			If bSelectByMouseMove Then
 &apos;				oStatusLine.SetText(&quot;Position: &quot; &amp; aEvent.X &amp; &quot; ; &quot; &amp; aEvent.Y)
-				ListIndex = CalGetGermanLandAtMousePos(CInt(aEvent.X/fWidthCorrFactor), CInt(aEvent.Y/fHeightCorrFactor), Land$)
+				ListIndex = CalGetGermanLandAtMousePos(CInt(aEvent.X/fWidthCorrFactor), CInt(aEvent.Y/fHeightCorrFactor))
 				DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
 			End If
 	End Select	
@@ -69,7 +69,7 @@ Dim ListIndex as Integer
 	Select Case sCurLangLocale
 		Case  cLANGUAGE_GERMAN
 			If aEvent.ClickCount &gt;= 1 Then
-				ListIndex = CalGetGermanLandAtMousePos(CInt(aEvent.X/fWidthCorrFactor), CInt(aEvent.Y/fHeightCorrFactor), Land$)
+				ListIndex = CalGetGermanLandAtMousePos(CInt(aEvent.X/fWidthCorrFactor), CInt(aEvent.Y/fHeightCorrFactor))
 			DlgCalendar.GetControl(&quot;lstHolidays&quot;).SelectItemPos(ListIndex, True)
 			bSelectByMouseMove = False
 		End If
@@ -144,4 +144,5 @@ Dim DateStr as String
 			End If
 		End If
 	End With
-End Sub</script:module>
+End Sub
+</script:module>
