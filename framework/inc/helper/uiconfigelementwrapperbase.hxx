@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uiconfigelementwrapperbase.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:24:49 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 09:32:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,10 @@ class UIConfigElementWrapperBase : public ::com::sun::star::lang::XTypeProvider 
                                                                                                 m_bInitialized : 1,
                                                                                                 m_bConfigListener : 1,
                                                                                                 m_bConfigListening : 1,
-                                                                                                m_bDisposed : 1;
+                                                                                                m_bDisposed : 1,
+                                                                                                m_bNoClose : 1;
         rtl::OUString                                                                           m_aResourceURL;
-        com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >   m_xConfigSource;
+        com::sun::star::uno::Reference< ::com::sun::star::ui::XUIConfigurationManager >         m_xConfigSource;
         com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess >               m_xConfigData;
         com::sun::star::uno::WeakReference< com::sun::star::frame::XFrame >                     m_xWeakFrame;
         com::sun::star::uno::Reference< com::sun::star::awt::XMenuBar >                         m_xMenuBar;
