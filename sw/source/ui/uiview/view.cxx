@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mtg $ $Date: 2001-05-03 14:45:14 $
+ *  last change: $Author: mib $ $Date: 2001-05-04 10:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,26 +1202,32 @@ void SwView::ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::s
             if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewLeft" ) ) )
             {
                pValue->Value >>= nX;
+               nX = MM100_TO_TWIP( nX );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
             {
                pValue->Value >>= nY;
+               nY = MM100_TO_TWIP( nY );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
             {
                pValue->Value >>= nLeft;
+               nLeft = MM100_TO_TWIP( nLeft );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleTop" ) ) )
             {
                pValue->Value >>= nTop;
+               nTop = MM100_TO_TWIP( nTop );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleRight" ) ) )
             {
                pValue->Value >>= nRight;
+               nRight = MM100_TO_TWIP( nRight );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleBottom" ) ) )
             {
                pValue->Value >>= nBottom;
+               nBottom = MM100_TO_TWIP( nBottom );
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ZoomType" ) ) )
             {
