@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockfile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:16 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:01:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,16 +76,21 @@
 
 using namespace ::rtl;
 namespace desktop {
+
+
     class Lockfile
     {
     public:
 
         // contructs a new lockfile onject
-        Lockfile(void);
+        Lockfile( bool bIPCserver = true );
+
+        // separating GUI code:
+        typedef bool (* fpExecWarning)( Lockfile * that );
 
         // checks the lockfile, asks user when lockfile is
-        // found and returns false when we may not continue
-        sal_Bool check(void);
+        // found (iff gui) and returns false when we may not continue
+        sal_Bool check( fpExecWarning execWarning = Lockfile_execWarning );
 
         // removes the lockfile. should only be called in exceptional situations
         void clean(void);
@@ -100,8 +105,10 @@ namespace desktop {
         static const ByteString m_aHostkey;
         static const ByteString m_aStampkey;
         static const ByteString m_aTimekey;
+        static const ByteString m_aIPCkey;
         // lockfilename
         static const OUString m_aSuffix;
+        bool m_bIPCserver;
         // full qualified name (file://-url) of the lockfile
         OUString m_aLockname;
         // flag whether the d'tor should delete the lock
@@ -112,8 +119,9 @@ namespace desktop {
         OUString m_aDate;
         // access to data in file
         void syncToFile(void) const;
-        short execWarning(void) const;
         sal_Bool isStale(void) const;
+        friend bool Lockfile_execWarning( Lockfile * that );
 
     };
+
 }
