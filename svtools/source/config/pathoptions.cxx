@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-14 08:18:58 $
+ *  last change: $Author: pb $ $Date: 2000-12-14 15:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1454,7 +1454,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
         {
             sal_Bool bCfg = ( PATH_USERCONFIG == ePath );
             bRet = sal_True;
-            INetURLObject aObj( bCfg ? GetUserConfigPath() : GetUserDictionaryPath(), INET_PROT_FILE );
+            INetURLObject aObj( bCfg ? GetUserConfigPath() : GetUserDictionaryPath() );
             xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
             for ( i = 0; i < nCount; ++i )
                 aObj.insertName( aIniFile.GetToken( i, '/' ) );
@@ -1510,9 +1510,14 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             sal_uInt16 i, nIdx = 0, nCount = aPath.GetTokenCount( SEARCHPATH_DELIMITER );
             for ( i = 0; i < nCount; ++i )
             {
-                INetURLObject aObj;
-                aObj.SetSmartProtocol( INET_PROT_FILE );
-                aObj.SetSmartURL( aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx ) );
+                String aPathToken = aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx );
+                INetURLObject aObj( aPathToken );
+                if ( aObj.HasError() )
+                {
+                    String aURL;
+                    if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
+                        aObj.SetURL( aURL );
+                }
                 xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
                 for ( i = 0; i < nCount; ++i )
                     aObj.insertName( aIniFile.GetToken( i, '/' ) );
