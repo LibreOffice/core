@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-27 01:47:44 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
 #endif
+#ifndef _SV_SALVD_HXX
+#include <salvd.hxx>
+#endif
 #ifndef _SV_DIALOG_HXX
 #include <dialog.hxx>
 #endif
@@ -102,6 +105,7 @@ void SalAbort( const XubString& rErrorText )
 void InitSalData()
 {
     SalData *pSalData = new SalData;
+    memset( pSalData, 0, sizeof( SalData ) );
     SetSalData( pSalData );
 }
 
@@ -320,6 +324,36 @@ void SalInstance::DestroyObject( SalObject* pObject )
 {
     delete ( pObject );
 }
+
+// -----------------------------------------------------------------------
+
+SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
+    long nDX, long nDY, USHORT nBitCount )
+{
+    return new SalVirtualDevice();
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
+{
+    delete pDevice;
+}
+
+// -----------------------------------------------------------------------
+
+SalPrinter* SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
+{
+    return NULL;
+}
+
+// -----------------------------------------------------------------------
+
+void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
+{
+}
+
+// -----------------------------------------------------------------------
 
 void SalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {

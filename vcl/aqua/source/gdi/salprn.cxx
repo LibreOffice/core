@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:32 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,19 +149,6 @@ void SalInfoPrinter::GetPageInfo( const ImplJobSetup*,
 }
 
 // =======================================================================
-
-SalPrinter* SalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
-{
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void SalInstance::DestroyPrinter( SalPrinter* pPrinter )
-{
-}
-
-// -----------------------------------------------------------------------
 
 SalPrinter::SalPrinter()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-11-29 23:11:27 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,13 +468,19 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont )
 
 long SalGraphics::GetCharWidth( sal_Unicode nChar1, sal_Unicode nChar2, long* pWidthAry )
 {
-    return 1;
+    // Stub code: we have not yet written any interfaces to native fonts.
+    // However, we need to get some font info in order to continue porting.
+    return 10;
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
+    // Stub code: we have not yet written any interfaces to native fonts.
+    // However, we need to get some font info in order to continue porting.
+    pMetric->mnAscent = 10;
+    pMetric->mnDescent = 10;
 }
 
 // -----------------------------------------------------------------------

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: salvd.cxx,v $
+ *  $RCSfile: saltimer.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:54 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,48 +59,17 @@
  *
  ************************************************************************/
 
-#define _SV_SALVD_CXX
+#ifndef _SV_SALTIMER_H
+#define _SV_SALTIMER_H
 
-#ifndef _SV_SALDATA_HXX
-#include <saldata.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
-#endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
-#endif
-#ifndef _SV_SALVD_HXX
-#include <salvd.hxx>
-#endif
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
-// =======================================================================
+void CallSalTimerCallbackProc();
 
-SalVirtualDevice::SalVirtualDevice()
-{
+#ifdef __cplusplus
 }
+#endif // __cplusplus
 
-// -----------------------------------------------------------------------
-
-SalVirtualDevice::~SalVirtualDevice()
-{
-}
-
-// -----------------------------------------------------------------------
-
-SalGraphics* SalVirtualDevice::GetGraphics()
-{
-    return NULL;
-}
-
-// -----------------------------------------------------------------------
-
-void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
-{
-}
+#endif // _SV_SALTIMER_H

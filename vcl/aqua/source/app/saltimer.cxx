@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:30 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,25 +61,53 @@
 
 #define _SV_SALTIMER_CXX
 
+#ifndef _SV_SALDATA_HXX
+#include <saldata.hxx>
+#endif
 #ifndef _SV_SALTIMER_HXX
 #include <saltimer.hxx>
 #endif
+#ifndef _SV_SALTIMER_HXX
+#include <saltimer.h>
+#endif
+#ifndef _SV_VCLAPPLICATION_H
+#include <VCLApplication.h>
+#endif
 
+// =======================================================================
+
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+
+void CallSalTimerCallbackProc()
+{
+    SalData* pSalData = GetSalData();
+    pSalData->mpTimerProc();
+}
+
+#ifdef __cplusplus
+}
+#endif // __cplusplus
 
 // =======================================================================
 
 void SalTimer::Start( ULONG nMS )
 {
+    VCLApplication_StartTimer( nMS );
 }
 
 // -----------------------------------------------------------------------
 
 void SalTimer::Stop()
 {
+    VCLApplication_StopTimer();
 }
 
 // -----------------------------------------------------------------------
 
 void SalTimer::SetCallback( SALTIMERPROC pProc )
 {
+    SalData* pSalData = GetSalData();
+    pSalData->mpTimerProc = pProc;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-01 22:12:26 $
+ *  last change: $Author: pluby $ $Date: 2000-11-30 00:01:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,6 @@ class SalFrame;
 class SalVirtualDevice;
 class SalPrinter;
 class Font;
-struct VCLVIEWCache;
 
 // -----------
 // - SalData -
@@ -109,7 +108,6 @@ struct SalData
     SalObject*              mpFirstObject;          // pointer of first object window
     SalVirtualDevice*       mpFirstVD;              // first VirDev
     SalPrinter*             mpFirstPrinter;         // first printing printer
-    VCLVIEWCache*           mpVCLVIEWCache;         // Cache for three DC's
     USHORT                  mnStockPenCount;        // Anzahl statischer Pens
     USHORT                  mnStockBrushCount;      // Anzahl statischer Brushes
     INT32                   mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
