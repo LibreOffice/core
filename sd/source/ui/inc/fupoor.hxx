@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2002-02-26 14:34:14 $
+ *  last change: $Author: aw $ $Date: 2002-03-01 10:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,12 @@ class FuPoor
     BOOL            bDelayActive;
     BOOL            bFirstMouseMove;
 
+    // #95491# member to hold state of the mouse buttons for creation
+    // of own MouseEvents (like in ScrollHdl)
+private:
+    sal_uInt16      mnCode;
+
+protected:
     DECL_LINK( DelayHdl, Timer * );
     long diffPoint (long pos1, long pos2);
 
@@ -140,6 +146,10 @@ class FuPoor
     FuPoor(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
            SdDrawDocument* pDoc, SfxRequest& rReq);
     virtual ~FuPoor();
+
+    // #95491# see member
+    void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
+    const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
     SdDrawDocShell* GetDocSh() { return pDocSh; }
     SdDrawDocument* GetDoc() { return pDoc; }
@@ -152,7 +162,10 @@ class FuPoor
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
     virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt);
-    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt) { return FALSE; }
+
+    // #95491# moved from inline to *.cxx
+    virtual BOOL MouseButtonDown(const MouseEvent& rMEvt);
+
     virtual BOOL Command(const CommandEvent& rCEvt);
     virtual BOOL RequestHelp(const HelpEvent& rHEvt);
     virtual void Paint(const Rectangle& rRect, SdWindow* pWin) {}
