@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:49:11 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,13 +109,20 @@ struct SalIcon
 // - SalData -
 // -----------
 
-struct SalData
+class SalData
 {
+public:
+    SalData();
+    ~SalData();
+
+    // native widget framework
+    void    initNWF();
+    void    deInitNWF();
+
+public:
     HINSTANCE               mhInst;                 // default instance handle
     HINSTANCE               mhPrevInst;             // previous instance handle
     int                     mnCmdShow;              // default frame show style
-    // Erst hier koennen Daten kompatible eingefuegt werden, da die
-    // oberen Daten in salmain.cxx modifiziert werden
     HPALETTE                mhDitherPal;            // dither palette
     HGLOBAL                 mhDitherDIB;            // dither memory handle
     BYTE*                   mpDitherDIB;            // dither memory
@@ -155,6 +162,8 @@ struct SalData
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
+    BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
