@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-14 09:36:00 $
+ *  last change: $Author: jsc $ $Date: 2001-08-29 09:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,8 +508,7 @@ static RegError REGISTRY_CALLTYPE mergeKey(RegHandle hReg,
 
     destroyRegistry(hReg, tmpName);
     */
-    if ( pKey != pNewKey )
-        _ret = pKey->closeKey(pNewKey);
+    _ret = pKey->closeKey(pNewKey);
 
     return _ret;
 }
