@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:41:48 $
+ *  last change: $Author: mba $ $Date: 2002-07-08 07:50:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,3 +728,14 @@ item String                 SvxClipboardFmtItem;  // dummy
 item String                 SfxSetItem;  // dummy
 item String                 SvxDrawToolItem;
 item String                 SvxDrawAlignItem;
+item INT16                  SvxRotateModeItem;  // enum
+item INT16                  SvxOrientationItem;  // enum
+
+struct SvxMargin
+{
+    INT32 LeftMargin MID_MARGIN_L_MARGIN;
+    INT32 RightMargin MID_MARGIN_R_MARGIN;
+    INT32 UpperMargin MID_MARGIN_UP_MARGIN;
+    INT32 LowerMargin MID_MARGIN_LO_MARGIN;
+};
+item SvxMargin SvxMarginItem;
