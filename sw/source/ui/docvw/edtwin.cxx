@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: os $ $Date: 2002-11-06 12:50:23 $
+ *  last change: $Author: os $ $Date: 2002-11-08 10:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -957,7 +957,7 @@ void SwEditWin::ChangeFly( BYTE nDir, BOOL bWeb )
                 bSetPos = FALSE;
             else
             {
-                bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_FULL_ABS_POS) ?
+                bSetPos = (::GetHtmlMode(rView.GetDocShell()) & HTMLMODE_SOME_ABS_POS) ?
                     TRUE : FALSE;
             }
         }
