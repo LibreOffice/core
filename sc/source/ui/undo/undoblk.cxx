@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:14:38 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,12 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SVDSURO_HXX
 
 // INCLUDE ---------------------------------------------------------------
 
