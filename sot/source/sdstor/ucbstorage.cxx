@@ -1462,6 +1462,14 @@ BaseStorage* UCBStorage::OpenUCBStorage( const String& rEleName, StreamMode nMod
     return OpenStorage_Impl( rEleName, nMode, bDirect, TRUE );
 }
 
+BaseStorage* UCBStorage::OpenOLEStorage( const String& rEleName, StreamMode nMode, BOOL bDirect )
+{
+    if( !rEleName.Len() )
+        return NULL;
+
+    return OpenStorage_Impl( rEleName, nMode, bDirect, FALSE );
+}
+
 BaseStorage* UCBStorage::OpenStorage( const String& rEleName, StreamMode nMode, BOOL bDirect )
 {
     if( !rEleName.Len() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-06 11:12:08 $
+ *  last change: $Author: mba $ $Date: 2001-02-12 17:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,6 +929,27 @@ SotStorage * SotStorage::OpenUCBStorage( const String & rEleName,
         nMode |= STREAM_SHARE_DENYALL;
         ErrCode nE = pOwnStg->GetError();
         BaseStorage * p = pOwnStg->OpenUCBStorage( rEleName, nMode,
+                        (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
+        pStor = new SotStorage( p );
+        if( !nE )
+            pOwnStg->ResetError(); // kein Fehler setzen
+    }
+    else
+        SetError( SVSTREAM_GENERALERROR );
+    return pStor;
+}
+
+SotStorage * SotStorage::OpenOLEStorage( const String & rEleName,
+                                        StreamMode nMode,
+                                        StorageMode nStorageMode )
+{
+    SotStorage * pStor = NULL;
+    DBG_ASSERT( Owner(), "must be owner" )
+    if( pOwnStg )
+    {
+        nMode |= STREAM_SHARE_DENYALL;
+        ErrCode nE = pOwnStg->GetError();
+        BaseStorage * p = pOwnStg->OpenOLEStorage( rEleName, nMode,
                         (nStorageMode & STORAGE_TRANSACTED) ? FALSE : TRUE );
         pStor = new SotStorage( p );
         if( !nE )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-04 11:10:03 $
+ *  last change: $Author: mba $ $Date: 2001-02-12 17:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,6 +558,11 @@ BaseStorage* Storage::OpenUCBStorage( const String& rName, StreamMode m, BOOL bD
     BaseStorage* pStorage = new Storage( pIo, NULL, m );
     SetError( ERRCODE_IO_NOTSUPPORTED );
     return pStorage;
+}
+
+BaseStorage* Storage::OpenOLEStorage( const String& rName, StreamMode m, BOOL bDirect )
+{
+    return OpenStorage( rName, m, bDirect );
 }
 
 BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDirect )

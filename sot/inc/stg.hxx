@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-05 18:11:00 $
+ *  last change: $Author: mba $ $Date: 2001-02-12 17:16:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@ public:
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    BOOL bDirect = FALSE ) = 0;
+    virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE ) = 0;
     virtual BOOL                IsStream( const String& rEleName ) const = 0;
     virtual BOOL                IsStorage( const String& rEleName ) const = 0;
     virtual BOOL                IsContained( const String& rEleName ) const = 0;
@@ -250,6 +253,9 @@ public:
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    BOOL bDirect = FALSE );
+    virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE );
     virtual BOOL                IsStream( const String& rEleName ) const;
     virtual BOOL                IsStorage( const String& rEleName ) const;
     virtual BOOL                IsContained( const String& rEleName ) const;
@@ -336,6 +342,9 @@ public:
                                        StreamMode = STREAM_STD_READWRITE,
                                        BOOL bDirect = FALSE );
     virtual BaseStorage*        OpenUCBStorage( const String & rEleName,
+                                   StreamMode = STREAM_STD_READWRITE,
+                                   BOOL bDirect = FALSE );
+    virtual BaseStorage*        OpenOLEStorage( const String & rEleName,
                                    StreamMode = STREAM_STD_READWRITE,
                                    BOOL bDirect = FALSE );
     virtual BOOL                IsStream( const String& rEleName ) const;
