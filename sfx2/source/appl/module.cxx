@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 14:50:10 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include <stdio.h>
 #include <tools/rcid.h>
