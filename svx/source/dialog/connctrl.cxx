@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connctrl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:33:20 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void SvxXConnectionPreview::Construct()
 {
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    const SdrMarkList& rMarkList = pView->GetMarkList();
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
     if( nMarkCount >= 1 )
