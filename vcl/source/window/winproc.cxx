@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ssa $ $Date: 2001-11-23 12:33:48 $
+ *  last change: $Author: ssa $ $Date: 2001-11-26 17:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1571,6 +1571,9 @@ static void ImplHandleGetFocus( Window* pWindow )
     {
         pWindow->mpFrameData->mbStartFocusState = !pWindow->mpFrameData->mbHasFocus;
         Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
+        Window* pFocusWin = pWindow->mpFrameData->mpFocusWin;
+        if ( pFocusWin && pFocusWin->mpCursor )
+            pFocusWin->mpCursor->ImplShow();
     }
 }
 
@@ -1609,6 +1612,10 @@ static void ImplHandleLoseFocus( Window* pWindow )
         pWindow->mpFrameData->mbStartFocusState = !pWindow->mpFrameData->mbHasFocus;
         Application::PostUserEvent( pWindow->mpFrameData->mnFocusId, LINK( pWindow, Window, ImplAsyncFocusHdl ) );
     }
+
+    Window* pFocusWin = pWindow->mpFrameData->mpFocusWin;
+    if ( pFocusWin && pFocusWin->mpCursor )
+        pFocusWin->mpCursor->ImplHide();
 }
 
 // -----------------------------------------------------------------------
