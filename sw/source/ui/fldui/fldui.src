@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-04 21:03:31 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 06:41:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String STR_FLD_EDIT_DLG
     Text [ italian ] = "Modifica comando di campo" ;
     Text [ portuguese_brazilian ] = "Editar Campo" ;
     Text [ portuguese ] = "Editar campos" ;
-    Text [ finnish ] = "Muokkaa kenttää" ;
+    Text [ finnish ] = "Muokkaa kenttiä" ;
     Text [ danish ] = "Rediger felt" ;
     Text [ french ] = "Édition de champ" ;
     Text [ swedish ] = "Redigera fältkommando" ;
@@ -106,7 +106,7 @@ String STR_DATEFLD
     TEXT [ italian ] = "Data" ;
     TEXT [ portuguese_brazilian ] = "Data" ;
     TEXT [ portuguese ] = "Data" ;
-    TEXT [ finnish ] = "Päiväys" ;
+    TEXT [ finnish ] = "Päivämäärä" ;
     TEXT [ danish ] = "Dato" ;
     TEXT [ french ] = "Date" ;
     TEXT [ swedish ] = "Datum" ;
@@ -160,7 +160,7 @@ String STR_FILENAMEFLD
     TEXT [ italian ] = "Nome file" ;
     TEXT [ portuguese_brazilian ] = "Nome do Arquivo" ;
     TEXT [ portuguese ] = "Nome do ficheiro" ;
-    TEXT [ finnish ] = "Tiedostonimi" ;
+    TEXT [ finnish ] = "Tiedoston nimi" ;
     TEXT [ danish ] = "Filnavn" ;
     TEXT [ french ] = "Nom de fichier" ;
     TEXT [ swedish ] = "Filnamn" ;
@@ -241,7 +241,7 @@ String STR_PAGENUMBERFLD
     TEXT [ italian ] = "Numero pagina" ;
     TEXT [ portuguese_brazilian ] = "Número de página" ;
     TEXT [ portuguese ] = "Número de página" ;
-    TEXT [ finnish ] = "Sivunumero" ;
+    TEXT [ finnish ] = "Sivunumerot" ;
     TEXT [ danish ] = "Sidetal" ;
     TEXT [ french ] = "Numéro de page" ;
     TEXT [ swedish ] = "Sidnummer" ;
@@ -268,7 +268,7 @@ String STR_DOCSTATFLD
     TEXT [ italian ] = "Statistiche" ;
     TEXT [ portuguese_brazilian ] = "Estatística" ;
     TEXT [ portuguese ] = "Estatística" ;
-    TEXT [ finnish ] = "Tilasto" ;
+    TEXT [ finnish ] = "Tiedot" ;
     TEXT [ danish ] = "Statistik" ;
     TEXT [ french ] = "Statistique" ;
     TEXT [ swedish ] = "Statistik" ;
@@ -311,6 +311,7 @@ String STR_AUTHORFLD
     Text[ turkish ] = "Yazan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Usuario";
+    Text[ finnish ] = "Laatija";
 };
 String STR_TEMPLNAMEFLD
 {
@@ -320,7 +321,7 @@ String STR_TEMPLNAMEFLD
     TEXT [ italian ] = "Modello" ;
     TEXT [ portuguese_brazilian ] = "Modelo" ;
     TEXT [ portuguese ] = "Modelo de documento" ;
-    TEXT [ finnish ] = "Mallipohja" ;
+    TEXT [ finnish ] = "Mallipohjat" ;
     TEXT [ danish ] = "Dokumentskabelon" ;
     TEXT [ french ] = "Modèle de document" ;
     TEXT [ swedish ] = "Dokumentmall" ;
@@ -506,6 +507,7 @@ String STR_SETINPUTFLD
     Text[ turkish ] = "Giriþ alaný (deðiþken)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de entrada (variable)";
+    Text[ finnish ] = "Syöttökenttä (muuttuja)";
 };
 String STR_USRINPUTFLD
 {
@@ -531,6 +533,7 @@ String STR_USRINPUTFLD
     Text[ turkish ] = "Giriþ alaný (Kullanýcý)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Campo de entrada (Usuario)";
+    Text[ finnish ] = "Syöttökenttä (käyttäjä)";
 };
 String STR_CONDTXTFLD
 {
@@ -567,7 +570,7 @@ String STR_DDEFLD
     TEXT [ italian ] = "Campo DDE" ;
     TEXT [ portuguese_brazilian ] = "Ligação do DDE" ;
     TEXT [ portuguese ] = "Campo DDE" ;
-    TEXT [ finnish ] = "DDE-linkki" ;
+    TEXT [ finnish ] = "DDE-kenttä" ;
     TEXT [ danish ] = "DDE-felt" ;
     TEXT [ french ] = "Champ DDE" ;
     TEXT [ swedish ] = "DDE-fält" ;
@@ -621,7 +624,7 @@ String STR_SEQFLD
     TEXT [ italian ] = "Sequenza" ;
     TEXT [ portuguese_brazilian ] = "Sequência" ;
     TEXT [ portuguese ] = "Sequência" ;
-    TEXT [ finnish ] = "Sarjanumero" ;
+    TEXT [ finnish ] = "Numeroalue" ;
     TEXT [ danish ] = "Sekvensnummererering" ;
     TEXT [ french ] = "Séquence" ;
     TEXT [ swedish ] = "Nummersekvens" ;
@@ -664,6 +667,7 @@ String STR_SETREFPAGEFLD
     Text[ turkish ] = "Sayfa deðiþkeni tanýmla";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Determinar variable de página";
+    Text[ finnish ] = "Määritä sivumuuttuja";
 };
 String STR_GETREFPAGEFLD
 {
@@ -689,6 +693,7 @@ String STR_GETREFPAGEFLD
     Text[ turkish ] = "Sayfa deðiþkenini görüntüle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Mostrar variable de página";
+    Text[ finnish ] = "Näytä sivumuuttuja";
 };
 String STR_INTERNETFLD
 {
@@ -714,6 +719,7 @@ String STR_INTERNETFLD
     Text[ turkish ] = "URL'yi yükle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cargar URL";
+    Text[ finnish ] = "Lataa URL-osoite";
 };
 String STR_JUMPEDITFLD
 {
@@ -739,6 +745,7 @@ String STR_JUMPEDITFLD
     Text[ turkish ] = "Genel arama  karakteri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Comodín";
+    Text[ finnish ] = "Paikkamerkki";
 };
 String STR_COMBINED_CHARS
 {
@@ -763,6 +770,7 @@ String STR_COMBINED_CHARS
     TEXT[ turkish ] = "Combine characters";
     TEXT[ arabic ] = "Öã ÇáÃÍÑÝ";
     TEXT[ catalan ] = "Combinar caracteres";
+    TEXT[ finnish ] = "Zeichen kombinieren";
 };
 
  //
@@ -776,7 +784,7 @@ String STR_SETREFFLD
     TEXT [ italian ] = "Imposta riferimento" ;
     TEXT [ portuguese_brazilian ] = "Definir referência" ;
     TEXT [ portuguese ] = "Definir referência" ;
-    TEXT [ finnish ] = "Määritä viittaus" ;
+    TEXT [ finnish ] = "Määritä viite" ;
     TEXT [ danish ] = "Definer reference" ;
     TEXT [ french ] = "Définir une référence" ;
     TEXT [ swedish ] = "Sätt referens" ;
@@ -803,7 +811,7 @@ String STR_GETREFFLD
     TEXT [ italian ] = "Inserisci riferimento" ;
     TEXT [ portuguese_brazilian ] = "Inserir referência" ;
     TEXT [ portuguese ] = "Inserir referência" ;
-    TEXT [ finnish ] = "Lisää viittaus" ;
+    TEXT [ finnish ] = "Lisää viite" ;
     TEXT [ danish ] = "Indsæt reference" ;
     TEXT [ french ] = "Insérer une référence" ;
     TEXT [ swedish ] = "Infoga referens" ;
@@ -833,7 +841,7 @@ String STR_DBFLD
     TEXT [ italian ] = "Campo stampa in serie" ;
     TEXT [ portuguese_brazilian ] = "Imprimir campo intercalado" ;
     TEXT [ portuguese ] = "Campo para cartas em série" ;
-    TEXT [ finnish ] = "Yhdistelykenttä" ;
+    TEXT [ finnish ] = "Lomakekirjeen kenttä" ;
     TEXT [ danish ] = "Brevfletningsfelt" ;
     TEXT [ french ] = "Champ de mailing" ;
     TEXT [ swedish ] = "Standardbrevfält" ;
@@ -860,7 +868,7 @@ String STR_DBNEXTSETFLD
     TEXT [ italian ] = "Record dati successivo" ;
     TEXT [ portuguese_brazilian ] = "Definir próximo" ;
     TEXT [ portuguese ] = "Registo seguinte" ;
-    TEXT [ finnish ] = "Seuraava joukko" ;
+    TEXT [ finnish ] = "Seuraava tietue" ;
     TEXT [ danish ] = "Næste datapost" ;
     TEXT [ french ] = "Enregistrement suivant" ;
     TEXT [ swedish ] = "Nästa datapost" ;
@@ -887,7 +895,7 @@ String STR_DBNUMSETFLD
     TEXT [ italian ] = "Qualsiasi record di dati" ;
     TEXT [ portuguese_brazilian ] = "Definir aleatoriamente" ;
     TEXT [ portuguese ] = "Qualquer registo" ;
-    TEXT [ finnish ] = "Satunnainen joukko" ;
+    TEXT [ finnish ] = "Mikä tahansa tietue" ;
     TEXT [ danish ] = "Vilkårlig datapost" ;
     TEXT [ french ] = "Enregistrement aléatoire" ;
     TEXT [ swedish ] = "Slumpvis datapost" ;
@@ -914,7 +922,7 @@ String STR_DBSETNUMBERFLD
     TEXT [ italian ] = "Numero record dati" ;
     TEXT [ portuguese_brazilian ] = "Definir número" ;
     TEXT [ portuguese ] = "Número do registo" ;
-    TEXT [ finnish ] = "Joukon numero" ;
+    TEXT [ finnish ] = "Tietueen numero" ;
     TEXT [ danish ] = "Datapostnummer" ;
     TEXT [ french ] = "Numéro d'enregistrement" ;
     TEXT [ swedish ] = "Datapostnummer" ;
@@ -1025,7 +1033,7 @@ String STR_USERFLD
     TEXT [ italian ] = "Campo utente" ;
     TEXT [ portuguese_brazilian ] = "Campo do usuário" ;
     TEXT [ portuguese ] = "Campo do utilizador" ;
-    TEXT [ finnish ] = "Käyttäjän kenttä" ;
+    TEXT [ finnish ] = "Käyttäjäkenttä" ;
     TEXT [ danish ] = "Brugerdefineret felt" ;
     TEXT [ french ] = "Champ d'utilisateur" ;
     TEXT [ swedish ] = "Användarfält" ;
@@ -1095,6 +1103,7 @@ String STR_SCRIPTFLD
     Text[ turkish ] = "Script";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Script";
+    Text[ finnish ] = "Komentosarja";
 };
 String STR_AUTHORITY
 {
@@ -1120,6 +1129,7 @@ String STR_AUTHORITY
     TEXT[ turkish ] = "Kaynakça giriþi";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Entrada bibliografía";
+    TEXT[ finnish ] = "Bibliografiamerkintä";
 };
 String STR_HIDDENPARAFLD
 {
@@ -1129,7 +1139,7 @@ String STR_HIDDENPARAFLD
     TEXT [ italian ] = "Paragrafo vuoto" ;
     TEXT [ portuguese_brazilian ] = "Parágrafo vazio" ;
     TEXT [ portuguese ] = "Parágrafo oculto" ;
-    TEXT [ finnish ] = "Tyhjä kappale" ;
+    TEXT [ finnish ] = "Piilotettu kappale" ;
     TEXT [ danish ] = "Skjult afsnit" ;
     TEXT [ french ] = "Paragraphe masqué" ;
     TEXT [ swedish ] = "Dolt stycke" ;
@@ -1159,7 +1169,7 @@ String STR_DOCINFOFLD
     TEXT [ italian ] = "Info documento" ;
     TEXT [ portuguese_brazilian ] = "Informações sobre o documento" ;
     TEXT [ portuguese ] = "Info. sobre documento" ;
-    TEXT [ finnish ] = "Asiakirjan tiedot" ;
+    TEXT [ finnish ] = "Asiakirjatiedot" ;
     TEXT [ danish ] = "Dokumentinfo" ;
     TEXT [ french ] = "Info document" ;
     TEXT [ swedish ] = "Dokumentinformation" ;
@@ -1205,6 +1215,7 @@ String FLD_DATE_STD
     TEXT[ turkish ] = "Tarih";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Fecha";
+    TEXT[ finnish ] = "Päivämäärä";
 };
 String FLD_DATE_FIX
 {
@@ -1214,7 +1225,7 @@ String FLD_DATE_FIX
     TEXT [ italian ] = "Data (fissa)" ;
     TEXT [ portuguese_brazilian ] = "Data (fix)" ;
     TEXT [ portuguese ] = "Data (fixa)" ;
-    TEXT [ finnish ] = "Päivä (vakio)" ;
+    TEXT [ finnish ] = "Päivämäärä (kiinteä)" ;
     TEXT [ danish ] = "Dato (fast)" ;
     TEXT [ french ] = "Date (fixe)" ;
     TEXT [ swedish ] = "Datum (fast)" ;
@@ -1257,6 +1268,7 @@ String FLD_TIME_STD
     TEXT[ turkish ] = "Saat";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Hora";
+    TEXT[ finnish ] = "Aika";
 };
 String FLD_TIME_FIX
 {
@@ -1266,7 +1278,7 @@ String FLD_TIME_FIX
     TEXT [ italian ] = "Orario (fisso)" ;
     TEXT [ portuguese_brazilian ] = "Hora (fix)" ;
     TEXT [ portuguese ] = "Hora (fixa)" ;
-    TEXT [ finnish ] = "Aika (vakio)" ;
+    TEXT [ finnish ] = "Aika (kiinteä)" ;
     TEXT [ danish ] = "Klokkeslæt (fast)" ;
     TEXT [ french ] = "Heure (fixe)" ;
     TEXT [ swedish ] = "Klockslag (fast)" ;
@@ -1458,7 +1470,7 @@ String FLD_STAT_PAGE
     TEXT [ italian ] = "Pagine" ;
     TEXT [ portuguese_brazilian ] = "Páginas" ;
     TEXT [ portuguese ] = "Páginas" ;
-    TEXT [ finnish ] = "Sivumäärä" ;
+    TEXT [ finnish ] = "Sivut" ;
     TEXT [ danish ] = "Sider" ;
     TEXT [ french ] = "Pages" ;
     TEXT [ swedish ] = "Sidor" ;
@@ -1487,7 +1499,7 @@ String FMT_DDE_HOT
     TEXT [ italian ] = "DDE automatico" ;
     TEXT [ portuguese_brazilian ] = "DDE autom tico" ;
     TEXT [ portuguese ] = "DDE automático" ;
-    TEXT [ finnish ] = "DDE automaattinen" ;
+    TEXT [ finnish ] = "Automaattinen DDE" ;
     TEXT [ danish ] = "DDE automatisk" ;
     TEXT [ french ] = "DDE automatique" ;
     TEXT [ swedish ] = "DDE-automatisk" ;
@@ -1514,7 +1526,7 @@ String FMT_DDE_NORMAL
     TEXT [ italian ] = "DDE manuale" ;
     TEXT [ portuguese_brazilian ] = "DDE manual" ;
     TEXT [ portuguese ] = "DDE manual" ;
-    TEXT [ finnish ] = "DDE manuaalinen" ;
+    TEXT [ finnish ] = "Manuaalinen DDE" ;
     TEXT [ danish ] = "DDE manuel" ;
     TEXT [ french ] = "DDE manuel" ;
     TEXT [ swedish ] = "DDE manuell" ;
@@ -1618,6 +1630,7 @@ String FLD_EU_NAME
     Text[ turkish ] = "Soyad";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Apellidos";
+    Text[ finnish ] = "Sukunimi";
 };
 String FLD_EU_ABK
 {
@@ -1627,7 +1640,7 @@ String FLD_EU_ABK
     TEXT [ italian ] = "Iniziali" ;
     TEXT [ portuguese_brazilian ] = "Atalho" ;
     TEXT [ portuguese ] = "Iniciais" ;
-    TEXT [ finnish ] = "Pikatoiminto" ;
+    TEXT [ finnish ] = "Nimikirjaimet" ;
     TEXT [ danish ] = "Initialer" ;
     TEXT [ french ] = "Initiales" ;
     TEXT [ swedish ] = "Initialer" ;
@@ -1654,7 +1667,7 @@ String FLD_EU_STRASSE
     TEXT [ italian ] = "Via" ;
     TEXT [ portuguese_brazilian ] = "Rua" ;
     TEXT [ portuguese ] = "Rua" ;
-    TEXT [ finnish ] = "Lähiosoite" ;
+    TEXT [ finnish ] = "Katu" ;
     TEXT [ danish ] = "Gade" ;
     TEXT [ french ] = "Rue" ;
     TEXT [ swedish ] = "Gata" ;
@@ -1708,7 +1721,7 @@ String FLD_EU_PLZ
     TEXT [ italian ] = "C.A.P." ;
     TEXT [ portuguese_brazilian ] = "CEP" ;
     TEXT [ portuguese ] = "CP" ;
-    TEXT [ finnish ] = "Postinro" ;
+    TEXT [ finnish ] = "Postinumero" ;
     TEXT [ danish ] = "Postnr." ;
     TEXT [ french ] = "C.P." ;
     TEXT [ swedish ] = "Postnummer" ;
@@ -1735,7 +1748,7 @@ String FLD_EU_ORT
     TEXT [ italian ] = "Località" ;
     TEXT [ portuguese_brazilian ] = "Cidade" ;
     TEXT [ portuguese ] = "Cidade" ;
-    TEXT [ finnish ] = "Kaupunki" ;
+    TEXT [ finnish ] = "Paikkakunta" ;
     TEXT [ danish ] = "By" ;
     TEXT [ french ] = "Ville" ;
     TEXT [ swedish ] = "Stad" ;
@@ -1816,7 +1829,7 @@ String FLD_EU_TELPRIV
     TEXT [ italian ] = "Telefono (priv.)" ;
     TEXT [ portuguese_brazilian ] = "Fone (privado)" ;
     TEXT [ portuguese ] = "Tel. (part.)" ;
-    TEXT [ finnish ] = "Puhelin (kotiin)" ;
+    TEXT [ finnish ] = "Puh. (Koti)" ;
     TEXT [ danish ] = "Tlf. (privat)" ;
     TEXT [ french ] = "Tél. (domicile)" ;
     TEXT [ swedish ] = "Tfn. (privat)" ;
@@ -1843,7 +1856,7 @@ String FLD_EU_TELFIRMA
     TEXT [ italian ] = "Telefono (uff.)" ;
     TEXT [ portuguese_brazilian ] = "Fone (Compania)" ;
     TEXT [ portuguese ] = "Tel. (empr.)" ;
-    TEXT [ finnish ] = "Puhelin (työhön)" ;
+    TEXT [ finnish ] = "Puh. (Työ)" ;
     TEXT [ danish ] = "Tlf. (arbejde)" ;
     TEXT [ french ] = "Tél. (bureau)" ;
     TEXT [ swedish ] = "Tfn. (företag)" ;
@@ -1890,6 +1903,7 @@ String FLD_EU_EMAIL
     Text[ turkish ] = "E-posta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "E-mail";
+    Text[ finnish ] = "Sähköposti";
 };
 String FLD_EU_STATE
 {
@@ -1915,6 +1929,7 @@ String FLD_EU_STATE
     Text[ turkish ] = "Ýl";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estado";
+    Text[ finnish ] = "Osavaltio";
 };
 String FLD_PAGEREF_OFF
 {
@@ -1940,6 +1955,7 @@ String FLD_PAGEREF_OFF
     Text[ turkish ] = "kapalý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "de";
+    Text[ finnish ] = "off";
 };
 String FLD_PAGEREF_ON
 {
@@ -1965,6 +1981,7 @@ String FLD_PAGEREF_ON
     Text[ turkish ] = "Açýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "en";
+    Text[ finnish ] = "on";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Pfadname
@@ -1978,7 +1995,7 @@ String FMT_FF_NAME
     TEXT [ italian ] = "Nome file" ;
     TEXT [ portuguese_brazilian ] = "Nome do Arquivo" ;
     TEXT [ portuguese ] = "Nome do ficheiro" ;
-    TEXT [ finnish ] = "Tiedostonimi" ;
+    TEXT [ finnish ] = "Tiedoston nimi" ;
     TEXT [ danish ] = "Filnavn" ;
     TEXT [ french ] = "Nom de fichier" ;
     TEXT [ swedish ] = "Filnamn" ;
@@ -2021,6 +2038,7 @@ String FMT_FF_NAME_NOEXT
     Text[ turkish ] = "Uzantýsýz dosya adý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre del archivo sin extensión";
+    Text[ finnish ] = "Tiedoston nimi ilman loppuliitettä";
 };
 String FMT_FF_PATHNAME
 {
@@ -2030,7 +2048,7 @@ String FMT_FF_PATHNAME
     TEXT [ italian ] = "Percorso/Nome file" ;
     TEXT [ portuguese_brazilian ] = "Caminho/Nome do arquivo" ;
     TEXT [ portuguese ] = "Atalho/Nome do ficheiro" ;
-    TEXT [ finnish ] = "Polku/Tiedostonimi" ;
+    TEXT [ finnish ] = "Polku/tiedosto" ;
     TEXT [ danish ] = "Sti/Filnavn" ;
     TEXT [ french ] = "Chemin/Nom de fichier" ;
     TEXT [ swedish ] = "Sökväg/Filnamn" ;
@@ -2099,6 +2117,7 @@ String FMT_FF_UI_NAME
     Text[ turkish ] = "Þablon";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Plantilla";
+    Text[ finnish ] = "Tyyli";
 };
 String FMT_FF_UI_RANGE
 {
@@ -2124,6 +2143,7 @@ String FMT_FF_UI_RANGE
     Text[ turkish ] = "Aralýk";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Area";
+    Text[ finnish ] = "Alue";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Format Kapitel
@@ -2179,6 +2199,7 @@ String FMT_CHAPTER_NO
     Text[ turkish ] = "Bölüm numarasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número del capítulo";
+    Text[ finnish ] = "Luvun numero";
 };
 String FMT_CHAPTER_NO_NOSEPARATOR
 {
@@ -2204,6 +2225,7 @@ String FMT_CHAPTER_NO_NOSEPARATOR
     Text[ turkish ] = "Ayýrma iþareti içermeyen bölüm numarasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número de capítulo sin separador";
+    Text[ finnish ] = "Luvun numero ilman erotinta";
 };
 String FMT_CHAPTER_NAMENO
 {
@@ -2230,6 +2252,7 @@ String FMT_CHAPTER_NAMENO
     Text[ turkish ] = "Bölüm numarasý ve adý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Número y nombre";
+    Text[ finnish ] = "Luvun numero ja nimi";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate
@@ -2258,7 +2281,7 @@ String FMT_NUM_ROMAN
     TEXT [ italian ] = "Romani (I II III)" ;
     TEXT [ portuguese_brazilian ] = "Romano (I II III)" ;
     TEXT [ portuguese ] = "Romano (I II III)" ;
-    TEXT [ finnish ] = "Roomalainen (I II III)" ;
+    TEXT [ finnish ] = "Roomalaiset (I II III)" ;
     TEXT [ danish ] = "Romertal (I II III)" ;
     TEXT [ french ] = "Romain (I II III)" ;
     TEXT [ swedish ] = "Romerska siffror (I II III)" ;
@@ -2285,7 +2308,7 @@ String FMT_NUM_SROMAN
     TEXT [ italian ] = "Romani  (i ii iii)" ;
     TEXT [ portuguese_brazilian ] = "Romano (i ii iii)" ;
     TEXT [ portuguese ] = "Romano (i ii iii)" ;
-    TEXT [ finnish ] = "Roomalainen (i ii iii)" ;
+    TEXT [ finnish ] = "Roomalaiset (i ii iii)" ;
     TEXT [ danish ] = "Romertal (i ii iii)" ;
     TEXT [ french ] = "Romain (i ii iii)" ;
     TEXT [ swedish ] = "Romerska siffror (i ii iii)" ;
@@ -2312,7 +2335,7 @@ String FMT_NUM_ARABIC
     TEXT [ italian ] = "Arabi (1 2 3)" ;
     TEXT [ portuguese_brazilian ] = "Arábico (1 2 3)" ;
     TEXT [ portuguese ] = "Arábe (1 2 3)" ;
-    TEXT [ finnish ] = "Arabialainen (1 2 3)" ;
+    TEXT [ finnish ] = "Arabialaiset (1 2 3)" ;
     TEXT [ danish ] = "Arabisk (1 2 3)" ;
     TEXT [ french ] = "Arabe (1 2 3)" ;
     TEXT [ swedish ] = "Arabiska siffror (1 2 3)" ;
@@ -2382,6 +2405,7 @@ String FMT_NUM_PAGESPECIAL
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Author
@@ -2421,7 +2445,7 @@ String FMT_AUTHOR_SCUT
     TEXT [ italian ] = "Iniziali" ;
     TEXT [ portuguese_brazilian ] = "Abreviação" ;
     TEXT [ portuguese ] = "Iniciais" ;
-    TEXT [ finnish ] = "Lyhyt nimi" ;
+    TEXT [ finnish ] = "Nimikirjaimet" ;
     TEXT [ danish ] = "Initialer" ;
     TEXT [ french ] = "Abréviation" ;
     TEXT [ swedish ] = "Inititaler" ;
@@ -2467,6 +2491,7 @@ String FMT_SETVAR_SYS
     Text[ turkish ] = "Sistem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema";
+    Text[ finnish ] = "Järjestelmä";
 };
 String FMT_SETVAR_TEXT
 {
@@ -2492,6 +2517,7 @@ String FMT_SETVAR_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 String FMT_GETVAR_NAME
 {
@@ -2517,6 +2543,7 @@ String FMT_GETVAR_NAME
     Text[ turkish ] = "Ad";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Nombre";
+    Text[ finnish ] = "Nimi";
 };
 String FMT_GETVAR_TEXT
 {
@@ -2542,6 +2569,7 @@ String FMT_GETVAR_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 String FMT_USERVAR_CMD
 {
@@ -2567,6 +2595,7 @@ String FMT_USERVAR_CMD
     Text[ turkish ] = "Formül";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fórmula";
+    Text[ finnish ] = "Kaava";
 };
 String FMT_USERVAR_TEXT
 {
@@ -2592,6 +2621,7 @@ String FMT_USERVAR_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 String FMT_DBFLD_DB
 {
@@ -2617,6 +2647,7 @@ String FMT_DBFLD_DB
     Text[ turkish ] = "Veritabaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base de datos";
+    Text[ finnish ] = "Tietokanta";
 };
 String FMT_DBFLD_SYS
 {
@@ -2642,6 +2673,7 @@ String FMT_DBFLD_SYS
     Text[ turkish ] = "Sistem";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sistema";
+    Text[ finnish ] = "Järjestelmä";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Ablagefelder
@@ -2654,7 +2686,7 @@ String FMT_REG_AUTHOR
     TEXT [ italian ] = "Autore" ;
     TEXT [ portuguese_brazilian ] = "Autor" ;
     TEXT [ portuguese ] = "Autor" ;
-    TEXT [ finnish ] = "Tekijä" ;
+    TEXT [ finnish ] = "Laatija" ;
     TEXT [ danish ] = "Forfatter" ;
     TEXT [ french ] = "Auteur" ;
     TEXT [ swedish ] = "Författare" ;
@@ -2708,7 +2740,7 @@ String FMT_REG_DATE
     TEXT [ italian ] = "Data" ;
     TEXT [ portuguese_brazilian ] = "Data" ;
     TEXT [ portuguese ] = "Data" ;
-    TEXT [ finnish ] = "Päiväys" ;
+    TEXT [ finnish ] = "Päivämäärä" ;
     TEXT [ danish ] = "Dato" ;
     TEXT [ french ] = "Date" ;
     TEXT [ swedish ] = "Datum" ;
@@ -2738,7 +2770,7 @@ String FMT_REF_TEXT
     TEXT [ italian ] = "Testo di riferimento" ;
     TEXT [ portuguese_brazilian ] = "Referência" ;
     TEXT [ portuguese ] = "Referência" ;
-    TEXT [ finnish ] = "Viittaus" ;
+    TEXT [ finnish ] = "Viite" ;
     TEXT [ danish ] = "Referencetekst" ;
     TEXT [ french ] = "Texte de référence" ;
     TEXT [ swedish ] = "Referenstext" ;
@@ -2835,6 +2867,7 @@ String FMT_REF_UPDOWN
     Text[ turkish ] = "Üstte/Altta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Encima/Debajo";
+    Text[ finnish ] = "Ylhäällä/alhaalla";
 };
 String FMT_REF_PAGE_PGDSC
 {
@@ -2887,6 +2920,7 @@ String FMT_REF_ONLYNUMBER
     Text[ turkish ] = "Kategori ve numara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Categoría y número";
+    Text[ finnish ] = "Luokka ja luku";
 };
 String FMT_REF_ONLYCAPTION
 {
@@ -2912,6 +2946,7 @@ String FMT_REF_ONLYCAPTION
     Text[ turkish ] = "Altyazý metni";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto de etiqueta";
+    Text[ finnish ] = "Kuvaotsikon teksti";
 };
 String FMT_REF_ONLYSEQNO
 {
@@ -2937,6 +2972,7 @@ String FMT_REF_ONLYSEQNO
     TEXT[ turkish ] = "Numara";
     TEXT[ language_user1 ] = " ";
     TEXT[ catalan ] = "Número";
+    TEXT[ finnish ] = "Numerointi";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Platzhalter
@@ -2965,6 +3001,7 @@ String FMT_MARK_TEXT
     Text[ turkish ] = "Metin";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Texto";
+    Text[ finnish ] = "Teksti";
 };
 String FMT_MARK_TABLE
 {
@@ -3028,7 +3065,7 @@ String FMT_MARK_GRAFIC
     Text [ italian ] = "Immagine" ;
     Text [ portuguese_brazilian ] = "Gráfico" ;
     Text [ portuguese ] = "Imagem" ;
-    Text [ finnish ] = "Kuva" ;
+    Text [ finnish ] = "Kuvat" ;
     Text [ danish ] = "Grafik" ;
     Text [ french ] = "Image" ;
     Text [ swedish ] = "Grafik" ;
@@ -3149,7 +3186,7 @@ String STR_COND
     TEXT [ italian ] = "Condizione" ;
     TEXT [ portuguese_brazilian ] = "condição" ;
     TEXT [ portuguese ] = "~Condição" ;
-    TEXT [ finnish ] = "Ehto" ;
+    TEXT [ finnish ] = "~Ehto" ;
     TEXT [ danish ] = "Betingelse" ;
     TEXT [ french ] = "~Condition" ;
     TEXT [ swedish ] = "Villkor" ;
@@ -3176,7 +3213,7 @@ String STR_TEXT
     TEXT [ italian ] = "Poi, altrimenti" ;
     TEXT [ portuguese_brazilian ] = "Entao,Senão" ;
     TEXT [ portuguese ] = "Então, Senão" ;
-    TEXT [ finnish ] = "Sitten,Muuten" ;
+    TEXT [ finnish ] = "Sitten, Muuten" ;
     TEXT [ danish ] = "Så, Ellers" ;
     TEXT [ french ] = "Alors, sinon" ;
     TEXT [ swedish ] = "Sedan, annars" ;
@@ -3203,7 +3240,7 @@ String STR_DDE_CMD
     TEXT [ italian ] = "Istruzione DDE" ;
     TEXT [ portuguese_brazilian ] = "Instruções do DDE" ;
     TEXT [ portuguese ] = "Instruções DDE" ;
-    TEXT [ finnish ] = "DDE-käsky" ;
+    TEXT [ finnish ] = "DDE-lauseke" ;
     TEXT [ danish ] = "DDE-sætning" ;
     TEXT [ french ] = "Instruction DDE" ;
     TEXT [ swedish ] = "DDE-instruktion" ;
@@ -3230,7 +3267,7 @@ String STR_INSTEXT
     TEXT [ italian ] = "Inserisci testo" ;
     TEXT [ portuguese_brazilian ] = "Inserir texto" ;
     TEXT [ portuguese ] = "Inserir ~texto" ;
-    TEXT [ finnish ] = "Lisää teksti" ;
+    TEXT [ finnish ] = "~Lisää teksti" ;
     TEXT [ danish ] = "Indsæt tekst" ;
     TEXT [ french ] = "Insérer un ~texte" ;
     TEXT [ swedish ] = "Infoga ~text" ;
@@ -3257,7 +3294,7 @@ String STR_MACNAME
     TEXT [ italian ] = "Nome ~macro" ;
     TEXT [ portuguese_brazilian ] = "Nome da macro" ;
     TEXT [ portuguese ] = "Nome da ~macro" ;
-    TEXT [ finnish ] = "Makron nimi" ;
+    TEXT [ finnish ] = "~Makron nimi" ;
     TEXT [ danish ] = "Makronavn" ;
     TEXT [ french ] = "~Nom de la macro" ;
     TEXT [ swedish ] = "~Makronamn" ;
@@ -3284,7 +3321,7 @@ String STR_PROMPT
     TEXT [ italian ] = "Nota" ;
     TEXT [ portuguese_brazilian ] = "Aviso" ;
     TEXT [ portuguese ] = "~Anotação" ;
-    TEXT [ finnish ] = "Kehote" ;
+    TEXT [ finnish ] = "~Viite" ;
     TEXT [ danish ] = "Henvisning" ;
     TEXT [ french ] = "~Annotation" ;
     TEXT [ swedish ] = "Hänv~isning" ;
@@ -3326,6 +3363,7 @@ String STR_COMBCHRS_FT
     TEXT[ turkish ] = "Ch~aracters";
     TEXT[ arabic ] = "ÃÍÑÝ";
     TEXT[ catalan ] = "C~arácter";
+    TEXT[ finnish ] = "Ze~ichen";
 };
 String STR_SETNO
 {
@@ -3335,7 +3373,7 @@ String STR_SETNO
     TEXT [ italian ] = "Numero di record" ;
     TEXT [ portuguese_brazilian ] = "Definir número" ;
     TEXT [ portuguese ] = "Número de registo" ;
-    TEXT [ finnish ] = "Joukon numero" ;
+    TEXT [ finnish ] = "Tietueen numero" ;
     TEXT [ danish ] = "Datapostnummer" ;
     TEXT [ french ] = "Numéro de l'enregistrement" ;
     TEXT [ swedish ] = "Datapostnummer" ;
@@ -3362,7 +3400,7 @@ String STR_OFFSET
     TEXT [ italian ] = "Correzione" ;
     TEXT [ portuguese_brazilian ] = "Deslocar" ;
     TEXT [ portuguese ] = "~Correcção" ;
-    TEXT [ finnish ] = "Siirroa" ;
+    TEXT [ finnish ] = "~Siirtymä" ;
     TEXT [ danish ] = "Korrektion" ;
     TEXT [ french ] = "Dé~calage" ;
     TEXT [ swedish ] = "Ko~rrigering" ;
@@ -3432,6 +3470,7 @@ String STR_FORMULA
     Text[ turkish ] = "Formül";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fórmula";
+    Text[ finnish ] = "Kaava";
 };
 String STR_LEVEL
 {
@@ -3441,7 +3480,7 @@ String STR_LEVEL
     TEXT [ italian ] = "Livello " ;
     TEXT [ portuguese_brazilian ] = "Nível" ;
     TEXT [ portuguese ] = "Nível " ;
-    TEXT [ finnish ] = "Taso" ;
+    TEXT [ finnish ] = "Kerros " ;
     TEXT [ danish ] = "Niveau" ;
     TEXT [ french ] = "Niveau" ;
     TEXT [ swedish ] = "Nivå  " ;
@@ -3484,6 +3523,7 @@ String STR_URLPROMPT
     Text[ turkish ] = "~URL";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~URL";
+    Text[ finnish ] = "~URL-osoite";
 };
 String STR_ALL_DATABASE
 {
@@ -3509,6 +3549,7 @@ String STR_ALL_DATABASE
     Text[ turkish ] = "<Tümü>";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "<Todos>";
+    Text[ finnish ] = "<Kaikki>";
 };
 ImageButton BTN_FLDEDT_PREV
 {
@@ -3555,4 +3596,5 @@ PushButton PB_FLDEDT_ADDRESS
     Text[ turkish ] = "Düzenle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Editar";
+    Text[ finnish ] = "Muokkaa";
 };
