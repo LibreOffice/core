@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-18 08:56:52 $
+ *  last change: $Author: cd $ $Date: 2002-12-02 10:32:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,13 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
 void SvImpLBox::ShowCursor( BOOL bShow )
 {
     if( !bShow || !pCursor || !pView->HasFocus() )
+    {
+        Region aOldClip( pView->GetClipRegion());
+        Region aClipRegion( GetClipRegionRect() );
+        pView->SetClipRegion( aClipRegion );
         pView->HideFocus();
+        pView->SetClipRegion( aOldClip );
+    }
     else
     {
         long nY = GetEntryLine( pCursor );
