@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:01:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:08:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,10 +245,10 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
 
         // waehrend des queryInterface braucht man ein Ref auf das
         // SvNumberFormatsSupplierObj, sonst wird es geloescht.
-        uno::Reference<util::XNumberFormatsSupplier> xFormatter = new SvNumberFormatsSupplierObj(
-                                                pDocShell->GetDocument()->GetFormatTable() );
+        uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(
+                                                pDocShell->GetDocument()->GetFormatTable() ));
         {
-            xNumberAgg = uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY );
+            xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
             // extra block to force deletion of the temporary before setDelegator
         }
 
@@ -345,7 +345,7 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
     SC_QUERYINTERFACE( lang::XServiceInfo )
 
-    uno::Any aRet = SfxBaseModel::queryInterface( rType );
+    uno::Any aRet(SfxBaseModel::queryInterface( rType ));
     if ( !aRet.hasValue() && xNumberAgg.is() )
         aRet = xNumberAgg->queryAggregation( rType );
 
@@ -367,7 +367,7 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
     {
-        uno::Sequence<uno::Type> aParentTypes = SfxBaseModel::getTypes();
+        uno::Sequence<uno::Type> aParentTypes(SfxBaseModel::getTypes());
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
@@ -375,11 +375,11 @@ uno::Sequence<uno::Type> SAL_CALL ScModelObj::getTypes() throw(uno::RuntimeExcep
         if ( xNumberAgg.is() )
         {
             const uno::Type& rProvType = ::getCppuType((uno::Reference<lang::XTypeProvider>*) 0);
-            uno::Any aNumProv = xNumberAgg->queryAggregation(rProvType);
+            uno::Any aNumProv(xNumberAgg->queryAggregation(rProvType));
             if(aNumProv.getValueType() == rProvType)
             {
-                uno::Reference<lang::XTypeProvider> xNumProv =
-                    *(uno::Reference<lang::XTypeProvider>*)aNumProv.getValue();
+                uno::Reference<lang::XTypeProvider> xNumProv(
+                    *(uno::Reference<lang::XTypeProvider>*)aNumProv.getValue());
                 aAggTypes = xNumProv->getTypes();
             }
         }
@@ -508,12 +508,12 @@ OutputDevice* lcl_GetRenderDevice( const uno::Sequence<beans::PropertyValue>& rO
     for (long i = 0; i < nPropCount; i++)
     {
         const beans::PropertyValue& rProp = pPropArray[i];
-        String aPropName = rProp.Name;
+        String aPropName(rProp.Name);
 
         if (aPropName.EqualsAscii( SC_UNONAME_RENDERDEV ))
         {
-            uno::Reference<awt::XDevice> xRenderDevice;
-            if ( ( rProp.Value >>= xRenderDevice ) && xRenderDevice.is() )
+            uno::Reference<awt::XDevice> xRenderDevice(rProp.Value, uno::UNO_QUERY);
+            if ( xRenderDevice.is() )
             {
                 VCLXDevice* pDevice = VCLXDevice::GetImplementation( xRenderDevice );
                 if ( pDevice )
@@ -616,8 +616,8 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
 
     BOOL bDone = FALSE;
 
-    uno::Reference<uno::XInterface> xInterface;
-    if ( aSelection >>= xInterface )
+    uno::Reference<uno::XInterface> xInterface(aSelection, uno::UNO_QUERY);
+    if ( xInterface.is() )
     {
         ScCellRangesBase* pSelObj = ScCellRangesBase::getImplementation( xInterface );
         if ( pSelObj && pSelObj->GetDocShell() == pDocShell )
@@ -1065,7 +1065,7 @@ void SAL_CALL ScModelObj::protect( const rtl::OUString& aPassword ) throw(uno::R
     ScUnoGuard aGuard;
     if (pDocShell)
     {
-        String aString = aPassword;
+        String aString(aPassword);
 
         ScDocFunc aFunc(*pDocShell);
         aFunc.Protect( TABLEID_DOC, aString, TRUE );
@@ -1078,7 +1078,7 @@ void SAL_CALL ScModelObj::unprotect( const rtl::OUString& aPassword )
     ScUnoGuard aGuard;
     if (pDocShell)
     {
-        String aString = aPassword;
+        String aString(aPassword);
 
         ScDocFunc aFunc(*pDocShell);
         aFunc.Unprotect( TABLEID_DOC, aString, TRUE );
@@ -1136,7 +1136,7 @@ void ScModelObj::setPrinterName(const rtl::OUString& PrinterName)
         SfxPrinter* pPrinter = pDocShell->GetPrinter();
         if (pPrinter)
         {
-            String aString = PrinterName;
+            String aString(PrinterName);
             SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
             if (pNewPrinter->IsKnown())
                 pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
@@ -1178,7 +1178,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
     if (pDocShell)
     {
         WaitObject aWait( pDocShell->GetDialogParent() );
-        String aGoalString = aGoalValue;
+        String aGoalString(aGoalValue);
         ScDocument* pDoc = pDocShell->GetDocument();
         double fValue = 0.0;
         BOOL bFound = pDoc->Solver(
@@ -1258,7 +1258,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
         ScUnoGuard aGuard;
         if (pDocShell && pDocShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED)
         {
-            xRet = uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues"))));
+            xRet.set(uno::Reference < container::XIndexAccess >::query(::comphelper::getProcessServiceFactory()->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.IndexedPropertyValues")))));
 
             uno::Reference < container::XIndexContainer > xCont( xRet, uno::UNO_QUERY );
             DBG_ASSERT( xCont.is(), "ScModelObj::getViewData() failed for OLE object" );
@@ -1286,8 +1286,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScModelObj::getPropertySetInfo(
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( aPropSet.getPropertyMap() ));
     return aRef;
 }
 
@@ -1298,7 +1298,7 @@ void SAL_CALL ScModelObj::setPropertyValue(
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
 
     if (pDocShell)
     {
@@ -1379,7 +1379,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
                         uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    String aString = aPropertyName;
+    String aString(aPropertyName);
     uno::Any aRet;
 
     if (pDocShell)
@@ -1420,38 +1420,31 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         }
         else if ( aString.EqualsAscii( SC_UNO_NAMEDRANGES ) )
         {
-            uno::Reference<sheet::XNamedRanges> xRanges = new ScNamedRangesObj( pDocShell );
-            aRet <<= xRanges;
+            aRet <<= uno::Reference<sheet::XNamedRanges>(new ScNamedRangesObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_DATABASERNG ) )
         {
-            uno::Reference<sheet::XDatabaseRanges> xRanges = new ScDatabaseRangesObj( pDocShell );
-            aRet <<= xRanges;
+            aRet <<= uno::Reference<sheet::XDatabaseRanges>(new ScDatabaseRangesObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_COLLABELRNG ) )
         {
-            uno::Reference<sheet::XLabelRanges> xRanges = new ScLabelRangesObj( pDocShell, TRUE );
-            aRet <<= xRanges;
+            aRet <<= uno::Reference<sheet::XLabelRanges>(new ScLabelRangesObj( pDocShell, TRUE ));
         }
         else if ( aString.EqualsAscii( SC_UNO_ROWLABELRNG ) )
         {
-            uno::Reference<sheet::XLabelRanges> xRanges = new ScLabelRangesObj( pDocShell, FALSE );
-            aRet <<= xRanges;
+            aRet <<= uno::Reference<sheet::XLabelRanges>(new ScLabelRangesObj( pDocShell, FALSE ));
         }
         else if ( aString.EqualsAscii( SC_UNO_AREALINKS ) )
         {
-            uno::Reference<sheet::XAreaLinks> xLinks = new ScAreaLinksObj( pDocShell );
-            aRet <<= xLinks;
+            aRet <<= uno::Reference<sheet::XAreaLinks>(new ScAreaLinksObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_DDELINKS ) )
         {
-            uno::Reference<container::XNameAccess> xLinks = new ScDDELinksObj( pDocShell );
-            aRet <<= xLinks;
+            aRet <<= uno::Reference<container::XNameAccess>(new ScDDELinksObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_SHEETLINKS ) )
         {
-            uno::Reference<container::XNameAccess> xLinks = new ScSheetLinksObj( pDocShell );
-            aRet <<= xLinks;
+            aRet <<= uno::Reference<container::XNameAccess>(new ScSheetLinksObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_APPLYFMDES ) )
         {
@@ -1469,8 +1462,7 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         }
         else if ( aString.EqualsAscii( SC_UNO_FORBIDDEN ) )
         {
-            uno::Reference<i18n::XForbiddenCharacters> xForbidden = new ScForbiddenCharsObj( pDocShell );
-            aRet <<= xForbidden;
+            aRet <<= uno::Reference<i18n::XForbiddenCharacters>(new ScForbiddenCharsObj( pDocShell ));
         }
         else if ( aString.EqualsAscii( SC_UNO_HASDRAWPAGES ) )
         {
@@ -1499,7 +1491,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
 {
     ScUnoGuard aGuard;
     uno::Reference<uno::XInterface> xRet;
-    String aNameStr = aServiceSpecifier;
+    String aNameStr(aServiceSpecifier);
     USHORT nType = ScServiceProvider::GetProviderType(aNameStr);
     if ( nType != SC_SERVICE_INVALID )
     {
@@ -1507,29 +1499,29 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  return stored instance if already set
         switch ( nType )
         {
-            case SC_SERVICE_GRADTAB:    xRet = xDrawGradTab;    break;
-            case SC_SERVICE_HATCHTAB:   xRet = xDrawHatchTab;   break;
-            case SC_SERVICE_BITMAPTAB:  xRet = xDrawBitmapTab;  break;
-            case SC_SERVICE_TRGRADTAB:  xRet = xDrawTrGradTab;  break;
-            case SC_SERVICE_MARKERTAB:  xRet = xDrawMarkerTab;  break;
-            case SC_SERVICE_DASHTAB:    xRet = xDrawDashTab;    break;
-            case SC_SERVICE_CHDATAPROV: xRet = xChartDataProv;  break;
+            case SC_SERVICE_GRADTAB:    xRet.set(xDrawGradTab);     break;
+            case SC_SERVICE_HATCHTAB:   xRet.set(xDrawHatchTab);    break;
+            case SC_SERVICE_BITMAPTAB:  xRet.set(xDrawBitmapTab);   break;
+            case SC_SERVICE_TRGRADTAB:  xRet.set(xDrawTrGradTab);   break;
+            case SC_SERVICE_MARKERTAB:  xRet.set(xDrawMarkerTab);   break;
+            case SC_SERVICE_DASHTAB:    xRet.set(xDrawDashTab);     break;
+            case SC_SERVICE_CHDATAPROV: xRet.set(xChartDataProv);  break;
         }
 
         if ( !xRet.is() )
         {
-            xRet = ScServiceProvider::MakeInstance( nType, pDocShell );
+            xRet.set(ScServiceProvider::MakeInstance( nType, pDocShell ));
 
             //  store created instance
             switch ( nType )
             {
-                case SC_SERVICE_GRADTAB:    xDrawGradTab = xRet;    break;
-                case SC_SERVICE_HATCHTAB:   xDrawHatchTab = xRet;   break;
-                case SC_SERVICE_BITMAPTAB:  xDrawBitmapTab = xRet;  break;
-                case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab = xRet;  break;
-                case SC_SERVICE_MARKERTAB:  xDrawMarkerTab = xRet;  break;
-                case SC_SERVICE_DASHTAB:    xDrawDashTab = xRet;    break;
-                case SC_SERVICE_CHDATAPROV: xChartDataProv = xRet;  break;
+                case SC_SERVICE_GRADTAB:    xDrawGradTab.set(xRet);     break;
+                case SC_SERVICE_HATCHTAB:   xDrawHatchTab.set(xRet);    break;
+                case SC_SERVICE_BITMAPTAB:  xDrawBitmapTab.set(xRet);   break;
+                case SC_SERVICE_TRGRADTAB:  xDrawTrGradTab.set(xRet);   break;
+                case SC_SERVICE_MARKERTAB:  xDrawMarkerTab.set(xRet);   break;
+                case SC_SERVICE_DASHTAB:    xDrawDashTab.set(xRet);     break;
+                case SC_SERVICE_CHDATAPROV: xChartDataProv.set(xRet);  break;
             }
         }
     }
@@ -1539,7 +1531,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
         {
-            xRet = SvxFmMSFactory::createInstance(aServiceSpecifier);
+            xRet.set(SvxFmMSFactory::createInstance(aServiceSpecifier));
             // extra block to force deletion of the temporary before ScShapeObj ctor (setDelegator)
         }
 
@@ -1551,7 +1543,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         {
             xRet.clear();               // for aggregation, xShape must be the object's only ref
             new ScShapeObj( xShape );   // aggregates object and modifies xShape
-            xRet = xShape;
+            xRet.set(xShape);
         }
     }
     return xRet;
@@ -1565,7 +1557,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments
     //! unterscheiden zwischen eigenen Services und denen vom Drawing-Layer?
 
     ScUnoGuard aGuard;
-    uno::Reference<uno::XInterface> xInt = createInstance(ServiceSpecifier);
+    uno::Reference<uno::XInterface> xInt(createInstance(ServiceSpecifier));
 
     if ( aArgs.getLength() )
     {
@@ -1588,8 +1580,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
     //! return concatServiceNames( ScServiceProvider::GetAllServiceNames(),
     //!                            SvxFmMSFactory::getAvailableServiceNames() );
 
-    uno::Sequence<rtl::OUString> aMyServices = ScServiceProvider::GetAllServiceNames();
-    uno::Sequence<rtl::OUString> aDrawServices = SvxFmMSFactory::getAvailableServiceNames();
+    uno::Sequence<rtl::OUString> aMyServices(ScServiceProvider::GetAllServiceNames());
+    uno::Sequence<rtl::OUString> aDrawServices(SvxFmMSFactory::getAvailableServiceNames());
 
     return concatServiceNames( aMyServices, aDrawServices );
 }
@@ -1604,7 +1596,7 @@ rtl::OUString SAL_CALL ScModelObj::getImplementationName() throw(uno::RuntimeExc
 sal_Bool SAL_CALL ScModelObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    String aServiceStr = rServiceName;
+    String aServiceStr(rServiceName);
     return aServiceStr.EqualsAscii( SCMODELOBJ_SERVICE ) ||
            aServiceStr.EqualsAscii( SCDOCSETTINGS_SERVICE ) ||
            aServiceStr.EqualsAscii( SCDOC_SERVICE );
@@ -1642,11 +1634,11 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
     if ( xNumberAgg.is() )
     {
         const uno::Type& rTunnelType = ::getCppuType((uno::Reference<lang::XUnoTunnel>*) 0);
-        uno::Any aNumTunnel = xNumberAgg->queryAggregation(rTunnelType);
+        uno::Any aNumTunnel(xNumberAgg->queryAggregation(rTunnelType));
         if(aNumTunnel.getValueType() == rTunnelType)
         {
-            uno::Reference<lang::XUnoTunnel> xTunnelAgg =
-                *(uno::Reference<lang::XUnoTunnel>*)aNumTunnel.getValue();
+            uno::Reference<lang::XUnoTunnel> xTunnelAgg(
+                *(uno::Reference<lang::XUnoTunnel>*)aNumTunnel.getValue());
             return xTunnelAgg->getSomething( rId );
         }
     }
@@ -1738,7 +1730,7 @@ uno::Reference<drawing::XDrawPage> SAL_CALL ScDrawPagesObj::insertNewByIndex( sa
         pDocShell->GetDocument()->CreateValidTabName(aNewName);
         ScDocFunc aFunc(*pDocShell);
         if ( aFunc.InsertTable( (SCTAB)nPos, aNewName, TRUE, TRUE ) )
-            xRet = GetObjectByIndex_Impl( nPos );
+            xRet.set(GetObjectByIndex_Impl( nPos ));
     }
     return xRet;
 }
@@ -1775,13 +1767,12 @@ uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<drawing::XDrawPage> xPage = GetObjectByIndex_Impl(nIndex);
-    uno::Any aAny;
+    uno::Reference<drawing::XDrawPage> xPage(GetObjectByIndex_Impl(nIndex));
     if (xPage.is())
-        aAny <<= xPage;
+        return uno::makeAny(xPage);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDrawPagesObj::getElementType() throw(uno::RuntimeException)
@@ -1823,7 +1814,7 @@ void ScTableSheetsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // XSpreadsheets
 
-ScTableSheetObj* ScTableSheetsObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScTableSheetObj* ScTableSheetsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     if ( pDocShell && nIndex < pDocShell->GetDocument()->GetTableCount() )
         return new ScTableSheetObj( pDocShell, static_cast<SCTAB>(nIndex) );
@@ -1836,7 +1827,7 @@ ScTableSheetObj* ScTableSheetsObj::GetObjectByName_Impl(const rtl::OUString& aNa
     if (pDocShell)
     {
         SCTAB nIndex;
-        String aString = aName;
+        String aString(aName);
         if ( pDocShell->GetDocument()->GetTable( aString, nIndex ) )
             return new ScTableSheetObj( pDocShell, nIndex );
     }
@@ -1850,7 +1841,7 @@ void SAL_CALL ScTableSheetsObj::insertNewByName( const rtl::OUString& aName, sal
     BOOL bDone = FALSE;
     if (pDocShell)
     {
-        String aNamStr = aName;
+        String aNamStr(aName);
         ScDocFunc aFunc(*pDocShell);
         bDone = aFunc.InsertTable( nPosition, aNamStr, TRUE, TRUE );
     }
@@ -1865,7 +1856,7 @@ void SAL_CALL ScTableSheetsObj::moveByName( const rtl::OUString& aName, sal_Int1
     BOOL bDone = FALSE;
     if (pDocShell)
     {
-        String aNamStr = aName;
+        String aNamStr(aName);
         SCTAB nSource;
         if ( pDocShell->GetDocument()->GetTable( aNamStr, nSource ) )
             bDone = pDocShell->MoveTable( nSource, nDestination, FALSE, TRUE );
@@ -1882,8 +1873,8 @@ void SAL_CALL ScTableSheetsObj::copyByName( const rtl::OUString& aName,
     BOOL bDone = FALSE;
     if (pDocShell)
     {
-        String aNamStr = aName;
-        String aNewStr = aCopy;
+        String aNamStr(aName);
+        String aNewStr(aCopy);
         SCTAB nSource;
         if ( pDocShell->GetDocument()->GetTable( aNamStr, nSource ) )
         {
@@ -1909,16 +1900,16 @@ void SAL_CALL ScTableSheetsObj::insertByName( const rtl::OUString& aName, const 
 
     //! Type of aElement can be some specific interface instead of XInterface
 
-    uno::Reference<uno::XInterface> xInterface;
     if ( pDocShell )
     {
-        if ( aElement >>= xInterface )
+        uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
+        if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // noch nicht eingefuegt?
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
-                String aNamStr = aName;
+                String aNamStr(aName);
                 SCTAB nDummy;
                 if ( pDoc->GetTable( aNamStr, nDummy ) )
                 {
@@ -1961,15 +1952,15 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const rtl::OUString& aName, const
 
     //! Type of aElement can be some specific interface instead of XInterface
 
-    uno::Reference<uno::XInterface> xInterface;
     if ( pDocShell )
     {
-        if ( aElement >>= xInterface )
+        uno::Reference<uno::XInterface> xInterface(aElement, uno::UNO_QUERY);
+        if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
             if ( pSheetObj && !pSheetObj->GetDocShell() )   // noch nicht eingefuegt?
             {
-                String aNamStr = aName;
+                String aNamStr(aName);
                 SCTAB nPosition;
                 if ( pDocShell->GetDocument()->GetTable( aNamStr, nPosition ) )
                 {
@@ -2013,7 +2004,7 @@ void SAL_CALL ScTableSheetsObj::removeByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         SCTAB nIndex;
-        String aString = aName;
+        String aString(aName);
         if ( pDocShell->GetDocument()->GetTable( aString, nIndex ) )
         {
             ScDocFunc aFunc(*pDocShell);
@@ -2054,13 +2045,12 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSpreadsheet> xSheet = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XSpreadsheet> xSheet(GetObjectByIndex_Impl(nIndex));
     if (xSheet.is())
-        aAny <<= xSheet;
+        return uno::makeAny(xSheet);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableSheetsObj::getElementType() throw(uno::RuntimeException)
@@ -2082,13 +2072,12 @@ uno::Any SAL_CALL ScTableSheetsObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSpreadsheet> xSheet = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<sheet::XSpreadsheet> xSheet(GetObjectByName_Impl(aName));
     if (xSheet.is())
-        aAny <<= xSheet;
+        return uno::makeAny(xSheet);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetsObj::getElementNames()
@@ -2119,8 +2108,7 @@ sal_Bool SAL_CALL ScTableSheetsObj::hasByName( const rtl::OUString& aName )
     if (pDocShell)
     {
         SCTAB nIndex;
-        String aString = aName;
-        if ( pDocShell->GetDocument()->GetTable( aString, nIndex ) )
+        if ( pDocShell->GetDocument()->GetTable( String(aName), nIndex ) )
             return TRUE;
     }
     return FALSE;
@@ -2160,7 +2148,7 @@ void ScTableColumnsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // XTableColumns
 
-ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     SCCOL nCol = static_cast<SCCOL>(nIndex) + nStartCol;
     if ( pDocShell && nCol <= nEndCol )
@@ -2172,7 +2160,7 @@ ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(USHORT nIndex) const
 ScTableColumnObj* ScTableColumnsObj::GetObjectByName_Impl(const rtl::OUString& aName) const
 {
     SCCOL nCol = 0;
-    String aString = aName;
+    String aString(aName);
     if ( ::AlphaToCol( nCol, aString) )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
             return new ScTableColumnObj( pDocShell, nCol, nTab );
@@ -2236,13 +2224,12 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xColumn = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<table::XCellRange> xColumn(GetObjectByIndex_Impl(nIndex));
     if (xColumn.is())
-        aAny <<= xColumn;
+        return uno::makeAny(xColumn);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableColumnsObj::getElementType() throw(uno::RuntimeException)
@@ -2262,13 +2249,12 @@ uno::Any SAL_CALL ScTableColumnsObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xColumn = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<table::XCellRange> xColumn(GetObjectByName_Impl(aName));
     if (xColumn.is())
-        aAny <<= xColumn;
+        return uno::makeAny(xColumn);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableColumnsObj::getElementNames()
@@ -2289,7 +2275,7 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const rtl::OUString& aName )
 {
     ScUnoGuard aGuard;
     SCCOL nCol = 0;
-    String aString = aName;
+    String aString(aName);
     if ( ::AlphaToCol( nCol, aString) )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
             return TRUE;
@@ -2303,8 +2289,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableColumnsObj::getPropertyS
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( lcl_GetColumnsPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( lcl_GetColumnsPropertyMap() ));
     return aRef;
 }
 
@@ -2323,7 +2309,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
     SCCOLROW nColArr[2];
     nColArr[0] = nStartCol;
     nColArr[1] = nEndCol;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
     {
@@ -2368,7 +2354,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPro
         throw uno::RuntimeException();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     uno::Any aAny;
 
     //! loop over all columns for current state?
@@ -2439,7 +2425,7 @@ void ScTableRowsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
 // XTableRows
 
-ScTableRowObj* ScTableRowsObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScTableRowObj* ScTableRowsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     SCROW nRow = static_cast<SCROW>(nIndex) + nStartRow;
     if ( pDocShell && nRow <= nEndRow )
@@ -2504,13 +2490,12 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<table::XCellRange> xRow = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<table::XCellRange> xRow(GetObjectByIndex_Impl(nIndex));
     if (xRow.is())
-        aAny <<= xRow;
+        return uno::makeAny(xRow);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType() throw(uno::RuntimeException)
@@ -2531,8 +2516,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableRowsObj::getPropertySetI
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef =
-        new SfxItemPropertySetInfo( lcl_GetRowsPropertyMap() );
+    static uno::Reference<beans::XPropertySetInfo> aRef(
+        new SfxItemPropertySetInfo( lcl_GetRowsPropertyMap() ));
     return aRef;
 }
 
@@ -2551,7 +2536,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     SCCOLROW nRowArr[2];
     nRowArr[0] = nStartRow;
     nRowArr[1] = nEndRow;
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
     {
@@ -2606,7 +2591,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
         throw uno::RuntimeException();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    String aNameString = aPropertyName;
+    String aNameString(aPropertyName);
     uno::Any aAny;
 
     //! loop over all rows for current state?
@@ -2754,7 +2739,7 @@ BOOL ScAnnotationsObj::GetAddressByIndex_Impl( ULONG nIndex, ScAddress& rPos ) c
 
 // XSheetAnnotations
 
-ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(USHORT nIndex) const
+ScAnnotationObj* ScAnnotationsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
 {
     if (pDocShell)
     {
@@ -2775,10 +2760,8 @@ void SAL_CALL ScAnnotationsObj::insertNew( const table::CellAddress& aPosition,
         DBG_ASSERT( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
 
-        String aString = aText;
-
         ScDocFunc aFunc(*pDocShell);
-        aFunc.SetNoteText( aPos, aString, TRUE );
+        aFunc.SetNoteText( aPos, String(aText), TRUE );
     }
 }
 
@@ -2837,13 +2820,12 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XSheetAnnotation> xAnnotation = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XSheetAnnotation> xAnnotation(GetObjectByIndex_Impl(nIndex));
     if (xAnnotation.is())
-        aAny <<= xAnnotation;
+        return uno::makeAny(xAnnotation);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScAnnotationsObj::getElementType() throw(uno::RuntimeException)
@@ -2896,7 +2878,7 @@ BOOL ScScenariosObj::GetScenarioIndex_Impl( const rtl::OUString& rName, SCTAB& r
 
     if ( pDocShell )
     {
-        String aString = rName;
+        String aString(rName);
 
         String aTabName;
         ScDocument* pDoc = pDocShell->GetDocument();
@@ -2913,7 +2895,7 @@ BOOL ScScenariosObj::GetScenarioIndex_Impl( const rtl::OUString& rName, SCTAB& r
     return FALSE;
 }
 
-ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(USHORT nIndex)
+ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
 {
     USHORT nCount = (USHORT)getCount();
     if ( pDocShell && nIndex < nCount )
@@ -2956,8 +2938,8 @@ void SAL_CALL ScScenariosObj::addNewByName( const rtl::OUString& aName,
             }
         }
 
-        String aNameStr = aName;
-        String aCommStr = aComment;
+        String aNameStr(aName);
+        String aCommStr(aComment);
 
         Color aColor( COL_LIGHTGRAY );  // Default
         USHORT nFlags = SC_SCENARIO_SHOWFRAME | SC_SCENARIO_PRINTFRAME | SC_SCENARIO_TWOWAY | SC_SCENARIO_PROTECT;
@@ -3015,13 +2997,12 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XScenario> xScen = GetObjectByIndex_Impl((USHORT)nIndex);
-    uno::Any aAny;
+    uno::Reference<sheet::XScenario> xScen(GetObjectByIndex_Impl(nIndex));
     if (xScen.is())
-        aAny <<= xScen;
+        return uno::makeAny(xScen);
     else
         throw lang::IndexOutOfBoundsException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Type SAL_CALL ScScenariosObj::getElementType() throw(uno::RuntimeException)
@@ -3041,13 +3022,12 @@ uno::Any SAL_CALL ScScenariosObj::getByName( const rtl::OUString& aName )
                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    uno::Reference<sheet::XScenario> xScen = GetObjectByName_Impl(aName);
-    uno::Any aAny;
+    uno::Reference<sheet::XScenario> xScen(GetObjectByName_Impl(aName));
     if (xScen.is())
-        aAny <<= xScen;
+        return uno::makeAny(xScen);
     else
         throw container::NoSuchElementException();
-    return aAny;
+    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScScenariosObj::getElementNames()
