@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2003-05-15 18:04:04 $
+ *  last change: $Date: 2003-05-27 12:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ public class ProcessHandler {
     /**
      * Creates instance with specified external command.
      * Debug info and output
-     * of external commandis printed to stdout.
+     * of external command is printed to stdout.
      */
     public ProcessHandler(String cmdLine) {
         this(cmdLine, null, null, null);
@@ -247,8 +247,7 @@ public class ProcessHandler {
 
             isStarted = true ;
         } catch (java.io.IOException e) {
-            log.println("The command "+cmdLine+" can't be started: " + e.getMessage());
-            e.printStackTrace((PrintWriter) log);
+            log.println("The command "+cmdLine+" can't be started: " + e);
             return;
         }
         stdout = new Pump(proc.getInputStream(), log, "out > ");
@@ -335,7 +334,7 @@ public class ProcessHandler {
      * Returns the text output by external command to stdout.
      */
     public String getOutputText() {
-        if(stdout == null)
+        if (stdout == null)
             return "";
         else
             return stdout.getStringBuffer();
@@ -344,7 +343,7 @@ public class ProcessHandler {
      * Returns the text output by external command to stderr.
      */
     public String getErrorText() {
-        if(stderr == null)
+        if (stderr == null)
             return "";
         else
             return stderr.getStringBuffer();
