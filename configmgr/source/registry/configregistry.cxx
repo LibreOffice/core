@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:17:35 $
+ *  last change: $Author: jb $ $Date: 2002-07-11 17:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,10 +125,21 @@ namespace beans = ::com::sun::star::beans;
         "com.sun.star.configuration.ConfigurationRegistry",
         NULL
     };
+    // #99130# Don't export SimpleRegistry service
+    const AsciiServiceName * const aExportedConfigRegistryServices = aConfigRegistryServices + 1;
+
+    const AsciiServiceName aConfigRegistryImplementationName = "com.sun.star.configuration.configmgr.OConfigurationRegistry";
+
     const ServiceInfo OConfigurationRegistry::s_aServiceInfo =
     {
-        "com.sun.star.configuration.configmgr.OConfigurationRegistry",
+        aConfigRegistryImplementationName,
         aConfigRegistryServices
+    };
+
+    const ServiceInfo s_aExportedConfigurationRegistryServiceInfo =
+    {
+        aConfigRegistryImplementationName,
+        aExportedConfigRegistryServices
     };
 
     Reference< XInterface > SAL_CALL instantiateConfigRegistry(Reference< XMultiServiceFactory > const& _rServiceManager )
@@ -138,7 +149,7 @@ namespace beans = ::com::sun::star::beans;
 
     const ServiceInfo* getConfigurationRegistryServiceInfo()
     {
-        return &OConfigurationRegistry::s_aServiceInfo;
+        return &s_aExportedConfigurationRegistryServiceInfo;
     }
 
 //--------------------------------------------------------------------------
