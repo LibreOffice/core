@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageMapCircleObject.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 17:14:22 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 
 //=============================================================================
 
-/** this service describes a circular shaped region inside
+/** this service describes a circular-shaped region inside
     a html image map.
     @see ImageMap
     @see ImageMapObject
@@ -85,10 +85,10 @@ service ImageMapCircleObject
     /** The basic service for all image map objects. */
     service ImageMapObject;
 
-    /** This is the center point of the circle in pixel */
+    /** This is the center point of the circle in pixels */
     [property] com::sun::star::awt::Point Center;
 
-    /** This is the radius of the circle in pixel */
+    /** This is the radius of the circle in pixels */
     [property] long Radius;
 };
 

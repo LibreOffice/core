@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageMap.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 17:14:22 $
+ *  last change: $Author: mi $ $Date: 2001-11-15 15:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
  */
 service ImageMap
 {
-    /** a ImageMap can optionaly have a name. */
+    /** a ImageMap can, optionally, have a name. */
     interface ::com::sun::star::container::XNamed;
 
     /** this container interface gives access to
