@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_data.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:19 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,7 @@ void jni_Bridge::map_to_uno(
         }
         else
         {
-            jo_type = create_type( attach, (jclass)jo_class.get() );
+            jo_type.reset( attach, create_type( attach, (jclass)jo_class.get() ) );
         }
 
         // get type name
@@ -1074,7 +1074,7 @@ void jni_Bridge::map_to_java(
         {
             typelib_TypeDescriptionReference * type =
                 *(typelib_TypeDescriptionReference **)uno_data;
-            jo_type = create_type( attach, type );
+            jo_type.reset( attach, create_type( attach, type ) );
         }
         if (out_param)
         {
@@ -1099,7 +1099,7 @@ void jni_Bridge::map_to_java(
                 attach, args, pAny->pData, pAny->pType, 0,
                 true /* in */, false /* no out */, true /* create integral wrappers */ );
             JLocalAutoRef jo_val( attach, args[ 0 ].l );
-            JLocalAutoRef jo_type( create_type( attach, pAny->pType ) );
+            JLocalAutoRef jo_type( attach, create_type( attach, pAny->pType ) );
             args[ 0 ].l = jo_type.get();
             args[ 1 ].l = jo_val.get();
             // build up any
@@ -1124,7 +1124,7 @@ void jni_Bridge::map_to_java(
         OUString const & type_name = *reinterpret_cast< OUString const * >( &type->pTypeName );
         OString class_name(
             OUStringToOString( type_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-        JLocalAutoRef jo_enum_class( find_class( attach, class_name.getStr() ) );
+        JLocalAutoRef jo_enum_class( attach, find_class( attach, class_name.getStr() ) );
 
         JLocalAutoRef jo_enum;
         if (in_param)
@@ -1446,7 +1446,7 @@ void jni_Bridge::map_to_java(
                 OUStringToOString(
                     element_type_name.replace( '.', '/' ),
                     RTL_TEXTENCODING_ASCII_US ) );
-            JLocalAutoRef jo_enum_class( find_class( attach, class_name.getStr() ) );
+            JLocalAutoRef jo_enum_class( attach, find_class( attach, class_name.getStr() ) );
 
             jo_ar.reset(
                 attach, attach->NewObjectArray( nElements, (jclass)jo_enum_class.get(), 0 ) );
@@ -1513,7 +1513,7 @@ void jni_Bridge::map_to_java(
             OStringBuffer buf( 64 );
             m_jni_info->append_sig( &buf, element_type ); // xxx todo opt
             OString class_name( buf.makeStringAndClear() );
-            JLocalAutoRef jo_seq_class( find_class( attach, class_name.getStr() ) );
+            JLocalAutoRef jo_seq_class( attach, find_class( attach, class_name.getStr() ) );
 
             jo_ar.reset(
                 attach, attach->NewObjectArray( nElements, (jclass)jo_seq_class.get(), 0 ) );
@@ -1572,7 +1572,7 @@ void jni_Bridge::map_to_java(
 
         if (out_param)
         {
-            JLocalAutoRef jo_element_class( jo_ar.get_class() );
+            JLocalAutoRef jo_element_class( attach, get_class( attach, jo_ar.get() ) );
             if (in_param)
             {
                 java_data->l =
@@ -1622,7 +1622,7 @@ void jni_Bridge::map_to_java(
                     *reinterpret_cast< OUString const * >( &type->pTypeName );
                 OString class_name(
                     OUStringToOString( type_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-                JLocalAutoRef jo_iface_class( find_class( attach, class_name.getStr() ) );
+                JLocalAutoRef jo_iface_class( attach, find_class( attach, class_name.getStr() ) );
 
                 java_data->l = attach->NewObjectArray(
                     1, (jclass)jo_iface_class.get(), jo_iface.get() );

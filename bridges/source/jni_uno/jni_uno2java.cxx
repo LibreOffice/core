@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:33 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ static void handle_java_exc(
             OUSTR("java exception occured, but no java exception available!?") );
     }
 
-    OUString exc_name( jo_exc.get_class_name() );
+    OUString exc_name( get_class_name( attach, jo_exc.get() ) );
     ::com::sun::star::uno::TypeDescription td( exc_name.pData );
     if (!td.is() || (typelib_TypeClass_EXCEPTION != td.get()->eTypeClass))
     {
@@ -524,7 +524,7 @@ static void SAL_CALL jni_unoInterfaceProxy_dispatch(
                         if (jo_ret.is())
                         {
 #ifdef _DEBUG
-                            JLocalAutoRef jo_oid( compute_oid( attach, jo_ret.get() ) );
+                            JLocalAutoRef jo_oid( attach, compute_oid( attach, jo_ret.get() ) );
                             OUString oid( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
                             OSL_ENSURE( oid.equals( that->m_oid ), "### different oids!" );
 #endif
@@ -615,7 +615,7 @@ uno_Interface * jni_Bridge::map_java2uno(
     JNI_attach const & attach,
     jobject javaI, JNI_type_info const * info ) const
 {
-    JLocalAutoRef jo_oid( compute_oid( attach, javaI ) );
+    JLocalAutoRef jo_oid( attach, compute_oid( attach, javaI ) );
     OUString oid( jstring_to_oustring( attach, (jstring)jo_oid.get() ) );
 
     uno_Interface * pUnoI = 0;

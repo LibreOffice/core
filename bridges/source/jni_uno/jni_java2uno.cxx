@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:30 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ jobject jni_Bridge::map_uno2java(
                 attach, attach->CallStaticObjectMethodA(
                     m_jni_info->m_class_JNI_proxy,
                     m_jni_info->m_method_JNI_proxy_create, args ) );
+            attach.ensure_no_exception();
 
             // register at java env
             jo_iface.reset(

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:22 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,112 +69,9 @@
 using namespace ::std;
 using namespace ::osl;
 using namespace ::rtl;
-using namespace ::com::sun::star::uno;
 
 namespace jni_bridge
 {
-
-//##################################################################################################
-
-// //__________________________________________________________________________________________________
-// typelib_TypeDescriptionReference * JNI_type_info::get_member(
-//     OUString const & fully_qualified_member_name ) const
-// {
-//  typelib_TypeDescriptionReference ** ppAllMembers = m_td->ppAllMembers;
-//     for ( sal_Int32 nPos = m_td->nAllMembers; nPos--; )
-//     {
-//         typelib_TypeDescriptionReference * member_tdref = ppAllMembers[ nPos ];
-//         OUString const & member_name = *reinterpret_cast< OUString const * >(
-//             &member_tdref->pTypeName );
-//         if (fully_qualified_member_name.equals( member_name ))
-//             return member_tdref;
-//     }
-//     return 0;
-// }
-
-//--------------------------------------------------------------------------------------------------
-void JNI_info::append_sig(
-    OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const
-{
-    switch (type->eTypeClass)
-    {
-    case typelib_TypeClass_VOID:
-        buf->append( 'V' );
-        break;
-    case typelib_TypeClass_CHAR:
-        buf->append( 'C' );
-        break;
-    case typelib_TypeClass_BOOLEAN:
-        buf->append( 'Z' );
-        break;
-    case typelib_TypeClass_BYTE:
-        buf->append( 'B' );
-        break;
-    case typelib_TypeClass_SHORT:
-    case typelib_TypeClass_UNSIGNED_SHORT:
-        buf->append( 'S' );
-        break;
-    case typelib_TypeClass_LONG:
-    case typelib_TypeClass_UNSIGNED_LONG:
-        buf->append( 'I' );
-        break;
-    case typelib_TypeClass_HYPER:
-    case typelib_TypeClass_UNSIGNED_HYPER:
-        buf->append( 'J' );
-        break;
-    case typelib_TypeClass_FLOAT:
-        buf->append( 'F' );
-        break;
-    case typelib_TypeClass_DOUBLE:
-        buf->append( 'D' );
-        break;
-    case typelib_TypeClass_STRING:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;") );
-        break;
-    case typelib_TypeClass_TYPE:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;") );
-        break;
-    case typelib_TypeClass_ANY:
-        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
-        break;
-    case typelib_TypeClass_ENUM:
-    case typelib_TypeClass_STRUCT:
-    case typelib_TypeClass_EXCEPTION:
-    {
-        OUString const & uno_name = *reinterpret_cast< OUString const * >( &type->pTypeName );
-        buf->append( 'L' );
-        buf->append(
-            OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-        buf->append( ';' );
-        break;
-    }
-    case typelib_TypeClass_SEQUENCE:
-    {
-        buf->append( '[' );
-        TypeDescr td( type );
-        append_sig( buf, ((typelib_IndirectTypeDescription *)td.get())->pType );
-        break;
-    }
-    case typelib_TypeClass_INTERFACE:
-        if (typelib_typedescriptionreference_equals( type, m_XInterface.get()->pWeakRef ))
-        {
-            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
-        }
-        else
-        {
-            OUString const & uno_name = *reinterpret_cast< OUString const * >( &type->pTypeName );
-            buf->append( 'L' );
-            buf->append(
-                OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-            buf->append( ';' );
-        }
-        break;
-    default:
-        throw BridgeRuntimeError(
-            OUSTR("unsupported type: ") +
-            *reinterpret_cast< OUString const * >( &type->pTypeName ) );
-    }
-}
 
 //__________________________________________________________________________________________________
 JNI_type_info::JNI_type_info(
@@ -197,7 +94,7 @@ JNI_type_info::JNI_type_info(
 
     OString java_name(
         OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-    JLocalAutoRef jo_class( find_class( attach, java_name.getStr() ) );
+    JLocalAutoRef jo_class( attach, find_class( attach, java_name.getStr() ) );
 
     JNI_info const * jni_info = attach.get_jni_info();
 
@@ -311,7 +208,7 @@ JNI_type_info::JNI_type_info(
         }
     }
 
-    JLocalAutoRef jo_type( create_type( attach, (jclass)jo_class.get() ) );
+    JLocalAutoRef jo_type( attach, create_type( attach, (jclass)jo_class.get() ) );
 
     m_class = (jclass)attach->NewGlobalRef( jo_class.get() );
     m_jo_type = attach->NewGlobalRef( jo_type.get() );
@@ -337,7 +234,7 @@ JNI_type_info::JNI_type_info(
 
     OString java_name(
         OUStringToOString( uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
-    JLocalAutoRef jo_class( find_class( attach, java_name.getStr() ) );
+    JLocalAutoRef jo_class( attach, find_class( attach, java_name.getStr() ) );
 
     JNI_info const * jni_info = attach.get_jni_info();
 
@@ -378,7 +275,6 @@ JNI_type_info::JNI_type_info(
             for ( sal_Int32 nPos = 0; nPos < nMembers; ++nPos )
             {
                 OStringBuffer sig_buf( 32 );
-                // xxx todo: possible opt here
                 jni_info->append_sig( &sig_buf, td->ppTypeRefs[ nPos ] );
                 OString sig( sig_buf.makeStringAndClear() );
 
@@ -470,34 +366,60 @@ JNI_type_info const * JNI_info::get_type_info(
 //__________________________________________________________________________________________________
 JNI_info::JNI_info( uno_Environment * java_env )
     : m_java_env( java_env ), // unacquired pointer to owner
-      m_XInterface( ::getCppuType( (Reference< XInterface > const *)0 ) ),
-      m_Exception( ::getCppuType( (Exception const *)0 ) ),
-      m_RuntimeException( ::getCppuType( (RuntimeException const *)0 ) ),
+      m_XInterface(
+          ::getCppuType(
+              (::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > const *)0 ) ),
+      m_Exception(
+          ::getCppuType(
+              (::com::sun::star::uno::Exception const *)0 ) ),
+      m_RuntimeException(
+          ::getCppuType(
+              (::com::sun::star::uno::RuntimeException const *)0 ) ),
       m_class_JNI_proxy( 0 )
 {
     JNI_attach attach( java_env );
 
     // class lookup
-    JLocalAutoRef jo_Object( find_class( attach, "java/lang/Object" ) );
-    JLocalAutoRef jo_Class( find_class( attach, "java/lang/Class" ) );
-    JLocalAutoRef jo_Throwable( find_class( attach, "java/lang/Throwable" ) );
-    JLocalAutoRef jo_Character( find_class( attach, "java/lang/Character" ) );
-    JLocalAutoRef jo_Boolean( find_class( attach, "java/lang/Boolean" ) );
-    JLocalAutoRef jo_Byte( find_class( attach, "java/lang/Byte" ) );
-    JLocalAutoRef jo_Short( find_class( attach, "java/lang/Short" ) );
-    JLocalAutoRef jo_Integer( find_class( attach, "java/lang/Integer" ) );
-    JLocalAutoRef jo_Long( find_class( attach, "java/lang/Long" ) );
-    JLocalAutoRef jo_Float( find_class( attach, "java/lang/Float" ) );
-    JLocalAutoRef jo_Double( find_class( attach, "java/lang/Double" ) );
-    JLocalAutoRef jo_String( find_class( attach, "java/lang/String" ) );
-    JLocalAutoRef jo_RuntimeException( find_class( attach, "com/sun/star/uno/RuntimeException" ) );
-    JLocalAutoRef jo_UnoRuntime( find_class( attach, "com/sun/star/uno/UnoRuntime" ) );
-    JLocalAutoRef jo_Any( find_class( attach, "com/sun/star/uno/Any" ) );
-    JLocalAutoRef jo_Enum( find_class( attach, "com/sun/star/uno/Enum" ) );
-    JLocalAutoRef jo_Type( find_class( attach, "com/sun/star/uno/Type" ) );
-    JLocalAutoRef jo_TypeClass( find_class( attach, "com/sun/star/uno/TypeClass" ) );
-    JLocalAutoRef jo_IEnvironment( find_class( attach, "com/sun/star/uno/IEnvironment" ) );
-    JLocalAutoRef jo_JNI_proxy( find_class( attach, "com/sun/star/bridges/jni_uno/JNI_proxy" ) );
+    JLocalAutoRef jo_Object(
+        attach, find_class( attach, "java/lang/Object" ) );
+    JLocalAutoRef jo_Class(
+        attach, find_class( attach, "java/lang/Class" ) );
+    JLocalAutoRef jo_Throwable(
+        attach, find_class( attach, "java/lang/Throwable" ) );
+    JLocalAutoRef jo_Character(
+        attach, find_class( attach, "java/lang/Character" ) );
+    JLocalAutoRef jo_Boolean(
+        attach, find_class( attach, "java/lang/Boolean" ) );
+    JLocalAutoRef jo_Byte(
+        attach, find_class( attach, "java/lang/Byte" ) );
+    JLocalAutoRef jo_Short(
+        attach, find_class( attach, "java/lang/Short" ) );
+    JLocalAutoRef jo_Integer(
+        attach, find_class( attach, "java/lang/Integer" ) );
+    JLocalAutoRef jo_Long(
+        attach, find_class( attach, "java/lang/Long" ) );
+    JLocalAutoRef jo_Float(
+        attach, find_class( attach, "java/lang/Float" ) );
+    JLocalAutoRef jo_Double(
+        attach, find_class( attach, "java/lang/Double" ) );
+    JLocalAutoRef jo_String(
+        attach, find_class( attach, "java/lang/String" ) );
+    JLocalAutoRef jo_RuntimeException(
+        attach, find_class( attach, "com/sun/star/uno/RuntimeException" ) );
+    JLocalAutoRef jo_UnoRuntime(
+        attach, find_class( attach, "com/sun/star/uno/UnoRuntime" ) );
+    JLocalAutoRef jo_Any(
+        attach, find_class( attach, "com/sun/star/uno/Any" ) );
+    JLocalAutoRef jo_Enum(
+        attach, find_class( attach, "com/sun/star/uno/Enum" ) );
+    JLocalAutoRef jo_Type(
+        attach, find_class( attach, "com/sun/star/uno/Type" ) );
+    JLocalAutoRef jo_TypeClass(
+        attach, find_class( attach, "com/sun/star/uno/TypeClass" ) );
+    JLocalAutoRef jo_IEnvironment(
+        attach, find_class( attach, "com/sun/star/uno/IEnvironment" ) );
+    JLocalAutoRef jo_JNI_proxy(
+        attach, find_class( attach, "com/sun/star/bridges/jni_uno/JNI_proxy" ) );
 
     // method Object.getClass()
     m_method_Object_getClass = attach->GetMethodID(
@@ -779,53 +701,6 @@ JNI_info::~JNI_info() SAL_THROW( () )
     attach->DeleteGlobalRef( m_class_TypeClass );
     attach->DeleteGlobalRef( m_class_Type );
     attach->DeleteGlobalRef( m_class_Any );
-}
-
-//##################################################################################################
-
-//__________________________________________________________________________________________________
-jobject JNI_info::java_env_getRegisteredInterface(
-    JNI_attach const & attach, jstring oid, jobject type ) const
-{
-    jvalue args[ 2 ];
-    args[ 0 ].l = oid;
-    args[ 1 ].l = type;
-    JLocalAutoRef jo_iface(
-        attach, attach->CallObjectMethodA(
-            m_object_java_env, m_method_IEnvironment_getRegisteredInterface, args ) );
-    attach.ensure_no_exception();
-
-    return jo_iface.release();
-}
-//__________________________________________________________________________________________________
-jobject JNI_info::java_env_registerInterface(
-    JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const
-{
-    JLocalAutoRef jo_string_array( attach, attach->NewObjectArray( 1, m_class_String, oid ) );
-    attach.ensure_no_exception();
-
-    jvalue args[ 3 ];
-    args[ 0 ].l = javaI;
-    args[ 1 ].l = jo_string_array.get();
-    args[ 2 ].l = type;
-
-    JLocalAutoRef jo_iface(
-        attach, attach->CallObjectMethodA(
-            m_object_java_env, m_method_IEnvironment_registerInterface, args ) );
-    attach.ensure_no_exception();
-
-    return jo_iface.release();
-}
-//__________________________________________________________________________________________________
-void JNI_info::java_env_revokeInterface(
-    JNI_attach const & attach, jstring oid, jobject type ) const
-{
-    jvalue args[ 2 ];
-    args[ 0 ].l = oid;
-    args[ 1 ].l = type;
-
-    attach->CallVoidMethodA( m_object_java_env, m_method_IEnvironment_revokeInterface, args );
-    attach.ensure_no_exception();
 }
 
 }

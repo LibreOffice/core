@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:08 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,18 @@
 #define _JNI_BRIDGE_H_
 
 #include "jni_base.h"
+#include "jni_info.h"
+#include "jni_helper.h"
 
 #include <bridges/java/jvmcontext.hxx>
 
+#include <osl/diagnose.h>
 #include <osl/interlck.h>
 
 #include <uno/mapping.h>
 #include <uno/dispatcher.h>
+
+#include <com/sun/star/uno/XInterface.hpp>
 
 
 namespace jni_bridge

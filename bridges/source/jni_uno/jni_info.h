@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_info.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-28 18:20:26 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 10:55:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,8 @@
 #ifndef _JNI_INFO_H_
 #define _JNI_INFO_H_
 
-#include <jni.h>
+#include "jni_base.h"
+
 #include <hash_map>
 
 #include <osl/mutex.hxx>
@@ -77,8 +78,6 @@
 namespace jni_bridge
 {
 
-class JNI_attach;
-class JNI_info;
 //==================================================================================================
 struct JNI_type_info
 {
@@ -98,10 +97,6 @@ struct JNI_type_info
         JNI_attach const & attach, typelib_CompoundTypeDescription * td );
 
     static void _delete( JNI_attach const & attach, JNI_type_info * that ) SAL_THROW( () );
-
-//     // returns unacquired ref of demanded member
-//     typelib_TypeDescriptionReference * get_member(
-//         ::rtl::OUString const & fully_qualified_member_name ) const;
 };
 //==================================================================================================
 struct JNI_type_info_holder
@@ -120,6 +115,13 @@ class JNI_info
     uno_Environment *           m_java_env;
     mutable ::osl::Mutex        m_mutex;
     mutable t_str2type          m_type_map;
+
+    //
+    jmethodID                   m_method_IEnvironment_getRegisteredInterface;
+    jmethodID                   m_method_IEnvironment_registerInterface;
+    jmethodID                   m_method_IEnvironment_revokeInterface;
+    //
+    jobject                     m_object_java_env;
 
 public:
     //
@@ -186,20 +188,6 @@ public:
     jfieldID                    m_field_JNI_proxy_m_type;
     jfieldID                    m_field_JNI_proxy_m_oid;
 
-    jmethodID                   m_method_IEnvironment_getRegisteredInterface;
-    jmethodID                   m_method_IEnvironment_registerInterface;
-    jmethodID                   m_method_IEnvironment_revokeInterface;
-    //
-    jobject                     m_object_java_env;
-
-    // xxx todo: opt inline?
-    jobject java_env_getRegisteredInterface(
-        JNI_attach const & attach, jstring oid, jobject type ) const;
-    jobject java_env_registerInterface(
-        JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const;
-    void java_env_revokeInterface(
-        JNI_attach const & attach, jstring oid, jobject type ) const;
-
     //
     JNI_info( uno_Environment * java_env );
     ~JNI_info() SAL_THROW( () );
@@ -208,9 +196,141 @@ public:
     JNI_type_info const * get_type_info(
         JNI_attach const & attach, typelib_TypeDescription * td ) const;
     //
-    void append_sig(
+    inline void append_sig(
         ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const;
+    //
+    inline jobject java_env_getRegisteredInterface(
+        JNI_attach const & attach, jstring oid, jobject type ) const;
+    inline jobject java_env_registerInterface(
+        JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const;
+    inline void java_env_revokeInterface(
+        JNI_attach const & attach, jstring oid, jobject type ) const;
+
 };
+//__________________________________________________________________________________________________
+inline void JNI_info::append_sig(
+    ::rtl::OStringBuffer * buf, typelib_TypeDescriptionReference * type ) const
+{
+    switch (type->eTypeClass)
+    {
+    case typelib_TypeClass_VOID:
+        buf->append( 'V' );
+        break;
+    case typelib_TypeClass_CHAR:
+        buf->append( 'C' );
+        break;
+    case typelib_TypeClass_BOOLEAN:
+        buf->append( 'Z' );
+        break;
+    case typelib_TypeClass_BYTE:
+        buf->append( 'B' );
+        break;
+    case typelib_TypeClass_SHORT:
+    case typelib_TypeClass_UNSIGNED_SHORT:
+        buf->append( 'S' );
+        break;
+    case typelib_TypeClass_LONG:
+    case typelib_TypeClass_UNSIGNED_LONG:
+        buf->append( 'I' );
+        break;
+    case typelib_TypeClass_HYPER:
+    case typelib_TypeClass_UNSIGNED_HYPER:
+        buf->append( 'J' );
+        break;
+    case typelib_TypeClass_FLOAT:
+        buf->append( 'F' );
+        break;
+    case typelib_TypeClass_DOUBLE:
+        buf->append( 'D' );
+        break;
+    case typelib_TypeClass_STRING:
+        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/String;") );
+        break;
+    case typelib_TypeClass_TYPE:
+        buf->append( RTL_CONSTASCII_STRINGPARAM("Lcom/sun/star/uno/Type;") );
+        break;
+    case typelib_TypeClass_ANY:
+        buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+        break;
+    case typelib_TypeClass_ENUM:
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+    {
+        ::rtl::OUString const & uno_name =
+              *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName );
+        buf->append( 'L' );
+        buf->append(
+            ::rtl::OUStringToOString(
+                uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+        buf->append( ';' );
+        break;
+    }
+    case typelib_TypeClass_SEQUENCE:
+    {
+        buf->append( '[' );
+        TypeDescr td( type );
+        append_sig( buf, ((typelib_IndirectTypeDescription *)td.get())->pType );
+        break;
+    }
+    case typelib_TypeClass_INTERFACE:
+        if (typelib_typedescriptionreference_equals( type, m_XInterface.get()->pWeakRef ))
+        {
+            buf->append( RTL_CONSTASCII_STRINGPARAM("Ljava/lang/Object;") );
+        }
+        else
+        {
+            ::rtl::OUString const & uno_name =
+                  *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName );
+            buf->append( 'L' );
+            buf->append(
+                ::rtl::OUStringToOString(
+                    uno_name.replace( '.', '/' ), RTL_TEXTENCODING_ASCII_US ) );
+            buf->append( ';' );
+        }
+        break;
+    default:
+        throw BridgeRuntimeError(
+            OUSTR("unsupported type: ") +
+            *reinterpret_cast< ::rtl::OUString const * >( &type->pTypeName ) );
+    }
+}
+//__________________________________________________________________________________________________
+inline jobject JNI_info::java_env_getRegisteredInterface(
+    JNI_attach const & attach, jstring oid, jobject type ) const
+{
+    jvalue args[ 2 ];
+    args[ 0 ].l = oid;
+    args[ 1 ].l = type;
+    jobject jo_iface = attach->CallObjectMethodA(
+        m_object_java_env, m_method_IEnvironment_getRegisteredInterface, args );
+    attach.ensure_no_exception();
+    return jo_iface;
+}
+//__________________________________________________________________________________________________
+inline jobject JNI_info::java_env_registerInterface(
+    JNI_attach const & attach, jobject javaI, jstring oid, jobject type ) const
+{
+    JLocalAutoRef jo_string_array( attach, attach->NewObjectArray( 1, m_class_String, oid ) );
+    attach.ensure_no_exception();
+    jvalue args[ 3 ];
+    args[ 0 ].l = javaI;
+    args[ 1 ].l = jo_string_array.get();
+    args[ 2 ].l = type;
+    jobject jo_iface = attach->CallObjectMethodA(
+        m_object_java_env, m_method_IEnvironment_registerInterface, args );
+    attach.ensure_no_exception();
+    return jo_iface;
+}
+//__________________________________________________________________________________________________
+inline void JNI_info::java_env_revokeInterface(
+    JNI_attach const & attach, jstring oid, jobject type ) const
+{
+    jvalue args[ 2 ];
+    args[ 0 ].l = oid;
+    args[ 1 ].l = type;
+    attach->CallVoidMethodA( m_object_java_env, m_method_IEnvironment_revokeInterface, args );
+    attach.ensure_no_exception();
+}
 
 }
 
