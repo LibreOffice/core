@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-03-04 14:49:12 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 09:54:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -431,9 +431,6 @@ void OListBoxModel::fillProperties(
                 Sequence< Property >& _rAggregateProps ) const
 {
     FRM_BEGIN_PROP_HELPER(13)
-        // die SelectSequence-Property soll transient sein ....
-                ModifyPropertyAttributes(_rAggregateProps, PROPERTY_SELECT_SEQ, PropertyAttribute::TRANSIENT, 0);
-
         DECL_PROP2(CLASSID,             sal_Int16,                      READONLY, TRANSIENT);
         DECL_PROP1(NAME,                ::rtl::OUString,                BOUND);
         DECL_PROP1(TAG,                 ::rtl::OUString,                BOUND);
