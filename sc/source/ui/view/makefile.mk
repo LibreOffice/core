@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 13:53:38 $
+#   last change: $Author: obo $ $Date: 2005-03-15 11:43:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -182,8 +182,12 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
     $(SLO)$/cellsh1.obj \
+    $(SLO)$/drawvie4.obj \
     $(SLO)$/formatsh.obj \
-    $(SLO)$/viewdata.obj
+    $(SLO)$/tabvwshb.obj \
+    $(SLO)$/viewdata.obj \
+    $(SLO)$/viewfun5.obj \
+    $(SLO)$/viewfun7.obj
 
 # goal seek -O2
 
