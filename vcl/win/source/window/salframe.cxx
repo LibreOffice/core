@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-06 16:51:19 $
+ *  last change: $Author: ssa $ $Date: 2002-12-12 17:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,13 @@ extern "C" {
 #endif
 #ifndef IMN_CLOSECANDIDATE
 #define IMN_CLOSECANDIDATE              0x0004
+#endif
+
+#ifdef DEBUG
+void MyOutputDebugString(const char *buffer)
+{
+    OutputDebugString( buffer );
+}
 #endif
 
 // =======================================================================
@@ -1348,7 +1355,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     nWidth  = aWinRect.right - aWinRect.left + 1;
     nHeight = aWinRect.bottom - aWinRect.top + 1;
 
-    if ( ::GetParent( maFrameData.mhWnd ) )
+    if ( !(nPosSize & SWP_NOMOVE) && ::GetParent( maFrameData.mhWnd ) )
     {
             // --- RTL --- (mirror window pos)
             RECT aParentRect;
