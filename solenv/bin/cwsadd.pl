@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsadd.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-12 15:09:59 $
+#   last change: $Author: rt $ $Date: 2004-09-08 11:42:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,7 +101,7 @@ use CvsModule;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.3 $ ';
+my $id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -236,9 +236,9 @@ sub parse_options
     # returns freshly allocated Cws reference
 
     # linking and unlinking requires UNIX
-    if ( $^O =~ "MSWin32" || $^O =~ "cygwin" )
+    if ( $^O =~ "MSWin32" )
     {
-        print_error("Sorry! not for windows",2);
+        print_error("Sorry! not for non-cygwin Windows environment",2);
     }
     my $help;
     my $success = GetOptions('-h' => \$help, '-a' => \$force_checkout);
