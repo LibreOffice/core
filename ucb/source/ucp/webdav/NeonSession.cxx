@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-01-26 16:05:04 $
+ *  last change: $Author: kso $ $Date: 2001-02-15 11:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,14 @@
  *
  *
  ************************************************************************/
+#include "NeonTypes.hxx"
 #include "NeonSession.hxx"
 #include "NeonInputStream.hxx"
 #include "NeonPropFindRequest.hxx"
 #include "NeonPUTFile.hxx"
 #include "NeonUri.hxx"
+
 #include <dav_basic.h>
-#include <http_basic.h>
 #include <http_redirect.h>
 
 using namespace rtl;
@@ -473,8 +474,12 @@ void NeonSession::GETReader( void *         inUserData,
                              const char *   inBuf,
                              size_t         inLen )
 {
-    NeonInputStream * theInputStream = ( NeonInputStream *) inUserData;
-    theInputStream->AddToStream( inBuf, inLen );
+    // neon calls this function with (inLen == 0)...
+    if ( inLen > 0 )
+    {
+        NeonInputStream * theInputStream = ( NeonInputStream *) inUserData;
+        theInputStream->AddToStream( inBuf, inLen );
+    }
 }
 
 // -------------------------------------------------------------------
@@ -486,12 +491,16 @@ void NeonSession::GETWriter( void *         inUserData,
                              const char *   inBuf,
                              size_t         inLen )
 {
-    Reference< XOutputStream > * theOutputStreamPtr =
-            ( Reference< XOutputStream > *) inUserData;
-    Reference< XOutputStream > theOutputStream = *theOutputStreamPtr;
+    // neon calls this function with (inLen == 0)...
+    if ( inLen > 0 )
+    {
+        Reference< XOutputStream > * theOutputStreamPtr =
+                static_cast< Reference< XOutputStream > * >( inUserData );
+        Reference< XOutputStream > theOutputStream = *theOutputStreamPtr;
 
-    const Sequence< sal_Int8 > theSequence( ( sal_Int8 *) inBuf, inLen );
-    theOutputStream->writeBytes( theSequence );
+        const Sequence< sal_Int8 > theSequence( ( sal_Int8 *) inBuf, inLen );
+        theOutputStream->writeBytes( theSequence );
+    }
 }
 
 // Note: Uncomment the following if locking support is required
