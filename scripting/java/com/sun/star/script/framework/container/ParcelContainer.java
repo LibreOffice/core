@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParcelContainer.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:49:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 15:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,10 +177,9 @@ public class ParcelContainer implements XNameAccess
     }
 
     /**
-     * Returns a child <tt>ParcelContainer</tt> whose member
-     * <tt>containerUrl</tt> matches the <tt>containerUrl</tt>
-     * argument passed to this method.
-     * @param    containerUrl the <tt>containerUrl</tt> which is to
+     * Returns a child <tt>ParcelContainer</tt> whose location
+     * matches the <tt>location</tt> argument passed to this method.
+     * @param    key the <tt>location</tt> which is to
      *           be matched.
      *
      * @return    child <tt>ParcelContainer</tt> or <null> if none
@@ -198,6 +197,33 @@ public class ParcelContainer implements XNameAccess
                 c.containerUrl, c.getName());
 
             if ( key.equals( location ) )
+            {
+                result = c;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Returns a child <tt>ParcelContainer</tt> whose member
+     * <tt>containerUrl</tt> matches the <tt>containerUrl</tt>
+     * argument passed to this method.
+     * @param    containerUrl the <tt>containerUrl</tt> which is to
+     *           be matched.
+     *
+     * @return    child <tt>ParcelContainer</tt> or <null> if none
+     * found.
+     */
+
+    public ParcelContainer getChildContainerForURL( String containerUrl )
+    {
+        ParcelContainer result = null;
+        Iterator iter = childContainers.iterator();
+        while ( iter.hasNext() )
+        {
+            ParcelContainer c = (ParcelContainer) iter.next();
+            if ( containerUrl.equals( c.containerUrl ) )
             {
                 result = c;
                 break;
@@ -368,7 +394,7 @@ public class ParcelContainer implements XNameAccess
         }
         if ( parcel == null )
         {
-            throw new com.sun.star.container.NoSuchElementException( aName );
+            throw new com.sun.star.container.NoSuchElementException( "Macro Library " + aName + " not found" );
         }
         return parcel;
     }
