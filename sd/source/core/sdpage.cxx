@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: aw $ $Date: 2001-11-20 11:24:16 $
+ *  last change: $Author: aw $ $Date: 2001-12-12 19:05:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,7 +486,11 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         }
 
         // Objekt am StyleSheet anmelden
-        pSdrObj->NbcSetStyleSheet( GetStyleSheetForPresObj(eObjKind), FALSE );
+        // #95114# Set style only when one was found (as in 5.2)
+        // pSdrObj->NbcSetStyleSheet( GetStyleSheetForPresObj(eObjKind), FALSE );
+        SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
+        if(pSheetForPresObj)
+            pSdrObj->SetStyleSheet(pSheetForPresObj, FALSE);
 
         if (eObjKind == PRESOBJ_OUTLINE)
         {
