@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:42:49 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:33:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _CONNECTIVITY_MAB_QUERYHELPER_HXX_
 #include <MQueryHelper.hxx>
+#endif
 #include <MNameMapper.hxx>
 #include <MConnection.hxx>
 
@@ -71,6 +73,9 @@
 #endif
 #ifndef _CONNECTIVITY_MAB_CONVERSIONS_HXX_
 #include "MTypeConverter.hxx"
+#endif
+#ifndef _CONNECTIVITY_MAB_MOZABHELPER_HXX_
+#include "MNSMozabProxy.hxx"
 #endif
 
 #if OSL_DEBUG_LEVEL > 0
@@ -98,9 +103,9 @@ using namespace connectivity;
 namespace connectivity {
     namespace mozab {
         struct MQueryDirectory {
-            nsCOMPtr<nsIAbDirectoryQuery> directory;
+            nsCOMPtr<nsIAbDirectory> directory;
+            nsCOMPtr<nsIAbDirectoryQuery> directoryQuery;
             PRInt32                       contextId;
-
             MQueryDirectory() : contextId(-1) {}
         };
     }
@@ -112,6 +117,9 @@ MQuery::MQuery()
     OSL_TRACE( "IN MQuery::MQuery()\n" );
 
    construct();
+#if OSL_DEBUG_LEVEL > 0
+    m_oThreadID = osl_getThreadIdentifier(NULL);
+#endif
 
     OSL_TRACE( "\tOUT MQuery::MQuery()\n" );
 }
@@ -123,6 +131,9 @@ MQuery::MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString>  & ca)
     construct();
 
     m_aColumnAliasMap = ca;
+#if OSL_DEBUG_LEVEL > 0
+    m_oThreadID = osl_getThreadIdentifier(NULL);
+#endif
 
     OSL_TRACE( "\tOUT MQuery::MQuery( ca )\n" );
 }
@@ -134,9 +145,9 @@ MQuery::~MQuery()
     // MQueryHelper is reference counted, so we need to decrement the
     // count here.
     //
-    if ( m_aQueryDirectory->contextId != -1 && m_aQueryDirectory->directory !=
+    if ( m_aQueryDirectory->contextId != -1 && m_aQueryDirectory->directoryQuery !=
     NULL )
-        m_aQueryDirectory->directory->StopQuery(m_aQueryDirectory->contextId);
+        m_aQueryDirectory->directoryQuery->StopQuery(m_aQueryDirectory->contextId);
 
     if ( m_aQueryDirectory )
         delete m_aQueryDirectory;
@@ -170,7 +181,8 @@ void MQuery::setAttributes(::std::vector< ::rtl::OUString> &attrs)
     m_aAttributes.reserve(attrs.size());
     ::std::vector< ::rtl::OUString>::iterator aIterAttr = attrs.begin();
     ::std::map< ::rtl::OUString, ::rtl::OUString>::iterator aIterMap;
-    for(aIterAttr; aIterAttr != attrs.end();++aIterAttr)
+
+    for(aIterAttr = attrs.begin(); aIterAttr != attrs.end();++aIterAttr)
     {
         aIterMap = m_aColumnAliasMap.find(*aIterAttr);
         if (aIterMap == m_aColumnAliasMap.end()) {
@@ -411,33 +423,110 @@ sal_uInt32 MQuery::InsertLoginInfo(OConnection* _pCon)
     sslPrefName.Append(NS_LITERAL_CSTRING(".UseSSL"));
     rv = prefs->SetBoolPref (sslPrefName.get(),useSSL);
     NS_ENSURE_SUCCESS(rv, rv);
+    return rv;
 }
+
 // -------------------------------------------------------------------------
-sal_Bool CheckForceQueryProxyUse(const nsIAbDirectory*  directory)
+sal_Int32 getDirectoryType(const nsIAbDirectory*  directory)
 {
     nsresult retCode;
     nsCOMPtr<nsIRDFResource> rdfResource = do_QueryInterface((nsISupports *)directory, &retCode) ;
-    if (NS_FAILED(retCode)) { return sal_False; }
+    if (NS_FAILED(retCode)) { return SDBCAddress::Unknown; }
     const char * uri;
     retCode=rdfResource->GetValueConst(&uri);
-    if (NS_FAILED(retCode)) { return sal_False; }
-    const char *outlookUriPrefix="moz-aboutlookdirectory://";
-    if (strncmp(uri,outlookUriPrefix,strlen(outlookUriPrefix)) == 0)
+    if (NS_FAILED(retCode)) { return SDBCAddress::Unknown; }
+    const sal_Char *sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_LDAP;
+    if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
-        return sal_True;
+        return SDBCAddress::LDAP;
     }
-    else
+    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_MOZILLA;
+    if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
     {
-        return sal_False;
+        return SDBCAddress::Mozilla;
     }
+    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_MOZILLA_MDB;
+    if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
+    {
+        return SDBCAddress::Mozilla;
+    }
+    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_OUTLOOK_EXPRESS;
+    if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
+    {
+        return SDBCAddress::OutlookExp;
+    }
+    sUriPrefix = ::connectivity::mozab::MOZ_SCHEME_OUTLOOK_MAPI;
+    if (strncmp(uri,sUriPrefix,strlen(sUriPrefix)) == 0)
+    {
+        return SDBCAddress::Outlook;
+    }
+    return SDBCAddress::Unknown;
 
 }
 // -------------------------------------------------------------------------
+sal_Bool isForceQueryProxyUsed(const nsIAbDirectory*  directory)
+{
+    sal_Int32 nType = getDirectoryType(directory);
+    if (nType == SDBCAddress::Outlook || nType == SDBCAddress::OutlookExp)
+        return sal_True;
+    return sal_False;
+}
+// -------------------------------------------------------------------------
+sal_Int32 MQuery::commitRow(const sal_Int32 rowIndex)
+{
+    if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
+        return sal_False;
+        MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_QUERYHELPER_COMMIT_CARD;
+    args.argCount = 3;
+    args.arg1 = (void*)m_aQueryHelper;
+    args.arg2 = (void*)&rowIndex;
+    args.arg3 = (void*)m_aQueryDirectory->directory;
+    nsresult rv = xMProxy.StartProxy(&args);
+    m_aErrorString = m_aQueryHelper->getErrorString();
+    return rv;
+}
+
+// -------------------------------------------------------------------------
+sal_Int32 MQuery::deleteRow(const sal_Int32 rowIndex)
+{
+    if (!m_aQueryHelper || !m_aQueryDirectory || !m_aQueryDirectory->directoryQuery)
+        return sal_False;
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_QUERYHELPER_DELETE_CARD;
+    args.argCount = 3;
+    args.arg1 = (void*)m_aQueryHelper;
+    args.arg2 = (void*)&rowIndex;
+    args.arg3 = (void*)m_aQueryDirectory->directory;
+    nsresult rv = xMProxy.StartProxy(&args);
+    m_aErrorString = m_aQueryHelper->getErrorString();
+    return rv;
+
+}
+
+// -------------------------------------------------------------------------
 sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 {
-    OSL_TRACE("IN MQuery::executeQuery()\n");
     ::osl::MutexGuard aGuard(m_aMutex);
-
+    OSL_TRACE("IN MQuery::executeQuery()\n");
+    nsresult rv;
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_EXECUTE_QUERY;
+    args.argCount = 2;
+    args.arg1 = (void*)this;
+    args.arg2 = (void*)_pCon;
+    rv = xMProxy.StartProxy(&args);
+    return rv;
+}
+// -------------------------------------------------------------------------
+sal_Int32 MQuery::executeQueryProxied(OConnection* _pCon)
+{
+#if OSL_DEBUG_LEVEL > 0
+    OSL_TRACE("IN MQuery::executeQueryProxied() Caller thread: %4d \n", m_oThreadID);
+#endif
 
     nsresult rv;        // Store return values.
     //  MTypeConverter aTypeConverter;
@@ -464,10 +553,11 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     // Since Outlook Express and Outlook in OCL mode support a very limited query capability,
     // we use the following bool to judge whether we need bypass any use of a DirectoryQuery
     // interface and instead force the use of the QueryProxy.
-    sal_Bool forceQueryProxyUse = CheckForceQueryProxyUse(directory);
+    sal_Bool forceQueryProxyUse = isForceQueryProxyUsed(directory);
 
+     m_aQueryDirectory->directory = directory;
     // Initialize directory in cases of LDAP and Mozilla
-    if (!forceQueryProxyUse) m_aQueryDirectory->directory = do_QueryInterface(directory, &rv);
+    if (!forceQueryProxyUse) m_aQueryDirectory->directoryQuery = do_QueryInterface(directory, &rv);
 
     if ( NS_FAILED(rv) || forceQueryProxyUse)
     {
@@ -483,7 +573,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
         rv = directoryQueryProxy->Initiate (directory);
         NS_ENSURE_SUCCESS(rv, rv);
 
-        m_aQueryDirectory->directory = do_QueryInterface (directoryQueryProxy, &rv);
+        m_aQueryDirectory->directoryQuery = do_QueryInterface (directoryQueryProxy, &rv);
         NS_ENSURE_SUCCESS(rv, rv);
         OSL_TRACE("Using the directoryQueryProxy\n");
     }
@@ -530,6 +620,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
         }
     }
 
+
     nsCOMPtr< nsIAbBooleanExpression > queryExpression = do_CreateInstance( kBooleanExpressionCID , &rv);
     NS_ENSURE_SUCCESS( rv, rv );
     rv = generateExpression( this, &m_aExpr, queryExpression );
@@ -558,13 +649,13 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
 
     m_aQueryHelper->reset();
 
-    rv = m_aQueryDirectory->directory->DoQuery(arguments, m_aQueryHelper, m_nMaxNrOfReturns, -1, &m_aQueryDirectory->contextId);
+    rv = m_aQueryDirectory->directoryQuery->DoQuery(arguments, m_aQueryHelper, m_nMaxNrOfReturns, -1, &m_aQueryDirectory->contextId);
 
 
     if (NS_FAILED(rv))  {
         m_aQueryDirectory->contextId = -1;
         OSL_TRACE( "****** DoQuery failed\n");
-        OSL_TRACE("\tOUT MQuery::executeQuery()\n");
+        OSL_TRACE("\tOUT MQuery::executeQueryProxied()\n");
         m_aQueryHelper->notifyQueryError() ;
         return(-1);
     }
@@ -574,7 +665,7 @@ sal_Int32 MQuery::executeQuery(OConnection* _pCon)
     }
 #endif
 
-    OSL_TRACE("\tOUT MQuery::executeQuery()\n");
+    OSL_TRACE("\tOUT MQuery::executeQueryProxied()\n");
 
     return(0);
 }
@@ -616,9 +707,9 @@ MQuery::queryComplete( void )
 sal_Bool
 MQuery::waitForQueryComplete( void )
 {
-    if( m_aQueryHelper->waitForQueryComplete( m_aErrorString ) )
+    if( m_aQueryHelper->waitForQueryComplete( ) )
         return sal_True;
-
+    m_aErrorString = m_aQueryHelper->getErrorString();
     m_aErrorOccurred = sal_True;
     return( sal_False );
 }
@@ -629,24 +720,57 @@ sal_Bool
 MQuery::checkRowAvailable( sal_Int32 nDBRow )
 {
     while( !queryComplete() && m_aQueryHelper->getRealCount() <= (sal_uInt32)nDBRow )
-        if ( !m_aQueryHelper->waitForRow( nDBRow, m_aErrorString ) ) {
+        if ( !m_aQueryHelper->waitForRow( nDBRow ) ) {
             m_aErrorOccurred = sal_True;
+            m_aErrorString = m_aQueryHelper->getErrorString();
             return( sal_False );
         }
 
     return( getRowCount() > nDBRow );
+}
+// -------------------------------------------------------------------------
+sal_Bool
+MQuery::setRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType ) const
+{
+    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
+
+    OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
+    if (xResEntry == NULL )
+    {
+        m_aErrorOccurred = sal_True;
+        m_aErrorString = m_aQueryHelper->getErrorString();
+        return sal_False;
+    }
+    switch ( nType )
+    {
+        case DataType::VARCHAR:
+            {
+                ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap = m_aColumnAliasMap.find(aDBColumnName);
+                if (aIterMap != m_aColumnAliasMap.end())
+                    xResEntry->setValue(aIterMap->second, rValue.getString());
+                else
+                    xResEntry->setValue( aDBColumnName, rValue.getString());
+            }
+            break;
+        default:
+            OSL_ENSURE( sal_False, "invalid data type!" );
+            break;
+    }
+
+    return sal_True;
 }
 
 // -------------------------------------------------------------------------
 sal_Bool
 MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString& aDBColumnName, sal_Int32 nType ) const
 {
-    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow, m_aErrorString );
+    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
 
     OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
     if (xResEntry == NULL )
     {
         m_aErrorOccurred = sal_True;
+        m_aErrorString = m_aQueryHelper->getErrorString();
         rValue.setNull();
         return sal_False;
     }
@@ -669,6 +793,66 @@ MQuery::getRowValue( ORowSetValue& rValue, sal_Int32 nDBRow,const rtl::OUString&
     return sal_True;
 }
 // -------------------------------------------------------------------------
+sal_Int32
+MQuery::getRowStates(sal_Int32 nDBRow)
+{
+    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
+
+    OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
+    if (xResEntry == NULL )
+    {
+        m_aErrorOccurred = sal_True;
+        m_aErrorString = m_aQueryHelper->getErrorString();
+        return RowStates_Error;
+    }
+    return xResEntry->getRowStates();
+}
+sal_Bool
+MQuery::setRowStates(sal_Int32 nDBRow,sal_Int32 aState)
+{
+    MQueryHelperResultEntry*   xResEntry = m_aQueryHelper->getByIndex( nDBRow );
+
+    OSL_ENSURE( xResEntry != NULL, "xResEntry == NULL");
+    if (xResEntry == NULL )
+    {
+        m_aErrorOccurred = sal_True;
+        m_aErrorString = m_aQueryHelper->getErrorString();
+        return sal_False;
+    }
+    return xResEntry->setRowStates(aState);
+}
+
+sal_Bool
+MQuery::resyncRow(sal_Int32 nDBRow)
+{
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_QUERYHELPER_RESYNC_CARD;
+    args.argCount = 2;
+    args.arg1 = (void*)m_aQueryHelper;
+    args.arg2 = (void*)&nDBRow;
+    nsresult rv = xMProxy.StartProxy(&args);
+    m_aErrorString = m_aQueryHelper->getErrorString();
+    return rv;
+}
+
+sal_Int32
+MQuery::createNewCard()
+{
+    sal_Int32 nNumber = 0;
+    MNSMozabProxy xMProxy;
+    RunArgs args;
+    args.funcIndex = ProxiedFunc::FUNC_QUERYHELPER_CREATE_NEW_CARD;
+    args.argCount = 2;
+    args.arg1 = (void*)m_aQueryHelper;
+    args.arg2 = (void*)&nNumber;
+    nsresult rv = xMProxy.StartProxy(&args);
+
+    m_aErrorString = m_aQueryHelper->getErrorString();
+    NS_ENSURE_SUCCESS(rv,0);
+    return nNumber;
+}
+// -------------------------------------------------------------------------
 
 MNameMapper*
 MQuery::CreateNameMapper()
@@ -681,4 +865,25 @@ void
 MQuery::FreeNameMapper( MNameMapper* _ptr )
 {
     delete _ptr;
+}
+// -------------------------------------------------------------------------
+sal_Bool MQuery::
+isWritable()
+{
+    if ( !m_aQueryDirectory )
+        return sal_False;
+
+    nsresult rv;        // Store return values.
+    nsCOMPtr<nsIAbDirectory> directory = do_QueryInterface(m_aQueryDirectory->directory, &rv);;
+    if (NS_FAILED(rv))
+        return sal_False;
+    if (getDirectoryType(directory) == SDBCAddress::Mozilla && isProfileLocked())
+        return sal_False;
+
+    PRBool isWriteable;
+    rv = directory->GetOperations (&isWriteable);
+    if (NS_FAILED(rv))
+        return sal_False;
+    sal_Bool bWritable = isWriteable & nsIAbDirectory::opWrite;
+    return  bWritable;
 }
