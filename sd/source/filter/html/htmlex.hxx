@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlex.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ class HtmlErrorContext : public ErrorContext
 {
 private:
     USHORT  m_nResId;
-    ByteString  m_aURL1;
-    ByteString  m_aURL2;
+    String  m_aURL1;
+    String  m_aURL2;
 
 public:
                     HtmlErrorContext(Window *pWin=0);
@@ -138,8 +138,8 @@ public:
     virtual BOOL    GetString( ULONG nErrId, String& rCtxStr );
 
     void            SetContext( USHORT nResId );
-    void            SetContext( USHORT nResId, const ByteString& rURL );
-    void            SetContext( USHORT nResId, const ByteString& rURL1, const ByteString& rURL2 );
+    void            SetContext( USHORT nResId, const String& rURL );
+    void            SetContext( USHORT nResId, const String& rURL1, const String& rURL2 );
 };
 
 // =====================================================================
@@ -147,7 +147,7 @@ public:
 // =====================================================================
 class HtmlExport
 {
-    rtl::OUString m_aPath;
+    String m_aPath;
 
     SdDrawDocument* pDoc;
     SdDrawDocShell* pDocSh;
@@ -156,112 +156,112 @@ class HtmlExport
 
     HtmlPublishMode m_eMode;
     SfxProgress* mpProgress;
-    BOOL m_bImpress;
+    bool m_bImpress;
     USHORT m_nSdPageCount;
     USHORT m_nPagesWritten;
-    BOOL m_bContentsPage;
+    bool m_bContentsPage;
     INT16 m_nButtonThema;
     UINT16 m_nWidthPixel;
     UINT16 m_nHeightPixel;
     PublishingFormat m_eFormat;
-    BOOL m_bHeader;
-    BOOL m_bNotes;
-    BOOL m_bFrames;
-    BOOL m_bKiosk;
-//-/    BOOL m_bCreated;
-    ByteString m_aIndex;
-    ByteString m_aEMail;
-    ByteString m_aAuthor;
-    ByteString m_aHomePage;
-    ByteString m_aInfo;
+    bool m_bHeader;
+    bool m_bNotes;
+    bool m_bFrames;
+    bool m_bKiosk;
+//-/    bool m_bCreated;
+    String m_aIndex;
+    String m_aEMail;
+    String m_aAuthor;
+    String m_aHomePage;
+    String m_aInfo;
     INT16 m_nCompression;
-    ByteString m_aDocFileName;
-    ByteString m_aFramePage;
-    ByteString m_DocTitle;
-    BOOL m_bDownload;
+    String m_aDocFileName;
+    String m_aFramePage;
+    String m_DocTitle;
+    bool m_bDownload;
 
-    BOOL m_bAutoSlide;
+    bool m_bAutoSlide;
     UINT32  m_nSlideDuration;
-    BOOL m_bSlideSound;
-    BOOL m_bEndless;
+    bool m_bSlideSound;
+    bool m_bEndless;
 
-    BOOL m_bUserAttr;           // die folgenden Farben werden fuer das <body>
+    bool m_bUserAttr;           // die folgenden Farben werden fuer das <body>
     Color m_aTextColor;         // tag genutzt, wenn m_bUserAttr true ist
     Color m_aBackColor;
     Color m_aLinkColor;
     Color m_aVLinkColor;
     Color m_aALinkColor;
     Color m_aFirstPageColor;
-    BOOL m_bDocColors;
+    bool m_bDocColors;
 
-    ByteString   m_aHTMLExtension;
-    ByteString** m_pHTMLFiles;
-    ByteString** m_pImageFiles;
-    ByteString** m_pPageNames;
-    ByteString** m_pTextFiles;
+    String   m_aHTMLExtension;
+    String** m_pHTMLFiles;
+    String** m_pImageFiles;
+    String** m_pPageNames;
+    String** m_pTextFiles;
 
-    ByteString m_aExportPath;           // Das Ausgabeverzeichnes bzw. die URL
-    ByteString m_aIndexUrl;
-    ByteString m_aURLPath;
-    ByteString m_aCGIPath;
+    String m_aExportPath;           // Das Ausgabeverzeichnes bzw. die URL
+    String m_aIndexUrl;
+    String m_aURLPath;
+    String m_aCGIPath;
     PublishingScript m_eScript;
 
     SdrTextObj* GetLayoutTextObject(SdrPage* pPage);
 
     void SetDocColors( SdPage* pPage = NULL );
 
-    BOOL    CreateImagesForPresPages();
-    BOOL    CreateHtmlTextForPresPages();
-    BOOL    CreateHtmlForPresPages();
-    BOOL    CreateContentPage();
+    bool    CreateImagesForPresPages();
+    bool    CreateHtmlTextForPresPages();
+    bool    CreateHtmlForPresPages();
+    bool    CreateContentPage();
     void    CreateFileNames();
-    BOOL    CreateBitmaps();
-    BOOL    CreateOutlinePages();
-    BOOL    CreateFrames();
-    BOOL    CreateNotesPages();
-    BOOL    CreateNavBarFrames();
+    bool    CreateBitmaps();
+    bool    CreateOutlinePages();
+    bool    CreateFrames();
+    bool    CreateNotesPages();
+    bool    CreateNavBarFrames();
 
-    BOOL    CreateASPScripts();
-    BOOL    CreatePERLScripts();
-    BOOL    CreateImageFileList();
-    BOOL    CreateImageNumberFile();
+    bool    CreateASPScripts();
+    bool    CreatePERLScripts();
+    bool    CreateImageFileList();
+    bool    CreateImageNumberFile();
 
-    ULONG   CreateBitmap( ULONG nThemeId, INT16 nImage, const ByteString& aName ) const;
+    ULONG   CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aName ) const;
     void    SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const;
-    ByteString getDocumentTitle();
-    BOOL    SavePresentation();
+    String getDocumentTitle();
+    bool    SavePresentation();
 
-    ByteString  CreateLink( const ByteString& aLink, const ByteString& aText,
-                        const ByteString& aTarget = ByteString()) const;
-    ByteString  CreateImage( const ByteString& aImage, const ByteString& aAltText, INT16 nWidth = -1, INT16 nHeight = -1 ) const;
-    ByteString  CreateNavBar( USHORT nSdPage, BOOL bIsText ) const;
-    ByteString  CreateBodyTag() const;
+    String  CreateLink( const String& aLink, const String& aText,
+                        const String& aTarget = String()) const;
+    String  CreateImage( const String& aImage, const String& aAltText, INT16 nWidth = -1, INT16 nHeight = -1 ) const;
+    String  CreateNavBar( USHORT nSdPage, bool bIsText ) const;
+    String  CreateBodyTag() const;
 
-    ByteString  ParagraphToHTMLString( SdrOutliner* pOutliner, ULONG nPara, const Color& rBackgroundColor );
-    ByteString  TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
+    String  ParagraphToHTMLString( SdrOutliner* pOutliner, ULONG nPara, const Color& rBackgroundColor );
+    String  TextAttribToHTMLString( SfxItemSet* pSet, HtmlState* pState, const Color& rBackgroundColor );
 
-    ByteString  CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
-    ByteString  CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, BOOL bHeadLine, const Color& rBackgroundColor );
-    ByteString  CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, BOOL bHeadLine, const Color& rBackgroundColor );
+    String  CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, const Color& rBackgroundColor );
+    String  CreateTextForPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
+    String  CreateTextForNotesPage( SdrOutliner* pOutliner, SdPage* pPage, bool bHeadLine, const Color& rBackgroundColor );
 
-    ByteString  CreateHTMLCircleArea( ULONG nRadius, ULONG nCenterX,
-                                  ULONG nCenterY, const ByteString& rHRef ) const;
-    ByteString  CreateHTMLPolygonArea( const XPolyPolygon& rXPolyPoly,
+    String  CreateHTMLCircleArea( ULONG nRadius, ULONG nCenterX,
+                                  ULONG nCenterY, const String& rHRef ) const;
+    String  CreateHTMLPolygonArea( const XPolyPolygon& rXPolyPoly,
                                    Size aShift, double fFactor,
-                                   const ByteString& rHRef ) const;
-    ByteString  CreateHTMLRectArea( const Rectangle& rRect,
-                                const ByteString& rHRef ) const;
+                                   const String& rHRef ) const;
+    String  CreateHTMLRectArea( const Rectangle& rRect,
+                                const String& rHRef ) const;
 
-    ByteString  CreatePageURL( USHORT nPgNum );
+    String  CreatePageURL( USHORT nPgNum );
 
-    ByteString InsertSound( const ByteString& rSoundFile );
-    BOOL CopyFile( const ByteString& rSourceFile, const ByteString& rDestPath );
-    BOOL CopyScript( const ByteString& rPath, const ByteString& rSource, const ByteString& rDest, bool bUnix = false );
+    String InsertSound( const String& rSoundFile );
+    bool CopyFile( const String& rSourceFile, const String& rDestPath );
+    bool CopyScript( const String& rPath, const String& rSource, const String& rDest, bool bUnix = false );
 
     void InitProgress( USHORT nProgrCount );
     void ResetProgress();
 
-    ByteString WriteMetaCharset() const;
+    String WriteMetaCharset() const;
 
     void InitExportParameters( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams);
     void ExportHtml();
@@ -272,13 +272,16 @@ class HtmlExport
     void HideSpecialObjects( SdPage* pPage );
     void ShowSpecialObjects();
 
+    bool WriteHtml( const String& rFileName, bool bAddExtension, const String& rHtmlData );
+    String GetButtonName( USHORT nButton ) const;
+
  public:
      HtmlExport( rtl::OUString aPath, const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rParams, SdDrawDocument* pExpDoc, SdDrawDocShell* pDocShell );
     virtual ~HtmlExport();
 
-    static ByteString   ColorToHTMLString( Color aColor );
-    static ByteString   StringToHTMLString( const String& rString );
-    static ByteString   StringToHTMLString( const ByteString& rString );
+    static String   ColorToHTMLString( Color aColor );
+    static String   StringToHTMLString( const String& rString );
+    static String   StringToURL( const String& rURL );
 };
 
 #endif // _SD_HTMLEX_HXX
