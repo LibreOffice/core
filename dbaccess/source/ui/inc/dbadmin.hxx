@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-10 12:12:46 $
+ *  last change: $Author: fs $ $Date: 2001-05-15 15:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -650,6 +650,9 @@ protected:
     */
     sal_Bool            hasAuthentication(const SfxItemSet& _rSet) const;
 
+    /// prepares switching to another data source
+    sal_Bool            prepareSwitchDatasource();
+
 private:
     DECL_LINK(OnDatasourceSelected, ListBox*);
     DECL_LINK(OnTypeSelected, OGeneralPage*);
@@ -671,6 +674,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/05/10 12:12:46  fs
+ *  #86223# remember view settings while applying (no matter if synchron or asynchronously
+ *
  *  Revision 1.15  2001/04/26 11:49:58  fs
  *  file is alive, again - added support for data source associated bookmarks
  *
