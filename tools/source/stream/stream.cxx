@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stream.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:24:15 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:40:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -795,9 +795,11 @@ BOOL SvStream::ReadLine( ByteString& rStr )
     if ( bEnd && (c=='\r' || c=='\n') )  // Sonderbehandlung DOS-Dateien
     {
         char cTemp;
-        Read((char*)&cTemp , sizeof(cTemp) );
-        if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
-            Seek( nOldFilePos );
+        ULONG nLen = Read((char*)&cTemp , sizeof(cTemp) );
+        if ( nLen ) {
+            if( cTemp == c || (cTemp != '\n' && cTemp != '\r') )
+                Seek( nOldFilePos );
+        }
     }
 
     if ( bEnd )
