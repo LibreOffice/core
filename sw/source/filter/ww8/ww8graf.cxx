@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:15:28 $
+ *  last change: $Author: vg $ $Date: 2003-06-24 07:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2432,6 +2432,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             //it to the current page. we want to be able to do this in the
             //future.
             eAnchor=FLY_PAGE;
+            if (nXRelTo == 3)
+                nXRelTo = 2;
         }
         else if (eAnchor == FLY_AUTO_CNTNT)
         {
@@ -2439,6 +2441,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             //paragraph". #109069#, we want to be able to do this in the
             //future
             eAnchor = FLY_AT_CNTNT;
+            if (nXRelTo == 3)
+                nXRelTo = 2;
         }
     }
 
