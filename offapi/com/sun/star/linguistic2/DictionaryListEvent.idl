@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryListEvent.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 15:05:48 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,11 @@ struct DictionaryListEvent : com::sun::star::lang::EventObject
     //-------------------------------------------------------------------------
     /** the combined type of the accumulated events.
 
-        <p>The value can be the combination of multiple
-         <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
-         by applying the logical OR to them.</p>
+    <p>The value can be the combination of multiple
+     <type scope="com::sun::star::linguistic2">DictionaryListEventFlags</type>
+     by applying the logical OR to them.</p>
 
-        @see    com::sun::star::linguistic2::DictionaryListEventFlags
+    @see    com::sun::star::linguistic2::DictionaryListEventFlags
 
     <!-- Dennis: Does the <type> tag change the display of its contents -->
     <!-- Thomas: AFAIK it should translate into a hyperlink or so. -->

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionary.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 15:03:19 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ module com { module sun { module star { module linguistic2 {
     <type scope="com::sun::star::linguistic2">XDictionaryEntry</type>).
     Only active dictionaries with an appropriate language are used
     for that purpose.
-    The entries of a active positive dictionary are words that are
+    The entries of an active, positive dictionary are words that are
     required to be recognized as correct during the spellchecking
     process. Additionally, they will be used for hyphenation.
     Entries of a negative dictionary are required to be recognized
@@ -117,10 +117,11 @@ interface XDictionary : com::sun::star::container::XNamed
     com::sun::star::linguistic2::DictionaryType getDictionaryType();
 
     //-------------------------------------------------------------------------
-    /** specifies whether the dictionary should be used or not.
+    /** specifies whether the dictionary should be used or not .
 
         @param  bAcvtivate
-            <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
+        <TRUE/> if the dictionary should be used, <FALSE/> otherwise.
+
     */
     void setActive( [in] boolean bActivate );
 
@@ -282,8 +283,8 @@ interface XDictionary : com::sun::star::container::XNamed
         @returns
             <TRUE/> if the entry was successfully made, <FALSE/> otherwise.
             If <member scope="com::sun::star::lang">
-            XEventListener::disposing</member> was called before it
-            will always fail.
+            XEventListener::disposing</member> was called before,
+              it will always fail.
 
         @see    removeDictionaryEventListener
          @see   com::sun::star::linguistic2::XDictionaryEventListener

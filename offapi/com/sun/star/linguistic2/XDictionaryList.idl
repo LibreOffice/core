@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryList.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-23 15:03:37 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,8 @@ interface XDictionaryList : com::sun::star::uno::XInterface
         @returns
             <TRUE/> if the entry was made, <FALSE/> otherwise.
             If <member scope="com::sun::star::lang">
-            XEventListener::disposing</member> was called before it
-            will always fail.
+            XEventListener::disposing</member> was called before,
+              it will always fail.
 
         @param  xListener
             the object to be notified of dictionary-list events.
@@ -265,15 +265,15 @@ interface XDictionaryList : com::sun::star::uno::XInterface
 
         @param  aLocale
             defines the language of the dictionary.
-             Use an empty aLocale
-            for dictionaries which may contain entries of all languages.
+             Use an empty aLocale for dictionaries which may contain
+            entries of all languages.
 
         @param  eDicType
             specifies the type of the dictionary.
 
          @param aURL
-            is the URL of the location where the dictionary is persistent if
-            the XStorable interface is supported.
+            is the URL of the location where the dictionary is persistent,
+            if the XStorable interface is supported.
             It may be empty, which means the dictionary will not be persistent.
 
         @see    com::sun::star::linguistic2::XDictionary

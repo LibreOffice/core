@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellChecker.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 17:29:42 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ module com { module sun { module star { module linguistic2 {
 
     <P>It is possible to simply check if a word, in a specified language,
     is correct or additionally, if it was misspelled, some proposals
-    how it might be written.</P>
+    how it might be correctly written.</P>
 
     @see    com::sun::star::linguistic2::XSupportedLocales
 */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryEvent.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-03 17:29:41 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ struct DictionaryEvent : com::sun::star::lang::EventObject
     short nEvent;
 
     //-------------------------------------------------------------------------
-    /** is the affected dictionary entry (if any).
+    /**     is the affected dictionary entry (if any).
 
          <p>It must be set if an entry was
          added or deleted, otherwise it should be empty.</p>

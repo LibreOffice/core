@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPossibleHyphens.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 17:12:41 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ module com { module sun { module star { module linguistic2 {
      getOrigHyphensPositions:   4, 9
      That is "Dampfschiffahrt" can be hyphenated after the "pf" (4) and
      between the double "ff" (9). And if you are going to hyphenate it at
-     the at position 9 you will get a additional "f" before the hyphen
+     position 9 you will get an additional "f" before the hyphen
      character.</P>
 
     @see    com::sun::star::linguistic2::XHyphenator

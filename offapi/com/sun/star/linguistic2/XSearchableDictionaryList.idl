@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSearchableDictionaryList.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: arellano $ $Date: 2001-04-04 17:18:42 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,8 +111,7 @@ interface XSearchableDictionaryList : com::sun::star::linguistic2::XDictionaryLi
         @param bSpellEntry
             <TRUE/> if entries for purposes of spellchecking are required.
             <FALSE/> if only entries for hyphenation purposes are required.
-
-    */
+*/
     com::sun::star::linguistic2::XDictionaryEntry   queryDictionaryEntry(
         [in] string  aWord ,
         [in] com::sun::star::lang::Locale  aLocale,

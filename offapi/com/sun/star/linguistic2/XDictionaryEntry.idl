@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDictionaryEntry.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: mi $ $Date: 2001-11-01 14:42:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,15 +76,15 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** This interfaces gives access to a dictionary entry.
 
-    <P>A dictionary entry can supply a word and it's hyhenation
+    <P>A dictionary entry can supply a word and its hyhenation
     and indicate if it is a negative word.
     If it is a negative entry it may supply a replacement text to
-    ne used instead of the entries word.</P>
+    be used instead of the entry word.</P>
 
-     <P>Hyphenation positions are represented by a '=' in the word.
+     <P>Hyphenation positions are represented by an '=' in the word.
      If the '=' is the last character of the word this means it should not
      be hyphenated. If there is no '=' charcter in the word, hyphenation
-     positions will be determined automatically (i.e. from the hyphenator
+     positions will be determined automatically (i.e., from the hyphenator
     service alone).</P>
 
      <P>Entries whose words only differ in hyphenation are considered
@@ -106,20 +106,20 @@ interface XDictionaryEntry : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @returns
-            <TRUE/> if the word (entry) is a negativ one and should not be
-             used, <FALSE/> else.
+            <TRUE/> if the word (entry) is a negative one and should not be
+             used, <FALSE/> otherwise.
 
         @see    getReplacementText
     */
     boolean isNegative();
 
     //-------------------------------------------------------------------------
-    /** is the suggested replacement text for negativ words.
+    /** is the suggested replacement text for negative words.
 
-         <p>It is undefined if the entry is not negativ.</p>
+         <p>It is undefined if the entry is not negative.</p>
 
          @returns
-             the replacement text for a negativ entry.
+             the replacement text for a negative entry.
              An empty string indicates that no replacement text is provided.
 
          @see   isNegative
