@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:28:44 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:29:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -468,9 +468,9 @@ public:
     ULONG                   GetNumberFormat( const ScAddress& rPos ) const
                                 { return aCol[rPos.Col()].GetNumberFormat( rPos.Row() ); }
     ULONG                   GetNumberFormat( SCCOL nCol, SCROW nRow ) const;
-    void                    MergeSelectionPattern( SfxItemSet** ppSet,
+    void                    MergeSelectionPattern( ScMergePatternState& rState,
                                                 const ScMarkData& rMark, BOOL bDeep ) const;
-    void                    MergePatternArea( SfxItemSet** ppSet, SCCOL nCol1, SCROW nRow1,
+    void                    MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
                                                 SCCOL nCol2, SCROW nRow2, BOOL bDeep ) const;
     void                    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                                             ScLineFlags& rFlags,
