@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3i64tuple.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@ namespace basegfx
     */
     class B3I64Tuple
     {
-    private:
-        static B3I64Tuple                               maEmptyTuple;
-
     protected:
         sal_Int64                                       mnX;
         sal_Int64                                       mnY;
@@ -248,7 +245,7 @@ namespace basegfx
 
         bool equalZero() const
         {
-            return (this == &maEmptyTuple ||
+            return (this == &getEmptyTuple() ||
                 (mnX == 0 && mnY == 0 && mnZ == 0));
         }
 
@@ -270,10 +267,7 @@ namespace basegfx
             return *this;
         }
 
-        static const B3I64Tuple& getEmptyTuple()
-        {
-            return maEmptyTuple;
-        }
+        static const B3I64Tuple& getEmptyTuple();
     };
 
     // external operators

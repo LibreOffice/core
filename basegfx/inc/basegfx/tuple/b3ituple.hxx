@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3ituple.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-02-16 17:03:09 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:17:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@ namespace basegfx
     */
     class B3ITuple
     {
-    private:
-        static B3ITuple                             maEmptyTuple;
-
     protected:
         sal_Int32                                       mnX;
         sal_Int32                                       mnY;
@@ -248,7 +245,7 @@ namespace basegfx
 
         bool equalZero() const
         {
-            return (this == &maEmptyTuple ||
+            return (this == &getEmptyTuple() ||
                 (mnX == 0 && mnY == 0 && mnZ == 0));
         }
 
@@ -270,10 +267,7 @@ namespace basegfx
             return *this;
         }
 
-        static const B3ITuple& getEmptyTuple()
-        {
-            return maEmptyTuple;
-        }
+        static const B3ITuple& getEmptyTuple();
     };
 
     // external operators
