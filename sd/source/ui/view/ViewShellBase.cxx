@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:28:52 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,25 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XWINDOW_HPP_
+#include <com/sun/star/awt/XWindow.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
+#include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
 
 using namespace sd;
 #define ViewShellBase
 #include "sdslots.hxx"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 
 namespace sd {
 
@@ -163,9 +178,10 @@ void ViewShellBase::Construct (
     StartListening(*GetViewFrame());
     StartListening(*GetDocShell());
 
-    // Make sure that an instance of the controller exists.  Its
-    // creation includes registration at the frame.
-    GetDrawController();
+    // Make sure that an instance of the controller exists.  We don't have
+    // to call UpdateController() here because the registration at the frame
+    // is called automatically.
+    mpController = GetSubShellManager().GetMainSubShell()->GetController();
 }
 
 
@@ -290,15 +306,31 @@ void ViewShellBase::GetMenuState (SfxItemSet& rSet)
 
 
 
-DrawController* ViewShellBase::GetDrawController (void)
+void ViewShellBase::UpdateController (void)
 {
-    if (mpController == NULL)
+    ::osl::MutexGuard aGuard (maMutex);
+    ViewShell* pViewShell = GetSubShellManager().GetMainSubShell();
+    DrawController* pController = pViewShell->GetController();
+
+    if (pController != NULL)
+        SetController (pController);
+    Reference <frame::XController> xController (pController);
+    Reference <awt::XWindow> xWindow(
+        GetFrame()->GetFrame()->GetWindow().GetComponentInterface(),
+        UNO_QUERY );
+    Reference <frame::XFrame> xFrame (
+        GetFrame()->GetFrame()->GetFrameInterface());
+    SfxObjectShell* pObjectShellold = GetObjectShell();
+    xFrame->setComponent (xWindow, xController);
+    xController->attachFrame (xFrame);
+    SfxObjectShell* pObjectShell = GetObjectShell();
+    Reference <frame::XModel> xModel (pObjectShell->GetModel());
+    if (xModel.is())
     {
-        ::osl::MutexGuard aGuard (maMutex);
-        if (mpController == NULL)
-            mpController = new DrawController (*this);
+        xController->attachModel (xModel);
+        xModel->connectController (xController);
+        xModel->setCurrentController (xController);
     }
-    return mpController;
 }
 
 
@@ -359,12 +391,10 @@ void ViewShellBase::InnerResizePixel(const Point &rPos, const Size &rSize)
 
 void ViewShellBase::OuterResizePixel(const Point &rPos, const Size &rSize)
 {
-    /*af
     SfxViewShell::OuterResizePixel (rPos, rSize);
     ViewShell* pMainViewShell = GetSubShellManager().GetMainSubShell();
     if (pMainViewShell != NULL)
         pMainViewShell->OuterResizePixel (rPos, rSize);
-    */
 }
 
 
@@ -454,7 +484,142 @@ USHORT ViewShellBase::SetPrinterOptDlg (
 
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
+    SfxViewShell::PreparePrint (pPrintDialog);
     return maPrintManager.PreparePrint (pPrintDialog);
+}
+
+
+
+
+void ViewShellBase::WriteUserDataSequence (
+    ::com::sun::star::uno::Sequence <
+    ::com::sun::star::beans::PropertyValue >& rSequence,
+    sal_Bool bBrowse)
+{
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->WriteUserDataSequence (rSequence, bBrowse);
+}
+
+
+
+
+void ViewShellBase::ReadUserDataSequence (
+    const ::com::sun::star::uno::Sequence <
+    ::com::sun::star::beans::PropertyValue >& rSequence,
+    sal_Bool bBrowse)
+{
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->ReadUserDataSequence (rSequence, bBrowse);
+}
+
+
+
+
+void ViewShellBase::UIActivate (SvInPlaceObject *pIPObj)
+{
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->UIActivate (pIPObj);
+}
+
+
+
+
+void ViewShellBase::UIDeactivate (SvInPlaceObject *pIPObj)
+{
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->UIDeactivate (pIPObj);
+}
+
+
+
+
+void ViewShellBase::SetZoomFactor (
+    const Fraction &rZoomX,
+    const Fraction &rZoomY)
+{
+    SfxViewShell::SetZoomFactor (rZoomX, rZoomY);
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->SetZoomFactor (rZoomX, rZoomY);
+}
+
+
+
+
+USHORT ViewShellBase::PrepareClose (BOOL bUI, BOOL bForBrowsing)
+{
+    USHORT nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
+
+    if (nResult == TRUE)
+    {
+        // Forward call to main sub shell.
+        ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+        if (pShell != NULL)
+            nResult = pShell->PrepareClose (bUI, bForBrowsing);
+    }
+
+    return nResult;
+}
+
+
+
+
+void ViewShellBase::WriteUserData (String& rString, BOOL bBrowse)
+{
+    SfxViewShell::WriteUserData (rString, bBrowse);
+
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->WriteUserData (rString);
+}
+
+
+
+
+void ViewShellBase::ReadUserData (const String& rString, BOOL bBrowse)
+{
+    SfxViewShell::ReadUserData (rString, bBrowse);
+
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->ReadUserData (rString);
+}
+
+
+
+
+SdrView* ViewShellBase::GetDrawView (void) const
+{
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        return pShell->GetDrawView ();
+    else
+        return SfxViewShell::GetDrawView();
+}
+
+
+
+
+void ViewShellBase::AdjustPosSizePixel (const Point &rOfs, const Size &rSize)
+{
+    SfxViewShell::AdjustPosSizePixel (rOfs, rSize);
+
+    // Forward call to main sub shell.
+    ViewShell* pShell = GetSubShellManager().GetMainSubShell();
+    if (pShell != NULL)
+        pShell->AdjustPosSizePixel (rOfs, rSize);
 }
 
 
