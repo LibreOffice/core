@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 11:33:04 $
+ *  last change: $Author: fs $ $Date: 2001-05-17 12:40:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,7 +564,24 @@ namespace xmloff
         _rPropValue.Value >>= sValue;
         OSL_ENSURE(bSuccess, "OControlImport::implTranslateValueProperty: supposed to be called with non-translated string values!");
 
-        _rPropValue.Value = convertString(GetImport(), aProp.Type, sValue);
+        if (TypeClass_ANY == aProp.Type.getTypeClass())
+        {
+            // we have exactly 2 properties where this type class is allowed:
+            OSL_ENSURE(
+                    (0 == _rPropValue.Name.compareToAscii(PROPERTY_EFFECTIVE_VALUE))
+                ||  (0 == _rPropValue.Name.compareToAscii(PROPERTY_EFFECTIVE_DEFAULT)),
+                "OControlImport::implTranslateValueProperty: invalid property type/name combination!");
+
+            // Both properties are allowed to have a double or a string value,
+            // so first try to convert the string into a number
+            double nValue;
+            if (GetImport().GetMM100UnitConverter().convertDouble(nValue, sValue))
+                _rPropValue.Value <<= nValue;
+            else
+                _rPropValue.Value <<= sValue;
+        }
+        else
+            _rPropValue.Value = convertString(GetImport(), aProp.Type, sValue);
     }
 
     //---------------------------------------------------------------------
@@ -1199,6 +1216,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/04/27 11:33:04  fs
+ *  #86267# simulate EmptyIsNull only if appliable
+ *
  *  Revision 1.19  2001/04/20 16:51:09  fs
  *  OFormImport: recognize tabbing-cycle 'til SRC630 (compatibility)
  *
