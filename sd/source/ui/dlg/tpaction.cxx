@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: iha $ $Date: 2002-09-25 17:24:23 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,6 +840,15 @@ void SdTPAction::OpenFileDialog()
                 aFile = SvtPathOptions().GetWorkPath();
 
             aFileDialog.SetDisplayDirectory( aFile );
+
+            // The following is a fix for #1008001# and a workarround for
+            // #i4306#: The addition of the implicitely existing "all files"
+            // filter makes the (Windows system) open file dialog follow
+            // links on the desktop to directories.
+            aFileDialog.AddFilter (
+                String (SdResId (STR_FILTERNAME_ALL)),
+                String (RTL_CONSTASCII_USTRINGPARAM("*.*")));
+
 
             if( aFileDialog.Execute() == ERRCODE_NONE )
             {
