@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:27:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 14:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3139,7 +3139,8 @@ void SwEditWin::MouseMove(const MouseEvent& rMEvt)
         {
             //Zuppeln von Tabellenspalten aus dem Dokument heraus.
 
-            SetPointer( SW_TABCOL_VERT == nMouseTabCol ? POINTER_VSIZEBAR : POINTER_HSIZEBAR );
+            SetPointer( SW_TABCOL_VERT == nMouseTabCol || SW_TABROW_HORI == nMouseTabCol ?
+                    POINTER_VSIZEBAR : POINTER_HSIZEBAR );
             return;
         }
         // #i23726#
