@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 09:01:20 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,18 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
     if ( pMed )
     {
         WaitObject aWait( this );
+
+        // #92296# replace HTML filter with DataQuery filter
+        const String aHTMLFilterName( RTL_CONSTASCII_USTRINGPARAM( "HTML (StarCalc)" ) );
+        const String aWebQFilterName( RTL_CONSTASCII_USTRINGPARAM( "calc_HTML_WebQuery" ) );
+
+        const SfxFilter* pFilter = pMed->GetFilter();
+        if( pFilter && (pFilter->GetFilterName() == aHTMLFilterName) )
+        {
+            const SfxFilter* pNewFilter = pApp->GetFilter( ScDocShell::Factory(), aWebQFilterName );
+            if( pNewFilter )
+                pMed->SetFilter( pNewFilter );
+        }
 
         //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 22:54:17 $
+ *  last change: $Author: dr $ $Date: 2002-10-16 12:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,18 +100,19 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "~URL de la source de donn�es externe";
         Text[ spanish ] = "~URL de la fuente de datos externa";
         Text[ italian ] = "URL della sorgente dati esterna";
-        Text[ danish ] = "External Data Source Location";
+        Text[ danish ] = "~URL til den eksterne datakilde";
         Text[ swedish ] = "~URL f�r extern datak�lla";
         Text[ polish ] = "Adres URL zewn�trznego �r�d�a danych";
         Text[ portuguese_brazilian ] = "External Data Source Location";
-        Text[ japanese ] = "外部ﾃﾞｰﾀｿｰｽの URL(~E)";
+        Text[ japanese ] = "外部データソースの URL(~E)";
         Text[ korean ] = "외부 데이터 소스의 URL(~E)";
         Text[ chinese_simplified ] = "外部数据源的 URL(~E)";
         Text[ chinese_traditional ] = "外部資料源的 URL(~E)";
         Text[ turkish ] = "External Data Source Location";
         Text[ arabic ] = "External Data Source Location";
-        Text[ catalan ] = "External Data Source Location";
-        Text[ finnish ] = "~URL der externen Datenquelle";
+        Text[ catalan ] = "URL de la font de dades ~externa";
+        Text[ finnish ] = "~Ulkoisen tietol�hteen URL-osoite";
+        Text[ thai ] = "URL ของแหล่งขอมูล~ภายนอก";
     };
     ComboBox CB_URL
     {
@@ -124,7 +125,7 @@ ModalDialog RID_SCDLG_LINKAREA
     {
         Pos = MAP_APPFONT ( 190 , 14 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
-        Text = "..." ;
+        Text = "~..." ;
     };
     FixedText FT_HINT
     {
@@ -141,18 +142,19 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "(URL du document source dans le syst�me de fichiers local ou dans l'Internet)";
         Text[ spanish ] = "(URL del documento fuente en el sistema de archivos local o en Internet)";
         Text[ italian ] = "(URL del documento sorgente nel sistema di dati locale oppure in Internet)";
-        Text[ danish ] = "(Insert a local file location or an URL from a web site here)";
+        Text[ danish ] = "(Kildedokumentets URL i det lokale filsystem eller p� Internettet)";
         Text[ swedish ] = "(K�lldokumentets URL i det lokala filsystemet eller p� Internet)";
         Text[ polish ] = "(Adres URL dokumentu �r�d�owego w lokalnym systemie plik�w lub w Internecie)";
         Text[ portuguese_brazilian ] = "(Insert a local file location or an URL from a web site here)";
-        Text[ japanese ] = "(ﾛｰｶﾙのﾌｧｲﾙｼｽﾃﾑ、あるいはｲﾝﾀｰﾈｯﾄにあるｿｰｽﾄﾞｷｭﾒﾝﾄの URL)";
+        Text[ japanese ] = "(ローカルのファイルシステム、あるいはインターネットにあるソースドキュメントの URL)";
         Text[ korean ] = "(로컬 파일 시스템 또는 웹사이트 내 소스 문서의 URL)";
-        Text[ chinese_simplified ] = "(局部文件系统或国际互联网之中源文本的 URL)";
-        Text[ chinese_traditional ] = "(局部檔案系統或 internet 之中源文件的 URL)";
+        Text[ chinese_simplified ] = "(本机文件系统或国际互联网之中源文本的 URL)";
+        Text[ chinese_traditional ] = "(本機檔案系統或 internet 之中源文件的 URL)";
         Text[ turkish ] = "(Insert a local file location or an URL from a web site here)";
         Text[ arabic ] = "(Insert a local file location or an URL from a web site here)";
-        Text[ catalan ] = "(Insert a local file location or an URL from a web site here)";
-        Text[ finnish ] = "(URL des Quelldokuments im lokalen Dateisystem oder im Internet)";
+        Text[ catalan ] = "(Introdu�u aqu� l'URL del document font del sistema de fitxers local o d'Internet.)";
+        Text[ finnish ] = "(Kirjoita t�h�n paikallisessa tiedostoj�rjestelm�ss� tai Internetiss� olevan l�hdetiedoston URL-osoite).";
+        Text[ thai ] = "(ใส่ URL ของแหล่งเอกสารในระบบแฟ้มท้องถิ่นหรืออินเตอร์เน็ตที่นี่)";
     };
     FixedText FT_RANGES
     {
@@ -167,26 +169,27 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
         Text[ french ] = "Feuilles/plages dis~ponibles";
         Text[ spanish ] = "Tablas/�reas dispo~nibles";
-        Text[ italian ] = "Sezioni/tabelle disponibili";
-        Text[ danish ] = "Available Tables/Ranges";
+        Text[ italian ] = "~Sezioni/tabelle disponibili";
+        Text[ danish ] = "~Tilg�ngelige tabeller/omr�der";
         Text[ swedish ] = "T~illg�ngliga tabeller/omr�den";
         Text[ polish ] = "Dost�pne tabele/obszary";
         Text[ portuguese_brazilian ] = "Available Tables/Ranges";
         Text[ japanese ] = "使用できる表と範囲(~A)";
-        Text[ korean ] = "사용 가능한 표/범위(~A)";
+        Text[ korean ] = "사용 가능한 시트/범위(~A)";
         Text[ chinese_simplified ] = "现有的表格/区域(~A)";
         Text[ chinese_traditional ] = "現有的表格或區域(~A)";
         Text[ turkish ] = "Available Tables/Ranges";
         Text[ arabic ] = "Available Tables/Ranges";
-        Text[ catalan ] = "Available Tables/Ranges";
-        Text[ finnish ] = "~Verf�gbare Tabellen/Bereiche";
+        Text[ catalan ] = "Taules/�rees ~disponibles";
+        Text[ finnish ] = "~K�ytett�viss� olevat taulukot/alueet";
+        Text[ thai ] = "ตาราง/ช่วงที่ใช้ได้";
     };
     MultiListBox LB_RANGES
     {
         SimpleMode = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 74 ) ;
-        Size = MAP_APPFONT ( 174 , 80 ) ;
+        Size = MAP_APPFONT ( 192 , 80 ) ;
         AutoHScroll = TRUE ;
     };
     CheckBox BTN_RELOAD
@@ -204,18 +207,19 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "~Actualisation toutes les";
         Text[ spanish ] = "Actuali~zar cada";
         Text[ italian ] = "Aggiorna ogni";
-        Text[ danish ] = "Auto reload data every";
+        Text[ danish ] = "~Opdater alle";
         Text[ swedish ] = "Uppd~atering var";
         Text[ polish ] = "Aktualizuj co";
         Text[ portuguese_brazilian ] = "Auto reload data every";
-        Text[ japanese ] = "更新(~U)";
+        Text[ japanese ] = "次の時間間隔で更新(~U)";
         Text[ korean ] = "모두 업데이트(~U)";
         Text[ chinese_simplified ] = "更新时间间隔为每(~U)";
         Text[ chinese_traditional ] = "更新時間間隔為每(~U)";
         Text[ turkish ] = "Auto reload data every";
         Text[ arabic ] = "Auto reload data every";
-        Text[ catalan ] = "Auto reload data every";
-        Text[ finnish ] = "~Aktualisierung alle";
+        Text[ catalan ] = "~Actualitza cada";
+        Text[ finnish ] = "~P�ivitysv�li";
+        Text[ thai ] = "~ปรับปรุงทุกๆ";
     };
     NumericField NF_DELAY
     {
@@ -242,7 +246,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ french ] = "secondes";
         Text[ spanish ] = "segundos";
         Text[ italian ] = "secondi";
-        Text[ danish ] = "seconds";
+        Text[ danish ] = "Sekunder";
         Text[ swedish ] = "sekund";
         Text[ polish ] = "sekundy";
         Text[ portuguese_brazilian ] = "seconds";
@@ -252,8 +256,9 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ chinese_traditional ] = "秒";
         Text[ turkish ] = "seconds";
         Text[ arabic ] = "seconds";
-        Text[ catalan ] = "seconds";
+        Text[ catalan ] = "segons";
         Text[ finnish ] = "sekuntia";
+        Text[ thai ] = "วินาที";
     };
     Text[ english_us ] = "External Data";
     Text[ portuguese ] = "Dados externos";
@@ -263,19 +268,22 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ french ] = "Donn�es externes";
     Text[ spanish ] = "Datos externos";
     Text[ italian ] = "Dati esterni";
-    Text[ danish ] = "External Data Source";
+    Text[ danish ] = "Eksterne data";
     Text[ swedish ] = "Externa data";
     Text[ polish ] = "Zewn�trzne dane";
     Text[ portuguese_brazilian ] = "External Data Source";
-    Text[ japanese ] = "外部ﾃﾞｰﾀ";
+    Text[ japanese ] = "外部データ";
     Text[ korean ] = "외부 데이터";
     Text[ chinese_simplified ] = "外部的数据";
     Text[ chinese_traditional ] = "外部的資料";
     Text[ turkish ] = "External Data Source";
     Text[ arabic ] = "External Data Source";
-    Text[ catalan ] = "External Data Source";
-    Text[ finnish ] = "Ulkoinen l�hde";
+    Text[ catalan ] = "Font de dades externa";
+    Text[ finnish ] = "Ulkoinen tietol�hde";
+    Text[ thai ] = "แหล่งข้อมูลภายนอก";
 };
+
+
 
 
 
