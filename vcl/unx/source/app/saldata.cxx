@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:32:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -642,7 +642,7 @@ void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
         else if( pEvent->request_code == X_SetInputFocus )
             return;
 
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
 #if ! ( defined LINUX && defined PPC )
         XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
 #endif
@@ -883,7 +883,7 @@ void SalXLib::Yield( BOOL bWait )
             if ( pEntry->fd )
             {
                 if ( FD_ISSET( nFD, &ExceptionFDS ) ) {
-#if defined DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     fprintf( stderr, "SalXLib::Yield exception\n" );
 #endif
                     nFound--;
