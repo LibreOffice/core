@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-06 12:12:41 $
+ *  last change: $Author: dv $ $Date: 2001-07-06 12:26:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1329,7 +1329,25 @@ String FileDialogHelper::GetCurrentFilter() const
 // ------------------------------------------------------------------------
 Graphic FileDialogHelper::GetGraphic() const
 {
-    return mpImp->GetGraphic();
+    Graphic aGraphic = mpImp->GetGraphic();
+
+    if ( !aGraphic )
+    {
+        String aURL = GetPath();
+
+        if ( aURL.Len() && utl::UCBContentHelper::IsDocument( aURL ) )
+        {
+            SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL, STREAM_READ );
+
+            if( pIStm )
+            {
+                GraphicConverter::Import( *pIStm, aGraphic );
+                delete pIStm;
+            }
+        }
+    }
+
+    return aGraphic;
 }
 
 // ------------------------------------------------------------------------
