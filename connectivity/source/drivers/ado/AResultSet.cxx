@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-18 16:33:01 $
+ *  last change: $Author: oj $ $Date: 2002-01-22 07:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -498,6 +498,7 @@ sal_Bool SAL_CALL OResultSet::first(  ) throw(SQLException, RuntimeException)
     if(SUCCEEDED(m_pRecordSet->MoveFirst()))
     {
         m_nRowPos = 1;
+        m_bOnFirstAfterOpen = sal_False;
         return sal_True;
     }
     return sal_False;
@@ -512,7 +513,10 @@ sal_Bool SAL_CALL OResultSet::last(  ) throw(SQLException, RuntimeException)
 
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->MoveLast());
     if(bRet)
+    {
         m_pRecordSet->get_RecordCount(&m_nRowPos);
+        m_bOnFirstAfterOpen = sal_False;
+    }
     return bRet;
 }
 // -------------------------------------------------------------------------
@@ -543,6 +547,8 @@ sal_Bool SAL_CALL OResultSet::absolute( sal_Int32 row ) throw(SQLException, Runt
         if(bCheck)
             m_nRowPos = row;
     }
+    if(bCheck)
+        m_bOnFirstAfterOpen = sal_False;
     return bCheck;
 }
 // -------------------------------------------------------------------------
@@ -556,7 +562,10 @@ sal_Bool SAL_CALL OResultSet::relative( sal_Int32 row ) throw(SQLException, Runt
     aEmpty.setNoArg();
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->Move(row,aEmpty));
     if(bRet)
+    {
         m_nRowPos += row;
+        m_bOnFirstAfterOpen = sal_False;
+    }
     return bRet;
 }
 // -------------------------------------------------------------------------
@@ -568,7 +577,10 @@ sal_Bool SAL_CALL OResultSet::previous(  ) throw(SQLException, RuntimeException)
 
     sal_Bool bRet = SUCCEEDED(m_pRecordSet->MovePrevious());
     if(bRet)
+    {
         --m_nRowPos;
+        m_bOnFirstAfterOpen = sal_False;
+    }
     return bRet;
 }
 // -------------------------------------------------------------------------
@@ -624,8 +636,12 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
 
 
     OSL_ENSURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
-    VARIANT_BOOL bIsAtBOF;
-    m_pRecordSet->get_BOF(&bIsAtBOF);
+    VARIANT_BOOL bIsAtBOF = VARIANT_TRUE;
+    if(!m_bOnFirstAfterOpen)
+    {
+        OSL_ENSURE(!m_nRowPos,"OResultSet::isBeforeFirst: Error in setting m_nRowPos!");
+        m_pRecordSet->get_BOF(&bIsAtBOF);
+    }
     return bIsAtBOF == VARIANT_TRUE;
 }
 // -------------------------------------------------------------------------
