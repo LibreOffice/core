@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gh $ $Date: 2000-12-14 17:11:57 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 20:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ String S_RESETAPPLICATION_FAILED_COMPLEX
     Text[ italian ] = "ResetApplication failed: too complex";
     Text[ danish ] = "ResetApplication failed: too complex";
     Text[ swedish ] = "ResetApplication failed: too complex";
-    Text[ polish ] = "ResetApplikation nie powid³o siê: za bardzo z³o¿one";
+    Text[ polish ] = "ResetApplication failed: too complex ";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "ResetApplication failed: too complex";
     Text[ korean ] = "ResetApplication  ½ÇÆĞ : ³Ê¹« º¹ÀâÇÕ´Ï´Ù.";
@@ -1334,19 +1334,19 @@ String S_UNPACKING_STORAGE_FAILED
     Text[ english_us ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ portuguese ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ russian ] = "Ğàñïàêîâàòü íàêîïèòåëü \"($Arg1)\" â \"($Arg2)\" íå óäàëîñü.";
-    Text[ greek ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ dutch ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ greek ] = "Ç áğïóõìğßåóç ôïõ áñ÷åßïõ áğïèŞêåõóçò \"($Arg1)\" óôï \"($Arg2)\" áğİôõ÷å";
+    Text[ dutch ] = "Decomprimeren van Storage \"($Arg1)\" in \"($Arg2)\" mislukt";
     Text[ french ] = "La décompression du stockage \"($Arg1)\" vers \"($Arg2)\" a échoué.";
     Text[ spanish ] = "No se pudo descomprimir storage \"($Arg1)\" a \"($Arg2)\"";
-    Text[ italian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ italian ] = "Decompressione Storage \"($Arg1)\" a \"($Arg2)\" non è riuscita";
     Text[ danish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ swedish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ polish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ swedish ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ polish ] = "Rozpakowanie pamiêci (storage) \"($Arg1)\" w \"($Arg2)\" nie powiod³o siê.";
     Text[ portuguese_brazilian ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
     Text[ japanese ] = "‹L‰¯‘•’u \"($Arg1)\" ‚ğ \"($Arg2)\" ‚É’Šo‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Text[ korean ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ chinese_simplified ] = "½âÑ¹ËõÎÄ¼ş \"($Arg1)\" ÖÁ \"($Arg2)\" Ã»ÓĞ³É¹¦¡£";
-    Text[ chinese_traditional ] = "¸ÑÀ£ÁYÀÉ®× \"($Arg1)\" ¦Ü \"($Arg2)\" ¥¢±Ñ¡C";
+    Text[ chinese_simplified ] = "½âÑ¹ËõÎÄ¼ş \"($Arg1)\" ÖÁ \"($Arg2)\" Ê§°Ü¡£";
+    Text[ chinese_traditional ] = "¸ÑÀ£ÁYÀÉ®× \"($Arg1)\" ¨ì \"($Arg2)\" ¨S¦³¦¨¥\\¡C";
     Text[ turkish ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
-    Text[ arabic ] = "Unpacking Storage \"($Arg1)\" to \"($Arg2)\" failed";
+    Text[ arabic ] = "İÔáÊ ÚãáíÉ İß ÖÛØ ÊÎÒíä\"($Arg1)\"  Åáì \"($Arg2)\"";
 };
