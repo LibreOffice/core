@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:00 $
+ *  last change: $Author: dbo $ $Date: 2002-03-07 15:02:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
-#include <com/sun/star/reflection/XUnionTypeDescription.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
@@ -269,60 +268,6 @@ public:
     virtual Reference< XTypeDescription > SAL_CALL getBaseType() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< Reference< XTypeDescription > > SAL_CALL getMemberTypes() throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getMemberNames() throw(::com::sun::star::uno::RuntimeException);
-};
-
-//==================================================================================================
-class UnionTypeDescriptionImpl : public WeakImplHelper1< XUnionTypeDescription >
-{
-    Mutex                                 _aMutex;
-    Reference< XHierarchicalNameAccess >  _xTDMgr;
-    TypeClass                             _eTypeClass;
-    Sequence< sal_Int8 >                  _aBytes;
-    OUString                              _aName;
-
-    OUString                              _aDiscriminantType;
-    Reference< XTypeDescription >         _xDiscriminantTD;
-
-    sal_Bool                              _bInit;
-    Any                                   _aDefautDisciminant;
-    Reference< XTypeDescription >         _xDefaultTD;
-    OUString                              _aDefaultName;
-
-    Sequence< Any > *                     _pMemberDiscriminants;
-    Sequence< Reference< XTypeDescription > > * _pMembers;
-    Sequence< OUString > *                _pMemberNames;
-
-    void    initMembers() throw(::com::sun::star::uno::RuntimeException);
-public:
-    UnionTypeDescriptionImpl( const Reference< XHierarchicalNameAccess > & xTDMgr,
-                                TypeClass eTypeClass,
-                              const OUString & rName, const OUString & rDiscriminantName,
-                              const Sequence< sal_Int8 > & rBytes )
-        : _xTDMgr( xTDMgr )
-        , _eTypeClass( eTypeClass )
-        , _aBytes( rBytes )
-        , _aName( rName )
-        , _aDiscriminantType( rDiscriminantName )
-        , _bInit(sal_False)
-        , _pMemberDiscriminants( 0 )
-        , _pMembers( 0 )
-        , _pMemberNames( 0 )
-        {
-            g_moduleCount.modCnt.acquire( &g_moduleCount.modCnt );
-        }
-    virtual ~UnionTypeDescriptionImpl();
-
-    // XTypeDescription
-    virtual TypeClass SAL_CALL getTypeClass() throw(::com::sun::star::uno::RuntimeException);
-    virtual OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
-
-    // XUnionTypeDescription
-    virtual Reference< XTypeDescription > SAL_CALL getDiscriminantType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Any SAL_CALL getDefaultDiscriminant(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Reference< XTypeDescription > SAL_CALL getDefaultMemberType(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< Any > SAL_CALL getDiscriminants(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< Reference< ::com::sun::star::reflection::XTypeDescription > > SAL_CALL getMemberTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual Sequence< OUString > SAL_CALL getMemberNames(  ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 //==================================================================================================
