@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-21 10:57:08 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2429,6 +2429,12 @@ SvStream& operator>>(SvStream& rIn, SdrPageView& rPageView)
 void SdrPageView::SetApplicationBackgroundColor(Color aBackgroundColor)
 {
     maBackgroundColor = aBackgroundColor;
+}
+
+// #109585#
+Color SdrPageView::GetApplicationBackgroundColor() const
+{
+    return maBackgroundColor;
 }
 
 // #103911# Set document color for svx at SdrPageViews
