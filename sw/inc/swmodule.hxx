@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-29 16:53:48 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,6 @@ public:
     //Die Handler fuer die Slots
     void                StateOther(SfxItemSet &);   // andere
     void                StateViewOptions(SfxItemSet &);
-    void                StateIsView(SfxItemSet &);
 
     void                ExecOther(SfxRequest &);    // Felder, Formel ..
     void                ExecViewOptions(SfxRequest &);
@@ -247,17 +246,12 @@ public:
 
     // Redlining
     sal_uInt16          GetRedlineAuthor();
-    sal_uInt16          GetRedlineAuthorCount();
     const String&       GetRedlineAuthor(sal_uInt16 nPos);
     sal_uInt16          InsertRedlineAuthor(const String& rAuthor);
 
     void                GetInsertAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
     void                GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
     void                GetFormatAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet);
-
-    const AuthorCharAttr&   GetInsertAuthorAttr() const;
-    const AuthorCharAttr&   GetDeletedAuthorAttr() const;
-    const AuthorCharAttr&   GetFormatAuthorAttr() const;
 
     sal_uInt16              GetRedlineMarkPos();
     const Color&            GetRedlineMarkColor();
