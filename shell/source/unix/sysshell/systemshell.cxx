@@ -2,9 +2,9 @@
  *
  *  $RCSfile: systemshell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:19:33 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:10:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,7 @@ namespace SystemShell {
     rtl::OUString get_absolute_library_url(const rtl::OUString& lib_name)
     {
         rtl::OUString url;
-        // Convert from reinterpret_cast<void*>
-        // not allowed in gcc3.3 without permissive
-        if (osl::Module::getUrlFromAddress((void*)(AddToRecentDocumentList), url))
+        if (osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(AddToRecentDocumentList), url))
         {
             sal_Int32 index = url.lastIndexOf('/');
             url = url.copy(0, index + 1);
@@ -101,7 +99,7 @@ namespace SystemShell {
                // convert from reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>
                // not allowed in gcc 3.3 without permissive.
                 PFUNC_ADD_TO_RECENTLY_USED_LIST add_to_recently_used_file_list =
-                    (PFUNC_ADD_TO_RECENTLY_USED_LIST)(module.getSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST));
+                    reinterpret_cast<PFUNC_ADD_TO_RECENTLY_USED_LIST>(module.getFunctionSymbol(SYM_ADD_TO_RECENTLY_USED_FILE_LIST));
 
                 if (add_to_recently_used_file_list)
                     add_to_recently_used_file_list(aFileUrl, aMimeType);
