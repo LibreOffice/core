@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-17 18:35:14 $
+ *  last change: $Author: ab $ $Date: 2001-10-26 13:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,10 @@ static Methods aMethods[] = {
   { "expression",   SbxVARIANT },
 { "CDate",          SbxDATE,      1 | _FUNCTION, RTLNAME(CDate)             },
   { "expression",   SbxVARIANT },
+{ "CDateFromIso",   SbxDATE,      1 | _FUNCTION, RTLNAME(CDateFromIso)      },
+  { "IsoDate",      SbxSTRING },
+{ "CDateToIso",     SbxSTRING,    1 | _FUNCTION, RTLNAME(CDateToIso)        },
+  { "Date",         SbxDATE },
 { "CDbl",           SbxDOUBLE,    1 | _FUNCTION, RTLNAME(CDbl)              },
   { "expression",   SbxVARIANT },
 { "CF_BITMAP",      SbxINTEGER,       _CPROP,    RTLNAME(CF_BITMAP)         },
