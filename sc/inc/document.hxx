@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: nn $ $Date: 2002-10-10 16:55:05 $
+ *  last change: $Author: er $ $Date: 2002-11-27 21:09:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1450,10 +1450,21 @@ public:
                                             SfxListener* pListener );
     void                EndListeningArea( const ScRange& rRange,
                                             SfxListener* pListener );
+                        /** Broadcast wrapper, calls
+                            rHint.GetCell()->Broadcast() and AreaBroadcast()
+                            and TrackFormulas() and conditional format list
+                            SourceChanged().
+                            Preferred.
+                         */
+    void                Broadcast( const ScHint& rHint );
+                        /// deprecated
     void                Broadcast( ULONG nHint, const ScAddress& rAddr,
                                     ScBaseCell* pCell );
-        // wrapper, ruft pCell->Broadcast() und AreaBroadcast() und
-        // TrackFormulas()
+                        /// only area, no cell broadcast
+    void                AreaBroadcast( const ScHint& rHint );
+                        /// only areas in range, no cell broadcasts
+    void                AreaBroadcastInRange( const ScRange& rRange,
+                                              const ScHint& rHint );
     void                DelBroadcastAreasInRange( const ScRange& rRange );
     void                UpdateBroadcastAreas( UpdateRefMode eUpdateRefMode,
                                             const ScRange& rRange,
