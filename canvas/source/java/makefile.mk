@@ -2,9 +2,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: rt $ $Date: 2004-11-26 17:07:21 $
+#  last change: $Author: obo $ $Date: 2005-01-25 15:07:13 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -52,11 +52,14 @@ USE_JAVAVER:=TRUE
 .INCLUDE: settings.mk
 
 .IF "$(SOLAR_JAVA)"=="TRUE"
-
 # Since Canvas needs newer features like
 # e.g. java.awt.image.BufferStrategy,
 # disabled for now for everything <1.4
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
+.IF "$(JDK)" == "gcj"
+all:
+        @echo This dir cannot be build with gcj because of sun.awt
+.ELSE
 
 JAVAFILES  = \
     SpriteBase.java \
@@ -92,6 +95,7 @@ JARCOMPRESS             = TRUE
 #JARCLASSDIRS            = $(PACKAGE) 
 CUSTOMMANIFESTFILE      = manifest
 
+.ENDIF # gcj
 .ENDIF # "$(JAVANUMVER:s/.//)" >= "000100040000" 
 .ENDIF # "$(SOLAR_JAVA)"=="TRUE"
 
