@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-23 09:55:28 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,10 @@
 #include "fontbuff.hxx"
 #include "excupn.hxx"
 
-#include "xcl97exp.hxx"
+#ifndef _SC_XCLEXPSTREAM_HXX
+#include "XclExpStream.hxx"
+#endif
+
 #include "xcl97rec.hxx"
 
 
@@ -205,9 +208,6 @@ void ExcETabNumBuffer::AppendTabRef( UINT16 nExcFirst, UINT16 nExcLast )
 
 
 
-//----------------------------------------------------------- class ExcRecord -
-const UINT16    ExcRecord::nIgnore = 0;
-
 //------------------------------------------------------------- class ExcCell -
 UsedAttrList*   ExcCell::pXFRecs = NULL;
 UINT32          ExcCell::nCellCount = 0UL;
@@ -231,7 +231,7 @@ const BYTE      ExcDummy_00::pMyData[] = {
     0x42, 0x00, 0x02, 0x00, 0xe4, 0x04,                     // CODEPAGE
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
-const UINT16    ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
+const ULONG ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 //  ( UINT16 ) 0x00 + 0x02 + 0x00 + 0x00 + 0x00 + 0x20 +
 //  0x02 + 0x02 + 8 * 4;
 
@@ -246,14 +246,14 @@ const BYTE      ExcDummy_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00,                     // HIDEOBJ
 };
-const UINT16    ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
+const ULONG ExcDummy_040::nMyLen = sizeof( ExcDummy_040::pMyData );
 //  ( UINT16 ) 0x02 + 0x02 + 0x02 + 0x12 + 0x02 + 0x02 + 6 * 4;
 
 const BYTE      ExcDummy_041::pMyData[] = {
     0x0e, 0x00, 0x02, 0x00, 0x01, 0x00,                     // PRECISION
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
-const UINT16    ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
+const ULONG ExcDummy_041::nMyLen = sizeof( ExcDummy_041::pMyData );
 //  ( UINT16 ) 0x02 + 0x02 + 2 * 4;
 
 //--------------------------------------------------------- class ExcDummy_01-
@@ -274,7 +274,7 @@ const BYTE      ExcDummy_01::pMyData[] = {   //////////
     0x31, 0x00, 0x14, 0x00, 0xc8, 0x00, 0x00, 0x00, 0xff, 0x7f, 0x90, 0x01,
     0x00, 0x00, 0x00, 0x00, 0x00, 0xa5, 0x05, 0x41, 0x72, 0x69, 0x61, 0x6c
 };
-const UINT16    ExcDummy_01::nMyLen = sizeof( ExcDummy_01::pMyData );   //( ( UINT16 ) 0x14 + 4 ) * 5;
+const ULONG ExcDummy_01::nMyLen = sizeof( ExcDummy_01::pMyData );   //( ( UINT16 ) 0x14 + 4 ) * 5;
 
 
 //--------------------------------------------------------- class ExcDummy_Fm -
@@ -320,7 +320,7 @@ const BYTE      ExcDummy_Fm::pMyData[] = {
     0x3b, 0x5f, 0x2d, 0x2a, 0x20, 0x22, 0x2d, 0x22, 0x3f, 0x3f, 0x5c, 0x20,
     0x5f, 0x44, 0x5f, 0x4d, 0x5f, 0x2d, 0x3b, 0x5f, 0x2d, 0x40, 0x5f, 0x2d
 };
-const UINT16    ExcDummy_Fm::nMyLen = sizeof( ExcDummy_Fm::pMyData );
+const ULONG ExcDummy_Fm::nMyLen = sizeof( ExcDummy_Fm::pMyData );
 //  ( UINT16 ) 0x1c + 0x21 + 0x22 + 0x27 + 0x3c + 0x3c + 0x44 + 0x44 + 4 * 8;
 
 
@@ -369,7 +369,7 @@ const BYTE      ExcDummy_XF::pMyData[] = {
     0xe0, 0x00, 0x10, 0x00, 0x05, 0x00, 0x2a, 0x00, 0xf5, 0xff, 0x20, 0xf8,
     0xc0, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
-const UINT16    ExcDummy_XF::nMyLen = sizeof( ExcDummy_XF::pMyData );
+const ULONG ExcDummy_XF::nMyLen = sizeof( ExcDummy_XF::pMyData );
 //      ( UINT16 ) ( 0x10 + 4 ) * 21;
 
 //------------------------------------------------------ class ExcDummy_Style -
@@ -381,7 +381,7 @@ const BYTE      ExcDummy_Style::pMyData[] = {
     0x93, 0x02, 0x04, 0x00, 0x13, 0x80, 0x04, 0xff,
     0x93, 0x02, 0x04, 0x00, 0x14, 0x80, 0x07, 0xff
 };
-const UINT16    ExcDummy_Style::nMyLen = sizeof( ExcDummy_Style::pMyData );
+const ULONG ExcDummy_Style::nMyLen = sizeof( ExcDummy_Style::pMyData );
 //      ( UINT16 ) ( 0x04 + 4 ) * 6;
 
 //--------------------------------------------------------- class ExcDummy_02 -
@@ -413,7 +413,7 @@ const BYTE      ExcDummy_02::pMyData[] = {
 //  0xf0, 0x00//,
 //  0x55, 0x00, 0x02, 0x00, 0x0a, 0x00                      // DEFCOLWIDTH
 };
-const UINT16    ExcDummy_02::nMyLen = sizeof( ExcDummy_02::pMyData );
+const ULONG ExcDummy_02::nMyLen = sizeof( ExcDummy_02::pMyData );
 //  ( UINT16 ) 0x02 + 0x02 + 0x02 + 0x02 +
 //  0x08 + 0x02 + 0x02 + 0x02 + 0x02 + 0x08 + 0x04 + 0x04 + 0x02 + /*0x03 +*/
 //  /*0x09 +*/ 0x02 + 0x02 + /*0x22 +*/ /*0x02 + */15 * 4;
@@ -425,7 +425,7 @@ const BYTE      ExcDummy_03::pMyData[] = {
     0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00
 };
-const UINT16    ExcDummy_03::nMyLen = sizeof( ExcDummy_03::pMyData );
+const ULONG ExcDummy_03::nMyLen = sizeof( ExcDummy_03::pMyData );
 
 
 ExcPalette2*    ExcFont::pPalette2 = NULL;
@@ -446,175 +446,110 @@ UINT32          ExcFormat::nObjCnt = 0;
 
 //----------------------------------------------------------- class ExcRecord -
 
-void ExcRecord::SaveCont( SvStream& rStr )
-{
-}
-
-
-void ExcRecord::_Save( SvStream& rStr )
-{
-    rStr << ( UINT16 ) GetNum() << ( UINT16 ) GetLen();
-}
-
-
 ExcRecord::~ExcRecord()
 {
 }
 
 
-void ExcRecord::Save( SvStream& rStr )
+void ExcRecord::SaveCont( XclExpStream& rStrm )
 {
-    _Save( rStr );
-    SaveCont( rStr );
 }
 
 
-
-
-ExcRecordList::~ExcRecordList()
+void ExcRecord::Save( XclExpStream& rStrm )
 {
-    ExcRecord*          p = First();
-
-    while( p )
-    {
-        delete p;
-        p = Next();
-    }
+    rStrm.StartRecord( GetNum(), GetLen() );
+    SaveCont( rStrm );
+    rStrm.EndRecord();
 }
-
-
-UINT16 ExcRecordList::GetNum( void ) const
-{
-    return 0;       // doesn't matter, dummy
-}
-
-
-UINT16 ExcRecordList::GetLen( void ) const
-{
-    const UINT32        nEnd = Count();
-    UINT32              n;
-    UINT16              nLen = 0;
-
-    for( n = 0 ; n < nEnd ; n++ )
-        nLen += Get( n )->GetLen();
-
-    return nLen;
-}
-
-
-void ExcRecordList::Save( SvStream& r )
-{
-    ExcRecord*          p = First();
-
-    while( p )
-    {
-        p->Save( r );
-        p = Next();
-    }
-}
-
 
 
 
 //--------------------------------------------------------- class ExcEmptyRec -
 
-void ExcEmptyRec::_Save( SvStream& rStrm )
-{   }
+void ExcEmptyRec::Save( XclExpStream& rStrm )
+{
+}
 
-void ExcEmptyRec::Save( SvStream& rStrm )
-{   }
 
 UINT16 ExcEmptyRec::GetNum() const
 {
     return 0;
 }
 
-UINT16 ExcEmptyRec::GetLen() const
+
+ULONG ExcEmptyRec::GetLen() const
 {
     return 0;
 }
 
 
 
+//------------------------------------------------------- class ExcRecordList -
+
+ExcRecordList::~ExcRecordList()
+{
+    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
+        delete pRec;
+}
+
+
+void ExcRecordList::Save( XclExpStream& rStrm )
+{
+    for( ExcRecord* pRec = First(); pRec; pRec = Next() )
+        pRec->Save( rStrm );
+}
+
+
+
 //--------------------------------------------------------- class ExcDummyRec -
 
-void ExcDummyRec::Save( SvStream& rStr )
+void ExcDummyRec::Save( XclExpStream& rStrm )
 {
-    rStr.Write( GetData(), GetLen() );
+    rStrm.Write( GetData(), GetLen() );     // raw write mode
 }
 
 
 UINT16 ExcDummyRec::GetNum( void ) const
 {
-    return 0x0000;  // weil Banane
+    return 0x0000;
 }
 
 
 
+//------------------------------------------------------- class ExcBoolRecord -
 
-ExcBof_Base::ExcBof_Base( void )
+ExcBoolRecord::ExcBoolRecord( SfxItemSet* pItemSet, USHORT nWhich, BOOL bDefault )
 {
-    nRupBuild = 0x096c;     // von Excel abgeschrieben
-    nRupYear = 0x07c9;      // "
+    bVal = pItemSet? ( ( const SfxBoolItem& ) pItemSet->Get( nWhich ) ).GetValue() : bDefault;
 }
 
 
-
-
-void ExcCell::SaveCont( SvStream& rStr )
+void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
-    if( pPrgrsBar )
-        pPrgrsBar->SetState( GetCellCount() );
-
-    IncCellCount();
-
-    rStr << ( UINT16 ) aPos.Row() << ( UINT16 ) aPos.Col() << nXF;
-    SaveDiff( rStr );
+    rStrm << (UINT16)(bVal ? 0x0001 : 0x0000);
 }
 
 
-void ExcCell::SaveDiff( SvStream& )
+ULONG ExcBoolRecord::GetLen( void ) const
+{
+    return 2;
+}
+
+
+
+
+//--------------------------------------------------------- class ExcBof_Base -
+
+ExcBof_Base::ExcBof_Base() :
+    nRupBuild( 0x096C ),    // copied from Excel
+    nRupYear( 0x07C9 )      // copied from Excel
 {
 }
 
 
-ExcCell::ExcCell( const ScAddress rPos, const ScPatternAttr* pAttr,
-                    const ULONG nAltNumForm, BOOL bForceAltNumForm ) :
-    aPos( rPos )
-{
-    if( pPrgrsBar )
-        pPrgrsBar->SetState( GetCellCount() );
 
-    IncCellCount();
-
-    // Basis-Daten
-    DBG_ASSERT( pXFRecs, "-ExcCell::ExcCell(): Halt Fremder!" );
-
-    nXF = pXFRecs->Find( pAttr, FALSE, nAltNumForm, bForceAltNumForm );
-
-#ifdef DBG_UTIL
-    _nRefCount++;
-#endif
-}
-
-
-ExcCell::~ExcCell()
-{
-    pXFRecs = NULL;
-#ifdef DBG_UTIL
-    _nRefCount--;
-    DBG_ASSERT( _nRefCount >= 0, "*ExcCell::~ExcCell(): Das war mindestens einer zuviel!" );
-#endif
-}
-
-
-void ExcCell::SetXFRecs( UsedAttrList *pNewXFRecs )
-{
-    pXFRecs = pNewXFRecs;
-}
-
-
-
+//-------------------------------------------------------------- class ExcBof -
 
 ExcBof::ExcBof( void )
 {
@@ -623,9 +558,9 @@ ExcBof::ExcBof( void )
 }
 
 
-void ExcBof::SaveCont( SvStream &rStr )
+void ExcBof::SaveCont( XclExpStream& rStrm )
 {
-    rStr << nVers << nDocType << nRupBuild << nRupYear;
+    rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
 
 
@@ -635,13 +570,14 @@ UINT16 ExcBof::GetNum( void ) const
 }
 
 
-UINT16 ExcBof::GetLen( void ) const
+ULONG ExcBof::GetLen( void ) const
 {
     return 8;
 }
 
 
 
+//------------------------------------------------------------- class ExcBofW -
 
 ExcBofW::ExcBofW( void )
 {
@@ -650,10 +586,11 @@ ExcBofW::ExcBofW( void )
 }
 
 
-void ExcBofW::SaveCont( SvStream &rStr )
+void ExcBofW::SaveCont( XclExpStream& rStrm )
 {
-    rStr << nVers << nDocType << nRupBuild << nRupYear;
+    rStrm << nVers << nDocType << nRupBuild << nRupYear;
 }
+
 
 
 UINT16 ExcBofW::GetNum( void ) const
@@ -662,17 +599,34 @@ UINT16 ExcBofW::GetNum( void ) const
 }
 
 
-UINT16 ExcBofW::GetLen( void ) const
+
+ULONG ExcBofW::GetLen( void ) const
 {
     return 8;
 }
 
 
 
+//-------------------------------------------------------------- class ExcEof -
 
-void ExcFngroupcount::SaveCont( SvStream &rStr )
+UINT16 ExcEof::GetNum( void ) const
 {
-    rStr << ( UINT16 ) 0x000E;  // abgekupfert von einem Original
+    return 0x000A;
+}
+
+
+ULONG ExcEof::GetLen( void ) const
+{
+    return 0;
+}
+
+
+
+//----------------------------------------------------- class ExcFngroupcount -
+
+void ExcFngroupcount::SaveCont( XclExpStream& rStrm )
+{
+    rStrm << ( UINT16 ) 0x000E;     // copied from Excel
 }
 
 
@@ -682,29 +636,16 @@ UINT16 ExcFngroupcount::GetNum( void ) const
 }
 
 
-UINT16 ExcFngroupcount::GetLen( void ) const
+ULONG ExcFngroupcount::GetLen( void ) const
 {
     return 2;
 }
 
 
 
+//--------------------------------------------------------- class ExcDummy_00 -
 
-UINT16 ExcEof::GetNum( void ) const
-{
-    return 0x000A;
-}
-
-
-UINT16 ExcEof::GetLen( void ) const
-{
-    return 0;
-}
-
-
-
-
-UINT16 ExcDummy_00::GetLen( void ) const
+ULONG ExcDummy_00::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -717,8 +658,9 @@ const BYTE* ExcDummy_00::GetData( void ) const
 
 
 
+//-------------------------------------------------------- class ExcDummy_04x -
 
-UINT16 ExcDummy_040::GetLen( void ) const
+ULONG ExcDummy_040::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -732,7 +674,7 @@ const BYTE* ExcDummy_040::GetData( void ) const
 
 
 
-UINT16 ExcDummy_041::GetLen( void ) const
+ULONG ExcDummy_041::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -745,21 +687,12 @@ const BYTE* ExcDummy_041::GetData( void ) const
 
 
 
+//------------------------------------------------------------- class Exc1904 -
 
-void Exc1904::SaveCont( SvStream& r )
+Exc1904::Exc1904( ScDocument& rDoc )
 {
-    UINT16  n = b1904? 0x0001 : 0x0000;
-    r << n;
-}
-
-
-Exc1904::Exc1904( ScDocument& r )
-{
-    Date*   p = r.GetFormatTable()->GetNullDate();
-    if( p )
-        b1904 = ( *p == Date( 1, 1, 1904 ) );
-    else
-        b1904 = FALSE;
+    Date* pDate = rDoc.GetFormatTable()->GetNullDate();
+    bVal = pDate ? (*pDate == Date( 1, 1, 1904 )) : FALSE;
 }
 
 
@@ -769,16 +702,12 @@ UINT16 Exc1904::GetNum( void ) const
 }
 
 
-UINT16 Exc1904::GetLen( void ) const
-{
-    return 2;
-}
 
+//------------------------------------------------------------- class ExcFont -
 
-
-
-ExcFont::ExcFont( BiffTyp eBiffP ) :
-        eBiff( eBiffP )
+ExcFont::ExcFont( RootData& rRootData ) :
+        eBiff( rRootData.eDateiTyp ),
+        eCharSet( *rRootData.pCharset )
 {
 #ifdef DBG_UTIL
     nObjCnt++;
@@ -794,8 +723,9 @@ ExcFont::ExcFont( BiffTyp eBiffP ) :
 }
 
 
-ExcFont::ExcFont( Font* pFont, BiffTyp eBiffP ) :
-        eBiff( eBiffP )
+ExcFont::ExcFont( Font* pFont, RootData& rRootData ) :
+        eBiff( rRootData.eDateiTyp ),
+        eCharSet( *rRootData.pCharset )
 {
 #ifdef DBG_UTIL
     nObjCnt++;
@@ -838,9 +768,6 @@ ExcFont::~ExcFont()
 #ifdef DBG_UTIL
     DBG_ASSERT( nObjCnt, "ExcFont::ExcFont() - nObjCnt underflow!" );
     nObjCnt--;
-
-//  if( !nObjCnt )
-//      pPalette2 = NULL;
 #endif
 }
 
@@ -848,7 +775,7 @@ ExcFont::~ExcFont()
 void ExcFont::SetName( const String& rName )
 {
     sName.Assign( rName );
-    nNameLen = (UINT16) sName.Len();
+    nNameLen = (UINT16) Min( sName.Len(), (xub_StrLen) 0xFFFF );
 }
 
 
@@ -859,10 +786,8 @@ void ExcFont::SetColor( UINT32 nSerial )
 }
 
 
-void ExcFont::SaveCont( SvStream& rStrm )
+void ExcFont::SaveCont( XclExpStream& rStrm )
 {
-    XclContinue aCont( rStrm, 0, GetLen() );
-
     rStrm   << nHeight                                  // font height
             << nAttr                                    // attributes
             << pPalette2->GetColorIndex( nColorSer )    // color index
@@ -876,17 +801,9 @@ void ExcFont::SaveCont( SvStream& rStrm )
     // Name
     DBG_ASSERT( nNameLen < 256, "ExcFont::SaveCont() - sName too long!" );
     if ( eBiff < Biff8 )
-    {
-        rStrm << (BYTE) nNameLen;
-        rStrm.Write( sName.GetBuffer(), (BYTE) nNameLen );
-    }
+        rStrm.WriteByteString( ByteString( sName, eCharSet ) );     // 8 bit length, max 255 chars
     else
-    {
-        //! always 16-bit
-        XclRawUnicodeString aUni( sName, 255, TRUE );
-        rStrm << (UINT8) aUni.GetLen() << aUni.GetGrbit();
-        aUni.Write( aCont );
-    }
+        XclExpUniString( sName, 255, TRUE ).Write( rStrm, FALSE );  //! 8 bit length, always 16-bit-chars
 }
 
 
@@ -987,15 +904,16 @@ UINT16 ExcFont::GetNum( void ) const
 }
 
 
-UINT16 ExcFont::GetLen( void ) const
+ULONG ExcFont::GetLen( void ) const
 {
     return 15 + ( eBiff < Biff8 ? nNameLen : 1 + 2 * nNameLen );
 }
 
 
 
+//--------------------------------------------------------- class ExcDummy_01 -
 
-UINT16 ExcDummy_01::GetLen( void ) const
+ULONG ExcDummy_01::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1008,8 +926,9 @@ const BYTE* ExcDummy_01::GetData( void ) const
 
 
 
+//--------------------------------------------------------- class ExcDummy_Fm -
 
-UINT16 ExcDummy_Fm::GetLen( void ) const
+ULONG ExcDummy_Fm::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1022,8 +941,9 @@ const BYTE* ExcDummy_Fm::GetData( void ) const
 
 
 
+//--------------------------------------------------------- class ExcDummy_XF -
 
-UINT16 ExcDummy_XF::GetLen( void ) const
+ULONG ExcDummy_XF::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1036,8 +956,9 @@ const BYTE* ExcDummy_XF::GetData( void ) const
 
 
 
+//------------------------------------------------------ class ExcDummy_Style -
 
-UINT16 ExcDummy_Style::GetLen( void ) const
+ULONG ExcDummy_Style::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1050,27 +971,28 @@ const BYTE* ExcDummy_Style::GetData( void ) const
 
 
 
+//------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, UINT16 nTab ) :
     nGrbit( rRootData.pDoc->IsVisible( nTab ) ? 0x0000 : 0x0001 ),
-    nOwnPos( 0xFFFFFFFF ),
-    nStrPos( 0xFFFFFFFF )
+    nOwnPos( STREAM_SEEK_TO_END ),
+    nStrPos( STREAM_SEEK_TO_END )
 {
 }
 
 
 ExcBundlesheetBase::ExcBundlesheetBase() :
     nGrbit( 0x0000 ),
-    nOwnPos( 0xFFFFFFFF ),
-    nStrPos( 0xFFFFFFFF )
+    nOwnPos( STREAM_SEEK_TO_END ),
+    nStrPos( STREAM_SEEK_TO_END )
 {
 }
 
 
-void ExcBundlesheetBase::UpdateStreamPos( SvStream& rOut )
+void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
-    rOut.Seek( nOwnPos );
-    rOut << nStrPos;
+    rStrm.SetStreamPos( nOwnPos );
+    rStrm << nStrPos;
 }
 
 
@@ -1087,31 +1009,30 @@ ExcBundlesheet::ExcBundlesheet( RootData& rRootData, UINT16 nTab ) :
 {
     String sTabName;
     rRootData.pDoc->GetName( nTab, sTabName );
-    DBG_ASSERT( sTabName.Len() < 256, "*ExcBundlesheet::Ctor: Tabellenname laenger als 255 Zeichen!" );
+    DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
     aName = ByteString( sTabName, *rRootData.pCharset );
 }
 
 
-void ExcBundlesheet::SaveCont( SvStream& rStrm )
+void ExcBundlesheet::SaveCont( XclExpStream& rStrm )
 {
-    nOwnPos = rStrm.Tell();
-    BYTE nNameLen = (BYTE) aName.Len();         // max. 255 Zeichen langer Name
-    rStrm   << (UINT32) 0x00000000              // Position ist nur Dummy
-            << nGrbit
-            << nNameLen;
-    rStrm.Write( aName.GetBuffer(), nNameLen );
+    nOwnPos = rStrm.GetStreamPos();
+    rStrm   << (UINT32) 0x00000000              // dummy (stream position of the sheet)
+            << nGrbit;
+    rStrm.WriteByteString( aName );             // 8 bit length, max 255 chars
 }
 
 
-UINT16 ExcBundlesheet::GetLen() const
+ULONG ExcBundlesheet::GetLen() const
 {
-    return 7 + (UINT16) aName.Len();
+    return 7 + Min( aName.Len(), (xub_StrLen) 255 );
 }
 
 
 
+//--------------------------------------------------------- class ExcDummy_02 -
 
-UINT16 ExcDummy_02::GetLen( void ) const
+ULONG ExcDummy_02::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -1124,18 +1045,13 @@ const BYTE* ExcDummy_02::GetData( void ) const
 
 
 
+//------------------------------------------------------------- class ExcNote -
 
 ExcNote::ExcNote( const ScAddress aNewPos, const String& rText, RootData& rExcRoot ) :
     aPos( aNewPos )
 {
     pText = new ByteString( rText, *rExcRoot.pCharset );
-    nTextLen = ( UINT16 ) pText->Len();
-
-    if( nTextLen > 4080 )
-    {
-        nTextLen = 4080;
-        DBG_WARNING( "ExcNote::ExcNote(): String truncated" );
-    }
+    nTextLen = (UINT16) Min( pText->Len(), (xub_StrLen) 0xFFFF );
 }
 
 
@@ -1145,26 +1061,94 @@ ExcNote::~ExcNote()
 }
 
 
-void ExcNote::SaveCont( SvStream& rStr )
+void ExcNote::Save( XclExpStream& rStrm )
 {
-    rStr << ( UINT16 ) aPos.Row() << ( UINT16 ) aPos.Col() << nTextLen;
-    rStr.Write( pText->GetBuffer(), nTextLen );
+    const sal_Char* pBuffer = pText->GetBuffer();
+    UINT16          nLeft = nTextLen;
+    BOOL            bFirstRun = TRUE;
+
+    do
+    {
+        UINT16 nWriteLen = Min( nLeft, (UINT16) EXC_NOTE5_MAXTEXT );
+
+        rStrm.StartRecord( 0x001C, 6 + nWriteLen );
+
+        // first record: row, col, length of complete text
+        // next records: -1, 0, length of current text segment
+        if( bFirstRun )
+            rStrm << (UINT16) aPos.Row() << (UINT16) aPos.Col() << nTextLen;
+        else
+            rStrm << (UINT16) 0xFFFF << (UINT16) 0 << nWriteLen;
+
+        rStrm.Write( pBuffer, nWriteLen );
+        pBuffer += nWriteLen;
+        nLeft -= nWriteLen;
+        bFirstRun = FALSE;
+
+        rStrm.EndRecord();
+    }
+    while( nLeft );
 }
 
 
-UINT16 ExcNote::GetNum( void ) const
+
+//------------------------------------------------------------- class ExcCell -
+
+ExcCell::ExcCell( const ScAddress rPos, const ScPatternAttr* pAttr,
+                    const ULONG nAltNumForm, BOOL bForceAltNumForm ) :
+    aPos( rPos )
 {
-    return 0x001C;
+    if( pPrgrsBar )
+        pPrgrsBar->SetState( GetCellCount() );
+
+    IncCellCount();
+
+    // Basis-Daten
+    DBG_ASSERT( pXFRecs, "-ExcCell::ExcCell(): Halt Fremder!" );
+
+    nXF = pXFRecs->Find( pAttr, FALSE, nAltNumForm, bForceAltNumForm );
+
+#ifdef DBG_UTIL
+    _nRefCount++;
+#endif
 }
 
 
-UINT16 ExcNote::GetLen( void ) const
+ExcCell::~ExcCell()
 {
-    return 6 + nTextLen;
+    pXFRecs = NULL;
+#ifdef DBG_UTIL
+    _nRefCount--;
+    DBG_ASSERT( _nRefCount >= 0, "*ExcCell::~ExcCell(): Das war mindestens einer zuviel!" );
+#endif
+}
+
+
+void ExcCell::SaveCont( XclExpStream& rStrm )
+{
+    if( pPrgrsBar )
+        pPrgrsBar->SetState( GetCellCount() );
+
+    IncCellCount();
+
+    rStrm << ( UINT16 ) aPos.Row() << ( UINT16 ) aPos.Col() << nXF;
+    SaveDiff( rStrm );
+}
+
+
+void ExcCell::SaveDiff( XclExpStream& rStrm )
+{
+}
+
+
+ULONG ExcCell::GetLen() const
+{
+    return 6 + GetDiffLen();
 }
 
 
 
+//----------------------------------------------------------- class ExcNumber -
 
 ExcNumber::ExcNumber( const ScAddress rPos, const ScPatternAttr* pAttr,
     const double& rNewVal ) :
@@ -1174,9 +1158,9 @@ ExcNumber::ExcNumber( const ScAddress rPos, const ScPatternAttr* pAttr,
 }
 
 
-void ExcNumber::SaveDiff( SvStream &rStr )
+void ExcNumber::SaveDiff( XclExpStream& rStrm )
 {
-    rStr << fVal;
+    rStrm << fVal;
 }
 
 
@@ -1186,13 +1170,14 @@ UINT16 ExcNumber::GetNum( void ) const
 }
 
 
-UINT16 ExcNumber::GetLen( void ) const
+ULONG ExcNumber::GetDiffLen( void ) const
 {
-    return 6 + 8;
+    return 8;
 }
 
 
 
+//---------------------------------------------------------- class ExcBoolerr -
 
 ExcBoolerr::ExcBoolerr( const ScAddress rPos, const ScPatternAttr* pAttr,
     UINT8 nValP, BOOL bIsError ) :
@@ -1204,7 +1189,7 @@ ExcBoolerr::ExcBoolerr( const ScAddress rPos, const ScPatternAttr* pAttr,
 }
 
 
-void ExcBoolerr::SaveDiff( SvStream &rStr )
+void ExcBoolerr::SaveDiff( XclExpStream &rStr )
 {
     rStr << nVal << bError;
 }
@@ -1216,46 +1201,14 @@ UINT16 ExcBoolerr::GetNum( void ) const
 }
 
 
-UINT16 ExcBoolerr::GetLen( void ) const
+ULONG ExcBoolerr::GetDiffLen( void ) const
 {
-    return 6 + 2;
+    return 2;
 }
 
 
 
-
-void ExcRKMulRK::SaveCont( SvStream& rStr )
-{
-    if( ExcCell::pPrgrsBar )
-        ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
-
-    CONT*   pAct = ( CONT* ) List::First();
-
-    DBG_ASSERT( pAct, "-ExcRKMulRk::SaveCont(): einen brauch' ich schon! ")
-
-    if( IsRK() )
-    {
-        rStr << ( UINT16 ) aPos.Row()  << ( UINT16 ) aPos.Col() << pAct->nXF
-            << pAct->nVal;
-        ExcCell::IncCellCount();
-    }
-    else
-    {
-        UINT16  nLastCol = aPos.Col();
-        rStr << ( UINT16 ) aPos.Row()  << nLastCol;
-        while( pAct )
-        {
-            rStr << pAct->nXF << pAct->nVal;
-            pAct = ( CONT* ) List::Next();
-            ExcCell::IncCellCount();
-            nLastCol++;
-        }
-
-        nLastCol--;
-        rStr << nLastCol;
-    }
-}
-
+//---------------------------------------------------------- class ExcRKMulRK -
 
 ExcRKMulRK::ExcRKMulRK( const ScAddress rPos, const ScPatternAttr *pAttr, const INT32 nVal ) :
     aPos( rPos )
@@ -1294,7 +1247,7 @@ ExcRKMulRK* ExcRKMulRK::Extend(
     const ScAddress rPos, const ScPatternAttr* pAttr, const INT32 nVal )
 {
     if( aPos.Row() == rPos.Row() && aPos.Col() + List::Count() == rPos.Col() )
-    {// erweiterbar
+    {// extendable
         if( ExcCell::pPrgrsBar )
             ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
 
@@ -1311,37 +1264,65 @@ ExcRKMulRK* ExcRKMulRK::Extend(
         return NULL;
     }
     else
-    {// neuen erzeugen
+    {// create new
         return new ExcRKMulRK( rPos, pAttr, nVal );
+    }
+}
+
+
+void ExcRKMulRK::SaveCont( XclExpStream& rStrm )
+{
+    if( ExcCell::pPrgrsBar )
+        ExcCell::pPrgrsBar->SetState( ExcCell::GetCellCount() );
+
+    CONT*   pAct = ( CONT* ) List::First();
+
+    DBG_ASSERT( pAct, "-ExcRKMulRk::SaveCont(): einen brauch' ich schon! ")
+
+    if( IsRK() )
+    {
+        rStrm << ( UINT16 ) aPos.Row()  << ( UINT16 ) aPos.Col() << pAct->nXF
+            << pAct->nVal;
+        ExcCell::IncCellCount();
+    }
+    else
+    {
+        UINT16  nLastCol = aPos.Col();
+        rStrm << ( UINT16 ) aPos.Row()  << nLastCol;
+        while( pAct )
+        {
+            rStrm << pAct->nXF << pAct->nVal;
+            pAct = ( CONT* ) List::Next();
+            ExcCell::IncCellCount();
+            nLastCol++;
+        }
+
+        nLastCol--;
+        rStrm << nLastCol;
     }
 }
 
 
 UINT16 ExcRKMulRK::GetNum( void ) const
 {
-    if( IsRK() )
-        return 0x027E;
-    else
-        return 0x00BD;
+    return IsRK() ? 0x027E : 0x00BD;
 }
 
 
-UINT16 ExcRKMulRK::GetLen( void ) const
+ULONG ExcRKMulRK::GetLen( void ) const
 {
-    if( IsRK() )
-        return 6 + 4;
-    else
-        return 6 + ( UINT16 ) List::Count() * 6;
+    return 6 + (IsRK() ? 4 : List::Count() * 6);
 }
 
 
 
+//------------------------------------------------------------ class ExcLabel -
 
 ExcLabel::ExcLabel( const ScAddress rPos, const ScPatternAttr* pAttr, const String& rText, RootData& rExcRoot ) :
-    ExcCell( rPos, pAttr )
+    ExcCell( rPos, pAttr ),
+    aText( rText, *rExcRoot.pCharset )
 {
-    pText = new ByteString( rText, *rExcRoot.pCharset );
-    nTextLen = ( UINT16 ) pText->Len();
+    nTextLen = (UINT16) Min( aText.Len(), (xub_StrLen) 0xFFFF );
 
     if( nTextLen > 255 )
     {
@@ -1353,14 +1334,12 @@ ExcLabel::ExcLabel( const ScAddress rPos, const ScPatternAttr* pAttr, const Stri
 
 ExcLabel::~ExcLabel()
 {
-    delete pText;
 }
 
 
-void ExcLabel::SaveDiff( SvStream &rStr )
+void ExcLabel::SaveDiff( XclExpStream& rStrm )
 {
-    rStr << nTextLen;
-    rStr.Write( pText->GetBuffer(), nTextLen );
+    rStrm.WriteByteString( aText, nTextLen, TRUE );     // 16 bit length
 }
 
 
@@ -1370,13 +1349,14 @@ UINT16 ExcLabel::GetNum( void ) const
 }
 
 
-UINT16 ExcLabel::GetLen( void ) const
+ULONG ExcLabel::GetDiffLen( void ) const
 {
-    return 6 + 2 + nTextLen;
+    return 2 + nTextLen;
 }
 
 
 
+//---------------------------------------------------------- class ExcRichStr
 
 ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* pAttr,
                         const ScEditCell& rEdCell, RootData& rRoot, xub_StrLen nMaxChars ) :
@@ -1557,29 +1537,47 @@ ExcRichStr::ExcRichStr( ExcCell& rExcCell, String& rText, const ScPatternAttr* p
 }
 
 
-void ExcRichStr::Write( XclContinue& rCont )
-{
-    const UINT32        nEnd = ( UINT32 ) GetFormCount() * 2;
-    if( nEnd )
-    {
-        if ( eBiff >= Biff8 )
-            rCont.Write( &aForms, nEnd );
-        else
-        {   // keine CONTINUE Records, max 255 chars + 2 * 255 Forms
-            SvStream&   rStr = rCont.GetStream();
-            rStr << ( UINT8 ) aForms.First();
-            for( UINT32 n = 1 ; n < nEnd ; n++ )
-                rStr << ( UINT8 ) aForms.Next();
-        }
-    }
-}
-
-
 ExcRichStr::~ExcRichStr()
 {
 }
 
 
+void ExcRichStr::Write( SvStream& rStrm )
+{
+    UINT32 nEnd = (UINT32) GetFormCount() * 2;
+
+    if( eBiff >= Biff8 )
+        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
+            rStrm << aForms.Get( nIndex );
+    else
+        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
+            rStrm << (UINT8) aForms.Get( nIndex );
+}
+
+
+void ExcRichStr::Write( XclExpStream& rStrm )
+{
+    UINT32 nEnd = (UINT32) GetFormCount() * 2;
+
+    if( eBiff >= Biff8 )
+    {
+        rStrm.SetSliceLen( 4 );
+        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
+            rStrm << aForms.Get( nIndex );
+    }
+    else
+    {
+        rStrm.SetSliceLen( 2 );
+        for( UINT32 nIndex = 0 ; nIndex < nEnd ; nIndex++ )
+            rStrm << (UINT8) aForms.Get( nIndex );
+    }
+    rStrm.SetSliceLen( 0 );
+}
+
+
+
+
+//---------------------------------------------------------- class ExcRString -
 
 ExcRString::ExcRString( RootData* pRootData, const ScAddress aNewPos, const ScPatternAttr* pAttr,
     const ScEditCell& rEdCell ) :
@@ -1587,10 +1585,7 @@ ExcRString::ExcRString( RootData* pRootData, const ScAddress aNewPos, const ScPa
 {
     pRichStr = new ExcRichStr( *this, aText, pAttr, rEdCell, *pRootData, 255 );
     DBG_ASSERT( aText.Len() <= 0xFFFF, "*ExcRString::ExcRString(): String to long!" );
-    nTextLen = ( UINT16 ) aText.Len();
-
-    if( nTextLen > 255 )
-        nTextLen = 255;
+    nTextLen = (UINT16) Min( aText.Len(), (xub_StrLen) 255 );
 }
 
 
@@ -1600,13 +1595,12 @@ ExcRString::~ExcRString()
 }
 
 
-void ExcRString::SaveDiff( SvStream& rStr )
+void ExcRString::SaveDiff( XclExpStream& rStrm )
 {
-    XclContinue     aCont( rStr, 6, GetLen() );
-    rStr << nTextLen;
-    rStr.Write( ByteString( aText, *pExcRoot->pCharset ).GetBuffer(), nTextLen );
-    rStr << ( UINT8 ) pRichStr->GetFormCount();
-    pRichStr->Write( aCont );
+    rStrm.WriteByteString(
+        ByteString( aText, *pExcRoot->pCharset ), nTextLen, TRUE ); // 16 bit length
+    rStrm << (UINT8) pRichStr->GetFormCount();
+    pRichStr->Write( rStrm );
 }
 
 
@@ -1616,13 +1610,14 @@ UINT16 ExcRString::GetNum( void ) const
 }
 
 
-UINT16 ExcRString::GetLen( void ) const
+ULONG ExcRString::GetDiffLen( void ) const
 {
-    return 6 + 2 + nTextLen + 1 + ( UINT16 ) pRichStr->GetByteCount();
+    return 2 + nTextLen + 1 + pRichStr->GetByteCount();
 }
 
 
 
+//---------------------------------------------------------- class ExcFormula -
 
 ExcFormula::ExcFormula( RootData* pRD, const ScAddress rPos, const ScPatternAttr* pAttr,
                     const ULONG nAltNumForm, BOOL bForceAltNumForm, const ScTokenArray& rTokArray,
@@ -1748,13 +1743,12 @@ void ExcFormula::SetTableOp( USHORT nCol, USHORT nRow )
 }
 
 
-void ExcFormula::SaveDiff( SvStream &rStr )
+void ExcFormula::SaveDiff( XclExpStream& rStrm )
 {//                         grbit               chn
     UINT16      nGrBit = bShrdFmla? 0x000B : 0x0003;
-    rStr << ( double ) 0.0 << nGrBit  << ( UINT32 ) 0x00000000
-        << nFormLen;
-    if( pData )
-        rStr.Write( pData, nFormLen );
+    rStrm   << ( double ) 0.0 << nGrBit  << ( UINT32 ) 0x00000000
+            << nFormLen;
+    rStrm.Write( pData, nFormLen );
 }
 
 
@@ -1764,70 +1758,38 @@ UINT16 ExcFormula::GetNum( void ) const
 }
 
 
-UINT16 ExcFormula::GetLen( void ) const
+ULONG ExcFormula::GetDiffLen( void ) const
 {
-    return 6 + 16 + nFormLen;
+    return 16 + nFormLen;
 }
 
 
 
-
-void ExcBlankMulblank::SaveDiff( SvStream &rStr )
-{
-    if( bMulBlank )
-    {
-        void    *pAkt = List::First();
-        if( pAkt )
-        {
-            UINT16  nCol = ( UINT16 ) aPos.Col();
-            UINT16  nXF, nTmpAnz;
-
-            do{
-                nXF = GetXF( pAkt );
-                nTmpAnz = GetAnz( pAkt );
-
-                nCol += nTmpAnz;
-
-                while( nTmpAnz )
-                {
-                    rStr << nXF;
-                    nTmpAnz--;
-                }
-
-                pAkt = List::Next();
-            } while( pAkt );
-
-            rStr << nCol;   // nur 'nCol' und nicht 'nCol-1', weil initial schon einen zu
-                            //  wenig wegen 'Single-Schreiben' eines XFs in ExcCell!
-        }
-    }
-}
-
+//---------------------------------------------------- class ExcBlankMulblank -
 
 ExcBlankMulblank::ExcBlankMulblank( const ScAddress rPos,
-    const ScPatternAttr *pFirstAttr, UINT16 nFirstAnz ) :
-    ExcCell( rPos, pFirstAttr )
-{// nFirstAnz > 1 -> sofort Mulblank, ansonsten erstmal Blank!
-    DBG_ASSERT( nFirstAnz > 0, "-ExcBlankMulblank::ExcBlankMulblank(): Anzahl <> 0!" );
+    const ScPatternAttr *pFirstAttr, UINT16 nFirstCount ) :
+    ExcCell( rPos, pFirstAttr ),
+    nLen( 0 )
+{// nFirstCount > 1 -> Mulblank, otherwise Blank
+    DBG_ASSERT( nFirstCount > 0, "-ExcBlankMulblank::ExcBlankMulblank(): count==0!" );
     nLastCol = aPos.Col();
 
-    nLen = 6;
-
-    nFirstAnz--;    // einer ist schon in ExcCell!
-    if( nFirstAnz )
+    nFirstCount--;  // one is in ExcCell
+    if( nFirstCount )
     {
-        List::Insert( MakeEntry( nXF, nFirstAnz ), LIST_APPEND );
+        List::Insert( MakeEntry( nXF, nFirstCount ), LIST_APPEND );
 
         bMulBlank = TRUE;
-        nLen += 2 * nFirstAnz + 2;
-        nLastCol += nFirstAnz;
+        nLen += 2 * nFirstCount + 2;
+        nLastCol += nFirstCount;
     }
     else
         bMulBlank = FALSE;
 }
 
 
-void ExcBlankMulblank::Add( const ScPatternAttr *pAttr, const UINT16 nAddAnz )
+void ExcBlankMulblank::Add( const ScPatternAttr *pAttr, const UINT16 nAddCount )
 {
     DBG_ASSERT( pXFRecs, "-ExcMulblank::Add(): Wohin des Weges Fremder?" );
 
@@ -1837,28 +1799,58 @@ void ExcBlankMulblank::Add( const ScPatternAttr *pAttr, const UINT16 nAddAnz )
         nLen += 2;
     }
 
-    List::Insert( MakeEntry( pXFRecs->Find( pAttr ), nAddAnz ), LIST_APPEND );
-    nLen += 2 * nAddAnz;
-    nLastCol += nAddAnz;
+    List::Insert( MakeEntry( pXFRecs->Find( pAttr ), nAddCount ), LIST_APPEND );
+    nLen += 2 * nAddCount;
+    nLastCol += nAddCount;
+}
+
+
+void ExcBlankMulblank::SaveDiff( XclExpStream& rStrm )
+{
+    if( bMulBlank )
+    {
+        void    *pAkt = List::First();
+        if( pAkt )
+        {
+            UINT16  nCol = ( UINT16 ) aPos.Col();
+            UINT16  nXF, nTmpCount;
+
+            do{
+                nXF = GetXF( pAkt );
+                nTmpCount = GetAnz( pAkt );
+
+                nCol += nTmpCount;
+
+                while( nTmpCount )
+                {
+                    rStrm << nXF;
+                    nTmpCount--;
+                }
+
+                pAkt = List::Next();
+            } while( pAkt );
+
+            rStrm << nCol;  // nur 'nCol' und nicht 'nCol-1', weil initial schon einen zu
+                            //  wenig wegen 'Single-Schreiben' eines XFs in ExcCell!
+        }
+    }
 }
 
 
 UINT16 ExcBlankMulblank::GetNum( void ) const
 {
-    if( bMulBlank )
-        return 0x00BE;
-    else
-        return 0x0201;
+    return bMulBlank ? 0x00BE : 0x0201;
 }
 
 
-UINT16 ExcBlankMulblank::GetLen( void ) const
+ULONG ExcBlankMulblank::GetDiffLen( void ) const
 {
     return nLen;
 }
 
 
 
+//---------------------------------------------------- class ExcNameListEntry -
 
 ExcNameListEntry::~ExcNameListEntry()
 {
@@ -1872,6 +1864,7 @@ UINT16 ExcNameListEntry::GetNum( void ) const
 
 
 
+//------------------------------------------------------------- class ExcName -
 
 void ExcName::Init( BOOL bHid, BOOL bBIn )
 {
@@ -1923,7 +1916,7 @@ ExcName::ExcName( RootData* pRD, ScRangeData* pRange ) : eBiff( pRD->eDateiTyp )
 
     pRange->GetName( aName );
 
-    bDummy = aName.CompareToAscii( GetBuiltInName( 0x06 ) ) == COMPARE_EQUAL;   // no PrintRanges
+    bDummy = aName.CompareToAscii( ScFilterTools::GetBuiltInName( 0x06 ) ) == COMPARE_EQUAL;    // no PrintRanges
 
     if( !bDummy )
     {
@@ -2007,54 +2000,47 @@ ExcName::~ExcName()
 }
 
 
-void ExcName::Save( SvStream& r )
+void ExcName::Save( XclExpStream& rStrm )
 {
     if( !bDummy )
-    {
-        _Save( r );
-        SaveCont( r );
-    }
+        ExcNameListEntry::Save( rStrm );
 }
 
 
-void ExcName::SaveCont( SvStream& rStr )
+void ExcName::SaveCont( XclExpStream& rStrm )
 {
-    XclContinue aCont( rStr, 0, GetLen() );
     UINT8       nNameLen = ( UINT8 ) Min( aName.Len(), ( xub_StrLen ) 255 );
     UINT16      nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
 
-    //      grbit           chKey       cch
-    rStr << nGrbit << ( BYTE ) 0x00 << nNameLen
-    //      cce             ixals           itab
-        << nFormLen << ( UINT16 ) 0x0000 << nTabNum
-    //      cch...
-        << ( UINT32 ) 0x00000000;
+    rStrm   << nGrbit                   // grbit
+            << (BYTE) 0x00              // chKey
+            << nNameLen                 // cch
+            << nFormLen                 // cce
+            << (UINT16) 0x0000          // ixals
+            << nTabNum                  // itab
+            << (UINT32) 0x00000000;     // cch...
+
     if ( eBiff < Biff8 )
-    {
-        rStr.Write( ByteString( aName, *pExcRoot->pCharset ).GetBuffer(), nNameLen );
-        if( pData )
-            rStr.Write( pData, nFormLen );
-    }
+        rStrm.WriteByteStringBuffer( ByteString( aName, *pExcRoot->pCharset ), nNameLen );
     else
     {
-        XclRawUnicodeString aUni( aName, nNameLen );
-        rStr << aUni.GetGrbit();
-        aUni.Write( aCont );
-        aCont.Write( pData, nFormLen );
+        XclExpUniString aUni( aName, nNameLen );
+        aUni.WriteFlags( rStrm );
+        aUni.WriteBuffer( rStrm );
     }
+
+    rStrm.Write( pData, nFormLen );
 }
 
 
-UINT16 ExcName::GetLen( void ) const
+ULONG ExcName::GetLen( void ) const
 {   // only a guess for Biff8 (8bit/16bit unknown)
-    if( bDummy )
-        return 0;
-    else
-        return 14 + nFormLen + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), ( xub_StrLen ) 255 );
+    return bDummy ? 0 : (14 + nFormLen + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), ( xub_StrLen ) 255 ));
 }
 
 
 
+//--------------------------------------------------------- class ExcNameList -
 
 ExcNameList::~ExcNameList()
 {
@@ -2063,33 +2049,17 @@ ExcNameList::~ExcNameList()
 }
 
 
-void ExcNameList::_Save( SvStream& rStrm )
-{
-}
-
-
-void ExcNameList::SaveCont( SvStream& rStrm )
+void ExcNameList::Save( XclExpStream& rStrm )
 {
     for( ExcNameListEntry* pName = _First(); pName; pName = _Next() )
         pName->Save( rStrm );
 }
 
 
-UINT16 ExcNameList::GetNum( void ) const
-{
-    return 0;
-}
 
+//--------------------------------------------------------- class ExcDummy_03 -
 
-UINT16 ExcNameList::GetLen( void ) const
-{
-    return 0;
-}
-
-
-
-
-UINT16 ExcDummy_03::GetLen( void ) const
+ULONG ExcDummy_03::GetLen( void ) const
 {
     return nMyLen;
 }
@@ -2102,6 +2072,7 @@ const BYTE* ExcDummy_03::GetData( void ) const
 
 
 
+//------------------------------------------------------- class ExcDimensions -
 
 ExcDimensions::ExcDimensions( BiffTyp eBiffP )
             : eBiff( eBiffP )
@@ -2118,28 +2089,6 @@ ExcDimensions::ExcDimensions(  UINT16 nFirstCol, UINT16 nFirstRow,
 }
 
 
-void ExcDimensions::SaveCont( SvStream &rStr )
-{
-    if ( eBiff < Biff8 )
-        rStr << nRwMic << nRwMac;
-    else
-        rStr << (UINT32) nRwMic << (UINT32) nRwMac;
-    rStr << nColMic << nColMac << nIgnore;
-}
-
-
-UINT16 ExcDimensions::GetNum( void ) const
-{
-    return 0x0200;
-}
-
-
-UINT16 ExcDimensions::GetLen( void ) const
-{
-    return eBiff < Biff8 ? 10 : 14;
-}
-
-
 void ExcDimensions::SetLimits( UINT16 nFirstCol, UINT16 nFirstRow,
     UINT16 nLastCol, UINT16 nLastRow )
 {
@@ -2150,7 +2099,30 @@ void ExcDimensions::SetLimits( UINT16 nFirstCol, UINT16 nFirstRow,
 }
 
 
+void ExcDimensions::SaveCont( XclExpStream& rStrm )
+{
+    if ( eBiff < Biff8 )
+        rStrm << nRwMic << nRwMac;
+    else
+        rStrm << (UINT32) nRwMic << (UINT32) nRwMac;
+    rStrm << nColMic << nColMac << (UINT16) 0;
+}
 
+
+UINT16 ExcDimensions::GetNum( void ) const
+{
+    return 0x0200;
+}
+
+
+ULONG ExcDimensions::GetLen( void ) const
+{
+    return eBiff < Biff8 ? 10 : 14;
+}
+
+
+
+//--------------------------------------------------------- class ExcEOutline -
 
 ExcEOutline::ExcEOutline( ScOutlineArray* pArray ) :
         pOLArray( pArray ),
@@ -2167,6 +2139,7 @@ ExcEOutline::ExcEOutline( ScOutlineArray* pArray ) :
     }
 
 }
+
 
 void ExcEOutline::Update( UINT16 nNum )
 {
@@ -2202,6 +2175,7 @@ void ExcEOutline::Update( UINT16 nNum )
 
 
 
+//------------------------------------------------------------ class ExcEGuts -
 
 ExcEGuts::ExcEGuts( ScOutlineArray* pCol, ScOutlineArray* pRow )
 {
@@ -2213,7 +2187,8 @@ ExcEGuts::ExcEGuts( ScOutlineArray* pCol, ScOutlineArray* pRow )
         nRowLevel = Min( pRow->GetDepth(), (UINT16) EXC_OUTLINE_MAX );
 }
 
-void ExcEGuts::SaveCont( SvStream& rStrm )
+
+void ExcEGuts::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (UINT16)(nRowLevel ? (12 * nRowLevel + 17) : 0)
             << (UINT16)(nColLevel ? (12 * nColLevel + 17) : 0)
@@ -2221,18 +2196,21 @@ void ExcEGuts::SaveCont( SvStream& rStrm )
             << (UINT16)(nColLevel + (nRowLevel ? 1 : 0));
 }
 
+
 UINT16 ExcEGuts::GetNum() const
 {
     return 0x0080;
 }
 
-UINT16 ExcEGuts::GetLen() const
+
+ULONG ExcEGuts::GetLen() const
 {
     return 8;
 }
 
 
 
+//-------------------------------------------------------------- class ExcRow -
 
 ExcRow::ExcRow( UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
                 UINT16 nNewXF, ScDocument& rDoc, ExcEOutline& rOutline ) :
@@ -2256,6 +2234,7 @@ ExcRow::ExcRow( UINT16 nRow, UINT16 nTab, UINT16 nFCol, UINT16 nLCol,
         nOptions |= EXC_ROW_COLLAPSED;
 }
 
+
 void ExcRow::SetRange( UINT16 nFCol, UINT16 nLCol )
 {
     DBG_ASSERT( nFCol <= nLCol, "+ExcRow::SetRange(): First Col > Last Col!" );
@@ -2263,6 +2242,7 @@ void ExcRow::SetRange( UINT16 nFCol, UINT16 nLCol )
     nFirstCol = nFCol;
     nLastCol = nLCol;
 }
+
 
 void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 {
@@ -2280,12 +2260,14 @@ void ExcRow::SetHeight( UINT16 nNewHeight, BOOL bUser )
 //      nHeight |= EXC_ROW_FLAGDEFHEIGHT;   // default height
 }
 
-void ExcRow::SaveCont( SvStream& rStrm )
+
+void ExcRow::SaveCont( XclExpStream& rStrm )
 {
     nOptions |= EXC_ROW_FLAGCOMMON;
     rStrm   << nNum << nFirstCol << (UINT16)(nLastCol + 1)
             << nHeight << (UINT32)0 << nOptions << nXF;
 }
+
 
 UINT16 ExcRow::GetNum() const
 {
@@ -2293,13 +2275,14 @@ UINT16 ExcRow::GetNum() const
 }
 
 
-UINT16 ExcRow::GetLen() const
+ULONG ExcRow::GetLen() const
 {
     return 16;
 }
 
 
 
+//--------------------------------------------------------- class ExcRowBlock -
 
 ExcRowBlock::ExcRowBlock()
 {
@@ -2307,21 +2290,15 @@ ExcRowBlock::ExcRowBlock()
     nNext = 0;
 }
 
+
 ExcRowBlock::~ExcRowBlock()
 {
-    UINT16  nC;
-    for( nC = 0 ; nC < nNext ; nC++ )
+    for( UINT16 nC = 0 ; nC < nNext ; nC++ )
         delete ppRows[ nC ];
 
     delete[] ppRows;
 }
 
-void ExcRowBlock::Save( SvStream& rOut )
-{
-    UINT16  nC;
-    for( nC = 0 ; nC < nNext ; nC++ )
-        ppRows[ nC ]->Save( rOut );
-}
 
 ExcRowBlock* ExcRowBlock::Append( ExcRow* pNewRow )
 {
@@ -2333,36 +2310,23 @@ ExcRowBlock* ExcRowBlock::Append( ExcRow* pNewRow )
     }
     else
     {
-        ExcRowBlock*    pRet = new ExcRowBlock;
+        ExcRowBlock* pRet = new ExcRowBlock;
         pRet->ppRows[ 0 ] = pNewRow;
         pRet->nNext = 1;
         return pRet;
     }
 }
 
-UINT16 ExcRowBlock::GetNum() const
+
+void ExcRowBlock::Save( XclExpStream& rStrm )
 {
-    return 0x0000;  // Dummy
-}
-
-
-UINT16 ExcRowBlock::GetLen() const
-{
-    UINT32 nLenSum = 0;
-    if( nNext )
-    {
-        for( UINT16 nC = 0; nC < nNext; nC++ )
-            nLenSum += ppRows[ nC ]->GetLen();
-
-        nLenSum += (nNext - 1) * 4;
-    }
-
-    DBG_ASSERT( nLenSum <= 0xFFFF, "ExcRowBlock::GetLen() - size > 0xFFFF!" );
-    return (UINT16) nLenSum;
+    for( UINT16 nC = 0 ; nC < nNext ; nC++ )
+        ppRows[ nC ]->Save( rStrm );
 }
 
 
 
+//------------------------------------------------------ class ExcDefcolwidth -
 
 ExcDefcolwidth::ExcDefcolwidth( UINT16 nNewWidth )
 {
@@ -2370,9 +2334,9 @@ ExcDefcolwidth::ExcDefcolwidth( UINT16 nNewWidth )
 }
 
 
-void ExcDefcolwidth::SaveCont( SvStream &rStr )
+void ExcDefcolwidth::SaveCont( XclExpStream& rStrm )
 {
-    rStr << nWidth;
+    rStrm << nWidth;
 }
 
 
@@ -2382,13 +2346,14 @@ UINT16 ExcDefcolwidth::GetNum( void ) const
 }
 
 
-UINT16 ExcDefcolwidth::GetLen( void ) const
+ULONG ExcDefcolwidth::GetLen( void ) const
 {
     return 2;
 }
 
 
 
+//---------------------------------------------------------- class ExcColinfo -
 
 ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF, RootData& rRoot, ExcEOutline& rOutline )
 {
@@ -2413,6 +2378,7 @@ ExcColinfo::ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nNewXF, RootData& rRoot
         nOptions |= EXC_COL_COLLAPSED;
 }
 
+
 void ExcColinfo::SetWidth( UINT16 nWidth, double fColScale )
 {
     double  f = nWidth;
@@ -2424,36 +2390,41 @@ void ExcColinfo::SetWidth( UINT16 nWidth, double fColScale )
     nColWidth = (UINT16) f;
 }
 
-BOOL ExcColinfo::Expand( ExcColinfo* pExp )
+
+void ExcColinfo::Expand( ExcColinfo*& rpExp )
 {
-    if( pExp && (nLastCol + 1 == pExp->nFirstCol) && (nColWidth == pExp->nColWidth) &&
-        (nXF == pExp->nXF) && (nOptions == pExp->nOptions) )
-    {// erweitern
-        nLastCol = pExp->nLastCol;
-        delete pExp;
-        return TRUE;
+    if( !rpExp ) return;
+
+    if( (nLastCol + 1 == rpExp->nFirstCol) && (nColWidth == rpExp->nColWidth) &&
+        (nXF == rpExp->nXF) && (nOptions == rpExp->nOptions) )
+    {// expand
+        nLastCol = rpExp->nLastCol;
+        delete rpExp;
+        rpExp = NULL;
     }
-    else
-        return FALSE;
 }
 
-void ExcColinfo::SaveCont( SvStream &rStr )
+
+void ExcColinfo::SaveCont( XclExpStream& rStrm )
 {
-    rStr << nFirstCol << nLastCol << nColWidth << nXF << nOptions << (BYTE)0;
+    rStrm << nFirstCol << nLastCol << nColWidth << nXF << nOptions << (BYTE)0;
 }
+
 
 UINT16 ExcColinfo::GetNum( void ) const
 {
     return 0x007D;
 }
 
-UINT16 ExcColinfo::GetLen( void ) const
+
+ULONG ExcColinfo::GetLen( void ) const
 {
     return 11;
 }
 
 
 
+//--------------------------------------------------------------- class ExcXf -
 
 ExcXf::ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr, BOOL& rbWrap, BOOL bSt ) :
     bStyle( bSt )
@@ -2588,51 +2559,14 @@ ExcXf::~ExcXf()
     nObjCnt--;
 
     if( !nObjCnt )
-    {
         pPalette2 = NULL;   // letzter macht das Licht aus...
-    }
 }
 #endif
 
 
-void ExcXf::SaveCont( SvStream& rStr )
+void ExcXf::SetPalette( ExcPalette2& rPalette2 )
 {
-    UINT16  nTmp;
-
-    rStr << nIfnt << nIfmt                              // Offs 4 + 6
-        << nOffs8;                                      // Offs 8
-
-    nTmp = ( UINT16 ) eAlc;                             // Offs 10
-    nTmp |= 0x0800;     // locked
-    if( bFWrap )
-        nTmp += 0x0008;
-    nTmp += ( ( UINT16 ) eAlcV ) << 4;
-    nTmp += ( ( UINT16 ) eOri ) << 8;
-    rStr << nTmp;
-
-    UINT16 nForeInd, nBackInd;
-    pPalette2->GetMixedColors( nIcvForeSer, nIcvBackSer, nForeInd, nBackInd, nFls );
-    nTmp = nForeInd;                                    // Offs 12
-    nTmp |= nBackInd << 7;
-
-    if ( bFSxButton )
-        nTmp |= 0x2000;
-    rStr << nTmp;
-
-    nTmp = nFls;                                        // Offs 14
-    nTmp += nDgBottom << 6;
-    nTmp |= pPalette2->GetColorIndex( nIcvBotSer ) << 9;
-    rStr << nTmp;
-
-    nTmp = nDgTop;                                      // Offs 16
-    nTmp += nDgLeft << 3;
-    nTmp += nDgRight << 6;
-    nTmp |= pPalette2->GetColorIndex( nIcvTopSer ) << 9;
-    rStr << nTmp;
-
-    nTmp = pPalette2->GetColorIndex( nIcvLftSer );      // Offs 18
-    nTmp |= pPalette2->GetColorIndex( nIcvRigSer ) << 7;
-    rStr << nTmp;
+    pPalette2 = &rPalette2;
 }
 
 
@@ -2664,9 +2598,44 @@ void ExcXf::ScToExcBorderLine( const SvxBorderLine* pLine, UINT32& rIcvSer, UINT
 }
 
 
-void ExcXf::SetPalette( ExcPalette2& rPalette2 )
+void ExcXf::SaveCont( XclExpStream& rStrm )
 {
-    pPalette2 = &rPalette2;
+    UINT16  nTmp;
+
+    rStrm << nIfnt << nIfmt                             // Offs 4 + 6
+        << nOffs8;                                      // Offs 8
+
+    nTmp = ( UINT16 ) eAlc;                             // Offs 10
+    nTmp |= 0x0800;     // locked
+    if( bFWrap )
+        nTmp += 0x0008;
+    nTmp += ( ( UINT16 ) eAlcV ) << 4;
+    nTmp += ( ( UINT16 ) eOri ) << 8;
+    rStrm << nTmp;
+
+    UINT16 nForeInd, nBackInd;
+    pPalette2->GetMixedColors( nIcvForeSer, nIcvBackSer, nForeInd, nBackInd, nFls );
+    nTmp = nForeInd;                                    // Offs 12
+    nTmp |= nBackInd << 7;
+
+    if ( bFSxButton )
+        nTmp |= 0x2000;
+    rStrm << nTmp;
+
+    nTmp = nFls;                                        // Offs 14
+    nTmp += nDgBottom << 6;
+    nTmp |= pPalette2->GetColorIndex( nIcvBotSer ) << 9;
+    rStrm << nTmp;
+
+    nTmp = nDgTop;                                      // Offs 16
+    nTmp += nDgLeft << 3;
+    nTmp += nDgRight << 6;
+    nTmp |= pPalette2->GetColorIndex( nIcvTopSer ) << 9;
+    rStrm << nTmp;
+
+    nTmp = pPalette2->GetColorIndex( nIcvLftSer );      // Offs 18
+    nTmp |= pPalette2->GetColorIndex( nIcvRigSer ) << 7;
+    rStrm << nTmp;
 }
 
 
@@ -2676,13 +2645,14 @@ UINT16 ExcXf::GetNum( void ) const
 }
 
 
-UINT16 ExcXf::GetLen( void ) const
+ULONG ExcXf::GetLen( void ) const
 {
     return 16;
 }
 
 
 
+//----------------------------------------------------------- class ExcFormat -
 
 ExcFormat::ExcFormat( RootData* pExcRoot, UINT32 nNewScIndex ) : ExcRoot( pExcRoot )
 {
@@ -2760,18 +2730,18 @@ ExcFormat::~ExcFormat()
 }
 
 
-void ExcFormat::SaveCont( SvStream &rOut )
+void ExcFormat::SaveCont( XclExpStream& rStrm )
 {
     if ( eBiff < Biff8 )
     {
-        rOut << nIndex << nFormLen;
-        rOut.Write( ByteString( *pForm, *pExcRoot->pCharset ).GetBuffer(), nFormLen );
+        rStrm << nIndex;
+        rStrm.WriteByteString(
+            ByteString( *pForm, *pExcRoot->pCharset ), nFormLen );  // 8 bit length
     }
     else
     {
-        XclContinue aCont( rOut, 0, GetLen() );
-        rOut << nIndex;
-        XclUnicodeString( *pForm ).Write( aCont );
+        rStrm << nIndex;
+        XclExpUniString( *pForm, nFormLen ).Write( rStrm );     // normal unicode string
     }
 }
 
@@ -2782,14 +2752,14 @@ UINT16 ExcFormat::GetNum( void ) const
 }
 
 
-UINT16 ExcFormat::GetLen( void ) const
+ULONG ExcFormat::GetLen( void ) const
 {   //! for Biff8 only a prediction, assumes 8-bit string
     return ( eBiff < Biff8 ? 2 + 1 + nFormLen : 2 + 3 + nFormLen );
 }
 
 
 
-//_____________________________________________________________________________
+//--------------------------------------------------------- class ExcPalette2 -
 // ExcPal2Entry & ExcPalette2
 
 INT32 lcl_GetColorDistance( const Color& rCol1, const Color& rCol2 )
@@ -2851,7 +2821,7 @@ void ExcPal2Entry::AddColor( const ExcPal2Entry& rEntry )
     nWeight = nWeightSum;
 }
 
-void ExcPal2Entry::Save( SvStream& rStrm )
+void ExcPal2Entry::Save( XclExpStream& rStrm )
 {
     rStrm << GetRed() << GetGreen() << GetBlue() << (UINT8)0x00;
 }
@@ -2866,8 +2836,7 @@ ExcPalette2::ExcPalette2( ColorBuffer& rCB ) :
         pColorIndex( NULL ),
         pColors( NULL )
 {
-    Color aCol( 0x00000000 );
-    InsertColor( aCol, EXC_COLOR_CELLTEXT );
+    InsertColor( Color( COL_BLACK ), EXC_COLOR_CELLTEXT );
 }
 
 ExcPalette2::~ExcPalette2()
@@ -2962,11 +2931,10 @@ void ExcPalette2::RecalcColorIndex( UINT32 nKeep, UINT32 nRemove )
 
 void ExcPalette2::MergeColors( UINT32 nKeep, UINT32 nRemove )
 {
-    if( nRemove == 0 )
+    if( nRemove == 0 )      // don't remove color 0
     {
-        UINT32 nSwap = nKeep;
-        nKeep = nRemove;
-        nRemove = nSwap;
+        nRemove = nKeep;
+        nKeep = 0;
     }
 
     ExcPal2Entry*   pKeepEntry      = _Get( nKeep );
@@ -3101,7 +3069,7 @@ UINT16 ExcPalette2::GetColorIndex( const Color& rCol ) const
 UINT16 ExcPalette2::GetColorIndex( UINT32 nSerial ) const
 {
     if( nSerial >= EXC_PAL2_INDEXBASE )
-        return (UINT16)(nSerial & !EXC_PAL2_INDEXBASE);
+        return (UINT16)(nSerial & ~EXC_PAL2_INDEXBASE);
     if( (nSerial >= nMaxSerial) || !pColorIndex )
         return 0;
     return (UINT16)(pColorIndex[ nSerial ] + ColorBuffer::GetIndCorrect());
@@ -3170,14 +3138,14 @@ ColorData ExcPalette2::GetRGBValue( UINT16 nIndex ) const
     return 0;
 }
 
-void ExcPalette2::SaveCont( SvStream& rStrm )
+void ExcPalette2::SaveCont( XclExpStream& rStrm )
 {
     rStrm << rColBuff.GetAnz();
 
     for( ExcPal2Entry* pEntry = _First(); pEntry; pEntry = _Next() )
         pEntry->Save( rStrm );
 
-    for( UINT16 nInd = ( UINT16 ) List::Count(); nInd < rColBuff.GetAnz(); nInd++ )
+    for( UINT16 nInd = (UINT16) List::Count(); nInd < rColBuff.GetAnz(); nInd++ )
         rStrm   << rColBuff.GetRed( nInd )
                 << rColBuff.GetGreen( nInd )
                 << rColBuff.GetBlue( nInd )
@@ -3189,28 +3157,30 @@ UINT16 ExcPalette2::GetNum() const
     return 0x0092;
 }
 
-UINT16 ExcPalette2::GetLen() const
+ULONG ExcPalette2::GetLen() const
 {
     return 2 + 4 * rColBuff.GetAnz();
 }
-//_____________________________________________________________________________
 
 
 
-ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) : ExcRoot( pRD )
+//------------------------------------------------------ class ExcExterncount -
+
+ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
+    ExcRoot( pRD ),
+    bTable( bTableNew )
 {
-    bTable = bTableNew;
 }
 
 
-void ExcExterncount::SaveCont( SvStream &rOut )
+void ExcExterncount::SaveCont( XclExpStream& rStrm )
 {
     UINT16  nNumTabs = pExcRoot->pDoc->GetTableCount();
 
     if( nNumTabs && bTable )
         nNumTabs--;
 
-    rOut << nNumTabs;
+    rStrm << nNumTabs;
 }
 
 
@@ -3220,29 +3190,31 @@ UINT16 ExcExterncount::GetNum( void ) const
 }
 
 
-UINT16 ExcExterncount::GetLen( void ) const
+ULONG ExcExterncount::GetLen( void ) const
 {
     return 2;
 }
 
 
 
+//------------------------------------------------------ class ExcExternsheet -
 
 ExcExternsheet::ExcExternsheet( RootData* pExcRoot, const UINT16 nNewTabNum ) : ExcRoot( pExcRoot )
 {
     DBG_ASSERT( pExcRoot->pDoc->HasTable( nNewTabNum ),
-        "*ExcExternsheet::ExcExternsheet(): Tabelle existiert nicht!" );
+        "*ExcExternsheet::ExcExternsheet(): table not found" );
 
     pExcRoot->pDoc->GetName( nNewTabNum, aTabName );
-    DBG_ASSERT( aTabName.Len() < 256,
-        "*ExcExternsheet::ExcExternsheet(): Tabellenname zu lang fuer Excel!" );
+    DBG_ASSERT( aTabName.Len() < 255,
+        "*ExcExternsheet::ExcExternsheet(): table name too long" );
 }
 
 
-void ExcExternsheet::SaveCont( SvStream& rOut )
+void ExcExternsheet::SaveCont( XclExpStream& rStrm )
 {
-    rOut << ( UINT8 ) ( aTabName.Len() + 1 ) << ( UINT8 ) 0x03;
-    rOut.Write( ByteString( aTabName, *pExcRoot->pCharset ).GetBuffer(), aTabName.Len() );
+    rStrm << ( UINT8 ) Min( (xub_StrLen)(aTabName.Len() + 1), (xub_StrLen) 255 ) << ( UINT8 ) 0x03;
+    rStrm.WriteByteStringBuffer(
+        ByteString( aTabName, *pExcRoot->pCharset ), 254 );     // max 254 chars (leading 0x03!)
 }
 
 
@@ -3252,59 +3224,31 @@ UINT16 ExcExternsheet::GetNum( void ) const
 }
 
 
-UINT16 ExcExternsheet::GetLen( void ) const
+ULONG ExcExternsheet::GetLen( void ) const
 {
-    DBG_ASSERT( aTabName.Len() <= 0xFFFF, "*ExcExternsheet::GetLen(): Tab name to long!" );
-    return 2 + ( UINT16 ) aTabName.Len();
+    return 2 + Min( aTabName.Len(), (xub_StrLen) 254 );
 }
 
 
 
-
-void ExcExternsheetList::_Save( SvStream& r )
-{
-    ExcExternsheet*     p = ( ExcExternsheet* ) First();
-
-    while( p )
-    {
-        p->Save( r );
-        p = ( ExcExternsheet* ) Next();
-    }
-}
-
+//-------------------------------------------------- class ExcExternsheetList -
 
 ExcExternsheetList::~ExcExternsheetList()
 {
-    ExcExternsheet*     p = ( ExcExternsheet* ) First();
-
-    while( p )
-    {
-        delete p;
-        p = ( ExcExternsheet* ) Next();
-    }
+    for( ExcExternsheet* pSheet = _First(); pSheet; pSheet = _Next() )
+        delete pSheet;
 }
 
 
-UINT16 ExcExternsheetList::GetNum( void ) const
-{   // Dummy
-    return 0;
-}
-
-
-UINT16 ExcExternsheetList::GetLen( void ) const
-{   // Dummy
-    return 0;
-}
-
-
-
-
-void ExcExternDup::_Save( SvStream& r )
+void ExcExternsheetList::Save( XclExpStream& rStrm )
 {
-    rExtCnt.Save( r );
-    rExtSheetList.Save( r );
+    for( ExcExternsheet* pSheet = _First(); pSheet; pSheet = _Next() )
+        pSheet->Save( rStrm );
 }
 
+
+
+//-------------------------------------------------------- class ExcExternDup -
 
 ExcExternDup::ExcExternDup( ExcExterncount& rC, ExcExternsheetList& rL ) :
     rExtCnt( rC ), rExtSheetList( rL )
@@ -3318,89 +3262,55 @@ ExcExternDup::ExcExternDup( const ExcExternDup& r ) :
 }
 
 
-UINT16 ExcExternDup::GetNum( void ) const
-{   // Dummy
-    return 0;
-}
-
-
-UINT16 ExcExternDup::GetLen( void ) const
-{   // Dummy
-    return 0;
+void ExcExternDup::Save( XclExpStream& rStrm )
+{
+    rExtCnt.Save( rStrm );
+    rExtSheetList.Save( rStrm );
 }
 
 
 
+//---------------------------------------------------------- class ExcWindow2 -
 
 ExcWindow2::ExcWindow2( UINT16 nTab ) : nTable( nTab )
 {
 }
 
 
-void ExcWindow2::SaveCont( SvStream& rOut )
+void ExcWindow2::SaveCont( XclExpStream& rStrm )
 {
     BYTE pData[] = { 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
     DBG_ASSERT( sizeof(pData) == GetLen(), "ExcWindow2::SaveCont: length mismatch" );
     if ( GetTable() == 0 )
         pData[1] |= 0x06;       // displayed and selected
-    rOut.Write( pData, GetLen() );
+    rStrm.Write( pData, GetLen() );
 }
 
 
 UINT16 ExcWindow2::GetNum( void ) const
 {
-    return 0x023e;
+    return 0x023E;
 }
 
 
-UINT16 ExcWindow2::GetLen( void ) const
+ULONG ExcWindow2::GetLen( void ) const
 {
     return 10;
 }
 
 
 
+//------------------------------------------------------------ class UsedList -
 
-UsedList::UsedList( void )
+void UsedList::Save( XclExpStream& rStrm )
 {
-    nLen = 0;
-}
-
-
-void UsedList::SaveCont( SvStream& rOut )
-{
-    ExcRecord*  pExcRec = ( ExcRecord* ) First();
-
-    while( pExcRec )
-    {
-        pExcRec->Save( rOut );
-        pExcRec = ( ExcRecord * ) Next();
-    }
-}
-
-
-void UsedList::_Save( SvStream &rOut )
-{
-}
-
-
-void UsedList::SetBaseIndex( UINT16 nNewVal )
-{
-    nBaseIndex = nNewVal;
-}
-
-
-UINT16 UsedList::GetLen( void ) const
-{
-    return nLen;
+    for( ExcRecord* pExcRec = (ExcRecord*) First(); pExcRec; pExcRec = (ExcRecord*) Next() )
+        pExcRec->Save( rStrm );
 }
 
 
 
-
-UsedFontList::UsedFontList( BiffTyp eBiffP ) : eBiff( eBiffP )
-{   }
-
+//-------------------------------------------------------- class UsedFontList -
 
 UsedFontList::~UsedFontList()
 {
@@ -3437,34 +3347,23 @@ UINT16 UsedFontList::Add( ExcFont* pExcFont )
 
     Insert( pExcFont, LIST_APPEND );
 
-    nLen += pExcFont->GetLen();
     return (UINT16)(Count() - 1 + nBaseIndex);
 }
 
 
 UINT16 UsedFontList::Add( Font* pFont )
 {
-    return Add( new ExcFont( pFont, eBiff ) );
-}
-
-
-UINT16 UsedFontList::GetNum( void ) const
-{
-    return 0xFF31;
+    return Add( new ExcFont( pFont, *pExcRoot ) );
 }
 
 
 
+//-------------------------------------------------------- class UsedFormList -
 
 UsedFormList::~UsedFormList()
 {
-    void*       pAkt = First();
-
-    while( pAkt )
-    {
-        delete ( ExcFormat* ) pAkt;
-        pAkt = Next();
-    }
+    for( ExcFormat* pFormat = _First(); pFormat; pFormat = _Next() )
+        delete pFormat;
 }
 
 
@@ -3473,31 +3372,41 @@ UINT16 UsedFormList::Add( ExcFormat* pFormat )
     // Doubletten suchen
     UINT32      nSearch = pFormat->nScIndex;
 
-    ExcFormat*  pAkt = ( ExcFormat* ) First();
     UINT16      nC = nBaseIndex;
-    while( pAkt )
+    for( ExcFormat* pCurr = _First(); pCurr; pCurr = _Next() )
     {
-        if( pAkt->nScIndex == nSearch )
+        if( pCurr->nScIndex == nSearch )
         {
             delete pFormat;
             return nC;
         }
         nC++;
-        pAkt = ( ExcFormat* ) Next();
     }
+
     pFormat->nIndex = nC;
     Insert( pFormat, LIST_APPEND );
-    nLen += pFormat->GetLen();
     return nC;
 }
 
 
-UINT16 UsedFormList::GetNum( void ) const
+
+//-------------------------------------------------------- class UsedAttrList -
+
+UsedAttrList::UsedAttrList( RootData* pRD, ExcPalette2& rPal2,
+    UsedFontList& rUFntLst, UsedFormList& rUFrmLst ) :
+    ExcRoot( pRD ),
+    rPalette2( rPal2 ),
+    rFntLst( rUFntLst ),
+    rFrmLst( rUFrmLst )
 {
-    return 0xFF1E;
 }
 
 
+UsedAttrList::~UsedAttrList()
+{
+    for( ENTRY* pEntry = _First(); pEntry; pEntry = _Next() )
+        delete pEntry;
+}
 
 
 void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, const BOOL bExplLineBreak,
@@ -3508,7 +3417,7 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
     pData->pPattAttr = pAttr;
     pData->bLineBreak = bExplLineBreak;
     pData->nAltNumForm = nAltNumForm;
-    Insert( ( void* ) pData, LIST_APPEND );
+    List::Insert( pData, LIST_APPEND );
 
     // Font-Daten
     UINT16          nFontIndex;
@@ -3543,47 +3452,10 @@ void UsedAttrList::AddNewXF( const ScPatternAttr* pAttr, const BOOL bStyle, cons
 
     UINT16          nFormatIndex = rFrmLst.Add( pFormat );
 
-    // XF-Daten + Laengen-Update
     if ( pExcRoot->eDateiTyp < Biff8 )
         pData->pXfRec = new ExcXf( nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
     else
         pData->pXfRec = new ExcXf8( nFontIndex, nFormatIndex, pAttr, pData->bLineBreak, bStyle );
-    nLen += pData->pXfRec->GetLen();
-}
-
-
-UsedAttrList::UsedAttrList( RootData* pRD, ExcPalette2& rPal2,
-    UsedFontList& rUFntLst, UsedFormList& rUFrmLst ) :
-    ExcRoot( pRD ),
-    rPalette2( rPal2 ),
-    rFntLst( rUFntLst ),
-    rFrmLst( rUFrmLst )
-{
-}
-
-
-UsedAttrList::~UsedAttrList()
-{
-    void*       pAkt = First();
-
-    while( pAkt )
-    {
-        delete ( ( ENTRY* ) pAkt )->pXfRec; // erst ExcXf loeschen
-        delete ( ENTRY* ) pAkt;             // ... dann Entry selbst
-        pAkt = Next();
-    }
-}
-
-
-void UsedAttrList::SaveCont( SvStream& rOut )
-{
-    ENTRY*      pEntry = ( ENTRY* ) First();
-
-    while( pEntry )
-    {
-        pEntry->pXfRec->Save( rOut );
-        pEntry = ( ENTRY* ) Next();
-    }
 }
 
 
@@ -3595,14 +3467,11 @@ UINT16 UsedAttrList::Find( const ScPatternAttr* pAttr, const BOOL bStyle,
 
     DBG_ASSERT( nBaseIndex, "*UsedAttrList::Find(): leer == nichtleer?" );
 
-    const ENTRY*    pAkt = ( const ENTRY* ) First();
     UINT16          nC = nBaseIndex;
-
-    while( pAkt )
+    for( ENTRY* pCurr = _First(); pCurr; pCurr = _Next() )
     {
-        if( pAkt->Equal( pAttr, nAltNumForm ) )
+        if( pCurr->Equal( pAttr, nAltNumForm ) )
             return nC;
-        pAkt = ( const ENTRY* ) Next();
         nC++;
     }
 
@@ -3619,14 +3488,11 @@ UINT16 UsedAttrList::FindWithLineBreak( const ScPatternAttr* pAttr )
     DBG_ASSERT( nBaseIndex,
         "*UsedAttrList::FindWithLineBreak(): leer == nichtleer?" );
 
-    ENTRY*          pAkt = ( ENTRY* ) First();
     UINT16          nC = nBaseIndex;
-
-    while( pAkt )
+    for( ENTRY* pCurr = _First(); pCurr; pCurr = _Next() )
     {
-        if( pAkt->pPattAttr == pAttr && pAkt->bLineBreak )
+        if( pCurr->pPattAttr == pAttr && pCurr->bLineBreak )
             return nC;
-        pAkt = ( ENTRY* ) Next();
         nC++;
     }
 
@@ -3638,25 +3504,16 @@ UINT16 UsedAttrList::FindWithLineBreak( const ScPatternAttr* pAttr )
 }
 
 
-UINT16 UsedAttrList::GetNum( void ) const
+void UsedAttrList::Save( XclExpStream& rStrm )
 {
-    return 0xFFE0;
+    for( ENTRY* pEntry = _First(); pEntry; pEntry = _Next() )
+        if( pEntry->pXfRec )
+            pEntry->pXfRec->Save( rStrm );
 }
 
 
 
-
-void ExcSetup::SaveCont( SvStream& rStr )
-{
-    rStr << nPaperSize << nScale << nPageStart
-            << ( UINT16 ) 1 << ( UINT16 ) 1             // FitWidth / FitHeight
-            << nGrbit
-            << ( UINT16 ) 0x012C << ( UINT16 ) 0x012C   // Res / VRes
-            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Header margin (double)
-            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Footer margin (double)
-            << ( UINT16 ) 1;                            // num of copies
-}
-
+//------------------------------------------------------------ class ExcSetup -
 
 ExcSetup::ExcSetup( RootData* pExcRoot )
 {
@@ -3778,45 +3635,38 @@ ExcSetup::ExcSetup( RootData* pExcRoot )
 }
 
 
+void ExcSetup::SaveCont( XclExpStream& rStrm )
+{
+    rStrm   << nPaperSize << nScale << nPageStart
+            << ( UINT16 ) 1 << ( UINT16 ) 1             // FitWidth / FitHeight
+            << nGrbit
+            << ( UINT16 ) 0x012C << ( UINT16 ) 0x012C   // Res / VRes
+            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Header margin (double)
+            << ( UINT32 ) 0 << ( UINT32 ) 0x3FE00000    // Footer margin (double)
+            << ( UINT16 ) 1;                            // num of copies
+}
+
+
 UINT16 ExcSetup::GetNum( void ) const
 {
     return 0x00A1;
 }
 
 
-UINT16 ExcSetup::GetLen( void ) const
+ULONG ExcSetup::GetLen( void ) const
 {
     return 0x0022;
 }
 
 
 
+//------------------- class ExcHeaderFooter, class ExcHeader, class ExcFooter -
 
-void ExcHeaderFooter::_Save( SvStream& rStream )
+ExcHeaderFooter::ExcHeaderFooter( RootData* p, const BOOL b ) :
+    nLen( 0 ),
+    bUnicode( b ),
+    ExcRoot( p )
 {
-    if( !aFormatString.Len() )
-        return;
-
-    if( bUnicode )
-    {   // >= Biff8
-        XclRawUnicodeString     aStr( aFormatString );
-        DBG_ASSERT( aStr.GetByteCount() <= 0xFFFC, "*ExcHeaderFooter::SaveCont(): string is to long!" );
-
-        nLen = ( UINT16 ) ( aStr.GetByteCount() + 3 );
-
-        rStream << GetNum() << nLen << aStr.GetLen() << aStr.GetGrbit();
-        aStr.WriteToStream( rStream );
-    }
-    else
-    {   // < Biff8
-        ByteString              aStr( aFormatString, *pExcRoot->pCharset );
-        DBG_ASSERT( aStr.Len() <= 0xFE, "*ExcHeaderFooter::SaveCont(): string is to long!" );
-
-        nLen = ( UINT16 ) ( aStr.Len() + 1 );
-
-        rStream << GetNum() << nLen << ( UINT8 ) aStr.Len();
-        rStream.Write( aStr.GetBuffer(), aStr.Len() );
-    }
 }
 
 
@@ -3896,18 +3746,18 @@ String ExcHeaderFooter::GetFormatString( const EditTextObject& rEdTxtObj )
         if( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
             bFields = TRUE;
     }
-    if( bFields )
+
+    BOOL                bOldUpdateMode = rEdEng.GetUpdateMode();
+
+    rEdEng.SetUpdateMode( TRUE );
+
+    for( UINT16 nPar = 0 ; nPar < nParas ; nPar++ )
     {
-        BOOL                bOldUpdateMode = rEdEng.GetUpdateMode();
-        UINT16              nPar;
+        if( nPar )
+            aRet += cParSep;
 
-        rEdEng.SetUpdateMode( TRUE );
-
-        for( nPar=0 ; nPar < nParas ; nPar++ )
+        if( bFields )   // text and fields
         {
-            if( nPar > 0 )
-                aRet += cParSep;
-
             SvUShorts       aPortions;
 
             rEdEng.GetPortions( nPar, aPortions );
@@ -3960,22 +3810,45 @@ String ExcHeaderFooter::GetFormatString( const EditTextObject& rEdTxtObj )
                 nStart = nEnd;
             }
         }
-        rEdEng.SetUpdateMode( bOldUpdateMode );
+        else        // no fields, text only
+        {
+            aRet += rEdTxtObj.GetText( nPar );
+        }
     }
+    rEdEng.SetUpdateMode( bOldUpdateMode );
 
     return aRet;
 }
 
 
-ExcHeaderFooter::ExcHeaderFooter( RootData* p, const BOOL b ) :
-    nLen( 0 ),
-    bUnicode( b ),
-    ExcRoot( p )
-{
+void ExcHeaderFooter::CalcLen()
+{   //! for Biff8 only a prediction, assumes 8-bit string
+    if( bUnicode )
+        nLen = 3 + Min( aFormatString.Len(), (xub_StrLen) 0xFFFF );
+    else
+        nLen = 1 + Min( aFormatString.Len(), (xub_StrLen) 255 );
 }
 
 
-UINT16 ExcHeaderFooter::GetLen( void ) const
+void ExcHeaderFooter::SaveCont( XclExpStream& rStrm )
+{
+    if( bUnicode )          // >= Biff8
+        // normal unicode string
+        XclExpUniString( aFormatString ).Write( rStrm );
+    else                    // < Biff8
+        // 8 bit length, max 255 chars
+        rStrm.WriteByteString( ByteString( aFormatString, *pExcRoot->pCharset ), 255 );
+}
+
+
+void ExcHeaderFooter::Save( XclExpStream& rStrm )
+{
+    if( aFormatString.Len() )
+        ExcRecord::Save( rStrm );
+}
+
+
+ULONG ExcHeaderFooter::GetLen( void ) const
 {
     return nLen;
 }
@@ -3986,6 +3859,7 @@ UINT16 ExcHeaderFooter::GetLen( void ) const
 ExcHeader::ExcHeader( RootData* p, const BOOL b ) : ExcHeaderFooter( p, b )
 {
     aFormatString = GetFormatString( ATTR_PAGE_HEADERRIGHT );
+    CalcLen();
 }
 
 
@@ -4000,6 +3874,7 @@ UINT16 ExcHeader::GetNum( void ) const
 ExcFooter::ExcFooter( RootData* p, const BOOL b ) : ExcHeaderFooter( p, b )
 {
     aFormatString = GetFormatString( ATTR_PAGE_FOOTERRIGHT );
+    CalcLen();
 }
 
 
@@ -4010,26 +3885,7 @@ UINT16 ExcFooter::GetNum( void ) const
 
 
 
-
-void ExcBoolRecord::SaveCont( SvStream& r )
-{
-    r << ( UINT16 ) ( bVal? 0x0001 : 0x0000 );
-}
-
-
-ExcBoolRecord::ExcBoolRecord( SfxItemSet* pItemSet, USHORT nWhich, BOOL bDefault )
-{
-    bVal = pItemSet? ( ( const SfxBoolItem& ) pItemSet->Get( nWhich ) ).GetValue() : bDefault;
-}
-
-
-UINT16 ExcBoolRecord::GetLen( void ) const
-{
-    return 2;
-}
-
-
-
+//----------------------------------------------------- class ExcPrintheaders -
 
 ExcPrintheaders::ExcPrintheaders( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_HEADERS, TRUE )
 {
@@ -4043,6 +3899,7 @@ UINT16 ExcPrintheaders::GetNum( void ) const
 
 
 
+//--------------------------------------------------- class ExcPrintGridlines -
 
 ExcPrintGridlines::ExcPrintGridlines( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_GRID, TRUE )
 {
@@ -4056,6 +3913,7 @@ UINT16 ExcPrintGridlines::GetNum( void ) const
 
 
 
+//---------------------------------------------------------- class ExcHcenter -
 
 ExcHcenter::ExcHcenter( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_HORCENTER, FALSE )
 {
@@ -4069,6 +3927,7 @@ UINT16 ExcHcenter::GetNum( void ) const
 
 
 
+//---------------------------------------------------------- class ExcVcenter -
 
 ExcVcenter::ExcVcenter( SfxItemSet* p ) : ExcBoolRecord( p, ATTR_PAGE_VERCENTER, FALSE )
 {
@@ -4082,20 +3941,14 @@ UINT16 ExcVcenter::GetNum( void ) const
 
 
 
-//___________________________________________________________________
-// AutoFilter
-
-
-
-void ExcFilterMode::SaveCont( SvStream& rStrm )
-{   }
+//---------------------------------------------------------------- AutoFilter -
 
 UINT16 ExcFilterMode::GetNum() const
 {
     return 0x009B;
 }
 
-UINT16 ExcFilterMode::GetLen() const
+ULONG ExcFilterMode::GetLen() const
 {
     return 0;
 }
@@ -4104,9 +3957,10 @@ UINT16 ExcFilterMode::GetLen() const
 
 
 ExcAutoFilterInfo::~ExcAutoFilterInfo()
-{   }
+{
+}
 
-void ExcAutoFilterInfo::SaveCont( SvStream& rStrm )
+void ExcAutoFilterInfo::SaveCont( XclExpStream& rStrm )
 {
     rStrm << nCount;
 }
@@ -4116,7 +3970,7 @@ UINT16 ExcAutoFilterInfo::GetNum() const
     return 0x009D;
 }
 
-UINT16 ExcAutoFilterInfo::GetLen() const
+ULONG ExcAutoFilterInfo::GetLen() const
 {
     return 2;
 }
@@ -4129,7 +3983,8 @@ ExcFilterCondition::ExcFilterCondition() :
         nOper( EXC_AFOPER_EQUAL ),
         fVal( 0.0 ),
         pText( NULL )
-{   }
+{
+}
 
 ExcFilterCondition::~ExcFilterCondition()
 {
@@ -4137,11 +3992,9 @@ ExcFilterCondition::~ExcFilterCondition()
         delete pText;
 }
 
-UINT16 ExcFilterCondition::GetTextBytes() const
+ULONG ExcFilterCondition::GetTextBytes() const
 {
-    if( !pText )
-        return 0;
-    return ( UINT16 ) ( 1 + pText->GetByteCount() );
+    return pText ? 1 + pText->GetBufferByteCount() : 0;
 }
 
 void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT )
@@ -4152,36 +4005,36 @@ void ExcFilterCondition::SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* 
 
     if( pText )
         delete pText;
-    pText = pT ? new XclRawUnicodeString( *pT ) : NULL;
+    pText = pT ? new XclExpUniString( *pT, 255 ) : NULL;
 }
 
-void ExcFilterCondition::Save( SvStream& rStrm )
+void ExcFilterCondition::Save( XclExpStream& rStrm )
 {
     rStrm << nType << nOper;
     switch( nType )
     {
         case EXC_AFTYPE_DOUBLE:
             rStrm << fVal;
-            break;
+        break;
         case EXC_AFTYPE_STRING:
             DBG_ASSERT( pText, "ExcFilterCondition::Save() -- pText is NULL!" );
             rStrm << (UINT32)0 << (UINT8) pText->GetLen() << (UINT16)0 << (UINT8)0;
-            break;
+        break;
         case EXC_AFTYPE_BOOLERR:
             rStrm << (UINT8)0 << (UINT8)((fVal != 0) ? 1 : 0) << (UINT32)0 << (UINT16)0;
-            break;
+        break;
         default:
             rStrm << (UINT32)0 << (UINT32)0;
     }
 }
 
-void ExcFilterCondition::SaveText( SvStream& rStrm )
+void ExcFilterCondition::SaveText( XclExpStream& rStrm )
 {
     if( nType == EXC_AFTYPE_STRING )
     {
         DBG_ASSERT( pText, "ExcFilterCondition::SaveText() -- pText is NULL!" );
-        rStrm << pText->GetGrbit();
-        pText->WriteToStream( rStrm );
+        pText->WriteFlags( rStrm );
+        pText->WriteBuffer( rStrm );
     }
 }
 
@@ -4191,7 +4044,8 @@ void ExcFilterCondition::SaveText( SvStream& rStrm )
 ExcAutoFilter::ExcAutoFilter( UINT16 nC ) :
         nCol( nC ),
         nFlags( 0 )
-{   }
+{
+}
 
 BOOL ExcAutoFilter::AddCondition( ScQueryConnect eConn, UINT8 nType, UINT8 nOp,
                                     double fVal, String* pText, BOOL bSimple )
@@ -4239,16 +4093,16 @@ BOOL ExcAutoFilter::AddEntry( RootData& rRoot, const ScQueryEntry& rEntry )
         {
             case SC_TOPVAL:
                 nNewFlags = (EXC_AFFLAG_TOP10 | EXC_AFFLAG_TOP10TOP);
-                break;
+            break;
             case SC_BOTVAL:
                 nNewFlags = EXC_AFFLAG_TOP10;
-                break;
+            break;
             case SC_TOPPERC:
                 nNewFlags = (EXC_AFFLAG_TOP10 | EXC_AFFLAG_TOP10TOP | EXC_AFFLAG_TOP10PERC);
-                break;
+            break;
             case SC_BOTPERC:
                 nNewFlags = (EXC_AFFLAG_TOP10 | EXC_AFFLAG_TOP10PERC);
-                break;
+            break;
         }
         BOOL bNewTop10 = TRUEBOOL( nNewFlags & EXC_AFFLAG_TOP10 );
 
@@ -4283,7 +4137,7 @@ BOOL ExcAutoFilter::AddEntry( RootData& rRoot, const ScQueryEntry& rEntry )
     return bConflict;
 }
 
-void ExcAutoFilter::SaveCont( SvStream& rStrm )
+void ExcAutoFilter::SaveCont( XclExpStream& rStrm )
 {
     rStrm << nCol << nFlags;
     aCond[ 0 ].Save( rStrm );
@@ -4297,7 +4151,7 @@ UINT16 ExcAutoFilter::GetNum() const
     return 0x009E;
 }
 
-UINT16 ExcAutoFilter::GetLen() const
+ULONG ExcAutoFilter::GetLen() const
 {
     return 24 + aCond[ 0 ].GetTextBytes() + aCond[ 1 ].GetTextBytes();
 }
@@ -4455,7 +4309,7 @@ void ExcAutoFilterRecs::AddObjRecs( RootData& rRoot, const ScAddress& rPos, UINT
     }
 }
 
-void ExcAutoFilterRecs::Save( SvStream& rStrm )
+void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 {
     if( pFilterMode )
         pFilterMode->Save( rStrm );
@@ -4466,17 +4320,8 @@ void ExcAutoFilterRecs::Save( SvStream& rStrm )
 }
 
 
-//___________________________________________________________________
 
-void ExcMargin::SaveCont( SvStream& r )
-{
-    double  f = nVal;
-
-    f /= 1440.0;
-
-    r << f;
-}
-
+//----------------------------------------------------------- class ExcMargin -
 
 ExcMargin::ExcMargin( long n, IMPEXC_MARGINSIDE e ) : nVal( ( n < 0 )? 0 : ( UINT16 ) n )
 {
@@ -4493,19 +4338,30 @@ ExcMargin::ExcMargin( long n, IMPEXC_MARGINSIDE e ) : nVal( ( n < 0 )? 0 : ( UIN
 }
 
 
+void ExcMargin::SaveCont( XclExpStream& rStrm )
+{
+    double  f = nVal;
+
+    f /= 1440.0;
+
+    rStrm << f;
+}
+
+
 UINT16 ExcMargin::GetNum() const
 {
     return nId;
 }
 
 
-UINT16 ExcMargin::GetLen() const
+ULONG ExcMargin::GetLen() const
 {
     return 8;
 }
 
 
-//___________________________________________________________________
+
+//---------------------------------------------------- class XclExpPageBreaks -
 
 XclExpPageBreaks::XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient ) :
     nRecNum( (eOrient == pbHorizontal) ? 0x001B : 0x001A )
@@ -4535,13 +4391,13 @@ XclExpPageBreaks::~XclExpPageBreaks()
 {
 }
 
-void XclExpPageBreaks::Save( SvStream& rStrm )
+void XclExpPageBreaks::Save( XclExpStream& rStrm )
 {
     if( aPageBreaks.Count() )
         ExcRecord::Save( rStrm );
 }
 
-void XclExpPageBreaks::SaveCont( SvStream& rStrm )
+void XclExpPageBreaks::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (UINT16) aPageBreaks.Count();
     for( UINT32 nIndex = 0; nIndex < aPageBreaks.Count(); nIndex++ )
@@ -4553,13 +4409,14 @@ UINT16 XclExpPageBreaks::GetNum() const
     return nRecNum;
 }
 
-UINT16 XclExpPageBreaks::GetLen() const
+ULONG XclExpPageBreaks::GetLen() const
 {
-    return (UINT16)(2 + aPageBreaks.Count() * 2);
+    return 2 + 2 * aPageBreaks.Count();
 }
 
 
 
+//------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -
 
 void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nId )
 {
@@ -4578,13 +4435,13 @@ void ExcArray::SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nId )
 }
 
 
-void ExcArray::SaveCont( SvStream& r )
+void ExcArray::SaveCont( XclExpStream& rStrm )
 {
-    r << nFirstRow << nLastRow << nFirstCol << nLastCol
-        << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
+    rStrm   << nFirstRow << nLastRow << nFirstCol << nLastCol
+            << ( UINT8 ) 0 << nID << ( UINT8 ) 0xFE << nFormLen;
 
     if( pData )
-        r.Write( pData, nFormLen );
+        rStrm.Write( pData, nFormLen );
 }
 
 
@@ -4644,7 +4501,7 @@ UINT16 ExcArray::GetNum() const
 }
 
 
-UINT16 ExcArray::GetLen() const
+ULONG ExcArray::GetLen() const
 {
     return nFormLen + 14;
 }
@@ -4765,12 +4622,12 @@ BOOL ExcArrays::Extend( UINT8 nStartCol, UINT16 nStartRow, UINT8 nEndCol, UINT16
 
 
 
-void ExcShrdFmla::SaveCont( SvStream& r )
+void ExcShrdFmla::SaveCont( XclExpStream& rStrm )
 {
-    r << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0x0000 << nFormLen;
+    rStrm << nFirstRow << nLastRow << nFirstCol << nLastCol << ( UINT16 ) 0x0000 << nFormLen;
 
     if( pData )
-        r.Write( pData, nFormLen );
+        rStrm.Write( pData, nFormLen );
 }
 
 
@@ -4793,15 +4650,14 @@ UINT16 ExcShrdFmla::GetNum() const
 }
 
 
-UINT16 ExcShrdFmla::GetLen() const
+ULONG ExcShrdFmla::GetLen() const
 {
     return 10 + nFormLen;
 }
 
 
 
-
-//___________________________________________________________________
+//--------------------------- class XclExpTableOp, class XclExpTableOpManager -
 
 XclExpTableOp::XclExpTableOp(
         ExcFormula& rFormula,
@@ -4970,7 +4826,7 @@ void XclExpTableOp::UpdateCells()
     }
 }
 
-void XclExpTableOp::SaveCont( SvStream& rStrm )
+void XclExpTableOp::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (UINT16) nFirstRow << (UINT16) nLastRow
             << (UINT8) nFirstCol << (UINT8) nLastCol;
@@ -4984,7 +4840,7 @@ void XclExpTableOp::SaveCont( SvStream& rStrm )
                 << (UINT16) 0 << (UINT16) 0;
 }
 
-void XclExpTableOp::Save( SvStream& rStrm )
+void XclExpTableOp::Save( XclExpStream& rStrm )
 {
     if( bIsValid )
         ExcRecord::Save( rStrm );
@@ -4995,7 +4851,7 @@ UINT16 XclExpTableOp::GetNum() const
     return 0x0236;
 }
 
-UINT16 XclExpTableOp::GetLen() const
+ULONG XclExpTableOp::GetLen() const
 {
     return 16;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2000-12-06 16:07:04 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,15 +85,12 @@ class SvStream;
 class ScBaseCell;
 class ScHorizontalCellIterator;
 class ScDocument;
+class ScProgress;
 
 class NameBuffer;
 
-class ScProgress;
+class XclExpStream;
 class XclExpChangeTrack;
-
-//class ScDPCollection;
-//class ScDPObject;
-//class ScRange;
 
 //--------------------------------------------------- class ExcRecordListRefs -
 
@@ -171,7 +168,7 @@ public:
     void                        FillAsHeader( ExcRecordListRefs& rBundleSheetRecList );
     void                        FillAsTable( void );
 
-    void                        Write( SvStream& );
+    void                        Write( XclExpStream& );
 };
 
 
@@ -205,7 +202,7 @@ public:
                         ExcDocument( RootData* pRD/*, ExportFormatExcel*/ );
                         ~ExcDocument();
     void                ReadDoc( void );
-    void                Write( SvStream& );
+    void                Write( SvStream& rSvStrm );
 };
 
 

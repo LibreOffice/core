@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:19:02 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:48:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@
 #include "excupn.hxx"
 #include "namebuff.hxx"
 
-#include "xcl97exp.hxx"
 #include "xcl97dum.hxx"
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
@@ -216,7 +215,7 @@ void ExcTable::FillAsHeader( ExcRecordListRefs& rBSRecList )
 
     ExcNameList*    pNameL      = rR.pNameList = new ExcNameList;
     ExcPalette2*    pPalette2   = rR.pPalette2 = new ExcPalette2( *rR.pColor );
-    UsedFontList*   pFontRecs   = rR.pFontRecs = new UsedFontList( rR.eDateiTyp ) ;
+    UsedFontList*   pFontRecs   = rR.pFontRecs = new UsedFontList( rR ) ;
     UsedFormList*   pFormRecs   = rR.pFormRecs = new UsedFormList;
 
     XclSstList*         pSstRecs            = NULL;
@@ -670,7 +669,8 @@ void ExcTable::FillAsTable( void )
     for( UINT16 iCol = 1; iCol <= MAXCOL; iCol++ )
     {
         pNewColInfo = new ExcColinfo( iCol, nScTab, nDefXF, rR, aExcOLCol );
-        if( !pLastColInfo->Expand( pNewColInfo ) )
+        pLastColInfo->Expand( pNewColInfo );
+        if( pNewColInfo )
         {
             pLastColInfo = pNewColInfo;
             Add( pLastColInfo );
@@ -745,7 +745,7 @@ void ExcTable::FillAsTable( void )
                         pLastRKMulRK = NULL;
                         pAktExcCell = new ExcBoolerr( aScPos, pPatt, UINT8(fVal), FALSE );
                     }
-                    else if( GetExcRKValue( fVal, nRKValue ) )
+                    else if( XclExpHelper::GetRKFromDouble( fVal, nRKValue ) )
                     {
                         if( pLastRKMulRK )
                         {
@@ -1134,7 +1134,7 @@ void ExcTable::NullTab( const String* pCodename )
 }
 
 
-void ExcTable::Write( SvStream& rStr )
+void ExcTable::Write( XclExpStream& rStr )
 {
     ExcRecord*          pAkt = aRecList.First();
 
@@ -1196,7 +1196,7 @@ ExcDocument::~ExcDocument()
 void ExcDocument::ReadDoc( void )
 {
     CodenameList*   pL = pExcRoot->pExtDocOpt->GetCodenames();
-    UINT16          nCodenames = pExcRoot->nCodenames = pL? pL->Count() : 0;
+    UINT16          nCodenames = pExcRoot->nCodenames = (UINT16) (pL ? pL->Count() : 0);
 
     aHeader.FillAsHeader( aBundleSheetRecList );
 
@@ -1232,27 +1232,32 @@ void ExcDocument::Add( UINT16 nScTab )
 }
 
 
-void ExcDocument::Write( SvStream& rOut )
+void ExcDocument::Write( SvStream& rSvStrm )
 {
     if( List::Count() > 0 )
     {
+        ULONG nMaxRecordLen;
         if ( pExcRoot->eDateiTyp >= Biff8 )
+        {
             pExcRoot->pEscher->GetStrm().Seek(0);   // ready for take off
+            nMaxRecordLen = EXC_MAXRECLEN_BIFF8;
+        }
+        else
+            nMaxRecordLen = EXC_MAXRECLEN_BIFF5;
 
         pExcRoot->pPalette2->ReduceColors();
 
-        ExcTable*           pAktTab;
-        ExcBundlesheetBase* pAktBS;
+        XclExpStream        aXclStrm( rSvStrm, nMaxRecordLen );
+        ExcTable*           pAktTab = ( ExcTable* ) List::First();
+        ExcBundlesheetBase* pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
 
-        aHeader.Write( rOut );
+        aHeader.Write( aXclStrm );
 
-        pAktTab = ( ExcTable* ) List::First();
-        pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
         while( pAktTab )
         {
             DBG_ASSERT( pAktBS, "-ExcDocument::Write(): BundleSheetRecs und Tabs passen nicht zusammen!" );
-            pAktBS->SetStreamPos( rOut.Tell() );
-            pAktTab->Write( rOut );
+            pAktBS->SetStreamPos( aXclStrm.GetStreamPos() );
+            pAktTab->Write( aXclStrm );
             pAktTab = ( ExcTable* ) List::Next();
             pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
         }
@@ -1263,7 +1268,7 @@ void ExcDocument::Write( SvStream& rOut )
         pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.First();
         while( pAktBS )
         {
-            pAktBS->UpdateStreamPos( rOut );
+            pAktBS->UpdateStreamPos( aXclStrm );
             pAktBS = ( ExcBundlesheetBase* ) aBundleSheetRecList.Next();
         }
 

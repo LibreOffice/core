@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:23:42 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,6 @@
 #define _XCL97REC_HXX
 
 #include "excrecds.hxx"
-#include "xcl97exp.hxx"
 #include "xcl97esc.hxx"
 #ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"
@@ -73,22 +72,19 @@ struct SingleRefData;
 
 // --- class XclSstList ----------------------------------------------
 
-class XclSstList : public List, public ExcRecord
+class XclSstList : public List, public ExcEmptyRec
 {
 private:
-                                // overwritten to be able to not save empty list
-            void                _Save( SvStream& );
-
-    virtual void                SaveCont( SvStream& );
+    inline XclExpUniString*     _First()    { return (XclExpUniString*) List::First(); }
+    inline XclExpUniString*     _Next()     { return (XclExpUniString*) List::Next(); }
 
 public:
-                                XclSstList();
+    inline                      XclSstList() {}
     virtual                     ~XclSstList();
 
-            UINT32              Add( XclUnicodeString* );
+            UINT32              Add( XclExpUniString* pStr );
 
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
@@ -99,18 +95,22 @@ class XclCrn : public ExcRecord
 private:
     UINT16                      nCol;
     UINT16                      nRow;
+    UINT8                       nId;
 
 protected:
-    void                        SaveHeadings( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
+    virtual void                SaveDiff( XclExpStream& rStrm ) = 0;
+    virtual ULONG               GetDiffLen() const = 0;
 
 public:
-    inline                      XclCrn( UINT16 nC, UINT16 nR ) :
-                                    nCol( nC ), nRow( nR )  {}
+    inline                      XclCrn( UINT16 nC, UINT16 nR, UINT8 nI ) :
+                                    nCol( nC ), nRow( nR ), nId( nI )   {}
 
     inline BOOL                 IsAddress( UINT16 nC, UINT16 nR )
                                     { return (nC == nCol) && (nR == nRow); }
 
     virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -120,12 +120,12 @@ class XclCrnDouble : public XclCrn
 {
 private:
     double                      fVal;
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveDiff( XclExpStream& rStrm );
+    virtual ULONG               GetDiffLen() const;
 
 protected:
 public:
                                 XclCrnDouble( UINT16 nC, UINT16 nR, double fV );
-    virtual UINT16              GetLen() const;
 };
 
 
@@ -134,13 +134,13 @@ public:
 class XclCrnString : public XclCrn
 {
 private:
-    XclRawUnicodeString         sText;
-    virtual void                SaveCont( SvStream& rStrm );
+    XclExpUniString             sText;
+    virtual void                SaveDiff( XclExpStream& rStrm );
+    virtual ULONG               GetDiffLen() const;
 
 protected:
 public:
                                 XclCrnString( UINT16 nC, UINT16 nR, const String& rTxt );
-    virtual UINT16              GetLen() const;
 };
 
 
@@ -150,12 +150,12 @@ class XclCrnBool : public XclCrn
 {
 private:
     UINT16                      nBool;
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveDiff( XclExpStream& rStrm );
+    virtual ULONG               GetDiffLen() const;
 
 protected:
 public:
                                 XclCrnBool( UINT16 nC, UINT16 nR, BOOL b );
-    virtual UINT16              GetLen() const;
 };
 
 
@@ -164,7 +164,7 @@ public:
 class XclXct : public ExcRecord, private List
 {
 private:
-    XclUnicodeString            sTable;
+    XclExpUniString             sTable;
     UINT16                      nTabNum;
 
     inline XclCrn*              _First()    { return (XclCrn*) List::First(); }
@@ -174,7 +174,7 @@ private:
     inline void                 Append( XclCrn* pCrn )
                                     { List::Insert( pCrn, LIST_APPEND ); }
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
@@ -183,15 +183,15 @@ public:
     virtual                     ~XclXct();
 
     inline UINT16               GetTableBytes() const   { return ( UINT16 ) sTable.GetByteCount(); }
-    inline const XclUnicodeString& GetTableName() const { return sTable; }
+    inline const XclExpUniString& GetTableName() const  { return sTable; }
 
     inline void                 SetTableNum( UINT16 nTab )  { nTabNum = nTab; }
     void                        StoreCellRange( RootData& rRoot, const ScRange& rRange );
 
-    virtual void                Save( SvStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -204,8 +204,8 @@ class XclSupbook : public ExcRecord, private List
 private:
     UINT16                      nTables;
     String                      sDocName;
-    XclUnicodeString            sEncoded;
-    UINT32                      nLen;
+    XclExpUniString             sEncoded;
+    ULONG                       nLen;
     BOOL                        bSelf;
     XclExternNameList*          pExtNameList;
 
@@ -214,7 +214,7 @@ private:
     inline XclXct*              _Get( UINT16 nTab ) const
                                             { return (XclXct*) List::GetObject( nTab ); }
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclSupbook( UINT16 nTabs );             // own book
@@ -222,17 +222,17 @@ public:
     virtual                     ~XclSupbook();
 
     inline const String&        GetName() const         { return sDocName; }
-    inline const XclUnicodeString& GetEncName() const   { return sEncoded; }
-    const XclUnicodeString*     GetTableName( UINT16 nIndex ) const;
+    inline const XclExpUniString& GetEncName() const    { return sEncoded; }
+    const XclExpUniString*      GetTableName( UINT16 nIndex ) const;
 
     UINT16                      AddTableName( const String& rTabName );
     void                        StoreCellRange( RootData& rRoot, const ScRange& rRange,
                                                 UINT16 nXct );
 
-    virtual void                Save( SvStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 
 //  void                        SetExtNameList( XclExternNameList* pNew );
 //  inline XclExternNameList*   GetExtNameList( void ) const;
@@ -242,7 +242,7 @@ public:
 
 // --- class XclSupbookList ------------------------------------------
 
-class XclSupbookList : public ExcEmptyRec, ExcRoot, private List
+class XclSupbookList : public ExcEmptyRec, public ExcRoot, private List
 {
 private:
     UINT16*                     pSupbookBuffer; // supbook number for every xcl table
@@ -251,12 +251,12 @@ private:
 
     inline XclSupbook*          _First()    { return (XclSupbook*) List::First(); }
     inline XclSupbook*          _Next()     { return (XclSupbook*) List::Next(); }
-    inline XclSupbook*          _Get( UINT32 nInd )
+    inline XclSupbook*          _Get( ULONG nInd )
                                             { return (XclSupbook*) List::GetObject( nInd ); }
 
     inline XclSupbook*          GetSupbook( UINT16 nExcTab ) const;
 
-    UINT32                      Append( XclSupbook* pBook );
+    ULONG                       Append( XclSupbook* pBook );
     void                        AddExt( UINT16 nScTab );
 
 public:
@@ -264,14 +264,14 @@ public:
     virtual                     ~XclSupbookList();
 
                                 // get external document name - expects Excel tabnums
-    const XclUnicodeString*     GetDocumentName( UINT16 nExcTab );
+    const XclExpUniString*      GetDocumentName( UINT16 nExcTab );
                                 // get external table name - expects Excel tabnums
-    const XclUnicodeString*     GetTableName( UINT16 nExcTab );
+    const XclExpUniString*      GetTableName( UINT16 nExcTab );
 
     void                        StoreCellRange( const ScRange& rRange );
 
-    void                        WriteXtiInfo( SvStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast );
-    virtual void                Save( SvStream& rStrm );
+    void                        WriteXtiInfo( XclExpStream& rStrm, UINT16 nTabFirst, UINT16 nTabLast );
+    virtual void                Save( XclExpStream& rStrm );
 
     inline UINT16               GetAddinIndex( const String& rName, UINT16 nTab );
 };
@@ -302,7 +302,7 @@ public:
     inline                      XclXti( UINT16 nFirst, UINT16 nLast ) :
                                     nTabFirst( nFirst ), nTabLast( nLast )  {}
 
-    static inline UINT16        GetSize()           { return 3 * sizeof(UINT16); }
+    static inline UINT16        GetSize()           { return 6; }
     inline UINT16               GetTabFirst() const { return nTabFirst; }
     inline UINT16               GetTabLast() const  { return nTabLast; }
 };
@@ -321,8 +321,8 @@ private:
     static inline UINT16        GetVal16( UINT32 nVal )
                                     { return (nVal <= 0xFFFF) ? (UINT16) nVal : 0xFFFF; }
 
-    inline void                 WriteXtiInfo( SvStream& rStrm, XclXti& rXti );
-    virtual void                SaveCont( SvStream& rStrm );
+    inline void                 WriteXtiInfo( XclExpStream& rStrm, XclXti& rXti );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclExternsheetList( RootData* pRoot );
@@ -336,26 +336,26 @@ public:
                                 // add new XclXti if not found - expects Excel tabnums
     UINT16                      Find( UINT16 nTabFirst, UINT16 nTabLast );
                                 // get external document name - expects Excel tabnums
-    inline const XclUnicodeString* GetDocumentName( UINT16 nExcTab )
+    inline const XclExpUniString* GetDocumentName( UINT16 nExcTab )
                                     { return aSupbookList.GetDocumentName( nExcTab ); }
                                 // get external table name - expects Excel tabnums
-    inline const XclUnicodeString* GetTableName( UINT16 nExcTab )
+    inline const XclExpUniString* GetTableName( UINT16 nExcTab )
                                     { return aSupbookList.GetTableName( nExcTab ); }
 
                                 // cell contents -> CRN - expects SC tabnums
     void                        StoreCellCont( const SingleRefData& rRef );
     void                        StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 );
 
-    virtual void                Save( SvStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 
     inline UINT16               GetAddinIndex( const String& rName, UINT16 nTab )
                                         { return aSupbookList.GetAddinIndex( rName, nTab ); }
 };
 
-inline void XclExternsheetList::WriteXtiInfo( SvStream& rStrm, XclXti& rXti )
+inline void XclExternsheetList::WriteXtiInfo( XclExpStream& rStrm, XclXti& rXti )
 {
     aSupbookList.WriteXtiInfo( rStrm, rXti.GetTabFirst(), rXti.GetTabLast() );
 }
@@ -366,9 +366,9 @@ inline void XclExternsheetList::WriteXtiInfo( SvStream& rStrm, XclXti& rXti )
 class XclMsodrawing_Base
 {
 protected:
-        XclEscher*          pEscher;
-        ULONG               nStartPos;      // position in OffsetMap
-        ULONG               nStopPos;       // position in OffsetMap
+        XclEscher*              pEscher;
+        ULONG                   nStartPos;      // position in OffsetMap
+        ULONG                   nStopPos;       // position in OffsetMap
 
 public:
                                 XclMsodrawing_Base( XclEscher& rEscher );
@@ -387,7 +387,7 @@ class XclMsodrawinggroup : public XclMsodrawing_Base, public ExcRecord
 {
 private:
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawinggroup( RootData& rRoot,
@@ -395,7 +395,7 @@ public:
     virtual                     ~XclMsodrawinggroup();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -405,7 +405,7 @@ class XclMsodrawing : public XclMsodrawing_Base, public ExcRecord
 {
 private:
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclMsodrawing( RootData& rRoot,
@@ -413,7 +413,7 @@ public:
     virtual                     ~XclMsodrawing();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -422,14 +422,10 @@ public:
 class XclObj;
 class XclMsodrawing;
 
-class XclObjList : public List, public ExcRecord
+class XclObjList : public List, public ExcEmptyRec
 {
 private:
-        XclMsodrawing*      pMsodrawingPerSheet;
-
-                                // overwritten to be able to write nothing
-            void                _Save( SvStream& );
-    virtual void                SaveCont( SvStream& );
+        XclMsodrawing*          pMsodrawingPerSheet;
 
 public:
                                 XclObjList( RootData& rRoot );
@@ -442,19 +438,13 @@ public:
                                 ///! count>=0xFFFF: Obj will be deleted, return 0
             UINT16              Add( XclObj* );
 
-    inline  XclMsodrawing*      GetMsodrawingPerSheet();
+    inline  XclMsodrawing*      GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+
                                 /// close groups and DgContainer opened in ctor
             void                EndSheet();
 
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
 };
-
-
-inline XclMsodrawing* XclObjList::GetMsodrawingPerSheet()
-{
-    return pMsodrawingPerSheet;
-}
 
 
 // --- class XclObj --------------------------------------------------
@@ -464,7 +454,7 @@ class SdrTextObj;
 
 class XclObj : public ExcRecord
 {
-    friend void XclObjList::SaveCont( SvStream& );
+    friend void XclObjList::SaveCont( XclExpStream& );
 
 protected:
 
@@ -532,12 +522,10 @@ protected:
                                 XclObj( ObjType eObjType, RootData& rRoot );
 
                                 // overwritten for writing MSODRAWING record
-            void                _Save( SvStream& );
-    virtual void                SaveCont( SvStream& );
-            void                SaveText( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
+            void                SaveTextRecs( XclExpStream& rStrm );
 
 public:
-
     virtual                     ~XclObj();
 
     inline  void                SetId( UINT16 nId ) { nObjId = nId; }
@@ -560,8 +548,10 @@ public:
 
     inline  void                UpdateStopPos();
 
+    virtual void                Save( XclExpStream& rStrm );
+
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -579,16 +569,15 @@ inline void XclObj::UpdateStopPos()
 class XclObjComment : public XclObj
 {
 private:
-
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclObjComment( RootData& rRoot,
                                     const ScAddress& rPos, const String& rStr );
     virtual                     ~XclObjComment();
 
-//  virtual UINT16              GetNum() const;     // done by XclObj
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -599,14 +588,14 @@ class XclObjDropDown : public XclObj
 private:
     BOOL                        bIsFiltered;
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
                                 XclObjDropDown( RootData& rRoot, const ScAddress& rPos, BOOL bFilt );
     virtual                     ~XclObjDropDown();
 
-    virtual UINT16              GetLen() const;     // GetNum() done by XclObj
+    virtual ULONG               GetLen() const;     // GetNum() done by XclObj
 };
 
 
@@ -616,23 +605,25 @@ class SdrTextObj;
 
 class XclTxo : public ExcRecord
 {
-    friend void XclObjComment::SaveCont( SvStream& );
+    friend void XclObjComment::SaveCont( XclExpStream& );
 
 private:
 
-        XclRawUnicodeString aText;
+        XclExpUniString     aText;
         UINT16              nGrbit;
         UINT16              nRot;
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclTxo( const String& rStr );
                                 XclTxo( const SdrTextObj& rEditObj );
     virtual                     ~XclTxo();
 
+    virtual void                Save( XclExpStream& rStrm );
+
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -645,14 +636,14 @@ private:
         const SdrObject&    rOleObj;
         SvStorage*          pRootStorage;
 
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclObjOle( RootData& rRoot, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
-//  virtual UINT16              GetNum() const;     // done by XclObj
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -661,15 +652,14 @@ public:
 class XclObjAny : public XclObj
 {
 private:
-
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclObjAny( RootData& rRoot );
     virtual                     ~XclObjAny();
 
-//  virtual UINT16              GetNum() const;     // done by XclObj
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -677,13 +667,9 @@ public:
 
 class XclNote;
 
-class XclNoteList : public List, public ExcRecord
+class XclNoteList : public List, public ExcEmptyRec
 {
 private:
-                                // overwritten to be able to write nothing
-            void                _Save( SvStream& );
-    virtual void                SaveCont( SvStream& );
-
 public:
                                 XclNoteList();
     virtual                     ~XclNoteList();
@@ -693,8 +679,7 @@ public:
 
             void                Add( XclNote* );
 
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
@@ -703,22 +688,22 @@ public:
 class XclNote : public ExcRecord
 {
 private:
-        XclUnicodeString    aAuthor;
+        XclExpUniString     aAuthor;
         ScAddress           aPos;
         UINT16              nGrbit;
         UINT16              nObjId;
 
-                            // overwritten to be able to not save any data
-            void            _Save( SvStream& );
-    virtual void            SaveCont( SvStream& );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
                             XclNote( RootData& rD, const ScAddress& rPos,
                                 const String& rNoteText, const String& rNoteAuthor );
     virtual                 ~XclNote();
 
+    virtual void            Save( XclExpStream& rStrm );
+
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
@@ -730,13 +715,13 @@ protected:
         UINT32              nFileHistory;       // bfh
         UINT32              nLowestBiffVer;     // sfo
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBof8_Base();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -769,15 +754,17 @@ public:
                                 ExcBofC8();
 };
 
-
+#if 0
+//! unused
 // --- class ExcLabel8 -----------------------------------------------
 
 class ExcLabel8 : public ExcCell
 {
 private:
-        XclRichString       aText;
+    XclExpRichString            aText;
 
-    virtual void                SaveDiff( SvStream& );  // statt SaveCont()
+    virtual void                SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG               GetDiffLen() const;
 
 public:
                                 ExcLabel8(
@@ -792,10 +779,9 @@ public:
     virtual                     ~ExcLabel8();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
 };
 
-
+#endif
 // --- class ExcLabelSst ---------------------------------------------
 
 class ExcLabelSst : public ExcCell
@@ -803,7 +789,8 @@ class ExcLabelSst : public ExcCell
 private:
         UINT32              nIsst;      // Index in SST
 
-    virtual void                SaveDiff( SvStream& );  // statt SaveCont()
+    virtual void                SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG               GetDiffLen() const;
 
 public:
                                 ExcLabelSst(
@@ -819,7 +806,6 @@ public:
     virtual                     ~ExcLabelSst();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
 };
 
 
@@ -839,7 +825,7 @@ private:
         BOOL                bFShrinkToFit;
         BOOL                bFMergeCell;
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcXf8( UINT16 nFont, UINT16 nForm,
@@ -847,7 +833,7 @@ public:
                                     BOOL& rbLineBreak, BOOL bStyle = FALSE );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -856,15 +842,15 @@ public:
 class ExcBundlesheet8 : public ExcBundlesheetBase
 {
 private:
-    XclRawUnicodeString         aUnicodeName;
+    XclExpUniString             aUnicodeName;
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcBundlesheet8( RootData& rRootData, UINT16 nTab );
                                 ExcBundlesheet8( const String& rString );
 
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -874,13 +860,13 @@ class ExcWindow28 : public ExcWindow2
 {
 private:
 
-            void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 ExcWindow28( UINT16 nTab ) : ExcWindow2( nTab ) {}
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -892,24 +878,28 @@ class ScRangeList;
 struct RootData;
 class XclCf;
 
-class XclCondFormat : public ExcRecord, protected List
+class XclCondFormat : public ExcEmptyRec, protected List
 {
 // writes multiple cf _and_ condfmt records!
 private:
     const ScConditionalFormat&  rCF;
     ScRangeList*                pRL;
     UINT16                      nTabNum;
-    UINT16                      nOwnLen;
-    UINT16                      nComplLen;
-protected:
-    virtual void                _Save( SvStream& );     // because multiple records are written!
+    ULONG                       nComplLen;
+
+    inline XclCf*               _First()    { return (XclCf*) List::First(); }
+    inline XclCf*               _Next()     { return (XclCf*) List::Next(); }
+
+    void                        WriteCondfmt( XclExpStream& rStrm );
+
 public:
                                 XclCondFormat( const ScConditionalFormat&, ScRangeList*, RootData& );
                                     // takes ScRangeList, don't use it after this Ctor!
     virtual                     ~XclCondFormat();
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+
+    virtual void                Save( XclExpStream& rStrm );
 };
+
 
 
 class XclCf : public ExcRecord
@@ -954,51 +944,47 @@ private:
     UINT32                      nIcvForeSer;
     UINT32                      nIcvBackSer;
 
-protected:
-    virtual void                SaveCont( SvStream& );
+    virtual void                SaveCont( XclExpStream& rStrm );
+
 public:
                                 XclCf( const ScCondFormatEntry&, RootData& );
     virtual                     ~XclCf();
+
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
+
+// --- class XclObproj -----------------------------------------------
 
 class XclObproj : public ExcRecord
 {
 public:
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
-//============================================================================
-// data consolidation reference
-
+// --- class XclDConRef ----------------------------------------------
 
 class XclDConRef : public ExcRecord
 {
 private:
     ScRange                 aSourceRange;
-    XclRawUnicodeString*    pWorkbook;
+    XclExpUniString*        pWorkbook;
 
-protected:
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
                             XclDConRef( const ScRange& rSrcR, const String& rWB );
     virtual                 ~XclDConRef();
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-
-//============================================================================
-// merged cells
-//_________________________________________________________
-// class XclCellMerging - merged cells (max. 1024)
+// --- class XclCellMerging, class XclCellMergingList ----------------
 
 class XclCellMerging : public ExcRecord
 {
@@ -1006,11 +992,10 @@ private:
     UINT16                  nCount;
     UINT16List              aCoordList;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
-protected:
 public:
-    inline                  XclCellMerging();
+    inline                  XclCellMerging() : nCount( 0 ) {}
     virtual                 ~XclCellMerging();
 
     inline BOOL             IsListFull() const  { return nCount >= 1024; }
@@ -1018,18 +1003,10 @@ public:
                                     UINT16 nRow1, UINT16 nRowCnt );
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-inline XclCellMerging::XclCellMerging() :
-        nCount( 0 )
-{   }
-
-
-
-//_________________________________________________________
-// class XclCellMergingList - list of XclCellMerging
 
 class XclCellMergingList : public ExcEmptyRec, private List
 {
@@ -1043,39 +1020,33 @@ private:
 
 protected:
 public:
-    inline                  XclCellMergingList();
+    inline                  XclCellMergingList() : pCurrRec( NULL ) {}
     virtual                 ~XclCellMergingList();
 
     void                    Append( UINT16 nCol1, UINT16 nColCnt,
                                     UINT16 nRow1, UINT16 nRowCnt );
 
-    virtual void            Save( SvStream& rStrm );
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
-inline XclCellMergingList::XclCellMergingList() :
-        pCurrRec( NULL )
-{   }
 
-
-
-//_________________________________________________________
-// class XclCodename
+// ---- class XclCodename --------------------------------------------
 
 class XclCodename : public ExcRecord
 {
 private:
-    XclUnicodeString            aName;
-    virtual void                SaveCont( SvStream& );
+    XclExpUniString             aName;
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclCodename( const String& );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
-
+// ---- class XclBuildInName -----------------------------------------
 
 class XclBuildInName : public ExcNameListEntry, private ExcRoot
 {
@@ -1086,49 +1057,32 @@ private:
     UINT16                  nTabNum;
     ScRangeList             aRL;
 
-    void                    _Save( SvStream& rStrm );
+    inline ScRange*         _First()    { return (ScRange*) aRL.First(); }
+    inline ScRange*         _Next()     { return (ScRange*) aRL.Next(); }
 
-    inline ScRange*         _First( void );
-    inline ScRange*         _Next( void );
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 protected:
-    inline void             Append( const ScRange& rNew );
-
-    void                    Add( const ScRange& rRange );
     void                    CreateFormula( void );
 public:
                             XclBuildInName( RootData*, UINT16 nTabNum, UINT8 nKey );
     virtual                 ~XclBuildInName();
 
-    virtual UINT16          GetLen() const;
+    inline void             Append( const ScRange& rNew )   { aRL.Append( rNew ); }
+
+    virtual void            Save( XclExpStream& rStrm );
+
+    virtual ULONG           GetLen() const;
 };
 
 
-inline ScRange* XclBuildInName::_First( void )
-{
-    return ( ScRange* ) aRL.First();
-}
-
-
-inline ScRange* XclBuildInName::_Next( void )
-{
-    return ( ScRange* ) aRL.Next();
-}
-
-
-inline void XclBuildInName::Append( const ScRange& r )
-{
-    aRL.Append( r );
-}
-
-
-
+// ---- class XclPrintRange, class XclTitleRange ---------------------
 
 class XclPrintRange : public XclBuildInName
 {
 public:
                             XclPrintRange( RootData*, UINT16 nTabNum, ScDocument& rDoc );
 };
-
 
 
 
@@ -1139,10 +1093,7 @@ public:
 };
 
 
-
-
-//___________________________________________________________________
-// Scenario export
+// ---- Scenarios ----------------------------------------------------
 // - ExcEScenarioCell           a cell of a scenario range
 // - ExcEScenario               all ranges of a scenario table
 // - ExcEScenarioManager        list of scenario tables
@@ -1152,17 +1103,17 @@ class ExcEScenarioCell
 private:
     UINT16                      nCol;
     UINT16                      nRow;
-    XclRawUnicodeString         sText;
+    XclExpUniString             sText;
 
 protected:
 public:
                                 ExcEScenarioCell( UINT16 nC, UINT16 nR, const String& rTxt );
 
-    inline UINT16               GetStringBytes()
-                                    { return (UINT16)(sText.GetByteCount() + 3); }
+    inline ULONG                GetStringBytes()
+                                    { return sText.GetByteCount(); }
 
-    inline void                 WriteAddress( SvStream& rStrm ) { rStrm << nRow << nCol; }
-    void                        WriteText( SvStream& rStrm );
+    void                        WriteAddress( XclExpStream& rStrm );
+    void                        WriteText( XclExpStream& rStrm );
 };
 
 
@@ -1170,17 +1121,17 @@ public:
 class ExcEScenario : public ExcRecord, private List
 {
 private:
-    UINT16                      nRecLen;
-    XclRawUnicodeString         sName;
-    XclRawUnicodeString         sComment;
-    static XclRawUnicodeString  sUsername;
+    ULONG                       nRecLen;
+    XclExpUniString             sName;
+    XclExpUniString             sComment;
+    static XclExpUniString      sUsername;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
     inline ExcEScenarioCell*    _Next()     { return (ExcEScenarioCell*) List::Next(); }
 
     BOOL                        Append( UINT16 nCol, UINT16 nRow, const String& rTxt );
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
@@ -1188,7 +1139,7 @@ public:
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -1204,22 +1155,21 @@ private:
     inline void                 Append( ExcEScenario* pScen )
                                     { List::Insert( pScen, LIST_APPEND ); }
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
                                 ExcEScenarioManager( ScDocument& rDoc, UINT16 nTab );
     virtual                     ~ExcEScenarioManager();
 
-    virtual void                Save( SvStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
-
-//___________________________________________________________________
+// ---- class XclHlink -----------------------------------------------
 
 class SvMemoryStream;
 class SvxURLField;
@@ -1235,10 +1185,10 @@ private:
     static const BYTE           pStaticData[];
     SvMemoryStream*             pVarData;
 
-    static inline UINT32        GetStaticLen();             // -> xcl97rec.cxx!
-    inline UINT32               GetVarLen() const;          // -> xcl97rec.cxx!
+    static inline ULONG         GetStaticLen();             // -> xcl97rec.cxx!
+    inline ULONG                GetVarLen() const;          // -> xcl97rec.cxx!
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclHlink( RootData& rRootData, const SvxURLField& rField );
@@ -1249,7 +1199,7 @@ public:
     inline const String*        GetRepr() const     { return pRepr; }
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 inline void XclHlink::SetPosition( const ScAddress& rPos )
@@ -1259,85 +1209,82 @@ inline void XclHlink::SetPosition( const ScAddress& rPos )
 }
 
 
-//___________________________________________________________________
+// ---- class XclProtection ------------------------------------------
 
 class XclProtection : public ExcDummyRec
 {
     // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
 private:
     static const BYTE           pMyData[];
-    static const UINT16         nMyLen;
+    static const ULONG          nMyLen;
 public:
-    virtual UINT16              GetLen( void ) const;
+    virtual ULONG               GetLen( void ) const;
     virtual const BYTE*         GetData( void ) const;
 };
 
 
+// ---- class XclBGPic -----------------------------------------------
 
-
-class XclBGPic : public ExcRecord
+class XclBGPic : public ExcEmptyRec
 {
 private:
     const Graphic*              pGr;
-    virtual void                _Save( SvStream& );
+
 public:
                                 XclBGPic( RootData& );
     virtual                     ~XclBGPic();
 
-    virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 
-//___________________________________________________________________
-// page breaks
+// ---- class XclExpPageBreaks8 --------------------------------------
 
 class XclExpPageBreaks8 : public XclExpPageBreaks
 {
 private:
     UINT16                  nRangeMax;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
                             XclExpPageBreaks8( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
     virtual                 ~XclExpPageBreaks8();
 
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-//___________________________________________________________________
+// ---- class XclExternName ------------------------------------------
 
 class XclExternName : public ExcRecord
 {
 private:
     String                      aName;
-    XclRawUnicodeString*        pExpStr;
-    virtual void                SaveCont( SvStream& rStrm );
+    XclExpUniString*            pExpStr;
+    virtual void                SaveCont( XclExpStream& rStrm );
 public:
                                 XclExternName( const String& );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 
-    inline BOOL                 operator ==( const String& rRef ) const;
+    inline BOOL                 operator ==( const String& rRef ) const
+                                    { return aName == r; }
 };
 
 
 class XclExternNameList : protected List
 {
 private:
-    virtual void                _Save( SvStream& );
-
-    inline XclExternName*       First( void );
-    inline XclExternName*       Next( void );
+    inline XclExternName*       First( void )   { return ( XclExternName* ) List::First(); }
+    inline XclExternName*       Next( void )    { return ( XclExternName* ) List::Next(); }
 public:
     virtual                     ~XclExternNameList();
 
     UINT16                      GetIndex( const String& rName );
 
-    virtual void                Save( SvStream& );
+    void                        Save( XclExpStream& rStrm );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:13 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@ class ExcDummy8_00a : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -83,9 +83,9 @@ class ExcDummy8_00b : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -94,9 +94,9 @@ class ExcDummy8_040 : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -105,9 +105,9 @@ class ExcDummy8_041 : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -116,9 +116,9 @@ class ExcDummy8_01 : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -127,9 +127,9 @@ class ExcDummy8_Fm : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -138,9 +138,9 @@ class ExcDummy8_XF : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -149,9 +149,9 @@ class ExcDummy8_Style : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -160,9 +160,9 @@ class ExcDummy8_UsesElfs : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -171,9 +171,9 @@ class ExcDummy8_Country : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 
@@ -182,9 +182,9 @@ class ExcDummy8_02 : public ExcDummyRec
 {
 private:
         static const BYTE   pMyData[];
-        static const UINT16 nMyLen;
+        static const ULONG  nMyLen;
 public:
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
     virtual const BYTE*         GetData() const;
 };
 

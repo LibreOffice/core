@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-01-18 16:32:13 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #ifndef _EXCRECDS_HXX
 #include "excrecds.hxx"
 #endif
-#ifndef _XCL97EXP_HXX
-#include "xcl97exp.hxx"
-#endif
 
 //___________________________________________________________________
 
@@ -100,19 +97,18 @@ class ScBaseCell;
 class XclExpUserBView : public ExcRecord
 {
 private:
-    XclRawUnicodeString         sUsername;
+    XclExpUniString             sUsername;
     sal_uInt8                   aGUID[ 16 ];
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclExpUserBView( const String& rUsername, const sal_uInt8* pGUID );
 
     inline const sal_uInt8*     GetGUID() const { return aGUID; }
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -131,7 +127,7 @@ public:
     inline const XclExpUserBView* First()   { return (const XclExpUserBView*) List::First(); }
     inline const XclExpUserBView* Next()    { return (const XclExpUserBView*) List::Next(); }
 
-    virtual void                Save( SvStream& rStrm );
+    virtual void                Save( XclExpStream& rStrm );
 };
 
 //___________________________________________________________________
@@ -143,13 +139,12 @@ private:
     sal_uInt8                   aGUID[ 16 ];
     sal_uInt32                  nCurrTab;
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
                                 XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 nTab );
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -157,12 +152,12 @@ public:
 
 class XclExpUsersViewEnd : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -170,12 +165,12 @@ public:
 
 class XclExpChTr0x0191 : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -183,12 +178,12 @@ public:
 
 class XclExpChTr0x0198 : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -196,12 +191,12 @@ public:
 
 class XclExpChTr0x0192 : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -209,12 +204,12 @@ public:
 
 class XclExpChTr0x0197 : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -223,14 +218,14 @@ public:
 class XclExpChTrEmpty : public ExcRecord
 {
 private:
-    sal_uInt16                  nRecNum;
+    UINT16                      nRecNum;
 
 public:
-    inline                      XclExpChTrEmpty( sal_uInt16 nNum ) : nRecNum( nNum ) {}
+    inline                      XclExpChTrEmpty( UINT16 nNum ) : nRecNum( nNum ) {}
     virtual                     ~XclExpChTrEmpty();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -238,14 +233,14 @@ public:
 
 class XclExpChTr0x0195 : public ExcRecord
 {
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+private:
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
     virtual                     ~XclExpChTr0x0195();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -254,18 +249,17 @@ public:
 class XclExpChTr0x0194 : public ExcRecord
 {
 private:
-    XclRawUnicodeString         sUsername;
+    XclExpUniString             sUsername;
     DateTime                    aDateTime;
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
     inline                      XclExpChTr0x0194( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTr0x0194();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 inline XclExpChTr0x0194::XclExpChTr0x0194( const ScChangeTrack& rChangeTrack ) :
@@ -283,8 +277,7 @@ private:
     sal_uInt8                   aGUID[ 16 ];
     sal_uInt32                  nCount;
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
     inline                      XclExpChTrHeader() : nCount( 0 ) {}
@@ -293,8 +286,8 @@ public:
     inline void                 SetGUID( const sal_uInt8* pGUID )   { memcpy( aGUID, pGUID, 16 ); }
     inline void                 SetCount( sal_uInt32 nNew )         { nCount = nNew; }
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -303,12 +296,11 @@ public:
 class XclExpChTrInfo : public ExcRecord
 {
 private:
-    XclRawUnicodeString         sUsername;
+    XclExpUniString             sUsername;
     DateTime                    aDateTime;
     sal_uInt8                   aGUID[ 16 ];
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
     inline                      XclExpChTrInfo(
@@ -317,8 +309,8 @@ public:
                                     const sal_uInt8* pGUID );
     virtual                     ~XclExpChTrInfo();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 inline XclExpChTrInfo::XclExpChTrInfo( const String& rUsername, const DateTime& rDateTime, const sal_uInt8* pGUID ) :
@@ -383,8 +375,7 @@ private:
 
     inline void                 Clear() { if( pBuffer ) delete[] pBuffer; pBuffer = NULL; }
 
-protected:
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 public:
     inline                      XclExpChTrTabId( sal_uInt16 nCount ) :
@@ -394,8 +385,8 @@ public:
 
     void                        Copy( const XclExpChTrTabIdBuffer& rBuffer );
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetLen() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetLen() const;
 };
 
 //___________________________________________________________________
@@ -425,23 +416,23 @@ protected:
                                     RootData& rRootData,
                                     ScChangeTrack& rChangeTrack );
 
-    inline void                 Write2DAddress( SvStream& rStrm, const ScAddress& rAddress ) const;
-    inline void                 Write2DRange( SvStream& rStrm, const ScRange& rRange ) const;
-    inline void                 WriteTabId( SvStream& rStrm, sal_uInt16 nTabId ) const;
+    inline void                 Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const;
+    inline void                 Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const;
+    inline void                 WriteTabId( XclExpStream& rStrm, sal_uInt16 nTabId ) const;
 
                                 // save header data, call SaveActionData()
-    virtual void                SaveCont( SvStream& rStrm );
-    inline sal_uInt16           GetHeaderByteCount() const  { return 12; }
+    virtual void                SaveCont( XclExpStream& rStrm );
+    inline ULONG                GetHeaderByteCount() const  { return 12; }
 
                                 // overload to save action data without header, called by SaveCont()
-    virtual void                SaveActionData( SvStream& rStrm ) const = 0;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const = 0;
                                 // overload to get action size without header, called by GetLen()
-    virtual sal_uInt16          GetActionByteCount() const = 0;
+    virtual ULONG               GetActionByteCount() const = 0;
 
                                 // do something before writing the record
-    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
+    virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
                                 // do something after writing the record
-    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
+    virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTrAction(
@@ -460,17 +451,17 @@ public:
                                 // could be overloaded to use more indexes per action
     virtual void                SetIndex( sal_uInt32& rIndex );
 
-    virtual void                Save( SvStream& rStrm );
-    virtual sal_uInt16          GetLen() const;
+    virtual void                Save( XclExpStream& rStrm );
+    virtual ULONG               GetLen() const;
 };
 
-inline void XclExpChTrAction::Write2DAddress( SvStream& rStrm, const ScAddress& rAddress ) const
+inline void XclExpChTrAction::Write2DAddress( XclExpStream& rStrm, const ScAddress& rAddress ) const
 {
     rStrm   << (sal_uInt16) rAddress.Row()
             << (sal_uInt16) rAddress.Col();
 }
 
-inline void XclExpChTrAction::Write2DRange( SvStream& rStrm, const ScRange& rRange ) const
+inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& rRange ) const
 {
     rStrm   << (sal_uInt16) rRange.aStart.Row()
             << (sal_uInt16) rRange.aEnd.Row()
@@ -478,7 +469,7 @@ inline void XclExpChTrAction::Write2DRange( SvStream& rStrm, const ScRange& rRan
             << (sal_uInt16) rRange.aEnd.Col();
 }
 
-inline void XclExpChTrAction::WriteTabId( SvStream& rStrm, sal_uInt16 nTab ) const
+inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, sal_uInt16 nTab ) const
 {
     rStrm << rIdBuffer.GetId( rTabBuffer.GetExcTable( nTab ) );
 }
@@ -488,7 +479,7 @@ inline void XclExpChTrAction::WriteTabId( SvStream& rStrm, sal_uInt16 nTab ) con
 
 struct XclExpChTrData
 {
-    XclUnicodeString*           pString;
+    XclExpUniString*            pString;
     ExcUPN*                     pUPN;
     UINT16List*                 pRefList;
     double                      fValue;
@@ -501,14 +492,13 @@ struct XclExpChTrData
     void                        Clear();
 
     void                        WriteFormula(
-                                    XclContinue& rCont,
+                                    XclExpStream& rStrm,
                                     const RootData& rRootData,
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     void                        Write(
-                                    SvStream& rStrm,
+                                    XclExpStream& rStrm,
                                     const RootData& rRootData,
-                                    const XclExpChTrTabIdBuffer& rTabIdBuffer,
-                                    sal_uInt16& rRecOffset );
+                                    const XclExpChTrTabIdBuffer& rTabIdBuffer );
 };
 
 inline XclExpChTrData::XclExpChTrData() :
@@ -543,7 +533,7 @@ protected:
                                     sal_uInt32& rXclLength1,
                                     sal_uInt16& rXclLength2 );
 
-    virtual void                SaveActionData( SvStream& rStrm ) const;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTrCellContent(
@@ -552,8 +542,8 @@ public:
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrCellContent();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetActionByteCount() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetActionByteCount() const;
 };
 
 //___________________________________________________________________
@@ -567,9 +557,9 @@ protected:
                                 XclExpChTrInsert( const XclExpChTrInsert& rCopy ) :
                                     XclExpChTrAction( rCopy ), aRange( rCopy.aRange ) {}
 
-    virtual void                SaveActionData( SvStream& rStrm ) const;
-    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
-    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const;
+    virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
+    virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTrInsert(
@@ -579,8 +569,8 @@ public:
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrInsert();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetActionByteCount() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetActionByteCount() const;
 };
 
 //___________________________________________________________________
@@ -592,7 +582,7 @@ private:
     sal_uInt16                  nTab;
 
 protected:
-    virtual void                SaveActionData( SvStream& rStrm ) const;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTrInsertTab(
@@ -601,8 +591,8 @@ public:
                                     const XclExpChTrTabIdBuffer& rTabIdBuffer );
     virtual                     ~XclExpChTrInsertTab();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetActionByteCount() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetActionByteCount() const;
 };
 
 //___________________________________________________________________
@@ -614,9 +604,9 @@ protected:
     ScRange                     aSourceRange;
     ScRange                     aDestRange;
 
-    virtual void                SaveActionData( SvStream& rStrm ) const;
-    virtual void                PrepareSaveAction( SvStream& rStrm ) const;
-    virtual void                CompleteSaveAction( SvStream& rStrm ) const;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const;
+    virtual void                PrepareSaveAction( XclExpStream& rStrm ) const;
+    virtual void                CompleteSaveAction( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTrMoveRange(
@@ -626,8 +616,8 @@ public:
                                     ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpChTrMoveRange();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetActionByteCount() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetActionByteCount() const;
 };
 
 //___________________________________________________________________
@@ -636,14 +626,14 @@ public:
 class XclExpChTr0x014A : public XclExpChTrInsert
 {
 protected:
-    virtual void                SaveActionData( SvStream& rStrm ) const;
+    virtual void                SaveActionData( XclExpStream& rStrm ) const;
 
 public:
                                 XclExpChTr0x014A( const XclExpChTrInsert& rAction );
     virtual                     ~XclExpChTr0x014A();
 
-    virtual sal_uInt16          GetNum() const;
-    virtual sal_uInt16          GetActionByteCount() const;
+    virtual UINT16              GetNum() const;
+    virtual ULONG               GetActionByteCount() const;
 };
 
 //___________________________________________________________________
@@ -672,7 +662,7 @@ public:
 
                                 List::Count;
     void                        Append( ExcRecord* pNewRec );
-    void                        Save( SvStream& rStrm );
+    void                        Save( XclExpStream& rStrm );
 };
 
 //___________________________________________________________________

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97dum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2001-01-15 11:27:21 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,14 +96,14 @@ const BYTE ExcDummy8_00a::pMyData[] = {
     0x42, 0x00, 0x02, 0x00, 0xb0, 0x04,                     // CODEPAGE
     0x61, 0x01, 0x02, 0x00, 0x00, 0x00                      // DSF (8+)
 };
-const UINT16 ExcDummy8_00a::nMyLen = sizeof(ExcDummy8_00a::pMyData);
+const ULONG ExcDummy8_00a::nMyLen = sizeof(ExcDummy8_00a::pMyData);
 
                                                             // TABID (8+): ExcTabid
 
 const BYTE ExcDummy8_00b::pMyData[] = {
     0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
 };
-const UINT16 ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
+const ULONG ExcDummy8_00b::nMyLen = sizeof(ExcDummy8_00b::pMyData);
 
 
 const BYTE ExcDummy8_040::pMyData[] = {
@@ -118,7 +118,7 @@ const BYTE ExcDummy8_040::pMyData[] = {
     0x40, 0x00, 0x02, 0x00, 0x00, 0x00,                     // BACKUP
     0x8d, 0x00, 0x02, 0x00, 0x00, 0x00                      // HIDEOBJ
 };
-const UINT16 ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
+const ULONG ExcDummy8_040::nMyLen = sizeof(ExcDummy8_040::pMyData);
 
 
 const BYTE ExcDummy8_041::pMyData[] = {
@@ -126,7 +126,7 @@ const BYTE ExcDummy8_041::pMyData[] = {
     0xb7, 0x01, 0x02, 0x00, 0x00, 0x00,                     // REFRESHALL (8+)
     0xda, 0x00, 0x02, 0x00, 0x00, 0x00                      // BOOKBOOL
 };
-const UINT16 ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
+const ULONG ExcDummy8_041::nMyLen = sizeof(ExcDummy8_041::pMyData);
 
 
 // 5 Default Font Records (8*)
@@ -158,7 +158,7 @@ const BYTE ExcDummy8_01::pMyData[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x01,
     0x41, 0x00, 0x72, 0x00, 0x69, 0x00, 0x61, 0x00, 0x6C, 0x00
 };
-const UINT16 ExcDummy8_01::nMyLen = sizeof(ExcDummy8_01::pMyData);
+const ULONG ExcDummy8_01::nMyLen = sizeof(ExcDummy8_01::pMyData);
 
 
 // 8 default FORMAT Records (8*)  (DM Formats)
@@ -233,7 +233,7 @@ const BYTE ExcDummy8_Fm::pMyData[] = {
     0x5C, 0x20, 0x5F, 0x44, 0x5F, 0x4D, 0x5F, 0x2D,
     0x3B, 0x5F, 0x2D, 0x40, 0x5F, 0x2D
 };
-const UINT16 ExcDummy8_Fm::nMyLen = sizeof(ExcDummy8_Fm::pMyData);
+const ULONG ExcDummy8_Fm::nMyLen = sizeof(ExcDummy8_Fm::pMyData);
 
 
 // 21 default XF Records (8*)
@@ -323,7 +323,7 @@ const BYTE ExcDummy8_XF::pMyData[] = {
     0x00, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x20
 
 };
-const UINT16 ExcDummy8_XF::nMyLen = sizeof(ExcDummy8_XF::pMyData);
+const ULONG ExcDummy8_XF::nMyLen = sizeof(ExcDummy8_XF::pMyData);
 
 
 // 6 default STYLE Records (8*)
@@ -335,21 +335,21 @@ const BYTE ExcDummy8_Style::pMyData[] = {
     0x93, 0x02, 0x04, 0x00, 0x13, 0x80, 0x04, 0xFF,
     0x93, 0x02, 0x04, 0x00, 0x14, 0x80, 0x07, 0xFF
 };
-const UINT16 ExcDummy8_Style::nMyLen = sizeof(ExcDummy8_Style::pMyData);
+const ULONG ExcDummy8_Style::nMyLen = sizeof(ExcDummy8_Style::pMyData);
 
 
 // Natural Language Formulas Flag (8+)  0 := nein, 1:= ja
 const BYTE ExcDummy8_UsesElfs::pMyData[] = {
     0x60, 0x01, 0x02, 0x00, 0x00, 0x00
 };
-const UINT16 ExcDummy8_UsesElfs::nMyLen = sizeof(ExcDummy8_UsesElfs::pMyData);
+const ULONG ExcDummy8_UsesElfs::nMyLen = sizeof(ExcDummy8_UsesElfs::pMyData);
 
 
 // Country always Germany
 const BYTE ExcDummy8_Country::pMyData[] = {
     0x8c, 0x00, 0x04, 0x00, 0x31, 0x00, 0x31, 0x00
 };
-const UINT16 ExcDummy8_Country::nMyLen = sizeof(ExcDummy8_Country::pMyData);
+const ULONG ExcDummy8_Country::nMyLen = sizeof(ExcDummy8_Country::pMyData);
 
 
 const BYTE ExcDummy8_02::pMyData[] = {
@@ -377,12 +377,12 @@ const BYTE ExcDummy8_02::pMyData[] = {
 //  0x3f, 0xc1, 0x8d, 0xb0, 0x82, 0xc1, 0x60, 0xe0, 0x3f,
 //  0xf0, 0x00
     };
-const UINT16 ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
+const ULONG ExcDummy8_02::nMyLen = sizeof(ExcDummy8_02::pMyData);
 
 
 // --- class ExcDummy8_xx --------------------------------------------
 
-UINT16 ExcDummy8_00a::GetLen() const
+ULONG ExcDummy8_00a::GetLen() const
 {
     return nMyLen;
 }
@@ -395,7 +395,7 @@ const BYTE* ExcDummy8_00a::GetData() const
 
 
 
-UINT16 ExcDummy8_00b::GetLen() const
+ULONG ExcDummy8_00b::GetLen() const
 {
     return nMyLen;
 }
@@ -408,7 +408,7 @@ const BYTE* ExcDummy8_00b::GetData() const
 
 
 
-UINT16 ExcDummy8_040::GetLen() const
+ULONG ExcDummy8_040::GetLen() const
 {
     return nMyLen;
 }
@@ -421,7 +421,7 @@ const BYTE* ExcDummy8_040::GetData() const
 
 
 
-UINT16 ExcDummy8_041::GetLen() const
+ULONG ExcDummy8_041::GetLen() const
 {
     return nMyLen;
 }
@@ -434,7 +434,7 @@ const BYTE* ExcDummy8_041::GetData() const
 
 
 
-UINT16 ExcDummy8_01::GetLen() const
+ULONG ExcDummy8_01::GetLen() const
 {
     return nMyLen;
 }
@@ -447,7 +447,7 @@ const BYTE* ExcDummy8_01::GetData() const
 
 
 
-UINT16 ExcDummy8_Fm::GetLen() const
+ULONG ExcDummy8_Fm::GetLen() const
 {
     return nMyLen;
 }
@@ -460,7 +460,7 @@ const BYTE* ExcDummy8_Fm::GetData() const
 
 
 
-UINT16 ExcDummy8_XF::GetLen() const
+ULONG ExcDummy8_XF::GetLen() const
 {
     return nMyLen;
 }
@@ -473,7 +473,7 @@ const BYTE* ExcDummy8_XF::GetData() const
 
 
 
-UINT16 ExcDummy8_Style::GetLen() const
+ULONG ExcDummy8_Style::GetLen() const
 {
     return nMyLen;
 }
@@ -486,7 +486,7 @@ const BYTE* ExcDummy8_Style::GetData() const
 
 
 
-UINT16 ExcDummy8_UsesElfs::GetLen() const
+ULONG ExcDummy8_UsesElfs::GetLen() const
 {
     return nMyLen;
 }
@@ -499,7 +499,7 @@ const BYTE* ExcDummy8_UsesElfs::GetData() const
 
 
 
-UINT16 ExcDummy8_Country::GetLen() const
+ULONG ExcDummy8_Country::GetLen() const
 {
     return nMyLen;
 }
@@ -512,7 +512,7 @@ const BYTE* ExcDummy8_Country::GetData() const
 
 
 
-UINT16 ExcDummy8_02::GetLen() const
+ULONG ExcDummy8_02::GetLen() const
 {
     return nMyLen;
 }

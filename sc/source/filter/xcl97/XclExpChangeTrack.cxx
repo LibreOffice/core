@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-20 15:21:27 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,39 +89,28 @@ extern const sal_Char*  pUserNamesStreamName;
 //___________________________________________________________________
 // local functions
 
-inline void lcl_WriteZeroBytes( SvStream& rStrm, sal_uInt32 nCount )
+void lcl_WriteDateTime( XclExpStream& rStrm, const DateTime& rDateTime )
 {
-    while( nCount > 3 )
-    {
-        rStrm << (sal_uInt32) 0;
-        nCount -= 4;
-    }
-    while( nCount-- )
-        rStrm << (sal_uInt8) 0;
-}
-
-void lcl_WriteDateTime( SvStream& rStrm, const DateTime& rDateTime )
-{
+    rStrm.SetSliceLen( 7 );
     rStrm   << (sal_uInt16) rDateTime.GetYear()
             << (sal_uInt8)  rDateTime.GetMonth()
             << (sal_uInt8)  rDateTime.GetDay()
             << (sal_uInt8)  rDateTime.GetHour()
             << (sal_uInt8)  rDateTime.GetMin()
             << (sal_uInt8)  rDateTime.GetSec();
+    rStrm.SetSliceLen( 0 );
 }
 
 // write string and fill rest of <nLength> with zero bytes
 // <nLength> is without string header
-void lcl_WriteFixedString( SvStream& rStrm, const XclRawUnicodeString& rString, sal_uInt16 nLength )
+void lcl_WriteFixedString( XclExpStream& rStrm, const XclExpUniString& rString, ULONG nLength )
 {
-    sal_uInt32 nStrBytes = rString.GetByteCount();
+    ULONG nStrBytes = rString.GetBufferByteCount();
     DBG_ASSERT( nLength >= nStrBytes, "lcl_WriteFixedString - String too long" );
-    rStrm   << (sal_uInt16) rString.GetLen()
-            << (sal_uInt8)  rString.GetGrbit();
     if( rString.GetLen() )
-        rString.WriteToStream( rStrm );
+        rString.Write( rStrm );
     if( nLength > nStrBytes )
-        lcl_WriteZeroBytes( rStrm, nLength - nStrBytes );
+        rStrm.WriteZeroBytes( nLength - nStrBytes );
 }
 
 inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
@@ -130,10 +119,12 @@ inline void lcl_GenerateGUID( sal_uInt8* pGUID, sal_Bool& rValidGUID )
     rValidGUID = sal_True;
 }
 
-inline void lcl_WriteGUID( SvStream& rStrm, const sal_uInt8* pGUID )
+inline void lcl_WriteGUID( XclExpStream& rStrm, const sal_uInt8* pGUID )
 {
+    rStrm.SetSliceLen( 16 );
     for( sal_uInt32 nIndex = 0; nIndex < 16; nIndex++ )
         rStrm << pGUID[ nIndex ];
+    rStrm.SetSliceLen( 0 );
 }
 
 //___________________________________________________________________
@@ -144,12 +135,12 @@ XclExpUserBView::XclExpUserBView( const String& rUsername, const sal_uInt8* pGUI
     memcpy( aGUID, pGUID, 16 );
 }
 
-void XclExpUserBView::SaveCont( SvStream& rStrm )
+void XclExpUserBView::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (sal_uInt32) 0xFF078014
             << (sal_uInt32) 0x00000001;
     lcl_WriteGUID( rStrm, aGUID );
-    lcl_WriteZeroBytes( rStrm, 8 );
+    rStrm.WriteZeroBytes( 8 );
     rStrm   << (sal_uInt32) 1200
             << (sal_uInt32) 1000
             << (sal_uInt16) 1000
@@ -158,24 +149,17 @@ void XclExpUserBView::SaveCont( SvStream& rStrm )
             << (sal_uInt16) 0x0001
             << (sal_uInt16) 0x0000;
     if( sUsername.GetLen() )
-    {
-        rStrm   << (sal_uInt16) sUsername.GetLen()
-                << (sal_uInt8)  sUsername.GetGrbit();
-        sUsername.WriteToStream( rStrm );
-    }
+        sUsername.Write( rStrm );
 }
 
-sal_uInt16 XclExpUserBView::GetNum() const
+UINT16 XclExpUserBView::GetNum() const
 {
     return 0x01A9;
 }
 
-sal_uInt16 XclExpUserBView::GetLen() const
+ULONG XclExpUserBView::GetLen() const
 {
-    sal_uInt16 nLength = 50;
-    if( sUsername.GetLen() )
-        nLength += (sal_uInt16)(3 + sUsername.GetByteCount());
-    return nLength;
+    return 50 + (sUsername.GetLen() ? sUsername.GetByteCount() : 0);
 }
 
 //___________________________________________________________________
@@ -200,7 +184,7 @@ XclExpUserBViewList::~XclExpUserBViewList()
         delete pRec;
 }
 
-void XclExpUserBViewList::Save( SvStream& rStrm )
+void XclExpUserBViewList::Save( XclExpStream& rStrm )
 {
     for( XclExpUserBView* pRec = _First(); pRec; pRec = _Next() )
         pRec->Save( rStrm );
@@ -214,7 +198,7 @@ XclExpUsersViewBegin::XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 n
     memcpy( aGUID, pGUID, 16 );
 }
 
-void XclExpUsersViewBegin::SaveCont( SvStream& rStrm )
+void XclExpUsersViewBegin::SaveCont( XclExpStream& rStrm )
 {
     lcl_WriteGUID( rStrm, aGUID );
     rStrm   << nCurrTab
@@ -232,99 +216,99 @@ void XclExpUsersViewBegin::SaveCont( SvStream& rStrm )
             << (sal_Int16)  -1;
 }
 
-sal_uInt16 XclExpUsersViewBegin::GetNum() const
+UINT16 XclExpUsersViewBegin::GetNum() const
 {
     return 0x01AA;
 }
 
-sal_uInt16 XclExpUsersViewBegin::GetLen() const
+ULONG XclExpUsersViewBegin::GetLen() const
 {
     return 64;
 }
 
 //___________________________________________________________________
 
-void XclExpUsersViewEnd::SaveCont( SvStream& rStrm )
+void XclExpUsersViewEnd::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0001;
 }
 
-sal_uInt16 XclExpUsersViewEnd::GetNum() const
+UINT16 XclExpUsersViewEnd::GetNum() const
 {
     return 0x01AB;
 }
 
-sal_uInt16 XclExpUsersViewEnd::GetLen() const
+ULONG XclExpUsersViewEnd::GetLen() const
 {
     return 2;
 }
 
 //___________________________________________________________________
 
-void XclExpChTr0x0191::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0191::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0000;
 }
 
-sal_uInt16 XclExpChTr0x0191::GetNum() const
+UINT16 XclExpChTr0x0191::GetNum() const
 {
     return 0x0191;
 }
 
-sal_uInt16 XclExpChTr0x0191::GetLen() const
+ULONG XclExpChTr0x0191::GetLen() const
 {
     return 2;
 }
 
 //___________________________________________________________________
 
-void XclExpChTr0x0198::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0198::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (sal_uInt16) 0x0006
             << (sal_uInt16) 0x0000;
 }
 
-sal_uInt16 XclExpChTr0x0198::GetNum() const
+UINT16 XclExpChTr0x0198::GetNum() const
 {
     return 0x0198;
 }
 
-sal_uInt16 XclExpChTr0x0198::GetLen() const
+ULONG XclExpChTr0x0198::GetLen() const
 {
     return 4;
 }
 
 //___________________________________________________________________
 
-void XclExpChTr0x0192::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0192::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0022;
-    lcl_WriteZeroBytes( rStrm, 510 );
+    rStrm.WriteZeroBytes( 510 );
 }
 
-sal_uInt16 XclExpChTr0x0192::GetNum() const
+UINT16 XclExpChTr0x0192::GetNum() const
 {
     return 0x0192;
 }
 
-sal_uInt16 XclExpChTr0x0192::GetLen() const
+ULONG XclExpChTr0x0192::GetLen() const
 {
     return 512;
 }
 
 //___________________________________________________________________
 
-void XclExpChTr0x0197::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0197::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt16) 0x0000;
 }
 
-sal_uInt16 XclExpChTr0x0197::GetNum() const
+UINT16 XclExpChTr0x0197::GetNum() const
 {
     return 0x0197;
 }
 
-sal_uInt16 XclExpChTr0x0197::GetLen() const
+ULONG XclExpChTr0x0197::GetLen() const
 {
     return 2;
 }
@@ -335,12 +319,12 @@ XclExpChTrEmpty::~XclExpChTrEmpty()
 {
 }
 
-sal_uInt16 XclExpChTrEmpty::GetNum() const
+UINT16 XclExpChTrEmpty::GetNum() const
 {
     return nRecNum;
 }
 
-sal_uInt16 XclExpChTrEmpty::GetLen() const
+ULONG XclExpChTrEmpty::GetLen() const
 {
     return 0;
 }
@@ -351,17 +335,17 @@ XclExpChTr0x0195::~XclExpChTr0x0195()
 {
 }
 
-void XclExpChTr0x0195::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0195::SaveCont( XclExpStream& rStrm )
 {
-    lcl_WriteZeroBytes( rStrm, 162 );
+    rStrm.WriteZeroBytes( 162 );
 }
 
-sal_uInt16 XclExpChTr0x0195::GetNum() const
+UINT16 XclExpChTr0x0195::GetNum() const
 {
     return 0x0195;
 }
 
-sal_uInt16 XclExpChTr0x0195::GetLen() const
+ULONG XclExpChTr0x0195::GetLen() const
 {
     return 162;
 }
@@ -372,7 +356,7 @@ XclExpChTr0x0194::~XclExpChTr0x0194()
 {
 }
 
-void XclExpChTr0x0194::SaveCont( SvStream& rStrm )
+void XclExpChTr0x0194::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (sal_uInt32) 0;
     lcl_WriteDateTime( rStrm, aDateTime );
@@ -380,12 +364,12 @@ void XclExpChTr0x0194::SaveCont( SvStream& rStrm )
     lcl_WriteFixedString( rStrm, sUsername, 147 );
 }
 
-sal_uInt16 XclExpChTr0x0194::GetNum() const
+UINT16 XclExpChTr0x0194::GetNum() const
 {
     return 0x0194;
 }
 
-sal_uInt16 XclExpChTr0x0194::GetLen() const
+ULONG XclExpChTr0x0194::GetLen() const
 {
     return 162;
 }
@@ -396,7 +380,7 @@ XclExpChTrHeader::~XclExpChTrHeader()
 {
 }
 
-void XclExpChTrHeader::SaveCont( SvStream& rStrm )
+void XclExpChTrHeader::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (sal_uInt16) 0x0006
             << (sal_uInt16) 0x0000
@@ -409,12 +393,12 @@ void XclExpChTrHeader::SaveCont( SvStream& rStrm )
             << (sal_uInt16) 0x001E;
 }
 
-sal_uInt16 XclExpChTrHeader::GetNum() const
+UINT16 XclExpChTrHeader::GetNum() const
 {
     return 0x0196;
 }
 
-sal_uInt16 XclExpChTrHeader::GetLen() const
+ULONG XclExpChTrHeader::GetLen() const
 {
     return 50;
 }
@@ -425,7 +409,7 @@ XclExpChTrInfo::~XclExpChTrInfo()
 {
 }
 
-void XclExpChTrInfo::SaveCont( SvStream& rStrm )
+void XclExpChTrInfo::SaveCont( XclExpStream& rStrm )
 {
     rStrm   << (sal_uInt32) 0xFFFFFFFF
             << (sal_uInt32) 0x00000000
@@ -439,12 +423,12 @@ void XclExpChTrInfo::SaveCont( SvStream& rStrm )
             << (sal_uInt16) 0x0002;
 }
 
-sal_uInt16 XclExpChTrInfo::GetNum() const
+UINT16 XclExpChTrInfo::GetNum() const
 {
     return 0x0138;
 }
 
-sal_uInt16 XclExpChTrInfo::GetLen() const
+ULONG XclExpChTrInfo::GetLen() const
 {
     return 158;
 }
@@ -551,7 +535,7 @@ void XclExpChTrTabId::Copy( const XclExpChTrTabIdBuffer& rBuffer )
     rBuffer.GetBufferCopy( pBuffer );
 }
 
-void XclExpChTrTabId::SaveCont( SvStream& rStrm )
+void XclExpChTrTabId::SaveCont( XclExpStream& rStrm )
 {
     if( pBuffer )
         for( sal_uInt16* pElem = pBuffer; pElem < (pBuffer + nTabCount); pElem++ )
@@ -561,12 +545,12 @@ void XclExpChTrTabId::SaveCont( SvStream& rStrm )
             rStrm << nIndex;
 }
 
-sal_uInt16 XclExpChTrTabId::GetNum() const
+UINT16 XclExpChTrTabId::GetNum() const
 {
     return 0x013D;
 }
 
-sal_uInt16 XclExpChTrTabId::GetLen() const
+ULONG XclExpChTrTabId::GetLen() const
 {
     return nTabCount << 1;
 }
@@ -638,7 +622,7 @@ void XclExpChTrAction::SetIndex( sal_uInt32& rIndex )
     nIndex = rIndex++;
 }
 
-void XclExpChTrAction::SaveCont( SvStream& rStrm )
+void XclExpChTrAction::SaveCont( XclExpStream& rStrm )
 {
     DBG_ASSERT( nOpCode != EXC_CHTR_OP_UNKNOWN, "XclExpChTrAction::SaveCont - unknown action" );
     rStrm   << nLength
@@ -648,15 +632,15 @@ void XclExpChTrAction::SaveCont( SvStream& rStrm )
     SaveActionData( rStrm );
 }
 
-void XclExpChTrAction::PrepareSaveAction( SvStream& rStrm ) const
+void XclExpChTrAction::PrepareSaveAction( XclExpStream& rStrm ) const
 {
 }
 
-void XclExpChTrAction::CompleteSaveAction( SvStream& rStrm ) const
+void XclExpChTrAction::CompleteSaveAction( XclExpStream& rStrm ) const
 {
 }
 
-void XclExpChTrAction::Save( SvStream& rStrm )
+void XclExpChTrAction::Save( XclExpStream& rStrm )
 {
     PrepareSaveAction( rStrm );
     ExcRecord::Save( rStrm );
@@ -665,7 +649,7 @@ void XclExpChTrAction::Save( SvStream& rStrm )
     CompleteSaveAction( rStrm );
 }
 
-sal_uInt16 XclExpChTrAction::GetLen() const
+ULONG XclExpChTrAction::GetLen() const
 {
     return GetHeaderByteCount() + GetActionByteCount();
 }
@@ -691,16 +675,12 @@ void XclExpChTrData::Clear()
 }
 
 void XclExpChTrData::WriteFormula(
-        XclContinue& rCont,
+        XclExpStream& rStrm,
         const RootData& rRootData,
         const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
     DBG_ASSERT( pUPN && pUPN->GetData(), "XclExpChTrData::Write - no formula" );
-    SvStream& rStrm = rCont.GetStream();
-    sal_uInt16 nRecOffset = rCont.GetRecOff();
     sal_uInt16 nFmlSize = pUPN->GetLen();
-    if( (3 + nFmlSize) > (SC_XCL_RECLENMAX - nRecOffset) )
-        rCont.NextRecord();
     rStrm << nFmlSize;
     rStrm.Write( pUPN->GetData(), nFmlSize );
 
@@ -709,20 +689,18 @@ void XclExpChTrData::WriteFormula(
     {
         sal_uInt16 nExcFirst = pRefList->Get( nIndex++ );
         sal_uInt16 nExcLast = pRefList->Get( nIndex++ );
-        const XclUnicodeString* pDocName = rRootData.pExternsheetRecs->GetDocumentName( nExcFirst );
-        const XclUnicodeString* pTabName = rRootData.pExternsheetRecs->GetTableName( nExcFirst );
+        const XclExpUniString* pDocName = rRootData.pExternsheetRecs->GetDocumentName( nExcFirst );
+        const XclExpUniString* pTabName = rRootData.pExternsheetRecs->GetTableName( nExcFirst );
         if( pDocName && pTabName )
         {
-            pDocName->Write( rCont );
+            pDocName->Write( rStrm );       // normal unicode string
             rStrm << (sal_uInt8) 0x01;
-            pTabName->Write( rCont );
+            pTabName->Write( rStrm );       // normal unicode string
             rStrm << (sal_uInt8) 0x02;
         }
         else
         {
-            sal_uInt16 nByteCount = (nExcFirst == nExcLast) ? 6 : 8;
-            if( (rCont.GetRecOff() + nByteCount) > SC_XCL_RECLENMAX )
-                rCont.NextRecord();
+            rStrm.SetSliceLen( (nExcFirst == nExcLast) ? 6 : 8 );
             rStrm << (sal_uInt8) 0x01;
             rStrm << (sal_uInt8) 0x02;
             rStrm << (sal_uInt8) 0x00;
@@ -736,16 +714,15 @@ void XclExpChTrData::WriteFormula(
             }
         }
     }
+    rStrm.SetSliceLen( 0 );
     rStrm << (sal_uInt8) 0x00;
 }
 
 void XclExpChTrData::Write(
-        SvStream& rStrm,
+        XclExpStream& rStrm,
         const RootData& rRootData,
-        const XclExpChTrTabIdBuffer& rTabIdBuffer,
-        sal_uInt16& rRecOffset )
+        const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
-    XclContinue aCont( rStrm, rRecOffset );
     switch( nType )
     {
         case EXC_CHTR_TYPE_RK:
@@ -756,13 +733,12 @@ void XclExpChTrData::Write(
         break;
         case EXC_CHTR_TYPE_STRING:
             DBG_ASSERT( pString, "XclExpChTrData::Write - no string" );
-            pString->Write( aCont );
+            pString->Write( rStrm );    // normal unicode string
         break;
         case EXC_CHTR_TYPE_FORMULA:
-            WriteFormula( aCont, rRootData, rTabIdBuffer );
+            WriteFormula( rStrm, rRootData, rTabIdBuffer );
         break;
     }
-    rRecOffset = aCont.GetRecOff();
 }
 
 //___________________________________________________________________
@@ -821,7 +797,7 @@ void XclExpChTrCellContent::GetCellData(
         case CELLTYPE_VALUE:
         {
             rpData->fValue = ((const ScValueCell*) pScCell)->GetValue();
-            if( ::GetExcRKValue( rpData->fValue, rpData->nRKValue ) )
+            if( XclExpHelper::GetRKFromDouble( rpData->fValue, rpData->nRKValue ) )
             {
                 rpData->nType = EXC_CHTR_TYPE_RK;
                 rpData->nSize = 4;
@@ -845,7 +821,7 @@ void XclExpChTrCellContent::GetCellData(
                 ((const ScStringCell*) pScCell)->GetString( sCellStr );
             else
                 ((const ScEditCell*) pScCell)->GetString( sCellStr );
-            rpData->pString = new XclUnicodeString( sCellStr, 32766 );
+            rpData->pString = new XclExpUniString( sCellStr, 32766 );
             rpData->nType = EXC_CHTR_TYPE_STRING;
             rpData->nSize = 3 + (sal_uInt16) rpData->pString->GetByteCount();
             rXclLength1 = 64 + (sCellStr.Len() << 1);
@@ -871,14 +847,14 @@ void XclExpChTrCellContent::GetCellData(
                 {
                     sal_uInt16 nExcFirst = rpData->pRefList->Get( nIndex++ );
                     sal_uInt16 nExcLast = rpData->pRefList->Get( nIndex++ );
-                    const XclUnicodeString* pDocName = pExcRoot->pExternsheetRecs->GetDocumentName( nExcFirst );
-                    const XclUnicodeString* pTabName = pExcRoot->pExternsheetRecs->GetTableName( nExcFirst );
+                    const XclExpUniString* pDocName = pExcRoot->pExternsheetRecs->GetDocumentName( nExcFirst );
+                    const XclExpUniString* pTabName = pExcRoot->pExternsheetRecs->GetTableName( nExcFirst );
                     if( pDocName && pTabName )
-                        nSize += ((pDocName->GetByteCount() + pTabName->GetByteCount() + 2) << 1);
+                        nSize += pDocName->GetByteCount() + pTabName->GetByteCount() + 2;
                     else
                         nSize += (nExcFirst == nExcLast) ? 6 : 8;
                 }
-                rpData->nSize = (sal_uInt16) Max( nSize, (sal_uInt32) 0x0000FFFF );
+                rpData->nSize = (sal_uInt16) Min( nSize, (sal_uInt32) 0x0000FFFF );
                 rXclLength1 = 0x00000052;
                 rXclLength2 = 0x0018;
             }
@@ -887,7 +863,7 @@ void XclExpChTrCellContent::GetCellData(
     }
 }
 
-void XclExpChTrCellContent::SaveActionData( SvStream& rStrm ) const
+void XclExpChTrCellContent::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aPosition.Tab() );
     rStrm   << (sal_uInt16)((pOldData ? (pOldData->nType << 3) : 0x0000) | (pNewData ? pNewData->nType : 0x0000))
@@ -895,21 +871,20 @@ void XclExpChTrCellContent::SaveActionData( SvStream& rStrm ) const
     Write2DAddress( rStrm, aPosition );
     rStrm   << nOldLength
             << (sal_uInt32) 0x00000000;
-    sal_uInt16 nRecOffset = GetHeaderByteCount() + 16;
     if( pOldData )
-        pOldData->Write( rStrm, *pExcRoot, rIdBuffer, nRecOffset );
+        pOldData->Write( rStrm, *pExcRoot, rIdBuffer );
     if( pNewData )
-        pNewData->Write( rStrm, *pExcRoot, rIdBuffer, nRecOffset );
+        pNewData->Write( rStrm, *pExcRoot, rIdBuffer );
 }
 
-sal_uInt16 XclExpChTrCellContent::GetNum() const
+UINT16 XclExpChTrCellContent::GetNum() const
 {
     return 0x013B;
 }
 
-sal_uInt16 XclExpChTrCellContent::GetActionByteCount() const
+ULONG XclExpChTrCellContent::GetActionByteCount() const
 {
-    sal_uInt16 nLen = 16;
+    ULONG nLen = 16;
     if( pOldData )
         nLen += pOldData->nSize;
     if( pNewData )
@@ -960,7 +935,7 @@ XclExpChTrInsert::~XclExpChTrInsert()
 {
 }
 
-void XclExpChTrInsert::SaveActionData( SvStream& rStrm ) const
+void XclExpChTrInsert::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
     rStrm   << (sal_uInt16) 0x0000;
@@ -968,24 +943,24 @@ void XclExpChTrInsert::SaveActionData( SvStream& rStrm ) const
     rStrm   << (sal_uInt32) 0x00000000;
 }
 
-void XclExpChTrInsert::PrepareSaveAction( SvStream& rStrm ) const
+void XclExpChTrInsert::PrepareSaveAction( XclExpStream& rStrm ) const
 {
     if( (nOpCode == EXC_CHTR_OP_DELROW) || (nOpCode == EXC_CHTR_OP_DELCOL) )
         XclExpChTrEmpty( 0x0150 ).Save( rStrm );
 }
 
-void XclExpChTrInsert::CompleteSaveAction( SvStream& rStrm ) const
+void XclExpChTrInsert::CompleteSaveAction( XclExpStream& rStrm ) const
 {
     if( (nOpCode == EXC_CHTR_OP_DELROW) || (nOpCode == EXC_CHTR_OP_DELCOL) )
         XclExpChTrEmpty( 0x0151 ).Save( rStrm );
 }
 
-sal_uInt16 XclExpChTrInsert::GetNum() const
+UINT16 XclExpChTrInsert::GetNum() const
 {
     return 0x0137;
 }
 
-sal_uInt16 XclExpChTrInsert::GetActionByteCount() const
+ULONG XclExpChTrInsert::GetActionByteCount() const
 {
     return 16;
 }
@@ -1008,23 +983,23 @@ XclExpChTrInsertTab::~XclExpChTrInsertTab()
 {
 }
 
-void XclExpChTrInsertTab::SaveActionData( SvStream& rStrm ) const
+void XclExpChTrInsertTab::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, nTab );
     rStrm   << (sal_uInt32) 0x00000000;
     String sTabName;
     pExcRoot->pDoc->GetName( nTab, sTabName );
-    lcl_WriteFixedString( rStrm, XclRawUnicodeString( sTabName ), 127 );
+    lcl_WriteFixedString( rStrm, XclExpUniString( sTabName ), 127 );
     lcl_WriteDateTime( rStrm, GetDateTime() );
-    lcl_WriteZeroBytes( rStrm, 133 );
+    rStrm.WriteZeroBytes( 133 );
 }
 
-sal_uInt16 XclExpChTrInsertTab::GetNum() const
+UINT16 XclExpChTrInsertTab::GetNum() const
 {
     return 0x014D;
 }
 
-sal_uInt16 XclExpChTrInsertTab::GetActionByteCount() const
+ULONG XclExpChTrInsertTab::GetActionByteCount() const
 {
     return 276;
 }
@@ -1056,7 +1031,7 @@ XclExpChTrMoveRange::~XclExpChTrMoveRange()
 {
 }
 
-void XclExpChTrMoveRange::SaveActionData( SvStream& rStrm ) const
+void XclExpChTrMoveRange::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aDestRange.aStart.Tab() );
     Write2DRange( rStrm, aSourceRange );
@@ -1065,22 +1040,22 @@ void XclExpChTrMoveRange::SaveActionData( SvStream& rStrm ) const
     rStrm << (sal_uInt32) 0x00000000;
 }
 
-void XclExpChTrMoveRange::PrepareSaveAction( SvStream& rStrm ) const
+void XclExpChTrMoveRange::PrepareSaveAction( XclExpStream& rStrm ) const
 {
     XclExpChTrEmpty( 0x014E ).Save( rStrm );
 }
 
-void XclExpChTrMoveRange::CompleteSaveAction( SvStream& rStrm ) const
+void XclExpChTrMoveRange::CompleteSaveAction( XclExpStream& rStrm ) const
 {
     XclExpChTrEmpty( 0x014F ).Save( rStrm );
 }
 
-sal_uInt16 XclExpChTrMoveRange::GetNum() const
+UINT16 XclExpChTrMoveRange::GetNum() const
 {
     return 0x0140;
 }
 
-sal_uInt16 XclExpChTrMoveRange::GetActionByteCount() const
+ULONG XclExpChTrMoveRange::GetActionByteCount() const
 {
     return 24;
 }
@@ -1098,7 +1073,7 @@ XclExpChTr0x014A::~XclExpChTr0x014A()
 {
 }
 
-void XclExpChTr0x014A::SaveActionData( SvStream& rStrm ) const
+void XclExpChTr0x014A::SaveActionData( XclExpStream& rStrm ) const
 {
     WriteTabId( rStrm, aRange.aStart.Tab() );
     rStrm   << (sal_uInt16) 0x0003
@@ -1106,12 +1081,12 @@ void XclExpChTr0x014A::SaveActionData( SvStream& rStrm ) const
     Write2DRange( rStrm, aRange );
 }
 
-sal_uInt16 XclExpChTr0x014A::GetNum() const
+UINT16 XclExpChTr0x014A::GetNum() const
 {
     return 0x014A;
 }
 
-sal_uInt16 XclExpChTr0x014A::GetActionByteCount() const
+ULONG XclExpChTr0x014A::GetActionByteCount() const
 {
     return 14;
 }
@@ -1146,7 +1121,7 @@ void XclExpChTrRecordList::Append( ExcRecord* pNewRec )
         List::Insert( pNewRec, LIST_APPEND );
 }
 
-void XclExpChTrRecordList::Save( SvStream& rStrm )
+void XclExpChTrRecordList::Save( XclExpStream& rStrm )
 {
     for( ExcRecord* pRec = First(); pRec; pRec = Next() )
         pRec->Save( rStrm );
@@ -1316,18 +1291,26 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 
 sal_Bool XclExpChangeTrack::WriteUserNamesStream()
 {
+    sal_Bool bRet = sal_False;
     String sStreamName( RTL_CONSTASCII_STRINGPARAM( pUserNamesStreamName ) );
-    SvStream* pStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
-    DBG_ASSERT( pStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
-    if( !pStrm )
-        return sal_False;
-
-    { XclExpChTr0x0191().Save( *pStrm ); }
-    { XclExpChTr0x0198().Save( *pStrm ); }
-    { XclExpChTr0x0192().Save( *pStrm ); }
-    { XclExpChTr0x0197().Save( *pStrm ); }
-    delete pStrm;
-    return sal_True;
+    SvStream* pSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
+    DBG_ASSERT( pSvStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
+    if( pSvStrm )
+    {
+        XclExpStream* pXclStrm = new XclExpStream( *pSvStrm, EXC_MAXRECLEN_BIFF8 );
+        DBG_ASSERT( pXclStrm, "XclExpChangeTrack::WriteUserNamesStream - no stream" );
+        if( pXclStrm )
+        {
+            { XclExpChTr0x0191().Save( *pXclStrm ); }
+            { XclExpChTr0x0198().Save( *pXclStrm ); }
+            { XclExpChTr0x0192().Save( *pXclStrm ); }
+            { XclExpChTr0x0197().Save( *pXclStrm ); }
+            delete pXclStrm;
+        }
+        delete pSvStrm;
+        bRet = sal_True;
+    }
+    return bRet;
 }
 
 void XclExpChangeTrack::Write()
@@ -1338,13 +1321,14 @@ void XclExpChangeTrack::Write()
     if( WriteUserNamesStream() )
     {
         String sStreamName( RTL_CONSTASCII_STRINGPARAM( pRevLogStreamName ) );
-        SvStream* pStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
-        DBG_ASSERT( pStrm, "XclExpChangeTrack::Write - no stream" );
-        if( !pStrm )
-            return;
-
-        aRecList.Save( *pStrm );
-        delete pStrm;
+        SvStorageStreamRef xSvStrm = pExcRoot->pRootStorage->OpenStream( sStreamName, STREAM_READWRITE | STREAM_TRUNC );
+        DBG_ASSERT( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
+        if( xSvStrm.Is() )
+        {
+            XclExpStream aXclStrm( *xSvStrm, EXC_MAXRECLEN_BIFF8 + 8 );
+            aRecList.Save( aXclStrm );
+            xSvStrm->Commit();
+        }
     }
 }
 

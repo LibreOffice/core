@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-02-23 09:56:48 $
+ *  last change: $Author: dr $ $Date: 2001-02-26 06:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
 #endif
+#ifndef _SC_XCLEXPHELPER_HXX
+#include "XclExpHelper.hxx"
+#endif
 #ifndef _EXCDEFS_HXX
 #include "excdefs.hxx"
 #endif
@@ -103,6 +106,7 @@
 //------------------------------------------------------------------ Forwards -
 
 class SvStream;
+class XclExpStream;
 class Font;
 class List;
 class ScPatternAttr;
@@ -113,9 +117,7 @@ class ScEditCell;
 class SfxItemSet;
 class EditTextObject;
 class ScPageHFItem;
-class XclRawUnicodeString;
 
-//class ExcRecordList;
 class UsedAttrList;
 class ExcArray;
 class ExcArrays;
@@ -163,42 +165,20 @@ public:
 };
 
 
-
 //----------------------------------------------------------- class ExcRecord -
 
 class ExcRecord
 {
 protected:
-    static const UINT16     nIgnore;    // fuer Nichtdokumentiertes
-    virtual void            SaveCont( SvStream& );
-    virtual void            _Save( SvStream& );
-                            // fuer ExcRecord-Daten: ACHTUNG: NICHT UEBERLADEN
-                            // ... ausser es werden nNumber und nLen SELBST geschrieben!
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
     virtual                 ~ExcRecord();
-    virtual UINT16          GetNum( void ) const = 0;
-    virtual UINT16          GetLen( void ) const = 0;
-    virtual void            Save( SvStream& );
-};
 
+    virtual void            Save( XclExpStream& rStrm );
 
-class ExcRecordList : protected List, public ExcRecord
-{
-private:
-protected:
-public:
-    virtual                 ~ExcRecordList();
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
-    virtual void            Save( SvStream& );
-
-    inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
-    inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
-
-    inline void             Append( ExcRecord* pNew )   { List::Insert( pNew, LIST_APPEND ); }
-    inline const ExcRecord* Get( UINT32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
-
-    List::Count;
+    virtual UINT16          GetNum() const = 0;
+    virtual ULONG           GetLen() const = 0;
 };
 
 
@@ -207,12 +187,32 @@ public:
 class ExcEmptyRec : public ExcRecord
 {
 private:
-    virtual void            _Save( SvStream& rStrm );
 protected:
 public:
-    virtual void            Save( SvStream& rStrm );
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
+    virtual UINT16          GetNum() const;
+    virtual ULONG           GetLen() const;
+};
+
+
+//------------------------------------------------------- class ExcRecordList -
+
+class ExcRecordList : protected List, public ExcEmptyRec
+{
+private:
+protected:
+public:
+    virtual                 ~ExcRecordList();
+
+                            List::Count;
+
+    inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
+    inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
+
+    inline void             Append( ExcRecord* pNew )   { if( pNew ) List::Insert( pNew, LIST_APPEND ); }
+    inline const ExcRecord* Get( UINT32 nNum ) const    { return ( ExcRecord* ) List::GetObject( nNum ); }
+
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
@@ -222,9 +222,30 @@ class ExcDummyRec : public ExcRecord
 {
 protected:
 public:
-    void                    Save( SvStream& );
-    virtual UINT16          GetNum( void ) const;
-    virtual const BYTE*     GetData( void ) const = 0;
+    virtual void            Save( XclExpStream& rStrm );
+    virtual UINT16          GetNum() const;
+    virtual const BYTE*     GetData() const = 0;    // byte data must contain header and body
+};
+
+
+//------------------------------------------------------- class ExcBoolRecord -
+// stores BOOL as 16bit val ( 0x0000 | 0x0001 )
+
+class ExcBoolRecord : public ExcRecord
+{
+private:
+    virtual void            SaveCont( XclExpStream& rStrm );
+
+protected:
+    BOOL                    bVal;
+
+    inline                  ExcBoolRecord() : bVal( FALSE ) {}
+
+public:
+    inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
+                            ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
+
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -243,85 +264,18 @@ public:
 };
 
 
-//------------------------------------------------------------- class ExcCell -
-
-class ExcRKMulRK;
-
-class ExcCell : public ExcRecord
-{
-friend ExcRKMulRK;
-protected:
-    ScAddress               aPos;
-    UINT16                  nXF;
-    static UsedAttrList*    pXFRecs;        // um zu Attributen zu kommen
-    static UINT32           nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
-    static ScProgress*      pPrgrsBar;
-#ifdef DBG_UTIL
-    friend class ExcDocument;
-    static INT32            _nRefCount;
-#endif
-    // ---------------------------------------------------------------
-    void                    SaveCont( SvStream& );
-    virtual void            SaveDiff( SvStream& );
-                            ExcCell( const ScAddress aPos, const ScPatternAttr* pAttr,
-                                    const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                    BOOL bForceAltNumForm = FALSE );
-public:
-    virtual                 ~ExcCell();
-    void                    SetXF( UINT16 nNew )    { nXF = nNew; }
-    static void             SetXFRecs( UsedAttrList* pXFRecs );
-    static UsedAttrList*    GetXFRecs() { return pXFRecs; }
-    inline static void      ResetCellCount( void );
-    inline static void      IncCellCount( void );
-    inline static UINT32    GetCellCount( void );
-    inline static void      SetPrgrsBar( ScProgress& );
-    inline static void      ClearPrgrsBar( void );
-};
-
-
-inline void ExcCell::ResetCellCount( void )
-{
-    nCellCount = 0;
-}
-
-
-inline void ExcCell::IncCellCount( void )
-{
-    nCellCount++;
-}
-
-
-inline UINT32 ExcCell::GetCellCount( void )
-{
-    return nCellCount;
-}
-
-
-inline void ExcCell::SetPrgrsBar( ScProgress& rNewBar )
-{
-    ResetCellCount();       // logisch... oder?
-    pPrgrsBar = &rNewBar;
-}
-
-
-inline void ExcCell::ClearPrgrsBar( void )
-{
-    pPrgrsBar = NULL;
-}
-
-
 //-------------------------------------------------------------- class ExcBof -
 // Header Record fuer WORKSHEETS
 
 class ExcBof : public ExcBof_Base
 {
 private:
-    void                    SaveCont( SvStream& );
+    virtual void            SaveCont( XclExpStream& rStrm );
 public:
                             ExcBof( void );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -331,24 +285,12 @@ public:
 class ExcBofW : public ExcBof_Base
 {
 private:
-    void                    SaveCont( SvStream& );
+    virtual void            SaveCont( XclExpStream& rStrm );
 public:
                             ExcBofW( void );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
-};
-
-
-//----------------------------------------------------- class ExcFngroupcount -
-
-class ExcFngroupcount : public ExcRecord
-{
-private:
-    void                    SaveCont( SvStream& );
-public:
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -359,58 +301,69 @@ class ExcEof : public ExcRecord
 private:
 public:
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
+};
+
+
+//----------------------------------------------------- class ExcFngroupcount -
+
+class ExcFngroupcount : public ExcRecord
+{
+private:
+    virtual void            SaveCont( XclExpStream& rStrm );
+public:
+    virtual UINT16          GetNum( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
 //--------------------------------------------------------- class ExcDummy_00 -
-// von INTERFACEHDR bis FNGROUPCOUNT (siehe excrecds.cxx)
+// INTERFACEHDR to FNGROUPCOUNT (see excrecds.cxx)
 
 class ExcDummy_00 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
 
 //-------------------------------------------------------- class ExcDummy_04x -
-// von WINDOWPROTECT bis BOOKBOOL (siehe excrecds.cxx), 1904 ausgespart
+// WINDOWPROTECT to BOOKBOOL (see excrecds.cxx), no 1904
 
 class ExcDummy_040 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
+
 
 
 class ExcDummy_041 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
 
-class Exc1904 : public ExcRecord
+//------------------------------------------------------------- class Exc1904 -
+
+class Exc1904 : public ExcBoolRecord
 {
-private:
-    BOOL                    b1904;
-    virtual void            SaveCont( SvStream& );
 public:
                             Exc1904( ScDocument& rDoc );
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -433,16 +386,18 @@ private:
     BOOL                    bIgnoreCol;
     UINT32                  nSign;      // quick ==
     BiffTyp                 eBiff;
+    CharSet                 eCharSet;
     static ExcPalette2*     pPalette2;
 #ifdef DBG_UTIL
     static UINT16           nObjCnt;
 #endif
-    // ---------------------------------------------------------------
-    virtual void            SaveCont( SvStream& rStrm );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
-                            ExcFont( BiffTyp eBiff );
-                            ExcFont( Font* pFont, BiffTyp eBiff );
-                            ~ExcFont();
+                            ExcFont( RootData& rRootData );
+                            ExcFont( Font* pFont, RootData& rRootData );
+    virtual                 ~ExcFont();
 
     BOOL                    operator==( const ExcFont& rRef ) const;
     inline BOOL             operator!=( const ExcFont& rRef ) const
@@ -471,9 +426,8 @@ public:
     static UINT8            GetCharSet( const rtl_TextEncoding eCharset );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
-
 
 
 //--------------------------------------------------------- class ExcDummy_01 -
@@ -483,9 +437,9 @@ class ExcDummy_01: public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -497,9 +451,9 @@ class ExcDummy_Fm : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -511,9 +465,9 @@ class ExcDummy_XF : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -525,9 +479,9 @@ class ExcDummy_Style : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -537,8 +491,8 @@ public:
 class ExcBundlesheetBase : public ExcRecord
 {
 protected:
-    UINT32                  nStrPos;
-    UINT32                  nOwnPos;    // Position NACH # und Len
+    ULONG                   nStrPos;
+    ULONG                   nOwnPos;    // Position NACH # und Len
     UINT16                  nGrbit;
 
                             ExcBundlesheetBase();
@@ -546,11 +500,12 @@ protected:
 public:
                             ExcBundlesheetBase( RootData& rRootData, UINT16 nTab );
 
-    inline void             SetStreamPos( UINT32 nNewStrPos ) { nStrPos = nNewStrPos; }
-    void                    UpdateStreamPos( SvStream& rOut );
+    inline void             SetStreamPos( ULONG nNewStrPos ) { nStrPos = nNewStrPos; }
+    void                    UpdateStreamPos( XclExpStream& rStrm );
 
     virtual UINT16          GetNum() const;
 };
+
 
 
 class ExcBundlesheet : public ExcBundlesheetBase
@@ -558,46 +513,97 @@ class ExcBundlesheet : public ExcBundlesheetBase
 private:
     ByteString              aName;
 
-    void                    SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
                             ExcBundlesheet( RootData& rRootData, UINT16 nTab );
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-
-
 //--------------------------------------------------------- class ExcDummy_02 -
-// in Tabelle: von CALCMODE bis SETUP
+// sheet dummies: CALCMODE to SETUP
 
 class ExcDummy_02 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
 
 //------------------------------------------------------------- class ExcNote -
 
-class ExcNote : public ExcRecord
+class ExcNote : public ExcEmptyRec
 {
 private:
     ByteString*             pText;
     ScAddress               aPos;
     UINT16                  nTextLen;
-    void                    SaveCont( SvStream& );
+
 public:
                             ExcNote( const ScAddress, const String& rText, RootData& );
     virtual                 ~ExcNote();
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
 };
+
+
+//------------------------------------------------------------- class ExcCell -
+
+class ExcRKMulRK;
+
+class ExcCell : public ExcRecord
+{
+friend ExcRKMulRK;
+protected:
+    ScAddress               aPos;
+    UINT16                  nXF;
+    static UsedAttrList*    pXFRecs;        // um zu Attributen zu kommen
+    static UINT32           nCellCount;     // zaehlt DOPPELT: im Ctor und SaveCont
+    static ScProgress*      pPrgrsBar;
+#ifdef DBG_UTIL
+    friend class ExcDocument;
+    static INT32            _nRefCount;
+#endif
+
+                            ExcCell( const ScAddress aPos, const ScPatternAttr* pAttr,
+                                    const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
+                                    BOOL bForceAltNumForm = FALSE );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+    virtual void            SaveDiff( XclExpStream& rStrm );
+    virtual ULONG           GetDiffLen() const = 0;
+
+public:
+    virtual                 ~ExcCell();
+
+    inline void             SetXF( UINT16 nNew )    { nXF = nNew; }
+
+    virtual ULONG           GetLen() const;
+
+    inline static void      SetXFRecs( UsedAttrList* pXFRecs );
+    inline static UsedAttrList* GetXFRecs()         { return pXFRecs; }
+    inline static void      ResetCellCount()        { nCellCount = 0; }
+    inline static void      IncCellCount()          { nCellCount++; }
+    inline static UINT32    GetCellCount()          { return nCellCount; }
+    inline static void      SetPrgrsBar( ScProgress& rNewBar );
+    inline static void      ClearPrgrsBar()         { pPrgrsBar = NULL; }
+};
+
+inline void ExcCell::SetXFRecs( UsedAttrList *pNewXFRecs )
+{
+    pXFRecs = pNewXFRecs;
+}
+
+inline void ExcCell::SetPrgrsBar( ScProgress& rNewBar )
+{
+    ResetCellCount();       // logisch... oder?
+    pPrgrsBar = &rNewBar;
+}
 
 
 //----------------------------------------------------------- class ExcNumber -
@@ -606,13 +612,14 @@ class ExcNumber : public ExcCell
 {
 private:
     double                  fVal;
-    //----------------------------------------------------------------
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcNumber( const ScAddress, const ScPatternAttr*, const double& rVal );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -623,13 +630,14 @@ class ExcBoolerr : public ExcCell
 private:
     UINT8                   nVal;
     UINT8                   bError;
-    //----------------------------------------------------------------
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    void                    SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcBoolerr( const ScAddress, const ScPatternAttr*, UINT8 nVal, BOOL bIsError );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -638,42 +646,32 @@ public:
 class ExcRKMulRK : private List, public ExcRecord
 {
 private:
-    ScAddress               aPos;
     struct CONT
-        {
+    {
         UINT32              nVal;
         UINT16              nXF;
-        };
+    };
+
+    ScAddress               aPos;
+
 protected:
-    virtual void            SaveCont( SvStream& );
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcRKMulRK( const ScAddress, const ScPatternAttr*, const INT32 nVal );
     virtual                 ~ExcRKMulRK();
 
+                            // returns new RK or NULL if an old RK was extendable
     ExcRKMulRK*             Extend( const ScAddress rPos,
                                 const ScPatternAttr *pAttr,
                                 const INT32 nVal );
-                                // passt neuer RK an alten 'ran, so ist return = NULL,
-                                // ansonsten wird neuer RK zurueckgeliefert
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 
-    inline BOOL             IsRK( void ) const;
-    inline BOOL             IsMulRK( void ) const;
+    inline BOOL             IsRK( void ) const      { return List::Count() == 1; }
+    inline BOOL             IsMulRK( void ) const   { return List::Count() > 1; }
 };
-
-
-inline BOOL ExcRKMulRK::IsRK( void ) const
-{
-    return List::Count() == 1;
-}
-
-
-inline BOOL ExcRKMulRK::IsMulRK( void ) const
-{
-    return List::Count() > 1;
-}
 
 
 //------------------------------------------------------------ class ExcLabel -
@@ -681,24 +679,23 @@ inline BOOL ExcRKMulRK::IsMulRK( void ) const
 class ExcLabel : public ExcCell
 {
 private:
-    ByteString*             pText;
+    ByteString              aText;
     UINT16                  nTextLen;
-    //----------------------------------------------------------------
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcLabel( const ScAddress, const ScPatternAttr*, const String& rText, RootData& );
     virtual                 ~ExcLabel();
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
 //---------------------------------------------------------- class ExcRichStr
 
-class XclContinue;
-
-// Helferklasse fuer ExcRString und ExcLabel8/XclRichString
+// helper class for ExcRString and ExcLabel8/XclExpRichString
 class ExcRichStr
 {
 private:
@@ -712,25 +709,29 @@ public:
                                 const ScEditCell&       rEdCell,
                                 RootData&               rRoot,
                                 xub_StrLen              nMaxChars );
+    inline                  ExcRichStr( const ExcRichStr& rCopy ) :
+                                aForms( rCopy.aForms ), eBiff( rCopy.eBiff ) {}
+
                             ~ExcRichStr();
 
     inline  UINT16          GetFormCount() const;
 
                             // number of bytes to be saved
-    inline  UINT32          GetByteCount() const;
+    inline  ULONG           GetByteCount() const;
 
                             // write list of forms
-    void                    Write( XclContinue& rCont );
+    void                    Write( SvStream& rStrm );
+    void                    Write( XclExpStream& rStrm );
 };
 
 
 inline UINT16 ExcRichStr::GetFormCount() const
 {
-    return (UINT16) Min( aForms.Count() / 2, (eBiff < Biff8 ? UINT32(0xff) : UINT32(0xffff)) );
+    return (UINT16) Min( aForms.Count() / 2, (eBiff < Biff8 ? ULONG(0xFF) : ULONG(0xFFFF)) );
 }
 
 
-inline UINT32 ExcRichStr::GetByteCount() const
+inline ULONG ExcRichStr::GetByteCount() const
 {
     return (eBiff < Biff8 ? 2 : 4) * GetFormCount();
 }
@@ -744,8 +745,10 @@ private:
     String                  aText;
     ExcRichStr*             pRichStr;
     UINT16                  nTextLen;
-    //----------------------------------------------------------------
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcRString(
                                 RootData*               pRootData,
@@ -755,7 +758,6 @@ public:
     virtual                 ~ExcRString();
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -767,8 +769,10 @@ private:
     sal_Char*               pData;
     UINT16                  nFormLen;
     BOOL                    bShrdFmla;
-    //----------------------------------------------------------------
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcFormula( RootData *pRD,
                                 const ScAddress rPos,
@@ -787,7 +791,6 @@ public:
     void                    SetTableOp( USHORT nCol, USHORT nRow ); // for TableOp export
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -796,24 +799,27 @@ public:
 class ExcBlankMulblank : public ExcCell, private List
 {
 private:
+    ULONG                   nLen;
     UINT16                  nLastCol;
     BOOL                    bMulBlank;
-    UINT16                  nLen;
 
     inline void*            MakeEntry( const UINT16 nXF, const UINT16 nAnz );
     inline UINT16           GetXF( const void* );
     inline UINT16           GetAnz( const void* );
-    void                    SaveDiff( SvStream& );// statt SaveCont()
+
+    virtual void            SaveDiff( XclExpStream& rStrm );    // instead of SaveCont()
+    virtual ULONG           GetDiffLen( void ) const;
+
 public:
                             ExcBlankMulblank(
                                 const ScAddress rPos,
                                 const ScPatternAttr* pFirstAttr,
                                 UINT16 nFirstAnz );
+
     void                    Add( const ScPatternAttr* pAttr, const UINT16 nAnz );
     inline UINT16           GetLastCol( void ) const;
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
 };
 
 
@@ -841,7 +847,7 @@ inline UINT16 ExcBlankMulblank::GetLastCol( void ) const
 }
 
 
-
+//---------------------------------------------------- class ExcNameListEntry -
 
 class ExcNameListEntry : public ExcRecord
 {
@@ -851,8 +857,6 @@ public:
     virtual                 ~ExcNameListEntry();
     virtual UINT16          GetNum( void ) const;
 };
-
-
 
 
 //------------------------------------------------------------- class ExcName -
@@ -868,65 +872,55 @@ private:
     BOOL                    bBuiltIn;
     BOOL                    bDummy;
     BiffTyp                 eBiff;
-    //----------------------------------------------------------------
+
     void                    Init( BOOL bHid = FALSE, BOOL bBIn = FALSE );
     void                    BuildFormula( const ScRange& rRange );
-    void                    SaveCont( SvStream& );
+
+    void                    SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcName( RootData* pRD, ScRangeData* pRange );
                             ExcName( RootData* pRD, ScDBData* pArea );
                             ExcName( RootData* pRD, const ScRange& rRange,
                                     UINT8 nBuiltIn, BOOL bHid = FALSE );
-                            ~ExcName();
+    virtual                 ~ExcName();
 
-//  virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
-    virtual void            Save( SvStream& );
+    virtual void            Save( XclExpStream& rStrm );
+    virtual ULONG           GetLen( void ) const;
 
-    inline BOOL             IsDummy( void ) const;
+    inline BOOL             IsDummy( void ) const { return bDummy; }
 };
-
-
-inline BOOL ExcName::IsDummy( void ) const
-{
-    return bDummy;
-}
-
-
 
 
 //--------------------------------------------------------- class ExcNameList -
 
-class ExcNameList : public ExcRecord, private List
+class ExcNameList : public ExcEmptyRec, private List
 {
 private:
-    inline ExcNameListEntry*    _First()    { return (ExcNameListEntry*) List::First(); }
-    inline ExcNameListEntry*    _Next()     { return (ExcNameListEntry*) List::Next(); }
+    inline ExcNameListEntry* _First()   { return (ExcNameListEntry*) List::First(); }
+    inline ExcNameListEntry* _Next()    { return (ExcNameListEntry*) List::Next(); }
 
 protected:
-    virtual void            _Save( SvStream& rStrm );
-    virtual void            SaveCont( SvStream& rStrm );
 public:
     virtual                 ~ExcNameList();
 
     inline void             Append( ExcNameListEntry* pName )
                                 { List::Insert( pName, LIST_APPEND ); }
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
 //--------------------------------------------------------- class ExcDummy_03 -
-// in Tabelle: SELECTION
+// sheet record: SELECTION
 
 class ExcDummy_03 : public ExcDummyRec
 {
 private:
     static const BYTE       pMyData[];
-    static const UINT16     nMyLen;
+    static const ULONG      nMyLen;
 public:
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
     virtual const BYTE*     GetData( void ) const;
 };
 
@@ -941,16 +935,19 @@ private:
     UINT16                  nColMic;
     UINT16                  nColMac;
     BiffTyp                 eBiff;
-    void                    SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcDimensions( BiffTyp );
                             ExcDimensions( UINT16 nFirstCol, UINT16 nFirstRow,
                                 UINT16 nLastCol, UINT16 nLastRow, BiffTyp );
+
     void                    SetLimits( UINT16 nFirstCol, UINT16 nFirstRow,
                                 UINT16 nLastCol, UINT16 nLastRow );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -985,14 +982,14 @@ private:
     UINT16                      nRowLevel;
     UINT16                      nColLevel;
 
-    virtual void                SaveCont( SvStream& rStrm );
+    virtual void                SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
                                 ExcEGuts( ScOutlineArray* pCol, ScOutlineArray* pRow );
 
     virtual UINT16              GetNum() const;
-    virtual UINT16              GetLen() const;
+    virtual ULONG               GetLen() const;
 };
 
 
@@ -1012,7 +1009,7 @@ private:
     void                    SetRange( UINT16 nFCol, UINT16 nLCol );
     void                    SetHeight( UINT16 nNewHeight, BOOL bUser );
 
-    void                    SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
@@ -1022,7 +1019,7 @@ public:
     inline BOOL             IsDefault();
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 inline BOOL ExcRow::IsDefault()
@@ -1031,24 +1028,23 @@ inline BOOL ExcRow::IsDefault()
 }
 
 
+//--------------------------------------------------------- class ExcRowBlock -
 
-class ExcRowBlock : public ExcRecord
+class ExcRowBlock : public ExcEmptyRec
 {
 private:
-    ExcRow**                ppRows; // 32 Rows en Block
+    ExcRow**                ppRows; // 32 rows per block
     UINT16                  nNext;
 
 protected:
 public:
                             ExcRowBlock();
-                            ~ExcRowBlock();
+    virtual                 ~ExcRowBlock();
 
-    virtual void            Save( SvStream& rOut );
-
+                            // returns new block or NULL if last block not full
     ExcRowBlock*            Append( ExcRow* pNewRow );
-                                // liefert neuen Block, wenn alter voll, ansonsten NULL
-    virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
@@ -1058,12 +1054,14 @@ class ExcDefcolwidth : public ExcRecord
 {
 private:
     UINT16                  nWidth;
-    void                    SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcDefcolwidth( UINT16 nDefColWidth );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -1077,19 +1075,18 @@ private:
     UINT16                  nColWidth;
     UINT16                  nXF;
     UINT16                  nOptions;
-    //----------------------------------------------------------------
-    void                    SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcColinfo( UINT16 nCol, UINT16 nTab, UINT16 nXF, RootData&, ExcEOutline& rOutline );
     void                    SetWidth( UINT16 nWidth, double fColScale );
 
-    BOOL                    Expand( ExcColinfo* pExp );
-                                // wenn sich this mit pExp erweitern laesst, wird pExp
-                                // GELOESCHT, return = TRUE!, ansonsten muss pExp als
-                                // Neuer eingefuegt werden wenn return = FALSE
+                            // if expandable, delete rpExp and set to NULL
+    void                    Expand( ExcColinfo*& rpExp );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
@@ -1137,8 +1134,9 @@ protected:
 #ifdef DBG_UTIL
     static UINT16           nObjCnt;
 #endif
-    //----------------------------------------------------------------
-    virtual void            SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcXf( UINT16 nFont, UINT16 nForm, const ScPatternAttr*, BOOL& rbLineBreak,
                                     BOOL bStyle = FALSE );
@@ -1148,10 +1146,10 @@ public:
     virtual                 ~ExcXf();
 #endif
 
-    static void             SetPalette( ExcPalette2& rPalette2 );
-
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
+
+    static void             SetPalette( ExcPalette2& rPalette2 );
 
     static void             ScToExcBorderLine( const SvxBorderLine*, UINT32& rIcvSer, UINT16& rDg );
 };
@@ -1174,14 +1172,15 @@ private:
     BiffTyp                     eBiff;
     static SvNumberFormatter*   pFormatter;
     static UINT32               nObjCnt;
-    //----------------------------------------------------------------
-    void                    SaveCont( SvStream& );
-public:
-                            ExcFormat( RootData*, UINT32 nScIndex );
-    virtual                 ~ExcFormat();
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void                SaveCont( XclExpStream& rStrm );
+
+public:
+                                ExcFormat( RootData*, UINT32 nScIndex );
+    virtual                     ~ExcFormat();
+
+    virtual UINT16              GetNum( void ) const;
+    virtual ULONG               GetLen( void ) const;
 };
 
 
@@ -1212,7 +1211,7 @@ public:
     inline void             AddWeighting( const ExcPal2Entry& rEntry );
     void                    AddColor( const ExcPal2Entry& rEntry );
 
-    void                    Save( SvStream& rStrm );
+    void                    Save( XclExpStream& rStrm );
 };
 
 inline ExcPal2Entry::ExcPal2Entry( const Color& rCol, UINT32 nSer ) :
@@ -1260,9 +1259,8 @@ private:
     UINT32                  GetNearestColor( const Color& rCol, UINT32 nIgnore ) const;
     UINT32                  GetNearestColor( UINT32 nIndex ) const;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
-protected:
 public:
                             ExcPalette2( ColorBuffer& rCB );
     virtual                 ~ExcPalette2();
@@ -1277,7 +1275,7 @@ public:
     ColorData               GetRGBValue( UINT16 nIndex ) const;
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 inline ExcPal2Entry* ExcPalette2::_Get( UINT32 nIndex ) const
@@ -1292,62 +1290,62 @@ inline ExcPal2Entry* ExcPalette2::_Get( UINT32 nIndex ) const
 class ExcExterncount : public ExcRecord, ExcRoot
 {
 private:
-    //----------------------------------------------------------------
-    void                    SaveCont( SvStream& );
     BOOL                    bTable;
+
+    virtual void            SaveCont( XclExpStream& rStrm );
 public:
                             ExcExterncount( RootData*, const BOOL bTable );
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
 //------------------------------------------------------ class ExcExternsheet -
 
-class ExcExternsheet : public ExcRecord, ExcRoot
+class ExcExternsheet : public ExcRecord, public ExcRoot
 {
 private:
     String                  aTabName;
-    //----------------------------------------------------------------
-    void                    SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
 public:
                             ExcExternsheet( RootData* pRD, const UINT16 nTabNum );
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
 //-------------------------------------------------- class ExcExternsheetList -
 
-class ExcExternsheetList : public ExcRecord, protected List
+class ExcExternsheetList : public ExcEmptyRec, protected List
 {
 private:
+    inline ExcExternsheet*  _First()    { return (ExcExternsheet*) List::First(); }
+    inline ExcExternsheet*  _Next()     { return (ExcExternsheet*) List::Next(); }
+
 protected:
-    virtual void            _Save( SvStream& );
 public:
     virtual                 ~ExcExternsheetList();
     inline void             Add( ExcExternsheet* pNew ) { List::Insert( pNew, LIST_APPEND ); }
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
 //-------------------------------------------------------- class ExcExternDup -
 
-class ExcExternDup : public ExcRecord
+class ExcExternDup : public ExcEmptyRec
 {
 private:
     ExcExterncount&         rExtCnt;
     ExcExternsheetList&     rExtSheetList;
+
 protected:
-    virtual void            _Save( SvStream& );
 public:
                             ExcExternDup( ExcExterncount&, ExcExternsheetList& );
                             ExcExternDup( const ExcExternDup& );
 
-    virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
@@ -1357,74 +1355,71 @@ class ExcWindow2 : public ExcRecord
 {
 private:
     UINT16                  nTable;
-    //----------------------------------------------------------------
-    void                    SaveCont( SvStream& );
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcWindow2( UINT16 nTable );
     inline  UINT16          GetTable() const    { return nTable; }
+
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
 //------------------------------------------------------------ class UsedList -
 
-class UsedList : public List, public ExcRecord
+class UsedList : public List, public ExcEmptyRec
 {
 private:
-    virtual void            SaveCont( SvStream& );
 protected:
-    void                    _Save( SvStream& );
-                            // musste ueberladen werden, da sonst nicht
-                            //  ohne Inhalt geschrieben werden kann!
     UINT16                  nBaseIndex;
-    UINT16                  nLen;
+
 public:
-                            UsedList( void );
-    void                    SetBaseIndex( UINT16 nNewVal );
-                            // um auf richtigen Excel-Index 'trimmen'
-                            //  zu koennen
-    virtual UINT16          GetLen( void ) const;
+    inline                  UsedList() {}
+
+    inline void             SetBaseIndex( UINT16 nNewVal ) { nBaseIndex = nNewVal; }
+
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
 //-------------------------------------------------------- class UsedFontList -
+// a list of FONT records
 
-class UsedFontList : public UsedList
+class UsedFontList : public UsedList, public ExcRoot
 {
 private:
-    BiffTyp                 eBiff;
-
     inline ExcFont*         _First()    { return (ExcFont*) List::First(); }
     inline ExcFont*         _Next()     { return (ExcFont*) List::Next(); }
 
 public:
-                            UsedFontList( BiffTyp eBiff );
+    inline                  UsedFontList( RootData& rRootData ) : ExcRoot( &rRootData ) {}
     virtual                 ~UsedFontList();
 
     BOOL                    Find( ExcFont* pExcFont, UINT16& rIndex );
-    UINT16                  Add( ExcFont* pExcFont );
+    UINT16                  Add( ExcFont* pExcFont );   // add and forget
     UINT16                  Add( Font* pFont );
-
-    virtual UINT16          GetNum( void ) const;
 };
 
 
 //-------------------------------------------------------- class UsedFormList -
+// a list of FORMAT records
 
 class UsedFormList : public UsedList
 {
 private:
-public:
-                            ~UsedFormList();
-    UINT16                  Add( ExcFormat* pFormat );
+    inline ExcFormat*       _First()    { return (ExcFormat*) List::First(); }
+    inline ExcFormat*       _Next()     { return (ExcFormat*) List::Next(); }
 
-    virtual UINT16          GetNum( void ) const;
+public:
+    virtual                 ~UsedFormList();
+    UINT16                  Add( ExcFormat* pFormat );  // add and forget
 };
 
 
 //-------------------------------------------------------- class UsedAttrList -
-// entspricht einer Ansammlung XF-Records
+// a list of EXTRY structs
 
 class UsedAttrList : public UsedList, ExcRoot
 {
@@ -1436,7 +1431,8 @@ private:
         BOOL                bLineBreak;
         ULONG               nAltNumForm;
 
-        inline              ENTRY( void ) : nAltNumForm( NUMBERFORMAT_ENTRY_NOT_FOUND ) {}
+        inline              ENTRY() : nAltNumForm( NUMBERFORMAT_ENTRY_NOT_FOUND ), pXfRec( NULL ) {}
+        inline              ~ENTRY() { if( pXfRec ) delete pXfRec; }
 
         inline BOOL         Equal( const ScPatternAttr* p, const ULONG n ) const
                             {
@@ -1444,15 +1440,18 @@ private:
                             }
     };
 
+    inline ENTRY*           _First()    { return (ENTRY*) List::First(); }
+    inline ENTRY*           _Next()     { return (ENTRY*) List::Next(); }
+
     ExcPalette2&            rPalette2;
     UsedFontList&           rFntLst;
     UsedFormList&           rFrmLst;
-    void                    SaveCont( SvStream& );  // ... ueberladen, da List
-                                // nicht direkt ExcRecord-Pointer enthaelt!
+
     void                    AddNewXF( const ScPatternAttr* pAttr,
                                 const BOOL bStyle, const BOOL bExplLineBreak,
                                 const ULONG nAltNumForm = NUMBERFORMAT_ENTRY_NOT_FOUND,
                                 BOOL bForceAltNumForm = FALSE );
+
 public:
                             UsedAttrList( RootData* pRD, ExcPalette2&,
                                 UsedFontList&, UsedFormList& );
@@ -1462,11 +1461,11 @@ public:
                                     BOOL bForceAltNumForm = FALSE );
     UINT16                  FindWithLineBreak( const ScPatternAttr* pSearch );
 
-    virtual UINT16          GetNum( void ) const;
+    virtual void            Save( XclExpStream& rStrm );    // overloaded to get ExcRecord from ENTRY
 };
 
 
-
+//------------------------------------------------------------ class ExcSetup -
 
 class ExcSetup : public ExcRecord
 {
@@ -1476,33 +1475,39 @@ private:
     UINT16                  nPageStart;
     UINT16                  nGrbit;
 
-    void                    SaveCont( SvStream& );
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcSetup( RootData* );
 
     virtual UINT16          GetNum( void ) const;
-    virtual UINT16          GetLen( void ) const;
+    virtual ULONG           GetLen( void ) const;
 };
 
 
-
+//------------------- class ExcHeaderFooter, class ExcHeader, class ExcFooter -
 
 class ExcHeaderFooter : public ExcRecord, ExcRoot
 {
 protected:
     String                  aFormatString;
-    UINT16                  nLen;
+    ULONG                   nLen;
     BOOL                    bUnicode;
-    virtual void            _Save( SvStream& );
+
     String                  GetFormatString( USHORT nWhich );
     String                  GetFormatString( const ScPageHFItem& );
     String                  GetFormatString( const EditTextObject& );
+
+    void                    CalcLen();
+
+    virtual void            SaveCont( XclExpStream& rStrm );
+
 public:
                             ExcHeaderFooter( RootData*, const BOOL bUnicode );
 
-    virtual UINT16          GetLen( void ) const;
+    virtual void            Save( XclExpStream& rStrm );
+    virtual ULONG           GetLen( void ) const;
 };
-
 
 
 
@@ -1517,7 +1522,6 @@ public:
 
 
 
-
 class ExcFooter : public ExcHeaderFooter
 {
 protected:
@@ -1528,23 +1532,7 @@ public:
 };
 
 
-
-
-class ExcBoolRecord : public ExcRecord
-{
-    // stores BOOL as 16bit val ( 0x0000 | 0x0001 )
-private:
-    void                    SaveCont( SvStream& );
-    BOOL                    bVal;
-public:
-    inline                  ExcBoolRecord( const BOOL bDefault ) : bVal( bDefault ) {}
-                            ExcBoolRecord( SfxItemSet*, USHORT nWhich, BOOL bDefault );
-
-    virtual UINT16          GetLen( void ) const;
-};
-
-
-
+//----------------------------------------------------- class ExcPrintheaders -
 
 class ExcPrintheaders : public ExcBoolRecord
 {
@@ -1556,7 +1544,7 @@ public:
 };
 
 
-
+//--------------------------------------------------- class ExcPrintGridlines -
 
 class ExcPrintGridlines : public ExcBoolRecord
 {
@@ -1568,7 +1556,7 @@ public:
 };
 
 
-
+//---------------------------------------------------------- class ExcHcenter -
 
 class ExcHcenter : public ExcBoolRecord
 {
@@ -1580,7 +1568,7 @@ public:
 };
 
 
-
+//---------------------------------------------------------- class ExcVcenter -
 
 class ExcVcenter : public ExcBoolRecord
 {
@@ -1592,19 +1580,15 @@ public:
 };
 
 
-
-//___________________________________________________________________
-// AutoFilter
+//---------------------------------------------------------------- AutoFilter -
+// classes: ExcFilterMode, ExcAutoFilterInfo, ExcFilterCondition,
+//          ExcAutoFilter, ExcAutoFilterRecs
 
 class ExcFilterMode : public ExcRecord
 {
-private:
-    virtual void            SaveCont( SvStream& rStrm );
-
-protected:
 public:
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
@@ -1614,7 +1598,7 @@ class ExcAutoFilterInfo : public ExcRecord
 private:
     UINT16                  nCount;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
@@ -1622,7 +1606,7 @@ public:
     virtual                 ~ExcAutoFilterInfo();
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
@@ -1633,7 +1617,7 @@ private:
     UINT8                   nType;
     UINT8                   nOper;
     double                  fVal;
-    XclRawUnicodeString*    pText;
+    XclExpUniString*        pText;
 
 protected:
 public:
@@ -1642,12 +1626,12 @@ public:
 
     inline BOOL             IsEmpty() const     { return (nType == EXC_AFTYPE_NOTUSED); }
     inline BOOL             HasEqual() const    { return (nOper == EXC_AFOPER_EQUAL); }
-    UINT16                  GetTextBytes() const;
+    ULONG                   GetTextBytes() const;
 
     void                    SetCondition( UINT8 nTp, UINT8 nOp, double fV, String* pT );
 
-    void                    Save( SvStream& rStrm );
-    void                    SaveText( SvStream& rStrm );
+    void                    Save( XclExpStream& rStrm );
+    void                    SaveText( XclExpStream& rStrm );
 };
 
 
@@ -1663,7 +1647,7 @@ private:
                                 UINT8 nOp, double fVal, String* pText,
                                 BOOL bSimple = FALSE );
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
 public:
@@ -1676,7 +1660,7 @@ public:
     BOOL                    AddEntry( RootData& rRoot, const ScQueryEntry& rEntry );
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
@@ -1702,13 +1686,11 @@ public:
                             ExcAutoFilterRecs( RootData& rRoot, UINT16 nTab );
     virtual                 ~ExcAutoFilterRecs();
 
-    virtual void            Save( SvStream& rStrm );
+    virtual void            Save( XclExpStream& rStrm );
 };
 
 
-
-//___________________________________________________________________
-// Margins
+//----------------------------------------------------------- class ExcMargin -
 
 class ExcMargin : public ExcRecord
 {
@@ -1716,25 +1698,24 @@ private:
     UINT16                  nVal;
     UINT16                  nId;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 protected:
 public:
                             ExcMargin( long nMargin, IMPEXC_MARGINSIDE eSide );
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-//___________________________________________________________________
-// Page breaks
+//---------------------------------------------------- class XclExpPageBreaks -
 
 class XclExpPageBreaks : public ExcRecord
 {
 private:
     UINT16                  nRecNum;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 protected:
     UINT16List              aPageBreaks;
@@ -1745,13 +1726,13 @@ public:
                             XclExpPageBreaks( RootData& rRootData, UINT16 nScTab, ExcPBOrientation eOrient );
     virtual                 ~XclExpPageBreaks();
 
-    virtual void            Save( SvStream& rStrm );
+    virtual void            Save( XclExpStream& rStrm );
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-
+//------------------------ class ExcArray, class ExcArrays, class ExcShrdFmla -
 
 class ExcArray : public ExcRecord
 {
@@ -1766,7 +1747,7 @@ protected:
 
     void                    SetColRow( UINT8 nCol, UINT16 nRow, UINT32 nID = 0xFFFFFFFF );
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
                             ExcArray( const sal_Char* pData, UINT16 nLen, UINT8 nCol, UINT16 nRow );
 public:
@@ -1775,7 +1756,7 @@ public:
     virtual                 ~ExcArray();
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 
     BOOL                    AppendBy( const ExcArray& rExt );
                                 // TRUE, if rEXt is touching given range and extend range
@@ -1820,19 +1801,17 @@ private:
 //  sal_Char*               pData;
 //  UINT16                  nLen;
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 public:
                             ExcShrdFmla( const sal_Char* pData, UINT16 nLen, const ScRange& rPos );
     virtual                 ~ExcShrdFmla();
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 
-
-
-//___________________________________________________________________
+//--------------------------- class XclExpTableOp, class XclExpTableOpManager -
 // multiple operations aka table operations (record TABLE)
 
 // a multiple operations record
@@ -1857,7 +1836,7 @@ private:
 
     inline void             Append( ExcFormula* pFmla ) { List::Insert( pFmla, LIST_APPEND ); }
 
-    virtual void            SaveCont( SvStream& rStrm );
+    virtual void            SaveCont( XclExpStream& rStrm );
 
 public:
                             XclExpTableOp(
@@ -1888,10 +1867,10 @@ public:
                             // change #NA error values of formula recs to TableOp values if in table op range
     void                    UpdateCells();
 
-    virtual void            Save( SvStream& rStrm );
+    virtual void            Save( XclExpStream& rStrm );
 
     virtual UINT16          GetNum() const;
-    virtual UINT16          GetLen() const;
+    virtual ULONG           GetLen() const;
 };
 
 // stores pointers to ExcTableOp records - insert cells to existing or new ExcTableOp
