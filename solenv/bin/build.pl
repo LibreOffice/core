@@ -5,9 +5,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.126 $
+#   $Revision: 1.127 $
 #
-#   last change: $Author: vg $ $Date: 2004-11-15 12:16:18 $
+#   last change: $Author: vg $ $Date: 2004-11-22 14:30:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@
     if ($ENV{GUI} eq 'WNT') {
         eval { require Win32::Process; import Win32::Process; };
         $enable_multiprocessing = 0 if ($@);
-        $_4nt_exe = $ENV{ComSpec};#'c:\4nt401\4nt.exe'; # 4nt executable
     };
 
     ### for XML file format
@@ -103,7 +102,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.126 $ ';
+    $id_str = ' $Revision: 1.127 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -235,7 +234,7 @@
     print $new_line;
 
     &BuildAll();
-    &cancel_build if (scalar keys %broken_build);
+    cancel_build() if (scalar keys %broken_build);
     @TotenEltern = keys %dead_parents;
     if ($#TotenEltern != -1) {
         my ($DeadPrj);
@@ -1120,20 +1119,20 @@ sub cancel_build {
     my $log_string = 'FAILURE. Build is broken in modules: ';
     if ($BuildAllParents) {
         $modules_number -= scalar @broken_modules_names;
-        print STDERR "\n";
-        print STDERR scalar @broken_modules_names;
-        print STDERR " module(s): ";
+        print "\n";
+        print scalar @broken_modules_names;
+        print " module(s): ";
         foreach (@broken_modules_names) {
-            print STDERR "\n\t$_";
+            print "\n\t$_";
             $log_string .= " $_";
-            &RemoveFromDependencies($_, \%global_deps_hash);
+#            &RemoveFromDependencies($_, \%global_deps_hash);
         };
-        &finish_logging($log_string);
-        print STDERR "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
+        finish_logging($log_string);
+        print "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
         foreach (keys %broken_build) {
-            print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+            print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-        print STDERR "\nAttention: if you build and deliver the above module(s) you may prolongue your build from module " . &PickPrjToBuild(\%global_deps_hash) . "\n";
+        print "\nAttention: if you build and deliver the above module(s) you may prolongue your the build issuing command \"build --from @broken_modules_names\n";
     } else {
         &finish_logging($log_string . $CurrentPrj);
 #        if ($ENV{GUI} eq 'WNT') {
@@ -1142,13 +1141,13 @@ sub cancel_build {
                 sleep 1;
             }
             foreach (keys %broken_build) {
-                print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+                print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
             };
 #        } else {
 #            kill 9 => -$$;
 #        };
     };
-    print STDERR "\n";
+    print "\n";
     do_exit(1);
 };
 
@@ -1292,39 +1291,42 @@ sub build_multiprocessing {
     my @build_queue = ();        # array, containing queue of projects
                                 # to build
     do {
-        while ($Prj = &PickPrjToBuild(\%global_deps_hash)) {
+        while ($Prj = PickPrjToBuild(\%global_deps_hash)) {
             my $module_type = $modules_types{$Prj};
 
             if (($module_type eq 'lnk') || ($module_type eq 'img')) {
-                &print_announce($Prj);
-                &RemoveFromDependencies($Prj, \%global_deps_hash);
+                print_announce($Prj);
+                RemoveFromDependencies($Prj, \%global_deps_hash);
                 next;
             };
 
-            &mark_force_deliver($Prj, &CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP} && defined($log));
+            mark_force_deliver($Prj, CorrectPath($StandDir.$Prj)) if (defined $ENV{CWS_WORK_STAMP});
             push @build_queue, $Prj;
             $projects_deps_hash{$Prj} = {};
             &get_deps_hash($Prj, $projects_deps_hash{$Prj});
         };
-        sleep(1) if (!$Prj);
-        &build_actual_queue(\@build_queue);
-        if (scalar keys %broken_modules_hashes) {
-            do {
-                sleep(1);
-                handle_dead_children();
-                &build_actual_queue(\@build_queue);
-            } while (&children_number());
-            &cancel_build;
-        };
+        if (!$Prj) {
+            cancel_build() if (!scalar @build_queue);
+            sleep(1);
+        }
+        build_actual_queue(\@build_queue);
+#        if (scalar keys %broken_modules_hashes) {
+#            do {
+#                sleep(1);
+#                handle_dead_children();
+#                build_actual_queue(\@build_queue);
+#            } while (children_number());
+#            cancel_build();
+#        };
     } while (scalar (keys %global_deps_hash));
     # Let all children finish their work
-    &cancel_build if (scalar keys %broken_build);
-    &mp_success_exit;
+    cancel_build() if (scalar keys %broken_build);
+    mp_success_exit();
 };
 
 sub mp_success_exit {
-    print STDERR "\nMultiprocessing build is finished\n";
-    print STDERR "Maximum number of processes run: $maximal_processes\n";
+    print "\nMultiprocessing build is finished\n";
+    print "Maximum number of processes run: $maximal_processes\n";
     do_exit(0);
 };
 
@@ -1342,7 +1344,7 @@ sub build_actual_queue {
                 splice (@$build_queue, $i, 1);
                 next;
             };
-            &announce_module($Prj) if (!(defined $module_announced{$Prj}));
+            announce_module($Prj) if (!(defined $module_announced{$Prj}));
             $only_dependent = 0;
             $no_projects = 0;
             &BuildDependent($projects_deps_hash{$Prj});
@@ -1351,8 +1353,8 @@ sub build_actual_queue {
                 !defined $broken_modules_hashes{$projects_deps_hash{$Prj}})
             {
                 chdir(&CorrectPath($StandDir.$Prj));
-                system (&get_deliver_commando($Prj)) if (!$show && ($Prj ne $CurrentPrj));
-                &RemoveFromDependencies($Prj, \%global_deps_hash);
+                system (get_deliver_commando($Prj)) if (!$show && ($Prj ne $CurrentPrj));
+                RemoveFromDependencies($Prj, \%global_deps_hash);
                 splice (@$build_queue, $i, 1);
                 next;
             };
@@ -1705,21 +1707,6 @@ sub is_output_tree {
     return '';
 };
 
-#
-# Procedure generates a 4nt batch file in $tmp_dir
-#
-#sub generate_4nt_batch {
-#    my $batch_file = "$tmp_dir/dmake.bat";
-#    if (!open(DMAKE_BATCH, ">>$batch_file")) {
-#        print_error("Cannot generate batch file");
-#    };
-#    print DMAKE_BATCH "@" . $dmake . "\n";
-#    print DMAKE_BATCH "\@dmake\n";
-#    print DMAKE_BATCH "\@exit %?\n";
-#    close DMAKE_BATCH;
-#    return CorrectPath($batch_file);
-#};
-
 sub get_tmp_dir {
     my $tmp_dir;
     if( defined($ENV{TMP}) ) {
@@ -1816,6 +1803,7 @@ sub prepare_incompatible_build {
     };
     @modules_built = keys %$deps_hash;
     clear_delivered() if ($prepare);
+    my $old_output_tree = '';
     foreach $prj (sort keys %$deps_hash) {
         if ($prepare) {
             ensure_clear_module($prj);
@@ -1825,7 +1813,7 @@ sub prepare_incompatible_build {
             if ($modules_types{$prj} ne 'mod') {
                 $message = "$prj is not a complete module!";
             } elsif (-d &CorrectPath($StandDir.$prj.'/'. $ENV{INPATH})) {
-                $message = "$prj contains old output tree!";
+                $old_output_tree++;
             };
             &print_error("$message Prepare workspace with --prepare switch!") if ($message);
         };
@@ -1833,6 +1821,10 @@ sub prepare_incompatible_build {
     if ($build_from_opt) {
         $$deps_hash{$build_from_opt} = ();
         $build_from_opt = '';
+    };
+    if ($old_output_tree) {
+        print STDERR "\nAttention: Some module(s) contain old output tree(s)! If you are performing an incompatible build, please break the build with Ctrl+C and prepare the workspace with --prepare switch!\n\n";
+        sleep(10);
     };
     print "\nPreparation finished\n\n" and    do_exit(0) if ($prepare);
 };
