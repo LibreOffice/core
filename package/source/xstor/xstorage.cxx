@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:03:09 $
+ *  last change: $Author: mav $ $Date: 2004-11-29 11:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2563,6 +2563,7 @@ void SAL_CALL OStorage::renameElement( const ::rtl::OUString& aElementName, cons
             throw container::NoSuchElementException(); //???
 
         pElement->m_aName = aNewName;
+        m_pImpl->SetModifiedInternally( sal_True );
     }
     catch( embed::InvalidStorageException& )
     {
