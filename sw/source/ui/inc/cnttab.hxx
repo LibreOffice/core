@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 06:06:23 $
+ *  last change: $Author: os $ $Date: 2001-08-01 07:45:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,6 @@ struct SwIndexSections_Impl;
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
     Window                  aExampleContainerWIN;
-    Window                  aDummyContainerWIN;
     Window                  aExampleWIN;
     CheckBox                aShowExampleCB;
     SwTOXMgr*               pMgr;
