@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:28:44 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:10:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,7 +245,7 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
-    FASTBOOL SelectTableRowCol( const Point& rPt );
+    FASTBOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0 );
     // <--
     FASTBOOL SelectTableRow();
     FASTBOOL SelectTableCol();
