@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-30 11:14:45 $
+ *  last change: $Author: oj $ $Date: 2002-09-24 10:52:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -924,12 +924,29 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                     bListAction = sal_True;
                     static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->EnterListAction(String(),String());
 
-                    bError = saveField(aFieldName,pEntry,bListAction);
+                    USHORT nPos = m_pFieldCell->GetEntryPos(aFieldName);
+                    if ( nPos != COMBOBOX_ENTRY_NOTFOUND && aFieldName.GetTokenCount('.') > 1 )
+                    { // special case, we have a table field so we must cut the table name
+                        String sTableAlias = aFieldName.GetToken(0,'.');
+                        pEntry->SetAlias(sTableAlias);
+                        String sColumnName = aFieldName.GetToken(1,'.');
+                        Reference<XConnection> xConnection = pController->getConnection();
+                        if ( !xConnection.is() )
+                            return sal_False;
+                        Reference<XDatabaseMetaData> xMetaData = xConnection->getMetaData();
+                        bError = fillColumnRef(sColumnName,sTableAlias,xMetaData,pEntry,bListAction);
+                    }
+                    else
+                        bError = sal_True;
+
+                    if ( bError )
+                        bError = saveField(aFieldName,pEntry,bListAction);
                 }
                 if ( bError )
                 {
                     sNewValue = aFieldName;
                     static_cast<OQueryController*>(getDesignView()->getController())->getUndoMgr()->LeaveListAction();
+                    bListAction = sal_False;
                 }
                 else
                     sNewValue = pEntry->GetField();
