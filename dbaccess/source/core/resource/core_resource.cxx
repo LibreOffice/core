@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:18:46 $
+ *  last change: $Author: oj $ $Date: 2001-07-11 09:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ namespace dbaccess
         if (m_pImpl)
             return;
 
-        LanguageType nType = Application::GetAppInternational().GetLanguage();
+        LanguageType nType = Application::GetSettings().GetUILanguage();
 
         ByteString sFileName("dba");
         sFileName += ByteString::CreateFromInt32( (sal_Int32)SOLARUPD );
