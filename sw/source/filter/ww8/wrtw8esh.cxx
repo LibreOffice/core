@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:58:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,161 +538,40 @@ void SwWW8Writer::AppendFlyInFlys(WW8_CP& rCP, const SwFrmFmt& rFrmFmt,
     ASSERT(!pEscher, "der EscherStream wurde schon geschrieben!");
     if (pEscher)
         return ;
-    bool bExportAsTable = false;
-    USHORT nArrLen = 0, nLastFmt = 0;
-    ULONG nStart = 0, nEnd = 0;
-
-    if (RES_FLYFRMFMT == rFrmFmt.Which())
-    {
-        const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
-        ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
-        nStart = pNdIdx->GetIndex();
-        nEnd = pNdIdx->GetNode().EndOfSectionIndex();
-        nArrLen = pDoc->GetSpzFrmFmts()->Count();
-        for (nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt)
-        {
-            if (lcl_IsFlyInFlyHere(
-                (*pDoc->GetSpzFrmFmts())[nLastFmt], nStart, nEnd))
-            {
-                bExportAsTable = true;
-                break;
-            }
-        }
-    }
-
-    if (bExportAsTable)
-    {
-        SwTwips nTblOffset=0;
-        WW8Bytes aAt( 128, 128 );
-        USHORT nStdAtLen = StartTableFromFrmFmt(aAt,&rFrmFmt,nTblOffset);
-
-        static BYTE __READONLY_DATA aNullBytes[] = { 0, 0, 0, 0 };
-        BYTE nWWColMax = 1;
-
-        if( bWrtWW8 )
-            SwWW8Writer::InsUInt16( aAt, 0x3404 );
-        else
-            aAt.Insert( 186, aAt.Count() );
-        aAt.Insert( 1, aAt.Count() );
-
-        long nHeight=0;
-        const SwFmtFrmSize& rLSz = rFrmFmt.GetFrmSize();
-        if( ATT_VAR_SIZE != rLSz.GetSizeType() && rLSz.GetHeight() )
-            nHeight = ATT_MIN_SIZE == rLSz.GetSizeType()
-                ? rLSz.GetHeight() : -rLSz.GetHeight();
-
-        if( nHeight )
-        {
-            if( bWrtWW8 )
-                SwWW8Writer::InsUInt16( aAt, 0x9407 );
-            else
-                aAt.Insert( 189, aAt.Count() );
-            SwWW8Writer::InsUInt16( aAt, (USHORT)nHeight );
-        }
-
-        if( bWrtWW8 )
-            SwWW8Writer::InsUInt16( aAt, 0x3403 );
-        else
-            aAt.Insert( 185, aAt.Count() );
-        aAt.Insert( (BYTE)0, aAt.Count() );
-
-        const SwNodeIndex* pNodeIndex = rFrmFmt.GetCntnt().GetCntntIdx();
-        ULONG nNodeStt = pNodeIndex ? pNodeIndex->GetIndex()+1 : 0;
-        ULONG nNodeEnd = pNodeIndex ?
-            pNodeIndex->GetNode().EndOfSectionIndex() : 0;
-
-        WW8SaveData aSaveData(*this,nNodeStt,nNodeEnd);
-        bOutTable = true;
-        bIsInTable= true;
-        WriteText();
-        WriteCellEnd();
-        WriteRowEnd();
-
-        if( bWrtWW8 )
-        {
-            SwWW8Writer::InsUInt16( aAt, 0xD608 );
-            SwWW8Writer::InsUInt16( aAt, 2 + ( nWWColMax + 1 ) * 2 +
-                ( nWWColMax * 20 ));
-            aAt.Insert( nWWColMax, aAt.Count() );
-        }
-        else
-        {
-            aAt.Insert( 190, aAt.Count() );
-            SwWW8Writer::InsUInt16( aAt, nWWColMax * 12 + 4 );
-            aAt.Insert( nWWColMax, aAt.Count() );
-        }
-        SwWW8Writer::InsUInt16( aAt, (USHORT)nTblOffset );
-
-        SwTwips nCalc = rFrmFmt.GetFrmSize().GetWidth();
-        SwWW8Writer::InsUInt16( aAt, (USHORT)(nTblOffset + nCalc ));
-
-        if( bWrtWW8 )
-        {
-            USHORT nFlags = 0;
-            SwWW8Writer::InsUInt16( aAt, nFlags );
-            aAt.Insert( aNullBytes, 2, aAt.Count() );
-            Out_SwFmtTableBox( aAt, rFrmFmt.GetBox() );
-
-            static USHORT __READONLY_DATA aBorders[] =
-            {
-                BOX_LINE_TOP, BOX_LINE_LEFT,
-                BOX_LINE_BOTTOM, BOX_LINE_RIGHT
-            };
-            const USHORT* pBrd = aBorders;
-
-            for( int i = 0; i < 4; ++i, ++pBrd)
-            {
-                SwWW8Writer::InsUInt16(aAt, 0xD634);
-                aAt.Insert( BYTE(6), aAt.Count() );
-                aAt.Insert( BYTE(0), aAt.Count() );
-                aAt.Insert( BYTE(3), aAt.Count() );
-                aAt.Insert( BYTE(1 << i), aAt.Count() );
-                aAt.Insert( BYTE(3), aAt.Count() );
-                SwWW8Writer::InsUInt16(aAt,
-                    rFrmFmt.GetBox().GetDistance(*pBrd));
-            }
-        }
-
-        pPapPlc->AppendFkpEntry( Strm().Tell(),
-                aAt.Count(), aAt.GetData() );
-
-        if( aAt.Count() > nStdAtLen )
-            aAt.Remove( nStdAtLen, aAt.Count() - nStdAtLen );
-    }
+    PlcDrawObj *pDrwO;
+    if (TXT_HDFT == nTxtTyp)
+        pDrwO = pHFSdrObjs;
     else
+        pDrwO = pSdrObjs;
+
+    if (pDrwO->Append( *this, rCP, rFrmFmt, rNdTopLeft))
     {
-        PlcDrawObj *pDrwO;
-        if (TXT_HDFT == nTxtTyp)
-            pDrwO = pHFSdrObjs;
-        else
-            pDrwO = pSdrObjs;
+        static BYTE __READONLY_DATA aSpec8[] = {
+            0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
+            0x55, 0x08, 1           // sprmCFSpec
+        };
+                                                // fSpec-Attribut true
+                            // Fuer DrawObjets muss ein Spezial-Zeichen
+                            // in den Text und darum ein fSpec-Attribut
+        pChpPlc->AppendFkpEntry( Strm().Tell() );
+        WriteChar( 0x8 );
+        rCP += 1;       // to next charakter position
+        pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
 
-        if (pDrwO->Append( *this, rCP, rFrmFmt, rNdTopLeft))
+        if (RES_FLYFRMFMT == rFrmFmt.Which())
         {
-            static BYTE __READONLY_DATA aSpec8[] = {
-                0x03, 0x6a, 0, 0, 0, 0, // sprmCObjLocation
-                0x55, 0x08, 1           // sprmCFSpec
-            };
-                                                    // fSpec-Attribut true
-                                // Fuer DrawObjets muss ein Spezial-Zeichen
-                                // in den Text und darum ein fSpec-Attribut
-            pChpPlc->AppendFkpEntry( Strm().Tell() );
-            WriteChar( 0x8 );
-            rCP += 1;       // to next charakter position
-            pChpPlc->AppendFkpEntry( Strm().Tell(), sizeof( aSpec8 ), aSpec8 );
-
-            if (RES_FLYFRMFMT == rFrmFmt.Which())
+            const SwNodeIndex* pNdIdx = rFrmFmt.GetCntnt().GetCntntIdx();
+            ASSERT( pNdIdx, "wo ist der NodeIndex geblieben?" );
+            ULONG nStart = pNdIdx->GetIndex();
+            ULONG nEnd = pNdIdx->GetNode().EndOfSectionIndex();
+            // search all Flys/DrawObj in Flys and put it after this text
+            // position.
+            USHORT nArrLen = pDoc->GetSpzFrmFmts()->Count();
+            for (USHORT nLastFmt = 0; nLastFmt < nArrLen; ++nLastFmt)
             {
-                // search all Flys/DrawObj in Flys and put it after this text
-                // position. The test to change the parent fly frame into a
-                // table will have left nLastFmt pointing to the first frame
-                // to begin exporting
-                for( ; nLastFmt < nArrLen; ++nLastFmt )
-                {
-                    const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[nLastFmt];
-                    if (lcl_IsFlyInFlyHere(pFmt, nStart, nEnd))
-                        AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
-                }
+                const SwFrmFmt* pFmt = (*pDoc->GetSpzFrmFmts())[nLastFmt];
+                if (lcl_IsFlyInFlyHere(pFmt, nStart, nEnd))
+                    AppendFlyInFlys( rCP, *pFmt, rNdTopLeft );
             }
         }
     }
@@ -878,6 +757,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
         rWrt.pOutFmtNode = 0;
 
         const SfxItemPool* pSrcPool = pEditPool;
+        const SfxItemPool& rDstPool = rWrt.pDoc->GetAttrPool();
 
         nTmpSwPos = nSwPos;
         register USHORT i, nWhich, nSlotId;
@@ -897,7 +777,9 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
 
                 if (nSlotId && nWhich != nSlotId)
                 {
-                    if (nWhich && nWhich < RES_UNKNOWNATR_BEGIN &&
+                    nWhich = rDstPool.GetWhich(nSlotId);
+                    if (nWhich && nWhich != nSlotId &&
+                        nWhich < RES_UNKNOWNATR_BEGIN &&
                         (pOut = aWW8AttrFnTab[nWhich - RES_CHRATR_BEGIN]))
                     {
                         if (rWrt.CollapseScriptsforWordOk(nScript,nWhich))
@@ -1465,64 +1347,60 @@ INT32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeTyp
         rPropOpt.AddOpt( ESCHER_Prop_dxTextRight, 0 );
     }
 
-    if ((pItem = rWrt.TrueFrameBgBrush(rFmt)))
+    SvxBrushItem aBrush(rWrt.TrueFrameBgBrush(rFmt));
+    bool bSetOpacity = false;
+    sal_uInt32 nOpaque = 0;
+    if (const GraphicObject *pGraphicObject = aBrush.GetGraphicObject())
     {
-        const SvxBrushItem *pBrush= (const SvxBrushItem*)pItem;
-        bool bSetOpacity = false;
-        sal_uInt32 nOpaque = 0;
-
-        if (const GraphicObject *pGraphicObject = pBrush->GetGraphicObject())
+        ByteString aUniqueId = pGraphicObject->GetUniqueID();
+        if (aUniqueId.Len())
         {
-            ByteString aUniqueId = pGraphicObject->GetUniqueID();
-            if (aUniqueId.Len())
+            const Graphic &rGraphic = pGraphicObject->GetGraphic();
+            Size aSize(rGraphic.GetPrefSize());
+            const MapMode aMap100mm(MAP_100TH_MM);
+            if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
             {
-                const Graphic &rGraphic = pGraphicObject->GetGraphic();
-                Size aSize(rGraphic.GetPrefSize());
-                const MapMode aMap100mm(MAP_100TH_MM);
-                if (MAP_PIXEL == rGraphic.GetPrefMapMode().GetMapUnit())
-                {
-                    aSize = Application::GetDefaultDevice()->PixelToLogic(
-                        aSize, aMap100mm);
-                }
-                else
-                {
-                    aSize = OutputDevice::LogicToLogic(aSize,
-                        rGraphic.GetPrefMapMode(), aMap100mm);
-                }
-
-                Point aEmptyPoint = Point();
-                Rectangle aRect(aEmptyPoint, aSize);
-
-                sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
-                    aRect, 0);
-                if (nBlibId)
-                    rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
+                aSize = Application::GetDefaultDevice()->PixelToLogic(
+                    aSize, aMap100mm);
+            }
+            else
+            {
+                aSize = OutputDevice::LogicToLogic(aSize,
+                    rGraphic.GetPrefMapMode(), aMap100mm);
             }
 
-            if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
-                bSetOpacity = true;
+            Point aEmptyPoint = Point();
+            Rectangle aRect(aEmptyPoint, aSize);
 
-            rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
-            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
-            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
-        }
-        else
-        {
-            UINT32 nFillColor = GetColor(pBrush->GetColor(), false);
-            rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
-            rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
-            rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
-
-            if ((nOpaque = pBrush->GetColor().GetTransparency()))
-                bSetOpacity = true;
+            sal_uInt32 nBlibId = GetBlibID(*QueryPicStream(), aUniqueId,
+                aRect, 0);
+            if (nBlibId)
+                rPropOpt.AddOpt(ESCHER_Prop_fillBlip,nBlibId,sal_True);
         }
 
-        if (bSetOpacity)
-        {
-            nOpaque = (nOpaque * 100) / 0xFE;
-            nOpaque = ((100 - nOpaque) << 16) / 100;
-            rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
-        }
+        if ((nOpaque = pGraphicObject->GetAttr().GetTransparency()))
+            bSetOpacity = true;
+
+        rPropOpt.AddOpt( ESCHER_Prop_fillType, ESCHER_FillPicture );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x140014 );
+        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, 0 );
+    }
+    else
+    {
+        UINT32 nFillColor = GetColor(aBrush.GetColor(), false);
+        rPropOpt.AddOpt( ESCHER_Prop_fillColor, nFillColor );
+        rPropOpt.AddOpt( ESCHER_Prop_fillBackColor, nFillColor ^ 0xffffff );
+        rPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x100010 );
+
+        if ((nOpaque = aBrush.GetColor().GetTransparency()))
+            bSetOpacity = true;
+    }
+
+    if (bSetOpacity)
+    {
+        nOpaque = (nOpaque * 100) / 0xFE;
+        nOpaque = ((100 - nOpaque) << 16) / 100;
+        rPropOpt.AddOpt(ESCHER_Prop_fillOpacity, nOpaque);
     }
 
     const SdrObject* pObj = rFmt.FindRealSdrObject();
@@ -2428,12 +2306,23 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
  can't risk having a math object using starsymbol exported to word as it'll
  not render correctly :-(
 
- Optionally I would prefer to detect if a GDIMetafile is using
- {Open|Star}Symbol and if it is then use PNG, and if not use EMF. That would
- be a very acceptable compromise in my view.
+ Optionally perhaps detect if a GDIMetafile is using {Open|Star}Symbol and if
+ it is then use PNG, and if not use EMF. That would be a very acceptable
+ compromise in my view.
+
+ But currently just use wmf as we have always done :-(
 */
 Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
 {
+#if 1
+    if (xObj.Is())
+    {
+        GDIMetaFile aMtf;
+        xObj->GetGDIMetaFile(aMtf);
+        return Graphic(aMtf);
+    }
+    return Graphic();
+#else
     Graphic aGraphic;
     GDIMetaFile aGDIMtf;
 
@@ -2459,6 +2348,7 @@ Graphic wwUtility::MakeSafeGDIMetaFile(SvInPlaceObjectRef xObj)
     aBmpEx.SetPrefMapMode(aGDIMtf.GetPrefMapMode());
     aBmpEx.SetPrefSize(aGDIMtf.GetPrefSize());
     return Graphic(aBmpEx);
+#endif
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(
