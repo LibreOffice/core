@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 09:58:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:00:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 #ifndef _PSPRINT_PRINTERINFOMANAGER_HXX_
 #define _PSPRINT_PRINTERINFOMANAGER_HXX_
 
-#ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
-#endif
 #ifndef __SGI_STL_LIST
 #include <list>
 #endif
