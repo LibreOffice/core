@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 09:20:33 $
+ *  last change: $Author: gt $ $Date: 2001-06-26 05:56:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ private:
     UINT16*             pHeight;
     INT8*               pRowFlags;
 
-    UINT16              nMaxRow;
+    INT32               nMaxRow;    // < 0 -> no row used!
     UINT16              nDefWidth;
     UINT16              nDefHeight;
     BOOL                bDirty;     // noch nicht rausgehauen?
