@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oletest.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-20 09:08:28 $
+ *  last change: $Author: jl $ $Date: 2002-09-04 16:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,8 @@ interface XCallback: com::sun::star::uno::XInterface
 
     void inValues( [in] char aChar, [in] long aLong, [in] string aString);
     void inSeqByte( [in] sequence<byte> val);
+    void inSeqXEventListener( [in] sequence<com::sun::star::lang::XEventListener> listener, [in]
+                              sequence<com::sun::star::lang::EventObject> events);
 
     // Attributes
     [attribute] oletest::XSimple simple;
