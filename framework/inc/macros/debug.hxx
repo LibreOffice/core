@@ -2,9 +2,9 @@
  *
  *  $RCSfile: debug.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-05-21 06:11:35 $
+ *  last change: $Author: as $ $Date: 2001-05-30 10:58:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,17 +68,36 @@
 //  User can overwrite these adjustment with his own values! We will do it only if nothing is set.
 //*****************************************************************************************************************
 
-#ifndef _DEBUG
-    #undef  ENABLE_LOGMECHANISM
-    #undef  ENABLE_ASSERTIONS
-    #undef  ENABLE_EVENTDEBUG
-    #undef  ENABLE_MUTEXDEBUG
-    #undef  ENABLE_REGISTRATIONDEBUG
-    #undef  ENABLE_TARGETINGDEBUG
-    #undef  ENABLE_PLUGINDEBUG
-    #undef  ENABLE_TIMEMEASURE
-#else
-    // Enable log mechanism for assertion handling.
+/*ATTENTION
+    "DEBUG" must be checked before "_DEBUG" ... because otherwhise
+    we couldn't differ between product-debug/product-no-debug/non-product-debug/non-product-no-debug ...!!!
+ */
+
+//-----------------------------------------------------------------------------------------------------------------
+// => for debug build project ("non product and debug compiled")
+#if defined( DEBUG )
+
+    // Enable log mechanism for normal assertion and error handling.
+    // Look for user decisions before!
+    #ifndef ENABLE_LOGMECHANISM
+        #define ENABLE_LOGMECHANISM
+    #endif
+    // Enable assertion handling himself AND additional warnings.
+    // The default logtype is MESSAGEBOX.
+    // see "assertion.hxx" for further informations
+    #ifndef ENABLE_ASSERTIONS
+        #define ENABLE_ASSERTIONS
+    #endif
+    #ifndef ENABLE_WARNINGS
+        #define ENABLE_WARNINGS
+    #endif
+
+//-----------------------------------------------------------------------------------------------------------------
+// => for debug linked project ("non product")
+#elif defined( _DEBUG )
+
+    // Enable log mechanism for normal assertion and error handling.
+    // Look for user decisions before!
     #ifndef ENABLE_LOGMECHANISM
         #define ENABLE_LOGMECHANISM
     #endif
@@ -88,6 +107,21 @@
     #ifndef ENABLE_ASSERTIONS
         #define ENABLE_ASSERTIONS
     #endif
+
+//-----------------------------------------------------------------------------------------------------------------
+// => for product version
+#else
+
+    #undef  ENABLE_LOGMECHANISM
+    #undef  ENABLE_ASSERTIONS
+    #undef  ENABLE_WARNINGS
+    #undef  ENABLE_EVENTDEBUG
+    #undef  ENABLE_MUTEXDEBUG
+    #undef  ENABLE_REGISTRATIONDEBUG
+    #undef  ENABLE_TARGETINGDEBUG
+    #undef  ENABLE_PLUGINDEBUG
+    #undef  ENABLE_TIMEMEASURE
+
 #endif
 
 //*****************************************************************************************************************
