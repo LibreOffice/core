@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:45:01 $
+ *  last change: $Author: rt $ $Date: 2003-09-25 07:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,9 +533,9 @@ public:
 
         // Offset in Stream where last read of 52 bytes took place
         long nFilePos;
-        short nIdx;         // Pos-Merker
+        sal_uInt8 mnIdx;         // Pos-Merker
         ePLCFT ePLCF;
-        BYTE nIMax;         // Anzahl der Eintraege
+        sal_uInt8 mnIMax;         // Anzahl der Eintraege
 
         wwSprmParser maSprmParser;
     public:
@@ -543,21 +543,21 @@ public:
             long _nFilePos,long nItemSiz,ePLCFT ePl,WW8_FC nStartFc = -1);
         void Reset(WW8_FC nPos);
         long GetFilePos() const { return nFilePos; }
-        ULONG GetIdx() const { return nIdx; }
-        void SetIdx( ULONG nI );
-        bool SeekPos( long nPos );
+        sal_uInt8 GetIdx() const { return mnIdx; }
+        bool SetIdx(sal_uInt8 nI);
+        bool SeekPos(WW8_FC nFc);
         WW8_FC Where() const
         {
-            return (nIdx < nIMax) ? maEntries[nIdx].mnFC : LONG_MAX;
+            return (mnIdx < mnIMax) ? maEntries[mnIdx].mnFC : LONG_MAX;
         }
         WW8Fkp& operator ++( int )
         {
-            if( nIdx < nIMax )
-                nIdx++;
+            if (mnIdx < mnIMax)
+                mnIdx++;
             return *this;
         }
         BYTE* Get( WW8_FC& rStart, WW8_FC& rEnd, long& rLen ) const;
-        USHORT GetIstd() const { return maEntries[nIdx].mnIStd; }
+        sal_uInt16 GetIstd() const { return maEntries[mnIdx].mnIStd; }
 
         /*
             liefert einen echten Pointer auf das Sprm vom Typ nId,
@@ -1653,6 +1653,9 @@ public:
     UINT32 fUnknown1:2;
     UINT32 fDontUseHTMLAutoSpacing:1;
     UINT32 fUnknown2:29;
+
+    UINT16 fUnknown3:15;
+    UINT16 fUseBackGroundInAllmodes:1;
 
     // 2. Initialisier-Dummy:
     BYTE    nDataEnd;
