@@ -1,4 +1,5 @@
 Various unresolved issues with configure:
+----------------------------------------
 
 * Providing the location of perl5 with --with-perl-home does not work.
 Please make sure that perl5 is on your path.
@@ -11,7 +12,15 @@ to a solvenv residing at a non-standard location.
 
 * Solaris 8
 
+* The configure script also creates a bootstrap script in the top-level 
+directory to support the creation of the build executable tools needed to 
+bootstrap the build process. These tools normally reside in the 
+solenv/$OUTPATH/bin directory for the supported platforms. It is hoped that 
+these tools will be removed from the solenv tree at some stage. This 
+bootstrap script does not yet work on Windows.
+
 Running configure on Windows NT:
+-------------------------------
 
 * configure must be run from the Cygnus bash shell. On the bash command line
 type "bash configure <options>" to run the script. The generated winenv.bat
@@ -31,3 +40,4 @@ manually copy the makefile.rc file in config_office to the top level directory.
 
 * It is recommended that you close the Cygnus bash shell before you start the
 build as it might cause problems later on.
+
