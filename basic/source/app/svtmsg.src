@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-24 15:41:40 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 09:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,7 @@ String S_WIN_DISABLED
     Text[ greek ] = "($Arg1) could not be accessed";
     Text[ dutch ] = "Geen toegang tot ($Arg1)";
     Text[ french ] = "Accès à ($Arg1) impossible";
-    Text[ spanish ] = "No se pudo acceder a (Arg1)";
+    Text[ spanish ] = "No se pudo acceder a ($Arg1)";
     Text[ italian ] = "Impossibile accedere a ($Arg1)";
     Text[ danish ] = "(Arg1) could not be accessed";
     Text[ swedish ] = "($Arg1) could not be accessed";
@@ -1058,7 +1058,7 @@ String S_ALLOWED_ONLY_IN_FLOATING_MODE
     Text[ polish ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ portuguese_brazilian ] = "dummytext";
     Text[ japanese ] = "Method only allowed in floating mode at ($Arg1)";
-    Text[ korean ] = "($Arg1)¿¡¼­ ÀÌµ¿ ¸ðµå¸Þ¼Òµå¸¸ Çã¿ëµË´Ï´Ù.";
+    Text[ korean ] = "($Arg1)¿¡¼­ ¸Þ¼Òµå´Â ºÎµ¿ ¸ðµå¿¡¼­¸¸ Çã¿ëµË´Ï´Ù.";
     Text[ chinese_simplified ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ chinese_traditional ] = "Method only allowed in floating mode at ($Arg1)";
     Text[ arabic ] = "Method only allowed in floating mode at ($Arg1)";
