@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:14:55 $
+ *  last change: $Author: mba $ $Date: 2001-05-17 13:13:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,11 @@
  *
  ************************************************************************/
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
+#include <com/sun/star/uno/Sequence.hxx>
+#endif
+
+#include <rtl/digest.h>
 #include <osl/file.hxx>
 #include <stg.hxx>
 #include <storinfo.hxx>
@@ -1159,7 +1164,7 @@ BOOL SotStorage::SetProperty( const String& rName, const ::com::sun::star::uno::
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_WARNING("W1:Not implemented!")
         return FALSE;
     }
 }
@@ -1173,7 +1178,7 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
     }
     else
     {
-        DBG_ERROR("Not implemented!")
+        DBG_WARNING("W1:Not implemented!")
         return FALSE;
     }
 }
@@ -1193,4 +1198,23 @@ BOOL SotStorage::IsOLEStorage( SvStream* pStream )
 {
     return Storage::IsStorageFile( pStream );
 }
+
+void SotStorage::SetKey( const ByteString& rKey )
+{
+    aKey = rKey;
+    if ( !IsOLEStorage() )
+    {
+        sal_uInt8 aBuffer[RTL_DIGEST_LENGTH_SHA1];
+        rtlDigestError nError = rtl_digest_SHA1( aKey.GetBuffer(), aKey.Len(), aBuffer, RTL_DIGEST_LENGTH_SHA1 );
+        if ( nError == rtl_Digest_E_None )
+        {
+            sal_uInt8* pBuffer = aBuffer;
+            ::com::sun::star::uno::Sequence < sal_Int8 > aSequ( (sal_Int8*) pBuffer, RTL_DIGEST_LENGTH_SHA1 );
+            ::com::sun::star::uno::Any aAny;
+            aAny <<= aSequ;
+            SetProperty( ::rtl::OUString::createFromAscii("EncryptionKey"), aAny );
+        }
+    }
+}
+
 
