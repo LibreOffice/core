@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 10:55:13 $
+ *  last change: $Author: os $ $Date: 2002-05-03 13:50:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,11 +876,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_GRAPHIC_FILTER               (FN_EXTRA2 + 87)
 #define FN_UNO_CELL_NAME                    (FN_EXTRA2 + 88)
 
-/*--------------------------------------------------------------------
-    Bereich: Fenster
- --------------------------------------------------------------------*/
 
-#define FN_SOURCEVIEW               SID_SOURCEVIEW
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/
