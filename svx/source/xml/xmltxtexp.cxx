@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltxtexp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:28:10 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:57:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
 #include <sfx2/docfile.hxx>
 #endif
 #ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 
 #ifndef _RTL_USTRBUF_HXX_
