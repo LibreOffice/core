@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 16:11:38 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3092,3 +3092,10 @@ String STR_TASKPANEL_LAYOUT_MENU_TITLE
     Text [ de ] = "Layouts";
     Text [ en-US ] = "Layouts";
 };
+String STR_GRAPHICS_STYLE_FAMILY
+{
+    Text [ de ] = "Grafikobjektvorlagen";
+    Text [ en-US ] = "Graphics Styles";
+};
+
+
