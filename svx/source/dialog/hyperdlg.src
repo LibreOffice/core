@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-09 21:22:58 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 22:17:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "~Telnet";
         Text[ greek ] = "T~elnet";
         Text[ dutch ] = "~Telnet";
-        Text[ french ] = "~Telnet";
+        Text[ french ] = "Telnet";
         Text[ spanish ] = "~Telnet";
         Text[ italian ] = "~Telnet";
         Text[ danish ] = "Telnet";
@@ -223,7 +223,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Φελό";
         Text[ greek ] = "Προορισμός";
         Text[ dutch ] = "D~oel";
-        Text[ french ] = "~Cible";
+        Text[ french ] = "Cible";
         Text[ spanish ] = "Destino";
         Text[ italian ] = "Destinazione";
         Text[ danish ] = "Mεl";
@@ -476,8 +476,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Τξπμΰ";
         Text[ greek ] = "Φόρμα";
         Text[ dutch ] = "V~orm";
-        Text[ french ] = "F~orme";
-        Text[ spanish ] = "f~orma";
+        Text[ french ] = "Forme";
+        Text[ spanish ] = "Forma";
         Text[ italian ] = "F~orma";
         Text[ danish ] = "Form";
         Text[ swedish ] = "F~orm";
@@ -628,7 +628,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Aan~wijzing" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text[ spanish ] = "Texto";
         Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
@@ -661,7 +661,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ russian ] = "Θμÿ";
         Text[ greek ] = "Όνομ~α";
         Text[ dutch ] = "N~aam";
-        Text[ french ] = "~Nom";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "N~ombre";
         Text[ italian ] = "Nome";
         Text[ danish ] = "Navn";
@@ -793,7 +793,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ greek ] = "EMail";
         Text[ dutch ] = "~E-mail";
         Text[ french ] = "~E-mail";
-        Text[ spanish ] = "~E-mail";
+        Text[ spanish ] = "E-mail";
         Text[ italian ] = "~eMail";
         Text[ danish ] = "E-mail";
         Text[ swedish ] = "~E-post";
@@ -820,7 +820,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Νξβξρςθ";
         Text[ greek ] = "Συζητήσεις";
         Text[ dutch ] = "~Nieuws";
-        Text[ french ] = "~News";
+        Text[ french ] = "News";
         Text[ spanish ] = "~Noticias";
         Text[ italian ] = "~News";
         Text[ danish ] = "Nyheder";
@@ -848,7 +848,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Οξλσχΰςελό";
         Text[ greek ] = "Παραλήπτης";
         Text[ dutch ] = "Ont~vanger";
-        Text[ french ] = "~Destinataire";
+        Text[ french ] = "Destinataire";
         Text[ spanish ] = "D~estinatario";
         Text[ italian ] = "Destinatario";
         Text[ danish ] = "Modtager";
@@ -875,7 +875,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Òεμΰ";
         Text[ greek ] = "Θέμα";
         Text[ dutch ] = "~Betreft";
-        Text[ french ] = "~Objet";
+        Text[ french ] = "Objet";
         Text[ spanish ] = "A~sunto";
         Text[ italian ] = "Oggetto";
         Text[ danish ] = "Emne";
@@ -1007,8 +1007,8 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Τξπμΰ";
         Text[ greek ] = "Φόρμα";
         Text[ dutch ] = "V~orm";
-        Text[ french ] = "F~orme";
-        Text[ spanish ] = "f~orma";
+        Text[ french ] = "Forme";
+        Text[ spanish ] = "Forma";
         Text[ italian ] = "F~orma";
         Text[ danish ] = "Form";
         Text[ swedish ] = "F~orm";
@@ -1159,7 +1159,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text[ spanish ] = "Texto";
         Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
@@ -1192,7 +1192,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ russian ] = "Θμÿ";
         Text[ greek ] = "Όνομ~α";
         Text[ dutch ] = "N~aam";
-        Text[ french ] = "~Nom";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "N~ombre";
         Text[ italian ] = "Nome";
         Text[ danish ] = "Navn";
@@ -1324,7 +1324,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Οσςό";
         Text[ greek ] = "Διαδρομή";
         Text[ dutch ] = "~Pad";
-        Text[ french ] = "~Chemin";
+        Text[ french ] = "Chemin";
         Text[ spanish ] = "~Ruta";
         Text[ italian ] = "~Percorso";
         Text[ danish ] = "Sti";
@@ -1413,7 +1413,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "~Φελό";
         Text[ greek ] = "Προορισμός";
         Text[ dutch ] = "~Doel";
-        Text[ french ] = "~Cible";
+        Text[ french ] = "Cible";
         Text[ spanish ] = "Destino";
         Text[ italian ] = "Destina~zione";
         Text[ danish ] = "Mεl";
@@ -1599,8 +1599,8 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Τξπμΰ";
         Text[ greek ] = "Φόρμα";
         Text[ dutch ] = "V~orm";
-        Text[ french ] = "F~orme";
-        Text[ spanish ] = "f~orma";
+        Text[ french ] = "Forme";
+        Text[ spanish ] = "Forma";
         Text[ italian ] = "F~orma";
         Text[ danish ] = "Form";
         Text[ swedish ] = "F~orm";
@@ -1751,7 +1751,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text[ spanish ] = "Texto";
         Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
@@ -1784,7 +1784,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ russian ] = "Θμÿ";
         Text[ greek ] = "Όνομ~α";
         Text[ dutch ] = "N~aam";
-        Text[ french ] = "~Nom";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "N~ombre";
         Text[ italian ] = "Nome";
         Text[ danish ] = "Navn";
@@ -1916,7 +1916,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Οπΰβθςό ρειχΰρ";
         Text[ greek ] = "Επεξερ~γασία αμέσως";
         Text[ dutch ] = "~Meteen bewerken";
-        Text[ french ] = "Ιditer ~tout de suite";
+        Text[ french ] = "Ιditer tout de suite";
         Text[ spanish ] = "Editar a~hora";
         Text[ italian ] = "Modi~fica subito";
         Text[ danish ] = "Rediger straks";
@@ -1943,8 +1943,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Οπΰβθςό οξηζε";
         Text[ greek ] = "Επεξεργα~σία αργότερα";
         Text[ dutch ] = "~Later bewerken";
-        Text[ french ] = "Ιditer ~plus tard";
-        Text[ spanish ] = "Edit~ar mαs tarde";
+        Text[ french ] = "Ιditer plus tard";
+        Text[ spanish ] = "Editar mαs tarde";
         Text[ italian ] = "Modifica dopo";
         Text[ danish ] = "Rediger senere";
         Text[ swedish ] = "Redigera ~senare";
@@ -2003,7 +2003,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Òθο τΰιλΰ";
         Text[ greek ] = "~Τύπος αρχείου";
         Text[ dutch ] = "Bestands~type";
-        Text[ french ] = "~Type de fichier";
+        Text[ french ] = "Type de fichier";
         Text[ spanish ] = "Ti~po";
         Text[ italian ] = "~Tipo di file";
         Text[ danish ] = "Filtype";
@@ -2136,8 +2136,8 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Τξπμΰ";
         Text[ greek ] = "Φόρμα";
         Text[ dutch ] = "V~orm";
-        Text[ french ] = "F~orme";
-        Text[ spanish ] = "f~orma";
+        Text[ french ] = "Forme";
+        Text[ spanish ] = "Forma";
         Text[ italian ] = "F~orma";
         Text[ danish ] = "Form";
         Text[ swedish ] = "F~orm";
@@ -2288,7 +2288,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Òεκρς";
         Text[ greek ] = "Κείμενο";
         Text [ dutch ] = "Te~kst" ;
-        Text [ french ] = "~Texte" ;
+        Text [ french ] = "Texte" ;
         Text[ spanish ] = "Texto";
         Text[ italian ] = "Testo";
         Text[ danish ] = "Tekst";
@@ -2321,7 +2321,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ russian ] = "Θμÿ";
         Text[ greek ] = "Όνομ~α";
         Text[ dutch ] = "N~aam";
-        Text[ french ] = "~Nom";
+        Text[ french ] = "Nom";
         Text[ spanish ] = "N~ombre";
         Text[ italian ] = "Nome";
         Text[ danish ] = "Navn";
