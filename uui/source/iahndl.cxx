@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2000-11-10 10:13:24 $
+ *  last change: $Author: sb $ $Date: 2000-11-10 10:53:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,7 @@ public:
 USHORT executeErrorDialog(ULONG nID, USHORT nMask);
 
 //============================================================================
-void executeLoginDialog(LoginErrorInfo & rInfo);
+void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm);
 
 //============================================================================
 void executeCookieDialog(CntHTTPCookieRequest & rRequest);
@@ -387,13 +387,7 @@ UUIInteractionHandler::handle(
         LoginErrorInfo aInfo;
         aInfo.SetTitle(aAuthenticationRequest.ServerName);
         aInfo.SetServer(aAuthenticationRequest.ServerName);
-        DBG_ASSERT(!(aAuthenticationRequest.HasRealm
-                     && aAuthenticationRequest.HasAccount),
-                   "UUIInteractionHandler::handle():"
-                       " AuthenticationRequest with both Realm and Account");
-        if (aAuthenticationRequest.HasRealm)
-            aInfo.SetAccount(aAuthenticationRequest.Realm);
-        else if (aAuthenticationRequest.HasAccount)
+        if (aAuthenticationRequest.HasAccount)
             aInfo.SetAccount(aAuthenticationRequest.Account);
         if (aAuthenticationRequest.HasUserName)
             aInfo.SetUserName(aAuthenticationRequest.UserName);
@@ -402,12 +396,16 @@ UUIInteractionHandler::handle(
         aInfo.SetErrorText(aAuthenticationRequest.Diagnostic);
         aInfo.SetPersistentPassword(bRememberPersistent);
         aInfo.SetSavePassword(bRemember);
-        aInfo.SetModifyAccount(aAuthenticationRequest.HasRealm
-                               || aAuthenticationRequest.HasAccount);
+        aInfo.SetModifyAccount(aAuthenticationRequest.HasAccount
+                                && xSupplyAuthentication.is()
+                                && xSupplyAuthentication->canSetAccount());
         aInfo.SetModifyUserName(aAuthenticationRequest.HasUserName
                                 && xSupplyAuthentication.is()
                                 && xSupplyAuthentication->canSetUserName());
-        executeLoginDialog(aInfo);
+        executeLoginDialog(aInfo,
+                           aAuthenticationRequest.HasRealm ?
+                               aAuthenticationRequest.Realm :
+                               rtl::OUString());
         switch (aInfo.GetResult())
         {
             case ERRCODE_BUTTON_OK:
@@ -870,7 +868,7 @@ USHORT executeErrorDialog(ULONG nID, USHORT nMask)
 //
 //============================================================================
 
-void executeLoginDialog(LoginErrorInfo & rInfo)
+void executeLoginDialog(LoginErrorInfo & rInfo, rtl::OUString const & rRealm)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
@@ -888,7 +886,7 @@ void executeLoginDialog(LoginErrorInfo & rInfo)
 
     ResMgr * pManager = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui));
     LoginDialog * pDialog = new LoginDialog(0, nFlags, rInfo.GetServer(),
-                                            rInfo.GetAccount(), pManager);
+                                            rRealm, pManager);
     if (rInfo.GetErrorText().Len() != 0)
         pDialog->SetErrorText(rInfo.GetErrorText());
     pDialog->SetName(rInfo.GetUserName());
