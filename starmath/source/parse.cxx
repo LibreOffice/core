@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-12-14 09:07:32 $
+ *  last change: $Author: er $ $Date: 2002-01-14 16:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -464,7 +464,8 @@ const sal_Int32 coStartFlags =
 
 // Continuing characters may be any alphanumeric or dot.
 const sal_Int32 coContFlags =
-    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS;
+    ( coStartFlags | KParseTokens::ASC_DOT ) & ~KParseTokens::IGNORE_LEADING_WS
+    | KParseTokens::TWO_DOUBLE_QUOTES_BREAK_STRING;
 
 
 void SmParser::NextToken()
