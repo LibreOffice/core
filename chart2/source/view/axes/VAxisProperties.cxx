@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VAxisProperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 09:52:35 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:12:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,11 @@ sal_Int32 AxisProperties::getMainLineScreenPosition(
     if(m_pfMainLinePositionAtOtherAxis)
         fCrossOtherAxis = *m_pfMainLinePositionAtOtherAxis;
     else
-        fCrossOtherAxis = m_bIsLeftOrBottomAxis ? fMin : fMax;
+    {
+        bool bMinimumForLeftAxis = ( m_bIsYAxis && rPosHelper.isMathematicalOrientationY() )
+                            || ( !m_bIsYAxis && rPosHelper.isMathematicalOrientationX() );
+        fCrossOtherAxis = ( bMinimumForLeftAxis && m_bIsLeftOrBottomAxis ) ? fMin : fMax;
+    }
     sal_Int32 nRet = getAxisScreenPosition( fCrossOtherAxis, rPosHelper, m_bIsYAxis );
     return nRet;
 }

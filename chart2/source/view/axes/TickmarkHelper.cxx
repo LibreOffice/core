@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TickmarkHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 13:55:43 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -686,7 +686,7 @@ void TickmarkHelper::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::Sequence
 }
 
 //-----------------------------------------------------------------------------
-// ___TickmarkHelper_3D___
+// ___TickmarkHelper_2D___
 //-----------------------------------------------------------------------------
 TickmarkHelper_2D::TickmarkHelper_2D(
           const ExplicitScaleData& rScale, const ExplicitIncrementData& rIncrement
@@ -696,8 +696,16 @@ TickmarkHelper_2D::TickmarkHelper_2D(
           , m_fOffset_LogicToScreen(0.0)
 {
     double fWidthY = m_fScaledVisibleMax - m_fScaledVisibleMin;
-    m_fStrech_LogicToScreen = FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY * fStrech_SceneToScreen;
-    m_fOffset_LogicToScreen = -m_fScaledVisibleMin*m_fStrech_LogicToScreen + fOffset_SceneToScreen;
+    if( AxisOrientation_MATHEMATICAL==m_rScale.Orientation )
+    {
+        m_fStrech_LogicToScreen = FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY * fStrech_SceneToScreen;
+        m_fOffset_LogicToScreen = -m_fScaledVisibleMin*m_fStrech_LogicToScreen + fOffset_SceneToScreen;
+    }
+    else
+    {
+        m_fStrech_LogicToScreen = -FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY * fStrech_SceneToScreen;
+        m_fOffset_LogicToScreen = -m_fScaledVisibleMax*m_fStrech_LogicToScreen + fOffset_SceneToScreen;
+    }
 }
 
 TickmarkHelper_2D::~TickmarkHelper_2D()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: iha $ $Date: 2003-11-19 13:14:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,17 +121,30 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationLogic
         doLogicScaling( &MinX, &MinY, &MinZ );
         doLogicScaling( &MaxX, &MaxY, &MaxZ);
 
-        aMatrix.TranslateX(-MinX);
-        aMatrix.TranslateY(-MinY);
-        aMatrix.TranslateZ(-MinZ);
+        if( AxisOrientation_MATHEMATICAL==m_aScales[0].Orientation )
+            aMatrix.TranslateX(-MinX);
+        else
+            aMatrix.TranslateX(-MaxX);
+        if( AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation )
+            aMatrix.TranslateY(-MinY);
+        else
+            aMatrix.TranslateY(-MaxY);
+        if( AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation )
+            aMatrix.TranslateZ(-MaxZ);//z direction in draw is reverse mathematical direction
+        else
+            aMatrix.TranslateY(-MinZ);
 
         double fWidthX = MaxX - MinX;
         double fWidthY = MaxY - MinY;
         double fWidthZ = MaxZ - MinZ;
 
-        aMatrix.ScaleX(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX);
-        aMatrix.ScaleY(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
-        aMatrix.ScaleZ(FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
+        double fScaleDirectionX = AxisOrientation_MATHEMATICAL==m_aScales[0].Orientation ? 1.0 : -1.0;
+        double fScaleDirectionY = AxisOrientation_MATHEMATICAL==m_aScales[1].Orientation ? 1.0 : -1.0;
+        double fScaleDirectionZ = AxisOrientation_MATHEMATICAL==m_aScales[2].Orientation ? -1.0 : 1.0;
+
+        aMatrix.ScaleX(fScaleDirectionX*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthX);
+        aMatrix.ScaleY(fScaleDirectionY*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthY);
+        aMatrix.ScaleZ(fScaleDirectionZ*FIXED_SIZE_FOR_3D_CHART_VOLUME/fWidthZ);
 
         aMatrix = aMatrix*m_aMatrixScreenToScene;
 
