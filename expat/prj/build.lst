@@ -1,0 +1,2 @@
+ft	freetype	:	NULL
+ft	freetype			nmake	-	all	ft_mkout NULL
