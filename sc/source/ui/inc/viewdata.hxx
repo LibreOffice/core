@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:31:45 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:43:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,6 +206,7 @@ private:
     USHORT              nFillEndY;
     USHORT              nEditCol;                   // Position dazu
     USHORT              nEditRow;
+    USHORT              nEditStartCol;
     USHORT              nEditEndCol;                // Ende der Edit-View
     USHORT              nEditEndRow;
     USHORT              nTabStartCol;               // fuer Enter nach Tab
@@ -408,6 +409,8 @@ public:
 
     USHORT          GetEditViewCol() const          { return nEditCol; }
     USHORT          GetEditViewRow() const          { return nEditRow; }
+    USHORT          GetEditStartCol() const         { return nEditStartCol; }
+    USHORT          GetEditStartRow() const         { return nEditRow; }        // never editing above the cell
     USHORT          GetEditEndCol() const           { return nEditEndCol; }
     USHORT          GetEditEndRow() const           { return nEditEndRow; }
 
