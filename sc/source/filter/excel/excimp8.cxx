@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:32:19 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:13:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,8 +172,8 @@ using namespace com::sun::star;
 
 
 
-ImportExcel8::ImportExcel8( SfxMedium& rMedium, SvStream& rStream, XclBiff eBiff, ScDocument* pDoc ) :
-    ImportExcel( rMedium, rStream, eBiff, pDoc )
+ImportExcel8::ImportExcel8( XclImpRootData& rImpData ) :
+    ImportExcel( rImpData )
 {
     delete pFormConv;
 
@@ -407,70 +407,6 @@ void ImportExcel8::Labelsst( void )
 }
 
 
-void ImportExcel8::Rstring( void )
-{
-    UINT16 nRow, nCol, nXF;
-    aIn >> nRow >> nCol >> nXF;
-
-    SCCOL nScCol = static_cast< SCCOL >( nCol );
-    SCROW nScRow = static_cast< SCROW >( nRow );
-
-    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
-    {
-        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
-
-        // unformatted Unicode string with separate formatting information
-        XclImpString aString( maStrm );
-        if( !aString.IsRich() )
-            aString.ReadFormats( maStrm );
-
-        ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
-        if( pCell )
-            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
-
-        pColRowBuff->Used( nScCol, nScRow );
-    }
-    else
-    {
-        bTabTruncated = TRUE;
-        GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-    }
-
-    pLastFormCell = NULL;
-}
-
-
-void ImportExcel8::Label( void )
-{
-    UINT16  nRow, nCol, nXF;
-    aIn >> nRow >> nCol >> nXF;
-
-    SCCOL nScCol = static_cast< SCCOL >( nCol );
-    SCROW nScRow = static_cast< SCROW >( nRow );
-
-    if( (nScRow <= MAXROW) && (nScCol <= MAXCOL) )
-    {
-        GetXFRangeBuffer().SetXF( nScCol, nScRow, nXF );
-
-        XclImpString aString( maStrm );
-        ScBaseCell* pCell = XclImpStringHelper::CreateCell( *this, aString, nXF );
-        if( pCell )
-            GetDoc().PutCell( nScCol, nScRow, GetCurrScTab(), pCell );
-
-        pColRowBuff->Used( nScCol, nScRow );
-
-    }
-    else
-    {
-        bTabTruncated = TRUE;
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow, MAXROW);
-    }
-
-
-    pLastFormCell = NULL;
-}
-
-
 void ImportExcel8::Txo( void )
 {
     GetObjectManager().ReadTxo( maStrm );
@@ -516,20 +452,16 @@ void ImportExcel8::ReadBasic( void )
     bHasBasic = TRUE;
 
     SfxObjectShell* pShell = GetDocShell();
-
-    if( pShell )
+    SotStorageRef xRootStrg = GetRootStorage();
+    SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
+    if( pShell && xRootStrg.Is() && pFilterOpt )
     {
-        SvtFilterOptions* pFltOpts = SvtFilterOptions::Get();
-        if( pFltOpts )
+        bool bLoadCode = pFilterOpt->IsLoadExcelBasicCode();
+        bool bLoadStrg = pFilterOpt->IsLoadExcelBasicStorage();
+        if( bLoadCode || bLoadStrg )
         {
-            if( pFltOpts->IsLoadExcelBasicCode() || pFltOpts->IsLoadExcelBasicStorage() )
-            {
-                DBG_ASSERT( GetRootStorage(), "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
-
-                SvxImportMSVBasic   aBasicImport( *pShell, *GetRootStorage(), pFltOpts->IsLoadExcelBasicCode(), pFltOpts->IsLoadExcelBasicStorage() );
-
-                aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
-            }
+            SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
+            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
         }
     }
 }
@@ -561,39 +493,19 @@ void ImportExcel8::PostDocLoad( void )
         aScenList.Apply( GetRoot() );
     }
 
-    SfxObjectShell* pShell = GetDocShell();
-
-    // BASIC
-    if( bHasBasic && pShell )
+    // read doc info (no docshell while pasting from clipboard)
+    if( SfxObjectShell* pShell = GetDocShell() )
     {
-        SvtFilterOptions*   pFiltOpt = SvtFilterOptions::Get();
-
-        if( pFiltOpt )
+        // BIFF5+ without storage is possible
+        SotStorageRef xRootStrg = GetRootStorage();
+        if( xRootStrg.Is() )
         {
-            if( pFiltOpt->IsLoadExcelBasicCode() || pFiltOpt->IsLoadExcelBasicStorage() )
-            {
-                DBG_ASSERT( GetRootStorage(), "-ImportExcel8::PostDocLoad(): no storage, no cookies!" );
-
-                SvxImportMSVBasic   aBasicImport( *pShell, *GetRootStorage(),
-                                                    pFiltOpt->IsLoadExcelBasicCode(),
-                                                    pFiltOpt->IsLoadExcelBasicStorage() );
-
-                aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
-            }
+            SfxDocumentInfo aNewDocInfo;
+            SfxDocumentInfo& rOldDocInfo = pShell->GetDocInfo();
+            aNewDocInfo.LoadPropertySet( GetRootStorage() );
+            rOldDocInfo = aNewDocInfo;
+            pShell->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
         }
-    }
-
-    // read doc info
-    // no docshell while pasting from clipboard
-    if( pShell )
-    {
-        SfxDocumentInfo     aNewDocInfo;
-        SfxDocumentInfo&    rOldDocInfo = pShell->GetDocInfo();
-
-        aNewDocInfo.LoadPropertySet( GetRootStorage() );
-
-        rOldDocInfo = aNewDocInfo;
-        pShell->Broadcast( SfxDocumentInfoHint( &rOldDocInfo ) );
     }
 
     // building pivot tables
