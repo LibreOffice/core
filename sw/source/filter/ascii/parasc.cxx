@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 12:40:07 $
+ *  last change: $Author: jp $ $Date: 2001-09-19 17:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _RTL_TENCINFO_H
+#include <rtl/tencinfo.h>
+#endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
@@ -537,8 +540,7 @@ class SwASCIIParser
     long nFileSize;
     BOOL bNewDoc;
 
-    void ReadChars();
-    void ReadUnicode();
+    ULONG ReadChars();
 
 public:
     SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
@@ -637,14 +639,22 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     pPam = new SwPaM( *rCrsr.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 1 ];
 
-    SfxItemSet aDfltSet( pDoc->GetAttrPool(),   RES_CHRATR_FONT,
-                                                RES_CHRATR_LANGUAGE );
+    SfxItemSet aDfltSet( pDoc->GetAttrPool(),
+                RES_CHRATR_FONT,        RES_CHRATR_LANGUAGE,
+                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_LANGUAGE,
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
+                0 );
 
     // set defaults from the options
     if( rOpt.GetLanguage() )
     {
-        aDfltSet.Put( SvxLanguageItem( (LanguageType)rOpt.GetLanguage(),
-                                        RES_CHRATR_LANGUAGE ) );
+        SvxLanguageItem aLang( (LanguageType)rOpt.GetLanguage(),
+                                 RES_CHRATR_LANGUAGE );
+        aDfltSet.Put( aLang );
+//!!!!!!!!!!!!!!!
+//JP 19.9.2001: must exit defines for CJK and CTL
+//      aDfltSet.Put( aLang, RES_CHRATR_CJK_LANGUAGE );
+//      aDfltSet.Put( aLang, RES_CHRATR_CTL_LANGUAGE );
     }
     if( rOpt.GetFontName().Len() )
     {
@@ -658,9 +668,17 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
             pFnt = new SfxFont( FAMILY_DONTKNOW, rOpt.GetFontName() );
             bDelete = TRUE;
         }
+        SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
+                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet() );
+        aDfltSet.Put( aFont );
+//!!!!!!!!!!!!!!!
+//JP 19.9.2001: must exit defines for CJK and CTL
+//      aDfltSet.Put( aFont, RES_CHRATR_CJK_FONT );
+//      aDfltSet.Put( aFont, RES_CHRATR_CTL_FONT );
 
-        aDfltSet.Put( SvxFontItem( pFnt->GetFamily(), pFnt->GetName(),
-                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet() ) );
+
+        if( bDelete )
+            delete (SfxFont*)pFnt;
     }
 
     if( aDfltSet.Count() )
@@ -675,7 +693,7 @@ SwASCIIParser::SwASCIIParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 SwASCIIParser::~SwASCIIParser()
 {
     delete pPam;
-    delete pArr;
+    delete [] pArr;
     delete pItemSet;
 }
 
@@ -690,7 +708,6 @@ ULONG SwASCIIParser::CallParser()
     rInput.Seek(STREAM_SEEK_TO_BEGIN);
     rInput.ResetError();
 
-    ULONG nError = 0;
     ::StartProgress( STR_STATSTR_W4WREAD, 0, nFileSize, pDoc->GetDocShell() );
 
     SwPaM* pInsPam = 0;
@@ -702,10 +719,7 @@ ULONG SwASCIIParser::CallParser()
         nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
     }
 
-    if( RTL_TEXTENCODING_UCS2 == rOpt.GetCharSet() )
-        ReadUnicode();
-    else
-        ReadChars();
+    ULONG nError = ReadChars();
 
     if( pInsPam )
     {
@@ -734,204 +748,31 @@ ULONG SwASCIIParser::CallParser()
     return nError;
 }
 
-void SwASCIIParser::ReadChars()
+ULONG SwASCIIParser::ReadChars()
 {
-    sal_Char *pStt = pArr, *pEnd = pArr, *pLastStt = pArr;
-    long nReadCnt = 0;
-
-    sal_Char cLastCR = 0;
-    long nLineLen = 0;
-
-    do {
-        if( pStt >= pEnd )
-        {
-            if( pLastStt != pStt )
-                pDoc->Insert( *pPam, String( pLastStt, rOpt.GetCharSet() ));
-
-            // lese einen neuen Block ein
-            ULONG lGCount;
-            if (SVSTREAM_OK != rInput.GetError() ||
-                ((lGCount = rInput.Read(pArr, ASC_BUFFLEN)) == 0))
-                break;      // aus der WHILE-Schleife heraus
-
-            if( lGCount == ASC_BUFFLEN )
-            {
-                if( RTL_TEXTENCODING_UTF8 == rOpt.GetCharSet() &&
-                    0 != ( pArr[ ASC_BUFFLEN - 1 ] & 0x80 ) )
-                {
-                    // check the last char and skip before the start of it
-                    long nBack = 0;
-                    while( 0x80 == ( pArr[ ASC_BUFFLEN - 1 + nBack ] & 0xC0 ))
-                        --nBack;
-                    --nBack;
-                    lGCount += nBack;
-                    rInput.SeekRel( nBack );
-                }
-                else if( RTL_TEXTENCODING_UTF7 == rOpt.GetCharSet() )
-                {
-                    // search any char that may not be convertet
-                    long nBack = 0;
-                    sal_Char c;
-                    while( ' ' < ( c = pArr[ ASC_BUFFLEN - 1 + nBack ] ) &&
-                            '+' != c )
-                        --nBack;
-                    if( '+' == c )
-                        --nBack;
-                    lGCount += nBack;
-                    rInput.SeekRel( nBack );
-                }
-            }
-
-            pEnd = pArr + lGCount;
-            nReadCnt += lGCount;
-            *pEnd = 0;
-            pStt = pLastStt = pArr;
-
-            ::SetProgressState( nReadCnt, pDoc->GetDocShell() );
-
-            if( cLastCR )
-            {
-                if( 0x0a == *pStt && 0x0d == cLastCR )
-                    pLastStt = ++pStt;
-                cLastCR = 0;
-                nLineLen = 0;
-                // JP 03.04.96: das letze am Ende nehmen wir nicht
-                if( !rInput.IsEof() || !(pEnd == pStt ||
-                    ( !*pEnd && pEnd == pStt+1 ) ) )
-                    pDoc->SplitNode( *pPam->GetPoint() );
-            }
-        }
-
-        BOOL bIns = TRUE, bSplitNode = FALSE;
-        switch( *pStt )
-        {
-        case 0:
-                    pEnd = pStt;
-                    bIns = FALSE;
-                    break;
-
-        case 0x0a:  if( LINEEND_LF == rOpt.GetParaFlags() )
-                    {
-                        bIns = FALSE;
-                        *pStt = 0;
-                        ++pStt;
-
-                        // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( !rInput.IsEof() || !(pEnd == pStt ||
-                            ( !*pEnd && pEnd == pStt+1 ) ) )
-                            bSplitNode = TRUE;
-                    }
-                    break;
-
-        case 0x0d:  if( LINEEND_LF != rOpt.GetParaFlags() )
-                    {
-                        bIns = FALSE;
-                        *pStt = 0;
-                        ++pStt;
-
-                        BOOL bChkSplit = FALSE;
-                        if( LINEEND_CRLF == rOpt.GetParaFlags() )
-                        {
-                            if( pStt == pEnd )
-                                cLastCR = 0x0d;
-                            else if( 0x0a == *pStt )
-                            {
-                                ++pStt;
-                                bChkSplit = TRUE;
-                            }
-                        }
-                        else
-                            bChkSplit = TRUE;
-
-                            // JP 03.04.96: das letze am Ende nehmen wir nicht
-                        if( bChkSplit && ( !rInput.IsEof() ||
-                            !(pEnd == pStt || ( !*pEnd && pEnd == pStt+1 ))))
-                                bSplitNode = TRUE;
-                    }
-                    break;
-
-        case 0x0c:
-                    {
-                        // dann mal einen harten Seitenumbruch einfuegen
-                        *pStt++ = 0;
-                        if( nLineLen )
-                        {
-                            // Change to charset system!!!!
-                            //rOpt.GetCharSet();
-                            pDoc->Insert( *pPam, String( pLastStt,
-                                                        rOpt.GetCharSet() ));
-                        }
-                        pDoc->SplitNode( *pPam->GetPoint() );
-                        pDoc->Insert( *pPam, SvxFmtBreakItem(
-                                    SVX_BREAK_PAGE_BEFORE ));
-                        pLastStt = pStt;
-                        nLineLen = 0;
-                        bIns = FALSE;
-                    }
-                    break;
-
-        case 0x1a:
-                    if( nReadCnt == nFileSize && pStt+1 == pEnd )
-                        *pStt = 0;
-                    else
-                        *pStt = '#';        // Ersatzdarstellung
-                    break;
-
-        case '\t':  break;
-
-        default:
-            if( (BYTE)' ' > (BYTE)*pStt )
-                    // Ctrl-Zchn gefunden ersetze durch '#'
-                *pStt = '#';
-            break;
-        }
-
-        if( bIns )
-        {
-            if( ( nLineLen >= MAX_ASCII_PARA - 100 ) &&
-                ( ( *pStt == ' ' ) || ( nLineLen >= MAX_ASCII_PARA - 1 ) ) )
-            {
-                sal_Char c = *pStt;
-                *pStt = 0;
-
-                // Change to charset system!!!!
-                //rOpt.GetCharSet();
-                pDoc->Insert( *pPam, String( pLastStt, rOpt.GetCharSet() ));
-
-                pDoc->SplitNode( *pPam->GetPoint() );
-                pLastStt = pStt;
-                nLineLen = 0;
-                *pStt = c;
-            }
-            ++pStt;
-            ++nLineLen;
-        }
-        else if( bSplitNode )
-        {
-            // es wurde ein CR/LF erkannt, also speichere den Text
-
-            // Change to charset system!!!!
-            //rOpt.GetCharSet();
-            pDoc->Insert( *pPam, String( pLastStt, rOpt.GetCharSet() ));
-
-            pDoc->SplitNode( *pPam->GetPoint() );
-            pLastStt = pStt;
-            nLineLen = 0;
-        }
-    } while( TRUE );
-}
-
-void SwASCIIParser::ReadUnicode()
-{
-    long nReadCnt = 0;
-
-    rInput.StartReadingUnicodeText();
-    BOOL bSwapUnicode = rInput.IsEndianSwap();
-
-    sal_Unicode *pStt = (sal_Unicode*)pArr, *pEnd = pStt, *pLastStt = pStt;
-
+    sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
+    long nReadCnt = 0, nLineLen = 0;
     sal_Unicode cLastCR = 0;
-    long nLineLen = 0;
+
+    BOOL bSwapUnicode;
+    rtl_TextToUnicodeConverter hConverter;
+    if( RTL_TEXTENCODING_UCS2 != rOpt.GetCharSet() )
+    {
+        hConverter = rtl_createTextToUnicodeConverter( rOpt.GetCharSet() );
+        ASSERT( hConverter, "no string convert avaiable" );
+        if( !hConverter )
+            return ERR_W4W_DLL_ERROR | ERROR_SW_READ_BASE;
+        bSwapUnicode = FALSE;
+    }
+    else
+    {
+        hConverter = 0;
+        rInput.StartReadingUnicodeText();
+        bSwapUnicode = rInput.IsEndianSwap();
+    }
+
+    String sWork;
+    ULONG nArrOffset = 0;
 
     do {
         if( pStt >= pEnd )
@@ -941,25 +782,52 @@ void SwASCIIParser::ReadUnicode()
 
             // lese einen neuen Block ein
             ULONG lGCount;
-            if (SVSTREAM_OK != rInput.GetError() ||
-                ((lGCount = rInput.Read(pArr, ASC_BUFFLEN)) == 0))
+            if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
+                        rInput.Read( pArr + nArrOffset,
+                                     ASC_BUFFLEN - nArrOffset )))
                 break;      // aus der WHILE-Schleife heraus
 
-            pEnd = (sal_Unicode*)(pArr + lGCount);
-            nReadCnt += lGCount;
-            *pEnd = 0;
-            pStt = pLastStt = (sal_Unicode*)pArr;
-
-            if( bSwapUnicode )
+            if( hConverter )
             {
-                sal_Char* pF = pArr, *pN = pArr + 1;
-                for( ULONG n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
+                sal_uInt32 nInfo;
+                sal_Size nNewLen = lGCount, nCntBytes;
+                sal_Unicode* pBuf = sWork.AllocBuffer( nNewLen );
+
+                nNewLen = rtl_convertTextToUnicode( hConverter, 0,
+                                pArr, lGCount, pBuf, nNewLen,
+                                (
+                                RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
+                                RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
+                                ),
+                                &nInfo,
+                                &nCntBytes );
+                if( 0 != ( nArrOffset = lGCount - nCntBytes ) )
+                    memmove( pArr, pArr + nCntBytes, nArrOffset );
+                sWork.ReleaseBufferAccess( nNewLen );
+
+                pStt = pLastStt = sWork.GetBufferAccess();
+                pEnd = pStt + nNewLen;
+            }
+            else
+            {
+                pStt = pLastStt = (sal_Unicode*)pArr;
+                pEnd = (sal_Unicode*)(pArr + lGCount);
+
+                if( bSwapUnicode )
                 {
-                    sal_Char c = *pF;
-                    *pF = *pN;
-                    *pN = c;
+                    sal_Char* pF = pArr, *pN = pArr + 1;
+                    for( ULONG n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
+                    {
+                        sal_Char c = *pF;
+                        *pF = *pN;
+                        *pN = c;
+                    }
                 }
             }
+
+            *pEnd = 0;
+            nReadCnt += lGCount;
 
             ::SetProgressState( nReadCnt, pDoc->GetDocShell() );
 
@@ -1066,11 +934,7 @@ void SwASCIIParser::ReadUnicode()
             {
                 sal_Unicode c = *pStt;
                 *pStt = 0;
-
-                // Change to charset system!!!!
-                //rOpt.GetCharSet();
                 pDoc->Insert( *pPam, String( pLastStt ));
-
                 pDoc->SplitNode( *pPam->GetPoint() );
                 pLastStt = pStt;
                 nLineLen = 0;
@@ -1084,13 +948,18 @@ void SwASCIIParser::ReadUnicode()
             // es wurde ein CR/LF erkannt, also speichere den Text
 
             pDoc->Insert( *pPam, String( pLastStt ));
-
             pDoc->SplitNode( *pPam->GetPoint() );
             pLastStt = pStt;
             nLineLen = 0;
         }
     } while( TRUE );
+
+    if( hConverter )
+        rtl_destroyTextToUnicodeConverter( hConverter );
+
+    return 0;
 }
+
 
 #endif
 
@@ -1098,11 +967,14 @@ void SwASCIIParser::ReadUnicode()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/parasc.cxx,v 1.2 2001-01-19 12:40:07 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ascii/parasc.cxx,v 1.3 2001-09-19 17:04:14 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/01/19 12:40:07  jp
+      use new stream interface instead of one implementation; Bugfix: #76023#: Textfilter use system charset
+
       Revision 1.1.1.1  2000/09/18 17:14:53  hr
       initial import
 
