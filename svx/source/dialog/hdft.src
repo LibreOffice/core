@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 23:20:33 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:36:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ russian ] = "Ïîëå ñëåâà";
         Text[ polish ] = "Lewy margines";
         Text[ japanese ] = "¶—]”’(~L)";
-        Text[ chinese_traditional ] = "¥ªÃäªÅ¥Õ(~L)";
+        Text[ chinese_traditional ] = "¥ªÃä®Ø(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
@@ -208,7 +208,7 @@ TabPage RID_SVXPAGE_HEADER
         Text[ russian ] = "Ïîëå ñïğàâà";
         Text[ polish ] = "Prawy margines";
         Text[ japanese ] = "‰E—]”’(~I)";
-        Text[ chinese_traditional ] = "¥kÃäªÅ¥Õ(~I)";
+        Text[ chinese_traditional ] = "¥kÃä®Ø(~I)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";
         Text[ greek ] = "Äåîéü ğåñéèşñéï";
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
@@ -283,16 +283,16 @@ TabPage RID_SVXPAGE_HEADER
         Text [ ENGLISH ] = "H~eight" ;
         Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
-        Text [ swedish ] = "~Höjd" ;
+        Text [ swedish ] = "Höj~d" ;
         Text [ danish ] = "Højde" ;
         Text [ italian ] = "~Altezza" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ french ] = "~Hauteur" ;
+        Text [ french ] = "Hauteur" ;
         Text [ dutch ] = "~Hoogte" ;
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wysokoœæ";
         Text[ japanese ] = "‚‚³(~H)";
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -522,7 +522,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ russian ] = "Ïîëå ñëåâà";
         Text[ polish ] = "Lewy margines";
         Text[ japanese ] = "¶—]”’(~L)";
-        Text[ chinese_traditional ] = "¥ªÃäªÅ¥Õ(~L)";
+        Text[ chinese_traditional ] = "¥ªÃä®Ø(~L)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíÓÑ";
         Text[ greek ] = "Áñéóôåñü ğåñéèşñéï";
         Text[ korean ] = "¿ŞÂÊ ¿©¹é(~L)";
@@ -567,7 +567,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text[ russian ] = "Ïîëå ñïğàâà";
         Text[ polish ] = "Prawy margines";
         Text[ japanese ] = "‰E—]”’(~I)";
-        Text[ chinese_traditional ] = "¥kÃäªÅ¥Õ(~I)";
+        Text[ chinese_traditional ] = "¥kÃä®Ø(~I)";
         Text[ arabic ] = "ÇáåÇãÔ ÇáÃíãä";
         Text[ greek ] = "Äåîéü ğåñéèşñéï";
         Text[ korean ] = "¿À¸¥ÂÊ ¿©¹é(~I)";
@@ -642,7 +642,7 @@ TabPage RID_SVXPAGE_FOOTER
         Disable = TRUE ;
         Text [ english_us ] = "~Height" ;
         Text [ portuguese_brazilian ] = "~H?e" ;
-        Text [ swedish ] = "~Höjd" ;
+        Text [ swedish ] = "Höj~d" ;
         Text [ danish ] = "Højde" ;
         Text [ italian ] = "~Altezza" ;
         Text [ spanish ] = "A~ltura" ;
@@ -651,7 +651,7 @@ TabPage RID_SVXPAGE_FOOTER
         Text [ portuguese ] = "~Altura" ;
         Text[ chinese_simplified ] = "¸ß¶È(~H)";
         Text[ russian ] = "Âûñîòà";
-        Text[ polish ] = "Wys.";
+        Text[ polish ] = "Wysokoœæ";
         Text[ japanese ] = "‚‚³(~H)";
         Text[ chinese_traditional ] = "°ª«×(~H)";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
@@ -815,6 +815,7 @@ QueryBox RID_SVXQBX_DELETE_HEADFOOT
 };
 
  // ********************************************************************** EOF
+
 
 
 
