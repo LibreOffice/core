@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:06:28 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:50:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ String STYLES + 2
     Text[ english_us ] = "~Cancel";
     Text[ portuguese ] = "~Cancelar";
     Text[ russian ] = "Ξςμενθςό";
-    Text[ greek ] = "~Ακύρωση";
+    Text[ greek ] = "~Άκυρο";
     Text[ dutch ] = "~Annuleren";
     Text[ french ] = "Annuler";
     Text[ spanish ] = "~Cancelar";
@@ -307,7 +307,7 @@ String AgendaDlgNoCancel
     Text[ italian ] = "Θ necessario confermare una opzione.";
     Text[ swedish ] = "Ett alternativ mεste bekrδftas.";
     Text[ russian ] = "Νεξαυξδθμξ οξδςβεπδθςό οΰπΰμεςπ.";
-    Text[ greek ] = "Πρέπει να γίνει εκλογή μιας επιλογής.";
+    Text[ greek ] = "Πρέπει να γίνει επιβεβαίωση μιας επιλογής.";
     Text[ finnish ] = "Valinta on vahvistettava.";
     Text[ danish ] = "Du skal bekrζfte en indstilling.";
     Text[ polish ] = "NaleΏy potwierdziζ opcjκ.";
@@ -525,7 +525,7 @@ String CorrespondenceDialog
     Text[ italian ] = "Destinatario";
     Text[ swedish ] = "Mottagare";
     Text[ russian ] = "Οξλσχΰςελό";
-    Text[ greek ] = "Τι επιθυμείτε να γράψετε;";
+    Text[ greek ] = "Παραλήπτης";
     Text[ danish ] = "Modtager";
     Text[ polish ] = "Odbiorca";
     Text[ portuguese_brazilian ] = "Destinatαrio";
@@ -556,7 +556,7 @@ String CorrespondenceDialog+1
     Text[ italian ] = "Un destinatario";
     Text[ swedish ] = "En mottagare";
     Text[ russian ] = "Ξδθν οξλσχΰςελό";
-    Text[ greek ] = "Μεμονωμένη επιστολή";
+    Text[ greek ] = "Ένας παραλήπτης";
     Text[ danish ] = "Ιn modtager";
     Text[ polish ] = "Jeden adresat";
     Text[ portuguese_brazilian ] = "Destinatαrio ϊnico";
@@ -588,7 +588,7 @@ String CorrespondenceDialog+2
     Text[ italian ] = "Piω destinatari (database Rubrica)";
     Text[ swedish ] = "Flera mottagare (adressdatabas)";
     Text[ russian ] = "Νερκξλόκξ οξλσχΰςελει (αΰηΰ δΰννϋυ ΰδπερξβ)";
-    Text[ greek ] = "Εγκύκλιος επιστολή";
+    Text[ greek ] = "Πολλοί παραλήπτες (βάση δεδομένων διευθύνσεων)";
     Text[ danish ] = "Flere modtagere (adressedatabase)";
     Text[ polish ] = "Kilku adresatσw (adresowa baza danych)";
     Text[ portuguese_brazilian ] = "Vαrios destinatαrios (banco de dados de endereηos)";
@@ -614,7 +614,7 @@ String CorrespondenceDialog+3
     Text[ english_us ] = "Use of This Template";
     Text[ portuguese ] = "Utilizar modelo";
     Text[ russian ] = "Θροξλόηξβΰνθε ύςξγξ ψΰαλξνΰ";
-    Text[ greek ] = "Use of This Template";
+    Text[ greek ] = "Χρήση αυτού του προτύπου";
     Text[ dutch ] = "Gebruikmaking van sjabloon";
     Text[ french ] = "Utilisation du modθle";
     Text[ spanish ] = "Uso de la plantilla";
@@ -644,10 +644,10 @@ String CorrespondenceFields
     Text = "Platzhalter anklicken und όberschreiben";
     Text[English] = "Click place holder and overwrite";
     Text[ english_us ] = "Click placeholder and overwrite";
-    Text[ language_user1 ] = "Platzhalter-Hinweistext";
+    Text[ language_user1 ] = "; Platzhalter-Hinweistext";
     Text[ portuguese ] = "Clique no marcador de posiηγo e escreva o seu texto";
     Text[ russian ] = "Ωελκνθςε νΰ οξλε οξδρςΰνξβκθ θ ββεδθςε νξβϋι ςεκρς";
-    Text[ greek ] = "Click place holder and overwrite";
+    Text[ greek ] = "Κάντε κλικ στο πλαίσιο δείκτη τοποθέτησης και αντικαταστήστε τον";
     Text[ dutch ] = "Op plaatsvervanger klikken en overschrijven";
     Text[ french ] = "Clic sur le substituant pour remplacement";
     Text[ spanish ] = "Pulse sobre el comodνn y sobrescriba";
@@ -676,10 +676,10 @@ String CorrespondenceFields+1
     Text = "Firma";
     Text[English] = "Company";
     Text[ english_us ] = "Company";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Empresa";
     Text[ russian ] = "Ξπγΰνθηΰφθÿ";
-    Text[ greek ] = "Εταιρία";
+    Text[ greek ] = "Εταιρεία";
     Text[ dutch ] = "Bedrijf";
     Text[ french ] = "Sociιtι";
     Text[ spanish ] = "Empresa";
@@ -708,7 +708,7 @@ String CorrespondenceFields+2
     Text = "Abteilung";
     Text[English] = "Department";
     Text[ english_us ] = "Department";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Departamento";
     Text[ russian ] = "Ξςδελ";
     Text[ greek ] = "Τμήμα";
@@ -740,7 +740,7 @@ String CorrespondenceFields+3
     Text = "Vorname";
     Text[English] = "First Name";
     Text[ english_us ] = "First Name";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Nome prσprio";
     Text[ russian ] = "Θμÿ";
     Text[ greek ] = "Όνομα";
@@ -772,7 +772,7 @@ String CorrespondenceFields+4
     Text = "Nachname";
     Text[English] = "Last Name";
     Text[ english_us ] = "Last Name";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Apelido";
     Text[ russian ] = "Τΰμθλθÿ";
     Text[ greek ] = "Επώνυμο";
@@ -804,10 +804,10 @@ String CorrespondenceFields+5
     Text = "Straίe";
     Text[English] = "Address";
     Text[ english_us ] = "Street";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Rua";
     Text[ russian ] = "Σλθφΰ";
-    Text[ greek ] = "Address";
+    Text[ greek ] = "Οδός";
     Text[ dutch ] = "Straat";
     Text[ french ] = "Rue";
     Text[ spanish ] = "Calle";
@@ -836,7 +836,7 @@ String CorrespondenceFields+6
     Text = "Land";
     Text[English] = "Country";
     Text[ english_us ] = "Country";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Paνs";
     Text[ russian ] = "Ρςπΰνΰ";
     Text[ greek ] = "Χώρα";
@@ -869,10 +869,10 @@ String CorrespondenceFields+7
     Text = "PLZ";
     Text[English] = "Postal Code";
     Text[ english_us ] = "ZIP/Postal Code";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "CP";
     Text[ russian ] = "Οξχςξβϋι θνδεκρ";
-    Text[ greek ] = "Postal Code";
+    Text[ greek ] = "Ταχυδρομικός κώδικας";
     Text[ dutch ] = "Postcode";
     Text[ french ] = "C.P.";
     Text[ spanish ] = "Cσdigo postal";
@@ -901,7 +901,7 @@ String CorrespondenceFields+8
     Text = "Ort";
     Text[English] = "City";
     Text[ english_us ] = "City";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Localidade";
     Text[ russian ] = "Γξπξδ";
     Text[ greek ] = "Πόλη";
@@ -933,7 +933,7 @@ String CorrespondenceFields+9
     Text = "Titel";
     Text[English] = "Title";
     Text[ english_us ] = "Title";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tνtulo";
     Text[ russian ] = "Ηΰγξλξβξκ";
     Text[ greek ] = "Τίτλος";
@@ -966,7 +966,7 @@ String CorrespondenceFields+10
     Text = "Position";
     Text[English] = "Position";
     Text[ english_us ] = "Position";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Posiηγo";
     Text[ russian ] = "Δξλζνξρςό";
     Text[ greek ] = "Θέση";
@@ -999,7 +999,7 @@ String CorrespondenceFields+11
     Text = "Anrede";
     Text[English] = "Form of Address";
     Text[ english_us ] = "Form of Address";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Vocativo";
     Text[ russian ] = "Τξπμΰ ΰδπερΰ";
     Text[ greek ] = "Προσφώνηση";
@@ -1032,7 +1032,7 @@ String CorrespondenceFields+12
     Text = "Kόrzel";
     Text[English] = "Initials";
     Text[ english_us ] = "Initials";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Iniciais";
     Text[ russian ] = "Θνθφθΰλϋ";
     Text[ greek ] = "Αρχικά";
@@ -1065,10 +1065,10 @@ String CorrespondenceFields+13
     Text = "Briefanrede";
     Text[English] = "Salutation";
     Text[ english_us ] = "Salutation";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Inνcio de carta";
     Text[ russian ] = "Οπθβεςρςβθε";
-    Text[ greek ] = "Προσφ. επιστ.";
+    Text[ greek ] = "Χαιρετισμός";
     Text[ dutch ] = "Aanhef";
     Text[ french ] = "Formule d'ouverture";
     Text[ spanish ] = "Tratamiento";
@@ -1098,10 +1098,10 @@ String CorrespondenceFields+14
     Text = "Tel. privat";
     Text[English] = "Home Phone";
     Text[ english_us ] = "Home Phone";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tel. particular";
     Text[ russian ] = "Δξμ. ςελετξν";
-    Text[ greek ] = "Home Phone";
+    Text[ greek ] = "Τηλέφωνο οικίας";
     Text[ dutch ] = "Tel. privι";
     Text[ french ] = "Tιl. domicile";
     Text[ spanish ] = "Tfno. particular";
@@ -1131,10 +1131,10 @@ String CorrespondenceFields+15
     Text = "Tel. gesch.";
     Text[English] = "Work Phone";
     Text[ english_us ] = "Work Phone";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tel. emprego";
     Text[ russian ] = "Πΰα. ςελετξν";
-    Text[ greek ] = "Work Phone";
+    Text[ greek ] = "Τηλέφωνο εργασίας";
     Text[ dutch ] = "Tel. werk";
     Text[ french ] = "Tιl. bureau 2";
     Text[ spanish ] = "Tfno. trabajo";
@@ -1164,10 +1164,10 @@ String CorrespondenceFields+16
     Text = "Fax";
     Text[English] = "Fax";
     Text[ english_us ] = "Fax";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Fax";
     Text[ russian ] = "Τΰκρ";
-    Text[ greek ] = "Fax";
+    Text[ greek ] = "Φαξ";
     Text[ dutch ] = "Fax";
     Text[ french ] = "Fax";
     Text[ spanish ] = "Fax";
@@ -1197,10 +1197,10 @@ String CorrespondenceFields+17
     Text = "E-Mail";
     Text[English] = "E-Mail";
     Text[ english_us ] = "E-Mail";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "E-mail";
     Text[ russian ] = "έλ. οξχςΰ";
-    Text[ greek ] = "E-Mail";
+    Text[ greek ] = "Διεύθυνση ηλεκτρονικού ταχυδρομείου";
     Text[ dutch ] = "E-mail";
     Text[ french ] = "E-mail";
     Text[ spanish ] = "Correo-e";
@@ -1230,7 +1230,7 @@ String CorrespondenceFields+18
     Text = "URL";
     Text[English] = "URL";
     Text[ english_us ] = "URL";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "URL";
     Text[ russian ] = "URL";
     Text[ greek ] = "URL";
@@ -1263,10 +1263,10 @@ String CorrespondenceFields+19
     Text = "Notiz";
     Text[English] = "Notes";
     Text[ english_us ] = "Notes";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Anotaηυes";
     Text[ russian ] = "Οπθμεχΰνθÿ";
-    Text[ greek ] = "Σημείωση";
+    Text[ greek ] = "Σημειώσεις";
     Text[ dutch ] = "Aantekening";
     Text[ french ] = "Notes";
     Text[ spanish ] = "Notas";
@@ -1296,10 +1296,10 @@ String CorrespondenceFields+20
     Text = "Alt. Feld 1";
     Text[English] = "Alt. Field 1";
     Text[ english_us ] = "Alt. Field 1";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 1";
     Text[ russian ] = "ΐλόςεπν. οξλε 1";
-    Text[ greek ] = "Alt. Field 1";
+    Text[ greek ] = "Εναλλακτικό πεδίο 1";
     Text[ dutch ] = "Alt. veld 1";
     Text[ french ] = "Champ facultatif 1";
     Text[ spanish ] = "Campo alt. 1";
@@ -1329,10 +1329,10 @@ String CorrespondenceFields+21
     Text = "Alt. Feld 2";
     Text[English] = "Alt. Field 2";
     Text[ english_us ] = "Alt. Field 2";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 2";
     Text[ russian ] = "ΐλόςεπν. οξλε 2";
-    Text[ greek ] = "Alt. Field 2";
+    Text[ greek ] = "Εναλλακτικό πεδίο 2";
     Text[ dutch ] = "Alt. veld 2";
     Text[ french ] = "Champ facultatif 2";
     Text[ spanish ] = "Campo alt. 2";
@@ -1362,10 +1362,10 @@ String CorrespondenceFields+22
     Text = "Alt. Feld 3";
     Text[English] = "Alt. Field 3";
     Text[ english_us ] = "Alt. Field 3";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 3";
     Text[ russian ] = "ΐλόςεπν. οξλε 3";
-    Text[ greek ] = "Alt. Field 3";
+    Text[ greek ] = "Εναλλακτικό πεδίο 3";
     Text[ dutch ] = "Alt. veld 3";
     Text[ french ] = "Champ facultatif 3";
     Text[ spanish ] = "Campo alt. 3";
@@ -1395,10 +1395,10 @@ String CorrespondenceFields+23
     Text = "Alt. Feld 4";
     Text[English] = "Alt. Field 4";
     Text[ english_us ] = "Alt. Field 4";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Campo facultativo 4";
     Text[ russian ] = "ΐλόςεπν. οξλε 4";
-    Text[ greek ] = "Alt. Field 4";
+    Text[ greek ] = "Εναλλακτικό πεδίο 4";
     Text[ dutch ] = "Alt. veld 4";
     Text[ french ] = "Champ facultatif 4";
     Text[ spanish ] = "Campo alt. 4";
@@ -1428,10 +1428,10 @@ String CorrespondenceFields+24
     Text = "ID";
     Text[English] = "ID";
     Text[ english_us ] = "ID";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "ID";
     Text[ russian ] = "ID";
-    Text[ greek ] = "Ταυτότητα (ID)";
+    Text[ greek ] = "Αναγνωριστικό";
     Text[ dutch ] = "ID";
     Text[ french ] = "ID";
     Text[ spanish ] = "ID (identificaciσn)";
@@ -1461,7 +1461,7 @@ String CorrespondenceFields+25
     Text = "Bundesland";
     Text[English] = "State";
     Text[ english_us ] = "State";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Estado";
     Text[ russian ] = "Ξαλΰρςό";
     Text[ greek ] = "Νομός";
@@ -1494,10 +1494,10 @@ String CorrespondenceFields+26
     Text = "Tel. Bόro";
     Text[English] = "Office Phone";
     Text[ english_us ] = "Office Phone";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Tel. emprego";
     Text[ russian ] = "Πΰαξχθι ςελετξν";
-    Text[ greek ] = "Office Phone";
+    Text[ greek ] = "Τηλέφωνο γραφείου";
     Text[ dutch ] = "Tel. kantoor";
     Text[ french ] = "Tιl. bureau 2";
     Text[ spanish ] = "Tfno. oficina";
@@ -1527,10 +1527,10 @@ String CorrespondenceFields+27
     Text = "Pager";
     Text[English] = "Pager";
     Text[ english_us ] = "Pager";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Pager";
     Text[ russian ] = "Οειδζεπ";
-    Text[ greek ] = "Τηλεειδοποιητής";
+    Text[ greek ] = "Τηλεειδοποίηση";
     Text[ dutch ] = "Pager";
     Text[ french ] = "Pager";
     Text[ spanish ] = "Busca";
@@ -1560,10 +1560,10 @@ String CorrespondenceFields+28
     Text = "Tel. Mobil";
     Text[English] = "Mobile Phone";
     Text[ english_us ] = "Mobile Phone";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Telemσvel";
     Text[ russian ] = "Òελετξν, μξαθλόνϋι";
-    Text[ greek ] = "Mobile Phone";
+    Text[ greek ] = "Κινητό τηλέφωνο";
     Text[ dutch ] = "Tel. mobiel";
     Text[ french ] = "Tιl. portable";
     Text[ spanish ] = "Tfno. mσvil";
@@ -1593,10 +1593,10 @@ String CorrespondenceFields+29
     Text = "Tel. Andere";
     Text[English] = "Other Phone";
     Text[ english_us ] = "Other Phone";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Outros telefones";
     Text[ russian ] = "Òελετξν δξοξλν.";
-    Text[ greek ] = "Other Phone";
+    Text[ greek ] = "Άλλο τηλέφωνο";
     Text[ dutch ] = "Tel. andere";
     Text[ french ] = "Tιl. autre";
     Text[ spanish ] = "Otros telιfonos";
@@ -1625,10 +1625,10 @@ String CorrespondenceFields+30
     Text = "Kalender URL";
     Text[English] = "Calendar URL";
     Text[ english_us ] = "Calendar URL";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "URL do calendαrio";
     Text[ russian ] = "URL κΰλενδΰπÿ";
-    Text[ greek ] = "Calendar URL";
+    Text[ greek ] = "URL ημερολογίου";
     Text[ dutch ] = "Kalender URL";
     Text[ french ] = "URL du calendrier";
     Text[ spanish ] = "Calendario URL";
@@ -1657,7 +1657,7 @@ String CorrespondenceFields+31
     Text = "Einladen";
     Text[English] = "Invite";
     Text[ english_us ] = "Invite";
-    Text[ language_user1 ] = "dies ist ein Platzhalter auf einem Brief";
+    Text[ language_user1 ] = "; dies ist ein Platzhalter auf einem Brief";
     Text[ portuguese ] = "Convocar";
     Text[ russian ] = "Οπθγλΰρθςό";
     Text[ greek ] = "Πρόσκληση";
@@ -1690,7 +1690,7 @@ String TextField
     Text = "Benutzerdatenfeld ist nicht definiert!";
     Text[English] = "Textfield is not defined!";
     Text[ english_us ] = "User data field is not defined!";
-    Text[ language_user1 ] = "Mitteilung in einer Messagebox";
+    Text[ language_user1 ] = "; Mitteilung in einer Messagebox";
 
     Text[ portuguese ] = "Campo de dados do utilizador nγo definido.";
     Text[ russian ] = "Νε ηΰδΰνξ οξλε οξλόηξβΰςελÿ.";
@@ -1723,10 +1723,10 @@ String Newsletter
     Text = "Allgemeines Layout";
     Text[English] = "General Layout";
     Text[ english_us ] = "General layout";
-    Text[ language_user1 ] = "άberschrift fόr Optionsgruppe im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; άberschrift fόr Optionsgruppe im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Configuraηγo geral";
     Text[ russian ] = "Ξαωΰÿ πΰημεςκΰ";
-    Text[ greek ] = "General layout";
+    Text[ greek ] = "Γενική διάταξη";
     Text[ dutch ] = "Algemene lay-out";
     Text[ french ] = "Mise en page universelle";
     Text[ spanish ] = "Diseρo general";
@@ -1756,10 +1756,10 @@ String Newsletter + 1
     Text = "Standard Layout";
     Text[English] = "Standard Layout";
     Text[ english_us ] = "Default layout";
-    Text[ language_user1 ] = "Layout Option im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; Layout Option im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Configuraηγo padrγo";
     Text[ russian ] = "Ρςΰνδΰπςνΰÿ πΰημεςκΰ";
-    Text[ greek ] = "Default layout";
+    Text[ greek ] = "Προεπιλεγμένη διάταξη";
     Text[ dutch ] = "Standaardlay-out";
     Text[ french ] = "Mise en page standard";
     Text[ spanish ] = "Diseρo predeterminado";
@@ -1788,10 +1788,10 @@ String Newsletter + 2
     Text = "Festschrift";
     Text[English] = "Party Layout";
     Text[ english_us ] = "Commemorative publication layout";
-    Text[ language_user1 ] = "Layout Option im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; Layout Option im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Publicaηγo festiva";
     Text[ russian ] = "Πΰημεςκΰ ώαθλεινξι οσαλθκΰφθθ";
-    Text[ greek ] = "Party Layout";
+    Text[ greek ] = "Διάταξη δημοσίευσης υπενθύμισης";
     Text[ dutch ] = "Feestelijke lay-out";
     Text[ french ] = "Mise en page Fκte";
     Text[ spanish ] = "Diseρo festivo";
@@ -1820,10 +1820,10 @@ String Newsletter + 3
     Text = "Prospekt Layout";
     Text[English] = "Brochure Layout";
     Text[ english_us ] = "Brochure layout";
-    Text[ language_user1 ] = "Layout Option im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; Layout Option im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Configuraηγo de brochura";
     Text[ russian ] = "Πΰημεςκΰ απξψώπϋ";
-    Text[ greek ] = "Brochure layout";
+    Text[ greek ] = "Διάταξη φυλλαδίου";
     Text[ dutch ] = "Brochure lay-out";
     Text[ french ] = "Mise en page Prospectus";
     Text[ spanish ] = "Diseρo prospecto";
@@ -1852,7 +1852,7 @@ String Newsletter + 10
     Text = "Format";
     Text[English] = "Format";
     Text[ english_us ] = "Format";
-    Text[ language_user1 ] = "άberschrift fόr Optionsgruppe im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; άberschrift fόr Optionsgruppe im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Formato";
     Text[ russian ] = "Τξπμΰς";
     Text[ greek ] = "Μορφή";
@@ -1884,10 +1884,10 @@ String Newsletter + 11
     Text = "Einseitig";
     Text[English] = "Single sided";
     Text[ english_us ] = "Single-sided";
-    Text[ language_user1 ] = "'Format' Option im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; 'Format' Option im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Uma pαgina";
     Text[ russian ] = "Ρ ξδνξι ρςξπξνϋ";
-    Text[ greek ] = "Single sided";
+    Text[ greek ] = "Μονής όψης";
     Text[ dutch ] = "Enkelzijdig";
     Text[ french ] = "Une page";
     Text[ spanish ] = "Por un lado";
@@ -1916,10 +1916,10 @@ String Newsletter + 12
     Text = "Doppelseitig";
     Text[English] = "double sided";
     Text[ english_us ] = "Double-sided";
-    Text[ language_user1 ] = "'Format' Option im Initialdialog fόr die Zeitungsvorlage";
+    Text[ language_user1 ] = "; 'Format' Option im Initialdialog fόr die Zeitungsvorlage";
     Text[ portuguese ] = "Pαgina dupla";
     Text[ russian ] = "Ρ δβσυ ρςξπξν";
-    Text[ greek ] = "double sided";
+    Text[ greek ] = "Διπλής όψης";
     Text[ dutch ] = "Dubbelzijdig";
     Text[ french ] = "Pages vis-ΰ-vis";
     Text[ spanish ] = "Ambas caras";
@@ -1942,6 +1942,7 @@ String Newsletter + 12
     Text[ hindi ] = "ΰ¤¦ΰ¥ΰ¤µΰ¤Ώΰ¤—ΰ¥ΰ¤£ΰ¤Ώΰ¤¤-ΰ¤­ΰ¤Ύΰ¤—";
     Text[ slovak ] = "DvojitΓ© riadkovanie";
 };
+
 
 
 
