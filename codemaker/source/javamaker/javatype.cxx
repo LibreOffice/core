@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-08-20 11:10:55 $
+ *  last change: $Author: jbu $ $Date: 2001-10-26 11:40:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,8 +1438,7 @@ sal_Bool StructureType::dumpFile(FileStream& o)
             flags = flags | UIT_ANY;
         if (isInterface(fieldType))
             flags = flags | UIT_INTERFACE;
-        if (flags)
-              aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i, flags));
+        aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i, flags));
 
         dumpSeqStaticMember(o, fieldType, fieldName);
         o << indent() << "public ";
@@ -1480,6 +1479,7 @@ sal_Bool StructureType::dumpFile(FileStream& o)
                 o << indent();
 
             o << "new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( \"" << (*iter).m_name << "\", ";
+            o << (*iter).m_index << ", ";
 
             if ((*iter).m_flags & UIT_UNSIGNED)
             {
@@ -1492,6 +1492,10 @@ sal_Bool StructureType::dumpFile(FileStream& o)
             else if ((*iter).m_flags & UIT_INTERFACE)
             {
                 o << "com.sun.star.lib.uno.typeinfo.TypeInfo.INTERFACE )";
+            }
+            else
+            {
+                o << "0 )";
             }
 
             if (++iter != aUnoTypeInfos.end())
@@ -1564,6 +1568,7 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
     }
 
     sal_uInt16 i;
+    sal_Int32 nOffset = 0;
     for (i=0; i < fieldCount; i++)
     {
         access = m_reader.getFieldAccess(i);
@@ -1576,17 +1581,19 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
 
         flags = 0;
 
+        if (m_typeName.equals("com/sun/star/uno/Exception") && fieldName.equals("Message"))
+        {
+            nOffset ++;
+            continue;
+        }
+
         if (isUnsigned(fieldType))
             flags = flags | UIT_UNSIGNED;
         if (isAny(fieldType))
             flags = flags | UIT_ANY;
         if (isInterface(fieldType))
             flags = flags | UIT_INTERFACE;
-        if (flags)
-              aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i, flags));
-
-        if (m_typeName.equals("com/sun/star/uno/Exception") && fieldName.equals("Message"))
-            continue;
+        aUnoTypeInfos.push_back(UnoInfo(fieldName, "", UNOTYPEINFO_MEMBER, i-nOffset, flags));
 
         dumpSeqStaticMember(o, fieldType, fieldName);
         o << indent() << "public ";
@@ -1628,7 +1635,7 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
     if (m_typeName.equals("com/sun/star/uno/RuntimeException"))
     {
         o << "\n" << indent() << "public static final com.sun.star.lib.uno.typeinfo.TypeInfo UNOTYPEINFO[] = { "
-          << "new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( \"Context\", com.sun.star.lib.uno.typeinfo.TypeInfo.INTERFACE ) };\n";
+          << "new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( \"Context\", 0, com.sun.star.lib.uno.typeinfo.TypeInfo.INTERFACE ) };\n";
     } else
     if (!aUnoTypeInfos.empty())
     {
@@ -1642,6 +1649,7 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
                 o << indent();
 
             o << "new com.sun.star.lib.uno.typeinfo.MemberTypeInfo( \"" << (*iter).m_name << "\", ";
+            o << (*iter).m_index << ", ";
 
             if ((*iter).m_flags & UIT_UNSIGNED)
             {
@@ -1654,6 +1662,10 @@ sal_Bool ExceptionType::dumpFile(FileStream& o)
             else if ((*iter).m_flags & UIT_INTERFACE)
             {
                 o << "com.sun.star.lib.uno.typeinfo.TypeInfo.INTERFACE )";
+            }
+            else
+            {
+                o << "0 )";
             }
 
             if (++iter != aUnoTypeInfos.end())
