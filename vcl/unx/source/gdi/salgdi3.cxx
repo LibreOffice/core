@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hdu $ $Date: 2001-03-07 12:59:08 $
+ *  last change: $Author: pl $ $Date: 2001-03-07 15:07:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,12 +576,12 @@ SalGraphicsData::SetFont( const ImplFontSelectData *pEntry )
     }
     else
     {
-        #ifdef DEBUG
+#ifdef DEBUG
         // XXX Fix me: provide a fallback for poor font installations
         // we may be reach this if no font matches the GUI font
         // MS Sans Serif;Geneva;Helv;WarpSans;Dialog;Lucida; ... */
         fprintf( stderr, "SalGraphicsData::SetFont: Invalid Font Selection\n" );
-        #endif
+#endif
     }
 }
 
@@ -1211,8 +1211,13 @@ SalGraphics::SetFont( ImplFontSelectData *pEntry )
         sal_Bool bVertical = pEntry->mbVertical;
         sal_Int32 nID = pEntry->mpFontData ? (sal_Int32)pEntry->mpFontData->mpSysData : 0;
 
-        return maGraphicsData.m_pPrinterGfx->SetFont( nID,
-            pEntry->mnHeight, pEntry->mnWidth, pEntry->mnOrientation);
+        return maGraphicsData.m_pPrinterGfx->SetFont(
+                                                     nID,
+                                                     pEntry->mnHeight,
+                                                     pEntry->mnWidth,
+                                                     pEntry->mnOrientation,
+                                                     pEntry->mbVertical
+                                                     );
     }
     else
 #endif
