@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 11:59:51 $
+ *  last change: $Author: obo $ $Date: 2005-01-25 15:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1037,7 +1037,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             if( fTemp )
             {
                 sTmp.append( fTemp );
-                sTmp.append( (sal_Unicode)'%' );
+                sTmp.append( (sal_Unicode)'s' );
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
             }
         }
