@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridcell.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:30:38 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 18:13:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3040,7 +3040,7 @@ void FmXTextCell::Paint(OutputDevice& rDev,
 
 
 /*************************************************************************/
-SMART_UNO_IMPLEMENTATION(FmXEditCell, FmXTextCell);
+//SMART_UNO_IMPLEMENTATION(FmXEditCell, FmXTextCell);
 
 
 DBG_NAME(FmXEditCell);
@@ -3248,7 +3248,7 @@ IMPL_LINK( FmXEditCell, OnTextChanged, void*, EMPTYARG )
 }
 
 /*************************************************************************/
-SMART_UNO_IMPLEMENTATION(FmXCheckBoxCell, FmXDataCell);
+//SMART_UNO_IMPLEMENTATION(FmXCheckBoxCell, FmXDataCell);
 
 
 DBG_NAME(FmXCheckBoxCell);
@@ -3394,7 +3394,7 @@ IMPL_LINK( FmXCheckBoxCell, OnClick, void*, EMPTYARG )
 }
 
 /*************************************************************************/
-SMART_UNO_IMPLEMENTATION(FmXListBoxCell, FmXTextCell);
+// SMART_UNO_IMPLEMENTATION(FmXListBoxCell, FmXTextCell);
 
 
 DBG_NAME(FmXListBoxCell);
