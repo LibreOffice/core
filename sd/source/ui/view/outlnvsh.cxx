@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:50:03 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,8 @@
 #ifndef _SVX_TAB_HYPERLINK_HXX
 #include <svx/hyperdlg.hxx>
 #endif
+
+#include <sfx2/objface.hxx>
 
 #ifndef _SOT_EXCHANGE_HXX //autogen
 #include <sot/exchange.hxx>
