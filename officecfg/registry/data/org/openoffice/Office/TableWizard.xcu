@@ -3,9 +3,9 @@
  *
  *  $RCSfile: TableWizard.xcu,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pjunck $  $Date: 2004-10-27 12:16:08 $
+ *  last change: $Author: rt $  $Date: 2005-01-28 15:54:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">SerialNo</value>
-                                <value xml:lang="de">Seriennr</value>
+                                <value xml:lang="de">SerienNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -243,11 +243,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">UnitsInStock</value>
-                                <value xml:lang="de">ArtikelAufLager</value>
+                                <value xml:lang="de">Lagerbestand</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">UnitsStock</value>
-                                <value xml:lang="de">ArtLager</value>
+                                <value xml:lang="de">Lagerbest</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -279,7 +279,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">UnitPrice</value>
-                                <value xml:lang="de">Artpreis</value>
+                                <value xml:lang="de">ArtPreis</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>3</value>
@@ -333,7 +333,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">LeadTime</value>
-                                <value xml:lang="de">Vorlaufzt</value>
+                                <value xml:lang="de">Vorlfzeit</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -350,6 +350,7 @@
                     </prop>
                     <prop oor:name="Name">
                         <value xml:lang="en-US">Suppliers</value>
+                        <value xml:lang="de">Lieferanten</value>
                     </prop>
                     <node oor:name="Fields">
                         <node oor:name="supplierID" oor:op="replace">
@@ -396,11 +397,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">ContactName</value>
-                                <value xml:lang="de">Ansprechpartner</value>
+                                <value xml:lang="de">KontaktName</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ContctName</value>
-                                <value xml:lang="de">Ansprpartn</value>
+                                <value xml:lang="de">KontktName</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -533,7 +534,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -552,7 +553,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -885,7 +886,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -904,7 +905,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -923,7 +924,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">MobileNo</value>
-                                <value xml:lang="de">Handynr</value>
+                                <value xml:lang="de">HandyNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1359,7 +1360,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1378,7 +1379,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">MobileNo</value>
-                                <value xml:lang="de">Handynr</value>
+                                <value xml:lang="de">HandyNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1798,7 +1799,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1817,7 +1818,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -1836,7 +1837,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">MobileNo</value>
-                                <value xml:lang="de">Handynr</value>
+                                <value xml:lang="de">HandyNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2208,7 +2209,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2227,7 +2228,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2246,7 +2247,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">MobileNo</value>
-                                <value xml:lang="de">Handynr</value>
+                                <value xml:lang="de">HandyNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2663,11 +2664,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">ShipPostalCode</value>
-                                <value xml:lang="de">Liefer-Postleitzahl</value>
+                                <value xml:lang="de">LieferPostleitzahl</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ShipPostlC</value>
-                                <value xml:lang="de">Liefer-PLZ</value>
+                                <value xml:lang="de">LieferPLZ</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2705,7 +2706,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ShipPhonNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -2774,11 +2775,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">SalesTaxRate</value>
-                                <value xml:lang="de">USt-Rate</value>
+                                <value xml:lang="de">UStRate</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">SalesTaxRt</value>
-                                <value xml:lang="de">USt-Rate</value>
+                                <value xml:lang="de">UStRate</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>3</value>
@@ -3726,11 +3727,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">PaymentTerms</value>
-                                <value xml:lang="en-US">Zahlungsbedingungen</value>
+                                <value xml:lang="de">Zahlungsbedingungen</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PaymntTerm</value>
-                                <value xml:lang="en-US">Zahlungbed</value>
+                                <value xml:lang="de">Zahlungbed</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -3747,6 +3748,7 @@
                     </prop>
                     <prop oor:name="Name">
                         <value xml:lang="en-US">Projects</value>
+                        <value xml:lang="de">Projekte</value>
                     </prop>
                     <node oor:name="Fields">
                         <node oor:name="projectID" oor:op="replace">
@@ -4941,11 +4943,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">ShipperPhoneNumber</value>
-                                <value xml:lang="de">Spediteur-Telefonnummer</value>
+                                <value xml:lang="de">SpediteurTelefonnummer</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ShipPhonNo</value>
-                                <value xml:lang="de">Sped-Telnr</value>
+                                <value xml:lang="de">SpediTelnr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -5017,11 +5019,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">DestinationPostalCode</value>
-                                <value xml:lang="de">Liefer-Postleitzahl</value>
+                                <value xml:lang="de">LieferPostleitzahl</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">DestPstCde</value>
-                                <value xml:lang="de">Liefer-PLZ</value>
+                                <value xml:lang="de">LieferPLZ</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -5036,7 +5038,7 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">DestinationCountryRegion</value>
-                                <value xml:lang="de">LandOderRagion</value>
+                                <value xml:lang="de">LandOderRegion</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">DestCouReg</value>
@@ -5430,7 +5432,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ModelNo</value>
-                                <value xml:lang="de">Modellnr</value>
+                                <value xml:lang="de">ModellNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -5449,7 +5451,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">SerialNo</value>
-                                <value xml:lang="de">Seriennr</value>
+                                <value xml:lang="de">SerienNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -6390,7 +6392,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">PhoneNo</value>
-                                <value xml:lang="de">Telefonnr</value>
+                                <value xml:lang="de">TelefonNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -6409,7 +6411,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">FaxNo</value>
-                                <value xml:lang="de">Faxnr</value>
+                                <value xml:lang="de">FaxNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -6428,7 +6430,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">MobileNo</value>
-                                <value xml:lang="de">Handynr</value>
+                                <value xml:lang="de">HandyNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -6497,11 +6499,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">SendCard</value>
-                                <value xml:lang="de">Urlaubsgruss</value>
+                                <value xml:lang="de">Grusskarte</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">SendCard</value>
-                                <value xml:lang="de">Urlaubgrus</value>
+                                <value xml:lang="de">Grusskarte</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>-7</value>
@@ -6820,7 +6822,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ModelNo</value>
-                                <value xml:lang="de">Modellnr</value>
+                                <value xml:lang="de">ModellNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -6839,7 +6841,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">SerialNo</value>
-                                <value xml:lang="de">Seriennr</value>
+                                <value xml:lang="de">SerienNr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -7090,11 +7092,11 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">TimeToPrepare</value>
-                                <value xml:lang="de">Zubereitungszeit</value>
+                                <value xml:lang="de">Zeitbedarf</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">TimePrepar</value>
-                                <value xml:lang="de">Zuberzeit</value>
+                                <value xml:lang="de">Zeitbedarf</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -7964,7 +7966,7 @@
                         <value>7</value>
                     </prop>
                     <prop oor:name="Name">
-                        <value xml:lang="en-US">DVDCollection</value>
+                        <value xml:lang="en-US">DVD-Collection</value>
                         <value xml:lang="de">DVD-Sammlung</value>
                     </prop>
                     <node oor:name="Fields">
@@ -7973,12 +7975,12 @@
                                 <value>0</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">DVDCollectionID</value>
-                                <value xml:lang="de">DVD-SammlungsID</value>
+                                <value xml:lang="en-US">CollectionID</value>
+                                <value xml:lang="de">SammlungsID</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">DVDCollcID</value>
-                                <value xml:lang="de">DVD-SammID</value>
+                                <value xml:lang="en-US">CollectnID</value>
+                                <value xml:lang="de">SammlungID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -8011,12 +8013,12 @@
                                 <value>2</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">Actress</value>
-                                <value xml:lang="de">Darstellerin</value>
+                                <value xml:lang="en-US">Genre</value>
+                                <value xml:lang="de">Genre</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">Actress</value>
-                                <value xml:lang="de">Darstellin</value>
+                                <value xml:lang="en-US">Genre</value>
+                                <value xml:lang="de">Genre</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>12</value>
@@ -8257,7 +8259,7 @@
                         <value>8</value>
                     </prop>
                     <prop oor:name="Name">
-                        <value xml:lang="en-US">CDCollection</value>
+                        <value xml:lang="en-US">CD-Collection</value>
                         <value xml:lang="de">CD-Sammlung</value>
                     </prop>
                     <node oor:name="Fields">
@@ -8266,12 +8268,12 @@
                                 <value>0</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">CDCollectionID</value>
-                                <value xml:lang="de">CD-SammlungsID</value>
+                                <value xml:lang="en-US">CollectionID</value>
+                                <value xml:lang="de">SammlungsID</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">CDCollcID</value>
-                                <value xml:lang="de">CD-SammlID</value>
+                                <value xml:lang="en-US">CollectnID</value>
+                                <value xml:lang="de">SammlungID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -8452,6 +8454,8 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">DatePurch</value>
+                                <value xml:lang="de">Kaufdatum</value>
+
                             </prop>
                             <prop oor:name="Type">
                                 <value>91</value>
@@ -8590,11 +8594,11 @@
                                 <value>2</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">Topic</value>
+                                <value xml:lang="en-US">Genre</value>
                                 <value xml:lang="de">Genre</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">Topic</value>
+                                <value xml:lang="en-US">Genre</value>
                                 <value xml:lang="de">Genre</value>
                             </prop>
                             <prop oor:name="Type">
@@ -8626,7 +8630,7 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">CopyrightYear</value>
-                                <value xml:lang="de">Copyright-Jahr</value>
+                                <value xml:lang="de">CopyrightJahr</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">CpyrightYr</value>
@@ -8642,7 +8646,7 @@
                             </prop>
                             <prop oor:name="Name">
                                 <value xml:lang="en-US">ISBNNumber</value>
-                                <value xml:lang="de">ISBN-Nummer</value>
+                                <value xml:lang="de">ISBNNummer</value>
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">ISBNNumber</value>
@@ -9345,12 +9349,12 @@
                                 <value>0</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">ExerciseLogID</value>
-                                <value xml:lang="de">Fitness-TagebuchID</value>
+                                <value xml:lang="en-US">LogID</value>
+                                <value xml:lang="de">TagebuchID</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">ExercLogID</value>
-                                <value xml:lang="de">FitTagebID</value>
+                                <value xml:lang="en-US">LogID</value>
+                                <value xml:lang="de">TagebuchID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -9509,7 +9513,7 @@
                             </prop>
                             <prop oor:name="ShortName">
                                 <value xml:lang="en-US">CalsBurned</value>
-                                <value xml:lang="de">Kalverbrau</value>
+                                <value xml:lang="de">Kaloverbr</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
@@ -9566,12 +9570,12 @@
                                 <value>0</value>
                             </prop>
                             <prop oor:name="Name">
-                                <value xml:lang="en-US">DietLogID</value>
-                                <value xml:lang="de">Diaet-TagebuchID</value>
+                                <value xml:lang="en-US">LogID</value>
+                                <value xml:lang="de">TagebuchID</value>
                             </prop>
                             <prop oor:name="ShortName">
-                                <value xml:lang="en-US">DietLogID</value>
-                                <value xml:lang="de">DiaetTgbID</value>
+                                <value xml:lang="en-US">LogID</value>
+                                <value xml:lang="de">TagebuchID</value>
                             </prop>
                             <prop oor:name="Type">
                                 <value>4</value>
