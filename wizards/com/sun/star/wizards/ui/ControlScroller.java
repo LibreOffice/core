@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlScroller.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:04:18 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 14:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,15 @@
  */
 
 package com.sun.star.wizards.ui;
+import com.sun.star.awt.FocusEvent;
+import com.sun.star.awt.XFocusListener;
 import com.sun.star.awt.XScrollBar;
 import com.sun.star.awt.AdjustmentEvent;
 import com.sun.star.beans.*;
 import com.sun.star.awt.*;
-import com.sun.star.lang.*;
+import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.Any;
 import com.sun.star.wizards.common.*;
 
 import java.util.*;
@@ -72,9 +76,9 @@ public abstract class ControlScroller {
     protected WizardDialog CurUnoDialog;
     protected XMultiServiceFactory xMSF;
     protected int ncurfieldcount;
-    private int nblockincrement;
+    protected int nblockincrement;
     private int nlineincrement;
-    private int nscrollvalue = 0;
+    protected int nscrollvalue = 0;
     protected int ntotfieldcount;
     XScrollBar xScrollBar;
     protected Vector scrollfields;
@@ -143,7 +147,10 @@ public abstract class ControlScroller {
         Object oImgControl = CurUnoDialog.xDlgContainer.getControl("imgBackground" + sIncSuffix);
         PeerConfigHelper oTitlePeerConfig = new PeerConfigHelper(CurUnoDialog.xUnoDialog);
         oTitlePeerConfig.setPeerProperties(oImgControl, new String[] { "MouseTransparent" }, new Boolean[] { Boolean.TRUE });
-        xScrollBar = CurUnoDialog.insertScrollBar("TitleScrollBar" + sIncSuffix, 0, new AdjustmentListenerImpl(), new String[] { "Border", "Enabled", "Height", "Orientation", "PositionX", "PositionY", "Step", "Width" }, new Object[] { new Short("0"), new Boolean(true), new Integer(ScrollHeight), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)});
+        xScrollBar = CurUnoDialog.insertScrollBar("TitleScrollBar" + sIncSuffix, 0,
+                new AdjustmentListenerImpl(),
+                new String[] { "Border", "Enabled", "Height", "HelpURL", "Orientation", "PositionX", "PositionY", "Step", "Width" },
+                new Object[] { new Short("0"), new Boolean(true), new Integer(ScrollHeight), "HID:" + curHelpIndex,  new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)});
         scrollfields = new Vector();
         int ypos = iStartPosY + SORELFIRSTPOSY;
         for (int i = 0; i < nblockincrement; i++) {
@@ -182,17 +189,8 @@ public abstract class ControlScroller {
         PropertyValue[] oldproperties;
         PropertyValue[] newproperties;
         for (int a = 0; a < this.nblockincrement; a++) {
-            if (a < ncurfieldcount){
-                newindex = (a) + nscrollvalue;
-                oldproperties = (PropertyValue[]) scrollfields.elementAt(a);
-                newproperties = (PropertyValue[]) scrollfields.elementAt(newindex);
-                for (int n = 0; n < oldproperties.length; n++) {
-                    if (CurUnoDialog.xDlgNameAccess.hasByName(oldproperties[n].Name))
-                        setControlData(oldproperties[n].Name, newproperties[n].Value);
-                    else
-                        oldproperties[n].Value = newproperties[n].Value;
-                }
-            }
+            if (a < ncurfieldcount)
+                fillupControls(a);
             if (binitialize)
                 setControlGroupVisible(a, (a < this.ncurfieldcount));
         }
@@ -200,6 +198,18 @@ public abstract class ControlScroller {
             CurUnoDialog.repaintDialogStep();
 
     }
+
+    protected void fillupControls(int guiRow) {
+        PropertyValue[] nameProps = (PropertyValue[]) scrollfields.get(guiRow);
+        PropertyValue[] valueProps = (PropertyValue[]) scrollfields.get(guiRow + nscrollvalue);
+        for (int n = 0; n < nameProps.length; n++) {
+            if (CurUnoDialog.xDlgNameAccess.hasByName(nameProps[n].Name))
+                setControlData(nameProps[n].Name, valueProps[n].Value);
+            else
+                throw new IllegalArgumentException("No such control !");
+        }
+    }
+
 
     protected void setScrollValue(int _nscrollvalue) {
         if (_nscrollvalue >= 0) {
@@ -289,19 +299,44 @@ public abstract class ControlScroller {
     }
 
     protected void scrollRowsInfo() {
-        int newindex;
-        PropertyValue[] oldproperties;
-        PropertyValue[] newproperties;
-        for (int a = 0; a < ncurfieldcount; a++) {
-            newindex = (a) + nscrollvalue;
-            oldproperties = (PropertyValue[]) scrollfields.elementAt(a);
-            newproperties = (PropertyValue[]) scrollfields.elementAt(newindex);
-            for (int n = 0; n < oldproperties.length; n++)
-                if (CurUnoDialog.xDlgNameAccess.hasByName(oldproperties[n].Name))
-                    newproperties[n].Value = getControlData(oldproperties[n].Name);
-                else
-                    newproperties[n].Value = oldproperties[n].Value;
+        int cols =
+            scrollfields.size() > 0
+                ?   ((PropertyValue[])scrollfields.get(0)).length
+                :   0;
+        for (int a = 0; a < ncurfieldcount; a++)
+            for (int n = 0; n < cols; n++)
+                fieldInfo(a,n);
+
+    }
+
+    /**
+     * updates the corresponding data to
+     * the control in guiRow and column
+     * @param guiRow 0 based row index
+     * @param column 0 based column index
+     * @return the propertyValue object corresponding to
+     * this control.
+     */
+    protected PropertyValue fieldInfo(int guiRow, int column) {
+        if (guiRow + nscrollvalue < scrollfields.size()) {
+            PropertyValue pv = fieldInfo (
+                ((PropertyValue[]) scrollfields.elementAt(guiRow + nscrollvalue )) [column],
+                ((PropertyValue[]) scrollfields.elementAt(guiRow)) [column]
+
+            );
+        //System.out.println("getting field info for : " + guiRow + "/" + column  + ":" + pv.Value + "(" + pv.Name + ")" );
+
+            return pv;
         }
+        else return null;
+    }
+
+    protected PropertyValue fieldInfo(PropertyValue valueProp, PropertyValue nameProp) {
+        if (CurUnoDialog.xDlgNameAccess.hasByName(nameProp.Name))
+            valueProp.Value = getControlData(nameProp.Name);
+        else
+            valueProp.Value = nameProp.Value;
+        return valueProp;
     }
 
     protected void unregisterControlGroup(int _index) {
@@ -367,5 +402,6 @@ public abstract class ControlScroller {
     protected abstract void insertControlGroup(int _index, int npos);
 
     protected abstract void setControlGroupVisible(int _index, boolean _bIsVisible);
+
 
 }
