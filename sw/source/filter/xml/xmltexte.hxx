@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:27 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class SwXMLTextParagraphExport : public XMLTextParagraphExport
 {
     const ::rtl::OUString sTextTable;
     const ::rtl::OUString sEmbeddedObjectProtocol;
+    const ::rtl::OUString sGraphicObjectProtocol;
 
     const SvGlobalName aAppletClassId;
     const SvGlobalName aPluginClassId;
