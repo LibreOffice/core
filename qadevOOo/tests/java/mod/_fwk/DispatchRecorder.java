@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DispatchRecorder.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-10-06 13:31:50 $
+ *  last change:$Date: 2004-03-02 13:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ public class DispatchRecorder extends TestCase {
     } // finish method getTestEnvironment
 
     protected void cleanup( TestParameters Param, PrintWriter log) {
-        //oDoc.dispose();
+        util.DesktopTools.closeDoc(oDoc);
     }
 
 }
