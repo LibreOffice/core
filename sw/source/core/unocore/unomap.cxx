@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 09:53:01 $
+ *  last change: $Author: os $ $Date: 2001-02-12 07:13:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,7 +670,6 @@ void SwUnoPropertyMapProvider::Sort(sal_uInt16 nId)
     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT  ),             RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },             \
     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_POSITION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int32*)0),            PROPERTY_NONE ,MID_VERTORIENT_POSITION|CONVERT_TWIPS    }, \
     { SW_PROP_NAME(UNO_NAME_VERT_ORIENT_RELATION),  RES_VERT_ORIENT,        &::getCppuType((const sal_Int16*)0),            PROPERTY_NONE ,MID_VERTORIENT_RELATION  },               \
-    { SW_PROP_NAME(UNO_NAME_WIDTH),                     RES_FRM_SIZE,           &::getCppuType((const sal_Int32*)0)  ,          PROPERTY_NONE, MID_FRMSIZE_WIDTH|CONVERT_TWIPS}, \
     { SW_PROP_NAME(UNO_NAME_LEFT_BORDER),               RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, LEFT_BORDER  |CONVERT_TWIPS },             \
     { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER),          RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, RIGHT_BORDER |CONVERT_TWIPS },                 \
     { SW_PROP_NAME(UNO_NAME_TOP_BORDER),                RES_BOX,                &::getCppuType((const table::BorderLine*)0),    0, TOP_BORDER   |CONVERT_TWIPS },             \
