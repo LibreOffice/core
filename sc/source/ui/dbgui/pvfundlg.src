@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:29:42 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:24:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "µL(~N)";
         Text[ arabic ] = "ÈÏæä";
         Text[ greek ] = "Êáíİíá";
-        Text[ korean ] = "¾øÀ½(~N)";
+        Text[ korean ] = "¾øÀ½";
         Text[ turkish ] = "~Yok";
         Text[ language_user1 ] = " ";
     };
@@ -130,7 +130,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "¦Û°Ê(~A)";
         Text[ arabic ] = "ÊáŞÇÆí";
         Text[ greek ] = "Áõôüìáôá";
-        Text[ korean ] = "ÀÚµ¿(~A)";
+        Text[ korean ] = "ÀÚµ¿";
         Text[ turkish ] = "~Otomatik";
         Text[ language_user1 ] = " ";
     };
@@ -159,7 +159,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ chinese_traditional ] = "¨Ï¥ÎªÌ¦Û­q(~U)";
         Text[ arabic ] = "ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";
         Text[ greek ] = "Ïñéæüìåíï áğü ôïí ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ(~U)";
+        Text[ korean ] = "»ç¿ëÀÚ Á¤ÀÇ";
         Text[ turkish ] = "~Kullanıcı tanımlı";
         Text[ language_user1 ] = " ";
     };
@@ -461,11 +461,11 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Æò±Õ" ; Default ; > ;
         < "ÃÖ´ë" ; Default ; > ;
         < "ÃÖ¼Ò" ; Default ; > ;
-        < "Á¦Ç°" ; Default ; > ;
-        < "¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
-        < "StDev (»ùÇÃ)" ; Default ; > ;
-        < "Ç¥ÁØ ÆíÂ÷ (¸ğÁı´Ü)" ; Default ; > ;
-        < "Ç¥ÁØ ÆíÂ÷(»ùÇÃ)" ; Default ; > ;
+        < "°ö" ; Default ; > ;
+        < "°³¼ö (¼ıÀÚ¸¸)" ; Default ; > ;
+        < "StDev (Ç¥º»)" ; Default ; > ;
+        < "£Ó£ô£Á£â£÷£Î (¸ğÁı´Ü)" ; Default ; > ;
+        < "ºĞ»ê(Ç¥º»)" ; Default ; > ;
         < "ºĞ»ê (¸ğÁı´Ü)" ; Default ; > ;
     };
     StringList [ turkish ] =
