@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adtabdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-11 13:02:08 $
+ *  last change: $Author: oj $ $Date: 2002-04-02 06:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,10 +263,4 @@ void OAddTableDlg::UpdateTableList(BOOL bViewsAllowed)
     }
 
     aTableList.UpdateTableList(Reference< XConnection>(xTableSupp,UNO_QUERY)->getMetaData(),sTables,sViews);
-/*
-    //////////////////////////////////////////////////////////////////////
-    // Ersten Eintrag selektieren
-    if( aTableList.GetEntryCount() )
-        aTableList.SelectEntryPos( 0 );
-*/
 }
