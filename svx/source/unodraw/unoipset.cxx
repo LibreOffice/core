@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoipset.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-10-16 09:22:25 $
+ *  last change: $Author: cl $ $Date: 2001-10-26 13:46:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,12 @@
 #include <tools/list.hxx>
 #endif
 
+#include <hash_map>
+#include <vector>
+
+#ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
+#endif
 
 #include "unoipset.hxx"
 #include "svdpool.hxx"
@@ -86,6 +91,138 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::rtl;
 
+//----------------------------------------------------------------------
+
+struct SfxItemPropertyMapHash
+{
+    size_t operator()(const SfxItemPropertyMap* pMap) const { return (size_t)pMap; }
+};
+
+/** this class caches the created XPropertySetInfo objects for each different
+    SfxItemPropertyMap pointer. This class can't be used with dynamicly created
+    SfxItemPropertyMaps!
+*/
+
+class SvxInfoSetCache
+{
+private:
+    typedef std::hash_map< const SfxItemPropertyMap*, uno::WeakReference< beans::XPropertySetInfo >,  SfxItemPropertyMapHash > InfoMap;
+    typedef std::hash_map< const SfxItemPropertyMap*, const SfxItemPropertyMap*,  SfxItemPropertyMapHash > PropertyMap;
+
+    InfoMap maInfoMap;
+    PropertyMap maPropertyMap;
+
+    static ::osl::Mutex maMutex;
+    static SvxInfoSetCache* mpGlobalCache;
+
+    SvxInfoSetCache() {};
+    ~SvxInfoSetCache() {};
+public:
+    static uno::Reference< beans::XPropertySetInfo > getCachedPropertySetInfo( const SfxItemPropertyMap* pMap );
+    static const SfxItemPropertyMap* getSortedPropertyMap( const SfxItemPropertyMap* pMap );
+};
+
+::osl::Mutex SvxInfoSetCache::maMutex;
+SvxInfoSetCache* SvxInfoSetCache::mpGlobalCache = NULL;
+
+uno::Reference< beans::XPropertySetInfo > SvxInfoSetCache::getCachedPropertySetInfo( const SfxItemPropertyMap* pMap )
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if( NULL == mpGlobalCache )
+        mpGlobalCache = new SvxInfoSetCache();
+
+    uno::Reference< beans::XPropertySetInfo > xInfo;
+    {
+        InfoMap::iterator aIt(mpGlobalCache->maInfoMap.find(pMap));
+        if (aIt != mpGlobalCache->maInfoMap.end())
+            xInfo =uno::Reference< beans::XPropertySetInfo >::query(uno::Reference< uno::XWeak >( aIt->second.get(), uno::UNO_QUERY).get());
+
+        if (!xInfo.is())
+        {
+            xInfo = new SfxItemPropertySetInfo( pMap );
+            mpGlobalCache->maInfoMap[pMap] = uno::WeakReference< beans::XPropertySetInfo >(xInfo.get());
+
+            /* if this assertion is triggered this class is possible used with dynamicly created
+               SfxItemPropertyMap pointers. This will cause a cache overflow as the current
+               implementation is designed for a limited number of different SfxItemPropertyMap
+               pointers */
+            DBG_ASSERT( mpGlobalCache->maInfoMap.size(), "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
+
+        }
+    }
+    return xInfo;
+}
+
+inline bool greater_size_pmap( const SfxItemPropertyMap* pFirst,
+                              const SfxItemPropertyMap* pSecond )
+{
+    return strcmp( pFirst->pName, pSecond->pName ) < 0;
+}
+
+
+const SfxItemPropertyMap* SvxInfoSetCache::getSortedPropertyMap( const SfxItemPropertyMap* pMap )
+{
+    ::osl::MutexGuard aGuard(maMutex);
+
+    if( NULL == mpGlobalCache )
+        mpGlobalCache = new SvxInfoSetCache();
+
+    const SfxItemPropertyMap* pSortedMap = NULL;
+    PropertyMap::iterator aIt( mpGlobalCache->maPropertyMap.find(pMap) );
+    if (aIt != mpGlobalCache->maPropertyMap.end())
+        pSortedMap = aIt->second;
+
+    if( NULL == pSortedMap )
+    {
+        // count the entries in the map
+        std::vector< const SfxItemPropertyMap * >::size_type nCount = 0;
+        const SfxItemPropertyMap* pTempMap = pMap;
+        while( pTempMap->pName )
+        {
+            pTempMap++;
+            nCount++;
+        }
+
+        // fill a stl vector with the entry pointers
+        std::vector< const SfxItemPropertyMap * > aMap( nCount );
+        std::vector< const SfxItemPropertyMap * >::iterator aIter( aMap.begin() );
+
+        pTempMap = pMap;
+        while( pTempMap->pName )
+            *aIter++ = pTempMap++;
+
+        // sort the vector
+        std::sort( aMap.begin(), aMap.end(), greater_size_pmap );
+
+        // create a new map
+        pSortedMap = new SfxItemPropertyMap[nCount+1];
+        pTempMap = pSortedMap;
+
+        // copy the sorted entries to a new map
+        aIter = aMap.begin();
+        while( aIter != aMap.end() )
+        {
+            memcpy( (void*)pTempMap, *aIter++, sizeof( SfxItemPropertyMap ) );
+            pTempMap++;
+        }
+
+        ((SfxItemPropertyMap*)pTempMap)->pName = NULL;
+
+        mpGlobalCache->maPropertyMap[pMap] = pSortedMap;
+
+        /* if this assertion is triggered this class is possible used with dynamicly created
+           SfxItemPropertyMap pointers. This will cause a cache overflow as the current
+           implementation is designed for a limited number of different SfxItemPropertyMap
+           pointers */
+        DBG_ASSERT( mpGlobalCache->maPropertyMap.size(), "WARNING: SvxInfoSetCache::get(), possible cache overflow!" );
+    }
+
+    return pSortedMap;
+}
+
+//----------------------------------------------------------------------
+
 struct SvxIDPropertyCombine
 {
     sal_uInt16  nWID;
@@ -95,7 +232,7 @@ struct SvxIDPropertyCombine
 DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * );
 
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMap* pMap, sal_Bool bConvertTwips )
-:   _pMap(pMap), mbConvertTwips(bConvertTwips)
+:   _pMap(SvxInfoSetCache::getSortedPropertyMap(pMap)), mbConvertTwips(bConvertTwips)
 {
     pItemPool = NULL;
     pCombiList = NULL;
@@ -421,8 +558,7 @@ const SfxItemPropertyMap* SvxItemPropertySet::getPropertyMapEntry(const OUString
 
 Reference< ::com::sun::star::beans::XPropertySetInfo >  SvxItemPropertySet::getPropertySetInfo() const
 {
-    Reference< ::com::sun::star::beans::XPropertySetInfo >  aRef(new SfxItemPropertySetInfo( _pMap ));
-    return aRef;
+    return SvxInfoSetCache::getCachedPropertySetInfo( _pMap );
 }
 
 //----------------------------------------------------------------------
@@ -508,3 +644,4 @@ void SvxUnoConvertFromMM( const SfxMapUnit eDestinationMapUnit, com::sun::star::
         }
     }
 }
+
