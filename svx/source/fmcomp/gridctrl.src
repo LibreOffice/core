@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-10 15:19:23 $
+ *  last change: $Author: kz $ $Date: 2000-12-06 14:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ Menu RID_SVXMNU_ROWS
             Text[ dutch ] = "Ongedaan: Gegevensinvoer";
             Text[ chinese_simplified ] = "³·ÏûÃüÁî: ÊäÈëÊı¾İ";
             Text[ greek ] = "Áíáßñåóç: ÅéóáãùãŞ äåäïìİíùí";
-            Text[ korean ] = "½ÇÇà Ãë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
+            Text[ korean ] = "½ÇÇàÃë¼Ò: µ¥ÀÌÅÍ ÀÔ·Â";
             Text[ arabic ] = "ÊÑÇÌÚ: ÅÏÎÇá ÈíÇäÇÊ";
             Text[ turkish ] = "Geri al: Veri girişi";
         };
