@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:09:14 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:56:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,10 @@
 #define CRSR_INLINE inline
 #else
 #define CRSR_INLINE
+#endif
+
+#ifndef _TBLSEL_HXX
+#include <tblsel.hxx>
 #endif
 
 // einige Forward Deklarationen
@@ -222,8 +226,8 @@ class SwCrsrShell : public ViewShell, public SwModify
     friend class SwChgLinkFlag;
 
     //Braucht den Crsr als IntrnlCrsr.
-    friend void GetTblSel( const SwCrsrShell&, SwSelBoxes& rBoxes,
-                           const SwTblSearchType );
+    friend void GetTblSel( const SwCrsrShell& rShell, SwSelBoxes& rBoxes,
+                           const SwTblSearchType eSearchType);
     friend BOOL GetAutoSumSel( const SwCrsrShell&, SwCellFrms& );
 
 public:     // public, damit defaultet werden kann !!
@@ -915,6 +919,18 @@ public:
     {
         return mbMacroExecAllowed;
     }
+
+    // #111827#
+    /**
+       Returns textual description of the current selection.
+
+       - If the current selection is a multi-selection the result is
+         STR_MULTISEL.
+       - Else the result is the text of the selection.
+
+       @return the textual description of the current selection
+     */
+    String GetCrsrDescr() const;
 };
 
 
