@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-02 14:08:15 $
+ *  last change: $Author: kz $ $Date: 2001-11-05 13:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #define _SPOOLPRINTER_EXT
 #define _RMPRINTER_EXT
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
+#include <list>
 
 #ifndef REMOTE_APPSERVER
 
