@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-05 08:22:24 $
+ *  last change: $Author: mba $ $Date: 2001-06-05 08:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,11 +223,13 @@ class SvtMiscOptions_Impl : public ConfigItem
         void SetSymbolSet( sal_Int16 nSet )
         { m_nSymbolSet = nSet; SetModified(); }
 
+        // translate to VCL settings ( "0" = 3D, "1" = FLAT )
         sal_Int16 GetToolboxStyle()
-        { return m_nToolboxStyle; }
+        { return m_nToolboxStyle ? 4 : 0; }
 
+        // translate from VCL settings
         void SetToolboxStyle( sal_Int16 nStyle )
-        { m_nToolboxStyle = nStyle; SetModified(); }
+        { m_nToolboxStyle = nStyle ? 1 : 0; SetModified(); }
 
         void AddListener( const Link& rLink );
         void RemoveListener( const Link& rLink );
@@ -264,7 +266,7 @@ class SvtMiscOptions_Impl : public ConfigItem
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Init baseclasses first
     : ConfigItem( ROOTNODE_MISC )
-    , m_nToolboxStyle( 4 )      // TOOLBOX_STYLE_FLAT
+    , m_nToolboxStyle( 1 )
     , m_nSymbolSet( 0 )
 {
     // Use our static list of configuration keys to get his values.
