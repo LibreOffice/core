@@ -68,10 +68,6 @@ USE_JAVAVER:=TRUE
 .INCLUDE :  settings.mk
 
 .IF "$(JAVANUMVER:s/.//)" >= "000100040000" 
-.IF "$(JDK)" == "gcj"
-all:
-        @echo This dir cannot be build with gcj because of org.openoffice.java.accessibility.AccessibleKeyBinding
-.ELSE
 JARFILES = jurt.jar unoil.jar ridl.jar 
 JAVAFILES = \
     AccessBridge.java \
@@ -85,7 +81,6 @@ JARTARGET               = $(TARGET).jar
 JARCOMPRESS             = TRUE
 JARCLASSDIRS            = $(PACKAGE) org/openoffice/java/accessibility 
 CUSTOMMANIFESTFILE      = manifest
-.ENDIF
 .ENDIF			# "$(JAVANUMVER:s/.//)" >= "000100040000" 
 
 # --- Targets ------------------------------------------------------
