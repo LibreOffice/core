@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dim.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-04 14:21:40 $
+ *  last change: $Author: ab $ $Date: 2001-05-07 16:29:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,12 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                     SbiExpression aExpr( this, *pDef, NULL );
                     aExpr.Gen();
                     aGen.Gen( _ERASE );
+                }
+                else if( eOp == _REDIMP )
+                {
+                    SbiExpression aExpr( this, *pDef, NULL );
+                    aExpr.Gen();
+                    aGen.Gen( _REDIMP_ERASE );
                 }
                 pDef->SetDims( pDim->GetDims() );
                 SbiExpression aExpr( this, *pDef, pDim );
