@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Cache.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:53 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:22:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,153 +61,94 @@
 
 package com.sun.star.lib.uno.protocols.urp;
 
+import java.util.HashMap;
 
-import java.util.Hashtable;
+/**
+   An LRU cache for arbitrary objects.
 
-
-class Cache {
+   This class is not synchronized, as any necessary synchronization will already
+   take place in the client.
+*/
+final class Cache {
     /**
-     * When set to true, enables various debugging output.
-     */
-    static private final boolean DEBUG = false;
+       Create a cache.
 
-    private static class Entry {
-        short _prev;
-        short _next;
-
-        Object _content;
-
-        Entry(short prev, short next, Object content) {
-            _prev = prev;
-            _next = next;
-            _content = content;
-        }
+       @param size the maximum cache size, must be between 0, inclusive, and
+       NOT_CACHED, exclusive
+    */
+    public Cache(int size) {
+        maxSize = size;
     }
 
-    private Entry _entrys[];
-    private short _size;
-    private short _last;
-    private short _first;
-
-    private Hashtable _keyMap = new Hashtable();
-
-    Cache(short size) {
-        _size = size;
-        _entrys = new Entry[size];
-
-        for(short i = 0; i < size; ++ i) {
-            _entrys[i] = new Entry((short)(i - 1), (short)(i + 1), new Object());
+    public int add(boolean[] found, Object content) {
+        Entry e = (Entry) map.get(content);
+        found[0] = e != null;
+        if (e == null) {
+            if (map.size() < maxSize) {
+                // There is still room for a new entry at the front:
+                e = new Entry(content, map.size(), last, null);
+                if (first == null) {
+                    last = e;
+                } else {
+                    first.prev = e;
+                }
+                first = e;
+            } else if (last != null) {
+                // Take last entry out and recycle as new front:
+                map.remove(last.content);
+                e = last;
+                e.content = content;
+                if (first != last) {
+                    // Reached only if maxSize > 1:
+                    last = last.prev;
+                    last.next = null;
+                    e.prev = null;
+                    e.next = first;
+                    first.prev = e;
+                    first = e;
+                }
+            } else {
+                // Reached iff maxSize == 0:
+                return NOT_CACHED;
+            }
+            map.put(content, e);
+        } else if (e != first) {
+            // Move to front (reached only if maxSize > 1):
+            e.prev.next = e.next;
+            if (e.next == null) {
+                last = e.prev;
+            } else {
+                e.next.prev = e.prev;
+            }
+            e.prev = null;
+            e.next = first;
+            first.prev = e;
+            first = e;
         }
-
-        _first = 0;
-        _last = 4;
-
-        _entrys[_first]._prev = -1; // end of list
-        _entrys[_last]._next = -1; // end of list
+        return e.index;
     }
 
-    short add(boolean found[], Object content) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() +  ".add:" + content);
+    public static final int NOT_CACHED = 0xFFFF;
 
-        short index = -1;
-
-//          for(index = 0; index < _entrys.length && !_entrys[index]._content.equals(content); ++ index);
-        Short ii = (Short)_keyMap.get(content);
-
-        if(ii != null)
-            index = ii.shortValue();
-
-
-        if(index < 0 || index >= _entrys.length) { // not found
-            if(DEBUG) System.err.println("##### " + getClass().getName() +  ".add - not found:" + content + " index:" + _last);
-
-            // remove last from list
-            index = _last;
-            _last = _entrys[_last]._prev;
-            _entrys[_last]._next = -1; // end of list
-
-            // insert last as head
-            _entrys[index]._next = _first;
-            _entrys[_first]._prev = index;
-
-            _entrys[index]._content = content;
-
-            _first = index;
-            _entrys[_first]._prev = -1; // end of list
-
-            _keyMap.put(new Short(index), content);
-
-            found[0] = false;
-        }
-        else { // found
-            if(DEBUG) System.err.println("##### " + getClass().getName() +  ".add - found:" + content + " " + index);
-
-            touch(index);
-
-            found[0] = true;
+    private static final class Entry {
+        public Entry(Object content, int index, Entry prev, Entry next) {
+            this.content = content;
+            this.index = index;
+            this.prev = prev;
+            this.next = next;
         }
 
-        return index;
+        public Object content;
+        public int index;
+        public Entry prev;
+        public Entry next;
     }
 
-    void touch(short index) {
-        if(DEBUG) System.err.println("##### " + getClass().getName() +  ".touch:" + index);
-
-        // remove index of list
-        if(index != _first && _entrys[index]._prev != -1)
-            _entrys[_entrys[index]._prev]._next = _entrys[index]._next;
-
-        if(index != _last)
-            _entrys[_entrys[index]._next]._prev = _entrys[index]._prev;
-        else {
-            _last = _entrys[_last]._prev;
-            _entrys[_last]._next = -1; // end of list
-        }
-
-
-        // insert index at first
-        _entrys[index]._next = _first;
-        _entrys[_first]._prev = index;
-
-        _first = index;
-        _entrys[_first]._prev = -1; // end of list
-    }
-
-
-    void list() {
-        System.err.println("################# listing cache #############" + _first + " " + _last);
-
-        short curr = _first;
-        do {
-            System.err.println("e:" + _entrys[curr]._content);
-
-            curr = _entrys[curr]._next;
-        }
-        while(curr != -1);
-
-        System.err.println();
-    }
-
-    static public void main(String args[]) {
-        Cache cache = new Cache((short)5);
-
-        cache.list();
-
-        boolean found[] = new boolean[1];
-
-        for(int i = 0; i < 7; ++ i) {
-            short index = cache.add(found, new Integer(i));
-
-            System.err.println("added: " + i + " "  + found[0]);
-            cache.list();
-        }
-
-        for(int x = 0; x < 2; x++) {
-            cache.add(found, new Integer(5));
-            cache.list();
-
-            cache.add(found, new Integer(4));
-            cache.list();
-        }
-    }
+    // first/last form a list of 0 to maxSize entries, most recently used first;
+    // map contains the same entries; each entry has a unique index in the range
+    // 0 to maxSize - 1
+    private final int maxSize;
+    private final HashMap map = new HashMap(); // from Object to Entry
+    private Entry first = null;
+    private Entry last = null;
 }
