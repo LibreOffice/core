@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1378,7 +1378,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if( pDoc->GetLayoutCache() )
         {
 #ifndef PRODUCT
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             pDoc->GetLayoutCache()->CompareLayout( *pDoc );
 #endif
 #endif
