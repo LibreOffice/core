@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-13 11:55:24 $
+ *  last change: $Author: ka $ $Date: 2002-08-16 12:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ sal_Bool PDFExport::Export( const OUString& rFile )
 
     if( aURL.GetProtocol() == INET_PROT_FILE )
     {
-        PDFWriter       aWriter( aURL.GetMainURL() );
+        PDFWriter       aWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4 );
         OutputDevice*   pOut = aWriter.GetReferenceDevice();
 
         if( pOut )
@@ -185,7 +185,7 @@ sal_Bool PDFExport::Export( const OUString& rFile )
                         {
                             GDIMetaFile                 aMtf;
                             const MapMode               aMapMode( eMapUnit );
-                            const Size                  aMtfSize( aPageSize.Width, aPageSize.Width );
+                            const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
                             VCLXDevice*                 pXDevice = new VCLXDevice;
                             Sequence< PropertyValue >   aRenderOptions( 2 );
 
@@ -617,14 +617,14 @@ sal_Bool PDFExport::ImplWriteActions( PDFWriter& rWriter, const GDIMetaFile& rMt
             {
                 const MetaPushAction* pA = (const MetaPushAction*) pAction;
 
-                const_cast< MetaAction* >( pAction )->Execute( &rDummyVDev );
+                rDummyVDev.Push( PUSH_ALL );
                 rWriter.Push();
             }
             break;
 
             case( META_POP_ACTION ):
             {
-                const_cast< MetaAction* >( pAction )->Execute( &rDummyVDev );
+                rDummyVDev.Pop();
                 rWriter.Pop();
             }
             break;
