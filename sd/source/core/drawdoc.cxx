@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-26 08:32:41 $
+ *  last change: $Author: cl $ $Date: 2002-07-26 12:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include <svx/svxids.hrc>
 #include <svx/srchitem.hxx>
 
-#ifndef SVX_LIGHT
 #ifndef _OSPLCFG_HXX
 #include <offmgr/osplcfg.hxx>
 #endif
@@ -87,12 +86,6 @@
 #include <svx/dialogs.hrc>
 #include "sdoutl.hxx"
 #include "app.hxx"
-#else  // SVX_LIGHT
-#ifndef _SVDOUTL_HXX //autogen wg. Outliner
-#include <svx/svdoutl.hxx>
-#endif
-#define SfxPrinter Printer
-#endif // !SVX_LIGHT
 
 #ifndef _EEITEM_HXX //autogen
 #include <svx/eeitem.hxx>
@@ -183,17 +176,14 @@
 #include "cusshow.hxx"
 
 #ifndef MAC
-#ifndef SVX_LIGHT
 #include "../ui/inc/docshell.hxx"
 #include "../ui/inc/grdocsh.hxx"
 #include "../ui/inc/sdxfer.hxx"
 #include "../ui/inc/viewshel.hxx"
 #include "../ui/inc/grdocsh.hxx"
 #include "../ui/inc/optsitem.hxx"
-#endif //!SVX_LIGHT
 #include "../ui/inc/frmview.hxx"
 #else
-#ifndef SVX_LIGHT
 #include "docshell.hxx"
 #include "grdocsh.hxx"
 #include "sdresid.hxx"
@@ -201,7 +191,6 @@
 #include "viewshel.hxx"
 #include "grdocsh.hxx"
 #include "optsitem.hxx"
-#endif //!SVX_LIGHT
 #include "frmview.hxx"
 #endif
 
@@ -228,11 +217,7 @@ SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
 
 SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     FmFormModel(
-#ifndef SVX_LIGHT
     SvtPathOptions().GetPalettePath(),
-#else
-    String(),
-#endif
     NULL, (SvPersist*)pDrDocSh ),
     eDocType(eType),
     pDocSh( (SdDrawDocShell*) pDrDocSh ),
@@ -264,9 +249,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     mpInternational(NULL),
     mpLocale(NULL),
     mpCharClass(NULL),
-#ifndef SVX_LIGHT
     bAllocDocSh(FALSE),
-#endif
     pDeletedPresObjList(NULL),
     nFileFormatVersion(SDIOCOMPAT_VERSIONDONTKNOW),
     pDocStor(NULL),
@@ -275,16 +258,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     eLanguageCJK( LANGUAGE_SYSTEM ),
     eLanguageCTL( LANGUAGE_SYSTEM )
 {
-#ifndef SVX_LIGHT
     SetObjectShell(pDrDocSh);       // fuer das VCDrawModel
-#endif
 
     if (pDocSh)
     {
         SetSwapGraphics(TRUE);
     }
 
-#ifndef SVX_LIGHT
     // Masseinheit (von App) und Massstab (von SdMod) setzen
     INT32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(eDocType);
@@ -295,7 +275,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
     else
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
-#endif
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
@@ -314,40 +293,21 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     // Vorlagen existieren.
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-#ifndef SVX_LIGHT
     rOutliner.SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-#endif // !SVX_LIGHT
 
-#ifndef SVX_LIGHT
-    TRY
+    // set linguistic options
     {
         const SvtLinguConfig    aLinguConfig;
-        uno::Any                aAny;
-        lang::Locale            aLocale;
+        SvtLinguOptions         aOptions;
+        aLinguConfig.GetOptions( aOptions );
 
-        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE ) );
-        aAny >>= aLocale;
-        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE );
+        SetLanguage( aOptions.nDefaultLanguage, EE_CHAR_LANGUAGE );
+        SetLanguage( aOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK );
+        SetLanguage( aOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL );
 
-        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE_CJK ) );
-        aAny >>= aLocale;
-        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CJK );
-
-        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE_CTL ) );
-        aAny >>= aLocale;
-        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CTL );
-
-        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
-        aAny >>= bOnlineSpell;
-
-        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_IS_SPELL_HIDE ) );
-        aAny >>= bHideSpell;
+        bOnlineSpell = aOptions.bIsSpellAuto;
+        bHideSpell = aOptions.bIsSpellHideMarkings;
     }
-    CATCH_ALL()
-    {
-        DBG_ERROR("Error in LinguProperties");
-    }
-    END_CATCH
 
     mpInternational = new International(eLanguage);
     String aLanguage, aCountry, aEmpty;
@@ -389,16 +349,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         SetLinkManager( new SvxLinkManager(pDocSh) );
     }
 
-#else
-    AllSettings aSettings( Application::GetSettings() );
-    LanguageType eLang = aSettings.GetLanguage();
-    SetLanguage( eLang, EE_CHAR_LANGUAGE );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CJK );
-    SetLanguage( eLang, EE_CHAR_LANGUAGE_CTL );
-    bOnlineSpell = FALSE;
-    bHideSpell = FALSE;
-#endif // !SVX_LIGHT
-
     ULONG nCntrl = rOutliner.GetControlWord();
     nCntrl |= EE_CNTRL_ALLOWBIGOBJS;
     nCntrl |= EE_CNTRL_URLSFXEXECUTE;
@@ -413,7 +363,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     else
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
 
-#ifndef SVX_LIGHT
     nCntrl &= ~ EE_CNTRL_ULSPACESUMMATION;
     if ( eDocType != DOCUMENT_TYPE_IMPRESS )
         SetSummationOfParagraphs( sal_False );
@@ -423,7 +372,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
         if ( pOptions->IsSummationOfParagraphs() )
             nCntrl |= EE_CNTRL_ULSPACESUMMATION;
     }
-#endif
     rOutliner.SetControlWord(nCntrl);
 
 
@@ -434,7 +382,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
-#ifndef SVX_LIGHT
     pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
 
     TRY
@@ -454,7 +401,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     END_CATCH
 
     pHitTestOutliner->SetDefaultLanguage( eLanguage );
-#endif // !SVX_LIGHT
 
     ULONG nCntrl2 = pHitTestOutliner->GetControlWord();
     nCntrl2 |= EE_CNTRL_ALLOWBIGOBJS;
@@ -462,11 +408,9 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     nCntrl2 |= EE_CNTRL_NOREDLINES;
     nCntrl2 &= ~EE_CNTRL_ONLINESPELLING;
 
-#ifndef SVX_LIGHT
     nCntrl2 &= ~ EE_CNTRL_ULSPACESUMMATION;
     if ( pOptions->IsSummationOfParagraphs() )
         nCntrl2 |= EE_CNTRL_ULSPACESUMMATION;
-#endif
 
     pHitTestOutliner->SetControlWord( nCntrl2 );
 
@@ -519,7 +463,6 @@ SdDrawDocument::~SdDrawDocument()
         pWorkStartupTimer = NULL;
     }
 
-#ifndef SVX_LIGHT
     StopOnlineSpelling();
     delete pOnlineSearchItem;
     pOnlineSearchItem = NULL;
@@ -528,10 +471,8 @@ SdDrawDocument::~SdDrawDocument()
     SetAllocDocSh(FALSE);
 
     SetNotifyUndoActionHdl(aOldNotifyUndoActionHdl);
-#endif
     Clear();
 
-#ifndef SVX_LIGHT
     if (pLinkManager)
     {
         // BaseLinks freigeben
@@ -543,7 +484,6 @@ SdDrawDocument::~SdDrawDocument()
         delete pLinkManager;
         pLinkManager = NULL;
     }
-#endif // !SVX_LIGHT
 
     FrameView* pFrameView = NULL;
 
@@ -603,7 +543,6 @@ SdrModel* SdDrawDocument::AllocModel() const
 {
     SdDrawDocument* pNewModel = NULL;
 
-#ifndef SVX_LIGHT
     if( pCreatingTransferable )
     {
         // Dokument wird fuer Drag&Drop/Clipboard erzeugt, dafuer muss dem Dokument eine DocShell (SvPersist) bekannt sein
@@ -646,7 +585,6 @@ SdrModel* SdDrawDocument::AllocModel() const
         pNewModel = pDoc->xAllocedDocShRef->GetDoc();
     }
     else
-#endif // !SVX_LIGHT
     {
         pNewModel = new SdDrawDocument(eDocType, NULL);
     }
@@ -676,7 +614,6 @@ SdrPage* SdDrawDocument::AllocPage(FASTBOOL bMasterPage)
 
 SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
 {
-#ifndef SVX_LIGHT
     // #90477# CharSet eSysSet = ::GetStoreCharSet( gsl_getSystemTextEncoding());
     CharSet eSysSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
 
@@ -834,7 +771,6 @@ SvStream& operator << (SvStream& rOut, SdDrawDocument& rDoc)
 
     // ab Version 18 (keine Aenderung)
 
-#endif // !SVX_LIGHT
     return rOut;
 }
 
@@ -912,7 +848,6 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
                         ATTR_OPTIONS_PRINT,         ATTR_OPTIONS_PRINT,
                         0 );
         // PrintOptionsSet setzen
-#ifndef SVX_LIGHT
         SdOptionsPrintItem aPrintItem(ATTR_OPTIONS_PRINT
                                       ,SD_MOD()->GetSdOptions(rDoc.eDocType)
                                       );
@@ -937,10 +872,6 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
             rDoc.pDocSh->SetPrinter(pPrinter);
         else
             delete pPrinter;
-#else
-        JobSetup aFileJobSetup;
-        rIn >> aFileJobSetup;
-#endif
     }
 
     if (rDoc.nFileFormatVersion >= 3)
@@ -970,12 +901,8 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
         rDoc.pFrameViewList->Clear();
 
         // Anzahl FrameViews lesen
-#ifndef SVX_LIGHT
         const SvtSaveOptions aOptions;
         BOOL bIsSaveDocView = aOptions.IsSaveDocView();
-#else
-        BOOL bIsSaveDocView = FALSE;
-#endif // !SVX_LIGHT
 
         ULONG nFrameViewCount = 0;
         rIn >> nFrameViewCount;
@@ -1044,7 +971,6 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
     {
         UINT16 nDocType;
         rIn >> nDocType;
-#ifndef SVX_LIGHT
         rDoc.eDocType = (DocumentType) nDocType;
         // existiert eine DocShell bestimmt diese den DocType
         if(rDoc.pDocSh)
@@ -1054,9 +980,6 @@ SvStream& operator >> (SvStream& rIn, SdDrawDocument& rDoc)
             else
                 rDoc.eDocType = DOCUMENT_TYPE_IMPRESS;
         }
-#else
-        rDoc.eDocType = DOCUMENT_TYPE_IMPRESS;
-#endif // !SVX_LIGHT
     }
 
     if (rDoc.nFileFormatVersion >= 13)
@@ -1219,7 +1142,6 @@ void SdDrawDocument::SetPresFirstPage(ULONG nNewPresFirstPage)
 
 void SdDrawDocument::SetChanged(FASTBOOL bFlag)
 {
-#ifndef SVX_LIGHT
     if (pDocSh)
     {
         if (bNewOrLoadCompleted && pDocSh->IsEnableSetModified())
@@ -1236,7 +1158,6 @@ void SdDrawDocument::SetChanged(FASTBOOL bFlag)
         // weitergeben an Basisklasse
         FmFormModel::SetChanged(bFlag);
     }
-#endif // !SVX_LIGHT
 }
 
 /*************************************************************************
@@ -1277,7 +1198,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         CheckMasterPages();
 
-#ifndef SVX_LIGHT
         if ( GetMasterSdPageCount(PK_STANDARD) > 1 )
             RemoveUnnessesaryMasterPages( NULL, TRUE, FALSE );
 
@@ -1326,7 +1246,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         // Sprachabhaengige Namen der StandardLayer erzeugen
         RestoreLayerNames();
-#endif
 
         // Sprachabhaengige Namen der Vorlagen setzen
         ((SdStyleSheetPool*)pStyleSheetPool)->UpdateStdNames();
@@ -1469,7 +1388,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                             }
                         }
 
-#ifndef SVX_LIGHT
                         if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
                         {
                             PresObjKind ePresObjKind = pPage->GetPresObjKind(pObj);
@@ -1484,7 +1402,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                                 pInternalOutl->Clear();
                             }
                         }
-#endif // !SVX_LIGHT
                     }
                     pObj = (SdrAttrObj*)pPresObjList->Next();
                 }
@@ -1565,7 +1482,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                             }
                         }
 
-#ifndef SVX_LIGHT
                         SdPage* pPage = (SdPage*) pObj->GetPage();
 
                         if (pObj->ISA(SdrTextObj) && pObj->IsEmptyPresObj() && pPage)
@@ -1582,7 +1498,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                                 pInternalOutl->Clear();
                             }
                         }
-#endif // !SVX_LIGHT
                     }
                     pObj = (SdrAttrObj*)pPresObjList->Next();
                 }
@@ -1641,11 +1556,7 @@ SdOutliner* SdDrawDocument::GetOutliner(BOOL bCreateOutliner)
 {
     if (!pOutliner && bCreateOutliner)
     {
-#ifndef SVX_LIGHT
         pOutliner = new SdOutliner( this, OUTLINERMODE_TEXTOBJECT );
-#else
-        pOutliner = new Outliner( &GetItemPool(), OUTLINERMODE_TEXTOBJECT );
-#endif
 
         if (pDocSh)
             pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
@@ -1671,11 +1582,7 @@ SdOutliner* SdDrawDocument::GetInternalOutliner(BOOL bCreateOutliner)
 {
     if ( !pInternalOutliner && bCreateOutliner )
     {
-#ifndef SVX_LIGHT
         pInternalOutliner = new SdOutliner( this, OUTLINERMODE_TEXTOBJECT );
-#else
-        pInternalOutliner = new Outliner( &GetItemPool(), OUTLINERMODE_TEXTOBJECT );
-#endif
         // MT:
         // Dieser Outliner wird nur fuer das Erzeugen spezieller Textobjekte
         // verwendet. Da in diesen Textobjekten keine Portion-Informationen
@@ -1754,7 +1661,6 @@ void SdDrawDocument::SetPresFullScreen(BOOL bNewFullScreen)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::SetOnlineSpell(BOOL bIn)
 {
     bOnlineSpell = bIn;
@@ -1804,7 +1710,6 @@ void SdDrawDocument::SetOnlineSpell(BOOL bIn)
         StopOnlineSpelling();
     }
 }
-#endif
 
 
 /*************************************************************************
@@ -1813,7 +1718,6 @@ void SdDrawDocument::SetOnlineSpell(BOOL bIn)
 |*
 \************************************************************************/
 
-#ifndef SVX_LIGHT
 void SdDrawDocument::SetHideSpell(BOOL bIn)
 {
     bHideSpell = bIn;
@@ -1854,7 +1758,6 @@ void SdDrawDocument::SetHideSpell(BOOL bIn)
 
     rOutliner.SetControlWord(nCntrl);
 }
-#endif
 
 uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {
