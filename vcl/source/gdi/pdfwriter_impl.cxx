@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 13:33:53 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6536,7 +6536,11 @@ void PDFWriterImpl::drawPixel( const Point& rPoint, const Color& rColor )
 
     OStringBuffer aLine( 20 );
     m_aPages.back().appendPoint( rPoint, aLine );
-    aLine.append( " 1 1 re f\r\n" );
+    aLine.append( ' ' );
+    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIX()), aLine );
+    aLine.append( ' ' );
+    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aLine );
+    aLine.append( " re f\r\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
 
     setFillColor( aOldFillColor );
@@ -6560,6 +6564,13 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
         aLine.append( ' ' );
     }
 
+    OStringBuffer aPixel(32);
+    aPixel.append( ' ' );
+    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIX()), aPixel );
+    aPixel.append( ' ' );
+    appendDouble( 1.0/double(getReferenceDevice()->ImplGetDPIY()), aPixel );
+    OString aPixelStr = aPixel.makeStringAndClear();
+
     for( int i = 0; i < nPoints; i++ )
     {
         if( pColors )
@@ -6571,7 +6582,8 @@ void PDFWriterImpl::drawPixel( const Polygon& rPoints, const Color* pColors )
             aLine.append( ' ' );
         }
         m_aPages.back().appendPoint( rPoints[i], aLine );
-        aLine.append( " 1 1 re f\r\n" );
+        aLine.append( aPixelStr );
+        aLine.append( " re f\r\n" );
     }
     aLine.append( "Q\r\n" );
     writeBuffer( aLine.getStr(), aLine.getLength() );
