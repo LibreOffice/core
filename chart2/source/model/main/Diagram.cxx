@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Diagram.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-04 14:06:58 $
+ *  last change: $Author: iha $ $Date: 2003-12-04 16:15:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ void lcl_AddPropertiesToVector(
                   PROP_DIAGRAM_SCENE_PROPERTIES,
                   ::getCppuType( reinterpret_cast< const chart2::SceneDescriptor * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  | beans::PropertyAttribute::MAYBEVOID ));
 }
 
 void lcl_AddDefaultsToMap(
