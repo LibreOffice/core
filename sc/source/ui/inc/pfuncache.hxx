@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfuncache.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-28 17:56:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,8 +109,8 @@ class ScPrintFuncCache
     ScPrintSelectionStatus  aSelection;
     ScDocShell*             pDocSh;
     long                    nTotalPages;
-    long                    nPages[MAXTAB+1];
-    long                    nFirstAttr[MAXTAB+1];
+    long                    nPages[MAXTABCOUNT];
+    long                    nFirstAttr[MAXTABCOUNT];
 
 public:
             ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
@@ -120,10 +120,10 @@ public:
     BOOL    IsSameSelection( const ScPrintSelectionStatus& rStatus ) const;
 
     long    GetPageCount() const                { return nTotalPages; }
-    long    GetFirstAttr( USHORT nTab ) const   { return nFirstAttr[nTab]; }
-    USHORT  GetTabForPage( long nPage ) const;
-    long    GetTabStart( USHORT nTab ) const;
-    long    GetDisplayStart( USHORT nTab ) const;
+    long    GetFirstAttr( SCTAB nTab ) const    { return nFirstAttr[nTab]; }
+    SCTAB   GetTabForPage( long nPage ) const;
+    long    GetTabStart( SCTAB nTab ) const;
+    long    GetDisplayStart( SCTAB nTab ) const;
 };
 
 #endif
