@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:26:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2507,15 +2507,6 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
         // <--
 
-        //#111875#
-        if ((eHoriRel == REL_PG_FRAME) && (eHoriOri == HORI_RIGHT))
-        {
-            eHoriRel = REL_FRM_RIGHT;
-            eHoriOri = HORI_NONE;
-            pFSPA->nXaRight -= pFSPA->nXaLeft;
-            pFSPA->nXaLeft = 0;
-        }
-
         //#109311# Miserable miserable hack.
         if (!bDrawingHacks)
         {
@@ -2527,6 +2518,19 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
                 pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
             }
         }
+
+        // --> OD 2005-01-20 #118546# - if the object is anchored inside
+        // a table cell, is horizontal aligned at frame|character and
+        // has wrap through, but its attribute 'layout in table cell' isn't set,
+        // convert its horizontal alignment to page text area.
+        if ( nInTable &&
+             ( eHoriRel == FRAME || eHoriRel == REL_CHAR ) &&
+             pFSPA->nwr == 3 &&
+             pRecord->nLayoutInTableCell == 0x80000000 )
+        {
+            eHoriRel = REL_PG_PRTAREA;
+        }
+        // <--
 
         SwFmtHoriOrient aHoriOri(MakeSafePositioningValue(pFSPA->nXaLeft),
             eHoriOri, eHoriRel);
