@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-11 10:50:57 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2730,7 +2730,6 @@ void SAL_CALL SwXTextDocument::render(
 
     if(pVwSh && pOut)
     {
-        SfxProgress     aProgress( pView->GetObjectShell(), C2U("PDF export"), 10 );
         SwPrtOptions    aOptions( C2U("PDF export") );
 
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
@@ -2771,7 +2770,7 @@ void SAL_CALL SwXTextDocument::render(
         }
         // <--
 
-        pVwSh->Prt( aOptions, aProgress, pOut );
+        pVwSh->Prt( aOptions, 0, pOut );
 
         // --> FME 2004-10-08 #i35176#
         //
