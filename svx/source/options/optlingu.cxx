@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tl $ $Date: 2001-01-30 14:55:05 $
+ *  last change: $Author: tl $ $Date: 2001-01-31 08:17:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,7 +965,7 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
 
     aChkunBmp           ( ResId( BMP_CHKBUT_UNCHECKED ) ),
     aChkchBmp           ( ResId( BMP_CHKBUT_CHECKED ) ),
-    pLinguData          (new SvxLinguData_Impl)
+    pLinguData          ( NULL )
 {
     pCheckButtonData = NULL;
     aLinguModulesCLB.SetWindowBits( WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
@@ -1009,7 +1009,8 @@ SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
 
 SvxLinguTabPage::~SvxLinguTabPage()
 {
-    delete pLinguData;
+    if (pLinguData)
+        delete pLinguData;
     for(sal_uInt16 nEntry = 0; nEntry < aLinguModulesCLB.GetEntryCount(); nEntry++)
     {
         SvxModulesData_Impl* pData = (SvxModulesData_Impl*)aLinguModulesCLB.GetEntry(nEntry)->GetUserData();
@@ -1048,33 +1049,39 @@ sal_Bool SvxLinguTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     sal_Bool bModified = sal_True; // !!!!
 
-    SvStringsDtor aToRemove;
-    SvStringsDtor aToInsert;
-    for(sal_uInt16 i = 0; i < aLinguModulesCLB.GetEntryCount(); i++)
+    // if not HideGroups was called with GROUP_MODULES...
+    if (aLinguModulesCLB.IsVisible())
     {
-        SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
-        SvxModulesData_Impl* pData = (SvxModulesData_Impl*) pEntry->GetUserData();
-        if(pData->bIsConfigured != aLinguModulesCLB.IsChecked( i ))
+        SvStringsDtor aToRemove;
+        SvStringsDtor aToInsert;
+        for(sal_uInt16 i = 0; i < aLinguModulesCLB.GetEntryCount(); i++)
         {
-            if(pData->bIsConfigured)
-                aToRemove.Insert(new String(pData->sServiceImplName), aToRemove.Count());
-            else if(!pData->bIsConfigured)
-                aToInsert.Insert(new String(pData->sServiceImplName), aToInsert.Count());
+            SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
+            SvxModulesData_Impl* pData = (SvxModulesData_Impl*) pEntry->GetUserData();
+            if(pData->bIsConfigured != aLinguModulesCLB.IsChecked( i ))
+            {
+                if(pData->bIsConfigured)
+                    aToRemove.Insert(new String(pData->sServiceImplName), aToRemove.Count());
+                else if(!pData->bIsConfigured)
+                    aToInsert.Insert(new String(pData->sServiceImplName), aToInsert.Count());
+            }
         }
-    }
-    if(aToRemove.Count() || aToInsert.Count())
-    {
-        Sequence<OUString> aRemove(aToRemove.Count());
-        OUString* pRemove = aRemove.getArray();
-        USHORT i;
-        for(i = 0; i < aToRemove.Count(); i++)
-            pRemove[i] = OUString(*aToRemove[i]);
-        Sequence<OUString> aInsert(aToInsert.Count());
-        OUString* pInsert = aInsert.getArray();
-        for(i = 0; i < aToInsert.Count(); i++)
-            pInsert[i] = OUString(*aToInsert[i]);
+        if(aToRemove.Count() || aToInsert.Count())
+        {
+            Sequence<OUString> aRemove(aToRemove.Count());
+            OUString* pRemove = aRemove.getArray();
+            USHORT i;
+            for(i = 0; i < aToRemove.Count(); i++)
+                pRemove[i] = OUString(*aToRemove[i]);
+            Sequence<OUString> aInsert(aToInsert.Count());
+            OUString* pInsert = aInsert.getArray();
+            for(i = 0; i < aToInsert.Count(); i++)
+                pInsert[i] = OUString(*aToInsert[i]);
 
-        pLinguData->Reconfigure(aRemove, aInsert);
+            if (!pLinguData)
+                pLinguData =    new SvxLinguData_Impl;
+            pLinguData->Reconfigure(aRemove, aInsert);
+        }
     }
 
     if (!xProp.is())
@@ -1222,6 +1229,8 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
 {
     if (&aLinguModulesEditPB == pBtn)
     {
+        if (!pLinguData)
+            pLinguData = new SvxLinguData_Impl;
         SvxEditModulesDlg aDlg( this, *pLinguData );
         aDlg.Execute();
     }
@@ -1319,23 +1328,24 @@ SvLBoxEntry* SvxLinguTabPage::CreateEntry(String& rTxt, USHORT nCol)
 
 void SvxLinguTabPage::UpdateBox_Impl()
 {
-    const ServiceInfoArr&   aAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
-
-//  const Sequence<OUString>&  rAllNames      = pLinguData->GetAvailSrvcNames();
-//  const OUString* pNames = rAllNames.getConstArray();
-//  const Sequence<OUString>&  rAllDispNames  = pLinguData->GetAvailSrvcDisplayNames();
-//  const OUString* pDispNames = rAllDispNames.getConstArray();
-//  const Sequence<sal_Bool>&  rAllConfigured = pLinguData->GetAvailSrvcConfigured();
-//  const sal_Bool* pConfigured = rAllConfigured.getConstArray();
-    for(sal_uInt16 i = 0; i < aAllDispSrvcArr.Count(); i++)
+    // if not HideGroups was called with GROUP_MODULES...
+    if (aLinguModulesCLB.IsVisible())
     {
-        ServiceInfo_Impl* pInfo = aAllDispSrvcArr[i];
-        aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
-        SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
-        pEntry->SetUserData(new SvxModulesData_Impl(pInfo->sDisplayName, pInfo->bConfigured));
-        aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
+        if (!pLinguData)
+            pLinguData = new SvxLinguData_Impl;
+        const ServiceInfoArr&   rAllDispSrvcArr = pLinguData->GetDisplayServiceArray();
+
+        for(sal_uInt16 i = 0; i < rAllDispSrvcArr.Count(); i++)
+        {
+            ServiceInfo_Impl* pInfo = rAllDispSrvcArr[i];
+            aLinguModulesCLB.InsertEntry(pInfo->sDisplayName);
+            SvLBoxEntry* pEntry = aLinguModulesCLB.GetEntry(i);
+            pEntry->SetUserData( new SvxModulesData_Impl(
+                                 pInfo->sDisplayName, pInfo->bConfigured ) );
+            aLinguModulesCLB.CheckEntryPos( i, pInfo->bConfigured );
+        }
+        aLinguModulesEditPB.Enable( rAllDispSrvcArr.Count() > 0 );
     }
-    aLinguModulesEditPB.Enable(aAllDispSrvcArr.Count() > 0);
 
     if (xProp.is())
     {
