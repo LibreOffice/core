@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:26:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:28:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,7 @@ class ScModule: public SfxModule, public SfxListener
     USHORT              nCurRefDlgId;
     BOOL                bIsWaterCan;
     BOOL                bIsInEditCommand;
+    BOOL                bIsInExecuteDrop;
 
 public:
                     SFX_DECL_INTERFACE(SCID_APP);
@@ -231,6 +232,9 @@ public:
 
     void                SetInEditCommand( BOOL bNew )   { bIsInEditCommand = bNew; }
     BOOL                IsInEditCommand() const         { return bIsInEditCommand; }
+
+    void                SetInExecuteDrop( BOOL bNew )   { bIsInExecuteDrop = bNew; }
+    BOOL                IsInExecuteDrop() const         { return bIsInExecuteDrop; }
 
     // Options:
     const ScViewOptions&    GetViewOptions  ();
