@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 15:56:26 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,15 @@ struct ScLineFlags
                     nBottom(SC_LINE_EMPTY),nHori(SC_LINE_EMPTY),nVert(SC_LINE_EMPTY) {}
 };
 
+struct ScMergePatternState
+{
+    SfxItemSet* pItemSet;           // allocated in MergePatternArea, used for resulting ScPatternAttr
+    const ScPatternAttr* pOld1;     // existing objects, temporary
+    const ScPatternAttr* pOld2;
+
+    ScMergePatternState() : pItemSet(NULL), pOld1(NULL), pOld2(NULL) {}
+};
+
 struct ScAttrEntry
 {
     SCROW                   nRow;
@@ -144,7 +153,7 @@ public:
 
     const ScPatternAttr* GetPattern( SCROW nRow ) const;
     const ScPatternAttr* GetPatternRange( SCROW& rStartRow, SCROW& rEndRow, SCROW nRow ) const;
-    void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, SfxItemSet** ppSet, BOOL bDeep ) const;
+    void    MergePatternArea( SCROW nStartRow, SCROW nEndRow, ScMergePatternState& rState, BOOL bDeep ) const;
 
     void    MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
                             SCROW nStartRow, SCROW nEndRow, BOOL bLeft, SCCOL nDistRight ) const;
