@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:49:45 $
+#   last change: $Author: obo $ $Date: 2004-06-03 15:12:33 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,17 +64,26 @@ PRJNAME := idlc
 TARGET := test_parser
 
 .INCLUDE: settings.mk
-
 .INCLUDE: target.mk
 
 ALLTAR: test
 
-test .PHONY: exittest.pl interfaceinheritance.tests methodoverload.tests
-    + $(PERL) exittest.pl attribute.tests $(BIN)/idlc$(EXECPOST) \
+test .PHONY:
+    + $(EXECTEST) attribute.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(PERL) exittest.pl constructor.tests $(BIN)/idlc$(EXECPOST) \
+    + $(EXECTEST) constant.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(PERL) exittest.pl interfaceinheritance.tests $(BIN)/idlc$(EXECPOST) \
+    + $(EXECTEST) constructor.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
-    + $(PERL) exittest.pl methodoverload.tests $(BIN)/idlc$(EXECPOST) \
+    + $(EXECTEST) interfaceinheritance.tests $(BIN)/idlc$(EXECPOST) \
+        -O $(MISC)/$(TARGET) -stdin
+    + $(EXECTEST) methodoverload.tests $(BIN)/idlc$(EXECPOST) \
+        -O $(MISC)/$(TARGET) -stdin
+    + $(EXECTEST) polystruct.tests $(BIN)/idlc$(EXECPOST) \
+        -O $(MISC)/$(TARGET) -stdin
+    + $(EXECTEST) published.tests $(BIN)/idlc$(EXECPOST) \
+        -O $(MISC)/$(TARGET) -stdin
+    + $(EXECTEST) struct.tests $(BIN)/idlc$(EXECPOST) \
+        -O $(MISC)/$(TARGET) -stdin
+    + $(EXECTEST) typedef.tests $(BIN)/idlc$(EXECPOST) \
         -O $(MISC)/$(TARGET) -stdin
