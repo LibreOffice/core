@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:23:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -413,17 +413,35 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
         }
 #endif // GCP_KERN_HACK
     }
-    else
+    else // Win95, Win98, WinME, etc.
     {
         if( mbDisableGlyphs )
         {
-            // GetCharacterPlacementW replacement on non-W platforms:
-            // in no-glyphs case unicode chars are interpreted as glyphs
+            // fake GetCharacterPlacementW needed for non-WNT platforms
+            bool bAliasSymbolsHigh = mrWinFontData.AliasSymbolsHigh();
+            bool bAliasSymbolsLow  = mrWinFontData.AliasSymbolsLow();
             nRC = 0;
             for( i = 0; i < mnGlyphCount; ++i )
             {
                 WCHAR cChar = pBidiStr[ i ];
+
+                // manually apply symbol aliasing if needed
+                if( bAliasSymbolsHigh )
+                {
+                    // used to support symbol aliasing on bitmap fonts
+                    if( cChar < 0x0100)
+                        cChar += 0xF000;
+                }
+                else if( bAliasSymbolsLow )
+                {
+                    // used to support symbol mapping to printer builtin fonts
+                    if( (cChar ^ 0xF000) < 0x0100 )
+                        cChar -= 0xF000;
+                }
+
+                // the unicode chars will be interpreted as glyphs
                 mpOutGlyphs[ i ] = cChar;
+                // also get the corresponding metric
                 ::GetCharWidthW( mhDC, cChar, cChar, &mpGlyphAdvances[i] );
                 nRC += mpGlyphAdvances[i];
             }
