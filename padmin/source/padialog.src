@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:30:05 $
+ *  last change: $Author: kz $ $Date: 2002-09-17 13:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2304,7 +2304,7 @@ String RID_ERR_REMOVESGENPRT
     Text[ russian ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ greek ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ dutch ] = "The driver \"%s\" is always needed and can therefore not be removed.";
-    Text[ french ] = "The driver \"%s\" is always needed and can therefore not be removed.";
+    Text[ french ] = "Le pilote \"%s\" est systématiquement utilisé : il ne peut pas être supprimé.";
     Text[ spanish ] = "El controlador \"%s\" se utiliza siempre y por lo tanto no se puede eliminar.";
     Text[ finnish ] = "The driver \"%s\" is always needed and can therefore not be removed.";
     Text[ italian ] = "Il driver \"%s\" viene sempre utilizzato per questo non può essere rimosso.";
