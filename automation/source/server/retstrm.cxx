@@ -2,9 +2,9 @@
  *
  *  $RCSfile: retstrm.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:24 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:05:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,44 +81,44 @@ RetStream::~RetStream()
     delete pSammel;
 }
 
-void RetStream::GenError ( ULONG nError, String aString )
+void RetStream::GenError ( SmartId aUId, String aString )
 {
-    CmdBaseStream::GenError ( nError, aString.GetBuffer(), aString.Len() );
+    CmdBaseStream::GenError ( &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, ULONG nUId, String aString )
+void RetStream::GenReturn ( USHORT nRet, SmartId aUId, String aString )
 {
-    CmdBaseStream::GenReturn ( nRet, nUId, aString.GetBuffer(), aString.Len() );
+    CmdBaseStream::GenReturn ( nRet, &aUId, &aString );
 }
 
-void RetStream::GenReturn ( USHORT nRet, ULONG nUId, SbxValue &aValue )
+void RetStream::GenReturn ( USHORT nRet, SmartId aUId, SbxValue &aValue )
 {
     Write(USHORT(SIReturn));
     Write(nRet);
-    Write(nUId);
+    Write(&aUId);
     Write(USHORT(PARAM_SBXVALUE_1));        // Typ der folgenden Parameter
     Write(aValue);
 }
 
-void RetStream::GenReturn ( USHORT nRet, ULONG nUId, ULONG nNr, String aString, BOOL bBool )
+void RetStream::GenReturn ( USHORT nRet, SmartId aUId, ULONG nNr, String aString, BOOL bBool )
 {
-    CmdBaseStream::GenReturn ( nRet, nUId, nNr, aString.GetBuffer(), aString.Len(), bBool );
+    CmdBaseStream::GenReturn ( nRet, &aUId, nNr, &aString, bBool );
 }
 
-void RetStream::GenReturn( USHORT nRet, ULONG nUId, USHORT nMethod, String aString )
+void RetStream::GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString )
 {
-    CmdBaseStream::GenReturn ( nRet, nUId, nMethod, aString.GetBuffer(), aString.Len() );
+    CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString );
 }
 
-void RetStream::GenReturn( USHORT nRet, ULONG nUId, USHORT nMethod, String aString, BOOL bBool )
+void RetStream::GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString, BOOL bBool )
 {
-    CmdBaseStream::GenReturn ( nRet, nUId, nMethod, aString.GetBuffer(), aString.Len(), bBool );
+    CmdBaseStream::GenReturn ( nRet, &aUId, nMethod, &aString, bBool );
 }
 
 
-void RetStream::Write( String aString )
+void RetStream::Write( String *pString )
 {
-    CmdBaseStream::Write( aString.GetBuffer(), aString.Len() );
+    CmdBaseStream::Write( pString->GetBuffer(), pString->Len() );
 }
 
 void RetStream::Write( SbxValue &aValue )
@@ -126,6 +126,18 @@ void RetStream::Write( SbxValue &aValue )
     *pSammel << USHORT( BinSbxValue );
     aValue.Store( *pSammel );
 }
+
+void RetStream::Write( SmartId* pId )
+{
+    if ( pId->IsNumeric() )
+        Write( pId->GetNum() );
+    else
+    {
+        String aTmp( pId->GetStr() );
+        Write( &aTmp );
+    }
+}
+
 
 SvStream* RetStream::GetStream()
 {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: retstrm.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2002-11-18 15:28:29 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 12:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _SBXVAR_HXX //autogen
 #include <svtools/sbxvar.hxx>
 #endif
+#ifndef _SMARTID_HXX_
+#include "smartid.hxx"
+#endif
 #include "cmdbasestream.hxx"
 
 class SvStream;
@@ -78,31 +81,32 @@ public:
 //  CmdBaseStream::GenError;
 //    void GenError( comm_ULONG nError, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenError( nError, aString, nLenInChars );}
 //  new
-    void GenError( ULONG nError, String aString );
+    void GenError( SmartId aUId, String aString );
 
 //  CmdBaseStream::GenReturn;
     void GenReturn( comm_USHORT nRet, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nNr );}
-    void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nUId, nNr );}
+    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nNr );}
 //  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenReturn( nRet, nUId, aString, nLenInChars );}
-    void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, bBool );}
+    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, bBool );}
 //  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_ULONG nNr, const comm_UniChar* aString, comm_USHORT nLenInChars, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, nNr, aString, nLenInChars, bBool );}
 // MacroRecorder
-    void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, nUId, nMethod );}
+    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod );}
 //  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, aString, nLenInChars );}
 //  void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, const comm_UniChar* aString, comm_USHORT nLenInChars, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, aString, nLenInChars, bBool );}
-    void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, bBool );}
-    void GenReturn( comm_USHORT nRet, comm_ULONG nUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, nUId, nMethod, nNr );}
+    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_BOOL bBool ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, bBool );}
+    void GenReturn( comm_USHORT nRet, SmartId aUId, comm_USHORT nMethod, comm_ULONG nNr ){CmdBaseStream::GenReturn( nRet, &aUId, nMethod, nNr );}
 
 //  new
-    void GenReturn( USHORT nRet, ULONG nUId, String aString );
-    void GenReturn( USHORT nRet, ULONG nUId, SbxValue &aValue );
-    void GenReturn( USHORT nRet, ULONG nUId, ULONG nNr, String aString, BOOL bBool );
+    void GenReturn( USHORT nRet, SmartId aUId, String aString );
+    void GenReturn( USHORT nRet, SmartId aUId, SbxValue &aValue );
+    void GenReturn( USHORT nRet, SmartId aUId, ULONG nNr, String aString, BOOL bBool );
 // MacroRecorder
-    void GenReturn( USHORT nRet, ULONG nUId, USHORT nMethod, String aString );
-    void GenReturn( USHORT nRet, ULONG nUId, USHORT nMethod, String aString, BOOL bBool );
+    void GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString );
+    void GenReturn( USHORT nRet, SmartId aUId, USHORT nMethod, String aString, BOOL bBool );
 
     void Reset();
     SvStream* GetStream();
+
 
 
 //  CmdBaseStream::Write;
@@ -111,8 +115,11 @@ public:
 //  void Write( const comm_UniChar* aString, comm_USHORT nLenInChars ){CmdBaseStream::Write( aString, nLenInChars );}
     void Write( comm_BOOL bBool ){CmdBaseStream::Write( bBool );}
 //  new
-    void Write( String aString );
     void Write( SbxValue &aValue );
+
+// Complex Datatypes to be handled system dependent
+    virtual void Write( SmartId* pId );
+    virtual void Write( String *pString );
 
     SvStream *pSammel;
 };
