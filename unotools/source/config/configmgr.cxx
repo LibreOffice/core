@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configmgr.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 12:39:30 $
+ *  last change: $Author: jl $ $Date: 2001-03-20 16:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
-    OSL_ENSHURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
+    OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
@@ -189,7 +189,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(sal_False, sMsg.getStr());
+        OSL_ENSURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -225,7 +225,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(sal_False, sMsg.getStr());
+        OSL_ENSURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -244,7 +244,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
         if(rEntry.pConfigItem == &rCfgItem)
-            OSL_ENSHURE(sal_False, "AddConfigItem: already inserted!");
+            OSL_ENSURE(sal_False, "AddConfigItem: already inserted!");
     }
 #endif
     OUString sPath = C2U(cConfigBaseURL);
@@ -282,7 +282,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(sal_False, sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -295,7 +295,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
  ---------------------------------------------------------------------------*/
 void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
 {
-    OSL_ENSHURE(!pMgrImpl->aItemList.empty(), "no ConfigItems available");
+    OSL_ENSURE(!pMgrImpl->aItemList.empty(), "no ConfigItems available");
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
@@ -481,7 +481,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(sal_False, sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception&){}
@@ -515,7 +515,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
         sMsg += OString(rEx.Message.getStr(),
                     rEx.Message.getLength(),
                      RTL_TEXTENCODING_ASCII_US);
-        OSL_ENSHURE(sal_False, sMsg.getStr());
+        OSL_ENSURE(sal_False, sMsg.getStr());
     }
 #else
     catch(Exception&){}
@@ -553,7 +553,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
             sMsg += OString(rEx.Message.getStr(),
                         rEx.Message.getLength(),
                          RTL_TEXTENCODING_ASCII_US);
-            OSL_ENSHURE(sal_False, sMsg.getStr());
+            OSL_ENSURE(sal_False, sMsg.getStr());
         }
 #else
         catch(Exception& ){}
