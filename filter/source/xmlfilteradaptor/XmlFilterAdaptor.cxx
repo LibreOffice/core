@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-11 16:17:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 13:13:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,9 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASOURCE_HPP_
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #endif
@@ -124,28 +126,20 @@
 #ifndef _COM_SUN_STAR_STYLE_XSTYLELOADER_HPP_
 #include <com/sun/star/style/XStyleLoader.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/conainer/XNameAccess.hpp>
+#endif
 
-using rtl::OUString;
-using com::sun::star::uno::Sequence;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::Any;
-using com::sun::star::uno::UNO_QUERY;
-using com::sun::star::uno::XInterface;
-using com::sun::star::uno::Exception;
-using com::sun::star::uno::RuntimeException;
-using com::sun::star::lang::XMultiServiceFactory;
-using com::sun::star::io::XActiveDataSource;
-using com::sun::star::io::XOutputStream;
-using com::sun::star::beans::PropertyValue;
-using com::sun::star::document::XExporter;
-using com::sun::star::document::XFilter;
-
-using com::sun::star::io::XInputStream;
-using com::sun::star::document::XImporter;
-using com::sun::star::xml::sax::InputSource;
-using com::sun::star::xml::sax::XDocumentHandler;
-using com::sun::star::xml::sax::XParser;
-
+using namespace rtl;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::io;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::container;
+using namespace com::sun::star::document;
+using namespace com::sun::star::style;
+using namespace com::sun::star::xml;
+using namespace com::sun::star::xml::sax;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
@@ -190,12 +184,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     const OUString sSaxParser ( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Parser") );
     Reference < XParser > xSaxParser( mxMSF->createInstance( sSaxParser ), UNO_QUERY );
     Reference < XDocumentHandler > xHandler( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
-    try{
-      if(! xHandler.is())
-        fprintf (stderr, "XMLReader::Read: %s Unable to create service instance xHandler\n" );
-    }
-    catch( Exception& e){
-      fprintf (stderr, "XMLReader::Read: %s Unable to create service instance\n" );
+    if(! xHandler.is()) {
+        OSL_ENSURE(sal_False, "XMLReader::Read: %s Unable to create service instance xHandler\n" );
+        return sal_False;
     }
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument ( mxDoc );
@@ -207,99 +198,51 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //*********************
     // Creating a ConverterBridge instance
     //*********************
-    Reference< XInterface > xConvBridge;
-     xConvBridge = mxMSF->createInstance( udConvertClass );
-    try{
-      if(! xConvBridge.is()){
-         OSL_ENSURE( sal_False,"XMLReader::Read: %s service missing\n" );
-         //fprintf (stderr, "XMLReader::Read: %s service missing\n",udConvertClass );
+    Reference< XInterface > xConvBridge(mxMSF->createInstance( udConvertClass ), UNO_QUERY);
+    if(! xConvBridge.is()){
+        OSL_ENSURE( sal_False,"XMLReader::Read: %s service missing\n" );
         return sal_False;
-      }
-      if (xStatusIndicator.is()){
+    }
+    if (xStatusIndicator.is())
         xStatusIndicator->setValue(nSteps++);
-      }
-    }
-    catch( Exception& e){
-        //fprintf (stderr, "XMLReader::Read: %s Unable to create service instance\n" );
-         OSL_ENSURE( sal_False,"XMLReader::Read: Unable to create service instance\n" );
-        return sal_False;
-     }
 
-    Reference< com::sun::star::xml::XImportFilter > xConverter;
-    try {
-      xConverter = Reference< com::sun::star::xml::XImportFilter > ( xConvBridge, UNO_QUERY );
-    }
-    catch( Exception& e)
-    {
-      fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString(  e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
-      OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-      fprintf(stderr, "Casting failure!\n");
-      return sal_False;
-    }
+    Reference< XImportFilter > xConverter( xConvBridge, UNO_QUERY );
 
      //********************
-     //Template Loading if Required
-     //********************
-     if (!msTemplateName.equalsAscii("")){
-             com::sun::star::uno::Reference< XModel >xModel ( com::sun::star::uno::Reference< XModel >::query( mxDoc ) );
-         com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier > xstylefamiliessupplier ( com::sun::star::uno::Reference< com::sun::star::style::XStyleFamiliesSupplier >::query( mxDoc) );
+    //Template Loading if Required
+    //********************
+    if (!msTemplateName.equalsAscii("")){
+        Reference< XModel > xModel(mxDoc, UNO_QUERY);
+        Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
 
-         Reference< com::sun::star::container::XNameAccess >xName;
-         if(xstylefamiliessupplier.is()){
-               //fprintf (stderr, "\n\nCreated xstylefamiliessupplier\n");
-               xName=xstylefamiliessupplier->getStyleFamilies();
-         }
-         com::sun::star::uno::Reference< com::sun::star::style::XStyleLoader > xstyleLoader ( com::sun::star::uno::Reference< com::sun::star::style::XStyleLoader >::query( xstylefamiliessupplier->getStyleFamilies()) );
-
-
-         if(xstyleLoader.is()){
-                //fprintf (stderr, "\n\nCreated xstyleLoader\n");
+        Reference< XNameAccess >xName;
+        if(xstylefamiliessupplier.is()){
             xName=xstylefamiliessupplier->getStyleFamilies();
-         }
+        }
+        Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
 
-         Sequence < OUString > elementNames = xName->getElementNames();
-         Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
-         //Load the Styles from the Template URL Supplied in the TypeDetection file
+        if(xstyleLoader.is()){
+            xName=xstylefamiliessupplier->getStyleFamilies();
+        }
+
+        Sequence < OUString > elementNames = xName->getElementNames();
+        Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
+
+        //Load the Styles from the Template URL Supplied in the TypeDetection file
         if(msTemplateName.indexOf(OUString::createFromAscii("file:"))==-1)
         {
-              com::sun::star::uno::Reference< com::sun::star::frame::XConfigManager >xCfgMgr ( mxMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
-             OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
+            Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
+                OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
+            OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
             PathString=PathString.concat(OUString::createFromAscii("/"));
             msTemplateName=PathString.concat(msTemplateName);
         }
-        //OSL_ENSURE( sal_False, ::rtl::OUStringToOString( msTemplateName, RTL_TEXTENCODING_ASCII_US).getStr());
+
         xstyleLoader->loadStylesFromURL(msTemplateName,pValue);
-          //*********************
-         // Debug Info
-         //*********************
-         /*
-         sal_Int32 nLength = pValue.getLength();
-         OUString temp =OUString::createFromAscii(" ");
-         for ( sal_Int32 i = 0 ; i < nLength; i++)
-         {
-                fprintf(stderr,"UserData :  %s",OUStringToOString(  pValue[i].Name, RTL_TEXTENCODING_ASCII_US ).getStr());
-            pValue[i].Value>>=temp;
-            fprintf(stderr,"UserData :  %s",OUStringToOString(  temp, RTL_TEXTENCODING_ASCII_US ).getStr());
+    }
 
-         }
-         nLength = elementNames.getLength();
-         for ( sal_Int32 x = 0 ; x < nLength; x++)
-         {
-                fprintf(stderr,"UserData :  %s",OUStringToOString(  elementNames[x], RTL_TEXTENCODING_ASCII_US ).getStr());
-
-         }
-
-         fprintf(stderr,"UserData :  %s",OUStringToOString(  xModel->getURL(), RTL_TEXTENCODING_ASCII_US ).getStr());
-         */
-     }
-
-
-    //*********************
-    //End of template stuff
-    //*********************
-
-      sal_Bool xconv_ret = sal_True;
+    sal_Bool xconv_ret = sal_True;
 
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
@@ -307,27 +250,24 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     //*********************
     // Calling Filtering Component
     //*********************
-    try{
-       xconv_ret =xConverter->importer(aDescriptor,xHandler,msUserData);
+    try {
+        if (!xConverter->importer(aDescriptor,xHandler,msUserData)) {
+            if (xStatusIndicator.is())
+                   xStatusIndicator->end();
+            return sal_False;
+        }
     }
     catch( Exception& e){
-      if (xStatusIndicator.is()){
-                   xStatusIndicator->end();
-      }
-      OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
-      //throw(e);
-       return sal_False;
+        if (xStatusIndicator.is())
+               xStatusIndicator->end();
+
+        OSL_ENSURE( sal_False, ::rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_ASCII_US).getStr());
+        return sal_False;
     }
-    if (!xconv_ret) {
-       if (xStatusIndicator.is()){
-                   xStatusIndicator->end();
-        }
-       return sal_False;
+    if (xStatusIndicator.is()) {
+        xStatusIndicator->setValue(nSteps++);
+        xStatusIndicator->end();
     }
-      if (xStatusIndicator.is()){
-         xStatusIndicator->setValue(nSteps++);
-         xStatusIndicator->end();
-      }
     return sal_True;
 }
 
@@ -402,9 +342,10 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     //*********************
     //Calling Filtering Component
     //*********************
-    sal_Bool xconv_ret=xConverter->exporter(aDescriptor,msUserData);
-    if (!xconv_ret) {
-      return sal_False;
+    if (!xConverter->exporter(aDescriptor,msUserData)) {
+        if (xStatusIndicator.is())
+            xStatusIndicator->end();
+        return sal_False;
     }
     xStatusIndicator->setValue(nSteps++);
     OUString sXMLExportService (  udExport  );
