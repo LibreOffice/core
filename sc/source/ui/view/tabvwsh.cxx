@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-19 18:36:27 $
+ *  last change: $Author: mh $ $Date: 2000-11-14 10:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,103 +66,6 @@
 #pragma hdrstop
 
 //------------------------------------------------------------------
-
-#if !defined OS2 && !defined WNT
-//#define _BUTTON_HXX
-#endif
-
-#define _SETBRW_HXX
-#define _STACK_HXX
-//#define _STATUS_HXX
-#define _STDMENU_HXX
-#define _TABBAR_HXX
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-
-#define _BASE_DLGS_HXX
-#define _BIGINT_HXX
-#define _CACHESTR_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _CTRLTOOL_HXX
-#define _DLGCFG_HXX
-#define _DYNARR_HXX
-#define _EXTATTR_HXX
-#define _FILDLG_HXX
-#define _FONTDLG_HXX
-#define _FRM3D_HXX
-#define _INTRO_HXX
-#define _ISETBWR_HXX
-#define _NO_SVRTF_PARSER_HXX
-#define _MACRODLG_HXX
-#define _MODALDLG_HXX
-#define _MOREBUTTON_HXX
-#define _OUTLINER_HXX
-#define _PASSWD_HXX
-//#define _PRNDLG_HXX
-//#define _POLY_HXX
-#define _PVRWIN_HXX
-#define _QUEUE_HXX
-#define _RULER_HXX
-#define _SCRWIN_HXX
-#define _STACK_HXX
-#define _SETBRW_HXX
-#define _STACK_HXX
-//#define _STATUS_HXX
-#define _STDMENU_HXX
-#define _TABBAR_HXX
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SVDETC_HXX
-#define _SVDIO_HXX
-#define _SVDRAG_HXX
-#define _SVDLAYER_HXX
-
-#define _SFXFILEDLG_HXX
-#define _SFX_MACRO_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXMULTISEL_HXX
-#define _SFXBASIC_HXX
-#define _SFXSTBMGR_HXX
-//#define _SFXTBXCTRL_HXX
-//#define _SFXTBXMGR_HXX
-//#define _SFXIMGMGR_HXX
-
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW
-#define _SI_NOCONTROL
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -170,6 +73,7 @@
 #include <svx/srchitem.hxx>
 #include <offmgr/sbasltid.hrc>
 #include <sfx2/templdlg.hxx>
+#include <sfx2/app.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
