@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: tl $ $Date: 2002-08-15 13:36:53 $
+#   last change: $Author: tl $ $Date: 2002-09-25 13:53:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,6 +96,7 @@ IDLFILES=\
     ParagraphStyle.idl\
     ParagraphStyleCategory.idl\
     ParagraphProperties.idl\
+        ParagraphPropertiesAsian.idl\
         ParagraphPropertiesComplex.idl\
     Style.idl\
     StyleFamilies.idl\
