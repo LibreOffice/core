@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsax.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 14:01:52 $
+ *  last change: $Author: jbu $ $Date: 2002-05-15 16:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,11 +428,11 @@ public: // ExtendedDocumentHandler
             OString o = OUStringToOString(aChars , RTL_TEXTENCODING_UTF8 );
             printf( "%s\n" , o.getStr() );
         }
-        m_iCharCount += aChars.len();
+        m_iCharCount += aChars.getLength();
     }
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (SAXException,RuntimeException)
     {
-        m_iWhitespaceCount += aWhitespaces.len();
+        m_iWhitespaceCount += aWhitespaces.getLength();
     }
 
     virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (SAXException,RuntimeException)

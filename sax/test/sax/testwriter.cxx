@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-01-04 16:00:43 $
+ *  last change: $Author: jbu $ $Date: 2002-05-15 16:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -480,11 +480,11 @@ void OSaxWriterTest::writeParagraph(
     const Reference< XExtendedDocumentHandler > &r ,
     const OUString & s)
 {
-    int nMax = s.len();
+    int nMax = s.getLength();
     int nStart = 0;
 
-    Sequence<sal_uInt16> seq( s.len() );
-    memcpy( seq.getArray() , s.getStr() , s.len() * sizeof( sal_uInt16 ) );
+    Sequence<sal_uInt16> seq( s.getLength() );
+    memcpy( seq.getArray() , s.getStr() , s.getLength() * sizeof( sal_uInt16 ) );
 
     for( int n = 1 ; n < nMax ; n++ ){
         if( 32 == seq.getArray()[n] ) {

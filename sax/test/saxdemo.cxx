@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxdemo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-13 06:49:10 $
+ *  last change: $Author: jbu $ $Date: 2002-05-15 16:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,11 +234,11 @@ public: // ExtendedDocumentHandler
 
     virtual void SAL_CALL characters(const OUString& aChars) throw (SAXException,RuntimeException)
     {
-        m_iCharCount += aChars.len();
+        m_iCharCount += aChars.getLength();
     }
     virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (SAXException,RuntimeException)
     {
-        m_iWhitespaceCount += aWhitespaces.len();
+        m_iWhitespaceCount += aWhitespaces.getLength();
     }
 
     virtual void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (SAXException,RuntimeException)
@@ -453,11 +453,11 @@ void writeParagraphHelper(
     const  Reference< XExtendedDocumentHandler > &r ,
     const OUString & s)
 {
-    int nMax = s.len();
+    int nMax = s.getLength();
     int nStart = 0;
 
-    Sequence<sal_uInt16> seq( s.len() );
-    memcpy( seq.getArray() , s.getStr() , s.len() * sizeof( sal_uInt16 ) );
+    Sequence<sal_uInt16> seq( s.getLength() );
+    memcpy( seq.getArray() , s.getStr() , s.getLength() * sizeof( sal_uInt16 ) );
 
     for( int n = 1 ; n < nMax ; n++ ){
         if( 32 == seq.getArray()[n] ) {
