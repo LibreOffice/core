@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-07 13:34:12 $
+ *  last change: $Author: fs $ $Date: 2001-05-22 12:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,8 +98,8 @@ static sal_Int32           nRefCount = 0;
 #define AGENT_ENABLED       2
 #define AGENT_TIMEOUT       3
 #define AGENT_RETRYLIMIT    4
-//#define LOCALE                5
-//#define SYSTEM                6
+#define LOCALE              5
+#define SYSTEM              6
 //#define WELCOMESCREEN 7
 
 class SvtHelpOptions_Impl : public utl::ConfigItem
@@ -164,8 +164,8 @@ static Sequence< OUString > GetPropertyNames()
         "HelpAgent/Enabled",
         "HelpAgent/Timeout",
         "HelpAgent/RetryLimit",
-//      "Locale",
-//      "System",
+        "Locale",
+        "System",
 //      "HowTo/Show"
     };
 
@@ -238,23 +238,23 @@ SvtHelpOptions_Impl::SvtHelpOptions_Impl()
                             break;
                     }
                 }
-//              else if ( pValues[nProp] >>= aTmpStr )
-//              {
-//                  switch ( nProp )
-//                  {
-//                      case LOCALE:
-//                          aLocale = aTmpStr;
-//                          break;
-//
-//                      case SYSTEM:
-//                          aSystem = aTmpStr;
-//                          break;
-//
-//                      default:
-//                          DBG_ERRORFILE( "Wrong Member!" );
-//                          break;
-//                  }
-//              }
+                else if ( pValues[nProp] >>= aTmpStr )
+                {
+                    switch ( nProp )
+                    {
+                        case LOCALE:
+                            aLocale = aTmpStr;
+                            break;
+
+                        case SYSTEM:
+                            aSystem = aTmpStr;
+                            break;
+
+                        default:
+                            DBG_ERRORFILE( "Wrong Member!" );
+                            break;
+                    }
+                }
                 else if ( pValues[nProp] >>= nTmpInt )
                 {
                     switch ( nProp )
@@ -525,6 +525,14 @@ void SvtHelpOptions_Impl::Commit()
 
             case AGENT_RETRYLIMIT:
                 pValues[nProp] <<= nHelpAgentRetryLimit;
+                break;
+
+            case LOCALE:
+                pValues[nProp] <<= ::rtl::OUString(aLocale);
+                break;
+
+            case SYSTEM:
+                pValues[nProp] <<= ::rtl::OUString(aSystem);
                 break;
         }
     }
