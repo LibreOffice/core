@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sta_list.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:24:55 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 16:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,33 @@ BOOL StatementList::bDoTypeKeysDelay = FALSE;
 Window* StatementList::pFirstDocFrame = NULL;
 
 BOOL StatementList::bCatchGPF = TRUE;
+
+
+static TTSettings* pTTSettings = NULL;
+
+TTSettings* GetTTSettings()
+{
+    if ( !pTTSettings )
+    {
+        pTTSettings = new TTSettings;
+
+        // DisplayHID
+        pTTSettings->pDisplayInstance = NULL;
+        pTTSettings->pDisplayHidWin = NULL;
+        pTTSettings->Old = NULL;
+        pTTSettings->Act = NULL;
+        pTTSettings->aOriginalCaption.Erase();
+
+        // Translate
+        pTTSettings->pTranslateWin = NULL;
+        pTTSettings->bToTop = TRUE;
+    }
+
+    return pTTSettings;
+}
+
+
+
 
 #define IS_WINP_CLOSING(pWin) (pWin->GetSmartHelpId().Matches( 4321 ) && pWin->GetSmartUniqueId().Matches( 1234 ))
 
@@ -413,44 +440,44 @@ BOOL SearchUID::IsWinOK( Window *pWin )
             return FALSE;
         }
     }
-    else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons und Controls auf Toolboxen.
+    else if ( pWin->GetType() == WINDOW_TOOLBOX )   // Buttons and Controls on ToolBox.
     {
         ToolBox *pTB = ((ToolBox*)pWin);
         int i;
         for ( i = 0; i < pTB->GetItemCount() ; i++ )
         {
             if ( aUId.Matches( pTB->GetItemCommand(pTB->GetItemId( i )) ) || aUId.Matches( pTB->GetHelpId(pTB->GetItemId( i )) ) )
-            {       // Die ID stimmt.
+            {       // ID matches.
                 Window *pItemWin;
                 pItemWin = pTB->GetItemWindow( pTB->GetItemId( i ) );
 
                 if ( bSearchButtonOnToolbox && pTB->GetItemType( i ) == TOOLBOXITEM_BUTTON && !pItemWin )
-                {       // Wir haben ein Control. Noch sehen ob Gültig.
-                        // Das Gleiche wie oben.
+                {       // We got a Control, see if its valid also.
+                        // Same as above.
                     if ( ( pTB->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pTB->IsVisible() )
-                    {   // Wir haben einen Button. Noch sehen ob Gültig.
+                    {   // We got a Button, see if its valid also.
                         if ( ( pTB->IsItemEnabled(pTB->GetItemId(i)) || HasSearchFlag( SEARCH_FIND_DISABLED ) )
                          && pTB->IsItemVisible(pTB->GetItemId(i)) )
-                            return TRUE;    // Wir haben einen Button.
+                            return TRUE;    // We got a Button.
                         else
-                        {   // Lieber der Button auf der Gültigen ToolBox als der Fall unten
+                        {   // better a disabled Button on a valid ToolBox than an invalid ToolBox as below
                             pMaybeResult = pTB;
                             return FALSE;
                         }
                     }
                     else if ( !pMaybeResult )
-                    {   // ToolBox ungültig
+                    {   // invalid ToolBox
                         pMaybeResult = pTB;
                         return FALSE;
                     }
                 }
                 if ( pItemWin )
-                {       // Wir haben ein Control. Noch sehen ob Gültig.
-                        // Das Gleiche wie oben.
+                {       // We got a Control, see if its valid also.
+                        // Same as above.
                     if ( ( pItemWin->IsEnabled() || HasSearchFlag( SEARCH_FIND_DISABLED ) ) && pItemWin->IsVisible() )
                     {
-                        pMaybeResult = pItemWin;    // Da wir hier kein Window zurückliefern können
-                        return FALSE;
+                        pAlternateResult = pItemWin;    // since we cannot return a Window here
+                        return TRUE;
                     }
                     else if ( !pMaybeResult )
                     {
@@ -473,6 +500,8 @@ Window* StatementList::SearchTree( SmartId aUId ,BOOL bSearchButtonOnToolbox )
     Window *pResult = SearchAllWin( NULL, aSearch );
     if ( !pResult )
         return aSearch.GetMaybeWin();
+    else if ( aSearch.GetAlternateResultWin() )
+        return aSearch.GetAlternateResultWin();
     else
         return pResult;
 }
@@ -658,7 +687,7 @@ BOOL SearchFadeSplitWin::IsWinOK( Window *pWin )
 #endif
     return pWin->IsVisible() && ( pWin->GetType() == WINDOW_SPLITWINDOW )
         && (((SplitWindow*)pWin)->IsFadeInButtonVisible() || ((SplitWindow*)pWin)->IsFadeOutButtonVisible() )
-        && ((SplitWindow*)pWin)->IsAutoHideButtonVisible() && ((SplitWindow*)pWin)->GetAlign() == nAlign;
+        /*&& ((SplitWindow*)pWin)->IsAutoHideButtonVisible()*/ && ((SplitWindow*)pWin)->GetAlign() == nAlign;
 }
 
 Window* StatementList::GetFadeSplitWin( Window *pBase, WindowAlign nAlign, BOOL MaybeBase )
