@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-30 18:42:35 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,8 +550,8 @@ USHORT ScTabView::CalcZoom( SvxZoomType eType, USHORT nOldZoom )
                 ScMarkData& rMark = aViewData.GetMarkData();
                 ScDocument* pDoc = aViewData.GetDocument();
 
-                if (!rMark.IsMarked())
-                    nZoom = 100;                // nichts markiert
+                if (!rMark.IsMarked() && !rMark.IsMultiMarked())
+                    nZoom = 100;                // nothing selected
                 else
                 {
                     USHORT  nTab = aViewData.GetTabNo();

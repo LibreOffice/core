@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-03-01 11:38:14 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,8 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
         {
             //  wenn auf einem bestehenden Bereich aufgerufen, den markieren
             GetDBData( TRUE, SC_DB_OLD );
-            if ( !GetViewData()->GetMarkData().IsMarked() )
+            const ScMarkData& rMark = GetViewData()->GetMarkData();
+            if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                 MarkDataArea( FALSE );
 
             pResult = new ScDbNameDlg( pB, pCW, pParent, GetViewData() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,6 +302,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
             case SID_OPENDLG_FUNCTION:
                 {
                     ScMarkData aMarkData=GetViewData()->GetMarkData();
+                    aMarkData.MarkToSimple();
                     ScRange aRange;
                     aMarkData.GetMarkArea(aRange);
                     if(aMarkData.IsMarked())

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-13 08:10:43 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -787,7 +787,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 USHORT nEndRow;
                 USHORT nEndTab;
 
-                if ( !GetViewData()->GetMarkData().IsMarked() )
+                const ScMarkData& rMark = GetViewData()->GetMarkData();
+                if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                     pTabViewShell->MarkDataArea( TRUE );
 
                 GetViewData()->GetSimpleArea( nStartCol,nStartRow,nStartTab,

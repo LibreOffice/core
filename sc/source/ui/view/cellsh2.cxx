@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-16 16:22:11 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -724,7 +724,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 {
                     //  select database range or data
                     pTabViewShell->GetDBData( TRUE, SC_DB_OLD );
-                    if ( !GetViewData()->GetMarkData().IsMarked() )
+                    const ScMarkData& rMark = GetViewData()->GetMarkData();
+                    if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )
                         pTabViewShell->MarkDataArea( FALSE );
 
                     //  output to cursor position for non-sheet data
@@ -1191,13 +1192,11 @@ void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
                     USHORT nEndCol,   nEndRow,   nEndTab;
                     BOOL bAnyQuery = FALSE;
 
-                    ScMarkData& rMark = GetViewData()->GetMarkData();
-                    BOOL bSelected = rMark.IsMarked();
+                    BOOL bSelected = GetViewData()->GetSimpleArea(
+                            nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab );
 
                     if ( bSelected )
                     {
-                        GetViewData()->GetSimpleArea( nStartCol, nStartRow, nStartTab,
-                                                      nEndCol,   nEndRow,   nEndTab   );
                         if (nStartCol==nEndCol && nStartRow==nEndRow)
                             bSelected = FALSE;
                     }

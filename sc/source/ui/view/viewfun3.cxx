@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nn $ $Date: 2002-07-16 17:00:25 $
+ *  last change: $Author: nn $ $Date: 2002-09-20 10:07:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ void ScViewFunc::CutToClip( ScDocument* pClipDoc, BOOL bIncludeObjects )
 
         ScDocShellModificator aModificator( *pDocSh );
 
-        if (!rMark.IsMarked())                  // Markierung setzen, falls nicht vorhanden
+        if ( !rMark.IsMarked() && !rMark.IsMultiMarked() )          // mark the range if not marked yet
         {
             DoneBlockMode();
             InitOwnBlockMode();
