@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdrctl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:14:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:11:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,14 +88,14 @@
 #include "tbxcolor.hxx"
 #include "tbxdraw.hrc"
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 
 // -----------------------------------------------------------------------
 
