@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-07 14:44:59 $
+ *  last change: $Author: mba $ $Date: 2001-11-09 15:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
 #include <com/sun/star/document/XFilter.hpp>
@@ -109,6 +112,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
 
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -308,6 +315,7 @@ sal_Bool SfxObjectShell::DoInitNew( SvStorage * pStor )
         if ( xModel.is() )
         {
             SfxItemSet *pSet = GetMedium()->GetItemSet();
+            pSet->Put( SfxStringItem( SID_FILTER_NAME, GetFactory().GetFilter(0)->GetName() ) );
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs;
             TransformItems( SID_OPENDOC, *pSet, aArgs );
             sal_Int32 nLength = aArgs.getLength();
@@ -1972,24 +1980,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
 
         // notify the document that saving was done successfully
         if ( !bCopyTo )
-        {
             bOk = DoSaveCompleted( pNewFile );
-            if ( pNewFile )
-            {
-                const SfxFilter* pFilter = pNewFile->GetFilter();
-                if  (   pFilter
-                    &&  pFilter->IsOwnFormat()
-                    &&  pFilter->UsesStorage()
-                    &&  pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60
-                    )
-                {
-                    SfxViewFrame* pDocViewFrame = SfxViewFrame::GetFirst( this );
-                    SfxFrame* pDocFrame = pDocViewFrame ? pDocViewFrame->GetFrame() : NULL;
-                    if ( pDocFrame )
-                        SfxHelp::OpenHelpAgent( pDocFrame, HID_DID_SAVE_PACKED_XML );
-                }
-            }
-        }
 
         if( bOk )
         {
@@ -2094,19 +2085,18 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
     SvStorageRef xStor = rMedium.GetStorage();
     if ( xStor.Is() )
     {
-#if SUPD < 635
-        // Config
-        if ( xStor->IsStream(SfxConfigManager::GetStreamName()) )
-            SetConfigManager (new SfxConfigManager( xStor, SFX_CFGMANAGER()));
-#endif
         if ( rMedium.GetFileVersion() )
             xStor->SetVersion( rMedium.GetFileVersion() );
 
         // Password
-        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem,
-                         SfxStringItem, SID_PASSWORD, sal_False );
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
         SfxApplication *pApp = SFX_APP();
-        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( 0, pApp->GetPool(), pMedium ) )
+        SfxFrame* pFrame = pMedium->GetLoadTargetFrame();
+        Window* pWindow = NULL;
+        if ( pFrame )
+            pWindow = VCLUnoHelper::GetWindow( pFrame->GetFrameInterface()->getContainerWindow() );
+
+        if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( pWindow, pApp->GetPool(), pMedium ) )
         {
             String aPasswd;
             if ( GetPasswd_Impl(pMedium->GetItemSet(), aPasswd) )
