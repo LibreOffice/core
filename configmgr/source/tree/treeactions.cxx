@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2002-02-11 13:47:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ namespace
         void handle(ValueNode& _rValue)     { implForceWritable(_rValue); }
         void handle(ISubtree& _rSubtree)    { implForceWritable(_rSubtree); applyToChildren(_rSubtree); }
 
-        void implForceWritable(INode& _rNode) { _rNode.forceWritableToFinalized(); }
+        void implForceWritable(INode& _rNode) { _rNode.forceReadonlyToFinalized(); }
     };
 }
 
