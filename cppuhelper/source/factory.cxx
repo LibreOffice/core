@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:34:31 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:24:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,13 +805,15 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
                 catch( CannotActivateFactoryException& e)
                 {
                     OString msg( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
-                    OSL_ENSURE( !msg.getLength(), msg.getStr() );
+                    OSL_TRACE(msg.getStr() );
                 }
             }
         }
     }
-    catch (InvalidRegistryException &)
+    catch (InvalidRegistryException & e)
     {
+        OString msg( OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US) );
+        OSL_TRACE(msg.getStr() );
     }
 
     return xFactory;
