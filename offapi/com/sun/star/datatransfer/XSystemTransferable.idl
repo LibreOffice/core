@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSystemTransferable.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2001-08-06 13:31:13 $
+ *  last change: $Author: jl $ $Date: 2001-08-15 06:49:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,14 @@ interface XSystemTransferable: com::sun::star::uno::XInterface
         source.
         The data object is returned in an any. The contained type may differ on
         different platforms.
+        The argument aProcessId contains a process identifier of the caller's process.
+        The process ID can be obtained by the C function rtl_getGlobalProcessId
+        (rtl/process.h).
+        The interface implementation must ensure that the system data object can be
+        used in that process. If the data object is not valid in the caller' process
+        than the returned any must be empty.
 
-        Windows: The any contains an unsigned long which represents a pointer to
+        Windows: The returned any contains an unsigned long which represents a pointer to
         an IDataObject interface. The caller of getData has to release the data
         object (IDataObject::Release) if it is no longer needed.
         The caller must make sure that the current thread has been initialized for
@@ -96,7 +102,7 @@ interface XSystemTransferable: com::sun::star::uno::XInterface
         @returns
         the system dependent data object.
     */
-    any getData();
+    any getData( [in] sequence < byte > aProcessId);
 };
 
 }; }; }; };
