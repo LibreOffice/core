@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:17:46 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 12:22:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1035,8 +1035,7 @@ void SwCalendarWrapper::LoadCalendar( USHORT eLang, const String& rUniqueId )
 
 ULONG GetAppLanguage()
 {
-//  return Application::GetAppInternational().GetFormatLanguage();
-    return Application::GetAppInternational().GetLanguage();
+    return Application::GetSettings().GetLanguage();
 }
 
 CollatorWrapper& GetAppCollator()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-05-13 03:33:17 $
+ *  last change: $Author: jp $ $Date: 2001-07-06 12:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,17 +177,12 @@ static sal_Char __READONLY_DATA sKomma[] = ", ";
     {
         SfxItemIter aIter( *this );
         const IntlWrapper rInt( ::comphelper::getProcessServiceFactory(),
-            Application::GetAppInternational().GetLanguage() );
+                                    GetAppLanguage() );
         while( TRUE )
         {
-#if SUPD>546
             aIter.GetCurItem()->GetPresentation( ePres, eCoreMetric,
                                                  ePresMetric, aStr,
                                                  &rInt );
-#else
-            aIter.GetCurItem()->GetPresentation( ePres, eCoreMetric,
-                                                 ePresMetric, aStr );
-#endif
             if( rText.Len() && aStr.Len() )
                 rText += String::CreateFromAscii(sKomma);
             rText += aStr;
@@ -1265,6 +1260,9 @@ SfxItemPresentation SwDrawModeGrf::GetPresentation(
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/05/13 03:33:17  er
+      replaced International with IntlWrapper
+
       Revision 1.4  2001/02/23 12:45:30  os
       Complete use of DefaultNumbering component
 
