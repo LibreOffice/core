@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 12:52:42 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 09:41:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #include <services.h>
 #endif
 
+#ifndef __FRAMEWORK_CLASSES_DROPTARGETLISTENER_HXX_
+#include <classes/droptargetlistener.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -143,6 +147,14 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_XDATATRANSFERPROVIDERACCESS_HPP_
+#include <com/sun/star/awt/XDataTransferProviderAccess.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGET_HPP_
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -183,6 +195,10 @@
 #include <toolkit/awt/vclxwindow.hxx>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #ifdef ENABLE_ASSERTIONS
     #ifndef _RTL_STRBUF_HXX_
     #include <rtl/strbuf.hxx>
@@ -205,6 +221,7 @@ namespace framework{
 
 #define PROPERTYCOUNT               1
 
+#define SERVICE_TOOLKIT             DECLARE_ASCII("com.sun.star.awt.Toolkit")
 //_________________________________________________________________________________________________________________
 //  non exported definitions
 //_________________________________________________________________________________________________________________
@@ -344,6 +361,10 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
     // We can't work without these helpers!
     LOG_ASSERT2( m_xDispatchHelper.is()==sal_False, "Frame::Frame()", "DispatchHelper is not valid. XDispatchProvider, XDispatch, XDispatchProviderInterception are not supported!" )
     LOG_ASSERT2( m_xFramesHelper.is  ()==sal_False, "Frame::Frame()", "FramesHelper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!"                       )
+
+    //-------------------------------------------------------------------------------------------------------------
+    // Initialize a the drop target listener.
+    m_xDropTargetListener = new DropTargetListener( this );
 
     // Don't forget it - or we live for ever!
     --m_refCount;
@@ -2458,6 +2479,17 @@ void Frame::impl_startWindowListening( const css::uno::Reference< css::awt::XWin
         if( xTopWindow.is() == sal_True )
         {
             xTopWindow->addTopWindowListener( xTopWindowListener );
+
+            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( SERVICE_TOOLKIT ) ), css::uno::UNO_QUERY );
+            if ( xTransfer.is() )
+            {
+                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xWindow );
+                if ( xDropTarget.is() )
+                {
+                    xDropTarget->addDropTargetListener( m_xDropTargetListener );
+                    xDropTarget->setActive( sal_True );
+                }
+            }
         }
     }
 }
@@ -2478,6 +2510,17 @@ void Frame::impl_stopWindowListening( const css::uno::Reference< css::awt::XWind
         if( xTopWindow.is() == sal_True )
         {
             xTopWindow->removeTopWindowListener( xTopWindowListener );
+
+            css::uno::Reference< css::awt::XDataTransferProviderAccess > xTransfer( ::comphelper::getProcessServiceFactory()->createInstance( ::rtl::OUString( SERVICE_TOOLKIT ) ), css::uno::UNO_QUERY );
+            if ( xTransfer.is() )
+            {
+                css::uno::Reference< css::datatransfer::dnd::XDropTarget > xDropTarget = xTransfer->getDropTarget( xWindow );
+                if ( xDropTarget.is() )
+                {
+                    xDropTarget->removeDropTargetListener( m_xDropTargetListener );
+                    xDropTarget->setActive( sal_False );
+                }
+            }
         }
     }
 }
