@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2000-10-26 17:17:10 $
+ *  last change: $Author: er $ $Date: 2000-10-29 16:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@
 #ifndef _UNOTOOLS_NUMBERFORMATCODEWRAPPER_HXX
 #include <unotools/numberformatcodewrapper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_LANG_KNUMBERFORMATUSAGE_HPP_
-#include <com/sun/star/lang/KNumberFormatUsage.hpp>
+#ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATUSAGE_HPP_
+#include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #endif
 
 #define _SVSTDARR_USHORTS
@@ -112,6 +112,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 
 
@@ -1312,7 +1313,7 @@ ULONG SvNumberFormatter::TestNewString(const String& sFormatString,
 }
 
 SvNumberformat* SvNumberFormatter::ImpInsertFormat(
-            const ::com::sun::star::lang::NumberFormatCode& rCode,
+            const ::com::sun::star::i18n::NumberFormatCode& rCode,
             ULONG nPos )
 {
     String aTmp( rCode.Code );
@@ -1353,7 +1354,7 @@ SvNumberformat* SvNumberFormatter::ImpInsertFormat(
 }
 
 void SvNumberFormatter::ImpInsertNewStandardFormat(
-            const ::com::sun::star::lang::NumberFormatCode& rCode,
+            const ::com::sun::star::i18n::NumberFormatCode& rCode,
             ULONG nPos, USHORT nVersion )
 {
     SvNumberformat* pNewFormat = ImpInsertFormat( rCode, nPos );
@@ -1432,7 +1433,7 @@ inline ULONG SetIndexTable( NfIndexTableOffset nTabOff, ULONG nIndOff )
 
 
 sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::lang::NumberFormatCode >& rSeq,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::NumberFormatCode >& rSeq,
             const NfIndexTableOffset nTabOff )
 {
     const sal_Int32 nLen = rSeq.getLength();
@@ -1481,7 +1482,7 @@ sal_Int32 SvNumberFormatter::GetFormatCodeIndex(
     else
     {   // we need at least _some_ format
         rSeq.realloc(1);
-        rSeq[0] = ::com::sun::star::lang::NumberFormatCode();
+        rSeq[0] = ::com::sun::star::i18n::NumberFormatCode();
         String aTmp( '0' );
         aTmp += GetDecimalSep();
         aTmp.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "############" ) );
@@ -1558,8 +1559,8 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Number
-    uno::Sequence< lang::NumberFormatCode > aFormatSeq
-        = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::FIXED_NUMBER );
+    uno::Sequence< i18n::NumberFormatCode > aFormatSeq
+        = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::FIXED_NUMBER );
 
     // 0
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_NUMBER_INT );
@@ -1589,7 +1590,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Percent number
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::PERCENT_NUMBER );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::PERCENT_NUMBER );
 
     // 0%
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_PERCENT_INT );
@@ -1604,7 +1605,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Currency (no default standard option => no TRUE at ImpInsertFormat)
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::CURRENCY );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::CURRENCY );
 
     // #,##0
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_CURRENCY_1000INT );
@@ -1689,7 +1690,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Date
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE );
 
     // DD.MM.YY   System
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATE_SYSTEM_SHORT );
@@ -1819,7 +1820,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Time
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::TIME );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::TIME );
 
     // HH:MM
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_TIME_HHMM );
@@ -1860,7 +1861,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // DateTime
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::DATE_TIME );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::DATE_TIME );
 
     // DD.MM.YY HH:MM   System
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_DATETIME_SYSTEM_SHORT_HHMM );
@@ -1876,7 +1877,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Scientific number
-    aFormatSeq = aNumberFormatCode.getAllFormatCode( lang::KNumberFormatUsage::SCIENTIFIC_NUMBER );
+    aFormatSeq = aNumberFormatCode.getAllFormatCode( i18n::KNumberFormatUsage::SCIENTIFIC_NUMBER );
 
     // 0.00E+000
     nIdx = GetFormatCodeIndex( aFormatSeq, NF_SCIENTIFIC_000E000 );
@@ -1891,7 +1892,7 @@ void SvNumberFormatter::ImpGenerateFormats(ULONG CLOffset)
 
 
     // Fraction number (no default option)
-    lang::NumberFormatCode aSingleFormatCode;
+    i18n::NumberFormatCode aSingleFormatCode;
 
      // # ?/?
     aSingleFormatCode.Code = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "# ?/?" ) );

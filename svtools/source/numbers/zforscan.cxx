@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2000-10-20 18:45:10 $
+ *  last change: $Author: er $ $Date: 2000-10-29 16:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,7 @@ void ImpSvNumberformatScan::SetDependentKeywords(LanguageType eLnge)
 {
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
-    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::i18n;
 
     const CharClass* pCharClass = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
