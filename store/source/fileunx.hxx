@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fileunx.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:06:33 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 14:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,9 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#if defined(FREEBSD) || defined(NETBSD)
+#if defined(FREEBSD) || defined(NETBSD) || defined(MACOSX)
 #define EDEADLOCK EDEADLK
-#endif /* FREEBSD || NETBSD */
+#endif /* FREEBSD || NETBSD || MACOSX */
 
 typedef int HSTORE;
 
@@ -111,7 +111,7 @@ inline sal_Int32 __store_errno (void)
 /*
  * __store_malign.
  */
-#if   defined(FREEBSD) || defined(LINUX)
+#if   defined(FREEBSD) || defined(LINUX) || defined(MACOSX)
 inline sal_uInt32 __store_malign (void)
 {
     return (sal_uInt32)::getpagesize();
@@ -126,7 +126,7 @@ inline sal_uInt32 __store_malign (void)
 {
     return (sal_uInt32)(-1);
 }
-#endif /* FREEBSD || IRIX || LINUX || SOLARIS */
+#endif /* FREEBSD || IRIX || LINUX || SOLARIS || MACOSX*/
 
 /*
  * __store_fmap (readonly).
