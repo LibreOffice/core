@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shlib.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2002-06-27 07:36:55 $
+ *  last change: $Author: hr $ $Date: 2002-08-15 13:08:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -276,19 +276,16 @@ static OUString makeComponentPath( const OUString & rLibName, const OUString & r
 
 #if defined( SAL_UNX )
 #if defined( MACOSX )
-    sal_Int32 nEnd = endsWith( rLibName, OUString( RTL_CONSTASCII_USTRINGPARAM(".dylib.framework") ) );
+        const char suffix[] = ".dylib";
 #else
-    sal_Int32 nEnd = endsWith( rLibName, OUString( RTL_CONSTASCII_USTRINGPARAM(".so") ) );
+        const char suffix[] = ".so";
 #endif
+    sal_Int32 nEnd = endsWith( rLibName, OUString( RTL_CONSTASCII_USTRINGPARAM(suffix) ) );
     if (nEnd < 0) // !endsWith
     {
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("lib") );
         buf.append( rLibName );
-#if defined( MACOSX )
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".dylib.framework") );
-#else
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(".so") );
-#endif
+        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(suffix) );
     }
     else // name is completely pre/postfixed
     {
