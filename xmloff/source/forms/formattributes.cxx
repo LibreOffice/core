@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formattributes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-13 13:44:41 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 08:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ namespace xmloff
             case faName:            return "name";
             case faServiceName:     return "service-name";
             case faAction:          return "href";      // the only special thing here: Action is represented by an xlink:href attribute
-            case faEnctype:         return "enc-type";
+            case faEnctype:         return "enctype";
             case faMethod:          return "method";
             case faTargetFrame:     return "target-frame";
             case faAllowDeletes:    return "allow-deletes";
@@ -149,7 +149,7 @@ namespace xmloff
             case faCommandType:     return "command-type";
             case faEscapeProcessing:return "escape-processing";
             case faDatasource:      return "datasource";
-            case faDetailFiels:     return "detail-fiels";
+            case faDetailFiels:     return "detail-fields";
             case faFilter:          return "filter";
             case faIgnoreResult:    return "ignore-result";
             case faMasterFields:    return "master-fields";
@@ -320,6 +320,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/02/13 13:44:41  fs
+ *  tab_index -> tab-index
+ *
  *  Revision 1.5  2001/01/03 16:25:34  fs
  *  file format change (extra wrapper element for controls, similar to columns)
  *
