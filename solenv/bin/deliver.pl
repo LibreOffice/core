@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2002-02-18 17:58:50 $
+#   last change: $Author: hr $ $Date: 2002-03-08 11:45:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.21 $ ';
+$id_str = ' $Revision: 1.22 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -95,6 +95,12 @@ print "$script_name -- version: $script_rev\n";
                         'linklib',
                         'mkdir',
                         'touch'
+                        );
+
+# copy filter: files matching these patterns won't be copied by
+# the copy action
+@copy_filter_patterns = (
+                        '\/_[\w\-]+\.dll$' # Win32 debug dll's
                         );
 
 $is_debug           = 0;
@@ -148,7 +154,7 @@ sub do_copy {
 
     $dependent = expand_macros($line);
     ($from, $to) = split(' ', $dependent);
-    print "copy dependant: from: $from, to: $to\n" if $is_debug;
+    print "copy dependent: from: $from, to: $to\n" if $is_debug;
     glob_and_copy($from, $to, $touch);
 
     $line =~ s/%__SRC%/%COMMON_OUTDIR%/ig;
@@ -505,6 +511,7 @@ sub glob_and_copy {
     my @copy_files = @{glob_line($from, $to)};
 
     for (my $i = 0; $i <= $#copy_files; $i++) {
+        next if filter_out($copy_files[$i][0]); # apply copy filter
         copy_if_newer($copy_files[$i][0], $copy_files[$i][1], $touch)
                     ? $files_copied++ : $files_unchanged++;
     }
@@ -592,6 +599,20 @@ sub is_newer {
         else {
             return ($from_stat[9] > $to_stat[9]) ? \@from_stat : 0;
         }
+}
+
+sub filter_out
+{
+    my $file = shift;
+
+    foreach my $pattern ( @copy_filter_patterns ) {
+        if  ( $file =~ /$pattern/ ) {
+           print "filter out: $file\n" if $is_debug;
+           return 1;
+        }
+    }
+
+    return 0;
 }
 
 sub fix_file_permissions {
