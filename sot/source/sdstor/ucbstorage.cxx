@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-29 15:23:09 $
+ *  last change: $Author: mba $ $Date: 2002-02-01 17:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,15 +500,7 @@ public:
     Reference<XInputStream>     GetXInputStream();                      // return XInputStream, after that
                                                                         // this class is close to be unusable
                                                                         // since it can not read and write
-
-    void                        SetError( long nError )
-                                {
-                                    if ( !m_nError )
-                                    {
-                                        m_nError = nError;
-                                        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
-                                    }
-                                }
+    void                        SetError( long nError );
 };
 
 SV_DECL_IMPL_REF( UCBStorageStream_Impl );
@@ -566,14 +558,7 @@ public:
                                 { if ( !m_pContent ) CreateContent(); return m_pContent; }
     UCBStorageElementList_Impl& GetChildrenList()
                                 { ReadContent(); return m_aChildrenList; }
-    void                        SetError( long nError )
-                                {
-                                    if ( !m_nError )
-                                    {
-                                        m_nError = nError;
-                                        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
-                                    }
-                                }
+    void                        SetError( long nError );
 };
 
 SV_DECL_IMPL_REF( UCBStorage_Impl );
@@ -1135,6 +1120,15 @@ void  UCBStorageStream_Impl::FlushData()
     m_bCommited = TRUE;
 }
 
+void UCBStorageStream_Impl::SetError( long nError )
+{
+    if ( !m_nError )
+    {
+        m_nError = nError;
+        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
+    }
+}
+
 void  UCBStorageStream_Impl::ResetError()
 {
     m_nError = 0;
@@ -1262,7 +1256,7 @@ BOOL UCBStorageStream_Impl::Revert()
         {
             SetError( ERRCODE_IO_GENERAL );
         }
-        catch ( Exception& e )
+        catch ( Exception& )
         {
         }
 
@@ -1930,6 +1924,15 @@ void UCBStorage_Impl::ReadContent()
     {
         // any other error - not specified
         SetError( ERRCODE_IO_GENERAL );
+    }
+}
+
+void UCBStorage_Impl::SetError( long nError )
+{
+    if ( !m_nError )
+    {
+        m_nError = nError;
+        if ( m_pAntiImpl ) m_pAntiImpl->SetError( nError );
     }
 }
 
@@ -3310,4 +3313,3 @@ BOOL UCBStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
 
     return FALSE;
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mav $ $Date: 2001-12-10 09:03:36 $
+ *  last change: $Author: mba $ $Date: 2002-02-01 17:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,10 +175,7 @@ SotStorageStream::SotStorageStream()
 *************************************************************************/
 SotStorageStream::~SotStorageStream()
 {
-
-    SetBufferSize( 0 );
-    // Hack, wegen Fehler in den SD-Storages
-    // Commit();
+    Flush(); //SetBufferSize(0);
     delete pOwnStm;
 }
 
