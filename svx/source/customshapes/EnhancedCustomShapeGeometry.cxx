@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 11:08:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 16:16:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5528,6 +5528,7 @@ const sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
         switch( eSpType )
         {
             case mso_sptRectangle :
+            case mso_sptRoundRectangle :
             case mso_sptPictureFrame :
             case mso_sptFlowChartProcess :
             case mso_sptTextPlainText :
