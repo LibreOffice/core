@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-05 16:35:24 $
+#   last change: $Author: obo $ $Date: 2004-08-12 10:12:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -122,6 +122,8 @@ SVSDIDEPEND= \
         _viewsh.sdi\
         viewsh.sdi\
         wviewsh.sdi\
+        _mediash.sdi\
+        mediash.sdi\
         swslots.hrc \
         $(INC)$/globals.hrc \
         $(INC)$/cmdid.h
