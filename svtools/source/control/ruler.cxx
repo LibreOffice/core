@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ruler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-12-12 10:00:40 $
+ *  last change: $Author: os $ $Date: 2002-02-26 15:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -953,6 +953,16 @@ void Ruler::ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom
                 aPoly.SetPoint( Point( n+nIndentWidth2, nVirTop+3 ), 4 );
             }
 
+            if(0 == (mnWinStyle & WB_HORZ))
+            {
+                Point aTmp;
+                for(USHORT i = 0; i < 5; i++)
+                {
+                    aTmp = aPoly[i];
+                    Point aSet(aTmp.Y(), aTmp.X());
+                    aPoly[i] = aSet;
+                }
+            }
             if(RULER_INDENT_BORDER != nIndentStyle)
                 ImplDrawIndent( aPoly, nStyle );
         }
@@ -971,68 +981,93 @@ static void ImplCenterTabPos( Point& rPos, USHORT nStyle )
 }
 
 // -----------------------------------------------------------------------
+void lcl_RotateRect(Rectangle& rRect)
+{
+    if(!rRect.IsEmpty())
+    {
+        Rectangle aTmp(rRect);
+        rRect.Top() = aTmp.Left();
+        rRect.Bottom() = aTmp.Right();
+        rRect.Left() = aTmp.Top();
+        rRect.Right() = aTmp.Bottom();
+    }
+}
+// -----------------------------------------------------------------------
 
 static void ImplDrawRulerTab( OutputDevice* pDevice,
-                             const Point& rPos, USHORT nStyle )
+                             const Point& rPos, USHORT nStyle, BOOL bVertical )
 {
     if ( nStyle & RULER_STYLE_INVISIBLE )
         return;
 
     USHORT nTabStyle = nStyle & RULER_TAB_STYLE;
 
+    Rectangle aRect1, aRect2, aRect3;
+    aRect3.SetEmpty();
     if ( nTabStyle == RULER_TAB_DEFAULT )
     {
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_DWIDTH2 + 1,
-                                      rPos.Y() - RULER_TAB_DHEIGHT2 + 1,
-                                      rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH,
-                                      rPos.Y() ) );
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3,
-                                      rPos.Y() - RULER_TAB_DHEIGHT + 1,
-                                      rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3 + RULER_TAB_DWIDTH4 - 1,
-                                      rPos.Y() ) );
+        aRect1.Left() =     rPos.X() - RULER_TAB_DWIDTH2 + 1                ;
+        aRect1.Top() =      rPos.Y() - RULER_TAB_DHEIGHT2 + 1               ;
+        aRect1.Right() =    rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH ;
+        aRect1.Bottom() =   rPos.Y();
+        aRect2.Left() =     rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3;
+        aRect2.Top() =      rPos.Y() - RULER_TAB_DHEIGHT + 1;
+        aRect2.Right() =    rPos.X() - RULER_TAB_DWIDTH2 + RULER_TAB_DWIDTH3 + RULER_TAB_DWIDTH4 - 1;
+        aRect2.Bottom() =   rPos.Y();
 
     }
     else if ( nTabStyle == RULER_TAB_LEFT )
     {
-        pDevice->DrawRect( Rectangle( rPos.X(),
-                                      rPos.Y() - RULER_TAB_HEIGHT2 + 1,
-                                      rPos.X() + RULER_TAB_WIDTH - 1,
-                                      rPos.Y() ) );
-        pDevice->DrawRect( Rectangle( rPos.X(),
-                                      rPos.Y() - RULER_TAB_HEIGHT + 1,
-                                      rPos.X() + RULER_TAB_WIDTH2 - 1,
-                                      rPos.Y() ) );
+        aRect1.Left() =     rPos.X();
+        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =    rPos.X() + RULER_TAB_WIDTH - 1;
+        aRect1.Bottom() =   rPos.Y();
+        aRect2.Left() =     rPos.X();
+        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =    rPos.X() + RULER_TAB_WIDTH2 - 1;
+        aRect2.Bottom() =   rPos.Y();
     }
     else if ( nTabStyle == RULER_TAB_RIGHT )
     {
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_WIDTH + 1,
-                                      rPos.Y() - RULER_TAB_HEIGHT2 + 1,
-                                      rPos.X(),
-                                      rPos.Y() ) );
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_WIDTH2 + 1,
-                                      rPos.Y() - RULER_TAB_HEIGHT + 1,
-                                      rPos.X(),
-                                      rPos.Y() ) );
+        aRect1.Left() =     rPos.X() - RULER_TAB_WIDTH + 1;
+        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =    rPos.X();
+        aRect1.Bottom() =   rPos.Y();
+        aRect2.Left() =     rPos.X() - RULER_TAB_WIDTH2 + 1;
+        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =    rPos.X();
+        aRect2.Bottom() =   rPos.Y();
     }
     else
     {
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_CWIDTH2 + 1,
-                                      rPos.Y() - RULER_TAB_HEIGHT2 + 1,
-                                      rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH,
-                                      rPos.Y() ) );
-        pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3,
-                                      rPos.Y() - RULER_TAB_HEIGHT + 1,
-                                      rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3 + RULER_TAB_CWIDTH4 - 1,
-                                      rPos.Y() ) );
+        aRect1.Left() =     rPos.X() - RULER_TAB_CWIDTH2 + 1;
+        aRect1.Top() =      rPos.Y() - RULER_TAB_HEIGHT2 + 1;
+        aRect1.Right() =    rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+        aRect1.Bottom() =   rPos.Y();
+        aRect2.Left() =     rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3;
+        aRect2.Top() =      rPos.Y() - RULER_TAB_HEIGHT + 1;
+        aRect2.Right() =    rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH3 + RULER_TAB_CWIDTH4 - 1;
+        aRect2.Bottom() =   rPos.Y();
 
         if ( nTabStyle == RULER_TAB_DECIMAL )
         {
-            pDevice->DrawRect( Rectangle( rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1,
-                                          rPos.Y() - RULER_TAB_HEIGHT + 1 + 1,
-                                          rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH,
-                                          rPos.Y() - RULER_TAB_HEIGHT + 1 + 2 ) );
+            aRect3.Left() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH - 1;
+            aRect3.Top() = rPos.Y() - RULER_TAB_HEIGHT + 1 + 1;
+            aRect3.Right() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
+            aRect3.Bottom() = rPos.X() - RULER_TAB_CWIDTH2 + RULER_TAB_CWIDTH;
         }
     }
+    if( bVertical )
+    {
+        lcl_RotateRect(aRect1);
+        lcl_RotateRect(aRect2);
+        lcl_RotateRect(aRect3);
+    }
+    pDevice->DrawRect( aRect1 );
+    pDevice->DrawRect( aRect2 );
+    if(!aRect2.IsEmpty())
+        pDevice->DrawRect( aRect3 );
+
 }
 
 // -----------------------------------------------------------------------
@@ -1048,7 +1083,7 @@ void Ruler::ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle
     else
         pDevice->SetFillColor( GetSettings().GetStyleSettings().GetWindowTextColor() );
 
-    ImplDrawRulerTab( pDevice, rPos, nStyle );
+    ImplDrawRulerTab( pDevice, rPos, nStyle, 0 == (GetStyle() & WB_HORZ ) );
 }
 
 // -----------------------------------------------------------------------
@@ -2954,8 +2989,6 @@ void Ruler::SetBorders( USHORT n, const RulerBorder* pBrdAry )
 
 void Ruler::SetIndents( USHORT n, const RulerIndent* pIndentAry )
 {
-    DBG_ASSERT( mnWinStyle & WB_HORZ,
-                "Ruler::SetIndents() not allowed when WB_VERT" );
 
     if ( !n || !pIndentAry )
     {
@@ -3002,9 +3035,6 @@ void Ruler::SetIndents( USHORT n, const RulerIndent* pIndentAry )
 
 void Ruler::SetTabs( USHORT n, const RulerTab* pTabAry )
 {
-    DBG_ASSERT( mnWinStyle & WB_HORZ,
-                "Ruler::SetTabs() not allowed when WB_VERT" );
-
     if ( !n || !pTabAry )
     {
         if ( !mpData->pTabs )
@@ -3069,6 +3099,6 @@ void Ruler::DrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle )
     pDevice->SetLineColor();
     pDevice->SetFillColor( pDevice->GetSettings().GetStyleSettings().GetWindowTextColor() );
     ImplCenterTabPos( aPos, nTabStyle );
-    ImplDrawRulerTab( pDevice, aPos, nTabStyle );
+    ImplDrawRulerTab( pDevice, aPos, nTabStyle, 0 == (nStyle & WB_HORZ ) );
     pDevice->Pop();
 }
