@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputsequencechecker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-20 13:41:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:01:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,10 +108,10 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
 static ScriptTypeList typeList[] = {
         //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
         //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
-        //{ UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    // 14,
-        { UnicodeScript_kThai,                  UnicodeScript_kThai },          // 24,
+        { UnicodeScript_kDevanagari,UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    // 14,
+        { UnicodeScript_kThai,  UnicodeScript_kThai,                  UnicodeScript_kThai },          // 24,
 
-        { UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    // 88
+        { UnicodeScript_kScriptCount,   UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    // 88
 };
 
 sal_Char* SAL_CALL
@@ -122,10 +122,10 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
     if (type != UnicodeScript_kScriptCount &&
             type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
         switch(type) {
-            case UnicodeScript_kThai:           return "th";
-            //case UnicodeScript_kArabic:       return "ar";
-            //case UnicodeScript_kHebrew:       return "he";
-            //cace UnicodeScript_kDevanagari:   return "hi";
+            case UnicodeScript_kThai:           return (sal_Char*)"th";
+            //case UnicodeScript_kArabic:       return (sal_Char*)"ar";
+            //case UnicodeScript_kHebrew:       return (sal_Char*)"he";
+            case UnicodeScript_kDevanagari:   return (sal_Char*)"hi";
         }
     }
     return NULL;
