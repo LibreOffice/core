@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+#   last change: $Author: cl $ $Date: 2000-10-26 12:45:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,23 +76,6 @@ AUTOSEG=true
 #.INCLUDE :  sd.mk
 .INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-
-# cppu code requires name space support.
-.IF "$(USE_NAMESPACE)"!=""
-
-UNOUCRDEP=$(SOLARBINDIR)$/applicat.rdb
-UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
-UNOUCROUT=$(OUT)$/inc
-
-UNOTYPES=\
-    com.sun.star.task.XInteractionHandler \
-    com.sun.star.uno.XInterface \
-    com.sun.star.uno.XWeak \
-    com.sun.star.uno.TypeClass
-
-
-.ENDIF # USE_NAMESPACE
 
 # --- Files --------------------------------------------------------
 
