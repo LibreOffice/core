@@ -1598,3 +1598,9 @@ _TI2?AVRuntimeException@uno@star@sun@com@@
 ?insert@?$list@PAVUNOStorageHolder@@V?$allocator@PAVUNOStorageHolder@@@_STL@@@_STL@@QAE?AU?$_List_iterator@PAVUNOStorageHolder@@U?$_Nonconst_traits@PAVUNOStorageHolder@@@_STL@@@2@U32@ABQAVUNOStorageHolder@@@Z
 ?push_back@?$list@PAVUNOStorageHolder@@V?$allocator@PAVUNOStorageHolder@@@_STL@@@_STL@@QAEXABQAVUNOStorageHolder@@@Z
 ?remove@?$list@PAVUNOStorageHolder@@V?$allocator@PAVUNOStorageHolder@@@_STL@@@_STL@@QAEXABQAVUNOStorageHolder@@@Z
+?getLength@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QBAJXZ
+??0OString@rtl@@QAE@PBGJGK@Z
+??1OString@rtl@@QAE@XZ
+??BOString@rtl@@QBEPBDXZ
+?OUStringToOString@rtl@@YA?AVOString@1@ABVOUString@1@GK@Z
+?getStr@OUString@rtl@@QBEPBGXZ
