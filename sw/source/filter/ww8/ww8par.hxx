@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-14 14:46:43 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -821,7 +821,7 @@ friend class WW8FormulaControl;
     //empty is valid. Set bCheBtwn to work with paragraphs that have a special
     //between paragraphs border
     BOOL SetBorder( SvxBoxItem& rBox, const WW8_BRC* pbrc, short *pSizeArray=0,
-        BYTE nSetBorders=0xFF, BOOL bChkBtwn=FALSE );
+        BYTE nSetBorders=0xFF, BOOL bChkBtwn=FALSE);
 
     void GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist );
 
@@ -830,7 +830,7 @@ friend class WW8FormulaControl;
 
     //returns true is a shadow was set
     BOOL SetFlyBordersShadow( SfxItemSet& rFlySet, const WW8_BRC pbrc[4],
-        USHORT nInnerMgn, short *SizeArray=0 );
+        short *SizeArray=0 );
 
     USHORT MatchSdrBoxIntoFlyBoxItem( const Color& rLineColor,
         MSO_LineStyle eLineStyle, MSO_SPT eShapeType, USHORT &rLineWidth,

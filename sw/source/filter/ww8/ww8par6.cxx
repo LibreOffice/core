@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-14 10:53:53 $
+ *  last change: $Author: cmc $ $Date: 2002-01-15 17:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,14 +291,6 @@ static ColorData __FAR_DATA eSwWW8ColA[] = {
         COL_YELLOW, COL_WHITE, COL_BLUE, COL_CYAN, COL_GREEN,
         COL_MAGENTA, COL_RED, COL_BROWN, COL_GRAY, COL_LIGHTGRAY };
 
-
-#ifdef HP9000
-#define INLINE_AUSSER_HP
-#else
-#define INLINE_AUSSER_HP inline
-#endif
-
-
 //-----------------------------------------
 //              diverses
 //-----------------------------------------
@@ -307,10 +299,8 @@ static ColorData __FAR_DATA eSwWW8ColA[] = {
 #define MM_200 1134             // WW-Default fuer u.Seitenrand: 2.0 cm
 #define MM_125 709              // WW-Default fuer vert. K/F-Pos: 1.25 cm
 
-BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
-                            WW8PLCFx_Cp_FKP* pPap,
-                            const WW8RStyle* pSty = 0,
-                            const WW8PLCFx_SEPX* pSep = 0 );
+BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+    const WW8RStyle* pSty = 0, const WW8PLCFx_SEPX* pSep = 0 );
 
 
 ColorData SwWW8ImplReader::GetCol( BYTE nIco )
@@ -738,7 +728,7 @@ void SwWW8ImplReader::SetPageULSpaceItems( SwFrmFmt &rFmt, WW8ULSpaceData& rData
 void SwWW8ImplReader::SetPageBorder(SwPageDesc *pPageDesc0,
     SwPageDesc *pPageDesc1, const WW8PLCFx_SEPX* pSep, USHORT nLIdx )
 {
-    WW8_BRC brc[4];
+    WW8_BRC brc[4]={0};
     if( !bVer67 && ::lcl_ReadBorders( bVer67, brc, 0, 0, pSep ) &&
         IsBorder( brc ))
     {
@@ -1669,20 +1659,18 @@ void SwWW8ImplReader::CopyPageDescHdFt( const SwPageDesc* pOrgPageDesc,
 static BOOL _SetWW8_BRC( BOOL bVer67, WW8_BRC& rVar, const BYTE* pS )
 {
     if( pS )
+    {
         if( bVer67 )
-            (WW8_BRCVer6&)rVar = *((WW8_BRCVer6*)pS);
+            memcpy( rVar.aBits1, pS, sizeof( SVBT16 ) );
         else
             rVar = *((WW8_BRC*)pS);
-    else
-        rVar.clear();
+    }
 
     return 0 != pS;
 }
 
-BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc,
-                            WW8PLCFx_Cp_FKP* pPap,
-                            const WW8RStyle* pSty,
-                            const WW8PLCFx_SEPX* pSep )
+BYTE lcl_ReadBorders( BOOL bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
+    const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep )
 {
 // Ausgegend von diesen defines:
 //      #define WW8_TOP 0
@@ -2040,7 +2028,7 @@ void SwWW8ImplReader::GetBorderDistance( WW8_BRC* pbrc, Rectangle& rInnerDist )
 
 
 BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
-    const WW8_BRC pbrc[4], USHORT nInnerMgn, short *pSizeArray )
+    const WW8_BRC pbrc[4], short *pSizeArray )
 {
     BOOL bShadowed=FALSE;
     if( IsBorder( pbrc ) )
@@ -2048,8 +2036,6 @@ BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
         SvxBoxItem aBox;
         SetBorder( aBox, pbrc, pSizeArray );
 
-        if( nInnerMgn )
-            aBox.SetDistance( nInnerMgn );          // Rand innen
         rFlySet.Put( aBox );
 
         // fShadow
@@ -2062,8 +2048,6 @@ BOOL SwWW8ImplReader::SetFlyBordersShadow(SfxItemSet& rFlySet,
     }
     return bShadowed;
 }
-
-
 
 //-----------------------------------------
 //              APOs
@@ -2081,8 +2065,7 @@ static void FlySecur1( short& rSize, const BOOL bBorder )
         rSize = nMin;
 }
 
-INLINE_AUSSER_HP BOOL SetValSprm( short* pVar, WW8PLCFx_Cp_FKP* pPap,
-                                  USHORT nId )
+inline BOOL SetValSprm( INT16* pVar, WW8PLCFx_Cp_FKP* pPap, USHORT nId )
 {
     register const BYTE* pS = pPap->HasSprm( nId );
     if( pS )
@@ -2090,8 +2073,7 @@ INLINE_AUSSER_HP BOOL SetValSprm( short* pVar, WW8PLCFx_Cp_FKP* pPap,
     return ( pS != 0 );
 }
 
-INLINE_AUSSER_HP BOOL SetValSprm( short* pVar, const WW8RStyle* pStyle,
-                                  USHORT nId )
+inline BOOL SetValSprm( INT16* pVar, const WW8RStyle* pStyle, USHORT nId )
 {
     register const BYTE* pS = pStyle->HasParaSprm( nId );
     if( pS )
@@ -2152,8 +2134,6 @@ int WW8FlyPara::operator == ( const WW8FlyPara& rSrc ) const
 
 BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
 {
-//  WW8PLCFx_Cp_FKP* pPap = pPlcxMan->GetPapPLCF();
-
     if( pSprm29 )
         nSp29 = *pSprm29;                           // PPC ( Bindung )
 
@@ -2161,50 +2141,37 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8PLCFx_Cp_FKP* pPap )
 
     if( bVer67 )
     {
-        SetValSprm( &nSp26,         pPap, 26 ); // X-Position       //sprmPDxaAbs
-        SetValSprm( &nSp27,         pPap, 27 ); // Y-Position       //sprmPDyaAbs
-        SetValSprm( (short*)&nSp45, pPap, 45 ); // Hoehe                //sprmPWHeightAbs
-        SetValSprm( (short*)&nSp28, pPap, 28 ); // Breite               //sprmPDxaWidth
-        SetValSprm( &nSp49,         pPap, 49 ); // L/R-Raender  //sprmPDxaFromText
-        SetValSprm( &nSp48,         pPap, 48 ); // U/L-Raender  //sprmPDyaFromText
+        SetValSprm( &nSp26, pPap, 26 ); // X-Position   //sprmPDxaAbs
+        SetValSprm( &nSp27, pPap, 27 ); // Y-Position   //sprmPDyaAbs
+        SetValSprm( &nSp45, pPap, 45 ); // Hoehe        //sprmPWHeightAbs
+        SetValSprm( &nSp28, pPap, 28 ); // Breite       //sprmPDxaWidth
+        SetValSprm( &nSp49, pPap, 49 ); // L/R-Raender  //sprmPDxaFromText
+        SetValSprm( &nSp48, pPap, 48 ); // U/L-Raender  //sprmPDyaFromText
 
-        pS = pPap->HasSprm( 37 );                               // Umfluss          //sprmPWr
+        pS = pPap->HasSprm( 37 );                       //sprmPWr
         if( pS )
             nSp37 = *pS;
-#if 0
-        pS = pPap->HasSprm( 46 );   // DropCap          //sprmPDcs
-#endif
     }
     else
     {
-        SetValSprm( &nSp26,         pPap, 0x8418 ); // X-Position
-        SetValSprm( &nSp27,         pPap, 0x8419 ); // Y-Position
-        SetValSprm( (short*)&nSp45, pPap, 0x442B ); // Hoehe
-        SetValSprm( (short*)&nSp28, pPap, 0x841A ); // Breite
-        SetValSprm( &nSp49,         pPap, 0x842F ); // L/R-Raender
-        SetValSprm( &nSp48,         pPap, 0x842E ); // U/L-Raender
+        SetValSprm( &nSp26, pPap, 0x8418 ); // X-Position
+        SetValSprm( &nSp27, pPap, 0x8419 ); // Y-Position
+        SetValSprm( &nSp45, pPap, 0x442B ); // Hoehe
+        SetValSprm( &nSp28, pPap, 0x841A ); // Breite
+        SetValSprm( &nSp49, pPap, 0x842F ); // L/R-Raender
+        SetValSprm( &nSp48, pPap, 0x842E ); // U/L-Raender
 
         pS = pPap->HasSprm( 0x2423 );                               // Umfluss
         if( pS )
             nSp37 = *pS;
-#if 0
-        pS = pPap->HasSprm( 0x442C );                               // DropCap
-#endif
     }
-#if 0
-    bDropCap = pS != 0;
-#endif
+
+    if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
+        bBorderLines = ::lcl_IsBorder( bVer67, brc );
 
     if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
 
-    if( ::lcl_ReadBorders( bVer67, brc, pPap ))     // Umrandung
-    {
-        bBorderLines = ::lcl_IsBorder( bVer67, brc );
-        bBorder = TRUE;
-    }
-    else
-        bBorderLines = bBorder = FALSE;
     return TRUE;
 }
 
@@ -2254,7 +2221,6 @@ BOOL WW8FlyPara::ReadFull( const BYTE* pSprm29, SwWW8ImplReader* pIo )
                 nColl = 0;                          // Unguelige Style-Id
 
             BOOL bNowStyleApo = pIo->pCollA[nColl].pWWFly != 0; // Apo in StyleDef
-    //      BOOL bNowApo = bNowStyleApo || ( pS != 0 ); // hier Apo
             WW8FlyPara aF( bVer67, bNowStyleApo ? pIo->pCollA[nColl].pWWFly : 0 );
                                                     // Neuer FlaPara zum Vergleich
             aF.Read( pS, pPap );                    // WWPara fuer neuen Para
@@ -2280,50 +2246,37 @@ BOOL WW8FlyPara::Read( const BYTE* pSprm29, WW8RStyle* pStyle )
     const BYTE* pS = 0;
     if( bVer67 )
     {
-        SetValSprm( &nSp26,         pStyle, 26 );   // X-Position
-        SetValSprm( &nSp27,         pStyle, 27 );   // Y-Position
-        SetValSprm( (short*)&nSp45, pStyle, 45 );   // Hoehe
-        SetValSprm( (short*)&nSp28, pStyle, 28 );   // Breite
-        SetValSprm( &nSp49,         pStyle, 49 );   // L/R-Raender
-        SetValSprm( &nSp48,         pStyle, 48 );   // U/L-Raender
+        SetValSprm( &nSp26, pStyle, 26 );   // X-Position
+        SetValSprm( &nSp27, pStyle, 27 );   // Y-Position
+        SetValSprm( &nSp45, pStyle, 45 );   // Hoehe
+        SetValSprm( &nSp28, pStyle, 28 );   // Breite
+        SetValSprm( &nSp49, pStyle, 49 );   // L/R-Raender
+        SetValSprm( &nSp48, pStyle, 48 );   // U/L-Raender
 
         pS = pStyle->HasParaSprm( 37 );             // Umfluss
         if( pS )
             nSp37 = *pS;
-#if 0
-        pS = pStyle->HasParaSprm( 46 );             // DropCap
-#endif
     }
     else
     {
-        SetValSprm( &nSp26,         pStyle, 0x8418 );   // X-Position
-        SetValSprm( &nSp27,         pStyle, 0x8419 );   // Y-Position
-        SetValSprm( (short*)&nSp45, pStyle, 0x442B );   // Hoehe
-        SetValSprm( (short*)&nSp28, pStyle, 0x841A );   // Breite
-        SetValSprm( &nSp49,         pStyle, 0x842F );   // L/R-Raender
-        SetValSprm( &nSp48,         pStyle, 0x842E );   // U/L-Raender
+        SetValSprm( &nSp26, pStyle, 0x8418 );   // X-Position
+        SetValSprm( &nSp27, pStyle, 0x8419 );   // Y-Position
+        SetValSprm( &nSp45, pStyle, 0x442B );   // Hoehe
+        SetValSprm( &nSp28, pStyle, 0x841A );   // Breite
+        SetValSprm( &nSp49, pStyle, 0x842F );   // L/R-Raender
+        SetValSprm( &nSp48, pStyle, 0x842E );   // U/L-Raender
 
         pS = pStyle->HasParaSprm( 0x2423 );             // Umfluss
         if( pS )
             nSp37 = *pS;
-#if 0
-        pS = pStyle->HasParaSprm( 0x442C );             // DropCap
-#endif
     }
-#if 0
-    bDropCap = pS != 0;
-#endif
 
     if( !nSp29 && !nSp27 && !nSp49 && !nSp37 )      // alles 0 heisst
         return FALSE;                               // Apo ist nicht vorhanden
 
     if( ::lcl_ReadBorders( bVer67, brc, 0, pStyle ) )       // Umrandung
-    {
         bBorderLines = ::lcl_IsBorder( bVer67, brc );
-        bBorder = TRUE;
-    }
-    else
-        bBorderLines = bBorder = FALSE;
+
     return TRUE;
 }
 
@@ -2483,51 +2436,25 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM, SwWW8ImplReader& rIo, WW8FlyPara& rWW,
             break;
     }
 
-    INT16 nLeLMgn = 0, nRiLMgn = 0;     // aus Liniendicke entstehende Raender
-
-    if( rWW.bBorder )                   // Raender innerhalb der Umrandung
+    if (rWW.bBorderLines)
     {
-        WW8_BRC5& rBrc = rWW.brc;
+        /*
+        #i582#
+        Word has a curious bug where the offset stored do not take into
+        account the internal distance from the corner both
+        */
+        INT16 nLeLMgn = 0;
+        INT16 nTemp = rWW.brc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67,
+            &nLeLMgn);
+        nLeLMgn += nTemp;
 
-        // dxpSpace aller 4 Borders bestimmen, zum InnerMargin aufaddieren
-        // und die linken/rechten zur Groesse dazu rechnen
-        // Die Angaben sind in Point
-        short nLeft, nRight;
-        if( rWW.bVer67 )
+        if (nLeLMgn)
         {
-            nLeft  = (rBrc[WW8_LEFT ].aBits1[1] >> 3) & 0x1f;   // dxpSpace
-            nRight = (rBrc[WW8_RIGHT].aBits1[1] >> 3) & 0x1f;   // dxpSpace
-            // muessen obere / untere Liniendicken auch beruecksichtigt werden ???
-
-            nInnerMgn = (( rBrc[WW8_TOP].aBits1[1] ) >> 3 & 0x1f) +
-                        (( rBrc[WW8_BOT].aBits1[1] ) >> 3 & 0x1f);
+            if (eHAlign == HORI_LEFT)
+                eHAlign = HORI_NONE;
+            nXPos -= nLeLMgn;
         }
-        else
-        {
-            nLeft  = rBrc[WW8_LEFT ].aBits2[1] & 0x1f;      // dxpSpace
-            nRight = rBrc[WW8_RIGHT].aBits2[1] & 0x1f;      // dxpSpace
-            // muessen obere / untere Liniendicken auch beruecksichtigt werden ???
-
-            nInnerMgn = (rBrc[WW8_TOP].aBits2[1] & 0x1f) +
-                        (rBrc[WW8_BOT].aBits2[1] & 0x1f);
-        }
-
-        nLeLMgn += 20 * nLeft;          // dxpSpace
-        nRiLMgn += 20 * nRight;         // dxpSpace
-        nLeLMgn += rBrc[WW8_LEFT].DetermineBorderProperties(rWW.bVer67);
-        nRiLMgn += rBrc[WW8_RIGHT].DetermineBorderProperties(rWW.bVer67);
-
-        nInnerMgn += nLeft + nRight;
-        nInnerMgn *= 5;     // Mittelwert in Twips (20 * 4 Kanten)
     }
-                                            // Raender ausserhalb der Umrandung
-    nWidth += nLeLMgn + nRiLMgn;
-    /*
-    ##582##
-    Word has a curious bug where the offset stored do not take into account
-    the internal distance from the corner both
-    */
-    nXPos -= nLeLMgn;
 
     FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, rWW.bBorderLines );
@@ -2600,8 +2527,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put( aSur );
 
     short aSizeArray[5]={0};
-    rReader.SetFlyBordersShadow( *this, (const WW8_BRC*)pFW->brc,
-        pFS->nInnerMgn, &aSizeArray[0] );
+    rReader.SetFlyBordersShadow(*this,(const WW8_BRC*)pFW->brc,&aSizeArray[0]);
 
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
@@ -2609,16 +2535,22 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     {
         Put( SwFmtAnchor(pFS->eAnchor) );
         // Groesse einstellen
-        Put( SwFmtFrmSize( pFS->eHeightFix,
-            pFS->nWidth+aSizeArray[WW8_LEFT]+aSizeArray[WW8_RIGHT],
-            pFS->nHeight+aSizeArray[WW8_TOP]+aSizeArray[WW8_BOT] ));
+
+        //Ordinarily with frames, the border width and spacing is
+        //placed outside the frame, making it larger. With these
+        //types of frames, the left right thickness and space makes
+        //it wider, but the top bottom spacing and border thickness
+        //is placed inside.
+        Put( SwFmtFrmSize( pFS->eHeightFix, pFS->nWidth +
+            aSizeArray[WW8_LEFT] + aSizeArray[WW8_RIGHT],
+            pFS->nHeight));
     }
 }
 
 // WW8FlySet-ctor fuer zeichengebundene Grafiken
 WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
-                    const WW8_PIC& rPic, long nWidth, long nHeight )
-:SfxItemSet( rReader.rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1 )
+    const WW8_PIC& rPic, long nWidth, long nHeight )
+    : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
 {
     if( !rReader.bNew )
         Reader::ResetFrmFmtAttrs( *this );  // Abstand/Umrandung raus
@@ -2640,7 +2572,7 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     region is translated spacing around the graphic to those sides, and the
     bottom and right shadow size is added to the graphic size.
     */
-    if (rReader.SetFlyBordersShadow( *this, rPic.rgbrc, 0, &aSizeArray[0]))
+    if (rReader.SetFlyBordersShadow( *this, rPic.rgbrc, &aSizeArray[0]))
     {
         Put(SvxLRSpaceItem( aSizeArray[WW8_LEFT], 0 ) );
         Put(SvxULSpaceItem( aSizeArray[WW8_TOP], 0 ));
@@ -2649,8 +2581,8 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
     }
 
     Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth+aSizeArray[WW8_LEFT]+
-        aSizeArray[WW8_RIGHT], nHeight+aSizeArray[WW8_TOP]+
-        aSizeArray[WW8_BOT] ) );
+        aSizeArray[WW8_RIGHT], nHeight+aSizeArray[WW8_TOP]
+        + aSizeArray[WW8_BOT]) );
 }
 
 WW8DupProperties::WW8DupProperties(SwDoc &rDoc,
@@ -2745,10 +2677,14 @@ BOOL SwWW8ImplReader::StartApo( const BYTE* pSprm29, BOOL bNowStyleApo,
         pCollA[nAktColl].pWWFly : 0 );
 
     // APO-Parameter ermitteln und Test auf bGrafApo
-    if( pSprm29 && !pWFlyPara->ReadFull( pSprm29, this ) )
+    if( pSprm29 || bNowStyleApo)
     {
-        DELETEZ( pWFlyPara );
-        return FALSE;
+        BOOL bOk = pWFlyPara->ReadFull( pSprm29, this );
+        if (!bOk && !bNowStyleApo)
+        {
+            DELETEZ( pWFlyPara );
+            return FALSE;
+        }
     }
 
     pWFlyPara->ApplyTabPos(pTabPos,pSprm29);
@@ -2958,7 +2894,7 @@ BOOL SwWW8ImplReader::TestSameApo( const BYTE* pSprm29, BOOL bNowStyleApo,
     // Zum Vergleich
     WW8FlyPara aF( bVer67, bNowStyleApo ? pCollA[nAktColl].pWWFly : 0 );
     // WWPara fuer akt. Para
-    if (pSprm29)
+    if (pSprm29 || bNowStyleApo)
         aF.Read( pSprm29, pPlcxMan->GetPapPLCF() );
     aF.ApplyTabPos(pTabPos,pSprm29);
 
@@ -4560,7 +4496,7 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
         // CtrlStack und wieder runter
         bHasBorder = TRUE;
 
-        WW8_BRC5 aBrcs; // Top, Left, Bottom, Right, Between
+        WW8_BRC5 aBrcs={0}; // Top, Left, Bottom, Right, Between
         BYTE nBorder;
 
         if( pAktColl )
