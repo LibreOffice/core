@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propcontroller.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:10:28 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 18:27:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,8 +410,12 @@ namespace pcr
                 getVirtualPropertyState( sal_Int32 _nPropId );
 
         /** called to update properties which depend on a given properties's value
+
+        @param _bIsRealPropertyChange
+            if set to <TRUE/>, this is a real change in the property value, not just a call
+            for purposes of initialization
         */
-        void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue );
+        void    updateDependentProperties( sal_Int32 _nPropId, const ::com::sun::star::uno::Any& _rNewValue, const ::com::sun::star::uno::Any& _rOldValue, bool _bIsRealPropertyChange = true );
 
         /** updates the state of a property which depends on more than one other property value
         */
