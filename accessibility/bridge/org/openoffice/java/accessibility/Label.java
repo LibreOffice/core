@@ -54,33 +54,28 @@
  *
  *
  ************************************************************************/
-
 package org.openoffice.java.accessibility;
+
+import com.sun.star.accessibility.*;
+import com.sun.star.uno.*;
 
 import javax.accessibility.AccessibleState;
 import javax.accessibility.AccessibleStateSet;
 
-import com.sun.star.uno.*;
-import com.sun.star.accessibility.*;
 
 /**
  */
 public class Label extends Component implements javax.accessibility.Accessible {
-
     protected Label(XAccessible xAccessible, XAccessibleContext xAccessibleContext) {
         super(xAccessible, xAccessibleContext);
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            accessibleContext = new AccessibleLabel();
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleLabel();
     }
 
     protected class AccessibleLabel extends AccessibleUNOComponent {
-
         /**
         * Though the class is abstract, this should be called by all sub-classes
         */
@@ -100,8 +95,9 @@ public class Label extends Component implements javax.accessibility.Accessible {
         /** Gets the AccessibleText associated with this object presenting text on the display */
         public javax.accessibility.AccessibleText getAccessibleText() {
             try {
-                XAccessibleText unoAccessibleText = (XAccessibleText)
-                    UnoRuntime.queryInterface(XAccessibleText.class, unoAccessibleContext);
+                XAccessibleText unoAccessibleText = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class,
+                        unoAccessibleContext);
+
                 if (unoAccessibleText != null) {
                     return new AccessibleTextImpl(unoAccessibleText);
                 } else {
@@ -119,39 +115,51 @@ public class Label extends Component implements javax.accessibility.Accessible {
         * of the object
         * @see AccessibleState
         */
-/*
-        public AccessibleStateSet getAccessibleStateSet() {
-            AccessibleStateSet states = super.getAccessibleStateSet();
-            return states;
-        }
-*/
+
+        /*
+                        public AccessibleStateSet getAccessibleStateSet() {
+                                AccessibleStateSet states = super.getAccessibleStateSet();
+                                return states;
+                        }
+        */
+
         /** Returns the relation set of this object */
         public javax.accessibility.AccessibleRelationSet getAccessibleRelationSet() {
             try {
                 XAccessibleRelationSet unoAccessibleRelationSet = unoAccessibleContext.getAccessibleRelationSet();
+
                 if (unoAccessibleRelationSet == null) {
                     return null;
                 }
 
                 javax.accessibility.AccessibleRelationSet relationSet = new javax.accessibility.AccessibleRelationSet();
                 int count = unoAccessibleRelationSet.getRelationCount();
+
                 for (int i = 0; i < count; i++) {
                     AccessibleRelation unoAccessibleRelation = unoAccessibleRelationSet.getRelation(i);
+
                     switch (unoAccessibleRelation.RelationType) {
                         case AccessibleRelationType.LABEL_FOR:
                             relationSet.add(new javax.accessibility.AccessibleRelation(
-                                javax.accessibility.AccessibleRelation.LABEL_FOR,
-                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                                    javax.accessibility.AccessibleRelation.LABEL_FOR,
+                                    getAccessibleComponents(
+                                        unoAccessibleRelation.TargetSet)));
+
                             break;
+
                         case AccessibleRelationType.MEMBER_OF:
                             relationSet.add(new javax.accessibility.AccessibleRelation(
-                                javax.accessibility.AccessibleRelation.MEMBER_OF,
-                                getAccessibleComponents(unoAccessibleRelation.TargetSet)));
+                                    javax.accessibility.AccessibleRelation.MEMBER_OF,
+                                    getAccessibleComponents(
+                                        unoAccessibleRelation.TargetSet)));
+
                             break;
+
                         default:
                             break;
                     }
                 }
+
                 return relationSet;
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
                 return null;
@@ -161,4 +169,3 @@ public class Label extends Component implements javax.accessibility.Accessible {
         }
     }
 }
-
