@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:33:41 $
+ *  last change: $Author: os $ $Date: 2001-05-04 11:06:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3951,7 +3951,6 @@ TabPage RID_SVXPAGE_COLOR
     Text [ english_us ] = "Colors" ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 6 , 9  ) ;
@@ -4025,10 +4024,10 @@ TabPage RID_SVXPAGE_COLOR
         DDExtraWidth = TRUE ;
     };
 
-    FixedLine GRP_COLORTABLE
+    FixedText FT_TABLE_NAME
     {
-        Pos = MAP_APPFONT ( 6 , 43 ) ;
-        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Pos = MAP_APPFONT ( 36 , 41 ) ;
+        Size = MAP_APPFONT ( 94 , 8 ) ;
         Text = "Farbtabelle" ;
         Text [ ENGLISH ] = "Colortable" ;
         Text [ norwegian ] = "Fargetabell" ;
@@ -4057,24 +4056,206 @@ TabPage RID_SVXPAGE_COLOR
     {
         Border = TRUE ;
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 12 , 56 ) ;
+        Pos = MAP_APPFONT ( 36 , 52 ) ;
         Size = MAP_APPFONT ( 94 , 117 ) ;
         TabStop = TRUE ;
     };
 
     Control CTL_PREVIEW_OLD
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 113  ) ;
-        Size = MAP_APPFONT ( 68 , 28 ) ;
+        Pos = MAP_APPFONT ( 164 , 7  ) ;
+        Size = MAP_APPFONT ( 34 , 22 ) ;
         TabStop = TRUE ;
     };
     Control CTL_PREVIEW_NEW
     {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 145  ) ;
-        Size = MAP_APPFONT ( 68 , 28 ) ;
+        Pos = MAP_APPFONT ( 164 , 29  ) ;
+        Size = MAP_APPFONT ( 34 , 22 ) ;
         TabStop = TRUE ;
+    };
+    ListBox LB_COLORMODEL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 55  ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ english_us ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ italian ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ spanish ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ french ] =
+        {
+            < "RVB" ; Default ; > ;
+            < "CMJN" ; Default ; > ;
+        };
+        stringlist [ dutch ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ portuguese_brazilian ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ swedish ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ danish ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+        stringlist [ portuguese ] =
+        {
+            < "RGB" ; Default ; > ;
+            < "CMYK" ; Default ; > ;
+        };
+    StringList [ chinese_simplified ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ russian ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ polish ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ japanese ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ arabic ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ greek ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ korean ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ turkish ] =
+    {
+            < "RGB" ; Default ; > ;
+        < "CMYK" ; Default ; > ;
+    };
+    StringList [ language_user1 ] =
+    {
+            < " " ; Default ; > ;
+        < " " ; Default ; > ;
+    };
+    };
+    FixedText FT_1
+    {
+        Pos = MAP_APPFONT ( 136 , 73  ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "~C" ;
+    };
+    MetricField MTR_FLD_1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 71  ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
+    };
+    FixedText FT_2
+    {
+        Pos = MAP_APPFONT ( 136 , 88  ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "~M" ;
+    };
+    MetricField MTR_FLD_2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 86  ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
+    };
+    FixedText FT_3
+    {
+        Pos = MAP_APPFONT ( 136 , 103  ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "~Y" ;
+    };
+    MetricField MTR_FLD_3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 101  ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
+    };
+    FixedText FT_4
+    {
+        Pos = MAP_APPFONT ( 136 , 118  ) ;
+        Size = MAP_APPFONT ( 25 , 8 ) ;
+        Text = "~K" ;
+    };
+    MetricField MTR_FLD_4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 164 , 116  ) ;
+        Size = MAP_APPFONT ( 34 , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Maximum = 100 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = " %" ;
+        Last = 100 ;
     };
     PushButton BTN_ADD
     {
@@ -4192,191 +4373,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ turkish ] = "~Deðiþtir";
         Text[ language_user1 ] = " ";
     };
-    MetricField MTR_FLD_1
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 30  ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-        Last = 100 ;
-    };
-    MetricField MTR_FLD_2
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 46  ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-        Last = 100 ;
-    };
-    MetricField MTR_FLD_3
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 62  ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-        Last = 100 ;
-    };
-    MetricField MTR_FLD_4
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 152 , 78  ) ;
-        Size = MAP_APPFONT ( 40 , 12 ) ;
-        TabStop = TRUE ;
-        Repeat = TRUE ;
-        Spin = TRUE ;
-        Maximum = 100 ;
-        Unit = FUNIT_CUSTOM ;
-        CustomUnitText = " %" ;
-        Last = 100 ;
-    };
-    FixedText FT_1
-    {
-        Pos = MAP_APPFONT ( 124 , 32  ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text = "~C" ;
-    };
-    FixedText FT_2
-    {
-        Pos = MAP_APPFONT ( 124 , 48  ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text = "~M" ;
-    };
-    FixedText FT_3
-    {
-        Pos = MAP_APPFONT ( 124 , 64  ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text = "~Y" ;
-    };
-    FixedText FT_4
-    {
-        Pos = MAP_APPFONT ( 124 , 80  ) ;
-        Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text = "~K" ;
-    };
-    ListBox LB_COLORMODEL
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 125 , 14  ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
-        TabStop = TRUE ;
-        DropDown = TRUE ;
-        StringList =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ english_us ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ italian ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ spanish ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ french ] =
-        {
-            < "RVB" ; Default ; > ;
-            < "CMJN" ; Default ; > ;
-        };
-        stringlist [ dutch ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ portuguese_brazilian ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ swedish ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ danish ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-        stringlist [ portuguese ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
-    StringList [ chinese_simplified ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "RGB" ; Default ; > ;
-        < "CMYK" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
-    };
-    FixedLine GRP_PREVIEW
+/*    FixedLine GRP_PREVIEW
     {
         Pos = MAP_APPFONT ( 119 , 99  ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
@@ -4428,7 +4425,7 @@ TabPage RID_SVXPAGE_COLOR
         Text[ chinese_traditional ] = "ÃC¦âÃþ«¬";
         Text[ turkish ] = "Color system";
         Text[ arabic ] = "ÚíäÉ Çááæä";
-    };
+    };*/
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 218 , 95  ) ;
