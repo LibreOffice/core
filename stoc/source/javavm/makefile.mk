@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: sb $ $Date: 2002-12-06 10:48:59 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:10:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,16 +62,16 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=jen
+TARGET = javavm.uno
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = jen
 
 .IF "$(SOLAR_JAVA)" == "TRUE"
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # --- Files --------------------------------------------------------
 
@@ -98,7 +98,7 @@ NOOPTFILES= \
 .ENDIF			# "$(COM)"=="C52"
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP=$(TARGET).map
+SHL1VERSIONMAP = jen.map
 SHL1STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)	    	\
