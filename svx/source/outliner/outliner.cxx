@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-21 11:04:46 $
+ *  last change: $Author: mt $ $Date: 2001-08-23 14:39:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,33 +780,22 @@ void Outliner::ImplCheckNumBulletItem( USHORT nPara )
 
     // Wenn es ein SvxNumBulletItem gibt, ueberschreibt dieses die
     // Einstellungen von BulletItem und LRSpaceItem.
-    const SvxNumBulletItem& rNumBullet = ImplGetNumBulletItem( nPara );
-    if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
+    const SvxNumberFormat* pFmt = ImplGetBullet( nPara );
+    if ( pFmt )
     {
         SvxLRSpaceItem aNewLRSpace( EE_PARA_LRSPACE );
-        CreateLRSpaceItem( rNumBullet, pPara->GetDepth(), aNewLRSpace );
+        aNewLRSpace.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
+        aNewLRSpace.SetTxtLeft( pFmt->GetAbsLSpace() );
         if ( pEditEngine->HasParaAttrib( nPara, EE_PARA_LRSPACE ) )
         {
             const SvxLRSpaceItem& rOldLRSpace = (const SvxLRSpaceItem&)pEditEngine->GetParaAttrib( nPara, EE_PARA_LRSPACE );
             aNewLRSpace.SetRight( rOldLRSpace.GetRight() );
         }
-
         SfxItemSet aAttrs( pEditEngine->GetParaAttribs( nPara ) );
         aAttrs.Put( aNewLRSpace);
         pPara->aBulSize.Width() = -1;
         pEditEngine->SetParaAttribs( nPara, aAttrs );
     }
-}
-
-BOOL Outliner::CreateLRSpaceItem( const SvxNumBulletItem& rNumBullet, USHORT nLevel, SvxLRSpaceItem& rLRSpace )
-{
-    const SvxNumberFormat* pFmt = rNumBullet.GetNumRule()->Get( nLevel );
-    if ( pFmt )
-    {
-        rLRSpace.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-        rLRSpace.SetTxtLeft( pFmt->GetAbsLSpace() );
-    }
-    return pFmt ? TRUE : FALSE;
 }
 
 void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara )
@@ -896,7 +885,6 @@ void Outliner::SetParaAttribs( ULONG nPara, const SfxItemSet& rSet )
 
         if ( bLRSpaceChanged )
         {
-            // Use Item from Style/ParaAttribs, ImplGetNumBulletItem could return a pool default in OutlineView on Level 0
             const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&)pEditEngine->GetParaAttrib( (USHORT)nPara, EE_PARA_NUMBULLET );
             Paragraph* pPara = pParaList->GetParagraph( nPara );
             if ( rNumBullet.GetNumRule()->GetLevelCount() > pPara->GetDepth() )
@@ -1476,6 +1464,8 @@ Outliner::Outliner( SfxItemPool* pPool, USHORT nMode )
     nMinDepth           = 0;
     nMaxDepth           = 9;
 
+    pOverwriteLevel0Bullet = NULL;
+
     pParaList = new ParagraphList;
     pParaList->SetVisibleStateChangedHdl( LINK( this, Outliner, ParaVisibleStateChangedHdl ) );
     Paragraph* pPara = new Paragraph( 0 );
@@ -1495,6 +1485,7 @@ Outliner::~Outliner()
 
     pParaList->Clear( TRUE );
     delete pParaList;
+    delete pOverwriteLevel0Bullet;
     delete pEditEngine;
 }
 
@@ -1618,27 +1609,22 @@ BOOL Outliner::ImplHasBullet( USHORT nPara ) const
 
 const SvxNumberFormat* Outliner::ImplGetBullet( USHORT nPara ) const
 {
-    const SvxNumBulletItem& rNumBullet = ImplGetNumBulletItem( nPara );
+    const SvxNumberFormat* pFmt = NULL;
+
     USHORT nDepth = pParaList->GetParagraph( nPara )->GetDepth();
-    return rNumBullet.GetNumRule()->Get( nDepth );
-}
 
-const SvxNumBulletItem& Outliner::ImplGetNumBulletItem( USHORT nPara ) const
-{
-    // #84013# Active when DL changed the default item...
-/*
-    if ( ( pEditEngine->GetControlWord() & EE_CNTRL_OUTLINER ) && !pParaList->GetParagraph( nPara )->GetDepth() )
+    if ( !nDepth && pOverwriteLevel0Bullet )
     {
-        // return Pool-Default....
-        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) GetEmptyItemSet().GetPool()->GetDefaultItem( EE_PARA_NUMBULLET );
-        const SvxNumberFormat* pBullet = rNumBullet.GetNumRule()->Get( 0 );
-        if ( pBullet )
-            return rNumBullet;
-
+        pFmt = pOverwriteLevel0Bullet;
     }
-*/
-    const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
-    return rNumBullet;
+    else
+    {
+        const SvxNumBulletItem& rNumBullet = (const SvxNumBulletItem&) pEditEngine->GetParaAttrib( nPara, EE_PARA_NUMBULLET );
+        if ( rNumBullet.GetNumRule()->GetLevelCount() > nDepth )
+            pFmt = rNumBullet.GetNumRule()->Get( nDepth );
+    }
+
+    return pFmt;
 }
 
 Size Outliner::ImplGetBulletSize( USHORT nPara )
@@ -1847,6 +1833,12 @@ void Outliner::ExpandHdl()
 {
     DBG_CHKTHIS(Outliner,0);
     aExpandHdl.Call( this );
+}
+
+void Outliner::OverwriteLevel0Bullet( const SvxNumberFormat& rNumberFormat )
+{
+    delete pOverwriteLevel0Bullet;
+    pOverwriteLevel0Bullet = new SvxNumberFormat( rNumberFormat );
 }
 
 XubString Outliner::GetText( Paragraph* pParagraph, ULONG nCount ) const
