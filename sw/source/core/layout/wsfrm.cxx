@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:19:49 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 09:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2166,6 +2166,21 @@ void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
                 }
             }
             break;
+
+        // OD 2004-02-26 #i25029#
+        case RES_PARATR_CONNECT_BORDER:
+        {
+            rInvFlags |= 0x01;
+            if ( IsTxtFrm() )
+            {
+                static_cast<SwTxtFrm*>(this)->InvalidateNextPrtArea();
+            }
+            if ( !GetIndNext() && IsInTab() && IsInSplitTableRow() )
+            {
+                FindTabFrm()->InvalidateSize();
+            }
+        }
+        break;
 
         case RES_PARATR_TABSTOP:
         case RES_CHRATR_PROPORTIONALFONTSIZE:
