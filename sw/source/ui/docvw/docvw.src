@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:12:00 $
+ *  last change: $Author: rt $ $Date: 2001-06-08 22:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ Menu MN_READONLY_POPUP
             Text [ english_us ] = "~Edit" ;
             Text [ italian ] = "~Modifica" ;
             Text [ spanish ] = "~Editar" ;
-            Text [ french ] = "~Edition" ;
+            Text [ french ] = "~Édition" ;
             Text [ dutch ] = "Be~werken" ;
             Text [ swedish ] = "~Redigera" ;
             Text [ danish ] = "~Rediger" ;
@@ -204,7 +204,7 @@ Menu MN_READONLY_POPUP
             Text[ english_us ] = "Reload Frame";
             Text[ chinese_simplified ] = "ÖØĞÂ×°Èë¿ò¶ÔÏó";
             Text[ russian ] = "Ïåğåçàãğóçèòü ğàìêó";
-            Text[ polish ] = "Za³aduj ponownie Frame";
+            Text[ polish ] = "~Za³aduj ponownie ramkê";
             Text[ japanese ] = "ÌÚ°Ñ‚ÌÄ“Ç‚İ‚İ(~R)";
             Text[ chinese_traditional ] = "­«·s¸ü¤J°T®Ø";
             Text[ arabic ] = "ÅÚÇÏÉ ÊÍãíá ÇáÅØÇÑ";
@@ -234,7 +234,7 @@ Menu MN_READONLY_POPUP
             Text [ portuguese_brazilian ] = "HTM~L - Quelltext" ;
             Text[ chinese_simplified ] = "HT~ML Ô´ÎÄ±¾";
             Text[ russian ] = "Èñõîäíûé òåêñò HTM~L";
-            Text[ polish ] = "Tekst ?ród³owy HTML";
+            Text[ polish ] = "Tekst Ÿród³owy HTML";
             Text[ japanese ] = "HT~ML ¿°½Ã·½Ä";
             Text[ chinese_traditional ] = "HT~ML ­ì©lÀÉ";
             Text[ arabic ] = "HTML ãÕÏÑ";
@@ -935,7 +935,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text [ dutch ] = "Het bronkader is reeds basis van een koppeling." ;
     Text[ chinese_simplified ] = "Õâ¸öÀ´Ô´¿òÒÑ¾­ÊÇÒ»¸öÁ´½ÓµÄÀ´Ô´¿ò¡£";
     Text[ russian ] = "Èñõîäíàÿ ğàìêà óæå ÿâëÿåòñÿ èñòî÷íèêîì ñâÿçè.";
-    Text[ polish ] = "Ramka ?ród³owa jest ju¿ ?ród³em po³¹czenia.";
+    Text[ polish ] = "Ramka Ÿród³owa jest ju¿ Ÿród³em po³¹czenia.";
     Text[ japanese ] = "‚±‚ÌÃ·½Ä˜g‚É‚Í•Ê‚ÌÃ·½Ä˜g‚ª‚·‚Å‚É˜AŒ‹‚µ‚Ä‚¢‚Ü‚·B";
     Text[ chinese_traditional ] = "³o­Ó¨Ó·½°T®Ø¤w¸g¬O¤@­Ó³sµ²ªº·½°T®Ø¡C";
     Text[ arabic ] = "ßÇÏÑ ÇáãÕÏÑ åæ ãÓÈŞÇğ ãÕÏÑ ÇáÊÓáÓá.";
@@ -1201,4 +1201,5 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ catalan ] = "La marca o selección se encuentra en una posición protegida.\nPor ello no se puede aceptar una modificación.";
     MESSAGE[ finnish ] = "Vain luku -sisältöä ei voi muuttaa.\nMuokkauksia ei hyväksytä";
 };
+
 
