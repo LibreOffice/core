@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-17 11:08:34 $
+ *  last change: $Author: dl $ $Date: 2001-02-13 12:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,8 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame, SfxViewShell *pOldShell) 
     bMousePosFreezed (FALSE),
     nLastSlot(0),
     bReadOnly(pDocSh->IsReadOnly()),
-    bInEffectAssignment(FALSE)
+    bInEffectAssignment(FALSE),
+    pSlotArray( NULL )
 {
     if (pOldShell)
     {
@@ -235,7 +236,8 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame,
     bMousePosFreezed (FALSE),
     nLastSlot(0),
     bReadOnly(pDocSh->IsReadOnly()),
-    bInEffectAssignment(FALSE)
+    bInEffectAssignment(FALSE),
+    pSlotArray( NULL )
 {
     pFrameView = new FrameView(pDoc);
     pFrameView->Connect();
@@ -312,6 +314,7 @@ __EXPORT SdDrawViewShell::~SdDrawViewShell()
 
     pFrameView->Disconnect();
     delete pXPolygon;
+    delete [] pSlotArray;
 }
 
 /*************************************************************************
@@ -322,6 +325,37 @@ __EXPORT SdDrawViewShell::~SdDrawViewShell()
 
 void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
 {
+    // Array fuer Slot-/ImageMapping:
+    // Gerader Eintrag: Haupt-/ToolboxSlot
+    // Ungerader Eintrag: gemappter Slot
+    // Achtung: Anpassen von GetIdBySubId() !!!
+    // Reihenfolge (insbesondere Zoom) darf nicht geaendert werden !!!
+    pSlotArray = new USHORT[ SLOTARRAY_COUNT ];
+    pSlotArray[ 0 ]  = SID_OBJECT_CHOOSE_MODE;
+    pSlotArray[ 1 ]  = SID_OBJECT_ROTATE;
+    pSlotArray[ 2 ]  = SID_OBJECT_ALIGN;
+    pSlotArray[ 3 ]  = SID_OBJECT_ALIGN_LEFT;
+    pSlotArray[ 4 ]  = SID_ZOOM_TOOLBOX;
+    pSlotArray[ 5 ]  = SID_ZOOM_TOOLBOX;
+    pSlotArray[ 6 ]  = SID_DRAWTBX_TEXT;
+    pSlotArray[ 7 ]  = SID_ATTR_CHAR;
+    pSlotArray[ 8 ]  = SID_DRAWTBX_RECTANGLES;
+    pSlotArray[ 9 ]  = SID_DRAW_RECT;
+    pSlotArray[ 10 ] = SID_DRAWTBX_ELLIPSES;
+    pSlotArray[ 11 ] = SID_DRAW_ELLIPSE;
+    pSlotArray[ 12 ] = SID_DRAWTBX_LINES;
+    pSlotArray[ 13 ] = SID_DRAW_FREELINE_NOFILL;
+    pSlotArray[ 14 ] = SID_DRAWTBX_3D_OBJECTS;
+    pSlotArray[ 15 ] = SID_3D_CUBE;
+    pSlotArray[ 16 ] = SID_DRAWTBX_INSERT;
+    pSlotArray[ 17 ] = SID_INSERT_DIAGRAM;
+    pSlotArray[ 18 ] = SID_POSITION;
+    pSlotArray[ 19 ] = SID_FRAME_TO_TOP;
+    pSlotArray[ 20 ] = SID_DRAWTBX_CONNECTORS;
+    pSlotArray[ 21 ] = SID_TOOL_CONNECTOR;
+    pSlotArray[ 22 ] = SID_DRAWTBX_ARROWS;
+    pSlotArray[ 23 ] = SID_LINE_ARROW_END;
+
     StartListening(*GetViewFrame());
     StartListening(*pDocSh);
 

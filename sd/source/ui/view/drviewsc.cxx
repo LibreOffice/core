@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dl $ $Date: 2001-02-12 16:01:14 $
+ *  last change: $Author: dl $ $Date: 2001-02-13 12:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,29 +119,6 @@
 #include "docshell.hxx"
 #include "drawview.hxx"
 #include "brkdlg.hxx"
-
-// Array fuer Slot-/ImageMapping:
-// Gerader Eintrag: Haupt-/ToolboxSlot
-// Ungerader Eintrag: gemappter Slot
-// Achtung: Anpassen von GetIdBySubId() !!!
-// Reihenfolge (insbesondere Zoom) darf nicht geaendert werden !!!
-// (wird in drawdoc2.cxx benutzt)
-#define ARRAY_COUNT 24
-USHORT SlotArray[ ARRAY_COUNT ] =
-{
-    SID_OBJECT_CHOOSE_MODE, SID_OBJECT_ROTATE,
-    SID_OBJECT_ALIGN,       SID_OBJECT_ALIGN_LEFT,
-    SID_ZOOM_TOOLBOX,       SID_SIZE_PAGE,
-    SID_DRAWTBX_TEXT,       SID_ATTR_CHAR,
-    SID_DRAWTBX_RECTANGLES, SID_DRAW_RECT,
-    SID_DRAWTBX_ELLIPSES,   SID_DRAW_ELLIPSE,
-    SID_DRAWTBX_LINES,      SID_DRAW_FREELINE_NOFILL,
-    SID_DRAWTBX_3D_OBJECTS, SID_3D_CUBE,
-    SID_DRAWTBX_INSERT,     SID_INSERT_DIAGRAM,
-    SID_POSITION,           SID_FRAME_TO_TOP,
-    SID_DRAWTBX_CONNECTORS, SID_TOOL_CONNECTOR,
-    SID_DRAWTBX_ARROWS,     SID_LINE_ARROW_END
-};
 
 #define MIN_ACTIONS_FOR_DIALOG  5000    // bei mehr als 1600 Metaobjekten
                                         // wird beim Aufbrechen ein Dialog
@@ -756,11 +733,8 @@ USHORT SdDrawViewShell::GetIdBySubId( USHORT nSId )
         break;
 
         case SID_ATTR_CHAR:
-        case SID_ATTR_CHAR_VERTICAL:
         case SID_TEXT_FITTOSIZE:
-        case SID_TEXT_FITTOSIZE_VERTICAL:
         case SID_DRAW_CAPTION:
-        case SID_DRAW_CAPTION_VERTICAL:
         {
             nMappedSId = SID_DRAWTBX_TEXT;
         }
@@ -908,7 +882,7 @@ void SdDrawViewShell::MapSlot( USHORT nSId )
     if( nMappedSId > 0 )
     {
         USHORT nID = GetArrayId( nMappedSId ) + 1;
-        SlotArray[ nID ] = nSId;
+        pSlotArray[ nID ] = nSId;
     }
 }
 
@@ -923,19 +897,19 @@ void SdDrawViewShell::UpdateToolboxImages( SfxItemSet &rSet, BOOL bPermanent )
     if( !bPermanent )
     {
         USHORT nId = GetArrayId( SID_ZOOM_TOOLBOX ) + 1;
-        rSet.Put( TbxImageItem( SID_ZOOM_TOOLBOX, SlotArray[nId] ) );
+        rSet.Put( TbxImageItem( SID_ZOOM_TOOLBOX, pSlotArray[nId] ) );
 
         nId = GetArrayId( SID_DRAWTBX_INSERT ) + 1;
-        rSet.Put( TbxImageItem( SID_DRAWTBX_INSERT, SlotArray[nId] ) );
+        rSet.Put( TbxImageItem( SID_DRAWTBX_INSERT, pSlotArray[nId] ) );
 
         nId = GetArrayId( SID_POSITION ) + 1;
-        rSet.Put( TbxImageItem( SID_POSITION, SlotArray[nId] ) );
+        rSet.Put( TbxImageItem( SID_POSITION, pSlotArray[nId] ) );
     }
     else
     {
-        for( USHORT nId = 0; nId < ARRAY_COUNT; nId += 2 )
+        for( USHORT nId = 0; nId < SLOTARRAY_COUNT; nId += 2 )
         {
-            rSet.Put( TbxImageItem( SlotArray[nId], SlotArray[nId+1] ) );
+            rSet.Put( TbxImageItem( pSlotArray[nId], pSlotArray[nId+1] ) );
         }
     }
 }
@@ -951,7 +925,7 @@ USHORT SdDrawViewShell::GetMappedSlot( USHORT nSId )
     USHORT nSlot = 0;
     USHORT nId = GetArrayId( nSId );
     if( nId != USHRT_MAX )
-        nSlot = SlotArray[ nId+1 ];
+        nSlot = pSlotArray[ nId+1 ];
 
     // Wenn der Slot noch auf sich selbst gemapped ist, muss 0 zurueck-
     // gegeben werden, da sonst der Slot immer wieder selbst executet
@@ -971,9 +945,9 @@ USHORT SdDrawViewShell::GetMappedSlot( USHORT nSId )
 
 USHORT SdDrawViewShell::GetArrayId( USHORT nSId )
 {
-    for( int i = 0; i < ARRAY_COUNT; i += 2 )
+    for( int i = 0; i < SLOTARRAY_COUNT; i += 2 )
     {
-        if( SlotArray[ i ] == nSId )
+        if( pSlotArray[ i ] == nSId )
             return( i );
     }
     DBG_ERROR( "Slot im Array nicht gefunden!" );

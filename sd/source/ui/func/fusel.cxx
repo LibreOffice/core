@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:52:00 $
+ *  last change: $Author: dl $ $Date: 2001-02-13 12:43:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,6 @@
 #include "sdclient.hxx"
 
 using namespace ::com::sun::star;
-
-extern USHORT SlotArray[];
 
 TYPEINIT1( FuSelection, FuDraw );
 
@@ -941,7 +939,11 @@ void FuSelection::Activate()
         case SID_OBJECT_ROTATE:
         {
             // (gemapter) Slot wird explizit auf Rotate gesetzt #31052#
-            SlotArray[ 1 ] = SID_OBJECT_ROTATE;
+            if( pViewShell->ISA( SdDrawViewShell) )
+            {
+                USHORT* pSlotArray = ( (SdDrawViewShell*) pViewShell )->GetSlotArray();
+                pSlotArray[ 1 ] = SID_OBJECT_ROTATE;
+            }
 
             eMode = SDRDRAG_ROTATE;
 
