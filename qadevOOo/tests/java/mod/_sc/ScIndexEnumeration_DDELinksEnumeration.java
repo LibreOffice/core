@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScIndexEnumeration_DDELinksEnumeration.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-03 12:56:10 $
+ *  last change:$Date: 2003-05-27 13:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
     * Creates Spreadsheet document.
     */
     protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF() );
+        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
 
         try {
             log.println( "creating a Spreadsheet document" );
@@ -127,7 +127,7 @@ public class ScIndexEnumeration_DDELinksEnumeration extends TestCase {
 
         // create testobject here
 
-        XMultiServiceFactory oMSF = Param.getMSF();
+        XMultiServiceFactory oMSF = (XMultiServiceFactory)Param.getMSF();
         try {
             oInterface = oMSF.createInstance("com.sun.star.frame.Desktop" );
         } catch(com.sun.star.uno.Exception e) {
