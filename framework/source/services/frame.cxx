@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:51 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:17:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2322,8 +2322,6 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& aEvent ) throw
 
 IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
 {
-    try
-    {
         // try to close this frame
         // But don't deliver the ownership to anyone.
         // Because our "UI owner" will try it again if this request
@@ -2335,14 +2333,19 @@ IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
         // closing of the dialog. That's not fine.
         // We must ignore this close() request then and user can try it later again ...
 
+    try
+    {
+        /*ATTENTION!
+            Don't try to suspend the controller here! Because it's done inside used dispatch().
+            Otherwhise the dialog "would you save your changes?" will be shown more then once ...
+         */
+
         /* SAFE */
         ReadGuard aReadLock( m_aLock );
         css::uno::Reference< css::frame::XController > xController = m_xController;
         aReadLock.unlock();
         /* SAFE */
 
-        if ( xController.is() && !xController->suspend(sal_True) )
-            return 0;
         css::util::URL aURL;
         aURL.Complete = DECLARE_ASCII(".uno:CloseFrame");
         css::uno::Reference< css::util::XURLTransformer > xParser(m_xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY);
@@ -2351,7 +2354,6 @@ IMPL_LINK( Frame, implts_windowClosing, void*, pVoid )
         css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL,SPECIALTARGET_TOP,0);
         if (xCloser.is())
             xCloser->dispatch(aURL,css::uno::Sequence< css::beans::PropertyValue >());
-//        close( sal_False );
     }
     catch( css::util::CloseVetoException& )
     {
