@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JobExecutor.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:43:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ module com { module sun { module star { module task {
     @see Job
     @see AsyncJob
  */
-service JobExecutor
+published service JobExecutor
 {
     //------------------------------------------------------------------------
     /** start and regulate execution.
