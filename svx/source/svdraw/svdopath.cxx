@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-07 12:08:48 $
+ *  last change: $Author: aw $ $Date: 2002-07-17 11:35:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,10 @@ void SdrPathObj::ImpForceLineWink()
         aGeo.nShearWink=0;
         aGeo.RecalcSinCos();
         aGeo.RecalcTan();
+
+        // #101412# for SdrTextObj, keep aRect up to date
+        aRect = Rectangle(aPathPolygon[0][0], aPathPolygon[0][1]);
+        aRect.Justify();
     }
 }
 
