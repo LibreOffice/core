@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 12:47:56 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:46:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_SPINBUTTON,      "com.sun.star.form.component.SpinButton"        );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_RICHTEXTCONTROL, "com.sun.star.form.component.RichTextControl"   );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_NAVTOOLBAR,      "com.sun.star.form.component.NavigationToolBar" );
+    FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_SUBMITBUTTON,    "com.sun.star.form.component.SubmitButton"      );
 
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_IMAGECONTROL, "com.sun.star.form.component.DatabaseImageControl" );
     FORMS_CONSTASCII_STRING( FRM_SUN_COMPONENT_DATABASE_RADIOBUTTON, "com.sun.star.form.component.DatabaseRadioButton" );
@@ -223,8 +224,9 @@ namespace frm
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_CURRENCYFIELD, "com.sun.star.form.control.CurrencyField" );
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_PATTERNFIELD, "com.sun.star.form.control.PatternField" );
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_IMAGECONTROL, "com.sun.star.form.control.ImageControl" );
-    FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField" );
+    FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_FORMATTEDFIELD, "com.sun.star.form.control.FormattedField"  );
     FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_RICHTEXTCONTROL,"com.sun.star.form.control.RichTextControl" );
+    FORMS_CONSTASCII_STRING( FRM_SUN_CONTROL_SUBMITBUTTON,   "com.sun.star.form.control.SubmitButton"    );
 
     FORMS_CONSTASCII_STRING( FRM_SUN_FORMS_COLLECTION, "com.sun.star.form.Forms" );
 
@@ -235,8 +237,11 @@ namespace frm
     FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_NUMERIC_FIELD,  "com.sun.star.form.component.binding.BindableDatabaseNumericField" );
     FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_RADIO_BUTTON,   "com.sun.star.form.component.binding.BindableDatabaseRadioButton" );
     FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TEXT_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseTextField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_DATE_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseDateField" );
+    FORMS_CONSTASCII_STRING( BINDABLE_DATABASE_TIME_FIELD,     "com.sun.star.form.component.binding.BindableDatabaseTimeField" );
 
     FORMS_CONSTASCII_STRING( BINDABLE_CONTROL_MODEL,            "com.sun.star.form.binding.BindableControlModel" );
+    FORMS_CONSTASCII_STRING( BINDABLE_INTEGER_VALUE_RANGE,      "com.sun.star.form.binding.BindableIntegerValueRange" );
     FORMS_CONSTASCII_STRING( BINDABLE_DATA_AWARE_CONTROL_MODEL, "com.sun.star.form.binding.BindableDataAwareControlModel" );
     FORMS_CONSTASCII_STRING( DATA_AWARE_CONTROL_MODEL,          "com.sun.star.form.binding.DataAwareControlModel" );
     FORMS_CONSTASCII_STRING( VALIDATABLE_CONTROL_MODEL,         "com.sun.star.form.binding.ValidatableControlModel" );
