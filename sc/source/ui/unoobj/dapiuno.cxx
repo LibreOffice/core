@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 19:22:55 $
+ *  last change: $Author: nn $ $Date: 2001-01-17 18:28:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #include "unoguard.hxx"
 #include "dpobject.hxx"
 #include "dpshttab.hxx"
+#include "dpsave.hxx"
 #include "dbdocfun.hxx"
 #include "unonames.hxx"
 
@@ -247,6 +248,93 @@ String lcl_CreatePivotName( ScDocShell* pDocShell )
     return String();                    // sollte nicht vorkommen
 }
 
+void lcl_SetLayoutNamesToObject( ScDocument* pDoc,
+                    const ScPivotParam& rParam, const ScArea& rSrcArea,
+                    ScDPObject& rObject )
+{
+    //  set layout names from LabelData to SaveData
+
+    //! reset old names? (renamed columns)
+
+    ScDPSaveData* pOldData = rObject.GetSaveData();
+    if ( pOldData && rSrcArea.nColEnd >= rSrcArea.nColStart )
+    {
+        ScDPSaveData aNewData( *pOldData );
+
+        USHORT nRow = rSrcArea.nRowStart;
+        USHORT nTab = rSrcArea.nTab;
+        USHORT nCount = rSrcArea.nColEnd - rSrcArea.nColStart + 1;
+        for (USHORT nField = 0; nField < nCount; nField++)
+        {
+            USHORT nCol = rSrcArea.nColStart + nField;
+            String aSourceName = lcl_ColumnTitle( pDoc, nCol, nRow, nTab );
+
+            if ( nField < rParam.nLabels && rParam.ppLabelArr &&
+                                rParam.ppLabelArr[nField] &&
+                                rParam.ppLabelArr[nField]->pStrColName &&
+                                rParam.ppLabelArr[nField]->pStrColName->Len() )
+            {
+                String aLayoutName = *rParam.ppLabelArr[nField]->pStrColName;
+
+                // create SaveDimension if not there
+                ScDPSaveDimension* pDim = aNewData.GetDimensionByName( aSourceName );
+                if (pDim)
+                    pDim->SetLayoutName( &aLayoutName );
+            }
+            else
+            {
+                // reset layout name if one was set
+                ScDPSaveDimension* pDim = aNewData.GetExistingDimensionByName( aSourceName );
+                if (pDim)
+                    pDim->ResetLayoutName();
+            }
+        }
+
+        rObject.SetSaveData( aNewData );
+    }
+}
+
+void lcl_SetLayoutNamesToParam( ScPivotParam& rParam, ScDocument* pDoc,
+                        const ScArea& rSrcArea, const ScDPObject& rObject )
+{
+    //  set layout names from SaveData to LabelData
+
+    ScDPSaveData* pSaveData = rObject.GetSaveData();
+    if ( pSaveData && rSrcArea.nColEnd >= rSrcArea.nColStart )
+    {
+        BOOL bAnyFound = FALSE;
+        USHORT nNewCount = rSrcArea.nColEnd - rSrcArea.nColStart + 1;
+        LabelData** ppNewData = new LabelData*[nNewCount];
+
+        USHORT nRow = rSrcArea.nRowStart;
+        USHORT nTab = rSrcArea.nTab;
+        for (USHORT nField = 0; nField < nNewCount; nField++)
+        {
+            USHORT nCol = rSrcArea.nColStart + nField;
+            String aSourceName = lcl_ColumnTitle( pDoc, nCol, nRow, nTab );
+
+            String aLayoutName;
+            ScDPSaveDimension* pDim = pSaveData->GetExistingDimensionByName( aSourceName );
+            if ( pDim && pDim->HasLayoutName() )
+            {
+                aLayoutName = pDim->GetLayoutName();
+                if (aLayoutName.Len())
+                    bAnyFound = TRUE;
+            }
+
+            ppNewData[nField] = new LabelData( aLayoutName, 0, FALSE );
+        }
+
+        if ( bAnyFound )
+            rParam.SetLabelData( ppNewData, nNewCount );
+
+        // SetLabelData copies data - ppNewData must be deleted
+        for (USHORT i=0; i<nNewCount; i++)
+            delete ppNewData[i];
+        delete[] ppNewData;
+    }
+}
+
 //------------------------------------------------------------------------
 
 ScDataPilotTablesObj::ScDataPilotTablesObj(ScDocShell* pDocSh, USHORT nT) :
@@ -396,6 +484,7 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const rtl::OUString& aNewNa
 
         ScDPObject* pNewObj = new ScDPObject( pDoc );
         pNewObj->InitFromOldPivot( *pNewPivot, pDoc, TRUE );
+        lcl_SetLayoutNamesToObject( pDoc, aParam, aSrcArea, *pNewObj );
 
         ScDBDocFunc aFunc(*pDocShell);
         bDone = aFunc.DataPilotUpdate( NULL, pNewObj, TRUE, TRUE );
@@ -872,6 +961,8 @@ void ScDataPilotTableObj::GetParam( ScPivotParam& rParam, ScQueryParam& rQuery, 
                 if (rEntry.bDoQuery && rEntry.nField >= nFieldStart)
                     rEntry.nField -= nFieldStart;
             }
+
+            lcl_SetLayoutNamesToParam( rParam, GetDocShell()->GetDocument(), rSrcArea, *pDPObj );
         }
     }
 }
@@ -917,6 +1008,7 @@ void ScDataPilotTableObj::SetParam( const ScPivotParam& rParam,
 
         ScDPObject* pNewObj = new ScDPObject( pDoc );
         pNewObj->InitFromOldPivot( *pNew, pDoc, TRUE );
+        lcl_SetLayoutNamesToObject( pDoc, aNewParam, rSrcArea, *pNewObj );
 
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.DataPilotUpdate( pDPObj, pNewObj, TRUE, TRUE );
@@ -1234,8 +1326,6 @@ BOOL lcl_GetFieldDataByIndex( const ScPivotParam& rParam, const ScArea& rSrcArea
 String lcl_FieldName( ScDocShell* pDocSh, const ScPivotParam& rParam,
                         const ScArea& rSrcArea, USHORT nField )
 {
-    //! Gespeicherte Namen im Pivot beruecksichtigen !!!!
-
     String aRet;
     if ( nField == PIVOT_DATA_FIELD )
         aRet = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Data"));     //! ???
@@ -1246,9 +1336,41 @@ String lcl_FieldName( ScDocShell* pDocSh, const ScPivotParam& rParam,
         {
             USHORT nRow = rSrcArea.nRowStart;
             aRet = lcl_ColumnTitle( pDocSh->GetDocument(), nCol, nRow, rSrcArea.nTab );
+
+            //  layout names from SaveData are in PivotParam LabelData
+
+            if ( nField < rParam.nLabels && rParam.ppLabelArr &&
+                                rParam.ppLabelArr[nField] &&
+                                rParam.ppLabelArr[nField]->pStrColName &&
+                                rParam.ppLabelArr[nField]->pStrColName->Len() )
+                aRet = *rParam.ppLabelArr[nField]->pStrColName;
         }
     }
     return aRet;
+}
+
+void lcl_SetFieldName( ScPivotParam& rParam, USHORT nField, const String& rNewName )
+{
+    USHORT nNewCount = Max( rParam.nLabels, (USHORT)( nField + 1 ) );
+    USHORT i;
+
+    LabelData** ppNewData = new LabelData*[nNewCount];
+    for (i=0; i<nNewCount; i++)
+    {
+        if ( i == nField )
+            ppNewData[i] = new LabelData( rNewName, 0, FALSE );
+        else if ( i < rParam.nLabels && rParam.ppLabelArr && rParam.ppLabelArr[i] )
+            ppNewData[i] = new LabelData( *rParam.ppLabelArr[i] );
+        else
+            ppNewData[i] = new LabelData( EMPTY_STRING, 0, FALSE );
+    }
+
+    rParam.SetLabelData( ppNewData, nNewCount );
+
+    // SetLabelData copies data - ppNewData must be deleted
+    for (i=0; i<nNewCount; i++)
+        delete ppNewData[i];
+    delete[] ppNewData;
 }
 
 // XDataPilotFields
@@ -1440,9 +1562,19 @@ rtl::OUString SAL_CALL ScDataPilotFieldObj::getName() throw(uno::RuntimeExceptio
 void SAL_CALL ScDataPilotFieldObj::setName( const rtl::OUString& aNewName )
                                                 throw(uno::RuntimeException)
 {
-    //! muss noch
-    //! (Namen fuer Spalten vergeben, setzen und ueber den Namen wiederfinden)
-    //! -> spaeter...
+    ScPivotParam aParam;
+    ScQueryParam aQuery;
+    ScArea aSrcArea;
+    pParent->GetParam( aParam, aQuery, aSrcArea );
+
+    if ( nField == PIVOT_DATA_FIELD )
+    {
+        //! ... ???
+    }
+    else
+        lcl_SetFieldName( aParam, nField, aNewName );
+
+    pParent->SetParam( aParam, aQuery, aSrcArea );
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDataPilotFieldObj::getPropertySetInfo()
