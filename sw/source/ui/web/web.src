@@ -2,9 +2,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:36:00 $
+ *  last change: $Author: rt $ $Date: 2000-12-01 11:34:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,54 +107,54 @@ String STR_HUMAN_SWWEBDOC_NAME
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
-    Text = "StarOffice 4.0 HTML" ;
+    Text = "%PRODUCTNAME 4.0 HTML" ;
     Text [ English ] = "StarOffice 4.0 HTML" ;
-    Text [ english_us ] = "StarOffice 4.0 HTML" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 HTML" ;
-    Text [ swedish ] = "StarOffice 4.0 HTML" ;
-    Text [ danish ] = "StarOffice 4.0 HTML" ;
-    Text [ italian ] = "HTML StarOffice 4.0" ;
-    Text [ spanish ] = "HTML de StarOffice 4.0" ;
-    Text [ french ] = "StarOffice 4.0 HTML" ;
-    Text [ dutch ] = "StarOffice 4.0 HTML" ;
-    Text [ portuguese ] = "HTML (StarOffice 4.0)" ;
-    Text[ chinese_simplified ] = "StarOffice 4.0 HTML";
-    Text[ russian ] = "StarOffice 4.0 HTML";
-    Text[ polish ] = "StarOffice 4.0 HTML";
-    Text[ japanese ] = "StarOffice 4.0 HTML";
-    Text[ chinese_traditional ] = "StarOffice 4.0 HTML";
-    Text[ arabic ] = "StarOffice 4.0 HTML";
-    Text[ dutch ] = "StarOffice 4.0 HTML";
-    Text[ chinese_simplified ] = "StarOffice 4.0 HTML";
-    Text[ greek ] = "StarOffice 4.0 HTML";
-    Text[ korean ] = "HTML (StarOffice 4.0)";
-    Text[ turkish ] = "StarOffice 4.0 HTML";
+    Text [ english_us ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ italian ] = "HTML %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "HTML de %PRODUCTNAME 4.0" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ dutch ] = "%PRODUCTNAME 4.0 HTML" ;
+    Text [ portuguese ] = "HTML (%PRODUCTNAME 4.0)" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ russian ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ polish ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ arabic ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ dutch ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ greek ] = "%PRODUCTNAME 4.0 HTML";
+    Text[ korean ] = "HTML (%PRODUCTNAME 4.0)";
+    Text[ turkish ] = "%PRODUCTNAME 4.0 HTML";
     Text[ language_user1 ] = " ";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
-    Text = "StarOffice 5.0 HTML" ;
+    Text = "%PRODUCTNAME 5.0 HTML" ;
     Text [ English ] = "StarOffice 5.0 HTML" ;
-    Text [ english_us ] = "StarOffice 5.0 HTML" ;
-    Text [ portuguese_brazilian ] = "StarOffice 5.0 HTML" ;
-    Text [ swedish ] = "StarOffice 5.0 HTML" ;
-    Text [ danish ] = "StarOffice 5.0 HTML" ;
-    Text [ italian ] = "HTML StarOffice 5.0" ;
-    Text [ spanish ] = "HTML de StarOffice 5.0" ;
-    Text [ french ] = "StarOffice 5.0 HTML" ;
-    Text [ dutch ] = "StarOffice 5.0 HTML" ;
-    Text [ portuguese ] = "HTML (StarOffice 5.0)" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 HTML";
-    Text[ russian ] = "StarOffice 5.0 HTML";
-    Text[ polish ] = "StarOffice 5.0 HTML";
-    Text[ japanese ] = "StarOffice 5.0 HTML";
-    Text[ chinese_traditional ] = "StarOffice 5.0 HTML";
-    Text[ arabic ] = "StarOffice 5.0 HTML";
-    Text[ dutch ] = "StarOffice 5.0 HTML";
-    Text[ chinese_simplified ] = "StarOffice 5.0 HTML";
-    Text[ greek ] = "StarOffice 5.0 HTML";
-    Text[ korean ] = "HTML (StarOffice 5.0)";
-    Text[ turkish ] = "StarOffice 5.0 HTML";
+    Text [ english_us ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ italian ] = "HTML %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "HTML de %PRODUCTNAME 5.0" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 HTML" ;
+    Text [ portuguese ] = "HTML (%PRODUCTNAME 5.0)" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ russian ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ polish ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ arabic ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ dutch ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ greek ] = "%PRODUCTNAME 5.0 HTML";
+    Text[ korean ] = "HTML (%PRODUCTNAME 5.0)";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 HTML";
     Text[ language_user1 ] = " ";
 };
 String STR_SHELLNAME_WEBTEXT
