@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:56:36 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:31:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@
 
 // ============================================================================
 
-//! TODO make dynamic
+//CHINA001 //! TODO make dynamic
 //CHINA001 #ifdef WIN
 //CHINA001 const sal_Int32 ASCIIDLG_MAXROWS                = 10000;
 //CHINA001 #else
