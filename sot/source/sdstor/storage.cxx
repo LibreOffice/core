@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 13:14:44 $
+ *  last change: $Author: mba $ $Date: 2001-03-05 12:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1154,5 +1154,11 @@ BOOL SotStorage::GetProperty( const String& rName, ::com::sun::star::uno::Any& r
         DBG_ERROR("Not implemented!")
         return FALSE;
     }
+}
+
+BOOL SotStorage::IsOLEStorage() const
+{
+    UCBStorage* pStg = PTR_CAST( UCBStorage, pOwnStg );
+    return !pStg;
 }
 
