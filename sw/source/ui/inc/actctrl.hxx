@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:57:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #include <vcl/field.hxx>
 #endif
 
+#ifndef INCLUDED_SWDLLAPI_H
+#include "swdllapi.h"
+#endif
+
 /*--------------------------------------------------------------------
     Beschreibung:   numerische Eingabe
  --------------------------------------------------------------------*/
@@ -88,7 +92,7 @@ public:
 /* -----------------21.04.98 08:11-------------------
  * Edit, dass keine Spaces akzeptiert
  * --------------------------------------------------*/
-class NoSpaceEdit : public Edit
+class SW_DLLPUBLIC NoSpaceEdit : public Edit
 {
     String sForbiddenChars;
 protected:
@@ -117,7 +121,7 @@ public:
 /* -----------------25.06.2003 15:55-----------------
     call a link when KEY_RETURN is pressed
  --------------------------------------------------*/
-class ReturnActionEdit : public Edit
+class SW_DLLPUBLIC ReturnActionEdit : public Edit
 {
     Link    aReturnActionLink;
 public:
