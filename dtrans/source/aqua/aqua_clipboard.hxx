@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_clipboard.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 20:57:12 $
+ *  last change: $Author: pluby $ $Date: 2001-03-16 17:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ public:
 
 private:
     ::osl::Mutex m_aMutex;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > m_aTransferable;
 };
 
 } // namespace aqua

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: aqua_clipboard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-15 20:57:57 $
+ *  last change: $Author: pluby $ $Date: 2001-03-16 17:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::uno;
 using namespace cppu;
+using namespace osl;
 using namespace rtl;
 using namespace aqua;
 
@@ -78,11 +79,16 @@ AquaClipboard::AquaClipboard() :
 
 Reference< XTransferable > SAL_CALL AquaClipboard::getContents() throw( RuntimeException )
 {
-    return Reference< XTransferable >();
+    MutexGuard aGuard( m_aMutex );
+
+    return m_aTransferable;
 }
 
 void SAL_CALL AquaClipboard::setContents( const Reference< XTransferable >& xTransferable, const Reference< XClipboardOwner >& xClipboardOwner ) throw( RuntimeException )
 {
+    MutexGuard aGuard( m_aMutex );
+
+    m_aTransferable = xTransferable;
 }
 
 OUString SAL_CALL AquaClipboard::getName() throw( RuntimeException )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_aquacb.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-16 16:50:18 $
+ *  last change: $Author: pluby $ $Date: 2001-03-16 17:32:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,10 +128,6 @@ private:
     OUString               m_Data;
 };
 
-//----------------------------------------------------------------
-//  ctor
-//----------------------------------------------------------------
-
 TestTransferable::TestTransferable() :
     m_seqDFlv( 1 ),
     m_Data( RTL_CONSTASCII_USTRINGPARAM( "This is a test string" ) )
@@ -143,10 +139,6 @@ TestTransferable::TestTransferable() :
 
     m_seqDFlv[0] = df;
 }
-
-//----------------------------------------------------------------
-//  getTransferData
-//----------------------------------------------------------------
 
 Any SAL_CALL TestTransferable::getTransferData( const DataFlavor& aFlavor )
     throw(UnsupportedFlavorException, IOException, RuntimeException)
@@ -168,19 +160,11 @@ Any SAL_CALL TestTransferable::getTransferData( const DataFlavor& aFlavor )
     return anyData;
 }
 
-//----------------------------------------------------------------
-//  getTransferDataFlavors
-//----------------------------------------------------------------
-
 Sequence< DataFlavor > SAL_CALL TestTransferable::getTransferDataFlavors()
     throw(RuntimeException)
 {
     return m_seqDFlv;
 }
-
-//----------------------------------------------------------------
-//  isDataFlavorSupported
-//----------------------------------------------------------------
 
 sal_Bool SAL_CALL TestTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
     throw(RuntimeException)
@@ -199,10 +183,6 @@ sal_Bool SAL_CALL TestTransferable::isDataFlavorSupported( const DataFlavor& aFl
 
     return bRet;
 }
-
-//----------------------------------------------------------------
-//  lostOwnership
-//----------------------------------------------------------------
 
 void SAL_CALL TestTransferable::lostOwnership( const Reference< XClipboard >& xClipboard, const Reference< XTransferable >& xTrans )
     throw(RuntimeException)
@@ -249,7 +229,7 @@ int SAL_CALL main( int argc, char** argv )
     {
         Sequence< Type >     seqType = rXTypProv->getTypes();
         sal_Int32 nLen = seqType.getLength();
-        for ( sal_Int32 i = 0; i < nLen; ++nLen )
+        for ( sal_Int32 i = 0; i < nLen; i++ )
         {
             Type nxtType = seqType[i];
         }
