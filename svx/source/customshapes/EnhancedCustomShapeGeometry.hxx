@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeGeometry.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:17:38 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,6 @@ struct mso_CustomShape
     SvxMSDffHandle*                         pHandles;
     sal_uInt32                              nHandles;
 };
-
-#define GEOMETRY_USED_LEFT              1
-#define GEOMETRY_USED_TOP               2
-#define GEOMETRY_USED_RIGHT             4
-#define GEOMETRY_USED_BOTTOM            8
 
 #define MSO_I | (sal_Int32)0x80000000
 
