@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:20:59 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,44 +175,64 @@ namespace configmgr
     //= OProviderImpl
     //=============================================================================
     //-----------------------------------------------------------------------------
-    OProviderImpl::OProviderImpl(OProvider* _pProvider,
-                                 const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory)
-                  :m_pNewProviders(0)
+    OProviderImpl::OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext)
+                  :m_xContext(_xContext)
+                  ,m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
                   ,m_pSession(NULL)
                   ,m_pTreeMgr(NULL)
     {
+        OSL_ENSURE(m_xContext.is(), "Module::Module : missing service factory !");
         m_xTypeConverter = m_xTypeConverter.query(
-            _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))));
+            m_xContext->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))));
         OSL_ENSURE(m_xTypeConverter.is(), "Module::Module : could not create an instance of the type converter !");
 
         m_xDefaultOptions = new OOptions();
     }
     //-----------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------
-    void OProviderImpl::initSession(IConfigSession* _pSession,const ConnectionSettings& _rSettings)
+    IConfigSession * OProviderImpl::getSession() const
     {
-        m_pSession = _pSession;
-
-        OSL_ASSERT(_pSession);
-    // prepare the options
-        // this is a hack asking the session if caching should be supported or not
-        // at the time we have complete notification support this hack isn't necessary anymore
-        if (!_pSession->allowsCaching_Hack())
-            m_xDefaultOptions->setNoCache(sal_True);
-
-        // this is a hack to simulate 'finalized' where the backend doesn't support it
-        if (_rSettings.isAdminSession() && !_pSession->supportsFinalized_Hack())
-            m_xDefaultOptions->setForceWritable(true);
-
+        OSL_ENSURE( m_pSession, "Trying to get the legacy session from a new-style provider" );
+        return m_pSession;
+    }
+    //-----------------------------------------------------------------------------
+    bool OProviderImpl::initSession(const ConnectionSettings& _rSettings)
+    {
         bool bNeedProfile = false;
-        this->implInitFromSettings(_rSettings,bNeedProfile);
+        if (_rSettings.isUnoBackend())
+        {
+            this->implInitFromSettings(_rSettings,bNeedProfile);
 
-        rtl::Reference< TreeManager > xNewTreeManager =
-            CacheFactory::instance().createCacheManager(_pSession, m_xTypeConverter);
+            rtl::Reference< TreeManager > xNewTreeManager =
+                CacheFactory::instance().createCacheManager(_rSettings, m_xContext);
 
-        m_pTreeMgr = xNewTreeManager.get();
-        m_pTreeMgr->acquire();
+            m_pTreeMgr = xNewTreeManager.get();
+            m_pTreeMgr->acquire();
+        }
+        else
+        {
+            m_pSession = _rSettings.createConnection(m_xContext);
+
+            if (!m_pSession) return false;
+
+         // prepare the options
+            // this is a hack asking the session if caching should be supported or not
+            // at the time we have complete notification support this hack isn't necessary anymore
+            if (!m_pSession->allowsCaching_Hack())
+                m_xDefaultOptions->setNoCache(sal_True);
+
+            // this is a hack to simulate 'finalized' where the backend doesn't support it
+            if (_rSettings.isAdminSession() && !m_pSession->supportsFinalized_Hack())
+                m_xDefaultOptions->setForceWritable(true);
+
+            this->implInitFromSettings(_rSettings,bNeedProfile);
+
+            rtl::Reference< TreeManager > xNewTreeManager =
+                CacheFactory::instance().createCacheManager(m_pSession, m_xTypeConverter);
+
+            m_pTreeMgr = xNewTreeManager.get();
+            m_pTreeMgr->acquire();
+        }
 
         // put out of line to get rid of the order dependency (and to have a acquired configuration)
         m_pNewProviders   = new configapi::ApiProviderInstances(*this);
@@ -236,6 +256,8 @@ namespace configmgr
             // could not read profile
             CFG_TRACE_ERROR_NI("Provider bootstrapping: Caught an exception trying to get 'Setup' data: ", OUSTRING2ASCII(e.Message));
         }
+
+        return true;
     }
     //-----------------------------------------------------------------------------
 

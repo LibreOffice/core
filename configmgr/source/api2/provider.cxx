@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,8 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OProvider::implConnect(OProviderImpl& _rFreshProviderImpl, const ConnectionSettings& _rSettings) throw(uno::Exception)
     {
-        IConfigSession* pNewSession = _rSettings.createConnection(m_xServiceFactory);
-        if (pNewSession == NULL)
+        if (!_rFreshProviderImpl.initSession(_rSettings))
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration. Please check your settings."), THISREF() );
-
-        _rFreshProviderImpl.initSession( pNewSession, _rSettings);
     }
 
     //-----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:20:59 $
+ *  last change: $Author: jb $ $Date: 2002-06-12 16:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,7 +190,9 @@ namespace configmgr
         };
 
     private:
-        typedef uno::Reference< script::XTypeConverter > TypeConverterRef;
+        typedef uno::Reference< lang::XMultiServiceFactory >    CreationContext;
+        typedef uno::Reference< script::XTypeConverter >        TypeConverterRef;
+        CreationContext                     m_xContext;
         TypeConverterRef                    m_xTypeConverter;
         vos::ORef<OOptions>                 m_xDefaultOptions;
         configapi::ApiProviderInstances*    m_pNewProviders;    /// order depedency - this must be after the TreeManager
@@ -198,12 +200,9 @@ namespace configmgr
         IConfigSession*                     m_pSession;
 
     protected:
-        IConfigSession*   getSession() const
-        { return m_pSession; }
-
+        IConfigSession*   getSession() const;
     public:
-        OProviderImpl(OProvider* _pProvider,
-                      const uno::Reference< lang::XMultiServiceFactory >& _xServiceFactory);
+        OProviderImpl(OProvider* _pProvider, CreationContext const & _xContext);
 
 
         virtual ~OProviderImpl();
@@ -251,7 +250,7 @@ namespace configmgr
         configapi::NodeElement* buildUpdateAccess(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions, sal_Int32 nMinLevels) CFG_UNO_THROW_ALL(  );
 
     private:
-        void initSession(IConfigSession* pSession, const ConnectionSettings& _rSettings);
+        bool initSession(const ConnectionSettings& _rSettings);
     private:
         void implInitFromSettings(const ConnectionSettings& _rSettings, bool& rNeedProfile);
         void implInitFromProfile(data::NodeAccess const& aProfile);
