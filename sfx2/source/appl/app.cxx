@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:57:58 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:19:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,11 +75,8 @@
 #ifndef _TOOLS_SIMPLERESMGR_HXX_
 #include <tools/simplerm.hxx>
 #endif
-#ifndef _CONFIG_HXX //autogen
-#include <vcl/config.hxx>
-#endif
-#ifndef _SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _CONFIG_HXX
+#include <tools/config.hxx>
 #endif
 
 #ifndef SVTOOLS_ASYNCLINK_HXX
@@ -1446,18 +1443,7 @@ Window* SfxApplication::GetTopWindow() const
 
 void SfxApplication::SetTopWindow( WorkWindow *pWindow )
 {
-/*
-    sal_Bool bMode = sal_True;
-    if ( !pWindow || pWindow == GetAppWindow() )
-        bMode = sal_False;
-
-    SfxPlugInFrame* pPlug = PTR_CAST( SfxPlugInFrame,
-        GetViewFrame()->GetTopViewFrame() );
-    if ( pPlug )
-        pPlug->GetEnv_Impl()->SetPresentationMode( bMode, pWindow );
-    else
-        GetAppWindow()->SetPresentationMode( bMode, pWindow );
-*/
+    // MT: Removed out commented code, which didn't work because AppWindow usage...
 }
 
 sal_Bool SfxApplication::IsPlugin()
