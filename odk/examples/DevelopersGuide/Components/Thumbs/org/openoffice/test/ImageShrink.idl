@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageShrink.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:15:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,17 +38,14 @@
  *
  *************************************************************************/
 
-#ifndef __org_openoffice_test_ImageShrink_idl__
-#define __org_openoffice_test_ImageShrink_idl__
-#include <org/openoffice/test/XImageShrink.idl>
-#include <com/sun/star/document/XFilter.idl>
+#ifndef _org_openoffice_test_ImageShrink_idl_
+#define _org_openoffice_test_ImageShrink_idl_
+
+#include <org/openoffice/test/XImageShrinkFilter.idl>
 
 module org { module openoffice { module test {
 
-service ImageShrink {
-  interface org::openoffice::test::XImageShrink;
-  interface com::sun::star::document::XFilter;
-};
+    service ImageShrink : XImageShrinkFilter;
 
 }; }; };
 
