@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 13:34:38 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:47:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
     //  Der Rahmen darf nicht per Dokumentposition selektiert werden, weil er
     //  auf jedenfall selektiert sein muss!
     SwViewImp *pImp = Imp();
-    if( GetWin() && (bNew || !pImp->GetDrawView()->HasMarkedObj()) )
+    if( GetWin() && (bNew || !pImp->GetDrawView()->AreObjectsMarked()) )
     {
         ASSERT( rFrm.IsFlyFrm(), "SelectFlyFrm will einen Fly" );
 
@@ -375,7 +375,7 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
         if( !rFrm.GetAnchorFrm()->IsInFly() )
             rFrm.Calc();
 
-        if( pImp->GetDrawView()->HasMarkedObj() )
+        if( pImp->GetDrawView()->AreObjectsMarked() )
             pImp->GetDrawView()->UnmarkAll();
 
         pImp->GetDrawView()->MarkObj( rFrm.GetVirtDrawObj(),
@@ -401,7 +401,7 @@ SwFlyFrm *SwFEShell::FindFlyFrm() const
     if ( Imp()->HasDrawView() )
     {
         // Ein Fly ist genau dann erreichbar, wenn er selektiert ist.
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         if( rMrkList.GetMarkCount() != 1 )
             return 0;
 
@@ -429,7 +429,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
     if ( !Imp()->HasDrawView() )
         return NULL;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if ( !rMrkList.GetMarkCount() )
     {
         SwCntntFrm *pCntnt = GetCurrFrm( sal_False );
@@ -543,7 +543,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     if ( !Imp()->HasDrawView() )
         return aRet;
 
-    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+    const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
     if ( rMrkList.GetMarkCount() != 1 ||
          !GetUserCall(rMrkList.GetMark( 0 )->GetObj()) )
         return aRet;
@@ -1436,7 +1436,7 @@ SwRect SwFEShell::GetFlyRect() const
 
 SwRect SwFEShell::GetObjRect() const
 {
-/*  const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+/*  const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
      Rectangle aRect;
     for ( sal_uInt16 i = 0; i < rMrkList.GetMarkCount(); ++i )
         aRect.Union( rMrkList.GetMark( i )->GetObj()->GetBoundRect() );
@@ -1927,7 +1927,7 @@ ObjCntType SwFEShell::GetObjCntTypeOfSelection( SdrObject** ppObj ) const
 
     if( Imp()->HasDrawView() )
     {
-        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkList();
+        const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         for( sal_uInt32 i = 0, nE = rMrkList.GetMarkCount(); i < nE; ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetObj();
@@ -1957,7 +1957,7 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
     sal_Bool bRet = sal_False;
     const SdrMarkList *pMrkList;
     if( Imp()->HasDrawView() &&  1 ==
-        ( pMrkList = &Imp()->GetDrawView()->GetMarkList())->GetMarkCount() )
+        ( pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList())->GetMarkCount() )
     {
         SdrObject* pObj = pMrkList->GetMark( 0 )->GetObj();
         SwFrmFmt *pFmt = FindFrmFmt( pObj );
