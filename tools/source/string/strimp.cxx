@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:04:52 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:16:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -987,7 +987,7 @@ STRING& STRING::Erase( xub_StrLen nIndex, xub_StrLen nCount )
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );
 
     // Ist der Index ausserhalb des Strings oder ist nCount == 0
-    if ( (nIndex > mpData->mnLen) || !nCount )
+    if ( (nIndex >= mpData->mnLen) || !nCount )
         return *this;
 
     // nCount darf nicht ueber das Stringende hinnausgehen
