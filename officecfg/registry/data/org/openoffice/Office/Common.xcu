@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:25:18 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,13 +187,25 @@
       </node>
       <node oor:name="m4" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
+          <value >private:factory/sdatabase?Interactive</value>
+        </prop>
+        <prop oor:name="Title">
+          <value xml:lang="de">Datenbank</value>
+          <value xml:lang="en-US">Database</value>
+        </prop>
+        <prop oor:name="TargetName"  oor:type="xs:string">
+          <value >_default</value>
+        </prop>
+      </node>
+      <node oor:name="m5" oor:op="replace">
+        <prop oor:name="URL"  oor:type="xs:string">
           <value >private:separator</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m5" oor:op="replace" install:module="writer">
+      <node oor:name="m6" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter/web</value>
         </prop>
@@ -205,7 +217,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m6" oor:op="replace" install:module="writer">
+      <node oor:name="m7" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter/GlobalDocument</value>
         </prop>
@@ -217,7 +229,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m7" oor:op="replace">
+      <node oor:name="m8" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:separator</value>
         </prop>
@@ -225,7 +237,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m8" oor:op="replace" install:module="math">
+      <node oor:name="m9" oor:op="replace" install:module="math">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/smath</value>
         </prop>
@@ -237,7 +249,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m9" oor:op="replace" install:module="writer">
+      <node oor:name="m10" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter?slot=21051</value>
         </prop>
@@ -252,7 +264,7 @@
           <value >private:image/3163</value>
         </prop>
       </node>
-      <node oor:name="m10" oor:op="replace" install:module="writer">
+      <node oor:name="m11" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:factory/swriter?slot=21052</value>
         </prop>
@@ -267,7 +279,7 @@
           <value >private:image/3163</value>
         </prop>
       </node>
-      <node oor:name="m11" oor:op="replace">
+      <node oor:name="m12" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >private:separator</value>
         </prop>
@@ -275,7 +287,7 @@
           <value >_default</value>
         </prop>
       </node>
-      <node oor:name="m12" oor:op="replace">
+      <node oor:name="m13" oor:op="replace">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >slot:5500</value>
         </prop>
@@ -444,22 +456,7 @@
           <value >_self</value>
         </prop>
       </node>
-      <node oor:name="m14" oor:op="replace">
-        <prop oor:name="URL"  oor:type="xs:string">
-          <value >slot:10909</value>
-        </prop>
-        <prop oor:name="Title">
-          <value xml:lang="de">StarOffice 5.2 Datenbanken-Import...</value>
-          <value xml:lang="en-US">StarOffice 5.2 Database Import...</value>
-        </prop>
-        <prop oor:name="TargetName"  oor:type="xs:string">
-          <value >_self</value>
-        </prop>
-        <prop oor:name="ImageIdentifier"  oor:type="xs:string">
-          <value >private:image/3216</value>
-        </prop>
-      </node>
-      <node oor:name="m15" oor:op="replace" install:module="writer">
+      <node oor:name="m14" oor:op="replace" install:module="writer">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >slot:10934</value>
         </prop>
@@ -474,7 +471,7 @@
           <value >private:image/3216</value>
         </prop>
       </node>
-      <node oor:name="m16" oor:op="replace" install:module="dicooo">
+      <node oor:name="m15" oor:op="replace" install:module="dicooo">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >macro:///Launcher.DicOOo.StartDicOOo</value>
         </prop>
@@ -489,7 +486,7 @@
           <value >private:image/3216</value>
         </prop>
       </node>
-      <node oor:name="m17" oor:op="replace" install:module="dicooo">
+      <node oor:name="m16" oor:op="replace" install:module="dicooo">
         <prop oor:name="URL"  oor:type="xs:string">
           <value >macro:///Launcher.FontOOo.StartFontOOo</value>
         </prop>
