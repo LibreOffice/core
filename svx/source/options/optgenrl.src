@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:43:12 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:24:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Společnost";
         Text[ hebrew ] = "‮חברה‬";
         Text[ hindi ] = "~संस्था";
+        Text[ slovak ] = "~Spoločnosť";
     };
     Edit ED_COMPANY
     {
@@ -164,6 +165,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Jméno/příjmení/iniciály";
         Text[ hebrew ] = "‮שם פרטי\\שם משפחה\\ראשי תיבות‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल्";
+        Text[ slovak ] = "~Meno/Priezvisko/Iniciály";
     };
     FixedText FT_NAME_RUSS
     {
@@ -197,6 +199,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = " ";
         Text[ polish ] = " ";
         Text[ hindi ] = " ";
+        Text[ slovak ] = " ";
     };
     Edit ED_FATHERNAME
     {
@@ -256,6 +259,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Ulice";
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "~सड़क";
+        Text[ slovak ] = "~Ulica";
     };
     FixedText FT_STREET_RUSS
     {
@@ -289,6 +293,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = " ";
         Text[ polish ] = " ";
         Text[ hindi ] = " ";
+        Text[ slovak ] = " ";
     };
     Edit ED_STREET
     {
@@ -335,6 +340,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "PSČ/Obec";
         Text[ hebrew ] = "‮מיקוד\\עיר‬";
         Text[ hindi ] = "Zip/नगर";
+        Text[ slovak ] = "PSČ/Mesto";
     };
     Edit ED_PLZ
     {
@@ -398,6 +404,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Země/region";
         Text[ hebrew ] = "‮מדינה\\מחוז‬";
         Text[ hindi ] = "देश";
+        Text[ slovak ] = "Krajina/región";
     };
     Edit ED_COUNTRY
     {
@@ -437,6 +444,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Titul/pozice";
         Text[ hebrew ] = "‮תואר\\משרה‬";
         Text[ hindi ] = "~शीर्षक/स्थान";
+        Text[ slovak ] = "~Titul/Pozícia";
     };
     Edit ED_TITLE
     {
@@ -483,6 +491,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Tel. (domů/do práce)";
         Text[ hebrew ] = "‮טלפון (בית\\עבודה)‬";
         Text[ hindi ] = "दूरभाष (घर/काम)";
+        Text[ slovak ] = "Tel. (domov/do práce)";
     };
     Edit ED_TELPRIVAT
     {
@@ -529,6 +538,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Fax / E-mail";
         Text[ hebrew ] = "‮פקס\\דואר א'‬";
         Text[ hindi ] = "फ़ॉ~क्स / इ-मेइल";
+        Text[ slovak ] = "Fa~x / E-mail";
     };
     Edit ED_FAX
     {
@@ -574,6 +584,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Adresa ";
         Text[ hebrew ] = "‮כתובת ‬";
         Text[ hindi ] = "पता ";
+        Text[ slovak ] = "Adresa ";
     };
     CheckBox CB_USEDATA
     {
@@ -607,6 +618,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Použít údaje pro vlastnosti souboru";
         Text[ hebrew ] = "‮העברה אוטומטית של הפרטים למאפיינים של מסמכי המשתמש‬";
         Text[ hindi ] = "लेखपत्र स्वभावों केलिए ड़ॉटा का उपयोग करो";
+        Text[ slovak ] = "Použiť údaje pre vlastnosti súboru";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
@@ -639,6 +651,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Obec/Stát/PSČ";
         Text[ hebrew ] = "‮עיר\\מחוז\\מיקוד‬";
         Text[ hindi ] = "नगर/राज्य/Zip";
+        Text[ slovak ] = "Obec/Štát/PSČ";
     };
     String STR_QUERY_REG
     {
@@ -669,6 +682,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ czech ] = "Všimněte si, že PSČ a obec budou použity pro vygenerování registračního klíče. Nebudete moci znovu změnit údaje o uživateli, dokud neproběhne registrace. Přejete si nyní změnit údaje o uživateli?";
         Text[ hebrew ] = "‮שימו לב שרחוב, מיקוד ועיר הם ממרכיביו של מפתח ההרשמה. לא ניתן לשנות פרטים אלו עד לאחר סיום ההרשמה. האם אכן לשנות את הפרטים עכשיו?‬";
         Text[ hindi ] = "सड़क, Zip कोड् और नगर को रजिस्टरी की उत्पन्न करने केलिए उपयोग किया जाएगा । रजिस्टरी कार्य सफ़ल होने तक, उपभोक्ता का ड़ॉटा को बदल नहीं सकते है । आप अभी उपभोक्ता का ड़ॉटा को बदलना चाहते है?";
+        Text[ slovak ] = "Všimnite si, že PSČ a mesto budú použité na vygenerovanie registračného kľúča. Nebudete môcť opäť zmeniť údaje o užívateľovi, pokiaľ neprebehne registrácia. Chcete zmeniť údaje o užívateľovi teraz?";
     };
     Text[ chinese_traditional ] = "使用者資料";
     Text[ arabic ] = "������ ��������";
@@ -682,6 +696,7 @@ TabPage RID_SFXPAGE_GENERAL
     Text[ czech ] = "Údaje o uživateli";
     Text[ hebrew ] = "‮פרטי המשתמש‬";
     Text[ hindi ] = "उपभोक्ता ड़ॉटा";
+    Text[ slovak ] = "Údaje o užívateľovi";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -717,6 +732,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ czech ] = "Údaje o uživateli byly změněny.\nVšimněte si, že pokud budete pokračovat, registrace se stane neplatnou.\nTudíž bude potřeba nová registrace během následujících 30 dnů.\nRegistrační formulář najdete v menu 'Nápověda - Registrace...'\nOpravdu chcete změnit své údaje?";
     Message[ hebrew ] = "‮פרטי המשתמש שונו.\nאם ממשיכים, מפתח ההרשמה לא יתאים לנתונים החדשים\nוידרש מפתח חדש לאחר שלושים יום.\nטופס ההרשמה נמצא תחת 'עזרה' > 'הרשמה'...\nהאם אכן לשנות את פרטי המשתמש?‬";
     Message[ hindi ] = "उपभोक्ता ड़ॉटा को परिवर्तन किया है । \nअगर आप जारी रखेंगे तो, रजिस्टरी की अमान्य हो जाएगा ।\nइसलिए, 30 दिनों के अंदर एक नया रजिस्टरी की चाहिए ।\nआप रजिस्टरी फ़ॉर्म् को सहायता - रजिस्टरी... में देख सकते है ।\nआप सचमुच में उपभोक्ता का ड़ॉटा को बदलना चाहते है?";
+    Message[ slovak ] = "Údaje o užívateľovi boli zmenené.\nVšimnite si, že pokiaľ budete pokračovať, registrácia sa stane neplatnou.\nPreto bude potrebná nová registrácia behom nasledujúcich 30 dní.\nRegistračný formulár nájdete v menu 'Pomocník - Registrácia...'\nNaozaj chcete zmeniť svoje údaje?";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
@@ -1059,9 +1075,23 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "पिका" ; FUNIT_PICA ; > ;
         < "बिन्दु" ; FUNIT_POINT ; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "Milimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Stopa" ; FUNIT_FOOT ; > ;
+        < "Míle" ; FUNIT_MILE ; > ;
+        < "Pika" ; FUNIT_PICA ; > ;
+        < "Bod" ; FUNIT_POINT ; > ;
+    };
     };
 
  // ********************************************************************** EOF
+
+
 
 
 
