@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 11:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ namespace connectivity
         typedef odbc::ODBCDriver ODriver_BASE;
 
         class ODriver : public ODriver_BASE,
-                                                public ::com::sun::star::sdbcx::XDataDefinitionSupplier
+                        public ::com::sun::star::sdbcx::XDataDefinitionSupplier
         {
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
         protected:

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-09 11:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,14 +72,17 @@ namespace connectivity
 {
     namespace adabas
     {
+        // please don't name the class the same name as in an other namespaces
+        // some compilers have problems with this task as I noticed on windows
         class OAdabasConnection;
         class OAdabasCatalog : public connectivity::sdbcx::OCatalog
         {
-            OAdabasConnection*  m_pConnection;
-            SQLHANDLE           m_aConnectionHdl;
-                        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
+            OAdabasConnection*  m_pConnection;      // used to get the metadata
+            SQLHANDLE           m_aConnectionHdl;   // used for odbc specific stuff
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
         public:
+            // implementation of the pure virtual methods
             virtual void refreshTables();
             virtual void refreshViews() ;
             virtual void refreshGroups();
