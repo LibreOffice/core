@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:27:41 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,7 @@ class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAttrSet;
 class SwAuthEntry;
+class SwRewriter;
 
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
@@ -551,12 +552,13 @@ public:
 
     // macht rueckgaengig:
     // setzt Undoklammerung auf, liefert nUndoId der Klammerung
-    USHORT StartUndo( USHORT nUndoId = 0 );
+    USHORT StartUndo( USHORT nUndoId = 0, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
     USHORT EndUndo( USHORT nUndoId = 0 );
     // liefert die Id der letzten undofaehigen Aktion zurueck
     // fuellt ggf. VARARR mit User-UndoIds
     USHORT GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
+    String GetUndoIdsStr( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
         // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
     static USHORT GetUndoActionCount();
@@ -566,11 +568,14 @@ public:
     // liefert die Id der letzten Redofaehigen Aktion zurueck
     // fuellt ggf. VARARR mit RedoIds
     USHORT GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
+    String GetRedoIdsStr( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
 
     // Repeat
     // liefert die Id der letzten Repeatfaehigen Aktion zurueck
     // fuellt ggf. VARARR mit RedoIds
     USHORT GetRepeatIds( String* pRepeatStr = 0, SwUndoIds *pRedoIds = 0) const;
+    String GetRepeatIdsStr( String* pRepeatStr = 0,
+                            SwUndoIds *pRedoIds = 0) const;
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
     // mit KillPaMs, ClearMark
