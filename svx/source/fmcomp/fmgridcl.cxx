@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-09-19 14:39:09 $
+ *  last change: $Author: fs $ $Date: 2000-09-21 12:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,9 +86,9 @@
 #include "dbexch.hrc"
 #endif
 
-//#ifndef _USR_CONVER_HXX
-//#include <usr/conver.hxx>
-//#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_XNAMINGSERVICE_HPP_
 #include <com/sun/star/uno/XNamingService.hpp>
@@ -855,7 +855,15 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
     if (bMarked)
     {
         SfxPoolItem* pItem = NULL;
-        SfxItemState eState = SFX_BINDINGS().QueryState(SID_FM_CTL_PROPERTIES, pItem);
+
+        SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
+        SfxItemState eState = SFX_ITEM_UNKNOWN;
+        // ask the bindings of the current view frame (which should be the one we're residing in) for the state
+        if (pCurrentFrame)
+            eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
+        else
+            DBG_ERROR("FmGridHeader::PreExecuteColumnContextMenu : no current view frame -> no bindings !");
+
         if (eState >= SFX_ITEM_AVAILABLE)
         {
             if (pItem)
@@ -895,8 +903,14 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             ::cppu::extractInterface(xCol, xCols->getByIndex(nPos));
             FmInterfaceItem aIFaceItem(SID_FM_SHOW_PROPERTY_BROWSER, xCol);
             SfxBoolItem aShowItem(SID_FM_SHOW_PROPERTIES, !rMenu.IsItemChecked(SID_FM_SHOW_PROPERTY_BROWSER));
-            SFX_DISPATCHER().Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
+
+            // execute the slot, use the dispatcher of the current view frame (which should be the one we're residing in)
+            SfxViewFrame* pCurrentFrame = SfxViewFrame::Current();
+            if (pCurrentFrame)
+                pCurrentFrame->GetBindings().GetDispatcher()->Execute( SID_FM_SHOW_PROPERTY_BROWSER, SFX_CALLMODE_ASYNCHRON,
                                           &aIFaceItem, &aShowItem, 0L );
+            else
+                DBG_ERROR("FmGridHeader::PostExecuteColumnContextMenu : no current view frame -> no bindings !");
         }   break;
         case SID_FM_EDIT + nChangeTypeOffset:
             bReplace = sal_True;
