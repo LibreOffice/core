@@ -2,9 +2,9 @@
 #
 #   $RCSfile: configuration.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-06-11 18:14:35 $
+#   last change: $Author: obo $ $Date: 2004-07-05 13:25:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -233,7 +233,7 @@ sub insert_start_block_into_configfile
     my $line = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
     push( @{$configfileref}, $line);
 
-    $line = '<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="FILENAME" oor:package="PACKAGENAME">' . "\n";
+    $line = '<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:install="http://openoffice.org/2004/installation" oor:name="FILENAME" oor:package="PACKAGENAME">' . "\n";
     my $packagename = $oneconfig->{'packagename'};
     my $name = $oneconfig->{'name'};
     $line =~ s/PACKAGENAME/$packagename/g;
@@ -379,7 +379,7 @@ sub insert_into_config_file
 
     my $nodeline = '<node oor:name="NODECONTENT" REPLACEPART >' . "\n";
     my $propline = '<prop oor:name="KEYCONTENT" REPLACEPART TYPEPART>' . "\n";
-    my $valueline = '<value>VALUECONTENT</value>' . "\n";
+    my $valueline = '<value SEPARATORPART>VALUECONTENT</value>' . "\n";
     my $langvalueline = '<value xml:lang="SAVEDLANGUAGE">VALUECONTENT</value>' . "\n";
     my $propendline = '</prop>' . "\n";
     my $nodeendline = '</node>' . "\n";
@@ -592,6 +592,13 @@ sub insert_into_config_file
     $value =~ s/^\s*\<//;
     $value =~ s/\>\s*$//;
 
+    # Deal with list separators
+    my $separatorpart = '';
+    if ( ($valuetype eq "string-list") && ($value =~ /\|/) )
+    {
+        $separatorpart = 'oor:separator="|"';
+    }
+
     # Fake: substituting german umlauts
 
     $value =~ s/\ä/ae/;
@@ -601,17 +608,14 @@ sub insert_into_config_file
     $value =~ s/\Ö/OE/;
     $value =~ s/\Ü/UE/;
 
-    # Fake: to be removed after integration of JBs CWS
-
-    if ( $value eq 'com.sun.star.comp.sdbc.ODBCDriver|com.sun.star.comp.sdbc.JDBCDriver|com.sun.star.comp.sdbcx.adabas.ext.ODriver' ) { $value =~ s/\|/ /g; }
-
     my $newvalueline;
 
     if (!($oneconfig->{'isisocode'} ))  # this is the simpe case
     {
-        # my $valueline = '<value>VALUECONTENT</value>' . "\n";
+        # my $valueline = '<value SEPARATORPART>VALUECONTENT</value>' . "\n";
         $newvalueline = $valueline;
         $newvalueline =~ s/VALUECONTENT/$value/g;
+        $newvalueline =~ s/SEPARATORPART/$separatorpart/;
     }
     else
     {
