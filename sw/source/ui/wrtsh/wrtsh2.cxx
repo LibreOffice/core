@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-06-11 10:16:34 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:37:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,8 +512,8 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     {
         SwSection aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
         String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
-        aLinkFile += cTokenSeperator;
-        aLinkFile += cTokenSeperator;
+        aLinkFile += so3::cTokenSeperator;
+        aLinkFile += so3::cTokenSeperator;
         aLinkFile += rBkmk.GetURL().GetToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtect( TRUE );

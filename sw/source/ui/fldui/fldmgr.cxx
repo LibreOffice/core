@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-06-08 13:47:31 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -982,8 +982,8 @@ USHORT SwFldMgr::GetFormatId(USHORT nTypeId, ULONG nFormatId) const
     case TYP_DDEFLD:
         switch ( aSwFlds[ GetPos( nTypeId ) ].nFmtBegin + nFormatId )
         {
-        case FMT_DDE_NORMAL:    nId = LINKUPDATE_ONCALL; break;
-        case FMT_DDE_HOT:       nId = LINKUPDATE_ALWAYS; break;
+        case FMT_DDE_NORMAL:    nId = so3::LINKUPDATE_ONCALL; break;
+        case FMT_DDE_HOT:       nId = so3::LINKUPDATE_ALWAYS; break;
         }
         break;
     }
@@ -1219,8 +1219,8 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
             //              Namen haben! Wird hier noch nicht beachtet.
             String sCmd( rData.sPar2 );
-            USHORT nTmpPos = sCmd.SearchAndReplace( ' ', cTokenSeperator );
-            sCmd.SearchAndReplace( ' ', cTokenSeperator, nTmpPos );
+            USHORT nTmpPos = sCmd.SearchAndReplace( ' ', so3::cTokenSeperator );
+            sCmd.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
 
             SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType(
                     SwDDEFieldType( rData.sPar1, sCmd, (USHORT)nFormatId ));
@@ -1613,8 +1613,8 @@ void SwFldMgr::UpdateCurFld(ULONG nFormat,
         {
             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
             //              Namen haben! Wird hier noch nicht beachtet.
-            USHORT nTmpPos = sPar2.SearchAndReplace( ' ', cTokenSeperator );
-            sPar2.SearchAndReplace( ' ', cTokenSeperator, nTmpPos );
+            USHORT nTmpPos = sPar2.SearchAndReplace( ' ', so3::cTokenSeperator );
+            sPar2.SearchAndReplace( ' ', so3::cTokenSeperator, nTmpPos );
             break;
         }
 

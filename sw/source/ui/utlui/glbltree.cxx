@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 09:04:37 $
+ *  last change: $Author: ama $ $Date: 2001-07-05 13:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ void     SwGlobalTree::RequestHelp( const HelpEvent& rHEvt )
             if(pItem && SV_ITEM_ID_LBOXSTRING == pItem->IsA())
             {
                 const SwSection* pSect = pCont->GetSection();
-                String sEntry = pSect->GetLinkFileName().GetToken(0, cTokenSeperator);
+                String sEntry = pSect->GetLinkFileName().GetToken(0, so3::cTokenSeperator);
                 if(!pSect->IsConnectFlag())
                     sEntry.Insert(aContextStrings[ST_BROKEN_LINK - ST_GLOBAL_CONTEXT_FIRST], 0 );
                 Point aPos = GetEntryPos( pEntry );
@@ -892,9 +892,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
         String sFilterName;
         if( GetFileFilterNameDlg( *this, sFileName, &sFilePassword, &sFilterName ))
         {
-            sFileName += cTokenSeperator;
+            sFileName += so3::cTokenSeperator;
             sFileName += sFilterName;
-            sFileName += cTokenSeperator;
+            sFileName += so3::cTokenSeperator;
         }
     }
     else if(pFileName->Len())
@@ -905,7 +905,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont,
     if(sFileName.Len())
     {
         INetURLObject aFileUrl(sFileName);
-        String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).GetToken(0, cTokenSeperator));
+        String sSectionName(aFileUrl.GetLastName(INetURLObject::DECODE_UNAMBIGUOUS).
+                                             GetToken(0, so3::cTokenSeperator));
         USHORT nSectCount = rSh.GetSectionFmtCount();
         String sTempSectionName(sSectionName);
         USHORT nAddNumber = 0;
@@ -1387,7 +1388,8 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
 --------------------------------------------------*/
 void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 {
-    String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0, cTokenSeperator));
+    String sFileName(pCont->GetSection()->GetLinkFileName().GetToken(0,
+            so3::cTokenSeperator));
     BOOL bFound = FALSE;
     const SfxObjectShell* pCurr = SfxObjectShell::GetFirst();
     while( !bFound && pCurr )
