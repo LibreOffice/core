@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.173 $
+ *  $Revision: 1.174 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:46:59 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1595,6 +1595,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_AUTOMATIC_CONTROL_FOCUS),       WID_DOC_AUTOMATIC_CONTROL_FOCUS,    CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_APPLY_FORM_DESIGN_MODE),        WID_DOC_APPLY_FORM_DESIGN_MODE,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_RUNTIME_UID), WID_DOC_RUNTIME_UID,  CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_LOCK_UPDATES),        WID_DOC_LOCK_UPDATES,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocMap_Impl;
