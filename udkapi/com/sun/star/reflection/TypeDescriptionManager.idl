@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescriptionManager.idl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:30:31 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:07:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,15 +101,33 @@
     @see com::sun::star::reflection::TypeDescriptionProvider
     @see com::sun::star::reflection::XTypeDescription
 */
-service TypeDescriptionManager
+published service TypeDescriptionManager
 {
-    /** Interface to retrieve type descriptions:
+    /** Interface to retrieve type descriptions.
+
         <ul>
-        <li>names are given in dotted notation, e.g. "com.sun.star.uno.XInterface"</li>
-        <li>sequences are accessable via "[]element_name"</li>
-        <li>interface members are accessable via "interface_name::member_name"</li>
+            <li>Names are given in dotted notation, for example
+            <code>"com.sun.star.uno.XInterface"</code>.</li>
+
+            <li>Sequence types are accessible via
+            <code>"[]<var>ComponentType</var>"</code></li>
+
+            <li>Instantiated polymorphic struct types are accessible via
+            <code>"<var>StructType</var>&lt;<!--
+            --><var>Parameter</var><sub>1</sub>,&hellip;,<!--
+            --><var>Parameter</var><sub><var>n</var></sub>&gt;"</code>.</li>
+
+            <li>Members of interface types are accessible via
+            <code>"<var>InterfaceType</var>::<var>Member</var>"</code>.</li>
         </ul>
-        The returned values are of interface type <type>XTypeDescription</type>.
+
+        <p>The returned values are of interface type
+        <type>XTypeDescription</type>.</p>
+
+        <p>Even though the name of this interface suggests that the used type
+        names are hierarchic, this need not be the case.  (For example, consider
+        the names of instantiated polymorphic struct types, like
+        <code>"Struct&lt;long&gt;"</code>.)</p>
     */
     interface com::sun::star::container::XHierarchicalNameAccess;
 
