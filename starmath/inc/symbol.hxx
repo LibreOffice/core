@@ -2,9 +2,9 @@
  *
  *  $RCSfile: symbol.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 15:07:01 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:03:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,9 +125,6 @@ class SmSym
 {
     friend class SmSymSetManager;
 
-    friend SvStream& operator << (SvStream& rStream, const SmSym& rSymbol);
-    friend SvStream& operator >> (SvStream& rStream, SmSym& rSymbol);
-
     SmFace               Face;
     String               Name;
     String               aExportName;
@@ -173,9 +170,6 @@ SV_DECL_PTRARR( SymbolArray, SmSym *, 32, 32 );
 class SmSymSet
 {
     friend class SmSymSetManager;
-
-    friend SvStream& operator << (SvStream& rStream, const SmSymSet& rSymbolSet);
-    friend SvStream& operator >> (SvStream& rStream, SmSymSet& rSymbolSet);
 
     SmListSym            SymbolList;
     String               Name;
