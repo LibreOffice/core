@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: cl $ $Date: 2000-10-24 11:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             aNewName = GetExport().GetAutoStylePool()->Find(
                 XML_STYLE_FAMILY_SD_GRAPHICS_ID, aParentName, xPropStates);
 
-        DBG_ASSERT(aNewName.getLength(), "XMLEXP: xShape without style name(!)");
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
 
         SdXMLExport::ImpCalcShapeType(xShape, eShapeType);

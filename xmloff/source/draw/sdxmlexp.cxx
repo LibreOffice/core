@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2000-10-19 14:25:15 $
+ *  last change: $Author: cl $ $Date: 2000-10-24 11:51:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2596,11 +2596,14 @@ void SdXMLExport::ImpWriteSingleShapeStyleInfo(
     const uno::Reference< drawing::XShape >& xShape,
     sal_uInt16 nFamily, const OUString& rStyleName, XmlShapeType eShapeType)
 {
-    // add style-name attribute (REQUIRED) Style-name, evtl. auto-style
-    if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily)
-        rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, rStyleName);
-    else
-        rExp.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, rStyleName);
+    if( rStyleName.getLength() )
+    {
+        // add style-name attribute (REQUIRED) Style-name, evtl. auto-style
+        if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily)
+            rExp.AddAttribute(XML_NAMESPACE_DRAW, sXML_style_name, rStyleName);
+        else
+            rExp.AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_style_name, rStyleName);
+    }
 
     switch(eShapeType)
     {
