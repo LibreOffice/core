@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:26 $
+#   last change: $Author: iha $ $Date: 2003-12-09 17:06:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ SLOFILES=   	$(SLO)$/tp_AxisLabel.obj \
                 $(SLO)$/tp_TitleRotation.obj \
                 $(SLO)$/dlg_ObjectProperties.obj \
                 $(SLO)$/dlg_ChartType.obj \
+                $(SLO)$/dlg_RotateDiagram.obj \
                 $(SLO)$/dlg_InsertAxis_Grid.obj \
                 $(SLO)$/dlg_InsertDataLabel.obj \
                 $(SLO)$/dlg_InsertLegend.obj \
@@ -116,6 +117,7 @@ SRC1FILES=		\
                 dlg_ChartType.src \
                 Bitmaps.src \
                 Bitmaps_HC.src \
+                dlg_RotateDiagram.src \
                 dlg_InsertAxis_Grid.src \
                 dlg_InsertDataLabel.src \
                 dlg_InsertLegend.src \
