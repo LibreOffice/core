@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: af $ $Date: 2001-05-17 15:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,13 +58,13 @@
  *
  *
  ************************************************************************/
-#define GRP_HORIZONTAL          1
+#define FL_HORIZONTAL           1
 #define BTN_HOR_NONE            2
 #define BTN_HOR_LEFT            3
 #define BTN_HOR_CENTER          4
 #define BTN_HOR_DISTANCE        5
 #define BTN_HOR_RIGHT           6
-#define GRP_VERTICAL            7
+#define FL_VERTICAL             7
 #define BTN_VER_NONE            8
 #define BTN_VER_TOP             9
 #define BTN_VER_CENTER          10

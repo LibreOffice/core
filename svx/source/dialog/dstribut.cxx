@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:08 $
+ *  last change: $Author: af $ $Date: 2001-05-17 15:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ SvxDistributePage::SvxDistributePage(
 :   SvxTabPage(pWindow, ResId(RID_SVXPAGE_DISTRIBUTE, DIALOG_MGR()), rInAttrs),
     meDistributeHor(eHor),
     meDistributeVer(eVer),
-    maGrpHorizontal     (this, ResId(GRP_HORIZONTAL     )),
+    maFlHorizontal      (this, ResId(FL_HORIZONTAL      )),
     maBtnHorNone        (this, ResId(BTN_HOR_NONE       )),
     maBtnHorLeft        (this, ResId(BTN_HOR_LEFT       )),
     maBtnHorCenter      (this, ResId(BTN_HOR_CENTER     )),
@@ -134,7 +134,7 @@ SvxDistributePage::SvxDistributePage(
     maHorCenter         (this, ResId(IMG_HOR_CENTER     )),
     maHorDistance       (this, ResId(IMG_HOR_DISTANCE   )),
     maHorHigh           (this, ResId(IMG_HOR_HIGH       )),
-    maGrpVertical       (this, ResId(GRP_VERTICAL       )),
+    maFlVertical        (this, ResId(FL_VERTICAL        )),
     maBtnVerNone        (this, ResId(BTN_VER_NONE       )),
     maBtnVerTop         (this, ResId(BTN_VER_TOP        )),
     maBtnVerCenter      (this, ResId(BTN_VER_CENTER     )),
