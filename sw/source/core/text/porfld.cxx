@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:41:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -631,7 +631,8 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
         if( nDiff > rInf.Width() )
         {
             nDiff = rInf.Width();
-            SetHide( sal_True );
+            if ( rInf.GetFly() || ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() ) )
+                SetHide( sal_True );
         }
 
         // A numbering portion can be inside a SwRotatedPortion. Then the
