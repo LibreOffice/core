@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLEmbeddedObjectImportContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:13:40 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,16 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
+// #110680#
+//#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+//#include <comphelper/processfactory.hxx>
+//#endif
+
+#ifndef _GLOBNAME_HXX
+#include <tools/globname.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
 #endif
 #ifndef _GLOBNAME_HXX
 #include <tools/globname.hxx>
@@ -216,8 +224,11 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 
 
     Sequence<Any> aArgs( 0 );
-    Reference< XMultiServiceFactory > xServiceFactory =
-            comphelper::getProcessServiceFactory();
+
+    // #110680#
+    // Reference< XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
+    Reference< XMultiServiceFactory > xServiceFactory = GetImport().getServiceFactory();
+
     xHandler = Reference < XDocumentHandler >(
         xServiceFactory->createInstanceWithArguments( sFilterService, aArgs),
                                                UNO_QUERY);
