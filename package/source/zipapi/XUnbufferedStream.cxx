@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-12-04 17:41:17 $
+ *  last change: $Author: mtg $ $Date: 2002-01-28 18:11:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
         }
         mnMyCurrent += nRead;
         nTotal = nRead + nLastRead;
-        if ( nTotal < nBytesToRead )
+        if ( nTotal < nRequestedBytes)
             aData.realloc ( nTotal );
     }
     return nTotal;
