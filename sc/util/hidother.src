@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 11:38:51 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 17:04:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@ hidspecial HID_SC_RENAME_OBJECT  { HelpID = HID_SC_RENAME_OBJECT; };
 hidspecial HID_SELECTTABLES      { HelpId = HID_SELECTTABLES; };
 hidspecial HID_SC_REPLCELLSWARN  { HelpId = HID_SC_REPLCELLSWARN; };
 
+hidspecial HID_SC_DPLAY_PAGE     { HelpId = HID_SC_DPLAY_PAGE; };
 hidspecial HID_SC_DPLAY_COLUMN   { HelpId = HID_SC_DPLAY_COLUMN; };
 hidspecial HID_SC_DPLAY_ROW      { HelpId = HID_SC_DPLAY_ROW; };
 hidspecial HID_SC_DPLAY_DATA     { HelpId = HID_SC_DPLAY_DATA; };
