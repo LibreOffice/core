@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:06 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 14:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,7 +393,7 @@ XMLTextFrameContext::XMLTextFrameContext(
     {
         if( bRelWidth > 0 )
         {
-            aAny <<= (sal_Int16)nWidth;
+            aAny <<= (sal_Int8)nWidth;
             xPropSet->setPropertyValue( sRelativeWidth, aAny );
         }
         else
@@ -419,7 +419,7 @@ XMLTextFrameContext::XMLTextFrameContext(
         }
         if( bRelHeight > 0 )
         {
-            aAny <<= (sal_Int16)nHeight;
+            aAny <<= (sal_Int8)nHeight;
             xPropSet->setPropertyValue( sRelativeHeight, aAny );
         }
         else

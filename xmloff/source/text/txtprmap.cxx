@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:07 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 14:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,11 +376,11 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     // TODO: not required???
     // RES_FRM_SIZE
     M_E( "Width",           SVG, width,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEWIDTH_ABS ),
-    M_E( "RelativeWidth",   SVG, width,             XML_TYPE_PERCENT16, CTF_FRAMEWIDTH_REL ),
+    M_E( "RelativeWidth",   SVG, width,             XML_TYPE_PERCENT8, CTF_FRAMEWIDTH_REL ),
     M_E( "Height",          SVG, height,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_ABS ),
     M_E( "Height",          FO, min_height,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, CTF_FRAMEHEIGHT_MIN_ABS ),
-    M_E( "RelativeHeight",  SVG, height,            XML_TYPE_PERCENT16, CTF_FRAMEHEIGHT_REL ),
-    M_E( "RelativeHeight",  FO, min_height,         XML_TYPE_PERCENT16, CTF_FRAMEHEIGHT_MIN_REL ),
+    M_E( "RelativeHeight",  SVG, height,            XML_TYPE_PERCENT8, CTF_FRAMEHEIGHT_REL ),
+    M_E( "RelativeHeight",  FO, min_height,         XML_TYPE_PERCENT8, CTF_FRAMEHEIGHT_MIN_REL ),
     M_E( "SizeType",        FO, text_box,           XML_TYPE_NUMBER16|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SIZETYPE ),
     M_E( "SizeRelative",    FO, text_box,                   XML_TYPE_BOOL|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_SYNCHEIGHT ),
     // RES_PAPER_BIN

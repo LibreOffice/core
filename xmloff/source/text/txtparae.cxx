@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-09-21 09:49:31 $
+ *  last change: $Author: mib $ $Date: 2000-09-21 14:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sParaConditionalStyleName(RTL_CONSTASCII_USTRINGPARAM("ParaConditionalStyleName")),
     sParaChapterNumberingLevel(RTL_CONSTASCII_USTRINGPARAM("ParaChapterNumberingLevel")),
     sCharStyleName(RTL_CONSTASCII_USTRINGPARAM("CharStyleName")),
-    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyle")),
+    sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName")),
     sTextField(RTL_CONSTASCII_USTRINGPARAM("TextField")),
     sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
     sFrame(RTL_CONSTASCII_USTRINGPARAM("Frame")),
@@ -1110,7 +1110,7 @@ void XMLTextParagraphExport::addTextFrameAttributes(
 
 
     // svg:width
-    sal_Int16 nRelWidth =  0;
+    sal_Int8 nRelWidth =  0;
     aAny = rPropSet->getPropertyValue( sRelativeWidth );
     aAny >>= nRelWidth;
     DBG_ASSERT( nRelWidth >= 0 && nRelWidth <= 100,
@@ -1150,7 +1150,7 @@ void XMLTextParagraphExport::addTextFrameAttributes(
 
     if( !bSyncHeight && SizeType::VARIABLE != nSizeType )
     {
-        sal_Int16 nRelHeight =  0;
+        sal_Int8 nRelHeight =  0;
         aAny = rPropSet->getPropertyValue( sRelativeHeight );
         aAny >>= nRelHeight;
         if( nRelHeight > 0 )
