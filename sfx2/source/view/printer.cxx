@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-09-05 10:15:27 $
+ *  last change: $Author: pb $ $Date: 2001-10-10 10:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,7 +656,9 @@ void SfxPrintOptionsDialog::DisableHelp()
 {
     pDlgImpl->mbHelpDisabled = sal_True;
 
-#if SUPD <= 640
+#if SUPD > 640
+    aHelpBtn.Disable();
+#else
     pDlgImpl->mpHelpBtn->Disable();
 #endif
 }
