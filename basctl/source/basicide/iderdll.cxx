@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-03 11:51:39 $
+ *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,6 @@
 #pragma hdrstop
 
 #include <svtools/solar.hrc>
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
-#endif
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <iderid.hxx>
@@ -192,7 +189,7 @@ BasicIDEData::BasicIDEData() : aObjCatPos( INVPOSITION, INVPOSITION )
     bChoosingMacro = FALSE;
     bShellInCriticalSection = FALSE;
     pSearchItem = new SvxSearchItem( SID_SEARCH_ITEM );
-    StarBASIC::SetGlobalErrorHdl( LINK( this, BasicIDEData, GlobalBasicErrorHdl ) );
+
     StarBASIC::SetGlobalBreakHdl( LINK( this, BasicIDEData, GlobalBasicBreakHdl ) );
 
     pAccelerator = 0;
@@ -237,53 +234,6 @@ void BasicIDEData::SetSearchItem( const SvxSearchItem& rItem )
     delete pSearchItem;
     pSearchItem = (SvxSearchItem*)rItem.Clone();
 }
-
-IMPL_LINK( BasicIDEData, GlobalBasicErrorHdl, StarBASIC *, pBasic )
-{
-    BasicIDE::BasicStopped();
-
-    // Waerend der Macroauswahl keine Fehler ausgeben:
-    if ( bChoosingMacro )
-        return 1;
-    if ( bShellInCriticalSection )
-        return 2;
-
-    long nRet = 0;
-    BasicIDEShell* pShell = 0;
-    if ( SvtModuleOptions().IsBasicIDE() )
-    {
-        BasicManager* pBasicManager = BasicIDE::FindBasicManager( pBasic );
-        if ( pBasicManager )
-        {
-            USHORT nLib = pBasicManager->GetLibId( pBasic );
-            // TODO: check password
-            //if ( !pBasicManager->HasPassword( nLib ) ||
-            //      pBasicManager->IsPasswordVerified( nLib ) )
-            //{
-                pShell = IDE_DLL()->GetShell();
-                if ( !pShell )
-                {
-                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
-                    if( pDispatcher )
-                    {
-                        pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
-                    }
-                    pShell = IDE_DLL()->GetShell();
-                }
-            //}
-        }
-    }
-
-    if ( pShell )
-        nRet = pShell->CallBasicErrorHdl( pBasic );
-    else
-        BasicIDE::HandleBasicError();
-
-    return nRet;
-}
-
 
 IMPL_LINK( BasicIDEData, GlobalBasicBreakHdl, StarBASIC *, pBasic )
 {

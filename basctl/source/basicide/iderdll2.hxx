@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iderdll2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:37 $
+ *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,6 @@ private:
     void            InitAccelerator();
 
 protected:
-    DECL_LINK( GlobalBasicErrorHdl, StarBASIC * );
     DECL_LINK( GlobalBasicBreakHdl, StarBASIC * );
 
 public:

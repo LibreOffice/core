@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
+ *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -674,7 +674,7 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, TRUE );
 //  ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
 //  ErrorHandler::HandleError( pBasic->GetErrorCode() );
-    BasicIDE::HandleBasicError();
+    ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( MARKER_NOMARKER );
     return FALSE;

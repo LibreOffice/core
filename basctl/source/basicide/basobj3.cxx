@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-11 15:40:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,13 @@
 #endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
+
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
+
 #include <iderdll.hxx>
+#include <iderdll2.hxx>
 #include <iderid.hxx>
 #include <basobj.hxx>
 #include <basidesh.hxx>
@@ -81,6 +87,7 @@
 
 #include <baside2.hxx>
 #include <baside3.hxx>
+#include <basicmod.hxx>
 
 #ifndef _BASCTL_DLGED_HXX
 #include "dlged.hxx"
@@ -106,6 +113,15 @@ using namespace ::com::sun::star::container;
 
 
 #define LINE_SEP    0x0A
+
+//----------------------------------------------------------------------------
+
+extern "C" {
+    long basicide_handle_basic_error( void* pPtr )
+    {
+        return BasicIDE::HandleBasicError( (StarBASIC*)pPtr );
+    }
+}
 
 //----------------------------------------------------------------------------
 
@@ -855,9 +871,52 @@ void BasicIDE::InvalidateDebuggerSlots()
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::HandleBasicError()
+long BasicIDE::HandleBasicError( StarBASIC* pBasic )
 {
-    ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
+    BASIC_MOD()->Load();
+
+    BasicIDE::BasicStopped();
+
+    // no error output during macro choosing
+    if ( IDE_DLL()->GetExtraData()->ChoosingMacro() )
+        return 1;
+    if ( IDE_DLL()->GetExtraData()->ShellInCriticalSection() )
+        return 2;
+
+    long nRet = 0;
+    BasicIDEShell* pShell = 0;
+    if ( SvtModuleOptions().IsBasicIDE() )
+    {
+        BasicManager* pBasicManager = BasicIDE::FindBasicManager( pBasic );
+        if ( pBasicManager )
+        {
+            USHORT nLib = pBasicManager->GetLibId( pBasic );
+            // TODO: check password
+            //if ( !pBasicManager->HasPassword( nLib ) ||
+            //      pBasicManager->IsPasswordVerified( nLib ) )
+            //{
+                pShell = IDE_DLL()->GetShell();
+                if ( !pShell )
+                {
+                    SfxViewFrame* pCurFrame = SfxViewFrame::Current();
+                    DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
+                    SfxDispatcher* pDispatcher = pCurFrame ? pCurFrame->GetDispatcher() : NULL;
+                    if( pDispatcher )
+                    {
+                        pDispatcher->Execute( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON );
+                    }
+                    pShell = IDE_DLL()->GetShell();
+                }
+            //}
+        }
+    }
+
+    if ( pShell )
+        nRet = pShell->CallBasicErrorHdl( pBasic );
+    else
+        ErrorHandler::HandleError( StarBASIC::GetErrorCode() );
+
+    return nRet;
 }
 
 //----------------------------------------------------------------------------
