@@ -72,7 +72,7 @@ TARGET=suse
 
 # --- Files --------------------------------------------------------
 
-LAUNCHERLIST = writer calc draw impress math printeradmin
+LAUNCHERLIST = writer calc draw impress math base printeradmin
 LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
 LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
 
@@ -90,7 +90,31 @@ MIMELIST = \
     presentation \
     presentation-template \
     formula \
-    master-document
+    master-document \
+    oasis-text \
+    oasis-text-template \
+    oasis-spreadsheet \
+    oasis-spreadsheet-template \
+    oasis-drawing \
+    oasis-drawing-template \
+    oasis-presentation \
+    oasis-presentation-template \
+    oasis-formula \
+    oasis-master-document \
+        oasis-database
+
+MIMEICONLIST = \
+    text \
+    text-template \
+    spreadsheet \
+    spreadsheet-template \
+    drawing \
+    drawing-template \
+    presentation \
+    presentation-template \
+    formula \
+    master-document \
+        database
 
 GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
 KDEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.desktop
@@ -100,13 +124,13 @@ KDEMIMEFLAGFILE = \
         
 GNOMEICONLIST = \
     {16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    {16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png
+    {16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
     
 KDEICONLIST = \
     hicolor/{16x16 22x22 32x32 48x48}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    hicolor/{16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png \
+    hicolor/{16x16 22x22 32x32 48x48}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png \
     locolor/{16x16 22x22 32x32}/apps/$(UNIXFILENAME)-{$(LAUNCHERLIST)}.png \
-    locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMELIST)}.png
+    locolor/{16x16 22x22 32x32}/mimetypes/$(UNIXFILENAME)-{$(MIMEICONLIST)}.png
 
 .IF "$(RPM)"!=""
 
@@ -116,6 +140,7 @@ RPMDEPN = \
     $(MISC)/$(TARGET)/opt/kde3/share/applnk/Office.flag \
     $(MISC)/$(TARGET)/opt/gnome2/share/application-registry/$(UNIXFILENAME).applications \
     $(MISC)/$(TARGET)/opt/gnome2/share/mime-info/$(UNIXFILENAME).keys \
+    $(MISC)/$(TARGET)/opt/gnome2/share/mime-info/$(UNIXFILENAME).mime \
     $(MISC)/$(TARGET)/opt/kde3/share/mimelnk/application.flag \
     $(MISC)/$(TARGET)/opt/gnome2/share/icons/gnome/{$(GNOMEICONLIST)} \
     $(MISC)/$(TARGET)/opt/kde3/share/icons/{$(KDEICONLIST)} 
@@ -174,6 +199,12 @@ $(MISC)/$(TARGET)/opt/gnome2/share/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMED
     @$(PERL) ../share/brand.pl -p $(PRODUCTNAME) -u $(UNIXFILENAME) --iconprefix "$(UNIXFILENAME)-" $(GNOMEMIMEDEPN) $(MISC)/$(TARGET)
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
+        
+$(MISC)/$(TARGET)/opt/gnome2/share/mime-info/$(UNIXFILENAME).mime : ../mimetypes/openoffice.mime
+    @$(MKDIRHIER) $(@:d)
+    @echo Creating GNOME .mime file ..
+    @echo ---------------------------------
+    @cat ../mimetypes/openoffice.mime | tr -d "\015" > $@
 
 $(KDEMIMEFLAGFILE) : $(KDEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:db)
@@ -187,7 +218,7 @@ $(MISC)/$(TARGET)/opt/gnome2/share/application-registry/$(UNIXFILENAME).applicat
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
-    @cat $< | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
+    @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
 # --- packaging ---------------------------------------------------
     
