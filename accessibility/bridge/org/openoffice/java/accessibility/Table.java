@@ -164,11 +164,22 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         return new AccessibleTable();
     }
 
-    protected class AccessibleTable extends AccessibleDescendantManager {
+    protected class AccessibleTable extends AccessibleDescendantManager implements javax.accessibility.AccessibleExtendedTable {
+
+        protected XAccessibleTable unoAccessibleTable;
+
+        public AccessibleTable() {
+            unoAccessibleTable = (XAccessibleTable) UnoRuntime.queryInterface(XAccessibleTable.class, unoAccessibleContext);
+        }
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
             return javax.accessibility.AccessibleRole.TABLE;
+        }
+
+        /** Returns the AccessibleTable interface of this object */
+        public javax.accessibility.AccessibleTable getAccessibleTable() {
+            return this;
         }
 
         /** Returns the specified Accessible child of the object */
@@ -214,9 +225,244 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             }
             return child;
         }
+
+        /*
+        * AccessibleTable
+        */
+
+        /** Returns the Accessible at a specified row and column in the table. */
+        public javax.accessibility.Accessible getAccessibleAt(int r, int c) {
+            javax.accessibility.Accessible child = null;
+            try {
+                XAccessible xAccessible = unoAccessibleTable.getAccessibleCellAt(r,c);
+                if (xAccessible != null) {
+                    // Re-use the active descandant wrapper if possible
+                    javax.accessibility.Accessible activeDescendant = Table.this.activeDescendant;
+                    if ((activeDescendant instanceof TableCell) && xAccessible.equals(((TableCell) activeDescendant).unoAccessible)) {
+                        child = activeDescendant;
+                    } else {
+                        child = new TableCell(xAccessible);
+                    }
+                }
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            } catch (com.sun.star.uno.RuntimeException e) {
+            }
+            return child;
+        }
+
+        /** Returns the caption for the table. */
+        public javax.accessibility.Accessible getAccessibleCaption() {
+            // Not yet supported.
+            return null;
+        }
+
+        /** Returns the number of columns in the table. */
+        public int getAccessibleColumnCount() {
+             try {
+                return unoAccessibleTable.getAccessibleColumnCount();
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return 0;
+            }
+       }
+
+        /** Returns the description text of the specified column in the table. */
+        public javax.accessibility.Accessible getAccessibleColumnDescription(int c) {
+            try {
+                return new javax.swing.JLabel(
+                    unoAccessibleTable.getAccessibleColumnDescription(c));
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /**
+         * Returns the number of columns occupied by the Accessible
+         * at a specified row and column in the table.
+         */
+        public int getAccessibleColumnExtentAt(int r, int c) {
+            try {
+                return unoAccessibleTable.getAccessibleColumnExtentAt(r,c);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return 0;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return 0;
+            }
+        }
+
+        /** Returns the column headers as an AccessibleTable. */
+        public javax.accessibility.AccessibleTable getAccessibleColumnHeader() {
+            // Not yet supported
+            return null;
+        }
+
+        /** Returns the number of rows in the table. */
+        public int getAccessibleRowCount() {
+             try {
+                return unoAccessibleTable.getAccessibleRowCount();
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return 0;
+            }
+        }
+
+        /** Returns the description of the specified row in the table. */
+        public javax.accessibility.Accessible getAccessibleRowDescription(int r) {
+            try {
+                return new javax.swing.JLabel(
+                    unoAccessibleTable.getAccessibleRowDescription(r));
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return null;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /**
+         * Returns the number of rows occupied by the Accessible
+         * at a specified row and column in the table.
+         */
+        public int getAccessibleRowExtentAt(int r, int c) {
+            try {
+                return unoAccessibleTable.getAccessibleRowExtentAt(r,c);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return 0;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return 0;
+            }
+        }
+
+        /** Returns the row headers as an AccessibleTable. */
+        public javax.accessibility.AccessibleTable getAccessibleRowHeader() {
+            // Not yet supported
+            return null;
+        }
+
+        /** Returns the summary description of the table. */
+        public javax.accessibility.Accessible getAccessibleSummary() {
+            // Not yet supported.
+            return null;
+        }
+
+        /** Returns the selected columns in a table. */
+        public int[] getSelectedAccessibleColumns() {
+            try {
+                return unoAccessibleTable.getSelectedAccessibleColumns();
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Returns the selected rows in a table. */
+        public int[] getSelectedAccessibleRows() {
+            try {
+                return unoAccessibleTable.getSelectedAccessibleRows();
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return null;
+            }
+        }
+
+        /** Returns a boolean value indicating whether the specified column is selected. */
+        public boolean isAccessibleColumnSelected(int c) {
+            try {
+                return unoAccessibleTable.isAccessibleColumnSelected(c);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return false;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return false;
+            }
+        }
+
+        /** Returns a boolean value indicating whether the specified row is selected. */
+        public boolean isAccessibleRowSelected(int r) {
+            try {
+                return unoAccessibleTable.isAccessibleRowSelected(r);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return false;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return false;
+            }
+        }
+
+        /**
+         * Returns a boolean value indicating whether the accessible
+         * at a specified row and column is selected.
+         */
+        public boolean isAccessibleSelected(int r, int c) {
+            try {
+                return unoAccessibleTable.isAccessibleSelected(r,c);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return false;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return false;
+            }
+        }
+
+        /** Sets the caption for the table. */
+        public void setAccessibleCaption(javax.accessibility.Accessible accessible) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Sets the description text of the specified column in the table. */
+        public void setAccessibleColumnDescription(int param, javax.accessibility.Accessible accessible) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Sets the column headers. */
+        public void setAccessibleColumnHeader(javax.accessibility.AccessibleTable accessibleTable) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Sets the description text of the specified row of the table. */
+        public void setAccessibleRowDescription(int param, javax.accessibility.Accessible accessible) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Sets the row headers. */
+        public void setAccessibleRowHeader(javax.accessibility.AccessibleTable accessibleTable) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Sets the summary description of the table */
+        public void setAccessibleSummary(javax.accessibility.Accessible accessible) {
+            // Not supported by the UNO Accessibility API
+        }
+
+        /** Returns the column number of an index in the table */
+        public int getAccessibleColumn(int index) {
+            try {
+                return unoAccessibleTable.getAccessibleColumn(index);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return -1;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return -1;
+            }
+        }
+
+        /** Returns the index of a specified row and column in the table. */
+        public int getAccessibleIndex(int r, int c) {
+            try {
+                return unoAccessibleTable.getAccessibleIndex(r,c);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return -1;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return -1;
+            }
+        }
+
+        /** Returns the row number of an index in the table */
+        public int getAccessibleRow(int index) {
+            try {
+                return unoAccessibleTable.getAccessibleRow(index);
+            } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+                return -1;
+            } catch (com.sun.star.uno.RuntimeException e) {
+                return -1;
+            }
+        }
     }
 
-    class TableCell implements javax.accessibility.Accessible {
+    class TableCell extends java.awt.Component implements javax.accessibility.Accessible {
 
         protected XAccessible unoAccessible;
 
@@ -359,41 +605,10 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
             /** Returns the state set of this object */
             public javax.accessibility.AccessibleStateSet getAccessibleStateSet() {
                 try {
-                    javax.accessibility.AccessibleStateSet stateSet = new javax.accessibility.AccessibleStateSet();
-                    // table cells are transient and so neither focusable nor focused
-                    stateSet.add(javax.accessibility.AccessibleState.TRANSIENT);
-
-                    XAccessibleStateSet unoAccessibleStateSet = unoAccessibleContext.getAccessibleStateSet();
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.ENABLED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.ENABLED);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.OPAQUE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.OPAQUE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.RESIZABLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.RESIZABLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SHOWING)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SHOWING);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.VISIBLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.VISIBLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SINGLE_LINE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SINGLE_LINE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.MULTI_LINE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.MULTI_LINE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTABLE)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SELECTABLE);
-                    }
-                    if (unoAccessibleStateSet.contains(AccessibleStateType.SELECTED)) {
-                        stateSet.add(javax.accessibility.AccessibleState.SELECTED);
-                    }
-                    return stateSet;
+                    return AccessibleStateAdapter.getAccessibleStateSet(TableCell.this,
+                        unoAccessibleContext.getAccessibleStateSet());
                 } catch (com.sun.star.uno.RuntimeException e) {
-                    return null;
+                    return AccessibleStateAdapter.getDefunctStateSet();
                 }
             }
 
