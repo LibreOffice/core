@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:36:57 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:44:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -825,8 +825,8 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& aEvent
     ReadGuard aReadLock(m_aLock);
 
     // don't disagree with this request if job was already stopped or finished it's work
-    if (m_eRunState != E_RUNNING)
-        return;
+    // if (m_eRunState != E_RUNNING)
+    //    return;
 
     // Otherwhise try to close() it
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
