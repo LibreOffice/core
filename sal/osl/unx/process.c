@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mfe $ $Date: 2000-12-18 10:21:07 $
+ *  last change: $Author: mfe $ $Date: 2001-02-20 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1501,7 +1501,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         rtl_uString2String( &strImageName,
                             rtl_uString_getStr(ustrImageName),
                             rtl_uString_getLength(ustrImageName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pszImageName = rtl_string_getStr(strImageName);
@@ -1516,7 +1516,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         rtl_uString2String( &strWorkDir,
                             rtl_uString_getStr(ustrWorkDir),
                             rtl_uString_getLength(ustrWorkDir),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pszWorkDir =  rtl_string_getStr(strWorkDir);
@@ -1536,7 +1536,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         rtl_uString2String( &strArg,
                             rtl_uString_getStr(ustrArguments[index]),
                             rtl_uString_getLength(ustrArguments[index]),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pArguments[index]=strdup(rtl_string_getStr(strArg));
@@ -1556,7 +1556,7 @@ oslProcessError SAL_CALL osl_executeProcess(rtl_uString *ustrImageName,
         rtl_uString2String( &strEnv,
                             rtl_uString_getStr(ustrEnvironment[index]),
                             rtl_uString_getLength(ustrEnvironment[index]),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
 
         pEnvironment[index]=strdup(rtl_string_getStr(strEnv));
@@ -2310,7 +2310,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
         rtl_uString2String( &strVar,
                             rtl_uString_getStr(ustrVar),
                             rtl_uString_getLength(ustrVar),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszVar = rtl_string_getStr(strVar);
     }

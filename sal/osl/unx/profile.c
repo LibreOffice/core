@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mfe $ $Date: 2000-12-06 16:03:16 $
+ *  last change: $Author: mfe $ $Date: 2001-02-20 13:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -242,7 +242,7 @@ oslProfile SAL_CALL osl_openProfile(rtl_uString *ustrProfileName, oslProfileOpti
         rtl_uString2String( &strProfileName,
                             rtl_uString_getStr(ustrProfileName),
                             rtl_uString_getLength(ustrProfileName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszProfileName = rtl_string_getStr(strProfileName);
 
@@ -1245,7 +1245,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrNam
         rtl_uString2String( &strPath,
                             rtl_uString_getStr(ustrPath),
                             rtl_uString_getLength(ustrPath),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszPath = rtl_string_getStr(strPath);
 
@@ -1267,7 +1267,7 @@ sal_Bool SAL_CALL osl_getProfileName(rtl_uString* ustrPath, rtl_uString* ustrNam
         rtl_uString2String( &strName,
                             rtl_uString_getStr(ustrName),
                             rtl_uString_getLength(ustrName),
-                            RTL_TEXTENCODING_UTF8,
+                            osl_getThreadTextEncoding(),
                             OUSTRING_TO_OSTRING_CVTFLAGS );
         pszName = rtl_string_getStr(strName);
     }
