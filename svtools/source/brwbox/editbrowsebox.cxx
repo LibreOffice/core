@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 14:37:37 $
+ *  last change: $Author: fs $ $Date: 2002-04-11 15:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,10 @@
 
 #include <algorithm>
 
+#ifndef _SV_MULTISEL_HXX
+#include <tools/multisel.hxx>
+#endif
+
 // .......................................................................
 namespace svt
 {
@@ -162,8 +166,8 @@ namespace svt
 
     DBG_NAME(EditBrowseBox);
     //------------------------------------------------------------------------------
-    EditBrowseBox::EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode nMode)
-                  :BrowseBox(pParent, rId, nMode)
+    EditBrowseBox::EditBrowseBox(Window* pParent, const ResId& rId, sal_Int32 nBrowserFlags, BrowserMode _nMode )
+                  :BrowseBox( pParent, rId, _nMode )
                   ,nEditRow(-1)
                   ,nPaintRow(-1)
                   ,nOldEditRow(-1)
@@ -197,8 +201,8 @@ namespace svt
     }
 
     //==================================================================
-    EditBrowseBox::EditBrowseBox(Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode nMode)
-                  :BrowseBox(pParent, nBits, nMode)
+    EditBrowseBox::EditBrowseBox( Window* pParent, sal_Int32 nBrowserFlags, WinBits nBits, BrowserMode _nMode )
+                  :BrowseBox( pParent, nBits, _nMode )
                   ,nEditRow(-1)
                   ,nPaintRow(-1)
                   ,nOldEditRow(-1)
@@ -585,9 +589,25 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------
-    void EditBrowseBox::Dispatch(sal_uInt16 nId)
+    void EditBrowseBox::Dispatch( sal_uInt16 _nId )
     {
-        BrowseBox::Dispatch(nId);
+        if ( _nId == BROWSER_ENHANCESELECTION )
+        {   // this is a workaround for the bug in the base class:
+            // if the row selection is to be extended (which is what BROWSER_ENHANCESELECTION tells us)
+            // then the base class does not revert any column selections, while, for doing a "simple"
+            // selection (BROWSER_SELECT), it does. In fact, it does not only revert the col selection then,
+            // but also any current row selections.
+            // This clearly tells me that the both ids are for row selection only - there this behaviour does
+            // make sense.
+            // But here, where we have column selection, too, we take care of this ourself.
+            if ( GetSelectColumnCount( ) )
+            {
+                while ( GetSelectColumnCount( ) )
+                    SelectColumnId( FirstSelectedColumn(), sal_False );
+                Select();
+            }
+        }
+        BrowseBox::Dispatch( _nId );
     }
 
     //------------------------------------------------------------------------------
@@ -607,7 +627,7 @@ namespace svt
                     sal_Bool   bCtrl  = pKeyEvent->GetKeyCode().IsMod1();
                     sal_Bool   bAlt =   pKeyEvent->GetKeyCode().IsMod2();
                     sal_Bool   bSelect= sal_False;
-                    sal_Bool   bModify= sal_False;
+                    sal_Bool   bNonEditOnly =   sal_False;
                     sal_uInt16 nId = BROWSER_NONE;
 
                     if (!bAlt && !bCtrl && !bShift )
@@ -642,7 +662,7 @@ namespace svt
                                 break;
                             case KEY_RIGHT:         nId = BROWSER_CURSORRIGHT; break;
                             case KEY_LEFT:          nId = BROWSER_CURSORLEFT; break;
-                            case KEY_SPACE:         nId = BROWSER_SELECT; bModify = bSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_SELECT; bNonEditOnly = bSelect = sal_True;break;
                         }
 
                     if ( !bAlt && !bCtrl && bShift )
@@ -652,6 +672,7 @@ namespace svt
                             case KEY_UP:            nId = BROWSER_SELECTUP; bSelect = sal_True;break;
                             case KEY_HOME:          nId = BROWSER_SELECTHOME; bSelect = sal_True;break;
                             case KEY_END:           nId = BROWSER_SELECTEND; bSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_SELECTCOLUMN; bSelect = sal_True; break;
                             case KEY_TAB:
                                 if (IsTabAllowed(sal_False))
                                     nId = BROWSER_CURSORLEFT;
@@ -668,11 +689,17 @@ namespace svt
                             case KEY_PAGEUP:        nId = BROWSER_CURSORTOPOFFILE; break;
                             case KEY_HOME:          nId = BROWSER_CURSORTOPOFSCREEN; break;
                             case KEY_END:           nId = BROWSER_CURSORENDOFSCREEN; break;
-                            case KEY_SPACE:         nId = BROWSER_SELECT; bModify = bSelect = sal_True;break;
+                            case KEY_SPACE:         nId = BROWSER_ENHANCESELECTION; bSelect = sal_True;break;
                         }
 
 
-                    if (nId != BROWSER_NONE && (!IsEditing() || (!bModify && aController->MoveAllowed(*pKeyEvent))))
+                    if  (   ( nId != BROWSER_NONE )
+                        &&  (   !IsEditing()
+                            ||  (   !bNonEditOnly
+                                &&  aController->MoveAllowed( *pKeyEvent )
+                                )
+                            )
+                        )
                     {
                         if (nId == BROWSER_SELECT)
                         {
@@ -688,8 +715,8 @@ namespace svt
 
                         Dispatch(nId);
 
-                        if (bSelect && (!GetSelectRowCount() || GetSelection() != NULL))
-                            ActivateCell();
+                        if (bSelect && (GetSelectRowCount() || GetSelection() != NULL))
+                            DeactivateCell();
                         return 1;
                     }
                 }
@@ -1427,6 +1454,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/12/05 14:37:37  oj
+ *  #95598# PaintTristate correct for parentupdate
+ *
  *  Revision 1.3  2001/10/12 16:57:26  hr
  *  #92830#: required change: std::min()/std::max()
  *
