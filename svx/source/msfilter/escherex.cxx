@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: sj $ $Date: 2000-12-07 16:55:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,14 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XGRAPHICS_HPP_
 #include <com/sun/star/awt/XGraphics.hpp>
+#endif
+
+#ifndef _RTL_CRC_H_
+#include <rtl/crc.h>
+#endif
+#include <vos/xception.hxx>
+#ifndef _VOS_NO_NAMESPACE
+using namespace vos;
 #endif
 
 using namespace ::com::sun::star;
@@ -231,8 +239,140 @@ UINT32 EscherPersistTable::PtReplaceOrInsert( UINT32 nID, UINT32 nOfs )
     return 0;
 }
 
+sal_Bool EscherPropertyValueHelper::GetPropertyValue(
+    ::com::sun::star::uno::Any& rAny,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+            const String& rString,
+                    sal_Bool bTestPropertyAvailability )
+{
+    sal_Bool bRetValue = sal_True;
+
+#ifdef UNX
+    bTestPropertyAvailability = sal_True;
+#endif
+    if ( bTestPropertyAvailability )
+    {
+        bRetValue = sal_False;
+        try
+        {
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                aXPropSetInfo( rXPropSet->getPropertySetInfo() );
+            if ( aXPropSetInfo.is() )
+                bRetValue = aXPropSetInfo->hasPropertyByName( rString );
+        }
+        catch(...)
+        {
+            //...
+        }
+    }
+    if ( bRetValue )
+    {
+        try
+        {
+            rAny = rXPropSet->getPropertyValue( rString );
+            if ( !rAny.hasValue() )
+                bRetValue = sal_False;
+        }
+        catch(...)
+        {
+            bRetValue = sal_False;
+        }
+    }
+    return bRetValue;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+::com::sun::star::beans::PropertyState EscherPropertyValueHelper::GetPropertyState(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
+        const String& rPropertyName )
+{
+    ::com::sun::star::beans::PropertyState eRetValue = ::com::sun::star::beans::PropertyState_AMBIGUOUS_VALUE;
+    try
+    {
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState > aXPropState
+                ( rXPropSet, ::com::sun::star::uno::UNO_QUERY );
+        if ( aXPropState.is() )
+            eRetValue = aXPropState->getPropertyState( rPropertyName );
+    }
+    catch(...)
+    {
+        //...
+    }
+    return eRetValue;
+}
+
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+
+EscherBlibEntry::EscherBlibEntry( sal_uInt32 nPictureOffset, const GraphicObject& rObject, const ByteString& rId,
+                                        const GraphicAttr* pGraphicAttr ) :
+    mbIsEmpty       ( TRUE ),
+    mnPictureOffset ( nPictureOffset ),
+    mnRefCount      ( 1 ),
+    mnSizeExtra     ( 0 )
+{
+    mbIsNativeGraphicPossible = ( pGraphicAttr == NULL );
+    meBlibType = UNKNOWN;
+    mnSize = 0;
+
+    sal_uInt32      nLen = rId.Len();
+    const sal_Char* pData = rId.GetBuffer();
+    GraphicType     eType( rObject.GetType() );
+    if ( nLen && pData && ( eType != GRAPHIC_NONE ) )
+    {
+        mnIdentifier[ 0 ] = rtl_crc32( 0,pData, nLen );
+
+        mnIdentifier[ 1 ] = 0;
+
+        if ( pGraphicAttr )
+        {
+            if ( pGraphicAttr->IsSpecialDrawMode()
+                    || pGraphicAttr->IsMirrored()
+                         || pGraphicAttr->IsCropped()
+                            || pGraphicAttr->IsRotated()
+                                || pGraphicAttr->IsTransparent()
+                                    || pGraphicAttr->IsAdjusted() )
+            {
+                SvMemoryStream aSt( sizeof( GraphicAttr ) );
+                aSt << (sal_uInt16)pGraphicAttr->GetDrawMode()
+                    << pGraphicAttr->GetMirrorFlags()
+                    << pGraphicAttr->GetLeftCrop()
+                    << pGraphicAttr->GetTopCrop()
+                    << pGraphicAttr->GetRightCrop()
+                    << pGraphicAttr->GetBottomCrop()
+                    << pGraphicAttr->GetRotation()
+                    << pGraphicAttr->GetLuminance()
+                    << pGraphicAttr->GetContrast()
+                    << pGraphicAttr->GetChannelR()
+                    << pGraphicAttr->GetChannelG()
+                    << pGraphicAttr->GetChannelB()
+                    << pGraphicAttr->GetGamma()
+                    << (BOOL)( pGraphicAttr->IsInvert() == TRUE )
+                    << pGraphicAttr->GetTransparency();
+                mnIdentifier[ 1 ] = rtl_crc32( 0, aSt.GetData(), aSt.Tell() );
+            }
+            else
+                mbIsNativeGraphicPossible = TRUE;
+        }
+        sal_uInt32 i, nTmp, n1, n2;
+        n1 = n2 = 0;
+        for ( i = 0; i < nLen; i++ )
+        {
+            nTmp = n2 >> 28;    // rotating 4 bit
+            n2 <<= 4;
+            n2 |= n1 >> 28;
+            n1 <<= 4;
+            n1 |= nTmp;
+            n1 ^= *pData++ - '0';
+        }
+        mnIdentifier[ 2 ] = n1;
+        mnIdentifier[ 3 ] = n2;
+        mbIsEmpty = FALSE;
+    }
+};
+
 // ---------------------------------------------------------------------------------------------
 
 EscherBlibEntry::EscherBlibEntry( SvMemoryStream& rStream, ESCHER_BlibType eBlibType, UINT32 nPictureOffset )
@@ -287,8 +427,6 @@ EscherBlibEntry::~EscherBlibEntry()
 
 BOOL EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) const
 {
-    if ( meBlibType != rEscherBlibEntry.meBlibType )
-        return FALSE;
     for ( int i = 0; i < 3; i++ )
     {
         if ( mnIdentifier[ i ] != rEscherBlibEntry.mnIdentifier[ i ] )
@@ -301,9 +439,234 @@ BOOL EscherBlibEntry::operator==( const EscherBlibEntry& rEscherBlibEntry ) cons
 // ---------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------
 
+EscherGraphicProvider::EscherGraphicProvider( sal_uInt32 nFlags ) :
+    mnFlags         ( nFlags ),
+    mpBlibEntrys    ( NULL ),
+    mnBlibBufSize   ( 0 ),
+    mnBlibEntrys    ( 0 )
+{
+}
+
+EscherGraphicProvider::~EscherGraphicProvider()
+{
+    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] );
+    delete mpBlibEntrys;
+}
+
+void EscherGraphicProvider::SetNewBlipStreamOffset( sal_Int32 nOffset )
+{
+    for( sal_uInt32 i = 0; i < mnBlibEntrys; i++ )
+    {
+        EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
+        pBlibEntry->mnPictureOffset += nOffset;
+    }
+}
+
+UINT32 EscherGraphicProvider::ImplInsertBlib( EscherBlibEntry* p_EscherBlibEntry )
+{
+    if ( mnBlibBufSize == mnBlibEntrys )
+    {
+        mnBlibBufSize += 64;
+        EscherBlibEntry** pTemp = new EscherBlibEntry*[ mnBlibBufSize ];
+        for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
+        {
+            pTemp[ i ] = mpBlibEntrys[ i ];
+        }
+        delete mpBlibEntrys;
+        mpBlibEntrys = pTemp;
+    }
+    mpBlibEntrys[ mnBlibEntrys++ ] = p_EscherBlibEntry;
+    return mnBlibEntrys;
+}
+
+// ---------------------------------------------------------------------------------------------
+
+sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteString& rId,
+                                                const Rectangle& rBoundRect, const GraphicAttr* pGraphicAttr )
+{
+    sal_uInt32          nBlibId = 0;
+    GraphicAttr*        pAttr = NULL;
+    const GraphicAttr*  pAttrUsed = pGraphicAttr;
+    GraphicObject       aGraphicObject( rId );
+
+    if ( pAttrUsed
+            && pAttrUsed->GetRotation()
+                && ( aGraphicObject.GetType() == GRAPHIC_GDIMETAFILE )
+                    && ( mnFlags & _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ) )
+    {
+        pAttr = new GraphicAttr;
+        *pAttr = *pAttrUsed;
+        pAttr->SetRotation( 0 );
+        pAttrUsed = pAttr;
+    }
+    EscherBlibEntry* p_EscherBlibEntry = new EscherBlibEntry( rPicOutStrm.Tell(), aGraphicObject, rId, pAttrUsed );
+    if ( !p_EscherBlibEntry->IsEmpty() )
+    {
+        for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
+        {
+            if ( *( mpBlibEntrys[ i ] ) == *p_EscherBlibEntry )
+            {
+                mpBlibEntrys[ i ]->mnRefCount++;
+                delete p_EscherBlibEntry;
+                return i + 1;
+            }
+        }
+
+        sal_Bool            bUseNativeGraphic( FALSE );
+
+        Graphic             aGraphic( aGraphicObject.GetTransformedGraphic( pAttrUsed ) );
+        GfxLink             aGraphicLink;
+        SvMemoryStream      aStream;
+
+        const sal_uInt8*    pGraphicAry = NULL;
+
+        if ( p_EscherBlibEntry->mbIsNativeGraphicPossible && aGraphic.IsLink() )
+        {
+            aGraphicLink = aGraphic.GetLink();
+
+            p_EscherBlibEntry->mnSize = aGraphicLink.GetDataSize();
+            pGraphicAry = aGraphicLink.GetData();
+
+            if ( p_EscherBlibEntry->mnSize && pGraphicAry )
+            {
+                switch ( aGraphicLink.GetType() )
+                {
+                    case GFX_LINK_TYPE_NATIVE_JPG : p_EscherBlibEntry->meBlibType = PEG; break;
+                    case GFX_LINK_TYPE_NATIVE_PNG : p_EscherBlibEntry->meBlibType = PNG; break;
+                    case GFX_LINK_TYPE_NATIVE_WMF :
+                    {
+                        if ( pGraphicAry && ( p_EscherBlibEntry->mnSize > 0x2c ) )
+                        {
+                            if ( ( pGraphicAry[ 0x28 ] == 0x20 ) && ( pGraphicAry[ 0x29 ] == 0x45 )     // check the magic
+                                && ( pGraphicAry[ 0x2a ] == 0x4d ) && ( pGraphicAry[ 0x2b ] == 0x46 ) ) // number ( emf detection )
+                            {
+                                p_EscherBlibEntry->meBlibType = EMF;
+                            }
+                            else
+                            {
+                                p_EscherBlibEntry->meBlibType = WMF;
+                                if ( ( pGraphicAry[ 0 ] == 0xd7 ) && ( pGraphicAry[ 1 ] == 0xcd )
+                                    && ( pGraphicAry[ 2 ] == 0xc6 ) && ( pGraphicAry[ 3 ] == 0x9a ) )
+                                {   // we have to get rid of the metafileheader
+                                    pGraphicAry += 22;
+                                    p_EscherBlibEntry->mnSize -= 22;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                }
+                if ( p_EscherBlibEntry->meBlibType != UNKNOWN )
+                    bUseNativeGraphic = TRUE;
+            }
+        }
+        if ( !bUseNativeGraphic )
+        {
+            GraphicType eGraphicType = aGraphic.GetType();
+            if ( ( eGraphicType == GRAPHIC_BITMAP ) || ( eGraphicType == GRAPHIC_GDIMETAFILE ) )
+            {
+                sal_uInt32 nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
+                if ( nErrCode == ERRCODE_NONE )
+                {
+                    p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
+                    aStream.Seek( STREAM_SEEK_TO_END );
+                    p_EscherBlibEntry->mnSize = aStream.Tell();
+                    pGraphicAry = (sal_uInt8*)aStream.GetData();
+
+                    if ( p_EscherBlibEntry->meBlibType == WMF )     // the fileheader is not used
+                    {
+                        p_EscherBlibEntry->mnSize -= 22;
+                        pGraphicAry += 22;
+                    }
+                }
+            }
+        }
+
+        ESCHER_BlibType eBlibType = p_EscherBlibEntry->meBlibType;
+        if ( p_EscherBlibEntry->mnSize && pGraphicAry && ( eBlibType != UNKNOWN ) )
+        {
+            sal_uInt32 nExtra, nAtomSize = 0;
+            sal_uInt32 nInstance, nUncompressedSize = p_EscherBlibEntry->mnSize;
+
+            if ( mnFlags & _E_GRAPH_PROV_USE_INSTANCES )
+            {
+                rPicOutStrm << (UINT32)( 0x7f90000 | (UINT16)( mnBlibEntrys << 4 ) )
+                            << (UINT32)0;
+                nAtomSize = rPicOutStrm.Tell();
+                 if ( eBlibType == PNG )
+                    rPicOutStrm << (UINT16)0x0606;
+                else if ( eBlibType == WMF )
+                    rPicOutStrm << (UINT16)0x0403;
+            }
+            if ( ( eBlibType == PEG ) || ( eBlibType == PNG ) )
+            {
+                nExtra = 17;
+                p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
+                nInstance = ( eBlibType == PNG ) ? 0xf01e6e00 : 0xf01d46a0;
+                rPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra );
+                rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                rPicOutStrm << (sal_uInt8)0xff;
+                rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+            }
+            else
+            {
+                ZCodec aZCodec( 0x8000, 0x8000 );
+                aZCodec.BeginCompression();
+                SvMemoryStream aDestStrm;
+                aZCodec.Write( aDestStrm, pGraphicAry, p_EscherBlibEntry->mnSize );
+                aZCodec.EndCompression();
+                aDestStrm.Seek( STREAM_SEEK_TO_END );
+                p_EscherBlibEntry->mnSize = aDestStrm.Tell();
+                pGraphicAry = (sal_uInt8*)aDestStrm.GetData();
+                if ( p_EscherBlibEntry->mnSize && pGraphicAry )
+                {
+                    nExtra = ( eBlibType == WMF ) ? 0x42 : 0x32;
+                    p_EscherBlibEntry->mnSizeExtra = nExtra + 8;
+                    nInstance = ( eBlibType == WMF ) ? 0xf01b2170 : 0xf01a3d40;
+                    rPicOutStrm << nInstance << (sal_uInt32)( p_EscherBlibEntry->mnSize + nExtra );
+                    if ( eBlibType == WMF )
+                        rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                    rPicOutStrm.Write( p_EscherBlibEntry->mnIdentifier, 16 );
+                    UINT32 nWidth = rBoundRect.GetWidth() * 360;
+                    UINT32 nHeight = rBoundRect.GetHeight() * 360;
+                    double fWidth = (double)rBoundRect.GetWidth() / 10000.0 * 1027.0;
+                    double fHeight = (double)rBoundRect.GetHeight() / 10000.0 * 1027.0;
+                    rPicOutStrm << nUncompressedSize    // WMFSize ohne FileHeader
+                                << (sal_Int32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
+                                << (sal_Int32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
+                                << (sal_Int32)fWidth
+                                << (sal_Int32)fHeight
+                                << nWidth
+                                << nHeight
+                                << p_EscherBlibEntry->mnSize
+                                << (sal_uInt16)0xfe00;  // compression Flags
+                    rPicOutStrm.Write( pGraphicAry, p_EscherBlibEntry->mnSize );
+                }
+            }
+            if ( nAtomSize )
+            {
+                sal_uInt32  nPos = rPicOutStrm.Tell();
+                rPicOutStrm.Seek( nAtomSize - 4 );
+                rPicOutStrm << (sal_uInt32)( nPos - nAtomSize );
+                rPicOutStrm.Seek( nPos );
+            }
+            nBlibId = ImplInsertBlib( p_EscherBlibEntry ), p_EscherBlibEntry = NULL;
+        }
+    }
+    if ( p_EscherBlibEntry )
+        delete p_EscherBlibEntry;
+    if ( pAttr )
+        delete pAttr;
+    return nBlibId;
+}
+
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------
+
 EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
+    EscherGraphicProvider   ( _E_GRAPH_PROV_DO_NOT_ROTATE_METAFILES ),
     mpOutStrm               ( &rOutStrm ),
-    mpPicOutStrm            ( NULL ),
     mpOffsets               ( new UINT32[ 32 ] ),
     mpSizes                 ( new UINT32[ 32 ] ),
     mpRecTypes              ( new UINT16[ 32 ] ),
@@ -314,9 +677,6 @@ EscherEx::EscherEx( SvStream& rOutStrm, UINT32 nDrawings ) :
     mbEscherDg              ( FALSE ),
     mbOleEmf                ( FALSE ),
     mpSortStruct            ( NULL ),
-    mpBlibEntrys            ( NULL ),
-    mnBlibBufSize           ( 0 ),
-    mnBlibEntrys            ( 0 ),
     mnGroupLevel            ( 0 ),
     mnHellLayerId           ( USHRT_MAX )
 {
@@ -439,8 +799,6 @@ void EscherEx::Flush( SvStream* pPicStreamMergeBSE /* = NULL */ )
 
 EscherEx::~EscherEx()
 {
-    for ( UINT32 i = 0; i < mnBlibEntrys; delete mpBlibEntrys[ i++ ] );
-    delete mpBlibEntrys;
     delete[] mpSortStruct;
     delete[] mpRecTypes;
     delete[] mpSizes;
@@ -450,28 +808,9 @@ EscherEx::~EscherEx()
 
 // ---------------------------------------------------------------------------------------------
 
-UINT32 EscherEx::ImplInsertBlib( EscherBlibEntry* pEscherBlibEntry )
+UINT32 EscherEx::ImplGetBlibID( SvStream& rPicOutStrm, SvMemoryStream& rSource, ESCHER_BlibType eBlibType, const ESCHER_GDIStruct* pGDI )
 {
-    if ( mnBlibBufSize == mnBlibEntrys )
-    {
-        mnBlibBufSize += 64;
-        EscherBlibEntry** pTemp = new EscherBlibEntry*[ mnBlibBufSize ];
-        for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
-        {
-            pTemp[ i ] = mpBlibEntrys[ i ];
-        }
-        delete mpBlibEntrys;
-        mpBlibEntrys = pTemp;
-    }
-    mpBlibEntrys[ mnBlibEntrys++ ] = pEscherBlibEntry;
-    return mnBlibEntrys;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-UINT32 EscherEx::ImplGetBlibID( SvMemoryStream& rSource, ESCHER_BlibType eBlibType, const ESCHER_GDIStruct* pGDI )
-{
-    EscherBlibEntry* pEscherBlibEntry = new EscherBlibEntry( rSource, eBlibType, mpPicOutStrm->Tell() );
+    EscherBlibEntry* pEscherBlibEntry = new EscherBlibEntry( rSource, eBlibType, rPicOutStrm.Tell() );
     for ( UINT32 i = 0; i < mnBlibEntrys; i++ )
     {
         if ( *( mpBlibEntrys[ i ] ) == *pEscherBlibEntry )
@@ -487,10 +826,10 @@ UINT32 EscherEx::ImplGetBlibID( SvMemoryStream& rSource, ESCHER_BlibType eBlibTy
         {
             const UINT32 nExtra = 17;
             pEscherBlibEntry->mnSizeExtra += 8 + nExtra;
-            *mpPicOutStrm << (UINT32)0xf01e6e00 << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
-            mpPicOutStrm->Write( pEscherBlibEntry->mnIdentifier, 16 );
-            *mpPicOutStrm << (BYTE)0xff;
-            mpPicOutStrm->Write( rSource.GetData(), pEscherBlibEntry->mnSize );
+            rPicOutStrm << (UINT32)0xf01e6e00 << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
+            rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
+            rPicOutStrm << (BYTE)0xff;
+            rPicOutStrm.Write( rSource.GetData(), pEscherBlibEntry->mnSize );
         }
         break;
         case WMF :
@@ -499,10 +838,10 @@ UINT32 EscherEx::ImplGetBlibID( SvMemoryStream& rSource, ESCHER_BlibType eBlibTy
             const UINT32 nExtra = (eBlibType == WMF ? 0x42 : 0x32);
             const UINT32 nHeaderID = (eBlibType == WMF ? 0xf01b2170 : 0xf01a3d40);
             pEscherBlibEntry->mnSizeExtra += 8 + nExtra;
-            *mpPicOutStrm << nHeaderID << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
+            rPicOutStrm << nHeaderID << (UINT32)( pEscherBlibEntry->mnSize + nExtra );
             if ( eBlibType == WMF )
-                mpPicOutStrm->Write( pEscherBlibEntry->mnIdentifier, 16 );
-            mpPicOutStrm->Write( pEscherBlibEntry->mnIdentifier, 16 );
+                rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
+            rPicOutStrm.Write( pEscherBlibEntry->mnIdentifier, 16 );
 
 
             UINT32 nWidth = pGDI->GDIBoundRect.GetWidth() * 360;
@@ -510,27 +849,16 @@ UINT32 EscherEx::ImplGetBlibID( SvMemoryStream& rSource, ESCHER_BlibType eBlibTy
             double fWidth = (double)pGDI->GDIBoundRect.GetWidth() / 10000.0 * 1027.0;
             double fHeight = (double)pGDI->GDIBoundRect.GetHeight() / 10000.0 * 1027.0;
 
-            *mpPicOutStrm   << (UINT32)( pGDI->GDIUncompressedSize )// WMFSize ohne FileHeader
-                            << (INT32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
-                            << (INT32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
-                            << (INT32)fWidth
-                            << (INT32)fHeight
-                            << nWidth
-                            << nHeight
-
-/*
-            double fQuo = (double)pGDI->GDIBoundRect.GetHeight() / pGDI->GDIBoundRect.GetWidth();
-            *mpPicOutStrm   << (UINT32)( pGDI->GDIUncompressedSize )// WMFSize ohne FileHeader
-                            << (INT32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
-                            << (INT32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
-                            << (INT32)1027
-                            << (INT32)( 1027 * fQuo )
-                            << (UINT32)0x36ee80
-                            << (UINT32)( 0x36ee80 * fQuo )
-*/
-                            << (UINT32)( pEscherBlibEntry->mnSize )
-                            << (UINT16)0xfe00;                      // compression Flags
-            mpPicOutStrm->Write( rSource.GetData(), pEscherBlibEntry->mnSize );
+            rPicOutStrm << (UINT32)( pGDI->GDIUncompressedSize )// WMFSize ohne FileHeader
+                        << (INT32)0         // da die Originalgroesse des WMF's (ohne FileHeader)
+                        << (INT32)0         // nicht mehr feststellbar ist, schreiben wir 10cm / x
+                        << (INT32)fWidth
+                        << (INT32)fHeight
+                        << nWidth
+                        << nHeight
+                        << (UINT32)( pEscherBlibEntry->mnSize )
+                        << (UINT16)0xfe00;                      // compression Flags
+            rPicOutStrm.Write( rSource.GetData(), pEscherBlibEntry->mnSize );
         }
         break;
         default:
@@ -1228,7 +1556,6 @@ void EscherEx::WriteGradient( const awt::Gradient* pVCLGradient )
 
 UINT32 EscherEx::AddGraphic( SvStream& rStrm, const Graphic& rGraphic )
 {
-    mpPicOutStrm = &rStrm;
     UINT32 nId = 0;
     switch( rGraphic.GetType() )
     {
@@ -1237,7 +1564,7 @@ UINT32 EscherEx::AddGraphic( SvStream& rStrm, const Graphic& rGraphic )
             SvMemoryStream aDestStrm;
             if( ERRCODE_NONE == GraphicConverter::Export( aDestStrm,
                     rGraphic, CVT_PNG ) )
-                nId = ImplGetBlibID( aDestStrm, PNG );
+                nId = ImplGetBlibID( rStrm, aDestStrm, PNG );
         }
         break;
 
@@ -1259,12 +1586,13 @@ UINT32 EscherEx::AddGraphic( SvStream& rStrm, const Graphic& rGraphic )
 
             Rectangle aRect( Point(0,0), aSize );
 
-            nId = AddWMF( *mpPicOutStrm, pMem + 22, nLen - 22, aRect );
+            nId = AddWMF( rStrm, pMem + 22, nLen - 22, aRect );
         }
         break;
     }
     return nId;
 }
+
 
 // ---------------------------------------------------------------------------------------------
 
@@ -1275,13 +1603,12 @@ UINT32 EscherEx::ImplAddMetafile( SvStream& rStrm, const BYTE* pSource,
     aGDIStruct.GDIBoundRect = rRect;
     aGDIStruct.GDISize = rRect.GetSize();
     aGDIStruct.GDIUncompressedSize = nSize;
-    mpPicOutStrm = &rStrm;
     ZCodec aZCodec( 0x8000, 0x8000 );
     aZCodec.BeginCompression();
     SvMemoryStream aDestStrm;
     aZCodec.Write( aDestStrm, pSource, nSize );
     aZCodec.EndCompression();
-    return ImplGetBlibID( aDestStrm, eType, &aGDIStruct );
+    return ImplGetBlibID( rStrm, aDestStrm, eType, &aGDIStruct );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -1299,14 +1626,3 @@ UINT32 EscherEx::AddEMF( SvStream& rStrm, const BYTE* pSource, UINT32 nSize, con
 }
 
 // ---------------------------------------------------------------------------------------------
-
-void EscherEx::SetNewBlipStreamOffset( INT32 nOffset )
-{
-    for( UINT32 i = 0; i < mnBlibEntrys; i++ )
-    {
-        EscherBlibEntry* pBlibEntry = mpBlibEntrys[ i ];
-        pBlibEntry->mnPictureOffset += nOffset;
-    }
-}
-
-
