@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:37:09 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,7 +256,16 @@ const SvStorageStreamRef ScfTools::OpenStorageStreamWrite( SvStorage* pStorage, 
 }
 
 
-// *** style sheet handling ***
+
+// *** item handling *** ------------------------------------------------------
+
+bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
+{
+    return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
+}
+
+
+// *** style sheet handling *** -----------------------------------------------
 
 ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const String& rStyleName, bool bForceName )
 {
