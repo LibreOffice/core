@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextContainerEventImport.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:29:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 using ::com::sun::star::container::XNameReplace;
 using ::xmloff::token::IsXMLToken;
-using ::xmloff::token::XML_EVENTS;
+using ::xmloff::token::XML_EVENT_LISTENERS;
 
 
 TYPEINIT1(XMLAutoTextContainerEventImport, SvXMLImportContext);
@@ -130,7 +130,7 @@ SvXMLImportContext* XMLAutoTextContainerEventImport::CreateChildContext(
     const Reference<XAttributeList> & xAttrList )
 {
     if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
-         IsXMLToken( rLocalName, XML_EVENTS)   )
+         IsXMLToken( rLocalName, XML_EVENT_LISTENERS)   )
     {
         return new XMLEventsImportContext(GetImport(), nPrefix, rLocalName,
                                           rEvents);
