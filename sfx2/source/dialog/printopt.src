@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printopt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:10:35 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 10:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,8 +224,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCETRANSPARENCY_AUTO
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 43 ) ;
-        Size = MAP_APPFONT ( 115, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 43 ) ;
+        Size = MAP_APPFONT ( 112, 10 ) ;
         Text = "Auto~matisch" ;
         Text [ ENGLISH ] = "Auto~matic" ;
         Text[ english_us ] = "Auto~matically";
@@ -252,8 +252,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCETRANSPARENCY_NONE
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 56 ) ;
-        Size = MAP_APPFONT ( 115, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 56 ) ;
+        Size = MAP_APPFONT ( 112, 10 ) ;
         Text = "~Keine Transparenz" ;
         Text [ ENGLISH ] = "~No transparency" ;
         Text[ english_us ] = "~No transparency";
@@ -311,8 +311,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEGRADIENTS_STRIPES
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 142, 43 ) ;
-        Size = MAP_APPFONT ( 79, 10 ) ;
+        Pos = MAP_APPFONT ( 145, 43 ) ;
+        Size = MAP_APPFONT ( 78, 10 ) ;
         Text = "Fabverlauf~sstreifen" ;
         Text [ ENGLISH ] = "Gradient ~stripes" ;
         Text[ english_us ] = "Gradient ~stripes";
@@ -350,8 +350,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEGRADIENTS_COLOR
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 142, 56 ) ;
-        Size = MAP_APPFONT ( 112, 10 ) ;
+        Pos = MAP_APPFONT ( 145, 56 ) ;
+        Size = MAP_APPFONT ( 109, 10 ) ;
         Text = "~Zwischenfarbe" ;
         Text [ ENGLISH ] = "Medium ~color" ;
         Text[ english_us ] = "Intermediate ~color";
@@ -409,8 +409,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEBITMAPS_OPTIMAL
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 85 ) ;
-        Size = MAP_APPFONT ( 236, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 85 ) ;
+        Size = MAP_APPFONT ( 233, 10 ) ;
         Text = "Gute Druck~qualität" ;
         Text [ ENGLISH ] = "Good ~quality" ;
         Text[ english_us ] = "~Good print quality";
@@ -437,8 +437,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEBITMAPS_NORMAL
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 98 ) ;
-        Size = MAP_APPFONT ( 236, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 98 ) ;
+        Size = MAP_APPFONT ( 233, 10 ) ;
         Text = "N~ormale Druckqualität" ;
         Text [ ENGLISH ] = "N~ormal quality" ;
         Text[ english_us ] = "N~ormal print quality";
@@ -465,8 +465,8 @@ TabPage TP_COMMONPRINTOPTIONS
     RadioButton RB_REDUCEBITMAPS_RESOLUTION
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 111 ) ;
-        Size = MAP_APPFONT ( 60, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 111 ) ;
+        Size = MAP_APPFONT ( 59, 10 ) ;
         Text = "Aufl~ösung" ;
         Text [ ENGLISH ] = "Reso~lution" ;
         Text[ english_us ] = "Reso~lution";
@@ -709,8 +709,8 @@ TabPage TP_COMMONPRINTOPTIONS
     CheckBox CB_REDUCEBITMAPS_TRANSPARENCY
     {
         TabStop = TRUE;
-        Pos = MAP_APPFONT ( 18, 124 ) ;
-        Size = MAP_APPFONT ( 236, 10 ) ;
+        Pos = MAP_APPFONT ( 21, 124 ) ;
+        Size = MAP_APPFONT ( 233, 10 ) ;
         Text = "Transparente Ob~jekte einschließen" ;
         Text [ ENGLISH ] = "Include transparent ob~jects" ;
         Text[ english_us ] = "Include transparent ob~jects";
