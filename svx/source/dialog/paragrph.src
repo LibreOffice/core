@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: pb $ $Date: 2002-08-15 12:10:47 $
+ *  last change: $Author: kz $ $Date: 2002-08-20 20:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text = "~Vor Text" ;
         Text [ english_us ] = "Bef~ore text" ;
         Text[ catalan ] = "Des de ~l'esquerra";
+        Text[ korean ] = "텍스트 앞";
+        Text[ chinese_traditional ] = "在文字之前";
     };
     MetricField ED_LEFTINDENT
     {
@@ -114,6 +116,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text = "H~inter Text" ;
         Text [ english_us ] = "Aft~er text" ;
         Text[ catalan ] = "Des de la dre~ta";
+        Text[ korean ] = "텍스트 뒤";
+        Text[ chinese_traditional ] = "在文字之後";
     };
     MetricField ED_RIGHTINDENT
     {
@@ -259,9 +263,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ polish ] = "Od g�ry";
         Text[ portuguese_brazilian ] = "P~ara o topo";
         Text[ japanese ] = "上(~T)";
-        Text[ korean ] = "위(~T)";
+        Text[ korean ] = "텍스트 앞";
         Text[ chinese_simplified ] = "上部(~T)";
-        Text[ chinese_traditional ] = "向上(~T)";
+        Text[ chinese_traditional ] = "在文字之前";
         Text[ turkish ] = "~�st";
         Text[ arabic ] = "����";
         Text[ thai ] = "~บน";
@@ -303,9 +307,9 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Text[ polish ] = "Od do�u";
         Text[ portuguese_brazilian ] = "Para a ~base";
         Text[ japanese ] = "下(~B)";
-        Text[ korean ] = "아래(~B)";
+        Text[ korean ] = "텍스트 뒤";
         Text[ chinese_simplified ] = "下部(~B)";
-        Text[ chinese_traditional ] = "向下(~B)";
+        Text[ chinese_traditional ] = "在文字之後";
         Text[ turkish ] = "~Alt";
         Text[ arabic ] = "����";
         Text[ thai ] = "~ล่าง";
@@ -1529,13 +1533,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ swedish ] = "Properties";
         Text[ polish ] = "Properties";
         Text[ japanese ] = "属性";
-        Text[ korean ] = "Properties";
+        Text[ korean ] = "등록 정보";
         Text[ chinese_simplified ] = "Properties";
-        Text[ chinese_traditional ] = "Properties";
+        Text[ chinese_traditional ] = "屬性";
         Text[ turkish ] = "Properties";
         Text[ arabic ] = "Properties";
         Text[ catalan ] = "Opcions";
         Text[ thai ] = "คุณสมบัติ";
+        Text[ portuguese_brazilian ] = "Properties";
     };
     FixedText   FT_TEXTDIRECTION
     {
@@ -1557,11 +1562,14 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Text[ swedish ] = "Text ~direction";
         Text[ polish ] = "Text ~direction";
         Text[ japanese ] = "文字方向";
-        Text[ korean ] = "Text ~direction";
+        Text[ korean ] = "텍스트 방향";
         Text[ chinese_simplified ] = "Text ~direction";
-        Text[ chinese_traditional ] = "Text ~direction";
+        Text[ chinese_traditional ] = "文字方向";
         Text[ turkish ] = "Text ~direction";
         Text[ arabic ] = "Text ~direction";
+        Text[ portuguese_brazilian ] = "Text ~direction";
+        Text[ catalan ] = "Text ~direction";
+        Text[ thai ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
     {
@@ -1598,7 +1606,122 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         {
             < "Left-to-right" ; 0; > ;
             < "Right-to-left" ; 1; > ;
+            < "Use superordinate object settings" ; 4; > ;
         };
+    StringList [ portuguese ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ russian ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ greek ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ dutch ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ french ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ spanish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ finnish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ italian ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ danish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ swedish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ polish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ portuguese_brazilian ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "왼쪽에서 오른쪽으로" ; 0; > ;
+        < "오른쪽에서 왼쪽으로" ; 1; > ;
+        < "상위 개체의 설정 적용" ; 4; > ;
+    };
+    StringList [ chinese_simplified ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �ergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "從左向右" ; 0; > ;
+        < "從右向左" ; 1; > ;
+        < "沿用現有的文字方向的設定" ; 4; > ;
+    };
+    StringList [ turkish ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ arabic ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ catalan ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
+    };
+    StringList [ thai ] =
+    {
+         < "Links nach rechts" ; 0; > ;
+        < "Rechts nach links" ; 1; > ;
+        < "Einstellungen des �ergeordneten Objektes verwenden" ; 4; > ;
+    };
     };
     Text[ chinese_simplified ] = "对齐";
     Text[ russian ] = "������������";
@@ -1943,9 +2066,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ swedish ] = "Breaks";
         Text[ polish ] = "Breaks";
         Text[ japanese ] = "区切り";
-        Text[ korean ] = "Breaks";
+        Text[ korean ] = "나누기";
         Text[ chinese_simplified ] = "Breaks";
-        Text[ chinese_traditional ] = "Breaks";
+        Text[ chinese_traditional ] = "換行和分頁";
         Text[ turkish ] = "Breaks";
         Text[ arabic ] = "Breaks";
     };
@@ -1962,10 +2085,10 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ russian ] = "������";
         Text[ polish ] = "Podzia~�";
         Text[ japanese ] = "区切り(~B)";
-        Text[ chinese_traditional ] = "換頁(~B)";
+        Text[ chinese_traditional ] = "允許";
         Text[ arabic ] = "����";
         Text[ greek ] = "������";
-        Text[ korean ] = "나누기(~B)";
+        Text[ korean ] = "허용(~B)";
         Text[ turkish ] = "~Kesme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Pausa";
@@ -1999,9 +2122,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ swedish ] = "T~ype";
         Text[ polish ] = "T~ype";
         Text[ japanese ] = "種類";
-        Text[ korean ] = "T~ype";
+        Text[ korean ] = "유형";
         Text[ chinese_simplified ] = "T~ype";
-        Text[ chinese_traditional ] = "T~ype";
+        Text[ chinese_traditional ] = "類型";
         Text[ turkish ] = "T~ype";
         Text[ arabic ] = "T~ype";
         Text[ catalan ] = "~Tipus";
@@ -2095,7 +2218,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     };
     StringList [ korean ] =
     {
-         < "슬라이드" ; 0; > ;
+         < "페이지" ; 0; > ;
         < "열" ; 1; > ;
     };
     StringList [ chinese_simplified ] =
@@ -2106,7 +2229,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     StringList [ chinese_traditional ] =
     {
          < "頁" ; 0; > ;
-        < "COLUMN" ; 1; > ;
+        < "欄" ; 1; > ;
     };
     StringList [ turkish ] =
     {
@@ -2151,7 +2274,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text[ japanese ] = "部署";
         Text[ korean ] = "위치";
         Text[ chinese_simplified ] = "位置(~O)";
-        Text[ chinese_traditional ] = "位置(~P)";
+        Text[ chinese_traditional ] = "位置";
         Text[ turkish ] = "O~rtala";
         Text[ arabic ] = "������";
         Text[ thai ] = "~ตำแหน่ง";
@@ -2186,6 +2309,15 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
          < "Before" ; 0; > ;
         < "After" ; 1; > ;
+    };
+    StringList [ korean ] =
+    {
+         < "이전" ; 0; > ;
+        < "이후" ; 1; > ;
+    };
+    StringList [ chinese_traditional ] =
+    {
+         < "之前" ; 0; > ;
     };
     };
     TriStateBox BTN_PAGECOLL
@@ -2721,7 +2853,7 @@ TabPage RID_SVXPAGE_PARA_ASIAN
         Text[ swedish ] = "Anv�nd ~avst�nd mellan asiatisk, latinsk och komplex text";
         Text[ polish ] = "Ustaw odst�p mi�dzy tekstem azjatyckim, �aci�skim i z�o�onym";
         Text[ portuguese_brazilian ] = "Apply distance between asian, latin and complex text";
-        Text[ japanese ] = "日本語、英文字、および混在文章で文字間隔を調整";
+        Text[ japanese ] = "アジア諸国語、西欧諸国語、および複合文字言語の間の間隔を調整する";
         Text[ korean ] = "아시아어, 라틴어 및 혼합 텍스트에서 간격 적용";
         Text[ chinese_simplified ] = "在中日韩文字和西文及混合文字之间加入空格";
         Text[ chinese_traditional ] = "在中日韓文字和西文及混合文字之間加入空格";
