@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unohelp.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-25 09:32:51 $
+ *  last change: $Author: cp $ $Date: 2000-10-27 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -293,7 +293,8 @@ uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
     if( !xB.is() )
     {
         uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.GNUcollator" ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.GNUcollator" ) ),
             Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
 
         uno::Reference < uno::XInterface > xI = xSSF->createInstance();
@@ -303,6 +304,21 @@ uno::Reference < util::XCollator > vcl::unohelper::CreateCollator()
             x >>= xB;
         }
     }
+    if( !xB.is() )
+    {
+        uno::Reference< lang::XSingleServiceFactory > xSSF = ImplLoadLibComponentFactory(
+            OUString( RTL_CONSTASCII_USTRINGPARAM( LIBNAME( int ) ) ),
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.SimpleCollator" ) ),
+            Reference< XMultiServiceFactory >(), Reference< XRegistryKey >() );
+
+        uno::Reference < uno::XInterface > xI = xSSF->createInstance();
+        if ( xI.is() )
+        {
+            uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< util::XCollator >*)0) );
+            x >>= xB;
+        }
+    }
+
     return xB;
 }
 
