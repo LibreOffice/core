@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: as $ $Date: 2001-12-12 13:24:11 $
+#   last change: $Author: mba $ $Date: 2002-03-28 16:00:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,7 @@ IDLFILES=\
     XDispatchProvider.idl\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
+        XDispatchRecorder.idl\
     XDocumentTemplates.idl\
     XExtendedFilterDetection.idl\
     XFilterDetect.idl\
