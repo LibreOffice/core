@@ -206,9 +206,9 @@ Dim MaxFileIndex as Integer
 	ImportDialog.cbGoOn.Enabled = True
 	bCallCancelMsg = False
 
-&apos;	oLogDocument.Dispose()
-&apos;	ImportDialogArea.endExecute
-&apos;	ImportDialogArea.Dispose	
+	oLogDocument.Dispose()
+	ImportDialogArea.endExecute
+	ImportDialogArea.Dispose	
 	End
 
 	Exit Sub
