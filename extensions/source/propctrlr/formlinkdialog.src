@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formlinkdialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:25:38 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
 #endif
 #ifndef EXTENSIONS_SOURCE_PROPCTRLR_FORMLINKDIALOG_HRC
@@ -128,7 +128,7 @@ ModalDialog RID_DLG_FORMLINKS
             Pos  = MAP_APPFONT( 85, 0 );              \
             Size = MAP_APPFONT( 10, 12 );             \
             Center = TRUE;                            \
-            Text = "=";                               \
+            Text [ de ] = "=";                               \
         };                                            \
         ComboBox 2                                    \
         {                                             \
