@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:30:45 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -278,6 +278,23 @@ public:
     */
     virtual FuPoor* CreateSelectionFunction (SfxRequest& rRequest);
 
+    /** Add a listener that is called when the selection of the slide sorter
+        changes.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddSelectionChangeListener (const Link& rListener);
+
+    /** Remove a listener that was called when the selection of the slide
+        sorter changes.
+        @param rListener
+            It is save to pass a listener that was not added are has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveSelectionChangeListener (const Link& rListener);
+
     /** Prepare for a change of the edit mode.  Depending on the current
         edit mode we may save the selection so that it can be restored when
         later changing back to the current edit mode.
@@ -324,6 +341,8 @@ private:
         made and one to PostModelChange() is pending.
     */
     bool mbPostModelChangePending;
+
+    ::std::vector<Link> maSelectionChangeListeners;
 
     /** This array stores the indices of the  selected page descriptors at
         the time when the edit mode is switched to EM_MASTERPAGE.  With this
