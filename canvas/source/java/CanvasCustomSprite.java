@@ -151,6 +151,11 @@ public class CanvasCustomSprite
     // ==================
     //
 
+    public synchronized void setPriority( double nPriority )
+    {
+        // TODO
+    }
+
     public synchronized void setAlpha( double _alpha )
     {
         CanvasUtils.printLog( "CanvasCustomSprite.setAlpha() called" );
@@ -186,9 +191,7 @@ public class CanvasCustomSprite
         // TODO
     }
 
-    public synchronized void clip( XPolyPolygon2D   aClip,
-                                   ViewState        viewState,
-                                   RenderState      renderState ) throws com.sun.star.lang.IllegalArgumentException
+    public synchronized void clip( XPolyPolygon2D   aClip )
     {
         // TODO
     }
@@ -198,7 +201,7 @@ public class CanvasCustomSprite
         CanvasUtils.printLog( "CanvasCustomSprite.show() called" );
 
         canvas.showSprite( this );
-        canvas.updateScreen();
+        canvas.updateScreen( false );
     }
 
     public synchronized void hide()
