@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2001-10-25 14:26:39 $
+ *  last change: $Author: obr $ $Date: 2001-11-05 15:24:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,7 @@ const _pair _iso_language_list[] = {
     { "fi",  RTL_TEXTENCODING_ISO_8859_1 },
     { "fo",  RTL_TEXTENCODING_ISO_8859_1 },
     { "fr",  RTL_TEXTENCODING_ISO_8859_1 },
+    { "gr",  RTL_TEXTENCODING_ISO_8859_7 },
     { "hi",  RTL_TEXTENCODING_DONTKNOW },
     { "hr",  RTL_TEXTENCODING_ISO_8859_2 },
     { "hu",  RTL_TEXTENCODING_ISO_8859_2 },
