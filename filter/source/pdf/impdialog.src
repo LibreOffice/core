@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:49:56 $
+ *  last change: $Author: hr $ $Date: 2005-02-14 11:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #include "impdialog.hrc"
 
+#define WORKARROUND  \
+     Text [ de ] = "PDF Optionen";    \
+    Text [ en-US ] = "PDF Options";
+
 ModalDialog RID_PDF_EXPORT_DLG
 {
     OutputSize = TRUE ;
@@ -69,8 +73,7 @@ ModalDialog RID_PDF_EXPORT_DLG
     Size = MAP_APPFONT ( 230, 207 );
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "PDF Optionen";
-    Text [ en-US ] = "PDF Options";
+    WORKARROUND
     FixedLine FL_PAGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
