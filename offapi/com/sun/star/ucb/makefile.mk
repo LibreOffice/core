@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:57:56 $
+#   last change: $Author: rt $ $Date: 2003-04-23 17:15:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -284,6 +284,7 @@ IDLFILES=\
      XRemoteContentProviderSupplier.idl\
      XSimpleFileAccess.idl\
      XSimpleFileAccess2.idl\
+     XSimpleFileAccess3.idl\
      XSortedDynamicResultSetFactory.idl\
      XSourceInitialization.idl
 
