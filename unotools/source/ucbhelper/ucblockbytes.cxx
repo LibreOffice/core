@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-06 12:42:23 $
+ *  last change: $Author: sb $ $Date: 2001-03-05 14:48:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,9 +462,23 @@ UcbLockBytes::~UcbLockBytes()
     if ( !m_bDontClose )
     {
         if ( m_xInputStream.is() )
-            m_xInputStream->closeInput();
+            try
+            {
+                m_xInputStream->closeInput();
+            }
+            catch ( RuntimeException const & )
+            {}
+            catch ( IOException const & )
+            {}
         if ( m_xOutputStream.is() )
-            m_xOutputStream->closeOutput();
+            try
+            {
+                m_xOutputStream->closeOutput();
+            }
+            catch ( RuntimeException const & )
+            {}
+            catch ( IOException const & )
+            {}
     }
 }
 
