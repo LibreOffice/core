@@ -2,9 +2,9 @@
  *
  *  $RCSfile: canvasgraphichelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:02 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:22:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _CPPCANVAS_CANVASGRAPHICHELPER_HXX
 #define _CPPCANVAS_CANVASGRAPHICHELPER_HXX
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
-#include <drafts/com/sun/star/rendering/RenderState.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_RENDERSTATE_HPP__
+#include <com/sun/star/rendering/RenderState.hpp>
 #endif
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -71,10 +71,10 @@
 
 #include <cppcanvas/canvasgraphic.hxx>
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XGraphicDevice;
-} } } } }
+} } } }
 
 
 /* Definition of CanvasGraphicHelper class */
@@ -104,14 +104,14 @@ namespace cppcanvas
             // for our clients
             // ===============
             CanvasSharedPtr                                                                         getCanvas() const;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > getGraphicDevice() const;
 
-            mutable ::drafts::com::sun::star::rendering::RenderState                                maRenderState; // for reasons of speed...
+            mutable ::com::sun::star::rendering::RenderState                                maRenderState; // for reasons of speed...
 
         private:
             PolyPolygonSharedPtr                                                                    mpClipPolyPolygon;
             CanvasSharedPtr                                                                         mpCanvas;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XGraphicDevice > mxGraphicDevice;
         };
 
     }
