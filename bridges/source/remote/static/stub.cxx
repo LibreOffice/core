@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stub.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:28:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@
 
 #include "remote_types.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <bridges/remote/counter.hxx>
 static MyCounter thisCounter( "DEBUG : Uno2RemoteStub");
 #endif
@@ -115,7 +115,7 @@ Uno2RemoteStub::Uno2RemoteStub( uno_Interface *pUnoI,
                                            m_sOid.pData,
                                            m_pType );
     m_pUnoI->acquire( m_pUnoI );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
@@ -128,7 +128,7 @@ Uno2RemoteStub::~Uno2RemoteStub()
     m_pUnoI->release( m_pUnoI );
     m_pEnvUno->release( m_pEnvUno );
     m_pEnvRemote->release( m_pEnvRemote );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.release();
 #endif
 }
