@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:12:07 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 15:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1681,17 +1681,6 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
     long        nOffX = 3*nOnePixel;
     long        nOffY = (aSize.Height() - nTextHeight) / 2;
 
-    if ( GetStyle() & WB_CENTER )
-    {
-        aPos.X() += (aSize.Width() - nTextWidth) / 2;
-        nOffX = 0;
-    }
-    else if ( GetStyle() & WB_RIGHT )
-    {
-        aPos.X() += aSize.Width() - nTextWidth;
-        nOffX = -nOffX;
-    }
-
     // Clipping?
     if ( (nOffY < 0) ||
          ((nOffY+nTextHeight) > aSize.Height()) ||
@@ -1701,6 +1690,17 @@ void Edit::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG
         if ( nTextHeight > aSize.Height() )
             aClip.Bottom() += nTextHeight-aSize.Height()+1;  // Damit HP-Drucker nicht 'weg-optimieren'
         pDev->IntersectClipRegion( aClip );
+    }
+
+    if ( GetStyle() & WB_CENTER )
+    {
+        aPos.X() += (aSize.Width() - nTextWidth) / 2;
+        nOffX = 0;
+    }
+    else if ( GetStyle() & WB_RIGHT )
+    {
+        aPos.X() += aSize.Width() - nTextWidth;
+        nOffX = -nOffX;
     }
 
     pDev->DrawText( Point( aPos.X() + nOffX, aPos.Y() + nOffY ), aText );
