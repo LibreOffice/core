@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 11:36:26 $
+ *  last change: $Author: obo $ $Date: 2001-08-29 21:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Name der URL";
         QuickHelpText[ catalan ] = "Nombre de la URL";
-        QuickHelpText[ finnish ] = "URL-osoitteen nimi";
+        QuickHelpText[ finnish ] = "URL-nimi!";
     };
     FixedText FT_URL
     {
@@ -137,7 +137,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         Text[ turkish ] = "URL:";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "URL:";
-        Text[ finnish ] = "URL-osoite:";
+        Text[ finnish ] = "URL:";
     };
     ComboBox CB_URL
     {
@@ -171,7 +171,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Sammelbox für Internet-URLs";
         QuickHelpText[ catalan ] = "URLs de Internet";
-        QuickHelpText[ finnish ] = "Internetin URL-osoitteet";
+        QuickHelpText[ finnish ] = "Internetin URL-osoitteet!";
     };
     ToolBox TB
     {
@@ -235,7 +235,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
                 Text[ turkish ] = "Yer iþareti";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Marcador";
-                Text[ finnish ] = "Kirjanmerkki";
+                Text[ finnish ] = "Kirjanmerkit";
             };
             ToolBoxItem
             {
@@ -288,7 +288,7 @@ DockingWindow RID_SVXDLG_HYPERLINK
     Text[ turkish ] = "Hyperlink ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar hiperenlace";
-    Text[ finnish ] = "Lisää hyperlinkki";
+    Text[ finnish ] = "Lis?? hyperlinkki";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -320,7 +320,7 @@ Menu RID_SVXMN_HYPERLINK
             Text[ turkish ] = "Metin olarak";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Como ~texto";
-            Text[ finnish ] = "Tekstinä";
+            Text[ finnish ] = "Tekstin?";
         };
         MenuItem
         {
@@ -380,7 +380,7 @@ QueryBox RID_SVXQB_NOCONNECT
     Message[ turkish ] = "Bu URL baðlantý kurulduktan sonra kontrol edilebilir.\nBaðlantý kurulsun mu?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La URL solo puede ser verificada después de haberse establecido una conexión.\n¿Desea establecer la conexión?";
-    Message[ finnish ] = "Tämä URL-osoite voidaan testata vasta, kun yhteys on muodostettu. Muodostetaanko yhteys?";
+    Message[ finnish ] = "T?m? URL-osoite voidaan testata vasta, kun yhteys on muodostettu. Muodostetaanko yhteys?";
 };
 QueryBox RID_SVXQB_DONTEXIST
 {
@@ -410,8 +410,9 @@ QueryBox RID_SVXQB_DONTEXIST
     Message[ turkish ] = "Bu URL mevcut deðil.\nYine de URL'yi eklemek istiyor musunuz?";
     Message[ language_user1 ] = " ";
     Message[ catalan ] = "La URL no existe.\n¿Desea insertarla de todas formas?";
-    Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lisätäänkö kuitenkin?";
+    Message[ finnish ] = "URL-osoitetta ei ole olemassa. Lis?t??nk?kuitenkin?";
 };
+
 
 
 
