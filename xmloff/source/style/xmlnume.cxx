@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnume.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 10:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,6 +792,7 @@ void SvxXMLNumRuleExport::exportStyles( sal_Bool bUsed,
     }
 }
 
+#if SUPD < 627
 const sal_Char *SvxXMLNumRuleExport::GetNumFormatValue( sal_Int16 eNumType )
 {
     const sal_Char *pFormat = 0;
@@ -845,4 +846,4 @@ const sal_Char *SvxXMLNumRuleExport::GetNumLetterSync( sal_Int16 eNumType )
 
     return pSync;
 }
-
+#endif

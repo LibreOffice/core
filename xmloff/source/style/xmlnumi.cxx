@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlnumi.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
+ *  last change: $Author: mib $ $Date: 2001-03-19 10:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1170,6 +1170,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
     rNumRule->replaceByIndex( nLevel, aAny );
 }
 
+#if SUPD < 627
 sal_Int16 SvxXMLListStyleContext::GetNumType( const OUString& rNumFmt,
                                                    const OUString& rLetterSync,
                                                   sal_Int16 eDflt,
@@ -1209,5 +1210,5 @@ sal_Int16 SvxXMLListStyleContext::GetNumType( const OUString& rNumFmt,
 
     return eValue;
 }
-
+#endif
 
