@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:09:50 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,7 +479,7 @@ void OFieldDescControl::CheckScrollBars()
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y - nHScrollHeight) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
     else
         nLastVisible = static_cast<sal_uInt16>((szOverallSize.Height() - CONTROL_SPACING_Y) / (CONTROL_SPACING_Y + CONTROL_HEIGHT));
-    bNeedVScrollBar = nActive>nLastVisible;
+    bNeedVScrollBar = nActive > nLastVisible;
 
     if (bNeedVScrollBar)
     {
@@ -1634,6 +1634,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
                 ActivateAggregate( tpFormat );
                 break;
             case DataType::BIT:
+            case DataType::BOOLEAN:
                 DeactivateAggregate( tpTextLen );
                 DeactivateAggregate( tpFormat );
                 DeactivateAggregate( tpDefault );
