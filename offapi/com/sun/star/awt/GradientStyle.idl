@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GradientStyle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:47:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,49 +68,42 @@
 
 //=============================================================================
 
-// DocMerge from xml: enum com::sun::star::awt::GradientStyle
 /** specify the style of color dispersion.
  */
 enum GradientStyle
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::LINEAR
     /** specifies a linear gradient.
      */
     LINEAR,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::AXIAL
     /** specifies an axial gradient.
      */
     AXIAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::RADIAL
     /** specifies a radial gradient.
      */
     RADIAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::ELLIPTICAL
     /** specifies an elliptical gradient.
      */
     ELLIPTICAL,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::SQUARE
     /** specifies a gradient in the shape of a square.
      */
     SQUARE,
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: value com::sun::star::awt::GradientStyle::RECT
     /** specifies a gradient in the shape of a rectangle.
      */
     RECT

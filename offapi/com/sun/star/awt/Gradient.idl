@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Gradient.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:47:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,79 +72,66 @@
 
 //=============================================================================
 
-// DocMerge from xml: struct com::sun::star::awt::Gradient
 /** describes a color dispersion within an area.
  */
 struct Gradient
 {
-    // DocMerge from xml: field com::sun::star::awt::Gradient::Style
-    /** style of the gradient.
+    //-------------------------------------------------------------------------
+
+    /** specifies the style of the gradient.
      */
     com::sun::star::awt::GradientStyle Style;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::StartColor
     /** specifies the color at the start point of the gradient.
      */
     long StartColor;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::EndColor
     /** specifies the color at the end point of the gradient.
      */
     long EndColor;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Gradient::Angle
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::Angle
     /** angle of the gradient in 1/10 degree.
      */
     short Angle;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Gradient::Border
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::Border
     /** per cent of the total width where just the start color is used.
      */
     short Border;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Gradient::XOffset
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::XOffset
-    /** specifies the X-coordinate, where gradient begins.
+    /** specifies the X-coordinate, where the gradient begins.
      */
     short XOffset;
 
     //-------------------------------------------------------------------------
-    // DOCUMENTATION MISSING FOR Gradient::YOffset
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::YOffset
-    /** specifies the Y-coordinate, where gradient begins.
+    /** specifies the Y-coordinate, where the gradient begins.
      */
     short YOffset;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::StartIntensity
     /** specifies the intensity at the start point of the gradient.
      */
     short StartIntensity;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::EndIntensity
     /** specifies the intensity at the end point of the gradient.
      */
     short EndIntensity;
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: field com::sun::star::awt::Gradient::StepCount
     /** specifies the number of steps of change color.
      */
     short StepCount;
