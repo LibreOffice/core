@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:16:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-07 19:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,7 @@ String STR_ADABAS_HELP_FREESIZE
 {
     Text = "Noch zur Verfόgung stehender Speicher bevor ein neues Datadev Datei erzeugt werden muss." ;
     Text [ English ] = "Currently free avaliable space bevor a new datadev must be created." ;
-    Text[ english_us ] = "Currently avaliable space before a new datadev file must be created.";
+    Text[ english_us ] = "Currently available space before a new datadev file must be created.";
     Text[ portuguese ] = "Memσria ainda disponνvel antes de criar um novo ficheiro Datadev.";
     Text[ russian ] = "Δξρςσονξ οΰμÿςθ οεπεδ ρξηδΰνθεμ νξβξγξ τΰιλΰ datadev.";
     Text[ greek ] = "Απομένουσα μνήμη πριν την δημιουργία ενός νέου αρχείου Datadev.";
