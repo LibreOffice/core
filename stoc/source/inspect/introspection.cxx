@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
+ *  last change: $Author: ab $ $Date: 2002-08-08 09:08:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,7 +315,7 @@ public:
     IntrospectionAccessStatic_Impl( Reference< XIdlReflection > xCoreReflection_ );
     ~IntrospectionAccessStatic_Impl()
     {
-        delete mpOrgPropertyHandleArray;
+        delete[] mpOrgPropertyHandleArray;
     }
     sal_Int32 getPropertyIndex( const OUString& aPropertyName ) const;
     sal_Int32 getMethodIndex( const OUString& aMethodName ) const;
@@ -2904,7 +2904,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                         if( bFoundXInterface )
                             bXInterfaceIsInvalid = sal_True;
 
-                        delete pMethodTypes;
+                        delete[] pMethodTypes;
                         delete pLocalMethodConcepts;
                     }
 
