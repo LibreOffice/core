@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:57 $
+ *  last change: $Author: oj $ $Date: 2002-11-04 13:45:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2619,14 +2619,14 @@ void FmXFormController::startFiltering()
 void FmXFormController::stopFiltering()
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
-    if (!m_pView)
-    {
-        DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
+    if ( !m_bFiltering ) // #104693# OJ
+    {   // nothing to do
         return;
     }
 
-    if ( !m_bFiltering )
-    {   // nothing to do
+    if (!m_pView)
+    {
+        DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
         return;
     }
 
