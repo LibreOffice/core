@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2000-12-18 18:43:50 $
+#   last change: $Author: er $ $Date: 2001-04-21 20:23:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -132,7 +132,8 @@ CXXFILES = \
         navicfg.cxx \
         addincol.cxx \
         addinlis.cxx \
-        rangeseq.cxx
+        rangeseq.cxx \
+        refreshtimer.cxx
 
 
 SLOFILES =  \
@@ -187,7 +188,8 @@ SLOFILES =  \
         $(SLO)$/navicfg.obj \
         $(SLO)$/addincol.obj \
         $(SLO)$/addinlis.obj \
-        $(SLO)$/rangeseq.obj
+        $(SLO)$/rangeseq.obj \
+        $(SLO)$/refreshtimer.obj
 
 EXCEPTIONSFILES= \
         $(SLO)$/addincol.obj
