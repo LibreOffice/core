@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-29 02:28:15 $
+ *  last change: $Author: kz $ $Date: 2001-07-14 00:08:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,14 +220,14 @@ String RID_STR_SOURCETOBIG
     Text [ portuguese_brazilian ] = "Der Quelltext ist zu gro? und kann weder gespeichert noch compiliert werden.\nL?chen Sie einige Kommentare oder ?ertragen Sie einige Methoden in ein anderes Modul." ;
     Text [ portuguese ] = "O texto-fonte ι demasiado longo e nγo pode ser guardado nem compilado.\nElimine alguns comentαrios ou transfira alguns mιtodos para outro mσdulo." ;
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
-    Text[ russian ] = "Θρυξδνϋι ςεκρς ρλθψκξμ αξλόψξι θ εγξ νεβξημξζνξ νθ ρξυπΰνθςό, νθ κξμοθλθπξβΰςό.\nΣδΰλθςε νεκξςξπϋε κξμμενςΰπθθ θλθ οεπενερθςε νεκξςξπϋε ";
+    Text[ russian ] = "Θρυξδνϋι ςεκρς ρλθψκξμ αξλόψξι θ εγξ νεβξημξζνξ νθ ρξυπΰνθςό, νθ κξμοθλθπξβΰςό.\nΣδΰλθςε νεκξςξπϋε κξμμενςΰπθθ θλθ οεπενερθςε νεκξςξπϋε μεςξδϋ β δπσγξι μξδσλό.";
     Text[ polish ] = "Tekst rσd³owy jest za duΏy. Nie moΏna go zapisaζ ani skompilowaζ.\nNaleΏy usunΉζ kilka komentarzy lub przenieζ kilka metod do innego modu³u.";
     Text[ japanese ] = "Ώ°½Γ·½Δ‚ª’·‚·‚¬‚ΔA•Ϋ‘¶‚ΰΊέΚί²Ω‚πs‚¤‚±‚Ζ‚ΰ‚Ε‚«‚ά‚Ή‚ρB\nΊÒέΔ‚π‚Ά‚­‚Β‚©ν‚·‚ι‚©AÒΏ―Δή‚Μ‚Ά‚­‚Β‚©‚π•Κ‚ΜΣΌή­°Ω‚Ι“]‘—‚µ‚ά‚·B";
     Text[ chinese_traditional ] = "­μ©lΐΙ¤Σ¤j΅MµLªkΐx¦s½sΔ¶΅C\n½Π±z§R°£¤@¨ΗµωΈΡ©ΞªΜ±N΄X­Σ¤θªkΒΰ²Ύ¨μ¤@­Σ¨δ¥LªΊΌÒ¶τ¤§¤¤΅C";
     Text[ arabic ] = "δΥ ΗαγΥΟΡ ίΘνΡ αΟΡΜΙ νΚΪΠΡ γΪεΗ ΝέΩε΅ Γζ ΚΡΜγΚε.\nήγ ΘΝΠέ ΘΪΦ ΗαΚΪανήΗΚ΅ Γζ Ηδήα ΘΪΦ ΗαΓΣΗανΘ Εαμ ζΝΟΙ δγΨνΙ ΓΞΡμ.";
     Text[ dutch ] = "De brontekst is te lang en kan niet worden opgeslagen of gecompileerd.\\Wis enkele commentaren of verplaats enkele methodes naar een andere module.";
     Text[ chinese_simplified ] = "Τ΄ΞΔ±ΎΜ«΄σ£¬Ξή·¨΄ζΕΜΊΝ±ΰÒλ΅£\nΗλΔϊΙΎ³ύÒ»Π©ΧΆ½β»ςΥί½«ΌΈΈφ·½·¨ΧªÒΖµ½Ò»ΈφΖδΛϋµΔΔ£ΏιΦ®ΦΠ΅£";
-    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλ";
+    Text[ greek ] = "Δεν είναι δυνατόν να γίνει η μεταγλώττιση και η αποθήκευση του κειμένου προέλευσης επειδή είναι υπερβολικά μεγάλο.\nΔιαγράψτε μερικά σχόλια ή μετακινήστε ορισμένες μεθόδους σε κάποια άλλη λειτουργική μονάδα.";
     Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ®°΅ ³ΚΉ« ΔΏΌ­ ΐϊΐε ¶Η΄Β ΔΔΖΔΐΟΐΜ ΊÒ°΅΄ΙΗΥ΄Ο΄Ω.\nΐΟΊΞ ΑΦΌ®ΐ» »θΑ¦ΗΟ°Ε³ª, ΈξΈξ ΈήΌÒµεΈ¦ ΄ΩΈ¥ Έπµβ·Ξ ΏΕ±β½Κ½ΓΏΐ.";
     Text[ turkish ] = "Kaynak metin uzunluπu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazύ aηύklamalarύ silin ya da bazύ yφntemleri baώka bir modόle aktarύn.";
     Text[ catalan ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nElimine algunos comentarios o transfiera algunos mιtodos a otro mσdulo.";
@@ -754,7 +754,7 @@ String RID_STR_GENERATESOURCE
     Text[ dutch ] = "Brontekst maken";
     Text[ chinese_simplified ] = "Ιϊ³ΙΤ΄ΞΔ±Ύ";
     Text[ greek ] = "Δημιουργία κειμένου προέλευσης";
-    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ®  »ύΌΊ";
+    Text[ korean ] = "ΌÒ½ΊΕΨ½ΊΖ® »ύΌΊ";
     Text[ turkish ] = "Kaynak kod oluώturuluyor";
     Text[ catalan ] = "Creando un texto fuente";
     Text[ finnish ] = "Luodaan lδhde";
@@ -837,7 +837,7 @@ String RID_STR_QUERYDELMACRO
     Text[ dutch ] = "Wilt u de macro XX wissen?";
     Text[ chinese_simplified ] = "ΔϊÒªΙΎ³ύΊκ XX £Ώ";
     Text[ greek ] = "Θέλετε να διαγραφεί η μακροεντολή ΧΧ;";
-    Text[ korean ] = "ΈΕΕ©·ΞXXΐ»£¨Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "ΈΕΕ©·ΞXXΐ»(Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "XX makrosunu silmek istiyor musunuz?";
     Text[ catalan ] = "ΏDesea eliminar la macro XX?";
     Text[ finnish ] = "Haluatko poistaa makron XX?";
@@ -865,7 +865,7 @@ String RID_STR_QUERYDELDIALOG
     Text[ dutch ] = "Wilt u de dialoog XX wissen?";
     Text[ chinese_simplified ] = "ΔϊÒªΙΎ³ύ¶Τ»° XX £Ώ";
     Text[ greek ] = "Θέλετε να διαγραφεί ο διάλογος ΧΧ;";
-    Text[ korean ] = "΄λΘ­»σΐΪXXΐ»£¨Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "΄λΘ­»σΐΪXXΐ»(Έ¦£©»θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "XX diyaloπunu silmek istiyor musunuz?";
     Text[ catalan ] = "ΏDesea eliminar el diαlogo XX?";
     Text[ finnish ] = "Haluatko poistaa valintaikkunan XX?";
@@ -893,7 +893,7 @@ String RID_STR_QUERYDELLIB
     Text[ dutch ] = "Wilt u de bibliotheek XX wissen?";
     Text[ chinese_simplified ] = "ΔϊÒªΙΎ³ύ³ΜΠςΏβ XX £Ώ";
     Text[ greek ] = "Θέλετε να διαγραφεί η βιβλιοθήκη ΧΧ;";
-    Text[ korean ] = "¶σΐΜΊκ·―Έ®XXΐ»£¨Έ¦£© »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ ?";
+    Text[ korean ] = "¶σΐΜΊκ·―Έ®XXΐ»(Έ¦) »θΑ¦ΗΟ½Γ°Ϊ½ΐ΄Ο±ξ ?";
     Text[ turkish ] = "XX kitaplύπύnύ silmek istiyor musunuz?";
     Text[ catalan ] = "ΏDesea eliminar la biblioteca XX?";
     Text[ finnish ] = "Haluatko poistaa kirjaston XX?";
@@ -1450,7 +1450,7 @@ String RID_STR_NEWDLG
     Text [ portuguese ] = "Novo diαlogo" ;
     Text[ chinese_simplified ] = "ΠΒµΔ¶Τ»°Ώς";
     Text[ russian ] = "Νξβϋι δθΰλξγ";
-    Text[ polish ] = "Nowy dialog";
+    Text[ polish ] = "Nowe okno dialogowe";
     Text[ japanese ] = "V‚µ‚Άΐή²±ΫΈή";
     Text[ chinese_traditional ] = "·sªΊΉοΈά¤θ¶τ";
     Text[ arabic ] = "γΡΘΪ ΝζΗΡ ΜΟνΟ";
@@ -1514,7 +1514,7 @@ String RID_STR_PAGE
     Text[ dutch ] = "Pagina";
     Text[ chinese_simplified ] = "Ò³";
     Text[ greek ] = "Σελίδα";
-    Text[ korean ] = "ΒΚ";
+    Text[ korean ] = "ΖδΐΜΑφ";
     Text[ turkish ] = "Sayfa";
     Text[ catalan ] = "Pαgina";
 };
@@ -1596,7 +1596,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ dutch ] = "Wilt u de tekst in alle actieve modules vervangen?";
     Text[ chinese_simplified ] = "ΔϊÒªΈόΜζΛωΣΠΌ¤»ξµΔΔ£ΏιΊ¬ΣΠµΔΞΔΧΦ£Ώ";
     Text[ greek ] = "Να αντικατασταθεί το κείμενο σε όλες τις τρέχουσες λειτουργικές μονάδες;";
-    Text[ korean ] = "Θ°ΌΊΘ­µΘ Έπµη ΈπµβΐΗ ΕΨ½ΊΖ®Έ¦ ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
+    Text[ korean ] = "Θ°ΌΊΘ­µΘ Έπµη ΈπµβΏ΅Ό­ ΕΨ½ΊΖ®Έ¦ ΄λΓΌΗΟ½Γ°Ϊ½ΐ΄Ο±ξ?";
     Text[ turkish ] = "Bu metin tόm etkin modόllerde deπiώtirilsin mi?";
     Text[ catalan ] = "ΏDesea substituir el texto en todos los mσdulos activos?";
     Text[ finnish ] = "Haluatko korvata tekstin kaikissa aktiivissa moduuleissa?";
@@ -2125,7 +2125,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ dutch ] = "Controle weergeven";
             Text[ chinese_simplified ] = "²ιΏ΄";
             Text[ greek ] = "Εμφάνιση παρατηρητή";
-            Text[ korean ] = "°¨½ΓΐΪ΅΅ΊΈΐΜ±β";
+            Text[ korean ] = "°¨½ΓΐΪ ΊΈΐΜ±β";
             Text[ turkish ] = "έzleyici ekle";
             Text[ catalan ] = "Mostrar observador";
             Text[ finnish ] = "Lisδδ kello";
@@ -2270,14 +2270,14 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ dutch ] = "Besturingselementen" ;
             Text [ spanish ] = "Campos de control" ;
             Text [ english_us ] = "Controls" ;
-            Text[ chinese_simplified ] = "ΏΨΦΖΧΦ¶Ξ";
+            Text[ chinese_simplified ] = "ΏΨΦΖ";
             Text[ russian ] = "έλεμενςϋ σοπΰβλενθÿ";
             Text[ polish ] = "Pola kontrolne";
             Text[ japanese ] = "ΊέΔΫ°Ω";
             Text[ chinese_traditional ] = "±±¨ξ¶µ";
             Text[ arabic ] = "ΪδΗΥΡ ΚΝίγ";
             Text[ dutch ] = "Besturingselementen";
-            Text[ chinese_simplified ] = "ΏΨΦΖΧΦ¶Ξ";
+            Text[ chinese_simplified ] = "ΏΨΦΖ";
             Text[ greek ] = "Πεδία ελέγχου";
             Text[ korean ] = "ΔΑΖ®·Ρ";
             Text[ turkish ] = "Komut alanlarύ";
@@ -2784,6 +2784,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
