@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllib_export.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:14:35 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ SAL_CALL exportLibraryContainer(
                                         rLib.bReadOnly ? aTrueStr : aFalseStr );
         }
 
-        pLibElement->dump( xOut );
+        pLibElement->dump( xOut.get() );
     }
 
     xOut->ignorableWhitespace( OUString() );
@@ -198,7 +198,7 @@ SAL_CALL exportLibrary(
         }
     }
 
-    pLibElement->dump( xOut );
+    pLibElement->dump( xOut.get() );
 
     xOut->endDocument();
 }
