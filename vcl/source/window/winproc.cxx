@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: th $ $Date: 2001-04-25 16:30:26 $
+ *  last change: $Author: th $ $Date: 2001-05-18 08:29:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,9 @@
 #endif
 #ifndef _SV_FLOATWIN_HXX
 #include <floatwin.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <dialog.hxx>
 #endif
 #ifndef TF_SVDATA
 #ifndef _SV_DRAG_HXX
@@ -1584,7 +1587,14 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
             if ( mpFrameData->mpFocusWin->IsEnabled() && mpFrameData->mpFocusWin->IsInputEnabled() )
                 mpFrameData->mpFocusWin->GrabFocus();
             else
-                mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow()->GrabFocus();
+            {
+                ImplSVData* pSVData = ImplGetSVData();
+                Window*     pTopLevelWindow = mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow();
+                if ( !pTopLevelWindow->IsInputEnabled() && pSVData->maWinData.mpLastExecuteDlg )
+                    pSVData->maWinData.mpLastExecuteDlg->ToTop( TOTOP_RESTOREWHENMIN );
+                else
+                    pTopLevelWindow->GrabFocus();
+            }
         }
         else
             GrabFocus();
