@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extinput.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:52:11 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 16:03:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,10 +93,20 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>
 #endif
+#ifndef _SVX_LANGITEM_HXX
+#include <svx/langitem.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 
 
 SwExtTextInput::SwExtTextInput( const SwPaM& rPam, Ring* pRing )
-    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing )
+    : SwPaM( *rPam.GetPoint(), (SwPaM*)pRing ),
+    eInputLanguage(LANGUAGE_DONTKNOW)
 {
     bIsOverwriteCursor = FALSE;
     bInsText = TRUE;
@@ -120,6 +130,17 @@ SwExtTextInput::~SwExtTextInput()
             // damit Undo / Redlining usw. richtig funktioniert,
             // muss ueber die Doc-Schnittstellen gegangen werden !!!
             SwDoc* pDoc = GetDoc();
+            if(eInputLanguage != LANGUAGE_DONTKNOW)
+            {
+                USHORT nWhich = RES_CHRATR_LANGUAGE;
+                switch(GetI18NScriptTypeOfLanguage(eInputLanguage))
+                {
+                    case  ::com::sun::star::i18n::ScriptType::ASIAN:     nWhich = RES_CHRATR_CJK_LANGUAGE; break;
+                    case  ::com::sun::star::i18n::ScriptType::COMPLEX:   nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+                }
+                SvxLanguageItem aLangItem( eInputLanguage, nWhich );
+                pDoc->Insert(*this, aLangItem, 0 );
+            }
             rIdx = nSttCnt;
             String sTxt( pTNd->GetTxt().Copy( nSttCnt, nEndCnt - nSttCnt ));
             if( bIsOverwriteCursor && sOverwriteText.Len() )
