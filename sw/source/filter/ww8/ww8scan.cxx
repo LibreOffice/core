@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:59 $
+ *  last change: $Author: khz $ $Date: 2000-10-20 11:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,12 +1871,12 @@ BOOL WW8PLCFx_Fc_FKP::NewFkp()
     }
     else // khz test1 //
     {
-        pFkp->SetIdx( 0 );
-        if( nStartFc >= 0 )
-            pFkp->SeekPos( nStartFc );
+//      pFkp->SetIdx( 0 );
+//      if( nStartFc >= 0 )
+//          pFkp->SeekPos( nStartFc );
     }
 
-    nStartFc = -1;                                  // Nur das erste Mal
+//  nStartFc = -1;                                  // Nur das erste Mal
     return TRUE;
 }
 
@@ -5995,11 +5995,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.1.1.1 2000-09-18 17:14:59 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.2 2000-10-20 11:19:29 khz Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:59  hr
+      initial import
+
       Revision 1.106  2000/09/18 16:05:02  willem.vandorp
       OpenOffice header added.
 
