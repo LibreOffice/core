@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:39:02 $
+ *  last change: $Author: obo $ $Date: 2003-12-05 11:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -834,7 +834,7 @@ void SwDrawContact::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 if( pOldAnch )
                 {
                     pPg = pOldAnch->FindPageFrm();
-                    aOldRect = SwRect( GetMaster()->GetBoundRect() );
+                    aOldRect = SwRect( GetMaster()->GetCurrentBoundRect() );
                 }
                 ConnectToLayout( pAnch );
                 if( pPg && aOldRect.HasArea() )
