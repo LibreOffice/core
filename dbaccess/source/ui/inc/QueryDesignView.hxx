@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:10:20 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,6 +210,8 @@ namespace dbaui
         BOOL getColWidth( const ::rtl::OUString& rAliasName, const ::rtl::OUString& rFieldName, ULONG& nWidth );
         void fillValidFields(const ::rtl::OUString& strTableName, ComboBox* pFieldList);
         void zoomTableView(const Fraction& _rFraction);
+
+        void SaveUIConfig();
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeControl(Rectangle& rRect);

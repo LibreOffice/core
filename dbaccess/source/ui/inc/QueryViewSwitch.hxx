@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:10:14 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,8 @@ namespace dbaui
         OAddTableDlg* getAddTableDialog();
         BOOL IsAddAllowed();
         void zoomTableView(const Fraction& _rFraction);
+        void SaveUIConfig();
+        void clearDesignView();
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeControl(Rectangle& rRect);

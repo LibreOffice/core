@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:09:58 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ namespace dbaui
 
         void NotifyTitleClicked( OTableWindow* pTabWin, const Point rMousePos );
 
-        virtual void AddTabWin(const String& _rComposedName, const String& rWinName, BOOL bNewTable = FALSE);
+        virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
         virtual void RemoveTabWin( OTableWindow* pTabWin );
 
         virtual void AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest);

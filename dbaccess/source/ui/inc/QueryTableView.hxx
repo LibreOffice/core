@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 09:10:06 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,11 +108,11 @@ namespace dbaui
 
         // Basisklasse ueberschrieben : Fenster kreieren und loeschen
         // (eigentlich nicht wirklich LOESCHEN, es geht in die Verantwortung einer UNDO-Action ueber)
-        virtual void AddTabWin(const String& strDatabase, const String& strTableName, BOOL bNewTable = FALSE);
+        virtual void AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, BOOL bNewTable = FALSE);
         virtual void RemoveTabWin(OTableWindow* pTabWin);
 
         // und ein AddTabWin, das einen Alias vorgibt
-        void    AddTabWin(const String& strDatabase, const String& strTableName, const String& strAlias, BOOL bNewTable = FALSE);
+        void    AddTabWin(const ::rtl::OUString& strDatabase, const ::rtl::OUString& strTableName, const ::rtl::OUString& strAlias, BOOL bNewTable = FALSE);
         // Fenster an Hand des AliasNamen loeschen (zieht sich natuerlich auf voriges RemoveTabWin zurueck)
         BOOL    RemoveTabWin(const String& rAliasName);
 
@@ -136,7 +136,7 @@ namespace dbaui
             // natuerlich alle Connections an diesen Fenstern und alle Abfrage-Spalten, die auf diesen Tabellen basierten.
 
         // TabWin anzeigen oder verstecken (NICHT kreieren oder loeschen)
-        BOOL    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
+        BOOL    ShowTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction,sal_Bool _bAppend);
         void    HideTabWin(OQueryTableWindow* pTabWin, OQueryTabWinUndoAct* pUndoAction);
 
         // Sichbarkeit eines TabWins sicherstellen (+ Invalidieren der Connections)

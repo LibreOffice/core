@@ -34,6 +34,9 @@
 #ifndef _COM_SUN_STAR_IO_XOBJECTINPUTSTREAM_HPP_
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #endif
+#ifndef DBAUI_JOINTABLEVIEW_HXX
+#include "JoinTableView.hxx"
+#endif
 
 
 class VCLXWindow;
@@ -45,6 +48,7 @@ namespace dbaui
     class OTableWindowData;
     class OAddTableDlg;
     class OTableFieldDesc;
+    class OQueryTableWindow;
     class OQueryController : public OGenericUnoController
     {
         SfxUndoManager  m_aUndoManager;
@@ -110,6 +114,8 @@ namespace dbaui
         ::std::vector<OTableFieldDesc*>*        getTableFieldDesc()         { return &m_vTableFieldDesc; }
         ::std::vector< OTableConnectionData*>*  getTableConnectionData()    { return &m_vTableConnectionData;}
 
+        void SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY );
+        void SaveTabWinPosSize(OQueryTableWindow* pTabWin, long nOffsetX, long nOffsetY);
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > getConnection() { return m_xConnection; }
 
         // should the statement be parsed by our own sql parser
