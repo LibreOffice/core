@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:52 $
+ *  last change: $Author: dbo $ $Date: 2001-02-02 14:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,33 +62,24 @@
 #include <plugin/impl.hxx>
 
 #ifdef WNT
-#if _MSC_VER >= 1200
 #include <tools/prewin.h>
-#else
-#include <tools/presys.h>
 #endif
-#endif
-#if STLPORT_VERSION < 321
-#include <stl/map.h>
-#endif
+
 #include <windows.h>
 #include <string.h>
 #include <tchar.h>
 #include <winreg.h>
 #include <winbase.h>
 #include <objbase.h>
+
 #ifdef WNT
-#if _MSC_VER >= 1200
 #include <tools/postwin.h>
-#else
-#include <tools/postsys.h>
 #endif
-#endif
-#if STLPORT_VERSION >= 321
-#include <stl/list>
-#include <stl/map>
-#include <stl/algorithm>
-#endif
+
+#include <list>
+#include <map>
+#include <algorithm>
+
 
 extern NPNetscapeFuncs aNPNFuncs;
 

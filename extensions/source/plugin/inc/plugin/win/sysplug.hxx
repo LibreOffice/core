@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:51 $
+ *  last change: $Author: dbo $ $Date: 2001-02-02 14:37:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,30 +62,17 @@
 #ifndef __PLUGIN_INC_WINPLUG_HXX
 #define __PLUGIN_INC_WINPLUG_HXX
 
-#if _MSC_VER >= 1200
 #include <tools/prewin.h>
-#else
-#include <tools/presys.h>
-#endif
-#if STLPORT_VERSION < 321
-#include <list.h>
-#include <map.h>
-#include <algo.h>
-#include <function.h>
-#endif
+
 #include <windows.h>
 #include <tchar.h>
 #include <winbase.h>
-#if _MSC_VER >= 1200
+
 #include <tools/postwin.h>
-#else
-#include <tools/postsys.h>
-#endif
-#if STLPORT_VERSION >= 321
-#include <stl/list>
-#include <stl/map>
-#include <stl/algorithm>
-#endif
+
+#include <list>
+#include <map>
+#include <algorithm>
 
 #pragma pack( push, 8 )
 #include <npsdk/npapi.h>
