@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-21 11:17:29 $
+ *  last change: $Author: jp $ $Date: 2001-10-10 16:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1391,25 +1391,17 @@ void SwView::WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::s
 
 void SwView::ShowCursor( FASTBOOL bOn )
 {
-#ifdef HIDE_CRSR_AND_SEL
+    //JP 10.10.2001: Bug 90461 - don't scroll the cursor into the visible area
+    BOOL bUnlockView = !pWrtShell->IsViewLocked();
+    pWrtShell->LockView( TRUE );    //lock visible section
 
-//JP 24.4.2001: this doesnt work correct!
-    if ( bOn )
-        pWrtShell->ShowCrsrs( sal_True );
-    else
-        pWrtShell->HideCrsrs();
-
-#else
-
-    if ( bOn )
-    {
-        if( !pWrtShell->IsFrmSelected() && !pWrtShell->IsObjSelected() )
-            pWrtShell->ShowCrsr();
-    }
-    else
+    if( !bOn )
         pWrtShell->HideCrsr();
+    else if( !pWrtShell->IsFrmSelected() && !pWrtShell->IsObjSelected() )
+        pWrtShell->ShowCrsr();
 
-#endif
+    if( bUnlockView )
+        pWrtShell->LockView( FALSE );
 }
 
 
