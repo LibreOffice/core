@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:36:28 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:27:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,13 +1698,13 @@
 							<desc>Defines the min range for the picklist size.</desc>
 						</info>
 					</minInclusive>
-					<maxInclusive oor:value="9">
+					<maxInclusive oor:value="10">
 						<info>
 							<desc>Defines the max range for the picklist size.</desc>
 						</info>
 					</maxInclusive>
 				</constraints>
-				<value>4</value>
+				<value>10</value>
 			</prop>
 			<set oor:name="HelpBookmarks" oor:node-type="HistoryType">
 				<info>
