@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-31 18:16:17 $
+ *  last change: $Author: mba $ $Date: 2000-11-02 10:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,6 +161,7 @@ using namespace ::com::sun::star::ucb;
 #include <so3/transbnd.hxx> // SvKeyValueIterator
 #include <tools/urlobj.hxx>
 #include <unotools/ucblockbytes.hxx>
+#include <unotools/localfilehelper.hxx>
 #include <ucbhelper/contentbroker.hxx>
 
 #include "ucbhelp.hxx"
@@ -1402,21 +1403,18 @@ void SfxMedium::GetMedium_Impl()
         {
             Reference < ::com::sun::star::io::XInputStream > xStream;
             if ( ( pStreamItem->GetValue() >>= xStream ) && xStream.is() )
-                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream, pHandler );
+                xLockBytes = utl::UcbLockBytes::CreateInputLockBytes( xStream );
         }
         else
         {
-            xLockBytes = ::utl::UcbLockBytes::CreateInputLockBytes( GetContent(), pHandler );
+            xLockBytes = ::utl::UcbLockBytes::CreateLockBytes( GetContent(), STREAM_STD_READ, pHandler );
+            if ( xLockBytes.Is() && bSynchron )
+                xLockBytes->SetSynchronMode( sal_True );
         }
 
         if ( xLockBytes.Is() )
         {
             pImp->pCancellable = new UcbLockBytesCancellable_Impl( xLockBytes, pImp->GetCancelManager(), aLogicName );
-            if ( bSynchron )
-                xLockBytes->SetSynchronMode( sal_True );
-            else
-                xLockBytes->SetSynchronMode( sal_False );
-
             pInStream = new SvStream( xLockBytes );
             pImp->bStreamReady = sal_True;
         }
