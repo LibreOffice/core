@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:13:08 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:28:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,7 +147,7 @@ using namespace ::com::sun::star::lang;
 // - TbxImageItem -
 // ----------------
 
-TYPEINIT1( TbxImageItem, SfxUInt16Item );
+TYPEINIT1_AUTOFACTORY( TbxImageItem, SfxUInt16Item );
 
 //---------------------------------------------------------
 
@@ -701,6 +701,7 @@ SfxPopupWindow* SvxGrafFilterToolBoxControl::CreatePopupWindow()
     rtl::OUString aSubTbxResName(
         RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/graffilterbar" ) );
     createAndPositionSubToolBar( aSubTbxResName );
+
     return NULL;
 }
 
