@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-10 11:35:41 $
+ *  last change: $Author: fs $ $Date: 2002-02-04 13:47:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1548,11 +1548,22 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
             {
                 Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
                 // the international doesn't matter I have a string
-                pCondition->parseNodeToPredicateStr(aCondition,xMetaData, static_cast<OQueryController*>(getController())->getNumberFormatter(),
+                pCondition->parseNodeToPredicateStr(aCondition,
+                                            xMetaData,
+                                            static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                             m_aLocale,
-                                            m_sDecimalSep.toChar());
-                pCondition->getChild(0)->parseNodeToPredicateStr(aColumnName,xMetaData, static_cast<OQueryController*>(getController())->getNumberFormatter(), m_aLocale,
-                                            m_sDecimalSep.toChar());
+                                            m_sDecimalSep.toChar(),
+                                            &static_cast<OQueryController*>(getController())->getParser()->getContext()
+                                        );
+
+                pCondition->getChild(0)->parseNodeToPredicateStr(
+                                            aColumnName,
+                                            xMetaData,
+                                            static_cast<OQueryController*>(getController())->getNumberFormatter(),
+                                            m_aLocale,
+                                            m_sDecimalSep.toChar(),
+                                            &static_cast<OQueryController*>(getController())->getParser()->getContext()
+                                        );
 
                 // don't display the column name
                 aCondition = aCondition.copy(aColumnName.getLength());
@@ -1590,7 +1601,9 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
                                     xMetaData,
                                     static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                     m_aLocale,
-                                    m_sDecimalSep.toChar());
+                                    m_sDecimalSep.toChar(),
+                                    &static_cast<OQueryController*>(getController())->getParser()->getContext()
+                                    );
             }
         }
 
@@ -1617,7 +1630,8 @@ int OQueryDesignView::GetANDCriteria(const  ::connectivity::OSQLParseNode * pCon
                                             xMetaData,
                                             static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                             m_aLocale,
-                                            m_sDecimalSep.toChar());
+                                            m_sDecimalSep.toChar(),
+                                            &static_cast<OQueryController*>(getController())->getParser()->getContext());
         }
 
         aDragLeft->SetField(aCondition);
@@ -1689,7 +1703,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                                                     xMetaData,
                                                                     static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                                     m_aLocale,
-                                                                    m_sDecimalSep.toChar());
+                                                                    m_sDecimalSep.toChar(),
+                                                                    &static_cast<OQueryController*>(getController())->getParser()->getContext());
             }
         }
         else if(SQL_ISRULE(pCondition->getChild(pCondition->count()-1), column_ref ))
@@ -1736,7 +1751,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                             xMetaData,
                                             static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                             m_aLocale,
-                                            m_sDecimalSep.toChar());
+                                            m_sDecimalSep.toChar(),
+                                            &static_cast<OQueryController*>(getController())->getParser()->getContext());
             }
         }
         if(FillDragInfo(pCondition->getChild(nPos),aDragLeft))
@@ -1768,12 +1784,14 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                                 xMetaData,
                                                 static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                 m_aLocale,
-                                                m_sDecimalSep.toChar());
+                                                m_sDecimalSep.toChar(),
+                                                &static_cast<OQueryController*>(getController())->getParser()->getContext());
             pFunction->parseNodeToPredicateStr(aColumnName,
                                                 xMetaData,
                                                 static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                 m_aLocale,
-                                                m_sDecimalSep.toChar());
+                                                m_sDecimalSep.toChar(),
+                                                &static_cast<OQueryController*>(getController())->getParser()->getContext());
             // don't display the column name
             aCondition = aCondition.copy(aColumnName.getLength());
             aCondition = aCondition.trim();
@@ -1791,7 +1809,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                                 xMetaData,
                                                 static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                 m_aLocale,
-                                                m_sDecimalSep.toChar());
+                                                m_sDecimalSep.toChar(),
+                                                &static_cast<OQueryController*>(getController())->getParser()->getContext());
                     aDragLeft->SetField(sParameterValue);
                 }
                 aDragLeft->SetFunctionType(FKT_AGGREGATE);
@@ -1835,7 +1854,8 @@ int OQueryDesignView::ComparsionPredicate(const ::connectivity::OSQLParseNode * 
                                                             xMetaData,
                                                             static_cast<OQueryController*>(getController())->getNumberFormatter(),
                                                             m_aLocale,
-                                                            m_sDecimalSep.toChar());
+                                                            m_sDecimalSep.toChar(),
+                                                            &static_cast<OQueryController*>(getController())->getParser()->getContext());
         }
 
         aDragLeft->SetField(aName);
