@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-02 14:23:14 $
+ *  last change: $Author: ssa $ $Date: 2002-04-05 13:32:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2494,15 +2494,15 @@ IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-#ifndef REMOTE_APPSERVER
-    if( ImplGetFrame()->GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
+//#ifndef REMOTE_APPSERVER
+    if( GetCurrentModButtons() & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
     {
         mbFormat = TRUE;
         ImplFormat( TRUE );
         maTimer.Start();
     }
     else
-#endif
+//#endif
     {
         mbFormat = TRUE;
         ImplFormat();
@@ -3294,7 +3294,7 @@ BOOL ToolBox::ImplHandleMouseMove( const MouseEvent& rMEvt, BOOL bRepeat )
     Point aMousePos = rMEvt.GetPosPixel();
 
     // Ist ToolBox aktiv
-    if ( mbDrag )
+    if ( mbDrag && mnCurPos != TOOLBOX_ITEM_NOTFOUND )
     {
         // Befindet sich Maus ueber dem Item
         ImplToolItem* pItem = mpItemList->GetObject( mnCurPos );
@@ -3387,7 +3387,7 @@ BOOL ToolBox::ImplHandleMouseButtonUp( const MouseEvent& rMEvt, BOOL bCancel )
 
         // Wurde Maus ueber dem Item losgelassen
         ImplToolItem* pItem = mpItemList->GetObject( mnCurPos );
-        if ( pItem->maRect.IsInside( rMEvt.GetPosPixel() ) )
+        if ( pItem && pItem->maRect.IsInside( rMEvt.GetPosPixel() ) )
         {
             mnCurItemId = pItem->mnId;
             if ( !bCancel )
