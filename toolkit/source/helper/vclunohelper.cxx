@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclunohelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 07:43:57 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:51:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ Font VCLUnoHelper::CreateFont( const ::com::sun::star::uno::Reference< ::com::su
     ::com::sun::star::awt::SimpleFontMetric aFM;
     aFM.Ascent = (sal_Int16)rFontMetric.GetAscent();
     aFM.Descent = (sal_Int16)rFontMetric.GetDescent();
-    aFM.Leading = (sal_Int16)rFontMetric.GetLeading();
+    aFM.Leading = (sal_Int16)rFontMetric.GetIntLeading();
     aFM.Slant = (sal_Int16)rFontMetric.GetSlant();
     aFM.FirstChar = rFontMetric.GetFirstChar();
     aFM.LastChar = rFontMetric.GetLastChar();
