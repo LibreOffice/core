@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: thb $ $Date: 2001-06-22 17:26:31 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:34:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,7 @@ String RID_SVXSTR_ASK_CHANGE_GRADIENT
     Text[ japanese ] = "ΈήΧΓή°Ό®έ‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ΈήΧΓή°Ό®έ‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚ΆΈήΧΓή°Ό®έ‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ±m¦βΉΟ®Χ¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C\n±z―ΰ°χΕά§σΏο¨ϊªΊ±m¦βΉΟ®Χ\n©ΞªΜΌW¥[¤@­Σ·sªΊ±m¦βΉΟ®Χ΅C";
     Text[ arabic ] = "αγ νΚγ ΝέΩ ΚΟΡΜ Ηααζδ ΘΪΟ ΚΫννΡε. \nνγίδί ΚΫννΡ ΚΟΡΜ Ηααζδ ΗαγΝΟΟ \nΓζ ΕΦΗέΙ ΚΟΡΜ αζδ ΜΟνΟ.";
-    Text[ greek ] = "Η διαβάθμιση του χρώματος τροποποιήθηκε και δεν αποθηκεύτηκε. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση χρώματος \nή να προσθέσετε μ";
+    Text[ greek ] = "Η διαβάθμιση του χρώματος τροποποιήθηκε και δεν αποθηκεύτηκε. \nΜπορείτε να αλλάξετε την επιλεγμένη διαβάθμιση χρώματος \nή να προσθέσετε ";
     Text[ korean ] = "±Χ¶σµ¥ΐΜΌΗΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ ±Χ¶σµ¥ΐΜΌΗΐ» Ί―°ζΗΟ°Ε³ª \n»υ ±Χ¶σµ¥ΐΜΌΗΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Gradyan deπiώtirildi ancak kaydedilmedi.\nSeηili gradyanύ deπiώtirebilir ya da\nyeni bir gradyan ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -491,7 +491,7 @@ String RID_SVXSTR_ASK_DEL_LINESTYLE
     Text[ chinese_simplified ] = "ΥζÒªΙΎ³ύΥβΈφΟίΜυΚ½Ρω£Ώ";
     Text[ russian ] = "Βϋ δειρςβθςελόνξ υξςθςε σδΰλθςό ύςξ ρςθλό λθνθθ?";
     Text[ polish ] = "Czy styl linii ma na pewno zostaζ usuniκty?";
-    Text[ japanese ] = "‚±‚Μό½ΐ²Ω‚πν‚µ‚Δ‚©‚ά‚Ά‚ά‚Ή‚ρ‚©B";
+    Text[ japanese ] = "‚±‚Μό½ΐ²Ω‚π–{“–‚Ιν‚µ‚ά‚·‚©B";
     Text[ chinese_traditional ] = "±z―u­n§R°£³o­Σ½u±ψΌΛ¦΅΅H";
     Text[ arabic ] = "εα ΚΡνΟ ΘΗαέΪα ΝΠέ δγΨ ΗαΞΨΏ";
     Text[ greek ] = "Θέλετε σίγουρα να διαγραφεί το στυλ γραμμής;";
@@ -523,7 +523,7 @@ String RID_SVXSTR_ASK_CHANGE_LINESTYLE
     Text[ japanese ] = "ό‚Μ½ΐ²Ω‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½ό‚Μ½ΐ²Ω‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚Άό‚Μ½ΐ²Ω‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ½u±ψΌΛ¦΅¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ½u±ψΌΛ¦΅\n©ΞªΜΌW¥[¤@­Σ·sªΊ½u±ψΌΛ¦΅΅C";
     Text[ arabic ] = "Κγ ΚΫννΡ δγΨ ΗαΞΨ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ δγΨ ΗαΞΨ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δγΨ ΞΨ ΜΟνΟ.";
-    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \nή να προσθέσετε ένα καινούριο στυλ γραμ";
+    Text[ greek ] = "Το στυλ γραμμής τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε το επιλεγμένο στυλ \nή να προσθέσετε ένα καινούριο στυλ γρα";
     Text[ korean ] = "Ό± ΐ―ΗόΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω.\nΌ±ΕΓµΘ Ό± ΐ―Ηόΐ» Ί―°ζΗΟ°Ε³ª \n»υ Ό± ΐ―Ηόΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Ηizgi biηimi deπiώtirildi ancak kaydedilmedi. \nSeηili ηizgi biηimini deπiώtirebilir ya da \nyeni bir ηizgi biηimi ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -720,7 +720,7 @@ String RID_SVXSTR_ASK_CHANGE_HATCH
     Text[ japanese ] = "Κ―ΑέΈή‚ª•ΟX‚³‚κ‚Δ•Ϋ‘¶‚³‚κ‚Δ‚Ά‚ά‚Ή‚ρB\n‘I‘π‚µ‚½Κ―ΑέΈή‚Μ•ΟX‚ά‚½‚Ν\nV‚µ‚ΆΚ―ΑέΈή‚Μ’Η‰Α‚ª‚Ε‚«‚ά‚·B";
     Text[ chinese_traditional ] = "³o­Σ³±Όv¤wΈgΕά§σ΅M¦ύ¬O©|¥Όΐx¦s΅C \n±z―ΰ°χΕά§σΏο¨ϊªΊ³±Όv\n©ΞªΜΌW¥[¤@­Σ·sªΊ³±Όv΅C";
     Text[ arabic ] = "Κγ ΚΫννΡ ΗαδήΤ ζαγ νΚγ ΝέΩε ΘΪΟ.\nνγίδί ΚΫννΡ ΗαδήΤ ΗαγΝΟΟ΅\nΓζ ΕΦΗέΙ δήΤ ΜΟνΟ.";
-    Text[ greek ] = "Η γραμμοσκιά τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε την επιλεγμένη γραμμοσκιά \nή να προσθέσετε μια καινούρια γραμ";
+    Text[ greek ] = "Η γραμμοσκιά τροποποιήθηκε χωρίς να γίνει αποθήκευση. \nΜπορείτε να αλλάξετε την επιλεγμένη γραμμοσκιά \nή να προσθέσετε μια καινούρια γρα";
     Text[ korean ] = "ΗΨΔªΐΜ Ί―°ζµΗΎϊΐΈ³ª ΐϊΐεµΗΑφ ΎΚΎÒ½ΐ΄Ο΄Ω. \nΌ±ΕΓµΘ ΗΨΔªΐ» Ί―°ζΗΟ°Ε³ª \n»υ ΗΨΔªΐ» Γί°΅ΗÒ Όφ ΐΦ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Tarama deπiώtirildi ancak kaydedilmedi.\nSeηili deseni deπiώtirebilir ya da\nyeni bir tarama ekleyebilirsiniz.";
     Text[ language_user1 ] = " ";
@@ -2559,7 +2559,7 @@ String RID_SVXSTR_TBLAFMT_CURRENCY_3D
     Text[ polish ] = "Waluta 3-W";
     Text[ portuguese_brazilian ] = "Currency 3D";
     Text[ japanese ] = "’Κ‰έ 3D";
-    Text[ korean ] = "ΕλΘ­ 3£Δ";
+    Text[ korean ] = "ΕλΘ­ 3£Δ!";
     Text[ chinese_simplified ] = "»υ±Ò 3 Ξ¬";
     Text[ chinese_traditional ] = "³fΉτ 3D";
     Text[ arabic ] = "ΪγαΙ ΛαΗΛνΙ ΗαΓΘΪΗΟ";
@@ -5283,4 +5283,5 @@ String RID_SVXSTR_TRASNGR0
 };
 
  // ********************************************************************** EOF
+
 
