@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: as $ $Date: 2002-05-23 13:13:43 $
+ *  last change: $Author: as $ $Date: 2002-07-05 12:25:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -761,11 +761,18 @@ long Select_Impl( void* pHdl, void* pVoid )
     if( !aURL.Len() )
         return 0;
 
-    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
-            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
-    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
-    if ( !xFrame.is() )
-        xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+    SfxDispatcher* pDispatcher = ((SfxBindings*)pHdl)->GetDispatcher_Impl();
+    if ( ! pDispatcher )
+        return 0;
+    Reference<com::sun::star::frame::XFrame> xFrame( pDispatcher->GetFrame()->GetFrame()->GetFrameInterface() );
+    if (! xFrame.is())
+    {
+        Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
+                Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+        xFrame = Reference < ::com::sun::star::frame::XFrame > ( xDesktop->getActiveFrame() );
+        if ( !xFrame.is() )
+            xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+    }
 
     URL aTargetURL;
     aTargetURL.Complete = aURL;
