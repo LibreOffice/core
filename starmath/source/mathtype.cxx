@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 08:50:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -786,7 +786,7 @@ int MathType::Parse(SvStorage *pStor)
     //starmaths internals.
     APPEND(rRet,"{}");
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #   ifdef CAOLAN
     //sanity check
 
@@ -3350,24 +3350,7 @@ void MathType::HandleMath(SmNode *pNode,int nLevel)
             *pS << sal_uInt8(END); //end embel
         }
         else
-        {
             *pS << nArse;
-            if ((nPendingAttributes) &&
-                (i == ((pTemp->GetText().Len()+1)/2)-1))
-            {
-                *pS << sal_uInt8(EMBEL);
-                while (nPendingAttributes)
-                {
-                        *pS << sal_uInt8(2);
-                        //wedge the attributes in here and clear
-                        //the pending stack
-                        nPendingAttributes--;
-                }
-                nInsertion=pS->Tell();
-                *pS << sal_uInt8(END); //end embel
-                *pS << sal_uInt8(END); //end embel
-            }
-        }
     }
     nPendingAttributes = 0;
 }
