@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-16 07:48:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -661,7 +661,7 @@ namespace dbaui
         {
             aToBeCreated.push_back(aParser.getName());  // remember the local name for creation
             aParser.removeSegment();                    // cut the local name
-            bParentExists = directoryExists(aParser.GetMainURL());
+            bParentExists = directoryExists(aParser.GetMainURL(INetURLObject::NO_DECODE));
         }
 
         if (!aParser.getSegmentCount())
@@ -672,7 +672,7 @@ namespace dbaui
         {
             // the parent content
             Reference< XCommandEnvironment > xEmptyEnv;
-            ::ucb::Content aParent(aParser.GetMainURL(), xEmptyEnv);
+            ::ucb::Content aParent(aParser.GetMainURL(INetURLObject::NO_DECODE), xEmptyEnv);
 
             const ::rtl::OUString sDirectoryContentType = ::rtl::OUString::createFromAscii("application/vnd.sun.staroffice.fsys-folder");
 
@@ -1108,7 +1108,7 @@ namespace dbaui
         INetURLObject aNormalizer;
         aNormalizer.SetSmartProtocol(INET_PROT_FILE);
         aNormalizer.SetSmartURL(_rPath);
-        String sAdabasConfigDir = aNormalizer.GetMainURL();
+        String sAdabasConfigDir = aNormalizer.GetMainURL(INetURLObject::NO_DECODE);
 
         ::ucb::Content aAdabasConfigDir;
         try
@@ -1177,6 +1177,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/07/16 07:48:40  oj
+ *  #89578# removed : after address url
+ *
  *  Revision 1.13  2001/07/12 13:54:20  oj
  *  #89456# check if old type is already ldap
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-21 15:07:11 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,7 +376,7 @@ void ODbaseIndexDialog::Init()
 
 
     //  String aFileName = aURL.PathToFileName();
-    m_aDSN = aURL.GetMainURL();
+    m_aDSN = aURL.GetMainURL(INetURLObject::NO_DECODE);
     ::ucb::Content aFile;
     sal_Bool bFolder=sal_True;
     try
@@ -599,6 +599,9 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/06/21 15:07:11  fme
+ *  Fix #86988#: Redesign of dialogs
+ *
  *  Revision 1.9  2001/06/12 15:42:44  fs
  *  #88079# catch the property exceptions
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-11 10:10:30 $
+ *  last change: $Author: oj $ $Date: 2001-07-17 07:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,6 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
     AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
     AddTabPage(PAGE_DOCUMENTLINKS, String(ResId(STR_PAGETITLE_DOCUMENTS)), ODocumentLinksPage::Create, NULL);
-
     // no local resources needed anymore
     FreeResource();
 
@@ -1901,6 +1900,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.64  2001/07/11 10:10:30  oj
+ *  #87257# change GetUILanguage
+ *
  *  Revision 1.63  2001/07/06 11:33:29  oj
  *  #89359# now dialog saves password temp
  *
