@@ -10934,3 +10934,4 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?__default_constructed_aux@_STL@@YA?AVType@uno@star@sun@com@@PAV23456@ABU__false_type@1@@Z
 ?__default_constructed@_STL@@YA?AUAttributeAssignment@OAttribute2Property@xmloff@@PAU234@@Z
 ?__default_constructed_aux@_STL@@YA?AUAttributeAssignment@OAttribute2Property@xmloff@@PAU234@ABU__false_type@1@@Z
+?lcl_AddState@@YAXAAV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@JABVOUString@rtl@@AAV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
