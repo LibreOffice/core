@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-01 12:36:33 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:32:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,13 +531,6 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
     pOLELRU_Cache->Insert( *this );
 
     return *pOLERef;
-}
-
-
-void SwOLEObj::Unload()
-{
-    if( pOLERef && pOLELRU_Cache )
-        pOLELRU_Cache->Remove( *this );
 }
 
 BOOL SwOLEObj::RemovedFromLRU()
