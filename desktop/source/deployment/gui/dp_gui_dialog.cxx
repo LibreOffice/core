@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-12-07 10:51:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:10:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -567,10 +567,9 @@ void DialogImpl::clickAdd( USHORT )
         m_xPkgMgrFac->getPackageManager( context ) );
     OSL_ASSERT( xPackageManager.is() );
 
-    Any mode(
-        makeAny( static_cast<sal_Int16>(
-                     ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) ) );
-    Reference<ui::dialogs::XFilePicker> xFilePicker(
+    const Any mode( static_cast<sal_Int16>(
+                        ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) );
+    const Reference<ui::dialogs::XFilePicker> xFilePicker(
         m_xComponentContext->getServiceManager()
         ->createInstanceWithArgumentsAndContext(
             OUSTR("com.sun.star.ui.dialogs.FilePicker"),
@@ -643,9 +642,8 @@ void DialogImpl::clickAdd( USHORT )
         else
             file = files[ pos ];
         currentCmdEnv->progressSection(
-            extract_throw<OUString>(
-                ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
-                    OUSTR("Title") ) ), xAbortChannel );
+            ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
+                OUSTR("Title") ).get<OUString>(), xAbortChannel );
         try {
             Reference<deployment::XPackage> xPackage(
                 xPackageManager->addPackage(
@@ -763,11 +761,9 @@ void DialogImpl::clickExport( USHORT )
     }
     else // single item selected
     {
-        Any mode(
-            makeAny(
-                static_cast<sal_Int16>(
-                    ui::dialogs::TemplateDescription::FILESAVE_SIMPLE ) ) );
-        Reference<ui::dialogs::XFilePicker> xFilePicker(
+        const Any mode( static_cast<sal_Int16>(
+                      ui::dialogs::TemplateDescription::FILESAVE_SIMPLE ) );
+        const Reference<ui::dialogs::XFilePicker> xFilePicker(
             m_xComponentContext->getServiceManager()
             ->createInstanceWithArgumentsAndContext(
                 OUSTR("com.sun.star.ui.dialogs.FilePicker"),
@@ -808,8 +804,7 @@ void DialogImpl::clickExport( USHORT )
         // set default selection:
         ::ucb::Content sourceContent( xPackage->getURL(), currentCmdEnv.get() );
         xFilePicker->setDefaultName(
-            extract_throw<OUString>( sourceContent.getPropertyValue(
-                                         OUSTR("Title") ) ) );
+            sourceContent.getPropertyValue( OUSTR("Title") ).get<OUString>() );
         if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
             return; // cancelled
 
@@ -924,9 +919,8 @@ struct DeploymentGuiResMgr :
 
 struct BrandName : public rtl::StaticWithInit<const OUString, BrandName> {
     const OUString operator () () {
-        return extract_throw<OUString>(
-            ::utl::ConfigManager::GetDirectConfigProperty(
-                ::utl::ConfigManager::PRODUCTNAME ) );
+        return ::utl::ConfigManager::GetDirectConfigProperty(
+            ::utl::ConfigManager::PRODUCTNAME ).get<OUString>();
     }
 };
 } // anon namespace
