@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DocumentHelper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:52:36 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 10:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@ import com.sun.star.container.*;
 import integration.forms.dbfTools;
 import integration.forms.DocumentViewHelper;
 import integration.forms.SpreadsheetView;
+import integration.forms.SpreadsheetDocument;
 
 /**************************************************************************/
 /** provides a small wrapper around a document
@@ -82,8 +83,45 @@ import integration.forms.SpreadsheetView;
 public class DocumentHelper
 {
     protected XMultiServiceFactory  m_orb;
-    protected XComponent                m_documentComponent;
+    protected XComponent            m_documentComponent;
 
+    /* ================================================================== */
+    /* ------------------------------------------------------------------ */
+    public DocumentHelper( XMultiServiceFactory orb, XComponent document )
+    {
+        m_orb = orb;
+        m_documentComponent = document;
+    }
+
+    /* ------------------------------------------------------------------ */
+    protected static XComponent implCreateBlankDocument( XMultiServiceFactory orb, String factoryURL ) throws com.sun.star.uno.Exception
+    {
+        XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
+            XComponentLoader.class,
+            orb.createInstance( "com.sun.star.frame.Desktop" )
+        );
+
+        return dbfTools.queryComponent(
+            aLoader.loadComponentFromURL( factoryURL, "_blank", 0, new PropertyValue[ 0 ] )
+        );
+    }
+
+    /* ------------------------------------------------------------------ */
+    public static DocumentHelper blankTextDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
+    {
+        return blankDocument( orb, DocumentType.WRITER );
+    }
+
+    /* ------------------------------------------------------------------ */
+    public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
+    {
+        XComponent document = implCreateBlankDocument( orb, getDocumentFactoryURL( eType ) );
+        if ( eType == DocumentType.CALC )
+            return new SpreadsheetDocument( orb, document );
+        return new DocumentHelper( orb, document );
+    }
+
+    /* ================================================================== */
     /* ------------------------------------------------------------------ */
     public XComponent getDocument( )
     {
@@ -91,40 +129,15 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
+    public Object query( Class aInterfaceClass )
+    {
+        return UnoRuntime.queryInterface( aInterfaceClass, m_documentComponent );
+    }
+
+    /* ------------------------------------------------------------------ */
     public XMultiServiceFactory getOrb( )
     {
         return m_orb;
-    }
-
-    /* ------------------------------------------------------------------ */
-    public DocumentHelper( XMultiServiceFactory orb, XComponent xDocument )
-    {
-        m_orb = orb;
-        m_documentComponent = xDocument;
-    }
-
-    /* ------------------------------------------------------------------ */
-    private static DocumentHelper implCreateBlankDocument( XMultiServiceFactory orb, String factoryURL ) throws com.sun.star.uno.Exception
-    {
-        XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
-            XComponentLoader.class,
-            orb.createInstance( "com.sun.star.frame.Desktop" ) );
-
-        XComponent xDocument = dbfTools.queryXComponent(
-            aLoader.loadComponentFromURL( factoryURL, "_blank", 0, new PropertyValue[ 0 ] ) );
-        return new DocumentHelper( orb, xDocument );
-    }
-
-    /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankTextDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
-    {
-        return implCreateBlankDocument( orb, "private:factory/swriter" );
-    }
-
-    /* ------------------------------------------------------------------ */
-    public static DocumentHelper blankSpreadsheetDocument( XMultiServiceFactory orb ) throws com.sun.star.uno.Exception
-    {
-        return implCreateBlankDocument( orb, "private:factory/scalc" );
     }
 
     /* ------------------------------------------------------------------ */
@@ -167,7 +180,7 @@ public class DocumentHelper
         // set the name if necessary
         if ( null != sInitialName )
         {
-            XPropertySet xFormProps = dbfTools.queryXPropertySet( xNewForm );
+            XPropertySet xFormProps = dbfTools.queryPropertySet( xNewForm );
             xFormProps.setPropertyValue( "Name", sInitialName );
         }
 
@@ -228,6 +241,20 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
+    /** returns a URL which can be used to create a document of a certain type
+    */
+    public static String getDocumentFactoryURL( DocumentType eType )
+    {
+        if ( eType == DocumentType.WRITER )
+            return "private:factory/swriter";
+        if ( eType == DocumentType.CALC )
+            return "private:factory/scalc";
+        if ( eType == DocumentType.DRAWING )
+            return "private:factory/sdraw";
+        return "private:factory/swriter";
+    }
+
+    /* ------------------------------------------------------------------ */
     /** classifies a document
     */
     public DocumentType classify( )
@@ -247,7 +274,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves a com.sun.star.drawing.DrawPage of the document, denoted by index
      *  @param index
-     *      the index of the draw page<br/>
+     *      the index of the draw page
      *  @throws
      *      com.sun.star.lang.IndexOutOfBoundsException
      *      com.sun.star.lang.WrappedTargetException
@@ -303,6 +330,26 @@ public class DocumentHelper
             xFormsCollection = xSuppForms.getForms();
         }
         return xFormsCollection;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** creates a component at the service factory provided by the document
+    */
+    public XInterface createInstance( String serviceSpecifier ) throws com.sun.star.uno.Exception
+    {
+        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            m_documentComponent );
+        return (XInterface)xORB.createInstance( serviceSpecifier );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** creates a component at the service factory provided by the document
+    */
+    public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
+    {
+        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            m_documentComponent );
+        return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }
 };
 
