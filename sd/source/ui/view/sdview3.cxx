@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:18:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:13:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,7 +309,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_SVIM, xStm ) )
         {
             pImageMap = new ImageMap;
-            *xStm >> *pImageMap;
+            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            pImageMap->Read( *xStm, String() );
         }
     }
 
@@ -795,7 +796,10 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
             {
                 uno::Reference < embed::XStorage > xStore = ::comphelper::OStorageHelper::GetStorageFromInputStream( xStm );
                 ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, pDoc->GetDocumentType() ) );
-                if( xDocShRef->DoLoad( xStore ) )
+
+                // mba: BaseURL doesn't make sense for clipboard functionality
+                SfxMedium *pMedium = new SfxMedium( xStore, String() );
+                if( xDocShRef->DoLoad( pMedium ) )
                 {
                     SdDrawDocument* pModel = (SdDrawDocument*) xDocShRef->GetDoc();
                     SdPage*         pWorkPage = (SdPage*) pModel->GetSdPage( 0, PK_STANDARD );
@@ -829,6 +833,8 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     aLayout.Erase(aLayout.SearchAscii(SD_LT_SEPARATOR));
                     pPage->SetPresentationLayout( aLayout, FALSE, FALSE );
                 }
+                else
+                    delete pMedium;
 
                 xDocShRef->DoClose();
                 xDocShRef.Clear();
@@ -1153,7 +1159,8 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
         if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_HTML, xStm ) )
         {
             xStm->Seek( 0 );
-            bReturn = SdrView::Paste( *xStm, EE_FORMAT_HTML, aDropPos, pPage, nPasteOptions );
+            // mba: clipboard always must contain absolute URLs (could be from alien source)
+            bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_HTML, aDropPos, pPage, nPasteOptions );
         }
     }
     else if( !bLink && CHECK_FORMAT_TRANS( SOT_FORMATSTR_ID_EDITENGINE ) )
@@ -1173,13 +1180,15 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
 
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
-                    pOLV->Read( *xStm, EE_FORMAT_BIN, FALSE, pDocSh->GetHeaderAttributes() );
+                    // mba: clipboard always must contain absolute URLs (could be from alien source)
+                    pOLV->Read( *xStm, String(), EE_FORMAT_BIN, FALSE, pDocSh->GetHeaderAttributes() );
                     bReturn = TRUE;
                 }
             }
 
             if( !bReturn )
-                bReturn = SdrView::Paste( *xStm, EE_FORMAT_BIN, aDropPos, pPage, nPasteOptions );
+                // mba: clipboard always must contain absolute URLs (could be from alien source)
+                bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_BIN, aDropPos, pPage, nPasteOptions );
         }
     }
     else if( !bLink && CHECK_FORMAT_TRANS( FORMAT_RTF ) )
@@ -1199,13 +1208,15 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
 
                 if( aRect.IsInside( aPos ) || ( !bDrag && IsTextEdit() ) )
                 {
-                    pOLV->Read( *xStm, EE_FORMAT_RTF, FALSE, pDocSh->GetHeaderAttributes() );
+                    // mba: clipboard always must contain absolute URLs (could be from alien source)
+                    pOLV->Read( *xStm, String(), EE_FORMAT_RTF, FALSE, pDocSh->GetHeaderAttributes() );
                     bReturn = TRUE;
                 }
             }
 
             if( !bReturn )
-                bReturn = SdrView::Paste( *xStm, EE_FORMAT_RTF, aDropPos, pPage, nPasteOptions );
+                // mba: clipboard always must contain absolute URLs (could be from alien source)
+                bReturn = SdrView::Paste( *xStm, String(), EE_FORMAT_RTF, aDropPos, pPage, nPasteOptions );
         }
     }
     else if( CHECK_FORMAT_TRANS( FORMAT_FILE_LIST ) )
