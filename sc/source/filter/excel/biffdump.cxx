@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: gt $ $Date: 2000-09-22 14:54:24 $
+ *  last change: $Author: gt $ $Date: 2000-09-29 11:55:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #ifdef DEBUGGING
 
 #include <tools/stream.hxx>
-#include <sfx2/inimgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 
@@ -5191,43 +5190,33 @@ void Biff8RecDumper::Init( void )
 
     const sal_Char*     pDefName = "biffrecdumper.ini";
     const sal_Char*     pIniKey = "BIFFRECDUMPERINI";
+    const sal_Char*     pPathSep = "\\";        // only DOS-style implemented
+    ByteString          aIniName;
 
-    SvFileStream*   pIn;
+    SvFileStream*       pIn = NULL;
 
-    ByteString          aIniName( GETSTR( SFX_INIMANAGER()->Get( SFX_GROUP_COMMON, _STRING( pIniKey ) ) ) );
+    // first try: search for biffrecdumper.ini in dir, specified  in %HOME%
+    const sal_Char*     pHome = getenv( "HOME" );
+    if( pHome )
+    {
+        aIniName = pHome;
+        aIniName.EraseTrailingChars( *pPathSep );
+        aIniName += pPathSep;
+        aIniName += pDefName;
 
-    if( aIniName.Len() )
         pIn = CreateInStream( aIniName.GetBuffer() );
-    else
-        pIn = NULL;
+    }
 
     if( !pIn )
-    {
+    {   // %HOME% not set or %HOME%\biffrecdumper.ini could not be opened
         const sal_Char* pIni = getenv( pIniKey );
         if( pIni )
         {
             pIn = CreateInStream( pIni );
             if( !pIn )
-                AddError( 0, "Could not open ini file", ByteString( pIni ) );
-        }
-        else
-        {
-            pIn = CreateInStream( ".", pDefName );
-
-            if( !pIn )
             {
-                pIni = getenv( "TMP" );
-                if( !pIni )
-                    pIni = getenv( "TEMP" );
-
-                if( pIni )
-                    pIn = CreateInStream( pIni, pDefName );
-
-                if( !pIn )
-                {
-                    AddError( 0, "Could not find ini file" );
-                    bEndLoading = TRUE;     // zur Sicherheit....
-                }
+                AddError( 0, "Could not open ini file", ByteString( pIni ) );
+                bEndLoading = TRUE;     // zur Sicherheit....
             }
         }
     }
