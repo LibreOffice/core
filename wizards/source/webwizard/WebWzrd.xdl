@@ -3,30 +3,30 @@
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="WebWzrd" dlg:left="96" dlg:top="28" dlg:width="270" dlg:height="210" dlg:help-url="HID:34200">
  <dlg:bulletinboard>
   <dlg:button dlg:id="cbCancel" dlg:tab-index="0" dlg:left="6" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34206" dlg:value="Cancel">
-   <script:event script:event-name="on-performaction" script:macro-name="WebWizard.HtmlAutoPilotBasic.CancelHTMLWizard" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.CancelHTMLWizard" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cbHelp" dlg:tab-index="1" dlg:left="66" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34200" dlg:help-url="HID:34200" dlg:value="cbHelp">
-   <script:event script:event-name="on-performaction" script:macro-name="Tools.Recursive.ShowHelperDialog" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tools.Recursive.ShowHelperDialog" script:language="StarBasic"/>
   </dlg:button>
   <dlg:button dlg:id="cbGoOn" dlg:tab-index="2" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34205" dlg:value="cbGoOn">
-   <script:event script:event-name="on-performaction" script:macro-name="WebWizard.HtmlAutoPilotBasic.EndDialog" script:language="StarBasic"/>
+   <script:event script:event-name="on-performaction" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.EndDialog" script:language="StarBasic"/>
   </dlg:button>
   <dlg:img dlg:id="ImagePreview" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26"/>
   <dlg:menulist dlg:id="lbTemplate" dlg:tab-index="4" dlg:left="6" dlg:top="53" dlg:width="110" dlg:height="94" dlg:help-url="HID:34201">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.ReloadCurrentDocument" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:menulist dlg:id="lbStyles" dlg:tab-index="5" dlg:left="154" dlg:top="53" dlg:width="110" dlg:height="94" dlg:help-url="HID:34202">
-   <script:event script:event-name="on-itemstatechange" script:macro-name="WebWizard.HtmlAutoPilotBasic.LoadWebPageStyles" script:language="StarBasic"/>
+   <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.LoadWebPageStyles" script:language="StarBasic"/>
   </dlg:menulist>
   <dlg:text dlg:id="lblTemplate" dlg:tab-index="6" dlg:left="6" dlg:top="42" dlg:width="110" dlg:height="10"/>
   <dlg:text dlg:id="lblStyle" dlg:tab-index="7" dlg:left="154" dlg:top="42" dlg:width="110" dlg:height="10" dlg:value="lblStyle"/>
   <dlg:checkbox dlg:id="chkSaveasTemplate" dlg:tab-index="8" dlg:left="6" dlg:top="164" dlg:width="110" dlg:height="12" dlg:help-url="HID:34207" dlg:value="chkSaveasTemplate"/>
   <dlg:radiogroup>
    <dlg:radio dlg:id="optTiled" dlg:tab-index="9" dlg:left="161" dlg:top="164" dlg:width="96" dlg:height="10" dlg:tag="11" dlg:help-url="HID:34208" dlg:value="optTiled">
-    <script:event script:event-name="on-itemstatechange" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
    <dlg:radio dlg:id="optArea" dlg:tab-index="10" dlg:left="161" dlg:top="177" dlg:width="96" dlg:height="10" dlg:tag="10" dlg:help-url="HID:34209" dlg:value="optArea">
-    <script:event script:event-name="on-itemstatechange" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
+    <script:event script:event-name="on-itemstatechange" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.SetBackGraphicStyle" script:language="StarBasic"/>
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:fixedline dlg:id="hlnBackground" dlg:tab-index="11" dlg:left="154" dlg:top="152" dlg:width="110" dlg:height="9" dlg:value="hlnBackground"/>
