@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-22 15:43:25 $
+ *  last change: $Author: sj $ $Date: 2000-11-24 17:24:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5361,7 +5361,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
     if ( GetAttrib( PPT_CharAttr_FontColor, nVal, nInstanceInSheet ) )  // Textfarbe (4Byte-Arg)
     {
         Color aCol( rManager.MSO_CLR_ToColor( nVal ) );
-        rSet.Put( SvxColorItem( aCol ) );
+        rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
         if ( nInstanceInSheet == 0xffffffff )
             mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet = aCol;
     }
@@ -5370,7 +5370,7 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
         Color   aCol( rManager.MSO_CLR_ToColor( nVal ) );
         Color&  aColorInSheet = mrStyleSheet.mpCharSheet[ mnInstance ]->maCharLevel[ mnDepth ].mnFontColorInStyleSheet;
         if ( aColorInSheet != aCol )
-            rSet.Put( SvxColorItem( aCol ) );
+            rSet.Put( SvxColorItem( aCol, EE_CHAR_COLOR ) );
     }
 
     if ( GetAttrib( PPT_CharAttr_Escapement, nVal, nInstanceInSheet ) ) // Hoch/Tiefstellung in %
