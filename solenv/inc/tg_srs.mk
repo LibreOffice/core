@@ -42,12 +42,14 @@ $(SRCTARGET) : $(SRCFILES)
 .IF "$(UPDATER)"=="YES"
 .IF "$(BUILD_SOSL)"==""
 .IF "$(no_hids)$(NO_HIDS)"==""
+.IF "$(USE_SHELL)"=="4nt"
     @+type $(mktmp $(SRCFILES:+"\n")) > $(TMP)$/$(TARGET).tra
     @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
     +type $(TMP)$/$(TARGET).art | $(SORT) -u  > $(TMP)$/$(TARGET).tra
     +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
     @+-del $(TMP)$/$(TARGET).tra
     @+-del $(TMP)$/$(TARGET).art
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
 .ENDIF
@@ -117,12 +119,14 @@ $(SRS)$/$(SRS$(TNR)NAME).srs: $(SRC$(TNR)FILES)
 .IF "$(UPDATER)"=="YES"
 .IF "$(BUILD_SOSL)"==""
 .IF "$(no_hids)$(NO_HIDS)"==""
+.IF "$(USE_SHELL)"=="4nt"
     @+type $(mktmp $(SRC$(TNR)FILES:+"\n")) > $(TMP)$/$(TARGET).tra
     @+-$(COPY) $(TMP)$/$(TARGET).tra $(TMP)$/$(TARGET).art
     +type $(TMP)$/$(TARGET).art | $(SORT) -u > $(TMP)$/$(TARGET).tra
     +call resp.bat $(ENV_TOOLS)\mhids.bat @$(TMP)$/$(TARGET).tra $(SRS) $(PRJNAME) $(CDEFS) $(INCLUDE)
     @+del $(TMP)$/$(TARGET).art
     @+del $(TMP)$/$(TARGET).tra
+.ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF
 .ENDIF
