@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DocumentSettings.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: bm $ $Date: 2002-11-29 14:42:58 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2002 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TextDocumentSettings_idl__
+#define __com_sun_star_text_TextDocumentSettings_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+//=============================================================================
+
+module com {   module sun {   module star {   module text {
+
+//=============================================================================
+
+/** describes properties that apply to the whole text document.
+ */
+service DocumentSettings
+{
+    /** gives access to the properties implemented by this service.
+     */
+    interface com::sun::star::beans::XPropertySet;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if charts in text documents are updated automatically.
+
+        This has no effect if 'FieldAutoUpdate' is <FALSE/>.
+    */
+    [optional, property] boolean ChartAutoUpdate;
+
+    /** specifies if spacing between paragraphs and tables is to be
+        added.
+
+        <p>If between two paragraphs, two tables, or a paragraph and a
+        table, you have defined spacing above and below each object,
+        usually only the larger one of the two spaces is used.  If the
+        spacing between hte objects are to be added this property has
+        to be <TRUE\>.</p>
+    */
+    [optional, property] boolean AddParaTableSpacing;
+
+    /** specifies if top paragraph spacing is applied to paragraphs
+        on the first page of text documents.
+
+        <p>If <TRUE\>, the paragraph or table spacing to the top will
+        also be effective at the beginning of a page or column if the
+        paragraph or table is positioned on the first page of the
+        document.  The same applies for a page break.</p>
+    */
+    [optional, property] boolean AddParaTableSpacingAtStart;
+
+    /** specifies the alignment of tab stops in text documents.
+
+        <p>If <TRUE\> centered and right-aligned paragraphs containing
+        tabs are formatted as a whole in the center or aligned to the
+        right. If <FLASE\>, only the text to the right of the last
+        tab, for example, is aligned to the right, while the text to
+        the left remains where it is.</p>
+    */
+    [optional, property] boolean AlignTabStopPosition;
+
+    // Note: This name is not really correct: It should be something
+    // like SaveLinkedDocumentContent (and should ideally be in a
+    // service for "global documents")
+    // ------------------------------------------------------------
+    /** specifies if the contents of links in the global document
+        are saved or not.
+    */
+    [optional, property] boolean SaveGlobalDocumentLinks;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
