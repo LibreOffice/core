@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:31:38 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:14:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,7 @@ class SalXLib
     int             nStateOfYield_;
     BOOL            bWasXError_;
     BOOL            bIgnoreXErrors_;
+    int                         nIgnoreErrorLevel;
 
     int             nFDs_;
     fd_set          aReadFDS_;
@@ -295,6 +296,8 @@ public:
     void            Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
+    inline  void                    PushErrorTrap() { nIgnoreErrorLevel++; }
+    inline  void                    PopErrorTrap() { nIgnoreErrorLevel--; }
     inline  BOOL            WasXError() const { return bWasXError_; }
     inline  BOOL            GetIgnoreXErrors() const { return bIgnoreXErrors_; }
     inline  void            SetIgnoreXErrors( BOOL b )
@@ -325,6 +328,11 @@ class SalUnicodeConverter;
 class SalConverterCache;
 
 DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
+
+extern "C" {
+    struct SnDisplay;
+    struct SnLauncheeContext;
+};
 
 class SalDisplay
 {
@@ -402,6 +410,9 @@ class SalDisplay
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
+
+    struct SnDisplay           *m_pSnDisplay;
+    struct SnLauncheeContext   *m_pSnLauncheeContext;
 
     void            DestroyFontCache();
     long            Dispatch( XEvent *pEvent );
