@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prhdlfac.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:35:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:02:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,6 @@
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_FONTWEIGHTTYPES_HXX
 #include "weighhdl.hxx"
-#endif
-#ifndef _XMLOFF_PROPERTYHANDLER_FMTSPLITTYPES_HXX
-#include "splithdl.hxx"
 #endif
 #ifndef _XMLOFF_PROPERTYHANDLER_BREAKTYPES_HXX
 #include "breakhdl.hxx"
@@ -431,7 +428,9 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLFontWeightPropHdl;
             break;
         case XML_TYPE_TEXT_SPLIT:
-            pPropHdl = new XMLFmtSplitPropHdl;
+            pPropHdl = new XMLNamedBoolPropertyHdl(
+                GetXMLToken(XML_AUTO),
+                GetXMLToken(XML_ALWAYS) );
             break;
         case XML_TYPE_TEXT_BREAKBEFORE:
             pPropHdl = new XMLFmtBreakBeforePropHdl;
@@ -516,6 +515,15 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             break;
         case XML_TYPE_STYLENAME :
             pPropHdl = new XMLStyleNamePropHdl;
+            break;
+        case XML_TYPE_NUMBER_NO_ZERO:
+            pPropHdl = new XMLNumberWithoutZeroPropHdl( 4 );
+            break;
+        case XML_TYPE_NUMBER8_NO_ZERO:
+            pPropHdl = new XMLNumberWithoutZeroPropHdl( 1 );
+            break;
+        case XML_TYPE_NUMBER16_NO_ZERO:
+            pPropHdl = new XMLNumberWithoutZeroPropHdl( 2 );
             break;
     }
 
