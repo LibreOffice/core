@@ -2,9 +2,9 @@
  *
  *  $RCSfile: encryptorimpl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-12 13:15:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_XML_CRYPTO_SAX_XSIGNATURECOLLECTOR_HPP_
 #include <com/sun/star/xml/crypto/sax/XReferenceCollector.hpp>
 #endif
+#ifndef _COM_SUN_STAR_XML_CRYPTO_XSECURITYENVIRONMENT_HPP_
+#include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
@@ -125,6 +128,9 @@ private:
      * remembers whether the encryption succeeds.
      */
     bool      m_bEncryptionSucceed;
+
+    com::sun::star::uno::Reference<
+        com::sun::star::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
 
     virtual void notifyResultListener() const
         throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
