@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mib $ $Date: 2002-07-04 09:32:04 $
+ *  last change: $Author: mib $ $Date: 2002-07-04 13:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1970,7 +1970,7 @@ Point SwAccessibleMap::PixelToLogic( const Point& rPoint ) const
 {
     Point aPoint;
     Window *pWin = GetShell()->GetWin();
-    if( Win )
+    if( pWin )
     {
         aPoint = pWin->ScreenToOutputPixel( rPoint );
         aPoint = pWin->PixelToLogic( aPoint );
