@@ -2,7 +2,7 @@
     shell SfxViewFrame
 
     (C) 1994-1995 StarDivision GmbH, Hamburg, Germany
-    $Author: hr $ $Date: 2000-09-18 16:52:25 $ $Revision: 1.1.1.1 $
+    $Author: os $ $Date: 2001-01-10 15:55:44 $ $Revision: 1.2 $
     $Logfile:   T:/sfx2/sdi/frmslots.sdv  $ $Workfile:   FRMSLOTS.SDI  $
 =========================================================================*/
 
@@ -26,6 +26,12 @@ interface Window : Object
 
     //----------------------------------------------------------------------
     SID_HYPERLINK_DIALOG
+    [
+        ExecMethod = ChildWindowExecute ;
+        StateMethod = ChildWindowState ;
+    ]
+    //----------------------------------------------------------------------
+    SID_RUBY_DIALOG
     [
         ExecMethod = ChildWindowExecute ;
         StateMethod = ChildWindowState ;
@@ -549,6 +555,9 @@ shell SfxViewFrame
 /*-------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:52:25  hr
+    initial import
+
     Revision 1.48  2000/09/12 10:42:32  mba
     ChildWindow slot all in SfxViewFrame
 

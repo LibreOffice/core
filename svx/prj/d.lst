@@ -210,6 +210,7 @@ hedabu: ..\inc\pszctrl.hxx %_DEST%\inc%_EXT%\svx\pszctrl.hxx
 hedabu: ..\inc\rectenum.hxx %_DEST%\inc%_EXT%\svx\rectenum.hxx
 hedabu: ..\inc\relfld.hxx %_DEST%\inc%_EXT%\svx\relfld.hxx
 hedabu: ..\inc\rotmodit.hxx %_DEST%\inc%_EXT%\svx\rotmodit.hxx
+hedabu: ..\inc\rubydialog.hxx %_DEST%\inc%_EXT%\svx\rubydialog.hxx
 hedabu: ..\inc\ruler.hxx %_DEST%\inc%_EXT%\svx\ruler.hxx
 hedabu: ..\inc\rulritem.hxx %_DEST%\inc%_EXT%\svx\rulritem.hxx
 hedabu: ..\inc\scene3d.hxx %_DEST%\inc%_EXT%\svx\scene3d.hxx

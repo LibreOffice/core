@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: er $ $Date: 2000-12-20 11:42:13 $
+#   last change: $Author: os $ $Date: 2001-01-10 16:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -168,6 +168,7 @@ CXXFILES = \
         relfld.cxx  \
         rlrcitem.cxx \
         rulritem.cxx \
+        rubydialog.cxx \
         simptabl.cxx \
         spldlg.cxx \
         splwrap.cxx \
@@ -236,6 +237,7 @@ SRC1FILES =  \
         postdlg.src \
         prtqry.src \
         ruler.src \
+        rubydialog.src\
         spldlg.src \
         srchdlg.src \
         srchxtra.src \
@@ -323,6 +325,7 @@ SLOFILES=\
         $(SLO)$/relfld.obj   \
         $(SLO)$/rlrcitem.obj \
         $(SLO)$/rulritem.obj \
+        $(SLO)$/rubydialog.obj \
     $(SLO)$/simptabl.obj \
     $(SLO)$/spldlg.obj   \
     $(SLO)$/splwrap.obj  \
