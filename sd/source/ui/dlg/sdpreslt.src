@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 13:05:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 17:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ ModalDialog DLG_PRESLT
         Text[ japanese ] = "γƒγƒΌγ‚Έγ‚Ήγ‚Ώγ‚¤γƒ«γ‚’ιΈζγ—γΎγ™(~S)";
         Text[ chinese_traditional ] = "θ«‹ζ‚¨ιΈζ“‡δΈ€ε€‹ι ιΆζ¨£εΌ(~S)";
         Text[ arabic ] = "ΗαΡΜΗΑ ΗΞΚνΗΡ ΚΞΨνΨ ΗαΥέΝΙ";
-        Text[ greek ] = "Επιλέξτε ένα πρότυπο ~σελίδας";
+        Text[ greek ] = "Επιλέξτε ένα πρότυπο ~διαφάνειας";
         Text[ korean ] = "μ¬λΌμ΄λ“ λ””μμΈμ„ μ„ νƒν•μ‹­μ‹μ¤(~S)";
         Text[ turkish ] = "Bir sayfa biηimi seηin";
         Text[ language_user1 ] = " ";
@@ -248,7 +248,7 @@ ModalDialog DLG_PRESLT
     Text[ japanese ] = "γƒγƒΌγ‚Έγ‚Ήγ‚Ώγ‚¤γƒ«";
     Text[ chinese_traditional ] = "ι ιΆζ¨£εΌ";
     Text[ arabic ] = "δγΨ ΥέΝΙ";
-    Text[ greek ] = "Πρότυπο σελίδας";
+    Text[ greek ] = "Πρότυπο διαφάνειας";
     Text[ korean ] = "μ¬λΌμ΄λ“ λ””μμΈ";
     Text[ turkish ] = "Slayt tasarύmύ";
     Text[ language_user1 ] = " ";
@@ -260,6 +260,7 @@ ModalDialog DLG_PRESLT
     Text[ hindi ] = "ΰ¤Έΰ¥ΰ¤²ΰ¤‡ΰ¤΅ ΰ¤΅ΰ¤Ώΰ¤Έΰ¥ΰ¤¨";
     Text[ slovak ] = "NΓ΅vrh snΓ­mku";
 };
+
 
 
 
