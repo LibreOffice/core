@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:17:27 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:35:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,10 @@
 #define _SVSTDARR_USHORTS
 #include <svtools/svstdarr.hxx>
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 
 class Font;
 class Color;
@@ -137,7 +141,7 @@ struct SvxRTFStyleType
 
 // Bitmap - Mode
 
-struct SvxRTFPictureType
+struct SVX_DLLPUBLIC SvxRTFPictureType
 {
     // Format der Bitmap
     enum RTF_BMPSTYLE
@@ -246,7 +250,7 @@ struct RTFPardAttrMapIds
 // -----------------------------------------------------------------------
 
 
-class SvxRTFParser : public SvRTFParser
+class SVX_DLLPUBLIC SvxRTFParser : public SvRTFParser
 {
     SvStream &rStrm;
     SvxRTFColorTbl  aColorTbl;
@@ -427,7 +431,7 @@ public:
 
 // der Stack fuer die Attribute:
 // diese Klasse darf nur vom SvxRTFParser benutzt werden!
-class SvxRTFItemStackType
+class SVX_DLLPUBLIC SvxRTFItemStackType
 {
     friend class SvxRTFParser;
     friend class SvxRTFItemStackList;
