@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-25 16:43:07 $
+ *  last change: $Author: bm $ $Date: 2001-05-02 11:17:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,12 +381,25 @@ void SchXMLExportHelper::parseDocument( uno::Reference< chart::XChartDocument >&
         {
             // determine size of data
             const uno::Sequence< double >* pSequence = xValues.getConstArray();
-            mnSeriesCount = pSequence->getLength();
-            mnSeriesLength = xValues.getLength();
+            uno::Sequence< rtl::OUString > xSeriesLabels;
+            uno::Sequence< rtl::OUString > xCategoryLabels;
+
+            if( mbRowSourceColumns )
+            {
+                mnSeriesCount = pSequence->getLength();
+                mnSeriesLength = xValues.getLength();
+                xSeriesLabels = xData->getColumnDescriptions();
+                xCategoryLabels = xData->getRowDescriptions();
+            }
+            else
+            {
+                mnSeriesCount = xValues.getLength();
+                mnSeriesLength = pSequence->getLength();
+                xSeriesLabels = xData->getRowDescriptions();
+                xCategoryLabels = xData->getColumnDescriptions();
+            }
 
             // determine existence of headers
-            uno::Sequence< rtl::OUString > xSeriesLabels = xData->getColumnDescriptions();
-            uno::Sequence< rtl::OUString > xCategoryLabels = xData->getRowDescriptions();
             mbHasCategoryLabels = ( xCategoryLabels.getLength() > 0 );
             mbHasSeriesLabels = ( xSeriesLabels.getLength() > 0 );
         }
@@ -708,6 +721,17 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
             // export column headers
             uno::Sequence< rtl::OUString > xSeriesLabels = rData->getColumnDescriptions();
             uno::Sequence< rtl::OUString > xCategoryLabels = rData->getRowDescriptions();
+            sal_Int32 nSeriesCount, nSeriesLength;
+            if( mbRowSourceColumns )
+            {
+                nSeriesLength = mnSeriesLength;
+                nSeriesCount = mnSeriesCount;
+            }
+            else
+            {
+                nSeriesLength = mnSeriesCount;
+                nSeriesCount = mnSeriesLength;
+            }
             sal_Int32 nSeriesLablesLength = xSeriesLabels.getLength();
             sal_Int32 nCategoryLabelsLength = xCategoryLabels.getLength();
 
@@ -747,7 +771,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
 
             // export data
             SvXMLElementExport aRows( mrExport, XML_NAMESPACE_TABLE, sXML_table_rows, sal_True, sal_True );
-            for( nDataPoint = 0; nDataPoint < mnSeriesLength; nDataPoint++ )
+            for( nDataPoint = 0; nDataPoint < nSeriesLength; nDataPoint++ )
             {
                 // <table:table-row>
                 SvXMLElementExport aRow( mrExport, XML_NAMESPACE_TABLE, sXML_table_row, sal_True, sal_True );
@@ -763,7 +787,7 @@ void SchXMLExportHelper::exportTable( uno::Reference< chart::XChartDataArray >& 
                         mrExport.GetDocHandler()->characters( xCategoryLabels[ nDataPoint ] );
                 }
 
-                for( nSeries = 0; nSeries < mnSeriesCount; nSeries++ )
+                for( nSeries = 0; nSeries < nSeriesCount; nSeries++ )
                 {
                     // get string by value
                     fData = pData[ nSeries ];
@@ -1090,10 +1114,7 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
                 // get property states for autostyles
                 try
                 {
-                    if( mbRowSourceColumns )
-                        xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
-                    else
-                        xPropSet = xDiagram->getDataPointProperties( nSeries, nElement );
+                    xPropSet = xDiagram->getDataPointProperties( nElement, nSeries );
                 }
                 catch( uno::Exception aEx )
                 {
