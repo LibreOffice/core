@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:32 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ chinese_traditional ] = "Áõ∏ÈóúÁöÑË°®Ê†º";
             Text[ arabic ] = "«·Ãœ«Ê· «·„⁄‰Ì…";
             Text[ turkish ] = "›lgili tablolar";
-            Text[ catalan ] = "tablas implicadas";
+            Text[ catalan ] = "taules implicades";
             Text[ finnish ] = "beteiligte Tabellen";
             Text[ thai ] = "Tables involved";
         };
@@ -158,7 +158,7 @@ ModalDialog DLG_QRY_JOIN
             Text[ chinese_traditional ] = "Áõ∏ÈóúÁöÑÊ¨Ñ‰Ωç";
             Text[ arabic ] = "«·ÕﬁÊ· «·„⁄‰Ì…";
             Text[ turkish ] = "›lgili alanlar";
-            Text[ catalan ] = "campos implicados";
+            Text[ catalan ] = "camps implicats";
             Text[ finnish ] = "beteiligte Felder";
             Text[ thai ] = "Fields involved";
         };
@@ -222,8 +222,8 @@ ModalDialog DLG_QRY_JOIN
         Text[ chinese_traditional ] = "È°ûÂûã(~T)";
         Text[ turkish ] = "~Type";
         Text[ arabic ] = "~Type";
-        Text[ catalan ] = "~Type";
-        Text[ thai ] = "~Type";
+        Text[ catalan ] = "~Tipus";
+        Text[ thai ] = "~‡∏ä‡∏ô‡∏¥‡∏î";
     };
 
     ListBox LB_JOINTYPE
@@ -257,10 +257,10 @@ ModalDialog DLG_QRY_JOIN
     };
     StringList [ english_us ] =
     {
-         < "Innerer" ; Default; > ;
-        < "Linker" ; Default; > ;
-        < "Rechter" ; Default; > ;
-        < "Vollst‰ndiger"  ; Default; > ;
+         < "Inner join" ; Default; > ;
+        < "Left join" ; Default; > ;
+        < "Right join" ; Default; > ;
+        < "Full (outer) join"  ; Default; > ;
     };
     StringList [ portuguese ] =
     {
@@ -470,7 +470,7 @@ String STR_QUERY_INNER_JOIN
     Text[ french ] = "Contient uniquement les enregistrements pour lesquels les contenus des champs liÈs des deux tables sont identiques.";
     Text[ spanish ] = "Contiene solo los registros en los que los contenidos de los campos vinculados de ambas tablas con iguales.";
     Text[ italian ] = "Contiene solamente i record di dati in cui i contenuti dei campi collegati di entrambe le tabelle sono uguali.";
-    Text[ danish ] = "Indeholder kun dataposter for hvilke indholdet af de sammenkÊdede felter i begge tabeller er ens.";
+    Text[ danish ] = "Indeholder kun de dataposter, hvor indholdet i de kÊdede felter i de to tabeller er ens.";
     Text[ swedish ] = "InnehÂller bara de dataposter d‰r innehÂllet i de l‰nkade f‰lten ‰r lika i bÂda tabellerna.";
     Text[ polish ] = "Zawiera tylko te rekordy, ktÛrych zawartoúci w po≥πczonych polach sπ takie same w obydwu tabelach.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
@@ -500,7 +500,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ french ] = "Contient TOUS les enregistrements de '%1', et uniquement les enregistrements de '%2' pour lesquels les contenus des champs liÈs des deux tables sont identiques.";
     Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y solo los registros de '%2' en los que los contenidos de los campos vinculados de ambas tablas son iguales.";
     Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e soltanto i record di dati da '%2' in cui i campi collegati di entrambe le caselle sono uguali.";
-    Text[ danish ] = "Indeholder alle dataposter fra '%1' og kun de dataposter fra '%2', for hvilke indholdet af de sammenkÊdede felter i begge tabeller ens.";
+    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og kun de dataposter fra '%2', hvor indholdet i de kÊdede felter i de to tabeller er ens.";
     Text[ swedish ] = "InnehÂller ALLA dataposter frÂn '%1' och bara de dataposter frÂn '%2' d‰r innehÂllet i de l‰nkade f‰lten ‰r lika i bÂda tabellerna.";
     Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1 i tylko te rekordy z %2, ktÛrych zawartoúci po≥πczonych pÛl w obu tabelach sπ rÛwne.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
@@ -530,7 +530,7 @@ String STR_QUERY_FULL_JOIN
     Text[ french ] = "Contient TOUS les enregistrements de '%1' et de '%2'.";
     Text[ spanish ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ italian ] = "Contiene TUTTI i record di dati da '%1' e da '%2'.";
-    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og fra '%2'.";
+    Text[ danish ] = "Indeholder ALLE dataposter fra '%1' og '%2'.";
     Text[ swedish ] = "InnehÂller ALLA dataposter frÂn '%1' och frÂn '%2'.";
     Text[ polish ] = "Zawiera WSZYSTKIE rekordy z %1' i z %2'.";
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
