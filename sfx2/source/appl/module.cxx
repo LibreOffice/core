@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 11:56:19 $
+ *  last change: $Author: dv $ $Date: 2001-07-12 07:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,6 @@
 #include "accmgr.hxx"
 #include "objface.hxx"
 #include "viewfrm.hxx"
-#include "iodlg.hxx"
 
 #define SfxModule
 #include "sfxslots.hxx"
