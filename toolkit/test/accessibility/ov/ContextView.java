@@ -21,16 +21,20 @@ public class ContextView
     extends ListeningObjectView
     implements ActionListener
 {
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
+        System.out.println ("ContextView.CreateView");
         if (xContext != null)
-            return new ContextView();
+            return new ContextView (aContainer);
         else
             return null;
     }
 
-    public ContextView ()
+    public ContextView (ObjectViewContainer aContainer)
     {
+        super (aContainer);
         maNameLabel = new JLabel ("Name: ");
         maName = new JLabel ("");
         maDescriptionLabel = new JLabel ("Description: ");

@@ -16,7 +16,7 @@ JAR_PATH = $(SOLARBINDIR)$/
 
 # The rest of this makefile should not need to be touched.
 
-all : AccessibilityWorkBench dist
+all : AccessibilityWorkBench
 
 JAR_FILES =		\
     unoil.jar	\
@@ -94,7 +94,7 @@ JFLAGS = -deprecation -classpath $(CLASSPATH)
 %.class : %.java
     +$(JAVAC) $(JFLAGS) $<
 
-AccessibilityWorkBench : ObjectView $(JAVA_FILES:b:+".class")
+AccessibilityWorkBench : ObjectView Tools $(JAVA_FILES:b:+".class")
 
 ObjectView .SETDIR=ov :
     @echo "making package ObjectView"
@@ -103,6 +103,15 @@ ObjectView .SETDIR=ov :
 Tools .SETDIR=tools :
     @echo "making package Tools"
     dmake
+
+# Remove all class files.
+clean : ObjectView.clean Tools.clean
+    rm *.class
+    rm AccessibilityWorkBench.jar
+ObjectView.clean .SETDIR=ov :
+    rm *.class
+Tools.clean .SETDIR=tools :
+    rm *.class
 
 # Create a jar file of all files neccessary to build and run the work bench.
 dist: AccessibilityWorkBench.jar

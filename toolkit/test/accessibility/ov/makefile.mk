@@ -33,8 +33,8 @@ JAVA_FILES = 								\
     ov/ContextView.java						\
     ov/FocusView.java						\
     ov/SelectionView.java					\
-    ov/StateSetView.java					\
     ov/TextView.java
+#	ov/StateSetView.java					\
 
 
 JAVA_CLASSPATHS := 			\

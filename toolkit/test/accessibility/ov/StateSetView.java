@@ -36,21 +36,103 @@ public class StateSetView
     /** Create a FocusView when the given object supports the
         XAccessibleComponent interface.
     */
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
+    {
+        ObjectView aView = null;
+        if (xContext != null)
+            if (mnViewMode == SHOW_ALL_STATES)
+                aView = StateSetAllView.Create (aContainer, xContext);
+            else
+                aView = StateSetSetView.Create (aContainer, xContext);
+        return aView;
+    }
+
+    public StateSetView (ObjectViewContainer aContainer)
+    {
+        super (aContainer);
+
+        addMouseListener (this);
+    }
+
+    private void SetViewMode (int nViewMode)
+    {
+        mnViewMode = nViewMode;
+        switch (mnViewMode)
+        {
+            case SHOW_SET_STATES :
+                maContainer.ReplaceView (
+                    getClass(),
+                    StateSetSetView.class);
+                break;
+            case SHOW_ALL_STATES :
+                maContainer.ReplaceView (
+                    getClass(),
+                    StateSetAllView.class);
+                break;
+        }
+        aContainer.SetObject (mxContext);
+    }
+
+
+
+    public String GetTitle ()
+    {
+        return ("StateSet");
+    }
+
+    public void notifyEvent (AccessibleEventObject aEvent)
+    {
+        if (aEvent.EventId == AccessibleEventId.STATE_CHANGED)
+            Update();
+    }
+
+    public void mouseClicked(MouseEvent e)
+    {
+        switch (mnViewMode)
+        {
+            case SHOW_SET_STATES :
+                SetViewMode (SHOW_ALL_STATES);
+                break;
+            case SHOW_ALL_STATES :
+                SetViewMode (SHOW_SET_STATES);
+                break;
+        }
+    }
+    public void mouseEntered (MouseEvent e) {}
+    public void mouseExited (MouseEvent e) {}
+    public void mousePressed (MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {}
+
+    private static int mnViewMode = SHOW_ALL_STATES;
+    private final static int SHOW_SET_STATES = 0;
+    private final static int SHOW_ALL_STATES = 1;
+
+
+
+public class StateSetAllView
+    extends StateSetView
+{
+    /** Create a FocusView when the given object supports the
+        XAccessibleComponent interface.
+    */
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
         if (xContext != null)
-            return new StateSetView();
+            return new StateSetAllView (aContainer);
         else
             return null;
     }
 
-    public StateSetView ()
+    public StateSetAllView (ObjectViewContainer aContainer)
     {
-        maStates = null;
-        mnViewMode = SHOW_ALL_STATES;
+        super (aContainer);
+
         setPreferredSize (new Dimension(300,90));
         setMinimumSize (new Dimension(200,80));
-        addMouseListener (this);
     }
 
     public void paintChildren (Graphics g)
@@ -68,41 +150,8 @@ public class StateSetView
                 aSize.width-aInsets.left-aInsets.right,
                 aSize.height-aInsets.top-aInsets.bottom);
 
-            switch (mnViewMode)
-            {
-                case SHOW_ALL_STATES :
-                    PaintAllStates ((Graphics2D)g, aWidgetArea);
-                    break;
-                case SHOW_SET_STATES :
-                    PaintSetStates ((Graphics2D)g, aWidgetArea);
-                    break;
-            }
+            PaintAllStates ((Graphics2D)g, aWidgetArea);
         }
-    }
-
-    private void SetViewMode (int nViewMode)
-    {
-        mnViewMode = nViewMode;
-        switch (mnViewMode)
-        {
-            case SHOW_SET_STATES :
-                maStates = new JLabel ();
-                add (maStates, BorderLayout.CENTER);
-                Update();
-                break;
-            case SHOW_ALL_STATES :
-                if (maStates != null)
-                {
-                    remove (maStates);
-                    maStates = null;
-                }
-                repaint();
-                break;
-        }
-    }
-
-    private void PaintSetStates (Graphics2D g, Rectangle aWidgetArea)
-    {
     }
 
     private void PaintAllStates (Graphics2D g, Rectangle aWidgetArea)
@@ -152,58 +201,49 @@ public class StateSetView
             }
         }
     }
+}
+
+
+public class StateSetSetView
+    extends StateSetView
+{
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
+    {
+        if (xContext != null)
+            return new StateSetSetView (aContainer);
+        else
+            return null;
+    }
+
+    public StateSetSetView (ObjectViewContainer aContainer)
+    {
+        super (aContainer);
+
+        maStates = null;
+        setPreferredSize (new Dimension(300,90));
+    }
 
 
     synchronized public void Update ()
     {
-        if (mnViewMode == SHOW_SET_STATES)
+        XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();
+        if (xStateSet != null)
         {
-            XAccessibleStateSet xStateSet = mxContext.getAccessibleStateSet();
-            if (xStateSet != null)
+            String sStates = new String ();
+            short aStates[] = xStateSet.getStates();
+            for (int i=0; i<aStates.length; i++)
             {
-                String sStates = new String ();
-                short aStates[] = xStateSet.getStates();
-                for (int i=0; i<aStates.length; i++)
-                {
-                    if (i > 0)
-                        sStates = sStates + ", ";
-                    sStates = sStates + NameProvider.getStateName(aStates[i]);
-                }
-                maStates.setText (sStates);
+                if (i > 0)
+                    sStates = sStates + ", ";
+                sStates = sStates + NameProvider.getStateName(aStates[i]);
             }
+            maStates.setText (sStates);
         }
     }
-
-    public String GetTitle ()
-    {
-        return ("StateSet");
-    }
-
-    public void notifyEvent (AccessibleEventObject aEvent)
-    {
-        if (aEvent.EventId == AccessibleEventId.STATE_CHANGED)
-            Update();
-    }
-
-    public void mouseClicked(MouseEvent e)
-    {
-        switch (mnViewMode)
-        {
-            case SHOW_SET_STATES :
-                SetViewMode (SHOW_ALL_STATES);
-                break;
-            case SHOW_ALL_STATES :
-                SetViewMode (SHOW_SET_STATES);
-                break;
-        }
-    }
-    public void mouseEntered (MouseEvent e) {}
-    public void mouseExited (MouseEvent e) {}
-    public void mousePressed (MouseEvent e) {}
-    public void mouseReleased(MouseEvent e) {}
 
     private JLabel maStates;
-    private int mnViewMode;
-    private final int SHOW_SET_STATES = 0;
-    private final int SHOW_ALL_STATES = 1;
+}
+
 }

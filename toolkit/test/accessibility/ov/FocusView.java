@@ -24,18 +24,22 @@ public class FocusView
     /** Create a FocusView when the given object supports the
         XAccessibleComponent interface.
     */
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
         XAccessibleComponent xComponent = (XAccessibleComponent)UnoRuntime.queryInterface(
                 XAccessibleComponent.class, xContext);
         if (xComponent != null)
-            return new FocusView();
+            return new FocusView (aContainer);
         else
             return null;
     }
 
-    public FocusView ()
+    public FocusView (ObjectViewContainer aContainer)
     {
+        super (aContainer);
+
         setLayout (new GridBagLayout());
         GridBagConstraints aConstraints = new GridBagConstraints ();
 

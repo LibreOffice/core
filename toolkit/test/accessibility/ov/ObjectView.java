@@ -24,13 +24,16 @@ abstract public class ObjectView
         In the ususal case this will be the support of a specific
         accessibility interface.
     */
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
         return null;
     }
 
-    public ObjectView ()
+    public ObjectView (ObjectViewContainer aContainer)
     {
+        maContainer = aContainer;
         mxContext = null;
     }
 
@@ -69,4 +72,6 @@ abstract public class ObjectView
 
     /// Reference to the current object to display information about.
     protected XAccessibleContext mxContext;
+
+    protected ObjectViewContainer maContainer;
 }

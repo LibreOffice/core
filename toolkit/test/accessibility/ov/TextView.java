@@ -23,19 +23,23 @@ public class TextView
     /** Create a TextView when the given object supports the
         XAccessibleText interface.
     */
-    static public ObjectView Create (XAccessibleContext xContext)
+    static public ObjectView Create (
+        ObjectViewContainer aContainer,
+        XAccessibleContext xContext)
     {
         XAccessibleText xText = (XAccessibleText)UnoRuntime.queryInterface(
                 XAccessibleText.class, xContext);
         if (xText != null)
-            return new TextView();
+            return new TextView (aContainer);
         else
             return null;
     }
 
 
-    public TextView ()
+    public TextView (ObjectViewContainer aContainer)
     {
+        super (aContainer);
+
         setLayout (new GridBagLayout());
         GridBagConstraints aConstraints = new GridBagConstraints ();
 

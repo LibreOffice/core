@@ -14,6 +14,11 @@ abstract class ListeningObjectView
     extends ObjectView
     implements XAccessibleEventListener
 {
+    public ListeningObjectView (ObjectViewContainer aContainer)
+    {
+        super (aContainer);
+    }
+
     /** Add this object as event listener at the broadcasting
         accessible object.
     */
