@@ -2,9 +2,9 @@
 *
 *  $RCSfile: profileitem_ooo.scp,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: rt $ $Date: 2004-03-30 14:51:24 $
+*  last change: $Author: hr $ $Date: 2004-04-14 12:17:15 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -206,7 +206,7 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Schemadataurl
     Section = "Bootstrap";
     Order = 6;
     Key = "CFG_SchemaDataUrl";
-    Value = "$BaseInstallation/share/registry/schema ?${$UnoFile:UNO_USER_PACKAGES_CACHE}/registry/schema ?${$UnoFile:UNO_SHARED_PACKAGES_CACHE}/registry/schema";
+    Value = "$BaseInstallation/share/registry/schema ?$PKG_UserConfig/schema ?$PKG_SharedConfig/schema";
 End
 
 ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultdataurl
@@ -215,9 +215,10 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Defaultdataurl
     Section = "Bootstrap";
     Order = 7;
     Key = "CFG_DefaultLayerUrls";
-    Value = "$BaseInstallation/share/registry ${$UnoFile:UNO_SHARED_PACKAGES_CACHE}/registry ${$UnoFile:UNO_USER_PACKAGES_CACHE}/registry";
+    Value = "$BaseInstallation/share/registry $PKG_SharedConfig $PKG_UserConfig";
 End
- ProfileItem gid_Profileitem_Configmgr_Cachedisposal
+
+ProfileItem gid_Profileitem_Configmgr_Cachedisposal
     ProfileID =gid_Profile_Configmgr_Ini  ;
     ModuleID = gid_Module_Root;
     Section   = "Bootstrap";
@@ -326,6 +327,24 @@ ProfileItem gid_Profileitem_Configmgr_Localcfg_Strata
     Value  = "com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_DefaultLayerUrl;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UnoSharedPackages;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UnoUserPackages;com.sun.star.comp.configuration.backend.LocalSingleStratum:$CFG_UserLayerUrl;";
 End
 
+ProfileItem gid_Profileitem_Configmgr_Pkg_SharedConfig
+    ProfileID = gid_Profile_Configmgr_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 13;
+    Key = "PKG_SharedConfig";
+    Value = "${$UnoFile:UNO_SHARED_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
+End
+
+ProfileItem gid_Profileitem_Configmgr_Pkg_UserConfig
+    ProfileID = gid_Profile_Configmgr_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 14;
+    Key = "PKG_UserConfig";
+    Value = "${$UnoFile:UNO_USER_PACKAGES_CACHE}/registry/com.sun.star.comp.deployment.configuration.PackageRegistryBackend/registry";
+End
+
 //end configmgr
 
 ProfileItem gid_Profileitem_Setup_Uno_Java_Comppath
@@ -364,15 +383,6 @@ ProfileItem gid_Profileitem_Soffice_Logo
     Value = "1";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Services
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 6;
-    Key = "UNO_SERVICES";
-    Value = "?$UNO_USER_PACKAGES_CACHE/services.rdb ?$UNO_SHARED_PACKAGES_CACHE/services.rdb $ORIGIN/services.rdb";
-End
-
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
@@ -395,15 +405,6 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
     Value = "$UNO_SHARED_PACKAGES/cache";
 End
 
-ProfileItem gid_Profileitem_Uno_Uno_Types
-    ProfileID = gid_Profile_Uno_Ini;
-    ModuleID = gid_Module_Root;
-    Section = "Bootstrap";
-    Order = 5;
-    Key = "UNO_TYPES";
-    Value = "$ORIGIN/types.rdb ?$UNO_SHARED_PACKAGES_CACHE/types.rdb ?$UNO_USER_PACKAGES_CACHE/types.rdb";
-End
-
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
@@ -424,6 +425,50 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
     Order = 4;
     Key = "UNO_USER_PACKAGES_CACHE";
     Value = "$UNO_USER_PACKAGES/cache";
+End
+
+ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_SharedUnoFile";
+#if defined UNX
+    Value = "$UNO_SHARED_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+#else
+    Value = "$UNO_SHARED_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/uno.ini";
+#endif
+End
+
+ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 6;
+    Key = "PKG_UserUnoFile";
+#if defined UNX
+    Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+#else
+    Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/uno.ini";
+#endif
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Types
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 7;
+    Key = "UNO_TYPES";
+    Value = "$ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Services
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 8;
+    Key = "UNO_SERVICES";
+    Value = "${$PKG_UserUnoFile:UNO_SERVICES} ${$PKG_SharedUnoFile:UNO_SERVICES} $ORIGIN/services.rdb";
 End
 
 ProfileItem gid_Profileitem_Versions_Staroffice5_2
