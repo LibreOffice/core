@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nativenumbersupplier.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: khong $ $Date: 2002-10-19 00:22:50 $
+ *  last change: $Author: khong $ $Date: 2002-11-05 23:31:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         sal_Unicode ch = src[i];
         newStr->buffer[i] = (isNumber(ch) ? NumberChar[number][ ch - NUMBER_ZERO ] :
         isDecimal(ch) ? DecimalChar[number] : isMinus(ch) ? MinusChar[number] :
-        (isSeparator(ch) && number == NumberChar_FullWidth) ? thousandSeparator + 0xFEE0 : ch);
+        ! isSeparator(ch) ? ch : number == NumberChar_FullWidth ? thousandSeparator + 0xFEE0 : SeparatorChar[number]);
         offset[i] = startPos + i;
     }
     return OUString(newStr->buffer, nCount);
@@ -331,7 +331,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         } else {
             if ((index = numberChar.indexOf(str[i])) >= 0)
             newStr->buffer[count] = (index % 10) + NUMBER_ZERO;
-            else if (isSeparator(str[i]) &&
+            else if ((isSeparator(str[i]) || str[i] == 0x3001) &&
                 (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                         multiplierChar.indexOf(str[i+1]) >= 0)))
             newStr->buffer[count] = thousandSeparator;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberchar.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-09-15 22:28:56 $
+ *  last change: $Author: khong $ $Date: 2002-11-05 23:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,6 +164,37 @@ static sal_Unicode MinusChar[] = {
     0x002D, // Myammar
     0x002D, // Cambodian (Khmer)
     0x002D, // Mongolian
+};
+
+static sal_uInt16 SeparatorChar[] = {
+    0x002C, // Half Width (Ascii)
+    0x3001, // Full Width
+    0x3001, // Chinese Lower
+    0x3001, // S. Chinese Upper
+    0x3001, // T. Chinese Upper
+    0x3001, // Japanese Modern
+    0x3001, // Japanese Trad.
+    0x3001, // Korean Lower
+    0x3001, // Korean Upper
+    0x3001, // Korean Hangul
+    0x002C, // Arabic Indic
+    0x002C, // Est. Arabic Indic
+    0x002C, // Indic
+    0x002C, // Thai
+    0x002C, // Oriya
+    0x002C, // Marathi
+    0x002C, // Bengali
+    0x002C, // Punjabi
+    0x002C, // Gujarali
+    0x002C, // Tamil
+    0x002C, // Telugu
+    0x002C, // Kannada
+    0x002C, // Malayalam
+    0x002C, // Lao
+    0x002C, // Tibetan
+    0x002C, // Myammar
+    0x002C, // Cambodian (Khmer)
+    0x002C, // Mongolian
 };
 
 #define NUMBER_ZERO     NumberChar[NumberChar_HalfWidth][0] // 0x0030
