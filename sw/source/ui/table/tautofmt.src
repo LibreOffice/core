@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:03:50 $
+ *  last change: $Author: rt $ $Date: 2000-11-29 11:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ ModalDialog DLG_AUTOFMT_TABLE
         Text[ chinese_traditional ] = "¼Æ¦r®æ¦¡(~N)";
         Text[ arabic ] = "ÊäÓíŞ ÇáÃÑŞÇã";
         Text[ greek ] = "ÌïñöŞ áñéèìşí";
-        Text[ korean ] = "¹øÈ£ ¼­½Ä(~N)";
+        Text[ korean ] = "¼ıÀÚ Çü½Ä(~N)";
         Text[ turkish ] = "Sayı f~ormatı";
         Text[ language_user1 ] = " ";
     };
