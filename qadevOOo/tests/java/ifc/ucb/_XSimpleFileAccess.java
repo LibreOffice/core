@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSimpleFileAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:30:32 $
+ *  last change:$Date: 2003-09-08 11:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,15 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.ucb.XSimpleFileAccess</code>

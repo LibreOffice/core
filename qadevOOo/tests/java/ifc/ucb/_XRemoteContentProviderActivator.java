@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XRemoteContentProviderActivator.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:30:21 $
+ *  last change:$Date: 2003-09-08 11:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,11 +61,12 @@
 
 package ifc.ucb;
 
+import lib.MultiMethodTest;
+
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.ucb.XContentProviderManager;
 import com.sun.star.ucb.XRemoteContentProviderAcceptor;
 import com.sun.star.ucb.XRemoteContentProviderActivator;
-import lib.MultiMethodTest;
 
 /**
  * Testing <code>com.sun.star.ucb.XRemoteContentProviderActivator</code>
