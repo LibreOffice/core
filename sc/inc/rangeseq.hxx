@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 18:22:16 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 18:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,15 @@ public:
                                 const ScMatrix* pMatrix );
 };
 
+
+class ScByteSequenceToString
+{
+public:
+    //  rAny must contain Sequence<sal_Int8>,
+    //  may or may not contain 0-bytes at the end
+    static BOOL GetString( String& rString, const com::sun::star::uno::Any& rAny,
+                            sal_uInt16 nEncoding );
+};
 
 #endif
 

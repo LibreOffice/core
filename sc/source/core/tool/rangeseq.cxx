@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rangeseq.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 18:23:33 $
+ *  last change: $Author: nn $ $Date: 2001-04-10 18:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ long lcl_DoubleToLong( double fVal )
     if ( fInt >= LONG_MIN && fInt <= LONG_MAX )
         return (long)fInt;
     else
-        return 0.0;     // out of range
+        return 0;       // out of range
 }
 
 BOOL ScRangeToSequence::FillLongArray( uno::Any& rAny, ScDocument* pDoc, const ScRange& rRange )
@@ -370,5 +370,19 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix 
 
 //------------------------------------------------------------------------
 
+BOOL ScByteSequenceToString::GetString( String& rString, const uno::Any& rAny,
+                                        sal_uInt16 nEncoding )
+{
+    uno::Sequence<sal_Int8> aSeq;
+    if ( rAny >>= aSeq )
+    {
+        rString = String( (const sal_Char*)aSeq.getConstArray(),
+                            (xub_StrLen)aSeq.getLength(), nEncoding );
+        rString.EraseTrailingChars( (sal_Unicode) 0 );
+        return TRUE;
+    }
+    return FALSE;
+}
 
+//------------------------------------------------------------------------
 
