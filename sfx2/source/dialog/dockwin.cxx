@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-27 11:47:51 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,4 +1537,15 @@ void SfxDockingWindow::StateChanged( StateChangedType nStateChange )
     DockingWindow::StateChanged( nStateChange );
 }
 
+void SfxDockingWindow::Move()
+{
+    if ( IsReallyVisible() )
+    {
+        SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
+        if ( pImp->bSplitable )
+            eIdent = SFX_CHILDWIN_SPLITWINDOW;
+        SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
+        pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+    }
+}
 

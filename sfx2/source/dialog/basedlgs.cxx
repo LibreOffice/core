@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-20 11:20:42 $
+ *  last change: $Author: mba $ $Date: 2002-04-17 12:42:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ void SfxModelessDialog::Resize()
 void SfxModelessDialog::Move()
 {
     ModelessDialog::Move();
-    if ( pImp->bConstructed && pImp->pMgr )
+    if ( pImp->bConstructed && pImp->pMgr && IsReallyVisible() )
     {
         ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
