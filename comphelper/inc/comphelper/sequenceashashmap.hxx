@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sequenceashashmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-01-28 12:45:49 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,46 +125,22 @@ class SequenceAsHashMap : public SequenceAsHashMapBase
         SequenceAsHashMap();
 
         //---------------------------------------
-        /** @short  creates a new map from the given
-                    any, which must contain a suitable
-                    sequence of element types
-                    "css.beans.PropertyValue" or
-                    "css.beans.NamedValue".
-
-            @attention  If the given Any is an empty one
-                        (if its set to VOID), no exception
-                        is thrown. In such case this instance will
-                        be created as an empty one too!
-
-            @param  aSource
-                    contains the new items for this map.
-
-            @throw  An <type scope="com::sun::star::beans">IllegalTypeException</type>
-                    is thrown, if the given any
-                    does not contain a suitable sequence.
+        /** @see    operator<<(const ::com::sun::star::uno::Any&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Any& aSource);
 
         //---------------------------------------
-        /** @short  creates a new map from the given
-                    PropertyValue sequence.
+        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&)
+         */
+        SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
 
-            @attention  Only the struct elements "Name" and
-                        "Value" are used here. The items "Handle"
-                        and "State" will be ignored and cant be
-                        restored later!
-
-            @param  lSource
-                    contains the new items for this map.
+        //---------------------------------------
+        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lSource);
 
         //---------------------------------------
-        /** @short  creates a new map from the given
-                    NamedValue sequence.
-
-            @param  lSource
-                    contains the new items for this map.
+        /** @see    operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >&)
          */
         SequenceAsHashMap(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lSource);
 
@@ -188,10 +164,25 @@ class SequenceAsHashMap : public SequenceAsHashMapBase
                     contains the new items for this map.
 
             @throw  An <type scope="com::sun::star::beans">IllegalTypeException</type>
-                    is thrown, if the given any
-                    does not contain a suitable sequence.
+                    is thrown, if the given any does not contain a suitable sequence ...
+                    but not if its a VOID Any!
          */
         void operator<<(const ::com::sun::star::uno::Any& aSource);
+
+        //---------------------------------------
+        /** @short  fill this map from the given
+                    sequence, where every Any must contain
+                    an item from type "css.beans.PropertyValue"
+                    "css.beans.NamedValue".
+
+            @param  lSource
+                    contains the new items for this map.
+
+            @throw  An <type scope="com::sun::star::beans">IllegalTypeException</type>
+                    is thrown, if the given any sequence
+                    uses wrong types for its items. VOID Any will be ignored!
+         */
+        void operator<<(const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lSource);
 
         //---------------------------------------
         /** @short  fill this map from the given
