@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-25 20:02:32 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3281,6 +3281,8 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
 
 SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+    DropTargetHelper( this ),
+    DragSourceHelper( this ),
     aActHitType(SDRHIT_NONE),
     eDrawMode(OBJ_NONE),
     pApplyTempl(0),
@@ -3306,7 +3308,6 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
 
     SetPointer( POINTER_TEXT );
     aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
-    EnableDrop();
 
     bTblInsDelMode = FALSE;
     aKeyInputTimer.SetTimeout( 3000 );
@@ -3465,65 +3466,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
 
     switch ( rCEvt.GetCommand() )
     {
-        case COMMAND_STARTDRAG:
-        {
-            if (rSh.GetDrawView() && rSh.GetDrawView()->Command(rCEvt, this))
-            {
-                rView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
-                return; // Event von der SdrView ausgewertet
-            }
-            if ( !pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
-            {
-                BOOL bStart = FALSE, bDelSelect = FALSE;
-                SdrObject *pObj = NULL;
-                Point aDocPos( PixelToLogic( rCEvt.GetMousePosPixel() ) );
-                if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, TRUE, TRUE))
-                    //Wir sind nicht beim Selektieren und stehen auf einer
-                    //Selektion
-                    bStart = TRUE;
-                else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
-                          rSh.IsInsideSelectedObj( aDocPos ) )
-                    //Wir sind nicht am internen Draggen und stehen auf
-                    //einem Objekt (Rahmen, Zeichenobjekt)
-                    bStart = TRUE;
-                else if( !bFrmDrag && rView.GetDocShell()->IsReadOnly() &&
-                        OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
-                {
-                    rSh.LockPaint();
-                    if( rSh.SelectObj( aDocPos, FALSE, FALSE, pObj ))
-                        bStart = bDelSelect = TRUE;
-                    else
-                        rSh.UnlockPaint();
-                }
-                else
-                {
-                    SwContentAtPos aSwContentAtPos( SwContentAtPos::SW_INETATTR );
-                    bStart = rSh.GetContentAtPos( aDocPos,
-                                aSwContentAtPos,
-                                FALSE );
-                }
-
-                if ( bStart && !bIsInDrag )
-                {
-                    bMBPressed = FALSE;
-                    ReleaseMouse();
-                    bFrmDrag = FALSE;
-                    bExecuteDrag = TRUE;
-                    SwEditWin::nDDStartPosY = aDocPos.Y();
-                    SwEditWin::nDDStartPosX = aDocPos.X();
-                    aMovePos = aDocPos;
-                    StartExecuteDrag();
-                    bCallBase = FALSE;
-                    if( bDelSelect )
-                    {
-                        rSh.UnSelectFrm();
-                        rSh.UnlockPaint();
-                    }
-                }
-            }
-        }
-        break;
-
         case COMMAND_CONTEXTMENU:
         {
             const USHORT nId = SwInputChild::GetChildWindowId();
@@ -3932,6 +3874,9 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
 /***********************************************************************
 
         $Log: not supported by cvs2svn $
+        Revision 1.6  2001/01/25 20:02:32  jp
+        use calendarwrapper instead of international
+
         Revision 1.5  2000/11/29 14:52:48  jp
         Bug #80898#: Start QuickHelp - set correct cursor flags
 

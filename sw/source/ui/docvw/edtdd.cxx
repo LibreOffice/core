@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtdd.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:45:49 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,8 @@
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
 #endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 #ifndef _SWMODULE_HXX
 #include <swmodule.hxx>
@@ -131,7 +131,6 @@ extern BOOL bNoInterrupt;
 extern BOOL bFrmDrag;
 extern BOOL bDDTimerStarted;
 
-static BOOL bDroped = FALSE;
 BOOL bExecuteDrag = FALSE;
 
 void SwEditWin::StartDDTimer()
@@ -152,101 +151,84 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
     aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
 }
 
+void SwEditWin::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+{
+    SwWrtShell &rSh = rView.GetWrtShell();
+//!!    if( rSh.GetDrawView() &&
+//!!        rSh.GetDrawView()->StartDrag( nAction, rPosPixel, this) )
+//!!    {
+//!!        rView.GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+//!!        return; // Event von der SdrView ausgewertet
+//!!    }
+
+    if ( !pApplyTempl && !rSh.IsDrawCreate() && !IsDrawAction())
+    {
+        BOOL bStart = FALSE, bDelSelect = FALSE;
+        SdrObject *pObj = NULL;
+        Point aDocPos( PixelToLogic( rPosPixel ) );
+        if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, TRUE, TRUE))
+            //Wir sind nicht beim Selektieren und stehen auf einer
+            //Selektion
+            bStart = TRUE;
+        else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
+                    rSh.IsInsideSelectedObj( aDocPos ) )
+            //Wir sind nicht am internen Draggen und stehen auf
+            //einem Objekt (Rahmen, Zeichenobjekt)
+            bStart = TRUE;
+        else if( !bFrmDrag && rView.GetDocShell()->IsReadOnly() &&
+                OBJCNT_NONE != rSh.GetObjCntType( aDocPos, pObj ))
+        {
+            rSh.LockPaint();
+            if( rSh.SelectObj( aDocPos, FALSE, FALSE, pObj ))
+                bStart = bDelSelect = TRUE;
+            else
+                rSh.UnlockPaint();
+        }
+        else
+        {
+            SwContentAtPos aSwContentAtPos( SwContentAtPos::SW_INETATTR );
+            bStart = rSh.GetContentAtPos( aDocPos,
+                        aSwContentAtPos,
+                        FALSE );
+        }
+
+        if ( bStart && !bIsInDrag )
+        {
+            bMBPressed = FALSE;
+            ReleaseMouse();
+            bFrmDrag = FALSE;
+            bExecuteDrag = TRUE;
+            SwEditWin::nDDStartPosY = aDocPos.Y();
+            SwEditWin::nDDStartPosX = aDocPos.X();
+            aMovePos = aDocPos;
+            StartExecuteDrag();
+            if( bDelSelect )
+            {
+                rSh.UnSelectFrm();
+                rSh.UnlockPaint();
+            }
+        }
+    }
+}
 
 void SwEditWin::StartExecuteDrag()
 {
     if( !bExecuteDrag || bIsInDrag )
         return;
 
-    bDroped = FALSE;
     bIsInDrag = TRUE;
 
-    SwWrtShell *pSh = &rView.GetWrtShell();
+    SwTransferable* pTransfer = new SwTransferable( rView.GetWrtShell() );
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::datatransfer::XTransferable > xRef( pTransfer );
 
-    BOOL bOldIdle = pSh->GetViewOptions()->IsIdle();
-    ((SwViewOption *)pSh->GetViewOptions())->SetIdle(FALSE);
+    pTransfer->StartDrag( this, aMovePos );
+}
 
-    if( pSh->IsSelFrmMode() )
-        pSh->ShowCrsr();
-
-    DropAction eAction;
-#ifdef MAC
-    const Region aRegion( pSh->GetCrsrRegion() );
-#endif
-
-    //Object bereits hier auf den Stack legen, weil es sich im DTor aus dem
-    //SwView austragen wurde und deshalb hinter dem else-Scope nicht mehr
-    //erreichbar waere.
-    SwDataExchangeRef aRef( new SwDataExchange( rView.GetWrtShell() ) );
-    SW_MOD()->pDragDrop = aRef;
-    aRef->DragAndDrop_Copy();
-
-    DBG_TRACE("SW: Vor ExecuteDrag" );
-
-    // JP 02.10.96: aus ReadOnly-Docs darf nichts gemovt werden!
-    // JP 19.01.99: aus ReadOnly-Docs darf eigentlich nur kopiert werden!
-    USHORT nDragOptions = DRAG_ALL;
-    if( ( rView.GetDocShell() && rView.GetDocShell()->IsReadOnly() ) ||
-        rView.GetWrtShell().HasReadonlySel() )
-        nDragOptions = DRAG_COPYABLE;
-
-    eAction = aRef->ExecuteDrag( this, Pointer( POINTER_MOVEDATA ),
-                                       Pointer( POINTER_COPYDATA ),
-                                       nDragOptions
-#ifdef MAC
-                                        , &aRegion
-#endif
-                                        );
-
-    DBG_TRACE("SW: Nach ExecuteDrag" );
-
-    //Und noch die letzten Nacharbeiten damit alle Stati stimmen.
-    if ( eAction == DROP_MOVE || eAction == DROP_DISCARD )
-    {
-        if ( !bDroped )
-        {
-            //Es wurde auserhalb des Writers gedroped. Wir muessen noch
-            //loeschen.
-
-            pSh->StartAllAction();
-            pSh->StartUndo( UIUNDO_DRAG_AND_MOVE );
-            if ( pSh->IsTableMode() )
-                pSh->DeleteTblSel();
-            else
-            {
-                if ( !(pSh->IsSelFrmMode() || pSh->IsObjSelected()) )
-                    //SmartCut, eines der Blanks mitnehmen.
-                    pSh->IntelligentCut( pSh->GetSelectionType(), TRUE );
-                pSh->DelRight();
-            }
-            pSh->EndUndo( UIUNDO_DRAG_AND_MOVE );
-            pSh->EndAllAction();
-        }
-        else
-        {
-            const int nSelection = pSh->GetSelectionType();
-            if( ( SwWrtShell::SEL_FRM | SwWrtShell::SEL_GRF |
-                 SwWrtShell::SEL_OLE | SwWrtShell::SEL_DRW ) & nSelection )
-            {
-                pSh->EnterSelFrmMode();
-            }
-        }
-    }
-    if ( pSh->IsSelFrmMode() )
-        pSh->HideCrsr();
-    else if ( DROP_NONE != eAction )
-        pSh->ShowCrsr();
-    else
-    {
-        //Muss wohl sein weil gescrollt wurde und ?...?
-        pSh->StartAction();
-        pSh->EndAction();
-    }
+void SwEditWin::DragFinished()
+{
     aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
-    ((SwViewOption *)pSh->GetViewOptions())->SetIdle(bOldIdle);
     bIsInDrag = FALSE;
-
-    DBG_TRACE("SW: Fertig mit D&D" );
 }
 
 
@@ -285,65 +267,63 @@ void lcl_SelectShellForDrop( SwView &rView )
         rView.SelectShell();
 }
 
-BOOL SwEditWin::Drop( const DropEvent& rEvt )
+sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     ::lcl_SelectShellForDrop( GetView() );
     DropCleanup();
+    sal_Int8 nRet = DND_ACTION_NONE;
 
     //Ein Drop auf eine offene OutlinerView geht uns nichts an (siehe auch QueryDrop)
     SwWrtShell &rSh = rView.GetWrtShell();
+    const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
     SdrObject *pObj = 0;
-    const Point aDocPt( PixelToLogic( rEvt.GetPosPixel() ) );
+    OutlinerView* pOLV;
     rSh.GetObjCntType( aDocPt, pObj );
-    if( pObj )
+
+    if( pObj && 0 != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
     {
-        OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
-        if ( pOLV )
+        Rectangle aRect( pOLV->GetOutputArea() );
+        aRect.Union( pObj->GetLogicRect() );
+        const Point aPos = pOLV->GetWindow()->PixelToLogic(rEvt.maPosPixel);
+        if ( aRect.IsInside(aPos) )
         {
-            Rectangle aRect( pOLV->GetOutputArea() );
-            aRect.Union( pObj->GetLogicRect() );
-            const Point aPos = pOLV->GetWindow()->PixelToLogic(rEvt.GetPosPixel());
-            if ( aRect.IsInside(aPos) )
-            {
-                rSh.StartAllAction();
-                BOOL bRet = pOLV->Drop( rEvt );
-                rSh.EndAllAction();
-                return bRet;
-            }
+            rSh.StartAllAction();
+//!!            sal_Int8 nRet = DND_ACTION_NONE/*pOLV->ExecuteDrop( rEvt )*/;
+            rSh.EndAllAction();
+            return nRet;
         }
     }
 
-    BOOL bRet = rEvt.GetData() &&
-                0 != SwDataExchange::PasteData( *rEvt.GetData(), rSh,
-                                                nDropAction, nDropFormat,
-                                                nDropDestination, &rEvt );
+    TransferableDataHelper aData( rEvt.maDropEvent.Transferable );
+    nRet = rEvt.mnAction;
+    if( !SwTransferable::PasteData( aData, rSh, nDropAction, nDropFormat,
+                                nDropDestination, FALSE, &aDocPt, nRet ))
+//!!    nRet = OFF_APP()->ExecuteDrop( rEvt );
+        nRet = DND_ACTION_NONE;
+    else if ( SW_MOD()->pDragDrop )
+        //Bei internem D&D nicht mehr aufraeumen!
+        SW_MOD()->pDragDrop->SetCleanUp( FALSE );
 
-    if ( bRet )
-    {
-        if ( SW_MOD()->pDragDrop )
-            bDroped = TRUE;         //Bei internem D&D nicht mehr aufraeumen!
-    }
-    else
-        bRet = OFF_APP()->Drop( (DropEvent&)rEvt );
-    return bRet;
+    return nRet;
 }
 
 
-BOOL SwEditWin::QueryDrop( DropEvent& rEvt )
+
+sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 {
-    if ( rEvt.IsLeaveWindow() )
+    if( rEvt.mbLeaving )
     {
         DropCleanup();
-        return TRUE;
+        return rEvt.mnAction;
     }
 
-    if(rView.GetDocShell()->IsReadOnly())
-        return FALSE;
+    if( rView.GetDocShell()->IsReadOnly() )
+        return DND_ACTION_NONE;
 
     SwWrtShell &rSh = rView.GetWrtShell();
 
     //Ein bischen scrollen?
-    Point aPixPt( rEvt.GetPosPixel() );
+    Point aPixPt( rEvt.maPosPixel );
     Point aPoint;
     Rectangle aWin( aPoint, GetOutputSizePixel() );
     Rectangle aWin2( aWin );
@@ -392,7 +372,7 @@ BOOL SwEditWin::QueryDrop( DropEvent& rEvt )
     //JP 19.01.99: Drop in geschuetzte Bereiche ist nicht statthaft
     const Point aDocPt( PixelToLogic( aPixPt ) );
     if( rSh.ChgCurrPam( aDocPt ) || rSh.IsOverReadOnlyPos( aDocPt ) )
-        return FALSE;
+        return DND_ACTION_NONE;
 
     //Auf was wollen wir denn gerade droppen?
     nDropDestination = 0;
@@ -411,8 +391,9 @@ BOOL SwEditWin::QueryDrop( DropEvent& rEvt )
             Rectangle aRect( pOLV->GetOutputArea() );
             aRect.Union( pObj->GetLogicRect() );
             const Point aPos = pOLV->GetWindow()->PixelToLogic(aPixPt);
-            if ( aRect.IsInside(aPos) )
-                return pOLV->QueryDrop( rEvt );
+            if( aRect.IsInside( aPos ) )
+//!!                return pOLV->AcceptDrop( rEvt );
+                return rEvt.mnAction;
         }
     }
 
@@ -467,25 +448,25 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
             nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
         else
             nDropDestination = EXCHG_DEST_SWDOC_FREE_AREA;
-
     }
     else
         bDropCursor = FALSE;
 
-    USHORT nEventAction, nUserOpt = EXCHG_IN_ACTION_DEFAULT;
-    if( !rEvt.IsDefaultAction() )
-        nUserOpt = rEvt.GetAction();
+    USHORT nEventAction;
+    sal_Int8 nUserOpt = rEvt.mnAction;
 
-    nDropAction = SotExchange::GetExchangeAction( *rEvt.GetData(),
-                                nDropDestination, rEvt.GetSourceOptions(),
+    nDropAction = SotExchange::GetExchangeAction(
+                                GetDataFlavorExVector(),
+                                nDropDestination,
+                                rEvt.mnAction,
+//!!                                rEvt.GetSourceOptions(),
                                 nUserOpt, nDropFormat, nEventAction );
 
-    BOOL bRet = TRUE;
     if( EXCHG_INOUT_ACTION_NONE != nDropAction )
     {
         //Bei den default Aktionen wollen wir noch ein bischen mitreden.
         SwModule *pMod = SW_MOD();
-        if ( pMod->pDragDrop )
+        if( pMod->pDragDrop )
         {
             BOOL bCleanup = FALSE;
             //Zeichenobjekte in Kopf-/Fusszeilen sind nicht erlaubt
@@ -496,31 +477,31 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
                 bCleanup = TRUE;
             }
             // keine positionsgeschuetzten Objecte verschieben!
-            else if( DROP_MOVE == rEvt.GetAction() &&
+            else if( DROP_MOVE == rEvt.mnAction &&
                      pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
             {
                 bCleanup = TRUE;
             }
-            else if( rEvt.IsDefaultAction() )
-            {
-                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
-                //              ansonten ein Copy - Task 54974
-                nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
-                                    ? DROP_MOVE
-                                    : DROP_COPY;
-            }
+//!!            else if( rEvt.IsDefaultAction() )
+//!!            {
+//!!                // JP 13.08.98: internes Drag&Drop: bei gleichem Doc ein Move
+//!!                //              ansonten ein Copy - Task 54974
+//!!                nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
+//!!                                    ? DROP_MOVE
+//!!                                    : DROP_COPY;
+//!!            }
             if ( bCleanup )
             {
                 CleanupDropUserMarker();
                 rSh.UnSetVisCrsr();
-                return FALSE;
+                return DND_ACTION_NONE;
             }
         }
         else
         {
             //D&D von ausserhalb des SW soll per default ein Copy sein.
             if( EXCHG_IN_ACTION_DEFAULT == nEventAction &&
-                DROP_MOVE == rEvt.GetAction() )
+                DROP_MOVE == rEvt.mnAction )
                 nEventAction = DROP_COPY;
 
             if( (SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE == nDropFormat &&
@@ -529,13 +510,12 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
             {
                 SdrMarkView* pMView = PTR_CAST( SdrMarkView, rSh.GetDrawView() );
                 if( pMView && !pMView->IsDesignMode() )
-                    return FALSE;
+                    return DND_ACTION_NONE;
             }
-
         }
 
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
-            rEvt.SetAction( (DropAction)nEventAction );
+            nUserOpt = nEventAction;
 
         if ( bDropCursor )
         {
@@ -556,12 +536,13 @@ JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
                 pUserMarker->Show();
             }
         }
-        return TRUE;
+        return nUserOpt;
     }
 
     CleanupDropUserMarker();
     rSh.UnSetVisCrsr();
-    return OFF_APP()->QueryDrop( rEvt );
+//!!    return OFF_APP()->AcceptDrop( rEvt );
+    return DND_ACTION_NONE;
 }
 
 
@@ -587,6 +568,9 @@ IMPL_LINK( SwEditWin, DDHandler, Timer *, EMPTYARG )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/02/02 17:45:49  jp
+    SwDataExchange interfaces renamed
+
     Revision 1.1.1.1  2000/09/18 17:14:35  hr
     initial import
 

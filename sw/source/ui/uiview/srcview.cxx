@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-19 16:00:15 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:54:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,9 +208,6 @@
 #endif
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
-#endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
 #endif
 
 #ifndef _CMDID_H
@@ -776,15 +773,18 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_PASTE:
             {
                 SvDataObjectRef xObj;
-                if ( Clipboard::GetFormatCount() )
+                BOOL bDisable = TRUE;
+                if( Clipboard::GetFormatCount() )
                 {
-                    SwModule* pMod = SW_MOD();
-                    if ( pMod->pClipboard )
-                        xObj = pMod->pClipboard ;
+                    if( SW_MOD()->pClipboard )
+                        bDisable = FALSE;
                     else
-                        xObj = SvDataObject::PasteClipboard();
+                    {
+                        SvDataObjectRef xObj( SvDataObject::PasteClipboard());
+                        bDisable = !xObj.Is();
+                    }
                 }
-                if(!xObj.Is())
+                if( bDisable )
                     rSet.DisableItem(nWhich);
             }
             break;

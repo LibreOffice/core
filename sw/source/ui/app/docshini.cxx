@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:07:24 $
+ *  last change: $Author: jp $ $Date: 2001-03-23 15:55:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,8 @@
 #ifndef _SHELLIO_HXX
 #include <shellio.hxx>
 #endif
-#ifndef _DATAEX_HXX
-#include <dataex.hxx>
+#ifndef _SWDTFLVR_HXX
+#include <swdtflvr.hxx>
 #endif
 #ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
@@ -353,7 +353,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         {
             // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
             SvEmbeddedObject* pObj = this;
-            SwDataExchange::InitOle( pObj, pDoc );
+            SwTransferable::InitOle( pObj, *pDoc );
         }
         SubInitNew();
     }
@@ -578,7 +578,7 @@ sal_Bool  SwDocShell::Load(SvStorage* pStor)
             {
                 // fuer MWERKS (Mac-Compiler): kann nicht selbststaendig casten
                 SvEmbeddedObject* pObj = this;
-                SwDataExchange::InitOle( pObj, pDoc );
+                SwTransferable::InitOle( pObj, *pDoc );
             }
             // SfxProgress unterdruecken, wenn man Embedded ist
             SW_MOD()->SetEmbeddedLoadSave( sal_True );
@@ -778,15 +778,6 @@ sal_Bool  SwDocShell::LoadFrom(SvStorage* pStor)
 }
 
 
-SvDataMemberObjectRef  SwDocShell::CreateSnapshot()
-{
-    SvDataMemberObjectRef aRef;
-    if( pDoc )
-        aRef = new SwDataExchange( *pDoc );
-    return aRef;
-}
-
-
 void SwDocShell::SubInitNew()
 {
     ASSERT( !pBasePool, "wer hat seinen Pool nicht zerstoert?" );
@@ -858,6 +849,9 @@ void SwDocShell::SubInitNew()
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.13  2001/03/06 11:07:24  mib
+    organizer support for XML file format
+
     Revision 1.12  2001/02/26 07:56:31  mib
     xml filters for templates and global docs
 
