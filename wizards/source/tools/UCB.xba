@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="UCB" script:language="StarBasic">&apos;Option explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="UCB" script:language="StarBasic">&apos;Option explicit
 Public oDocument
 Dim oDocInfo as object
 Const SBMAXDIRCOUNT = 10

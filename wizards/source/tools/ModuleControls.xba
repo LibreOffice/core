@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
- <script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="ModuleControls" script:language="StarBasic">Option Explicit
 &apos;bla
 
 &apos; Accepts the name of a control and returns the respective control model as object
@@ -217,7 +217,7 @@ Dim oUcb as object
 End Sub
 
 
-Function StoreDocument(oDocument as Object, FilterNames() as String, DefaultName as String, DisplayDirectory as String) as String
+Function StoreDocument(oDocument as Object, FilterNames() as String, DefaultName as String, DisplayDirectory as String, Optional iAddProcedure as Integer) as String
 Dim NoArgs() as New com.sun.star.beans.PropertyValue
 Dim oStoreProperties(0) as New com.sun.star.beans.PropertyValue
 Dim oStoreDialog as Object
@@ -239,6 +239,12 @@ Dim FilterIndex as Integer
 		UIFilterName = oStoreDialog.GetCurrentFilter()
 		FilterIndex = IndexInArray(UIFilterName, FilterNames())
 		FilterName = FilterNames(FilterIndex,2)
+		If Not IsMissing(iAddProcedure) Then
+			Select Case iAddProcedure
+				Case 1
+					CommitLastDocumentChanges(sPath)
+			End Select
+		End If
 		On Local Error Goto NOSAVING
 		If FilterName = &quot;&quot;  Then
 			&apos; Todo: Den Fall abfangen, wenn ein zu überschreibendes Dokument schreibgeschützt ist (weil es z.B. gerade geöffnet ist)
