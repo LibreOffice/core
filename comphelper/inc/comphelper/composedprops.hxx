@@ -2,9 +2,9 @@
  *
  *  $RCSfile: composedprops.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 15:58:30 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
 
 //.........................................................................
 namespace comphelper
@@ -115,7 +118,7 @@ namespace comphelper
         <p>Speaking strictly, the property defaults (getPropertyDefault) do not work correctly, as there's always
         an empty <type scope="com.sun.star.uno">Any</type> returned.</p>
     */
-    class OComposedPropertySet : public OComposedPropertySet_Base
+    class COMPHELPER_DLLPUBLIC OComposedPropertySet : public OComposedPropertySet_Base
     {
     private:
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >
