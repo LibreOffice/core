@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-06 16:05:20 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,12 +513,7 @@ void SfxApplication::FillStatusBar( StatusBar& rBar )
 */
 
 {
-//  rBar.InsertItem( SID_MAIL_NOTIFY, 18, SIB_IN|SIB_USERDRAW );
     rBar.InsertItem( SID_EXPLORER_SELECTIONSIZE, 200, SIB_IN|SIB_LEFT|SIB_AUTOSIZE );
-//    rBar.InsertItem( SID_CURRENTTIME, rBar.GetTextSize(
-//        String("::") + GetAppInternational().GetTime( ::com::sun::star::util::Time() ) ).Width() );
-//    rBar.InsertItem( SID_CURRENTDATE, rBar.GetTextSize(
-//        String("::") + GetAppInternational().GetDate( Date() ) ).Width() );
 }
 
 //--------------------------------------------------------------------

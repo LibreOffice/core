@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-29 08:49:29 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
 #include <svtools/addresstemplate.hxx>
+#endif
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
 #endif
 
 #ifndef _SV_CONFIG_HXX
@@ -289,13 +292,14 @@ void SfxApplication::BasicLibExec_Impl( SfxRequest &rReq, BasicManager *pMgr )
     if ( aLibName.Len() )
     {
         // Die Library zum "ubergebenen Namen suchen
-        const International &rInter = Application::GetAppInternational();
+        IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+        const CollatorWrapper* pCollator = aIntlWrapper.getCollator();
         USHORT nLibCount = pMgr->GetLibCount();
         StarBASIC *pLib = NULL;
         USHORT nLib;
         for ( nLib = 0; nLib < nLibCount; ++nLib )
         {
-            if ( COMPARE_EQUAL == rInter.Compare( pMgr->GetLibName( nLib ), aLibName, INTN_COMPARE_IGNORECASE ) )
+            if ( COMPARE_EQUAL == pCollator->compareString( pMgr->GetLibName( nLib ), aLibName ) )
             {
                 pLib = pMgr->GetLib( nLib );
                 break;
@@ -746,6 +750,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
     int bFoundMiniMDI = FALSE;
     int bFoundNonDesktopMDI = FALSE;
 
+    LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     const USHORT *pRanges = rSet.GetRanges();
     DBG_ASSERT(pRanges && *pRanges, "Set ohne Bereich");
     while ( *pRanges )
@@ -799,12 +804,12 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
                 case SID_CURRENTTIME:
                 {
-                    rSet.Put( SfxStringItem( nWhich, Application::GetAppInternational().GetTime( Time(), FALSE ) ) );
+                    rSet.Put( SfxStringItem( nWhich, aLocaleWrapper.getTime( Time(), FALSE ) ) );
                     break;
                 }
                 case SID_CURRENTDATE:
                 {
-                    rSet.Put( SfxStringItem( nWhich, Application::GetAppInternational().GetDate( Date() ) ) );
+                    rSet.Put( SfxStringItem( nWhich, aLocaleWrapper.getDate( Date() ) ) );
                     break;
                 }
 

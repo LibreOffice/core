@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-10 06:03:30 $
+ *  last change: $Author: pb $ $Date: 2001-07-10 07:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1364,65 +1364,6 @@ sal_uInt16 SfxApplication::Exception( sal_uInt16 nError )
         }
     }
 
-#if SUPD<613//MUSTINI
-/*TODO: We need a new key to save informations for SenCrashMail feature.*/
-    sal_Bool bSendMail = pInternalOptions->CrashMailEnabled();
-    if ( !pAppData_Impl->bBean && bSendMail )
-    {
-        String aInfo = System::GetSummarySystemInfos();
-        if ( aInfo.Len() )
-        {
-            TempFile aTempFile( aSaveObj.GetMainURL() );
-            String aFileName = aTempFile.GetName();
-            SvFileStream aStr( aFileName, STREAM_STD_READWRITE );
-            aStr.WriteByteString(aInfo);
-            aStr << "\n<Build>\n";
-            aStr << BUILD;
-            aStr << '\n';
-            aStr << "</Build>\n";
-            aStr << "\n<Plattform>\n";
-#ifdef WNT
-            ByteString aPlattform( "wntmsci3" );
-#elif defined ( C50 )
-#   if defined ( SPARC )
-            ByteString aPlattform( "unxsols2" );
-#   elif defined ( INTEL )
-            ByteString aPlattform( "unxsoli2" );
-#   endif
-#elif defined ( C52 )
-#   if defined ( SPARC )
-            ByteString aPlattform( "unxsols3" );
-#   elif defined ( INTEL )
-            ByteString aPlattform( "unxsoli3" );
-#   endif
-#elif GLIBC == 2
-            ByteString aPlattform( "unxlngi2" );
-#elif defined ( SPARC ) && defined ( GCC )
-            ByteString aPlattform( "unxsogs" );
-#endif
-#ifndef DBG_UTIL
-            aPlattform += ".pro";
-#endif
-            aStr << aPlattform.GetBuffer();
-            aStr << '\n';
-            aStr << "</Plattform>\n";
-            aStr << "\n<OfficeLanguage>\n";
-            aStr.WriteByteString( ByteString(Application::GetAppInternational().GetLanguage()) );
-            aStr << '\n';
-            aStr << "</OfficeLanguage>\n";
-            aStr << "\n<ExceptionType>\n";
-            aStr << nError;
-            aStr << '\n';
-            aStr << "</ExceptionType>\n";
-            aStr.Close();
-
-            pAppIniMgr->WriteKey( pAppIniMgr->GetGroupName( SFX_GROUP_WORKINGSET_IMPL ),
-                                  DEFINE_CONST_UNICODE("Info"), aFileName );
-            pAppIniMgr->Flush();
-        }
-    }
-#endif//MUSTINI
-
     ::utl::ConfigManager::GetConfigManager()->StoreConfigItems();
 
     switch( nError & EXC_MAJORTYPE )
@@ -1466,13 +1407,10 @@ SimpleResMgr* SfxApplication::CreateSimpleResManager()
         sAppName = ::rtl::OUString();
     }
 
-    LanguageType nType = Application::GetAppInternational().GetLanguage();
-    if ( nType == LANGUAGE_SYSTEM )
-        nType = System::GetLanguage();
-
+    const AllSettings& rAllSettings = Application::GetSettings();
+    LanguageType nType = rAllSettings.GetUILanguage();
     String sTemp( sAppName );
-    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx),
-                             nType, &sTemp, 0 );
+    pRet = new SimpleResMgr( CREATEVERSIONRESMGR_NAME(sfx), nType, &sTemp, 0 );
 
     return pRet;
 }
