@@ -2,9 +2,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 18:15:28 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -467,7 +467,7 @@ String RID_POPUP_TAB
     Text [ danish ] = "Popup-menu for regnearkslinjen" ;
     Text [ french ] = "Menu Pop-up pour la barre des feuilles" ;
     Text [ swedish ] = "Popupmeny för tabellist" ;
-    Text [ dutch ] = "PopUp-menu voor werkbladenbalk" ;
+    Text [ dutch ] = "PopUp-menu voor werkbladenlijst" ;
     Text [ spanish ] = "Menú emergente para la barra de hojas" ;
     Text [ english_us ] = "Sheet bar pop-up menu" ;
     Text[ chinese_simplified ] = "¹¤×÷±í·ÖÒ³µÄµ¯³öÊ½²Ëµ¥";
@@ -1564,7 +1564,7 @@ Menu RID_POPUP_PAGEBREAK
             Text [ french ] = "Supprimer l'~échelle" ;
             Text [ dutch ] = "Schaal ~opheffen" ;
             Text [ portuguese ] = "Repor ~escala" ;
-            Text[ chinese_simplified ] = "ÖØÉè¿Ì¶ÈÏÔÊ¾(~S)";
+            Text[ chinese_simplified ] = "ÖØÉè¿Ì¶È(~S)";
             Text[ russian ] = "Ñíÿòü ìàñøòàáèğîâàíèå";
             Text[ polish ] = "Zresetuj skalowanie";
             Text[ japanese ] = "½¹°Ù‚Ì‰ğœ";
