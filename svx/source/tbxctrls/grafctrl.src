@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 19:37:08 $
+ *  last change: $Author: kz $ $Date: 2001-05-10 05:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ french ] = "Filtres";
     Text[ spanish ] = "Filtros";
     Text[ italian ] = "Filtri";
-    Text[ danish ] = "Filter";
+    Text[ danish ] = "Filtre";
     Text[ swedish ] = "Filter";
     Text[ polish ] = "Filtr";
     Text[ portuguese_brazilian ] = "Filter";
@@ -166,6 +166,7 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Text[ turkish ] = "Filtre";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filtros";
+    Text[ finnish ] = "Suodattimet";
 };
 
 // -----------
@@ -195,6 +196,7 @@ String RID_SVXSTR_UNDO_GRAFMODE
     Text[ arabic ] = "Ê÷⁄ «·’Ê—";
     Text[ turkish ] = "Grafik kipi";
     Text[ catalan ] = "Modo gr·fico";
+    Text[ finnish ] = "Grafiikkatila";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
@@ -219,6 +221,7 @@ String RID_SVXSTR_UNDO_GRAFRED
     Text[ arabic ] = "‰”»… «·√Õ„—";
     Text[ turkish ] = "K˝rm˝z˝ oran˝";
     Text[ catalan ] = "ProporciÛn de rojo";
+    Text[ finnish ] = "Punainen";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
@@ -243,6 +246,7 @@ String RID_SVXSTR_UNDO_GRAFGREEN
     Text[ arabic ] = "‰”»… «·√Œ÷—";
     Text[ turkish ] = "Ye˛il oran˝";
     Text[ catalan ] = "ProporciÛn de verde";
+    Text[ finnish ] = "Vihre‰";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
@@ -267,6 +271,7 @@ String RID_SVXSTR_UNDO_GRAFBLUE
     Text[ arabic ] = "‰”»… «·√“—ﬁ";
     Text[ turkish ] = "Mavi oran˝";
     Text[ catalan ] = "ProporciÛn de azul";
+    Text[ finnish ] = "Sininen";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
@@ -291,6 +296,7 @@ String RID_SVXSTR_UNDO_GRAFLUMINANCE
     Text[ arabic ] = "«·≈÷«¡…";
     Text[ turkish ] = "Parlakl˝k";
     Text[ catalan ] = "Brillo";
+    Text[ finnish ] = "Kirkkaus";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
@@ -315,6 +321,7 @@ String RID_SVXSTR_UNDO_GRAFCONTRAST
     Text[ arabic ] = "«· »«Ì‰";
     Text[ turkish ] = "Kontrast";
     Text[ catalan ] = "Contraste";
+    Text[ finnish ] = "Kontrasti";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
@@ -339,6 +346,7 @@ String RID_SVXSTR_UNDO_GRAFGAMMA
     Text[ arabic ] = "€«„«";
     Text[ turkish ] = "Gamma";
     Text[ catalan ] = "Gamma";
+    Text[ finnish ] = "Gamma";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
@@ -363,6 +371,7 @@ String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
     Text[ arabic ] = "‘›«›Ì…";
     Text[ turkish ] = "Saydaml˝k";
     Text[ catalan ] = "Transparencia";
+    Text[ finnish ] = "L‰pikuultavuus";
 };
 String RID_SVXSTR_GRAFCROP
 {
@@ -387,6 +396,7 @@ String RID_SVXSTR_GRAFCROP
     Text[ turkish ] = "Crop";
     Text[ arabic ] = "«ﬁ ’«’";
     Text[ catalan ] = "Recortar";
+    Text[ finnish ] = "Rajaa";
 };
 
 // ********************************************************************** EOF
