@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sigstruct.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:50:04 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:02:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ typedef ::std::vector< SignatureReferenceInformation > SignatureReferenceInforma
 struct SignatureInformation
 {
     sal_Int32                       nSecurityId;
+    sal_Int32           nSecurityEnvironmentIndex;
 
     //sal_Int32         nStatus;
     ::com::sun::star::xml::crypto::SecurityOperationStatus nStatus;
@@ -132,6 +133,7 @@ struct SignatureInformation
     {
         nSecurityId = nId;
         nStatus = ::com::sun::star::xml::crypto::SecurityOperationStatus_STATUS_UNKNOWN;
+        nSecurityEnvironmentIndex = -1;
     }
 };
 
