@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2001-07-11 15:49:35 $
+ *  last change: $Author: gt $ $Date: 2001-07-20 10:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,16 +368,23 @@ ULONG XclXct::GetLen() const
 
 // --- class XclSupbook ----------------------------------------------
 
+XclSupbook::XclSupbook( void ) :
+        nTables( 1 ),
+        nLen( 4 ),
+        eType( SB_Addin ),
+        pExtNameList( NULL )
+{   }
+
 XclSupbook::XclSupbook( UINT16 nTabs ) :
         nTables( nTabs ),
         nLen( 4 ),
-        bSelf( TRUE ),
+        eType( SB_Self ),
         pExtNameList( NULL )
 {   }
 
 XclSupbook::XclSupbook( const String& rDocName ) :
         sDocName( rDocName ),
-        bSelf( FALSE ),
+        eType( SB_Ext ),
         pExtNameList( NULL )
 {
     INetURLObject aURLObj( rDocName );
@@ -406,7 +413,7 @@ const XclExpUniString* XclSupbook::GetTableName( UINT16 nIndex ) const
 
 UINT16 XclSupbook::AddTableName( const String& rTabName )
 {
-    DBG_ASSERT( !bSelf, "XclSupbook::AddTableName() - Don't insert table names here" );
+    DBG_ASSERT( eType != SB_Self, "XclSupbook::AddTableName() - Don't insert table names here" );
     XclXct* pXct = new XclXct( rTabName );
     nLen += pXct->GetTableBytes();
     List::Insert( pXct, LIST_APPEND );
@@ -425,15 +432,18 @@ void XclSupbook::StoreCellRange( RootData& rRoot, const ScRange& rRange, UINT16 
 
 void XclSupbook::SaveCont( XclExpStream& rStrm )
 {
-    if ( bSelf )
-        rStrm << nTables << (UINT8) 0x01 << (UINT8) 0x04;
-    else
+    switch( eType )
     {
-        rStrm << (UINT16) List::Count();
-        sEncoded.Write( rStrm );
+        case SB_Addin:  rStrm << nTables << UINT8( 0x01 ) << UINT8( 0x3A ); break;
+        case SB_Self:   rStrm << nTables << UINT8( 0x01 ) << UINT8( 0x04 ); break;
+        default:
+        {
+            rStrm << (UINT16) List::Count();
+            sEncoded.Write( rStrm );
 
-        for( XclXct* pXct = _First(); pXct; pXct = _Next() )
-            pXct->GetTableName().Write( rStrm );
+            for( XclXct* pXct = _First(); pXct; pXct = _Next() )
+                pXct->GetTableName().Write( rStrm );
+        }
     }
 }
 
@@ -488,14 +498,21 @@ XclSupbookList::XclSupbookList( RootData* pRoot ) :
     pTableBuffer = new UINT16[ nRefdCnt ];
 
     UINT16 nInd;
-    for( nInd = 0; nInd < nRefdCnt; nInd++ )
-        pSupbookBuffer[ nInd ] = pTableBuffer[ nInd ] = 0;
-
-    // self-ref supbook at beginning of list
-    Append( new XclSupbook( Max( nExcCnt, pRoot->nCodenames ) ) );
-    for( nInd = 0; nInd < nExcCnt; nInd++ )
+    pSupbookBuffer[ 0 ] = pTableBuffer[ 0 ] = 0;
+    for( nInd = 1; nInd < nRefdCnt; nInd++ )
     {
-        pSupbookBuffer[ nInd ] = 0;
+        pSupbookBuffer[ nInd ] = 1;
+        pTableBuffer[ nInd ] = 0;
+    }
+
+    // supbook for Addins at the beginning of list, even if it's not needed
+    Append( new XclSupbook() );
+
+    // self-ref supbook second of list
+    UINT16 nSelfInd = Append( new XclSupbook( Max( nExcCnt, pRoot->nCodenames ) ) );
+    for( nInd = 1; nInd < nExcCnt; nInd++ )
+    {
+        pSupbookBuffer[ nInd ] = nSelfInd;
         pTableBuffer[ nInd ] = nInd;
     }
 
@@ -614,7 +631,7 @@ XclExternsheetList::XclExternsheetList( RootData* pRoot ) :
         ExcRoot( pRoot ),
         aSupbookList( pRoot )
 {
-    Find( 0, 0 );   // add dummy Xti to prevent an empty list
+    Find( 65534, 65534 );   // dummy for Addin-Supbook
 }
 
 XclExternsheetList::~XclExternsheetList()
