@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-21 09:57:13 $
+ *  last change: $Author: od $ $Date: 2002-11-07 09:06:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -839,7 +839,12 @@ void SwTxtFrm::CriticalLines( const OutputDevice& rOut, SwStripes &rStripes,
         if ( nTopMargin )
         {
             rStripes.Insert( aStripe, rStripes.Count() );
-            aStripe.Y() -= nTopMargin;
+            // OD 06.11.2002 #104171#,#103931# - consider vertical layout
+            if ( bVert )
+                aStripe.Y() -= nTopMargin;
+            else
+                // OD 06.11.2002 #104171#,#103931# - *add* top margin to Y.
+                aStripe.Y() += nTopMargin;
         }
         SwLineLayout* pLay = GetPara();
         do
