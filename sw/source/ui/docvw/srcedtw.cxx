@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:01:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -770,7 +770,7 @@ void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         BOOL bTempModified = IsModified();
-        pTextEngine->RemoveAttribs( nPara, TRUE );
+        pTextEngine->RemoveAttribs( nPara, (BOOL)TRUE );
         String aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( FALSE );
         ImpDoHighlight( aSource, nPara );
