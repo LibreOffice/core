@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:52 $
+ *  last change: $Author: dbo $ $Date: 2000-09-25 14:47:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,6 +214,8 @@ inline sal_Bool __assignData(
         pSourceTypeDescr = 0;
         pSourceType = ((uno_Any *)pSource)->pType;
         pSource = ((uno_Any *)pSource)->pData;
+        if (pDest == pSource)
+            return sal_True;
     }
 
     switch (pDestType->eTypeClass)
@@ -482,6 +484,8 @@ inline sal_Bool __assignData(
         }
         return sal_False;
     case typelib_TypeClass_SEQUENCE:
+        if (typelib_TypeClass_SEQUENCE != pSourceType->eTypeClass)
+            return sal_False;
         if (*(uno_Sequence **)pSource == *(uno_Sequence **)pDest) // self assignment
             return sal_True;
         if (__type_equals( pDestType, pSourceType ))
