@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:51:00 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -664,7 +664,7 @@ pDesc[nPos++] = Property(FM_PROP_##varname, FM_ATTR_##varname, ::getCppuType((co
 
 
 #define DECL_PROP1(varname, type, attrib1)  \
-    DECL_PROP_CORE(varname, type) PropertyAttribute::##attrib1)
+    DECL_PROP_CORE(varname, type) PropertyAttribute::attrib1)
 
 //------------------------------------------------------------------------------
 void FmXFormController::fillProperties(
