@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transliterationwrapper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: er $ $Date: 2002-05-31 14:29:09 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,11 +80,12 @@
 #pragma hdrstop
 
 
-#define _LIBRARYNAME "i18n"
-#define _SERVICENAME "com.sun.star.i18n.Transliteration"
+#define TRANSLIT_LIBRARYNAME "i18n"
+#define TRANSLIT_SERVICENAME "com.sun.star.i18n.Transliteration"
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+using namespace ::drafts::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 using namespace ::utl;
 
@@ -96,9 +97,10 @@ TransliterationWrapper::TransliterationWrapper(
     if( xSMgr.is() )
     {
         try {
-            xTrans = Reference< XTransliteration > ( xSMgr->createInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( _SERVICENAME ) ) ),
-                UNO_QUERY );
+            xTrans = Reference< XExtendedTransliteration > (
+                    xSMgr->createInstance( ::rtl::OUString(
+                            RTL_CONSTASCII_USTRINGPARAM(
+                                TRANSLIT_SERVICENAME))), UNO_QUERY );
         }
         catch ( Exception&  )
         {
@@ -111,14 +113,14 @@ TransliterationWrapper::TransliterationWrapper(
         try
         {
             Reference< XInterface > xI = ::comphelper::getComponentInstance(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                        LLCF_LIBNAME( _LIBRARYNAME ) ) ),
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                        _SERVICENAME ) ) );
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( LLCF_LIBNAME(
+                                TRANSLIT_LIBRARYNAME ))),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            TRANSLIT_SERVICENAME)));
             if ( xI.is() )
             {
                 Any x = xI->queryInterface(
-                    ::getCppuType((const Reference< XTransliteration>*)0) );
+                    ::getCppuType((const Reference< XExtendedTransliteration>*)0) );
                 x >>= xTrans ;
             }
         }
@@ -127,7 +129,7 @@ TransliterationWrapper::TransliterationWrapper(
             DBG_ERRORFILE( "getComponentInstance: Exception caught!" );
         }
     }
-    DBG_ASSERT( xTrans.is(), "TransliterationWrapper: no Transliteraion avaible" );
+    DBG_ASSERT( xTrans.is(), "TransliterationWrapper: no Transliteraion available" );
 }
 
 
@@ -151,10 +153,7 @@ String TransliterationWrapper::transliterate(
             if ( pOffset )
                 sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
             else
-            {
-                Sequence <long> aOffset;
-                sRet = xTrans->transliterate( rStr, nStart, nLen, aOffset );
-            }
+                sRet = xTrans->transliterateString2String( rStr, nStart, nLen);
         }
         catch( Exception&  )
         {
@@ -178,10 +177,7 @@ String TransliterationWrapper::transliterate(
             if ( pOffset )
                 sRet = xTrans->transliterate( rStr, nStart, nLen, *pOffset );
             else
-            {
-                Sequence <long> aOffset;
-                sRet = xTrans->transliterate( rStr, nStart, nLen, aOffset );
-            }
+                sRet = xTrans->transliterateString2String( rStr, nStart, nLen);
         }
         catch( Exception&  )
         {
