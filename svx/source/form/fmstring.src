@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:39:59 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:16:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3125,7 +3125,7 @@ String RID_STR_IMAGE_URL
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ğèñóíîê";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ greek ] = "Ãñáöéêü";
     Text[ korean ] = "±×·¡ÇÈ";
@@ -4568,7 +4568,7 @@ String RID_STR_EVT_COMPONENTSHOWN
     Text[ polish ] = "Poka¿";
     Text[ japanese ] = "•\\¦";
     Text[ chinese_traditional ] = "Åã¥Ü";
-    Text[ greek ] = "ÅìöÜíéóç";
+    Text[ greek ] = "ĞñïâïëŞ";
     Text[ korean ] = "Ç¥½Ã";
     Text[ arabic ] = "ÅÙåÇÑ";
     Text[ turkish ] = "Görüntüle";
