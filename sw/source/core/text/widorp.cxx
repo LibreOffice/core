@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:31:56 $
+ *  last change: $Author: hjs $ $Date: 2003-09-25 10:49:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrm, SwTxtMargin &rLine )
  *                  WidowsAndOrphans::WouldFit()
  *************************************************************************/
 
-sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight )
+sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sal_Bool bTst )
 {
     // Here it does not matter, if pFrm is swapped or not.
     // IsInside() takes care for itself
@@ -574,7 +574,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight )
     }
 
     // Sind nach Orphans/Initialen noch genug Zeilen fuer die Widows uebrig?
-    if( nLineCnt - nMinLines >= GetWidowsLines() )
+    if( bTst || nLineCnt - nMinLines >= GetWidowsLines() )
     {
         if( rMaxHeight >= nLineSum )
         {
