@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-21 13:30:29 $
+ *  last change: $Author: af $ $Date: 2002-08-21 14:57:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,10 +910,19 @@ void SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             rSet.Put( SvxSizeItem( SID_ATTR_SIZE, Size( 0, 0 ) ) );
     }
 
-    // Seiten-/Ebenenanzeige
+    // Display of current page and layer.
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
-        String aString;
+        // Allways show the slide/page number.
+        String aString (SdResId( STR_SD_PAGE ));
+        aString += sal_Unicode(' ');
+        aString += UniString::CreateFromInt32( aTabControl.GetCurPageId() );
+        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
+        aString += UniString::CreateFromInt32( pDoc->GetSdPageCount( ePageKind ) );
+
+        // If in layer mode additionally show the layer that contains all
+        // selected shapes of the page.  If the shapes are distributed on
+        // more than one layer, no layer name is shown.
         if( bLayerMode )
         {
             SdrLayerAdmin& rLayerAdmin = pDoc->GetLayerAdmin();
@@ -924,6 +933,9 @@ void SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             ULONG nMarkCount = rMarkList.GetMarkCount();
             FASTBOOL bOneLayer = TRUE;
 
+            // Use the first ten selected shapes as a (hopefully
+            // representative) sample of all shapes of the current page.
+            // Detect whether they belong to the same layer.
             for( ULONG j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
             {
                 pObj = rMarkList.GetMark( j )->GetObj();
@@ -937,22 +949,21 @@ void SdDrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                     nOldLayer = nLayer;
                 }
             }
+
+            // Append the layer name to the current page number.
             if( bOneLayer && nMarkCount )
             {
                 pLayer = rLayerAdmin.GetLayerPerID( nLayer );
                 if( pLayer )
-                    aString = pLayer->GetName();
+                {
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " (" ));
+                    aString += pLayer->GetName();
+                    aString += sal_Unicode(')');
+                }
             }
         }
-        else
-        {
-            aString  = String( SdResId( STR_SD_PAGE ) );
-            aString += sal_Unicode(' ');
-            aString += UniString::CreateFromInt32( aTabControl.GetCurPageId() );
-            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( " / " ));
-            aString += UniString::CreateFromInt32( pDoc->GetSdPageCount( ePageKind ) );
-        }
-        rSet.Put( SfxStringItem( SID_STATUS_PAGE, aString ) );
+
+        rSet.Put (SfxStringItem (SID_STATUS_PAGE, aString));
     }
     // Layout
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
