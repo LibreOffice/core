@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:39 $
+ *  last change: $Author: cl $ $Date: 2002-11-29 15:11:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,14 @@ class FuSelection : public FuDraw
     USHORT  GetEditMode() { return nEditMode; }
 
     BOOL    AnimateObj(SdrObject* pObj, const Point& rPos);
+
+    /** is called when the currenct function should be aborted. <p>
+        This is used when a function gets a KEY_ESCAPE but can also
+        be called directly.
+
+        @returns true if a active function was aborted
+    */
+    virtual bool cancel();
 };
 
 
