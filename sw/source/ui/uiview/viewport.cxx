@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:01:01 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:31:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,7 +1151,8 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 
 void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
-    if( bInOuterResizePixel )
+    // FME 22.08.2003 #i16909# - return, if no size (caused by minimize window).
+    if ( bInOuterResizePixel || ( !rSize.Width() && !rSize.Height() ) )
         return;
     bInOuterResizePixel = TRUE;
 
