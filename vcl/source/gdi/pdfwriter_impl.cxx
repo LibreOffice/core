@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 14:29:47 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:29:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2055,6 +2055,8 @@ sal_Int32 PDFWriterImpl::emitFonts()
                     CHECK_RETURN( (osl_File_E_None == osl_isEndOfFile( aFontFile, &bEOF ) ) );
                 } while( ! bEOF );
                 endCompression();
+                // close the file
+                osl_closeFile( aFontFile );
 
                 sal_uInt64 nEndPos = 0;
                 CHECK_RETURN( (osl_File_E_None == osl_getFilePos( m_aFile, &nEndPos ) ) );
