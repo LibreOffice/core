@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-06 09:14:46 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2013,7 +2013,10 @@ void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
         ScViewDataTable* pViewTab = pTabData[ nTab ];
         if( pViewTab )
         {
-            ScExtTabOptions* pTabOpt = new ScExtTabOptions;
+            ScExtTabOptions* pTabOpt = rOpt.GetExtTabOptions( nTab );
+            if( !pTabOpt )
+                rOpt.SetExtTabOptions( nTab, pTabOpt = new ScExtTabOptions );
+
             pTabOpt->nTabNum = nTab;
             pTabOpt->bSelected = GetMarkData().GetTableSelect( nTab );
             if( pTabOpt->bSelected )
@@ -2058,8 +2061,6 @@ void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
 
             pTabOpt->aLastSel.aStart.Set( pViewTab->nCurX, pViewTab->nCurY, nTab );
             pTabOpt->aLastSel.aEnd = pTabOpt->aLastSel.aStart;
-
-            rOpt.SetExtTabOptions( nTab, pTabOpt );
         }
     }
 }
@@ -2067,6 +2068,7 @@ void ScViewData::WriteExtOptions(ScExtDocOptions& rOpt)
 void ScViewData::ReadExtOptions( const ScExtDocOptions& rOpt )
 {
     // for Excel import
+    if( !rOpt.IsChanged() ) return;
 
     USHORT nTabCount = pDoc->GetTableCount();
     for (USHORT nTab=0; nTab<nTabCount; nTab++)

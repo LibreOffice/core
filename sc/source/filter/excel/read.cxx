@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-28 13:44:50 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,7 @@ FltError ImportExcel::Read( void )
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345]
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
+                    case 0xDE:  Olesize(); break;
                     case 0xE0:  XF5(); break;           // XF           [    5]
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
@@ -1125,6 +1126,7 @@ FltError ImportExcel8::Read( void )
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0xD3:  bHasBasic = TRUE; break;
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
+                    case 0xDE:  Olesize(); break;
                     case 0xE0:  Xf(); break;            // XF           [    5   ]
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;

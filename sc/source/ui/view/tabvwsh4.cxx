@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-08 12:44:08 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:55:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@
 #include "dpobject.hxx"
 #include "prevwsh.hxx"
 #include "tpprint.hxx"
-
+#include "scextopt.hxx"
 
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
@@ -1583,11 +1583,12 @@ void ScTabViewShell::Construct()
                 pDoc->MakeTable(i);
         }
 
-        const ScExtDocOptions* pExtOpt = pDoc->GetExtDocOptions();
+        ScExtDocOptions* pExtOpt = pDoc->GetExtDocOptions();
         if (pExtOpt)
         {
             GetViewData()->ReadExtOptions(*pExtOpt);        //  Excel-View Optionen
             SetTabNo( GetViewData()->GetTabNo(), TRUE );
+            pExtOpt->SetChanged( FALSE );
             //! alles von ReadUserData auch hier
         }
 

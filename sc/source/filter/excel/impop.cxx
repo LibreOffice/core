@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: er $ $Date: 2001-05-16 09:59:38 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 
+#include <so3/embobj.hxx>
+#include <sfx2/objsh.hxx>
+#include <com/sun/star/frame/XModel.hpp>
+#include "docuno.hxx"
+
 #if defined( WNT ) || defined( WIN )
 #include <math.h>
 #else
@@ -124,6 +129,7 @@
 #include "excform.hxx"
 #include "flttools.hxx"
 
+using namespace ::com::sun::star;
 
 
 const double ImportExcel::fExcToTwips =
@@ -215,6 +221,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pExtDocOpt = new ScExtDocOptions;
     if( pDoc->GetExtDocOptions() )
         *pExcRoot->pExtDocOpt = *pDoc->GetExtDocOptions();
+    pExcRoot->pExtDocOpt->SetChanged( TRUE );
     pExcRoot->pProgress = NULL;
     pExcRoot->pEdEng = NULL;
     pExcRoot->pEdEngHF = NULL;
@@ -1624,6 +1631,16 @@ void ImportExcel::Rstring( void )
 }
 
 
+void ImportExcel::Olesize( void )
+{
+    aIn.Ignore( 2 );
+    UINT16  nFirstRow, nLastRow;
+    UINT8   nFirstCol, nLastCol;
+    aIn >> nFirstRow >> nLastRow >> nFirstCol >> nLastCol;
+    pExcRoot->pExtDocOpt->SetOleSize( nFirstCol, nFirstRow, nLastCol, nLastRow );
+}
+
+
 void ImportExcel::XF5( void )
 {
     UINT16      nAttr0, nAlign, nIndexFormat, nIndexFont, nFillCol,
@@ -2741,6 +2758,26 @@ void ImportExcel::PostDocLoad( void )
     aDocOpt.SetIgnoreCase( TRUE );      // immer in Excel
     aDocOpt.SetFormulaRegexEnabled( FALSE );    // regular expressions? what's that?
     pD->SetDocOptions( aDocOpt );
+
+    // visible area if embedded OLE
+    SfxObjectShell* pShell = pD->GetDocumentShell();
+    if( pShell )
+    {
+        uno::Reference< frame::XModel > xModel( pShell->GetModel() );
+        ScModelObj* pDocObj = ScModelObj::getImplementation( xModel );
+        if( pDocObj )
+        {
+            SvEmbeddedObject* pEmbObj = pDocObj->GetEmbeddedObject();
+            const ScRange* pOleSize = pExcRoot->pExtDocOpt->GetOleSize();
+            if( pEmbObj && pOleSize )
+            {
+                pEmbObj->SetVisArea( pD->GetMMRect(
+                    pOleSize->aStart.Col(), pOleSize->aStart.Row(),
+                    pOleSize->aEnd.Col(), pOleSize->aEnd.Row(), pExcRoot->pExtDocOpt->nActTab ) );
+                pD->SetVisibleTab( pExcRoot->pExtDocOpt->nActTab );
+            }
+        }
+    }
 
     pExcRoot->pExtDocOpt->fColScale = pExcRoot->fColScale;
     pD->SetExtDocOptions( pExcRoot->pExtDocOpt );

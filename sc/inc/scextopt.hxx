@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scextopt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-10 17:22:51 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:51:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,10 +146,14 @@ private:
 
     String*                 pCodenameWB;
     CodenameList*           pCodenames;
+
+    BOOL                    bChanged;       // for import: copy data only first time to doc
+
 public:
     UINT32                  nLinkCnt;       // Zaehlt die Rekursionstufe beim Laden
                                             //  von externen Dokumenten
     UINT16                  nActTab;        // aktuelle Tabelle
+    ScRange*                pOleSize;       // visible range if embedded
     UINT16                  nSelTabs;       // count of selected sheets
     Color*                  pGridCol;       // Farbe Grid und Row-/Col-Heading
     UINT16                  nZoom;          // in %
@@ -167,12 +171,17 @@ public:
 
     void                    SetGridCol( const Color& rColor );
     void                    SetActTab( UINT16 nTab );
+    void                    SetOleSize( USHORT nFirstCol, USHORT nFirstRow, USHORT nLastCol, USHORT nLastRow );
     void                    SetCursor( UINT16 nCol, UINT16 nRow );
     void                    SetZoom( UINT16 nZaehler, UINT16 nNenner );
+    inline void             SetChanged( BOOL bChg )     { bChanged = bChg; }
+    inline BOOL             IsChanged() const           { return bChanged; }
 
     void                    Add( const ColRowSettings& rCRS );
 
     inline const ScExtTabOptions*   GetExtTabOptions( const UINT16 nTabNum ) const;
+    inline ScExtTabOptions* GetExtTabOptions( const UINT16 nTabNum );
+    inline const ScRange*   GetOleSize() const  { return pOleSize; }
 
     inline const String*    GetCodename( void ) const;      // for Workbook globals
     inline CodenameList*    GetCodenames( void );           // for tables
@@ -265,10 +274,13 @@ inline void ScExtTabOptions::operator =( const ScExtTabOptions& rCpy )
 
 inline const ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const UINT16 nTab ) const
 {
-    if( nTab <= MAXTAB )
-        return ppExtTabOpts[ nTab ];
-    else
-        return NULL;
+    return (nTab <= MAXTAB) ? ppExtTabOpts[ nTab ] : NULL;
+}
+
+
+inline ScExtTabOptions* ScExtDocOptions::GetExtTabOptions( const UINT16 nTab )
+{
+    return (nTab <= MAXTAB) ? ppExtTabOpts[ nTab ] : NULL;
 }
 
 

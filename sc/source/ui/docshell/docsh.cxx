@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-01 10:08:16 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1698,14 +1698,14 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
     {
         WaitObject aWait( GetDialogParent() );
 
-        ScExtDocOptions* pExtDocOpt = NULL;
         ScTabViewShell* pViewShell = GetBestViewShell();
         if( pViewShell )
         {
-            pExtDocOpt = new ScExtDocOptions;
+            ScExtDocOptions* pExtDocOpt = aDocument.GetExtDocOptions();
+            if( !pExtDocOpt )
+                aDocument.SetExtDocOptions( pExtDocOpt = new ScExtDocOptions );
             pViewShell->GetViewData()->WriteExtOptions( *pExtDocOpt );
         }
-        aDocument.SetExtDocOptions( pExtDocOpt );
 
         BOOL bFake97 = ( aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx97Temp) );
         FltError eError = ScExportExcel5( rMed, &aDocument, bFake97, RTL_TEXTENCODING_MS_1252 );

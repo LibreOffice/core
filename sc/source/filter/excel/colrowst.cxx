@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-11 09:19:40 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:52:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -921,6 +921,7 @@ ScExtDocOptions::ScExtDocOptions( void )
 {
     pGridCol = NULL;
     nActTab = nSelTabs = nCurCol = nCurRow = 0;
+    pOleSize = NULL;
     nLinkCnt = 0;       // -> 'Root'-Dokument
     nZoom = 100;
 
@@ -930,6 +931,7 @@ ScExtDocOptions::ScExtDocOptions( void )
 
     pCodenameWB = NULL;
     pCodenames = NULL;
+    bChanged = TRUE;
 
     fColScale = 0.0;
 }
@@ -939,6 +941,8 @@ ScExtDocOptions::~ScExtDocOptions()
 {
     if( pGridCol )
         delete pGridCol;
+    if( pOleSize )
+        delete pOleSize;
 
     for( UINT16 nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
     {
@@ -1004,6 +1008,8 @@ ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
     if( rCpy.pCodenames )
         pCodenames = new CodenameList( *rCpy.pCodenames );
 
+    bChanged = rCpy.bChanged;
+
     fColScale = rCpy.fColScale;
 
     return *this;
@@ -1030,6 +1036,18 @@ void ScExtDocOptions::SetGridCol( const Color& rColor )
 void ScExtDocOptions::SetActTab( UINT16 nTab )
 {
     nActTab = ( nTab <= MAXTAB )? nTab : MAXTAB;
+}
+
+
+void ScExtDocOptions::SetOleSize( USHORT nFirstCol, USHORT nFirstRow, USHORT nLastCol, USHORT nLastRow )
+{
+    if( pOleSize )
+    {
+        pOleSize->aStart.Set( nFirstCol, nFirstRow, 0 );
+        pOleSize->aEnd.Set( nLastCol, nLastRow, 0 );
+    }
+    else
+        pOleSize = new ScRange( nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0 );
 }
 
 

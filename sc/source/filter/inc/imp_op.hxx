@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-04-12 08:44:16 $
+ *  last change: $Author: dr $ $Date: 2001-06-08 14:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,6 +246,7 @@ protected:
     void                    Mulrk( void );                  // 0xBD
     void                    Mulblank( void );               // 0xBE
     void                    Rstring( void );                // 0xD6
+    void                    Olesize( void );                // 0xDE
     void                    XF5( void );                    // 0xE0
     void                    Blank34( void );                // 0x0201
     void                    Number34( void );               // 0x0203
