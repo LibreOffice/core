@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:35 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3378,6 +3378,18 @@ static void ImplCallMoveHdl( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
+static void ImplCallClosePopupsHdl( HWND hWnd )
+{
+    SalFrame* pFrame = GetWindowPtr( hWnd );
+    if ( pFrame )
+    {
+        pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                    SALEVENT_CLOSEPOPUPS, 0 );
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplHandleMoveMsg( HWND hWnd )
 {
     if ( ImplSalYieldMutexTryToAcquire() )
@@ -4406,7 +4418,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
         case WM_NCMBUTTONDOWN:
         case WM_NCRBUTTONDOWN:
             ImplSalYieldMutexAcquireWithWait();
-            ImplCallMoveHdl( hWnd );   // close popups...
+            ImplCallClosePopupsHdl( hWnd );   // close popups...
             ImplSalYieldMutexRelease();
             break;
 

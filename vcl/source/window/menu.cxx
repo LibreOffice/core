@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 08:50:32 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3496,10 +3496,13 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
 
     if( GetParent() )
     {
-        SystemWindow *pSysWin = (SystemWindow*)GetParent()->GetWindow( WINDOW_CLIENT );
-        if( pSysWin->IsSystemWindow() && pSysWin->GetTaskPaneList() )
-            if( pSysWin->GetTaskPaneList()->HandleKeyEvent( rKEvent ) )
-                return TRUE;
+        if( GetParent()->GetWindow( WINDOW_CLIENT )->IsSystemWindow() )
+        {
+            SystemWindow *pSysWin = (SystemWindow*)GetParent()->GetWindow( WINDOW_CLIENT );
+            if( pSysWin->GetTaskPaneList() )
+                if( pSysWin->GetTaskPaneList()->HandleKeyEvent( rKEvent ) )
+                    return TRUE;
+        }
     }
 
     if ( nCode == KEY_MENU )

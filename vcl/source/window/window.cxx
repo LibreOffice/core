@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:44:59 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,6 +462,7 @@ void Window::ImplInitData( WindowType nType )
     mbDockWin           = FALSE;        // TRUE: DockingWindow is the base class
     mbFloatWin          = FALSE;        // TRUE: FloatingWindow is the base class
     mbPushButton        = FALSE;        // TRUE: PushButton is the base class
+    mbToolBox           = FALSE;        // TRUE: ToolBox is the base class
     mbVisible           = FALSE;        // TRUE: Show( TRUE ) called
     mbOverlapVisible    = FALSE;        // TRUE: Hide called for visible window from ImplHideAllOverlapWindow()
     mbDisabled          = FALSE;        // TRUE: Enable( FALSE ) called

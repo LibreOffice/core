@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-19 17:09:34 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1420,7 +1420,7 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
 
 // -----------------------------------------------------------------------
 
-void KillOwnPopups( Window* pWindow )
+static void KillOwnPopups( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if ( pSVData->maWinData.mpFirstFloat && pWindow->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
@@ -1463,7 +1463,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 
 void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
 {
-    if( pWindow->mbFrame && pWindow->mnType == WINDOW_FLOATINGWINDOW && pWindow->IsReallyVisible() )
+    if( pWindow->mbFrame && pWindow->ImplIsFloatingWindow() && pWindow->IsReallyVisible() )
     {
         static_cast<FloatingWindow*>(pWindow)->EndPopupMode( FLOATWIN_POPUPMODEEND_TEAROFF );
         pWindow->Move();
@@ -1660,8 +1660,14 @@ void ImplHandleClose( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Bei Close schliessen wir erstmal alle FloatingModi mit
-    // und brechen auch sonstige Ablaeufe
+    bool bWasPopup = false;
+    if( pWindow->ImplIsFloatingWindow() &&
+        static_cast<FloatingWindow*>(pWindow)->mbInPopupMode )
+    {
+        bWasPopup = true;
+    }
+
+    // on Close stop all floating modes and end popups
     if ( pSVData->maWinData.mpFirstFloat )
     {
         FloatingWindow* pLastLevelFloat;
@@ -1679,14 +1685,18 @@ void ImplHandleClose( Window* pWindow )
     if ( pSVData->maWinData.mpTrackWin )
         pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL | ENDTRACK_KEY );
 
-    // Dann stellen wir fest, ob Close ueberhaupt erlaubt ist
-    Window *pWin = pWindow->ImplGetWindow();
-    if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() )
-        Sound::Beep( SOUND_DISABLE, pWin );
-    else if( pWin->IsSystemWindow() )
-        ((SystemWindow*)pWin)->Close();
-    else if( pWin->ImplIsDockingWindow() )
-        ((DockingWindow*)pWin)->Close();
+    if( ! bWasPopup )
+    {
+        Window *pWin = pWindow->ImplGetWindow();
+        // check whether close is allowed
+        if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() )
+            Sound::Beep( SOUND_DISABLE, pWin );
+        // dispatch to correct window type
+        else if( pWin->IsSystemWindow() )
+            ((SystemWindow*)pWin)->Close();
+        else if( pWin->ImplIsDockingWindow() )
+            ((DockingWindow*)pWin)->Close();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1992,6 +2002,12 @@ long ImplWindowFrameProc( void* pInst, SalFrame* pFrame,
             {
             SalFrameGeometry g = ((Window*)pInst)->mpFrame->GetGeometry();
             ImplHandleMoveResize( (Window*)pInst, g.nX, g.nY, g.nWidth, g.nHeight );
+            }
+            break;
+
+        case SALEVENT_CLOSEPOPUPS:
+            {
+            KillOwnPopups( (Window*)pInst );
             }
             break;
 

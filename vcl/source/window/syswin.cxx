@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-15 13:53:18 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,9 +151,9 @@ long SystemWindow::Notify( NotifyEvent& rNEvt )
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
         {
-            SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
-            if ( pW )
-                pMBar = pW->GetMenuBar();
+            Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+            if( pWin && pWin->IsSystemWindow() )
+                pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
         if ( pMBar && pMBar->ImplHandleKeyEvent( *rNEvt.GetKeyEvent(), FALSE ) )
             return TRUE;
@@ -189,9 +189,9 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
             TaskPaneList *pTList = mpTaskPaneList;
             if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
             {
-                SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
-                if ( pW )
-                    pTList = pW->mpTaskPaneList;
+                Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+                if( pWin && pWin->IsSystemWindow() )
+                    pTList = ((SystemWindow*)pWin)->mpTaskPaneList;
             }
             if( !pTList )
             {
@@ -225,9 +225,9 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
         {
-            SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
-            if ( pW )
-                pMBar = pW->GetMenuBar();
+            Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
+            if ( pWin && pWin->IsSystemWindow() )
+                pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
         if( pMBar )
             mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-15 13:54:31 $
+ *  last change: $Author: ssa $ $Date: 2002-03-21 18:33:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3426,6 +3426,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
     Window *pWin = Application::GetFocusWindow();
     if( pWin && pWin->mbToolBox && pWin != this )
         bDrawHotSpot = FALSE;
+    /*
     else
         if( pWin && !pWin->mbToolBox )
             while( pWin )
@@ -3437,6 +3438,7 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
                     break;
                 }
             }
+            */
 
     if ( mbSelection && bDrawHotSpot )
     {
@@ -4216,6 +4218,7 @@ void ToolBox::ToggleFloatingMode()
     if ( IsFloatingMode() )
     {
         mbHorz   = TRUE;
+        meAlign  = WINDOWALIGN_TOP;
         mbScroll = TRUE;
         SetOutputSizePixel( ImplCalcFloatSize( this, mnFloatLines ) );
     }
@@ -4226,6 +4229,9 @@ void ToolBox::ToggleFloatingMode()
             mbHorz = TRUE;
         else
             mbHorz = FALSE;
+
+        // set focus back to document
+        ImplGetFrameWindow()->GetWindow( WINDOW_CLIENT )->GrabFocus();
     }
 
     mbFormat = TRUE;
@@ -4408,7 +4414,6 @@ void ToolBox::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
         if ( meAlign != meDockAlign )
             SetAlign( meDockAlign );
     }
-
     if ( bFloatMode || (bFloatMode != IsFloatingMode()) )
         DockingWindow::EndDocking( rRect, bFloatMode );
 }
@@ -4644,7 +4649,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             if( !IsHorizontal() )
                 ImplChangeHighlightUpDn( TRUE );
             else
-                bForwardKey = ImplOpenItem( aKeyCode );
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_LEFT:
@@ -4661,7 +4666,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
                 if( IsHorizontal() )
                     ImplChangeHighlightUpDn( TRUE );
                 else
-                    bForwardKey = ImplOpenItem( aKeyCode );
+                    ImplOpenItem( aKeyCode );
             }
         }
         break;
@@ -4670,7 +4675,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             if( !IsHorizontal() )
                 ImplChangeHighlightUpDn( FALSE );
             else
-                bForwardKey = !ImplOpenItem( aKeyCode );
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_RIGHT:
@@ -4678,7 +4683,7 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             if( IsHorizontal() )
                 ImplChangeHighlightUpDn( FALSE );
             else
-                bForwardKey = !ImplOpenItem( aKeyCode );
+                ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_PAGEUP:
@@ -4890,7 +4895,8 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 
             mnHighItemId = pItem->mnId;
             ImplDrawItem( aPos, 2 );
-            mnCurPos = aPos;
+            if( mbSelection )
+                mnCurPos = aPos;
             ImplShowFocus();
         }
     }
