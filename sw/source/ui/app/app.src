@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: os $ $Date: 2002-09-13 09:20:45 $
+ *  last change: $Author: vg $ $Date: 2002-09-17 13:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2039,13 +2039,13 @@ InfoBox MSG_ERROR_PASSWD
     MESSAGE[ chinese_simplified ] = "ε―†η ζ— ζ•γ€‚";
     MESSAGE[ russian ] = "Ξψθακΰ β οΰπξλε.";
     MESSAGE[ polish ] = "Nieprawid³owe has³o.";
-    MESSAGE[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γζ­£γ—γγ‚γ‚γΎγ›γ‚“γ€‚";
+    MESSAGE[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰γι–“ι•γ£γ¦γ„γΎγ™γ€‚";
     MESSAGE[ chinese_traditional ] = "ε―†ηΆΌη„΅ζ•γ€‚";
     MESSAGE[ arabic ] = "ίαγΙ ΣΡ ΫνΡ ΥΗαΝΙ.";
     MESSAGE[ dutch ] = "Wachtwoord niet correct.";
     MESSAGE[ chinese_simplified ] = "ε―†η ζ— ζ•γ€‚";
     MESSAGE[ greek ] = "Εσφαλμένος κωδικός πρόσβασης.";
-    MESSAGE[ korean ] = "μ ν¨ν•μ§€ μ•μ€ ν¨μ¤μ›λ“";
+    MESSAGE[ korean ] = "μ•”νΈκ°€ μ³μ§€ μ•μµλ‹λ‹¤.";
     MESSAGE[ turkish ] = "Yanlύώ ώifre.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "Contrasenya incorrecta.";
@@ -3172,9 +3172,9 @@ String STR_FDLG_TEMPLATE_NAME
     Text [ portuguese_brazilian ] = "Aktuelle Vorlage: " ;
     Text [ swedish ] = "Formatmallar: " ;
     Text [ danish ] = "Aktuel skabelon: " ;
-    Text [ italian ] = "Modello corrente: " ;
+    Text [ italian ] = "Modello: " ;
     Text [ spanish ] = "Estilos: " ;
-    Text [ french ] = "Modθle actif : " ;
+    Text [ french ] = "Styles : " ;
     Text [ dutch ] = "Actuele sjabloon  " ;
     Text [ portuguese ] = "Modelo actual: " ;
     Text[ chinese_simplified ] = "ζ ΌεΌζ ·εΌοΌ";
