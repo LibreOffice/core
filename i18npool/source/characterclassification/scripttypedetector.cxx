@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scripttypedetector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:06:35 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 17:17:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,9 @@
 #include <scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
 
-//  ----------------------------------------------------
-//  class ScriptTypeDetector
-//  ----------------------------------------------------;
+//      ----------------------------------------------------
+//      class ScriptTypeDetector
+//      ----------------------------------------------------;
 
 using namespace com::sun::star::i18n;
 
@@ -80,25 +80,25 @@ ScriptTypeDetector::~ScriptTypeDetector()
 }
 
 static sal_Int16 scriptDirection[] = {
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_LEFT_TO_RIGHT = 0,
-    ScriptDirection::RIGHT_TO_LEFT, // DirectionProperty_RIGHT_TO_LEFT = 1,
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_EUROPEAN_NUMBER = 2,
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_EUROPEAN_NUMBER_SEPARATOR = 3,
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_EUROPEAN_NUMBER_TERMINATOR = 4,
-    ScriptDirection::RIGHT_TO_LEFT, // DirectionProperty_ARABIC_NUMBER = 5,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_COMMON_NUMBER_SEPARATOR = 6,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_BLOCK_SEPARATOR = 7,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_SEGMENT_SEPARATOR = 8,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_WHITE_SPACE_NEUTRAL = 9,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_OTHER_NEUTRAL = 10,
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_LEFT_TO_RIGHT_EMBEDDING = 11,
-    ScriptDirection::LEFT_TO_RIGHT, // DirectionProperty_LEFT_TO_RIGHT_OVERRIDE = 12,
-    ScriptDirection::RIGHT_TO_LEFT, // DirectionProperty_RIGHT_TO_LEFT_ARABIC = 13,
-    ScriptDirection::RIGHT_TO_LEFT, // DirectionProperty_RIGHT_TO_LEFT_EMBEDDING = 14,
-    ScriptDirection::RIGHT_TO_LEFT, // DirectionProperty_RIGHT_TO_LEFT_OVERRIDE = 15,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_POP_DIRECTIONAL_FORMAT = 16,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_DIR_NON_SPACING_MARK = 17,
-    ScriptDirection::NEUTRAL,       // DirectionProperty_BOUNDARY_NEUTRAL = 18,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT = 0,
+    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT = 1,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER = 2,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER_SEPARATOR = 3,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_EUROPEAN_NUMBER_TERMINATOR = 4,
+    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_ARABIC_NUMBER = 5,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_COMMON_NUMBER_SEPARATOR = 6,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_BLOCK_SEPARATOR = 7,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_SEGMENT_SEPARATOR = 8,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_WHITE_SPACE_NEUTRAL = 9,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_OTHER_NEUTRAL = 10,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT_EMBEDDING = 11,
+    ScriptDirection::LEFT_TO_RIGHT,     // DirectionProperty_LEFT_TO_RIGHT_OVERRIDE = 12,
+    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_ARABIC = 13,
+    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_EMBEDDING = 14,
+    ScriptDirection::RIGHT_TO_LEFT,     // DirectionProperty_RIGHT_TO_LEFT_OVERRIDE = 15,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_POP_DIRECTIONAL_FORMAT = 16,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_DIR_NON_SPACING_MARK = 17,
+    ScriptDirection::NEUTRAL,           // DirectionProperty_BOUNDARY_NEUTRAL = 18,
 };
 
 sal_Int16 SAL_CALL
@@ -112,41 +112,41 @@ ScriptTypeDetector::getScriptDirection( const ::rtl::OUString& Text, sal_Int32 n
 sal_Int32 SAL_CALL
 ScriptTypeDetector::beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 cPos = nPos;
+        sal_Int32 cPos = nPos;
 
-    if (cPos < Text.getLength()) {
-        for (; cPos >= 0; cPos--) {
-        if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
-            break;
+        if (cPos < Text.getLength()) {
+            for (; cPos >= 0; cPos--) {
+                if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
+                    break;
+            }
+            return cPos == nPos ? -1 : cPos + 1;
         }
-        return cPos == nPos ? -1 : cPos + 1;
-    }
 }
 
 sal_Int32 SAL_CALL
 ScriptTypeDetector::endOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 cPos = nPos;
-    sal_Int32 len = Text.getLength();
+        sal_Int32 cPos = nPos;
+        sal_Int32 len = Text.getLength();
 
-    if (cPos >=0) {
-        for (; cPos < len; cPos++) {
-        if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
-            break;
+        if (cPos >=0) {
+            for (; cPos < len; cPos++) {
+                if (scriptDirection != getScriptDirection(Text, cPos, scriptDirection))
+                    break;
+            }
         }
-    }
-    return cPos == nPos ? -1 : cPos;
+        return cPos == nPos ? -1 : cPos;
 }
 
 sal_Int16 SAL_CALL
 ScriptTypeDetector::getCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     static ScriptTypeList typeList[] = {
-    { UnicodeScript_kHebrew,    CTLScriptType::CTL_HEBREW },    // 10
-    { UnicodeScript_kArabic,    CTLScriptType::CTL_ARABIC },    // 11
-    { UnicodeScript_kDevanagari,    CTLScriptType::CTL_INDIC }, // 14
-    { UnicodeScript_kThai,      CTLScriptType::CTL_THAI },  // 24
-    { UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
+        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, CTLScriptType::CTL_HEBREW },    // 10
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, CTLScriptType::CTL_ARABIC },    // 11
+        { UnicodeScript_kDevanagari, UnicodeScript_kDevanagari, CTLScriptType::CTL_INDIC },     // 14
+        { UnicodeScript_kThai, UnicodeScript_kThai, CTLScriptType::CTL_THAI },      // 24
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   CTLScriptType::CTL_UNKNOWN }    // 88
     };
 
     return unicode::getUnicodeScriptType(Text[nPos], typeList, CTLScriptType::CTL_UNKNOWN);
@@ -157,16 +157,16 @@ sal_Int32 SAL_CALL
 ScriptTypeDetector::beginOfCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     if (nPos < 0)
-    return 0;
+        return 0;
     else if (nPos >= Text.getLength())
-    return Text.getLength();
+        return Text.getLength();
     else {
-    sal_Int16 cType = getCTLScriptType(Text, nPos);
-    for (nPos--; nPos >= 0; nPos--) {
-        if (cType != getCTLScriptType(Text, nPos))
-        break;
-    }
-    return nPos + 1;
+        sal_Int16 cType = getCTLScriptType(Text, nPos);
+        for (nPos--; nPos >= 0; nPos--) {
+            if (cType != getCTLScriptType(Text, nPos))
+                break;
+        }
+        return nPos + 1;
     }
 }
 
@@ -175,17 +175,17 @@ sal_Int32 SAL_CALL
 ScriptTypeDetector::endOfCTLScriptType( const ::rtl::OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     if (nPos < 0)
-    return 0;
+        return 0;
     else if (nPos >= Text.getLength())
-    return Text.getLength();
+        return Text.getLength();
     else {
-    sal_Int16 cType = getCTLScriptType(Text, nPos);
-    sal_Int32 len = Text.getLength();
-    for (nPos++; nPos < len; nPos++) {
-        if (cType != getCTLScriptType(Text, nPos))
-        break;
-    }
-    return nPos;
+        sal_Int16 cType = getCTLScriptType(Text, nPos);
+        sal_Int32 len = Text.getLength();
+        for (nPos++; nPos < len; nPos++) {
+            if (cType != getCTLScriptType(Text, nPos))
+                break;
+        }
+        return nPos;
     }
 }
 
