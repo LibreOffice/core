@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 10:18:30 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:22:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,9 @@
 #ifndef _COMBOBOX_HXX //autogen
 #include <vcl/combobox.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+#include <svtools/acceleratorexecute.hxx>
+#endif
 
 #if _SOLAR__PRIVATE
 
@@ -78,11 +81,14 @@ class SvtURLBox;
 class SfxURLToolBoxControl_Impl : public SfxToolBoxControl
 {
 private:
+    ::svt::AcceleratorExecute*  pAccExec;
+
     SvtURLBox*              GetURLBox() const;
     void                    OpenURL( const String& rName, BOOL bNew ) const;
 
     DECL_LINK(              OpenHdl, void* );
     DECL_LINK(              SelectHdl, void* );
+    DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
     struct ExecuteInfo
     {
@@ -98,6 +104,7 @@ public:
                             SFX_DECL_TOOLBOX_CONTROL();
 
                             SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );
+    virtual                 ~SfxURLToolBoxControl_Impl();
 
     virtual Window*         CreateItemWindow( Window* pParent );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
