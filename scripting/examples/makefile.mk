@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2005-01-25 15:08:56 $
+#   last change: $Author: rt $ $Date: 2005-01-27 15:25:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ ZIP1LIST=java
 
 ZIP2FLAGS=-r
 ZIP2TARGET=ScriptsBeanShell
-ZIP2LIST=beanshell
+ZIP2LIST=beanshell/HelloWorld beanshell/Highlight beanshell/WordCount beanshell/Capitalise beanshell/MemoryUsage 
 
 ZIP3FLAGS=-r
 ZIP3TARGET=ScriptsJavaScript
