@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchyprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-03 11:16:33 $
+ *  last change: $Author: kso $ $Date: 2001-07-12 15:04:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,8 +171,6 @@ HierarchyContentProvider::queryContent(
         const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
     throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     HierarchyUri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
         throw star::ucb::IllegalIdentifierException();
@@ -182,6 +180,8 @@ HierarchyContentProvider::queryContent(
         = new ::ucb::ContentIdentifier( m_xSMgr,
                                         HierarchyUri::encodeURL(
                                                             aUri.getUri() ) );
+    vos::OGuard aGuard( m_aMutex );
+
     // Check, if a content with given id already exists...
     uno::Reference< star::ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).getBodyPtr();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkgprovider.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
+ *  last change: $Author: kso $ $Date: 2001-07-12 15:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,8 +256,6 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
             const uno::Reference< star::ucb::XContentIdentifier >& Identifier )
     throw( star::ucb::IllegalIdentifierException, uno::RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     if ( !Identifier.is() )
         return uno::Reference< star::ucb::XContent >();
 
@@ -269,6 +267,8 @@ uno::Reference< star::ucb::XContent > SAL_CALL ContentProvider::queryContent(
     // PackageUri::getUri().
     uno::Reference< star::ucb::XContentIdentifier > xId
                 = new ::ucb::ContentIdentifier( m_xSMgr, aUri.getUri() );
+
+    vos::OGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
     uno::Reference< star::ucb::XContent > xContent

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavprovider.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:51:54 $
+ *  last change: $Author: kso $ $Date: 2001-07-12 15:04:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,6 @@ ContentProvider::queryContent(
     throw( com::sun::star::ucb::IllegalIdentifierException,
            uno::RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     // Check URL scheme...
 
     const rtl::OUString aScheme
@@ -204,6 +202,8 @@ ContentProvider::queryContent(
     }
     else
         xCanonicId = Identifier;
+
+    vos::OGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
     uno::Reference< com::sun::star::ucb::XContent > xContent
