@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 07:55:26 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:48:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _DBHELPER_DBCHARSET_HXX_
+#include <connectivity/dbcharset.hxx>
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
@@ -194,7 +197,10 @@ void OEvoabConnection::construct(const ::rtl::OUString& url,const Sequence< Prop
     ::std::vector<PropertyValue> aParam;
 
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("EnableSQL92Check"), 0, Any(), PropertyState_DIRECT_VALUE));
-    aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("CharSet"), 0, Any(), PropertyState_DIRECT_VALUE));
+     ::dbtools::OCharsetMap aLookupIanaName;
+     ::dbtools::OCharsetMap::const_iterator aLookup = aLookupIanaName.find(RTL_TEXTENCODING_UTF8);
+     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("CharSet"), 0,
+                                    makeAny((*aLookup).getIanaName()), PropertyState_DIRECT_VALUE));
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("Extension"), 0, makeAny(getDriver()->getFileExt()), PropertyState_DIRECT_VALUE));
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("HeaderLine"), 0, makeAny(m_bHeaderLine), PropertyState_DIRECT_VALUE));
     aParam.push_back(PropertyValue(::rtl::OUString::createFromAscii("FieldDelimiter"), 0, makeAny(::rtl::OUString(&m_cFieldDelimiter,1)), PropertyState_DIRECT_VALUE));
