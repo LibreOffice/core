@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-22 14:44:40 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 07:24:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ public:
         throw (uno::RuntimeException);
     void RemoveState(sal_Int16 aState)
         throw (uno::RuntimeException);
-    void Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
+    sal_Bool Compare(const AccessibleStateSetHelperImpl* pComparativeValue,
                         AccessibleStateSetHelperImpl* pOldStates,
                         AccessibleStateSetHelperImpl* pNewStates)
         throw (uno::RuntimeException);
@@ -168,24 +168,31 @@ void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
     maStates &= aTempBitSet;
 }
 
-void AccessibleStateSetHelperImpl::Compare(
+sal_Bool AccessibleStateSetHelperImpl::Compare(
     const AccessibleStateSetHelperImpl* pComparativeValue,
         AccessibleStateSetHelperImpl* pOldStates,
         AccessibleStateSetHelperImpl* pNewStates)
     throw (uno::RuntimeException)
 {
+    sal_Bool bResult(sal_False);
     if (pComparativeValue && pOldStates && pNewStates)
     {
+        if (maStates == pComparativeValue->maStates)
+            bResult = sal_True;
+        else
+        {
 #if 0
-        std::bitset<BITFIELDSIZE> aTempBitSet(maStates);
+            std::bitset<BITFIELDSIZE> aTempBitSet(maStates);
 #endif
-        sal_uInt64 aTempBitSet(maStates);
-        aTempBitSet ^= pComparativeValue->maStates;
-        pOldStates->maStates = aTempBitSet;
-        pOldStates->maStates &= maStates;
-        pNewStates->maStates = aTempBitSet;
-        pNewStates->maStates &= pComparativeValue->maStates;
+            sal_uInt64 aTempBitSet(maStates);
+            aTempBitSet ^= pComparativeValue->maStates;
+            pOldStates->maStates = aTempBitSet;
+            pOldStates->maStates &= maStates;
+            pNewStates->maStates = aTempBitSet;
+            pNewStates->maStates &= pComparativeValue->maStates;
+        }
     }
+    return bResult;
 }
 
 
@@ -290,14 +297,14 @@ void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
     mpHelperImpl->RemoveState(aState);
 }
 
-void AccessibleStateSetHelper::Compare(
+sal_Bool AccessibleStateSetHelper::Compare(
     const AccessibleStateSetHelper& rComparativeValue,
         AccessibleStateSetHelper& rOldStates,
         AccessibleStateSetHelper& rNewStates)
     throw (uno::RuntimeException)
 {
     ::vos::OGuard aGuard (maMutex);
-    mpHelperImpl->Compare(rComparativeValue.mpHelperImpl,
+    return mpHelperImpl->Compare(rComparativeValue.mpHelperImpl,
         rOldStates.mpHelperImpl, rNewStates.mpHelperImpl);
 }
 

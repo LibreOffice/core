@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 12:44:23 $
+ *  last change: $Author: sab $ $Date: 2002-03-20 07:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ public:
         rNewStates contains after call all states which are in the comparative
          set and not in the own set.
     */
-    void    Compare(const AccessibleStateSetHelper& rComparativeValue,
+    sal_Bool Compare(const AccessibleStateSetHelper& rComparativeValue,
                         AccessibleStateSetHelper& rOldStates,
                         AccessibleStateSetHelper& rNewStates)
         throw (::com::sun::star::uno::RuntimeException);
