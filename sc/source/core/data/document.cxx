@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:41:28 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 18:59:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,30 @@
 #include "indexmap.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
 #include "scmod.hxx"
+#ifndef SC_DOCITER_HXX
+#include "dociter.hxx"
+#endif
+#ifndef __SGI_STL_SET
+#include <set>
+#endif
 
+struct ScDefaultAttr
+{
+    const ScPatternAttr*    pAttr;
+    USHORT                  nFirst;
+    USHORT                  nCount;
+    ScDefaultAttr(const ScPatternAttr* pPatAttr) : pAttr(pPatAttr), nFirst(0), nCount(0) {}
+};
+
+struct ScLessDefaultAttr
+{
+    sal_Bool operator() (const ScDefaultAttr& rValue1, const ScDefaultAttr& rValue2) const
+    {
+        return rValue1.pAttr < rValue2.pAttr;
+    }
+};
+
+typedef std::set<ScDefaultAttr, ScLessDefaultAttr>  ScDefaultAttrSet;
 
 void ScDocument::MakeTable( USHORT nTab )
 {
@@ -2358,13 +2381,54 @@ USHORT ScDocument::GetNextDifferentFlaggedRow( USHORT nTab, USHORT nStart) const
     return 0;
 }
 
-BOOL ScDocument::GetColDefault( USHORT nTab, USHORT nCol, USHORT nLastRow, USHORT& nDefault) const
+BOOL ScDocument::GetColDefault( USHORT nTab, USHORT nCol, USHORT nLastRow, USHORT& nDefault)
 {
     BOOL bRet(FALSE);
+    nDefault = 0;
+    ScDocAttrIterator aDocAttrItr(this, nTab, nCol, 0, nCol, nLastRow);
+    USHORT nColumn, nStartRow, nEndRow;
+    const ScPatternAttr* pAttr = aDocAttrItr.GetNext(nColumn, nStartRow, nEndRow);
+    if (nEndRow < nLastRow)
+    {
+        ScDefaultAttrSet aSet;
+        ScDefaultAttrSet::iterator aItr = aSet.end();
+        while (pAttr)
+        {
+            ScDefaultAttr aAttr(pAttr);
+            aItr = aSet.find(aAttr);
+            if (aItr == aSet.end())
+            {
+                aAttr.nCount = nEndRow - nStartRow + 1;
+                aAttr.nFirst = nStartRow;
+                aSet.insert(aAttr);
+            }
+            else
+            {
+                aAttr.nCount = aItr->nCount + nEndRow - nStartRow + 1;
+                aAttr.nFirst = aItr->nFirst;
+                aSet.erase(aItr);
+                aSet.insert(aAttr);
+            }
+            pAttr = aDocAttrItr.GetNext(nColumn, nStartRow, nEndRow);
+        }
+        ScDefaultAttrSet::iterator aDefaultItr = aSet.begin();
+        aItr = aDefaultItr;
+        aItr++;
+        while (aItr != aSet.end())
+        {
+            if (aItr->nCount > aDefaultItr->nCount)
+                aDefaultItr = aItr;
+            aItr++;
+        }
+        nDefault = aDefaultItr->nFirst;
+        bRet = TRUE;
+    }
+    else
+        bRet = TRUE;
     return bRet;
 }
 
-BOOL ScDocument::GetRowDefault( USHORT nTab, USHORT nRow, USHORT nLastCol, USHORT& nDefault) const
+BOOL ScDocument::GetRowDefault( USHORT nTab, USHORT nRow, USHORT nLastCol, USHORT& nDefault)
 {
     BOOL bRet(FALSE);
     return bRet;
