@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 19:05:48 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 19:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,15 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
+#include <com/sun/star/sheet/XCellRangesQuery.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
 #endif
@@ -111,6 +120,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::sheet;
 
 // -------------------------------------------------------------------------
@@ -463,6 +473,50 @@ sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExce
 
 // -------------------------------------------------------------------------
 
+sal_Bool lcl_IsEmptyOrHidden( const Reference<XSpreadsheets>& xSheets, const ::rtl::OUString& rName )
+{
+    Any aAny = xSheets->getByName( rName );
+    Reference<XSpreadsheet> xSheet;
+    if ( aAny >>= xSheet )
+    {
+        //  test if sheet is hidden
+
+        Reference<XPropertySet> xProp( xSheet, UNO_QUERY );
+        if (xProp.is())
+        {
+            sal_Bool bVisible;
+            Any aVisAny = xProp->getPropertyValue( ::rtl::OUString::createFromAscii("IsVisible") );
+            if ( aVisAny >>= bVisible )
+                if (!bVisible)
+                    return sal_True;                // hidden
+        }
+
+        //  test if sheet is empty
+
+        Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
+        Reference<XCellRangesQuery> xQuery( xSheet, UNO_QUERY );
+        if ( xAddr.is() && xQuery.is() )
+        {
+            CellRangeAddress aTotalRange = xAddr->getRangeAddress();
+            // queryIntersection to get a ranges object
+            Reference<XSheetCellRanges> xRanges = xQuery->queryIntersection( aTotalRange );
+            if (xRanges.is())
+            {
+                Reference<XEnumerationAccess> xCells = xRanges->getCells();
+                if (xCells.is())
+                {
+                    if ( !xCells->hasElements() )
+                        return sal_True;            // empty
+                }
+            }
+        }
+    }
+
+    return sal_False;
+}
+
+// -------------------------------------------------------------------------
+
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const Any& catalog, const ::rtl::OUString& schemaPattern,
         const ::rtl::OUString& tableNamePattern, const Sequence< ::rtl::OUString >& types )
@@ -513,15 +567,15 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
     sal_Int32 nSheetCount = aSheetNames.getLength();
     for (sal_Int32 nSheet=0; nSheet<nSheetCount; nSheet++)
     {
-        //! leave out hidden or empty sheets?
-
         ::rtl::OUString aName = aSheetNames[nSheet];
-
-        ORow aRow(3);
-        aRow.push_back(makeAny(aName));
-        aRow.push_back(makeAny(aTable));
-        aRow.push_back(Any());
-        aRows.push_back(aRow);
+        if ( !lcl_IsEmptyOrHidden( xSheets, aName ) )
+        {
+            ORow aRow(3);
+            aRow.push_back(makeAny(aName));
+            aRow.push_back(makeAny(aTable));
+            aRow.push_back(Any());
+            aRows.push_back(aRow);
+        }
     }
 
     pResult->setRows(aRows);
