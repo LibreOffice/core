@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-06 09:56:13 $
+ *  last change: $Author: cl $ $Date: 2001-12-14 15:04:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1151,12 +1151,13 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
         throw lang::IllegalArgumentException();
 
     // check if this is a praesentation object by checking the stylesheet
-    SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
+    const SfxStyleSheet* pOldStyleSheet = pObj->GetStyleSheet();
+    const SfxStyleSheet* pNewStyleSheet = (SfxStyleSheet*)pStyleSheet->getStyleSheet();
 
-    String aEmptyString;
-    if( pOldStyleSheet &&
-        pOldStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA &&
-        pOldStyleSheet->GetHelpId( aEmptyString ) == HID_PSEUDOSHEET_BACKGROUNDOBJECTS )
+    if( pOldStyleSheet == pNewStyleSheet )
+        return;
+
+    if( pOldStyleSheet && (pOldStyleSheet->GetFamily() != SFX_STYLE_FAMILY_PARA) )
         throw lang::IllegalArgumentException();
 
     pObj->SetStyleSheet( (SfxStyleSheet*)pStyleSheet->getStyleSheet(), sal_False );
