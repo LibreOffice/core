@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nf $ $Date: 2000-12-06 11:04:58 $
+ *  last change: $Author: rt $ $Date: 2000-12-07 13:05:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,14 +114,14 @@ ModalDialog DLG_UUI_LOGIN
         WordBreak = TRUE ;
         Text = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ English ] = "Please enter user name and password here for %1." ;
-        Text [ portuguese ] = "Especifique o nome do utilizador e a senha para %1." ;
+        Text [ portuguese ] = "Indique o nome do utilizador e a senha para %1." ;
         Text [ english_us ] = "Enter the user name and password for %1 here." ;
         Text [ portuguese_brazilian ] = "Bitte geben Sie hier Benutzernamen und Passwort für %1 ein." ;
         Text [ swedish ] = "Mata in användarnamn och lösenord här för %1." ;
         Text [ danish ] = "Indtast her venligst brugernavnet og adgangkoden for %1." ;
         Text [ italian ] = "Digitate qui il nome dell'utente e la password per %1." ;
         Text [ spanish ] = "Especifique su nombre de usuario y su contraseña para %1." ;
-        Text [ french ] = "Veuilez saisir votre nom d'utilisateur et votre mot de passe pour %1." ;
+        Text [ french ] = "Saisissez vos nom d'utilisateur et mot de passe pour %1." ;
         Text [ dutch ] = "Vermeld hier de gebruiker en het wachtwoord voor %1." ;
         Text[ chinese_simplified ] = "ÇëÄúÔÚ´ËÎª %1 ÊäÈëÊ¹ÓÃÃûºÍÃÜÂë¡£";
         Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ ïîëüçîâàòåëÿ è ïàğîëü äëÿ %1.";
@@ -154,7 +154,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Êß½(~H)";
         Text[ chinese_traditional ] = "¸ô®|(~H)";
         Text[ greek ] = "ÄéáäñïìŞ";
-        Text[ korean ] = "°æ·Î(~H)";
+        Text[ korean ] = "°æ·Î";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ turkish ] = "Veri yolu";
     };
@@ -187,7 +187,7 @@ ModalDialog DLG_UUI_LOGIN
         Text [ swedish ] = "~Användarnamn" ;
         Text [ danish ] = "Brugernavn" ;
         Text [ italian ] = "Nome ~utente" ;
-        Text [ spanish ] = "~Nombre de usuario" ;
+        Text [ spanish ] = "~Usuario" ;
         Text [ french ] = "~Nom d'utilisateur" ;
         Text [ dutch ] = "Naam ~gebruiker" ;
         Text [ portuguese ] = "~Nome do utilizador" ;
@@ -197,7 +197,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Õ°»Ş°–¼(~U)";
         Text[ chinese_traditional ] = "¨Ï¥Î¦W(~U)";
         Text[ greek ] = "¼íïìá ÷ñŞóôç";
-        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§(~U)";
+        Text[ korean ] = "»ç¿ëÀÚ ÀÌ¸§";
         Text[ arabic ] = "ÇÓã ÇáãÓÊÎÏã";
         Text[ turkish ] = "Kullanıcı adı";
     };
@@ -234,7 +234,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Êß½Ü°ÄŞ(~W)";
         Text[ chinese_traditional ] = "±K½X(~W)";
         Text[ greek ] = "Êùäéêüò ğñüóâ~áóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå(~W)";
+        Text[ korean ] = "ÆĞ½º¿öµå";
         Text[ arabic ] = "ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifre";
     };
@@ -266,7 +266,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ chinese_simplified ] = "ÕÊºÅ(~C)";
         Text[ chinese_traditional ] = "±b¸¹(~C)";
         Text[ greek ] = "Ëïãáñéáóìü~ò";
-        Text[ korean ] = "°èÁ¤(~C)";
+        Text[ korean ] = "°èÁ¤";
         Text[ arabic ] = "ÇÔÊÑÇß";
         Text[ turkish ] = "Hesap";
     };
@@ -298,7 +298,7 @@ ModalDialog DLG_UUI_LOGIN
         Text[ japanese ] = "Êß½Ü°ÄŞ‚Ì•Û‘¶(~S)";
         Text[ chinese_traditional ] = "Àx¦s±K½X(~S)";
         Text[ greek ] = "ÁğïèŞêåõ~óç êùäéêïı ğñüóâáóçò";
-        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå(~S)";
+        Text[ korean ] = "ÆĞ½º¿öµå ÀúÀå";
         Text[ arabic ] = "ÍİÙ ßáãÉ ÇáÓÑ";
         Text[ turkish ] = "Şifreyi kaydet";
     };
@@ -352,10 +352,10 @@ ModalDialog DLG_UUI_LOGIN
         Text [ portuguese_brazilian ] = "auf " ;
         Text [ swedish ] = "på " ;
         Text [ danish ] = "på " ;
-        Text [ italian ] = "su   " ;
-        Text [ spanish ] = "en   " ;
-        Text [ french ] = "sur  " ;
-        Text [ dutch ] = "op   " ;
+        Text [ italian ] = "su " ;
+        Text [ spanish ] = "en  " ;
+        Text [ french ] = "sur " ;
+        Text [ dutch ] = "op    " ;
         Text[ chinese_simplified ] = "ÔÚ ";
         Text[ russian ] = "íà ";
         Text[ polish ] = "na ";
