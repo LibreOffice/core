@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:56:32 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,12 @@ void SwHTMLParser::InsertEmbed()
 
     // die URL aufbereiten
     INetURLObject aURLObj;
-    if( aURL.Len() && !aURLObj.SetURL( INetURLObject::RelToAbs(aURL) ) )
+    bool bHasURL = aURL.Len() &&
+                   !aURLObj.SetURL( INetURLObject::RelToAbs(aURL) );
+
+    // #109761# do not insert plugin if it has neither URL nor type
+    bool bHasType = aType.Len() != 0;
+    if( !bHasURL && !bHasType )
         return;
 
     // das Plugin anlegen
@@ -486,8 +491,10 @@ void SwHTMLParser::InsertEmbed()
 
     pPlugin->EnableSetModified( FALSE );
     pPlugin->SetPlugInMode( (USHORT)PLUGIN_EMBEDED );
-    pPlugin->SetURL( aURLObj );
-    pPlugin->SetMimeType( aType );
+    if( bHasURL )
+        pPlugin->SetURL( aURLObj );
+    if( bHasType )
+        pPlugin->SetMimeType( aType );
     pPlugin->SetCommandList( aCmdLst );
     pPlugin->EnableSetModified( TRUE );
 
@@ -1135,11 +1142,14 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         // erstmal das Plug-spezifische
         sOut += sHTML_embed;
 
-        String aURL(
+        String aURL;
+        if( pPlugin->GetURL() != NULL )
+        {
             INetURLObject::AbsToRel(
                     pPlugin->GetURL()->GetMainURL( INetURLObject::NO_DECODE ),
                     INetURLObject::WAS_ENCODED,
-                    INetURLObject::DECODE_UNAMBIGUOUS) );
+                    INetURLObject::DECODE_UNAMBIGUOUS);
+        }
 
         if( aURL.Len() )
         {
