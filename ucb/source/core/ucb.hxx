@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 08:21:39 $
+ *  last change: $Author: sb $ $Date: 2001-11-28 09:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public:
         throw( com::sun::star::uno::RuntimeException );
     virtual com::sun::star::uno::Reference<
         com::sun::star::ucb::XContentProvider > SAL_CALL
-    queryContentProvider( const rtl::OUString& Scheme )
+    queryContentProvider( const rtl::OUString& Identifier )
         throw( com::sun::star::uno::RuntimeException );
 
     // XContentProvider
@@ -232,7 +232,8 @@ public:
 
 private:
     com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider >
-    queryContentProvider( const rtl::OUString& Scheme, sal_Bool bResolved );
+    queryContentProvider( const rtl::OUString& Identifier,
+                          sal_Bool bResolved );
 
     com::sun::star::uno::Reference< com::sun::star::ucb::XCommandInfo >
     getCommandInfo();

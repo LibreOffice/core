@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucb.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-25 08:50:27 $
+ *  last change: $Author: sb $ $Date: 2001-11-28 09:42:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,10 +377,11 @@ com::sun::star::uno::Sequence< ContentProviderInfo > SAL_CALL
 //=========================================================================
 // virtual
 Reference< XContentProvider > SAL_CALL
-        UniversalContentBroker::queryContentProvider( const OUString& Scheme )
+        UniversalContentBroker::queryContentProvider( const OUString&
+                                                          Identifier )
     throw( com::sun::star::uno::RuntimeException )
 {
-    return queryContentProvider( Scheme, sal_False );
+    return queryContentProvider( Identifier, sal_False );
 }
 
 //=========================================================================
@@ -566,11 +567,12 @@ void SAL_CALL UniversalContentBroker::abort( sal_Int32 CommandId )
 //=========================================================================
 
 Reference< XContentProvider > UniversalContentBroker::queryContentProvider(
-                                const OUString& Scheme, sal_Bool bResolved )
+                                const OUString& Identifier,
+                                sal_Bool bResolved )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    ProviderList_Impl const * pList = m_aProviders.map( Scheme );
+    ProviderList_Impl const * pList = m_aProviders.map( Identifier );
     return pList ? bResolved ? pList->front().getResolvedProvider()
                              : pList->front().getProvider()
                  : Reference< XContentProvider >();
