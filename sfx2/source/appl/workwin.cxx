@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-27 09:21:25 $
+ *  last change: $Author: mba $ $Date: 2001-02-19 11:38:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,6 +411,24 @@ void SfxWorkWindow::ChangeWindow_Impl( Window *pNew )
     }
 }
 
+void SfxWorkWindow::SaveStatus_Impl()
+{
+    USHORT nCount = pChildWins->Count();
+    for ( USHORT n=0; n<nCount; n++ )
+    {
+        SfxChildWin_Impl* pCW = (*pChildWins)[n];
+        SfxChildWindow *pChild = pCW->pWin;
+        if (pChild)
+        {
+            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            pCW->aInfo = pChild->GetInfo();
+            if ( bTask )
+                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            SaveStatus_Impl(pChild, pCW->aInfo);
+        }
+    }
+}
+
 //--------------------------------------------------------------------
 // Hilfsmethode zum Freigeben der Childlisten. Wenn danach nicht der dtor
 // aufgerufen wird, sondern weiter gearbeitet wird, mu\s wie im ctor von
@@ -439,6 +457,12 @@ void SfxWorkWindow::DeleteControllers_Impl()
         SfxChildWindow *pChild = pCW->pWin;
         if (pChild)
         {
+            BOOL bTask = ( pCW->aInfo.nFlags & SFX_CHILDWIN_TASK ) != 0;
+            pCW->aInfo = pChild->GetInfo();
+            if ( bTask )
+                pCW->aInfo.nFlags |= SFX_CHILDWIN_TASK;
+            SaveStatus_Impl(pChild, pCW->aInfo);
+
             pChild->Hide();
 
             // Wenn das ChildWindow ein direktes Childfenster ist und nicht
@@ -2643,16 +2667,21 @@ BOOL SfxWorkWindow::IsAutoHideMode( const SfxSplitWindow *pSplitWin )
 }
 
 
-void SfxWorkWindow::EndAutoShow_Impl()
+void SfxWorkWindow::EndAutoShow_Impl( Point aPos )
 {
     if ( pParent )
-        pParent->EndAutoShow_Impl();
+        pParent->EndAutoShow_Impl( aPos );
 
     for ( USHORT n=0; n<SFX_SPLITWINDOWS_MAX; n++ )
     {
         SfxSplitWindow *p = pSplit[n];
         if ( p && p->IsAutoHide() )
-            p->FadeOut();
+        {
+            Point aLocalPos = p->ScreenToOutputPixel( aPos );
+            Rectangle aRect( Point(), p->GetSizePixel() );
+            if ( !aRect.IsInside( aLocalPos ) )
+                p->FadeOut();
+        }
     }
 }
 
