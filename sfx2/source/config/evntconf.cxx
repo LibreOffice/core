@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-11 17:53:29 $
+ *  last change: $Author: mba $ $Date: 2002-06-19 17:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,7 +536,7 @@ int SfxEventConfigItem_Impl::Load(SvStream& rStream)
         for (i=0; i<nCount; i++)
         {
             USHORT nId;
-            SfxMacroInfo aInfo( GetConfigManager()->GetObjectShell() );
+            SfxMacroInfo aInfo( pObjShell );
             rStream >> nId >> aInfo;
 
             for (USHORT n=0; n<nEventCount; n++)
