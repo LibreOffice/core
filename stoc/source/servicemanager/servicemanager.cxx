@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jbu $ $Date: 2002-02-06 17:43:21 $
+ *  last change: $Author: dbo $ $Date: 2002-03-13 15:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/XSimpleRegistry.hpp>
@@ -134,8 +135,6 @@ using namespace cppu;
 using namespace osl;
 using namespace rtl;
 using namespace std;
-
-
 
 namespace stoc_smgr
 {
@@ -570,7 +569,7 @@ protected:
 
     sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
-    virtual Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
+    virtual Sequence< Reference< XInterface > > queryServiceFactories(const OUString& aServiceName);
 
     Reference< XComponentContext >  m_xContext;
     sal_Int32 m_nUnloadingListenerId;
@@ -729,9 +728,19 @@ void OServiceManager::dispose()
     HashSet_Ref::iterator aIt = aImpls.begin();
     while( aIt != aImpls.end() )
     {
-        Reference<XComponent > xComp( Reference<XComponent >::query( *aIt++ ) );
-        if( xComp.is() )
-            xComp->dispose();
+        try
+        {
+            Reference<XComponent > xComp( Reference<XComponent >::query( *aIt++ ) );
+            if( xComp.is() )
+                xComp->dispose();
+        }
+        catch (RuntimeException & exc)
+        {
+#ifdef DEBUG
+            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
+#endif
+        }
     }
 
     // set the service manager to disposed
@@ -856,25 +865,40 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
 {
     Reference< XInterface > xRet;
 
-    Reference< XInterface > xFactory( queryServiceFactory( rServiceSpecifier ) );
-    if (xFactory.is())
+    Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
+    Reference< XInterface > const * p = factories.getConstArray();
+    for ( sal_Int32 nPos = factories.getLength(); nPos--; )
     {
-        Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
-        if (xFac.is())
+        try
         {
-            xRet = xFac->createInstanceWithContext( xContext );
-        }
-        else
-        {
-            Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
-            if (xFac.is())
+            Reference< XInterface > const & xFactory = p[ nPos ];
+            if (xFactory.is())
             {
+                Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
+                if (xFac.is())
+                {
+                    xRet = xFac->createInstanceWithContext( xContext );
+                }
+                else
+                {
+                    Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
+                    if (xFac.is())
+                    {
 #ifdef DEBUG
-                OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+                        OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
+                        OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                xRet = xFac->createInstance();
+                        xRet = xFac->createInstance();
+                    }
+                }
             }
+        }
+        catch (lang::DisposedException & exc)
+        {
+#ifdef DEBUG
+            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+#endif
         }
     }
 
@@ -889,25 +913,41 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
 {
     Reference< XInterface > xRet;
 
-    Reference< XInterface > xFactory( queryServiceFactory( rServiceSpecifier ) );
-    if (xFactory.is())
+    Sequence< Reference< XInterface > > factories( queryServiceFactories( rServiceSpecifier ) );
+    Reference< XInterface > const * p = factories.getConstArray();
+    for ( sal_Int32 nPos = factories.getLength(); nPos--; )
     {
-        Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
-        if (xFac.is())
+        try
         {
-            xRet = xFac->createInstanceWithArgumentsAndContext( rArguments, xContext );
-        }
-        else
-        {
-            Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
-            if (xFac.is())
+            Reference< XInterface > const & xFactory = p[ nPos ];
+            if (xFactory.is())
             {
+                Reference< XSingleComponentFactory > xFac( xFactory, UNO_QUERY );
+                if (xFac.is())
+
+                {
+                    xRet = xFac->createInstanceWithArgumentsAndContext( rArguments, xContext );
+                }
+                else
+                {
+                    Reference< XSingleServiceFactory > xFac( xFactory, UNO_QUERY );
+                    if (xFac.is())
+                    {
 #ifdef DEBUG
-                OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
-                OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
+                        OString aStr( OUStringToOString( rServiceSpecifier, RTL_TEXTENCODING_ASCII_US ) );
+                        OSL_TRACE( "### ignoring given context raising service %s !!!\n", aStr.getStr() );
 #endif
-                xRet = xFac->createInstanceWithArguments( rArguments );
+                        xRet = xFac->createInstanceWithArguments( rArguments );
+                    }
+                }
             }
+        }
+        catch (lang::DisposedException & exc)
+        {
+#ifdef DEBUG
+            OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+#endif
         }
     }
 
@@ -967,61 +1007,53 @@ Sequence< OUString > OServiceManager::getSupportedServiceNames()
 }
 
 
-Reference< XInterface > OServiceManager::queryServiceFactory( const OUString& aServiceName )
+Sequence< Reference< XInterface > > OServiceManager::queryServiceFactories(
+    const OUString& aServiceName )
 {
+    Sequence< Reference< XInterface > > ret;
+
     MutexGuard aGuard( m_mutex );
+    ::std::pair<
+          HashMultimap_OWString_Interface::iterator,
+          HashMultimap_OWString_Interface::iterator> p(
+              m_ServiceMap.equal_range( aServiceName ) );
 
-    Reference< XInterface > xRet;
-
-    HashMultimap_OWString_Interface::iterator aMultiIt = m_ServiceMap.find( aServiceName );
-    if( aMultiIt == m_ServiceMap.end() )
+    if (p.first == p.second) // no factories
     {
         // no service found, look for an implementation
         HashMap_OWString_Interface::iterator aIt = m_ImplementationNameMap.find( aServiceName );
         if( aIt != m_ImplementationNameMap.end() )
+        {
+            Reference< XInterface > const & x = aIt->second;
             // an implementation found
-            xRet = (*aIt).second;
+            ret = Sequence< Reference< XInterface > >( &x, 1 );
+        }
     }
     else
     {
-        xRet = (*aMultiIt).second;
+        ::std::vector< Reference< XInterface > > vec;
+        vec.reserve( 4 );
+        while (p.first != p.second)
+        {
+            vec.push_back( p.first->second );
+            ++p.first;
+        }
+        ret = Sequence< Reference< XInterface > >( &vec[ 0 ], vec.size() );
     }
 
-    return xRet;
+    return ret;
 }
 
 // XContentEnumerationAccess
 Reference<XEnumeration > OServiceManager::createContentEnumeration(const OUString& aServiceName)
     throw(::com::sun::star::uno::RuntimeException)
 {
-    MutexGuard aGuard( m_mutex );
-
-    // get all factories
-    pair<HashMultimap_OWString_Interface::iterator, HashMultimap_OWString_Interface::iterator> p =
-        m_ServiceMap.equal_range( aServiceName );
-
-    if( p.first == p.second )
-        // nothing
-        return Reference<XEnumeration >();
-
-    // get the length of the sequence
-    sal_Int32 nLen = 0;
-    HashMultimap_OWString_Interface::iterator next = p.first;
-    while( next != p.second )
-    {
-        ++nLen;
-        ++next;
-    }
-
-    Sequence< Reference<XInterface > > aFactories( nLen );
-    Reference<XInterface > * pArray = aFactories.getArray();
-    sal_Int32 i = 0;
-    while( p.first != p.second )
-    {
-        pArray[i++] = (*p.first).second;
-        ++p.first;
-    }
-    return new ServiceEnumeration_Impl( aFactories );
+    Sequence< Reference< XInterface > > factories(
+        OServiceManager::queryServiceFactories( aServiceName ) );
+    if (factories.getLength())
+        return new ServiceEnumeration_Impl( factories );
+    else
+        return Reference< XEnumeration >();
 }
 
 // XEnumeration
@@ -1244,7 +1276,7 @@ public:
 
 protected:
     //OServiceManager
-    Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
+    Sequence< Reference< XInterface > > queryServiceFactories(const OUString& aServiceName);
 private:
     Reference<XRegistryKey >        getRootKey();
     Reference<XInterface > loadWithImplementationName( const OUString & rImplName );
@@ -1512,19 +1544,23 @@ Sequence< OUString > ORegistryServiceManager::getSupportedServiceNames()
 
 
 // OServiceManager
-Reference< XInterface > ORegistryServiceManager::queryServiceFactory(
+Sequence< Reference< XInterface > > ORegistryServiceManager::queryServiceFactories(
     const OUString& aServiceName )
 {
-    Reference< XInterface > xRet = OServiceManager::queryServiceFactory( aServiceName );
-    if( !xRet.is() )
+    Sequence< Reference< XInterface > > ret(
+        OServiceManager::queryServiceFactories( aServiceName ) );
+    if (ret.getLength())
+    {
+        return ret;
+    }
+    else
     {
         MutexGuard aGuard( m_mutex );
-        xRet = loadWithServiceName( aServiceName );
-        if( !xRet.is() )
-            xRet = loadWithImplementationName( aServiceName );
+        Reference< XInterface > x( loadWithServiceName( aServiceName ) );
+        if (! x.is())
+            x = loadWithImplementationName( aServiceName );
+        return Sequence< Reference< XInterface > >( &x, 1 );
     }
-
-    return xRet;
 }
 
 // XContentEnumerationAccess
