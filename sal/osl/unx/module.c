@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-09 14:26:00 $
+ *  last change: $Author: hr $ $Date: 2002-08-12 14:54:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,111 +163,87 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
 {
 #ifdef MACOSX
+        // GrP use dyld APIs so dylibs don't have to be in framework bundles
 
-    CFStringRef     pPath=0;
-    CFURLRef        pURL=0;
-    CFBundleRef     pLib=0;
-    sal_Char        *searchPath=0;
-    sal_Char        path[PATH_MAX + 1];
-    sal_Char        *pszModulePath=0;
+        int                     len;
+        const struct mach_header      *pLib = NULL;
+        oslModule               pModule;
+        sal_Char        buf[PATH_MAX + 1];
 
     OSL_ASSERT(pszModuleName);
 
     if ( ! pszModuleName || *pszModuleName == '\0' )
         return NULL;
 
-    /*
-     * Try to construct the absolute path to the module name by searching
-     * for the module name in the directories specified in the
-     * DYLD_LIBRARY_PATH environment variable.
-     */
-    if ( osl_searchPath( pszModuleName, "DYLD_LIBRARY_PATH", '\0', path, sizeof(path) ) == osl_Process_E_None )
-        pszModulePath = path;
-
-    /* Try checking in the system directories */
-    if ( ! pszModulePath )
-    {
-        strcpy( path, "/System/Library/Frameworks/" );
-        strcat( path, pszModuleName );
-        pszModulePath = path;
-    }
-
-    if ( pszModulePath )
-    {
 #ifndef NO_DL_FUNCTIONS
-        /* Convert path in strModulePath to CFStringRef */
-        pPath = CFStringCreateWithCString( NULL, pszModulePath,
-            kCFStringEncodingUTF8 );
 
-        /* Get the framework's CFURLRef using its path */
-        if ( ! (pURL = CFURLCreateWithFileSystemPath( kCFAllocatorDefault,
-            pPath, kCFURLPOSIXPathStyle, true) ) )
-        {
-#ifdef DEBUG
-            fprintf( stderr,
-                "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModulePath, "path does not exist" );
-#endif
-            CFRelease(pPath);
-            return NULL;
+        // Check if module is already loaded
+        strncpy(buf, pszModuleName, sizeof(buf));
+        buf[sizeof(buf)-1] = '\0';
+        pLib = NSAddImage(buf, NSADDIMAGE_OPTION_RETURN_ONLY_IF_LOADED |
+                          NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+
+        if (!pLib) {
+                // Module not already loaded. Try to load the module using
+                // the name as given (search includes DYLD_LIBRARY_PATH)
+                strncpy(buf, pszModuleName, sizeof(buf));
+                buf[sizeof(buf)-1] = '\0';
+                pLib = NSAddImage(buf, NSADDIMAGE_OPTION_WITH_SEARCHING |
+                                  NSADDIMAGE_OPTION_RETURN_ON_ERROR);
         }
 
-        /* Load the framework */
-        if ( ! ( pLib = CFBundleCreate( NULL, pURL) ) )
-        {
-#ifdef DEBUG
-            fprintf( stderr,
-                "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModulePath, "path is not a bundle" );
-#endif
-            CFRelease( pPath );
-            CFRelease( pURL );
-            return NULL;
+        if (!pLib  &&  pszModuleName[0] != '/') {
+                // Didn't find module in DYLD_LIBRARY_PATH. Try looking
+                // in application's bundle.
+                // But don't bother if the name is an absolute path.
+                strncpy(buf, "@executable_path/", sizeof(buf));
+                strncat(buf, pszModuleName, sizeof(buf) - strlen(buf));
+                buf[sizeof(buf)-1] = '\0';
+                pLib = NSAddImage(buf, NSADDIMAGE_OPTION_WITH_SEARCHING |
+                                  NSADDIMAGE_OPTION_RETURN_ON_ERROR);
         }
 
-        /* Load the library in the framework */
-        if ( CFBundleLoadExecutable( pLib ) )
+        if (!pLib) {
+                // Still couldn't find it - give up
+#ifdef DEBUG
+                // fixme use NSLinkEditError() to get a better error message
+                fprintf( stderr,
+                         "osl_loadModule: cannot load module %s for reason: %s\n",
+                         pszModuleName, "file does not exist or is not a library (tried DYLD_LIBRARY_PATH and @executable_path)" );
+#endif
+                return NULL;
+        }
+
+        pModule = (oslModule)malloc( sizeof( struct _oslModule ) );
+        if (!pModule) {
+#ifdef DEBUG
+                fprintf( stderr,
+                         "osl_loadModule: cannot load module %s for reason: %s\n",
+                         pszModuleName, "out of memory!" );
+#endif
+                return NULL;
+        }
+
+        // Calculate module name = file name without trailing .dylib*
+        for ( len = strlen(pszModuleName) - 6; len > 0 ; len-- )
         {
-            oslModule pModule=0;
-
-            CFRelease( pPath );
-            CFRelease( pURL );
-            pModule = (oslModule)malloc( sizeof( struct _oslModule ) );
-
-            if ( pModule )
-            {
-                // ignore trailing ".dylib*"
-                int len = strlen( pszModuleName ) - 6;
-                pModule->pModule = pLib;
-                // find last ".dylib"
-                for ( ; len > 0 ; len-- )
-                {
-                    if ( !strncmp( pszModuleName + len - 1, ".dylib", 6 ) )
+                if ( !strncmp( pszModuleName + len, ".dylib", 6 ) )
                         break;
-                }
-                pModule->pModuleName = (sal_Char *)malloc( len );
-                strncpy( pModule->pModuleName, pszModuleName, len );
-                pModule->pModuleName[len - 1] = '\0';
-            }
-
-            return pModule;
         }
-        else
-        {
-#ifdef DEBUG
-            fprintf( stderr,
-                "osl_loadModule: cannot load module %s for reason: %s\n",
-                pszModulePath, "bundle does not contain a valid library" );
-#endif
-            CFRelease( pPath );
-            CFRelease( pURL );
-            CFRelease( pLib );
-            return NULL;
-        }
+        pModule->pModuleName = (sal_Char *)malloc( len + 1 );
+        strncpy( pModule->pModuleName, pszModuleName, len + 1 );
+        pModule->pModuleName[len] = '\0';
+        pModule->pModule = pLib;
+        return pModule;
 
-#endif
-    }
-    return NULL;
+#else  /* NO_DL_FUNCTIONS */
+        fprintf( stderr,
+                 "osl_loadModule: cannot load module %s for reason: %s\n",
+                 pszModuleName, "not compiled with dynamic library support" );
+        return NULL;
+#endif  /* NO_DL_FUNCTIONS */
+
+
 
 #else /* MACOSX */
 
@@ -312,18 +288,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 
 #ifdef MACOSX
 
-
-    if (hModule)
-    {
-        if ( hModule->pModule )
-        {
-            CFBundleUnloadExecutable((CFBundleRef)(hModule->pModule));
-            CFRelease((CFBundleRef)(hModule->pModule));
-        }
-        if ( hModule->pModuleName )
-            free( hModule->pModuleName );
-        free( hModule );
-    }
+        // Unloading dylibs is not yet supported on Mac OS X.
 
 #else /* MACOSX */
 
@@ -395,50 +360,27 @@ void* SAL_CALL osl_psz_getSymbol(oslModule hModule, const sal_Char* pszSymbolNam
 {
 #ifdef MACOSX
 
-    CFMutableStringRef pMutSymbolName=0;
-    CFStringRef pSymbolName=0;
-    void *pSymbol=0;
-
     OSL_ASSERT(hModule);
     OSL_ASSERT(pszSymbolName);
 
     if (hModule && hModule->pModule && pszSymbolName)
     {
 #ifndef NO_DL_FUNCTIONS
-        /* The need to concat the library name and function name is caused
-           by a bug in MACOSX's loader */
-        if ( hModule->pModuleName )  /* if module name is not null */
-        {
-            /* Convert char pointer to CFStringRef, make it mutable and
-               append the symbol */
-            pSymbolName = CFStringCreateWithCString(NULL, hModule->pModuleName, kCFStringEncodingUTF8);
-            pMutSymbolName = CFStringCreateMutableCopy(NULL, 0, pSymbolName);
-            CFStringAppendCString(pMutSymbolName, pszSymbolName, kCFStringEncodingUTF8);
-            /* Try to get the symbol */
-            pSymbol = CFBundleGetFunctionPointerForName((CFBundleRef)(hModule->pModule), (CFStringRef)pMutSymbolName);
-            /* Release CFStringRef */
-            if ( pSymbolName )
-                CFRelease(pSymbolName);
-            /* Release CFMutableStringRef */
-            if ( pMutSymbolName )
-                CFRelease(pMutSymbolName);
-        }
+                struct mach_header *pLib;
+                NSSymbol pSymbol;
 
-        /* If a symbol with the module name as a prefix was not found, try to
-           load the symbol without any prefix */
-        if ( !pSymbol )
-        {
-            /* Convert char pointer to CFStringRef */
-            pSymbolName = CFStringCreateWithCString(NULL, pszSymbolName, kCFStringEncodingUTF8);
+                // Prefix symbol name with '_'
+                char *name = malloc(1+strlen(pszSymbolName)+1);
+                strcpy(name, "_");
+                strcat(name, pszSymbolName);
 
-            /* Try to get the symbol */
-            pSymbol = CFBundleGetFunctionPointerForName((CFBundleRef)(hModule->pModule), pSymbolName);
-            /* Release CFStringRef */
-            if ( pSymbolName )
-                CFRelease(pSymbolName);
-        }
-
-        return pSymbol;
+                pLib = (struct mach_header *)hModule->pModule;
+                // fixme need to BIND_FULLY or BIND_NOW?
+                pSymbol = NSLookupSymbolInImage(pLib, name, NSLOOKUPSYMBOLINIMAGE_OPTION_BIND);
+                free(name);
+                if (pSymbol) {
+                        return NSAddressOfSymbol(pSymbol);
+                }
 #endif
     }
     return NULL;
