@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javatype.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-06 08:17:55 $
+ *  last change: $Author: jsc $ $Date: 2001-03-07 14:02:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,6 +1830,9 @@ sal_Bool TypeDefType::dump(JavaOptions* pOptions)
     throw( CannotDumpException )
 {
     OString relBaseType(checkRealBaseType(m_typeName));
+
+    if ( pOptions->isValid("-nD") )
+        return sal_True;
 
     return produceType(relBaseType, m_typeMgr, m_dependencies, pOptions);
 }
