@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-22 13:26:26 $
+ *  last change: $Author: cl $ $Date: 2001-01-22 13:33:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1028,11 +1028,11 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         case OWN_ATTR_WRITINGMODE:
         {
-            drawing::WritingMode eMode;
-            if( pObj && pObj->ISA(SdrTextObj) && rVal >>= eMode )
+            text::WritingMode eMode;
+            if( pObj && pObj->ISA(SdrTextObj) && (rVal >>= eMode) )
             {
                 SdrTextObj* pText = (SdrTextObj*)pObj;
-                pText->SetVerticalWriting( eMode == drawing::WritingMode_TB_RL );
+                pText->SetVerticalWriting( eMode == text::WritingMode_TB_RL );
                 return;
             }
         }
@@ -1485,7 +1485,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 if( pObj && pObj->ISA(SdrTextObj) )
                 {
                     SdrTextObj* pText = (SdrTextObj*)pObj;
-                    drawing::WritingMode eMode = pText->IsVerticalWriting() ? drawing::WritingMode_TB_RL : drawing::WritingMode_LR_TB;
+                    text::WritingMode eMode = pText->IsVerticalWriting() ? text::WritingMode_TB_RL : text::WritingMode_LR_TB;
                     aAny <<= eMode;
                     break;
                 }
