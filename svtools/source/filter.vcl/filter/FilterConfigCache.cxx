@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterConfigCache.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-04-17 12:10:46 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,16 @@
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
 
 #define TOKEN_COUNT_FOR_OWN_FILTER      3
-#define TOKEN_INDEX_FOR_IDENT           0
+// #define TOKEN_INDEX_FOR_IDENT          0
 #define TOKEN_INDEX_FOR_FILTER          1
-#define TOKEN_INDEX_FOR_HASDIALOG       2
+// #define TOKEN_INDEX_FOR_HASDIALOG      2
 
-using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory, getProcessServiceFactory()
+using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
 using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
@@ -126,7 +129,6 @@ sal_Int32 FilterConfigCache::nIndFlags = -1;
 sal_Int32 FilterConfigCache::nIndUserData = -1;
 sal_Int32 FilterConfigCache::nIndFileFormatVersion = -1;
 sal_Int32 FilterConfigCache::nIndTemplateName = -1;
-
 
 sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUString& rUserDataEntry )
 {
@@ -172,7 +174,18 @@ String FilterConfigCache::FilterConfigCacheEntry::GetShortName()
     }
     return aShortName;
 }
-
+sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
+{
+    return sal_False;
+}
+sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
+                                                const Sequence< PropertyValue >& rFilterProperties,
+                                                    const Reference< XNameAccess >& xTypeAccess,
+                                                        const OUString& rInternalFilterName )
+{
+    return sal_False;
+}
+/*
 sal_Bool FilterConfigCache::ImplIsOwnFilter( const Sequence< PropertyValue >& rFilterProperties )
 {
     static OUString sUserData   ( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) );
@@ -280,94 +293,137 @@ sal_Bool FilterConfigCache::ImplAddFilterEntry( sal_Int32& nFlags,
     }
     return bFilterEntryCreated;
 }
+*/
+
+/** helper to open the configuration root of the underlying
+    config package
+
+    @param  sPackage
+            specify, which config package should be opened.
+            Must be one of the defined static values TYPEPKG or FILTERPKG.
+
+    @return A valid object if open was successfull. The access on opened
+            data will be readonly. It returns NULL in case open failed.
+
+    @throws It let pass RuntimeExceptions only.
+ */
+Reference< XInterface > openConfig(const char* sPackage)
+    throw(RuntimeException)
+{
+    static OUString TYPEPKG( RTL_CONSTASCII_USTRINGPARAM( "types" ) );
+    static OUString FILTERPKG( RTL_CONSTASCII_USTRINGPARAM( "filters" ) );
+
+    Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();
+    Reference< XInterface >           xCfg;
+    try
+    {
+        // get access to config API (not to file!)
+        Reference< XMultiServiceFactory > xConfigProvider( xSMGR->createInstance(
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
+
+        if (xConfigProvider.is())
+        {
+            Sequence< Any > lParams(1);
+            PropertyValue   aParam    ;
+
+            // define cfg path for open
+            aParam.Name = OUString::createFromAscii("nodepath");
+            if (TYPEPKG.equalsIgnoreAsciiCaseAscii(sPackage))
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.Types/Types");
+            if (FILTERPKG.equalsIgnoreAsciiCaseAscii(sPackage))
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.GraphicFilter/Filters");
+            lParams[0] = makeAny(aParam);
+
+            // get access to file
+            xCfg = xConfigProvider->createInstanceWithArguments(
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), lParams);
+        }
+    }
+    catch(const RuntimeException&)
+        { throw; }
+    catch(const Exception&)
+        { xCfg.clear(); }
+
+    return xCfg;
+}
 
 void FilterConfigCache::ImplInit()
 {
-    static OUString sType ( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
+    static OUString STYPE                ( RTL_CONSTASCII_USTRINGPARAM( "Type"               ) );
+    static OUString SUINAME              ( RTL_CONSTASCII_USTRINGPARAM( "UIName"             ) );
+    static OUString SDOCUMENTSERVICE     ( RTL_CONSTASCII_USTRINGPARAM( "DocumentService"    ) );
+    static OUString SFILTERSERVICE       ( RTL_CONSTASCII_USTRINGPARAM( "FilterService"      ) );
+    static OUString STEMPLATENAME        ( RTL_CONSTASCII_USTRINGPARAM( "TemplateName"       ) );
+    static OUString SFILEFORMATVERSION   ( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion"  ) );
+    static OUString SUICOMPONENT         ( RTL_CONSTASCII_USTRINGPARAM( "UIComponent"        ) );
+    static OUString SFLAGS               ( RTL_CONSTASCII_USTRINGPARAM( "Flags"              ) );
+    static OUString SUSERDATA            ( RTL_CONSTASCII_USTRINGPARAM( "UserData"           ) );
+    static OUString SMEDIATYPE           ( RTL_CONSTASCII_USTRINGPARAM( "MediaType"          ) );
+    static OUString SEXTENSIONS          ( RTL_CONSTASCII_USTRINGPARAM( "Extensions"         ) );
+    static OUString SFORMATNAME          ( RTL_CONSTASCII_USTRINGPARAM( "FormatName"         ) );
+    static OUString SREALFILTERNAME      ( RTL_CONSTASCII_USTRINGPARAM( "RealFilterName"     ) );
 
-    // get global uno service manager
-    Reference< XMultiServiceFactory > xSMGR = getProcessServiceFactory();
+    // get access to config
+    Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );
+    Reference< XNameAccess > xFilterAccess( openConfig("filters"), UNO_QUERY );
 
-    // create type detection service
-    Reference< XNameAccess > xTypeAccess( xSMGR->createInstance(
-        OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ), UNO_QUERY );
-
-    Reference< XNameAccess > xFilterAccess( xSMGR->createInstance(
-        OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ), UNO_QUERY );
     Sequence< OUString > lAllFilter = xFilterAccess->getElementNames();
     sal_Int32 nAllFilterCount = lAllFilter.getLength();
 
-    sal_Int32 i, j;
-
-    for ( i = 0; i < nAllFilterCount; i++ )
+    for ( sal_Int32 i = 0; i < nAllFilterCount; i++ )
     {
         OUString sInternalFilterName = lAllFilter[ i ];
-        Any aTypePropertySet = xFilterAccess->getByName( sInternalFilterName );
+        Reference< XPropertySet > xFilterSet;
+        xFilterAccess->getByName( sInternalFilterName ) >>= xFilterSet;
+        if (!xFilterSet.is())
+            continue;
 
-        Sequence< PropertyValue > lProperties;
-        aTypePropertySet >>= lProperties;
-        if ( !bInitialized )
-        {
-            sal_Int32 i, nCount = lProperties.getLength();
-            for ( i = 0; i < nCount; i++ )
-            {
-                PropertyValue aPropValue( lProperties[ i ] );
-                if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) )
-                    nIndType = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "UIName" ) ) ) )
-                    nIndUIName = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentService" ) ) ) )
-                    nIndDocumentService = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterService" ) ) ) )
-                    nIndFilterService = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Flags" ) ) ) )
-                    nIndFlags = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ) ) )
-                    nIndUserData = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "FileFormatVersion" ) ) ) )
-                    nIndFileFormatVersion = i;
-                else if ( aPropValue.Name.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" ) ) ) )
-                    nIndTemplateName = i;
-            }
-            bInitialized = sal_True;
-        }
-        if ( ImplIsOwnFilter( lProperties ) )
-        {
-            sal_Int32 nFlags = 0;
-            if ( ImplAddFilterEntry( nFlags, lProperties, xTypeAccess, sInternalFilterName ) )
-            {
-                if ( ( nFlags & 1 ) && ( nIndType >= 0 )  )  // import filter ?
-                {
-                    CacheVector::iterator aIter( aImport.end() - 1 );
-                    for ( j = 0; j < nAllFilterCount; j++ )
-                    {
-                        if ( i != j )
-                        {
-                            OUString sInternalTypeName = lAllFilter[ j ];
-                            Any aTypePropertySet = xFilterAccess->getByName( sInternalTypeName );
-                            Sequence< PropertyValue > l2Properties;
-                            aTypePropertySet >>= l2Properties;
-                            sal_Int32 n2Flags;
-                            l2Properties[ nIndFlags ].Value >>= n2Flags;
-                            if ( n2Flags & 1 )
-                            {
-                                OUString s2Type;
-                                l2Properties[ nIndType ].Value >>= s2Type;
-                                if ( s2Type.equals( aIter->sType ) )
-                                {
-                                    sal_Int32 nIndex = sInternalTypeName.lastIndexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( ": " ) ) );
-                                    if ( nIndex >= 0 )
-                                        aIter->sFilterType = sInternalTypeName.copy( nIndex + 2 );
-                                    else
-                                        aIter->sFilterType = sInternalTypeName;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        FilterConfigCacheEntry aEntry;
+
+        aEntry.sInternalFilterName = sInternalFilterName;
+        xFilterSet->getPropertyValue(STYPE) >>= aEntry.sType;
+        xFilterSet->getPropertyValue(SUINAME) >>= aEntry.sUIName;
+        xFilterSet->getPropertyValue(SREALFILTERNAME) >>= aEntry.sFilterType;
+        Sequence< OUString > lFlags;
+        xFilterSet->getPropertyValue(SFLAGS) >>= lFlags;
+        if (lFlags.getLength()!=1 || !lFlags[0].getLength())
+            continue;
+        if (lFlags[0].equalsIgnoreAsciiCaseAscii("import"))
+            aEntry.nFlags = 1;
+        else
+        if (lFlags[0].equalsIgnoreAsciiCaseAscii("export"))
+            aEntry.nFlags = 2;
+
+        OUString sUIComponent;
+        xFilterSet->getPropertyValue(SUICOMPONENT) >>= sUIComponent;
+        aEntry.bHasDialog = sUIComponent.getLength();
+
+        ::rtl::OUString sFormatName;
+        xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
+        aEntry.CreateFilterName( sFormatName );
+
+        Reference< XPropertySet > xTypeSet;
+        xTypeAccess->getByName( aEntry.sType ) >>= xTypeSet;
+        if (!xTypeSet.is())
+            continue;
+
+        xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
+        xTypeSet->getPropertyValue(SEXTENSIONS) >>= aEntry.lExtensionList;
+
+        // The first extension will be used
+        // to generate our internal FilterType ( BMP, WMF ... )
+        String aExtension( aEntry.GetShortName() );
+        if (aExtension.Len() != 3)
+            continue;
+
+        if ( aEntry.nFlags & 1 )
+            aImport.push_back( aEntry );
+        if ( aEntry.nFlags & 2 )
+            aExport.push_back( aEntry );
+
+        // bFilterEntryCreated!?
+        if (!( aEntry.nFlags & 3 ))
+            continue; //? Entry was already inserted ... but following code will be supressed?!
     }
 };
 
