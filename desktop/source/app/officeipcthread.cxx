@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:52:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:44:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,14 +457,15 @@ void OfficeIPCThread::DisableOfficeIPCThread()
 {
     osl::ClearableMutexGuard aMutex( GetMutex() );
 
-    if( pGlobalOfficeIPCThread && !( pGlobalOfficeIPCThread->mbShutdownInProgress ))
+    if( pGlobalOfficeIPCThread )
     {
-        pGlobalOfficeIPCThread->mbShutdownInProgress = sal_True;
+        OfficeIPCThread *pOfficeIPCThread = pGlobalOfficeIPCThread;
+        pGlobalOfficeIPCThread = 0;
 
         // send thread a termination message
         // this is done so the subsequent join will not hang
         // because the thread hangs in accept of pipe
-        OPipe Pipe( pGlobalOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
+        OPipe Pipe( pOfficeIPCThread->maPipeIdent, OPipe::TOption_Open, maSecurity );
         //Pipe.send( TERMINATION_SEQUENCE, TERMINATION_LENGTH );
         Pipe.send( sc_aTerminationSequence, sc_nTSeqLength+1 ); // also send 0-byte
 
@@ -476,22 +477,14 @@ void OfficeIPCThread::DisableOfficeIPCThread()
         aMutex.clear();
 
         // exit gracefully and join
-        pGlobalOfficeIPCThread->join();
-
-        {
-            // acquire mutex again to delete and reset global pointer threadsafe!
-            osl::MutexGuard aGuard( GetMutex() );
-            delete pGlobalOfficeIPCThread;
-            pGlobalOfficeIPCThread = 0;
-        }
+        pOfficeIPCThread->join();
     }
 }
 
 OfficeIPCThread::OfficeIPCThread() :
     mbBlockRequests( sal_False ),
     mnPendingRequests( 0 ),
-    mpDispatchWatcher( 0 ),
-    mbShutdownInProgress( sal_False )
+    mpDispatchWatcher( 0 )
 {
 }
 
@@ -724,6 +717,11 @@ void SAL_CALL OfficeIPCThread::run()
             sleep( tval );
         }
     } while( schedule() );
+}
+
+void SAL_CALL OfficeIPCThread::onTerminated()
+{
+    delete this;
 }
 
 static void AddToDispatchList(
