@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:48:23 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 #ifndef _CPPUHELPER_COMPBASE4_HXX_
 #include <cppuhelper/compbase4.hxx>
 #endif
@@ -134,14 +137,14 @@
 #ifndef _CONNECTIVITY_FILE_VALUE_HXX_
 #include <connectivity/FValue.hxx>
 #endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include <connectivity/sdbcx/IRefreshable.hxx>
 #endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
 #endif
 
 namespace dbaccess
@@ -217,11 +220,6 @@ namespace dbaccess
         virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
 
-        /** return a pointer to the object which holds the UI-settings for this column, if any.
-            @see    OColumnSettings
-            @see    OColumns::loadSettings
-        */
-        virtual OColumnSettings*    getSettings();
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
     };
 
@@ -262,33 +260,11 @@ namespace dbaccess
         void SAL_CALL getFastPropertyValue( ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
     public:
-        /** write the connection independent information (i.e. the hidden flag or the column width) to the given stream.
-            @param _rxConfigNode
-                the configuratoin node to write to
-            @param _rxFormats
-                the number formats to use. In the configuration, for user defined formats the format descriptor (string/locale pair) is
-                made persistent, not the format key. To obtain this descriptor, the number formatter is necessary.
-            @return
-                <TRUE/>, if anything has been written (i.e. there is at least one non-default property)
-                <FALSE/> else
-        */
-        sal_Bool    writeUITo( const ::utl::OConfigurationNode& _rConfigNode, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats );
-        /** read the connection independent information (i.e. te hidden flag or the column width) from the given configuration node.
-            @param _rxConfigNode
-                the configuratoin node to read from
-            @param _rxFormats
-                the number formats to use. In the configuration, for user defined formats the format descriptor (string/locale pair) is
-                made persistent, not the format key. To obtain this descriptor, the number formatter is necessary.
-        */
-        void        readUIFrom(const ::utl::OConfigurationNode& _rConfigNode, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxFormats);
 
         /** check if the persistent settings have their default value
         */
         sal_Bool    isDefaulted() const;
     };
-
-    //------------------------------------------------------------
-    DECLARE_STL_USTRINGACCESS_MAP( OColumnSettings*, MapName2Settings );
 
     //============================================================
     //= IColumnFactory - used by OColumns for creating new columns
@@ -298,6 +274,8 @@ namespace dbaccess
     public:
         virtual OColumn*    createColumn(const ::rtl::OUString& _rName) const = 0;
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createEmptyObject() = 0;
+        virtual void columnDropped(const ::rtl::OUString& _sName) = 0;
+        virtual void columnCloned(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xClone){}
     };
 
     //============================================================
@@ -309,20 +287,22 @@ namespace dbaccess
     typedef ::std::vector<OColumn*> OColumnArray;
 
     class ODBTable;
+    class OContainerMediator;
+    typedef ::cppu::ImplHelper1< ::com::sun::star::container::XChild > TXChild;
     typedef connectivity::OColumnsHelper OColumns_BASE;
     //------------------------------------------------------------
     class OColumns : public OColumns_BASE
+                    ,public TXChild
     {
-        MapName2Settings            m_aSettings;
+        OContainerMediator*     m_pMediator;
             // in case we are asked to load our UI, but do not have the columns, yet, we don't create them
             // instead we store the column settings and merge them into the real columns as soon as they're
             // inserted
 
     protected:
-        // configuration
-        ::utl::OConfigurationNode   m_aConfigurationNode;
         // comes from the driver can be null
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xDrvColumns;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDrvColumns;
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::uno::XInterface >       m_xParent;
         IColumnFactory*                             m_pColFactoryImpl;
         ::connectivity::sdbcx::IRefreshableColumns* m_pRefreshColumns;
 
@@ -344,8 +324,9 @@ namespace dbaccess
         }
         /** flag which determines whether the container is filled or not
         */
-        sal_Bool    isInitialized() const { return m_bInitialized; }
-        void        setInitialized() {m_bInitialized = sal_True;}
+        inline sal_Bool isInitialized() const { return m_bInitialized; }
+        inline void     setInitialized() {m_bInitialized = sal_True;}
+        inline void     setMediator(OContainerMediator* _pMediator) { m_pMediator = _pMediator; }
 
     public:
         /** constructs an empty container without configuration location.
@@ -363,7 +344,8 @@ namespace dbaccess
                 IColumnFactory* _pColFactory,
                 ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                 sal_Bool _bAddColumn = sal_False,
-                sal_Bool _bDropColumn = sal_False);
+                sal_Bool _bDropColumn = sal_False,
+                sal_Bool _bUseHardRef = sal_True);
 
         OColumns(
             ::cppu::OWeakObject& _rParent,
@@ -374,11 +356,14 @@ namespace dbaccess
             IColumnFactory* _pColFactory,
             ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
             sal_Bool _bAddColumn = sal_False,
-            sal_Bool _bDropColumn = sal_False);
-        ~OColumns();
+            sal_Bool _bDropColumn = sal_False,
+            sal_Bool _bUseHardRef = sal_True);
+        virtual ~OColumns();
 
         //XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw() { OColumns_BASE::acquire(); }
+        virtual void SAL_CALL release() throw() { OColumns_BASE::release(); }
         //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
@@ -387,44 +372,15 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // column settings persistence
-        /** loads the columns UI information from the given configuration node.
-            <p>If the container does contain any columns when this method is called, the informations are merged
-            by name, i.e. for each column under the node the routine tries to find a column with the same name
-            and overwrites it's settings, else it creates a new one.</p>
-
-            @param _rxLocation
-                the configuration node where the column UI informations are stored
-            @see    OColumn::readUIFrom
-            @see    storeSettings
-        */
-        virtual void    loadSettings(
-            const ::utl::OConfigurationNode& _rLocation,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
-        );
-
-        /** store the columns configuration information under the current configuration node.
-            @param  _rCommitLocation        Since the current configuration does not support different types of
-                                            operations in one transaction, we have to commit before and after we
-                                            create new nodes, thus ensuring that every transaction we do contains
-                                            only one type of operation (insert/remove/update). Thus this commit node
-                                            needs to be given, so every creation of a new set child (which is an insert
-                                            operation) is flanked by two commits.
-            @see    OColumn::writeUITo
-            @see    loadSettings
-        */
-        virtual void    storeSettings(
-            const ::utl::OConfigurationNode& _rLocation,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& _rxNumberFormats
-        );
+        // ::com::sun::star::container::XChild
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
         void append(const ::rtl::OUString& rName, OColumn*);
         void clearColumns();
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
 
-    private:
-        void clearColumnSettings();
     };
 }
 #endif // _DBA_COREAPI_COLUMN_HXX_
