@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockListContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-10 17:18:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,22 @@ public:
                            const ::com::sun::star::uno::Reference<
                            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
     ~SwXMLTextBlockBodyContext ( void );
+};
+class SwXMLTextBlockTextContext : public SvXMLImportContext
+{
+private:
+    SwXMLTextBlockImport & rLocalRef;
+public:
+    SwXMLTextBlockTextContext(     SwXMLTextBlockImport& rImport,
+                           sal_uInt16 nPrefix,
+                           const rtl::OUString& rLocalName,
+                           const ::com::sun::star::uno::Reference<
+                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
+                           const rtl::OUString& rLocalName,
+                           const ::com::sun::star::uno::Reference<
+                           ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
+    ~SwXMLTextBlockTextContext ( void );
 };
 class SwXMLTextBlockParContext : public SvXMLImportContext
 {
