@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-18 17:03:19 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:42:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -2170,6 +2169,8 @@ inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
 
 sal_Bool Complex::ParseString( const STRING& rStr, Complex& rCompl )
 {
+    rCompl.c = '\0';    // do not force a symbol, if only real part present
+
     const sal_Unicode*      pStr = ( const sal_Unicode * ) rStr;
 
     if( IsImagUnit( *pStr ) && rStr.getLength() == 1)
@@ -2245,22 +2246,25 @@ STRING Complex::GetString() const THROWDEF_RTE_IAE
     CHK_FINITE(r);
     CHK_FINITE(i);
     STRING aRet;
-    bool   bHasReal = r != 0.0;
+
+    bool bHasImag = i != 0.0;
+    bool bHasReal = !bHasImag || (r != 0.0);
 
     if( bHasReal )
         aRet = ::GetString( r );
-
-    if( i == 1.0)
+    if( bHasImag )
     {
-        if( bHasReal )
-            aRet += aPlus;
+        if( i == 1.0 )
+        {
+            if( bHasReal )
+                aRet += aPlus;
+        }
+        else if( i == -1.0 )
+            aRet += aMinus;
+        else
+            aRet += ::GetString( i, bHasReal );
+        aRet += (c != 'j') ? aI : aJ;
     }
-    else if( i == -1.0 )
-        aRet += aMinus;
-    else
-        aRet += ::GetString( i, bHasReal );
-
-    aRet += (c == 'i') ? aI : aJ;
 
     return aRet;
 }
@@ -2376,6 +2380,8 @@ void Complex::Div( const Complex& z ) THROWDEF_RTE_IAE
 
     r = ( a1 * a2 + b1 * b2 ) * f;
     i = ( a2 * b1 - a1 * b2 ) * f;
+
+    if( !c ) c = z.c;
 }
 
 
