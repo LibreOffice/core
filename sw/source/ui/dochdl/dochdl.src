@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-03 19:33:13 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,7 @@ String STR_NOGLOS1
     TEXT[ korean ] = "ÀÚµ¿ÅØ½ºÆ® ¹Ù·Î°¡±â '";
     TEXT[ turkish ] = "Otomatik metin kýsaltmasý '";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "AutoTexto para la abreviatura '";
 };
 String STR_NOGLOS2
 {
@@ -126,6 +127,7 @@ String STR_NOGLOS2
     TEXT[ korean ] = "' À»£¨¸¦£©Ã£Áö¡¡¸øÇß½À´Ï´Ù.";
     TEXT[ turkish ] = "' bulunamadý.";
     TEXT[ language_user1 ] = " ";
+    TEXT[ catalan ] = "' no se encontró.";
 };
 
 String STR_NO_TABLE
@@ -156,6 +158,7 @@ String STR_NO_TABLE
     Text[ korean ] = "Ç¥¸¦ »ðÀÔÇÏ´Â°ÍÀÌ ÇöÀç ºÒ°¡´ÉÇÕ´Ï´Ù.";
     Text[ turkish ] = "Þu an tablo eklenemiyor.";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Actualmente no se puede insertar ninguna tabla.";
 };
 
 
@@ -186,6 +189,7 @@ InfoBox MSG_ERR_INSERT_GLOS
     MESSAGE[ korean ] = "ÀÚµ¿ÅØ½ºÆ®¸¦ ¸¸µé¼ö ¾ø½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Otomatik metin oluþturulamadý.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "No se pudo crear el AutoTexto.";
 };
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
@@ -216,6 +220,7 @@ InfoBox MSG_CLPBRD_FORMAT_ERROR
     MESSAGE[ korean ] = "¿äÃ»µÈ Å¬¸³º¸µå ¼­½ÄÀº °¡´ÉÇÏÁö ¾Ê½À´Ï´Ù.";
     MESSAGE[ turkish ] = "Ýstenen pano formatý mevcut deðil.";
     MESSAGE[ language_user1 ] = " ";
+    MESSAGE[ catalan ] = "El formato deseado del portapapeles no está disponible.";
 };
 
 QueryBox MSG_UPDATE_NEW_GLOS_FMT
@@ -249,6 +254,7 @@ QueryBox MSG_UPDATE_NEW_GLOS_FMT
     Message[ korean ] = "±¸¿ª ¼­½ÄÀº ¿À·¡µÈ °ÍÀÔ´Ï´Ù.\n ÀÌ°ÍÀ» º¯È¯ÇÏ¿©¾ß º¯°æ»çÇ×À»\nÀúÀåÇÒ ¼ö ÀÖ½À´Ï´Ù.\n Áö±Ý º¯È¯ ÇÏ½Ã°Ú½À´Ï±î?";
     Message[ turkish ] = "Bölümün formatý eski.\nDeðiþikliklerin kaydedilebilmesi n\niçin deðiþtirilmesi gerekiyor.\nFormat deðiþtirilsin mi?";
     Message[ language_user1 ] = " ";
+    Message[ catalan ] = "El formato del área no es actual.\nHay que convertirlo\npara poder guardar las modificaciones.\n¿Desea usted convertirlo?";
 };
 
 String STR_PRIVATETEXT
@@ -274,6 +280,7 @@ String STR_PRIVATETEXT
     Text[ korean ] = "%PRODUCTNAME Writer";
     Text[ turkish ] = "%PRODUCTNAME Writer";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "%PRODUCTNAME Writer";
 };
 String STR_PRIVATEGRAPHIC
 {
@@ -299,6 +306,7 @@ String STR_PRIVATEGRAPHIC
     Text[ chinese_traditional ] = "¹Ï§Î [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer] ÑÓæãÇÊ";
     Text[ turkish ] = "Grafik [%PRODUCTNAME Writer]";
+    Text[ catalan ] = "Imagen [%PRODUCTNAME Writer]";
 };
 String STR_PRIVATEOLE
 {
@@ -322,6 +330,7 @@ String STR_PRIVATEOLE
     Text[ chinese_traditional ] = "ª«¥ó [%PRODUCTNAME Writer]";
     Text[ arabic ] = "[%PRODUCTNAME Writer]ßÇÆä ";
     Text[ turkish ] = "Nesne [%PRODUCTNAME Writer]";
+    Text[ catalan ] = "Objeto [%PRODUCTNAME Writer]";
 };
 String STR_DDEFORMAT
 {
@@ -351,6 +360,7 @@ String STR_DDEFORMAT
     Text[ korean ] = "DDE ¿¬°á";
     Text[ turkish ] = "DDE baðlantýsý";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Vínculo DDE";
 };
 String STR_RTFFORMAT
 {
@@ -376,6 +386,7 @@ String STR_RTFFORMAT
     Text[ chinese_traditional ] = "¤w¸g®æ¦¡¤Æªº¤å¦r [RTF]";
     Text[ arabic ] = "[RTF]äÕ ãõäÓÞ ";
     Text[ turkish ] = "Formatlý metin [RTF]";
+    Text[ catalan ] = "Texto formateado [RTF]";
 };
 String STR_TEXTFORMAT
 {
@@ -404,6 +415,7 @@ String STR_TEXTFORMAT
     Text[ korean ] = "Æ÷¸ËµÇÁö¾ÊÀº ÅØ½ºÆ®";
     Text[ turkish ] = "Formatlanmamýþ metin";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Texto no formateado";
 };
 
 
