@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 12:48:48 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,11 +337,12 @@ sal_Int32 compileFile(const OString * pathname)
     OUString startDir;
     OSL_VERIFY(osl_getExecutableFile(&cpp.pData) == osl_Process_E_None);
 
+    sal_Int32 idx= cpp.lastIndexOf(OUString( RTL_CONSTASCII_USTRINGPARAM("idlc")) );
+     cpp = cpp.copy(0, idx);
+
 #if defined(SAL_W32) || defined(SAL_OS2)
-    cpp = cpp.copy(0, cpp.getLength() - 8);
-    cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
+     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp.exe"));
 #else
-    cpp = cpp.copy(0, cpp.getLength() - 4);
     cpp += OUString( RTL_CONSTASCII_USTRINGPARAM("idlcpp"));
 #endif
 
