@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:21 $
+ *  last change: $Author: ama $ $Date: 2000-09-25 12:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,11 +185,12 @@ class SwSubFont : public SvxFont
 #define SW_LATIN 0
 #define SW_CJK 1
 #define SW_CTL 2
+#define SW_SCRIPTS 3
 
 class SwFont
 {                               // CJK == Chinese, Japanese, Korean
                                 // CTL == Complex text layout ( Hebrew, Arabic )
-    SwSubFont   aSub[3];        // Latin-, CJK- and CTL-font
+    SwSubFont   aSub[SW_SCRIPTS]; // Latin-, CJK- and CTL-font
     Color*      pBackColor;     // background color (i.e. at character styles)
     BYTE        nToxCnt;        // Zaehlt die Schachtelungstiefe der Tox
     BYTE        nRefCnt;        // Zaehlt die Schachtelungstiefe der Refs
@@ -367,7 +368,7 @@ public:
                          const OutputDevice *pOut, const XubString &rTxt,
                          const xub_StrLen nIdx = 0,
                          const xub_StrLen nLen = STRING_LEN )
-        { aSub[nActual].GetCapitalSize( pSh, pOut, rTxt, nIdx, nLen ); }
+        { return aSub[nActual].GetCapitalSize( pSh, pOut, rTxt, nIdx, nLen ); }
 
     xub_StrLen GetCapitalBreak( ViewShell *pSh,
                             const OutputDevice *pOut, const XubString &rTxt,

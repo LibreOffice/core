@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2000-09-25 12:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,7 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+#include "swfont.hxx"
 
 
 #ifndef PRODUCT
@@ -209,6 +210,7 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
                               rAttr;
 
     SwTxtAttr* pNew = 0;
+    BYTE nScript = SW_LATIN;
     switch( rNew.Which() )
     {
     case RES_CHRATR_CASEMAP:
@@ -229,20 +231,28 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_CHRATR_ESCAPEMENT:
         pNew = new SwTxtEscapement( (SvxEscapementItem&)rNew, nStt, nEnd );
         break;
+    case RES_CHRATR_CTL_FONT: nScript += SW_CTL - SW_CJK;   // no break;
+    case RES_CHRATR_CJK_FONT: nScript += SW_CJK - SW_LATIN; // no break;
     case RES_CHRATR_FONT:
-        pNew = new SwTxtFont( (SvxFontItem&)rNew, nStt, nEnd );
+        pNew = new SwTxtFont( (SvxFontItem&)rNew, nStt, nEnd, nScript );
         break;
+    case RES_CHRATR_CTL_FONTSIZE: nScript += SW_CTL - SW_CJK;   // no break;
+    case RES_CHRATR_CJK_FONTSIZE: nScript += SW_CJK - SW_LATIN; // no break;
     case RES_CHRATR_FONTSIZE:
-        pNew = new SwTxtSize( (SvxFontHeightItem&)rNew, nStt, nEnd );
+        pNew = new SwTxtSize( (SvxFontHeightItem&)rNew, nStt, nEnd, nScript );
         break;
     case RES_CHRATR_KERNING:
         pNew = new SwTxtKerning( (SvxKerningItem&)rNew, nStt, nEnd );
         break;
+    case RES_CHRATR_CTL_LANGUAGE: nScript += SW_CTL - SW_CJK;   // no break;
+    case RES_CHRATR_CJK_LANGUAGE: nScript += SW_CJK - SW_LATIN; // no break;
     case RES_CHRATR_LANGUAGE:
-        pNew = new SwTxtLanguage( (SvxLanguageItem&)rNew, nStt, nEnd );
+        pNew = new SwTxtLanguage( (SvxLanguageItem&)rNew, nStt, nEnd, nScript );
         break;
+    case RES_CHRATR_CTL_POSTURE: nScript += SW_CTL - SW_CJK;    // no break;
+    case RES_CHRATR_CJK_POSTURE: nScript += SW_CJK - SW_LATIN;  // no break;
     case RES_CHRATR_POSTURE:
-        pNew = new SwTxtPosture( (SvxPostureItem&)rNew, nStt, nEnd );
+        pNew = new SwTxtPosture( (SvxPostureItem&)rNew, nStt, nEnd, nScript );
         break;
     case RES_CHRATR_SHADOWED:
         pNew = new SwTxtShadowed( (SvxShadowedItem&)rNew, nStt, nEnd );
@@ -256,8 +266,10 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_CHRATR_UNDERLINE:
         pNew = new SwTxtUnderline( (SvxUnderlineItem&)rNew, nStt, nEnd );
         break;
+    case RES_CHRATR_CTL_WEIGHT: nScript += SW_CTL - SW_CJK; // no break;
+    case RES_CHRATR_CJK_WEIGHT: nScript += SW_CJK - SW_LATIN;   // no break;
     case RES_CHRATR_WEIGHT:
-        pNew = new SwTxtWeight( (SvxWeightItem&)rNew, nStt, nEnd );
+        pNew = new SwTxtWeight( (SvxWeightItem&)rNew, nStt, nEnd, nScript );
         break;
     case RES_TXTATR_CHARFMT:
         {

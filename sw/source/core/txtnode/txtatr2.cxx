@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:27 $
+ *  last change: $Author: ama $ $Date: 2000-09-25 12:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,22 +142,92 @@
 TYPEINIT1(SwTxtINetFmt,SwClient);
 
 /*************************************************************************
+ *                      class SwImplPrev
+ * Internal structur for SwTxtCharFmt- und SwTxtINetFmt-attributs to store
+ * the actual fonts (Latin, CJK and CTL), change them and restore them.
+ *************************************************************************/
+
+class SwImplPrev
+{
+    Color* pPrevColor;
+    SvxFont* pPrevLatin;
+    SvxFont* pPrevCJK;
+    SvxFont* pPrevCTL;
+    const void* pLatinNo;
+    const void* pCJKNo;
+    const void* pCTLNo;
+    USHORT nLatinIndex;
+    USHORT nCJKIndex;
+    USHORT nCTLIndex;
+public:
+    SwImplPrev(): pPrevColor(0), pPrevLatin(0), pPrevCJK(0), pPrevCTL(0) {}
+    ~SwImplPrev()
+    { delete pPrevColor; delete pPrevLatin; delete pPrevCJK; delete pPrevCTL; }
+    BOOL ChangeFont( SwFont *pFont, SwCharFmt *pFmt );
+    void ResetFont( SwFont* pFont, const BOOL bColor );
+};
+
+BOOL SwImplPrev::ChangeFont( SwFont* pFont, SwCharFmt* pFmt )
+{
+    if ( pPrevLatin )
+    {
+        *pPrevLatin = pFont->GetFnt( SW_LATIN );
+        *pPrevCJK = pFont->GetFnt( SW_CJK );
+        *pPrevCTL = pFont->GetFnt( SW_CTL );
+    }
+    else
+    {
+        pPrevLatin = new SvxFont( pFont->GetFnt( SW_LATIN ) );
+        pPrevCJK = new SvxFont( pFont->GetFnt( SW_CJK ) );
+        pPrevCTL = new SvxFont( pFont->GetFnt( SW_CTL ) );
+    }
+    pFont->GetMagic( pLatinNo, nLatinIndex, SW_LATIN );
+    pFont->GetMagic( pCJKNo, nCJKIndex, SW_CJK );
+    pFont->GetMagic( pCTLNo, nCTLIndex, SW_CTL );
+    pFont->SetDiffFnt( &pFmt->GetAttrSet() );
+    delete pPrevColor;
+    BOOL bRet = SFX_ITEM_SET ==
+                 pFmt->GetAttrSet().GetItemState( RES_CHRATR_BACKGROUND, TRUE );
+    if( bRet )
+    {
+        pPrevColor = new Color( pFmt->GetChrBackground().GetColor() );
+        pPrevColor = pFont->XChgBackColor( pPrevColor );
+    }
+    else
+         pPrevColor = NULL;
+    return bRet;
+}
+
+void SwImplPrev::ResetFont( SwFont* pFont, const BOOL bColor )
+{
+    pFont->SetFnt( *pPrevLatin, SW_LATIN );
+    pFont->SetFnt( *pPrevCJK, SW_CJK );
+    pFont->SetFnt( *pPrevCTL, SW_CTL );
+    pFont->SetMagic( pLatinNo, nLatinIndex, SW_LATIN );
+    pFont->SetMagic( pCJKNo, nCJKIndex, SW_CJK );
+    pFont->SetMagic( pCTLNo, nCTLIndex, SW_CTL );
+    if( bColor )
+    {
+        pFont->SetBackColor( pPrevColor );
+        pPrevColor = NULL;
+    }
+}
+
+/*************************************************************************
  *                      class SwTxtCharFmt
  *************************************************************************/
 
 SwTxtCharFmt::~SwTxtCharFmt( )
 {
-    delete pPrevFont;
-    delete pPrevColor;
+    delete pImpl;
 }
 
 
 SwTxtCharFmt::SwTxtCharFmt( const SwFmtCharFmt& rAttr,
                     xub_StrLen nStart, xub_StrLen nEnd )
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
-    pMyTxtNd( 0 ),
-    pPrevFont( 0 ),
-    pPrevColor( 0 )
+    pImpl( NULL ),
+    pMyTxtNd( 0 )
 {
     ((SwFmtCharFmt&)rAttr).pTxtAttr = this;
 }
@@ -167,44 +237,23 @@ void SwTxtCharFmt::ChgFnt( SwFont *pFont )
     SwCharFmt* pFmt = SwTxtAttrEnd::GetCharFmt().GetCharFmt();
     if ( pFmt )
     {
-        // Das 0 != bNew-Geraffel bringt M80 zum Schweigen
-        if ( pPrevFont )
-            *pPrevFont = pFont->GetFnt( SW_LATIN );
-        else
-            pPrevFont = new SvxFont( pFont->GetFnt( SW_LATIN ) );
+        if( !pImpl )
+            pImpl = new SwImplPrev();
         bPrevNoHyph = pFont->IsNoHyph();
         bPrevBlink = pFont->IsBlink();
         bPrevURL = pFont->IsURL();
-        pFont->GetMagic( pFontNo, nFntIndex, SW_LATIN );
-        pFont->SetDiffFnt( &pFmt->GetAttrSet() );
-        delete pPrevColor;
-        bColor = SFX_ITEM_SET ==
-                 pFmt->GetAttrSet().GetItemState( RES_CHRATR_BACKGROUND, TRUE );
-        if( bColor )
-        {
-            pPrevColor = new Color( pFmt->GetChrBackground().GetColor() );
-            pPrevColor = pFont->XChgBackColor( pPrevColor );
-        }
-        else
-            pPrevColor = NULL;
+        bColor = pImpl->ChangeFont( pFont, pFmt );
     }
 }
 
 void SwTxtCharFmt::RstFnt(SwFont *pFont)
 {
-    if ( pPrevFont )
+    if ( pImpl )
     {
-        // Das 0 != bNew-Geraffel bringt M80 zum Schweigen
-        pFont->SetFnt( *pPrevFont, SW_LATIN );
-        pFont->SetMagic( pFontNo, nFntIndex, SW_LATIN );
         pFont->SetBlink( bPrevBlink );
         pFont->SetNoHyph( bPrevNoHyph );
         pFont->SetURL( bPrevURL );
-        if( bColor )
-        {
-            pFont->SetBackColor( pPrevColor );
-            pPrevColor = NULL;
-        }
+        pImpl->ResetFont( pFont, bColor );
     }
 }
 
@@ -243,8 +292,7 @@ BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 
 SwTxtINetFmt::~SwTxtINetFmt( )
 {
-    delete pPrevFont;
-    delete pPrevBackColor;
+    delete pImpl;
 }
 
 
@@ -253,8 +301,7 @@ SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
     : SwTxtAttrEnd( rAttr, nStart, nEnd ),
     SwClient( 0 ),
     pMyTxtNd( 0 ),
-    pPrevFont( 0 ),
-    pPrevBackColor( 0 )
+    pImpl( 0 )
 {
     bValidVis = FALSE;
     ((SwFmtINetFmt&)rAttr).pTxtAttr  = this;
@@ -262,30 +309,16 @@ SwTxtINetFmt::SwTxtINetFmt( const SwFmtINetFmt& rAttr,
 
 void SwTxtINetFmt::ChgFnt( SwFont *pFont )
 {
-    const SwCharFmt* pFmt = GetCharFmt();
+    SwCharFmt* pFmt = GetCharFmt();
     if( pFmt )
     {
-        // Das 0 != bNew-Geraffel bringt M80 zum Schweigen
-        if ( pPrevFont )
-            *pPrevFont = pFont->GetFnt( SW_LATIN );
-        else
-            pPrevFont = new SvxFont( pFont->GetFnt( SW_LATIN ) );
+        if( !pImpl )
+            pImpl = new SwImplPrev();
         bPrevNoHyph = pFont->IsNoHyph();
         bPrevBlink = pFont->IsBlink();
         bPrevURL = pFont->IsURL();
-        pFont->GetMagic( pFontNo, nFntIndex, SW_LATIN );
-        pFont->SetDiffFnt( &pFmt->GetAttrSet() );
         pFont->SetURL( TRUE );
-        delete pPrevBackColor;
-        bColor = SFX_ITEM_SET ==
-                 pFmt->GetAttrSet().GetItemState( RES_CHRATR_BACKGROUND, TRUE );
-        if( bColor )
-        {
-            pPrevBackColor = new Color( pFmt->GetChrBackground().GetColor() );
-            pPrevBackColor = pFont->XChgBackColor( pPrevBackColor );
-        }
-        else
-            pPrevBackColor = NULL;
+        bColor = pImpl->ChangeFont( pFont, pFmt );
     }
 }
 
@@ -342,21 +375,12 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 void SwTxtINetFmt::RstFnt(SwFont *pFont)
 {
     const SwFmtINetFmt& rFmt = SwTxtAttrEnd::GetINetFmt();
-    if( pPrevFont && rFmt.GetValue().Len() )
+    if( pImpl && rFmt.GetValue().Len() )
     {
-        // Das 0 != bNew-Geraffel bringt M80 zum Schweigen
-        pFont->SetFnt( *pPrevFont, SW_LATIN );
-        pFont->SetMagic( pFontNo, nFntIndex, SW_LATIN );
         pFont->SetBlink( bPrevBlink );
         pFont->SetNoHyph( bPrevNoHyph );
         pFont->SetURL( bPrevURL );
-        if( bColor )
-        {
-            pFont->SetBackColor( pPrevBackColor );
-            pPrevBackColor = NULL;
-        }
-        delete pPrevFont;
-        pPrevFont = NULL;
+        pImpl->ResetFont( pFont, bColor );
     }
 }
 
@@ -602,19 +626,19 @@ void SwTxtKerning::RstTxtAttr( SwTxtAttr &rAttr )
  *************************************************************************/
 
 SwTxtLanguage::SwTxtLanguage( const SvxLanguageItem& rAttr,
-                    xub_StrLen nStart, xub_StrLen nEnd )
-    : SwTxtAttrEnd( rAttr, nStart, nEnd )
+                    xub_StrLen nStart, xub_StrLen nEnd, const BYTE nScrpt )
+    : SwTxtAttrEnd( rAttr, nStart, nEnd ), nScript( nScrpt )
 {}
 
 void SwTxtLanguage::ChgFnt( SwFont *pFont )
 {
-    ePrevLang = pFont->GetLanguage( SW_LATIN );
-    pFont->SetLanguage( GetLanguage().GetLanguage(), SW_LATIN );
+    ePrevLang = pFont->GetLanguage( nScript );
+    pFont->SetLanguage( GetLanguage().GetLanguage(), nScript );
 }
 
 void SwTxtLanguage::RstFnt( SwFont *pFont )
 {
-    pFont->SetLanguage( ePrevLang, SW_LATIN );
+    pFont->SetLanguage( ePrevLang, nScript );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtinet.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:29 $
+ *  last change: $Author: ama $ $Date: 2000-09-25 12:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,16 +72,14 @@ class SvxFont;
 class SwTxtNode;
 class SwCharFmt;
 class Color;
+class SwImplPrev;
 
 // ATT_INETFMT *********************************************
 
 class SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
 {
-    SvxFont* pPrevFont;
-    Color* pPrevBackColor;
+    SwImplPrev *pImpl;
     SwTxtNode* pMyTxtNd;
-    const void* pFontNo;
-    USHORT nFntIndex;
     BOOL bPrevNoHyph    : 1;
     BOOL bPrevBlink     : 1;
     BOOL bPrevURL       : 1;
