@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:55:11 $
+#   last change: $Author: hr $ $Date: 2003-04-04 17:55:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ IDLFILES=\
     CommandType.idl \
     Connection.idl \
     ContentLoader.idl \
+    DataAccessDescriptor.idl \
     DatabaseAccess.idl \
     DatabaseAccessConnection.idl \
     DatabaseAccessContext.idl \
