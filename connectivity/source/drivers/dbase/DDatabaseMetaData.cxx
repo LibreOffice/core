@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-16 09:20:28 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,12 @@
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+#ifndef _CONNECTIVITY_FILE_VALUE_HXX_
+#include "file/FValue.hxx"
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 using namespace connectivity::dbase;
 using namespace connectivity::file;
@@ -127,64 +133,64 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getTypeInfo(  ) throw(S
     ORows aRows;
     ORow aRow;
 
-    aRow.push_back(Any());
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("CHAR")));
-    aRow.push_back(makeAny(DataType::CHAR));
-    aRow.push_back(makeAny((sal_Int32)254));
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(makeAny(::rtl::OUString::createFromAscii("'")));
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)ColumnValue::NULLABLE));
-    aRow.push_back(makeAny((sal_Int32)1));
-    aRow.push_back(makeAny((sal_Int32)ColumnSearch::FULL));
-    aRow.push_back(makeAny((sal_Int32)1));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(makeAny((sal_Int32)0));
-    aRow.push_back(Any());
-    aRow.push_back(Any());
-    aRow.push_back(makeAny((sal_Int32)10));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("CHAR")));
+    aRow.push_back(ORowSetValue(DataType::CHAR));
+    aRow.push_back(ORowSetValue((sal_Int32)254));
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("'")));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)ColumnValue::NULLABLE));
+    aRow.push_back(ORowSetValue((sal_Int32)1));
+    aRow.push_back(ORowSetValue((sal_Int32)ColumnSearch::FULL));
+    aRow.push_back(ORowSetValue((sal_Int32)1));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue((sal_Int32)0));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue((sal_Int32)10));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("VARCHAR"));
-    aRow[2] = makeAny(DataType::VARCHAR);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("VARCHAR"));
+    aRow[2] = ORowSetValue(DataType::VARCHAR);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("LONGVARCHAR"));
-    aRow[2] = makeAny(DataType::LONGVARCHAR);
-    aRow[3] = makeAny((sal_Int32)65535);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("LONGVARCHAR"));
+    aRow[2] = ORowSetValue(DataType::LONGVARCHAR);
+    aRow[3] = ORowSetValue((sal_Int32)65535);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("BOOL"));
-    aRow[2] = makeAny(DataType::BIT);
-    aRow[3] = makeAny((sal_Int32)1);
-    aRow[9] = makeAny((sal_Int32)ColumnSearch::BASIC);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("BOOL"));
+    aRow[2] = ORowSetValue(DataType::BIT);
+    aRow[3] = ORowSetValue((sal_Int32)1);
+    aRow[9] = ORowSetValue((sal_Int32)ColumnSearch::BASIC);
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DATE"));
-    aRow[2] = makeAny(DataType::DATE);
-    aRow[3] = makeAny((sal_Int32)10);
-    aRow[4] = makeAny(::rtl::OUString::createFromAscii("'"));
-    aRow[5] = makeAny(::rtl::OUString::createFromAscii("'"));
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DATE"));
+    aRow[2] = ORowSetValue(DataType::DATE);
+    aRow[3] = ORowSetValue((sal_Int32)10);
+    aRow[4] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
+    aRow[5] = ORowSetValue(::rtl::OUString::createFromAscii("'"));
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("DECIMAL"));
-    aRow[2] = makeAny(DataType::DECIMAL);
-    aRow[3] = makeAny((sal_Int32)20);
-    aRow[15] = makeAny((sal_Int32)15);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("DECIMAL"));
+    aRow[2] = ORowSetValue(DataType::DECIMAL);
+    aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[15] = ORowSetValue((sal_Int32)15);
     aRows.push_back(aRow);
 
-    aRow[1] = makeAny(::rtl::OUString::createFromAscii("NUMERIC"));
-    aRow[2] = makeAny(DataType::NUMERIC);
-    aRow[3] = makeAny((sal_Int32)20);
-    aRow[15] = makeAny((sal_Int32)20);
+    aRow[1] = ORowSetValue(::rtl::OUString::createFromAscii("NUMERIC"));
+    aRow[2] = ORowSetValue(DataType::NUMERIC);
+    aRow[3] = ORowSetValue((sal_Int32)20);
+    aRow[15] = ORowSetValue((sal_Int32)20);
     aRows.push_back(aRow);
 
     pResult->setRows(aRows);
@@ -221,7 +227,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
     ORows aRows;
     ORow aRow(19);
-    aRow[10] <<= (sal_Int32)10;
+    aRow[10] = (sal_Int32)10;
     Sequence< ::rtl::OUString> aTabNames(xNames->getElementNames());
     const ::rtl::OUString* pTabBegin    = aTabNames.getConstArray();
     const ::rtl::OUString* pTabEnd      = pTabBegin + aTabNames.getLength();
@@ -230,9 +236,9 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
         if(match(tableNamePattern,*pTabBegin,'\0'))
         {
             Reference< XColumnsSupplier> xTable;
-            xNames->getByName(*pTabBegin) >>= xTable;
-            OSL_ENSHURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
-            aRow[3] <<= *pTabBegin;
+            ::cppu::extractInterface(xTable,xNames->getByName(*pTabBegin));
+            OSL_ENSURE(xTable.is(),"Table not found! Normallya exception had to be thrown here!");
+            aRow[3] = *pTabBegin;
 
             Reference< XNameAccess> xColumns = xTable->getColumns();
             if(!xColumns.is())
@@ -247,43 +253,43 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
             {
                 if(match(columnNamePattern,*pBegin,'\0'))
                 {
-                    aRow[4] <<= *pBegin;
+                    aRow[4] = *pBegin;
 
-                    xColumns->getByName(*pBegin) >>= xColumn;
-                    OSL_ENSHURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
-                    aRow[5] = xColumn->getPropertyValue(PROPERTY_TYPE);
-                    aRow[6] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[7] = xColumn->getPropertyValue(PROPERTY_PRECISION);
+                    ::cppu::extractInterface(xColumn,xColumns->getByName(*pBegin));
+                    OSL_ENSURE(xColumn.is(),"Columns contains a column who isn't a fastpropertyset!");
+                    aRow[5] = getINT32(xColumn->getPropertyValue(PROPERTY_TYPE));
+                    aRow[6] = getString(xColumn->getPropertyValue(PROPERTY_TYPENAME));
+                    aRow[7] = getINT32(xColumn->getPropertyValue(PROPERTY_PRECISION));
                     //  aRow[8] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[9] = xColumn->getPropertyValue(PROPERTY_SCALE);
-                    aRow[11] = xColumn->getPropertyValue(PROPERTY_ISNULLABLE);
+                    aRow[9] = getINT32(xColumn->getPropertyValue(PROPERTY_SCALE));
+                    aRow[11] = getINT32(xColumn->getPropertyValue(PROPERTY_ISNULLABLE));
                     //  aRow[12] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    aRow[13] = xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE);
+                    aRow[13] = getString(xColumn->getPropertyValue(PROPERTY_DEFAULTVALUE));
                     //  aRow[14] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
                     //  aRow[15] = xColumn->getPropertyValue(PROPERTY_TYPENAME);
-                    switch(getINT32(aRow[5]))
+                    switch((sal_Int32)aRow[5])
                     {
                     case DataType::CHAR:
                     case DataType::VARCHAR:
-                        aRow[16] <<= (sal_Int32)254;
+                        aRow[16] = (sal_Int32)254;
                         break;
                     case DataType::LONGVARCHAR:
-                        aRow[16] <<= (sal_Int32)65535;
+                        aRow[16] = (sal_Int32)65535;
                         break;
                     default:
-                        aRow[16] <<= (sal_Int32)0;
+                        aRow[16] = (sal_Int32)0;
                     }
-                    aRow[17] <<= i;
-                    switch(getINT32(aRow[11]))
+                    aRow[17] = i;
+                    switch(sal_Int32(aRow[11]))
                     {
                     case ColumnValue::NO_NULLS:
-                        aRow[18] <<= ::rtl::OUString::createFromAscii("NO");
+                        aRow[18] = ::rtl::OUString::createFromAscii("NO");
                         break;
                     case ColumnValue::NULLABLE:
-                        aRow[18] <<= ::rtl::OUString::createFromAscii("YES");
+                        aRow[18] = ::rtl::OUString::createFromAscii("YES");
                         break;
                     default:
-                        aRow[18] <<= ::rtl::OUString();
+                        aRow[18] = ::rtl::OUString();
                     }
                     aRows.push_back(aRow);
                 }
@@ -359,17 +365,17 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
 
     ORows aRows;
     ORow aRow(14);
-    aRow[5] <<= ::rtl::OUString();
-    aRow[10] <<= ::rtl::OUString::createFromAscii("A");
+    aRow[5]     = ::rtl::OUString();
+    aRow[10]    = ::rtl::OUString::createFromAscii("A");
 
     Reference< XIndexesSupplier> xTable;
-    xNames->getByName(table) >>= xTable;
-    aRow[3] <<= table;
-    aRow[7] <<= (sal_Int32)3;
+    ::cppu::extractInterface(xTable,xNames->getByName(table));
+    aRow[3] = table;
+    aRow[7] = (sal_Int32)3;
 
     Reference< XNameAccess> xIndexes = xTable->getIndexes();
     if(!xIndexes.is())
-                throw SQLException();
+        throw SQLException();
 
     Sequence< ::rtl::OUString> aIdxNames(xIndexes->getElementNames());
 
@@ -378,13 +384,13 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     Reference< XPropertySet> xIndex;
     for(;pBegin != pEnd;++pBegin)
     {
-        xIndexes->getByName(*pBegin) >>= xIndex;
-        OSL_ENSHURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
+        ::cppu::extractInterface(xIndex,xIndexes->getByName(*pBegin));
+        OSL_ENSURE(xIndex.is(),"Indexes contains a column who isn't a fastpropertyset!");
 
         if(unique && !getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
             continue;
-        aRow[4] = xIndex->getPropertyValue(PROPERTY_ISUNIQUE);
-        aRow[6] <<= *pBegin;
+        aRow[4] = getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE));
+        aRow[6] = *pBegin;
 
         Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
         if(xTunnel.is())
@@ -392,8 +398,8 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
             ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
             if(pIndex)
             {
-                aRow[11] <<= pIndex->getHeader().db_maxkeys;
-                aRow[12] <<= pIndex->getHeader().db_pagecount;
+                aRow[11] = (sal_Int32)pIndex->getHeader().db_maxkeys;
+                aRow[12] = (sal_Int32)pIndex->getHeader().db_pagecount;
             }
         }
 
@@ -406,9 +412,9 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
         Reference< XPropertySet> xColumn;
         for(sal_Int32 j=1;pColBegin != pColEnd;++pColBegin,++j)
         {
-            xColumns->getByName(*pColBegin) >>= xColumn;
-            aRow[8] <<= j;
-            aRow[9] <<= *pColBegin;
+            //  xColumns->getByName(*pColBegin) >>= xColumn;
+            aRow[8] = j;
+            aRow[9] = *pColBegin;
             aRows.push_back(aRow);
         }
     }
@@ -486,5 +492,6 @@ sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExc
 
     return 128;
 }
+// -----------------------------------------------------------------------------
 
 

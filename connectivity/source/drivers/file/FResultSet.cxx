@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-13 15:02:28 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1872,6 +1872,10 @@ BOOL OResultSet::OpenImpl()
     m_aRow          = new OValueVector(xNames->getCount());
     m_aEvaluateRow  = new OValueVector(xNames->getCount());
     m_aInsertRow    = new OValueVector(xNames->getCount());
+
+    (*m_aRow)[0].setBound(sal_True);
+    (*m_aEvaluateRow)[0].setBound(sal_True);
+    (*m_aInsertRow)[0].setBound(sal_True);
     // unbound all values so that we only update the really needed columns
     OValueVector::iterator aInsertIter = m_aInsertRow->begin()+1;
     for(;aInsertIter != m_aInsertRow->end();++aInsertIter)
@@ -2057,7 +2061,7 @@ BOOL OResultSet::OpenImpl()
                 {
                     if(!IsSorted())
                     {
-                        nOrderbyColumnNumber[0] = 1;
+                        nOrderbyColumnNumber[0] = m_aColMapping[1];
                         bOrderbyAscending[0] = FALSE;
                     }
                     else
@@ -2077,7 +2081,8 @@ BOOL OResultSet::OpenImpl()
                         eKeyType[i] = SQL_ORDERBYKEY_NONE;
                     else
                     {
-                        switch (aRowIter->getTypeKind())
+                        OSL_ENSURE(m_aRow->size() > nOrderbyColumnNumber[i]+1,"Invalid Index");
+                        switch ((m_aRow->begin()+nOrderbyColumnNumber[i]+1)->getTypeKind())
                         {
                         case DataType::CHAR:
                             case DataType::VARCHAR:
@@ -2193,6 +2198,12 @@ BOOL OResultSet::OpenImpl()
     DISTINCT:   if(bDistinct && m_pFileSet)   // sicher ist sicher
                 {
                     OValueRow aSearchRow = new OValueVector(m_aRow->size());
+                    OValueVector::iterator aRowIter = m_aRow->begin();
+                    OValueVector::iterator aSearchIter = aSearchRow->begin();
+                    for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
+                            aRowIter != m_aRow->end();
+                            ++aRowIter,++aSearchIter)
+                                aSearchIter->setBound(aRowIter->isBound());
                     //  ODbRowRef aSearchRow = new ODbRow(*aFileRow); // nach dieser wird gesucht
                     //  const ODbRow &rSearchRow = *aSearchRow,
                         //  &rFileRow = *aFileRow;
@@ -2219,16 +2230,27 @@ BOOL OResultSet::OpenImpl()
                                 {
                                     nKey = (*m_pFileSet)[i];
                                     ExecuteRow(OFileTable::FILE_BOOKMARK,nKey ,TRUE,FALSE);
-                                    if(!nWasAllwaysFound[i] && aSearchRow == m_aRow)
+                                    if(!nWasAllwaysFound[i])
                                     {
-                                        // gefunden
-                                        // Key an der Stelle 0 setzen.
-                                        (*m_pFileSet)[nPrev_i] = 0;
-                                        // und altes i merken
-                                        nPrev_i = i;
-                                        nPos = nKey; // auf naechste gültige Position setzen
-                                        nWasAllwaysFound[i] = TRUE;
-
+                                        OValueVector::iterator aRowIter = m_aRow->begin();
+                                        OValueVector::iterator aSearchIter = aSearchRow->begin();
+                                        for (   ++aRowIter,++aSearchIter;   // the first column is the bookmark column
+                                                aRowIter != m_aRow->end();
+                                                ++aRowIter,++aSearchIter)
+                                        {
+                                            if(aRowIter->isBound() && !(*aRowIter == *aSearchIter))
+                                                break;
+                                        }
+                                        if(aRowIter == m_aRow->end())
+                                        {
+                                            // gefunden
+                                            // Key an der Stelle 0 setzen.
+                                            (*m_pFileSet)[nPrev_i] = 0;
+                                            // und altes i merken
+                                            nPrev_i = i;
+                                            nPos = nKey; // auf naechste gültige Position setzen
+                                            nWasAllwaysFound[i] = TRUE;
+                                        }
                                     }
                                 }
                             }

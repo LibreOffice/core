@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DIndex.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 12:26:39 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ BOOL ODbaseIndex::CreateImpl()
     }
 
     Reference<XFastPropertySet> xCol;
-    m_pColumns->getByIndex(1) >>= xCol;
+    ::cppu::extractInterface(xCol,m_pColumns->getByIndex(1));
 
     // ist die Spalte schon indiziert ?
     if (!xCol.is())

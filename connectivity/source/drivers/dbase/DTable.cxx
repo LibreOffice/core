@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-05 15:09:45 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ sal_Bool ODbaseTable::seekRow(FilePosition eCursorPosition, sal_Int32 nOffset, s
     {
         sal_uInt16 nEntryLen = m_aHeader.db_slng;
 
-        OSL_ENSHURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
+        OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
         sal_Int32 nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
 
         ULONG nLen = m_pFileStream->Seek(nPos);
@@ -973,7 +973,7 @@ void ODbaseTable::FileClose()
 // -------------------------------------------------------------------------
 BOOL ODbaseTable::CreateImpl()
 {
-    OSL_ENSHURE(!m_pFileStream, "SequenceError");
+    OSL_ENSURE(!m_pFileStream, "SequenceError");
 
     INetURLObject aURL;
     aURL.SetSmartProtocol(INET_PROT_FILE);
@@ -1093,8 +1093,8 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
     Reference<XPropertySet> xCol;
     for(sal_Int32 i=0;i<xColumns->getCount();++i)
     {
-        xColumns->getByIndex(i) >>= xCol;
-        OSL_ENSHURE(xCol.is(),"This should be a column!");
+        ::cppu::extractInterface(xCol,xColumns->getByIndex(i));
+        OSL_ENSURE(xCol.is(),"This should be a column!");
 
         char  cTyp;
 
@@ -1162,7 +1162,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
         switch(cTyp)
         {
             case 'C':
-                OSL_ENSHURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
+                OSL_ENSURE(nPrecision < 255, "ODbaseTable::Create: Column zu lang!");
                 if (nPrecision > 254)
                 {
 //                  String aText = String(SdbResId(STR_DBF_INVALIDFIELDLENGTH));
@@ -1179,7 +1179,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                 break;
             case 'F':
             case 'N':
-                OSL_ENSHURE(nPrecision >=  nScale,
+                OSL_ENSURE(nPrecision >=  nScale,
                            "ODbaseTable::Create: Feldlänge muß größer Nachkommastellen sein!");
                 if (nPrecision <  nScale)
                 {
@@ -1423,7 +1423,7 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
     for (USHORT i = 0; i < m_pColumns->getCount(); i++)
     {
-        m_pColumns->getByIndex(i) >>= xCol;
+        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
 
         xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
@@ -1431,9 +1431,9 @@ BOOL ODbaseTable::DeleteRow(const OSQLColumns& _rCols)
         if (xIndex.is())
         {
             Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
-            OSL_ENSHURE(xTunnel.is(),"No TunnelImplementation!");
+            OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
             ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-            OSL_ENSHURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
+            OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
 
             OSQLColumns::const_iterator aIter = _rCols.begin();
             //  sal_Int32 nPos = 0;
@@ -1606,7 +1606,7 @@ BOOL ODbaseTable::WriteMemo(ORowSetValue& aVariable, ULONG& rBlockNr)
 void ODbaseTable::AllocBuffer()
 {
     UINT16 nSize = m_aHeader.db_slng;
-    OSL_ENSHURE(nSize > 0, "Size too small");
+    OSL_ENSURE(nSize > 0, "Size too small");
 
     if (m_nBufferSize != nSize)
     {
@@ -1629,8 +1629,8 @@ Reference<XPropertySet> ODbaseTable::isUniqueByColumnName(const ::rtl::OUString&
     Reference<XPropertySet> xIndex;
     for(sal_Int32 i=0;i<m_pIndexes->getCount();++i)
     {
-        m_pIndexes->getByIndex(i) >>= xIndex;
-        if(getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
+        ::cppu::extractInterface(xIndex,m_pIndexes->getByIndex(i));
+        if(xIndex.is() && getBOOL(xIndex->getPropertyValue(PROPERTY_ISUNIQUE)))
         {
             Reference<XNameAccess> xCols(Reference<XColumnsSupplier>(xIndex,UNO_QUERY)->getColumns());
             if(xCols->hasByName(_rColName))
@@ -1675,7 +1675,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
     // first search a key that exist already in the table
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
-        m_pColumns->getByIndex(i) >>= xCol;
+        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
         xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         //  const SdbFILEColumn *pColumn = (const SdbFILEColumn *)(*aOriginalColumns)[i];
@@ -1683,7 +1683,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         for(;nPos<_xCols->getCount();++nPos)
         {
             Reference<XPropertySet> xFindCol;
-            _xCols->getByIndex(nPos) >>= xFindCol;
+            ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
             if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
                 break;
         }
@@ -1702,9 +1702,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
             {
                 //  ODbVariantRef xVar = (pVal == NULL) ? new ODbVariant() : pVal;
                 Reference<XUnoTunnel> xTunnel(xIndex,UNO_QUERY);
-                OSL_ENSHURE(xTunnel.is(),"No TunnelImplementation!");
+                OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
                 ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-                OSL_ENSHURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
+                OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
 
                 if (pIndex->Find(0,rRow[nPos]))
                 {
@@ -1727,7 +1727,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 
     for (i = 0; i < m_pColumns->getCount(); i++)
     {
-        m_pColumns->getByIndex(i) >>= xCol;
+        ::cppu::extractInterface(xCol,m_pColumns->getByIndex(i));
         xCol->getPropertyValue(PROPERTY_NAME) >>= aColName;
 
         // Laengen je nach Datentyp:
@@ -1750,7 +1750,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         for(;nPos<_xCols->getCount();++nPos)
         {
             Reference<XPropertySet> xFindCol;
-            _xCols->getByIndex(nPos) >>= xFindCol;
+            ::cppu::extractInterface(xFindCol,_xCols->getByIndex(nPos));
             if(aCase(getString(xFindCol->getPropertyValue(PROPERTY_NAME)),aColName))
                 break;
         }
@@ -1765,9 +1765,9 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
         if (aIndexedCols[i].is())
         {
             Reference<XUnoTunnel> xTunnel(aIndexedCols[i],UNO_QUERY);
-            OSL_ENSHURE(xTunnel.is(),"No TunnelImplementation!");
+            OSL_ENSURE(xTunnel.is(),"No TunnelImplementation!");
             ODbaseIndex* pIndex = (ODbaseIndex*)xTunnel->getSomething(ODbaseIndex::getUnoTunnelImplementationId());
-            OSL_ENSHURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
+            OSL_ENSURE(pIndex,"ODbaseTable::UpdateBuffer: No Index returned!");
             // Update !!
             if (pOrgRow.isValid() && !rRow[nPos].isNull() )//&& pVal->isModified())
                 pIndex->Update(m_nFilePos,(*pOrgRow)[nPos],rRow[nPos]);
@@ -1898,7 +1898,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
 //------------------------------------------------------------------
 BOOL ODbaseTable::WriteBuffer()
 {
-    OSL_ENSHURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
+    OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
 
     // Auf gewuenschten Record positionieren:
     long nPos = m_aHeader.db_kopf + (long)(m_nFilePos-1) * m_aHeader.db_slng;

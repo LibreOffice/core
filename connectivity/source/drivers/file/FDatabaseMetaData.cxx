@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-15 09:34:00 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@
 #ifndef _CONNECTIVITY_FILE_TABLE_HXX_
 #include "file/FTable.hxx"
 #endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
+
 
 using namespace com::sun::star::ucb;
 using namespace connectivity::file;
@@ -234,7 +238,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                 sal_Unicode nChar = aName.toChar();
                 if(match(tableNamePattern,aName.getStr(),'\0') && (nChar < '0' || nChar > '9'))
                 {
-                    aRow.push_back(makeAny(aName));
+                    aRow.push_back(ORowSetValue(aName));
                     bNewRow = sal_True;
                 }
             }
@@ -249,7 +253,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
                     sal_Unicode nChar = aURL.getBase().GetChar(0);
                     if(match(tableNamePattern,aURL.getBase().GetBuffer(),'\0') && (nChar < '0' || nChar > '9'))
                     {
-                        aRow.push_back(makeAny(::rtl::OUString(aURL.getBase())));
+                        aRow.push_back(ORowSetValue(::rtl::OUString(aURL.getBase())));
                         bNewRow = sal_True;
                     }
                     break;
@@ -263,8 +267,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
         }
         if(bNewRow)
         {
-            aRow.push_back(makeAny(aTable));
-            aRow.push_back(Any());
+            aRow.push_back(ORowSetValue(aTable));
+            aRow.push_back(ORowSetValue());
             aRows.push_back(aRow);
         }
     }
@@ -433,19 +437,19 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
             if(match(tableNamePattern,pBegin->getStr(),'\0'))
             {
                 ORow aRow(8);
-                aRow[0] = Any();
-                aRow[1] = Any();
-                aRow[2] = makeAny(*pBegin);
-                aRow[3] = Any();
-                aRow[4] = Any();
-                aRow[5] = Any();
-                aRow[6] = makeAny(::rtl::OUString::createFromAscii("SELECT"));
-                aRow[7] = makeAny(::rtl::OUString::createFromAscii("NO"));
+                aRow[0] = ORowSetValue();
+                aRow[1] = ORowSetValue();
+                aRow[2] = ORowSetValue(*pBegin);
+                aRow[3] = ORowSetValue();
+                aRow[4] = ORowSetValue();
+                aRow[5] = ORowSetValue();
+                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("SELECT"));
+                aRow[7] = ORowSetValue(::rtl::OUString::createFromAscii("NO"));
 
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
-                xNames->getByName(*pBegin) >>= xTable;
+                ::cppu::extractInterface(xTable,xNames->getByName(*pBegin));
                 if(xTable.is())
                 {
                     Reference<XUnoTunnel> xTunnel(xTable,UNO_QUERY);
@@ -456,19 +460,19 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
                         {
                             if(!pTable->isReadOnly())
                             {
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("INSERT"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("INSERT"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("DELETE"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DELETE"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("UPDATE"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("UPDATE"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("CREATE"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("CREATE"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("READ"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("READ"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("ALTER"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("ALTER"));
                                 aRows.push_back(aRow);
-                                aRow[6] = makeAny(::rtl::OUString::createFromAscii("DROP"));
+                                aRow[6] = ORowSetValue(::rtl::OUString::createFromAscii("DROP"));
                                 aRows.push_back(aRow);
                             }
                         }
@@ -761,8 +765,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     pResult->setTableTypes();
     ORows aRows;
     ORow aRow;
-        aRow.push_back(Any());
-        aRow.push_back(makeAny(::rtl::OUString::createFromAscii("TABLE")));
+    aRow.push_back(ORowSetValue());
+    aRow.push_back(ORowSetValue(::rtl::OUString::createFromAscii("TABLE")));
     aRows.push_back(aRow);
     pResult->setRows(aRows);
     return xRef;

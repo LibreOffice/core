@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fanalyzer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 08:02:15 $
+ *  last change: $Author: oj $ $Date: 2001-02-14 07:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
 #endif
 
 
@@ -271,7 +274,7 @@ void OSQLAnalyzer::describeParam(::vos::ORef<OSQLColumns> rParameterColumns)
                     if (pLeft)
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
-                        Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()) >>= xCol;
+                        ::cppu::extractInterface(xCol,Reference< XIndexAccess>(m_aCompiler.getOrigColumns(),UNO_QUERY)->getByIndex(pLeft->getRowPos()));
                         OSL_ENSHURE(xCol.is(), "Ungültige Struktur");
                         pParam->describe(xCol, aNewParamColumns);
                     }
