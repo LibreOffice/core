@@ -4285,7 +4285,9 @@ SfxVoidItem InsertFormula FN_EDIT_FORMULA
 
 //--------------------------------------------------------------------------
 SfxVoidItem InsertFrame FN_INSERT_FRAME
-()
+( SfxUInt16Item AnchorType FN_INSERT_FRAME,
+SfxPointItem Pos FN_PARAM_1,
+SvxSizeItem Size FN_PARAM_2 )
 [
     /* flags: */
     AutoUpdate = FALSE,

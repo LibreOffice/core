@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:58:10 $
+ *  last change: $Author: os $ $Date: 2002-08-07 11:39:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,6 +602,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             pArgs &&pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem) == SFX_ITEM_SET)
             nCols = ((SfxUInt16Item *)pItem)->GetValue();
         GetView().InsFrmMode(nCols);
+        rReq.Ignore();
     }
     break;
     case FN_INSERT_FRAME:
@@ -624,60 +625,104 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         // Rahmen neu anlegen
         SwFlyFrmAttrMgr aMgr( TRUE, GetShellPtr(), FRMMGR_TYPE_TEXT );
-        static USHORT __READONLY_DATA aFrmAttrRange[] =
+        if(pArgs)
         {
-            RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
-            SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
-            FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
-            SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
-            FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
-            SID_HTML_MODE,          SID_HTML_MODE,
-            0
-        };
+            Size aSize(aMgr.GetSize());
+            aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
+            Point aPos = aMgr.GetPos();
+            RndStdIds eAnchor = FLY_AT_CNTNT;
+            if(pArgs->GetItemState(nSlot, FALSE, &pItem) == SFX_ITEM_SET)
+                eAnchor = (RndStdIds)((SfxUInt16Item *)pItem)->GetValue();
+            if(pArgs->GetItemState(FN_PARAM_1, FALSE, &pItem)  == SFX_ITEM_SET)
+                aPos = ((SfxPointItem *)pItem)->GetValue();
+            if(pArgs->GetItemState(FN_PARAM_2, FALSE, &pItem)  == SFX_ITEM_SET)
+                aSize = ((SvxSizeItem *)pItem)->GetSize();
+            if(pArgs->GetItemState(SID_ATTR_COLUMNS, FALSE, &pItem)  == SFX_ITEM_SET)
+            {
+                USHORT nCols = ((SfxUInt16Item *)pItem)->GetValue();
+                if( !bSingleCol && 1 < nCols )
+                {
+                    SwFmtCol aFmtCol;
+                    aFmtCol.Init( nCols , (rReq.IsAPI() ? 0
+                                        : DEF_GUTTER_WIDTH), USHRT_MAX );
+                    aMgr.SetCol(aFmtCol);
+                }
+            }
 
-        SfxItemSet aSet(GetPool(), aFrmAttrRange );
-        aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-        const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
-        SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
-        aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
-        aSet.Put(aFrmSize);
-
-        const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
-        SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
-        aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
-        aSet.Put(aPrtSize);
-
-        aSet.Put(aMgr.GetAttrSet());
-        aSet.SetParent( aMgr.GetAttrSet().GetParent() );
-
-        // Minimalgroesse in Spalten l”schen
-        SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
-        aBoxInfo.SetMinDist(FALSE);
-        aSet.Put(aBoxInfo);
-
-        SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
-
-        if(pDlg->Execute() && pDlg->GetOutputItemSet())
-        {
             GetShell().StartAllAction();
-            GetShell().StartUndo(UNDO_INSERT);
 
-            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-            aMgr.SetAttrSet(*pOutSet);
+            aMgr.InsertFlyFrm(eAnchor, aPos, aSize);
 
-            // beim ClickToEditFeld erst die Selektion loeschen
-            if( GetShell().IsInClickToEdit() )
-                GetShell().DelRight();
-
-            aMgr.InsertFlyFrm();
-
-
-            GetView().AutoCaption(FRAME_CAP);
-            GetShell().EndUndo(UNDO_INSERT);
             GetShell().EndAllAction();
         }
+        else
+        {
+            static USHORT __READONLY_DATA aFrmAttrRange[] =
+            {
+                RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
+                SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,
+                FN_GET_PRINT_AREA,      FN_GET_PRINT_AREA,
+                SID_ATTR_PAGE_SIZE,     SID_ATTR_PAGE_SIZE,
+                FN_SET_FRM_NAME,        FN_SET_FRM_NAME,
+                SID_HTML_MODE,          SID_HTML_MODE,
+                0
+            };
 
-        DELETEZ(pDlg);
+            SfxItemSet aSet(GetPool(), aFrmAttrRange );
+            aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
+            const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
+            SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
+            aFrmSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
+            aSet.Put(aFrmSize);
+
+            const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
+            SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+            aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
+            aSet.Put(aPrtSize);
+
+            aSet.Put(aMgr.GetAttrSet());
+            aSet.SetParent( aMgr.GetAttrSet().GetParent() );
+
+            // Minimalgroesse in Spalten l”schen
+            SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
+            aBoxInfo.SetMinDist(FALSE);
+            aSet.Put(aBoxInfo);
+
+            SwFrmDlg* pDlg = new SwFrmDlg(GetView().GetViewFrame(), &GetView().GetViewFrame()->GetWindow(), aSet, TRUE);
+
+            if(pDlg->Execute() && pDlg->GetOutputItemSet())
+            {
+                GetShell().StartAllAction();
+                GetShell().StartUndo(UNDO_INSERT);
+
+                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                aMgr.SetAttrSet(*pOutSet);
+
+                // beim ClickToEditFeld erst die Selektion loeschen
+                if( GetShell().IsInClickToEdit() )
+                    GetShell().DelRight();
+
+                aMgr.InsertFlyFrm();
+
+                com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                        GetView().GetViewFrame()->GetBindings().GetRecorder();
+                if ( xRecorder.is() )
+                {
+                    //FN_INSERT_FRAME
+                    USHORT nAnchor = (USHORT)aMgr.GetAnchor();
+                        rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
+                        rReq.AppendItem(SfxPointItem(FN_PARAM_1, GetShell().GetObjAbsPos()));
+                        rReq.AppendItem(SvxSizeItem(FN_PARAM_2, GetShell().GetObjSize()));
+                    rReq.Done();
+                }
+
+                GetView().AutoCaption(FRAME_CAP);
+                GetShell().EndUndo(UNDO_INSERT);
+                GetShell().EndAllAction();
+            }
+
+            DELETEZ(pDlg);
+        }
         break;
     }
     case FN_INSERT_HRULER:
@@ -1150,6 +1195,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.17  2002/07/03 16:58:10  mba
+    #100782#: recording for InsertTable
+
     Revision 1.16  2002/07/01 09:07:34  mba
     #100784#: recording paramaters
 

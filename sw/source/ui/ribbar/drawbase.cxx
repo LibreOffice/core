@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawbase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-06-24 14:53:54 $
+ *  last change: $Author: os $ $Date: 2002-08-07 11:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,6 +381,16 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
             pSh->EndCreate(SDRCREATE_FORCEEND);
             if (pWin->GetDrawMode() == OBJ_NONE)    // Textrahmen eingefuegt
             {
+               com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder =
+                    pSh->GetView().GetViewFrame()->GetBindings().GetRecorder();
+                if ( xRecorder.is() )
+                {
+                    SfxRequest aReq(pSh->GetView().GetViewFrame(),FN_INSERT_FRAME);
+                        aReq.AppendItem(SfxUInt16Item( FN_INSERT_FRAME, (USHORT)FLY_AT_CNTNT ));
+                        aReq.AppendItem(SfxPointItem( FN_PARAM_1, pSh->GetAnchorObjDiff()));
+                        aReq.AppendItem(SvxSizeItem( FN_PARAM_2, pSh->GetObjSize()));
+                    aReq.Done();
+                }
                 bAutoCap = TRUE;
                 if(pWin->GetFrmColCount() > 1)
                 {
