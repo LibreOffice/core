@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-09-10 10:49:05 $
+#   last change: $Author: dfoster $ $Date: 2003-09-10 14:44:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@
 
   <!-- =================== Environmental Properties ======================= -->
 
-  <property file="build.env"/>
   <property name="prj" value=".."/>
   <property name="build.compiler"   value="classic"/>
   <property name="optimize"   value="on"/>
@@ -85,9 +84,9 @@
     <pathelement location="${solar.jar}/java_uno.jar"/>
     <pathelement location="${solar.jar}/ridl.jar"/>
     <pathelement location="${solar.jar}/sandbox.jar"/>
+    <pathelement location="${solar.jar}/bsh-1.2b7.jar"/>
+    <pathelement location="${solar.jar}/js.jar"/>
     <pathelement location="${jardir}"/>
-    <pathelement path="${install.dir}/bsh-1.2b7.jar"/>
-    <pathelement location="${install.dir}/js.jar"/>
   </path>
 
   <path id="idesupport.class.path">
@@ -99,7 +98,7 @@
 
   <path id="openide.class.path">
     <pathelement path="${jardir}"/>
-    <pathelement path="${netbeans.home}/lib/openide.jar"/>
+    <pathelement path="${solar.jar}/openide.jar"/>
     <!-- <pathelement path="${install.dir}/xerces.jar"/> -->
   </path>
 
