@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2002-08-19 17:23:47 $
+#   last change: $Author: vg $ $Date: 2003-04-15 14:31:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,12 +86,16 @@ MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
 .ENDIF
 #End of mozilla specific stuff.
 
+# Disable '-z defs' due to broken libxpcom.
+LINKFLAGSDEFS=$(0)
 
 USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
 ENABLE_EXCEPTIONS=TRUE
 LDUMP=ldump2.exe
+
 # --- Settings ----------------------------------
+
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -100,17 +104,15 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE :  $(PRJ)$/version.mk
 
-
 # --- Recursiveness  ---------------------------------------------------
 
 RC_SUBDIRS = mozillasrc
 
 # --- Files -------------------------------------
+
 SLOFILES=\
         $(SLO)$/MDriver.obj						\
         $(SLO)$/MServices.obj
-
-        
 
 # --- MOZAB BASE Library -----------------------------------
 
