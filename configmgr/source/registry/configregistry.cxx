@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:13:41 $
+ *  last change: $Author: fs $ $Date: 2000-10-25 06:50:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include "cfgregistrykey.hxx"
 #endif
 
-#ifndef _UTL_SEQUENCE_HXX_
-#include <unotools/sequence.hxx>
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
@@ -158,7 +158,7 @@ Any SAL_CALL OConfigurationRegistry::queryInterface( const Type& _rType ) throw(
 //--------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OConfigurationRegistry::getTypes(  ) throw(RuntimeException)
 {
-    return ::utl::concatSequences(
+    return ::comphelper::concatSequences(
         ServiceComponentImpl::getTypes(),
         OConfigurationRegistry_Base::getTypes());
 }
