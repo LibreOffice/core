@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:50:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:37:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
