@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_xsltfilter.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:41:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 12:25:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,21 +292,12 @@ File gid_File_Xsl_Export_Xhtml_Master_Chapter_Numbering
     Name = "/xslt/export/xhtml/master_chapter_numbering.xsl";
 End
 
-File gid_File_Xsl_Export_Xhtml_Master_Child_Linking
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Xslt_Export_Xhtml;
-    Name = "/xslt/export/xhtml/master_child_linking.xsl";
-End
-
-
 File gid_File_Xsl_Export_Xhtml_Master_Document
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Share_Xslt_Export_Xhtml;
     Name = "/xslt/export/xhtml/master_document.xsl";
 End
-
 
 File gid_File_Xsl_Export_Xhtml_Master_Refs_Workaround
     TXT_FILE_BODY;
