@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-08 17:33:10 $
+ *  last change: $Author: pb $ $Date: 2000-12-14 08:18:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
+#endif
+#ifndef _UNOTOOLS_LOCALFILEHELPER_HXX
+#include <unotools/localfilehelper.hxx>
 #endif
 
 #include <vos/process.hxx>
@@ -1405,21 +1408,31 @@ String SvtPathOptions::SubstituteVariable( const String& rVar )
 
 // -----------------------------------------------------------------------
 
-BOOL IniFileExists_Impl( const String rURL )
+sal_Bool IniFileExists_Impl( const String rURL )
 {
-    INetURLObject aObj( rURL, INET_PROT_FILE );
-    OUString aTmp( aObj.GetMainURL() );
-    OUString aResult;
-    if ( FileBase::getNormalizedPathFromFileURL( aTmp, aResult )  == FileBase::E_None )
+    sal_Bool bRet = sal_False;
+    INetURLObject aObj( rURL );
+    ::rtl::OUString aFileName = aObj.getName(
+        INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+    aObj.removeSegment();
+    aObj.removeFinalSlash();
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > aFiles =
+        ::utl::LocalFileHelper::GetFolderContents( aObj.GetMainURL(), sal_False );
+    const ::rtl::OUString* pFiles  = aFiles.getConstArray();
+    UINT32 i, nCount = aFiles.getLength();
+    for ( i = 0; i < nCount; ++i )
     {
-        FileBase::RC err = Directory::create( aResult );
-        if ( err == FileBase::E_EXIST )
-            return sal_True;
-        else
-            Directory::remove( aResult );
+        INetURLObject aFileObject( pFiles[i] );
+        ::rtl::OUString aFile = aFileObject.getName(
+            INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).ToLowerAscii();
+        if ( aFile == aFileName )
+        {
+            bRet = sal_True;
+            break;
+        }
     }
 
-    return sal_False;
+    return bRet;
 }
 
 sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
@@ -1442,7 +1455,10 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
             sal_Bool bCfg = ( PATH_USERCONFIG == ePath );
             bRet = sal_True;
             INetURLObject aObj( bCfg ? GetUserConfigPath() : GetUserDictionaryPath(), INET_PROT_FILE );
-            aObj.insertName( aIniFile );
+            xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
+            for ( i = 0; i < nCount; ++i )
+                aObj.insertName( aIniFile.GetToken( i, '/' ) );
+
             if ( !IniFileExists_Impl( aObj.GetMainURL() ) )
             {
                 aObj.SetSmartURL( bCfg ? GetConfigPath() : GetDictionaryPath() );
@@ -1497,7 +1513,9 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 INetURLObject aObj;
                 aObj.SetSmartProtocol( INET_PROT_FILE );
                 aObj.SetSmartURL( aPath.GetToken( 0, SEARCHPATH_DELIMITER, nIdx ) );
-                aObj.insertName( aIniFile );
+                xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
+                for ( i = 0; i < nCount; ++i )
+                    aObj.insertName( aIniFile.GetToken( i, '/' ) );
                 bRet = IniFileExists_Impl( aObj.GetMainURL() );
 
                 if ( bRet )
