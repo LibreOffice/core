@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: os $ $Date: 2002-09-05 10:00:47 $
+ *  last change: $Author: os $ $Date: 2002-09-10 08:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2004,6 +2004,14 @@ KEYINPUT_CHECKTABLE_INSDEL:
             case KS_PrevObject:
                 if(rSh.GotoObj( KS_NextObject == eKeyState, GOTO_ANY))
                 {
+                    if( rSh.IsFrmSelected() &&
+                        rView.GetDrawFuncPtr() )
+                    {
+                        rView.GetDrawFuncPtr()->Deactivate();
+                        rView.SetDrawFuncPtr(NULL);
+                        rView.LeaveDrawCreate();
+                        rView.AttrChangedNotify( &rSh );
+                    }
                     rSh.HideCrsr();
                     rSh.EnterSelFrmMode();
                 }
