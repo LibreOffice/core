@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2002-07-11 11:42:38 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,6 +415,7 @@ OutputDevice::OutputDevice() :
     mpObjStack          = NULL;
     mpOutDevData        = NULL;
     mp3DContext         = NULL;
+    mpPDFWriter         = NULL;
     mnOutOffX           = 0;
     mnOutOffY           = 0;
     mnOutWidth          = 0;
@@ -508,6 +509,12 @@ OutputDevice::~OutputDevice()
         delete mpGetDevFontList;
     if ( mpGetDevSizeList )
         delete mpGetDevSizeList;
+
+    if( mpFontList && mpFontList != ImplGetSVData()->maGDIData.mpScreenFontList )
+    {
+        mpFontList->Clear();
+        delete mpFontList;
+    }
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-08 14:18:57 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,13 +98,17 @@
 #include <list>
 
 namespace rtl { class OStringBuffer; }
+class SalLayout;
+struct ImplFontData;
 
 namespace vcl
 {
 
 class PDFWriterImpl
 {
-private:
+public:
+    // definition of structs
+
     struct PDFPage
     {
         PDFWriterImpl*              m_pWriter;
@@ -171,6 +175,36 @@ private:
         Rectangle   m_aRectangle;
     };
 
+    // font subsets
+    struct GlyphEmit
+    {
+        sal_uInt8       m_nSubsetGlyphID;
+        sal_Unicode     m_aUnicode;
+    };
+    typedef std::map< long, GlyphEmit > FontEmitMapping;
+    struct FontEmit
+    {
+        sal_Int32           m_nFontID;
+        FontEmitMapping     m_aMapping;
+
+        FontEmit( sal_Int32 nID ) : m_nFontID( nID ) {}
+    };
+    typedef std::list< FontEmit > FontEmitList;
+    struct Glyph
+    {
+        sal_Int32   m_nFontID;
+        sal_uInt8   m_nSubsetGlyphID;
+    };
+    typedef std::map< long, Glyph > FontMapping;
+
+    struct FontSubset
+    {
+        FontEmitList        m_aSubsets;
+        FontMapping         m_aMapping;
+    };
+    typedef std::map< ImplFontData*, FontSubset > FontSubsetData;
+
+private:
     OutputDevice*                   m_pReferenceDevice;
 
     MapMode                         m_aMapMode; // PDFWriterImpl scaled units
@@ -188,6 +222,9 @@ private:
     std::list< HatchEmit >          m_aHatches;
     /* contains bitmap tiling patterns */
     std::list< BitmapPatternEmit >  m_aTilings;
+    /*  contains all font subsets in use */
+    FontSubsetData                  m_aSubsets;
+    sal_Int32                       m_nNextFID;
 
     sal_Int32                       m_nInheritedPageWidth;  // in inch/72
     sal_Int32                       m_nInheritedPageHeight; // in inch/72
@@ -200,26 +237,6 @@ private:
     rtl::OUString                   m_aFileName;
     oslFileHandle                   m_aFile;
     bool                            m_bOpen;
-
-    struct ltfont
-    {
-        bool operator()(const Font& rLeft, const Font& rRight)
-        {
-            StringCompare eComp = rLeft.GetName().CompareTo( rRight.GetName() );
-            if( eComp != COMPARE_EQUAL )
-                return eComp == COMPARE_LESS;
-            if( rLeft.GetItalic() != rRight.GetItalic() )
-                return rLeft.GetItalic() < rRight.GetItalic();
-            if( rLeft.GetWeight() != rRight.GetWeight() )
-                return rLeft.GetWeight() < rRight.GetWeight();
-            return rLeft.GetWidth() < rRight.GetWidth();
-        }
-    };
-
-    // fonts used in whole file, maps to font id
-    std::map< Font, sal_Int32, ltfont > m_aFonts;
-    sal_Int32                           m_nNextFID;
-
 
     // graphics state
     struct GraphicsState
@@ -239,6 +256,7 @@ private:
                 m_aLineColor( COL_TRANSPARENT ),
                 m_aFillColor( COL_TRANSPARENT ),
                 m_aTextLineColor( COL_BLACK ),
+                m_nLayoutMode( 0 ),
                 m_nTransparentPercent( 0 ) {}
         GraphicsState( const GraphicsState& rState ) :
                 m_aFont( rState.m_aFont ),
@@ -272,6 +290,12 @@ private:
     std::list< GraphicsState >          m_aGraphicsStack;
     GraphicsState                       m_aCurrentPDFState;
 
+    /* creates fonts and subsets that will be emitted later */
+    void registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects );
+
+    /*  emits a text object according to the passed layout */
+    void drawLayout( const SalLayout& rLayout );
+
     /*  writes differences between graphics stack and current real PDF
      *   state to the file
      */
@@ -296,10 +320,10 @@ private:
     bool emitGradients();
     /* writes all hatch patterns */
     bool emitHatches();
-    /* writes a font dictionary;
-     * returns object id (or 0 on error)
+    /* writes a the font dictionary and emits all font objects
+     * returns object id of font directory (or 0 on error)
      */
-    sal_Int32 emitFont( const Font& rFont );
+    sal_Int32 emitFonts();
     /* writes the Resource dictionary;
      * returns dict object id (or 0 on error)
      */
@@ -322,6 +346,13 @@ private:
 public:
     PDFWriterImpl( const rtl::OUString& rTargetFile, PDFWriter::PDFVersion eVersion = PDFWriter::PDF_1_4 );
     ~PDFWriterImpl();
+
+    /*  for OutputDevice so the reference device can have a list
+     *  that contains only suitable fonts (subsettable or builtin)
+     *  produces a new font list
+     */
+    ImplDevFontList* filterDevFontList( ImplDevFontList* pFontList );
+
 
     /* for documentation of public fucntions please see pdfwriter.hxx */
 

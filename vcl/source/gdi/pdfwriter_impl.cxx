@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2002-07-10 14:21:56 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 #include <bmpacc.hxx>
 #include <bitmapex.hxx>
 #include <image.hxx>
+#include <outdev.h>
+#include <sallayout.hxx>
 
 #include "implncvt.hxx"
 
@@ -474,8 +476,33 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
         VirtualDevice* pVDev = new VirtualDevice( 0 );
         m_pReferenceDevice = pVDev;
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
+        m_pReferenceDevice->mpPDFWriter = this;
     }
     return m_pReferenceDevice;
+}
+
+ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
+{
+    DBG_ASSERT( m_aPages.begin() == m_aPages.end(), "Fonts changing during PDF generation, document will be invalid" );
+
+    ImplDevFontList* pFiltered = new ImplDevFontList();
+
+    ImplDevFontListData* pData = pFontList->First();
+    while( pData )
+    {
+        ImplFontData* pEntry = pData->mpFirst;
+        while( pEntry )
+        {
+            if( pEntry->mbSubsettable || pEntry->mbEmbeddable )
+            {
+                ImplFontData* pNewData = new ImplFontData();
+                *pNewData = *pEntry;
+                pFiltered->Add( pNewData );
+            }
+            pData = pFontList->Next();
+        }
+    }
+    return pFiltered;
 }
 
 sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, PDFWriter::Orientation eOrientation )
@@ -779,93 +806,10 @@ bool PDFWriterImpl::emitHatches()
     return true;
 }
 
-sal_Int32 PDFWriterImpl::emitFont( const Font& rFont )
+sal_Int32 PDFWriterImpl::emitFonts()
 {
-    sal_Int32 nFont = 0;
-    // catch the 14 special fonts
-    if( rFont.GetName().EqualsIgnoreCaseAscii( "Times" )
-        || rFont.GetName().EqualsIgnoreCaseAscii( "Helvetica" )
-        || rFont.GetName().EqualsIgnoreCaseAscii( "Courier" )
-        || rFont.GetName().EqualsIgnoreCaseAscii( "Symbol" )
-        || rFont.GetName().EqualsIgnoreCaseAscii( "ZapfDingbats" )
-        )
-    {
-        // emit a simple font
-        nFont = createObject();
-        if( updateObject( nFont ) )
-        {
-            OStringBuffer aLine( 256 );
-            aLine.append( nFont );
-            aLine.append( " 0 obj\r\n  << /Type /Font\r\n     /Subtype /Type1\r\n     /BaseFont " );
-            if( rFont.GetName().EqualsIgnoreCaseAscii( "Times" ) )
-            {
-                if( rFont.GetItalic() == ITALIC_NONE || rFont.GetItalic() == ITALIC_DONTKNOW )
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Times-Roman" );
-                    else
-                        aLine.append( "/Times-Bold" );
-                }
-                else
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Times-Italic" );
-                    else
-                        aLine.append( "/Times-BoldItalic" );
-                }
-            }
-            else if( rFont.GetName().EqualsIgnoreCaseAscii( "Helvetica" ) )
-            {
-                if( rFont.GetItalic() == ITALIC_NONE || rFont.GetItalic() == ITALIC_DONTKNOW )
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Helvetica" );
-                    else
-                        aLine.append( "/Helvetica-Bold" );
-                }
-                else
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Helvetica-Oblique" );
-                    else
-                        aLine.append( "/Helvetica-BoldOblique" );
-                }
-            }
-            else if( rFont.GetName().EqualsIgnoreCaseAscii( "Courier" ) )
-            {
-                if( rFont.GetItalic() == ITALIC_NONE || rFont.GetItalic() == ITALIC_DONTKNOW )
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Courier" );
-                    else
-                        aLine.append( "/Courier" );
-                }
-                else
-                {
-                    if( rFont.GetWeight() == WEIGHT_DONTKNOW || rFont.GetWeight() < WEIGHT_SEMIBOLD )
-                        aLine.append( "/Courier-Oblique" );
-                    else
-                        aLine.append( "/Courier-BoldOblique" );
-                }
-            }
-            else if( rFont.GetName().EqualsIgnoreCaseAscii( "ZapfDingbats" ) )
-                aLine.append( "/ZapfDingbats" );
-            else
-                aLine.append( "/Symbol" );
-            aLine.append( "\r\n  >>\r\nendobj\r\n\r\n" );
-            CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
-        }
-    }
-    // much TODO here
-    // preliminary: map everything else to Helvetica
-    else
-    {
-        Font aFont( rFont );
-        aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ) );
-        nFont = emitFont( aFont );
-    }
-
-    return nFont;
+    // TODO
+    return 0;
 }
 
 sal_Int32 PDFWriterImpl::emitResources()
@@ -929,27 +873,8 @@ sal_Int32 PDFWriterImpl::emitResources()
     }
 
     // emit font dict
-    sal_Int32 nFontDict = createObject();
-    aLine.setLength( 0 );
-    aLine.append( nFontDict );
-    aLine.append( " 0 obj\r\n  << " );
-    for( std::map< Font, sal_Int32 >::const_iterator it = m_aFonts.begin();
-         it != m_aFonts.end(); ++it )
-    {
-        sal_Int32 nFont = emitFont( it->first );
-        DBG_ASSERT( nFont, "could not emit font" );
-        if( nFont )
-        {
-            aLine.append( "/F" );
-            aLine.append( it->second );
-            aLine.append( ' ' );
-            aLine.append( nFont );
-            aLine.append( " 0 R\r\n     " );
-        }
-    }
-    aLine.append( ">>\r\nendobj\r\n\r\n" );
-    CHECK_RETURN( updateObject( nFontDict ) );
-    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    sal_Int32 nFontDict = 0;
+    CHECK_RETURN( (nFontDict = emitFonts()) );
 
     // emit xobject dict
     sal_Int32 nXObjectDict = 0;
@@ -1137,33 +1062,123 @@ bool PDFWriterImpl::emit()
     return true;
 }
 
+void PDFWriterImpl::registerGlyphs( int nGlyphs, long* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects )
+{
+    ImplFontData* pCurrentFont = m_pReferenceDevice->mpFontEntry->maFontSelData.mpFontData;
+    if( pCurrentFont->mbSubsettable )
+    {
+        FontSubset& rSubset = m_aSubsets[ pCurrentFont ];
+        for( int i = 0; i < nGlyphs; i++ )
+        {
+            // search for glyphID
+            FontMapping::iterator it = rSubset.m_aMapping.find( pGlyphs[i] );
+            if( it != rSubset.m_aMapping.end() )
+            {
+                pMappedFontObjects[i] = it->second.m_nFontID;
+                pMappedGlyphs[i] = it->second.m_nSubsetGlyphID;
+            }
+            else
+            {
+                // create new subset if necessary
+                if( rSubset.m_aSubsets.begin() == rSubset.m_aSubsets.end() ||
+                    rSubset.m_aSubsets.back().m_aMapping.size() > 253 )
+                {
+                    rSubset.m_aSubsets.push_back( FontEmit( m_nNextFID++ ) );
+                }
+
+                // copy font id
+                pMappedFontObjects[i] = rSubset.m_aSubsets.back().m_nFontID;
+                // create new glyph in subset
+                sal_uInt8 nNewId = rSubset.m_aSubsets.back().m_aMapping.size()+1;
+                pMappedGlyphs[i] = nNewId;
+
+                // add new glyph to emitted font subset
+                GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ pGlyphs[i] ];
+                rNewGlyphEmit.m_nSubsetGlyphID = nNewId;
+                rNewGlyphEmit.m_aUnicode = (pUnicodes ? pUnicodes[i] : 0);
+
+                // add new glyph to font mapping
+                Glyph& rNewGlyph = rSubset.m_aMapping[ pGlyphs[i] ];
+                rNewGlyph.m_nFontID = pMappedFontObjects[i];
+                rNewGlyph.m_nSubsetGlyphID = nNewId;
+            }
+        }
+    }
+    else
+    {
+        // TODO: downloadable font
+    }
+}
+
+void PDFWriterImpl::drawLayout( const SalLayout& rSalLayout )
+{
+    // TODO: the needed methods must be moved to the base class
+    // then rename the input paramter and scratch the next line
+    const GenericSalLayout& rLayout = reinterpret_cast<const GenericSalLayout&>(rSalLayout);
+
+    OStringBuffer aLine( 512 );
+    // begin text object
+    aLine.append( "BT\r\n" );
+
+    const int nMaxGlyphs = 100;
+
+    long pGlyphs[nMaxGlyphs];
+    sal_Int32 pXOffsets[nMaxGlyphs];
+    sal_uInt8 pMappedGlyphs[nMaxGlyphs];
+    sal_Int32 pMappedFontObjects[nMaxGlyphs];
+    int nGlyphs;
+    int nIndex = 0;
+    Point aPos;
+    while( nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, pXOffsets ) )
+    {
+        registerGlyphs( nGlyphs, pGlyphs, NULL, pMappedGlyphs, pMappedFontObjects );
+        int nLast = 0;
+        while( nLast < nGlyphs )
+        {
+            int nNext = nLast+1;
+            while( nNext < nGlyphs && pMappedFontObjects[ nNext ] == pMappedFontObjects[nLast] )
+                nNext++;
+            aLine.append( "/F" );
+            aLine.append( pMappedFontObjects[nLast] );
+            aLine.append( ' ' );
+            m_aPages.back().appendMappedLength( m_aCurrentPDFState.m_aFont.GetHeight(), aLine, true );
+            aLine.append( " Tf [ <" );
+            for( int i = nLast; i < nNext; i++ )
+            {
+                appendHex( (sal_Int8)pMappedGlyphs[i], aLine );
+                if( (i % 70) == 0 )
+                    aLine.append( "\r\n" );
+            }
+            aLine.append( "> ] Tj\r\n" );
+
+            nLast = nNext;
+        }
+    }
+
+    // end textobject
+    aLine.append( "ET\r\n" );
+
+    writeBuffer( aLine.getStr(), aLine.getLength() );
+}
+
 void PDFWriterImpl::drawText( const Point& rPos, const String& rText )
 {
     MARK( "drawText" );
 
-    // just for testing purposes
-    ByteString aText( rText, RTL_TEXTENCODING_MS_1252 );
-
     updateGraphicsState();
 
-    DBG_ASSERT( m_aCurrentPDFState.m_aFont.GetName().Len(), "invalid font set" );
+    // get a sal layout
+    getReferenceDevice();
+    // set font on reference device
+    m_pReferenceDevice->SetFont( m_aCurrentPDFState.m_aFont );
+    m_pReferenceDevice->SetLayoutMode( m_aCurrentPDFState.m_nLayoutMode );
+    // get the layout from the OuputDevice's SalGraphics
+    // this also enforces font substitution and sets the font on SalGraphics
+    SalLayout* pLayout = m_pReferenceDevice->ImplLayout( rText, 0, rText.Len(), rPos );
+    pLayout->Reference();
 
-    OStringBuffer aLine;
-    aLine.append( "BT\r\n   /F" );
-    aLine.append( m_aFonts[ m_aCurrentPDFState.m_aFont ] );
-    aLine.append( ' ' );
-    m_aPages.back().appendMappedLength( m_aCurrentPDFState.m_aFont.GetHeight(), aLine, true );
-    aLine.append( " Tf\r\n   " );
-    m_aPages.back().appendPoint( rPos, aLine );
-    aLine.append( " Td\r\n   <" );
-    for( int i = 0; i < aText.Len(); i++ )
-    {
-        sal_Int8 aChar = aText.GetChar( i );
-        appendHex( aChar, aLine );
-    }
-    aLine.append( "> Tj\r\nET\r\n" );
-
-    writeBuffer( aLine.getStr(), aLine.getLength() );
+    drawLayout( *pLayout );
+    pLayout->Release();
 }
 
 void PDFWriterImpl::drawLine( const Point& rStart, const Point& rStop )
@@ -2301,13 +2316,6 @@ void PDFWriterImpl::updateGraphicsState()
     {
         appendNonStrokingColor( rNewState.m_aFillColor, aLine );
         aLine.append( "\r\n" );
-    }
-
-    if( m_aCurrentPDFState.m_aFont != rNewState.m_aFont && rNewState.m_aFont.GetName().Len()
-        )
-    {
-        if( m_aFonts.find( rNewState.m_aFont ) == m_aFonts.end() )
-            m_aFonts[ rNewState.m_aFont ] = m_nNextFID++;
     }
 
     if( m_eVersion >= PDFWriter::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: pl $ $Date: 2002-06-18 11:26:23 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:04:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1789,10 +1789,10 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
     rData.mnWidth       = 0;
     rData.mnHeight      = 0;
     rData.mbOrientation = TRUE;
-    rData.mnQuality     = aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0;
+    rData.mnQuality     = (aInfo.m_eType == psp::fonttype::Builtin ? 1024 : 0);
     rData.mnVerticalOrientation= 0;
     rData.meType        = TYPE_SCALABLE;
-    rData.mbDevice      = aInfo.m_eType == psp::fonttype::Builtin;
+    rData.mbDevice      = (aInfo.m_eType == psp::fonttype::Builtin);
     String aMapNames;
     for( ::std::list< OUString >::const_iterator it = aInfo.m_aAliases.begin(); it != aInfo.m_aAliases.end(); ++it )
     {
@@ -1801,6 +1801,21 @@ static void SetImplFontData( const psp::FastPrintFontInfo& aInfo, ImplFontData& 
         aMapNames.Append( String( *it ) );
     }
     rData.maMapNames    = aMapNames;
+    switch( aInfo.m_eType )
+    {
+        case psp::fonttype::TrueType:
+            rData.mbSubsettable = TRUE;
+            rData.mbEmbeddable  = FALSE;
+            break;
+        case psp::fonttype::Type1:
+            rData.mbSubsettable = FALSE;
+            rData.mbEmbeddable  = TRUE;
+            break;
+        default:
+            rData.mbSubsettable = FALSE;
+            rData.mbEmbeddable  = FALSE;
+            break;
+    }
 }
 
 #endif
@@ -1881,6 +1896,8 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
             pFonts->Get(nIdx)->ToImplFontData( pFontData );
             if( pFontData->maName.CompareIgnoreCaseToAscii( "itc ", 4 ) == COMPARE_EQUAL )
                 pFontData->maName = pFontData->maName.Copy( 4 );
+            pFontData->mbSubsettable    = FALSE;
+            pFontData->mbEmbeddable     = FALSE;
             pList->Add( pFontData );
         }
 

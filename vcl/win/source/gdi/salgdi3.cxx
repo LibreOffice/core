@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-29 12:09:26 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 11:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1279,6 +1279,8 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
     {
         ImplFontData* pData = new ImplFontData;
         pData->maName = *(pInfo->mpName);
+        pData->mbSubsettable = FALSE;
+        pData->mbEmbeddable = FALSE;
 
         ImplLogMetricToDevFontDataA( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
         // Test if Stylename is correct
@@ -1363,6 +1365,8 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
     {
         ImplFontData* pData = new ImplFontData;
         pData->maName = *(pInfo->mpName);
+        pData->mbSubsettable = FALSE;
+        pData->mbEmbeddable = FALSE;
 
         ImplLogMetricToDevFontDataW( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
 

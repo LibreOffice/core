@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-01 08:21:16 $
+ *  last change: $Author: pl $ $Date: 2002-07-15 12:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 
 #include <unohelp.hxx>
+#ifndef _VCL_PDFWRITER_IMPL_HXX
+#include <pdfwriter_impl.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HDL_
 #include <com/sun/star/beans/PropertyValues.hdl>
@@ -280,9 +283,12 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
         }
     }
 
-    if ( GetOutDevType() == OUTDEV_PRINTER )
+    if ( GetOutDevType() == OUTDEV_PRINTER || mpPDFWriter )
     {
-        mpFontCache->Clear();
+        ImplSVData* pSVData = ImplGetSVData();
+
+        if( mpFontCache && mpFontCache != pSVData->maGDIData.mpScreenFontCache )
+            mpFontCache->Clear();
 
         if ( bNewFontLists )
         {
@@ -293,8 +299,17 @@ void OutputDevice::ImplUpdateFontData( BOOL bNewFontLists )
             if ( ImplGetServerGraphics() )
 #endif
             {
-                mpFontList->Clear();
-                mpGraphics->GetDevFontList( mpFontList );
+                if( mpFontList && mpFontList != pSVData->maGDIData.mpScreenFontList )
+                    mpFontList->Clear();
+
+                if( mpPDFWriter )
+                {
+                    if( mpFontList )
+                        delete mpFontList;
+                    mpFontList = mpPDFWriter->filterDevFontList( pSVData->maGDIData.mpScreenFontList );
+                }
+                else
+                    mpGraphics->GetDevFontList( mpFontList );
             }
         }
     }
@@ -2405,7 +2420,6 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
     // initialize font selection data
     ImplFontSelectData* pFontSelData = &(pEntry->maFontSelData);
     pFontSelData->mpFontData        = pFontData;
-    pFontSelData->mpSysSelData      = NULL;
     pFontSelData->maName            = rName;
     pFontSelData->maStyleName       = rStyleName;
     pFontSelData->mnWidth           = nWidth;
