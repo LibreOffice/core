@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localsinglebackend.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:07:54 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 14:58:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include "localsinglebackend.hxx"
+
+#ifndef CONFIGMGR_LOCALBE_LOCALFILEHELPER_HXX_
+#include "localfilehelper.hxx"
+#endif
 
 #ifndef CONFIGMGR_LOCALBE_LOCALFILELAYER_HXX_
 #include "localfilelayer.hxx"
@@ -117,141 +121,6 @@ LocalSingleBackend::LocalSingleBackend(
 
 LocalSingleBackend::~LocalSingleBackend(void) {}
 //------------------------------------------------------------------------------
-static inline bool isValidFileURL (rtl::OUString const& _sFileURL)
-{
-    using osl::File;
-
-    rtl::OUString sSystemPath;
-    return _sFileURL.getLength() && (File::E_None == File::getSystemPathFromFileURL(_sFileURL, sSystemPath));
-}
-// ---------------------------------------------------------------------------------------
-static
-bool implEnsureAbsoluteURL(rtl::OUString & _rsURL) // also strips embedded dots etc.
-{
-    using osl::File;
-
-    rtl::OUString sBasePath = _rsURL;
-    OSL_VERIFY(osl_Process_E_None == osl_getProcessWorkingDir(&sBasePath.pData));
-
-    rtl::OUString sAbsolute;
-    if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
-    {
-        _rsURL = sAbsolute;
-        return true;
-    }
-    else
-    {
-        OSL_ENSURE(false, "Could not get absolute file URL for valid URL");
-        return false;
-    }
-}
-// ---------------------------------------------------------------------------------------
-
-static
-osl::DirectoryItem::RC implNormalizeURL(OUString & _sURL, osl::DirectoryItem& aDirItem)
-{
-    using namespace osl;
-
-    OSL_PRECOND(aDirItem.is(), "Opened DirItem required");
-
-    static const sal_uInt32 cFileStatusMask = FileStatusMask_FileURL;
-
-    FileStatus aFileStatus(cFileStatusMask);
-
-    DirectoryItem::RC rc = aDirItem.getFileStatus(aFileStatus);
-
-    if (rc == DirectoryItem::E_None)
-    {
-        OUString aNormalizedURL = aFileStatus.getFileURL();
-
-        if (aNormalizedURL.getLength() != 0)
-            _sURL = aNormalizedURL;
-        else
-            rc = DirectoryItem::E_INVAL;
-    }
-    return rc;
-}
-
-// ---------------------------------------------------------------------------------------
-static
-bool normalizeURL(OUString & _sURL, backend::XBackendEntities * pContext, bool bNothrow = false)
-{
-    using namespace osl;
-
-    if (_sURL.getLength() == 0)
-        return false;
-
-    DirectoryItem aDirItem;
-
-    DirectoryItem::RC rc = DirectoryItem::get(_sURL, aDirItem);
-
-    if (rc == DirectoryItem::E_None)
-        rc = implNormalizeURL(_sURL,aDirItem);
-
-    switch (rc)
-    {
-    case DirectoryItem::E_None:  return true;
-
-    case DirectoryItem::E_NOENT: return true;
-
-    case DirectoryItem::E_ACCES:
-        if (!bNothrow)
-        {
-            rtl::OUStringBuffer msg;
-            msg.appendAscii("LocalBackend: Cannot normalize URL \"" );
-            msg.append(_sURL);
-            msg.appendAscii("\" - InsufficientAccess");
-            throw backend::InsufficientAccessRightsException(msg.makeStringAndClear(),pContext,uno::Any());
-        }
-        return false;
-
-    default:
-        if (!bNothrow)
-        {
-            rtl::OUStringBuffer msg;
-            msg.appendAscii("LocalBackend: Cannot normalize URL \"" );
-            msg.append(_sURL);
-            msg.appendAscii("\" - ").append(FileHelper::createOSLErrorString(rc));
-            throw backend::BackendAccessException(msg.makeStringAndClear(),pContext,uno::Any());
-        }
-        return false;
-
-    }
-}
-// ---------------------------------------------------------------------------------------
-static void fillFromBlankSeparated(const rtl::OUString& aList,
-                                   uno::Sequence<rtl::OUString>& aTarget) {
-    std::vector<rtl::OUString> tokens ;
-    sal_Int32 nextToken = 0 ;
-
-    do {
-        tokens.push_back(aList.getToken(0, ' ', nextToken)) ;
-    } while (nextToken >= 0) ;
-    if (tokens.size() > 0) {
-        aTarget.realloc(tokens.size()) ;
-        std::vector<rtl::OUString>::const_iterator token ;
-        sal_Int32 i = 0 ;
-
-        for (token = tokens.begin() ; token != tokens.end() ; ++ token) {
-            aTarget [i ++] = *token ;
-        }
-    }
-}
-//------------------------------------------------------------------------------
-static inline bool checkOptionalArg(rtl::OUString& aArg)
-{
-    if (aArg.getLength() && aArg[0] == sal_Unicode('?'))
-    {
-        aArg = aArg.copy(1);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-//------------------------------------------------------------------------------
-
 static const rtl::OUString kSchemaDataUrl(
         RTL_CONSTASCII_USTRINGPARAM(CONTEXT_ITEM_PREFIX_"SchemaDataUrl")) ;
 static const rtl::OUString kDefaultDataUrl(
@@ -306,7 +175,7 @@ void SAL_CALL LocalSingleBackend::initialize(
         bool bOptional = checkOptionalArg(aSchemas[j]);
 
         if (!bOptional)
-            validateFileURL(aSchemas[j]);
+            validateFileURL(aSchemas[j],*this);
 
         else if (!isValidFileURL(aSchemas[j]))
             continue;
@@ -315,7 +184,7 @@ void SAL_CALL LocalSingleBackend::initialize(
 
         //NormalizeURL
         implEnsureAbsoluteURL(aSchemas[j]);
-        if (!normalizeURL(aSchemas[j],this,bOptional))
+        if (!normalizeURL(aSchemas[j],*this,bOptional))
             continue;
 
         // now we have a correct file URL, which we will use
@@ -323,12 +192,14 @@ void SAL_CALL LocalSingleBackend::initialize(
 
         // check existence
         if (!bOptional)
-            checkFileExists(aSchemas[j]);
+            checkFileExists(aSchemas[j], *this);
 
         else if(!FileHelper::fileExists(aSchemas[j]))
             continue; // skip the directory check
 
-        checkIfDirectory(aSchemas[j]);
+
+        checkIfDirectory(aSchemas[j],*this);
+
         ++nExistingSchemaLocations;
     }
     mSchemaDataUrls.realloc(nSchemaLocations);
@@ -365,12 +236,12 @@ void SAL_CALL LocalSingleBackend::initialize(
 
         //NormalizeURL
         implEnsureAbsoluteURL(aDefaults[ix]);
-        if (!normalizeURL(aDefaults[ix],this,true))
+        if (!normalizeURL(aDefaults[ix],*this,true))
             continue;
 
         if(FileHelper::fileExists(aDefaults[ix]))
         {
-            checkIfDirectory(aDefaults[ix]);
+            checkIfDirectory(aDefaults[ix],*this);
         }
 
         // good URL -> use it
@@ -388,13 +259,13 @@ void SAL_CALL LocalSingleBackend::initialize(
         if ( (context->getValueByName(kEntity) >>= mUserDataUrl) && mUserDataUrl.getLength() )
         {
             //Validate UserDataUrl
-            validateFileURL(mUserDataUrl);
+            validateFileURL(mUserDataUrl,*this);
             //NormalizeURL
             implEnsureAbsoluteURL(mUserDataUrl);
-            normalizeURL(mUserDataUrl,this);
+            normalizeURL(mUserDataUrl,*this);
             if(FileHelper::fileExists(mUserDataUrl))
             {
-                checkIfDirectory(mUserDataUrl);
+                checkIfDirectory(mUserDataUrl,*this);
             }
 
             for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength(); ++ix)
@@ -425,10 +296,10 @@ void SAL_CALL LocalSingleBackend::initialize(
         if (isValidFileURL(mUserDataUrl))
         {
             implEnsureAbsoluteURL(mUserDataUrl);
-            normalizeURL(mUserDataUrl,this);
+            normalizeURL(mUserDataUrl,*this);
             if(FileHelper::fileExists(mUserDataUrl))
             {
-                checkIfDirectory(mUserDataUrl);
+                checkIfDirectory(mUserDataUrl,*this);
             }
         }
     }
@@ -440,19 +311,6 @@ void SAL_CALL LocalSingleBackend::initialize(
     }
 }
 //------------------------------------------------------------------------------
-
-static sal_Unicode kComponentSeparator = '.' ;
-static sal_Unicode kPathSeparator = '/' ;
-
-static rtl::OUString componentToPath(const rtl::OUString& aComponent) {
-    rtl::OUStringBuffer retCode ;
-
-    retCode.append(kPathSeparator) ;
-    retCode.append(aComponent.replace(kComponentSeparator, kPathSeparator)) ;
-    return retCode.makeStringAndClear() ;
-}
-//------------------------------------------------------------------------------
-
 const sal_Int32 k_UserLayerEntity = 0;
 const sal_Int32 k_InvalidEntity         = k_UserLayerEntity - 1;
 const sal_Int32 k_DefaultEntityOffset   = k_UserLayerEntity + 1;
@@ -560,12 +418,12 @@ sal_Int32 LocalSingleBackend::findEntity(const rtl::OUString& aEntity)
     }
 
     OUString sNormalizedEntityUrl(aEntity);
-    normalizeURL(sNormalizedEntityUrl,this);
+    normalizeURL(sNormalizedEntityUrl,*this);
 
     for (sal_Int32 ix = 0; ix < mDefaultDataUrls.getLength(); ++ix)
     {
         OUString sNormalizedDefaultUrl(mDefaultDataUrls[ix]);
-        OSL_VERIFY(normalizeURL(sNormalizedDefaultUrl,this,true));
+        OSL_VERIFY(normalizeURL(sNormalizedDefaultUrl,*this,true));
 
         if (sNormalizedEntityUrl.equals(sNormalizedDefaultUrl))
         {
@@ -576,7 +434,8 @@ sal_Int32 LocalSingleBackend::findEntity(const rtl::OUString& aEntity)
 
     //Try normalized version of mUserDataUrl
     OUString sNormalizedUserUrl(mUserDataUrl);
-    if (normalizeURL(sNormalizedUserUrl,this,true))
+
+    if (normalizeURL(sNormalizedUserUrl,*this,true))
     {
         if (sNormalizedEntityUrl.equals(sNormalizedUserUrl))
         {
@@ -685,10 +544,10 @@ sal_Bool SAL_CALL LocalSingleBackend::isEqualEntity(const OUString& aEntity, con
         throw lang::IllegalArgumentException(sMsg, *this, 2);
     }
     OUString aNormalizedEntity(aEntity);
-    normalizeURL(aNormalizedEntity,this);
+    normalizeURL(aNormalizedEntity,*this);
 
     OUString aNormalizedOther(aOtherEntity);
-    normalizeURL(aNormalizedOther,this);
+    normalizeURL(aNormalizedOther,*this);
 
     return aNormalizedEntity == aNormalizedOther;
 }
@@ -1008,46 +867,5 @@ SAL_CALL LocalSingleBackend::getSupportedServiceNames(void)
 }
 
 // ---------------------------------------------------------------------------------------
-
-void LocalSingleBackend::validateFileURL(rtl::OUString& aFileURL)
-{
-     if (!isValidFileURL( aFileURL))
-     {
-         rtl::OUStringBuffer sMsg;
-         sMsg.appendAscii(" Not a Valid File URL: \"");
-         sMsg.append(aFileURL);
-         sMsg.appendAscii("\"");
-
-         // todo: get configmgrrc url from context
-          throw com::sun::star::configuration::InvalidBootstrapFileException(
-            sMsg.makeStringAndClear(),*this, OUString() ) ;
-     }
-}
-//------------------------------------------------------------------------------
-void LocalSingleBackend::checkFileExists(rtl::OUString& aFileURL)
-     throw (backend::CannotConnectException)
-{
-    rtl::OUStringBuffer sMsg;
-    sMsg.appendAscii(" No Such File or Directory: \"");
-    sMsg.append(aFileURL);
-    sMsg.appendAscii("\"");
-    if (!FileHelper::fileExists(aFileURL))
-    {
-        throw backend::CannotConnectException(sMsg.makeStringAndClear(), *this, uno::Any()) ;
-    }
-}
-//------------------------------------------------------------------------------
-void LocalSingleBackend::checkIfDirectory(rtl::OUString& aFileURL)
-    throw (backend::BackendSetupException)
-{
-    rtl::OUStringBuffer sMsg;
-    sMsg.appendAscii(" File:\"");
-    sMsg.append(aFileURL);
-    sMsg.appendAscii("\" Must be a Directory\"");
-    if (!FileHelper::dirExists(aFileURL))
-    {
-        throw backend::BackendSetupException(sMsg.makeStringAndClear(),*this, uno::Any()) ;
-    }
-}
 
 } } // configmgr.localbe
