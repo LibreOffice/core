@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:31:34 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:40:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,9 @@
 #include <svdata.hxx>
 #include <svapp.hxx>
 #include <saldisp.hxx>
-#include <salframe.hxx>
+#include <salframe.h>
 #include <saldata.hxx>
+#include <sysdata.hxx>
 
 using namespace vcl;
 using namespace rtl;
@@ -101,7 +102,7 @@ public:
 
     virtual void setPosition( SalFrame* );
     virtual void setText( const String & ) = 0;
-    virtual const String& getText() const = 0;
+    virtual String getText() const = 0;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason ) = 0;
     virtual void toggle( bool bOn );
 };
@@ -152,7 +153,7 @@ public:
 
     virtual void setPosition( SalFrame* );
     virtual void setText( const String & );
-    virtual const String& getText() const;
+    virtual String getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
 
     // overload WorkWindow::DataChanged
@@ -196,15 +197,13 @@ void XIMStatusWindow::layout()
 
     if (m_bAnchoredAtRight && IsVisible())
     {
-        SalFrameData & rData
-            = static_cast< SalFrame * >(
-                GetSystemData()->pSalFrame)->maFrameData;
-        Rectangle aOldRect;
-        rData.getPosSize(aOldRect);
-        long nDelta = aOldRect.GetWidth() - m_aWindowSize.Width();
-        rData.setPosSize(Rectangle(Point(aOldRect.Left() + nDelta,
-                                         aOldRect.Top()),
-                                   m_aWindowSize));
+        SalFrame* pFrame = (SalFrame*)GetSystemData()->pSalFrame;
+        long nDelta = pFrame->maGeometry.nWidth - m_aWindowSize.Width();
+        pFrame->SetPosSize( pFrame->maGeometry.nX + nDelta,
+                            pFrame->maGeometry.nY,
+                            m_aWindowSize.Width(),
+                            m_aWindowSize.Height(),
+                            SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
     else
         SetOutputSizePixel( m_aWindowSize );
@@ -214,12 +213,13 @@ bool XIMStatusWindow::checkLastParent() const
 {
     if( m_pLastParent )
     {
-        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        // FIXME: remove X11SalFrame
+        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
         while( pFrame )
         {
             if( pFrame == m_pLastParent )
                 return true;
-            pFrame = pFrame->maFrameData.GetNextFrame();
+            pFrame = pFrame->GetNextFrame();
         }
     }
     return false;
@@ -241,12 +241,12 @@ Point XIMStatusWindow::updatePosition()
         SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
 
         SalExtTextInputPosEvent aPosEvent;
-        m_pLastParent->maFrameData.Call(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
+        m_pLastParent->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
         int x, y;
         XLIB_Window aChild;
         XTranslateCoordinates( (Display*)pParentEnvData->pDisplay,
                                (XLIB_Window)pParentEnvData->aShellWindow,
-                               m_pLastParent->maFrameData.GetDisplay()->GetRootWindow(),
+                               GetSalData()->GetDefDisp()->GetRootWindow(),
                                0, 0,
                                &x, &y,
                                &aChild );
@@ -295,7 +295,8 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
         {
             const SystemEnvData* pEnvData = GetSystemData();
             SalFrame* pStatusFrame = (SalFrame*)pEnvData->pSalFrame;
-            pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
+            Point aPoint = updatePosition();
+            pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
         }
     }
 }
@@ -309,7 +310,8 @@ IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, pDummy )
     {
         Size aControlSize( m_aWindowSize.Width()-4, m_aWindowSize.Height()-4 );
         m_aStatusText.SetPosSizePixel( Point( 1, 1 ), aControlSize );
-        pStatusFrame->maFrameData.setPosSize( Rectangle( updatePosition(), m_aWindowSize ) );
+        Point aPoint = updatePosition();
+        pStatusFrame->SetPosSize( aPoint.X(), aPoint.Y(), m_aWindowSize.Width(), m_aWindowSize.Height(), SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y | SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT );
     }
     Show( m_bDelayedShow, SHOW_NOACTIVATE );
     if( m_bDelayedShow )
@@ -337,7 +339,7 @@ void XIMStatusWindow::setText( const String& rText )
     m_aWindowSize.Width() = m_aStatusText.GetTextWidth( rText )+8;
 }
 
-const String& XIMStatusWindow::getText() const
+String XIMStatusWindow::getText() const
 {
     return m_aStatusText.GetText();
 }
@@ -363,7 +365,7 @@ public:
     virtual ~IIIMPStatusWindow();
 
     virtual void setText( const String & );
-    virtual const String& getText() const;
+    virtual String getText() const;
     virtual void show( bool bShow, I18NStatus::ShowReason eReason );
     virtual void toggle( bool bOn );
     void layout();
@@ -445,7 +447,7 @@ void IIIMPStatusWindow::setText( const String& rText )
     m_aStatusBtn.SetText( rText );
 }
 
-const String& IIIMPStatusWindow::getText() const
+String IIIMPStatusWindow::getText() const
 {
     return m_aStatusBtn.GetText();
 }
@@ -492,21 +494,22 @@ void IIIMPStatusWindow::GetFocus()
          *  since reset focus really is an internal hack there should
          *  not be a method to be called in SalFrame destructor
          */
-        SalFrame* pFrame = GetSalData()->pFirstFrame_;
+        X11SalFrame* pFrame = GetSalData()->pFirstFrame_;
         while( pFrame && pFrame != m_pResetFocus )
-            pFrame = pFrame->maFrameData.GetNextFrame();
+            pFrame = pFrame->GetNextFrame();
         if( pFrame == m_pResetFocus )
         {
             const SystemEnvData* pParentEnvData = m_pResetFocus->GetSystemData();
-            BOOL bIgnore = m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
-            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
+            SalXLib* pXLib = GetSalData()->GetDefDisp()->GetXLib();
+            BOOL bIgnore = pXLib->GetIgnoreXErrors();
+            pXLib->SetIgnoreXErrors( TRUE );
             XSetInputFocus( (Display*)pParentEnvData->pDisplay,
                             (XLIB_Window)pParentEnvData->aShellWindow,
                             RevertToNone,
                             CurrentTime
                             );
             XSync( (Display*)pParentEnvData->pDisplay, False );
-            m_pResetFocus->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( bIgnore );
+            pXLib->SetIgnoreXErrors( bIgnore );
         }
         m_pResetFocus = NULL;
     }
@@ -527,18 +530,21 @@ IMPL_LINK( IIIMPStatusWindow, SelectHdl, MenuButton*, pBtn )
                           XNUnicodeCharacterSubset,
                           rChoices[nIndex].pData,
                           0);
-            SalFrame* pParent = I18NStatus::get().getParent();
-            if( pParent && pParent->maFrameData.isMapped() )
+            // FIXME: get rid of X11SalFrame
+            X11SalFrame* pParent = static_cast<X11SalFrame*>(I18NStatus::get().getParent());
+            if( pParent && pParent->isMapped() )
             {
-                BOOL bIgnore = pParent->maFrameData.GetDisplay()->GetXLib()->GetIgnoreXErrors();
-                pParent->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( TRUE );
-                XSetInputFocus( pParent->maFrameData.GetXDisplay(),
-                                pParent->maFrameData.GetShellWindow(),
+                const SystemEnvData* pEnv = pParent->GetSystemData();
+                SalXLib* pXLib = GetSalData()->GetDefDisp()->GetXLib();
+                BOOL bIgnore = pXLib->GetIgnoreXErrors();
+                pXLib->SetIgnoreXErrors( TRUE );
+                XSetInputFocus( (Display*)pEnv->pDisplay,
+                                (XLIB_Window)pEnv->aShellWindow,
                                 RevertToNone,
                                 CurrentTime
                                 );
-                XSync( pParent->maFrameData.GetXDisplay(), False );
-                pParent->maFrameData.GetDisplay()->GetXLib()->SetIgnoreXErrors( bIgnore );
+                XSync( (Display*)pEnv->pDisplay, False );
+                pXLib->SetIgnoreXErrors( bIgnore );
             }
         }
     }
@@ -671,10 +677,9 @@ void I18NStatus::changeIM( const String& rIM )
 
 // --------------------------------------------------------------------------
 
-const String& I18NStatus::getStatusText() const
+String I18NStatus::getStatusText() const
 {
-    static String aEmpty;
-    return m_pStatusWindow ? m_pStatusWindow->getText() :  aEmpty;
+    return m_pStatusWindow ? m_pStatusWindow->getText() :  String();
 }
 
 // --------------------------------------------------------------------------
@@ -741,4 +746,26 @@ bool I18NStatus::getStatusWindowMode()
     case ImplSVAppData::ImeStatusWindowMode_SHOW:
         return true;
     }
+}
+
+/*
+ * X11ImeStatus
+ */
+X11ImeStatus::~X11ImeStatus()
+{
+}
+
+bool X11ImeStatus::canToggle()
+{
+    return vcl::I18NStatus::get().canToggleStatusWindow();
+}
+
+void X11ImeStatus::toggle()
+{
+    vcl::I18NStatus::get().toggleStatusWindow();
+}
+
+SalI18NImeStatus* X11SalInstance::CreateI18NImeStatus()
+{
+    return new X11ImeStatus();
 }
