@@ -2,9 +2,9 @@
   *
   *  $RCSfile: text_gfx.cxx,v $
   *
-  *  $Revision: 1.13 $
+  *  $Revision: 1.14 $
   *
-  *  last change: $Author: hdu $ $Date: 2001-11-23 11:45:09 $
+  *  last change: $Author: hdu $ $Date: 2001-11-30 11:37:19 $
   *
   *  The Contents of this file are made available subject to the terms of
   *  either of the following licenses
@@ -387,21 +387,21 @@ void PrinterGfx::drawVerticalizedText(
                      nNormalAngle + nDeltaAngle,
                      mbTextVertical );
 
-//             CharacterMetric aMetric;
-//             rMgr.getMetrics( mnFontID, pStr + i, 1, &aMetric /* mbVertical */);
-//             double nH = nTextScale * aMetric.height / 1000.0;
-            double nH = nTextScale * aInfo.m_nAscend / 1000.0;
+            double nA = nTextScale * aInfo.m_nAscend / 1000.0;
+            double nD = nTextScale * aInfo.m_nDescend / 1000.0;
+            if( !rMgr.hasVerticalSubstitutions( mnFontID ) )
+                nD *= 0.5;
 
             Point aPos( aPoint );
             switch( nDeltaAngle )
             {
-                case 900:
-                    aPos.X() += nH * fCos;
-                    aPos.Y() += nH * fSin;
+                case +900:
+                    aPos.X() += +nA * fCos - nD * fSin;
+                    aPos.Y() += +nA * fSin + nD * fCos;
                     break;
                 case -900:
-                    aPos.X() += nH * fSin;
-                    aPos.Y() += nH * fCos;
+                    aPos.X() += +nA * fSin + nD * fCos;
+                    aPos.Y() += -nA * fCos + nD * fSin;
                     break;
             }
             drawText( aPos, pStr+i, 1, NULL );
