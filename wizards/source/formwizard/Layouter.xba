@@ -2,12 +2,6 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Layouter" script:language="StarBasic">Option Explicit
 
-&apos; Todo: Testplan: ImageControl an erster Stelle im Array der Feldnamen
-&apos; Todo: Durchtesten mit allen möglichen Datentypen in allen möglichen Konstellationen
-&apos; 		Was passiert, wenn Felder jenseits der Ränder positioniert werden?
-&apos; Todo: Die ObjektArrays oDBShapeList() und oTCShaplist könnten 3-Dimensional sein mit dem Model und dem Control 
-&apos; in den anderen beiden Dimensionen
-
 Public oProgressbar as Object
 Public ProgressValue as Integer
 Public oDocument as Object
@@ -81,8 +75,6 @@ Public FieldNames(MaxFieldIndex) as string
 Public oModelService(cControlCollectionCount) as String
 Public oGridModel as Object
 
-&apos; field label postfix (the label ist the data source followed by a postfix)
-Public nFieldPostfixes (MaxFieldIndex%) as string
 
 
 Function InsertControl(oContainer as Object, oControlObject as object, aPoint as Object, aSize as Object)
@@ -100,32 +92,22 @@ End Function
 Function ArrangeControls()
 Dim oShape as Object
 Dim i as Integer
-&apos; Todo: Was haben diese Postfixes zu bedeuten?
-&apos;	nFieldPostfixes() = nFldLabelPostfixes$()
 	oProgressbar = oDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	oProgressbar.Start(&quot;&quot;, MaxIndex)
 	If oDBForm.HasbyName(&quot;Grid1&quot;) Then
-		oGridshape.Dispose
+		oDBForm.GetByName(&quot;Grid1&quot;).Dispose
 	End If
 	ToggleLayoutPage(False)
 	Select Case CurArrangement
 		Case cTabled
 			PositionGridControl(MaxIndex)
 		Case Else
-&apos;			oDocument.LockControllers()
+			oDocument.LockControllers()
 			PositionControls(MaxIndex)
-&apos;			oDocument.UnlockControllers()
+			oDocument.UnlockControllers()
 	End Select
 	ToggleLayoutPage(True)
 	oProgressbar.End
-	Exit Function
-
-ErrorAndCloseForm:
-	ToggleWindow(True)
-	MsgBox(sMsgErrMsg, 16, sMsgWizardName)
-	oDocument.Dispose()
-	Stop
-	exit Function
 End Function
 
 
@@ -137,7 +119,6 @@ Dim oViewSettings as Object
 	oController = oDocument.GetCurrentController
 	oViewSettings = oDocument.CurrentController.ViewSettings
 	oViewSettings.ShowTableBoundaries = False
-&apos; Todo: Im Auge behalten, ob die Viewsettings auch mit abgespeichert werden
 	oViewSettings.ShowTextBoundaries = False
 	oViewSettings.ShowOnlineLayout = True
 	oViewSettings.ShowHoriRuler = True
@@ -174,7 +155,7 @@ Dim sLocText as String
 	End If
 
 	oModel = oEvent.Source.Model
-	SwitchBorderMode(Val(Right(oModel.Name,1)))	
+	SwitchBorderMode(Val(Right(oModel.Name,1)))
 	ToggleLayoutPage(False)
 	oDocument.LockControllers
 
@@ -189,12 +170,8 @@ Dim sLocText as String
 			Next i
 		End If
 	End If
-
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If	
-	
+	ShowErrorMessage(True)
 	oDocument.UnlockControllers
 	ToggleLayoutPage(True)
 End Sub
@@ -223,13 +200,10 @@ Dim oModel as Object
 			oSize.Width = oDBShapeList(i).Position.X - oTCShapeList(i).Position.X - cHoriDistance
 			oTCShapeList(i).Size = oSize
 		Next i
-	End If	
+	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If	
-
-	oDocument.UnlockControllers()
+	ShowErrorMessage(True)
+	oDocument.UnlockControllers(False)
 	ToggleLayoutPage(True)
 End Sub
 
@@ -264,9 +238,7 @@ Dim oModel as Object
 		End Select
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If	
+	ShowErrorMessage(True)
 End Sub
 
 
@@ -293,25 +265,15 @@ End Sub
 
 
 Sub ToggleLayoutPage(bDoEnable as Boolean, Optional FocusControlName as String)
-	With oDialogModel
-		.hlnArrangements.Enabled = bDoEnable
-		.cmdArrange1.Enabled = bDoEnable
-		.cmdArrange2.Enabled = bDoEnable
-		.cmdArrange3.Enabled = bDoEnable
-		.cmdArrange4.Enabled = bDoEnable
-		.cmdArrange5.Enabled = bDoEnable
-		.lstStyles.Enabled = bDoEnable
-		.lblStyles.Enabled = bDoEnable
-		.cmdHelp.Enabled = bDoEnable
-		.cmdBack.Enabled = bDoEnable
-		.cmdGoOn.Enabled = bDoEnable
-		If Not IsMissing(FocusControlName) Then
-			DlgFormDB.GetControl(FocusControlName).SetFocus()
-		End If
-	End With
-	ToggleOptionButtons(oDialogModel,((bWithBackGraphic = True) AND (bDoEnable = True)))
-	ToggleAlignGroup(bDoEnable)
-	ToggleBorderGroup(bDoEnable)
+	oDialogModel.Enabled = bDoEnable
+	If Not IsMissing(FocusControlName) Then
+		DlgFormDB.GetControl(FocusControlName).SetFocus()
+	End If
+	If bDoEnable Then
+		ToggleOptionButtons(oDialogModel,(bWithBackGraphic = True))
+		ToggleAlignGroup(bDoEnable)
+		ToggleBorderGroup(bDoEnable)
+	End If
 End Sub
 
 

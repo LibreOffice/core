@@ -33,7 +33,7 @@ Public Tablename as String
 Public Const SBSIZETEXT = &quot;The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog.&quot;
 Public bDisposeDoc as Boolean
 Public bDebug as Boolean
-&apos; Todo: Mit FS abschnacken, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
+&apos; Todo: Mit FS absprechen, dass als CommandType Nur Queries und Tables zugelassen sind. Dabei müsste noch abgklärt werden
 &apos; wann ein Content ein &apos;Command&apos; ist.
 
 
@@ -70,11 +70,10 @@ Dim i as Integer
 Dim SelCount as Integer
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
-	bDebug = True
+	bDebug = False
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-&apos; Todo: Variable is initialized due to Bug#88329
 	CurArrangement = 0
 	bControlsareCreated = False
 	bEnableBinaryOptionGroup = False
@@ -95,9 +94,7 @@ Dim SelCount as Integer
 	InitializeWidthList()
 	LoadLanguage
 	bNeedFieldRefresh = True
-
 	With oDialogModel
-&apos;		.optIgnoreBinaries.State = True
 		.cmdBack.Enabled = False
 		.cmdGoOn.Enabled = False
 		.lblTables.Enabled = False
@@ -152,6 +149,7 @@ Dim SelCount as Integer
 	oDialogModel.imgTheme.ImageURL = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	ToggleDatabasePage(True)
 	DlgFormDB.GetControl(&quot;lstDatabases&quot;).SetFocus()
+	oDialogModel.cmdGoOn.DefaultButton = True
 	DlgFormDB.Execute()
 	DlgFormDB.Dispose
 	If Not IsNull(oDBConnection) Then
@@ -160,14 +158,9 @@ Dim SelCount as Integer
 	If bDisposeDoc Then
 		oDocument.Dispose
 	End If
-
-	Exit Sub
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-		ToggleWindow(True)
-		DlgFormDB.EndExecute()
-	End If
+	ShowErrorMessage(True)
+	ToggleWindow(True)
 End Sub
 
 
@@ -183,6 +176,9 @@ Sub FillUpFieldsListbox(bGetCommandType as Boolean)
 Dim n as Integer
 Dim SelIndex as Integer
 Dim QueryIndex as Integer
+	If Not bDebug Then
+		On Local Error GoTo NOFIELDS
+	End If
 	n = Ubound(oDialogModel.lstTables.SelectedItems())
 	If n &gt; -1 Then
 		SelIndex = oDialogModel.lstTables.SelectedItems(0)
@@ -200,10 +196,10 @@ Dim QueryIndex as Integer
 		GetSpecificFieldNames()
 		ToggleListboxControls(oDialogModel, True)
 	End If
-	Exit Sub
-&apos;TODO: Diese Fehlermarke sinnvoll einbinden
 NOFIELDS:
-	MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
+	If Err &lt;&gt; 0 Then
+		MsgBox sMsgErrCouldNotOpenObject, 16, sMsgWizardName
+	End If
 End Sub
 
 
@@ -226,9 +222,7 @@ Sub PreviousStep()
 		.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_1.bmp&quot;
 	End With
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If
+	ShowErrorMessage(True)
 End Sub
 
 
@@ -261,10 +255,7 @@ Dim bOldVisible as Boolean
 	oDialogModel.imgTheme.ImageUrl = FormPath &amp; &quot;FormWizard_&quot; &amp; oDialogModel.Step &amp; &quot;.bmp&quot;
 	DlgFormDB.Title = WizardTitle(oDialogModel.Step)
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If
-	
+	ShowErrorMessage(True)
 End Sub
 
 
@@ -310,14 +301,10 @@ Dim bLinkExists as Boolean
 Dim i as Integer	
 Dim sBaseBookmarkName as String
 	oMasterKey = GetRegistryKeyContent(&quot;org.openoffice.Office.TypeDetection/&quot;)
-&apos; Todo: Hier &quot;Filters&quot; als key angeben
-	oFilters() = oMasterKey.Types
-	FilterNames(0,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer&quot;).UIName
+	oFilters() = oMasterKey.Filters
+	FilterNames(0,0) = oFilters.GetByName(&quot;swriter: StarOffice XML (Writer)&quot;).UIName
 	FilterNames(0,1) = &quot;*.sxw&quot;
 	FilterNames(0,2) = &quot;&quot;
-&apos;	FilterNames(1,0) = oFilters.GetByName(&quot;writer_StarOffice_XML_Writer_Template&quot;).UIName
-&apos;	FilterNames(1,1) = &quot;*.stw&quot;
-&apos;	FilterNames(1,2) = &quot;swriter: writer_StarOffice_XML_Writer_Template&quot;
 	sTargetPath = StoreDocument(oDocument, FilterNames(), &quot;Form_&quot; &amp; sDBName &amp; &quot;_&quot; &amp; TableName, WorkPath)
 	If sTargetPath &lt;&gt; &quot;&quot; Then
 		sBookmarkName = GetFileNamewithoutExtension(FileNameoutofPath(sTargetPath))
@@ -336,7 +323,6 @@ Dim sBaseBookmarkName as String
 		bDisposeDoc = False
 		DlgFormDB.EndExecute()
 		ToggleDesignMode(oDocument)
-		&apos; Todo: evtl unsinnige Standardwerte für Controls rauswerfen	
 		oDBForm.Reload()
 	End If
 End Sub</script:module>

@@ -89,9 +89,9 @@ Sub SetDialogLanguage ()
 		.hlnAlign.Label = GetResText(RID_FORM + 32)
 		.hlnArrangements.Label = GetResText(RID_FORM + 35)
 
-		WizardTitle(1) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 45)
-		WizardTitle(2) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 46)
-		WizardTitle(3) = sMsgWizardName &amp; &quot;: &quot; &amp; GetResText(RID_FORM + 47)
+		WizardTitle(1) = sMsgWizardName &amp; &quot; - &quot; &amp; GetResText(RID_FORM + 45)
+		WizardTitle(2) = sMsgWizardName &amp; &quot; - &quot; &amp; GetResText(RID_FORM + 46)
+		WizardTitle(3) = sMsgWizardName &amp; &quot; - &quot; &amp; GetResText(RID_FORM + 47)
 
 		.hlnBinaries.Label = GetResText(RID_FORM + 50)
 		.optIgnoreBinaries.Label = GetResText(RID_FORM + 51)
@@ -140,7 +140,6 @@ Sub InitializeWidthList()
 &apos; interpretiert wird. Darstellung über Numberformatter. Ist nicht konsistent über Datenbanken.
 &apos; außerdem dürften hier einige Treiber auch buggy sein.
 
-	&apos; Todo: Bugfix to Bug #88329
 	If Ubound(WidthList(),1) &gt; 15 Then
 		ReDim WidthList(15,4)
 	End If
@@ -200,7 +199,6 @@ Sub InitializeWidthList()
 	WidthList(10,2) = False
 	WidthList(10,3) = &quot;TextField&quot;
 
-	&apos; Todo: Sollte die Feldlänge vielleicht lieber aus den Metadaten ausgelesen werden?	
 	WidthList(11,0) = com.sun.star.sdbc.DataType.VARCHAR		&apos; =  12;
 	WidthList(11,1) = cTextBox
 	WidthList(11,2) = True
@@ -222,7 +220,6 @@ Sub InitializeWidthList()
 	WidthList(14,3) = &quot;TimeField&quot;
 	
 	WidthList(15,0) = com.sun.star.sdbc.DataType.TIMESTAMP		&apos; =  93;
-&apos; Todo: Dieses Control ist keine cDatebox sondern Kollektion aus Time und Datefield
 	WidthList(15,1) = cDateBox
 	WidthList(15,2) = False
 	WidthList(15,3) = &quot;DateField&quot;
@@ -248,7 +245,6 @@ Sub InitializeWidthList()
 	ImgWidthList(3,3) = &quot;ImageControl&quot;
 
 &apos; Note: the following Fieldtypes cannot be presented
-&apos; Todo: This should be mentioned in the help	
 &apos;ExcludeList(0) = com.sun.star.sdbc.DataType.SQLNULL
 &apos;ExcludeList(1) = com.sun.star.sdbc.DataType.OTHER
 &apos;ExcludeList(2) = com.sun.star.sdbc.DataType.OBJECT
@@ -257,7 +253,7 @@ Sub InitializeWidthList()
 &apos;ExcludeList(5) = com.sun.star.sdbc.DataType.ARRAY
 &apos;ExcludeList(6) = com.sun.star.sdbc.DataType.CLOB
 &apos;ExcludeList(7) = com.sun.star.sdbc.DataType.REF
-	
+
 	oModelService(cLabel) = &quot;com.sun.star.form.component.FixedText&quot;
 	oModelService(cTextBox) = &quot;com.sun.star.form.component.TextField&quot;
 	oModelService(cCheckBox) = &quot;com.sun.star.form.component.CheckBox&quot;

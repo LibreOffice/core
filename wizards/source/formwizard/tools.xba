@@ -3,6 +3,9 @@
 <script:module xmlns:script="http://openoffice.org/2000/script" script:name="tools" script:language="StarBasic">REM  *****  BASIC  *****
 Option Explicit
 
+
+Public CurIndex as Integer
+
 Function SetProgressValue(iValue as Integer)	
 	If iValue = 0 Then
 		oProgressbar.End
@@ -16,17 +19,19 @@ Function GetPreferredWidth(oModel as Object, bGetMaxWidth as Boolean, Optional L
 Dim aPeerSize as new com.sun.star.awt.Size
 Dim nWidth as Integer
 Dim oControl as Object
-	If CurControlType = cImageControl Then
+	If Not IsMissing(LocText) Then
+		&apos; Label
+		aPeerSize = GetPeerSize(oModel, oControl, LocText)
+	ElseIf CurControlType = cImageControl Then
 		GetPreferredWidth() = 2000
-	Else		
-		If Not IsMissing(LocText) Then
-			aPeerSize = GetPeerSize(oModel, oControl, LocText)
-		Else
-			aPeerSize = GetPeerSize(oModel, oControl)
-		End If
-		nWidth = aPeerSize.Width
-		GetPreferredWidth = (nWidth + 4) * XPixelFactor	&apos; PixelTo100thmm(nWidth)
+		Exit Function
+	Else
+		aPeerSize = GetPeerSize(oModel, oControl)
 	End If
+	nWidth = aPeerSize.Width
+	&apos; We increase the preferred Width a bit so that the control does not become too small
+	&apos; when we change the border from &quot;3D&quot; to &quot;Flat&quot;
+	GetPreferredWidth = (nWidth + 5) * XPixelFactor	&apos; PixelTo100thmm(nWidth)
 End Function
 
 
@@ -34,18 +39,23 @@ Function GetPreferredHeight(oModel as Object, Optional LocText)
 Dim aPeerSize as new com.sun.star.awt.Size
 Dim nHeight as Integer
 Dim oControl as Object
-&apos; Todo: Wie geht das mit ImageControls
 	If Not IsMissing(LocText) Then
+		&apos; Label
 		aPeerSize = GetPeerSize(oModel, oControl, LocText)
+	ElseIf CurControlType = cImageControl Then
+		GetPreferredHeight() = 2000
+		Exit Function
 	Else
 		aPeerSize = GetPeerSize(oModel, oControl)
 	End If
 	nHeight = aPeerSize.Height
-	GetPreferredHeight = nHeight * YPixelFactor 	&apos; PixelTo100thmm(nHeight)
+	&apos; We increase the preferred Height a bit so that the control does not become too small
+	&apos; when we change the border from &quot;3D&quot; to &quot;Flat&quot;
+	GetPreferredHeight = (nHeight+1) * YPixelFactor 	&apos; PixelTo100thmm(nHeight)
 End Function
 
 
-Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)	
+Function GetPeerSize(oModel as Object, oControl as Object, Optional LocText)
 Dim oPeer as Object
 Dim aPeerSize as new com.sun.star.awt.Size
 Dim NullValue
@@ -54,17 +64,16 @@ Dim NullValue
 	If oControl.Model.PropertySetInfo.HasPropertybyName(&quot;EffectiveMax&quot;) Then
 		If oControl.Model.EffectiveMax = 0 Then
 			&apos; This is relevant for decimal fields
-			oControl.Model.EffectiveValue = 999.9999			
+			oControl.Model.EffectiveValue = 999.9999
 		Else
 			oControl.Model.EffectiveValue = oControl.Model.EffectiveMax
 		End If
 		GetPeerSize() = oPeer.PreferredSize()	
 		oControl.Model.EffectiveValue = NullValue
-
-	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
-		GetPeerSize() = oPeer.PreferredSize()	
 	ElseIf Not IsMissing(LocText) Then
 		oControl.Text = LocText
+		GetPeerSize() = oPeer.PreferredSize()	
+	ElseIf CurFieldType = com.sun.star.sdbc.DataType.BIT Then
 		GetPeerSize() = oPeer.PreferredSize()	
 	ElseIf CurFieldType = com.sun.star.sdbc.DataType.DATE Then
 		oControl.Model.Date = Date
@@ -130,33 +139,30 @@ End Function
 
 
 Sub	ImportStyles()
-Dim CurIndex as Integer
+Dim OldIndex as Integer
 Dim sImportPath as String
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
-	ToggleLayoutPage(False)
-	oDocument.LockControllers
+	OldIndex = CurIndex
 	CurIndex = GetCurIndex(oDialogModel.lstStyles, Styles(), NumberofStyles,8)
-	sImportPath = Styles(8,CurIndex)
-	bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
-	ControlCaptionsToStandardLayout()
-	ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
-	ConfigurePageStyle()	
+	If CurIndex &lt;&gt; OldIndex Then	
+		ToggleLayoutPage(False)
+		oDocument.LockControllers
+		sImportPath = Styles(8,CurIndex)
+		bWithBackGraphic = LoadNewStyles(oDocument, oDialogModel, CurIndex, sImportPath, Styles(), TexturePath)
+		ControlCaptionsToStandardLayout()
+		ToggleOptionButtons(oDialogModel, bWithBackGraphic)	
+		ConfigurePageStyle()	
+		ToggleLayoutPage(True, &quot;lstStyles&quot;)	
+		oDocument.UnlockControllers
+	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then	
-		Msgbox(sMsgErrMsg, 16, GetProductName())
-	End If	
-
-	oDocument.UnlockControllers
-	ToggleLayoutPage(True, &quot;lstStyles&quot;)	
+	ShowErrorMessage(True)
 End Sub
 
 
 Function SetNumerics(ByVal oLocObject as Object, iLocFieldType as Integer) as Object	
-	&apos; Todo: FS fragen, ob dies alles richtig ist
-	&apos; Todo: Es sollte in der Hilfe darauf hingewiesen werden, dass der untere Wertbereich negativ ist.
 	Select Case iLocFieldType
 		Case com.sun.star.sdbc.DataType.BIGINT
 			oLocObOject.EffectiveMax = 2147483647 * 2147483647 
@@ -246,7 +252,7 @@ End Function
 
 Function GetDBHeight(oDBModel as Object)
 	If CurControlType = cImageControl Then
-		nDBWidth = 2000
+		nDBHeight = 2000
 	Else
 		If bIsVeryFirstValueField Then
 			&apos; Todo: Hier wird vereinfachend davon ausgegangen, dass alle DB-Feldern immer die selbe Höhe wie Textfelder haben
@@ -262,4 +268,19 @@ Function GetDBHeight(oDBModel as Object)
 		End If
 	End If
 	GetDBHeight() = nDBHeight
-End Function</script:module>
+End Function
+
+
+Sub ShowErrorMessage(bEndExecute as Boolean)
+	If Err &lt;&gt; 0 Then	
+		Msgbox(sMsgErrMsg, 16, GetProductName())
+		oDocument.UnlockControllers()
+		ToggleWindow(True)
+		Resume LOCERROR
+		LOCERROR:		
+		If bEndExecute Then
+			DlgFormDB.EndExecute()	
+		End If
+	End If
+End Sub	
+</script:module>

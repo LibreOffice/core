@@ -208,30 +208,26 @@ Dim m as Integer
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR
 	End If
-
-&apos; Todo: Die folgenden Zeilen könnten in einer allgemeinen Routine 
-&apos; bearbeitet werden, z. B. durch Umschreiben von AddListToList, wobei
-&apos; beim Abfragen des Ubounds der zweiten Dimension eine Fehlerabfrage nötig wäre.
 	If oDialogModel.optBinariesasGraphics.State = 1 Then
-&apos;		MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
-&apos;		OldMaxIndex = Ubound(WidthList(),1)
-		ReDim Preserve WidthList(18,4)
-		s = 0
-		For n = OldMaxIndex + 1 To MaxIndex
-			For m = 0 To 3
-				WidthList(n,m) = ImgWidthList(s,m)
-			Next m
-			s = s + 1
-		Next n
-		MergeList(oDialogModel.lstFields, ImgFieldNames())
+		OldMaxIndex = Ubound(WidthList(),1)
+		If OldMaxIndex = 15 Then
+			MaxIndex = Ubound(WidthList(),1) + Ubound(ImgWidthList(),1) + 1
+			ReDim Preserve WidthList(MaxIndex,4)
+			s = 0
+			For n = OldMaxIndex + 1 To MaxIndex
+				For m = 0 To 3
+					WidthList(n,m) = ImgWidthList(s,m)
+				Next m
+				s = s + 1
+			Next n
+			MergeList(oDialogModel.lstFields, ImgFieldNames())
+		End If
 	Else
 		ReDim Preserve WidthList(15, 4)
 		RemoveListItems(oDialogModel.lstFields(), oDialogModel.lstSelFields(), ImgFieldNames())
 	End If
 WIZARDERROR:
-	If Err &lt;&gt; 0 Then
-		Msgbox(&quot;Blabla&quot;,16, GetProductName())
-	End If	
+	ShowErrorMessage(True)
 End Sub
 
 

@@ -48,7 +48,7 @@ Dim i as Integer
 		Else		
 			InsertDBControl(i)
 			bIsVeryFirstRun = False
-&apos;			oDBModel.LabelControl = oTCModel
+			oDBModelList(i).LabelControl = oTCModel
 		End If
 		ResetPosSizes(i)
 		oProgressbar.Value = i
@@ -89,7 +89,6 @@ Sub ResetPosSizes(LastIndex as Integer)
 				a = a + 1
 			End If
 		Case cLeftJustified,cTopJustified
-&apos; Todo: Berücksichtigen, wenn das Label eines Controls länger als das DB-Control ist
 			If nMaxColRightX &gt; cXOffset + nFormWidth Then
 				Dim nOldYTCPos as Long
 				nOldYTCPos = nYTCPos
@@ -114,15 +113,8 @@ Dim i as Integer
 			nXTCPos = oTCShapeList(i).Position.X
 			nXDBPos = nXTCPos + nMaxTCWidth  + cHoriDistance
 		End If
-&apos;		If oLocDBShape.SupportsService(&quot;com.sun.star.drawing.Shapes&quot;) Then
-&apos;			ResetDBShape(oLocDBShape(0), nXDBPos)
-&apos;			ResetDBShape(oLocDBShape(1), nXDBPos + oLocDBShape(0).Size.Width)
-&apos;			printdbgInfo oLocDBShape
-&apos;		Else
-			ResetDBShape(oDBShapeList(i), nXDBPos)
-			CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
-&apos;		End If
-&apos;		GroupShapes(oDrawPage, oLocTextShape, oLocDBShape)
+		ResetDBShape(oDBShapeList(i), nXDBPos)
+		CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
 	Next i
 End Sub
 
@@ -176,7 +168,6 @@ Dim aSize As New com.sun.star.awt.Size
 		End If
 	Else
 		oModel = CreateUnoService(oModelService(cLabel))
-&apos;		oModel.Label = CurFieldName &apos; + nFieldPostfixes(i) (Todo: Was ist ein fieldPostfix?)
 &apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
 &apos; own. therefor the model should be inserted before the shape
 &apos;		oDBForm.InsertByName(oModel.Name, oModel)
@@ -226,25 +217,24 @@ Dim iColRightX as Long
 
 	aPoint = GetPoint(nXDBPos, nYDBPos)
 	If bControlsAreCreated Then
-&apos;		Set oDBModel = oDBModelList(i) &apos;oDBShapeList(i).GetControl
 		oDBShapeList(i).Position = aPoint
 	Else
 		oDBModelList(i) = CreateUnoService(oModelService(CurControlType))
 		oDBShapeList(i) = InsertControl(oDrawPage, oDBModelList(i), aPoint, aSize)		
 		SetNumerics(oDBModelList(i), CurFieldType)
-		&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
-		&apos; own. therefor the model should be inserted before the shape
-		&apos; oDBForm.InsertByName(oDBModel.Name, oDBModel)
 		If CurControlType = cCheckBox Then
 			oDBModelList(i).Label = &quot;&quot;
 		End If
+		&apos; Todo: According to FS this handling should be verified. I should not rely on the shape to create a model on its
+		&apos; own. therefor the model should be inserted before the shape
+		&apos; oDBForm.InsertByName(oDBModel.Name, oDBModel)
+		oDBModelList(i).DataField = CurFieldName
 	End If
 	nDBHeight = GetDBHeight(oDBModelList(i))
 	nDBWidth = GetPreferredWidth(oDBModelList(i),True)
 	aSize = GetSize(nDBWidth,nDBHeight)
 	oDBShapeList(i).SetSize(aSize)
 	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
-	oDBModelList(i).DataField = CurFieldName
 End Sub
 
 
@@ -259,50 +249,41 @@ Dim aSize as New com.sun.star.awt.Size
 Dim nDateWidth as Long
 Dim nTimeWidth as Long
 Dim oGroupShape as Object
-&apos;	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
-&apos;	oDrawPage.Add(oGroupShape)
-&apos;	aSize = GetSize(1000, 600)
-&apos;
-&apos;	oDateModel = CreateUnoService(&quot;com.sun.star.form.component.DateField&quot;)
-&apos;	oDateShape = InsertControl(oGroupShape, oDateModel, aPoint, aSize)
-&apos;
-&apos;	oTimeModel = CreateUnoService(&quot;com.sun.star.form.component.TimeField&quot;)
-&apos;	oTimeShape = InsertControl(oGroupShape, oTimeModel, aPoint, aSize)
-&apos;	InsertTimeStampShape() = oGroupShape
 
 	aPoint = GetPoint(nXDBPos, nYDBPos)
-	oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
-	oGroupShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
-	oGroupShape.Position = aPoint
-	oDrawPage.Add(oGroupShape)
-	aSize = GetSize(2000, 600)
+	If bControlsAreCreated Then
+		oDBShapeList(i).Position = aPoint
+		nDBWidth = oDBShapeList(i).Size.Width
+		nDBHeight = oDBShapeList(i).Size.Height
+	Else		
+		oGroupShape = oDocument.CreateInstance(&quot;com.sun.star.drawing.GroupShape&quot;)
+		oGroupShape.AnchorType = com.sun.star.text.TextContentAnchorType.AT_PARAGRAPH
+		oDrawPage.Add(oGroupShape)
+		CurFieldType = com.sun.star.sdbc.DataType.DATE
+		oDateModel = CreateUnoService(&quot;com.sun.star.form.component.DateField&quot;)
+		oDateModel.DataField = CurFieldName
+		oDateShape = InsertControl(oGroupShape, oDateModel, aPoint, aSize)
+		SetNumerics(oDateModel, CurFieldType)
+		nDBHeight = GetDBHeight(oDateModel)
+		nDateWidth = GetPreferredWidth(oDateModel,True)
+		aSize = GetSize(nDateWidth,nDBHeight)
+		oDateShape.SetSize(aSize)
 
-&apos;	oGroupShape.Size = aSize
-&apos;	oGroupShape.Position = aPoint
-
-	aSize = GetSize(1000, 600)
-	CurFieldType = com.sun.star.sdbc.DataType.DATE
-	oDateModel = CreateUnoService(&quot;com.sun.star.form.component.DateField&quot;)
-	oDateModel.DataField = CurFieldName
-	oDateShape = InsertControl(oGroupShape, oDateModel, aPoint, aSize)
-	SetNumerics(oDateModel, CurFieldType)
-	nDBHeight = GetDBHeight(oDateModel)
-	nDateWidth = GetPreferredWidth(oDateModel,True)
-	aSize = GetSize(nDateWidth,nDBHeight)
-	oDateShape.SetSize(aSize)
-	aPoint = GetPoint(nXDBPos+nDateWidth, nYDBPos)
-
-	CurFieldType = com.sun.star.sdbc.DataType.TIME
-	oTimeModel = CreateUnoService(&quot;com.sun.star.form.component.TimeField&quot;)
-	oTimeModel.DataField = CurFieldName
-	oTimeShape = InsertControl(oGroupShape, oTimeModel, aPoint, aSize)
-	nTimeWidth = GetPreferredWidth(oTimeModel)
-	aSize = GetSize(nTimeWidth,nDBHeight)
-	oTimeShape.SetSize(aSize)
-	Set oDBShapeList(i)= oDateTimeShape
-	nDBWidth = nDateWidth + nTimeWidth
+		CurFieldType = com.sun.star.sdbc.DataType.TIME
+		oTimeModel = CreateUnoService(&quot;com.sun.star.form.component.TimeField&quot;)
+		oTimeModel.DataField = CurFieldName
+		oTimeShape = InsertControl(oGroupShape, oTimeModel, aPoint, aSize)
+		oTimeShape.Position = GetPoint(nXDBPos + 10 + nDateWidth,nYDBPos)
+		nTimeWidth = GetPreferredWidth(oTimeModel)
+		aSize = GetSize(nTimeWidth,nDBHeight)
+		oTimeShape.SetSize(aSize)
+		nDBWidth = nDateWidth + nTimeWidth + 10
+		oGroupShape.Position = aPoint
+		oGroupShape.Size = GetSize(nDBWidth + 10 + nTimeWidth, nDBHeight)
+		Set oDBShapeList(i)= oGroupShape
+	End If
 	CheckOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, True)
-	InsertTimeStampShape() = oGroupShape
+	InsertTimeStampShape() = oDBShapeList(i)	
 End Function
 
 
@@ -471,6 +452,10 @@ Dim aSize as New com.sun.star.awt.Size
 	End If
 	oGridModel = CreateUnoService(oModelService(cGridControl))
 	oGridModel.Name = &quot;Grid1&quot;
+	aPoint = GetPoint(cXOffset, cYOffset)
+	aSize = GetSize(nFormWidth, nFormHeight)
+	oDBForm.InsertByName (oGridModel.Name, oGridModel)
+	oGridShape = InsertControl(oDrawPage, oGridModel, aPoint, aSize)
 	For n = 0 to MaxIndex
 		GetCurrentMetaValues(n)
 	    If CurFieldType = com.sun.star.sdbc.DataType.TIMESTAMP Then
@@ -485,12 +470,6 @@ Dim aSize as New com.sun.star.awt.Size
 		End If
 		oProgressbar.Value = n
 	next n
-	aPoint = GetPoint(cXOffset, cYOffset)
-	&apos; Todo: Man müsste die Größe und die Position der Controls von der Anzahl der 
-	&apos; Datenbankfelder abhängig machen
-	aSize = GetSize(nFormWidth, nFormHeight)
-	oDBForm.InsertByName (oGridModel.Name, oGridModel)
-	oGridShape = InsertControl(oDrawPage, oGridModel, aPoint, aSize)
 End Function
 
 
@@ -504,7 +483,7 @@ Dim oColumn as Object
 	oColumn.Hidden = bHidden
 	SetNumerics(oColumn, iLocFieldType)
 	oColumn.DataField = CurFieldName
-	oColumn.Label = ColName  &apos;+ nFieldPostfixes(n); Todo: Was hat das nFieldPostfix hier zu suchen?
+	oColumn.Label = ColName 
 	oColumn.Width = 0 	&apos;Spaltenbreite richtet sich nach dem Feldnamen
 	oGridModel.insertByName(oColumn.Name, oColumn)
 End Function		
@@ -528,5 +507,5 @@ Dim iStandardColor as Long
 			End If
 			oCurModel.TextColor = iStandardColor
 		Next i
-	End If 
+	End If
 End Sub</script:module>
