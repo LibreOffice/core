@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:15:01 $
+ *  last change: $Author: kz $ $Date: 2001-09-21 20:55:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4011,12 +4011,12 @@ String RID_ATTR_PARA_WIDOWS
     Text [ dutch ] = "Zwevende regels: wezen" ;
     Text [ spanish ] = "Huérfanas" ;
     Text [ english_us ] = "Orphans" ;
-    Text[ chinese_simplified ] = "æ®µä¸­ä¸åˆ†é¡µ";
+    Text[ chinese_simplified ] = "æ®µå‰åˆ†é¡µ";
     Text[ russian ] = "Êîíöåâûå âèñÿ÷èå ñòğîêè";
     Text[ polish ] = "Bez oddz. pierw. wiersza akap.";
     Text[ japanese ] = "æ”¹ï¾ï¾Ÿï½°ï½¼ï¾æ™‚ã«æ®‹ã™è¡Œæ•°";
     Text[ chinese_traditional ] = "æ®µä¸­ä¸åˆ†é ";
-    Text[ arabic ] = "ÇáÃÓØÑ ÇáÃæáì ááİŞÑÉ";
+    Text[ arabic ] = "ÇáÃÓØÑ ÇáæÍíÏÉ";
     Text[ greek ] = "\"ÏñöáíÜ\"";
     Text[ korean ] = "ì²˜ìŒ í•œì¤„";
     Text[ turkish ] = "Tek satır (paragraf başı)";
@@ -4038,12 +4038,12 @@ String RID_ATTR_PARA_ORPHANS
     Text [ dutch ] = "Zwevende regels: weduwen" ;
     Text [ spanish ] = "Viudas" ;
     Text [ english_us ] = "Widows" ;
-    Text[ chinese_simplified ] = "æ®µè½ä¹‹ä¸­ä¸åˆ†é¡µ";
+    Text[ chinese_simplified ] = "å­¤è¡Œæ§åˆ¶";
     Text[ russian ] = "Íà÷àëüíûå âèñÿ÷èå ñòğîêè";
     Text[ polish ] = "Bez oddz. ost. wiersza akap.";
     Text[ japanese ] = "æ®µè½å‰ã§æ”¹ï¾ï¾Ÿï½°ï½¼ï¾";
     Text[ chinese_traditional ] = "æ®µè½ä¹‹ä¸­ä¸åˆ†é ";
-    Text[ arabic ] = "ÇáÃÓØÑ ÇáÃÎíÑÉ ááİŞÑÉ";
+    Text[ arabic ] = "ÇáÃÓØÑ ÇáäÇŞÕÉ";
     Text[ greek ] = "\"×Şñåò\"";
     Text[ korean ] = "ë§ˆì§€ë§‰ í•œì¤„";
     Text[ turkish ] = "Tek satır (paragraf sonu)";
@@ -4300,7 +4300,7 @@ String RID_ATTR_PARA_KEEP
     Text [ dutch ] = "Alinea's bijeenhouden" ;
     Text [ spanish ] = "Mantener párrafos juntos" ;
     Text [ english_us ] = "Keep with Next Paragraph" ;
-    Text[ chinese_simplified ] = "æ®µè½ä¸åˆ†å¼€";
+    Text[ chinese_simplified ] = "ä¸ä¸‹æ®µåŒé¡µ";
     Text[ russian ] = "Âìåñòå ñî ñëåäóşùèì àáçàöåì";
     Text[ polish ] = "Razem z nastêpnym";
     Text[ japanese ] = "æ®µè½ã®æ¥åˆ";
@@ -5551,7 +5551,7 @@ String RID_SVXITEMS_FMTKEEP_TRUE
     Text [ dutch ] = "Alinea's bijeenhouden" ;
     Text [ spanish ] = "Mantener párrafos juntos" ;
     Text [ english_us ] = "Keep with next paragraph" ;
-    Text[ chinese_simplified ] = "æ®µè½ä¸åˆ†å¼€";
+    Text[ chinese_simplified ] = "ä¸ä¸‹æ®µåŒé¡µ";
     Text[ russian ] = "Âìåñòå ñî ñëåäóşùèì àáçàöåì";
     Text[ polish ] = "Razem z nastêpnym";
     Text[ japanese ] = "æ®µè½ã‚’æ¥åˆã™ã‚‹";
@@ -5633,7 +5633,7 @@ String RID_SVXITEMS_FMTSPLIT_FALSE
     Text [ dutch ] = "Alinea niet splitsen" ;
     Text [ spanish ] = "No dividir párrafo" ;
     Text [ english_us ] = "Don't split paragraph" ;
-    Text[ chinese_simplified ] = "æ®µè½ä¸åˆ†å¼€";
+    Text[ chinese_simplified ] = "æ®µä¸­ä¸åˆ†é¡µ";
     Text[ russian ] = "Àáçàö íå ğàçğûâàòü";
     Text[ polish ] = "Nie dziel akapitu";
     Text[ japanese ] = "æ®µè½ã‚’åˆ†å‰²ã—ãªã„";
@@ -7045,12 +7045,12 @@ String RID_SVXITEMS_WIDOWS_COMPLETE
     Text [ swedish ] = "Änkekontroll " ;
     Text [ dutch ] = "Zwevende regels: wezen  " ;
     Text [ spanish ] = "Ajuste de huérfanas " ;
-    Text[ chinese_simplified ] = "æ®µä¸­ä¸åˆ†é¡µ ";
+    Text[ chinese_simplified ] = "æ®µå‰åˆ†é¡µ";
     Text[ russian ] = "Óïğàâëåíèå êîíöåâûìè âèñÿ÷èìè ñòğîêàìè ";
     Text[ polish ] = "Bez oddz. pierw. wiersza akap. ";
     Text[ japanese ] = "æ”¹ï¾ï¾Ÿï½°ï½¼ï¾æ™‚ã«æ®‹ã™è¡Œæ•° ";
     Text[ chinese_traditional ] = "æ®µä¸­ä¸åˆ†é  ";
-    Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃæá ";
+    Text[ arabic ] = "ÇáÊÍßã ÈÇáÃÓØÑ ÇáæÍíÏÉ ";
     Text[ greek ] = "Êáíüíáò \"ïñöáíïı\" ";
     Text[ korean ] = "ì²« ì¤„ ë¶„ë¦¬ ë°©ì§€ ";
     Text[ turkish ] = "İlk satırı paragrafla birleştir ";
@@ -7072,12 +7072,12 @@ String RID_SVXITEMS_ORPHANS_COMPLETE
     Text [ swedish ] = "Horungekontroll " ;
     Text [ dutch ] = "Zwevende regels: weduwen  " ;
     Text [ spanish ] = "Ajuste de viudas " ;
-    Text[ chinese_simplified ] = "æ®µè½ä¹‹ä¸­ä¸åˆ†é¡µ ";
+    Text[ chinese_simplified ] = "å­¤è¡Œæ§åˆ¶";
     Text[ russian ] = "Óïğàâëåíèå íà÷àëüíûìè âèñÿ÷èìè ñòğîêàìè ";
     Text[ polish ] = "Bez oddz. ost. wiersza akap. ";
     Text[ japanese ] = "æ®µè½å‰ã§æ”¹ï¾ï¾Ÿï½°ï½¼ï¾ ";
     Text[ chinese_traditional ] = "æ®µè½ä¹‹ä¸­ä¸åˆ†é  ";
-    Text[ arabic ] = "ÊÚÏíá ÇäİÕÇá ÓØÑ ÇáİŞÑÉ ÇáÃÎíÑ ";
+    Text[ arabic ] = "ÇáÊÍßã ÈÇáÃÓØÑ ÇáäÇŞÕÉ ";
     Text[ greek ] = "Êáíüíáò \"÷Şñáò\" ";
     Text[ korean ] = "ë§ˆì§€ë§‰ ì¤„ ë¶„ë¦¬ ë°©ì§€ ";
     Text[ turkish ] = "Son satırı paragrafla birleştir ";
@@ -7648,7 +7648,7 @@ String RID_SVXITEMS_TWOLINES_OFF
     Text[ russian ] = "Îòêë. äâóñòğî÷íûé";
     Text[ greek ] = "Äßãñáììá - ¼÷é";
     Text[ dutch ] = "Tweeregelig uit";
-    Text[ french ] = "Deux lignes en une désactivées";
+    Text[ french ] = "'Deux lignes en une' désactivé";
     Text[ spanish ] = "Desactivar líneas dobles";
     Text[ italian ] = "Disattiva 'A due righe'";
     Text[ danish ] = "Two lines off";
@@ -8172,6 +8172,7 @@ String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 };
 
  // ********************************************************************** EOF
+
 
 
 
