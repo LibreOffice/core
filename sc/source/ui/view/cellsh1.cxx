@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 12:00:35 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 14:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1078,9 +1078,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if ( nFormat )
                 {
+                    BOOL bCells = ( ScTransferObj::GetOwnClipboard() != NULL );
                     BOOL bDraw = ( ScDrawTransferObj::GetOwnClipboard() != NULL );
+                    BOOL bOle = ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE );
 
-                    if ( bDraw && nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                    if ( bCells && bOle )
+                        pTabViewShell->PasteFromSystem();
+                    else if ( bDraw && bOle )
                         pTabViewShell->PasteDraw();
                     else
                         pTabViewShell->PasteFromSystem(nFormat);
@@ -1266,21 +1270,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             ULONG nFormatId = aFormats.GetClipbrdFormatId( i );
                             String aName = aFormats.GetClipbrdFormatName( i );
-                            if ( !aName.Len() )
-                            {
-                                USHORT nResId = 0;
-                                switch ( nFormatId )
-                                {
-                                    case SOT_FORMATSTR_ID_LINK: nResId = SCSTR_CLIP_DDE;    break;
-                                    case SOT_FORMAT_STRING:     nResId = SCSTR_CLIP_STRING; break;
-                                    case SOT_FORMATSTR_ID_DIF:  nResId = SCSTR_CLIP_DIF;    break;
-                                    case SOT_FORMAT_RTF:        nResId = SCSTR_CLIP_RTF;    break;
-                                }
-                                if ( nResId )
-                                    aName = String( ScResId( nResId ) );
-                                else
-                                    aName = Clipboard::GetFormatName( nFormatId );
-                            }
+                            // special case for paste dialog: '*' is replaced by object type
+                            if ( nFormatId == SOT_FORMATSTR_ID_EMBED_SOURCE )
+                                aName.Assign((sal_Unicode)'*');
                             pDlg->Insert( nFormatId, aName );
                         }
 

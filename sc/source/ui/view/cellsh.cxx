@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-23 12:00:35 $
+ *  last change: $Author: nn $ $Date: 2001-04-23 14:47:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,11 +300,24 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
     }
 }
 
-inline void TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
+void lcl_TestFormat( SvxClipboardFmtItem& rFormats, const TransferableDataHelper& rDataHelper,
                         SotFormatStringId nFormatId )
 {
     if ( rDataHelper.HasFormat( nFormatId ) )
-        rFormats.AddClipbrdFormat( nFormatId );
+    {
+        USHORT nResId = 0;
+        switch ( nFormatId )
+        {
+            case SOT_FORMATSTR_ID_LINK: nResId = SCSTR_CLIP_DDE;    break;
+            case SOT_FORMAT_STRING:     nResId = SCSTR_CLIP_STRING; break;
+            case SOT_FORMATSTR_ID_DIF:  nResId = SCSTR_CLIP_DIF;    break;
+            case SOT_FORMAT_RTF:        nResId = SCSTR_CLIP_RTF;    break;
+        }
+        if ( nResId )
+            rFormats.AddClipbrdFormat( nFormatId, String( ScResId( nResId ) ) );
+        else
+            rFormats.AddClipbrdFormat( nFormatId );
+    }
 }
 
 // static
@@ -314,21 +327,21 @@ void ScCellShell::GetPossibleClipboardFormats( SvxClipboardFmtItem& rFormats )
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard() );
 
-    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
-    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
-    TestFormat( rFormats, aDataHelper, SOT_FORMAT_GDIMETAFILE );
-    TestFormat( rFormats, aDataHelper, SOT_FORMAT_BITMAP );
-    TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DRAWING );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_SVXB );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_GDIMETAFILE );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_BITMAP );
+    lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_EMBED_SOURCE );
 
     if ( !bDraw )
     {
-        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_LINK );
-        TestFormat( rFormats, aDataHelper, SOT_FORMAT_STRING );
-        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DIF );
-        TestFormat( rFormats, aDataHelper, SOT_FORMAT_RTF );
-        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML );
-        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML_SIMPLE );
-        TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_5 );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_LINK );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_STRING );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_DIF );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMAT_RTF );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_HTML_SIMPLE );
+        lcl_TestFormat( rFormats, aDataHelper, SOT_FORMATSTR_ID_BIFF_5 );
     }
 }
 
