@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.147 $
+#   $Revision: 1.148 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 13:39:39 $
+#   last change: $Author: hr $ $Date: 2004-11-09 18:33:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -323,11 +323,8 @@ NEWCLASS+=$(foreach,i,$(EXTRAJARFILES) $(SOLARENV)$/bin$/$i)
 NEWCLASS+=$(CLASSGENDIR)
 .ENDIF			# "$(GENJAVACLASSFILES)"!=""
 .IF "$(NEWCLASS)"!=""
-.IF "$(GUI)"=="UNX"
-CLASSPATH:=.:$(CLASSDIR):$(XCLASSPATH):$(NEWCLASS:s/ /:/)
-.ELSE
-CLASSPATH:=.;$(CLASSDIR);$(XCLASSPATH);$(NEWCLASS:s/ /;/)
-.ENDIF
+# See iz36027 for the reason for the strange $(subst ..) construct
+CLASSPATH:=.$(PATH_SEPERATOR)$(CLASSDIR)$(PATH_SEPERATOR)$(XCLASSPATH)$(PATH_SEPERATOR){$(subst,%Z*Z%,$(PATH_SEPERATOR) $(NEWCLASS:s/ /%Z*Z%/))}
 .ENDIF			# "$(NEWCLASS)"!=""
 .ENDIF			# "$(L10N_framework)"==""
 
