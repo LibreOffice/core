@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Sequence.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 09:14:30 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:33:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,7 +227,7 @@ SAL_CALL getCppuType( const ::com::sun::star::uno::Sequence< E > * ) SAL_THROW( 
     if (! ::com::sun::star::uno::Sequence< E >::s_pType)
     {
         const ::com::sun::star::uno::Type & rElementType = ::getCppuType(
-            (::com::sun::star::uno::Sequence< E >::ElementType *)0 );
+            (typename ::com::sun::star::uno::Sequence< E >::ElementType const *)0 );
         ::typelib_static_sequence_type_init(
             & ::com::sun::star::uno::Sequence< E >::s_pType,
             rElementType.getTypeLibType() );
