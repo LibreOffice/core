@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anypair.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:16:02 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,7 +255,7 @@ namespace configmgr
         else if ( typelib_typedescriptionreference_equals(_ppType,_pUnoAny->pType)  )
             return true;
 
-        else if (_pUnoAny->pData == NULL && _pUnoAny->pType->eTypeClass == typelib_TypeClass_VOID)
+        else if (_pUnoAny->pType->eTypeClass == typelib_TypeClass_VOID)
             return true;
 
         else
@@ -269,7 +269,7 @@ namespace configmgr
             return false;
 
         bool bOldNull = (*_ppData == NULL);
-        bool bNewNull = (_pUnoAny->pData == NULL);
+        bool bNewNull = (_pUnoAny->pType->eTypeClass == typelib_TypeClass_VOID);
 
         if (bOldNull)
         {
@@ -295,14 +295,15 @@ namespace configmgr
 
             uno_type_any_assign(&aTmp,_pUnoAny->pData, _pUnoAny->pType, uno::cpp_acquire, uno::cpp_release);
 
-            *_ppData = aTmp.pData;
             if (bNewNull)
             {
                 OSL_ASSERT(aTmp.pData == NULL);
+                *_ppData = NULL;
                 typelib_typedescriptionreference_release(aTmp.pType);
             }
             else
             {
+                *_ppData = aTmp.pData;
                 *_ppType = aTmp.pType;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:22:35 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ namespace configmgr
         {
             NodeChangesInformation& m_rTargetList;
             RelativePath            m_aAccessor;
+            Name                    m_aContextTypeName;
             TreeImpl*               m_pBaseTree;
             NodeOffset              m_nBaseNode;
             TreeDepth               m_nDepthLeft;
@@ -105,6 +106,7 @@ namespace configmgr
             /// Constructs a Visitor object, sets the output target list and context
             CollectChanges( NodeChangesInformation& rTargetList_,
                             TreeImpl& rStartTree_, NodeOffset nStartNode_,
+                            TemplateHolder aElementTemplate_,
                             TreeDepth nMaxDepth = c_TreeDepthAll);
 
             /// Adds a (translated) ValueChange to the target list
@@ -127,7 +129,7 @@ namespace configmgr
 
         protected:
             /// Constructs a Visitor object for a child of another one's context
-            CollectChanges( CollectChanges const& rBase, Name const& rChildName);
+            CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, Name const& aSubTypeName );
 
         private:
             // ChangeTreeAction implementations
@@ -138,6 +140,7 @@ namespace configmgr
 
             bool implSetLocation(NodeChangeLocation& rLocation_, Change const& aOriginal_, bool bSet_) const;
             void implAdd(NodeChangeInformation const& aChangeInfo_);
+            Path::Component implGetNodeName(Change const& _aChange_) const;
         };
 //-----------------------------------------------------------------------------
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 09:22:47 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,6 @@
 #ifndef CONFIGMGR_TREEPROVIDER_HXX
 #define CONFIGMGR_TREEPROVIDER_HXX
 
-#include "change.hxx"
-
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
 #ifndef _CONFIGMGR_COMMONTYPES_HXX_
 #include "commontypes.hxx"
 #endif
@@ -77,123 +72,45 @@
 #include "synchronize.hxx"
 #endif
 
-#ifndef _COM_SUN_STAR_UNO_ANY_H_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
-#include <com/sun/star/uno/Type.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_LANG_WRAPPEDTARGETEXCEPTION_HPP_
-#include <com/sun/star/lang/WrappedTargetException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
-#include <com/sun/star/container/NoSuchElementException.hpp>
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
 #endif
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include <options.hxx>
 #endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
+
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
 #endif
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
+
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
 #endif
-#ifndef CONFIGMGR_CONFNAME_HXX_
-#include "confname.hxx"
+
+#ifndef INCLUDED_MEMORY
+#include <memory>
+#define INCLUDED_MEMORY
 #endif
+
 
 namespace configmgr
 {
 
     namespace uno = com::sun::star::uno;
-    namespace lang = com::sun::star::lang;
-    namespace container = com::sun::star::container;
     using ::rtl::OUString;
 
 ////////////////////////////////////////////////////////////////////////////////
-
-
-    //==========================================================================
-    //= TreeChangeList
-    //==========================================================================
-    struct TreeChangeList
+    namespace configuration
     {
-        vos::ORef < OOptions > m_xOptions;       // options for the tree that is concerned by these changes
-        ConfigurationName pathToRoot;            // absolute path to the root of the whole to-be-updated subtree
-        SubtreeChange root;                      // changes made within this sub tree
-        // TreeChangeList(): root(::rtl::OUString(), configuration::Attributes()){}
-
-        TreeChangeList(const vos::ORef < OOptions >& _xOptions, const rtl::OUString& _rPathToRoot, const SubtreeChange& _aSubtree)
-                : m_xOptions(_xOptions),
-                  pathToRoot(_rPathToRoot, ConfigurationName::Absolute()),
-                  root(_aSubtree)   /* EXPENSIVE!!! (deep copy) */
-            {}
-
-        // TreeChangeList(const vos::ORef < OOptions >& _xOptions, const rtl::OUString& _rPathToRoot, auto_ptr<SubtreeChange> _pSubtreeChange)
-        //         : m_xOptions(_xOptions),
-        //           pathToRoot(_rPathToRoot),
-        //           root(*_pSubtreeChange.release()) /* EXPENSIVE!!! (deep copy) */
-        //     {}
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const rtl::OUString& _rPathToRoot,
-                        const rtl::OUString& _rLocalName,
-                        const configuration::Attributes& _rAttr)
-                : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
-                , root(_rLocalName, _rAttr)
-        {}
-
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const rtl::OUString& _rPathToRoot,
-                        const rtl::OUString& _rLocalName,
-                        const rtl::OUString& _rChildTemplateName,
-                        const rtl::OUString& _rChildTemplateModule,
-                        const configuration::Attributes& _rAttr)
-                : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
-                , root(_rLocalName, _rChildTemplateName, _rChildTemplateModule, _rAttr)
-        {}
-
-        /** ctor
-        @param      _rPathToRoot        path to the root of the whole to-be-updated subtree
-        @param      _rLocalName         relative path within the to-be-updated subtree
-        */
-        TreeChangeList( const vos::ORef < OOptions >& _xOptions,
-                        const rtl::OUString& _rPathToRoot,
-                        const ISubtree& _rTree)
-                : m_xOptions(_xOptions)
-                , pathToRoot(_rPathToRoot, ConfigurationName::Absolute())
-                , root(_rTree)
-        {
-            OSL_ENSURE(false, "Test only, because deep copy of subtreechange is very expensive.");
-        }
-
-        /** ctor
-        @param      _rTreeList          list to initialize the path, no childs are copied
-        */
-        TreeChangeList( const TreeChangeList& _rTree, SubtreeChange::NoChildCopy _rNoCopy)
-            : m_xOptions(_rTree.m_xOptions)
-            , pathToRoot(_rTree.pathToRoot)
-            , root(_rTree.root, _rNoCopy)
-        {}
-
-        /// get the module these changes belong to
-        OUString getModuleName() const;
-    };
+        class Name;
+        class AbsolutePath;
+    }
+    //-------------------------
+    class ISubtree;
+    struct TreeChangeList;
 
     //==========================================================================
     //= ITreeProvider
@@ -201,10 +118,12 @@ namespace configmgr
     class ITreeProvider
     {
     public:
+        typedef configuration::AbsolutePath AbsolutePath;
+
         enum { ALL_LEVELS = -1  };
 
         /// load the tree named by a path using certain options and requiring a specific loading depth - return it yielding ownership
-        virtual std::auto_ptr<ISubtree> loadSubtree(OUString const& aSubtreePath,
+        virtual std::auto_ptr<ISubtree> loadSubtree(AbsolutePath const& aSubtreePath,
                                                       const vos::ORef < OOptions >& _xOptions,
                                                       sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
 
@@ -221,6 +140,8 @@ namespace configmgr
     class ITreeManager : public ISynchronizedData
     {
     public:
+        typedef configuration::AbsolutePath AbsolutePath;
+
          enum { ALL_LEVELS = ITreeProvider::ALL_LEVELS  };
 
        /** request that the tree named by a path is added to the collection of managed trees
@@ -228,14 +149,14 @@ namespace configmgr
             Return a reference to that managed tree.
             The reference must later be released by calling releaseSubtree with the same path and options.
         */
-        virtual ISubtree * requestSubtree(OUString const& aSubtreePath,
+        virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath,
                                           const vos::ORef < OOptions >& _xOptions,
                                           sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception) = 0;
 
         /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
         */
-        virtual void fetchSubtree(OUString const& aSubtreePath,
+        virtual void fetchSubtree(AbsolutePath const& aSubtreePath,
                                   const vos::ORef < OOptions >& _xOptions,
                                   sal_Int16 nMinLevels = ALL_LEVELS) throw() = 0;
 
@@ -246,7 +167,7 @@ namespace configmgr
         virtual void notifyUpdate(TreeChangeList const& aChanges ) throw (uno::RuntimeException) = 0;
 
         // bookkeeping support
-        virtual void releaseSubtree(OUString const& aSubtreePath,
+        virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
                                     const vos::ORef < OOptions >& _xOptions ) throw () = 0;
 
         /** data for the given options may not be used any more
@@ -265,8 +186,12 @@ namespace configmgr
     class ITemplateProvider
     {
     public:
-        virtual ::std::auto_ptr<INode> requestTemplateInstance(::rtl::OUString const& aName, ::rtl::OUString const& aModule,
-                                           const vos::ORef < OOptions >& _xOptions) throw (uno::Exception) = 0;
+        typedef configuration::Name         Name;
+
+        virtual ::std::auto_ptr<INode> requestTemplateInstance(
+                                            Name const& aName, Name const& aModule,
+                                            const vos::ORef < OOptions >& _xOptions
+                                        ) throw (uno::Exception) = 0;
 
     };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,8 @@
  *
  ************************************************************************/
 #include <stdio.h>
-#ifndef CONFIGMGR_API_BASEACCESSIMPL_HXX_
+
 #include "accessimpl.hxx"
-#endif
 
 #ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
@@ -87,7 +86,7 @@
 #ifndef CONFIGMGR_API_PROPERTYINFOIMPL_HXX_
 #include "propertyinfohelper.hxx"
 #endif
-#ifndef _CONFIGMGR_TREEITERATORS_HXX_
+#ifndef CONFIGMGR_TREEITERATORS_HXX_
 #include "treeiterators.hxx"
 #endif
 
@@ -119,7 +118,6 @@ namespace configmgr
 
         using configuration::Tree;
         using configuration::Name;
-        using configuration::Path;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
         using configuration::Attributes;
@@ -143,8 +141,7 @@ OUString implGetHierarchicalName( NodeAccess& rNode ) throw(RuntimeException)
 
         Tree aTree( impl->getTree());
 
-        RelativePath const aLocalPath = aTree.getLocalPath(impl->getNode());
-        AbsolutePath const aFullPath  = aTree.getContextPath().compose(aLocalPath);
+        AbsolutePath const aFullPath  = aTree.getAbsolutePath(impl->getNode());
         sRet = aFullPath.toString();
     }
     catch (configuration::Exception& ex)
@@ -158,10 +155,10 @@ OUString implGetHierarchicalName( NodeAccess& rNode ) throw(RuntimeException)
 }
 
 //------------------------------------------------------------------------------------------------------------------
-OUString implComposeHierarchicalName(NodeAccess& rNode, const OUString& sRelativeName )
+OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString& sRelativeName )
     throw(css::lang::IllegalArgumentException, NoSupportException, RuntimeException)
 {
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails there
+    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails there
     OUString sRet;
     try
     {
@@ -169,11 +166,47 @@ OUString implComposeHierarchicalName(NodeAccess& rNode, const OUString& sRelativ
         NodeRef aNode( impl->getNode() );
         Tree aTree( impl->getTree() );
 
-        RelativePath const aAddedPath = reduceRelativePath(sRelativeName, aTree, aNode);
+        RelativePath const aAddedPath = validateRelativePath(sRelativeName, aTree, aNode);
 
         // TODO: add (relative) name validation based on node type - may then need provider lock
-        RelativePath const aLocalPath = aTree.getLocalPath(aNode).compose(aAddedPath);
-        AbsolutePath const aFullPath = aTree.getContextPath().compose(aLocalPath);
+        AbsolutePath const aFullPath = aTree.getAbsolutePath(aNode).compose(aAddedPath);
+
+        sRet = aFullPath.toString();
+    }
+    catch (configuration::InvalidName& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.illegalArgument(1);
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+
+
+    return sRet;
+}
+
+//------------------------------------------------------------------------------------------------------------------
+OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& sElementName )
+    throw(css::lang::IllegalArgumentException, NoSupportException, RuntimeException)
+{
+    using configuration::validateElementPathComponent; // should actually be found by "Koenig" lookup, but MSVC6 fails there
+    using configuration::Path::Component;
+    OUString sRet;
+    try
+    {
+        GuardedNodeAccess impl( rNode );
+        NodeRef aNode( impl->getNode() );
+        Tree aTree( impl->getTree() );
+
+        /*Path::*/Component const aAddedName = validateElementPathComponent(sElementName, aTree, aNode);
+
+        // TODO: add (relative) name validation based on node type - may then need provider lock
+        AbsolutePath const aFullPath = aTree.getAbsolutePath(aNode).compose(aAddedName);
 
         sRet = aFullPath.toString();
     }
@@ -287,7 +320,7 @@ sal_Bool implHasElements(NodeSetInfoAccess& rNode) throw(RuntimeException)
 //------------------------------------------------------------------------------------------------------------------
 namespace internal
 {
-    using configuration::NodeVisitor;
+    using namespace configuration;
     struct SearchExactName : private NodeVisitor
     {
     protected:
@@ -301,11 +334,11 @@ namespace internal
         , pSearchComponent(aSearchPath.begin_mutate())
         {}
 
-        bool complete() const { return aSearchPath.end() == pSearchComponent; }
+        bool complete() { return aSearchPath.end_mutate() == pSearchComponent; }
 
         bool search(NodeRef const& aNode, Tree const& aTree);
 
-        OUString getBestMatch() const { return aSearchPath.toString(); }
+        RelativePath const& getBestMatch() const { return aSearchPath; }
 
     private:
         bool findMatch(NodeRef& aNode, Tree& aTree);
@@ -320,7 +353,7 @@ namespace internal
         if ( !aNode.isValid() ) return false;
 
         using configuration::hasChildOrElement;
-        using configuration::findInnerChildNode;
+        using configuration::findInnerChildOrAvailableElement;
 
         // exact match ?
         if (!hasChildOrElement(aTree,aNode,*pSearchComponent))
@@ -330,10 +363,24 @@ namespace internal
         }
         OSL_ASSERT(hasChildOrElement(aTree,aNode,*pSearchComponent));
 
-        if (! findInnerChildNode(aTree,aNode,*pSearchComponent++) )
-            aNode = NodeRef(); // will stop recursion (value found)
+        if (! findInnerChildOrAvailableElement(aTree,aNode,pSearchComponent->getName()) )
+            aNode = NodeRef(); // will stop recursion (value or unloaded element found)
+        ++pSearchComponent;
 
         return true;
+    }
+    //..................................................................................................................
+    // helper
+    static Path::Component getExtendedNodeName(Tree const& aTree, NodeRef const& aNode, Name const& aSimpleNodeName)
+    {
+        OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
+        OSL_PRECOND( !aNode.isValid() || aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
+
+        if (aTree.isRootNode(aNode))
+            return aTree.getRootName();
+
+        else
+            return Path::wrapSimpleName(aSimpleNodeName);
     }
     //..................................................................................................................
     NodeVisitor::Result SearchExactName::handle(Tree const& aTree, NodeRef const& aNode)
@@ -344,9 +391,10 @@ namespace internal
         // find inexact match (the first one, but the order is unspecified)
         // TODO: Add support for node-type-specific element names
         Name aNodeName = aTree.getName(aNode);
-        if (aNodeName.toString().equalsIgnoreAsciiCase(pSearchComponent->toString()))
+        Name aSearchName = pSearchComponent->getName();
+        if (aNodeName.toString().equalsIgnoreAsciiCase(aSearchName.toString()))
         {
-            *pSearchComponent = aNodeName;
+            *pSearchComponent = getExtendedNodeName(aTree,aNode,aNodeName);
             return DONE; // for this level
         }
         else
@@ -361,9 +409,12 @@ namespace internal
         // find inexact match (the first one, but the order is unspecified)
         // TODO: Add support for node-type-specific element names
         Name aNodeName = aTree.getName(aNode);
-        if (aNodeName.toString().equalsIgnoreAsciiCase(pSearchComponent->toString()))
+        OSL_ASSERT( isSimpleName(aNodeName) );
+
+        // value refs are group members and thus have to have simple names
+        if (aNodeName.toString().equalsIgnoreAsciiCase(pSearchComponent->getName().toString()))
         {
-            *pSearchComponent = aNodeName;
+            *pSearchComponent = Path::wrapSimpleName(aNodeName);
             return DONE; // for this level
         }
         else
@@ -387,26 +438,71 @@ namespace internal
 } // namespace internal
 
 //..................................................................................................................
-OUString implGetExactName(NodeAccess& rNode, const OUString& rApproximateName ) throw(RuntimeException)
+OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& rApproximateName ) throw(RuntimeException)
 {
+    // here we try to support both tree-fragment-local pathes and simple names (the latter ones are just an instance of the first)
     try
     {
         using internal::SearchExactName;
-        using configuration::reduceRelativePath;
+        using configuration::validateRelativePath;
 
         GuardedNodeDataAccess impl( rNode );
 
         Tree aTree(impl->getTree());
         NodeRef aNode(impl->getNode());
 
-        // TODO: (?) handle absolute pathes' prefix part properly:
-        RelativePath aApproximatePath = configuration::reduceRelativePath(rApproximateName,aTree,aNode);
+        RelativePath aApproximatePath = validateRelativePath(rApproximateName,aTree,aNode);
 
         SearchExactName aSearch(aApproximatePath);
 
         aSearch.search(aNode, aTree);
 
-        return aSearch.getBestMatch();
+        OSL_ENSURE( aSearch.getBestMatch().getDepth() == aApproximatePath.getDepth(),
+                    "Search for exact names changed number of path components !?");
+
+        return aSearch.getBestMatch().toString();
+    }
+    catch (configuration::InvalidName& )
+    {
+        OSL_TRACE("WARNING: Configuration::getExactName: query uses locally invalid Path");
+        return rApproximateName;
+    }
+    catch (configuration::Exception& ex)
+    {
+        ExceptionMapper e(ex);
+        e.setContext( rNode.getUnoInstance() );
+        e.unhandled();
+    }
+    // unreachable, but still there to make compiler happy
+    OSL_ASSERT(!"Unreachable code");
+    return rApproximateName;
+}
+
+//..................................................................................................................
+OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& rApproximateName ) throw(RuntimeException)
+{
+    // here we can support only local names
+    try
+    {
+        using internal::SearchExactName;
+        using configuration::validateElementPathComponent;
+        using configuration::Path::Component;
+
+        GuardedNodeDataAccess impl( rNode );
+
+        Tree aTree(impl->getTree());
+        NodeRef aNode(impl->getNode());
+
+        /*Path::*/Component aApproximateName = validateElementPathComponent(rApproximateName,aTree,aNode);
+
+        SearchExactName aSearch(aApproximateName);
+
+        aSearch.search(aNode, aTree);
+
+        OSL_ENSURE( aSearch.getBestMatch().getDepth() == 1,
+                    "Search for exact names changed number of path components !?");
+
+        return aSearch.getBestMatch().getLocalName().getName().toString();
     }
     catch (configuration::InvalidName& )
     {
@@ -472,7 +568,7 @@ sal_Bool implHasByName(NodeAccess& rNode, const OUString& sName ) throw(RuntimeE
     {
         GuardedNodeDataAccess impl( rNode );
 
-        Name aChildName = configuration::makeName(sName);
+        Name aChildName = configuration::makeName(sName, Name::NoValidate());
 
         return hasChildOrElement(impl->getTree(), impl->getNode(), aChildName);
     }
@@ -509,7 +605,7 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
         Tree aTree( impl->getTree() );
         NodeRef aNode( impl->getNode() );
 
-        Name aChildName = configuration::validateNodeName(sName,aTree,aNode);
+        Name aChildName = configuration::validateChildOrElementName(sName,aTree,aNode);
 
         AnyNodeRef aChildNode = getChildOrElement(aTree,aNode, aChildName);
         if (!aChildNode.isValid())
@@ -517,7 +613,7 @@ Any implGetByName(NodeAccess& rNode, const OUString& sName )
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Child Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
@@ -569,33 +665,6 @@ Sequence< OUString > implGetElementNames( NodeAccess& rNode ) throw( RuntimeExce
 
 // XHierarchicalNameAccess
 //-----------------------------------------------------------------------------------
-/*
-// if NULL is returned, aPath may have a Partial path appended
-NodeRef findDescendant(RelativePath const& aRelativePath, TreePath& aPath)
-{
-    checkInitialized();
-
-    ConfigurationName aName( aRelativePath );
-    if (!normalizeNestedPath(aName))
-        return 0;
-
-    ConfigurationName::Iterator it = aName.begin();
-    ConfigurationName::Iterator const stop  = aName.end();
-
-    for(TreeRef pTree = m_aSubtree; pTree != 0; )
-    {
-        NodeRef pFound = pTree->getChild(*it);
-        aPath.push_back(pTree);
-
-        if (++it == stop || !pFound)
-            return pFound;
-
-        pTree = pFound->asISubtree();
-    }
-
-    return 0;
-}
-*/
 
 //-----------------------------------------------------------------------------------
 // TO DO: optimization - cache the node found for subsequent getByHierarchicalName()
@@ -603,8 +672,8 @@ NodeRef findDescendant(RelativePath const& aRelativePath, TreePath& aPath)
 sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalName ) throw(RuntimeException)
 {
     using namespace com::sun::star::container;
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateAndReducePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getDeepDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
         GuardedNodeDataAccess impl( rNode );
@@ -612,9 +681,9 @@ sal_Bool implHasByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchi
         Tree aTree( impl->getTree() );
         NodeRef aNode( impl->getNode() );
 
-        RelativePath aRelPath = reduceRelativePath( sHierarchicalName, aTree, aNode );
+        RelativePath aRelPath = validateAndReducePath( sHierarchicalName, aTree, aNode );
 
-        return getDescendant(aTree, aNode, aRelPath).isValid();
+        return getDeepDescendant(aTree, aNode, aRelPath).isValid();
     }
     catch (configuration::InvalidName& )
     {
@@ -637,8 +706,8 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
     throw(css::container::NoSuchElementException, RuntimeException)
 {
     using namespace com::sun::star::container;
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateAndReducePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getDeepDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
         GuardedNodeDataAccess impl( rNode );
@@ -646,15 +715,15 @@ Any implGetByHierarchicalName(NodeAccess& rNode, const OUString& sHierarchicalNa
         Tree aTree( impl->getTree() );
         NodeRef aNode( impl->getNode() );
 
-        RelativePath aRelPath = reduceRelativePath( sHierarchicalName, aTree, aNode );
+        RelativePath aRelPath = validateAndReducePath( sHierarchicalName, aTree, aNode );
 
-        AnyNodeRef aNestedNode = getDescendant( aTree, aNode, aRelPath );
+        AnyNodeRef aNestedNode = getDeepDescendant( aTree, aNode, aRelPath );
         if (!aNestedNode.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Descendant Element '") );
             sMessage += aRelPath.toString();
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Node ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( impl->getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
@@ -691,7 +760,7 @@ OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
     throw(uno::RuntimeException)
 {
     GuardedNode<NodeSetInfoAccess> impl(rNode);
-    return impl->getElementInfo().getTemplatePath().toString();
+    return impl->getElementInfo().getTemplatePathString();
 }
 
 // XStringEscape

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:23:17 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,11 +62,18 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #define CONFIGMGR_CONFIGPATH_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
-#include "configexcept.hxx"
-#include <vector>
+#endif
 
-#include "attributes.hxx"
+#ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
+#include "attributes.hxx" // used to be defined in this header
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif  INCLUDED_VECTOR
 
 namespace configmgr
 {
@@ -77,10 +84,10 @@ namespace configmgr
         namespace argument { struct NoValidate {}; }
 
         class Name;
-        class Path;
         class AbsolutePath;
         class RelativePath;
     //------------------------------------------------------------------------
+        namespace Path { struct PackageOnly; }
 
         /// represents a name for a node in the configuration
         class Name
@@ -89,40 +96,63 @@ namespace configmgr
             /// A dummy parameter for disabling validity checking on arguments
             typedef argument::NoValidate NoValidate;
 
-            /// construct an empty Name
-            Name() : m_sRep() {}
+            /// construct a Name from a String (internal use only - use creation wrapper functions)
+            explicit Name(OUString const& aString, Path::PackageOnly) SAL_THROW(());
 
-            /// construct a Name from a String without checking whether it is a valid node-name
-            explicit Name(OUString const& aString, NoValidate);
+        public:
+            /// construct an empty Name
+            Name() SAL_THROW(()) : m_sRep() {}
 
             /// check whether this is an empty Name
-            bool isEmpty() const { return m_sRep.getLength() == 0; }
+            bool isEmpty() const SAL_THROW(()) { return m_sRep.getLength() == 0; }
 
             /// get a string representation of this Name
-            const OUString& toString() const { return m_sRep; }
+            const OUString& toString() const SAL_THROW(()) { return m_sRep; }
 
         public:
         // comparison operators
             // equality (== is primary)
-            friend bool operator==(Name const& lhs, Name const& rhs)
+            friend bool operator==(Name const& lhs, Name const& rhs) SAL_THROW(())
             { return !!(lhs.m_sRep == rhs.m_sRep); }
 
         // comparison operators
             // ordering (< is primary)
-            friend bool operator< (Name const& lhs, Name const& rhs)
+            friend bool operator< (Name const& lhs, Name const& rhs) SAL_THROW(())
             { return !!(lhs.m_sRep < rhs.m_sRep); }
 
         // hashing support
-            size_t hashCode() const { return m_sRep.hashCode(); }
+            size_t hashCode() const SAL_THROW(()) { return m_sRep.hashCode(); }
         private:
             OUString m_sRep;
         };
         //--------------------------------------------------------------------
 
+        /** check if this is a well-formed name for a
+            config Node (excluding set elements)
+        */
+        bool isSimpleName(OUString const& sName) SAL_THROW(());
+
+        /** check if this is a well-formed name for a
+            config Node (excluding set elements)
+        */
+        inline
+        bool isSimpleName(Name const& sName) SAL_THROW(())
+        { return isSimpleName(sName.toString()); }
+
         /** make a <type>Name</type> out of <var>sName</var>
             without full Validation.
         */
-        Name makeName(OUString const& sName);
+        Name makeName(OUString const& sName, argument::NoValidate) SAL_THROW(());
+
+        /** make a <type>Name</type> out of <var>sName</var>,
+            which should be used for a config Node (excluding set elements)
+        */
+        Name makeNodeName(OUString const& sName, argument::NoValidate) SAL_THROW(());
+
+        /** make a <type>Name</type> out of <var>sName</var>,
+            which should be used for a config Node (excluding set elements)
+        */
+        Name makeElementName(OUString const& sName, argument::NoValidate) SAL_THROW(());
 
         /** make a <type>Name</type> out of <var>sName</var>,
             validating that it can be used for a config Node (excluding set elements)
@@ -134,7 +164,6 @@ namespace configmgr
 
         /** make a <type>Name</type> out of <var>sName</var>
             validating that it can be used for a config set element
-            or template name.
             @throws InvalidName
                 if the name is not valid for that purpose
         */
@@ -142,369 +171,451 @@ namespace configmgr
     //------------------------------------------------------------------------
 
     //------------------------------------------------------------------------
-        /// lower-level representation a path within the configuration
-        class PathRep
+        namespace Path
         {
-        public:
-            /// a sequence of element names which make up a path
-            typedef std::vector<Name> Components;
+        //------------------------------------------------------------------------
+            /// tag for disabling validity checking on arguments
+            using argument::NoValidate;
+
+        //------------------------------------------------------------------------
+
+            class Component
+            {
+                /// holds the contents of this path component
+                Name m_aName;
+            public:
+                /// construct a path component from a string, without any validation
+                Component(OUString const& _sName, PackageOnly) SAL_THROW(());
+                /// construct a path component from a Name, without any validation
+                Component(Name const& _aName, PackageOnly) SAL_THROW(());
+
+                /// is this component an empty name ?
+                bool isEmpty()    const SAL_THROW(()) { return m_aName.isEmpty(); }
+                /// is this component a simple name ?
+                bool isSimpleName()    const SAL_THROW(());
+                /// get the inner name for this component
+                Name getName()         const SAL_THROW(());
+                /// get the embedded type name for this component (if any)
+                Name getTypeName()     const SAL_THROW(());
+                /// get inner name and the embedded type name (if any) for this component
+                bool splitCompositeName(Name& _rName, Name& _rType) const SAL_THROW(());
+                /// get inner name and the embedded type name (if any) for this component as strings
+                bool splitCompositeName(OUString& _rName, OUString& _rType) const SAL_THROW(());
+
+                /// get the contents of this as string (unparsed).
+                OUString toPathString() const SAL_THROW(()) { return m_aName.toString(); }
+
+                // hashing - for hash maps. compatible to equiv or matches
+                size_t hashCode() const SAL_THROW(())
+                { return this->getName().hashCode(); }
+
+                /// get the contents of this as a Name (unparsed). Use with care !
+                Name const& getInternalName() const SAL_THROW(()) { return m_aName; }
+
+            };
+
+        //-------------------------------------------------------------------------
+
+            /// compare taking type wildcards into account
+            bool matches(Component const& lhs,Component const& rhs) SAL_THROW(());
+
+            /// compare by inner names only
+            bool before(Component const& lhs,Component const& rhs) SAL_THROW(());
+
+            /// compare by inner names only
+            bool equiv(Component const& lhs,Component const& rhs) SAL_THROW(());
+        //-------------------------------------------------------------------------
+
+            /// construct a empty path component
+            Component makeEmptyComponent() SAL_THROW(());
+
+        //-------------------------------------------------------------------------
+            /// construct a path component from a name, validating it as simple name
+            Component wrapSimpleName(Name const& _aName);
+
+            /// construct a path component from a type and element name, using a wildcard if no type is available
+            Component makeCompositeName(Name const& _aElementName, Name const& _aTypeName);
+
+        //-------------------------------------------------------------------------
+            /// construct a path component from a string, validating it as simple name
+            Component wrapSimpleName(OUString const& _sName);
+
+            /// construct a path component from a type and element name as strings, using a wildcard if no type is available
+            Component makeCompositeName(OUString const& _sElementName, OUString const& _sTypeName);
+
+    //-----------------------------------------------------------------------------
+            /// construct a composite path component from a element name or string, using a wildcard type
+            template <class NameRep>
+            Component wrapElementName(NameRep const& _aElementName) SAL_THROW(())
+            {
+                return makeCompositeName(_aElementName, NameRep());
+            }
+
+        //-------------------------------------------------------------------------
+            /// construct a path component from an arbitrary na,e or string
+            template <class NameRep>
+            Component wrapSafeName(NameRep const& _aName) SAL_THROW(())
+            {
+                return isSimpleName(_aName) ? wrapSimpleName(_aName) : wrapElementName(_aName);
+            }
+
+    //-----------------------------------------------------------------------------
+            /** lower-level representation of a path within the configuration
+                <p>Keeps the data in a vector of names in reverse order! </P>
+            */
+            class Rep
+            {
+            public:
+                /// a sequence of element names which make up a path
+                typedef std::vector<Component> Components;
+                /// a (read-only) iterator to the element names which make up a path
+                typedef Components::const_reverse_iterator Iterator;
+                /// a (mutating) iterator to the element names which make up a path
+                typedef Components::reverse_iterator MutatingIterator;
+                /// a (mutating) iterator to the element names which make up a path
+                typedef Components::size_type size_type;
+
+            public:
+                /// construct an empty path
+                Rep() SAL_THROW(()) : m_aComponents() {}
+
+                /// construct a path consisting of a single component <var>_aName</var>
+                explicit Rep(Component const& _aName) SAL_THROW(()) : m_aComponents(1,_aName) {}
+
+                /// construct a path consisting of a path subrange
+                explicit Rep(Iterator const& _first, Iterator const& _last)
+                : m_aComponents(_last.base(), _first.base()) {}
+
+                /// swap contents with another instance
+                void swap(Rep& _aOther) SAL_THROW(()) { m_aComponents.swap(_aOther.m_aComponents); }
+
+                /// modify a path by prepending <var>aName</var>
+                void prepend(Component const& _aName) SAL_THROW(()) { m_aComponents.push_back(_aName); }
+
+                /// modify a path by prepending <var>aName</var>
+                void prepend(Rep const& _aOther) SAL_THROW(());
+
+                /// get the local name (the last component of this path)
+                Component const& getLocalName() const { check_not_empty(); return m_aComponents.front(); }
+
+                /// get the next name (the first component of this path)
+                Component const& getFirstName() const { check_not_empty(); return m_aComponents.back(); }
+
+                /// set this to the remainder after the first name (drop the first component of this path)
+                void dropFirstName() { check_not_empty(); m_aComponents.pop_back(); }
+
+                /// get a /-separated string representation of this
+                OUString toString(bool _bAbsolute) const SAL_THROW(());
+
+            public:
+                /// check if this is an empty path
+                bool isEmpty() const SAL_THROW(()) { return m_aComponents.empty(); }
+
+                /// Count the components of this
+                size_type countComponents() const SAL_THROW(()) { return m_aComponents.size(); }
+
+                /// Insert a component into this path
+                void insertComponent(MutatingIterator _it, Component _aName)
+                { m_aComponents.insert(_it.base(),_aName); }
+
+                /// Remove a component from this path
+                void removeComponent(MutatingIterator _it) { m_aComponents.erase(_it.base()); }
+
+                /// Remove all components from this path
+                void clearComponents() SAL_THROW(()) { m_aComponents.clear(); }
+
+                /// get a STL style iterator to the first component
+                Iterator begin() const SAL_THROW(()) { return m_aComponents.rbegin(); }
+                /// get a STL style iterator to after the last component
+                Iterator end()   const SAL_THROW(()) { return m_aComponents.rend(); }
+
+                /// get a STL style iterator to the first component
+                MutatingIterator begin_mutate() SAL_THROW(()) { return m_aComponents.rbegin(); }
+                /// get a STL style iterator to after the last component
+                MutatingIterator end_mutate() SAL_THROW(())   { return m_aComponents.rend(); }
+
+                // hashing - for hash maps
+                size_t hashCode() const SAL_THROW(());
+
+                /// preflight check for operations that require a non-empty path
+                void check_not_empty() const;
+
+            private:
+                Components m_aComponents;
+            };
+        //------------------------------------------------------------------------
+
+            /// compare taking type wildcards into account
+            bool matches(Rep const& lhs,Rep const& rhs) SAL_THROW(());
+
+            /// compare by inner names only
+            bool before(Rep const& lhs,Rep const& rhs) SAL_THROW(());
+
+            /// compare by inner names only
+            bool equiv(Rep const& lhs,Rep const& rhs) SAL_THROW(());
+        //------------------------------------------------------------------------
+
+            /// check a path for a prefix
+            bool hasMatchingPrefix(Rep const& _aPath,Rep const& _aPrefix) SAL_THROW(());
+
+            /// remove a prefix from a path. Throws InvalidName if it isn't a prefix
+            Rep stripMatchingPrefix(Rep const& _aPath,Rep const& _aPrefix);
+        //------------------------------------------------------------------------
+
             /// a (read-only) iterator to the element names which make up a path
-            typedef Components::const_iterator Iterator;
+            typedef Rep::Iterator Iterator;
             /// a (mutating) iterator to the element names which make up a path
-            typedef Components::iterator MutatingIterator;
-        public:
-            /// construct a path consisting of the components of <var>aComponents</var>
-            explicit PathRep(Components const& sComponents);
+            typedef Rep::MutatingIterator MutatingIterator;
+            /// a (mutating) iterator to the element names which make up a path
+            typedef Rep::size_type size_type;
+        //------------------------------------------------------------------------
 
-            /// build the path that results from appending <var>aRelativePath</var> to this
-            PathRep compose(PathRep const& aRelativePath) const;
-
-            /// construct a path by appending <var>aName</var>
-            PathRep child(Name const& aName) const;
-
-            /// build the path that results from dropping the last component off this
-            PathRep parent() const;
-
-            /// get the local name (the last component of this path)
-            Name getLocalName() const;
-
-            /// get a /-separated string representation of this
-            OUString toString() const;
-        public:
-            /// Get a reference to (or copy of) a collection of all components of this
-            Components const& components() const { return m_aComponents; }
-
-            /// check if this is an empty path
-            bool isEmpty() const { return m_aComponents.empty(); }
-
-            /// Count the components of this
-            Components::size_type countComponents() const { return m_aComponents.size(); }
-
-            /// Insert a component into this path
-            void insertComponent(MutatingIterator it, Name aName = Name()) { m_aComponents.insert(it,aName); }
-            /// Remove a component from this path
-            void removeComponent(MutatingIterator it) { m_aComponents.erase(it); }
-            /// Remove all components from this path
-            void clearComponents() { m_aComponents.clear(); }
-
-            /// get a STL style iterator to the first component
-            Iterator begin() const { return m_aComponents.begin(); }
-            /// get a STL style iterator to after the last component
-            Iterator end()   const { return m_aComponents.end(); }
-
-            /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() { return m_aComponents.begin(); }
-            /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate()   { return m_aComponents.end(); }
-
-        // comparison
-            // equality (== is primary)
-            friend bool operator==(PathRep const& lhs, PathRep const& rhs);
-            friend bool operator!=(PathRep const& lhs, PathRep const& rhs)
-            { return !(lhs == rhs); }
-            // ordering - for maps
-            bool before(PathRep const& rhs) const;
-            // hashing - for hash maps
-            size_t hashCode() const;
-        private:
-            Components m_aComponents;
-        };
-
+            /// distinguishes which kind of path is present in a string
+            bool isAbsolutePath(OUString const& _sPath);
+        //------------------------------------------------------------------------
+        }
     //------------------------------------------------------------------------
 
         class RelativePath
         {
-            PathRep m_aRep;
+            Path::Rep m_aRep;
         public:
-            /// A dummy parameter for disabling validity checking on arguments
-            typedef argument::NoValidate NoValidate;
-
-            /// a sequence of element names which make up a path
-            typedef PathRep::Components Components;
             /// a (read-only) iterator to the element names which make up a path
-            typedef PathRep::Iterator   Iterator;
+            typedef Path::Iterator  Iterator;
             /// a (mutating) iterator to the element names which make up a path
-            typedef PathRep::MutatingIterator MutatingIterator;
+            typedef Path::MutatingIterator MutatingIterator;
         public:
         // Construction
+            /// construct a relative path from <var>aString</var> throwing InvalidName for parse errors
+            static  RelativePath parse(OUString const& _aString);
+
             /// construct an empty relative path
-            RelativePath();
-            /// construct a relative path from <var>aString</var> ignoring any parse errors
-            explicit RelativePath(OUString const& aString, NoValidate);
-            /// construct a relative path having <var>aName</var> as single component
-            explicit RelativePath(Name const& aName);
+            RelativePath() SAL_THROW(()) : m_aRep() { init(); }
+
             /// construct a relative path having <var>aRep</var> as representation
-            explicit RelativePath(PathRep const& aRep) : m_aRep(aRep) { init(); }
-            /// construct a relative path consisting of the components of <var>aComponents</var>
-            explicit RelativePath(Components const& aComponents) : m_aRep(aComponents) { init(); }
+            explicit RelativePath(Path::Rep const& _aRep)
+            : m_aRep(_aRep) { init(); }
+
+            /// CONVERSION: construct a relative path having <var>aName</var> as single component
+            RelativePath(Path::Component const& _aName) SAL_THROW(());
 
             /// build the Path that results from appending <var>aPath</var> to this
-            RelativePath compose(RelativePath const& aPath) const;
-
-            /// construct a path to the child of this path named by <var>aName</var>
-            RelativePath child(Name const& aName) const;
-
-            /// build the path that results from dropping the last component off this
-            RelativePath parent() const;
+            RelativePath compose(RelativePath const& _aPath) const SAL_THROW(());
 
             /// check if this is an empty path
-            bool isEmpty() const { return m_aRep.isEmpty(); }
+            bool isEmpty() const SAL_THROW(()) { return m_aRep.isEmpty(); }
 
             /// Count the components of this
-            Components::size_type getDepth() const { return m_aRep.countComponents(); }
+            Path::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
 
             /// get the local name (the last component of this path)
-            Name getLocalName() const { return m_aRep.getLocalName(); }
+            Path::Component const& getLocalName() const { return m_aRep.getLocalName(); }
+
+            /// get the local name (the first component of this path)
+            Path::Component const& getFirstName() const { return m_aRep.getFirstName(); }
+
+            /// set this to the remainder of this path after the first name (drop the first component of this path)
+            void dropFirstName() { m_aRep.dropFirstName(); }
 
             /// get a /-separated string representation of this
-            OUString toString() const;
+            OUString toString() const SAL_THROW(());
         public:
         // Iteration support
             /// get a STL style iterator to the first component
-            Iterator begin() const { return m_aRep.begin(); }
+            Iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
             /// get a STL style iterator to after the last component
-            Iterator end()   const { return m_aRep.end(); }
+            Iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
 
             /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() { return m_aRep.begin_mutate(); }
+            MutatingIterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
             /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate()   { return m_aRep.end_mutate(); }
-
-        // Decomposed access
-            /// Get a collection of all components of this
-            Components components() const { return m_aRep.components(); }
+            MutatingIterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
 
         // Direct access - 'package' visible
             /// Get a reference to (or copy of) the internal PathRep of this
-            PathRep const& rep() const { return m_aRep; }
-        public:
-        // comparison operators
-            // equality (== is primary)
-            friend bool operator==(RelativePath const& lhs, RelativePath const& rhs)
-            { return lhs.m_aRep == rhs.m_aRep; }
+            Path::Rep const& rep() const SAL_THROW(()) { return m_aRep; }
 
-            // ordering (< is primary)
-            friend bool operator< (RelativePath const& lhs, RelativePath const& rhs)
-            { return lhs.m_aRep.before(rhs. m_aRep); }
-
-            // hashing
-            size_t hashCode() const { return m_aRep.hashCode(); }
         private:
             void init();
         };
+
+        /// compare taking type wildcards into account
+        inline bool matches(RelativePath const& lhs,RelativePath const& rhs) SAL_THROW(())
+        { return Path::matches(lhs.rep(),rhs.rep()); }
 
     //------------------------------------------------------------------------
 
         class AbsolutePath
         {
-            PathRep m_aRep; enum { REP_OFF = 1 };
+            Path::Rep m_aRep;
         public:
             /// A dummy parameter for disabling validity checking on arguments
             typedef argument::NoValidate NoValidate;
 
-            /// a sequence of element names which make up a path
-            typedef PathRep::Components Components;
             /// a (read-only) iterator to the element names which make up a path
-            typedef PathRep::Iterator   Iterator;
+            typedef Path::Iterator  Iterator;
             /// a (mutating) iterator to the element names which make up a path
-            typedef PathRep::MutatingIterator MutatingIterator;
+            typedef Path::MutatingIterator MutatingIterator;
         public:
         // Construction
-            /// construct a absolute path from <var>aString</var> ignoring any parse errors
-            explicit AbsolutePath(OUString const& aString, NoValidate);
-            /// construct a absolute path having <var>aRep</var> as representation
-            explicit AbsolutePath(PathRep const& aRep) : m_aRep(aRep) { init(); }
-            /// construct a absolute path consisting of the components of <var>aComponents</var>
-            explicit AbsolutePath(Components const& aComponents) : m_aRep(aComponents) { init(); }
+            /// construct a absolute path from <var>aString</var> throwing InvalidName for parse errors
+            static AbsolutePath parse(OUString const& _aString);
+
+            /// construct a absolute path to a whole module (toplevel)
+            static AbsolutePath makeModulePath(Name const& _aModuleName)
+            { return AbsolutePath( Path::Rep( Path::wrapSimpleName(_aModuleName) ) ); }
+
+            /// construct a absolute path to a whole module (toplevel)
+            static AbsolutePath makeModulePath(Name const& _aModuleName, NoValidate) SAL_THROW(());
+
+            /// construct a absolute path to a whole module (toplevel) without error checking
+            static AbsolutePath makeModulePath(OUString const& _aString, NoValidate) SAL_THROW(());
 
             /// construct an absolute path to the (virtual) hierarchy root
-            static  AbsolutePath root();
+            static  AbsolutePath root() SAL_THROW(());
 
             /// construct an (otherwise invalid) substitute path for the root of a free-floating node
-            static  AbsolutePath detachedRoot();
+            static  AbsolutePath detachedRoot() SAL_THROW(());
+
+            /// construct a absolute path having <var>aRep</var> as representation
+            explicit AbsolutePath(Path::Rep const& _aRep) SAL_THROW(())
+            : m_aRep(_aRep) { init(); }
 
             /// build the absolute path that results from appending <var>aPath</var> to this
-            AbsolutePath compose(RelativePath const& aPath) const;
+            AbsolutePath compose(RelativePath const& _aPath) const SAL_THROW(());
 
-            /// construct a path to the child of this path named by <var>aName</var>
-            AbsolutePath child(Name const& aName) const;
+            /// build the absolute path that results from removing the last component of this
+            AbsolutePath getParentPath() const;
 
-            /// build the path that results from dropping the last component off this
-            AbsolutePath parent() const;
+            /// check if this is the path to the (imaginary) root node
+            bool isRoot() const SAL_THROW(()) { return m_aRep.isEmpty(); }
 
-            /// check if this is the path to the root node
-            bool isRoot() const;
+            /// check if this is a path to a detached node
+            bool isDetached() const SAL_THROW(());
 
             /// get the local name (the last component of this path)
-            Name getLocalName() const { return m_aRep.getLocalName(); }
+            Path::Component const& getLocalName() const { return m_aRep.getLocalName(); }
 
-            Name getModuleName() const { return isRoot() ? Name() : *begin(); }
+            Name const & getModuleName() const { return m_aRep.getFirstName().getInternalName(); }
 
             /// get a /-separated string representation of this
-            OUString toString() const;
+            OUString toString() const SAL_THROW(());
 
             /// Count the components of this
-            Components::size_type getDepth() const { return m_aRep.countComponents() - REP_OFF; }
+            Path::size_type getDepth() const SAL_THROW(()) { return m_aRep.countComponents(); }
         public:
         // Iteration support
             /// get a STL style iterator to the first component
-            Iterator begin() const { return m_aRep.begin() + REP_OFF; }
+            Iterator begin() const SAL_THROW(()) { return m_aRep.begin(); }
             /// get a STL style iterator to after the last component
-            Iterator end()   const { return m_aRep.end(); }
+            Iterator end()   const SAL_THROW(()) { return m_aRep.end(); }
 
             /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() { return m_aRep.begin_mutate() + REP_OFF; }
+            MutatingIterator begin_mutate() SAL_THROW(()) { return m_aRep.begin_mutate(); }
             /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate()   { return m_aRep.end_mutate(); }
-
-        // Decomposed access
-            /// Get a collection of all components of this
-            Components components() const  { return Components(begin(),end()); }
+            MutatingIterator end_mutate() SAL_THROW(())   { return m_aRep.end_mutate(); }
 
         // Direct access - 'package' visible
             /// Get a reference to (or copy of) the internal PathRep of this
-            PathRep const& rep() const { return m_aRep; }
-        public:
-        // comparison operators
-            // equality (== is primary)
-            friend bool operator==(AbsolutePath const& lhs, AbsolutePath const& rhs)
-            { return lhs.m_aRep == rhs.m_aRep; }
-
-            // ordering (< is primary)
-            friend bool operator< (AbsolutePath const& lhs, AbsolutePath const& rhs)
-            { return lhs.m_aRep.before(rhs. m_aRep); }
-
-            // hashing
-            size_t hashCode() const { return m_aRep.hashCode(); }
+            Path::Rep const& rep() const SAL_THROW(()) { return m_aRep; }
         private:
-            void init();
+            void init() SAL_THROW(());
         };
 
-        /// distinguishes which kind of path is held in a <type>Path</type> object
-        namespace PathType { enum Type { eNAME = 0, eRELATIVE = 1, eABSOLUTE = 2, ePATH = 3 }; }
-        //------------------------------------------------------------------------
-        class Path
-        {
-        public:
-            /// A dummy parameter for disabling validity checking on arguments
-            typedef argument::NoValidate NoValidate;
-
-            /// distinguishes which kind of path is held in this object
-            typedef PathType::Type Type;
-
-            /// a sequence of element names which make up a path
-            typedef PathRep::Components Components;
-            /// a (read-only) iterator to the element names which make up a path
-            typedef PathRep::Iterator   Iterator;
-            /// a (mutating) iterator to the element names which make up a path
-            typedef PathRep::MutatingIterator MutatingIterator;
-        public:
-            /// Parse a /-separated string into a collection of path components (best try, no exceptions)
-            static Components parse(OUString const& aString,  Type eType = PathType::ePATH);
-        public:
-            /// construct a path (of type <var>eType</var>) from <var>aString</var> ignoring any parse errors
-            explicit Path(OUString const& aString, NoValidate, Type eType = PathType::ePATH);
-
-            /// construct a path (of type <var>eType</var>) having <var>aRep</var> as representation
-            explicit Path(PathRep const& aRep, Type eType = PathType::ePATH);
-
-            /// construct a path (of type <constant>Path::NAME</constant>) containing <var>aName</var>
-            explicit Path(Name const& aName);
-
-            /// construct a path (of type <constant>Path::ABSOLUTE</constant>) equal to <var>aPath</var>
-            Path(AbsolutePath const& aPath);
-
-            /// construct a path (of type <constant>Path::RELATIVE</constant>) equal to <var>aPath</var>
-            Path(RelativePath const& aPath);
-
-            /// build the path (of the same type as this) that results from appending <var>aPath</var> to this
-            Path compose(RelativePath const& aPath) const;
-
-            /// construct a path to the child of this path named by <var>aName</var>
-            Path child(Name const& aName) const;
-
-            /// build the path that results from dropping the last component off this
-            Path parent() const;
-
-            /// tell the type of this (as known)
-            Type getType() const { return m_eType; }
-
-            /// get the local name (the last component of this path)
-            Name getLocalName() const { return m_aRep.getLocalName(); }
-
-            /// get a /-separated string representation of this
-            OUString toString() const;
-        public:
-        // Iteration support
-            /// get a STL style iterator to the first component
-            Iterator begin() const { return m_aRep.begin(); }
-            /// get a STL style iterator to after the last component
-            Iterator end()   const { return m_aRep.end(); }
-
-            /// get a STL style iterator to the first component
-            MutatingIterator begin_mutate() { return m_aRep.begin_mutate(); }
-            /// get a STL style iterator to after the last component
-            MutatingIterator end_mutate()   { return m_aRep.end_mutate(); }
-
-        // Decomposed access
-            /// Get a collection of all components of this
-            Components components() const  { return m_aRep.components(); }
-
-        // Direct access - 'package' visible
-            /// Get a reference to (or copy of) the internal PathRep of this
-            PathRep const& rep() const { return m_aRep; }
-        public:
-        // comparison operators
-            // equality (== is primary)
-            friend bool operator==(Path const& lhs, Path const& rhs)
-            { return lhs.m_aRep == rhs.m_aRep; }
-            // hashing
-            size_t hashCode() const { return m_aRep.hashCode(); }
-        private:
-            PathRep m_aRep;
-            Type    m_eType;
-
-            void init();
-        };
-
-
+        /// compare taking type wildcards into account
+        inline bool matches(AbsolutePath const& lhs,AbsolutePath const& rhs) SAL_THROW(())
+        { return Path::matches(lhs.rep(),rhs.rep()); }
 
     //------------------------------------------------------------------------
     // Derived comparison operator implementations
     //------------------------------------------------------------------------
-        inline bool operator!=(Name const& lhs, Name const& rhs)
+        inline bool operator!=(Name const& lhs, Name const& rhs) SAL_THROW(())
         { return !(lhs == rhs); }
         //--------------------------------------------------------------------
-        inline bool operator<=(Name const& lhs, Name const& rhs)
+        inline bool operator<=(Name const& lhs, Name const& rhs) SAL_THROW(())
         { return !(rhs < lhs); }
-        inline bool operator> (Name const& lhs, Name const& rhs)
+        inline bool operator> (Name const& lhs, Name const& rhs) SAL_THROW(())
         { return   rhs < lhs;  }
-        inline bool operator>=(Name const& lhs, Name const& rhs)
+        inline bool operator>=(Name const& lhs, Name const& rhs) SAL_THROW(())
         { return !(lhs < rhs); }
     //------------------------------------------------------------------------
-        inline bool operator!=(AbsolutePath const& lhs, AbsolutePath const& rhs)
-        { return !(lhs == rhs); }
-        //--------------------------------------------------------------------
-        inline bool operator<=(AbsolutePath const& lhs, AbsolutePath const& rhs)
-        { return !(rhs < lhs); }
-        inline bool operator> (AbsolutePath const& lhs, AbsolutePath const& rhs)
-        { return   rhs < lhs;  }
-        inline bool operator>=(AbsolutePath const& lhs, AbsolutePath const& rhs)
-        { return !(lhs < rhs); }
 
+        namespace Path
+        {
     //------------------------------------------------------------------------
-        inline bool operator!=(RelativePath const& lhs, RelativePath const& rhs)
-        { return !(lhs == rhs); }
-        //--------------------------------------------------------------------
-        inline bool operator<=(RelativePath const& lhs, RelativePath const& rhs)
-        { return !(rhs < lhs); }
-        inline bool operator> (RelativePath const& lhs, RelativePath const& rhs)
-        { return   rhs < lhs;  }
-        inline bool operator>=(RelativePath const& lhs, RelativePath const& rhs)
-        { return !(lhs < rhs); }
+            template <class PathClass>
+            bool hasPrefix(PathClass const& _aPath, PathClass const& _aPrefix) SAL_THROW(())
+            {
+                return hasMatchingPrefix(_aPath.rep(),_aPrefix.rep() );
+            }
     //------------------------------------------------------------------------
-        inline bool operator!=(Path const& lhs, Path const& rhs)
-        { return !(lhs == rhs); }
+
+            template <class PathClass>
+            RelativePath stripPrefix(PathClass const& _aPath, PathClass const& _aPrefix)
+            {
+                return RelativePath( stripMatchingPrefix(_aPath.rep(),_aPrefix.rep()) );
+            }
+    //------------------------------------------------------------------------
+
+    // STL Helpers
+    //------------------------------------------------------------------------
+
+            /// a weak strict ordering considering only the name part
+            struct Before
+            {
+                bool operator()(Component const& lhs, Component const& rhs) const SAL_THROW(())
+                { return before(lhs,rhs); }
+                bool operator()(Rep const& lhs, Rep const& rhs) const SAL_THROW(())
+                { return before(lhs,rhs); }
+                bool operator()(AbsolutePath const& lhs, AbsolutePath const& rhs) const SAL_THROW(())
+                { return before(lhs.rep(),rhs.rep()); }
+                bool operator()(RelativePath const& lhs, RelativePath const& rhs) const SAL_THROW(())
+                { return before(lhs.rep(),rhs.rep()); }
+            };
+    //------------------------------------------------------------------------
+
+            /// an equality relation considering only the name part (compatible to Before)
+            struct Equiv
+            {
+                bool operator()(Component const& lhs, Component const& rhs) const SAL_THROW(())
+                { return equiv(lhs,rhs); }
+                bool operator()(Rep const& lhs, Rep const& rhs) const SAL_THROW(())
+                { return equiv(lhs,rhs); }
+                bool operator()(AbsolutePath const& lhs, AbsolutePath const& rhs) const SAL_THROW(())
+                { return equiv(lhs.rep(),rhs.rep()); }
+                bool operator()(RelativePath const& lhs, RelativePath const& rhs) const SAL_THROW(())
+                { return equiv(lhs.rep(),rhs.rep()); }
+            };
+    //------------------------------------------------------------------------
+
+            /// a hash generator (compatible to Equiv and Before)
+            struct Hash
+            {
+                size_t operator()(Component const& _aObject) const SAL_THROW(())
+                { return _aObject.hashCode(); }
+                size_t operator()(Rep const& _aObject) const SAL_THROW(())
+                { return _aObject.hashCode(); }
+                size_t operator()(AbsolutePath const& _aObject) const SAL_THROW(())
+                { return _aObject.rep().hashCode(); }
+                size_t operator()(RelativePath const& _aObject) const SAL_THROW(())
+                { return _aObject.rep().hashCode(); }
+            };
+    //------------------------------------------------------------------------
+            /// a binary predicate that is not (!) an equivalence relation
+
+            struct Matches
+            {
+                bool operator()(Component const& lhs, Component const& rhs) const SAL_THROW(())
+                { return matches(lhs,rhs); }
+                bool operator()(Rep const& lhs, Rep const& rhs) const SAL_THROW(())
+                { return matches(lhs,rhs); }
+                bool operator()(AbsolutePath const& lhs, AbsolutePath const& rhs) const SAL_THROW(())
+                { return matches(lhs.rep(),rhs.rep()); }
+                bool operator()(RelativePath const& lhs, RelativePath const& rhs) const SAL_THROW(())
+                { return matches(lhs.rep(),rhs.rep()); }
+            };
+    //------------------------------------------------------------------------
+        }
     //------------------------------------------------------------------------
     }
 }

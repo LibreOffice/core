@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,7 +458,7 @@ void DeferredGroupNodeImpl::doFinishCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aValueName(it->getNodeName(), Name::NoValidate());
+        Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
         ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
@@ -500,7 +500,7 @@ void DeferredGroupNodeImpl::doRevertCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aValueName(it->getNodeName(), Name::NoValidate());
+        Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
         ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
@@ -535,7 +535,7 @@ void DeferredGroupNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aValueName(it->getNodeName(), Name::NoValidate());
+        Name aValueName = makeNodeName(it->getNodeName(), Name::NoValidate());
 
         ValueChanges::iterator itStoredChange = m_aChanges.find(aValueName);
 
@@ -949,7 +949,7 @@ SetNodeVisitor::Result DeferredTreeSetNodeImpl::doDispatchToElements(SetNodeVisi
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            aVisitor.visit(SetEntry(it->second.getBodyPtr()));
+            eRet = aVisitor.visit(SetEntry(it->second.getBodyPtr()));
         }
     }}
 
@@ -1209,7 +1209,7 @@ void DeferredTreeSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 
@@ -1300,7 +1300,7 @@ void DeferredTreeSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 
@@ -1374,7 +1374,7 @@ void DeferredTreeSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 
@@ -1977,7 +1977,7 @@ void DeferredValueSetNodeImpl::doFinishCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 
@@ -2064,7 +2064,7 @@ void DeferredValueSetNodeImpl::doRevertCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 
@@ -2134,7 +2134,7 @@ void DeferredValueSetNodeImpl::doFailedCommit(SubtreeChange& rChanges)
         it != stop;
         ++it)
     {
-        Name aElementName = Name(it->getNodeName(), Name::NoValidate());
+        Name aElementName = makeElementName(it->getNodeName(), Name::NoValidate());
 
         Element* pOriginal = getStoredElement(aElementName);
 

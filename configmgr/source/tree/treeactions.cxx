@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-11 08:28:01 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,13 @@
 #include <stdio.h>
 
 #include "treeactions.hxx"
+
+#ifndef CONFIGMGR_TREE_NODEFACTORY_HXX
 #include "treenodefactory.hxx"
+#endif
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
 #include "treeprovider.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>

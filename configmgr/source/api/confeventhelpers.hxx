@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:06:54 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,12 +61,16 @@
 #ifndef CONFIGMGR_API_EVENTHELPERS_HXX_
 #define CONFIGMGR_API_EVENTHELPERS_HXX_
 
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
-#include <com/sun/star/uno/RuntimeException.hpp>
-#endif
-
 #ifndef CONFIGMGR_API_EVENTS_HXX_
 #include "confevents.hxx"
+#endif
+
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HPP_
+#include <com/sun/star/uno/RuntimeException.hpp>
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -76,11 +80,21 @@
 #include <osl/mutex.hxx>
 #endif
 
-#ifndef __SGI_STL_MAP
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
 #endif
-#ifndef __SGI_STL_SET
+#ifndef INCLUDED_FUNCTIONAL
+#include <functional>
+#define INCLUDED_FUNCTIONAL
+#endif
+#ifndef INCLUDED_HASH_SET
+#include <hash_set>
+#define INCLUDED_HASH_SET
+#endif
+#ifndef INCLUDED_SET
 #include <set>
+#define INCLUDED_SET
 #endif
 
 namespace configmgr
@@ -88,7 +102,7 @@ namespace configmgr
     namespace internal
     {
 
-
+        using namespace configuration;
     ////////////////////////////////////////////////////////////////////////
         template <class ListenerRef>
         class BroadcastImplHelper
@@ -160,7 +174,7 @@ namespace configmgr
         class NodeListenerInfo
         {
         public:
-            typedef std::set<OUString> Pathes;
+            typedef std::hash_set<AbsolutePath, Path::Hash, Path::Equiv> Pathes;
 
         public:
             NodeListenerInfo(INodeListenerRef const&    pListener)
@@ -171,8 +185,8 @@ namespace configmgr
         // path handling
             Pathes const& pathList() const { return m_aPathes; }
 
-            void addPath(OUString const& sPath) const { m_aPathes.insert(sPath); }
-            void removePath(OUString const& sPath) const { m_aPathes.erase(sPath); }
+            void addPath(AbsolutePath const& sPath) const { m_aPathes.insert(sPath); }
+            void removePath(AbsolutePath const& sPath) const { m_aPathes.erase(sPath); }
             //void removeChildPathes(OUString const& sPath);
 
         // behave as pointer for use as a 'reference' class
@@ -201,7 +215,7 @@ namespace configmgr
 
         private:
             INodeListenerRef m_pListener;
-            mutable Pathes m_aPathes; // hack to be mutable as set element
+            mutable Pathes m_aPathes; // hack to be mutable even as set element
         };
         class ConfigChangesBroadcasterImpl
         {
@@ -209,23 +223,23 @@ namespace configmgr
             ConfigChangesBroadcasterImpl();
             ~ConfigChangesBroadcasterImpl();
 
-            void add(OUString const& aName, INodeListenerRef const& pListener);
+            void add(AbsolutePath const& aPath, INodeListenerRef const& pListener);
             void remove(INodeListenerRef const& pListener);
 
 //          void removed(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
 
-            void dispatch(Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatch(Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
             void dispatch(TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource);
             void disposing(IConfigBroadcaster* pSource);
         private:
             typedef BroadcastImplHelper<NodeListenerInfo> Listeners;
             typedef Listeners::FullIterator InfoRef;
-            typedef std::multimap<OUString, InfoRef> PathMap;
+            typedef std::multimap<AbsolutePath, InfoRef, Path::Before> PathMap;
             Listeners m_aListeners;
             PathMap m_aPathMap;
         private:
-            void dispatchInner(INodeListenerRef const& pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
-            void dispatchOuter(INodeListenerRef const& pTarget, OUString const& sTargetPath, Change const& rBaseChange, OUString const& sChangeContext, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchInner(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchOuter(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
         };
 
     /////////////////////////////////////////////////////////////////////////

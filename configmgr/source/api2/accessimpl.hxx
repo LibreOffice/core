@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessimpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,10 @@ namespace configmgr
         OUString implGetHierarchicalName(NodeAccess& rNode)
             throw(uno::RuntimeException);
 
-        OUString implComposeHierarchicalName(NodeAccess& rNode, const OUString& aRelativeName )
+        OUString implComposeHierarchicalName(NodeGroupInfoAccess& rNode, const OUString& aRelativeName )
+            throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException);
+
+        OUString implComposeHierarchicalName(NodeSetInfoAccess& rNode, const OUString& aRelativeName )
             throw(css::lang::IllegalArgumentException, css::lang::NoSupportException, uno::RuntimeException);
 
         // XElementAccess, base class of XNameAccess
@@ -144,7 +147,10 @@ namespace configmgr
             throw(uno::RuntimeException);
 
         // XExactName
-        OUString implGetExactName(NodeAccess& rNode, const OUString& aApproximateName )
+        OUString implGetExactName(NodeGroupInfoAccess& rNode, const OUString& aApproximateName )
+            throw(uno::RuntimeException);
+
+        OUString implGetExactName(NodeSetInfoAccess& rNode, const OUString& aApproximateName )
             throw(uno::RuntimeException);
 
         // XProperty

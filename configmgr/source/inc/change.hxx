@@ -2,9 +2,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:43:13 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,7 @@ namespace configmgr
         void setModeAsString(const rtl::OUString& _rMode);
 
         void applyTo(ValueNode& aNode);
+        void applyChangeNoRecover(ValueNode& aNode) const;
 
         virtual void dispatch(ChangeTreeAction& anAction) const { anAction.handle(*this); }
         virtual void dispatch(ChangeTreeModification& anAction) { anAction.handle(*this); }

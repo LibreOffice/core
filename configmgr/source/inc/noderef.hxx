@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:19:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,13 +62,23 @@
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #define CONFIGMGR_CONFIGNODE_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
-#include <vector>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
 #endif
 
 namespace configmgr
@@ -83,6 +93,7 @@ namespace configmgr
         class Name;
         class AbsolutePath;
         class RelativePath;
+        namespace Path { class Component; }
 
         struct Attributes;
 
@@ -203,6 +214,9 @@ namespace configmgr
             /// checks whether the node <var>aNode</var> has a element node named <var>aName</var>.
             bool hasElement(NodeRef const& aNode, Name const& aName) const;
 
+            /// checks whether the node <var>aNode</var> has a element node named <var>aName</var>.
+            bool hasElement(NodeRef const& aNode, Path::Component const& aName) const;
+
             /** gets the element named <var>aName</var> of node <var>aNode</var>.
                 <p>PRE: <code>hasElement(aNode,aName) == true</code></p>
                 <p>If there is no such element, may return an empty node or raise an exception (?)</p>
@@ -268,7 +282,7 @@ namespace configmgr
             AnyNodeRef getAnyChild(NodeRef const& aNode, Name const& aName) const;
 
             /// return the local <type>Name</type> of the root node of this tree
-            Name            getRootName() const;
+            Path::Component getRootName() const;
 
             /// return the local <type>Name</type> of node <var>aNode</var> in this tree
             Name            getName(NodeRef const& aNode) const;
@@ -302,11 +316,11 @@ namespace configmgr
             /// return the parent <type>NodeRef</type> of <var>aValue</var> (or an empty node, if it is the tree root)
             NodeRef getParent(ValueRef const& aValue) const;
 
-            /// return the <type>Path</type> of <var>aNode</var>, relative to the tree root (or an empty path if it is empty)
-            RelativePath    getLocalPath(NodeRef const& aNode) const;
+            /// return the <type>AbsolutePath</type> of <var>aNode</var>
+            AbsolutePath    getAbsolutePath(NodeRef const& aNode) const;
 
-            /// return the <type>Path</type> of <var>aNode</var>
-            RelativePath    getLocalPath(ValueRef const& aNode) const;
+            /// gets the <type>AbsolutePath</type> of the root node of this tree
+            AbsolutePath    getRootPath() const;
 
             /// gets the root node of this tree
             NodeRef         getRootNode() const;
@@ -349,8 +363,6 @@ namespace configmgr
             Tree getContextTree() const;
             /// gets the parent node of this tree ('s root node), if available
             NodeRef getContextNode() const;
-            /// gets the path of the (possibly fictitious) parent node of this tree
-            AbsolutePath getContextPath() const;
 
         // Update handling
         public:
@@ -445,20 +457,54 @@ namespace configmgr
 
         /** make a <type>Name</type> out of <var>sName</var>.
             @throws InvalidName
-                if <var>sName is not a valid name for a <var>aNode</var> within <var>aTree</var>
+                if <var>sName</var> is not a valid name for a member of group <var>aNode</var> within <var>aTree</var>
 
         */
-        Name validateNodeName(OUString const& sName, Tree const& aTree, NodeRef const& aNode );
+        Name validateChildName(OUString const& sName, Tree const& aTree, NodeRef const& aNode );
 
-        /** reduce <var>aPath</var> to be a path relative to (<var>aTree<var/>,<var>aNode<var/>)
+        /** make a <type>Name</type> out of <var>sName</var>.
+            @throws InvalidName
+                if <var>sName</var> is not a valid name for an element of set <var>aNode</var> within <var>aTree</var>
+
+        */
+        Name validateElementName(OUString const& sName, Tree const& aTree, NodeRef const& aNode );
+
+        /** make a <type>Name</type> out of <var>sName</var>.
+            @throws InvalidName
+                if <var>sName</var> is not a valid name for a child of <var>aNode</var> within <var>aTree</var>
+
+        */
+        Name validateChildOrElementName(OUString const& sName, Tree const& aTree, NodeRef const& aNode );
+
+        /** make one path component out of <var>sName</var>.
+            @throws InvalidName
+                if <var>sName</var> is not a valid name for an element of set <var>aNode</var> within <var>aTree</var>
+
+        */
+        Path::Component validateElementPathComponent(OUString const& sName, Tree const& aTree, NodeRef const& aNode );
+
+        /** parse <var>aPath</var> into a relative path,
+            valid in the context of node <var>aNode<var/> in <var>aTree<var/>.
 
             @returns
-                <var>aPath<var/> if it already is a relative path or the part of it relative to <var>aNode<var/>
-                if it is an absolute path that to a descendant of <var>aNode<var/>
+                <var>aPath<var/> parsed as a relative path
             @throws InvalidName
-                if <var>aPath<var/> is an absolute path that is not to a descendant of <var>aNode<var/>
+                if <var>aPath<var/> is not a relative path or not valid in the context of <var>aNode<var/>
         */
-        RelativePath reduceRelativePath(OUString const& aPath, Tree const& aTree, NodeRef const& aBaseNode);
+        RelativePath validateRelativePath(OUString const& aPath, Tree const& aTree, NodeRef const& aNode);
+
+        /** parse <var>aPath</var> as a configuration path
+            and reduce it to be relative to node <var>aNode<var/> in <var>aTree<var/>.
+
+            @returns
+                the result of parsing <var>aPath<var/>, if that results in a relative path, or
+                the part of it relative to <var>aNode<var/>,
+                  if it is an absolute path to a descendant of <var>aNode<var/>
+            @throws InvalidName
+                if <var>aPath<var/> is not awell-formed path or
+                if it is an absolute path that is not to a descendant of <var>aNode<var/>
+        */
+        RelativePath validateAndReducePath(OUString const& aPath, Tree const& aTree, NodeRef const& aNode);
 
         /** checks whether there are any immediate children of <var>aNode</var> (which is in <var>aTree</var>)
 
@@ -477,18 +523,14 @@ namespace configmgr
         */
         bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Name const& aName);
 
-        /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
+        /** checks whether there is an immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
-            <p> On return <var>aNode</var> is modified to refer to the node found and
-                <var>aTree</var> will then refer to the tree that node is in.
-            <p/>
 
             @return
                 <TRUE/> if the child node exists
-                (so <var>aNode</var> and <var>aTree</var> refer to the desired node),
                 <FALSE/> otherwise
         */
-        bool findInnerChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
+        bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Path::Component const& aName);
 
         /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
             specified by <var>aName</var>
@@ -504,42 +546,7 @@ namespace configmgr
 
             @see NodeRef::getAvailableChild
         */
-        bool findInnerAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
-
-        /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
-            <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
-            <p> On return <var>aNode</var> is modified to refer to the last node found and
-                <var>aTree</var> will then refer to the tree that node is in.
-            <p/>
-            <p> Also, <var>aPath</var> is modified to contain the unresolved part of the original path.
-            </p>
-
-            @return
-                <TRUE/> if the path could be resolved completely
-                (so <var>aNode</var> and <var>aTree</var> refer to the desired node,
-                <var>aPath</var> is empty)<BR/>
-                <FALSE/> otherwise
-        */
-        bool findInnerDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
-
-        /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
-            <p> This function follows the given path stepwise, until a requested node is miss in the tree,
-                or is not availbale in a set node.
-            </p>
-            <p> On return <var>aNode</var> is modified to refer to the last node found and
-                <var>aTree</var> will then refer to the tree that node is in.
-            <p/>
-            <p> Also, <var>aPath</var> is modified to contain the unresolved part of the original path.
-            </p>
-            <p>Caution: May miss existing descendants unless the node has been accessed before.</p>
-
-            @return
-                <TRUE/> if the path could be resolved completely
-                (so <var>aNode</var> and <var>aTree</var> refer to the desired node,
-                <var>aPath</var> is empty)<BR/>
-                <FALSE/> otherwise
-        */
-        bool findInnerDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        bool findInnerChildOrAvailableElement(Tree& aTree, NodeRef& aNode, Name const& aName);
 
         /// test whether the given node is a structural (inner) node
         bool isStructuralNode(Tree const& aTree, NodeRef const& aNode);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ namespace
         OSL_ENSURE(aTree->nodeCount(), "INTERNAL ERROR: Unexpected empty (!) tree constructed in set node");
         OSL_ENSURE(aTree->isValidNode(aTree->root()), "INTERNAL ERROR: Corrupt tree constructed in set node");
 
-        return aTree->getRootName();
+        return aTree->getSimpleRootName();
     }
     void CollectElementTrees::handle(ValueNode& rValue)
     {
@@ -378,7 +378,7 @@ void AbstractSetNodeImpl::implAdjustToElementChange(NodeChangesInformation& rLoc
 {
     OSL_ENSURE( implHasLoadedElements() , "Unexpected call: Processing element change in uninitialized set");
 
-    Name aName( aChange.getNodeName(), Name::NoValidate() );
+    Name aName = makeElementName( aChange.getNodeName(), Name::NoValidate() );
 
     NodeChangeImpl* pThisChange = 0;
     if (aChange.ISA(AddNode))
@@ -466,7 +466,9 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateInsert(Name const& aName, Element c
     typedef SetInsertTreeImpl   SetInsertImpl;
     typedef SetInsertValueImpl  SetInsertImpl;
 
-    SetChangeImpl* pRet = new SetInsertImpl(aName, aNewElement, true);
+    Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
+
+    SetChangeImpl* pRet = new SetInsertImpl(aFullName, aNewElement, true);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -478,7 +480,9 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateReplace(Name const& aName, Element 
     typedef SetReplaceTreeImpl  SetReplaceImpl;
     typedef SetReplaceValueImpl SetReplaceImpl;
 
-    SetChangeImpl* pRet = new SetReplaceImpl(aName, aNewElement, aOldElement);
+    Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
+
+    SetChangeImpl* pRet = new SetReplaceImpl(aFullName, aNewElement, aOldElement);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -490,7 +494,9 @@ NodeChangeImpl* AbstractSetNodeImpl::doCreateRemove(Name const& aName, Element c
     typedef SetRemoveTreeImpl   SetRemoveImpl;
     typedef SetRemoveValueImpl  SetRemoveImpl;
 
-    SetChangeImpl* pRet = new SetRemoveImpl(aName, aOldElement);
+    Path::Component aFullName = Path::makeCompositeName(aName, this->getElementTemplate()->getName());
+
+    SetChangeImpl* pRet = new SetRemoveImpl(aFullName, aOldElement);
     pRet->setTarget( getParentTree(), getContextOffset() );
     return pRet;
 }
@@ -809,8 +815,8 @@ ElementTreeHolder TreeSetNodeImpl::implMakeElement(ElementTreeHolder const& aNew
         }
         if (!aNewElement->isInstanceOf(aTemplate))
         {
-            throw TypeMismatch( aNewElement->getTemplate()->getPath().toString(),
-                                aTemplate->getPath().toString(),
+            throw TypeMismatch( aNewElement->getTemplate()->getPathString(),
+                                aTemplate->getPathString(),
                                 " - Trying to insert element with wrong template into set");
         }
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,16 @@
  ************************************************************************/
 
 #include "updateimpl.hxx"
+
+#ifndef CONFIGMGR_API_BASEACCESSIMPL_HXX_
 #include "accessimpl.hxx"
-
+#endif
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_API_NODEUPDATE_HXX_
 #include "apinodeupdate.hxx"
-
+#endif
 #ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
 #endif
@@ -72,13 +77,25 @@
 #include "valueref.hxx"
 #endif
 
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGGROUP_HXX_
 #include "configgroup.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
+#ifndef CONFIGMGR_API_BROADCASTER_HXX_
 #include "broadcaster.hxx"
+#endif
+#ifndef CONFIGMGR_API_ENCODENAME_HXX_
 #include "encodename.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -118,10 +135,10 @@ namespace configmgr
         using configuration::ElementTree;
         using configuration::Tree;
         using configuration::Name;
-        using configuration::Path;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
-        using configuration::validateNodeName;
+        using configuration::validateChildName;
+        using configuration::validateElementName;
 
 // Interface methods
 //-----------------------------------------------------------------------------------
@@ -142,7 +159,7 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateChildName(sName,aTree,aNode);
 
         ValueRef aChildValue( aTree.getChildValue(aNode, aChildName) );
 
@@ -163,7 +180,7 @@ void implReplaceByName(NodeGroupAccess& rNode, const OUString& sName, const Any&
                 OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Value. Value '") );
                 sMessage += sName;
                 sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-                sMessage += aTree.getLocalPath(aNode).toString();
+                sMessage += aTree.getAbsolutePath(aNode).toString();
 
                 Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
                 throw NoSuchElementException( sMessage, xContext );
@@ -234,7 +251,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
@@ -245,7 +262,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
@@ -314,7 +331,7 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
@@ -325,7 +342,7 @@ void implReplaceByName(NodeValueSetAccess& rNode, const OUString& sName, const A
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
@@ -390,14 +407,14 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         if( aTree.hasElement(aNode,aChildName) )
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is already present in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw ElementExistException( sMessage, xContext );
@@ -468,14 +485,14 @@ void implInsertByName(NodeValueSetAccess& rNode, const OUString& sName, const An
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         if( aTree.hasElement(aNode,aChildName) )
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' is already present in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw ElementExistException( sMessage, xContext );
@@ -540,7 +557,7 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         ElementRef aElement( aTree.getElement(aNode,aChildName) );
 
@@ -551,7 +568,7 @@ void implRemoveByName(NodeTreeSetAccess& rNode, const OUString& sName )
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );
@@ -604,7 +621,7 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sName,aTree,aNode);
+        Name aChildName = validateElementName(sName,aTree,aNode);
 
         ElementRef aElement = aTree.getElement(aNode,aChildName);
         if (!aElement.isValid())
@@ -614,7 +631,7 @@ void implRemoveByName(NodeValueSetAccess& rNode, const OUString& sName )
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot remove Set Element. Element '") );
             sMessage += sName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in Set ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw NoSuchElementException( sMessage, xContext );

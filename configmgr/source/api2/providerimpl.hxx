@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 #ifndef CONFIGMGR_API_PROVIDERIMPL_HXX_
 #define CONFIGMGR_API_PROVIDERIMPL_HXX_
 
-#ifndef CONFIGMGR_API_EVENTS_HXX_
-#include "confevents.hxx"
-#endif
+#include "treeprovider.hxx"
 
 #ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -112,6 +110,8 @@ namespace configmgr
     class IConfigSession;
     class TreeManager;
     class ConnectionSettings;
+
+    struct IConfigBroadcaster;
 
     namespace configapi
     {
@@ -194,16 +194,15 @@ namespace configmgr
 
         virtual ~OProviderImpl();
 
-        /// ITreeProvider
-        virtual ISubtree * requestSubtree(OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+        /// ITreeManager
+        virtual ISubtree * requestSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                           sal_Int16 nMinLevels = ALL_LEVELS) throw (uno::Exception);
         virtual void updateTree(TreeChangeList& aChanges) throw (uno::Exception);
 
-        /// ITreeManager
-        virtual void releaseSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ();
+        virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ();
         virtual void notifyUpdate(TreeChangeList const& aChanges) throw (uno::RuntimeException);
         virtual void disposeData(const vos::ORef < OOptions >& _xOptions) throw();
-        virtual void fetchSubtree(OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) throw();
+        virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels = ALL_LEVELS) throw();
 
         // IInterface
         virtual void SAL_CALL acquire(  ) throw ();
@@ -222,8 +221,7 @@ namespace configmgr
         virtual void acquireWriteAccess();
         virtual void releaseWriteAccess();
 
-        static OUString getBasePath(OUString const& _rAccessor);
-        static OUString getErrorMessage(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
+        static OUString getErrorMessage(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions);
 
         virtual void SAL_CALL dispose() throw();
     public:

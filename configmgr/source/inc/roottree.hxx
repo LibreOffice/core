@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:26:39 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,11 +84,11 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
 
-        RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
+        RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
                                         ISubtree& rCacheNode, TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
-        RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
+        RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
                                         ISubtree& rCacheNode, TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
 

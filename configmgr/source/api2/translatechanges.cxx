@@ -2,9 +2,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,18 @@
 
 #include "translatechanges.hxx"
 
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "apifactory.hxx"
+#endif
 
 namespace configmgr
 {
@@ -91,7 +99,6 @@ namespace configmgr
     {
         using configuration::Tree;
         using configuration::Name;
-        using configuration::Path;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
         using configuration::NodeRef;
@@ -110,43 +117,22 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 {
     OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
 
+    namespace Path = configuration::Path;
+
     typedef Path::Iterator Iter;
 
     Tree aChangeBaseTree = aChange.getBaseTree();
 
-    AbsolutePath aOuterBaseTreePath     = aBaseTree.getContextPath();
-    AbsolutePath aChangeBaseTreePath    = aChangeBaseTree.getContextPath();
-    RelativePath aOuterBaseNodePath     = aBaseTree.getLocalPath(aBaseNode);
-    RelativePath aChangeBaseNodePath    = aChangeBaseTree.getLocalPath(aChange.getBaseNode());
+    AbsolutePath aOuterBasePath     = aBaseTree.getAbsolutePath(aBaseNode);
+    AbsolutePath aChangeBasePath    = aChangeBaseTree.getAbsolutePath(aChange.getBaseNode());
 
-    // First start resolving the context pathes
-    Iter aChangeIt = aChangeBaseTreePath.begin(),   aChangeEnd = aChangeBaseTreePath.end();
-    Iter aOuterIt  = aOuterBaseTreePath.begin(),    aOuterEnd  = aOuterBaseTreePath.end();
+    Iter aChangeIt = aChangeBasePath.begin(),   aChangeEnd = aChangeBasePath.end();
+    Iter aOuterIt  = aOuterBasePath.begin(),    aOuterEnd  = aOuterBasePath.end();
 
+    // First by resolve the base node pathes
     while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
     {
-        if (*aOuterIt != *aChangeIt) return false; // mismatch
-        ++aOuterIt;
-        ++aChangeIt;
-    }
-
-    // Prepend any remaining parts to the respective node pathes
-    if (aChangeIt != aChangeEnd)
-    {
-        aChangeBaseNodePath = RelativePath( Path::Components(aChangeIt,aChangeEnd) ).compose(aChangeBaseNodePath);
-    }
-    else if (aOuterIt != aOuterEnd)
-    {
-        aOuterBaseNodePath = RelativePath( Path::Components(aOuterIt,aOuterEnd) ).compose(aOuterBaseNodePath);
-    }
-
-    // Continue by resolving the node pathes
-    aChangeIt = aChangeBaseNodePath.begin(); aChangeEnd = aChangeBaseNodePath.end();
-    aOuterIt  = aOuterBaseNodePath.begin();  aOuterEnd  = aOuterBaseNodePath.end();
-
-    while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
-    {
-        if (*aOuterIt != *aChangeIt) return false; // mismatch
+        if ( ! Path::matches(*aOuterIt,*aChangeIt) ) return false; // mismatch
         ++aOuterIt;
         ++aChangeIt;
     }
@@ -154,13 +140,15 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
     // Next consider the stored accessor
     if (aChangeIt != aChangeEnd) // stepping outward - prepend
     {
-        aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) ).compose(aChange.getAccessor());
+        Path::Rep aRemaining(aChangeIt, aChangeEnd);
+
+        aPath = RelativePath(aRemaining).compose(aChange.getAccessor());
     }
     else if (aOuterIt == aOuterEnd) // exact match outside
     {
         aPath = aChange.getAccessor();
     }
-    else //(aChangeIt == aChangeEnd) but outer left // shall we support actually going inside the accessor?
+    else //(aChangeIt == aChangeEnd) but outer left
     {
         RelativePath aAccessor = aChange.getAccessor();
         aChangeIt   = aAccessor.begin();
@@ -169,14 +157,16 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
         // resolve the outer path against the change accessor
         while (aOuterIt != aOuterEnd && aChangeIt != aChangeEnd)
         {
-            if (*aOuterIt != *aChangeIt) return false; // mismatch
+            if ( ! Path::matches(*aOuterIt,*aChangeIt) ) return false; // mismatch
             ++aOuterIt;
             ++aChangeIt;
         }
 
         if (aOuterIt == aOuterEnd)
         {
-            aPath = RelativePath( Path::Components(aChangeIt, aChangeEnd) );
+            Path::Rep aRemaining(aChangeIt, aChangeEnd);
+
+            aPath = RelativePath( aRemaining );
         }
     }
 
@@ -295,7 +285,7 @@ bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation cons
         return false;
     }
 
-    rEvent.Accessor     <<= aInfo.location.getAccessor().getLocalName().toString();
+    rEvent.Accessor     <<= aInfo.location.getAccessor().getLocalName().getName().toString();
     rEvent.Element          = aUnoChange.newValue;
     rEvent.ReplacedElement  = aUnoChange.oldValue;
 
@@ -305,7 +295,7 @@ bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation cons
 /// fill a event from a NodeChangeInfo (uno objects are assumed to be resolved already)
 bool fillEventDataFromResolved(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo)
 {
-    rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().toString();
+    rEvent.Accessor         <<= aInfo.location.getAccessor().getLocalName().getName().toString();
     rEvent.Element          = aInfo.change.unoData.newValue;
     rEvent.ReplacedElement  = aInfo.change.unoData.oldValue;
 
@@ -322,7 +312,7 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, NodeChangeInformation con
     if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
-    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().toString();
+    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
 
     rEvent.NewValue         = aUnoChange.newValue;
     rEvent.OldValue         = aUnoChange.oldValue;
@@ -339,7 +329,7 @@ bool fillEventDataFromResolved(beans::PropertyChangeEvent& rEvent, NodeChangeInf
     if (!aInfo.isValueChange())
         return false;
 
-    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().toString();
+    rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
 
     rEvent.NewValue         = aInfo.change.unoData.newValue;
     rEvent.OldValue         = aInfo.change.unoData.oldValue;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:23 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,20 @@
 #ifndef CONFIGMGR_API_EVENTS_HXX_
 #define CONFIGMGR_API_EVENTS_HXX_
 
-#include "cmtreemodel.hxx"
-#include <vos/refernce.hxx>
+#ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
+#endif
 
 namespace rtl { class OUString; }
 
 namespace configmgr
 {
-    using ::rtl::OUString;
+    class Change;
+    struct TreeChangeList;
+    class OOptions;
+
+    namespace configuration { class AbsolutePath; }
+    using configuration::AbsolutePath;
 
     struct IConfigBroadcaster;
     struct IConfigListener : public virtual vos::OReference
@@ -79,8 +84,8 @@ namespace configmgr
     };
     struct INodeListener : IConfigListener
     {
-        virtual void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource) = 0;
-        virtual void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
     };
     typedef vos::ORef<INodeListener> INodeListenerRef;
 
@@ -90,10 +95,9 @@ namespace configmgr
         IConfigBroadcaster() {}
         ~IConfigBroadcaster() {}
     public:
-        virtual void addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener) = 0;
+        virtual void addListener(AbsolutePath const& aPath, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener) = 0;
         virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener) = 0;
 
-//      virtual void removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel = false) = 0;
     };
 
     class ConfigChangeBroadcastHelper; // broadcasts changes for a given set of options
@@ -103,10 +107,8 @@ namespace configmgr
         ConfigChangeBroadcaster();
         virtual ~ConfigChangeBroadcaster();
 
-        virtual void addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
+        virtual void addListener(AbsolutePath const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
         virtual void removeListener(const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pListener);
-
-//      virtual void removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel = false);
 
     protected:
         virtual void fireChanges(TreeChangeList const& _aChanges, sal_Bool _bError);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergechange.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-17 15:02:30 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,64 +59,42 @@
  *
  ************************************************************************/
 
+#ifndef INCLUDED_CONFIGMGR_MERGECHANGE_HXX
+#define INCLUDED_CONFIGMGR_MERGECHANGE_HXX
+
+#ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
+#include "namecreator.hxx"
+#endif
+
+#ifndef CONFIGMGR_CHANGE_HXX
 #include "change.hxx"
-#include "treeprovider.hxx"
+#endif
+#ifndef CONFIGMGR_TREECHANGELIST_HXX
+#include "treechangelist.hxx"
+#endif
 
 namespace configmgr
 {
-
-    class ONameCreator
-    {
-        std::vector<rtl::OUString> m_aNameList;
-    public:
-        ONameCreator(){}
-        void init(const ConfigurationName &_aName);
-        rtl::OUString createName(const rtl::OUString &aPlusName);
-        void pushName(const rtl::OUString &aName);
-        void popName();
-    };
-
     // -----------------------------------------------------------------------------
 
-    // Helperclass to search a change in a given changetree
-    class OMergeSearchChange : private ChangeTreeModification, public ONameCreator
-    {
-        rtl::OUString              m_aSearchName;
-        bool                       m_bFound;
-        Change*                    m_pFoundChange;
-
-    protected:
-        bool isFound() { return m_bFound; }
-        virtual void handle(ValueChange& _rValueNode);
-        virtual void handle(AddNode& _rAddNode);
-        virtual void handle(RemoveNode& _rRemoveNode);
-        virtual void handle(SubtreeChange& _rSubtree);
-
-    public:
-        OMergeSearchChange(const rtl::OUString &_aName);
-        Change* searchForChange(Change &aChange);
-    };
-
-    // -----------------------------------------------------------------------------
-    class OMergeTreeChangeList : private ChangeTreeAction, public ONameCreator
+    class OMergeTreeChangeList : private ChangeTreeAction, private OPathCreator<AbsolutePath>
     {
         TreeChangeList &m_aTreeChangeList;       // ChangeList, which will be grown
         SubtreeChange *m_pCurrentParent;         // our current position
-        vector<SubtreeChange*> m_aTreePathStack; // how the name says, a stack for the given path
-
 
         // ------- Helper for Path stack -------
-        void pushTree(SubtreeChange* _pTree);
-        void popTree();
+        SubtreeChange* pushTree(SubtreeChange& _rTree);
+        void popTree(SubtreeChange* _pSaveTree);
     public:
         // CTor
         OMergeTreeChangeList(TreeChangeList& _aTree);
-        SubtreeChange* check(const ConfigurationName &_aName);
 
         // start function, with the Change we want to do.
         // WARNING this could be a big tree, because a change can contain subtreechanges!
-        void handleChange(TreeChangeList &_rList);
+        void mergeChanges(TreeChangeList const&_rList);
 
+    private:
+        void initRoot(TreeChangeList const& _aChanges);
 
     private:
         virtual void handle(ValueChange const& _rValueNode);
@@ -126,26 +104,27 @@ namespace configmgr
     };
 
     // -----------------------------------------------------------------------------
-    class OMergeChanges : private ChangeTreeAction, public ONameCreator
+    class OMergeChanges : private ChangeTreeAction, private OPathCreator<RelativePath>
     {
-        SubtreeChange &m_aSubtreeChange;          // ChangeList, which will be grown
+        SubtreeChange &m_rSubtreeChange;          // ChangeList, which will be grown
         SubtreeChange *m_pCurrentParent;          // our current position
-        vector<SubtreeChange*> m_aTreePathStack;  // how the name says, a stack for the given path
 
+        typedef configuration::RelativePath RelativePath;
         // ------- Helper for Path stack -------
-        void pushTree(SubtreeChange* _pTree);
-        void popTree();
+        SubtreeChange* pushTree(SubtreeChange& _rTree);
+        void popTree(SubtreeChange* _pSaveTree);
 
     public:
         // CTor
-        OMergeChanges(SubtreeChange& _aTree);
-
-        SubtreeChange* check(const ConfigurationName &_aName);
+        OMergeChanges(SubtreeChange& _rTree);
 
         // start function, with the Change we want to do.
         // WARNING this could be a big tree, because a change can contain subtreechanges!
-        void handleChange(const SubtreeChange &_rList, const rtl::OUString &_aPathToRoot);
+        void mergeChanges(const SubtreeChange &_rChange, const RelativePath& _aPathToChange);
+        void mergeChanges(const SubtreeChange &_rChange);
 
+    private:
+        void initRoot(const RelativePath& _aPathToChange);
     private:
         virtual void handle(ValueChange const& _rValueNode);
         virtual void handle(AddNode const& _rAddNode);
@@ -154,3 +133,6 @@ namespace configmgr
 
     };
 } // namespace configmgr
+
+#endif
+

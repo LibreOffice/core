@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-31 11:49:31 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,16 +60,27 @@
  ************************************************************************/
 
 #include <stdio.h>
-#ifndef CONFIGMGR_CMTREEMODEL_HXX
+
 #include "cmtreemodel.hxx"
+
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
+#include "configexcept.hxx"
 #endif
+#ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
+#include "namecreator.hxx"
+#endif
+#ifndef _CONFIGMGR_STRDECL_HXX_
+#include "strdecl.hxx"
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
-#include "configexcept.hxx"
-#include "strdecl.hxx"
 
+#ifndef INCLUDED_ALGORITHM
+#define INCLUDED_ALGORITHM
 #include <algorithm>
+#endif
 
 //..........................................................................
 namespace configmgr
@@ -94,21 +105,7 @@ bool isLocalizedValueSet(SubtreeChange const& _aSubtree)
 }
 
 //==========================================================================
-// -----------------------------------------------------------------------------
-//= TreeChangeList
-//==========================================================================
-OUString TreeChangeList::getModuleName() const
-{
-    OUString sRet;
-    if (this->pathToRoot.depth() == 0)
-        sRet = root.getNodeName();
 
-    else
-        sRet = pathToRoot.moduleName();
-    OSL_ENSURE(sRet.getLength(), "WARNING: TreeChangeList has no module name");
-    return sRet;
-}
-//..........................................................................
 //==========================================================================
 //= Change
 //==========================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:16:03 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,28 +60,53 @@
  ************************************************************************/
 
 #include <stdio.h>
-/* PLEASE DON'T DELETE ANY COMMENT LINES, ALSO IT'S UNNECESSARY. */
 
 #include "subtree.hxx"
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
+#endif
+#ifndef CONFIGMGR_TREECHANGELIST_HXX
+#include "treechangelist.hxx"
+#endif
 
-#include <deque>
-#include <vector>
-#include <iostream>
-#include <exception>
-#include <sal/types.h>
-#include <set>
-#include <rtl/string.hxx>
-#include <rtl/ustring.hxx>
-#include <osl/diagnose.h>
-
-#include "confname.hxx"                          // Iterator for PathName scans
-#include "cmtreemodel.hxx"
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
+#include "treeprovider.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
 #include "treeactions.hxx"
+#endif
 
-#include <com/sun/star/uno/Any.hxx>
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
-// WISDOM
-// !!Never write same code twice!!
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
+#ifndef INCLUDED_DEQUE
+#include <deque>
+#define INCLUDED_DEQUE
+#endif
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
+#ifndef INCLUDED_IOSTREAM
+#include <iostream>
+#define INCLUDED_IOSTREAM
+#endif
+#ifndef INCLUDED_EXCEPTION
+#include <exception>
+#define INCLUDED_EXCEPTION
+#endif
+#ifndef INCLUDED_SET
+#include <set>
+#define INCLUDED_SET
+#endif
 
 using namespace std;
 using namespace rtl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,8 @@ namespace configmgr
             virtual void disposeData();
 
         // Context Access
-            /// gets the path to the parent node of this tree
-            AbsolutePath    getContextPath() const;
+            /// gets the path to the root node of this tree
+            AbsolutePath    getRootPath() const;
             /// gets the tree of parent node of this tree
             TreeImpl*       getContextTree()        { return m_pParentTree; }
             /// gets the tree of parent node of this tree
@@ -270,15 +270,19 @@ namespace configmgr
             */
             NodeOffset      parent(NodeOffset nNode) const;
 
-            /** gets the <type>Name</type> of the node <var>nNode</var>
+            /** gets the simple <type>Name</type> of the node <var>nNode</var>
                 <p>PRE: <code>isValidNode(nNode)</code>
                 </p>
             */
-            Name            getNodeName(NodeOffset nNode) const;
+            Name            getSimpleNodeName(NodeOffset nNode) const;
 
-            /** gets the <type>Name</type> of the root node (i.e. of the tree)
+            /** gets the simple <type>Name</type> of the root node (i.e. of the tree as a whole)
             */
-            Name            getRootName() const;
+            Name            getSimpleRootName() const;
+
+            /** gets the full name of the root node
+            */
+            Path::Component getExtendedRootName() const;
 
             /** gets the number of hierarchy levels from the root node to node <var>nNode</var>
                 in this tree
@@ -289,8 +293,8 @@ namespace configmgr
             */
             TreeDepth       depthTo(NodeOffset nNode) const;
 
-            /// append the local path to a node to a collection of names
-            void    appendPathTo(NodeOffset nNode, Path::Components& rNames);
+            /// append the local path (relative to root) to a node to a collection of names
+            void    prependLocalPathTo(NodeOffset nNode, Path::Rep& rNames);
 
         // Change management
             bool    hasChanges() const;
@@ -401,6 +405,7 @@ namespace configmgr
             /// set no-parent context for this tree
             void clearContext();
 
+            Name    implGetOriginalName(NodeOffset nNode) const;
 
         private:
             // ISynchronizedData
@@ -412,8 +417,10 @@ namespace configmgr
             virtual RootTreeImpl const* doCastToRootTree() const = 0;
             virtual ElementTreeImpl const* doCastToElementTree() const = 0;
 
-            Name    implGetOriginalName(NodeOffset nNode) const;
-            virtual void doGetPathRoot(Path::Components& rPath) const = 0;
+            /// get the full name of the root of this tree
+            virtual Path::Component doGetRootName() const = 0;
+            /// prepend the absolute path to the root of this tree (no context use)
+            virtual void doFinishRootPath(Path::Rep& rPath) const = 0;
 
             mutable OTreeAccessor m_aOwnLock;
 
@@ -425,7 +432,8 @@ namespace configmgr
             enum { m_nRoot = 1 }; /// base of <type>NodeOffset</type>s used in this class
             //NodeOffset    const m_nRoot; /// base of <type>NodeOffset</type>s used in this class
 
-            void implGetContextPath(Path::Components& rPath) const;
+            /// prepend the absolute path to the root of this tree (using context if present)
+            void implPrependRootPath(Path::Rep& rPath) const;
 
             friend class TreeImplBuilder;
         };
@@ -467,6 +475,8 @@ namespace configmgr
             bool isInstanceOf(TemplateHolder const& aTemplateInfo) const { return m_aInstanceInfo == aTemplateInfo && aTemplateInfo.isValid(); }
             /// retrieves the template that this is an instance of
             TemplateHolder getTemplate() const { return m_aInstanceInfo; }
+            /// makes a complete name from a simple name and template information
+            Path::Component makeExtendedName(Name const& aSimpleName) const;
 
         // node control operation
             /// check if this is a free-floating tree
@@ -495,7 +505,8 @@ namespace configmgr
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
 
-            virtual void doGetPathRoot(Path::Components& rPath) const;
+            virtual Path::Component doGetRootName() const;
+            virtual void doFinishRootPath(Path::Rep& rPath) const;
         private:
             TemplateHolder  const m_aInstanceInfo;
             INode* m_pOwnedNode;

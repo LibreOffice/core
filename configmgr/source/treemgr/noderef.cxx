@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,32 @@ bool Tree::hasElement(NodeRef const& aNode, Name const& aName) const
 }
 //-----------------------------------------------------------------------------
 
+bool Tree::hasElement(NodeRef const& aNode, Path::Component const& aName) const
+{
+    OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
+    OSL_PRECOND( aNode.isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
+    OSL_PRECOND( isValidNode(aNode), "ERROR: Configuration: NodeRef does not match tree" );
+
+    if (aNode.m_nDepth == 0)
+    {
+        CFG_TRACE_WARNING( "configuration: Querying node beyond available depth" );
+    }
+
+    bool bFound = false;
+
+    if (aNode.m_pImpl && aNode.m_pImpl->isSetNode())
+    {
+        SetEntry aChildEntry = aNode.m_pImpl->setImpl().findElement(aName.getName());
+
+        // do check if types do match as well
+        bFound = aChildEntry.isValid() &&
+                 Path::matches(aChildEntry.tree()->getExtendedRootName(),aName);
+    }
+
+    return bFound; // even if nothing found
+}
+//-----------------------------------------------------------------------------
+
 ElementRef Tree::getElement(NodeRef const& aNode, Name const& aName) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires valid tree" );
@@ -469,7 +495,7 @@ Name Tree::getName(NodeRef const& aNode) const
 
     if (isEmpty()) return Name();
 
-    return m_pImpl->getNodeName(aNode.m_nPos);
+    return m_pImpl->getSimpleNodeName(aNode.m_nPos);
 }
 //-----------------------------------------------------------------------------
 // class ValueRef
@@ -716,7 +742,7 @@ Name Tree::getName(AnyNodeRef const& aNode) const
     if (isEmpty() || !aNode.isValid()) return Name();
 
     if (aNode.isNode())
-        return m_pImpl->getNodeName(aNode.m_nUsedPos);
+        return m_pImpl->getSimpleNodeName(aNode.m_nUsedPos);
 
     else
         return aNode.m_sNodeName;
@@ -1037,17 +1063,21 @@ UnoAny Tree::getNodeValue(ValueRef const& aNode) const
 }
 //-----------------------------------------------------------------------------
 
-RelativePath Tree::getLocalPath(NodeRef const& aNode) const
+AbsolutePath Tree::getAbsolutePath(NodeRef const& aNode) const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
     OSL_PRECOND( !aNode.isValid() || isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-    Path::Components aNames;
+    Path::Rep aNames;
 
-    // Case of invalid node is handled properly (as they (should) have m_nPos == 0)
-    m_pImpl->appendPathTo( aNode.m_nPos, aNames );
+    if (!this->isEmpty())
+    {
+        if ( aNode.isValid() )
+            m_pImpl->prependLocalPathTo( aNode.m_nPos, aNames );
 
-    return RelativePath(aNames);
+        aNames.prepend( m_pImpl->getRootPath().rep() );
+    }
+    return AbsolutePath(aNames);
 }
 //-----------------------------------------------------------------------------
 
@@ -1061,12 +1091,12 @@ NodeRef Tree::getRootNode() const
 }
 //-----------------------------------------------------------------------------
 
-Name Tree::getRootName() const
+Path::Component Tree::getRootName() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    if (isEmpty()) return Name();
+    if (isEmpty()) return Path::makeEmptyComponent();
 
-    return m_pImpl->getRootName();
+    return m_pImpl->getExtendedRootName();
 }
 //-----------------------------------------------------------------------------
 
@@ -1169,11 +1199,11 @@ NodeRef Tree::getContextNode() const
 }
 //-----------------------------------------------------------------------------
 
-AbsolutePath Tree::getContextPath() const
+AbsolutePath Tree::getRootPath() const
 {
     OSL_PRECOND( !isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
 
-    return isEmpty() ? AbsolutePath::root() : m_pImpl->getContextPath();
+    return isEmpty() ? AbsolutePath::root() : m_pImpl->getRootPath();
 }
 //-----------------------------------------------------------------------------
 
@@ -1458,15 +1488,39 @@ bool operator < (SubNodeID const& lhs, SubNodeID const& rhs)
 // Free functions
 //-----------------------------------------------------------------------------
 
-Name validateNodeName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
+Name validateElementName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
 {
     OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
     OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-    if (!aNode.isValid()) // no node - any name
-        return makeName(sName);
+    OSL_PRECOND(  TreeImplHelper::isSet(aNode), "ERROR: Configuration: Set node expected.");
 
-    else if (TreeImplHelper::isSet(aNode))
+    return validateElementName(sName);
+}
+//-----------------------------------------------------------------------------
+
+Name validateChildName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
+{
+    OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
+    OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
+
+    OSL_PRECOND(  TreeImplHelper::isGroup(aNode), "ERROR: Configuration: Group node expected.");
+
+    return validateNodeName(sName);
+}
+//-----------------------------------------------------------------------------
+
+Name validateChildOrElementName(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
+{
+    OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
+    OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
+
+    OSL_PRECOND(  isStructuralNode(aTree,aNode), "ERROR: Configuration: Inner node expected.");
+
+    if (TreeImplHelper::isSet(aNode))
         return validateElementName(sName);
 
     else
@@ -1474,61 +1528,75 @@ Name validateNodeName(OUString const& sName, Tree const& aTree, NodeRef const& a
 }
 //-----------------------------------------------------------------------------
 
-RelativePath reduceRelativePath(OUString const& sPath, Tree const& aTree, NodeRef const& aBaseNode)
+Path::Component validateElementPathComponent(OUString const& sName, Tree const& aTree, NodeRef const& aNode )
+{
+    Name aElementName = validateElementName(sName,aTree,aNode);
+
+    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(aTree,aNode);
+    if (aTemplate.isValid())
+    {
+        return Path::makeCompositeName( aElementName, aTemplate->getName() );
+    }
+    else
+    {
+        OSL_ENSURE(false, "WARNING: Cannot find element type information for building an element name");
+        return Path::wrapElementName(aElementName);
+    }
+}
+//-----------------------------------------------------------------------------
+
+static void implValidateLocalPath(RelativePath& _rPath, Tree const& , NodeRef const& aNode)
+{
+    if (_rPath.isEmpty())
+        throw InvalidName(_rPath.toString(), "is an empty path.");
+
+    // FOR NOW: validate only the first component
+    if (aNode.isValid() && !TreeImplHelper::isSet(aNode))
+        if (!_rPath.getFirstName().isSimpleName())
+            throw InvalidName(_rPath.toString(), "is not valid in this context. Predicate expression used to select group member.");
+}
+//-----------------------------------------------------------------------------
+
+RelativePath validateRelativePath(OUString const& _sPath, Tree const& aTree, NodeRef const& aNode)
 {
     OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
-    OSL_PRECOND(  !aBaseNode.isValid() || aTree.isValidNode(aBaseNode), "WARNING: Configuration: NodeRef does not match Tree");
+    OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
+    OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-    // TODO: Evaluate aTree's ancestors as node context for path parsing (?)
-    Path aPath( sPath, Path::NoValidate() );
+    OSL_PRECOND(  isStructuralNode(aTree,aNode), "ERROR: Configuration: Inner node expected.");
 
-    Path::Type eType = aPath.getType();
-
-    if (eType != PathType::eABSOLUTE)
+    if (  Path::isAbsolutePath(_sPath) )
     {
-        // TODO: Validate path components based on node context
-        return RelativePath(aPath.rep());
+        OSL_ENSURE(false, "Absolute pathes are not allowed here (compatibility support enabled");
+        return validateAndReducePath(_sPath,aTree,aNode);
     }
 
-    // handle absolute path prefix removal now
-    typedef Path::Iterator Iter;
+    RelativePath aResult = RelativePath::parse(_sPath);
 
-    Iter        itPath      = aPath.begin();
-    Iter const  itPathEnd   = aPath.end();
+    implValidateLocalPath(aResult,aTree,aNode);
 
-    if (itPath != itPathEnd && itPath->isEmpty())   // absolute pathes may use a dummy empty first component
-        ++itPath;
+    return aResult;
+}
+//-----------------------------------------------------------------------------
 
-    // Tree context resolution
-    {
-        AbsolutePath aContextPath( aTree.getContextPath() );
-        Iter        itCtx       = aContextPath.begin();
-        Iter const  itCtxEnd    = aContextPath.end();
+RelativePath validateAndReducePath(OUString const& _sPath, Tree const& aTree, NodeRef const& aNode)
+{
+    OSL_PRECOND( !aTree.isEmpty(), "ERROR: Configuration: Tree operation requires a valid Tree");
+    OSL_PRECOND(  aNode.isValid(), "ERROR: Configuration: Node operation requires a valid NodeRef");
+    OSL_PRECOND(  aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
 
-        for ( ; itCtx != itCtxEnd; ++itPath, ++itCtx)
-        {
-            if (itPath == itPathEnd || *itPath != *itCtx )
-                throw InvalidName(sPath, " does not point into the current node's tree context.");
-        }
-    }
-    // now resolve the path within the tree
-    {
-        RelativePath aLocalPath( aTree.getLocalPath(aBaseNode) );
-        // could be optimized by just building the reverse list
+    OSL_PRECOND(  isStructuralNode(aTree,aNode), "ERROR: Configuration: Inner node expected.");
 
-        Iter        itLocal     = aLocalPath.begin();
-        Iter const  itLocalEnd  = aLocalPath.end();
+    if ( !Path::isAbsolutePath(_sPath) )
+        return validateRelativePath(_sPath,aTree,aNode);
 
-        for ( ; itLocal != itLocalEnd; ++itPath, ++itLocal)
-        {
-            if (itPath == itPathEnd || *itPath != *itLocal )
-                throw InvalidName(sPath, " does not point into the current context node.");
-        }
-    }
-    // TODO: Validate subsequent path components based on node context
+    AbsolutePath aInputPath = AbsolutePath::parse(_sPath);
 
-    // now return the valid remainder
-    return RelativePath(Path::Components(itPath, itPathEnd));
+    RelativePath aStrippedPath = Path::stripPrefix( aInputPath, aTree.getAbsolutePath(aNode) );
+
+    implValidateLocalPath(aStrippedPath,aTree,aNode);
+
+    return aStrippedPath;
 }
 //-----------------------------------------------------------------------------
 
@@ -1544,34 +1612,13 @@ bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Name const& aNam
 }
 //-----------------------------------------------------------------------------
 
-bool findInnerChildNode(Tree& aTree, NodeRef& aNode, Name const& aName)
+bool hasChildOrElement(Tree const& aTree, NodeRef const& aNode, Path::Component const& aName)
 {
-    if ( TreeImplHelper::isSet(aNode) )
-    {
-        ElementRef aElement = aTree.getElement(aNode,aName);
-        if (aElement.isValid())
-        {
-            aTree = aElement.getElementTree().getTree();
-            aNode = aTree.getRootNode();
-            return true;
-        }
-    }
-    else
-    {
-        NodeRef aChild = aTree.getChildNode(aNode,aName);
-
-        if ( aChild.isValid() )
-        {
-            aNode = aChild;
-            return true;
-        }
-    }
-
-    return false;
+    return TreeImplHelper::isSet(aNode) ? aTree.hasElement(aNode,aName) : aTree.hasChild(aNode,aName.getName());
 }
 //-----------------------------------------------------------------------------
 
-bool findInnerAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName)
+bool findInnerChildOrAvailableElement(Tree& aTree, NodeRef& aNode, Name const& aName)
 {
     if ( TreeImplHelper::isSet(aNode) )
     {
@@ -1598,43 +1645,6 @@ bool findInnerAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-bool findInnerDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
-{
-    // requires: findChildNode leaves node and tree unchanged when returning false
-    typedef Path::Iterator Iter;
-
-    Iter        itPath      = aPath.begin();
-    Iter const  itPathEnd   = aPath.end();
-
-    for ( ; itPath != itPathEnd; ++itPath)
-        if (!findInnerChildNode(aTree,aNode,*itPath))
-            break;
-
-    aPath = RelativePath(Path::Components(itPath, itPathEnd));
-    return itPath == itPathEnd;
-}
-//-----------------------------------------------------------------------------
-
-// NOT exported through noderef.hxx, but through treeimpl.hxx
-bool findInnerDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
-{
-    // requires: findChildNode leaves node and tree unchanged when returning false
-    typedef Path::Iterator Iter;
-
-    Iter        itPath      = aPath.begin();
-    Iter const  itPathEnd   = aPath.end();
-
-    for ( ; itPath != itPathEnd; ++itPath)
-    {
-        if (!findInnerAvailableChildNode(aTree,aNode,*itPath))
-            break;
-    }
-
-    aPath = RelativePath(Path::Components(itPath, itPathEnd));
-    return itPath == itPathEnd;
-}
-//-----------------------------------------------------------------------------
-
 AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const& aName)
 {
     if (aTree.hasChildValue(aParentNode,aName))
@@ -1642,46 +1652,23 @@ AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const
         return AnyNodeRef(aTree.getChildValue(aParentNode,aName));
     }
 
-    NodeRef aNode(aParentNode);
-    if ( findInnerChildNode(aTree,aNode,aName) )
+    else if ( TreeImplHelper::isSet(aParentNode) )
     {
-        return AnyNodeRef(aNode);
-    }
-
-    return AnyNodeRef();
-}
-//-----------------------------------------------------------------------------
-
-AnyNodeRef getAvailableChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const& aName)
-{
-    if (aTree.hasChildValue(aParentNode,aName))
-    {
-        return AnyNodeRef(aTree.getChildValue(aParentNode,aName));
-    }
-
-    NodeRef aNode(aParentNode);
-    if ( findInnerAvailableChildNode(aTree,aNode,aName) )
-    {
-        return AnyNodeRef(aNode);
-    }
-
-    return AnyNodeRef();
-}
-//-----------------------------------------------------------------------------
-
-AnyNodeRef getDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
-{
-    if ( findInnerDescendantNode(aTree,aNode,aPath) )
-    {
-        return AnyNodeRef(aNode);
-    }
-
-    if ( aPath.getDepth() == 1 )
-    {
-        Name aName = aPath.getLocalName();
-        if (aTree.hasChildValue(aNode,aName))
+        ElementRef aElement = aTree.getElement(aParentNode,aName);
+        if (aElement.isValid())
         {
-            return AnyNodeRef(aTree.getChildValue(aNode,aName));
+            aTree = aElement.getElementTree().getTree();
+            return AnyNodeRef(aTree.getRootNode());
+        }
+    }
+
+    else
+    {
+        NodeRef aChild = aTree.getChildNode(aParentNode,aName);
+
+        if ( aChild.isValid() )
+        {
+            return AnyNodeRef(aChild);
         }
     }
 
@@ -1689,20 +1676,140 @@ AnyNodeRef getDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
 }
 //-----------------------------------------------------------------------------
 
-AnyNodeRef getDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
+static
+inline
+bool findLocalInnerChild(Tree const& aTree, NodeRef& aNode, Path::Component const& aName)
 {
-    if ( findInnerDescendantAvailable(aTree,aNode,aPath) )
+    NodeRef aChild = aTree.getChildNode(aNode,aName.getName());
+
+    if ( !aChild.isValid() ) return false;
+
+    OSL_ENSURE( aName.isSimpleName(), "Child of group was found by request using element name format -failing");
+    if ( !aName.isSimpleName()) return false;
+
+    aNode = aChild;
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+static
+inline
+bool findElement(Tree& aTree, NodeRef& aNode, Path::Component const& aName)
+{
+    ElementRef aElement = aTree.getElement(aNode,aName.getName());
+
+    if (!aElement.isValid()) return false;
+
+    Tree aFoundTree = aElement.getElementTree().getTree();
+
+    OSL_ENSURE(matches(aFoundTree.getRootName(),aName), "Element found, but type prefix does not match - failing");
+    if ( !matches(aFoundTree.getRootName(),aName) ) return false;
+
+    aTree = aFoundTree;
+    aNode = aTree.getRootNode();
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+static
+bool findLocalInnerDescendant(Tree const& aTree, NodeRef& aNode, RelativePath& rPath)
+{
+    while ( !rPath.isEmpty() )
     {
+        if (  TreeImplHelper::isSet(aNode) ) return false;
+
+        if ( ! findLocalInnerChild(aTree,aNode,rPath.getFirstName()) ) return false;
+
+        rPath.dropFirstName();
+    }
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+static
+bool findDeepInnerDescendant(Tree& aTree, NodeRef& aNode, RelativePath& rPath)
+{
+    while ( !rPath.isEmpty() )
+    {
+        if (  TreeImplHelper::isSet(aNode) )
+        {
+            if ( ! findElement(aTree,aNode,rPath.getFirstName()) ) return false;
+        }
+        else
+        {
+            if ( ! findLocalInnerChild(aTree,aNode,rPath.getFirstName()) ) return false;
+        }
+
+        rPath.dropFirstName();
+    }
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+static
+inline
+bool identifiesLocalValue(Tree const& aTree, NodeRef const& aNode, RelativePath const& aPath)
+{
+    if ( aPath.getDepth() == 1 )
+    {
+        Path::Component const & aLocalName = aPath.getLocalName();
+        Name aName = aLocalName.getName();
+
+        if (aTree.hasChildValue(aNode,aName))
+        {
+            OSL_ENSURE( aLocalName.isSimpleName(), "Value in group was found by request using element name format");
+            if ( aLocalName.isSimpleName())
+                return true;
+        }
+    }
+    return false;
+}
+//-----------------------------------------------------------------------------
+
+AnyNodeRef getLocalDescendant(Tree /*const*/& aTree, NodeRef& aNode, RelativePath& rPath)
+{
+    if ( findLocalInnerDescendant(aTree,aNode,rPath) )
+    {
+        OSL_ASSERT(aTree.isValidNode(aNode));
         return AnyNodeRef(aNode);
     }
 
-    if ( aPath.getDepth() == 1 )
+    if ( identifiesLocalValue(aTree,aNode,rPath) )
     {
-        Name aName = aPath.getLocalName();
-        if (aTree.hasChildValue(aNode,aName))
-        {
-            return AnyNodeRef(aTree.getChildValue(aNode,aName));
-        }
+        ValueRef aValue = aTree.getChildValue(aNode,rPath.getLocalName().getName());
+        OSL_ASSERT(aTree.isValidNode(aValue));
+        return AnyNodeRef(aValue);
+    }
+
+    // compatibility hack
+    if (aTree.hasElement(aNode,rPath.getFirstName()))
+    {
+        OSL_ENSURE(false, "WARNING: Hierarchical Access to set elements is not specified for this interface. This usage is deprecated");
+        // compatibility access only
+        return getDeepDescendant(aTree,aNode,rPath);
+    }
+
+    return AnyNodeRef();
+}
+//-----------------------------------------------------------------------------
+
+AnyNodeRef getDeepDescendant(Tree& aTree, NodeRef& aNode, RelativePath& rPath)
+{
+    if ( findDeepInnerDescendant(aTree,aNode,rPath) )
+    {
+        OSL_ASSERT(aTree.isValidNode(aNode));
+        return AnyNodeRef(aNode);
+    }
+
+    if ( identifiesLocalValue(aTree,aNode,rPath) )
+    {
+        ValueRef aValue = aTree.getChildValue(aNode,rPath.getLocalName().getName());
+        OSL_ASSERT(aTree.isValidNode(aValue));
+        return AnyNodeRef(aValue);
     }
 
     return AnyNodeRef();
@@ -1759,7 +1866,7 @@ void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList)
                 nOffset = pTreeImpl->findNextChild(nParent,nOffset))
             {
                 OSL_ASSERT( pTreeImpl->isValidNode(nOffset) );
-                aList.push_back( SubNodeID( aNode, pTreeImpl->getNodeName(nOffset)) );
+                aList.push_back( SubNodeID( aNode, pTreeImpl->getSimpleNodeName(nOffset)) );
             }
         }
     }

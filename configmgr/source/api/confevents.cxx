@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-08 11:19:22 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #ifndef CONFIGMGR_API_EVENTHELPERS_HXX_
 #include "confeventhelpers.hxx"
 #endif
+#ifndef CONFIGMGR_TREECHANGELIST_HXX
+#include "treechangelist.hxx"
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -85,10 +89,8 @@ namespace configmgr
 
     public:
         // IConfigBroadcaster implementation helper
-        void addListener(OUString const& aName, INodeListenerRef const& );
+        void addListener(AbsolutePath const& aName, INodeListenerRef const& );
         void removeListener(INodeListenerRef const&);
-
-//      void removeNode(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
 
         void dispose(IConfigBroadcaster* pSource);
     };
@@ -120,7 +122,7 @@ namespace configmgr
 
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation
-    void ConfigChangeBroadcaster::addListener(OUString const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
+    void ConfigChangeBroadcaster::addListener(AbsolutePath const& aName, const vos::ORef < OOptions >& _xOptions, INodeListenerRef const& pHandler)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,true))
         {
@@ -149,7 +151,7 @@ namespace configmgr
     /////////////////////////////////////////////////////////////////////////
     void ConfigChangeBroadcaster::fireChanges(TreeChangeList const& rList_, sal_Bool bError_)
     {
-        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(rList_.m_xOptions,false))
+        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(rList_.getOptions(),false))
         {
             pHelper->broadcast(rList_, bError_, this);
         }
@@ -171,7 +173,7 @@ namespace configmgr
     }
     /////////////////////////////////////////////////////////////////////////
     // IConfigBroadcaster implementation help
-    void ConfigChangeBroadcastHelper::addListener(OUString const& aName, INodeListenerRef const& pHandler)
+    void ConfigChangeBroadcastHelper::addListener(AbsolutePath const& aName, INodeListenerRef const& pHandler)
     {
         m_changes.add(aName, pHandler);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-22 12:42:25 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,8 +176,8 @@ namespace configmgr
 #else
             static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
 #endif
-
-            if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions))
+            AbsolutePath aProfileModule = AbsolutePath::makeModulePath(ssUserProfile, AbsolutePath::NoValidate());
+            if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(aProfileModule, m_xDefaultOptions))
                 implInitFromProfile(pSubTree);
 
             // should we clean this up ?
@@ -223,7 +223,7 @@ namespace configmgr
 
         if  (_rSettings.hasAsyncSetting())
         {
-            m_xDefaultOptions->setLazyWrite(_rSettings.getAsyncSetting());
+            m_xDefaultOptions->setLazyWrite( !!_rSettings.getAsyncSetting() );
         }
 
     // call the template method
@@ -308,10 +308,34 @@ namespace configmgr
 
     // ITreeProvider /ITreeManager
     //-----------------------------------------------------------------------------
-    ISubtree* OProviderImpl::requestSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
+    ISubtree* OProviderImpl::requestSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions,
                                              sal_Int16 nMinLevels) throw (uno::Exception)
     {
-        return m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
+        ISubtree* pTree = NULL;
+        try
+        {
+            pTree = m_pTreeMgr->requestSubtree(aSubtreePath, _xOptions, nMinLevels);
+        }
+        catch(uno::Exception&e)
+        {
+            ::rtl::OUString sMessage = getErrorMessage(aSubtreePath, _xOptions);
+            // append the error message given by the tree provider
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\nThe backend returned the following error:\n"));
+            sMessage += e.Message;
+
+            throw lang::WrappedTargetException(sMessage, getProviderInstance(), uno::makeAny(e));
+        }
+
+        if (!pTree)
+        {
+            ::rtl::OUString sMessage = getErrorMessage(aSubtreePath, _xOptions);
+
+            sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\nNo backend error message available\n"));
+
+            throw uno::Exception(sMessage, getProviderInstance());
+        }
+
+        return pTree;
     }
 
     //-----------------------------------------------------------------------------
@@ -321,7 +345,7 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::releaseSubtree( OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ()
+    void OProviderImpl::releaseSubtree( AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions ) throw ()
     {
         m_pTreeMgr->releaseSubtree(aSubtreePath, _xOptions);
     }
@@ -339,7 +363,7 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::fetchSubtree(OUString const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
+    void OProviderImpl::fetchSubtree(AbsolutePath const& aSubtreePath, const vos::ORef < OOptions >& _xOptions, sal_Int16 nMinLevels) throw()
     {
         m_pTreeMgr->fetchSubtree(aSubtreePath, _xOptions, nMinLevels);
     }
@@ -401,23 +425,16 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------------
-    OUString OProviderImpl::getBasePath(OUString const& _rAccessor)
+    OUString OProviderImpl::getErrorMessage(AbsolutePath const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
     {
-        sal_Int32 nNameStart = _rAccessor.lastIndexOf(ConfigurationName::delimiter);
-        if (nNameStart == (_rAccessor.getLength() - 1))
-            nNameStart = _rAccessor.lastIndexOf(ConfigurationName::delimiter, nNameStart);
-        return nNameStart > 0 ? _rAccessor.copy(0,nNameStart) : ConfigurationName::rootname();
-    }
+        OUString const sAccessor = _rAccessor.toString();
 
-    //-----------------------------------------------------------------------------------
-    OUString OProviderImpl::getErrorMessage(OUString const& _rAccessor, const vos::ORef < OOptions >& _xOptions)
-    {
         CFG_TRACE_ERROR("config provider: the cache manager could not provide the tree (neither from the cache nor from the session)");
         ::rtl::OUString sMessage;
         ::rtl::OUString sUser(_xOptions->getUser());
         ::rtl::OUString sLocale(_xOptions->getLocale());
-        CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the locale \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sLocale), OUSTRING2ASCII(_rAccessor));
-        sMessage += _rAccessor;
+        CFG_TRACE_INFO_NI("config provider: the user we tried this for is \"%s\", the locale \"%s\", the path \"%s\"", OUSTRING2ASCII(sUser), OUSTRING2ASCII(sLocale), OUSTRING2ASCII(sAccessor));
+        sMessage += sAccessor;
 
         if (sUser.getLength())
         {
@@ -443,40 +460,33 @@ namespace configmgr
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
-        ISubtree*   pTree = NULL;
-        ::rtl::OUString sErrorMessage;
+        OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
+
         try
         {
-            OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
-            pTree = requestSubtree(_rAccessor,_xOptions, sal_Int16(nMinLevels));
+            using namespace configuration;
+
+            AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
+
+            ISubtree*   pTree = this->requestSubtree(aAccessorPath,_xOptions, sal_Int16(nMinLevels));
+
+            TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+
+            RootTree aRootTree( createReadOnlyTree(
+                    aAccessorPath,
+                    *pTree, nDepth,
+                    TemplateProvider( this->getTemplateProvider(), _xOptions )
+                ));
+
+            return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree, _xOptions);
         }
-        catch(uno::Exception&e)
+        catch (configuration::Exception& e)
         {
-            sErrorMessage = e.Message;
+            configapi::ExceptionMapper ec(e);
+            ec.setContext(this->getProviderInstance());
+            //ec.unhandled();
+            throw lang::WrappedTargetException(ec.message(), ec.context(), uno::Any());
         }
-
-        if (!pTree)
-        {
-            ::rtl::OUString sMessage = getErrorMessage(_rAccessor, _xOptions);
-
-            // append the error message given by the tree provider
-            if (sErrorMessage.getLength())
-            {
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\nThe server returned the following error:\n"));
-                sMessage += sErrorMessage;
-            }
-            throw uno::Exception(sMessage, getProviderInstance());
-        }
-        using namespace configuration;
-        TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
-
-        RootTree aRootTree( createReadOnlyTree(
-                AbsolutePath(getBasePath(_rAccessor), Path::NoValidate()),
-                *pTree, nDepth,
-                TemplateProvider( this->getTemplateProvider(), _xOptions )
-            ));
-
-        return m_pNewProviders->getReaderFactory().makeAccessRoot(aRootTree, _xOptions);
     }
 
 
@@ -486,43 +496,34 @@ namespace configmgr
     {
         CFG_TRACE_INFO("config provider: requesting the tree from the cache manager");
 
-        ISubtree*   pTree = NULL;
-        ::rtl::OUString sErrorMessage;
+        OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
+
         try
         {
-            OSL_ASSERT(sal_Int16(nMinLevels) == nMinLevels);
-            pTree = requestSubtree(_rAccessor, _xOptions, sal_Int16(nMinLevels));
+            using namespace configuration;
+
+            AbsolutePath aAccessorPath = AbsolutePath::parse(_rAccessor);
+
+            ISubtree*   pTree = requestSubtree(aAccessorPath, _xOptions, sal_Int16(nMinLevels));
+
+            TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
+
+            RootTree aRootTree( createUpdatableTree(
+                                    aAccessorPath,
+                                    *pTree, nDepth,
+                                    TemplateProvider( this->getTemplateProvider(), _xOptions )
+                                ));
+
+
+            return m_pNewProviders->getWriterFactory().makeAccessRoot(aRootTree, _xOptions);
         }
-        catch(uno::Exception &e)
+        catch (configuration::Exception& e)
         {
-            sErrorMessage = e.Message;
+            configapi::ExceptionMapper ec(e);
+            ec.setContext(this->getProviderInstance());
+            //ec.unhandled();
+            throw lang::WrappedTargetException(ec.message(), ec.context(), uno::Any());
         }
-
-        if (!pTree)
-        {
-            ::rtl::OUString sMessage = getErrorMessage(_rAccessor, _xOptions);
-
-            // append the error message given by the tree provider
-            if (sErrorMessage.getLength())
-            {
-                sMessage += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\nThe server returned the following error:\n"));
-                sMessage += sErrorMessage;
-            }
-            throw uno::Exception(sMessage, getProviderInstance());
-        }
-        //ConfigurationName aPathToUpdateRoot(getBasePath(_rAccessor), ConfigurationName::Absolute());
-
-        using namespace configuration;
-        TreeDepth nDepth = (nMinLevels == ALL_LEVELS) ? C_TreeDepthAll : TreeDepth(nMinLevels);
-
-        RootTree aRootTree( createUpdatableTree(
-                                AbsolutePath(getBasePath(_rAccessor),Path::NoValidate()),
-                                *pTree, nDepth,
-                                TemplateProvider( this->getTemplateProvider(), _xOptions )
-                            ));
-
-
-        return m_pNewProviders->getWriterFactory().makeAccessRoot(aRootTree, _xOptions);
     }
 
     //=============================================================================

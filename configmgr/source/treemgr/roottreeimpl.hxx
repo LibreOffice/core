@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottreeimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-20 01:38:19 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ namespace configmgr
         //  Construction
             /// creates a TreeImpl without a parent tree
             RootTreeImpl(   NodeFactory& rNodeFactory,
-                            AbsolutePath const& aContextPath,
+                            AbsolutePath const& aRootPath,
                             ISubtree& rCacheTree, TreeDepth nDepth,
                             TemplateProvider const& aTemplateProvider);
 
@@ -93,9 +93,11 @@ namespace configmgr
         private:
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
-            virtual void doGetPathRoot(Path::Components& rPath) const;
 
-            AbsolutePath m_aContextPath;
+            virtual Path::Component doGetRootName() const;
+            virtual void doFinishRootPath(Path::Rep& rPath) const;
+
+            AbsolutePath m_aRootPath;
         };
 //-----------------------------------------------------------------------------
     }

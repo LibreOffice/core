@@ -2,9 +2,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,8 +123,8 @@ void Committer::commit()
 
     OSL_ENSURE(m_rTree.getOptions().isValid(),"INTERNAL ERROR: Invalid Options used.");
     TreeChangeList  aChangeList(m_rTree.getOptions(),
-                                aTree.getContextPath().toString(),
-                                aTree.getRootName().toString(),
+                                aTree.getRootPath(),
+                                Chg(),
                                 aTree.getAttributes(aTree.getRootNode()));
 
     ITreeManager* pUpdateProvider = getUpdateProvider();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collectchanges.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:35:06 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,24 +126,44 @@ bool convertNodeChange(NodeChangeData& aData_, RemoveNode const& aChange_)
 
 CollectChanges::CollectChanges( NodeChangesInformation& rTargetList_,
                 TreeImpl& rStartTree_, NodeOffset nStartNode_,
+                TemplateHolder aElementTemplate_,
                 TreeDepth nMaxDepth)
 : m_rTargetList(rTargetList_)
 , m_aAccessor()
+, m_aContextTypeName()
 , m_pBaseTree(&rStartTree_)
 , m_nBaseNode(nStartNode_)
 , m_nDepthLeft( nMaxDepth )
 {
+    if (aElementTemplate_.isValid())
+        m_aContextTypeName = aElementTemplate_->getName();
 }
 
 //-----------------------------------------------------------------------------
-CollectChanges::CollectChanges( CollectChanges const& rBase, Name const& rChildName)
+CollectChanges::CollectChanges( CollectChanges const& rBase, Path::Component const& rChildName, Name const& aSubTypeName_)
 : m_rTargetList(rBase.m_rTargetList)
-, m_aAccessor(rBase.m_aAccessor.child(rChildName))
+, m_aAccessor(rBase.m_aAccessor.compose(rChildName))
+, m_aContextTypeName(aSubTypeName_)
 , m_pBaseTree(rBase.m_pBaseTree)
 , m_nBaseNode(rBase.m_nBaseNode)
 , m_nDepthLeft(childDepth(rBase.m_nDepthLeft))
 {
     OSL_ASSERT(rBase.m_nDepthLeft > 0);
+}
+
+//-----------------------------------------------------------------------------
+inline
+Path::Component CollectChanges::implGetNodeName(Change const& aChange_) const
+{
+    Name aSimpleNodeName = makeName( aChange_.getNodeName(), Name::NoValidate() );
+
+    if (m_aContextTypeName.isEmpty())
+    {
+        OSL_ENSURE(isSimpleName(aSimpleNodeName),"Unexpected: Found non-simple name without a type");
+        return Path::wrapSafeName(aSimpleNodeName);
+    }
+    else
+        return Path::makeCompositeName(aSimpleNodeName, m_aContextTypeName);
 }
 
 //-----------------------------------------------------------------------------
@@ -187,9 +207,9 @@ void CollectChanges::collectFrom(SubtreeChange const& aChanges_)
 {
     if (m_nDepthLeft > 0)
     {
-        Name aNodeName( aChanges_.getNodeName(), Name::NoValidate() );
+        Name aSubTypeName = makeName( aChanges_.getElementTemplateName(), Name::NoValidate() );
 
-        CollectChanges aSubcollector( *this, aNodeName );
+        CollectChanges aSubcollector( *this, implGetNodeName(aChanges_), aSubTypeName );
 
         aSubcollector.applyToChildren(aChanges_);
     }
@@ -213,8 +233,8 @@ bool CollectChanges::implSetLocation(NodeChangeLocation& rLocation_, Change cons
     if (bSet_ && m_aAccessor.isEmpty()) // It is  a set change affecting the base ...
         rLocation_.setAffected( aBaseID );
 
-    Name aChangeName( aOriginal_.getNodeName(), Name::NoValidate() );
-    rLocation_.setAccessor( m_aAccessor.child( aChangeName ) );
+    Path::Component aChangeName = implGetNodeName( aOriginal_ );
+    rLocation_.setAccessor( m_aAccessor.compose( aChangeName ) );
 
     return true;
 }

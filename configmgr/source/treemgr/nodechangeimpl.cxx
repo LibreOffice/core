@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,14 +315,14 @@ void ValueChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nPar
     {
         OSL_ENSURE(false, "ValueChangeTarget is being set without a name");
         NodeChangeImpl::setAffected(aAffectedTree,aAffectedTree->parent(nParentNode));
-        m_aName = aAffectedTree->getNodeName(nParentNode);
+        m_aName = aAffectedTree->getSimpleNodeName(nParentNode);
     }
 }
 //-----------------------------------------------------------------------------
 
 RelativePath ValueChangeImpl::doGetChangingNodePath() const
 {
-    return RelativePath( m_aName );
+    return RelativePath( Path::wrapSimpleName(m_aName) );
 }
 //-----------------------------------------------------------------------------
 
@@ -504,7 +504,7 @@ NodeOffset DeepValueReplaceImpl::doGetBaseNode() const // use your own
 // All Sets: SetChangeImpl - common base
 //-----------------------------------------------------------------------------
 
-SetChangeImpl::SetChangeImpl(Name const& aName, bool bNoCheck)
+SetChangeImpl::SetChangeImpl(Path::Component const& aName, bool bNoCheck)
 : NodeChangeImpl(bNoCheck)
 , m_aName(aName)
 {
@@ -519,7 +519,7 @@ void SetChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffec
 
 RelativePath SetChangeImpl::doGetChangingNodePath() const
 {
-    return RelativePath(getElementName());
+    return RelativePath(getFullElementName());
 }
 //-----------------------------------------------------------------------------
 
@@ -544,7 +544,7 @@ void SetChangeImpl::doApply( Node& rTarget)
 // Full Sets: SetInsertTreeImpl
 //-----------------------------------------------------------------------------
 
-SetInsertTreeImpl::SetInsertTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck)
+SetInsertTreeImpl::SetInsertTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck)
 : SetChangeImpl(aName,bNoCheck)
 , m_aNewTree(aNewTree)
 {
@@ -587,7 +587,7 @@ void SetInsertTreeImpl::doApplyToElement( SetNodeImpl& rNode, Name const& aName)
 // Full Sets: SetReplaceTreeImpl
 //-----------------------------------------------------------------------------
 
-SetReplaceTreeImpl::SetReplaceTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree)
+SetReplaceTreeImpl::SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree)
 : SetChangeImpl(aName)
 , m_aNewTree(aNewTree)
 , m_aOldTree()
@@ -595,7 +595,7 @@ SetReplaceTreeImpl::SetReplaceTreeImpl(Name const& aName, ElementTreeHolder cons
 }
 //-----------------------------------------------------------------------------
 
-SetReplaceTreeImpl::SetReplaceTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree)
+SetReplaceTreeImpl::SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree)
 : SetChangeImpl(aName,true)
 , m_aNewTree(aNewTree)
 , m_aOldTree(aOldTree)
@@ -657,14 +657,14 @@ void SetReplaceTreeImpl::doApplyToElement( SetNodeImpl& rNode, Name const& aName
 // Full Sets: SetRemoveTreeImpl
 //-----------------------------------------------------------------------------
 
-SetRemoveTreeImpl::SetRemoveTreeImpl(Name const& aName)
+SetRemoveTreeImpl::SetRemoveTreeImpl(Path::Component const& aName)
 : SetChangeImpl(aName)
 , m_aOldTree()
 {
 }
 //-----------------------------------------------------------------------------
 
-SetRemoveTreeImpl::SetRemoveTreeImpl(Name const& aName, ElementTreeHolder const& aOldTree)
+SetRemoveTreeImpl::SetRemoveTreeImpl(Path::Component const& aName, ElementTreeHolder const& aOldTree)
 : SetChangeImpl(aName,true)
 , m_aOldTree(aOldTree)
 {

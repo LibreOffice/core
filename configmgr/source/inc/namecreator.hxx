@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: apitypes.hxx,v $
+ *  $RCSfile: namecreator.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,93 +59,69 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_API_APITYPES_HXX_
-#define CONFIGMGR_API_APITYPES_HXX_
+#ifndef INCLUDED_CONFIGMGR_NAMECREATOR_HXX
+#define INCLUDED_CONFIGMGR_NAMECREATOR_HXX
 
-#ifndef _COM_SUN_STAR_UNO_TYPE_HXX_
-#include <com/sun/star/uno/Type.hxx>
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx"
 #endif
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
-#include <com/sun/star/uno/Any.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
-#include <com/sun/star/uno/Sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
-#include <com/sun/star/uno/XInterface.hpp>
-#endif
-
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/ustring.hxx>
-#endif
-
-#ifndef INCLUDED_VECTOR
-#include <vector>
-#define INCLUDED_VECTOR
-#endif  INCLUDED_VECTOR
 
 namespace configmgr
 {
-    namespace css = ::com::sun::star;
-    namespace uno = ::com::sun::star::uno;
+    // -----------------------------------------------------------------------------
+    class Change;
+    class SubtreeChange;
+    // -----------------------------------------------------------------------------
+    using configuration::Name;
+    using configuration::AbsolutePath;
+    using configuration::RelativePath;
+    // -----------------------------------------------------------------------------
 
-    using ::std::vector;
-    using ::rtl::OUString;
-
-    namespace configapi
+    class ONameCreator
     {
-        inline
-        uno::Type getAnyType( )
-        {
-            return ::getCppuType( static_cast< uno::Any const * >(0) );
-        }
+    public:
+        typedef configuration::Path::Component  FullName;
+        typedef configuration::Path::Rep        PathRep;
+        typedef std::vector< FullName > NameList;
+    public:
+        ONameCreator() {}
 
-        inline
-        uno::Type getUnoInterfaceType( )
-        {
-            return ::getCppuType( static_cast< uno::Reference< uno::XInterface > const * >(0) );
-        }
+        void pushName(const FullName &_aName) { m_aNameList.push_back(_aName); }
+        void popName()                       { m_aNameList.pop_back(); }
 
-        template <typename Interface>
-        inline
-        uno::Type getReferenceType( Interface const* )
-        {
-            return ::getCppuType( static_cast< uno::Reference<Interface> const * >(0) );
-        }
+        void clear() { m_aNameList.clear(); }
 
-        template <typename Type>
-        inline
-        uno::Type getSequenceType( Type const* )
-        {
-            return ::getCppuType( static_cast< uno::Sequence<Type> const * >(0) );
-        }
+        RelativePath buildPath() const;
+        RelativePath buildPath(const FullName &_aPlusName) const;
 
-        template <typename Type>
-        inline
-        uno::Sequence<Type> makeSequence(vector<Type> const& aVector)
-        {
-            if (aVector.empty())
-                return uno::Sequence<Type>();
-            return uno::Sequence<Type>(&aVector[0],aVector.size());
-        }
-    }
-
-    // and one on the side
-    class NotCopyable
-    {
-    protected:
-        NotCopyable() {}
-        ~NotCopyable() {}
+        static FullName createName(Change const& _rChange, SubtreeChange const* _pParent);
     private:
-        NotCopyable     (NotCopyable& notImplemented);
-        void operator=  (NotCopyable& notImplemented);
+        NameList     m_aNameList;
     };
 
-}
+    template <class PathClass>
+    class OPathCreator : public ONameCreator
+    {
+    public:
+        typedef PathClass PathType;
+    public:
+        OPathCreator() : m_aBasePath( PathRep() ) {}
+        OPathCreator(PathClass const & _aBasePath) : m_aBasePath(_aBasePath) {}
 
-#endif // CONFIGMGR_API_APITYPES_HXX_
+        void init(PathClass const & _aBasePath)
+        { clear(); m_aBasePath = _aBasePath; }
 
+        PathClass createPath() const
+        { return m_aBasePath.compose( ONameCreator::buildPath() ); }
+
+        PathClass createPath(const FullName & _aPlusName) const
+        { return m_aBasePath.compose( ONameCreator::buildPath(_aPlusName) ); }
+    private:
+        PathClass m_aBasePath;
+    };
+    // -----------------------------------------------------------------------------
+
+} // namespace configmgr
+
+#endif
 

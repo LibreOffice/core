@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,10 +166,10 @@ UnoType Template::getInstanceType() const
 //-----------------------------------------------------------------------------
 
 /// get the path where the template is located
-RelativePath Template::getPath() const
+OUString Template::getPathString() const
 {
     TemplateName aNames(m_aName,m_aModule);
-    return aNames.makePath( );
+    return aNames.makePathString( );
 }
 //-----------------------------------------------------------------------------
 

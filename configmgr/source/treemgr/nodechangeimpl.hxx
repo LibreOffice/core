@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:35:59 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,12 +304,15 @@ namespace configmgr
         class SetChangeImpl
         : public NodeChangeImpl
         {
-            Name m_aName;
+            Path::Component m_aName;
         public:
-            explicit SetChangeImpl(Name const& aName, bool bNoCheck = false);
+            explicit SetChangeImpl(Path::Component const& aName, bool bNoCheck = false);
 
             /// the name of the element being changed
-            Name getElementName() const { return m_aName; }
+            Path::Component getFullElementName() const { return m_aName; }
+
+            /// the name of the element being changed
+            Name getElementName() const { return m_aName.getName(); }
 
             /// setup the 'target' node that is to be affected or changed
             void setTarget(TreeHolder const& aAffectedTree, NodeOffset nAffectedNode);
@@ -340,7 +343,7 @@ namespace configmgr
         {
             ElementTreeHolder m_aNewTree;
         public:
-            explicit SetInsertTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck = false);
+            explicit SetInsertTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, bool bNoCheck = false);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
@@ -362,8 +365,8 @@ namespace configmgr
             ElementTreeHolder m_aNewTree;
             ElementTreeHolder m_aOldTree;
         public:
-            explicit SetReplaceTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree);
-            explicit SetReplaceTreeImpl(Name const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree);
+            explicit SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree);
+            explicit SetReplaceTreeImpl(Path::Component const& aName, ElementTreeHolder const& aNewTree, ElementTreeHolder const& aOldTree);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)
@@ -384,8 +387,8 @@ namespace configmgr
         {
             ElementTreeHolder m_aOldTree;
         public:
-            explicit SetRemoveTreeImpl(Name const& aName);
-            explicit SetRemoveTreeImpl(Name const& aName, ElementTreeHolder const& aOldTree);
+            explicit SetRemoveTreeImpl(Path::Component const& aName);
+            explicit SetRemoveTreeImpl(Path::Component const& aName, ElementTreeHolder const& aOldTree);
 
         protected:
             /// checks, if this represents an actual change (given whether the change has been applied or not)

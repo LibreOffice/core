@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2001-05-03 16:09:46 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,27 +59,56 @@
  *
  ************************************************************************/
 
-#include <algorithm>
 
-#include "configsession.hxx"
-#include "change.hxx"
-#include "valuenode.hxx"
-#include "treeactions.hxx"
-#include "treeprovider.hxx"
 #include "treecache.hxx"
-#include "tracer.hxx"
+
+#ifndef _CONFIGMGR_SESSION_CONFIGSESSION_HXX_
+#include "configsession.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
+#endif
+#ifndef _CONFIGMGR_TREE_VALUENODE_HXX
+#include "valuenode.hxx"
+#endif
+#ifndef _CONFIGMGR_TREEACTIONS_HXX_
+#include "treeactions.hxx"
+#endif
+#ifndef CONFIGMGR_TREEPROVIDER_HXX
+#include "treeprovider.hxx"
+#endif
+#ifndef CONFIGMGR_TREEDATA_HXX
 #include "treedata.hxx"
-#include "treeloader.hxx"
+#endif
+#ifndef CONFIGMGR_LOADER_HXX
+#include "loader.hxx"
+#endif
+#ifndef _CONFIGMGR_TRACER_HXX_
+#include "tracer.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#endif
 
 #ifndef _VOS_THREAD_HXX_
 #include <vos/thread.hxx>
+#endif
+
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
 #endif
 
 namespace configmgr
 {
 
     using namespace com::sun::star::uno;
+    using namespace configuration;
+    namespace container = com::sun::star::container;
 // -----------------------------------------------------------------------------
 // ------------------------------- invalidateTree -------------------------------
 // -----------------------------------------------------------------------------
@@ -184,64 +213,16 @@ namespace configmgr
             }
     };
 
-/*
-    class MyAction : public NodeAction
-    {
-        vector< OUString > m_aNameList;
-        OUString getPath();
-    public:
-        virtual void handle(ValueNode const&);
-        virtual void handle(ISubtree const&);
-    };
-
-    // -----------------------------------------------------------------------------
-
-    OUString MyAction::getPath()
-    {
-        OUString aName;
-        for (vector<OUString>::const_iterator it = m_aNameList.begin();
-             it != m_aNameList.end();
-             it++)
-        {
-            aName += *it;
-            aName += OUString::createFromAscii("/");
-        }
-        return aName;
-    }
-
-    void MyAction::handle(ValueNode const& aValueNode)
-    {
-        OUString aName = getPath() + aValueNode.getName();
-        Any anAny = aValueNode.getValue();
-
-          // double aDouble;
-          // anAny >>= aDouble;
-          // volatile int dummy = 0;
-
-    }
-
-    void MyAction::handle(ISubtree const& aSubtree)
-    {
-        m_aNameList.push_back(aSubtree.getName());
-        aSubtree.forEachChild(*this);
-        m_aNameList.pop_back();
-    }
-*/
-
 // -----------------------------------------------------------------------------
 auto_ptr<TreeChangeList> createDiffs(ISubtree* _pCachedTree, ISubtree * _pLoadedSubtree,
-                                    const vos::ORef<OOptions>& _rOptions, rtl::OUString const& _aAbsoluteSubtreePath)
+                                    const vos::ORef<OOptions>& _rOptions,
+                                    AbsolutePath const& _aAbsoluteSubtreePath)
 {
     // a new TreeChangeList, will filled with the changes between the cached tree and the new loaded tree
 
     // Create a TreeChangeList with the right name, parentname and ConfigurationProperties
-    ConfigurationName aName(_aAbsoluteSubtreePath, ConfigurationName::Absolute());
-    OUString aParentName = aName.getParentName().fullName();
-    OUString aLocalName = aName.localName();
-
-    std::auto_ptr<TreeChangeList>
-        aNewChangeList(
-            new TreeChangeList(_rOptions, aParentName, aLocalName, configuration::Attributes()));
+    std::auto_ptr<TreeChangeList> aNewChangeList(
+                                        new TreeChangeList(_rOptions, _aAbsoluteSubtreePath,Chg()) );
 
     // create the differences
     OBuildChangeTree aNewChangeTree(aNewChangeList.get()->root, _pCachedTree, 1);
@@ -281,7 +262,7 @@ void concatSubtreeWithChanges(ISubtree* _pSubtree, TreeChangeList &_aChangeList)
 }
 // -----------------------------------------------------------------------------
 
-auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, rtl::OUString const& _aAbsoluteSubtreePath,
+auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
                                                      sal_Int16 _nMinLevels)  throw (uno::Exception)
 {
@@ -321,11 +302,11 @@ class OInvalidateTreeThread: public vos::OThread
 {
     vos::ORef<OOptions> m_aOptions;
     TreeManager&        m_rTreeManager;
-    OUString            m_aAbsoluteSubtreePath;
+    AbsolutePath        m_aAbsoluteSubtreePath;
 
     virtual void SAL_CALL run();
 public:
-    OInvalidateTreeThread(TreeManager& _pTreeManager, const rtl::OUString &_aAbsoluteSubtreePath,
+    OInvalidateTreeThread(TreeManager& _pTreeManager, const AbsolutePath &_aAbsoluteSubtreePath,
                           const vos::ORef<OOptions>& _rOptions)
             :m_rTreeManager(_pTreeManager),
              m_aAbsoluteSubtreePath(_aAbsoluteSubtreePath),
@@ -340,7 +321,7 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-void TreeManager::invalidateTreeAsync(const rtl::OUString &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) throw (uno::Exception)
+void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) throw (uno::Exception)
 {
     if (m_bDisposeMode == false)
     {
@@ -358,7 +339,7 @@ void TreeManager::invalidateTreeAsync(const rtl::OUString &_aAbsoluteSubtreePath
 
 // -----------------------------------------------------------------------------
 
-void TreeManager::refreshSubtree(const rtl::OUString &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) throw (uno::Exception)
+void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) throw (uno::Exception)
 {
     // load the Node direct from the session, without using the cache
     auto_ptr<ISubtree> aLoadedSubtree( this->loadNodeFromSession(m_pSession, _aAbsoluteSubtreePath, _aOptions, -1) );

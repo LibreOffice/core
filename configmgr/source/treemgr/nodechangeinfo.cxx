@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:31:32 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,7 +188,7 @@ bool NodeChangeLocation::isValidLocation() const
                 :   ( m_affected.isValidNode() &&
                       (! m_bSubNodeChanging ||
                          (!m_path.isEmpty() &&
-                            SubNodeID(m_affected,m_path.getLocalName()).isValidNode()
+                            SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode()
                     ) )  ) );
 }
 //-----------------------------------------------------------------------------
@@ -265,7 +265,7 @@ SubNodeID NodeChangeLocation::getChangingValueID() const
     OSL_ENSURE(!m_affected.isEmpty() && m_affected.isValidNode(), "Invalid target location set in NodeChangeLocation with subnode");
     OSL_ENSURE(!m_path.isEmpty(), "No target accessor set in NodeChangeLocation with subnode");
 
-    SubNodeID aResult( m_affected, m_path.getLocalName() );
+    SubNodeID aResult( m_affected, m_path.getLocalName().getName() );
 
     OSL_ENSURE(aResult.isValidNode(), "Invalid change location set in NodeChangeLocation");
 

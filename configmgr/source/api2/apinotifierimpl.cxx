@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinotifierimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,12 +60,22 @@
  ************************************************************************/
 
 #include "apinotifierimpl.hxx"
-#include "apinodeaccess.hxx"
 
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
+#include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGVALUEREF_HXX_
 #include "valueref.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGEXCEPT_HXX_
 #include "configexcept.hxx"
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -120,7 +130,7 @@ template <class Listener>
 inline
 bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
 {
-    using configuration::validateNodeName;
+    using configuration::validateChildName;
 
     if (sName.getLength() != 0)
     {
@@ -130,7 +140,7 @@ bool genericAddChildListener(NodeGroupInfoAccess& rNode, const Reference< Listen
         Tree        aTree( aGuardedNode->getTree() );
         NodeRef     aNode( aGuardedNode->getNode() );
 
-        Name        aChildName = validateNodeName(sName,aTree,aNode);
+        Name        aChildName = validateChildName(sName,aTree,aNode);
 
         if (!aTree.hasChild(aNode,aChildName)) return false;
 
@@ -157,7 +167,7 @@ template <class Listener>
 inline
 bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Listener >& xListener, const OUString& sName )
 {
-    using configuration::validateNodeName;
+    using configuration::validateChildName;
 
     if (sName.getLength() != 0)
     {
@@ -167,7 +177,7 @@ bool genericRemoveChildListener(NodeGroupInfoAccess& rNode, const Reference< Lis
         Tree        aTree( aGuardedNode->getTree() );
         NodeRef     aNode( aGuardedNode->getNode() );
 
-        Name        aChildName = validateNodeName(sName,aTree,aNode);
+        Name        aChildName = validateChildName(sName,aTree,aNode);
 
         if (!aTree.hasChild(aNode,aChildName)) return false;
 

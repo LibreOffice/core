@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,11 +122,19 @@ ElementTree ElementRef::getElementTree() const
 }
 //-----------------------------------------------------------------------------
 
+Path::Component ElementRef::getFullName() const
+{
+    if (!isValid()) return Path::makeEmptyComponent();
+
+    return m_aTreeHolder->getExtendedRootName();
+}
+//-----------------------------------------------------------------------------
+
 Name ElementRef::getName() const
 {
     if (!isValid()) return Name();
 
-    return m_aTreeHolder->getRootName();
+    return m_aTreeHolder->getSimpleRootName();
 }
 //-----------------------------------------------------------------------------
 // class ElementTree
@@ -286,9 +294,9 @@ Name SetElementInfo::getTemplatePackage() const
 }
 //-----------------------------------------------------------------------------
 
-RelativePath SetElementInfo::getTemplatePath() const
+OUString SetElementInfo::getTemplatePathString() const
 {
-    return m_aTemplate->getPath();
+    return m_aTemplate->getPathString();
 }
 //-----------------------------------------------------------------------------
 
@@ -514,7 +522,7 @@ static void doValidateElement(ElementRef const& aElement)
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid in this context and returns its name
-Name TreeSetUpdater::implValidateElement(ElementRef const& aElement)
+Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement)
 {
     doValidateElement(aElement);
 
@@ -523,12 +531,12 @@ Name TreeSetUpdater::implValidateElement(ElementRef const& aElement)
 //  OSL_ENSURE( !pElement || pElement->isTemplateInstance(), "INTERNAL ERROR: Set Element without associated template found");
 //  OSL_ENSURE( !pElement || pElement->isInstanceOf(m_aTemplate), "INTERNAL ERROR: Set Update: existing element does not match template");
 
-    return aElement.getName();
+    return aElement.getFullName();
 }
 //-----------------------------------------------------------------------------
 
 /// validates that the given element is valid and can be replaced in this context and returns its name
-Name ValueSetUpdater::implValidateElement(ElementRef const& aElement)
+Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement)
 {
     doValidateElement(aElement);
 
@@ -543,7 +551,7 @@ Name ValueSetUpdater::implValidateElement(ElementRef const& aElement)
                "INTERNAL ERROR: Set Update: existing element does not match template type");
 #endif
 
-    return aElement.getName();
+    return aElement.getFullName();
 }
 //-----------------------------------------------------------------------------
 static void checkEligibleChild(ElementTree const& aElementTree, Tree const& aParentTree)
@@ -581,8 +589,8 @@ void TreeSetUpdater::implValidateTree(ElementTree const& aElementTree)
 
     if (!aElementTree->isInstanceOf(m_aTemplate))
     {
-        throw TypeMismatch( aElementTree->getTemplate()->getPath().toString(),
-                            m_aTemplate->getPath().toString(), " - new element without template in Set Update");
+        throw TypeMismatch( aElementTree->getTemplate()->getPathString(),
+                            m_aTemplate->getPathString(), " - new element without template in Set Update");
     }
 }
 //-----------------------------------------------------------------------------
@@ -639,7 +647,7 @@ NodeChange TreeSetUpdater::validateInsertElement (Name const& aName, ElementTree
 
     implValidateTree(aNewElement);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetInsertTreeImpl(aName, aNewElement.get()) );
+    std::auto_ptr<SetChangeImpl> pChange( new SetInsertTreeImpl(aNewElement->makeExtendedName(aName), aNewElement.get()) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -655,7 +663,9 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
     UnoAny aValidValue = implValidateValue(aNewValue);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetInsertValueImpl(aName, makeValueElement(aName, aValidValue)) );
+    ElementTreeHolder aNewElement = makeValueElement(aName, aValidValue);
+
+    std::auto_ptr<SetChangeImpl> pChange( new SetInsertValueImpl(aNewElement->makeExtendedName(aName), aNewElement) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -665,7 +675,7 @@ NodeChange ValueSetUpdater::validateInsertElement (Name const& aName, UnoAny con
 
 NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, ElementTree const& aNewElement)
 {
-    Name aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement);
 
     implValidateTree(aNewElement);
 
@@ -679,13 +689,15 @@ NodeChange TreeSetUpdater::validateReplaceElement(ElementRef const& aElement, El
 
 NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, UnoAny const& aNewValue)
 {
-    Name aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement);
 
     ElementNodeRef aElementNode = extractElementNode(aElement);
 
     UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceValueImpl(aName, makeValueElement(aName, aElementNode,aValidValue)) );
+    ElementTreeHolder aNewElement = makeValueElement(aName.getName(), aElementNode, aValidValue);
+
+    std::auto_ptr<SetChangeImpl> pChange( new SetReplaceValueImpl(aName, aNewElement) );
 
     pChange->setTarget(TreeImplHelper::impl(m_aParentTree), TreeImplHelper::offset(m_aSetNode));
 
@@ -695,7 +707,7 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
 
 NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Name aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement);
 
     std::auto_ptr<SetChangeImpl> pChange( new SetRemoveTreeImpl(aName) );
 
@@ -708,7 +720,7 @@ NodeChange TreeSetUpdater::validateRemoveElement (ElementRef const& aElement)
 
 NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
 {
-    Name aName = implValidateElement(aElement);
+    Path::Component aName = implValidateElement(aElement);
 
     std::auto_ptr<SetChangeImpl> pChange( new SetRemoveValueImpl(aName) );
 
@@ -763,11 +775,7 @@ Name ElementHelper::getElementName(ElementRef const& aElement)
 {
     OSL_PRECOND( aElement.isValid(), "ERROR: Configuration: ElementRef operation requires valid node" );
 
-    Tree aElementTree = impl_extractElementTree(aElement);
-
-    OSL_ASSERT( aElementTree.isEmpty() == !aElement.isValid() );
-
-    return aElementTree.getRootName();
+    return aElement.getName();
 }
 //-----------------------------------------------------------------------------
     }

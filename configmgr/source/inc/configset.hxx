@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:27:17 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace configmgr
         //---------------------------------------------------------------------
         class Name;
         class AbsolutePath;
+        namespace Path { class Component; }
         //---------------------------------------------------------------------
 
         typedef com::sun::star::uno::Type       UnoType;
@@ -113,7 +114,8 @@ namespace configmgr
 
             bool isValid() const;
 
-            Name getName() const;
+            Path::Component getFullName() const;
+            Name            getName() const;
 
             ElementTree getElementTree() const;
         };
@@ -168,7 +170,7 @@ namespace configmgr
             UnoType  getElementType() const;
             Name     getTemplateName() const;
             Name     getTemplatePackage() const;
-            RelativePath getTemplatePath() const;
+            OUString getTemplatePathString() const;
 
             static TemplateHolder extractElementInfo(Tree const& aTree, NodeRef const& aNode);
         };
@@ -206,9 +208,9 @@ namespace configmgr
 
             NodeChange validateRemoveElement (ElementRef const& aElement);
         private:
-            void        implValidateSet();
-            Name        implValidateElement(ElementRef const& aElement);
-            void        implValidateTree(ElementTree const& aElementTree);
+            void                implValidateSet();
+            Path::Component     implValidateElement(ElementRef const& aElement);
+            void                implValidateTree(ElementTree const& aElementTree);
         };
 //-----------------------------------------------------------------------------
         /// allows to insert,remove and replace an element of a <type>Node</type> that is a Container ("set") of simple values.
@@ -230,7 +232,7 @@ namespace configmgr
         private:
             typedef Tree ElementNodeRef;
             void implValidateSet();
-            Name implValidateElement(ElementRef const& aElement);
+            Path::Component     implValidateElement(ElementRef const& aElement);
             UnoAny implValidateValue(ElementNodeRef const& aElementTree, UnoAny const& aValue);
             UnoAny implValidateValue(UnoAny const& aValue);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,12 @@
 #ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
 #endif
-
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
-
+#endif
+#ifndef CONFIGMGR_API_BROADCASTER_HXX_
 #include "broadcaster.hxx"
+#endif
 
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -109,7 +111,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef INCLUDED_ALGORITHM
 #include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
 
 namespace configmgr
 {
@@ -138,10 +143,10 @@ namespace configmgr
         using configuration::NodeChanges;
 
         using configuration::Name;
-        using configuration::Path;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
-        using configuration::validateNodeName;
+        using configuration::validateChildName;
+        using configuration::validateChildOrElementName;
 
         using namespace beans;
         using namespace uno;
@@ -279,7 +284,8 @@ Property SAL_CALL TreeNodePropertySetInfo::getPropertyByName(const OUString& _rP
     throw(UnknownPropertyException, RuntimeException)
 {
     OReadSynchronized aGuard(m_rNodeAccess.getDataLock());
-    Name aName(_rPropertyName, Name::NoValidate());
+
+    Name aName = configuration::makeNodeName(_rPropertyName, Name::NoValidate());
 
     if (!m_aTree.hasChild(m_aNode, aName))
     {
@@ -300,7 +306,8 @@ sal_Bool SAL_CALL TreeNodePropertySetInfo::hasPropertyByName(const OUString& _rP
     throw(RuntimeException)
 {
     OReadSynchronized aGuard(m_rNodeAccess.getDataLock());
-    Name aName(_rPropertyName, Name::NoValidate());
+
+    Name aName = configuration::makeNodeName(_rPropertyName, Name::NoValidate());
 
     return m_aTree.hasChild(m_aNode, aName);
 }
@@ -447,7 +454,7 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sPropertyName,aTree,aNode);
+        Name aChildName = validateChildName(sPropertyName,aTree,aNode);
 
         ValueRef aChild( aTree.getChildValue(aNode, aChildName) );
 
@@ -471,7 +478,7 @@ void implSetPropertyValue( NodeGroupAccess& rNode, const OUString& sPropertyName
                 sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM(" Property '") );
                 sMessage += sPropertyName;
                 sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ") );
-                sMessage += aTree.getLocalPath(aNode).toString();
+                sMessage += aTree.getAbsolutePath(aNode).toString();
 
                 Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
                 throw UnknownPropertyException( sMessage, xContext );
@@ -541,7 +548,7 @@ void implSetPropertyValues( NodeGroupAccess& rNode, const Sequence< OUString >& 
         NodeChanges aChanges;
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
         {
-            Name aChildName = configuration::makeName( aPropertyNames[i] ); // not validated
+            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
 
             ValueRef aChild( aTree.getChildValue(aNode, aChildName) );
 
@@ -616,8 +623,8 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, RuntimeException)
 {
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
 
     try
     {
@@ -626,20 +633,20 @@ void implSetHierarchicalPropertyValue( NodeGroupAccess& rNode, const OUString& a
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        RelativePath const aRelPath = reduceRelativePath( aPropertyName, aTree, aNode );
+        RelativePath const aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
 
         Tree aNestedTree( aTree );
         NodeRef aNestedNode( aNode );
         RelativePath aResolvePath( aRelPath );
 
-        AnyNodeRef aNestedValue = getDescendant( aNestedTree, aNestedNode, aResolvePath );
+        AnyNodeRef aNestedValue = getLocalDescendant( aNestedTree, aNestedNode, aResolvePath );
 
         if (!aNestedValue.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot set Property Value. Property '") );
             sMessage += aResolvePath.toString();
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' was not found in ")  );
-            sMessage += aNestedTree.getLocalPath(aNestedNode).toString();
+            sMessage += aNestedTree.getAbsolutePath(aNestedNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );
@@ -708,8 +715,8 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
     throw(beans::PropertyVetoException, lang::IllegalArgumentException,
           lang::WrappedTargetException, RuntimeException)
 {
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
 
     try
     {
@@ -722,13 +729,13 @@ void implSetHierarchicalPropertyValues( NodeGroupAccess& rNode, const Sequence< 
         for(sal_Int32 i = 0, count= aValues.getLength(); i < count; ++i)
         try
         {
-            RelativePath aRelPath = reduceRelativePath( aPropertyNames[i], aTree, aNode );
+            RelativePath aRelPath = validateRelativePath( aPropertyNames[i], aTree, aNode );
 
             Tree aNestedTree( aTree );
             NodeRef aNestedNode( aNode );
             RelativePath aResolvePath( aRelPath );
 
-            AnyNodeRef aNestedValue = getDescendant( aNestedTree, aNestedNode, aResolvePath );
+            AnyNodeRef aNestedValue = getLocalDescendant( aNestedTree, aNestedNode, aResolvePath );
 
             if (!aNestedValue.isValid())
             {
@@ -814,7 +821,7 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(aPropertyName,aTree,aNode);
+        Name aChildName = validateChildName(aPropertyName,aTree,aNode);
 
         AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
 
@@ -825,7 +832,7 @@ Any implGetPropertyValue( NodeGroupInfoAccess& rNode,const OUString& aPropertyNa
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
             sMessage += aPropertyName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );
@@ -874,7 +881,7 @@ Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequenc
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            Name aChildName = configuration::makeName( aPropertyNames[i] ); // not validated
+            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
 
             AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
 
@@ -904,8 +911,8 @@ Sequence< Any > implGetPropertyValues( NodeGroupInfoAccess& rNode, const Sequenc
 Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString& aPropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, RuntimeException)
 {
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
     try
     {
         GuardedNodeDataAccess impl( rNode );
@@ -913,16 +920,16 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
         Tree aTree( impl->getTree() );
         NodeRef aNode( impl->getNode() );
 
-        RelativePath aRelPath = reduceRelativePath( aPropertyName, aTree, aNode );
+        RelativePath aRelPath = validateRelativePath( aPropertyName, aTree, aNode );
 
-        AnyNodeRef aNestedNode = getDescendant( aTree, aNode, aRelPath );
+        AnyNodeRef aNestedNode = getLocalDescendant( aTree, aNode, aRelPath );
 
         if (!aNestedNode.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Property Value. Property '") );
             sMessage += aRelPath.toString();
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );
@@ -954,8 +961,8 @@ Any implGetHierarchicalPropertyValue( NodeGroupInfoAccess& rNode, const OUString
 Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, const Sequence< OUString >& aPropertyNames )
     throw(RuntimeException)
 {
-    using configuration::reduceRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
-    using configuration::getDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::validateRelativePath; // should actually be found by "Koenig" lookup, but MSVC6 fails
+    using configuration::getLocalDescendant; // should actually be found by "Koenig" lookup, but MSVC6 fails
 
     sal_Int32 const count = aPropertyNames.getLength();
     Sequence<Any> aRet(count);
@@ -970,12 +977,12 @@ Sequence< Any > implGetHierarchicalPropertyValues( NodeGroupInfoAccess& rNode, c
         for(sal_Int32 i = 0; i < count; ++i)
         try
         {
-            RelativePath aRelPath = reduceRelativePath( aPropertyNames[i], aTree, aNode );
+            RelativePath aRelPath = validateRelativePath( aPropertyNames[i], aTree, aNode );
 
             Tree aNestedTree( aTree );
             NodeRef aNestedNode( aNode );
 
-            AnyNodeRef aNestedValue = getDescendant( aNestedTree, aNestedNode, aRelPath );
+            AnyNodeRef aNestedValue = getLocalDescendant( aNestedTree, aNestedNode, aRelPath );
 
             if (aNestedValue.isValid())
             {
@@ -1030,7 +1037,7 @@ void implFirePropertiesChangeEvent( NodeGroupInfoAccess& rNode, const Sequence< 
 
         for(sal_Int32 i = 0; i < count; ++i)
         {
-            Name aChildName = configuration::makeName( aPropertyNames[i] ); // not validated
+            Name aChildName = configuration::makeNodeName( aPropertyNames[i], Name::NoValidate() ); // not validated
 
             AnyNodeRef aChild( aTree.getAnyChild(aNode, aChildName) );
 
@@ -1078,7 +1085,7 @@ beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sP
         Tree aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sPropertyName,aTree,aNode);
+        Name aChildName = validateChildOrElementName(sPropertyName,aTree,aNode);
 
         AnyNodeRef aChild = getChildOrElement(aTree,aNode,aChildName);
         if (!aChild.isValid())
@@ -1086,7 +1093,7 @@ beans::PropertyState implGetPropertyState( NodeAccess& rNode, const OUString& sP
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyState. Property '") );
             sMessage += sPropertyName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );
@@ -1138,7 +1145,7 @@ Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const
         {
             using configuration::getChildOrElement;
 
-            Name aChildName = validateNodeName(aPropertyNames[i],aTree,aNode);
+            Name aChildName = validateChildOrElementName(aPropertyNames[i],aTree,aNode);
 
             Tree aChildTree( aTree);
 
@@ -1148,7 +1155,7 @@ Sequence< beans::PropertyState > implGetPropertyStates( NodeAccess& rNode, const
                 OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get PropertyStates. Property '") );
                 sMessage += aPropertyNames[i];
                 sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' could not be found in ")  );
-                sMessage += aTree.getLocalPath(aNode).toString();
+                sMessage += aTree.getAbsolutePath(aNode).toString();
 
                 Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
                 throw UnknownPropertyException( sMessage, xContext );
@@ -1188,7 +1195,7 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
         Tree const aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(sPropertyName,aTree,aNode);
+        Name aChildName = validateChildOrElementName(sPropertyName,aTree,aNode);
 
         Tree aChildTree( aTree);
 
@@ -1198,7 +1205,7 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot restore Default. Property '") );
             sMessage += sPropertyName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in NodeRef ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );
@@ -1255,7 +1262,7 @@ Any implGetPropertyDefault( NodeAccess& rNode, const OUString& aPropertyName )
         Tree aTree( impl->getTree() );
         NodeRef const aNode( impl->getNode() );
 
-        Name aChildName = validateNodeName(aPropertyName,aTree,aNode);
+        Name aChildName = validateChildOrElementName(aPropertyName,aTree,aNode);
 
         AnyNodeRef aChildNode = getChildOrElement(aTree, aNode, aChildName);
         if (!aChildNode.isValid())
@@ -1263,7 +1270,7 @@ Any implGetPropertyDefault( NodeAccess& rNode, const OUString& aPropertyName )
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot get Default. Property '") );
             sMessage += aPropertyName;
             sMessage += OUString( RTL_CONSTASCII_USTRINGPARAM("' not found in ")  );
-            sMessage += aTree.getLocalPath(aNode).toString();
+            sMessage += aTree.getAbsolutePath(aNode).toString();
 
             Reference<uno::XInterface> xContext( rNode.getUnoInstance() );
             throw UnknownPropertyException( sMessage, xContext );

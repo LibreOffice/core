@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2001-03-02 15:52:25 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTY_HPP_
 #include <com/sun/star/beans/XProperty.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XSTRINGESCAPE_HPP_
+#include <com/sun/star/util/XStringEscape.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
@@ -111,7 +114,11 @@
 #include <typelib/typedescription.hxx>
 #endif
 
+#ifndef INCLUDED_LIMITS
 #include <limits>
+#define INCLUDED_LIMITS
+#endif
+
 
 #define THISREF()       static_cast< ::cppu::OWeakObject* >(this)
 #define UNISTRING(c)    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(c) )
@@ -123,6 +130,7 @@ namespace configmgr
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
@@ -179,14 +187,12 @@ OUString getNodeName(const Reference< XNameAccess >& _xNode)
     if (xName.is())
         return xName->getName();
 
-    // fallback
-    Reference< XHierarchicalName > xPath( _xNode, UNO_QUERY );
-    if (xPath.is())
-        return xPath->getHierarchicalName();
-
     OSL_ENSURE( !_xNode.is(), "Cannot get name of node");
     return OUString();
 }
+//--------------------------------------------------------------------------
+
+static bool splitPath(const OUString& _sPath, OUString& _rsParentPath, OUString& _rsLocalName);
 //--------------------------------------------------------------------------
 
 OConfigurationRegistryKey::OConfigurationRegistryKey
@@ -212,7 +218,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
     ,m_bReadOnly(!_bWriteable)
     ,m_xNode(_rxNode)
     ,m_xParentNode()
-    ,m_sLocalName( getNodeName(_rxNode) ) // this will be treated as root
+    ,m_sLocalName( getNodeName(_rxNode) ) // this will not be treated as root
 {
     OSL_ENSURE(m_xNode.is(), "OConfigurationRegistryKey::OConfigurationRegistryKey : invalid config node param !");
 }
@@ -627,27 +633,31 @@ Any OConfigurationRegistryKey::implGetDescendant(const OUString& _rDescendantNam
 
     try
     {
-        if (-1 != _rDescendantName.indexOf('/'))
+        if (!m_xNode.is())
         {
-            Reference< XHierarchicalNameAccess > xDeepAccess( m_xNode, UNO_QUERY );
-            if (xDeepAccess.is())
-                aElementReturn = xDeepAccess->getByHierarchicalName(_rDescendantName);
-            else
-                throw InvalidRegistryException(UNISTRING("Nested element access not supported by this node."), THISREF());
+            // implEnsureNode should have been called before this method
+            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getDescendant : invalid call !");
+
+            // this method should not be called if the object does not represent a container node ...
+            throw InvalidRegistryException(UNISTRING("invalid object."), THISREF());
         }
-        else
+
+        try
         {
-            if (m_xNode.is())
-                aElementReturn = m_xNode->getByName(_rDescendantName);
+            // look for a local member first
+            aElementReturn = m_xNode->getByName(_rDescendantName);
+        }
+        catch(NoSuchElementException&)
+        {
+            // is it a (possibly) hierarchical name ?
+            if ( _rDescendantName.indexOf('/') <0 ) throw;
 
-            else
-            {
-                // implEnsureNode should have been called before this method
-                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::getDescendant : invalid call !");
+            // Yes, so try deep access
+            Reference< XHierarchicalNameAccess > xDeepAccess( m_xNode, UNO_QUERY );
+            if (!xDeepAccess.is())
+                throw InvalidRegistryException(UNISTRING("Nested element access not supported by this node."), THISREF());
 
-                // this method should not be called if the object does not represent a container node ...
-                throw InvalidRegistryException(UNISTRING("invalid object."), THISREF());
-            }
+            aElementReturn = xDeepAccess->getByHierarchicalName(_rDescendantName);
         }
     }
     catch(NoSuchElementException&)
@@ -1193,36 +1203,27 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
         }
 #endif
 
+        OSL_ASSERT(m_xNode.is());
+
         Reference< XNameAccess > xDescParent(m_xNode);  // the parent config node of the descandent
+        OUString sDescRelativeName( _rKeyName );        // local name of the descendant within xDescParent
 
-        OUString sDescRelativeName(_rKeyName);
-        sal_Int32 nSeparatorPos = _rKeyName.lastIndexOf('/');
-
-        if ( (nSeparatorPos > 0) && (nSeparatorPos == (_rKeyName.getLength() - 1)) )
+        if (!m_xNode->hasByName(_rKeyName)) // it is a hierarchical Path -> more work
         {
-            // recognize a trailing slash
-            sDescRelativeName = sDescRelativeName.copy(0, nSeparatorPos);
-            OSL_ASSERT(sDescRelativeName.getLength() == nSeparatorPos);
+            OUString sParentLocation;
 
-            nSeparatorPos = sDescRelativeName.lastIndexOf('/');
-            OSL_ASSERT(sDescRelativeName.getLength() > nSeparatorPos);
-        }
+            if ( !splitPath(_rKeyName, sParentLocation, sDescRelativeName) )
+            {
+                throw InvalidRegistryException(UNISTRING("Cannot split path for value. The internal registry structure seems to be corrupt."), THISREF());
+            }
 
-        if (nSeparatorPos >= 1)
-        {
-            Any aDescParent = implGetDescendant(_rKeyName.copy(0, nSeparatorPos));
-            ::cppu::extractInterface(xDescParent, aDescParent);
-            if (!xDescParent.is())
-                throw InvalidRegistryException(UNISTRING("The internal registry structure seems to be corrupt."), THISREF());
-
-            // will be the name of the new key relative to it's parent
-            sDescRelativeName = sDescRelativeName.copy(nSeparatorPos + 1);
-        }
-        else if (nSeparatorPos == 0)
-        {
-            OSL_ENSURE(false, "Component root path specified for value ?");
-            throw InvalidRegistryException(UNISTRING("Component root path found for value. The internal registry structure seems to be corrupt."), THISREF());
-
+            if (sParentLocation.getLength())
+            {
+                Any aDescParent = implGetDescendant(sParentLocation);
+                ::cppu::extractInterface(xDescParent, aDescParent);
+                if (!xDescParent.is())
+                    throw InvalidRegistryException(UNISTRING("The internal registry structure seems to be corrupt."), THISREF());
+            }
         }
 
         OSL_ENSURE(xDescParent.is(), "No Parent Node found for value ?");
@@ -1240,25 +1241,71 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::openKey( const ::r
 
     return implGetKey(_rKeyName);
 }
-
 //--------------------------------------------------------------------------
-void OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(InvalidRegistryException, RuntimeException)
+bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(InvalidRegistryException, RuntimeException)
 {
     // no empty names allowed
     if (!_rKeyName.getLength())
         throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
-    // no absolute names ("/...") allowed
-    if (_rKeyName.getStr()[0] == '/')
-        throw InvalidRegistryException(UNISTRING("The key name is invalid. It must be a relative, not an absolute name."), THISREF());
+    bool bCleanPath = true;
 
     // cut trailing slashes
-    while (_rKeyName.getLength() && (_rKeyName.getStr()[_rKeyName.getLength() - 1] == '/'))
-        _rKeyName = _rKeyName.copy(0, _rKeyName.getLength() - 1);
+    sal_Int32 nCleanEnd = _rKeyName.getLength();
+    while (nCleanEnd > 0 && _rKeyName[nCleanEnd - 1] == '/' )
+        --nCleanEnd;
 
-    if (!_rKeyName.getLength())
-        // the original name consists of slashes only
-        throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+    if (m_xNode.is())
+    {
+        if (m_xNode-> hasByName(_rKeyName))
+        {
+            bCleanPath = false;
+        }
+
+        else
+        {
+            Reference< XStringEscape > xSE(m_xNode, UNO_QUERY);
+
+            sal_Bool bPreferLocal = xSE.is();
+
+            if (!bPreferLocal)
+            {
+                Reference< XServiceInfo > xSI(m_xNode, UNO_QUERY);
+                if (xSI.is() && xSI->supportsService(OUString::createFromAscii("com.sun.star.configuration.SetAccess")))
+                    bPreferLocal = true;
+            }
+
+            if (bPreferLocal)
+            {
+                Reference< XHierarchicalNameAccess > xHA(m_xNode, UNO_QUERY);
+                OUString sCleanName = _rKeyName.copy(0, nCleanEnd);
+
+                if (xHA.is() && xHA->hasByHierarchicalName(sCleanName))
+                    bPreferLocal = false;
+            }
+
+            if (bPreferLocal && xSE.is())
+            {
+                _rKeyName = xSE->escapeString(_rKeyName);
+            }
+            bCleanPath = !bPreferLocal;
+        }
+    }
+
+    if (bCleanPath)
+    {
+        // no absolute names ("/...") allowed
+        if (_rKeyName.getStr()[0] == '/')
+            throw InvalidRegistryException(UNISTRING("The key name is invalid. It must be a relative, not an absolute name."), THISREF());
+
+        if (nCleanEnd <= 0)
+            // the original name consists of slashes only
+            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+
+
+        _rKeyName = _rKeyName.copy(0, nCleanEnd);
+    }
+    return bCleanPath;
 }
 
 //--------------------------------------------------------------------------
@@ -1273,30 +1320,34 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
     OSL_ENSURE(m_xNode.is(), "OConfigurationRegistryKey::createKey : somebody changed the checkValid(KAT_CHILD) behaviour !");
 
     OUString sKeyName(_rKeyName);
-    checkRelativeKeyName(sKeyName);
-
-    sal_Int32 nSeparatorPos = sKeyName.lastIndexOf('/');
-    if (-1 != nSeparatorPos)
+    if (checkRelativeKeyName(sKeyName))
     {
-        // check if we have the key already
-        Reference< XHierarchicalNameAccess > xDeepAccess(m_xNode, UNO_QUERY);
-        if (xDeepAccess.is() && xDeepAccess->hasByHierarchicalName(sKeyName))
-        {
-            // already there - just open it
-            return implGetKey(sKeyName);
-        }
+        OUString sParentName, sLocalName;
 
-        // deep access, but not found. delegate it to a registry key which is one level above the to-be-created one
-        OUString sSetNodeName = sKeyName.copy(0, nSeparatorPos);
-        sKeyName = sKeyName.copy(nSeparatorPos + 1);
+        if (!splitPath(sKeyName,sParentName, sLocalName))
+            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
 
-        Reference< XRegistryKey > xSetNode = implGetKey(sSetNodeName);
-        if (!xSetNode.is())
+        if (sParentName.getLength()) // it's a nested key name
         {
-            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
-            throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+            // check if we have the key already
+            Reference< XHierarchicalNameAccess > xDeepAccess(m_xNode, UNO_QUERY);
+            if (xDeepAccess.is() && xDeepAccess->hasByHierarchicalName(sKeyName))
+            {
+                // already there - just open it
+                return implGetKey(sKeyName);
+            }
+
+            // deep access, but not found. delegate it to a registry key which is one level above the to-be-created one
+            Reference< XRegistryKey > xSetNode = implGetKey(sParentName);
+            if (!xSetNode.is())
+            {
+                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
+                throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+            }
+            return xSetNode->createKey(sLocalName); // problem: request for a/['b/c'] might find a/b/c
         }
-        return xSetNode->createKey(sKeyName);
+        else
+            sKeyName = sLocalName;
     }
 
     // The requested new key is one level below ourself. Can't delegate the creation.
@@ -1404,23 +1455,26 @@ void SAL_CALL OConfigurationRegistryKey::deleteKey( const OUString& _rKeyName ) 
         throw InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
 
     OUString sKeyName(_rKeyName);
-    checkRelativeKeyName(sKeyName);
-
-    sal_Int32 nSeparatorPos = sKeyName.lastIndexOf('/');
-    if (-1 != nSeparatorPos)
+    if (checkRelativeKeyName(sKeyName))
     {
-        // deep access. delegate it to a registry key which is one level above the to-be-created one
-        ::rtl::OUString sSetNodeName = sKeyName.copy(0, nSeparatorPos);
-        sKeyName = sKeyName.copy(nSeparatorPos + 1);
+        OUString sParentName, sLocalName;
 
-        Reference< XRegistryKey > xSetNode = implGetKey(sSetNodeName);
-        if (!xSetNode.is())
+        if (!splitPath(sKeyName,sParentName, sLocalName))
+            throw InvalidRegistryException(UNISTRING("The key name is invalid."), THISREF());
+
+        if (sParentName.getLength()) // it's a nested key name
         {
-            OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
-            throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+            Reference< XRegistryKey > xSetNode = implGetKey(sParentName);
+            if (!xSetNode.is())
+            {
+                OSL_ENSURE(sal_False, "OConfigurationRegistryKey::createKey : somebody changed the implGetKey behaviour !");
+                throw InvalidRegistryException(UNISTRING("An internal error occured."), THISREF());
+            }
+            xSetNode->deleteKey(sLocalName);
+            return;
         }
-        xSetNode->deleteKey(sKeyName);
-        return;
+        else
+            sKeyName = sLocalName;
     }
 
     // The requested new key is one level below ourself. Can't delegate the creation.
@@ -1502,6 +1556,40 @@ void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& rLin
 //--------------------------------------------------------------------------
 //..........................................................................
 }   // namespace configmgr
+//..........................................................................
+// split path
+#include "configpath.hxx"
+#include "configexcept.hxx"
+
+bool configmgr::splitPath(const OUString& _sPath, OUString& _rsParentPath, OUString& _rsLocalName)
+{
+    using namespace ::configmgr::configuration;
+
+    bool bResult = false;
+    try
+    {
+        bool bAbsolute = Path::isAbsolutePath(_sPath);
+        Path::Rep aPath = bAbsolute ? AbsolutePath::parse(_sPath).rep() : RelativePath::parse(_sPath).rep();
+
+        OSL_ENSURE(!aPath.isEmpty(), "Trying to split an empty or root path");
+        Path::Iterator aFirst = aPath.begin(), aLast = aPath.end();
+
+        if (aFirst != aLast)
+        {
+            --aLast;
+
+            _rsLocalName = aLast->getName().toString();
+            _rsParentPath = Path::Rep(aFirst,aLast).toString(bAbsolute);
+
+            bResult = true;
+        }
+        //  else go on to fail
+    }
+    catch (configuration::Exception&)
+    {
+    }
+    return bResult;
+}
 //..........................................................................
 
 

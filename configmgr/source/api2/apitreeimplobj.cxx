@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,22 +59,52 @@
  *
  ************************************************************************/
 #include <stdio.h>
+
 #include "apitreeimplobj.hxx"
+
+#ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
+#ifndef CONFIGMGR_API_NOTIFIERIMPL_HXX_
 #include "notifierimpl.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "apifactory.hxx"
+#endif
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_API_BROADCASTER_HXX_
 #include "broadcaster.hxx"
+#endif
+#ifndef CONFIGMGR_CHANGE_HXX
+#include "change.hxx"
+#endif
+#ifndef CONFIGMGR_ROOTTREE_HXX_
 #include "roottree.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGANYNODE_HXX_
 #include "anynoderef.hxx"
-
+#endif
+#ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
+#endif
 
+#ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
+#endif
+#ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
+#endif
 
 namespace configmgr
 {
@@ -233,11 +263,12 @@ class ApiRootTreeImpl::NodeListener : public INodeListener
     IConfigBroadcaster* pSource;
 
     vos::ORef< OOptions > m_xOptions;
-    OUString            m_aLocationPath;
+    AbsolutePath          m_aLocationPath;
 public:
     NodeListener(ApiRootTreeImpl& _rParent)
         : pParent(&_rParent)
         , pSource(NULL)
+        , m_aLocationPath( AbsolutePath::root() )
     {}
     ~NodeListener()
     {
@@ -263,14 +294,14 @@ public:
                 pSource = pNew;
                 if (pNew)
                 {
-                    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot register for notifications: no location set");
+                    OSL_ENSURE(!m_aLocationPath.isRoot(), "Cannot register for notifications: no location set");
                     pNew->addListener(m_aLocationPath, m_xOptions, this);
                 }
             }
         }
     }
 
-    void setLocation(OUString const& _aLocation, vos::ORef< OOptions > const& _xOptions)
+    void setLocation(AbsolutePath const& _aLocation, vos::ORef< OOptions > const& _xOptions)
     {
         osl::MutexGuard aGuard(mutex);
 
@@ -293,7 +324,7 @@ public:
         {
             pSource->removeListener(m_xOptions, this);
             m_xOptions.unbind();
-            m_aLocationPath = OUString();
+            m_aLocationPath = AbsolutePath::root();
         }
 
     }
@@ -312,7 +343,7 @@ public:
 
                 pSource = 0;
                 m_xOptions.unbind();
-                m_aLocationPath = OUString();
+                m_aLocationPath = AbsolutePath::root();
 
                 aGuard.clear();
 
@@ -323,8 +354,8 @@ public:
 
     // Interfaces
     virtual void disposing(IConfigBroadcaster* pSource);
-    virtual void nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource);
-    virtual void nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource);
+    virtual void nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* pSource);
+    virtual void nodeDeleted(AbsolutePath const& sPath, IConfigBroadcaster* pSource);
 };
 
 //-------------------------------------------------------------------------
@@ -384,6 +415,7 @@ ApiRootTreeImpl::ApiRootTreeImpl(UnoInterface* pInstance, ApiProvider& rProvider
 : m_aTreeImpl(pInstance, rProvider, aTree, 0)
 , m_pNotificationListener(NULL)
 , m_xOptions(_xOptions)
+, m_aLocationPath( configuration::Path::Rep() )
 {
     implSetLocation();
     enableNotification(true);
@@ -722,20 +754,19 @@ void ApiRootTreeImpl::implSetLocation()
     Tree aTree = getApiTree().getTree();
     if (!aTree.isEmpty())
     {
-        configuration::Name aRootName = aTree.getRootName();
-        m_aLocationPath = aTree.getContextPath().compose( configuration::RelativePath(aRootName) ).toString();
+        m_aLocationPath = aTree.getRootPath();
+        OSL_ENSURE(!m_aLocationPath.isRoot(), "Setting up a RootTree without location");
     }
     else
     {
         OSL_ENSURE(false, "Setting up a RootTree without data");
-        m_aLocationPath = OUString();
+        m_aLocationPath = configuration::AbsolutePath::root();
     }
-    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Setting up a RootTree without location");
 
     if (!m_pNotificationListener.isValid())
         m_pNotificationListener = new NodeListener(*this);
 
-    OSL_ENSURE(m_aLocationPath.getLength() > 0, "Cannot reregister for notifications: setting empty location");
+    OSL_ENSURE(!m_aLocationPath.isRoot() && !m_aLocationPath.isDetached(), "Cannot reregister for notifications: setting empty location");
     OSL_ENSURE( m_xOptions.isValid(), "Cannot reregister for notifications: no options available" );
 
     m_pNotificationListener->setLocation(m_aLocationPath, m_xOptions);
@@ -744,18 +775,18 @@ void ApiRootTreeImpl::implSetLocation()
 
 void ApiRootTreeImpl::releaseData()
 {
-    CFG_TRACE_INFO("Api Root TreeImpl at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath));
+    CFG_TRACE_INFO("Api Root TreeImpl at %s: releasing the Data",OUSTRING2ASCII(m_aLocationPath.toString()));
     Tree aTree( m_aTreeImpl.getTree() );
 
     aTree.disposeData();
     OSL_ASSERT(aTree.isEmpty());
 
-    OSL_ENSURE( m_aLocationPath.getLength(), "Location still needed to release data" );
+    OSL_ENSURE( !m_aLocationPath.isRoot() && !m_aLocationPath.isDetached(), "Location still needed to release data" );
     OSL_ENSURE( m_xOptions.isValid(), "Options still needed to release data" );
 
     getApiTree().getProvider().getProviderImpl().releaseSubtree(m_aLocationPath,m_xOptions);
     m_xOptions.unbind();
-    m_aLocationPath = OUString();
+    m_aLocationPath = configuration::AbsolutePath::detachedRoot();
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -777,7 +808,7 @@ void ApiRootTreeImpl::NodeListener::disposing(IConfigBroadcaster* _pSource)
 void ApiRootTreeImpl::disposing(IConfigBroadcaster* pSource)
 {
     CFG_TRACE_INFO("Api Root TreeImpl at %s: Cache data is disposed - dispose and release own data",
-            OUSTRING2ASCII(m_aLocationPath));
+                    OUSTRING2ASCII(m_aLocationPath.toString()));
         // ensure our provider stays alive
     UnoInterfaceRef xKeepProvider( m_aTreeImpl.getUnoProviderInstance() );
 
@@ -840,7 +871,7 @@ void disposeRemovedNodes(configuration::NodeChangesInformation const& aChanges, 
 }
 // ---------------------------------------------------------------------------------------------------
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, AbsolutePath const& sPath, IConfigBroadcaster* _pSource)
 {
     osl::ClearableMutexGuard aGuard(mutex);
 
@@ -858,12 +889,12 @@ void ApiRootTreeImpl::NodeListener::nodeChanged(Change const& aChange, OUString 
 // ---------------------------------------------------------------------------------------------------
 
 //INodeListener : IConfigListener
-void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeChanged(Change const& aChange, AbsolutePath const& aChangePath, IConfigBroadcaster* pSource)
 {
     using configuration::AnyNodeRef;
-    using configuration::Path;
     using configuration::NodeChanges;
     using configuration::RelativePath;
+    using configuration::AbsolutePath;
 
     // do not dipatch if we are dying/dead anyway
     if (m_aTreeImpl.isAlive())
@@ -873,80 +904,87 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 
         Tree aTree( m_aTreeImpl.getTree() );
 
-        OSL_ENSURE( Path(sPath, Path::NoValidate()).getType() == configuration::PathType::eABSOLUTE,
-                    "Unexpected format for 'nodeChanged' Path location - path is not absolute" );
+        OSL_ENSURE(configuration::Path::hasPrefix(aChangePath, m_aLocationPath),
+                    "'changed' Path does not indicate this tree or its context: ");
 
-        bool bValidNotification = sPath.indexOf(m_aLocationPath) == 0;
-        OSL_ENSURE(bValidNotification, "Notified Path does not match this tree's path - ignoring notification");
+        RelativePath aLocalChangePath = configuration::Path::stripPrefix(aChangePath,m_aLocationPath);
 
-        if (bValidNotification)
+        // find the node and change
+        NodeRef  aNode;
+
+        if ( !aLocalChangePath.isEmpty() )
         {
-            // find the node and change
-            NodeRef  aNode;
+            NodeRef aBaseNode = aTree.getRootNode();
 
-            if (sPath != m_aLocationPath)
+#ifdef DBG_UTIL
+            try {
+                RelativePath aLocalPathOld = configuration::validateAndReducePath(aChangePath.toString(), aTree, aBaseNode);
+                OSL_ENSURE( configuration::matches(aLocalPathOld,aLocalChangePath),
+                            "New local path different from validateAndReducePath(...) result in notification dispatch");
+            }
+            catch (configuration::Exception& e) {
+                rtl::OString sMsg("Cannot validate new path handling for notification dispatch: ");
+                sMsg += e.what();
+                OSL_ENSURE(false, sMsg.getStr() );
+            }
+#endif // DBG_UTIL
+
+            AnyNodeRef aFoundNode = configuration::getDeepDescendant(aTree, aBaseNode, aLocalChangePath);
+            if ( aFoundNode.isValid() )
             {
-                OSL_ASSERT(sPath.getLength() > m_aLocationPath.getLength());
-                OSL_ENSURE(sPath[m_aLocationPath.getLength()] == sal_Unicode('/'),
-                            "'nodeChanged' Path does not respect directory boundaries - erratic notification");
-
-                OSL_ENSURE(sPath.getLength() > m_aLocationPath.getLength()+1, "Unexpected path format: slash terminated");
-
-                NodeRef aBaseNode = aTree.getRootNode();
-
-                RelativePath aLocalConfigPath = configuration::reduceRelativePath(sPath, aTree, aBaseNode);
-
-                AnyNodeRef aFoundNode = configuration::getDescendant(aTree, aBaseNode, aLocalConfigPath);
-                if ( aFoundNode.isValid() )
+                if (aFoundNode.isNode())
                 {
-                    if (aFoundNode.isNode())
-                    {
-                        aNode = aFoundNode.toNode();
-                    }
-                    else
-                    {
-                        // TODO: Notify using parent node and temporary dummy change
-                        OSL_ENSURE( false, "Notification broken: Node being adressed is a Value");
-                    }
+                    aNode = aFoundNode.toNode();
                 }
-            }
-            else
-            {
-                aNode = aTree.getRootNode();
-            }
-
-            SubtreeChange const* pTreeChange = NULL;
-            if (aNode.isValid())
-            {
-                if (aChange.ISA(SubtreeChange))
-                    pTreeChange = static_cast<SubtreeChange const*>(&aChange);
-
-                else // TODO: Notify set change using parent (if available) and temporary dummy change
-                    OSL_ENSURE( false, "Notification broken: Change to inner node is not a subtree change");
-            }
-
-            if (pTreeChange != NULL) // implies aNode.isValid()
-            {
-                OSL_ENSURE( aChange.getNodeName() == aTree.getName(aNode).toString(),
-                            "Change's node-name does not match found node's name - erratic notification");
-
-                configuration::NodeChangesInformation aChanges;
-
-                if (configuration::adjustToChanges(aChanges, aTree,aNode, *pTreeChange))
+                else
                 {
-                    OSL_ASSERT(aChanges.size() > 0);
-
-                    Broadcaster aSender(m_aTreeImpl.getNotifier(),aChanges,false);
-
-        // Should be improved later. Maybe this is the wrong lock for disposeTree ?
-        //          aLocalGuard.downgrade(); // partial clear for broadcast
-
-                    aSender.notifyListeners(aChanges, false);
-
-                    disposeRemovedNodes(aChanges, m_aTreeImpl.getFactory());
+                    // TODO: Notify using parent node and temporary dummy change
+                    OSL_ENSURE( false, "Notification broken: Node being adressed is a Value");
                 }
             }
         }
+        else
+        {
+            aNode = aTree.getRootNode();
+        }
+
+        SubtreeChange const* pTreeChange = NULL;
+        if (aNode.isValid())
+        {
+            if (aChange.ISA(SubtreeChange))
+                pTreeChange = static_cast<SubtreeChange const*>(&aChange);
+
+            else // TODO: Notify set change using parent (if available) and temporary dummy change
+                OSL_ENSURE( false, "Notification broken: Change to inner node is not a subtree change");
+        }
+
+        if (pTreeChange != NULL) // implies aNode.isValid()
+        {
+            OSL_ENSURE( aChange.getNodeName() == aTree.getName(aNode).toString(),
+                        "Change's node-name does not match found node's name - erratic notification");
+
+            configuration::NodeChangesInformation aChanges;
+
+            if (configuration::adjustToChanges(aChanges, aTree,aNode, *pTreeChange))
+            {
+                OSL_ASSERT(aChanges.size() > 0);
+
+                Broadcaster aSender(m_aTreeImpl.getNotifier(),aChanges,false);
+
+    // Should be improved later. Maybe this is the wrong lock for disposeTree ?
+    //          aLocalGuard.downgrade(); // partial clear for broadcast
+
+                aSender.notifyListeners(aChanges, false);
+
+                disposeRemovedNodes(aChanges, m_aTreeImpl.getFactory());
+            }
+        }
+    }
+    catch (configuration::InvalidName& i)
+    {
+        rtl::OString sMsg("Cannot locate change within this tree: ");
+        sMsg += i.what();
+        OSL_ENSURE(false, sMsg.getStr() );
     }
     catch (configuration::Exception& e)
     {
@@ -957,7 +995,7 @@ void ApiRootTreeImpl::nodeChanged(Change const& aChange, OUString const& sPath, 
 }
 // ---------------------------------------------------------------------------------------------------
 
-void ApiRootTreeImpl::NodeListener::nodeDeleted(OUString const& sPath, IConfigBroadcaster* _pSource)
+void ApiRootTreeImpl::NodeListener::nodeDeleted(AbsolutePath const& _aPath, IConfigBroadcaster* _pSource)
 {
     osl::ClearableMutexGuard aGuard(mutex);
 
@@ -969,31 +1007,22 @@ void ApiRootTreeImpl::NodeListener::nodeDeleted(OUString const& sPath, IConfigBr
         ApiRootTreeImpl* pKeepParent = pParent;
         aGuard.clear();
 
-        pKeepParent->nodeDeleted(sPath,_pSource);
+        pKeepParent->nodeDeleted(_aPath,_pSource);
     }
 }
 // ---------------------------------------------------------------------------------------------------
-void ApiRootTreeImpl::nodeDeleted(OUString const& sPath, IConfigBroadcaster* pSource)
+void ApiRootTreeImpl::nodeDeleted(AbsolutePath const& _aDeletedPath, IConfigBroadcaster* pSource)
 {
     // this is a non-UNO external entry point - we need to keep this object alive for the duration of the call
     UnoInterfaceRef xKeepAlive( m_aTreeImpl.getUnoInstance() );
 
 #ifdef DBG_UTIL
-    using configuration::Path;
-
 
     {
         OReadSynchronized aLocalGuard(m_aTreeImpl.getDataLock());
 
-        OSL_ENSURE( Path(sPath, Path::NoValidate()).getType() == configuration::PathType::eABSOLUTE,
-                    "Unexpected format for 'deleted' Path location - path is not absolute" );
-
-
-        OSL_ENSURE( m_aLocationPath.indexOf( sPath ) == 0, "'deleted' Path does not indicate this tree or its context");
-
-        const OUString delimiter = OUString::createFromAscii("/");
-        OSL_ENSURE( m_aLocationPath.indexOf( sPath ) == m_aLocationPath.concat(delimiter).indexOf( sPath.concat(delimiter) ),
-                            "'deleted' Path does not check subdirectory boundaries");
+        OSL_ENSURE(configuration::Path::hasPrefix(m_aLocationPath, _aDeletedPath),
+                    "'deleted' Path does not indicate this tree or its context: ");
     }
 #endif
     // ensure our provider stays alive

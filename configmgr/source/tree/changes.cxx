@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-21 12:26:09 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,31 @@ void ValueChange::applyTo(ValueNode& aValue)
 
     case changeDefault:
         doAdjust( m_aOldValue,  aValue.getDefault());
+        aValue.changeDefault(getNewValue());
+        break;
+
+    default:
+        OSL_ENSURE(0, "Unknown mode found for ValueChange");
+        break;
+    }
+}
+
+// -------------------------------------------------------------------------
+void ValueChange::applyChangeNoRecover(ValueNode& aValue) const
+{
+    switch (getMode())
+    {
+    case wasDefault:
+        OSL_ASSERT(aValue.isDefault());
+    case changeValue:
+        aValue.setValue(getNewValue());
+        break;
+
+    case setToDefault:
+        aValue.setDefault();
+        break;
+
+    case changeDefault:
         aValue.changeDefault(getNewValue());
         break;
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setaccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-07 14:34:32 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,13 +187,21 @@ OUString SAL_CALL BasicSetAccess::getElementTemplateName(  )
 OUString SAL_CALL BasicSetAccess::escapeString( const OUString& aString )
     throw(css::lang::IllegalArgumentException, RuntimeException)
 {
+#ifndef CFG_ESCAPE_ENABLED
+    return aString;
+#else
     return implEscapeString( getNode(), aString );
+#endif
 }
 
 OUString SAL_CALL BasicSetAccess::unescapeString( const OUString& aEscapedString )
     throw(css::lang::IllegalArgumentException, RuntimeException)
 {
+#ifndef CFG_ESCAPE_ENABLED
+    return aEscapedString;
+#else
     return implUnescapeString( getNode(), aEscapedString );
+#endif
 }
 
 //-----------------------------------------------------------------------------------

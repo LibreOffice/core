@@ -2,9 +2,9 @@
  *
  *  $RCSfile: roottree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-21 12:02:38 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,23 +75,23 @@ namespace configmgr
 // factory methods
 //-----------------------------------------------------------------------------
 
-RootTree createReadOnlyTree(    AbsolutePath const& aContextPath,
+RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
                                 ISubtree& rCacheNode, TreeDepth nDepth,
                                 TemplateProvider const& aTemplateProvider)
 {
     return RootTree( new RootTreeImpl(  NodeType::getReadAccessFactory(),
-                                        aContextPath, rCacheNode, nDepth,
+                                        aRootPath, rCacheNode, nDepth,
                                         aTemplateProvider
                                     ));
 }
 //-----------------------------------------------------------------------------
 
-RootTree createUpdatableTree(   AbsolutePath const& aContextPath,
+RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
                                 ISubtree& rCacheNode, TreeDepth nDepth,
                                 TemplateProvider const& aTemplateProvider)
 {
     return RootTree( new RootTreeImpl(  NodeType::getDeferredChangeFactory(),
-                                        aContextPath, rCacheNode, nDepth,
+                                        aRootPath, rCacheNode, nDepth,
                                         aTemplateProvider
                                     ));
 }
@@ -142,13 +142,10 @@ bool CommitHelper::prepareCommit(TreeChangeList& rChangeList)
         return false;
 
     // find the name and path of the change
-    Name aRootName(m_pTree->getRootName());
-    AbsolutePath aPath = m_pTree->getContextPath();
-
-    OSL_ENSURE(aRootName.toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
+    OSL_ENSURE(m_pTree->getSimpleRootName().toString() == pTreeChange->getNodeName(), "ERROR in Commit: Change Name Mismatch");
 
     // now fill the TreeChangeList
-    rChangeList.pathToRoot = ConfigurationName(aPath.toString());
+    rChangeList.setRootPath( m_pTree->getRootPath() );
     rChangeList.root.swap( *pTreeChange );
 
     return true;
@@ -160,11 +157,10 @@ void CommitHelper::finishCommit(TreeChangeList& rChangeList)
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
     // find the name and path of the change
-    Name aRootName(m_pTree->getRootName());
-    AbsolutePath aPath = m_pTree->getContextPath();
+    AbsolutePath aPath = m_pTree->getRootPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot.fullName() != aPath.toString())
+    OSL_ENSURE( rChangeList.getRootNodePath().toString() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
+    if ( !matches(rChangeList.getRootNodePath(), aPath) )
         throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
     m_pTree->finishCommit(rChangeList.root);
@@ -175,12 +171,11 @@ void CommitHelper::revertCommit(TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
-    Name aRootName(m_pTree->getRootName());
-    AbsolutePath aPath = m_pTree->getContextPath();
+    AbsolutePath aPath = m_pTree->getRootPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot.fullName() != aPath.toString())
-        throw configuration::Exception("INTERNAL ERROR: RevertCommit cannot handle rebased changes trees");
+    OSL_ENSURE( rChangeList.getRootNodePath().toString() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
+    if ( !matches(rChangeList.getRootNodePath(), aPath) )
+        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
     m_pTree->revertCommit(rChangeList.root);
 }
@@ -190,12 +185,11 @@ void CommitHelper::failedCommit(TreeChangeList& rChangeList)
 {
     OSL_ENSURE(m_pTree,"INTERNAL ERROR: Nothing to finish without a tree");
 
-    Name aRootName(m_pTree->getRootName());
-    AbsolutePath aPath = m_pTree->getContextPath();
+    AbsolutePath aPath = m_pTree->getRootPath();
 
-    OSL_ENSURE(rChangeList.pathToRoot.fullName() == aPath.toString(), "ERROR: cannot handle rebased changes trees");
-    if (rChangeList.pathToRoot.fullName() != aPath.toString())
-        throw configuration::Exception("INTERNAL ERROR: FailedCommit cannot handle rebased changes trees");
+    OSL_ENSURE( rChangeList.getRootNodePath().toString() == aPath.toString(), "ERROR: FinishCommit cannot handle rebased changes trees");
+    if ( !matches(rChangeList.getRootNodePath(), aPath) )
+        throw configuration::Exception("INTERNAL ERROR: FinishCommit cannot handle rebased changes trees");
 
     m_pTree->recoverFailedCommit(rChangeList.root);
 }

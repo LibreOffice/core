@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoA
             return ElementTree(0);
 
         if (aFoundTemplate != aRequestedTemplate)
-            throw configuration::TypeMismatch(aFoundTemplate->getPath().toString(), aRequestedTemplate->getPath().toString());
+            throw configuration::TypeMismatch(aFoundTemplate->getPathString(), aRequestedTemplate->getPathString());
 
         aRet = pSetElement->getElementTree();
     }

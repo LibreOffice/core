@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-03 16:33:57 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,11 @@ namespace configmgr
         ::vos::ORef<OOptions> xOptions(new OOptions(m_pImpl->getDefaultOptions()));
 
         for (sal_Int32 i = 0; i < aNodeList.getLength(); i++)
-            m_pImpl->fetchSubtree(aNodeList[i], xOptions);
+        {
+            using namespace configuration;
+            AbsolutePath aModulePath = AbsolutePath::makeModulePath(aNodeList[i], AbsolutePath::NoValidate());
+            m_pImpl->fetchSubtree(aModulePath , xOptions);
+        }
     }
 
 } // namespace configmgr

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-19 15:20:07 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,6 +200,7 @@ namespace configmgr
         class ApiRootTreeImpl
         {
             typedef configuration::Tree Tree;
+            typedef configuration::AbsolutePath AbsolutePath;
             vos::ORef< OOptions > m_xOptions;
 
         public:
@@ -229,13 +230,13 @@ namespace configmgr
         // IConfigListener
             void disposing(IConfigBroadcaster* pSource) ;
         //INodeListener : IConfigListener
-            void nodeChanged(Change const& aChange, OUString const& aPath, IConfigBroadcaster* pSource);
-            void nodeDeleted(OUString const& aPath, IConfigBroadcaster* pSource);
+            void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource);
 
         private:
-            ApiTreeImpl             m_aTreeImpl;
-            OUString                m_aLocationPath;
-            vos::ORef<NodeListener> m_pNotificationListener;
+            ApiTreeImpl                 m_aTreeImpl;
+            AbsolutePath                m_aLocationPath;
+            vos::ORef<NodeListener>     m_pNotificationListener;
         };
 //-----------------------------------------------------------------------------
     }

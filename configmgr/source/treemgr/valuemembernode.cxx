@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuemembernode.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:40:28 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ bool ValueMemberNode::hasChange() const
 
 Name ValueMemberNode::getNodeName() const
 {
-    return Name( getOriginalNodeName(m_pOriginal), Name::NoValidate() );
+    return makeNodeName( getOriginalNodeName(m_pOriginal), Name::NoValidate() );
 }
 //-----------------------------------------------------------------------------
 

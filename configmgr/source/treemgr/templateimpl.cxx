@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ namespace configmgr
 Name TemplateName::makeSimpleTypeName(UnoType const& aType)
 {
     OUString sTypeName = toTemplateName(aType);
-    return Name(sTypeName, Name::NoValidate());
+    return makeName(sTypeName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
 
@@ -92,13 +92,13 @@ UnoType TemplateName::resolveSimpleTypeName(Name const& aName)
 Name TemplateName::makeNativeTypeModuleName()
 {
     OUString aModuleName = TEMPLATE_MODULE_NATIVE_VALUE;
-    return Name(aModuleName, Name::NoValidate());
+    return makeName(aModuleName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
 Name TemplateName::makeLocalizedTypeModuleName()
 {
     OUString aModuleName = TEMPLATE_MODULE_LOCALIZED_VALUE;
-    return Name(aModuleName, Name::NoValidate());
+    return makeName(aModuleName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
 bool TemplateName::isSimpleTypeName() const
@@ -222,7 +222,7 @@ std::auto_ptr<INode> TemplateProvider_Impl::instantiate(TemplateHolder const& aT
     std::auto_ptr<INode> pRet;
     if (aTemplate.isValid())
     {
-        pRet = m_rProvider.requestTemplateInstance(aTemplate->getName().toString(), aTemplate->getModule().toString(), m_xOptions);
+        pRet = m_rProvider.requestTemplateInstance(aTemplate->getName(), aTemplate->getModule(), m_xOptions);
     }
     return pRet;
 }
@@ -332,9 +332,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
             OSL_ASSERT(aNames.aName.toString() == aSet.getElementTemplateName());
             OSL_ASSERT(aNames.aModule.toString() == aSet.getElementTemplateModule());
 
-            OUString sPath = aNames.makePath().toString(); // could also be extracted from aSet
-
-            pTemplateInstance = m_rProvider.requestTemplateInstance(aNames.aName.toString(), aNames.aModule.toString(), m_xOptions);
+            pTemplateInstance = m_rProvider.requestTemplateInstance(aNames.aName, aNames.aModule, m_xOptions);
 
             aType = detectNodeType(pTemplateInstance.get()); // throws if necessary
         }

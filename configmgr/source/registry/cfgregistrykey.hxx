@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgregistrykey.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-27 10:27:47 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,12 +274,13 @@ protected:
         that ...<br/>
         In addition, the given name will be normalized. Basically, this means that it does not contain trailing slashes.
         </p>
+        @returns
+            <TRUE/>     if the name is a valid relative path
+            <FALSE/>    if the name is a local name only
         @throws InvalidRegistryException
-            if the name is not relative (i.e. if it starts with an slash)
-        @throws InvalidRegistryException
-            if the name is empty or consists of slashes only
+            if the name is invalid or not relative (i.e. if it starts with an slash)
     */
-    void checkRelativeKeyName(::rtl::OUString& _rKeyName)
+    bool checkRelativeKeyName(::rtl::OUString& _rKeyName)
             throw(::com::sun::star::registry::InvalidRegistryException, ::com::sun::star::uno::RuntimeException);
 
     /** get a default value for a value of a given type

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodeimpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:43:00 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ namespace
 
     bool GroupMemberDispatch::test_value(INode const& _rNode) const
     {
-        Name aName( _rNode.getName(), Name::NoValidate() );
+        Name aName = makeName( _rNode.getName(), Name::NoValidate() );
 
         return m_rGroup.hasValue( aName );
     }
@@ -126,7 +126,7 @@ namespace
         OSL_ENSURE( test_value(_rValue), "ERROR: GroupMemberDispatch:Did not find a ValueMember for a value child.");
         if ( !done() )
         {
-            Name aValueName( _rValue.getName(), Name::NoValidate() );
+            Name aValueName( makeNodeName(_rValue.getName(), Name::NoValidate()) );
 
             m_aResult = m_rVisitor.visit( m_rGroup.getValue(aValueName) );
         }
@@ -641,7 +641,7 @@ void SetNodeImpl::implCollectChanges(NodeChangesInformation& rLocalChanges, Subt
         OSL_ENSURE(pParentTree->isValidNode(nNode), "Invalid context node in Set");
         OSL_ENSURE(&pParentTree->node(nNode)->setImpl() == this, "Wrong context node in Set");
 
-        CollectChanges aCollector(rLocalChanges, *pParentTree, nNode, nDepth);
+        CollectChanges aCollector(rLocalChanges, *pParentTree, nNode, getElementTemplate(), nDepth);
 
         aCollector.collectFrom(rExternalChange);
     }
@@ -699,7 +699,7 @@ void GroupNodeImpl::adjustToChanges(NodeChangesInformation& rLocalChanges, Subtr
         {
             ValueChange const& rValueChange = static_cast<ValueChange const&>(*it);
 
-            Name aValueName( rValueChange.getNodeName(), Name::NoValidate() );
+            Name aValueName = makeNodeName( rValueChange.getNodeName(), Name::NoValidate() );
 
             if (ValueChangeImpl* pThisChange = doAdjustToValueChange(aValueName, rValueChange))
             {

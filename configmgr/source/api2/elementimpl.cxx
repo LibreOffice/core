@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,52 @@
 
 #include "elementimpl.hxx"
 
+#ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #include "apitreeaccess.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
+#endif
+#ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "apifactory.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNODE_HXX_
 #include "noderef.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGCHANGEINFO_HXX_
 #include "nodechangeinfo.hxx"
+#endif
+#ifndef CONFIGMGR_API_TRANSLATECHANGES_HXX_
 #include "translatechanges.hxx"
+#endif
 
+#ifndef CONFIGMGR_CONFIGSET_HXX_
 #include "configset.hxx"
+#endif
+#ifndef CONFIGMGR_CONFIGNOTIFIER_HXX_
 #include "confignotifier.hxx"
+#endif
 
+#ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
 #include "confsvccomponent.hxx"
+#endif
+#ifndef CONFIGMGR_API_COMMITTER_HXX_
 #include "committer.hxx"
+#endif
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_XTEMPLATECONTAINER_HPP_
 #include <com/sun/star/configuration/XTemplateContainer.hpp>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -103,7 +131,6 @@ namespace configmgr
         using configuration::Tree;
         using configuration::ElementTree;
         using configuration::Name;
-        using configuration::Path;
         using configuration::AbsolutePath;
         using configuration::RelativePath;
 
@@ -603,7 +630,7 @@ OUString implGetTemplateName(SetElement& rElement)
     try
     {
         GuardedSetElement aLocked(rElement);
-        return aLocked->getTemplateInfo().getTemplatePath().toString();
+        return aLocked->getTemplateInfo().getTemplatePathString();
     }
     catch (configuration::Exception& ex)
     {

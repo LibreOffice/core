@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anynoderef.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:19:26 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,19 +177,20 @@ namespace configmgr
         */
         AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const& aName);
 
-        /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
-            specified by <var>aName</var>
-            <p> On return <var>aNode</var> is modified to refer to the node found and
-                <var>aTree</var> will then refer to the tree that node is in.
+        /** tries to find the descendant of <var>aNode</var> specified by <var>aPath</var> within <var>aTree</var>
+            <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
+            <p> On return <var>aNode</var> is modified to refer to the last inner node found
+                and <var>aTree</var> will be unchanged (except for deprecated usage).
             <p/>
-            <p>Caution: May miss an existing child unless the child has been accessed before.</p>
+            <p> Also, <var>aPath</var> is modified to contain the unresolved part of the original path.
+            </p>
 
-            @return The requested child node, if it exists
-                (then <var>aTree</var> refers to the tree containing the desired node)
-
-            @see NodeRef::getAvailableChild
+            @return the requested node, if the path could be resolved completely
+                (so <var>aNode</var> refers to the desired node or its parent,
+                and <var>aPath</var> is empty)<BR/>
+                an invalid node otherwise
         */
-        AnyNodeRef getAvailableChildOrElement(Tree& aTree, NodeRef const& aNode, Name const& aName);
+        AnyNodeRef getLocalDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
@@ -204,23 +205,7 @@ namespace configmgr
                 and <var>aPath</var> is empty)<BR/>
                 an invalid node otherwise
         */
-        AnyNodeRef getDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
-
-        /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
-            <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
-            <p> On return <var>aNode</var> is modified to refer to the last inner node found and
-                <var>aTree</var> will then refer to the tree that node is in.
-            <p/>
-            <p> Also, <var>aPath</var> is modified to contain the unresolved part of the original path.
-            </p>
-            <p>Caution: May miss existing descendants unless the node has been accessed before.</p>
-
-            @return the requested node, if the path could be resolved completely
-                (so <var>aNode</var> and <var>aTree</var> refer to the desired node or its parent,
-                and <var>aPath</var> is empty)<BR/>
-                an invalid node otherwise
-        */
-        AnyNodeRef getDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+        AnyNodeRef getDeepDescendant(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
 
     //-------------------------------------------------------------------------
         inline bool AnyNodeRef::isValid() const

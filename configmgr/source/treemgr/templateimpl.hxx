@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:33:42 $
+ *  last change: $Author: jb $ $Date: 2001-07-05 17:05:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,16 +62,34 @@
 #ifndef CONFIGMGR_TEMPLATEIMPL_HXX_
 #define CONFIGMGR_TEMPLATEIMPL_HXX_
 
+#ifndef CONFIGMGR_API_APITYPES_HXX_
 #include "apitypes.hxx"
-
+#endif
+#ifndef CONFIGMGR_CONFIGTEMPLATE_HXX_
 #include "template.hxx"
-
+#endif
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
+#endif
+#ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
+#endif
 
+#ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
+#ifndef INCLUDED_MAP
 #include <map>
+#define INCLUDED_MAP
+#endif
+#ifndef INCLUDED_MEMORY
 #include <memory>
+#define INCLUDED_MEMORY
+#endif
 
 namespace configmgr
 {
@@ -120,18 +138,22 @@ namespace configmgr
             {}
 
             TemplateName(OUString const& sName_, OUString const& sModule_)
-            : aName(sName_, Name::NoValidate())
-            , aModule(sModule_, Name::NoValidate())
+            : aName(    makeName(sName_, Name::NoValidate()) )
+            , aModule(  makeName(sModule_, Name::NoValidate()) )
             {}
             //-----------------------------------------------------------------
 
             /// compose the path where the template is located
-            RelativePath makePath() const
+            OUString makePathString() const
             {
-                Path::Components aPath;
-                if (!aModule.isEmpty()) aPath.push_back(aModule);
-                aPath.push_back(aName);
-                return RelativePath( aPath  );
+                rtl::OUStringBuffer aBuffer;
+
+                if (!aModule.isEmpty())
+                    aBuffer.append( this->aModule.toString() ).append(sal_Unicode('/'));
+
+                aBuffer.append( this->aName.toString() );
+
+                return aBuffer.makeStringAndClear();
             }
             //-----------------------------------------------------------------
             bool isEmpty() const
