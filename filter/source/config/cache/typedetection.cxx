@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2005-03-18 11:08:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:31:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 
 #ifndef _COM_SUN_STAR_IO_XINPUSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
+#include <com/sun/star/io/XSeekable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
@@ -155,8 +159,8 @@ TypeDetection::~TypeDetection()
     // first item is guaranteed as "preferred" one!
     if (lFlatTypes.size() > 0)
     {
-        css::beans::NamedValue aMatch = *(lFlatTypes.begin());
-        sType = aMatch.Name;
+        const FlatDetectionInfo& aMatch = *(lFlatTypes.begin());
+        sType = aMatch.sType;
     }
 
     return sType;
@@ -360,7 +364,9 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
         }
 
         /*
-            ? this type does not seem to fit the requirements
+            Comment ... why the following line of code should be comened out .-)
+
+            This type does not seem to fit the requirements
             But its an existing and well known type.
             At least - [because may be the extension was missing :-( ]
             we should try to detect this type deep ...
@@ -374,11 +380,15 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     // if its a valid type - set it on all return values!
     if (sType.getLength())
     {
-        css::beans::NamedValue aResult(sType, css::uno::makeAny(bMatchByPattern));
+        FlatDetectionInfo aInfo;
+        aInfo.sType              = sType;
+        aInfo.bMatchByPattern    = bMatchByPattern;
+        aInfo.bPreselectedAsType = sal_True;
+
         if (bPreferredPreselection)
-            rFlatTypes.push_front(aResult);
+            rFlatTypes.push_front(aInfo);
         else
-            rFlatTypes.push_back(aResult);
+            rFlatTypes.push_back(aInfo);
 
         return sal_True;
     }
@@ -430,6 +440,17 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
             sFilter = ::rtl::OUString();
     }
 
+    // We have to mark all retrieved preselection items as "preselected by filter"!
+    FlatDetection::iterator pIt;
+    for (  pIt  = rFlatTypes.begin();
+           pIt != rFlatTypes.end()  ;
+         ++pIt                      )
+    {
+        FlatDetectionInfo& rInfo = *pIt;
+        rInfo.bPreselectedAsType   = sal_False;
+        rInfo.bPreselectedByFilter = sal_True;
+    }
+
     if (sFilter.getLength())
         return sal_True;
     else
@@ -469,15 +490,43 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
 
     // step over all filters, and check if its registered type
     // match the given URL.
+    // But use temp. list of "preselected types" instead of incoming rFlatTypes list!
+    // The reason behind: we must filter the getted results. And copying of stl entries
+    // is an easier job then removing it .-)
+    FlatDetection lPreselections;
     for (OUStringList::const_iterator pFilter  = lFilters.begin();
                                       pFilter != lFilters.end()  ;
                                     ++pFilter                    )
     {
         const ::rtl::OUString sFilter = *pFilter;
-        impl_getPreselectionForFilter(sFilter, aParsedURL, rFlatTypes);
+        impl_getPreselectionForFilter(sFilter, aParsedURL, lPreselections);
     }
 
-    return sal_False;
+    // We have to mark all retrieved preselection items as "preselected by document service".
+    // Further we must ignore all preselected items, which does not match the URL!
+    FlatDetection::iterator pIt;
+    for (  pIt  = lPreselections.begin();
+           pIt != lPreselections.end()  ;
+         ++pIt                          )
+    {
+        FlatDetectionInfo& rInfo = *pIt;
+
+        // match preslection the URL?
+        // NO  -> ignore it
+        // YES -> use it
+        if (
+            (!rInfo.bMatchByExtension) &&
+            (!rInfo.bMatchByPattern  )
+           )
+           continue;
+
+        rInfo.bPreselectedAsType            = sal_False;
+        rInfo.bPreselectedByFilter          = sal_False;
+        rInfo.bPreselectedByDocumentService = sal_True ;
+        rFlatTypes.push_back(rInfo);
+    }
+
+    return sal_True;
 }
 
 /*-----------------------------------------------
@@ -551,18 +600,16 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
                                        pFlatIt != lFlatTypes.end()  ;
                                      ++pFlatIt                      )
     {
-        css::beans::NamedValue aFlatTypeInfo   = *pFlatIt;
-        ::rtl::OUString        sFlatType       = aFlatTypeInfo.Name;
-        sal_Bool               bMatchByPattern = sal_False;
-        aFlatTypeInfo.Value >>= bMatchByPattern;
+        const FlatDetectionInfo& aFlatTypeInfo = *pFlatIt;
+              ::rtl::OUString    sFlatType     = aFlatTypeInfo.sType;
 
         if (!impl_validateAndSetTypeOnDescriptor(rDescriptor, sFlatType))
             continue;
 
         // b)
         if (
-            (!bAllowDeep    ) ||
-            (bMatchByPattern)
+            (!bAllowDeep                  ) ||
+            (aFlatTypeInfo.bMatchByPattern)
            )
         {
             return sFlatType;
@@ -572,7 +619,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         {
             // SAFE -> ----------------------------------
             ::osl::ResettableMutexGuard aLock(m_aLock);
-            CacheItem       aType         = m_rCache->getItem(FilterCache::E_TYPE, sFlatType);
+            CacheItem aType = m_rCache->getItem(FilterCache::E_TYPE, sFlatType);
             aLock.clear();
 
             ::rtl::OUString sDetectService;
@@ -581,13 +628,27 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
             // c)
             if (!sDetectService.getLength())
             {
-                // let first flat type win, if no deep detection is possible
+                // In case this type was preselected by the user, it must be used.
+                // It doesnt matter, if this type has a deep detection service registered
+                // or not.
+                // But only a "direct preselection" can be accepted here.
+                // That means: The user must preselect the type or the filter.
+                // But no document service. Because selection of type and filter
+                // can be interpreted as selection of one specific file format.
+                // Selection of a document service does not select a special format.
+                // It selected s set of formats! In such case we try to find a better solution
+                // by continuing this loop. But we save this first type without detect service
+                // as possible fallback .-)
+
+                if (
+                    (aFlatTypeInfo.bPreselectedAsType  ) ||
+                    (aFlatTypeInfo.bPreselectedByFilter)
+                   )
                 return sFlatType;
-                /*
+
                 if (!rLastChance.getLength())
                     rLastChance = sFlatType;
                 continue;
-                */
             }
 
             // dont forget to add every real asked deep detection service here.
@@ -621,14 +682,31 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     aLock.clear();
     // <- SAFE ----------------------------------
 
-    for (OUStringList::const_iterator pDeepIt  = lDetectors.begin();
-                                      pDeepIt != lDetectors.end()  ;
-                                    ++pDeepIt                      )
+    // The list of "already used detect services" correspond to the list
+    // of preselected or flat detected types. But these detect services was called
+    // to check these types explicitly and return black/white ... yes/no only.
+    // Now they are called to return any possible result. But we should preferr
+    // these already used detect services against all other ones!
+    OUStringList::const_iterator pIt;
+    for (  pIt  = lUsedDetectors.begin();
+           pIt != lUsedDetectors.end()  ;
+         ++pIt                          )
     {
-        ::rtl::OUString              sDetectService = *pDeepIt;
-        //OUStringList::const_iterator pAlreadyUsed   = ::std::find(lUsedDetectors.begin(), lUsedDetectors.end(), sDetectService);
-        //if (pAlreadyUsed != lUsedDetectors.end())
-        //    continue;
+        const ::rtl::OUString& sDetectService = *pIt;
+              ::rtl::OUString  sDeepType      = impl_askDetectService(sDetectService, rDescriptor);
+        if (sDeepType.getLength())
+            return sDeepType;
+    }
+
+    for (  pIt  = lDetectors.begin();
+           pIt != lDetectors.end()  ;
+         ++pIt                      )
+    {
+        const ::rtl::OUString& sDetectService = *pIt;
+
+        OUStringList::const_iterator pAlreadyUsed = ::std::find(lUsedDetectors.begin(), lUsedDetectors.end(), sDetectService);
+        if (pAlreadyUsed != lUsedDetectors.end())
+            continue;
 
         ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
         if (sDeepType.getLength())
@@ -636,6 +714,30 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     }
 
     return ::rtl::OUString();
+}
+
+/*-----------------------------------------------
+    07.03.2005 11:13
+-----------------------------------------------*/
+void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
+{
+    // try to seek to 0 ...
+    // But because XSeekable is an optional interface ... try it only .-)
+    css::uno::Reference< css::io::XInputStream > xStream = rDescriptor.getUnpackedValueOrDefault(
+                                                            ::comphelper::MediaDescriptor::PROP_INPUTSTREAM(),
+                                                            css::uno::Reference< css::io::XInputStream >());
+    css::uno::Reference< css::io::XSeekable > xSeek(xStream, css::uno::UNO_QUERY);
+    if (xSeek.is())
+    {
+        try
+        {
+            xSeek->seek(0);
+        }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
+        catch(const css::uno::Exception&)
+            {}
+    }
 }
 
 /*-----------------------------------------------
@@ -663,6 +765,10 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     if (!xSMGR.is())
         return ::rtl::OUString();
 
+    // seek to 0 is an optional feature to be more robust against
+    // "simple implemented detect services" .-)
+    impl_seekStreamToZero(rDescriptor);
+
     ::rtl::OUString sDeepType;
     try
     {
@@ -687,6 +793,10 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         { throw exRun; }
     catch(const css::uno::Exception&)
         { sDeepType = ::rtl::OUString(); }
+
+    // seek to 0 is an optional feature to be more robust against
+    // "simple implemented detect services" .-)
+    impl_seekStreamToZero(rDescriptor);
 
     // analyze the results
     // a) detect service returns "" => return "" too and remove TYPE/FILTER prop from descriptor
