@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLNumberStyles.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:13:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 11:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,10 +415,6 @@ static void SdXMLExportStyle( SdXMLExport& rExport, const SdXMLFixedDataStyle* p
         sAttrValue += OUString::createFromAscii( pStyle2->mpName );
 
     rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sAttrValue );
-
-    // family
-    sAttrValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("data-style"));
-    rExport.AddAttribute( XML_NAMESPACE_STYLE, XML_FAMILY, sAttrValue );
 
     if( pStyle->mbAutomatic )
     {
