@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:00:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,9 @@
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
-
+#ifndef SC_XINAME_HXX
+#include "xiname.hxx"
+#endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
@@ -486,7 +488,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             {
                 aIn.Ignore( 2 );
                 //Determine if this is a user-defined Macro name.
-                const XclImpName* pName = GetNameBuffer().GetNameFromIndex(nUINT16);
+                const XclImpName* pName = GetNameManager().GetName( nUINT16 );
                 if(pName && !pName->GetScRangeData())
                     aStack << aPool.Store( ocMacro, pName->GetXclName() );
                 else
@@ -664,16 +666,20 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, UINT32 nFormulaLen
             case 0x79:
             case 0x39: // Name or External Name                 [    275]
             {
-                sal_uInt16 nXtiIndex, nName;
-                aIn >> nXtiIndex >> nName;
+                sal_uInt16 nXtiIndex, nNameIdx;
+                aIn >> nXtiIndex >> nNameIdx;
                 aIn.Ignore( 2 );
 
                 if( rLinkMan.IsSelfRef( nXtiIndex ) )
                 {
                     // internal defined name with explicit sheet, i.e.: =Sheet1!AnyName
-                    aStack << aPool.Store( nName );
+                    const XclImpName* pName = GetNameManager().GetName( nNameIdx );
+                    if( pName && !pName->GetScRangeData() )
+                        aStack << aPool.Store( ocMacro, pName->GetXclName() );
+                    else
+                        aStack << aPool.Store( nNameIdx );
                 }
-                else if( const XclImpExtName* pExtName = rLinkMan.GetExternName( nXtiIndex, nName ) )
+                else if( const XclImpExtName* pExtName = rLinkMan.GetExternName( nXtiIndex, nNameIdx ) )
                 {
                     switch( pExtName->GetType() )
                     {
