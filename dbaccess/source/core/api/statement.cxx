@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:35:13 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:04:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
 {
     DBG_CTOR(OStatementBase, NULL);
     OSL_ENSURE(_xStatement.is() ,"Statement is NULL!");
-    m_xAggregateAsSet = Reference< XPropertySet >(_xStatement, UNO_QUERY);
+    m_xAggregateAsSet.set(_xStatement,UNO_QUERY);
     m_xAggregateAsCancellable = Reference< ::com::sun::star::util::XCancellable > (m_xAggregateAsSet, UNO_QUERY);
 }
 
@@ -212,10 +212,10 @@ void OStatementBase::disposing()
         {
             Reference< XCloseable > (m_xAggregateAsSet, UNO_QUERY)->close();
         }
-        catch(DisposedException& e)
+        catch(DisposedException& )
         {// don't care for anymore
         }
-        catch(RuntimeException& e)
+        catch(RuntimeException& )
         {// don't care for anymore
         }
     }
