@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-04 17:07:57 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 08:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1318,6 +1318,7 @@ static void ImplFreeButtonDevice( VirtualDevice* pVirDev )
 void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
 {
     // Variablen initialisieren
+    mbToolBox         = TRUE;
     mpBtnDev          = NULL;
     mpFloatSizeAry    = NULL;
     mpItemList        = new ImplToolItemList;
@@ -3340,12 +3341,13 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
 
 
     // only highlight when the focus is not inside a child window of a toolbox
+    // eg, in a edit control
     BOOL bDrawHotSpot = TRUE;
     Window *pWin = Application::GetFocusWindow();
     while( pWin )
     {
         pWin = pWin->GetParent();
-        if( pWin && pWin->mbDockWin )
+        if( pWin && pWin->mbToolBox )
         {
             bDrawHotSpot = FALSE;
             break;
