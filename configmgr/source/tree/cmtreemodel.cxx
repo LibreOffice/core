@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtreemodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2001-04-05 14:43:14 $
+ *  last change: $Author: jb $ $Date: 2001-05-31 11:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,7 @@ void SubtreeChange::swap(SubtreeChange& aOther)
     m_aChanges.swap(aOther.m_aChanges);
     std::swap(m_sTemplateName, aOther.m_sTemplateName);
     std::swap(m_sTemplateModule, aOther.m_sTemplateModule);
+    std::swap(m_aAttributes, aOther.m_aAttributes);
 }
 
 //--------------------------------------------------------------------------
