@@ -2,9 +2,9 @@
  *
  *  $RCSfile: metric.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hdu $ $Date: 2002-11-07 08:55:49 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,8 @@ FontInfo::FontInfo()
     mpImplMetric->mbDevice      = FALSE;
     mpImplMetric->mnAscent      = 0;
     mpImplMetric->mnDescent     = 0;
-    mpImplMetric->mnLeading     = 0;
+    mpImplMetric->mnIntLeading  = 0;
+    mpImplMetric->mnExtLeading  = 0;
     mpImplMetric->mnLineHeight  = 0;
     mpImplMetric->mnSlant       = 0;
     mpImplMetric->mnFirstChar   = 0;
@@ -133,7 +134,8 @@ BOOL FontInfo::operator==( const FontInfo& rInfo ) const
          (mpImplMetric->mbDevice    == rInfo.mpImplMetric->mbDevice     ) &&
          (mpImplMetric->mnAscent    == rInfo.mpImplMetric->mnAscent     ) &&
          (mpImplMetric->mnDescent   == rInfo.mpImplMetric->mnDescent    ) &&
-         (mpImplMetric->mnLeading   == rInfo.mpImplMetric->mnLeading    ) &&
+         (mpImplMetric->mnIntLeading== rInfo.mpImplMetric->mnIntLeading ) &&
+         (mpImplMetric->mnExtLeading== rInfo.mpImplMetric->mnExtLeading ) &&
          (mpImplMetric->mnSlant     == rInfo.mpImplMetric->mnSlant      ) &&
          (mpImplMetric->mnFirstChar == rInfo.mpImplMetric->mnFirstChar  ) &&
          (mpImplMetric->mnLastChar  == rInfo.mpImplMetric->mnLastChar   ) )
