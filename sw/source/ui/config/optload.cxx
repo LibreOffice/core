@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:18:31 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 10:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,10 @@
 #ifndef _OUTPLACE_HXX //autogen
 #include <so3/outplace.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
+#include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#endif
+
 #ifndef _SWDOCSH_HXX //autogen
 #include <docsh.hxx>
 #endif
@@ -190,6 +194,13 @@ SwLoadOptPage::SwLoadOptPage( Window* pParent, const SfxItemSet& rSet ) :
     }
     aAutoUpdateFields.SetClickHdl(LINK(this, SwLoadOptPage, UpdateHdl));
     aCaptionPB.SetClickHdl(LINK(this, SwLoadOptPage, CaptionHdl));
+
+    // hide these controls because we get a new tabpage for the compatibility flags
+    aPrinterMetricsCB.Hide();
+    aMergeDistCB.Hide();
+    aMergeDistPageStartCB.Hide();
+    aTabAlignment.Hide();
+    aCompatFL.Hide();
 }
 
 /*-----------------18.01.97 12.43-------------------
@@ -264,7 +275,10 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     {
         if(aPrinterMetricsCB.IsChecked() != aPrinterMetricsCB.GetSavedValue())
         {
-            pWrtShell->SetUseVirtualDevice(!aPrinterMetricsCB.IsChecked());
+            if ( aPrinterMetricsCB.IsChecked() )
+                pWrtShell->SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::DISABLED );
+            else
+                pWrtShell->SetUseVirtualDevice( com::sun::star::document::PrinterIndependentLayout::HIGH_RESOLUTION );
         }
         if(aMergeDistCB.IsChecked() != aMergeDistCB.GetSavedValue() ||
             aMergeDistPageStartCB.IsChecked() != aMergeDistPageStartCB.GetSavedValue())
@@ -319,7 +333,9 @@ void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
     {
         nFldFlags = pWrtShell->GetFldUpdateFlags(TRUE);
         nOldLinkMode = pWrtShell->GetLinkUpdMode(TRUE);
-        aPrinterMetricsCB.Check(!pWrtShell->IsUseVirtualDevice());
+        aPrinterMetricsCB.Check(
+            com::sun::star::document::PrinterIndependentLayout::DISABLED ==
+            pWrtShell->IsUseVirtualDevice());
         aMergeDistCB.Check(pWrtShell->IsParaSpaceMax());
         aMergeDistPageStartCB.Check(pWrtShell->IsParaSpaceMaxAtPages());
         aTabAlignment.Check(pWrtShell->IsTabCompat());
@@ -802,7 +818,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
     {
         InsCaptionOpt* pOpt = (InsCaptionOpt*)pEntry->GetUserData();
 
-        pOpt->UseCaption() = aCheckLB.IsChecked(aCheckLB.GetModel()->GetAbsPos(pEntry));
+        pOpt->UseCaption() = aCheckLB.IsChecked((USHORT)aCheckLB.GetModel()->GetAbsPos(pEntry));
         String aName( aCategoryBox.GetText() );
         aName.EraseLeadingChars (' ');
         aName.EraseTrailingChars(' ');
