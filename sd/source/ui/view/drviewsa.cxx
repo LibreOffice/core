@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:19:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:56:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "DrawViewShell.hxx"
 
 #define ITEMID_SIZE 0
 
@@ -150,9 +152,6 @@
 #ifndef SD_FU_SELECTION_HXX
 #include "fusel.hxx"
 #endif
-#ifndef SD_DRAW_VIEW_SHELL_HXX
-#include "DrawViewShell.hxx"
-#endif
 #ifndef SD_BEZIER_OBJECT_BAR_HXX
 #include "BezierObjectBar.hxx"
 #endif
@@ -174,15 +173,19 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
+#include "SdUnoDrawView.hxx"
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 #ifndef SD_OBJECT_BAR_MANAGER_HXX
 #include "ObjectBarManager.hxx"
 #endif
 #include "SdUnoDrawView.hxx"
-#include "FormShellManager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+
 
 namespace sd {
 
@@ -239,19 +242,12 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 DrawViewShell::DrawViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
+    ::Window* pParentWindow,
     PageKind ePageKind,
     FrameView* pFrameViewArgument)
-    : ViewShell (pFrame, rViewShellBase),
-      aTabControl(this, &pFrame->GetWindow()),
-      aLayerTab(this, &pFrame->GetWindow()),
-      aPageBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS),
-      aMasterPageBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-      aLayerBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    : ViewShell (pFrame, pParentWindow, rViewShellBase),
+      aTabControl(this, pParentWindow),
       pActualPage(NULL),
-      bLayerMode(FALSE),
       pXPolygon (0),
       nPolygonIndex (0),
       bLineError (FALSE),
@@ -264,8 +260,8 @@ DrawViewShell::DrawViewShell (
       bInEffectAssignment(FALSE),
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE),
-      mpFormShellManager(NULL)
+      mbIsLayerModeActive(false),
+      bPastePossible(FALSE)
 {
     if (pFrameViewArgument != NULL)
         pFrameView = pFrameViewArgument;
@@ -282,18 +278,11 @@ DrawViewShell::DrawViewShell (
 
 DrawViewShell::DrawViewShell (
     SfxViewFrame* pFrame,
+    ::Window* pParentWindow,
     const DrawViewShell& rShell)
-    : ViewShell(pFrame, rShell),
-      aTabControl(this, &pFrame->GetWindow()),
-      aLayerTab(this, &pFrame->GetWindow()),
-      aPageBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-      aMasterPageBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
-      aLayerBtn(&pFrame->GetWindow(),
-          WB_3DLOOK | WB_RECTSTYLE | WB_SMALLSTYLE | WB_NOPOINTERFOCUS ),
+    : ViewShell(pFrame, pParentWindow, rShell),
+      aTabControl(this, pParentWindow),
       pActualPage(NULL),
-      bLayerMode(FALSE),
       pXPolygon (0),
       nPolygonIndex (0),
       bLineError (FALSE),
@@ -306,8 +295,8 @@ DrawViewShell::DrawViewShell (
       bInEffectAssignment(FALSE),
       pSlotArray( NULL ),
       pClipEvtLstnr(NULL),
-      bPastePossible(FALSE),
-      mpFormShellManager(NULL)
+      mbIsLayerModeActive(false),
+      bPastePossible(FALSE)
 {
     pFrameView = new FrameView(GetDoc());
     Construct (GetDocSh(), PK_STANDARD);
@@ -323,8 +312,6 @@ DrawViewShell::~DrawViewShell()
 {
     SfxViewShell* pViewShell = GetViewShell();
     OSL_ASSERT (pViewShell!=NULL);
-
-    mpFormShellManager.reset();
 
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
@@ -391,8 +378,8 @@ DrawViewShell::~DrawViewShell()
     // sterbende Funktion eventuell die ObjectBars zu wechseln. Die
     // entsprechende Shell ist aber schon vom SFX vom Dispatcher-Stack
     // genommen worden.
-    bObjectBarSwitchEnabled = FALSE;
     */
+    GetObjectBarManager().DisableObjectBarSwitching();
 
     if ( pClipEvtLstnr )
     {
@@ -402,7 +389,6 @@ DrawViewShell::~DrawViewShell()
     }
 
     delete pDrView;
-    pViewShell->SetWindow(NULL);
 
     pFrameView->Disconnect();
     delete pXPolygon;
@@ -457,8 +443,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     GetDoc()->CreateFirstPages();
 
-    pDrView = new DrawView(pDocSh, pWindow, this);
-    pView = pDrView;             // Pointer der Basisklasse ViewShell
+    pDrView = new DrawView(pDocSh, GetActiveWindow(), this);
+    mpView = pDrView;            // Pointer der Basisklasse ViewShell
     pDrView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
 
     ePageKind = eInitialPageKind; //af pFrameView->GetPageKind();
@@ -481,49 +467,9 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     // Create the object bars and register them at the sub shell
     // manager.
-    ObjectBarManager& rObjectBarManager (GetObjectBarManager());
-    // The id for the main object bars is the same.
-    if (eDocType == DOCUMENT_TYPE_DRAW)
-        rObjectBarManager.RegisterObjectBar (
-            RID_DRAW_OBJ_TOOLBOX,
-            ::std::auto_ptr<SfxShell>(new DrawObjectBar(this, pDrView)));
-    else
-        rObjectBarManager.RegisterObjectBar (
-            RID_DRAW_OBJ_TOOLBOX,
-            ::std::auto_ptr<SfxShell>(new ImpressObjectBar(this,pDrView)));
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_BEZIER_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(new BezierObjectBar(this, pDrView)));
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_GLUEPOINTS_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(new GluePointsObjectBar(this, pDrView)));
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_DRAW_TEXT_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(new TextObjectBar(
-            this, GetDoc()->GetPool(), pDrView)));
-
-    ::std::auto_ptr<SfxShell> pFormShell(new FmFormShell(pViewShell, pDrView));
-    rObjectBarManager.RegisterObjectBar (RID_FORMLAYER_TOOLBOX, pFormShell);
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_DRAW_GRAF_TOOLBOX,
-        ::std::auto_ptr<SfxShell>(new GraphicObjectBar(this, pDrView)));
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_SVX_EXTRUSION_BAR,
-        ::std::auto_ptr<SfxShell>(new svx::ExtrusionBar( pViewShell )));
-
-    rObjectBarManager.RegisterObjectBar (
-        RID_SVX_FONTWORK_BAR,
-        ::std::auto_ptr<SfxShell>(new svx::FontworkBar( pViewShell )));
-
+    GetObjectBarManager().EnableObjectBarSwitching();
     // Activate the relevant object bars.
-    rObjectBarManager.PushObjectBar (RID_FORMLAYER_TOOLBOX);
-    rObjectBarManager.PushObjectBar (RID_SVX_EXTRUSION_BAR);
-    rObjectBarManager.PushObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
 
     Size aPageSize = GetDoc()->GetSdPage(0, ePageKind)->GetSize();
     Point aPageOrg = Point(aPageSize.Width(), aPageSize.Height() / 2);
@@ -544,31 +490,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     // Split-Handler fuer TabControls
     aTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
-    aLayerTab.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
-
-    aPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE ) ), IMAGE_STDBTN_COLOR ) );
-    aPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_PAGEMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-    aPageBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
-    aPageBtn.SetQuickHelpText( String( SdResId( STR_PAGEMODE ) ) );
-    aPageBtn.SetHelpId( HID_SD_BTN_PAGE );
-    aPageBtn.SetAccessibleName (String(SdResId(STR_PAGEMODE)));
-    aPageBtn.Show();
-
-    aMasterPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE ) ), IMAGE_STDBTN_COLOR ) );
-    aMasterPageBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_MASTERPAGE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-    aMasterPageBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
-    aMasterPageBtn.SetQuickHelpText( String( SdResId( STR_MASTERPAGEMODE ) ) );
-    aMasterPageBtn.SetHelpId( HID_SD_BTN_MASTERPAGE );
-    aMasterPageBtn.SetAccessibleName (String(SdResId(STR_MASTERPAGEMODE)));
-    aMasterPageBtn.Show();
-
-    aLayerBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE ) ), IMAGE_STDBTN_COLOR ) );
-    aLayerBtn.SetModeImage( Image( Bitmap( SdResId( BMP_TAB_LAYERMODE_H ) ), IMAGE_STDBTN_COLOR_HC ), BMP_COLOR_HIGHCONTRAST );
-    aLayerBtn.SetClickHdl(LINK(this, DrawViewShell, TabModeBtnHdl));
-    aLayerBtn.SetQuickHelpText( String( SdResId( STR_LAYERMODE ) ) );
-    aLayerBtn.SetHelpId( HID_SD_BTN_LAYER );
-    aLayerBtn.SetAccessibleName (String(SdResId(STR_LAYERMODE)));
-    aLayerBtn.Show();
 
     // Damit der richtige EditMode von der FrameView komplett eingestellt
     // werden kann, wird hier ein aktuell anderer gewaehlt (kleiner Trick)
@@ -587,40 +508,34 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( eDocType == DOCUMENT_TYPE_DRAW )
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        pWindow->SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        pWindow->SetUniqueId( SD_IF_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetUniqueId( SD_IF_SDGRAPHICVIEWSHELL );
     }
     else
     {
         if (ePageKind == PK_NOTES)
         {
-            aNotesBtn.Check(TRUE);
-            aLayerBtn.Disable();
             SetHelpId( SID_NOTESMODE );
-            pWindow->SetHelpId( SID_NOTESMODE );
-            pWindow->SetUniqueId( SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
         }
         else if (ePageKind == PK_HANDOUT)
         {
-            aHandoutBtn.Check(TRUE);
-            aPageBtn.Disable();
-            aLayerBtn.Disable();
             SetHelpId( SID_HANDOUTMODE );
-            pWindow->SetHelpId( SID_HANDOUTMODE );
-            pWindow->SetUniqueId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
         }
         else
         {
-            aDrawBtn.Check(TRUE);
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            pWindow->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            pWindow->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
         }
     }
 
@@ -640,7 +555,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     bIsRulerDrag = FALSE;
 
-    String aName( RTL_CONSTASCII_USTRINGPARAM( "DrawView" ));
+    String aName( RTL_CONSTASCII_USTRINGPARAM("DrawViewShell"));
     SetName (aName);
 
     if (pFrameView->GetPresentationViewShellId() != SID_VIEWSHELL0)
@@ -681,9 +596,6 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
     }
 
-    mpController = new SdUnoDrawView (GetViewShellBase(), *this, *pView);
-    mxController = static_cast<XWeak*>(mpController);
-
     DestroyPolygons ();
     pXPolygon = new XPolygon;
     CreateBorder();
@@ -694,12 +606,31 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 void DrawViewShell::Init (void)
 {
     ViewShell::Init ();
+
     StartListening (*GetDocSh());
-    mpFormShellManager = ::std::auto_ptr<FormShellManager>(
-        new FormShellManager (GetViewShellBase()));
 }
 
 
+
+
+DrawController* DrawViewShell::GetController (void)
+{
+    if ( ! mpController.is() && IsMainViewShell())
+    {
+        // Create uno controller for the main view shell.  For the ones
+        // displayed in the non-center panes we may later introduce
+        // sub-controllers.
+        DrawController* pController = new SdUnoDrawView (
+            GetViewShellBase(),
+            *this,
+            *GetView());
+        mpController = ::comphelper::ImplementationReference<
+        DrawController,
+            ::com::sun::star::uno::XInterface,
+            ::com::sun::star::uno::XWeak> (pController);
+    }
+    return mpController.get();
+}
 
 /*************************************************************************
 |*
@@ -952,7 +883,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         else
         {
             SvxZoomItem* pZoomItem;
-            UINT16 nZoom = (UINT16) pWindow->GetZoom();
+            UINT16 nZoom = (UINT16) GetActiveWindow()->GetZoom();
 
             if( bZoomOnPage )
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_WHOLEPAGE, nZoom );
@@ -975,7 +906,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
     }
 
-    Point aPos = pWindow->PixelToLogic(aMousePos);
+    Point aPos = GetActiveWindow()->PixelToLogic(aMousePos);
     pDrView->GetPageViewPvNum(0)->LogicToPagePos(aPos);
     Fraction aUIScale(GetDoc()->GetUIScale());
     aPos.X() = Fraction(aPos.X()) / aUIScale;
@@ -1040,7 +971,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         // If in layer mode additionally show the layer that contains all
         // selected shapes of the page.  If the shapes are distributed on
         // more than one layer, no layer name is shown.
-        if( bLayerMode )
+        if (IsLayerModeActive())
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
             SdrLayerID nLayer, nOldLayer;
