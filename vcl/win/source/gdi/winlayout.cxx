@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:41:10 $
+ *  last change: $Author: vg $ $Date: 2003-07-21 11:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,17 @@
 #define alloca _alloca
 
 #ifdef GCP_KERN_HACK
-#include <algorithm>
+    #include <algorithm>
 #endif // GCP_KERN_HACK
+
+// #110440# TODO: move GSUBList caching to upper layers
+// for now it is much less riscy to keep it here
+#define GNG_VERT_HACK
+#ifdef GNG_VERT_HACK
+    #include <hash_set>
+    #include <psprint/sft.h>
+    typedef std::hash_set<int> GSUBList;
+#endif // GNG_VERT_HACK
 
 // =======================================================================
 
@@ -107,6 +116,9 @@ public:
 #ifdef GCP_KERN_HACK
                       , const KERNINGPAIR* pPairs, int nPairs
 #endif // GCP_KERN_HACK
+#ifdef GNG_VERT_HACK
+                      , GSUBList& rGSUBList
+#endif // GNG_VERT_HACK
                     );
 
     virtual         ~SimpleWinLayout();
@@ -150,6 +162,12 @@ private:
     const KERNINGPAIR* mpKerningPairs;
     int             mnKerningPairs;
 #endif // GCP_KERN_HACK
+
+#ifdef GNG_VERT_HACK
+    bool            HasGSUBstitutions() const;
+    bool            IsGSUBstituted( sal_Unicode ) const;
+    GSUBList&       mrGSUBList;
+#endif // GNG_VERT_HACK
 };
 
 // =======================================================================
@@ -173,12 +191,18 @@ SimpleWinLayout::SimpleWinLayout( HDC hDC, BYTE nCharSet
 #ifdef GCP_KERN_HACK
         , const KERNINGPAIR* pKerningPairs, int nKerningPairs
 #endif // GCP_KERN_HACK
+#ifdef GNG_VERT_HACK
+        , GSUBList& rGSUBList
+#endif // GNG_VERT_HACK
     )
 :   WinLayout( hDC ),
 #ifdef GCP_KERN_HACK
     mpKerningPairs( pKerningPairs ),
     mnKerningPairs( nKerningPairs ),
 #endif // GCP_KERN_HACK
+#ifdef GNG_VERT_HACK
+    mrGSUBList( rGSUBList ),
+#endif // GNG_VERT_HACK
     mnGlyphCount( 0 ),
     mnCharCount( 0 ),
     mpOutGlyphs( NULL ),
@@ -555,6 +579,65 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
 
 // -----------------------------------------------------------------------
 
+bool SimpleWinLayout::HasGSUBstitutions() const
+{
+    if( mrGSUBList.find( -1 ) != mrGSUBList.end() ) // no GSUB in font?
+        return false;
+    if( !mrGSUBList.empty() )   // already initialized?
+        return true;
+
+    mrGSUBList.insert( -1 );    // mark as "no GSUB in font"
+
+    // get raw font file data
+    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
+    if( nFontSize == GDI_ERROR )
+        return false;
+    std::vector<char> aRawFont( nFontSize+1 );
+    aRawFont[ nFontSize ] = 0;
+    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)&aRawFont[0], nFontSize );
+    if( nFontSize != nFontSize2 )
+        return false;
+
+    // open font file
+    sal_uInt32 nFaceNum = 0;
+    if( !aRawFont[0] )  // TTC candidate
+        nFaceNum = ~0;  // indicate "TTC font extracts only"
+
+    TrueTypeFont* pTTFont = NULL;
+    OpenTTFont( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
+    if( !pTTFont )
+        return false;
+
+    mrGSUBList.erase( -1 ); // remove "no GSUB in font" mark
+
+    // add vertically substituted characters to list
+    static sal_Unicode aGSUBCandidates[] = {
+        0x0020, 0x0080, // ASCII
+        0x2000, 0x2600, // misc
+        0x3000, 0x3100, // CJK punctutation
+        0x3300, 0x3400, // squared words
+        0xFF00, 0xFFF0, // halfwidth|fullwidth forms
+    0 };
+
+    for( sal_Unicode* pPair = aGSUBCandidates; *pPair; pPair += 2 )
+        for( sal_Unicode c = pPair[0]; c < pPair[1]; ++c )
+            if( MapChar( pTTFont, c, 0 ) != MapChar( pTTFont, c, 1 ) )
+                mrGSUBList.insert( c ); // insert GSUBbed unicodes
+
+    CloseTTFont( pTTFont );
+}
+
+// -----------------------------------------------------------------------
+
+bool SimpleWinLayout::IsGSUBstituted( sal_Unicode aChar ) const
+{
+    if( mrGSUBList.find( aChar ) == mrGSUBList.end() )
+        return false;
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
 int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& nStart,
     long* pGlyphAdvances, int* pCharIndexes ) const
 {
@@ -581,9 +664,17 @@ int SimpleWinLayout::GetNextGlyphs( int nLen, long* pGlyphs, Point& rPos, int& n
         {
             if( mnLayoutFlags & SAL_LAYOUT_VERTICAL )
             {
-                nGlyphIndex |= GetVerticalFlags( nGlyphIndex & GF_IDXMASK );
-                if( !(nGlyphIndex & GF_ROTMASK) )
-                    nGlyphIndex |= GF_VERT;
+#ifdef GNG_VERT_HACK
+                sal_Unicode cChar = (sal_Unicode)(nGlyphIndex & GF_IDXMASK);
+                if( HasGSUBstitutions() && IsGSUBstituted( cChar ) )
+                    nGlyphIndex |= GF_ROTL | GF_GSUB;
+                else
+#endif // GNG_VERT_HACK
+                {
+                    nGlyphIndex |= GetVerticalFlags( cChar );
+                    if( !(nGlyphIndex & GF_ROTMASK) )
+                        nGlyphIndex |= GF_VERT;
+                }
             }
             nGlyphIndex |= GF_ISCHAR;
         }
@@ -1015,6 +1106,30 @@ void SimpleWinLayout::Simplify( bool bIsBase )
     if( mnGlyphCount <= 0 )
         mnWidth = mnBaseAdv = 0;
 }
+
+// =======================================================================
+
+#ifdef GNG_VERT_HACK
+
+class GNGVertLayoutCache : public ImplTextLayoutCache
+{
+public:
+    GNGVertLayoutCache() {}
+    virtual ~GNGVertLayoutCache() { flush( 0 ); }
+    virtual void flush( int nMinLevel );
+
+    GSUBList maGSUBLists[ MAX_FALLBACK ];
+};
+
+// -----------------------------------------------------------------------
+
+void GNGVertLayoutCache::flush( int nMinLevel )
+{
+    for( int i = nMinLevel; i < MAX_FALLBACK; ++i )
+        maGSUBLists[i].clear();
+}
+
+#endif // GNG_VERT_HACK
 
 // =======================================================================
 
@@ -2263,7 +2378,7 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
     if( !(rArgs.mnFlags & SAL_LAYOUT_COMPLEX_DISABLED)  // complex text
     &&   (aUspModule || (bUspEnabled && InitUSP())) ) // CTL layout engine
     {
-        if (maGraphicsData.mxTextLayoutCache.get() == 0)
+        if( maGraphicsData.mxTextLayoutCache.get() == 0 )
             maGraphicsData.mxTextLayoutCache.reset(new UniscribeLayoutCache);
 
         // script complexity is determined in upper layers
@@ -2283,6 +2398,14 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
             GetKernPairs( 0, NULL );
 #endif // GCP_KERN_HACK
 
+#ifdef GNG_VERT_HACK
+        if( maGraphicsData.mxTextLayoutCache.get() == 0 )
+            maGraphicsData.mxTextLayoutCache.reset( new GNGVertLayoutCache );
+        GSUBList& rGSUBList =
+            static_cast<GNGVertLayoutCache*>( maGraphicsData.mxTextLayoutCache.get() )
+                ->maGSUBLists[ nFallbackLevel ];
+#endif // GNG_VERT_HACK
+
         BYTE eCharSet = ANSI_CHARSET;
         if( maGraphicsData.mpLogFont )
             eCharSet = maGraphicsData.mpLogFont->lfCharSet;
@@ -2290,6 +2413,9 @@ SalLayout* SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLevel
 #ifdef GCP_KERN_HACK
             , maGraphicsData.mpFontKernPairs, maGraphicsData.mnFontKernPairCount
 #endif // GCP_KERN_HACK
+#ifdef GNG_VERT_HACK
+            , rGSUBList
+#endif // GNG_VERT_HACK
             );
     }
 
