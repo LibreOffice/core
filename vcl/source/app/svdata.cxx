@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdata.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-03 19:56:59 $
+ *  last change: $Author: kz $ $Date: 2005-03-04 00:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,6 +199,7 @@ void ImplInitSVData()
 
     // init global instance data
     memset( pSVData, 0, sizeof( ImplSVData ) );
+    pSVData->maHelpData.mbAutoHelpId = sal_True;
 }
 
 // -----------------------------------------------------------------------
