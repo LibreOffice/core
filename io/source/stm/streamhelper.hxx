@@ -2,9 +2,9 @@
  *
  *  $RCSfile: streamhelper.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: hr $ $Date: 2001-09-26 15:55:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@ public:
     virtual void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
         throw( IRingBuffer_OutOfBoundsException )=0;
     virtual sal_Int32   getSize() const throw(  )  =0;
-    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw()=0;
-    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw()=0;
+    virtual void    forgetFromStart( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
+    virtual void    forgetFromEnd( sal_Int32 nBytesToForget ) throw(IRingBuffer_OutOfBoundsException)=0;
     virtual void    shrink() throw() = 0;
     virtual ~IRingBuffer() {};
 };
