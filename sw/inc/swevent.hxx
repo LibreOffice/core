@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swevent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:08:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-11 10:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@
 #define     SW_EVENT_FRM_MOVE             ( EVENT_APP_START + 7 )
 #define     SW_EVENT_PAGE_COUNT           ( EVENT_APP_START + 8 )
 #define     SW_EVENT_MAIL_MERGE_END       ( EVENT_APP_START + 9 )
-
+#define     SW_EVENT_FIELD_MERGE          ( EVENT_APP_START + 10 )
+#define     SW_EVENT_FIELD_MERGE_FINISHED ( EVENT_APP_START + 11 )
 
 class SwFrmFmt;
 class SwFmtINetFmt;
