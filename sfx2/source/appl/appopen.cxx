@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-22 11:37:21 $
+ *  last change: $Author: cd $ $Date: 2002-06-03 10:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@
 #include "topfrm.hxx"
 #include "appimp.hxx"
 #include "sfxuno.hxx"
-
+#include "objface.hxx"
 #include "filedlghelper.hxx"
 
 #define _SVSTDARR_STRINGSDTOR
@@ -414,36 +414,6 @@ ULONG CheckPasswd_Impl
 
 //--------------------------------------------------------------------
 
-
-SfxObjectShell* FindNoName_Impl( TypeId aDocType )
-
-/*  [Beschreibung]
-
-    Findet die erste unbenannte und unver"anderte SfxObjectShell vom
-    angegeben Typ, f"ur das ein SfxMDIFrame exist
-*/
-
-{
-    // suchen
-    for ( SfxObjectShell *pFirst = SfxObjectShell::GetFirst();
-          pFirst;
-          pFirst = SfxObjectShell::GetNext(*pFirst) )
-    {
-        // passend?
-        SfxTopViewFrame *pTopFrame = (SfxTopViewFrame*)
-                SfxViewFrame::GetFirst(pFirst, TYPE(SfxTopViewFrame));
-        if ( pTopFrame && !pFirst->HasName() && !pFirst->IsModified() &&
-             pFirst->Type() == aDocType )
-        {
-            // => gefundenen zur"uckgeben
-            return (pFirst->GetFlags() &
-                    SFXOBJECTSHELL_DONTREPLACE ) ? 0 :  pFirst;
-        }
-    }
-
-    // keins gefunden => 0 zur"uckgeben
-    return 0;
-}
 
 ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFileName,
     const String &rLongName, BOOL bCopy, SfxItemSet* pSet )
@@ -974,6 +944,26 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
 
     USHORT nSID = rReq.GetSlot();
     SFX_REQUEST_ARG( rReq, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE );
+    if ( pFileNameItem )
+    {
+        String aCommand( pFileNameItem->GetValue() );
+        const SfxSlot* pSlot = GetInterface()->GetSlot( aCommand );
+        if ( pSlot )
+        {
+            pFileNameItem = NULL;
+        }
+        else
+        {
+            sal_Int32 nIndex = aCommand.SearchAscii("slot:");
+            if ( !nIndex )
+            {
+                USHORT nSlotId =  String( aCommand, 5, aCommand.Len()-5 ).ToInt32();
+                if ( nSlotId == SID_OPENDOC )
+                    pFileNameItem = NULL;
+            }
+        }
+    }
+
     if ( !pFileNameItem )
     {
         // FileDialog ausf"uhren
