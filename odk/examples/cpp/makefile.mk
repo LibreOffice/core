@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-05-28 15:49:08 $
+#   last change: $Author: rt $ $Date: 2005-01-31 17:01:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,30 +78,23 @@ COUNTER_FILES=\
     $(DESTDIRCPPEXAMPLES)$/counter$/counter.cxx \
     $(DESTDIRCPPEXAMPLES)$/counter$/counter.uno.xml \
     $(DESTDIRCPPEXAMPLES)$/counter$/countermain.cxx \
-    $(DESTDIRCPPEXAMPLES)$/counter$/exports.dxp \
     $(DESTDIRCPPEXAMPLES)$/counter$/Makefile \
     $(DESTDIRCPPEXAMPLES)$/counter$/XCountable.idl
 
 DOUCMENTLOADER_FILES=\
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/DocumentLoader.cxx \
     $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/Makefile \
-    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/test.sxw
+    $(DESTDIRCPPEXAMPLES)$/DocumentLoader$/test.odt
 
 REMOTECLIENT_FILES=\
-    $(DESTDIRCPPEXAMPLES)$/remoteclient$/exports.dxp \
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/Makefile \
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclient.cxx \
     $(DESTDIRCPPEXAMPLES)$/remoteclient$/remoteclientsample.uno.xml
 
-SIMPLEBOOTSTRAP_FILES=\
-    $(DESTDIRCPPEXAMPLES)$/SimpleBootstrap$/SimpleBootstrap.cxx \
-    $(DESTDIRCPPEXAMPLES)$/SimpleBootstrap$/Makefile
-
 DIR_FILE_LIST= \
     $(COUNTER_FILES) \
     $(DOUCMENTLOADER_FILES) \
-    $(REMOTECLIENT_FILES) \
-    $(SIMPLEBOOTSTRAP_FILES)
+    $(REMOTECLIENT_FILES)
 
 DIR_DIRECTORY_LIST=$(uniq $(DIR_FILE_LIST:d))
 DIR_CREATE_FLAG=$(MISC)$/ex_cpp_dirs_created.txt
