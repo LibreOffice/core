@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nf $ $Date: 2001-07-04 13:06:41 $
+ *  last change: $Author: nf $ $Date: 2001-08-07 11:38:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,10 @@ CharSet Export::GetCharSet( USHORT nLangId )
         case POLISH: return RTL_TEXTENCODING_MS_1250;
         case GERMAN: return RTL_TEXTENCODING_MS_1252;
         case PORTUGUESE_BRAZILIAN: return RTL_TEXTENCODING_MS_1252;
-        case JAPANESE: return RTL_TEXTENCODING_MS_932;
-        case KOREAN: return RTL_TEXTENCODING_MS_949;
-        case CHINESE_SIMPLIFIED: return RTL_TEXTENCODING_MS_936;
-        case CHINESE_TRADITIONAL: return RTL_TEXTENCODING_MS_950;
+        case JAPANESE: return RTL_TEXTENCODING_UTF8;
+        case KOREAN: return RTL_TEXTENCODING_UTF8;
+        case CHINESE_SIMPLIFIED: return RTL_TEXTENCODING_UTF8;
+        case CHINESE_TRADITIONAL: return RTL_TEXTENCODING_UTF8;
         case TURKISH: return RTL_TEXTENCODING_MS_1254;
         case ARABIC: return RTL_TEXTENCODING_MS_1256;
         case HEBREW: return RTL_TEXTENCODING_MS_1255;
