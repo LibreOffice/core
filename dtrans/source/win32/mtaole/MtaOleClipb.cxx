@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hro $ $Date: 2002-12-12 11:38:37 $
+ *  last change: $Author: hro $ $Date: 2002-12-12 15:57:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,10 @@
     Actually we need PM_QS_SENDMESSAGE
 */
 #ifdef WINVER
+#if WINVER < 0x0500
 #undef WINVER
 #define WINVER 0x0500
+#endif
 #endif
 
 #define UNICODE
