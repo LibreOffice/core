@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 07:50:01 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 13:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,6 +1184,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
                                                     WB_BORDER );
             m_pColumnName->SetHelpId(HID_TAB_ENT_COLUMNNAME);
             m_pColumnName->SetMaxTextLen(xub_StrLen( nMax ? nMax : EDIT_NOLIMIT));
+            m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
         SetPosSize( (Control**)&m_pColumnNameText, nPos, 0 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 07:44:03 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 13:18:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,9 +110,10 @@ namespace dbaui
             : OFieldDescControl(pParent,pHelpBar) { };
         OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar=NULL)
             : OFieldDescControl(pParent,rResId,pHelpBar) { };
-        ~OWizTypeSelectControl();
+        virtual ~OWizTypeSelectControl();
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData();
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection();
     };
 
 

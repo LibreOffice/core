@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-19 06:04:38 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 13:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,11 @@ void OTableFieldControl::DeactivateAggregate( EControlType eType )
 void OTableFieldControl::SetModified(BOOL bModified)
 {
     GetCtrl()->GetView()->getController()->setModified(bModified);
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OTableFieldControl::getConnection()
+{
+    return GetCtrl()->GetView()->getController()->getConnection();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OTableFieldControl::getMetaData()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2002-05-15 09:25:27 $
+ *  last change: $Author: oj $ $Date: 2002-07-09 13:20:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,11 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
     return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection->getMetaData();
+}
+// -----------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
+{
+    return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection;
 }
 //========================================================================
 DBG_NAME(OWizTypeSelect);
