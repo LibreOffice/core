@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testwriter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jbu $ $Date: 2002-05-15 16:35:38 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ class OFileWriter :
         public WeakImplHelper1< XOutputStream >
 {
 public:
-    OFileWriter( char *pcFile ) { strcpy( m_pcFile , pcFile ); m_f = 0; }
+    OFileWriter( char *pcFile ) { strncpy( m_pcFile, pcFile, 256 - 1 ); m_f = 0; }
 
 
 public:

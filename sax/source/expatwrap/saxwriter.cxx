@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saxwriter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-12 09:23:09 $
+ *  last change: $Author: hr $ $Date: 2003-03-26 17:32:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -534,7 +534,7 @@ inline void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel) throw( SAXEx
             pBytes[0] = LINEFEED;
             memset( &(pBytes[1]), 32, m_nLevel );
             AddBytes(mp_Sequence, nCurrentPos, pBytes, nCount);
-            delete pBytes;
+            delete[] pBytes;
             nLastLineFeedPos = nCurrentPos - nCount;
             if (nCurrentPos == SEQUENCESIZE)
                 nCurrentPos = writeSequence();
