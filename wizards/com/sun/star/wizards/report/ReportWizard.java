@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-30 17:03:46 $
+ *  last change: $Author: bc $ $Date: 2002-05-31 15:07:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ public class ReportWizard {
         CurReportDocument.ReportTextDocument.lockControllers();
         iPos = xContentListBox.getSelectedItemPos();
         ReportDocument.loadSectionsfromTemplate(CurReportDocument, CurDBMetaData, ContentFiles[0][iPos]);
-        ReportDocument.loadStyleTemplates(CurReportDocument, ContentFiles[0][iPos], "LoadTextStyles");
+        ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, ContentFiles[0][iPos], "LoadTextStyles");
         CurReportDocument.ReportTextDocument.unlockControllers();
         ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
            break;
@@ -445,7 +445,7 @@ public class ReportWizard {
         CurReportDocument.ReportTextDocument.lockControllers();
         iPos = xLayoutListBox.getSelectedItemPos();
             boolean bOldIsCurLandscape = ((Boolean) tools.getUNOPropertyValue(CurReportDocument.ReportPageStyle, "IsLandscape")).booleanValue();
-        ReportDocument.loadStyleTemplates(CurReportDocument, LayoutFiles[0][iPos], "LoadPageStyles");
+        ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, LayoutFiles[0][iPos], "LoadPageStyles");
         ReportDocument.changePageOrientation(xGlobalMSF, xDlgNameAccess, CurReportDocument, bOldIsCurLandscape);
         CurReportDocument.ReportTextDocument.unlockControllers();
         ReportDocument.selectFirstPage(CurReportDocument.ReportTextDocument);
@@ -586,7 +586,7 @@ public class ReportWizard {
         sStorePath = getStorePath();
         if (bCreateTemplate == true){
             ReportDocument.createDBForm(xMSF, CurReportDocument, CurDBMetaData);
-            ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "service:com.sun.star.wizards.report.CallReportWizard?fill");
+            ReportDocument.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");     //"service:com.sun.star.wizards.report.CallReportWizard?fill"
             boolean bUseTemplate = ((Short) UNODialogs.getPropertyOfDialogControl(xDlgNameAccess, "optUseTemplate", "State")).shortValue() == (short) 1;
             if (bUseTemplate == false)
             ReportDocument.createReport(xGlobalMSF);
@@ -909,19 +909,23 @@ public class ReportWizard {
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(6), new Integer(70), new Integer(4), new Integer(125), slblDataStructure});
 
-        ContentFiles = tools.getFolderTitles(xMSF, "cnt");
+        ContentFiles = tools.getFolderTitles(xMSF, "cnt", CurReportDocument.ReportFolderName);
         xContentListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstContent", SOCONTENTLST,
                     new String[] {"Height", "PositionX", "PositionY", "Step", "StringItemList", "Width"},
                             new Object[] {new Integer(58), new Integer(6), new Integer(80), new Integer(4), ContentFiles[1], new Integer(125)});
+        short iSelPos = (short) tools.FieldInList(ContentFiles[0], CurReportDocument.ReportFolderName + "/cnt-default.stw");
+        xContentListBox.selectItemPos(iSelPos, true);
 
         InsertControlModel("com.sun.star.awt.UnoControlFixedTextModel", xMSFDialogModel, xDlgNames, "lblLayout",
                 new String[] {"Height", "PositionX", "PositionY", "Step", "Width", "Label"},
                 new Object[] {new Integer(8), new Integer(140), new Integer(70), new Integer(4), new Integer(125), slblPageLayout});
 
-        LayoutFiles = tools.getFolderTitles(xMSF,"stl");
+        LayoutFiles = tools.getFolderTitles(xMSF,"stl", CurReportDocument.ReportFolderName);
         xLayoutListBox = InsertListbox(xMSFDialogModel, xDlgNames, xDialogContainer, "lstLayout", SOLAYOUTLST,
                     new String[] {"Height", "PositionX", "PositionY", "Step", "StringItemList", "Width"},
                             new Object[] {new Integer(58), new Integer(140), new Integer(80), new Integer(4), LayoutFiles[1], new Integer(125)});
+        short iSelLayoutPos = (short) tools.FieldInList(LayoutFiles[0], CurReportDocument.ReportFolderName + "/stl-default.stw");
+        xLayoutListBox.selectItemPos(iSelLayoutPos, true);
 
         InsertControlModel("com.sun.star.awt.UnoControlFixedLineModel", xMSFDialogModel, xDlgNames, "hlnOrientation",
                 new String[] {"Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "Width"},
@@ -1044,8 +1048,8 @@ public class ReportWizard {
         String[] ConnectStr;
         ConnectStr = new String[1];
 // connecting synchronously with the office
-    //ConnectStr[0] = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
-          ConnectStr[0] = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
+      ConnectStr[0] = "uno:socket,host=localhost,port=8100;urp,negotiate=0,forcesynchronous=1;StarOffice.NamingService";
+          //ConnectStr[0] = "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager";
 //        ConnectStr[1] = "uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService;StarOffice.NamingService";     //ServiceManager
 
         try {
@@ -1060,6 +1064,7 @@ public class ReportWizard {
         System.exit(0);
     }
 
+
     public static void startReportWizard(XMultiServiceFactory xMSF){
     try{
     xGlobalMSF = xMSF;
@@ -1071,6 +1076,8 @@ public class ReportWizard {
     CurDBMetaData = new DBMetaData.CommandMetaData();
     CurReportDocument.ReportTextDocument =  (XTextDocument) tools.createNewDocument(xDesktop, CurReportDocument.oComponent, "swriter");
     ReportDocument.initializeReportDocument(xMSF, CurReportDocument);
+    ReportDocument.loadStyleTemplates(CurReportDocument.ReportTextDocument, CurReportDocument.ReportFolderName + "/stl-default.stw", "LoadPageStyles");
+
         ShowDialog(xMSF, CurReportDocument);
     }
     catch(java.lang.Exception jexception ){
@@ -1338,8 +1345,6 @@ public class ReportWizard {
 
         Object rInitialObject = urlResolver.resolve( connectStr );
     xMultiComponentFactory = tools.getMultiComponentFactory();
-
-        rInitialObject = urlResolver.resolve("uno:socket,host=localhost,port=8100;urp;StarOffice.NamingService");
 
         XNamingService rName = (XNamingService)UnoRuntime.queryInterface(XNamingService.class, rInitialObject );
 
