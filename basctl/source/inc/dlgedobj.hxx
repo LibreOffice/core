@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:51:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,7 @@ public:
     virtual void SetRectFromProps();
     virtual void SetPropsFromRect();
 
-    virtual void SortByTabIndex();
+    virtual void UpdateTabIndices();
 
     virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
 };
