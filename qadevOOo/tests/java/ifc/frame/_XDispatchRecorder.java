@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchRecorder.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:25:52 $
+ *  last change:$Date: 2003-09-08 10:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+import lib.Status;
+import lib.StatusException;
+import util.utils;
+
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -69,10 +74,6 @@ import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
-import lib.MultiMethodTest;
-import lib.Status;
-import lib.StatusException;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.frame.XDispatchRecorder</code>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchProvider.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:25:40 $
+ *  last change:$Date: 2003-09-08 10:38:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 package ifc.frame;
 
+import lib.MultiMethodTest;
+import util.utils;
+
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XDispatch;
@@ -69,8 +72,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-import lib.MultiMethodTest;
-import util.utils;
 
 /**
 * Testing <code>com.sun.star.frame.XDispatchProvider</code>
