@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 13:07:42 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 13:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -903,6 +903,10 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
 #ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERACCESS_HPP_
+#include <com/sun/star/container/XIdentifierAccess.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
 #include <com/sun/star/drawing/GluePoint2.hpp>
 #endif
@@ -950,20 +954,23 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
     if( !xSupplier.is() )
         return;
 
-    uno::Reference< container::XIndexContainer > xGluePoints( xSupplier->getGluePoints() );
+    uno::Reference< container::XIdentifierAccess > xGluePoints( xSupplier->getGluePoints(), uno::UNO_QUERY );
     if( !xGluePoints.is() )
         return;
 
     drawing::GluePoint2 aGluePoint;
 
-    const sal_Int32 nCount = xGluePoints->getCount();
+    uno::Sequence< sal_Int32 > aIdSequence( xGluePoints->getIdentifiers() );
+
+    const sal_Int32 nCount = aIdSequence.getLength();
     for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
     {
-        if( (xGluePoints->getByIndex( nIndex ) >>= aGluePoint) && aGluePoint.IsUserDefined )
+        const sal_Int32 nIdentifier = aIdSequence[nIndex];
+        if( (xGluePoints->getByIdentifier( nIdentifier ) >>= aGluePoint) && aGluePoint.IsUserDefined )
         {
             // export only user defined glue points
 
-            const OUString sId( OUString::valueOf( nIndex ) );
+            const OUString sId( OUString::valueOf( nIdentifier ) );
             rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_id, sId );
 
             rExport.GetMM100UnitConverter().convertMeasure(msBuffer, aGluePoint.Position.X);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-30 08:17:16 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 14:01:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,9 @@
 #include <sfx2/objsh.hxx>
 #endif
 #endif
-
+#ifndef _SVDOPAGE_HXX
+#include "svdopage.hxx"
+#endif
 #ifndef _SVX_XFLBSTIT_HXX
 #include "xflbstit.hxx"
 #endif
@@ -1558,6 +1560,21 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
             }
             break;
         }
+        case OWN_ATTR_PAGE_NUMBER:
+        {
+            sal_Int32 nPageNum;
+            if( (rVal >>= nPageNum) && ( nPageNum >= 0 ) && ( nPageNum <= 0xffff ) )
+            {
+                nPageNum <<= 1;
+                nPageNum -= 1;
+
+                SdrPageObj* pPageObj = PTR_CAST(SdrPageObj,pObj);
+                if( pPageObj )
+                    pPageObj->SetPageNum( (sal_uInt16)nPageNum );
+                return;
+            }
+            break;
+        }
         case OWN_ATTR_OLE_VISAREA:
         {
 #ifndef SVX_LIGHT
@@ -2045,7 +2062,7 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 aAny <<= pObj->GetShearAngle();
                 break;
             case SDRATTR_OBJMOVEPROTECT:
-                aAny = bool2any( pObj->IsMoveProtect() );
+                aAny = uno::makeAny( (sal_Bool) pObj->IsMoveProtect() );
                 break;
             case SDRATTR_OBJECTNAME:
             {
@@ -2054,12 +2071,23 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 break;
             }
             case SDRATTR_OBJPRINTABLE:
-                aAny = bool2any( pObj->IsPrintable() );
+                aAny = uno::makeAny( (sal_Bool) pObj->IsPrintable() );
                 break;
             case SDRATTR_OBJSIZEPROTECT:
-                aAny = bool2any( pObj->IsResizeProtect() );
+                aAny = uno::makeAny( (sal_Bool)pObj->IsResizeProtect() );
                 break;
-
+            case OWN_ATTR_PAGE_NUMBER:
+            {
+                SdrPageObj* pPageObj = PTR_CAST(SdrPageObj,pObj);
+                if(pPageObj)
+                {
+                    sal_Int32 nPageNumber = pPageObj->GetPageNum();
+                    nPageNumber++;
+                    nPageNumber >>= 1;
+                    aAny <<= nPageNumber;
+                }
+                break;
+            }
             default:
             {
                 DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
