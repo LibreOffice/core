@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2002-12-05 07:30:16 $
+ *  last change: $Author: kz $ $Date: 2002-12-05 14:01:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,7 +793,7 @@
                         <value xml:lang="nl">Tekst (StarWriter/Web)</value>
                         <value xml:lang="fr">Texte (StarWriter/Web)</value>
                         <value xml:lang="es">Texto (StarWriter/Web)</value>
-                        <value xml:lang="fi">Text (StarWriter/Web)</value>
+                        <value xml:lang="fi">Teksti (StarWriter/Web)</value>
                         <value xml:lang="it">Testo (StarWriter/Web)</value>
                         <value xml:lang="da">Tekst (StarWriter/Web)</value>
                         <value xml:lang="sv">Text (StarWriter/Web)</value>
