@@ -21,7 +21,7 @@
 
 <Status StatusValue="final"/>
 
-<SupportedService>  com.sun.star.io.Acceptor    </SupportedService>
+<SupportedService>  com.sun.star.connection.Acceptor    </SupportedService>
 
 <ServiceDependency> ... </ServiceDependency>
 
