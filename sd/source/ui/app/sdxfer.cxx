@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2002-06-17 14:49:19 $
+ *  last change: $Author: cl $ $Date: 2002-11-19 17:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView, BOOL
     pImageMap( NULL ),
     bLateInit( bInitOnGetData ),
     bPageTransferable( FALSE ),
-    bPageTransferablePersistent( FALSE )
+    bPageTransferablePersistent( FALSE ),
+    mbIsUnoObj( false )
 {
     if( !bLateInit )
         CreateData();
@@ -320,6 +321,8 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
 
         if( pInfo )
             pImageMap = new ImageMap( pInfo->GetImageMap() );
+
+        mbIsUnoObj = pObj && pObj->IsUnoObj();
     }
 }
 
@@ -450,8 +453,11 @@ void SdTransferable::AddSupportedFormats()
         {
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
-            AddFormat( SOT_FORMAT_GDIMETAFILE );
-            AddFormat( SOT_FORMAT_BITMAP );
+            if( !mbIsUnoObj )
+            {
+                AddFormat( SOT_FORMAT_GDIMETAFILE );
+                AddFormat( SOT_FORMAT_BITMAP );
+            }
         }
 
         if( pImageMap )

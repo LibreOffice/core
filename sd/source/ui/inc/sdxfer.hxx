@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-24 13:15:58 $
+ *  last change: $Author: cl $ $Date: 2002-11-19 17:22:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ private:
     BOOL                            bLateInit                   : 1;
     BOOL                            bPageTransferable           : 1;
     BOOL                            bPageTransferablePersistent : 1;
+    bool                            mbIsUnoObj                  : 1;
 
                                     // not available
                                     SdTransferable();
