@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-16 11:52:02 $
+ *  last change: $Author: kz $ $Date: 2001-05-18 11:52:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Benutzerdefiniert" ; Default ; > ;
             < "Zahl" ; Default ; > ;
             < "Prozent" ; Default ; > ;
-            < "W‰hrung" ; Default ; > ;
+            < "W?hrung" ; Default ; > ;
             < "Datum" ; Default ; > ;
             < "Zeit" ; Default ; > ;
             < "Wissenschaft" ; Default ; > ;
@@ -340,7 +340,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Czas" ; Default ; > ;
             < "Nauka" ; Default ; > ;
             < "U≥amek" ; Default ; > ;
-            < "WartoúÊ logiczna" ; Default ; > ;
+            < "Warto?Ê logiczna" ; Default ; > ;
             < "Tekst" ; Default ; > ;
         };
         StringList [ japanese ] =
@@ -464,7 +464,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ ENGLISH ] = "Format-~Description" ;
         Text [ norwegian ] = "Format-~Beskrivelse" ;
         Text [ italian ] = "Codice del formato" ;
-        Text [ portuguese_brazilian ] = "Formato-~DescriÁ„o" ;
+        Text [ portuguese_brazilian ] = "Formato-~Descri??o" ;
         Text [ portuguese ] = "CÛdigo do formato" ;
         Text [ finnish ] = "~Muotoile koodi" ;
         Text [ danish ] = "Format-kode" ;
@@ -652,7 +652,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ ENGLISH ] = "~Precision" ;
         Text [ norwegian ] = "~Precision" ;
         Text [ italian ] = "Posizioni decimali" ;
-        Text [ portuguese_brazilian ] = "~Precis„o" ;
+        Text [ portuguese_brazilian ] = "~Precis?o" ;
         Text [ portuguese ] = "Casas ~decimais" ;
         Text [ finnish ] = "~Desimaaleja" ;
         Text [ danish ] = "Antal decimaler" ;
@@ -695,7 +695,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Text [ ENGLISH ] = "~Leading Zeroes" ;
         Text [ norwegian ] = "~Ledende nuller" ;
         Text [ italian ] = "~Zeri iniziali" ;
-        Text [ portuguese_brazilian ] = "~Zeros ‡ esquerda" ;
+        Text [ portuguese_brazilian ] = "~Zeros ? esquerda" ;
         Text [ portuguese ] = "~Zeros ‡ esquerda" ;
         Text [ finnish ] = "~Etunollat" ;
         Text [ danish ] = "Indledende nuller" ;
@@ -883,7 +883,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
          // ### ACHTUNG: Neuer Text in Resource? Neues Zahlenformat hinzuf¸gen : Neues Zahlenformat hinzuf≥gen
         QuickHelpText[ russian ] = "ƒÓ·‡‚ËÚ¸";
         QuickHelpText[ polish ] = "Dodaj";
-        QuickHelpText[ japanese ] = "í«â¡";
+        QuickHelpText[ japanese ] = "í«â¡!";
         QuickHelpText[ chinese_simplified ] = "–¬‘ˆ";
         QuickHelpText[ chinese_traditional ] = "ºW•[";
         QuickHelpText[ arabic ] = "≈÷«›…";
@@ -917,7 +917,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
          // ### ACHTUNG: Neuer Text in Resource? Zahlenformat lˆschen : Zahlenformat l˜schen
         QuickHelpText[ russian ] = "”·‡Ú¸";
         QuickHelpText[ polish ] = "UsuÒ";
-        QuickHelpText[ japanese ] = "çÌèú";
+        QuickHelpText[ japanese ] = "çÌèú!";
         QuickHelpText[ chinese_simplified ] = "…æ≥˝";
         QuickHelpText[ chinese_traditional ] = "ßR∞£";
         QuickHelpText[ arabic ] = "≈“«·…";
@@ -938,7 +938,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText = "Kommentar ‰ndern" ;
         QuickHelpText [ ENGLISH ] = "Change comment" ;
         QuickHelpText [ english_us ] = "Edit Comment" ;
-        QuickHelpText [ portuguese_brazilian ] = "Kommentar ‰ndern" ;
+        QuickHelpText [ portuguese_brazilian ] = "Kommentar ?ndern" ;
         QuickHelpText [ swedish ] = "ƒndra kommentar" ;
         QuickHelpText [ danish ] = "Modificer kommentar" ;
         QuickHelpText [ italian ] = "Cambia commento" ;
@@ -948,7 +948,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         QuickHelpText [ portuguese ] = "Edita coment·rio" ;
         QuickHelpText[ russian ] = "»ÁÏÂÌËÚ¸ ÍÓÏÏÂÌÚ‡ËÈ";
         QuickHelpText[ polish ] = "ZmieÒ komentarz";
-        QuickHelpText[ japanese ] = "∫“›ƒÇÃïœçX";
+        QuickHelpText[ japanese ] = "∫“›ƒÇÃïœçX!";
         QuickHelpText[ chinese_simplified ] = "±‡º≠∆¿”Ô";
         QuickHelpText[ chinese_traditional ] = "≈‹ßÛµ˚ªy";
         QuickHelpText[ arabic ] = " €ÌÌ— «· ⁄·Ìﬁ";
