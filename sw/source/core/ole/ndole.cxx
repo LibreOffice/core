@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:26:56 $
+ *  last change: $Author: rt $ $Date: 2005-01-05 16:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,9 +145,6 @@
 #include <vcl/graph.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <svtools/filter.hxx>
-#ifndef _SW3IO_HXX
-#include <sw3io.hxx>
-#endif
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
