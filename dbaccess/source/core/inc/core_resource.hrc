@@ -2,9 +2,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-19 09:04:38 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:18:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,10 @@
 
 //------------------------------------------------------------------------------
 //- String-IDs
-#define RID_STR_TRIED_OPEN_TABLE                ( RID_CORE_STRINGS_START +  5 )
-#define RID_STR_CONNECTION_INVALID              ( RID_CORE_STRINGS_START +  6 )
-#define RID_STR_TABLE_IS_FILTERED               ( RID_CORE_STRINGS_START +  7 )
+#define RID_STR_TRIED_OPEN_TABLE                ( RID_CORE_STRINGS_START +  0 )
+#define RID_STR_CONNECTION_INVALID              ( RID_CORE_STRINGS_START +  1 )
+#define RID_STR_TABLE_IS_FILTERED               ( RID_CORE_STRINGS_START +  2 )
+#define RID_STR_NEED_CONFIG_WRITE_ACCESS        ( RID_CORE_STRINGS_START +  3 )
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-19 09:04:38 $
+ *  last change: $Author: fs $ $Date: 2001-04-26 11:19:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,13 +86,21 @@ String RID_STR_TRIED_OPEN_TABLE
 };
 String RID_STR_CONNECTION_INVALID
 {
-    Text = "Es konnte keine Verbindung erstellt werden!";
-    Text [ english ] = "Not possible to create a connection!";
+    Text = "Es konnte keine Verbindung erstellt werden.";
+    Text [ english ] = "The connection could not be established.";
+    Text [ english_us ] = "The connection could not be established.";
 };
 
 String RID_STR_TABLE_IS_FILTERED
 {
     Text = "Die Tabelle $name$ existiert bereits. Sie wurde gefiltert!";
-    Text [ english ] = "the table $name$ already exists. She is only filtered!";
+    Text [ english ] = "The table $name$ already exists, but hidden because it's filtered out.";
+    Text [ english_us ] = "The table $name$ already exists, but hidden because it's filtered out.";
 };
 
+String RID_STR_NEED_CONFIG_WRITE_ACCESS
+{
+    Text = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
+    Text [ english ] = "You have no write access to the configuration data the object is based on.";
+    Text [ english_us ] = "You have no write access to the configuration data the object is based on.";
+};
