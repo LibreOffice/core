@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-07 14:58:09 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,15 +451,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // Diese Funktionen sind nur f"ur Aufrufe aus dem Basic gedacht
             if ( IsInBasicCall() )
                 BasicLibExec_Impl( rReq, GetBasicManager() );
-            break;
-        }
-
-        case SID_NEXTWINDOW :
-        case SID_PREVWINDOW :
-        {
-            SfxWorkWindow *pWork = GetWorkWindow_Impl();
-            pWork->ActivateNextChild_Impl( rReq.GetSlot() == SID_NEXTWINDOW ? TRUE :FALSE );
-            rReq.Done();
             break;
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-19 18:02:57 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3223,19 +3223,6 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
     FASTBOOL bDone = FALSE;
     switch ( rReq.GetSlot() )
     {
-        case SID_NEXTWINDOW :
-        case SID_PREVWINDOW :
-        {
-            SfxWorkWindow *pWork = GetFrame()->GetWorkWindow_Impl();
-            if ( !pWork->ActivateNextChild_Impl( rReq.GetSlot() == SID_NEXTWINDOW ? TRUE :FALSE ) )
-            {
-                GetViewShell()->GetWindow()->GrabFocus();
-                pWork->SetActiveChild_Impl( NULL );
-            }
-            rReq.Done();
-            break;
-        }
-
         case SID_TOGGLESTATUSBAR:
         {
 #if SUPD<635

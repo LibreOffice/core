@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 17:00:49 $
+ *  last change: $Author: mba $ $Date: 2002-03-07 18:37:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2017,60 +2017,6 @@ void SfxFrame::ReFill_Impl( const SfxFrameSetDescriptor* pSet )
 
         delete pOld;
     }
-}
-
-sal_Bool SfxFrame::ActivateNextChildWindow_Impl( sal_Bool bForward )
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
-    ::com::sun::star::util::URL aTargetURL;
-    String aCmd( DEFINE_CONST_UNICODE( ".uno:" ) );
-    aCmd += String::CreateFromAscii( SFX_SLOTPOOL().GetUnoSlot( bForward ? SID_NEXTWINDOW : SID_PREVWINDOW )->GetUnoName() );
-    aTargetURL.Complete = aCmd;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-    xTrans->parseStrict( aTargetURL );
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  aTmpRef( GetFrameInterface() );
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( aTmpRef, ::com::sun::star::uno::UNO_QUERY );
-    if ( xProv.is() )
-        xDisp = xProv->queryDispatch( aTargetURL, String(), 0 );
-
-    if ( xDisp.is() )
-    {
-        // Der Controller kann es selbst
-        xDisp->dispatch( aTargetURL, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue>() );
-        return sal_True;
-    }
-    else if ( ( pImp->nType & SFXFRAME_FRAMESET ) && pChildArr->Count() )
-    {
-        // ansonsten versuchen wir es mit dem SFX
-        SfxViewFrame *pAct = pImp->pCurrentViewFrame->GetActiveChildFrame_Impl();
-        if ( !GetWindow().HasChildPathFocus( sal_True ) )
-        {
-            pAct = ( bForward ? (*pChildArr)[0] : (*pChildArr)[pChildArr->Count()-1] )->GetCurrentViewFrame();
-        }
-        else if ( pAct )
-        {
-            sal_uInt16 nPos = (*pChildArr).GetPos( pAct->GetFrame() );
-            if ( bForward && ++nPos<pChildArr->Count() )
-            {
-                pAct = (*pChildArr)[nPos]->GetCurrentViewFrame();
-            }
-            else if ( !bForward && nPos > 0 )
-            {
-                pAct = (*pChildArr)[--nPos]->GetCurrentViewFrame();
-            }
-            else
-                pAct = NULL;
-        }
-
-        if ( pAct )
-        {
-            pAct->MakeActive_Impl( TRUE );
-            return sal_True;
-        }
-    }
-
-    return sal_False;
 }
 
 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProviderInterceptor >  SfxFrame::GetInterceptor_Impl()
