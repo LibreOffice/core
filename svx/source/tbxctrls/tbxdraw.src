@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:36:26 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 21:50:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ japanese ] = "ξ`";
                 Text[ chinese_traditional ] = "®°§Ξ";
                 Text[ greek ] = "Τομέας έλλειψης";
-                Text[ korean ] = "ΏψΉέ";
+                Text[ korean ] = "ΕΈΏψ΅΅ΊΞΓ¤²Γ";
                 Text[ arabic ] = "ήΨΗΪ Τία ΘνΦζν";
                 Text[ turkish ] = "Elips dilimi";
                 Text[ language_user1 ] = " ";
@@ -360,7 +360,7 @@ FloatingWindow RID_SVXTBX_DRAW
                 Text[ japanese ] = "‰~‚ΜΨ•Π";
                 Text[ chinese_traditional ] = "¶κ―Κ";
                 Text[ greek ] = "Τμήμα κύκλου";
-                Text[ korean ] = "ΏψΘ£";
+                Text[ korean ] = "ΏψΐΗ΅΅ΐύΖν";
                 Text[ arabic ] = "ήΨΪΙ γδ ΟΗΖΡΙ";
                 Text[ turkish ] = "Yay dilimi";
                 Text[ language_user1 ] = " ";
