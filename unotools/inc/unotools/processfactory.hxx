@@ -2,9 +2,9 @@
  *
  *  $RCSfile: processfactory.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:53 $
+ *  last change: $Author: pluby $ $Date: 2000-10-07 22:17:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX_
 #define _UNOTOOLS_PROCESSFACTORY_HXX_
+
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
