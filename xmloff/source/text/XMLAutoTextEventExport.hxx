@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLAutoTextEventExport.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,16 +100,27 @@ class XMLAutoTextEventExport : public SvXMLExport
 
 public:
 
-    XMLAutoTextEventExport();
-
+    // #110680#
+    //XMLAutoTextEventExport();
     XMLAutoTextEventExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory
+        );
+
+    // #110680#
+    //XMLAutoTextEventExport(
+    //  const ::rtl::OUString& rFileName,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::frame::XModel > & rModel,
+    //  const ::com::sun::star::uno::Reference<
+    //      ::com::sun::star::container::XNameAccess > & rEvents);
+    XMLAutoTextEventExport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         const ::rtl::OUString& rFileName,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::frame::XModel > & rModel,
-        const ::com::sun::star::uno::Reference<
-            ::com::sun::star::container::XNameAccess > & rEvents);
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > & rHandler,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > & rEvents);
 
     ~XMLAutoTextEventExport();
 
