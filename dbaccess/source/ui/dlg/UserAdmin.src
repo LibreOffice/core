@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UserAdmin.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 07:05:01 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:58:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ TabPage TAB_PAGE_USERADMIN
         Text [ ENGLISH ]    = "User choise" ;
         Text[english_us]    = "User selection";
         Text[ portuguese ] = "Selecção do utilizador";
-        Text[ russian ] = "Âûáîğ ïîëüçîâàòåëÿ";
+        Text[ russian ] = "Ïîëüçîâàòåëü, äëÿ êîòîğîãî íàñòğàèâàşòñÿ ïğàâà äîñòóïà";
         Text[ greek ] = "ÅğéëïãŞ ÷ñŞóôç";
         Text[ dutch ] = "Gebruikerselectie";
         Text[ french ] = "Sélection de l'utilisateur";
@@ -132,7 +132,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ chinese_traditional ] = "ä½¿ç”¨è€…(~E)ï¼š";
         Text[ arabic ] = "ÇáãÓÊÎÏã:";
         Text[ turkish ] = "Kullanıcı:";
-        Text[ finnish ] = "Käyt~täjä";
+        Text[ finnish ] = "K~äyttäjä";
         Text[ catalan ] = "Us~uari:";
         Text[ thai ] = "à¸œà¸¹à¹‰à¹ƒ~à¸Šà¹‰:";
     };
@@ -166,7 +166,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ dutch ] = "Gebruiker ~toevoegen...";
         Text[ french ] = "Ajouter un utilisateur...";
         Text[ spanish ] = "~Nuevo usuario...";
-        Text[ finnish ] = "~Uusi käyttäjä";
+        Text[ finnish ] = "Uu~si käyttäjä...";
         Text[ italian ] = "~Nuovo utente...";
         Text[ danish ] = "~Tilføj bruger...";
         Text[ swedish ] = "Lägg till ~användare...";
@@ -209,7 +209,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ chinese_traditional ] = "è®Šæ›´å¯†ç¢¼(~P)...";
         Text[ arabic ] = "ÊÛííÑ ßáãÉ ÇáÓÑ...";
         Text[ turkish ] = "Şifreyi değiştir...";
-        Text[ finnish ] = "~Muuta salasana";
+        Text[ finnish ] = "M~uuta salasana...";
         Text[ catalan ] = "Canvia la ~contrasenya...";
         Text[ thai ] = "à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™~à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™...";
     };
@@ -225,7 +225,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ENGLISH]       = "~Delete user...";
         Text[ english_us ] = "~Delete User...";
         Text[ portuguese ] = "~Eliminar utilizador...";
-        Text[ russian ] = "Óáğàòü ïîëüçîâàòåëÿ...";
+        Text[ russian ] = "Óäàëèòü ïîëüçîâàòåëÿ...";
         Text[ greek ] = "ÄéáãñáöŞ ÷ñŞóôç...";
         Text[ dutch ] = "~Gebruiker wissen...";
         Text[ french ] = "Supprimer l'utilisateur...";
@@ -241,7 +241,7 @@ TabPage TAB_PAGE_USERADMIN
         Text[ chinese_traditional ] = "åˆªé™¤ä½¿ç”¨è€…(~D)...";
         Text[ arabic ] = "ÍĞİ ÇáãÓÊÎÏã...";
         Text[ turkish ] = "Kullanıcısyı sil...";
-        Text[ finnish ] = "~Poista käyttäjä";
+        Text[ finnish ] = "P~oista käyttäjä...";
         Text[ catalan ] = "~Elimina l'usuari...";
         Text[ thai ] = "~à¸¥à¸šà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰...";
     };
@@ -297,7 +297,7 @@ QueryBox QUERY_USERADMIN_DELETE_USER
     Message[ dutch ] = "Wilt u deze gebruikersnaam werkelijk wissen?";
     Message[ french ] = "Voulez-vous vraiment supprimer l'utilisateur ?";
     Message[ spanish ] = "¿Desea realmente eliminar el usuario?";
-    Message[ finnish ] = "Do you really want to delete the select user?";
+    Message[ finnish ] = "Haluatko varmasti poistaa käyttäjän?";
     Message[ italian ] = "Volete davvero eliminare l'utente selezionato?";
     Message[ danish ] = "Skal brugeren virkelig slettes?";
     Message[ swedish ] = "Vill du verkligen radera användaren?";
@@ -337,12 +337,12 @@ ModalDialog DLG_PASSWORD
         Text [ English ] = "User \"$name$:  $\"" ;
         Text[ english_us ] = "User \"$name$:  $\"";
         Text[ portuguese ] = "Utilizador \"$name$:  $\"";
-        Text[ russian ] = "Ïîëüçîâàòåëü \"$name$:  $\"";
+        Text[ russian ] = "Ïîëüçîâàòåëü \"$Name: not supported by cvs2svn $\"";
         Text[ greek ] = "User \"$name$:  $\"";
-        Text[ dutch ] = "Gebruiker \"$name$:  $\"";
+        Text[ dutch ] = "Gebruiker \"$Name: not supported by cvs2svn $\"";
         Text[ french ] = "Utilisateur \"$name$:  $\"";
         Text[ spanish ] = "Usuario \"$name$:  $\"";
-        Text[ finnish ] = "User \"$name$:  $\"";
+        Text[ finnish ] = "Käyttäjä \"$Name: not supported by cvs2svn $\"";
         Text[ italian ] = "Utente \"$name$:  $\"";
         Text[ danish ] = "Bruger \"$name$:  $\"";
         Text[ swedish ] = "Användare \"$name$:  $\"";
@@ -371,7 +371,7 @@ ModalDialog DLG_PASSWORD
         Text[ dutch ] = "Oud w~achtwoord";
         Text[ french ] = "Ancien mot de passe";
         Text[ spanish ] = "Contraseña anterior";
-        Text[ finnish ] = "old p~assword";
+        Text[ finnish ] = "Vanha ~salasana";
         Text[ italian ] = "Vecchia password";
         Text[ danish ] = "Gammel a~dgangskode";
         Text[ swedish ] = "Gammalt lös~enord";
@@ -407,7 +407,7 @@ ModalDialog DLG_PASSWORD
         Text[ dutch ] = "~wachtwoord";
         Text[ french ] = "Mot de passe";
         Text[ spanish ] = "~Contraseña";
-        Text[ finnish ] = " password";
+        Text[ finnish ] = "~Salasana";
         Text[ italian ] = "~Password";
         Text[ danish ] = "~Adgangskode";
         Text[ swedish ] = "Lö~senord";
@@ -442,7 +442,7 @@ ModalDialog DLG_PASSWORD
         Text[ dutch ] = "~Wachtwoord bevestigen";
         Text[ french ] = "Confirmation du mot de passe";
         Text[ spanish ] = "~Confirmar contraseña";
-        Text[ finnish ] = "~Confirm  password";
+        Text[ finnish ] = "V~ahvista salasana";
         Text[ italian ] = "~Conferma password";
         Text[ danish ] = "~Bekræft adgangskode";
         Text[ swedish ] = "~Bekräfta lösenord";
@@ -488,7 +488,7 @@ ModalDialog DLG_PASSWORD
     Text[ dutch ] = "Wachtwoord wijzigen";
     Text[ french ] = "Modification du mot de passe";
     Text[ spanish ] = "Modificar contraseña";
-    Text[ finnish ] = "Change password";
+    Text[ finnish ] = "Muuta salasana";
     Text[ italian ] = "Cambia password";
     Text[ danish ] = "Skift adgangskode";
     Text[ swedish ] = "Ändra lösenord";
@@ -512,10 +512,10 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ portuguese ] = "As senhas não são iguais. Indique-as novamente.";
     Text[ russian ] = "Ïàğîëè íå ñîâïàäàşò. Ïîâòîğèòå ââîä ïàğîëÿ";
     Text[ greek ] = "Passwords are different, please enter again";
-    Text[ dutch ] = "De beide wachtwoorden komen niet overeen. Nogmaals invoeren!";
+    Text[ dutch ] = "De beide wachtwoorden komen niet overeen. Voer het wachtwoord nogmaals in!";
     Text[ french ] = "Les deux mots de passe sont différents. Répétez la saisie  !";
     Text[ spanish ] = "Las contraseñas no coinciden. Introdúzcalas otra vez.";
-    Text[ finnish ] = "Passwords are different, please enter again";
+    Text[ finnish ] = "Salasanat eivät ole identtiset. Anna salasana uudestaan.";
     Text[ italian ] = "Le due password non coincidono. Digitate di nuovo la password.";
     Text[ danish ] = "De to adgangskoder stemmer ikke overens, prøv igen!";
     Text[ swedish ] = "De båda lösenorden stämmer inte överens, mata in lösenordet igen.";
