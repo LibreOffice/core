@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:09:02 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,9 +379,9 @@ static Window* ImplFindDlgCtrlWindow( Window* pParent, Window* pWindow, USHORT& 
     Window* pSecondWindow = NULL;
     Window* pTempWindow = NULL;
     USHORT  i;
-    USHORT  nSecond_i;
+    USHORT  nSecond_i = 0;
     USHORT  nFormStart = 0;
-    USHORT  nSecondFormStart;
+    USHORT  nSecondFormStart = 0;
     USHORT  nFormEnd;
 
     // Focus-Fenster in der Child-Liste suchen
