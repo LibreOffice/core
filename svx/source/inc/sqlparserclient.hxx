@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparserclient.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-27 11:20:57 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,16 +119,4 @@ namespace svxform
 
 #endif // SVX_SQLPARSERCLIENT_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.2  2002/09/12 14:15:27  fs
- *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
- *
- *  Revision 1.1  2001/07/25 13:35:23  fs
- *  initial checkin - base class for load-on-demand usage of the OSQLParser
- *
- *
- *  Revision 1.0 24.07.01 17:43:18  fs
- ************************************************************************/
 

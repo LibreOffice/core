@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtoolsclient.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:02:56 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,24 +339,4 @@ namespace svxform
 }   // namespace svxform
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2002/09/23 09:49:36  oj
- *  #103585# only revoke client when already loaded
- *
- *  Revision 1.4  2002/09/12 14:15:51  fs
- *  #97420# (on behalf of BerryJia@openoffice.org) lazy construction, to load the dbtools lib only if needed
- *
- *  Revision 1.3  2001/08/01 12:46:41  oj
- *  #90462# use of MODULE_NAME corrected
- *
- *  Revision 1.2  2001/07/27 08:06:47  rt
- *  #87576# sparc compiler comlains about static_cast here
- *
- *  Revision 1.1  2001/07/25 13:34:38  fs
- *  initial checkin - base class for accessing DBTOOLS with load-on-demand
- *
- *
- *  Revision 1.0 24.07.01 16:55:54  fs
- ************************************************************************/
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confirmdelete.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:37:22 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,4 @@ namespace svxform
 
 #endif // SVX_FORM_CONFIRMDELETE_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.0 25.07.01 09:41:32  fs
- ************************************************************************/
 

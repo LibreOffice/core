@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbcharsethelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:28 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,4 @@ namespace svxform
 
 #endif // SVX_DBCHARSETCLIENT_HXX
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/08/13 15:05:20  fs
- *  initial checkin - wrapper for accessing the dbcharset functionality without linking against dbtools
- *
- *
- *  Revision 1.0 13.08.01 16:58:49  fs
- ************************************************************************/
 

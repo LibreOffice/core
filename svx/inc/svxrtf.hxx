@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-29 10:03:38 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,94 +478,6 @@ inline SfxItemSet& SvxRTFParser::GetAttrSet()
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }
-
-
-/*************************************************************************
-
-      Source Code Control System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/svx/inc/svxrtf.hxx,v 1.9 2002-07-29 10:03:38 cmc Exp $
-
-      Source Code Control System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.8  2001/11/29 15:47:29  jp
-      Bug #93450#: new picture types
-
-      Revision 1.7  2001/08/16 15:41:26  thb
-      #90760# Removed VCL define
-
-      Revision 1.6  2001/05/03 11:48:03  jp
-      handle RTF default attributes correct
-
-      Revision 1.5  2001/03/12 16:19:49  jp
-      import relief item
-
-      Revision 1.4  2001/02/16 10:28:22  jp
-      im-/export the Rotate-/ScaleWidth-Character attribut
-
-      Revision 1.3  2001/02/06 17:56:21  jp
-      Bug #81999#: replace GetWhichId with SetScriptAttr - for asian/complex char.attributes
-
-      Revision 1.2  2000/11/10 11:34:57  jp
-      new Tokens for the CJK-Version
-
-      Revision 1.1.1.1  2000/09/18 17:01:01  hr
-      initial import
-
-      Revision 1.42  2000/09/18 12:41:51  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.41  2000/09/05 10:54:06  willem.vandorp
-      Header and footer replaced
-
-      Revision 1.40  2000/04/14 13:16:59  jp
-      Unicode changes
-
-      Revision 1.39  2000/04/13 16:02:58  jp
-      Unicode changes
-
-      Revision 1.38  2000/03/30 16:03:30  aw
-      UNICODE conversions
-
-      Revision 1.37  2000/02/10 19:38:13  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.36  1999/11/18 09:13:27  jp
-      read BaseURL from info-struct
-
-      Revision 1.35  1999/08/03 17:37:42  jp
-      Bug #68028#: new SetAllAttrOfStk
-
-      Revision 1.34  1999/04/15 15:17:04  JP
-      zu Bug #60140#: RTF-OLE-Objecte in laden
-
-
-      Rev 1.33   15 Apr 1999 17:17:04   JP
-   zu Bug #60140#: RTF-OLE-Objecte in laden
-
-      Rev 1.32   20 Apr 1998 10:19:10   JP
-   eCodeSet in die BasisKlasse verschoben
-
-      Rev 1.31   08 Apr 1998 19:24:04   JP
-   GetColorTbl/GetFontTbl exportiert
-
-      Rev 1.30   03 Apr 1998 18:53:48   JP
-   RTF-Parser um neue Tokens erweitert, nTokenValue wurde ein long
-
-      Rev 1.29   23 Feb 1998 17:33:52   TJ
-   include
-
-      Rev 1.28   26 Jan 1998 15:13:06   JP
-   Bug #46608# AttrGroupEnd - ungueltige Bereiche ueberspringen; ReadStyleTable: Zeichenvorlagen lesen
-
-      Rev 1.27   29 Nov 1997 17:21:24   MA
-   includes
-
-      Rev 1.26   20 Nov 1997 22:38:16   JP
-   HeaderFile Umstellung
-
-*************************************************************************/
 
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconversionclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-12 14:15:52 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,13 +90,4 @@ namespace svxform
 }   // namespace svxform
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.1  2001/07/25 13:36:16  fs
- *  initial checkin - base class for load-on-demand usage of the type conversion capabilities of DBTOOLS
- *
- *
- *  Revision 1.0 25.07.01 13:57:04  fs
- ************************************************************************/
 

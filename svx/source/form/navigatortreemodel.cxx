@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatortreemodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-25 12:42:14 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1115,19 +1115,4 @@ namespace svxform
 }   // namespace svxform
 //............................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.3  2002/05/17 08:41:57  fs
- *  high contrast support #99375#
- *
- *  Revision 1.2  2002/05/16 15:05:59  fs
- *  some major changes in preparation of #98725# (not enabled, yet)
- *
- *  Revision 1.1  2002/05/08 07:06:16  fs
- *  initial checkin - outsourced the tree model from fmexpl.cxx
- *
- *
- *  Revision 1.0 07.05.2002 09:43:40  fs
- ************************************************************************/
 

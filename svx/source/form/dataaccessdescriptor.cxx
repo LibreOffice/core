@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dataaccessdescriptor.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-18 08:38:49 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -620,28 +620,4 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.6  2002/05/06 10:35:21  fs
- *  #98721# new CTor( Any ) for creating with either a sequence or a property set
- *
- *  Revision 1.5  2001/06/25 08:45:37  fs
- *  #82371# +initializeFrom
- *
- *  Revision 1.4  2001/05/10 14:18:45  fs
- *  Cursor is of type XResultSet, not string
- *
- *  Revision 1.3  2001/04/20 16:14:36  fs
- *  exclude some stuff when compiling for SVX_LIGHT
- *
- *  Revision 1.2  2001/04/18 10:42:37  fs
- *  added operator=
- *
- *  Revision 1.1  2001/04/11 12:37:54  fs
- *  initial checkin - encapsulating descriptors of data access related transferable objects
- *
- *
- *  Revision 1.0 10.04.01 17:25:31  fs
- ************************************************************************/
 

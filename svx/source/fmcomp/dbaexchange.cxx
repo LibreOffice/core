@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-11-05 08:24:39 $
+ *  last change: $Author: os $ $Date: 2002-12-05 15:06:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -682,37 +682,4 @@ namespace svx
 }   // namespace svx
 //........................................................................
 
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.9  2002/10/25 08:34:28  oj
- *  #104474# set connection at descriptor
- *
- *  Revision 1.8  2001/08/08 09:25:12  fs
- *  #88849# OColumnTransferable: don't fake the to-be-dragged statement if the data source is no CommandType::COMMAND
- *
- *  Revision 1.7  2001/08/07 08:57:14  fs
- *  #90660# +addDataToContainer
- *
- *  Revision 1.6  2001/08/02 15:23:27  fs
- *  #90525# +ODataAccessObjectTransferable
- *
- *  Revision 1.5  2001/04/27 09:22:38  fs
- *  #86303# use another content type for the own clipboard format
- *
- *  Revision 1.4  2001/04/18 10:42:09  fs
- *  added connection to the ctor
- *
- *  Revision 1.3  2001/04/11 12:40:59  fs
- *  added a data access descriptor format
- *
- *  Revision 1.2  2001/03/27 14:38:28  fs
- *  swap the order in which the clipboard formats are added
- *
- *  Revision 1.1  2001/03/26 15:05:04  fs
- *  initial checkin - helper classes for data access related DnD
- *
- *
- *  Revision 1.0 23.03.01 12:59:54  fs
- ************************************************************************/
 
