@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-29 12:48:30 $
+ *  last change: $Author: hdu $ $Date: 2002-08-01 13:27:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5648,7 +5648,6 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
 
     return pSalLayout;
 }
-#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
@@ -5663,19 +5662,23 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
     xub_StrLen nRetVal = STRING_LEN;
     if( pSalLayout )
     {
-        // calculate text width in layout units
+        // convert widths into layout units
+        long nWidthFactor = pSalLayout->GetUnitsPerPixel();
+        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+        long nCharExtra2 = 0;
         if( nCharExtra != 0 )
+            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra * nWidthFactor );
+
+        nRetVal = pSalLayout->GetTextBreak( nTextWidth2, nCharExtra2 );
+        // recalculate for nCharExtra case to avoid rounding errors
+        // TODO: remove when layout units have subpixel granularity
+        if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
         {
-            // TODO: nCharExtra should be used in ImplLayout
-            xub_StrLen nEndIndex = rOrigStr.Len();
-            if( (ULONG)nIndex + nLen < nEndIndex )
-                nEndIndex = nIndex + nLen;
-            nTextWidth -= (nEndIndex - nIndex) * nCharExtra;
+            nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
+            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+            nRetVal = pSalLayout->GetTextBreak( nTextWidth2, 0 );
         }
-        nTextWidth *= pSalLayout->GetUnitsPerPixel();
-        if( mbMap )
-            nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth );
+
         pSalLayout->Release();
     }
 
@@ -5706,23 +5709,26 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
     rExtraCharPos = nRetVal;
     if( pSalLayout )
     {
+        // convert widths into layout units
+        long nWidthFactor = pSalLayout->GetUnitsPerPixel();
+        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+        long nCharExtra2 = 0;
         if( nCharExtra != 0 )
+            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra * nWidthFactor );
+
+        nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2 );
+        // recalculate for nCharExtra case to avoid rounding errors
+        // TODO: remove when layout units have subpixel granularity
+        if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
         {
-            // TODO: nCharExtra should be used in ImplLayout
-            xub_StrLen nEndIndex = rOrigStr.Len();
-            if( (ULONG)nIndex + nLen < nEndIndex )
-                nEndIndex = nIndex + nLen;
-            nTextWidth -= (nEndIndex - nIndex) * nCharExtra;
+            nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
+            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth * nWidthFactor );
+            nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, 0 );
         }
-        nTextWidth *= pSalLayout->GetUnitsPerPixel();
-        if( mbMap )
-            nTextWidth = ImplLogicWidthToDevicePixel( nTextWidth );
-        nTextWidth -= nExtraWidth;
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth );
 
         // calculate rExtraCharPos
-        if( nExtraWidth )
-            rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth - nExtraWidth );
+        if( nCharExtra2 != 0 )
+            rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0 );
         if( rExtraCharPos == STRING_LEN )
             rExtraCharPos = nRetVal;
 
@@ -5731,6 +5737,7 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
 
     return nRetVal;
 }
+#endif // ENABLE_CTL
 
 // -----------------------------------------------------------------------
 
@@ -7018,6 +7025,7 @@ BOOL OutputDevice::GetTextBoundRect( Rectangle& rRect,
     SalLayout* pSalLayout = NULL;
 
     // calculate offset when nBase!=nIndex
+    // TODO: fix offset calculation for Bidi case
     long nXOffset = 0;
     if( nBase != nIndex )
     {
@@ -7203,6 +7211,7 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
     SalLayout* pSalLayout = NULL;
 
     // calculate offset when nBase!=nIndex
+    // TODO: fix offset calculation for Bidi case
     long nXOffset = 0;
     if( nBase != nIndex )
     {
