@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-21 11:33:30 $
+ *  last change: $Author: nn $ $Date: 2001-02-21 13:38:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1482,6 +1482,7 @@ void ScDatabaseRangeObj::SetSortParam(const ScSortParam& rSortParam)
 
         ScDBData aNewData( *pData );
         aNewData.SetSortParam(aParam);
+        aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetSortParam
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.ModifyDBData(aNewData, TRUE);
     }
@@ -1558,6 +1559,7 @@ void ScDatabaseRangeObj::SetQueryParam(const ScQueryParam& rQueryParam)
 
         ScDBData aNewData( *pData );
         aNewData.SetQueryParam(aParam);
+        aNewData.SetHeader(aParam.bHasHeader);      // not in ScDBData::SetQueryParam
         ScDBDocFunc aFunc(*pDocShell);
         aFunc.ModifyDBData(aNewData, TRUE);
     }
