@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:42:13 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -401,7 +401,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex) throw( ::com::
     return 0;
 }
 // -------------------------------------------------------------------------
-Hyper SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
+sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -602,7 +602,7 @@ void SAL_CALL SbaXFormAdapter::updateInt(sal_Int32 columnIndex, sal_Int32 x) thr
         xIface->updateInt(columnIndex, x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, Hyper x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
+void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -988,7 +988,7 @@ void SAL_CALL SbaXFormAdapter::setInt(sal_Int32 parameterIndex, sal_Int32 x) thr
         xIface->setInt(parameterIndex, x);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, Hyper x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
+void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( ::com::sun::star::sdbc::SQLException, RuntimeException )
 {
     Reference< ::com::sun::star::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())

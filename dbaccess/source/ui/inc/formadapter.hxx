@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formadapter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:46:14 $
+ *  last change: $Author: jl $ $Date: 2001-03-23 13:30:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,7 @@ namespace dbaui
         virtual sal_Int8 SAL_CALL getByte(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int16 SAL_CALL getShort(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Int32 SAL_CALL getInt(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual Hyper SAL_CALL getLong(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual sal_Int64 SAL_CALL getLong(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual float SAL_CALL getFloat(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual double SAL_CALL getDouble(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getBytes(sal_Int32 columnIndex) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -319,7 +319,7 @@ namespace dbaui
         virtual void SAL_CALL updateByte(sal_Int32 columnIndex, sal_Int8 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateShort(sal_Int32 columnIndex, sal_Int16 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateInt(sal_Int32 columnIndex, sal_Int32 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL updateLong(sal_Int32 columnIndex, Hyper x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL updateLong(sal_Int32 columnIndex, sal_Int64 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateFloat(sal_Int32 columnIndex, float x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateDouble(sal_Int32 columnIndex, double x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL updateString(sal_Int32 columnIndex, const ::rtl::OUString& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -398,7 +398,7 @@ namespace dbaui
         virtual void SAL_CALL setByte(sal_Int32 parameterIndex, sal_Int8 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setShort(sal_Int32 parameterIndex, sal_Int16 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setInt(sal_Int32 parameterIndex, sal_Int32 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL setLong(sal_Int32 parameterIndex, Hyper x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setLong(sal_Int32 parameterIndex, sal_Int64 x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setFloat(sal_Int32 parameterIndex, float x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setDouble(sal_Int32 parameterIndex, double x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setString(sal_Int32 parameterIndex, const ::rtl::OUString& x) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
