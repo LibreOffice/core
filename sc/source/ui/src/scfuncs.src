@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-30 14:22:06 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -7974,7 +7974,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         String 3 // Description of Parameter 1
         {
             Text [ de ] = "Die Anzahl der Erfolge in der Stichprobe." ;
-            Text [ en-US ] = "The numbe rof successes in the sample." ;
+            Text [ en-US ] = "The number of successes in the sample." ;
             Text [ x-comment ] = " ";
         };
         String 4 // Name of Parameter 2
