@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sgfbram.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-16 10:17:03 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,9 @@
  ************************************************************************/
 
 #include <string.h>
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
 #include <tools/color.hxx>
@@ -83,7 +86,7 @@
 SvStream& operator>>(SvStream& rIStream, SgfHeader& rHead)
 {
     rIStream.Read((char*)&rHead.Magic,SgfHeaderSize);
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rHead.Magic  =SWAPSHORT(rHead.Magic  );
     rHead.Version=SWAPSHORT(rHead.Version);
     rHead.Typ    =SWAPSHORT(rHead.Typ    );
@@ -128,7 +131,7 @@ UINT32 SgfHeader::GetOffset()
 SvStream& operator>>(SvStream& rIStream, SgfEntry& rEntr)
 {
     rIStream.Read((char*)&rEntr.Typ,SgfEntrySize);
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rEntr.Typ  =SWAPSHORT(rEntr.Typ  );
     rEntr.iFrei=SWAPSHORT(rEntr.iFrei);
     rEntr.lFreiLo=SWAPSHORT (rEntr.lFreiLo);
@@ -155,7 +158,7 @@ UINT32 SgfEntry::GetOffset()
 SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 {
     rIStream.Read((char*)&rVect,sizeof(rVect));
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rVect.Flag =SWAPSHORT(rVect.Flag );
     rVect.x    =SWAPSHORT(rVect.x    );
     rVect.y    =SWAPSHORT(rVect.y    );
@@ -177,7 +180,7 @@ SvStream& operator>>(SvStream& rIStream, SgfVector& rVect)
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
 {
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rHead.Typ     =SWAPSHORT(rHead.Typ     );
     rHead.SizeLo  =SWAPSHORT(rHead.SizeLo  );
     rHead.SizeHi  =SWAPSHORT(rHead.SizeHi  );
@@ -187,7 +190,7 @@ SvStream& operator<<(SvStream& rOStream, BmpFileHeader& rHead)
     rHead.OfsHi   =SWAPSHORT(rHead.OfsHi   );
 #endif
     rOStream.Write((char*)&rHead,sizeof(rHead));
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rHead.Typ     =SWAPSHORT(rHead.Typ     );
     rHead.SizeLo  =SWAPSHORT(rHead.SizeLo  );
     rHead.SizeHi  =SWAPSHORT(rHead.SizeHi  );
@@ -227,7 +230,7 @@ UINT32 BmpFileHeader::GetOfs()
 *************************************************************************/
 SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
 {
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rInfo.Size    =SWAPLONG (rInfo.Size    );
     rInfo.Width   =SWAPLONG (rInfo.Width   );
     rInfo.Hight   =SWAPLONG (rInfo.Hight   );
@@ -241,7 +244,7 @@ SvStream& operator<<(SvStream& rOStream, BmpInfoHeader& rInfo)
     rInfo.ColMust =SWAPLONG (rInfo.ColMust );
 #endif
     rOStream.Write((char*)&rInfo,sizeof(rInfo));
-#if defined __BIGENDIAN
+#if defined OSL_BIGENDIAN
     rInfo.Size    =SWAPLONG (rInfo.Size    );
     rInfo.Width   =SWAPLONG (rInfo.Width   );
     rInfo.Hight   =SWAPLONG (rInfo.Hight   );
