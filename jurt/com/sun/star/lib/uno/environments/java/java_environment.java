@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jbu $ $Date: 2002-06-25 07:13:38 $
+ *  last change: $Author: dbo $ $Date: 2002-10-29 09:17:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.8 $ $ $Date: 2002-06-25 07:13:38 $
+ * @version     $Revision: 1.9 $ $ $Date: 2002-10-29 09:17:05 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -222,7 +222,23 @@ public class java_environment implements IEnvironment, Disposable {
             _oId    = oId;
             _object = object;
             _refCount = 1;
-            _class = ((TypeDescription)type.getTypeDescription()).getZClass();
+
+            com.sun.star.uno.ITypeDescription typedescr = type.getTypeDescription();
+            // [HACK] workaround uninitialized Type object:
+            if (null == typedescr)
+            {
+                try
+                {
+                    _class = Class.forName( type.getTypeName() );
+                }
+                catch (ClassNotFoundException exc)
+                {
+                }
+            }
+            else
+            {
+                _class = ((TypeDescription)type.getTypeDescription()).getZClass();
+            }
             _instanceOfProxy = (object instanceof Proxy);
         }
 
@@ -336,7 +352,6 @@ public class java_environment implements IEnvironment, Disposable {
 
             if(holder == null) {
                 holder = new Holder(keyName, object , type );
-
                 _objects.put(keyName, holder);
             }
             else
