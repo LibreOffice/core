@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-12-10 10:30:54 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:14:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,6 +279,31 @@ const sal_Char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncodin
     The best matching Unix charset string, or null if none matches.
  */
 const sal_Char* SAL_CALL rtl_getBestUnixCharsetFromTextEncoding( rtl_TextEncoding eTextEncoding  );
+
+/** Map from a Windows code page to a text encoding.
+
+    @param nCodePage
+    Any Windows code page number.
+
+    @return
+    The corresponding rtl_TextEncoding value (which will be an octet text
+    encoding, see rtl_isOctetTextEncoding), or RTL_TEXTENCODING_DONTKNOW if no
+    mapping is applicable.
+ */
+rtl_TextEncoding SAL_CALL
+rtl_getTextEncodingFromWindowsCodePage(sal_uInt32 nCodePage);
+
+/** Map from a text encoding to a Windows code page.
+
+    @param nEncoding
+    Any rtl_TextEncoding value.
+
+    @return
+    The corresponding Windows code page number, or 0 if no mapping is
+    applicable.
+ */
+sal_uInt32 SAL_CALL
+rtl_getWindowsCodePageFromTextEncoding(rtl_TextEncoding nEncoding);
 
 #ifdef __cplusplus
 }
