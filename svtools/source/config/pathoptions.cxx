@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-17 12:34:52 $
+ *  last change: $Author: pb $ $Date: 2000-11-20 07:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,7 +688,7 @@ OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
 // -----------------------------------------------------------------------
 
 SvtPathOptions_Impl::SvtPathOptions_Impl() :
-    ConfigItem( ASCII_STR("Office.Common/Path") )
+    ConfigItem( ASCII_STR("Office.Common/Path/Current") )
 {
     ConfigManager* pCfgMgr = ConfigManager::GetConfigManager();
     Any aAny = pCfgMgr->GetDirectConfigProperty( ConfigManager::OFFICEINSTALL );
