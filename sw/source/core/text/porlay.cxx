@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 16:12:39 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,9 +929,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // we search for connecting opportunities (kashida)
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
-            SwScanner aScanner( rNode, NULL,
+            SwScanner aScanner( rNode,
                                 ::com::sun::star::i18n::WordType::DICTIONARY_WORD,
-                                nLastKashida, nChg, sal_False, sal_False );
+                                nLastKashida, nChg );
 
             // the search has to be performed on a per word base
             while ( aScanner.NextWord() )
