@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:37 $
+ *  last change: $Author: ssa $ $Date: 2001-11-29 09:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,6 +410,144 @@ Size Image::GetSizePixel() const
     }
 
     return Size();
+}
+
+// -----------------------------------------------------------------------
+
+Bitmap Image::GetBitmap() const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                return *((Bitmap*)mpImplData->mpData);
+
+            case IMAGETYPE_IMAGE:
+                return ((ImplImageData*)mpImplData->mpData)->maBmp;
+
+            case IMAGETYPE_IMAGEREF:
+                {
+                ImplImageRefData* pData = (ImplImageRefData*)mpImplData->mpData;
+                return pData->mpImplData->mpImageBitmap->GetBitmap( 1, &pData->mnIndex );
+                }
+        }
+    }
+
+    return Bitmap();
+}
+
+// -----------------------------------------------------------------------
+
+Bitmap Image::GetMaskBitmap() const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                return Bitmap();
+
+            case IMAGETYPE_IMAGE:
+                return ((ImplImageData*)mpImplData->mpData)->maMaskBmp;
+
+            case IMAGETYPE_IMAGEREF:
+                {
+                ImplImageRefData* pData = (ImplImageRefData*)mpImplData->mpData;
+                if( pData->mpImplData->mpImageBitmap->HasMaskBitmap() )
+                    return pData->mpImplData->mpImageBitmap->GetMaskBitmap( 1, &pData->mnIndex );
+                else
+                    return Bitmap();
+                }
+        }
+    }
+
+    return Bitmap();
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Image::HasMaskBitmap() const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                return FALSE;
+
+            case IMAGETYPE_IMAGE:
+                return !!((ImplImageData*)mpImplData->mpData)->maMaskBmp;
+
+            case IMAGETYPE_IMAGEREF:
+                {
+                ImplImageRefData* pData = (ImplImageRefData*)mpImplData->mpData;
+                return pData->mpImplData->mpImageBitmap->HasMaskBitmap();
+                }
+        }
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Image::HasMaskColor() const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                return FALSE;
+
+            case IMAGETYPE_IMAGE:
+                return ((ImplImageData*)mpImplData->mpData)->mbColor;
+
+            case IMAGETYPE_IMAGEREF:
+                {
+                ImplImageRefData* pData = (ImplImageRefData*)mpImplData->mpData;
+                return pData->mpImplData->mpImageBitmap->HasMaskColor();
+                }
+        }
+    }
+
+    return FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+Color Image::GetMaskColor() const
+{
+    DBG_CHKTHIS( Image, NULL );
+
+    if ( mpImplData )
+    {
+        switch ( mpImplData->meType )
+        {
+            case IMAGETYPE_BITMAP:
+                return Color();
+
+            case IMAGETYPE_IMAGE:
+                return ((ImplImageData*)mpImplData->mpData)->maColor;
+
+            case IMAGETYPE_IMAGEREF:
+                {
+                ImplImageRefData* pData = (ImplImageRefData*)mpImplData->mpData;
+                return pData->mpImplData->mpImageBitmap->GetMaskColor();
+                }
+        }
+    }
+
+    return Color();
 }
 
 // -----------------------------------------------------------------------
