@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 21:05:10 $
+ *  last change: $Author: obo $ $Date: 2001-10-11 20:42:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,7 +894,7 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Det g�r inte att utf�ra operationen p� $(ARG1) eftersom inget mer minne �r tillg�ngligt";
         Text[ polish ] = "Wykonanie operacji na $(ARG1) nie jest mo�liwe z powodu braku pami�ci";
         Text[ portuguese_brazilian ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
-        Text[ japanese ] = "ﾒﾓﾘ空き容量がないために、$(ARG1) への操作は実行できません。";
+        Text[ japanese ] = "$(ARG1) への操作は空き容量不足のため実行できません。";
         Text[ korean ] = "사용 가능한 메모리가 부족하여 $(ARG1)에 대한 작업을 실행할 수 없습니다.";
         Text[ chinese_simplified ] = "因为内存用尽而无法执行用于 $(ARG1) 的命令。";
         Text[ chinese_traditional ] = "因爲記憶體用完，無法執行操作 $(ARG1) 。";
@@ -1309,7 +1309,7 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "$(ARG1) �r inte redo; l�gg in ett lagringsmedium";
         Text[ polish ] = "$(ARG1) nie jest gotowy; nale�y wsun�� no�nik danych";
         Text[ portuguese_brazilian ] = "$(ARG1) is not ready; please insert a storage medium";
-        Text[ japanese ] = "$(ARG1) の準備ができていません。ﾒﾓﾘ媒体を入れてください。";
+        Text[ japanese ] = "$(ARG1) の準備ができていません。記憶媒体を入れてください。";
         Text[ korean ] = "$(ARG1) is not ready; please insert a storage medium";
         Text[ chinese_simplified ] = "$(ARG1) 尚未准备就绪；请放入磁盘或光盘。";
         Text[ chinese_traditional ] = "$(ARG1) 尚未就緒。請插入軟盤。";
@@ -1335,7 +1335,7 @@ Resource RID_UUI_ERRHDL
         Text[ swedish ] = "Enheten $(ARG1) �r inte redo; l�gg in ett lagringsmedium";
         Text[ polish ] = "Nap�d $(ARG1) nie jest gotowy; nale�y wsun�� no�nik danych";
         Text[ portuguese_brazilian ] = "Volume $(ARG1) is not ready; please insert a storage medium";
-        Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) の準備ができていません。ﾒﾓﾘ媒体を入れてください。";
+        Text[ japanese ] = "ﾄﾞﾗｲﾌﾞ $(ARG1) の準備ができていません。記憶媒体を入れてください。";
         Text[ korean ] = "Volume $(ARG1) is not ready; please insert a storage medium";
         Text[ chinese_simplified ] = "驱动盘 $(ARG1) 尚未准备就绪。请放入磁盘。";
         Text[ chinese_traditional ] = "驅動盤 $(ARG1) 尚未就緒。請插入軟盤。";
@@ -1396,6 +1396,7 @@ Resource RID_UUI_ERRHDL
         Text[ catalan ] = "The object could not be created in directory $(ARG2)";
     };
 };
+
 
 
 
