@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:06:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,7 +1039,9 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence)
         rtl::OUString sText;
         while(aStart != aSentence.end())
         {
-            sText += aStart->sText;
+            // hidden text has to be ignored
+            if(!aStart->bIsHidden)
+                sText += aStart->sText;
             aStart++;
         }
         aSentenceED.SetText(sText);
@@ -1049,13 +1051,17 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence)
 
         while(aStart != aSentence.end())
         {
-            nEndPosition += aStart->sText.getLength();
-            if(aStart->xAlternatives.is())
-                aSentenceED.SetAttrib( SpellErrorAttrib(aStart->xAlternatives), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
-            if(aStart->bIsField)
-                aSentenceED.SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
-            aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
-            nStartPosition = nEndPosition;
+            // hidden text has to be ignored
+            if(!aStart->bIsHidden)
+            {
+                nEndPosition += aStart->sText.getLength();
+                if(aStart->xAlternatives.is())
+                    aSentenceED.SetAttrib( SpellErrorAttrib(aStart->xAlternatives), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                if(aStart->bIsField)
+                    aSentenceED.SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                nStartPosition = nEndPosition;
+            }
             aStart++;
         }
         //the edit field needs to be modified to apply the change from the ApplyChangeAllList
