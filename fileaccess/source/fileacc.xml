@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "componentdescription.dtd">
+
+<COMPONENTDESCRIPTION
+    xmlns:xlink="http://www.w3.org/1999/xlink/Namespace" >
+
+<Author> Andreas Bregas </Author>
+
+<Name>  com.sun.star.comp.ucb.SimpleFileAccess </Name>
+
+<Description>
+    This component provides a simple set of methods
+    to access a file system.
+</Description>
+
+<ModuleName>    fileacc </ModuleName>
+
+<LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+
+<Language>  c++ </Language>
+
+<Status StatusValue="beta"/>
+
+<SupportedService>  com.sun.star.ucb.SimpleFileAccess   </SupportedService>
+
+<!-- Because of ucbhelper -->
+<ServiceDependency>     com.sun.star.ucb.UniversalContentBroker             </ServiceDependency>
+<ServiceDependency>     com.sun.star.ucb.Configuration                      </ServiceDependency>
+<ServiceDependency>     com.sun.star.script.Converter                       </ServiceDependency>
+<ServiceDependency>     com.sun.star.ucb.Store                              </ServiceDependency>
+<ServiceDependency>     com.sun.star.ucb.ContentProviderProxyFactory        </ServiceDependency>
+<ServiceDependency>     com.sun.star.ucb.CachedDynamicResultSetStubFactory  </ServiceDependency>
+<ServiceDependency>     com.sun.star.ucb.PropertiesManager                  </ServiceDependency>
+
+<ProjectBuildDependency>    cppuhelper  </ProjectBuildDependency>
+<ProjectBuildDependency>    ucbhelper   </ProjectBuildDependency>
+<ProjectBuildDependency>    tools       </ProjectBuildDependency>
+<ProjectBuildDependency>    cppu        </ProjectBuildDependency>
+<ProjectBuildDependency>    vos         </ProjectBuildDependency>
+<ProjectBuildDependency>    sal         </ProjectBuildDependency>
+
+<RuntimeModuleDependency>   cppuhelper2 </RuntimeModuleDependency>
+<RuntimeModuleDependency>   ucbhelper1MSC </RuntimeModuleDependency>
+<RuntimeModuleDependency>   cppu2       </RuntimeModuleDependency>
+<RuntimeModuleDependency>   vos2        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   sal2        </RuntimeModuleDependency>
+<RuntimeModuleDependency>   tools       </RuntimeModuleDependency>
+
+
+<Type>   com.sun.star.io.XActiveDataSink            </Type>
+<Type>   com.sun.star.io.XActiveDataSource          </Type>
+<Type>   com.sun.star.io.XActiveDataStreamer        </Type>
+<Type>   com.sun.star.ucb.XSimpleFileAccess         </Type>
+<Type>   com.sun.star.ucb.XContentAccess            </Type>
+<Type>   com.sun.star.ucb.TransferInfo              </Type>
+<Type>   com.sun.star.ucb.NameClash                 </Type>
+<Type>   com.sun.star.ucb.OpenCommandArgument2      </Type>
+<Type>   com.sun.star.ucb.InsertCommandArgument     </Type>
+<Type>   com.sun.star.ucb.XCommandEnvironment       </Type>
+<Type>   com.sun.star.ucb.OpenMode                  </Type>
+<Type>   com.sun.star.sdbc.XResultSet               </Type>
+<Type>   com.sun.star.beans.Property                </Type>
+
+</COMPONENTDESCRIPTION>
+
