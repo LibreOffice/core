@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:21:12 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:20:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1455,7 +1455,7 @@ ModelessDialog RID_SCDLG_FILTER
         Text[ chinese_traditional ] = "°Ï°ì¥]§tÄæ¼ĞÃD(~C)";
         Text[ arabic ] = "ÇáãäØŞÉ ÊÊÖãä ÑÄæÓ ÃÚãÏÉ";
         Text[ greek ] = "Ğåñéï÷Ş ğåñéİ÷åé êåöáëßäåò óôçëşí";
-        Text[ korean ] = "¿­ ¸Ó¸®±ÛÀÌ Æ÷ÇÔµÇ´Â ¿µ¿ª(~C)";
+        Text[ korean ] = "¹üÀ§¿¡ ¿­ ¸Ó¸®±Û Æ÷ÇÔ(~C)";
         Text[ turkish ] = "Aralık, ~sütun başlıkları içeriyor";
         Text[ language_user1 ] = " ";
     };
