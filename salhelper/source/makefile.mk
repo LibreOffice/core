@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2001-11-14 13:19:21 $
+#   last change: $Author: mhu $ $Date: 2002-09-01 18:22:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,38 +61,43 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=	salhelper
-TARGET=		salhelper
-NO_BSYMBOLIC=	TRUE
+PRJNAME=salhelper
+TARGET=salhelper
+
 ENABLE_EXCEPTIONS=TRUE
-USE_DEFFILE=	TRUE
+NO_BSYMBOLIC=TRUE
+USE_DEFFILE=TRUE
+
+.IF "$(OS)" != "WNT"
+UNIXVERSIONNAMES=UDK
+.ENDIF # WNT
 
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
+
+.IF "$(OS)" == "WNT"
+CFLAGS+= -GR # enable RTTI
+.ENDIF # WNT
 
 # --- Files --------------------------------------------------------
 
-#RTTI on
-.IF "$(OS)" == "WNT"
-CFLAGS+= -GR
-.ENDIF
-
 SLOFILES=	\
     $(SLO)$/dynload.obj \
-        $(SLO)$/simplereferenceobject.obj
+    $(SLO)$/simplereferenceobject.obj
 
 # SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
 .IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
 SLOFILES+=$(SLO)$/staticmb.obj
 .ENDIF
 
-SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COMID)
+.IF "$(UNIXVERSIONNAMES)" != ""
+SHL1TARGET=	$(TARGET)$(COMID)
+.ELSE
+SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COMID)
+.ENDIF # UNIXVERSIONNAMES
 
-SHL1STDLIBS= \
-    $(SALLIB)
+SHL1STDLIBS=$(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
@@ -110,7 +115,6 @@ SHL1VERSIONMAP=lngi.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="LINUXIgcc3"
 SHL1VERSIONMAP=gcc3_linux_intel.map
 .ENDIF
-
 
 # --- Targets ------------------------------------------------------
 

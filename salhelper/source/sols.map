@@ -1,8 +1,7 @@
-SALHLP_1_0 {
+UDK_3.0 {
     global:
 GetVersionInfo;
-_fini;
-_init;
+component_getDescriptionFunc;
 __1cJsalhelperSORealDynamicLoaderLnewInstance6Fpp1rknDrtlIOUString_7_2_;
 __1cJsalhelperSORealDynamicLoader2t5B6Mpp1rknDrtlIOUString_7pv8_v_;
 __1cJsalhelperSORealDynamicLoader2t6Mpp1rknDrtlIOUString_7pv8_v_;
@@ -27,4 +26,12 @@ __1cJsalhelperbT__RTTI__1CpnJsalhelperVSimpleReferenceObject__;
 __1cJsalhelperbU__RTTI__1CpknJsalhelperVSimpleReferenceObject__;
     local:
         *;
+} SALHLP_1_0;
+
+SALHLP_1_0 { # WEAK (backward compatibility, should have been UDK_3.0)
+};
+
+{ # BASE
+_init;
+_fini;
 };
