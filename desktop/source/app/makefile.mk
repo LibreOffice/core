@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: mh $ $Date: 2001-08-01 07:42:16 $
+#   last change: $Author: as $ $Date: 2001-10-12 11:48:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -92,7 +92,6 @@ OBJFILES = \
         $(OBJ)$/officeacceptthread.obj	\
         $(OBJ)$/oinstanceprovider.obj	\
         $(OBJ)$/opluginframefactory.obj	\
-        $(OBJ)$/appsys.obj				\
         $(OBJ)$/desktopresid.obj
 
 SRC1FILES=	desktop.src

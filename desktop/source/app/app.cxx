@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mba $ $Date: 2001-10-11 12:19:44 $
+ *  last change: $Author: as $ $Date: 2001-10-12 11:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@
 #include "cmdlineargs.hxx"
 #include "officeacceptthread.hxx"
 #include "pluginacceptthread.hxx"
-#include "appsys.hxx"
 #include "desktopresid.hxx"
 
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
@@ -1644,9 +1643,6 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
                 continue;
             }
 
-#ifdef WNT
-            FATToVFat_Impl( aName );
-#endif
             aName = GetURL_Impl(aName);
 
             if ( rAppEvent.IsPrintEvent() )
