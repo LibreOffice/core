@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-01-17 13:09:43 $
+ *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@
 #include "fuspell.hxx"
 #include "sdoutl.hxx"
 #include "animobjs.hxx"
+#include "SdUnoDrawView.hxx"
 
 #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
 #define SO2_DECL_SVINPLACEOBJECT_DEFINED
@@ -374,6 +375,9 @@ void SdDrawViewShell::SelectionHasChanged()
         SetHelpIdBySelection();
 
     pDrView->UpdateSelectionClipboard( FALSE );
+
+    if( pController )
+        pController->fireSelectionChangeListener();
 }
 
 
@@ -491,6 +495,12 @@ void SdDrawViewShell::ChangeEditMode(EditMode eEMode, BOOL bLMode)
 {
     if (eEditMode != eEMode || bLayerMode != bLMode)
     {
+        if( pController )
+        {
+            pController->fireChangeEditMode( eEMode == EM_MASTERPAGE );
+            pController->fireChangeLayerMode( bLMode );
+        }
+
         if ( pDrView->IsTextEdit() )
         {
             pDrView->EndTextEdit();

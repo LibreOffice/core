@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-01-09 12:55:49 $
+ *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "sdclient.hxx"
 #include "fuslshow.hxx"
 #include "unokywds.hxx"
+#include "SdUnoDrawView.hxx"
 
 #define TABCONTROL_INITIAL_SIZE     350
 
@@ -780,4 +781,14 @@ void SdDrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequen
     ChangeEditMode( eEditMode, !bLayerMode );
     ChangeEditMode( eEditMode, !bLayerMode );
 
+}
+
+void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
+{
+    SdViewShell::VisAreaChanged( rRect );
+
+    if( pController )
+    {
+        pController->fireVisAreaChanged( rRect );
+    }
 }

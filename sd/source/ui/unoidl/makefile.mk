@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: cl $ $Date: 2001-08-24 11:55:14 $
+#   last change: $Author: cl $ $Date: 2002-01-24 15:04:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,12 +84,14 @@ NOOPTFILES= $(SLO)$/unowcntr.obj
 .ENDIF
 
 SLOFILES =      \
+        $(SLO)$/SdUnoSlideView.obj\
+        $(SLO)$/SdUnoOutlineView.obj\
+        $(SLO)$/SdUnoDrawView.obj \
         $(SLO)$/unopool.obj \
         $(SLO)$/UnoDocumentSettings.obj \
         $(SLO)$/facreg.obj \
         $(SLO)$/unomodel.obj    \
         $(SLO)$/unopage.obj     \
-        $(SLO)$/unoiview.obj    \
         $(SLO)$/unolayer.obj    \
         $(SLO)$/unopres.obj     \
         $(SLO)$/unocpres.obj    \
@@ -104,26 +106,6 @@ SLOFILES =      \
         $(SLO)$/unostyls.obj	\
         $(SLO)$/unopback.obj	\
         $(SLO)$/unovwcrs.obj
-
-SVXLIGHTOBJFILES = \
-        $(OBJ)$/unopool.obj \
-        $(OBJ)$/UnoDocumentSettings.obj \
-        $(OBJ)$/unomodel.obj    \
-        $(OBJ)$/unopage.obj     \
-        $(OBJ)$/unolayer.obj    \
-        $(OBJ)$/unopres.obj     \
-        $(OBJ)$/unocpres.obj    \
-        $(OBJ)$/unoobj.obj		\
-        $(OBJ)$/unosrch.obj		\
-        $(OBJ)$/unowcntr.obj	\
-        $(OBJ)$/unogsfm.obj		\
-        $(OBJ)$/unogstyl.obj	\
-        $(OBJ)$/unopsfm.obj		\
-        $(OBJ)$/unopstyl.obj	\
-        $(OBJ)$/unokywds.obj	\
-        $(OBJ)$/unostyls.obj	\
-        $(OBJ)$/unopback.obj	\
-        $(OBJ)$/basemodel.obj
 
 # --- Tagets -------------------------------------------------------
 

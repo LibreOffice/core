@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-01-18 12:28:50 $
+ *  last change: $Author: cl $ $Date: 2002-01-24 15:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@
 #include "drstdob.hxx"
 #include "grstdob.hxx"
 #include "drawview.hxx"
-#include "unoiview.hxx"
+#include "SdUnoDrawView.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -208,7 +208,8 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame, SfxViewShell *pOldShell) 
     bInEffectAssignment(FALSE),
     pSlotArray( NULL ),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+    bPastePossible(FALSE),
+    pController(NULL)
 {
     if (pOldShell)
     {
@@ -254,7 +255,8 @@ SdDrawViewShell::SdDrawViewShell(SfxViewFrame* pFrame,
     bInEffectAssignment(FALSE),
     pSlotArray( NULL ),
     pClipEvtLstnr(NULL),
-    bPastePossible(FALSE)
+    bPastePossible(FALSE),
+    pController(NULL)
 {
     pFrameView = new FrameView(pDoc);
     pFrameView->Connect();
@@ -400,11 +402,6 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
     pDrView = new SdDrawView(pDocSh, pWindow, this);
     pView = pDrView;             // Pointer der Basisklasse SdViewShell
     pDrView->SetSwapAsynchron(TRUE); // Asynchrones Laden von Graphiken
-
-    pController = new SdXImpressView(pView, this);
-
-    uno::Reference< awt::XWindow > aTmpRef;
-    GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, pController );
 
     ePageKind = pFrameView->GetPageKind();
     eEditMode = EM_PAGE;
@@ -585,6 +582,11 @@ void SdDrawViewShell::Construct(SdDrawDocShell* pDocSh)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
+
+    pController = new SdUnoDrawView(pView, this);
+
+    uno::Reference< awt::XWindow > aTmpRef;
+    GetViewFrame()->GetFrame()->GetFrameInterface()->setComponent( aTmpRef, pController );
 }
 
 /*************************************************************************
