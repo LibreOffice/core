@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:19:25 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 12:47:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2542,6 +2542,8 @@ namespace xmloff { namespace token {
         TOKEN( "libraries",                    XML_LIBRARIES ),
         TOKEN( "source-code",                  XML_SOURCE_CODE ),
         TOKEN( "readonly",                     XML_READONLY ),
+        TOKEN( "z",                            XML_Z ),
+        TOKEN( "dimension",                    XML_DIMENSION ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
