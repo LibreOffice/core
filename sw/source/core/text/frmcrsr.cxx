@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:02:43 $
+ *  last change: $Author: rt $ $Date: 2004-03-31 15:10:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,11 @@
 
 #ifndef _SVX_ULSPITEM_HXX //autogen
 #include <svx/ulspitem.hxx>
+#endif
+
+// OD 2004-03-18 #114789#
+#ifndef _SVX_LSPCITEM_HXX //autogen
+#include <svx/lspcitem.hxx>
 #endif
 
 #ifndef _PORMULTI_HXX
@@ -495,10 +500,8 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
                 rOrig.Height( aTmpState.aRealHeight.Y() );
             }
 
-#ifdef BIDI
             if ( pFrm->IsRightToLeft() )
                 pFrm->SwitchLTRtoRTL( rOrig );
-#endif
 
             if ( bVert )
                 pFrm->SwitchHorizontalToVertical( rOrig );
@@ -512,8 +515,10 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
 /** determine top of line for given position in the text frame
 
     OD 11.11.2003 #i22341#
-    OD 2004-02-02 - adjustment
-    Top of first paragraph line is the top of the paragraph.
+    OD 2004-03-18 #114789# - corrections:
+    - Top of first paragraph line is the top of the printing area of the text frame
+    - If a proportional line spacing is applied use top of anchor character as
+      top of the line.
 
     @author OD
 */
@@ -534,27 +539,42 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
         SWRECTFN( this )
         if ( IsEmpty() || !(Prt().*fnRect->fnGetHeight)() )
         {
-            _onTopOfLine = (this->Frm().*fnRect->fnGetTop)();
+            // OD 2004-03-18 #i11860# - consider upper space amount considered
+            // for previous frame and the page grid.
+            _onTopOfLine = (this->*fnRect->fnGetPrtTop)();
         }
         else
         {
             // determine formatted text frame that contains the requested position
             SwTxtFrm* pFrm = &(const_cast<SwTxtFrm*>(this)->GetFrmAtOfst( nOffset ));
             pFrm->GetFormatted();
-            // assure that text frame is in a horizontal layout
             SWREFRESHFN( pFrm )
-            SwFrmSwapper aSwapper( pFrm, sal_True );
-            // determine text line that contains the requested position
-            SwTxtSizeInfo aInf( pFrm );
-            SwTxtCursor aLine( pFrm, &aInf );
-            aLine.CharCrsrToLine( nOffset );
-            // determine top of line
-            if ( !aLine.GetPrevLine() )
+            // OD 2004-03-18 #114789# - If proportional line spacing is applied
+            // to the text frame, the top of the anchor character is also the
+            // top of the line.
+            // Otherwise the line layout determines the top of the line
+            const SvxLineSpacingItem& rSpace = GetAttrSet()->GetLineSpacing();
+            if ( rSpace.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
             {
-                _onTopOfLine = (pFrm->Frm().*fnRect->fnGetTop)();
+                SwRect aCharRect;
+                if ( GetAutoPos( aCharRect, _rPos ) )
+                {
+                    _onTopOfLine = (aCharRect.*fnRect->fnGetTop)();
+                }
+                else
+                {
+                    bRet = false;
+                }
             }
             else
             {
+                // assure that text frame is in a horizontal layout
+                SwFrmSwapper aSwapper( pFrm, sal_True );
+                // determine text line that contains the requested position
+                SwTxtSizeInfo aInf( pFrm );
+                SwTxtCursor aLine( pFrm, &aInf );
+                aLine.CharCrsrToLine( nOffset );
+                // determine top of line
                 _onTopOfLine = aLine.Y();
                 if ( bVert )
                 {
@@ -1796,5 +1816,3 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     ((SwCrsrMoveState*)rFill.pCMS)->bFillRet = bFill;
     delete pFnt;
 }
-
-
