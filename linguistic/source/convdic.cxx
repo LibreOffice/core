@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convdic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-28 12:18:58 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,12 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDICTIONARYTYPE_HPP_
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
@@ -281,13 +287,19 @@ ConvDic::ConvDic(
         const String &rName,
         INT16 nLang,
         sal_Int16 nConvType,
-        const String &rMainURL ) :
+             BOOL bBiDirectional,
+        const String &rMainURL) :
     aFlushListeners( GetLinguMutex() )
 {
     aName           = rName;
     nLanguage       = nLang;
     nConversionType = nConvType;
     aMainURL        = rMainURL;
+
+    if (bBiDirectional)
+        pFromRight = std::auto_ptr< ConvMap >( new ConvMap );
+    if (nLang == LANGUAGE_CHINESE_SIMPLIFIED || nLang == LANGUAGE_CHINESE_TRADITIONAL)
+        pConvPropType = std::auto_ptr< PropTypeMap >( new PropTypeMap );
 
     nMaxLeftCharCount = nMaxRightCharCount = 0;
     bMaxCharCountIsValid = TRUE;
@@ -428,13 +440,14 @@ void ConvDic::AddEntry( const OUString &rLeftText, const OUString &rRightText )
 
     DBG_ASSERT(!HasEntry( rLeftText, rRightText), "entry already exists" );
     aFromLeft .insert( ConvMap::value_type( rLeftText, rRightText ) );
-    aFromRight.insert( ConvMap::value_type( rRightText, rLeftText ) );
+    if (pFromRight.get())
+        pFromRight->insert( ConvMap::value_type( rRightText, rLeftText ) );
 
     if (bMaxCharCountIsValid)
     {
         if (rLeftText.getLength() > nMaxLeftCharCount)
             nMaxLeftCharCount   = (sal_Int16) rLeftText.getLength();
-        if (rRightText.getLength() > nMaxRightCharCount)
+        if (pFromRight.get() && rRightText.getLength() > nMaxRightCharCount)
             nMaxRightCharCount  = (sal_Int16) rRightText.getLength();
     }
 
@@ -448,11 +461,15 @@ void ConvDic::RemoveEntry( const OUString &rLeftText, const OUString &rRightText
         Load();
 
     ConvMap::iterator aLeftIt  = GetEntry( aFromLeft,  rLeftText,  rRightText );
-    ConvMap::iterator aRightIt = GetEntry( aFromRight, rRightText, rLeftText );
     DBG_ASSERT( aLeftIt  != aFromLeft.end(),  "left map entry missing" );
-    DBG_ASSERT( aRightIt != aFromRight.end(), "right map entry missing" );
     aFromLeft .erase( aLeftIt );
-    aFromRight.erase( aRightIt );
+
+    if (pFromRight.get())
+    {
+        ConvMap::iterator aRightIt = GetEntry( *pFromRight, rRightText, rLeftText );
+        DBG_ASSERT( aRightIt != pFromRight->end(), "right map entry missing" );
+        pFromRight->erase( aRightIt );
+    }
 
     bIsModified = TRUE;
     bMaxCharCountIsValid = FALSE;
@@ -504,7 +521,8 @@ void SAL_CALL ConvDic::clear(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aFromLeft .clear();
-    aFromRight.clear();
+    if (pFromRight.get())
+        pFromRight->clear();
     bNeedEntries    = FALSE;
     bIsModified     = TRUE;
     nMaxLeftCharCount       = 0;
@@ -522,12 +540,16 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
     throw (IllegalArgumentException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+
+    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+        return uno::Sequence< OUString >();
+
     if (bNeedEntries)
         Load();
 
     OUString aLookUpText( aText.copy(nStartPos, nLength) );
     ConvMap &rConvMap = eDirection == ConversionDirection_FROM_LEFT ?
-                                aFromLeft : aFromRight;
+                                aFromLeft : *pFromRight;
     pair< ConvMap::iterator, ConvMap::iterator > aRange =
             rConvMap.equal_range( aLookUpText );
 
@@ -551,11 +573,15 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+
+    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+        return uno::Sequence< OUString >();
+
     if (bNeedEntries)
         Load();
 
     ConvMap &rConvMap = eDirection == ConversionDirection_FROM_LEFT ?
-                                aFromLeft : aFromRight;
+                                aFromLeft : *pFromRight;
     uno::Sequence< OUString > aRes( rConvMap.size() );
     OUString *pRes = aRes.getArray();
     ConvMap::iterator aIt = rConvMap.begin();
@@ -604,6 +630,13 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
     throw (RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
+
+    if (!pFromRight.get() && eDirection == ConversionDirection_FROM_RIGHT)
+    {
+        DBG_ASSERT( nMaxRightCharCount == 0, "max right char count should be 0" );
+        return 0;
+    }
+
     if (bNeedEntries)
         Load();
 
@@ -620,13 +653,16 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
         }
 
         nMaxRightCharCount  = 0;
-        aIt = aFromRight.begin();
-        while (aIt != aFromRight.end())
+        if (pFromRight.get())
         {
-            sal_Int16 nTmp = (sal_Int16) (*aIt).first.getLength();
-            if (nTmp > nMaxRightCharCount)
-                nMaxRightCharCount = nTmp;
-            ++aIt;
+            aIt = pFromRight->begin();
+            while (aIt != pFromRight->end())
+            {
+                sal_Int16 nTmp = (sal_Int16) (*aIt).first.getLength();
+                if (nTmp > nMaxRightCharCount)
+                    nMaxRightCharCount = nTmp;
+                ++aIt;
+            }
         }
 
         bMaxCharCountIsValid = TRUE;
@@ -634,6 +670,46 @@ sal_Int16 SAL_CALL ConvDic::getMaxCharCount( ConversionDirection eDirection )
     sal_Int16 nRes = eDirection == ConversionDirection_FROM_LEFT ?
             nMaxLeftCharCount : nMaxRightCharCount;
     DBG_ASSERT( nRes >= 0, "invalid MaxCharCount" );
+    return nRes;
+}
+
+
+void SAL_CALL ConvDic::setPropertyType(
+        const OUString& rLeftText,
+        const OUString& rRightText,
+        sal_Int16 nPropertyType )
+    throw (container::NoSuchElementException, IllegalArgumentException, RuntimeException)
+{
+    sal_Bool bHasElement = HasEntry( rLeftText, rRightText);
+    if (!bHasElement)
+        throw container::NoSuchElementException();
+
+    // currently we assume that entries with the same left text have the
+    // same PropertyType even if the right text is different...
+    if (pConvPropType.get())
+        pConvPropType->insert( PropTypeMap::value_type( rLeftText, nPropertyType ) );
+    bIsModified = sal_True;
+}
+
+
+sal_Int16 SAL_CALL ConvDic::getPropertyType(
+        const OUString& rLeftText,
+        const OUString& rRightText )
+    throw (container::NoSuchElementException, RuntimeException)
+{
+    sal_Bool bHasElement = HasEntry( rLeftText, rRightText);
+    if (!bHasElement)
+        throw container::NoSuchElementException();
+
+    sal_Int16 nRes = ConversionPropertyType::NOT_DEFINED;
+    if (pConvPropType.get())
+    {
+        // still assuming that entries with same left text have same PropertyType
+        // even if they have different right text...
+        PropTypeMap::iterator aIt = pConvPropType->find( rLeftText );
+        if (aIt != pConvPropType->end())
+            nRes = (*aIt).second;
+    }
     return nRes;
 }
 
