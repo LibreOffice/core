@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typemanager.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:25:26 $
+ *  last change: $Author: jsc $ $Date: 2001-03-08 14:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ public:
 
     virtual sal_Int32 getSize() { return 0; }
 
+    static sal_Bool isBaseType(const ::rtl::OString& name);
 protected:
     sal_Int32 acquire();
     sal_Int32 release();
