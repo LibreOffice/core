@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonSession.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:11:25 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,12 +780,13 @@ void NeonSession::PROPPATCH( const rtl::OUString &                   inPath,
      */
 
     int theRetVal = NE_OK;
+    int n;  // for the "for" loop
 
     // Generate the list of properties we want to set.
     int nPropCount = inValues.size();
     ne_proppatch_operation* pItems
         = new ne_proppatch_operation[ nPropCount + 1 ];
-    for ( int n = 0; n < nPropCount; ++n )
+    for ( n = 0; n < nPropCount; ++n )
     {
         const ProppatchValue & rValue = inValues[ n ];
 
