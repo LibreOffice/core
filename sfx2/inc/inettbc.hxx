@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2000-12-07 14:33:35 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 08:37:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ protected:
 public:
                                     SfxURLBox( Window* pParent, INetProtocol eSmart = INET_PROT_NOT_VALID );
 
-    void                            OpenURL( SfxPickEntry_Impl* pEntry, const String& rName, BOOL nMod ) const;
+    void                            OpenURL( const String& rName, BOOL nMod ) const;
     void                            SetBaseURL( const String& rURL ) { aBaseURL = rURL; }
     const String&                   GetBaseURL() const { return aBaseURL; }
     void                            SetOpenHdl( const Link& rLink ) { aOpenHdl = rLink; }
@@ -115,6 +115,7 @@ public:
     void                            SetSmartProtocol( INetProtocol eProt );
     BOOL                            IsCtrlOpen()
                                     { return bCtrlClick; }
+    String                          GetURL();
 };
 
 #if _SOLAR__PRIVATE
