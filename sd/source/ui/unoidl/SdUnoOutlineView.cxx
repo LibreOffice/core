@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:49:04 $
+ *  last change: $Author: kz $ $Date: 2004-12-09 16:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,9 +141,9 @@ SdUnoOutlineView::~SdUnoOutlineView() throw()
 
 
 
-OutlineViewShell& SdUnoOutlineView::GetDrawViewShell (void) const
+OutlineViewShell* SdUnoOutlineView::GetDrawViewShell (void) const
 {
-    return static_cast<OutlineViewShell&>(mrViewShell);
+    return static_cast<OutlineViewShell*>(mpViewShell);
 }
 
 
@@ -303,21 +303,24 @@ void SdUnoOutlineView::getFastPropertyValue(
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    switch( nHandle )
+    if (mpViewShell != NULL)
     {
-        case PROPERTY_CURRENTPAGE:
+        switch( nHandle )
         {
-            SdPage* pPage = const_cast<OutlineViewShell&>(
-                static_cast<const OutlineViewShell&>(mrViewShell)
-                ).GetActualPage();
+            case PROPERTY_CURRENTPAGE:
+            {
+                SdPage* pPage = const_cast<OutlineViewShell*>(
+                    static_cast<const OutlineViewShell*>(mpViewShell)
+                    )->GetActualPage();
 
-            if (pPage != NULL)
-                rRet <<= pPage->getUnoPage();
+                if (pPage != NULL)
+                    rRet <<= pPage->getUnoPage();
+            }
+            break;
+
+            default:
+                DrawController::getFastPropertyValue (rRet, nHandle);
         }
-        break;
-
-        default:
-            DrawController::getFastPropertyValue (rRet, nHandle);
     }
 }
 
