@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:04:45 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:52:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,9 @@
 #endif
 #ifndef _SVX_FHGTITEM_HXX //autogen
 #include <svx/fhgtitem.hxx>
+#endif
+#ifndef _SVX_LANGITEM_HXX //autogen
+#include <svx/langitem.hxx>
 #endif
 
 #ifndef _FMTFLD_HXX //autogen
@@ -579,28 +582,36 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 aSaveStr.SearchAndReplaceAscii( "AM", aEmptyStr );
                 aSaveStr.SearchAndReplaceAscii( "PM", aEmptyStr );
 
-                // M.M. Ok this is more stuff that should be sitting in a shared space with the word filter
+                // #117892# M.M. Put the word date and time formatter stuff in a common area
+                // and get the rtf filter to use it
                 SwField *pFld = 0;
                 UINT16 nCheckPos = 0;
                 INT16  nType = NUMBERFORMAT_DEFINED;
                 ULONG  nKey = NUMBERFORMAT_UNDEFINED;
-                USHORT rLang(0);
                 short nNumFmtType = NUMBERFORMAT_UNDEFINED;
+                ULONG nFmtIdx = NUMBERFORMAT_UNDEFINED;
+
+                USHORT rLang(0);
+                RES_CHRATR eLang = maPageDefaults.mbRTLdoc ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
+                const SvxLanguageItem *pLang = (SvxLanguageItem*)&pDoc->GetAttrPool().GetDefaultItem(eLang);
+                rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
                 SvNumberFormatter* pFormatter = pDoc->GetNumberFormatter();
+                bool bHijri = false;
+
                 if( pFormatter )
                 {
-                    pFormatter->PutEntry(aSaveStr, nCheckPos, nType, nKey, rLang);
-                    if (nKey)
-                        nNumFmtType = pFormatter->GetType(nKey);
+                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri);
+                    if (nFmtIdx)
+                        nNumFmtType = pFormatter->GetType(nFmtIdx);
                 }
 
                 pFldType = pDoc->GetSysFldType( RES_DATETIMEFLD );
 
                 if(nNumFmtType & NUMBERFORMAT_DATE)
-                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, DATEFLD, nKey );
+                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, DATEFLD, nFmtIdx );
                 else if(nNumFmtType == NUMBERFORMAT_TIME)
-                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, TIMEFLD, nKey );
+                    pFld = new SwDateTimeField( (SwDateTimeFieldType*)pFldType, TIMEFLD, nFmtIdx );
 
                 if( pFld )
                 {
