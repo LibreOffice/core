@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,11 +83,14 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 //#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -141,7 +144,7 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sDataPilotTableName(),
     sApplicationData(),
-    sGrandTotal(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_both))),
+    sGrandTotal(GetXMLToken(XML_BOTH)),
     bIsNative(sal_True),
     bIgnoreEmptyRows(sal_False),
     bIdentifyCategories(sal_False),
@@ -180,14 +183,12 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_IGNORE_EMPTY_ROWS :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bIgnoreEmptyRows = sal_True;
+                bIgnoreEmptyRows = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_IDENTIFY_CATEGORIES :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bIdentifyCategories = sal_True;
+                bIdentifyCategories = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_TARGET_RANGE_ADDRESS :
@@ -339,17 +340,17 @@ void ScXMLDataPilotTableContext::EndElement()
             }
             break;
         }
-        if (sGrandTotal.compareToAscii(sXML_both) == 0)
+        if (IsXMLToken(sGrandTotal, XML_BOTH))
         {
             pDPSave->SetRowGrand(sal_True);
             pDPSave->SetColumnGrand(sal_True);
         }
-        else if (sGrandTotal.compareToAscii(sXML_row) == 0)
+        else if (IsXMLToken(sGrandTotal, XML_ROW))
         {
             pDPSave->SetRowGrand(sal_True);
             pDPSave->SetColumnGrand(sal_False);
         }
-        else if (sGrandTotal.compareToAscii(sXML_column) == 0)
+        else if (IsXMLToken(sGrandTotal, XML_COLUMN))
         {
             pDPSave->SetRowGrand(sal_False);
             pDPSave->SetColumnGrand(sal_True);
@@ -402,10 +403,7 @@ ScXMLDPSourceSQLContext::ScXMLDPSourceSQLContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    pDataPilotTable->SetNative(sal_False);
-                else
-                    pDataPilotTable->SetNative(sal_True);
+                pDataPilotTable->SetNative(!IsXMLToken(sValue, XML_TRUE));
             }
             break;
         }
@@ -712,8 +710,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDataLayout = sal_True;
+                bDataLayout = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION :
@@ -796,10 +793,7 @@ ScXMLDataPilotLevelContext::ScXMLDataPilotLevelContext( ScXMLImport& rImport,
         {
             case XML_TOK_DATA_PILOT_LEVEL_ATTR_DISPLAY_EMPTY :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    pDataPilotField->SetShowEmpty(sal_True);
-                else if (sValue.compareToAscii(sXML_false) == 0)
-                    pDataPilotField->SetShowEmpty(sal_False);
+                pDataPilotField->SetShowEmpty(IsXMLToken(sValue, XML_TRUE));
             }
             break;
         }
@@ -1024,18 +1018,12 @@ ScXMLDataPilotMemberContext::ScXMLDataPilotMemberContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDisplay = sal_True;
-                else if (sValue.compareToAscii(sXML_false) == 0)
-                    bDisplay = sal_False;
+                bDisplay = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_DETAILS :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDisplayDetails = sal_True;
-                else if (sValue.compareToAscii(sXML_false) == 0)
-                    bDisplayDetails = sal_False;
+                bDisplayDetails = IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }

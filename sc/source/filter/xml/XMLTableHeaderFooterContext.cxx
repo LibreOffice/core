@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-07 10:07:37 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,11 +68,11 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _SC_XMLTABLEHEADERFOOTERCONTEXT_HXX_
 #include "XMLTableHeaderFooterContext.hxx"
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #include "unonames.hxx"
@@ -81,12 +81,9 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-//using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
-//using namespace ::com::sun::star::container;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::text;
+using namespace xmloff::token;
 
 
 TYPEINIT1( XMLTableHeaderFooterContext, SvXMLImportContext );
@@ -123,9 +120,8 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         // TODO: use a map here
         if( XML_NAMESPACE_STYLE == nPrfx )
         {
-            if( aLName.compareToAscii( sXML_display ) == 0 )
-                if ( rValue.compareToAscii( sXML_false ) == 0 )
-                    bDisplay = sal_False;
+            if( IsXMLToken(aLName, XML_DISPLAY ) )
+                bDisplay = IsXMLToken(rValue, XML_TRUE);
         }
     }
     if( bLeft )
@@ -194,8 +190,8 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if (nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.compareToAscii(sXML_p) == 0)
+    if ((nPrefix == XML_NAMESPACE_TEXT) &&
+        IsXMLToken(rLocalName, XML_P))
     {
         if (!xTextCursor.is())
         {
@@ -222,17 +218,17 @@ SvXMLImportContext *XMLTableHeaderFooterContext::CreateChildContext(
             if (xHeaderFooterContent.is())
             {
                 uno::Reference < text::XText > xText;
-                if (rLocalName.compareToAscii( sXML_region_left ) == 0)
+                if (IsXMLToken(rLocalName, XML_REGION_LEFT ))
                 {
                     xText = xHeaderFooterContent->getLeftText();
                     bContainsLeft = sal_True;
                 }
-                else if (rLocalName.compareToAscii( sXML_region_center ) == 0)
+                else if (IsXMLToken(rLocalName, XML_REGION_CENTER ))
                 {
                     xText = xHeaderFooterContent->getCenterText();
                     bContainsCenter = sal_True;
                 }
-                else if (rLocalName.compareToAscii( sXML_region_right ) == 0)
+                else if (IsXMLToken(rLocalName, XML_REGION_RIGHT ))
                 {
                     xText = xHeaderFooterContent->getRightText();
                     bContainsRight = sal_True;
@@ -306,8 +302,8 @@ SvXMLImportContext *XMLHeaderFooterRegionContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if (nPrefix == XML_NAMESPACE_TEXT &&
-        rLocalName.compareToAscii(sXML_p) == 0)
+    if ((nPrefix == XML_NAMESPACE_TEXT) &&
+        IsXMLToken(rLocalName, XML_P))
     {
         pContext =
             GetImport().GetTextImport()->CreateTextChildContext(GetImport(),

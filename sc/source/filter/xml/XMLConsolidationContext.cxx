@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,12 +87,13 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace xmloff::token;
 
 
 //___________________________________________________________________
@@ -138,7 +139,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
                 sUseLabel = sValue;
             break;
             case XML_TOK_CONSOLIDATION_ATTR_LINK_TO_SOURCE:
-                bLinkToSource = (sValue.compareToAscii( sXML_true ) == 0);
+                bLinkToSource = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }
@@ -181,11 +182,11 @@ void ScXMLConsolidationContext::EndElement()
         }
 
         aConsParam.bByCol = aConsParam.bByRow = FALSE;
-        if( sUseLabel.compareToAscii( sXML_column ) == 0 )
+        if( IsXMLToken(sUseLabel, XML_COLUMN ) )
             aConsParam.bByCol = TRUE;
-        else if( sUseLabel.compareToAscii( sXML_row ) == 0 )
+        else if( IsXMLToken( sUseLabel, XML_ROW ) )
             aConsParam.bByRow = TRUE;
-        else if( sUseLabel.compareToAscii( sXML_both ) == 0 )
+        else if( IsXMLToken( sUseLabel, XML_BOTH ) )
             aConsParam.bByCol = aConsParam.bByRow = TRUE;
 
         aConsParam.bReferenceData = bLinkToSource;

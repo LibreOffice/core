@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-21 07:24:02 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,9 @@
 #endif
 
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
@@ -169,6 +171,7 @@
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -307,25 +310,25 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const
 {
-    if (sOUValue.equals(GetScImport().sSC_float))
+    if (IsXMLToken(sOUValue, XML_FLOAT))
         return util::NumberFormat::NUMBER;
     else
-        if (sOUValue.equals(GetScImport().sSC_string))
+        if (IsXMLToken(sOUValue, XML_STRING))
             return util::NumberFormat::TEXT;
         else
-            if (sOUValue.equals(GetScImport().sSC_time))
+            if (IsXMLToken(sOUValue, XML_TIME))
                 return util::NumberFormat::TIME;
             else
-                if (sOUValue.equals(GetScImport().sSC_date))
+                if (IsXMLToken(sOUValue, XML_DATE))
                     return util::NumberFormat::DATETIME;
                 else
-                    if (sOUValue.equals(GetScImport().sSC_percentage))
+                    if (IsXMLToken(sOUValue, XML_PERCENTAGE))
                         return util::NumberFormat::PERCENT;
                     else
-                        if (sOUValue.equals(GetScImport().sSC_currency))
+                        if (IsXMLToken(sOUValue, XML_CURRENCY))
                             return util::NumberFormat::CURRENCY;
                         else
-                            if (sOUValue.equals(GetScImport().sSC_boolean))
+                            if (IsXMLToken(sOUValue, XML_BOOLEAN))
                                 return util::NumberFormat::LOGICAL;
                             else
                                 return 0;
@@ -813,7 +816,7 @@ void ScXMLTableRowCellContext::EndElement()
                                     break;
                                 case util::NumberFormat::LOGICAL:
                                     {
-                                        if ( 0 == sOUBooleanValue.compareToAscii(sXML_true) )
+                                        if ( IsXMLToken(sOUBooleanValue, XML_TRUE) )
                                             xCell->setValue(1.0);
                                         else
                                             xCell->setValue(0.0);

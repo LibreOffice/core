@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@
 #include <tools/datetime.hxx>
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -105,6 +105,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace xmloff::token;
 
 
 //___________________________________________________________________
@@ -119,7 +120,7 @@ void ScXMLConverter::AssignString(
         if( rNewStr.getLength() )
         {
             if( rString.getLength() )
-                rString += OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_WS ) );
+                rString += GetXMLToken( XML_WS );
             rString += rNewStr;
         }
     }
@@ -246,7 +247,7 @@ sal_Bool ScXMLConverter::GetRangeFromString(
     GetTokenByOffset( sToken, rRangeStr, nOffset );
     if( nOffset >= 0 )
     {
-        sal_Int32 nIndex = IndexOf( sToken, sXML__colon[0], 0 );
+        sal_Int32 nIndex = IndexOf( sToken, GetXMLToken(XML__COLON)[0], 0 );
         if( nIndex < 0 )
         {
             bResult = ((rRange.aStart.Parse( sToken, (ScDocument*) pDocument ) & SCA_VALID) == SCA_VALID);
@@ -386,7 +387,7 @@ void ScXMLConverter::GetStringFromRange(
         aStartAddress.Format( sStartAddress, nFormatFlags, (ScDocument*) pDocument );
         aEndAddress.Format( sEndAddress, nFormatFlags, (ScDocument*) pDocument );
         OUString sOUStartAddress( sStartAddress );
-        sOUStartAddress += OUString( RTL_CONSTASCII_USTRINGPARAM( sXML__colon ) );
+        sOUStartAddress += GetXMLToken( XML__COLON );
         sOUStartAddress += OUString( sEndAddress );
         AssignString( rString, sOUStartAddress, bAppendStr );
     }
@@ -473,56 +474,56 @@ void ScXMLConverter::GetStringFromRangeList(
 
 sheet::GeneralFunction ScXMLConverter::GetFunctionFromString( const OUString& sFunction )
 {
-    if( sFunction.compareToAscii( sXML_sum ) == 0 )
+    if( IsXMLToken(sFunction, XML_SUM ) )
         return sheet::GeneralFunction_SUM;
-    if( sFunction.compareToAscii( sXML_auto ) == 0 )
+    if( IsXMLToken(sFunction, XML_AUTO ) )
         return sheet::GeneralFunction_AUTO;
-    if( sFunction.compareToAscii( sXML_count ) == 0 )
+    if( IsXMLToken(sFunction, XML_COUNT ) )
         return sheet::GeneralFunction_COUNT;
-    if( sFunction.compareToAscii( sXML_countnums ) == 0 )
+    if( IsXMLToken(sFunction, XML_COUNTNUMS ) )
         return sheet::GeneralFunction_COUNTNUMS;
-    if( sFunction.compareToAscii( sXML_product ) == 0 )
+    if( IsXMLToken(sFunction, XML_PRODUCT ) )
         return sheet::GeneralFunction_PRODUCT;
-    if( sFunction.compareToAscii( sXML_average ) == 0 )
+    if( IsXMLToken(sFunction, XML_AVERAGE ) )
         return sheet::GeneralFunction_AVERAGE;
-    if( sFunction.compareToAscii( sXML_max ) == 0 )
+    if( IsXMLToken(sFunction, XML_MAX ) )
         return sheet::GeneralFunction_MAX;
-    if( sFunction.compareToAscii( sXML_min ) == 0 )
+    if( IsXMLToken(sFunction, XML_MIN ) )
         return sheet::GeneralFunction_MIN;
-    if( sFunction.compareToAscii( sXML_stdev ) == 0 )
+    if( IsXMLToken(sFunction, XML_STDEV ) )
         return sheet::GeneralFunction_STDEV;
-    if( sFunction.compareToAscii( sXML_stdevp ) == 0 )
+    if( IsXMLToken(sFunction, XML_STDEVP ) )
         return sheet::GeneralFunction_STDEVP;
-    if( sFunction.compareToAscii( sXML_var ) == 0 )
+    if( IsXMLToken(sFunction, XML_VAR ) )
         return sheet::GeneralFunction_VAR;
-    if( sFunction.compareToAscii( sXML_varp ) == 0 )
+    if( IsXMLToken(sFunction, XML_VARP ) )
         return sheet::GeneralFunction_VARP;
     return sheet::GeneralFunction_NONE;
 }
 
 ScSubTotalFunc ScXMLConverter::GetSubTotalFuncFromString( const OUString& sFunction )
 {
-    if( sFunction.compareToAscii( sXML_sum ) == 0 )
+    if( IsXMLToken(sFunction, XML_SUM ) )
         return SUBTOTAL_FUNC_SUM;
-    if( sFunction.compareToAscii( sXML_count ) == 0 )
+    if( IsXMLToken(sFunction, XML_COUNT ) )
         return SUBTOTAL_FUNC_CNT;
-    if( sFunction.compareToAscii( sXML_countnums ) == 0 )
+    if( IsXMLToken(sFunction, XML_COUNTNUMS ) )
         return SUBTOTAL_FUNC_CNT2;
-    if( sFunction.compareToAscii( sXML_product ) == 0 )
+    if( IsXMLToken(sFunction, XML_PRODUCT ) )
         return SUBTOTAL_FUNC_PROD;
-    if( sFunction.compareToAscii( sXML_average ) == 0 )
+    if( IsXMLToken(sFunction, XML_AVERAGE ) )
         return SUBTOTAL_FUNC_AVE;
-    if( sFunction.compareToAscii( sXML_max ) == 0 )
+    if( IsXMLToken(sFunction, XML_MAX ) )
         return SUBTOTAL_FUNC_MAX;
-    if( sFunction.compareToAscii( sXML_min ) == 0 )
+    if( IsXMLToken(sFunction, XML_MIN ) )
         return SUBTOTAL_FUNC_MIN;
-    if( sFunction.compareToAscii( sXML_stdev ) == 0 )
+    if( IsXMLToken(sFunction, XML_STDEV ) )
         return SUBTOTAL_FUNC_STD;
-    if( sFunction.compareToAscii( sXML_stdevp ) == 0 )
+    if( IsXMLToken(sFunction, XML_STDEVP ) )
         return SUBTOTAL_FUNC_STDP;
-    if( sFunction.compareToAscii( sXML_var ) == 0 )
+    if( IsXMLToken(sFunction, XML_VAR ) )
         return SUBTOTAL_FUNC_VAR;
-    if( sFunction.compareToAscii( sXML_varp ) == 0 )
+    if( IsXMLToken(sFunction, XML_VARP ) )
         return SUBTOTAL_FUNC_VARP;
     return SUBTOTAL_FUNC_NONE;
 }
@@ -538,19 +539,19 @@ void ScXMLConverter::GetStringFromFunction(
     OUString sFuncStr;
     switch( eFunction )
     {
-        case sheet::GeneralFunction_AUTO:       sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_auto ) );        break;
-        case sheet::GeneralFunction_AVERAGE:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_average ) );     break;
-        case sheet::GeneralFunction_COUNT:      sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_count ) );       break;
-        case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_countnums ) );   break;
-        case sheet::GeneralFunction_MAX:        sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_max ) );         break;
-        case sheet::GeneralFunction_MIN:        sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_min ) );         break;
-        case sheet::GeneralFunction_NONE:       sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );        break;
-        case sheet::GeneralFunction_PRODUCT:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_product ) );     break;
-        case sheet::GeneralFunction_STDEV:      sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stdev ) );       break;
-        case sheet::GeneralFunction_STDEVP:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stdevp ) );      break;
-        case sheet::GeneralFunction_SUM:        sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_sum ) );         break;
-        case sheet::GeneralFunction_VAR:        sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_var ) );         break;
-        case sheet::GeneralFunction_VARP:       sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_varp ) );        break;
+        case sheet::GeneralFunction_AUTO:       sFuncStr = GetXMLToken( XML_AUTO );         break;
+        case sheet::GeneralFunction_AVERAGE:    sFuncStr = GetXMLToken( XML_AVERAGE );      break;
+        case sheet::GeneralFunction_COUNT:      sFuncStr = GetXMLToken( XML_COUNT );        break;
+        case sheet::GeneralFunction_COUNTNUMS:  sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
+        case sheet::GeneralFunction_MAX:        sFuncStr = GetXMLToken( XML_MAX );          break;
+        case sheet::GeneralFunction_MIN:        sFuncStr = GetXMLToken( XML_MIN );          break;
+        case sheet::GeneralFunction_NONE:       sFuncStr = GetXMLToken( XML_NONE );         break;
+        case sheet::GeneralFunction_PRODUCT:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
+        case sheet::GeneralFunction_STDEV:      sFuncStr = GetXMLToken( XML_STDEV );        break;
+        case sheet::GeneralFunction_STDEVP:     sFuncStr = GetXMLToken( XML_STDEVP );       break;
+        case sheet::GeneralFunction_SUM:        sFuncStr = GetXMLToken( XML_SUM );          break;
+        case sheet::GeneralFunction_VAR:        sFuncStr = GetXMLToken( XML_VAR );          break;
+        case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
     }
     AssignString( rString, sFuncStr, bAppendStr );
 }
@@ -563,18 +564,18 @@ void ScXMLConverter::GetStringFromFunction(
     OUString sFuncStr;
     switch( eFunction )
     {
-        case SUBTOTAL_FUNC_AVE:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_average ) );     break;
-        case SUBTOTAL_FUNC_CNT:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_count ) );       break;
-        case SUBTOTAL_FUNC_CNT2:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_countnums ) );   break;
-        case SUBTOTAL_FUNC_MAX:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_max ) );         break;
-        case SUBTOTAL_FUNC_MIN:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_min ) );         break;
-        case SUBTOTAL_FUNC_NONE:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_none ) );        break;
-        case SUBTOTAL_FUNC_PROD:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_product ) );     break;
-        case SUBTOTAL_FUNC_STD:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stdev ) );       break;
-        case SUBTOTAL_FUNC_STDP:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_stdevp ) );      break;
-        case SUBTOTAL_FUNC_SUM:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_sum ) );         break;
-        case SUBTOTAL_FUNC_VAR:     sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_var ) );         break;
-        case SUBTOTAL_FUNC_VARP:    sFuncStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_varp ) );        break;
+        case SUBTOTAL_FUNC_AVE:     sFuncStr = GetXMLToken( XML_AVERAGE );      break;
+        case SUBTOTAL_FUNC_CNT:     sFuncStr = GetXMLToken( XML_COUNT );        break;
+        case SUBTOTAL_FUNC_CNT2:    sFuncStr = GetXMLToken( XML_COUNTNUMS );    break;
+        case SUBTOTAL_FUNC_MAX:     sFuncStr = GetXMLToken( XML_MAX );          break;
+        case SUBTOTAL_FUNC_MIN:     sFuncStr = GetXMLToken( XML_MIN );          break;
+        case SUBTOTAL_FUNC_NONE:    sFuncStr = GetXMLToken( XML_NONE );         break;
+        case SUBTOTAL_FUNC_PROD:    sFuncStr = GetXMLToken( XML_PRODUCT );      break;
+        case SUBTOTAL_FUNC_STD:     sFuncStr = GetXMLToken( XML_STDEV );        break;
+        case SUBTOTAL_FUNC_STDP:    sFuncStr = GetXMLToken( XML_STDEVP );       break;
+        case SUBTOTAL_FUNC_SUM:     sFuncStr = GetXMLToken( XML_SUM );          break;
+        case SUBTOTAL_FUNC_VAR:     sFuncStr = GetXMLToken( XML_VAR );          break;
+        case SUBTOTAL_FUNC_VARP:    sFuncStr = GetXMLToken( XML_VARP );         break;
     }
     AssignString( rString, sFuncStr, bAppendStr );
 }
@@ -585,13 +586,13 @@ void ScXMLConverter::GetStringFromFunction(
 sheet::DataPilotFieldOrientation ScXMLConverter::GetOrientationFromString(
     const OUString& rString )
 {
-    if( rString.compareToAscii( sXML_column ) == 0 )
+    if( IsXMLToken(rString, XML_COLUMN ) )
         return sheet::DataPilotFieldOrientation_COLUMN;
-    if( rString.compareToAscii( sXML_row ) == 0 )
+    if( IsXMLToken(rString, XML_ROW ) )
         return sheet::DataPilotFieldOrientation_ROW;
-    if( rString.compareToAscii( sXML_page ) == 0 )
+    if( IsXMLToken(rString, XML_PAGE ) )
         return sheet::DataPilotFieldOrientation_PAGE;
-    if( rString.compareToAscii( sXML_data ) == 0 )
+    if( IsXMLToken(rString, XML_DATA ) )
         return sheet::DataPilotFieldOrientation_DATA;
     return sheet::DataPilotFieldOrientation_HIDDEN;
 }
@@ -608,19 +609,19 @@ void ScXMLConverter::GetStringFromOrientation(
     switch( eOrientation )
     {
         case sheet::DataPilotFieldOrientation_HIDDEN:
-            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_hidden ) );
+            sOrientStr = GetXMLToken( XML_HIDDEN );
         break;
         case sheet::DataPilotFieldOrientation_COLUMN:
-            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_column ) );
+            sOrientStr = GetXMLToken( XML_COLUMN );
         break;
         case sheet::DataPilotFieldOrientation_ROW:
-            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_row ) );
+            sOrientStr = GetXMLToken( XML_ROW );
         break;
         case sheet::DataPilotFieldOrientation_PAGE:
-            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_page ) );
+            sOrientStr = GetXMLToken( XML_PAGE );
         break;
         case sheet::DataPilotFieldOrientation_DATA:
-            sOrientStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_data ) );
+            sOrientStr = GetXMLToken( XML_DATA );
         break;
     }
     AssignString( rString, sOrientStr, bAppendStr );
@@ -631,26 +632,26 @@ void ScXMLConverter::GetStringFromOrientation(
 
 ScDetectiveObjType ScXMLConverter::GetDetObjTypeFromString( const OUString& rString )
 {
-    if( rString.compareToAscii( sXML_from_same_table ) == 0 )
+    if( IsXMLToken(rString, XML_FROM_SAME_TABLE ) )
         return SC_DETOBJ_ARROW;
-    if( rString.compareToAscii( sXML_from_another_table ) == 0 )
+    if( IsXMLToken(rString, XML_FROM_ANOTHER_TABLE ) )
         return SC_DETOBJ_FROMOTHERTAB;
-    if( rString.compareToAscii( sXML_to_another_table ) == 0 )
+    if( IsXMLToken(rString, XML_TO_ANOTHER_TABLE ) )
         return SC_DETOBJ_TOOTHERTAB;
     return SC_DETOBJ_NONE;
 }
 
 sal_Bool ScXMLConverter::GetDetOpTypeFromString( ScDetOpType& rDetOpType, const OUString& rString )
 {
-    if( rString.compareToAscii( sXML_trace_dependents ) == 0 )
+    if( IsXMLToken(rString, XML_TRACE_DEPENDENTS ) )
         rDetOpType = SCDETOP_ADDSUCC;
-    else if( rString.compareToAscii( sXML_trace_precedents ) == 0 )
+    else if( IsXMLToken(rString, XML_TRACE_PRECEDENTS ) )
         rDetOpType = SCDETOP_ADDPRED;
-    else if( rString.compareToAscii( sXML_trace_errors ) == 0 )
+    else if( IsXMLToken(rString, XML_TRACE_ERRORS ) )
         rDetOpType = SCDETOP_ADDERROR;
-    else if( rString.compareToAscii( sXML_remove_dependents ) == 0 )
+    else if( IsXMLToken(rString, XML_REMOVE_DEPENDENTS ) )
         rDetOpType = SCDETOP_DELSUCC;
-    else if( rString.compareToAscii( sXML_remove_precedents ) == 0 )
+    else if( IsXMLToken(rString, XML_REMOVE_PRECEDENTS ) )
         rDetOpType = SCDETOP_DELPRED;
     else
         return sal_False;
@@ -669,13 +670,13 @@ void ScXMLConverter::GetStringFromDetObjType(
     switch( eObjType )
     {
         case SC_DETOBJ_ARROW:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_from_same_table ) );
+            sTypeStr = GetXMLToken( XML_FROM_SAME_TABLE );
         break;
         case SC_DETOBJ_FROMOTHERTAB:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_from_another_table ) );
+            sTypeStr = GetXMLToken( XML_FROM_ANOTHER_TABLE );
         break;
         case SC_DETOBJ_TOOTHERTAB:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_to_another_table ) );
+            sTypeStr = GetXMLToken( XML_TO_ANOTHER_TABLE );
         break;
     }
     AssignString( rString, sTypeStr, bAppendStr );
@@ -690,19 +691,19 @@ void ScXMLConverter::GetStringFromDetOpType(
     switch( eOpType )
     {
         case SCDETOP_ADDSUCC:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_dependents ) );
+            sTypeStr = GetXMLToken( XML_TRACE_DEPENDENTS );
         break;
         case SCDETOP_ADDPRED:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_precedents ) );
+            sTypeStr = GetXMLToken( XML_TRACE_PRECEDENTS );
         break;
         case SCDETOP_ADDERROR:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_trace_errors ) );
+            sTypeStr = GetXMLToken( XML_TRACE_ERRORS );
         break;
         case SCDETOP_DELSUCC:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_remove_dependents ) );
+            sTypeStr = GetXMLToken( XML_REMOVE_DEPENDENTS );
         break;
         case SCDETOP_DELPRED:
-            sTypeStr = OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_remove_precedents ) );
+            sTypeStr = GetXMLToken( XML_REMOVE_PRECEDENTS );
         break;
     }
     AssignString( rString, sTypeStr, bAppendStr );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-04-10 09:00:56 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,14 +83,17 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #define SC_USERLIST "UserList"
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -126,8 +129,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
         {
             case XML_TOK_SORT_ATTR_BIND_STYLES_TO_CONTENT :
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bBindFormatsToContent = sal_False;
+                bBindFormatsToContent = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_SORT_ATTR_TARGET_RANGE_ADDRESS :
@@ -143,8 +145,7 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SORT_ATTR_CASE_SENSITIVE :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bIsCaseSensitive = sal_True;
+                bIsCaseSensitive = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_SORT_ATTR_LANGUAGE :
@@ -253,7 +254,7 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
 {
     util::SortField aSortField;
     aSortField.Field = sFieldNumber.toInt32();
-    if (sOrder.compareToAscii(sXML_ascending) == 0)
+    if (IsXMLToken(sOrder, XML_ASCENDING))
         aSortField.SortAscending = sal_True;
     else
         aSortField.SortAscending = sal_False;
@@ -268,15 +269,15 @@ void ScXMLSortContext::AddSortField(const rtl::OUString& sFieldNumber, const rtl
         }
         else
         {
-            if (sDataType.compareToAscii(sXML_automatic) == 0)
+            if (IsXMLToken(sDataType, XML_AUTOMATIC))
                 aSortField.FieldType = util::SortFieldType_AUTOMATIC;
         }
     }
     else
     {
-        if (sDataType.compareToAscii(sXML_text) == 0)
+        if (IsXMLToken(sDataType, XML_TEXT))
             aSortField.FieldType = util::SortFieldType_ALPHANUMERIC;
-        else if (sDataType.compareToAscii(sXML_number) == 0)
+        else if (IsXMLToken(sDataType, XML_NUMBER))
             aSortField.FieldType = util::SortFieldType_NUMERIC;
     }
     aSortFields.realloc(aSortFields.getLength() + 1);
@@ -289,10 +290,10 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLSortContext* pTempSortContext) :
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    sOrder(GetXMLToken(XML_ASCENDING)),
+    sDataType(GetXMLToken(XML_AUTOMATIC))
 {
-    sOrder = rtl::OUString::createFromAscii(sXML_ascending);
-    sDataType = rtl::OUString::createFromAscii(sXML_automatic);
     pSortContext = pTempSortContext;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetSortSortByAttrTokenMap();

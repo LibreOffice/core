@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-14 07:13:41 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@ class ScBigRange;
 class ScEditEngineTextObj;
 class ScChangeActionTable;
 class DateTime;
+namespace xmloff { namespace token {
+    enum XMLTokenEnum; }}
+
 
 typedef std::list<ScChangeActionDel*> ScMyDeletionsList;
 
@@ -93,15 +96,12 @@ class ScChangeTrackingExportHelper
     ScEditEngineTextObj* pEditTextObj;
     ScChangeActionTable* pDependings;
     rtl::OUString   sChangeIDPrefix;
-    rtl::OUString   sAccepted;
-    rtl::OUString   sRejected;
-    rtl::OUString   sPending;
     com::sun::star::uno::Reference<com::sun::star::text::XText> xText;
 
     rtl::OUString GetChangeID(const sal_uInt32 nActionNumber);
     void GetAcceptanceState(const ScChangeAction* pAction);
 
-    void WriteBigRange(const ScBigRange& rBigRange, const sal_Char *pName);
+    void WriteBigRange(const ScBigRange& rBigRange, xmloff::token::XMLTokenEnum aName);
     void WriteChangeInfo(const ScChangeAction* pAction);
     void WriteGenerated(const ScChangeAction* pDependAction);
     void WriteDeleted(const ScChangeAction* pDependAction);

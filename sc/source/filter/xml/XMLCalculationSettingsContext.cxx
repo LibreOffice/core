@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLCalculationSettingsContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-21 16:40:57 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #include "document.hxx"
 #endif
 
-//#ifndef _XMLOFF_XMLKYWD_HXX
-//#include <xmloff/xmlkywd.hxx>
-//#endif
 #ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
 #endif

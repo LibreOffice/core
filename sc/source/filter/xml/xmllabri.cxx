@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmllabri.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:40 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
@@ -94,6 +94,7 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+using namespace xmloff::token;
 
 
 //___________________________________________________________________
@@ -165,7 +166,7 @@ ScXMLLabelRangeContext::ScXMLLabelRangeContext(
                 sDataRangeStr = sValue;
             break;
             case XML_TOK_LABEL_RANGE_ATTR_ORIENTATION:
-                bColumnOrientation = (sValue.compareToAscii( sXML_column ) == 0);
+                bColumnOrientation = IsXMLToken(sValue, XML_COLUMN );
             break;
         }
     }

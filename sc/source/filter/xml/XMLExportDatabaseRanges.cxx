@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 14:54:04 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,8 @@
 #include "XMLExportDatabaseRanges.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -129,6 +129,7 @@
 #define SC_USERSORTLISTINDEX "UserSortListIndex"
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 ScXMLExportDatabaseRanges::ScXMLExportDatabaseRanges(ScXMLExport& rTempExport)
     : rExport(rTempExport),
@@ -230,27 +231,27 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
         case sheet::DataImportMode_NONE : break;
         case sheet::DataImportMode_QUERY :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_query_name, sSourceObject);
-            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, sXML_database_source_query, sal_True, sal_True);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_QUERY_NAME, sSourceObject);
+            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY, sal_True, sal_True);
             rExport.CheckAttrList();
         }
         break;
         case sheet::DataImportMode_TABLE :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_table_name, sSourceObject);
-            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, sXML_database_source_table, sal_True, sal_True);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sSourceObject);
+            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, sal_True, sal_True);
             rExport.CheckAttrList();
         }
         break;
         case sheet::DataImportMode_SQL :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_database_name, sDatabaseName);
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_sql_statement, sSourceObject);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SQL_STATEMENT, sSourceObject);
             if (!bNative)
-                rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_parse_sql_statement, sXML_true);
-            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, sXML_database_source_sql, sal_True, sal_True);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TRUE);
+            SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, sal_True, sal_True);
             rExport.CheckAttrList();
         }
         break;
@@ -264,10 +265,10 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
         switch (aFilterOperator)
         {
             case sheet::FilterOperator_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_match));
+                return GetXMLToken(XML_MATCH);
                 break;
             case sheet::FilterOperator_NOT_EQUAL :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_nomatch));
+                return GetXMLToken(XML_NOMATCH);
                 break;
         }
     }
@@ -282,13 +283,13 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
                 break;
             case sheet::FilterOperator_BOTTOM_PERCENT :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_percent));
+                return GetXMLToken(XML_BOTTOM_PERCENT);
                 break;
             case sheet::FilterOperator_BOTTOM_VALUES :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom_values));
+                return GetXMLToken(XML_BOTTOM_VALUES);
                 break;
             case sheet::FilterOperator_EMPTY :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_empty));
+                return GetXMLToken(XML_EMPTY);
                 break;
             case sheet::FilterOperator_GREATER :
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
@@ -303,13 +304,13 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
                 break;
             case sheet::FilterOperator_NOT_EMPTY :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_noempty));
+                return GetXMLToken(XML_NOEMPTY);
                 break;
             case sheet::FilterOperator_TOP_PERCENT :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_percent));
+                return GetXMLToken(XML_TOP_PERCENT);
                 break;
             case sheet::FilterOperator_TOP_VALUES :
-                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top_values));
+                return GetXMLToken(XML_TOP_VALUES);
                 break;
         }
     }
@@ -318,20 +319,20 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
 
 void ScXMLExportDatabaseRanges::WriteCondition(const sheet::TableFilterField& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions)
 {
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aFilterField.Field));
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aFilterField.Field));
     if (bIsCaseSensitive)
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
     if (aFilterField.IsNumeric)
     {
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
         rtl::OUStringBuffer sBuffer;
         rExport.GetMM100UnitConverter().convertDouble(sBuffer, aFilterField.NumericValue);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, sBuffer.makeStringAndClear());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, sBuffer.makeStringAndClear());
     }
     else
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_value, aFilterField.StringValue);
-    rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_operator, getOperatorXML(aFilterField.Operator, bUseRegularExpressions));
-    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_filter_condition, sal_True, sal_True);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE, aFilterField.StringValue);
+    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OPERATOR, getOperatorXML(aFilterField.Operator, bUseRegularExpressions));
+    SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_CONDITION, sal_True, sal_True);
 }
 
 void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <sheet::XSheetFilterDescriptor>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName)
@@ -354,7 +355,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
                     {
                         rtl::OUString sOUCellAddress;
                         ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
                     }
                 }
             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
@@ -366,15 +367,15 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             {
                 rtl::OUString sOUCellAddress;
                 ScXMLConverter::GetStringFromRange( sOUCellAddress, aAdvSource, pDoc );
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_condition_source_range_address, sOUCellAddress);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION_SOURCE_RANGE_ADDRESS, sOUCellAddress);
             }
 
             sal_Bool bSkipDuplicates;
             uno::Any aSkipDuplicates = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SKIPDUP)));
             if (aSkipDuplicates >>= bSkipDuplicates)
                 if (bSkipDuplicates)
-                    rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_duplicates, sXML_false);
-            SvXMLElementExport aElemF(rExport, XML_NAMESPACE_TABLE, sXML_filter, sal_True, sal_True);
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_DUPLICATES, XML_FALSE);
+            SvXMLElementExport aElemF(rExport, XML_NAMESPACE_TABLE, XML_FILTER, sal_True, sal_True);
             rExport.CheckAttrList();
             sal_Bool bIsCaseSensitive = sal_False;
             uno::Any aIsCaseSensitive = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)));
@@ -393,7 +394,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             }
             if (bOr && !bAnd)
             {
-                SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
+                SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
                 for (i = 0; i < nTableFilterFields; i++)
                 {
                     WriteCondition(aTableFilterFields[i], bIsCaseSensitive, bUseRegularExpressions);
@@ -401,7 +402,7 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             }
             else if (bAnd && !bOr)
             {
-                SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, sXML_filter_and, sal_True, sal_True);
+                SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, sal_True, sal_True);
                 for (i = 0; i < nTableFilterFields; i++)
                 {
                     WriteCondition(aTableFilterFields[i], bIsCaseSensitive, bUseRegularExpressions);
@@ -413,11 +414,11 @@ void ScXMLExportDatabaseRanges::WriteFilterDescriptor(const uno::Reference <shee
             }
             else
             {
-                SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, sXML_filter_or, sal_True, sal_True);
+                SvXMLElementExport aElemC(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
                 sheet::TableFilterField aPrevFilterField = aTableFilterFields[0];
                 sheet::FilterConnection aConnection = aTableFilterFields[1].Connection;
                 sal_Bool bOpenAndElement;
-                rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_filter_and)));
+                rtl::OUString aName = rExport.GetNamespaceMap().GetQNameByKey(XML_NAMESPACE_TABLE, GetXMLToken(XML_FILTER_AND));
                 if (aConnection == sheet::FilterConnection_AND)
                 {
                     rExport.GetDocHandler()->ignorableWhitespace(rExport.sWS);
@@ -541,46 +542,46 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
     if (nSortFields > 0)
     {
         if (!bBindFormatsToContent)
-            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, sXML_false);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
         if (bCopyOutputData)
         {
             rtl::OUString sOUCellAddress;
             ScXMLConverter::GetStringFromAddress( sOUCellAddress, aOutputPosition, pDoc );
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_target_range_address, sOUCellAddress);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUCellAddress);
         }
         if (bIsCaseSensitive)
-            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
         if (aCollatorLocale.Language.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_language, aCollatorLocale.Language);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_LANGUAGE, aCollatorLocale.Language);
         if (aCollatorLocale.Country.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_country, aCollatorLocale.Country);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_COUNTRY, aCollatorLocale.Country);
         if (sCollatorAlgorithm.getLength())
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_algorithm, sCollatorAlgorithm);
-        SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, sXML_sort, sal_True, sal_True);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALGORITHM, sCollatorAlgorithm);
+        SvXMLElementExport aElemS(rExport, XML_NAMESPACE_TABLE, XML_SORT, sal_True, sal_True);
         rExport.CheckAttrList();
         for (i = 0; i < nSortFields; i++)
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aSortFields[i].Field));
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aSortFields[i].Field));
             if (!aSortFields[i].SortAscending)
-                rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_order, sXML_descending);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
             if (!bIsUserListEnabled)
             {
                 switch (aSortFields[i].FieldType)
                 {
                     case util::SortFieldType_ALPHANUMERIC :
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_text);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_TEXT);
                     break;
                     case util::SortFieldType_AUTOMATIC :
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_automatic);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_AUTOMATIC);
                     break;
                     case util::SortFieldType_NUMERIC :
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_data_type, sXML_number);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
                     break;
                 }
             }
             else
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_data_type, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERLIST)) + rtl::OUString::valueOf(nUserListIndex));
-            SvXMLElementExport aElemSb(rExport, XML_NAMESPACE_TABLE, sXML_sort_by, sal_True, sal_True);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERLIST)) + rtl::OUString::valueOf(nUserListIndex));
+            SvXMLElementExport aElemSb(rExport, XML_NAMESPACE_TABLE, XML_SORT_BY, sal_True, sal_True);
             rExport.CheckAttrList();
         }
     }
@@ -604,17 +605,17 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                 uno::Any aBindFormatsToContent = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT)));
                 if (aBindFormatsToContent >>= bBindFormatsToContent)
                     if (!bBindFormatsToContent)
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_bind_styles_to_content, sXML_false);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BIND_STYLES_TO_CONTENT, XML_FALSE);
                 sal_Bool bInsertPageBreaks;
                 uno::Any aInsertPageBreaks = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INSBRK)));
                 if (aInsertPageBreaks >>= bInsertPageBreaks)
                     if (bInsertPageBreaks)
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_page_breaks_on_group_change, sXML_true);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PAGE_BREAKS_ON_GROUP_CHANGE, XML_TRUE);
                 sal_Bool bIsCaseSensitive;
                 uno::Any aIsCaseSensitive = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE)));
                 if (aIsCaseSensitive >>= bIsCaseSensitive)
                     if (bIsCaseSensitive)
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_case_sensitive, sXML_true);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CASE_SENSITIVE, XML_TRUE);
                 uno::Any aSortAscending = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SORTASCENDING)));
                 aSortAscending >>= bSortAscending;
                 uno::Any aEnabledUserSortList = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ENABLEUSERSORTLIST)));
@@ -625,7 +626,7 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                         aUserSortListIndex >>= nUserSortListIndex;
                     }
             }
-            SvXMLElementExport aElemSTRs(rExport, XML_NAMESPACE_TABLE, sXML_subtotal_rules, sal_True, sal_True);
+            SvXMLElementExport aElemSTRs(rExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULES, sal_True, sal_True);
             rExport.CheckAttrList();
             {
                 ScDBCollection* pDBCollection = pDoc->GetDBCollection();
@@ -637,14 +638,14 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                 if (aSubTotalParam.bDoSort)
                 {
                     if (!aSubTotalParam.bAscending)
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_order, sXML_descending);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORDER, XML_DESCENDING);
                     if (aSubTotalParam.bUserDef)
                     {
                         rtl::OUString sUserList = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_USERLIST));
                         sUserList += rtl::OUString::valueOf(aSubTotalParam.nUserIndex);
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_data_type, sUserList);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, sUserList);
                     }
-                    SvXMLElementExport aElemSGs(rExport, XML_NAMESPACE_TABLE, sXML_sort_groups, sal_True, sal_True);
+                    SvXMLElementExport aElemSGs(rExport, XML_NAMESPACE_TABLE, XML_SORT_GROUPS, sal_True, sal_True);
                     rExport.CheckAttrList();
                 }
             }
@@ -655,18 +656,18 @@ void ScXMLExportDatabaseRanges::WriteSubTotalDescriptor(const com::sun::star::un
                 if (aSubTotalField >>= xSubTotalField)
                 {
                     sal_Int32 nGroupColumn = xSubTotalField->getGroupColumn();
-                    rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_group_by_field_number, rtl::OUString::valueOf(nGroupColumn));
-                    SvXMLElementExport aElemSTR(rExport, XML_NAMESPACE_TABLE, sXML_subtotal_rule, sal_True, sal_True);
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_GROUP_BY_FIELD_NUMBER, rtl::OUString::valueOf(nGroupColumn));
+                    SvXMLElementExport aElemSTR(rExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_RULE, sal_True, sal_True);
                     rExport.CheckAttrList();
                     uno::Sequence <sheet::SubTotalColumn> aSubTotalColumns = xSubTotalField->getSubTotalColumns();
                     sal_Int32 nSubTotalColumns = aSubTotalColumns.getLength();
                     for (sal_Int32 j = 0; j < nSubTotalColumns; j++)
                     {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_field_number, rtl::OUString::valueOf(aSubTotalColumns[j].Column));
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FIELD_NUMBER, rtl::OUString::valueOf(aSubTotalColumns[j].Column));
                         rtl::OUString sFunction;
                         ScXMLConverter::GetStringFromFunction( sFunction, aSubTotalColumns[j].Function );
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_function, sFunction);
-                        SvXMLElementExport aElemSTF(rExport, XML_NAMESPACE_TABLE, sXML_subtotal_field, sal_True, sal_True);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sFunction);
+                        SvXMLElementExport aElemSTF(rExport, XML_NAMESPACE_TABLE, XML_SUBTOTAL_FIELD, sal_True, sal_True);
                         rExport.CheckAttrList();
                     }
                 }
@@ -692,7 +693,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                 sal_Int32 nDatabaseRangesCount = aRanges.getLength();
                 if (nDatabaseRangesCount > 0)
                 {
-                    SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, sXML_database_ranges, sal_True, sal_True);
+                    SvXMLElementExport aElemDRs(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGES, sal_True, sal_True);
                     for (sal_Int32 i = 0; i < nDatabaseRangesCount; i++)
                     {
                         rtl::OUString sDatabaseRangeName = aRanges[i];
@@ -703,19 +704,19 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                             String sUnbenannt = ScGlobal::GetRscString(STR_DB_NONAME);
                             rtl::OUString sOUUnbenannt (sUnbenannt);
                             if (sOUUnbenannt != sDatabaseRangeName)
-                                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_name, sDatabaseRangeName);
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, sDatabaseRangeName);
                             table::CellRangeAddress aRangeAddress = xDatabaseRange->getDataArea();
                             rtl::OUString sOUAddress;
                             ScXMLConverter::GetStringFromRange( sOUAddress, aRangeAddress, pDoc );
-                            rExport.AddAttribute (XML_NAMESPACE_TABLE, sXML_target_range_address, sOUAddress);
+                            rExport.AddAttribute (XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sOUAddress);
                             ScDBCollection* pDBCollection = pDoc->GetDBCollection();
                             sal_uInt16 nIndex;
                             pDBCollection->SearchName(sDatabaseRangeName, nIndex);
                             ScDBData* pDBData = (*pDBCollection)[nIndex];
                             if (pDBData->HasImportSelection())
-                                rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_is_selection, sXML_true);
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_IS_SELECTION, XML_TRUE);
                             if (pDBData->HasAutoFilter())
-                                rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display_filter_buttons, sXML_true);
+                                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_FILTER_BUTTONS, XML_TRUE);
                             uno::Reference <beans::XPropertySet> xPropertySetDatabaseRange (xDatabaseRange, uno::UNO_QUERY);
                             if (xPropertySetDatabaseRange.is())
                             {
@@ -723,17 +724,17 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                 sal_Bool bKeepFormats = sal_False;
                                 if (aKeepFormatsProperty >>= bKeepFormats)
                                     if (bKeepFormats)
-                                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_on_update_keep_styles, sXML_true);
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_STYLES, XML_TRUE);
                                 uno::Any aMoveCellsProperty = xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_MOVCELLS)));
                                 sal_Bool bMoveCells = sal_False;
                                 if (aMoveCellsProperty >>= bMoveCells)
                                     if (bMoveCells)
-                                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_on_update_keep_size, sXML_false);
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ON_UPDATE_KEEP_SIZE, XML_FALSE);
                                 uno::Any aStripDataProperty = xPropertySetDatabaseRange->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STRIPDAT)));
                                 sal_Bool bStripData = sal_False;
                                 if (aStripDataProperty >>= bStripData)
                                     if (bStripData)
-                                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_has_persistent_data, sXML_false);
+                                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_HAS_PERSISTENT_DATA, XML_FALSE);
                             }
                             uno::Reference <sheet::XSheetFilterDescriptor> xSheetFilterDescriptor = xDatabaseRange->getFilterDescriptor();
                             if (xSheetFilterDescriptor.is())
@@ -745,12 +746,12 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                                     sal_Bool bContainsHeader = sal_True;
                                     if (aContainsHeaderProperty >>= bContainsHeader)
                                         if (!bContainsHeader)
-                                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_contains_header, sXML_false);
+                                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONTAINS_HEADER, XML_FALSE);
                                     uno::Any aOrientationProperty = xFilterProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
                                     sal_Bool bOrientation = sal_False;
                                     if (aOrientationProperty >>= bOrientation)
                                         if (bOrientation)
-                                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_orientation, sXML_column);
+                                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
                                 }
                             }
                             sal_Int32 nRefresh( pDBData->GetRefreshDelay() );
@@ -758,9 +759,9 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
                             {
                                 rtl::OUStringBuffer sBuffer;
                                 SvXMLUnitConverter::convertTime( sBuffer, (double)nRefresh / 86400 );
-                                rExport.AddAttribute( XML_NAMESPACE_TABLE, sXML_refresh_delay, sBuffer.makeStringAndClear() );
+                                rExport.AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sBuffer.makeStringAndClear() );
                             }
-                            SvXMLElementExport aElemDR(rExport, XML_NAMESPACE_TABLE, sXML_database_range, sal_True, sal_True);
+                            SvXMLElementExport aElemDR(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_RANGE, sal_True, sal_True);
                             rExport.CheckAttrList();
                             WriteImportDescriptor(xDatabaseRange->getImportDescriptor());
                             if (xSheetFilterDescriptor.is())

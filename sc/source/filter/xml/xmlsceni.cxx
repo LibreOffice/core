@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:29:26 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,15 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -115,7 +118,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
         {
             case XML_TOK_TABLE_SCENARIO_ATTR_DISPLAY_BORDER:
             {
-                bDisplayBorder = (sValue.compareToAscii(sXML_true) == 0);
+                bDisplayBorder = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_BORDER_COLOR:
@@ -125,22 +128,22 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COPY_BACK:
             {
-                bCopyBack = (sValue.compareToAscii(sXML_true) == 0);
+                bCopyBack = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COPY_STYLES:
             {
-                bCopyStyles = (sValue.compareToAscii(sXML_true) == 0);
+                bCopyStyles = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_COPY_FORMULAS:
             {
-                bCopyFormulas = (sValue.compareToAscii(sXML_true) == 0);
+                bCopyFormulas = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_IS_ACTIVE:
             {
-                bIsActive = (sValue.compareToAscii(sXML_true) == 0);
+                bIsActive = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_SCENARIO_ATTR_SCENARIO_RANGES:

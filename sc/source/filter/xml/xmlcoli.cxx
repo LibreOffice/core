@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,8 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
@@ -103,6 +103,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -112,7 +113,7 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sVisibility(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible)))
+    sVisibility(GetXMLToken(XML_VISIBLE))
 {
     nColCount = 1;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -221,7 +222,7 @@ void ScXMLTableColContext::EndElement()
                             pStyle->FillPropertySet(xColumnProperties);
                         rtl::OUString sVisible(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLVIS));
                         uno::Any aAny = xColumnProperties->getPropertyValue(sVisible);
-                        if (sVisibility.compareToAscii(sXML_visible) == 0)
+                        if (IsXMLToken(sVisibility, XML_VISIBLE))
                         {
                             sal_Bool bValue = sal_True;
                             aAny <<= bValue;
@@ -271,9 +272,9 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                                 sAttrName, &aLocalName );
             rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-            if (nPrfx == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_display) == 0)
+            if (nPrfx == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
+                if (IsXMLToken(sValue, XML_FALSE))
                     bGroupDisplay = sal_False;
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #include "document.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -95,6 +95,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -119,7 +120,7 @@ SvXMLImportContext *ScXMLDDELinksContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if (nPrefix == XML_NAMESPACE_TABLE && rLName.compareToAscii(sXML_dde_link) == 0)
+    if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(rLName, XML_DDE_LINK))
         pContext = new ScXMLDDELinkContext(GetScImport(), nPrefix, rLName, xAttrList);
 
     if( !pContext )
@@ -162,9 +163,9 @@ SvXMLImportContext *ScXMLDDELinkContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if (nPrefix == XML_NAMESPACE_OFFICE && rLName.compareToAscii(sXML_dde_source) == 0)
+    if ((nPrefix == XML_NAMESPACE_OFFICE) && IsXMLToken(rLName, XML_DDE_SOURCE))
         pContext = new ScXMLDDESourceContext(GetScImport(), nPrefix, rLName, xAttrList, this);
-    else if (nPrefix == XML_NAMESPACE_TABLE && rLName.compareToAscii(sXML_table) == 0)
+    else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(rLName, XML_TABLE))
         pContext = new ScXMLDDETableContext(GetScImport(), nPrefix, rLName, xAttrList, this);
 
     if( !pContext )
@@ -259,17 +260,17 @@ ScXMLDDESourceContext::ScXMLDDESourceContext( ScXMLImport& rImport,
 
         if (nPrefix == XML_NAMESPACE_OFFICE)
         {
-            if (aLocalName.compareToAscii(sXML_dde_application) == 0)
+            if (IsXMLToken(aLocalName, XML_DDE_APPLICATION))
                 pDDELink->SetApplication(sValue);
-            else if (aLocalName.compareToAscii(sXML_dde_topic) == 0)
+            else if (IsXMLToken(aLocalName, XML_DDE_TOPIC))
                 pDDELink->SetTopic(sValue);
-            else if (aLocalName.compareToAscii(sXML_dde_item) == 0)
+            else if (IsXMLToken(aLocalName, XML_DDE_ITEM))
                 pDDELink->SetItem(sValue);
         }
-        else if (nPrefix == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_conversion_mode) == 0)
-            if (sValue.compareToAscii(sXML_into_english_number) == 0)
+        else if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_CONVERSION_MODE))
+            if (IsXMLToken(sValue, XML_INTO_ENGLISH_NUMBER))
                 pDDELink->SetMode(SC_DDE_ENGLISH);
-            else if (sValue.compareToAscii(sXML_let_text) == 0)
+            else if (IsXMLToken(sValue, XML_LET_TEXT))
                 pDDELink->SetMode(SC_DDE_TEXT);
             else
                 pDDELink->SetMode(SC_DDE_DEFAULT);
@@ -319,9 +320,9 @@ SvXMLImportContext *ScXMLDDETableContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = NULL;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
-        if (rLName.compareToAscii(sXML_table_column) == 0)
+        if (IsXMLToken(rLName, XML_TABLE_COLUMN))
             pContext = new ScXMLDDEColumnContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
-        else if (rLName.compareToAscii(sXML_table_row) == 0)
+        else if (IsXMLToken(rLName, XML_TABLE_ROW))
             pContext = new ScXMLDDERowContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
 
     if (!pContext)
@@ -356,7 +357,7 @@ ScXMLDDEColumnContext::ScXMLDDEColumnContext( ScXMLImport& rImport,
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
-            if (aLocalName.compareToAscii(sXML_number_columns_repeated) == 0)
+            if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
                 GetScImport().GetMM100UnitConverter().convertNumber(nCols, sValue);
     }
     pDDELink->AddColumns(nCols);
@@ -402,7 +403,7 @@ ScXMLDDERowContext::ScXMLDDERowContext( ScXMLImport& rImport,
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
-            if (aLocalName.compareToAscii(sXML_number_rows_repeated) == 0)
+            if (IsXMLToken(aLocalName, XML_NUMBER_ROWS_REPEATED))
                 GetScImport().GetMM100UnitConverter().convertNumber(nRows, sValue);
     }
     pDDELink->AddRows(nRows);
@@ -420,7 +421,7 @@ SvXMLImportContext *ScXMLDDERowContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = NULL;
 
     if (nPrefix == XML_NAMESPACE_TABLE)
-        if (rLName.compareToAscii(sXML_table_cell) == 0)
+        if (IsXMLToken(rLName, XML_TABLE_CELL))
             pContext = new ScXMLDDECellContext(GetScImport(), nPrefix, rLName, xAttrList, pDDELink);
 
     if (!pContext)
@@ -461,26 +462,26 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
         USHORT nPrefix      = GetScImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
         if (nPrefix == XML_NAMESPACE_TABLE)
-            if (aLocalName.compareToAscii(sXML_value_type) == 0)
+            if (IsXMLToken(aLocalName, XML_VALUE_TYPE))
             {
-                if (sTempValue.compareToAscii(sXML_string) == 0)
+                if (IsXMLToken(sTempValue, XML_STRING))
                     bString = sal_True;
                 else
                     bString = sal_False;
             }
-            else if (aLocalName.compareToAscii(sXML_string_value) == 0)
+            else if (IsXMLToken(aLocalName, XML_STRING_VALUE))
             {
                 sValue = sTempValue;
                 bEmpty = sal_False;
                 bString2 = sal_True;
             }
-            else if (aLocalName.compareToAscii(sXML_value) == 0)
+            else if (IsXMLToken(aLocalName, XML_VALUE))
             {
                 GetScImport().GetMM100UnitConverter().convertDouble(fValue, sTempValue);
                 bEmpty = sal_False;
                 bString2 = sal_False;
             }
-            else if (aLocalName.compareToAscii(sXML_number_columns_repeated) == 0)
+            else if (IsXMLToken(aLocalName, XML_NUMBER_COLUMNS_REPEATED))
                 GetScImport().GetMM100UnitConverter().convertNumber(nCells, sTempValue);
     }
 }

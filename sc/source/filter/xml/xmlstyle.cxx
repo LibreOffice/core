@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-13 16:12:01 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,6 @@
 #endif
 
 #include <xmloff/xmlnmspe.hxx>
-#include <xmloff/xmlkywd.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltypes.hxx>
 #include <xmloff/families.hxx>
@@ -91,6 +90,7 @@
 #ifndef _XMLOFF_ATTRLIST_HXX
 #include <xmloff/attrlist.hxx>
 #endif
+
 #ifndef _COM_SUN_STAR_UTIL_CELLPROTECTION_HPP_
 #include <com/sun/star/util/CellProtection.hpp>
 #endif
@@ -458,8 +458,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                         {
                             rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
                                 aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );
-                            rtl::OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM(sXML_CDATA ) );
-                            rAttrList.AddAttribute( sAttrName, sCDATA, sAttrValue );
+                            rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sAttrValue );
                         }
                     }
                 }
@@ -484,8 +483,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
                     {
                         rtl::OUString sAttrName( rNamespaceMap.GetQNameByKey(
                             aPropMapper->GetEntryNameSpace(i->mnIndex), aPropMapper->GetEntryXMLName(i->mnIndex) ) );
-                        rtl::OUString sCDATA( RTL_CONSTASCII_USTRINGPARAM(sXML_CDATA ) );
-                        rAttrList.AddAttribute( sAttrName, sCDATA, sName );
+                        rAttrList.AddAttribute( sAttrName, GetXMLToken(XML_CDATA), sName );
                     }
                 }
                 break;
@@ -539,13 +537,13 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 rtl::OUString sCondition(RTL_CONSTASCII_USTRINGPARAM("is-true-formula("));
                                                 sCondition += xSheetCondition->getFormula1();
                                                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_condition, sCondition);
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_apply_style_name, sStyleName);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
                                                 OUString sOUBaseAddress;
                                                 ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_base_cell_address, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, sXML_map, sal_True, sal_True);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
+                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                             }
                                             else
                                             {
@@ -588,13 +586,13 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                     }
                                                     sCondition += xSheetCondition->getFormula1();
                                                 }
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_condition, sCondition);
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_apply_style_name, sStyleName);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
                                                 OUString sOUBaseAddress;
                                                 ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, sXML_base_cell_address, sOUBaseAddress);
-                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, sXML_map, sal_True, sal_True);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_BASE_CELL_ADDRESS, sOUBaseAddress);
+                                                SvXMLElementExport aMElem(rScXMLExport, XML_NAMESPACE_STYLE, XML_MAP, sal_True, sal_True);
                                             }
                                         }
                                     }
@@ -639,7 +637,7 @@ void ScXMLStyleExport::exportStyleAttributes(
             if (aAny >>= nNumberFormat)
             {
                 rtl::OUString sDataStyleName = GetExport().getDataStyleName(nNumberFormat);
-                GetExport().AddAttribute( XML_NAMESPACE_STYLE, sXML_data_style_name,
+                GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
                                                     sDataStyleName );
 
             }
@@ -780,13 +778,13 @@ sal_Bool XmlScPropHdl_CellProtection::importXML(
     }
     if ((rValue >>= aCellProtection) || bDefault)
     {
-        if (rStrImpValue.compareToAscii(sXML_none) != 0)
+        if (!IsXMLToken(rStrImpValue, XML_NONE))
         {
-            if (rStrImpValue.compareToAscii(sXML_hidden_and_protected) != 0)
+            if (!IsXMLToken(rStrImpValue, XML_HIDDEN_AND_PROTECTED))
             {
-                if (rStrImpValue.compareToAscii(sXML_protected) != 0)
+                if (!IsXMLToken(rStrImpValue, XML_PROTECTED))
                 {
-                    if (rStrImpValue.compareToAscii(sXML_formula_hidden) != 0)
+                    if (!IsXMLToken(rStrImpValue, XML_FORMULA_HIDDEN))
                     {
                         sal_Int16 i = 0;
                         while (i < rStrImpValue.getLength() && rStrImpValue[i] != ' ')
@@ -796,9 +794,9 @@ sal_Bool XmlScPropHdl_CellProtection::importXML(
                         aCellProtection.IsFormulaHidden = sal_False;
                         aCellProtection.IsHidden = sal_False;
                         aCellProtection.IsLocked = sal_False;
-                        if ((sFirst.compareToAscii(sXML_protected) == 0) || (sSecond.compareToAscii(sXML_protected) == 0))
+                        if ((IsXMLToken(sFirst, XML_PROTECTED)) || (IsXMLToken(sSecond, XML_PROTECTED)))
                             aCellProtection.IsLocked = sal_True;
-                        if ((sFirst.compareToAscii(sXML_formula_hidden) == 0) || (sSecond.compareToAscii(sXML_formula_hidden) == 0))
+                        if ((IsXMLToken(sFirst, XML_FORMULA_HIDDEN)) || (IsXMLToken(sSecond, XML_FORMULA_HIDDEN)))
                             aCellProtection.IsFormulaHidden = sal_True;
                         rValue <<= aCellProtection;
                         bRetval = sal_True;
@@ -855,29 +853,29 @@ sal_Bool XmlScPropHdl_CellProtection::exportXML(
     {
         if (!(aCellProtection.IsFormulaHidden || aCellProtection.IsHidden || aCellProtection.IsLocked))
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_none));
+            rStrExpValue = GetXMLToken(XML_NONE);
             bRetval = sal_True;
         }
         else if (aCellProtection.IsHidden && aCellProtection.IsLocked)
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_hidden_and_protected));
+            rStrExpValue = GetXMLToken(XML_HIDDEN_AND_PROTECTED);
             bRetval = sal_True;
         }
         else if (aCellProtection.IsLocked && !(aCellProtection.IsFormulaHidden || aCellProtection.IsHidden))
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_protected));
+            rStrExpValue = GetXMLToken(XML_PROTECTED);
             bRetval = sal_True;
         }
         else if (aCellProtection.IsFormulaHidden && !(aCellProtection.IsLocked || aCellProtection.IsHidden))
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_formula_hidden));
+            rStrExpValue = GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = sal_True;
         }
         else if (aCellProtection.IsFormulaHidden && aCellProtection.IsLocked)
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_protected));
+            rStrExpValue = GetXMLToken(XML_PROTECTED);
             rStrExpValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
-            rStrExpValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_formula_hidden));
+            rStrExpValue += GetXMLToken(XML_FORMULA_HIDDEN);
             bRetval = sal_True;
         }
     }
@@ -974,25 +972,25 @@ sal_Bool XmlScPropHdl_HoriJustify::importXML(
     sal_Bool bRetval(sal_False);
 
     table::CellHoriJustify nValue;
-    if (rStrImpValue.compareToAscii(sXML_start) == 0)
+    if (IsXMLToken(rStrImpValue, XML_START))
     {
          nValue = table::CellHoriJustify_LEFT;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_end) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_END))
     {
          nValue = table::CellHoriJustify_RIGHT;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_center) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_CENTER))
     {
          nValue = table::CellHoriJustify_CENTER;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_justify) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_JUSTIFY))
     {
          nValue = table::CellHoriJustify_BLOCK;
         rValue <<= nValue;
@@ -1016,25 +1014,25 @@ sal_Bool XmlScPropHdl_HoriJustify::exportXML(
         {
             case table::CellHoriJustify_LEFT:
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_start));
+                rStrExpValue = GetXMLToken(XML_START);
                 bRetval = sal_True;
             }
             break;
             case table::CellHoriJustify_RIGHT:
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_end));
+                rStrExpValue = GetXMLToken(XML_END);
                 bRetval = sal_True;
             }
             break;
             case table::CellHoriJustify_CENTER:
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_center));
+                rStrExpValue = GetXMLToken(XML_CENTER);
                 bRetval = sal_True;
             }
             break;
             case table::CellHoriJustify_BLOCK:
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_justify));
+                rStrExpValue = GetXMLToken(XML_JUSTIFY);
                 bRetval = sal_True;
             }
             break;
@@ -1066,11 +1064,11 @@ sal_Bool XmlScPropHdl_HoriJustifySource::importXML(
 {
     sal_Bool bRetval(sal_False);
 
-    if (rStrImpValue.compareToAscii(sXML_fix) == 0)
+    if (IsXMLToken(rStrImpValue, XML_FIX))
     {
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_value_type) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_VALUE_TYPE))
     {
         table::CellHoriJustify nValue = table::CellHoriJustify_STANDARD;
         rValue <<= nValue;
@@ -1092,12 +1090,12 @@ sal_Bool XmlScPropHdl_HoriJustifySource::exportXML(
     {
         if (nVal == table::CellHoriJustify_STANDARD)
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_value_type));
+            rStrExpValue = GetXMLToken(XML_VALUE_TYPE);
             bRetval = sal_True;
         }
         else
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_fix));
+            rStrExpValue = GetXMLToken(XML_FIX);
             bRetval = sal_True;
         }
     }
@@ -1128,13 +1126,13 @@ sal_Bool XmlScPropHdl_Orientation::importXML(
     sal_Bool bRetval(sal_False);
 
     table::CellOrientation nValue;
-    if (rStrImpValue.compareToAscii(sXML_ltr) == 0)
+    if (IsXMLToken(rStrImpValue, XML_LTR))
     {
         nValue = table::CellOrientation_STANDARD;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_ttb) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_TTB))
     {
         nValue = table::CellOrientation_STACKED;
         rValue <<= nValue;
@@ -1158,13 +1156,13 @@ sal_Bool XmlScPropHdl_Orientation::exportXML(
         {
             case table::CellOrientation_STACKED :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_ttb));
+                rStrExpValue = GetXMLToken(XML_TTB);
                 bRetval = sal_True;
             }
             break;
             default:
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_ltr));
+                rStrExpValue = GetXMLToken(XML_LTR);
                 bRetval = sal_True;
             }
             break;
@@ -1249,25 +1247,25 @@ sal_Bool XmlScPropHdl_RotateReference::importXML(
     sal_Bool bRetval(sal_False);
 
     table::CellVertJustify nValue;
-    if (rStrImpValue.compareToAscii(sXML_none) == 0)
+    if (IsXMLToken(rStrImpValue, XML_NONE))
     {
         nValue = table::CellVertJustify_STANDARD;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_bottom) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_BOTTOM))
     {
         nValue = table::CellVertJustify_BOTTOM;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_top) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_TOP))
     {
         nValue = table::CellVertJustify_TOP;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_center) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_CENTER))
     {
         nValue = table::CellVertJustify_CENTER;
         rValue <<= nValue;
@@ -1291,25 +1289,25 @@ sal_Bool XmlScPropHdl_RotateReference::exportXML(
         {
             case table::CellVertJustify_BOTTOM :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom));
+                rStrExpValue = GetXMLToken(XML_BOTTOM);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_CENTER :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_center));
+                rStrExpValue = GetXMLToken(XML_CENTER);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_STANDARD :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_none));
+                rStrExpValue = GetXMLToken(XML_NONE);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_TOP :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top));
+                rStrExpValue = GetXMLToken(XML_TOP);
                 bRetval = sal_True;
             }
             break;
@@ -1342,25 +1340,25 @@ sal_Bool XmlScPropHdl_VertJustify::importXML(
     sal_Bool bRetval(sal_False);
 
     table::CellVertJustify nValue;
-    if (rStrImpValue.compareToAscii(sXML_automatic) == 0)
+    if (IsXMLToken(rStrImpValue, XML_AUTOMATIC))
     {
         nValue = table::CellVertJustify_STANDARD;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_bottom) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_BOTTOM))
     {
         nValue = table::CellVertJustify_BOTTOM;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_top) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_TOP))
     {
         nValue = table::CellVertJustify_TOP;
         rValue <<= nValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_middle) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_MIDDLE))
     {
         nValue = table::CellVertJustify_CENTER;
         rValue <<= nValue;
@@ -1384,25 +1382,25 @@ sal_Bool XmlScPropHdl_VertJustify::exportXML(
         {
             case table::CellVertJustify_BOTTOM :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_bottom));
+                rStrExpValue = GetXMLToken(XML_BOTTOM);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_CENTER :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_middle));
+                rStrExpValue = GetXMLToken(XML_MIDDLE);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_STANDARD :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_automatic));
+                rStrExpValue = GetXMLToken(XML_AUTOMATIC);
                 bRetval = sal_True;
             }
             break;
             case table::CellVertJustify_TOP :
             {
-                rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_top));
+                rStrExpValue = GetXMLToken(XML_TOP);
                 bRetval = sal_True;
             }
             break;
@@ -1435,13 +1433,13 @@ sal_Bool XmlScPropHdl_BreakBefore::importXML(
     sal_Bool bRetval(sal_False);
 
     sal_Bool bValue;
-    if (rStrImpValue.compareToAscii(sXML_auto) == 0)
+    if (IsXMLToken(rStrImpValue, XML_AUTO))
     {
         bValue = sal_False;
         rValue = ::cppu::bool2any(bValue);
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_page) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_PAGE))
     {
         bValue = sal_True;
         rValue = ::cppu::bool2any(bValue);
@@ -1463,12 +1461,12 @@ sal_Bool XmlScPropHdl_BreakBefore::exportXML(
     {
         if (bVal)
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_page));
+            rStrExpValue = GetXMLToken(XML_PAGE);
             bRetval = sal_True;
         }
         else
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_auto));
+            rStrExpValue = GetXMLToken(XML_AUTO);
             bRetval = sal_True;
         }
     }
@@ -1499,13 +1497,13 @@ sal_Bool XmlScPropHdl_IsTextWrapped::importXML(
     sal_Bool bRetval(sal_False);
 
     sal_Bool bValue;
-    if (rStrImpValue.compareToAscii(sXML_wrap) == 0)
+    if (IsXMLToken(rStrImpValue, XML_WRAP))
     {
         bValue = sal_True;
         rValue <<= bValue;
         bRetval = sal_True;
     }
-    else if (rStrImpValue.compareToAscii(sXML_no_wrap) == 0)
+    else if (IsXMLToken(rStrImpValue, XML_NO_WRAP))
     {
         bValue = sal_False;
         rValue <<= bValue;
@@ -1527,12 +1525,12 @@ sal_Bool XmlScPropHdl_IsTextWrapped::exportXML(
     {
         if (bVal)
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_wrap));
+            rStrExpValue = GetXMLToken(XML_WRAP);
             bRetval = sal_True;
         }
         else
         {
-            rStrExpValue = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_no_wrap));
+            rStrExpValue = GetXMLToken(XML_NO_WRAP);
             bRetval = sal_True;
         }
     }

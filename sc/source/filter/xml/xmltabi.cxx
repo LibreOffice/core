@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltabi.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-27 11:33:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,11 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #ifndef _XMLOFF_FORMSIMP_HXX
 #include <xmloff/formsimp.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
@@ -104,6 +106,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -142,8 +145,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                         sStyleName = sValue;
                     break;
                 case XML_TOK_TABLE_PROTECTION:
-                        if (sValue.compareToAscii(sXML_true) == 0)
-                            bProtection = sal_True;
+                        bProtection = IsXMLToken(sValue, XML_TRUE);
                     break;
                 case XML_TOK_TABLE_PRINT_RANGES:
                         sPrintRanges = sValue;

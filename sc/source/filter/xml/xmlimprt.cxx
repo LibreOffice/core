@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,6 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/i18nmap.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlkywd.hxx>
-#include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
@@ -93,6 +91,9 @@
 #endif
 #ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #include "xmlimprt.hxx"
@@ -168,13 +169,6 @@
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
-
-//----------------------------------------------------------------------------
-
-sal_Char __READONLY_DATA sXML_np__text[] = "text";
-sal_Char __READONLY_DATA sXML_np__table[] = "table";
-
-//----------------------------------------------------------------------------
 
 uno::Sequence< rtl::OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw()
 {
@@ -1375,12 +1369,12 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_OFFICE==nPrefix &&
-        ( 0 == rLocalName.compareToAscii(sXML_document) ||
-          0 == rLocalName.compareToAscii(sXML_document_meta) ||
-          0 == rLocalName.compareToAscii(sXML_document_styles) ||
-          0 == rLocalName.compareToAscii(sXML_document_content) ||
-          0 == rLocalName.compareToAscii(sXML_document_settings) ))
+    if( (XML_NAMESPACE_OFFICE == nPrefix) &&
+        ( IsXMLToken(rLocalName, XML_DOCUMENT) ||
+          IsXMLToken(rLocalName, XML_DOCUMENT_META) ||
+          IsXMLToken(rLocalName, XML_DOCUMENT_STYLES) ||
+          IsXMLToken(rLocalName, XML_DOCUMENT_CONTENT) ||
+          IsXMLToken(rLocalName, XML_DOCUMENT_SETTINGS) ))
         pContext = new ScXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else
@@ -1466,13 +1460,6 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
     aValidations(),
     aDetectiveOpArray(),
 //  pScAutoStylePool(new SvXMLAutoStylePoolP),
-    sSC_float(RTL_CONSTASCII_USTRINGPARAM(sXML_float)),
-    sSC_time(RTL_CONSTASCII_USTRINGPARAM(sXML_time)),
-    sSC_date(RTL_CONSTASCII_USTRINGPARAM(sXML_date)),
-    sSC_percentage(RTL_CONSTASCII_USTRINGPARAM(sXML_percentage)),
-    sSC_currency(RTL_CONSTASCII_USTRINGPARAM(sXML_currency)),
-    sSC_string(RTL_CONSTASCII_USTRINGPARAM(sXML_string)),
-    sSC_boolean(RTL_CONSTASCII_USTRINGPARAM(sXML_boolean)),
     bRemoveLastChar(sal_False),
     pChangeTrackingImportHelper(NULL),
     pStylesImportHelper(NULL),
@@ -1490,10 +1477,6 @@ ScXMLImport::ScXMLImport(const sal_uInt16 nImportFlag) :
 
 //  pParaItemMapper( 0 ),
 {
-    /*GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TEXT, sXML_np__text,
-                                  sXML_n_text, XML_NAMESPACE_TEXT );
-    GetNamespaceMap().AddAtIndex( XML_NAMESPACE_TABLE, sXML_np__table,
-                                  sXML_n_table, XML_NAMESPACE_TABLE );*/
     pStylesImportHelper = new ScMyStylesImportHelper(*this);
 
     xScPropHdlFactory = new XMLScPropHdlFactory;

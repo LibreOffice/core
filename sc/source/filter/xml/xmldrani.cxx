@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 10:31:45 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,9 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
 #endif
@@ -112,6 +114,7 @@
 #define SC_USERLIST             "UserList"
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -204,44 +207,37 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_IS_SELECTION :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    bIsSelection = sal_True;
+                bIsSelection = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_STYLES :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    bKeepFormats = sal_True;
+                bKeepFormats = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ON_UPDATE_KEEP_SIZE :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
-                    bMoveCells = sal_True;
+                bMoveCells = !IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_HAS_PERSISTENT_DATA :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
-                    bStripData = sal_True;
+                bStripData = !IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_ORIENTATION :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_column)))
-                    bOrientation = sal_True;
+                bOrientation = IsXMLToken(sValue, XML_COLUMN);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_CONTAINS_HEADER :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
-                    bContainsHeader = sal_False;
+                bContainsHeader = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_DISPLAY_FILTER_BUTTONS :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    bAutoFilter = sal_True;
+                bAutoFilter = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_DATABASE_RANGE_ATTR_TARGET_RANGE_ADDRESS :
@@ -513,10 +509,7 @@ ScXMLSourceSQLContext::ScXMLSourceSQLContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SOURCE_SQL_ATTR_PARSE_SQL_STATEMENT :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    pDatabaseRangeContext->SetNative(sal_False);
-                else
-                    pDatabaseRangeContext->SetNative(sal_True);
+                pDatabaseRangeContext->SetNative(IsXMLToken(sValue, XML_TRUE));
             }
             break;
         }
@@ -682,26 +675,17 @@ ScXMLSubTotalRulesContext::ScXMLSubTotalRulesContext( ScXMLImport& rImport,
         {
             case XML_TOK_SUBTOTAL_RULES_ATTR_BIND_STYLES_TO_CONTENT :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    pDatabaseRangeContext->SetSubTotalsBindFormatsToContent(sal_True);
-                else
-                    pDatabaseRangeContext->SetSubTotalsBindFormatsToContent(sal_False);
+                pDatabaseRangeContext->SetSubTotalsBindFormatsToContent(IsXMLToken(sValue, XML_TRUE));
             }
             break;
             case XML_TOK_SUBTOTAL_RULES_ATTR_CASE_SENSITIVE :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    pDatabaseRangeContext->SetSubTotalsIsCaseSensitive(sal_True);
-                else
-                    pDatabaseRangeContext->SetSubTotalsIsCaseSensitive(sal_False);
+                pDatabaseRangeContext->SetSubTotalsIsCaseSensitive(IsXMLToken(sValue, XML_TRUE));
             }
             break;
             case XML_TOK_SUBTOTAL_RULES_ATTR_PAGE_BREAKS_ON_GROUP_CHANGE :
             {
-                if (sValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_true)))
-                    pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(sal_True);
-                else
-                    pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(sal_False);
+                pDatabaseRangeContext->SetSubTotalsInsertPageBreaks(IsXMLToken(sValue, XML_TRUE));
             }
             break;
         }
@@ -781,17 +765,17 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
                     }
                     else
                     {
-                        //if (sValue.compareToAscii(sXML_automatic) == 0)
+                        //if (IsXMLToken(sValue, XML_AUTOMATIC))
                             //aSortField.FieldType = util::SortFieldType_AUTOMATIC;
                             // is not supported by StarOffice
                     }
                 }
                 else
                 {
-                    //if (sValue.compareToAscii(sXML_text) == 0)
+                    //if (IsXMLToken(sValue, XML_TEXT))
                         //aSortField.FieldType = util::SortFieldType_ALPHANUMERIC;
                         // is not supported by StarOffice
-                    //else if (sValue.compareToAscii(sXML_number) == 0)
+                    //else if (IsXMLToken(sValue, XML_NUMBER))
                         //aSortField.FieldType = util::SortFieldType_NUMERIC;
                         // is not supported by StarOffice
                 }
@@ -799,7 +783,7 @@ ScXMLSortGroupsContext::ScXMLSortGroupsContext( ScXMLImport& rImport,
             break;
             case XML_TOK_SORT_GROUPS_ATTR_ORDER :
             {
-                if (sValue.compareToAscii(sXML_ascending) == 0)
+                if (IsXMLToken(sValue, XML_ASCENDING))
                     pDatabaseRangeContext->SetSubTotalsAscending(sal_True);
                 else
                     pDatabaseRangeContext->SetSubTotalsAscending(sal_False);

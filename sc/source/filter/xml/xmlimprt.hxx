@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:39:27 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,14 +792,6 @@ protected:
     virtual XMLShapeImportHelper* CreateShapeImport();
 
 public:
-    rtl::OUString sSC_float;
-    rtl::OUString sSC_time;
-    rtl::OUString sSC_date;
-    rtl::OUString sSC_percentage;
-    rtl::OUString sSC_currency;
-    rtl::OUString sSC_string;
-    rtl::OUString sSC_boolean;
-
     ScXMLImport(const sal_uInt16 nImportFlag);
     ~ScXMLImport();
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-02 10:33:21 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,12 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -161,7 +164,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 sBaseCellAddress = sValue;
             break;
             case XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL:
-                if (sValue.compareToAscii(sXML_false) == 0)
+                if (IsXMLToken(sValue, XML_FALSE))
                     bAllowEmptyCell = sal_True;
             break;
         }
@@ -201,13 +204,13 @@ SvXMLImportContext *ScXMLContentValidationContext::CreateChildContext( USHORT nP
 
 void ScXMLContentValidationContext::GetAlertStyle(const rtl::OUString& sMessageType, com::sun::star::sheet::ValidationAlertStyle& aAlertStyle)
 {
-    if (sMessageType.compareToAscii("macro") == 0)
+    if (IsXMLToken(sMessageType, XML_MACRO))
         aAlertStyle = sheet::ValidationAlertStyle_MACRO;
-    else if (sMessageType.compareToAscii(sXML_stop) == 0)
+    else if (IsXMLToken(sMessageType, XML_STOP))
         aAlertStyle = sheet::ValidationAlertStyle_STOP;
-    else if (sMessageType.compareToAscii(sXML_warning) == 0)
+    else if (IsXMLToken(sMessageType, XML_WARNING))
         aAlertStyle = sheet::ValidationAlertStyle_WARNING;
-    else if (sMessageType.compareToAscii(sXML_information) == 0)
+    else if (IsXMLToken(sMessageType, XML_INFORMATION))
         aAlertStyle = sheet::ValidationAlertStyle_INFO;
 }
 
@@ -437,8 +440,7 @@ ScXMLHelpMessageContext::ScXMLHelpMessageContext( ScXMLImport& rImport,
                 sTitle = sValue;
             break;
             case XML_TOK_HELP_MESSAGE_ATTR_DISPLAY:
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDisplay = sal_True;
+                bDisplay = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }
@@ -512,8 +514,7 @@ ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
                 sMessageType = sValue;
             break;
             case XML_TOK_ERROR_MESSAGE_ATTR_DISPLAY:
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDisplay = sal_True;
+                bDisplay = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }
@@ -581,8 +582,7 @@ ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
                 sName = sValue;
             break;
             case XML_TOK_ERROR_MACRO_ATTR_EXECUTE:
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bExecute = sal_True;
+                bExecute = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }

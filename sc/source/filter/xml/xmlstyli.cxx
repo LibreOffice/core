@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-13 16:17:50 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,9 +70,6 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
-#endif
 #ifndef _XMLOFF_XMLIMPPR_HXX
 #include <xmloff/xmlimppr.hxx>
 #endif
@@ -84,6 +81,9 @@
 #endif
 #ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
 #include <xmloff/XMLGraphicsDefaultStyle.hxx>
+#endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
@@ -136,6 +136,7 @@ using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace xmloff::token;
 //using namespace ::com::sun::star::text;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
@@ -319,11 +320,11 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         // TODO: use a map here
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
-            if( aLocalName.compareToAscii( sXML_condition ) == 0 )
+            if( IsXMLToken(aLocalName, XML_CONDITION ) )
                 sCondition = rValue;
-            else if( aLocalName.compareToAscii( sXML_apply_style_name ) == 0 )
+            else if( IsXMLToken(aLocalName, XML_APPLY_STYLE_NAME ) )
                 sApplyStyle = rValue;
-            else if (aLocalName.compareToAscii( sXML_base_cell_address ) == 0 )
+            else if ( IsXMLToken(aLocalName, XML_BASE_CELL_ADDRESS ) )
                 sBaseCell = rValue;
         }
     }
@@ -530,9 +531,9 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rValue )
 {
     // TODO: use a map here
-    if( rLocalName.compareToAscii( sXML_data_style_name ) == 0 )
+    if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
         sDataStyleName = rValue;
-    else if (rLocalName.compareToAscii( sXML_master_page_name ) == 0 )
+    else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
         sPageStyle = rValue;
     else
         XMLPropStyleContext::SetAttribute( nPrefixKey, rLocalName, rValue );
@@ -572,8 +573,8 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = NULL;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.compareToAscii( sXML_map ) == 0 )
+    if( (XML_NAMESPACE_STYLE == nPrefix) &&
+        IsXMLToken(rLocalName, XML_MAP ) )
     {
         pContext = new ScXMLMapContext(GetImport(), nPrefix, rLocalName, xAttrList);
 
@@ -974,8 +975,8 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 {
     SvXMLStyleContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        rLocalName.equalsAsciiL( sXML_master_page, sizeof(sXML_master_page)-1 ) &&
+    if( (XML_NAMESPACE_STYLE == nPrefix) &&
+        IsXMLToken(rLocalName, XML_MASTER_PAGE) &&
          InsertStyleFamily( XML_STYLE_FAMILY_MASTER_PAGE ) )
         pContext = new ScMasterPageContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,

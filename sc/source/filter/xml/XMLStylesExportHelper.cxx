@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-06 11:35:07 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@
 #include "document.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -110,6 +110,7 @@
 #include <algorithm>
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 ScMyValidation::ScMyValidation()
     : sName(),
@@ -354,16 +355,16 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
     const sal_Bool bShowMessage, const sal_Bool bIsHelpMessage)
 {
     if (sTitle.getLength())
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_title, sTitle);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TITLE, sTitle);
     if (bShowMessage)
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_true);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TRUE);
     else
-        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_display, sXML_false);
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY, XML_FALSE);
     SvXMLElementExport* pMessage = NULL;
     if (bIsHelpMessage)
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_help_message, sal_True, sal_True);
+        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_HELP_MESSAGE, sal_True, sal_True);
     else
-        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_error_message, sal_True, sal_True);
+        pMessage = new SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MESSAGE, sal_True, sal_True);
     if (sOUMessage.getLength())
     {
         sal_Int32 i = 0;
@@ -375,7 +376,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         {
             if ((sText[i] == '\n'))
             {
-                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+                SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
                 rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
             }
             else
@@ -384,7 +385,7 @@ void ScMyValidationsContainer::WriteMessage(ScXMLExport& rExport,
         }
         if (sTemp.getLength())
         {
-            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, sXML_p, sal_True, sal_False);
+            SvXMLElementExport aElemP(rExport, XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False);
             rExport.GetTextParagraphExport()->exportText(sTemp.makeStringAndClear(), bPrevCharWasSpace);
         }
     }
@@ -396,22 +397,22 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
 {
     if (aValidationVec.size())
     {
-        SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, sXML_content_validations, sal_True, sal_True);
+        SvXMLElementExport aElemVs(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATIONS, sal_True, sal_True);
         ScMyValidationVec::iterator aItr = aValidationVec.begin();
         while (aItr != aValidationVec.end())
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_name, aItr->sName);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sName);
             rtl::OUString sCondition = GetCondition(*aItr);
             if (sCondition.getLength())
             {
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_condition, sCondition);
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CONDITION, sCondition);
                 if (aItr->bIgnoreBlanks)
-                    rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_allow_empty_cell, sXML_false);
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_FALSE);
                 else
-                    rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_allow_empty_cell, sXML_true);
+                    rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL, XML_TRUE);
             }
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_base_cell_address, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
-            SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, sXML_content_validation, sal_True, sal_True);
+            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS, GetBaseCellAddress(rExport.GetDocument(), aItr->aBaseCell));
+            SvXMLElementExport aElemV(rExport, XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, sal_True, sal_True);
             if (aItr->bShowImputMessage || aItr->sImputMessage.getLength() || aItr->sImputTitle.getLength())
             {
                 WriteMessage(rExport, aItr->sImputTitle, aItr->sImputMessage, aItr->bShowImputMessage, sal_True);
@@ -422,30 +423,30 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                 {
                     case sheet::ValidationAlertStyle_INFO :
                     {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_information);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_INFORMATION);
                         WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
                     }
                     break;
                     case sheet::ValidationAlertStyle_WARNING :
                     {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_warning);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_WARNING);
                         WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
                     }
                     break;
                     case sheet::ValidationAlertStyle_STOP :
                     {
-                        rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_message_type, sXML_stop);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MESSAGE_TYPE, XML_STOP);
                         WriteMessage(rExport, aItr->sErrorTitle, aItr->sErrorMessage, aItr->bShowErrorMessage, sal_False);
                     }
                     break;
                     case sheet::ValidationAlertStyle_MACRO :
                     {
-                        rExport.AddAttribute(XML_NAMESPACE_TABLE, sXML_name, aItr->sErrorTitle);
+                        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, aItr->sErrorTitle);
                         if (aItr->bShowErrorMessage)
-                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_execute, sXML_true);
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_TRUE);
                         else
-                            rExport.AddAttributeASCII(XML_NAMESPACE_TABLE, sXML_execute, sXML_false);
-                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, sXML_error_macro, sal_True, sal_True);
+                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_EXECUTE, XML_FALSE);
+                        SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_ERROR_MACRO, sal_True, sal_True);
                     }
                     break;
                 }

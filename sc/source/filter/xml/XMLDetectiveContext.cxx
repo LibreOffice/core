@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,8 +74,8 @@
 #ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
@@ -95,6 +95,7 @@
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace xmloff::token;
 
 
 //___________________________________________________________________
@@ -210,7 +211,7 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
                 aDetectiveObj.eObjType = ScXMLConverter::GetDetObjTypeFromString( sValue );
             break;
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CONTAINS_ERROR:
-                aDetectiveObj.bHasError = (sValue.compareToAscii( sXML_true ) == 0);
+                aDetectiveObj.bHasError = IsXMLToken(sValue, XML_TRUE);
             break;
         }
     }

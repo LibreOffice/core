@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-22 19:53:32 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
@@ -90,6 +90,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::beans;
+using namespace xmloff::token;
 
 XMLTableMasterPageExport::XMLTableMasterPageExport( ScXMLExport& rExp ) :
         XMLTextMasterPageExport ( rExp )
@@ -101,7 +102,7 @@ XMLTableMasterPageExport::~XMLTableMasterPageExport()
 }
 
 void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
-                                                    const sal_Char *pName,
+                                                    const XMLTokenEnum aName,
                                                     const sal_Bool bDisplay)
 {
     if( xHeaderFooter.is() )
@@ -118,10 +119,10 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
             if (sCenter.getLength() || sLeft.getLength() || sRight.getLength())
             {
                 if( !bDisplay )
-                    GetExport().AddAttributeASCII( XML_NAMESPACE_STYLE,
-                                                    sXML_display, sXML_false );
+                    GetExport().AddAttribute( XML_NAMESPACE_STYLE,
+                                                    XML_DISPLAY, XML_FALSE );
                 SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                            pName, sal_True, sal_True );
+                                            aName, sal_True, sal_True );
                 if (sCenter.getLength() && !sLeft.getLength() && !sRight.getLength())
                     exportHeaderFooterContent( xCenter, sal_False, sal_False );
                 else
@@ -129,19 +130,19 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
                     if (sLeft.getLength())
                     {
                         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    sXML_region_left, sal_True, sal_True );
+                                                    XML_REGION_LEFT, sal_True, sal_True );
                          exportHeaderFooterContent( xLeft, sal_False, sal_False );
                     }
                     if (sCenter.getLength())
                     {
                         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    sXML_region_center, sal_True, sal_True );
+                                                    XML_REGION_CENTER, sal_True, sal_True );
                          exportHeaderFooterContent( xCenter, sal_False, sal_False );
                     }
                     if (sRight.getLength())
                     {
                         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
-                                                    sXML_region_right, sal_True, sal_True );
+                                                    XML_REGION_RIGHT, sal_True, sal_True );
                          exportHeaderFooterContent( xRight, sal_False, sal_False );
                     }
                 }
@@ -204,22 +205,22 @@ void XMLTableMasterPageExport::exportMasterPageContent(
         aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_HDRON ) ) );
         sal_Bool bHeader = *(sal_Bool *)aAny.getValue();
 
-        exportHeaderFooter(xHeader, sXML_header, bHeader );
+        exportHeaderFooter(xHeader, XML_HEADER, bHeader );
 
         aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_HDRSHARED ) ) );
         sal_Bool bLeftHeader = !(*(sal_Bool *)aAny.getValue()) && bHeader;
 
-        exportHeaderFooter( xHeaderLeft, sXML_header_left, bLeftHeader );
+        exportHeaderFooter( xHeaderLeft, XML_HEADER_LEFT, bLeftHeader );
 
         aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_FTRON ) ) );
         sal_Bool bFooter = *(sal_Bool *)aAny.getValue();
 
-        exportHeaderFooter( xFooter, sXML_footer, bFooter );
+        exportHeaderFooter( xFooter, XML_FOOTER, bFooter );
 
         aAny = rPropSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNO_PAGE_FTRSHARED ) ) );
         sal_Bool bLeftFooter = !(*(sal_Bool *)aAny.getValue()) && bFooter;
 
-        exportHeaderFooter( xFooterLeft, sXML_footer_left, bLeftFooter );
+        exportHeaderFooter( xFooterLeft, XML_FOOTER_LEFT, bLeftFooter );
     }
 }
 

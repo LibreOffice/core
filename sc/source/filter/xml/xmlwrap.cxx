@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-24 11:17:29 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,6 @@
 #include <vos/xception.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-23 15:24:06 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ class ScXMLExport : public SvXMLExport
     sal_Bool                    mbShowProgress : 1;
 
 
+    sal_Bool        HasDrawPages(com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheetDocument>& xDoc);
     void            CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCount, const sal_Int32 nCellCount);
     void            CollectShapesAutoStyles(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable, const sal_Int32 nTable);
     void            WriteTablesView(const com::sun::star::uno::Any& aTableView);

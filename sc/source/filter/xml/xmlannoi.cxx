@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:30 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,12 +76,15 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -126,8 +129,7 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY:
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bDisplay = sal_True;
+                bDisplay = IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }
@@ -145,7 +147,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if ((nPrefix == XML_NAMESPACE_TEXT) && (rLName.compareToAscii(sXML_p) == 0) )
+    if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
     {
         if (!bHasTextP)
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,9 +80,12 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -141,8 +144,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             break;
             case XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES :
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bSkipDuplicates = sal_True;
+                bSkipDuplicates = !IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }
@@ -317,7 +319,7 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     pFilterContext = pTempFilterContext;
-    sDataType = rtl::OUString::createFromAscii(sXML_text);
+    sDataType = GetXMLToken(XML_TEXT);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
@@ -338,8 +340,7 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
             break;
             case XML_TOK_CONDITION_ATTR_CASE_SENSITIVE :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bIsCaseSensitive = sal_True;
+                bIsCaseSensitive = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_CONDITION_ATTR_DATA_TYPE :
@@ -381,12 +382,12 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( USHORT nPrefix,
 void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sheet::FilterOperator& aFilterOperator, sal_Bool& bUseRegularExpressions) const
 {
     bUseRegularExpressions = sal_False;
-    if (sTempOperator.compareToAscii(sXML_match) == 0)
+    if (IsXMLToken(sTempOperator, XML_MATCH))
     {
         bUseRegularExpressions = sal_True;
         aFilterOperator = sheet::FilterOperator_EQUAL;
     }
-    else if (sTempOperator.compareToAscii(sXML_nomatch) == 0)
+    else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
         bUseRegularExpressions = sal_True;
         aFilterOperator = sheet::FilterOperator_NOT_EQUAL;
@@ -395,11 +396,11 @@ void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sh
         aFilterOperator = sheet::FilterOperator_EQUAL;
     else if (sTempOperator.compareToAscii("!=") == 0)
         aFilterOperator = sheet::FilterOperator_NOT_EQUAL;
-    else if (sTempOperator.compareToAscii(sXML_bottom_percent) == 0)
+    else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
         aFilterOperator = sheet::FilterOperator_BOTTOM_PERCENT;
-    else if (sTempOperator.compareToAscii(sXML_bottom_values) == 0)
+    else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
         aFilterOperator = sheet::FilterOperator_BOTTOM_VALUES;
-    else if (sTempOperator.compareToAscii(sXML_empty) == 0)
+    else if (IsXMLToken(sTempOperator, XML_EMPTY))
         aFilterOperator = sheet::FilterOperator_EMPTY;
     else if (sTempOperator.compareToAscii(">") == 0)
         aFilterOperator = sheet::FilterOperator_GREATER;
@@ -409,11 +410,11 @@ void ScXMLConditionContext::getOperatorXML(const rtl::OUString sTempOperator, sh
         aFilterOperator = sheet::FilterOperator_LESS;
     else if (sTempOperator.compareToAscii("<=") == 0)
         aFilterOperator = sheet::FilterOperator_LESS_EQUAL;
-    else if (sTempOperator.compareToAscii(sXML_noempty) == 0)
+    else if (IsXMLToken(sTempOperator, XML_NOEMPTY))
         aFilterOperator = sheet::FilterOperator_NOT_EMPTY;
-    else if (sTempOperator.compareToAscii(sXML_top_percent) == 0)
+    else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
         aFilterOperator = sheet::FilterOperator_TOP_PERCENT;
-    else if (sTempOperator.compareToAscii(sXML_top_values) == 0)
+    else if (IsXMLToken(sTempOperator, XML_TOP_VALUES))
         aFilterOperator = sheet::FilterOperator_TOP_VALUES;
 }
 
@@ -429,7 +430,7 @@ void ScXMLConditionContext::EndElement()
     getOperatorXML(sOperator, aFilterField.Operator, bUseRegularExpressions);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
     aFilterField.Field = nField;
-    if (sDataType.compareToAscii(sXML_number) == 0)
+    if (IsXMLToken(sDataType, XML_NUMBER))
     {
         aFilterField.NumericValue = sConditionValue.toDouble();
         aFilterField.IsNumeric = sal_True;
@@ -499,8 +500,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             break;
             case XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES :
             {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bSkipDuplicates = sal_True;
+                bSkipDuplicates = !IsXMLToken(sValue, XML_TRUE);
             }
             break;
         }
@@ -672,10 +672,10 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext) :
     bIsCaseSensitive(sal_False),
-    SvXMLImportContext( rImport, nPrfx, rLName )
+    SvXMLImportContext( rImport, nPrfx, rLName ),
+    sDataType(GetXMLToken(XML_TEXT))
 {
     pFilterContext = pTempFilterContext;
-    sDataType = rtl::OUString::createFromAscii(sXML_text);
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetFilterConditionAttrTokenMap();
@@ -696,8 +696,7 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
             break;
             case XML_TOK_CONDITION_ATTR_CASE_SENSITIVE :
             {
-                if (sValue.compareToAscii(sXML_true) == 0)
-                    bIsCaseSensitive = sal_True;
+                bIsCaseSensitive = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_CONDITION_ATTR_DATA_TYPE :
@@ -740,12 +739,12 @@ void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, 
                                             double& dVal) const
 {
     bUseRegularExpressions = sal_False;
-    if (sTempOperator.compareToAscii(sXML_match) == 0)
+    if (IsXMLToken(sTempOperator, XML_MATCH))
     {
         bUseRegularExpressions = sal_True;
         aFilterOperator = SC_EQUAL;
     }
-    else if (sTempOperator.compareToAscii(sXML_nomatch) == 0)
+    else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
         bUseRegularExpressions = sal_True;
         aFilterOperator = SC_NOT_EQUAL;
@@ -754,11 +753,11 @@ void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, 
         aFilterOperator = SC_EQUAL;
     else if (sTempOperator.compareToAscii("!=") == 0)
         aFilterOperator = SC_NOT_EQUAL;
-    else if (sTempOperator.compareToAscii(sXML_bottom_percent) == 0)
+    else if (IsXMLToken(sTempOperator, XML_BOTTOM_PERCENT))
         aFilterOperator = SC_BOTPERC;
-    else if (sTempOperator.compareToAscii(sXML_bottom_values) == 0)
+    else if (IsXMLToken(sTempOperator, XML_BOTTOM_VALUES))
         aFilterOperator = SC_BOTVAL;
-    else if (sTempOperator.compareToAscii(sXML_empty) == 0)
+    else if (IsXMLToken(sTempOperator, XML_EMPTY))
         dVal = SC_EMPTYFIELDS;
     else if (sTempOperator.compareToAscii(">") == 0)
         aFilterOperator = SC_GREATER;
@@ -768,11 +767,11 @@ void ScXMLDPConditionContext::getOperatorXML(const rtl::OUString sTempOperator, 
         aFilterOperator = SC_LESS;
     else if (sTempOperator.compareToAscii("<=") == 0)
         aFilterOperator = SC_LESS_EQUAL;
-    else if (sTempOperator.compareToAscii(sXML_noempty) == 0)
+    else if (IsXMLToken(sTempOperator, XML_NOEMPTY))
         dVal = SC_NONEMPTYFIELDS;
-    else if (sTempOperator.compareToAscii(sXML_top_percent) == 0)
+    else if (IsXMLToken(sTempOperator, XML_TOP_PERCENT))
         aFilterOperator = SC_TOPPERC;
-    else if (sTempOperator.compareToAscii(sXML_top_values) == 0)
+    else if (IsXMLToken(sTempOperator, XML_TOP_VALUES))
         aFilterOperator = SC_TOPVAL;
 }
 
@@ -789,7 +788,7 @@ void ScXMLDPConditionContext::EndElement()
     getOperatorXML(sOperator, aFilterField.eOp, bUseRegularExpressions, dVal);
     pFilterContext->SetUseRegularExpressions(bUseRegularExpressions);
     aFilterField.nField = static_cast<USHORT>(nField);
-    if (sDataType.compareToAscii(sXML_number) == 0)
+    if (IsXMLToken(sDataType, XML_NUMBER))
     {
         aFilterField.nVal = sConditionValue.toDouble();
         aFilterField.bQueryByString = sal_False;

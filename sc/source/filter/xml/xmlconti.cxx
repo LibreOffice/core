@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlconti.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,11 +73,15 @@
 #include "document.hxx"
 
 #include <xmloff/xmltkmap.hxx>
-#include <xmloff/xmlkywd.hxx>
 #include <xmloff/nmspmap.hxx>
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
 #endif
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
+#endif
+
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -104,7 +108,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
 {
     SvXMLImportContext *pContext = 0;
 
-    if ((nPrefix == XML_NAMESPACE_TEXT) && (rLName.compareToAscii(sXML_s) == 0))
+    if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_S))
     {
         sal_Int32 nRepeat(0);
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -115,7 +119,7 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
             rtl::OUString aLocalName;
             USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
-            if ((nPrfx == XML_NAMESPACE_TEXT) && (aLocalName.compareToAscii(sXML_c) == 0))
+            if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
                 nRepeat = sValue.toInt32();
         }
         if (nRepeat)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
 #endif
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
@@ -106,6 +106,7 @@
 #define SC_ISFILTERED "IsFiltered"
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -115,9 +116,8 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sVisibility(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_visible))),
+    sVisibility(GetXMLToken(XML_VISIBLE)),
     nRepeatedRows(1)
-//  sOptimalHeight(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_false)))
 {
     rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -233,13 +233,13 @@ void ScXMLTableRowContext::EndElement()
                         uno::Any aFilteredAny;// = xRowProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ISFILTERED)));
                         sal_Bool bVisible (sal_True);
                         sal_Bool bFiltered (sal_False);
-                        if (sVisibility.compareToAscii(sXML_collapse) == 0)
+                        if (IsXMLToken(sVisibility, XML_COLLAPSE))
                         {
                             bVisible = sal_False;
                             aVisibleAny <<= bVisible;
                             aFilteredAny <<= bFiltered;
                         }
-                        else if (sVisibility.compareToAscii(sXML_filter) == 0)
+                        else if (IsXMLToken(sVisibility, XML_FILTER))
                         {
                             bVisible = sal_False;
                             aVisibleAny <<= bVisible;
@@ -309,11 +309,8 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                                 sAttrName, &aLocalName );
             rtl::OUString sValue = xAttrList->getValueByIndex( i );
 
-            if (nPrfx == XML_NAMESPACE_TABLE && aLocalName.compareToAscii(sXML_display) == 0)
-            {
-                if (sValue.compareToAscii(sXML_false) == 0)
-                    bGroupDisplay = sal_False;
-            }
+            if ((nPrfx == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_DISPLAY))
+                bGroupDisplay = IsXMLToken(sValue, XML_TRUE);
         }
     }
 }

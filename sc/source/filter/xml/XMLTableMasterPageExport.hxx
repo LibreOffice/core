@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 16:57:57 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,11 +79,13 @@
 namespace com { namespace sun { namespace star {
     namespace text { class XText; }
 } } }
+namespace xmloff { namespace token {
+    enum XMLTokenEnum; }}
 
 class XMLTableMasterPageExport : public XMLTextMasterPageExport
 {
     void exportHeaderFooter(const com::sun::star::uno::Reference < com::sun::star::sheet::XHeaderFooterContent >& xHeaderFooter,
-                            const sal_Char *pName,
+                            const xmloff::token::XMLTokenEnum aName,
                             const sal_Bool bDisplay);
 
 protected:

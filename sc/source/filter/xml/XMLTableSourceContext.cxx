@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-06-25 12:03:09 $
+ *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,8 @@
 #include "tablink.hxx"
 #endif
 
-#ifndef _XMLOFF_XMLKYWD_HXX
-#include <xmloff/xmlkywd.hxx>
+#ifndef _XMLOFF_XMLTOKEN_HXX
+#include <xmloff/xmltoken.hxx>
 #endif
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
@@ -101,6 +101,7 @@
 #endif
 
 using namespace com::sun::star;
+using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
@@ -127,23 +128,23 @@ ScXMLTableSourceContext::ScXMLTableSourceContext( ScXMLImport& rImport,
         rtl::OUString sValue = xAttrList->getValueByIndex( i );
         if(nPrefix == XML_NAMESPACE_XLINK)
         {
-            if (aLocalName.compareToAscii(sXML_href) == 0)
+            if (IsXMLToken(aLocalName, XML_HREF))
                 sLink = GetScImport().GetAbsoluteReference(sValue);
         }
         else if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            if (aLocalName.compareToAscii(sXML_table_name) == 0)
+            if (IsXMLToken(aLocalName, XML_TABLE_NAME))
                 sTableName = sValue;
-            else if (aLocalName.compareToAscii(sXML_filter_name) == 0)
+            else if (IsXMLToken(aLocalName, XML_FILTER_NAME))
                 sFilterName = sValue;
-            else if (aLocalName.compareToAscii(sXML_filter_options) == 0)
+            else if (IsXMLToken(aLocalName, XML_FILTER_OPTIONS))
                 sFilterOptions = sValue;
-            else if (aLocalName.compareToAscii(sXML_mode) == 0)
+            else if (IsXMLToken(aLocalName, XML_MODE))
             {
-                if (sValue.compareToAscii(sXML_copy_results_only) == 0)
+                if (IsXMLToken(sValue, XML_COPY_RESULTS_ONLY))
                     nMode = sheet::SheetLinkMode_VALUE;
             }
-            else if (aLocalName.compareToAscii(sXML_refresh_delay) == 0)
+            else if (IsXMLToken(aLocalName, XML_REFRESH_DELAY))
             {
                 double fTime;
                 if( SvXMLUnitConverter::convertTime( fTime, sValue ) )
