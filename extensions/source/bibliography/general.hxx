@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-17 09:43:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,33 +123,43 @@ class BibGeneralPage: public BibGeneralPageBaseClass, public BibTabPage
     Window              aControlParentWin;
     FixedText           aIdentifierFT;
     FixedText           aAuthTypeFT;
-
-    FixedText           aAuthorFT;
-    FixedText           aMonthFT;
     FixedText           aYearFT;
 
+    FixedText           aAuthorFT;
+    FixedText           aTitleFT;
+
     FixedText           aPublisherFT;
+    FixedText           aAddressFT;
     FixedText           aISBNFT;
 
-    FixedText           aAddressFT;
-    FixedText           aAnnoteFT;
-    FixedText           aBooktitleFT;
     FixedText           aChapterFT;
-    FixedText           aEditionFT;
-    FixedText           aEditorFT;
-    FixedText           aHowpublishedFT;
-    FixedText           aInstitutionFT;
-    FixedText           aJournalFT;
-    FixedText           aNoteFT;
-    FixedText           aNumberFT;
-    FixedText           aOrganizationsFT;
     FixedText           aPagesFT;
-    FixedText           aSchoolFT;
-    FixedText           aSeriesFT;
-    FixedText           aTitleFT;
-    FixedText           aReportTypeFT;
+    FixedLine           aFirstFL;
+
+    FixedText           aEditorFT;
+    FixedText           aEditionFT;
+
+    FixedText           aBooktitleFT;
     FixedText           aVolumeFT;
+    FixedText           aHowpublishedFT;
+
+    FixedText           aOrganizationsFT;
+    FixedText           aInstitutionFT;
+    FixedText           aSchoolFT;
+
+    FixedText           aReportTypeFT;
+    FixedText           aMonthFT;
+    FixedLine           aSecondFL;
+
+    FixedText           aJournalFT;
+    FixedText           aNumberFT;
+    FixedText           aSeriesFT;
+
+    FixedText           aAnnoteFT;
+    FixedText           aNoteFT;
     FixedText           aURLFT;
+    FixedLine           aThirdFL;
+
     FixedText           aCustom1FT;
     FixedText           aCustom2FT;
     FixedText           aCustom3FT;
