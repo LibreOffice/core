@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 11:52:13 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FORM_XBINDABLEVALUE_HPP_
-#include <drafts/com/sun/star/form/XBindableValue.hpp>
+#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
+#include <com/sun/star/form/binding/XBindableValue.hpp>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -134,7 +134,7 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
 
 const sal_uInt16 WIDTH              = 0x0001;
 const sal_uInt16 ALIGN              = 0x0002;
@@ -444,8 +444,7 @@ void OGridColumn::clearAggregateProperties(Sequence<Property>& seqProps, sal_Boo
 void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 {
     aDescriptor.realloc(5);
-    Property* pProps = aDescriptor.getArray();
-    sal_Int32 nPos = 0;
+    Property* pProperties = aDescriptor.getArray();
     DECL_PROP1(LABEL,               ::rtl::OUString,    BOUND);
     DECL_PROP3(WIDTH,               sal_Int32,          BOUND, MAYBEVOID, MAYBEDEFAULT);
     DECL_PROP3(ALIGN,               sal_Int16,          BOUND, MAYBEVOID, MAYBEDEFAULT);
