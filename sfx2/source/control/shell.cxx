@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -473,7 +473,17 @@ void SfxShell::PutItem
             // falls aktiv Bindings benachrichtigen
             SfxDispatcher *pDispat = GetDispatcher();
             if ( pDispat )
-                pDispat->GetBindings()->Broadcast( aItemHint );
+            {
+                SfxBindings* pBindings = pDispat->GetBindings();
+                pBindings->Broadcast( aItemHint );
+                USHORT nSlotId = nWhich; //pItem->GetSlotId();
+                SfxStateCache* pCache = pBindings->GetStateCache( nSlotId );
+                if ( pCache )
+                {
+                    pCache->SetState( SFX_ITEM_AVAILABLE, pItem->Clone(), TRUE );
+                    pCache->SetCachedState( TRUE );
+                }
+            }
             return;
         }
     }
