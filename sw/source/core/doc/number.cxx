@@ -2,9 +2,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:30:05 $
+ *  last change: $Author: os $ $Date: 2002-10-08 13:51:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,6 +451,7 @@ SwNumRule::SwNumRule( const String& rNm, SwNumRuleType eType, BOOL bAutoFlg )
 //JP 18.01.96: heute soll es mal wieder vollstaendig numeriert werden
 //JP 10.03.96: und nun mal wieder nicht
             pFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
+            pFmt->SetIncludeUpperLevels( MAXLEVEL );
 //            pFmt->eType = ARABIC;
             pFmt->SetStart( 1 );
             SwNumRule::aBaseFmts[ OUTLINE_RULE ][ n ] = pFmt;
