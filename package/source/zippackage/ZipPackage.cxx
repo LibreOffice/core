@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-26 11:21:18 $
+ *  last change: $Author: mtg $ $Date: 2001-10-30 10:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
+#endif
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
 #endif
 #include <memory>
 
@@ -869,7 +872,9 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 aInfo.NameClash = NameClash::OVERWRITE;
                 aInfo.MoveData = sal_False;
                 aInfo.SourceURL = sTempURL;
-                aInfo.NewTitle = sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
+                aInfo.NewTitle = rtl::Uri::decode ( sURL.copy ( 1 + sURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) ),
+                                                    rtl_UriDecodeWithCharset,
+                                                    RTL_TEXTENCODING_UTF8 );
                 aAny <<= aInfo;
                 try
                 {
