@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:53:02 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,7 +336,8 @@ SwDoc::SwDoc() :
     eChrCmprType( CHARCOMPRESS_NONE ),
     n32Dummy1( 0 ), n32Dummy2( 0 ), n8Dummy1( 0x80 ), n8Dummy2( 0 ),
     nLinkUpdMode( GLOBALSETTING ),
-    nFldUpdMode( AUTOUPD_GLOBALSETTING )
+    nFldUpdMode( AUTOUPD_GLOBALSETTING ),
+    bReadlineChecked(sal_False)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::SwDoc" );
 
