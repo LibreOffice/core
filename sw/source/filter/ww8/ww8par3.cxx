@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 10:09:55 $
+ *  last change: $Author: cmc $ $Date: 2002-05-10 09:38:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,43 +331,40 @@ eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, String& )
 
 eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 {
+    WW8FormulaEditBox aFormula(*this);
+
+    if (!pFormImpl)
+        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
+
     if (0x01 == rStr.GetChar( pF->nLCode-1 ))
+        ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
+
+    /* #80205#
+    Here we have a small complication. This formula control contains
+    the default text that is displayed if you edit the form field in
+    the "default text" area. But MSOffice does not display that
+    information, instead it display the result of the field,
+    MSOffice just uses the default text of the control as its
+    initial value for the displayed default text. So we will swap in
+    the field result into the formula here in place of the default
+    text.
+    */
+    aFormula.sDefault = GetFieldResult(pF);
+
+    /* #80205#
+    And also a blank TextBox is indicated by 5 of these
+    placeholder chars, convert a field result of this stuff
+    into an empty string.
+    */
+    static sal_Unicode __READONLY_DATA aFormTextBoxBlank[] =
     {
-        WW8FormulaEditBox aFormula(*this);
-        if (ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT))
-        {
-            if( !pFormImpl )
-                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
-            /* #80205#
-            Here we have a small complication. This formula control contains
-            the default text that is displayed if you edit the form field in
-            the "default text" area. But MSOffice does not display that
-            information, instead it display the result of the field,
-            MSOffice just uses the default text of the control as its
-            initial value for the displayed default text. So we will swap in
-            the field result into the formula here in place of the default
-            text.
-            */
-            aFormula.sDefault = GetFieldResult(pF);
+        0x2002,0x2002,0x2002,0x2002,0x2002
+    };
+    if (aFormula.sDefault == aFormTextBoxBlank)
+        aFormula.sDefault.Erase();
 
-            /* #80205#
-            And also a blank TextBox is indicated by 5 of these
-            placeholder chars, convert a field result of this stuff
-            into an empty string.
-            */
-            static sal_Unicode __READONLY_DATA aFormTextBoxBlank[] =
-            {
-                0x2002,0x2002,0x2002,0x2002,0x2002
-            };
-            if (aFormula.sDefault == aFormTextBoxBlank)
-                aFormula.sDefault.Erase();
+    pFormImpl->InsertFormula(aFormula);
 
-            if (pFormImpl->InsertFormula(aFormula))
-                return FLD_OK;
-        }
-    }
-    ASSERT(0,"New Formula Code Failed!\n");
-    BuildInputField(WW8_CT_EDIT);
     return FLD_OK;
 
 }
