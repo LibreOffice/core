@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintPreview.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module view {
 //=============================================================================
 /** @deprecated
 */
-interface XPrintPreview: com::sun::star::uno::XInterface
+published interface XPrintPreview: com::sun::star::uno::XInterface
 {
     /** RowCount and ColumnCount contain the number of rows and columns
         for pages displayed at any given time in this view.
