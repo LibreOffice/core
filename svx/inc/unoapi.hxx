@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoapi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-06 15:30:16 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #include <svtools/poolitem.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SvxShape;
 class SdrObject;
 class SvxNumBulletItem;
@@ -91,16 +95,16 @@ class String;
 /** creates a StarOffice API wrapper with the given type and inventor
     Deprecated: This will be replaced with a function returning XShape.
 */
-SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor ) throw();
+SVX_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt32 nInventor ) throw();
 
 /** returns a StarOffice API wrapper for the given SdrObject */
-::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
+SVX_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw ();
 
 /** returns the SdrObject from the given StarOffice API wrapper */
-SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) throw() ;
+SVX_DLLPUBLIC SdrObject* GetSdrObjectFromXShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape ) throw() ;
 
 /** returns a GraphicObject for this URL */
-GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
+SVX_DLLPUBLIC GraphicObject CreateGraphicObjectFromURL( const ::rtl::OUString &rURL ) throw() ;
 
 /** returns the SvxNumBulletItem with the given name from the pool or a null if there is no item
     with that name
@@ -115,17 +119,17 @@ sal_Bool SvxMeasureUnitToMapUnit( const short eApi, short& nVcl ) throw();
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-sal_Bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+SVX_DLLPUBLIC sal_Bool SvxMapUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.
 */
-sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
+SVX_DLLPUBLIC sal_Bool SvxMeasureUnitToFieldUnit( const short eApi, short& nVcl ) throw();
 
 /** maps the vcl MapUnit enum to a API constant MeasureUnit.
     Returns false if conversion is not supported.
 */
-sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
+SVX_DLLPUBLIC sal_Bool SvxFieldUnitToMeasureUnit( const short nVcl, short& eApi ) throw();
 
 /** if the given name is a predefined name for the current language it is replaced by
     the corresponding api name.
