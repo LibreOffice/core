@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OFormsCollection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-11-02 11:59:58 $
+ *  last change:$Date: 2004-11-16 13:53:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@ public class OFormsCollection extends TestCase {
         XComponent xComp = (XComponent) UnoRuntime.queryInterface(
                                    XComponent.class, xDrawDoc);
         int THRCNT = 1;
-        if ((String)Param.get("THRCNT") != null) {
-            THRCNT = Integer.parseInt((String)Param.get("THRCNT"));
+        if (Param.get("THRCNT")!= null) {
+            THRCNT = Integer.parseInt((String) Param.get("THRCNT"));
         }
 
         for (int n = 1; n < (THRCNT + 1); n++) {
