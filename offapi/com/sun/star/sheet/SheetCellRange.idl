@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SheetCellRange.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:27:07 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:17:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,10 @@
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_XTolerantMultiPropertySet_idl__
+#include <com/sun/star/beans/XTolerantMultiPropertySet.idl>
 #endif
 
 #ifndef __com_sun_star_util_XModifyBroadcaster_idl__
@@ -372,7 +376,11 @@ published service SheetCellRange
      */
     interface com::sun::star::chart::XChartDataArray;
 
-    //=========================================================================
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::beans::XTolerantMultiPropertySet;
+
+    //-------------------------------------------------------------------------
 
     /**
 
