@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:14:51 $
+ *  last change: $Author: obo $ $Date: 2001-01-19 20:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ TabDialog DLG_CHAR
                 Text = "Asiatisches Layout" ;
                 Text [ ENGLISH ] = "Asian layout" ;
                 Text[ english_us ] = "Asian Layout";
-                Text[ portuguese ] = "Layout asiático";
+                Text[ portuguese ] = "Configuração asiática";
                 Text[ russian ] = "Àçèàòñêàÿ ğàçìåòêà";
                 Text[ greek ] = "ÁóéáôéêŞ äéÜôáîç";
                 Text[ dutch ] = "Asiatisch lay-out";
