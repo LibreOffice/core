@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimppr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-27 07:25:06 $
+ *  last change: $Author: dvo $ $Date: 2001-05-31 10:29:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,21 +426,6 @@ void XMLTextImportPropertyMapper::finished(
     if( pAllBorderWidth )
         pAllBorderWidth->mnIndex = -1;
 
-    // insert newly created properties. This inavlidates all iterators!
-    for( i=0; i<4; i++ )
-    {
-        if( pNewBorderDistances[i] )
-        {
-            rProperties.push_back( *pNewBorderDistances[i] );
-            delete pNewBorderDistances[i];
-        }
-        if( pNewBorders[i] )
-        {
-            rProperties.push_back( *pNewBorders[i] );
-            delete pNewBorders[i];
-        }
-    }
-
     if( pVertOrient && pVertOrientRelAsChar )
     {
         sal_Int16 nVertOrient;
@@ -479,6 +464,23 @@ void XMLTextImportPropertyMapper::finished(
         pVertOrientRelAsChar->mnIndex = -1;
     }
 
+    // insert newly created properties. This inavlidates all iterators!
+    // Most of the pXXX variables in this method are iterators and will be
+    // invalidated!!!
+    for( i=0; i<4; i++ )
+    {
+        if( pNewBorderDistances[i] )
+        {
+            rProperties.push_back( *pNewBorderDistances[i] );
+            delete pNewBorderDistances[i];
+        }
+        if( pNewBorders[i] )
+        {
+            rProperties.push_back( *pNewBorders[i] );
+            delete pNewBorders[i];
+        }
+    }
+
     if( bHasAnyHeight )
     {
         if( nSizeTypeIndex == -2 )
@@ -507,6 +509,10 @@ void XMLTextImportPropertyMapper::finished(
         }
     }
 
+    // DO NOT USE ITERATORS/POINTERS INTO THE rProperties-VECTOR AFTER
+    // THIS LINE.  All iterators into the rProperties-vector, especially all
+    // pXXX-type variables set in the first switch statement of this method,
+    // may have been invalidated by the above push_back() calls!
 }
 
 
