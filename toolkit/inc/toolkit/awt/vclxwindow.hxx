@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: tbe $ $Date: 2002-06-19 13:21:09 $
+ *  last change: $Author: tbe $ $Date: 2002-11-07 17:18:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPointer>  mxPointer;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics> mxViewGraphics;
 
-    ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > mxAccessibleContext;
 
     ULONG                           nDummy1;
     ULONG                           nDummy2;
@@ -160,8 +160,6 @@ protected:
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext >
                     CreateAccessibleContext();
-
-    ::com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessibleContext > GetAccessibleContext() { return mxAccessibleContext; }
 
 public:
     VCLXWindow();

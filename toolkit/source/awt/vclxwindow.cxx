@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-04 14:10:09 $
+ *  last change: $Author: tbe $ $Date: 2002-11-07 17:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,9 @@ void ImplInitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseE
 //  ----------------------------------------------------
 //  class VCLXWindow
 //  ----------------------------------------------------
+
+DBG_NAME(VCLXWindow);
+
 VCLXWindow::VCLXWindow()
     : maEventListeners( *this ),
       maFocusListeners( *this ),
@@ -198,12 +201,16 @@ VCLXWindow::VCLXWindow()
       maContainerListeners( *this ),
       maTopWindowListeners( *this )
 {
+    DBG_CTOR( VCLXWindow, 0 );
+
     mbDisposing = sal_False;
     mbDesignMode = sal_False;
 }
 
 VCLXWindow::~VCLXWindow()
 {
+    DBG_DTOR( VCLXWindow, 0 );
+
     if ( GetWindow() )
     {
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
@@ -578,7 +585,7 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     // dispose our accessibility wrapper
     try
     {
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
         if ( xComponent.is() )
             xComponent->dispose();
     }
@@ -1474,7 +1481,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     using namespace ::drafts::com::sun::star;
 
     // check if it comes from our AccessibleContext
-    uno::Reference< uno::XInterface > aAC( mxAccessibleContext.get(), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > aAC( mxAccessibleContext, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
 
     DBG_ASSERT( aAC.get() == xSource.get(), "VCLXWindow::disposing: where does this call come from?" );
@@ -1491,19 +1498,17 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
 
     ::vos::OGuard aGuard( GetMutex() );
 
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xC( mxAccessibleContext.get(), ::com::sun::star::uno::UNO_QUERY );
-    if ( !xC.is() && GetWindow() )
+    if ( !mxAccessibleContext.is() && GetWindow() )
     {
-        xC = CreateAccessibleContext();
-        mxAccessibleContext = xC;
+        mxAccessibleContext = CreateAccessibleContext();
 
         // add as event listener to this component
         // in case somebody disposes it, we do not want to have a (though weak) reference to a dead
         // object
-        uno::Reference< lang::XComponent > xComp( xC, uno::UNO_QUERY );
+        uno::Reference< lang::XComponent > xComp( mxAccessibleContext, uno::UNO_QUERY );
         if ( xComp.is() )
             xComp->addEventListener( this );
     }
 
-    return xC;
+    return mxAccessibleContext;
 }
