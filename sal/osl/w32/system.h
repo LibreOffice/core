@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:45:36 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
     extern DWORD g_dwPlatformId;
     #define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
 #else
-    extern DWORD GetPlatformId();
+    extern DWORD GetPlatformId(void);
     #define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
 #endif // #ifdef _DLL_
 
