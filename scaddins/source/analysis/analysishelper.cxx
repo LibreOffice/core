@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gt $ $Date: 2001-07-18 09:16:23 $
+ *  last change: $Author: gt $ $Date: 2001-07-19 09:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2347,12 +2347,15 @@ void Complex::Ln( void ) THROWDEF_RTE_IAE
     if( r == 0.0 && i == 0.0 )
         THROW_IAE;
 
-    double  r_;
+    double      fAbs = Abs();
+    sal_Bool    bNegi = i < 0.0;
 
-    r_ = log( Abs() );
+    i = acos( r / fAbs );
 
-    i = atan( i / r );
-    r = r_;
+    if( bNegi )
+        i = -i;
+
+    r = log( fAbs );
 }
 
 
