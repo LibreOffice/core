@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: aw $ $Date: 2002-10-21 15:14:39 $
+ *  last change: $Author: aw $ $Date: 2002-11-07 12:29:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -433,6 +433,7 @@ SdrTextHorzAdjust SdrTextObj::GetTextHorizontalAdjust() const
             }
         }
     }
+
     return eRet;
 } // defaults: BLOCK fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
@@ -441,7 +442,27 @@ SdrTextVertAdjust SdrTextObj::GetTextVerticalAdjust() const
     if(IsContourTextFrame())
         return SDRTEXTVERTADJUST_TOP;
 
-    SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(GetItem(SDRATTR_TEXT_VERTADJUST))).GetValue();
+    // #103516# Take care for vertical text animation here
+    const SfxItemSet& rSet = GetItemSet();
+    SdrTextVertAdjust eRet = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+    BOOL bInEditMode = IsInEditMode();
+
+    // #103516# Take care for vertical text animation here
+    if(!bInEditMode && eRet == SDRTEXTVERTADJUST_BLOCK)
+    {
+        SdrTextAniKind eAniKind = ((SdrTextAniKindItem&)(rSet.Get(SDRATTR_TEXT_ANIKIND))).GetValue();
+
+        if(eAniKind == SDRTEXTANI_SCROLL || eAniKind == SDRTEXTANI_ALTERNATE || eAniKind == SDRTEXTANI_SLIDE)
+        {
+            SdrTextAniDirection eDirection = ((SdrTextAniDirectionItem&)(rSet.Get(SDRATTR_TEXT_ANIDIRECTION))).GetValue();
+
+            if(eDirection == SDRTEXTANI_LEFT || eDirection == SDRTEXTANI_RIGHT)
+            {
+                eRet = SDRTEXTVERTADJUST_TOP;
+            }
+        }
+    }
+
     return eRet;
 } // defaults: TOP fuer Textrahmen, CENTER fuer beschriftete Grafikobjekte
 
@@ -812,15 +833,27 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FAS
             rOutliner.SetMaxAutoPaperSize(Size(nWdt,nHgt));
         }
 
+        // #103516# New try with _BLOCK for hor and ver after completely
+        // supporting full width for vertical text.
+        if(SDRTEXTHORZADJUST_BLOCK == eHAdj && !IsVerticalWriting())
+        {
+            rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+        }
+
+        if(SDRTEXTVERTADJUST_BLOCK == eVAdj && IsVerticalWriting())
+        {
+            rOutliner.SetMinAutoPaperSize(Size(0, nAnkHgt));
+        }
+
         // #103335# back to old solution, thus #100801# will be back and needs to be solved in
         // another way.
-        if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
-        {
-            if(IsVerticalWriting())
-                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
-            else
-                rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
-        }
+//      if (eHAdj==SDRTEXTHORZADJUST_BLOCK)
+//      {
+//          if(IsVerticalWriting())
+//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, nAnkHgt));
+//          else
+//              rOutliner.SetMinAutoPaperSize(Size(nAnkWdt, 0));
+//      }
 
 //      // #100801# MinAutoPaperSize needs always to be set completely
 //      // when Verical
@@ -1383,8 +1416,11 @@ FASTBOOL SdrTextObj::ImpPaintAnimatedText(OutputDevice& rOut, const Point& rOffs
     // (rPaintRect,rAnchorRect). Ich verschiebe nun aPaintRect so, dass fuer
     // beide die Drehreferenz rAnchorRect.TopLeft() gilt.
     Rectangle aPaintRect(rPaintRect);
-    if (GetTextHorizontalAdjust()==SDRTEXTHORZADJUST_BLOCK &&
-        GetFitToSize()!=SDRTEXTFIT_NONE) {
+
+    // #103516# Do this calculatin for vertical text, too.
+    if((SDRTEXTHORZADJUST_BLOCK == GetTextHorizontalAdjust() || SDRTEXTVERTADJUST_BLOCK == GetTextVerticalAdjust())
+        && SDRTEXTFIT_NONE != GetFitToSize())
+    {
         // Bei den Default-Textrahmen muss ich erstmal die laengste Zeile berechnen
         // Das gibt allerdings Probleme bei Absatzformatierungen Center, Rechts
         // und evtl. auch bei Blocksatz.
@@ -2355,17 +2391,41 @@ void SdrTextObj::SetVerticalWriting( BOOL bVertical )
             sal_Bool bAutoGrowWidth = ((SdrTextAutoGrowWidthItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue();
             sal_Bool bAutoGrowHeight = ((SdrTextAutoGrowHeightItem&)rSet.Get(SDRATTR_TEXT_AUTOGROWHEIGHT)).GetValue();
 
+            // #103516# Also exchange hor/ver adjust items
+            SdrTextHorzAdjust eHorz = ((SdrTextHorzAdjustItem&)(rSet.Get(SDRATTR_TEXT_HORZADJUST))).GetValue();
+            SdrTextVertAdjust eVert = ((SdrTextVertAdjustItem&)(rSet.Get(SDRATTR_TEXT_VERTADJUST))).GetValue();
+
             // rescue object size
             Rectangle aObjectRect = GetSnapRect();
 
             // prepare ItemSet to set exchanged width and height items
             SfxItemSet aNewSet(*rSet.GetPool(),
                 SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT,
-                SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_AUTOGROWWIDTH,
+                // #103516# Expanded item ranges to also support hor and ver adjust.
+                SDRATTR_TEXT_VERTADJUST, SDRATTR_TEXT_VERTADJUST,
+                SDRATTR_TEXT_AUTOGROWWIDTH, SDRATTR_TEXT_HORZADJUST,
                 0, 0);
+
             aNewSet.Put(rSet);
             aNewSet.Put(SdrTextAutoGrowWidthItem(bAutoGrowHeight));
             aNewSet.Put(SdrTextAutoGrowHeightItem(bAutoGrowWidth));
+
+            // #103516# Exchange horz and vert adjusts
+            switch(eVert)
+            {
+                case SDRTEXTVERTADJUST_TOP: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT)); break;
+                case SDRTEXTVERTADJUST_CENTER: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_CENTER)); break;
+                case SDRTEXTVERTADJUST_BOTTOM: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_LEFT)); break;
+                case SDRTEXTVERTADJUST_BLOCK: aNewSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK)); break;
+            }
+            switch(eHorz)
+            {
+                case SDRTEXTHORZADJUST_LEFT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BOTTOM)); break;
+                case SDRTEXTHORZADJUST_CENTER: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_CENTER)); break;
+                case SDRTEXTHORZADJUST_RIGHT: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP)); break;
+                case SDRTEXTHORZADJUST_BLOCK: aNewSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK)); break;
+            }
+
             SetItemSet(aNewSet);
 
             // set ParaObject orientation accordingly
