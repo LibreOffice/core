@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:28:55 $
+ *  last change: $Author: jp $ $Date: 2001-01-23 20:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2342,6 +2342,11 @@ String STR_UNDO_SETFLYFRMFMT
     Text[ korean ] = "ÇÁ·¹ÀÓ ½ºÅ¸ÀÏ Àû¿ë";
     Text[ turkish ] = "Çerçeve biçimi uygula";
     Text[ language_user1 ] = " ";
+};
+String STR_UNDO_SETRUBYATTR
+{
+    Text = "Phonetische Symbole setzen" ;
+    Text [ ENGLISH ] = "Set phonetic Symbols" ;
 };
 String STR_INSERT_FOOTNOTE
 {
