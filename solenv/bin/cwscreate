@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'configure' or 'setsolar'
+    exit 1
+fi
+exec perl -w $SOLARENV/cwscreate.pl "$@"

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: Cvs.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-02 13:26:40 $
+#   last change: $Author: hr $ $Date: 2004-06-26 00:20:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,8 @@
 package Cvs;
 use strict;
 
+use CwsConfig;
+
 ##### ctor ####
 
 sub new
@@ -78,11 +80,12 @@ sub new
     $self->{NAME} = undef;
     $self->{HEAD} = undef;
     $self->{FLAGS} = undef;
-    if ( $ENV{CVS_BINARY} ) {
-        $self->{CVS_BINARY} = $ENV{CVS_BINARY};
+    my $conf = CwsConfig::get_config();
+    if ( $conf->cvs_binary() ) {
+        $self->{CVS_BINARY} = $conf->cvs_binary();
     }
     else {
-        if ($^O eq "MSWin32" || $^O eq "os2" ) {
+        if ($^O eq "MSWin32" ) {
             $self->{CVS_BINARY} = "cvsclt2.exe";
         }
         else {
