@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-12 14:17:54 $
+ *  last change: $Author: fs $ $Date: 2001-01-24 13:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,6 +448,14 @@ void FmPropBrw::Resize()
 }
 
 //-----------------------------------------------------------------------
+IMPL_LINK( FmPropBrw, OnAsyncGetFocus, void*, NOTINTERESTEDIN )
+{
+    if (m_xBrowserComponentWindow.is())
+        m_xBrowserComponentWindow->setFocus();
+    return 0L;
+}
+
+//-----------------------------------------------------------------------
 void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState)
 {
     try
@@ -460,8 +468,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
             // wenn ich gerade neu angelegt worden bin, moechte ich den Fokus haben
             if (m_bInitialStateChange)
             {
-                if (m_xBrowserComponentWindow.is())
-                    m_xBrowserComponentWindow->setFocus();
+                PostUserEvent(LINK(this, FmPropBrw, OnAsyncGetFocus) );
                 m_bInitialStateChange = sal_False;
             }
 
