@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcasthelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-24 06:54:24 $
+ *  last change: $Author: fs $ $Date: 2002-04-23 11:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,9 @@ namespace comphelper
     public:
         OMutexAndBroadcastHelper() : m_aBHelper( m_aMutex ) { }
 
-        ::osl::Mutex&               GetMutex() { return m_aMutex; }
-        ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return m_aBHelper; }
+        ::osl::Mutex&                   GetMutex()                  { return m_aMutex; }
+        ::cppu::OBroadcastHelper&       GetBroadcastHelper()        { return m_aBHelper; }
+        const ::cppu::OBroadcastHelper& GetBroadcastHelper() const  { return m_aBHelper; }
 
     };
 
