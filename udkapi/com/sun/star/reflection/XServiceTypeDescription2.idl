@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceTypeDescription2.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:56:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:13:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 
 module com {  module sun {  module star {  module reflection {
 
-interface XInterfaceTypeDescription;
 interface XServiceConstructorDescription;
+interface XTypeDescription;
 
 /**
    Reflects a service, supporting single-interface&ndash;based services.
@@ -91,11 +91,15 @@ interface XServiceTypeDescription2: XServiceTypeDescription {
     /**
        Returns the interface type associated with the service.
 
-       @return the reflection of the interface type associated with the service,
+       @return the reflection of the interface type associated with the service
+           (of type <type
+           scope="com::sun::star::reflection">XInterfaceTypeDescription</type>
+           or, in case of a typedef, <type
+           scope="com::sun::star::reflection">XIndirectTypeDescription</type>),
            for a single-interface&ndash;based service; for an obsolete,
            accumulation-based service, <NULL/> is returned
      */
-    XInterfaceTypeDescription getInterface();
+    XTypeDescription getInterface();
 
     /**
        Returns the (explicit) constructors of the service.
