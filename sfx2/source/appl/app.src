@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-04 10:51:28 $
+ *  last change: $Author: obo $ $Date: 2000-12-06 14:14:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ ErrorBox MSG_ERR_OPEN_CFG
     Message[ dutch ] = "Fout bij het openen van het configuratiebestand.";
     Message[ chinese_simplified ] = "ÔÚ´ò¿ªÅäÖÃÎÄ¼şÊ±·¢Éú´íÎó¡£";
     Message[ greek ] = "ÓöÜëìá êáôÜ ôï Üíïéãìá ôïõ áñ÷åßïõ äéáìüñöùóçò.";
-    Message[ korean ] = "±¸¼º ÆÄÀÏ ¿­±â ¿À·ù.";
+    Message[ korean ] = "ÄÁÇÇ±Ô·¹ÀÌ¼Ç ¿­±â½Ã¿¡ ¿À·ù.";
     Message[ turkish ] = "Konfigürasyon dosyası açılırken hata oluştu.";
     Message[ language_user1 ] = " ";
 };
@@ -431,7 +431,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
     Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
     Message[ greek ] = "ĞáñïõóéÜóôçêå áíåğáíüñèùôï óöÜëìá.\n\n¼ëá ôá ôñïğïğïéçìİíá áñ÷åßá áğïèçêåıôçêáí şóôå \níá åßíáé ğéèáíşò äõíáôŞ ç åğáíáöïñÜ ôïõò ìå ôçí åğüìåíç \nåêêßíçóç ôïõ ğñïãñÜììáôïò.";
-    Message[ korean ] = "±¸Á¦ ºÒ°¡´ÉÇÑ ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\n±×·¯³ª º¯°æµÈ ÆÄÀÏÀº \nÀúÀåµÇ¾úÀ¸¹Ç·Î ¾Æ¸¶µµ ´ÙÀ½¿¡ \nÇÁ·Î±×·¥À» ½ÃÀÛÇÒ ¶§´Â º¹¿øµÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
+    Message[ korean ] = "Á¦°ÅÇÒ ¼ö ¾ø´Â ¿À·ù°¡ ¹ß»ıÇß½À´Ï´Ù.\n\n ÇÏÁö¸¸ º¯°æµÈ  ¸ğµç ÆÄÀÏÀº \nÀúÀåµÇ¾úÀ¸¹Ç·Î,  ´ÙÀ½ \nÇÁ·Î±×·¥ ½ÃÀÛ½Ã¿¡´Â º¹¿øµÉ ¼ö ÀÖÀ» °ÍÀÔ´Ï´Ù.";
     Message[ turkish ] = "Düzeltilemeyen bir hata oluştu.\n\nDeğiştirilen tüm dosyalar\nkaydedildi ve muhtemelen uygulama yeniden başlatıldığında\nkurtarılabilecek.";
     Message[ language_user1 ] = " ";
 };
@@ -715,7 +715,7 @@ String GID_OPTIONS
     Text[ dutch ] = "Extra";
     Text[ chinese_simplified ] = "ÆäËü";
     Text[ greek ] = "Åñãáëåßá";
-    Text[ korean ] = "¿É¼Ç";
+    Text[ korean ] = "µµ±¸";
     Text[ turkish ] = "Araçlar";
     Text[ language_user1 ] = " ";
 };
@@ -1803,7 +1803,7 @@ String MSG_IOERR_PATH_NOT_FOUND
     Text [ portuguese ] = "O atalho para o ficheiro $(FILE) não existe." ;
     Text [ finnish ] = "Polkua tiedostoon $(FILE) ei ole." ;
     Text [ danish ] = "Stien til filen $(FILE) eksisterer ikke." ;
-    Text [ french ] = "Chemin au fichier $(FILE) inexistant." ;
+    Text [ french ] = "Le chemin vers le fichier $(FILE) n'existe pas." ;
     Text [ swedish ] = "Sökvägen till filen $(FILE) existerar inte." ;
     Text [ dutch ] = "Pad naar bestand $(FILE) bestaat niet." ;
     Text [ spanish ] = "No existe la ruta de acceso al archivo $(FILE)." ;
@@ -3414,7 +3414,7 @@ String STR_KEY_CONFIG_DIR
     Text [ danish ] = "Konfiguration" ;
     Text [ french ] = "Configuration" ;
     Text [ swedish ] = "Konfiguration" ;
-    Text [ dutch ] = "Configuraties" ;
+    Text [ dutch ] = "Configuratie" ;
     Text [ spanish ] = "Configuración" ;
     Text [ english_us ] = "Configuration" ;
     Text[ chinese_simplified ] = "ÅäÖÃ";
@@ -3423,7 +3423,7 @@ String STR_KEY_CONFIG_DIR
     Text[ japanese ] = "İ’è";
     Text[ chinese_traditional ] = "°t¸m";
     Text[ arabic ] = "Êßæíä";
-    Text[ dutch ] = "Configuraties";
+    Text[ dutch ] = "Configuratie";
     Text[ chinese_simplified ] = "ÅäÖÃ";
     Text[ greek ] = "Äéáìüñöùóç";
     Text[ korean ] = "ÄÁÇÇ±Ô·¹ÀÌ¼Ç";
@@ -3494,7 +3494,7 @@ String STR_KEY_BITMAP_PATH
     Text [ italian ] = "Simboli" ;
     Text [ spanish ] = "Símbolos" ;
     Text [ french ] = "Icônes" ;
-    Text [ dutch ] = "Symbolen" ;
+    Text [ dutch ] = "Pictogrammen" ;
     Text [ swedish ] = "Symboler" ;
     Text [ danish ] = "Symboler" ;
     Text [ portuguese ] = "Símbolos" ;
@@ -3505,7 +3505,7 @@ String STR_KEY_BITMAP_PATH
     Text[ japanese ] = "¼İÎŞÙ";
     Text[ chinese_traditional ] = "¹Ï¥Ü";
     Text[ arabic ] = "ÑãæÒ";
-    Text[ dutch ] = "Symbolen";
+    Text[ dutch ] = "Pictogrammen";
     Text[ chinese_simplified ] = "Í¼±ê";
     Text[ greek ] = "Óıìâïëá";
     Text[ korean ] = "±âÈ£";
@@ -3826,7 +3826,7 @@ String STR_KEY_STORAGE_DIR
     Text [ dutch ] = "Geheugen voor berichten" ;
     Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş/ĞÂÎÅ´¢´æÌå";
     Text[ russian ] = "Íàêîïèòåëü ñîîáùåíèé";
-    Text[ polish ] = "Pamiêæ Poczty/Wiadomoœci";
+    Text[ polish ] = "Pamiêæ wiadomoœci";
     Text[ japanese ] = "Ò¯¾°¼Ş—pÒÓØ";
     Text[ chinese_traditional ] = "¹q¤l¶l¥ó/·s»DÀx¦sÅé";
     Text[ arabic ] = "ÍİÙ ÇáÃÎÈÇÑ";
@@ -3881,7 +3881,7 @@ String STR_KEY_PLUGINS_PATH
     Text[ japanese ] = "Ìß×¸Ş²İÃŞ¨Ú¸ÄØ";
     Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
     Text[ chinese_traditional ] = "Plugins ¥Ø¿ı";
-    Text[ arabic ] = "Ïáíá Plugins";
+    Text[ arabic ] = "Ïáíá Plug-Ins";
     Text[ dutch ] = "Plugins directory";
     Text[ chinese_simplified ] = "Plug-In Ä¿Â¼";
     Text[ greek ] = "ÊáôÜëïãïò óõíäåüìåíùí õğïìïíÜäùí";
@@ -3919,11 +3919,11 @@ String STR_KEY_FILTER_PATH
     Text[ english_us ] = "Filters";
     Text[ portuguese ] = "Filtros";
     Text[ greek ] = "Ößëôñï";
-    Text[ dutch ] = "Filter";
+    Text[ dutch ] = "Filters";
     Text[ french ] = "Filtres";
     Text[ spanish ] = "Filtros";
     Text[ swedish ] = "Filter";
-    Text[ russian ] = "Ôèëüòğ";
+    Text[ russian ] = "Ôèëüòğû";
     Text[ italian ] = "Filtro";
     Text[ danish ] = "Filtre";
     Text[ polish ] = "Filtr";
@@ -3956,7 +3956,7 @@ String STR_KEY_ADDINS_PATH
     Text[ korean ] = "¾ÖµåÀÎ";
     Text[ chinese_simplified ] = "AddIns";
     Text[ chinese_traditional ] = "AddIns";
-    Text[ arabic ] = "AddIns";
+    Text[ arabic ] = "Add-Ins";
     Text[ turkish ] = "Add-In";
 };
 String STR_KEY_USERCONFIG_PATH
@@ -3966,7 +3966,7 @@ String STR_KEY_USERCONFIG_PATH
     Text[ english_us ] = "User Configuration";
     Text[ portuguese ] = "Configuração personalizada";
     Text[ greek ] = "Äéáìüñöùóç ÷ñŞóôç";
-    Text[ dutch ] = "Gebruikerscofiguratie";
+    Text[ dutch ] = "Gebruikersconfiguratie";
     Text[ french ] = "Configuration d'utilisateur";
     Text[ spanish ] = "Configuración de usuario";
     Text[ swedish ] = "Användarkonfiguration";
@@ -4037,7 +4037,7 @@ String STR_KEY_LINGUISTIC_DIR
     Text[ english_us ] = "Writing Aids";
     Text[ portuguese ] = "Linguística";
     Text[ russian ] = "Ëèíãâèñòèêà";
-    Text[ greek ] = "Ãëşóóá";
+    Text[ greek ] = "Ãëùóóïëïãßá";
     Text[ dutch ] = "Linguïstiek";
     Text[ french ] = "Linguistique";
     Text[ spanish ] = "Lingüística";
