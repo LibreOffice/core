@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 18:12:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:59:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ private:
     EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
     EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
-    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const EditPaM& rPaM, BOOL bUseSpecial );
+    EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, BOOL bUseSpecial );
 
     EditPaM             Clear();
     EditPaM             RemoveText();
@@ -688,7 +688,7 @@ private:
     EditPaM             ReadText( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadRTF( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
-    EditPaM             ReadHTML( SvStream& rInput, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
+    EditPaM             ReadHTML( SvStream& rInput, const String& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
@@ -847,7 +847,7 @@ public:
     EditPaM         InsertField( EditSelection aEditSelection, const SvxFieldItem& rFld );
     sal_Bool        UpdateFields();
 
-    EditPaM         Read( SvStream& rInput, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    EditPaM         Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     void            Write( SvStream& rOutput, EETextFormat eFormat, EditSelection aSel );
 
     EditTextObject* CreateTextObject();
