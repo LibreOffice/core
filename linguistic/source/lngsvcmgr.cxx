@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngsvcmgr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 15:47:44 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,9 @@ static Sequence< Locale > GetAvailLocales(
         // check all services for the supported languages and new
         // languages to the result
         const OUString *pImplNames = rSvcImplNames.getConstArray();
-        for (INT32 i = 0;  i < nNames;  ++i)
+        INT32 i;
+
+        for ( i = 0;  i < nNames;  ++i)
         {
             Reference< XSupportedLocales > xSuppLoc(
                     xFac->createInstanceWithArguments( pImplNames[i], aArgs ),
@@ -201,7 +203,9 @@ BOOL SvcInfo::HasLanguage( INT16 nLanguage ) const
 {
     INT32 nCnt = aSuppLanguages.getLength();
     const INT16 *pLang = aSuppLanguages.getConstArray();
-    for (INT32 i = 0;  i < nCnt;  ++i)
+    INT32 i;
+
+    for ( i = 0;  i < nCnt;  ++i)
     {
         if (nLanguage == pLang[i])
             break;
