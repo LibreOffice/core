@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-05 10:39:35 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,7 @@ void SAL_CALL OpenStatusListener_Impl::statusChanged( const FeatureStateEvent& E
     m_bFinished = sal_True;
     m_aOpenLink.Call( this );
     m_xDispatch->removeStatusListener( this, ::com::sun::star::util::URL() );
+    m_aURL.Erase();
 }
 
 // -----------------------------------------------------------------------
@@ -196,6 +197,7 @@ void SAL_CALL OpenStatusListener_Impl::disposing( const EventObject& Source ) th
 void OpenStatusListener_Impl::AddListener( Reference< XDispatch >& xDispatch,
                                            const ::com::sun::star::util::URL& aURL )
 {
+    m_aURL = aURL.Complete;
     m_xDispatch = xDispatch;
     m_xDispatch->addStatusListener( this, aURL );
 }
@@ -1175,6 +1177,8 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
 {
+    String aModuleName = pListener->GetURL().GetToken( 2, '/' );
+    SetFactory( aModuleName, TRUE );
     if ( IsWait() )
         LeaveWait();
     return 0;

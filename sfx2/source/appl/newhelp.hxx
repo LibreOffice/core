@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-05 10:39:35 $
+ *  last change: $Author: mba $ $Date: 2001-06-18 10:03:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ class OpenStatusListener_Impl : public ::cppu::WeakImplHelper1< ::com::sun::star
 private:
     sal_Bool    m_bFinished;
     sal_Bool    m_bSuccess;
+    String      m_aURL;
     Link        m_aOpenLink;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >
                 m_xDispatch;
@@ -112,6 +113,7 @@ public:
 
     sal_Bool    IsFinished() const { return m_bFinished; }
     sal_Bool    IsSuccessful() const { return m_bSuccess; }
+    const String& GetURL() const { return m_aURL; }
     void        SetOpenHdl( const Link& rLink ) { m_aOpenLink = rLink; }
 };
 
