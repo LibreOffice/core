@@ -18,6 +18,9 @@ $(LIB1ARCHIV) :	$(LIB1TARGET)
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB1ARCHIV) >> $(MISC)$/$(LIB1ARCHIV:b).cmd
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB1ARCHIV) >> $(MISC)$/$(LIB1ARCHIV:b).cmd
+.ENDIF
     @cat $(MISC)$/$(LIB1ARCHIV:b).cmd
     @source $(MISC)$/$(LIB1ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
@@ -88,6 +91,9 @@ $(LIB2ARCHIV) :	$(LIB2TARGET)
     @+echo $(LIBMGR) $(LIB2FLAGS) $(LIBFLAGS) $(LIB2ARCHIV) `cat $(LIB2TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB2ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB2ARCHIV) >> $(MISC)$/$(LIB2ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB2ARCHIV) >> $(MISC)$/$(LIB2ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB2ARCHIV:b).cmd
     @source $(MISC)$/$(LIB2ARCHIV:b).cmd
@@ -160,6 +166,9 @@ $(LIB3ARCHIV) :	$(LIB3TARGET)
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB3ARCHIV) >> $(MISC)$/$(LIB3ARCHIV:b).cmd
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB3ARCHIV) >> $(MISC)$/$(LIB3ARCHIV:b).cmd
+.ENDIF
     @cat $(MISC)$/$(LIB3ARCHIV:b).cmd
     @source $(MISC)$/$(LIB3ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
@@ -230,6 +239,9 @@ $(LIB4ARCHIV) :	$(LIB4TARGET)
     @+echo $(LIBMGR) $(LIB4FLAGS) $(LIBFLAGS) $(LIB4ARCHIV) `cat $(LIB4TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB4ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB4ARCHIV) >> $(MISC)$/$(LIB4ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB4ARCHIV) >> $(MISC)$/$(LIB4ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB4ARCHIV:b).cmd
     @source $(MISC)$/$(LIB4ARCHIV:b).cmd
@@ -302,6 +314,9 @@ $(LIB5ARCHIV) :	$(LIB5TARGET)
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB5ARCHIV) >> $(MISC)$/$(LIB5ARCHIV:b).cmd
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB5ARCHIV) >> $(MISC)$/$(LIB5ARCHIV:b).cmd
+.ENDIF
     @cat $(MISC)$/$(LIB5ARCHIV:b).cmd
     @source $(MISC)$/$(LIB5ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
@@ -372,6 +387,9 @@ $(LIB6ARCHIV) :	$(LIB6TARGET)
     @+echo $(LIBMGR) $(LIB6FLAGS) $(LIBFLAGS) $(LIB6ARCHIV) `cat $(LIB6TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB6ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB6ARCHIV) >> $(MISC)$/$(LIB6ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB6ARCHIV) >> $(MISC)$/$(LIB6ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB6ARCHIV:b).cmd
     @source $(MISC)$/$(LIB6ARCHIV:b).cmd
@@ -444,6 +462,9 @@ $(LIB7ARCHIV) :	$(LIB7TARGET)
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB7ARCHIV) >> $(MISC)$/$(LIB7ARCHIV:b).cmd
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB7ARCHIV) >> $(MISC)$/$(LIB7ARCHIV:b).cmd
+.ENDIF
     @cat $(MISC)$/$(LIB7ARCHIV:b).cmd
     @source $(MISC)$/$(LIB7ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
@@ -514,6 +535,9 @@ $(LIB8ARCHIV) :	$(LIB8TARGET)
     @+echo $(LIBMGR) $(LIB8FLAGS) $(LIBFLAGS) $(LIB8ARCHIV) `cat $(LIB8TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB8ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB8ARCHIV) >> $(MISC)$/$(LIB8ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB8ARCHIV) >> $(MISC)$/$(LIB8ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB8ARCHIV:b).cmd
     @source $(MISC)$/$(LIB8ARCHIV:b).cmd
@@ -586,6 +610,9 @@ $(LIB9ARCHIV) :	$(LIB9TARGET)
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB9ARCHIV) >> $(MISC)$/$(LIB9ARCHIV:b).cmd
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB9ARCHIV) >> $(MISC)$/$(LIB9ARCHIV:b).cmd
+.ENDIF
     @cat $(MISC)$/$(LIB9ARCHIV:b).cmd
     @source $(MISC)$/$(LIB9ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
@@ -656,6 +683,9 @@ $(LIB10ARCHIV) :	$(LIB10TARGET)
     @+echo $(LIBMGR) $(LIB10FLAGS) $(LIBFLAGS) $(LIB10ARCHIV) `cat $(LIB10TARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(MISC)$/$(LIB10ARCHIV:b).cmd
 .IF "$(OS)$(COM)"=="NETBSDGCC"
     @+echo  ranlib $(LIB10ARCHIV) >> $(MISC)$/$(LIB10ARCHIV:b).cmd
+.ENDIF
+.IF "$(OS)" == "MACOSX"
+     @+echo  ranlib $(LIB10ARCHIV) >> $(MISC)$/$(LIB10ARCHIV:b).cmd
 .ENDIF
     @cat $(MISC)$/$(LIB10ARCHIV:b).cmd
     @source $(MISC)$/$(LIB10ARCHIV:b).cmd
