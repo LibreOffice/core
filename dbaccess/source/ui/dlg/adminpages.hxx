@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 08:32:30 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 14:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,10 @@
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
+#ifndef _UCBHELPER_CONTENT_HXX
+#include <ucbhelper/content.hxx>
+#endif
+
 //.........................................................................
 namespace dbaui
 {
@@ -212,7 +216,8 @@ protected:
     void initializeHistory();
 
     sal_Bool isBrowseable(DATASOURCE_TYPE _eType) const;
-    StringBag getInstalledAdabasDBs(const String &_rPath);
+    StringBag getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude);
+    StringBag getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir);
 
     DECL_LINK(OnDatasourceTypeSelected, ListBox*);
     DECL_LINK(OnBrowseConnections, PushButton*);
@@ -460,6 +465,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15  2000/11/30 08:32:30  fs
+ *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
+ *
  *  Revision 1.14  2000/11/29 22:29:40  fs
  *  #80003# implementation of the character set map changed
  *

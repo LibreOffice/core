@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adminpages.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kso $ $Date: 2000-12-01 08:06:01 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 14:15:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,6 @@
 #endif
 
 #include <stdlib.h>
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
@@ -488,36 +485,56 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
         break;
         case DST_ADABAS:
         {
-            String sAdabasConfigDir;
-            const char* pAdabas = getenv("DBCONFIG");
-            if (pAdabas)
-                sAdabasConfigDir.AssignAscii(pAdabas);
+            // collect all names from the config dir
+            // and all dir's of the DBWORK/wrk or DBROOT/wrk dir
+            // compare the names
+
+            // collect the names of the installed databases
+            StringBag aInstalledDBs;
+
+            String sAdabasConfigDir,sAdabasWorkDir;
+            const char* pAdabasCfg = getenv("DBCONFIG");
+            const char* pAdabasWrk = getenv("DBWORK");
+            sal_Bool bOldFashion = sal_False;
+            if (pAdabasCfg && pAdabasWrk) // for our type of adabas this must apply
+            {
+                sAdabasConfigDir.AssignAscii(pAdabasCfg);
+                sAdabasWorkDir.AssignAscii(pAdabasWrk);
+                bOldFashion = sal_True;
+            }
             else // we have a normal adabas installation
             {    // so we check the local database names in $DBROOT/config
                 const char* pAdabasRoot = getenv("DBROOT");
                 if (pAdabasRoot)
+                {
                     sAdabasConfigDir.AssignAscii(pAdabasRoot);
+                    sAdabasWorkDir.AssignAscii(pAdabasRoot);
+                }
             }
 
-            if(sAdabasConfigDir.Len())
+            if(sAdabasConfigDir.Len() && sAdabasWorkDir.Len())
             {
-                // collect the names of the installed databases
-                StringBag aInstalledDBs;
-                aInstalledDBs = getInstalledAdabasDBs(sAdabasConfigDir);
-                if(!aInstalledDBs.size())
+
+                aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
+
+                if(!aInstalledDBs.size() && bOldFashion)
                 {
                     const char* pAdabasRoot = getenv("DBROOT");
                     if (pAdabasRoot)
                     {
                         sAdabasConfigDir.AssignAscii(pAdabasRoot);
-                        aInstalledDBs = getInstalledAdabasDBs(sAdabasConfigDir);
+                        sAdabasWorkDir.AssignAscii(pAdabasRoot);
+                        aInstalledDBs   = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
                     }
                 }
 
                 ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, GetSelectedType());
                 if (RET_OK == aSelector.Execute())
                 {
-                    m_aConnection.SetTextNoPrefix(aSelector.GetSelected());
+                    String aSelected;
+                    aSelected.AssignAscii(":");
+                    aSelected += aSelector.GetSelected();
+                    m_aConnection.SetTextNoPrefix(aSelected);
                     callModifiedHdl();
                 }
             }
@@ -562,17 +579,47 @@ IMPL_LINK(OGeneralPage, OnBrowseConnections, PushButton*, _pButton)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rPath)
+StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rConfigDir,const String &_rWorkDir)
 {
-    INetURLObject aNormalizer;
-    aNormalizer.SetSmartProtocol(INET_PROT_FILE);
-    aNormalizer.SetSmartURL(_rPath);
-    String sAdabasConfigDir = aNormalizer.GetMainURL();
+    String sAdabasConfigDir(_rConfigDir),sAdabasWorkDir(_rWorkDir);
 
     if (sAdabasConfigDir.Len() && ('/' == sAdabasConfigDir.GetBuffer()[sAdabasConfigDir.Len() - 1]))
         sAdabasConfigDir.AppendAscii("config");
     else
         sAdabasConfigDir.AppendAscii("/config");
+
+    if (sAdabasWorkDir.Len() && ('/' == sAdabasWorkDir.GetBuffer()[sAdabasWorkDir.Len() - 1]))
+        sAdabasWorkDir.AppendAscii("wrk");
+    else
+        sAdabasWorkDir.AppendAscii("/wrk");
+    // collect the names of the installed databases
+    StringBag aInstalledDBs;
+    // collect the names of the installed databases
+    StringBag aConfigDBs,aWrkDBs;
+    aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucb::INCLUDE_DOCUMENTS_ONLY);
+    aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucb::INCLUDE_FOLDERS_ONLY);
+    StringBag::const_iterator aOuter = aConfigDBs.begin();
+    for(;aOuter != aConfigDBs.end();++aOuter)
+    {
+        StringBag::const_iterator aInner = aWrkDBs.begin();
+        for(;aInner != aWrkDBs.end();++aInner)
+        {
+            if(*aInner == *aOuter)
+            {
+                aInstalledDBs.insert(*aOuter);
+                break;
+            }
+        }
+    }
+    return aInstalledDBs;
+}
+// -----------------------------------------------------------------------------
+StringBag OGeneralPage::getInstalledAdabasDBDirs(const String &_rPath,const ::ucb::ResultSetInclude& _reResultSetInclude)
+{
+    INetURLObject aNormalizer;
+    aNormalizer.SetSmartProtocol(INET_PROT_FILE);
+    aNormalizer.SetSmartURL(_rPath);
+    String sAdabasConfigDir = aNormalizer.GetMainURL();
 
     ::ucb::Content aAdabasConfigDir;
     try
@@ -581,7 +628,7 @@ StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rPath)
     }
     catch(::com::sun::star::ucb::ContentCreationException&)
     {
-        DBG_ERROR("OGeneralPage::OnBrowseConnections: could not create the UCB content for the adabas config directory!");
+        return StringBag();
     }
 
     StringBag aInstalledDBs;
@@ -600,7 +647,7 @@ StringBag OGeneralPage::getInstalledAdabasDBs(const String &_rPath)
 
         try
         {
-            Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, ::ucb::INCLUDE_DOCUMENTS_ONLY);
+            Reference< XResultSet > xFiles = aAdabasConfigDir.createCursor(aProperties, _reResultSetInclude);
             Reference< XRow > xRow(xFiles, UNO_QUERY);
             xFiles->beforeFirst();
             while (xFiles->next())
@@ -1776,6 +1823,9 @@ IMPL_LINK( OTableSubscriptionPage, OnRadioButtonClicked, Button*, pButton )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2000/12/01 08:06:01  kso
+ *  #80644# - ::ucb::ContentCreationException -> ::com::sun::star::ucb::ContentCreationException
+ *
  *  Revision 1.18  2000/11/30 08:32:30  fs
  *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
  *
