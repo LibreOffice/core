@@ -22758,3 +22758,16 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?Command@FmGridControl@@MAEXABVCommandEvent@@@Z
 ?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx250552737@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
 ?triggerColumnContextMenu@FmGridHeader@@IAEXABVPoint@@@Z
+?DrawingText@EditEngine@@QAEXABVPoint@@ABVString@@GGPBJABVSvxFont@@GG@Z
+?DrawingText@Outliner@@QAEXABVPoint@@ABVString@@GGPBJABVSvxFont@@GG@Z
+?disposing@AccessibleShape@accessibility@@MAAXXZ
+?GetModelBroadcaster@AccessibleShapeTreeInfo@accessibility@@QBE?AV?$Reference@VXEventBroadcaster@document@star@sun@com@@@uno@star@sun@com@@XZ
+?SetModelBroadcaster@AccessibleShapeTreeInfo@accessibility@@QAEXABV?$Reference@VXEventBroadcaster@document@star@sun@com@@@uno@star@sun@com@@@Z
+??1?$Reference@VXProxyFactory@reflection@star@sun@com@@@uno@star@sun@com@@QAE@XZ
+?Init@AccessibleControlShape@accessibility@@MAEXXZ
+?ensureControlModelAccess@AccessibleControlShape@accessibility@@IAEEXZ
+?getSdrObject@AccessibleControlShape@accessibility@@IBEPAVSdrObject@@XZ
+?query@?$Reference@VXProxyFactory@reflection@star@sun@com@@@uno@star@sun@com@@SA?AV12345@ABVBaseReference@2345@@Z
+?s_pType_com_sun_star_reflection_XProxyFactory@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXProxyFactory@reflection@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+?set@?$Reference@VXAccessibleContext@accessibility@star@sun@com@drafts@@@uno@star@sun@com@@QAAEPAVXAccessibleContext@accessibility@345drafts@@@Z
+?set@?$Reference@VXProxyFactory@reflection@star@sun@com@@@uno@star@sun@com@@QAAEPAVXProxyFactory@reflection@345@@Z
