@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: hjs $ $Date: 2001-09-18 14:46:48 $
+#   last change: $Author: pl $ $Date: 2001-10-30 17:52:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,7 +113,7 @@ APP1STDLIBS=			\
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" == "LINUX"
 
-APP1STDLIBS+= -lXmu -lXext -lSM -lICE
+APP1STDLIBS+= -lXext -lSM -lICE
 
 .ENDIF
 .ENDIF
