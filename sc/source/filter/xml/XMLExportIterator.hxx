@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-29 15:42:01 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,6 +331,7 @@ struct ScMyCell
     ScMyDetectiveObjVec         aDetectiveObjVec;
     ScMyDetectiveOpVec          aDetectiveOpVec;
 
+    double                      fValue;
     sal_Int32                   nValidationIndex;
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
@@ -349,6 +350,7 @@ struct ScMyCell
     sal_Bool                    bIsEditCell : 1;
     sal_Bool                    bKnowWhetherIsEditCell : 1;
     sal_Bool                    bHasStringValue : 1;
+    sal_Bool                    bHasDoubleValue : 1;
     sal_Bool                    bHasXText : 1;
 
     sal_Bool                    bIsMatrixBase : 1;
@@ -413,7 +415,8 @@ public:
     inline void                 SetDetectiveOp(ScMyDetectiveOpContainer* pNewDetectiveOp)
                                     { pDetectiveOp = pNewDetectiveOp; }
 
-    void                        SetCurrentTable(const sal_Int32 nTable);
+    void                        SetCurrentTable(const sal_Int32 nTable,
+                                    com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
 
     sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };

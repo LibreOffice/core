@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-22 17:56:54 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,26 +714,21 @@ void ScXMLConverter::GetStringFromDetOpType(
 void ScXMLConverter::ParseFormula(OUString& sFormula, const sal_Bool bIsFormula)
 {
     OUStringBuffer sBuffer(sFormula.getLength());
-    sal_Int16 nCountQuotationMarks = 0;
-    sal_Int16 nCountBraces = 0;
-    sal_Unicode chPrevious = '=';
+    sal_Bool bInQuotationMarks(sal_False);
+    sal_Int16 nCountBraces(0);
+    sal_Unicode chPrevious('=');
     for (sal_Int32 i = 0; i < sFormula.getLength(); i++)
     {
         if (sFormula[i] == '"')
-            if (nCountQuotationMarks == 0)
-                nCountQuotationMarks++;
-            else
-                nCountQuotationMarks--;
+            bInQuotationMarks = !bInQuotationMarks;
         if (sFormula[i] != '[' && sFormula[i] != ']')
         {
             if (sFormula[i] != '.' || (nCountBraces == 0 && bIsFormula) ||
                 !(chPrevious == '[' || chPrevious == ':' || chPrevious == ' ' || chPrevious == '='))
-            {
                 sBuffer.append(sFormula[i]);
-            }
         }
         else
-            if (nCountQuotationMarks == 0)
+            if (!bInQuotationMarks)
                 if (sFormula[i] == '[')
                     nCountBraces++;
                 else

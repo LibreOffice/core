@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-09 08:21:50 $
+ *  last change: $Author: sab $ $Date: 2001-07-19 09:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1422,7 +1422,7 @@ void ScXMLExport::_ExportContent()
                         table::CellRangeAddress aRange = GetEndAddress(xTable, nTable);
                         pSharedData->SetLastColumn(nTable, aRange.EndColumn);
                         pSharedData->SetLastRow(nTable, aRange.EndRow);
-                        aCellsItr.SetCurrentTable(nTable);
+                        aCellsItr.SetCurrentTable(nTable, xCurrentTable);
                         pGroupColumns->NewTable();
                         pGroupRows->NewTable();
                         FillColumnRowGroups();
@@ -1853,23 +1853,15 @@ void ScXMLExport::_ExportAutoStyles()
                         if (xCellRangesQuery.is())
                         {
                             uno::Reference<sheet::XSheetCellRanges> xSheetCellRanges = xCellRangesQuery->queryContentCells(sheet::CellFlags::STRING);
-                            if (xSheetCellRanges.is())
+                            uno::Reference<sheet::XSheetOperation> xSheetOperation(xSheetCellRanges, uno::UNO_QUERY);
+                            if (xSheetCellRanges.is() && xSheetOperation.is())
                             {
+                                sal_Int32 nCount(sal_Int32(xSheetOperation->computeFunction(sheet::GeneralFunction_COUNT)));
                                 uno::Reference<container::XEnumerationAccess> xCellsAccess = xSheetCellRanges->getCells();
                                 if (xCellsAccess.is())
                                 {
-                                    uno::Reference<container::XEnumeration> xCells = xCellsAccess->createEnumeration();
-                                    if (xCells.is())
-                                    {
-                                        sal_Int32 nCount(0);
-                                        while(xCells->hasMoreElements())
-                                        {
-                                            xCells->nextElement();
-                                            nCount++;
-                                        }
-                                        GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
-                                    }
-                                    xCells = xCellsAccess->createEnumeration();
+                                    GetProgressBarHelper()->ChangeReference(GetProgressBarHelper()->GetReference() + nCount);
+                                    uno::Reference<container::XEnumeration>xCells = xCellsAccess->createEnumeration();
                                     if (xCells.is())
                                     {
                                         while (xCells->hasMoreElements())
@@ -2183,8 +2175,13 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         break;
     case table::CellContentType_VALUE :
         {
+            if (!aCell.bHasDoubleValue)
+            {
+                aCell.fValue = aCell.xCell->getValue();
+                aCell.bHasDoubleValue = sal_True;
+            }
             GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                aCell.nNumberFormat, aCell.fValue, XML_NAMESPACE_TABLE);
         }
         break;
     case table::CellContentType_TEXT :
@@ -2201,48 +2198,47 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
         break;
     case table::CellContentType_FORMULA :
         {
-            rtl::OUStringBuffer sFormula;
-            ScCellObj* pCellObj = (ScCellObj*) ScCellRangesBase::getImplementation( aCell.xCell );
-            if ( pCellObj )
+            ScAddress aCoreAddress(static_cast<sal_uInt16>(aCell.aCellAddress.Column),
+                                static_cast<sal_uInt16>(aCell.aCellAddress.Row),
+                                static_cast<sal_uInt16>(aCell.aCellAddress.Sheet));
+            ScBaseCell* pBaseCell = GetDocument()->GetCell(aCoreAddress);
+            if (pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA)
             {
-                ScBaseCell* pBaseCell = pCellObj->GetDocument()->GetCell(pCellObj->GetPosition());
+                rtl::OUStringBuffer sFormula;
                 ScFormulaCell* pFormulaCell = (ScFormulaCell*) pBaseCell;
-                if (pBaseCell && pBaseCell->GetCellType() == CELLTYPE_FORMULA)
+                if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
                 {
-                    if (!bIsMatrix || (bIsMatrix && bIsFirstMatrixCell))
-                    {
-                        pFormulaCell->GetEnglishFormula(sFormula, sal_True);
-                        rtl::OUString sOUFormula(sFormula.makeStringAndClear());
-                        if (!bIsMatrix)
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sOUFormula);
-                        else
-                        {
-                            rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sMatrixFormula);
-                        }
-                    }
-                    if (pFormulaCell->IsValue())
-                    {
-                        sal_Bool bIsStandard;
-                        rtl::OUString sCurrency;
-                        GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
-                        if (bIsStandard)
-                        {
-                            if (pDoc)
-                                GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                    pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
-                                    aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
-                        }
-                        else
-                            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
-                                aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
-                    }
+                    pFormulaCell->GetEnglishFormula(sFormula, sal_True);
+                    rtl::OUString sOUFormula(sFormula.makeStringAndClear());
+                    if (!bIsMatrix)
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sOUFormula);
                     else
                     {
-                        //AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING);
-                        if (GetCellText(aCell))
-                            AddAttribute(XML_NAMESPACE_TABLE, XML_STRING_VALUE, aCell.sStringValue);
+                        rtl::OUString sMatrixFormula = sOUFormula.copy(1, sOUFormula.getLength() - 2);
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_FORMULA, sMatrixFormula);
                     }
+                }
+                if (pFormulaCell->IsValue())
+                {
+                    sal_Bool bIsStandard;
+                    rtl::OUString sCurrency;
+                    GetNumberFormatAttributesExportHelper()->GetCellType(aCell.nNumberFormat, sCurrency, bIsStandard);
+                    if (bIsStandard)
+                    {
+                        if (pDoc)
+                            GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                                pFormulaCell->GetStandardFormat(*pDoc->GetFormatTable(), 0),
+                                aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                    }
+                    else
+                        GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                            aCell.nNumberFormat, aCell.xCell->getValue(), XML_NAMESPACE_TABLE);
+                }
+                else
+                {
+                    //AddAttribute(XML_NAMESPACE_TABLE, XML_VALUE_TYPE, XML_STRING);
+                    if (GetCellText(aCell))
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_STRING_VALUE, aCell.sStringValue);
                 }
             }
         }
@@ -2558,15 +2554,22 @@ sal_Bool ScXMLExport::IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& a
                 return (aCell1.nType == table::CellContentType_EMPTY);
 }
 
+sal_Bool ScXMLExport::IsEditCell(const com::sun::star::table::CellAddress& aAddress) const
+{
+    ScAddress aCoreAddress(static_cast<sal_uInt16>(aAddress.Column),
+                        static_cast<sal_uInt16>(aAddress.Row),
+                        static_cast<sal_uInt16>(aAddress.Sheet));
+    ScBaseCell* pBaseCell = GetDocument()->GetCell(aCoreAddress);
+    if (pBaseCell)
+        return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
+    return sal_False;
+}
+
 sal_Bool ScXMLExport::IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const
 {
-    ScCellObj* pCellObj = (ScCellObj*) ScCellRangesBase::getImplementation( xCell );
-    if ( pCellObj )
-    {
-        ScBaseCell* pBaseCell = pCellObj->GetDocument()->GetCell(pCellObj->GetPosition());
-        if (pBaseCell)
-            return (pBaseCell->GetCellType() == CELLTYPE_EDIT);
-    }
+    uno::Reference<sheet::XCellAddressable> xAddressable (xCell, uno::UNO_QUERY);
+    if ( xAddressable.is() )
+        return IsEditCell(xAddressable->getCellAddress());
     return sal_False;
 }
 
@@ -2576,7 +2579,7 @@ sal_Bool ScXMLExport::IsEditCell(ScMyCell& rCell) const
         return rCell.bIsEditCell;
     else
     {
-        rCell.bIsEditCell = IsEditCell(rCell.xCell);
+        rCell.bIsEditCell = IsEditCell(rCell.aCellAddress);
         rCell.bKnowWhetherIsEditCell = sal_True;
         return rCell.bIsEditCell;
     }
@@ -2652,9 +2655,17 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                         break;
                     case table::CellContentType_VALUE :
                         {
-                            double fCell1 = aCell1.xCell->getValue();
-                            double fCell2 = aCell2.xCell->getValue();
-                            bIsEqual = (fCell1 == fCell2);
+                            if(!aCell1.bHasDoubleValue)
+                            {
+                                aCell1.fValue = aCell1.xCell->getValue();
+                                aCell1.bHasDoubleValue = sal_True;
+                            }
+                            if (!aCell2.bHasDoubleValue)
+                            {
+                                aCell2.fValue = aCell2.xCell->getValue();
+                                aCell2.bHasDoubleValue = sal_True;
+                            }
+                            bIsEqual = (aCell1.fValue == aCell2.fValue);
                         }
                         break;
                     case table::CellContentType_TEXT :
