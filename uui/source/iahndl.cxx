@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: as $ $Date: 2002-07-18 08:34:51 $
+ *  last change: $Author: mav $ $Date: 2002-09-25 10:45:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEWRONGMEDIUMEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveWrongMediumException.hpp"
+#endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEAPPEXCEPTION_HPP_
+#include "com/sun/star/ucb/InteractiveAppException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_XINTERACTIONCOOKIEHANDLING_HPP_
 #include "com/sun/star/ucb/XInteractionCookieHandling.hpp"
@@ -820,6 +823,16 @@ UUIInteractionHandler::handle(
                                aArguments,
                                rRequest->getContinuations());
             return;
+        }
+
+        star::ucb::InteractiveAppException aAppException;
+        if (aAnyRequest >>= aAppException)
+        {
+            std::vector< rtl::OUString > aArguments;
+            handleErrorRequest( aAppException.Classification,
+                                aAppException.Code,
+                                aArguments,
+                                rRequest->getContinuations());
         }
 
         star::ucb::InteractiveNetworkException aNetworkException;
