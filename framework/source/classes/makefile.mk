@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: mh $ $Date: 2002-01-29 16:51:08 $
+#   last change: $Author: as $ $Date: 2002-05-02 11:42:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,8 @@ SLOFILES=			$(SLO)$/servicemanager.obj						\
                     $(SLO)$/actiontriggerseparatorpropertyset.obj	\
                     $(SLO)$/actiontriggercontainer.obj				\
                     $(SLO)$/imagewrapper.obj						\
-                    $(SLO)$/rootactiontriggercontainer.obj
+                    $(SLO)$/rootactiontriggercontainer.obj          \
+                    $(SLO)$/protocolhandlercache.obj
 
 # --- Targets ------------------------------------------------------
 
