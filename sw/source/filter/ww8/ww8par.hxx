@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 13:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -946,12 +946,11 @@ friend class WW8FormulaControl;
         const String& rFileName);
 
     SwFrmFmt* MakeGrafNotInCntnt(const WW8PicDesc& rPD, const Graphic* pGraph,
-        const String& rFileName, const String& rGrName,
-        const SfxItemSet& rGrfSet );
+        const String& rFileName, const SfxItemSet& rGrfSet);
 
-    SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic,   const WW8PicDesc& rPD,
-        const Graphic* pGraph, const String& rFileName, const String& rGrName,
-        const SfxItemSet& rGrfSet );
+    SwFrmFmt* MakeGrafInCntnt(const WW8_PIC& rPic, const WW8PicDesc& rPD,
+        const Graphic* pGraph, const String& rFileName,
+        const SfxItemSet& rGrfSet);
 
     SwFrmFmt *AddAutoAnchor(SwFrmFmt *pFmt);
     void RemoveAutoAnchor(const SwFrmFmt *pFmt);

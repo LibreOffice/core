@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cmc $ $Date: 2002-04-29 12:46:49 $
+ *  last change: $Author: cmc $ $Date: 2002-04-29 13:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,29 +269,24 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
 
     switch( rPic.MFP.mm )
     {
-    case 94:                        // BMP-File ( nicht embeddet ) oder GIF
-    case 99:
-        {   // TIFF-File ( nicht embeddet )
+        case 94: // BMP-File ( nicht embeddet ) oder GIF
+        case 99: // TIFF-File ( nicht embeddet )
             pSt->Seek( nPosFc );
-            String aStr( WW8ReadPString( *pSt, eStructCharSet, 0 ) );// Name als P-String einlesen
-            rFileName = aStr.GetChar( 0 );      // Wandeln in SV-String
+            // Name als P-String einlesen
+            rFileName = WW8ReadPString( *pSt, eStructCharSet, 0 );
             *pbInDoc = FALSE;       // Datei anschliessend nicht loeschen
             return rFileName.Len() != 0;        // Einlesen OK
-        }
     }
 
     GDIMetaFile aWMF;
     pSt->Seek( nPosFc );
     BOOL bOk = ReadWindowMetafile( *pSt, aWMF );
-                // *pSt >> aWMF; geht nicht ohne placable header
-    if( !bOk || pSt->GetError() || !aWMF.GetActionCount() ){
-//          ASSERT( bOk, "ReadWindowMetafile ging schief" );
-//          ASSERT( !pSt->GetError(), "WMF einlesen ging schief ( Stream-Error )" );
-//          ASSERT( aWMF.GetActionCount(), "WMF einlesen ging schief ( No Meta-Action )" );
-        return FALSE;
-    }
-    if( pWwFib->envr != 1 ){            // !MAC als Creator
 
+    if (!bOk || pSt->GetError() || !aWMF.GetActionCount())
+        return FALSE;
+
+    if (pWwFib->envr != 1) // !MAC als Creator
+    {
         aWMF.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
         // MetaFile auf neue Groesse skalieren und
         // neue Groesse am MetaFile setzen
@@ -306,6 +301,7 @@ BOOL SwWW8ImplReader::ReadGrafFile( String& rFileName, Graphic*& rpGraphic,
         rpGraphic = new Graphic( aWMF );
         return TRUE;
     }
+
     // MAC - Word als Creator
     // im WMF steht nur "Benutzen sie Word 6.0c"
     // Mac-Pict steht dahinter
@@ -395,9 +391,8 @@ void SwWW8ImplReader::ReplaceObjWithGraphicLink(const SdrObject &rReplaceObj,
 
 // MakeGrafNotInCntnt setzt eine nicht-Zeichengebundene Grafik
 // ( bGrafApo == TRUE )
-SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt( const WW8PicDesc& rPD,
-                   const Graphic* pGraph, const String& rFileName,
-                   const String& rGrName, const SfxItemSet& rGrfSet )
+SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt(const WW8PicDesc& rPD,
+    const Graphic* pGraph, const String& rFileName, const SfxItemSet& rGrfSet)
 {
 
     UINT32 nWidth = rPD.nWidth;
@@ -411,49 +406,43 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafNotInCntnt( const WW8PicDesc& rPD,
 
     WW8FlySet aFlySet( *this, pWFlyPara, pSFlyPara, TRUE );
 
-    SwFmtAnchor aAnchor( pSFlyPara->eAnchor );
-    aAnchor.SetAnchor( pPaM->GetPoint() );
-    aFlySet.Put( aAnchor );
+    SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
+    aAnchor.SetAnchor(pPaM->GetPoint());
+    aFlySet.Put(aAnchor);
 
     aFlySet.Put( SwFmtFrmSize( ATT_FIX_SIZE, nWidth, nHeight ) );
 
-    SwFlyFrmFmt* pFlyFmt = rDoc.Insert( *pPaM,
-                    rFileName, aEmptyStr,   // Name der Grafik !!
-                    pGraph,
-                    &aFlySet,               // Attribute fuer den FlyFrm
-                    &rGrfSet );             // Attribute fuer die Grafik
-
-    aGrfNameGenerator.SetUniqueGraphName(pFlyFmt,rGrName);
+    SwFlyFrmFmt* pFlyFmt = rDoc.Insert(*pPaM, rFileName, aEmptyStr, pGraph,
+        &aFlySet, &rGrfSet);
 
     // Damit die Frames bei Einfuegen in existierendes Doc erzeugt werden:
-    if(     rDoc.GetRootFrm()
-        &&  (FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId()) )
+    if (rDoc.GetRootFrm() &&
+        (FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId()))
+    {
         pFlyFmt->MakeFrms();
+    }
     return pFlyFmt;
 }
 
 
 // MakeGrafInCntnt fuegt zeichengebundene Grafiken ein
-SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt( const WW8_PIC& rPic, const WW8PicDesc& rPD,
-                       const Graphic* pGraph, const String& rFileName,
-                       const String& rGrName, const SfxItemSet& rGrfSet )
+SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt(const WW8_PIC& rPic,
+    const WW8PicDesc& rPD, const Graphic* pGraph, const String& rFileName,
+    const SfxItemSet& rGrfSet)
 {
-    WW8FlySet aFlySet( *this, pPaM, rPic, rPD.nWidth, rPD.nHeight );
+    WW8FlySet aFlySet(*this, pPaM, rPic, rPD.nWidth, rPD.nHeight);
 
     SwFrmFmt* pFlyFmt = 0;
 
-    if( !rFileName.Len() && nObjLocFc )     // dann sollte ists ein OLE-Object
+    if (!rFileName.Len() && nObjLocFc)      // dann sollte ists ein OLE-Object
         pFlyFmt = ImportOle( pGraph, &aFlySet );
 
-
     if( !pFlyFmt )                          // dann eben als Graphic
-        pFlyFmt = rDoc.Insert( *pPaM,
-                    rFileName, aEmptyStr,   // Name der Grafik !!
-                    pGraph,
-                    &aFlySet,               // Attribute fuer den FlyFrm
-                    &rGrfSet );             // Attribute fuer die Grafik
+    {
 
-    aGrfNameGenerator.SetUniqueGraphName(pFlyFmt, rGrName);
+        pFlyFmt = rDoc.Insert( *pPaM, rFileName, aEmptyStr, pGraph, &aFlySet,
+            &rGrfSet );
+    }
 
     // Grafik im Rahmen ? ok, Rahmen auf Bildgroesse vergroessern
     //  ( nur wenn Auto-Breite )
@@ -462,26 +451,25 @@ SwFrmFmt* SwWW8ImplReader::MakeGrafInCntnt( const WW8_PIC& rPic, const WW8PicDes
     return pFlyFmt;
 }
 
-SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
-                                             ULONG nFilePos )
+SwFrmFmt* SwWW8ImplReader::ImportGraf1(WW8_PIC& rPic, SvStream* pSt,
+    ULONG nFilePos )
 {
     SwFrmFmt* pRet = 0;
     if( pSt->IsEof() || rPic.fError || rPic.MFP.mm == 99 )
-        return pRet;
+        return 0;
 
     String aFileName;
     BOOL bInDoc;
     Graphic* pGraph = 0;
-    BOOL bOk = ReadGrafFile( aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc );
+    BOOL bOk = ReadGrafFile(aFileName, pGraph, rPic, pSt, nFilePos, &bInDoc);
 
-    if ( !bOk )
+    if (!bOk)
     {
         delete pGraph;
-        return pRet;                        // Grafik nicht korrekt eingelesen
+        return 0;                       // Grafik nicht korrekt eingelesen
     }
 
     WW8PicDesc aPD( rPic );
-
 
     SwAttrSet aGrfSet( rDoc.GetAttrPool(), RES_GRFATR_BEGIN, RES_GRFATR_END-1);
     if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
@@ -491,9 +479,9 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf1( WW8_PIC& rPic, SvStream* pSt,
     }
 
     if( pWFlyPara && pWFlyPara->bGrafApo )
-        pRet = MakeGrafNotInCntnt( aPD, pGraph, aFileName, aEmptyStr, aGrfSet );
+        pRet = MakeGrafNotInCntnt(aPD,pGraph,aFileName,aGrfSet);
     else
-        pRet = MakeGrafInCntnt( rPic, aPD, pGraph, aFileName, aEmptyStr, aGrfSet );
+        pRet = MakeGrafInCntnt(rPic,aPD,pGraph,aFileName,aGrfSet);
     delete pGraph;
     return pRet;
 }
@@ -647,9 +635,13 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
     SwFrmFmt* pOldFlyFmt, BOOL bSetToBackground )
 {
     SwFrmFmt* pRet = 0;
-    if(    ( ( pStrm == pDataStream ) && !nPicLocFc )
-            || ( nIniFlags & WW8FL_NO_GRAF )                )
-        return pRet;
+    if (
+        ((pStrm == pDataStream ) && !nPicLocFc) ||
+        (nIniFlags & WW8FL_NO_GRAF)
+       )
+    {
+        return 0;
+    }
 
     ::SetProgressState( nProgress, rDoc.GetDocShell() );         // Update
 
@@ -666,8 +658,7 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
 
         // Plausibilitaetstest ist noetig, da z.B. bei CheckBoxen im
         // Feld-Result ein WMF-aehnliches Struct vorkommt.
-    if(     (aPic.lcb >= 58)
-            && !pDataStream->GetError() )
+    if ((aPic.lcb >= 58) && !pDataStream->GetError())
     {
         if( pFlyFmtOfJustInsertedGraphic )
         {
@@ -688,22 +679,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf( SdrTextObj* pTextObj,
                 aFlySet.ClearItem( RES_ANCHOR );
 
             pFlyFmtOfJustInsertedGraphic->SetAttr( aFlySet );
-
-
-            // ACHTUNG: Zuschneiden ist hier noch nicht implementiert!
-
-            // einfach die Crop-Infos bauen und in aFlySet setzen ???
-            /*
-            if( aPD.nCL || aPD.nCR || aPD.nCT || aPD.nCB )
-            {
-                SwCropGrf aCrop;
-                aCrop.Left()   = aPD.nCL;
-                aCrop.Right()  = aPD.nCR;
-                aCrop.Top()    = aPD.nCT;
-                aCrop.Bottom() = aPD.nCB;
-                pFlyFmtOfJustInsertedGraphic->SetAttr( aCrop ); // ? ? ?
-            }
-            */
 
             pFlyFmtOfJustInsertedGraphic = 0;
         }
