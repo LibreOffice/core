@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: jb $ $Date: 2001-05-28 15:33:37 $
+ *  last change: $Author: dg $ $Date: 2001-06-18 10:48:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,11 +87,6 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
-
-static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
-static ::rtl::OUString ssDefaultLocale(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-static ::rtl::OUString ssInternational(RTL_CONSTASCII_USTRINGPARAM("International"));
-static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
 
 namespace configmgr
 {
@@ -176,6 +171,12 @@ namespace configmgr
         if (bNeedProfile)
         try
         {
+#ifdef TF_CFG
+            static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"));
+#else
+            static ::rtl::OUString ssUserProfile(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.UserProfile"));
+#endif
+
             if (ISubtree* pSubTree = m_pTreeMgr->requestSubtree(ssUserProfile, m_xDefaultOptions))
                 implInitFromProfile(pSubTree);
 
@@ -229,8 +230,16 @@ namespace configmgr
     {
         OSL_ASSERT(pProfile);
 
+#ifdef TF_CFG
+        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("Office"));
+        static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("ooLocale"));
+#else
+        static ::rtl::OUString ssSubGroup(RTL_CONSTASCII_USTRINGPARAM("International"));
+        static ::rtl::OUString ssLocale(RTL_CONSTASCII_USTRINGPARAM("Locale"));
+#endif
+
         // read the default locale for the user
-        INode const* pNode = pProfile->getChild(ssInternational);
+        INode const* pNode = pProfile->getChild(ssSubGroup);
         ISubtree const* pSubTree = pNode ? pNode->asISubtree() : NULL;
         if (pSubTree)
         {
