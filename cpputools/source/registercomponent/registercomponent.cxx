@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registercomponent.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jbu $ $Date: 2002-10-02 12:08:52 $
+ *  last change: $Author: jbu $ $Date: 2002-10-02 13:16:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,9 @@ using com::sun::star::container::XSet;
 using com::sun::star::container::XContentEnumerationAccess;
 using com::sun::star::container::XEnumeration;
 
+#ifdef SAL_W32
+#define putenv _putenv
+#endif
 
 sal_Bool isFileUrl(const OUString& fileName)
 {
@@ -136,25 +139,46 @@ OUString convertToFileUrl(const OUString& fileName)
 
     return uUrlFileName;
 }
-
 static void usingRegisterImpl()
 {
-    fprintf(stderr, "usage: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl] [-s]\n");
+    fprintf(stderr, "usage: regcomp -register|revoke -r registryfile -c locationUrl [-br registryfile] [-l componentLoaderUrl] [-s] [-classpath path]\n");
     fprintf(stderr, " Parameters:\n");
-    fprintf(stderr, "      -register              = register a new component.\n");
-    fprintf(stderr, "      -revoke                = revoke a component.\n\n");
-    fprintf(stderr, "      -br registryfile       = the name of the registry used for bootstrapping the program.\n"
-                    "                               The option can be given twice, each one followed by exactly one registry file.\n"
-                    "                               The registries are used to access both types and registered components.\n");
-    fprintf(stderr, "      -r registryfile        = the name of the target registry (will be created if it does not exists).\n");
-    fprintf(stderr, "      -c locationUrls        = the location of a component (a url to a shared library or a absolute url to a .jar\n"
-                    "                               file) or a list of urls seperated by ';' or ' '. Note if a list of urls is \n"
-                    "                               specified, the components must all need the same loader (quoting is possible with\n"
-                    "                               \\ or \"\").\n");
-    fprintf(stderr, "      -l componentLoaderUrl  = the name of the needed loader. If no loader is specified and the components have a\n"
-                    "                               .jar suffix, the default is 'com.sun.star.loader.Java2'.\n"
-                    "                               Otherwise, the default is com.sun.star.loader.SharedLibrary\n"
-                    "      -s                     = silent, output only on error.\n" );
+    fprintf(stderr, "  -register\n"
+                    "        register a new component.\n");
+    fprintf(stderr, "  -revoke\n"
+                    "        revoke a component.\n");
+    fprintf(stderr, "  -br registryfile\n"
+                    "        the name of the registry used for bootstrapping\n"
+                    "        regcomp. The option can be given twice, each\n"
+                    "        one followed by exactly one registry file.\n"
+                    "        The registries are used to access both types and\n"
+                    "        registered components.\n");
+    fprintf(stderr, "  -r registryfile\n"
+                    "        the name of the target registry (will be created\n"
+                    "        if it does not exists). The file name may match\n"
+                    "        with one of the filenames given with the -br option.\n");
+    fprintf(stderr, "  -c locationUrls\n"
+                    "        the location of a component (a url to a shared\n"
+                    "        library or a absolute url to a .jar file) or a\n"
+                    "        list of urls seperated by ';' or ' '. Note if a\n"
+                    "        list of urls is specified, the components must\n"
+                    "        all need the same loader (quoting is possible with\n"
+                    "        \\ or \"\").\n");
+    fprintf(stderr, "  -l componentLoaderUrl\n"
+                    "        the name of the needed loader. If no loader is\n"
+                    "        specified and the components have a .jar suffix,\n"
+                    "        the default is com.sun.star.loader.Java2.\n"
+                    "        Otherwise, the default is\n"
+                    "        com.sun.star.loader.SharedLibrary\n"
+                    "  -s\n"
+                    "        silent, regcomp prints messages only on error.\n"
+                    "  -classpath path\n"
+                    "        sets the java classpath to path (overwriting the\n"
+                    "        current classpath environment variable). Note that\n"
+                    "        in case you start regcomp e.g. within an office\n"
+                    "        environment, the classpath entries in the\n"
+                    "        configuration still have precedence over this\n"
+                    "        option.\n");
 }
 
 class IllegalArgument
@@ -294,7 +318,24 @@ sal_Bool parseOptions(int ac, char* av[], Options& rOptions, sal_Bool bCmdFile)
                             }
                             throw IllegalArgument(tmp);
                         }
-                    } else
+                    }
+                    else if( 0 == strncmp( av[i] , "-classpath" ,10 ) )
+                    {
+                        i++;
+                        if( i < ac )
+                        {
+                            // leak this string as some platforms assume to own
+                            // the pointer
+                            sal_Char * p = (sal_Char *) rtl_allocateMemory( 13+ strlen( av[i] ) );
+                            p[0] = 0;
+                            strcat( p, "CLASSPATH=" );
+                            strcat( p, av[i] );
+
+                            putenv( p );
+                        }
+                        break;
+                    }
+                    else
                     {
                         sUrls = OStringToOUString(av[i]+2, osl_getThreadTextEncoding());
                     }
@@ -572,7 +613,7 @@ static bool hasService(
     const Reference< XMultiServiceFactory > &xSMgr,
     const sal_Char * service )
 {
-    sal_Bool ret = sal_False;
+    bool ret = false;
 
     Reference< XContentEnumerationAccess > access( xSMgr, UNO_QUERY );
     if( access.is( ))
@@ -582,7 +623,7 @@ static bool hasService(
 
         if( enumeration.is() && enumeration->hasMoreElements() )
         {
-            ret = sal_True;
+            ret = true;
         }
     }
     return ret;
