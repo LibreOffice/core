@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-16 14:16:51 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -354,7 +354,6 @@ sal_Bool ImplSdPPTImport::Import()
         return FALSE;
 
     pSdrModel->setLock( sal_True );
-    SetStarDraw();
     SdrOutliner& rOutl = pDoc->GetDrawOutliner();
     sal_uInt32 nControlWord = rOutl.GetEditEngine().GetControlWord();
     nControlWord |=  EE_CNTRL_ULSPACESUMMATION;
@@ -824,10 +823,17 @@ sal_Bool ImplSdPPTImport::Import()
                                                     ? (*pList)[ nAktPageNum ] : NULL;
         if ( pPersist )
         {
-            if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 3 ) && ( ( nAktPageNum & 1 ) == 0 ) )
+            if ( pPersist->bStarDrawFiller && pPersist->bNotesMaster && ( nAktPageNum > 2 ) && ( ( nAktPageNum & 1 ) == 0 ) )
             {
                 pSdrModel->DeleteMasterPage( nAktPageNum );
-                pSdrModel->InsertMasterPage( pSdrModel->GetMasterPage( nAktPageNum - 2 )->Clone(), nAktPageNum );
+                SdrPage* pNotesClone = ((SdPage*)pSdrModel->GetMasterPage( 2 ))->Clone();
+                pSdrModel->InsertMasterPage( pNotesClone, nAktPageNum );
+                if ( pNotesClone )
+                {
+                    String aLayoutName( ((SdPage*)pSdrModel->GetMasterPage( nAktPageNum - 1 ))->GetLayoutName() );
+                    ((SdPage*)pNotesClone)->SetPresentationLayout( aLayoutName, sal_False, sal_False, sal_False );
+                    ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
+                }
             }
             else if ( ( pPersist->bStarDrawFiller == FALSE ) )
             {
@@ -962,39 +968,41 @@ sal_Bool ImplSdPPTImport::Import()
                 pPage->SetPageKind( PK_STANDARD );
                 ImportPageEffect( (SdPage*)pPage );
                 pSdrModel->InsertPage( pPage );
-                if ( HasNotesPage( nAktPageNum, eAktPageKind ) )
+
+                // creating the corresponding note page
+                eAktPageKind = PPT_NOTEPAGE;
+                SdPage* pNotesPage = (SdPage*)MakeBlancPage( FALSE );
+                sal_uInt16 nNotesMasterNum = GetMasterPageIndex( nPageNum, PPT_SLIDEPAGE ) + 1;
+                sal_uInt32 nNotesPageId = GetNotesPageId( nPageNum );
+                if ( nNotesPageId )
                 {
                     nImportedPages++;
-                    USHORT nNotesPageNum = GetNotesPageIndex( nAktPageNum, eAktPageKind );
-                    SetPageNum( nNotesPageNum, PPT_NOTEPAGE );
-                    SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
+                    sal_uInt16 nNotesPageIndex = pNotePages->FindPage( nNotesPageId );
+                    if ( nNotesPageIndex == PPTSLIDEPERSIST_ENTRY_NOTFOUND )
+                        nNotesPageIndex = 0;
+                    SetPageNum( nNotesPageIndex, PPT_NOTEPAGE );
                     PptSlidePersistEntry* pMasterPersist = NULL;
-                    if ( HasMasterPage( nNotesPageNum, PPT_NOTEPAGE ) ) // try to get the LayoutName from the masterpage
+                    if ( HasMasterPage( nNotesPageIndex, PPT_NOTEPAGE ) ) // try to get the LayoutName from the masterpage
                     {
-                        sal_uInt16 nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                        pPage->InsertMasterPage( nMasterNum );
+                        pNotesPage->InsertMasterPage( nNotesMasterNum );
                         PptSlidePersistList* pPageList = GetPageList( PPT_MASTERPAGE );
-                        if ( pPageList && nMasterNum < pPageList->Count() )
-                            pMasterPersist = (*pPageList)[ nMasterNum ];
-                        pPage->SetLayoutName( ( (SdPage*)pPage->GetMasterPage( 0 ) )->GetLayoutName() );
+                        if ( pPageList && nNotesMasterNum < pPageList->Count() )
+                            pMasterPersist = (*pPageList)[ nNotesMasterNum ];
+                        pNotesPage->SetLayoutName( ( (SdPage*)pNotesPage->GetMasterPage( 0 ) )->GetLayoutName() );
                     }
-                    ImportPage( pPage, pMasterPersist );
-                    pPage->SetPageKind( PK_NOTES );
-                    USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                    pPage->InsertMasterPage( nMasterNum );
-                    pPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
-                    pSdrModel->InsertPage( pPage );
+                    ImportPage( pNotesPage, pMasterPersist );
+                    pNotesPage->SetPageKind( PK_NOTES );
+                    pNotesPage->InsertMasterPage( nNotesMasterNum );
+                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, FALSE );
+                    pSdrModel->InsertPage( pNotesPage );
                 }
                 else
                 {
-                    eAktPageKind = PPT_NOTEPAGE; // fuer das richtige Seitenformat
-                    SdPage* pPage = (SdPage*)MakeBlancPage( FALSE );
-                    pPage->SetPageKind( PK_NOTES );
-                    USHORT nMasterNum = GetMasterPageIndex( nAktPageNum, eAktPageKind );
-                    pPage->InsertMasterPage( nMasterNum );
-                    pPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
-                    pSdrModel->InsertPage( pPage );
-                    SdrObject* pPageObj = pPage->GetPresObj( PRESOBJ_PAGE, 1 );
+                    pNotesPage->SetPageKind( PK_NOTES );
+                    pNotesPage->InsertMasterPage( nNotesMasterNum );
+                    pNotesPage->SetAutoLayout( AUTOLAYOUT_NOTES, TRUE );
+                    pSdrModel->InsertPage( pNotesPage );
+                    SdrObject* pPageObj = pNotesPage->GetPresObj( PRESOBJ_PAGE, 1 );
                     if ( pPageObj )
                         ((SdrPageObj*)pPageObj)->SetPageNum( ( nPageNum << 1 ) + 1 );
                 }
