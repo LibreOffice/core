@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dtuple.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2004-01-16 10:34:35 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,21 +66,28 @@
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
 #include <basegfx/numeric/ftools.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
+namespace { struct EmptyTuple : public rtl::Static<basegfx::B2DTuple, EmptyTuple> {}; }
 
 namespace basegfx
 {
-    // initialize static member
-    ::basegfx::B2DTuple B2DTuple::maEmptyTuple(0.0, 0.0);
+    const B2DTuple& B2DTuple::getEmptyTuple()
+    {
+        return EmptyTuple::get();
+    }
 
     bool B2DTuple::equalZero() const
     {
-        return (this == &maEmptyTuple ||
+        return (this == &getEmptyTuple() ||
                 (::basegfx::fTools::equalZero(mfX) && ::basegfx::fTools::equalZero(mfY)));
     }
 
     bool B2DTuple::equalZero(const double& rfSmallValue) const
     {
-        return (this == &maEmptyTuple ||
+        return (this == &getEmptyTuple() ||
                 (::basegfx::fTools::equalZero(mfX, rfSmallValue) && ::basegfx::fTools::equalZero(mfY, rfSmallValue)));
     }
 
