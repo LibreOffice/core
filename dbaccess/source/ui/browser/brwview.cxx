@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-23 14:41:10 $
+ *  last change: $Author: fs $ $Date: 2001-09-06 13:59:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,7 +202,11 @@ void UnoDataBrowserView::setTreeView(DBTreeView* _pTreeView)
     if (m_pTreeView != _pTreeView)
     {
         if (m_pTreeView)
-            delete m_pTreeView;
+        {
+            Window* pDeleteIt = m_pTreeView;
+            m_pTreeView = NULL;
+            delete pDeleteIt;
+        }
         m_pTreeView = _pTreeView;
     }
 }
