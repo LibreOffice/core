@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-05-06 09:44:29 $
+ *  last change: $Author: af $ $Date: 2002-05-08 09:57:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,9 +191,9 @@ awt::Rectangle SAL_CALL AccessiblePageShape::getBounds (void)
     }
 
     // Transform coordinates from internal to pixel.
-    ::Size aPixelSize = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Size aPixelSize = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Size (aBoundingBox.Width, aBoundingBox.Height));
-    ::Point aPixelPosition = mrShapeTreeInfo.GetViewForwarder()->LogicToPixel (
+    ::Point aPixelPosition = mShapeTreeInfo.GetViewForwarder()->LogicToPixel (
         ::Point (aBoundingBox.X, aBoundingBox.Y));
 
     // Clip the shape's bounding box with the bounding box of its parent.
