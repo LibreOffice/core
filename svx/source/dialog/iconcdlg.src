@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-28 12:55:01 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ String RID_SVXSTR_ICONCHOICEDLG_RESETBUT
     Text[ greek ] = "~Ðßóù";
     Text[ dutch ] = "~Vorige";
     Text[ french ] = "~Précédent";
-    Text[ spanish ] = "Ante~rior";
+    Text[ spanish ] = "~Regresar";
     Text[ italian ] = "Indietro";
     Text[ danish ] = "Tilbage";
     Text[ swedish ] = "~Tillbaka";
