@@ -955,13 +955,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::adapt_packagename(\$packagename);
             }
 
-            #############################################################################
-            # scp Todo: No need for packaging cde, kde and gnome. This can be removed
-            # if scp changes can be done after removal of old setup application
-            #############################################################################
-
-            if (( $packagename =~ /cde/) || ( $packagename =~ /kde/) || ( $packagename =~ /gnome/)) { next; }
-
             ###########################################
             # Root path, can be defined as parameter
             ###########################################
