@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swatrset.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:25:53 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 09:40:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #endif
 class SwModify;
 class SwDoc;
+class OutputDevice;
 
 class SfxBoolItem;
 class SvxPostureItem;
@@ -369,5 +370,7 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwAttrSet)
 };
 
-    // #ifndef _SWATRSET_HXX
+//Helper for filters to find true lineheight of a font
+long AttrSetToLineHeight(const SwDoc &rDoc, const SwAttrSet &rSet,
+    const OutputDevice &rOut, sal_Int16 nScript);
 #endif

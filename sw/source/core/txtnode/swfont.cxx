@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-03 11:42:50 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 09:42:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,3 +1296,33 @@ SwUnderlineFont::~SwUnderlineFont()
      delete pFnt;
 }
 
+//Helper for filters to find true lineheight of a font
+long AttrSetToLineHeight(const SwDoc &rDoc, const SwAttrSet &rSet,
+    const OutputDevice &rOut, sal_Int16 nScript)
+{
+    SwFont aFont(&rSet, &rDoc);
+    BYTE nActual;
+    switch (nScript)
+    {
+        default:
+        case com::sun::star::i18n::ScriptType::LATIN:
+            nActual = SW_LATIN;
+            break;
+        case com::sun::star::i18n::ScriptType::ASIAN:
+            nActual = SW_CJK;
+            break;
+        case com::sun::star::i18n::ScriptType::COMPLEX:
+            nActual = SW_CTL;
+            break;
+    }
+    aFont.SetActual(nActual);
+
+    OutputDevice &rMutableOut = const_cast<OutputDevice &>(rOut);
+    const Font aOldFont(rMutableOut.GetFont());
+
+    rMutableOut.SetFont(aFont.GetActualFont());
+    long nHeight = rMutableOut.GetTextHeight();
+
+    rMutableOut.SetFont(aOldFont);
+    return nHeight;
+}
