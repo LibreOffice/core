@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:36:58 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:38:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,10 +150,11 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         ::rtl::OUString aStmt;
         ::rtl::OUString sSchema = _rUser.toAsciiUpperCase();
 
-        Reference<XDatabaseMetaData> xMetaData = m_xConnection->getMetaData();
+        Reference<XDatabaseMetaData> xMetaData;
         // first read the sizes
         try
         {
+            xMetaData = m_xConnection->getMetaData();
             bCanSelect = checkSystemTable(::rtl::OUString::createFromAscii("SERVERDBSTATISTICS"),sSchema);
 
             if(bCanSelect)
@@ -176,7 +177,7 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
 
                     m_ET_SIZE.SetText(::rtl::OUString::valueOf((INT32)nUsedPages));
                     m_ET_FREESIZE.SetText(::rtl::OUString::valueOf((INT32)nFreePages));
-                    m_ET_MEMORYUSING.SetValue(((nUsedPages-nFreePages)/nUsedPages)*100);
+                    m_ET_MEMORYUSING.SetValue(static_cast<sal_Int32>(((nUsedPages-nFreePages)/nUsedPages)*100));
                 }
                 else
                     showError();
@@ -194,7 +195,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
         {
             OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
         }
-        ::comphelper::disposeComponent(xStmt);
+        try
+        {
+            ::comphelper::disposeComponent(xStmt);
+        }
+        catch(const Exception&)
+        {
+            OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+        }
 
         // now fill the datadev spaces
         if(bCanSelect)
@@ -231,7 +239,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
             {
                 OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
             }
-            ::comphelper::disposeComponent(xStmt);
+            try
+            {
+                ::comphelper::disposeComponent(xStmt);
+            }
+            catch(const Exception&)
+            {
+                OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+            }
 
             // now fill the sysdatadev spaces
             if(bCanSelect)
@@ -278,7 +293,14 @@ OAdabasStatistics::OAdabasStatistics( Window* pParent,
                 {
                     OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
                 }
-                ::comphelper::disposeComponent(xStmt);
+                try
+                {
+                    ::comphelper::disposeComponent(xStmt);
+                }
+                catch(const Exception&)
+                {
+                    OSL_ENSURE(sal_False, "OAdabasStatistics::OAdabasStatistics: caught an exception!");
+                }
             }
         }
     }
@@ -308,7 +330,7 @@ sal_Bool OAdabasStatistics::checkSystemTable(const ::rtl::OUString& _rsSystemTab
             Reference<XRow> xRow(xRes,UNO_QUERY);
             static const ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT");
             // first the db sizes
-            while(xRes.is() && xRes->next())
+            while( xRow.is() && xRes->next() )
             {
                 _rsSchemaName = xRow->getString(2);
                 if(sSelect == xRow->getString(6) && !xRow->wasNull())
@@ -320,6 +342,7 @@ sal_Bool OAdabasStatistics::checkSystemTable(const ::rtl::OUString& _rsSystemTab
             ::comphelper::disposeComponent(xRes);
         }
     }
+
     return bCanSelect;
 }
 // -----------------------------------------------------------------------------
