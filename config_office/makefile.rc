@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: mh $ $Date: 2003-01-20 15:00:18 $
+#   last change: $Author: hr $ $Date: 2003-07-16 17:24:55 $
 #
 #   Bugs:  'update' tag will not change you from one release to another.
 #          See webpages to checkout OpenOffice.org from you office directory.
@@ -188,10 +188,10 @@ BUILD_SUBDIRS =  \
 	zlib
 
 build_all .SETDIR=instsetoo/prj:
-	@+perl $(SOLARENV)$/bin$/build.pl -all product=full
+	@+perl $(SOLARENV)$/bin$/build.pl --all product=full
 
 depend .SETDIR=instsetoo/prj:
-	@+perl $(SOLARENV)$/bin$/build.pl -all product=full depend=t
+	@+perl $(SOLARENV)$/bin$/build.pl --all product=full depend=t
 
 
 # 
