@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itratr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-08 08:16:18 $
+ *  last change: $Author: ama $ $Date: 2001-03-08 10:53:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,10 +86,6 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
-#include <com/sun/star/i18n/ScriptType.hdl>
-#endif
-
 #ifndef _FMTANCHR_HXX //autogen
 #include <fmtanchr.hxx>
 #endif
@@ -168,7 +164,17 @@
 #ifndef _ITRTXT_HXX
 #include <itrtxt.hxx>
 #endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HPP_
+#include <com/sun/star/i18n/WordType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
+#include <com/sun/star/i18n/ScriptType.hdl>
+#endif
 
+using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
 /*************************************************************************
@@ -904,8 +910,6 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
 USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     const
 {
-    ASSERT( nStt < nEnd , "what? start >= end?" );
-
     ViewShell* pSh;
     OutputDevice* pOut;
     GetDoc()->GetEditShell( &pSh );
@@ -923,6 +927,31 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
 
     MapMode aOldMap( pOut->GetMapMode() );
     pOut->SetMapMode( MapMode( MAP_TWIP ) );
+
+    if ( nStt == nEnd )
+    {
+        if ( !pBreakIt->xBreak.is() )
+            return 100;
+
+        SwScriptInfo aScriptInfo;
+        SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
+        aIter.SeekAndChg( nStt, pOut );
+
+        Boundary aBound =
+            pBreakIt->xBreak->getWordBoundary( GetTxt(), nStt,
+            pBreakIt->GetLocale( aIter.GetFnt()->GetLanguage() ),
+            WordType::DICTIONARY_WORD, sal_True );
+
+        if ( nStt == aBound.startPos )
+            // cursor is at left or right border of word
+            return 100;
+
+        nStt = aBound.startPos;
+        nEnd = aBound.endPos;
+
+        if ( nStt == nEnd )
+            return 100;
+    }
 
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
