@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-27 12:30:59 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:48:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1685,7 +1685,9 @@ KEYINPUT_CHECKTABLE_INSDEL:
                             eKeyState = KS_GlossaryExpand;
 
                         //RETURN und leerer Absatz in Numerierung -> Num. beenden
-                        else if( rSh.GetCurNumRule() && !rSh.HasSelection() &&
+                        else if( rSh.GetCurNumRule() &&
+                                 !rSh.GetCurNumRule()->IsOutlineRule() &&
+                                 !rSh.HasSelection() &&
                                 rSh.IsSttPara() && rSh.IsEndPara() )
                             eKeyState = KS_NumOff;
 
