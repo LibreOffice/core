@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:04:55 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Ope~nen";
             Text[ chinese_simplified ] = "΄ςΏª(~O)";
             Text[ greek ] = "Άν~οιγμα";
-            Text[ korean ] = "Ώ­±β(~O)";
+            Text[ korean ] = "Ώ­±β";
             Text[ turkish ] = "Aη";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Abrir";
@@ -121,7 +121,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Openen in n~ieuw venster";
             Text[ chinese_simplified ] = "ΚΉΣΓΠΒΚΣ΄°΄ςΏª(~W)";
             Text[ greek ] = "Άνοιγμα σε νέο ~παράθυρο";
-            Text[ korean ] = "»υ΅΅ΓΆΏ΅Ό­ Ώ­±β";
+            Text[ korean ] = "»υ ΓΆΏ΅Ό­ Ώ­±β";
             Text[ turkish ] = "Yeni bir pencerede aη";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Abrir en nueva ~ventana";
@@ -151,7 +151,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Be~werken";
             Text[ chinese_simplified ] = "±ΰΌ­(~E)";
             Text[ greek ] = "~Επεξεργασία";
-            Text[ korean ] = "ΖνΑύ(~E)";
+            Text[ korean ] = "ΖνΑύ";
             Text[ turkish ] = "D~όzenle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Editar";
@@ -181,7 +181,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Opnieuw laden";
             Text[ chinese_simplified ] = "ΦΨΠΒΧ°Θλ(~L)";
             Text[ greek ] = "Επα~ναφόρτωση";
-            Text[ korean ] = "΄Ω½Γ ·Ξµε(~L)!";
+            Text[ korean ] = "΄Ω½Γ ·Ξµε!";
             Text[ turkish ] = "Yeniden yόkle";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Recargar";
@@ -241,7 +241,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~HTML - brontekst";
             Text[ chinese_simplified ] = "HT~ML Τ΄ΞΔ±Ύ";
             Text[ greek ] = "Κείμενο προέλευσης HTM~L";
-            Text[ korean ] = "HT~ML ΌÒ½ΊΕΨ½ΊΖ®";
+            Text[ korean ] = "HTML ΌÒ½ΊΕΨ½ΊΖ®";
             Text[ turkish ] = "HTM~L  kaynak kodu";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "Texto fuente ~HTML";
@@ -272,7 +272,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Stop";
             Text[ chinese_simplified ] = "ΤέΝ£(~S)";
             Text[ greek ] = "~Διακοπή";
-            Text[ korean ] = "Α¤Αφ(~S)";
+            Text[ korean ] = "Α¤Αφ";
             Text[ turkish ] = "Dur";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Stop";
@@ -333,7 +333,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Vooruit";
             Text[ chinese_simplified ] = "ΟςΗ°(~F)";
             Text[ greek ] = "Εμπρό~ς";
-            Text[ korean ] = "ΎΥΐΈ·Ξ(~F)";
+            Text[ korean ] = "ΎΥΐΈ·Ξ";
             Text[ turkish ] = "έleri";
             Text[ catalan ] = "~Avanzar";
             Text[ finnish ] = "~Eteenpδin";
@@ -618,7 +618,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "~Koppeling kopiλren";
             Text[ chinese_simplified ] = "Έ΄ΦΖΑ΄½Σ(~L)";
             Text[ greek ] = "Αντιγραφή ~σύνδεσης";
-            Text[ korean ] = "ΈµΕ© ΊΉ»η(~L)";
+            Text[ korean ] = "ΈµΕ© ΊΉ»η";
             Text[ turkish ] = "Baπlantύyύ kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Copiar vνnculo";
@@ -651,7 +651,7 @@ Menu MN_READONLY_POPUP
             Text[ dutch ] = "Afbeelding ko~piλren";
             Text[ chinese_simplified ] = "Έ΄ΦΖΝΌΠΞ(~G)";
             Text[ greek ] = "Αντιγραφή γραφι~κών";
-            Text[ korean ] = "±Χ·΅ΗΘ ΊΉ»η(~G)";
+            Text[ korean ] = "±Χ·΅ΗΘ ΊΉ»η";
             Text[ turkish ] = "Grafiπi kopyala";
             Text[ language_user1 ] = " ";
             Text[ catalan ] = "~Copiar imagen";
@@ -769,7 +769,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ russian ] = "έκροξπς πθρσνκΰ";
     Text[ polish ] = "Eksport grafiki";
     Text[ japanese ] = "}‚Μ΄Έ½Ξί°Δ";
-    Text[ chinese_traditional ] = "Ώι¥XΉΟ§Ξ";
+    Text[ chinese_traditional ] = "¶Χ¥XΉΟ§Ξ";
     Text[ arabic ] = "ΚΥΟνΡ ΥζΡ";
     Text[ dutch ] = "Afbeelding exporteren";
     Text[ chinese_simplified ] = "ΝΌΠΞ-Κδ³φ";
@@ -830,7 +830,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ dutch ] = "Het doelkader is niet leeg.";
     Text[ chinese_simplified ] = "ΔΏ±κΏς²»ΚΗΏΥµΔ΅£";
     Text[ greek ] = "Το πλαίσιο προορισμού δεν είναι κενό.";
-    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΊ ΊρΎξΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
+    Text[ korean ] = "ΈρΗ¥ ΗΑ·ΉΐΣΐΜ ΊρΎξΐΦΑφ ΎΚ½ΐ΄Ο΄Ω.";
     Text[ turkish ] = "Hedef ηerηeve boώ deπil.";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "El marco destino no estα vacνo.";
@@ -1194,13 +1194,14 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ arabic ] = "ΚήΪ ΪαΗγΙ ΗαίΚΗΘΙ Γζ ΗαΚΝΟνΟ έν γζΦΪ γΝγν ΦΟ ΗαίΚΗΘΙ.\nαεΠΗ αΗ νγίδ ήΘζα ΓνΙ ΚΫννΡΗΚ.";
     MESSAGE[ dutch ] = "De cursor of de selectie bevindt zich op een schrijfbeveiligde positie.\nDe inhoud kan daarom niet worden gewijzigd.";
     MESSAGE[ chinese_simplified ] = "ΚδΘλΉβ±κ»ςΡ΅ΦΠµΘΔΪΘέΚΗÒ»ΈφΚά±£»¤µΔ΅£\nΞή·¨ΈόΈΔ·ΐΈ²Π΄µΔΔΪΘέ΅£";
-    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποπο? ";
-    MESSAGE[ korean ] = "Ύ²±β΅΅Έ¶Ε©΅΅¶Η΄Β΅΅Ό±ΕΓΐΊ΅΅ΊΈΘ£µΘ΅΅ΐ§Δ΅Ώ΅΅΅ΐΦ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΗΑφ΅΅ΎΚ½ΐ΄Ο΄Ω.";
+    MESSAGE[ greek ] = "Το σημάδι της εγγραφής ή η επιλογή βρίσκεται σε μία προστατευόμενη θέση.\nΓι αυτό το λόγο δεν μπορούν να γίνουν δεκτές οποιεσδήποτε τροποπ";
+    MESSAGE[ korean ] = "Ύ²±β Έ¶Ε© ¶Η΄Β Ό±ΕΓΐΊ ΊΈΘ£µΘ ΐ§Δ΅Ώ΅ ΐΦ½ΐ΄Ο΄Ω.\nΌφΑ¤ΐΊ ΗγΏλµΗΑφ ΎΚ½ΐ΄Ο΄Ω.";
     MESSAGE[ turkish ] = "Salt okunur bir iηerik deπiώtirilemez.\nYapύlan deπiώiklikler nu nedenle kabul edilmeyecek.";
     MESSAGE[ language_user1 ] = " ";
     MESSAGE[ catalan ] = "La marca o selecciσn se encuentra en una posiciσn protegida.\nPor ello no se puede aceptar una modificaciσn.";
     MESSAGE[ finnish ] = "Vain luku -sisδltφδ ei voi muuttaa.\nMuokkauksia ei hyvδksytδ";
 };
+
 
 
 
