@@ -1,0 +1,3 @@
+sh	shell	:	offapi rdbmaker NULL
+sh	shell						usr1	-	all	su_mkout NULL
+sh  shell\source\win32\			nmake	-	w	sh_win32 NULL

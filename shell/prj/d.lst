@@ -1,0 +1,5 @@
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+..\source\win32\syssh.xml %_DEST%\xml%_EXT%\syssh.xml
