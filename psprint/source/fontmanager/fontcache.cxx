@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 09:22:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 #define FONTCACHEFILE "/user/psprint/pspfontcache"
+#define CACHE_MAGIC "PspFontCacheFile format 1"
 
 using namespace std;
 using namespace rtl;
@@ -151,6 +152,7 @@ void FontCache::flush()
     }
 
     aStream.SetLineDelimiter( LINEEND_LF );
+    aStream.WriteLine( ByteString( CACHE_MAGIC ) );
 
     PrintFontManager& rManager( PrintFontManager::get() );
     MultiAtomProvider* pAtoms = rManager.m_pAtoms;
@@ -201,10 +203,12 @@ void FontCache::flush()
                 /*
                  *  for each font entry write:
                  *  name[;name[;name]]
-                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh[;{metricfile,typeflags}]
+                 *  fontnr;PSName;italic;weight;width;pitch;encoding;ascend;descend;leading;vsubst;gxw;gxh;gyw;gyh;useroverrride[;{metricfile,typeflags}]
                  */
                 if( nEntrySize > 1 )
                     nSubEntry = static_cast<const PrintFontManager::TrueTypeFontFile*>(*it)->m_nCollectionEntry;
+                else
+                    nSubEntry = -1;
 
                 aLine = OUStringToOString( pAtoms->getString( ATOM_FAMILYNAME, (*it)->m_nFamilyName ), RTL_TEXTENCODING_UTF8 );
                 for( ::std::list< int >::const_iterator name_it = (*it)->m_aAliases.begin(); name_it != (*it)->m_aAliases.end(); ++name_it )
@@ -248,6 +252,8 @@ void FontCache::flush()
                 aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricY.width ) );
                 aLine.Append( ';' );
                 aLine.Append( ByteString::CreateFromInt32( (*it)->m_aGlobalMetricY.height ) );
+                aLine.Append( ';' );
+                aLine.Append( (*it)->m_bUserOverride ? "1" : "0" );
 
                 switch( (*it)->m_eType )
                 {
@@ -289,9 +295,19 @@ void FontCache::read()
 
 
     ByteString aLine;
+    aStream.ReadLine( aLine );
+    if( !aLine.Equals( CACHE_MAGIC ) )
+    {
+        #if OSL_DEBUG_LEVEL >1
+        fprintf( stderr, "FontCache::read: cache file %s fails magic test\n", ByteString( m_aCacheFile, osl_getThreadTextEncoding() ).GetBuffer() );
+        #endif
+        return;
+    }
+
     int nDir = 0;
     FontDirMap* pDir = NULL;
     xub_StrLen nIndex;
+    bool bKeepOnlyUserOverridden = false;
     do
     {
         aStream.ReadLine( aLine );
@@ -321,7 +337,6 @@ void FontCache::read()
             // is the directory modified ?
             struct stat aStat;
             if( stat( aDir.getStr(), &aStat )               ||
-                (sal_Int64)aStat.st_mtime != nTimestamp     ||
                 ! S_ISDIR(aStat.st_mode) )
             {
                 // remove outdated cache data
@@ -336,6 +351,8 @@ void FontCache::read()
                 m_aCache[ nDir ].m_nTimestamp = nTimestamp;
                 m_aCache[ nDir ].m_bNoFiles = bEmpty;
                 pDir = bEmpty ? NULL : &m_aCache[ nDir ].m_aEntries;
+                bKeepOnlyUserOverridden = ((sal_Int64)aStat.st_mtime != nTimestamp);
+                m_aCache[ nDir ].m_bUserOverrideOnly = bKeepOnlyUserOverridden;
             }
         }
         else if( pDir && aLine.CompareTo( "File:", 5 ) == COMPARE_EQUAL )
@@ -414,7 +431,7 @@ void FontCache::read()
                 CHECKINDEX();
                 pFont->m_nLeading = aLine.GetToken( 0, ';', nIndex ).ToInt32();
                 CHECKINDEX();
-                pFont->m_bHaveVerticalSubstitutedGlyphs = aLine.GetToken( 0, ';', nIndex ).CompareIgnoreCaseToAscii( "true" ) == COMPARE_EQUAL ? true : false;
+                pFont->m_bHaveVerticalSubstitutedGlyphs = (aLine.GetToken( 0, ';', nIndex ).ToInt32() != 0 ) ? true : false;
                 CHECKINDEX();
                 pFont->m_aGlobalMetricX.width = aLine.GetToken( 0, ';', nIndex ).ToInt32();
                 CHECKINDEX();
@@ -423,6 +440,8 @@ void FontCache::read()
                 pFont->m_aGlobalMetricY.width = aLine.GetToken( 0, ';', nIndex ).ToInt32();
                 CHECKINDEX();
                 pFont->m_aGlobalMetricY.height = aLine.GetToken( 0, ';', nIndex ).ToInt32();
+                CHECKINDEX();
+                pFont->m_bUserOverride = (aLine.GetToken( 0, ';', nIndex ).ToInt32() != 0) ? true : false;
 
                 switch( eType )
                 {
@@ -449,34 +468,61 @@ void FontCache::read()
                     default: break;
                 }
 
-                /*
-                 *  #i20287# duplicate lines could exist because of
-                 *  fontcache code prior to OOo 1.1.1, ignore them
-                 */
-                bool bDuplicate = false;
-                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
-                for( FontCacheEntry::const_iterator entry = rEntry.begin();
-                     entry != rEntry.end() && ! bDuplicate; ++entry )
+                bool bObsolete = false;
+                if( bKeepOnlyUserOverridden )
                 {
-                    const PrintFontManager::PrintFont* pOld = *entry;
-                    if( pOld->m_eType               == pFont->m_eType               &&
-                        pOld->m_nFamilyName         == pFont->m_nFamilyName         &&
-                        pOld->m_nPSName             == pFont->m_nPSName             &&
-                        pOld->m_eItalic             == pFont->m_eItalic             &&
-                        pOld->m_eWidth              == pFont->m_eWidth              &&
-                        pOld->m_ePitch              == pFont->m_ePitch              &&
-                        pOld->m_aEncoding           == pFont->m_aEncoding           &&
-                        pOld->m_bFontEncodingOnly   == pFont->m_bFontEncodingOnly   &&
-                        pOld->m_nAscend             == pFont->m_nAscend             &&
-                        pOld->m_nDescend            == pFont->m_nDescend
-                        )
-                        bDuplicate = m_bDoFlush = true;
+                    if( pFont->m_bUserOverride )
+                    {
+                        ByteString aFilePath = rManager.getDirectory( nDir );
+                        aFilePath.Append( '/' );
+                        aFilePath.Append( ByteString(aFile) );
+                        struct stat aStat;
+                        if( stat( aFilePath.GetBuffer(), &aStat )   ||
+                            ! S_ISREG( aStat.st_mode )              ||
+                            aStat.st_size < 16 )
+                        {
+                            bObsolete = true;
+                        }
+                        #if OSL_DEBUG_LEVEL > 1
+                        else
+                            fprintf( stderr, "keeping file %s in outdated cache entry due to user override\n",
+                                     aFilePath.GetBuffer() );
+                        #endif
+                    }
+                    else
+                        bObsolete = true;
+                }
+                FontCacheEntry& rEntry = (*pDir)[aFile].m_aEntry;
+                if( ! bObsolete )
+                {
+                    /*
+                    *  #i20287# duplicate lines could exist because of
+                    *  fontcache code prior to OOo 1.1.1, ignore them
+                    */
+                    for( FontCacheEntry::const_iterator entry = rEntry.begin();
+                         entry != rEntry.end() && ! bObsolete; ++entry )
+                    {
+                        const PrintFontManager::PrintFont* pOld = *entry;
+                        if( pOld->m_eType               == pFont->m_eType               &&
+                            pOld->m_nFamilyName         == pFont->m_nFamilyName         &&
+                            pOld->m_nPSName             == pFont->m_nPSName             &&
+                            pOld->m_eItalic             == pFont->m_eItalic             &&
+                            pOld->m_eWidth              == pFont->m_eWidth              &&
+                            pOld->m_ePitch              == pFont->m_ePitch              &&
+                            pOld->m_aEncoding           == pFont->m_aEncoding           &&
+                            pOld->m_bFontEncodingOnly   == pFont->m_bFontEncodingOnly   &&
+                            pOld->m_nAscend             == pFont->m_nAscend             &&
+                            pOld->m_nDescend            == pFont->m_nDescend
+                            )
+                        bObsolete = true;
+                    }
                 }
 
-                if( bDuplicate )
+                if( bObsolete )
                 {
+                    m_bDoFlush = true;
 #if OSL_DEBUG_LEVEL > 1
-                    fprintf( stderr, "removing duplicate font %s\n", aFile.getStr() );
+                    fprintf( stderr, "removing obsolete font %s\n", aFile.getStr() );
 #endif
                     delete pFont;
                     continue;
@@ -546,6 +592,7 @@ void FontCache::copyPrintFont( const PrintFontManager::PrintFont* pFrom, PrintFo
     pTo->m_nXMax            = pFrom->m_nXMax;
     pTo->m_nYMax            = pFrom->m_nYMax;
     pTo->m_bHaveVerticalSubstitutedGlyphs = pFrom->m_bHaveVerticalSubstitutedGlyphs;
+    pTo->m_bUserOverride    = pFrom->m_bUserOverride;
 }
 
 /*
@@ -605,7 +652,9 @@ bool FontCache::equalsPrintFont( const PrintFontManager::PrintFont* pLeft, Print
         pRight->m_nYMin             != pLeft->m_nYMin           ||
         pRight->m_nXMax             != pLeft->m_nXMax           ||
         pRight->m_nYMax             != pLeft->m_nYMax           ||
-        pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs )
+        pRight->m_bHaveVerticalSubstitutedGlyphs != pLeft->m_bHaveVerticalSubstitutedGlyphs ||
+        pRight->m_bUserOverride     != pLeft->m_bUserOverride
+        )
         return false;
     std::list< int >::const_iterator lit, rit;
     for( lit = pLeft->m_aAliases.begin(), rit = pRight->m_aAliases.begin();
@@ -763,6 +812,19 @@ bool FontCache::listDirectory( const OString& rDir, std::list< PrintFontManager:
         }
     }
     return bFound;
+}
+
+/*
+ *  FontCache::listDirectory
+ */
+bool FontCache::scanAdditionalFiles( const OString& rDir )
+{
+    PrintFontManager& rManager( PrintFontManager::get() );
+    int nDirID = rManager.getDirectoryAtom( rDir );
+    FontCacheData::const_iterator dir = m_aCache.find( nDirID );
+    bool bFound = (dir != m_aCache.end());
+
+    return (bFound && dir->second.m_bUserOverrideOnly);
 }
 
 /*
