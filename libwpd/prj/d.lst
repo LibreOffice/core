@@ -1,3 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\libwpd
 ..\%__SRC%\misc\build\libwpd-snap-20040823\src\lib\*.h %_DEST%\inc%_EXT%\libwpd\*.h
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
+..\%__SRC%\slb\*.lib %_DEST%\lib%_EXT%\*.lib
