@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-10 11:08:28 $
+ *  last change: $Author: cmc $ $Date: 2002-10-16 10:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2332,10 +2332,15 @@ uno::Reference< table::XTableRows >  SwXTextTable::getRows(void) throw( uno::Run
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XTableRows >  xRet;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-        xRet = new SwXTableRows(*pFmt);
-    else
+    if (SwFrmFmt* pFmt = GetFrmFmt())
+    {
+        SwXTableRows* pRows = (SwXTableRows*)SwClientIter(*pFmt).
+            First(TYPE(SwXTableRows));
+        if (!pRows)
+            pRows = new SwXTableRows(*pFmt);
+        xRet = pRows;
+    }
+    if (!xRet.is())
         throw uno::RuntimeException();
     return xRet;
 }
@@ -2346,10 +2351,15 @@ uno::Reference< table::XTableColumns >  SwXTextTable::getColumns(void) throw( un
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Reference< table::XTableColumns >  xRet;
-    SwFrmFmt* pFmt = GetFrmFmt();
-    if(pFmt)
-        xRet = new SwXTableColumns(*pFmt);
-    else
+    if (SwFrmFmt* pFmt = GetFrmFmt())
+    {
+        SwXTableColumns* pCols = (SwXTableColumns*)SwClientIter(*pFmt).
+            First(TYPE(SwXTableColumns));
+        if (!pCols)
+            pCols = new SwXTableColumns(*pFmt);
+        xRet = pCols;
+    }
+    if (!xRet.is())
         throw uno::RuntimeException();
     return xRet;
 }
