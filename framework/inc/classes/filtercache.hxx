@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: as $ $Date: 2001-10-15 12:59:25 $
+ *  last change: $Author: as $ $Date: 2001-10-24 09:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,10 @@
 
 #ifndef __FRAMEWORK_GENERAL_H_
 #include <general.h>
+#endif
+
+#ifndef __FRAMEWORK_QUERIES_H_
+#include <queries.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -396,27 +400,6 @@ class FilterCache   :   private ThreadHelpBase
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-
-        /*-****************************************************************************************************//**
-            @short      support query mode
-            @descr      These helper functions returns subsets of our internal cached values.
-
-            @attention  This methods are threadsafe by himself! Don't call it with any locked rw-lock!
-
-            @seealso    methods query...()
-
-            @param      -
-            @return     A result set if query was successful - empty structures if not.
-
-            @onerror    We return empty structures.
-        *//*-*****************************************************************************************************/
-
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ,
-                                                                                                              sal_Bool            bForUI      ) const;
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ,
-                                                                                                              sal_Bool            bForUI      ) const;
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByFlags                        (           sal_Int32           nFlags      ) const;
-        css::uno::Sequence< ::rtl::OUString >   implts_queryFilter_ByFirstUserData                (   const   ::rtl::OUString&    sIdentifier ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
