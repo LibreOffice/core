@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-02 07:21:11 $
+#   last change: $Author: rt $ $Date: 2003-04-17 17:20:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,6 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/fibersrv.obj    \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
-                $(SLO)$/reactor.obj     \
                 $(SLO)$/refernce.obj    \
                 $(SLO)$/runthrd.obj     \
                 $(SLO)$/socket.obj      \
@@ -94,11 +93,8 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/security.obj    \
                 $(SLO)$/signal.obj      \
                 $(SLO)$/pipe.obj        \
-                $(SLO)$/dynload.obj		\
                 $(SLO)$/xception.obj	\
                 $(SLO)$/evtque.obj
-
-# $(SLO)$/evtque.obj
 
 .IF "$(GUI)"=="WIN"
 SLOFILES+=$(SLO)$/dllentry.obj
@@ -113,7 +109,6 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/fibersrv.obj    \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
-                $(OBJ)$/reactor.obj     \
                 $(OBJ)$/refernce.obj    \
                 $(OBJ)$/runthrd.obj     \
                 $(OBJ)$/socket.obj      \
@@ -128,11 +123,9 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/security.obj    \
                 $(OBJ)$/signal.obj      \
                 $(OBJ)$/pipe.obj        \
-                $(OBJ)$/dynload.obj		\
                 $(OBJ)$/xception.obj	\
                 $(OBJ)$/evtque.obj
 
-# $(SLO)$/evtque.obj
 .ENDIF
 
 # --- Targets ------------------------------------------------------
