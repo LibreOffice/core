@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-12 11:48:46 $
+ *  last change: $Author: af $ $Date: 2002-04-22 11:48:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,10 @@ AccessibleContextBase::AccessibleContextBase (
         const uno::Reference<XAccessible>& rxParent,
         const sal_Int16 aRole)
     :   BaseClass (MutexOwner::maMutex),
-        maRole(aRole),
-        mxParent(rxParent),
         mxStateSet (NULL),
-        mxRelationSet (NULL)
+        mxRelationSet (NULL),
+        mxParent(rxParent),
+        maRole(aRole)
 {
     // Create the state set.
     ::utl::AccessibleStateSetHelper* pStateSet  = new ::utl::AccessibleStateSetHelper ();
@@ -661,6 +661,7 @@ void AccessibleContextBase::CheckDisposedState (void)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
+        OSL_TRACE ("Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
             OUString(RTL_CONSTASCII_USTRINGPARAM("object has been already disposed")),
             static_cast<uno::XWeak*>(this));
