@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:39:46 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ String RID_SVX_3D_CREATE_LATHE
     Text[ czech ] = "Vytvořit 3D rotační objekt";
     Text[ hebrew ] = "‮יצירת עצם סיבובי תלת מימדי‬";
     Text[ hindi ] = "3D घुमाव वस्तु को उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť 3D rotačný objekt";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
@@ -125,6 +126,7 @@ String RID_SVX_3D_UNDO_EXCHANGE_PASTE
     Text[ czech ] = "Vložit objekt(y)";
     Text[ hebrew ] = "‮הכנסת עצמים‬";
     Text[ hindi ] = "वस्तु जोड़ो";
+    Text[ slovak ] = "Vložiť objekt(y)";
 };
 String RID_SVX_3D_UNDO_SEGMENTS
 {
@@ -155,6 +157,7 @@ String RID_SVX_3D_UNDO_SEGMENTS
     Text[ czech ] = "Počet částí";
     Text[ hebrew ] = "‮מספר הקטעים‬";
     Text[ hindi ] = "खण्डों की संख्या";
+    Text[ slovak ] = "Počet častí";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
@@ -185,6 +188,7 @@ String RID_SVX_3D_UNDO_DEEPTH
     Text[ czech ] = "Hloubka objektu";
     Text[ hebrew ] = "‮עומק העצם‬";
     Text[ hindi ] = "वस्तु की गहराई";
+    Text[ slovak ] = "Hĺbka objektu";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
@@ -215,6 +219,7 @@ String RID_SVX_3D_UNDO_FOCAL
     Text[ czech ] = "Ohnisková vzdálenost";
     Text[ hebrew ] = "‮מרחק מיקוד‬";
     Text[ hindi ] = "ताल के मध्य से उसके केन्द्र तक की दूरी";
+    Text[ slovak ] = "Ohnisková vzdialenosť";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
@@ -245,6 +250,7 @@ String RID_SVX_3D_UNDO_CAMPOS
     Text[ czech ] = "Umístění kamery";
     Text[ hebrew ] = "‮מיקום מצלמה‬";
     Text[ hindi ] = "केमरा का स्थान";
+    Text[ slovak ] = "Umiestnenie kamery";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
@@ -275,6 +281,7 @@ String RID_SVX_3D_UNDO_ROTATE
     Text[ czech ] = "Otočit 3D objekt";
     Text[ hebrew ] = "‮סיבוב עצם תלת מימדי‬";
     Text[ hindi ] = "3D वस्तु को घुमाओ";
+    Text[ slovak ] = "Otočiť 3D objekt";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
@@ -305,6 +312,7 @@ String RID_SVX_3D_UNDO_EXTRUDE
     Text[ czech ] = "Vytvořit protažený objekt";
     Text[ hebrew ] = "‮יצירת עצם שיחול‬";
     Text[ hindi ] = "निष्कासन वस्तु उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť predĺžený objekt";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
@@ -337,6 +345,7 @@ String RID_SVX_3D_UNDO_LATHE
     Text[ czech ] = "Vytvořit rotační objekt";
     Text[ hebrew ] = "‮יצירת עצם סיבובי‬";
     Text[ hindi ] = "घुमाव वस्तु उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť rotačný objekt";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
@@ -369,6 +378,7 @@ String RID_SVX_3D_UNDO_BREAK_LATHE
     Text[ czech ] = "Rozdělit 3D objekt";
     Text[ hebrew ] = "‮בקיעת עצם תלת מימדי‬";
     Text[ hindi ] = "3D वस्तु को अलगाना";
+    Text[ slovak ] = "Rozdeliť 3D objekt";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
@@ -399,8 +409,11 @@ String RID_SVX_3D_UNDO_ATTRIBUTES
     Text[ czech ] = "3D atributy";
     Text[ hebrew ] = "‮תכונות תלת מימדיות‬";
     Text[ hindi ] = "3D ऐट्रिब्यूट्स";
+    Text[ slovak ] = "3D atribúty";
 };
  // ********************************************************************** EOF
+
+
 
 
 
