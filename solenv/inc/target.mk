@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 17:18:19 $
+#   last change: $Author: hjs $ $Date: 2001-11-22 16:13:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2030,7 +2030,7 @@ $(OBJFILES) : $(UNOUCRHEADER)
 .IF "$(SLOFILES)"!=""
 $(SLOFILES) : $(UNOUCRHEADER)
 .ENDIF			# "$(SLOFILES)"!=""
-$(UNOUCRTARGET) .UPDATEALL : $(UNOUCRDEP)
+$(UNOUCRTARGET) : $(UNOUCRDEP)
     +cppumaker @$(mktmp $(CPPUMAKERFLAGS) -B$(UNOUCRBASE) -O$(UNOUCROUT) $(UNOTYPES:^"-T")  $(UNOUCRRDB))
 .ENDIF			# "$(SINGLE_SHOT)" == ""
 .ENDIF			# "$(UNOTYPES)" != ""
