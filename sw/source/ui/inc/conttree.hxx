@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conttree.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-07 08:53:08 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ protected:
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );
     virtual void    InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&);
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     SwNavigationPI* GetParentWindow(){return
                         (SwNavigationPI*)Window::GetParent();}
@@ -264,6 +265,7 @@ class SwGlobalTree : public SvTreeListBox
 protected:
     virtual sal_Int8 AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8 ExecuteDrop( const ExecuteDropEvent& rEvt );
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    RequestHelp( const HelpEvent& rHEvt );

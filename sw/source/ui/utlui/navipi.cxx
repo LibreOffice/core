@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2002-04-04 13:45:20 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,6 +877,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     aContentToolBox(this, SW_RES(TB_CONTENT)),
     aGlobalToolBox(this, SW_RES(TB_GLOBAL)),
     aContentImageList(SW_RES(IL_CONTENT)),
+    aContentImageListH(SW_RES(ILH_CONTENT)),
     aDocListBox(this, SW_RES(LB_DOCS)),
     nActMark(0),
     nAutoMarkIdx(0),
@@ -896,13 +897,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     pCreateView(0)
 {
     GetCreateView();
-    for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
-            aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
-                    aContentImageList.GetImage(aContentToolBox.GetItemId(k)));
-
-    for( k = 0; k < aGlobalToolBox.GetItemCount(); k++)
-            aGlobalToolBox.SetItemImage(aGlobalToolBox.GetItemId(k),
-                    aContentImageList.GetImage(aGlobalToolBox.GetItemId(k)));
+    InitImageList();
 
     aContentToolBox.SetHelpId(HID_NAVIGATOR_TOOLBOX );
     aGlobalToolBox.SetHelpId(HID_NAVIGATOR_GLOBAL_TOOLBOX);
@@ -1417,8 +1412,12 @@ void SwNavigationPI::SetRegionDropMode(USHORT nNewMode)
     else if(nRegionMode == REGION_MODE_EMBEDDED)
         nId = FN_DROP_REGION_COPY;
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    ImageList& rImgLst = rStyleSettings.GetHighContrastMode() ?
+                aContentImageList : aContentImageListH;
+
     aContentToolBox.SetItemImage( FN_DROP_REGION,
-                                    aContentImageList.GetImage(nId));
+                                    rImgLst.GetImage(nId));
 }
 
 
@@ -1547,5 +1546,39 @@ SwNavigationChild::SwNavigationChild( Window* pParent,
         pNavi->_ZoomIn();
     }
 }
+/* -----------------------------06.05.2002 10:06------------------------------
 
+ ---------------------------------------------------------------------------*/
+void SwNavigationPI::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+            InitImageList();
+
+    Window::DataChanged( rDCEvt );
+}
+/* -----------------------------06.05.2002 10:07------------------------------
+
+ ---------------------------------------------------------------------------*/
+void SwNavigationPI::InitImageList()
+{
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    ImageList& rImgLst = rStyleSettings.GetHighContrastMode() ?
+                aContentImageListH : aContentImageList;
+    for(USHORT k = 0; k < aContentToolBox.GetItemCount(); k++)
+            aContentToolBox.SetItemImage(aContentToolBox.GetItemId(k),
+                    rImgLst.GetImage(aContentToolBox.GetItemId(k)));
+
+    for( k = 0; k < aGlobalToolBox.GetItemCount(); k++)
+            aGlobalToolBox.SetItemImage(aGlobalToolBox.GetItemId(k),
+                    rImgLst.GetImage(aGlobalToolBox.GetItemId(k)));
+
+    USHORT nId = FN_DROP_REGION;
+    if(nRegionMode == REGION_MODE_LINK)
+        nId = FN_DROP_REGION_LINK;
+    else if(nRegionMode == REGION_MODE_EMBEDDED)
+        nId = FN_DROP_REGION_COPY;
+    aContentToolBox.SetItemImage( FN_DROP_REGION,
+                                    rImgLst.GetImage(nId));
+}
 

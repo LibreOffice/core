@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utlui.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@
 #define DLG_GLOSSARY_DECIDE_DLG     (RC_UTLUI_BEGIN + 3)
 
 #define IMG_NAVI_ENTRYBMP           (RC_UTLUI_BEGIN + 4)
+#define IMG_NAVI_ENTRYBMPH          (RC_UTLUI_BEGIN + 5)
 
 #define UTLUI_ACT_END               RES_FRMEX_MENU
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-03-13 08:34:24 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ class SwNavigationPI : public Window,
     SwNavHelpToolBox    aContentToolBox;
     SwHelpToolBox       aGlobalToolBox;
     ImageList           aContentImageList;
+    ImageList           aContentImageListH;
     SwContentTree       aContentTree;
     SwGlobalTree        aGlobalTree;
     ListBox             aDocListBox;
@@ -173,7 +174,7 @@ class SwNavigationPI : public Window,
     void UsePage(SwWrtShell *);
 
     void MakeVisible();
-
+    void InitImageList();
     virtual SfxChildAlignment
                     CheckAlignment(SfxChildAlignment,SfxChildAlignment);
 
@@ -181,6 +182,7 @@ protected:
 
     virtual         BOOL Close();
     virtual         void Resize();
+    virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
 
     // zum App-Ende rechtzeitig ObjectShellLock loslassen

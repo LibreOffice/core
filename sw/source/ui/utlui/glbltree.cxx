@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-10-09 14:40:53 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,9 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = TRUE;
     }
     USHORT nCount = pSwGlblDocContents->Count();
@@ -1496,5 +1498,20 @@ void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     }
     else
         SvLBoxString::Paint( rPos, rDev, nFlags, pEntry);
+}
+/* -----------------------------06.05.2002 10:20------------------------------
+
+ ---------------------------------------------------------------------------*/
+void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        USHORT nResId = rStyleSettings.GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
+        Update(sal_True);
+    }
+    Window::DataChanged( rDCEvt );
 }
 

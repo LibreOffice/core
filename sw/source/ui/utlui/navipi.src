@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-03 08:40:09 $
+ *  last change: $Author: os $ $Date: 2002-05-06 09:50:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,36 +103,45 @@ Window DLG_NAVIGATION_PI
     /************************************************************************************
     Toolbox ab 323 x
 ************************************************************************************/
+#define NAVI_IDLIST \
+        IdList =                                    \
+        {                                           \
+            FN_UP ;                   \
+            FN_DOWN ;                \
+            FN_SELECT_HEADER ;      \
+            FN_SELECT_FOOTER ;      \
+            FN_SELECT_FOOTNOTE ;    \
+            FN_SHOW_CONTENT_BOX ;       \
+            FN_SHOW_ROOT ;      \
+            FN_ITEM_UP ;        \
+            FN_ITEM_DOWN ;      \
+            FN_ITEM_LEFT ;      \
+            FN_ITEM_RIGHT ;     \
+            FN_DROP_REGION ;    \
+            FN_OUTLINE_LEVEL ;    \
+            FN_SELECT_SET_AUTO_BOOKMARK ; \
+            FN_DROP_REGION_LINK ;   \
+            FN_DROP_REGION_COPY ;   \
+            FN_GLOBAL_SWITCH ;         \
+            FN_GLOBAL_EDIT ;           \
+            FN_GLOBAL_UPDATE ;         \
+            FN_GLOBAL_OPEN ;           \
+            FN_GLOBAL_SAVE_CONTENT ;     \
+            FN_CREATE_NAVIGATION ;       \
+        };                                               \
+        IdCount = { 21 ; };
+
     ImageList IL_CONTENT
     {
         ImageBitmap = Bitmap { File = "sc_nacon.bmp" ; };
         MaskColor = IMAGE_STDBTN_COLOR ;
-        IdList =
-        {
-            FN_UP ;  // sc20186.bmp
-            FN_DOWN ;  // sc20175.bmp
-            FN_SELECT_HEADER ;  // sc20179.bmp
-            FN_SELECT_FOOTER ;  // sc20177.bmp
-            FN_SELECT_FOOTNOTE ;  // sc20182.bmp
-            FN_SHOW_CONTENT_BOX ;  // 20233.bmp
-            FN_SHOW_ROOT ;  // 20234.bmp
-            FN_ITEM_UP ;  // sc20174.bmp
-            FN_ITEM_DOWN ;  // sc20171.bmp
-            FN_ITEM_LEFT ;  // sc20172.bmp
-            FN_ITEM_RIGHT ;  // sc20173.bmp
-            FN_DROP_REGION ;  // sc20235.bmp
-            FN_OUTLINE_LEVEL ;  // sc20236.bmp
-            FN_SELECT_SET_AUTO_BOOKMARK ;  // sc20183.bmp
-            FN_DROP_REGION_LINK ;  // 20238
-            FN_DROP_REGION_COPY ;  // 20239
-            FN_GLOBAL_SWITCH ;  //20244
-            FN_GLOBAL_EDIT ;  //20245
-            FN_GLOBAL_UPDATE ;  //20246
-            FN_GLOBAL_OPEN ;  //20247
-            FN_GLOBAL_SAVE_CONTENT ;  //20248
-            FN_CREATE_NAVIGATION ;  //20249
-        };
-        IdCount = { 21 ; };
+        NAVI_IDLIST
+    };
+    ImageList ILH_CONTENT
+    {
+        ImageBitmap = Bitmap { File = "sch_nacon.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+        NAVI_IDLIST
     };
     Toolbox TB_CONTENT
     {
@@ -1764,28 +1773,39 @@ Window DLG_NAVIGATION_PI
     Text[ catalan ] = "Navegador";
     Text[ thai ] = "ตัวนำ";
 };
+#define NAVI_ENTRY_IDS \
+    IdList =           \
+    {                  \
+        20000 ;        \
+        20001 ;        \
+        20002 ;        \
+        20003 ;        \
+        20004 ;        \
+        20005 ;        \
+        20006 ;        \
+        20007 ;        \
+        20008 ;        \
+        20009 ;        \
+        20010 ;        \
+        20011 ;        \
+    };                 \
+    IdCount = { 12 ; };
+
+
+
 ImageList IMG_NAVI_ENTRYBMP
 {
     ImageBitmap = Bitmap { File = "nc_cntnt.bmp" ; };
     MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
-    IdList =
-    {
-        20000 ;
-        20001 ;
-        20002 ;
-        20003 ;
-        20004 ;
-        20005 ;
-        20006 ;
-        20007 ;
-        20008 ;
-        20009 ;
-        20010 ;
-        20011 ;
-    };
-    IdCount = { 12 ; };
+    NAVI_ENTRY_IDS
 };
 
+ImageList IMG_NAVI_ENTRYBMPH
+{
+    ImageBitmap = Bitmap { File = "nch_cntnt.bmp" ; };
+    MaskColor = Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; };
+    NAVI_ENTRY_IDS
+};
 
 
 
