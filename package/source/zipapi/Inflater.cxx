@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:39 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,11 @@ sal_Bool SAL_CALL Inflater::needsDictionary(  )
     return bNeedDict;
 }
 
+void SAL_CALL Inflater::finish(  )
+        throw(com::sun::star::uno::RuntimeException)
+{
+    bFinish = sal_True;
+}
 sal_Bool SAL_CALL Inflater::finished(  )
         throw(com::sun::star::uno::RuntimeException)
 {
@@ -222,8 +227,7 @@ void SAL_CALL Inflater::reset(  )
         throw(com::sun::star::uno::RuntimeException)
 {
     z_inflateReset(pStream);
-    bNeedDict = sal_False;
-    bFinished = sal_False;
+    bFinish = bNeedDict = bFinished = sal_False;
     nOffset = nLength = 0;
 }
 
@@ -246,7 +250,7 @@ sal_Int32 Inflater::doInflateBytes (com::sun::star::uno::Sequence < sal_Int8 >  
     pStream->next_out  = (unsigned char*) rBuffer.getArray() + nNewOffset;
     pStream->avail_out = nNewLength;
 
-    nResult = ::z_inflate(pStream, Z_PARTIAL_FLUSH);
+    nResult = ::z_inflate(pStream, bFinish ? Z_SYNC_FLUSH : Z_PARTIAL_FLUSH);
 
     switch (nResult)
     {

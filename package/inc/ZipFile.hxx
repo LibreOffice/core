@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,10 +114,9 @@ private:
     ::rtl::OUString sComment;       /* zip file comment */
     EntryHash       aEntries;
     ByteGrabber     aGrabber;
+    Inflater        aInflater;
     com::sun::star::uno::Reference < com::sun::star::io::XInputStream > xStream;
 public:
-    ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput)
-        throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput, sal_Bool bInitialise)
         throw(::com::sun::star::io::IOException, com::sun::star::package::ZipException, com::sun::star::uno::RuntimeException);
     void updateFromManList(std::vector < ManifestEntry * > &rManList);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-07 16:09:44 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,17 +69,11 @@ using namespace com::sun::star::package::ZipConstants;
 
 /** This class is used to read entries from a zip file
  */
-ZipFile::ZipFile (uno::Reference < io::XInputStream > &xInput)
-    throw(io::IOException, package::ZipException, uno::RuntimeException)
-: xStream(xInput)
-, aGrabber(xInput)
-{
-    readCEN();
-}
 ZipFile::ZipFile( uno::Reference < io::XInputStream > &xInput, sal_Bool bInitialise)
     throw(io::IOException, package::ZipException, uno::RuntimeException)
 : xStream(xInput)
 , aGrabber(xInput)
+, aInflater (sal_True)
 {
     if (bInitialise)
         readCEN();
@@ -209,19 +203,19 @@ sal_uInt32 SAL_CALL ZipFile::getHeader(const package::ZipEntry& rEntry)
     }
     else if (rEntry.nMethod == DEFLATED)
     {
+        /*
         uno::Reference < io::XInputStream > xEntryStream = getInputStream (rEntry);
         if (xEntryStream->readBytes(aSequence, 4) < 4)
             return 0;
-        /*
-        Inflater aInflater ( sal_True );
-        sal_Int32 nSize = rEntry.nCompressedSize < 50 ? rEntry.nCompressedSize : 50;
+        */
+        sal_Int32 nSize = rEntry.nCompressedSize < 32768 ? rEntry.nCompressedSize : 32768;
         uno::Sequence < sal_Int8 > aCompSeq (nSize );
         if (xStream->readBytes(aCompSeq, nSize) < nSize)
             return 0;
+        aInflater.finish();
         aInflater.setInput(aCompSeq);
         aInflater.doInflate(aSequence);
-        aInflater.end();
-        */
+        aInflater.reset();
     }
     return (static_cast < sal_uInt32 >
             (static_cast < sal_uInt8> (aSequence[0]& 0xFF)

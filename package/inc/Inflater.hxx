@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-19 21:55:35 $
+ *  last change: $Author: mtg $ $Date: 2001-03-07 19:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,8 @@ public:
     virtual sal_Bool SAL_CALL needsInput(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL needsDictionary(  )
+        throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL finish(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL finished(  )
         throw(::com::sun::star::uno::RuntimeException);
