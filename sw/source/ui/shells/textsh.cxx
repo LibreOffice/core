@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:16:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,6 +292,15 @@
 #endif
 #ifndef _SWSLOTS_HXX
 #include <swslots.hxx>
+#endif
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
 #endif
 
 #include <svx/svxdlg.hxx> //CHINA001
@@ -695,7 +704,14 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
             const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
             SwFmtFrmSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
+            {
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_START_QUOTE));
+                aRewriter.AddRule(UNDO_ARG2, rSh.GetTableFmt()->GetName());
+                aRewriter.AddRule(UNDO_ARG3, SW_RES(STR_END_QUOTE));
+
             aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
+            }
             aSet.Put(aPrtSize);
 
             aSet.Put(aMgr.GetAttrSet());
@@ -1171,7 +1187,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         rSh.StartAllAction();
 
         // Selektierten Inhalt loeschen
-        rSh.StartUndo( UNDO_INSERT );
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UNDO_ARG1, SW_RES(STR_SPECIALCHAR));
+
+        rSh.StartUndo( UNDO_INSERT, &aRewriter );
         if ( rSh.HasSelection() )
         {
             rSh.DelRight();
