@@ -34,7 +34,7 @@ Dim RValue as Integer
 Dim oNewDocument as Object
 Dim mFileProperties(0) as New com.sun.star.beans.PropertyValue
 	PrepareForEditing = NULL
-	LoadLibrary( &quot;Tools&quot; )
+        BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	If InitResources(&quot;&apos;Template&apos;&quot;, &quot;tpl&quot;) then
 		If IsMissing(oDocument) Then
 			oDocument = StarDesktop.ActiveFrame.Controller.Model

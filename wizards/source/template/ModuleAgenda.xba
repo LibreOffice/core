@@ -10,13 +10,13 @@ Dim DlgAgenda_gMyName as String
 Public TemplateDialog as Object
 Public DialogModel as Object
 Public sTrueContent as String
-Public Bookmarkname as String	
+Public Bookmarkname as String
 
 
 
 Sub Initialize()
 &apos; User sets the type of minutes
-	LoadLibrary( &quot;Tools&quot; )
+        BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	TemplateDialog = LoadDialog(&quot;Template&quot;, &quot;TemplateDialog&quot;)
 	DialogModel = TemplateDialog.Model
 	DialogModel.Step = 1
@@ -44,12 +44,12 @@ End Sub
 Sub ModifyTemplate()
 Dim oDocument, oBookmarks, oBookmark, oBookmarkCursor, oTextField as Object
 Dim i as Integer
-	
+
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oBookMarks = oDocument.Bookmarks
 
 	On Local Error Goto NOBOOKMARK
-&apos; Todo: auch beim Schließen des Dialogs muss was passieren	
+&apos; Todo: auch beim Schließen des Dialogs muss was passieren
 	TemplateDialog.EndExecute
 	DialogExited = TRUE
 	oBookmarkCursor = CreateBookmarkCursor(oDocument, BookmarkName)
@@ -89,7 +89,7 @@ Sub NewTopic
 Dim oDocument, oBookmarks, oBookmark, oBookmarkCursor, oTextField as Object
 Dim oBaustein, oAutoText, oAutoGroup as Object
 Dim i as Integer
-	
+
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 	oBookMarkCursor = CreateBookMarkCursor(oDocument, &quot;NextTopic&quot;)
 	oTextField = oBookMarkCursor.TextField
@@ -118,7 +118,7 @@ Dim oBookmarkCursor as Object
 Dim oFormats, oLocale as Object
 Dim iDateTimeKey as Integer
 
-	LoadLibrary( &quot;Tools&quot; )
+        BasicLibraries.LoadLibrary( &quot;Tools&quot; )
 	oDocument = StarDesktop.ActiveFrame.Controller.Model
 
 	oUserField = oDocument.CreateInstance(&quot;com.sun.star.text.TextField.ExtendedUser&quot;)
@@ -151,7 +151,7 @@ Function CreateBookMarkCursor(oDocument as Object,sBookmarkName as String)
 	Else
 		Msgbox &quot;Bookmark &quot; &amp; sBookmarkName &amp;  &quot; is not defined!&quot;
 	End If
-End Function	
+End Function
 
 
 
@@ -179,7 +179,7 @@ Dim BtnFinishAgenda As Object
 	If AgendaFinished Then
 		DisposeControl(oDocument, &quot;BtnAddAgendaTopic&quot;)
 		DisposeControl(oDocument, &quot;BtnFinishAgenda&quot;)
-	
+
 		oBookmarkCursor = CreateBookMarkCursor(oDocument,&quot;NextTopic&quot;)
 		oBookMarkCursor.GotoEnd(True)
 		oBookmarkCursor.Text.insertString(oBookmarkCursor,&quot;&quot;,True)
@@ -197,7 +197,7 @@ Dim CurTag as String
 Dim Taglist() as String
 	CurTag = aEvent.Source.Model.Tag
 	Taglist() = ArrayoutOfString(CurTag, &quot;;&quot;)
-	Bookmarkname = TagList(0)	
+	Bookmarkname = TagList(0)
 	sTrueContent = TagList(1)
 End Sub
 </script:module>
