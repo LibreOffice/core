@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:33:14 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1657,6 +1657,11 @@ void ImportExcel::AdjustRowHeight()
 
 void ImportExcel::PostDocLoad( void )
 {
+    /*  Set automatic page numbering in Default page style (default is "page number = 1").
+        Otherwise hidden tables (i.e. for scenarios) which have Default page style will
+        break automatic page numbering. */
+    if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PAGE ) )
+        pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
     // Apply any Outlines for each sheet
     for(OutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
@@ -1693,8 +1698,6 @@ void ImportExcel::PostDocLoad( void )
 
     if( pExcRoot->pPrintRanges->HasRanges() )
     {
-        UINT16          nPos;
-
         for( UINT16 n = 0 ; n < nLast ; n++ )
         {
             p = pExcRoot->pPrintRanges->First( n );
@@ -1703,17 +1706,17 @@ void ImportExcel::PostDocLoad( void )
                 DBG_ASSERT( pExcRoot->pPrintRanges->GetActList(),
                             "-ImportExcel::PostDocLoad(): Imaginaere Tabelle gefunden!" );
 
-                pD->SetPrintRangeCount( n, ( UINT16 ) pExcRoot->pPrintRanges->GetActList()->Count() );
-
-                nPos = 0;
-
+                pD->ClearPrintRanges( n );
                 while( p )
                 {
-                    pD->SetPrintRange( n, nPos, *p );
-
-                    nPos++;
+                    pD->AddPrintRange( n, *p );
                     p = pExcRoot->pPrintRanges->Next();
                 }
+            }
+            else
+            {
+                // #i4063# no print ranges -> print entire sheet
+                pD->SetPrintEntireSheet( n );
             }
         }
         GetTracer().TracePrintRange();
