@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 18:12:32 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ ModalDialog DLG_LOGIN
         Text [ portuguese_brazilian ] = "~Benutzername" ;
         Text [ swedish ] = "~Användarnamn" ;
         Text [ danish ] = "Brugernavn" ;
-        Text [ italian ] = "Nome utente" ;
+        Text [ italian ] = "Nome ~utente" ;
         Text [ spanish ] = "~Nombre de usuario" ;
         Text [ french ] = "~Nom d'utilisateur" ;
         Text [ dutch ] = "Naam ~gebruiker" ;
@@ -352,7 +352,7 @@ ModalDialog DLG_LOGIN
         Text [ portuguese_brazilian ] = "auf " ;
         Text [ swedish ] = "på   " ;
         Text [ danish ] = "på " ;
-        Text [ italian ] = "su  " ;
+        Text [ italian ] = "su   " ;
         Text [ spanish ] = "en   " ;
         Text [ french ] = "sur  " ;
         Text [ dutch ] = "op   " ;
