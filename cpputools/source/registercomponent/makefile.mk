@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-16 11:44:52 $
+#   last change: $Author: kz $ $Date: 2004-04-22 17:20:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..
 
 PRJNAME=cpputools
@@ -105,7 +104,6 @@ APP1STDLIBS=\
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS+= \
-            $(LIBCIMT) \
             $(LIBCMT)
 .ENDIF
 
