@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:33:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -576,7 +576,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
         ToolBoxItem
         {
             Identifier = ID_EDIT_QUERY_DESIGN;
-            Text = "Make disjunctive normal form" ;
+            Text [ de ] ="Make disjunctive normal form" ;
             Text [ x-comment ] = "; EM Oct 2002: Do Not Translate. This is only for the in-house developer \"Debugging\" version of SO.";
         };
 
@@ -701,50 +701,13 @@ String STR_QRY_CHECK_CASESENSITIVE
 
 String STR_QUERYDESIGN
 {
-    Text [ de ] = "Abfrageentwurf:";
-    Text [ en-US ] = "Query Design:";
+    Text [ de ] = " - %PRODUCTNAME Base: Abfrageentwurf";
+    Text [ en-US ] = " - %PRODUCTNAME Base: Query Design";
 };
 
 String STR_VIEWDESIGN
 {
-    Text [ de ] = "Ansichtsentwurf:";
-    Text [ en-US ] = "View Design:";
+    Text [ de ] = " - %PRODUCTNAME Base: Ansichtsentwurf";
+    Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
