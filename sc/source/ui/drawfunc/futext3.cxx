@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 18:00:26 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:40:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,18 @@ void FuText::StopEditMode(BOOL bTextDirection)
                 if ( pParaObj )
                 {
                     ScNoteEditEngine& rEE = pDoc->GetNoteEngine();
-                    rEE.SetText(pParaObj->GetTextObject());
+                    const EditTextObject& rTextObj = pParaObj->GetTextObject();
+                    rEE.SetText(rTextObj);
+                    sal_uInt16 nCount = rEE.GetParagraphCount();
+                    for( sal_uInt16 nPara = 0; nPara < nCount; ++nPara )
+                    {
+                        String aParaText( rEE.GetText( nPara ) );
+                        if( aParaText.Len() )
+                        {
+                            SfxItemSet aSet( rTextObj.GetParaAttribs( nPara));
+                            rEE.SetParaAttribs(nPara, aSet);
+                        }
+                    }
                     pEditText.reset(rEE.CreateTextObject());
                 }
             }
