@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-02 11:55:54 $
+ *  last change: $Author: mba $ $Date: 2001-07-03 17:31:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,17 @@
 #ifndef _COM_SUN_STAR_REGISTRY_INVALIDREGISTRYEXCEPTION_HPP_
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_PropertyValue_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
@@ -165,6 +174,8 @@
 
 using namespace ::vos;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
 //===================================================================
@@ -977,6 +988,43 @@ ISfxTemplateCommon* SfxApplication::GetCurrentTemplateCommon( SfxBindings& rBind
     return 0;
 }
 
+long Select_Impl( void* pHdl, void* pVoid )
+{
+    Menu* pMenu = (Menu*) pVoid;
+    String aURL( pMenu->GetItemCommand( pMenu->GetCurItemId() ) );
+    if( !aURL.Len() )
+        return 0;
+
+    Reference < ::com::sun::star::frame::XFramesSupplier > xDesktop =
+            Reference < ::com::sun::star::frame::XFramesSupplier >( ::comphelper::getProcessServiceFactory()->createInstance( DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
+    Reference < ::com::sun::star::frame::XFrame > xFrame( xDesktop->getActiveFrame() );
+    if ( !xFrame.is() )
+        xFrame = Reference < ::com::sun::star::frame::XFrame >( xDesktop, UNO_QUERY );
+
+    URL aTargetURL;
+    aTargetURL.Complete = aURL;
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    xTrans->parseStrict( aTargetURL );
+
+    Reference < ::com::sun::star::frame::XDispatchProvider > xProv( xFrame, UNO_QUERY );
+    Reference < ::com::sun::star::frame::XDispatch > xDisp;
+    if ( xProv.is() )
+        if ( aTargetURL.Protocol.compareToAscii("slot:") == COMPARE_EQUAL )
+            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
+        else
+            xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_blank"), 0 );
+    if ( xDisp.is() )
+    {
+        Sequence<PropertyValue> aArgs(1);
+        PropertyValue* pArg = aArgs.getArray();
+        pArg[0].Name = rtl::OUString::createFromAscii("Referer");
+        pArg[0].Value <<= ::rtl::OUString::createFromAscii("private:user");
+        xDisp->dispatch( aTargetURL, aArgs );
+    }
+
+    return TRUE;
+}
+
 PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bool bNew )
 {
     PopupMenu** ppMenu;
@@ -1007,6 +1055,8 @@ PopupMenu* SfxAppData_Impl::GetPopupMenu( sal_uInt16 nSID, sal_Bool bBig, sal_Bo
 
         ::framework::MenuConfiguration aConf( ::comphelper::getProcessServiceFactory() );
         *ppMenu = aConf.CreateBookmarkMenu( pViewFrame->GetFrame()->GetFrameInterface(), sKey );
+        if ( *ppMenu )
+            (*ppMenu)->SetSelectHdl( Link( this, Select_Impl ) );
     }
 
     return ppMenu ? *ppMenu : NULL;
