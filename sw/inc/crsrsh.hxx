@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 13:42:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-22 08:16:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,6 +396,10 @@ protected:
 
     // --> FME 2004-07-30 #i32329# Enhanced table selection
     FASTBOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
+    // <--
+
+    // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
+    bool SetInFrontOfLabel( FASTBOOL bNew );
     // <--
 
 public:
