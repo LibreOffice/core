@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 11:35:20 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessible.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEROLE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
+#endif
 #include <algorithm>
 #include <functional>
 
@@ -131,7 +134,15 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 using namespace ::drafts::com::sun::star::accessibility;
-const long LINE_SIZE = 50;
+
+#define LINE_SIZE           50
+////////////////////////////////////////////////////////////////
+// Konstanten fuer das Fensterlayout
+#define TABWIN_SPACING_X    17
+#define TABWIN_SPACING_Y    17
+
+#define TABWIN_WIDTH_STD    120
+#define TABWIN_HEIGHT_STD   120
 
 DBG_NAME(OScrollWindowHelper);
 OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
@@ -153,6 +164,9 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
     m_pCornerWindow->Show();
+
+    // normally we should be SCROLL_PANE
+    SetAccessibleRole(AccessibleRole::SCROLLPANE);
 }
 
 // -----------------------------------------------------------------------------
@@ -235,6 +249,7 @@ OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView ) :
     ,m_aScrollOffset( Point(0,0) )
     ,m_bTrackingInitiallyMoved(FALSE)
     ,m_pLastFocusTabWin(NULL)
+    ,m_pAccessible(NULL)
 {
     DBG_CTOR(OJoinTableView,NULL);
     SetSizePixel( Size(1000, 1000) );
@@ -258,6 +273,7 @@ OJoinTableView::~OJoinTableView()
     // den Undo-Manager des Dokuments leeren (da die UndoActions sich eventuell TabWins von mir halten, das gibt sonst eine
     // Assertion in Window::~Window)
     m_pView->getController()->getUndoMgr()->Clear();
+    m_pAccessible = NULL;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OJoinTableView, ScrollHdl, ScrollBar*, pScrollBar )
@@ -311,23 +327,31 @@ ULONG OJoinTableView::GetTabWinCount()
 void OJoinTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
+    sal_Int32 nOldCount = m_vTableConnection.size();
 }
 
 //------------------------------------------------------------------------------
-BOOL OJoinTableView::RemoveConnection( OTableConnection* pConn )
+::std::vector<OTableConnection*>::const_iterator OJoinTableView::RemoveConnection( OTableConnection* _pConn,sal_Bool _bDelete )
 {
     DBG_CHKTHIS(OJoinTableView,NULL);
-    DeselectConn(pConn);
+    DeselectConn(_pConn);
 
-    pConn->Invalidate();
-        // damit der Bereich neu gezeichntet wird
+    // to force a redraw
+    _pConn->Invalidate();
 
-    m_pView->getController()->removeConnectionData( ::std::auto_ptr<OTableConnectionData>(pConn->GetData()) );
-    m_vTableConnection.erase( ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),pConn) );
+    m_pView->getController()->removeConnectionData( _pConn->GetData() );
 
-    delete pConn;
-    pConn = NULL;
-    return TRUE;
+    ::std::vector<OTableConnection*>::const_iterator aNextPos = m_vTableConnection.erase(
+                        ::std::find(m_vTableConnection.begin(),m_vTableConnection.end(),_pConn) );
+
+    childCountChanged(m_vTableConnection.size() + 1);
+    if ( _bDelete )
+    {
+        delete _pConn->GetData();
+        delete _pConn;
+    }
+
+    return aNextPos;
 }
 
 //------------------------------------------------------------------------
@@ -370,9 +394,7 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
         SetDefaultTabWinPosSize( pNewTabWin );
         pNewTabWin->Show();
 
-        m_pView->getController()->setModified( sal_True );
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
+        childCountChanged(m_aTableMap.size() - 1);
     }
     else
     {
@@ -390,6 +412,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     String aWinName = pTabWin->GetWinName();
     String sComposedName = pTabWin->GetComposedName();
     BOOL bRemove = TRUE;
+
     sal_Int32 nCount = m_vTableConnection.size();
     ::std::vector<OTableConnection*>::reverse_iterator aIter = m_vTableConnection.rbegin();
     for(;aIter != m_vTableConnection.rend();++aIter)
@@ -401,7 +424,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
             ( sComposedName == pTabConn->GetData()->GetSourceWinName()) ||
             ( sComposedName == pTabConn->GetData()->GetDestWinName())
           )
-            bRemove = RemoveConnection( pTabConn );
+          bRemove = RemoveConnection( pTabConn ,sal_True) != m_vTableConnection.end();
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -428,11 +451,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     }
 
     if(bRemove && (sal_Int32)m_aTableMap.size() < (nCount-1)) // if some connections could be removed
-    {
-        m_pView->getController()->setModified( sal_True );
-        m_pView->getController()->InvalidateFeature(ID_BROWSER_ADDTABLE);
-        m_pView->getController()->InvalidateFeature(ID_RELATION_ADD_RELATION);
-    }
+        childCountChanged(m_aTableMap.size() + 1);
 }
 
 //------------------------------------------------------------------------------
@@ -903,7 +922,7 @@ void OJoinTableView::KeyInput( const KeyEvent& rEvt )
     if( !bCtrl && !bShift && (nCode==KEY_DELETE) )
     {
         if (GetSelectedConn())
-            RemoveConnection(GetSelectedConn());
+            RemoveConnection( GetSelectedConn() ,sal_True);
     }
     else
         Window::KeyInput( rEvt );
@@ -1048,7 +1067,7 @@ void OJoinTableView::ClearAll()
     // und das selbe mit den Connections
     ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
     for(;aIter != m_vTableConnection.end();++aIter)
-        RemoveConnection(*aIter);
+        RemoveConnection( *aIter ,sal_True);
     m_vTableConnection.clear();
 
     m_pLastFocusTabWin  = NULL;
@@ -1209,10 +1228,10 @@ void OJoinTableView::executePopup(const Point& _aPos,OTableConnection* _pSelConn
     switch (aContextMenu.Execute(this, _aPos))
     {
         case SID_DELETE:
-            RemoveConnection(_pSelConnection);
+            RemoveConnection( _pSelConnection ,sal_True);
             break;
         case ID_QUERY_EDIT_JOINCONNECTION:
-            ConnDoubleClicked(_pSelConnection); // is the same as double clicked
+            ConnDoubleClicked( _pSelConnection ); // is the same as double clicked
             break;
     }
 }
@@ -1587,19 +1606,20 @@ void OJoinTableView::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 // -----------------------------------------------------------------------------
 void OJoinTableView::clearLayoutInformation()
 {
+    sal_Int32 nOldCount = m_aTableMap.size() + m_vTableConnection.size();
     //////////////////////////////////////////////////////////////////////
     // Listen loeschen
-    OTableWindowMapIterator aIter = GetTabWinMap()->begin();
-    for(;aIter != GetTabWinMap()->end();++aIter)
+    OTableWindowMapIterator aIter = m_aTableMap.begin();
+    for(;aIter != m_aTableMap.end();++aIter)
         delete aIter->second;
 
-    GetTabWinMap()->clear();
+    m_aTableMap.clear();
 
-    ::std::vector<OTableConnection*>::iterator aIter2 = GetTabConnList()->begin();
-    for(;aIter2 != GetTabConnList()->end();++aIter2)
+    ::std::vector<OTableConnection*>::const_iterator aIter2 = m_vTableConnection.begin();
+    for(;aIter2 != m_vTableConnection.end();++aIter2)
         delete *aIter2;
 
-    GetTabConnList()->clear();
+    m_vTableConnection.clear();
 }
 // -----------------------------------------------------------------------------
 void OJoinTableView::lookForUiActivities()
@@ -1621,11 +1641,32 @@ Reference< XAccessible > OJoinTableView::CreateAccessible()
         if(pParent)
             xParent = pParent->GetAccessible();
         // create our VIEWPORT
-        aRet = new OJoinDesignViewAccess(this,xParent);
+
+        OJoinDesignViewAccess* pAccessible = new OJoinDesignViewAccess(this,xParent);
+        m_pAccessible = pAccessible;
+        aRet = pAccessible;
     }
     else
         aRet = Window::CreateAccessible();
     return aRet;
+}
+// -----------------------------------------------------------------------------
+void OJoinTableView::childCountChanged(sal_Int32 _nOldCount)
+{
+    OJoinController* pController = m_pView->getController();
+    pController->setModified( sal_True );
+    pController->InvalidateFeature(ID_BROWSER_ADDTABLE);
+    pController->InvalidateFeature(ID_RELATION_ADD_RELATION);
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccesibleEvent(3/* AccessibleEventId::ACCESSIBLE_CHILD_EVENT */,makeAny(_nOldCount),makeAny(GetTabWinCount() + getTableConnections()->size()));
+}
+// -----------------------------------------------------------------------------
+void OJoinTableView::addConnection(OTableConnection* _pConnection)
+{
+    m_pView->getController()->getTableConnectionData()->push_back(_pConnection->GetData());
+    m_vTableConnection.push_back(_pConnection);
+    _pConnection->Invalidate(),
+    childCountChanged(m_vTableConnection.size() - 1);
 }
 // -----------------------------------------------------------------------------
 

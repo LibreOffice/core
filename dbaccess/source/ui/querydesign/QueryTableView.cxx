@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,17 +221,21 @@ namespace
         return bReturn;
     }
     // -----------------------------------------------------------------------------
-    /** addTabAddUndoAction appends a new TabAdd Undo action at controller
+    /** appends a new TabAdd Undo action at controller
         @param  _pView          the view which we use
+        @param  _pUndoAction    the undo action which should be added
         @param  _pConnection    the connection for which the undo action should be appended
+        @param  _bOwner         is the undo action the owner
     */
     // -----------------------------------------------------------------------------
-    void addTabAddUndoAction(OQueryTableView* _pView,OQueryTableConnection* _pConnection)
+    void addUndoAction( OQueryTableView* _pView,
+                        OQueryTabConnUndoAction* _pUndoAction,
+                        OQueryTableConnection* _pConnection,
+                        sal_Bool _bOwner = sal_False)
     {
-        OQueryTabConnUndoAction* pUndoAction = new OQueryAddTabConnUndoAction(_pView);
-        pUndoAction->SetOwnership(sal_False);
-        pUndoAction->SetConnection(_pConnection);
-        _pView->getDesignView()->getController()->addUndoActionAndInvalidate(pUndoAction);
+        _pUndoAction->SetOwnership(_bOwner);
+        _pUndoAction->SetConnection(_pConnection);
+        _pView->getDesignView()->getController()->addUndoActionAndInvalidate(_pUndoAction);
     }
     // -----------------------------------------------------------------------------
     /** openJoinDialog opens the join dialog with this connection data
@@ -269,7 +273,9 @@ namespace
 
         // add an undo action
         if ( _bAddUndo )
-            addTabAddUndoAction(_pView,static_cast< OQueryTableConnection*>(_pConnection));
+            addUndoAction(  _pView,
+                            new OQueryAddTabConnUndoAction(_pView),
+                            static_cast< OQueryTableConnection*>(_pConnection));
         // redraw
         _pConnection->RecalcLines();
         // force an invalidation of the bounding rectangle
@@ -385,7 +391,7 @@ void OQueryTableView::ReSync()
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     ::std::vector< OTableWindowData*>* pTabWinDataList = m_pView->getController()->getTableWindowData();
-    DBG_ASSERT((GetTabConnList()->size()==0) && (GetTabWinMap()->size()==0),
+    DBG_ASSERT((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
         "vor OQueryTableView::ReSync() bitte ClearAll aufrufen !");
 
     // ich brauche eine Sammlung aller Fensternamen, deren Anlegen schief geht, damit ich die entsprechenden Connections
@@ -444,7 +450,8 @@ void OQueryTableView::ReSync()
             continue;
         }
 
-        GetTabConnList()->push_back(new OQueryTableConnection(this, pTabConnData));
+        // adds a new connection to join view and notifies our accessible and invaldates the controller
+        addConnection(new OQueryTableConnection(this, pTabConnData));
     }
 }
 
@@ -464,11 +471,15 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     DBG_CHKTHIS(OQueryTableView,NULL);
     // erst mal schauen, ob ich diese Connection schon habe
     OQueryTableConnection* pTabConn = NULL;
-    ::std::vector<OTableConnection*>::iterator aIter = ::std::find(GetTabConnList()->begin(),GetTabConnList()->end(),static_cast<const OTableConnection*>(&rNewConn));
-    if(aIter == GetTabConnList()->end())
+    const ::std::vector<OTableConnection*>* pConnections = getTableConnections();
+    ::std::vector<OTableConnection*>::const_iterator aIter = ::std::find(   pConnections->begin(),
+                                                    pConnections->end(),
+                                                    static_cast<const OTableConnection*>(&rNewConn)
+                                                    );
+    if(aIter == pConnections->end())
     {
-        aIter = GetTabConnList()->begin();
-        for(;aIter != GetTabConnList()->end();++aIter)
+        aIter = pConnections->begin();
+        for(;aIter != pConnections->end();++aIter)
         {
             if(*static_cast<OQueryTableConnection*>(*aIter) == rNewConn)
             {
@@ -794,20 +805,21 @@ void OQueryTableView::createNewConnection()
         delete pData;
 }
 //------------------------------------------------------------------------------
-sal_Bool OQueryTableView::RemoveConnection( OTableConnection* pConn )
+::std::vector<OTableConnection*>::const_iterator OQueryTableView::RemoveConnection( OTableConnection* _pConnection,sal_Bool _bDelete )
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(pConn->ISA(OQueryTableConnection), "OQueryTableView::RemoveConnection : Connection ist vom falschen Typ !");
+    DBG_ASSERT(_pConnection->ISA(OQueryTableConnection), "OQueryTableView::RemoveConnection : Connection ist vom falschen Typ !");
     // NICHT die Basisklasse erledigen lassen (die loescht die Connection hart, ich will sie aber ans Undo uebergeben)
-    DropConnection(static_cast< OQueryTableConnection*>(pConn));
 
-    // eine Undo-Action
-    OQueryTabConnUndoAction* pUndoAction = new OQueryDelTabConnUndoAction(this);
-    pUndoAction->SetOwnership(sal_True);
-    pUndoAction->SetConnection(static_cast< OQueryTableConnection*>(pConn));
-    m_pView->getController()->addUndoActionAndInvalidate(pUndoAction);
+    // we don't want that our connection will be deleted, we put it in the undo manager
+    ::std::vector<OTableConnection*>::const_iterator aNextPos = OJoinTableView::RemoveConnection( _pConnection,sal_False);
 
-    return sal_True;
+    // add undo action
+    addUndoAction(  this,
+                    new OQueryDelTabConnUndoAction(this),
+                    static_cast< OQueryTableConnection*>(_pConnection),
+                    sal_True);
+    return aNextPos;
 }
 
 //------------------------------------------------------------------------------
@@ -902,14 +914,10 @@ void OQueryTableView::GetConnection(OQueryTableConnection* pConn)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     // bei mir und dem Dokument einfuegen
-    GetTabConnList()->push_back(pConn);
-    m_pView->getController()->getTableConnectionData()->push_back(pConn->GetData());
 
+    addConnection( pConn );
     // invalidieren (damit es neu gezeichnet wird)
-    pConn->Invalidate();
-
-    // modified-Flag
-    m_pView->getController()->setModified(sal_True);
+    //  pConn->Invalidate();
 }
 
 //------------------------------------------------------------------------
@@ -917,17 +925,8 @@ void OQueryTableView::DropConnection(OQueryTableConnection* pConn)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     // Selektion beachten
-    DeselectConn(GetSelectedConn());
-
     // bei mir und dem Dokument rausnehmen
-    GetTabConnList()->erase( ::std::find(GetTabConnList()->begin(),GetTabConnList()->end(),static_cast<OTableConnection*>(pConn)));
-    m_pView->getController()->getTableConnectionData()->erase( ::std::find(m_pView->getController()->getTableConnectionData()->begin(),m_pView->getController()->getTableConnectionData()->end(),pConn->GetData()));
-
-    // invalidieren (damit es neu gezeichnet wird)
-    pConn->Invalidate();
-
-    // modified-Flag
-    m_pView->getController()->setModified(sal_True);
+    RemoveConnection( pConn ,sal_False);
 }
 
 //------------------------------------------------------------------------
@@ -966,8 +965,8 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
         ::std::vector< OTableConnectionData*>* pTabConnDataList = m_pView->getController()->getTableConnectionData();
 
         sal_Int16 nCnt = 0;
-        ::std::vector<OTableConnection*>* pTabConList = GetTabConnList();
-        ::std::vector<OTableConnection*>::iterator aIter2 = pTabConList->begin();
+        const ::std::vector<OTableConnection*>* pTabConList = getTableConnections();
+        ::std::vector<OTableConnection*>::const_iterator aIter2 = pTabConList->begin();
         for(;aIter2 != pTabConList->end();)
         {
             OQueryTableConnection* pTmpEntry = static_cast<OQueryTableConnection*>(*aIter2);
@@ -975,16 +974,13 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
             if( pTmpEntry->GetAliasName(JTCS_FROM) == pTabWin->GetAliasName() ||
                 pTmpEntry->GetAliasName(JTCS_TO) == pTabWin->GetAliasName() )
             {
+                // add to undo list
                 pUndoAction->InsertConnection(pTmpEntry);
-                // die Connection invalidieren (ich kann nicht unten einfach ein InvalidateConnections machen, da ja dann die Connection
-                // in meiner Liste nicht mehr existiert !)
-                pTmpEntry->Invalidate();
 
-                // die Daten aus dem Doc entfernen (Kommentar wie oben bei den Tabellendaten)
-                pTabConnDataList->erase( ::std::find(pTabConnDataList->begin(),pTabConnDataList->end(),pTmpEntry->GetData()) );
-                // die Connection selber weg und weiter
-                aIter2 = pTabConList->erase(aIter2); // TODO check if this is ok
-                nCnt++;
+                // call base class because we append an undo action
+                // but this time we are in a undo action list
+                aIter2 = OJoinTableView::RemoveConnection(pTmpEntry,sal_False);
+                ++nCnt;
             }
             else
                 ++aIter2;
@@ -1040,21 +1036,17 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
                 // GetEntryPos, und dieses wiederum von der Connection, wenn sie ihren Ansatzpunkt am Fenster feststellen will.
 
             // die Connections
-            sal_Int16 nCount(0);
             ::std::vector<OTableConnection*>* pTableCon = pUndoAction->GetTabConnList();
             ::std::vector<OTableConnection*>::iterator aIter = pTableCon->begin();
 
-            for(;aIter != pTableCon->end();++aIter,++nCount)
-            {
-                // und in meine Liste rein
-                GetTabConnList()->push_back(*aIter);
-                // die Daten wieder in das Doc einfuegen
-                m_pView->getController()->getTableConnectionData()->push_back((*aIter)->GetData());
-            }
-            pTableCon->clear();
+            const ::std::vector<OTableConnection*>* pOwnList = getTableConnections();
+            for(;aIter != pTableCon->end();++aIter)
+                addConnection(*aIter); // add all connections from the undo action
 
-            if (nCount)
-                InvalidateConnections();
+            // each connection should invalidated inside addConnection so we don't need this here any longer
+//          if ( !pOwnList->empty() )
+//              InvalidateConnections();
+            pTableCon->clear();
 
             // und die Daten des Fensters ebenfalls in Liste (des Docs)
             if(_bAppend)
@@ -1095,10 +1087,10 @@ void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) const
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    ::std::vector<OTableConnection*>* pList = const_cast< OQueryTableView*>(this)->GetTabConnList();
+    const ::std::vector<OTableConnection*>* pList = getTableConnections();
     if (pList)
     {
-        ::std::vector<OTableConnection*>::iterator aIter = pList->begin();
+        ::std::vector<OTableConnection*>::const_iterator aIter = pList->begin();
         for(;aIter != pList->end();++aIter)
         {
             OQueryTableConnection* pTemp = static_cast<OQueryTableConnection*>(*aIter);
@@ -1110,4 +1102,6 @@ sal_Bool OQueryTableView::ExistsAVisitedConn(const OQueryTableWindow* pFrom) con
 
     return sal_False;
 }
+// -----------------------------------------------------------------------------
+
 

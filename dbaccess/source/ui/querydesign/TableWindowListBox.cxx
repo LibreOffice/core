@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowListBox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,15 +268,18 @@ void OTableWindowListBox::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     OQueryTableView* pCont = static_cast<OQueryTableView*>(m_pTabWin->getTableView());
     if (!pCont->getDesignView()->getController()->isReadOnly() && pCont->getDesignView()->getController()->isConnected())
     {
+        sal_Bool bFirst = FirstSelected() != First();
         EndSelection();
-
-        // eine Beschreibung der Source
-        OJoinExchangeData jxdSource(this);
-        m_bDragSource = sal_True;
-        // in ein Exchange-Objekt packen
-        OJoinExchObj* pJoin = new OJoinExchObj(jxdSource);
-        Reference< XTransferable > xEnsureDelete(pJoin);
-        pJoin->StartDrag(this, DND_ACTION_LINK, this);
+        if ( !m_pTabWin->GetData()->IsShowAll() || bFirst)
+        {
+            // eine Beschreibung der Source
+            OJoinExchangeData jxdSource(this);
+            m_bDragSource = sal_True;
+            // in ein Exchange-Objekt packen
+            OJoinExchObj* pJoin = new OJoinExchObj(jxdSource);
+            Reference< XTransferable > xEnsureDelete(pJoin);
+            pJoin->StartDrag(this, DND_ACTION_LINK, this);
+        }
     }
 }
 
@@ -294,16 +297,6 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             SelectAll(FALSE);
         else
         {
-
-    /*
-        // Wenn der erste Eintrag der Quelle (*) gedraggt wird, lehne ich grundsaetzlich ab
-        // TODO there isn't a exchange object yet
-
-        OJoinExchangeData jxdSource = ((OJoinExchObj*)&xDataObj)->GetSourceDescription();
-        if (jxdSource.pListBox->GetTabWin()->GetData()->IsShowAll() && (jxdSource.pListBox->First() == jxdSource.pEntry))
-            return FALSE;
-    */
-
             // hit test
             m_aMousePos = _rEvt.maPosPixel;
             Size aOutputSize = GetOutputSizePixel();

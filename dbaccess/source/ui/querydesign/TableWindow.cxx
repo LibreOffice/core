@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,9 +135,12 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::drafts::com::sun::star::accessibility;
 
-const long TABWIN_SIZING_AREA       = 4;
-const long LISTBOX_SCROLLING_AREA   = 6;
-const ULONG SCROLLING_TIMESPAN      = 500;
+#define TABWIN_SIZING_AREA      4
+#define LISTBOX_SCROLLING_AREA  6
+#define SCROLLING_TIMESPAN      500
+
+#define TABWIN_WIDTH_MIN    90
+#define TABWIN_HEIGHT_MIN   80
 
 
 TYPEINIT0(OTableWindow);
@@ -154,6 +157,7 @@ OTableWindow::OTableWindow( Window* pParent, OTableWindowData* pTabWinData )
           ,m_pListBox(NULL)
           ,m_nMoveCount(0)
           ,m_nMoveIncrement(1)
+          ,m_pAccessible(NULL)
 {
     DBG_CTOR(OTableWindow,NULL);
     // ich uebernehme nicht die Verantwortung fuer die Daten, ich merke mir nur den Zeiger darauf
@@ -187,6 +191,7 @@ OTableWindow::~OTableWindow()
         EmptyListBox();
         DELETEZ(m_pListBox);
     }
+    m_pAccessible = NULL;
     DBG_DTOR(OTableWindow,NULL);
 }
 // -----------------------------------------------------------------------------
@@ -411,7 +416,10 @@ void OTableWindow::Paint( const Rectangle& rRect )
 //------------------------------------------------------------------------------
 void OTableWindow::SetTitle( const ::rtl::OUString& rTit )
 {
+    ::rtl::OUString sOldTitle = m_aTitle.GetText();
     m_aTitle.SetText( rTit );
+    if ( m_pAccessible )
+        m_pAccessible->notifyAccesibleEvent(6/* AccessibleEventId::ACCESSIBLE_NAME_EVENT */,makeAny(sOldTitle),makeAny(rTit));
 }
 
 //------------------------------------------------------------------------------
@@ -668,7 +676,9 @@ void OTableWindow::_disposing( const ::com::sun::star::lang::EventObject& _rSour
 // -----------------------------------------------------------------------------
 Reference< XAccessible > OTableWindow::CreateAccessible()
 {
-    return new OTableWindowAccess(getTableView()->GetAccessible(),this);
+    OTableWindowAccess* pAccessible = new OTableWindowAccess(getTableView()->GetAccessible(),this);
+    m_pAccessible = pAccessible;
+    return pAccessible;
 }
 // -----------------------------------------------------------------------------
 void OTableWindow::Command(const CommandEvent& rEvt)
@@ -762,5 +772,10 @@ long OTableWindow::PreNotify(NotifyEvent& rNEvt)
     if (!bHandled)
         return Window::PreNotify(rNEvt);
     return 1L;
+}
+// -----------------------------------------------------------------------------
+String OTableWindow::getTitle() const
+{
+    return m_aTitle.GetText();
 }
 // -----------------------------------------------------------------------------

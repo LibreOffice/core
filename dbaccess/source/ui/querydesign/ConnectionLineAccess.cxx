@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLineAccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:55:02 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,8 +155,8 @@ namespace dbaui
         {
             // search the postion of our table window in the table window map
             nIndex = m_pLine->GetParent()->GetTabWinMap()->size();
-            ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->GetTabConnList();
-            ::std::vector<OTableConnection*>::iterator aIter = pVec->begin();
+            const ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->getTableConnections();
+            ::std::vector<OTableConnection*>::const_iterator aIter = pVec->begin();
             for (; aIter != pVec->end() && (*aIter) != m_pLine; ++nIndex,++aIter)
                 ;
             nIndex = ( aIter != pVec->end() ) ? nIndex : -1;
@@ -275,7 +275,7 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     Reference< XAccessible > OTableConnection::getAccessible() const
     {
-        if( m_xAccessible.is() )
+        if( !m_xAccessible.is() )
             m_xAccessible = new OConnectionLineAccess(this);
         return m_xAccessible;
     }

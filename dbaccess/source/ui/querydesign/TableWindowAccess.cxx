@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindowAccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:54:56 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,9 +222,10 @@ namespace dbaui
         AccessibleRelation aRet;
         if( m_pTable )
         {
-            ::std::vector<OTableConnection*>::const_iterator aIter = m_pTable->getTableView()->getTableConnections(m_pTable) + nIndex;
+            OJoinTableView* pView = m_pTable->getTableView();
+            ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable) + nIndex;
             aRet.TargetSet.realloc(1);
-            aRet.TargetSet[0] = m_xParentContext->getAccessibleChild(aIter - m_pTable->getTableView()->GetTabConnList()->begin());
+            aRet.TargetSet[0] = m_xParentContext->getAccessibleChild(aIter - pView->getTableConnections()->begin());
             aRet.RelationType = AccessibleRelationType::CONTROLLER_FOR;
         }
         return aRet;
@@ -242,9 +243,10 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_aMutex  );
         if( AccessibleRelationType::CONTROLLER_FOR == aRelationType && m_pTable)
         {
-            ::std::vector<OTableConnection*>* pConnectionList = m_pTable->getTableView()->GetTabConnList();
+            OJoinTableView* pView = m_pTable->getTableView();
+            const ::std::vector<OTableConnection*>* pConnectionList = pView->getTableConnections();
 
-            ::std::vector<OTableConnection*>::const_iterator aIter = m_pTable->getTableView()->getTableConnections(m_pTable);
+            ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
             ::std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != pConnectionList->end() ; ++aIter )
@@ -258,7 +260,21 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     sal_Bool OTableWindowAccess::isEditable() const
     {
-        return m_pTable ? !m_pTable->getTableView()->getDesignView()->getController()->isReadOnly() : sal_False;
+        return m_pTable && !m_pTable->getTableView()->getDesignView()->getController()->isReadOnly();
+    }
+    // -----------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException)
+    {
+        return getAccessibleName(  );
+    }
+    // -----------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL OTableWindowAccess::getAccessibleName(  ) throw (RuntimeException)
+    {
+        ::osl::MutexGuard aGuard( m_aMutex  );
+        ::rtl::OUString sAccessibleName;
+        if ( m_pTable )
+            sAccessibleName = m_pTable->getTitle();
+        return sAccessibleName;
     }
     // -----------------------------------------------------------------------------
 }

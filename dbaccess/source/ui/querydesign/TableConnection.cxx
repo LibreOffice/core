@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,11 +202,7 @@ namespace dbaui
     void OTableConnection::Deselect()
     {
         m_bSelected = FALSE;
-        Rectangle rcBounding = GetBoundingRect();
-        rcBounding.Bottom() += 1;
-        rcBounding.Right() += 1;
-        m_pParent->Invalidate( rcBounding, INVALIDATE_NOCHILDREN );
-            // Kommentar siehe ::Invalidate ...
+        Invalidate();
     }
 
     //------------------------------------------------------------------------

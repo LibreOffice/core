@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConnectionLine.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:15:30 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,8 +472,8 @@ Rectangle OConnectionLine::GetDestTextPos() const
 Point OConnectionLine::getMidPoint() const
 {
     Point aDest = m_aDestConnPos - m_aSourceConnPos;
-    aDest.X() *= 0.5;
-    aDest.Y() *= 0.5;
+    aDest.X() /= 2;
+    aDest.Y() /= 2;
 
     return m_aSourceConnPos + aDest;
 }

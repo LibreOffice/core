@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JAccess.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-06 08:55:08 $
+ *  last change: $Author: oj $ $Date: 2002-02-08 09:09:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ namespace dbaui
     OJoinDesignViewAccess::OJoinDesignViewAccess(OJoinTableView* _pTableView,
                                                  const Reference< XAccessible >& _xParent)
         :OAccessibleBase(_pTableView,_xParent)
+        ,m_pTableView(_pTableView)
     {
     }
     // -----------------------------------------------------------------------------
@@ -111,15 +112,17 @@ namespace dbaui
     {
         // TODO may be this will change to only visible windows
         // this is the same assumption mt implements
+        ::osl::MutexGuard aGuard( m_aMutex  );
         sal_Int32 nChildCount = 0;
         if ( m_pTableView )
-            nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->GetTabConnList()->size();
+            nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections()->size();
         return nChildCount;
     }
     // -----------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (RuntimeException)
     {
         Reference< XAccessible > aRet;
+        ::osl::MutexGuard aGuard( m_aMutex  );
         if(i >= 0 && i < getAccessibleChildCount() && m_pTableView )
         {
             // check if we should return a table window or a connection
@@ -131,22 +134,21 @@ namespace dbaui
                     ;
                 aRet = aIter->second->GetAccessible();
             }
-            else if( size_t(i - nTableWindowCount) < m_pTableView->GetTabConnList()->size() )
-                aRet = (*m_pTableView->GetTabConnList())[i - nTableWindowCount]->getAccessible();
+            else if( size_t(i - nTableWindowCount) < m_pTableView->getTableConnections()->size() )
+                aRet = (*m_pTableView->getTableConnections())[i - nTableWindowCount]->getAccessible();
         }
         return aRet;
     }
     // -----------------------------------------------------------------------------
     sal_Bool OJoinDesignViewAccess::isEditable() const
     {
-        return m_pTableView ? !m_pTableView->getDesignView()->getController()->isReadOnly() : sal_False;
+        return m_pTableView && !m_pTableView->getDesignView()->getController()->isReadOnly();
     }
     // -----------------------------------------------------------------------------
     sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException)
     {
         return AccessibleRole::VIEWPORT;
     }
-    // -----------------------------------------------------------------------------
     // -----------------------------------------------------------------------------
 }
 
