@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-27 14:23:01 $
+ *  last change: $Author: sab $ $Date: 2001-03-06 16:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,9 @@
 #include <tools/isolang.hxx>
 #endif
 #include <tools/intn.hxx>
+#ifndef _CPPUHELPER_EXTRACT_HXX_
+#include <cppuhelper/extract.hxx>
+#endif
 
 #define SC_LOCALE           "Locale"
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
@@ -787,13 +790,13 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     aAny <<= aValidation.sImputTitle;
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_INPTITLE)), aAny);
                 }
-                aAny <<= aValidation.bShowErrorMessage;
+                aAny <<= ::cppu::bool2any(aValidation.bShowErrorMessage);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWERR)), aAny);
-                aAny <<= aValidation.bShowImputMessage;
+                aAny <<= ::cppu::bool2any(aValidation.bShowImputMessage);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SHOWINP)), aAny);
                 aAny <<= aValidation.aValidationType;
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_TYPE)), aAny);
-                aAny <<= aValidation.bIgnoreBlanks;
+                aAny <<= ::cppu::bool2any(aValidation.bIgnoreBlanks);
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_IGNOREBL)), aAny);
                 aAny <<= aValidation.aAlertStyle;
                 xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ERRALSTY)), aAny);
