@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DResultSet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:21:22 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 06:19:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,20 @@ sal_Int32 SAL_CALL ODbaseResultSet::compareBookmarks( const  Any& first, const  
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return (first == second) ? 0 : 2;
+    sal_Int32 nFirst,nSecond,nResult;
+    first  >>= nFirst;
+    second >>= nSecond;
+
+    // have a look at CompareBookmark
+    // we can't use the names there because we already have defines with the same name from the parser
+    if(nFirst < nSecond)
+        nResult = -1;
+    else if(nFirst > nSecond)
+        nResult = 1;
+    else
+        nResult = 0;
+
+    return  nResult;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODbaseResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException)
