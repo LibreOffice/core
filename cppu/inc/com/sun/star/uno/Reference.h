@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:05 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:01:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -390,6 +390,20 @@ public:
         @return true, if non-null interface was set
     */
     inline sal_Bool SAL_CALL set( const BaseReference & rRef, UnoReference_Query ) SAL_THROW( (RuntimeException) );
+
+    /** Queries given any for reference interface type (interface_type)
+        and sets it.  An interface already set will be released.
+
+        @param rAny
+               an Any containing an interface
+        @param dummy
+               UNO_QUERY or UNO_REF_QUERY to force obvious distinction
+               to set methods
+        @return
+                true, if non-null interface was set
+    */
+    inline bool set( Any const & rAny, UnoReference_Query );
+
 #ifndef EXCEPTIONS_OFF
     /** Queries given interface for reference interface type (interface_type) and sets it.
         An interface already set will be released.
@@ -409,6 +423,19 @@ public:
                to set methods
     */
     inline void SAL_CALL set( const BaseReference & rRef, UnoReference_QueryThrow ) SAL_THROW( (RuntimeException) );
+
+    /** Queries given any for reference interface type (interface_type) and
+        sets it.  An interface already set will be released.
+        Throws a RuntimeException if the demanded interface cannot be set.
+
+        @param rAny
+               an Any containing an interface
+        @param dummy
+               UNO_QUERY_THROW or UNO_REF_QUERY_THROW to force obvious
+               distinction to set methods
+    */
+    inline void set( Any const & rAny, UnoReference_QueryThrow );
+
 #endif
 
     /** Assignment operator: Acquires given interface pointer and sets reference.
