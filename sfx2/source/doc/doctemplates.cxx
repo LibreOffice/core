@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:21:42 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:41:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
@@ -1195,44 +1197,31 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
     // Find service name of the document
     // and construct a query for it
-    OUString aQueryForFilter;
-
     Reference< XSERVICEINFO > rServiceInfo( rStorable, UNO_QUERY );
     if( !rServiceInfo.is() )
         return sal_False;
 
+    OUStringBuffer sQueryBuffer;
+    sQueryBuffer.appendAscii("matchByDocumentService=");
     if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.TextDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_writer" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.text.TextDocument");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.formula.FormulaProperties" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_math" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.formula.FormulaProperties");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.presentation.PresentationDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_impress" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.presentation.PresentationDocument");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.drawing.DrawingDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_draw" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.drawing.DrawingDocument");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.sheet.SpreadsheetDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_calc" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.sheet.SpreadsheetDocument");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.WebDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_web" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.text.WebDocument");
     else if( rServiceInfo->supportsService( OUString::createFromAscii( "com.sun.star.text.GlobalDocument" ) ) )
-    {
-        aQueryForFilter = OUString::createFromAscii( "_query_global" );
-    }
+        sQueryBuffer.appendAscii("com.sun.star.text.GlobalDocument");
     else
         return sal_False;
 
-    aQueryForFilter += OUString::createFromAscii( ":iflags=54:eflags=64" ); // template export filter
+    sQueryBuffer.appendAscii( ":iflags=54:eflags=64" ); // template export filter
+    OUString aQueryForFilter = sQueryBuffer.makeStringAndClear();
 
     // Find a template filter for the document type
     Reference< XMULTISERVICEFACTORY > rServiceManager = ::comphelper::getProcessServiceFactory();
