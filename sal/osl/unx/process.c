@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: tra $ $Date: 2002-12-14 12:57:16 $
+ *  last change: $Author: haggai $ $Date: 2003-03-25 17:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,10 @@ oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt
     const char * pszRealPathSrc = pszCmdLine;
     char szAbsolutePath[PATH_MAX] = "";
     char szRealPathBuf[PATH_MAX] = "";
+
+    if( pszCmdLine == NULL ) {
+        return osl_Process_E_None;
+    }
 
     /* if the command line argument #0 starts with a '/', this program has been */
     /* invoked using a full qualified path */
