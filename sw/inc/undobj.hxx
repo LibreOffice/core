@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fme $ $Date: 2002-11-15 09:24:03 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1302,10 +1302,11 @@ public:
 class SwUndoNumOrNoNum : public SwUndo
 {
     ULONG nIdx;
-    BOOL bDel : 1;
-    BOOL bOutline : 1;
+    SwNodeNum mNewNum, mOldNum; // #115901#
+
 public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL bDelete, BOOL bOutline );
+    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, const SwNodeNum & mOldNum,
+                      const SwNodeNum & mNewNum ); // #115901#
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
