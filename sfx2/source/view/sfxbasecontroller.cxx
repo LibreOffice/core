@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:59:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 11:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1080,7 +1080,7 @@ void ImplInitKeyEvent( ::com::sun::star::awt::KeyEvent& rEvent, const KeyEvent& 
         rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
 
     rEvent.KeyCode = rEvt.GetKeyCode().GetCode();
-    rEvent.KeyChar = (unsigned char)rEvt.GetCharCode();
+    rEvent.KeyChar = rEvt.GetCharCode();
     rEvent.KeyFunc = rEvt.GetKeyCode().GetFunction();
 }
 
