@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-02 19:12:16 $
+ *  last change: $Author: nn $ $Date: 2002-03-26 17:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ void ScAppOptions::SetDefaults()
     nTrackMoveColor    = COL_TRANSPARENT;
     eLinkMode          = LM_ON_DEMAND;
 
+    nDefaultObjectSizeWidth = 8000;
+    nDefaultObjectSizeHeight = 5000;
 }
 
 //------------------------------------------------------------------------
@@ -161,6 +163,8 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
     nTrackDeleteColor  = rCpy.nTrackDeleteColor;
     nTrackMoveColor    = rCpy.nTrackMoveColor;
     eLinkMode       = rCpy.eLinkMode;
+    nDefaultObjectSizeWidth = rCpy.nDefaultObjectSizeWidth;
+    nDefaultObjectSizeHeight = rCpy.nDefaultObjectSizeHeight;
     return *this;
 }
 
@@ -415,6 +419,12 @@ void lcl_GetSortList( Any& rDest )
 #define SCSORTLISTOPT_LIST          0
 #define SCSORTLISTOPT_COUNT         1
 
+#define CFGPATH_MISC        "Office.Calc/Misc"
+
+#define SCMISCOPT_DEFOBJWIDTH       0
+#define SCMISCOPT_DEFOBJHEIGHT      1
+#define SCMISCOPT_COUNT             2
+
 
 Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
@@ -498,13 +508,29 @@ Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
     return aNames;
 }
 
+Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
+{
+    static const char* aPropNames[] =
+    {
+        "DefaultObjectSize/Width",  // SCMISCOPT_DEFOBJWIDTH
+        "DefaultObjectSize/Height"  // SCMISCOPT_DEFOBJHEIGHT
+    };
+    Sequence<OUString> aNames(SCMISCOPT_COUNT);
+    OUString* pNames = aNames.getArray();
+    for(int i = 0; i < SCMISCOPT_COUNT; i++)
+        pNames[i] = OUString::createFromAscii(aPropNames[i]);
+
+    return aNames;
+}
+
 
 ScAppCfg::ScAppCfg() :
     aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
     aInputItem( OUString::createFromAscii( CFGPATH_INPUT ) ),
     aRevisionItem( OUString::createFromAscii( CFGPATH_REVISION ) ),
     aContentItem( OUString::createFromAscii( CFGPATH_CONTENT ) ),
-    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) )
+    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) ),
+    aMiscItem( OUString::createFromAscii( CFGPATH_MISC ) )
 {
     sal_Int32 nIntVal;
 
@@ -650,6 +676,32 @@ ScAppCfg::ScAppCfg() :
         }
     }
     aSortListItem.SetCommitLink( LINK( this, ScAppCfg, SortListCommitHdl ) );
+
+    aNames = GetMiscPropertyNames();
+    aValues = aMiscItem.GetProperties(aNames);
+    aMiscItem.EnableNotification(aNames);
+    pValues = aValues.getConstArray();
+    DBG_ASSERT(aValues.getLength() == aNames.getLength(), "GetProperties failed")
+    if(aValues.getLength() == aNames.getLength())
+    {
+        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        {
+            DBG_ASSERT(pValues[nProp].hasValue(), "property value missing")
+            if(pValues[nProp].hasValue())
+            {
+                switch(nProp)
+                {
+                    case SCMISCOPT_DEFOBJWIDTH:
+                        if (pValues[nProp] >>= nIntVal) SetDefaultObjectSizeWidth( nIntVal );
+                        break;
+                    case SCMISCOPT_DEFOBJHEIGHT:
+                        if (pValues[nProp] >>= nIntVal) SetDefaultObjectSizeHeight( nIntVal );
+                        break;
+                }
+            }
+        }
+    }
+    aMiscItem.SetCommitLink( LINK( this, ScAppCfg, MiscCommitHdl ) );
 }
 
 IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
@@ -786,6 +838,31 @@ IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
+IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
+{
+    Sequence<OUString> aNames = GetMiscPropertyNames();
+    OUString* pNames = aNames.getArray();
+    Sequence<Any> aValues(aNames.getLength());
+    Any* pValues = aValues.getArray();
+
+    const Type& rType = ::getBooleanCppuType();
+    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    {
+        switch(nProp)
+        {
+            case SCMISCOPT_DEFOBJWIDTH:
+                pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeWidth();
+                break;
+            case SCMISCOPT_DEFOBJHEIGHT:
+                pValues[nProp] <<= (sal_Int32) GetDefaultObjectSizeHeight();
+                break;
+        }
+    }
+    aMiscItem.PutProperties(aNames, aValues);
+
+    return 0;
+}
+
 void ScAppCfg::SetOptions( const ScAppOptions& rNew )
 {
     *(ScAppOptions*)this = rNew;
@@ -799,6 +876,7 @@ void ScAppCfg::OptionsChanged()
     aRevisionItem.SetModified();
     aContentItem.SetModified();
     aSortListItem.SetModified();
+    aMiscItem.SetModified();
 }
 
 
