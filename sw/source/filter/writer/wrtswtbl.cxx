@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-25 09:31:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:25:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,7 +711,10 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
                     USHORT nBorderMask = MergeBoxBorders(pBox, nOldRow, nOldCol,
                         nRowSpan, nColSpan, nTopBorder, nBottomBorder);
 
-                    if (!(nBorderMask & 4))
+                    // #i30094# add a sanity check here to ensure that
+                    // we don't access an invalid aCols[] as &nCol
+                    // above can be changed.
+                    if (!(nBorderMask & 4) && nOldCol < aCols.Count())
                     {
                         SwWriteTableCol *pCol = aCols[nOldCol];
                         ASSERT(pCol, "No TableCol found, panic!");
