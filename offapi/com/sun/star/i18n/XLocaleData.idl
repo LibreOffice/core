@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-19 10:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,10 +121,12 @@ constants reservedWords {
     const short TRUE_WORD       = 0;
     const short FALSE_WORD      = 1;
     const short QUARTER_WORD    = 2;
+    const short ABOVE_WORD      = 3;
+    const short BELOW_WORD      = 4;
 
     //! Yes, this must be the count of known reserved words and one more than
     //! the maximum number used above!
-    const short COUNT           = 3;
+    const short COUNT           = 5;
 };
 
 
