@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:10:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1040,4 +1040,17 @@ OutputDevice* DrawDocShell::GetDocumentRefDev (void)
         pReferenceDevice = pDoc->GetRefDevice ();
     return pReferenceDevice;
 }
+
+/** executes the SID_OPENDOC slot to let the framework open a document
+    with the given URL and this document as a referer */
+void DrawDocShell::OpenBookmark( const String& rBookmarkURL )
+{
+    SfxStringItem   aStrItem( SID_FILE_NAME, rBookmarkURL );
+    SfxStringItem   aReferer( SID_REFERER, GetMedium()->GetName() );
+    SfxBoolItem     aBrowseItem( SID_BROWSE, TRUE );
+
+    ( pViewShell ? pViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetDispatcher()->
+        Execute(SID_OPENDOC, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aStrItem, &aBrowseItem, &aReferer, 0L );
+}
+
 } // end of namespace sd
