@@ -2,9 +2,9 @@
  *
  *  $RCSfile: funcutl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-28 11:46:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,7 +141,6 @@ public:
 class ArgEdit : public ScRefEdit
 {
 public:
-            ArgEdit( Window* pParent, WinBits nWinStyle = WB_LEFT | WB_BORDER );
             ArgEdit( Window* pParent, const ResId& rResId );
 
     void    Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
