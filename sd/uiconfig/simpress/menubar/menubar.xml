@@ -64,15 +64,6 @@
             <menu:menuitem menu:id=".uno:ModifyField" menu:helpid="27362" menu:label="" />
             <menu:menuitem menu:id=".uno:DeletePage" menu:helpid="27080" menu:label="" />
             <menu:menuseparator/>
-            <menu:menu menu:id=".uno:LayerMenu" menu:label="" >
-                <menu:menupopup>
-                    <menu:menuitem menu:id=".uno:InsertLayer" menu:helpid="27043" menu:label="" />
-                    <menu:menuitem menu:id=".uno:ModifyLayer" menu:helpid="27048" menu:label="" />
-                    <menu:menuitem menu:id=".uno:DeleteLayer" menu:helpid="27081" menu:label="" />
-                    <menu:menuitem menu:id=".uno:RenameLayer" menu:helpid="27269" menu:label="" />
-                </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ManageLinks" menu:helpid="27005" menu:label="" />
             <menu:menuitem menu:id=".uno:PlugInsActive" menu:helpid="6314" menu:label="" />
             <menu:menuitem menu:id=".uno:ImageMapDialog" menu:helpid="10371" menu:label="" />
@@ -152,6 +143,7 @@
             </menu:menu>
             <menu:menuitem menu:id=".uno:Bullet" menu:helpid="27019" menu:label="" />
             <menu:menuitem menu:id=".uno:HyperlinkDialog" menu:helpid="5678" menu:label="" />
+            <menu:menuitem menu:id=".uno:AnimationObjects" menu:helpid="27062" menu:label="" />
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:GraphicMenu" menu:label="" >
                 <menu:menupopup>
@@ -266,7 +258,6 @@
             <menu:menuitem menu:id=".uno:SlideChangeWindow" menu:helpid="27334" menu:label="" />
             <menu:menuitem menu:id=".uno:HideSlide" menu:helpid="10161" menu:label="" />
             <menu:menuseparator/>
-            <menu:menuitem menu:id=".uno:AnimationObjects" menu:helpid="27062" menu:label="" />
             <menu:menuitem menu:id=".uno:EffectWindow" menu:helpid="27328" menu:label="" />
             <menu:menuitem menu:id=".uno:AnimationEffects" menu:helpid="27063" menu:label="" />
         </menu:menupopup>
