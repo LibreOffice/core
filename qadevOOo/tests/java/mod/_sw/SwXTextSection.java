@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXTextSection.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-05-27 13:53:02 $
+ *  last change:$Date: 2003-09-08 12:53:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,16 @@
 
 package mod._sw;
 
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+import util.InstCreator;
+import util.SOfficeFactory;
+import util.TableDsc;
+
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
@@ -74,19 +84,10 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextSection;
 import com.sun.star.text.XTextSectionsSupplier;
 import com.sun.star.text.XWordCursor;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
-import java.io.PrintWriter;
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.InstCreator;
-import util.SOfficeFactory;
-import util.TableDsc;
-
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 /**
  *
@@ -170,10 +171,10 @@ public class SwXTextSection extends TestCase {
                 ("com.sun.star.text.TextSection");
             oTSC = (XTextContent)UnoRuntime.queryInterface(XTextContent.class, oTS2);
             oText.insertTextContent(oCursor, oTSC, false);
-            String[] oTSSNames = oTSSuppName.getElementNames();
+
             XIndexAccess oTSSuppIndex = (XIndexAccess)
             UnoRuntime.queryInterface(XIndexAccess.class, oTSSuppName);
-            int TScount = oTSSuppIndex.getCount();
+
             log.println( "getting a TextSection with the XTextSectionSupplier()" );
             xTS = (XTextSection) AnyConverter.toObject(
                         new Type(XTextSection.class),oTSSuppIndex.getByIndex(0));
