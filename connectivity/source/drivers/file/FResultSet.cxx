@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 15:37:39 $
+ *  last change: $Author: oj $ $Date: 2001-01-17 10:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -788,6 +788,9 @@ void SAL_CALL OResultSet::deleteRow(  ) throw(SQLException, RuntimeException)
     if(m_bRowDeleted && m_pFileSet)
     {
         m_aRow->setDeleted(sal_True);
+        ::std::map<sal_Int32,sal_Int32>::iterator aIter = m_aBookmarkToPos.find(nPos);
+        for(;aIter != m_aBookmarkToPos.end();++aIter)
+            --aIter->second;
         m_aBookmarkToPos.erase(nPos);
     }
 }
