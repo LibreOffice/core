@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 12:29:51 $
+#   last change: $Author: rt $ $Date: 2005-03-30 11:34:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 .INCLUDE : settings.mk
 
-.IF "$(OS)"=="MACOSX" || "$(WITH_MOZILLA)" == "NO"
+.IF  "$(OS)"=="MACOSX" || ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
 
 dummy:
     @echo "		Not building the mozillasrc stuff in OpenOffice.org build"
