@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2002-12-05 10:26:03 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 09:58:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1707,7 +1707,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ swedish ] = "tecken i slutet av raden" ;
         Text [ dutch ] = "tekens aan regeleinde" ;
         Text [ spanish ] = "caracteres al final de la lнnea" ;
-        Text [ english_us ] = "Characters at line end" ;
+        Text [ english_us ] = "C~haracters at line end" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "иЎЊжњ«е­—з¬¦";
         Text[ russian ] = "Символов в конце строки";
@@ -1755,7 +1755,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Text [ swedish ] = "tecken i bцrjan av raden" ;
         Text [ dutch ] = "tekens aan regelbegin" ;
         Text [ spanish ] = "caracteres al comienzo de la lнnea" ;
-        Text [ english_us ] = "Characters at line begin" ;
+        Text [ english_us ] = "Cha~racters at line begin" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "иЎЊй¦–е­—з¬¦";
         Text[ russian ] = "Символов в начале строки";
@@ -1937,7 +1937,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Size = MAP_APPFONT ( 21 , 10 ) ;
         Text = "T~yp" ;
         Text [ ENGLISH ] = "T~ype" ;
-        Text[ english_us ] = "T~ype";
+        Text[ english_us ] = "~Type";
         Text[ portuguese ] = "T~ype";
         Text[ russian ] = "T~ype";
         Text[ greek ] = "T~ype";
