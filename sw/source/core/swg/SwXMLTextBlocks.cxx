@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-17 13:52:27 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 18:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,11 +590,13 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
 ULONG SwXMLTextBlocks::StartPutBlock( const String& rShort, const String& rPackageName )
 {
     USHORT nIndex = GetIndex ( rShort );
+    /*
     if( xBlkRoot->IsContained( rPackageName ) )
     {
         xBlkRoot->Remove( rPackageName );
         xBlkRoot->Commit();
     }
+    */
     xRoot = xBlkRoot->OpenUCBStorage( rPackageName, STREAM_STGWRITE );
     return 0;
 }
@@ -621,7 +623,6 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     SwWriter aWriter (*xRoot, *pDoc );
 
     nRes = aWriter.Write ( xWrt );
-
     // Save OLE objects if there are some
     SwDocShell *pDocSh = pDoc->GetDocShell();
 
@@ -638,7 +639,6 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
 
     xRoot->Commit();
     xRoot.Clear();
-
     if ( !nCommitFlags )
         xBlkRoot->Commit();
     ULONG nErr = xBlkRoot->GetError();
@@ -729,8 +729,6 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
     }
     return bRet;
 }
-
-
 
 ULONG SwXMLTextBlocks::OpenFile( BOOL bReadOnly )
 {
@@ -938,7 +936,7 @@ ULONG SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 
     // Kurzform!
     xRoot = xBlkRoot->OpenUCBStorage( aFolderName, STREAM_STGREAD );
-    xContents = xBlkRoot->OpenStream( aStreamName, STREAM_STGREAD );
+    xContents = xRoot->OpenStream( aStreamName, STREAM_STGREAD );
 
     xContents->Seek( 0L );
     xContents->SetBufferSize( 1024 * 2 );
@@ -1004,11 +1002,13 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
                                      const String& rText,  const String& rPackageName )
 {
     USHORT nIndex = GetIndex ( rShort );
+    /*
     if (xBlkRoot->IsContained ( rPackageName ) )
     {
         xBlkRoot->Remove ( rPackageName );
         xBlkRoot->Commit ( );
     }
+    */
     String aFolderName( rPackageName );
     String aStreamName = aFolderName + String::CreateFromAscii(".xml");
 
@@ -1047,6 +1047,7 @@ ULONG SwXMLTextBlocks::PutBlockText( const String& rShort, const String& rName,
 
     if (! (nFlags & SWXML_NOROOTCOMMIT) )
         xBlkRoot->Commit();
+
 
     ULONG nErr = xBlkRoot->GetError();
     ULONG nRes = 0;
@@ -1131,15 +1132,23 @@ void SwXMLTextBlocks::WriteInfo( void )
         DBG_ASSERT(xWriter.is(),"com.sun.star.xml.sax.Writer service missing");
         OUString sDocName( RTL_CONSTASCII_USTRINGPARAM( XMLN_BLOCKLIST ) );
 
+        /*
         if ( xBlkRoot->IsContained( sDocName) )
         {
             xBlkRoot->Remove ( sDocName );
             xBlkRoot->Commit();
         }
+        */
 
         SvStorageStreamRef xDocStream = xBlkRoot->OpenStream( sDocName, STREAM_WRITE | STREAM_TRUNC );
         xDocStream->SetSize ( 0L );
         xDocStream->SetBufferSize( 16*1024 );
+        String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+        OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+        Any aAny;
+        aAny <<= aMime;
+        xDocStream->SetProperty( aPropName, aAny );
+
         Reference < io::XOutputStream> xOut = new utl::OOutputStreamWrapper(*xDocStream);
         uno::Reference<io::XActiveDataSource> xSrc(xWriter, uno::UNO_QUERY);
         xSrc->setOutputStream(xOut);
@@ -1230,18 +1239,26 @@ ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMac
 
         // workaround for bug: storages do not get overwritten
         // (This workaround is SLOOOOWWW! Remove this ASAP.)
+        /*
         if( xRoot->IsContained( sStreamName ) )
         {
             xRoot->Remove( sStreamName );
             xRoot->Commit();
             xBlkRoot->Commit();
         }
+        */
+
 
         SvStorageStreamRef xDocStream = xRoot->OpenStream(
             sStreamName, STREAM_WRITE | STREAM_SHARE_DENYWRITE );
         DBG_ASSERT(xDocStream.Is(), "Can't create output stream");
         if ( xDocStream.Is() )
         {
+            String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
+            OUString aMime ( RTL_CONSTASCII_USTRINGPARAM ( "text/xml") );
+            Any aAny;
+            aAny <<= aMime;
+            xDocStream->SetProperty( aPropName, aAny );
             xDocStream->SetSize( 0 );
             xDocStream->SetBufferSize( 16*1024 );
             Reference<io::XOutputStream> xOutputStream =
@@ -1298,7 +1315,6 @@ ULONG SwXMLTextBlocks::SetMacroTable( USHORT nIdx, const SvxMacroTableDtor& rMac
             // finally, commit stream, sub-storage and storage
             xDocStream->Commit();
             xDocStream.Clear();
-
             xRoot->Commit();
             xRoot.Clear();
             xBlkRoot->Commit();
