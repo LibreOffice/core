@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcellbinding.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:39:21 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 15:53:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,13 @@ namespace xmloff
 
     namespace
     {
+        using ::com::sun::star::uno::Reference;
+        using ::com::sun::star::uno::XInterface;
+        using ::com::sun::star::container::XChild;
+        using ::com::sun::star::drawing::XDrawPage;
+        using ::com::sun::star::frame::XModel;
+        using ::com::sun::star::uno::UNO_QUERY;
+
         //....................................................................
         template< class TYPE >
         Reference< TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
