@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-14 11:59:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -101,8 +100,6 @@ ColRowSettings::ColRowSettings( RootData& rRootData ) :
     pHeight = new UINT16 [ MAXROW + 1 ];
     pRowFlags = new INT8[ MAXROW + 1 ];
 
-    pExtTabOpt = NULL;
-
     Reset();
 }
 
@@ -113,9 +110,6 @@ ColRowSettings::~ColRowSettings()
     delete[] pHeight;
     delete[] pColHidden;
     delete[] pWidth;
-
-    if( pExtTabOpt )
-        delete pExtTabOpt;
 }
 
 
@@ -129,12 +123,6 @@ void ColRowSettings::Reset( void )
     }
 
     memset( pRowFlags, 0x00, sizeof( INT8 ) * ( MAXROW + 1 ) );
-
-    if( pExtTabOpt )
-    {
-        delete pExtTabOpt;
-        pExtTabOpt = NULL;
-    }
 
     bDirty = TRUE;
     nMaxRow = -1;
@@ -152,7 +140,7 @@ void ColRowSettings::Apply( SCTAB nScTab )
     SCROW                   nStart = 0;
     UINT16                  nWidth;
     UINT16                  nLastWidth = ( pWidth[ 0 ] >= 0 )? ( UINT16 ) pWidth[ 0 ] : nDefWidth;
-    ScDocument&             rD = *pExcRoot->pDoc;
+    ScDocument&             rD = pExcRoot->pIR->GetDoc();
 
     rD.IncSizeRecalcLevel( nScTab );
 
@@ -251,9 +239,6 @@ void ColRowSettings::Apply( SCTAB nScTab )
     if( nLastHeight && nMaxRow >= 0 )
         rD.SetRowHeightRange( nStart, static_cast<SCROW>( nMaxRow ), nScTab, nLastHeight );
 
-    if( pExtTabOpt )
-        pExcRoot->pIR->GetExtDocOptions().Add( *this );
-
     bDirty = FALSE; // jetzt stimmt Tabelle im ScDocument
 
     rD.DecSizeRecalcLevel( nScTab );
@@ -262,7 +247,7 @@ void ColRowSettings::Apply( SCTAB nScTab )
 
 void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
 {
-    ScDocument& rDoc = *pExcRoot->pDoc;
+    ScDocument& rDoc = pExcRoot->pIR->GetDoc();
 
     for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
     {
@@ -279,7 +264,7 @@ void ColRowSettings::SetHiddenFlags( SCTAB nScTab )
     // #i38093# rows hidden by filter need extra flag
     SCROW nFirstFilterScRow = SCROW_MAX;
     SCROW nLastFilterScRow = SCROW_MAX;
-    if( pExcRoot->pIR->GetBiff() >= xlBiff8 )
+    if( pExcRoot->pIR->GetBiff() == EXC_BIFF8 )
     {
         const XclImpAutoFilterData* pFilter = pExcRoot->pIR->GetFilterManager().GetByTab( nScTab );
         if( pFilter && pFilter->IsActive() )
@@ -367,7 +352,7 @@ void ColRowSettings::SetDefaults( UINT16 nWidth, UINT16 nHeight )
 
 void ColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeight, const UINT16 nGrbit )
 {
-    pHeight[ nRow ] = ( UINT16 ) ( ( double ) ( nExcelHeight & 0x7FFF ) * pExcRoot->fRowScale );
+    pHeight[ nRow ] = nExcelHeight & 0x7FFF;
 
     INT8    nFlags = ROWFLAG_USED;
 
@@ -385,315 +370,4 @@ void ColRowSettings::_SetRowSettings( const SCROW nRow, const UINT16 nExcelHeigh
     if( nRow > nMaxRow )
         nMaxRow = nRow;
 }
-
-
-void ColRowSettings::ReadSplit( XclImpStream& rIn )
-{
-    GetExtTabOpt();
-
-    rIn >> pExtTabOpt->nSplitX >> pExtTabOpt->nSplitY >> pExtTabOpt->nTopSplitRow >> pExtTabOpt->nLeftSplitCol;
-
-    if( (pExcRoot->eHauptDateiTyp == Biff5) || (pExcRoot->eHauptDateiTyp == Biff8) )
-        rIn >> pExtTabOpt->nActPane;
-    else
-        pExtTabOpt->nActPane = rIn.ReaduInt8();
-
-    pExtTabOpt->nTabNum = static_cast<sal_uInt16>(pExcRoot->pIR->GetCurrScTab());
-}
-
-
-void ColRowSettings::SetVisCorner( SCCOL nCol, SCROW nRow )
-{
-    GetExtTabOpt().nLeftCol = static_cast<sal_uInt16>(nCol);
-    GetExtTabOpt().nTopRow = static_cast<sal_uInt16>(nRow);
-}
-
-
-
-void ColRowSettings::SetFrozen( const BOOL bFrozen )
-{
-    GetExtTabOpt().nTabNum = static_cast<sal_uInt16>(pExcRoot->pIR->GetCurrScTab());
-    GetExtTabOpt().bFrozen = bFrozen;
-}
-
-
-
-
-
-
-ScExtTabOptions::ScExtTabOptions() :
-    nTabNum( 0 ),
-    nSplitX( 0 ),
-    nSplitY( 0 ),
-    nLeftCol( 0 ),
-    nTopRow( 0 ),
-    nLeftSplitCol( 0 ),
-    nTopSplitRow( 0 ),
-    nActPane( 3 ),
-    bSelected( FALSE ),
-    bFrozen( FALSE ),
-    bValidSel( FALSE ),
-    bValidDim( FALSE )
-{
-}
-
-
-void ScExtTabOptions::SetSelection( const ScRange& r )
-{
-    if( ValidRow(r.aStart.Row()) && ValidRow(r.aEnd.Row()) )
-    {
-        bValidSel = TRUE;
-        aLastSel = r;
-    }
-    else
-        bValidSel = FALSE;
-}
-
-
-void ScExtTabOptions::SetDimension( const ScRange& r )
-{
-    if( ValidRow(r.aStart.Row()) && ValidRow(r.aEnd.Row()) )
-    {
-        bValidDim = TRUE;
-        aDim = r;
-    }
-    else
-        bValidDim = FALSE;
-}
-
-
-
-
-CodenameList::CodenameList( const CodenameList& r )
-{
-    UINT32          n = 0;
-    const String*   p = ( const String*) r.GetObject( n );
-
-    while( p )
-    {
-        Append( *p );
-        n++;
-        p = ( const String*) r.GetObject( n );
-    }
-}
-
-
-CodenameList::~CodenameList()
-{
-    String*         p = ( String* ) List::First();
-
-    while( p )
-    {
-        delete p;
-        p = ( String* ) List::Next();
-    }
-}
-
-
-
-
-void ScExtDocOptions::Reset()
-{
-    pGridCol = NULL;
-    nActTab = nSelTabs = nCurCol = nCurRow = 0;
-    pOleSize = NULL;
-    nLinkCnt = 0;       // -> 'Root'-Dokument
-    nZoom = 100;
-
-    ppExtTabOpts = new ScExtTabOptions *[ MAXTAB + 1 ];
-    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
-        ppExtTabOpts[ nCnt ] = NULL;
-
-    pCodenameWB = NULL;
-    pCodenames = NULL;
-    bChanged = TRUE;
-
-    SetWinProtection(false);
-    SetWinEncryption(false);
-}
-
-
-ScExtDocOptions::ScExtDocOptions( void )
-{
-    Reset();
-}
-
-
-ScExtDocOptions::ScExtDocOptions( const ScExtDocOptions& rCpy )
-{
-    Reset();
-    *this = rCpy;
-}
-
-
-ScExtDocOptions::~ScExtDocOptions()
-{
-    if( pGridCol )
-        delete pGridCol;
-    if( pOleSize )
-        delete pOleSize;
-
-    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
-    {
-        if( ppExtTabOpts[ nCnt ] )
-            delete ppExtTabOpts[ nCnt ];
-    }
-
-    delete[] ppExtTabOpts;
-
-    if( pCodenameWB )
-        delete pCodenameWB;
-    if( pCodenames )
-        delete pCodenames;
-}
-
-
-ScExtDocOptions& ScExtDocOptions::operator =( const ScExtDocOptions& rCpy )
-{
-    nLinkCnt = rCpy.nLinkCnt;
-    nActTab = rCpy.nActTab;
-    nSelTabs = rCpy.nSelTabs;
-    nCurCol = rCpy.nCurCol;
-    nCurRow = rCpy.nCurRow;
-
-    if( pGridCol )
-    {
-        if( rCpy.pGridCol )
-            *pGridCol = *rCpy.pGridCol;
-        else
-        {
-            delete pGridCol;
-            pGridCol = NULL;
-        }
-    }
-    else if( rCpy.pGridCol )
-        pGridCol = new Color( *rCpy.pGridCol );
-
-    nZoom = rCpy.nZoom;
-    nCurCol = rCpy.nCurCol;
-    nCurRow = rCpy.nCurRow;
-
-    for( SCTAB nCnt = 0 ; nCnt <= MAXTAB ; nCnt++ )
-    {
-        const ScExtTabOptions*  pT = rCpy.ppExtTabOpts[ nCnt ];
-        if( pT )
-        {
-            if( ppExtTabOpts[ nCnt ] )
-                *ppExtTabOpts[ nCnt ] = *pT;
-            else
-                ppExtTabOpts[ nCnt ] = new ScExtTabOptions( *pT );
-        }
-        else
-        {
-            if( ppExtTabOpts[ nCnt ] )
-                delete ppExtTabOpts[ nCnt ];
-
-            ppExtTabOpts[ nCnt ] = NULL;
-        }
-    }
-
-    if( rCpy.pCodenameWB )
-        pCodenameWB = new String( *rCpy.pCodenameWB );
-    if( rCpy.pCodenames )
-        pCodenames = new CodenameList( *rCpy.pCodenames );
-
-    bChanged = rCpy.bChanged;
-    bWinProtection = rCpy.bWinProtection;
-    bWinEncryption = rCpy.bWinEncryption;
-
-    return *this;
-}
-
-
-void ScExtDocOptions::SetExtTabOptions( SCTAB nTabNum, ScExtTabOptions* pTabOpt )
-{
-    if( ppExtTabOpts[ nTabNum ] )
-        delete ppExtTabOpts[ nTabNum ];
-    ppExtTabOpts[ nTabNum ] = pTabOpt;
-}
-
-
-void ScExtDocOptions::SetGridCol( const Color& rColor )
-{
-    if( pGridCol )
-        pGridCol->SetColor( rColor.GetColor() );
-    else
-        pGridCol = new Color( rColor );
-}
-
-
-void ScExtDocOptions::SetActTab( UINT16 nTab )
-{
-    nActTab = ( nTab <= static_cast<sal_uInt16>(MAXTAB) )? nTab : static_cast<sal_uInt16>(MAXTAB);
-}
-
-
-void ScExtDocOptions::SetOleSize( SCCOL nFirstCol, SCROW nFirstRow, SCCOL nLastCol, SCROW nLastRow )
-{
-    if( pOleSize )
-    {
-        pOleSize->aStart.Set( nFirstCol, nFirstRow, 0 );
-        pOleSize->aEnd.Set( nLastCol, nLastRow, 0 );
-    }
-    else
-        pOleSize = new ScRange( nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0 );
-}
-
-
-void ScExtDocOptions::SetCursor( UINT16 nCol, UINT16 nRow )
-{
-    nCurCol = ( nCol <= static_cast<sal_uInt16>(MAXCOL) )? nCol : static_cast<sal_uInt16>(MAXCOL);
-    nCurRow = ( nRow <= static_cast<sal_uInt16>(MAXROW) )? nRow : static_cast<sal_uInt16>(MAXROW);
-}
-
-
-void ScExtDocOptions::SetZoom( UINT16 nZaehler, UINT16 nNenner )
-{
-    nZoom = 100 * nZaehler / nNenner;
-    if( nZoom < 20 )
-        nZoom = 20;
-    else if( nZoom > 400 )
-        nZoom = 400;
-}
-
-
-void ScExtDocOptions::Add( const ColRowSettings& rCRS )
-{
-    const SCTAB nTab = rCRS.pExcRoot->pIR->GetCurrScTab();
-
-    if( ValidTab(nTab) )
-    {
-        if( rCRS.pExtTabOpt )
-        {
-            if( ppExtTabOpts[ nTab ] )
-                *ppExtTabOpts[ nTab ] = *rCRS.pExtTabOpt;
-            else
-                ppExtTabOpts[ nTab ] = new ScExtTabOptions( *rCRS.pExtTabOpt );
-        }
-    }
-    else
-    {
-        DBG_WARNING( "ScExtDocOptions::Add(): Aetsch... falsch bedient!" );
-    }
-}
-
-
-void ScExtDocOptions::SetCodename( const String& r )
-{
-    if( pCodenameWB )
-        *pCodenameWB = r;
-    else
-        pCodenameWB = new String( r );
-}
-
-
-void ScExtDocOptions::AddCodename( const String& r )
-{
-    if( !pCodenames )
-        pCodenames = new CodenameList;
-
-    pCodenames->Append( r );
-}
-
-
 
