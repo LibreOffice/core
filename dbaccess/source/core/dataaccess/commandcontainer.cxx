@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 16:41:24 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:06:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,10 +77,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::ucb;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
-using namespace ::utl;
 
 //........................................................................
 namespace dbaccess
@@ -92,32 +92,43 @@ namespace dbaccess
 //==========================================================================
 DBG_NAME(OCommandContainer)
 //--------------------------------------------------------------------------
-OCommandContainer::OCommandContainer(OWeakObject& _rParent, Mutex& _rMutex)
-    :ODefinitionContainer(_rParent, _rMutex)
+OCommandContainer::OCommandContainer( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xORB
+                                     ,const Reference< XInterface >&    _xParentContainer
+                                     ,const TContentPtr& _pImpl
+                                     ,sal_Bool _bTables
+                                     )
+    :ODefinitionContainer(_xORB,_xParentContainer,_pImpl)
+    ,m_bTables(_bTables)
 {
     DBG_CTOR(OCommandContainer, NULL);
 }
-
 //--------------------------------------------------------------------------
 OCommandContainer::~OCommandContainer()
 {
     DBG_DTOR(OCommandContainer, NULL);
 }
-
+// -----------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandContainer_BASE)
+IMPLEMENT_TYPEPROVIDER2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
 //--------------------------------------------------------------------------
-Reference< XPropertySet > OCommandContainer::createObject()
+Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _rName)
 {
-    OCommandDefinition::AccessControl aAccessControl;
-    return new OCommandDefinition(aAccessControl);
-}
-
-//--------------------------------------------------------------------------
-Reference< XPropertySet > OCommandContainer::createObject( const ::rtl::OUString& _rName,  const OConfigurationNode& _rObjectNode)
-{
-    return new OCommandDefinition(static_cast<OWeakObject*>(this), _rName, _rObjectNode.cloneAsRoot());
+    ODefinitionContainer_Impl* pItem = static_cast<ODefinitionContainer_Impl*>(m_pImpl.get());
+    OSL_ENSURE(pItem->m_aDocumentMap.find(_rName) != pItem->m_aDocumentMap.end() ," Invalid entry in map!");
+    if ( m_bTables )
+        return new OComponentDefinition(*this, _rName,m_xORB,pItem->m_aDocumentMap.find(_rName)->second,m_bTables);
+    return new OCommandDefinition(*this, _rName,m_xORB,pItem->m_aDocumentMap.find(_rName)->second);
 }
 // -----------------------------------------------------------------------------
-
+Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
+{
+    return createInstance( );
+}
+// -----------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
+{
+    return m_xORB->createInstance(m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION);
+}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................
