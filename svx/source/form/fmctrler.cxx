@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 09:50:18 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,7 +348,6 @@ Reference< XInterface > SAL_CALL
 }
 
 //------------------------------------------------------------------
-extern rtl::OUString _fModeName;
 FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XMultiServiceFactory > & _rxORB,
                                      FmFormView* _pView, Window* _pWindow, const UniString& _sDispatchPrefix)
                   :FmXFormController_BASE1(m_aMutex)
@@ -373,7 +372,7 @@ FmXFormController::FmXFormController(const Reference< ::com::sun::star::lang::XM
                   ,m_bCurrentRecordNew(sal_False)
                   ,m_bLocked(sal_False)
                   ,m_bControlsSorted(sal_True)
-                  ,m_aMode(_fModeName)
+                  ,m_aMode(DATA_MODE)
                   ,m_bFiltering(sal_False)
                   ,m_bAttachEvents(sal_True)
                   ,m_bDetachEvents(sal_True)
@@ -536,7 +535,7 @@ Sequence< ::rtl::OUString> FmXFormController::static_getSupportedServiceNames(vo
 //------------------------------------------------------------------------------
 void FmXFormController::setCurrentFilterPosition(sal_Int32 nPos)
 {
-    DBG_ASSERT(nPos < m_aFilters.size(), "Invalid Position");
+    DBG_ASSERT(nPos < (sal_Int32)m_aFilters.size(), "Invalid Position");
 
     if (nPos != m_nCurrentFilterPosition)
     {
@@ -703,7 +702,7 @@ sal_Int32 SAL_CALL FmXFormController::getCount(void) throw( RuntimeException )
 Any SAL_CALL FmXFormController::getByIndex(sal_Int32 Index) throw( ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     if (Index < 0 ||
-        Index >= m_aChilds.size())
+        Index >= (sal_Int32)m_aChilds.size())
         throw ::com::sun::star::lang::IndexOutOfBoundsException();
 
     return makeAny(m_aChilds[Index]);
@@ -1846,7 +1845,7 @@ void FmXFormController::removeControl(const Reference< ::com::sun::star::awt::XC
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     const Reference< ::com::sun::star::awt::XControl > * pCtrls = m_aControls.getArray();
     sal_Int32 nCount = m_aControls.getLength();
-    for ( sal_uInt32 i = 0; i < nCount; i++ )
+    for ( sal_uInt32 i = 0; i < (sal_uInt32)nCount; i++ )
     {
         if ((::com::sun::star::awt::XControl*)xControl.get() == (::com::sun::star::awt::XControl*)pCtrls[i].get())
         {
