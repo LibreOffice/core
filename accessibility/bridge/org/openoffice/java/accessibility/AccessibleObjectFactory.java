@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleObjectFactory.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obr $ $Date: 2002-10-08 06:48:02 $
+ *  last change: $Author: obr $ $Date: 2002-11-08 13:55:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,6 +163,7 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                         ac = new AccessibleList(xAccessibleContext);
                         break;
                     case AccessibleRole.MENUBAR:
+                    case AccessibleRole.PAGETABLIST:
                     case AccessibleRole.POPUPMENU:
                         ac = new AccessibleContainer(
                             AccessibleRoleMap.toAccessibleRole(role),
@@ -257,7 +258,6 @@ public class AccessibleObjectFactory implements XGlobalFocusListener {
                     case AccessibleRole.LAYEREDPANE:
                     case AccessibleRole.OPTIONPANE:
                     case AccessibleRole.PAGETAB:
-                    case AccessibleRole.PAGETABLIST:
                     case AccessibleRole.PANEL:
                     case AccessibleRole.ROOTPANE:
                     case AccessibleRole.SCROLLPANE:
