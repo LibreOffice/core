@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2002-01-10 09:44:53 $
+#   last change: $Author: tl $ $Date: 2002-07-22 13:21:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,6 +93,7 @@ SHL1IMPLIB= smimp
 SHL1LIBS=   $(SLB)$/starmath.lib
 SHL1STDLIBS= \
             $(TOOLSLIB) \
+                        $(TKLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB)	\
             $(SVMEMLIB) \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-07-22 13:22:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -429,12 +429,19 @@ void SmGraphicWindow::Command(const CommandEvent& rCEvt)
             case COMMAND_CONTEXTMENU:
             {
                 GetParent()->ToTop();
-                PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_VIEWMENU));
+                SmResId aResId( RID_VIEWMENU );
+                PopupMenu* pPopupMenu = new PopupMenu(aResId);
                 pPopupMenu->SetSelectHdl(LINK(this, SmGraphicWindow, MenuSelectHdl));
                 Point aPos(5, 5);
                 if (rCEvt.IsMouseEvent())
                     aPos = rCEvt.GetMousePosPixel();
-                pPopupMenu->Execute( this, aPos );
+                DBG_ASSERT( pViewShell, "view shell missing" );
+
+                // added for replaceability of context menus #96085, #93782
+                pViewShell->GetViewFrame()->GetBindings().GetDispatcher()
+                        ->ExecutePopup( aResId, this, &aPos );
+                //pPopupMenu->Execute( this, aPos );
+
                 delete pPopupMenu;
                 bCallBase = FALSE;
             }

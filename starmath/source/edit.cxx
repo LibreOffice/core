@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: tl $ $Date: 2002-06-13 14:41:41 $
+ *  last change: $Author: tl $ $Date: 2002-07-22 13:21:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,11 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLESTATETYPE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleStateType.hpp>
 #endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
 
 #include "starmath.hrc"
 #define ITEMID_FONT         1
@@ -398,10 +403,27 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
     {
         GetParent()->ToTop();
 
+        Point aPoint = rCEvt.GetMousePosPixel();
         PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
+
+        // added for replaceability of context menus #96085, #93782
+        Menu* pMenu = NULL;
+        ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
+        aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
+        aEvent.ExecutePosition.X = aPoint.X();
+        aEvent.ExecutePosition.Y = aPoint.Y();
+        if ( GetView()->TryContextMenuInterception( *pPopupMenu, pMenu, aEvent ) )
+        {
+            if ( pMenu )
+            {
+                delete pPopupMenu;
+                pPopupMenu = (PopupMenu*) pMenu;
+            }
+        }
+
         pPopupMenu->SetSelectHdl(LINK(this, SmEditWindow, MenuSelectHdl));
 
-        pPopupMenu->Execute( this, rCEvt.GetMousePosPixel() );
+        pPopupMenu->Execute( this, aPoint );
         delete pPopupMenu;
     }
     else if (pEditView)
