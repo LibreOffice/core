@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-05-16 08:31:52 $
+ *  last change: $Author: os $ $Date: 2001-05-30 07:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -687,6 +687,9 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     aDDECB              .Enable(FALSE);
     aDDECommandFT       .Enable(FALSE);
 #endif
+        BOOL bPasswdEnabled = aProtectCB.GetState() == STATE_CHECK;
+        aPasswdCB.Enable(bPasswdEnabled);
+        aPasswdPB.Enable(bPasswdEnabled);
         if(!bPasswdValid)
         {
             pEntry = pBox->FirstSelected();
@@ -743,6 +746,9 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
 #endif
         aProtectCB.SetState(pRepr->IsProtect() ? STATE_CHECK : STATE_NOCHECK);
         aProtectCB.Enable();
+        BOOL bPasswdEnabled = aProtectCB.IsChecked();
+        aPasswdCB.Enable(bPasswdEnabled);
+        aPasswdPB.Enable(bPasswdEnabled);
     }
     bDontCheckPasswd = sal_False;
     return 0;
@@ -809,6 +815,8 @@ IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
         SwSectionFmt* pFmt = aOrigArray[ pRepr->GetArrPos() ];
+        if( !pRepr->GetSection().IsProtectFlag())
+            pRepr->GetSection().SetPasswd(Sequence <sal_Int8 >());
         USHORT nNewPos = rDocFmts.GetPos( pFmt );
         if( USHRT_MAX != nNewPos )
         {
@@ -866,16 +874,19 @@ IMPL_LINK( SwEditRegionDlg, ChangeProtectHdl, TriStateBox *, pBox )
     pBox->EnableTriState( FALSE );
     SvLBoxEntry* pEntry=aTree.FirstSelected();
     DBG_ASSERT(pEntry,"kein Entry gefunden");
+    BOOL bCheck = STATE_CHECK == pBox->GetState();
     while( pEntry )
     {
         SectReprPtr pRepr = (SectReprPtr) pEntry->GetUserData();
-        pRepr->SetProtect(STATE_CHECK == pBox->GetState());
-        Bitmap& aBmp=BuildBitmap(STATE_CHECK == pBox->GetState(),
+        pRepr->SetProtect(bCheck);
+        Bitmap& aBmp=BuildBitmap( bCheck,
                                     STATE_CHECK == aHideCB.GetState());
         aTree.SetExpandedEntryBmp(pEntry,aBmp);
         aTree.SetCollapsedEntryBmp(pEntry,aBmp);
         pEntry = aTree.NextSelected(pEntry);
     }
+    aPasswdCB.Enable(bCheck);
+    aPasswdPB.Enable(bCheck);
     return 0;
 }
 /*---------------------------------------------------------------------
@@ -1718,6 +1729,7 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
 #ifdef DDE_AVAILABLE
     aDDECB.SetClickHdl      ( LINK( this, SwInsertSectionTabPage, DDEHdl ));
 #endif
+    ChangeProtectHdl(&aProtectCB);
 }
 /* -----------------21.05.99 10:31-------------------
  *
@@ -1775,12 +1787,13 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
  * --------------------------------------------------*/
 BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
 {
-    BOOL bRecording = FALSE;//pRequest && 0 != SfxRequest::GetRecordingMacro();
     SwSection aSection(CONTENT_SECTION, aCurName.GetText());
     aSection.SetCondition(aConditionED.GetText());
-    aSection.SetProtect(aProtectCB.IsChecked());
+    BOOL bProtected = aProtectCB.IsChecked();
+    aSection.SetProtect(bProtected);
     aSection.SetHidden(aHideCB.IsChecked());
-    aSection.SetPasswd(aNewPasswd);
+    if(bProtected)
+        aSection.SetPasswd(aNewPasswd);
     String sFileName = aFileNameED.GetText();
     String sSubRegion = aSubRegionED.GetText();
     BOOL bDDe = FALSE;
@@ -1813,16 +1826,6 @@ BOOL SwInsertSectionTabPage::FillItemSet( SfxItemSet& rSet)
             aLinkFile += sFilterName;
             aLinkFile += cTokenSeperator;
             aLinkFile += sSubRegion;
-            if(bRecording)
-            {
-//              pRequest->AppendItem(SfxStringItem(FN_PARAM_1,
-//                          aLinkFile.GetToken(0, cTokenSeperator)));
-//              pRequest->AppendItem(SfxStringItem(FN_PARAM_2,
-//                          sFilterName));
-//              pRequest->AppendItem(SfxStringItem(FN_PARAM_3,
-//                          sSubRegion));
-            }
-
         }
 
         aSection.SetLinkFileName(aLinkFile);
@@ -2366,6 +2369,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/05/16 08:31:52  os
+    #86819# invalid assertion removed
+
     Revision 1.8  2001/04/27 12:10:09  os
     password at each section
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-17 08:20:04 $
+ *  last change: $Author: os $ $Date: 2001-05-30 07:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@
     Text[ catalan ] = "Write protection";
 
 #define CB_PASSWD_TEXT\
-        Text = "~Mit Passwort" ;\
+        Text = "~Mit Kennwort" ;\
         Text[English] = "With password" ;   \
     Text[ english_us ] = "Wit~h Password";  \
     Text[ portuguese ] = "Com ~senha";  \
@@ -543,8 +543,8 @@ ModalDialog MD_EDIT_REGION
     };
     CheckBox CB_PASSWD
     {
-        Pos = MAP_APPFONT ( 98 , 100 ) ;
-        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Pos = MAP_APPFONT ( 104 , 100 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         CB_PASSWD_TEXT
     };
@@ -782,7 +782,7 @@ InfoBox REG_WRONG_PASSWORD
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Es wurde ein falsches Passwort eingegeben." ;
+    Message = "Es wurde ein falsches Kennwort eingegeben." ;
     Message [ English ] = "A wrong password was specified." ;
     Message [ dutch ] = "Er werd een verkeerd wachtwoord aangegeven" ;
     Message [ english_us ] = "The password entered is invalid." ;
@@ -809,7 +809,7 @@ InfoBox REG_WRONG_PASSWD_REPEAT
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message = "Das Passwort wurde nicht gesetzt." ;
+    Message = "Das Kennwort wurde nicht gesetzt." ;
     Message [ English ] = "The password has not been set." ;
     Message [ portuguese ] = "A senha não foi especificada." ;
     Message [ english_us ] = "The password has not been set." ;
