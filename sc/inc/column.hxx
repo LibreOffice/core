@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2004-09-07 10:38:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:40:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
+#endif
+#ifndef SC_POSTIT_HXX
+#include "postit.hxx"
 #endif
 
 #ifndef SC_COMPRESSEDARRAY_HXX
