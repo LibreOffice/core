@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvXMLAutoCorrectImport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-09-12 13:17:11 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,14 @@ public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
     SvStorageRef            &rStorage;
-    SvXMLAutoCorrectImport ( SvxAutocorrWordList *pNewAutocorr_List, SvxAutoCorrect &rNewAutoCorrect, SvStorageRef & rNewStorage);
+
+    // #110680#
+    SvXMLAutoCorrectImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SvxAutocorrWordList *pNewAutocorr_List,
+        SvxAutoCorrect &rNewAutoCorrect,
+        SvStorageRef & rNewStorage);
+
     ~SvXMLAutoCorrectImport ( void ) throw ();
 };
 
@@ -145,7 +152,12 @@ protected:
                     ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
     SvStringsISortDtor  &rList;
-    SvXMLExceptionListImport ( SvStringsISortDtor & rNewList );
+
+    // #110680#
+    SvXMLExceptionListImport(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+        SvStringsISortDtor & rNewList );
+
     ~SvXMLExceptionListImport ( void ) throw ();
 };
 
