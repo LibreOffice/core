@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:35:38 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1197,7 +1197,7 @@ TabPage TP_OUTLINE_NUM
         Text = "Zeichenv~orlage" ;
         Text [ ENGLISH ] = "Character style" ;
         Text [ english_us ] = "~Character Style" ;
-        Text [ swedish ] = "~Teckenformatmall" ;
+        Text [ swedish ] = "Teckenf~ormatmall" ;
         Text [ danish ] = "Tegntypografi" ;
         Text [ italian ] = "Modello di carattere" ;
         Text [ spanish ] = "E~stilo de carácter" ;
@@ -1385,7 +1385,7 @@ TabPage TP_OUTLINE_NUM
         Text [ finnish ] = "~Start at" ;
         Text [ danish ] = "Begynd med" ;
         Text [ french ] = "~À partir de" ;
-        Text [ swedish ] = "~Börja vid" ;
+        Text [ swedish ] = "~Börja med" ;
         Text [ dutch ] = "~Begin met" ;
         Text [ spanish ] = "Comen~zar en" ;
         Text [ english_us ] = "~Start at" ;
@@ -1487,7 +1487,7 @@ TabPage TP_OUTLINE_NUM
         TEXT [ finnish ] = "(ei mitään)" ;
         TEXT [ danish ] = "(ingen)" ;
         TEXT [ french ] = "(aucun(e))" ;
-        TEXT [ swedish ] = "(inga)" ;
+        TEXT [ swedish ] = "(ingen)" ;
         TEXT [ dutch ] = "(geen)" ;
         TEXT [ spanish ] = "(ninguna)" ;
         TEXT [ english_us ] = "(none)" ;
