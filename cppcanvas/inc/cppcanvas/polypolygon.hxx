@@ -2,9 +2,9 @@
  *
  *  $RCSfile: polypolygon.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 16:57:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,10 +80,10 @@ namespace basegfx
     class B2DPolyPolygon;
 }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XPolyPolygon2D;
-} } } } }
+} } } }
 
 
 /* Definition of PolyPolygon interface */
@@ -125,7 +125,7 @@ namespace cppcanvas
         virtual double                      getStrokeWidth() const = 0;
 
         virtual ::com::sun::star::uno::Reference<
-            ::drafts::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
+            ::com::sun::star::rendering::XPolyPolygon2D > getUNOPolyPolygon() const = 0;
     };
 
     typedef ::boost::shared_ptr< ::cppcanvas::PolyPolygon > PolyPolygonSharedPtr;
