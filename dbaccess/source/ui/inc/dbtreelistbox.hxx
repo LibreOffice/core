@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreelistbox.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:45:24 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:06:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,13 @@ namespace dbaui
         SvLBoxEntry*    pEntry;
         XubString       aNewText;
     };
+
+    class IEntryFilter
+    {
+    public:
+        virtual bool    includeEntry( SvLBoxEntry* _pEntry ) const = 0;
+    };
+
     //========================================================================
     class IControlActionListener;
     class IController;
@@ -172,7 +179,7 @@ namespace dbaui
         // (normally, the expand handler is called only once)
         void            EnableExpandHandler(SvLBoxEntry* _pEntry);
 
-        SvLBoxEntry*    GetEntryPosByName(const String& aName,SvLBoxEntry* pStart=NULL) const;
+        SvLBoxEntry*    GetEntryPosByName( const String& aName, SvLBoxEntry* pStart = NULL, const IEntryFilter* _pFilter = NULL ) const;
         virtual void    RequestingChilds( SvLBoxEntry* pParent );
         virtual void    SelectHdl();
         virtual void    DeselectHdl();
@@ -200,6 +207,7 @@ namespace dbaui
     protected:
         virtual void        MouseButtonDown( const MouseEvent& rMEvt );
         virtual void        Command( const CommandEvent& rCEvt );
+        virtual void        RequestHelp( const HelpEvent& rHEvt );
 
         // DragSourceHelper overridables
         virtual void        StartDrag( sal_Int8 nAction, const Point& rPosPixel );
