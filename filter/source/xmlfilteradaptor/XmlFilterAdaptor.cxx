@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XmlFilterAdaptor.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aidan $ $Date: 2002-04-10 13:49:48 $
+ *  last change: $Author: aidan $ $Date: 2002-04-26 12:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,9 @@
 #ifndef _COM_SUN_STAR_XML_SAX_XPARSER_HPP_
 #include <com/sun/star/xml/sax/XParser.hpp>
 #endif
-#ifndef _COM_SUN_STAR_DOCUMENTCONVERSION_XCONVERTERBRIDGE_HPP_
-//#include <com/sun/star/documentconversion/XConverterBridge.hpp>
-#include "XConverterBridge.hpp"
+#ifndef _COM_SUN_STAR_DOCUMENT_XFILTERADAPTER_HPP_
+#include <com/sun/star/document/XFilterAdapter.hpp>
+//#include "XConverterBridge.hpp"
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCONFIGMANAGER_HPP_
 #include <com/sun/star/frame/XConfigManager.hpp>
@@ -216,10 +216,10 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     fprintf(stderr, "now creating the ConverterBridge instance\n");
     
 
-    Reference< com::sun::star::documentconversion::XConverterBridge > xConverter;
+    Reference< com::sun::star::document::XFilterAdapter > xConverter;
     
     try {
-      xConverter = Reference< com::sun::star::documentconversion::XConverterBridge > ( xConvBridge, UNO_QUERY );
+      xConverter = Reference< com::sun::star::document::XFilterAdapter > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e)
       {
@@ -341,15 +341,17 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     xConvBridge = mxMSF->createInstance(
                         udConvertClass );
     if(! xConvBridge.is()){
-      fprintf (stderr, "XMLReader::Read: com.sun.star.documentconversion.ConverterBridge service missing\n" );
+      //fprintf (stderr, "XMLReader::Read: com.sun.star.document.ConverterBridge service missing\n" );
+       fprintf (stderr, "XMLReader::Read: %s service missing\n",::rtl::OUStringToOString( 
+                msUserData[0], RTL_TEXTENCODING_ASCII_US).getStr() );
       return sal_False;
     }
         fprintf(stderr, "now creating the xConverter instance\n");
  
-    Reference< com::sun::star::documentconversion::XConverterBridge > xConverter;
+    Reference< com::sun::star::document::XFilterAdapter > xConverter;
     
     try {
-      xConverter = Reference< com::sun::star::documentconversion::XConverterBridge > ( xConvBridge, UNO_QUERY );
+      xConverter = Reference< com::sun::star::document::XFilterAdapter > ( xConvBridge, UNO_QUERY );
     }
     catch( Exception& e){
       fprintf(stderr, "Fell into the catch block!: %s\n",::rtl::OUStringToOString( 
