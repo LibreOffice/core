@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-05 21:13:23 $
+ *  last change: $Author: kz $ $Date: 2002-02-08 21:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1868,7 +1868,7 @@ String STR_DESC_LINESTYLE
     Text [ french ] = "Veuillez saisir un nom pour le nouveau style de ligne :" ;
     Text [ swedish ] = "Mata in namnet för den nya linjestilen här:" ;
     Text [ dutch ] = "Geef het nieuwe lijntype een naam:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para el nuevo estilo de línea:" ;
+    Text [ spanish ] = "Introduzca aquí un nombre para el nuevo estilo de línea:" ;
     Text [ english_us ] = "Please enter a name for the new line style:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨ä¸ºè¿™ä¸ªæ–°çš„çº¿æ¡å¼æ ·è¾“å…¥ä¸€ä¸ªåç§°ï¼š";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî ñòèëÿ ëèíèè:";
@@ -3611,7 +3611,7 @@ String STR_DESC_LINEEND
     Text [ french ] = "Veuillez saisir un nom pour la nouvelle extrémité :" ;
     Text [ swedish ] = "Ange ett namn för det nya linjeslutet:" ;
     Text [ dutch ] = "Typ een naam voor het nieuwe lijnuiteinde:" ;
-    Text [ spanish ] = "Inserte aquí el nombre para el final de línea nuevo:" ;
+    Text [ spanish ] = "Introduzca aquí un nombre para el final de línea nuevo:" ;
     Text [ english_us ] = "Please enter a name for the new arrowhead:" ;
     Text[ chinese_simplified ] = "è¯·æ‚¨ä¸ºè¿™ä¸ªæ–°çº¿æ¡ç®­å¤´è¾“å…¥ä¸€ä¸ªåç§°ï¼š";
     Text[ russian ] = "Ââåäèòå, ïîæàëóéñòà, èìÿ äëÿ íîâîãî êîíöà ëèíèè :";
@@ -5267,7 +5267,7 @@ String STR_SAVE_PACKED_DOCUMENT
     Text[ spanish ] = "Comprimir documento";
     Text[ italian ] = "Comprimi documento";
     Text[ danish ] = "Pack document";
-    Text[ swedish ] = "Komprimera document";
+    Text[ swedish ] = "Komprimera dokument";
     Text[ polish ] = "Zapakuj dokument";
     Text[ portuguese_brazilian ] = "Pack document";
     Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®åœ§ç¸®";
@@ -5771,7 +5771,7 @@ ModalDialog RID_UNDO_DELETE_WARNING
         Text[ greek ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ dutch ] = "Met deze opdracht wist u de lijst met handelingen die \nongedaan kunnen worden gemaakt. Tot nu toe aangebrachte \\wijzigingen aan het document blijven behouden en kunnen niet \nmeer ongedaan worden gemaakt. Wilt u doorgaan \nen het nieuwe pagina-opmaakprofiel toewijzen?";
         Text[ french ] = "Cette action supprime la liste des opérations pouvant\nêtre annulées. Ceci n'affecte pas les modifications\napportées au document, mais empêche de les annuler.\nVoulez-vous poursuivre et assigner\nle nouveau style de page ?";
-        Text[ spanish ] = "Este comando elimina la lista de los pasos que se\ndeban deshacer. Se conservarán las modificaciones\nrealizadas hasta ahora en el documento, pero no podrán\ndeshacerse más. Desea continuar y asignar el nuevo\nestilo de página.";
+        Text[ spanish ] = "Este comando elimina la lista de los pasos que se\npuedan deshacer. En el documento se conservarán las modificaciones\nrealizadas hasta ahora, pero no se podrán\ndeshacer más. ¿Desea continuar y asignar el nuevo\nestilo de página?";
         Text[ finnish ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
         Text[ italian ] = "Quest'azione elimina l'elenco delle fasi di lavoro da annullare./nLa modifiche effettuate fino a questo momento rimangono inalterate/nma non si possono più annullare. Volete proseguire/ne assegnare il nuovo modello di pagina?";
         Text[ danish ] = "This action will delete the list of undoable actions.\nChanges on the document made up to now are maintained,\nbut cannot be taken back. Do You want to continue and\nassign the new page layout?";
@@ -6347,7 +6347,7 @@ String STR_CLPBRD_CLEAR
     Text [ finnish ] = "Leikepöydällä on paljon tietoja.\nHaluatko säilyttää leikepöydän tiedot muita sovelluksia varten?" ;
     Text [ danish ] = "Du har placeret en stor mængde data i udklipsholderen.\nSkal udklipholderens indhold være tilgængeligt for andre applikationer?" ;
     Text [ french ] = "Vous avez déposé un grand nombre de données dans le presse-papiers. \nSouhaitez-vous en conserver le contenu pour une utilisation sous une autre application ?" ;
-    Text [ swedish ] = "Du har stora datamängder i urklippet.\nSkall innehållet i urklippet hållas tillgängligt för andra tillämpningar?" ;
+    Text [ swedish ] = "Du har stora datamängder i urklippet.\nSka innehållet i urklippet hållas tillgängligt för andra tillämpningar?" ;
     Text [ dutch ] = "U hebt een groot aantal gegevens op het Klembord geplaatst.\nWilt u dat de inhoud van het Klembord beschikbaar blijft voor andere toepassingen?" ;
     Text [ spanish ] = "Ha copiado una gran cantidad de datos al portapapeles.\n¿Desea que el contenido del portapapeles esté disponible para otras aplicaciones?" ;
     Text[ chinese_simplified ] = "åœ¨å‰ªè´´æ¿å†…å­˜æœ‰ä¸€ä¸ªè¾ƒå¤§çš„æ•°æ®ã€‚\næ‚¨è¦è®©è¿™ä¸ªæ•°æ®ä¹Ÿæä¾›ç»™å…¶ä»–åº”ç”¨ç¨‹åºä½¿ç”¨ï¼Ÿ";
