@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 18:54:00 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,7 +684,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "Dodaj odstκpy miκdzy akapitami a tabelami w bieΏΉcym dokumencie";
         Text[ portuguese_brazilian ] = "Afastar parαgrafos das tabelas no documento atual";
         Text[ japanese ] = "ηΎε¨γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®ζ®µθ½ι–“ι”γ¨θ΅¨ι–“ι”γ‚’ε η®—γ™γ‚‹(~S)";
-        Text[ chinese_simplified ] = "ε½“ε‰ζ–‡ζ΅£δΉ‹δΈ­ζ‰€ζ‰ζ®µθ½η„εθ΅¨ζ Όη„ι—΄ι”η›Έε (ε¨ε½“ε‰η„ζ–‡ζ΅£ε†…)(~S)";
+        Text[ chinese_simplified ] = "ε¨ζ®µθ½ε’θ΅¨ζ ΌδΉ‹ι—΄ζ·»ε η©Ίζ ΌοΌε½“ε‰ζ–‡ζ΅£δΈ­οΌ‰";
         Text[ chinese_traditional ] = "ε·²ι–‹ε•“ζ–‡δ»¶η„ζ‰€ζ‰ζ®µθ½ι–“ι”εθ΅¨ζ Όι–“ι”η›Έε (~S)";
         Text[ arabic ] = "ΕΦΗέΙ γΣΗέΙ ΗαΚΘΗΪΟ Εαμ ία έήΡΗΚ ζΜΟΗζα ΗαγΣΚδΟ ΗαΝΗαν";
         Text[ greek ] = "Άθρο~ισμα όλων των αποστάσεων των παραγράφων και των πινάκων στο τρέχον έγγραφο";
@@ -721,7 +721,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Adicionar espaηo de parαgrafos e tabelas no topo das pαginas";
         Text[ japanese ] = "ηΎε¨γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γƒγƒΌγ‚Έε§‹γ‚γ«ζ®µθ½ι–“ι”γ¨θ΅¨ι–“ι”γ‚’ε η®—γ™γ‚‹(~P)";
         Text[ korean ] = "ν„μ¬ λ¬Έμ„μ νμ΄μ§€ μ‹μ‘ λ¶€λ¶„μΌλ΅ λ‹¨λ½κ³Ό ν‘μ κ°„κ²©μ„ ν•©μ‚°(~P)";
-        Text[ chinese_simplified ] = "ε¨ι΅µι¦–δ½η½®ε ε…¥ζ®µθ½ε’θ΅¨ζ Όη„ι—΄ι”(ε¨ε½“ε‰η„ζ–‡ζ΅£ε†…)(~P)";
+        Text[ chinese_simplified ] = "ε¨ι΅µι¦–δ½η½®ε ε…¥ζ®µθ½ε’θ΅¨ζ Όη„ι—΄ι”οΌε½“ε‰ζ–‡ζ΅£δΈ­οΌ‰";
         Text[ chinese_traditional ] = "ε¨ι ι¦–δ½η½®ε ε…¥ζ®µθ½θ‡θ΅¨ζ ΌδΉ‹ι–“η„ι–“ι” (ε¨η›®ε‰η„ζ–‡δ»¶δΉ‹ε†…)(~P)";
         Text[ arabic ] = "ΕΦΗέΙ ΗαέήΡΙ ζΚΘΗΪΟ ΗαΜΟΗζα Εαμ ΘΟΗνΙ ΗαΥέΝΗΚ";
         Text[ turkish ] = "Sayfanύn baώύna paragraf ve tablo boώluπu ekle";
@@ -756,7 +756,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese_brazilian ] = "Alinhar posiηγo da tabulaηγo";
         Text[ japanese ] = "ηΎε¨γ®γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ®γ‚Ώγƒ–δ½η½®γ‚’ζƒγγ‚‹(~B)";
         Text[ korean ] = "ν„μ¬ λ¬Έμ„μ—μ„ νƒ­ μ„μΉλ¥Ό λ§μ¶¤(~B)";
-        Text[ chinese_simplified ] = "θ°ƒζ•΄ε¶θ΅¨ι”®δ½η½®(ε¨ε½“ε‰η„ζ–‡ζ΅£ε†…)(~B)";
+        Text[ chinese_simplified ] = "θ°ƒζ•΄ε¶θ΅¨εζ­Άδ½η½®οΌε½“ε‰ζ–‡ζ΅£δΈ­οΌ‰";
         Text[ chinese_traditional ] = "θªΏζ•΄ε®δ½ιµδ½η½® (ε¨η›®ε‰η„ζ–‡δ»¶)(~B)";
         Text[ turkish ] = "Sekme noktasύnύ hizala";
         Text[ arabic ] = "Align ta~b stop position (in current document)";
