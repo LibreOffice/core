@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:06:29 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 12:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -336,6 +336,17 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
     rBindings.Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
 
+    // pseudo slots for Format menu
+    rBindings.Invalidate( SID_ALIGN_ANY_HDEFAULT );
+    rBindings.Invalidate( SID_ALIGN_ANY_LEFT );
+    rBindings.Invalidate( SID_ALIGN_ANY_HCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
+    rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
+    rBindings.Invalidate( SID_ALIGN_ANY_VDEFAULT );
+    rBindings.Invalidate( SID_ALIGN_ANY_TOP );
+    rBindings.Invalidate( SID_ALIGN_ANY_VCENTER );
+    rBindings.Invalidate( SID_ALIGN_ANY_BOTTOM );
+
 //  rBindings.Invalidate( SID_RANGE_VALUE );
 //  rBindings.Invalidate( SID_RANGE_FORMULA );
 }
@@ -465,6 +476,7 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_DEL_COLBRK );
     rBindings.Invalidate( FID_MERGE_ON );
     rBindings.Invalidate( FID_MERGE_OFF );
+    rBindings.Invalidate( FID_MERGE_TOGGLE );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
     rBindings.Invalidate( SID_UNFILTER );
 //  rBindings.Invalidate( SID_IMPORT_DATA );        // jetzt wieder immer moeglich
