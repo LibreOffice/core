@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-20 07:10:12 $
+ *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #endif
+#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
+#include "com/sun/star/task/InteractionClassification.hpp"
+#endif
 #ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP_
 #include "com/sun/star/task/PasswordRequestMode.hpp"
 #endif
@@ -95,8 +98,19 @@
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
+#ifndef _ERRCODE_HXX
+#include "tools/errcode.hxx"
+#endif
 #ifndef _SOLAR_H
 #include "tools/solar.h"
+#endif
+#ifndef _SV_WINTYPES_HXX
+#include "vcl/wintypes.hxx"
+#endif
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
 #endif
 
 namespace com { namespace sun { namespace star {
@@ -126,7 +140,7 @@ class UUIInteractionHandler:
                                   com::sun::star::task::XInteractionHandler >
 {
 public:
-    static sal_Char const m_aImplementationName[];
+    static char const m_aImplementationName[];
 
     static com::sun::star::uno::Sequence< rtl::OUString >
     getSupportedServiceNames_static();
@@ -140,11 +154,11 @@ public:
         SAL_THROW((com::sun::star::uno::Exception));
 
 private:
-    osl::Mutex m_aMutex;
+    osl::Mutex m_aPropertyMutex;
     com::sun::star::uno::Reference<
             com::sun::star::lang::XMultiServiceFactory >
         m_xServiceFactory;
-    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aArguments;
+    com::sun::star::uno::Sequence< com::sun::star::uno::Any > m_aProperties;
 
     UUIInteractionHandler(UUIInteractionHandler &); // not implemented
     void operator =(UUIInteractionHandler); // not implemented
@@ -179,21 +193,15 @@ private:
                rRequest)
         throw (com::sun::star::uno::RuntimeException);
 
-    Window * getParentArgument() SAL_THROW(());
+    Window * getParentProperty() SAL_THROW(());
 
-    bool getContextArgument(rtl::OUString * pContext) SAL_THROW(());
+    rtl::OUString getContextProperty() SAL_THROW(());
 
     bool
     initPasswordContainer(com::sun::star::uno::Reference<
                                   com::sun::star::task::XPasswordContainer > *
                               pContainer)
         const SAL_THROW(());
-
-    USHORT executeErrorDialog(ULONG nID,
-                              USHORT nMask,
-                              bool bOverrideContext,
-                              rtl::OUString const & rContext)
-        SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void executeLoginDialog(LoginErrorInfo & rInfo,
                             rtl::OUString const & rRealm)
@@ -205,6 +213,14 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void executeCookieDialog(CntHTTPCookieRequest & rRequest)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    USHORT
+    executeErrorDialog(com::sun::star::task::InteractionClassification
+                           eClassification,
+                       rtl::OUString const & rContext,
+                       rtl::OUString const & rMessage,
+                       WinBits nButtonMask)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
@@ -228,6 +244,20 @@ private:
     void
     handleCookiesRequest(
         com::sun::star::ucb::HandleCookiesRequest const & rRequest,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleErrorRequest(
+        com::sun::star::task::InteractionClassification eClassification,
+        rtl::OUString const & rContext,
+            //TODO! only InteractiveFileIOException needs to override the
+            // context (otherwise, it could be removed from this interface)
+        ErrCode nErrorCode,
+        std::vector< rtl::OUString > const & rArguments,
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &

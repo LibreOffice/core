@@ -47,7 +47,7 @@
     <type>com.sun.star.lang.XTypeProvider</type>
     <type>com.sun.star.registry.XRegistryKey</type>
     <type>com.sun.star.sync2.BadPartnershipException</type>
-    <type>com.sun.star.task.ClassifiedInteractionRequest</type>
+    <type>com.sun.star.task.InteractionClassification</type>
     <type>com.sun.star.task.NoMasterException</type>
     <type>com.sun.star.task.PasswordRequest</type>
     <type>com.sun.star.task.XInteractionAbort</type>
@@ -60,7 +60,6 @@
     <type>com.sun.star.ucb.AuthenticationRequest</type>
     <type>com.sun.star.ucb.HandleCookiesRequest</type>
     <type>com.sun.star.ucb.InteractiveAugmentedIOException</type>
-    <type>com.sun.star.ucb.InteractiveBadTransferURLException</type>
     <type>com.sun.star.ucb.InteractiveCHAOSException</type>
     <type>com.sun.star.ucb.InteractiveFileIOException</type>
     <type>com.sun.star.ucb.InteractiveNetworkConnectException</type>

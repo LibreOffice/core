@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 05:57:03 $
+ *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,23 +58,17 @@
  *
  *
  ************************************************************************/
-//============================================================================
-//
-//  Miscellaneous Resources
-//
-// $Author: kz $ $Date: 2001-08-24 05:57:03 $ $Revision: 1.29 $
-//============================================================================
 
 #define __RSC
 
 #ifndef UUI_IDS_HRC
-#include <ids.hrc>
+#include "ids.hrc"
 #endif
 
 String RID_KEEP_PASSWORD
 {
     Text = "Passwort bis Applikationsende ~merken";
-    Text[ english ] = "~Remember password until application ends";
+    Text[english] = "~Remember password until application ends";
     Text[ arabic ] = "КРЯшС ЯбгЙ ЗбУС НКм деЗнЙ МбУЙ ЗбЪгб";
     Text[ chinese_simplified ] = "з»“жќџзЁ‹еєЏд№‹е‰ЌдёЂз›ґи®°дЅЏеЇ†з Ѓ(~R)";
     Text[ chinese_simplified ] = "з»“жќџзЁ‹еєЏд№‹е‰ЌдёЂз›ґи®°дЅЏеЇ†з Ѓ(~R)";
@@ -102,7 +96,7 @@ String RID_KEEP_PASSWORD
 String RID_SAVE_PASSWORD
 {
     Text = "Passwort dauerhaft ~speichern";
-    Text[ english ] = "~Save password permanently";
+    Text[english] = "~Save password permanently";
     Text[ arabic ] = "НЭЩ ПЗЖг бЯбгЙ ЗбУС";
     Text[ chinese_simplified ] = "дїќе­еЇ†з Ѓ(~R)";
     Text[ chinese_simplified ] = "дїќе­еЇ†з Ѓ(~R)";
@@ -130,7 +124,7 @@ String RID_SAVE_PASSWORD
 String STR_ERROR_FILEIO
 {
     Text = "Fehler beim Zugriff auf die Datei ($URL1)";
-    Text[ english ] = "Error accessing file ($URL1)";
+    Text[english] = "Error accessing file ($URL1)";
     Text[ arabic ] = "НПЛ ОШГ ГЛдЗБ гНЗжбЙ ЗбжХжб Ебм ЗбгбЭ ($URL1)";
     Text[ chinese_simplified ] = "ењЁиЇ»еЏ–ж–‡д»¶($URL1)ж—¶еЏ‘з”џй”™иЇЇ";
     Text[ chinese_traditional ] = "е­еЏ–жЄ”жЎ€ ($URL1) з™јз”џйЊЇиЄ¤";
@@ -153,39 +147,12 @@ String STR_ERROR_FILEIO
     Text[ finnish ] = "On ilmennyt virhe kдytettдessд tiedostoa ($URL1)";
 };
 
-String STR_ERROR_WRONGMEDIUM
-{
-    Text = "Legen Sie bitte den Datentrдger $$ ein.";
-    Text[ english ] = "Please insert disk $$.";
-    Text[ arabic ] = "ЗбСМЗБ ЕПОЗб ЗбЮСХ $$ .";
-    Text[ chinese_simplified ] = "иЇ·ж‚Ёж”ѕе…ҐиЅЇз› $$гЂ‚";
-    Text[ chinese_traditional ] = "и«‹ж”ѕзЅ®зЈЃз‰‡ $$ гЂ‚";
-    Text[ danish ] = "Indsжt venligst datamediet $$.";
-    Text[ dutch ] = "Leg datamedium in station $$.";
-    Text[ english_us ] = "Please insert data storage medium $$.";
-    Text[ french ] = "Insйrez le mйdia $$.";
-    Text[ greek ] = "Рбсбкблю ейуЬгефе фпн дЯукп $$.";
-    Text[ italian ] = "Inserite il supporto dati $$.";
-    Text[ japanese ] = "еЄ’дЅ“ $$ г‚’е…Ґг‚ЊгЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
-    Text[ korean ] = "лЌ°мќґн„° л§¤мІґ $$мќ„(лҐј) м‚Ѕмћ…н•м‹­м‹њм¤ .";
-    Text[ polish ] = "Wsuс proszк noњnik danych $$.";
-    Text[ portuguese ] = "Introduza o media $$.";
-    Text[ portuguese_brazilian ] = "Please insert disk $$.";
-    Text[ russian ] = "Вставьте, пожалуйста, диск $$.";
-    Text[ spanish ] = "Inserte por favor el medio $$.";
-    Text[ swedish ] = "Lдgg in datamediet $$.";
-    Text[ turkish ] = "Please insert disk $$.";
-    Text[ catalan ] = "Inserte por favor el medio $$.";
-    Text[ finnish ] = "Syцtд tallennusvдline $$.";
-};
-
 Resource RID_UUI_ERRHDL
 {
-    // IOErrorCode_ABORT = 0,
-    String ( ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK )
+    String (ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK)
     {
-        Text = "Die auf $(ARG1) ausgefьhrte Aktion wurde abgebrochen" ;
-        Text [ ENGLISH ] = "The operation executed on $(ARG1) was aborted" ;
+        Text = "Die auf $(ARG1) ausgefьhrte Aktion wurde abgebrochen";
+        Text[english] = "The operation executed on $(ARG1) was aborted";
         Text[ english_us ] = "The operation executed on $(ARG1) was aborted";
         Text[ portuguese ] = "A acзгo executada em $(ARG1) foi cancelada.";
         Text[ russian ] = "Выполняемая на $(ARG1) операция прервана";
@@ -207,11 +174,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation executed on $(ARG1) was aborted";
         Text[ catalan ] = "The operation executed on $(ARG1) was aborted";
     };
-    // IOErrorCode_ACCESS_DENIED = 1,
-    String ( ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK)
     {
-        Text = "Der Zugriff auf $(ARG1) wurde verweigert" ;
-        Text [ ENGLISH ] = "The access to $(ARG1) was denied" ;
+        Text = "Der Zugriff auf $(ARG1) wurde verweigert";
+        Text[english] = "The access to $(ARG1) was denied";
         Text[ english_us ] = "Access to $(ARG1) was denied";
         Text[ portuguese ] = "Acesso a $(ARG1) recusado.";
         Text[ russian ] = "Доступ к $(ARG1) запрещен";
@@ -233,11 +200,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The access to $(ARG1) was denied";
         Text[ catalan ] = "The access to $(ARG1) was denied";
     };
-    // IOErrorCode_ALREADY_EXISTING = 2,
-    String ( ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) existiert bereits" ;
-        Text [ ENGLISH ] = "$(ARG1) does already exist" ;
+        Text = "$(ARG1) existiert bereits";
+        Text[english] = "$(ARG1) does already exist";
         Text[ english_us ] = "$(ARG1) already exists";
         Text[ portuguese ] = "$(ARG1) jб existe.";
         Text[ russian ] = "$(ARG1) уже существует";
@@ -259,11 +226,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) does already exist";
         Text[ catalan ] = "$(ARG1) does already exist";
     };
-    // IOErrorCode_BAD_CRC = 3,
-    String ( ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
     {
-        Text = "Die Daten von $(ARG1) haben eine inkorrekte Prьfsumme" ;
-        Text [ english ] = "The data of $(ARG1) have an incorrect checksum" ;
+        Text = "Die Daten von $(ARG1) haben eine inkorrekte Prьfsumme";
+        Text[english] = "The data of $(ARG1) have an incorrect checksum";
         Text[ english_us ] = "The data from $(ARG1) has an incorrect checksum";
         Text[ portuguese ] = "A soma do controlo dos dados de $(ARG1) estб incorrecta.";
         Text[ russian ] = "Данные $(ARG1) содержат неправильную контрольную сумму";
@@ -285,12 +252,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The data of $(ARG1) have an incorrect checksum";
         Text[ catalan ] = "The data of $(ARG1) have an incorrect checksum";
     };
-    // IOErrorCode_CANT_CREATE = 4,
-    String ( ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK)
     {
-        // !!! $(ARG1) can be empty!
-        Text = "Das Objekt $(ARG1) kann im Verzeichnis $(ARG2) nicht angelegt werden" ;
-        Text [ ENGLISH ] = "The object $(ARG1) could not be created in directory $(ARG2)" ;
+        Text = "Das Objekt $(ARG1) kann im Verzeichnis $(ARG2) nicht angelegt werden";
+        Text[english] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ english_us ] = "The object $(ARG1) cannot be created in directory $(ARG2)";
         Text[ portuguese ] = "Impossнvel criar o objecto $(ARG1) no directуrio $(ARG2).";
         Text[ russian ] = "Создать объект $(ARG1) в папке $(ARG2) невозможно";
@@ -312,11 +278,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The object $(ARG1) could not be created in directory $(ARG2)";
         Text[ catalan ] = "The object $(ARG1) could not be created in directory $(ARG2)";
     };
-    // IOErrorCode_CANT_READ = 5,
-    String ( ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK)
     {
-        Text = "Daten von $(ARG1) konnten nicht gelesen werden" ;
-        Text [ ENGLISH ] = "Data of $(ARG1) could not be read" ;
+        Text = "Daten von $(ARG1) konnten nicht gelesen werden";
+        Text[english] = "Data of $(ARG1) could not be read";
         Text[ english_us ] = "Data of $(ARG1) could not be read";
         Text[ portuguese ] = "Foi impossнvel ler os dados de $(ARG1).";
         Text[ russian ] = "Прочитать данные $(ARG1) невозможно";
@@ -338,11 +304,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Data of $(ARG1) could not be read";
         Text[ catalan ] = "Data of $(ARG1) could not be read";
     };
-    // IOErrorCode_CANT_SEEK = 6,
-    String ( ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK)
     {
-        Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgefьhrt werden" ;
-        Text [ ENGLISH ] = "The seek operation on $(ARG1) could not be completed" ;
+        Text = "Die Seek-Operation auf $(ARG1) konnte nicht ausgefьhrt werden";
+        Text[english] = "The seek operation on $(ARG1) could not be completed";
         Text[ english_us ] = "The seek operation on $(ARG1) could not be performed";
         Text[ portuguese ] = "Foi impossнvel executar a operaзгo seek em $(ARG1).";
         Text[ russian ] = "Выполнить операцию seek на $(ARG1) невозможно";
@@ -364,11 +330,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The seek operation on $(ARG1) could not be completed";
         Text[ catalan ] = "The seek operation on $(ARG1) could not be completed";
     };
-    // IOErrorCode_CANT_TELL = 7,
-    String ( ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK)
     {
-        Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgefьhrt werden" ;
-        Text [ ENGLISH ] = "The tell operation on $(ARG1) could not be completed" ;
+        Text = "Die Tell-Operation auf $(ARG1) konnte nicht ausgefьhrt werden";
+        Text[english] = "The tell operation on $(ARG1) could not be completed";
         Text[ english_us ] = "The tell operation on $(ARG1) could not be performed";
         Text[ portuguese ] = "Foi impossнvel executar a operaзгo tell em $(ARG1).";
         Text[ russian ] = "Выполнить операцию tell на $(ARG1) невозможно";
@@ -390,11 +356,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The tell operation on $(ARG1) could not be completed";
         Text[ catalan ] = "The tell operation on $(ARG1) could not be completed";
     };
-    // IOErrorCode_CANT_WRITE = 8,
-    String ( ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK)
     {
-        Text = "Daten fьr $(ARG1) konnten nicht geschrieben werden" ;
-        Text [ ENGLISH ] = "Data for $(ARG1) could not be written" ;
+        Text = "Daten fьr $(ARG1) konnten nicht geschrieben werden";
+        Text[english] = "Data for $(ARG1) could not be written";
         Text[ english_us ] = "Data for $(ARG1) could not be written";
         Text[ portuguese ] = "Foi impossнvel escrever os dados para $(ARG1).";
         Text[ russian ] = "Написать данные для $(ARG1) невозможно";
@@ -416,11 +382,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Data for $(ARG1) could not be written";
         Text[ catalan ] = "Data for $(ARG1) could not be written";
     };
-    // IOErrorCode_CURRENT_DIRECTORY = 9,
-    String ( ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK)
     {
-        Text = "Aktion unmцglich: $(ARG1) ist das aktuelle Verzeichnis" ;
-        Text [ english ] = "Action not allowed: $(ARG1) is the current directory" ;
+        Text = "Aktion unmцglich: $(ARG1) ist das aktuelle Verzeichnis";
+        Text[english] = "Action not allowed: $(ARG1) is the current directory";
         Text[ english_us ] = "Action impossible: $(ARG1) is the current directory";
         Text[ portuguese ] = "Acзгo impossнvel: $(ARG1) й o directуrio activo.";
         Text[ russian ] = "Данная операция невозможна: $(ARG1) является текущей папкой";
@@ -442,11 +408,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Action not allowed: $(ARG1) is the current directory";
         Text[ catalan ] = "Action not allowed: $(ARG1) is the current directory";
     };
-    // IOErrorCode_DEVICE_NOT_READY = 10,
-    String ( ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) ist nicht bereit" ;
-        Text [ english ] = "$(ARG1) is not ready" ;
+        Text = "$(ARG1) ist nicht bereit";
+        Text[english] = "$(ARG1) is not ready";
         Text[ english_us ] = "The device (drive) $(ARG1) is not ready";
         Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) nгo estб preparado.";
         Text[ russian ] = "Устройство (диск) $(ARG1) не готово";
@@ -468,11 +434,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The Device (drive) $(ARG1) is not ready";
         Text[ catalan ] = "The Device (drive) $(ARG1) is not ready";
     };
-    // IOErrorCode_DIFFERENT_DEVICES = 11,
-    String ( ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK)
     {
-        Text = "Aktion unmцglich: $(ARG1) und $(ARG2) sind verschiedene Gerдte (Laufwerke)" ;
-        Text [ english ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)" ;
+        Text = "Aktion unmцglich: $(ARG1) und $(ARG2) sind verschiedene Gerдte (Laufwerke)";
+        Text[english] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ english_us ] = "Action impossible: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ portuguese ] = "Acзгo impossнvel: $(ARG1) e $(ARG2) sгo dispositivos diferentes (unidades).";
         Text[ russian ] = "Данная операция невозможна: $(ARG1) и $(ARG2) являются различными устройствами (дисками)";
@@ -494,11 +460,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
         Text[ catalan ] = "Action not allowed: $(ARG1) and $(ARG2) are different devices (drives)";
     };
-    // IOErrorCode_GENERAL = 12,
-    String ( ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK)
     {
-        Text = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(ARG1)" ;
-        Text [ ENGLISH ] = "General input/output error while accessing $(ARG1)" ;
+        Text = "Allgemeiner Ein-/Ausgabefehler beim Zugriff auf $(ARG1)";
+        Text[english] = "General input/output error while accessing $(ARG1)";
         Text[ english_us ] = "General input/output error while accessing $(ARG1)";
         Text[ portuguese ] = "Erro geral de acesso/saнda ao entrar em $(ARG1).";
         Text[ russian ] = "Общая ошибка ввода/вывода при доступе к $(ARG1)";
@@ -520,11 +486,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "General input/output error while accessing $(ARG1)";
         Text[ catalan ] = "General input/output error while accessing $(ARG1)";
     };
-    // IOErrorCode_INVALID_ACCESS = 13,
-    String ( ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK)
     {
-        Text = "Es wurde versucht, in ungьltiger Weise auf $(ARG1) zuzugreifen" ;
-        Text [ ENGLISH ] = "An invalid attempt was made to access $(ARG1)" ;
+        Text = "Es wurde versucht, in ungьltiger Weise auf $(ARG1) zuzugreifen";
+        Text[english] = "An invalid attempt was made to access $(ARG1)";
         Text[ english_us ] = "An attempt was made to access $(ARG1) in an invalid way";
         Text[ portuguese ] = "Tentativa de acesso a $(ARG1) nгo vбlida.";
         Text[ russian ] = "Неправильный доступ к $(ARG1)";
@@ -546,11 +512,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "An invalid attempt was made to access $(ARG1)";
         Text[ catalan ] = "An invalid attempt was made to access $(ARG1)";
     };
-    // IOErrorCode_INVALID_CHARACTER = 14,
-    String ( ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) enthдlt unzulдssige Zeichen" ;
-        Text [ ENGLISH ] = "$(ARG1) contains invalid characters" ;
+        Text = "$(ARG1) enthдlt unzulдssige Zeichen";
+        Text[english] = "$(ARG1) contains invalid characters";
         Text[ english_us ] = "$(ARG1) contains invalid characters";
         Text[ portuguese ] = "$(ARG1) contйm caracteres interditos.";
         Text[ russian ] = "$(ARG1) содержит недопустимые знаки";
@@ -572,11 +538,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) contains invalid characters";
         Text[ catalan ] = "$(ARG1) contains invalid characters";
     };
-    // IOErrorCode_INVALID_DEVICE = 15,
-    String ( ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK)
     {
-        Text = "Das Gerдt (Laufwerk) $(ARG1) ist ungьltig" ;
-        Text [ ENGLISH ] = "The device (drive) $(ARG1) is invalid" ;
+        Text = "Das Gerдt (Laufwerk) $(ARG1) ist ungьltig";
+        Text[english] = "The device (drive) $(ARG1) is invalid";
         Text[ english_us ] = "The device (drive) $(ARG1) is invalid";
         Text[ portuguese ] = "O dispositivo (unidade) $(ARG1) nгo й vбlido.";
         Text[ russian ] = "Устройство (диск) $(ARG1) недоступно";
@@ -598,11 +564,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The device (drive) $(ARG1) is invalid";
         Text[ catalan ] = "The device (drive) $(ARG1) is invalid";
     };
-    // IOErrorCode_INVALID_LENGTH = 16,
-    String ( ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK)
     {
-        Text = "Die Daten von $(ARG1) haben eine ungьltige Lдnge" ;
-        Text [ english ] = "The data of $(ARG1) have an invalid length" ;
+        Text = "Die Daten von $(ARG1) haben eine ungьltige Lдnge";
+        Text[english] = "The data of $(ARG1) have an invalid length";
         Text[ english_us ] = "The data from $(ARG1) has an invalid length";
         Text[ portuguese ] = "Os dados de $(ARG1) tкm um comprimento nгo vбlido.";
         Text[ russian ] = "У данных $(ARG1) недопустимая длина";
@@ -624,11 +590,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The data of $(ARG1) have an invalid length";
         Text[ catalan ] = "The data of $(ARG1) have an invalid length";
     };
-    // IOErrorCode_INVALID_PARAMETER = 17,
-    String ( ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK)
     {
-        Text = "Die Operation auf $(ARG1) wurde mit einem ungьltigen Parameter gestartet" ;
-        Text [ ENGLISH ] = "The operation on $(ARG1) was started with an invalid parameter" ;
+        Text = "Die Operation auf $(ARG1) wurde mit einem ungьltigen Parameter gestartet";
+        Text[english] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ english_us ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ portuguese ] = "A operaзгo em $(ARG1) foi iniciada com um parвmetro nгo vбlido.";
         Text[ russian ] = "Операция на $(ARG1) запущена при помощи недопустимого параметра";
@@ -650,11 +616,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation on $(ARG1) was started with an invalid parameter";
         Text[ catalan ] = "The operation on $(ARG1) was started with an invalid parameter";
     };
-    // IOErrorCode_IS_WILDCARD = 18,
-    String ( ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK)
     {
         Text = "Die Operation kann nicht ausgefьhrt werden, weil $(ARG1) Wildcards enthдlt";
-        Text [ ENGLISH ] = "The operation cannot be run, because $(ARG1) contains wildcards" ;
+        Text[english] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ english_us ] = "The operation cannot be performed because $(ARG1) contains wildcards";
         Text[ portuguese ] = "Impossнvel executar a operaзгo, porque $(ARG1) contйm wildcards.";
         Text[ russian ] = "Из-за содержащихся в $(ARG1) подстановочных знаков выполнить операцию невозможно";
@@ -676,11 +642,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation cannot be run, because $(ARG1) contains wildcards";
         Text[ catalan ] = "The operation cannot be run, because $(ARG1) contains wildcards";
     };
-    // IOErrorCode_LOCKING_VIOLATION = 19,
-    String ( ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK)
     {
-        Text = "Fehler beim gemeinsamen Zugriff auf $(ARG1)" ;
-        Text [ ENGLISH ] = "Sharing violation while accessing $(ARG1)" ;
+        Text = "Fehler beim gemeinsamen Zugriff auf $(ARG1)";
+        Text[english] = "Sharing violation while accessing $(ARG1)";
         Text[ english_us ] = "Error during shared access to $(ARG1).";
         Text[ portuguese ] = "Erro ao tentar acesso partilhado a $(ARG1).";
         Text[ russian ] = "Ошибка при коллективном доступе к $(ARG1)";
@@ -702,11 +668,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Sharing violation while accessing $(ARG1)";
         Text[ catalan ] = "Sharing violation while accessing $(ARG1)";
     };
-    // IOErrorCode_MISPLACED_CHARACTER = 20,
-    String ( ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) enthдlt Zeichen an unzulдssiger Position" ;
-        Text [ ENGLISH ] = "$(ARG1) contains misplaced characters" ;
+        Text = "$(ARG1) enthдlt Zeichen an unzulдssiger Position";
+        Text[english] = "$(ARG1) contains misplaced characters";
         Text[ english_us ] = "$(ARG1) contains misplaced characters";
         Text[ portuguese ] = "$(ARG1) contйm caracteres mal posicionados.";
         Text[ russian ] = "$(ARG1) содержит знаки в недопустимом месте";
@@ -728,11 +694,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) contains misplaced characters";
         Text[ catalan ] = "$(ARG1) contains misplaced characters";
     };
-    // IOErrorCode_NAME_TOO_LONG = 21,
-    String ( ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK)
     {
-        Text = "Der Name $(ARG1) enthдlt zu viele Zeichen" ;
-        Text [ ENGLISH ] = "The name $(ARG1) contains to many characters" ;
+        Text = "Der Name $(ARG1) enthдlt zu viele Zeichen";
+        Text[english] = "The name $(ARG1) contains to many characters";
         Text[ english_us ] = "The name $(ARG1) contains too many characters";
         Text[ portuguese ] = "O nome $(ARG1) contйm demasiados caracteres.";
         Text[ russian ] = "Имя $(ARG1) содержит слишком много знаков";
@@ -754,11 +720,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The name $(ARG1) contains to many characters";
         Text[ catalan ] = "The name $(ARG1) contains to many characters";
     };
-    // IOErrorCode_NOT_EXISTING = 22,
-    String ( ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) existiert nicht" ;
-        Text [ ENGLISH ] = "$(ARG1) does not exist" ;
+        Text = "$(ARG1) existiert nicht";
+        Text[english] = "$(ARG1) does not exist";
         Text[ english_us ] = "$(ARG1) does not exist";
         Text[ portuguese ] = "$(ARG1) nгo existe.";
         Text[ russian ] = "$(ARG1) не существует";
@@ -780,11 +746,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) does not exist";
         Text[ catalan ] = "$(ARG1) does not exist";
     };
-    // IOErrorCode_NOT_EXISTING_PATH = 23,
-    String ( ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK)
     {
-        Text = "Der Pfad $(ARG1) existiert nicht" ;
-        Text [ ENGLISH ] = "The path $(ARG1) does not exist" ;
+        Text = "Der Pfad $(ARG1) existiert nicht";
+        Text[english] = "The path $(ARG1) does not exist";
         Text[ english_us ] = "The path $(ARG1) does not exist";
         Text[ portuguese ] = "O atalho $(ARG1) nгo existe.";
         Text[ russian ] = "Путь к $(ARG1) не существует";
@@ -806,11 +772,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The path $(ARG1) does not exist";
         Text[ catalan ] = "The path $(ARG1) does not exist";
     };
-    // IOErrorCode_NOT_SUPPORTED = 24,
-    String ( ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK)
     {
-        Text = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstьtzt" ;
-        Text [ ENGLISH ] = "The operation on $(ARG1) is not supported on this operating system" ;
+        Text = "Die Operation auf $(ARG1) wird auf dem vorliegenden Betriebssystem nicht unterstьtzt";
+        Text[english] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ english_us ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ portuguese ] = "O actual sistema operativo nгo tem suporte para a operaзгo em $(ARG1).";
         Text[ russian ] = "Операция на $(ARG1) данной операционной системой не поддерживается";
@@ -832,11 +798,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation on $(ARG1) is not supported on this operating system";
         Text[ catalan ] = "The operation on $(ARG1) is not supported on this operating system";
     };
-    // IOErrorCode_NO_DIRECTORY = 25,
-    String ( ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) ist kein Verzeichnis" ;
-        Text [ ENGLISH ] = "$(ARG1) is not a directory" ;
+        Text = "$(ARG1) ist kein Verzeichnis";
+        Text[english] = "$(ARG1) is not a directory";
         Text[ english_us ] = "$(ARG1) is not a directory";
         Text[ portuguese ] = "$(ARG1) nгo й um directуrio.";
         Text[ russian ] = "$(ARG1) не является папкой";
@@ -858,11 +824,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) is not a directory";
         Text[ catalan ] = "$(ARG1) is not a directory";
     };
-    // IOErrorCode_NO_FILE = 26,
-    String ( ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) ist keine Datei" ;
-        Text [ ENGLISH ] = "$(ARG1) is not a file" ;
+        Text = "$(ARG1) ist keine Datei";
+        Text[english] = "$(ARG1) is not a file";
         Text[ english_us ] = "$(ARG1) is not a file";
         Text[ portuguese ] = "$(ARG1) nгo й um ficheiro.";
         Text[ russian ] = "$(ARG1) не является файлом";
@@ -884,11 +850,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) is not a file";
         Text[ catalan ] = "$(ARG1) is not a file";
     };
-    // IOErrorCode_OUT_OF_DISK_SPACE = 27,
-    String ( ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK)
     {
-        Text = "Auf dem Gerдt $(ARG1) ist kein Platz mehr vorhanden" ;
-        Text [ ENGLISH ] = "There was no space left on device $(ARG1)" ;
+        Text = "Auf dem Gerдt $(ARG1) ist kein Platz mehr vorhanden";
+        Text[english] = "There was no space left on device $(ARG1)";
         Text[ english_us ] = "There is no space left on device $(ARG1)";
         Text[ portuguese ] = "Nгo hб espaзo disponнvel no dispositivo $(ARG1).";
         Text[ russian ] = "На устройстве $(ARG1) нет свободного места";
@@ -910,11 +876,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "There was no space left on device $(ARG1)";
         Text[ catalan ] = "There was no space left on device $(ARG1)";
     };
-    // IOErrorCode_OUT_OF_FILE_HANDLES = 28,
-    String ( ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK)
     {
-        Text = "Die Operation auf $(ARG1) kann nicht ausgefьhrt werden, da bereits zu viele Dateien geцffnet sind" ;
-        Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there are too many open files" ;
+        Text = "Die Operation auf $(ARG1) kann nicht ausgefьhrt werden, da bereits zu viele Dateien geцffnet sind";
+        Text[english] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ english_us ] = "The operation on $(ARG1) cannot be performed because too many files are already open";
         Text[ portuguese ] = "Й impossнvel executar a operaзгo em $(ARG1): demasiados ficheiros abertos.";
         Text[ russian ] = "Операцию на $(ARG1) выполнить невозможно, поскольку открыто слишком много файлов";
@@ -936,11 +902,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation on $(ARG1) can't be completed because there are too many open files";
         Text[ catalan ] = "The operation on $(ARG1) can't be completed because there are too many open files";
     };
-    // IOErrorCode_OUT_OF_MEMORY = 29,
-    String ( ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK)
     {
-        Text = "Die Operation auf $(ARG1) kann nicht ausgefьhrt werden, da kein Speicher mehr zur Verfьgung steht" ;
-        Text [ ENGLISH ] = "The operation on $(ARG1) can't be completed because there is no more memory available" ;
+        Text = "Die Operation auf $(ARG1) kann nicht ausgefьhrt werden, da kein Speicher mehr zur Verfьgung steht";
+        Text[english] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ english_us ] = "The operation on $(ARG1) cannot be performed because there is no more memory available";
         Text[ portuguese ] = "Й impossнvel executar a operaзгo em $(ARG1): memуria insuficiente.";
         Text[ russian ] = "Из-за нехватки памяти выполнить операцию на $(ARG1) невозможно";
@@ -962,11 +928,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
         Text[ catalan ] = "The operation on $(ARG1) can't be completed because there is no more memory available";
     };
-    // IOErrorCode_PENDING = 30,
-    String ( ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK)
     {
-        Text = "Die Operation auf $(ARG1) kann nicht fortgesetzt werden, weil weitere Daten erwartet werden" ;
-        Text [ ENGLISH ] = "The operation on $(ARG1) cannot continue, because there are pending data" ;
+        Text = "Die Operation auf $(ARG1) kann nicht fortgesetzt werden, weil weitere Daten erwartet werden";
+        Text[english] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ english_us ] = "The operation on $(ARG1) cannot continue because more data is pending";
         Text[ portuguese ] = "Й impossнvel executar a operaзгo em $(ARG1): existem dados pendentes.";
         Text[ russian ] = "Продолжить операцию на $(ARG1) невозможно, поскольку ожидаются другие данные";
@@ -988,11 +954,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "The operation on $(ARG1) cannot continue, because there are pending data";
         Text[ catalan ] = "The operation on $(ARG1) cannot continue, because there are pending data";
     };
-    // IOErrorCode_RECURSIVE = 31,
-    String ( ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) kann nicht in sich selbst kopiert werden" ;
-        Text [ ENGLISH ] = "$(ARG1) cannot be copied into itself" ;
+        Text = "$(ARG1) kann nicht in sich selbst kopiert werden";
+        Text[english] = "$(ARG1) cannot be copied into itself";
         Text[ english_us ] = "$(ARG1) cannot be copied into itself";
         Text[ portuguese ] = "$(ARG1) nгo pode autocopiar-se.";
         Text[ russian ] = "$(ARG1) не может быть скопирован сам в себя";
@@ -1014,11 +980,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) cannot be copied into itself";
         Text[ catalan ] = "$(ARG1) cannot be copied into itself";
     };
-    // IOErrorCode_UNKNOWN = 32,
-    String ( ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK)
     {
-        Text = "Unbekannter Ein-/Ausgabefehler beim Zugriff auf $(ARG1)" ;
-        Text [ ENGLISH ] = "Unknown input/output error while accessing $(ARG1)" ;
+        Text = "Unbekannter Ein-/Ausgabefehler beim Zugriff auf $(ARG1)";
+        Text[english] = "Unknown input/output error while accessing $(ARG1)";
         Text[ english_us ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ portuguese ] = "Erro de entrada/saнda durante o acesso a $(ARG1).";
         Text[ russian ] = "Во время доступа к $(ARG1) произошла неизвестная ошибка ввода/вывода";
@@ -1040,11 +1006,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Unknown input/output error while accessing $(ARG1)";
         Text[ catalan ] = "Unknown input/output error while accessing $(ARG1)";
     };
-    // IOErrorCode_WRITE_PROTECTED = 33,
-    String ( ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) ist schreibgeschьtzt" ;
-        Text [ english ] = "$(ARG1) is write protected" ;
+        Text = "$(ARG1) ist schreibgeschьtzt";
+        Text[english] = "$(ARG1) is write protected";
         Text[ english_us ] = "$(ARG1) is write protected";
         Text[ portuguese ] = "$(ARG1) й sу de leitura.";
         Text[ russian ] = "$(ARG1) только для чтения";
@@ -1066,11 +1032,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) is write protected";
         Text[ catalan ] = "$(ARG1) is write protected";
     };
-    // IOErrorCode_WRONG_FORMAT = 34,
-    String ( ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) liegt in einem falschen Format vor" ;
-        Text [ ENGLISH ] = "$(ARG1) has an incorrect format" ;
+        Text = "$(ARG1) liegt in einem falschen Format vor";
+        Text[english] = "$(ARG1) has an incorrect format";
         Text[ english_us ] = "$(ARG1) is not in the correct format";
         Text[ portuguese ] = "O formato de $(ARG1) estб incorrecto.";
         Text[ russian ] = "$(ARG1) содержит неправильный формат";
@@ -1092,11 +1058,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) has an incorrect format";
         Text[ catalan ] = "$(ARG1) has an incorrect format";
     };
-    // IOErrorCode_WRONG_VERSION = 35,
-    String ( ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK)
     {
-        Text = "$(ARG1) liegt in einer falschen Version vor" ;
-        Text [ ENGLISH ] = "$(ARG1) has an incorrect version" ;
+        Text = "$(ARG1) liegt in einer falschen Version vor";
+        Text[english] = "$(ARG1) has an incorrect version";
         Text[ english_us ] = "$(ARG1) is not in the correct version";
         Text[ portuguese ] = "A versгo de $(ARG1) estб incorrecta.";
         Text[ russian ] = "$(ARG1) в неправильной версии";
@@ -1118,11 +1084,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "$(ARG1) has an incorrect version";
         Text[ catalan ] = "$(ARG1) has an incorrect version";
     };
-    // IOErrorCode_NOT_EXISTING_VOLUME = 36,
-    String ( ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK)
     {
-        Text = "Laufwerk $(ARG1) existiert nicht" ;
-        Text [ ENGLISH ] = "Volume $(ARG1) does not exist" ;
+        Text = "Laufwerk $(ARG1) existiert nicht";
+        Text[english] = "Volume $(ARG1) does not exist";
         Text[ english_us ] = "Drive $(ARG1) does not exist";
         Text[ portuguese ] = "A unidade $(ARG1)nгo existe.";
         Text[ russian ] = "Устройство $(ARG1) не существует";
@@ -1144,11 +1110,11 @@ Resource RID_UUI_ERRHDL
         Text[ arabic ] = "Volume $(ARG1) does not exist";
         Text[ catalan ] = "Volume $(ARG1) does not exist";
     };
-    // IOErrorCode_NOT_EXISTING_FOLDER = 37,
-    String ( ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK )
+
+    String (ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK)
     {
-        Text = "Ordner $(ARG1) existiert nicht" ;
-        Text [ ENGLISH ] = "Folder $(ARG1) does not exist" ;
+        Text = "Ordner $(ARG1) existiert nicht";
+        Text[english] = "Folder $(ARG1) does not exist";
         Text[ english_us ] = "Folder $(ARG1) does not exist";
         Text[ portuguese ] = "A pasta $(ARG1) nгo existe.";
         Text[ russian ] = "Папки $(ARG1) не существует";
@@ -1329,20 +1295,44 @@ Resource RID_UUI_ERRHDL
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK)
     {
         Text = "Laufwerk $(ARG1) ist nicht bereit";
-        Text [ english ] = "Volume $(ARG1) is not ready";
+        Text[english] = "Volume $(ARG1) is not ready";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
     {
         Text = "$(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
-        Text [ english ] = "$(ARG1) is not ready; please insert a storage medium";
+        Text[english] = "$(ARG1) is not ready; please insert a storage medium";
     };
 
     String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
     {
         Text = "Laufwerk $(ARG1) ist nicht bereit; bitte legen Sie ein Speichermedium ein";
-        Text [ english ] = "Volume $(ARG1) is not ready; please insert a storage medium";
+        Text[english] = "Volume $(ARG1) is not ready; please insert a storage medium";
+    };
+
+    String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
+    {
+        Text = "Legen Sie bitte den Datentrдger $(ARG1) ein.";
+        Text[english] = "Please insert disk $(ARG1).";
+        Text[ arabic ] = "ЗбСМЗБ ЕПОЗб ЗбЮСХ $(ARG1) .";
+        Text[ chinese_simplified ] = "иЇ·ж‚Ёж”ѕе…ҐиЅЇз› $(ARG1)гЂ‚";
+        Text[ chinese_traditional ] = "и«‹ж”ѕзЅ®зЈЃз‰‡ $(ARG1) гЂ‚";
+        Text[ danish ] = "Indsжt venligst datamediet $(ARG1).";
+        Text[ dutch ] = "Leg datamedium in station $(ARG1).";
+        Text[ english_us ] = "Please insert data storage medium $(ARG1).";
+        Text[ french ] = "Insйrez le mйdia $(ARG1).";
+        Text[ greek ] = "Рбсбкблю ейуЬгефе фпн дЯукп $(ARG1).";
+        Text[ italian ] = "Inserite il supporto dati $(ARG1).";
+        Text[ japanese ] = "еЄ’дЅ“ $(ARG1) г‚’е…Ґг‚ЊгЃ¦гЃЏгЃ гЃ•гЃ„гЂ‚";
+        Text[ korean ] = "лЌ°мќґн„° л§¤мІґ $(ARG1)мќ„(лҐј) м‚Ѕмћ…н•м‹­м‹њм¤ .";
+        Text[ polish ] = "Wsuс proszк noњnik danych $(ARG1).";
+        Text[ portuguese ] = "Introduza o media $(ARG1).";
+        Text[ portuguese_brazilian ] = "Please insert disk $(ARG1).";
+        Text[ russian ] = "Вставьте, пожалуйста, диск $(ARG1).";
+        Text[ spanish ] = "Inserte por favor el medio $(ARG1).";
+        Text[ swedish ] = "Lдgg in datamediet $(ARG1).";
+        Text[ turkish ] = "Please insert disk $(ARG1).";
+        Text[ catalan ] = "Inserte por favor el medio $(ARG1).";
+        Text[ finnish ] = "Syцtд tallennusvдline $(ARG1).";
     };
 };
-
-

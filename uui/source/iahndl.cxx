@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-21 08:34:43 $
+ *  last change: $Author: sb $ $Date: 2001-08-24 13:14:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef _COM_SUN_STAR_SYNC2_BADPARTNERSHIPEXCEPTION_HPP_
 #include "com/sun/star/sync2/BadPartnershipException.hpp"
 #endif
-#ifndef _COM_SUN_STAR_TASK_CLASSIFIEDINTERACTIONREQUEST_HPP_
-#include "com/sun/star/task/ClassifiedInteractionRequest.hpp"
+#ifndef _COM_SUN_STAR_TASK_INTERACTIONCLASSIFICATION_HPP_
+#include "com/sun/star/task/InteractionClassification.hpp"
 #endif
 #ifndef _COM_SUN_STAR_TASK_NOMASTEREXCEPTION_HPP_
 #include "com/sun/star/task/NoMasterException.hpp"
@@ -126,9 +126,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVEAUGMENTEDIOEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
-#endif
-#ifndef _COM_SUN_STAR_UCB_INTERACTIVEBADTRANSFERURLEXCEPTION_HPP_
-#include "com/sun/star/ucb/InteractiveBadTransferURLException.hpp"
 #endif
 #ifndef _COM_SUN_STAR_UCB_INTERACTIVECHAOSEXCEPTION_HPP_
 #include "com/sun/star/ucb/InteractiveCHAOSException.hpp"
@@ -175,6 +172,9 @@
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include "com/sun/star/uno/Reference.hxx"
 #endif
+#ifndef _COM_SUN_STAR_UNO_RuntimeEXCEPTION_HPP_
+#include "com/sun/star/uno/RuntimeException.hpp"
+#endif
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include "com/sun/star/uno/Sequence.hxx"
 #endif
@@ -193,6 +193,9 @@
 #ifndef _RTL_STRING_H_
 #include "rtl/string.h"
 #endif
+#ifndef _RTL_STRING_HXX_
+#include "rtl/string.hxx"
+#endif
 #ifndef _RTL_TEXTENC_H
 #include "rtl/textenc.h"
 #endif
@@ -208,9 +211,6 @@
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
 #endif
-#ifndef _EHDL_HXX
-#include "svtools/ehdl.hxx"
-#endif
 #ifndef SVTOOLS_HTTPCOOK_HXX
 #include "svtools/httpcook.hxx"
 #endif
@@ -222,9 +222,6 @@
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include "toolkit/helper/vclunohelper.hxx"
-#endif
-#ifndef _EINF_HXX
-#include "tools/errinf.hxx"
 #endif
 #ifndef _LIST_HXX
 #include "tools/list.hxx"
@@ -241,13 +238,17 @@
 #ifndef _SV_SVAPP_HXX
 #include "vcl/svapp.hxx"
 #endif
-#ifndef _SV_WRKWIN_HXX
-#include "vcl/wrkwin.hxx"
+#ifndef _SV_WINTYPES_HXX
+#include "vcl/wintypes.hxx"
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include "vos/mutex.hxx"
 #endif
 
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
@@ -255,6 +256,10 @@
 #ifndef INCLUDED_NEW
 #include <new>
 #define INCLUDED_NEW
+#endif
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
 #endif
 
 using namespace com::sun;
@@ -273,58 +278,51 @@ CookieList::~CookieList() SAL_THROW(())
         delete static_cast< CntHTTPCookie * >(Remove(Count() - 1));
 }
 
-class SimpleErrorContext: public ErrorContext
+class ErrorResource: private Resource
 {
 public:
-    inline SimpleErrorContext(Window * pParent,
-                              bool bHasContext,
-                              UniString const & rContext)
-        SAL_THROW(());
+    inline ErrorResource(ResId & rResId) SAL_THROW(()): Resource(rResId) {}
 
-    virtual BOOL GetString(ULONG, UniString & rCtxStr);
+    inline ~ErrorResource() SAL_THROW(()) { FreeResource(); }
 
-private:
-    rtl::OUString m_aContext;
-    bool m_bHasContext;
+    rtl::OUString getString(ErrCode nErrorCode) const SAL_THROW(());
 };
 
-inline SimpleErrorContext::SimpleErrorContext(Window * pParent,
-                                              bool bHasContext,
-                                              UniString const & rContext)
-    SAL_THROW(()):
-    ErrorContext(pParent),
-    m_bHasContext(bHasContext),
-    m_aContext(rContext)
-{}
-
-BOOL SimpleErrorContext::GetString(ULONG, UniString & rCtxStr)
+rtl::OUString ErrorResource::getString(ErrCode nErrorCode) const SAL_THROW(())
 {
-    rCtxStr = m_aContext;
-    return m_bHasContext;
+    rtl::OUString
+        aResult(ResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK)).
+                    SetAutoRelease(false));
+    Resource::GetResManager()->PopContext();
+    return aResult;
 }
 
-bool
-hasAbortContinuation(
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > > const &
-        rContinuations)
-    SAL_THROW((star::uno::RuntimeException))
+//TODO! should be part of rtl::OUString (and optimized when rOld is char *)
+rtl::OUString replace(rtl::OUString const & rOriginal,
+                      rtl::OUString const & rOld,
+                      rtl::OUString const & rNew)
 {
-    for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
-        if (star::uno::Reference< star::task::XInteractionAbort >::query(
-                    rContinuations[i]).
-                is())
-            return true;
-    return false;
+    rtl::OUString aResult(rOriginal);
+    for (sal_Int32 i = 0;;)
+    {
+        i = aResult.indexOf(rOld, i);
+        if (i == -1)
+            break;
+        aResult = aResult.replaceAt(i, rOld.getLength(), rNew);
+        i += rNew.getLength();
+    }
+    return aResult;
 }
 
 void
-getAuthenticationContinuations(
+getContinuations(
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
         rContinuations,
-    star::uno::Reference< star::task::XInteractionAbort > * pAbort,
+    star::uno::Reference< star::task::XInteractionApprove > * pApprove,
+    star::uno::Reference< star::task::XInteractionDisapprove > * pDisapprove,
     star::uno::Reference< star::task::XInteractionRetry > * pRetry,
+    star::uno::Reference< star::task::XInteractionAbort > * pAbort,
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > *
         pSupplyAuthentication)
     SAL_THROW((star::uno::RuntimeException))
@@ -358,9 +356,10 @@ getAuthenticationContinuations(
 }
 
 bool
-getStringArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
-                  rtl::OUString const & rKey,
-                  rtl::OUString * pValue)
+getStringRequestArgument(star::uno::Sequence< star::uno::Any > const &
+                             rArguments,
+                         rtl::OUString const & rKey,
+                         rtl::OUString * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
@@ -381,9 +380,10 @@ getStringArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
 }
 
 bool
-getBoolArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
-                rtl::OUString const & rKey,
-                bool * pValue)
+getBoolRequestArgument(star::uno::Sequence< star::uno::Any > const &
+                           rArguments,
+                       rtl::OUString const & rKey,
+                       bool * pValue)
     SAL_THROW(())
 {
     for (sal_Int32 i = 0; i < rArguments.getLength(); ++i)
@@ -403,24 +403,26 @@ getBoolArgument(star::uno::Sequence< star::uno::Any > const & rArguments,
     return false;
 }
 
-bool getResourceNameArgument(star::uno::Sequence< star::uno::Any > const &
-                                 rArguments,
-                             rtl::OUString * pValue)
+bool
+getResourceNameRequestArgument(star::uno::Sequence< star::uno::Any > const &
+                                   rArguments,
+                               rtl::OUString * pValue)
     SAL_THROW(())
 {
-    if (!getStringArgument(rArguments,
-                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Uri")),
-                           pValue))
+    if (!getStringRequestArgument(rArguments,
+                                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                      "Uri")),
+                                  pValue))
         return false;
     // Use the resource name only for file URLs, to avoid confusion:
     //TODO! work with ucp locality concept instead of hardcoded "file"?
     if (pValue
         && pValue->matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(
                                                   "file:")))
-        getStringArgument(rArguments,
-                          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                            "ResourceName")),
-                          pValue);
+        getStringRequestArgument(rArguments,
+                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                   "ResourceName")),
+                                 pValue);
     return true;
 }
 
@@ -466,8 +468,8 @@ UUIInteractionHandler::initialize(
     star::uno::Sequence< star::uno::Any > const & rArguments)
     throw (star::uno::Exception)
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    m_aArguments = rArguments;
+    osl::MutexGuard aGuard(m_aPropertyMutex);
+    m_aProperties = rArguments;
 }
 
 void SAL_CALL
@@ -475,92 +477,114 @@ UUIInteractionHandler::handle(
     star::uno::Reference< star::task::XInteractionRequest > const & rRequest)
     throw (star::uno::RuntimeException)
 {
-    if (!rRequest.is())
-        return;
-
-    star::uno::Any aTheRequest(rRequest->getRequest());
-    star::uno::Sequence< star::uno::Reference<
-                             star::task::XInteractionContinuation > >
-        aContinuations(rRequest->getContinuations());
-
-    star::ucb::AuthenticationRequest aAuthenticationRequest;
-    if (aTheRequest >>= aAuthenticationRequest)
-    {
-        handleAuthenticationRequest(aAuthenticationRequest, aContinuations);
-        return;
-    }
-
-    star::task::PasswordRequest aPasswordRequest;
-    if (aTheRequest >>= aPasswordRequest)
-    {
-        handlePasswordRequest(aPasswordRequest, aContinuations);
-        return;
-    }
-
-    star::ucb::HandleCookiesRequest aCookiesRequest;
-    if (aTheRequest >>= aCookiesRequest)
-    {
-        handleCookiesRequest(aCookiesRequest, aContinuations);
-        return;
-    }
-
-    star::task::InteractionClassification eClassification
-        = star::task::InteractionClassification_ERROR;
-    star::task::ClassifiedInteractionRequest aClassifiedInteractionRequest;
-    if (aTheRequest >>= aClassifiedInteractionRequest)
-        eClassification = aClassifiedInteractionRequest.Classification;
-
-    enum Execute { EXECUTE_NO, EXECUTE_YES, EXECUTE_IGNORE_RESULT };
-
-    ULONG nErrorID = ERRCODE_NONE;
-    sal_uInt16 nErrorFlags = USHRT_MAX;
-    bool bOverrideContext = false;
-    rtl::OUString aContext;
-    Execute eExecute = EXECUTE_YES;
-    USHORT nButton = ERRCODE_BUTTON_CANCEL;
-
-    star::ucb::InteractiveIOException aIOException;
-    star::ucb::InteractiveNetworkException aNetworkException;
-    star::ucb::InteractiveCHAOSException aCHAOSException;
-    star::ucb::InteractiveBadTransferURLException aTransferException;
-    star::ucb::InteractiveWrongMediumException aWrongMediumException;
-    star::java::WrongJavaVersionException aWrongJavaVersionException;
-    star::sync2::BadPartnershipException aBadPartnershipException;
     try
     {
-        if (aTheRequest >>= aIOException)
+        if (!rRequest.is())
+            return;
+
+        star::uno::Any aAnyRequest(rRequest->getRequest());
+
+        star::ucb::AuthenticationRequest aAuthenticationRequest;
+        if (aAnyRequest >>= aAuthenticationRequest)
         {
-            // Due to the implementation of ErrorHandler::HandleError, IO
-            // errors only display an OK button, and that button is (per
-            // definition) mapped to the XInteractionAbort continuation.  So,
-            // if that continuation is missing, do not handle the request:
-            if (!hasAbortContinuation(aContinuations))
-                return;
+            handleAuthenticationRequest(aAuthenticationRequest,
+                                        rRequest->getContinuations());
+            return;
+        }
 
-            nErrorFlags = ERRCODE_BUTTON_OK;
-            switch (eClassification)
+        star::task::PasswordRequest aPasswordRequest;
+        if (aAnyRequest >>= aPasswordRequest)
+        {
+            handlePasswordRequest(aPasswordRequest,
+                                  rRequest->getContinuations());
+            return;
+        }
+
+        star::ucb::HandleCookiesRequest aCookiesRequest;
+        if (aAnyRequest >>= aCookiesRequest)
+        {
+            handleCookiesRequest(aCookiesRequest,
+                                 rRequest->getContinuations());
+            return;
+        }
+
+        star::ucb::InteractiveIOException aIoException;
+        if (aAnyRequest >>= aIoException)
+        {
+            rtl::OUString aContext;
+            star::ucb::InteractiveFileIOException aFileIoException;
+            if (aAnyRequest >>= aFileIoException)
             {
-            case star::task::InteractionClassification_ERROR:
-                nErrorFlags |= ERRCODE_MSG_ERROR;
+                //TODO! context string should rather be passed to the
+                // interaction handler upon initialization...
+
+                {
+                    //TODO! use SimpleResMgr instead?
+                    vos::OGuard aGuard(Application::GetSolarMutex());
+                    std::auto_ptr< ResMgr >
+                        xManager(ResMgr::CreateResMgr(
+                                     CREATEVERSIONRESMGR_NAME(uui)));
+                    aContext
+                        = UniString(ResId(STR_ERROR_FILEIO, xManager.get()));
+                }
+                aContext = replace(aContext,
+                                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                     "($URL1)")),
+                                   aFileIoException.FileName);
+            }
+            else
+                aContext = getContextProperty();
+
+            star::uno::Sequence< star::uno::Any > aRequestArguments;
+            star::ucb::InteractiveAugmentedIOException aAugmentedIoException;
+            if (aAnyRequest >>= aAugmentedIoException)
+                aRequestArguments = aAugmentedIoException.Arguments;
+
+            //TODO! remove this backwards compatibility?
+            bool bArgUri = false;
+            bool bArgFolder = false;
+            bool bArgVolumes = false;
+            rtl::OUString aArgUri;
+            rtl::OUString aArgFolder;
+            rtl::OUString aArgVolume;
+            rtl::OUString aArgOtherVolume;
+            switch (aIoException.Code)
+            {
+            case star::ucb::IOErrorCode_CANT_CREATE:
+                if (aRequestArguments.getLength() == 2
+                    && (aRequestArguments[0] >>= aArgUri)
+                    && (aRequestArguments[1] >>= aArgFolder))
+                {
+                    bArgUri = true;
+                    bArgFolder = true;
+                    aRequestArguments.realloc(0);
+                }
                 break;
 
-            case star::task::InteractionClassification_WARNING:
-                nErrorFlags |= ERRCODE_MSG_WARNING;
+            case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
+                if (aRequestArguments.getLength() == 2
+                    && (aRequestArguments[0] >>= aArgVolume)
+                    && (aRequestArguments[1] >>= aArgOtherVolume))
+                {
+                    bArgVolumes = true;
+                    aRequestArguments.realloc(0);
+                }
                 break;
 
-            case star::task::InteractionClassification_INFO:
-                nErrorFlags |= ERRCODE_MSG_INFO;
-                break;
-
-            case star::task::InteractionClassification_QUERY:
-                nErrorFlags |= ERRCODE_MSG_QUERY;
+            default:
+                if (aRequestArguments.getLength() == 1
+                    && (aRequestArguments[0] >>= aArgUri))
+                {
+                    bArgUri = true;
+                    aRequestArguments.realloc(0);
+                }
                 break;
             }
 
-            eExecute = EXECUTE_IGNORE_RESULT;
-
-            static ULONG const aID[star::ucb::IOErrorCode_WRONG_VERSION + 1]
-                                  [2]
+            ErrCode nErrorCode;
+            std::vector< rtl::OUString > aArguments;
+            static ErrCode const
+                    aErrorCode[star::ucb::IOErrorCode_WRONG_VERSION + 1][2]
                 = { { ERRCODE_IO_ABORT, ERRCODE_UUI_IO_ABORT }, // ABORT
                     { ERRCODE_IO_ACCESSDENIED, ERRCODE_UUI_IO_ACCESSDENIED },
                         // ACCESS_DENIED
@@ -629,402 +653,313 @@ UUIInteractionHandler::handle(
                         // WRONG_FORMAT
                     { ERRCODE_IO_WRONGVERSION,
                       ERRCODE_UUI_IO_WRONGVERSION } }; // WRONG_VERSION
-
-            star::ucb::InteractiveFileIOException aFileIOException;
-            if (aTheRequest >>= aFileIOException)
+            switch (aIoException.Code)
             {
-                nErrorID = aID[aIOException.Code][0];
-                bOverrideContext = true;
-
-                vos::OGuard aGuard(Application::GetSolarMutex());
-                std::auto_ptr< ResMgr >
-                    xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(
-                                                      uui)));
-                UniString aTemplate(ResId(STR_ERROR_FILEIO, xManager.get()));
-                aTemplate.SearchAndReplaceAscii("($URL1)",
-                                                aFileIOException.FileName);
-                aContext = aTemplate;
-            }
-            else
-            {
-                star::uno::Sequence< star::uno::Any > aArguments;
-                star::ucb::InteractiveAugmentedIOException
-                    aAugmentedIOException;
-                if (aTheRequest >>= aAugmentedIOException)
-                    aArguments = aAugmentedIOException.Arguments;
-
-                //TODO! remove this backwards compatibility?
-                bool bArgUri = false;
-                bool bArgFolder = false;
-                bool bArgVolumes = false;
-                rtl::OUString aArgUri;
-                rtl::OUString aArgFolder;
-                rtl::OUString aArgVolume;
-                rtl::OUString aArgOtherVolume;
-                switch (aIOException.Code)
+            case star::ucb::IOErrorCode_CANT_CREATE:
+                if ((bArgUri
+                     || getResourceNameRequestArgument(aRequestArguments,
+                                                       &aArgUri))
+                    && (bArgFolder
+                        || getStringRequestArgument(
+                               aRequestArguments,
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                 "Folder")),
+                               &aArgFolder)))
                 {
-                case star::ucb::IOErrorCode_CANT_CREATE:
-                    if (aArguments.getLength() == 2
-                        && (aArguments[0] >>= aArgUri)
-                        && (aArguments[1] >>= aArgFolder))
-                    {
-                        bArgUri = true;
-                        bArgFolder = true;
-                        aArguments.realloc(0);
-                    }
-                    break;
-
-                case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
-                    if (aArguments.getLength() == 2
-                        && (aArguments[0] >>= aArgVolume)
-                        && (aArguments[1] >>= aArgOtherVolume))
-                    {
-                        bArgVolumes = true;
-                        aArguments.realloc(0);
-                    }
-                    break;
-
-                default:
-                    if (aArguments.getLength() == 1
-                        && (aArguments[0] >>= aArgUri))
-                    {
-                        bArgUri = true;
-                        aArguments.realloc(0);
-                    }
-                    break;
+                    nErrorCode = aErrorCode[aIoException.Code][1];
+                    aArguments.reserve(2);
+                    aArguments.push_back(aArgUri);
+                    aArguments.push_back(aArgFolder);
                 }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
 
-                switch (aIOException.Code)
+            case star::ucb::IOErrorCode_DEVICE_NOT_READY:
+                if (bArgUri
+                    || getResourceNameRequestArgument(aRequestArguments,
+                                                      &aArgUri))
                 {
-                case star::ucb::IOErrorCode_CANT_CREATE:
-                    nErrorID
-                        = (bArgUri
-                               || getResourceNameArgument(aArguments,
-                                                          &aArgUri))
-                          && (bArgFolder
-                              || getStringArgument(
-                                     aArguments,
-                                     rtl::OUString(
-                                         RTL_CONSTASCII_USTRINGPARAM(
-                                             "Folder")),
-                                     &aArgFolder)) ?
-                              *new TwoStringErrorInfo(
-                                       aID[aIOException.Code][1],
-                                       aArgUri,
-                                       aArgFolder) :
-                              aID[aIOException.Code][0];
-                    break;
+                    rtl::OUString aResourceType;
+                    getStringRequestArgument(aRequestArguments,
+                                             rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "ResourceType")),
+                                             &aResourceType);
+                    bool bRemovable = false;
+                    getBoolRequestArgument(aRequestArguments,
+                                           rtl::OUString(
+                                               RTL_CONSTASCII_USTRINGPARAM(
+                                                   "Removable")),
+                                           &bRemovable);
+                    nErrorCode
+                        = aResourceType.
+                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                   "volume")) ?
+                              bRemovable ?
+                                  ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE :
+                                  ERRCODE_UUI_IO_NOTREADY_VOLUME :
+                              bRemovable ?
+                                  ERRCODE_UUI_IO_NOTREADY_REMOVABLE :
+                                  ERRCODE_UUI_IO_NOTREADY;
+                    aArguments.push_back(aArgUri);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
 
-                case star::ucb::IOErrorCode_DEVICE_NOT_READY:
-                    if (bArgUri
-                        || getResourceNameArgument(aArguments, &aArgUri))
-                    {
-                        rtl::OUString aResourceType;
-                        getStringArgument(
-                            aArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                              "ResourceType")),
-                            &aResourceType);
-                        bool bRemovable = false;
-                        getBoolArgument(
-                            aArguments,
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Removable")),
-                            &bRemovable);
-                        nErrorID
-                            = aResourceType.
-                                      equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                                       "volume")) ?
-                                  *new StringErrorInfo(
-                                           bRemovable ?
-                                    ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE :
-                                               ERRCODE_UUI_IO_NOTREADY_VOLUME,
-                                           aArgUri) :
-                                  *new StringErrorInfo(
-                                           bRemovable ?
-                                           ERRCODE_UUI_IO_NOTREADY_REMOVABLE :
-                                               ERRCODE_UUI_IO_NOTREADY,
-                                           aArgUri);
-                    }
-                    else
-                        nErrorID = aID[aIOException.Code][0];
-                    break;
-
-                case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
-                    nErrorID
-                        = bArgVolumes
-                          || getStringArgument(
-                                     aArguments,
-                                     rtl::OUString(
-                                         RTL_CONSTASCII_USTRINGPARAM(
+            case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
+                if (bArgVolumes
+                    || getStringRequestArgument(
+                           aRequestArguments,
+                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                              "Volume")),
-                                     &aArgVolume)
-                                 && getStringArgument(
-                                        aArguments,
-                                        rtl::OUString(
-                                            RTL_CONSTASCII_USTRINGPARAM(
+                           &aArgVolume)
+                       && getStringRequestArgument(
+                              aRequestArguments,
+                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                                 "OtherVolume")),
-                                        &aArgOtherVolume) ?
-                              *new TwoStringErrorInfo(
-                                       aID[aIOException.Code][1],
-                                       aArgVolume,
-                                       aArgOtherVolume) :
-                              aID[aIOException.Code][0];
-                    break;
-
-                case star::ucb::IOErrorCode_NOT_EXISTING:
-                    if (bArgUri
-                        || getResourceNameArgument(aArguments, &aArgUri))
-                    {
-                        rtl::OUString aResourceType;
-                        getStringArgument(aArguments,
-                                          rtl::OUString(
-                                              RTL_CONSTASCII_USTRINGPARAM(
-                                                  "ResourceType")),
-                                          &aResourceType);
-                        nErrorID
-                            = *new StringErrorInfo(
-                                       aResourceType.
-                                               equalsAsciiL(
-                                                   RTL_CONSTASCII_STRINGPARAM(
-                                                       "volume")) ?
-                                           ERRCODE_UUI_IO_NOTEXISTS_VOLUME :
-                                       aResourceType.
-                                               equalsAsciiL(
-                                                   RTL_CONSTASCII_STRINGPARAM(
-                                                       "folder")) ?
-                                           ERRCODE_UUI_IO_NOTEXISTS_FOLDER :
-                                           ERRCODE_UUI_IO_NOTEXISTS,
-                                       aArgUri);
-                    }
-                    else
-                        nErrorID = aID[aIOException.Code][0];
-                    break;
-
-                default:
-                    nErrorID
-                        = bArgUri
-                          || getResourceNameArgument(aArguments, &aArgUri) ?
-                              *new StringErrorInfo(aID[aIOException.Code][1],
-                                                   aArgUri) :
-                              aID[aIOException.Code][0];
-                    break;
+                              &aArgOtherVolume))
+                {
+                    nErrorCode = aErrorCode[aIoException.Code][1];
+                    aArguments.reserve(2);
+                    aArguments.push_back(aArgVolume);
+                    aArguments.push_back(aArgOtherVolume);
                 }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+
+            case star::ucb::IOErrorCode_NOT_EXISTING:
+                if (bArgUri
+                    || getResourceNameRequestArgument(aRequestArguments,
+                                                      &aArgUri))
+                {
+                    rtl::OUString aResourceType;
+                    getStringRequestArgument(aRequestArguments,
+                                             rtl::OUString(
+                                                 RTL_CONSTASCII_USTRINGPARAM(
+                                                     "ResourceType")),
+                                             &aResourceType);
+                    nErrorCode
+                        = aResourceType.
+                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                   "volume")) ?
+                              ERRCODE_UUI_IO_NOTEXISTS_VOLUME :
+                          aResourceType.
+                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                                   "folder")) ?
+                              ERRCODE_UUI_IO_NOTEXISTS_FOLDER :
+                              ERRCODE_UUI_IO_NOTEXISTS;
+                    aArguments.push_back(aArgUri);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
+
+            default:
+                if (bArgUri
+                    || getResourceNameRequestArgument(aRequestArguments,
+                                                      &aArgUri))
+                {
+                    nErrorCode = aErrorCode[aIoException.Code][1];
+                    aArguments.push_back(aArgUri);
+                }
+                else
+                    nErrorCode = aErrorCode[aIoException.Code][0];
+                break;
             }
+
+            handleErrorRequest(aIoException.Classification,
+                               aContext,
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
         }
-        else if (aTheRequest >>= aNetworkException)
+
+        star::ucb::InteractiveNetworkException aNetworkException;
+        if (aAnyRequest >>= aNetworkException)
         {
+            ErrCode nErrorCode;
+            std::vector< rtl::OUString > aArguments;
             star::ucb::InteractiveNetworkOffLineException aOffLineException;
             star::ucb::InteractiveNetworkResolveNameException
                 aResolveNameException;
             star::ucb::InteractiveNetworkConnectException aConnectException;
             star::ucb::InteractiveNetworkReadException aReadException;
             star::ucb::InteractiveNetworkWriteException aWriteException;
-            nErrorID
-                = (aTheRequest >>= aOffLineException) ?
-                      ERRCODE_INET_OFFLINE :
-                  (aTheRequest >>= aResolveNameException) ?
-                      *new StringErrorInfo(ERRCODE_INET_NAME_RESOLVE,
-                                           aResolveNameException.Server) :
-                  (aTheRequest >>= aConnectException) ?
-                      *new StringErrorInfo(ERRCODE_INET_CONNECT,
-                                           aConnectException.Server) :
-                  (aTheRequest >>= aReadException) ?
-                      *new StringErrorInfo(ERRCODE_INET_READ,
-                                           aReadException.Diagnostic) :
-                  (aTheRequest >>= aWriteException) ?
-                      *new StringErrorInfo(ERRCODE_INET_WRITE,
-                                           aWriteException.Diagnostic) :
-                      ERRCODE_INET_GENERAL;
-        }
-        else if (aTheRequest >>= aCHAOSException)
-            nErrorID
-                = aCHAOSException.Arguments.getLength() >= 2 ?
-                      *new TwoStringErrorInfo(aCHAOSException.ID,
-                                              aCHAOSException.Arguments[0],
-                                              aCHAOSException.Arguments[1]) :
-                  aCHAOSException.Arguments.getLength() == 1 ?
-                      *new StringErrorInfo(aCHAOSException.ID,
-                                           aCHAOSException.Arguments[0]) :
-                  aCHAOSException.ID;
-        else if (aTheRequest >>= aTransferException)
-            eExecute = EXECUTE_NO;
-        else if (aTheRequest >>= aWrongMediumException)
-        {
-            vos::OGuard aGuard(Application::GetSolarMutex());
-
-            UniString aText;
+            if (aAnyRequest >>= aOffLineException)
+                nErrorCode = ERRCODE_INET_OFFLINE;
+            else if (aAnyRequest >>= aResolveNameException)
             {
-                std::auto_ptr< ResMgr >
-                    xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(
-                                                      uui)));
-                aText = ResId(STR_ERROR_WRONGMEDIUM, xManager.get());
+                nErrorCode = ERRCODE_INET_NAME_RESOLVE;
+                aArguments.push_back(aResolveNameException.Server);
             }
+            else if (aAnyRequest >>= aConnectException)
+            {
+                nErrorCode = ERRCODE_INET_CONNECT;
+                aArguments.push_back(aConnectException.Server);
+            }
+            else if (aAnyRequest >>= aReadException)
+            {
+                nErrorCode = ERRCODE_INET_READ;
+                aArguments.push_back(aReadException.Diagnostic);
+            }
+            else if (aAnyRequest >>= aWriteException)
+            {
+                nErrorCode = ERRCODE_INET_WRITE;
+                aArguments.push_back(aWriteException.Diagnostic);
+            }
+            else
+                nErrorCode = ERRCODE_INET_GENERAL;
+            handleErrorRequest(aNetworkException.Classification,
+                               getContextProperty(),
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
+        }
 
+        star::ucb::InteractiveCHAOSException aChaosException;
+        if (aAnyRequest >>= aChaosException)
+        {
+            std::vector< rtl::OUString > aArguments;
+            sal_Int32 nCount
+                = std::min< sal_Int32 >(aChaosException.Arguments.getLength(),
+                                        2);
+            aArguments.
+                reserve(
+                    static_cast< std::vector< rtl::OUString >::size_type >(
+                        nCount));
+            for (sal_Int32 i = 0; i < nCount; ++i)
+                aArguments.push_back(aChaosException.Arguments[i]);
+            handleErrorRequest(aChaosException.Classification,
+                               getContextProperty(),
+                               aChaosException.ID,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
+        }
+
+        star::ucb::InteractiveWrongMediumException aWrongMediumException;
+        if (aAnyRequest >>= aWrongMediumException)
+        {
             sal_Int32 nMedium;
             aWrongMediumException.Medium >>= nMedium;
-            aText.SearchAndReplaceAscii("$$",
-                                        UniString::CreateFromInt32(nMedium
-                                                                       + 1));
+            std::vector< rtl::OUString > aArguments;
+            aArguments.push_back(UniString::CreateFromInt32(nMedium + 1));
+            handleErrorRequest(aWrongMediumException.Classification,
+                               getContextProperty(),
+                               ERRCODE_UUI_WRONGMEDIUM,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
+        }
 
-            nButton = ErrorBox(getParentArgument(), WB_OK_CANCEL, aText).
-                          Execute();
-            eExecute = EXECUTE_NO;
-        }
-        else if (aTheRequest >>= aWrongJavaVersionException)
+        star::java::WrongJavaVersionException aWrongJavaVersionException;
+        if (aAnyRequest >>= aWrongJavaVersionException)
         {
-            if (!hasAbortContinuation(aContinuations))
-                return;
-            eExecute = EXECUTE_IGNORE_RESULT;
-            nErrorID
-                = aWrongJavaVersionException.DetectedVersion.getLength()
-                          == 0 ?
-                      aWrongJavaVersionException.LowestSupportedVersion.
-                                                     getLength()
-                              == 0 ?
-                          ERRCODE_UUI_WRONGJAVA :
-                          static_cast< ULONG >(
-                              *new StringErrorInfo(
-                                       ERRCODE_UUI_WRONGJAVA_MIN,
-                                       aWrongJavaVersionException.
-                                           LowestSupportedVersion)) :
-                      aWrongJavaVersionException.LowestSupportedVersion.
-                                                     getLength()
-                              == 0 ?
-                          static_cast< ULONG >(
-                              *new StringErrorInfo(
-                                       ERRCODE_UUI_WRONGJAVA_VERSION,
-                                       aWrongJavaVersionException.
-                                           DetectedVersion)) :
-                          static_cast< ULONG >(
-                              *new TwoStringErrorInfo(
-                                       ERRCODE_UUI_WRONGJAVA_VERSION_MIN,
-                                       aWrongJavaVersionException.
-                                           DetectedVersion,
-                                       aWrongJavaVersionException.
-                                           LowestSupportedVersion));
+            ErrCode nErrorCode;
+            std::vector< rtl::OUString > aArguments;
+            if (aWrongJavaVersionException.DetectedVersion.getLength() == 0)
+                if (aWrongJavaVersionException.LowestSupportedVersion.
+                                                   getLength()
+                        == 0)
+                    nErrorCode = ERRCODE_UUI_WRONGJAVA;
+                else
+                {
+                    nErrorCode = ERRCODE_UUI_WRONGJAVA_MIN;
+                    aArguments.push_back(aWrongJavaVersionException.
+                                             LowestSupportedVersion);
+                }
+            else if (aWrongJavaVersionException.LowestSupportedVersion.
+                                                    getLength()
+                         == 0)
+            {
+                nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION;
+                aArguments.push_back(aWrongJavaVersionException.
+                                         DetectedVersion);
+            }
+            else
+            {
+                nErrorCode = ERRCODE_UUI_WRONGJAVA_VERSION_MIN;
+                aArguments.reserve(2);
+                aArguments.push_back(aWrongJavaVersionException.
+                                         DetectedVersion);
+                aArguments.push_back(aWrongJavaVersionException.
+                                         LowestSupportedVersion);
+            }
+            handleErrorRequest(star::task::InteractionClassification_ERROR,
+                               getContextProperty(),
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
         }
-        else if (aTheRequest >>= aBadPartnershipException)
+
+        star::sync2::BadPartnershipException aBadPartnershipException;
+        if (aAnyRequest >>= aBadPartnershipException)
         {
-            if (!hasAbortContinuation(aContinuations))
-                return;
-            eExecute = EXECUTE_IGNORE_RESULT;
-            nErrorID = aBadPartnershipException.Partnership.getLength() == 0 ?
-                           ERRCODE_UUI_BADPARTNERSHIP :
-                           *new StringErrorInfo(
-                                    ERRCODE_UUI_BADPARTNERSHIP_NAME,
-                                    aBadPartnershipException.Partnership);
+            ErrCode nErrorCode;
+            std::vector< rtl::OUString > aArguments;
+            if (aBadPartnershipException.Partnership.getLength() == 0)
+                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP;
+            else
+            {
+                nErrorCode = ERRCODE_UUI_BADPARTNERSHIP_NAME;
+                aArguments.push_back(aBadPartnershipException.Partnership);
+            }
+            handleErrorRequest(star::task::InteractionClassification_ERROR,
+                               getContextProperty(),
+                               nErrorCode,
+                               aArguments,
+                               rRequest->getContinuations());
+            return;
         }
     }
     catch (std::bad_alloc const &)
     {
-        throw star::uno::RuntimeException(
+        throw com::sun::star::uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
                   *this);
     }
-
-    if (eExecute != EXECUTE_NO)
-    {
-        USHORT nResult = executeErrorDialog(nErrorID,
-                                            nErrorFlags,
-                                            bOverrideContext,
-                                            aContext);
-        if (eExecute != EXECUTE_IGNORE_RESULT)
-            nButton = nResult;
-    }
-
-    switch (nButton)
-    {
-    case ERRCODE_BUTTON_OK:
-    case ERRCODE_BUTTON_YES:
-        {for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-        {
-            star::uno::Reference< star::task::XInteractionApprove >
-                xApprove(aContinuations[i], star::uno::UNO_QUERY);
-            if (xApprove.is())
-            {
-                xApprove->select();
-                break;
-            }
-        }}
-        break;
-
-    case ERRCODE_BUTTON_CANCEL:
-        {for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-        {
-            star::uno::Reference< star::task::XInteractionAbort >
-                xAbort(aContinuations[i], star::uno::UNO_QUERY);
-            if (xAbort.is())
-            {
-                xAbort->select();
-                break;
-            }
-        }}
-        break;
-
-    case ERRCODE_BUTTON_RETRY:
-        {for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-        {
-            star::uno::Reference< star::task::XInteractionRetry >
-                xRetry(aContinuations[i], star::uno::UNO_QUERY);
-            if (xRetry.is())
-            {
-                xRetry->select();
-                break;
-            }
-        }}
-        break;
-
-    case ERRCODE_BUTTON_NO:
-        {for (sal_Int32 i = 0; i < aContinuations.getLength(); ++i)
-        {
-            star::uno::Reference< star::task::XInteractionDisapprove >
-                xDisapprove(aContinuations[i], star::uno::UNO_QUERY);
-            if (xDisapprove.is())
-            {
-                xDisapprove->select();
-                break;
-            }
-        }}
-        break;
-    }
 }
 
-Window * UUIInteractionHandler::getParentArgument() SAL_THROW(())
+Window * UUIInteractionHandler::getParentProperty() SAL_THROW(())
 {
-    osl::MutexGuard aGuard(m_aMutex);
-    for (sal_Int32 i = 0; i < m_aArguments.getLength(); ++i)
+    osl::MutexGuard aGuard(m_aPropertyMutex);
+    for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
-        star::beans::PropertyValue aArgument;
-        if ((m_aArguments[i] >>= aArgument)
-            && aArgument.
+        star::beans::PropertyValue aProperty;
+        if ((m_aProperties[i] >>= aProperty)
+            && aProperty.
                    Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Parent")))
         {
             star::uno::Reference< star::awt::XWindow > xWindow;
-            aArgument.Value >>= xWindow;
+            aProperty.Value >>= xWindow;
             return VCLUnoHelper::GetWindow(xWindow);
         }
     }
     return 0;
 }
 
-bool UUIInteractionHandler::getContextArgument(rtl::OUString * pContext)
-    SAL_THROW(())
+rtl::OUString UUIInteractionHandler::getContextProperty() SAL_THROW(())
 {
-    OSL_ENSURE(pContext, "specification violation");
-    osl::MutexGuard aGuard(m_aMutex);
-    for (sal_Int32 i = 0; i < m_aArguments.getLength(); ++i)
+    osl::MutexGuard aGuard(m_aPropertyMutex);
+    for (sal_Int32 i = 0; i < m_aProperties.getLength(); ++i)
     {
-        star::beans::PropertyValue aArgument;
-        if ((m_aArguments[i] >>= aArgument)
-            && aArgument.
+        star::beans::PropertyValue aProperty;
+        if ((m_aProperties[i] >>= aProperty)
+            && aProperty.
                    Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Context")))
         {
-            aArgument.Value >>= *pContext;
-            return true;
+            rtl::OUString aContext;
+            aProperty.Value >>= aContext;
+            return aContext;
         }
     }
-    return false;
+    return rtl::OUString();
 }
 
 bool
@@ -1049,71 +984,6 @@ UUIInteractionHandler::initPasswordContainer(
         {}
     OSL_ENSURE(pContainer->is(), "unexpected situation");
     return pContainer->is();
-}
-
-USHORT
-UUIInteractionHandler::executeErrorDialog(ULONG nID,
-                                          USHORT nMask,
-                                          bool bOverrideContext,
-                                          rtl::OUString const & rContext)
-    SAL_THROW((star::uno::RuntimeException))
-{
-    try
-    {
-        vos::OGuard aGuard(Application::GetSolarMutex());
-
-        std::auto_ptr< ResMgr >
-            xManager1(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler1(new SfxErrorHandler(RID_ERRHDL,
-                                          ERRCODE_AREA_TOOLS,
-                                          ERRCODE_AREA_LIB1 - 1,
-                                          xManager1.get()));
-        std::auto_ptr< ResMgr >
-            xManager2(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(cnt)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler2(new SfxErrorHandler(RID_CHAOS_START + 12,
-                                          ERRCODE_AREA_CHAOS,
-                                          ERRCODE_AREA_CHAOS_END,
-                                          xManager2.get()));
-            // cf. chaos/source/inc/cntrids.hrc, where
-            // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
-        std::auto_ptr< ResMgr >
-            xManager3(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
-        std::auto_ptr< SfxErrorHandler >
-            xHandler3(new SfxErrorHandler(RID_UUI_ERRHDL,
-                                          ERRCODE_AREA_UUI,
-                                          ERRCODE_AREA_UUI_END,
-                                          xManager3.get()));
-
-        bool bContext;
-        rtl::OUString aContext;
-        if (bOverrideContext)
-        {
-            bContext = true;
-            aContext = rContext;
-        }
-        else
-            bContext = getContextArgument(&aContext);
-        std::auto_ptr< ErrorContext >
-            xContext(new SimpleErrorContext(getParentArgument(),
-                                            bContext,
-                                            aContext));
-
-        // Needed because within ErrorHandler::HandleError() ResIds are
-        // created without a ResMgr---they require a default ResMgr:
-        ResMgr * pDefaultManager = Resource::GetResManager();
-        Resource::SetResManager(xManager1.get());
-        USHORT nButton = ErrorHandler::HandleError(nID, nMask);
-        Resource::SetResManager(pDefaultManager);
-        return nButton;
-    }
-    catch (std::bad_alloc const &)
-    {
-        throw star::uno::RuntimeException(
-                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
-                  *this);
-    }
 }
 
 void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
@@ -1146,7 +1016,7 @@ void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         UniString aRealm(rRealm); // Forte compiler needs it spelled out...
         std::auto_ptr< LoginDialog >
-            xDialog(new LoginDialog(getParentArgument(),
+            xDialog(new LoginDialog(getParentProperty(),
                                     nFlags,
                                     rInfo.GetServer(),
                                     &aRealm,
@@ -1200,7 +1070,7 @@ UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         std::auto_ptr< MasterPasswordDialog >
             xDialog(new MasterPasswordDialog(
-                            getParentArgument(), nMode, xManager.get()));
+                            getParentProperty(), nMode, xManager.get()));
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
         aMaster = rtl::OUStringToOString(xDialog->GetMasterPassword(),
@@ -1244,7 +1114,7 @@ UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
             xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         std::auto_ptr< CookiesDialog >
             xDialog(new CookiesDialog(
-                            getParentArgument(), &rRequest, xManager.get()));
+                            getParentProperty(), &rRequest, xManager.get()));
         xDialog->Execute();
     }
     catch (std::bad_alloc const &)
@@ -1255,6 +1125,74 @@ UUIInteractionHandler::executeCookieDialog(CntHTTPCookieRequest & rRequest)
     }
 }
 
+USHORT
+UUIInteractionHandler::executeErrorDialog(
+    star::task::InteractionClassification eClassification,
+    rtl::OUString const & rContext,
+    rtl::OUString const & rMessage,
+    WinBits nButtonMask)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    vos::OGuard aGuard(Application::GetSolarMutex());
+
+    rtl::OUStringBuffer aText(rContext);
+    if (rContext.getLength() != 0 && rMessage.getLength() != 0)
+        aText.appendAscii(RTL_CONSTASCII_STRINGPARAM(":\n"));
+            //TODO! must be internationalized
+    if (rMessage.getLength() != 0)
+    {
+        aText.append(rMessage);
+        aText.append(
+                  static_cast< sal_Unicode >(
+                      eClassification
+                              == star::task::InteractionClassification_QUERY ?
+                          '?' : '.'));
+            //TODO! must be internationalized
+    }
+
+    std::auto_ptr< MessBox > xBox;
+    try
+    {
+        switch (eClassification)
+        {
+        case star::task::InteractionClassification_ERROR:
+            xBox.reset(new ErrorBox(getParentProperty(),
+                                    nButtonMask,
+                                    aText.makeStringAndClear()));
+            break;
+
+        case star::task::InteractionClassification_WARNING:
+            xBox.reset(new WarningBox(getParentProperty(),
+                                      nButtonMask,
+                                      aText.makeStringAndClear()));
+            break;
+
+        case star::task::InteractionClassification_INFO:
+            if (nButtonMask == (WB_OK | WB_DEF_OK))
+                xBox.reset(new InfoBox(getParentProperty(),
+                                       aText.makeStringAndClear()));
+            else
+                xBox.reset(new ErrorBox(getParentProperty(),
+                                        nButtonMask,
+                                        aText.makeStringAndClear()));
+            break;
+
+        case star::task::InteractionClassification_QUERY:
+            xBox.reset(new QueryBox(getParentProperty(),
+                                    nButtonMask,
+                                    aText.makeStringAndClear()));
+            break;
+        }
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
+    return xBox->Execute();
+}
+
 void
 UUIInteractionHandler::handleAuthenticationRequest(
     star::ucb::AuthenticationRequest const & rRequest,
@@ -1263,12 +1201,12 @@ UUIInteractionHandler::handleAuthenticationRequest(
         rContinuations)
     SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
-    getAuthenticationContinuations(
-        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
+    getContinuations(
+        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication);
     bool bRemember;
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
@@ -1449,12 +1387,12 @@ UUIInteractionHandler::handlePasswordRequest(
         rContinuations)
     SAL_THROW((star::uno::RuntimeException))
 {
-    star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
-    getAuthenticationContinuations(
-        rContinuations, &xAbort, &xRetry, &xSupplyAuthentication);
+    getContinuations(
+        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication);
     LoginErrorInfo aInfo;
     executePasswordDialog(aInfo, rRequest.Mode);
     switch (aInfo.GetResult())
@@ -1585,7 +1523,181 @@ UUIInteractionHandler::handleCookiesRequest(
     }
 }
 
-sal_Char const UUIInteractionHandler::m_aImplementationName[]
+void
+UUIInteractionHandler::handleErrorRequest(
+    star::task::InteractionClassification eClassification,
+    rtl::OUString const & rContext,
+    ErrCode nErrorCode,
+    std::vector< rtl::OUString > const & rArguments,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    //TODO! It can happen that the buttons calculated below do not match the
+    // error text from the resource (e.g., some text that is not a question,
+    // but YES and NO buttons).  Some error texts have ExtraData that
+    // specifies a set of buttons, but that data is not really useful, because
+    // a single error text may well make sense both with only an OK button and
+    // with RETRY and CANCEL buttons.
+
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+    star::uno::Reference< star::task::XInteractionDisapprove > xDisapprove;
+    star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    getContinuations(
+        rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0);
+    // The following mapping uses the bit mask
+    //     Approve = 8,
+    //     Disapprove = 4,
+    //     Retry = 2,
+    //     Abort = 1
+    //
+    // The mapping has five properties on which the code to select the correct
+    // continuation relies:
+    // 1  The OK button is mapped to Approve if that is available, otherwise
+    //    to Abort if that is available, otherwise to none.
+    // 2  The CANCEL button is always mapped to Abort.
+    // 3  The RETRY button is always mapped to Retry.
+    // 4  The NO button is always mapped to Disapprove.
+    // 5  The YES button is always mapped to Approve.
+    //
+    // Because the WinBits button combinations are quite restricted, not every
+    // request can be served here.
+    static WinBits const aButtonMask[16]
+        = { 0,
+            WB_OK | WB_DEF_OK, // Abort
+            0,
+            WB_RETRY_CANCEL | WB_DEF_CANCEL, // Retry, Abort
+            0,
+            0,
+            0,
+            0,
+            WB_OK | WB_DEF_OK, // Approve
+            WB_OK_CANCEL | WB_DEF_CANCEL, // Approve, Abort
+            0,
+            0,
+            WB_YES_NO | WB_DEF_NO, // Approve, Disapprove
+            WB_YES_NO_CANCEL | WB_DEF_CANCEL, // Approve, Disapprove, Abort
+            0,
+            0 };
+    WinBits nButtonMask = aButtonMask[(xApprove.is() ? 8 : 0)
+                                          | (xDisapprove.is() ? 4 : 0)
+                                          | (xRetry.is() ? 2 : 0)
+                                          | (xAbort.is() ? 1 : 0)];
+    if (nButtonMask == 0)
+        return;
+
+    //TODO! remove this backwards compatibility?
+    rtl::OUString aContext(rContext);
+    if (aContext.getLength() == 0 && nErrorCode != 0)
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        ErrorContext * pContext = ErrorContext::GetContext();
+        if (pContext)
+        {
+            UniString aContextString;
+            if (pContext->GetString(nErrorCode, aContextString))
+                aContext = aContextString;
+        }
+    }
+
+    rtl::OUString aMessage;
+    {
+        enum Source { SOURCE_OFA, SOURCE_CNT, SOURCE_UUI };
+        static char const * const aManager[3]
+            = { CREATEVERSIONRESMGR_NAME(ofa),
+                CREATEVERSIONRESMGR_NAME(cnt),
+                CREATEVERSIONRESMGR_NAME(uui) };
+        static USHORT const aId[3]
+            = { RID_ERRHDL,
+                RID_CHAOS_START + 12,
+                    // cf. chaos/source/inc/cntrids.hrc, where
+                    // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
+                RID_UUI_ERRHDL };
+        Source eSource = nErrorCode >= ERRCODE_AREA_TOOLS
+                         && nErrorCode < ERRCODE_AREA_LIB1 ?
+                             SOURCE_OFA :
+                         nErrorCode >= ERRCODE_AREA_CHAOS
+                         && nErrorCode < ERRCODE_AREA_CHAOS_END ?
+                             SOURCE_CNT :
+                             SOURCE_UUI;
+
+        vos::OGuard aGuard(Application::GetSolarMutex());
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(aManager[eSource]));
+        aMessage = ErrorResource(ResId(aId[eSource], xManager.get())).
+                       getString(nErrorCode);
+    }
+    for (sal_Int32 i = 0;;)
+    {
+        i = aMessage.
+                indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$(ARG")),
+                        i);
+        if (i == -1)
+            break;
+        if (aMessage.getLength() - i >= RTL_CONSTASCII_LENGTH("$(ARGx)")
+            && aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARGx")] == ')')
+        {
+            sal_Unicode c
+                = aMessage.getStr()[i + RTL_CONSTASCII_LENGTH("$(ARG")];
+            if (c >= '1' && c <= '2')
+            {
+                std::vector< rtl::OUString >::size_type nIndex
+                    = static_cast< std::vector< rtl::OUString >::size_type >(
+                          c - '1');
+                if (nIndex < rArguments.size())
+                {
+                    aMessage
+                        = aMessage.replaceAt(i,
+                                             RTL_CONSTASCII_LENGTH("$(ARGx)"),
+                                             rArguments[nIndex]);
+                    i += rArguments[nIndex].getLength();
+                    continue;
+                }
+            }
+        }
+        ++i;
+    }
+
+    switch (executeErrorDialog(
+                eClassification, aContext, aMessage, nButtonMask))
+    {
+    case ERRCODE_BUTTON_OK:
+        OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
+        if (xApprove.is())
+            xApprove->select();
+        else if (xAbort.is())
+            xAbort->select();
+        break;
+
+    case ERRCODE_BUTTON_CANCEL:
+        OSL_ENSURE(xAbort.is(), "unexpected situation");
+        if (xAbort.is())
+            xAbort->select();
+        break;
+
+    case ERRCODE_BUTTON_RETRY:
+        OSL_ENSURE(xRetry.is(), "unexpected situation");
+        if (xRetry.is())
+            xRetry->select();
+        break;
+
+    case ERRCODE_BUTTON_NO:
+        OSL_ENSURE(xDisapprove.is(), "unexpected situation");
+        if (xDisapprove.is())
+            xDisapprove->select();
+        break;
+
+    case ERRCODE_BUTTON_YES:
+        OSL_ENSURE(xApprove.is(), "unexpected situation");
+        if (xApprove.is())
+            xApprove->select();
+        break;
+    }
+}
+
+char const UUIInteractionHandler::m_aImplementationName[]
     = "com.sun.star.comp.uui.UUIInteractionHandler";
 
 star::uno::Sequence< rtl::OUString >
