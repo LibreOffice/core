@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-10-31 17:06:41 $
+ *  last change: $Author: cl $ $Date: 2000-11-02 16:12:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,18 +756,20 @@ void SdrModel::ImpCreateTables()
 
 void SdrModel::Clear()
 {
-    USHORT i;
-    // alle Zeichenseiten loeschen
-    USHORT nAnz=GetPageCount();
-    for (i=0; i<nAnz; i++) {
-        delete GetPage(i);
+    sal_Int32 i;
+    // delete all drawing pages
+    sal_Int32 nAnz=GetPageCount();
+    for (i=nAnz-1; i>=0; i--)
+    {
+        DeletePage( (USHORT)i );
     }
     aPages.Clear();
 
-    // alle Masterpages loeschen
+    // delete all Masterpages
     nAnz=GetMasterPageCount();
-    for (i=0; i<nAnz; i++) {
-        delete GetMasterPage(i);
+    for(i=nAnz-1; i>=0; i--)
+    {
+        DeleteMasterPage( (USHORT)i );
     }
     aMaPag.Clear();
 
