@@ -1,0 +1,13 @@
+    <node oor:name="MS Excel 4.0 (StarWriter)" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>calc_MS_Excel_40</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>EXCEL</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">Microsoft Excel 4.0 (%productname% Writer)</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+    </node>
