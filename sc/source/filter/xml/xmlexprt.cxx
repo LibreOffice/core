@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-31 07:20:06 $
+ *  last change: $Author: sab $ $Date: 2001-06-05 09:27:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -669,10 +669,8 @@ void ScXMLExport::_ExportMeta()
         SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, XML_DOCUMENT_STATISTIC, sal_True, sal_True);
     }
     sal_Int32 nRef(nCellCount + (2 * nTableCount) + (2 * nShapesCount));
-    sal_Int32 nValue = 5;
-    nRef += nValue;
     GetProgressBarHelper()->SetReference(nRef);
-    GetProgressBarHelper()->SetValue(nValue);
+    GetProgressBarHelper()->SetValue(0);
 }
 
 void ScXMLExport::_ExportFontDecls()
@@ -1563,6 +1561,7 @@ void ScXMLExport::_ExportAutoStyles()
                 rtl::OUString SC_SCOLUMNPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX));
                 rtl::OUString SC_SROWPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX));
                 rtl::OUString SC_SCELLPREFIX(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX));
+                rtl::OUString SC_NUMBERFORMAT(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_NUMFMT));
                 GetChartExport()->setTableAddressMapper(xChartExportMapper);
                 sal_Int32 nTableCount = xIndex->getCount();
                 pCellStyles->AddNewTable(nTableCount - 1);
@@ -1608,7 +1607,7 @@ void ScXMLExport::_ExportAutoStyles()
                                             if (xCellRangeAddressable.is())
                                             {
                                                 rtl::OUString sStyleName;
-                                                sal_Int32 nNumberFormat;
+                                                sal_Int32 nNumberFormat(-1);
                                                 sal_Int32 nValidationIndex(-1);
                                                 table::CellRangeAddress aRangeAddress = xCellRangeAddressable->getRangeAddress();
                                                 std::vector< XMLPropertyState > xPropStates = xCellStylesExportPropertySetMapper->Filter( xProperties );
@@ -1666,6 +1665,11 @@ void ScXMLExport::_ExportAutoStyles()
                                                 }
                                                 if (nCount == 1) // this is the CellStyle and should be removed if alone
                                                     xPropStates.clear();
+                                                if (nNumberFormat == -1)
+                                                {
+                                                    uno::Any aAny = xProperties->getPropertyValue(SC_NUMBERFORMAT);
+                                                    aAny >>= nNumberFormat;
+                                                }
                                                 if (sStyleName.getLength())
                                                 {
                                                     if (xPropStates.size())
