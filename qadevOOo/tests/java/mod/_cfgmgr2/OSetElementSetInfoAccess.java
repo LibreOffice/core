@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OSetElementSetInfoAccess.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 11:39:06 $
+ *  last change:$Date: 2003-12-11 11:56:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 package mod._cfgmgr2;
 
+import com.sun.star.beans.Property;
 import java.io.PrintWriter;
 
 import lib.TestCase;
@@ -69,9 +70,14 @@ import util.utils;
 
 import com.sun.star.beans.PropertyState;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
+import com.sun.star.container.XNameReplace;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 
@@ -97,7 +103,6 @@ public class OSetElementSetInfoAccess extends TestCase {
         XInterface oObj = null;
         Object instance = null;
         Object instance1 = null;
-        Object instance2 = null;
         log.println("creating the Environment");
 
         PropertyValue[] nodeArgs = new PropertyValue[1];
@@ -108,18 +113,36 @@ public class OSetElementSetInfoAccess extends TestCase {
         nodepath.State = PropertyState.DEFAULT_VALUE;
         nodeArgs[0] = nodepath;
 
+        String hierarchicalElementName = "Labels['Avery A4']";
+        String elementName = "Avery A4";
+
+        XNameReplace xChangeView = null;
+        XNameContainer xContainer = null;
+        XHierarchicalNameAccess xHierachNameAccess = null;
         try {
             XInterface Provider = (XInterface) ((XMultiServiceFactory)tParam.getMSF())
                                                      .createInstance("com.sun.star.comp.configuration.ConfigurationProvider");
             XMultiServiceFactory pMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
                                                 XMultiServiceFactory.class,
                                                 Provider);
-            XHierarchicalNameAccess names = (XHierarchicalNameAccess) UnoRuntime.queryInterface(
+            xHierachNameAccess = (XHierarchicalNameAccess) UnoRuntime.queryInterface(
                                                     XHierarchicalNameAccess.class,
                                                     pMSF.createInstanceWithArguments(
                                                             "com.sun.star.configuration.ConfigurationAccess",
                                                             nodeArgs));
-            oObj = (XInterface) names.getByHierarchicalName("Labels['Avery A4']");
+
+            oObj = (XInterface) xHierachNameAccess.getByHierarchicalName(hierarchicalElementName);
+
+            // craete a changeable view.
+            XHierarchicalNameAccess changeableNames = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class,
+                        pMSF.createInstanceWithArguments("com.sun.star.configuration.ConfigurationUpdateAccess", nodeArgs));
+
+            XInterface xInt = (XInterface) changeableNames.getByHierarchicalName(hierarchicalElementName);
+            xChangeView = (XNameReplace)UnoRuntime.queryInterface(XNameReplace.class, xInt);
+            XSingleServiceFactory jobsFac = (XSingleServiceFactory) UnoRuntime.queryInterface(
+                                                    XSingleServiceFactory.class, xChangeView);
+            instance1 = jobsFac.createInstance();
+
         } catch (com.sun.star.uno.Exception e) {
             e.printStackTrace();
         }
@@ -128,15 +151,23 @@ public class OSetElementSetInfoAccess extends TestCase {
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        XNameAccess names = (XNameAccess) UnoRuntime.queryInterface(
+        XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(
                                     XNameAccess.class, oObj);
 
-        String[] pNames = names.getElementNames();
+        String[] pNames = xNameAccess.getElementNames();
 
         tEnv.addObjRelation("ElementName", pNames[0]);
 
         tEnv.addObjRelation("cannotSwitchParent",
                             "configmgr: BasicElement::setParent: cannot move Entry");
+
+        tEnv.addObjRelation("XContainer.NewValue", instance1);
+        tEnv.addObjRelation("XContainer.ElementName", "L0");
+        tEnv.addObjRelation("XContainer.Container", xChangeView);
+
+        // dispose the owner of the test object
+        tEnv.addObjRelation("XComponent.DisposeThis", (XComponent)
+                    UnoRuntime.queryInterface(XComponent.class, xHierachNameAccess));
 
         tEnv.addObjRelation("expectedName", pNames[0]);
         tEnv.addObjRelation("HierachicalName", "/org.openoffice.Office");
