@@ -90,6 +90,7 @@
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
 "CharacterStyle";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
+"CharacterStyle";"com::sun::star::style::CharacterProperties";"CharHidden#optional"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "CharacterStyle";"com::sun::star::beans::XPropertySet";"getPropertyValue()"
