@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlButton.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:41 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 08:53:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,18 +80,14 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::awt::UnoButtonControl
 /** specifies a button control.
  */
 service UnoControlButton
 {
-    // DocMerge: empty anyway
     service com::sun::star::awt::UnoControl;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XButton;
 
-    // DocMerge: empty anyway
     interface com::sun::star::awt::XLayoutConstrains;
 
 };
@@ -99,4 +95,5 @@ service UnoControlButton
 //=============================================================================
 
 }; }; }; };
+
 #endif
