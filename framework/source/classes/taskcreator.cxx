@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:24 $
+ *  last change: $Author: mba $ $Date: 2000-12-05 17:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,7 @@ Reference< XFrame > TaskCreator::createNewSystemTask( const OUString& sName )
             // Set window on task.
             xTask->initialize( xWindow );
             /* HACK for VCL */
-            xWindow->setPosSize ( 0, 0, 500, 500, PosSize::POSSIZE  );
+//            xWindow->setPosSize ( 0, 0, 500, 500, PosSize::POSSIZE  );
             xWindow->setEnable  ( sal_True                          );
             /* HACK for VCL */
         }
