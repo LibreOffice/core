@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:35:19 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:18:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3601,6 +3601,14 @@ Image RID_SVXBMP_HLDOCNTP_H
     ImageBitmap = Bitmap { File = "hldocntp_h.bmp" ; };
     MASKCOLOR
 };
+
+
+
+
+
+
+
+
 
 
 
