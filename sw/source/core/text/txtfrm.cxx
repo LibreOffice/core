@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-13 08:59:05 $
+ *  last change: $Author: ama $ $Date: 2000-10-13 09:05:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1339,7 +1339,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         {
             if( IsLocked() )
             {
-                if( PREP_FLY_ARRIVE == ePrep )
+                if( PREP_FLY_ARRIVE == ePrep || PREP_FLY_LEAVE == ePrep )
                 {
                     xub_StrLen nLen = ( GetFollow() ? GetFollow()->GetOfst() :
                                       STRING_LEN ) - GetOfst();
