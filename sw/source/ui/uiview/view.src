@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2001-04-09 23:18:56 $
+ *  last change: $Author: rt $ $Date: 2001-04-26 20:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,9 +385,9 @@ InfoBox MSG_ERR_NO_FAX
 {
     MESSAGE = "Kein Fax-Drucker unter Extras/Optionen/%1/Drucken eingestellt." ;
     MESSAGE [ English ] = "No fax printer at Settings/Options/%1/Printer configured." ;
-    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/Afdrukken." ;
+    Message [ dutch ] = "Geen faxprinter geconfigureerd onder: Extra/Opties/%1/Afdrukken." ;
     Message [ english_us ] = "No fax printer has been set under Tools/Options/%1/Print." ;
-    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/Stampa." ;
+    Message [ italian ] = "Nessuna stampante-fax installata in Strumenti/Opzioni/%1/Stampa." ;
     Message [ spanish ] = "En Herramientas/Opciones/%1/Imprimir no se ha configurado ninguna impresora fax." ;
     Message [ french ] = "Aucune imprimante fax n'a été paramétrée sous Outils/Options/%1/Impression." ;
     Message [ swedish ] = "Ingen faxskrivare har ställts in under Verktyg/Alternativ/%1/Skriv ut." ;
@@ -413,10 +413,10 @@ String STR_WEBOPTIONS
     TEXT[ portuguese ] = "HTML document";
     TEXT[ russian ] = "Äîêóìåíò HTML";
     TEXT[ greek ] = "¸ããñáöï HTML";
-    TEXT[ dutch ] = "HTML document";
+    TEXT[ dutch ] = "HTML-document";
     TEXT[ french ] = "Document HTML";
     TEXT[ spanish ] = "Documento HTML";
-    TEXT[ italian ] = "HTML document";
+    TEXT[ italian ] = "Documento HTML";
     TEXT[ danish ] = "HTML document";
     TEXT[ swedish ] = "HTML-dokument";
     TEXT[ polish ] = "Dokument HTML";
@@ -436,10 +436,10 @@ String STR_TEXTOPTIONS
     TEXT[ portuguese ] = "Text document";
     TEXT[ russian ] = "Òåêñòîâûé äîêóìåíò";
     TEXT[ greek ] = "¸ããñáöï êåéìİíïõ";
-    TEXT[ dutch ] = "Text document";
+    TEXT[ dutch ] = "Tekstdocument";
     TEXT[ french ] = "Document texte";
     TEXT[ spanish ] = "Documento de texto";
-    TEXT[ italian ] = "Text document";
+    TEXT[ italian ] = "Documento di testo";
     TEXT[ danish ] = "Text document";
     TEXT[ swedish ] = "Textdokument";
     TEXT[ polish ] = "Dokument tekstowy";
