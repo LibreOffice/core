@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-10 17:08:15 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 13:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "ErrorBar.hxx"
 
 #include "GraphicPropertyItemConverter.hxx"
 #include "CharacterPropertyItemConverter.hxx"
@@ -84,8 +85,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
 #include <drafts/com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBAR_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBar.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
+#include <drafts/com/sun/star/chart2/ErrorBarStyle.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -172,23 +173,22 @@ void lcl_AddMeanValueLine( uno::Reference< chart2::XRegressionCurveContainer > &
                                      uno::Reference< uno::XComponentContext >() ));
 }
 
-bool lcl_GetYErrorBar(
-    const uno::Reference< beans::XPropertySet > & xProp,
-    chart2::ErrorBar & rOutErrorBar )
+uno::Reference< beans::XPropertySet > lcl_GetYErrorBar(
+    const uno::Reference< beans::XPropertySet > & xProp )
 {
-    bool bResult = false;
+    uno::Reference< beans::XPropertySet > xResult;
 
     if( xProp.is())
         try
         {
-            bResult = ( xProp->getPropertyValue( C2U( "ErrorBarY" )) >>= rOutErrorBar );
+            ( xProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xResult );
         }
         catch( uno::Exception & ex )
         {
             ASSERT_EXCEPTION( ex );
         }
 
-    return bResult;
+    return xResult;
 }
 
 bool lcl_getRegressType( const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt,
@@ -336,18 +336,46 @@ bool lcl_removeAllKnownRegressionCurves( const uno::Reference< chart2::XRegressi
     return bResult;
 }
 
-chart2::ErrorBar lcl_GetDefaultErrorBar()
+uno::Reference< beans::XPropertySet > lcl_GetDefaultErrorBar()
 {
-    chart2::ErrorBar aErrorBar;
+    // todo: use a valid context
+    return uno::Reference< beans::XPropertySet >(
+        new ::chart::ErrorBar( uno::Reference< uno::XComponentContext >()));
+}
 
-    aErrorBar.aStyle = chart2::ErrorBarStyle_ABSOLUTE;
-    aErrorBar.fPositiveError = 0.0;
-    aErrorBar.fNegativeError = 0.0;
-    aErrorBar.fWeight = 0.0;
-    aErrorBar.bShowPositiveError = false;
-    aErrorBar.bShowNegativeError = false;
+void lcl_getErrorValues( const uno::Reference< beans::XPropertySet > & xErrorBarProp,
+                    double & rOutPosError, double & rOutNegError )
+{
+    if( ! xErrorBarProp.is())
+        return;
 
-    return aErrorBar;
+    try
+    {
+        xErrorBarProp->getPropertyValue( C2U( "PositiveError" )) >>= rOutPosError;
+        xErrorBarProp->getPropertyValue( C2U( "NegativeError" )) >>= rOutNegError;
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+}
+
+void lcl_getErrorIndicatorValues(
+    const uno::Reference< beans::XPropertySet > & xErrorBarProp,
+    bool & rOutShowPosError, bool & rOutShowNegError )
+{
+    if( ! xErrorBarProp.is())
+        return;
+
+    try
+    {
+        xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= rOutShowPosError;
+        xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= rOutShowNegError;
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
 }
 
 } // anonymous namespace
@@ -413,8 +441,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
         // SCHATTR_STAT_CONSTMINUS and SCHATTR_STAT_INDICATE
         case SCHATTR_STAT_KIND_ERROR:
         {
-            chart2::ErrorBar aOldErrorBar;
-            bool bOldHasErrorBar = ( lcl_GetYErrorBar( GetPropertySet(), aOldErrorBar ));
+            uno::Reference< beans::XPropertySet > xOldErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet() ));
+            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             SvxChartKindError eErrorKind =
                 reinterpret_cast< const SvxChartKindErrorItem & >(
@@ -447,16 +476,23 @@ bool StatisticsItemConverter::ApplySpecialItem(
                         break;
                 }
 
-                if( eErrorKind != CHERROR_NONE &&
-                    ( ! bOldHasErrorBar ||
-                      aOldErrorBar.aStyle != eStyle ))
+                if( eErrorKind != CHERROR_NONE )
                 {
-                    if( ! bOldHasErrorBar )
-                        aOldErrorBar = lcl_GetDefaultErrorBar();
-                    aOldErrorBar.aStyle = eStyle;
-                    GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                        uno::makeAny( aOldErrorBar ));
-                    bChanged = true;
+                    chart2::ErrorBarStyle eOldErrorBarStyle = chart2::ErrorBarStyle_VARIANCE;
+                    if( bOldHasErrorBar )
+                        xOldErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= eOldErrorBarStyle;
+
+                    if( ! bOldHasErrorBar ||
+                        eOldErrorBarStyle != eStyle )
+                    {
+                        if( ! bOldHasErrorBar )
+                            xOldErrorBarProp = lcl_GetDefaultErrorBar();
+                        xOldErrorBarProp->setPropertyValue( C2U( "ErrorBarStyle" ),
+                                                            uno::makeAny( eStyle ));
+                        GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
+                                                            uno::makeAny( xOldErrorBarProp ));
+                        bChanged = true;
+                    }
                 }
             }
         }
@@ -465,21 +501,26 @@ bool StatisticsItemConverter::ApplySpecialItem(
         case SCHATTR_STAT_PERCENT:
         case SCHATTR_STAT_BIGERROR:
         {
-            chart2::ErrorBar aOldErrorBar;
-            bool bOldHasErrorBar = ( lcl_GetYErrorBar( GetPropertySet(), aOldErrorBar ));
+            uno::Reference< beans::XPropertySet > xOldErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet()));
+            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
+            double fPos, fNeg;
+            lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
-                ! ( ::rtl::math::approxEqual( aOldErrorBar.fPositiveError, fValue ) &&
-                    ::rtl::math::approxEqual( aOldErrorBar.fNegativeError, fValue )))
+                ! ( ::rtl::math::approxEqual( fPos, fValue ) &&
+                    ::rtl::math::approxEqual( fNeg, fValue )))
             {
-                aOldErrorBar.fPositiveError = fValue;
-                aOldErrorBar.fNegativeError = fValue;
+                xOldErrorBarProp->setPropertyValue( C2U( "PositiveError" ),
+                                                    uno::makeAny( fValue ));
+                xOldErrorBarProp->setPropertyValue( C2U( "NegativeError" ),
+                                                    uno::makeAny( fValue ));
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                    uno::makeAny( aOldErrorBar ));
+                                                    uno::makeAny( xOldErrorBarProp ));
                 bChanged = true;
             }
         }
@@ -487,19 +528,22 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
         case SCHATTR_STAT_CONSTPLUS:
         {
-            chart2::ErrorBar aOldErrorBar;
-            bool bOldHasErrorBar = ( lcl_GetYErrorBar( GetPropertySet(), aOldErrorBar ));
+            uno::Reference< beans::XPropertySet > xOldErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet()));
+            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
+            double fPos, fNeg;
+            lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
-                ! ::rtl::math::approxEqual( aOldErrorBar.fPositiveError, fValue ))
+                ! ::rtl::math::approxEqual( fPos, fValue ))
             {
-                aOldErrorBar.fPositiveError = fValue;
+                xOldErrorBarProp->setPropertyValue( C2U( "PositiveError" ), uno::makeAny( fValue ));
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                    uno::makeAny( aOldErrorBar ));
+                                                    uno::makeAny( xOldErrorBarProp ));
                 bChanged = true;
             }
         }
@@ -507,19 +551,22 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
         case SCHATTR_STAT_CONSTMINUS:
         {
-            chart2::ErrorBar aOldErrorBar;
-            bool bOldHasErrorBar = ( lcl_GetYErrorBar( GetPropertySet(), aOldErrorBar ));
+            uno::Reference< beans::XPropertySet > xOldErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet()));
+            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             double fValue =
                 reinterpret_cast< const SvxDoubleItem & >(
                     rItemSet.Get( nWhichId )).GetValue();
+            double fPos, fNeg;
+            lcl_getErrorValues( xOldErrorBarProp, fPos, fNeg );
 
             if( bOldHasErrorBar &&
-                ! ::rtl::math::approxEqual( aOldErrorBar.fNegativeError, fValue ))
+                ! ::rtl::math::approxEqual( fNeg, fValue ))
             {
-                aOldErrorBar.fNegativeError = fValue;
+                xOldErrorBarProp->setPropertyValue( C2U( "NegativeError" ), uno::makeAny( fValue ));
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                    uno::makeAny( aOldErrorBar ));
+                                                    uno::makeAny( xOldErrorBarProp ));
                 bChanged = true;
             }
         }
@@ -555,8 +602,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
         case SCHATTR_STAT_INDICATE:
         {
-            chart2::ErrorBar aOldErrorBar;
-            bool bOldHasErrorBar = ( lcl_GetYErrorBar( GetPropertySet(), aOldErrorBar ));
+            uno::Reference< beans::XPropertySet > xOldErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet()));
+            bool bOldHasErrorBar = xOldErrorBarProp.is();
 
             SvxChartIndicate eIndicate =
                 reinterpret_cast< const SvxChartIndicateItem & >(
@@ -565,15 +613,17 @@ bool StatisticsItemConverter::ApplySpecialItem(
             bool bNewIndPos = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_UP );
             bool bNewIndNeg = (eIndicate == CHINDICATE_BOTH || eIndicate == CHINDICATE_DOWN );
 
-            if( bOldHasErrorBar &&
-                ( aOldErrorBar.bShowPositiveError != bNewIndPos ||
-                  aOldErrorBar.bShowNegativeError != bNewIndNeg ))
-            {
-                aOldErrorBar.bShowPositiveError = bNewIndPos;
-                aOldErrorBar.bShowNegativeError = bNewIndNeg;
+            bool bShowPos, bShowNeg;
+            lcl_getErrorIndicatorValues( xOldErrorBarProp, bShowPos, bShowNeg );
 
+            if( bOldHasErrorBar &&
+                ( bShowPos != bNewIndPos ||
+                  bShowNeg != bNewIndNeg ))
+            {
+                xOldErrorBarProp->setPropertyValue( C2U( "ShowPositiveError" ), uno::makeAny( bNewIndPos ));
+                xOldErrorBarProp->setPropertyValue( C2U( "ShowNegativeError" ), uno::makeAny( bNewIndNeg ));
                 GetPropertySet()->setPropertyValue( C2U( "ErrorBarY" ),
-                                                    uno::makeAny( aOldErrorBar ));
+                                                    uno::makeAny( xOldErrorBarProp ));
                 bChanged = true;
             }
         }
@@ -600,26 +650,31 @@ void StatisticsItemConverter::FillSpecialItem(
         case SCHATTR_STAT_KIND_ERROR:
         {
             SvxChartKindError eErrorKind = CHERROR_NONE;
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
+            uno::Reference< beans::XPropertySet > xErrorBarProp(
+                lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is() )
             {
-                switch( aErrorBar.aStyle )
+                chart2::ErrorBarStyle eStyle;
+                if( xErrorBarProp->getPropertyValue( C2U( "ErrorBarStyle" )) >>= eStyle )
                 {
-                    case chart2::ErrorBarStyle_VARIANCE:
-                        eErrorKind = CHERROR_VARIANT; break;
-                    case chart2::ErrorBarStyle_STANDARD_DEVIATION:
-                        eErrorKind = CHERROR_SIGMA; break;
-                    case chart2::ErrorBarStyle_ABSOLUTE:
-                        eErrorKind = CHERROR_CONST; break;
-                    case chart2::ErrorBarStyle_RELATIVE:
-                        eErrorKind = CHERROR_PERCENT; break;
-                    case chart2::ErrorBarStyle_ERROR_MARGIN:
-                        eErrorKind = CHERROR_BIGERROR; break;
+                    switch( eStyle )
+                    {
+                        case chart2::ErrorBarStyle_VARIANCE:
+                            eErrorKind = CHERROR_VARIANT; break;
+                        case chart2::ErrorBarStyle_STANDARD_DEVIATION:
+                            eErrorKind = CHERROR_SIGMA; break;
+                        case chart2::ErrorBarStyle_ABSOLUTE:
+                            eErrorKind = CHERROR_CONST; break;
+                        case chart2::ErrorBarStyle_RELATIVE:
+                            eErrorKind = CHERROR_PERCENT; break;
+                        case chart2::ErrorBarStyle_ERROR_MARGIN:
+                            eErrorKind = CHERROR_BIGERROR; break;
 
-                    case chart2::ErrorBarStyle_FROM_DATA:
-                        // suppress warning
-                    case chart2::ErrorBarStyle_MAKE_FIXED_SIZE:
-                        break;
+                        case chart2::ErrorBarStyle_FROM_DATA:
+                            // suppress warning
+                        case chart2::ErrorBarStyle_MAKE_FIXED_SIZE:
+                            break;
+                    }
                 }
             }
             rOutItemSet.Put( SvxChartKindErrorItem( eErrorKind ));
@@ -628,39 +683,49 @@ void StatisticsItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_PERCENT:
         {
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
+            uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is())
             {
-                double fValue = ( aErrorBar.fPositiveError + aErrorBar.fNegativeError ) / 2.0;
-                rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ));
+                double fPos, fNeg;
+                lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
+                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
             }
         }
         break;
 
         case SCHATTR_STAT_BIGERROR:
         {
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
+            uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is())
             {
-                double fValue = ( aErrorBar.fPositiveError + aErrorBar.fNegativeError ) / 2.0;
-                rOutItemSet.Put( SvxDoubleItem( fValue, nWhichId ));
+                double fPos, fNeg;
+                lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
+                rOutItemSet.Put( SvxDoubleItem( ( fPos + fNeg ) / 2.0, nWhichId ));
             }
         }
         break;
 
         case SCHATTR_STAT_CONSTPLUS:
         {
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
-                rOutItemSet.Put( SvxDoubleItem( aErrorBar.fPositiveError, nWhichId ));
+            uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is())
+            {
+                double fPos, fNeg;
+                lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
+                rOutItemSet.Put( SvxDoubleItem( fPos, nWhichId ));
+            }
         }
         break;
 
         case SCHATTR_STAT_CONSTMINUS:
         {
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
-                rOutItemSet.Put( SvxDoubleItem( aErrorBar.fNegativeError, nWhichId ));
+            uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is())
+            {
+                double fPos, fNeg;
+                lcl_getErrorValues( xErrorBarProp, fPos, fNeg );
+                rOutItemSet.Put( SvxDoubleItem( fNeg, nWhichId ));
+            }
         }
         break;
 
@@ -675,21 +740,23 @@ void StatisticsItemConverter::FillSpecialItem(
 
         case SCHATTR_STAT_INDICATE:
         {
-            chart2::ErrorBar aErrorBar;
-            if( lcl_GetYErrorBar( GetPropertySet(), aErrorBar ))
+            uno::Reference< beans::XPropertySet > xErrorBarProp( lcl_GetYErrorBar( GetPropertySet()));
+            if( xErrorBarProp.is())
             {
                 SvxChartIndicate eIndicate = CHINDICATE_NONE;
+                bool bShowPos, bShowNeg;
+                lcl_getErrorIndicatorValues( xErrorBarProp, bShowPos, bShowNeg );
 
-                if( aErrorBar.bShowPositiveError )
+                if( bShowPos )
                 {
-                    if( aErrorBar.bShowNegativeError )
+                    if( bShowNeg )
                         eIndicate = CHINDICATE_BOTH;
                     else
                         eIndicate = CHINDICATE_UP;
                 }
                 else
                 {
-                    if( aErrorBar.bShowNegativeError )
+                    if( bShowNeg )
                         eIndicate = CHINDICATE_DOWN;
                     else
                         eIndicate = CHINDICATE_NONE;

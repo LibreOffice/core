@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: bm $ $Date: 2003-12-11 09:37:20 $
+#   last change: $Author: bm $ $Date: 2003-12-11 13:54:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,6 +81,7 @@ ENABLE_EXCEPTIONS=	TRUE
 
 #Specifies object files to bind into linked libraries.
 SLOFILES=	\
+    $(SLO)$/ErrorBar.obj \
     $(SLO)$/LifeTime.obj \
     $(SLO)$/MediaDescriptorHelper.obj \
     $(SLO)$/CommonConverters.obj \

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-08 15:45:54 $
+ *  last change: $Author: bm $ $Date: 2003-12-11 13:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,6 @@
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <drafts/com/sun/star/chart2/Symbol.hpp>
-#endif
-#ifndef _DRAFTS_COM_SUN_STAR_CHART2_ERRORBAR_HPP_
-#include <drafts/com/sun/star/chart2/ErrorBar.hpp>
 #endif
 
 using namespace ::com::sun::star;
@@ -289,13 +286,15 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "ErrorBarX" ),
                   PROP_DATAPOINT_ERROR_BAR_X,
-                  ::getCppuType( reinterpret_cast< const chart2::ErrorBar * >(0)),
+                  // XPropertySet supporting service ErrorBar
+                  ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
         Property( C2U( "ErrorBarY" ),
                   PROP_DATAPOINT_ERROR_BAR_Y,
-                  ::getCppuType( reinterpret_cast< const chart2::ErrorBar * >(0)),
+                  // XPropertySet supporting service ErrorBar
+                  ::getCppuType( reinterpret_cast< const uno::Reference< beans::XPropertySet > * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
     rOutProperties.push_back(
