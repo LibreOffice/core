@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationaudionode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 17:11:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:20:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,11 @@ namespace presentation
         private:
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::animations::XAudio >  mxAudioNode;
-            SoundPlayerSharedPtr                        mpPlayer;
+            ::rtl::OUString                             maSoundURL;
+            mutable SoundPlayerSharedPtr                mpPlayer;
+
+            void createPlayer() const;
+            void resetPlayer() const;
         };
 
     }
