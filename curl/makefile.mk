@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2002-10-22 08:50:03 $
+#   last change: $Author: hr $ $Date: 2003-03-19 17:37:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,12 +78,12 @@ PATCH_FILE_NAME=unx1-curl-7.9.8.patch
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp  --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict 
 
-BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 
-OUT2LIB=$(BUILD_DIR)$/lib$/.libs$/libcurl*.so
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.so
 .ENDIF			# "$(GUI)"=="UNX"
 
 
