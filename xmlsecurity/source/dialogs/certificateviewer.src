@@ -2,9 +2,9 @@
  *
  *  $RCSfile: certificateviewer.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:51:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 14:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ TabDialog RID_XMLSECDLG_CERTVIEWER
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text [ de ] = "Zertifikat zeigen";
+    Text [ de ] = "Zertifikat anzeigen";
     Text [ en-US ] = "View Certificate";
     TabControl 1
     {
@@ -321,7 +321,7 @@ TabPage RID_XMLSECTP_CERTPATH
     SVLook = TRUE;
     FixedText FT_CERTPATH
     {
-        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0 );
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_0 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "Zertifikatspfad";
         Text [ en-US ] = "Certification path";
@@ -329,30 +329,29 @@ TabPage RID_XMLSECTP_CERTPATH
     Control LB_SIGNATURES
     {
         HelpId = HID_XMLSEC_CTRL_VIEWSIGNATURES;
-        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_0A );
-        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_1-CV_ROW_0A - 20 /*HACK MT*/ );
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_1 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3*2 );
         SVLook = TRUE;
         Border = TRUE;
     };
     PushButton BTN_VIEWCERT
     {
-        // MT: Gunnar should check positions, also hack above...
-        Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CV_ROW_0A+CV_ROW_1-CV_ROW_0A - 20 + 5 );
+        Pos = MAP_APPFONT( CV_COL_1-(CV_COL_B-CV_COL_A), CVP_ROW_2 );
         Size = MAP_APPFONT( CV_COL_B-CV_COL_A, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Zertifikat zeigen...";
+        Text [ de ] = "Zertifikat anzeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     FixedText FT_CERTSTATUS
     {
-        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2 );
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_3 );
         Size = MAP_APPFONT( CV_CONT_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ de ] = "Zertifikatsstatus";
         Text [ en-US ] = "Certification status";
     };
     MultiLineEdit ML_CERTSTATUS
     {
-        Pos = MAP_APPFONT( CV_COL_0, CV_ROW_2A );
-        Size = MAP_APPFONT( CV_CONT_WIDTH, CV_ROW_3-CV_ROW_2A );
+        Pos = MAP_APPFONT( CV_COL_0, CVP_ROW_4 );
+        Size = MAP_APPFONT( CV_CONT_WIDTH, REST_HEIGHT/3 );
         ReadOnly = TRUE;
         Border = TRUE;
     };
