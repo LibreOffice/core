@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2000-12-07 16:06:56 $
+ *  last change: $Author: th $ $Date: 2001-03-09 15:41:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ public:
     const XubString&        GetItalicStr() const { return maNormalItalic; }
     const XubString&        GetBoldStr() const { return maBold; }
     const XubString&        GetBoldItalicStr() const { return maBoldItalic; }
+    const XubString&        GetStyleName( FontWeight eWeight, FontItalic eItalic ) const;
     XubString               GetStyleName( const FontInfo& rInfo ) const;
 
     FontInfo                Get( const XubString& rName,
@@ -255,27 +256,27 @@ private:
 };
 
 
+// -----------------
+// - FontSizeNames -
+// -----------------
+
 class FontSizeNames
 {
-public:
-                            FontSizeNames();
-
-    bool                    IsEmpty() const { return (mnElem <= 0); }
-    long                    Name2Size( const String& ) const;
-    const char*             Size2UtfName( long ) const;
-
-    const char*             GetIndexName( long ) const;
-    long                    GetIndexSize( long ) const;
-
 private:
-    struct FsizeNameItem*   mpArray;
-    long                    mnElem;
+    struct ImplFSNameItem*  mpArray;
+    ULONG                   mnElem;
 
 public:
-    static void             SetNamePreference( bool b ) { bPreferName = b; }
-    static bool             GetNamePreference() { return bPreferName; }
+                            FontSizeNames( LanguageType eLanguage /* = LANGUAGE_DONTKNOW */ );
 
-    static bool             bPreferName;
+    ULONG                   Count() const { return mnElem; }
+    BOOL                    IsEmpty() const { return !mnElem; }
+
+    long                    Name2Size( const String& ) const;
+    String                  Size2Name( long ) const;
+
+    String                  GetIndexName( ULONG nIndex ) const;
+    long                    GetIndexSize( ULONG nIndex ) const;
 };
 
 #endif  // _CTRLTOOL_HXX
