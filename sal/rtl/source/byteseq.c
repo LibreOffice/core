@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-03-30 14:36:27 $
+ *  last change: $Author: dbo $ $Date: 2002-04-26 09:12:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void SAL_CALL rtl_byte_sequence_realloc(
         }
         else
         {
-            rtl_copyMemory( pNew->elements, pSequence->elements, nElements );
+            rtl_copyMemory( pNew->elements, pSequence->elements, nSize );
         }
 
         if (! osl_decrementInterlockedCount( &pSequence->nRefCount ))
