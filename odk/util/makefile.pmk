@@ -4,18 +4,25 @@ ODK_RELEASE=1.0
 
 PRODUCT_NAME=OpenOffice.org$(ODK_RELEASE)
 
-.IF "$(BUILD_SOSL)"==""
-# for SUN build without minor
+PRODUCTZIPFILE=$(PRODUCT_NAME).zip
+PRODUCTTARGZFILE=$(PRODUCT_NAME).tar.gz
+
+
 ODKNAME=odk$(UPD)
 ODKDOCNAME=$(ODKNAME)_doc
+
+ODKZIPFILE=$(ODKNAME).zip
+ODKTARGZFILE=$(ODKNAME).tar.gz
+
+
+.IF "$(BUILD_SOSL)"==""
+# for Sun build use ODKNAME as directory name
+DESTDIR=$(OUT)$/bin$/$(ODKNAME)
 .ELSE
-# for OpenOffice build with minor 
-ODKNAME=odk$(UPD)$(LAST_MINOR)
-ODKDOCNAME=$(ODKNAME)_doc
+# for OpenOffice build use PRODUCT_NAME as directory name
+DESTDIR=$(OUT)$/bin$/$(PRODUCT_NAME)
 .ENDIF
 
-
-DESTDIR=$(OUT)$/bin$/$(ODKNAME)
 DESTDIRIDL=$(DESTDIR)$/idl
 DESTDIRSETTINGS=$(DESTDIR)$/settings
 DESTDIREXAMPLES=$(DESTDIR)$/examples
@@ -30,6 +37,7 @@ DESTDIRDOCUIMAGES=$(DESTDIRDOCU)$/images
 
 UDKZIPPATH=$(SOLARBINDIR)
 UDKNAME=udk$(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO)
+UDKZIPPREFIX=$(UDKNAME)_odk
 CHECKSCRIPT=$(SOLARENV)$/bin$/checkit.pl
  
 BINOUT=$(SOLARBINDIR)
@@ -45,6 +53,7 @@ CONVERTSCRIPT=$(SOLARENV)$/bin$/convertlinks.pl
 #--------------------
 # WNT ONLY
 #--------------------
+DOLLARSIGN=$$
 MY_DELETE_RECURSIVE=del /sxyf
 MY_DIRCMP=dircmp -r
 MY_TEXTCOPY=cat
@@ -62,6 +71,7 @@ DESTDIRDLL=$(DESTDIRBIN)
 #--------------------
 # UNX ONLY
 #--------------------
+DOLLARSIGN=\$$
 MY_DELETE_RECURSIVE=rm -rf
 MY_DIRCMP=dircmp 
 MY_TEXTCOPY= tr -d "\015"
