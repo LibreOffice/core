@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2001-03-03 15:08:22 $
+ *  last change: $Author: ab $ $Date: 2001-03-03 15:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,9 @@ DialogWindow::DialogWindow( Window* pParent, VCSbxDialogRef aDialog,
 
     pEditor = new VCDlgEditor( GetBasic() );
     pEditor->SetWindow( this );
+#ifndef _DLGEDITOR_
     pEditor->SetVCSbxForm( pDialog );
+#endif
 
     // Undo einrichten
     pUndoMgr = new SfxUndoManager;
