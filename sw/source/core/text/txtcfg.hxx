@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtcfg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2002-12-05 13:29:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #ifndef _TXTCFG_HXX
 #define _TXTCFG_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include "dbgloop.hxx"  // DBG_LOOP
 #else
 #ifdef DBG_LOOP     //kann per precompiled hereinkommen
