@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgefactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 16:17:12 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 10:56:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ namespace remotebridges_factory
                                 if( sSuffix.getLength() > 6  &&
                                     0 == sSuffix.copy( sSuffix.getLength() - 6 ).compareToAscii( "Bridge" ) )
                                 {
-                                    OUString sProtocol = sSuffix.copy(0 , sSuffix.getLength()-6 ).toLowerCase();
+                                    OUString sProtocol = sSuffix.copy(0 , sSuffix.getLength()-6 ).toAsciiLowerCase();
                                     m_mapProtocolToService[ sProtocol ] = seq.getConstArray()[i];
                                 }
                             }
@@ -238,7 +238,7 @@ namespace remotebridges_factory
     {
         init();
         OUString sService;
-        OUString sProtocolName = sProtocol.toLowerCase();
+        OUString sProtocolName = sProtocol.toAsciiLowerCase();
         sal_Int32 nIndex = sProtocol.indexOf( (sal_Unicode)',' );
         if( nIndex > 0 )
         {

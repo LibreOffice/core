@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bridgeimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:14:14 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 10:57:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,8 @@ namespace remotebridges_factory {
             uno_Environment *pEnvRemote = 0;
             if( m_pContext->m_pConnection )
             {
-                OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' );
+                sal_Int32 nIndex = 0;
+                OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' , nIndex );
                 uno_getEnvironment( &pEnvRemote , sProtocol.pData , m_pContext );
                 OSL_ASSERT( pEnvRemote );
             }
@@ -153,7 +154,8 @@ namespace remotebridges_factory {
         }
         if( pContext )
         {
-            OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' );
+            sal_Int32 nIndex;
+            OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' , nIndex );
 
             // get the appropriate remote environment
             uno_Environment *pEnvRemote = 0;

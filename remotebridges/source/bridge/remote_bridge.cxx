@@ -2,9 +2,9 @@
  *
  *  $RCSfile: remote_bridge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-02 14:13:35 $
+ *  last change: $Author: tbe $ $Date: 2001-05-11 10:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,8 @@ namespace remotebridges_bridge
             {
                 if( m_pContext->m_pConnection )
                 {
-                    OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' );
+                    sal_Int32 nIndex = 0;
+                    OUString sProtocol = OUString( m_pContext->m_pProtocol ).getToken( 0 , ',' , nIndex );
                     uno_getEnvironment( &m_pEnvRemote , sProtocol.pData , m_pContext );
                     OSL_ASSERT( m_pEnvRemote );
                 }
