@@ -13,6 +13,17 @@
 
 class SODispatchInterceptor;
 
+enum SOVersion {
+    SO_NOT_DETECTED = 0,
+    SO_52,
+    SO_60,
+    SO_61,
+    SO_UNKNOWN,
+    OO_10,
+    OO_11,
+    OO_UNKNOWN
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // CSOActiveX
 class ATL_NO_VTABLE CSOActiveX :
@@ -50,6 +61,7 @@ protected:
     HWND                    mOffWin;
 
     SODispatchInterceptor*  mpDispatchInterceptor;
+    SOVersion               mnVersion;
 public:
     CSOActiveX();
     ~CSOActiveX();
@@ -131,6 +143,8 @@ public:
     HRESULT Cleanup();
     HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                                 const OLECHAR* target );
+
+    SOVersion GetVersionConnected();
 };
 
 #endif //__SOACTIVEX_H_

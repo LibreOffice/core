@@ -8,7 +8,25 @@
 
 #define STAROFFICE_WINDOWCLASS "SOParentWindow"
 
+
 /////////////////////////////////////////////////////////////////////////////
+
+void OutputError_Impl( HWND hw, DWORD ErrorCode )
+{
+    void* sMessage;
+    FormatMessageA(
+        FORMAT_MESSAGE_ALLOCATE_BUFFER |
+        FORMAT_MESSAGE_FROM_SYSTEM,
+        NULL,
+        ErrorCode,
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        (LPTSTR) &sMessage,
+        0,
+        NULL
+    );
+    MessageBoxA( hw, (LPCTSTR)sMessage, NULL, MB_OK | MB_ICONINFORMATION );
+    LocalFree( sMessage );
+}
 
 HRESULT ExecuteFunc( IDispatch* idispUnoObject,
                      OLECHAR* sFuncName,
@@ -98,9 +116,12 @@ CSOActiveX::CSOActiveX()
 , mOffWin( NULL )
 , mbViewOnly( TRUE )
 , mpDispatchInterceptor( NULL )
+, mnVersion( SO_NOT_DETECTED )
 {
     CLSID clsFactory = {0x82154420,0x0FBF,0x11d4,{0x83, 0x13,0x00,0x50,0x04,0x52,0x6A,0xB4}};
     HRESULT hr = CoCreateInstance( clsFactory, NULL, CLSCTX_ALL, __uuidof(IDispatch), (void**)&mpDispFactory);
+    if( !SUCCEEDED( hr ) )
+        OutputError_Impl( NULL, hr );
 
     mPWinClass.style            = CS_HREDRAW|CS_VREDRAW;
     mPWinClass.lpfnWndProc      = ::DefWindowProc;
@@ -161,12 +182,14 @@ HRESULT CSOActiveX::Cleanup()
 
 STDMETHODIMP CSOActiveX::InitNew ()
 {
+    mnVersion = GetVersionConnected();
     mbLoad = TRUE;
     return S_OK;
 }
 
 STDMETHODIMP CSOActiveX::Load ( LPSTREAM pStm )
 {
+    mnVersion = GetVersionConnected();
     mbLoad = TRUE;
 
     // may be later?
@@ -177,6 +200,8 @@ STDMETHODIMP CSOActiveX::Load ( LPSTREAM pStm )
 
 STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
 {
+    mnVersion = GetVersionConnected();
+
     IPropertyBag2* pPropBag2;
     HRESULT hr = pPropBag->QueryInterface( IID_IPropertyBag2, (void**)&pPropBag2 );
     ATLASSERT( hr >= 0 );
@@ -517,6 +542,94 @@ HRESULT CSOActiveX::LoadURLToFrame( )
     return S_OK;
 }
 
+SOVersion CSOActiveX::GetVersionConnected()
+{
+    SOVersion bResult = SO_NOT_DETECTED;
+    if( mpDispFactory )
+    {
+        // create ConfigurationProvider instance
+        CComPtr<IDispatch> pdispConfProv;
+        HRESULT hr = GetIDispByFunc( mpDispFactory,
+                             L"createInstance",
+                             &CComVariant( L"com.sun.star.configuration.ConfigurationProvider" ),
+                             1,
+                             pdispConfProv );
+
+        if( SUCCEEDED( hr ) && pdispConfProv )
+        {
+            CComPtr<IDispatch> pdispConfAccess;
+
+            SAFEARRAY* pInitParams = SafeArrayCreateVector( VT_VARIANT, 0, 1 );
+
+            if( pInitParams )
+            {
+                long ix = 0;
+                CComVariant aConfPath( L"org.openoffice.Setup" );
+                SafeArrayPutElement( pInitParams, &ix, &aConfPath );
+
+                CComVariant aArgs[2];
+                aArgs[1] = CComVariant( L"com.sun.star.configuration.ConfigurationAccess" );
+                aArgs[0].vt = VT_ARRAY | VT_VARIANT; aArgs[0].parray = pInitParams;
+
+                hr = GetIDispByFunc( pdispConfProv,
+                                     L"createInstanceWithArguments",
+                                    aArgs,
+                                     2,
+                                     pdispConfAccess );
+
+                if( SUCCEEDED( hr ) && pdispConfAccess )
+                {
+                    CComVariant aOfficeName;
+
+                    hr = ExecuteFunc( pdispConfAccess,
+                                        L"getByHierarchicalName",
+                                        &CComVariant( L"Product/ooName" ),
+                                        1,
+                                        &aOfficeName );
+
+                    if( SUCCEEDED( hr ) && aOfficeName.vt == VT_BSTR )
+                    {
+                        CComVariant aOfficeVersion;
+
+                        hr = ExecuteFunc( pdispConfAccess,
+                                            L"getByHierarchicalName",
+                                            &CComVariant( L"Product/ooSetupVersion" ),
+                                            1,
+                                            &aOfficeVersion );
+
+                        if( SUCCEEDED( hr ) && aOfficeVersion.vt == VT_BSTR )
+                        {
+                            USES_CONVERSION;
+                            if( !strcmp( OLE2T( aOfficeName.bstrVal ), "StarOffice" ) )
+                            {
+                                if( !strncmp( OLE2T( aOfficeVersion.bstrVal ), "6.1", 3 ) )
+                                    bResult = SO_61;
+                                else if( !strncmp( OLE2T( aOfficeVersion.bstrVal ), "6.0", 3 ) )
+                                    bResult = SO_60;
+                                else if( !strncmp( OLE2T( aOfficeVersion.bstrVal ), "5.2", 3 ) )
+                                    bResult = SO_52;
+                                else
+                                    bResult = SO_UNKNOWN;
+                            }
+                            else // OpenOffice
+                            {
+                                if( !strncmp( OLE2T( aOfficeVersion.bstrVal ), "1.1", 3 ) )
+                                    bResult = OO_11;
+                                else if( !strncmp( OLE2T( aOfficeVersion.bstrVal ), "1.0", 3 ) )
+                                    bResult = OO_10;
+                                else
+                                    bResult = OO_UNKNOWN;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return bResult;
+}
+
 HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
 {
     if( m_spInPlaceSite && mCurFileUrl )
@@ -579,18 +692,32 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
             }
         }
 
+        if( !mnVersion )
+        {
+            OutputError_Impl( mOffWin, CS_E_INVALID_VERSION );
+            return E_FAIL;
+        }
+
         if( ! mpDispFrame )
         {
             hr = CreateFrameOldWay( mOffWin,
                             di.prcBounds->right - di.prcBounds->left,
                             di.prcBounds->bottom - di.prcBounds->top );
-            if( !SUCCEEDED( hr ) ) return hr;
+            if( !SUCCEEDED( hr ) )
+            {
+                OutputError_Impl( mOffWin, STG_E_ABNORMALAPIEXIT );
+                return hr;
+            }
         }
 
         if( mbLoad )
         {
             hr = LoadURLToFrame();
-            if( !SUCCEEDED( hr ) ) return hr;
+            if( !SUCCEEDED( hr ) )
+            {
+                OutputError_Impl( mOffWin, STG_E_ABNORMALAPIEXIT );
+                return hr;
+            }
             mbLoad = FALSE;
         }
     }
