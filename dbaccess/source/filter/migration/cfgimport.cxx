@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:05:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:38:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #endif
 #ifndef _URLOBJ_HXX //autogen wg. INetURLObject
 #include <tools/urlobj.hxx>
@@ -609,10 +615,15 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
     ::rtl::OUString sFileName;
     try
     {
-        m_xCurrentDS.set(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"))),UNO_QUERY);
-        Reference< XModel > xModel(m_xCurrentDS,UNO_QUERY);
-        if ( !xModel.is() )
+        m_xModel.set(m_xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"))),UNO_QUERY);
+
+        if ( !m_xModel.is() )
             return;
+
+        Reference<XOfficeDatabaseDocument> xOfficeDoc(m_xModel,UNO_QUERY);
+        if ( xOfficeDoc.is() )
+            m_xCurrentDS.set(xOfficeDoc->getDataSource(),UNO_QUERY);
+
 
         INetURLObject aURL(rsWorkPath,INetURLObject::WAS_ENCODED);
         aURL.insertName(_sName,false,INetURLObject::LAST_SEGMENT,true,INetURLObject::ENCODE_ALL);
@@ -630,7 +641,7 @@ void OCfgImport::createDataSource(const ::rtl::OUString& _sName)
             sFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
         }
 
-        xModel->attachResource(sFileName,Sequence<PropertyValue>());
+        m_xModel->attachResource(sFileName,Sequence<PropertyValue>());
     }
     catch(Exception&)
     {
@@ -730,7 +741,12 @@ void SAL_CALL OCfgImport::addOrReplaceNode(
                 {
                     Reference< XNameAccess > xDatabaseContext(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
                     if ( xDatabaseContext.is() && xDatabaseContext->hasByName(m_sCurrentDataSourceName) )
+                    {
                         m_xCurrentDS.set(xDatabaseContext->getByName(m_sCurrentDataSourceName),UNO_QUERY);
+                        Reference<XDocumentDataSource> xDocumentDataSource(m_xCurrentDS,UNO_QUERY);
+                        if ( xDocumentDataSource.is() )
+                            m_xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
+                    }
                 }
                 if ( !m_xCurrentDS.is() )
                     createDataSource(m_sCurrentDataSourceName);
@@ -820,7 +836,7 @@ void SAL_CALL  OCfgImport::endNode()
             case DATASOURCE:
                 {
                     setProperties();
-                    Reference<XStorable> xStr(m_xCurrentDS,UNO_QUERY);
+                    Reference<XStorable> xStr(m_xModel,UNO_QUERY);
                     if ( xStr.is() )
                     {
                         xStr->store();
@@ -844,7 +860,8 @@ void SAL_CALL  OCfgImport::endNode()
                             Reference< XNamingService>(xDatabaseContext,UNO_QUERY)->registerObject(sName,m_xCurrentDS);
                         }
                     }
-                    ::comphelper::disposeComponent(m_xCurrentDS);
+                    ::comphelper::disposeComponent(m_xModel);
+                    m_xCurrentDS = NULL;
                 }
                 break;
             case DATASOURCESETTINGS:
@@ -885,13 +902,13 @@ void SAL_CALL  OCfgImport::endNode()
                     Reference<XNameAccess> xNames;
                     if ( bForm )
                     {
-                        Reference<XFormDocumentsSupplier> xSup(m_xCurrentDS,UNO_QUERY);
+                        Reference<XFormDocumentsSupplier> xSup(m_xModel,UNO_QUERY);
                         if ( xSup.is() )
                             xNames = xSup->getFormDocuments();
                     }
                     else
                     {
-                        Reference<XReportDocumentsSupplier> xSup(m_xCurrentDS,UNO_QUERY);
+                        Reference<XReportDocumentsSupplier> xSup(m_xModel,UNO_QUERY);
                         if ( xSup.is() )
                             xNames = xSup->getReportDocuments();
                     }
