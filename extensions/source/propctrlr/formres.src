@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:39:29 $
+ *  last change: $Author: kz $ $Date: 2001-04-12 07:24:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2033,7 +2033,7 @@ String RID_STR_MASTERFIELDS
     Text = "Verknüpfen von" ;
     Text [ English ] = "Master fields" ;
     Text [ portuguese ] = "Ligar de" ;
-    Text [ english_us ] = "Linking" ;
+    Text [ english_us ] = "Link master fields" ;
     Text [ portuguese_brazilian ] = "Übergeordnete Felder" ;
     Text [ swedish ] = "Länka från" ;
     Text [ danish ] = "Kæde fra" ;
@@ -2057,7 +2057,7 @@ String RID_STR_SLAVEFIELDS
     Text = "Verknüpfen nach" ;
     Text [ English ] = "Subfields" ;
     Text [ portuguese ] = "Ligar com" ;
-    Text [ english_us ] = "Subfields" ;
+    Text [ english_us ] = "Link slave fields" ;
     Text [ portuguese_brazilian ] = "Untergeordnete Felder" ;
     Text [ swedish ] = "Länka till" ;
     Text [ danish ] = "Kæde til" ;
@@ -2465,7 +2465,7 @@ String RID_STR_LISTINDEX
     Text = "ListIndex" ;
     Text [ ENGLISH ] = "ListIndex" ;
     Text [ portuguese ] = "Índice de listas" ;
-    Text [ english_us ] = "List Index" ;
+    Text [ english_us ] = "List index" ;
     Text [ portuguese_brazilian ] = "ListIndex" ;
     Text [ swedish ] = "Listindex" ;
     Text [ danish ] = "ListIndeks" ;
@@ -3949,7 +3949,7 @@ String RID_STR_STEP
     Text[ russian ] = "Øàã";
     Text[ greek ] = "ÂÞìá";
     Text[ dutch ] = "Stap";
-    Text[ french ] = "Step";
+    Text[ french ] = "Page (Step)";
     Text[ spanish ] = "Step";
     Text[ italian ] = "Step";
     Text[ danish ] = "Step";
@@ -4060,6 +4060,9 @@ TabDialog RID_TABDLG_FONTDIALOG
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/04/06 07:39:29  kz
+ *  Merge SRC627: 06.04.01 - 09:38:59
+ *
  *  Revision 1.11  2001/04/03 19:24:41  kz
  *  Merge SRC627: 03.04.01 - 22:25:35
  *
