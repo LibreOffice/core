@@ -2,9 +2,9 @@
  *
  *  $RCSfile: internaloptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 17:20:13 $
+ *  last change: $Author: mba $ $Date: 2001-05-18 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,17 @@ using namespace ::com::sun::star::beans ;
 #define ROOTNODE_INTERNAL                   OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Internal"   ))
 #define DEFAULT_SLOTCFG                     sal_False
 #define DEFAULT_SENDCRASHMAIL               sal_False
+#define DEFAULT_USEMAILUI                   sal_True
 
 #define FIXPROPERTYNAME_SLOTCFG             OUString(RTL_CONSTASCII_USTRINGPARAM("Slot"                     ))
 #define FIXPROPERTYNAME_SENDCRASHMAIL       OUString(RTL_CONSTASCII_USTRINGPARAM("SendCrashMail"            ))
+#define FIXPROPERTYNAME_USEMAILUI           OUString(RTL_CONSTASCII_USTRINGPARAM("UseMailUI"                ))
 
 #define FIXPROPERTYHANDLE_SLOTCFG           0
 #define FIXPROPERTYHANDLE_SENDCRASHMAIL     1
+#define FIXPROPERTYHANDLE_USEMAILUI         1
 
-#define FIXPROPERTYCOUNT                    2
+#define FIXPROPERTYCOUNT                    3
 
 #define PROPERTYNAME_RECOVERYLIST           OUString(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"             ))
 #define PROPERTYNAME_URL                    OUString(RTL_CONSTASCII_USTRINGPARAM("URL"                      ))
@@ -233,8 +236,9 @@ class SvtInternalOptions_Impl : public ConfigItem
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool    SlotCFGEnabled      (                                   ) const;
-        sal_Bool    CrashMailEnabled    (                                   ) const;
+        sal_Bool    SlotCFGEnabled      () const;
+        sal_Bool    CrashMailEnabled    () const;
+        sal_Bool    MailUIEnabled       () const;
         void        PushRecoveryItem    (   const   OUString&   sURL        ,
                                             const   OUString&   sFilter     ,
                                              const  OUString&   sTempName   );
@@ -273,6 +277,7 @@ class SvtInternalOptions_Impl : public ConfigItem
 
         sal_Bool                m_bSlotCFG          ;   /// cache "Slot" of Internal section
         sal_Bool                m_bSendCrashMail    ;   /// cache "SendCrashMail" of Internal section
+        sal_Bool                m_bUseMailUI;
         tIMPL_RecoveryStack     m_aRecoveryList     ;   /// cache "RecoveryList" of Internal section
 };
 
@@ -289,6 +294,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     // Init member then.
     ,   m_bSlotCFG          ( DEFAULT_SLOTCFG       )
     ,   m_bSendCrashMail    ( DEFAULT_SENDCRASHMAIL )
+    ,   m_bUseMailUI        ( DEFAULT_USEMAILUI )
 {
     // Use our list of configuration keys to get his values.
     // structure of internal section: (first 2 entries are fixed - all other are member of a set!)
@@ -314,6 +320,7 @@ SvtInternalOptions_Impl::SvtInternalOptions_Impl()
     DBG_ASSERT(!(seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL].getValueTypeClass()!=TypeClass_BOOLEAN) , "SvtInternalOptions_Impl::SvtInternalOptions_Impl()\nWho has changed the value type of \"Office.Common\\Internal\\SendCrashMail\"?"   );
     seqValues[FIXPROPERTYHANDLE_SLOTCFG         ] >>= m_bSlotCFG        ;
     seqValues[FIXPROPERTYHANDLE_SENDCRASHMAIL   ] >>= m_bSendCrashMail  ;
+    seqValues[FIXPROPERTYHANDLE_USEMAILUI       ] >>= m_bUseMailUI  ;
 
     // Read dynamical set "RecoveryList" then.
     // 3 subkeys for every item!
@@ -400,6 +407,14 @@ sal_Bool SvtInternalOptions_Impl::CrashMailEnabled() const
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
+sal_Bool SvtInternalOptions_Impl::MailUIEnabled() const
+{
+    return m_bUseMailUI;
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
 void SvtInternalOptions_Impl::PushRecoveryItem( const   OUString&   sURL        ,
                                                 const   OUString&   sFilter     ,
                                                 const   OUString&   sTempName   )
@@ -447,6 +462,7 @@ Sequence< OUString > SvtInternalOptions_Impl::impl_GetPropertyNames()
     // Add names of fix properties to list.
     seqProperties[FIXPROPERTYHANDLE_SLOTCFG         ]   =   FIXPROPERTYNAME_SLOTCFG         ;
     seqProperties[FIXPROPERTYHANDLE_SENDCRASHMAIL   ]   =   FIXPROPERTYNAME_SENDCRASHMAIL   ;
+    seqProperties[FIXPROPERTYHANDLE_USEMAILUI       ]   =   FIXPROPERTYNAME_USEMAILUI       ;
 
     sal_uInt32 nPosition = FIXPROPERTYCOUNT;
     // Add names for recovery list to list.
@@ -524,6 +540,15 @@ sal_Bool SvtInternalOptions::CrashMailEnabled() const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pDataContainer->CrashMailEnabled();
+}
+
+//*****************************************************************************************************************
+//  public method
+//*****************************************************************************************************************
+sal_Bool SvtInternalOptions::MailUIEnabled() const
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    return m_pDataContainer->MailUIEnabled();
 }
 
 //*****************************************************************************************************************
