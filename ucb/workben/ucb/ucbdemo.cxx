@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbdemo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mhu $ $Date: 2001-06-06 18:23:10 $
+ *  last change: $Author: kso $ $Date: 2001-07-09 12:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2759,9 +2759,7 @@ void MyApp::Main()
     // Go...
     //////////////////////////////////////////////////////////////////////
 
-    EnterMultiThread( TRUE );
     Execute();
-    EnterMultiThread( FALSE );
 
     //////////////////////////////////////////////////////////////////////
     // Destroy Application Window...
