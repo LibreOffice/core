@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-14 10:02:12 $
+#   last change: $Author: jsc $ $Date: 2001-05-18 15:20:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -119,6 +119,19 @@ APP3STDLIBS=\
 
 .IF "$(GUI)"=="WNT"
 APP3STDLIBS+= \
+            $(LIBCIMT) $(LIBCMT)
+.ENDIF
+
+APP4TARGET= checksingleton
+APP4OBJS=   $(OBJ)$/checksingleton.obj
+
+APP4STDLIBS=\
+            $(SALLIB) \
+            $(SALHELPERLIB) \
+            $(REGLIB)
+
+.IF "$(GUI)"=="WNT"
+APP4STDLIBS+= \
             $(LIBCIMT) $(LIBCMT)
 .ENDIF
 
