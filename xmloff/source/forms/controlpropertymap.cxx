@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlpropertymap.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2001-07-13 16:08:24 $
+ *  last change: $Author: hr $ $Date: 2002-02-21 15:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@
 #ifndef _XMLOFF_FORMS_STRINGS_HXX_
 #include "strings.hxx"
 #endif
+
+#include <string.h>
 
 using namespace ::xmloff::token;
 
@@ -154,6 +156,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/07/13 16:08:24  dvo
+ *  #86004# PropertMap construction improved: strings have lengths
+ *
  *  Revision 1.11  2001/06/29 21:07:14  dvo
  *  #86004# changes sXML_* strings to XML_* tokens
  *
