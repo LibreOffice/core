@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-04-19 06:11:33 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,9 +350,10 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
 
 /*TODO: Not used in the moment! see Notify() ...
     // Enable notification mechanism of ouer baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
-    EnableNotification( lNames );
-*/
+    // We need it to get information about changes outside these class on ouer used configuration keys! */
+    Sequence< OUString > aNotifySeq( 1 );
+    aNotifySeq[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Disabled" ));
+    sal_Bool bEnabled  = EnableNotification( aNotifySeq, sal_True );
 }
 
 //*****************************************************************************************************************
@@ -372,7 +373,32 @@ SvtCommandOptions_Impl::~SvtCommandOptions_Impl()
 //*****************************************************************************************************************
 void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& lPropertyNames )
 {
-    DBG_ASSERT( sal_False, "SvtCommandOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
+    MutexGuard aGuard( SvtCommandOptions::GetOwnStaticMutex() );
+
+    Sequence< OUString >    lNames   = impl_GetPropertyNames ();
+    Sequence< Any >         lValues  = GetProperties         ( lNames         );
+
+    // Safe impossible cases.
+    // We need values from ALL configuration keys.
+    // Follow assignment use order of values in relation to our list of key names!
+    DBG_ASSERT( !(lNames.getLength()!=lValues.getLength()), "SvtCommandOptions_Impl::SvtCommandOptions_Impl()\nI miss some values of configuration keys!\n" );
+
+    // Copy values from list in right order to ouer internal member.
+    // Attention: List for names and values have an internal construction pattern!
+    sal_Int32   nItem     = 0 ;
+    OUString    sCmd          ;
+
+    // Set size of hash_map reach a used size of approx. 60%
+    m_aDisabledCommands.Clear();
+    m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
+
+    // Get names/values for disabled commands.
+    for( nItem=0; nItem < lNames.getLength(); ++nItem )
+    {
+        // Currently only one value
+        lValues[nItem] >>= sCmd;
+        m_aDisabledCommands.AddCommand( sCmd );
+    }
 }
 
 //*****************************************************************************************************************
@@ -469,7 +495,7 @@ void SvtCommandOptions_Impl::AddCommand( SvtCommandOptions::CmdOption eCmdOption
 Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 {
     // First get ALL names of current existing list items in configuration!
-    Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED );
+    Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::CONFIG_NAME_LOCAL_PATH );
 
     OUString aSetNode( SETNODE_DISABLED );
     aSetNode += PATHDELIMITER;
