@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-07 10:26:30 $
+ *  last change: $Author: mba $ $Date: 2002-06-03 11:49:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -997,8 +997,9 @@ BOOL SvMetaSlot::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             {
                 SetRef( pKnownSlot );
 
-                // Namen d"urfen abweichen, da mit angegeben
-//              SetName( pKnownSlot->GetName(), &rBase );
+              // Namen d"urfen abweichen, da mit angegeben
+              DBG_ASSERT( pKnownSlot->GetName() == GetName(), "Name error!");
+              SetName( pKnownSlot->GetName(), &rBase );
             }
             else
             {
