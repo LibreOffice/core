@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2003-10-20 15:49:14 $
+#   last change: $Author: obo $ $Date: 2003-10-21 09:16:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,19 +71,15 @@ TARGET=cppvos
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=       $(SLO)$/acceptor.obj    \
-                $(SLO)$/bytarray.obj    \
+SLOFILES=       $(SLO)$/bytarray.obj    \
                 $(SLO)$/bytestrm.obj    \
-                $(SLO)$/connectr.obj    \
                 $(SLO)$/conditn.obj     \
                 $(SLO)$/mutex.obj       \
                 $(SLO)$/object.obj      \
                 $(SLO)$/refernce.obj    \
                 $(SLO)$/runthrd.obj     \
                 $(SLO)$/socket.obj      \
-                $(SLO)$/semaphor.obj    \
                 $(SLO)$/thread.obj      \
-                $(SLO)$/thrdsrv.obj     \
                 $(SLO)$/stream.obj      \
                 $(SLO)$/module.obj      \
                 $(SLO)$/timer.obj       \
@@ -91,27 +87,19 @@ SLOFILES=       $(SLO)$/acceptor.obj    \
                 $(SLO)$/security.obj    \
                 $(SLO)$/signal.obj      \
                 $(SLO)$/pipe.obj        \
-                $(SLO)$/xception.obj	\
-                $(SLO)$/evtque.obj
+                $(SLO)$/xception.obj
 
-.IF "$(GUI)"=="WIN"
-SLOFILES+=$(SLO)$/dllentry.obj
-.ENDIF
 
 .IF "$(UPDATER)"=="YES"
-OBJFILES=       $(OBJ)$/acceptor.obj    \
-                $(OBJ)$/bytarray.obj    \
+OBJFILES=       $(OBJ)$/bytarray.obj    \
                 $(OBJ)$/bytestrm.obj    \
-                $(OBJ)$/connectr.obj    \
                 $(OBJ)$/conditn.obj     \
                 $(OBJ)$/mutex.obj       \
                 $(OBJ)$/object.obj      \
                 $(OBJ)$/refernce.obj    \
                 $(OBJ)$/runthrd.obj     \
                 $(OBJ)$/socket.obj      \
-                $(OBJ)$/semaphor.obj    \
                 $(OBJ)$/thread.obj      \
-                $(OBJ)$/thrdsrv.obj     \
                 $(OBJ)$/stream.obj      \
                 $(OBJ)$/module.obj      \
                 $(OBJ)$/timer.obj       \
@@ -119,8 +107,7 @@ OBJFILES=       $(OBJ)$/acceptor.obj    \
                 $(OBJ)$/security.obj    \
                 $(OBJ)$/signal.obj      \
                 $(OBJ)$/pipe.obj        \
-                $(OBJ)$/xception.obj	\
-                $(OBJ)$/evtque.obj
+                $(OBJ)$/xception.obj
 
 .ENDIF
 
