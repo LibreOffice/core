@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cmc $ $Date: 2000-11-14 09:49:18 $
+ *  last change: $Author: sab $ $Date: 2000-11-14 12:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,9 +434,12 @@ XML_CONSTASCII_ACTION( sXML_ellipse , "ellipse" );
 XML_CONSTASCII_ACTION( sXML_embed, "embed" );
 XML_CONSTASCII_ACTION( sXML_empty, "empty");
 XML_CONSTASCII_ACTION( sXML_end, "end" );
+XML_CONSTASCII_ACTION( sXML_end_cell_address, "end-cell-address" );
 XML_CONSTASCII_ACTION( sXML_end_color, "end-color" );
 XML_CONSTASCII_ACTION( sXML_end_intensity, "end-intensity" );
 XML_CONSTASCII_ACTION( sXML_end_transparency, "end-transparency" );
+XML_CONSTASCII_ACTION( sXML_end_x, "end-x" );
+XML_CONSTASCII_ACTION( sXML_end_y, "end-y" );
 XML_CONSTASCII_ACTION( sXML_endnote, "endnote" );
 XML_CONSTASCII_ACTION( sXML_endnote_body, "endnote-body" );
 XML_CONSTASCII_ACTION( sXML_endnote_citation, "endnote-citation" );
