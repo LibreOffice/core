@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jni_bridge.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-11-15 16:12:20 $
+ *  last change: $Author: dbo $ $Date: 2002-11-18 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,11 +292,12 @@ JNI_attach::JNI_attach( uno_Environment * java_env )
     pair< JavaVMContext::t_map::iterator, bool > insertion(
         m_context->_registeredThreadMap.insert(
             JavaVMContext::t_map::value_type(
-                m_thread_id, JavaVMContext::t_entry( 1, m_env ) ) ) );
+                m_thread_id, JavaVMContext::t_entry( 1, 0 ) ) ) );
     if (insertion.second)
     {
         m_revoke = true;
         jint res = m_vm->AttachCurrentThread( (void **)&m_env, 0 );
+        insertion.first->second.second = m_env;
         if (0 < res)
         {
             m_detach = false;
