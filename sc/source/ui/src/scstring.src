@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-25 14:53:45 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 12:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ String SCSTR_LONG_SCDOC_NAME
     Text [ danish ] = "StarOffice Calc 5.0 regneark" ;
     Text [ italian ] = "Foglio di calcolo StarOffice 5.0" ;
     Text [ spanish ] = "Hoja de cαlculo de StarOffice 5.0" ;
-    Text [ french ] = "Classeur StarOffice 5.0" ;
+    Text [ french ] = "StarOffice 5.0 Classeur" ;
     Text [ portuguese ] = "StarOffice 5.0 Folha de cαlculo" ;
     Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
     Text[ chinese_simplified ] = "StarOffice 5.0 Ή¤Χχ±ν";
@@ -189,7 +189,7 @@ String SCSTR_40_LONG_DOCNAME
     Text [ danish ] = "StarCalc 4.0 regneark" ;
     Text [ italian ] = "Foglio elettronico StarOffice 4.0" ;
     Text [ spanish ] = "Hoja de cαlculo de StarOffice 4.0" ;
-    Text [ french ] = "Classeur StarCalc 4.0" ;
+    Text [ french ] = "StarCalc 4.0 Classeur" ;
     Text [ portuguese ] = "Folha de cαlculo StarCalc 4.0" ;
     Text [ portuguese_brazilian ] = "StarOffice 4.0 Tabelle" ;
     Text[ chinese_simplified ] = "StarCalc 4.0 Ή¤Χχ±ν";
@@ -504,7 +504,7 @@ String SCSTR_OLEOBJECTSHELL
     Text[ swedish ] = "OLE-objekt";
     Text[ polish ] = "Obiekty OLE";
     Text[ portuguese_brazilian ] = "OLE-objects";
-    Text[ japanese ] = "OLEµΜήΌήªΈΔ";
+    Text[ japanese ] = "OLE µΜήΌήªΈΔ";
     Text[ korean ] = "OLE °³ΓΌ";
     Text[ chinese_simplified ] = "OLE ¶ΤΟσ";
     Text[ chinese_traditional ] = "OLE ª«Ι²";
@@ -659,7 +659,7 @@ String SCSTR_AUDITSHELL
     Text[ chinese_simplified ] = "ΥμΜ½-³δΜξΔ£Κ½";
     Text[ russian ] = "Πεζθμ ηΰλθβκθ ηΰβθρθμξρςει";
     Text[ polish ] = "Tryb wype³niania detektywa";
-    Text[ japanese ] = "’T’m —sΣ°Δή";
+    Text[ japanese ] = "ΔΪ°½QΖ³ΎΩ–ξσ•\\¦Σ°Δή";
     Text[ chinese_traditional ] = "°»±΄-¥R¶ρΌÒ¦΅";
     Text[ arabic ] = "ζΦΪ ΚΪΘΖΙ ΗαγΞΘΡ";
     Text[ greek ] = "Κατάσταση γεμίσματος ανιχνευτή";
@@ -1077,7 +1077,7 @@ String SCSTR_TOP10FILTER
     Text[ chinese_simplified ] = "- Η° 10 Έφ -";
     Text[ russian ] = "- 10 οεπβϋυ -";
     Text[ polish ] = "- 10 pierwszych -";
-    Text[ japanese ] = "- Δ―Μί 10 -";
+    Text[ japanese ] = "- Δ―Μί10 -";
     Text[ chinese_traditional ] = "- «e 10 ­Σ -";
     Text[ arabic ] = "- Top 10 -";
     Text[ greek ] = "- Πρώτα 10 -";
@@ -1763,7 +1763,7 @@ String SCSTR_VER_JUSTIFY_CENTER
     Text[ chinese_simplified ] = "΄ΉΦ±ΎΣΦΠ";
     Text[ russian ] = "Βεπςθκΰλόνξ οξ φενςπσ";
     Text[ polish ] = "Wyrodkowany w pionie";
-    Text[ japanese ] = "‚’Ό‚Ι’†‰›‘µ‚¦";
+    Text[ japanese ] = "γ‰Ί‚Ι’†‰›‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½Έm¤¤";
     Text[ arabic ] = "γζΣΨ ΪγζΟνΗ";
     Text[ greek ] = "Κεντραρισμένα κατακόρυφα";
@@ -1815,7 +1815,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text[ chinese_simplified ] = "΄ΉΦ±¶ΤΖλ ±κΧΌ";
     Text[ russian ] = "Βϋπΰβνθβΰνθε οξ βεπςθκΰλθ (ρςΰνδΰπς)";
     Text[ polish ] = "Domylne wyrσwnanie w pionie";
-    Text[ japanese ] = "•W€‚’Ό‘µ‚¦";
+    Text[ japanese ] = "•W€γ‰Ί‘µ‚¦";
     Text[ chinese_traditional ] = "««ª½Ήο»τ ΌΠ·Η";
     Text[ arabic ] = "γΝΗΠΗΙ ΡΓΣνΙ ΗέΚΡΗΦνΙ";
     Text[ greek ] = "Προεπιλογή: Κατακόρυφη στοίχιση";
@@ -1972,7 +1972,7 @@ String SCSTR_CLIP_DDE
     Text[ chinese_simplified ] = "DDE Α΄½Σ";
     Text[ russian ] = "Ρβÿηό DDE";
     Text[ polish ] = "£Ήcze DDE";
-    Text[ japanese ] = "DDEΨέΈ";
+    Text[ japanese ] = "DDE ΨέΈ";
     Text[ chinese_traditional ] = "DDE ±¶®|";
     Text[ arabic ] = "ΗΡΚΘΗΨ DDE";
     Text[ greek ] = "Σύνδεση DDE";
@@ -2178,7 +2178,7 @@ String SCSTR_WRONGPASSWORD
     Text[ chinese_simplified ] = "ΓάΒλΞήΠ§";
     Text[ russian ] = "Νεοπΰβθλόνϋι οΰπξλό";
     Text[ polish ] = "Niepoprawne has³o";
-    Text[ japanese ] = "³‚µ‚­‚Θ‚ΆΚί½ά°Δή";
+    Text[ japanese ] = "Τα‚Α‚½Κί½ά°Δή";
     Text[ chinese_traditional ] = "±K½XµL®Δ";
     Text[ arabic ] = "ίαγΙ ΣΡ ΫνΡ ΥΝνΝΙ";
     Text[ greek ] = "Εσφαλμένος κωδικός πρόσβασης";
@@ -2315,7 +2315,7 @@ String SCSTR_CLPBRD_CLEAR
     Text[ chinese_simplified ] = "ΤΪΌτΜω°εΔΪΑτ΄ζ΄σΑΏΚύΎέ΅£\nΔϊÒªΘΓΖδΛϋµΔΣ¦ΣΓ³ΜΠςÒ²ΚΉΣΓΥβΠ©ΚύΎέΒπ£Ώ";
     Text[ russian ] = "Βϋ οξμερςθλθ β αστεπ ξαμενΰ αξλόψεε κξλθχερςβξ δΰννϋυ.\nΡδελΰςό δξρςσονϋμ ρξδεπζθμξε αστεπΰ ξαμενΰ δλÿ δπσγθυ οπθλξζενθι?";
     Text[ polish ] = "Wprowadzi³e wiκksze iloci danych do schowka.\nCzy zawartoζ schowka ma zostaζ udostκpniona innym aplikacjom?";
-    Text[ japanese ] = "‚©‚Θ‚θ‚ΜΓή°ΐ—Κ‚ªΈΨ―ΜίΞή°Δή‚Ι•ΫΗ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈΨ―ΜίΞή°Δή‚Μ“ΰ—e‚π‘Ό‚Μ±ΜίΨΉ°Ό®έ‚Ιg‚¤‚ζ‚¤‚Ι‚µ‚Δ‚ΰ‚ζ‚λ‚µ‚Ά‚Ε‚·‚©?";
+    Text[ japanese ] = "‚©‚Θ‚θ‚ΜΓή°ΐ—Κ‚ªΈΨ―ΜίΞή°Δή‚Ι•ΫΗ‚³‚κ‚Δ‚Ά‚ά‚·B\nΈΨ―ΜίΞή°Δή‚Μ“ΰ—e‚π‚Ω‚©‚Μ±ΜίΨΉ°Ό®έ‚Ιg‚Ά‚ά‚·‚©B";
     Text[ chinese_traditional ] = "¦b°Ε¶KΓ―¤Ί―d¦s¤j¶qΈκ®Ζ΅C\n±z­nΕύ¨δ¥LªΊΐ³¥Ξµ{§Η¤]¨Ο¥Ξ³o¨ΗΈκ®Ζ΅H";
     Text[ arabic ] = "αήΟ ήγΚ ΘΝέΩ ίγνΗΚ ίΘνΡΙ γδ ΗαΘνΗδΗΚ έν ΗαΝΗέΩΙ.\nεα ΚΡνΟ ζΦΪ γΝΚζνΗΚ ΗαΝΗέΩΙ ΚΝΚ ΚΥΡέ ΚΨΘνήΗΚ ΓΞΡμΏ";
     Text[ greek ] = "Έχετε αποθηκεύσει μεγάλη ποσότητα δεδομένων στο πρόχειρο.\nΘέλετε τα δεδομένα αυτά να είναι διαθέσιμα και για άλλες εφαρμογές;";
@@ -2440,7 +2440,7 @@ String SCSTR_CFG_SPELLCHECK
     Text[ chinese_simplified ] = "ΥύΧΦ·¨Ρ΅Οξ";
     Text[ russian ] = "Οΰπΰμεςπϋ ξπτξγπΰτθθ";
     Text[ polish ] = "Opcje pisowni";
-    Text[ japanese ] = "½ΝίΩΑª―Έ µΜίΌ®έ";
+    Text[ japanese ] = "½ΝίΩΑª―Έ‚ΜµΜίΌ®έ";
     Text[ chinese_traditional ] = "«χ¦r";
     Text[ arabic ] = "ΞνΗΡΗΚ ΗαΚΟήνή ΗαΕγαΗΖν";
     Text[ greek ] = "Επιλογές ορθογραφίας";
@@ -2673,7 +2673,7 @@ String SCSTR_FORMULA_AUTOCORRECTION
     Text[ chinese_simplified ] = "StarOffice Calc ·ΆΟΦΚδΘλµΔΉ«Κ½Ί¬ΣΠÒ»Έφ΄νΞσ΅£\nΔϊ½ΣΚάΟΒΓζ½¨ÒιµΔΠήΈΔΒπ£Ώ\n\n";
     Text[ russian ] = "StarOffice Calc νΰψελ ξψθακσ β ββεδεννξι τξπμσλε.\nΒϋ υξςθςε οπθνÿςό θροπΰβλενθε, οπεδλξζεννξε βνθησ?\n\n";
     Text[ polish ] = "StarOffice Calc znalaz³ b³Ήd we wprowadzonej formule.\nCzy akceptujesz podanΉ na dole korektκ?\n\n";
-    Text[ japanese ] = "StarOffice Calc‚Ν“ό—Ν‚³‚κ‚½”®‚Ι΄Χ°‚π©‚Β‚―‚ά‚µ‚½B\n‚ΜC³σ•β‚π“K—p‚µ‚ά‚·‚©?\n\n";
+    Text[ japanese ] = "StarOffice Calc ‚ª“ό—Ν‚µ‚½”®‚Ι΄Χ°‚πo‚µ‚Δ‚Ά‚ά‚·B\n‚ΜC³σ•β‚π“K—p‚µ‚ά‚·‚©B\n\n";
     Text[ chinese_traditional ] = "StarOffice Calc µo²{Ώι¤JªΊ¤½¦΅§t¦³¤@­ΣΏω»~΅C\n±z±µ¨ό¤U­±ªΊ­Χ§ο«ΨΔ³΅H\n\n";
     Text[ arabic ] = "StarOffice Calc ζΜΟ ΞΨΓ έν ΗαΥνΫΙ ΗαΚν ήγΚ ΘΕΟΞΗαεΗ.\nεα ΚΡνΟ ήΘζα ΗαΚΥΝνΝ ΗαγρήΚΡΝ ΓΟδΗεΏ\n\n";
     Text[ greek ] = "Το StarOffice Calc εντόπισε ένα σφάλμα στον τύπο που εισάγατε.\nΘέλετε να γίνει η αποδοχή της προτεινόμενης διόρθωσης που αναφέρεται παρακάτω;\n\n";
@@ -2702,7 +2702,7 @@ String SCSTR_GRFILTER_OPENERROR
     Text[ chinese_simplified ] = "Ξή·¨΄ςΏªΝΌΠΞΞΔΌώ";
     Text[ russian ] = "Ξςκπϋςό γπΰτθχερκθι τΰιλ νεβξημξζνξ";
     Text[ polish ] = "Pliku graficznego nie moΏna by³o otworzyζ";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚πJ‚―‚ά‚Ή‚ρ";
+    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚πJ‚―‚ά‚Ή‚ρB";
     Text[ chinese_traditional ] = "µLªk¶}±ÒΉΟ¤ωΐΙ®Χ";
     Text[ arabic ] = "αΗ νγίδ έΚΝ γαέ ΗαΡΣζγΗΚ";
     Text[ dutch ] = "Grafisch bestand kan niet worden geopend";
@@ -2730,7 +2730,7 @@ String SCSTR_GRFILTER_IOERROR
     Text[ chinese_simplified ] = "Ξή·¨¶ΑΘ΅ΝΌΠΞΞΔΌώ";
     Text[ russian ] = "Οπξχθςΰςό γπΰτθχερκθι τΰιλ νεβξημξζνξ";
     Text[ polish ] = "Pliku graficznego nie moΏna by³o odczytaζ";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚π“Η‚έ‚ί‚ά‚Ή‚ρ";
+    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚π“Η‚έ‚ί‚ά‚Ή‚ρB";
     Text[ chinese_traditional ] = "µLªkΕª¨ϊΉΟ¤ωΐΙ®Χ";
     Text[ arabic ] = "αΗ νγίδ ήΡΗΑΙ γαέ ΗαΡΣζγΗΚ";
     Text[ dutch ] = "Grafisch bestand kan niet worden gelezen";
@@ -2758,7 +2758,7 @@ String SCSTR_GRFILTER_FORMATERROR
     Text[ chinese_simplified ] = "²»ΓχµΔΝΌΠΞΈρΚ½";
     Text[ russian ] = "Νεθηβερςνϋι γπΰτθχερκθι τξπμΰς";
     Text[ polish ] = "Nieznany format graficzny";
-    Text[ japanese ] = "–³‘θ‚ΜΈήΧΜ¨―Έ‘®";
+    Text[ japanese ] = "•s–Ύ‚ΘΈήΧΜ¨―Έ‘®";
     Text[ chinese_traditional ] = "¤£©ϊªΊΉΟ¤ω®ζ¦΅";
     Text[ arabic ] = "ΚδΣνή ΡΣζγΗΚ ΫνΡ γΪΡζέ";
     Text[ dutch ] = "Onbekend afbeeldingsformaat";
@@ -2786,7 +2786,7 @@ String SCSTR_GRFILTER_VERSIONERROR
     Text[ chinese_simplified ] = "²»Φ§³ΦΥβΈφΝΌΠΞΞΔΌώ°ζ±Ύ";
     Text[ russian ] = "Βεπρθÿ γπΰτθχερκξγξ τΰιλΰ νε οξδδεπζθβΰεςρÿ";
     Text[ polish ] = "Wersja pliku graficznego nie bκdzie obs³ugiwana";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚ΜΚή°Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ§²Ω‚ΜΚή°Όή®έ‚Νx‰‡‚³‚κ‚ά‚Ή‚ρB";
     Text[ chinese_traditional ] = "¤£¤δ΄©³o­Σª©¥»ªΊΉΟ¤ωΐΙ®Χ";
     Text[ arabic ] = "αΗ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
     Text[ dutch ] = "Deze versie van het grafische bestand wordt niet ondersteund";
@@ -2814,7 +2814,7 @@ String SCSTR_GRFILTER_FILTERERROR
     Text[ chinese_simplified ] = "Γ»ΣΠΥÒµ½ΝΌΠΞΉύΒΛΖχ";
     Text[ russian ] = "Γπΰτθχερκθι τθλόςπ νε νΰιδεν";
     Text[ polish ] = "Nie znaleziono filtrσw graficznych";
-    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "ΈήΧΜ¨―ΈΜ¨Ωΐ‚ª©‚Β‚©‚θ‚ά‚Ή‚ρB";
     Text[ chinese_traditional ] = "¨S¦³§δ¨μΉΟ¤ωΉLΒoΎΉ";
     Text[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ έαΚΡ ΗαΡΣζγΗΚ";
     Text[ dutch ] = "Grafische filter niet gevonden";
@@ -2842,7 +2842,7 @@ String SCSTR_GRFILTER_TOOBIG
     Text[ chinese_simplified ] = "Γ»ΣΠΧγΉ»µΔΔΪ΄ζΣΓΣΪ²εΘλΝΌΠΞ";
     Text[ russian ] = "Νεδξρςΰςξχνξ οΰμÿςθ δλÿ βρςΰβκθ πθρσνκΰ";
     Text[ polish ] = "Za ma³o pamiκci do wstawienia grafiki";
-    Text[ japanese ] = "ΈήΧ―Μ¨―Έ‚π‘}“ό‚·‚ι‚Μ‚Ι\\•ª‚Μ‹σ‚«—e—Κ‚ª‚ ‚θ‚ά‚Ή‚ρ";
+    Text[ japanese ] = "ΈήΧ―Μ¨―Έ‚Μ‘}“ό‚Ι\\•ª‚ΜÒΣΨ‹σ‚«—e—Κ‚ª‚ ‚θ‚ά‚Ή‚ρB";
     Text[ chinese_traditional ] = "°OΎΠΕι¤£¨¬΅AµLªk΄΅¤JΉΟ¤ω";
     Text[ arabic ] = "αΗ νζΜΟ ΠΗίΡΙ ίΗένΙ αΕΟΡΗΜ ΗαΡΣγ";
     Text[ dutch ] = "Niet genoeg vrij geheugen om de afbeelding in te voegen";
