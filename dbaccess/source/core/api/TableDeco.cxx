@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-11-01 15:27:20 $
+ *  last change: $Author: oj $ $Date: 2001-12-19 15:09:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,16 +587,16 @@ void ODBTableDecorator::fillPrivileges() const
             while (xPrivileges->next())
             {
 #ifdef DBG_UTIL
-                ::rtl::OUString sCat, sSchema, sName, sGrantor, sGrantable;
-                sCat        = xCurrentRow->getString(1);
-                sSchema     = xCurrentRow->getString(2);
-                sName       = xCurrentRow->getString(3);
-                sGrantor    = xCurrentRow->getString(4);
+                ::rtl::OUString sCat1, sSchema1, sName1, sGrantor1, sGrantable1;
+                sCat1       = xCurrentRow->getString(1);
+                sSchema1    = xCurrentRow->getString(2);
+                sName1      = xCurrentRow->getString(3);
+                sGrantor1   = xCurrentRow->getString(4);
 #endif
                 sGrantee    = xCurrentRow->getString(5);
                 sPrivilege  = xCurrentRow->getString(6);
 #ifdef DBG_UTIL
-                sGrantable  = xCurrentRow->getString(7);
+                sGrantable1 = xCurrentRow->getString(7);
 #endif
 
                 if (sUserWorkingFor != sGrantee)
