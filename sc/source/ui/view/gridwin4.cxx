@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-12-06 08:10:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,17 @@ void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     aOuter.Top()    -= nVer;
     aOuter.Bottom() += nVer;
 
-    Font aFont;
+    //  use ScPatternAttr::GetFont only for font size
+    Font aAttrFont;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
-                                    GetFont(aFont,pDev,&rZoomY);
-    aFont.SetAlign( ALIGN_TOP );
-    pDev->SetFont( aFont );
+                                    GetFont(aAttrFont,pDev,&rZoomY);
+
+    //  everything else from application font
+    Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
+    aAppFont.SetSize( aAttrFont.GetSize() );
+
+    aAppFont.SetAlign( ALIGN_TOP );
+    pDev->SetFont( aAppFont );
 
     Size aTextSize( pDev->GetTextWidth( rTitle ), pDev->GetTextHeight() );
 
