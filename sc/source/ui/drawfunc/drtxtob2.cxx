@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
+ *  last change: $Author: cl $ $Date: 2002-04-25 10:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #include <svx/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xtextit.hxx>
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -142,15 +145,11 @@ void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             {
-                SfxItemSet aAttr( pView->GetModel()->GetItemPool(),
-                                    SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT, 0 );
-                aAttr.Put( SfxBoolItem( SDRATTR_TEXTDIRECTION_LEFT_TO_RIGHT,
-                                    BOOL( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ) ) );
+                SfxItemSet aAttr( pView->GetModel()->GetItemPool(), SDRATTR_TEXTDIRECTION, SDRATTR_TEXTDIRECTION, 0 );
+                aAttr.Put( SvxWritingModeItem( nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ? com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL ) );
                 pView->SetAttributes( aAttr );
-
                 Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
                 Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
-
                 rReq.Done( aAttr );
             }
             break;
