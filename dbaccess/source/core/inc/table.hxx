@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:00:55 $
+ *  last change: $Author: vg $ $Date: 2002-10-30 09:34:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,7 @@ namespace dbaccess
     class ODBTable;
     typedef ::comphelper::OIdPropertyArrayUsageHelper< ODBTable >   ODBTable_PROP;
     typedef ::connectivity::OTableHelper                            OTable_Base;
+    typedef ::connectivity::sdbcx::OTableDescriptor_BASE OTable_Linux;
 
     class ODBTable  :public ODataSettings_Base
                     ,public ODBTable_PROP
@@ -134,6 +135,7 @@ namespace dbaccess
     {
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xDriverColumns;
+        using OTable_Linux::rBHelper;
 
     // <properties>
         sal_Int32                                                                       m_nPrivileges;

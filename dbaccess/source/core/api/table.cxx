@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 08:55:20 $
+ *  last change: $Author: vg $ $Date: 2002-10-30 09:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,10 @@ void ODBTable::flush_NoBroadcast_NoCommit()
         storeTo(m_aConfigurationNode.openNode(CONFIGKEY_SETTINGS));
 
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        if ( pColumns )
-            pColumns->storeSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( getConnection() ) );
+        if ( pColumns ) {
+            Reference<XConnection> xCon = getConnection();
+            pColumns->storeSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( xCon ) );
+        };
     }
 }
 // XRename,
@@ -386,7 +388,7 @@ void SAL_CALL ODBTable::rename( const ::rtl::OUString& _rNewName ) throw(SQLExce
 void SAL_CALL ODBTable::alterColumnByName( const ::rtl::OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OTable_Base::rBHelper.bDisposed);
+    checkDisposed(OTable_Linux::rBHelper.bDisposed);
     if(m_pColumns->hasByName(_rName))
     {
         ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
@@ -441,7 +443,8 @@ void ODBTable::refreshColumns()
     if ( m_aConfigurationNode.isValid() )
     {
         OColumns* pColumns = static_cast<OColumns*>(m_pColumns);
-        pColumns->loadSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( getConnection() ) );
+        Reference<XConnection> xCon = getConnection();
+        pColumns->loadSettings( m_aConfigurationNode.openNode(CONFIGKEY_QRYDESCR_COLUMNS), getDataSourceNumberFormats( xCon ) );
     }
 
 }
