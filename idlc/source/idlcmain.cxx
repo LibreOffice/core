@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlcmain.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 16:21:26 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:34:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,19 +97,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 stdout, "%s: detected %d warnings compiling stdin\n",
                 options.getProgramName().getStr(), idlc()->getWarningCount());
         }
-        if (nErrors > 0) {
-            OString outputPathname;
-            if (options.isValid("-O")) {
-                OString outputPathname = convertToAbsoluteSystemPath(
-                    options.getOption("-O"));
-                if (outputPathname[outputPathname.getLength() - 1] != '/') {
-                    outputPathname += "/";
-                }
+        OString outputUrl;
+        if (options.isValid("-O")) {
+            outputUrl = convertToFileUrl(options.getOption("-O"));
+            if (outputUrl[outputUrl.getLength() - 1] != '/') {
+                outputUrl += "/";
             }
-            outputPathname += "stdin.urd";
-            removeIfExists(outputPathname);
+            outputUrl += "stdin.urd";
         } else {
-            nErrors = produceFile("stdin");
+            outputUrl = convertToFileUrl("stdin.urd");
+        }
+        if (nErrors > 0) {
+            removeIfExists(outputUrl);
+        } else {
+            nErrors = produceFile(outputUrl);
         }
         idlc()->reset();
     }
