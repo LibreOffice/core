@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LinguProperties.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-04 14:12:57 $
+ *  last change: $Author: arellano $ $Date: 2001-04-03 18:57:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,10 +92,11 @@ service LinguProperties
     interface com::sun::star::lang::XServiceInfo;
 
     //-------------------------------------------------------------------------
-    /** defines wether new German spelling rules should be used for German
+    /** defines whether new German spelling rules should be used for German
          text or not when doing spellchecking or hyphenation, or using the
          thesaurus.
-    */
+
+    <!-- Dennis: Should there be a specific reference to German? -->*/
     [property] boolean IsGermanPreReform;
 
     //-------------------------------------------------------------------------
@@ -111,14 +112,14 @@ service LinguProperties
     [property] boolean IsIgnoreControlCharacters;
 
     //-------------------------------------------------------------------------
-    /** defines if words with uppercase letters only should be
-         subject for spellchecking or not.
+    /** defines if words with only uppercase letters should be
+         subject to spellchecking or not.
     */
     [property] boolean IsSpellUpperCase;
 
     //-------------------------------------------------------------------------
     /** defines if words containing digits (or numbers) should be
-         subject for spellchecking or not.
+         subject to spellchecking or not.
     */
     [property] boolean IsSpellWithDigits;
 
@@ -150,25 +151,25 @@ service LinguProperties
     [property] com::sun::star::lang::Locale DefaultLocale;
 
     //-------------------------------------------------------------------------
-    /** defines wether interactive hyphenation should be performed without
-         requiring the user to select every hyphenation position after he has
+    /** defines whether interactive hyphenation should be performed without
+         requiring the user to select every hyphenation position after the user has
          triggered the hyphenation.
     */
     [property] boolean IsHyphAuto;
 
     //-------------------------------------------------------------------------
-    /** defines wether hyphenation should be done in special regions of
+    /** defines whether hyphenation should be done in special regions of
          documents or not.
     */
     [property] boolean IsHyphSpecial;
 
     //-------------------------------------------------------------------------
-    /** indicates wether spellchecking should be done automatically or not.
+    /** indicates whether spellchecking should be done automatically or not.
     */
     [property] boolean IsSpellAuto;
 
     //-------------------------------------------------------------------------
-    /** indicates wether the markings for incorrect spelled text should be
+    /** indicates whether the markings for incorrectly spelled text should be
          hidden or not.
     */
     [property] boolean IsSpellHide;
@@ -180,13 +181,13 @@ service LinguProperties
     [property] boolean IsSpellInAllLanguages;
 
     //-------------------------------------------------------------------------
-    /** defines wether spellchecking should be done in special regions of
+    /** defines whether spellchecking should be done in special regions of
          documents or not.
     */
     [property] boolean IsSpellSpecial;
 
     //-------------------------------------------------------------------------
-    /** defines wether spellchecking should be done in reverse
+    /** defines whether spellchecking should be done in reverse
          direction or not.
     */
     [property] boolean IsWrapReverse;
