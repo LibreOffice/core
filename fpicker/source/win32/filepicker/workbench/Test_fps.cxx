@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Test_fps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-28 11:14:43 $
+ *  last change: $Author: tra $ $Date: 2001-08-06 07:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ using namespace std                     ;
 void TestFilterManager( Reference< XFilePicker > xFilePicker );
 
 
-#define RDB_SYSPATH "D:\\Projects\\gsl\\sysui\\wntmsci7\\bin\\applicat.rdb"
+#define RDB_SYSPATH "D:\\Projects\\src638\\fpicker\\wntmsci7\\bin\\applicat.rdb"
 
 //_________________________________________________________________________________________________________________________
 //  global variables
@@ -294,7 +294,56 @@ void SAL_CALL FilePickerListener::directoryChanged( const ::com::sun::star::ui::
 OUString SAL_CALL FilePickerListener::helpRequested( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString( );
+    OUString aHelpText;
+
+    switch ( aEvent.ElementId )
+    {
+    case CHECKBOX_AUTOEXTENSION:
+        aHelpText = OUString( L"Automatische Dateinamenserweiterung" );
+        break;
+
+    case CHECKBOX_PASSWORD:
+        aHelpText = OUString( L"Password" );
+        break;
+
+    case CHECKBOX_FILTEROPTIONS:
+        aHelpText = OUString( L"Filteroptionen" );
+        break;
+
+    case CHECKBOX_READONLY:
+        aHelpText = OUString( L"Nur lesbar" );
+        break;
+
+    case CHECKBOX_LINK:
+        aHelpText = OUString( L"Link" );
+        break;
+
+    case CHECKBOX_PREVIEW:
+        aHelpText = OUString( L"Vorschau" );
+        break;
+
+    case PUSHBUTTON_PLAY:
+        aHelpText = OUString( L"Abspielen" );
+        break;
+
+    case LISTBOX_VERSION:
+        aHelpText = OUString( L"Dokumentenversion" );
+        break;
+
+    case LISTBOX_TEMPLATE:
+        aHelpText = OUString( L"Vorlage" );
+        break;
+
+    case LISTBOX_IMAGE_TEMPLATE:
+        aHelpText = OUString( L"Bildvorlage" );
+        break;
+
+    case CHECKBOX_SELECTION:
+        aHelpText = OUString( L"Selektion" );
+        break;
+    }
+
+    return aHelpText;
 }
 
 void SAL_CALL FilePickerListener::controlStateChanged( const ::com::sun::star::ui::dialogs::FilePickerEvent& aEvent )
@@ -371,9 +420,9 @@ int SAL_CALL main(int nArgc, char* Argv[], char* Env[]  )
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_SELECTION );
         //arguments[0] = makeAny( FILESAVE_AUTOEXTENSION_TEMPLATE );
-        //arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
+        arguments[0] = makeAny( FILEOPEN_LINK_PREVIEW_IMAGE_TEMPLATE );
         //arguments[0] = makeAny( FILEOPEN_PLAY );
-        arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
+        //arguments[0] = makeAny( FILEOPEN_READONLY_VERSION );
 
     Reference< XFilePicker > xFilePicker = Reference< XFilePicker >(
         g_xFactory->createInstanceWithArguments(
