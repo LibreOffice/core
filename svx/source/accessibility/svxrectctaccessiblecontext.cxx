@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrectctaccessiblecontext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2002-10-29 14:35:12 $
+ *  last change: $Author: os $ $Date: 2002-10-29 15:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,18 +561,18 @@ sal_Int32 SvxRectCtlAccessibleContext::getForeground(  )
 {
     ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard   aGuard( m_aMutex );
-    return mpRepr->GetControlForeground()->GetColor();
-
     ThrowExceptionIfNotAlive();
+
+    return mpRepr->GetControlForeground().GetColor();
 }
 sal_Int32 SvxRectCtlAccessibleContext::getBackground(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard   aGuard( m_aMutex );
-
     ThrowExceptionIfNotAlive();
-    return mpRepr->GetControlBackground()->GetColor();
+
+    return mpRepr->GetControlBackground().GetColor();
 }
 
 //=====  XServiceInfo  ========================================================
@@ -1021,6 +1021,23 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleKeyBinding() throw( 
 {
     // here is no implementation, because here are no KeyBindings for every object
     return Any();
+}
+sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard   aGuard( maMutex );
+    ThrowExceptionIfNotAlive();
+    return mrParentWindow.GetControlForeground().GetColor();
+}
+sal_Int32 SvxRectCtlChildAccessibleContext::getBackground(  )
+        throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard       aSolarGuard( Application::GetSolarMutex() );
+    ::osl::MutexGuard   aGuard( maMutex );
+
+    ThrowExceptionIfNotAlive();
+    return mrParentWindow.GetControlBackground().GetColor();
 }
 
 //=====  XAccessibleContext  ==================================================
