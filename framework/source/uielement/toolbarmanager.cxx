@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 17:22:50 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_XLAYOUTMANAGER_HPP_
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
@@ -547,14 +547,17 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
 
     {
         ResetableGuard aGuard( m_aLock );
-        try
+        if ( m_xDocImageManager.is() )
         {
-            m_xDocImageManager->removeConfigurationListener(
-                Reference< XUIConfigurationListener >(
-                    static_cast< OWeakObject* >( this ), UNO_QUERY ));
-        }
-        catch ( Exception& )
-        {
+            try
+            {
+                m_xDocImageManager->removeConfigurationListener(
+                    Reference< XUIConfigurationListener >(
+                        static_cast< OWeakObject* >( this ), UNO_QUERY ));
+            }
+            catch ( Exception& )
+            {
+            }
         }
         try
         {
@@ -947,7 +950,7 @@ void ToolBarManager::CreateControllers()
         {
             if ( xToolbarControllerFactory.is() )
             {
-                Sequence< Any > aSeq( 3 );
+                Sequence< Any > aSeq( 4 );
                 PropertyValue aPropValue;
 
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ModuleName" ));
@@ -959,6 +962,9 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                 aPropValue.Value    = makeAny( m_xServiceManager );
                 aSeq[2] = makeAny( aPropValue );
+                aPropValue.Name     = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Value    = makeAny( xToolbarWindow );
+                aSeq[3] = makeAny( aPropValue );
 
                 xController = Reference< XStatusListener >( xToolbarControllerFactory->createInstanceWithArgumentsAndContext(
                                                                 aCommandURL, aSeq, xComponentContext ),
@@ -968,12 +974,14 @@ void ToolBarManager::CreateControllers()
         }
 
         if ( !xController.is() )
+        {
             pController = CreateToolBoxController( m_xFrame, m_pToolBar, nId, aCommandURL );
-        if ( !pController )
-            pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL );
+            if ( !pController )
+                pController = new GenericToolbarController( m_xServiceManager, m_xFrame, m_pToolBar, nId, aCommandURL );
 
-        if ( pController )
-            xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+            if ( pController )
+                xController = Reference< XStatusListener >( static_cast< ::cppu::OWeakObject *>( pController ), UNO_QUERY );
+        }
 
         m_aControllerVector.push_back( xController );
         Reference< XInitialization > xInit( xController, UNO_QUERY );
@@ -983,7 +991,7 @@ void ToolBarManager::CreateControllers()
             if ( bInit )
             {
                 PropertyValue aPropValue;
-                Sequence< Any > aArgs( 3 );
+                Sequence< Any > aArgs( 4 );
                 aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
                 aPropValue.Value = makeAny( m_xFrame );
                 aArgs[0] = makeAny( aPropValue );
@@ -993,6 +1001,9 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ServiceManager" ));
                 aPropValue.Value = makeAny( m_xServiceManager );
                 aArgs[2] = makeAny( aPropValue );
+                aPropValue.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ParentWindow" ));
+                aPropValue.Value = makeAny( xToolbarWindow );
+                aArgs[3] = makeAny( aPropValue );
                 xInit->initialize( aArgs );
             }
 
