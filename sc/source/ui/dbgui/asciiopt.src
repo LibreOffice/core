@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dr $ $Date: 2002-01-10 13:16:12 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 10:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ ModalDialog RID_SCDLG_ASCII
         Text[ russian ] = "Òèï êîëîíîê";
         Text[ greek ] = "Ôýðïò óô~õëþí";
         Text[ dutch ] = "Kolomt~ype";
-        Text[ french ] = "T~ype";
+        Text[ french ] = "Type";
         Text[ spanish ] = "T~ipo de columna";
         Text[ finnish ] = "Saraket~yyppi";
         Text[ italian ] = "Tipo colonna";
@@ -457,7 +457,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ portuguese_brazilian ] = "~Semikolon" ;
         Text [ swedish ] = "~Semikolon" ;
         Text [ danish ] = "Semikolon" ;
-        Text [ italian ] = "~Punto e virgola" ;
+        Text [ italian ] = "Punto e virgola" ;
         Text [ spanish ] = "~Punto y coma" ;
         Text [ french ] = "~Point-virgule" ;
         Text [ dutch ] = "~Puntkomma" ;
@@ -520,7 +520,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ swedish ] = "~Blanksteg" ;
         Text [ danish ] = "Mellemrum" ;
         Text [ italian ] = "~Spazio" ;
-        Text [ spanish ] = "~Espacio" ;
+        Text [ spanish ] = "Espacio" ;
         Text [ french ] = "~Espace" ;
         Text [ dutch ] = "~Spatie" ;
         Text [ portuguese ] = "~Espaço" ;
