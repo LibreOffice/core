@@ -64,7 +64,7 @@
         <converter-class-impl>
             org.openoffice.xmerge.converter.xml.sxw.aportisdoc.PluginFactoryImpl
         </converter-class-impl>
-        <converter-target type="palm-PDB/REAdTEXt" />
+        <converter-target type="application/x-aportisdoc" />
     </converter>
 </converters>
 

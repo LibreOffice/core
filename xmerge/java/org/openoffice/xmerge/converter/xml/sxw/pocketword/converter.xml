@@ -72,7 +72,7 @@
         <converter-class-impl>
             org.openoffice.xmerge.converter.xml.sxw.pocketword.PluginFactoryImpl
         </converter-class-impl>
-        <converter-target type="application/pocket-word"/>
+        <converter-target type="application/x-pocket-word"/>
     </converter>
 </converters>
 
