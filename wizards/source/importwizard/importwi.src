@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-13 14:26:58 $
+ *  last change: $Author: rt $ $Date: 2002-09-17 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1041,12 +1041,12 @@ String sOverwriteallFiles
     Text[ russian ] = "Do you want to overwrite documents without query";
     Text[ greek ] = "Do you want to overwrite documents without query";
     Text[ dutch ] = "Do you want to overwrite documents without query";
-    Text[ french ] = "Do you want to overwrite documents without query";
+    Text[ french ] = "�craser les documents sans demande de confirmation ?";
     Text[ spanish ] = "�Desea sobrescribir documentos sin consulta?";
     Text[ finnish ] = "Do you want to overwrite documents without query";
-    Text[ italian ] = "Do you want to overwrite documents without query";
+    Text[ italian ] = "Volete soprascrivere i documenti senza domanda di controllo?";
     Text[ danish ] = "Do you want to overwrite documents without query";
-    Text[ swedish ] = "Do you want to overwrite documents without query";
+    Text[ swedish ] = "Vill du att dokument ska skrivas �ver utan att du blir tillfr�gad f�rst?";
     Text[ polish ] = "Do you want to overwrite documents without query";
     Text[ portuguese_brazilian ] = "Do you want to overwrite documents without query";
     Text[ japanese ] = "確認なしでドキュメントに上書きしますか。";
@@ -1069,12 +1069,12 @@ String sreeditMacro
     Text[ russian ] = "Document macro has to be revised";
     Text[ greek ] = "Document macro has to be revised";
     Text[ dutch ] = "Document macro has to be revised";
-    Text[ french ] = "Document macro has to be revised";
-    Text[ spanish ] = "Document macro has to be revised";
+    Text[ french ] = "R�vision de la macro de document requise";
+    Text[ spanish ] = "Se debe revisar la macro de los documentos.";
     Text[ finnish ] = "Document macro has to be revised";
-    Text[ italian ] = "Document macro has to be revised";
+    Text[ italian ] = "La macro dei documenti dev'essere modificata";
     Text[ danish ] = "Document macro has to be revised";
-    Text[ swedish ] = "Document macro has to be revised";
+    Text[ swedish ] = "Dokumentmakro m�ste revideras";
     Text[ polish ] = "Document macro has to be revised";
     Text[ portuguese_brazilian ] = "Document macro has to be revised";
     Text[ japanese ] = "ドキュメントマクロを編集しなおす必要があります。";
@@ -1096,12 +1096,12 @@ String scouldNotsaveDocument
     Text[ russian ] = "Document '<1>' could not be saved";
     Text[ greek ] = "Document '<1>' could not be saved";
     Text[ dutch ] = "Document '<1>' could not be saved";
-    Text[ french ] = "Document '<1>' could not be saved";
+    Text[ french ] = "Impossible d'enregistrer le document '<1>' !";
     Text[ spanish ] = "El documento '<1>' no se pudo guardar";
     Text[ finnish ] = "Document '<1>' could not be saved";
-    Text[ italian ] = "Document '<1>' could not be saved";
+    Text[ italian ] = "Non � stato possibile salvare il file '<1>'";
     Text[ danish ] = "Document '<1>' could not be saved";
-    Text[ swedish ] = "Document '<1>' could not be saved";
+    Text[ swedish ] = "Det gick inte att spara dokument '<1>'";
     Text[ polish ] = "Document '<1>' could not be saved";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be saved";
     Text[ japanese ] = "ドキュメント '<1>' は保存できませんでした。";
@@ -1124,12 +1124,12 @@ String scouldNotopenDocument
     Text[ russian ] = "Document '<1>' could not be opened";
     Text[ greek ] = "Document '<1>' could not be opened";
     Text[ dutch ] = "Document '<1>' could not be opened";
-    Text[ french ] = "Document '<1>' could not be opened";
+    Text[ french ] = "Impossible d'ouvrir le document '<1>' !";
     Text[ spanish ] = "El documento '<1>' no se pudo abrir.";
     Text[ finnish ] = "Document '<1>' could not be opened";
-    Text[ italian ] = "Document '<1>' could not be opened";
+    Text[ italian ] = "Impossibile aprire il documento '<1>'";
     Text[ danish ] = "Document '<1>' could not be opened";
-    Text[ swedish ] = "Document '<1>' could not be opened";
+    Text[ swedish ] = "Det gick inte att �ppna dokument '<1>'";
     Text[ polish ] = "Document '<1>' could not be opened";
     Text[ portuguese_brazilian ] = "Document '<1>' could not be opened";
     Text[ japanese ] = "ドキュメント '<1>' を開くことができません。";
@@ -1915,12 +1915,12 @@ String sshowLogfile
     Text[ russian ] = "Show Logfile";
     Text[ greek ] = "Show Logfile";
     Text[ dutch ] = "Show Logfile";
-    Text[ french ] = "Show Logfile";
-    Text[ spanish ] = "Show Logfile";
+    Text[ french ] = "Afficher le fichier journal";
+    Text[ spanish ] = "Mostrar logfile";
     Text[ finnish ] = "Show Logfile";
-    Text[ italian ] = "Show Logfile";
+    Text[ italian ] = "Mostra file log";
     Text[ danish ] = "Show Logfile";
-    Text[ swedish ] = "Show Logfile";
+    Text[ swedish ] = "Visa loggfil";
     Text[ polish ] = "Show Logfile";
     Text[ portuguese_brazilian ] = "Show Logfile";
     Text[ japanese ] = "Log file の表示";
