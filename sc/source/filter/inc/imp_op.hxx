@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:30:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:18:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,6 +212,10 @@ protected:
     sal_Bool                bFitToPage;         /// Stores fit to page setting from WSBOOL record.
     sal_Bool                bHasHeader;         /// Stores whether header for current sheet exists.
     sal_Bool                bHasFooter;         /// Stores whether footer for current sheet exists.
+    sal_Bool                bHasTopMargin;      /// Stores whether top margin for current sheet exists.
+    sal_Bool                bHasBottomMargin;   /// Stores whether bottom margin for current sheet exists.
+    sal_Bool                bHasLeftMargin;     /// Stores whether left margin for current sheet exists.
+    sal_Bool                bHasRightMargin;    /// Stores whether right margin for current sheet exists.
 
     // Record-Funktionen
     void                    Dimensions( void );             // 0x00
