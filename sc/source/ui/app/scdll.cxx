@@ -1,9 +1,9 @@
 /*
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:11:08 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:57:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,12 @@
 
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #include <svx/extrusioncontrols.hxx>
+#endif
+#ifndef _SVX_FONTWORK_GALLERY_DIALOG_HXX
+#include <svx/fontworkgallery.hxx>
+#endif
+#ifndef _SVX_TBXCUSTOMSHAPES_HXX
+#include <svx/tbxcustomshapes.hxx>
 #endif
 
 #include <svtools/parhtml.hxx>
@@ -290,8 +296,14 @@ void ScDLL::Init()
     ScTbxInsertCtrl     ::RegisterControl(SID_TBXCTL_INSOBJ, pMod);
 
     //  Svx-Toolbox-Controller
-    SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW, pMod);
-    SvxTbxCtlAlign                  ::RegisterControl(SID_OBJECT_ALIGN, pMod);
+    SvxTbxCtlDraw                   ::RegisterControl(SID_INSERT_DRAW,          pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_BASIC,     pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_SYMBOL,    pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_ARROW,     pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_FLOWCHART, pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_CALLOUT,   pMod);
+    SvxTbxCtlCustomShapes           ::RegisterControl(SID_DRAWTBX_CS_STAR,      pMod);
+    SvxTbxCtlAlign                  ::RegisterControl(SID_OBJECT_ALIGN,         pMod);
     SvxFillToolBoxControl           ::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl      ::RegisterControl(0, pMod);
     SvxLineWidthToolBoxControl      ::RegisterControl(0, pMod);
@@ -349,6 +361,10 @@ void ScDLL::Init()
     svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
     svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+
+    svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPES, pMod );
+    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
+    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
 
     //  Child-Windows
 
