@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:23 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 13:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,11 @@ public:
     MSE40HTMLClipFormatObj() : pStrm(0)         {}
     ~MSE40HTMLClipFormatObj();
 
+//JP 31.01.2001: old interfaces
     BOOL GetData( SotDataObject& );
     BOOL GetData( SvData& );
+//JP 31.01.2001: the new one
+    SvStream* IsValid( SvStream& );
 
     const SvStream* GetStream() const       { return pStrm; }
           SvStream* GetStream()             { return pStrm; }
@@ -96,6 +99,9 @@ public:
 //
 /*
    $Log: not supported by cvs2svn $
+   Revision 1.1.1.1  2000/09/18 16:52:23  hr
+   initial import
+
    Revision 1.8  2000/09/17 16:47:07  willem.vandorp
    OpenOffice header added.
 

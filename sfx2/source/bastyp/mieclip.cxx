@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mieclip.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:28 $
+ *  last change: $Author: jp $ $Date: 2001-02-02 13:41:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,59 +102,69 @@ BOOL MSE40HTMLClipFormatObj::GetData( SvData& rData )
     SvStorageStreamRef xStrm;
     rData.GetData( (SvStorageStreamRef&)xStrm );
     if( xStrm.Is() )
+        IsValid( *xStrm );
+    return 0 != pStrm;
+}
+
+SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
+{
+    BOOL bRet = FALSE;
+    if( pStrm )
+        delete pStrm, pStrm = 0;
+
+    ByteString sLine, sVersion;
+    ULONG nStt = 0, nEnd = 0;
+    USHORT nIndex = 0;
+
+    rStream.Seek(STREAM_SEEK_TO_BEGIN);
+    rStream.ResetError();
+
+    if( rStream.ReadLine( sLine ) &&
+        sLine.GetToken( 0, ':', nIndex ) == "Version" )
     {
-        ByteString sLine, sVersion;
-        ULONG nStt = 0, nEnd = 0;
-        USHORT nIndex = 0;
-
-        xStrm->Seek(STREAM_SEEK_TO_BEGIN);
-        xStrm->ResetError();
-
-        if( xStrm->ReadLine( sLine ) &&
-            sLine.GetToken( 0, ':', nIndex ) == "Version" )
+        sVersion = sLine.Copy( nIndex );
+        while( rStream.ReadLine( sLine ) )
         {
-            sVersion = sLine.Copy( nIndex );
-            while( xStrm->ReadLine( sLine ) )
-            {
-                nIndex = 0;
-                ByteString sTmp( sLine.GetToken( 0, ':', nIndex ) );
-                if( sTmp == "StartHTML" )
-                    nStt = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
-                else if( sTmp == "EndHTML" )
-                    nEnd = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
-                else if( sTmp == "SourceURL" )
-                    sBaseURL = String(S2U(sLine.Erase( 0, nIndex )));
+            nIndex = 0;
+            ByteString sTmp( sLine.GetToken( 0, ':', nIndex ) );
+            if( sTmp == "StartHTML" )
+                nStt = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
+            else if( sTmp == "EndHTML" )
+                nEnd = (ULONG)(sLine.Erase( 0, nIndex ).ToInt32());
+            else if( sTmp == "SourceURL" )
+                sBaseURL = String(S2U(sLine.Erase( 0, nIndex )));
 
-                if( nEnd && nStt &&
-                    ( sBaseURL.Len() || xStrm->Tell() >= nStt ))
-                {
-                    bRet = TRUE;
-                    break;
-                }
+            if( nEnd && nStt &&
+                ( sBaseURL.Len() || rStream.Tell() >= nStt ))
+            {
+                bRet = TRUE;
+                break;
             }
         }
-
-        if( bRet )
-        {
-            xStrm->Seek( nStt );
-
-            pStrm = new SvCacheStream( ( nEnd - nStt < 0x10000l
-                                            ? nEnd - nStt + 32
-                                            : 0 ));
-            *pStrm << *xStrm;
-            pStrm->SetStreamSize( nEnd - nStt );
-            pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-
-            bRet = TRUE;
-        }
     }
-    return bRet;
+
+    if( bRet )
+    {
+        rStream.Seek( nStt );
+
+        pStrm = new SvCacheStream( ( nEnd - nStt < 0x10000l
+                                        ? nEnd - nStt + 32
+                                        : 0 ));
+        *pStrm << rStream;
+        pStrm->SetStreamSize( nEnd - nStt );
+        pStrm->Seek( STREAM_SEEK_TO_BEGIN );
+    }
+
+    return pStrm;
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////
 //
 /* $Log: not supported by cvs2svn $
+/* Revision 1.1.1.1  2000/09/18 16:52:28  hr
+/* initial import
+/*
 /* Revision 1.9  2000/09/17 16:47:18  willem.vandorp
 /* OpenOffice header added.
 /*
