@@ -211,6 +211,9 @@ JAVA_WRITERSELECTOR= \
 
 JAVA_OFFICEBEAN_SIMPLEBEAN= \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBean.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleBeanBeanInfo.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/SimpleViewer.java \
+    $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/manifest.tmp \
     $(DESTDIRJAVAEXAMPLES)$/OfficeBean$/SimpleBean$/Makefile
 
 JAVA_OFFICEBEAN_OFFICEWRITERBEAN= \
