@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:16:38 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:12:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1910,9 +1910,9 @@ void MenuBarManager::FillMenu( USHORT& nId, Menu* pMenu, const Reference< XIndex
                     pMenu->InsertItem( nId, aLabel );
                     pMenu->SetItemCommand( nId, aCommandURL );
 
-                    sal_Int16 nHelpId = (sal_Int16)aHelpURL.toInt32();
+                    sal_Int32 nHelpId = aHelpURL.toInt32();
                     if ( nHelpId > 0 )
-                        pMenu->SetHelpId( nId, nHelpId );
+                        pMenu->SetHelpId( nId, (USHORT)nHelpId );
 
                     if ( xIndexContainer.is() )
                     {
