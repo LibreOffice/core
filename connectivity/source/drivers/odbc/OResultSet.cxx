@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1085,7 +1085,7 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
 
 
     columnIndex = mapColumn(columnIndex);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,(sal_Int8*)NULL,NULL,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,(sal_Int8*)NULL,NULL,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 
@@ -1097,7 +1097,7 @@ void SAL_CALL OResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) thr
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BIT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(SQLException, RuntimeException)
@@ -1109,7 +1109,7 @@ void SAL_CALL OResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_CHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 
@@ -1121,7 +1121,7 @@ void SAL_CALL OResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) thro
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TINYINT,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(SQLException, RuntimeException)
@@ -1133,7 +1133,7 @@ void SAL_CALL OResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_INTEGER,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(SQLException, RuntimeException)
@@ -1154,7 +1154,7 @@ void SAL_CALL OResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(SQ
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_REAL,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 
@@ -1166,7 +1166,7 @@ void SAL_CALL OResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DOUBLE,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUString& x ) throw(SQLException, RuntimeException)
@@ -1177,7 +1177,7 @@ void SAL_CALL OResultSet::updateString( sal_Int32 columnIndex, const ::rtl::OUSt
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_VARCHAR,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException)
@@ -1188,7 +1188,7 @@ void SAL_CALL OResultSet::updateBytes( sal_Int32 columnIndex, const Sequence< sa
 
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_BINARY,0,0,&x,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) throw(SQLException, RuntimeException)
@@ -1200,7 +1200,7 @@ void SAL_CALL OResultSet::updateDate( sal_Int32 columnIndex, const Date& x ) thr
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
     DATE_STRUCT aVal = OTools::DateToOdbcDate(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_DATE,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 
@@ -1213,7 +1213,7 @@ void SAL_CALL OResultSet::updateTime( sal_Int32 columnIndex, const Time& x ) thr
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
     TIME_STRUCT aVal = OTools::TimeToOdbcTime(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIME,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 
@@ -1226,7 +1226,7 @@ void SAL_CALL OResultSet::updateTimestamp( sal_Int32 columnIndex, const DateTime
     columnIndex = mapColumn(columnIndex);
     void* pData = (void*)m_aBindVector[columnIndex];
     TIMESTAMP_STRUCT aVal = OTools::DateTimeToTimestamp(x);
-    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding);
+    OTools::bindValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_TIMESTAMP,0,0,&aVal,pData,&m_aLengthVector[columnIndex],**this,m_nTextEncoding,m_pStatement->getOwnConnection()->useOldDateFormat());
 }
 // -------------------------------------------------------------------------
 

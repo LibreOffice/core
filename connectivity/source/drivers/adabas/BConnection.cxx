@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 07:27:01 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:29:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,7 @@ namespace starlang  = ::com::sun::star::lang;
 OAdabasConnection::OAdabasConnection(const SQLHANDLE _pDriverHandle, connectivity::odbc::ODBCDriver*        _pDriver)
                                                  : OConnection_BASE2(_pDriverHandle,_pDriver)
 {
+    m_bUseOldDateFormat = sal_True;
 }
 //-----------------------------------------------------------------------------
 SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequence< PropertyValue >& info) throw(SQLException)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,12 +82,12 @@ OResultSetMetaData::~OResultSetMetaData()
     if(_column <(sal_Int32) m_vMapping.size()) // use mapping
         column = m_vMapping[_column];
 
-    sal_Int32 BUFFER_LEN = 128;
+    SQLSMALLINT BUFFER_LEN = 128;
     char *pName = new char[BUFFER_LEN];
     SQLSMALLINT nRealLen=0;
     OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
                                     (SQLUSMALLINT)column,
-                                    (SQLSMALLINT)ident,
+                                    (SQLUSMALLINT)ident,
                                     (SQLPOINTER)pName,
                                     BUFFER_LEN,
                                     &nRealLen,

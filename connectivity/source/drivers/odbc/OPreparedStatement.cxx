@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:33:49 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
                                 bindBuf,                                \
                                 getLengthBuf(parameterIndex),           \
                                 (SWORD)_jt,                                 \
-                                sal_False,sal_False,&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding())
+                                sal_False,m_pConnection->useOldDateFormat(),&x,(Reference <XInterface>)*this,getOwnConnection()->getTextEncoding())
 
 
 
@@ -576,7 +576,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     SQLSMALLINT fSqlType = 0;
     SQLUINTEGER nColumnSize = 0;
     SQLSMALLINT nDecimalDigits = 0;
-    OTools::getBindTypes(sal_False,sal_False,sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
+    OTools::getBindTypes(sal_False,m_pConnection->useOldDateFormat(),sqlType,fCType,fSqlType,nColumnSize,nDecimalDigits);
 
     SQLRETURN nReturn = N3SQLBindParameter( m_aStatementHandle,
                                             (SQLUSMALLINT)parameterIndex,
@@ -1222,7 +1222,7 @@ void OPreparedStatement::setBinary (sal_Int32 parameterIndex,sal_Int32 SQLtype,
                             bindBuf,getLengthBuf(parameterIndex),
                             (SQLSMALLINT)SQLtype,
                             sal_False,
-                            sal_False,
+                            m_pConnection->useOldDateFormat(),
                             &x,
                             (Reference <XInterface>)*this,getOwnConnection()->getTextEncoding());
 

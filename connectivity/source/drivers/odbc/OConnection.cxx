@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
                          m_xMetaData(NULL),
-                         m_bUseCatalog(sal_False)
+                         m_bUseCatalog(sal_False),
+                         m_bUseOldDateFormat(sal_False)
 {
     ModuleContext::AddRef();
 }

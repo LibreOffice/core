@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:13 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ void OTools::bindValue( OConnection* _pConnection,
                         void* _pData,
                         SQLINTEGER *pLen,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                        rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+                        rtl_TextEncoding _nTextEncoding,
+                        sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SQLRETURN nRetcode;
     SWORD   fSqlType;
@@ -338,40 +339,40 @@ void OTools::bindValue( OConnection* _pConnection,
         case SQL_LONGVARBINARY:         fCType      = SQL_C_BINARY;
                                         fSqlType    = SQL_LONGVARBINARY; break;
         case SQL_DATE:
-                                    //  if(((SdbODBC3Connection*)GetODBCConnection())->m_bUseOldTimeDate)
+                                    if(_bUseOldTimeDate)
                                     {
                                         fCType      = SQL_C_DATE;
                                         fSqlType    = SQL_DATE;
                                     }
-//                                  else
-//                                  {
-//                                      fCType      = SQL_C_TYPE_DATE;
-//                                      fSqlType    = SQL_TYPE_DATE;
-//                                  }
+                                    else
+                                    {
+                                        fCType      = SQL_C_TYPE_DATE;
+                                        fSqlType    = SQL_TYPE_DATE;
+                                    }
                                     break;
         case SQL_TIME:
-                                    //  if(((SdbODBC3Connection*)GetODBCConnection())->m_bUseOldTimeDate)
+                                    if(_bUseOldTimeDate)
                                     {
                                         fCType      = SQL_C_TIME;
                                         fSqlType    = SQL_TIME;
                                     }
-//                                  else
-//                                  {
-//                                      fCType      = SQL_C_TYPE_TIME;
-//                                      fSqlType    = SQL_TYPE_TIME;
-//                                  }
+                                    else
+                                    {
+                                        fCType      = SQL_C_TYPE_TIME;
+                                        fSqlType    = SQL_TYPE_TIME;
+                                    }
                                     break;
         case SQL_TIMESTAMP:
-                                    //  if(((SdbODBC3Connection*)GetODBCConnection())->m_bUseOldTimeDate)
+                                    if(_bUseOldTimeDate)
                                     {
                                         fCType      = SQL_C_TIMESTAMP;
                                         fSqlType    = SQL_TIMESTAMP;
                                     }
-//                                  else
-//                                  {
-//                                      fCType      = SQL_C_TYPE_TIMESTAMP;
-//                                      fSqlType    = SQL_TYPE_TIMESTAMP;
-//                                  }
+                                    else
+                                    {
+                                        fCType      = SQL_C_TYPE_TIMESTAMP;
+                                        fSqlType    = SQL_TYPE_TIMESTAMP;
+                                    }
                                     break;
         default:                        fCType      = SQL_C_BINARY;
                                         fSqlType    = SQL_LONGVARBINARY; break;

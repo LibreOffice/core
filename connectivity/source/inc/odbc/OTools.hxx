@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,8 @@ namespace connectivity
                                     void* _pData,
                                     SQLINTEGER *pLen,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface,
-                                    rtl_TextEncoding _nTextEncoding) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+                                    rtl_TextEncoding _nTextEncoding,
+                                    sal_Bool _bUseOldTimeDate) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
 
         template <class T> void getValue(   OConnection* _pConnection,

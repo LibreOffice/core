@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-15 08:18:15 $
+ *  last change: $Author: oj $ $Date: 2001-05-21 14:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ namespace connectivity
             SQLHANDLE                   m_pDriverHandleCopy;    // performance reason
             sal_Bool                    m_bClosed;
             sal_Bool                    m_bUseCatalog;  // should we use the catalog on filebased databases
+            sal_Bool                    m_bUseOldDateFormat;
 
 
             SQLRETURN       OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int32 nTimeOut, sal_Bool bSilent);
@@ -183,6 +184,7 @@ namespace connectivity
             // should we use the catalog on filebased databases
             sal_Bool isCatalogUsed() const { return m_bUseCatalog; }
             ::rtl::OUString getUserName() const { return m_sUser; }
+            sal_Bool useOldDateFormat() const { return m_bUseOldDateFormat; }
         };
     }
 }
