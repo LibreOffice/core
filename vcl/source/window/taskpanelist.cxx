@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ssa $ $Date: 2002-02-19 14:54:55 $
+ *  last change: $Author: ssa $ $Date: 2002-02-22 09:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,34 @@
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
 #endif
-
+#ifndef _RCID_H
+#include <rcid.h>
+#endif
+#ifndef _SV_DOCKWIN_HXX
+#include <dockwin.hxx>
+#endif
 #include <taskpanelist.hxx>
 
+// compares window pos left-to-right
+bool LTR( const Window*& w1, const Window*& w2)
+{
+    Point pos1, pos2;
+    if( w1->GetType() == RSC_DOCKINGWINDOW )
+        pos1 = ((DockingWindow*)w1)->GetPosPixel();
+    else
+        pos1 = w1->GetPosPixel();
+    if( w2->GetType() == RSC_DOCKINGWINDOW )
+        pos2 = ((DockingWindow*)w2)->GetPosPixel();
+    else
+        pos2 = w2->GetPosPixel();
+
+    if( pos1.X() == pos2.X() )
+        return ( pos1.Y() < pos2.Y() );
+    else
+        return ( pos1.X() < pos2.X() );
+}
+
+// --------------------------------------------------
 
 TaskPaneList::TaskPaneList()
 {
@@ -73,51 +98,105 @@ TaskPaneList::~TaskPaneList()
 {
 }
 
+// --------------------------------------------------
+
 void TaskPaneList::AddWindow( Window *pWindow )
 {
-    mTaskPanes.push_back( pWindow );
+    bool bDockingWindow=false;
+    bool bToolbox=false;
+    if( pWindow )
+    {
+        if( pWindow->GetType() == RSC_DOCKINGWINDOW )
+            bDockingWindow = true;
+        else if( pWindow->GetType() == RSC_TOOLBOX )
+            bToolbox = true;
+
+        bool bFound = false;
+        ::std::list< Window* >::iterator p = mTaskPanes.begin();
+        while( p != mTaskPanes.end() )
+        {
+            if( *p++ == pWindow )
+            {
+                bFound = true;
+                break;
+            }
+        }
+
+        // avoid duplicates
+        if( !bFound )
+            mTaskPanes.push_back( pWindow );
+    }
 }
+
+// --------------------------------------------------
 
 void TaskPaneList::RemoveWindow( Window *pWindow )
 {
     mTaskPanes.remove( pWindow );
 }
 
+// --------------------------------------------------
+
 BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
-    if( (aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB)
-        //|| aKeyCode.GetCode() == KEY_F6
+    if( (aKeyCode.IsMod1() && aKeyCode.GetCode() == KEY_TAB)    // Ctrl-TAB
+        || aKeyCode.GetCode() == KEY_F6                         // F6
         )
     {
         // is the focus in the list ?
         BOOL bHasFocus = FALSE;
         ::std::list< Window* >::iterator p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
+        {
+            Window *pWin = *p;
             if( (*p)->HasChildPathFocus( TRUE ) )
             {
                 // activate next task pane
-                //Window *pNextWin = FindNextPane( *p );
-                if( ++p == mTaskPanes.end() )
-                    p = mTaskPanes.begin();
-                Window *pNextWin = *p;
-                if( pNextWin )
+                Window *pNextWin = FindNextPane( *p );
+                if( pNextWin != *p )
                 {
-                    ImplGetSVData()->maWinData.mbDummy1 = TRUE;
+                    ImplGetSVData()->maWinData.mbNoSaveFocus = TRUE;
                     pNextWin->GrabFocus();
-                    ImplGetSVData()->maWinData.mbDummy1 = FALSE;
+                    ImplGetSVData()->maWinData.mbNoSaveFocus = FALSE;
                 }
                 return TRUE;
             }
             else
                 p++;
+        }
     }
 
     return FALSE;
 }
 
+// --------------------------------------------------
+
 Window* TaskPaneList::FindNextPane( Window *pWindow )
 {
-    return pWindow;
+    mTaskPanes.sort(LTR);
+
+    ::std::list< Window* >::iterator p = mTaskPanes.begin();
+    while( p != mTaskPanes.end() )
+    {
+        if( *p == pWindow )
+        {
+            unsigned n = mTaskPanes.size();
+            while( --n )
+            {
+                if( ++p == mTaskPanes.end() )
+                    p = mTaskPanes.begin();
+                if( (*p)->IsVisible() )
+                    return *p;
+            }
+            break;
+        }
+        else
+            ++p;
+    }
+
+    return pWindow; // nothing found
 }
+
+// --------------------------------------------------
 
