@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-03-30 15:20:23 $
+ *  last change: $Author: cmc $ $Date: 2001-04-02 08:58:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1702,7 +1702,8 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                 rDoc.Insert( *pPaM, CHAR_HARDBLANK);    // Non-breaking spaces
                 break;
 
-    case 0x1:   if( bObj )
+    case 0x1:
+                if( bObj )
                     pFmtOfJustInsertedGraphicOrOLE = ImportOle();
                 else if( bEmbeddObj )
                 {
@@ -1713,12 +1714,21 @@ BOOL SwWW8ImplReader::ReadChar( long nPosCp, long nCpOfs )
                 }
                 else
                     pFmtOfJustInsertedGraphicOrOLE = ImportGraf();
-                bObj = bEmbeddObj = FALSE;      // das Flag auf immer zurueck setzen
+                // das Flag auf immer zurueck setzen
+                bObj = bEmbeddObj = FALSE;
                 nObjLocFc = 0;
+                //##515## set nLastFlyNode so we can determine if a section
+                //has ended with this paragraph unclosed
+                nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
                 break;
-
-    case 0x8:   if( !bObj )
+    case 0x8:
+                if( !bObj )
+                {
                     Read_GrafLayer( nPosCp );
+                    //##515##. Set nLastFlyNode so we can determine if a
+                    //section has ended with this paragraph unclosed
+                    nLastFlyNode = (*pPaM->GetPoint()).nNode.GetIndex();
+                }
                 break;
 
     case 0xd:   bRet = TRUE;    break;              // line end
@@ -2022,7 +2032,7 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
             }
         }
 
-        // If we have encountered a 0x0c which indicates either section or
+        // If we have encountered a 0x0c which indicates either section of
         // pagebreak then look it up to see if it is a section break, and
         // if it is not then insert a page break. If it is a section break
         // it will be handled as such in the ReadAttrs of the next loop
@@ -2035,12 +2045,24 @@ void SwWW8ImplReader::ReadText( long nStartCp, long nTextLen, short nType )
             pPlcxMan->GetSepPLCF()->GetSprms(&aTemp);
             if ((aTemp.nStartPos != l) && (aTemp.nEndPos != l))
             {
+                /*
+                #74468#, ##515##
+                Insert additional node only WHEN the Pagebreak is contained in
+                a NODE that is NOT EMPTY. Word can have empty paragraphs with
+                numbering information before a section break that are not
+                closed before the section break. In this case they are ignored
+                and not numbered, this is 74468's problem. But word can have
+                open paragraphs that only contain a node that in word can be
+                anchored, i.e. a single character indicating that a graphic or
+                an ole node or a text box is anchored here. In this case then
+                we should close the paragraph to ensure that it is is anchored
+                to the current page, and not pushed to the next page, this is
+                515's problem. nLastFlyNode is set on insertion of 0x01 and
+                0x08 graphics as well as on insertion of old ww6 textboxes.
+                */
                 SwPosition&  rPt = *pPaM->GetPoint();
-
-                // new behavior: insert additional node only WHEN the Pagebreak
-                // ( #74468# ) is contained in a NODE that is NOT EMPTY
-                if(    (nLastFlyNode == rPt.nNode.GetIndex())
-                    || (0             < rPt.nContent.GetIndex()) )
+                if ( (nLastFlyNode == rPt.nNode.GetIndex())
+                    || (0 < rPt.nContent.GetIndex()) )
                 {
                     rDoc.AppendTxtNode( rPt );
                 }
@@ -3064,11 +3086,14 @@ void SwMSDffManager::ProcessClientAnchor2( SvStream& rSt, DffRecordHeader& rHd, 
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.15 2001-03-30 15:20:23 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.cxx,v 1.16 2001-04-02 08:58:16 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/03/30 15:20:23  cmc
+      ##540## rework pagebreak insertion, to avoid bas pagebreak localtion due to handling fields before pagebreaks
+
       Revision 1.14  2001/03/16 14:15:34  cmc
       reformat code
 
