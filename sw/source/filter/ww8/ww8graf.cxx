@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:00:06 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:26:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,12 +339,6 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     pStrm->Read(pData, nDataSiz);
 
     RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_PAGE : FLY_AT_CNTNT;
-    if( (bIsHeader || bIsFooter) && (FLY_AT_CNTNT != eAnchor) )
-    {
-        eAnchor = FLY_AT_CNTNT;
-        pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
-    }
-
     rSet.Put(SwFmtAnchor(eAnchor));
 
     nDrawXOfs2 = nDrawXOfs;
@@ -2425,17 +2419,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     //ideally we will be able to remove this special check.
     if (!bOrgObjectWasReplace && !pRecord->bReplaceByFly)
     {
-        if (bIsHeader || bIsFooter)
-        {
-            //No drawing layer stuff in the header, so if this is going to be
-            //in the headerfooter and cannot be replaced by a fly then anchor
-            //it to the current page. we want to be able to do this in the
-            //future.
-            eAnchor=FLY_PAGE;
-            if (nXRelTo == 3)
-                nXRelTo = 2;
-        }
-        else if (eAnchor == FLY_AUTO_CNTNT)
+        if (eAnchor == FLY_AUTO_CNTNT)
         {
             //Drawing layer stuff cannot be "to character", fudge as "to
             //paragraph". #109069#, we want to be able to do this in the
@@ -2637,7 +2621,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     }
 
-    //#108778# when in a header or footer word appears to treat all elements are wrap through
+    //#108778# when in a header or footer word appears to treat all elements
+    //are wrap through
     if (bIsHeader || bIsFooter)
         pF->nwr = 3;
 
@@ -2741,12 +2726,6 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             pF->nby = WW8_FSPA::RelPageBorder;
         }
 
-        if (pF->nby != WW8_FSPA::RelText)
-        {
-            if (bIsHeader || bIsFooter)
-                pNode_FLY_AT_CNTNT = &pPaM->GetPoint()->nNode.GetNode();
-        }
-
         RndStdIds eAnchor = ProcessEscherAlign(pRecord, pF, aFlySet,
             bReplaceable);
 
@@ -2762,7 +2741,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         if (!bDone)
         {
             if (FmFormInventor == pObject->GetObjInventor())
-                pObject->SetLayer(rDoc.GetControlsId());
+                pObject->SetLayer(rDoc.GetInvisibleControlsId());
             else if (pF->bBelowText || pRecord->bDrawHell)
                 pObject->SetLayer(nDrawHell);
             else
@@ -2792,7 +2771,17 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
             applied.
             */
             pWWZOrder->InsertEscherObject(pObject, pF->nSpId);
+
+            const SwFmtAnchor *pAnchor =
+                    (const SwFmtAnchor *)aFlySet.GetItem(RES_HORI_ORIENT);
+
+            ASSERT(pAnchor && pAnchor->GetAnchorId() ==
+                eAnchor, "Not the anchor type requested!");
+
             pRetFrmFmt = rDoc.Insert( *pPaM, *pObject, &aFlySet );
+
+            ASSERT(pRetFrmFmt->GetAnchor().GetAnchorId() ==
+                eAnchor, "Not the anchor type requested!");
 
             /*
                 Insert text if necessary into textboxes contained in groups.
@@ -3143,8 +3132,8 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
     pDrawModel  = rDoc.GetDrawModel();
     ASSERT(pDrawModel, "Kann DrawModel nicht anlegen");
     pDrawPg     = pDrawModel->GetPage(0);
-    nDrawHeaven = rDoc.GetHeavenId();
-    nDrawHell   = rDoc.GetHellId();
+    nDrawHeaven = rDoc.GetInvisibleHeavenId();
+    nDrawHell   = rDoc.GetInvisibleHellId();
 
     pWWZOrder = new wwZOrderer(pDrawPg,
         pMSDffManager ? pMSDffManager->GetShapeOrders() : 0, nDrawHeaven,
