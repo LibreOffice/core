@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:02:21 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 14:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@
 #endif
 
 #include <svx/svxdlg.hxx> //CHINA001
-#include <svx/fmresids.hrc> //CHINA001
+//#include <svx/fmresids.hrc> //CHINA001
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt;
@@ -624,24 +624,24 @@ void SbaXDataBrowserController::initFormatter()
         m_xFormatter = NULL;
 }
 // -----------------------------------------------------------------------------
-void SbaXDataBrowserController::AddSupportedFeatures()
+void SbaXDataBrowserController::describeSupportedFeatures()
 {
-    OGenericUnoController::AddSupportedFeatures();
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/undoRecord"))]    = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormController/undoRecord"))]   = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecUndo"))]                 = ID_BROWSER_UNDORECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormSlots/saveRecord"))]    = ID_BROWSER_SAVERECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormController/saveRecord"))]   = ID_BROWSER_SAVERECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecSave"))]                 = ID_BROWSER_SAVERECORD;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RecSearch"))]               = SID_FM_SEARCH;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AutoFilter"))]              = SID_FM_AUTOFILTER;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Refresh"))]                 = SID_FM_REFRESH;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:OrderCrit"))]               = SID_FM_ORDERCRIT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:RemoveFilterSort"))]        = SID_FM_REMOVE_FILTER_SORT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FormFiltered"))]            = SID_FM_FORM_FILTERED;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FilterCrit"))]              = SID_FM_FILTERCRIT;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Sortup"))]                  = ID_BROWSER_SORTUP;
-    m_aSupportedFeatures[ ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SortDown"))]                = ID_BROWSER_SORTDOWN;
+    OGenericUnoController::describeSupportedFeatures();
+    implDescribeSupportedFeature( ".uno:FormSlots/undoRecord",      ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FormController/undoRecord", ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:RecUndo",                   ID_BROWSER_UNDORECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FormSlots/saveRecord",      ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FormController/saveRecord", ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:RecSave",                   ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:RecSearch",                 SID_FM_SEARCH,          CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:AutoFilter",                SID_FM_AUTOFILTER,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:Refresh",                   SID_FM_REFRESH,         CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:OrderCrit",                 SID_FM_ORDERCRIT,       CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:RemoveFilterSort",          SID_FM_REMOVE_FILTER_SORT,CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FormFiltered",              SID_FM_FORM_FILTERED,   CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:FilterCrit",                SID_FM_FILTERCRIT,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:Sortup",                    ID_BROWSER_SORTUP,      CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:SortDown",                  ID_BROWSER_SORTDOWN,    CommandGroup::CONTROLS );
 }
 //------------------------------------------------------------------------------
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
@@ -1821,18 +1821,19 @@ void SbaXDataBrowserController::ExecuteSearch()
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,m_xMultiServiceFacatory));
 
-    //CHINA001 FmSearchDialog dlg(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),
-//CHINA001      SM_ALLOWSCHEDULE);//CHINA001 FmSearchDialog::SM_ALLOWSCHEDULE);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractFmSearchDialog* dlg = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),ResId(RID_SVXDLG_SEARCHFORM),SM_ALLOWSCHEDULE);
-    DBG_ASSERT(dlg, "Dialogdiet fail!");//CHINA001
-    dlg->SetActiveField(sActiveField); //CHINA001 dlg.SetActiveField(sActiveField);
-
-    dlg->SetFoundHandler(LINK(this, SbaXDataBrowserController, OnFoundData));//CHINA001 dlg.SetFoundHandler(LINK(this, SbaXDataBrowserController, OnFoundData));
-    dlg->SetCanceledNotFoundHdl(LINK(this, SbaXDataBrowserController, OnCanceledNotFound));//CHINA001 dlg.SetCanceledNotFoundHdl(LINK(this, SbaXDataBrowserController, OnCanceledNotFound));
-    dlg->Execute();//CHINA001 dlg.Execute();
-    delete dlg; //add CHINA001
+    AbstractFmSearchDialog* pDialog = NULL;
+    if ( pFact )
+        pDialog = pFact->CreateFmSearchDialog(getBrowserView(), sInitialText, String::CreateFromAscii("Standard"), 0, LINK(this, SbaXDataBrowserController, OnSearchContextRequest),SM_ALLOWSCHEDULE);
+    DBG_ASSERT( pDialog, "SbaXDataBrowserController::ExecuteSearch: could not get the search dialog!" );
+    if ( pDialog )
+    {
+        pDialog->SetActiveField( sActiveField );
+        pDialog->SetFoundHandler( LINK( this, SbaXDataBrowserController, OnFoundData ) );
+        pDialog->SetCanceledNotFoundHdl( LINK( this, SbaXDataBrowserController, OnCanceledNotFound ) );
+        pDialog->Execute();
+        delete pDialog;
+    }
 
     // restore the grid's normal operating state
     xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
