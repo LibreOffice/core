@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 17:10:52 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:29:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,9 +383,9 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotControl::getAccessib
             Point aAbsPoint(VCLPoint(rPoint));
             Point aControlEdge(GetBoundingBoxOnScreen().TopLeft());
             Point aRelPoint(aAbsPoint - aControlEdge);
-            sal_Int32 nChildIndex(0);
+            size_t nChildIndex(0);
             if (mpDPFieldWindow->GetFieldIndex(aRelPoint, nChildIndex))
-                xAcc = getAccessibleChild(nChildIndex);
+                xAcc = getAccessibleChild(static_cast< long >( nChildIndex ));
         }
     }
     return xAcc;
@@ -460,7 +460,7 @@ uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotControl::getAccessibl
     uno::Reference<XAccessible> xAcc;
     if (mpDPFieldWindow)
     {
-        if (nIndex < 0 || nIndex >= mpDPFieldWindow->GetFieldCount())
+        if (nIndex < 0 || static_cast< size_t >( nIndex ) >= mpDPFieldWindow->GetFieldCount())
             throw lang::IndexOutOfBoundsException();
 
         DBG_ASSERT(static_cast<sal_uInt32>(mpDPFieldWindow->GetFieldCount()) == maChildren.size(), "did not recognize a child count change");
