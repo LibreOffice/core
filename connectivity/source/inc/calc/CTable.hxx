@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-26 18:27:41 $
+ *  last change: $Author: nn $ $Date: 2001-01-29 19:19:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > m_xSheet;
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats > m_xFormats;
             ::Date m_aNullDate;
+            sal_Int32 m_nDataRows;
 
             void fillColumns();
 
