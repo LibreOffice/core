@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBridgeSupplier2.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 11:52:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@
 
     @see com::sun::star::bridge::OleBridgeSupplier2
  */
-interface XBridgeSupplier2: com::sun::star::uno::XInterface
+published interface XBridgeSupplier2: com::sun::star::uno::XInterface
 {
     /** creates a bridge to provide an object of one object model with another.
      */
