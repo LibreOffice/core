@@ -2,9 +2,9 @@
  *
  *  $RCSfile: factory.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-12 10:19:10 $
+ *  last change: $Author: dbo $ $Date: 2001-07-04 08:50:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -479,9 +479,12 @@ Reference<XInterface > OFactoryComponentHelper::createInstance()
 {
     if( bOneInstance )
     {
-        MutexGuard aGuard( aMutex );
         if( !xTheInstance.is() )
-            xTheInstance = OSingleFactoryHelper::createInstance();
+        {
+            MutexGuard aGuard( aMutex );
+            if( !xTheInstance.is() )
+                xTheInstance = OSingleFactoryHelper::createInstance();
+        }
         return xTheInstance;
     }
     return OSingleFactoryHelper::createInstance();
@@ -493,10 +496,13 @@ Reference<XInterface > OFactoryComponentHelper::createInstanceWithArguments(
 {
     if( bOneInstance )
     {
-        MutexGuard aGuard( aMutex );
-//          OSL_ENSURE( !xTheInstance.is(), "### arguments will be ignored!" );
         if( !xTheInstance.is() )
-            xTheInstance = OSingleFactoryHelper::createInstanceWithArguments( Arguments );
+        {
+            MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### arguments will be ignored!" );
+            if( !xTheInstance.is() )
+                xTheInstance = OSingleFactoryHelper::createInstanceWithArguments( Arguments );
+        }
         return xTheInstance;
     }
     return OSingleFactoryHelper::createInstanceWithArguments( Arguments );
@@ -510,10 +516,13 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithContext(
 {
     if( bOneInstance )
     {
-        MutexGuard aGuard( aMutex );
-//          OSL_ENSURE( !xTheInstance.is(), "### context will be ignored!" );
         if( !xTheInstance.is() )
-            xTheInstance = OSingleFactoryHelper::createInstanceWithContext( xContext );
+        {
+            MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### context will be ignored!" );
+            if( !xTheInstance.is() )
+                xTheInstance = OSingleFactoryHelper::createInstanceWithContext( xContext );
+        }
         return xTheInstance;
     }
     return OSingleFactoryHelper::createInstanceWithContext( xContext );
@@ -526,10 +535,13 @@ Reference< XInterface > OFactoryComponentHelper::createInstanceWithArgumentsAndC
 {
     if( bOneInstance )
     {
-        MutexGuard aGuard( aMutex );
-//          OSL_ENSURE( !xTheInstance.is(), "### context and arguments will be ignored!" );
         if( !xTheInstance.is() )
-            xTheInstance = OSingleFactoryHelper::createInstanceWithArgumentsAndContext( rArguments, xContext );
+        {
+            MutexGuard aGuard( aMutex );
+//          OSL_ENSURE( !xTheInstance.is(), "### context and arguments will be ignored!" );
+            if( !xTheInstance.is() )
+                xTheInstance = OSingleFactoryHelper::createInstanceWithArgumentsAndContext( rArguments, xContext );
+        }
         return xTheInstance;
     }
     return OSingleFactoryHelper::createInstanceWithArgumentsAndContext( rArguments, xContext );
