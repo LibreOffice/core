@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 12:35:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:15:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,12 @@
 #ifndef DBAUI_CONNECTIONPAGESETUP_HXX
 #include "ConnectionPageSetup.hxx"
 #endif
+#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
+#endif
+#ifndef _DBAUI_DBADMIN_HRC_
+#include "dbadmin.hrc"
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -193,7 +198,7 @@
 
 
 
-
+#include <memory>
 
 
 //.........................................................................
@@ -236,6 +241,7 @@ using namespace ::cppu;
 #define PAGE_DBSETUPWIZARD_SPREADSHEET               13
 #define PAGE_DBSETUPWIZARD_AUTHENTIFICATION          14
 #define PAGE_DBSETUPWIZARD_FINAL                     15
+#define PAGE_DBSETUPWIZARD_USERDEFINED               16
 
 
 #define DBASE_PATH             1
@@ -255,6 +261,7 @@ using namespace ::cppu;
 #define MOZILLA_PATH           15
 #define EVOLUTION_PATH         16
 #define CREATENEW_PATH         17
+#define USERDEFINED_PATH       18
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -406,6 +413,11 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     else
         declarePath( CREATENEW_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
 
+    if ( m_pCollection->hasAuthentication(DST_USERDEFINE1))
+        declarePath( USERDEFINED_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+    else
+        declarePath( USERDEFINED_PATH, PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_USERDEFINED,PAGE_DBSETUPWIZARD_FINAL, WZS_INVALID_STATE);
+
     m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
     m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
     m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
@@ -418,7 +430,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
 
 
 String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
-    String sRoadmapItem = String::CreateFromAscii("");
+    String sRoadmapItem;
     switch( _nState )
     {
         case PAGE_DBSETUPWIZARD_INTRO:
@@ -466,6 +478,12 @@ String ODbTypeWizDialogSetup::getStateDisplayName( WizardState _nState ){
             break;
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
             sRoadmapItem = m_sRM_AuthentificationText;
+            break;
+        case PAGE_DBSETUPWIZARD_USERDEFINED:
+            {
+                OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
+                sRoadmapItem = String(ResId(STR_PAGETITLE_CONNECTION));
+            }
             break;
         case PAGE_DBSETUPWIZARD_FINAL:
             sRoadmapItem = m_sRM_FinalText;
@@ -569,7 +587,8 @@ void ODbTypeWizDialogSetup::activateDatabasePath(OGeneralPage* _pTabPage){
                 activatePath( EVOLUTION_PATH, sal_True);
                 break;
 
-            case DST_USERDEFINE2:       /// first user defined driver
+            case DST_USERDEFINE1:/// first user defined driver
+            case DST_USERDEFINE2:
             case DST_USERDEFINE3:
             case DST_USERDEFINE4:
             case DST_USERDEFINE5:
@@ -578,7 +597,10 @@ void ODbTypeWizDialogSetup::activateDatabasePath(OGeneralPage* _pTabPage){
             case DST_USERDEFINE8:
             case DST_USERDEFINE9:
             case DST_USERDEFINE10:
+                activatePath( USERDEFINED_PATH, sal_True);
                 break;
+            default:
+                OSL_ENSURE(0,"Unknown database type!");
         }
     ToggleFollowingRoadmapSteps();
     }
@@ -659,7 +681,7 @@ SfxItemSet* ODbTypeWizDialogSetup::getWriteOutputSet()
     return m_pOutSet;
 }
 // -----------------------------------------------------------------------------
-Reference< XConnection > ODbTypeWizDialogSetup::createConnection()
+::std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialogSetup::createConnection()
 {
     return m_pImpl->createConnection();
 }
@@ -779,6 +801,10 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
 
         case PAGE_DBSETUPWIZARD_AUTHENTIFICATION:
             pPage = OAuthentificationPageSetup::CreateAuthentificationTabPage(this,*m_pOutSet);
+            break;
+
+        case PAGE_DBSETUPWIZARD_USERDEFINED:
+            pPage = OConnectionTabPageSetup::CreateUserDefinedTabPage(this,*m_pOutSet);
             break;
 
         case PAGE_DBSETUPWIZARD_FINAL:
@@ -1020,29 +1046,28 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
    }
 
 //-------------------------------------------------------------------------
-    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(::rtl::OUString sPath)
+    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const ::rtl::OUString& _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         Reference< XNamingService > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
         Reference< XNameAccess > xNameAccessDatabaseContext(xDatabaseContext, UNO_QUERY);
-        INetURLObject aURL( sPath );
+        INetURLObject aURL( _sPath );
         ::rtl::OUString sFilename = aURL.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-        ::rtl::OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename);
+        ::rtl::OUString sDatabaseName = ::dbtools::createUniqueName(xNameAccessDatabaseContext, sFilename,sal_False);
         xDatabaseContext->registerObject(sDatabaseName, xDatasource);
     }
 
 
 //-------------------------------------------------------------------------
-    void ODbTypeWizDialogSetup::OpenDatabaseDocument(::rtl::OUString sPath)
+    void ODbTypeWizDialogSetup::OpenDatabaseDocument(const ::rtl::OUString& _sPath)
     {
         // get the desktop object
         sal_Int32 nFrameSearchFlag = FrameSearchFlag::ALL | FrameSearchFlag::GLOBAL ;
         Reference< XComponentLoader > xFrameLoader(getORB()->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-        ::rtl::OUString sTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default"));
         if ( xFrameLoader.is() )
         {
             xFrameLoader->loadComponentFromURL(
-                sPath,
+                _sPath,
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")),
                 nFrameSearchFlag,
                 Sequence<PropertyValue >() );
@@ -1054,14 +1079,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         short nResult = ModalDialog::Execute();
 
-        if ( RET_OK == nResult )
-            if (pFinalPage != NULL)
-            {
-                if (pFinalPage->IsTableWizardToBeStarted())
-                {
-                    StartTableWizard();
-                }
-            }
+        if ( RET_OK == nResult && pFinalPage != NULL && pFinalPage->IsTableWizardToBeStarted() )
+            StartTableWizard();
 
         return nResult;
     }
@@ -1082,28 +1101,24 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             aWorkURL.Append(sBase);
 //            aWorkURL.setBase(sBase);
             ::rtl::OUString sExtension = pFilter->GetDefaultExtension();
-            sExtension = sExtension.replaceAt( 0, 2, ::rtl::OUString::createFromAscii(""));
+            sExtension = sExtension.replaceAt( 0, 2, ::rtl::OUString());
             aWorkURL.setExtension(sExtension);
             createUniqueFileName(&aWorkURL);
             aFileDlg.SetDisplayDirectory( aWorkURL.GetMainURL( INetURLObject::NO_DECODE ));
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
             aFileDlg.SetCurrentFilter(pFilter->GetUIName());
         }
-        Reference< XNameAccess > xDatabaseContext(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        if ( xDatabaseContext.is() )
+        if ( aFileDlg.Execute() == ERRCODE_NONE )
         {
-            if ( aFileDlg.Execute() == ERRCODE_NONE )
-            {
-                m_aDocURL = INetURLObject(aFileDlg.GetPath());
+            m_aDocURL = INetURLObject(aFileDlg.GetPath());
 
-                if( m_aDocURL.GetProtocol() != INET_PROT_NOT_VALID )
-                {
-                    ::rtl::OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
-                    if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
-                        ::utl::UCBContentHelper::Kill(sFileName);
-                    m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
-                    bRet = sal_True;
-                }
+            if( m_aDocURL.GetProtocol() != INET_PROT_NOT_VALID )
+            {
+                ::rtl::OUString sFileName = m_aDocURL.GetMainURL( INetURLObject::NO_DECODE );
+                if ( ::utl::UCBContentHelper::IsDocument(sFileName) )
+                    ::utl::UCBContentHelper::Kill(sFileName);
+                m_pOutSet->Put(SfxStringItem(DSID_DOCUMENT_URL, sFileName));
+                bRet = sal_True;
             }
         }
         return bRet;
@@ -1149,39 +1164,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
         }
     }
-
-
-//-------------------------------------------------------------------------
-    ::rtl::OUString ODbTypeWizDialogSetup::createUniqueName(com::sun::star::uno::Sequence< ::rtl::OUString > sContent, ::rtl::OUString _ElementName)
-    {
-        sal_Bool bElementexists = sal_True;
-        sal_Int32 i = 1;
-        ::rtl::OUString sIncSuffix;
-        ::rtl::OUString BaseName = _ElementName;
-        sal_Int32 nCnt = sContent.getLength();
-        if (nCnt > 0)
-        {
-               while (bElementexists == sal_True)
-            {
-                bElementexists = sal_False;
-                for (sal_Int32 n = 0; i < nCnt; i++)
-                {
-                    bElementexists = (sContent[n].compareTo( _ElementName ) == 0);
-                    if (bElementexists == sal_True)
-                    {
-                        i++;
-                        _ElementName = BaseName.concat(::rtl::OUString::valueOf(i));
-                        bElementexists = sal_True;
-                        break;
-                    }
-                }
-            }
-        }
-        return _ElementName;
-    }
-
-
-
     // -----------------------------------------------------------------------------
     IWizardPage* ODbTypeWizDialogSetup::getWizardPage(TabPage* _pCurrentPage) const
     {
@@ -1212,10 +1194,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         try
         {
             ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-            OLinkedDocumentsAccess* oLinkedDocument = new OLinkedDocumentsAccess(this, getORB(), NULL, NULL);
-            sal_Int32 nCommandType(::com::sun::star::sdb::CommandType::TABLE);
-            String sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(""));
-            oLinkedDocument->newTableWithPilot(sPath, nCommandType, sName, NULL);
+            ::std::auto_ptr<OLinkedDocumentsAccess> oLinkedDocument(new OLinkedDocumentsAccess(this, getORB(), NULL, NULL));
+            oLinkedDocument->newTableWithPilot(sPath, NULL);
         }
         catch(const Exception&)
         {
