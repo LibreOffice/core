@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-04 14:21:52 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,11 @@
  *
  ************************************************************************/
 
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERPARIR_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
-#include <drafts/com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
+#ifndef _COM_SUN_STAR_DRAWING_ENHANCEDCUSTOMSHAPEPARAMETERTYPE_HPP_
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
@@ -126,7 +126,6 @@ using namespace ::cppu;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
-using namespace ::drafts::com::sun::star::drawing;
 
 /*************************************************************************
 |*
