@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:20:47 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1448,7 +1448,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ finnish ] = "Animaatioryhmä" ;
         Text [ danish ] = "Animationsgruppe" ;
         Text [ french ] = "Groupe animé" ;
-        Text [ swedish ] = "Animeringsgrupp" ;
+        Text [ swedish ] = "Animationsgrupp" ;
         Text [ dutch ] = "Animatiegroep" ;
         Text [ spanish ] = "Grupo de animación" ;
         Text [ english_us ] = "Animation group" ;
