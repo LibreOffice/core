@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:29:00 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:52:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@
             QuickHelpText[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ïñéóìİíï áğü ôïí ÷ñŞóôç";\
             QuickHelpText[ dutch ] = "Nieuwe gebruikergedefinieerde index";\
             QuickHelpText[ french ] = "Definir un nouvel index personnalisé";\
-            QuickHelpText[ spanish ] = "New user defined index";\
+            QuickHelpText[ spanish ] = "Nuevo índice definido por usuario";\
             QuickHelpText[ italian ] = "Nuovo indice personalizzato";\
             QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
             QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
@@ -468,7 +468,7 @@
             Text [ ENGLISH ] = "~Apply to all similar texts." ;                 \
             Hide = TRUE;                                                        \
             Text[ english_us ] = "~Apply to all similar texts.";                \
-            Text[ portuguese ] = "~Aplicar em todos os textos semelhantes";     \
+            Text[ portuguese ] = "~Aplicar a todos os textos semelhantes";     \
             Text[ russian ] = "Ïğèìåíèòü êî âñåì îäèíàêîâûì òåêñòàì";           \
             Text[ dutch ] = "~Alle gelijkluidende teksten";              \
             Text[ french ] = "~Appliquer à tous les textes similaires.";         \
@@ -662,7 +662,7 @@ ModalDialog DLG_NEW_USER_IDX
         Left = TRUE ;
     };
     Text[ english_us ] = "Create New User-defined Index";
-    Text[ portuguese ] = "Definir novo índice personalizado";
+    Text[ portuguese ] = "Criar novo índice personalizado";
     Text[ russian ] = "Ñîçäàòü íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";
     Text[ greek ] = "Äçìéïõñãßá íİïõ åõñåôçñßïõ ÷ñŞóôç";
     Text[ dutch ] = "Nieuwe gebruikersindex definiëren";
@@ -716,7 +716,7 @@ String STR_IDXMRK_INSERT
     Text [ norwegian ] = "Sett inn oppføring i stikkkordregister" ;
     Text [ italian ] = "Inserisci voce di indice" ;
     Text [ portuguese_brazilian ] = "Inserir entrada de índice" ;
-    Text [ portuguese ] = "Inserir entrada no índice remissivo" ;
+    Text [ portuguese ] = "Inserir entrada no índice" ;
     Text [ finnish ] = "Lisää hakemistotekstin" ;
     Text [ danish ] = "Indsæt indekselement" ;
     Text [ french ] = "Insertion d'une entrée d'index" ;
