@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:19:41 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1182,7 +1182,7 @@ void SwDoc::GetAllFlyFmts( SwPosFlyFrms& rPosFlyFmts,
             for( sal_uInt16 i = 0; i < rObjs.Count(); ++i)
             {
                 SdrObject *pO = rObjs[i];
-                SwVirtFlyDrawObj *pObj = pO->IsWriterFlyFrame() ?
+                SwVirtFlyDrawObj *pObj = pO->ISA(SwVirtFlyDrawObj) ?
                                                     (SwVirtFlyDrawObj*)pO : 0;
                 if( pObj )
                     pFly = pObj->GetFlyFrm()->GetFmt();
@@ -1646,7 +1646,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( pOldFmt->GetAnchor() );
 
     //In der Hoehe soll der neue Varabel sein!
-     Size aSz( rSdrObj.GetBoundRect().GetSize() );
+     Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFmtFrmSize aFrmSize( ATT_MIN_SIZE, aSz.Width(), aSz.Height() );
     pNewSet->Put( aFrmSize );
 
