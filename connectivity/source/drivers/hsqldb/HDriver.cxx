@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:15:06 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 14:39:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef CONNECTIVITY_HSQLDB_DRIVER_HXX
 #include "hsqldb/HDriver.hxx"
 #endif
@@ -351,7 +350,7 @@ namespace connectivity
                     ,Sequence< ::rtl::OUString >())
                     );
         }
-        return Sequence< DriverPropertyInfo >(aDriverInfo.begin(),aDriverInfo.size());
+        return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]), aDriverInfo.size());
     }
 
     //--------------------------------------------------------------------
