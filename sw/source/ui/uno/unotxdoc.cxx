@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 10:14:23 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -959,13 +959,10 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
             }
         }
         const SwNode* pRangeNode = pUnoCrsr->GetNode();
-        const SwStartNode* pTmp = pRangeNode->FindStartNode();
-
-        while(pTmp->IsSectionNode())
-        {
-            pTmp = pTmp->FindStartNode();
-        }
-        bParentInExtra = SwNormalStartNode != pTmp->GetStartNodeType();
+        bParentInExtra = pRangeNode->FindFlyStartNode() ||
+                            pRangeNode->FindFootnoteStartNode() ||
+                            pRangeNode->FindHeaderStartNode() ||
+                            pRangeNode->FindFooterStartNode() ;
     }
 
     sal_Bool bBackward = sal_False;
