@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tl $ $Date: 2000-12-07 09:15:28 $
+ *  last change: $Author: tl $ $Date: 2001-01-18 15:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,23 @@ static const sal_Char cSpell[] = "com.sun.star.linguistic2.SpellChecker";
 static const sal_Char cHyph[] = "com.sun.star.linguistic2.Hyphenator";
 static const sal_Char cThes[] = "com.sun.star.linguistic2.Thesaurus";
 // static ----------------------------------------------------------------
+
+static BOOL lcl_SeqHasEntry(
+    const Sequence< OUString > &rSeq, const OUString &rEntry )
+{
+    INT32 i;
+    INT32 nLen = rSeq.getLength();
+    const OUString *pItem = rSeq.getConstArray();
+    for (i = 0;  i < nLen;  ++i)
+    {
+        if (rEntry == pItem[i])
+            break;
+    }
+    return i < nLen ? TRUE : FALSE;
+}
+
+/*--------------------------------------------------
+--------------------------------------------------*/
 
 static const sal_uInt16 nNameLen = 8;
 
@@ -796,7 +813,10 @@ void SvxLinguData_Impl::SetChecked(const Sequence<OUString>& rConfiguredServices
         for(int i = 0; i < aDisplayServiceArr.Count(); i++)
         {
             ServiceInfo_Impl* pEntry = aDisplayServiceArr[i];
-            if(pEntry->sDisplayName == pConfiguredServices[n])
+//          if(pEntry->sDisplayName == pConfiguredServices[n])
+            if (pEntry->sSpellImplName == pConfiguredServices[n]  ||
+                pEntry->sHyphImplName  == pConfiguredServices[n]  ||
+                pEntry->sThesImplName  == pConfiguredServices[n])
             {
                 pEntry->bConfigured = sal_True;
                 break;
@@ -1950,24 +1970,33 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
     aModulesCLB.Clear();
     if(LANGUAGE_DONTKNOW != eCurLanguage)
     {
+        sal_Int32 nEntryPos = 1;
+        sal_uInt16 n;
+
         SvLBoxEntry* pEntry = CreateEntry( sSpell,  CBCOL_SECOND );
-        ModuleUserData_Impl* pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, 1, 0 );
+        ModuleUserData_Impl* pUserData = new ModuleUserData_Impl( String(), TRUE, FALSE, TYPE_SPELL, 0 );
         pEntry->SetUserData( (void *)pUserData );
         pModel->Insert( pEntry );
 
         const ServiceInfoArr&   rAllDispSrvcArr = rLinguData.GetDisplayServiceArray();
 
         Sequence<OUString> aSpellSrvc = xMgr->getConfiguredServices(C2U(cSpell), aCurLocale);
-        const OUString* pSpellSrvc = aSpellSrvc.getConstArray();
-        sal_Int32 nEntryPos = 1;
-        sal_uInt16 n;
+        sal_Int32 nLocalIndex = 0;  // index relative to parent
         for(n = 0; n < rAllDispSrvcArr.Count(); n++)
         {
             ServiceInfo_Impl* pInfo = rAllDispSrvcArr[n];
-            SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
-            pUserData = new ModuleUserData_Impl( pInfo->sSpellImplName, FALSE, FALSE, TYPE_SPELL, n );
-            pEntry->SetUserData( (void *)pUserData );
-            pModel->Insert( pEntry );
+
+            const OUString &rImplName = pInfo->sSpellImplName;
+            if (rImplName.getLength())
+            {
+                SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
+                BOOL bChecked = lcl_SeqHasEntry( aSpellSrvc, rImplName );
+                lcl_SetCheckButton( pEntry, bChecked );
+                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                                        bChecked, TYPE_SPELL, nLocalIndex++ );
+                pEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pEntry );
+            }
         }
 
         pEntry = CreateEntry( sHyph,    CBCOL_SECOND );
@@ -1976,15 +2005,22 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pModel->Insert( pEntry );
 
         Sequence<OUString> aHyphSrvc = xMgr->getConfiguredServices(C2U(cHyph), aCurLocale);
-        const OUString* pHyphSrvc = aHyphSrvc.getConstArray();
+        nLocalIndex = 0;
         for(n = 0; n < rAllDispSrvcArr.Count(); n++)
         {
             ServiceInfo_Impl* pInfo = rAllDispSrvcArr[n];
 
-            SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
-            pUserData = new ModuleUserData_Impl( pInfo->sHyphImplName, FALSE, FALSE, TYPE_HYPH, n );
-            pEntry->SetUserData( (void *)pUserData );
-            pModel->Insert( pEntry );
+            const OUString &rImplName = pInfo->sHyphImplName;
+            if (rImplName.getLength())
+            {
+                SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
+                BOOL bChecked = lcl_SeqHasEntry( aHyphSrvc, rImplName );
+                lcl_SetCheckButton( pEntry, bChecked );
+                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                                        bChecked, TYPE_HYPH, nLocalIndex++ );
+                pEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pEntry );
+            }
         }
 
         pEntry = CreateEntry( sThes,    CBCOL_SECOND );
@@ -1993,15 +2029,22 @@ IMPL_LINK( SvxEditModulesDlg, LangSelectHdl_Impl, ListBox *, pBox )
         pModel->Insert( pEntry );
 
         Sequence<OUString> aThesSrvc = xMgr->getConfiguredServices(C2U(cThes), aCurLocale);
-        const OUString* pThesSrvc = aThesSrvc.getConstArray();
+        nLocalIndex = 0;
         for(n = 0; n < rAllDispSrvcArr.Count(); n++)
         {
             ServiceInfo_Impl* pInfo = rAllDispSrvcArr[n];
 
-            SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
-            pUserData = new ModuleUserData_Impl( pInfo->sThesImplName, FALSE, FALSE, TYPE_THES, n );
-            pEntry->SetUserData( (void *)pUserData );
-            pModel->Insert( pEntry );
+            const OUString &rImplName = pInfo->sThesImplName;
+            if (rImplName.getLength())
+            {
+                SvLBoxEntry* pEntry = CreateEntry( pInfo->sDisplayName, CBCOL_FIRST );
+                BOOL bChecked = lcl_SeqHasEntry( aThesSrvc, rImplName );
+                lcl_SetCheckButton( pEntry, bChecked );
+                pUserData = new ModuleUserData_Impl( rImplName, FALSE,
+                                        bChecked, TYPE_THES, nLocalIndex++ );
+                pEntry->SetUserData( (void *)pUserData );
+                pModel->Insert( pEntry );
+            }
         }
     }
     aLastLocale.Language = aCurLocale.Language;
