@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hro $ $Date: 2002-08-14 11:21:19 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,15 @@ typedef BOOL (WINAPI *SymGetModuleInfo_PROC)(
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **pustrURL )
 {
     sal_Bool    bSuccess    = sal_False;    /* Assume failure */
-    HMODULE     hModImageHelp = LoadLibrary( "IMAGEHLP.DLL" );
+
+    /*  IMAGEHELP.DLL has a bug that it recursivly scans subdirectories of
+        the root when calling SymInitialize(), so we preferr DBGHELP.DLL
+        which exports the same symbols and is shipped with OOo */
+
+    HMODULE     hModImageHelp = LoadLibrary( "DBGHELP.DLL" );
+
+    if ( !hModImageHelp )
+        hModImageHelp = LoadLibrary( "IMAGEHLP.DLL" );
 
     if ( hModImageHelp )
     {
@@ -270,8 +278,26 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT4( void *pv, rtl_uString **p
         if ( lpfnSymInitialize && lpfnSymCleanup && lpfnSymGetModuleInfo )
         {
             IMAGEHLP_MODULE ModuleInfo;
+            CHAR    szModuleFileName[MAX_PATH];
+            LPCSTR  lpSearchPath = NULL;
 
-            lpfnSymInitialize( GetCurrentProcess(), NULL, TRUE );
+            if ( GetModuleFileNameA( NULL, szModuleFileName, sizeof(szModuleFileName) ) )
+            {
+                char *pLastBkSlash = strrchr( szModuleFileName, '\\' );
+
+                if (
+                    pLastBkSlash &&
+                    pLastBkSlash > szModuleFileName
+                    && *(pLastBkSlash - 1) != ':'
+                    && *(pLastBkSlash - 1) != '\\'
+                    )
+                {
+                    *pLastBkSlash = 0;
+                    lpSearchPath = szModuleFileName;
+                }
+            }
+
+            lpfnSymInitialize( GetCurrentProcess(), lpSearchPath, TRUE );
 
             ZeroMemory( &ModuleInfo, sizeof(ModuleInfo) );
             ModuleInfo.SizeOfStruct = sizeof(ModuleInfo);
