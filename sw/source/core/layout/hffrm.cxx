@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-10-08 12:42:24 $
+ *  last change: $Author: fme $ $Date: 2002-10-23 11:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -357,22 +357,24 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     ColUnlock();
                     if ( nDiff > 0 )
                     {
-                        pFrm = Lower();
-
-                        while ( pFrm )
+                        if ( Grow( nDiff PHEIGHT ) )
                         {
-                            if( pFrm->IsTxtFrm())
+                            pFrm = Lower();
+
+                            while ( pFrm )
                             {
-                                SwTxtFrm * pTmpFrm = (SwTxtFrm*) pFrm;
-                                if (pTmpFrm->IsUndersized() )
+                                if( pFrm->IsTxtFrm())
                                 {
-                                    pTmpFrm->InvalidateSize();
-                                    pTmpFrm->Prepare(PREP_ADJUST_FRM);
+                                    SwTxtFrm * pTmpFrm = (SwTxtFrm*) pFrm;
+                                    if (pTmpFrm->IsUndersized() )
+                                    {
+                                        pTmpFrm->InvalidateSize();
+                                        pTmpFrm->Prepare(PREP_ADJUST_FRM);
+                                    }
                                 }
+                                pFrm = pFrm->GetNext();
                             }
-                            pFrm = pFrm->GetNext();
                         }
-                      Grow( nDiff PHEIGHT );
                     }
                     else
                         Shrink( -nDiff PHEIGHT );
