@@ -148,7 +148,8 @@ while ( (!$main::correctVersion) &&
     print "C++ Compiler where a language binding exist:\n";
     print "Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher\n";
     print "Linux, GNU C++ compiler, gcc version 3.0.1 or higher\n";
-    print "Enter C++ tools directory (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
+    print "Enter the directory of the C++ compiler, the directory\n";
+    print "where the compiler is located (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
 
     $main::OO_SDK_CPP_HOME = <STDIN>;
     chop($main::OO_SDK_CPP_HOME);
@@ -295,7 +296,9 @@ close FILEIN;
 close FILEOUT;
 chmod 0755, "$main::currentWorkingDir/setsdkenv_unix";
 
-print "\nFor using your prepared environment, please run the \"setsdkenv_unix\" script file!\n\n";
+print "\n... \"setsdkenv_windows.bat\" batch file has been prepared.\n";
+print "For each time you want to use this configured SDK environment,\n";
+print "you have to run the \"setsdkenv_unix\" file in a new shell!\n\n";
 
 exit $return;
 
