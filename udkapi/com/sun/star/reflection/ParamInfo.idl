@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParamInfo.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:14 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:06:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@
 
  module com {  module sun {  module star {  module reflection {
 
-interface XIdlClass;
+ published interface XIdlClass;
 
 //=============================================================================
 
 /** Provides information about a formal parameter of a method.
 */
-struct ParamInfo
+published struct ParamInfo
 {
     /** name of the parameter
     */
