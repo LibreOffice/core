@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2002-11-14 16:36:39 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@ module com {  module sun {  module star {  module i18n {
 interface XBreakIterator: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
-    /** Traverses specified number of characters in Text from
-        <em>nStartPos</em> to the right.
+    /** Traverses specified number of characters/cells in Text from
+        <em>nStartPos</em> forwards.
         <type>CharacterIteratorMode</type> can be cell based or
         character based. A cell is made of more than one character.
 
@@ -113,8 +113,8 @@ interface XBreakIterator: com::sun::star::uno::XInterface
                      [in] long nCount, [out] long nDone );
 
     //------------------------------------------------------------------------
-    /** Traverses specified number of characters in Text from
-        <em>nStartPos</em> to the left.
+    /** Traverses specified number of characters/cells in Text from
+        <em>nStartPos</em> backwards.
         <type>CharacterIteratorMode</type> can be cell based or
         character based. A cell is made of more than one character.
 
@@ -129,7 +129,7 @@ interface XBreakIterator: com::sun::star::uno::XInterface
                      [in] long nCount, [out] long nDone );
 
     //------------------------------------------------------------------------
-    /** Traverses one word in Text from <em>nStartPos</em> to the right.
+    /** Traverses one word in Text from <em>nStartPos</em> forwards.
 
         @param nWordType
             One of <type>WordType</type>, specifies the type of
@@ -144,7 +144,7 @@ interface XBreakIterator: com::sun::star::uno::XInterface
                    [in] short nWordType);
 
     //------------------------------------------------------------------------
-    /** Traverses one word in Text from <em>nStartPos</em> to the left.
+    /** Traverses one word in Text from <em>nStartPos</em> backwards.
 
         @param aLocale
             The locale of the character preceding <em>nStartPos</em>.
@@ -268,41 +268,53 @@ interface XBreakIterator: com::sun::star::uno::XInterface
                     [in] LineBreakUserOptions aUserOptions );
 
     //------------------------------------------------------------------------
-    /** Get the position where the specified script starts, starting to
-        look from <em>nStartPos</em> to the left.
+    /** Traverses in Text from <em>nStartPos</em> to the beginning of
+        the specified script type.
 
         @param nScriptType
             One of <type>ScriptType</type>.
+
+        @returns
+            The position where the script type starts.
      */
     long beginOfScript( [in] string aText, [in] long nStartPos,
                     [in] short nScriptType );
 
     //------------------------------------------------------------------------
-    /** Get the position where the specified script starts, starting to
-        look from <em>nStartPos</em> to the right.
+    /** Traverses in Text from <em>nStartPos</em> to the end of the
+        specified script type.
 
         @param nScriptType
             One of <type>ScriptType</type>.
+
+        @returns
+            The position where the script type ends.
      */
     long endOfScript( [in] string aText, [in] long nStartPos,
                   [in] short nScriptType );
 
     //------------------------------------------------------------------------
-    /** Get the position where the next specified script starts,
-        starting to look from <em>nStartPos</em> to the right.
+    /** Traverses in Text from <em>nStartPos</em> to the next start of
+        the specified script type.
 
         @param nScriptType
             One of <type>ScriptType</type>.
+
+        @returns
+            The position where the next script type starts.
      */
     long nextScript( [in] string aText, [in] long nStartPos,
                  [in] short nScriptType );
 
     //------------------------------------------------------------------------
-    /** Get the position where the next specified script starts,
-        starting to look from <em>nStartPos</em> to the left.
+    /** Traverses in Text from <em>nStartPos</em> to the previous start
+        of the specified script type.
 
         @param nScriptType
             One of <type>ScriptType</type>.
+
+        @returns
+            The position where the previous script type starts.
      */
     long previousScript( [in] string aText, [in] long nStartPos,
                       [in] short nScriptType );
