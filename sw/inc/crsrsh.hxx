@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-12-02 10:19:44 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-12-03 14:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,6 +832,9 @@ public:
     // is cursor or the point in/over a right to left formatted text?
     FASTBOOL IsInRightToLeftText( const Point* pPt = 0 ) const;
 #endif
+
+    // remove all invalid cursors
+    void ClearUpCrsrs();
 };
 
 
