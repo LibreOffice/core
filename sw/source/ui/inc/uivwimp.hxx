@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uivwimp.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:32:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ public:
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
+class SwMailMergeConfigItem;
 class SwView_Impl
 {
     STAR_REFERENCE( lang::XEventListener )  xScanEvtLstnr;
@@ -162,6 +163,9 @@ class SwView_Impl
     SwClipboardChangeListener*  pClipEvtLstnr;
     ShellModes                  eShellMode;
 
+    SwMailMergeConfigItem*      pConfigItem;
+    sal_uInt16                  nMailMergeRestartPage;
+    sal_Bool                    bMailMergeSourceView;
 public:
     SwView_Impl(SwView* pShell);
     ~SwView_Impl();
@@ -183,6 +187,16 @@ public:
     SvEmbeddedObjectRef &           GetEmbeddedObjRef()     { return (SvEmbeddedObjectRef&)(long&)aEmbeddedObjRef; }
 
     void                            AddTransferable(SwTransferable& rTransferable);
+
+    void   SetMailMergeConfigItem(SwMailMergeConfigItem*  pItem,
+                                                sal_uInt16 nRestart, sal_Bool bIsSource)
+                            {   pConfigItem = pItem;
+                                nMailMergeRestartPage = nRestart;
+                                bMailMergeSourceView = bIsSource;
+                            }
+    SwMailMergeConfigItem*  GetMailMergeConfigItem() {return pConfigItem;}
+    sal_uInt16              GetMailMergeRestartPage() const {return nMailMergeRestartPage;}
+    sal_Bool                IsMailMergeSourceView() const { return bMailMergeSourceView;  }
 };
 #endif
 
