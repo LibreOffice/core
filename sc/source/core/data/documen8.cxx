@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:20:53 $
+ *  last change: $Author: nn $ $Date: 2001-03-27 13:48:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,8 @@
 #include <sfx2/viewsh.hxx>
 #include <svtools/flagitem.hxx>
 #include <svtools/intitem.hxx>
+#define _SVSTDARR_USHORTS
+#include <svtools/svstdarr.hxx>
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
 #include <sfx2/misccfg.hxx>
@@ -1565,6 +1567,57 @@ SfxBindings* ScDocument::GetViewBindings()
 
 //------------------------------------------------------------------------
 
+void lcl_TransliterateEditEngine( ScEditEngineDefaulter& rEngine,
+                                utl::TransliterationWrapper& rTranslitarationWrapper,
+                                BOOL bConsiderLanguage, ScDocument* pDoc )
+{
+    //! should use TransliterateText method of EditEngine instead, when available!
+
+    sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+
+    USHORT nParCount = rEngine.GetParagraphCount();
+    for (USHORT nPar=0; nPar<nParCount; nPar++)
+    {
+        SvUShorts aPortions;
+        rEngine.GetPortions( (USHORT)nPar, aPortions );
+
+        for ( USHORT nPos = aPortions.Count(); nPos; )
+        {
+            --nPos;
+            USHORT nEnd = aPortions.GetObject( nPos );
+            USHORT nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+
+            ESelection aSel( nPar, nStart, nPar, nEnd );
+            String aOldStr = rEngine.GetText( aSel );
+            SfxItemSet aAttr = rEngine.GetAttribs( aSel );
+
+            if ( aAttr.GetItemState( EE_FEATURE_FIELD ) != SFX_ITEM_ON )    // fields are not touched
+            {
+                if ( bConsiderLanguage )
+                {
+                    BYTE nScript = pDoc->GetStringScriptType( aOldStr );
+                    USHORT nWhich = ( nScript == SCRIPTTYPE_ASIAN ) ? EE_CHAR_LANGUAGE_CJK :
+                                    ( ( nScript == SCRIPTTYPE_COMPLEX ) ? EE_CHAR_LANGUAGE_CTL :
+                                                                            EE_CHAR_LANGUAGE );
+                    nLanguage = ((const SvxLanguageItem&)aAttr.Get(nWhich)).GetValue();
+                }
+
+                com::sun::star::uno::Sequence<sal_Int32> aOffsets;
+                String aNewStr = rTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, aOldStr.Len(), &aOffsets );
+
+                if ( aNewStr != aOldStr )
+                {
+                    // replace string, keep attributes
+
+                    rEngine.QuickInsertText( aNewStr, aSel );
+                    aSel.nEndPos = aSel.nStartPos + aNewStr.Len();
+                    rEngine.QuickSetAttribs( aAttr, aSel );
+                }
+            }
+        }
+    }
+}
+
 void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
 {
     DBG_ASSERT( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
@@ -1572,6 +1625,8 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
     utl::TransliterationWrapper aTranslitarationWrapper( xServiceManager, nType );
     BOOL bConsiderLanguage = aTranslitarationWrapper.needLanguageForTheMode();
     sal_uInt16 nLanguage = LANGUAGE_SYSTEM;
+
+    ScEditEngineDefaulter* pEngine = NULL;      // not using pEditEngine member because of defaults
 
     USHORT nCount = GetTableCount();
     for (USHORT nTab = 0; nTab < nCount; nTab++)
@@ -1589,15 +1644,10 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                 const ScBaseCell* pCell = GetCell( ScAddress( nCol, nRow, nTab ) );
                 CellType eType = pCell ? pCell->GetCellType() : CELLTYPE_NONE;
 
-                //! TransliterateText method for EditEngine needed
-
-                if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
+                if ( eType == CELLTYPE_STRING )
                 {
                     String aOldStr;
-                    if ( eType == CELLTYPE_STRING )
-                        ((const ScStringCell*)pCell)->GetString(aOldStr);
-                    else
-                        ((const ScEditCell*)pCell)->GetString(aOldStr);
+                    ((const ScStringCell*)pCell)->GetString(aOldStr);
                     xub_StrLen nOldLen = aOldStr.Len();
 
                     if ( bConsiderLanguage )
@@ -1613,11 +1663,52 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                     String aNewStr = aTranslitarationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
 
                     if ( aNewStr != aOldStr )
-                        PutCell( ScAddress( nCol, nRow, nTab ), new ScStringCell( aNewStr ) );
+                        PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
+                }
+                else if ( eType == CELLTYPE_EDIT )
+                {
+                    if (!pEngine)
+                        pEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
+
+                    // defaults from cell attributes must be set so right language is used
+                    const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
+                    SfxItemSet* pDefaults = new SfxItemSet( pEngine->GetEmptyItemSet() );
+                    pPattern->FillEditItemSet( pDefaults );
+                    pEngine->SetDefaults( pDefaults, TRUE );
+
+                    const EditTextObject* pData = ((const ScEditCell*)pCell)->GetData();
+                    pEngine->SetText( *pData );
+
+                    pEngine->ClearModifyFlag();
+
+                    lcl_TransliterateEditEngine( *pEngine, aTranslitarationWrapper, bConsiderLanguage, this );
+
+                    if ( pEngine->IsModified() )
+                    {
+                        ScEditAttrTester aTester( pEngine );
+                        if ( aTester.NeedsObject() )
+                        {
+                            // remove defaults (paragraph attributes) before creating text object
+                            SfxItemSet* pEmpty = new SfxItemSet( pEngine->GetEmptyItemSet() );
+                            pEngine->SetDefaults( pEmpty, TRUE );
+
+                            EditTextObject* pNewData = pEngine->CreateTextObject();
+                            PutCell( nCol, nRow, nTab,
+                                new ScEditCell( pNewData, this, pEngine->GetEditTextObjectPool() ) );
+                            delete pNewData;
+                        }
+                        else
+                        {
+                            String aNewStr = pEngine->GetText();
+                            PutCell( nCol, nRow, nTab, new ScStringCell( aNewStr ) );
+                        }
+                    }
                 }
 
                 bFound = GetNextMarkedCell( nCol, nRow, nTab, rMultiMark );
             }
         }
+
+    delete pEngine;
 }
 
