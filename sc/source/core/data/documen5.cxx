@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-06 17:18:17 $
+ *  last change: $Author: bm $ $Date: 2001-03-20 10:31:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ void ScDocument::UpdateChartListenerCollection()
                             SvInPlaceObjectRef aIPObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             USHORT nId;
                             if ( aIPObj.Is() &&
-                                 ((nId = SchModuleDummy::HasID( *aIPObj->GetSvFactory() )) != 0) )
+                                 ((nId = SchModuleDummy::HasID( aIPObj->GetStorage()->GetClassName() )) != 0) )
                             {
                                 BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
                                 SchMemChart* pChartData = SchDLL::GetChartData(aIPObj);
