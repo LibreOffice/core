@@ -9,8 +9,10 @@ mkdir: %_DEST%\inc%_EXT%\registry
 ..\%__SRC%\bin\reg*.dll %_DEST%\bin%_EXT%\reg*.dll
 ..\%__SRC%\lib\libreg*.dylib %_DEST%\lib%_EXT%\libreg*.dylib
 
+..\%__SRC%\bin\regmerge.exe %_DEST%\bin%_EXT%\regcompare.exe
 ..\%__SRC%\bin\regmerge.exe %_DEST%\bin%_EXT%\regmerge.exe
 ..\%__SRC%\bin\regview.exe %_DEST%\bin%_EXT%\regview.exe
+..\%__SRC%\bin\regmerge %_DEST%\bin%_EXT%\regcomare
 ..\%__SRC%\bin\regmerge %_DEST%\bin%_EXT%\regmerge
 ..\%__SRC%\bin\regview %_DEST%\bin%_EXT%\regview
 ..\version.mk %_DEST%\inc%_EXT%\registry\version.mk
