@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:39:50 $
+ *  last change: $Author: vg $ $Date: 2003-07-01 14:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3363,11 +3363,18 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
             SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
             if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
             {
-                uno::Any aData = rxDataObj->getTransferData( aFlavor );
-                ::rtl::OUString aText;
-                aData >>= aText;
-                aNewSelection = ImpInsertText( rPaM, aText );
-                bDone = TRUE;
+                try
+                {
+                    uno::Any aData = rxDataObj->getTransferData( aFlavor );
+                    ::rtl::OUString aText;
+                    aData >>= aText;
+                    aNewSelection = ImpInsertText( rPaM, aText );
+                    bDone = TRUE;
+                }
+                catch( ... )
+                {
+                    ; // #i9286# can happen, even if isDataFlavorSupported returns true...
+                }
             }
         }
     }
