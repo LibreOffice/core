@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:35:29 $
+ *  last change: $Author: os $ $Date: 2000-10-13 14:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4781,84 +4781,4 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, pButton)
         EndDialog(RET_OK);
     return 0;
 }
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.2  2000/10/05 12:23:41  jp
-    should change: remove image
-
-    Revision 1.1.1.1  2000/09/18 17:14:43  hr
-    initial import
-
-    Revision 1.162  2000/09/18 16:05:51  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.161  2000/08/24 12:22:06  os
-    #71235# RequestHelp must call the base class
-
-    Revision 1.160  2000/08/22 13:00:34  os
-    #77818# SeekRow has to return TRUE
-
-    Revision 1.159  2000/08/17 14:06:28  jp
-    UI with decode URL
-
-    Revision 1.158  2000/08/16 11:47:07  os
-    #73593# set first token control to start position if all controls fit into the window
-
-    Revision 1.157  2000/08/16 10:05:41  os
-    #74364# additional style CheckBox now set correctly
-
-    Revision 1.156  2000/08/14 06:58:34  os
-    #77101# don't call AdjustLayout initially
-
-    Revision 1.155  2000/08/09 14:53:25  os
-    #77101# call AdjustLayout
-
-    Revision 1.154  2000/08/03 07:56:09  jp
-    change for syntax gcc and optimized
-
-    Revision 1.153  2000/08/02 11:37:09  hjs
-    syntax gcc
-
-    Revision 1.152  2000/07/27 21:16:20  jp
-    opt: get template names direct from the doc and don't load it from the resource
-
-    Revision 1.151  2000/07/26 12:10:47  jp
-    Bug #77101#: ShowPreviewHdl - don't call StateChanged
-
-    Revision 1.150  2000/07/19 11:01:59  os
-    properties added/renamed
-
-    Revision 1.149  2000/07/03 08:53:42  jp
-    must changes for VCL
-
-    Revision 1.148  2000/06/26 13:06:16  os
-    INetURLObject::SmartRelToAbs removed
-
-    Revision 1.147  2000/06/19 12:12:28  os
-    #71623# FillCharStyleListBox: optional sorted insertion
-
-    Revision 1.146  2000/06/13 15:38:52  os
-    CreateFromInt32
-
-    Revision 1.145  2000/06/08 09:46:08  os
-    using UCB
-
-    Revision 1.144  2000/05/23 19:10:28  jp
-    Bugfixes for Unicode
-
-    Revision 1.143  2000/05/16 09:15:12  os
-    project usr removed
-
-    Revision 1.142  2000/04/26 14:51:23  os
-    GetName() returns const String&
-
-    Revision 1.141  2000/04/19 12:56:35  os
-    include sfx2/filedlg.hxx removed
-
-    Revision 1.140  2000/04/18 15:32:23  os
-    UNICODE
-
-------------------------------------------------------------------------*/
-
 
