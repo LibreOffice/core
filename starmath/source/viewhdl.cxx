@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewhdl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-07-19 08:13:04 $
+ *  last change: $Author: vg $ $Date: 2001-09-13 08:46:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,12 +104,12 @@ class SmClipboardChangeListener : public ::cppu::WeakImplHelper1<
 
     // XEventListener
     virtual void SAL_CALL disposing(
-            const lang::EventObject& rEventObject )
+            const lang::EventObject& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
 ;//                         throw( UNO_NMSPC::RuntimeException );
 
     // XClipboardListener
     virtual void SAL_CALL changedContents(
-            const datatransfer::clipboard::ClipboardEvent& rEventObject )
+            const datatransfer::clipboard::ClipboardEvent& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
 ;//                                     throw( UNO_NMSPC::RuntimeException );
 
 public:
@@ -130,12 +130,12 @@ SmClipboardChangeListener::~SmClipboardChangeListener()
 }
 
 void SAL_CALL SmClipboardChangeListener::disposing(
-                                    const lang::EventObject& rEventObject )
+                                    const lang::EventObject& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
 void SAL_CALL SmClipboardChangeListener::changedContents(
-                            const ClipboardEvent& rEventObject )
+                            const ClipboardEvent& rEventObject ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( pView )
     {
