@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:33:49 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 12:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -581,6 +581,77 @@ void ScChangeAction::UpdateReference( const ScChangeTrack* pTrack,
 }
 
 
+void ScChangeAction::GetDescription( String& rStr, ScDocument* pDoc,
+        BOOL bSplitRange ) const
+{
+    if (IsRejecting())
+    {
+        // #112261# Add comment if rejection may have resulted in references
+        // not properly restored in formulas. See specification at
+        // http://specs.openoffice.org/calc/ease-of-use/redlining_comment.sxw
+        if (GetType() == SC_CAT_MOVE)
+        {
+            rStr += ScGlobal::GetRscString(
+                    STR_CHANGED_MOVE_REJECTION_WARNING);
+            rStr += ' ';
+        }
+        else if (IsInsertType())
+        {
+            rStr += ScGlobal::GetRscString(
+                    STR_CHANGED_DELETE_REJECTION_WARNING);
+            rStr += ' ';
+        }
+        else
+        {
+            const ScChangeTrack* pCT = GetChangeTrack();
+            if (pCT)
+            {
+                ScChangeAction* pReject = pCT->GetActionOrGenerated(
+                        GetRejectAction());
+                if (pReject)
+                {
+                    if (pReject->GetType() == SC_CAT_MOVE)
+                    {
+                        rStr += ScGlobal::GetRscString(
+                                STR_CHANGED_MOVE_REJECTION_WARNING);
+                        rStr += ' ';
+                    }
+                    else if (pReject->IsDeleteType())
+                    {
+                        rStr += ScGlobal::GetRscString(
+                                STR_CHANGED_DELETE_REJECTION_WARNING);
+                        rStr += ' ';
+                    }
+                    else if (pReject->HasDependent())
+                    {
+                        ScChangeActionTable aTable;
+                        pCT->GetDependents( pReject, aTable, FALSE, TRUE );
+                        for ( const ScChangeAction* p = aTable.First(); p;
+                                p = aTable.Next() )
+                        {
+                            if (p->GetType() == SC_CAT_MOVE)
+                            {
+                                rStr += ScGlobal::GetRscString(
+                                        STR_CHANGED_MOVE_REJECTION_WARNING);
+                                rStr += ' ';
+                                break;  // for
+                            }
+                            else if (pReject->IsDeleteType())
+                            {
+                                rStr += ScGlobal::GetRscString(
+                                        STR_CHANGED_DELETE_REJECTION_WARNING);
+                                rStr += ' ';
+                                break;  // for
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 String ScChangeAction::GetRefString( const ScBigRange& rRange,
         ScDocument* pDoc, BOOL bFlag3D ) const
 {
@@ -979,6 +1050,8 @@ BOOL ScChangeActionIns::Store( SvStream& rStrm, ScMultipleWriteHeader& rHdr ) co
 void ScChangeActionIns::GetDescription( String& rStr, ScDocument* pDoc,
         BOOL bSplitRange ) const
 {
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+
     USHORT nWhatId;
     switch ( GetType() )
     {
@@ -1299,6 +1372,8 @@ ScBigRange ScChangeActionDel::GetOverAllRange() const
 void ScChangeActionDel::GetDescription( String& rStr, ScDocument* pDoc,
         BOOL bSplitRange ) const
 {
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+
     USHORT nWhatId;
     switch ( GetType() )
     {
@@ -1572,6 +1647,8 @@ void ScChangeActionMove::GetDelta( INT32& nDx, INT32& nDy, INT32& nDz ) const
 void ScChangeActionMove::GetDescription( String& rStr, ScDocument* pDoc,
         BOOL bSplitRange ) const
 {
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
+
     BOOL bFlag3D = ( GetFromRange().aStart.Tab() != GetBigRange().aStart.Tab() );
 
     String aRsc( ScGlobal::GetRscString( STR_CHANGED_MOVE ) );
@@ -1912,6 +1989,7 @@ void ScChangeActionContent::GetNewString( String& rStr ) const
 void ScChangeActionContent::GetDescription( String& rStr, ScDocument* pDoc,
         BOOL bSplitRange ) const
 {
+    ScChangeAction::GetDescription( rStr, pDoc, bSplitRange);
 
     String aRsc( ScGlobal::GetRscString( STR_CHANGED_CELL ) );
 
@@ -4540,7 +4618,7 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
 
 
 void ScChangeTrack::GetDependents( ScChangeAction* pAct,
-        ScChangeActionTable& rTable, BOOL bListMasterDelete, BOOL bAllFlat )
+        ScChangeActionTable& rTable, BOOL bListMasterDelete, BOOL bAllFlat ) const
 {
     //! bAllFlat==TRUE: intern aus Accept oder Reject gerufen,
     //! => Generated werden nicht aufgenommen
@@ -4548,7 +4626,7 @@ void ScChangeTrack::GetDependents( ScChangeAction* pAct,
     BOOL bIsDelete = pAct->IsDeleteType();
     BOOL bIsMasterDelete = ( bListMasterDelete && pAct->IsMasterDelete() );
 
-    ScChangeAction* pCur = pAct;
+    const ScChangeAction* pCur = pAct;
     ScChangeActionStack* pStack = new ScChangeActionStack;
     do
     {
@@ -4823,13 +4901,12 @@ BOOL ScChangeTrack::Accept( ScChangeAction* pAct )
 
     if ( pAct->IsDeleteType() || pAct->GetType() == SC_CAT_CONTENT )
     {
-        ScChangeActionTable* pTable = new ScChangeActionTable;
-        GetDependents( pAct, *pTable, FALSE, TRUE );
-        for ( ScChangeAction* p = pTable->First(); p; p = pTable->Next() )
+        ScChangeActionTable aTable;
+        GetDependents( pAct, aTable, FALSE, TRUE );
+        for ( ScChangeAction* p = aTable.First(); p; p = aTable.Next() )
         {
             p->Accept();
         }
-        delete pTable;
     }
     pAct->Accept();
     return TRUE;
