@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charmap.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-07-20 20:30:21 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ String RID_SUBSETSTR_TAMIL
         Text[ spanish ] = "Tamil";
         Text[ italian ] = "Tamil";
         Text[ danish ] = "Tamil";
-        Text[ swedish ] = "Tamilsk";
+        Text[ swedish ] = "Tamil";
         Text[ polish ] = "Tamilski";
         Text[ portuguese_brazilian ] = "Tamil";
         Text[ japanese ] = "¿–Ÿ";
@@ -1304,7 +1304,7 @@ String RID_SUBSETSTR_CONTROL_PICTURES
         Text[ japanese ] = "∑∞Œﬁ∞ƒﬁãLçÜ";
         Text[ korean ] = "≈∞∫∏µÂ  ±‚»£";
         Text[ chinese_simplified ] = "º¸≈Ã∑˚∫≈";
-        Text[ chinese_traditional ] = "±±®Ó≤≈∏π";
+        Text[ chinese_traditional ] = "±±ªs≤≈∏π";
         Text[ turkish ] = "Control Pictures";
         Text[ arabic ] = "«· Õﬂ„ »«·’Ê—";
         Text[ catalan ] = "SÌmbolos del teclado";
@@ -2694,6 +2694,7 @@ String RID_SUBSETSTR_MONGOLIAN
 };
 
 // ********************************************************************** EOF
+
 
 
 
