@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-21 12:19:03 $
+ *  last change: $Author: pb $ $Date: 2000-11-24 08:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,10 +612,13 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                             case SvtPathOptions::PATH_USERDICTIONARY: aValue = aPathCfg.GetUserDictionaryPath(); break;
                             case SvtPathOptions::PATH_WORK:         aValue = aPathCfg.GetWorkPath(); break;
                         }
-
                         aValues.InsertValue( nProp, aValue );
                     }
+
+                    if ( rSet.Put(aNames) || rSet.Put(aValues) )
+                        bRet = TRUE;
                 }
+
                 default:
                     DBG_WARNING( "W1:Wrong ID while getting Options!" );
                     break;
