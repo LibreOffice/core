@@ -1,0 +1,663 @@
+/*************************************************************************
+ *
+ *  $RCSfile: mmaddressblockpage.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:14:52 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#include <mmaddressblockpage.hrc>
+#include <dbui.hrc>
+#include <helpid.h>
+
+#define  _ST_NONE_LIST              \
+        StringList =                \
+        {                           \
+            < "< leer >" ; > ;       \
+        };                          \
+        StringList [en-US]=    \
+        {                           \
+            < "< none >" ; > ;        \
+        };
+
+
+TabPage DLG_MM_ADDRESSBLOCK_PAGE
+{
+    HelpID = HID_MM_ADDRESSBLOCKPAGE;
+    Size = MAP_APPFONT ( 260 , 220 ) ;
+    Hide = TRUE ;
+
+    FixedText FI_HEADER
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Adressblock einfügen";
+        Text [ en-US ] = "Insert address block";
+    };
+
+    FixedText FI_ADDRESSLIST
+    {
+        Pos = MAP_APPFONT ( 6 , 20 ) ;
+        Size = MAP_APPFONT ( 248 , 20 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "1. Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten der Adressenliste werden für den Adressblock benötigt." ;
+        Text[ en-US ] = "1. Select the address list containing the address data you want to use. This data is needed to create the address block.";
+    };
+    PushButton      PB_ADDRESSLIST
+    {
+        Pos = MAP_APPFONT ( 12 , 43 ) ;
+        Size = MAP_APPFONT ( 100 , 14 ) ;
+        Text [ de ] = "Adressenliste auswählen..." ;
+        Text[ en-US ] = "Select A~ddress List...";
+    };
+    String STR_CHANGEADDRESS
+    {
+        Text [ de ] = "Andere Adressenliste auswählen..." ;
+        Text[ en-US ] = "Select Different A~ddress List...";
+    };
+    FixedText   FI_CURRENTADDRESS
+    {
+        Pos = MAP_APPFONT ( 12 , 60 ) ;
+        Size = MAP_APPFONT ( 242 , 8 ) ;
+        Hide = TRUE;
+        Text [ de ] = "Aktuelle Adressenliste: %1" ;
+        Text[ en-US ] = "Current address list: %1";
+    };
+    FixedText       FI_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 72 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "2. Wählen Sie den Adressblock, der in das Dokument eingefügt werden soll." ;
+        Text[ en-US ] = "2. Select the address block you want to inserted in the document";
+    };
+    CheckBox        CB_ADDRESS
+    {
+        Pos = MAP_APPFONT ( 12 , 84 ) ;
+        Size = MAP_APPFONT ( 242 , 10 ) ;
+        Text [ de ] = "Dieses Dokument soll einen Adressblock enthalten" ;
+        Text[ en-US ] = "~This document shall contain an address block";
+    };
+    Window          WIN_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Size = MAP_APPFONT ( 176 , 45 ) ;
+    };
+    PushButton      PB_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 194 , 98 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Group = FALSE;
+        Text [ de ] = "Mehr..." ;
+        Text[ en-US ] = "~More...";
+    };
+    FixedText       FI_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 146 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "3. Überprüfen Sie, ob alle Adressdaten verfügbar sind." ;
+        Text[ en-US ] = "3. Check if the address data matches correctly.";
+    };
+    Window          WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 176 , 46 ) ;
+    };
+    PushButton      PB_ASSIGN
+    {
+        Pos = MAP_APPFONT ( 194 , 157 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Text [ de ] = "Felder zuordnen..." ;
+        Text[ en-US ] = "Match ~Fields...";
+    };
+    FixedText       FI_DOCINDEX
+    {
+        Pos = MAP_APPFONT ( 111 , 205 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Right = TRUE;
+    };
+    ImageButton     IB_PREVSET
+    {
+        Pos = MAP_APPFONT ( 167 , 204 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_PREV;
+        QuickHelpText [ de ] = "Adressblock des vorigen Dokuments ansehen" ;
+        QuickHelpText[ en-US ] = "Preview Previous Address Block";
+    };
+    ImageButton     IB_NEXTSET
+    {
+        Pos = MAP_APPFONT ( 178 , 204 ) ;
+        Size = MAP_APPFONT ( 10 , 10 ) ;
+        SYMBOL = IMAGEBUTTON_NEXT ;
+        QuickHelpText [ de ] = "Adressblock des nächsten Dokuments ansehen" ;
+        QuickHelpText[ en-US ] = "Preview Next Address Block";
+    };
+    String STR_DOCUMENT
+    {
+        Text [ de ] = "Dokument: %1" ;
+        Text[ en-US ] = "Document: %1";
+    };
+};
+
+/*-- 13.04.2004 16:07:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ModalDialog DLG_MM_SELECTADDRESSBLOCK
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_SELECTADDRESSBLOCK;
+    Size = MAP_APPFONT ( 260 , 219 ) ;
+    Moveable = TRUE ;
+
+    Text [ de ] = "Addressblock wählen";
+    Text [ en-US ] = "Select Address Block";
+
+    FixedText       FT_SELECT
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Text [ de ] = "Bitte wählen Sie einen Adressblock" ;
+        Text[ en-US ] = "~Select your preferred address block";
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 192 , 100 ) ;
+        DialogControl = TRUE;
+    };
+    PushButton      PB_NEW
+    {
+        Pos = MAP_APPFONT ( 204 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Neu..." ;
+        Text[ en-US ] = "~New...";
+    };
+    PushButton      PB_CUSTOMIZE
+    {
+        Pos = MAP_APPFONT ( 204 , 31 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text [ de ] = "Bearbeiten..." ;
+        Text[ en-US ] = "~Edit...";
+    };
+    PushButton      PB_DELETE
+    {
+        Pos = MAP_APPFONT ( 204 , 48 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Group = FALSE;
+        Text [ de ] = "Löschen" ;
+        Text[ en-US ] = "~Delete";
+    };
+
+    FixedText       FI_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 120 ) ;
+        Size = MAP_APPFONT ( 150 , 8 ) ;
+        Text [ de ] = "Adressblock Eigenschaften" ;
+        Text[ en-US ] = "Address block settings";
+    };
+    RadioButton     RB_NEVER
+    {
+        Pos = MAP_APPFONT ( 12 , 131 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Land/Region niemals in Adresse einfügen" ;
+        Text[ en-US ] = "N~ever include the country/region";
+    };
+    RadioButton     RB_ALWAYS
+    {
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Immer Land/Region in Adresse einfügen" ;
+        Text[ en-US ] = "~Always include the country/region";
+    };
+    RadioButton     RB_DEPENDENT
+    {
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 150 , 10 ) ;
+        Text [ de ] = "Land/Region nur dann einfügen, wenn anders als:" ;
+        Text[ en-US ] = "Only ~include the country/region if it is not:";
+    };
+    Edit ED_COUNTRY
+    {
+        Pos = MAP_APPFONT ( 18 , 172 ) ;
+        Size = MAP_APPFONT ( 180 , 12 ) ;
+        Border = TRUE;
+    };
+
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 188 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 , 199 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton    PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 148 , 199 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 199 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+};
+
+/*-- 13.04.2004 16:07:28---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_CUSTOMIZEADDRESSBLOCK;
+    Size = MAP_APPFONT ( 320 , 176 ) ;
+    Moveable = TRUE ;
+
+    Text [ de ] = "Neuer Adressblock";
+    Text [ en-US ] = "New Address Block";
+
+    String ST_TITLE_MALE
+    {
+        Text [ de ] = "Eigene Briefanrede (männliche Empfänger)";
+        Text [ en-US ] = "Custom Salutation (Male Recipients)";
+    };
+    String ST_TITLE_FEMALE
+    {
+        Text [ de ] = "Eigene Briefanrede (weibliche Empfängerinnen)";
+        Text [ en-US ] = "Custom Salutation (Female Recipients)";
+    };
+    FixedText       FT_ADDRESSELEMENTS
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 60 , 8 ) ;
+        Text [ de ] = "Adresselemente" ;
+        Text[ en-US ] = "Address ~elements" ;
+    };
+    String  ST_SALUTATIONELEMENTS
+    {
+        Text [ de ] = "Briefanrede-Elemente" ;
+        Text[ en-US ] = "Salutation e~lements" ;
+    };
+    Control LB_ADDRESSELEMENTS
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 68 , 121 ) ;
+        Border = TRUE;
+        DialogControl = TRUE;
+    };
+    ImageButton     IB_INSERTFIELD
+    {
+        Pos = MAP_APPFONT ( 80 , 59 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT;
+        QuickHelpText [ de ] = "In Adresse übernehmen" ;
+        QuickHelpText[ en-US ] = "Add to address";
+    };
+    String ST_INSERTSALUTATIONFIELD
+    {
+        Text [ de ] = "In Briefanrede übernehmen" ;
+        Text[ en-US ] = "Add to salutation";
+    };
+    ImageButton     IB_REMOVEFIELD
+    {
+        Pos = MAP_APPFONT ( 80 , 76 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT;
+        QuickHelpText [ de ] = "Aus Adresse entfernen" ;
+        QuickHelpText[ en-US ] = "Remove from address";
+    };
+    String ST_REMOVESALUTATIONFIELD
+    {
+        Text [ de ] = "Aus Briefanrede entfernen" ;
+        Text[ en-US ] = "Remove from salutation";
+    };
+    FixedText       FT_DRAG
+    {
+        Pos = MAP_APPFONT ( 100 , 3 ) ;
+        Size = MAP_APPFONT ( 210 , 8 ) ;
+        Text [ de ] = "1. Adresselemente hierher ziehen" ;
+        Text[ en-US ] = "1. Drag address elements here" ;
+    };
+    String ST_DRAGSALUTATION
+    {
+        Text [ de ] = "1. Ziehen Sie Briefanrede-Elemente in den Anredebereich" ;
+        Text[ en-US ] = "1. ~Drag salutation elements into the box below" ;
+    };
+    MultiLineEdit ED_DRAG
+    {
+        Pos = MAP_APPFONT ( 106 , 14 ) ;
+        Size = MAP_APPFONT ( 160 , 60 ) ;
+        Border = TRUE;
+    };
+    ImageButton     IB_UP
+    {
+        Pos = MAP_APPFONT ( 285 , 14 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_UP;
+        QuickHelpText [ de ] = "Nach oben" ;
+        QuickHelpText[ en-US ] = "Move up";
+    };
+    ImageButton     IB_LEFT
+    {
+        Pos = MAP_APPFONT ( 270 , 29 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_LEFT;
+        QuickHelpText [ de ] = "Nach links" ;
+        QuickHelpText[ en-US ] = "Move left";
+    };
+    ImageButton     IB_RIGHT
+    {
+        Pos = MAP_APPFONT ( 300 , 29 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_RIGHT;
+        QuickHelpText [ de ] = "Nach rechts" ;
+        QuickHelpText[ en-US ] = "Move right";
+    };
+    ImageButton     IB_DOWN
+    {
+        Pos = MAP_APPFONT ( 285 , 48 ) ;
+        Size = MAP_APPFONT ( 14 , 14 ) ;
+        Symbol = IMAGEBUTTON_ARROW_DOWN;
+        QuickHelpText [ de ] = "Nach unten" ;
+        QuickHelpText[ en-US ] = "Move down";
+    };
+    FixedText FT_FIELD
+    {
+        Pos = MAP_APPFONT ( 100 , 78 ) ;
+        Size = MAP_APPFONT ( 160 , 8 ) ;
+        Hide = TRUE;
+        Text [ de ] = "2. Briefanrede-Element anpassen" ;
+        Text[ en-US ] = "2. Customi~ze salutation";
+    };
+    ComboBox  CB_FIELD
+    {
+        Pos = MAP_APPFONT ( 106 , 89 ) ;
+        Size = MAP_APPFONT ( 160 , 50 ) ;
+        Border = TRUE;
+        DropDown = TRUE;
+        Hide = TRUE;
+    };
+    FixedText       FI_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 106 , 105 ) ;
+        Size = MAP_APPFONT ( 160 , 8 ) ;
+        Text [ de ] = "Vorschau" ;
+        Text[ en-US ] = "Preview";
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 106 , 116 ) ;
+        Size = MAP_APPFONT ( 160 , 19 ) ;
+        Border = TRUE;
+    };
+    FixedLine       FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 145 ) ;
+        Size = MAP_APPFONT ( 308 , 8 ) ;
+    };
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 155 , 156 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton    PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 208 , 156 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 264 , 156 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String ST_SALUTATION
+    {
+        Text [ de ] = "Anrede" ;
+        Text[ en-US ] = "Salutation";
+    };
+    String ST_PUNCTUATION
+    {
+        Text [ de ] = "Satzzeichen" ;
+        Text[ en-US ] = "Punctuation Mark";
+    };
+    String ST_TEXT
+    {
+        Text [ de ] = "Text" ;
+        Text[ en-US ] = "Text";
+    };
+    StringArray RA_SALUTATION_MALE
+    {
+        ItemList =
+        {
+            < "Sehr geehrter Herr <2>," ; > ;
+            < "Lieber Herr <2>," ; > ;
+            < "Hallo Herr <2>," ; > ;
+            < "Hallo <1>," ; > ;
+        };
+        ItemList [en-US]=
+        {
+            < "Dear Mr. <2>," ; > ;
+            < "Mr. <2>," ; > ;
+            < "Dear <1>," ; > ;
+            < "Hello <1>," ; > ;
+        };
+    };
+    StringArray RA_SALUTATION_FEMALE
+    {
+        ItemList =
+        {
+            < "Sehr geehrte Frau <2>," ; > ;
+            < "Liebe Frau <2>," ; > ;
+            < "Hallo Frau <2>," ; > ;
+            < "Hallo <1>," ; > ;
+        };
+        ItemList [en-US]=
+        {
+            < "Dear Mrs. <2>," ; > ;
+            < "Ms. <2>," ; > ;
+            < "Dear <1>," ; > ;
+            < "Hello <1>," ; > ;
+        };
+    };
+    StringArray RA_PUNCTUATION
+    {
+        ItemList =
+        {
+            < "," ; > ;
+            < ":" ; > ;
+            < "!" ; > ;
+            < "(kein)" ; > ;
+        };
+        ItemList [en-US]=
+        {
+            < "," ; > ;
+            < ":" ; > ;
+            < "!" ; > ;
+            < "(none)" ; > ;
+        };
+    };
+};
+/*-- 13.04.2004 17:45:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+ModalDialog DLG_MM_ASSIGNFIELDS
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    HelpID = HID_MM_ASSIGNFIELDS;
+    Size = MAP_APPFONT ( 260 , 245 ) ;
+    Moveable = TRUE ;
+
+    Text [ de ] = "Felder zuordnen";
+    Text [ en-US ] = "Match Fields";
+
+
+    FixedText FI_MATCHING
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 240 , 20 ) ;
+        WordBreak = TRUE;
+        Text [ de ] = "Weisen Sie den Adresselementen Felder der Datenquelle zu." ;
+        Text[ en-US ] = "Assign the fields from your data source to match the address elements." ;
+    };
+    String ST_SALUTATIONMATCHING
+    {
+        Text [ de ] = "Weisen Sie den Briefanrede-Elementen Felder der Datenquelle zu." ;
+        Text[ en-US ] = "Assign the fields from your data source to match the salutation elements." ;
+    };
+    Control CT_FIELDS
+    {
+        Pos = MAP_APPFONT ( 6 , 26 ) ;
+        Size = MAP_APPFONT ( 248 , 120 ) ;
+        Border = TRUE;
+        DialogControl = TRUE;
+        ScrollBar SCR_1
+        {
+            Pos = MAP_APPFONT ( 238 , 10 ) ;
+            Size = MAP_APPFONT ( 10 , 110 ) ;
+        };
+        FixedText FT_FIELDS
+        {
+            Pos = MAP_APPFONT ( 6 , 6 ) ;
+            Size = MAP_APPFONT ( 70 , 8 ) ;
+        };
+        Window WIN_DATA
+        {
+            Pos = MAP_APPFONT ( 0 , 0 ) ;
+            Size = MAP_APPFONT ( 248 , 120 ) ;
+            DialogControl = TRUE;
+        };
+        ListBox LB_FIELDS
+        {
+            Pos = MAP_APPFONT ( 83 , 4 ) ;
+            Size = MAP_APPFONT ( 74 , 50 ) ;
+            TabStop = TRUE;
+            Border = TRUE;
+            DropDown = TRUE;
+            _ST_NONE_LIST
+        };
+        FixedText FT_PREVIEW
+        {
+            Pos = MAP_APPFONT ( 165 , 6 ) ;
+            Size = MAP_APPFONT ( 70 , 8 ) ;
+        };
+    };
+    FixedText       FI_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 152 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Text [ de ] = "Adressblock Vorschau" ;
+        Text[ en-US ] = "Address block preview";
+    };
+    String ST_SALUTATIONPREVIEW
+    {
+        Text [ de ] = "Briefanrede Vorschau" ;
+        Text[ en-US ] = "Salutation preview";
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 163 ) ;
+        Size = MAP_APPFONT ( 248 , 45 ) ;
+    };
+    FixedLine       FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 6 , 214 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
+    };
+    OKButton        PB_OK
+    {
+        Pos = MAP_APPFONT ( 95 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    CancelButton    PB_CANCEL
+    {
+        Pos = MAP_APPFONT ( 148 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    HelpButton      PB_HELP
+    {
+        Pos = MAP_APPFONT ( 204 , 225 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String ST_ADDRESSELEMENT
+    {
+        Text [ de ] = "Adresselement";
+        Text[ en-US ] = "Address elements" ;
+    };
+    String ST_SALUTATIONELEMENT
+    {
+        Text [ de ] = "Briefanredeelement";
+        Text[ en-US ] = "Salutation elements" ;
+    };
+    String ST_MATCHESTO
+    {
+        Text [ de ] = "Zuordnung zu Feld:" ;
+        Text[ en-US ] = "Matches to field:" ;
+    };
+    String ST_PREVIEW
+    {
+        Text [ de ] = "Preview" ;
+        Text[ en-US ] = "Preview" ;
+    };
+    String ST_NONE
+    {
+        Text [ de ] = "< leer >";
+        Text [en-US] = "< none >";
+    };
+};
