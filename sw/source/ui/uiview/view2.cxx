@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:33:05 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,9 +1634,6 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
             if( pRead ||
                 (pMed->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER) != 0 )
             {
-                String sTmpBaseURL( INetURLObject::GetBaseURL() );
-                INetURLObject::SetBaseURL( pMed->GetName() );
-
                 ULONG nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
@@ -1655,7 +1652,6 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName,
                                                 : ERR_SWG_READ_ERROR;
                     }
 
-                    INetURLObject::SetBaseURL( sTmpBaseURL );
                 }
 
                 // ggfs. alle Verzeichnisse updaten:
