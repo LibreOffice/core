@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bulitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-17 13:29:41 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,11 @@
 #include "bulitem.hxx"
 #include "svxerr.hxx"
 
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
+
 #define BULITEM_VERSION     ((USHORT)2)
 
 // -----------------------------------------------------------------------
@@ -90,9 +95,11 @@ void SvxBulletItem::StoreFont( SvStream& rStream, const Font& rFont )
 
     rStream << rFont.GetColor();
     nTemp = (USHORT)rFont.GetFamily(); rStream << nTemp;
-    nTemp = (USHORT)GetStoreCharSet( rFont.GetCharSet(),
-                                       rStream.GetVersion() );
-                                        rStream << nTemp;
+
+    // #90477# nTemp = (USHORT)GetStoreCharSet( rFont.GetCharSet(), rStream.GetVersion() );
+    nTemp = (USHORT)GetSOStoreTextEncoding((rtl_TextEncoding)rFont.GetCharSet(), (sal_uInt16)rStream.GetVersion());
+    rStream << nTemp;
+
     nTemp = (USHORT)rFont.GetPitch(); rStream << nTemp;
     nTemp = (USHORT)rFont.GetAlign(); rStream << nTemp;
     nTemp = (USHORT)rFont.GetWeight(); rStream << nTemp;
@@ -117,7 +124,12 @@ Font SvxBulletItem::CreateFont( SvStream& rStream, USHORT nVer )
     rStream >> aColor;    aFont.SetColor( aColor );
     USHORT nTemp;
     rStream >> nTemp; aFont.SetFamily((FontFamily)nTemp);
-    rStream >> nTemp; aFont.SetCharSet((rtl_TextEncoding)nTemp);
+
+    // #90477#
+    rStream >> nTemp;
+    nTemp = (sal_uInt16)GetSOLoadTextEncoding((rtl_TextEncoding)nTemp, (sal_uInt16)rStream.GetVersion());
+    aFont.SetCharSet((rtl_TextEncoding)nTemp);
+
     rStream >> nTemp; aFont.SetPitch((FontPitch)nTemp);
     rStream >> nTemp; aFont.SetAlign((FontAlign)nTemp);
     rStream >> nTemp; aFont.SetWeight((FontWeight)nTemp);
@@ -393,7 +405,7 @@ SvStream& SvxBulletItem::Store( SvStream& rStrm, USHORT nItemVersion ) const
         USHORT nFac = ( rStrm.GetCompressMode() != COMPRESSMODE_NONE ) ? 3 : 1;
         const Bitmap aBmp( aGraphicObject.GetGraphic().GetBitmap() );
         ULONG nBytes = aBmp.GetSizeBytes();
-        if ( nBytes < (0xFF00*nFac) )
+        if ( nBytes < ULONG(0xFF00*nFac) )
             rStrm << aBmp;
 
         ULONG nEnd = rStrm.Tell();

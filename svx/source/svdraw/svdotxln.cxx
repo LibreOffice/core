@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxln.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 13:17:08 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,11 @@
 #endif
 
 #include <svtools/urihelper.hxx>
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #ifndef SVX_LIGHT
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -239,7 +244,9 @@ void ImpSdrObjTextLinkUserData::WriteData(SvStream& rOut)
     // UNICODE: rOut << aFilterName;
     rOut.WriteByteString(aFilterName);
 
-    rOut << UINT16(GetStoreCharSet(eCharSet));
+    // #90477# rOut << UINT16(GetStoreCharSet(eCharSet));
+    rOut << UINT16(GetSOStoreTextEncoding(eCharSet, (sal_uInt16)rOut.GetVersion()));
+
     rOut << UINT32(aFileDate0.GetDate());
     rOut << UINT32(aFileDate0.GetTime());
 }
@@ -273,7 +280,10 @@ void ImpSdrObjTextLinkUserData::ReadData(SvStream& rIn)
     // UNICODE: rIn >> aFilterName;
     rIn.ReadByteString(aFilterName);
 
-    rIn >> nTmp16; eCharSet = rtl_TextEncoding(nTmp16);
+    // #90477# rIn >> nTmp16; eCharSet = rtl_TextEncoding(nTmp16);
+    rIn >> nTmp16;
+    eCharSet = (rtl_TextEncoding)GetSOLoadTextEncoding((rtl_TextEncoding)nTmp16, (sal_uInt16)rIn.GetVersion());
+
     rIn >> nTmp32; aFileDate0.SetDate(nTmp32);
     rIn >> nTmp32; aFileDate0.SetTime(nTmp32);
 }
@@ -402,7 +412,9 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& rFilterName
 
     if( pIStm )
     {
-        pIStm->SetStreamCharSet( eCharSet );
+        // #90477# pIStm->SetStreamCharSet( eCharSet );
+        pIStm->SetStreamCharSet(GetSOLoadTextEncoding(eCharSet, (sal_uInt16)pIStm->GetVersion()));
+
         char cRTF[5];
         cRTF[4] = 0;
         pIStm->Read(cRTF, 5);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-06-26 14:31:42 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,11 @@
 #define ITEMID_FIELD    0
 #include "flditem.hxx"
 #include "adritem.hxx"
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #define FRAME_MARKER    (ULONG)0x21981357
 #define CHARSET_MARKER  (FRAME_MARKER+1)
@@ -554,8 +559,9 @@ void SvxURLField::Save( SvPersistStream & rStm )
     rStm.WriteByteString(aTargetFrame);
 
     rStm << CHARSET_MARKER;
-    rStm << (USHORT)GetStoreCharSet( gsl_getSystemTextEncoding(),
-                                       rStm.GetVersion() );
+
+    // #90477# rStm << (USHORT)GetStoreCharSet(gsl_getSystemTextEncoding(), rStm.GetVersion());
+    rStm << (USHORT)GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rStm.GetVersion());
 }
 
 // =================================================================

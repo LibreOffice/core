@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: mib $ $Date: 2001-08-01 14:05:18 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:31:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,11 @@
 #include "langtab.hxx"
 #include "dlgutil.hxx"
 
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -457,9 +462,12 @@ SvStream& SvxFontItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
     BOOL bToBats =
         GetFamilyName().EqualsAscii( "StarSymbol", 0, sizeof("StarSymbol")-1 ) ||
         GetFamilyName().EqualsAscii( "OpenSymbol", 0, sizeof("OpenSymbol")-1 );
-    rStrm << (BYTE) GetFamily()
-          << (BYTE) GetPitch()
-          << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
+
+    // #90477# rStrm << (BYTE) GetFamily()
+    //    << (BYTE) GetPitch()
+    //    << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() ) );
+    rStrm << (BYTE) GetFamily() << (BYTE) GetPitch()
+          << (BYTE)(bToBats ? RTL_TEXTENCODING_SYMBOL : GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion()));
 
     if( bToBats )
     {
@@ -802,7 +810,7 @@ sal_Bool SvxWeightItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
                     return sal_False;
                 fValue = (float)nValue;
             }
-            SetValue( VCLUnoHelper::ConvertFontWeight(fValue) );
+            SetValue( VCLUnoHelper::ConvertFontWeight((float)fValue) );
         }
         break;
     }
@@ -2029,7 +2037,9 @@ SfxPoolItem* SvxCharSetColorItem::Clone( SfxItemPool * ) const
 
 SvStream& SvxCharSetColorItem::Store( SvStream& rStrm , USHORT nItemVersion ) const
 {
-    rStrm << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() )
+    // #90477# rStrm << (BYTE) GetStoreCharSet( GetCharSet(), (USHORT)rStrm.GetVersion() )
+    //    << GetValue();
+    rStrm << (BYTE)GetSOStoreTextEncoding(GetCharSet(), (sal_uInt16)rStrm.GetVersion())
           << GetValue();
     return rStrm;
 }

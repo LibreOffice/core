@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-05 15:25:50 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,11 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
+
 using namespace ::com::sun::star;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -197,7 +202,9 @@ SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
 #endif
     rOut<<UINT32(rModInfo.aCreationDate.GetDate());
     rOut<<UINT32(rModInfo.aCreationDate.GetTime());
-    rOut<<UINT8( GetStoreCharSet( rModInfo.eCreationCharSet ) );
+
+    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eCreationCharSet ) );
+    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eCreationCharSet, (sal_uInt16)rOut.GetVersion()));
 
     /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
        We just have to write anythink in the file for compatibility:
@@ -213,7 +220,9 @@ SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
 
     rOut<<UINT32(rModInfo.aLastWriteDate.GetDate());
     rOut<<UINT32(rModInfo.aLastWriteDate.GetTime());
-    rOut<<UINT8( GetStoreCharSet( rModInfo.eLastWriteCharSet ) );
+
+    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastWriteCharSet ) );
+    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastWriteCharSet, (sal_uInt16)rOut.GetVersion()));
 
     // see comment above
     rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastWriteGUI);
@@ -222,7 +231,9 @@ SvStream& operator<<(SvStream& rOut, const SdrModelInfo& rModInfo)
 
     rOut<<UINT32(rModInfo.aLastReadDate.GetDate());
     rOut<<UINT32(rModInfo.aLastReadDate.GetTime());
-    rOut<<UINT8( GetStoreCharSet( rModInfo.eLastReadCharSet ) );
+
+    // #90477# rOut<<UINT8( GetStoreCharSet( rModInfo.eLastReadCharSet ) );
+    rOut << UINT8(GetSOStoreTextEncoding(rModInfo.eLastReadCharSet, (sal_uInt16)rOut.GetVersion()));
 
     // see comment above
     rOut<<UINT8(0);     //  rOut<<UINT8(rModInfo.eLastReadGUI);
@@ -245,7 +256,11 @@ SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
     UINT32 n32;
     rIn>>n32; rModInfo.aCreationDate.SetDate(n32);
     rIn>>n32; rModInfo.aCreationDate.SetTime(n32);
-    rIn>>n8;  rModInfo.eCreationCharSet=rtl_TextEncoding(n8);
+
+    // #90477# rIn>>n8;  rModInfo.eCreationCharSet=rtl_TextEncoding(n8);
+    rIn >> n8;
+    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+    rModInfo.eCreationCharSet = rtl_TextEncoding(n8);
 
     /* Since we removed old SV-stuff there is no way to determine system-speciefic informations, yet.
        We just have to write anythink in the file for compatibility:
@@ -260,7 +275,11 @@ SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
     rIn>>n8;  //    rModInfo.eCreationSys=SystemType(n8);
     rIn>>n32; rModInfo.aLastWriteDate.SetDate(n32);
     rIn>>n32; rModInfo.aLastWriteDate.SetTime(n32);
-    rIn>>n8;  rModInfo.eLastWriteCharSet=rtl_TextEncoding(n8);
+
+    // #90477# rIn>>n8;  rModInfo.eLastWriteCharSet=rtl_TextEncoding(n8);
+    rIn >> n8;
+    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+    rModInfo.eLastWriteCharSet = rtl_TextEncoding(n8);
 
     // see comment above
     rIn>>n8;  //    rModInfo.eLastWriteGUI=GUIType(n8);
@@ -269,7 +288,11 @@ SvStream& operator>>(SvStream& rIn, SdrModelInfo& rModInfo)
 
     rIn>>n32; rModInfo.aLastReadDate.SetDate(n32);
     rIn>>n32; rModInfo.aLastReadDate.SetTime(n32);
-    rIn>>n8;  rModInfo.eLastReadCharSet=rtl_TextEncoding(n8);
+
+    // #90477# rIn>>n8;  rModInfo.eLastReadCharSet=rtl_TextEncoding(n8);
+    rIn >> n8;
+    n8 = (UINT8)GetSOLoadTextEncoding((rtl_TextEncoding)n8, (sal_uInt16)rIn.GetVersion());
+    rModInfo.eLastReadCharSet = rtl_TextEncoding(n8);
 
     // see comment above
     rIn>>n8;  //    rModInfo.eLastReadGUI=GUIType(n8);
@@ -1558,7 +1581,9 @@ void SdrModel::WriteData(SvStream& rOut) const
         rtl_TextEncoding eOutCharSet = rOut.GetStreamCharSet();
         if(eOutCharSet == ((rtl_TextEncoding)9) /* == RTL_TEXTENCODING_SYSTEM */ )
             eOutCharSet = gsl_getSystemTextEncoding();
-        ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetStoreCharSet(eOutCharSet);
+
+        // #90477# ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetStoreCharSet(eOutCharSet);
+        ((SdrModel*)this)->aInfo.eLastWriteCharSet = GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
 
         // UNICODE: set the target charset on the stream to access it as parameter
         // in all streaming operations for UniString->ByteString conversions
@@ -1573,7 +1598,9 @@ void SdrModel::WriteData(SvStream& rOut) const
         if(aReadDate.IsValid())
         {
             ((SdrModel*)this)->aInfo.aLastReadDate = aReadDate;
-            ((SdrModel*)this)->aInfo.eLastReadCharSet = GetStoreCharSet(gsl_getSystemTextEncoding());
+
+            // ((SdrModel*)this)->aInfo.eLastReadCharSet = GetStoreCharSet(gsl_getSystemTextEncoding());
+            ((SdrModel*)this)->aInfo.eLastReadCharSet = GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rOut.GetVersion());
 
             /* old SV-stuff, there is no possibility to determine this informations in another way
             ((SdrModel*)this)->aInfo.eLastReadGUI=System::GetGUIType();
@@ -1860,11 +1887,14 @@ void SdrModel::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
                 // an dieser Stelle einen CharSet
                 INT16 nCharSet;
 
+                // #90477# rIn >> nCharSet;
                 rIn >> nCharSet;
+                nCharSet = (INT16)GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion());
 
                 // StreamCharSet setzen, damit Strings beim
                 // Lesen automatisch konvertiert werden
-                rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+                // #90477# rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+                rIn.SetStreamCharSet(GetSOLoadTextEncoding(rtl_TextEncoding(nCharSet), (sal_uInt16)rIn.GetVersion()));
             }
 
             // Tabellen- und Listennamen lesen (Tabellen/Listen existieren schon) // SOH!!!
@@ -2210,7 +2240,9 @@ SvStream& operator>>(SvStream& rIn, SdrModel& rMod)
     USHORT nCompressMerk=rIn.GetCompressMode(); // Der CompressMode wird von SdrModel::ReadData() gesetzt
     rMod.ReadData(aHead,rIn);
     rIn.SetCompressMode(nCompressMerk); // CompressMode wieder restaurieren
+
     rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
+
     rMod.bLoading=FALSE;
     rMod.DoProgress(rIn.Tell());
     rMod.AfterRead();

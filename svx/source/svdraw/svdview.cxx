@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-11 10:15:22 $
+ *  last change: $Author: aw $ $Date: 2001-08-06 08:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,11 @@
 #include "obj3d.hxx"
 #include "svddrgmt.hxx"
 #include "svdoutl.hxx"
+
+// #90477#
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1318,12 +1323,13 @@ void SdrView::WriteRecords(SvStream& rOut) const
     {
         // Der CharSet muss! als erstes rausgestreamt werden
         SdrNamedSubRecord aSubRecord(rOut,STREAM_WRITE,SdrInventor,SDRIORECNAME_VIEWCHARSET);
-        rtl_TextEncoding eOutCharSet=rOut.GetStreamCharSet();
 
         // UNICODE:
-        eOutCharSet = gsl_getSystemTextEncoding();
+        // rtl_TextEncoding eOutCharSet=rOut.GetStreamCharSet();
+        rtl_TextEncoding eOutCharSet = gsl_getSystemTextEncoding();
 
-        rOut << UINT16( GetStoreCharSet( eOutCharSet ) );
+        // #90477# rOut << UINT16( GetStoreCharSet( eOutCharSet ) );
+        rOut << (UINT16)GetSOStoreTextEncoding(eOutCharSet, (sal_uInt16)rOut.GetVersion());
     }
     SdrCreateView::WriteRecords(rOut);
 }
@@ -1338,8 +1344,10 @@ BOOL SdrView::ReadRecord(const SdrIOHeader& rViewHead,
         switch (rSubHead.GetIdentifier()) {
             case SDRIORECNAME_VIEWCHARSET: {
                 UINT16 nCharSet;
-                rIn>>nCharSet;
-                rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+                // #90477# rIn>>nCharSet;
+                // rIn.SetStreamCharSet(rtl_TextEncoding(nCharSet));
+                rIn >> nCharSet;
+                rIn.SetStreamCharSet(GetSOLoadTextEncoding((rtl_TextEncoding)nCharSet, (sal_uInt16)rIn.GetVersion()));
             } break;
             default: bRet=FALSE;
         }
@@ -1370,7 +1378,9 @@ SvStream& operator>>(SvStream& rIn, SdrView& rView)
         SdrNamedSubRecord aSubRecord(rIn,STREAM_READ);
         rView.ReadRecord(aHead,aSubRecord,rIn);
     }
+
     rIn.SetStreamCharSet(eStreamCharSetMerker); // StreamCharSet wieder restaurieren
+
     rView.InvalidateAllWin();
     return rIn;
 }
