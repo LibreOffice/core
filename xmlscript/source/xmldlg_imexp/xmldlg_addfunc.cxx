@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_addfunc.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-27 12:45:16 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #include <com/sun/star/xml/sax/XParser.hpp>
 
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <xmlscript/xmldlg_imexp.hxx>
 
@@ -76,10 +77,31 @@ namespace xmlscript
 {
 
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL exportDialogModelsToByteSequence(
-    Sequence< sal_Int8 > * pOutBytes,
-    Sequence< Reference< container::XNameContainer > > const & rInModels )
-    throw (Exception)
+class InputStreamProvider
+    : public ::cppu::WeakImplHelper1< io::XInputStreamProvider >
+{
+    ByteSequence _bytes;
+
+public:
+    inline InputStreamProvider( ByteSequence const & rBytes )
+        : _bytes( rBytes )
+        {}
+
+    // XInputStreamProvider
+    virtual Reference< io::XInputStream > SAL_CALL createInputStream()
+        throw (RuntimeException);
+};
+//__________________________________________________________________________________________________
+Reference< io::XInputStream > InputStreamProvider::createInputStream()
+    throw (RuntimeException)
+{
+    return ::xmlscript::createInputStream( _bytes );
+}
+
+//==================================================================================================
+SAL_DLLEXPORT Reference< io::XInputStreamProvider > SAL_CALL exportDialogModel(
+    Reference< container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (Exception) )
 {
     Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
     if (! xSMgr.is())
@@ -99,19 +121,20 @@ SAL_DLLEXPORT void SAL_CALL exportDialogModelsToByteSequence(
             Reference< XInterface >() );
     }
 
-    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
-    xSource->setOutputStream( createOutputStream( reinterpret_cast< ByteSequence * >( pOutBytes ) ) );
+    ByteSequence aBytes;
 
-    xHandler->startDocument();
-    exportDialogModels( xHandler, rInModels );
-    xHandler->endDocument();
+    Reference< io::XActiveDataSource > xSource( xHandler, UNO_QUERY );
+    xSource->setOutputStream( createOutputStream( &aBytes ) );
+    exportDialogModel( xHandler, xDialogModel );
+
+    return new InputStreamProvider( aBytes );
 }
 
 //==================================================================================================
-SAL_DLLEXPORT void SAL_CALL importDialogModelsFromByteSequence(
-    Sequence< Reference< container::XNameContainer > > * pOutModels,
-    Sequence< sal_Int8 > const & rInBytes )
-    throw (Exception)
+SAL_DLLEXPORT void SAL_CALL importDialogModel(
+    Reference< io::XInputStream > xInput,
+    Reference< container::XNameContainer > const & xDialogModel )
+    SAL_THROW( (Exception) )
 {
     Reference< lang::XMultiServiceFactory > xSMgr( ::comphelper::getProcessServiceFactory() );
     if (! xSMgr.is())
@@ -132,10 +155,10 @@ SAL_DLLEXPORT void SAL_CALL importDialogModelsFromByteSequence(
     }
 
     // error handler, entity resolver omitted for this helper function
-    xParser->setDocumentHandler( importDialogModels( pOutModels ) );
+    xParser->setDocumentHandler( importDialogModel( xDialogModel ) );
 
     xml::sax::InputSource source;
-    source.aInputStream = createInputStream( * reinterpret_cast< ByteSequence const * >( &rInBytes ) );
+    source.aInputStream = xInput;
     source.sSystemId = OUString( RTL_CONSTASCII_USTRINGPARAM("virtual file") );
 
     xParser->parseStream( source );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,7 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 //
-inline sal_Int32 toInt32( OUString const & rStr )
+inline sal_Int32 toInt32( OUString const & rStr ) SAL_THROW( () )
 {
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
@@ -142,38 +142,37 @@ inline bool getLongAttr(
     }
     return false;
 }
-//
+
+class ControlImportContext;
 
 //==================================================================================================
 struct DialogImport
     : public ::cppu::WeakImplHelper1< xml::XImporter >
 {
+    friend class ControlImportContext;
+
     vector< OUString > _styleNames;
     vector< Reference< xml::XImportContext > > _styles;
 
-    Reference< lang::XMultiServiceFactory > _xMgr;
-    Sequence< Reference< container::XNameContainer > > * _pOutModels;
-public:
     Reference< container::XNameContainer > _xDialogModel;
     Reference< lang::XMultiServiceFactory > _xDialogModelFactory;
 
+public:
     void addStyle(
         OUString const & rStyleId,
         Reference< xml::XImportContext > const & xStyle )
-        throw ();
+        SAL_THROW( () );
     Reference< xml::XImportContext > getStyle(
         OUString const & rStyleId ) const
-        throw ();
+        SAL_THROW( () );
 
-    inline DialogImport(
-        Reference< lang::XMultiServiceFactory > const & xMgr,
-        Sequence< Reference< container::XNameContainer > > * pOutModels )
-        throw ()
-        : _xMgr( xMgr )
-        , _pOutModels( pOutModels )
-        { *_pOutModels = Sequence< Reference< container::XNameContainer > >(); }
+    inline DialogImport( Reference< container::XNameContainer > const & xDialogModel )
+        SAL_THROW( () )
+        : _xDialogModel( xDialogModel )
+        , _xDialogModelFactory( xDialogModel, UNO_QUERY )
+        { OSL_ASSERT( _xDialogModel.is() && _xDialogModelFactory.is() ); }
     virtual ~DialogImport()
-        throw ();
+        SAL_THROW( () );
 
     // XImporter
     virtual void SAL_CALL startDocument()
@@ -196,20 +195,21 @@ public:
 class ElementBase
     : public ::cppu::WeakImplHelper1< xml::XImportContext >
 {
-public:
+protected:
+    DialogImport * _pImport;
+    ElementBase * _pParent;
+
     OUString _aLocalName;
     Reference< xml::sax2::XExtendedAttributes > _xAttributes;
 
-    ElementBase * _pParent;
-    DialogImport * _pImport;
-
+public:
     ElementBase(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ();
+        SAL_THROW( () );
     virtual ~ElementBase()
-        throw ();
+        SAL_THROW( () );
 
     // XImportContext
     virtual Reference< xml::XImportContext > SAL_CALL getParent()
@@ -247,7 +247,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -283,7 +283,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ElementBase( rLocalName, xAttributes, pParent, pImport )
         , _inited( 0 )
         , _hasValue( 0 )
@@ -308,7 +308,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -329,14 +329,14 @@ protected:
     Reference< xml::XImportContext > getStyle(
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 public:
-    vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() throw ()
+    vector< Reference< xml::sax2::XExtendedAttributes > > const * getEvents() SAL_THROW( () )
         { return &_events; }
 
     ControlElement(
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ();
+        SAL_THROW( () );
 };
 //==================================================================================================
 class ControlImportContext
@@ -396,24 +396,6 @@ public:
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes );
 };
 //==================================================================================================
-class DialogsElement
-    : public ControlElement
-{
-public:
-    virtual Reference< xml::XImportContext > SAL_CALL createChildContext(
-        sal_Int32 nUid, OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
-        throw (xml::sax::SAXException, RuntimeException);
-
-    inline DialogsElement(
-        OUString const & rLocalName,
-        Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
-        ElementBase * pParent, DialogImport * pImport )
-        throw ()
-        : ControlElement( rLocalName, xAttributes, pParent, pImport )
-        {}
-};
-//==================================================================================================
 class WindowElement
     : public ControlElement
 {
@@ -429,7 +411,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -445,7 +427,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ElementBase( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -463,7 +445,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ();
+        SAL_THROW( () );
 };
 //==================================================================================================
 class ButtonElement
@@ -481,7 +463,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -501,7 +483,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -522,7 +504,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -543,7 +525,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -561,7 +543,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -582,7 +564,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -604,7 +586,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : BulletinBoardElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -624,7 +606,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -644,7 +626,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -664,7 +646,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -684,7 +666,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -704,7 +686,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -724,7 +706,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -744,7 +726,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -764,7 +746,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
@@ -784,7 +766,7 @@ public:
         OUString const & rLocalName,
         Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
         ElementBase * pParent, DialogImport * pImport )
-        throw ()
+        SAL_THROW( () )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };

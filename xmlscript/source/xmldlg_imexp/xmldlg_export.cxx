@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 14:57:38 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,7 @@ void ElementDescriptor::readDefaults()
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEvents()
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     Reference< script::XScriptEventsSupplier > xSupplier( _xProps, UNO_QUERY );
     if (xSupplier.is())
@@ -803,7 +803,7 @@ inline bool equals( awt::FontDescriptor const & f1, awt::FontDescriptor const & 
 }
 //__________________________________________________________________________________________________
 OUString StyleBag::getStyleId( Style const & rStyle )
-    throw ()
+    SAL_THROW( () )
 {
     if (! rStyle._set) // nothin set
     {
@@ -873,7 +873,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
     return pStyle->_id;
 }
 //__________________________________________________________________________________________________
-StyleBag::~StyleBag()
+StyleBag::~StyleBag() SAL_THROW( () )
 {
     for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
     {
@@ -903,6 +903,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
 
 //__________________________________________________________________________________________________
 void ElementDescriptor::addSubElem( Reference< xml::sax::XAttributeList > const & xElem )
+    SAL_THROW( () )
 {
     _subElems.push_back( xElem );
 }
@@ -923,10 +924,10 @@ void ElementDescriptor::dump( Reference< xml::sax::XExtendedDocumentHandler > co
 }
 
 //==================================================================================================
-static void exportDialogModel(
+SAL_DLLEXPORT void SAL_CALL exportDialogModel(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     Reference< container::XNameContainer > const & xDialogModel )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     StyleBag all_styles;
     vector< Reference< xml::sax::XAttributeList > > all_elements;
@@ -1113,6 +1114,8 @@ static void exportDialogModel(
         }
     }
 
+    xOut->startDocument();
+
     if (! all_elements.empty()) // dump out
     {
         // window
@@ -1124,6 +1127,8 @@ static void exportDialogModel(
         OUString aWindowName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":window") );
         ElementDescriptor * pWindow = new ElementDescriptor( xProps, xPropState, aWindowName );
         Reference< xml::sax::XAttributeList > xWindow( pWindow );
+        pWindow->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
+                          OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ),
                                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":id") ) );
         pWindow->readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Title") ),
@@ -1169,33 +1174,8 @@ static void exportDialogModel(
         xOut->ignorableWhitespace( OUString() );
         xOut->endElement( aWindowName );
     }
-}
 
-//==================================================================================================
-SAL_DLLEXPORT void SAL_CALL exportDialogModels(
-    Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
-    Sequence< Reference< container::XNameContainer > > const & rInModels )
-    throw (Exception)
-{
-    // open up dialogs
-    OUString aDialogsName( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":dialogs") );
-    ElementDescriptor * pDialogs = new ElementDescriptor( aDialogsName );
-    Reference< xml::sax::XAttributeList > xDialogs( pDialogs );
-    pDialogs->addAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("xmlns:" XMLNS_DIALOGS_PREFIX) ),
-                       OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_URI) ) );
-    xOut->ignorableWhitespace( OUString() );
-    xOut->startElement( aDialogsName, xDialogs );
-
-    // write windows
-    Reference< container::XNameContainer > const * pModels = rInModels.getConstArray();
-    for ( sal_Int32 nPos = 0; nPos < rInModels.getLength(); ++nPos )
-    {
-        exportDialogModel( xOut, pModels[ nPos ] );
-    }
-
-    // end dialogs
-    xOut->ignorableWhitespace( OUString() );
-    xOut->endElement( aDialogsName );
+    xOut->endDocument();
 }
 
 };

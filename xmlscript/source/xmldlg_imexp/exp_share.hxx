@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-21 20:49:26 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ struct Style
 
     OUString _id;
 
-    Style( short all_ )
+    Style( short all_ ) SAL_THROW( () )
         : _all( all_ )
         , _set( 0 )
         {}
@@ -102,10 +102,9 @@ class StyleBag
 {
     vector< Style * > _styles;
 public:
-    ~StyleBag();
+    ~StyleBag() SAL_THROW( () );
 
-    OUString getStyleId( Style const & rStyle )
-        throw ();
+    OUString getStyleId( Style const & rStyle ) SAL_THROW( () );
 
     void dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut );
 };
@@ -127,22 +126,22 @@ public:
         Reference< beans::XPropertySet > const & xProps,
         Reference< beans::XPropertyState > const & xPropState,
         OUString const & name )
-        throw ()
+        SAL_THROW( () )
         : _xProps( xProps )
         , _xPropState( xPropState )
         , _name( name )
         {}
     inline ElementDescriptor(
         OUString const & name )
-        throw ()
+        SAL_THROW( () )
         : _name( name )
         {}
     //
-    inline OUString getName()
+    inline OUString getName() SAL_THROW( () )
         { return _name; }
     //
-    void addSubElem( Reference< xml::sax::XAttributeList > const & xElem );
-    inline Reference< xml::sax::XAttributeList > getSubElemAt( sal_Int32 nIndex )
+    void addSubElem( Reference< xml::sax::XAttributeList > const & xElem ) SAL_THROW( () );
+    inline Reference< xml::sax::XAttributeList > getSubElemAt( sal_Int32 nIndex ) SAL_THROW( () )
         { return _subElems[ nIndex ]; }
     void dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOut );
     //
@@ -160,43 +159,27 @@ public:
     void readDateFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     void readTimeFormatAttr( OUString const & rPropName, OUString const & rAttrName );
     //
-    inline void addAttr( OUString const & rAttrName, OUString const & rValue );
-    inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue );
+    inline void addAttr( OUString const & rAttrName, OUString const & rValue ) SAL_THROW( () );
+    inline void addBoolAttr( OUString const & rAttrName, sal_Bool bValue ) SAL_THROW( () );
 
     //
-    void readEvents()
-        throw (Exception);
+    void readEvents() SAL_THROW( (Exception) );
     //
-    void readButtonModel( StyleBag * all_styles )
-        throw (Exception);
-    void readEditModel( StyleBag * all_styles )
-        throw (Exception);
-    void readCheckBoxModel( StyleBag * all_styles )
-        throw (Exception);
-    void readRadioButtonModel( StyleBag * all_styles )
-        throw (Exception);
-    void readComboBoxModel( StyleBag * all_styles )
-        throw (Exception);
-    void readCurrencyFieldModel( StyleBag * all_styles )
-        throw (Exception);
-    void readDateFieldModel( StyleBag * all_styles )
-        throw (Exception);
-    void readFileControlModel( StyleBag * all_styles )
-        throw (Exception);
-    void readFixedTextModel( StyleBag * all_styles )
-        throw (Exception);
-    void readGroupBoxModel( StyleBag * all_styles )
-        throw (Exception);
-    void readImageControlModel( StyleBag * all_styles )
-        throw (Exception);
-    void readListBoxModel( StyleBag * all_styles )
-        throw (Exception);
-    void readNumericFieldModel( StyleBag * all_styles )
-        throw (Exception);
-    void readPatternFieldModel( StyleBag * all_styles )
-        throw (Exception);
-    void readTimeFieldModel( StyleBag * all_styles )
-        throw (Exception);
+    void readButtonModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readEditModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readCheckBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readRadioButtonModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readComboBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readCurrencyFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readDateFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readFileControlModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readFixedTextModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readGroupBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readImageControlModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readListBoxModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readNumericFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readPatternFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
+    void readTimeFieldModel( StyleBag * all_styles ) SAL_THROW( (Exception) );
 
     // XAttributeList
     virtual sal_Int16 SAL_CALL getLength()
@@ -214,12 +197,14 @@ public:
 };
 //__________________________________________________________________________________________________
 inline void ElementDescriptor::addAttr( OUString const & rAttrName, OUString const & rValue )
+    SAL_THROW( () )
 {
     _attrNames.push_back( rAttrName );
     _attrValues.push_back( rValue );
 }
 //__________________________________________________________________________________________________
 inline void ElementDescriptor::addBoolAttr( OUString const & rAttrName, sal_Bool bValue )
+    SAL_THROW( () )
 {
     addAttr( rAttrName,
              (bValue

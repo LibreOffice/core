@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_byteseq.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:47 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ class BSeqInputStream
 
 public:
     inline BSeqInputStream( ByteSequence const & rSeq )
-        throw ()
+        SAL_THROW( () )
         : _seq( rSeq )
         , _nPos( 0 )
         {}
@@ -151,7 +151,7 @@ class BSeqOutputStream
 
 public:
     inline BSeqOutputStream( ByteSequence * seq )
-        throw ()
+        SAL_THROW( () )
         : _seq( seq )
         {}
 
@@ -189,14 +189,14 @@ void BSeqOutputStream::closeOutput()
 
 //==================================================================================================
 Reference< io::XInputStream > SAL_CALL createInputStream( ByteSequence const & rInData )
-    throw ()
+    SAL_THROW( () )
 {
     return new BSeqInputStream( rInData );
 }
 
 //==================================================================================================
 Reference< io::XOutputStream > SAL_CALL createOutputStream( ByteSequence * pOutData )
-    throw ()
+    SAL_THROW( () )
 {
     return new BSeqOutputStream( pOutData );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-28 18:22:07 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ namespace xmlscript
 
 //__________________________________________________________________________________________________
 void ElementDescriptor::readButtonModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x8 );
@@ -93,7 +93,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x2 | 0x8 );
@@ -142,7 +142,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -203,7 +203,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -274,7 +274,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x2 | 0x8 );
@@ -318,7 +318,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x2 | 0x8 );
@@ -348,7 +348,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -377,7 +377,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readEditModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -426,7 +426,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x4 );
@@ -448,7 +448,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -476,7 +476,7 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -522,7 +522,7 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -562,7 +562,7 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -606,7 +606,7 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );
@@ -646,7 +646,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
 }
 //__________________________________________________________________________________________________
 void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
-    throw (Exception)
+    SAL_THROW( (Exception) )
 {
     // collect styles
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-02-16 14:14:47 $
+ *  last change: $Author: dbo $ $Date: 2001-03-14 16:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ struct PrefixEntry
 {
     ::std::vector< sal_Int32 > _Uids;
 
-    inline PrefixEntry() throw ()
+    inline PrefixEntry() SAL_THROW( () )
         { _Uids.reserve( 4 ); }
 };
 
@@ -147,32 +147,32 @@ class DocumentHandlerImpl
 
     inline sal_Int32 getUidByURI(
         OUString const & rURI )
-        throw ();
+        SAL_THROW( () );
     inline OUString getURIByUid(
         sal_Int32 nUid )
-        throw ();
+        SAL_THROW( () );
 
     inline sal_Int32 getUidByPrefix(
         OUString const & rPrefix )
-        throw ();
+        SAL_THROW( () );
     inline void pushPrefix(
         OUString const & rPrefix, OUString const & rURI )
-        throw ();
+        SAL_THROW( () );
     inline void popPrefix(
         OUString const & rPrefix )
-        throw ();
+        SAL_THROW( () );
     inline void getElementName(
         OUString const & rQName, sal_Int32 * pUid, OUString * pLocalName )
-        throw ();
+        SAL_THROW( () );
 public:
     DocumentHandlerImpl(
         const NameSpaceUid * pNamespaceUids, sal_Int32 nNameSpaceUids,
         sal_Int32 nUnknownNamespaceUid,
         Reference< xml::XImporter > const & xImporter,
         bool bSingleThreadedUse )
-        throw ();
+        SAL_THROW( () );
     virtual ~DocumentHandlerImpl()
-        throw ();
+        SAL_THROW( () );
 
     // XDocumentHandler
     virtual void SAL_CALL startDocument()
@@ -205,7 +205,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
     sal_Int32 nUnknownNamespaceUid,
     Reference< xml::XImporter > const & xImporter,
     bool bSingleThreadedUse )
-    throw ()
+    SAL_THROW( () )
     : _xImporter( xImporter )
     , _nUnknownNamespaceUid( nUnknownNamespaceUid )
     , _sXMLNS_URI_UNKNOWN( RTL_CONSTASCII_USTRINGPARAM("<<< unknown URI >>>") )
@@ -235,7 +235,7 @@ DocumentHandlerImpl::DocumentHandlerImpl(
 }
 //__________________________________________________________________________________________________
 DocumentHandlerImpl::~DocumentHandlerImpl()
-    throw ()
+    SAL_THROW( () )
 {
     if (_pMutex)
     {
@@ -248,7 +248,7 @@ DocumentHandlerImpl::~DocumentHandlerImpl()
 //__________________________________________________________________________________________________
 inline sal_Int32 DocumentHandlerImpl::getUidByURI(
     OUString const & rURI )
-    throw ()
+    SAL_THROW( () )
 {
     if (_nLastURI_lookup == _nUnknownNamespaceUid || _aLastURI_lookup != rURI)
     {
@@ -268,7 +268,7 @@ inline sal_Int32 DocumentHandlerImpl::getUidByURI(
 }
 //__________________________________________________________________________________________________
 inline OUString DocumentHandlerImpl::getURIByUid( sal_Int32 nUid )
-    throw ()
+    SAL_THROW( () )
 {
     if (nUid != _nLastURI_lookup)
     {
@@ -289,7 +289,7 @@ inline OUString DocumentHandlerImpl::getURIByUid( sal_Int32 nUid )
 //__________________________________________________________________________________________________
 inline sal_Int32 DocumentHandlerImpl::getUidByPrefix(
     OUString const & rPrefix )
-    throw ()
+    SAL_THROW( () )
 {
     // commonly the last added prefix is used often for several tags... good guess
     if (_nLastPrefix_lookup == _nUnknownNamespaceUid || _aLastPrefix_lookup != rPrefix)
@@ -313,7 +313,7 @@ inline sal_Int32 DocumentHandlerImpl::getUidByPrefix(
 //__________________________________________________________________________________________________
 inline void DocumentHandlerImpl::pushPrefix(
     OUString const & rPrefix, OUString const & rURI )
-    throw ()
+    SAL_THROW( () )
 {
     // lookup id for URI
     sal_Int32 nUid = getUidByURI( rURI );
@@ -339,7 +339,7 @@ inline void DocumentHandlerImpl::pushPrefix(
 //__________________________________________________________________________________________________
 inline void DocumentHandlerImpl::popPrefix(
     OUString const & rPrefix )
-    throw ()
+    SAL_THROW( () )
 {
     t_OUString2PrefixMap::iterator iFind( _prefixes.find( rPrefix ) );
     if (iFind != _prefixes.end()) // unused prefix
@@ -359,7 +359,7 @@ inline void DocumentHandlerImpl::popPrefix(
 //__________________________________________________________________________________________________
 inline void DocumentHandlerImpl::getElementName(
     OUString const & rQName, sal_Int32 * pUid, OUString * pLocalName )
-    throw ()
+    SAL_THROW( () )
 {
     sal_Int32 nColonPos = rQName.indexOf( (sal_Unicode)':' );
     *pLocalName = (nColonPos >= 0 ? rQName.copy( nColonPos +1 ) : rQName);
@@ -385,9 +385,9 @@ public:
         sal_Int32 * pUids, OUString * pPrefixes, OUString * pLocalNames, OUString * pQNames,
         Reference< xml::sax::XAttributeList > const & xAttributeList,
         DocumentHandlerImpl * pHandler )
-        throw ();
+        SAL_THROW( () );
     virtual ~ExtendedAttributes()
-        throw ();
+        SAL_THROW( () );
 
     // XAttributes
     virtual sal_Int32 SAL_CALL getIndexByQName(
@@ -443,7 +443,7 @@ inline ExtendedAttributes::ExtendedAttributes(
     sal_Int32 * pUids, OUString * pPrefixes, OUString * pLocalNames, OUString * pQNames,
     Reference< xml::sax::XAttributeList > const & xAttributeList,
     DocumentHandlerImpl * pHandler )
-    throw ()
+    SAL_THROW( () )
     : _nAttributes( nAttributes )
     , _pUids( pUids )
     , _pPrefixes( pPrefixes )
@@ -461,7 +461,7 @@ inline ExtendedAttributes::ExtendedAttributes(
 }
 //__________________________________________________________________________________________________
 ExtendedAttributes::~ExtendedAttributes()
-    throw ()
+    SAL_THROW( () )
 {
     _pHandler->release();
 
@@ -897,7 +897,7 @@ Reference< xml::sax::XDocumentHandler > SAL_CALL createDocumentHandler(
     sal_Int32 nUnknownNamespaceUid,
     Reference< xml::XImporter > const & xImporter,
     bool bSingleThreadedUse )
-    throw ()
+    SAL_THROW( () )
 {
     Reference< xml::sax::XDocumentHandler > xRet;
 
