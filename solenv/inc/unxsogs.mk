@@ -6,7 +6,7 @@ SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=321
+CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
  
 CVER=C295
 CDEFS+=-DCVER=$(CVER)
@@ -70,12 +70,13 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-lnsl -lsocket -ldl -lm
-STDLIBCUIST=-lnsl -lsocket -ldl -lm
-STDLIBGUIMT=-lpthread -ldl -lm
-STDLIBCUIMT=-lpthread -ldl -lm
-STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm
-STDSHLCUIMT=-lpthread -ldl -lm
+STDLIBGUIST=-lnsl -lsocket -ldl -lm -lstlport_gcc
+STDLIBCUIST=-lnsl -lsocket -ldl -lm -lstlport_gcc
+STDLIBGUIMT=-lpthread -ldl -lm -lstlport_gcc
+STDLIBCUIMT=-lpthread -ldl -lm -lstlport_gcc
+# libraries for linking shared libraries
+STDSHLGUIMT=-lpthread -lnsl -lsocket -ldl -lm -lstlport_gcc
+STDSHLCUIMT=-lpthread -ldl -lm -lstlport_gcc
 
 STDLIBGUIST+=-lXm -lXt -lX11
 STDLIBGUIMT+=-lXm -lXt -lX11
