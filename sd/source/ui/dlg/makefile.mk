@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-17 13:48:07 $
+#   last change: $Author: kz $ $Date: 2004-10-04 18:22:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,6 +174,7 @@ SLOFILES =  \
         $(SLO)$/PaneDockingWindow.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/tpaction.obj \
         $(SLO)$/filedlg.obj   	    \
         $(SLO)$/dlgass.obj		    \
         $(SLO)$/TemplateScanner.obj \
