@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 17:31:49 $
+ *  last change: $Author: kz $ $Date: 2002-02-21 21:11:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -377,7 +377,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ dutch ] = "Klik om het formaat van de overzichtstekst te bewerken";
     Text[ chinese_simplified ] = "θ―·ζ‚¨ζ‰ε‡»ιΌ ζ ‡οΌηΌ–θΎ‘ε¤§ηΊ²ζ­£ζ–‡ζ ΌεΌγ€‚";
     Text[ greek ] = "Κάντε κλικ εδώ για την επεξεργασία της μορφής των κειμένων διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ ν…μ¤νΈμ μ„μ‹μ„ νΈμ§‘ν•λ ¤λ©΄ ν΄λ¦­ν•μ‹­μ‹μ¤";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ ν…μ¤νΈμ μ„μ‹μ„ νΈμ§‘ν•λ ¤λ©΄ ν΄λ¦­ν•μ‹­μ‹μ¤";
     Text[ turkish ] = "Anahat metninin formatlarύnύ dόzenlemek iηin tύklayύn";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Muokkaa jδsennyksen tekstimuotoa napsauttamalla";
@@ -407,7 +407,7 @@ String STR_PRESOBJ_MPOUTLLAYER2
     Text[ dutch ] = "Tweede overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬δΊδΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Δεύτερο επίπεδο διάρθρωσης";
-    Text[ korean ] = "2λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "2λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "έkinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Segon nivell de contorn";
@@ -436,7 +436,7 @@ String STR_PRESOBJ_MPOUTLLAYER3
     Text[ dutch ] = "Derde overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬δΈ‰δΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Τρίτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "3λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "3λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "άηόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Tercer nivell de contorn";
@@ -465,7 +465,7 @@ String STR_PRESOBJ_MPOUTLLAYER4
     Text[ dutch ] = "Vierde overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬ε››δΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Τέταρτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "4λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "4λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Dφrdόncό anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Quart nivell de contorn";
@@ -495,7 +495,7 @@ String STR_PRESOBJ_MPOUTLLAYER5
     Text[ dutch ] = "Vijfde overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬δΊ”δΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Πέμπτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "5λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "5λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Beώinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Cinquθ nivell de contorn";
@@ -524,7 +524,7 @@ String STR_PRESOBJ_MPOUTLLAYER6
     Text[ dutch ] = "Zesde overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬ε…­δΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Έκτο επίπεδο διάρθρωσης";
-    Text[ korean ] = "6λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "6λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Altύncύ anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sisθ nivell de contorn";
@@ -553,7 +553,7 @@ String STR_PRESOBJ_MPOUTLLAYER7
     Text[ dutch ] = "Zevende overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬δΈƒδΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Έβδομο επίπεδο διάρθρωσης";
-    Text[ korean ] = "7λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "7λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Yedinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Setθ nivell de contorn";
@@ -582,7 +582,7 @@ String STR_PRESOBJ_MPOUTLLAYER8
     Text[ dutch ] = "Achtste overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬ε…«δΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Όγδοο επίπεδο διάρθρωσης";
-    Text[ korean ] = "8λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "8λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Sekizinci anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vuitθ nivell de contorn";
@@ -611,7 +611,7 @@ String STR_PRESOBJ_MPOUTLLAYER9
     Text[ dutch ] = "Negende overzichtsniveau";
     Text[ chinese_simplified ] = "η¬¬δΉδΈªε¤§ηΊ²ηΊ§";
     Text[ greek ] = "Ένατο επίπεδο διάρθρωσης";
-    Text[ korean ] = "9λ²μ§Έ λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "9λ²μ§Έ μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Dokuzuncu anahat dόzeyi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Novθ nivell de contorn";
@@ -724,7 +724,7 @@ String STR_PRESOBJ_OUTLINE
     Text[ dutch ] = "Klik om overzicht toe te voegen";
     Text[ chinese_simplified ] = "ε•ε‡»ιΌ ζ ‡ι”®ζ–°εΆε¤§ηΊ²";
     Text[ greek ] = "Κάντε κλικ εδώ για την εισαγωγή διάρθρωσης";
-    Text[ korean ] = "ν΄λ¦­μΌλ΅ λ‹¤λ‹¨κ³„ μ¶”κ°€";
+    Text[ korean ] = "ν΄λ¦­μΌλ΅ μ•„μ›ƒνΈλΌμΈ μ¶”κ°€";
     Text[ turkish ] = "Anahat eklemek iηin ηift tύklayύn";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Lisδδ jδsennys napsauttamalla";
@@ -986,7 +986,7 @@ String STR_OUTLINEVIEWSHELL
     Text[ dutch ] = "Overzichtmodus";
     Text[ chinese_simplified ] = "ε¤§ηΊ²ζ¨΅εΌ";
     Text[ greek ] = "Κατάσταση διάρθρωσης";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„ λª¨λ“";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ λª¨λ“";
     Text[ turkish ] = "Anahat kipi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Vista Contorn";
@@ -1038,7 +1038,7 @@ String STR_PRESVIEWSHELL
     Text[ polish ] = "Tryb prezentacji";
     Text[ portuguese_brazilian ] = "Presentation mode";
     Text[ japanese ] = "γ‚Ήγƒ©γ‚¤γƒ‰γ‚·γƒ§γƒΌγƒΆγƒΌγƒ‰";
-    Text[ korean ] = "ν”„λ¦¬μ  ν…μ΄μ… λª¨λ“";
+    Text[ korean ] = "ν”„λ μ  ν…μ΄μ… λª¨λ“";
     Text[ chinese_simplified ] = "ζΌ”η¤Ίζ–‡η¨Ώζ¨΅εΌ";
     Text[ chinese_traditional ] = "η°΅ε ±ζ¨΅εΌ";
     Text[ turkish ] = "Presentation mode";
@@ -1960,7 +1960,7 @@ String STR_PSEUDOSHEET_OUTLINE
     Text[ dutch ] = "Overzicht";
     Text[ chinese_simplified ] = "ε¤§ηΊ²";
     Text[ greek ] = "Διάρθρωση";
-    Text[ korean ] = "λ‹¤λ‹¨κ³„";
+    Text[ korean ] = "μ•„μ›ƒνΈλΌμΈ";
     Text[ turkish ] = "Anahat";
     Text[ language_user1 ] = " ";
     Text[ finnish ] = "Jδsennys";
