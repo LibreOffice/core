@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:42:26 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:41:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,8 @@ BOOL            FileExists( const INetURLObject& rURL );
 BOOL            CreateDir(  const INetURLObject& rURL );
 BOOL            CopyFile(  const INetURLObject& rSrcURL, const INetURLObject& rDstURL );
 BOOL            KillFile( const INetURLObject& rURL );
+BitmapEx        GalleryResGetBitmapEx( ULONG nId );
+
 
 // ---------------
 // - SgaIMapInfo -
