@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 09:58:34 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:56:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@
 #include <SwPortionHandler.hxx>
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _TXTPAINT_HXX
 #include <txtpaint.hxx>     // DbgRect
 #endif
@@ -1352,7 +1352,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 {
     SwFrmSwapper aSwapper( this, sal_False );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     const SwTwips nDbgY = Frm().Top();
 #endif
 
