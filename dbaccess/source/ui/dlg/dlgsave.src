@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsave.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:12:10 $
+ *  last change: $Author: oj $ $Date: 2002-12-04 13:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,57 +352,57 @@ ModalDialog DLG_SAVE_AS
     };
     String STR_OBJECT_EXISTS_ALREADY
     {
-        Text = "Der Name '$name$:  $' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
-        Text [ ENGLISH ] = "The name '$name$:  $' does already exist.\nPlease enter a new name." ;
-        Text [ english_us ] = "The name '$name$: $' already exists.\nPlease enter another name." ;
+        Text = "Der Name '$#$' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
+        Text [ ENGLISH ] = "The name '$#$' does already exist.\nPlease enter a new name." ;
+        Text [ english_us ] = "The name '$#$' already exists.\nPlease enter another name." ;
         Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "O nome '$name$:  $' já existe.\nIndique outro.";
-        Text[ russian ] = "Èìÿ '$name$:  $' óæå ñóùåñòâóåò.\nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
-        Text[ greek ] = "Ôï üíïìá '$name$:  $' õğÜñ÷åé Şäç.\nĞáñáêáëş åéóÜãåôå İíá íİï üíïìá.";
-        Text[ dutch ] = "De naam '$name$:  $' bestaat reeds.\nTyp een nieuwe naam.";
-        Text[ french ] = "Le nom '$name$:  $' existe déjà.\nIndiquez-en un autre !";
-        Text[ spanish ] = "Ya existe el nombre '$name$:  $'.\nIntroduzca otro.";
-        Text[ italian ] = "Il nome '$name$:  $' esiste già.\nSceglietene un altro.";
-        Text[ danish ] = "Navnet '$name$:  $' findes allerede.\nAngiv et andet navn.";
-        Text[ swedish ] = "Namnet '$name$:  $' finns redan.\nAnge ett annat namn.";
-        Text[ polish ] = "Nazwa '$name$:  $' ju¿ istnieje.\nWpisz inn¹ nazwê.";
-        Text[ portuguese_brazilian ] = "The name '$name$:  $' already exists.\nPlease enter a new name.";
-        Text[ japanese ] = "'$name$:  $' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\næ–°ã—ã„åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
-        Text[ korean ] = "'$name$:  $'ì´ë¦„ì€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\në‹¤ë¥¸ ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
-        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$name$:  $' å·²ç»å­˜åœ¨ã€‚\nè¯·è¾“å…¥ä¸€ä¸ªæœ‰æ•ˆçš„åç§°ã€‚";
-        Text[ chinese_traditional ] = "é€™å€‹åç¨±<$name$:  $>å·²ç¶“å­˜åœ¨ã€‚è«‹æ‚¨è¼¸å…¥ä¸€å€‹æœ‰æ•ˆåç¨±ã€‚";
-        Text[ turkish ] = "The name '$name$:  $' already exists.\nPlease enter a new name.";
-        Text[ arabic ] = "ÇáÇÓã'$name$:  $' ãæÌæÏ ÈÇáİÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
-        Text[ catalan ] = "El nom '$name$:  $' ja existeix.\nIntroduïu-ne un altre.";
-        Text[ finnish ] = "Nimi '$name$:  $' on jo käytössä.\nSyötä toinen nimi.";
-        Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­ '$name$:  $' à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
+        Text[ portuguese ] = "O nome '$#$' já existe.\nIndique outro.";
+        Text[ russian ] = "Èìÿ '$#$' óæå ñóùåñòâóåò.\nÂâåäèòå, ïîæàëóéñòà, äğóãîå èìÿ.";
+        Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nĞáñáêáëş åéóÜãåôå İíá íİï üíïìá.";
+        Text[ dutch ] = "De naam '$#$' bestaat reeds.\nTyp een nieuwe naam.";
+        Text[ french ] = "Le nom '$#$' existe déjà.\nIndiquez-en un autre !";
+        Text[ spanish ] = "Ya existe el nombre '$#$'.\nIntroduzca otro.";
+        Text[ italian ] = "Il nome '$#$' esiste già.\nSceglietene un altro.";
+        Text[ danish ] = "Navnet '$#$' findes allerede.\nAngiv et andet navn.";
+        Text[ swedish ] = "Namnet '$#$' finns redan.\nAnge ett annat namn.";
+        Text[ polish ] = "Nazwa '$#$' ju¿ istnieje.\nWpisz inn¹ nazwê.";
+        Text[ portuguese_brazilian ] = "The name '$#$' already exists.\nPlease enter a new name.";
+        Text[ japanese ] = "'$#$' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\næ–°ã—ã„åå‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
+        Text[ korean ] = "'$#$'ì´ë¦„ì€ ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\në‹¤ë¥¸ ì´ë¦„ì„ ì…ë ¥í•˜ì‹­ì‹œì˜¤.";
+        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$#$' å·²ç»å­˜åœ¨ã€‚\nè¯·è¾“å…¥ä¸€ä¸ªæœ‰æ•ˆçš„åç§°ã€‚";
+        Text[ chinese_traditional ] = "é€™å€‹åç¨±<$#$>å·²ç¶“å­˜åœ¨ã€‚è«‹æ‚¨è¼¸å…¥ä¸€å€‹æœ‰æ•ˆåç¨±ã€‚";
+        Text[ turkish ] = "The name '$#$' already exists.\nPlease enter a new name.";
+        Text[ arabic ] = "ÇáÇÓã'$#$' ãæÌæÏ ÈÇáİÚá.\nÇáÑÌÇÁ ÅÏÎÇá ÇÓã ÌÏíÏ.";
+        Text[ catalan ] = "El nom '$#$' ja existeix.\nIntroduïu-ne un altre.";
+        Text[ finnish ] = "Nimi '$#$' on jo käytössä.\nSyötä toinen nimi.";
+        Text[ thai ] = "à¸¡à¸µà¸Šà¸·à¹ˆà¸­ '$#$' à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§\nà¸à¸£à¸¸à¸“à¸²à¹ƒà¸ªà¹ˆà¸Šà¸·à¹ˆà¸­à¸­à¸·à¹ˆà¸™";
     };
     String STR_OBJECT_EXISTS_ALREADY_OVERWRITE
     {
-        Text = "Der Name '$name$:  $' existiert bereits.\nWollen Sie es überschreiben?" ;
-        Text [ ENGLISH ] = "The name '$name$:  $' does already exist.\nDo you want to overwrite it?" ;
-        Text [ english_us ] = "The name '$name$: $' already exists.\nDo you want to overwrite it?" ;
+        Text = "Der Name '$#$' existiert bereits.\nWollen Sie es überschreiben?" ;
+        Text [ ENGLISH ] = "The name '$#$' does already exist.\nDo you want to overwrite it?" ;
+        Text [ english_us ] = "The name '$#$' already exists.\nDo you want to overwrite it?" ;
         Text[ language_user1 ] = " ";
-        Text[ portuguese ] = "O nome '$name$:  $' já existe.\nSubstituir?";
-        Text[ russian ] = "Èìÿ '$name$:  $' óæå ñóùåñòâóåò.\nÇàìåíèòü åãî?";
-        Text[ greek ] = "Ôï üíïìá '$name$:  $' õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
-        Text[ dutch ] = "De naam '$name$:  $' bestaat reeds.\nWilt u deze overschrijven?";
-        Text[ french ] = "Le nom '$name$:  $' existe déjà.\nVoulez-vous l'écraser ?";
-        Text[ spanish ] = "El nombre '$name$:  $' existe ya.\n¿Desea sobrescribirlo?";
-        Text[ italian ] = "Il nome '$name$:  $' esiste già.\nVolete soprascriverlo?";
-        Text[ danish ] = "Navnet '$name$:  $' findes allerede.\nVil du overskrive det?";
-        Text[ swedish ] = "Namnet '$name$:  $' finns redan.\nVill du skriva över det?";
-        Text[ polish ] = "Nazwa '$name$:  $' ju¿ istnieje.\nSkasowaæ j¹ przez zapisanie?";
-        Text[ portuguese_brazilian ] = "The name '$name$:  $' already exists.\nDo you want to overwrite it?";
-        Text[ japanese ] = "'$name$:  $' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\nä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
-        Text[ korean ] = "ì´ë¦„ '$name$:  $'ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\në®ì–´ì“°ê² ìŠµë‹ˆê¹Œ?";
-        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$name$:  $' å·²ç»å­˜åœ¨ã€‚\nè¦æ”¹å†™ï¼Ÿ";
-        Text[ chinese_traditional ] = "é€™å€‹åç¨±<$name$:  $>å·²ç¶“å­˜åœ¨ã€‚\nè¦è¦†å¯«ï¼Ÿ";
-        Text[ turkish ] = "The name '$name$:  $' already exists.\nDo you want to overwrite it?";
-        Text[ arabic ] = "ÇáÇÓã '$name$:  $' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
-        Text[ catalan ] = "El nom '$name$:  $' ja existeix.\nVoleu sobreescriure'l?";
-        Text[ finnish ] = "Nimi '$name$:  $' on jo käytössä.\nHaluatko korvata sen?";
-        Text[ thai ] = "The name '$name$:  $' already exists.\nDo you want to overwrite it?";
+        Text[ portuguese ] = "O nome '$#$' já existe.\nSubstituir?";
+        Text[ russian ] = "Èìÿ '$#$' óæå ñóùåñòâóåò.\nÇàìåíèòü åãî?";
+        Text[ greek ] = "Ôï üíïìá '$#$' õğÜñ÷åé Şäç.\nÈİëåôå íá áíôéêáôáóôáèåß;";
+        Text[ dutch ] = "De naam '$#$' bestaat reeds.\nWilt u deze overschrijven?";
+        Text[ french ] = "Le nom '$#$' existe déjà.\nVoulez-vous l'écraser ?";
+        Text[ spanish ] = "El nombre '$#$' existe ya.\n¿Desea sobrescribirlo?";
+        Text[ italian ] = "Il nome '$#$' esiste già.\nVolete soprascriverlo?";
+        Text[ danish ] = "Navnet '$#$' findes allerede.\nVil du overskrive det?";
+        Text[ swedish ] = "Namnet '$#$' finns redan.\nVill du skriva över det?";
+        Text[ polish ] = "Nazwa '$#$' ju¿ istnieje.\nSkasowaæ j¹ przez zapisanie?";
+        Text[ portuguese_brazilian ] = "The name '$#$' already exists.\nDo you want to overwrite it?";
+        Text[ japanese ] = "'$#$' ã®åå‰ã¯ã™ã§ã«ã‚ã‚Šã¾ã™ã€‚\nä¸Šæ›¸ãã—ã¾ã™ã‹ã€‚";
+        Text[ korean ] = "ì´ë¦„ '$#$'ì´(ê°€) ì´ë¯¸ ì¡´ì¬í•©ë‹ˆë‹¤.\në®ì–´ì“°ê² ìŠµë‹ˆê¹Œ?";
+        Text[ chinese_simplified ] = "è¿™ä¸ªåç§° '$#$' å·²ç»å­˜åœ¨ã€‚\nè¦æ”¹å†™ï¼Ÿ";
+        Text[ chinese_traditional ] = "é€™å€‹åç¨±<$#$>å·²ç¶“å­˜åœ¨ã€‚\nè¦è¦†å¯«ï¼Ÿ";
+        Text[ turkish ] = "The name '$#$' already exists.\nDo you want to overwrite it?";
+        Text[ arabic ] = "ÇáÇÓã '$#$' ãæÌæÏ ÈÇáİÚá.\nåá ÊÑíÏ ÇáßÊÇÈÉ İæŞå¿";
+        Text[ catalan ] = "El nom '$#$' ja existeix.\nVoleu sobreescriure'l?";
+        Text[ finnish ] = "Nimi '$#$' on jo käytössä.\nHaluatko korvata sen?";
+        Text[ thai ] = "The name '$#$' already exists.\nDo you want to overwrite it?";
     };
     String STR_TITLE_PASTE_AS
     {
