@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2001-02-12 07:13:23 $
+ *  last change: $Author: os $ $Date: 2001-02-13 08:18:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1042,6 +1042,13 @@ const SfxItemPropertyMap*   SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 
                     { SW_PROP_NAME(UNO_NAME_USER_DEFINED_ATTRIBUTES),       RES_UNKNOWNATR_CONTAINER, &::getCppuType((uno::Reference<container::XNameContainer>*)0), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NAME(UNO_NAME_IS_PHYSICAL),                  FN_UNO_IS_PHYSICAL,    &::getBooleanCppuType(), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NAME(UNO_NAME_DISPLAY_NAME),              FN_UNO_DISPLAY_NAME, &::getCppuType((const OUString*)0), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_HEIGHT),               FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0), PROPERTY_NONE ,        MID_FTN_HEIGHT|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_WEIGHT),          FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE ,     MID_LINE_WEIGHT|CONVERT_TWIPS},
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_COLOR),           FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE ,     MID_LINE_COLOR},
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_RELATIVE_WIDTH),  FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int8*)0),     PROPERTY_NONE ,     MID_LINE_RELWIDTH    },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_ADJUST),          FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE ,     MID_LINE_ADJUST     },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_TEXT_DISTANCE),   FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE ,     MID_LINE_TEXT_DIST   |CONVERT_TWIPS },
+                    { SW_PROP_NAME(UNO_NAME_FOOTNOTE_LINE_DISTANCE),        FN_PARAM_FTN_INFO,      &::getCppuType((const sal_Int32*)0),    PROPERTY_NONE ,     MID_LINE_FOOTNOTE_DIST|CONVERT_TWIPS},
                     {0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aPageStyleMap;
