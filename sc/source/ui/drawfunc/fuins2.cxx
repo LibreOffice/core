@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:54:39 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:36:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,7 +374,11 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( aIPObj->GetClassName() ) )
                 lcl_ChartInit( aIPObj, pViewSh->GetViewData(), pWin );
 
+            ScViewData* pData = pViewSh->GetViewData();
+
             Point aPnt = pViewSh->GetInsertPos();
+            if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
+                aPnt.X() -= aSize.Width();      // move position to left edge
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj(aIPObj, aName, aRect);
 
@@ -618,10 +622,16 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                     // Das ganze von Twips nach 1/100 mm
                     x = (ULONG) ((double) x * HMM_PER_TWIPS);
                     y = (ULONG) ((double) y * HMM_PER_TWIPS);
+                    if ( pScDoc->IsNegativePage( nT0 ) )
+                        x = -x;
                     aStart = Point( x, y );
                 }
                 else
                     aStart = pViewSh->GetInsertPos();
+
+                // if not from marked rectangle, move position to left edge
+                if ( pScDoc->IsNegativePage( nT0 ) )
+                    aStart.X() -= aSize.Width();
             }
 
             Rectangle aRect (aStart, aSize);
