@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_import.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-07-30 16:49:36 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:19:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,11 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
+#include <com/sun/star/awt/ImagePosition.hpp>
+#include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/PushButtonType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
@@ -887,6 +890,21 @@ bool ImportContext::importLongProperty(
     return false;
 }
 //__________________________________________________________________________________________________
+bool ImportContext::importHexLongProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aValue(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aValue.getLength())
+    {
+        _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
 bool ImportContext::importShortProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -941,6 +959,42 @@ bool ImportContext::importAlignProperty(
     return false;
 }
 //__________________________________________________________________________________________________
+bool ImportContext::importVerticalAlignProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aAlign(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aAlign.getLength())
+    {
+        style::VerticalAlignment eAlign;
+
+        if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top") ))
+        {
+            eAlign = style::VerticalAlignment_TOP;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        {
+            eAlign = style::VerticalAlignment_MIDDLE;
+        }
+        else if (aAlign.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom") ))
+        {
+            eAlign = style::VerticalAlignment_BOTTOM;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid vertical align value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( eAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
 bool ImportContext::importImageAlignProperty(
     OUString const & rPropName, OUString const & rAttrName,
     Reference< xml::input::XAttributes > const & xAttributes )
@@ -975,6 +1029,81 @@ bool ImportContext::importImageAlignProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importImagePositionProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aPosition(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aPosition.getLength())
+    {
+        sal_Int16 nPosition;
+        if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-top") ))
+        {
+            nPosition = awt::ImagePosition::LeftTop;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-center") ))
+        {
+            nPosition = awt::ImagePosition::LeftCenter;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("left-bottom") ))
+        {
+            nPosition = awt::ImagePosition::LeftBottom;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-top") ))
+        {
+            nPosition = awt::ImagePosition::RightTop;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-center") ))
+        {
+            nPosition = awt::ImagePosition::RightCenter;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("right-bottom") ))
+        {
+            nPosition = awt::ImagePosition::RightBottom;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-left") ))
+        {
+            nPosition = awt::ImagePosition::AboveLeft;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-center") ))
+        {
+            nPosition = awt::ImagePosition::AboveCenter;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("top-right") ))
+        {
+            nPosition = awt::ImagePosition::AboveRight;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-left") ))
+        {
+            nPosition = awt::ImagePosition::BelowLeft;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-center") ))
+        {
+            nPosition = awt::ImagePosition::BelowCenter;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bottom-right") ))
+        {
+            nPosition = awt::ImagePosition::BelowRight;
+        }
+        else if (aPosition.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("center") ))
+        {
+            nPosition = awt::ImagePosition::Centered;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid image position value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nPosition ) );
         return true;
     }
     return false;
@@ -1163,6 +1292,41 @@ bool ImportContext::importOrientationProperty(
         }
 
         _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
+        return true;
+    }
+    return false;
+}
+//__________________________________________________________________________________________________
+bool ImportContext::importLineEndFormatProperty(
+    OUString const & rPropName, OUString const & rAttrName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+{
+    OUString aFormat(
+        xAttributes->getValueByUidName(
+            _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
+    if (aFormat.getLength())
+    {
+        sal_Int16 nFormat;
+        if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("carriage-return") ))
+        {
+            nFormat = awt::LineEndFormat::CARRIAGE_RETURN;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("line-feed") ))
+        {
+            nFormat = awt::LineEndFormat::LINE_FEED;
+        }
+        else if (aFormat.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("carriage-return-line-feed") ))
+        {
+            nFormat = awt::LineEndFormat::CARRIAGE_RETURN_LINE_FEED;
+        }
+        else
+        {
+            throw xml::sax::SAXException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("invalid line end format value!") ),
+                Reference< XInterface >(), Any() );
+        }
+
+        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
         return true;
     }
     return false;
