@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vendorplugin.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-22 12:52:39 $
+ *  last change: $Author: jl $ $Date: 2004-05-03 14:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ javaPluginError getJavaInfoByPath(
     @param
     JFW_PLUGIN_E_NONE,
     JFW_PLUGIN_E_ERROR,
+    JFW_PLUGIN_E_WRONG_VENDOR
     JFW_PLUGIN_E_INVALID_ARG,
 
  */
