@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-06 10:46:45 $
+ *  last change: $Author: obr $ $Date: 2002-08-16 12:16:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,7 +1185,9 @@ BOOL MiscSettings::GetEnableATToolSupport() const
 
 #ifndef REMOTE_APPSERVER
         DtIntegrator* pIntegrator = DtIntegrator::CreateDtIntegrator( NULL );
-        if( pIntegrator && pIntegrator->GetDtType() == DtGNOME )
+//        if( pIntegrator && pIntegrator->GetDtType() == DtGNOME )
+        static const char* pEnv = getenv("SAL_ACCESSIBILITY_ENABLED" );
+        if( pEnv && *pEnv )
 #else
         if( 0 )
 #endif
