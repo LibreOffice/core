@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:45 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ class SwAccessiblePortionData : public SwPortionHandler
     Positions_t aModelPositions;    /// position of portion breaks in the model
     Positions_t aAccessiblePositions;   /// portion breaks in sAccessibleString
 
-    std::bit_vector aGrayPortions;  /// portions with gray background
+    typedef std::vector<sal_uInt8> PortionAttrs_t;
+    PortionAttrs_t aPortionAttrs;   /// additional portion attributes
 
     Positions_t* pSentences;    /// positions of sentence breaks
 
@@ -128,8 +129,20 @@ class SwAccessiblePortionData : public SwPortionHandler
                       const Positions_t& rPositions,
                       size_t nPos );
 
-    /// Is this portion a special portion?
-    sal_Bool IsSpecialPortion( size_t nPortionNo );
+    /// Access to portion attributes
+    sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr );
+    inline sal_Bool IsSpecialPortion( size_t nPortionNo );
+    inline sal_Bool IsReadOnlyPortion( size_t nPortionNo );
+    inline sal_Bool IsGrayPortion( size_t nPortionNo );
+
+    // Helper methods for SwPortionHandler:
+
+    /// Is a portion of this type gray?
+    sal_Bool IsGrayPortionType( USHORT nType );
+
+    // helper method for GetEditableRange(...):
+    void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
+                         USHORT& nCorePos, sal_Bool& bEdit );
 
 public:
     SwAccessiblePortionData( const SwTxtNode* pTxtNd,
@@ -184,6 +197,14 @@ public:
     /// Determine whether this portion should have a gray background
     /// accoridng to the view options
     sal_Bool IsInGrayPortion( sal_Int32 nPos );
+
+
+    /// Convert start and end positions into core positions.
+    /// @returns true if 'special' portions are included either completely
+    ///          or not at all. This can be used to test whether editing
+    ///          that range would be legal
+    sal_Bool GetEditableRange( sal_Int32 nStart, sal_Int32 nEnd,
+                               USHORT& nCoreStart, USHORT& nCoreEnd );
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dvo $ $Date: 2002-03-26 18:29:44 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,12 @@ using com::sun::star::i18n::Boundary;
 #define POR_TERMINATE 0
 
 
+// portion attributes
+#define PORATTR_SPECIAL     1
+#define PORATTR_READONLY    2
+#define PORATTR_GRAY        4
+#define PORATTR_TERM        128
+
 SwAccessiblePortionData::SwAccessiblePortionData(
     const SwTxtNode* pTxtNd,
     const SwViewOption* pViewOpt ) :
@@ -204,7 +210,10 @@ void SwAccessiblePortionData::Text(USHORT nLength, USHORT nType)
     // store 'old' positions
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
-    aGrayPortions.push_back( false );
+
+    // store portion attributes
+    sal_uInt8 nAttr = IsGrayPortionType(nType) ? PORATTR_GRAY : 0;
+    aPortionAttrs.push_back( nAttr );
 
     // update buffer + nModelPosition
     aBuffer.append( OUString(
@@ -286,26 +295,6 @@ void SwAccessiblePortionData::Special(
             break;
     }
 
-    // gray portions?
-    // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
-    sal_Bool bGray = sal_False;
-    switch( nType )
-    {
-        case POR_FTN:       bGray = pViewOptions->IsFootNote();     break;
-        case POR_TOX:       bGray = pViewOptions->IsTox();          break;
-        case POR_REF:       bGray = pViewOptions->IsRef();          break;
-        case POR_QUOVADIS:
-        case POR_NUMBER:
-        case POR_FLD:
-        case POR_URL:
-        case POR_HIDDEN:    bGray = pViewOptions->IsField();        break;
-        case POR_TAB:       bGray = pViewOptions->IsTab();          break;
-        case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
-        case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;
-        default:
-            break; // bGray is false
-    }
-
     // special treatment for zero length portion at the beginning:
     // count as 'before' portion
     if( ( nLength == 0 ) && ( nModelPosition == 0 ) )
@@ -314,7 +303,13 @@ void SwAccessiblePortionData::Special(
     // store the 'old' positions
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
-    aGrayPortions.push_back( bGray ? true : false );
+
+    // store portion attributes
+    sal_uInt8 nAttr = PORATTR_SPECIAL;
+    if( IsGrayPortionType(nType) )      nAttr |= PORATTR_GRAY;
+    if( nLength == 0 )                  nAttr |= PORATTR_READONLY;
+    if( nType == POR_TERMINATE )        nAttr |= PORATTR_TERM;
+    aPortionAttrs.push_back( nAttr );
 
     // update buffer + nModelPosition
     aBuffer.append( OUString(sDisplay) );
@@ -358,6 +353,55 @@ void SwAccessiblePortionData::Finish()
 }
 
 
+sal_Bool SwAccessiblePortionData::IsPortionAttrSet(
+    size_t nPortionNo, sal_uInt8 nAttr )
+{
+    DBG_ASSERT( (nPortionNo >= 0) && (nPortionNo < aPortionAttrs.size()),
+                "Illegal portion number" );
+    return (aPortionAttrs[nPortionNo] & nAttr) != 0;
+}
+
+sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo )
+{
+    return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
+}
+
+sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo )
+{
+    return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
+}
+
+sal_Bool SwAccessiblePortionData::IsGrayPortion( size_t nPortionNo )
+{
+    return IsPortionAttrSet(nPortionNo, PORATTR_GRAY);
+}
+
+
+sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType )
+{
+    // gray portions?
+    // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
+    sal_Bool bGray = sal_False;
+    switch( nType )
+    {
+        case POR_FTN:       bGray = pViewOptions->IsFootNote();     break;
+        case POR_TOX:       bGray = pViewOptions->IsTox();          break;
+        case POR_REF:       bGray = pViewOptions->IsRef();          break;
+        case POR_QUOVADIS:
+        case POR_NUMBER:
+        case POR_FLD:
+        case POR_URL:
+        case POR_HIDDEN:    bGray = pViewOptions->IsField();        break;
+        case POR_TAB:       bGray = pViewOptions->IsTab();          break;
+        case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
+        case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;
+        default:
+            break; // bGray is false
+    }
+    return bGray;
+}
+
+
 const OUString& SwAccessiblePortionData::GetAccessibleString()
 {
     DBG_ASSERT( bFinished, "Shouldn't call this before we are done!" );
@@ -384,12 +428,13 @@ USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
 
     // get model portion size
     sal_Int32 nStartPos = aModelPositions[nPortionNo];
-    sal_Int32 nEndPos = aModelPositions[nPortionNo+1];
 
-    // if the model portion has more than one position, go into it;
-    // else return that position
-    if( (nEndPos - nStartPos) > 1 )
+    // if it's a non-special portion, move into the portion, else
+    // return the portion start
+    if( ! IsSpecialPortion( nPortionNo ) )
     {
+        sal_Int32 nEndPos = aModelPositions[nPortionNo+1];
+
         // 'wide' portions have to be of the same width
         DBG_ASSERT( ( nEndPos - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
@@ -399,7 +444,7 @@ USHORT SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos )
         sal_Int32 nWithinPortion = nPos - aAccessiblePositions[nPortionNo];
         nStartPos += nWithinPortion;
     }
-    // else: return startPos unmodified
+    // else: return nStartPos unmodified
 
     DBG_ASSERT( (nStartPos >= 0) && (nStartPos < USHRT_MAX),
                 "How can the SwTxtNode have so many characters?" );
@@ -413,17 +458,6 @@ void SwAccessiblePortionData::FillBoundary(
 {
     rBound.startPos = rPositions[nPos];
     rBound.endPos = rPositions[nPos+1];
-}
-
-
-sal_Bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo )
-{
-    sal_Int32 nAccPos = aAccessiblePositions[nPortionNo];
-    sal_Int32 nModelPos = aModelPositions[nPortionNo];
-    return ( (aAccessiblePositions[nPortionNo+1] - nAccPos) !=
-             (aModelPositions[nPortionNo+1] - nModelPos)   ) ||
-        ( sAccessibleString[nAccPos] !=
-          pTxtNode->GetTxt().GetChar( static_cast<USHORT>(nModelPos) ) );
 }
 
 
@@ -705,5 +739,48 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
 
 sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
 {
-    return aGrayPortions[ FindBreak( aAccessiblePositions, nPos ) ];
+    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
+}
+
+void SwAccessiblePortionData::AdjustAndCheck(
+    sal_Int32 nPos,
+    size_t& nPortionNo,
+    USHORT& nCorePos,
+    sal_Bool& bEdit)
+{
+    // find portion and get mode position
+    nPortionNo = FindBreak( aAccessiblePositions, nPos );
+    nCorePos = static_cast<USHORT>( aModelPositions[ nPortionNo ] );
+
+    // for special portions, make sure we're on a portion boundary
+    // for text portions, add the in-portion offset
+    if( IsSpecialPortion( nPortionNo ) )
+        bEdit &= nPos == aAccessiblePositions[nPortionNo];
+    else
+        nCorePos += static_cast<USHORT>(
+            nPos - aAccessiblePositions[nPortionNo] );
+}
+
+sal_Bool SwAccessiblePortionData::GetEditableRange(
+    sal_Int32 nStart, sal_Int32 nEnd,
+    USHORT& nCoreStart, USHORT& nCoreEnd )
+{
+    sal_Bool bIsEditable = sal_True;
+
+    // get start and end portions
+    size_t nStartPortion, nEndPortion;
+    AdjustAndCheck( nStart, nStartPortion, nCoreStart, bIsEditable );
+    AdjustAndCheck( nEnd,   nEndPortion,   nCoreEnd,   bIsEditable );
+
+    // iterate over portions, and make sure there is no read-only portion
+    // in-between
+    size_t nLastPortion = nEndPortion;
+    if( (nLastPortion > 0) && IsSpecialPortion(nLastPortion) )
+        nLastPortion--;
+    for( size_t nPor = nStartPortion; nPor <= nLastPortion; nPor ++ )
+    {
+        bIsEditable &= ! IsReadOnlyPortion( nPor );
+    }
+
+    return bIsEditable;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-09 09:26:03 $
+ *  last change: $Author: dvo $ $Date: 2002-04-09 13:42:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,22 +1351,31 @@ sal_Bool SwAccessibleParagraph::replaceText(
     {
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
-        // create SwPosition for nStartIndex
-        SwIndex aIndex( pNode, GetPortionData().GetModelPosition(nStartIndex));
-        SwPosition aStartPos( *pNode, aIndex );
+        // translate positions
+        USHORT nStart, nEnd;
+        sal_Bool bSuccess = GetPortionData().GetEditableRange(
+                                        nStartIndex, nEndIndex, nStart, nEnd );
 
-        // create SwPosition for nEndIndex
-        SwPosition aEndPos( aStartPos );
-        aEndPos.nContent = GetPortionData().GetModelPosition( nEndIndex );
+        // edit only if the range is editable
+        if( bSuccess )
+        {
+            // create SwPosition for nStartIndex
+            SwIndex aIndex( pNode, nStart );
+            SwPosition aStartPos( *pNode, aIndex );
 
-        // now create XTextRange as helper and set string
-        SwXTextRange::CreateTextRangeFromPosition(
-            pNode->GetDoc(), aStartPos, &aEndPos)->setString( sReplacement );
+            // create SwPosition for nEndIndex
+            SwPosition aEndPos( aStartPos );
+            aEndPos.nContent = nEnd;
 
-        // delete portion data
-        ClearPortionData();
+            // now create XTextRange as helper and set string
+            SwXTextRange::CreateTextRangeFromPosition(
+                pNode->GetDoc(), aStartPos, &aEndPos)->setString(sReplacement);
 
-        return sal_True;    // We always succeed! :-)
+            // delete portion data
+            ClearPortionData();
+        }
+
+        return bSuccess;
     }
     else
         throw IndexOutOfBoundsException();
@@ -1402,7 +1411,7 @@ sal_Bool SwAccessibleParagraph::setAttributes(
     Reference<XMultiPropertySet> xPortion = CreateUnoPortion( nStartIndex,
                                                               nEndIndex );
 
-    // build sort index array
+    // build sorted index array
     sal_Int32 nLength = rAttributeSet.getLength();
     const PropertyValue* pPairs = rAttributeSet.getConstArray();
     sal_Int32* pIndices = new sal_Int32[nLength];
