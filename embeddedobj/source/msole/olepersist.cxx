@@ -2,9 +2,9 @@
  *
  *  $RCSfile: olepersist.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 15:10:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1006,6 +1006,10 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "Can't store object without persistence!\n" ),
                                         uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
     }
+
+    // it is allowed to call saveCompleted( false ) for nonstored objects
+    if ( !m_bWaitSaveCompleted && !bUseNew )
+        return;
 
     OSL_ENSURE( m_bWaitSaveCompleted, "Unexpected saveCompleted() call!\n" );
     if ( !m_bWaitSaveCompleted )
