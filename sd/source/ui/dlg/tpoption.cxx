@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 18:01:29 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:44:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ SdTpOptionsLayout::SdTpOptionsLayout( Window* pParent, const SfxItemSet& rInAttr
     SetExchangeSupport();
 
     // Metrik einstellen
-    FieldUnit eFUnit;// = SFX_APP()->GetOptions().GetMetric();
+    FieldUnit eFUnit;
 
     USHORT nWhich = GetWhich( SID_ATTR_METRIC );
     if ( rInAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
@@ -277,7 +277,7 @@ SdTpOptionsLayout::SdTpOptionsLayout( Window* pParent, const SfxItemSet& rInAttr
         eFUnit = (FieldUnit)rItem.GetValue();
     }
     else
-        GET_MODULE_FIELDUNIT( eFUnit );
+        eFUnit = GetModuleFieldUnit();
 
     SetFieldUnit( aMtrFldTabstop, eFUnit );
 

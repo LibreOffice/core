@@ -2,9 +2,9 @@
  *
  *  $RCSfile: copydlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:31 $
+ *  last change: $Author: ka $ $Date: 2000-10-12 08:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,7 @@ SdCopyDlg::SdCopyDlg( Window* pWindow, const SfxItemSet& rInAttrs,
     aBtnSetDefault.SetClickHdl( LINK( this, SdCopyDlg, SetDefault ) );
 
 
-    FieldUnit eFUnit;// = SFX_APP()->GetOptions().GetMetric();
-    GET_MODULE_FIELDUNIT( eFUnit );
+    FieldUnit eFUnit( GetModuleFieldUnit() );
 
     SetFieldUnit( aMtrFldMoveX, eFUnit, TRUE );
     SetFieldUnit( aMtrFldMoveY, eFUnit, TRUE );
