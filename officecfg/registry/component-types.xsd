@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema targetNamespace="http://openoffice.org/2001/registry" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified" attributeFormDefault="qualified">
+<xs:schema targetNamespace="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oor="http://openoffice.org/2001/registry" elementFormDefault="unqualified" attributeFormDefault="qualified">
   <xs:annotation>
     <xs:documentation>provides a list of standard attribute and element definitions, reused in most parts of the different OOR document types</xs:documentation>
   </xs:annotation>
@@ -27,12 +27,12 @@
   </xs:attribute>
   <xs:attribute name="extensible" type="xs:boolean" use="optional" default="false">
     <xs:annotation>
-      <xs:documentation>determines, whether a node has an extensible list of attributes or fixed list of attributes.</xs:documentation>
+      <xs:documentation>determines, whether a node has an extensible list of properties or fixed list of attributes.</xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="localized" type="xs:boolean" use="optional" default="false">
     <xs:annotation>
-      <xs:documentation>specifies, whether an attribute has or might have different values for different locales. </xs:documentation>
+      <xs:documentation>specifies, whether a property has or might have different values for different locales. </xs:documentation>
     </xs:annotation>
   </xs:attribute>
   <xs:attribute name="separator" type="xs:string" default=" ">
