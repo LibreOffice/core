@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-16 12:32:03 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 15:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,7 @@ SvXMLImport::SvXMLImport( const Reference< XModel > & rModel,
 
 SvXMLImport::~SvXMLImport() throw ()
 {
+    delete pXMLErrors;
     delete pNamespaceMap;
     delete pUnitConv;
     delete pContexts;

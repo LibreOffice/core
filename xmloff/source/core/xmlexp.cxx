@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:02 $
+ *  last change: $Author: dvo $ $Date: 2001-10-30 15:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,7 @@ SvXMLExport::SvXMLExport(
 
 SvXMLExport::~SvXMLExport()
 {
+    delete pXMLErrors;
     delete pImageMapExport;
     delete pEventExport;
     delete pNamespaceMap;
