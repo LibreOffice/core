@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:45:07 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:30:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@ namespace sdr
             // warnings will be generated in debug version if there are still contacts
             // existing.
             virtual ~ObjectContactOfPageView();
+
+            // A ViewObjectContact was deleted and shall be forgotten.
+            // #i29181# Overload to clear selection at associated view
+            virtual void RemoveViewObjectContact(ViewObjectContact& rVOContact);
 
             // Pre-Process the whole displaying. The default implementation
             // calls EnsureValidDrawHierarchy() to ensure a valid draw hierarchy.
