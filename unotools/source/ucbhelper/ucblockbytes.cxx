@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-30 09:36:35 $
+ *  last change: $Author: mba $ $Date: 2001-04-03 15:06:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ ErrCode UcbLockBytes::SetSize (ULONG nNewSize)
 
     if ( nSize > nNewSize )
     {
-        Reference < XTruncate > xTrunc( getSeekable_Impl(), UNO_QUERY );
+        Reference < XTruncate > xTrunc( getOutputStream_Impl(), UNO_QUERY );
         if ( xTrunc.is() )
         {
             xTrunc->truncate();
