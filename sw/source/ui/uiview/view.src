@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 21:02:46 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:53:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,7 @@ InfoBox MSG_ERR_SRCSTREAM
     Message[ chinese_simplified ] = "Ξή·¨Χ°ΘλΤ΄ΞΔ±Ύ΅£";
     Message[ russian ] = "Ηΰγπσηκΰ θρυξδνξγξ ςεκρςΰ νεβξημξζνΰ.";
     Message[ polish ] = "Nie moΏna by³o za³adowaζ tekstu rσd³owego.";
-    Message[ japanese ] = "Ώ°½‚ª“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρB";
+    Message[ japanese ] = "Ώ°½Γ·½Δ‚π“Η‚έ‚έ‚Ε‚«‚ά‚Ή‚ρB";
     Message[ chinese_traditional ] = "µLªkΈό¤J­μ©lΐΙ΅C";
     Message[ arabic ] = ".αΗ νγίδ ΚΝγνα δΥ ΗαγΥΟΡ";
     Message[ greek ] = "Δεν είναι δυνατόν να φορτωθεί το κέιμενο προέλευσης.";
@@ -677,7 +677,7 @@ String STR_NB_REPLACED
     Text[ chinese_simplified ] = "ΛΡΡ°ΔΪΘέ±» XX ΄ΞΈόΜζ΅£";
     Text[ russian ] = "Θρκξμξε ρλξβξ ηΰμενενξ XXπΰη.";
     Text[ polish ] = "Szukane has³o zosta³o XX razy zastΉpione.";
-    Text[ japanese ] = "υκ‹ε‚Ν XX ‰ρ’u·‚³‚κ‚Δ‚Ά‚ά‚·B";
+    Text[ japanese ] = "XX Β‚Μυ·°‚ª’u·‚³‚κ‚ά‚µ‚½B";
     Text[ chinese_traditional ] = "·j΄M¶µ¥Ψ³Q XX ¦Έ¥N΄ΐ΅C";
     Text[ arabic ] = "Κγ ΗΣΚΘΟΗα ΘνΗδΗΚ ΗαΘΝΛ ΧΧΧ γΡΙ.";
     Text[ greek ] = "Ζητούμενο στοιχείο αντικαταστάθηκε XX φορές.";
@@ -725,7 +725,7 @@ String RID_SRCVIEW_TOOLBOX
     Text[ chinese_simplified ] = "Τ΄ΞΔ±Ύ";
     Text[ russian ] = "Θρυξδνϋι ςεκρς";
     Text[ polish ] = "Tekst rσd³owy";
-    Text[ japanese ] = "Ώ°½";
+    Text[ japanese ] = "Ώ°½Γ·½Δ";
     Text[ chinese_traditional ] = "­μ©lΐΙ";
     Text[ arabic ] = "δΥ ΗαγΥΟΡ";
     Text[ greek ] = "Κείμενο προέλευσης";
@@ -945,7 +945,7 @@ String MN_SRCVIEW_POPUPMENU
     Text[ chinese_simplified ] = "HTML Τ΄ΞΔ±Ύ";
     Text[ russian ] = "Θρυξδνϋι ςεκρς β τξπμΰςε HTML";
     Text[ polish ] = "Tekst rσd³owy HTML";
-    Text[ japanese ] = "HTML Ώ°½";
+    Text[ japanese ] = "HTML Ώ°½Γ·½Δ";
     Text[ chinese_traditional ] = "HTML ­μ©lΐΙ";
     Text[ arabic ] = "δΥ γΥΟΡ HTML";
     Text[ greek ] = "Αρχείο προέλευσης HTML";
@@ -1168,7 +1168,7 @@ Menu MN_SRCVIEW_POPUPMENU
             Text[ chinese_simplified ] = "HTML Τ΄ΞΔ±Ύ";
             Text[ russian ] = "Θρυξδνϋι ςεκρς β τξπμΰςε HTML";
             Text[ polish ] = "Tekst rσd³owy HTML";
-            Text[ japanese ] = "HTML Ώ°½";
+            Text[ japanese ] = "HTML Ώ°½Γ·½Δ";
             Text[ chinese_traditional ] = "HTML ­μ©lΐΙ";
             Text[ arabic ] = "δΥ γΥΟΡ HTML";
             Text[ greek ] = "Κείμενο προέλευσης HTML";
