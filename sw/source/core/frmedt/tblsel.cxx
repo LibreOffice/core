@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:09:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:51:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,7 +490,13 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     SwNodeIndex aIdx( rSttNd );
     const SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, TRUE, FALSE );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
+
+    // #109394# if table is invisible, return
+    // (layout needed for forming table selection further down, so we can't
+    //  continue with invisible tables)
+    if( pCNd->GetFrm() == NULL )
+            return FALSE;
 
     const SwLayoutFrm *pStart = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
     ASSERT( pStart, "ohne Frame geht gar nichts" );
@@ -498,7 +504,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     aIdx = rEndNd;
     pCNd = aIdx.GetNode().GetCntntNode();
     if( !pCNd )
-        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, TRUE, FALSE );
+        pCNd = aIdx.GetNodes().GoNextSection( &aIdx, FALSE, FALSE );
 
     const SwLayoutFrm *pEnd = pCNd ? pCNd->GetFrm( &aNullPos )->GetUpper() : 0;
     ASSERT( pEnd, "ohne Frame geht gar nichts" );
