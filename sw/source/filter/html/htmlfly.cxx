@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfly.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 15:20:29 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,8 @@ void SwHTMLWriter::CollectFlyFrms()
     }
 }
 
-BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos )
+BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos,
+                              HTMLOutContext *pContext )
 {
     BOOL bFlysLeft = FALSE; // Noch Flys an aktueller Node-Position da?
 
@@ -503,6 +504,12 @@ BOOL SwHTMLWriter::OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx, BYTE nPos )
                     pHTMLPosFlyFrms = 0;
                     bRestart = TRUE;    // nicht wirklich, nur raus
                                         // aus der Schleife
+                }
+
+                if( pContext )
+                {
+                    HTMLOutFuncs::FlushToAscii(Strm(), *pContext );
+                    pContext = 0; // one time only
                 }
 
                 OutFrmFmt( pPosFly->GetOutMode(), pPosFly->GetFmt(),
