@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xattr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-20 10:34:34 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 12:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,7 +362,8 @@ String NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_uIn
     {
         sal_Int32 nUserIndex = 1;
         const ResId aRes(SVX_RES(nPrefixResId));
-        const String aUser( aRes );
+        String aUser( aRes );
+        aUser += sal_Unicode( ' ' );
 
         if( pPool1 )
         {
@@ -3412,9 +3413,9 @@ XFillFloatTransparenceItem::XFillFloatTransparenceItem(SfxItemPool* pPool )
 
 int XFillFloatTransparenceItem::operator==( const SfxPoolItem& rItem ) const
 {
-    // don't compare name of items !
-    return ( ( GetValue() == ((const XFillGradientItem&)rItem).GetValue() ) &&
-             ( bEnabled == ( (XFillFloatTransparenceItem&) rItem ).bEnabled )  );
+    return ( NameOrIndex::operator==(rItem) ) &&
+            ( GetValue() == ((const XFillGradientItem&)rItem).GetValue() ) &&
+             ( bEnabled == ( (XFillFloatTransparenceItem&) rItem ).bEnabled );
 }
 
 //------------------------------------------------------------------------
@@ -3488,7 +3489,7 @@ XFillFloatTransparenceItem* XFillFloatTransparenceItem::checkForUniqueItem( SdrM
                                                                 &pModel->GetItemPool(),
                                                                 pModel->GetStyleSheetPool() ? &pModel->GetStyleSheetPool()->GetPool() : NULL,
                                                                 XFillFloatTransparenceItem::CompareValueFunc,
-                                                                SIP_XA_FILLFLOATTRANSPARENCE,
+                                                                RID_SVXSTR_TRASNGR0,
                                                                 NULL );
 
         // if the given name is not valid, replace it!

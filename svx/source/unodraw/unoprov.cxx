@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprov.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-14 16:39:05 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 11:59:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -832,10 +832,10 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
         nCount = RID_SVXSTR_HATCH_DEF_END - RID_SVXSTR_HATCH_DEF_START + 1;
         break;
 
-    case XATTR_LINECOLOR:
-        nApiResIds = RID_SVXSTR_HATCH_DEF_START;
-        nIntResIds = RID_SVXSTR_HATCH_START;
-        nCount = RID_SVXSTR_HATCH_DEF_END - RID_SVXSTR_HATCH_DEF_START + 1;
+    case XATTR_FILLFLOATTRANSPARENCE:
+        nApiResIds = RID_SVXSTR_TRASNGR_DEF_START;
+        nIntResIds = RID_SVXSTR_TRASNGR_START;
+        nCount = RID_SVXSTR_TRASNGR_DEF_END - RID_SVXSTR_TRASNGR_DEF_START + 1;
         break;
 
     default:

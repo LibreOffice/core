@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-07 14:38:01 $
+ *  last change: $Author: cl $ $Date: 2001-03-27 11:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4762,6 +4762,42 @@ String RID_SVXSTR_LEND11
     Text[ turkish ] = "Ok";
 };
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Reference-strings for standard transparence gradients
+//
+
+/* nicht uebersetzen */
+String RID_SVXSTR_TRASNGR0_DEF
+{
+    Text = "Transparency";
+};
+
+String RID_SVXSTR_TRASNGR0
+{
+    Text = "Flächentransparenz";
+    Text [ ENGLISH ] = "Transparence" ;
+    Text[ english_us ] = "Transparency";
+    Text[ portuguese ] = "Transparência";
+    Text[ russian ] = "Ïğîçğà÷íîñòü çàëèâêè";
+    Text[ dutch ] = "Transparantie";
+    Text[ french ] = "Transparence";
+    Text[ spanish ] = "Transparencia";
+    Text[ italian ] = "Trasparenza";
+    Text[ danish ] = "Fladetransparens";
+    Text[ swedish ] = "Ytans genomskinlighet";
+    Text[ polish ] = "Przezroczystoœæ powierzchni";
+    Text[ portuguese_brazilian ] = "Transparence";
+    Text[ japanese ] = "•\\–Ê‚Ì“§‰»«";
+    Text[ chinese_simplified ] = "Í¸Ã÷";
+    Text[ chinese_traditional ] = "¥­­±³z©ú";
+    Text[ arabic ] = "ÔİÇİíÉ";
+    Text[ dutch ] = "Transparantie";
+    Text[ chinese_simplified ] = "Í¸Ã÷";
+    Text[ greek ] = "ÄéáöÜíåéá åğéöÜíåéáò";
+    Text[ korean ] = "Åõ¸í Ã¤¿ì±â";
+    Text[ turkish ] = "Yüzey saydamlığı";
+};
 
  // ********************************************************************** EOF
 
