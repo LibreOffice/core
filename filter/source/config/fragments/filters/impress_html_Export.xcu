@@ -1,4 +1,4 @@
-    <node oor:name="impress_html_Export" oor:op="replace">
+    <node oor:name="impress_html_Export" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>0</value></prop>
         <prop oor:name="Type"><value>graphic_HTML</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.presentation.PresentationDocument</value></prop>
@@ -16,7 +16,7 @@
             <value xml:lang="th">เว็บเพจ</value>
             <value xml:lang="x-comment">HTML-Document (%productname% Impress)</value>
             <value xml:lang="ca">HTML Document (%productname% Impress)</value>
-            <value xml:lang="el">Έγγραφο HTML (%productname% Impress)</value>
+            <value xml:lang="el">Έγγ�?αφο HTML (%productname% Impress)</value>
             <value xml:lang="zh-CN">HTML 文档 (%productname% Impress)</value>
             <value xml:lang="pt">Web Page</value>
             <value xml:lang="cs">HTML dokument (%productname% Impress)</value>
