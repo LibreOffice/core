@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@ class WW8_WrPcPtrs;
 class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
+class SwMSConvertControls;
 struct WW8_PdAttrDesc;
 struct WW8_SHD;
 
@@ -295,6 +296,7 @@ friend Writer& OutWW8_SwTxtNode( Writer& rWrt, SwCntntNode& rNode );
     BitmapPalette* pBmpPal;
     void* pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
+    SwMSConvertControls* pOCXExp;
 
     ULONG nIniFlags;                // Flags aus der writer.ini
     USHORT nCharFmtStart;
@@ -392,6 +394,7 @@ public:
 
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
+    SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
 
     static USHORT TranslateToEditEngineId( USHORT nWhich );
     static USHORT TranslateFromEditEngineId( USHORT nWhich );

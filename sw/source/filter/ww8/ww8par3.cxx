@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,8 +253,8 @@
 #include <ww8par2.hxx>  // wg. Listen-Attributen in Styles
 #endif
 
-#ifndef _MSOCXIMP_HXX
-#include <msocximp.hxx>
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 
 #ifdef __WW8_NEEDS_COPY
@@ -279,13 +279,13 @@ static sal_Char sWW8_checkbox[] = "CheckBox";
 
 
 
-uno::Reference< drawing::XShape> SwWW8ImplReader::InsertControl(
-        //const uno::Reference< form::XFormComponent > & rFComp,
-        const uno::Reference< form::XFormComponent > & rFComp,
-        const awt::Size& rSize,
-        BOOL bFloatingCtrl )
+BOOL SwWW8ImplReader::InsertControl(
+    const uno::Reference< form::XFormComponent > & rFComp,
+    const awt::Size& rSize,
+    uno::Reference< drawing::XShape > *pShape,
+    BOOL bFloatingCtrl )
 {
-    return pFormImpl->InsertControl( rFComp, rSize, bFloatingCtrl  );
+    return pFormImpl->InsertControl(rFComp, rSize, pShape,bFloatingCtrl);
 }
 
 
@@ -304,7 +304,7 @@ void SwWW8ImplReader::BuildInputField( sal_uInt16 nType, const String& rParam )
     if( !pDrawModel )               // MIB: Braucht man das?
         GrafikCtor();
     if( !pFormImpl )
-        pFormImpl = new SwImportControls(rDoc.GetDocShell(),pPaM);
+        pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
 
     const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
         pFormImpl->GetServiceFactory();
@@ -384,7 +384,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
         if (ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT))
         {
             if( !pFormImpl )
-                pFormImpl = new SwImportControls(rDoc.GetDocShell(),pPaM);
+                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
             if (pFormImpl->InsertFormula(aFormula))
                 return F_OK;
         }
@@ -404,7 +404,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
             WW8_CT_CHECKBOX))
         {
             if( !pFormImpl )
-                pFormImpl = new SwImportControls(rDoc.GetDocShell(),pPaM);
+                pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
             if (pFormImpl->InsertFormula(aFormula))
                 return F_OK;
         }
@@ -1649,7 +1649,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16 nId, sal_uInt8* pData, short n
 // -------------------------------------------------------------------
 
 BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
-                                WW8_CP nStart, SwWw8ControlType nWhich )
+    WW8_CP nStart, SwWw8ControlType nWhich )
 {
     BOOL bRet=FALSE;
     /*
@@ -1707,7 +1707,7 @@ BOOL SwWW8ImplReader::ImportFormulaControl(WW8FormulaControl &aFormula,
     return(bRet);
 }
 
-BOOL SwImportControls::InsertFormula(WW8FormulaControl &rFormula,
+BOOL SwMSConvertControls::InsertFormula(WW8FormulaControl &rFormula,
     uno::Reference <drawing::XShape> *pShapeRef)
 {
     BOOL bRet=FALSE;
@@ -1723,12 +1723,8 @@ BOOL SwImportControls::InsertFormula(WW8FormulaControl &rFormula,
     //  GetServiceFactory();
     if(!rServiceFactory.is())
         return(FALSE);
-    if (bRet = rFormula.Convert(rServiceFactory, xFComp, aSz))
-    {
-        xShape = InsertControl( xFComp, aSz, FALSE );
-        if (pShapeRef)
-            *pShapeRef = xShape;
-    }
+    if (bRet = rFormula.Import(rServiceFactory, xFComp, aSz))
+        bRet = InsertControl( xFComp, aSz, pShapeRef,FALSE );
     return bRet;
 }
 
@@ -1778,10 +1774,9 @@ void WW8FormulaControl::Read(SwWw8ControlType nWhich,SvStream *pDataStream)
                                : WW8Read_xstz(   *pDataStream, 0,    TRUE );
 }
 
-BOOL WW8FormulaCheckBox::Convert(
-            const uno::Reference <lang::XMultiServiceFactory> &rServiceFactory,
-            uno::Reference <form::XFormComponent> &rFComp,
-            com::sun::star::awt::Size &rSz )
+BOOL WW8FormulaCheckBox::Import(const uno::Reference <
+    lang::XMultiServiceFactory> &rServiceFactory,
+    uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
 {
     String sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.CheckBox" );
     uno::Reference< uno::XInterface > xCreate = rServiceFactory->createInstance( sServiceName );
@@ -1957,8 +1952,9 @@ void WW8FormulaControl::SetOthersFromDoc(uno::Reference< form::XFormComponent >&
 }
 
 
-BOOL WW8FormulaEditBox::Convert(const uno::Reference< lang::XMultiServiceFactory >& rServiceFactory,
-        uno::Reference< form::XFormComponent >& rFComp, com::sun::star::awt::Size &rSz)
+BOOL WW8FormulaEditBox::Import(const uno::Reference<
+    lang::XMultiServiceFactory >& rServiceFactory,
+    uno::Reference< form::XFormComponent >& rFComp, awt::Size &rSz)
 {
     rtl::OUString sServiceName = WW8_ASCII2STR( "com.sun.star.form.component.TextField" );
     uno::Reference< uno::XInterface >  xCreate = rServiceFactory->createInstance( sServiceName );
@@ -2015,16 +2011,89 @@ BOOL WW8FormulaEditBox::Convert(const uno::Reference< lang::XMultiServiceFactory
 }
 
 
+BOOL SwMSConvertControls::InsertControl(
+    const uno::Reference< form::XFormComponent > & rFComp,
+    const awt::Size& rSize,
+    uno::Reference< drawing::XShape > *pShape,
+    BOOL bFloatingCtrl)
+{
+    uno::Reference< drawing::XShape >  xShape;
+
+    const uno::Reference< container::XIndexContainer > & rFormComps =
+        GetFormComps();
+    uno::Any aTmp( &rFComp, ::getCppuType((const uno::Reference<
+        form::XFormComponent >*)0) );
+    rFormComps->insertByIndex( rFormComps->getCount(), aTmp );
+
+    const uno::Reference< lang::XMultiServiceFactory > & rServiceFactory =
+        GetServiceFactory();
+    if( !rServiceFactory.is() )
+        return FALSE;
+
+    uno::Reference< uno::XInterface >  xCreate = rServiceFactory
+        ->createInstance(WW8_ASCII2STR("com.sun.star.drawing.ControlShape"));
+    if( !xCreate.is() )
+        return FALSE;
+
+    xShape = uno::Reference< drawing::XShape >(xCreate, uno::UNO_QUERY);
+
+    DBG_ASSERT(xShape.is(), "XShape nicht erhalten")
+    xShape->setSize(rSize);
+
+    uno::Reference< beans::XPropertySet >  xShapePropSet(
+        xCreate, uno::UNO_QUERY );
+
+    //I lay a small bet that this will change to
+    //INT16 nTemp=TextContentAnchorType::AS_CHARACTER;
+    INT16 nTemp;
+    if (bFloatingCtrl)
+        nTemp= text::TextContentAnchorType_AT_PARAGRAPH;
+    else
+        nTemp= text::TextContentAnchorType_AS_CHARACTER;
+
+    aTmp <<= nTemp;
+    xShapePropSet->setPropertyValue( WW8_ASCII2STR("AnchorType"), aTmp );
+
+    nTemp= text::VertOrientation::TOP;
+    aTmp <<= nTemp;
+    xShapePropSet->setPropertyValue( WW8_ASCII2STR("VertOrient"), aTmp );
+
+    uno::Reference< text::XText >  xDummyTxtRef;
+    uno::Reference< text::XTextRange >  xTxtRg =
+        new SwXTextRange( *pPaM, xDummyTxtRef );
+
+    aTmp.setValue(&xTxtRg,::getCppuType((
+        uno::Reference< text::XTextRange >*)0));
+    xShapePropSet->setPropertyValue( WW8_ASCII2STR("TextRange"), aTmp );
+
+    GetShapes()->add( xShape );
+
+    // Das Control-Model am Control-Shape setzen
+    uno::Reference< drawing::XControlShape >  xControlShape( xShape,
+        uno::UNO_QUERY );
+    uno::Reference< awt::XControlModel >  xControlModel( rFComp,
+        uno::UNO_QUERY );
+    xControlShape->setControl( xControlModel );
+
+    if (pShape)
+        *pShape = xShape;
+
+    return TRUE;
+}
+
 /*************************************************************************
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par3.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.53  2000/09/18 16:05:00  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,8 @@
 #ifndef _FLTSHELL_HXX
 #include <fltshell.hxx>
 #endif
-#ifndef _MSOCXIMP_HXX
-#include <msocximp.hxx>
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
@@ -424,7 +424,7 @@ SwFrmFmt* SwWW8ImplReader::ImportOle( const Graphic* pGrf,
             STREAM_READWRITE| STREAM_SHARE_DENYALL );
 
         if(!pFormImpl)
-            pFormImpl = new SwImportControls(rDoc.GetDocShell(),pPaM);
+            pFormImpl = new SwMSConvertControls(rDoc.GetDocShell(),pPaM);
         uno::Reference< drawing::XShape > xRef;
         if (pFormImpl->ReadOCXStream(xSrc1,&xRef,bFloatingCtrl))
         {
@@ -668,11 +668,14 @@ void SwWW8ImplReader::Read_CPropRMark( USHORT nId, BYTE* pData, short nLen )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par4.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.31  2000/09/18 16:05:01  willem.vandorp
       OpenOffice header added.
 

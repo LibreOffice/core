@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,13 +105,11 @@
 #include <svx/msdffimp.hxx>
 #endif
 
-#ifndef _MSOCXIMP_HXX
-#include <msocximp.hxx>
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 
-
 #define WW8_ASCII2STR(s) String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(s))
-
 
 class SvStringsDtor;
 class SwDoc;
@@ -398,9 +396,11 @@ class WW8FormulaControl : public OCX_Control
 public:
     WW8FormulaControl(const UniString& sN,SwWW8ImplReader &rR)
         : OCX_Control(sN), rRdr(rR) {}
-    void WW8FormulaControl::SetOthersFromDoc(com::sun::star::uno::Reference <com::sun::star::form::XFormComponent> &rFComp,
+    void WW8FormulaControl::SetOthersFromDoc(com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz,
-        com::sun::star::uno::Reference <com::sun::star::beans::XPropertySet> &rPropSet);
+        com::sun::star::uno::Reference <
+        com::sun::star::beans::XPropertySet> &rPropSet);
 
     UINT8   fToolTip:1;
     UINT8   fNoMark:1;
@@ -430,9 +430,11 @@ public:
     WW8FormulaCheckBox(SwWW8ImplReader &rR)
         : WW8FormulaControl( WW8_ASCII2STR( "CheckBox" ), rR)
         {}
-    BOOL Convert(const com::sun::star::uno::Reference <com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
-        com::sun::star::uno::Reference <com::sun::star::form::XFormComponent> &rFComp,com::sun::star::awt::Size &rSz);
-
+    BOOL Import(const com::sun::star::uno::Reference <
+        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
+        com::sun::star::awt::Size &rSz);
 };
 
 class WW8FormulaEditBox: public WW8FormulaControl
@@ -441,18 +443,27 @@ public:
     WW8FormulaEditBox(SwWW8ImplReader &rR)
         : WW8FormulaControl( WW8_ASCII2STR( "TextField" ) ,rR)
         {}
-    BOOL Convert(const com::sun::star::uno::Reference <com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
-        com::sun::star::uno::Reference <com::sun::star::form::XFormComponent> &rFComp,com::sun::star::awt::Size &rSz);
-
+    BOOL Import(const com::sun::star::uno::Reference <
+        com::sun::star::lang::XMultiServiceFactory> &rServiceFactory,
+        com::sun::star::uno::Reference <
+        com::sun::star::form::XFormComponent> &rFComp,
+        com::sun::star::awt::Size &rSz);
 };
 
-class SwImportControls : public SwImportOCX
+class SwMSConvertControls: public SvxMSConvertOCXControls
 {
 public:
-    SwImportControls( SfxObjectShell *pDSh,SwPaM *pP ) :
-        SwImportOCX( pDSh,pP ) {}
-        BOOL InsertFormula( WW8FormulaControl &rFormula,
-                            com::sun::star::uno::Reference <com::sun::star::drawing::XShape> *pShapeRef=0 );
+    SwMSConvertControls( SfxObjectShell *pDSh,SwPaM *pP ) :
+        SvxMSConvertOCXControls( pDSh,pP ) {}
+    BOOL InsertFormula( WW8FormulaControl &rFormula,
+        com::sun::star::uno::Reference <
+        com::sun::star::drawing::XShape> *pShapeRef=0 );
+    BOOL InsertControl(const com::sun::star::uno::Reference<
+        com::sun::star::form::XFormComponent >& rFComp,
+        const ::com::sun::star::awt::Size& rSize,
+        com::sun::star::uno::Reference <
+        com::sun::star::drawing::XShape > *pShape,BOOL bFloatingCtrl);
+    BOOL SwMSConvertControls::ExportControl(Writer &rWrt,const SdrObject *pObj);
 };
 
 class SwMSDffManager : public SvxMSDffManager
@@ -498,7 +509,7 @@ friend class WW8FormulaControl;
     SwWW8FltControlStack* pRefFldStck;  // for Reference Fields
 
 //  BYTE* pCharBuf;             // Puffer fuer nackten Text
-    SwImportControls *pFormImpl;    // Control-Implementierung
+    SwMSConvertControls *pFormImpl; // Control-Implementierung
 
     SwFlyFrmFmt* pFlyFmtOfJustInsertedGraphic;
     WW8Fib* pWwFib;
@@ -1059,11 +1070,12 @@ public:     // eigentlich private, geht aber leider nur public
     eF_ResT Read_F_OCX( WW8FieldDesc*, String& rStr );
     eF_ResT Read_F_Hyperlink( WW8FieldDesc*, String& rStr );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> InsertControl(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rFComp,
-            const ::com::sun::star::awt::Size& rSize,
-            //const ::com::sun::star::uno::Reference< ::com::sun::star::size::XSize>& rSize,
-            BOOL bFloatingCtrl = FALSE );
+    BOOL InsertControl(const com::sun::star::uno::Reference<
+        com::sun::star::form::XFormComponent>& rFComp,
+        const ::com::sun::star::awt::Size& rSize,
+        com::sun::star::uno::Reference<
+        com::sun::star::drawing::XShape> *pShape=NULL,
+        BOOL bFloatingCtrl = FALSE );
 
     void BuildInputField( USHORT eType, const String& rParam );
     void DeleteFormImpl();
@@ -1099,10 +1111,13 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.95  2000/09/18 16:05:00  willem.vandorp
       OpenOffice header added.
 

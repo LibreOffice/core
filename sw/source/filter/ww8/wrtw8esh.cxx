@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khz $ $Date: 2000-09-21 12:18:55 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,22 @@
 #include <svx/editeng.hxx>
 #endif
 
+#ifndef _SVX_FMGLOB_HXX
+#include <svx/fmglob.hxx>
+#endif
+#ifndef _SVDOUNO_HXX
+#include <svx/svdouno.hxx>
+#endif
+#ifndef _SVX_UNOAPI_HXX_
+#include <svx/unoapi.hxx>
+#endif
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
+#include <com/sun/star/form/FormComponentType.hpp>
+#endif
+
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
 #endif
@@ -198,7 +214,9 @@
 #ifndef _UNODRAW_HXX
 #include <unodraw.hxx>
 #endif
-
+#ifndef _WW8PAR_HXX
+#include <ww8par.hxx>
+#endif
 #ifndef _ERRHDL_HXX
 #include <errhdl.hxx>
 #endif
@@ -937,6 +955,7 @@ class SwEscherEx : public  EscherEx
                                 UINT32 nTxtBox );
     void WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
     void WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId );
+    void WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId );
     void WriteFlyFrameAttr( const SwFrmFmt& rFmt );
     void WriteGrfAttr( const SwNoTxtNode& rNd );
 
@@ -1039,8 +1058,11 @@ SwEscherEx::SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt )
                 for( USHORT n = 0; n < aSortFmts.Count(); ++n )
                 {
                     const SwFrmFmt& rFmt = *(SwFrmFmt*)aSortFmts[ n ];
-                    if( RES_FLYFRMFMT == rFmt.Which() )
+                    if( RES_FLYFRMFMT == rFmt.Which())
                         nShapeId = WriteFlyFrm( rFmt );
+                    else if (rFmt.FindRealSdrObject()->GetObjInventor() ==
+                             FmFormInventor)
+                        WriteOCXControl(rFmt,nShapeId=GetShapeID());
                     else
                     {
                         const SdrObject* pObj = rFmt.FindRealSdrObject();
@@ -1316,6 +1338,40 @@ void SwEscherEx::WriteGrfFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
     AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
 
     CloseContainer();   // ESCHER_SpContainer
+}
+
+
+void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
+{
+    const SdrObject* pSdrObj = rFmt.FindRealSdrObject();
+    if( pSdrObj)
+    {
+        OpenContainer( ESCHER_SpContainer );
+
+        AddShape( ESCHER_ShpInst_PictureFrame, 0xa10, nShapeId );
+
+        BeginCount();
+
+        Size aSz( pSdrObj->GetLogicRect().GetSize() );
+        aSz.Width() = DrawModelToEmu( aSz.Width() );
+        aSz.Height() = DrawModelToEmu( aSz.Height() );
+        Rectangle aRect( Point(0,0), aSz );
+
+        pTxtBxs->Append( *pSdrObj, nShapeId );
+        UINT32 nPicId = pTxtBxs->Count();
+        nPicId *= 0x10000;
+        AddOpt( ESCHER_Prop_pictureId, nPicId );
+        AddOpt( ESCHER_Prop_pictureActive, 0x10000 );
+
+        WriteFlyFrameAttr( rFmt );
+
+        EndCount( ESCHER_OPT, 3 );
+
+        AddAtom( 4, ESCHER_ClientAnchor );      GetStream() << 0L;
+        AddAtom( 4, ESCHER_ClientData );        GetStream() << 1L;
+
+        CloseContainer();   // ESCHER_SpContainer
+    }
 }
 
 void SwEscherEx::WriteOLEFlyFrame( const SwFrmFmt& rFmt, UINT32 nShapeId )
@@ -1624,15 +1680,84 @@ SvStream* SwEscherEx::QueryPicStream()
 }
 
 
+BOOL SwMSConvertControls::ExportControl(Writer &rWrt, const SdrObject *pObj)
+
+{
+    SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
+
+    if (!rWW8Wrt.bWrtWW8)
+        return FALSE;
+
+    SdrUnoObj *pFormObj = PTR_CAST(SdrUnoObj,pObj);
+    uno::Reference< awt::XControlModel > xControlModel =
+    pFormObj->GetUnoControlModel();
+
+    //Why oh lord do we use so many different units ?
+    //I think I painted myself into a little bit of a
+    //corner by trying to use the uno interface for
+    //controls export
+    Size aTempSize=pFormObj->GetLogicRect().GetSize();
+    awt::Size aSize;
+    aSize.Width = TWIPS_TO_MM(aTempSize.A());
+    aSize.Height = TWIPS_TO_MM(aTempSize.B());
+
+    //Open the ObjectPool
+    SvStorageRef xObjPool = rWW8Wrt.GetStorage().OpenStorage(
+                    String::CreateFromAscii(
+                    RTL_CONSTASCII_STRINGPARAM("ObjectPool")),
+                    STREAM_READWRITE|STREAM_SHARE_DENYALL);
+    //Create a destination storage for the microsoft control
+    String sStorageName('_');
+    sStorageName += String::CreateFromInt32((UINT32)pObj);
+    SvStorageRef xOleStg = xObjPool->OpenStorage(sStorageName,
+                 STREAM_READWRITE|STREAM_SHARE_DENYALL);
+
+    if (!xOleStg.Is())
+        return FALSE;
+
+    String sName;
+    if (!WriteOCXStream(xOleStg,xControlModel,aSize,sName))
+        return FALSE;
+
+    BYTE aSpecOLE[] =
+    {
+        0x03, 0x6a, 0xFF, 0xFF, 0xFF, 0xFF, // sprmCPicLocation
+        0x0a, 0x08, 1,                  // sprmCFOLE2
+        0x55, 0x08, 1,                  // sprmCFSpec
+        0x56, 0x08, 1                   // sprmCFObj
+    };
+    //Set the obj id into the sprmCPicLocation
+    BYTE *pData = aSpecOLE+2;
+    Set_UInt32(pData,(UINT32)pObj);
+
+    sName.InsertAscii(" CONTROL Forms.",0);
+    sName.AppendAscii(".1 \\s ");
+
+    rWW8Wrt.OutField(0,87,sName,
+        WRITEFIELD_START|WRITEFIELD_CMD_START|WRITEFIELD_CMD_END);
+
+    rWW8Wrt.pChpPlc->AppendFkpEntry(rWW8Wrt.Strm().Tell(),sizeof(aSpecOLE),
+        aSpecOLE);
+    rWW8Wrt.WriteChar( 0x1 );
+    rWW8Wrt.OutField( 0, 87, aEmptyStr, WRITEFIELD_END | WRITEFIELD_CLOSE );
+    return TRUE;
+}
+
+
+
+
 /*************************************************************************
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.2 2000-09-21 12:18:55 khz Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8esh.cxx,v 1.3 2000-10-10 16:54:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/09/21 12:18:55  khz
+      #78753# Avoid dividing by zero.
+
       Revision 1.1.1.1  2000/09/18 17:14:58  hr
       initial import
 

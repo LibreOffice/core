@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,12 @@
 #ifndef _SVDOTEXT_HXX //autogen wg. SdrTextObj
 #include <svx/svdotext.hxx>
 #endif
-
+#ifndef _SVDOTEXT_HXX
+#include <svx/svdotext.hxx>
+#endif
+#ifndef _SVX_FMGLOB_HXX
+#include <svx/fmglob.hxx>
+#endif
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
 #endif
@@ -147,6 +152,10 @@
 
 #ifndef SW_LINEINFO_HXX
 #include <lineinfo.hxx>
+#endif
+
+#ifndef _WW8PAR_HXX
+#include <ww8par.hxx>
 #endif
 
 
@@ -1591,7 +1600,14 @@ void WW8_WrPlcSubDoc::WriteTxt( SwWW8Writer& rWrt, BYTE nTTyp,
 
                 // is it an writer or sdr - textbox?
                 const SdrObject& rObj = *(SdrObject*)aCntnt[ i ];
-                if( rObj.ISA( SdrTextObj ) )
+                if (rObj.GetObjInventor() == FmFormInventor)
+                {
+                    BYTE nOldTyp = rWrt.nTxtTyp;
+                    rWrt.nTxtTyp = nTTyp;
+                    rWrt.GetOCXExp().ExportControl(rWrt,&rObj);
+                    rWrt.nTxtTyp = nOldTyp;
+                }
+                else if( rObj.ISA( SdrTextObj ) )
                     rWrt.WriteSdrTextObj( rObj );
                 else
                 {
@@ -1845,11 +1861,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.28  2000/09/18 16:04:58  willem.vandorp
       OpenOffice header added.
 

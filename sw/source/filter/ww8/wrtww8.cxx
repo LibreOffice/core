@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+ *  last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _HINTIDS_HXX
 #include <hintids.hxx>
 #endif
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
 
 #ifndef _SV_SALBTYPE_HXX
 #include <vcl/salbtype.hxx>
@@ -101,6 +104,9 @@
 #if SUPD>593
 #ifndef _MSOLEEXP_HXX
 #include <svx/msoleexp.hxx>
+#endif
+#ifndef _MSOCXIMEX_HXX
+#include <svx/msocximex.hxx>
 #endif
 #endif
 
@@ -158,6 +164,9 @@
 #endif
 #ifndef _WRTWW8_HXX
 #include <wrtww8.hxx>
+#endif
+#ifndef _WW8PAR_HXX
+#include <ww8par.hxx>
 #endif
 #ifndef _WW8STRUC_HXX
 #include <ww8struc.hxx>
@@ -1739,6 +1748,9 @@ ULONG SwWW8Writer::StoreDoc()
 
         pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
     }
+
+    if( !pOCXExp )
+        pOCXExp = new SwMSConvertControls(pDoc->GetDocShell(),pCurPam);
 #endif
 
     PrepareStorage();
@@ -2019,7 +2031,7 @@ SwWW8Writer::SwWW8Writer( const String& rFltName )
     pO( 0 ), pAktPageDesc( 0 ), pISet( 0 ), pUsedNumTbl( 0 ), pBmpPal( 0 ),
     pKeyMap( 0 )
 #if SUPD>593
-    , pOLEExp( 0 )
+    , pOLEExp( 0 ), pOCXExp(0)
 #endif
 {
     bWrtWW8 = rFltName.EqualsAscii( FILTER_WW8 );
@@ -2037,6 +2049,9 @@ SwWW8Writer::~SwWW8Writer()
 #if SUPD>593
     if( pOLEExp )
         delete pOLEExp;
+    if( pOCXExp )
+        delete pOCXExp;
+
 #endif
 }
 
@@ -2051,11 +2066,14 @@ void GetWW8Writer( const String& rFltName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.1.1.1 2000-09-18 17:14:58 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtww8.cxx,v 1.2 2000-10-10 16:54:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:58  hr
+      initial import
+
       Revision 1.54  2000/09/18 16:04:58  willem.vandorp
       OpenOffice header added.
 

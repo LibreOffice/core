@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:14:58 $
+#   last change: $Author: cmc $ $Date: 2000-10-10 16:54:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -97,7 +97,6 @@ CXXFILES = \
         ww8par5.cxx \
         ww8par6.cxx \
         ww8glsy.cxx \
-        msocximp.cxx \
         ww8scan.cxx
 
 
