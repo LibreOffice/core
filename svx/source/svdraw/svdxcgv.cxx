@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:50:23 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,15 +292,15 @@ BOOL SdrExchangeView::Paste(const XubString& rStr, const Point& rPos, SdrObjList
     pObj->SetModel(pMod);
     pObj->SetLayer(nLayer);
     pObj->NbcSetText(rStr); // #32424# SetText vor SetAttr, weil SetAttr sonst unwirksam!
-    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
+    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
-    pObj->SetItemSet(aDefaultAttr);
+    pObj->SetMergedItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
-    pObj->SetItemSet(aTempAttr);
+    pObj->SetMergedItemSet(aTempAttr);
 
     pObj->FitFrameToTextSize();
     Size aSiz(pObj->GetLogicRect().GetSize());
@@ -336,15 +336,15 @@ BOOL SdrExchangeView::Paste(SvStream& rInput, USHORT eFormat, const Point& rPos,
     SdrRectObj* pObj=new SdrRectObj(OBJ_TEXT,aTextRect);
     pObj->SetModel(pMod);
     pObj->SetLayer(nLayer);
-    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet,FALSE);
+    if (pDefaultStyleSheet!=NULL) pObj->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
-    pObj->SetItemSet(aDefaultAttr);
+    pObj->SetMergedItemSet(aDefaultAttr);
 
     SfxItemSet aTempAttr(pMod->GetItemPool());  // Keine Fuellung oder Linie
     aTempAttr.Put(XLineStyleItem(XLINE_NONE));
     aTempAttr.Put(XFillStyleItem(XFILL_NONE));
 
-    pObj->SetItemSet(aTempAttr);
+    pObj->SetMergedItemSet(aTempAttr);
 
     pObj->NbcSetText(rInput,eFormat);
     pObj->FitFrameToTextSize();
@@ -663,7 +663,7 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
             ExtOutputDevice aXOut( &aOut);
             SdrPaintInfoRec aInfoRec;
             GDIMetaFile     aMtf;
-            const Rectangle aBoundRect( pObj->GetBoundRect() );
+            const Rectangle aBoundRect( pObj->GetCurrentBoundRect() );
             const MapMode   aMap( pModel->GetScaleUnit(),
                                   Point(),
                                   pModel->GetScaleFraction(),
@@ -675,7 +675,7 @@ Graphic SdrExchangeView::GetObjGraphic( SdrModel* pModel, SdrObject* pObj )
 
             aXOut.SetOffset( Point( -aBoundRect.Left(), -aBoundRect.Top() ) );
             aInfoRec.nPaintMode |= SDRPAINTMODE_ANILIKEPRN;
-            pObj->Paint( aXOut, aInfoRec );
+            pObj->SingleObjectPainter( aXOut, aInfoRec ); // #110094#-17
 
             aMtf.Stop();
             aMtf.WindStart();
@@ -731,7 +731,7 @@ void SdrExchangeView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
             if( aOfs != pXOut->GetOffset() )
                 pXOut->SetOffset(aOfs);
 
-            pMark->GetObj()->Paint( *pXOut, aInfoRec );
+            pMark->GetObj()->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
         }
     }
 
