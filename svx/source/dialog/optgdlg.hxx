@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:34:28 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,14 +136,12 @@ public:
 class OfaViewTabPage : public SfxTabPage
 {
 private:
-    FixedLine       aAppearanceGB;
-    FixedText       aAppearanceFT;
-    ListBox         aAppearanceLB;
-    FixedText       aScalingFT;
-    MetricField     aScalingMF;
-    FixedText       aBigFT;
-    ListBox         aBigLB;
-    CheckBox        aStyleCB;
+    FixedLine       aUserInterfaceFL;
+    FixedText       aWindowSizeFT;
+    MetricField     aWindowSizeMF;
+    FixedText       aIconSizeFT;
+    ListBox         aIconSizeLB;
+
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     CheckBox        aFontAntiAliasing;
     FixedText       aAAPointLimitLabel;
@@ -151,13 +149,13 @@ private:
     FixedText       aAAPointLimitUnits;
 #endif
 
-    CheckBox        aMouseFollowCB;
-    CheckBox        aFlatTabCtrlCB;
-    CheckBox        aColorTabCtrlCB;
-    CheckBox        aFontShowCB;
-    CheckBox        aShowInactiveItemsCB;
-    CheckBox        aFontHistoryCB;
+    FixedLine       aMenuFL;
     CheckBox        aMenuIconsCB;
+    CheckBox        aShowInactiveItemsCB;
+
+    FixedLine       aFontListsFL;
+    CheckBox        aFontShowCB;
+    CheckBox        aFontHistoryCB;
 
     FixedLine       aWorkingSetBox;
     CheckBox        aDocViewBtn;
