@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:32:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:07:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,6 +225,7 @@
 #include <vos/process.hxx>
 #include <svtools/pathoptions.hxx>
 #include <svtools/moduleoptions.hxx>
+#include <comphelper/mediadescriptor.hxx>
 
 #include <rtl/logfile.hxx>
 
@@ -555,65 +556,66 @@ sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, const SfxFilter**
     const SfxFilter* pOldFilter = *ppFilter;
     const SfxFilter* pFilter = pOldFilter;
 
-    rMedium.UseInteractionHandler(TRUE);
-
+    // no detection service -> nothing to do !
     Reference< XTypeDetection > xDetection( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection")), UNO_QUERY );
-
-    sal_Int32 nParamCount = 3;
-    if ( pImpl->aName.getLength() )
-        nParamCount++;
-    if ( pOldFilter )
-        nParamCount += 2;
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aDescriptor(nParamCount);
-    sal_Int32 nParamIndex = 0;
-    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("InputStream");
-    aDescriptor[nParamIndex++].Value <<= rMedium.GetInputStream();
-    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("InteractionHandler");
-    aDescriptor[nParamIndex++].Value <<= rMedium.GetInteractionHandler();
-    aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("URL");
-    aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
-    if ( pImpl->aName.getLength() )
-    {
-        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("DocumentService");
-        aDescriptor[nParamIndex++].Value <<= pImpl->aName;
-    }
-
-    if ( pOldFilter )
-    {
-        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("TypeName");
-        aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( pOldFilter->GetTypeName() );
-        aDescriptor[nParamIndex].Name = ::rtl::OUString::createFromAscii("FilterName");
-        aDescriptor[nParamIndex++].Value <<= ::rtl::OUString( pOldFilter->GetFilterName() );
-    }
+    if (!xDetection.is())
+        return ERRCODE_ABORT;
 
     ::rtl::OUString sTypeName;
     try
     {
-        //!MBA: nmust, ndont?
-        sTypeName = xDetection->queryTypeByDescriptor(aDescriptor,sal_True);
+        // open the stream one times only ...
+        // Otherwhise it will be tried more then once and show the same interaction more then once ...
+        rMedium.UseInteractionHandler(TRUE);
+        ::rtl::OUString sURL( rMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
+        ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > xInStream = rMedium.GetInputStream();
+
+        // stream exists => deep detection (with preselection ... if possible)
+        if (xInStream.is())
+        {
+            ::comphelper::MediaDescriptor aDescriptor;
+
+            aDescriptor[::comphelper::MediaDescriptor::PROP_URL()               ] <<= sURL;
+            aDescriptor[::comphelper::MediaDescriptor::PROP_INPUTSTREAM()       ] <<= xInStream;
+            aDescriptor[::comphelper::MediaDescriptor::PROP_INTERACTIONHANDLER()] <<= rMedium.GetInteractionHandler();
+
+            if ( pImpl->aName.getLength() )
+                aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTSERVICE()] <<= pImpl->aName;
+
+            if ( pOldFilter )
+            {
+                aDescriptor[::comphelper::MediaDescriptor::PROP_TYPENAME()  ] <<= ::rtl::OUString( pOldFilter->GetTypeName()   );
+                aDescriptor[::comphelper::MediaDescriptor::PROP_FILTERNAME()] <<= ::rtl::OUString( pOldFilter->GetFilterName() );
+            }
+
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lDescriptor = aDescriptor.getAsConstPropertyValueList();
+            sTypeName = xDetection->queryTypeByDescriptor(lDescriptor, sal_True); // lDescriptor is used as In/Out param ... dont use aDescriptor.getAsConstPropertyValueList() directly!
+        }
+        // no stream exists => try flat detection without preselection as fallback
+        else
+            sTypeName = xDetection->queryTypeByURL(sURL);
+
+        if (sTypeName.getLength())
+        {
+            // detect filter by given type
+            // In case of this matcher is bound to a particular document type:
+            // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
+            // The DocumentService property is only a preselection, and all preselections are considered as optional!
+            // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
+            lQuery[0].Name = ::rtl::OUString::createFromAscii("Name");
+            lQuery[0].Value <<= sTypeName;
+
+            const SfxFilter* pFilter = GetFilterForProps(lQuery, nMust, nDont);
+            if (pFilter)
+            {
+                *ppFilter = pFilter;
+                return ERRCODE_NONE;
+            }
+        }
     }
     catch(const Exception&)
     {}
-
-    if ( sTypeName.getLength() )
-    {
-        // detect filter by given type
-        // In case of this matcher is bound to a particular document type:
-        // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
-        // The DocumentService property is only a preselection, and all preselections are considered as optional!
-        // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > lQuery(1);
-        lQuery[0].Name = ::rtl::OUString::createFromAscii("Name");
-        lQuery[0].Value <<= sTypeName;
-
-        const SfxFilter* pFilter = GetFilterForProps(lQuery, nMust, nDont);
-        if (pFilter)
-        {
-            *ppFilter = pFilter;
-            return ERRCODE_NONE;
-        }
-    }
 
     return ERRCODE_ABORT;
 }
