@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crenum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:33 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@ namespace stoc_corefl
 class IdlEnumFieldImpl
     : public IdlMemberImpl
     , public XIdlField
+    , public XIdlField2
 {
     sal_Int32               _nValue;
 
@@ -96,6 +97,8 @@ public:
     virtual FieldAccessMode SAL_CALL getAccessMode() throw(::com::sun::star::uno::RuntimeException);
     virtual Any SAL_CALL get( const Any & rObj ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+    // XIdlField2: getType, getAccessMode and get are equal to XIdlField
+    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 };
 //__________________________________________________________________________________________________
 IdlEnumFieldImpl::~IdlEnumFieldImpl()
@@ -107,7 +110,9 @@ IdlEnumFieldImpl::~IdlEnumFieldImpl()
 Any IdlEnumFieldImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlField * >( this ) ) );
+    Any aRet( ::cppu::queryInterface( rType,
+                                      static_cast< XIdlField * >( this ),
+                                      static_cast< XIdlField2 * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 //__________________________________________________________________________________________________
@@ -133,6 +138,7 @@ Sequence< Type > IdlEnumFieldImpl::getTypes()
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
+                ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
@@ -198,7 +204,14 @@ void IdlEnumFieldImpl::set( const Any & rObj, const Any & rValue )
         OUString( RTL_CONSTASCII_USTRINGPARAM("enum field is constant!") ),
         (XWeak *)(OWeakObject *)this );
 }
-
+//__________________________________________________________________________________________________
+void IdlEnumFieldImpl::set( Any & rObj, const Any & rValue )
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
+{
+    throw IllegalAccessException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("enum field is constant!") ),
+        (XWeak *)(OWeakObject *)this );
+}
 
 //##################################################################################################
 //##################################################################################################

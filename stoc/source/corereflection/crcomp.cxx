@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@
 #endif
 
 #include <com/sun/star/reflection/XIdlField.hpp>
+#include <com/sun/star/reflection/XIdlField2.hpp>
 
 #include "base.hxx"
 
@@ -75,6 +76,7 @@ namespace stoc_corefl
 class IdlCompFieldImpl
     : public IdlMemberImpl
     , public XIdlField
+    , public XIdlField2
 {
     sal_Int32                   _nOffset;
 
@@ -103,6 +105,8 @@ public:
     virtual FieldAccessMode SAL_CALL getAccessMode() throw(::com::sun::star::uno::RuntimeException);
     virtual Any SAL_CALL get( const Any & rObj ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+    // XIdlField2: getType, getAccessMode and get are equal to XIdlField
+    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 };
 
 // XInterface
@@ -110,7 +114,9 @@ public:
 Any IdlCompFieldImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlField * >( this ) ) );
+    Any aRet( ::cppu::queryInterface( rType,
+                                      static_cast< XIdlField * >( this ),
+                                      static_cast< XIdlField2 * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 //__________________________________________________________________________________________________
@@ -136,6 +142,7 @@ Sequence< Type > IdlCompFieldImpl::getTypes()
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
+                ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
@@ -277,6 +284,42 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
         (XWeak *)(OWeakObject *)this, 0 );
 }
 
+//__________________________________________________________________________________________________
+void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
+{
+    if (rObj.getValueTypeClass() == typelib_TypeClass_STRUCT ||
+        rObj.getValueTypeClass() == typelib_TypeClass_EXCEPTION)
+    {
+        typelib_TypeDescription * pObjTD = 0;
+        TYPELIB_DANGER_GET( &pObjTD, rObj.getValueTypeRef() );
+
+        typelib_TypeDescription * pTD = pObjTD;
+        typelib_TypeDescription * pDeclTD = getDeclTypeDescr();
+        while (pTD && !typelib_typedescription_equals( pTD, pDeclTD ))
+            pTD = (typelib_TypeDescription *)((typelib_CompoundTypeDescription *)pTD)->pBaseTypeDescription;
+
+        OSL_ENSURE( pTD, "### illegal object type!" );
+        if (pTD)
+        {
+            TYPELIB_DANGER_RELEASE( pObjTD );
+            if (coerce_assign( (char *)rObj.getValue() + _nOffset, getTypeDescr(), rValue, getReflection() ))
+            {
+                return;
+            }
+            else
+            {
+                throw IllegalArgumentException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
+                    (XWeak *)(OWeakObject *)this, 1 );
+            }
+        }
+        TYPELIB_DANGER_RELEASE( pObjTD );
+    }
+    throw IllegalArgumentException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal object given!") ),
+        (XWeak *)(OWeakObject *)this, 0 );
+}
 
 //##################################################################################################
 //##################################################################################################

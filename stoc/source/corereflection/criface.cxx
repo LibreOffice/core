@@ -2,9 +2,9 @@
  *
  *  $RCSfile: criface.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2001-04-09 13:38:14 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ namespace stoc_corefl
 class IdlAttributeFieldImpl
     : public IdlMemberImpl
     , public XIdlField
+    , public XIdlField2
 {
 public:
     typelib_InterfaceAttributeTypeDescription * getTypeDescr()
@@ -116,6 +117,8 @@ public:
     virtual FieldAccessMode SAL_CALL getAccessMode() throw(::com::sun::star::uno::RuntimeException);
     virtual Any SAL_CALL get( const Any & rObj ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL set( const Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
+    // XIdlField2: getType, getAccessMode and get are equal to XIdlField
+    virtual void SAL_CALL set( Any & rObj, const Any & rValue ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException);
 };
 
 // XInterface
@@ -123,7 +126,9 @@ public:
 Any IdlAttributeFieldImpl::queryInterface( const Type & rType )
     throw(::com::sun::star::uno::RuntimeException)
 {
-    Any aRet( ::cppu::queryInterface( rType, static_cast< XIdlField * >( this ) ) );
+    Any aRet( ::cppu::queryInterface( rType,
+                                      static_cast< XIdlField * >( this ),
+                                      static_cast< XIdlField2 * >( this ) ) );
     return (aRet.hasValue() ? aRet : IdlMemberImpl::queryInterface( rType ));
 }
 //__________________________________________________________________________________________________
@@ -149,6 +154,7 @@ Sequence< Type > IdlAttributeFieldImpl::getTypes()
         if (! s_pTypes)
         {
             static OTypeCollection s_aTypes(
+                ::getCppuType( (const Reference< XIdlField2 > *)0 ),
                 ::getCppuType( (const Reference< XIdlField > *)0 ),
                 IdlMemberImpl::getTypes() );
             s_pTypes = &s_aTypes;
@@ -265,6 +271,97 @@ Any IdlAttributeFieldImpl::get( const Any & rObj )
 }
 //__________________________________________________________________________________________________
 void IdlAttributeFieldImpl::set( const Any & rObj, const Any & rValue )
+    throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
+{
+    if (getTypeDescr()->bReadOnly)
+    {
+        throw IllegalAccessException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("cannot set readonly attribute!") ),
+            (XWeak *)(OWeakObject *)this );
+    }
+
+    uno_Interface * pUnoI = mapToUno( rObj, (typelib_InterfaceTypeDescription *)getDeclTypeDescr() );
+    OSL_ENSURE( pUnoI, "### illegal destination object given!" );
+    if (pUnoI)
+    {
+        TypeDescription aTD( getTypeDescr()->pAttributeTypeRef );
+        typelib_TypeDescription * pTD = aTD.get();
+
+        // construct uno value to be set
+        void * pArgs[1];
+        void * pArg = pArgs[0] = alloca( pTD->nSize );
+
+        sal_Bool bAssign;
+        if (pTD->eTypeClass == typelib_TypeClass_ANY)
+        {
+            uno_copyAndConvertData( pArg, SAL_CONST_CAST( Any *, &rValue ),
+                                    pTD, getCpp2Uno().get() );
+            bAssign = sal_True;
+        }
+        else if (typelib_typedescriptionreference_equals( rValue.getValueTypeRef(), pTD->pWeakRef ))
+        {
+            uno_copyAndConvertData( pArg, SAL_CONST_CAST( void *, rValue.getValue() ),
+                                    pTD, getCpp2Uno().get() );
+            bAssign = sal_True;
+        }
+        else if (pTD->eTypeClass == typelib_TypeClass_INTERFACE)
+        {
+            Reference< XInterface > xObj;
+            if (bAssign = extract( rValue, (typelib_InterfaceTypeDescription *)pTD,
+                                   xObj, getReflection() ))
+            {
+                *(void **)pArg = getCpp2Uno().mapInterface(
+                    xObj.get(), (typelib_InterfaceTypeDescription *)pTD );
+            }
+        }
+        else
+        {
+            typelib_TypeDescription * pValueTD = 0;
+            TYPELIB_DANGER_GET( &pValueTD, rValue.getValueTypeRef() );
+            // construct temp uno val to do proper assignment: todo opt
+            void * pTemp = alloca( pValueTD->nSize );
+            uno_copyAndConvertData(
+                pTemp, (void *)rValue.getValue(), pValueTD, getCpp2Uno().get() );
+            uno_constructData(
+                pArg, pTD );
+            // assignment does simple conversion
+            bAssign = uno_assignData(
+                pArg, pTD, pTemp, pValueTD, 0, 0, 0 );
+            uno_destructData(
+                pTemp, pValueTD, 0 );
+            TYPELIB_DANGER_RELEASE( pValueTD );
+        }
+
+        if (bAssign)
+        {
+            uno_Any aExc;
+            uno_Any * pExc = &aExc;
+            (*pUnoI->pDispatcher)( pUnoI, (typelib_TypeDescription *)getTypeDescr(), 0, pArgs, &pExc );
+            (*pUnoI->release)( pUnoI );
+
+            uno_destructData( pArg, pTD, 0 );
+            if (pExc)
+            {
+                // DBO TODO: throw original exception generically
+                uno_any_destruct( pExc, 0 );
+                throw RuntimeException(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured during get of attribute!") ),
+                    *(const Reference< XInterface > *)rObj.getValue() );
+            }
+            return;
+        }
+        (*pUnoI->release)( pUnoI );
+
+        throw IllegalArgumentException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal value given!") ),
+            *(const Reference< XInterface > *)rObj.getValue(), 1 );
+    }
+    throw IllegalArgumentException(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("illegal destination object given!") ),
+        (XWeak *)(OWeakObject *)this, 0 );
+}
+//__________________________________________________________________________________________________
+void IdlAttributeFieldImpl::set( Any & rObj, const Any & rValue )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IllegalAccessException, ::com::sun::star::uno::RuntimeException)
 {
     if (getTypeDescr()->bReadOnly)

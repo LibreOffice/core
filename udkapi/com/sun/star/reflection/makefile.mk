@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2001-03-30 13:51:50 $
+#   last change: $Author: jsc $ $Date: 2001-05-03 13:57:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,6 +90,7 @@ IDLFILES=\
     XIdlClass.idl\
     XIdlClassProvider.idl\
     XIdlField.idl\
+    XIdlField2.idl\
     XIdlMember.idl\
     XIdlMethod.idl\
     XIdlReflection.idl\

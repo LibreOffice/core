@@ -18,6 +18,7 @@ The service provides reflection and access to all uno types
         <type>  com.sun.star.reflection.XTypeDescription        </type>
         <type>  com.sun.star.reflection.XIdlReflection          </type>
         <type>  com.sun.star.reflection.XIdlClass               </type>
+        <type>  com.sun.star.reflection.XIdlField2              </type>
         <type>  com.sun.star.container.XHierarchicalNameAccess  </type>
         <type>  com.sun.star.lang.XComponent                    </type>
         <type>  com.sun.star.lang.XTypeProvider                 </type>

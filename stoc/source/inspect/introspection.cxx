@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-19 12:55:02 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <com/sun/star/reflection/XIdlClass.hpp>
+#include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -327,8 +328,10 @@ public:
 
     // Methoden von XIntrospectionAccess (ALT, jetzt nur Impl)
     void setPropertyValue(const Any& obj, const OUString& aPropertyName, const Any& aValue) const;
+//  void setPropertyValue(Any& obj, const OUString& aPropertyName, const Any& aValue) const;
     Any getPropertyValue(const Any& obj, const OUString& aPropertyName) const;
     void setPropertyValueByIndex(const Any& obj, sal_Int32 nIndex, const Any& aValue) const;
+//  void setPropertyValueByIndex(Any& obj, sal_Int32 nIndex, const Any& aValue) const;
     Any getPropertyValueByIndex(const Any& obj, sal_Int32 nIndex) const;
 
     Sequence<Property> getProperties(void) const                        { return maAllPropertySeq; }
@@ -391,6 +394,7 @@ sal_Int32 IntrospectionAccessStatic_Impl::getMethodIndex( const OUString& aMetho
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUString& aPropertyName, const Any& aValue ) const
+//void IntrospectionAccessStatic_Impl::setPropertyValue( Any& obj, const OUString& aPropertyName, const Any& aValue ) const
 {
     sal_Int32 i = getPropertyIndex( aPropertyName );
     if( i != -1 )
@@ -400,6 +404,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUS
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
+//void IntrospectionAccessStatic_Impl::setPropertyValueByIndex( Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
 {
     // Handelt es sich bei dem uebergebenen Objekt ueberhaupt um was passendes?
     TypeClass eObjType = obj.getValueType().getTypeClass();
@@ -494,6 +499,13 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
         case MAP_FIELD:
         {
             Reference<XIdlField> xField = (XIdlField*)(aInterfaceSeq1.getConstArray()[ nSequenceIndex ].get());
+            Reference<XIdlField2> xField2(xField, UNO_QUERY);
+            if( xField2.is() )
+            {
+                xField2->set( (Any&)obj, aValue );
+                // IllegalArgumentException
+                // NullPointerException
+            } else
             if( xField.is() )
             {
                 xField->set( obj, aValue );

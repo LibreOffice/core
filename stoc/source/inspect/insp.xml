@@ -41,6 +41,7 @@
         <type>  com.sun.star.reflection.XIdlReflection          </type>
         <type>  com.sun.star.reflection.XIdlClassProvider       </type>
         <type>  com.sun.star.reflection.XIdlClass               </type>
+        <type>  com.sun.star.reflection.XIdlField2              </type>
         <type>  com.sun.star.reflection.XIdlArray               </type>
         <type>  com.sun.star.reflection.FieldAccessMode         </type>
     </component-description>

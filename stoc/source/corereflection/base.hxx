@@ -2,9 +2,9 @@
  *
  *  $RCSfile: base.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 15:32:15 $
+ *  last change: $Author: jsc $ $Date: 2001-05-03 13:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlField.hpp>
+#include <com/sun/star/reflection/XIdlField2.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 
 using namespace std;
