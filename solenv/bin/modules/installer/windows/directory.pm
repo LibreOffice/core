@@ -2,9 +2,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: svesik $ $Date: 2004-04-20 12:31:51 $
+#   last change: $Author: kz $ $Date: 2004-06-11 18:19:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,14 @@ sub create_unique_directorynames
         }
         else
         {
-            $uniqueparentname = $installer::globals::officefolder;      # parent for program, share, user, ...
+            if ($installer::globals::product =~ /ada/i )
+            {
+                $uniqueparentname = "INSTALLLOCATION";
+            }
+            else
+            {
+                $uniqueparentname = $installer::globals::officefolder;      # parent for program, share, user, ...
+            }
         }
 
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
@@ -172,36 +179,46 @@ sub add_root_directories
     my $oneline = "TARGETDIR\t\tSourceDir\n";
     push(@{$directorytableref}, $oneline);
 
-    $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
-    push(@{$directorytableref}, $oneline);
-
-    my $manufacturer = $installer::globals::manufacturer;
-    my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");  # third parameter not used
-    $shortmanufacturer =~ s/\s/\_/g;                                    # changing empty space to underline
-
-    $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortmanufacturer|$manufacturer\n";
-    push(@{$directorytableref}, $oneline);
-
-    my $productname = $allvariableshashref->{'PRODUCTNAME'};
-    my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
-    my $productkey = $productname . " " . $productversion;
-    my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
-    $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
-
-    $oneline = "$installer::globals::officefolder\tINSTALLLOCATION\t$shortproductkey|$productkey\n";
-    push(@{$directorytableref}, $oneline);
-
-    if (!($installer::globals::product =~ /ada/i )) # the following directories not for ada products, FAKE?
+    if (!($installer::globals::product =~ /ada/i )) # the following directories not for ada products
     {
+        $oneline = "$installer::globals::programfilesfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        my $manufacturer = $installer::globals::manufacturer;
+        my $shortmanufacturer = installer::windows::idtglobal::make_eight_three_conform($manufacturer, "dir");  # third parameter not used
+        $shortmanufacturer =~ s/\s/\_/g;                                    # changing empty space to underline
+
+        $oneline = "INSTALLLOCATION\t$installer::globals::programfilesfolder\t$shortmanufacturer|$manufacturer\n";
+        push(@{$directorytableref}, $oneline);
+
+        my $productname = $allvariableshashref->{'PRODUCTNAME'};
+        my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
+        my $productkey = $productname . " " . $productversion;
+        my $shortproductkey = installer::windows::idtglobal::make_eight_three_conform($productkey, "dir");      # third parameter not used
+        $shortproductkey =~ s/\s/\_/g;                                  # changing empty space to underline
+
+        $oneline = "$installer::globals::officefolder\tINSTALLLOCATION\t$shortproductkey|$productkey\n";
+        push(@{$directorytableref}, $oneline);
+
         $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
+        # $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
+        # push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::fontsfolder\tINSTALLLOCATION\t$installer::globals::fontsfoldername\n";
+        $oneline = "$installer::globals::fontsfolder\tTARGETDIR\t$installer::globals::fontsfoldername\n";
         push(@{$directorytableref}, $oneline);
     }
+
+    if ($installer::globals::product =~ /ada/i )    # the following directories only for ada products
+    {
+        $oneline = "INSTALLLOCATION\tTARGETDIR\t$installer::globals::adafolder\n";
+        push(@{$directorytableref}, $oneline);
+    }
+
 }
 
 ###############################################
