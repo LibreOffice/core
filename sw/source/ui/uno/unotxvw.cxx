@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxvw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-02-02 11:52:17 $
+ *  last change: $Author: os $ $Date: 2001-02-19 07:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool bAutoma
         pValues[0].Value <<= OUString(rEntryText);
         pValues[1].Name = C2U(UNO_NAME_RUBY_TEXT);
         pValues[1].Value <<= OUString(rAttr.GetText());
-        pValues[2].Name = C2U(UNO_NAME_CHAR_STYLE_NAME);
+        pValues[2].Name = C2U(UNO_NAME_RUBY_CHAR_STYLE_NAME);
         pValues[2].Value <<= OUString(
                 SwXStyleFamilies::GetProgrammaticName(rAttr.GetCharFmtName(),SFX_STYLE_FAMILY_CHAR));
         pValues[3].Name = C2U(UNO_NAME_RUBY_ADJUST);
@@ -855,7 +855,7 @@ void SAL_CALL SwXTextView::setRubyList(
                 pProperties[nProp].Value >>= sTmp;
                 pEntry->GetRubyAttr().SetText(sTmp);
             }
-            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_CHAR_STYLE_NAME.pName))
+            else if(!pProperties[nProp].Name.compareToAscii(UNO_NAME_RUBY_CHAR_STYLE_NAME.pName))
             {
                 pProperties[nProp].Value >>= sTmp;
                 String sName(SwXStyleFamilies::GetUIName(sTmp, SFX_STYLE_FAMILY_CHAR));
