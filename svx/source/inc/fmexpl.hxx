@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:35:35 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 11:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -489,6 +489,8 @@ namespace svxform
         Timer               m_aSynchronizeTimer;
         // die Meta-Daten ueber meine aktuelle Selektion
         SvLBoxEntrySortedArray  m_arrCurrentSelection;
+        // the entries which, in the view, are currently marked as "cut" (painted semi-transparent)
+        SvLBoxEntrySortedArray  m_aCutEntries;
         // die Images, die ich brauche (und an FormDatas und EntryDatas weiterreiche)
         ImageList           m_aNavigatorImages;
         ImageList           m_aNavigatorImagesHC;
@@ -598,6 +600,8 @@ namespace svxform
         virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& );
         virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
         virtual void KeyInput( const KeyEvent& rKEvt );
+
+        virtual void ModelHasRemoved( SvListEntry* _pEntry );
 
     private:
         sal_Int8    implAcceptDataTransfer( const DataFlavorExVector& _rFlavors, sal_Int8 _nAction, const Point& _rDropPos, sal_Bool _bDnD );
