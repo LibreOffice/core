@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside.sdi,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2002-05-08 16:31:13 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,18 @@ shell BasicIDEShell
         StateMethod = GetState;
     ]
 
+    SID_BASICIDE_MANAGEBRKPNTS
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
+    SID_BASICIDE_TOGGLEBRKPNTENABLED
+    [
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
+    ]
+
     SID_BASICIDE_ADDWATCH
     [
         ExecMethod  = ExecuteBasic;
@@ -382,14 +394,14 @@ shell BasicIDEShell
 
     SID_BASICIDE_REMOVEWATCH
     [
-        ExecMethod      = ExecuteBasic;
+        ExecMethod  = ExecuteBasic;
         StateMethod = GetState;
     ]
 
     SID_BASICIDE_BRKPNTSCHANGED
     [
-        ExecMethod      = ExecuteBasic;
-        StateMethod     = GetState;
+        ExecMethod  = ExecuteBasic;
+        StateMethod = GetState;
     ]
 
     // ========================================================
