@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cd $ $Date: 2002-03-14 11:59:39 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,7 @@
 #ifndef INCLUDED_SVTOOLS_PRINTOPTIONS_HXX
 #include <svtools/printoptions.hxx>
 #endif
+#include <vector>
 
 #pragma hdrstop
 
@@ -469,10 +470,19 @@ void SfxPrinter::UpdateFonts_Impl()
 
     const USHORT nCount = pOut->GetDevFontCount();
     FONTS() =  new SfxFontArr_Impl((BYTE)nCount);
+
+    std::vector< Font > aNonRegularFonts;
     for(USHORT i = 0;i < nCount;++i)
     {
         Font aFont(pOut->GetDevFont(i));
-        if ( FONTS()->Count() == 0 ||
+        if ( (aFont.GetItalic() != ITALIC_NONE) ||
+             (aFont.GetWeight() != WEIGHT_MEDIUM) )
+        {
+            // First: Don't add non-regular fonts. The font name is not unique so we have
+            // to filter the device font list.
+            aNonRegularFonts.push_back( aFont );
+        }
+        else if ( FONTS()->Count() == 0 ||
              (*FONTS())[FONTS()->Count()-1]->GetName() != aFont.GetName() )
         {
             DBG_ASSERT(0 == SfxFindFont_Impl(*FONTS(), aFont.GetName()), "Doppelte Fonts vom SV-Device!");
@@ -482,6 +492,19 @@ void SfxPrinter::UpdateFonts_Impl()
         }
     }
     delete pVirDev;
+
+    // Try to add all non-regular fonts. It could be that there was no regular font
+    // with the same name added.
+    std::vector< Font >::const_iterator pIter;
+    for ( pIter = aNonRegularFonts.begin(); pIter != aNonRegularFonts.end(); pIter++ )
+    {
+        if ( SfxFindFont_Impl( *FONTS(), pIter->GetName() ) == 0 )
+        {
+            SfxFont* pTmp = new SfxFont( pIter->GetFamily(), pIter->GetName(),
+                                         pIter->GetPitch(), pIter->GetCharSet() );
+            FONTS()->C40_INSERT( SfxFont, pTmp, FONTS()->Count() );
+        }
+    }
 }
 
 //--------------------------------------------------------------------
