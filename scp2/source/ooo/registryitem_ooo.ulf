@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registryitem_ooo.ulf,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 14:39:12 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 21:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,21 +60,21 @@
  ************************************************************************/
 
 [STR_REG_VAL_NEW]
-en-US = "~New"
-de = "~Neu"
+en-US = "&New"
+de = "&Neu"
 
 [STR_REG_VAL_SO52_CHART_OOO]
 en-US = "StarOffice 5.0 Chart"
 de = "StarOffice 5.0 Diagramm"
 
 [STR_REG_VAL_SO60_CONFIGFILE]
-en-US = "%PRODUCTNAME %PRODUCTVERSION Configuration File"
-de = "%PRODUCTNAME %PRODUCTVERSION Konfigurationsdatei"
+en-US = "%PRODUCTNAME %SXWFORMATVERSION Configuration File"
+de = "%PRODUCTNAME %SXWFORMATVERSION Konfigurationsdatei"
 
 [STR_REG_VAL_SO50_TEMPLATE_OOO]
 en-US = "StarOffice 5.0 Template"
 de = "StarOffice 5.0 Vorlage"
 
 [STR_REG_VAL_OO_DATABASE]
-en-US = "Open Office Database"
-de = "Open Office Datenbank"
+en-US = "OpenDocument Database"
+de = "OpenDocument Datenbank"
