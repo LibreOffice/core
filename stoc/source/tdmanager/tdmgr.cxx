@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kso $ $Date: 2002-11-11 08:33:38 $
+ *  last change: $Author: vg $ $Date: 2003-10-06 13:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,7 @@ static const sal_Int32 CACHE_SIZE = 512;
 // exported via tdmgr_common.hxx
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
 
-static Sequence< OUString > tdmgr_getSupportedServiceNames()
+static Sequence< OUString > SAL_CALL tdmgr_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
     if( ! pNames )
@@ -145,7 +145,7 @@ static Sequence< OUString > tdmgr_getSupportedServiceNames()
     return *pNames;
 }
 
-static OUString tdmgr_getImplementationName()
+static OUString SAL_CALL tdmgr_getImplementationName()
 {
     static OUString *pImplName = 0;
     if( ! pImplName )
@@ -330,7 +330,7 @@ Any EnumerationImpl::nextElement()
             OUString( RTL_CONSTASCII_USTRINGPARAM("there is no further element!") ),
             (XWeak *)(OWeakObject *)this );
     }
-    return makeAny( _pMgr->_aProviders[_nPos] );
+    return makeAny( _pMgr->_aProviders[_nPos++] );
 }
 
 //##################################################################################################
