@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LockEntrySequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-22 14:44:26 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:12:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,12 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
+#ifndef NE_XML_H
+#include <neon/ne_xml.h>
+#endif
+
 #ifndef _LOCKENTRYSEQUENCE_HXX_
 #include "LockEntrySequence.hxx"
 #endif
@@ -68,72 +74,125 @@ using namespace com::sun::star;
 
 //////////////////////////////////////////////////////////////////////////
 
-#define DAV_ELM_LOCK_FIRST (NE_ELM_UNUSED)
-
-#define DAV_ELM_lockentry (DAV_ELM_LOCK_FIRST + 1)
-#define DAV_ELM_lockscope (DAV_ELM_LOCK_FIRST + 2)
-#define DAV_ELM_locktype  (DAV_ELM_LOCK_FIRST + 3)
-#define DAV_ELM_exclusive (DAV_ELM_LOCK_FIRST + 4)
-#define DAV_ELM_shared    (DAV_ELM_LOCK_FIRST + 5)
-#define DAV_ELM_write     (DAV_ELM_LOCK_FIRST + 6)
-
-// static
-const struct ne_xml_elm LockEntrySequence::elements[] =
-{
-    { "", "lockentry",  DAV_ELM_lockentry, 0 },
-    { "", "lockscope",  DAV_ELM_lockscope, 0 },
-    { "", "locktype",   DAV_ELM_locktype,  0 },
-    { "", "exclusive",  DAV_ELM_exclusive, 0 }, // leaf
-    { "", "shared",     DAV_ELM_shared,    0 }, // leaf
-    { "", "write",      DAV_ELM_write,     0 }, // leaf
-    { 0 }
-};
-
 struct LockEntrySequenceParseContext
 {
     ucb::LockEntry * pEntry;
+    bool hasScope;
+    bool hasType;
 
-    LockEntrySequenceParseContext() : pEntry( 0 ) {}
+    LockEntrySequenceParseContext()
+    : pEntry( 0 ), hasScope( false ), hasType( false ) {}
     ~LockEntrySequenceParseContext() { delete pEntry; }
 };
 
+#define STATE_TOP (1)
+
+#define STATE_LOCKENTRY (STATE_TOP)
+#define STATE_LOCKSCOPE (STATE_TOP + 1)
+#define STATE_EXCLUSIVE (STATE_TOP + 2)
+#define STATE_SHARED    (STATE_TOP + 3)
+#define STATE_LOCKTYPE  (STATE_TOP + 4)
+#define STATE_WRITE     (STATE_TOP + 5)
+
 //////////////////////////////////////////////////////////////////////////
-extern "C" int LinkEntrySequence_validate_callback( void * userdata,
-                                                    ne_xml_elmid parent,
-                                                    ne_xml_elmid child )
+extern "C" int LockEntrySequence_startelement_callback(
+    void *userdata,
+    int parent,
+    const char *nspace,
+    const char *name,
+    const char **atts )
 {
-    // @@@
-    return NE_XML_VALID;
+    if ( ( name != 0 ) &&
+         ( ( nspace == 0 ) || ( strcmp( nspace, "" ) == 0 ) ) )
+    {
+        switch ( parent )
+        {
+            case NE_XML_STATEROOT:
+                if ( strcmp( name, "lockentry" ) == 0 )
+                    return STATE_LOCKENTRY;
+                break;
+
+            case STATE_LOCKENTRY:
+                if ( strcmp( name, "lockscope" ) == 0 )
+                    return STATE_LOCKSCOPE;
+                else if ( strcmp( name, "locktype" ) == 0 )
+                    return STATE_LOCKTYPE;
+                break;
+
+            case STATE_LOCKSCOPE:
+                if ( strcmp( name, "exclusive" ) == 0 )
+                    return STATE_EXCLUSIVE;
+                else if ( strcmp( name, "shared" ) == 0 )
+                    return STATE_SHARED;
+                break;
+
+            case STATE_LOCKTYPE:
+                if ( strcmp( name, "write" ) == 0 )
+                    return STATE_WRITE;
+                break;
+        }
+    }
+    return NE_XML_DECLINE;
 }
 
 //////////////////////////////////////////////////////////////////////////
-extern "C" int LinkEntrySequence_endelement_callback( void * userdata,
-                                                      const struct ne_xml_elm * s,
-                                                      const char * cdata )
+extern "C" int LockEntrySequence_chardata_callback(
+    void *userdata,
+    int state,
+    const char *buf,
+    size_t len )
+{
+    return 0; // zero to continue, non-zero to abort parsing
+}
+
+//////////////////////////////////////////////////////////////////////////
+extern "C" int LockEntrySequence_endelement_callback(
+    void *userdata,
+    int state,
+    const char *nspace,
+    const char *name )
 {
     LockEntrySequenceParseContext * pCtx
                 = static_cast< LockEntrySequenceParseContext * >( userdata );
     if ( !pCtx->pEntry )
         pCtx->pEntry = new ucb::LockEntry;
 
-    switch ( s->id )
+    switch ( state )
     {
-        case DAV_ELM_exclusive:
+        case STATE_EXCLUSIVE:
             pCtx->pEntry->Scope = ucb::LockScope_EXCLUSIVE;
+            pCtx->hasScope = true;
             break;
 
-        case DAV_ELM_shared:
+        case STATE_SHARED:
             pCtx->pEntry->Scope = ucb::LockScope_SHARED;
+            pCtx->hasScope = true;
             break;
 
-        case DAV_ELM_write:
+        case STATE_WRITE:
             pCtx->pEntry->Type = ucb::LockType_WRITE;
+            pCtx->hasType = true;
+            break;
+
+        case STATE_LOCKSCOPE:
+            if ( !pCtx->hasScope )
+                return 1; // abort
+            break;
+
+        case STATE_LOCKTYPE:
+            if ( !pCtx->hasType )
+                return 1; // abort
+            break;
+
+        case STATE_LOCKENTRY:
+            if ( !pCtx->hasType || !pCtx->hasType )
+                return 1; // abort
             break;
 
         default:
             break;
     }
-    return 0;
+    return 0; // zero to continue, non-zero to abort parsing
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -160,11 +219,10 @@ bool LockEntrySequence::createFromXML( const rtl::OString & rInData,
 
         LockEntrySequenceParseContext aCtx;
         ne_xml_push_handler( parser,
-                                  elements,
-                                  LinkEntrySequence_validate_callback,
-                                  0, // startelement_callback
-                                  LinkEntrySequence_endelement_callback,
-                                  &aCtx );
+                             LockEntrySequence_startelement_callback,
+                             LockEntrySequence_chardata_callback,
+                             LockEntrySequence_endelement_callback,
+                             &aCtx );
 
         ne_xml_parse( parser,
                        rInData.getStr() + nStart,
