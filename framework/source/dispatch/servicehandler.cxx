@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicehandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2002-05-29 12:47:22 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:15:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,48 +315,55 @@ void SAL_CALL ServiceHandler::dispatchWithNotification( const css::util::URL&   
 css::uno::Reference< css::uno::XInterface > ServiceHandler::implts_dispatch( const css::util::URL&                                  aURL       ,
                                                                              const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    css::uno::Reference< css::uno::XInterface > xService;
+    /* SAFE */
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory = m_xFactory;
+    aReadLock.unlock();
+    /* SAFE */
 
-    css::uno::Reference< css::lang::XMultiServiceFactory > xFactory;
-    /* SAFE */{
-        ReadGuard aReadLock( m_aLock );
-        xFactory = m_xFactory;
-    /* SAFE */}
+    if (!xFactory.is())
+        return css::uno::Reference< css::uno::XInterface >();
 
-    if (xFactory.is())
+    // extract service name and may optional given parameters from given URL
+    // and use it to create and start the component
+    ::rtl::OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
+    ::rtl::OUString sServiceName;
+    ::rtl::OUString sArguments  ;
+
+    sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
+    if (nArgStart!=-1)
     {
-        // extract service name and may optional given parameters from given URL
-        // and use it to create and start the component
-        ::rtl::OUString sServiceAndArguments = aURL.Complete.copy(PROTOCOL_LENGTH);
-        ::rtl::OUString sServiceName;
-        ::rtl::OUString sArguments  ;
-
-        sal_Int32 nArgStart = sServiceAndArguments.indexOf('?',0);
-        if (nArgStart!=-1)
-        {
-            sServiceName = sServiceAndArguments.copy(0,nArgStart);
-            ++nArgStart; // ignore '?'!
-            sArguments   = sServiceAndArguments.copy(nArgStart);
-        }
-        else
-        {
-            sServiceName = sServiceAndArguments;
-        }
-
-        if (sServiceName.getLength()>0)
-        {
-            // If a service doesnt support an optional job executor interface - he can't get
-            // any given parameters!
-            // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
-
-            // => a) a service starts running inside his own ctor and we create it only
-            xService = xFactory->createInstance(sServiceName);
-            // or b) he implements the right interface and starts there (may with optional parameters)
-            css::uno::Reference< css::task::XJobExecutor > xExecuteable( xService, css::uno::UNO_QUERY );
-            if (xExecuteable.is())
-                xExecuteable->trigger(sArguments);
-        }
+        sServiceName = sServiceAndArguments.copy(0,nArgStart);
+        ++nArgStart; // ignore '?'!
+        sArguments   = sServiceAndArguments.copy(nArgStart);
     }
+    else
+    {
+        sServiceName = sServiceAndArguments;
+    }
+
+    if (!sServiceName.getLength())
+        return css::uno::Reference< css::uno::XInterface >();
+
+    // If a service doesnt support an optional job executor interface - he can't get
+    // any given parameters!
+    // Because we can't know if we must call createInstanceWithArguments() or XJobExecutor::trigger() ...
+
+    css::uno::Reference< css::uno::XInterface > xService;
+    try
+    {
+        // => a) a service starts running inside his own ctor and we create it only
+        xService = xFactory->createInstance(sServiceName);
+        // or b) he implements the right interface and starts there (may with optional parameters)
+        css::uno::Reference< css::task::XJobExecutor > xExecuteable(xService, css::uno::UNO_QUERY);
+        if (xExecuteable.is())
+            xExecuteable->trigger(sArguments);
+    }
+    // ignore all errors - inclusive runtime errors!
+    // E.g. a script based service (written in phyton) could not be executed
+    // because it contains syntax errors, which was detected at runtime ...
+    catch(const css::uno::Exception&)
+        { xService.clear(); }
 
     return xService;
 }
