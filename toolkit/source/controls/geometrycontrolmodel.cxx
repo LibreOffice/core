@@ -2,9 +2,9 @@
  *
  *  $RCSfile: geometrycontrolmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tbe $ $Date: 2001-04-12 11:30:28 $
+ *  last change: $Author: ab $ $Date: 2001-05-15 10:38:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -393,6 +393,31 @@
         pOwnClone->m_nStep      = m_nStep;
         pOwnClone->m_aTag       = m_aTag;
 
+
+        // Clone event container
+        Reference< ::com::sun::star::script::XScriptEventsSupplier > xEventsSupplier =
+            static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( this );
+        Reference< ::com::sun::star::script::XScriptEventsSupplier > xCloneEventsSupplier =
+            static_cast< ::com::sun::star::script::XScriptEventsSupplier* >( pOwnClone );
+
+        if( xEventsSupplier.is() && xCloneEventsSupplier.is() )
+        {
+            Reference< XNameContainer > xEventCont = xEventsSupplier->getEvents();
+            Reference< XNameContainer > xCloneEventCont = xCloneEventsSupplier->getEvents();
+
+            ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames =
+                xEventCont->getElementNames();
+            const ::rtl::OUString* pNames = aNames.getConstArray();
+            sal_Int32 i, nNameCount = aNames.getLength();
+
+            for( i = 0 ; i < nNameCount ; i++ )
+            {
+                ::rtl::OUString aName = pNames[ i ];
+                ::com::sun::star::uno::Any aElement = xEventCont->getByName( aName );
+                xCloneEventCont->insertByName( aName, aElement );
+            }
+        }
+
         return pOwnClone;
     }
 
@@ -411,6 +436,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/04/12 11:30:28  tbe
+ *  changed tabindex default from 0 to -1
+ *
  *  Revision 1.10  2001/04/10 07:33:49  dbo
  *  #85862# have to use namespace due to symbol ambiguity
  *
