@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 14:52:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:47:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1728,9 +1728,8 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
     }
 
 
-// Material
-    // Favoriten
-    //aLbMatFavorites.SelectEntryPos( 0 );
+    // Material Favoriten
+    aLbMatFavorites.SelectEntryPos( 0 );
 
     // Objektfarbe
     eState = rAttrs.GetItemState(XATTR_FILLCOLOR);
@@ -2991,7 +2990,70 @@ IMPL_LINK( Svx3DWin, SelectHdl, void *, p )
         Color aColor;
         BOOL bUpdatePreview = FALSE;
 
-        if( p == &aLbMatColor ||
+        // Material
+        if( p == &aLbMatFavorites )
+        {
+            Color aColObj( COL_WHITE );
+            Color aColEmis( COL_BLACK );
+            Color aColSpec( COL_WHITE );
+            USHORT nSpecIntens = 20;
+
+            USHORT nPos = aLbMatFavorites.GetSelectEntryPos();
+            switch( nPos )
+            {
+                case 1: // Metall
+                {
+                    aColObj = Color(230,230,255);
+                    aColEmis = Color(10,10,30);
+                    aColSpec = Color(200,200,200);
+                    nSpecIntens = 20;
+                }
+                break;
+
+                case 2: // Gold
+                {
+                    aColObj = Color(230,255,0);
+                    aColEmis = Color(51,0,0);
+                    aColSpec = Color(255,255,240);
+                    nSpecIntens = 20;
+                }
+                break;
+
+                case 3: // Chrom
+                {
+                    aColObj = Color(36,117,153);
+                    aColEmis = Color(18,30,51);
+                    aColSpec = Color(230,230,255);
+                    nSpecIntens = 2;
+                }
+                break;
+
+                case 4: // Plastik
+                {
+                    aColObj = Color(255,48,57);
+                    aColEmis = Color(35,0,0);
+                    aColSpec = Color(179,202,204);
+                    nSpecIntens = 60;
+                }
+                break;
+
+                case 5: // Holz
+                {
+                    aColObj = Color(153,71,1);
+                    aColEmis = Color(21,22,0);
+                    aColSpec = Color(255,255,153);
+                    nSpecIntens = 75;
+                }
+                break;
+            }
+            LBSelectColor( &aLbMatColor, aColObj );
+            LBSelectColor( &aLbMatEmission, aColEmis );
+            LBSelectColor( &aLbMatSpecular, aColSpec );
+            aMtrMatSpecularIntensity.SetValue( nSpecIntens );
+
+            bUpdatePreview = TRUE;
+        }
+        else if( p == &aLbMatColor ||
                  p == &aLbMatEmission ||
                  p == &aLbMatSpecular )
         {
