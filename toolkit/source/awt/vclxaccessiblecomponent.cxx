@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-12 10:52:35 $
+ *  last change: $Author: tbe $ $Date: 2002-06-21 08:47:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTLISTENER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLERELATIONTYPE_HPP_
+#include <drafts/com/sun/star/accessibility/AccessibleRelationType.hpp>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_KEYEVENT_HPP_
 #include <com/sun/star/awt/KeyEvent.hpp>
@@ -104,6 +107,9 @@
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
 #include <unotools/accessiblestatesethelper.hxx>
+#endif
+#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
+#include <unotools/accessiblerelationsethelper.hxx>
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -578,7 +584,30 @@ uno::Reference< accessibility::XAccessibleRelationSet > VCLXAccessibleComponent:
 {
     OExternalLockGuard aGuard( this );
 
-    return NULL;
+    utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
+    uno::Reference< accessibility::XAccessibleRelationSet > xSet = pRelationSetHelper;
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        Window *pLabeledBy = pWindow->GetLabeledBy();
+        if( pLabeledBy )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabeledBy->GetAccessible();
+            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABELED_BY, aSequence ) );
+        }
+
+        Window* pLabelFor = pWindow->GetLabelFor();
+        if ( pLabelFor )
+        {
+            uno::Sequence< uno::Reference< uno::XInterface > > aSequence(1);
+            aSequence[0] = pLabelFor->GetAccessible();
+            pRelationSetHelper->AddRelation( accessibility::AccessibleRelation( accessibility::AccessibleRelationType::LABEL_FOR, aSequence ) );
+        }
+    }
+
+    return xSet;
 }
 
 uno::Reference< accessibility::XAccessibleStateSet > VCLXAccessibleComponent::getAccessibleStateSet(  ) throw (uno::RuntimeException)
