@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 06:32:10 $
+ *  last change: $Author: rt $ $Date: 2001-05-16 15:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ String STR_NOTABLEINFO
     Text[ italian ] = "Il collegamento è stato realizzato tuttavia non è stato possibile trasmettere le informazioni relative alle tabelle nel database.";
     Text[ danish ] = "Forbindelsen er blevet oprettet; men det var ikke muligt at hente informationer om tabeller i databasen.";
     Text[ swedish ] = "Förbindelsen upprättades men det gick inte att få fram någon information om tabeller i databasen.";
-    Text[ polish ] = "Po³¹czenie zosta³o pomyœlnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
+    Text[ polish ] = "Po³¹czenie zosta³o pomy?lnie ustanowione, ale nadal brak informacji o tabelach w bazie danych.";
     Text[ portuguese_brazilian ] = "A connection was established sucessfully, but no informations about tables and/or views could be gathered.";
     Text[ japanese ] = "³í‚ÉÚ‘±‚Å‚«‚Ü‚µ‚½‚ªAÃŞ°ÀÍŞ°½‚ÌÃ°ÌŞÙ‚ÉŠÖ‚·‚éî•ñ‚ª‚ ‚è‚Ü‚¹‚ñB";
     Text[ korean ] = "¿¬°áÀº ¼º°øÀûÀ¸·Î ±¸ÃàµÇ¾úÁö¸¸, Ç¥ ±×¸®°í/¶Ç´Â º¸±â¿¡ ´ëÇÑ Á¤º¸¸¦ ¼öÁıÇÏÁö ¸øÇß½À´Ï´Ù.";
@@ -351,6 +351,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.11  2001/05/12 06:32:10  kz
+ *  Merge SRC631: 12.05.01 - 08:31:35 (NoBranch)
+ *
  *  Revision 1.10  2001/05/10 05:40:48  rt
  *  Merge SRC631: 10.05.01 - 07:40:06 (NoBranch)
  *
