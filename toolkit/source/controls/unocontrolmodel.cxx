@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-17 08:47:10 $
+ *  last change: $Author: mt $ $Date: 2001-11-16 13:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1126,38 +1126,57 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                 // is far enough from the destination type which it is 'c-style cast' to with the line above.
 
 
-            sal_Bool bConvertible = pDestType->equals(rValue.getValueType());
-            if (!bConvertible)
+            if ( pDestType->equals( rValue.getValueType() ) )
             {
-                // okay, try to be somewhat more tolerant, after all, this method here's called "convert...."
+                rConvertedValue = rValue;
+            }
+            else
+            {
+                BOOL bConverted = FALSE;
                 // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
+
                 switch (pDestType->getTypeClass())
                 {
                     case TypeClass_SHORT:
-                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_Int16* >(NULL));
-                        break;
+                    {
+                        sal_Int16 n;
+                        if ( bConverted = ( rValue >>= n ) )
+                            rConvertedValue <<= n;
+                    }
+                    break;
                     case TypeClass_UNSIGNED_SHORT:
-                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_uInt16* >(NULL));
-                        break;
+                    {
+                        sal_uInt16 n;
+                        if ( bConverted = ( rValue >>= n ) )
+                            rConvertedValue <<= n;
+                    }
+                    break;
                     case TypeClass_LONG:
-                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_Int32* >(NULL));
-                        break;
+                    {
+                        sal_Int32 n;
+                        if ( bConverted = ( rValue >>= n ) )
+                            rConvertedValue <<= n;
+                    }
+                    break;
                     case TypeClass_UNSIGNED_LONG:
-                        bConvertible = convertType(rConvertedValue, rValue, static_cast< const sal_uInt32* >(NULL));
-                        break;
+                    {
+                        sal_uInt32 n;
+                        if ( bConverted = ( rValue >>= n ) )
+                            rConvertedValue <<= n;
+                    }
+                    break;
                     // TODO: perhaps we should allow us some more tolerance for enum types, too ....
                 }
 
-                if (!bConvertible)
+                if (!bConverted)
+                {
                     throw ::com::sun::star::lang::IllegalArgumentException(
                                 ::rtl::OUString::createFromAscii("Unable to convert the given value for the property ")
                             +=  GetPropertyName((sal_uInt16)nPropId),
                         static_cast< ::com::sun::star::beans::XPropertySet* >(this),
                         1);
+                }
             }
-
-            // no we're allow to do this
-            rConvertedValue.setValue( rValue.getValue(), *pDestType );
         }
     }
 
