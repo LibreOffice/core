@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-02 15:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,6 +388,7 @@ namespace dbaui
     //------------------------------------------------------------------
     DbaIndexDialog::~DbaIndexDialog( )
     {
+        setToolBox(NULL);
         delete m_pIndexes;
         delete m_pFields;
 
