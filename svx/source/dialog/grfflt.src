@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:16:15 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,7 +320,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     Text[ ENGLISH ] = "Solarization" ;
     Text[ norwegian ] = "Solarization" ;
     Text[ italian ] = "Solarizzazione" ;
-    Text[ portuguese_brazilian ] = "SolarizaÁ„o" ;
+    Text[ portuguese_brazilian ] = "Solariza??o" ;
     Text[ portuguese ] = "SolarizaÁ„o" ;
     Text[ finnish ] = "Solarisaatio" ;
     Text[ danish ] = "Solarisering" ;
@@ -419,7 +419,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text[ english_us ] = "Threshold ~value" ;
         Text[ chinese_simplified ] = "≥ı º÷µ(~V)";
         Text[ russian ] = "œÓÓ„Ó‚ÓÂ ÁÌ‡˜ÂÌËÂ";
-        Text[ polish ] = "WartoúÊ progowa";
+        Text[ polish ] = "Warto?Ê progowa";
         Text[ japanese ] = "ÇµÇ´Ç¢íl(~V)";
         Text[ chinese_traditional ] = "™Ï©l≠»(~V)";
         Text[ arabic ] = "ﬁÌ„… «·»œ¡";
@@ -845,7 +845,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     Text[ ENGLISH ] = "Emboss" ;
     Text[ norwegian ] = "Emboss" ;
     Text[ italian ] = "Rilievo" ;
-    Text[ portuguese_brazilian ] = "RealÁar" ;
+    Text[ portuguese_brazilian ] = "Real?ar" ;
     Text[ portuguese ] = "Relevo" ;
     Text[ finnish ] = "Korkokuva" ;
     Text[ danish ] = "Relief" ;
@@ -944,7 +944,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
         Text[ english_us ] = "Light source" ;
         Text[ chinese_simplified ] = "π‚‘¥";
         Text[ russian ] = "»ÒÚÓ˜ÌËÍ Ò‚ÂÚ‡";
-        Text[ polish ] = "èrÛd≥o úwiat≥a";
+        Text[ polish ] = "?rÛd≥o ?wiat≥a";
         Text[ japanese ] = "åıåπ";
         Text[ chinese_traditional ] = "•˙∑Ω";
         Text[ arabic ] = "„’œ— «·÷Ê¡";
