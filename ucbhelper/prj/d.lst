@@ -22,7 +22,6 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\macros.hxx %_DEST%\inc%_EXT%\ucbhelper\macros.hxx
 ..\inc\ucbhelper\propertyvalueset.hxx %_DEST%\inc%_EXT%\ucbhelper\propertyvalueset.hxx
 ..\inc\ucbhelper\providerhelper.hxx %_DEST%\inc%_EXT%\ucbhelper\providerhelper.hxx
-..\inc\ucbhelper\remotecontentproviderscontrol.hxx %_DEST%\inc%_EXT%\ucbhelper\remotecontentproviderscontrol.hxx
 ..\inc\ucbhelper\resultset.hxx %_DEST%\inc%_EXT%\ucbhelper\resultset.hxx
 ..\inc\ucbhelper\resultsetmetadata.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsetmetadata.hxx
 ..\inc\ucbhelper\resultsethelper.hxx %_DEST%\inc%_EXT%\ucbhelper\resultsethelper.hxx
