@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change:$Date: 2003-10-06 12:39:11 $
+ *  last change:$Date: 2003-11-18 16:14:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -286,7 +286,6 @@ public class OfficeProvider implements AppProvider {
         try {
             msf = connect(cncstr);
         } catch (com.sun.star.uno.Exception ue) {
-            ue.printStackTrace();
             exc = ue.getMessage();
         } catch (java.lang.Exception je) {
             exc = je.getMessage();
