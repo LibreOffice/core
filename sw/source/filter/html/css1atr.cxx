@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:37:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3233,7 +3233,7 @@ static Writer& OutCSS1_SwFmtFrmSize( Writer& rWrt, const SfxPoolItem& rHt,
     if( nMode & CSS1_FRMSIZE_ANYHEIGHT )
     {
         BOOL bOutHeight = FALSE;
-        switch( rFSItem.GetSizeType() )
+        switch( rFSItem.GetHeightSizeType() )
         {
         case ATT_FIX_SIZE:
             bOutHeight = (nMode & CSS1_FRMSIZE_FIXHEIGHT) != 0;
