@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: hdu $ $Date: 2002-09-12 07:32:01 $
+ *  last change: $Author: pl $ $Date: 2002-09-19 07:54:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -968,7 +968,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         case LANGUAGE_ARABIC_BAHRAIN:
         case LANGUAGE_ARABIC_QATAR:
         case LANGUAGE_HEBREW:
-            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucida Bright;Supplement;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Interface User;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
+            aSearch = String( RTL_CONSTASCII_USTRINGPARAM( "Tahoma;Traditional Arabic;Simplified Arabic;Lucida Sans;Supplement;Andale Sans UI;Arial Unicode MS;Interface User;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif" ) );
             break;
 
         default:
