@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:33:58 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:27:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <svx/acorrcfg.hxx>
 #include <svx/algitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/brshitem.hxx>
@@ -89,7 +90,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <offmgr/app.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -2219,7 +2219,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
         if ( aString.GetChar(0) == '=' )
         {
-            SvxAutoCorrect* pAuto = OFF_APP()->GetAutoCorrect();
+            SvxAutoCorrect* pAuto = SvxAutoCorrCfg::Get()->GetAutoCorrect();
             if ( pAuto )
             {
                 sal_Unicode cReplace = pAuto->GetStartDoubleQuote();
