@@ -37,16 +37,14 @@ CLASSFILES = $(patsubst %.java,$(OUT_COMPONENT)$(PS)%.class,$(JAVAFILES) )
 
 CLASSFILES += $(patsubst %.java,$(OUT_COMPONENT)$(PS)$(PACKAGE)$(PS)%.class,$(GENJAVAFILES) )
 
-SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(EMPTYSTRING),,\
-		$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
+SDK_CLASSPATH =	$(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)$(PS)jurt.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)unoil.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)ridl.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)sandbox.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)java_uno.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)juh.jar\
 		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)$(PS)jut.jar\
-		$(PATH_SEPARATOR)$(OUT_COMPONENT)\
-		)
+		$(PATH_SEPARATOR)$(OUT_COMPONENT))
 
 OFFICE_FILEURL = $(subst \,/,$(OFFICE_PROGRAM_PATH))
 
@@ -63,7 +61,7 @@ $(OUT_COMPONENT) : $(OUT)
 $(TYPEFLAG) : $(IDLFILES)
 	$(BIN_DIR)$(PS)idlc -I. -I$(IDL_DIR) -O$(OUT_MISC) $^
 	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) /UCR $(GENURDFILES)
-	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) / $(BIN_DIR)$(PS)$(DKREGISTRYNAME)
+	$(BIN_DIR)$(PS)regmerge $(COMPONENT_RDB) / $(DKREGISTRYNAME)
 	$(BIN_DIR)$(PS)javamaker -BUCR -Torg.OpenOffice.XInstanceInspector -O$(OUT_MISC) $(COMPONENT_RDB)
 	@echo bla > $@
 
@@ -92,5 +90,5 @@ endif
 register: $(REGISTERFLAG)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use the following command to execute
-	@echo java -classpath $(subst \\,\,$(SDK_CLASSPATH)) Test $(OSEP)Connection$(CSEP)
+	@echo java -classpath "$(SDK_CLASSPATH)" Test $(OSEP)Connection$(CSEP)
 	@echo --------------------------------------------------------------------------------
