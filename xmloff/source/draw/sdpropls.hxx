@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:06:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:32:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,14 @@ extern const XMLPropertyMapEntry aXMLSDPresPageProps_onlyHeadersFooter[];
 // header & footer types
 #define XML_SD_TYPE_DATETIMEUPDATE                  (XML_SD_TYPES_START + 70 )
 #define XML_SD_TYPE_DATETIME_FORMAT                 (XML_SD_TYPES_START + 71 )
+
+//////////////////////////////////////////////////////////////////////////////
+// new types for merged style:protect attribute
+#define XML_SD_TYPE_MOVE_PROTECT                    (XML_SD_TYPES_START + 72 )
+#define XML_SD_TYPE_SIZE_PROTECT                    (XML_SD_TYPES_START + 73 )
+
+// new type for style:mirror attribute
+#define XML_TYPE_SD_MIRROR                          (XML_SD_TYPES_START + 74 )
 
 //////////////////////////////////////////////////////////////////////////////
 
