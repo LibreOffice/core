@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:51:17 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:54:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,13 +69,13 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text = "Szenario anlegen" ;
     Text [ ENGLISH ] = "Create Scenario" ;
     Text [ NORWEGIAN ] = "Lag Scenario" ;
-    Text [ DANISH ] = "Opret scenario" ;
+    Text [ DANISH ] = "Opret scenarie" ;
     Text [ ENGLISH_US ] = "Create Scenario" ;
     Text [ SPANISH ] = "Crear escenario" ;
     Text [ FINNISH ] = "Luo skenaario" ;
     Text [ FRENCH ] = "Cr�ation d'un sc�nario" ;
     Text [ ITALIAN ] = "Crea scenario" ;
-    Text [ DUTCH ] = "Scenario maken" ;
+    Text [ DUTCH ] = "Scenario aanmaken" ;
     Text [ PORTUGUESE_BRAZILIAN ] = "Criar Cen�rio" ;
     Text [ SWEDISH ] = "Skapa scenario" ;
     Text [ PORTUGUESE ] = "Criar cen�rio" ;
@@ -131,7 +131,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ spanish ] = "Mostrar borde";
         Text[ finnish ] = "N�yt� reuna";
         Text[ italian ] = "Mostra cornice in";
-        Text[ danish ] = "Vis ~ramme";
+        Text[ danish ] = "Vis kant i";
         Text[ swedish ] = "Visa ~ram";
         Text[ polish ] = "Wy�wietl kraw�d� w";
         Text[ portuguese_brazilian ] = "Exibir borda em";
@@ -148,6 +148,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "~Rahmen anzeigen";
         Text[ hindi ] = "किनारे को इसमें दिखाओ";
         Text[ slovak ] = "Zobrazovať okraje v";
+        Text[ hungarian ] = "Szegély megjelenítése:";
+        Text[ slovenian ] = "Prikaži obrobo v";
     };
     ListBox LB_COLOR
     {
@@ -167,7 +169,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ english_us ] = "Print border" ;
         Text [ portuguese_brazilian ] = "Imprimir borda" ;
         Text [ swedish ] = "Skriv ut ram" ;
-        Text [ danish ] = "Udskriv ramme" ;
+        Text [ danish ] = "Udskriv kant" ;
         Text [ italian ] = "Stampa cornice" ;
         Text [ spanish ] = "Imprimir borde" ;
         Text [ french ] = "Imprimer le cadre" ;
@@ -190,6 +192,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "Rahmen drucken";
         Text[ hindi ] = "किनारे का छपाई";
         Text[ slovak ] = "Tlačiť okraje";
+        Text[ hungarian ] = "Szegély nyomtatása";
+        Text[ slovenian ] = "Natisni obrobo";
     };
     CheckBox CB_TWOWAY
     {
@@ -201,7 +205,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ english_us ] = "Copy back" ;
         Text [ portuguese_brazilian ] = "Copiar de volta" ;
         Text [ swedish ] = "Kopiera t~illbaka" ;
-        Text [ danish ] = "Kopier til~bage" ;
+        Text [ danish ] = "Kopier tilbage" ;
         Text [ italian ] = "Ricopia all'indietro" ;
         Text [ spanish ] = "Volver a copiar" ;
         Text [ french ] = "~Recopier" ;
@@ -224,6 +228,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "~Zurückkopieren";
         Text[ hindi ] = "फिर से प्रतिलिपि";
         Text[ slovak ] = "Kopírovať späť";
+        Text[ hungarian ] = "Visszamásolás";
+        Text[ slovenian ] = "Kopiraj nazaj";
     };
     CheckBox CB_ATTRIB
     {
@@ -258,6 +264,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "‮תכונות‬";
         Text[ hindi ] = "ऐट्रिब्यूट्स";
         Text[ slovak ] = "Atribúty";
+        Text[ hungarian ] = "Jellemzők";
+        Text[ slovenian ] = "Atributi";
     };
     CheckBox CB_VALUE
     {
@@ -292,6 +300,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "Nur Werte kopieren";
         Text[ hindi ] = "केवल मूल्य का प्रतिलिपि बनाओ";
         Text[ slovak ] = "Kopírovať iba hodnoty";
+        Text[ hungarian ] = "Csak az értékek másolása";
+        Text[ slovenian ] = "Kopiraj samo vrednosti";
     };
     CheckBox CB_COPYALL
     {
@@ -302,7 +312,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ english_us ] = "Copy entire sheet" ;
         Text [ portuguese_brazilian ] = "Copiar a planilha inteira" ;
         Text [ swedish ] = "Kopiera hel ~tabell" ;
-        Text [ danish ] = "Kopier hele ~tabellen" ;
+        Text [ danish ] = "Kopier hele arket" ;
         Text [ italian ] = "Copia intera tabella" ;
         Text [ spanish ] = "Copiar toda la hoja" ;
         Text [ french ] = "Copier la feuille enti�re" ;
@@ -325,6 +335,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "Ganze ~Tabelle kopieren";
         Text[ hindi ] = "सम्पूर्ण शीट् का प्रतिलिपि बनाओ";
         Text[ slovak ] = "Kopírovať celý list";
+        Text[ hungarian ] = "Teljes munkalap másolása";
+        Text[ slovenian ] = "Kopiraj cel list";
     };
     String STR_EDIT
     {
@@ -334,7 +346,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text [ english_us ] = "Edit Scenario" ;
         Text [ portuguese_brazilian ] = "Editar Cen�rio" ;
         Text [ swedish ] = "Bearbeta scenario" ;
-        Text [ danish ] = "Rediger scenario" ;
+        Text [ danish ] = "Rediger scenarie" ;
         Text [ italian ] = "Modifica scenario" ;
         Text [ spanish ] = "Editar escenario" ;
         Text [ french ] = "�diter le sc�nario" ;
@@ -356,6 +368,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "Szenario bearbeiten";
         Text[ hindi ] = "विवरण का संपादन ";
         Text[ slovak ] = "Upraviť scenár";
+        Text[ hungarian ] = "Eset szerkesztése";
+        Text[ slovenian ] = "Uredi scenarij";
     };
     String STR_CREATEDBY
     {
@@ -388,6 +402,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "Angelegt von";
         Text[ hindi ] = "से उत्पन्न किया हुआ";
         Text[ slovak ] = "Vytvorené";
+        Text[ hungarian ] = "Készítette";
+        Text[ slovenian ] = "Ustvaril";
     };
     String STR_ON
     {
@@ -420,6 +436,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "am";
         Text[ hindi ] = "में";
         Text[ slovak ] = "zapnúť";
+        Text[ hungarian ] = "Bekapcsolás";
+        Text[ slovenian ] = "dne";
     };
     FixedLine FL_NAME
     {
@@ -431,7 +449,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ italian ] = "Nome dello scenario";
         Text[ portuguese_brazilian ] = "Nome do cen�rio";
         Text[ portuguese ] = "~Nome do cen�rio";
-        Text[ danish ] = "~Navn p� scenario";
+        Text[ danish ] = "Navn p� scenarie";
         Text[ french ] = "~Nom du sc�nario";
         Text[ swedish ] = "~Namn p� scenariot";
         Text[ dutch ] = "~Naam van het scenario";
@@ -453,6 +471,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "~Name des Szenarios";
         Text[ hindi ] = "विवरण का नाम";
         Text[ slovak ] = "Názov scenára";
+        Text[ hungarian ] = "Eset neve";
+        Text[ slovenian ] = "Ime scenarija";
     };
     FixedLine FL_COMMENT
     {
@@ -464,7 +484,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ italian ] = "~Commento";
         Text[ portuguese_brazilian ] = "Coment�rio";
         Text[ portuguese ] = "~Coment�rio";
-        Text[ danish ] = "~Kommentar";
+        Text[ danish ] = "Kommentar";
         Text[ french ] = "Commentaire";
         Text[ swedish ] = "~Kommentar";
         Text[ dutch ] = "~Opmerkingen";
@@ -486,6 +506,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "‮הערות‬";
         Text[ hindi ] = "अपवाद";
         Text[ slovak ] = "Komentár";
+        Text[ hungarian ] = "Megjegyzés";
+        Text[ slovenian ] = "Komentar";
     };
     FixedLine FL_OPTIONS
     {
@@ -519,6 +541,8 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ hebrew ] = "‮הגדרות‬";
         Text[ hindi ] = "निर्धारण";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Nastavitve";
     };
     Text[ chinese_simplified ] = "建立方案";
     Text[ russian ] = "������� ��������";
@@ -536,7 +560,10 @@ ModalDialog RID_SCDLG_NEWSCENARIO
     Text[ hebrew ] = "Szenario anlegen";
     Text[ hindi ] = "Create Scenario";
     Text[ slovak ] = "Vytvoriť scenár";
+    Text[ hungarian ] = "Eset létrehozása";
+    Text[ slovenian ] = "Ustvari scenarij";
 };
+
 
 
 
