@@ -1,0 +1,3 @@
+# table02
+TEST|Table 2|QUICKWORD|table02
+ENTER_STRING_AT_LOCATION|LEFT|64|This sentence comes after the table.

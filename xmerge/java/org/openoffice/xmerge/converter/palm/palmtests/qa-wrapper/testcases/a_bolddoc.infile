@@ -1,0 +1,4 @@
+#testing bold type conversion 
+# 
+TEST||QUICKWORD|a_bolddoc
+SLEEP|10

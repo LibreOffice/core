@@ -1,0 +1,4 @@
+#testing superscript conversion 
+# 
+TEST||QUICKWORD|a_superscript
+SLEEP|10
