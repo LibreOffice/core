@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:53:21 $
+ *  last change: $Author: kz $ $Date: 2004-07-23 12:07:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,5 @@
 #define RID_TB_TOOLBOX     11
 
 #define TBITEM_SHOW     1
-#define TBITEM_PROPS    2
-#define TBITEM_HELP     3
 
 #endif // _OBJDLG_HXX
