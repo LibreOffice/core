@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:18:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,7 +587,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text [ english_us ] = "Graphics Styles" ;
             Text [ italian ] = "Modelli di oggetti grafici" ;
             Text [ spanish ] = "Estilos de objetos gráficos" ;
-            Text [ french ] = "Styles d'objets graphiques" ;
+            Text [ french ] = "Styles d'objet graphique" ;
             Text [ dutch ] = "Opmaakprofielen voor grafische objecten" ;
             Text [ swedish ] = "Grafikobjektmallar" ;
             Text [ danish ] = "Grafikobjekttypografier" ;
