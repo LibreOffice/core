@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-02 14:37:48 $
+ *  last change: $Author: nn $ $Date: 2002-09-18 16:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,7 +989,17 @@ ScAccessibleEditLineTextData::~ScAccessibleEditLineTextData()
         pTxtWnd->SetAccessibleTextData(NULL);
 
     if (mbEditEngineCreated && mpEditEngine)
+    {
         delete mpEditEngine;
+        mpEditEngine = NULL;    // #103346# don't access in ScAccessibleEditObjectTextData dtor!
+    }
+    else if (pTxtWnd && pTxtWnd->GetEditView() && pTxtWnd->GetEditView()->GetEditEngine())
+    {
+        //  #103346# the NotifyHdl also has to be removed from the ScTextWnd's EditEngine
+        //  (it's set in ScAccessibleEditLineTextData::GetTextForwarder, and mpEditEngine
+        //  is reset there)
+        pTxtWnd->GetEditView()->GetEditEngine()->SetNotifyHdl(Link());
+    }
 }
 
 void ScAccessibleEditLineTextData::Dispose()
