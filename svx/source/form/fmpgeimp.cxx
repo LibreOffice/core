@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:19:54 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 10:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,9 +240,6 @@ void FmFormPageImpl::Init()
         SfxObjectShell* pObjShell = pDrawModel->GetObjectShell();
         if( pObjShell )
             xModel = pObjShell->GetModel();
-
-        // get a unique page id from the model
-        m_sPageId = pDrawModel->GetUniquePageId();
     }
 
     static const ::rtl::OUString sFormsCollectionServiceName = ::rtl::OUString::createFromAscii("com.sun.star.form.Forms");
@@ -622,6 +619,7 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
         case FormComponentType::HIDDENCONTROL:  nResId = RID_STR_HIDDEN_CLASSNAME;      break;
         case FormComponentType::SCROLLBAR:      nResId = RID_STR_CLASSNAME_SCROLLBAR;   break;
         case FormComponentType::SPINBUTTON:     nResId = RID_STR_CLASSNAME_SPINBUTTON;  break;
+        case FormComponentType::NAVIGATIONBAR:  nResId = RID_STR_NAVBAR_CLASSNAME;      break;
 
         case FormComponentType::TEXTFIELD:
             nResId = RID_STR_EDIT_CLASSNAME;
@@ -629,7 +627,6 @@ UniString FmFormPageImpl::getDefaultName( sal_Int16 _nClassId, const Reference< 
                 nResId = RID_STR_FORMATTED_CLASSNAME;
             break;
 
-        case FormComponentType::CONTROL:
         default:
             nResId = RID_STR_CONTROL_CLASSNAME;     break;
     }
