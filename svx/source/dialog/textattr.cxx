@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 14:13:16 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,12 +619,9 @@ void SvxTextAttrPage::Construct()
                 break;
                 case OBJ_CUSTOMSHAPE :
                 {
-                    if ( ((SdrTextObj*)pObj)->HasText() )
-                    {
-                        bFitToSizeEnabled = bContourEnabled = FALSE;
-                        bAutoGrowSizeEnabled = TRUE;
-                        bWordWrapTextEnabled = TRUE;
-                    }
+                    bFitToSizeEnabled = bContourEnabled = FALSE;
+                    bAutoGrowSizeEnabled = TRUE;
+                    bWordWrapTextEnabled = TRUE;
                 }
                 break;
             }
