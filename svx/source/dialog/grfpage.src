@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-15 12:17:19 $
+ *  last change: $Author: kz $ $Date: 2001-06-29 02:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,20 +290,20 @@ TabPage RID_SVXPAGE_GRFCROP
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Text = "Bildgröße beibehal~ten" ;
         Text [ ENGLISH ] = "Keep image si~ze" ;
-        Text [ english_us ] = "Keep si~ze" ;
+        Text [ english_us ] = "Keep image si~ze" ;
         Text [ italian ] = "Mantieni dimensione" ;
         Text [ spanish ] = "~Mantener el tamaño" ;
         Text [ french ] = "Même ~taille" ;
         Text [ dutch ] = "M~et behoud van grootte" ;
-        Text [ swedish ] = "Bibehåll s~torlek" ;
+        Text [ swedish ] = "Bibehåll bilds~torlek" ;
         Text [ danish ] = "Bevar størrelse" ;
         Text [ portuguese_brazilian ] = "Gr?e beibehalten" ;
         Text [ portuguese ] = "~Manter tamanho" ;
-        Text[ chinese_simplified ] = "±£³Ö´óĞ¡(~Z)";
+        Text[ chinese_simplified ] = "±£³Ö»­Ãæ´óĞ¡(~Z)";
         Text[ russian ] = "Ñîõğàíèòü ğàçìåğ";
-        Text[ polish ] = "Za~chowaj rozmiar";
-        Text[ japanese ] = "»²½Ş•Û(~Z)";
-        Text[ chinese_traditional ] = "«O«ù¤j¤p(~Z)";
+        Text[ polish ] = "Za~chowaj rozmiar obrazu";
+        Text[ japanese ] = "‰æ‘œ»²½Ş•Û(~Z)";
+        Text[ chinese_traditional ] = "«O«ùµe­±¤j¤p(~Z)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáÍÌã";
         Text[ greek ] = "Äéá~ôŞñçóç ìåãİèïõò";
         Text[ korean ] = "Å©±â À¯Áö(~Z)";
@@ -323,14 +323,14 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ spanish ] = "Mantener la ~escala" ;
         Text [ french ] = "Même é~chelle" ;
         Text [ dutch ] = "~Met behoud van schaal" ;
-        Text [ swedish ] = "Bibehåll s~kala" ;
+        Text [ swedish ] = "Bibehåll ~skalning" ;
         Text [ danish ] = "Bevar målestok" ;
         Text [ portuguese_brazilian ] = "Ma?stab beibehalten" ;
         Text [ portuguese ] = "Manter ~escala" ;
         Text[ chinese_simplified ] = "±£³ÖÏÔÊ¾±ÈÁĞ(~S)";
         Text[ russian ] = "Ñîõğàíèòü ìàñøòàá";
         Text[ polish ] = "Zachowaj s~kalê";
-        Text[ japanese ] = "½¹°Ù•Û(~S)";
+        Text[ japanese ] = "”{—¦•Û(~S)";
         Text[ chinese_traditional ] = "«O«ùÅã¥Ü¤ñ¨Ò(~S)";
         Text[ arabic ] = "ÇáÇÍÊİÇÙ ÈÇáãŞíÇÓ";
         Text[ greek ] = "ÄéáôŞñçóç êëß~ìáêáò";
@@ -356,14 +356,14 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ spanish ] = "Escala" ;
         Text [ french ] = "Échelle" ;
         Text [ dutch ] = "Schaal" ;
-        Text [ swedish ] = "Skala" ;
+        Text [ swedish ] = "Skalning" ;
         Text [ danish ] = "Målestok" ;
         Text [ portuguese_brazilian ] = "Ma?stab" ;
         Text [ portuguese ] = "Escala" ;
         Text[ chinese_simplified ] = "ÏÔÊ¾±ÈÁĞ";
         Text[ russian ] = "Ìàñøòàá";
         Text[ polish ] = "Skala";
-        Text[ japanese ] = "½¹°Ù";
+        Text[ japanese ] = "•\\¦”{—¦";
         Text[ chinese_traditional ] = "Åã¥Ü¤ñ¨Ò";
         Text[ arabic ] = "ÊßÈíÑ/ÊÕÛíÑ";
         Text[ greek ] = "Êëßìáêá";
@@ -389,7 +389,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ swedish ] = "Br~edd" ;
         Text [ dutch ] = "B~reedte" ;
         Text [ spanish ] = "A~ncho" ;
-        Text [ english_us ] = "W~idth" ;
+        Text [ english_us ] = "~Width" ;
         Text[ chinese_simplified ] = "¿í(~W)";
         Text[ russian ] = "Øèğèíà";
         Text[ polish ] = "Szer.";
@@ -437,7 +437,7 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ swedish ] = "H~öjd" ;
         Text [ dutch ] = "H~oogte" ;
         Text [ spanish ] = "A~ltura" ;
-        Text [ english_us ] = "Hei~ght" ;
+        Text [ english_us ] = "H~eight" ;
         Left = TRUE ;
         Text[ chinese_simplified ] = "¸ß(~E)";
         Text[ russian ] = "Âûñîòà";
@@ -482,15 +482,15 @@ TabPage RID_SVXPAGE_GRFCROP
         Text [ finnish ] = "Koko" ;
         Text [ danish ] = "Størrelse" ;
         Text [ french ] = "Taille" ;
-        Text [ swedish ] = "Storlek" ;
+        Text [ swedish ] = "Bildstorlek" ;
         Text [ dutch ] = "Grootte" ;
-        Text [ spanish ] = "Tamaño" ;
-        Text [ english_us ] = "Size" ;
-        Text[ chinese_simplified ] = "´óĞ¡";
+        Text [ spanish ] = "Tamaño de la imagen" ;
+        Text [ english_us ] = "Image size" ;
+        Text[ chinese_simplified ] = "Í¼Ïñ´óĞ¡";
         Text[ russian ] = "Ğàçìåğ";
-        Text[ polish ] = "Rozmiar";
-        Text[ japanese ] = "»²½Ş";
-        Text[ chinese_traditional ] = "¤j¤p";
+        Text[ polish ] = "Rozmiar obrazu";
+        Text[ japanese ] = "‰æ‘œ»²½Ş";
+        Text[ chinese_traditional ] = "¼v¹³¤j¤p";
         Text[ arabic ] = "ÇáÍÌã";
         Text[ greek ] = "Ìİãåèïò";
         Text[ korean ] = "Å©±â";
@@ -624,4 +624,5 @@ TabPage RID_SVXPAGE_GRFCROP
         Text[ finnish ] = "~Alkuperäinen koko";
     };
 };
+
 
