@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-01 08:43:04 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:52:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ chinese_traditional ] = "±Ά®|(~L)";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
         Text[ greek ] = "Σύνδεση";
-        Text[ korean ] = "Ώ¬°α(~L)";
+        Text[ korean ] = "Ώ¬°α";
         Text[ turkish ] = "Baπlantύ";
         Text[ language_user1 ] = " ";
     };
@@ -161,7 +161,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ chinese_traditional ] = "§R°£€£₯ΞͺΊ­I΄Ί­Ά­±(~R)";
         Text[ arabic ] = "ΝΠέ ΥέΝΗΚ ΗαΞαένΙ ΗαΚν αγ ΚυΣΚΪγα";
         Text[ greek ] = "Διαγραφή μη χρησιμοποιουμέ~νων σελιδών φόντου.";
-        Text[ korean ] = "»ηΏλΗΟΑφ ΎΚΐΊ Ήθ°ζ »θΑ¦(~R)";
+        Text[ korean ] = "»ηΏλΗΟΑφ ΎΚΐΊ Ήθ°ζΒΚ »θΑ¦(~R)";
         Text[ turkish ] = "Artalandaki kullanύlmayan sayfalarύ sil";
     };
     Text[ greek ] = "Εισαγωγή αντικειμένων/σελίδων";
