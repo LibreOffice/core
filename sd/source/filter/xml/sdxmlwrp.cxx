@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 17:25:10 $
+ *  last change: $Author: cl $ $Date: 2001-03-02 16:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,8 +343,7 @@ sal_Bool SdXMLFilter::Import()
                         }
                     }
                 }
-
-            } while( pServices->mpService );
+            }
 
             if( pGraphicHelper )
                 SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -355,7 +354,7 @@ sal_Bool SdXMLFilter::Import()
         catch( uno::Exception e )
         {
     #ifdef DEBUG
-            ByteString aError( "uno Exception catched while exporting:\n" );
+            ByteString aError( "uno Exception caught while importing:\n" );
             aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
             DBG_ERROR( aError.GetBuffer() );
     #endif
@@ -561,7 +560,7 @@ sal_Bool SdXMLFilter::Export()
     catch(uno::Exception e)
     {
 #ifdef DEBUG
-        ByteString aError( "uno Exception catched while exporting:\n" );
+        ByteString aError( "uno Exception caught while exporting:\n" );
         aError += ByteString( String( e.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
