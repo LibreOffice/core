@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpgrp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:10:44 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,9 @@ SdXMLGroupShapeContext::SdXMLGroupShapeContext(
     SvXMLImport& rImport,
     USHORT nPrfx, const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList,
-    uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+    uno::Reference< drawing::XShapes >& rShapes,
+    sal_Bool bTemporaryShape)
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape )
 {
 }
 
