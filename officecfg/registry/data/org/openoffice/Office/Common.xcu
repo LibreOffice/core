@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:08:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,62 +487,6 @@
           <value >private:image/3216</value>
         </prop>
       </node>
-    </node>
-  </node>
-  <node oor:name="OfficeObjects">
-    <node oor:name="Calc" oor:op="replace" install:module="calc">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Tabelle</value>
-        <value xml:lang="en-US">StarOffice 8 Spreadsheet</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >47BBB4CB-CE4C-4E80-A591-42D9AE74950F</value>
-      </prop>
-    </node>
-    <node oor:name="Chart" oor:op="replace">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Diagramm</value>
-        <value xml:lang="en-US">StarOffice 8 Chart</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >12DCAE26-281F-416F-A234-C3086127382E</value>
-      </prop>
-    </node>
-    <node oor:name="Draw" oor:op="replace" install:module="draw">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Zeichnung</value>
-        <value xml:lang="en-US">StarOffice 8 Drawing</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >4BAB8970-8A3B-45B3-991C-CBEEAC6BD5E3</value>
-      </prop>
-    </node>
-    <node oor:name="Impress" oor:op="replace" install:module="impress">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Präsentation</value>
-        <value xml:lang="en-US">StarOffice 8 Presentation</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >9176E48A-637A-4D1F-803B-99D9BFAC1047</value>
-      </prop>
-    </node>
-    <node oor:name="Math" oor:op="replace" install:module="math">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Formel</value>
-        <value xml:lang="en-US">StarOffice 8 Formula</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >078B7ABA-54FC-457F-8551-6147E776A997</value>
-      </prop>
-    </node>
-    <node oor:name="Writer" oor:op="replace" install:module="writer">
-      <prop oor:name="Name">
-        <value xml:lang="de">StarOffice 8 Text</value>
-        <value xml:lang="en-US">StarOffice 8 Text</value>
-      </prop>
-      <prop oor:name="Key"  oor:type="xs:string">
-        <value >8BC6B165-B1B2-4EDD-AA47-DAE2EE689DD6</value>
-      </prop>
     </node>
   </node>
   <node oor:name="Startup">
