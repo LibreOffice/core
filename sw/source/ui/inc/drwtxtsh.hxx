@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtsh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:22 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:03:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,6 @@ class SwDrawTextShell: public SfxShell
     SwView      &rView;
 
     SdrView     *pSdrView;
-    OutlinerView*pOLV;
-    SdrOutliner *pOutliner;
 
     BOOL        bRotate : 1;
     BOOL        bSelMove: 1;
@@ -97,6 +95,8 @@ public:
 
                 SwDrawTextShell(SwView &rView);
     virtual     ~SwDrawTextShell();
+
+    virtual SfxUndoManager*     GetUndoManager();
 
     void        StateDisableItems(SfxItemSet &);
 
