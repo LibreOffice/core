@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-08 17:48:07 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:29:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ ModalDialog DLG_VERSIONS
         Text [ spanish ] = "Guardar ~versión siempre al cerrar" ;
         Text [ french ] = "~Toujours enregistrer une version lors de la fermeture" ;
         Text [ dutch ] = "~Bij sluiten altijd versie opslaan" ;
-        Text [ portuguese ] = "~Guardar sempre uma versão ao fechar" ;
+        Text [ portuguese ] = "~Guardar sempre uma versão ao fechar." ;
         Text[ chinese_simplified ] = "ÔÚ¹Ø±ÕÊ±×ÜÊÇ±£´æ°æ±¾ĞÅÏ¢(~A)";
         Text[ russian ] = "Ïğè çàêğûòèè âñåãäà ñîõğàíÿòü âåğñèş";
         Text[ polish ] = "Zawsze zapisuj wersjê przy zamykaniu";
