@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:46 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1172,7 +1172,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
         //  Auto-Fill
 
         ScRange aMarkRange;
-        if (pViewData->GetSimpleArea( aMarkRange, FALSE ))
+        if (pViewData->GetSimpleArea( aMarkRange ))
         {
             if ( aMarkRange.aStart.Tab() == pViewData->GetTabNo() )
             {
@@ -1202,6 +1202,10 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
                         else
                             pViewData->SetFillMode(
                                 aMarkRange.aStart.Col(), aMarkRange.aStart.Row(), nX, nY );
+
+                        //  #108266# The simple selection must also be recognized when dragging,
+                        //  where the Marking flag is set and MarkToSimple won't work anymore.
+                        pViewData->GetMarkData().MarkToSimple();
                     }
                     bNewPointer = TRUE;
                 }
