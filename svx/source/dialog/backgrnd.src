@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backgrnd.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:06 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -875,7 +875,7 @@ TabPage RID_SVXPAGE_BACKGROUND
         Text [ ENGLISH_US ] = "Find graphics" ;
         Text [ italian ] = "Cerca immagine" ;
         Text [ spanish ] = "Buscar imagen" ;
-        Text [ french ] = "Rechercher un image" ;
+        Text [ french ] = "Rechercher une image" ;
         Text [ dutch ] = "Afbeelding zoeken" ;
         Text [ swedish ] = "Sök grafik" ;
         Text [ danish ] = "Søg grafik" ;
