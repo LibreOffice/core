@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:24:05 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:57:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,6 +542,15 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
 {
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
 
+    // third argument only sets veto, everything else will be ignored!
+    if (aArguments.getLength() > 2)
+    {
+        sal_Bool bVeto = sal_True;
+        bVeto = ::cppu::any2bool(aArguments[2]);
+        m_bVeto = bVeto;
+        return;
+    }
+
     if ( aArguments.getLength() > 0 )
     {
         if ( !ShutdownIcon::pShutdownIcon )
@@ -580,4 +589,5 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
             if (!bAutostart && GetAutostart())
                 SetAutostart( sal_False );
     }
+
 }
