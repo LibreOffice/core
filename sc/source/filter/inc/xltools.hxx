@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:29:42 $
+ *  last change: $Author: hr $ $Date: 2003-04-23 17:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,12 +248,6 @@ public:
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool                 IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = NULL );
 
-// languages ------------------------------------------------------------------
-
-    /** Converts an Excel country index into a LanguageType ID.
-        @return  false = The Excel country ID is unknown. reScLang has not been changed. */
-    static bool                 GetScLanguage( LanguageType& reScLang, sal_uInt16 nXclCountry );
-
 private:
     static const String         maDefNamePrefix;        /// Prefix for built-in defined names.
     static const String         maStyleNamePrefix;      /// Prefix for built-in cell style names.
@@ -293,30 +287,6 @@ struct XclFormatRun
 
 /** A vector with all formatting runs for a rich-string. */
 typedef ::std::vector< XclFormatRun > XclFormatRunVec;
-
-
-// Add-in function names ======================================================
-
-class ScUnoAddInCollection;
-
-/** Provides translation between Excel and Calc add-in function names. */
-class XclAddInNameTranslator : ScfNoCopy
-{
-private:
-    LanguageType                meLanguage;     /// Preferred language for name conversion.
-    ScUnoAddInCollection&       mrAddInColl;    /// Calc internal add-in collection.
-
-public:
-    explicit                    XclAddInNameTranslator();
-
-    /** Sets the preferred language for name conversion. */
-    inline void                 SetLanguage( LanguageType eLanguage ) { meLanguage = eLanguage; }
-
-    /** Returns the Calc add-in function name for an Excel name. */
-    String                      GetScName( const String& rName );
-    /** Returns the Excel add-in function name for a Calc name. */
-    String                      GetXclName( const String& rName );
-};
 
 
 // ============================================================================
