@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltracer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:02:05 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,6 @@ public:
     void                        TraceBorderLineStyle(bool bBorderLineStyle);
     void                        TraceFillPattern(bool bFillPattern);
     void                        TraceInvisibleGrid(bool bVisibleGrid);
-    void                        TraceFormattedNote(bool bFormattedNote);
     void                        TraceFormulaExtName();
     void                        TraceFormulaMissingArg();
     void                        TracePivotDataSource(bool bExternal);
