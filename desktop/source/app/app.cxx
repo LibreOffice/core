@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: mba $ $Date: 2002-01-18 16:22:03 $
+ *  last change: $Author: mba $ $Date: 2002-01-21 10:13:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,17 +1323,10 @@ void Desktop::Main()
             bExpired = sal_True;
 
             // determine current locale
-            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
-            ::rtl::OUString aTmp;
-            aRet >>= aTmp;
-
-            // only first part of locale must match
             ::rtl::OUString aLocale;
-            sal_Int32 nPos = aTmp.indexOf('_');
-            if ( nPos > 0 )
-                aLocale = aTmp.copy( 0, nPos );
-            else
-                aLocale = aTmp;
+            ::rtl::OUString aTmp;
+            Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+            aRet >>= aLocale;
 
             sal_Int32 nCount = aSeq.getLength();
             if ( nCount )
@@ -1345,7 +1338,8 @@ void Desktop::Main()
             }
 
             // find string for matching locale
-            for ( sal_Int32 n=0; n<nCount; n++ )
+            sal_Int32 n;
+            for ( n=0; n<nCount; n++ )
             {
                 const NamedValue& rValue = aSeq[n];
                 if ( rValue.Name == aLocale )
@@ -1353,6 +1347,27 @@ void Desktop::Main()
                     rValue.Value >>= aTmp;
                     aEval = aTmp;
                     break;
+                }
+            }
+
+            if ( n == nCount )
+            {
+                // try matching only first part of locale, if tab service provides it
+                ::rtl::OUString aShortLocale;
+                sal_Int32 nPos = aLocale.indexOf('_');
+                if ( nPos > 0 )
+                {
+                    aShortLocale = aLocale.copy( 0, nPos );
+                    for ( n=0; n<nCount; n++ )
+                    {
+                        const NamedValue& rValue = aSeq[n];
+                        if ( rValue.Name == aShortLocale )
+                        {
+                            rValue.Value >>= aTmp;
+                            aEval = aTmp;
+                            break;
+                        }
+                    }
                 }
             }
 
