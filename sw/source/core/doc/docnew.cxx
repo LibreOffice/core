@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-30 08:20:30 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1025,6 +1025,7 @@ void SwDoc::SetForbiddenCharacters( USHORT nLang,
         pLayout->InvalidateAllCntnt();
         pLayout->EndAllAction();
     }
+    SetModified();
 }
 
 void SwDoc::ClearForbiddenCharacters( USHORT nLang )
@@ -1048,6 +1049,7 @@ void SwDoc::ClearForbiddenCharacters( USHORT nLang )
             pLayout->InvalidateAllCntnt();
             pLayout->EndAllAction();
         }
+        SetModified();
     }
 }
 
@@ -1069,6 +1071,7 @@ void SwDoc::SetCharCompressType( SwCharCompressType n )
             pLayout->InvalidateAllCntnt();
             pLayout->EndAllAction();
         }
+        SetModified();
     }
 }
 
