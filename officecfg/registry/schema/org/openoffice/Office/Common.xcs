@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: os $ $Date: 2002-08-14 11:01:22 $
+ *  last change: $Author: ka $ $Date: 2002-08-20 12:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3261,9 +3261,9 @@
 			</prop>
 		</group>
 		<group oor:name="Filter">
-			<!-- Responsible: SJ / OS -->
+			<!-- Responsible: SJ / OS / KA-->
 			<info>
-				<desc xml:lang="en-US">Specifies default settings of Microsoft-, Graphic- and HTML filters.</desc>
+				<desc xml:lang="en-US">Specifies default settings of Microsoft-, Graphic-, HTML- and PDF- filters.</desc>
 			</info>
 			<group oor:name="Microsoft">
 				<!-- Responsible: SJ -->
@@ -4223,6 +4223,41 @@
 					</info>
 				</group>
 			</group>
+			<group oor:name="PDF">
+				<!-- Responsible: KA -->
+				<info>
+					<desc xml:lang="en-US">Specifies default settings of PDF export dialog.</desc>
+				</info>
+				<group oor:name="Export">
+					<prop oor:name="CompressMode" oor:type="xs:int">
+						<value>0</value>
+						<info>
+							<desc xml:lang="en-US">Specifies usable export modes.</desc>
+							<label xml:lang="en-US">Screen - Print - Press</label>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc xml:lang="en-US">Screen mode - medium quality (600DPI, bitmaps reduced to 72DPI)</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc xml:lang="en-US">Print mode - high quality (1200DPI, bitmaps reduced to 300DPI)</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc xml:lang="en-US">Press mode - maximum quality (2400DPI, bitmaps reduced to 300DPI)</desc>
+								</info>
+							</enumeration>
+						</constraints>
+					</prop>
+					<info>
+						<desc xml:lang="en-US">Specifies default settings of PDF export dialog.</desc>
+					</info>
+				</group>
+			</group>
 		</group>
 		<group oor:name="Misc">
 			<prop oor:name="PluginsEnabled" oor:type="xs:boolean">
@@ -4794,20 +4829,20 @@ Relevant on platforms where file/folder picker integration is implemented.</desc
 					<!-- UIHints: setup -->
 					<value>false</value>
 					<info>
-                        <desc xml:lang="en-US">Specifies, whether CTL font settings are available (true) or not (false).</desc>
+						<desc xml:lang="en-US">Specifies, whether CTL font settings are available (true) or not (false).</desc>
 					</info>
 				</prop>
-                <prop oor:name="CTLSequenceChecking" oor:type="xs:boolean">
+				<prop oor:name="CTLSequenceChecking" oor:type="xs:boolean">
 					<!-- UIHints: setup -->
 					<value>false</value>
 					<info>
-                        <desc xml:lang="en-US">Specifies, whether CTL strings are checked for the correct input sequence(true) or not (false).</desc>
+						<desc xml:lang="en-US">Specifies, whether CTL strings are checked for the correct input sequence(true) or not (false).</desc>
 					</info>
 				</prop>
-                <info>
+				<info>
 					<desc xml:lang="en-US">Contains settings for the languages with complex text layout (Hebrew, Arabic, Thai,...).</desc>
 				</info>
-            </group>
+			</group>
 		</group>
 		<group oor:name="Startup">
 			<!-- Responsible: AS -->
