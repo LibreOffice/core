@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:15:55 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:45:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
 #endif
@@ -221,8 +220,10 @@ void XclImpString::ReadFormats( XclImpStream& rStrm, sal_uInt16 nRunCount )
 
 // String->EditEngine conversion ==============================================
 
-EditTextObject* XclImpStringHelper::CreateTextObject(
-        const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
+namespace {
+
+EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
+        const XclImpString& rString, XclImpFontMode eFontMode, sal_uInt16 nXFIndex )
 {
     EditTextObject* pTextObj = 0;
 
@@ -234,12 +235,13 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
         const XclImpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
         const XclFormatRunVec& rFormats = rString.GetFormats();
 
-        EditEngine& rEE = rRoot.GetEditEngine();
+        ScEditEngineDefaulter& rEE = (eFontMode == EXC_FONTMODE_NOTE) ?
+            rRoot.GetDoc().GetNoteEngine() : rRoot.GetEditEngine();
         rEE.SetText( rString.GetText() );
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
         if( bFirstEscaped )
-            rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, rXFBuffer.GetFontIndex( nXFIndex ) );
+            rFontBuffer.FillToItemSet( aItemSet, eFontMode, rXFBuffer.GetFontIndex( nXFIndex ) );
         ESelection aSelection;
 
         XclFormatRun aNextRun;
@@ -262,7 +264,7 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
 
                 // start new item set
                 aItemSet.ClearItem();
-                rFontBuffer.FillToItemSet( aItemSet, xlFontEEIDs, aNextRun.mnXclFont );
+                rFontBuffer.FillToItemSet( aItemSet, eFontMode, aNextRun.mnXclFont );
 
                 // read new formatting information
                 if( aIt != aEnd )
@@ -294,6 +296,20 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
     return pTextObj;
 }
 
+} // namespace
+
+EditTextObject* XclImpStringHelper::CreateTextObject(
+        const XclImpRoot& rRoot, const XclImpString& rString )
+{
+    return lclCreateTextObject( rRoot, rString, EXC_FONTMODE_EDITENG, 0 );
+}
+
+EditTextObject* XclImpStringHelper::CreateNoteObject(
+        const XclImpRoot& rRoot, const XclImpString& rString )
+{
+    return lclCreateTextObject( rRoot, rString, EXC_FONTMODE_NOTE, 0 );
+}
+
 ScBaseCell* XclImpStringHelper::CreateCell(
         const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
 {
@@ -301,7 +317,7 @@ ScBaseCell* XclImpStringHelper::CreateCell(
 
     if( rString.GetText().Len() )
     {
-        ::std::auto_ptr< EditTextObject > pTextObj( CreateTextObject( rRoot, rString, nXFIndex ) );
+        ::std::auto_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTMODE_EDITENG, nXFIndex ) );
         ScDocument& rDoc = rRoot.GetDoc();
 
         if( pTextObj.get() )
@@ -584,7 +600,7 @@ void XclImpHFConverter::SetAttribs()
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
         XclImpFont aFont( GetRoot(), *mxFontData );
-        aFont.FillToItemSet( aItemSet, xlFontHFIDs );
+        aFont.FillToItemSet( aItemSet, EXC_FONTMODE_HF );
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
         rSel.nStartPos = rSel.nEndPos;
