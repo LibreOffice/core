@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanner.ll,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:48:37 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:11:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,6 +314,8 @@ oneway          return IDL_ONEWAY;
 
 get             return IDL_GET;
 set             return IDL_SET;
+
+published       return IDL_PUBLISHED;
 
 "..."           return IDL_ELLIPSIS;
 
