@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:27:46 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:40:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,16 +239,11 @@ struct SvxPosSizeStatusBarControl_Impl
     Images fu"r die Position und Gro"sse laden.
 */
 
-SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT nId,
-                                                        StatusBar& rStb,
-                                                        SfxBindings& rBind ) :
-    SfxStatusBarControl( nId, rStb, rBind ),
-
-    aPosForwarder( SID_ATTR_POSITION, *this ),
-    aTableForwarder( SID_TABLE_CELL, *this ),
-    aFuncForwarder( SID_PSZ_FUNCTION, *this ),
+SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT nSlotId,
+                                                        USHORT nId,
+                                                        StatusBar& rStb ) :
+    SfxStatusBarControl( nSlotId, nId, rStb ),
     pImp( new SvxPosSizeStatusBarControl_Impl )
-
 {
     pImp->bTime = TRUE;
     pImp->bSize = FALSE;
@@ -257,6 +252,10 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT nId,
     pImp->nFunction = 0;
     pImp->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
     pImp->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
+
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Position" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StateTableCell" )));
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StatusBarFunc" )));
 }
 
 // -----------------------------------------------------------------------
@@ -383,8 +382,16 @@ void SvxPosSizeStatusBarControl::Command( const CommandEvent& rCEvt )
                 if (nSelect == PSZ_FUNC_NONE)
                     nSelect = 0;
 
+                ::com::sun::star::uno::Any a;
                 SfxUInt16Item aItem( SID_PSZ_FUNCTION, nSelect );
-                GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
+
+                ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > aArgs( 1 );
+                aArgs[0].Name  = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusBarFunc" ));
+                aItem.QueryValue( a );
+                aArgs[0].Value = a;
+
+                execute( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StatusBarFunc" )), aArgs );
+//              GetBindings().GetDispatcher()->Execute( SID_PSZ_FUNCTION, SFX_CALLMODE_RECORD, &aItem, 0L );
             }
         }
     }
