@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:58:42 $
+ *  last change: $Author: os $ $Date: 2002-09-24 06:44:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,15 @@ IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
     if(pField == &aColEdit)
     {
         long nCol = aColEdit.GetValue();
+        if(!nCol)
+            nCol = 1;
         aRowEdit.SetMax(ROW_COL_PROD/nCol);
     }
     else
     {
         long nRow = aRowEdit.GetValue();
+        if(!nRow)
+            nRow = 1;
         aColEdit.SetMax(ROW_COL_PROD/nRow);
     }
     return 0;
@@ -228,6 +232,9 @@ IMPL_LINK(SwInsTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2002/07/03 16:58:42  mba
+    #100782#: recording for InsertTable
+
     Revision 1.3  2001/06/01 11:14:09  fme
     Fix #86988#: Redesign of dialogs
 
