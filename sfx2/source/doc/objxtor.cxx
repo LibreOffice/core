@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-07 17:41:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,17 +382,6 @@ sal_Bool SfxObjectShell::Close()
             if ( nPos < rDocs.Count() )
                 rDocs.Remove( nPos );
             pImp->bInList = sal_False;
-
-/*
-            // Ist leider zu sp"at, da kaum noch Macros laufen, wenn keine View
-            // mehr da ist!
-            if ( _pFactory && _pFactory->GetFlags() & SFXOBJECTSHELL_HASOPENDOC )
-                // Event nur bei echten Dokumenten
-                pSfxApp->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, this) );
-*/
-            // Broadcast moved to SfxBaseModel!
-            //Broadcast( SfxSimpleHint(SFX_HINT_DEINITIALIZING) );
-            //pImp->bClosing = sal_False;
         }
     }
 
