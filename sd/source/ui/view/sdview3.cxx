@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-14 12:29:52 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,7 +626,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             xStm->Seek( 0 );
 
             com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
-            bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent );
+            bReturn = SvxDrawingLayerImport( pModel, xInputStream, xComponent, "com.sun.star.comp.Impress.XMLImporter" );
 
             pModel->SetStreamingSdrModel( FALSE );
 

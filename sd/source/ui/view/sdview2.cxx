@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-13 16:44:45 $
+ *  last change: $Author: cl $ $Date: 2002-06-17 14:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #pragma hdrstop
 
+#include <vector>
 
 #ifndef _REF_HXX
 #include <tools/ref.hxx>
@@ -122,6 +123,15 @@
 #endif
 #ifndef _MyEDITENG_HXX //autogen
 #include <svx/editeng.hxx>
+#endif
+#ifndef _SVDITER_HXX
+#include <svx/svditer.hxx>
+#endif
+#ifndef _E3D_OBJ3D_HXX
+#include <svx/obj3d.hxx>
+#endif
+#ifndef _E3D_SCENE3D_HXX
+#include <svx/scene3d.hxx>
 #endif
 
 #include "navigatr.hxx"
@@ -1008,3 +1018,225 @@ BOOL SdView::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT
 
     return( bNameOK );
 }
+
+typedef std::vector< std::pair< sal_uInt32, sal_uInt32 > > PathSurrogateVector;
+typedef std::vector< SdrObject* > SdrObjectVector;
+
+void ImplProcessObjectList(SdrObject* pObj, SdrObjectVector& rVector )
+{
+    sal_Bool bIsGroup(pObj->IsGroupObject());
+    if(bIsGroup && pObj->ISA(E3dObject) && !pObj->ISA(E3dScene))
+        bIsGroup = sal_False;
+
+    rVector.push_back( pObj );
+
+    if(bIsGroup)
+    {
+        SdrObjList* pObjList = pObj->GetSubList();
+        sal_uInt32 a;
+        for( a = 0; a < pObjList->GetObjCount(); a++)
+            ImplProcessObjectList(pObjList->GetObj(a), rVector);
+    }
+}
+
+/** this method restores all connections between shapes with animations along a path and theire path */
+SdrModel* SdView::GetMarkedObjModel() const
+{
+    // this vector holds the index of all shapes with animations along a path and the index
+    // of theire corresponding path. The index is a flat index
+    PathSurrogateVector aPathSurro;
+
+    {
+        // get a flat vector of all shapes inside the mark list first, including deep within groups
+        SdrObjectVector aSdrVector;
+        const sal_uInt32 nMarkCount = aMark.GetMarkCount();
+        sal_uInt32 nMark;
+        for(nMark = 0; nMark < nMarkCount; nMark++ )
+        {
+            ImplProcessObjectList( aMark.GetMark( nMark )->GetObj(), aSdrVector );
+        }
+
+        // now see if we find any shape with an animation along a path
+        sal_uInt32 nObj = 0;
+        SdrObjectVector::iterator aIter( aSdrVector.begin() );
+        const SdrObjectVector::iterator aEnd( aSdrVector.end() );
+        while( aIter != aEnd )
+        {
+            const SdrObject* pObj = (*aIter++);
+
+            if( pObj )
+            {
+                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(const_cast<SdrObject*>(pObj));
+                if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
+                {
+                    // we found one, now look for the path
+                    SdrObjectVector::iterator aPathIter( aSdrVector.begin() );
+                    sal_uInt32 nPath = 0;
+
+                    while( aPathIter != aEnd )
+                    {
+                        SdrObject* pPathObj = (*aPathIter++);
+                        if( pPathObj == pInfo->pPathObj )
+                        {
+                            // we found the path, so store the indices
+                            aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nObj, nPath ) );
+                            break;
+                        }
+                        nPath++;
+                    }
+                }
+            }
+            nObj++;
+        }
+    }
+
+    // let the base class create the model
+    SdrModel* pNewModel = FmFormView::GetMarkedObjModel();
+
+    // if we had any shapes with animations along a path...
+    if( !aPathSurro.empty() )
+    {
+        // restore theire connections to the they're path shapes
+        SdrPage* pPage = pNewModel->GetPage(0);
+        SdrObjListIter  aObjIter( *pPage, IM_DEEPWITHGROUPS );
+
+        PathSurrogateVector::iterator aIter = aPathSurro.begin();
+        const PathSurrogateVector::iterator aEnd = aPathSurro.end();
+
+        while( aIter != aEnd )
+        {
+
+            sal_uInt32 nObject = (*aIter).first;
+            SdrObject* pObject = NULL;
+            aObjIter.Reset();
+            while( (pObject = aObjIter.Next()) && nObject-- );
+
+            SdrObject* pPath = NULL;
+            nObject = (*aIter).second;
+            aObjIter.Reset();
+            while( (pPath = aObjIter.Next()) && nObject-- );
+
+            if( pObject && pPath )
+            {
+                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObject);
+                if( pInfo == NULL )
+                {
+                    pInfo = new SdAnimationInfo(pDoc);
+                    pObject->InsertUserData( pInfo );
+                }
+
+                pInfo->eEffect = presentation::AnimationEffect_PATH;
+                pInfo->pPathObj = PTR_CAST( SdrPathObj, pPath );
+            }
+
+            aIter++;
+        }
+    }
+
+    return pNewModel;
+}
+
+/** this method restores all connections between shapes with animations along a path and theire path */
+BOOL SdView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList* pLst /* =NULL */, UINT32 nOptions /* =0 */)
+{
+    // this vector holds the index of all shapes with animations along a path and the index
+    // of theire corresponding path. The index is a flat index
+    PathSurrogateVector aPathSurro;
+
+    // get the destination object list or page
+    SdrObjList* pDstList = pLst;
+    if( NULL == pDstList )
+    {
+        SdrPageView* pPV=GetPageView(rPos);
+        if (pPV!=NULL)
+            pDstList=pPV->GetObjList();
+    }
+
+    sal_uInt32 nDstObjCount = 0;
+    if( pDstList )
+    {
+        // first we need the flat count of shapes already in the destination
+        // object list, so we can have the absolut index of newly created shapes
+        {
+            SdrObjListIter  aIter( *pDstList, IM_DEEPWITHGROUPS );
+            while( aIter.Next() )
+                nDstObjCount++;
+        }
+
+        // now find all shapes with an animation at path set and theire path shape
+        sal_uInt32 nPageCount = rMod.GetPageCount();
+        sal_uInt32 nPage;
+        for( nPage=0; nPage < nPageCount; nPage++ )
+        {
+            const SdrPage* pPage = rMod.GetPage( 0 );
+            if( pPage )
+            {
+                SdrObjListIter  aIter( *pPage, IM_DEEPWITHGROUPS );
+
+                const sal_uInt32 nObjCount = pPage->GetObjCount();
+                sal_uInt32 nObj;
+                SdrObject* pObj;
+                for( pObj = aIter.Next(), nObj = 0; pObj; pObj = aIter.Next(), nObj++ )
+                {
+                    SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(const_cast<SdrObject*>(pObj));
+                    if( pInfo && pInfo->eEffect == presentation::AnimationEffect_PATH && pInfo->pPathObj)
+                    {
+                        SdrObjListIter  aPathIter( *pPage, IM_DEEPWITHGROUPS );
+                        sal_uInt32 nPath;
+                        SdrObject* pPath;
+                        for( pPath = aPathIter.Next(), nPath = 0; pPath; pPath = aPathIter.Next(), nPath++ )
+                        {
+                            if( pPath == pInfo->pPathObj )
+                            {
+                                aPathSurro.push_back( std::pair< sal_uInt32, sal_uInt32 >( nDstObjCount + nObj, nDstObjCount + nPath ) );
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    BOOL bRet = FmFormView::Paste( rMod, rPos, pLst,nOptions );
+
+    if( bRet && !aPathSurro.empty() )
+    {
+        // restore all shapes with animation at path and theire path connections
+        PathSurrogateVector::iterator aIter = aPathSurro.begin();
+        const PathSurrogateVector::iterator aEnd = aPathSurro.end();
+
+        SdrObjListIter  aObjIter( *pDstList, IM_DEEPWITHGROUPS );
+
+        while( aIter != aEnd )
+        {
+            sal_uInt32 nObject = (*aIter).first;
+            SdrObject* pObject = NULL;
+            aObjIter.Reset();
+            while( (pObject = aObjIter.Next()) && nObject-- );
+
+            SdrObject* pPath = NULL;
+            nObject = (*aIter).second;
+            aObjIter.Reset();
+            while( (pPath = aObjIter.Next()) && nObject-- );
+
+            if( pObject && PTR_CAST( SdrPathObj, pPath ) )
+            {
+                SdAnimationInfo* pInfo = pDoc->GetAnimationInfo(pObject);
+                if( pInfo == NULL )
+                {
+                    pInfo = new SdAnimationInfo(pDoc);
+                    pObject->InsertUserData( pInfo );
+                }
+
+                pInfo->eEffect = presentation::AnimationEffect_PATH;
+                pInfo->pPathObj = PTR_CAST(SdrPathObj, pPath );
+            }
+
+            aIter++;
+        }
+    }
+
+    return bRet;
+}
+
