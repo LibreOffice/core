@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:40:40 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:04:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -676,6 +676,7 @@ public:
                                         Color& rColor, USHORT& rFlags ) const;
     void            SetScenarioData( USHORT nTab, const String& rComment,
                                         const Color& rColor, USHORT nFlags );
+    void            GetScenarioFlags( USHORT nTab, USHORT& rFlags ) const;
     BOOL            IsActiveScenario( USHORT nTab ) const;
     void            SetActiveScenario( USHORT nTab, BOOL bActive );     // nur fuer Undo etc.
     BYTE            GetLinkMode( USHORT nTab ) const;
