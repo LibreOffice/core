@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generictoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:55:40 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 12:54:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_STATUS_ITEMSTATE_HPP_
 #include <com/sun/star/frame/status/ItemState.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_STATUS_VISIBILITY_HPP_
+#include <com/sun/star/frame/status/Visibility.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -249,11 +252,12 @@ throw ( RuntimeException )
         sal_Bool        bValue;
         rtl::OUString   aStrValue;
         ItemStatus      aItemState;
+        Visibility      aItemVisibility;
 
         if (( Event.State >>= bValue ) && !m_bEnumCommand )
         {
             // Boolean, treat it as checked/unchecked
-            m_pToolbar->SetItemBits( m_nID, nItemBits );
+            m_pToolbar->ShowItem( m_nID, TRUE );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -268,7 +272,6 @@ throw ( RuntimeException )
                 else
                     bValue = sal_False;
 
-                m_pToolbar->SetItemBits( m_nID, nItemBits );
                 m_pToolbar->CheckItem( m_nID, bValue );
                 if ( bValue )
                     eTri = STATE_CHECK;
@@ -276,12 +279,19 @@ throw ( RuntimeException )
             }
             else
                 m_pToolbar->SetItemText( m_nID, aStrValue );
+
+            m_pToolbar->ShowItem( m_nID, TRUE );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
+            m_pToolbar->ShowItem( m_nID, TRUE );
         }
+        else if ( Event.State >>= aItemVisibility )
+            m_pToolbar->ShowItem( m_nID, aItemVisibility.bVisible );
+        else
+            m_pToolbar->ShowItem( m_nID, TRUE );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );
