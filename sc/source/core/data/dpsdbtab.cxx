@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpsdbtab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:24:44 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 11:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,6 +308,7 @@ void lcl_FillItemData( ScDPItemData& rData,
         switch ( nType )
         {
             case sdbc::DataType::BIT:
+            case sdbc::DataType::BOOLEAN:
                 nNumType = NUMBERFORMAT_LOGICAL;
                 rData.fValue = (xRow->getBoolean(nRowPos) ? 1 : 0);
                 bEmptyFlag = ( rData.fValue == 0.0 ) && xRow->wasNull();
