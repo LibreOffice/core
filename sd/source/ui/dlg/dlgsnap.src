@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsnap.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:57:41 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:59:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ ModalDialog DLG_SNAPLINE
     Text [ ENGLISH ] = "New Snap Object" ;
     Text [ norwegian ] = "+++New Snap Object" ;
     Text [ italian ] = "Nuovo oggetto cattura" ;
-    Text [ portuguese_brazilian ] = "Novo Aderir Objeto" ;
+    Text [ portuguese_brazilian ] = "Novo Objeto de Encaixe" ;
     Text [ portuguese ] = "Novo objecto de captura" ;
     Text [ finnish ] = "Lisää kohdistuspiste tai -viiva" ;
     Text [ danish ] = "Nyt fangobjekt" ;
@@ -110,7 +110,7 @@ ModalDialog DLG_SNAPLINE
         Text [ ENGLISH ] = "~Delete" ;
         Text [ norwegian ] = "~Slett" ;
         Text [ italian ] = "~Elimina" ;
-        Text [ portuguese_brazilian ] = "~Apagar" ;
+        Text [ portuguese_brazilian ] = "E~xcluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
         Text [ danish ] = "Slet" ;
@@ -122,7 +122,7 @@ ModalDialog DLG_SNAPLINE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "åˆ é™¤(~D)";
         Text[ russian ] = "~Óäàëèòü";
-        Text[ polish ] = "Usuñ";
+        Text[ polish ] = "~Usuñ";
         Text[ japanese ] = "å‰Šé™¤(~D)";
         Text[ chinese_traditional ] = "åˆªé™¤(~D)";
         Text[ arabic ] = "ÍĞİ";
@@ -132,6 +132,9 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Suprimeix";
         Text[ thai ] = "~à¸¥à¸š";
+        Text[ czech ] = "Smazat";
+        Text[ hebrew ] = "â€®××—×™×§×”â€¬";
+        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";
     };
     FixedLine FL_POSITION
     {
@@ -162,6 +165,9 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Posició";
         Text[ thai ] = "à¸•à¸³à¹à¸«à¸™à¹ˆà¸‡";
+        Text[ czech ] = "UmÃ­stÄ›nÃ­";
+        Text[ hebrew ] = "â€®××™×§×•×â€¬";
+        Text[ hindi ] = "à¤¸à¥à¤¥à¤¾à¤¨";
     };
     FixedText FT_X
     {
@@ -238,6 +244,9 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
         Text[ thai ] = "à¸Šà¸™à¸´à¸”";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "â€®×¡×•×’â€¬";
+        Text[ hindi ] = "à¤µà¤°à¥à¤—";
     };
     ImageRadioButton RB_POINT
     {
@@ -264,7 +273,7 @@ ModalDialog DLG_SNAPLINE
         };
         Text[ chinese_simplified ] = "ç‚¹(~P)";
         Text[ russian ] = "~Òî÷êà";
-        Text[ polish ] = "Pu~nkt";
+        Text[ polish ] = "P~unkt";
         Text[ japanese ] = "ç‚¹(~P)";
         Text[ chinese_traditional ] = "é»(~P)";
         Text[ arabic ] = "äŞØÉ";
@@ -274,6 +283,9 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Punt";
         Text[ thai ] = "~à¸ˆà¸¸à¸”";
+        Text[ czech ] = "Bod";
+        Text[ hebrew ] = "~Punkt";
+        Text[ hindi ] = "~à¤¬à¤¿à¤¨à¥à¤¦à¥";
     };
     ImageRadioButton RB_VERTICAL
     {
@@ -300,7 +312,7 @@ ModalDialog DLG_SNAPLINE
         };
         Text[ chinese_simplified ] = "çºµå‘(~V)";
         Text[ russian ] = "~Âåğòèêàëüíî";
-        Text[ polish ] = "W pionie";
+        Text[ polish ] = "~Pionowo";
         Text[ japanese ] = "ç¸¦ä½ç½®(~V)";
         Text[ chinese_traditional ] = "ç¸±å‘(~V)";
         Text[ arabic ] = "ÑÃÓí";
@@ -310,6 +322,9 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Vertical";
         Text[ thai ] = "à¹à¸™à¸§~à¸•à¸±à¹‰à¸‡";
+        Text[ czech ] = "SvislÃ½";
+        Text[ hebrew ] = "~Vertikal";
+        Text[ hindi ] = "~à¤²à¤‚à¤¬à¤°à¥‚à¤ª";
     };
     ImageRadioButton RB_HORIZONTAL
     {
@@ -336,7 +351,7 @@ ModalDialog DLG_SNAPLINE
         };
         Text[ chinese_simplified ] = "æ¨ªå‘(~Z)";
         Text[ russian ] = "Ãîğèçîíòàëüíî";
-        Text[ polish ] = "W poziomie";
+        Text[ polish ] = "Po~ziomo";
         Text[ japanese ] = "æ¨ªä½ç½®(~Z)";
         Text[ chinese_traditional ] = "æ©«å‘(~Z)";
         Text[ arabic ] = "ÃİŞí";
@@ -346,10 +361,13 @@ ModalDialog DLG_SNAPLINE
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Horit~zontal";
         Text[ thai ] = "à¹à¸™à¸§~à¸™à¸­à¸™";
+        Text[ czech ] = "VodorovnÃ½";
+        Text[ hebrew ] = "~Horizontal";
+        Text[ hindi ] = "~à¤¸à¤®à¤¤à¤²";
     };
     Text[ chinese_simplified ] = "æ–°å»ºåæ ‡";
     Text[ russian ] = "Íîâûé îáúåêò ïğèâÿçêè";
-    Text[ polish ] = "Nowy obiekt zaczepu";
+    Text[ polish ] = "Nowy obiekt przyci¹gania";
     Text[ japanese ] = "æ–°ã—ã„ã‚¹ãƒŠãƒƒãƒ—ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ";
     Text[ chinese_traditional ] = "æ–°å»ºåº§æ¨™";
     Text[ arabic ] = "ßÇÆä ÍÈÓ ÌÏíÏ";
@@ -377,7 +395,19 @@ ModalDialog DLG_SNAPLINE
         MaskColor = IMAGE_MASK_STDCOLOR_HC;
         ImageBitmap = Bitmap { File = "hlplhorz_h.bmp" ; };
     };
+    Text[ czech ] = "NovÃ½ zÃ¡chytnÃ½ objekt";
+    Text[ hebrew ] = "Neues Fangobjekt";
+    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤¸à¥à¤¨à¥‰à¤ª à¤µà¤¸à¥à¤¤à¥";
 };
+
+
+
+
+
+
+
+
+
 
 
 
