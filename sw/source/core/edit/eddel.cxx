@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:22:07 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,7 +329,7 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->StartUndo( UNDO_END );
+        GetDoc()->StartUndo();
 
         FOREACHPAM_START(this)
 
@@ -358,7 +358,7 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo( UNDO_END );
+        GetDoc()->EndUndo();
         EndAllAction();
     }
     return bRet;
