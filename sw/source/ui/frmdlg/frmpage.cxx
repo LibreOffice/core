@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: jp $ $Date: 2002-01-23 11:37:21 $
+ *  last change: $Author: fme $ $Date: 2002-04-26 11:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 #endif
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
+#endif
+#ifndef _SOT_CLSIDS_HXX
+#include <sot/clsids.hxx>
 #endif
 
 #ifndef _FMTURL_HXX //autogen
@@ -1945,6 +1948,42 @@ void SwFrmPage::Init(const SfxItemSet& rSet, BOOL bReset)
 
         aWidthED .Enable( !bSizeFixed );
         aHeightED.Enable( !bSizeFixed );
+
+        // size controls for math OLE objects
+        if ( DLG_FRM_OLE == nDlgType && ! bNew )
+        {
+            // disable width and height for math objects
+            const SvGlobalName& rFactNm = *pSh->GetOLEObj()->GetSvFactory();
+
+            struct _GlobalNameId {
+                UINT32 n1;
+                USHORT n2, n3;
+                BYTE b8, b9, b10, b11, b12, b13, b14, b15;
+            } aGlbNmIds[4] = { SO3_SM_CLASSID_60, SO3_SM_CLASSID_50,
+                               SO3_SM_CLASSID_40, SO3_SM_CLASSID_30 };
+
+            for ( int i = 0; i < 4; ++i ) {
+                const _GlobalNameId& rId = aGlbNmIds[ i ];
+
+                SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
+                                     rId.b8, rId.b9, rId.b10, rId.b11,
+                                     rId.b12, rId.b13, rId.b14, rId.b15 );
+
+                if( rFactNm == aGlbNm )
+                {
+                    // disable size controls for math OLE objects
+                    aWidthFT.Disable();
+                    aWidthED.Disable();
+                    aRelWidthCB.Disable();
+                    aHeightFT.Disable();
+                    aHeightED.Disable();
+                    aRelHeightCB.Disable();
+                    aFixedRatioCB.Disable();
+                    aRealSizeBT.Disable();
+                    break;
+                }
+            }
+        }
     }
 
     const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
