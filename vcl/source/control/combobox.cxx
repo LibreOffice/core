@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:10:29 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 13:16:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-#define _SV_COMBOBOX_CXX
-
 #ifndef _TOOLS_TABLE_HXX
 #include <tools/table.hxx>
 #endif
@@ -69,7 +67,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -1280,14 +1278,6 @@ BOOL ComboBox::IsUserDrawEnabled() const
 }
 
 // -----------------------------------------------------------------------
-
-#if SUPD < 593
-void ComboBox::DrawEntry( const UserDrawEvent& rEvt, BOOL bDrawImage, BOOL bDrawText )
-{
-    DBG_ASSERT( rEvt.GetDevice() == mpImplLB->GetMainWindow(), "DrawEntry?!" );
-    mpImplLB->GetMainWindow()->DrawEntry( rEvt.GetItemId(), bDrawImage, bDrawText );
-}
-#endif
 
 void ComboBox::DrawEntry( const UserDrawEvent& rEvt, BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImagePos )
 {
