@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 12:47:37 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 10:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -615,7 +615,10 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getDrawPages(
     uno::Reference< drawing::XDrawPages >  xDrawPages( mxDrawPagesAccess );
 
     if( !xDrawPages.is() )
+    {
+        initializeDocument();
         mxDrawPagesAccess = xDrawPages = (drawing::XDrawPages*)new SdDrawPagesAccess(*this);
+    }
 
     return xDrawPages;
 }
@@ -627,7 +630,10 @@ uno::Reference< drawing::XDrawPages > SAL_CALL SdXImpressDocument::getMasterPage
     uno::Reference< drawing::XDrawPages >  xMasterPages( mxMasterPagesAccess );
 
     if( !xMasterPages.is() )
+    {
+        initializeDocument();
         mxMasterPagesAccess = xMasterPages = new SdMasterPagesAccess(*this);
+    }
 
     return xMasterPages;
 }
@@ -680,6 +686,7 @@ uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMast
 
     if( pDoc )
     {
+        initializeDocument();
         SdPage* pPage = pDoc->GetMasterSdPage( 0, PK_HANDOUT );
         if( pPage )
             xPage = uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
@@ -1114,6 +1121,15 @@ uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCha
         mxForbidenCharacters = xForb = new SdUnoForbiddenCharsTable( pDoc );
 
     return xForb;
+}
+
+void SdXImpressDocument::initializeDocument()
+{
+    if( pDoc->GetPageCount() <= 1)
+    {
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+    }
 }
 
 //=============================================================================

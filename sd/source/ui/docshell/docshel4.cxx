@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-16 13:49:07 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 10:13:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -338,7 +338,6 @@ BOOL SdDrawDocShell::InitNew( SvStorage * pStor )
             pDoc->NewOrLoadCompleted(NEW_DOC);  // otherwise calling
                                                 // NewOrLoadCompleted(NEW_LOADED) in
                                                 // SdDrawDocument::AllocModel()
-
     }
     return bRet;
 }
@@ -385,8 +384,6 @@ BOOL SdDrawDocShell::Load( SvStorage* pStore )
             else if( bXML )
             {
                 pDoc->NewOrLoadCompleted( NEW_DOC );
-                pDoc->CreateFirstPages();
-                pDoc->StopWorkStartupDelay();
 
                 pFilter = new SdXMLFilter( aMedium, *this, sal_True );
             }

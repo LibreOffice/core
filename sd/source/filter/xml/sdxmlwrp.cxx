@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-14 14:50:24 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 10:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,10 @@ sal_Bool SdXMLFilter::Import()
 
     do
     {
+        SdDrawDocument* pDoc = mrDocShell.GetDoc();
+        pDoc->CreateFirstPages();
+        pDoc->StopWorkStartupDelay();
+
         SvXMLEmbeddedObjectHelper*  pObjectHelper = NULL;
         SvXMLGraphicHelper*         pGraphicHelper = NULL;
         UINT16                      nStyleFamilyMask = 0;
@@ -260,7 +264,7 @@ sal_Bool SdXMLFilter::Import()
 
             if( pStorage )
             {
-                SvPersist *pPersist = mrDocShell.GetDoc()->GetPersist();
+                SvPersist *pPersist = pDoc->GetPersist();
                 if( pPersist )
                 {
                     pObjectHelper = SvXMLEmbeddedObjectHelper::Create(*pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_READ, sal_False );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-28 12:48:31 $
+ *  last change: $Author: cl $ $Date: 2001-05-31 10:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,6 +198,7 @@ private:
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 
+    void initializeDocument();
 public:
     SdXImpressDocument( SdDrawDocShell* pShell ) throw();
     virtual ~SdXImpressDocument() throw();
