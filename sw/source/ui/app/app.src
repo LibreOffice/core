@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:28:46 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:21:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ String STR_PRINT_MERGE_MACRO
     Text[ dutch ] = "Standaardbrieven afdrukken";
     Text[ chinese_simplified ] = "΄ςΣ΅ΣΚΌώΊΟ²Ά";
     Text[ greek ] = "Εκτύπωση εγκυκλίου επιστολής";
-    Text[ korean ] = "Ώ¬ΌΣΖνΑφ ΐΞΌβ";
+    Text[ korean ] = "Ζϋ ·ΉΕΝ ΐΞΌβ";
     Text[ turkish ] = "Standart mektup yazdύr";
 };
 
@@ -1558,82 +1558,82 @@ String STR_HUMAN_SWDOC_NAME
 
 String STR_WRITER_DOCUMENT_FULLTYPE_31
 {
-    Text = "StarOffice 3.0 Text" ;
+    Text = "%PRODUCTNAME 3.0 Text" ;
     Text [ English ] = "StarOffice 3.0 Text" ;
-    Text [ english_us ] = "Text (StarOffice 3.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 3.0 Text" ;
-    Text [ swedish ] = "StarOffice 3.0 text" ;
-    Text [ danish ] = "StarOffice 3.0 tekst" ;
-    Text [ italian ] = "Test StarOffice 3.0" ;
-    Text [ spanish ] = "Texto de StarOffice 3.0" ;
-    Text [ french ] = "StarOffice 3.0 Texte" ;
-    Text [ dutch ] = "StarOffice 3.0 Tekst" ;
-    Text [ portuguese ] = "StarOffice 3.0 Text" ;
-    Text[ chinese_simplified ] = "StarOffice 3.0 ΞΔ±Ύ";
-    Text[ russian ] = "Òεκρς β StarOffice 3.0";
-    Text[ polish ] = "Tekst StarOffice 3.0";
-    Text[ japanese ] = "StarOffice 3.0 Γ·½Δ";
-    Text[ chinese_traditional ] = "StarOffice 3.0 ¤ε¦r¤ε¥σ";
-    Text[ arabic ] = "δΥ γδ StarOffice 3.0";
-    Text[ dutch ] = "StarOffice 3.0 Tekst";
-    Text[ chinese_simplified ] = "StarOffice 3.0 ΞΔ±Ύ";
-    Text[ greek ] = "Κείμενο (StarOffice 3.0)";
-    Text[ korean ] = "ΕΨ½ΊΖ® (StarOffice 3.0)";
-    Text[ turkish ] = "StarOffice 3.0 metni";
+    Text [ english_us ] = "Text (%PRODUCTNAME 3.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Text" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0 text" ;
+    Text [ danish ] = "%PRODUCTNAME 3.0 tekst" ;
+    Text [ italian ] = "Test %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "Texto de %PRODUCTNAME 3.0" ;
+    Text [ french ] = "%PRODUCTNAME 3.0 Texte" ;
+    Text [ dutch ] = "%PRODUCTNAME 3.0 Tekst" ;
+    Text [ portuguese ] = "%PRODUCTNAME 3.0 Text" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ΞΔ±Ύ";
+    Text[ russian ] = "Òεκρς β %PRODUCTNAME 3.0";
+    Text[ polish ] = "Tekst %PRODUCTNAME 3.0";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 Γ·½Δ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ¤ε¦r¤ε¥σ";
+    Text[ arabic ] = "δΥ γδ %PRODUCTNAME 3.0";
+    Text[ dutch ] = "%PRODUCTNAME 3.0 Tekst";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 ΞΔ±Ύ";
+    Text[ greek ] = "Κείμενο (%PRODUCTNAME 3.0)";
+    Text[ korean ] = "ΕΨ½ΊΖ® (%PRODUCTNAME 3.0)";
+    Text[ turkish ] = "%PRODUCTNAME 3.0 metni";
     Text[ language_user1 ] = " ";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE_40
 {
-    Text = "StarOffice 4.0 Text" ;
+    Text = "%PRODUCTNAME 4.0 Text" ;
     Text [ English ] = "StarOffice 4.0 Text" ;
-    Text [ english_us ] = "Text (StarOffice 4.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Text" ;
-    Text [ swedish ] = "StarOffice 4.0 text" ;
-    Text [ danish ] = "StarOffice 4.0 tekst" ;
-    Text [ italian ] = "Testo StarOffice 4.0" ;
-    Text [ spanish ] = "Texto de StarOffice 4.0" ;
-    Text [ french ] = "StarOffice 4.0 Texte" ;
-    Text [ dutch ] = "StarOffice 4.0 Tekst" ;
-    Text [ portuguese ] = "Texto (StarOffice 4.0)" ;
-    Text[ chinese_simplified ] = "StarOffice 4.0 ΞΔ±Ύ";
+    Text [ english_us ] = "Text (%PRODUCTNAME 4.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 text" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
+    Text [ italian ] = "Testo %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "Texto de %PRODUCTNAME 4.0" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 Texte" ;
+    Text [ dutch ] = "%PRODUCTNAME 4.0 Tekst" ;
+    Text [ portuguese ] = "Texto (%PRODUCTNAME 4.0)" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ΞΔ±Ύ";
     Text[ language_user1 ] = " ";
-    Text[ russian ] = "Òεκρς β StarOffice 4.0";
-    Text[ polish ] = "Tekst StarOffice 4.0";
-    Text[ japanese ] = "StarOffice 4.0 Γ·½Δ";
-    Text[ chinese_traditional ] = "StarOffice 4.0 ¤ε¦r¤ε¥σ";
-    Text[ arabic ] = "δΥ γδ StarOffice 4.0";
-    Text[ dutch ] = "StarOffice 4.0 Tekst";
-    Text[ chinese_simplified ] = "StarOffice 4.0 ΞΔ±Ύ";
-    Text[ greek ] = "Κείμενο (StarOffice 4.0)";
-    Text[ korean ] = "ΕΨ½ΊΖ® (StarOffice 4.0)";
-    Text[ turkish ] = "StarOffice 4.0 metni";
+    Text[ russian ] = "Òεκρς β %PRODUCTNAME 4.0";
+    Text[ polish ] = "Tekst %PRODUCTNAME 4.0";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 Γ·½Δ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 ¤ε¦r¤ε¥σ";
+    Text[ arabic ] = "δΥ γδ %PRODUCTNAME 4.0";
+    Text[ dutch ] = "%PRODUCTNAME 4.0 Tekst";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ΞΔ±Ύ";
+    Text[ greek ] = "Κείμενο (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "ΕΨ½ΊΖ® (%PRODUCTNAME 4.0)";
+    Text[ turkish ] = "%PRODUCTNAME 4.0 metni";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
-    Text = "StarOffice 5.0 Text" ;
+    Text = "%PRODUCTNAME 5.0 Text" ;
     Text [ English ] = "StarOffice 5.0 Text" ;
-    Text [ english_us ] = "Text (StarOffice 5.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Text" ;
-    Text [ swedish ] = "StarOffice 5.0 text" ;
-    Text [ danish ] = "StarOffice 4.0 tekst" ;
-    Text [ italian ] = "Testo StarOffice 5.0" ;
-    Text [ spanish ] = "Texto de StarOffice 5.0" ;
-    Text [ french ] = "StarOffice 5.0 Texte" ;
-    Text [ dutch ] = "StarOffice 5.0 Tekst" ;
-    Text [ portuguese ] = "Texto (StarOffice 5.0)" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 ΞΔ±Ύ";
-    Text[ russian ] = "Òεκρς β StarOffice 5.0";
-    Text[ polish ] = "Tekst StarOffice 5.0";
-    Text[ japanese ] = "StarOffice 5.0 Γ·½Δ";
-    Text[ chinese_traditional ] = "StarOffice 5.0 ¤ε¦r¤ε¥σ";
-    Text[ arabic ] = "δΥ γδ StarOffice 5.0";
-    Text[ dutch ] = "StarOffice 5.0 Tekst";
-    Text[ chinese_simplified ] = "StarOffice 5.0 ΞΔ±Ύ";
-    Text[ greek ] = "Κείμενο (StarOffice 5.0)";
-    Text[ korean ] = "ΕΨ½ΊΖ® (StarOffice 5.0)";
-    Text[ turkish ] = "StarOffice 5.0 metni";
+    Text [ english_us ] = "Text (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Text" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 text" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 tekst" ;
+    Text [ italian ] = "Testo %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "Texto de %PRODUCTNAME 5.0" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Texte" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 Tekst" ;
+    Text [ portuguese ] = "Texto (%PRODUCTNAME 5.0)" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ΞΔ±Ύ";
+    Text[ russian ] = "Òεκρς β %PRODUCTNAME 5.0";
+    Text[ polish ] = "Tekst %PRODUCTNAME 5.0";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 Γ·½Δ";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 ¤ε¦r¤ε¥σ";
+    Text[ arabic ] = "δΥ γδ %PRODUCTNAME 5.0";
+    Text[ dutch ] = "%PRODUCTNAME 5.0 Tekst";
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ΞΔ±Ύ";
+    Text[ greek ] = "Κείμενο (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "ΕΨ½ΊΖ® (%PRODUCTNAME 5.0)";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 metni";
     Text[ language_user1 ] = " ";
 };
 
@@ -1775,7 +1775,7 @@ String STR_LOAD_GLOBAL_DOC
     Text[ dutch ] = "Naam en pad van het master-document";
     Text[ chinese_simplified ] = "ΦχΏΨΞΔµµµΔΓϋ³ΖΊΝΒ·Ύ¶";
     Text[ greek ] = "Όνομα και διαδρομή του κυρίου εγγράφου";
-    Text[ korean ] = "Έ¶½ΊΕΈ Ή®Ό­ΐΗ ΐΜΈ§°ϊ °ζ·Ξ";
+    Text[ korean ] = "Έ¶½ΊΕΝ Ή®Ό­ΐΗ ΐΜΈ§°ϊ °ζ·Ξ";
     Text[ turkish ] = "Ana belgenin adύ ve veri yolu";
     Text[ language_user1 ] = " ";
 };
@@ -1802,7 +1802,7 @@ String STR_LOAD_HTML_DOC
     Text[ dutch ] = "Naam en pad van het HTML document";
     Text[ chinese_simplified ] = "HTML ΞΔµµΓϋ³ΖΊΝΒ·Ύ¶";
     Text[ greek ] = "Όνομα και διαδρομή του εγγράφου HTML";
-    Text[ korean ] = "HTML Έ¶½ΊΕΈ Ή®Ό­ΐΗ ΐΜΈ§°ϊ °ζ·Ξ";
+    Text[ korean ] = "HTML Έ¶½ΊΕΝ Ή®Ό­ΐΗ ΐΜΈ§°ϊ °ζ·Ξ";
     Text[ turkish ] = "HTML belgesinin adύ ve veri yolu";
     Text[ language_user1 ] = " ";
 };
@@ -2901,7 +2901,7 @@ String STR_FDLG_TEMPLATE_NAME
     Text[ dutch ] = "Actuele sjabloon  ";
     Text[ chinese_simplified ] = "µ±Η°µΔΡωΚ½£Ί ";
     Text[ greek ] = "Τρέχων πρότυπο:  ";
-    Text[ korean ] = "Ηφΐη ΕΫΗΓΈ®Ζ®: ";
+    Text[ korean ] = "Ηφΐη ΕΫΗΓΈ΄: ";
     Text[ turkish ] = "Yόrόrlόkteki biηim: ";
     Text[ language_user1 ] = " ";
 };
