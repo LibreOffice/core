@@ -41,12 +41,54 @@ REM ------ Storage Refresh Function ------
 
 
 sub RefreshUserScripts()
+&apos; TDB - change Menu bindings to allow user to refresh all, user, share or document script
+   RefreshAppScripts( &quot;USER&quot; )
+end sub
+
+sub RefreshAllScripts()
+   RefreshAppScripts( &quot;USER&quot; )
+   RefreshAppScripts( &quot;SHARE&quot; )
+   RefreshDocumentScripts
+end sub 
+
+sub RefreshAppScripts( appName as String )
+   On Error Goto ErrorHandler
    smgr = getProcessServiceManager()
    context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
    scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; )
 
-   storage = scriptstoragemgr.getScriptStorage( 1 )
-   storage.refresh()
+   scriptstoragemgr.refreshScriptStorage( appName )
+
+   Exit sub
+
+   ErrorHandler:
+   reset
+   MsgBox (&quot;Error: Unable to refresh Java (scripts)&quot; + chr$(10) + chr$(10)+ &quot;Detail: &quot; &amp; error$ + chr$(10) + chr$(10)+ &quot;Action: Please restart Office&quot;,0,&quot;Error&quot; )
+   
+end sub 
+
+sub RefreshDocumentScripts()
+   On Error Goto ErrorHandler
+   smgr = getProcessServiceManager()
+   context = smgr.getPropertyValue( &quot;DefaultContext&quot; )
+   scriptstoragemgr = context.getValueByName( &quot;/singletons/drafts.com.sun.star.script.framework.storage.theScriptStorageManager&quot; )
+
+   oDocURL = ThisComponent.GetCurrentController.getModel.getURL
+
+   On Error Goto ErrorHandlerDoc
+   scriptstoragemgr.refreshScriptStorage( oDocURL )
+
+   Exit sub
+
+   ErrorHandlerDoc:
+   reset
+   &apos; Ignore document script errors as it will happen when refreshing an unsaved doc
+   Exit sub
+
+   ErrorHandler:
+   reset
+   MsgBox (&quot;Error: Unable to refresh Java (scripts)&quot; + chr$(10) + chr$(10)+ &quot;Detail: &quot; &amp; error$ + chr$(10) + chr$(10)+ &quot;Action: Please restart Office&quot;,0,&quot;Error&quot; )
+   
 end sub 
 
 
