@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MediaDescriptor.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-21 08:35:05 $
+ *  last change: $Author: mi $ $Date: 2001-03-22 17:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,10 +79,14 @@ module com { module sun { module star { module document {
 
 //=============================================================================
 
-/** describes properties of a document
+/** describes properties of a document, regarding the relationsship
+    between the loaded document and the resource the document is
+    loaded from / stored to.
 
-    <p>This service may be represented by a <code>sequence&amp;lt;PropertyValue&amp;gt;</code>.
-    </p>@see com::sun::star::beans::PropertyValue
+    <p>This service may be represented by a
+    <type scope="com::sun::star::beans" dim="[]">PropertyValue</type>. </p>
+
+    @see com::sun::star::beans::PropertyValue
  */
 service MediaDescriptor
 {
@@ -117,6 +121,15 @@ service MediaDescriptor
     [property] com::sun::star::io::XInputStream InputStream;
 
     //-------------------------------------------------------------------------
+    /** specifies the name of a mark within the document where the first
+        view is to position to.
+
+        <p>This is the same as the text behind a '#' in a http URL. But
+        this syntax with a '#' is not specified in most other URL schemas.
+        </p>
+     */
+    [property] string JumpMark;
+    //-------------------------------------------------------------------------
     /** mime type
      */
     [property] string MediaType;
@@ -132,12 +145,20 @@ service MediaDescriptor
     [property] com::sun::star::awt::Rectangle PosSize;
 
     //-------------------------------------------------------------------------
-    /** ???
+    /** contains the data for HTTP post method as a sequence of byte.
+
+        <p>This is for example the data from a web form. This property
+        is actually handled, not <member>MediaDescriptor::PostString</member>,
+        which is for convienience. </p>
      */
-    [property] string PostData;
+    [property] sequence<byte> PostData;
 
     //-------------------------------------------------------------------------
-    /** ???
+    /** contains the data for HTTP post method as a sequence of byte.
+
+        <p>This is for example the data from a web form. This property
+        is actually only for convienience and the data will interally processed
+        as <member>MediaDescriptor::PostData</member>. </p>
      */
     [property] string PostString;
 
@@ -157,22 +178,32 @@ service MediaDescriptor
     [property] string Referer;
 
     //-------------------------------------------------------------------------
-    /** ???
+    /** prevents dialogs to query for more information.
      */
     [property] boolean Silent;
 
     //-------------------------------------------------------------------------
-    /** name of corresponding template
+    /** name of the template instead of the URL.
+
+        <p>Use always in conjunction with
+        <member>MediaDescriptor::TemplateRegionName</member>. </p>
+
+        @deprecated
      */
     [property] string TemplateName;
 
     //-------------------------------------------------------------------------
-    /** ???
+    /** name of the region of the template.
+
+        <p>Use always in conjunction with
+        <member>MediaDescriptor::TemplateName</member>. </p>
+
+        @deprecated
      */
     [property] string TemplateRegionName;
 
     //-------------------------------------------------------------------------
-    /** url of document
+    /** url of the document
      */
     [property] com::sun::star::util::URL URL;// FileName
 
@@ -182,7 +213,7 @@ service MediaDescriptor
     [property] short Version;
 
     //-------------------------------------------------------------------------
-    /** ???
+    /** id of the initial view.
      */
     [property] short ViewId;
 };
