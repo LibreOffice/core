@@ -100,7 +100,10 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.io.File;
+import javax.xml.parsers.*;
+import  org.xml.sax.SAXException;
+import java.net.URI;
 
 
 /** This outer class provides an inner class to implement the service
@@ -118,9 +121,9 @@ public class XMergeBridge {
     private static String  udJarPath=null;
     private static XOutputStream xos = null;
     private static XOutputStreamToOutputStreamAdapter adaptedStream=null;
-    private static String sFileName=null;
     private static String offMime=null;
     private static String sdMime=null;
+    private static String sFileName=null;
 
     //private static FileOutputStream adaptedStream =null;
 
@@ -201,8 +204,8 @@ public class XMergeBridge {
         System.out.println("\n"+msUserData[5]);
         */
         sFileName=null;
-        String sDirectory = null;
         String sURL=null;
+        String sDirectory = null;
         String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
         String udImport =msUserData[2];
@@ -285,8 +288,8 @@ public class XMergeBridge {
         System.out.println("\n"+msUserData[5]);
         */
         sFileName=null;
-        String sDirectory = null;
         String sURL=null;
+        String sDirectory = null;
         String title=null;
         String udConvertClass=msUserData[0];
         udJarPath=msUserData[1];
@@ -298,6 +301,7 @@ public class XMergeBridge {
         com.sun.star.beans.PropertyValue[] pValue = aSourceData;
         for  (int  i = 0 ; i < pValue.length; i++)
         {
+
 
         if (pValue[i].Name.compareTo("OutputStream")==0){
             xos =(com.sun.star.io.XOutputStream)pValue[i].Value;
@@ -313,9 +317,11 @@ public class XMergeBridge {
         }
         if (pValue[i].Name.compareTo("URL")==0){
             sURL = (String)pValue[i].Value;
-            //System.out.println(pValue[i].Name+" "+sURL);
+            //System.out.println("\nMediaDescriptor url "+pValue[i].Name+" "+sURL);
         }
         }
+
+
         if (sFileName==null){
         sFileName=title;
         }
@@ -462,6 +468,12 @@ public class XMergeBridge {
          ConverterInfoReader cir = new ConverterInfoReader(jarName,false);
          ciEnum =cir.getConverterInfoEnumeration();
          }
+         catch (ParserConfigurationException pexc){
+          System.out.println("Error:"+pexc);
+         }
+          catch ( org.xml.sax.SAXException pexc){
+          System.out.println("Error:"+pexc);
+         }
          catch(Exception e){
          System.out.println("Error:"+e);
          }
@@ -487,27 +499,42 @@ public class XMergeBridge {
                  ConvertData dataOut = cv.convert();
 
                  Enumeration docEnum = dataOut.getDocumentEnumeration();
+
                  if (docEnum.hasMoreElements()){
-                 Document docOut      = (Document)docEnum.nextElement();
-                 String fileName      = docOut.getFileName();
-                 docOut.write(newxos);
+                     Document docOut      = (Document)docEnum.nextElement();
+                     String fileName      = docOut.getFileName();
+                     docOut.write(newxos);
 
-                 newxos.flush();
-                 newxos.close();
+                     newxos.flush();
+                     newxos.close();
+
+
+                     int i=1;
+                     while (docEnum.hasMoreElements() && sFileName.startsWith("file:")) {
+                     URI uri=new URI(sFileName);
+                     String newFileName = getPath(uri);
+                     //System.out.println("\nURI: "+uri.getPath());
+                     File newFile=null;
+                     if (newFileName.lastIndexOf(".")!=-1){
+                         newFile =new File(newFileName.substring(0,newFileName.lastIndexOf("."))+String.valueOf(i)+newFileName.substring(newFileName.lastIndexOf(".")));
+                     }
+                     else{
+                        newFile =new File(newFileName.concat(String.valueOf(i)));
+                     }
+
+                     FileOutputStream fos = new FileOutputStream(newFile);
+                     docOut      = (Document)docEnum.nextElement();
+                     fileName      = docOut.getFileName();
+                     docOut.write(fos);
+                     fos.flush();
+                     fos.close();
+                     i++;
+
+                     }
+
                  }
-                 //No support for multiple files yet
-                 /* while (docEnum.hasMoreElements()) {
-                 Document docOut      = (Document)docEnum.nextElement();
-                 String fileName      = docOut.getFileName();
-                 docOut.write(newxos);
-
-                 newxos.flush();
-                 newxos.close();
-                 }*/
              }
              ConverterInfoMgr.removeByJar(jarName);
-
-
          }
          catch (Exception e) {
              System.out.println("Error:"+e);
@@ -548,7 +575,18 @@ public class XMergeBridge {
 
          }
 
-     }
+    }
+
+        private String getPath(URI uri){
+        String path = uri.getPath();
+        String opSys=System.getProperty("os.name");
+        if(opSys.indexOf("Windows")!=-1){
+        path= path.replace('/','\\');
+        path = path.substring(1);
+        }
+        return path;
+    }
+
 
 
 
