@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-27 15:16:00 $
+ *  last change: $Author: ganaya $ $Date: 2001-02-01 01:17:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,7 +759,7 @@ void SAL_CALL SfxBaseModel::connectController( const REFERENCE< XCONTROLLER >& x
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
-    SEQUENCE<REFERENCE< XCONTROLLER > > aNewSeq( nOldCount + 1 );
+    SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount + 1 );
     for ( sal_uInt32 n = 0; n < nOldCount; n++ )
         aNewSeq.getArray()[n] = m_pData->m_seqControllers.getConstArray()[n];
     aNewSeq.getArray()[nOldCount] = xController;
@@ -774,7 +774,7 @@ void SAL_CALL SfxBaseModel::disconnectController( const REFERENCE< XCONTROLLER >
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     sal_uInt32 nOldCount = m_pData->m_seqControllers.getLength();
-    SEQUENCE<REFERENCE< XCONTROLLER > > aNewSeq( nOldCount - 1 );
+    SEQUENCE< REFERENCE< XCONTROLLER > > aNewSeq( nOldCount - 1 );
     for ( sal_uInt32 nOld = 0, nNew = 0; nOld < nOldCount; ++nOld )
         if ( xController != m_pData->m_seqControllers.getConstArray()[nOld] )
         {
@@ -948,13 +948,13 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getPrinter()
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, 0, sal_False ) : 0;
     if ( !pViewFrm )
-        return SEQUENCE<PROPERTYVALUE>();
+        return SEQUENCE< PROPERTYVALUE >();
     const SfxPrinter *pPrinter = pViewFrm->GetViewShell()->GetPrinter(sal_True);
     if ( !pPrinter )
-        return SEQUENCE<PROPERTYVALUE>();
+        return SEQUENCE< PROPERTYVALUE >();
 
     // Printer Eigenschaften uebertragen
-    SEQUENCE<PROPERTYVALUE> aPrinter(8);
+    SEQUENCE< PROPERTYVALUE > aPrinter(8);
 
     aPrinter.getArray()[7].Name = DEFINE_CONST_UNICODE( "CanSetPaperSize" );
 //ASDBG aPrinter.getArray()[7].Value.setBOOL( pPrinter->HasSupport( SUPPORT_SET_PAPERSIZE ) );
@@ -1434,7 +1434,7 @@ sal_Bool SfxBaseModel::impl_isDisposed() const
 
 void SfxBaseModel::impl_store(          SfxObjectShell*             pObjectShell    ,
                                 const   OUSTRING&                   sURL            ,
-                                const   SEQUENCE<PROPERTYVALUE>&    seqArguments    ,
+                                const   SEQUENCE< PROPERTYVALUE >&  seqArguments    ,
                                         sal_Bool                    bSaveTo         )
 {
     SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, pObjectShell->GetPool() );
