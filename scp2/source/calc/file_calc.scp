@@ -73,8 +73,10 @@ STD_UNO_LIB_FILE( gid_File_Lib_Scd , scd)
 // start binfilter #110743#
 //
 
+#ifndef WITHOUT_BINFILTER
 STD_LIB_FILE( gid_File_Lib_Bf_Sc, bf_sc)
 STD_RES_FILE( gid_File_Res_Bf_Sc, bf_sc)
+#endif
 
 //
 // end binfilter #110743#
