@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-26 14:48:57 $
+ *  last change: $Author: mba $ $Date: 2001-07-16 09:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,16 +412,24 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
 
     Reference < XInputStream > xStream;
     String aURL;
-    BOOL bWasReadOnly = FALSE, bReadOnly = FALSE;
     ::rtl::OUString sTemp;
     rtl::OUString aTypeName;            // a name describing the type ( from MediaDescriptor )
     String aPreselectedFilterName;      // a name describing the filter to use ( from MediaDescriptor )
     const SfxFilter* pFilter = NULL, *pExternalFilter = NULL;
 
+    // opening as template is done when a parameter tells to do so and a template filter can be detected
+    // ( otherwise no valid filter would be found! ) or if the detected filter is a template filter and
+    // there is no parameter that forbids to open as template
+    sal_Bool bOpenAsTemplate = sal_False;
+    sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
+
+    // now some parameters that can already be in the array, but may be overwritten or new inserted here
+    // remember their indices in the case new values must be added to the array
     sal_Int32 nPropertyCount = lDescriptor.getLength();
-    sal_Int32 nIndexOfFilterName = nPropertyCount;          // filter name and input stream could be put into the descriptor
+    sal_Int32 nIndexOfFilterName = nPropertyCount;
     sal_Int32 nIndexOfInputStream = lDescriptor.getLength();
     sal_Int32 nIndexOfReadOnlyFlag = lDescriptor.getLength();
+    sal_Int32 nIndexOfTemplateFlag = lDescriptor.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
@@ -448,13 +456,17 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             nIndexOfInputStream = nProperty;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly")) )
             nIndexOfReadOnlyFlag = nProperty;
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate")) )
+        {
+            lDescriptor[nProperty].Value >>= bOpenAsTemplate;
+            nIndexOfTemplateFlag = nProperty;
+        }
     }
 
     // detect using SfxFilter names
     // can't detect filter for external filters, so set the "dont" flag accordingly
     SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
     SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-
     if ( aPreselectedFilterName.Len() )
     {
         // supported formats for filter names:
@@ -626,6 +638,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             // No error while reading from medium ?
             if ( !pFilter && aMedium.GetErrorCode() == ERRCODE_NONE )
             {
+                // file extension "vor" is ambigious, so perhaps the flat detection gave the wrong
+                // template filter that was discarded in the deep detection
+                // searching the filter for the clipboard Id usually gives the document filter, not
+                // the template filter, so set the  "must" flags accordingly
+                if ( INetURLObject( aURL ).GetExtension().CompareToAscii("vor") == COMPARE_EQUAL )
+                    nMust |= SFX_FILTER_TEMPLATEPATH;
+
                 // no filter found until now
                 if ( bIsStorage )
                 {
@@ -639,13 +658,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 if ( !pFilter && aMedium.GetErrorCode() == ERRCODE_NONE )
                     nErr = rMatcher.GetFilter4Content( aMedium, &pFilter, nMust, nDont );
             }
+        }
 
-            if ( aMedium.GetErrorCode() != ERRCODE_NONE )
-            {
-                // when access to medium gives an error, the filter can't be valid
-                pFilter = NULL;
-                ErrorHandler::HandleError( aMedium.GetError() );
-            }
+        if ( aMedium.GetErrorCode() != ERRCODE_NONE )
+        {
+            // when access to medium gives an error, the filter can't be valid
+            pFilter = NULL;
+            ErrorHandler::HandleError( aMedium.GetError() );
         }
     }
 
@@ -665,6 +684,13 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             lDescriptor.realloc( nPropertyCount + 1 );
             lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
             lDescriptor[nPropertyCount].Value <<= ::rtl::OUString( aFilterName );
+        }
+
+        if ( pFilter->IsOwnTemplateFormat() && nIndexOfTemplateFlag == nPropertyCount )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("AsTemplate");
+            lDescriptor[nPropertyCount].Value <<= sal_True;
         }
     }
     else
