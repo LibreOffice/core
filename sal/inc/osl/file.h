@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 13:12:35 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,6 +739,7 @@ typedef void *oslFileHandle;
     @see osl_readFile()
     @see osl_writeFile()
     @see osl_setFileSize()
+    @see osl_getFileSize()
 */
 
 oslFileError SAL_CALL osl_openFile( rtl_uString *pustrFileURL, oslFileHandle *pHandle, sal_uInt32 uFlags );
@@ -800,8 +801,33 @@ oslFileError SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64 *pPos );
     @param Handle [in]
     Handle to a file received by a previous call to osl_openFile().
 
-    @param uSize [int]
+    @param uSize [in]
     New size in bytes.
+
+    @return
+    osl_File_E_None on success<br>
+    osl_File_E_INVAL the format of the parameters was not valid<br>
+    osl_File_E_OVERFLOW the resulting file offset would be a value which cannot be represented correctly for regular files<br>
+
+    @see osl_openFile()
+    @see osl_setFilePos()
+    @see osl_getFileStatus()
+    @see osl_getFileSize()
+*/
+
+oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
+
+
+/** Get the file size of an open file.
+
+    Gets the file size of an open file.
+    The position of the file pointer is not affeced by this function.
+
+    @param Handle [in]
+    Handle to a file received by a previous call to osl_openFile().
+
+    @param pSize [out]
+    Current size in bytes.
 
     @return
     osl_File_E_None on success<br>
@@ -813,7 +839,7 @@ oslFileError SAL_CALL osl_getFilePos( oslFileHandle Handle, sal_uInt64 *pPos );
     @see osl_getFileStatus()
 */
 
-oslFileError SAL_CALL osl_setFileSize( oslFileHandle Handle, sal_uInt64 uSize );
+oslFileError SAL_CALL osl_getFileSize( oslFileHandle Handle, sal_uInt64 *pSize );
 
 
 /** Read a number of bytes from a file.
