@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-31 09:36:13 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:16:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1969,6 +1969,9 @@ void SfxMedium::Close()
 
     if ( pOutStream )
         CloseOutStream_Impl();
+
+    if ( pSet )
+        pSet->ClearItem( SID_CONTENT );
 
     pImp->aContent = ::ucb::Content();
 }

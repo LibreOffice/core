@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: gt $ $Date: 2002-10-02 11:38:11 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:24:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1196,7 +1196,7 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 
         // Choose the correct mask color dependent from eColorMode. This must be adopted if
         // we change the mask color for normal images, too!
-        Color aMaskColor(( eColorMode == BMP_COLOR_NORMAL ) ? COL_LIGHTGRAY : COL_LIGHTMAGENTA );
+        Color aMaskColor( COL_LIGHTMAGENTA );
 
         // hier sind alle initial eingefuegt
         SfxErrorContext aEc(ERRCTX_SFX_CREATEOBJSH, pDlg->pDialog);
@@ -1581,7 +1581,7 @@ String SfxOrganizeDlg_Impl::GetPath_Impl( BOOL bOpen, const String& rFileName )
         }
 
         DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-        aFileDlg.SetDisplayDirectory( aObj.GetMainURL() );
+        aFileDlg.SetDisplayDirectory( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
     }
 
     if ( ERRCODE_NONE == aFileDlg.Execute() )

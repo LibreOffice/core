@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-28 14:17:37 $
+ *  last change: $Author: hr $ $Date: 2002-11-14 14:21:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,7 +768,7 @@ String SfxDocumentTemplates::GetTemplatePath
         if ( ! aExtension.getLength() )
             aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
 
-        return aURLObj.GetMainURL();
+        return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
         return String();
@@ -818,7 +818,7 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
         if ( ! aExtension.getLength() )
             aURLObj.setExtension( OUString( RTL_CONSTASCII_USTRINGPARAM( "vor" ) ) );
 
-        return aURLObj.GetMainURL();
+        return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
         return String();
@@ -1007,7 +1007,7 @@ BOOL SfxDocumentTemplates::CopyOrMove
                      INetURLObject::ENCODE_ALL );
         aNewTarget.setExtension( aSourceObj.getExtension() );
 
-        pTargetRgn->AddEntry( aTitle, aNewTarget.GetMainURL(), &nTargetIdx );
+        pTargetRgn->AddEntry( aTitle, aNewTarget.GetMainURL( INetURLObject::NO_DECODE ), &nTargetIdx );
 
         if ( bMove )
         {
@@ -1143,7 +1143,7 @@ BOOL SfxDocumentTemplates::CopyTo
                                          INetURLObject::DECODE_WITH_CHARSET ) );
     aTargetURL.removeSegment();
 
-    OUString aParentURL = aTargetURL.GetMainURL();
+    OUString aParentURL = aTargetURL.GetMainURL( INetURLObject::NO_DECODE );
 
     Reference< XCommandEnvironment > aCmdEnv;
     Content aTarget;
@@ -1741,7 +1741,7 @@ BOOL SfxDocumentTemplates::GetLogicNames
     aFullPath.SetURL( rPath );
     aFullPath.CutLastName();
 
-    OUString aPathTo = aFullPath.GetMainURL();
+    OUString aPathTo = aFullPath.GetMainURL( INetURLObject::NO_DECODE );
 
     RegionData_Impl *pData = NULL;
     EntryData_Impl  *pEntry = NULL;
@@ -1973,7 +1973,7 @@ const OUString& EntryData_Impl::GetHierarchyURL()
                      INetURLObject::LAST_SEGMENT, true,
                      INetURLObject::ENCODE_ALL );
 
-        maOwnURL = aTemplateObj.GetMainURL();
+        maOwnURL = aTemplateObj.GetMainURL( INetURLObject::NO_DECODE );
         DBG_ASSERT( maOwnURL.getLength(), "GetHierarchyURL(): Could not create URL!" );
     }
 
@@ -2097,7 +2097,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     aLinkObj.insertName( rTitle, false,
                       INetURLObject::LAST_SEGMENT, true,
                       INetURLObject::ENCODE_ALL );
-    OUString aLinkURL = aLinkObj.GetMainURL();
+    OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
     EntryData_Impl *pEntry;
     sal_Bool        bFound = sal_False;
@@ -2136,7 +2136,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
                      INetURLObject::LAST_SEGMENT, true,
                      INetURLObject::ENCODE_ALL );
 
-        maOwnURL = aRegionObj.GetMainURL();
+        maOwnURL = aRegionObj.GetMainURL( INetURLObject::NO_DECODE );
         DBG_ASSERT( maOwnURL.getLength(), "GetHierarchyURL(): Could not create URL!" );
     }
 
