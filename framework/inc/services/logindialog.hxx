@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindialog.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-10-09 11:33:51 $
+ *  last change: $Author: cd $ $Date: 2001-10-12 06:00:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,17 +219,15 @@ namespace framework{
 //  [Global]
 //  UserName=as
 //  ActiveServer=2
-//  ConnectionType=compressed_secure
+//  ConnectionType=https
 //  Language=en-US
 //  UseProxy=[browser|custom|none]
 //  SecurityProxy=so-webcache:3128
 //  dialog=[big|small]
 //
 //  [DefaultPorts]
-//  plain=8081
-//  secure=8082
-//  compressed_secure=8083
-//  compressed=8084
+//  https=8445
+//  http=8090
 //
 //  [ServerHistory]
 //  Server_1=localhost
@@ -246,10 +244,6 @@ namespace framework{
 #define SECTION_LANGUAGE                        SECTION_GLOBAL
 #define SECTION_SECURITYPROXY                   SECTION_GLOBAL
 #define SECTION_DIALOG                          SECTION_GLOBAL
-#define SECTION_PLAIN                           SECTION_DEFAULTPORTS
-#define SECTION_SECURE                          SECTION_DEFAULTPORTS
-#define SECTION_COMPRESSEDSECURE                SECTION_DEFAULTPORTS
-#define SECTION_COMPRESSED                      SECTION_DEFAULTPORTS
 #define SECTION_HTTP                            SECTION_DEFAULTPORTS
 #define SECTION_HTTPS                           SECTION_DEFAULTPORTS
 #define SECTION_SERVER_X                        SECTION_SERVERHISTORY
@@ -258,10 +252,6 @@ namespace framework{
 #define KEY_ACTIVESERVER                        "ActiveServer"
 #define KEY_CONNECTIONTYPE                      "ConnectionType"
 #define KEY_LANGUAGE                            "Language"
-#define KEY_PLAIN                               "plain"
-#define KEY_SECURE                              "secure"
-#define KEY_COMPRESSEDSECURE                    "compressed_secure"
-#define KEY_COMPRESSED                          "compressed"
 #define KEY_SERVER_X                            "Server_"
 #define KEY_SECURITYPROXY                       "SecurityProxy"
 #define KEY_USESECURITYPROXY                    "UseProxy"
@@ -277,10 +267,6 @@ namespace framework{
 #define PROPERTYNAME_SERVER                     DECLARE_ASCII("Server"                          )
 #define PROPERTYNAME_SERVERHISTORY              DECLARE_ASCII("ServerHistory"                   )
 #define PROPERTYNAME_USERNAME                   DECLARE_ASCII("UserName"                        )
-#define PROPERTYNAME_COMPRESSED                 DECLARE_ASCII("compressed"                      )
-#define PROPERTYNAME_COMPRESSEDSECURE           DECLARE_ASCII("compressed_secure"               )
-#define PROPERTYNAME_PLAIN                      DECLARE_ASCII("plain"                           )
-#define PROPERTYNAME_SECURE                     DECLARE_ASCII("secure"                          )
 #define PROPERTYNAME_USEPROXY                   DECLARE_ASCII("UseProxy"                        )
 #define PROPERTYNAME_DIALOG                     DECLARE_ASCII("Dialog"                          )
 #define PROPERTYNAME_HTTP                       DECLARE_ASCII("http"                            )
@@ -293,17 +279,13 @@ namespace framework{
 #define PROPERTYHANDLE_SERVER                   5
 #define PROPERTYHANDLE_SERVERHISTORY            6
 #define PROPERTYHANDLE_USERNAME                 7
-#define PROPERTYHANDLE_COMPRESSED               8
-#define PROPERTYHANDLE_COMPRESSEDSECURE         9
-#define PROPERTYHANDLE_PLAIN                    10
-#define PROPERTYHANDLE_SECURE                   11
-#define PROPERTYHANDLE_SECURITYPROXY            12
-#define PROPERTYHANDLE_USEPROXY                 13
-#define PROPERTYHANDLE_DIALOG                   14
-#define PROPERTYHANDLE_HTTP                     15
-#define PROPERTYHANDLE_HTTPS                    16
+#define PROPERTYHANDLE_SECURITYPROXY            8
+#define PROPERTYHANDLE_USEPROXY                 9
+#define PROPERTYHANDLE_DIALOG                   10
+#define PROPERTYHANDLE_HTTP                     11
+#define PROPERTYHANDLE_HTTPS                    12
 
-#define PROPERTYCOUNT                           16
+#define PROPERTYCOUNT                           12
 
 //_________________________________________________________________________________________________________________
 //  exported definitions
@@ -317,10 +299,6 @@ struct tIMPL_DialogData
     sal_Int32               nActiveServer           ;
     OUSTRING                sConnectionType         ;
     LOCALE                  aLanguage               ;
-    sal_Int32               nPortPlain              ;
-    sal_Int32               nPortSecure             ;
-    sal_Int32               nPortCompressedSecure   ;
-    sal_Int32               nPortCompressed         ;
     sal_Int32               nPortHttp               ;
     sal_Int32               nPortHttps              ;
     ANY                     aParentWindow           ;
@@ -337,10 +315,6 @@ struct tIMPL_DialogData
         ,   nActiveServer           ( 1                                     )
         ,   sConnectionType         ( OUSTRING()                            )
         ,   aLanguage               ( OUSTRING(), OUSTRING(), OUSTRING()    )
-        ,   nPortPlain              ( 0                                     )
-        ,   nPortSecure             ( 0                                     )
-        ,   nPortCompressedSecure   ( 0                                     )
-        ,   nPortCompressed         ( 0                                     )
         ,   nPortHttp               ( 0                                     )
         ,   nPortHttps              ( 0                                     )
         ,   aParentWindow           (                                       )
@@ -359,10 +333,6 @@ struct tIMPL_DialogData
         ,   nActiveServer           ( aCopyDataSet.nActiveServer            )
         ,   sConnectionType         ( aCopyDataSet.sConnectionType          )
         ,   aLanguage               ( aCopyDataSet.aLanguage                )
-        ,   nPortPlain              ( aCopyDataSet.nPortPlain               )
-        ,   nPortSecure             ( aCopyDataSet.nPortSecure              )
-        ,   nPortCompressedSecure   ( aCopyDataSet.nPortCompressedSecure    )
-        ,   nPortCompressed         ( aCopyDataSet.nPortCompressed          )
         ,   nPortHttp               ( aCopyDataSet.nPortHttp                )
         ,   nPortHttps              ( aCopyDataSet.nPortHttps               )
         ,   aParentWindow           ( aCopyDataSet.aParentWindow            )
@@ -382,10 +352,6 @@ struct tIMPL_DialogData
         nActiveServer           = aCopyDataSet.nActiveServer            ;
         sConnectionType         = aCopyDataSet.sConnectionType          ;
         aLanguage               = aCopyDataSet.aLanguage                ;
-        nPortPlain              = aCopyDataSet.nPortPlain               ;
-        nPortSecure             = aCopyDataSet.nPortSecure              ;
-        nPortCompressedSecure   = aCopyDataSet.nPortCompressedSecure    ;
-        nPortCompressed         = aCopyDataSet.nPortCompressed          ;
         nPortHttp               = aCopyDataSet.nPortHttp                ;
         nPortHttps              = aCopyDataSet.nPortHttps               ;
         aParentWindow           = aCopyDataSet.aParentWindow            ;
@@ -956,10 +922,6 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         void                    impl_writeServerHistory         (   const   SEQUENCE< OUSTRING >&   lHistory        );
         void                    impl_writeConnectionType        (   const   OUSTRING&               sConnectionType );
         void                    impl_writeLanguage              (   const   LOCALE&                 aLanguage       );
-        void                    impl_writePortPlain             (           sal_Int32               nPort           );
-        void                    impl_writePortSecure            (           sal_Int32               nPort           );
-        void                    impl_writePortCompressedSecure  (           sal_Int32               nPort           );
-        void                    impl_writePortCompressed        (           sal_Int32               nPort           );
         void                    impl_writePortHttp              (           sal_Int32               nPort           );
         void                    impl_writePortHttps             (           sal_Int32               nPort           );
         void                    impl_writeSecurityProxy         (   const   OUSTRING&               sSecurityProxy  );
@@ -971,10 +933,6 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
         SEQUENCE< OUSTRING >    impl_readServerHistory          (                                                   );
         OUSTRING                impl_readConnectionType         (                                                   );
         LOCALE                  impl_readLanguage               (                                                   );
-        sal_Int32               impl_readPortPlain              (                                                   );
-        sal_Int32               impl_readPortSecure             (                                                   );
-        sal_Int32               impl_readPortCompressedSecure   (                                                   );
-        sal_Int32               impl_readPortCompressed         (                                                   );
         sal_Int32               impl_readPortHttp               (                                                   );
         sal_Int32               impl_readPortHttps              (                                                   );
         OUSTRING                impl_readSecurityProxy          (                                                   );
