@@ -2,9 +2,9 @@
  *
  *  $RCSfile: marktree.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 08:49:26 $
+ *  last change: $Author: gt $ $Date: 2002-05-24 09:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,14 +98,7 @@ OMarkableTreeListBox::~OMarkableTreeListBox()
 // -----------------------------------------------------------------------------
 void OMarkableTreeListBox::notifyHiContrastChanged()
 {
-    OSL_ENSURE(m_pCheckButton,"No CheckButton!");
-    sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
-    m_pCheckButton->aBmps[SV_BMP_UNCHECKED]     = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_UNCHECKED_SCH  : BMP_CHECKBUTTON_UNCHECKED ) );
-    m_pCheckButton->aBmps[SV_BMP_CHECKED]       = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_CHECKED_SCH    : BMP_CHECKBUTTON_CHECKED ) );
-    m_pCheckButton->aBmps[SV_BMP_HICHECKED]     = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_HICHECKED_SCH  : BMP_CHECKBUTTON_HICHECKED ) );
-    m_pCheckButton->aBmps[SV_BMP_HIUNCHECKED]   = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_UNCHECKED_SCH  : BMP_CHECKBUTTON_UNCHECKED ) );
-    m_pCheckButton->aBmps[SV_BMP_TRISTATE]      = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_TRISTATE_SCH   : BMP_CHECKBUTTON_TRISTATE ) );
-    m_pCheckButton->aBmps[SV_BMP_HITRISTATE]    = Bitmap( ResId( bHiContrast ? BMP_CHECKBUTTON_HITRISTATE_SCH : BMP_CHECKBUTTON_HITRISTATE ) );
+    // old actions now done in SvTreeListBox::DataChanged() / InitSettings()
 }
 //------------------------------------------------------------------------
 void OMarkableTreeListBox::Paint(const Rectangle& _rRect)
@@ -132,7 +125,7 @@ void OMarkableTreeListBox::InitButtonData()
     SetNodeBitmaps( Bitmap(ModuleRes( bHiContrast ? BMP_PLUSBUTTON_SCH : BMP_PLUSBUTTON)),
         Bitmap(ModuleRes( bHiContrast ? BMP_MINUSBUTTON_SCH : BMP_MINUSBUTTON)));
 
-    m_pCheckButton = new SvLBoxButtonData();
+    m_pCheckButton = new SvLBoxButtonData( this );
     OMarkableTreeListBox::notifyHiContrastChanged();
     EnableCheckButton( m_pCheckButton );
 }
@@ -367,6 +360,9 @@ SvLBoxEntry* OMarkableTreeListBox::GetEntryPosByName(const String& aName,SvLBoxE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2002/04/29 08:49:26  oj
+ *  #98772# hi contrast changes
+ *
  *  Revision 1.5  2001/06/20 09:53:46  fs
  *  #88485# corrected implDetermineState for a special case
  *
