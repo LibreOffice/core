@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:47:30 $
+ *  last change: $Author: fs $ $Date: 2002-11-18 15:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,7 +840,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< ::com::sun::star:
 void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< ::com::sun::star::frame::XStatusListener > & xControl, const ::com::sun::star::util::URL& aURL) throw( RuntimeException )
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
-    if ( !pCont )
+    if ( pCont )
         pCont->removeInterface(xControl);
 }
 
