@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:40:40 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 15:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,16 +115,20 @@ void ToolPanel::AddControl (
         rTitle,
         TitleBar::TBT_CONTROL_TITLE));
 
-    // Add a down link only for the first control so that when
-    // entering the sub tool panel the focus is set to the first control.
-    if (mpControlContainer->GetControlCount() == 1)
-        FocusManager::Instance().RegisterLink (
-            GetParent(),
-            pChild->GetWindow());
-    else
-        FocusManager::Instance().RegisterUpLink (
-            pChild->GetWindow(),
-            GetParent());
+    // Get the (grand) parent window which is focus-wise our parent.
+    Window* pParent = GetParent();
+    if (pParent != NULL)
+        pParent = pParent->GetParent();
+
+    if (pParent != NULL)
+    {
+        // Add a down link only for the first control so that when entering
+        // the sub tool panel the focus is set to the first control.
+        if (mpControlContainer->GetControlCount() == 1)
+            FocusManager::Instance().RegisterLink (pParent, pChild->GetWindow());
+        else
+            FocusManager::Instance().RegisterUpLink (pChild->GetWindow(), pParent);
+    }
 
     mpControlContainer->AddControl (pChild);
 }
