@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-04 17:27:42 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 13:09:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,17 +273,27 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
     }
     aSwitchPos = rPointPixel;       // nur wichtig, wenn bDidSwitch
 
+    //  treat position 0 as -1, so scrolling is always possible
+    //  (with full screen and hidden headers, the top left border may be at 0)
+    //  (moved from ScViewData::GetPosFromPixel)
+
+    Point aEffPos = rPointPixel;
+    if ( aEffPos.X() == 0 )
+        aEffPos.X() = -1;
+    if ( aEffPos.Y() == 0 )
+        aEffPos.Y() = -1;
+
     //  Scrolling
 
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
-    BOOL bRightScroll  = ( rPointPixel.X() >= aWinSize.Width() );
-    BOOL bBottomScroll = ( rPointPixel.Y() >= aWinSize.Height() );
-    BOOL bNegScroll    = ( rPointPixel.X() < 0 || rPointPixel.Y() < 0 );
+    BOOL bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
+    BOOL bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
+    BOOL bNegScroll    = ( aEffPos.X() < 0 || aEffPos.Y() < 0 );
     BOOL bScroll = bRightScroll || bBottomScroll || bNegScroll;
 
     short   nPosX;
     short   nPosY;
-    pViewData->GetPosFromPixel( rPointPixel.X(), rPointPixel.Y(), GetWhich(),
+    pViewData->GetPosFromPixel( aEffPos.X(), aEffPos.Y(), GetWhich(),
                                 nPosX, nPosY, TRUE, TRUE );     // mit Repair
 
     //  fuer AutoFill in der Mitte der Zelle umschalten
@@ -291,7 +301,7 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
     if ( pViewData->IsFillMode() || pViewData->GetFillMode() == SC_FILL_MATRIX )
     {
         BOOL bLeft, bTop;
-        pViewData->GetMouseQuadrant( rPointPixel, GetWhich(), nPosX, nPosY, bLeft, bTop );
+        pViewData->GetMouseQuadrant( aEffPos, GetWhich(), nPosX, nPosY, bLeft, bTop );
         ScDocument* pDoc = pViewData->GetDocument();
         USHORT nTab = pViewData->GetTabNo();
         if ( bLeft && !bRightScroll )
@@ -307,7 +317,7 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
     if ( eWhich == pViewData->GetActivePart() )
     {
         if ( pViewData->GetHSplitMode() == SC_SPLIT_FIX )
-            if ( rPointPixel.X() >= aWinSize.Width() )
+            if ( aEffPos.X() >= aWinSize.Width() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
                     pViewData->GetView()->ActivatePart( SC_SPLIT_TOPRIGHT ), bScroll = FALSE, bDidSwitch = TRUE;
@@ -316,7 +326,7 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
             }
 
         if ( pViewData->GetVSplitMode() == SC_SPLIT_FIX )
-            if ( rPointPixel.Y() >= aWinSize.Height() )
+            if ( aEffPos.Y() >= aWinSize.Height() )
             {
                 if ( eWhich == SC_SPLIT_TOPLEFT )
                     pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMLEFT ), bScroll = FALSE, bDidSwitch = TRUE;

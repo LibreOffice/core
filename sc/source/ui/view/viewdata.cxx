@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2002-07-26 13:05:46 $
+ *  last change: $Author: nn $ $Date: 2002-08-16 13:09:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1433,12 +1433,7 @@ BOOL ScViewData::GetPosFromPixel( long nClickX, long nClickY, ScSplitPos eWhich,
                                         short& rPosX, short& rPosY,
                                         BOOL bTestMerge, BOOL bRepair, BOOL bNextIfLarge )
 {
-    //  Hack, damit auch bei "ganzer Bildschirm" ohne Spalten/Zeilenkoepfe
-    //  noch nach links/oben gescrollt werden kann:
-    if (nClickX == 0)
-        nClickX = -1;
-    if (nClickY == 0)
-        nClickY = -1;
+    //  special handling of 0 is now in ScViewFunctionSet::SetCursorAtPoint
 
     ScHSplitPos eHWhich = WhichH(eWhich);
     ScVSplitPos eVWhich = WhichV(eWhich);
