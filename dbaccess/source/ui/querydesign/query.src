@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-19 21:25:09 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:30:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1735,7 +1735,7 @@ QueryBox QUERY_VIEW_DESIGN_SAVEMODIFIED
     Message[ japanese ] = "пѕѓпЅ°пѕЊпѕћпѕ™пѕ‹пѕћпЅ­пЅ°гЃЊе¤‰ж›ґгЃ•г‚ЊгЃ¦гЃ„гЃѕгЃ™гЂ‚\nе¤‰ж›ґг‚’дїќе­гЃ—гЃѕгЃ™гЃ‹гЂ‚";
     Message[ korean ] = "л·°к°Ђ ліЂкІЅлђм—€мЉµл‹€л‹¤.\nліЂкІЅ л‚ґмљ©мќ„ м ЂмћҐн•м‹њкІ мЉµл‹€к№Њ?";
     Message[ chinese_simplified ] = "иї™дёЄиЎЁж ји§†е›ѕе·Із»Џж”№еЏгЂ‚\nи¦Ѓе­з›ж›ґж”№зљ„е†…е®№?";
-    Message[ chinese_traditional ] = "йЂ™еЂ‹жЄўи¦–е·Із¶“и®Љж›ґгЂ‚\nи¦Ѓе„Іе­и®Љж›ґе†…е®№?";
+    Message[ chinese_traditional ] = "йЂ™еЂ‹жЄўи¦–е·Із¶“и®Љж›ґгЂ‚\nи¦Ѓе„Іе­и®Љж›ґе…§е®№?";
     Message[ turkish ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ arabic ] = "The view has been changed.\nDo you want to save the changes?";
     Message[ catalan ] = "La vista ha canviat.\nVoleu desar els canvis?";
@@ -2412,7 +2412,7 @@ String STR_DATASOURCE_DELETED
     Text [ ENGLISH ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ english_us ] = "The corresponding data source has been deleted. Therefore, data relevant to that data source cannot be saved.";
     Text[ portuguese ] = "Impossнvel guardar os dados: a fonte de dados correspondente foi eliminada.";
-    Text[ russian ] = "Необходимый источник данных удален. Поэтому сохранить данные относящиеся к нему невозможно.";
+    Text[ russian ] = "Необходимые исходные данные удалены. Поэтому сохранить данные относящиеся к ним невозможно.";
     Text[ greek ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ dutch ] = "De bijbehorende gegevensbron werd gewist. De desbetreffende gegevens kunnen niet worden opgeslagen.";
     Text[ french ] = "Impossible d'enregistrer les donnйes : la source de donnйes correspondante a йtй supprimйe.";
@@ -2431,6 +2431,7 @@ String STR_DATASOURCE_DELETED
     Text[ arabic ] = "The datasource was deleted. It is not possible to save datasource relevant data.";
     Text[ catalan ] = "La font de les dades s'ha borrat. No йs possible desar dades rellevants sobre ella.";
 };
+
 
 
 
