@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-07 16:13:07 $
+ *  last change: $Author: pl $ $Date: 2002-04-19 10:13:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -617,9 +617,6 @@ void ToolBox::RemoveItem( USHORT nPos )
 void ToolBox::MoveItem( USHORT nItemId, USHORT nNewPos )
 {
     USHORT nPos = GetItemPos( nItemId );
-
-    if ( nPos < nNewPos )
-        nNewPos--;
 
     if ( nPos == nNewPos )
         return;
