@@ -1,0 +1,229 @@
+#************************************************************************
+#
+#   $RCSfile: makefile.rc,v $
+#
+#   $Revision: 1.39 $
+#
+#   last change: $Author: mh $ $Date: 2002-02-21 09:12:12 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   Sun Microsystems Inc., October, 2000
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+#
+#   Copyright: 2000 by Sun Microsystems, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): _______________________________________
+#
+#
+#
+#*************************************************************************
+
+
+# 
+# implementation of cvs checkout
+# 
+
+.IF "$(checkout)"==""
+all_target:  build_all ALLTAR
+.ELSE	# "$(checkout)"==""
+.IF "$(checkout)"=="true"
+% : $(NULL)
+	_cvs co $@
+.ELSE	# "$(checkout)"=="true"
+% : $(NULL)
+	_cvs co -r$(checkout) $@
+.ENDIF	# "$(checkout)"=="true"
+all_subdirs : $(BUILD_SUBDIRS)
+.ENDIF	# "$(checkout)"==""
+
+# 
+# macro BUILD_SUBDIRS handles iteration over
+# all mandatory sub directories
+# 
+
+BUILD_SUBDIRS =  \
+	UnoControls \
+	XmlSearch \
+	automation \
+	basctl \
+	basic \
+	bridges \
+	chaos \
+	codemaker \
+	comphelper \
+	configmgr \
+	connectivity \
+	cppu \
+	cppuhelper \
+	cpputools \
+	dbaccess \
+	desktop \
+	drafts \
+	dtrans \
+	eventattacher \
+	extensions \
+	extras \
+	external \
+	fileaccess \
+	forms \
+	framework \
+	goodies \
+	i18n \
+	idl \
+	idlc \
+	inet \
+	io \
+	javaunohelper \
+	jtools \
+	jurt \
+	jut \
+	ldapber \
+	lingu \
+	linguistic \
+	offapi \
+	officecfg \
+	offmgr \
+	offuh \
+	package \
+	padmin \
+	psprint \
+	rdbmaker \
+	readlicense \
+	registry \
+	remotebridges \
+	res \
+	ridljar \
+	rsc \
+	sal \
+	salhelper \
+	sandbox \
+	sax \
+	sc \
+	scaddins \
+	sch \
+	scp \
+	scptools \
+	sd \
+	setup2 \
+	sfx2 \
+	shell \
+	sj2 \
+	so3 \
+	soltools \
+	sot \
+	so_berkeleydb \
+	starmath \
+	stoc \
+	store \
+	svtools \
+	sysui \
+	svx \
+	sw \
+	sysui \
+	toolkit \
+	tools \
+	transex3 \
+	ucb \
+	ucbhelper \
+	udkapi \
+	unoil \
+	unotools \
+	unzip \
+	uui \
+	vcl \
+	vos \
+	wizards \
+	xml2cmp \
+	xmlhelp \
+	xmloff \
+	xmlscript
+
+build_all .SETDIR=instsetoo/prj:
+	@+perl $(SOLARENV)$/bin$/build.pl -all product=full
+
+
+# 
+# bootstrap target
+# 
+
+bootstrap .PHONY :
+	@config_office/bootstrap
+
+
+# 
+# configure target
+# 
+
+configure .PHONY SETDIR=config_office :
+	@configure
+
+install .SETDIR=instsetoo/util:
+	dmake product="full"
+
+# experimental composite targets:
+
+udk_modules :	xml2cmp sal vos store registry idlc udkapi codemaker \
+		sandbox ridljar jurt cppu cppuhelper javaunohelper \
+		jut rdbmaker io bridges cpputools io stoc remotebridges
+
+non_vcl :	udk_modules ucbhelper offuh unoil officecfg UnoControls \
+		rsc sot eventattacher idl transex3 inet package xmlscript \
+		sax xmlhelp fileaccess sysui psprint
+
+frmwrk:		dtrans framework chaos i18n uui xmloff setup2 scptools scp \
+		connectivity 
+
+# 
+# single directory targets for
+# dependency handling between directories
+# 
+
+
+.IF "$(checkout)"==""
+.INCLUDE : target.mk
+.ENDIF	#"$(checkout)"==""
+
+#*************************************************************************
+
