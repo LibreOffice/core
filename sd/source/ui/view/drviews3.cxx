@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-16 10:26:45 $
+ *  last change: $Author: dl $ $Date: 2001-04-18 13:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -634,7 +634,7 @@ void __EXPORT SdDrawViewShell::ExecRuler(SfxRequest& rReq)
         }
 */
 
-/*      case SID_ATTR_TABSTOP:
+        case SID_ATTR_TABSTOP:
         {
             if( pDrView->IsTextEdit() )
             {
@@ -648,7 +648,7 @@ void __EXPORT SdDrawViewShell::ExecRuler(SfxRequest& rReq)
             }
             break;
         }
-*/
+
         case SID_ATTR_PARA_LRSPACE:
         {
             if( pDrView->IsTextEdit() )
