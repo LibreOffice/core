@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventimport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:23 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 16:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,8 @@ namespace xmloff
             pEventDescriptionEnd    =   pEventDescription + aEvent->second.getLength();
             for (;pEventDescription != pEventDescriptionEnd; ++pEventDescription)
             {
-                if (0 == pEventDescription->Name.compareToAscii(EVENT_LOCALMACRONAME))
+                if ((0 == pEventDescription->Name.compareToAscii(EVENT_LOCALMACRONAME)) ||
+                    (0 == pEventDescription->Name.compareToAscii(EVENT_SCRIPTURL)))
                     pEventDescription->Value >>= pTranslated->ScriptCode;
                 else if (0 == pEventDescription->Name.compareToAscii(EVENT_TYPE))
                     pEventDescription->Value >>= pTranslated->ScriptType;
