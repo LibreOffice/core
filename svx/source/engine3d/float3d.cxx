@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2002-07-04 16:37:29 $
+ *  last change: $Author: aw $ $Date: 2002-08-14 15:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3298,7 +3298,10 @@ IMPL_LINK( Svx3DWin, ClickFavoriteHdl, void*, p )
                 // throw out 2d attributes
                 for(sal_uInt16 a(SDRATTR_START); a < SDRATTR_3D_FIRST; a++)
                 {
-                    if(a != SDRATTR_SHADOW)
+                    if(a != SDRATTR_SHADOW
+                        // #100997# let the linestyle attribute set as in the favourite
+                        // since the default for 3d objects is different from 2d objects
+                        && a != XATTR_LINESTYLE)
                     {
                         aFavoriteItemSet.ClearItem(a);
                     }
