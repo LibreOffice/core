@@ -7,14 +7,14 @@
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.lightning" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.heart" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.flower" toolbar:helpid="helpid:11003" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.cloud" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.forbidden" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.puzzle" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.bracket-pair" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-bracket" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-bracket" toolbar:helpid="helpid:11003" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.brace-pair" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.left-brace" toolbar:helpid="helpid:11003" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:SymbolShapes.right-brace" toolbar:helpid="helpid:11003" toolbar:text="" />

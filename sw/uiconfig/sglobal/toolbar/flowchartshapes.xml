@@ -7,28 +7,28 @@
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-data" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-predefined-process" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-internal-storage" toolbar:helpid="helpid:11005" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-document" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-multidocument" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-terminator" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-preparation" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-manual-input" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-manual-operation" toolbar:helpid="helpid:11005" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-connector" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-off-page-connector" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-card" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-punched-tape" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-summing-junction" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-or" toolbar:helpid="helpid:11005" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-collate" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sort" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-extract" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-merge" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-stored-data" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-delay" toolbar:helpid="helpid:11005" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-sequential-access" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-magnetic-disk" toolbar:helpid="helpid:11005" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes.flowchart-direct-access-storage" toolbar:helpid="helpid:11005" toolbar:text="" />

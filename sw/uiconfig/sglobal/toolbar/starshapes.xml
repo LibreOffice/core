@@ -7,7 +7,7 @@
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star6" toolbar:helpid="helpid:11007" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star8" toolbar:helpid="helpid:11007" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star12" toolbar:helpid="helpid:11007" toolbar:text="" />
- <toolbar:toolbarseparator/>
+ <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.star24" toolbar:helpid="helpid:11007" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.concave-star6" toolbar:helpid="helpid:11007" toolbar:text="" />
  <toolbar:toolbaritem xlink:href=".uno:StarShapes.vertical-scroll" toolbar:helpid="helpid:11007" toolbar:text="" />
