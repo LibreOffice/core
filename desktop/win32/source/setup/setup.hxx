@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setup.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 13:36:08 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,6 @@
  #undef Create_SetupAppX
 #endif
 
-#ifdef SetupDlgProcX
- #undef SetupDlgProcX
-#endif
-
 #ifdef LanguageDataX
  #undef LanguageDataX
 #endif
@@ -83,12 +79,10 @@
 #ifdef UNICODE
  #define SetupAppX          SetupAppW
  #define Create_SetupAppX   Create_SetupAppW
- #define SetupDlgProcX      SetupDlgProcW
  #define LanguageDataX      LanguageDataW
 #else
  #define SetupAppX          SetupAppA
  #define Create_SetupAppX   Create_SetupAppA
- #define SetupDlgProcX      SetupDlgProcA
  #define LanguageDataX      LanguageDataA
 #endif
 
