@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 17:02:49 $
+ *  last change: $Author: abi $ $Date: 2001-11-05 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,7 +1565,8 @@ shell::remove( sal_Int32 CommandId,
 
 sal_Bool SAL_CALL
 shell::mkdir( sal_Int32 CommandId,
-              const rtl::OUString& rUnqPath )
+              const rtl::OUString& rUnqPath,
+              sal_Bool OverWrite )
     throw()
 {
     rtl::OUString aUnqPath;
@@ -1581,7 +1582,12 @@ shell::mkdir( sal_Int32 CommandId,
     switch ( nError )
     {
         case osl::FileBase::E_EXIST:   // Directory cannot be overwritten
+        {
+            if( ! OverWrite )
+                installError( CommandId,
+                              TASKHANDLING_FOLDER_EXISTS_MKDIR );
             return sal_False;
+        }
         case osl::FileBase::E_None:
         {
             rtl::OUString aPrtPath = getParentName( aUnqPath );

@@ -566,6 +566,13 @@ namespace fileaccess {
             aAny <<= NameClashException();
             cancelCommandExecution( aAny,xEnv );
         }
+        else if( errorCode == TASKHANDLING_FOLDER_EXISTS_MKDIR )
+        {
+            ioErrorCode = IOErrorCode_ALREADY_EXISTING;
+            cancelCommandExecution( ioErrorCode,
+                                    generateErrorArguments(pShell,aUncPath),
+                                    xEnv );
+        }
         else if( errorCode == TASKHANDLING_ENSUREDIR_FOR_WRITE  ||
                  errorCode == TASKHANDLING_CREATEDIRECTORY_MKDIR )
         {

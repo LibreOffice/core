@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-24 16:20:07 $
+ *  last change: $Author: abi $ $Date: 2001-11-05 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1250,12 +1250,13 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
                                      aInsertArgument.Data );
     else
         success = m_pMyShell->mkdir( nMyCommandIdentifier,
-                                     m_aUncPath );
+                                     m_aUncPath,
+                                     aInsertArgument.ReplaceExisting );
 
-    if( ! success )
-    {
-        return;
-    }
+//      if( ! success )
+//      {
+//          return;
+//      }
 
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,m_aUncPath );
     m_xContentIdentifier = Reference< XContentIdentifier >( p );

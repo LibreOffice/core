@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mhu $ $Date: 2001-08-15 16:43:31 $
+ *  last change: $Author: abi $ $Date: 2001-11-05 07:43:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,7 +460,8 @@ namespace fileaccess {
 
         sal_Bool SAL_CALL
         mkdir( sal_Int32 CommandId,
-               const rtl::OUString& aDirectoryName )
+               const rtl::OUString& aDirectoryName,
+               sal_Bool OverWrite )
             throw();
 
 
