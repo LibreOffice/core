@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salmisc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:56:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 10:04:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -359,6 +359,10 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         IMPL_CASE_GET_FORMAT( _32BIT_TC_MASK );
 
         default:
+            // should never come here
+            // initialize pFncGetPixel to something valid that is
+            // least likely to crash
+            pFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;
             DBG_ERROR( "unknown read format" );
         break;
     }
@@ -384,6 +388,11 @@ BitmapBuffer* StretchAndConvert( const BitmapBuffer& rSrcBuffer, const SalTwoRec
         IMPL_CASE_SET_FORMAT( _32BIT_TC_MASK, 32 );
 
         default:
+            // should never come here
+            // initialize pFncSetPixel to something valid that is
+            // least likely to crash
+            pFncSetPixel = BitmapReadAccess::SetPixelFor_1BIT_MSB_PAL;
+            pDstBuffer->mnBitCount = 1;
             DBG_ERROR( "unknown write format" );
         break;
     }
