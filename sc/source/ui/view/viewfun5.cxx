@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:33:35 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:19:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,9 +156,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 nXT += pDoc->GetColWidth(i,nTab);
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
-            long nYT = 0;
-            for (SCROW j=0; j<nPosY; j++)
-                nYT += pDoc->FastGetRowHeight(j,nTab);
+            ULONG nYT = pDoc->FastGetRowHeight( 0, nPosY-1, nTab);
             aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
         }
     }
