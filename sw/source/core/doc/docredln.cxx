@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-10-11 15:01:32 $
+ *  last change: $Author: dvo $ $Date: 2002-11-07 18:38:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,15 +134,22 @@
 #else
 
     // helper function for lcl_CheckRedline
-    // make sure that rPos.nContent points into rPos.nNode
+    // make sure that pPos->nContent points into pPos->nNode
     // (or into the 'special' no-content-node-IndexReg)
-    void lcl_CheckPosition( const SwPosition& rPos )
+    void lcl_CheckPosition( const SwPosition* pPos )
     {
-        SwPosition aComparePos( rPos );
+        SwPosition aComparePos( *pPos );
         aComparePos.nContent.Assign(
             aComparePos.nNode.GetNode().GetCntntNode(), 0 );
-        ASSERT( rPos.nContent.GetIdxReg() == aComparePos.nContent.GetIdxReg(),
+        ASSERT( pPos->nContent.GetIdxReg() == aComparePos.nContent.GetIdxReg(),
                 "redline table corrupted: illegal position" );
+    }
+
+    void lcl_CheckPam( const SwPaM* pPam )
+    {
+        ASSERT( pPam != NULL, "illegal argument" );
+        lcl_CheckPosition( pPam->GetPoint() );
+        lcl_CheckPosition( pPam->GetMark() );
     }
 
     // check validity of the redline table. Checks redline bounds, and make
@@ -150,27 +157,24 @@
     void lcl_CheckRedline( const SwDoc* pDoc )
     {
         const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
+
+        // verify valid redline positions
+        for( USHORT i = 0; i < rTbl.Count(); ++i )
+            lcl_CheckPam( rTbl[ i ] );
+
+        // verify proper redline sorting
         for( USHORT n = 1; n < rTbl.Count(); ++n )
         {
-            const SwRedline* pPrev = rTbl[ n-1 ], *pCur = rTbl[ n ];
+            const SwRedline* pPrev = rTbl[ n-1 ];
+            const SwRedline* pCurrent = rTbl[ n ];
 
-            // check sorting redlines
-            ASSERT( *pPrev->Start() <= *pCur->Start(),
+            // check redline sorting
+            ASSERT( *pPrev->Start() <= *pCurrent->Start(),
                     "redline table corrupted: not sorted correctly" );
 
             // check for overlapping redlines
-            ASSERT( *pPrev->End() <= *pCur->Start(),
+            ASSERT( *pPrev->End() <= *pCurrent->Start(),
                     "redline table corrupted: overlapping redlines" );
-
-            // also check that redline position's content points into the
-            // proper node
-            lcl_CheckPosition( pCur->GetBound( TRUE ) );
-            lcl_CheckPosition( pCur->GetBound( FALSE ) );
-        }
-        if( rTbl.Count() > 0 )
-        {
-            lcl_CheckPosition( rTbl[0]->GetBound( TRUE ) );
-            lcl_CheckPosition( rTbl[0]->GetBound( FALSE ) );
         }
     }
 
