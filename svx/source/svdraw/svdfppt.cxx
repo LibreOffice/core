@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-11 13:53:24 $
+ *  last change: $Author: sj $ $Date: 2000-10-12 13:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3042,6 +3042,7 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                                         UINT32& nMappedFontId, Font& rFont, char nDefault ) const
 {
     static String aStarBats( String( RTL_CONSTASCII_USTRINGPARAM( "StarBats" ) ) );
+    static String aTimes( String( RTL_CONSTASCII_USTRINGPARAM( "Times New Roman" ) ) );
     BOOL bNeedsStarBats = FALSE;
 
     sal_Unicode c = 0;
@@ -3054,8 +3055,15 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
 
         UINT32  nSourceFontId( pAtom->nUniqueFontId );
 
+
+        if ( nChar & 0xff00 )                   // may be it is not possible to display this
+        {                                       // character by using a symbol font
+            eCharSet = eCharSetSystem;
+            rFont.SetName( aTimes );
+        }
+        else
+            rFont.SetName( pAtom->aName );
         rFont.SetCharSet( eCharSet );
-        rFont.SetName( pAtom->aName );
         rFont.SetFamily( FAMILY_DONTKNOW );
         rFont.SetPitch( PITCH_DONTKNOW );
 
@@ -3069,7 +3077,7 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
         }
         else
         {
-            if ( !pAtom->bAvailable )                       // the original font is not available
+            if ( !pAtom->bAvailable )   // the original font is not available
             {
                 if ( nSourceFontId == PPT_UNIQUE_FONT_ID_MONOTYPE_SORTS )
                 {   // this is a special mapping for monotype sorts
@@ -3080,9 +3088,9 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
                 }
                 else
                 {
-                    rFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Wingdings" ) ) );
                     if ( IsWingdingsAvailable() )           // mapping all fonts not available to wingdings
                     {
+                        rFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Wingdings" ) ) );
                         c = nChar;
 /*
                         if ( nChar & 0xff00 )
@@ -3126,7 +3134,7 @@ sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 nFont, sal_Unicode nChar,
         }
     }
     if ( !c )
-        c = nDefault ? nDefault : (UINT8)nChar;
+        c = nDefault ? nDefault : nChar;
     return c;
 }
 
@@ -3680,10 +3688,10 @@ void PPTNumberFormatCreator::ImplGetNumberFormat( SdrPowerPointImport& rManager,
     Font    aFont;
 
     aFont.SetColor( aCol );
-    unsigned char c = rManager.PPTSubstitute( nBulletFont, nBulletChar, nMappedFontId, aFont, ( nLevel & 1 ) ? 150 : 149 );
+    sal_Unicode c = rManager.PPTSubstitute( nBulletFont, nBulletChar, nMappedFontId, aFont, ( nLevel & 1 ) ? 150 : 149 );
 
     rNumberFormat.SetBulletFont( &aFont );
-    rNumberFormat.SetBulletChar( (char)c );
+    rNumberFormat.SetBulletChar( c );
     rNumberFormat.SetBulletRelSize( (UINT16)nBulletHeight );
     rNumberFormat.SetBulletColor( aCol );
     UINT16 nAbsLSpace = (UINT16)( ( (UINT32)nTextOfs * 2540 ) / 576 );
