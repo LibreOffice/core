@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linectrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-21 17:30:22 $
+ *  last change: $Author: cl $ $Date: 2002-11-27 12:21:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -758,6 +758,14 @@ void SvxLineEndWindow::SetSize()
     aSize.Height() = aBmpSize.Height();
     aSize.Height() += 14;
     //SetMinOutputSizePixel( aSize );
+}
+
+void SvxLineEndWindow::GetFocus (void)
+{
+    SfxPopupWindow::GetFocus();
+    // Grab the focus to the line ends value set so that it can be controlled
+    // with the keyboard.
+    aLineEndSet.GrabFocus();
 }
 
 /*************************************************************************
