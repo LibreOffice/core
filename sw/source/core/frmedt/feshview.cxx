@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-05-28 14:05:17 $
+ *  last change: $Author: ama $ $Date: 2002-05-30 16:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,9 @@
 #endif
 #ifndef _SWTABLE_HXX //autogen
 #include <swtable.hxx>
+#endif
+#ifndef _FLYFRMS_HXX
+#include <flyfrms.hxx>
 #endif
 #include "fesh.hxx"
 #include "rootfrm.hxx"
@@ -346,7 +349,34 @@ BOOL SwFEShell::SelectObj( const Point& rPt, BYTE nFlag, SdrObject *pObj )
     return bRet;
 }
 
-// First shot, has to be modified...
+/*************************************************************************
+|*
+|*  sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
+|*
+|*  Created        AMA 05/28/2002
+|*  Last modify    AMA 05/30/2002
+|*
+|*  Description: MoveAnchor( nDir ) looked for an another Anchor for
+|*  the selected drawing object (or fly frame) in the given direction.
+|*  An object "as character" doesn't moves anyway.
+|*  A page bounded object could move to the previous/next page with up/down,
+|*  an object bounded "at paragraph" moves to the previous/next paragraph, too.
+|*  An object bounded "at character" moves to the previous/next paragraph
+|*  with up/down and to the previous/next character with left/right.
+|*  If the anchor for at paragraph/character bounded objects has vertical or
+|*  right_to_left text direction, the directions for up/down/left/right will
+|*  interpreted accordingly.
+|*  An object bounded "at fly" takes the center of the actual anchor and looks
+|*  for the nearest fly frame in the given direction.
+|*
+*************************************************************************/
+
+#define LESS_X( aPt1, aPt2, bOld ) ( aPt1.X() < aPt2.X() || \
+        ( aPt1.X() == aPt2.X() && ( aPt1.Y() < aPt2.Y() || \
+        ( aPt1.Y() == aPt2.Y() && bOld ) ) ) )
+#define LESS_Y( aPt1, aPt2, bOld ) ( aPt1.Y() < aPt2.Y() || \
+        ( aPt1.Y() == aPt2.Y() && ( aPt1.X() < aPt2.X() || \
+        ( aPt1.X() == aPt2.X() && bOld ) ) ) )
 
 sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
 {
@@ -356,25 +386,218 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         1 != pMrkList->GetMarkCount())
         return sal_False;
     SwFrm* pOld;
+    SwFlyFrm* pFly = NULL;
     SdrObject *pObj = pMrkList->GetMark( 0 )->GetObj();
     if( pObj->IsWriterFlyFrame() )
-        pOld = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetAnchor();
+    {
+        pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+        pOld = pFly->GetAnchor();
+    }
     else
         pOld = ((SwDrawContact*)GetUserCall(pObj))->GetAnchor();
+    sal_Bool bRet = sal_False;
     if( pOld )
     {
-        Point aOld( pOld->Frm().Pos() );
-        Point aPt( aOld );
-        switch ( nDir ) {
-            case SW_MOVE_UP: aPt.Y() -= 10; break;
-            case SW_MOVE_DOWN: aPt.Y() += pOld->Frm().Height() + 10; break;
-            case SW_MOVE_LEFT: aPt.X() -= 10; break;
-            case SW_MOVE_RIGHT: aPt.X() += pOld->Frm().Width() + 10; break;
+        SwFrm* pNew = pOld;
+        SwFmt *pFmt = ::FindFrmFmt( pObj );
+        SwFmtAnchor aAnch( pFmt->GetAnchor() );
+        RndStdIds nAnchorId = aAnch.GetAnchorId();
+        if ( FLY_IN_CNTNT == nAnchorId )
+            return sal_False;
+#ifdef VERTICAL_LAYOUT
+        if( pOld->IsVertical() )
+        {
+            if( pOld->IsTxtFrm() )
+            {
+                switch( nDir ) {
+                    case SW_MOVE_UP: nDir = SW_MOVE_LEFT; break;
+                    case SW_MOVE_DOWN: nDir = SW_MOVE_RIGHT; break;
+                    case SW_MOVE_LEFT: nDir = SW_MOVE_DOWN; break;
+                    case SW_MOVE_RIGHT: nDir = SW_MOVE_UP; break;
+                }
+                if( pOld->IsRightToLeft() )
+                {
+                    if( nDir == SW_MOVE_LEFT )
+                        nDir = SW_MOVE_RIGHT;
+                    else if( nDir == SW_MOVE_RIGHT )
+                        nDir = SW_MOVE_LEFT;
+                }
+            }
         }
-        aPt = FindAnchorPos( aPt, sal_True );
-        return aPt != aOld;
+#endif
+        switch ( nAnchorId ) {
+            case FLY_PAGE:
+            {
+                ASSERT( pOld->IsPageFrm(), "Wrong anchor, page exspected." );
+                if( SW_MOVE_UP == nDir )
+                    pNew = pOld->GetPrev();
+                else if( SW_MOVE_DOWN == nDir )
+                    pNew = pOld->GetNext();
+                if( pNew && pNew != pOld )
+                {
+                    aAnch.SetPageNum( ((SwPageFrm*)pNew)->GetPhyPageNum() );
+                    bRet = sal_True;
+                }
+                break;
+            }
+            case FLY_AUTO_CNTNT:
+            {
+                ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
+                if( SW_MOVE_LEFT == nDir || SW_MOVE_RIGHT == nDir )
+                {
+                    SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                    SwTxtNode* pTxtNd = ((SwTxtFrm*)pOld)->GetTxtNode();
+                    xub_StrLen nAct = pPos->nContent.GetIndex();
+                    if( SW_MOVE_LEFT == nDir )
+                    {
+                        bRet = sal_True;
+                        if( nAct )
+                        {
+                            --nAct;
+                            pPos->nContent.Assign( pTxtNd, nAct );
+                        }
+                        else
+                            nDir = SW_MOVE_UP;
+                    }
+                    else
+                    {
+                        xub_StrLen nMax =
+                            ((SwTxtFrm*)pOld)->GetTxtNode()->GetTxt().Len();
+                        if( nAct < nMax )
+                        {
+                            ++nAct;
+                            bRet = sal_True;
+                            pPos->nContent.Assign( pTxtNd, nAct );
+                        }
+                        else
+                            nDir = SW_MOVE_DOWN;
+                    }
+                }
+            } // no break!
+            case FLY_AT_CNTNT:
+            {
+                ASSERT( pOld->IsCntntFrm(), "Wrong anchor, page exspected." );
+                if( SW_MOVE_UP == nDir )
+                    pNew = pOld->FindPrev();
+                else if( SW_MOVE_DOWN == nDir )
+                    pNew = pOld->FindNext();
+                if( pNew && pNew != pOld && pNew->IsCntntFrm() )
+                {
+                    SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
+                    SwTxtNode* pTxtNd = ((SwTxtFrm*)pNew)->GetTxtNode();
+                    pPos->nNode = *pTxtNd;
+                    xub_StrLen nTmp = 0;
+                    if( bRet )
+                    {
+                        nTmp = ((SwTxtFrm*)pNew)->GetTxtNode()->GetTxt().Len();
+                        if( nTmp )
+                            --nTmp;
+                    }
+                    pPos->nContent.Assign( pTxtNd, nTmp );
+                    bRet = sal_True;
+                }
+                else if( SW_MOVE_UP == nDir || SW_MOVE_DOWN == nDir )
+                    bRet = sal_False;
+                break;
+            }
+            case FLY_AT_FLY:
+            {
+                ASSERT( pOld->IsFlyFrm(), "Wrong anchor, fly frame exspected.");
+                SwPageFrm* pPage = pOld->FindPageFrm();
+                ASSERT( pPage, "Where's my page?" );
+                SwFlyFrm* pNewFly = NULL;
+                if( pPage->GetSortedObjs() )
+                {
+                    int i;
+                    sal_Bool bOld = sal_False;
+                    Point aCenter( pOld->Frm().Left() + pOld->Frm().Width()/2,
+                                   pOld->Frm().Top() + pOld->Frm().Height()/2 );
+                    Point aBest;
+                    for( i = 0; (USHORT)i<pPage->GetSortedObjs()->Count(); ++i )
+                    {
+                        SdrObject *pO = (*pPage->GetSortedObjs())[i];
+                        if( pO->IsWriterFlyFrame() )
+                        {
+                            SwFlyFrm* pTmp=((SwVirtFlyDrawObj*)pO)->GetFlyFrm();
+                            if( pTmp == pOld )
+                                bOld = sal_True;
+                            else
+                            {
+                                const SwFlyFrm* pCheck = pFly ? pTmp : 0;
+                                while( pCheck )
+                                {
+                                    if( pCheck == pFly )
+                                        break;
+                                    const SwFrm *pNxt = pCheck->GetAnchor();
+                                    pCheck = pNxt ? pNxt->FindFlyFrm() : NULL;
+                                }
+                                if( pCheck || pTmp->IsProtected() )
+                                    continue;
+                                Point aNew( pTmp->Frm().Left() +
+                                            pTmp->Frm().Width()/2,
+                                            pTmp->Frm().Top() +
+                                            pTmp->Frm().Height()/2 );
+                                sal_Bool bAccept = sal_False;
+                                switch( nDir ) {
+                                    case SW_MOVE_RIGHT:
+                                    {
+                                        bAccept = LESS_X( aCenter, aNew, bOld )
+                                             && ( !pNewFly ||
+                                             LESS_X( aNew, aBest, sal_False ) );
+                                        break;
+                                    }
+                                    case SW_MOVE_LEFT:
+                                    {
+                                        bAccept = LESS_X( aNew, aCenter, !bOld )
+                                             && ( !pNewFly ||
+                                             LESS_X( aBest, aNew, sal_True ) );
+                                        break;
+                                    }
+                                    case SW_MOVE_UP:
+                                    {
+                                        bAccept = LESS_Y( aNew, aCenter, !bOld )
+                                             && ( !pNewFly ||
+                                             LESS_Y( aBest, aNew, sal_True ) );
+                                        break;
+                                    }
+                                    case SW_MOVE_DOWN:
+                                    {
+                                        bAccept = LESS_Y( aCenter, aNew, bOld )
+                                             && ( !pNewFly ||
+                                             LESS_Y( aNew, aBest, sal_False ) );
+                                        break;
+                                    }
+                                }
+                                if( bAccept )
+                                {
+                                    pNewFly = pTmp;
+                                    aBest = aNew;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if( pNewFly )
+                {
+                    SwPosition aPos( *pNewFly->GetFmt()->
+                                        GetCntnt().GetCntntIdx());
+                    aAnch.SetAnchor( &aPos );
+                    bRet = sal_True;
+                }
+                break;
+            }
+        }
+        if( bRet )
+        {
+            StartAllAction();
+            pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
+            if( nAnchorId == FLY_AUTO_CNTNT && pFly && pFly->IsFlyAtCntFrm() )
+                ((SwFlyAtCntFrm*)pFly)->CheckCharRect();
+            EndAllAction();
+        }
     }
-    return sal_False;
+    return bRet;
 }
 
 /*************************************************************************
