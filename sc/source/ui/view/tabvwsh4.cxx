@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 17:58:59 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1361,6 +1361,17 @@ void ScTabViewShell::StartSimpleRefDialog(
             const String& rTitle, const String& rInitVal, BOOL bCloseOnButtonUp )
 {
     SfxViewFrame* pViewFrm = GetViewFrame();
+
+    if ( GetActiveViewShell() != this )
+    {
+        // #i18833# / #i34499# The API method can be called for a view that's not active.
+        // Then the view has to be activated first, the same way as in Execute for SID_CURRENTDOC.
+        // Can't use GrabFocus here, because it needs to take effect immediately.
+
+        if ( pViewFrm->ISA(SfxTopViewFrame) )
+            pViewFrm->GetFrame()->Appear();
+    }
+
     USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
 
     SC_MOD()->SetRefDialog( nId, TRUE, pViewFrm );
