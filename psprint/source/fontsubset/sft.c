@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 13:49:04 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 10:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,23 +158,40 @@ static const sal_uInt32 T_true = 0x74727565;        /* 'true' */
 static const sal_uInt32 T_ttcf = 0x74746366;        /* 'ttcf' */
 
 /* standard TrueType table tags and their ordinal numbers */
-static const sal_uInt32 T_maxp = 0x6D617870;    static const sal_uInt32 O_maxp = 0;     /* 'maxp' */
-static const sal_uInt32 T_glyf = 0x676C7966;    static const sal_uInt32 O_glyf = 1;     /* 'glyf' */
-static const sal_uInt32 T_head = 0x68656164;    static const sal_uInt32 O_head = 2;     /* 'head' */
-static const sal_uInt32 T_loca = 0x6C6F6361;    static const sal_uInt32 O_loca = 3;     /* 'loca' */
-static const sal_uInt32 T_name = 0x6E616D65;    static const sal_uInt32 O_name = 4;     /* 'name' */
-static const sal_uInt32 T_hhea = 0x68686561;    static const sal_uInt32 O_hhea = 5;     /* 'hhea' */
-static const sal_uInt32 T_hmtx = 0x686D7478;    static const sal_uInt32 O_hmtx = 6;     /* 'hmtx' */
-static const sal_uInt32 T_cmap = 0x636D6170;    static const sal_uInt32 O_cmap = 7;     /* 'cmap' */
-static const sal_uInt32 T_vhea = 0x76686561;    static const sal_uInt32 O_vhea = 8;     /* 'vhea' */
-static const sal_uInt32 T_vmtx = 0x766D7478;    static const sal_uInt32 O_vmtx = 9;     /* 'vmtx' */
-static const sal_uInt32 T_OS2  = 0x4F532F32;    static const sal_uInt32 O_OS2  = 10;    /* 'OS/2' */
-static const sal_uInt32 T_post = 0x706F7374;    static const sal_uInt32 O_post = 11;    /* 'post' */
-static const sal_uInt32 T_kern = 0x6B65726E;    static const sal_uInt32 O_kern = 12;    /* 'kern' */
-static const sal_uInt32 T_cvt  = 0x63767420;    static const sal_uInt32 O_cvt  = 13;    /* 'cvt_' - only used in TT->TT generation */
-static const sal_uInt32 T_prep = 0x70726570;    static const sal_uInt32 O_prep = 14;    /* 'prep' - only used in TT->TT generation */
-static const sal_uInt32 T_fpgm = 0x6670676D;    static const sal_uInt32 O_fpgm = 15;    /* 'fpgm' - only used in TT->TT generation */
-static const sal_uInt32 T_gsub = 0x47535542;    static const sal_uInt32 O_gsub = 16;    /* 'GSUB' */
+#define T_maxp 0x6D617870
+#define O_maxp 0     /* 'maxp' */
+#define T_glyf 0x676C7966
+#define O_glyf 1     /* 'glyf' */
+#define T_head 0x68656164
+#define O_head 2     /* 'head' */
+#define T_loca 0x6C6F6361
+#define O_loca 3     /* 'loca' */
+#define T_name 0x6E616D65
+#define O_name 4     /* 'name' */
+#define T_hhea 0x68686561
+#define O_hhea 5     /* 'hhea' */
+#define T_hmtx 0x686D7478
+#define O_hmtx 6     /* 'hmtx' */
+#define T_cmap 0x636D6170
+#define O_cmap 7     /* 'cmap' */
+#define T_vhea 0x76686561
+#define O_vhea 8     /* 'vhea' */
+#define T_vmtx 0x766D7478
+#define O_vmtx 9     /* 'vmtx' */
+#define T_OS2  0x4F532F32
+#define O_OS2  10    /* 'OS/2' */
+#define T_post 0x706F7374
+#define O_post 11    /* 'post' */
+#define T_kern 0x6B65726E
+#define O_kern 12    /* 'kern' */
+#define T_cvt  0x63767420
+#define O_cvt  13    /* 'cvt_' - only used in TT->TT generation */
+#define T_prep 0x70726570
+#define O_prep 14    /* 'prep' - only used in TT->TT generation */
+#define T_fpgm 0x6670676D
+#define O_fpgm 15    /* 'fpgm' - only used in TT->TT generation */
+#define T_gsub 0x47535542
+#define O_gsub 16    /* 'GSUB' */
 #define NUM_TAGS 17
 
 #define LAST_URANGE_BIT 69
@@ -1046,12 +1063,20 @@ static int BSplineToPSPath(ControlPoint *srcA, int srcCount, PSPathElement **pat
 
 /*- Extracts a string from the name table and allocates memory for it -*/
 
-static char *nameExtract(sal_uInt8 *name, int n, int dbFlag, sal_uInt16** ucs2result )
+static char *nameExtract(sal_uInt8 *name, int nTableSize, int n, int dbFlag, sal_uInt16** ucs2result )
 {
     int i;
     char *res;
     sal_uInt8 *ptr =  name + GetUInt16(name, 4, 1) + GetUInt16(name + 6, 12 * n + 10, 1);
     int len = GetUInt16(name+6, 12 * n + 8, 1);
+
+    // sanity check
+    if( ! len || ptr >= (name+nTableSize-len) )
+    {
+        if( ucs2result )
+            *ucs2result = NULL;
+        return NULL;
+    }
 
     if( ucs2result )
         *ucs2result = NULL;
@@ -1119,57 +1144,71 @@ static int findname(sal_uInt8 *name, sal_uInt16 n, sal_uInt16 platformID, sal_uI
 static void GetNames(TrueTypeFont *t)
 {
     sal_uInt8 *table = getTable(t, O_name);
+    int nTableSize = getTableSize(t, O_name);
+
     sal_uInt16 n = GetUInt16(table, 2, 1);
     int i, r;
 
     /* PostScript name: preferred Microsoft */
-    if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1) {
-        t->psname = nameExtract(table, r, 1, NULL);
-    } else if ((r = findname(table, n, 1, 0, 0, 6)) != -1) {
-        t->psname = nameExtract(table, r, 0, NULL);
-    } else if ((r = findname(table, n, 3, 0, 0x0409, 6)) != -1) {
+    t->psname = NULL;
+    if ((r = findname(table, n, 3, 1, 0x0409, 6)) != -1)
+        t->psname = nameExtract(table, nTableSize, r, 1, NULL);
+    if ( ! t->psname && (r = findname(table, n, 1, 0, 0, 6)) != -1)
+        t->psname = nameExtract(table, nTableSize, r, 0, NULL);
+    if ( ! t->psname && (r = findname(table, n, 3, 0, 0x0409, 6)) != -1)
+    {
         // some symbol fonts like Marlett have a 3,0 name!
-        t->psname = nameExtract(table, r, 1, NULL);
-    } else if ( t->fname ) {
-        char* pReverse = t->fname + strlen(t->fname);
-        /* take only last token of filename */
-        while(pReverse != t->fname && *pReverse != '/') pReverse--;
-        if(*pReverse == '/') pReverse++;
-        t->psname = strdup(pReverse);
-        assert(t->psname != 0);
-        for (i=strlen(t->psname) - 1; i > 0; i--) {                                /*- Remove the suffix  -*/
-            if (t->psname[i] == '.' ) {
-                t->psname[i] = 0;
-                break;
+        t->psname = nameExtract(table, nTableSize, r, 1, NULL);
+    }
+    if ( ! t->psname )
+    {
+        if ( t->fname )
+        {
+            char* pReverse = t->fname + strlen(t->fname);
+            /* take only last token of filename */
+            while(pReverse != t->fname && *pReverse != '/') pReverse--;
+            if(*pReverse == '/') pReverse++;
+            t->psname = strdup(pReverse);
+            assert(t->psname != 0);
+            for (i=strlen(t->psname) - 1; i > 0; i--)
+            {
+                /*- Remove the suffix  -*/
+                if (t->psname[i] == '.' ) {
+                    t->psname[i] = 0;
+                    break;
+                }
             }
         }
-    } else {
-        t->psname = strdup( "Unknown" );
+        else
+            t->psname = strdup( "Unknown" );
     }
 
     /* Font family and subfamily names: preferred Apple */
-    if ((r = findname(table, n, 0, 0, 0, 1)) != -1) {
-        t->family = nameExtract(table, r, 1, &t->ufamily);
-    } else if ((r = findname(table, n, 3, 1, 0x0409, 1)) != -1) {
-        t->family = nameExtract(table, r, 1, &t->ufamily);
-    } else if ((r = findname(table, n, 1, 0, 0, 1)) != -1) {
-        t->family = nameExtract(table, r, 0, NULL);
-    } else if ((r = findname(table, n, 3, 1, 0x0411, 1)) != -1) {
-        t->family = nameExtract(table, r, 1, &t->ufamily);
-    } else if ((r = findname(table, n, 3, 0, 0x0409, 1)) != -1) {
-        t->family = nameExtract(table, r, 1, &t->ufamily);
-    } else {
+    t->family = NULL;
+    if ((r = findname(table, n, 0, 0, 0, 1)) != -1)
+        t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
+    if ( ! t->family && (r = findname(table, n, 3, 1, 0x0409, 1)) != -1)
+        t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
+    if ( ! t->family && (r = findname(table, n, 1, 0, 0, 1)) != -1)
+        t->family = nameExtract(table, nTableSize, r, 0, NULL);
+    if ( ! t->family && (r = findname(table, n, 3, 1, 0x0411, 1)) != -1)
+        t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
+    if ( ! t->family && (r = findname(table, n, 3, 0, 0x0409, 1)) != -1)
+        t->family = nameExtract(table, nTableSize, r, 1, &t->ufamily);
+    if ( ! t->family )
+    {
         t->family = strdup(t->psname);
         assert(t->family != 0);
     }
 
-    if ((r = findname(table, n, 1, 0, 0, 2)) != -1) {
-        t->subfamily = nameExtract(table, r, 0, NULL);
-    } else if ((r = findname(table, n, 3, 1, 0x0409, 2)) != -1) {
-        t->subfamily = nameExtract(table, r, 1, NULL);
-    } else {
+    t->subfamily = NULL;
+    if ((r = findname(table, n, 1, 0, 0, 2)) != -1)
+        t->subfamily = nameExtract(table, nTableSize, r, 0, NULL);
+    if ( ! t->subfamily && (r = findname(table, n, 3, 1, 0x0409, 2)) != -1)
+        t->subfamily = nameExtract(table, nTableSize, r, 1, NULL);
+    if ( ! t->subfamily )
+    {
         t->subfamily = strdup("");
-        assert(t->family != 0);
     }
 
 }
@@ -1666,46 +1705,45 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
 
     /* parse the tables */
     for (i=0; i<(int)t->ntables; i++) {
+        int nIndex;
         tag = GetUInt32(t->ptr + tdoffset + 12, 16 * i, 1);
-        offset = t->ptr + GetUInt32(t->ptr + tdoffset + 12, 16 * i + 8, 1);
-        length = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 12, 1);
-        /* sanity check: table must lay completely within the file
-         * at this point one could check the checksum of all contained
-         *  tables, but this would be quite time intensive
-         */
-        if( (offset < t->ptr) || (offset+length > t->ptr+t->fsize) )
-        {
-#if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "font file %s has bad table %4s\n", t->fname, (char*)&tag );
-#endif
-            continue;
+        switch( tag ) {
+            case T_maxp: nIndex = O_maxp; break;
+            case T_glyf: nIndex = O_glyf; break;
+            case T_head: nIndex = O_head; break;
+            case T_loca: nIndex = O_loca; break;
+            case T_name: nIndex = O_name; break;
+            case T_hhea: nIndex = O_hhea; break;
+            case T_hmtx: nIndex = O_hmtx; break;
+            case T_cmap: nIndex = O_cmap; break;
+            case T_vhea: nIndex = O_vhea; break;
+            case T_vmtx: nIndex = O_vmtx; break;
+            case T_OS2 : nIndex = O_OS2;  break;
+            case T_post: nIndex = O_post; break;
+            case T_kern: nIndex = O_kern; break;
+            case T_cvt : nIndex = O_cvt;  break;
+            case T_prep: nIndex = O_prep; break;
+            case T_fpgm: nIndex = O_fpgm; break;
+            case T_gsub: nIndex = O_gsub; break;
+            default: nIndex = -1; break;
         }
-
-
-        if (tag == T_maxp) { t->tables[O_maxp] = offset; t->tlens[O_maxp] = length; continue; }
-        if (tag == T_glyf) { t->tables[O_glyf] = offset; t->tlens[O_glyf] = length; continue; }
-        if (tag == T_head) { t->tables[O_head] = offset; t->tlens[O_head] = length; continue; }
-        if (tag == T_loca) { t->tables[O_loca] = offset; t->tlens[O_loca] = length; continue; }
-        if (tag == T_name) { t->tables[O_name] = offset; t->tlens[O_name] = length; continue; }
-        if (tag == T_hhea) { t->tables[O_hhea] = offset; t->tlens[O_hhea] = length; continue; }
-        if (tag == T_hmtx) { t->tables[O_hmtx] = offset; t->tlens[O_hmtx] = length; continue; }
-        if (tag == T_cmap) { t->tables[O_cmap] = offset; t->tlens[O_cmap] = length; continue; }
-        if (tag == T_vhea) { t->tables[O_vhea] = offset; t->tlens[O_vhea] = length; continue; }
-        if (tag == T_vmtx) { t->tables[O_vmtx] = offset; t->tlens[O_vmtx] = length; continue; }
-        if (tag == T_OS2 ) { t->tables[O_OS2 ] = offset; t->tlens[O_OS2 ] = length; continue; }
-        if (tag == T_post) { t->tables[O_post] = offset; t->tlens[O_post] = length; continue; }
-        if (tag == T_kern) { t->tables[O_kern] = offset; t->tlens[O_kern] = length; continue; }
-        if (tag == T_cvt ) { t->tables[O_cvt ] = offset; t->tlens[O_cvt ] = length; continue; }
-        if (tag == T_prep) { t->tables[O_prep] = offset; t->tlens[O_prep] = length; continue; }
-        if (tag == T_fpgm) { t->tables[O_fpgm] = offset; t->tlens[O_fpgm] = length; continue; }
-        if (tag == T_gsub) { t->tables[O_gsub] = offset; t->tlens[O_gsub] = length; continue; }
+        if( nIndex >= 0 ) {
+            offset = t->ptr + GetUInt32(t->ptr + tdoffset + 12, 16 * i + 8, 1);
+            length = GetUInt32(t->ptr + tdoffset + 12, 16 * i + 12, 1);
+            t->tables[nIndex] = offset;
+            t->tlens[nIndex] = length;
+        }
     }
 
-    if( facenum == ~0 ) {   /* fixup offsets when only TTC extracts were provided */
-        /* TODO: find better method than searching head table's magic */
-        unsigned char *pHead = t->tables[O_head], *p = NULL;
+    /* Fixup offsets when only a TTC extract was provided */
+    if( facenum == ~0 ) {
+        sal_uInt8 *pHead = t->tables[O_head], *p = NULL;
         if( !pHead )
             return SF_TTFORMAT;
+        /* limit Head candidate to TTC extract's limits */
+        if( pHead > t->ptr + (t->fsize - 54) )
+            pHead = t->ptr + (t->fsize - 54);
+        /* TODO: find better method than searching head table's magic */
         for( p = pHead + 12; p > t->ptr; --p ) {
             if( p[0]==0x5F && p[1]==0x0F && p[2]==0x3C && p[3]==0xF5 ) {
                 int nDelta = (pHead + 12) - p, j;
@@ -1718,6 +1756,34 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
         }
         if( p <= t->ptr )
             return SF_TTFORMAT;
+    }
+
+    /* Check the table offsets after TTC correction */
+    for (i=0; i<NUM_TAGS; i++) {
+        /* sanity check: table must lay completely within the file
+         * at this point one could check the checksum of all contained
+         * tables, but this would be quite time intensive.
+         * Try to fix tables, so we can cope with minor problems.
+         */
+
+        if( (sal_uInt8*)t->tables[i] < t->ptr )
+        {
+            t->tlens[i] = 0;
+            t->tables[i] = NULL;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "font file %s has bad table offset (tagnum=%d)\n", t->fname, i );
+#endif
+        }
+        else if( (sal_uInt8*)t->tables[i] + t->tlens[i] > t->ptr + t->fsize )
+        {
+            int nMaxLen = (t->ptr + t->fsize) - (sal_uInt8*)t->tables[i];
+            if( nMaxLen < 0 )
+                nMaxLen = 0;
+            t->tlens[i] = nMaxLen;
+#if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "font file %s has too big table (tagnum=%d)\n", t->fname, i );
+#endif
+        }
     }
 
     /* At this point TrueTypeFont is constructed, now need to verify the font format
