@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-28 16:20:44 $
+ *  last change: $Author: fme $ $Date: 2001-06-14 08:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,7 +325,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     sal_Bool bFirst = sal_True;
 
     SwArrowPortion *pArrow = NULL;
-    SwLinePortion* pLastPor = NULL;
+    SwLinePortion* pLastPor = pCurr->GetFirstPortion();
 
     while( pPor )
     {
@@ -343,7 +343,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             // end character has the same font as this portion
             // (only in special vertical alignment case, otherwise the first
             // portion of the line is used)
-            if ( pPor->Width() )
+            if ( pPor->Width() && pPor->InTxtGrp() )
                 pLastPor = pPor;
         }
 
