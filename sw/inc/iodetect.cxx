@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:03:40 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,8 @@
 #endif
 #endif
 
+using namespace com::sun::star;
+
 class Reader;
 USHORT AutoDetec(const String& FileName, USHORT & rVersion);
 bool IsDocShellRegistered();
@@ -156,7 +158,8 @@ const USHORT MAXFILTER =
 #ifdef DEBUG_SH
         1 +
 #endif
-        21;
+        //21;
+        18;
 
 #define FORAMTNAME_SW4      "StarWriter 4.0"
 #define FORAMTNAME_SW3      "StarWriter 3.0"
@@ -214,9 +217,9 @@ const sal_Char* GetFILTER_TEXT()
 #endif
 SwIoDetect aReaderWriter[ MAXFILTER ] =
 {
-/*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
-/*  1*/ SwIoEntry(FILTER_SW4,       4,          &::GetSw3Writer,    FALSE),
-/*  2*/ SwIoEntry(FILTER_SW3,       4,          &::GetSw3Writer,    FALSE),
+///*  0*/ SwIoEntry(FILTER_SW5,       4,          &::GetSw3Writer,    TRUE),
+///*  1*/ SwIoEntry(FILTER_SW4,       4,          &::GetSw3Writer,    FALSE),
+///*  2*/ SwIoEntry(FILTER_SW3,       4,          &::GetSw3Writer,    FALSE),
 /*  3*/ SwIoEntry(FILTER_SWG,       STRING_LEN, 0,                  TRUE),
 /*  4*/ SwIoEntry(FILTER_SWGV,      4,          0,                  FALSE),
 /*  5*/ SwIoEntry(FILTER_RTF,       STRING_LEN, &::GetRTFWriter,    TRUE),
@@ -234,9 +237,7 @@ SwIoDetect aReaderWriter[ MAXFILTER ] =
 /* 17*/ SwIoEntry(sWW5,             STRING_LEN, 0,                  FALSE),
 /* 18*/ SwIoEntry(sSwg1,            4,          0,                  FALSE),
 /* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE)
-
-/* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE)
-                                                                          ,
+/* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE),
 /*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
 };
 
@@ -379,6 +380,23 @@ const SfxFilter* SwIoSystem::GetFilterOfFormat(const String& rFmtNm,
     return 0;
 }
 
+FASTBOOL SwIoSystem::IsValidStgFilter( const uno::Reference < embed::XStorage >& rStg, const SfxFilter& rFilter)
+{
+    BOOL bRet = FALSE;
+    try
+    {
+        ULONG nStgFmtId = SotStorage::GetFormatID( rStg );
+        bRet = rStg->isStreamElement( ::rtl::OUString::createFromAscii("content.xml") );
+        if ( bRet )
+            bRet = ( nStgFmtId && ( rFilter.GetFormat() == nStgFmtId ) );
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
+    return bRet;
+}
+
 FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 {
     ULONG nStgFmtId = rStg.GetFormat();
@@ -391,9 +409,7 @@ FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
 
     BOOL bRet = SVSTREAM_OK == rStg.GetError() &&
                 ( !nStgFmtId || rFilter.GetFormat() == nStgFmtId ) &&
-                ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) ||
-                  (rFilter.GetUserData().EqualsAscii(FILTER_XML) &&
-                   rStg.IsContained( String::CreateFromAscii("Content.xml") )) );
+                ( rStg.IsContained( SwIoSystem::GetSubStorageName( rFilter )) );
     if( bRet )
     {
         /* Bug 53445 - es gibt Excel Docs ohne ClipBoardId! */
@@ -415,8 +431,6 @@ FASTBOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter
                 bRet = !(nByte & 1);
             }
         }
-        else if( rFilter.GetUserData().EqualsAscii(FILTER_XML, 0, sizeof(FILTER_XML)-1) )
-            bRet = !nStgFmtId || rFilter.GetFormat() == nStgFmtId;
         else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
             bRet = rFilter.GetFormat() == nStgFmtId;
     }
@@ -448,9 +462,16 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
     SfxFilterContainer aCntSwWeb( String::CreateFromAscii( pSwWeb ) );
     const SfxFilterContainer& rFltContainer = IsDocShellRegistered() ? aCntSw : aCntSwWeb;
 
+    uno::Reference < embed::XStorage > xStor;
     SotStorageRef xStg;
     if (rMedium.IsStorage())
-         xStg = rMedium.GetStorage();
+        xStor = rMedium.GetStorage();
+    else
+    {
+        SvStream* pStream = rMedium.GetInStream();
+        if ( pStream && SotStorage::IsStorageFile(pStream) )
+            xStg = new SotStorage( pStream, FALSE );
+    }
 
     SfxFilterMatcher aMatcher( rFltContainer.GetName() );
     SfxFilterMatcherIter aIter( &aMatcher );
@@ -461,9 +482,12 @@ FASTBOOL SwIoSystem::IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
         {
             if( 'C' == *pFltr->GetUserData().GetBuffer() )
             {
-                bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
+                if ( xStor.is() )
+                    bRet = IsValidStgFilter( xStor, *pFltr );
+                else if ( xStg.Is() )
+                    bRet = xStg.Is() && IsValidStgFilter( *xStg, *pFltr );
             }
-            else if( !xStg.Is() )
+            else if( !xStg.Is() && !xStor.is() )
             {
                 SvStream* pStrm = rMedium.GetInStream();
                 if( pStrm && !pStrm->GetError() )
@@ -556,15 +580,30 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     if ( !pFilter )
         return 0;
 
-    if( pMedium ? pMedium->IsStorage() : SotStorage::IsStorageFile( rFileName ) )
+    if( pMedium ? ( pMedium->IsStorage() || SotStorage::IsStorageFile( pMedium->GetInStream() ) ) : SotStorage::IsStorageFile( rFileName ) )
     {
         /* Storage: Suchen nach einem Sub-Storage, dessen Name  */
         /* dem in einem Filter stehenden DLL-Namen entspricht   */
+        uno::Reference < embed::XStorage > xStor;
         SotStorageRef xStg;
-        if( pMedium )
-            xStg = pMedium->GetStorage();
+        BOOL bDeleteMedium = FALSE;
+        if (!pMedium )
+        {
+            INetURLObject aObj;
+            aObj.SetSmartProtocol( INET_PROT_FILE );
+            aObj.SetSmartURL( rFileName );
+            pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ, FALSE );
+            bDeleteMedium = TRUE;
+        }
+
+        if ( pMedium->IsStorage())
+            xStor = pMedium->GetStorage();
         else
-            xStg = new SotStorage( rFileName, STREAM_STD_READ );
+        {
+            SvStream* pStream = pMedium->GetInStream();
+            if ( pStream && SotStorage::IsStorageFile(pStream) )
+                xStg = new SotStorage( pStream, FALSE );
+        }
 
         if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
         {
@@ -590,13 +629,37 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
                 }
             }
         }
+        else if ( xStor.is() )
+        {
+            while ( pFilter )
+            {
+                if( 'C' == *pFilter->GetUserData().GetBuffer() &&
+                    IsValidStgFilter( xStor, *pFilter ) &&
+                    (pMedium ? checkResultForSDWAndTemplates(pMedium->GetURLObject().GetExtension(), *pFilter) : TRUE)
+                )
+                    return pFilter;
+                pFilter = aIter.Next();
+            }
+
+            if( IsDocShellRegistered() && 0 != ( pFCntnr = &aCntSwWeb ) )
+            {
+                pFilter = aIter.First();
+                while ( pFilter )
+                {
+                    if( 'C' == *pFilter->GetUserData().GetBuffer() &&
+                        IsValidStgFilter( xStor, *pFilter ) )
+                        return pFilter;
+                    pFilter = aIter.Next();
+                }
+            }
+        }
         return 0;
     }
 
     sal_Char aBuffer[4098];
     const ULONG nMaxRead = sizeof(aBuffer) - 2;
     ULONG nBytesRead;
-    if (pMedium)
+    //if (pMedium)
     {
         SvStream* pIStrm = pMedium->GetInStream();
         if( !pIStrm || SVSTREAM_OK != pIStrm->GetError() )
@@ -605,17 +668,18 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
         pIStrm->Seek( nCurrPos );
     }
+    /*
     else
     {
         SvFileStream aStrm( rFileName, STREAM_READ );
 
-        /* ohne FileName oder ohne Stream gibts nur den ANSI-Filter */
+        // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
         if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
             return 0;
 
         nBytesRead = aStrm.Read(aBuffer, nMaxRead);
         aStrm.Close();
-    }
+    }*/
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
 
