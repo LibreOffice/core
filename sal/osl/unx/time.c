@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: pluby $ $Date: 2000-10-23 18:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,15 +149,16 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
     {
         tzset();
 
-#ifdef MACOSX
-        fprintf( stderr, "osl_getTimeValueFromDateTime: timezone correction not implemented\n" );
-#else
         // timezone corrections
+#ifdef MACOSX
+        if ( (sal_Int64) aSeconds > (aSystemTime.tm_gmtoff * -1) )
+            aSeconds += aSystemTime.tm_gmtoff;
+#else
         if ( (sal_Int64) aSeconds > timezone )
             aSeconds -= timezone;
+#endif
         else
             return sal_False;
-#endif
 
         pTimeVal->Seconds = aSeconds;
         pTimeVal->Nanosec = pDateTime->NanoSeconds;
@@ -176,13 +177,18 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
 sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, TimeValue* pLocalTimeVal )
 {
     sal_Int64   bias;
+    struct tm   *pLocalTime;
+    time_t      atime;
+
+    atime = (time_t)pSystemTimeVal->Seconds;
 
     tzset();
 
-#ifdef MACOSX
-        fprintf( stderr, "osl_getLocalTimeFromSystemTime: timezone correction not implemented\n" );
-#else
     // timezone an daylight saving time
+#ifdef MACOSX
+    pLocalTime = localtime( &atime );
+    bias = pLocalTime->tm_gmtoff * -1;
+#else
     if ( daylight != 0)
         bias = timezone - 3600;
     else
@@ -207,13 +213,24 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
 sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, TimeValue* pSystemTimeVal )
 {
     sal_Int64   bias;
+    struct tm   *pLocalTime;
+    time_t      atime;
+
+    atime = (time_t)pLocalTimeVal->Seconds;
 
     tzset();
 
-#ifdef MACOSX
-        fprintf( stderr, "osl_getLocalTimeFromSystemTime: timezone correction not implemented\n" );
-#else
     // timezone an daylight saving time
+#ifdef MACOSX
+    // Convert atime, which is a local time, to it's GMT equivalent. Then, get
+    // the timezone offset for the local time for the GMT equivalent time. Note
+    // that we cannot directly use local time to determine the timezone offset
+    // because GMT is the only reliable time that we can determine timezone
+    // offset from.
+    atime = mktime( gmtime( &atime ) );
+    pLocalTime = localtime( &atime );
+    bias = pLocalTime->tm_gmtoff * -1;
+#else
     if ( daylight != 0)
         bias = timezone - 3600;
     else
