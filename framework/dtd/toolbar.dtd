@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: toolbar.dtd,v 1.4 2001-08-03 16:46:20 cd Exp $
+	$Id: toolbar.dtd,v 1.5 2001-09-25 12:37:20 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -64,17 +64,16 @@
 <!ELEMENT toolbar:toolbaritem EMPTY>
 <!ATTLIST toolbar:toolbaritem
 	xlink:href CDATA #REQUIRED
-	toolbar:visible %boolean; #IMPLIED
-	toolbar:userdefined %boolean; #IMPLIED
+	toolbar:visible %boolean; "true"
+	toolbar:userdefined %boolean; "false"
 	toolbar:text CDATA #IMPLIED
-	toolbar:width %numeric; #IMPLIED
-	toolbar:property %numeric; #IMPLIED
+	toolbar:width %numeric; "0"
+	toolbar:property %numeric; "0"
 	toolbar:bitmap CDATA #IMPLIED
 >
 <!ELEMENT toolbar:toolbarspace EMPTY>
 <!ELEMENT toolbar:toolbarbreak EMPTY>
 <!ELEMENT toolbar:toolbarseparator EMPTY>
-
 <!ELEMENT toolbar:toolbarlayouts (toolbar:toolbarlayout*)>
 <!ATTLIST toolbar:toolbarlayouts
 	xmlns:toolbar CDATA #FIXED "http://openoffice.org/2001/toolbar"
@@ -84,9 +83,10 @@
 	toolbar:id CDATA #REQUIRED
 	toolbar:floatingposleft %numeric; #IMPLIED
 	toolbar:floatingpostop %numeric; #IMPLIED
-	toolbar:floatinglines %numeric; #IMPLIED
-	toolbar:dockinglines %numeric; #IMPLIED
-	toolbar:align %alignment; #IMPLIED
-	toolbar:visible %boolean; #IMPLIED
-	toolbar:floating %boolean; #IMPLIED
+	toolbar:floatinglines %numeric; "0"
+	toolbar:dockinglines %numeric; "1"
+	toolbar:align %alignment; "left"
+	toolbar:visible %boolean; "false"
+	toolbar:floating %boolean; "false"
+	toolbar:style %style; "symbol"
 >
