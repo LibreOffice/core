@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:23:12 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,7 +296,8 @@ private:
     void PutCode( ScTokenRef& );
     void Factor();
     void UnionCutLine();
-    void Unary();
+    void UnaryLine();
+    void PostOpLine();
     void PowLine();
     void MulDivLine();
     void AddSubLine();
