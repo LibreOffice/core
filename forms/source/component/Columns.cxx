@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-19 13:18:45 $
+ *  last change: $Author: fs $ $Date: 2002-10-23 12:47:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,6 +283,7 @@ OGridColumn::OGridColumn(const Reference<XMultiServiceFactory>& _rxFactory, cons
           :OGridColumn_BASE(m_aMutex)
           ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
           ,m_aModelName(_sModelName)
+          ,m_aHidden( makeAny( sal_False ) )
 {
     DBG_CTOR(OGridColumn,NULL);
     // Anlegen des UnoControlModels
@@ -520,21 +521,28 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any
 //------------------------------------------------------------------------------
 PropertyState OGridColumn::getPropertyStateByHandle(sal_Int32 nHandle)
 {
-    PropertyState eState;
+    PropertyState eState = PropertyState_DIRECT_VALUE;
+
     switch (nHandle)
     {
         case PROPERTY_ID_WIDTH:
             if (!m_aWidth.hasValue())
                 eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
             break;
+
         case PROPERTY_ID_ALIGN:
             if (!m_aAlign.hasValue())
                 eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
             break;
+
+        case PROPERTY_ID_HIDDEN:
+        {
+            sal_Bool bHidden = sal_True;
+            if ( ( m_aHidden >>= bHidden ) && !bHidden )
+                eState = PropertyState_DEFAULT_VALUE;
+        }
+        break;
+
         default:
             eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
     }
@@ -551,7 +559,7 @@ void OGridColumn::setPropertyToDefaultByHandle(sal_Int32 nHandle)
             setFastPropertyValue(nHandle, Any());
             break;
         case PROPERTY_ID_HIDDEN:
-            setFastPropertyValue(nHandle, makeAny((sal_Bool)sal_True));
+            setFastPropertyValue( nHandle, makeAny( (sal_Bool)sal_False ) );
             break;
         default:
             OPropertySetAggregationHelper::setPropertyToDefaultByHandle(nHandle);
