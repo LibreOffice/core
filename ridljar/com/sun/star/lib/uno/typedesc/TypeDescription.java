@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-02-08 09:18:35 $
+ *  last change: $Author: kr $ $Date: 2001-02-09 09:57:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-02-08 09:18:35 $
+ * @version     $Revision: 1.4 $ $ $Date: 2001-02-09 09:57:54 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -318,28 +318,167 @@ public class TypeDescription {
 
     static private Hashtable __cyclicTypes = new Hashtable();
 
-    static public TypeDescription getTypeDescription(Class zClass) {
+    static private Hashtable __typeCache_name = new Hashtable();
+    static private Hashtable __typeCache_class = new Hashtable();
+    static class CacheEntry {
+        TypeDescription _typeDescription;
 
-        TypeDescription typeDescription = (TypeDescription)__classToTypeDescription.get(zClass);
+        short _index;
+        short _prev;
+        short _next;
+        CacheEntry(TypeDescription typeDescription, short index, short prev, short next) {
+            _typeDescription = typeDescription;
+            _index = index;
+            _prev = prev;
+            _next = next;
+        }
+    }
 
-        if(typeDescription == null) {
-            typeDescription = (TypeDescription)__cyclicTypes.get(zClass.getName());
+    private static final boolean DEBUG_CACHE = false;
+    private static CacheEntry __cacheEntrys[] = new CacheEntry[256];
+    private static short __first;
+    private static short __last = (short)(__cacheEntrys.length - 1);
 
-            if(typeDescription == null)
-                typeDescription = new TypeDescription(zClass);
+    static {
+        for(short i = 0; i < __cacheEntrys.length; ++ i)
+            __cacheEntrys[i] = new CacheEntry(null, i, (short)(i - 1), (short)((i + 1) < __cacheEntrys.length ? i + 1 : -1));
+    }
+
+    static private void listCache() {
+        synchronized(__cacheEntrys) {
+            System.err.println("************ TypeDescription - Cache *************");
+            short i = __first;
+            while(i != (short)-1) {
+                if(__cacheEntrys[i]._typeDescription != null)
+                    System.err.println(__cacheEntrys[i]._typeDescription.getTypeName());
+                else
+                    System.err.println("null");
+
+                i = __cacheEntrys[i]._next;
+            }
+        }
+    }
+
+    static private void touchCacheEntry(CacheEntry cacheEntry) {
+          if(DEBUG_CACHE) System.err.println("touchCacheEntry:" + (cacheEntry._typeDescription != null ? cacheEntry._typeDescription.getTypeName() : null));
+
+        if(cacheEntry != __cacheEntrys[__first]) {
+            synchronized(__cacheEntrys) {
+                if(DEBUG_CACHE) listCache();
+                // move entry to front of chain
+
+                // remove entry from chain
+                __cacheEntrys[cacheEntry._prev]._next = cacheEntry._next;
+                if(cacheEntry._next != -1) // not last entry
+                    __cacheEntrys[cacheEntry._next]._prev = cacheEntry._prev;
+
+                else
+                    __last = cacheEntry._prev;
+
+                // insert it as first element
+                __cacheEntrys[__first]._prev = cacheEntry._index;
+                cacheEntry._next = __first;
+
+                __first = cacheEntry._index;
+
+                if(DEBUG_CACHE) listCache();
+            }
+        }
+    }
+
+    static private TypeDescription getFromCache(String name) {
+        TypeDescription typeDescription = null;
+
+        CacheEntry cacheEntry = (CacheEntry)__typeCache_name.get(name);
+
+          if(DEBUG_CACHE) System.err.println("getFromCache:" + name + " " + cacheEntry);
+
+        if(cacheEntry != null) {
+            touchCacheEntry(cacheEntry);
+
+            typeDescription = cacheEntry._typeDescription;
         }
 
         return typeDescription;
     }
 
-    static public TypeDescription getTypeDescription(String typeName ) throws ClassNotFoundException {
+    static private TypeDescription getFromCache(Class zClass) {
+        TypeDescription typeDescription = null;
+
+        CacheEntry cacheEntry = (CacheEntry)__typeCache_class.get(zClass);
+
+          if(DEBUG_CACHE) System.err.println("getFromCache:" + zClass + " " + cacheEntry);
+
+        if(cacheEntry != null) {
+            touchCacheEntry(cacheEntry);
+
+            typeDescription = cacheEntry._typeDescription;
+        }
+
+        return typeDescription;
+    }
+
+    static private void addToCache(TypeDescription typeDescription) {
+          if(DEBUG_CACHE) System.err.println("addToCache:" + typeDescription.getTypeName());
+
+        synchronized(__cacheEntrys) {
+              if(DEBUG_CACHE) listCache();
+
+            // remove hashtab entry
+            if(__cacheEntrys[__last]._typeDescription != null) {// maybe null, when cache not full
+                __typeCache_name.remove(__cacheEntrys[__last]._typeDescription.getTypeName());
+                __typeCache_class.remove(__cacheEntrys[__last]._typeDescription.getZClass());
+            }
+
+            // move last cache entry to front
+            touchCacheEntry(__cacheEntrys[__last]);
+
+            // replace typedescription with new typedescription
+            __cacheEntrys[__first]._typeDescription = typeDescription;
+
+            __typeCache_name.put(typeDescription.getTypeName(), __cacheEntrys[__first]);
+            __typeCache_class.put(typeDescription.getZClass(), __cacheEntrys[__first]);
+
+            if(DEBUG_CACHE) listCache();
+        }
+    }
+
+
+    static public TypeDescription getTypeDescription(Class zClass) {
+        TypeDescription typeDescription = (TypeDescription)__classToTypeDescription.get(zClass);
+
+        if(typeDescription == null) {
+            typeDescription = (TypeDescription)__cyclicTypes.get(zClass.getName());
+
+            if(typeDescription == null) {
+                typeDescription = getFromCache(zClass);
+
+                if(typeDescription == null) {
+                    typeDescription = new TypeDescription(zClass);
+
+                    addToCache(typeDescription);
+                }
+            }
+        }
+
+        return typeDescription;
+    }
+
+    static public TypeDescription getTypeDescription(String typeName) throws ClassNotFoundException {
         TypeDescription typeDescription = (TypeDescription)__typeNameToTypeDescription.get(typeName);
 
         if(typeDescription == null) {
             typeDescription = (TypeDescription)__cyclicTypes.get(typeName);
 
-            if(typeDescription == null)
-                typeDescription = new TypeDescription(typeName);
+            if(typeDescription == null) {
+                typeDescription = getFromCache(typeName);
+
+                if(typeDescription == null) {
+                    typeDescription = new TypeDescription(typeName);
+
+                    addToCache(typeDescription);
+                }
+            }
         }
 
         return typeDescription;
@@ -436,8 +575,7 @@ public class TypeDescription {
             _initMemberTypeInfos();
         }
 
-
-        __cyclicTypes.remove(zClass.getName());
+          __cyclicTypes.remove(zClass.getName());
     }
 
     private TypeDescription(TypeClass typeClass, String typeName, String arrayTypeName, Class zClass) {
@@ -467,7 +605,7 @@ public class TypeDescription {
             initByClass(Class.forName(typeName));
         }
 
-        __cyclicTypes.remove(typeName);
+          __cyclicTypes.remove(typeName);
     }
 
 
