@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.65 $
+*  $Revision: 1.66 $
 *
-*  last change: $Author: hr $ $Date: 2004-11-09 16:51:31 $
+*  last change: $Author: obo $ $Date: 2004-11-15 15:43:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -436,6 +436,8 @@ End
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dba, dba)
+
+STD_UNO_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
 
 STD_UNO_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
@@ -2120,5 +2122,18 @@ File gid_File_Lib_LibXMLSec_xmlsecnss
     Styles = (PACKED);
 End
 #endif
-
 //i20156 - end
+
+File gid_File_Lib_Migrationoo2
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(migrationoo2.uno,UNXSUFFIX));
+  #else
+    Name = "migrationoo2.uno.dll";
+  #endif
+End
+
+
