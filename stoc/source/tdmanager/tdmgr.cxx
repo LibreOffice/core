@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-30 13:48:26 $
+ *  last change: $Author: jbu $ $Date: 2001-04-20 07:25:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -803,7 +803,7 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
             else
                 return Any(); // further lookup makes no sense
         }
-        if (rName[rName.getLength()-1] == ']') // test for array
+        else if (rName[rName.getLength()-1] == ']') // test for array
         {
             sal_Int32 nDims = rName.getTokenCount('[') - 1;
             sal_Int32 dimOffset = rName.indexOf('[');
