@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathml.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:30:59 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ public:
         const rtl::OUString &rLocalName,
         const com::sun::star::uno::Reference <
         com::sun::star::xml::sax::XAttributeList> &xAttrList);
-    const SvXMLTokenMap &GetMathElemTokenMap();
+
     const SvXMLTokenMap &GetPresLayoutElemTokenMap();
     const SvXMLTokenMap &GetPresLayoutAttrTokenMap();
     const SvXMLTokenMap &GetFencedAttrTokenMap();
@@ -317,7 +317,6 @@ public:
     virtual void SetConfigurationSettings(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aViewProps);
 
 private:
-        SvXMLTokenMap *pMathElemTokenMap;
         SvXMLTokenMap *pPresLayoutElemTokenMap;
         SvXMLTokenMap *pPresLayoutAttrTokenMap;
         SvXMLTokenMap *pFencedAttrTokenMap;
