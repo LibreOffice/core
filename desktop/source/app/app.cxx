@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: as $ $Date: 2001-09-26 09:45:06 $
+ *  last change: $Author: mba $ $Date: 2001-09-27 10:51:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,14 +853,14 @@ USHORT Desktop::Exception(USHORT nError)
             else
             {
                 bInException = sal_False;
-                return Application::Exception( nError );
+                return 0;
             }
 
             break;
         }
     }
 
-    return TRUE;
+    return 0;
 
     // ConfigManager is disposed, so no way to continue
 }
