@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlwrp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 08:19:41 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:20:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,9 @@
 #include <rtl/logfile.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
+#include <com/sun/star/embed/ElementModes.hpp>
+#endif
 #ifndef _COM_SUN_STAR_XML_SAX_SAXPARSEEXCEPTION_HDL_
 #include <com/sun/star/xml/sax/SAXParseException.hdl>
 #endif
@@ -156,6 +159,9 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
 
 #ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
@@ -164,6 +170,8 @@
 #include "sderror.hxx"
 #include "sdresid.hxx"
 #include "glob.hrc"
+
+#include <sfx2/frame.hxx>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -425,7 +433,7 @@ sal_Int32 ReadThroughComponent(
 }
 
 sal_Int32 ReadThroughComponent(
-    SvStorage* pStorage,
+    const uno::Reference < embed::XStorage >& xStorage,
     Reference<XComponent> xModelComponent,
     const sal_Char* pStreamName,
     const sal_Char* pCompatibilityStreamName,
@@ -435,12 +443,21 @@ sal_Int32 ReadThroughComponent(
     const OUString& rName,
     sal_Bool bMustBeSuccessfull )
 {
-    DBG_ASSERT(NULL != pStorage, "Need storage!");
+    DBG_ASSERT(NULL != xStorage.is(), "Need storage!");
     DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
 
     // open stream (and set parser input)
     OUString sStreamName = OUString::createFromAscii(pStreamName);
-    if (! pStorage->IsStream(sStreamName))
+    sal_Bool bContainsStream = sal_False;
+    try
+    {
+        bContainsStream = xStorage->isStreamElement(sStreamName);
+    }
+    catch( container::NoSuchElementException& )
+    {
+    }
+
+    if (!bContainsStream )
     {
         // stream name not found! Then try the compatibility name.
         // if no stream can be opened, return immediatly with OK signal
@@ -451,7 +468,15 @@ sal_Int32 ReadThroughComponent(
 
         // if so, does the stream exist?
         sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
-        if (! pStorage->IsStream(sStreamName) )
+        try
+        {
+            bContainsStream = xStorage->isStreamElement(sStreamName);
+        }
+        catch( container::NoSuchElementException& )
+        {
+        }
+
+        if (! bContainsStream )
             return 0;
     }
 
@@ -466,29 +491,42 @@ sal_Int32 ReadThroughComponent(
         xInfoSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
-    // get input stream
-    SvStorageStreamRef xEventsStream;
-    xEventsStream = pStorage->OpenStream( sStreamName,
-                                          STREAM_READ | STREAM_NOCREATE );
-    Any aAny;
-    sal_Bool bEncrypted =
-        xEventsStream->GetProperty(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
-        aAny.getValueType() == ::getBooleanCppuType() &&
-        *(sal_Bool *)aAny.getValue();
+    try
+    {
+        // get input stream
+        Reference <io::XStream> xStream =
+                xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
+        Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
+        if ( !xStream.is() || ! xProps.is() )
+            return SD_XML_READERROR;
 
-    Reference<io::XInputStream> xInputStream = xEventsStream->GetXInputStream();
+        Any aAny = xProps->getPropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
 
-    // read from the stream
-    return ReadThroughComponent(
-        xInputStream, xModelComponent, sStreamName, rFactory,
-        pFilterName, rFilterArguments,
-        rName, bMustBeSuccessfull, bEncrypted );
+        sal_Bool bEncrypted = aAny.getValueType() == ::getBooleanCppuType() &&
+                *(sal_Bool *)aAny.getValue();
+
+        Reference <io::XInputStream> xInputStream = xStream->getInputStream();
+
+        // read from the stream
+        return ReadThroughComponent(
+            xInputStream, xModelComponent, sStreamName, rFactory,
+            pFilterName, rFilterArguments,
+            rName, bMustBeSuccessfull, bEncrypted );
+    }
+    catch ( packages::WrongPasswordException& )
+    {
+        return ERRCODE_SFX_WRONGPASSWORD;
+    }
+    catch ( uno::Exception& )
+    {}
+
+    return SD_XML_READERROR;
 }
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdXMLFilter::Import()
+sal_Bool SdXMLFilter::Import( ErrCode& nError )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sd", "cl93746", "SdXMLFilter::Import" );
 #ifdef TIMELOG
@@ -598,46 +636,54 @@ sal_Bool SdXMLFilter::Import()
 
     SvStorageStreamRef xDocStream;
     Reference<io::XInputStream> xInputStream;
-    SvStorage *pStorage = 0;
+    uno::Reference < embed::XStorage > xStorage = mrMedium.GetStorage();
 
-    pStorage = mrMedium.GetStorage();
-
-    if( !pStorage )
+    if( !xStorage.is() )
         nRet = SD_XML_READERROR;
 
     if( 0 == nRet )
     {
-        pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage,
+        pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                      GRAPHICHELPER_MODE_READ,
                                                      sal_False );
-
         xGraphicResolver = pGraphicHelper;
-        SvPersist *pPersist = pDoc->GetPersist();;
-        if( pPersist )
-        {
-                pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
-                                            *pStorage, *pPersist,
-                                            EMBEDDEDOBJECTHELPER_MODE_READ,
-                                            sal_False );
-            xObjectResolver = pObjectHelper;
-        }
+        pObjectHelper = SvXMLEmbeddedObjectHelper::Create(
+                                    xStorage, *pDoc->GetPersist(),
+                                    EMBEDDEDOBJECTHELPER_MODE_READ,
+                                    sal_False );
+        xObjectResolver = pObjectHelper;
     }
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-    xInfoSet->setPropertyValue( sPropName,
-                            makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-    if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() &&
-         !pStorage->IsRoot() )
+    ::rtl::OUString aBaseURL = OUString(INetURLObject::GetBaseURL());
+    if ( mrMedium.GetItemSet() )
     {
-        OUString aName( pStorage->GetName() );
+        const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                mrMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
+        if ( pBaseURLItem )
+            aBaseURL = pBaseURLItem->GetValue();
+    }
+
+    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+
+    if( 0 == nRet && SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+    {
+        OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+        if ( mrMedium.GetItemSet() )
+        {
+            const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+            if ( pDocHierarchItem )
+                aName = pDocHierarchItem->GetValue();
+        }
+
         if( aName.getLength() )
         {
             sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
             xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
         }
     }
-
 
     // -------------------------------------
 
@@ -667,24 +713,24 @@ sal_Bool SdXMLFilter::Import()
         if( meFilterMode != SDXMLMODE_Organizer )
         {
             nWarn = ReadThroughComponent(
-                pStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
+                xStorage, xModelComp, "meta.xml", "Meta.xml", xServiceFactory,
                 pServices->mpMeta,
                 aEmptyArgs, aName, sal_False );
 
             nWarn2 = ReadThroughComponent(
-                pStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
+                xStorage, xModelComp, "settings.xml", NULL, xServiceFactory,
                 pServices->mpSettings,
                 aFilterArgs, aName, sal_False );
         }
 
         nRet = ReadThroughComponent(
-            pStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
+            xStorage, xModelComp, "styles.xml", NULL, xServiceFactory,
             pServices->mpStyles,
             aFilterArgs, aName, sal_True );
 
         if( !nRet && (meFilterMode != SDXMLMODE_Organizer) )
             nRet = ReadThroughComponent(
-               pStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
+               xStorage, xModelComp, "content.xml", "Content.xml", xServiceFactory,
                pServices->mpContent,
                aFilterArgs, aName, sal_True );
 
@@ -717,17 +763,18 @@ sal_Bool SdXMLFilter::Import()
     switch( nRet )
     {
     case 0: break;
-//  case ERRCODE_SFX_WRONGPASSWORD: break;
+    // case ERRCODE_SFX_WRONGPASSWORD: break;
     case SD_XML_READERROR: break;
     case ERRCODE_IO_BROKENPACKAGE:
-        if( pStorage )
+        if( xStorage.is() )
         {
-            pStorage->SetError( ERRCODE_IO_BROKENPACKAGE );
+            nError = ERRCODE_IO_BROKENPACKAGE;
             break;
         }
         // fall through intented
     default:
         {
+            // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly!
             ErrorHandler::HandleError( nRet );
             if( IsWarning( nRet ) )
                 nRet = 0;
@@ -815,22 +862,43 @@ sal_Bool SdXMLFilter::Export()
         sal_Bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
         xInfoSet->setPropertyValue( sUsePrettyPrinting, makeAny( bUsePrettyPrinting ) );
 
-        SvStorage* pStorage = mrMedium.GetOutputStorage( sal_True );
+        const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
-        xInfoSet->setPropertyValue( sPropName,
-                                makeAny( OUString(INetURLObject::GetBaseURL()) ) );
-        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() &&
-             !pStorage->IsRoot() )
+        ::rtl::OUString aBaseURL;
+        sal_Bool bBaseURLSet = sal_False;
+        if ( mrMedium.GetItemSet() )
         {
-            OUString aName( pStorage->GetName() );
+            const SfxStringItem* pBaseURLItem = static_cast<const SfxStringItem*>(
+                    mrMedium.GetItemSet()->GetItem(SID_DOC_BASEURL) );
+            if ( pBaseURLItem )
+            {
+                aBaseURL = pBaseURLItem->GetValue();
+                bBaseURLSet = sal_True;
+            }
+        }
+        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+        xInfoSet->setPropertyValue( sPropName, makeAny( aBaseURL ) );
+
+        if( SFX_CREATE_MODE_EMBEDDED == mrDocShell.GetCreateMode() )
+        {
+            OUString aName;
+            if ( mrMedium.GetItemSet() )
+            {
+                const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
+                    mrMedium.GetItemSet()->GetItem(SID_DOC_HIERARCHICALNAME) );
+                if ( pDocHierarchItem )
+                    aName = pDocHierarchItem->GetValue();
+            }
+
             if( aName.getLength() )
             {
                 sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
+        else if ( !bBaseURLSet )
+            xInfoSet->setPropertyValue( sPropName, makeAny( ::rtl::OUString( INetURLObject::GetBaseURL() ) ) );
 
         // initialize descriptor
         uno::Sequence< beans::PropertyValue > aDescriptor( 1 );
@@ -844,16 +912,12 @@ sal_Bool SdXMLFilter::Export()
             uno::Reference< document::XGraphicObjectResolver >  xGrfResolver;
 
             // create helper for graphic and ole export if we have a storage
-            if( pStorage )
+            if( xStorage.is() )
             {
-                SvPersist *pPersist = mrDocShell.GetDoc()->GetPersist();
-                if( pPersist )
-                {
-                    pObjectHelper = SvXMLEmbeddedObjectHelper::Create( *pStorage, *pPersist, EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
-                    xObjectResolver = pObjectHelper;
-                }
+                pObjectHelper = SvXMLEmbeddedObjectHelper::Create( xStorage, *mrDocShell.GetDoc()->GetPersist(), EMBEDDEDOBJECTHELPER_MODE_WRITE, sal_False );
+                xObjectResolver = pObjectHelper;
 
-                pGraphicHelper = SvXMLGraphicHelper::Create( *pStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
+                pGraphicHelper = SvXMLGraphicHelper::Create( xStorage, GRAPHICHELPER_MODE_WRITE, FALSE );
                 xGrfResolver = pGraphicHelper;
             }
 
@@ -915,31 +979,35 @@ sal_Bool SdXMLFilter::Export()
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "exporting substream %s", pServices->mpStream );
 
                 uno::Reference<io::XOutputStream> xDocOut;
-                SvStorageStreamRef xDocStream;
-
-                if( pStorage )
+                if( xStorage.is() )
                 {
                     const OUString sDocName( OUString::createFromAscii( pServices->mpStream ) );
-                    xDocStream = pStorage->OpenStream( sDocName, STREAM_WRITE | STREAM_SHARE_DENYWRITE | STREAM_TRUNC  );
-                    DBG_ASSERT(xDocStream.Is(), "Can't create output stream in package!");
-                    if( !xDocStream.Is() )
+                    uno::Reference<io::XStream> xStream =
+                            xStorage->openStreamElement( sDocName,
+                            embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
+
+                    DBG_ASSERT(xStream.is(), "Can't create output stream in package!");
+                    if( !xStream.is() )
                         return sal_False;
 
-                    xDocStream->SetVersion( pStorage->GetVersion() );
-//                  xDocStream->SetKey( pStorage->GetKey() );
-                    xDocStream->SetBufferSize( 16*1024 );
-                    xDocOut = new utl::OOutputStreamWrapper( *xDocStream );
+                    xDocOut = xStream->getOutputStream();
+                    Reference <beans::XPropertySet > xProps( xStream, uno::UNO_QUERY );
+                    if( !xDocOut.is() || !xProps.is() )
+                        return sal_False;
 
                     uno::Any aAny; aAny <<= OUString( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
-                    xDocStream->SetProperty(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
+                    xProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), aAny);
 
                     if( pServices->mbPlain )
                     {
-                        xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
+                        xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Compressed") ), uno::makeAny( (sal_Bool) sal_False ) );
                     }
                     else
                     {
-                        xDocStream->SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
+//REMOVE                            xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), uno::makeAny( (sal_Bool)sal_True ) );
+                        xProps->setPropertyValue(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") ),
+                            uno::makeAny( (sal_Bool)sal_True ) );
                     }
 
                     OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
@@ -966,10 +1034,8 @@ sal_Bool SdXMLFilter::Export()
                     {
                         xExporter->setSourceDocument( xComponent );
 
+                        // outputstream will be closed by SAX parser
                         bDocRet = xFilter->filter( aDescriptor );
-
-                        if(bDocRet && xDocStream.Is())
-                            xDocStream->Commit();
                     }
                 }
 
