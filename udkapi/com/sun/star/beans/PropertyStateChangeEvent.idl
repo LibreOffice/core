@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyStateChangeEvent.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 12:43:39 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module com {  module sun {  module star {  module beans {
     <p>Void values may be provided for the old and new values if their
     true values are not known. </p>
  */
-struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
+published struct PropertyStateChangeEvent: com::sun::star::lang::EventObject
 {
     //-------------------------------------------------------------------------
 
