@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextConversionOption.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:37:56 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:56:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ published constants TextConversionOption
     /** Use Taiwan, HongKong SAR, and Macao SAR character variants for
         Simplified to Traditionary Chinese conversion
 
-        @since #i29300#
+        @since OOo 2.0.0
     */
     const long  USE_CHARACTER_VARIANTS          = 2;    // (1 << 1)
 };
