@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formdlgs.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-30 20:16:21 $
+ *  last change: $Author: dr $ $Date: 2001-12-17 08:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,10 +99,10 @@ TabPage RID_SCTAB_FUNCTION
         QuickHelpText[ chinese_traditional ] = "ζ¥ζ”¶ε‡½ζ•Έ";
         QuickHelpText[ arabic ] = "ΚΨΘνή ΗαΟΗαΙ";
         QuickHelpText[ greek ] = "Εφαρμογή συνάρτησης";
-        QuickHelpText[ korean ] = "ν•¨μγ€€μ μ©";
+        QuickHelpText[ korean ] = "ν•¨μ μ μ©";
         QuickHelpText[ turkish ] = "Funktion όbernehmen";
         QuickHelpText[ catalan ] = "Aplicar funciσn";
-        QuickHelpText[ finnish ] = "K?yt? funktiota!";
+        QuickHelpText[ finnish ] = "Kδytδ funktiota";
     };
     ListBox LB_CATEGORY
     {
@@ -181,7 +181,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Tutte" ; Default ; > ;
             < "Database" ; Default ; > ;
             < "Data&Orario" ; Default ; > ;
-            < "Finanziaria" ; Default ; > ;
+            < "Finanza" ; Default ; > ;
             < "Informazione" ; Default ; > ;
             < "Logica" ; Default ; > ;
             < "Matematica" ; Default ; > ;
@@ -228,10 +228,10 @@ TabPage RID_SCTAB_FUNCTION
         };
         StringList [ finnish ] =
         {
-            < "Viimeksi k?ytetty" ; Default ; > ;
+            < "Viimeksi kδytetty" ; Default ; > ;
             < "Kaikki" ; Default ; > ;
             < "Tietokanta" ; Default ; > ;
-            < "P?iv?m??r?&Aika" ; Default ; > ;
+            < "Pδivδmδδrδ&Aika" ; Default ; > ;
             < "Rahoitus" ; Default ; > ;
             < "Tiedot" ; Default ; > ;
             < "Looginen" ; Default ; > ;
@@ -240,7 +240,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Tilastolliset" ; Default ; > ;
             < "Laskentataulukko" ; Default ; > ;
             < "Teksti" ; Default ; > ;
-            < "Lis?osa" ; Default ; > ;
+            < "Lisδosa" ; Default ; > ;
              //         < "Kδyttδjδn"; Default; >;
         };
         StringList [ danish ] =
@@ -291,7 +291,7 @@ TabPage RID_SCTAB_FUNCTION
             < "Statistik" ; Default ; > ;
             < "Tabell" ; Default ; > ;
             < "Text" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
              //         < "Anvδndardefinierad"; Default; >;
         };
         StringList [ dutch ] =
@@ -380,17 +380,17 @@ TabPage RID_SCTAB_FUNCTION
     {
             < "ζ€θΏ‘δ½Ώη”¨γ—γι–Άζ•°" ; Default ; > ;
         < "γ™γΉγ¦" ; Default ; > ;
-        < "οΎƒοΎο½°οΎ€οΎοΎο½°ο½½" ; Default ; > ;
+        < "γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ή" ; Default ; > ;
         < "ζ—¥δ»γ¨ζ™‚ε»" ; Default ; > ;
         < "θ²΅ε‹™" ; Default ; > ;
         < "ζƒ…ε ±" ; Default ; > ;
         < "θ«–η†" ; Default ; > ;
         < "ζ•°ε­¦" ; Default ; > ;
-        < "οΎοΎ„οΎο½Έο½½" ; Default ; > ;
+        < "θ΅ε—" ; Default ; > ;
         < "ηµ±θ¨" ; Default ; > ;
         < "θ΅¨" ; Default ; > ;
         < "ζ–‡ε­—ε—" ; Default ; > ;
-        < "ο½±οΎ„οΎο½²οΎ" ; Default ; > ;
+        < "γ‚Άγƒ‰γ‚¤γƒ³" ; Default ; > ;
     };
     StringList [ chinese_traditional ] =
     {
@@ -490,19 +490,19 @@ TabPage RID_SCTAB_FUNCTION
     };
     StringList [ catalan ] =
     {
-            < "Ϊltima utilizaciσn" ; Default ; > ;
-        < "Todas" ; Default ; > ;
-        < "Base de datos" ; Default ; > ;
-        < "Fecha&Hora" ; Default ; > ;
-        < "Finanzas" ; Default ; > ;
-        < "Informaciσn" ; Default ; > ;
-        < "Lσgico" ; Default ; > ;
-        < "Matemαticas" ; Default ; > ;
-        < "Matriz" ; Default ; > ;
-        < "Estadνstica" ; Default ; > ;
-        < "Hoja de cαlculo" ; Default ; > ;
-        < "Texto" ; Default ; > ;
-        < "Add In" ; Default ; > ;
+            < "Utilitzat per darrer cop" ; Default ; > ;
+        < "Tot" ; Default ; > ;
+        < "Base de dades" ; Default ; > ;
+        < "Data i hora" ; Default ; > ;
+        < "Financer" ; Default ; > ;
+        < "Informaciσ" ; Default ; > ;
+        < "Lςgic" ; Default ; > ;
+        < "Matemΰtic" ; Default ; > ;
+        < "Matriu" ; Default ; > ;
+        < "Estadνstic" ; Default ; > ;
+        < "Full de cΰlcul" ; Default ; > ;
+        < "Text" ; Default ; > ;
+        < "Complement" ; Default ; > ;
     };
     };
     ListBox LB_FUNCTION
@@ -538,7 +538,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ greek ] = "Κατηγορία";
         Text[ korean ] = "λ²”μ£Ό(~C)";
         Text[ turkish ] = "~Kategori";
-        Text[ catalan ] = "Ca~tegorνa";
+        Text[ catalan ] = "~Categoria";
     };
     FixedText FT_FUNCTION
     {
@@ -566,7 +566,7 @@ TabPage RID_SCTAB_FUNCTION
         Text[ greek ] = "Συνάρτηση";
         Text[ korean ] = "ν•¨μ(~F)";
         Text[ turkish ] = "~Fonksiyon";
-        Text[ catalan ] = "~Funciσn";
+        Text[ catalan ] = "~Funciσ";
     };
 };
 TabPage RID_SCTAB_STRUCT
@@ -667,7 +667,7 @@ TabPage RID_SCTAB_STRUCT
         Text[ chinese_simplified ] = "ι”™θ――";
         Text[ russian ] = "Ξψθακΰ";
         Text[ polish ] = "B³Ήd";
-        Text[ japanese ] = "ο½΄οΎ—ο½°";
+        Text[ japanese ] = "γ‚¨γƒ©γƒΌ";
         Text[ chinese_traditional ] = "ι―θª¤";
         Text[ arabic ] = "ΞΨΓ";
         Text[ greek ] = "Σφάλμα";
@@ -715,7 +715,7 @@ ModelessDialog RID_SCDLG_FORMULA
                 Text[ greek ] = "Συναρτήσεις";
                 Text[ korean ] = "ν•¨μ";
                 Text[ turkish ] = "Fonksiyon";
-                Text[ catalan ] = "Funciones";
+                Text[ catalan ] = "Funcions";
                 Text[ finnish ] = "Toiminnot";
             };
             PageItem
@@ -749,19 +749,19 @@ ModelessDialog RID_SCDLG_FORMULA
     FixedText FT_HEADLINE
     {
         Pos = MAP_APPFONT ( 115 , 24 ) ;
-        Size = MAP_APPFONT ( 194 , 20 ) ;
+        Size = MAP_APPFONT ( 194 , 8 ) ;
         WordBreak = TRUE ;
     };
     FixedText FT_FUNCNAME
     {
-        Pos = MAP_APPFONT ( 115 , 50 ) ;
-        Size = MAP_APPFONT ( 194 , 12 ) ;
+        Pos = MAP_APPFONT ( 115 , 38 ) ;
+        Size = MAP_APPFONT ( 194 , 24 ) ;
         WordBreak = TRUE ;
     };
     FixedText FT_FUNCDESC
     {
-        Pos = MAP_APPFONT ( 115 , 66 ) ;
-        Size = MAP_APPFONT ( 194 , 60 ) ;
+        Pos = MAP_APPFONT ( 115 , 68 ) ;
+        Size = MAP_APPFONT ( 194 , 64 ) ;
         WordBreak = TRUE ;
     };
      // 2. Seite
@@ -800,7 +800,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Τύπος";
         Text[ korean ] = "μμ‹(~M)";
         Text[ turkish ] = "F~ormόl";
-        Text[ catalan ] = "~Fσrmula";
+        Text[ catalan ] = "Fσr~mula";
         Text[ finnish ] = "~Kaava";
     };
     Control ED_FORMULA
@@ -836,7 +836,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Αποτέλεσμα λειτουργίας";
         Text[ korean ] = "μ†κ³„";
         Text[ turkish ] = "Ara sonuη";
-        Text[ catalan ] = "Subtotal";
+        Text[ catalan ] = "Resultat de la funciσ";
         Text[ finnish ] = "Funktion tulos";
     };
     Window WND_RESULT
@@ -872,7 +872,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "Αποτέλεσμα";
         Text[ korean ] = "κ²°κ³Ό";
         Text[ turkish ] = "Sonuη";
-        Text[ catalan ] = "Resultado";
+        Text[ catalan ] = "Resultat";
     };
     Window WND_FORMULA_RESULT
     {
@@ -898,16 +898,16 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ danish ] = "Matrix" ;
         Text [ spanish ] = "Matri~z" ;
         Text [ french ] = "~Matrice" ;
-        Text[ chinese_simplified ] = "η©ιµ(~X)";
+        Text[ chinese_simplified ] = "η©ιµ";
         Text[ russian ] = "Μΰςπθφΰ";
         Text[ polish ] = "Macierz";
-        Text[ japanese ] = "οΎοΎ„οΎο½Έο½½(~X)";
-        Text[ chinese_traditional ] = "η©ι™£(~X)";
+        Text[ japanese ] = "θ΅ε—";
+        Text[ chinese_traditional ] = "η©ι™£";
         Text[ arabic ] = "γΥέζέΙ";
         Text[ greek ] = "Μήτρα";
         Text[ korean ] = "ν–‰λ ¬";
         Text[ turkish ] = "Matri~s";
-        Text[ catalan ] = "Matri~z";
+        Text[ catalan ] = "Matriu";
         Text[ finnish ] = "Matriisi";
     };
     Edit ED_REF
@@ -942,7 +942,7 @@ ModelessDialog RID_SCDLG_FORMULA
         QuickHelpText[ korean ] = "ν™•λ€";
         QuickHelpText[ turkish ] = "Vergrφίern";
         QuickHelpText[ catalan ] = "Aumentar";
-        QuickHelpText[ finnish ] = "Suurenna!";
+        QuickHelpText[ finnish ] = "Suurenna";
     };
      //
     HelpButton BTN_HELP
@@ -985,7 +985,7 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ greek ] = "<< Πίσω";
         Text[ korean ] = "<<λ’¤λ΅(~B)";
         Text[ turkish ] = "<< ~Geri";
-        Text[ catalan ] = "<< ~Regresar";
+        Text[ catalan ] = "<< ~Enrere";
     };
     PushButton BTN_FORWARD
     {
@@ -1005,16 +1005,16 @@ ModelessDialog RID_SCDLG_FORMULA
         Text [ dutch ] = "~Volgende >>" ;
         Text [ spanish ] = "~Siguiente >>" ;
         Text [ english_us ] = "~Next >>" ;
-        Text[ chinese_simplified ] = "η»§η»­(~N)";
+        Text[ chinese_simplified ] = "η»§η»­(~N) >>";
         Text[ russian ] = "~Δΰλεε >>";
         Text[ polish ] = "Dalej >>";
-        Text[ japanese ] = "ζ¬΅γΈ  (~N) >>";
-        Text[ chinese_traditional ] = "ηΉΌηΊ (~N) >>";
+        Text[ japanese ] = "ζ¬΅γΈ(~N) >>";
+        Text[ chinese_traditional ] = "ηΉΌηΊ(~N) >>";
         Text[ arabic ] = "ΗαΚΗαν <<";
         Text[ greek ] = "Επόμενο >>";
-        Text[ korean ] = "λ‹¤μ (~N) >>";
+        Text[ korean ] = "λ‹¤μ(~N) >>";
         Text[ turkish ] = "~έleri >>";
-        Text[ catalan ] = "~Siguiente >>";
+        Text[ catalan ] = "~Segόent >>";
     };
     OKButton BTN_END
     {
@@ -1042,13 +1042,13 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "ε‡½ζ•°θ‡ªε¨ε©η†";
         Text[ russian ] = "ΐβςξοθλξς τσνκφθι";
         Text[ polish ] = "AutoPilot funkcji";
-        Text[ japanese ] = "ι–Άζ•°ο½µο½°οΎ„οΎοΎο½²οΎ›ο½―οΎ„";
+        Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ";
         Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†";
         Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ";
         Text[ greek ] = "AutoPilot συνάρτησης";
-        Text[ korean ] = "μλ™νμΌλΏ κΈ°λ¥";
+        Text[ korean ] = "μλ™ νμΌλΏ κΈ°λ¥";
         Text[ turkish ] = "Fonksiyon oto pilotu";
-        Text[ catalan ] = "AutoPiloto de funciones";
+        Text[ catalan ] = "AutoPilot: Funcions";
     };
     String STR_TITLE2
     {
@@ -1068,20 +1068,13 @@ ModelessDialog RID_SCDLG_FORMULA
         Text[ chinese_simplified ] = "ε‡½ζ•°θ‡ªε¨ε©η†  -";
         Text[ russian ] = "ΐβςξοθλξς τσνκφθι  -";
         Text[ polish ] = "AutoPilot funkcji  -";
-        Text[ japanese ] = "ι–Άζ•°ο½µο½°οΎ„οΎοΎο½²οΎ›ο½―οΎ„-";
+        Text[ japanese ] = "ι–Άζ•°γ‚ªγƒΌγƒγƒ‘γ‚¤γƒ­γƒƒγƒ-";
         Text[ chinese_traditional ] = "ε‡½ζ•Έθ‡ªε‹•ε©η†  -";
         Text[ arabic ] = "ΗαγΡΤΟ ΗαΒαν ααΟΗαΗΚ  -";
         Text[ greek ] = "AutoPilot συνάρτησης -  ";
-        Text[ korean ] = "μλ™νμΌλΏ κΈ°λ¥  -";
+        Text[ korean ] = "μλ™ νμΌλΏ κΈ°λ¥  -";
         Text[ turkish ] = "Fonksiyon oto pilotu  -";
-        Text[ catalan ] = "AutoPiloto de funciones  - ";
+        Text[ catalan ] = "AutoPilot: Funcions  -";
     };
 };
-
-
-
-
-
-
-
 
