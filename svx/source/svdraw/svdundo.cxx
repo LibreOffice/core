@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 13:26:59 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 09:06:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,16 @@
 // #i11426#
 #ifndef _SVDOGRP_HXX
 #include <svdogrp.hxx>
+#endif
+
+// #109587#
+#ifndef _SVDCAPT_HXX
+#include <svdocapt.hxx>
+#endif
+
+// #109587#
+#ifndef _SFX_WHITER_HXX
+#include <svtools/whiter.hxx>
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +433,32 @@ void SdrUndoAttrObj::Undo()
         // rescuing the size of the object necessary.
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
-        pObj->ClearItem();
+        // #109587#
+        if(pObj->ISA(SdrCaptionObj))
+        {
+            // do a more smooth item deletion here, else the text
+            // rect will be reformatted, especially when information regarding
+            // vertical text is changed. When clearing only set items it's
+            // slower, but safer regarding such information (it's not changed
+            // usually)
+            SfxWhichIter aIter(*pUndoSet);
+            sal_uInt16 nWhich(aIter.FirstWhich());
+
+            while(nWhich)
+            {
+                if(SFX_ITEM_SET != pUndoSet->GetItemState(nWhich, sal_False))
+                {
+                    pObj->ClearItem(nWhich);
+                }
+
+                nWhich = aIter.NextWhich();
+            }
+        }
+        else
+        {
+            pObj->ClearItem();
+        }
+
         pObj->SetItemSet(*pUndoSet);
 
         // #105122# Restore prev size here when it was changed.
@@ -463,7 +498,32 @@ void SdrUndoAttrObj::Redo()
         // #105122#
         const Rectangle aSnapRect = pObj->GetSnapRect();
 
-        pObj->ClearItem();
+        // #109587#
+        if(pObj->ISA(SdrCaptionObj))
+        {
+            // do a more smooth item deletion here, else the text
+            // rect will be reformatted, especially when information regarding
+            // vertical text is changed. When clearing only set items it's
+            // slower, but safer regarding such information (it's not changed
+            // usually)
+            SfxWhichIter aIter(*pRedoSet);
+            sal_uInt16 nWhich(aIter.FirstWhich());
+
+            while(nWhich)
+            {
+                if(SFX_ITEM_SET != pRedoSet->GetItemState(nWhich, sal_False))
+                {
+                    pObj->ClearItem(nWhich);
+                }
+
+                nWhich = aIter.NextWhich();
+            }
+        }
+        else
+        {
+            pObj->ClearItem();
+        }
+
         pObj->SetItemSet(*pRedoSet);
 
         // #105122# Restore prev size here when it was changed.
