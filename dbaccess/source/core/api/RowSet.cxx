@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.122 $
+ *  $Revision: 1.123 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 10:18:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 12:41:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2063,7 +2063,20 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                 if ( _rxRetTables.is() && _rxRetTables->hasByName(m_aCommand) )
                 {
                     Reference< XPropertySet > xTable;
-                    ::cppu::extractInterface(xTable,_rxRetTables->getByName(m_aCommand));
+                    try
+                    {
+                        ::cppu::extractInterface(xTable,_rxRetTables->getByName(m_aCommand));
+                    }
+                    catch(const WrappedTargetException& e)
+                    {
+                        SQLException e2;
+                        if ( e.TargetException >>= e2 )
+                            throw e2;
+                    }
+                    catch(Exception&)
+                    {
+                        OSL_ENSURE(0,"Exception catched!");
+                    }
 
                     Reference<XColumnsSupplier> xSup(xTable,UNO_QUERY);
                     if ( xSup.is() )
@@ -2092,7 +2105,7 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         Reference< XPropertySet > xQuery;
                         ::cppu::extractInterface(xQuery,xQueries->getByName(m_aCommand));
                         xQuery->getPropertyValue(PROPERTY_COMMAND) >>= aQuery;
-                        bEscapeProcessing = any2bool(xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
+                        m_bUseEscapeProcessing = bEscapeProcessing = any2bool(xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING));
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
