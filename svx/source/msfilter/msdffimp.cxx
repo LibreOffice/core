@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-16 14:56:11 $
+ *  last change: $Author: gt $ $Date: 2001-05-17 12:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4008,30 +4008,28 @@ void SvxMSDffManager::GetCtrlData( long nOffsDgg_ )
     {
         GetDrawingGroupContainerData( rStCtrl, nLength );
 
+         rStCtrl.Seek( STREAM_SEEK_TO_END );
+        UINT32 nMaxStrPos = rStCtrl.Tell();
+
         nPos += nLength;
         do
         {
             rStCtrl.Seek( nPos );
 
-            bOk =      this->ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
-                    && ( DFF_msofbtDgContainer == nFbt );
+            bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength ) && ( DFF_msofbtDgContainer == nFbt );
 
             if( !bOk )
             {
                 nPos++;
                 rStCtrl.Seek( nPos );
-                bOk =      this->ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
+                bOk = ReadCommonRecordHeader( rStCtrl, nVer, nInst, nFbt, nLength )
                         && ( DFF_msofbtDgContainer == nFbt );
             }
             if( bOk )
                 GetDrawingContainerData( rStCtrl, nLength );
             nPos += DFF_COMMON_RECORD_HEADER_SIZE + nLength;
         }
-        while( bOk );
-    }
-    else
-    {
-        ;
+        while( nPos < nMaxStrPos && bOk );
     }
 }
 
