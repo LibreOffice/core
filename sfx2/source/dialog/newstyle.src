@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:55:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:15:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,6 +126,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Text[ czech ] = "Název stylu";
         Text[ hebrew ] = "‮שם סגנון‬";
         Text[ hindi ] = "शैली का नाम";
+        Text[ slovak ] = "Názov štýlu";
     };
     ComboBox LB_COL
     {
@@ -179,12 +180,16 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
         Message[ czech ] = "Styl již existuje. Přepsat?";
         Message[ hebrew ] = "‮הסגנון כבר קיים. האם להחליפו?‬";
         Message[ hindi ] = "शैली पहिले से ही अस्तित्व में है । ओवररइट् करना है?";
+        Message[ slovak ] = "Štýl už existuje. Prepísať?";
     };
     Text[ thai ] = "สร้างลักษณะ";
     Text[ czech ] = "Vytvořit styl";
     Text[ hebrew ] = "‮יצירת סגנון‬";
     Text[ hindi ] = "शैली उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť štýl";
 };
+
+
 
 
 
