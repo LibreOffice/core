@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:14:05 $
+ *  last change: $Author: kz $ $Date: 2001-05-04 20:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,6 +115,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -143,6 +144,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ turkish ] = "Yazýtipi efekti";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -168,6 +170,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -187,12 +190,13 @@ TabDialog DLG_TEMPLATE_1
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "˜a•¶Ú²±³Ä";
+                Text[ japanese ] = "“ú–{ŒêÚ²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÖÐÈÕº«°æÊ½";
                 Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
+                Text[ catalan ] = "Diseño asiático";
             };
             PageItem
             {
@@ -221,6 +225,7 @@ TabDialog DLG_TEMPLATE_1
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
         };
     };
@@ -234,6 +239,7 @@ TabDialog DLG_TEMPLATE_1
     Text[ korean ] = "¹®ÀÚ À¯Çü";
     Text[ turkish ] = "Karakter biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de carácter";
 };
 TabDialog DLG_TEMPLATE_2
 {
@@ -286,6 +292,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "µé¿©¾²±â¿Í °£°Ý";
                 Text[ turkish ] = "Girinti ve aralýklar";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Sangrías y espacios";
             };
             PageItem
             {
@@ -312,6 +319,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "¸ÂÃã";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Alineación";
             };
             PageItem
             {
@@ -341,6 +349,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
                 Text[ turkish ] = "Metin akýþý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Flujo del texto";
             };
             PageItem
             {
@@ -365,6 +374,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
+                Text[ catalan ] = "Tipografía asiática";
             };
             PageItem
             {
@@ -393,6 +403,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "±Û²Ã";
                 Text[ turkish ] = "Yazýtipi";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fuente";
             };
             PageItem
             {
@@ -421,6 +432,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "±Û²Ã È¿°ú";
                 Text[ turkish ] = "Yazý tipi efektleri";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Efectos de fuente";
             };
             PageItem
             {
@@ -446,6 +458,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ chinese_traditional ] = "¦ì¸m";
                 Text[ turkish ] = "Position";
                 Text[ arabic ] = "ÇáãæÖÚ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -465,12 +478,13 @@ TabDialog DLG_TEMPLATE_2
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "˜a•¶Ú²±³Ä";
+                Text[ japanese ] = "“ú–{ŒêÚ²±³Ä";
                 Text[ korean ] = "¾Æ½Ã¾Æ  ·¹ÀÌ¾Æ¿ô";
                 Text[ chinese_simplified ] = "ÖÐÈÕº«°æÊ½";
                 Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
                 Text[ turkish ] = "Asian layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
+                Text[ catalan ] = "Diseño asiático";
             };
             PageItem
             {
@@ -496,6 +510,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "¹øÈ£¸Å±â±â";
                 Text[ turkish ] = "Numaralama";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Numeración";
             };
             PageItem
             {
@@ -524,6 +539,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "ÅÇ";
                 Text[ turkish ] = "Sekmeler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tabulaciones";
             };
             PageItem
             {
@@ -552,6 +568,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "´Ü¶ô Ã¹¹®ÀÚ Àå½Ä";
                 Text[ turkish ] = "Baþharfler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Iniciales";
             };
             PageItem
             {
@@ -580,6 +597,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -608,6 +626,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -634,6 +653,7 @@ TabDialog DLG_TEMPLATE_2
                 Text[ korean ] = "Á¶°Ç";
                 Text[ turkish ] = "Koþul";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Condición";
             };
         };
     };
@@ -647,6 +667,7 @@ TabDialog DLG_TEMPLATE_2
     Text[ korean ] = "´Ü¶ô À¯Çü";
     Text[ turkish ] = "Paragraf biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de párrafo";
 };
 TabDialog DLG_TEMPLATE_4
 {
@@ -716,6 +737,7 @@ TabDialog DLG_TEMPLATE_4
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
             /*            PageItem
             {
@@ -827,6 +849,7 @@ TabDialog DLG_TEMPLATE_4
     Text[ korean ] = "ÂÊ À¯Çü";
     Text[ turkish ] = "Sayfa biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de página";
 };
 String STR_PAGE_STD
 {
@@ -853,6 +876,7 @@ String STR_PAGE_STD
     Text[ korean ] = "ÂÊ";
     Text[ turkish ] = "Sayfa";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Página";
 };
 String STR_PAGE_BORDER
 {
@@ -879,6 +903,7 @@ String STR_PAGE_BORDER
     Text[ korean ] = "Å×µÎ¸®";
     Text[ turkish ] = "Kenarlýk";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borde";
 };
 String STR_PAGE_HEADER
 {
@@ -905,6 +930,7 @@ String STR_PAGE_HEADER
     Text[ korean ] = "¸Ó¸®±Û";
     Text[ turkish ] = "Üstbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Encabezamiento";
 };
 String STR_PAGE_FOOTER
 {
@@ -932,6 +958,7 @@ String STR_PAGE_FOOTER
     Text[ korean ] = "¹Ù´Ú±Û";
     Text[ turkish ] = "Altbilgi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Pie de página";
 };
 String STR_PAGE_COLUMN
 {
@@ -958,6 +985,7 @@ String STR_PAGE_COLUMN
     Text[ korean ] = "¿­";
     Text[ turkish ] = "Sütun";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Columnas";
 };
 String STR_PAGE_FOOTNOTE
 {
@@ -985,6 +1013,7 @@ String STR_PAGE_FOOTNOTE
     Text[ korean ] = "°¢ÁÖ";
     Text[ turkish ] = "Dipnot";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Nota al pie";
 };
 TabDialog DLG_TEMPLATE_3
 {
@@ -1036,6 +1065,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "À¯Çü";
                 Text[ turkish ] = "Tip";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Tipo";
             };
             PageItem
             {
@@ -1063,6 +1093,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Opciones";
             };
             PageItem
             {
@@ -1091,6 +1122,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "¹®ÀÚ¿­¡¡¹èÄ¡";
                 Text[ turkish ] = "Metin daðýlýmý";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Ajuste";
             };
             PageItem
             {
@@ -1119,6 +1151,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "¹è°æ";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Fondo";
             };
             PageItem
             {
@@ -1147,6 +1180,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "Å×µÎ¸®";
                 Text[ turkish ] = "Kenarlýk";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Borde";
             };
             PageItem
             {
@@ -1175,6 +1209,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "¿­";
                 Text[ turkish ] = "Sütun";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Columnas";
             };
             PageItem
             {
@@ -1200,6 +1235,7 @@ TabDialog DLG_TEMPLATE_3
                 Text[ korean ] = "¸ÅÅ©·Î";
                 Text[ turkish ] = "Makro";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Macro";
             };
         };
     };
@@ -1221,6 +1257,7 @@ TabDialog DLG_TEMPLATE_3
     Text[ korean ] = "ÇÁ·¹ÀÓ À¯Çü";
     Text[ turkish ] = "Çerçeve biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de marcos";
 };
 TabDialog DLG_TEMPLATE_5
 {
@@ -1257,6 +1294,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "±Û¸Ó¸®±âÈ£";
                 Text[ turkish ] = "Madde iþareti";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Viñetas";
             };
             PageItem
             {
@@ -1282,6 +1320,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ greek ] = "Óôõë áñßèìçóçò";
                 Text[ korean ] = "¹øÈ£¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
+                Text[ catalan ] = "Tipo de numeración";
             };
             PageItem
             {
@@ -1307,6 +1346,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "´Ù´Ü°è";
                 Text[ turkish ] = "Anahat";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Esquema";
             };
             PageItem
             {
@@ -1332,6 +1372,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "±×·¡ÇÈ";
                 Text[ turkish ] = "Grafik";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Imágenes";
             };
             PageItem
             {
@@ -1357,6 +1398,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ korean ] = "À§Ä¡";
                 Text[ turkish ] = "Konum";
                 Text[ language_user1 ] = " ";
+                Text[ catalan ] = "Posición";
             };
             PageItem
             {
@@ -1382,6 +1424,7 @@ TabDialog DLG_TEMPLATE_5
                 Text[ greek ] = "ÅðéëïãÝò";
                 Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
+                Text[ catalan ] = "~Opciones";
             };
         };
     };
@@ -1404,4 +1447,5 @@ TabDialog DLG_TEMPLATE_5
     Text[ korean ] = "¹øÈ£¸Å±â±â¡¡À¯Çü";
     Text[ turkish ] = "Numaralama biçimi";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Estilo de numeración";
 };
