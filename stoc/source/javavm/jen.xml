@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   jen </module-name>
+    <module-name>   javavm.uno  </module-name>
     <component-description>
         <author> Kay Ramme </author>
         <name>  com.sun.star.comp.stoc.JavaVirtualMachine   </name>
@@ -57,10 +57,10 @@ the existing vm given back.
     <project-build-dependency>  sal         </project-build-dependency>
     <project-build-dependency>  jvmaccess   </project-build-dependency>
     <project-build-dependency>  salhelper   </project-build-dependency>
-    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
-    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> cppuhelper3$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu3       </runtime-module-dependency>
     <runtime-module-dependency> tl(COM)     </runtime-module-dependency>
-    <runtime-module-dependency> sal2        </runtime-module-dependency>
+    <runtime-module-dependency> sal3        </runtime-module-dependency>
     <runtime-module-dependency> jvmaccess3$(COM) </runtime-module-dependency>
     <runtime-module-dependency> salhelper3$(COM) </runtime-module-dependency>
 </module-description>
