@@ -2,9 +2,9 @@
  *
  *  $RCSfile: float3d.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-21 21:15:07 $
+ *  last change: $Author: aw $ $Date: 2002-05-03 15:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,8 +515,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( BORDER , 19 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text = "Favoriten" ;
-        Text [ ENGLISH ] = "Preview" ;
+        Text = "~Favoriten" ;
+        Text [ ENGLISH ] = "~Preview" ;
         Text [ english_us ] = "Favorites" ;
         Text [ portuguese_brazilian ] = "Favoriten" ;
         Text [ swedish ] = "Favoriter" ;
@@ -615,8 +615,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 100 ) ;
         Size = MAP_APPFONT ( 43 , 8 ) ;
-        Text = "Horizontal" ;
-        Text [ ENGLISH ] = "Horizontal" ;
+        Text = "~Horizontal" ;
+        Text [ ENGLISH ] = "~Horizontal" ;
         Text [ english_us ] = "Horizontal" ;
         Text [ portuguese_brazilian ] = "Horizontal" ;
         Text [ swedish ] = "Horisontell" ;
@@ -657,8 +657,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 85 , 100 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Vertikal" ;
-        Text [ ENGLISH ] = "Vertical" ;
+        Text = "~Vertikal" ;
+        Text [ ENGLISH ] = "~Vertical" ;
         Text [ english_us ] = "Vertical" ;
         Text [ portuguese_brazilian ] = "Vertikal" ;
         Text [ swedish ] = "Vertikal" ;
@@ -699,8 +699,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( BORDER , 87 ) ;
         Size = MAP_APPFONT ( 152, 8 ) ;
-        Text = "Segmente" ;
-        Text [ ENGLISH ] = "Segments" ;
+        Text = "~Segmente" ;
+        Text [ ENGLISH ] = "~Segments" ;
         Text [ english_us ] = "Segments" ;
         Text [ portuguese_brazilian ] = "Segmente" ;
         Text [ swedish ] = "Segment" ;
@@ -728,8 +728,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 32 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text = "Kantenrundung" ;
-        Text [ ENGLISH ] = "Percent diagonal" ;
+        Text = "~Kantenrundung" ;
+        Text [ ENGLISH ] = "~Percent diagonal" ;
         Text [ english_us ] = "Rounded edges" ;
         Text [ portuguese_brazilian ] = "Kantenrundung" ;
         Text [ swedish ] = "Rundade kanter" ;
@@ -771,8 +771,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 46 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text = "Tiefenskalierung" ;
-        Text [ ENGLISH ] = "Backscale" ;
+        Text = "~Tiefenskalierung" ;
+        Text [ ENGLISH ] = "~Backscale" ;
         Text [ portuguese ] = "Escala de profundidade" ;
         Text [ english_us ] = "Scaled depth" ;
         Text [ portuguese_brazilian ] = "Tiefenskalierung" ;
@@ -814,8 +814,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 60 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text = "Endwinkel" ;
-        Text [ ENGLISH ] = "End angle" ;
+        Text = "~Endwinkel" ;
+        Text [ ENGLISH ] = "~End angle" ;
         Text [ english_us ] = "Rotation angle" ;
         Text [ portuguese_brazilian ] = "Endwinkel" ;
         Text [ swedish ] = "Slutvinkel" ;
@@ -879,8 +879,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 74 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text = "Tiefe" ;
-        Text [ ENGLISH ] = "Depth" ;
+        Text = "~Tiefe" ;
+        Text [ ENGLISH ] = "~Depth" ;
         Text [ english_us ] = "Depth" ;
         Text [ portuguese_brazilian ] = "Tiefe" ;
         Text [ swedish ] = "Djup" ;
@@ -1194,8 +1194,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 32 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Modus" ;
-        Text [ ENGLISH ] = "Mode" ;
+        Text = "~Modus" ;
+        Text [ ENGLISH ] = "~Mode" ;
         Text [ english_us ] = "Mode" ;
         Text [ portuguese_brazilian ] = "Modus" ;
         Text [ swedish ] = "Läge" ;
@@ -1414,8 +1414,8 @@ DockingWindow RID_SVXFLOAT_3D
         Right = TRUE;
         /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
         /* ### ACHTUNG: Neuer Text in Resource? Papierneigung : Neigung */
-        Text = "Papierneigung" ;
-        Text [ ENGLISH ] = "Paper slant" ;
+        Text = "~Papierneigung" ;
+        Text [ ENGLISH ] = "~Paper slant" ;
         Text [ english_us ] = "Surface angle" ;
         Text [ portuguese_brazilian ] = "Neigung" ;
         Text [ swedish ] = "Papperslutning" ;
@@ -1507,8 +1507,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 13 , 81 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Entfernung" ;
-        Text [ ENGLISH ] = "Distance" ;
+        Text = "~Entfernung" ;
+        Text [ ENGLISH ] = "~Distance" ;
         Text [ english_us ] = "Distance" ;
         Text [ portuguese_brazilian ] = "Entfernung" ;
         Text [ swedish ] = "Avstånd" ;
@@ -1553,8 +1553,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 13 , 97 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "Brennweite" ;
-        Text [ ENGLISH ] = "Focal length" ;
+        Text = "~Brennweite" ;
+        Text [ ENGLISH ] = "~Focal length" ;
         Text [ english_us ] = "Focal length" ;
         Text [ portuguese_brazilian ] = "Brennweite" ;
         Text [ swedish ] = "Brännvidd" ;
@@ -2109,8 +2109,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9, 72 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text = "Umgebungslicht" ;
-        Text [ ENGLISH ] = "Ambient light" ;
+        Text = "~Umgebungslicht" ;
+        Text [ ENGLISH ] = "~Ambient light" ;
         Text [ english_us ] = "Ambient light" ;
         Text [ portuguese_brazilian ] = "Umgebungslicht" ;
         Text [ swedish ] = "Omgivningsljus" ;
@@ -2168,8 +2168,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 31 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Art" ;
-        Text [ ENGLISH ] = "Kind" ;
+        Text = "~Art" ;
+        Text [ ENGLISH ] = "~Kind" ;
         Text [ english_us ] = "Type" ;
         Text [ portuguese_brazilian ] = "Art" ;
         Text [ swedish ] = "Typ" ;
@@ -2267,8 +2267,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 47 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Modus" ;
-        Text [ ENGLISH ] = "Mode" ;
+        Text = "~Modus" ;
+        Text [ ENGLISH ] = "~Mode" ;
         Text [ english_us ] = "Mode" ;
         Text [ portuguese_brazilian ] = "Modus" ;
         Text [ swedish ] = "Läge" ;
@@ -2401,8 +2401,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Projektion X" ;
-        Text [ ENGLISH ] = "Projection X" ;
+        Text = "~Projektion X" ;
+        Text [ ENGLISH ] = "~Projection X" ;
         Text [ english_us ] = "Projection X" ;
         Text [ portuguese_brazilian ] = "Projektion X" ;
         Text [ swedish ] = "Projektion X" ;
@@ -2535,8 +2535,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 77 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Projektion Y" ;
-        Text [ ENGLISH ] = "Projection Y" ;
+        Text = "~Projektion Y" ;
+        Text [ ENGLISH ] = "~Projection Y" ;
         Text [ english_us ] = "Projection Y" ;
         Text [ portuguese_brazilian ] = "Projektion Y" ;
         Text [ swedish ] = "Projektion Y" ;
@@ -2669,8 +2669,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 11 , 92 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text = "Filtern" ;
-        Text [ ENGLISH ] = "Filtering" ;
+        Text = "~Filtern" ;
+        Text [ ENGLISH ] = "~Filtering" ;
         Text [ english_us ] = "Filtering" ;
         Text [ portuguese_brazilian ] = "Filtern" ;
         Text [ swedish ] = "Filtrera" ;
@@ -2774,8 +2774,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 32 ) ;
         Size = MAP_APPFONT ( 54 , 8 ) ;
-        Text = "Favoriten" ;
-        Text [ ENGLISH ] = "Favorites" ;
+        Text = "~Favoriten" ;
+        Text [ ENGLISH ] = "~Favorites" ;
         Text [ english_us ] = "Favorites" ;
         Text [ portuguese_brazilian ] = "Favoriten" ;
         Text [ swedish ] = "Favoriter" ;
@@ -3036,8 +3036,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 48 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text = "Objektfarbe" ;
-        Text [ ENGLISH ] = "Object color" ;
+        Text = "~Objektfarbe" ;
+        Text [ ENGLISH ] = "~Object color" ;
         Text [ english_us ] = "Object color" ;
         Text [ portuguese_brazilian ] = "Objektfarbe" ;
         Text [ swedish ] = "Objektfärg" ;
@@ -3108,8 +3108,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9, 64 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text = "Leuchtfarbe" ;
-        Text [ ENGLISH ] = "Emission" ;
+        Text = "~Leuchtfarbe" ;
+        Text [ ENGLISH ] = "~Emission" ;
         Text [ english_us ] = "Illumination color" ;
         Text [ portuguese_brazilian ] = "Leuchtfarbe" ;
         Text [ swedish ] = "Lysfärg" ;
@@ -3180,8 +3180,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 90 ) ;
         Size = MAP_APPFONT ( 44 , 8 ) ;
-        Text = "Farbe" ;
-        Text [ ENGLISH ] = "Color" ;
+        Text = "~Farbe" ;
+        Text [ ENGLISH ] = "~Color" ;
         Text [ english_us ] = "Color" ;
         Text [ portuguese_brazilian ] = "Farbe" ;
         Text [ swedish ] = "Färg" ;
@@ -3252,8 +3252,8 @@ DockingWindow RID_SVXFLOAT_3D
     {
         Pos = MAP_APPFONT ( 9 , 106 ) ;
         Size = MAP_APPFONT ( 44 , 8 ) ;
-        Text = "Intensität" ;
-        Text [ ENGLISH ] = "Intensity" ;
+        Text = "~Intensität" ;
+        Text [ ENGLISH ] = "~Intensity" ;
         Text [ english_us ] = "Intensity" ;
         Text [ portuguese_brazilian ] = "Intensit?t" ;
         Text [ swedish ] = "Intensitet" ;
