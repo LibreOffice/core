@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxmacxp.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-09 11:18:05 $
+#   last change: $Author: rt $ $Date: 2004-09-20 08:39:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,6 +121,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # Normal C++ compilation flags
 CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double 
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
 
 # Other flags
 CFLAGSOBJGUIST=-fPIC -fno-common
