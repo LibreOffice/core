@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimppr.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:48:56 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:24:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -554,6 +554,8 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     const UniReference<XMLPropertySetMapper> & rPropMapper,
     struct _ContextID_Index_Pair* pSpecialContextIds )
 {
+    sal_Int32 i;
+
     OSL_ENSURE( rMultiPropSet.is(), "Need multi property set. ");
     OSL_ENSURE( rPropSetInfo.is(), "Need property set info." );
 
@@ -565,7 +567,7 @@ sal_Bool SvXMLImportPropertyMapper::_FillMultiPropertySet(
     aPropertyPairs.reserve( nCount );
 
     // iterate over property states that we want to set
-    for( sal_Int32 i=0; i < nCount; i++ )
+    for( i = 0; i < nCount; i++ )
     {
         const XMLPropertyState& rProp = rProperties[i];
         sal_Int32 nIdx = rProp.mnIndex;
