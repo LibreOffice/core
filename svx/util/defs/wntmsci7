@@ -19403,3 +19403,4 @@ _real@8@40088000000000000000
 ?release@Svx3DSceneObject@@WEE@AAXXZ
 ?SvxUnoConvertFromMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
 ?SvxUnoConvertToMM@@YAXW4SfxMapUnit@@AAVAny@uno@star@sun@com@@@Z
+?PreNotify@RubyEdit@@EAEJAAVNotifyEvent@@@Z
