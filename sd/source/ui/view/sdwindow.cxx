@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:20:22 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "Window.hxx"
+
 #ifndef _B3D_BASE3D_HXX
 #include "goodies/base3d.hxx"
 #endif
@@ -73,18 +75,30 @@
 
 #include "app.hrc"
 #include "helpids.h"
-#include "sdwindow.hxx"
-#include "viewshel.hxx"
-#include "drviewsh.hxx"
-#include "sdview.hxx"
-#include "frmview.hxx"
-#include "outlnvsh.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_FRAME_VIEW_HXX
+#include "FrameView.hxx"
+#endif
+#ifndef SD_OUTLINE_VIEW_SHELL_HXX
+#include "OutlineViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
-#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
+#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
 #endif
+#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
+#endif
 
+namespace sd {
 
 #define SCROLL_LINE_FACT   0.05     // Faktor fuer Zeilenscrolling
 #define SCROLL_PAGE_FACT   0.5      // Faktor fuer Seitenscrolling
@@ -100,11 +114,11 @@
 |*
 \************************************************************************/
 
-SdWindow::SdWindow(Window* pParent) :
-    Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
+Window::Window(::Window* pParent) :
+    ::Window(pParent, WinBits(WB_CLIPCHILDREN | WB_DIALOGCONTROL)),
     DropTargetHelper( this ),
     pShareWin(NULL),
-    pViewShell(NULL),
+    mpViewShell(NULL),
     aWinPos(0, 0),          // vorsichtshalber; die Werte sollten aber
     aViewOrigin(0, 0),      // vom Besitzer des Fensters neu gesetzt
     aViewSize(1000, 1000),  // werden
@@ -121,12 +135,14 @@ SdWindow::SdWindow(Window* pParent) :
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // Damit im Diamodus die WindowColor genommen wird
+    // Damit im Diamodus die ::WindowColor genommen wird
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetWindowColor() ) );
 
     // adjust contrast mode initially
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( bUseContrast
+        ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
+        : ViewShell::OUTPUT_DRAWMODE_COLOR );
 
     // Hilfe-ID setzen
     // SetHelpId(HID_SD_WIN_DOCUMENT);
@@ -139,11 +155,11 @@ SdWindow::SdWindow(Window* pParent) :
 |*
 \************************************************************************/
 
-SdWindow::~SdWindow()
+Window::~Window()
 {
-    if (pViewShell != NULL)
+    if (mpViewShell != NULL)
     {
-        ::sd::WindowUpdater* pWindowUpdater = pViewShell->GetWindowUpdater();
+        WindowUpdater* pWindowUpdater = mpViewShell->GetWindowUpdater();
         if (pWindowUpdater != NULL)
             pWindowUpdater->UnregisterWindow (this);
     }
@@ -152,23 +168,23 @@ SdWindow::~SdWindow()
 
 
 
-void SdWindow::SetViewShell(SdViewShell* pViewSh)
+void Window::SetViewShell(ViewShell* pViewSh)
 {
-    ::sd::WindowUpdater* pWindowUpdater = NULL;
+    WindowUpdater* pWindowUpdater = NULL;
     // Unregister at device updater of old view shell.
-    if (pViewShell != NULL)
+    if (mpViewShell != NULL)
     {
-        pWindowUpdater = pViewShell->GetWindowUpdater();
+        pWindowUpdater = mpViewShell->GetWindowUpdater();
         if (pWindowUpdater != NULL)
             pWindowUpdater->UnregisterWindow (this);
     }
 
-    pViewShell = pViewSh;
+    mpViewShell = pViewSh;
 
     // Register at device updater of new view shell
-    if (pViewShell != NULL)
+    if (mpViewShell != NULL)
     {
-        pWindowUpdater = pViewShell->GetWindowUpdater();
+        pWindowUpdater = mpViewShell->GetWindowUpdater();
         if (pWindowUpdater != NULL)
             pWindowUpdater->RegisterWindow (this);
     }
@@ -183,7 +199,7 @@ void SdWindow::SetViewShell(SdViewShell* pViewSh)
 |*
 \************************************************************************/
 
-void SdWindow::ShareViewArea(SdWindow* pOtherWin)
+void Window::ShareViewArea(Window* pOtherWin)
 {
     pShareWin       = pOtherWin;
     aViewOrigin     = pOtherWin->aViewOrigin;
@@ -203,7 +219,7 @@ void SdWindow::ShareViewArea(SdWindow* pOtherWin)
 
 
 
-void SdWindow::CalcMinZoom()
+void Window::CalcMinZoom()
 {
     // Are we entitled to change the minimal zoom factor?
     if ( bMinZoomAutoCalc )
@@ -251,9 +267,9 @@ void SdWindow::CalcMinZoom()
 |*
 \************************************************************************/
 
-void SdWindow::Resize()
+void Window::Resize()
 {
-    Window::Resize();
+    ::Window::Resize();
     CalcMinZoom();
 }
 
@@ -263,10 +279,10 @@ void SdWindow::Resize()
 |*
 \************************************************************************/
 
-void SdWindow::Paint(const Rectangle& rRect)
+void Window::Paint(const Rectangle& rRect)
 {
-    if ( pViewShell )
-        pViewShell->Paint(rRect, this);
+    if ( mpViewShell )
+        mpViewShell->Paint(rRect, this);
 }
 
 /*************************************************************************
@@ -275,20 +291,20 @@ void SdWindow::Paint(const Rectangle& rRect)
 |*
 \************************************************************************/
 
-void SdWindow::KeyInput(const KeyEvent& rKEvt)
+void Window::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL aReturn = FALSE;
 
-    if (!(pViewShell && pViewShell->KeyInput(rKEvt, this)))
+    if (!(mpViewShell && mpViewShell->KeyInput(rKEvt, this)))
     {
-        if (pViewShell && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
+        if (mpViewShell && rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
         {
             // Wenn IP aktiv, wird der IP-Modus abgebrochen
-            pViewShell->GetDocSh()->DoInPlaceActivate(FALSE);
+            mpViewShell->GetDocSh()->DoInPlaceActivate(FALSE);
         }
         else
         {
-            Window::KeyInput(rKEvt);
+            ::Window::KeyInput(rKEvt);
         }
     }
 }
@@ -299,10 +315,10 @@ void SdWindow::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void SdWindow::MouseButtonDown(const MouseEvent& rMEvt)
+void Window::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    if ( pViewShell )
-        pViewShell->MouseButtonDown(rMEvt, this);
+    if ( mpViewShell )
+        mpViewShell->MouseButtonDown(rMEvt, this);
 }
 
 /*************************************************************************
@@ -311,10 +327,10 @@ void SdWindow::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdWindow::MouseMove(const MouseEvent& rMEvt)
+void Window::MouseMove(const MouseEvent& rMEvt)
 {
-    if ( pViewShell )
-        pViewShell->MouseMove(rMEvt, this);
+    if ( mpViewShell )
+        mpViewShell->MouseMove(rMEvt, this);
 }
 
 /*************************************************************************
@@ -323,12 +339,12 @@ void SdWindow::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdWindow::MouseButtonUp(const MouseEvent& rMEvt)
+void Window::MouseButtonUp(const MouseEvent& rMEvt)
 {
     nTicks = 0;
 
-    if ( pViewShell )
-        pViewShell->MouseButtonUp(rMEvt, this);
+    if ( mpViewShell )
+        mpViewShell->MouseButtonUp(rMEvt, this);
 }
 
 /*************************************************************************
@@ -337,10 +353,10 @@ void SdWindow::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void SdWindow::Command(const CommandEvent& rCEvt)
+void Window::Command(const CommandEvent& rCEvt)
 {
-    if ( pViewShell )
-        pViewShell->Command(rCEvt, this);
+    if ( mpViewShell )
+        mpViewShell->Command(rCEvt, this);
 }
 
 /*************************************************************************
@@ -349,15 +365,15 @@ void SdWindow::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-void SdWindow::RequestHelp(const HelpEvent& rEvt)
+void Window::RequestHelp(const HelpEvent& rEvt)
 {
-    if ( pViewShell )
+    if ( mpViewShell )
     {
-        if( !pViewShell->RequestHelp( rEvt, this) )
-            Window::RequestHelp( rEvt );
+        if( !mpViewShell->RequestHelp( rEvt, this) )
+            ::Window::RequestHelp( rEvt );
     }
     else
-        Window::RequestHelp( rEvt );
+        ::Window::RequestHelp( rEvt );
 }
 
 /*************************************************************************
@@ -367,7 +383,7 @@ void SdWindow::RequestHelp(const HelpEvent& rEvt)
 |*
 \************************************************************************/
 
-void SdWindow::SetWinViewPos(const Point& rPnt)
+void Window::SetWinViewPos(const Point& rPnt)
 {
     aWinPos = rPnt;
 }
@@ -378,7 +394,7 @@ void SdWindow::SetWinViewPos(const Point& rPnt)
 |*
 \************************************************************************/
 
-void SdWindow::SetViewOrigin(const Point& rPnt)
+void Window::SetViewOrigin(const Point& rPnt)
 {
     aViewOrigin = rPnt;
 }
@@ -390,7 +406,7 @@ void SdWindow::SetViewOrigin(const Point& rPnt)
 |*
 \************************************************************************/
 
-void SdWindow::SetViewSize(const Size& rSize)
+void Window::SetViewSize(const Size& rSize)
 {
     aViewSize = rSize;
     CalcMinZoom();
@@ -399,7 +415,7 @@ void SdWindow::SetViewSize(const Size& rSize)
 
 
 
-long SdWindow::SetZoomFactor(long nZoom)
+long Window::SetZoomFactor(long nZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // calculated by CalcMinZoom() and the constant MAX_ZOOM.
@@ -418,8 +434,8 @@ long SdWindow::SetZoomFactor(long nZoom)
     UpdateMapOrigin();
 
     // Update the view's snapping to the the new zoom factor.
-    if ( pViewShell && pViewShell->ISA(SdDrawViewShell) )
-        ((SdDrawViewShell*) pViewShell)->GetView()->
+    if ( mpViewShell && mpViewShell->ISA(DrawViewShell) )
+        ((DrawViewShell*) mpViewShell)->GetView()->
                                         RecalcLogicSnapMagnetic(*this);
 
     // Return the zoom factor just in case it has been changed above to lie
@@ -430,7 +446,7 @@ long SdWindow::SetZoomFactor(long nZoom)
 
 
 
-void SdWindow::SetZoom(long nZoom)
+void Window::SetZoom(long nZoom)
 {
     // Clip the zoom factor to the valid range marked by nMinZoom as
     // previously calculated by <member>CalcMinZoom()</member> and the
@@ -461,7 +477,7 @@ void SdWindow::SetZoom(long nZoom)
     is displayed centered and as large as possible while still being fully
     visible in the window.
 */
-long SdWindow::SetZoomRect(const Rectangle& rZoomRect)
+long Window::SetZoomRect(const Rectangle& rZoomRect)
 {
     long nNewZoom = 100;
 
@@ -537,7 +553,7 @@ long SdWindow::SetZoomRect(const Rectangle& rZoomRect)
 |*
 \************************************************************************/
 
-void SdWindow::UpdateMapOrigin(BOOL bInvalidate)
+void Window::UpdateMapOrigin(BOOL bInvalidate)
 {
     MapMode aMap(GetMapMode());
     Point   aNewOrigin;
@@ -575,7 +591,7 @@ void SdWindow::UpdateMapOrigin(BOOL bInvalidate)
         // removed old stuff here which still forced zoom to be
         // %BRUSH_SIZE which is outdated now
 
-        if (pViewShell && pViewShell->ISA(SdDrawViewShell))
+        if (mpViewShell && mpViewShell->ISA(DrawViewShell))
         {
             Size aViewSizePixel = LogicToPixel(aViewSize);
             Size aWinSizePixel = LogicToPixel(aWinSize);
@@ -619,7 +635,7 @@ void SdWindow::UpdateMapOrigin(BOOL bInvalidate)
 |*
 \************************************************************************/
 
-double SdWindow::GetVisibleX()
+double Window::GetVisibleX()
 {
     return ((double) aWinPos.X() / aViewSize.Width());
 }
@@ -631,7 +647,7 @@ double SdWindow::GetVisibleX()
 |*
 \************************************************************************/
 
-double SdWindow::GetVisibleY()
+double Window::GetVisibleY()
 {
     return ((double) aWinPos.Y() / aViewSize.Height());
 }
@@ -644,7 +660,7 @@ double SdWindow::GetVisibleY()
 |*
 \************************************************************************/
 
-void SdWindow::SetVisibleXY(double fX, double fY)
+void Window::SetVisibleXY(double fX, double fY)
 {
     long nOldX = aWinPos.X();
     long nOldY = aWinPos.Y();
@@ -667,7 +683,7 @@ void SdWindow::SetVisibleXY(double fX, double fY)
 |*
 \************************************************************************/
 
-double SdWindow::GetVisibleWidth()
+double Window::GetVisibleWidth()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Width() > aViewSize.Width() )
@@ -682,7 +698,7 @@ double SdWindow::GetVisibleWidth()
 |*
 \************************************************************************/
 
-double SdWindow::GetVisibleHeight()
+double Window::GetVisibleHeight()
 {
     Size aWinSize = PixelToLogic(GetOutputSizePixel());
     if ( aWinSize.Height() > aViewSize.Height() )
@@ -697,7 +713,7 @@ double SdWindow::GetVisibleHeight()
 |*
 \************************************************************************/
 
-double SdWindow::GetScrlLineWidth()
+double Window::GetScrlLineWidth()
 {
     return (GetVisibleWidth() * SCROLL_LINE_FACT);
 }
@@ -709,7 +725,7 @@ double SdWindow::GetScrlLineWidth()
 |*
 \************************************************************************/
 
-double SdWindow::GetScrlLineHeight()
+double Window::GetScrlLineHeight()
 {
     return (GetVisibleHeight() * SCROLL_LINE_FACT);
 }
@@ -721,7 +737,7 @@ double SdWindow::GetScrlLineHeight()
 |*
 \************************************************************************/
 
-double SdWindow::GetScrlPageWidth()
+double Window::GetScrlPageWidth()
 {
     return (GetVisibleWidth() * SCROLL_PAGE_FACT);
 }
@@ -733,7 +749,7 @@ double SdWindow::GetScrlPageWidth()
 |*
 \************************************************************************/
 
-double SdWindow::GetScrlPageHeight()
+double Window::GetScrlPageHeight()
 {
     return (GetVisibleHeight() * SCROLL_PAGE_FACT);
 }
@@ -744,7 +760,7 @@ double SdWindow::GetScrlPageHeight()
 |*
 \************************************************************************/
 
-void SdWindow::DropScroll(const Point& rMousePos)
+void Window::DropScroll(const Point& rMousePos)
 {
     BOOL bReturn = FALSE;
 
@@ -781,7 +797,7 @@ void SdWindow::DropScroll(const Point& rMousePos)
 
     if ( (nDx || nDy) && (rMousePos.X()!=0 || rMousePos.Y()!=0 ) )
     {
-                if (nTicks > 20) pViewShell->ScrollLines(nDx, nDy);
+                if (nTicks > 20) mpViewShell->ScrollLines(nDx, nDy);
         else nTicks ++;
     }
 }
@@ -792,10 +808,10 @@ void SdWindow::DropScroll(const Point& rMousePos)
 |*
 \************************************************************************/
 
-void SdWindow::LoseFocus()
+void Window::LoseFocus()
 {
     nTicks = 0;
-        Window::LoseFocus ();
+        ::Window::LoseFocus ();
 }
 
 /*************************************************************************
@@ -804,10 +820,10 @@ void SdWindow::LoseFocus()
 |*
 \************************************************************************/
 
-void SdWindow::GrabFocus()
+void Window::GrabFocus()
 {
     nTicks       = 0;
-        Window::GrabFocus ();
+        ::Window::GrabFocus ();
 }
 
 
@@ -817,9 +833,9 @@ void SdWindow::GrabFocus()
 |*
 \************************************************************************/
 
-void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
+void Window::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    Window::DataChanged( rDCEvt );
+    ::Window::DataChanged( rDCEvt );
 
     // PRINTER bei allen Dokumenten weglassen, die keinen Printer benutzen.
     // FONTS und FONTSUBSTITUTION weglassen, wenn keine Textausgaben
@@ -842,7 +858,7 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             if (pOldSettings)
                 if (pOldSettings->GetStyleSettings().GetScreenZoom()
                     != rNewSettings.GetStyleSettings().GetScreenZoom())
-                    pViewShell->GetViewFrame()->GetDispatcher()->
+                    mpViewShell->GetViewFrame()->GetDispatcher()->
                         Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
             // ScrollBars neu anordnen bzw. Resize ausloesen, da sich
@@ -855,7 +871,7 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // den Settings uebernommen werden. Evtl. weitere Daten neu
             // berechnen, da sich auch die Aufloesung hierdurch geaendert
             // haben kann.
-            if( pViewShell )
+            if( mpViewShell )
             {
                 const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
                 SvtAccessibilityOptions aAccOptions;
@@ -863,41 +879,41 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
                 USHORT                  nPreviewSlot;
 
                 if( rStyleSettings.GetHighContrastMode() )
-                    nOutputMode = OUTPUT_DRAWMODE_CONTRAST;
+                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_CONTRAST;
                 else
-                    nOutputMode = OUTPUT_DRAWMODE_COLOR;
+                    nOutputMode = ViewShell::OUTPUT_DRAWMODE_COLOR;
 
                 if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForPagePreviews() )
                     nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
                 else
                     nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
 
-                if( pViewShell->ISA( SdDrawViewShell ) )
+                if( mpViewShell->ISA( DrawViewShell ) )
                 {
                     SetDrawMode( nOutputMode );
-                    pViewShell->GetFrameView()->SetDrawMode( nOutputMode );
+                    mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
 // #110094#-7
-//                  pViewShell->GetView()->ReleaseMasterPagePaintCache();
+//                  mpViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
                 }
 
                 // #103100# Overwrite window color for OutlineView
-                if( pViewShell->ISA( SdOutlineViewShell ) )
+                if( mpViewShell->ISA(OutlineViewShell ) )
                 {
                     svtools::ColorConfig aColorConfig;
                     const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
                     SetBackground( Wallpaper( aDocColor ) );
                 }
 
-                SfxRequest aReq( nPreviewSlot, 0, pViewShell->GetDocSh()->GetDoc()->GetItemPool() );
-                pViewShell->ExecReq( aReq );
-                pViewShell->Invalidate();
-                pViewShell->ArrangeGUIElements();
+                SfxRequest aReq( nPreviewSlot, 0, mpViewShell->GetDocSh()->GetDoc()->GetItemPool() );
+                mpViewShell->ExecReq( aReq );
+                mpViewShell->Invalidate();
+                mpViewShell->ArrangeGUIElements();
 
                 // #101928# re-create handles to show new outfit
-                if(pViewShell->ISA(SdDrawViewShell))
+                if(mpViewShell->ISA(DrawViewShell))
                 {
-                    pViewShell->GetView()->AdjustMarkHdl();
+                    mpViewShell->GetView()->AdjustMarkHdl();
                 }
             }
         }
@@ -934,9 +950,9 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // vorkommen, nicht mehr vorhanden sein muessen oder
             // jetzt vorhanden sind oder durch andere ersetzt wurden
             // sind.
-            if( pViewShell )
+            if( mpViewShell )
             {
-                SdDrawDocShell* pDocSh = pViewShell->GetDocSh();
+                DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
                     pDocSh->SetPrinter( pDocSh->GetPrinter( TRUE ) );
             }
@@ -951,9 +967,9 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             // geloescht wird. Ansonsten wuerde ich hier evtl. die
             // Formatierung neu berechnen, wenn der aktuelle Drucker
             // zerstoert wurde.
-            if( pViewShell )
+            if( mpViewShell )
             {
-                SdDrawDocShell* pDocSh = pViewShell->GetDocSh();
+                DrawDocShell* pDocSh = mpViewShell->GetDocSh();
                 if( pDocSh )
                     pDocSh->SetPrinter( pDocSh->GetPrinter( TRUE ) );
             }
@@ -970,16 +986,16 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
 |*
 \************************************************************************/
 
-sal_Int8 SdWindow::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 Window::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( pViewShell && !pViewShell->GetDocSh()->IsReadOnly() )
+    if( mpViewShell && !mpViewShell->GetDocSh()->IsReadOnly() )
     {
-        if( pViewShell )
-            nRet = pViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+        if( mpViewShell )
+            nRet = mpViewShell->AcceptDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
 
-        if( !pViewShell->ISA( SdOutlineViewShell ) )
+        if( !mpViewShell->ISA(OutlineViewShell ) )
             DropScroll( rEvt.maPosPixel );
     }
 
@@ -992,13 +1008,13 @@ sal_Int8 SdWindow::AcceptDrop( const AcceptDropEvent& rEvt )
 |*
 \************************************************************************/
 
-sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 Window::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    if( pViewShell )
+    if( mpViewShell )
     {
-        nRet = pViewShell->ExecuteDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
+        nRet = mpViewShell->ExecuteDrop( rEvt, *this, this, SDRPAGE_NOTFOUND, SDRLAYER_NOTFOUND );
     }
 
     return nRet;
@@ -1009,14 +1025,15 @@ sal_Int8 SdWindow::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
-    SdWindow::CreateAccessible (void)
+    Window::CreateAccessible (void)
 {
-    if (pViewShell != NULL)
-    return pViewShell->CreateAccessibleDocumentView (this);
+    if (mpViewShell != NULL)
+    return mpViewShell->CreateAccessibleDocumentView (this);
     else
     {
-        OSL_TRACE ("SdWindow::CreateAccessible: no view shell");
-    return Window::CreateAccessible ();
+        OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
+    return ::Window::CreateAccessible ();
     }
 }
 
+} // end of namespace sd
