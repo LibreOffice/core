@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hro $ $Date: 2001-11-09 11:36:51 $
+#   last change: $Author: mhu $ $Date: 2002-04-12 15:52:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,17 +67,15 @@ TARGET=workben
 LIBTARGET=NO
 TARGETTYPE=CUI
 
-TESTAPP=abbreviatetest
+#TESTAPP=abbreviatetest
 #TESTAPP=getlocaleinfotest
 #TESTAPP=salstattest
 #TESTAPP=saldyntest
 
+TESTAPP=t_alloc
 #TESTAPP=t_cipher
 #TESTAPP=t_digest
 #TESTAPP=t_random
-#TESTAPP=t_layer
-#TESTAPP=t_tls
-#TESTAPP=t_zip
 
 #TESTAPP=testfile
 #TESTAPP=testpipe
@@ -167,6 +165,21 @@ TESTAPP=abbreviatetest
 .ENDIF # salstattest
 
 #
+# t_alloc.
+#
+.IF "$(TESTAPP)" == "t_alloc"
+
+CFILES=		t_alloc.c
+OBJFILES=	$(OBJ)$/t_alloc.obj
+
+APP1TARGET=	t_alloc
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
+
+.ENDIF # t_layer
+
+#
 # t_cipher
 #
 .IF "$(TESTAPP)" == "t_cipher"
@@ -189,10 +202,10 @@ APP1DEPN=	$(SLB)$/sal.lib
 CFILES=		t_digest.c
 OBJFILES=	$(OBJ)$/t_digest.obj
 
-APP2TARGET=	t_digest
-APP2OBJS=	$(OBJFILES)
-APP2STDLIBS=$(SALLIB)
-APP2DEPN=	$(SLB)$/sal.lib
+APP1TARGET=	t_digest
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # t_digest
 
@@ -204,81 +217,12 @@ APP2DEPN=	$(SLB)$/sal.lib
 CFILES=		t_random.c
 OBJFILES=	$(OBJ)$/t_random.obj
 
-APP3TARGET=	t_random
-APP3OBJS=	$(OBJFILES)
-APP3STDLIBS=$(SALLIB)
-APP3DEPN=	$(SLB)$/sal.lib
+APP1TARGET=	t_random
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # t_random
-
-#
-# t_layer.
-#
-.IF "$(TESTAPP)" == "t_layer"
-
-CFILES=		t_layer.c
-OBJFILES=	$(OBJ)$/t_layer.obj
-
-APP4TARGET=	t_layer
-APP4OBJS=	$(OBJFILES)
-APP4STDLIBS=$(SALLIB)
-APP4DEPN=	$(SLB)$/sal.lib
-
-.ENDIF # t_layer
-
-#
-# t_tls.
-#
-.IF "$(TESTAPP)" == "t_tls"
-
-CFILES=		t_tls.c
-OBJFILES=	$(OBJ)$/t_tls.obj
-
-.IF "$(SALTLSLIB)" == ""
-
-.IF "$(GUI)" == "UNX"
-SALTLSLIB=		-lsaltls2
-.ENDIF # unx
-
-.IF "$(GUI)" == "WNT"
-SALTLSLIB=		isaltls.lib
-.ENDIF # wnt
-
-.ENDIF # saltlslib
-
-APP5TARGET=	t_tls
-APP5OBJS=	$(OBJFILES)
-APP5STDLIBS=$(SALTLSLIB) $(SALLIB)
-APP5DEPN=	$(SLB)$/sal.lib
-
-.ENDIF # t_tls
-
-#
-# t_zip.
-#
-.IF "$(TESTAPP)" == "t_zip"
-
-CFILES=		t_zip.c
-OBJFILES=	$(OBJ)$/t_zip.obj
-
-.IF "$(SALZIPLIB)" == ""
-
-.IF "$(GUI)" == "UNX"
-SALZIPLIB=	-lsalzip2
-.ENDIF # unx
-
-.IF "$(GUI)" == "WNT"
-SALZIPLIB=	isalzip.lib
-.ENDIF # wnt
-
-.ENDIF # salziplib
-
-APP6TARGET=	t_zip
-APP6OBJS=	$(OBJFILES)
-APP6STDLIBS=$(SALZIPLIB) $(SALLIB)
-APP6DEPN=	$(SLB)$/sal.lib
-
-.ENDIF # t_zip
 
 #
 # testfile
@@ -303,10 +247,10 @@ APP1DEPN=	$(SLB)$/sal.lib
 CXXFILES=	testpipe.cxx
 OBJFILES=	$(OBJ)$/testpipe.obj
 
-APP2TARGET= testpipe
-APP2OBJS=   $(OBJFILES)
-APP2STDLIBS=$(SALLIB)
-APP2DEPN=	$(SLB)$/sal.lib
+APP1TARGET= testpipe
+APP1OBJS=   $(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # testpipe
 
@@ -318,10 +262,10 @@ APP2DEPN=	$(SLB)$/sal.lib
 CXXFILES=	testpip2.cxx
 OBJFILES=	$(OBJ)$/testpip2.obj
 
-APP3TARGET=	testpip2
-APP3OBJS=	$(OBJFILES)
-APP3STDLIBS=$(SALLIB)
-APP3DEPN=	$(SLB)$/sal.lib
+APP1TARGET=	testpip2
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # testpip2
 
@@ -333,10 +277,10 @@ APP3DEPN=	$(SLB)$/sal.lib
 CXXFILES=	testproc.cxx
 OBJFILES=	$(OBJ)$/testproc.obj
 
-APP4TARGET= testproc
-APP4OBJS=	$(OBJFILES)
-APP4STDLIBS=$(SALLIB)
-APP4DEPN=	$(SLB)$/sal.lib
+APP1TARGET= testproc
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # testproc
 
@@ -349,10 +293,10 @@ APP4DEPN=	$(SLB)$/sal.lib
 CXXFILES=	tgetpwnam.cxx
 OBJFILES=	$(OBJ)$/tgetpwnam.obj
 
-APP5TARGET= tgetpwnam
-APP5OBJS=	$(OBJFILES)
-APP5STDLIBS=$(SALLIB)
-APP5DEPN=	$(SLB)$/sal.lib
+APP1TARGET= tgetpwnam
+APP1OBJS=	$(OBJFILES)
+APP1STDLIBS=$(SALLIB)
+APP1DEPN=	$(SLB)$/sal.lib
 
 .ENDIF # (sco | netbsd)
 .ENDIF # tgetpwname
