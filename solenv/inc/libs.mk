@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-05 12:35:56 $
+#   last change: $Author: hjs $ $Date: 2002-01-10 18:42:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,10 @@
 #
 #
 #*************************************************************************
+
+LIBSMKREV="$$Revision: 1.37 $$"
+
+.IF "$(OFFICELIBSSET)"!=""
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -349,3 +353,4 @@ FREETYPELIBST=freetype.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
+.ENDIF			# "$(OFFICELIBSSET)"!=""
