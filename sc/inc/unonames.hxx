@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-08 16:23:19 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 17:00:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,6 +236,11 @@
 #define SC_UNONAME_SORTASC          "SortAscending"
 #define SC_UNONAME_ENUSLIST         "EnableUserSortList"
 #define SC_UNONAME_USINDEX          "UserSortListIndex"
+
+//  text fields
+#define SC_UNONAME_ANCTYPE          "AnchorType"
+#define SC_UNONAME_ANCTYPES         "AnchorTypes"
+#define SC_UNONAME_TEXTWRAP         "TextWrap"
 
 //  url field
 #define SC_UNONAME_REPR             "Representation"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-15 14:59:47 $
+ *  last change: $Author: nn $ $Date: 2001-01-15 17:01:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,10 @@
 #include <svx/flditem.hxx>
 #include <rtl/uuid.h>
 
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
+
 #include "fielduno.hxx"
 #include "textuno.hxx"
 #include "miscuno.hxx"
@@ -98,8 +102,11 @@ const SfxItemPropertyMap* lcl_GetURLPropertyMap()
 {
     static SfxItemPropertyMap aURLPropertyMap_Impl[] =
     {
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_REPR),     0,  &getCppuType((rtl::OUString*)0),    0},
         {MAP_CHAR_LEN(SC_UNONAME_TARGET),   0,  &getCppuType((rtl::OUString*)0),    0},
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY },
         {MAP_CHAR_LEN(SC_UNONAME_URL),      0,  &getCppuType((rtl::OUString*)0),    0},
         {0,0,0,0}
     };
@@ -110,7 +117,10 @@ const SfxItemPropertyMap* lcl_GetHeaderFieldPropertyMap()
 {
     static SfxItemPropertyMap aHeaderFieldPropertyMap_Impl[] =
     {
-        //! Format bei Dateinamen?
+        //! format mode for file name?
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPE),  0,  &getCppuType((text::TextContentAnchorType*)0), beans::PropertyAttribute::READONLY },
+        {MAP_CHAR_LEN(SC_UNONAME_ANCTYPES), 0,  &getCppuType((uno::Sequence<text::TextContentAnchorType>*)0), beans::PropertyAttribute::READONLY },
+        {MAP_CHAR_LEN(SC_UNONAME_TEXTWRAP), 0,  &getCppuType((text::WrapTextMode*)0), beans::PropertyAttribute::READONLY },
         {0,0,0,0}
     };
     return aHeaderFieldPropertyMap_Impl;
@@ -690,7 +700,19 @@ uno::Any SAL_CALL ScCellFieldObj::getPropertyValue( const rtl::OUString& aProper
     uno::Any aRet;
     String aNameString = aPropertyName;
 
-    if (pEditSource)
+    // anchor type is always "as character", text wrap always "none"
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPE ) )
+        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
+    else if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPES ) )
+    {
+        uno::Sequence<text::TextContentAnchorType> aSeq(1);
+        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
+        aRet <<= aSeq;
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_TEXTWRAP ) )
+        aRet <<= text::WrapTextMode_NONE;
+    else if (pEditSource)
     {
         //! Feld-Funktionen muessen an den Forwarder !!!
         ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
@@ -1183,6 +1205,21 @@ uno::Any SAL_CALL ScHeaderFieldObj::getPropertyValue( const rtl::OUString& aProp
 {
     //! Properties?
     uno::Any aRet;
+    String aNameString = aPropertyName;
+
+    // anchor type is always "as character", text wrap always "none"
+
+    if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPE ) )
+        aRet <<= text::TextContentAnchorType_AS_CHARACTER;
+    else if ( aNameString.EqualsAscii( SC_UNONAME_ANCTYPES ) )
+    {
+        uno::Sequence<text::TextContentAnchorType> aSeq(1);
+        aSeq[0] = text::TextContentAnchorType_AS_CHARACTER;
+        aRet <<= aSeq;
+    }
+    else if ( aNameString.EqualsAscii( SC_UNONAME_TEXTWRAP ) )
+        aRet <<= text::WrapTextMode_NONE;
+
     return aRet;
 }
 
