@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::s
     }
 }
 
-uno::Any& XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
+void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
 {
@@ -523,7 +523,6 @@ uno::Any& XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
             aAny <<= xConditionalEntries;
         }
     }
-    return aAny;
 }
 
 void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
@@ -557,7 +556,10 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
     sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     sDataStyleName(),
-    pStyles(&rStyles)
+    pStyles(&rStyles),
+    nNumberFormat(-1),
+    bParentSet(sal_False),
+    bConditionalFormatCreated(sal_False)
 {
 }
 
@@ -592,42 +594,48 @@ SvXMLImportContext *XMLTableStyleContext::CreateChildContext(
 void XMLTableStyleContext::FillPropertySet(
             const Reference< XPropertySet > & rPropSet )
 {
-    if (!IsDefaultStyle())
+    if (!IsDefaultStyle() && (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL))
     {
-        if (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL)
+        if (!bParentSet)
         {
-            if (sDataStyleName.getLength())
+            rtl::OUString sParentName = GetParent();
+            uno::Any aStyleName;
+            aStyleName <<= sParentName;
+            AddProperty(CTF_SC_CELLSTYLE, aStyleName);
+            bParentSet = sal_True;
+        }
+        if ((nNumberFormat == -1) && sDataStyleName.getLength())
+        {
+            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
+                XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
+            if (!pStyle)
             {
-                SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-                if (!pStyle)
-                {
-                    XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
-                    pStyle = (SvXMLNumFormatContext *)pMyStyles->
-                        FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-                }
-                if (pStyle)
-                {
-                    uno::Any aNumberFormat;
-                    sal_Int32 nNumberFormat = pStyle->GetKey();
-                    aNumberFormat <<= nNumberFormat;
-                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
-                    AddProperty(CTF_SC_NUMBERFORMAT, aNumberFormat);
-                }
+                XMLTableStylesContext* pMyStyles = (XMLTableStylesContext *)GetScImport().GetStyles();
+                pStyle = (SvXMLNumFormatContext *)pMyStyles->
+                    FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
             }
-            if (aMaps.size() > 0)
+            if (pStyle)
             {
-                std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
-                while(aItr != aMaps.end())
-                {
-                    uno::Any aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
-                    /*rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
-                        GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell));*/
-                    AddProperty(CTF_SC_IMPORT_MAP,
-                        GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell));
-                    aItr++;
-                }
+                uno::Any aNumberFormat;
+                nNumberFormat = pStyle->GetKey();
+                aNumberFormat <<= nNumberFormat;
+                //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
+                AddProperty(CTF_SC_NUMBERFORMAT, aNumberFormat);
             }
+        }
+        if (!bConditionalFormatCreated && (aMaps.size() > 0))
+        {
+            aConditionalFormat = rPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)));
+            std::vector<ScXMLMapContent>::iterator aItr = aMaps.begin();
+            while(aItr != aMaps.end())
+            {
+                //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_CONDITIONALFORMAT)),
+                GetConditionalFormat(aConditionalFormat, aItr->sCondition, aItr->sApplyStyle, aItr->sBaseCell);
+
+                aItr++;
+            }
+            AddProperty(CTF_SC_IMPORT_MAP, aConditionalFormat);
+            bConditionalFormatCreated = sal_True;
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -644,33 +652,6 @@ void XMLTableStyleContext::SetDefaults()
             uno::Reference <beans::XPropertySet> xProperties(xInterface, uno::UNO_QUERY);
             if (xProperties.is())
                 FillPropertySet(xProperties);
-        }
-    }
-}
-
-void XMLTableStyleContext::Finish( sal_Bool bOverwrite )
-{
-    XMLPropStyleContext::Finish( bOverwrite );
-    Reference < XStyle > xStyle = GetStyle();
-    if( !xStyle.is() )
-        return;
-
-    if (GetFamily() == XML_STYLE_FAMILY_TABLE_CELL)
-    {
-        Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-        Reference< XPropertySetInfo > xPropSetInfo =
-                    xPropSet->getPropertySetInfo();
-        if( (xPropSetInfo->hasPropertyByName( sNumberFormat )) && sDataStyleName.getLength() )
-        {
-            Any aAny;
-            SvXMLNumFormatContext* pStyle = (SvXMLNumFormatContext *)pStyles->FindStyleChildContext(
-                XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
-            if (pStyle)
-            {
-                sal_Int32 nNumberFormat = pStyle->GetKey();
-                aAny <<= nNumberFormat;
-                xPropSet->setPropertyValue( sNumberFormat, aAny );
-            }
         }
     }
 }

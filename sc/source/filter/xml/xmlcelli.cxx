@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,15 +190,15 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bHasTextImport(sal_False),
     bIsFirstTextImport(sal_False),
     aDetectiveObjVec(),
-    aCellRangeSource()
+    aCellRangeSource(),
+    nCellType(util::NumberFormat::TEXT),
+    nMergedCols(1),
+    nMergedRows(1),
+    nCellsRepeated(1),
+    fValue(0.0)
 {
     GetScImport().SetRemoveLastChar(sal_False);
     GetScImport().GetTables().AddColumn(bTempIsCovered);
-    nMergedCols = 1;
-    nMergedRows = 1;
-    nCellsRepeated = 1;
-    fValue = 0.0;
-    nCellType = 0;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableRowCellAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -303,33 +303,28 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
 
 sal_Int16 ScXMLTableRowCellContext::GetCellType(const rtl::OUString& sOUValue) const
 {
-    if (sOUValue.getLength())
-    {
-        if (sOUValue.equals(GetScImport().sSC_float))
-            return util::NumberFormat::NUMBER;
-        else
-            if (sOUValue.equals(GetScImport().sSC_string))
-                return util::NumberFormat::TEXT;
-            else
-                if (sOUValue.equals(GetScImport().sSC_time))
-                    return util::NumberFormat::TIME;
-                else
-                    if (sOUValue.equals(GetScImport().sSC_date))
-                        return util::NumberFormat::DATETIME;
-                    else
-                        if (sOUValue.equals(GetScImport().sSC_percentage))
-                            return util::NumberFormat::PERCENT;
-                        else
-                            if (sOUValue.equals(GetScImport().sSC_currency))
-                                return util::NumberFormat::CURRENCY;
-                            else
-                                if (sOUValue.equals(GetScImport().sSC_boolean))
-                                    return util::NumberFormat::LOGICAL;
-                                else
-                                    return 0;
-    }
+    if (sOUValue.equals(GetScImport().sSC_float))
+        return util::NumberFormat::NUMBER;
     else
-        return util::NumberFormat::TEXT;
+        if (sOUValue.equals(GetScImport().sSC_string))
+            return util::NumberFormat::TEXT;
+        else
+            if (sOUValue.equals(GetScImport().sSC_time))
+                return util::NumberFormat::TIME;
+            else
+                if (sOUValue.equals(GetScImport().sSC_date))
+                    return util::NumberFormat::DATETIME;
+                else
+                    if (sOUValue.equals(GetScImport().sSC_percentage))
+                        return util::NumberFormat::PERCENT;
+                    else
+                        if (sOUValue.equals(GetScImport().sSC_currency))
+                            return util::NumberFormat::CURRENCY;
+                        else
+                            if (sOUValue.equals(GetScImport().sSC_boolean))
+                                return util::NumberFormat::LOGICAL;
+                            else
+                                return 0;
 }
 
 ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
@@ -844,14 +839,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
             XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                 XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
             if (pStyle)
-            {
-                rtl::OUString sParentName = pStyle->GetParent();
-                uno::Any aStyleName;
-                aStyleName <<= sParentName;
-                //xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-                pStyle->AddProperty(CTF_SC_CELLSTYLE, aStyleName);
                 pStyle->FillPropertySet(xProperties);
-            }
             else
             {
                 uno::Any aStyleName;
@@ -873,14 +861,7 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
         XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
             XML_STYLE_FAMILY_TABLE_CELL, sStyleName, sal_True);
         if (pStyle)
-        {
-            rtl::OUString sParentName = pStyle->GetParent();
-            uno::Any aStyleName;
-            aStyleName <<= sParentName;
-            //xProperties->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CELLSTYL)), aStyleName);
-            pStyle->AddProperty(CTF_SC_CELLSTYLE, aStyleName);
             pStyle->FillPropertySet(xProperties);
-        }
         else
         {
             uno::Any aStyleName;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-08 07:41:45 $
+ *  last change: $Author: sab $ $Date: 2001-05-08 11:48:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,10 @@ class XMLTableStyleContext : public XMLPropStyleContext
     const rtl::OUString         sNumberFormat;
     SvXMLStylesContext*         pStyles;
     std::vector<ScXMLMapContent>    aMaps;
+    com::sun::star::uno::Any    aConditionalFormat;
+    sal_Int32                   nNumberFormat;
+    sal_Bool                    bConditionalFormatCreated : 1;
+    sal_Bool                    bParentSet : 1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -164,7 +168,7 @@ class XMLTableStyleContext : public XMLPropStyleContext
     void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
         const rtl::OUString& sFormulas) const;
 
-    ::com::sun::star::uno::Any& GetConditionalFormat(
+    void GetConditionalFormat(
         ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const;
 protected:
@@ -193,9 +197,7 @@ public:
 
     virtual void SetDefaults();
 
-    virtual void Finish( sal_Bool bOverwrite );
-
-    void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
+      void AddProperty(sal_Int16 nContextID, const com::sun::star::uno::Any& aValue);
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext
