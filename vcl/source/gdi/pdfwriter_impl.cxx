@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:54:21 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 13:22:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,12 +71,8 @@
 #include <outdev.h>
 #include <sallayout.hxx>
 #include <metric.hxx>
-#ifndef REMOTE_APPSERVER
 #include <svsys.h>
 #include <salgdi.hxx>
-#else
-#include <rmoutdev.hxx>
-#endif
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <rtl/crc.h>
@@ -1946,11 +1942,7 @@ sal_Int32 PDFWriterImpl::emitFonts()
     if( ! m_aSubsets.size() && ! m_aEmbeddedFonts.size() ) // no fonts
         return 0;
 
-#ifndef REMOTE_APPSERVER
     if( ! m_pReferenceDevice->ImplGetGraphics() )
-#else
-    if( ! m_pReferenceDevice->ImplGetServerGraphics() )
-#endif
         return 0;
 
     OStringBuffer aLine( 1024 );
@@ -2595,10 +2587,8 @@ void PDFWriterImpl::registerGlyphs(
 
         const std::map< sal_Unicode, sal_Int32 >* pEncoding = NULL;
         const std::map< sal_Unicode, rtl::OString >* pNonEncoded = NULL;
-#ifndef REMOTE_APPSERVER
         getReferenceDevice()->ImplGetGraphics();
         pEncoding = m_pReferenceDevice->mpGraphics->GetFontEncodingVector( pCurrentFont, &pNonEncoded );
-#endif
 
         std::map< sal_Unicode, sal_Int32 >::const_iterator enc_it;
         std::map< sal_Unicode, rtl::OString >::const_iterator nonenc_it;
