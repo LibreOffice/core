@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 12:01:01 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:17:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@
 #include <svx/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
 
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
+#include <com/sun/star/awt/MouseButton.hpp>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"
@@ -151,6 +153,7 @@
 #include "seltrans.hxx"
 #include "sizedev.hxx"
 #include "AccessibilityHints.hxx"
+#include "viewuno.hxx"
 #include "compiler.hxx"
 
 using namespace com::sun::star;
@@ -2185,6 +2188,70 @@ void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 
     if ( pViewData->GetView()->GetSelEngine()->SelMouseMove( rMEvt ) )
         return;
+}
+
+void lcl_InitMouseEvent( ::com::sun::star::awt::MouseEvent& rEvent, const MouseEvent& rEvt )
+{
+    rEvent.Modifiers = 0;
+    if ( rEvt.IsShift() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::SHIFT;
+    if ( rEvt.IsMod1() )
+    rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD1;
+    if ( rEvt.IsMod2() )
+        rEvent.Modifiers |= ::com::sun::star::awt::KeyModifier::MOD2;
+
+    rEvent.Buttons = 0;
+    if ( rEvt.IsLeft() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::LEFT;
+    if ( rEvt.IsRight() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::RIGHT;
+    if ( rEvt.IsMiddle() )
+        rEvent.Buttons |= ::com::sun::star::awt::MouseButton::MIDDLE;
+
+    rEvent.X = rEvt.GetPosPixel().X();
+    rEvent.Y = rEvt.GetPosPixel().Y();
+    rEvent.ClickCount = rEvt.GetClicks();
+    rEvent.PopupTrigger = sal_False;
+}
+
+long ScGridWindow::PreNotify( NotifyEvent& rNEvt )
+{
+    BOOL bHandle = FALSE;
+
+    USHORT nType = rNEvt.GetType();
+    if ( nType == EVENT_MOUSEBUTTONUP || nType == EVENT_MOUSEBUTTONDOWN )
+    {
+        Window* pWindow = rNEvt.GetWindow();
+        if (pWindow == this && pViewData)
+        {
+            SfxViewFrame* pViewFrame = pViewData->GetViewShell()->GetViewFrame();
+            if (pViewFrame)
+            {
+                SfxFrame* pFrame = pViewFrame->GetFrame();
+                if (pFrame)
+                {
+                    com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
+                    if (xController.is())
+                    {
+                        ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+                        if (pImp && pImp->IsMouseListening())
+                        {
+                            ::com::sun::star::awt::MouseEvent aEvent;
+                            lcl_InitMouseEvent( aEvent, *rNEvt.GetMouseEvent() );
+                            if ( rNEvt.GetWindow() )
+                                aEvent.Source = rNEvt.GetWindow()->GetComponentInterface();
+                            if ( nType == EVENT_MOUSEBUTTONDOWN)
+                                pImp->MousePressed( aEvent );
+                            else
+                                pImp->MouseReleased( aEvent );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return bHandle;
 }
 
 void ScGridWindow::Tracking( const TrackingEvent& rTEvt )
