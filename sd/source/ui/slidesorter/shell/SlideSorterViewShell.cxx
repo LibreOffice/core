@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 15:12:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:22:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,6 @@
 
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
-#include "SlideChangeChildWindow.hxx"
 #include "drawdoc.hxx"
 #include "app.hrc"
 #include "glob.hrc"
@@ -133,7 +132,6 @@ SFX_IMPL_INTERFACE(
         SFX_OBJECTBAR_OBJECT,
         SdResId(RID_SLIDE_OBJ_TOOLBOX),
         gnSlideSorterToolbarFeature);
-    SFX_CHILDWINDOW_REGISTRATION(SlideChangeChildWindow::GetChildWindowId() );
 }
 
 
@@ -839,6 +837,25 @@ void SlideSorterViewShell::GetSelectedPages (
         rPageContainer.push_back (rDescriptor.GetPage());
     }
 }
+
+
+
+
+void SlideSorterViewShell::AddSelectionChangeListener (
+    const Link& rCallback)
+{
+    GetSlideSorterController().AddSelectionChangeListener(rCallback);
+}
+
+
+
+
+void SlideSorterViewShell::RemoveSelectionChangeListener (
+    const Link& rCallback)
+{
+    GetSlideSorterController().RemoveSelectionChangeListener(rCallback);
+}
+
 
 
 } } // end of namespace ::sd::slidesorter
