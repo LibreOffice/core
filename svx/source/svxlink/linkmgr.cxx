@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: jp $ $Date: 2000-09-26 12:08:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ BOOL SvxInternalLink::Connect( SvBaseLink& rLink )
         SfxStringItem aReferer( SID_REFERER, sReferer );
 
         SfxBoolItem aSilent(SID_SILENT, TRUE);
-        const SfxPoolItem* pRet = SFX_DISPATCHER().Execute(
+        const SfxPoolItem* pRet = SFX_APP()->GetDispatcher().Execute(
                 SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
                 &aName, &aNewView,
                 &aViewStat,&aRectItem/*aHidden*/,
