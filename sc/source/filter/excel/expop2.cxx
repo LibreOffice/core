@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-10-18 15:13:29 $
+ *  last change: $Author: rt $ $Date: 2004-11-09 15:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,6 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData ):
     // options from configuration
 
     ScFilterOptions aFilterOpt;
-    pExcRoot->bBreakSharedFormula = aFilterOpt.GetBreakShared();
-
     pExcRoot->fRowScale = aFilterOpt.GetExcelRowScale();
     if( pExcRoot->fRowScale <= 0.0 )
         pExcRoot->fRowScale = 1.0;
