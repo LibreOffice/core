@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2000-12-05 15:17:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,7 @@ void MessBox::ImplInitData()
 void MessBox::ImplInitButtons()
 {
     WinBits nStyle = GetStyle();
-    USHORT  nOKFlags = 0;
+    USHORT  nOKFlags = BUTTONDIALOG_OKBUTTON;
     USHORT  nCancelFlags = BUTTONDIALOG_CANCELBUTTON;
     USHORT  nRetryFlags = 0;
     USHORT  nYesFlags = 0;
@@ -175,7 +175,7 @@ void MessBox::ImplInitButtons()
     }
     else if ( nStyle & WB_OK )
     {
-        nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_CANCELBUTTON | BUTTONDIALOG_FOCUSBUTTON;
+        nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
         AddButton( BUTTON_OK, BUTTONID_OK, nOKFlags );
     }
