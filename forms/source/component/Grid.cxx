@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 08:54:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@ DBG_NAME(OGridControlModel);
 OGridControlModel::OGridControlModel(const Reference<XMultiServiceFactory>& _rxFactory)
                     :OControlModel(_rxFactory, ::rtl::OUString())
                     ,OInterfaceContainer(_rxFactory, m_aMutex, ::getCppuType(static_cast<Reference<XPropertySet>*>(NULL)))
+                    ,OErrorBroadcaster( rBHelper )
                     ,m_aSelectListeners(m_aMutex)
                     ,m_aResetListeners(m_aMutex)
                     ,m_aDefaultControl(FRM_CONTROL_GRID)        // use the old control name for compytibility reasons
@@ -232,14 +233,25 @@ Any SAL_CALL OGridControlModel::queryAggregation( const Type& _rType ) throw (Ru
 {
     Any aReturn = OGridControlModel_BASE::queryInterface(_rType);
 
-    if (!aReturn.hasValue())
+    if ( !aReturn.hasValue() )
     {
-        aReturn = OControlModel::queryAggregation(_rType);
-
-        if (!aReturn.hasValue())
-            aReturn = OInterfaceContainer::queryInterface(_rType);
+        aReturn = OControlModel::queryAggregation( _rType );
+        if ( !aReturn.hasValue() )
+        {
+            aReturn = OInterfaceContainer::queryInterface( _rType );
+            if ( !aReturn.hasValue() )
+                aReturn = OErrorBroadcaster::queryInterface( _rType );
+        }
     }
     return aReturn;
+}
+
+// XSQLErrorListener
+//------------------------------------------------------------------------------
+void SAL_CALL OGridControlModel::errorOccured( const SQLErrorEvent& _rEvent ) throw (RuntimeException)
+{
+    // forward the errors which happened to my columns to my own listeners
+    onError( _rEvent );
 }
 
 // XChild
@@ -259,10 +271,14 @@ void SAL_CALL OGridControlModel::setParent(const InterfaceRef& Parent) throw(NoS
 //------------------------------------------------------------------------------
 Sequence< Type > SAL_CALL OGridControlModel::getTypes(  ) throw(RuntimeException)
 {
-    static Sequence<Type> aTypes;
-    if (!aTypes.getLength())
-        aTypes = concatSequences(OControlModel::getTypes(), OInterfaceContainer::getTypes(), OGridControlModel_BASE::getTypes());
-    return aTypes;
+    return concatSequences(
+        concatSequences(
+            OControlModel::getTypes(),
+            OInterfaceContainer::getTypes(),
+            OErrorBroadcaster::getTypes()
+        ),
+        OGridControlModel_BASE::getTypes()
+    );
 }
 
 // OComponentHelper
@@ -993,6 +1009,11 @@ void OGridControlModel::lostColumn(const Reference< XInterface >& _rxColumn)
 void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
 {
     OInterfaceContainer::implRemoved(_rxObject);
+
+    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
+    if ( xBroadcaster.is() )
+        xBroadcaster->removeSQLErrorListener( this );
+
     lostColumn(_rxObject);
 }
 
@@ -1000,6 +1021,11 @@ void OGridControlModel::implRemoved(const InterfaceRef& _rxObject)
 void OGridControlModel::implInserted(const InterfaceRef& _rxObject)
 {
     OInterfaceContainer::implInserted(_rxObject);
+
+    Reference< XSQLErrorBroadcaster > xBroadcaster( _rxObject, UNO_QUERY );
+    if ( xBroadcaster.is() )
+        xBroadcaster->addSQLErrorListener( this );
+
     gotColumn(_rxObject);
 }
 

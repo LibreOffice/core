@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Grid.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-24 08:54:16 $
+ *  last change: $Author: fs $ $Date: 2001-08-28 14:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,11 @@
 #ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
 #include <comphelper/proparrhlp.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
+#endif
+#ifndef FORMS_ERRORBROADCASTER_HXX
+#include "errorbroadcaster.hxx"
 #endif
 
 //.........................................................................
@@ -96,16 +99,19 @@ namespace frm
 //==================================================================
 // OGridControlModel
 //==================================================================
-typedef ::cppu::ImplHelper5<    ::com::sun::star::awt::XControlModel,
-                                ::com::sun::star::form::XGridColumnFactory,
-                                ::com::sun::star::form::XLoadListener,
-                                ::com::sun::star::form::XReset,
-                                ::com::sun::star::view::XSelectionSupplier> OGridControlModel_BASE;
+typedef ::cppu::ImplHelper6 <   ::com::sun::star::awt::XControlModel
+                            ,   ::com::sun::star::form::XGridColumnFactory
+                            ,   ::com::sun::star::form::XLoadListener
+                            ,   ::com::sun::star::form::XReset
+                            ,   ::com::sun::star::view::XSelectionSupplier
+                            ,   ::com::sun::star::sdb::XSQLErrorListener
+                            >   OGridControlModel_BASE;
 
 class OGridColumn;
 class OGridControlModel :public OControlModel
                         ,public OInterfaceContainer
-                        ,public OAggregationArrayUsageHelper<OGridControlModel>
+                        ,public OErrorBroadcaster
+                        ,public OAggregationArrayUsageHelper< OGridControlModel >
                             // though we don't use aggregation, we're derived from an OPropertySetAggregationHelper,
                             // which expects that we use an OPropertyArrayAggregationHelper, which we ensure
                             // with deriving from OAggregationArrayUsageHelper
@@ -210,6 +216,9 @@ public:
 
 // ::com::sun::star::beans::XPropertyState
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
+
+// ::com::sun::star::sdb::XSQLErrorListener
+    virtual void SAL_CALL errorOccured( const ::com::sun::star::sdb::SQLErrorEvent& _rEvent ) throw (::com::sun::star::uno::RuntimeException);
 
 // OAggregationArrayUsageHelper
     virtual void fillProperties(
