@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbarsmenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 17:02:06 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:13:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ ToolbarsMenuController::~ToolbarsMenuController()
 {
 }
 
-void ToolbarsMenuController::addCommand( Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL )
+void ToolbarsMenuController::addCommand( Reference< css::awt::XPopupMenu >& rPopupMenu, const rtl::OUString& rCommandURL, USHORT nHelpId )
 {
     USHORT        nItemId    = m_xPopupMenu->getItemCount()+1;
     rtl::OUString aLabel     = getUINameFromCommand( rCommandURL );
@@ -206,14 +206,14 @@ void ToolbarsMenuController::addCommand( Reference< css::awt::XPopupMenu >& rPop
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     Image aImage = GetImageFromURL( m_xFrame, rCommandURL, FALSE, rSettings.GetMenuColor().IsDark() );
-    if ( !!aImage )
+
+    VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
+    if ( pPopupMenu )
     {
-        VCLXPopupMenu* pPopupMenu = (VCLXPopupMenu *)VCLXPopupMenu::GetImplementation( rPopupMenu );
-        if ( pPopupMenu )
-        {
-            PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        PopupMenu* pVCLPopupMenu = (PopupMenu *)pPopupMenu->GetMenu();
+        if ( !!aImage )
             pVCLPopupMenu->SetItemImage( nItemId, aImage );
-        }
+        pVCLPopupMenu->SetHelpId( nItemId, nHelpId );
     }
 
     m_aCommandVector.push_back( rCommandURL );
@@ -395,14 +395,14 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
              m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) ||
              m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
         {
-            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )));
+            addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_HYPERLINKBAR )), 10360 );
             if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) ||
                  m_aModuleIdentifier.equalsAscii( "com.sun.star.presentation.PresentationDocument" ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )));
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_COLORBAR )), 10417 );
             else if ( m_aModuleIdentifier.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ))
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )));
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_INPUTLINEBAR )), 26241 );
             else
-                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )));
+                addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CMD_FORMULABAR )), 20128 );
         }
 
         // Create command for configure
@@ -412,7 +412,7 @@ void ToolbarsMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
             m_xPopupMenu->insertSeparator( nItemCount+1 );
         }
 
-        addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS )));
+        addCommand( m_xPopupMenu, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( CONFIGURE_TOOLBARS )), 5904 );
     }
 }
 
@@ -526,8 +526,12 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
                     {
                         Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(
                                                                 aTargetURL, ::rtl::OUString(), 0 );
-                        if ( xDispatch.is() )
-                            xDispatch->dispatch( aTargetURL, aArgs );
+
+                        ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+                        pExecuteInfo->xDispatch     = xDispatch;
+                        pExecuteInfo->aTargetURL    = aTargetURL;
+                        pExecuteInfo->aArgs         = aArgs;
+                        Application::PostUserEvent( STATIC_LINK(0, ToolbarsMenuController, ExecuteHdl_Impl), pExecuteInfo );
                     }
                 }
                 else
@@ -685,6 +689,23 @@ void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArgume
                                                                    UNO_QUERY );
         }
     }
+}
+
+IMPL_STATIC_LINK( ToolbarsMenuController, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
+{
+    try
+    {
+        // Asynchronous execution as this can lead to our own destruction!
+        // Framework can recycle our current frame and the layout manager disposes all user interface
+        // elements if a component gets detached from its frame!
+        pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
+    }
+    catch ( Exception& )
+    {
+    }
+
+    delete pExecuteInfo;
+    return 0;
 }
 
 }
