@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:00:10 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 19:44:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,6 +273,31 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
     GroupId = GID_MODIFY;
 ]
 
+SfxVoidItem TaskPaneShowPanel SID_TASK_PANE (
+    SfxBoolItem IsPanelVisible ID_VAL_ISVISIBLE,
+    SfxUInt32Item PanelId ID_VAL_PANEL_INDEX)
+[
+    /* flags: */
+    AutoUpdate = TRUE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = TRUE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_VIEW;
+]
+
 interface ViewShellBaseView : View
 {
     SID_SWITCH_SHELL
@@ -330,6 +355,11 @@ interface ViewShellBaseView : View
         StateMethod = GetState;
     ]
     SID_HANDOUTMODE
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+    ]
+    SID_TASK_PANE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
