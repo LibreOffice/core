@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySet_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2002-08-08 12:16:07 $
+ *  last change: $Author: jl $ $Date: 2002-10-21 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,8 +562,8 @@ public class PropertySet_Test
             r[i++]= cl.boolClassProp == null;
 
             cl.propXWeakA.Attributes= PropertyAttribute.MAYBEVOID;
-            cl.setPropertyValue("propXWeakA", null);
-            r[i++]= isVoidAny(cl.getPropertyValue("propXWeakA"));
+            cl.setPropertyValue("PropXWeakA", null);
+            r[i++]= util.isVoidAny(cl.getPropertyValue("PropXWeakA"));
             cl.propXWeakA.Attributes= 0;
 
             cl.anyPropA= null;
