@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTransliteration.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bustamam $ $Date: 2000-11-19 00:34:22 $
+ *  last change: $Author: bustamam $ $Date: 2001-01-09 00:32:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,6 +171,8 @@ enum TransliterationModules
    ignoreProlongedSoundMark_ja_JP   = 0x02000000,
    ignoreMiddleDot_ja_JP        = 0x04000000,
    ignoreSpace_ja_JP            = 0x08000000,
+   smallToLarge_ja_JP           = 0x10000000,
+   largeToSmall_ja_JP           = 0x20000000,
    END_OF_MODULE    = 0
 };
 
