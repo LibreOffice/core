@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-29 16:42:09 $
+ *  last change: $Author: fme $ $Date: 2001-10-30 13:44:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1565,7 +1565,14 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         ASSERT( pPage, "No page in frame!");
 
         const SwLayoutFrm* pBody = pPage->FindBodyCont();
+#ifdef VERTICAL_LAYOUT
+        nMaxWidth = pBody ? ( rInf.GetTxtFrm()->IsVertical() ?
+                              pBody->Prt().Width() :
+                              pBody->Prt().Height() ) :
+                    USHRT_MAX;
+#else
         nMaxWidth = pBody ? pBody->Prt().Height() : USHRT_MAX;
+#endif
     }
     else
         nTmpX = rInf.X();
