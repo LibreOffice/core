@@ -1,5 +1,5 @@
 <!--
-	$Id: office.mod,v 1.46 2002-05-06 09:34:55 bm Exp $
+	$Id: office.mod,v 1.47 2003-04-17 15:59:01 vg Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -78,6 +78,7 @@
 <!ATTLIST office:document xmlns:dr3d	CDATA #FIXED "&nDr3D;">
 <!ATTLIST office:document xmlns:math	CDATA #FIXED "&nMath;">
 <!ATTLIST office:document xmlns:form	CDATA #FIXED "&nForm;">
+<!ATTLIST office:document xmlns:config	CDATA #FIXED "&nConfig;">
 
 <!ATTLIST office:document office:class
 						  (text|text-global|
