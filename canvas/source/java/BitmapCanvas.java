@@ -67,8 +67,8 @@ import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.awt.*;
 
 // Canvas
-import drafts.com.sun.star.rendering.*;
-import drafts.com.sun.star.geometry.*;
+import com.sun.star.rendering.*;
+import com.sun.star.geometry.*;
 
 // Java AWT
 import java.awt.*;
@@ -81,7 +81,7 @@ import sun.awt.*;
 
 public class BitmapCanvas
     extends CanvasBase
-    implements drafts.com.sun.star.rendering.XBitmapCanvas,
+    implements com.sun.star.rendering.XBitmapCanvas,
                com.sun.star.lang.XServiceInfo
 {
     private Graphics2D  graphics;
@@ -105,13 +105,13 @@ public class BitmapCanvas
     // ==================
     //
 
-    public synchronized void copyRect( drafts.com.sun.star.rendering.XBitmapCanvas  sourceCanvas,
-                                       drafts.com.sun.star.geometry.RealRectangle2D sourceRect,
-                                       drafts.com.sun.star.rendering.ViewState      sourceViewState,
-                                       drafts.com.sun.star.rendering.RenderState    sourceRenderState,
-                                       drafts.com.sun.star.geometry.RealRectangle2D destRect,
-                                       drafts.com.sun.star.rendering.ViewState      destViewState,
-                                       drafts.com.sun.star.rendering.RenderState    destRenderState )
+    public synchronized void copyRect( com.sun.star.rendering.XBitmapCanvas sourceCanvas,
+                                       com.sun.star.geometry.RealRectangle2D sourceRect,
+                                       com.sun.star.rendering.ViewState         sourceViewState,
+                                       com.sun.star.rendering.RenderState   sourceRenderState,
+                                       com.sun.star.geometry.RealRectangle2D    destRect,
+                                       com.sun.star.rendering.ViewState         destViewState,
+                                       com.sun.star.rendering.RenderState   destRenderState )
     {
         // TODO: create temp image when transform is non-trivial
 
@@ -145,7 +145,7 @@ public class BitmapCanvas
     //----------------------------------------------------------------------------------
 
     private static final String s_implName = "XBitmapCanvas.java.impl";
-    private static final String s_serviceName = "drafts.com.sun.star.rendering.BitmapCanvas";
+    private static final String s_serviceName = "com.sun.star.rendering.BitmapCanvas";
 
     //----------------------------------------------------------------------------------
 
