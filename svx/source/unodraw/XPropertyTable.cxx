@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPropertyTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-08 11:37:51 $
+ *  last change: $Author: aw $ $Date: 2001-05-10 11:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,10 @@ XPropertyEntry* SvxUnoXLineEndTable::getEntry( const OUString& rName, const Any&
     drawing::PolyPolygonBezierCoords* pCoords = (drawing::PolyPolygonBezierCoords*)rAny.getValue();
     if( pCoords->Coordinates.getLength() > 0 )
         SvxConvertPolyPolygonBezierToXPolygon( pCoords, aPolygon );
+
+    // #86265# make sure polygon is closed
+    if(aPolygon.GetPointCount() > 1 && aPolygon[0] != aPolygon[aPolygon.GetPointCount() - 1])
+        aPolygon[aPolygon.GetPointCount()] = aPolygon[0];
 
     const String aName( rName );
     return new XLineEndEntry( aPolygon, aName );
