@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-21 13:53:07 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:58:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=bib
+PRJNAME=extensions
 TARGET=bib
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
@@ -125,7 +125,7 @@ SHL1STDLIBS= \
 
 
 #Create UNO Header files
-UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
+UNOUCROUT=$(OUT)$/inc$/$(TARGET)
 INCPRE+=$(UNOUCROUT)
 
 
