@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-26 14:42:03 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 12:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ finnish ] = "Sarakkeen muoto..." ;
             Text [ danish ] = "Kolonneformatering..." ;
             Text [ french ] = "Formatage de colonne..." ;
-            Text [ swedish ] = "Kolumnformatering..." ;
+            Text [ swedish ] = "Kolumn~formatering..." ;
             Text [ dutch ] = "~Kolomopmaak..." ;
             Text [ spanish ] = "Formateado de ~columnas..." ;
             Text [ english_us ] = "Column Format..." ;
@@ -106,7 +106,7 @@ Menu RID_SBA_GRID_COLCTXMENU
             Text [ finnish ] = "Sarakkeen leveyden..." ;
             Text [ danish ] = "Kolonnebredde..." ;
             Text [ french ] = "Largeur de colonne..." ;
-            Text [ swedish ] = "Kolumnbredd..." ;
+            Text [ swedish ] = "Kolumn~bredd..." ;
             Text [ dutch ] = "K~olombreedte..." ;
             Text [ spanish ] = "Anc~ho de columna..." ;
             Text [ english_us ] = "Column Width..." ;
@@ -198,8 +198,8 @@ String RID_STR_UNDO_MODIFY_RECORD
     Text[ spanish ] = "Deshacer: Entrada de datos";
     Text[ italian ] = "Annulla: Immissione dati";
     Text[ danish ] = "Fortryd: Datainput";
-    Text[ swedish ] = "≈ngra: Datainmatning";
-    Text[ polish ] = "CofniÍcie: Wpisywanie danych";
+    Text[ swedish ] = "≈ngra: datainmatning";
+    Text[ polish ] = "CofniÍcie: wpisywania danych";
     Text[ portuguese_brazilian ] = "Undo: input data";
     Text[ japanese ] = "å≥Ç…ñﬂÇ∑: √ﬁ∞¿ì¸óÕ";
     Text[ korean ] = "Ω««‡√Îº“: µ•¿Ã≈Õ ¿‘∑¬";
@@ -221,7 +221,7 @@ String RID_STR_SAVE_CURRENT_RECORD
     Text[ spanish ] = "guardar registro actual";
     Text[ italian ] = "Salva record di dati attuale";
     Text[ danish ] = "Gem aktuel datapost";
-    Text[ swedish ] = "spara aktuell datapost";
+    Text[ swedish ] = "Spara aktuell datapost";
     Text[ polish ] = "Zapisz bieøπcy rekord";
     Text[ portuguese_brazilian ] = "aktuellen Datensatz speichern";
     Text[ japanese ] = "åªç›ÇÃ⁄∫∞ƒﬁÇÃï€ë∂";
@@ -242,7 +242,7 @@ String STR_QRY_TITLE
     Text [ english_us ] = "Query #" ;
     Text [ portuguese ] = "Consulta #" ;
     Text [ portuguese_brazilian ] = "Abfrage #" ;
-    Text [ swedish ] = "Sˆkning #" ;
+    Text [ swedish ] = "FˆrfrÂgan #" ;
     Text [ danish ] = "Foresp¯rgsel #" ;
     Text [ italian ] = "Ricerca #" ;
     Text [ spanish ] = "Consulta #" ;
