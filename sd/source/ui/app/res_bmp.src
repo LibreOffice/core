@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 17:20:57 $
+ *  last change: $Author: nf $ $Date: 2000-12-15 10:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,11 +684,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     {
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "sco206.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Grafikobjektvorlagen" ;
             Text [ ENGLISH ] = "Graphic Objects Styles" ;
             Text [ english_us ] = "Graphics Styles" ;
@@ -708,7 +703,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδΗΚ ΥζΡΙ";
             Text[ greek ] = "Στυλ αντικειμένων γραφικών";
             Text[ korean ] = "±Χ·‘ΗΘ°³ΓΌ ΐ―Ηό";
+            Text[ turkish ] = "Grafik biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "sco206.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
             FilterList =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
@@ -718,11 +719,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         SfxStyleFamilyItem
         {
-            StyleImage = Image
-            {
-                ImageBitmap = Bitmap { File = "presobjs.bmp" ; };
-                MaskColor = IMAGE_STDBTN_COLOR ;
-            };
             Text = "Prδsentationsobjektvorlagen" ;
             Text [ ENGLISH ] = "Presentation objects styles" ;
             Text [ english_us ] = "Presentation Styles" ;
@@ -742,7 +738,13 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             Text[ arabic ] = "ΓδγΗΨ ίΗΖδ ΪΡΦ ΚήΟνγν";
             Text[ greek ] = "Πρότυπα αντικειμένων παρουσίασης";
             Text[ korean ] = "ΗΑΈ®Α¨ΕΧΐΜΌΗ °³ΓΌ ΐ―Ηό";
+            Text[ turkish ] = "Sunu nesneleri biηimi";
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
+            StyleImage = Image
+            {
+                ImageBitmap = Bitmap { File = "presobjs.bmp" ; };
+                MaskColor = IMAGE_STDBTN_COLOR ;
+            };
             FilterList =
             {
                 < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
