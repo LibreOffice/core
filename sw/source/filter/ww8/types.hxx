@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 14:14:59 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 11:51:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #ifndef WW_TYPES
 #define WW_TYPES
 
+#include <vector>
+
 //if part of OOo
 #ifndef WW_TYPESSW
 #include "typessw.hxx"
@@ -74,6 +76,11 @@
 
 namespace ww
 {
+    typedef std::vector<sal_uInt8> bytes;
+    enum WordVersion {eWW6 = 6, eWW7 = 7, eWW8 = 8};
+    inline bool IsSevenMinus(WordVersion eVer) { return eVer <= eWW7; }
+    inline bool IsEightPlus(WordVersion eVer) { return eVer >= eWW8; }
+
     /** For custom wrapping
 
         When you edit the wrap points of a contour in word, word uses a relative
