@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-30 17:30:50 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-02 16:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,28 @@ bool HelpParser::CreateSDF(
     static const String tab_char     ( String::CreateFromAscii("")              );
 
     SimpleXMLParser aParser;
+    String sUsedTempFile;
+    String sXmlFile;
 
     //String x(sHelpFile.GetBuffer(),RTL_TEXTENCODING_UTF8 , sHelpFile.Len());
-    String x(sHelpFile,RTL_TEXTENCODING_ASCII_US );
-    std::auto_ptr <XMLFile> file ( aParser.Execute(x) );
+    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) ){
+        DirEntry aTempFile = Export::GetTempFile();
+        DirEntry aSourceFile( String( sHelpFile , RTL_TEXTENCODING_ASCII_US ) );
+        aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
+        String sTempFile = aTempFile.GetFull();
+        Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+        sUsedTempFile = sTempFile;
+        sXmlFile = sTempFile;
+    }else{
+        sUsedTempFile = String::CreateFromAscii("");
+        sXmlFile = String( sHelpFile , RTL_TEXTENCODING_ASCII_US );
+    }
+
+
+    //String x(sHelpFile,RTL_TEXTENCODING_ASCII_US );
+    //std::auto_ptr <XMLFile> file ( aParser.Execute(x) );
+    std::auto_ptr <XMLFile> file ( aParser.Execute( sXmlFile ) );
+
     if(file.get() == NULL){
         //printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_UTF8).GetBuffer());
         printf("%s\n",ByteString(aParser.GetError().sMessage,RTL_TEXTENCODING_ASCII_US).GetBuffer());
@@ -261,7 +279,12 @@ bool HelpParser::CreateSDF(
     }
     //Dump(aXMLStrHM);
     aSDFStream.Close();
-    fprintf(stdout,"Closing stream ...");
+    //fprintf(stdout,"Closing stream ...");
+
+    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
+        DirEntry aTempFile( sUsedTempFile );
+        aTempFile.Kill();
+    }
     return TRUE;
 }
 bool HelpParser::Merge( const ByteString &rSDFFile, const ByteString &rDestinationFile )
@@ -284,7 +307,28 @@ bool HelpParser::Merge(
 {
 
     SimpleXMLParser aParser;
-    OUString sOUHelpFile( sHelpFile.GetBuffer(),sHelpFile.Len(),RTL_TEXTENCODING_UTF8);
+
+    String sUsedTempFile;
+    String sXmlFile;
+
+    //String x(sHelpFile.GetBuffer(),RTL_TEXTENCODING_UTF8 , sHelpFile.Len());
+    if( Export::fileHasUTF8ByteOrderMarker( sHelpFile ) ){
+        DirEntry aTempFile = Export::GetTempFile();
+        DirEntry aSourceFile( String( sHelpFile , RTL_TEXTENCODING_ASCII_US ) );
+        aSourceFile.CopyTo( aTempFile , FSYS_ACTION_COPYFILE );
+        String sTempFile = aTempFile.GetFull();
+        Export::RemoveUTF8ByteOrderMarkerFromFile( ByteString( sTempFile , RTL_TEXTENCODING_ASCII_US ) );
+        sUsedTempFile = sTempFile;
+        sXmlFile = sTempFile;
+    }else{
+        sUsedTempFile = String::CreateFromAscii("");
+        sXmlFile = String( sHelpFile , RTL_TEXTENCODING_ASCII_US );
+    }
+
+
+    //OUString sOUHelpFile( sHelpFile.GetBuffer(),sHelpFile.Len(),RTL_TEXTENCODING_UTF8);
+    OUString sOUHelpFile( sXmlFile );
+
     std::auto_ptr <XMLFile> xmlfile ( aParser.Execute( sOUHelpFile ) );
 
     if( xmlfile.get() == NULL){
@@ -347,6 +391,10 @@ bool HelpParser::Merge(
             String test( testpath , RTL_TEXTENCODING_ASCII_US ); // check and remove '\\'
             file->Write(test); // Always write!
         }
+    if( !sUsedTempFile.EqualsIgnoreCaseAscii( "" ) ){
+        DirEntry aTempFile( sUsedTempFile );
+        aTempFile.Kill();
+    }
 
     return true;
 }
