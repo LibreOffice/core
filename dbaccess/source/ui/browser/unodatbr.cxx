@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: fs $ $Date: 2002-09-24 15:13:31 $
+ *  last change: $Author: oj $ $Date: 2002-10-18 10:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -3574,6 +3577,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
             }
         }
     }
+    // #95715# OJ
+    sal_Bool bIsWriterInstalled = SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER);
 
     if(pEntry)
     {
@@ -3614,8 +3619,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(SID_DELETE,         etTable == eType && bIsConnectionWriteAble);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,    etTable == eType && bIsConnectionWriteAble && bRenameAllowed);
                 aContextMenu.EnableItem(SID_COPY,           etTable == eType);
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etTable == eType);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          etTable == eType);
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled && etTable == eType);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,  bIsWriterInstalled && etTable == eType);
                 // these have to be disabled if the connection is readonly
                 if(!bIsConnectionWriteAble)
                 {
@@ -3642,8 +3647,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                     aContextMenu.EnableItem(ID_NEW_TABLE_DESIGN,sal_False);
                     aContextMenu.EnableItem(ID_NEW_VIEW_DESIGN,sal_False);
                 }
-                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  sal_True);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          sal_True);
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          bIsWriterInstalled);
             }
             break;
 
@@ -3660,7 +3665,8 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(SID_COPY,                   etQuery == eType);
                 aContextMenu.EnableItem(ID_RENAME_ENTRY,            etQuery == eType);
                 aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  etQuery == eType);
-                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          etQuery == eType);
+                aContextMenu.EnableItem(ID_FORM_NEW_PILOT,          bIsWriterInstalled && etQuery == eType);
+                aContextMenu.EnableItem(ID_DOCUMENT_CREATE_REPWIZ,  bIsWriterInstalled && etQuery == eType);
             }
             break;
 
@@ -3674,6 +3680,14 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
                 aContextMenu.EnableItem(ID_EDIT_DOCUMENT,   etBookmark == eType);
 
                 pDynamicSubMenu = new PopupMenu(ModuleRes(RID_NEW_FORM));
+
+                pDynamicSubMenu->EnableItem(ID_FORM_NEW_TEXT, bIsWriterInstalled);
+                pDynamicSubMenu->EnableItem(ID_FORM_NEW_PILOT, bIsWriterInstalled);
+                pDynamicSubMenu->EnableItem(ID_DOCUMENT_CREATE_REPWIZ, bIsWriterInstalled);
+                SvtModuleOptions aModuleOpt;
+                pDynamicSubMenu->EnableItem(ID_FORM_NEW_CALC, aModuleOpt.IsModuleInstalled(SvtModuleOptions::E_SCALC));
+                pDynamicSubMenu->EnableItem(ID_FORM_NEW_IMPRESS, aModuleOpt.IsModuleInstalled(SvtModuleOptions::E_SIMPRESS));
+
                 aContextMenu.SetPopupMenu(ID_CREATE_NEW_DOC, pDynamicSubMenu);
             }
             break;
