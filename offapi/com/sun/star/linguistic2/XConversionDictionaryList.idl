@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XConversionDictionaryList.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:06:37 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:19:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ module com { module sun { module star { module linguistic2 {
     If they do those dictionaries have to be flushed upon termination
     of the dictionary list.</p>
 
-     @since #107627#
+     @since OOo 1.1.2
 */
 published interface XConversionDictionaryList : com::sun::star::uno::XInterface
 {
