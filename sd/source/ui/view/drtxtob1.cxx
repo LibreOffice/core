@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dl $ $Date: 2001-11-23 11:14:05 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,6 +307,9 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             if (pOLV)
             {
                 pOLV->AdjustDepth( -1 );
+
+                // #96551# trigger preview refresh
+                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -317,6 +320,9 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             if (pOLV)
             {
                 pOLV->AdjustDepth( 1 );
+
+                // #96551# trigger preview refresh
+                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -327,6 +333,9 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             if (pOLV)
             {
                 pOLV->AdjustHeight( -1 );
+
+                // #96551# trigger preview refresh
+                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
@@ -337,6 +346,9 @@ void SdDrawTextObjectBar::Execute( SfxRequest &rReq )
             if (pOLV)
             {
                 pOLV->AdjustHeight( 1 );
+
+                // #96551# trigger preview refresh
+                pViewShell->GetViewFrame()->GetBindings().Invalidate( SID_PREVIEW_STATE, TRUE, FALSE );
             }
             rReq.Done();
         }
