@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MDatabaseMetaDataHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 18:31:40 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 12:30:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+#ifndef _COM_SUN_STAR_MOZILLA_MOZILLPRODUCTTYPE_HPP_
+#include <com/sun/star/mozilla/MozillaProductType.hpp>
+#endif
 
 
 namespace connectivity
@@ -131,7 +134,7 @@ namespace connectivity
             MDatabaseMetaDataHelper( );
             ~MDatabaseMetaDataHelper();
 
-            //PROXIED_FUNCTION
+            //
             sal_Bool getTableStrings( OConnection*                        _pCon,
                                       ::std::vector< ::rtl::OUString >&   _rStrings,
                                       ::std::vector< ::rtl::OUString >&   _rTypes);
@@ -152,6 +155,8 @@ namespace connectivity
             ::std::vector< ::rtl::OUString >    m_aTableTypes;
             ::rtl::OUString                     m_aErrorString;
             void setAbSpecificError( OConnection* _pCon, sal_Bool bGivenURI );
+            ::com::sun::star::mozilla::MozillaProductType m_ProductType;
+            ::rtl::OUString                               m_ProfileName;
         };
     }
 
