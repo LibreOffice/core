@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2002-02-19 14:59:57 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:31:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,14 +289,6 @@
 #endif
 #ifndef _SWWDOCSH_HXX //autogen
 #include <wdocsh.hxx>
-#endif
-#ifdef ACCESSIBLE_LAYOUT
-#ifndef _ACCMAP_HXX
-#include <accmap.hxx>
-#endif
-#ifndef _DOC_HXX
-#include <doc.hxx>
-#endif
 #endif
 
 #ifndef _HELPID_H
@@ -3392,9 +3384,6 @@ SwEditWin::SwEditWin(Window *pParent, SwView &rMyView):
     nDropDestination( 0 ),
     nInsFrmColCount( 1 ),
     bLockInput(FALSE)
-#ifdef ACCESSIBLE_LAYOUT
-    ,bHasAccessible( FALSE )
-#endif
 {
     SetHelpId(HID_EDIT_WIN);
     EnableChildTransparentMode();
@@ -3865,45 +3854,11 @@ void SwEditWin::SetChainMode( BOOL bOn )
     rView.GetViewFrame()->GetBindings().Invalidate(aInva);
 }
 
-
-#ifdef ACCESSIBLE_LAYOUT
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SwEditWin::CreateAccessible()
 {
-    using namespace ::com::sun::star;
-    using namespace ::drafts::com::sun::star;
-
-    uno::Reference< accessibility::XAccessible > xAcc;
-
     SwWrtShell &rSh = rView.GetWrtShell();
-
-    SwDoc *pDoc = rSh.GetDoc();
-    // We require a layout and an XModel to be accessible.
-    ASSERT( pDoc->GetRootFrm(), "no layout, no access" );
-
-    if( pDoc->GetRootFrm() )
-    {
-        xAcc = aAccMap.GetDocumentView( GetParent()->GetAccessible(),
-                                        rView.GetVisArea(),
-                                        pDoc->GetRootFrm() );
-        bHasAccessible = sal_True;
-    }
-
-    return xAcc;
+    return rSh.CreateAccessible();
 }
-
-void SwEditWin::UpdateAccessible()
-{
-    SwWrtShell &rSh = rView.GetWrtShell();
-    SwDoc *pDoc = rSh.GetDoc();
-
-    if( bHasAccessible && pDoc->GetRootFrm() )
-    {
-        aAccMap.GetDocumentView( GetParent()->GetAccessible(),
-                                 rView.GetVisArea(),
-                                 pDoc->GetRootFrm() );
-    }
-}
-#endif
 
 //-------------------------------------------------------------
 

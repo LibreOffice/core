@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-14 10:48:19 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:32:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -385,11 +385,6 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
     if ( bOuterResize )
         OuterResizePixel( Point(),
                           GetViewFrame()->GetWindow().GetOutputSizePixel() );
-
-#ifdef ACCESSIBLE_LAYOUT
-    if( pEditWin )
-        pEditWin->UpdateAccessible();
-#endif
 }
 
 /*--------------------------------------------------------------------

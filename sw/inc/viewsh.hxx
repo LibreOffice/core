@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-10 12:54:50 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 #include <errhdl.hxx>
 #endif
 
+namespace drafts {
+    namespace com { namespace sun { namespace star { namespace accessibility {
+           class XAccessible; } } } } }
 
 class SwDoc;
 class SfxPrinter;
@@ -157,6 +160,7 @@ class ViewShell : public Ring
     sal_Bool  bEnableSmooth    :1;  //Disable des SmoothScroll z.B. fuer
                                 //Drag der Scrollbars.
     sal_Bool  bEndActionByVirDev:1; //Paints aus der EndAction immer ueber virtuelles
+
                                 //Device (etwa beim Browsen)
 
     //Initialisierung, wird von den verschiedenen Konstruktoren gerufen.
@@ -406,6 +410,8 @@ public:
 
     const Size& GetBrowseBorder() const{ return aBrowseBorder; }
     void SetBrowseBorder( const Size& rNew );
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );

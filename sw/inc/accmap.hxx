@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-02-11 12:51:16 $
+ *  last change: $Author: mib $ $Date: 2002-02-20 18:33:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,42 +81,38 @@ class SwRootFrm;
 class SwAccessibleContext;
 class SwAccessibleMap_Impl;
 class SwRect;
+class ViewShell;
 
 class SwAccessibleMap
 {
     ::vos::OMutex aMutex;
     SwAccessibleMap_Impl *pMap;
+    ViewShell *pVSh;
     sal_Int32 nPara;
 
 public:
 
-    SwAccessibleMap();
+    SwAccessibleMap( ViewShell *pSh );
     ~SwAccessibleMap();
 
     ::com::sun::star::uno::Reference<
-        ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentView(
-            const ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
-                const Rectangle& rVisArea,
-                const SwRootFrm *pRootFrm );
+        ::drafts::com::sun::star::accessibility::XAccessible> GetDocumentView();
 
     ::vos::ORef < SwAccessibleContext > GetContextImpl(
-                                                const Rectangle& rVisArea,
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
     ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible> GetContext(
-                                                const Rectangle& rVisArea,
                                                  const SwFrm *pFrm,
                                                 sal_Bool bCreate = sal_True );
+
+    ViewShell *GetShell() { return pVSh; }
+
     void RemoveContext( SwAccessibleContext *pAcc );
 
     void DisposeFrm( const SwFrm *pFrm );
 
     void MoveFrm( const SwFrm *pFrm, const SwRect& rOldFrm );
 };
-
-
-extern SwAccessibleMap aAccMap;
 
 #endif
