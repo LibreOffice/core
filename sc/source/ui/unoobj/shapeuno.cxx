@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:44 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -531,7 +531,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getAnchor() throw(uno::Run
                     USHORT nTab = 0;
                     if ( lcl_GetPageNum( pPage, *pModel, nTab ) )
                     {
-                        Point aPos = pObj->GetBoundRect().TopLeft();
+                        Point aPos = pObj->GetCurrentBoundRect().TopLeft();
                         ScRange aRange = pDoc->GetRange( nTab, Rectangle( aPos, aPos ) );
 
                         //  anchor is always the cell
