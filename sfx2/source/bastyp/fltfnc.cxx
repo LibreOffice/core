@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-14 13:22:14 $
+ *  last change: $Author: hr $ $Date: 2001-08-14 14:25:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
 #endif
 
 #ifndef _EXCHANGE_HXX //autogen
-#include <vcl/exchange.hxx>
+#include <sot/exchange.hxx>
 #endif
 #ifndef _CONFIG_HXX //autogen
 #include <vcl/config.hxx>
