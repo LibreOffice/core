@@ -2,9 +2,9 @@
  *
  *  $RCSfile: model.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 10:53:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 11:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include "evaluationcontext.hxx"
 #include "xmlhelper.hxx"
 #include "datatyperepository.hxx"
+#include "NameContainer.hxx"
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -89,7 +90,6 @@
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
@@ -149,9 +149,10 @@ Model::Model() :
     mxBindings( mpBindings ),
     mxSubmissions( mpSubmissions ),
     mxInstances( mpInstances ),
+    mxNamespaces( new NameContainer<OUString>() ),
     mbInitialized( false )
 {
-    setInfo( _getPropertySetInfo() );
+    initializePropertySet();
 
     // initialize bindings collections
     // (not in initializer list to avoid use of incomplete 'this')
@@ -206,7 +207,8 @@ EvaluationContext Model::getEvaluationContext()
     OSL_ENSURE( xElement.is() &&
                 xElement->getNodeType() == NodeType_ELEMENT_NODE,
                 "no element in evaluation context" );
-    return EvaluationContext( xElement, this, 0, 1 );
+
+    return EvaluationContext( xElement, this, mxNamespaces, 0, 1 );
 }
 
 
@@ -234,6 +236,17 @@ rtl::OUString Model::getSchemaRef() const
 void Model::setSchemaRef( const rtl::OUString& rSchemaRef )
 {
     msSchemaRef = rSchemaRef;
+}
+
+Model::XNameContainer_t Model::getNamespaces() const
+{
+    return mxNamespaces;
+}
+
+void Model::setNamespaces( const XNameContainer_t& rNamespaces )
+{
+    if( rNamespaces.is() )
+        mxNamespaces = rNamespaces;
 }
 
 
@@ -341,7 +354,7 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
         MIPs_t::const_iterator aEnd = maMIPs.upper_bound( xCurrent );
         MIPs_t::const_iterator aIter = maMIPs.lower_bound( xCurrent );
         for( ; aIter != aEnd; aIter++ )
-            aMIP.join( aIter->second.second );
+          aMIP.join( aIter->second.second );
 
         // inherit from current node (or set if we are at the start node)
         if( xCurrent == xNode )
@@ -501,6 +514,20 @@ bool Model::isInitialized() const
     return mbInitialized;
 }
 
+bool Model::isValid() const
+{
+    bool bValid = true;
+    sal_Int32 nCount = mpBindings->countItems();
+    for( sal_Int32 i = 0; bValid && i < nCount; i++ )
+    {
+        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        OSL_ENSURE( pBind != NULL, "binding?" );
+        bValid = pBind->isValid();
+    }
+    return bValid;
+}
+
+
 
 //
 // implement xforms::XModel
@@ -561,43 +588,26 @@ void Model::refresh()
 }
 
 
-void SAL_CALL Model::submitWithInteraction( const ::rtl::OUString& sID, const XInteraction_t& _rxHandler )
-    throw( VetoException, WrappedTargetException, RuntimeException )
+void SAL_CALL Model::submitWithInteraction(
+    const rtl::OUString& sID,
+    const XInteractionHandler_t& _rxHandler )
+    throw( VetoException,
+           WrappedTargetException,
+           RuntimeException )
 {
     DBG_INVARIANT();
 
-    bool bResult = false;
-    try
+    if( mpSubmissions->hasItem( sID ) )
     {
-        // TODO: error handling!
-        if( mpSubmissions->hasItem( sID ) )
-        {
-            Submission* pSubmission =
-                Submission::getSubmission( mpSubmissions->getItem( sID ) );
-            OSL_ENSURE( pSubmission != NULL, "no submission?" );
-            OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
-                        "wrong model" );
-            bResult = pSubmission->doSubmit( _rxHandler );
-        }
-    }
-    catch( const RuntimeException& )
-    {
-        // allowed to leave
-        throw;
-    }
-    catch( const VetoException& )
-    {
-        OSL_ENSURE( sal_False, "Model::submit: Hmm. How can a single submission have a veto right?" );
-        // allowed to leave
-        throw;
-    }
-    catch( const Exception& e )
-    {
-        throw WrappedTargetException( ::rtl::OUString::createFromAscii( "The submission failed. Sorry." ), *this, makeAny( e ) );
-    }
+        Submission* pSubmission =
+            Submission::getSubmission( mpSubmissions->getItem( sID ) );
+        OSL_ENSURE( pSubmission != NULL, "no submission?" );
+        OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
+                    "wrong model" );
 
-    if( ! bResult )
-        throw WrappedTargetException( ::rtl::OUString::createFromAscii( "The submission failed. Sorry, no further info is available." ), *this, Any() );
+        // submit. All exceptions are allowed to leave.
+        pSubmission->submitWithInteraction( _rxHandler );
+    }
 }
 
 void Model::submit( const rtl::OUString& sID )
@@ -741,98 +751,23 @@ Model::XSet_t Model::getSubmissions()
 #define HANDLE_InstanceURL 2
 #define HANDLE_ForeignSchema 3
 #define HANDLE_SchemaRef 4
+#define HANDLE_Namespaces 5
 
-#define ENTRY_FLAGS(NAME,TYPE,FLAGS) { #NAME, sizeof(#NAME)-1, HANDLE_##NAME, &getCppuType(static_cast<TYPE*>(NULL)), FLAGS, 0 }
-#define ENTRY(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,0)
-#define ENTRY_RO(NAME,TYPE) ENTRY_FLAGS(NAME,TYPE,com::sun::star::beans::PropertyAttribute::READONLY)
-#define ENTRY_END { NULL, 0, NULL, 0, 0}
+#define REGISTER_PROPERTY( property, type )   \
+    registerProperty( PROPERTY( property, type ), \
+    new DirectPropertyAccessor< Model, type >( this, &Model::set##property, &Model::get##property ) );
 
-comphelper::PropertySetInfo* Model::_getPropertySetInfo()
+#define REGISTER_PROPERTY_API( property, type )   \
+    registerProperty( PROPERTY( property, type ), \
+    new APIPropertyAccessor< Model, type >( this, &Model::set##property, &Model::get##property ) );
+
+void Model::initializePropertySet()
 {
-    static comphelper::PropertySetInfo* pInfo = NULL;
-
-    static comphelper::PropertyMapEntry pEntries[] =
-    {
-        ENTRY( ID, OUString ),
-        ENTRY( ForeignSchema, XDocument_t ),
-        ENTRY( SchemaRef, OUString ),
-        ENTRY_END
-    };
-
-    if( pInfo == NULL )
-    {
-        pInfo = new comphelper::PropertySetInfo( pEntries );
-        pInfo->acquire();
-    }
-
-    return pInfo;
+    REGISTER_PROPERTY_API( ID,            OUString );
+    REGISTER_PROPERTY    ( ForeignSchema, XDocument_t );
+    REGISTER_PROPERTY    ( SchemaRef,     OUString );
+    REGISTER_PROPERTY    ( Namespaces,    XNameContainer_t );
 }
-
-
-
-void Model::_setPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    const Any_t* pValues )
-    throw( UnknownPropertyException,
-           PropertyVetoException,
-           IllegalArgumentException,
-           WrappedTargetException )
-{
-    DBG_INVARIANT();
-
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
-    {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
-        {
-            case HANDLE_ID:
-                setAny( this, &Model::setID, *pValues );
-                break;
-            case HANDLE_ForeignSchema:
-                setAny( this, &Model::setForeignSchema, *pValues );
-                break;
-            case HANDLE_SchemaRef:
-                setAny( this, &Model::setSchemaRef, *pValues );
-                break;
-            default:
-                OSL_ENSURE( false, "Unknown HANDLE" );
-                break;
-        }
-    }
-}
-
-
-void Model::_getPropertyValues(
-    const comphelper::PropertyMapEntry** ppEntries,
-    Any_t* pValues )
-    throw( UnknownPropertyException,
-           WrappedTargetException )
-{
-    DBG_INVARIANT();
-
-    // iterate over all PropertyMapEntry/Any pairs
-    for( ; *ppEntries != NULL; ppEntries++, pValues++ )
-    {
-        // delegate each property to the suitable handler method
-        switch( (*ppEntries)->mnHandle )
-        {
-        case HANDLE_ID:
-            getAny( this, &Model::getID, *pValues );
-            break;
-        case HANDLE_ForeignSchema:
-            getAny( this, &Model::getForeignSchema, *pValues );
-            break;
-        case HANDLE_SchemaRef:
-            getAny( this, &Model::getSchemaRef, *pValues );
-            break;
-        default:
-            OSL_ENSURE( false, "Unknown HANDLE" );
-            break;
-        }
-    }
-}
-
 
 void Model::update()
     throw( RuntimeException )
