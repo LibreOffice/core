@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-25 20:17:41 $
+ *  last change: $Author: nn $ $Date: 2001-07-11 19:22:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ ScFieldEditEngine& ScDocument::GetEditEngine()
 {
     if ( !pEditEngine )
     {
-        pEditEngine = new ScFieldEditEngine( GetEditPool() );
+        pEditEngine = new ScFieldEditEngine( GetEnginePool(), GetEditPool() );
         pEditEngine->SetUpdateMode( FALSE );
         pEditEngine->EnableUndo( FALSE );
         pEditEngine->SetRefMapMode( MAP_100TH_MM );
