@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:31:10 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -625,7 +625,7 @@ void SwDoc::SetDocStat( const SwDocStat& rStat )
  *            void UpdateDocStat( const SwDocStat& rStat );
  *************************************************************************/
 
-void SwDoc::UpdateDocStat( SwDocStat& rStat, USHORT nNumPages )
+void SwDoc::UpdateDocStat( SwDocStat& rStat )
 {
     if( rStat.bModified )
     {
@@ -696,7 +696,7 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat, USHORT nNumPages )
             case ND_SECTIONNODE:    break;
             }
 
-        rStat.nPage     = nNumPages;
+        rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = FALSE;
         SetDocStat( rStat );
         // event. Stat. Felder Updaten

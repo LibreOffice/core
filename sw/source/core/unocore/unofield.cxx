@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2000-11-17 16:24:47 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2934,7 +2934,7 @@ void SwXTextFieldTypes::refresh(void)  throw( uno::RuntimeException )
         throw uno::RuntimeException();
     UnoActionContext aContext(GetDoc());
     SwDocStat aDocStat;
-    GetDoc()->UpdateDocStat(aDocStat, 0);
+    GetDoc()->UpdateDocStat(aDocStat);
     GetDoc()->UpdateFlds(0, sal_False);
 }
 /* -----------------24.02.99 16:19-------------------

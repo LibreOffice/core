@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2000-11-08 11:19:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1191,7 +1191,7 @@ public:
         //  Dokument - Statistics
     inline const SwDocStat  &GetDocStat() const { return *pDocStat; }
     void SetDocStat( const SwDocStat& rStat );
-    void UpdateDocStat( SwDocStat& rStat, sal_uInt16 nNumPages );
+    void UpdateDocStat( SwDocStat& rStat );
 
         //PageDescriptor-Schnittstelle
     sal_uInt16 GetPageDescCnt() const { return aPageDescs.Count(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-06 13:06:39 $
+ *  last change: $Author: jp $ $Date: 2000-11-20 14:46:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,7 +541,7 @@ String SwEditShell::GetCurWord()
 void SwEditShell::UpdateDocStat( SwDocStat& rStat )
 {
     StartAllAction();
-    GetDoc()->UpdateDocStat( rStat, GetNumPages() );
+    GetDoc()->UpdateDocStat( rStat );
     EndAllAction();
 }
 
