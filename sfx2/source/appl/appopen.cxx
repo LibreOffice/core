@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: as $ $Date: 2002-08-26 13:15:18 $
+ *  last change: $Author: cd $ $Date: 2002-09-09 07:36:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,7 +1069,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             aURL.Complete = aFileName;
             Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
                                                     ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
-            xTrans->parseStrict( aURL );
+            xTrans->parseSmart( aURL, rtl::OUString() );
 
             INetProtocol aINetProtocol = INetURLObject( aURL.Complete ).GetProtocol();
             SvtExtendedSecurityOptions aExtendedSecurityOptions;
