@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:43:08 $
+ *  last change: $Author: ama $ $Date: 2001-10-08 14:10:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,13 +266,23 @@ SwFtnContFrm::SwFtnContFrm( SwFrmFmt *pFmt ):
 long lcl_Undersize( const SwFrm* pFrm )
 {
     long nRet = 0;
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( pFrm )
+#endif
     if( pFrm->IsTxtFrm() )
     {
         if( ((SwTxtFrm*)pFrm)->IsUndersized() )
+        {
             // Dieser TxtFrm waere gern ein bisschen groesser
+#ifdef VERTICAL_LAYOUT
+            nRet = ((SwTxtFrm*)pFrm)->GetParHeight() -
+                    (pFrm->Prt().*fnRect->fnGetHeight)();
+#else
             nRet = ((SwTxtFrm*)pFrm)->GetParHeight() - pFrm->Prt().Height();
+#endif
             if( nRet < 0 )
                 nRet = 0;
+        }
     }
     else if( pFrm->IsLayoutFrm() )
     {
@@ -305,14 +315,23 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
     const SwPageFtnInfo &rInf = pPage->GetPageDesc()->GetFtnInfo();
     const SwTwips nBorder = rInf.GetTopDist() + rInf.GetBottomDist() +
                             rInf.GetLineWidth();
-
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
     if ( !bValidPrtArea )
     {
         bValidPrtArea = TRUE;
+#ifdef VERTICAL_LAYOUT
+        (Prt().*fnRect->fnSetTop)( nBorder );
+        (Prt().*fnRect->fnSetWidth)( (Frm().*fnRect->fnGetWidth)() );
+        (Prt().*fnRect->fnSetHeight)((Frm().*fnRect->fnGetHeight)() - nBorder );
+        if( (Prt().*fnRect->fnGetHeight)() < 0 && !pPage->IsFtnPage() )
+#else
         Prt().Top( nBorder );
         Prt().Width ( Frm().Width() );
         Prt().Height( Frm().Height() - nBorder );
         if( Prt().Height() < 0 && !pPage->IsFtnPage() )
+#endif
             bValidSize = FALSE;
     }
 
@@ -335,7 +354,12 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             {   // lcl_Undersize(..) beruecksichtigt (rekursiv) TxtFrms, die gerne
                 // groesser waeren. Diese entstehen insbesondere in spaltigen Rahmen,
                 // wenn diese noch nicht ihre maximale Groesse haben.
+#ifdef VERTICAL_LAYOUT
+                nRemaining += (pFrm->Frm().*fnRect->fnGetHeight)()
+                              + lcl_Undersize( pFrm );
+#else
                 nRemaining += pFrm->Frm().SSize().Height() + lcl_Undersize( pFrm );
+#endif
                 pFrm = pFrm->GetNext();
             }
             //Jetzt noch den Rand addieren
@@ -354,7 +378,11 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                     Prt().Height( nDiff - Prt().Top() );
                 }
             }
+#ifdef VERTICAL_LAYOUT
+            nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
+#else
             nDiff = Frm().SSize().Height() - nRemaining;
+#endif
             if ( nDiff > 0 )
                 Shrink( nDiff, pHeight );
             else if ( nDiff < 0 )
@@ -363,6 +391,15 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                 //Es kann passieren, dass weniger Platz zur Verfuegung steht,
                 //als der bereits der Border benoetigt - die Groesse der
                 //PrtArea wird dann negativ.
+#ifdef VERTICAL_LAYOUT
+                SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+                if( nPrtHeight < 0 )
+                {
+                    const SwTwips nDiff = Max( (Prt().*fnRect->fnGetTop)(),
+                                                -nPrtHeight );
+                    (Prt().*fnRect->fnSubTop)( nDiff );
+                }
+#else
                 if ( Prt().Height() < 0 )
                 {
                     //Ausweg: Der Border wird so verkleinert, das die Hoehe
@@ -372,6 +409,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                     Prt().SSize().Height() += nDiff;
                     Prt().Pos().Y() -= nDiff;
                 }
+#endif
             }
         }
         bValidSize = TRUE;
@@ -403,9 +441,17 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     }
 #endif
 
+#ifdef VERTICAL_LAYOUT
+    const SzPtr pDir = IsVertical() ? ( pDirection==pHeight ? pWidth : pHeight )
+                                    : pDirection;
+    if( Frm().SSize().*pDir > 0 &&
+         nDist > (LONG_MAX - Frm().SSize().*pDir) )
+        nDist = LONG_MAX - Frm().SSize().*pDir;
+#else
     if ( Frm().SSize().*pDirection > 0 &&
          nDist > (LONG_MAX - Frm().SSize().*pDirection) )
         nDist = LONG_MAX - Frm().SSize().*pDirection;
+#endif
 
     SwFtnBossFrm *pBoss = (SwFtnBossFrm*)GetUpper();
     if( IsInSct() )
@@ -427,7 +473,11 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
         if ( pBoss->GetMaxFtnHeight() != LONG_MAX )
         {
             nDist = Min( nDist, pBoss->GetMaxFtnHeight()
+#ifdef VERTICAL_LAYOUT
+                         - Frm().SSize().*pDir );
+#else
                          - Frm().SSize().*pDirection );
+#endif
             if ( nDist <= 0 )
                 return 0L;
         }
@@ -441,11 +491,36 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                 return 0L;
         }
     }
+#ifdef VERTICAL_LAYOUT
+    else if( nDist > GetPrev()->Frm().SSize().*pDir )
+        //aber mehr als der Body kann koennen und wollen wir nun auch wieder
+        //nicht herausruecken.
+        nDist = GetPrev()->Frm().SSize().*pDir;
+
+    long nAvail = 0;
+    if ( GetFmt()->GetDoc()->IsBrowseMode() )
+    {
+        nAvail = GetUpper()->Prt().SSize().*pDir;
+        const SwFrm *pAvail = GetUpper()->Lower();
+        do
+        {   nAvail -= pAvail->Frm().SSize().*pDir;
+            pAvail = pAvail->GetNext();
+        } while ( pAvail );
+        if ( nAvail > nDist )
+            nAvail = nDist;
+    }
+
+    if ( !bTst )
+    {
+        Frm().SSize().*pDir += nDist;
+        if( IsVertical() && !IsReverse() )
+            Frm().Pos().X() -= nDist;
+    }
+#else
     else if ( nDist > GetPrev()->Frm().SSize().*pDirection )
         //aber mehr als der Body kann koennen und wollen wir nun auch wieder
         //nicht herausruecken.
         nDist = GetPrev()->Frm().SSize().*pDirection;
-
     //Nicht mehr verlangen als benoetigt wird.
     long nAvail = 0;
     if ( GetFmt()->GetDoc()->IsBrowseMode() )
@@ -461,14 +536,9 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     }
 
     if ( !bTst )
-    {
         Frm().SSize().*pDirection += nDist;
-#ifdef VERTICAL_LAYOUT
-        if( IsVertical() )
-            Frm().Pos().X() -= nDist;
-#endif
-    }
 
+#endif
     long nGrow = nDist - nAvail,
          nReal = 0;
     if ( nGrow > 0 )
@@ -507,10 +577,12 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
         {
             nDist -= nReal;
             //Den masslosen Wunsch koennen wir leider nur in Grenzen erfuellen.
-            Frm().SSize().*pDirection -= nDist;
 #ifdef VERTICAL_LAYOUT
-            if( IsVertical() )
+            Frm().SSize().*pDir -= nDist;
+            if( IsVertical() && !IsReverse() )
                 Frm().Pos().X() += nDist;
+#else
+            Frm().SSize().*pDirection -= nDist;
 #endif
         }
 
@@ -525,7 +597,6 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
     }
     return nReal;
 }
-
 
 
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, const SzPtr pDirection,
@@ -721,15 +792,25 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
     //In den Baum einhaengen.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
 
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+    if( (Frm().*fnRect->fnGetWidth)()!=(pParent->Prt().*fnRect->fnGetWidth)() )
+#else
     if( Frm().Width() != pParent->Prt().Width() )
+#endif
         _InvalidateSize();
     _InvalidatePos();
     SwPageFrm *pPage = FindPageFrm();
     InvalidatePage( pPage );
     if ( GetNext() )
         GetNext()->_InvalidatePos();
+#ifdef VERTICAL_LAYOUT
+    if( (Frm().*fnRect->fnGetHeight)() )
+        pParent->Grow( (Frm().*fnRect->fnGetHeight)(), pHeight );
+#else
     if ( Frm().Height() )
         pParent->Grow( Frm().Height(), pHeight );
+#endif
 
     //Wenn mein Vorgaenger mein Master ist und/oder wenn mein Nachfolger mein
     //Follow ist so kann ich deren Inhalt uebernehmen und sie vernichten.
@@ -2212,6 +2293,9 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
     //neue Position, bestimmt durch die neue Spalte/Seite, gemoved werden.
     const USHORT nMyNum = FindPageFrm()->GetPhyPageNum();
     const USHORT nMyCol = lcl_ColumnNum( this );
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
 
     for ( USHORT i = 0; i < rFtnArr.Count(); ++i )
     {
@@ -2242,19 +2326,34 @@ void SwFtnBossFrm::_MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc )
                     while( pTmp && ((SwLayoutFrm*)pCnt)->IsAnLower( pTmp ) )
                     {
                         pTmp->Prepare( PREP_MOVEFTN );
+#ifdef VERTICAL_LAYOUT
+                        (pTmp->Frm().*fnRect->fnSetHeight)(0);
+                        (pTmp->Prt().*fnRect->fnSetHeight)(0);
+#else
                         pTmp->Frm().Height(0);
                         pTmp->Prt().Height(0);
+#endif
                         pTmp = pTmp->FindNext();
                     }
                 }
                 else
                     pCnt->Prepare( PREP_MOVEFTN );
+#ifdef VERTICAL_LAYOUT
+                (pCnt->Frm().*fnRect->fnSetHeight)(0);
+                (pCnt->Prt().*fnRect->fnSetHeight)(0);
+#else
                 pCnt->Frm().Height(0);
                 pCnt->Prt().Height(0);
+#endif
                 pCnt = pCnt->GetNext();
             }
+#ifdef VERTICAL_LAYOUT
+            (pFtn->Frm().*fnRect->fnSetHeight)(0);
+            (pFtn->Prt().*fnRect->fnSetHeight)(0);
+#else
             pFtn->Frm().Height(0);
             pFtn->Prt().Height(0);
+#endif
             pFtn->Calc();
             pFtn->GetUpper()->Calc();
 
@@ -2538,13 +2637,23 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
 
     SwFrm *pCont = FindFtnCont();
     const SwTwips nMax = nMaxFtnHeight;//Aktuelle MaxHeight nicht ueberschreiten.
+#ifdef VERTICAL_LAYOUT
+    SWRECTFN( this )
+#endif
     if ( pCont )
     {
         pCont->Calc();
+#ifdef VERTICAL_LAYOUT
+        nMaxFtnHeight = (pCont->Frm().*fnRect->fnCheckLimit)( nDeadLine );
+    }
+    else
+        nMaxFtnHeight = (pBody->Frm().*fnRect->fnCheckLimit)( nDeadLine );
+#else
         nMaxFtnHeight = pCont->Frm().Height() + pCont->Frm().Top() - nDeadLine;
     }
     else
         nMaxFtnHeight = pBody->Frm().Top() + pBody->Frm().Height() - nDeadLine;
+#endif
 
     if ( GetFmt()->GetDoc()->IsBrowseMode() )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, pHeight, TRUE );
