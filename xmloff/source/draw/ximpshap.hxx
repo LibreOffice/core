@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 12:32:48 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 13:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,8 @@ public:
 
 class SdXMLPageShapeContext : public SdXMLShapeContext
 {
+private:
+    sal_Int32   mnPageNumber;
 public:
     TYPEINFO();
 
@@ -384,6 +386,9 @@ public:
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rShapes);
     virtual ~SdXMLPageShapeContext();
     virtual void StartElement(const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList);
+
+    // this is called from the parent group for each unparsed attribute in the attribute list
+    virtual void processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue );
 };
 
 //////////////////////////////////////////////////////////////////////////////

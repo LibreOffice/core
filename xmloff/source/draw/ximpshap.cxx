@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2001-06-01 12:32:47 $
+ *  last change: $Author: cl $ $Date: 2001-06-11 13:46:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <com/sun/star/drawing/XGluePointsSupplier.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_DRAWING_XGLUEPOINTSSUPPLIER_HPP_
-#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XIDENTIFIERACCESS_HPP_
+#include <com/sun/star/container/XIdentifierAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DRAWING_GLUEPOINT2_HPP_
@@ -1711,7 +1711,7 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes)
-:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes )
+:   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes ), mnPageNumber(0)
 {
 }
 
@@ -1719,6 +1719,23 @@ SdXMLPageShapeContext::SdXMLPageShapeContext(
 
 SdXMLPageShapeContext::~SdXMLPageShapeContext()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// this is called from the parent group for each unparsed attribute in the attribute list
+void SdXMLPageShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUString& rLocalName, const ::rtl::OUString& rValue )
+{
+    if( XML_NAMESPACE_DRAW == nPrefix )
+    {
+        if( rLocalName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_page_number)) )
+        {
+            mnPageNumber = rValue.toInt32();
+            return;
+        }
+    }
+
+    SdXMLShapeContext::processAttribute( nPrefix, rLocalName, rValue );
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1764,6 +1781,15 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
         // set pos, size, shear and rotate
         SetTransformation();
+
+        uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
+        if(xPropSet.is())
+        {
+            uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
+            const OUString aPageNumberStr(RTL_CONSTASCII_USTRINGPARAM("PageNumber"));
+            if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
+                xPropSet->setPropertyValue(aPageNumberStr, uno::makeAny( mnPageNumber ));
+        }
 
         SdXMLShapeContext::StartElement(xAttrList);
     }
