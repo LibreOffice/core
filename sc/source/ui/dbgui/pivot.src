@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:05:07 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:36:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Sloupec";
         Text[ hebrew ] = "Spalte";
         Text[ hindi ] = "Column";
+        Text[ slovak ] = "Stĺpec";
     };
     Control WND_COL
     {
@@ -168,6 +169,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Řádek";
         Text[ hebrew ] = "Zeile";
         Text[ hindi ] = "Row";
+        Text[ slovak ] = "Riadok";
     };
     Control WND_ROW
     {
@@ -205,6 +207,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Data";
         Text[ hebrew ] = "Daten";
         Text[ hindi ] = "Data";
+        Text[ slovak ] = "Dáta";
     };
     Control WND_DATA
     {
@@ -247,6 +250,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Oblast výběru";
         Text[ hebrew ] = "Auswahlbereich";
         Text[ hindi ] = "Selection area";
+        Text[ slovak ] = "Oblasť výberu";
     };
     ScrollBar WND_HSCROLL
     {
@@ -288,6 +292,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Přetáhněte pole z pravé části na požadované místo.";
         Text[ hebrew ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewünschten Bereiche.";
         Text[ hindi ] = "क्षेत्रों को दाहिनी ओर से खींचकर इष्ट स्थान में रखो ।";
+        Text[ slovak ] = "Presuňte polia z pravej strany na vybranú pozíciu.";
     };
     FixedLine FL_LAYOUT
     {
@@ -319,6 +324,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Rozložení";
         Text[ hebrew ] = "‮פריסה‬";
         Text[ hindi ] = "अभिन्यास";
+        Text[ slovak ] = "Formát";
     };
     OKButton BTN_OK
     {
@@ -370,6 +376,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Odstranit";
         Text[ hebrew ] = "‮הסרה‬";
         Text[ hindi ] = "Remove";
+        Text[ slovak ] = "Odstrániť";
     };
     PushButton BTN_OPTIONS
     {
@@ -402,6 +409,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Volby...";
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "Options...";
+        Text[ slovak ] = "Voľby...";
     };
     MoreButton BTN_MORE
     {
@@ -455,6 +463,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Výsledek";
         Text[ hebrew ] = "Ergebnis";
         Text[ hindi ] = "नतीजा";
+        Text[ slovak ] = "Výsledok";
     };
     FixedText FT_OUTAREA
     {
@@ -489,6 +498,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Výsledky do";
         Text[ hebrew ] = "~Ausgabe ab";
         Text[ hindi ] = "में नतीजा";
+        Text[ slovak ] = "Výsledky do";
     };
     ListBox LB_OUTAREA
     {
@@ -540,6 +550,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         QuickHelpText[ czech ] = "Zmenšit";
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
+        QuickHelpText[ slovak ] = "Zmenšiť";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -575,6 +586,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Ignorovat prázdné řádky";
         Text[ hebrew ] = "Leerzeilen ~ignorieren";
         Text[ hindi ] = "~खाली पंक्तियों को उपेक्षा करो";
+        Text[ slovak ] = "Ignorovať prázdn~e riadky";
     };
     CheckBox BTN_DETECTCAT
     {
@@ -610,6 +622,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Identifikovat kategorie";
         Text[ hebrew ] = "~Kategorieerkennung";
         Text[ hindi ] = "वर्गों की ~पहचान";
+        Text[ slovak ] = "~Identifikovať kategórie";
     };
     CheckBox BTN_TOTALCOL
     {
@@ -644,6 +657,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Sečíst sloupce";
         Text[ hebrew ] = "Gesamtergebnis-Spalten";
         Text[ hindi ] = "~स्तंभों की कुल संख्या";
+        Text[ slovak ] = "Súčty stĺpcov";
     };
     CheckBox BTN_TOTALROW
     {
@@ -678,6 +692,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Sečíst řádky";
         Text[ hebrew ] = "~Gesamtergebnis-Zeilen";
         Text[ hindi ] = "पंक्तियों की ~कुल संख्या";
+        Text[ slovak ] = "Súč~ty riadkov";
     };
     String PIVOTSTR_SUM
     {
@@ -709,6 +724,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Součet - ";
         Text[ hebrew ] = "‮סכום -‬";
         Text[ hindi ] = "जोड - ";
+        Text[ slovak ] = "Celkom - ";
     };
     String PIVOTSTR_COUNT
     {
@@ -740,6 +756,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Počet - ";
         Text[ hebrew ] = "Anzahl -";
         Text[ hindi ] = "गिनती - ";
+        Text[ slovak ] = "Počet - ";
     };
     String PIVOTSTR_AVG
     {
@@ -771,6 +788,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Střední hodnota - ";
         Text[ hebrew ] = "Mittelwert -";
         Text[ hindi ] = "माध्य - ";
+        Text[ slovak ] = "Stredne - ";
     };
     String PIVOTSTR_MAX
     {
@@ -802,6 +820,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Max - ";
         Text[ hebrew ] = "Max - ";
         Text[ hindi ] = "अधिकतम - ";
+        Text[ slovak ] = "Max - ";
     };
     String PIVOTSTR_MIN
     {
@@ -833,6 +852,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Min - ";
         Text[ hebrew ] = "Min - ";
         Text[ hindi ] = "न्यूनतम - ";
+        Text[ slovak ] = "Min - ";
     };
     String PIVOTSTR_PROD
     {
@@ -864,6 +884,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Produkt - ";
         Text[ hebrew ] = "Produkt -";
         Text[ hindi ] = "गुणन - ";
+        Text[ slovak ] = "Produkt - ";
     };
     String PIVOTSTR_COUNT2
     {
@@ -895,6 +916,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Počet - ";
         Text[ hebrew ] = "Anzahl -";
         Text[ hindi ] = "गिनती - ";
+        Text[ slovak ] = "Počet - ";
     };
     String PIVOTSTR_DEV
     {
@@ -926,6 +948,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "StDev - ";
         Text[ hebrew ] = "StAbw -";
         Text[ hindi ] = "StDev - ";
+        Text[ slovak ] = "ŠtandOch - ";
     };
     String PIVOTSTR_DEV2
     {
@@ -957,6 +980,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "StDevP - ";
         Text[ hebrew ] = "StAbwN -";
         Text[ hindi ] = "StDevP - ";
+        Text[ slovak ] = "ŠtandOchP - ";
     };
     String PIVOTSTR_VAR
     {
@@ -988,6 +1012,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "Var - ";
         Text[ hebrew ] = "Varianz -";
         Text[ hindi ] = "Var - ";
+        Text[ slovak ] = "Var - ";
     };
     String PIVOTSTR_VAR2
     {
@@ -1019,12 +1044,16 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Text[ czech ] = "VarP - ";
         Text[ hebrew ] = "Varianzen -";
         Text[ hindi ] = "VarP - ";
+        Text[ slovak ] = "VarP - ";
     };
     Text[ thai ] = "ข้อมูลนำร่อง";
     Text[ czech ] = "Kontingenční tabulka";
     Text[ hebrew ] = "Datenpilot";
     Text[ hindi ] = "ड़ॉटापैलट्";
+    Text[ slovak ] = "Sprievodca dátami";
 };
+
+
 
 
 
