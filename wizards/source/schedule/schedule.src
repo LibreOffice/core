@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-06 22:21:43 $
+ *  last change: $Author: rt $ $Date: 2001-12-10 22:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,11 +741,11 @@ Text[ swedish ] = "År";
 String dlgBitmapFile
 {
 Text = "germany.wmf";
-Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps";
+Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 Text[ English ] = "britain.bmp";
 Text[ English_us ] = "usa.bmp";
 Text[ french ] = "france.bmp";
-Text[ italian ] = "ital.bmp";
+Text[ italian ] = "italia.bmp";
 Text[ spanish ] = "spain.bmp";
 Text[ portuguese ] = "portugal.bmp";
 Text[ dutch ] = "nedland.bmp";
@@ -758,12 +758,12 @@ Text[ swedish ] = "sweden.bmp";
     Text[ japanese ] = "japan.bmp";
     Text[ korean ] = "korea.bmp";
     Text[ chinese_simplified ] = "china.bmp";
-    Text[ chinese_traditional ] = "usa.bmp";
+    Text[ chinese_traditional ] = "taiwan.bmp";
     Text[ arabic ] = "egypt.bmp";
     Text[ turkish ] = "turkiye.bmp";
     Text[ catalan ] = "spain.bmp";
     Text[ finnish ] = "usa.bmp";
-    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps";
+    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 
 };
 
@@ -1364,5 +1364,6 @@ Text[ English_us ] = "Progress:";
     Text[ catalan ] = "Progreso:";
     Text[ finnish ] = "Tilanne:";
 };
+
 
 
