@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:55:28 $
+ *  last change: $Author: rt $ $Date: 2001-03-01 20:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ chinese_simplified ] = "³£Ήζ±ν΄ο";
         Text[ russian ] = "Πεγσλÿπνξε βϋπΰζενθε";
         Text[ polish ] = "WyraΏenie regularne";
-        Text[ japanese ] = "ά²ΩΔή¶°Δή•¶";
+        Text[ japanese ] = "³‹K•\\»(~X)";
         Text[ chinese_traditional ] = "±`³WªνΉF";
         Text[ arabic ] = "ΚΪΘνΡ ΗΪΚνΗΟν";
         Text[ greek ] = "Κανονική έκφραση";
@@ -641,7 +641,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Text[ russian ] = "Ηΰοθρό :";
         Text[ polish ] = "Rekord :";
         Text[ japanese ] = "ΪΊ°Δή:";
-        Text[ chinese_traditional ] = "Έκ®Ζ¶µ¥Ψ΅G";
+        Text[ chinese_traditional ] = "Έκ®Ζ±ψ¥Ψ΅G";
         Text[ arabic ] = "ΣΜα :";
         Text[ greek ] = "Εγγραφή :";
         Text[ korean ] = "·ΉΔΪµε:";
@@ -783,7 +783,7 @@ String RID_STR_RECORDSEARCH_METHODS
     Text[ polish ] = "dowolnie w polu; na poczΉtku pola; na koρcu pola;ca³e pole";
     Text[ japanese ] = "Μ¨°ΩΔή“ΰ‚Μ‚ ‚ικ;Μ¨°ΩΔή‚Μ‰‚ί;Μ¨°ΩΔή‚ΜI‚θ;Μ¨°ΩΔή‘S‘Μ";
     Text[ chinese_traditional ] = "¥τ·N¤@­ΣΔζ¦μ΅Q¦bΔζ¦μ°_©l¦μΈm΅QΎγ­ΣΔζ¦μ";
-    Text[ arabic ] = "έν Γν γίΗδ έν ΗαΝήαΊ έν ΘΟΗνΚε΅ έν δεΗνΚεΊ Γζ ΗαΝήα ίαε";
+    Text[ arabic ] = "έν Γν γίΗδ έν ΗαΝήαΊέν ΘΟΗνΚε;έν δεΗνΚεΊΗαΝήα ίαε";
     Text[ greek ] = "τυχαία;στην αρχή του πεδίου;στο τέλος του πεδίου;ολόκληρο το πεδίο";
     Text[ korean ] = "ΗΚµεΏ΅Ό­ ΐΣΐΗ·Ξ;ΗΚµε ½ΓΐΫΏ΅;ΗΚµε ³΅Ώ΅;ΐόΓΌ ΗΚµε";
     Text[ turkish ] = "Alanda rasgele;Alan baώύnda;Alan sonunda;Tόm alanda";
@@ -833,7 +833,7 @@ ErrorBox RID_SVXERR_SEARCH_NORECORD
     Message[ russian ] = "Ηΰοθρθ, ρξξςβεςρςβσώωθε Βΰψθμ δΰννϋμ, νε ξανΰπσζενϋ !";
     Message[ polish ] = "Nie znaleziono Ώadnych rekordσw odpowiadajΉcych wpisanym danym!";
     Message[ japanese ] = "“ό—Ν€–Ϊ‚ΙY“–‚·‚ιΪΊ°Δή‚ª©‚Β‚©‚θ‚ά‚Ή‚ρ!";
-    Message[ chinese_traditional ] = "¨S¦³§δ¨μ²Ε¦X±z«ό©wªΊΈκ®Ζ¶µ¥Ψ΅T";
+    Message[ chinese_traditional ] = "¨S¦³§δ¨μ²Ε¦X±z«ό©wªΊΈκ®Ζ±ψ¥Ψ΅T";
     Message[ arabic ] = "ΚΪΠΡ ΗαΪΛζΡ Ϊαμ ΣΜαΗΚ ΘνΗδΗΚ ΚΚγΗΤμ γΪ ΘνΗδΗΚί !";
     Message[ greek ] = "Δεν βρέθηκαν εγγραφές, οι οποίες να εκπληρώνουν τα δεδομένα σας!";
     Message[ korean ] = "»ηΏλΐΪΐΗ µ¥ΐΜΕΝΏ΅ ΈΒ΄Β ·ΉΔΪµεΈ¦ Γ£Αφ ΈψΗί½ΐ΄Ο΄Ω!";
