@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 07:25:22 $
+ *  last change: $Author: vg $ $Date: 2001-05-17 08:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@ InfoBox MSG_ERR_TABLE_MERGE
     MESSAGE [ English ] = "Selected table cells are too complex to merge." ;
     MESSAGE [ norwegian ] = "Valgte tabellceller er for komplekse til å flette" ;
     MESSAGE [ italian ] = "Le celle della tabella selezionata sono troppo complesse per l'unione" ;
-    MESSAGE [ portuguese_brazilian ] = "Células selecionadas da tabela sao muito complexas para a intercalação." ;
+    MESSAGE [ portuguese_brazilian ] = "C?lulas selecionadas da tabela sao muito complexas para a intercala??o." ;
     MESSAGE [ portuguese ] = "As células seleccionadas da tabela são muito complexas para a intercalação." ;
     MESSAGE [ finnish ] = "Valitut taulukon solut ovat liian monimutkaisia yhdistettäväksi." ;
     MESSAGE [ danish ] = "De markerede tabelceller er for komplekse til fletning." ;
