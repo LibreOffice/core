@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:36:32 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:54:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #endif
 
 class ScPreviewShell;
+class SvxAccessibleTextHelper;
 
 class ScAccessiblePreviewCell : public ScAccessibleCellBase
 {
@@ -124,6 +125,8 @@ protected:
 private:
     ScPreviewShell* mpViewShell;
 
+    SvxAccessibleTextHelper* mpTextHelper;
+
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
@@ -136,6 +139,9 @@ private:
     sal_Bool IsSelected(
         const com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessibleStateSet>& rxParentStates);
+
+    void CreateTextHelper();
+
 };
 
 #endif

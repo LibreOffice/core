@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-01 08:38:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,30 @@
  *
  ************************************************************************/
 
+#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
+#endif
+#include <svx/eeitem.hxx>
+#define ITEMID_FIELD EE_FEATURE_FIELD
+#ifndef _SV_GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _SC_ACCESSIBLETEXT_HXX
+#include "AccessibleText.hxx"
+#endif
+#ifndef SC_EDITSRC_HXX
+#include "editsrc.hxx"
+#endif
 #include "AccessiblePreviewCell.hxx"
 #include "prevwsh.hxx"
 #include "unoguard.hxx"
 #include "prevloc.hxx"
 #include "document.hxx"
 
+#ifndef _SVX_UNOEDACC_HXX_
+#include <svx/unoedacc.hxx>
+#endif
 #include <unotools/accessiblestatesethelper.hxx>
 #include <svx/brshitem.hxx>
 #include <vcl/window.hxx>
@@ -99,9 +116,11 @@ ScAccessiblePreviewCell::~ScAccessiblePreviewCell()
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAt( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
 {
-    uno::Reference< XAccessible > xAccessible = NULL;
-    // should be implemented in the Accessible Text helper
-    return xAccessible;
+     ScUnoGuard aGuard;
+    if(!mpTextHelper)
+        CreateTextHelper();
+
+    return mpTextHelper->GetAt(rPoint);
 }
 
 void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
@@ -119,16 +138,19 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
 
 sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
-    sal_Int32 nCount(0);
-    // should call the Helper class to get the child count
-    return nCount;
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int32 nIndex)
                             throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
-    DBG_ERROR("not implemented yet");
-    return uno::Reference< XAccessible >();
+    ScUnoGuard aGuard;
+    if (!mpTextHelper)
+        CreateTextHelper();
+    return mpTextHelper->GetChild(nIndex);
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
@@ -188,7 +210,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     if (aId.getLength() == 0)
     {
         aId.realloc (16);
-        rtl_createUuid ((sal_uInt8 *)aId.getArray(), 0, sal_True);
+        rtl_createUuid (reinterpret_cast<sal_uInt8 *>(aId.getArray()), 0, sal_True);
     }
     return aId;
 }
@@ -222,7 +244,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBox() throw (uno::RuntimeException
 sal_Bool ScAccessiblePreviewCell::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
-    return (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
+    return ScAccessibleContextBase::IsDefunc() || (mpDoc == NULL) || (mpViewShell == NULL) || !getAccessibleParent().is() ||
          (rxParentStates.is() && rxParentStates->contains(AccessibleStateType::DEFUNC));
 }
 
@@ -252,5 +274,17 @@ sal_Bool ScAccessiblePreviewCell::IsOpaque(
 sal_Bool ScAccessiblePreviewCell::IsSelected(const uno::Reference<XAccessibleStateSet>& rxParentStates)
 {
     return sal_False;
+}
+
+void ScAccessiblePreviewCell::CreateTextHelper()
+{
+    if (!mpTextHelper)
+    {
+        ::std::auto_ptr < ScAccessibleTextData > pAccessiblePreviewCellTextData
+            (new ScAccessiblePreviewCellTextData(mpViewShell, maCellAddress));
+        ::std::auto_ptr< SvxEditSource > pEditSource (new ScAccessibilityEditSource(pAccessiblePreviewCellTextData));
+
+        mpTextHelper = new SvxAccessibleTextHelper(this, pEditSource );
+    }
 }
 
