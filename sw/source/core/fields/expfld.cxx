@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 12:06:16 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,14 +67,11 @@
 
 #include <float.h>
 
-#ifndef _INTN_HXX //autogen
-#include <tools/intn.hxx>
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
 #endif
-#ifndef _TOOLS_RESID_HXX //autogen
+#ifndef _TOOLS_RESID_HXX
 #include <tools/resid.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
 #endif
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
@@ -780,10 +777,12 @@ BOOL SwSeqFldList::InsertSort( _SeqFldLstElem* pNew )
 BOOL SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, USHORT* pP )
 {
     register USHORT nO = Count(), nM, nU = 0;
-    const International& rInt = Application::GetAppInternational();
-    const CharClass& rCC = GetAppCharClass();
     if( nO > 0 )
     {
+        CollatorWrapper & rCaseColl = ::GetAppCaseCollator(),
+                        & rColl = ::GetAppCollator();
+        const CharClass& rCC = GetAppCharClass();
+
         //#59900# Die Sortierung soll die Nummer korrekt einordnen
         //also "10" nach "9" und nicht "10" nach "1"
         const String& rTmp2 = rNew.sDlgEntry;
@@ -802,28 +801,25 @@ BOOL SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, USHORT* pP )
             const String& rTmp1 = (*((_SeqFldLstElem**)pData + nM))->sDlgEntry;
             xub_StrLen nFndPos1 = 0;
             String sNum1( rTmp1.GetToken( 0, ' ', nFndPos1 ));
-            StringCompare eCmp;
+            sal_Int32 nCmp;
 
             if( bIsNum2IsNumeric && rCC.isNumeric( sNum1 ) )
             {
                 sal_Int32 nNum1 = sNum1.ToInt32();
-                eCmp = nNum2 == nNum1 ? COMPARE_EQUAL
-                                      : nNum2 >= nNum1
-                                            ? COMPARE_GREATER
-                                            : COMPARE_LESS;
-                if( COMPARE_EQUAL == eCmp )
-                    eCmp = rInt.Compare( rTmp2.Copy( nFndPos2 ),
-                                         rTmp1.Copy( nFndPos1 ));
+                nCmp = nNum2 - nNum1;
+                if( 0 == nCmp )
+                    nCmp = rCaseColl.compareString( rTmp2.Copy( nFndPos2 ),
+                                                       rTmp1.Copy( nFndPos1 ));
             }
             else
-                eCmp = rInt.Compare( rTmp2, rTmp1, INTN_COMPARE_IGNORECASE );
+                nCmp = rColl.compareString( rTmp2, rTmp1 );
 
-            if( COMPARE_EQUAL == eCmp )
+            if( 0 == nCmp )
             {
                 if( pP ) *pP = nM;
                 return TRUE;
             }
-            else if( COMPARE_GREATER == eCmp )
+            else if( 0 < nCmp )
                 nU = nM + 1;
             else if( nM == 0 )
                 break;

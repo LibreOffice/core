@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-03-12 06:42:16 $
+ *  last change: $Author: jp $ $Date: 2001-04-27 16:57:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,21 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
-#ifndef _ZFORLIST_HXX //autogen
+#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
+#ifndef _SVX_PAGEITEM_HXX
+#include <svx/pageitem.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
+#include <com/sun/star/sdbc/DataType.hpp>
+#endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
-#endif
-#ifndef _SVX_PAGEITEM_HXX //autogen
-#include <svx/pageitem.hxx>
 #endif
 #ifndef _FMTFLD_HXX
 #include <fmtfld.hxx>
@@ -85,22 +92,40 @@
 #ifndef _TXTFLD_HXX
 #include <txtfld.hxx>
 #endif
-
-#include "doc.hxx"
-#include "docary.hxx"
-#include "frame.hxx"
-#include "fldbas.hxx"
-#include "pam.hxx"
-#include "ndtxt.hxx"
-#include "dbfld.hxx"
-#include "dbmgr.hxx"
-#include "docfld.hxx"
-#include "expfld.hxx"
-#include "txtatr.hxx"
-
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
+#ifndef _DOCARY_HXX
+#include <docary.hxx>
+#endif
+#ifndef _FRAME_HXX
+#include <frame.hxx>
+#endif
+#ifndef _FLDBAS_HXX
+#include <fldbas.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _DBFLD_HXX
+#include <dbfld.hxx>
+#endif
+#ifndef _DBMGR_HXX
+#include <dbmgr.hxx>
+#endif
+#ifndef _DOCFLD_HXX
+#include <docfld.hxx>
+#endif
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
+#ifndef _TXTATR_HXX
+#include <txtatr.hxx>
+#endif
+
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
@@ -270,11 +295,9 @@ void SwDBField::InitContent(const String& rExpansion)
         if (rExpansion.GetChar(0) == '<' &&
             rExpansion.GetChar(rExpansion.Len() - 1) == '>')
         {
-            String sColumn(rExpansion.Copy(1, rExpansion.Len() - 2));
-            const International rInt = Application::GetAppInternational();
-            if( rInt.CompareEqual(  sColumn,
-                                    ((SwDBFieldType *)GetTyp())->GetColumnName(),
-                                    INTN_COMPARE_IGNORECASE))
+            String sColumn( rExpansion.Copy( 1, rExpansion.Len() - 2 ) );
+            if( 0 == ::GetAppCollator().compareString( sColumn,
+                            ((SwDBFieldType *)GetTyp())->GetColumnName() ))
             {
                 InitContent();
                 return;
@@ -296,9 +319,7 @@ String SwDBField::GetOldContent()
     InitContent();
     bInitialized = bOldInit;
 
-    const International rInt = Application::GetAppInternational();
-
-    if( rInt.CompareEqual(  sNewExpand, Expand(), INTN_COMPARE_IGNORECASE))
+    if( 0 == GetAppCollator().compareString( sNewExpand, Expand() ))
     {
         sNewExpand = '<';
         sNewExpand += ((SwDBFieldType *)GetTyp())->GetColumnName();
