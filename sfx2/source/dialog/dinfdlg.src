@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:25:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:21:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,7 +298,7 @@ TabPage TP_DOCINFODOC
         Text [ french ] = "~En lecture-seule" ;
         Text [ dutch ] = "~Schrijfbeveiligd" ;
         Text [ portuguese ] = "~Só leitura" ;
-        Text[ chinese_simplified ] = "·À¸²Ğ´(~R)";
+        Text[ chinese_simplified ] = "·À¸ÄĞ´(~R)";
         Text[ russian ] = "~Òîëüêî äëÿ ÷òåíèÿ";
         Text[ polish ] = "Tylko do odczytu";
         Text[ japanese ] = "“Ç‚İæ‚èê—p(~R)";
@@ -592,7 +592,7 @@ TabPage TP_DOCINFODOC
         Text[ portuguese_brazilian ] = "~Benutzerdaten verwenden";
         Text[ danish ] = "Anvend brugerdata";
         Text[ english_us ] = "~Apply user data";
-        Text[ chinese_simplified ] = "Ì×ÓÃÊ¹ÓÃÕßÊı¾İ(~A)";
+        Text[ chinese_simplified ] = "²ÉÓÃÊ¹ÓÃÕßÊı¾İ(~A)";
         Text[ russian ] = "Ïğèìåíèòü äàííûå ïîëüçîâàòåëÿ";
         Text[ polish ] = "Zast~osuj dane u¿ytkownika";
         Text[ japanese ] = "Õ°»Ş° ÃŞ°À‚ğg—p‚·‚é(~A)";
@@ -1055,6 +1055,7 @@ TabDialog SID_DOCINFO
         };
     };
 };
+
 
 
 
