@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationbasenode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:01:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:49:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,9 +229,13 @@ namespace presentation
                     // NOTE: For shapes with ParagraphTarget, we ignore
                     // the SubItem property. We implicitely assume that it
                     // is set to ONLY_TEXT.
-                    OSL_ENSURE( mxAnimateNode->getSubItem() == ::com::sun::star::presentation::ShapeAnimationSubType::ONLY_TEXT,
-                                "AnimationBaseNode::AnimationBaseNode(): ParagraphTarget given, but subitem!=AS_TEXT? "
-                                "Make up your mind, I'll ignore the subitem." );
+                    OSL_ENSURE(
+                        mxAnimateNode->getSubItem() ==
+                        ::com::sun::star::presentation::ShapeAnimationSubType::ONLY_TEXT ||
+                        mxAnimateNode->getSubItem() ==
+                        ::com::sun::star::presentation::ShapeAnimationSubType::AS_WHOLE,
+                        "AnimationBaseNode::AnimationBaseNode(): ParagraphTarget given, but subitem not AS_TEXT or AS_WHOLE? "
+                        "Make up your mind, I'll ignore the subitem." );
 
                     // okay, found a ParagraphTarget with a valid XShape. Does the shape
                     // provide the given paragraph?
@@ -414,8 +418,8 @@ namespace presentation
 
             if( mpActivity.get() && mpActivity->isActive() )
             {
-                // end activity, if still running
-                mpActivity->end();
+                // kill activity, if still running
+                mpActivity->dispose();
             }
 
             // destroy activity, we need to re-generate it
