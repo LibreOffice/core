@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: jsc $ $Date: 2002-11-29 13:12:47 $
+#   last change: $Author: kz $ $Date: 2003-09-11 10:29:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,11 @@ IDLFILES=\
         PackageFolder.idl\
         PackageFolderEnumeration.idl\
         PackageStream.idl\
+        EncryptionNotAllowedException.idl\
+        NoEncryptionException.idl\
+        WrongPasswordException.idl\
+        NoRawFormatException.idl\
+        XDataSinkEncrSupport.idl\
 
 # ------------------------------------------------------------------
 
