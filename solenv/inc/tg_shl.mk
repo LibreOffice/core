@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2000-10-30 13:14:55 $
+#   last change: $Author: svesik $ $Date: 2000-11-08 18:55:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -417,6 +417,9 @@ $(SHL$(TNR)TARGETN) : \
         $(CC) -c -dynamic -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .IF "$(OS)"=="LINUX"
+        $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
+.ENDIF
+.IF "$(OS)"=="NETBSD"
         $(CC) -c -fPIC -o $(SLO)$/_version.o -DUNX $(ENVCDEFS) -I$(INCCOM) $(SOLARENV)$/src$/version.cxx
 .ENDIF
 .ENDIF
