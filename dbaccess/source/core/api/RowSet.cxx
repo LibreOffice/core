@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-30 16:38:57 $
+ *  last change: $Author: oj $ $Date: 2000-12-01 11:37:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1948,7 +1948,9 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
         {
             m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection);
             _rxRetTables = m_pTables;
-            m_pTables->construct(Sequence< ::rtl::OUString>(),Sequence< ::rtl::OUString>());
+            Sequence< ::rtl::OUString> aTableFilter(1);
+            aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
+            m_pTables->construct(aTableFilter,Sequence< ::rtl::OUString>());
         }
         switch (m_nCommandType)
         {
