@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnPeer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:57:26 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:20:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,8 +132,9 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 
             m_pActFieldDescr = new OFieldDescription(_xColumn,sal_True);
             // search for type
+            ::rtl::OUString sCreateParam(RTL_CONSTASCII_USTRINGPARAM("x"));
             sal_Bool bForce;
-            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,nPrecision,nScale,bAutoIncrement,bForce);
+            TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
             if ( !pTypeInfo.get() )
                 pTypeInfo = pFieldControl->getDefaultTyp();
 
