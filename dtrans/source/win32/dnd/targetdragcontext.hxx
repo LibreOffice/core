@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,25 +85,18 @@ class TargetDragContext: public WeakImplHelper1<XDropTargetDragContext>
     // some calls to the functions of XDropTargetDragContext are delegated
     // to non-interface functions of m_pDropTarget
     DropTarget* m_pDropTarget;
-    sal_uInt32 m_id;
 
     TargetDragContext();
     TargetDragContext( const TargetDragContext&);
     TargetDragContext &operator= ( const TargetDragContext&);
 public:
-    TargetDragContext( DropTarget* pTarget, sal_uInt32 id);
+    TargetDragContext( DropTarget* pTarget);
     ~TargetDragContext();
-
 
     virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation )
         throw( RuntimeException);
     virtual void SAL_CALL rejectDrag(  )
         throw( RuntimeException);
-/*    virtual Sequence< DataFlavor > SAL_CALL getCurrentDataFlavors(  )
-        throw(RuntimeException);
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const DataFlavor& df )
-        throw(RuntimeException);
-*/
 };
 
 #endif

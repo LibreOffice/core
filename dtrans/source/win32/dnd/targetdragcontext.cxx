@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdragcontext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 #include "targetdragcontext.hxx"
 
 
-TargetDragContext::TargetDragContext( DropTarget* p, sal_uInt32 id): m_id( id)
+TargetDragContext::TargetDragContext( DropTarget* p)
 {
     m_pDropTarget= p;
     p->acquire();
@@ -77,25 +77,12 @@ TargetDragContext::~TargetDragContext()
 void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )
     throw( RuntimeException)
 {
-    m_pDropTarget->_acceptDrag( dragOperation, m_id);
+    m_pDropTarget->_acceptDrag( dragOperation, static_cast<XDropTargetDragContext*>( this) );
 
 }
 void SAL_CALL TargetDragContext::rejectDrag( )
     throw( RuntimeException)
 {
-    m_pDropTarget->_rejectDrag( m_id);
+    m_pDropTarget->_rejectDrag( static_cast<XDropTargetDragContext*>( this) );
 }
 
-/*
-Sequence< DataFlavor > SAL_CALL TargetDragContext::getCurrentDataFlavors(  )
-    throw(RuntimeException)
-{
-    return m_pDropTarget->_getCurrentDataFlavors(  m_id);
-}
-
-sal_Bool SAL_CALL TargetDragContext::isDataFlavorSupported( const DataFlavor& df )
-    throw(RuntimeException)
-{
-    return m_pDropTarget->_isDataFlavorSupported( df, m_id);
-}
-*/

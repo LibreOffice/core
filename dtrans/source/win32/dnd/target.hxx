@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:35:23 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,9 @@ public:
 
 // XDropTargetDragContext delegated from DragContext
     void _acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context);
-    void _rejectDrag( sal_uInt32);
-    Sequence<DataFlavor> _getCurrentDataFlavors( const Reference<XDropTargetDragContext>& context);
-    sal_Bool _isDataFlavorSupported( const DataFlavor& df, const Reference<XDropTargetDragContext>& context);
+    void _rejectDrag( const Reference<XDropTargetDragContext>& context);
+//  Sequence<DataFlavor> _getCurrentDataFlavors( const Reference<XDropTargetDragContext>& context);
+//  sal_Bool _isDataFlavorSupported( const DataFlavor& df, const Reference<XDropTargetDragContext>& context);
 
 
 protected:

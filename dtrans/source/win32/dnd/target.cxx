@@ -2,9 +2,9 @@
  *
  *  $RCSfile: target.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:35:23 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@
 #include "targetdropcontext.hxx"
 #include "targetdragcontext.hxx"
 #include "DataObjectWrapper.hxx"
-//#include "windroptarget.hxx"
 #include <rtl/ustring.h>
 using namespace rtl;
 using namespace cppu;
@@ -87,8 +86,7 @@ DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
                         WeakComponentImplHelper2<XInitialization,XDropTarget>(m_mutex),
                         m_bDropTargetRegistered(sal_False),
                         m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK),
-                        m_nListenerDropAction( ACTION_NONE),
-                        m_currentEventId(0)
+                        m_nListenerDropAction( ACTION_NONE)
 {
 }
 
@@ -217,7 +215,6 @@ ULONG STDMETHODCALLTYPE DropTarget::Release( void)
     return (ULONG) m_refCount;
 }
 
-// Per default COPY is allowed as long as as listener does not object.
 STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
                                     DWORD grfKeyState,
                                     POINTL pt,
@@ -226,16 +223,12 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
 #if DBG_CONSOLE_OUT
     printf("\nDropTarget::DragEnter state: %x effect %d", grfKeyState, *pdwEffect);
 #endif
-
-
-    // Dont consider the allowed source action at this point. Because if pdwEffect is COPY
-    // and grfKeyState is only MK_LBUTTON ( default is ACTION_MOVE ) than we  give the listener the chance to change
-    // the action to COPY or something. Otherwise the source would display a NONE from the beginning.
+    // Intersection of pdwEffect and the allowed actions ( setDefaultActions)
     m_nListenerDropAction= getFilteredActions( grfKeyState);
     m_userAction= m_nListenerDropAction;
 
-    m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext( static_cast<DropTarget*>(this),
-                                                     m_currentEventId ));
+    m_currentDragContext= static_cast<XDropTargetDragContext*>( new TargetDragContext(
+        static_cast<DropTarget*>(this) ) );
     m_currentData= static_cast<XTransferable*>( new DNDTransferable( pDataObj) );
 
     if( m_nListenerDropAction != ACTION_NONE)
@@ -251,9 +244,6 @@ STDMETHODIMP DropTarget::DragEnter( IDataObject __RPC_FAR *pDataObj,
         e.Location.Y= point.y;
         e.SourceActions= dndOleDropEffectsToActions( *pdwEffect);
 
-
-        // The Event contains a XDropTargetDragContext Implementation. A listener is only allowd to call
-        // on it in the same thread and in event handler where it receives that event.
         fire_dragEnter( e);
         // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
         // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
@@ -305,8 +295,7 @@ STDMETHODIMP DropTarget::DragOver( DWORD grfKeyState,
             fire_dropActionChanged( e);
         m_nListenerDropAction= tmpAction;
 
-        // The Event contains a XDropTargetDragContext Implementation. A listener is only allowd to call
-        // on it in the same thread and in event handler where it receives that envent.
+        // The Event contains a XDropTargetDragContext implementation.
         fire_dragOver( e);
         // Check if the action derived from grfKeyState (m_nListenerDropAction) or the action set
         // by the listener (m_nListenerDropAction) is allowed by the source. Only a allowed action is set
@@ -372,7 +361,6 @@ STDMETHODIMP DropTarget::Drop( IDataObject  *pDataObj,
         fire_drop( e);
 
         //if fire_drop returns than a listener might have modified m_nListenerDropAction
-        // XDropTargetDropContext::dropComplete or the other functions
         if( m_bDropComplete == sal_True)
         {
             sal_Int8 allowedActions= dndOleDropEffectsToActions( *pdwEffect);
@@ -472,87 +460,53 @@ void DropTarget::fire_dropActionChanged( const DropTargetDragEvent& dtde )
 // to throw an InvalidDNDOperationException, meaning that a Drag is not currently performed.
 // return sal_False results in throwing a InvalidDNDOperationException in the caller.
 
-void DropTarget::_acceptDrop(sal_Int8 dropOperation, sal_uInt32 id)
+void DropTarget::_acceptDrop(sal_Int8 dropOperation, const Reference<XDropTargetDropContext>& context)
 {
-    if( m_currentEventId == id)
+    if( context == m_currentDropContext)
     {
         m_nListenerDropAction= dropOperation;
     }
-//  else
-//      throw InvalidDNDOperationException();
 }
 
-void DropTarget::_rejectDrop(sal_uInt32 id)
+void DropTarget::_rejectDrop( const Reference<XDropTargetDropContext>& context)
 {
-    if( m_currentEventId == id)
+    if( context == m_currentDropContext)
     {
         m_nListenerDropAction= ACTION_NONE;
     }
-//  else
-//      throw InvalidDNDOperationException();
 }
 
-void DropTarget::_dropComplete(sal_Bool success, sal_uInt32 id)
+void DropTarget::_dropComplete(sal_Bool success, const Reference<XDropTargetDropContext>& context)
 {
-    if( m_currentEventId == id)
+    if(context == m_currentDropContext)
     {
         m_bDropComplete= success;
     }
-//  else
-//      throw InvalidDNDOperationException();
 }
 // --------------------------------------------------------------------------------------
 // DropTarget fires events to XDropTargetListeners. The event object can contains an
-// XDropTargetDagContext implementaion. When the listener calls on that interface
+// XDropTargetDragContext implementaion. When the listener calls on that interface
 // then the calls are delegated from DragContext (XDropTargetDragContext) to these
 // functions.
 // Only one listener which visible area is affected is allowed to call on
 // XDropTargetDragContext
-void DropTarget::_acceptDrag( sal_Int8 dragOperation, sal_uInt32 id)
+void DropTarget::_acceptDrag( sal_Int8 dragOperation, const Reference<XDropTargetDragContext>& context)
 {
-    if( m_currentEventId == id)
+    if( context == m_currentDragContext)
     {
         m_nListenerDropAction= dragOperation;
     }
-//  else
-//      throw InvalidDNDOperationException();
 }
 
-void DropTarget::_rejectDrag( sal_uInt32 id)
+void DropTarget::_rejectDrag( const Reference<XDropTargetDragContext>& context)
 {
-    if( m_currentEventId == id)
+    if(context == m_currentDragContext)
     {
         m_nListenerDropAction= ACTION_NONE;
     }
-//  else
-//      throw InvalidDNDOperationException();
 }
 
-Sequence<DataFlavor> DropTarget::_getCurrentDataFlavors( sal_uInt32 id)
-{
-    Sequence<DataFlavor> retVal;
-    if( m_currentEventId == id)
-    {
-        if( m_currentData.is())
-            retVal= m_currentData->getTransferDataFlavors();
-    }
-//  else
-//      throw InvalidDNDOperationException();
-    return retVal;
-}
 
-sal_Bool DropTarget::_isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id)
-{
-    sal_Bool ret= sal_False;
-    if( m_currentEventId == id)
-    {
-        if( m_currentData.is())
-            ret= m_currentData->isDataFlavorSupported( df);
-    }
-//  else
-//      throw InvalidDNDOperationException();
-    return ret;
-}
 //--------------------------------------------------------------------------------------
 
 
@@ -565,7 +519,6 @@ sal_Bool DropTarget::_isDataFlavorSupported( const DataFlavor& df, sal_uInt32 id
 // params: grfKeyState - the modifier keys and mouse buttons currently pressed
 inline sal_Int8 DropTarget::getFilteredActions( DWORD grfKeyState)
 {
-//  sal_Int8 actions= getDropAction( grfKeyState);
     sal_Int8 actions= dndOleKeysToAction( grfKeyState);
     return actions &  m_nDefaultActions;
 }

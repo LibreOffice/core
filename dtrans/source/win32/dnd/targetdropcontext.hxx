@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targetdropcontext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-02-12 11:11:59 $
+ *  last change: $Author: jl $ $Date: 2001-02-12 12:35:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,13 +81,12 @@ class TargetDropContext: public WeakImplHelper1<XDropTargetDropContext>
     // calls to the functions of XDropTargetDropContext are delegated
     // to non-interface functions of m_pDropTarget
     DropTarget* m_pDropTarget;
-    sal_uInt32 m_id;
 
     TargetDropContext();
     TargetDropContext( const TargetDropContext&);
     TargetDropContext &operator= ( const TargetDropContext&);
 public:
-    TargetDropContext( DropTarget* pTarget, sal_uInt32 id);
+    TargetDropContext( DropTarget* pTarget);
     ~TargetDropContext();
 
 
