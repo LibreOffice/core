@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-19 11:54:16 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,6 +351,7 @@ public:
     void                    SetStatusBar_Impl(const ResId&, SfxShell *pShell, SfxBindings& );
     void                    UpdateStatusBar_Impl();
     SfxStatusBarManager*    GetStatusBarManager_Impl();
+    SfxStatusBarManager*    MakeStatusBarManager_Impl( BOOL bCreate );
 };
 
 class SfxPIWorkWin_Impl : public SfxWorkWindow
