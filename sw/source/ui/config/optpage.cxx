@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1726,17 +1726,20 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     : SfxTabPage(pParent, SW_RES(TP_REDLINE_OPT), rSet),
 
     aInsertGB(          this, SW_RES( GB_TE )),
-    aInsertFT(          this, SW_RES( FT_INS_ATTR     )),
+    aInsertFT(          this, SW_RES( FT_CHG_INSERT     )),
+    aInsertAttrFT(          this, SW_RES( FT_INS_ATTR     )),
     aInsertLB(          this, SW_RES( LB_INS_ATTR     )),
     aInsertColorFT(     this, SW_RES( FT_INS_COL      )),
     aInsertColorLB(     this, SW_RES( LB_INS_COL      )),
     aInsertedPreviewWN( this, SW_RES( WIN_INS         )),
-    aDeletedFT(         this, SW_RES( FT_DEL_ATTR     )),
+    aDeletedFT(         this, SW_RES( FT_CHG_DELETE     )),
+    aDeletedAttrFT(         this, SW_RES( FT_DEL_ATTR     )),
     aDeletedLB(         this, SW_RES( LB_DEL_ATTR     )),
     aDeletedColorFT(    this, SW_RES( FT_DEL_COL      )),
     aDeletedColorLB(    this, SW_RES( LB_DEL_COL      )),
     aDeletedPreviewWN(  this, SW_RES( WIN_DEL         )),
-    aChangedFT(         this, SW_RES( FT_CHG_ATTR     )),
+    aChangedFT(         this, SW_RES( FT_CHG_CHANGE     )),
+    aChangedAttrFT(         this, SW_RES( FT_CHG_ATTR     )),
     aChangedLB(         this, SW_RES( LB_CHG_ATTR     )),
     aChangedColorFT(    this, SW_RES( FT_CHG_COL      )),
     aChangedColorLB(    this, SW_RES( LB_CHG_COL      )),

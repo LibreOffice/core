@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:36:36 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,4 +83,6 @@
 #define GB_LC               22
 #define STR_AUTHOR          23
 #define STR_NOTHING         24
-
+#define FT_CHG_CHANGE       25
+#define FT_CHG_DELETE       26
+#define FT_CHG_INSERT       27

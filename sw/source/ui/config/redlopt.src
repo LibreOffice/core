@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlopt.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-12 07:06:28 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,10 +107,17 @@ TabPage TP_REDLINE_OPT
         Text[ catalan ] = "Ver texto";
         Text[ finnish ] = "Tekstin näyttö";
     };
+    FixedText FT_CHG_INSERT
+    {
+        Pos = MAP_APPFONT ( 12 , 14 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Einfügen" ;
+        Text [ English ] = "Insert" ;
+    };
     FixedText FT_INS_ATTR
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 25 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
@@ -136,7 +143,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_INS_ATTR
     {
-        Pos = MAP_APPFONT ( 90 , 14 ) ;
+        Pos = MAP_APPFONT ( 90 , 25 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -465,8 +472,8 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_INS_COL
     {
-        Pos = MAP_APPFONT ( 12 , 31 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 42 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
         Text [ portuguese ] = "~Cor" ;
@@ -493,7 +500,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_INS_COL
     {
-        Pos = MAP_APPFONT ( 90 , 29 ) ;
+        Pos = MAP_APPFONT ( 90 , 40 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -501,7 +508,7 @@ TabPage TP_REDLINE_OPT
     Window WIN_INS
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 14 ) ;
+        Pos = MAP_APPFONT ( 178 , 25 ) ;
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Einfügen" ;
         Text [ English ] = "Insert" ;
@@ -526,10 +533,17 @@ TabPage TP_REDLINE_OPT
         Text[ catalan ] = "Insert";
         Text[ finnish ] = "Lisää";
     };
+    FixedText FT_CHG_DELETE
+    {
+        Pos = MAP_APPFONT ( 12 , 58 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Löschen" ;
+        Text [ English ] = "Delete" ;
+    };
     FixedText FT_DEL_ATTR
     {
-        Pos = MAP_APPFONT ( 12 , 47 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 69 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
@@ -555,15 +569,15 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_DEL_ATTR
     {
-        Pos = MAP_APPFONT ( 90 , 45 ) ;
+        Pos = MAP_APPFONT ( 90 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_DEL_COL
     {
-        Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 84 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
@@ -589,7 +603,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_DEL_COL
     {
-        Pos = MAP_APPFONT ( 90 , 60 ) ;
+        Pos = MAP_APPFONT ( 90 , 82 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -597,7 +611,7 @@ TabPage TP_REDLINE_OPT
     Window WIN_DEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 45 ) ;
+        Pos = MAP_APPFONT ( 178 , 67 ) ;
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Löschen" ;
         Text [ English ] = "Delete" ;
@@ -622,10 +636,17 @@ TabPage TP_REDLINE_OPT
         Text[ catalan ] = "Delete";
         Text[ finnish ] = "Poista";
     };
+    FixedText FT_CHG_CHANGE
+    {
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text = "Attributänderung" ;
+        Text [ English ] = "Attributes changed" ;
+    };
     FixedText FT_CHG_ATTR
     {
-        Pos = MAP_APPFONT ( 12 , 78 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 113 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "A~ttribute" ;
         Text [ English ] = "Attributes" ;
         Text[ english_us ] = "Attributes";
@@ -651,15 +672,15 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_CHG_ATTR
     {
-        Pos = MAP_APPFONT ( 90 , 76 ) ;
+        Pos = MAP_APPFONT ( 90 , 111 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     FixedText FT_CHG_COL
     {
-        Pos = MAP_APPFONT ( 12 , 93 ) ;
-        Size = MAP_APPFONT ( 40 , 8 ) ;
+        Pos = MAP_APPFONT ( 18 , 128 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Farbe" ;
         Text [ English ] = "Color" ;
         Text[ english_us ] = "Color";
@@ -685,7 +706,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_CHG_COL
     {
-        Pos = MAP_APPFONT ( 90 , 91 ) ;
+        Pos = MAP_APPFONT ( 90 , 126 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -693,7 +714,7 @@ TabPage TP_REDLINE_OPT
     Window WIN_CHG
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 178 , 76 ) ;
+        Pos = MAP_APPFONT ( 178 , 111 ) ;
         Size = MAP_APPFONT ( 70 , 27 ) ;
         Text = "Attribute" ;
         Text [ English ] = "Attributes" ;
@@ -720,7 +741,7 @@ TabPage TP_REDLINE_OPT
     };
     FixedLine GB_LC
     {
-        Pos = MAP_APPFONT ( 6 , 109 ) ;
+        Pos = MAP_APPFONT ( 6 , 144 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Geänderte Zeilen" ;
         Text [ English ] = "Changed lines" ;
@@ -748,8 +769,8 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_MARKPOS
     {
-        Pos = MAP_APPFONT ( 12 , 122 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Ma~rkierung" ;
         Text [ English ] = "Mark" ;
         Text [ portuguese ] = "Ma~rca" ;
@@ -776,7 +797,7 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_MARKPOS
     {
-        Pos = MAP_APPFONT ( 90 , 120 ) ;
+        Pos = MAP_APPFONT ( 90 , 155 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -967,8 +988,8 @@ TabPage TP_REDLINE_OPT
     };
     FixedText FT_LC_COL
     {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
-        Size = MAP_APPFONT ( 48 , 8 ) ;
+        Pos = MAP_APPFONT ( 12 , 172 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "Far~be" ;
         Text [ English ] = "Color" ;
         Text [ english_us ] = "~Color" ;
@@ -995,14 +1016,14 @@ TabPage TP_REDLINE_OPT
     };
     ListBox LB_LC_COL
     {
-        Pos = MAP_APPFONT ( 90 , 135 ) ;
+        Pos = MAP_APPFONT ( 90 , 170 ) ;
         Size = MAP_APPFONT ( 80 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
     Window WIN_MARK
     {
-        Pos = MAP_APPFONT ( 178 , 120 ) ;
+        Pos = MAP_APPFONT ( 178 , 155 ) ;
         Size = MAP_APPFONT ( 70 , 27 ) ;
     };
     String STR_AUTHOR

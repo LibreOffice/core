@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:19 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:21:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -281,7 +281,7 @@ TabPage TP_CONTENT_OPT
     FixedLine GB_WINDOW
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Ansicht";
         Text[English] = "View";
         Group = TRUE ;
@@ -638,7 +638,7 @@ TabPage TP_CONTENT_OPT
     FixedLine GB_BACK
     {
         Pos = MAP_APPFONT ( 130 , 95 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Hinterlegung" ;
         Text [ ENGLISH ] = "Background" ;
         Text [ norwegian ] = "Background" ;
@@ -781,7 +781,7 @@ TabPage TP_CONTENT_OPT
     FixedLine GB_SETTINGS
     {
         Pos = MAP_APPFONT ( 130 , 122 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Einstellungen";
         Text [ ENGLISH ] = "Settings" ;
         Text[ english_us ] = "Settings";
@@ -1525,7 +1525,7 @@ TabPage TP_STD_FONT
     FixedLine GB_STDCHR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 195 , 8 ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
         Text = "Grundschriften (%1)" ;
         Text [ English ] = "Basic fonts (%1)" ;
     };
@@ -1748,7 +1748,7 @@ TabPage TP_STD_FONT
     };
     PushButton PB_STANDARD
     {
-        Pos = MAP_APPFONT ( 204 , 6 ) ;
+        Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "S~tandard" ;
         Text [ English ] = "S~tandard" ;
@@ -1946,7 +1946,7 @@ TabPage TP_OPTTABLE_PAGE
     FixedLine GB_TABLE_INSERT
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 122 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Eingabe in Tabellen" ;
         Text [ English ] = "Insertion into tables" ;
         Text[ english_us ] = "Input in tables";
@@ -2089,28 +2089,8 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 80) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text = "Alt- und Pfeiltaste gedrückt" ;
-        Text [ English ] = "Alt and arrow key pressed" ;
-        Text[ english_us ] = "Shift and arrow key pressed";
-        Text[ portuguese ] = "Teclas SHIFT e seta premidas";
-        Text[ russian ] = "Íàæàòûå êëàâèøè (Shift) è ñî ñòğåëêîé";
-        Text[ greek ] = "Ìå ğéåóìİíá ôá ğëŞêôñá \"Shift\" êáé \"Âİëïò\"";
-        Text[ dutch ] = "Shift- en pijltoets ingedrukt";
-        Text[ french ] = "Touches Maj. et Flèche enfoncées";
-        Text[ spanish ] = "Teclas Mayús y Flecha pulsadas";
-        Text[ finnish ] = "Umschalt- und Pfeiltaste gedrückt";
-        Text[ italian ] = "Tasto (Maiusc) e (freccia) premuti";
-        Text[ danish ] = "Shift and arrow key pressed";
-        Text[ swedish ] = "Alt- och piltangent nertryckta";
-        Text[ polish ] = "Naciœnij klawisz 'Shift' i klawisz ze strza³k¹";
-        Text[ portuguese_brazilian ] = "Shift and arrow key pressed";
-        Text[ japanese ] = "Shift·°‚Æ–îˆó·°‚ğ‰Ÿ‚·";
-        Text[ korean ] = "Shift and arrow key pressed";
-        Text[ chinese_simplified ] = "Í¬Ê±°´×¡ÉÏµµ¼üºÍ¼ıÍ·¼ü";
-        Text[ chinese_traditional ] = "«ö¦í¤WÀÉÁä©M½bÀYÁä";
-        Text[ turkish ] = "Shift and arrow key pressed";
-        Text[ arabic ] = "Shift and arrow key pressed";
-        Text[ catalan ] = "Shift and arrow key pressed";
+        Text = "Zellen verschieben" ;
+        Text [ English ] = "Move cells" ;
     };
     FixedText FT_ROWMOVE
     {
@@ -2203,29 +2183,9 @@ TabPage TP_OPTTABLE_PAGE
     FixedText FT_INSERT
     {
         Pos = MAP_APPFONT ( 136 , 80 ) ;
-        Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text = "Einfügen" ;
-        Text [ English ] = "Insert" ;
-        Text[ english_us ] = "Insert";
-        Text[ portuguese ] = "Inserir";
-        Text[ russian ] = "Âñòàâèòü";
-        Text[ greek ] = "ÅéóáãùãŞ";
-        Text[ dutch ] = "Invoegen";
-        Text[ french ] = "Insérer";
-        Text[ spanish ] = "Insertar";
-        Text[ italian ] = "Inserisci";
-        Text[ danish ] = "Insert";
-        Text[ swedish ] = "Infoga";
-        Text[ polish ] = "Wstaw";
-        Text[ portuguese_brazilian ] = "Insert";
-        Text[ japanese ] = "‘}“ü";
-        Text[ korean ] = "Insert";
-        Text[ chinese_simplified ] = "²åÈë";
-        Text[ chinese_traditional ] = "´¡¤J";
-        Text[ turkish ] = "Insert";
-        Text[ arabic ] = "ÅÏÑÇÌ";
-        Text[ finnish ] = "Einfügen";
-        Text[ catalan ] = "Insert";
+        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Text = "Zelle einfügen" ;
+        Text [ English ] = "Insert cell" ;
     };
     FixedText FT_ROWINSERT
     {
@@ -2318,7 +2278,7 @@ TabPage TP_OPTTABLE_PAGE
     FixedText FT_HANDLING
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
+        Size = MAP_APPFONT ( 230 , 8 ) ;
         Text = "Verhalten während des Verschiebens" ;
         Text [ English ] = "Behaviour while moving" ;
         Text[ english_us ] = "Behavior of rows/columns";
@@ -2374,30 +2334,9 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 133 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text = "Veränderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus" ;
-        Text [ English ] = "Changes of a row and column respectively will affect the direct neighbor only" ;
+        Text = "Veränderungen wirken sich nur auf den direkten Nachbarn aus" ;
+        Text [ English ] = "Changes will affect the adjacent area only" ;
         WordBreak = TRUE ;
-        Text [ english_us ] = "Changes to a row or column affect the adjacent area only" ;
-        Text [ portuguese_brazilian ] = "Veränderungen einer Zeile bzw. Spalte wirken sich nur auf den direkten Nachbarn aus" ;
-        Text [ swedish ] = "Ändringar i en rad resp. kolumn påverkar endast den omedelbara omgivningen" ;
-        Text [ danish ] = "Række- eller kolonneændringer påvirker kun den direkte nabo" ;
-        Text [ italian ] = "Le modifiche di una riga si ripercuotono solo sulle aree adiacenti" ;
-        Text [ spanish ] = "Las modificaciones en una fila o columna afectan solo a la fila o columna contigua" ;
-        Text [ french ] = "Modifications de ligne/colonne n'affecteront que la plage adjacente" ;
-        Text [ dutch ] = "Veranderingen in een rij of kolom beïnvloeden alleen de aangrenzende rij-/kolom" ;
-        Text [ portuguese ] = "As modificações numa linha ou coluna afectam apenas a área adjacente" ;
-        Text[ chinese_simplified ] = "ĞĞÁĞµÄ¸ü¸ÄÖ»»áÓ°Ïìµ½Ö±½ÓÁ¬½ÓµÄÇøÓò¡£";
-        Text[ russian ] = "Èçìåíåíèÿ ñòğîêè èëè êîëîíêè ïîâëèÿşò òîëüêî íà íåïîñğåäñòâåííûõ ñîñåäåé";
-        Text[ polish ] = "Zmiany wiersza lub kolumny wywieraj¹ wp³yw tylko na obszary przyleg³e";
-        Text[ japanese ] = "sE—ñ‚Ì»²½Ş•ÏX‚ğA—×Ú”ÍˆÍ‚Æ‚ÌŠÖŒW‚Ì‚İ‚Å’²ß‚µ‚Ü‚·";
-        Text[ chinese_traditional ] = "Äæ¦CªºÅÜ§ó¶È·|¼vÅT¨ìª½±µ³sµ²ªº°Ï°ì¡C";
-        Text[ arabic ] = "ÊÄËÑ ÇáÊÛííÑÇÊ ÇáÍÇÏËÉ İí Õİ Ãæ ÚãæÏ Úáì ÇáãäØŞÉ ÇáãÌÇæÑÉ İŞØ";
-        Text[ greek ] = "Ïé áëëáãİò ìéáò óôŞëçò Ş ãñáììŞò åğçñåÜæïõí ìüíï ôçí Üìåóá ãåéôïíéêŞ ğåñéï÷Ş";
-        Text[ korean ] = "¿­ ¶Ç´Â Çà¿¡ ´ëÇÑ º¯°æ»çÇ×Àº Á÷Á¢ ÀÎÁ¢ÇÑ ¿µ¿ª¿¡¸¸ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
-        Text[ turkish ] = "Satır ya da sütunlar üzerinde yapılan değişiklikler yalnızca bitişik birimleri etkiler";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Rivin tai sarakkeen muuttaminen vaikuttaa vain vierekkäiseen alueeseen";
-        Text[ catalan ] = "Las modificaciones en una fila o columna afectan solo a la fila o columna contigua";
     };
     RadioButton RB_FIXPROP
     {
@@ -2431,30 +2370,9 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 151 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus" ;
-        Text [ English ] = "Changes of a row and column respectively will affect the whole table" ;
+        Text = "Veränderungen wirken sich auf die gesamte Tabelle aus" ;
+        Text [ English ] = "Changes may affect the entire table" ;
         WordBreak = TRUE ;
-        Text [ english_us ] = "Changes to a row or column may affect the entire table" ;
-        Text [ portuguese_brazilian ] = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die gesamte Tabelle aus" ;
-        Text [ swedish ] = "Ändringar i en rad resp. kolumn påverkar hela tabellen" ;
-        Text [ danish ] = "Række- eller kolonneændringer påvirker hele tabellen" ;
-        Text [ italian ] = "Le modifiche di una riga o colonna si ripercuotono  sull'intera tabella" ;
-        Text [ spanish ] = "Las modificaciones en una fila o columna afectan a toda la tabla" ;
-        Text [ french ] = "Modifications de ligne/colonne affecteront la totalité du tableau " ;
-        Text [ dutch ] = "Veranderingen in een rij of kolom beïnvloeden de hele tabel" ;
-        Text [ portuguese ] = "As modificações numa linha ou coluna podem afectar a tabela inteira" ;
-        Text[ chinese_simplified ] = "ĞĞÁĞµÄ¸ü¸Ä»áÓ°Ïìµ½Õû¸ö±í¸ñ¡£";
-        Text[ russian ] = "Èçìåíåíèÿ ñòğîêè èëè êîëîíêè ïîâëèÿşò íà âñş òàáëèöó";
-        Text[ polish ] = "Zmiany wiersza lub kolumny wywieraj¹ wp³yw na ca³¹ tabelê";
-        Text[ japanese ] = "sE—ñ‚Ì»²½Ş•ÏX‚ÍA•\\“à‘S‘Ì‚Éì—p‚µ‚Ü‚·";
-        Text[ chinese_traditional ] = "Äæ¦CªºÅÜ§ó·|¼vÅT¨ì¾ã­Óªí®æ¡C";
-        Text[ arabic ] = "ÊÄËÑ ÇáÊÛííÑÇÊ ÇáÍÇÏËÉ İí Õİ Ãæ ÚãæÏ Úáì ÇáÌÏæá ÈÃËÑå";
-        Text[ greek ] = "Ïé áëëáãİò ìéáò ãñáììŞò Ş óôŞëçò åğçñåÜæïõí ïëüêëçñï ôïí ğßíáêá";
-        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÇ º¯°æÀº ÀüÃ¼ Ç¥¿¡  ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
-        Text[ turkish ] = "Satır ya da sütunlar üzerinde yapılan değişiklikler tablonun tümünü etkiler";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Rivin tai sarakkeen muuttaminen saattaa vaikuttaa koko taulukkoon";
-        Text[ catalan ] = "Las modificaciones en una fila o columna afectan a toda la tabla";
     };
     RadioButton RB_VAR
     {
@@ -2488,30 +2406,9 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 93 , 169 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengröße aus" ;
-        Text [ English ] = "Changes of a row and column respectively will affect the table size" ;
+        Text = "Veränderungen wirken sich auf die Tabellengröße aus" ;
+        Text [ English ] = "Changes may affect the table size" ;
         WordBreak = TRUE ;
-        Text [ english_us ] = "Changes to a row or column may affect the table size" ;
-        Text [ portuguese_brazilian ] = "Veränderungen einer Zeile bzw. Spalte wirken sich auf die Tabellengröße aus" ;
-        Text [ swedish ] = "Ändringar i en rad resp. kolumn påverkar tabellstorleken" ;
-        Text [ danish ] = "Række- eller kolonneændringer påvirker tabelstørrelsen" ;
-        Text [ italian ] = "Le modifiche di una riga o colonna si ripercuotono sulle dimensioni della tabella" ;
-        Text [ spanish ] = "Las modificaciones en una fila o columna afectan el tamaño de la tabla" ;
-        Text [ french ] = "Modifications de ligne/colonne affecteront la taille du tableau" ;
-        Text [ dutch ] = "Veranderingen in een rij of kolom beïnvloeden de tabelgrootte" ;
-        Text [ portuguese ] = "As modificações numa linha ou coluna podem afectar o tamanho da tabela" ;
-        Text[ chinese_simplified ] = "Ò»ĞĞºÍÁĞµÄ¸ü¸Ä»áÓ°Ïì±í¸ñµÄ´óĞ¡¡£";
-        Text[ russian ] = "Èçìåíåíèÿ ñòğîêè èëè êîëîíêè ïîâëèÿşò íà ğàçìåğ òàáëèöû";
-        Text[ polish ] = "Zmiany wiersza lub kolumny wywieraj¹ wp³yw na rozmiar tabeli";
-        Text[ japanese ] = "sE—ñ‚Ì»²½Ş•ÏX‚ÍA•\\‚Ì»²½Ş‚Éì—p‚µ‚Ü‚·";
-        Text[ chinese_traditional ] = "¤@­ÓÄæ¦CªºÅÜ§ó·|¼vÅTªí®æªº¤j¤p¡C";
-        Text[ arabic ] = "ÊÄËÑ ÇáÊÛííÑÇÊ ÇáÍÇÏËÉ İí Õİ Ãæ ÚãæÏ Úáì ÍÌã ÇáÌÏæá";
-        Text[ greek ] = "Ïé áëëáãİò ìéáò ãñáììŞò Ş óôŞëçò åğçñåÜæïõí ôï ìİãåèïò ôïõ ğßíáêá";
-        Text[ korean ] = "¿­ ¶Ç´Â ÇàÀÇ º¯°æÀº Ç¥ÀÇ Å©±â¿¡ ¿µÇâÀ» ¹ÌÄ¨´Ï´Ù.";
-        Text[ turkish ] = "Satır ya da sütunlar üzerinde yapılan değişiklikler tablo boyutunu etkiler";
-        Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Rivin tai sarakkeen muuttaminen saattaa vaikuttaa taulukon kokoon";
-        Text[ catalan ] = "Las modificaciones en una fila o columna afectan el tamaño de la tabla";
     };
 };
 /**************************************************************************/
@@ -2975,7 +2872,7 @@ TabPage TP_OPTSHDWCRSR
     FixedLine GB_SHDWCRSFLAG
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "Direkt-Cursor" ;
         Text [ ENGLISH ] = "Direct cursor" ;
         Text [ english_us ] = "Direct cursor" ;
@@ -3211,7 +3108,7 @@ TabPage TP_OPTSHDWCRSR
     FixedLine GB_CRSR_OPT
     {
         Pos = MAP_APPFONT ( 130 , 110 ) ;
-        Size = MAP_APPFONT ( 120 , 8 ) ;
+        Size = MAP_APPFONT ( 124 , 8 ) ;
         Text = "~Cursor in geschützten Zonen" ;
         Text [ ENGLISH ] = "Cursor in protected areas" ;
         Text[ english_us ] = "Cursor in protected areas";

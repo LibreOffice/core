@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2001-05-11 10:37:17 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:22:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,15 @@ class SwWrtShell;
 
 class SwContentOptPage : public SfxTabPage
 {
+    //visual aids
+    FixedLine   aLineGB;
+    CheckBox    aTxtbegCB;
+    CheckBox    aTblbegCB;
+    CheckBox    aSectBoundsCB;
+    CheckBox    aCrossCB;
+    CheckBox    aSolidHandleCB;
+    CheckBox    aBigHandleCB;
+
     //view
     FixedLine   aWindowGB;
     CheckBox    aHScrollBox;
@@ -113,14 +122,6 @@ class SwContentOptPage : public SfxTabPage
     CheckBox    aVRulerCBox;
     ListBox     aVMetric;
     CheckBox    aSmoothCBox;
-    //visual aids
-    FixedLine   aLineGB;
-    CheckBox    aTxtbegCB;
-    CheckBox    aTblbegCB;
-    CheckBox    aSectBoundsCB;
-    CheckBox    aCrossCB;
-    CheckBox    aSolidHandleCB;
-    CheckBox    aBigHandleCB;
 
     //display
     FixedLine   aDispBox;
@@ -446,18 +447,21 @@ class SwRedlineOptionsTabPage : public SfxTabPage
     FixedLine           aInsertGB;
 
     FixedText           aInsertFT;
+    FixedText           aInsertAttrFT;
     ListBox             aInsertLB;
     FixedText           aInsertColorFT;
     ColorListBox        aInsertColorLB;
     SvxFontPrevWindow   aInsertedPreviewWN;
 
     FixedText           aDeletedFT;
+    FixedText           aDeletedAttrFT;
     ListBox             aDeletedLB;
     FixedText           aDeletedColorFT;
     ColorListBox        aDeletedColorLB;
     SvxFontPrevWindow   aDeletedPreviewWN;
 
     FixedText           aChangedFT;
+    FixedText           aChangedAttrFT;
     ListBox             aChangedLB;
     FixedText           aChangedColorFT;
     ColorListBox        aChangedColorLB;
