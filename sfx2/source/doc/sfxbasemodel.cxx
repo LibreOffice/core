@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-19 17:04:52 $
+ *  last change: $Author: ab $ $Date: 2000-11-13 12:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -371,6 +371,7 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
                                             static_cast< XMODIFYBROADCASTER*    > ( this )  ,
                                             static_cast< XCOMPONENT*            > ( this )  ,
                                                static_cast< XPRINTABLE*         > ( this )  ,
+                                               static_cast< XSTARBASICACCESS*       > ( this )  ,
                                                static_cast< XSTORABLE*              > ( this )  ) ) ;
 
     // If searched interface supported by this class ...
@@ -439,7 +440,8 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                       ::getCppuType(( const REFERENCE< XMODEL                   >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XMODIFIABLE          >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XPRINTABLE               >*)NULL ) ,
-                                                      ::getCppuType(( const REFERENCE< XSTORABLE                >*)NULL ) ) ;
+                                                      ::getCppuType(( const REFERENCE< XSTORABLE                >*)NULL ) ,
+                                                      ::getCppuType(( const REFERENCE< XSTARBASICACCESS     >*)NULL ) ) ;
 
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;
@@ -480,6 +482,44 @@ SEQUENCE< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( RUNTIME
 
     return pID->getImplementationId() ;
 }
+
+//________________________________________________________________________________________________________
+//  XStarBasicAccess
+//________________________________________________________________________________________________________
+
+REFERENCE< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( RUNTIMEEXCEPTION )
+{
+    REFERENCE< XNAMECONTAINER > xRet;
+    return xRet;
+}
+
+/**___________________________________________________________________________________________________
+    @seealso    XStarBasicAccess
+*/
+void SAL_CALL SfxBaseModel::createLibrary( const OUSTRING& LibName, const OUSTRING& Password,
+    const OUSTRING& ExternalSourceURL, const OUSTRING& LinkTargetURL )
+        throw(ELEMENTEXISTEXCEPTION, RUNTIMEEXCEPTION)
+{
+}
+
+/**___________________________________________________________________________________________________
+    @seealso    XStarBasicAccess
+*/
+void SAL_CALL SfxBaseModel::addModule( const OUSTRING& LibraryName, const OUSTRING& ModuleName,
+    const OUSTRING& Language, const OUSTRING& Source )
+        throw( NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
+{
+}
+
+/**___________________________________________________________________________________________________
+    @seealso    XStarBasicAccess
+*/
+void SAL_CALL SfxBaseModel::addDialog( const OUSTRING& LibraryName, const OUSTRING& DialogName,
+    const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
+        throw(NOSUCHELEMENTEXCEPTION, RUNTIMEEXCEPTION)
+{
+}
+
 
 //________________________________________________________________________________________________________
 //  XChild
