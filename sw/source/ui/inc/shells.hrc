@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shells.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@
 #define STR_SHELLNAME_LIST         (RC_SHELLS_BEGIN +  29)
 #define STR_SHELLNAME_DRAW         (RC_SHELLS_BEGIN +  30)
 #define STR_SHELLNAME_DRAW_TEXT    (RC_SHELLS_BEGIN +  31)
+#define STR_SHELLNAME_MEDIA        (RC_SHELLS_BEGIN +  32)
 
 
 #define RID_BEZIER_TOOLBOX         (RC_SHELLS_BEGIN +  33)
@@ -131,7 +132,9 @@
 
 #define RID_MODULE_TOOLBOX          (RC_SHELLS_BEGIN + 60)
 
-#define SHELLS_ACT_END              RID_MODULE_TOOLBOX
+#define RID_MEDIA_TOOLBOX           (RC_SHELLS_BEGIN + 61)
+
+#define SHELLS_ACT_END              RID_MEDIA_TOOLBOX
 
 #if SHELLS_ACT_END > RC_SHELLS_END
 #error Resource-Id Ueberlauf in #file, #line
