@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-25 16:05:21 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 16:34:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ namespace configmgr
         if (!m_aAttributes.bWritable)
         {
             m_aAttributes.bFinalized = true;
-            m_aAttributes.bWritable = false;
+            m_aAttributes.bWritable  = true;
         }
     }
 
