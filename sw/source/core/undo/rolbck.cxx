@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:41:24 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,27 @@
 #include <charfmt.hxx> // #i27615#
 #endif
 
+#ifndef _COMCORE_HRC
+#include <comcore.hrc>
+#endif
+#ifndef _TOOLS_RESID_HXX
+#include <tools/resid.hxx>
+#endif
+
+#ifndef _UNDO_HRC
+#include <undo.hrc>
+#endif
+
+#ifndef _SVX_BRKITEM_HXX
+#include <svx/brkitem.hxx>
+#endif
+
 SV_IMPL_PTRARR( SwpHstry, SwHstryHintPtr)
+
+String SwHstryHint::GetDescription() const
+{
+    return String();
+}
 
 
 SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
@@ -217,6 +237,38 @@ SwSetFmtHint::SwSetFmtHint( const SfxPoolItem* pFmtHt, ULONG nNd )
     }
 }
 
+String SwSetFmtHint::GetDescription() const
+{
+    String aResult ;
+
+    USHORT nWhich = pAttr->Which();
+    switch (nWhich)
+    {
+    case RES_BREAK:
+        switch (((SvxFmtBreakItem *) pAttr)->GetBreak())
+        {
+        case SVX_BREAK_PAGE_BEFORE:
+        case SVX_BREAK_PAGE_AFTER:
+        case SVX_BREAK_PAGE_BOTH:
+            aResult = SW_RES(STR_UNDO_PAGEBREAKS);
+
+            break;
+        case SVX_BREAK_COLUMN_BEFORE:
+        case SVX_BREAK_COLUMN_AFTER:
+        case SVX_BREAK_COLUMN_BOTH:
+            aResult = SW_RES(STR_UNDO_COLBRKS);
+
+            break;
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
+
+    return aResult;
+}
 
 void SwSetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
 {
@@ -249,7 +301,6 @@ void SwSetFmtHint::SetInDoc( SwDoc* pDoc, BOOL bTmpSet )
     if( !bTmpSet )
         DELETEZ( pAttr );
 }
-
 
 SwSetFmtHint::~SwSetFmtHint()
 {
@@ -343,6 +394,10 @@ SwSetTxtFldHint::SwSetTxtFldHint( SwTxtFld* pTxtFld, ULONG nNodePos )
     nPos = *pTxtFld->GetStart();
 }
 
+String SwSetTxtFldHint::GetDescription() const
+{
+    return pFld->GetFld()->GetDescription();;
+}
 
 SwSetTxtFldHint::~SwSetTxtFldHint()
 {
@@ -502,6 +557,10 @@ SwSetFtnHint::SwSetFtnHint( const SwTxtFtn &rTxtFtn ) :
     bEndNote = rTxtFtn.GetFtn().IsEndNote();
 }
 
+String SwSetFtnHint::GetDescription() const
+{
+    return SW_RES(STR_FOOTNOTE);
+}
 
 SwSetFtnHint::~SwSetFtnHint()
 {
