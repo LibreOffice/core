@@ -326,7 +326,7 @@ $(SHL1TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -726,7 +726,7 @@ $(SHL2TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -1126,7 +1126,7 @@ $(SHL3TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -1526,7 +1526,7 @@ $(SHL4TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -1926,7 +1926,7 @@ $(SHL5TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -2326,7 +2326,7 @@ $(SHL6TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -2726,7 +2726,7 @@ $(SHL7TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -3126,7 +3126,7 @@ $(SHL8TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -3526,7 +3526,7 @@ $(SHL9TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
@@ -3926,7 +3926,7 @@ $(SHL10TARGETN) : \
 .ENDIF
     @ls -l $@
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) $@.framework$/$(@:f)
+    @+-$(RM) -R $@.framework
     @+if ( -f $@ ) \
     echo "Making: $@.framework" ; \
     $(MKDIRHIER) $@.framework ; \
