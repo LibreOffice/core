@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:44:41 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 #include <stdio.h>
 #endif
 
-#include "external/boost/scoped_array.hpp"
+#include "boost/scoped_array.hpp"
 #include "osl/diagnose.h"
 #include "rtl/ustring.hxx"
 #include "rtl/ustrbuf.hxx"
