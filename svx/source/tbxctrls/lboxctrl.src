@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:16:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:21:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,76 +91,24 @@ FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
 
 String RID_SVXSTR_NUM_UNDO_ACTIONS
 {
-    Text = "Rückgängig $(ARG1) Aktionen" ;
-    Text[ english_us ] = "Undo $(ARG1) actions";
-    Text[ portuguese ] = "Anular operação $(ARG1)";
-    Text[ russian ] = "Îòìåíèòü $(ARG1)";
-    Text[ greek ] = "Áíáßñåóç ôçò(ùí) åíİñãåéáò(şí) $(ARG1)";
-    Text[ dutch ] = "Ongedaan maken $(ARG1) handeling(en)";
-    Text[ french ] = "Annuler $(ARG1) opération(s)";
-    Text[ spanish ] = "Deshacer $(ARG1) acción(es)";
-    Text[ finnish ] = "Kumoa $(ARG1) toiminto(a)";
-    Text[ italian ] = "Annulla $(ARG1) operazione/i";
-    Text[ danish ] = "Fortryd $(ARG1) handling(er)";
-    Text[ swedish ] = "Ångra $(ARG1) åtgärd(er)";
-    Text[ polish ] = "Cofnij akcje w liczbie $(ARG1)";
-    Text[ portuguese_brazilian ] = "Desfazer $(ARG1) Ação(ões)";
-    Text[ japanese ] = "$(ARG1) ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å…ƒã«æˆ»ã™";
-    Text[ korean ] = "$(ARG1) ì‘ë™ ì‹¤í–‰ ì·¨ì†Œ";
-    Text[ chinese_simplified ] = "æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
-    Text[ chinese_traditional ] = "å¾©åŸ $(ARG1) æŒ‡ä»¤";
-    Text[ turkish ] = "$(ARG1) yapılanları geri al";
-    Text[ arabic ] = "Undo $(ARG1) action";
-    Text[ catalan ] = "Desfés $(ARG1) acció/ns";
-    Text[ thai ] = "à¹€à¸¥à¸´à¸à¸—à¸³à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³ $(ARG1) ";
-    Text[ czech ] = "VrÃ¡tit akce $(ARG1)";
-    Text[ hebrew ] = "â€®×‘×™×˜×•×œ ×¤×¢×•×œ×•×ª $(ARG1)â€¬";
-    Text[ hindi ] = "$(ARG1) à¤•à¤¾à¤°à¥à¤¯à¥‹à¤‚ à¤•à¥‹ à¤…à¤¨à¤¾à¤µà¥ƒà¤¤à¥à¤¤à¤¿ à¤•à¤°à¥‹";
-    Text[ slovak ] = "SpÃ¤Å¥ akcia $(ARG1)";
-    Text[ hungarian ] = "VisszacsinÃ¡l $(ARG1) mÅ±veletet";
-    Text[ slovenian ] = "Razveljavi $(ARG1) dejanje/a";
+    Text[ de ] = "Rückgängig $(ARG1) Aktionen" ;
+    Text[ en-US ] = "Undo $(ARG1) actions";
 };
 
 String RID_SVXSTR_NUM_UNDO_ACTION
 {
-    Text = "Rückgängig $(ARG1) Aktion" ;
-    Text[ english_us ] = "Undo $(ARG1) action" ;
+    Text[ de ] = "Rückgängig $(ARG1) Aktion" ;
+    Text[ en-US ] = "Undo $(ARG1) action" ;
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
 {
-    Text = "Wiederherstellen $(ARG1) Aktionen" ;
-    Text[ english_us ] = "Redo $(ARG1) actions";
-    Text[ portuguese ] = "Restaurar operação $(ARG1)";
-    Text[ russian ] = "Âåğíóòü $(ARG1)";
-    Text[ greek ] = "Åğáíåêôİëåóç $(ARG1) åíİñãåéáò(şí)";
-    Text[ dutch ] = "Herhalen $(ARG1) handeling(en)";
-    Text[ french ] = "Restaurer $(ARG1) opération(s)";
-    Text[ spanish ] = "Restaurar $(ARG1) acción(es)";
-    Text[ finnish ] = "Toista $(ARG1) toiminto(a)";
-    Text[ italian ] = "Ripeti $(ARG1) operazione/i";
-    Text[ danish ] = "Gendan $(ARG1) handling(er)";
-    Text[ swedish ] = "Återställ $(ARG1) åtgärd(er)";
-    Text[ polish ] = "Ponów akcje: $(ARG1)";
-    Text[ portuguese_brazilian ] = "Refazer $(ARG1) Ação(ões)";
-    Text[ japanese ] = "$(ARG1) ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã®ã‚„ã‚Šç›´ã—";
-    Text[ korean ] = "$(ARG1) ì‘ë™ ë‹¤ì‹œ ì‹¤í–‰";
-    Text[ chinese_simplified ] = "æ¢å¤æ’¤æ¶ˆå‘½ä»¤ $(ARG1) æ“ä½œ";
-    Text[ chinese_traditional ] = "æ¢å¾©æ’¤æ¶ˆ $(ARG1) æŒ‡ä»¤";
-    Text[ turkish ] = "$(ARG1) yapılanları yinele";
-    Text[ arabic ] = "Redo $(ARG1) action";
-    Text[ catalan ] = "Refés $(ARG1) acció/ns";
-    Text[ thai ] = "à¸—à¸³à¸à¸²à¸£à¸à¸£à¸°à¸—à¸³ $(ARG1) à¸‹à¹‰à¸³";
-    Text[ czech ] = "Znovu akce $(ARG1)";
-    Text[ hebrew ] = "â€®×—×–×¨×” ×¢×œ ×¤×¢×•×œ×•×ª $(ARG1)â€¬";
-    Text[ hindi ] = "$(ARG1) à¤•à¤¾à¤°à¥à¤¯à¥‹à¤‚ à¤•à¥‹ à¤«à¤¿à¤° à¤¸à¥‡ à¤•à¤°à¥‹";
-    Text[ slovak ] = "Znova akcia $(ARG1)";
-    Text[ hungarian ] = "MegismÃ©tel $(ARG1) mÅ±veletet";
-    Text[ slovenian ] = "Uveljavi $(ARG1) dejanje/a";
+    Text[  de ] = "Wiederherstellen $(ARG1) Aktionen" ;
+    Text[ en-US ] = "Redo $(ARG1) actions";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTION
 {
-    Text = "Wiederherstellen $(ARG1) Aktion" ;
-    Text[ english_us ] = "Redo $(ARG1) action";
+    Text[ de ] = "Wiederherstellen $(ARG1) Aktion" ;
+    Text[ en-US ] = "Redo $(ARG1) action";
 };
