@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:37 $
+ *  last change: $Author: dl $ $Date: 2001-11-16 14:50:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,107 +544,110 @@ IMPL_LINK_INLINE_START( SdDrawDocument, NotifyUndoActionHdl, SfxUndoAction *, pU
 #ifndef SVX_LIGHT
     if (pUndoAction)
     {
-        if (pDeletedPresObjList && pDeletedPresObjList->Count())
+        if ( pDeletedPresObjList )
         {
-            // Praesentationsobjekte sollen geloescht werden
-            ULONG nCount = pDeletedPresObjList->Count();
-
-            for (ULONG i=0; i < nCount; i++)
+            if( pDeletedPresObjList->Count() )
             {
-                SdrObject* pObj = (SdrObject*) pDeletedPresObjList->GetObject(i);
+                // Praesentationsobjekte sollen geloescht werden
+                ULONG nCount = pDeletedPresObjList->Count();
 
-                if (pObj && !pObj->IsEmptyPresObj())
+                for (ULONG i=0; i < nCount; i++)
                 {
-                    // Objekt ist kein leeres Praesentationsobjekt -> austauschen
-                    if (pObj->ISA(SdrTextObj))
+                    SdrObject* pObj = (SdrObject*) pDeletedPresObjList->GetObject(i);
+
+                    if (pObj && !pObj->IsEmptyPresObj())
                     {
-                        SdrTextObj* pTextObj = (SdrTextObj*) pObj;
-
-                        if (pTextObj)
+                        // Objekt ist kein leeres Praesentationsobjekt -> austauschen
+                        if (pObj->ISA(SdrTextObj))
                         {
-                            String aString;
-                            SdPage* pPage = (SdPage*) pTextObj->GetUserCall();
+                            SdrTextObj* pTextObj = (SdrTextObj*) pObj;
 
-                            if (pPage)
+                            if (pTextObj)
                             {
-                                PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
-                                PageKind ePageKind = pPage->GetPageKind();
+                                String aString;
+                                SdPage* pPage = (SdPage*) pTextObj->GetUserCall();
 
-                                List* pPresObjList = pPage->GetPresObjList();
-                                pPresObjList->Remove((void*) pTextObj);
-                                pTextObj->SetUserCall(NULL);
-
-                                if (ePresObjKind == PRESOBJ_TITLE)
+                                if (pPage)
                                 {
-                                    if ( pPage->IsMasterPage() )
+                                    PresObjKind ePresObjKind = pPage->GetPresObjKind(pTextObj);
+                                    PageKind ePageKind = pPage->GetPageKind();
+
+                                    List* pPresObjList = pPage->GetPresObjList();
+                                    pPresObjList->Remove((void*) pTextObj);
+                                    pTextObj->SetUserCall(NULL);
+
+                                    if (ePresObjKind == PRESOBJ_TITLE)
                                     {
-                                        if (ePageKind != PK_NOTES)
+                                        if ( pPage->IsMasterPage() )
                                         {
-                                            aString = String ( SdResId( STR_PRESOBJ_MPTITLE ) );
+                                            if (ePageKind != PK_NOTES)
+                                            {
+                                                aString = String ( SdResId( STR_PRESOBJ_MPTITLE ) );
+                                            }
+                                            else
+                                            {
+                                                aString = String ( SdResId( STR_PRESOBJ_MPNOTESTITLE ) );
+                                            }
                                         }
                                         else
                                         {
-                                            aString = String ( SdResId( STR_PRESOBJ_MPNOTESTITLE ) );
+                                            aString = String (SdResId(STR_PRESOBJ_TITLE));
                                         }
                                     }
-                                    else
+                                    else if (ePresObjKind == PRESOBJ_OUTLINE)
                                     {
-                                        aString = String (SdResId(STR_PRESOBJ_TITLE));
-                                    }
-                                }
-                                else if (ePresObjKind == PRESOBJ_OUTLINE)
-                                {
-                                    ePresObjKind = PRESOBJ_OUTLINE;
+                                        ePresObjKind = PRESOBJ_OUTLINE;
 
-                                    if ( pPage->IsMasterPage() )
+                                        if ( pPage->IsMasterPage() )
+                                        {
+                                            aString = String (SdResId(STR_PRESOBJ_MPOUTLINE));
+                                        }
+                                        else
+                                        {
+                                            aString = String (SdResId(STR_PRESOBJ_OUTLINE));
+                                        }
+                                    }
+                                    else if (ePresObjKind == PRESOBJ_NOTES)
                                     {
-                                        aString = String (SdResId(STR_PRESOBJ_MPOUTLINE));
+                                        if ( pPage->IsMasterPage() )
+                                        {
+                                            aString = String ( SdResId( STR_PRESOBJ_MPNOTESTEXT ) );
+                                        }
+                                        else
+                                        {
+                                            aString = String ( SdResId( STR_PRESOBJ_NOTESTEXT ) );
+                                        }
                                     }
-                                    else
+                                    else if (ePresObjKind == PRESOBJ_TEXT)
                                     {
-                                        aString = String (SdResId(STR_PRESOBJ_OUTLINE));
+                                        aString = String ( SdResId( STR_PRESOBJ_TEXT ) );
                                     }
-                                }
-                                else if (ePresObjKind == PRESOBJ_NOTES)
-                                {
-                                    if ( pPage->IsMasterPage() )
+
+                                    if ( aString.Len() )
                                     {
-                                        aString = String ( SdResId( STR_PRESOBJ_MPNOTESTEXT ) );
+                                        String aEmptyStr;
+                                        GetInternalOutliner(TRUE);
+                                        pInternalOutliner->SetMinDepth(0);
+                                        pPage->SetObjText( pTextObj, pInternalOutliner, ePresObjKind, aString );
+                                        pTextObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
+                                        OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                                        pInternalOutliner->SetText(*pParaObj);
+
+                                        pParaObj = pInternalOutliner->CreateParaObject();
+
+                                        SdrTextObj* pNewTextObj = (SdrTextObj*) pTextObj->Clone();
+                                        pNewTextObj->SetOutlinerParaObject(pParaObj);
+                                        pNewTextObj->SetEmptyPresObj(TRUE);
+                                        pNewTextObj->SetUserCall(pPage);
+                                        List* pPresObjList = pPage->GetPresObjList();
+                                        pPresObjList->Insert(pNewTextObj, LIST_APPEND);
+                                        pPage->InsertObject(pNewTextObj);
+    //                                    pNewTextObj->SetStyleSheet(pTitleSheet, TRUE);
+                                        pUndoAction->Merge(new SdrUndoNewObj(*pNewTextObj));
+
+                                        pInternalOutliner->Clear();
+                                        pInternalOutliner->SetMinDepth(0);
                                     }
-                                    else
-                                    {
-                                        aString = String ( SdResId( STR_PRESOBJ_NOTESTEXT ) );
-                                    }
-                                }
-                                else if (ePresObjKind == PRESOBJ_TEXT)
-                                {
-                                    aString = String ( SdResId( STR_PRESOBJ_TEXT ) );
-                                }
-
-                                if ( aString.Len() )
-                                {
-                                    String aEmptyStr;
-                                    GetInternalOutliner(TRUE);
-                                    pInternalOutliner->SetMinDepth(0);
-                                    pPage->SetObjText( pTextObj, pInternalOutliner, ePresObjKind, aString );
-                                    pTextObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), TRUE );
-                                    OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-                                    pInternalOutliner->SetText(*pParaObj);
-
-                                    pParaObj = pInternalOutliner->CreateParaObject();
-
-                                    SdrTextObj* pNewTextObj = (SdrTextObj*) pTextObj->Clone();
-                                    pNewTextObj->SetOutlinerParaObject(pParaObj);
-                                    pNewTextObj->SetEmptyPresObj(TRUE);
-                                    pNewTextObj->SetUserCall(pPage);
-                                    List* pPresObjList = pPage->GetPresObjList();
-                                    pPresObjList->Insert(pNewTextObj, LIST_APPEND);
-                                    pPage->InsertObject(pNewTextObj);
-//                                    pNewTextObj->SetStyleSheet(pTitleSheet, TRUE);
-                                    pUndoAction->Merge(new SdrUndoNewObj(*pNewTextObj));
-
-                                    pInternalOutliner->Clear();
-                                    pInternalOutliner->SetMinDepth(0);
                                 }
                             }
                         }
