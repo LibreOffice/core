@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-18 16:52:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #include "view/SlideSorterView.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -236,8 +235,9 @@ void SlideSorterView::ModelHasChanged (void)
 
 void SlideSorterView::PreModelChange (void)
 {
-    // Remove all page objects from the page.
-    mpPage->Clear();
+    // Reset the slide under the mouse.  It will be set to the correct slide
+    // on the next mouse motion.
+    GetOverlay().GetMouseOverIndicatorOverlay().SetSlideUnderMouse(NULL);
 
     // Tell the page descriptors of the model that the page objects do not
     // exist anymore.
@@ -246,9 +246,8 @@ void SlideSorterView::PreModelChange (void)
     while (aPageEnumeration.HasMoreElements())
         aPageEnumeration.GetNextElement().ReleasePageObject();
 
-    // Reset the slide under the mouse.  It will be set to the correct slide
-    // on the next mouse motion.
-    GetOverlay().GetMouseOverIndicatorOverlay().SetSlideUnderMouse(NULL);
+    // Remove all page objects from the page.
+    mpPage->Clear();
 }
 
 
@@ -264,8 +263,7 @@ void SlideSorterView::PostModelChange (void)
         mrModel.GetAllPagesEnumeration());
     while (aPageEnumeration.HasMoreElements())
     {
-        SdrPageObj* pPageObject
-            = aPageEnumeration.GetNextElement().GetPageObject();
+        SdrPageObj* pPageObject = aPageEnumeration.GetNextElement().GetPageObject();
         mpPage->InsertObject (pPageObject);
         pPageObject->SetModel (&maPageModel);
     }
