@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:05:50 $
+ *  last change: $Author: hjs $ $Date: 2000-11-07 13:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <string>
+#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -697,8 +700,8 @@ void    PrtPrvWindow::Paint(const Rectangle&)
         BOOL bHoriValid = (aWinSize.Width() * 100 / aWinSize.Height()) <
                     (rSettings.aPrtSize.Width() * 100/ rSettings.aPrtSize.Height());
         Fraction aXScale( aWinSize.Width(),
-                            max( nWidth , 1 ) );
-        Fraction aYScale( aWinSize.Height(), max( nHeight, 1 ) );
+                            std::max( nWidth , 1L ) );
+        Fraction aYScale( aWinSize.Height(), std::max( nHeight, 1L ) );
         MapMode aMapMode( GetMapMode() );
         aMapMode.SetScaleX( bHoriValid ? aXScale : aYScale);
         aMapMode.SetScaleY( bHoriValid ? aXScale : aYScale);
@@ -2218,6 +2221,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/25 12:05:50  jp
+      Spellchecker/Hyphenator are not longer member of the shells
+
       Revision 1.2  2000/09/28 15:24:06  os
       use of configuration service in view options
 
