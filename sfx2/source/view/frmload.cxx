@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-08 14:13:02 $
+ *  last change: $Author: as $ $Date: 2001-02-26 09:22:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -654,6 +654,7 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             aMedium.GetInStream();
 
         // Access to Medium was successful ?
+        const SfxFilter* pFilter = NULL;
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
         /*      String aMime;
@@ -664,7 +665,6 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
             SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
             ErrCode nErr = ERRCODE_ABORT;
             const SfxFilter* pOldFilter = NULL;
-            const SfxFilter* pFilter = NULL;
             if ( aPreselectedFilterName.Len() )
             {
                 // first check the preselected filter
@@ -736,12 +736,12 @@ SfxObjectFactory& SfxFrameLoader_Impl::GetFactory()
                 pFilter = NULL;
                 ErrorHandler::HandleError( aMedium.GetError() );
             }
-
-            if ( !pFilter )
-                aFilterName.Erase();
-            else
-                aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
         }
+
+        if ( !pFilter )
+            aFilterName.Erase();
+        else
+            aFilterName = SfxFilterContainer::ConvertToNewFilterName( pFilter->GetName() );
     }
 
     if ( aFilterName.Len() )
