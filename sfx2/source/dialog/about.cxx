@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2002-05-31 13:08:55 $
+ *  last change: $Author: pb $ $Date: 2002-06-04 10:47:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <tools/urlobj.hxx>
 #include <svtools/pathoptions.hxx>
 #include <unotools/configmgr.hxx>
+#include <unotools/bootstrap.hxx>
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
@@ -179,6 +180,14 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     // ggf. Spezial Version
     String aStr = aVersionText.GetText();
     aStr.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
+    ::rtl::OUString aDefault;
+    String sPatchLevel( utl::Bootstrap::getProductPatchLevel( aDefault ) );
+    if ( sPatchLevel.Len() > 0 )
+    {
+        aStr.EraseTrailingChars();
+        aStr += ' ';
+        aStr += sPatchLevel;
+    }
     aVersionText.SetText( aStr );
 
     // Initialisierung fuer Aufruf Entwickler
