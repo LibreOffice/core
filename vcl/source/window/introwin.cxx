@@ -2,9 +2,9 @@
  *
  *  $RCSfile: introwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:12:14 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,28 +70,15 @@
 #include <tools/debug.hxx>
 #endif
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <svapp.hxx>
-#endif
-#ifndef _SV_BRDWIN_HXX
-#include <brdwin.hxx>
-#endif
-#ifndef _SV_WINDOW_H
-#include <window.h>
 #endif
 #ifndef _SV_WRKWIN_HXX
 #include <wrkwin.hxx>
 #endif
-#ifndef _SV_OPENGL_HXX
-#include <opengl.hxx>
-#endif
 
+#include <bitmap.hxx>
+#include <impbmp.hxx>
 #include <introwin.hxx>
 
 
@@ -123,4 +110,11 @@ IntroWindow::~IntroWindow()
         pSVData->mpIntroWindow = NULL;
 }
 
-
+void IntroWindow::SetBackgroundBitmap( const Bitmap& rBitmap )
+{
+    if( ! rBitmap.IsEmpty() )
+    {
+        SalBitmap* pBmp = rBitmap.ImplGetImpBitmap()->ImplGetSalBitmap();
+        ImplGetFrame()->SetBackgroundBitmap( pBmp );
+    }
+}
