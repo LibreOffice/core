@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jl $ $Date: 2001-12-03 18:28:51 $
+ *  last change: $Author: jl $ $Date: 2002-02-26 08:49:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -587,9 +587,10 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
 
         V_VT(&variant) = VT_UNKNOWN;
         V_UNKNOWN(&variant) = pUnknown;
-
+        // AddRef for Variant
         pUnknown->AddRef();
 
+        // When the object is wrapped, then its refcount is increased
         if (variantToAny(&variant, any))
         {
             if (any.getValueTypeClass() == TypeClass_INTERFACE)
@@ -598,7 +599,8 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
             }
         }
 
-        VariantClear(&variant);
+        VariantClear(&variant); // implicit Release
+        pUnknown->Release(); // CoCreateInstance
     }
 
     return ret;
