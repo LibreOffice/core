@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:09:56 $
+#   last change: $Author: hr $ $Date: 2004-02-04 12:38:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
 # -fpermissive should be removed as soon as possible
 # CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -frtti 
-CFLAGSCXX= -fsigned-char -pipe -fno-for-scope -fpermissive -fno-rtti
+CFLAGSCXX= -fsigned-char -pipe -frtti
 
 
 # Compiler flags for compiling static object in single threaded environment with graphical user interface
