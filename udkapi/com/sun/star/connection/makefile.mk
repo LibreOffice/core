@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:28:30 $
+#   last change: $Author: hr $ $Date: 2001-01-24 13:25:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/connection
 
 IDLFILES=\
     XConnection.idl\
+    XConnection2.idl\
     XConnectionBroadcaster.idl\
     XAcceptor.idl\
     XConnector.idl\
