@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-01-10 18:20:07 $
+ *  last change: $Author: er $ $Date: 2001-02-09 14:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -933,13 +933,14 @@ void ScFormulaCell::GetFormula( String& rFormula ) const
         ScToken* p = pCode->GetNextReferenceRPN();
         if( p )
         {
-            ScBaseCell* pCell;
-            p->aRef.Ref1.CalcAbsIfRel( aPos );
-            if ( p->aRef.Ref1.Valid() )
-                pCell = pDocument->GetCell( ScAddress( p->aRef.Ref1.nCol,
-                    p->aRef.Ref1.nRow, p->aRef.Ref1.nTab ) );
-            else
-                pCell = NULL;
+            ScBaseCell* pCell = NULL;
+            if ( !IsInChangeTrack() )
+            {
+                p->aRef.Ref1.CalcAbsIfRel( aPos );
+                if ( p->aRef.Ref1.Valid() )
+                    pCell = pDocument->GetCell( ScAddress( p->aRef.Ref1.nCol,
+                        p->aRef.Ref1.nRow, p->aRef.Ref1.nTab ) );
+            }
             if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
             {
                 ((ScFormulaCell*)pCell)->GetFormula(rFormula);
