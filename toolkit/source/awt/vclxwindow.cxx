@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-01-24 16:13:20 $
+ *  last change: $Author: mt $ $Date: 2001-02-12 15:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -876,7 +876,8 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
         OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( mxViewGraphics );
         Point aPos( nX, nY );
 
-        if ( ( !pDev || ( GetWindow()->GetParent() == pDev ) ) && !GetWindow()->IsVisible() )
+        if ( GetWindow()->GetParent() && !GetWindow()->IsVisible()
+             && ( !pDev || ( GetWindow()->GetParent() == pDev ) ) )
         {
             Point aOldPos( GetWindow()->GetPosPixel() );
             GetWindow()->SetPosPixel( aPos );
