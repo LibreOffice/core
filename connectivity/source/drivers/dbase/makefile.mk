@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-09 12:30:30 $
+#   last change: $Author: oj $ $Date: 2000-10-19 11:55:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,7 +121,7 @@ SLOFILES+=$(SLO)$/staticmbdbase.obj
 
 # --- Library -----------------------------------
 
-SHL1TARGET=	$(DBASE_TARGET)$(DBASE_MAJOR)
+SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)					\
@@ -134,6 +134,7 @@ SHL1STDLIBS=\
     $(SVTOOLLIB)				\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
+    $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
 .IF "$(COMPHELPERLIB)" == ""
@@ -142,11 +143,7 @@ SHL1STDLIBS+= icomphelp2.lib
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(DBASE_TARGET)
-SHL1LIBS=	$(SLB)$/commontools.lib	\
-            $(SLB)$/resource.lib	\
-            $(SLB)$/sdbcx.lib		\
-            $(SLB)$/file.lib		\
-            $(SLB)$/sql.lib	
+SHL1LIBS=	$(SLB)$/file.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 

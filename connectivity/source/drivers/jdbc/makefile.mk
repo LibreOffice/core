@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: fs $ $Date: 2000-10-05 08:40:12 $
+#   last change: $Author: oj $ $Date: 2000-10-19 11:55:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -175,6 +175,7 @@ SHL1STDLIBS=\
     $(VOSLIB)					\
     $(OSLLIB)					\
     $(SALLIB)					\
+    $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
 .IF "$(COMPHELPERLIB)" == ""
@@ -183,9 +184,6 @@ SHL1STDLIBS+= icomphelp2.lib
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib	\
-            $(SLB)$/commontools.lib	\
-            $(SLB)$/resource.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 

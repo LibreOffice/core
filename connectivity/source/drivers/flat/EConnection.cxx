@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:14:16 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,13 +139,25 @@ void OFlatConnection::construct(const ::rtl::OUString& url,const Sequence< Prope
         else if(!pBegin->Name.compareToAscii("HeaderLine"))
             m_bHeaderLine = cppu::any2bool(pBegin->Value);
         else if(!pBegin->Name.compareToAscii("FieldDelimiter"))
-            pBegin->Value >>= m_cFieldDelimiter;
+        {
+            ::rtl::OUString aVal;
+            pBegin->Value >>= aVal; m_cFieldDelimiter = aVal.toChar();
+        }
         else if(!pBegin->Name.compareToAscii("StringDelimiter"))
-            pBegin->Value >>= m_cStringDelimiter;
+        {
+            ::rtl::OUString aVal;
+            pBegin->Value >>= aVal; m_cStringDelimiter = aVal.toChar();
+        }
         else if(!pBegin->Name.compareToAscii("DecimalDelimiter"))
-            pBegin->Value >>= m_cDecimalDelimiter;
+        {
+            ::rtl::OUString aVal;
+            pBegin->Value >>= aVal; m_cDecimalDelimiter = aVal.toChar();
+        }
         else if(!pBegin->Name.compareToAscii("ThousandDelimiter"))
-            pBegin->Value >>= m_cThousandDelimiter;
+        {
+            ::rtl::OUString aVal;
+            pBegin->Value >>= aVal; m_cThousandDelimiter = aVal.toChar();
+        }
     }
 
     osl_decrementInterlockedCount( &m_refCount );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:47:28 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _CONNECTIVITY_FILE_OCONNECTION_HXX_
 #include "file/FConnection.hxx"
 #endif
+#ifndef _CONNECTIVITY_FILE_ODRIVER_HXX_
+#include "file/FDriver.hxx"
+#endif
 #ifndef _CONNECTIVITY_FILE_ORESULTSET_HXX_
 #include "file/FResultSet.hxx"
 #endif
@@ -119,6 +122,7 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
     ,m_pConnection(_pConnection)
     ,m_pParseTree(NULL)
     ,m_aSQLIterator(_pConnection->createCatalog()->getTables(),_pConnection->getMetaData(),NULL)
+    ,m_aParser(_pConnection->getDriver()->getFactory())
 {
     m_pConnection->acquire();
 
@@ -262,7 +266,7 @@ Reference< XResultSet > SAL_CALL OStatement_Base::executeQuery( const ::rtl::OUS
 
     Reference< XResultSet > xRS = NULL;
 
-    String aErr;
+    ::rtl::OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
     {
@@ -298,7 +302,7 @@ sal_Int32 SAL_CALL OStatement_Base::executeUpdate( const ::rtl::OUString& sql ) 
 
     Reference< XResultSet > xRS = NULL;
 
-    String aErr;
+    ::rtl::OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,7 @@ void OPreparedStatement::disposing()
 // -------------------------------------------------------------------------
 void OPreparedStatement::construct(const ::rtl::OUString& sql)  throw(SQLException, RuntimeException)
 {
-    String aErr;
+    ::rtl::OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);
     if(m_pParseTree)
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-05 08:48:24 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode)
             return NULL;
         }
         else
-            cEscape = pEscNode->getTokenValue().GetChar(0);
+            cEscape = pEscNode->getTokenValue().toChar();
     }
 
     OOperand* pOb = execute(pPredicateNode->getChild(0));
@@ -405,14 +405,14 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
 
     if (SQL_ISRULE(pPredicateNode,column_ref))
     {
-        String  aColumnName;
+        ::rtl::OUString aColumnName;
         if (pPredicateNode->count() == 1)
         {
             aColumnName = pPredicateNode->getChild(0)->getTokenValue();
         }
         else if (pPredicateNode->count() == 3)
         {
-            String aTableName = pPredicateNode->getChild(0)->getTokenValue();
+            ::rtl::OUString aTableName = pPredicateNode->getChild(0)->getTokenValue();
             aColumnName = pPredicateNode->getChild(2)->getTokenValue();
         }
 
@@ -448,7 +448,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode)
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
             pPredicateNode->getChild(1)->getNodeType() == SQL_NODE_INTNUM)
     { // falls -1 bzw. +1 vorhanden ist
-        String aValue(pPredicateNode->getChild(0)->getTokenValue());
+        ::rtl::OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
         aValue += pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
     }

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-17 09:14:16 $
+#   last change: $Author: oj $ $Date: 2000-10-19 11:55:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -128,6 +128,7 @@ SHL1STDLIBS=\
     $(UNOTOOLSLIB)				\
     $(UCBHELPERLIB)				\
     $(SALLIB)					\
+    $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
 .IF "$(COMPHELPERLIB)" == ""
@@ -135,12 +136,8 @@ SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(FLAT_TARGET)
-SHL1LIBS=	$(SLB)$/commontools.lib	\
-            $(SLB)$/resource.lib	\
-            $(SLB)$/sdbcx.lib		\
-            $(SLB)$/file.lib		\
-            $(SLB)$/sql.lib	
+SHL1IMPLIB=	i$(TARGET)
+SHL1LIBS=	$(SLB)$/file.lib
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 

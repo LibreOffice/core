@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-11 10:46:43 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,9 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity;
 using namespace connectivity::flat;
@@ -136,6 +139,7 @@ using namespace connectivity::file;
 using namespace ucb;
 using namespace comphelper;
 using namespace cppu;
+using namespace utl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::beans;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 09:05:49 $
+ *  last change: $Author: oj $ $Date: 2000-10-19 11:56:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,9 @@
 #endif
 #ifndef _ITERATOR_
 #include <iterator>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
 #endif
 using namespace connectivity;
 using namespace connectivity::file;
@@ -2396,7 +2399,7 @@ void OResultSet::GetAssignValues()
             OSQLParseNode * pComp = pAssignment->getChild(1);
             OSL_ENSHURE(pComp != NULL,"OResultSet: pComp == NULL");
             OSL_ENSHURE(pComp->getNodeType() == SQL_NODE_EQUAL,"OResultSet: pComp->getNodeType() != SQL_NODE_COMPARISON");
-            if (pComp->getTokenValue().GetChar(0) != '=')
+            if (pComp->getTokenValue().toChar() != '=')
             {
                 //  aStatus.SetInvalidStatement();
                 throw SQLException();
@@ -2606,7 +2609,7 @@ void OResultSet::describeParameter()
         const OSQLTables& xTabs = m_aSQLIterator.getTables();
         OSQLTable xTable = xTabs.begin()->second;
 
-        String aTabName,aTmp,aColName,aParameterName;
+        ::rtl::OUString aTabName,aTmp,aColName,aParameterName;
         ::std::vector< OSQLParseNode*>::iterator aIter = aParseNodes.begin();
         for(;aIter != aParseNodes.end();++aIter)
         {
