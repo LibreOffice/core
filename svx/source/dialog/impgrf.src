@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-02 16:35:16 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 22:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         Text[ chinese_traditional ] = "ΐΙ®Χ®ζ¦‘€£©ϊ";
         Text[ arabic ] = "ΚδΣνή γαέ ΫνΡ γΪΡζέ!";
         Text[ greek ] = "’γνωστη μορφή αρχείου!";
-        Text[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ ΖΔΐΟ Ό­½Δ!";
+        Text[ korean ] = "ΎΛ·ΑΑ® ΐΦΑφ ΎΚΐΊ ΖΔΐΟ Ό­½Δ!";
         Text[ turkish ] = "Bilinmeyen dosya formatύ!";
         Text[ language_user1 ] = " ";
     };
@@ -284,7 +284,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ chinese_traditional ] = "€£©ϊͺΊΉΟ€ω®ζ¦‘";
         TEXT[ arabic ] = "ΚδΣνή ΡΣζγΗΚ ΫνΡ γΪΡζέ";
         TEXT[ greek ] = "’γνωστη μορφή γραφικού";
-        TEXT[ korean ] = "ΎΛ·ΑΑφΑφ ΎΚΐΊ ±Χ·‘ΗΘΌ­½Δ";
+        TEXT[ korean ] = "ΎΛ·ΑΑ® ΐΦΑφ ΎΚΐΊ ±Χ·‘ΗΘΌ­½Δ";
         TEXT[ turkish ] = "Bilinmeyen grafik formatύ";
         TEXT[ language_user1 ] = " ";
     };
@@ -310,7 +310,7 @@ Resource RID_SVXRES_IMPORTGRAPHIC
         TEXT[ chinese_traditional ] = "€£€δ«ω³o­ΣΉΟ€ωΐΙ®Χͺ©₯»";
         TEXT[ arabic ] = "αδ νΚγ ΟΪγ ΕΥΟΗΡ γαέ ΗαΡΣζγΗΚ";
         TEXT[ greek ] = "Δεν υποστηρίζεται η έκδοση αυτού του γραφικού αρχείου.";
-        TEXT[ korean ] = "±Χ·‘ΗΘΖΔΐΟΐΗ Ήφΐόΐ» ΑφΏψΗÒ Όφ Ύψΐ½";
+        TEXT[ korean ] = "±Χ·‘ΗΘΖΔΐΟΐΗ ΉφΐόΐΊ ΑφΏψ΅ΗΑφ ΎΚΐ½";
         TEXT[ turkish ] = "Grafik dosyasύnύn sόrόmό desteklenmiyor";
         TEXT[ language_user1 ] = " ";
     };
