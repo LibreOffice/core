@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2001-05-16 16:46:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 21:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -954,7 +954,7 @@ ItemList [ language_user1 ] =
         < "Europa Zchodnia (DOS/OS2-850/Miêdzynarodowe)"            ; RTL_TEXTENCODING_IBM_850          ; > ;
         < "Westeuropa (DOS/OS2-437/US)"                     ; RTL_TEXTENCODING_IBM_437          ; > ;
         < "Europa Zchodnia (DOS/OS2-860/Portugalski)"           ; RTL_TEXTENCODING_IBM_860          ; > ;
-        < "Europa Zchodni (DOS/OS2-861/Islandzki)"              ; RTL_TEXTENCODING_IBM_861          ; > ;
+        < "Europa Zchodnia (DOS/OS2-861/Islandzki)"             ; RTL_TEXTENCODING_IBM_861          ; > ;
         < "Europa Zchodnia (DOS/OS2-863/Francuski (Kand.))" ; RTL_TEXTENCODING_IBM_863          ; > ;
         < "Europa Zchodnia (DOS/OS2-865/Skandynawskie)"             ; RTL_TEXTENCODING_IBM_865          ; > ;
         < "Europa Zchodnia (ASCII/US)"                          ; RTL_TEXTENCODING_ASCII_US         ; > ;
@@ -1145,7 +1145,7 @@ ItemList [ language_user1 ] =
         < "¼­À¯·´ (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;
         < "¼­À¯·´ (DOS/OS2-850/International)"          ; RTL_TEXTENCODING_IBM_850          ; > ;
         < "¼­À¯·´ (DOS/OS2-437/US)"                     ; RTL_TEXTENCODING_IBM_437          ; > ;
-        < "¼­À¯·´ (DOS/OS2-860/Æ÷¸£ÅõÄ®)"           ; RTL_TEXTENCODING_IBM_860          ; > ;
+        < "¼­À¯·´ (DOS/OS2-860/Æ÷¸£ÅõÄ®¾î)"         ; RTL_TEXTENCODING_IBM_860          ; > ;
         < "¼­À¯·´ (DOS/OS2-861/¾ÆÀÌ½½·£µå)"             ; RTL_TEXTENCODING_IBM_861          ; > ;
         < "¼­À¯·´ (DOS/OS2-863/ÇÁ¶û½º¾î (Ä³³ª´Ù)))" ; RTL_TEXTENCODING_IBM_863          ; > ;
         < "¼­À¯·´ (DOS/OS2-865/ºÏºÎ)"               ; RTL_TEXTENCODING_IBM_865          ; > ;
@@ -1172,13 +1172,13 @@ ItemList [ language_user1 ] =
         < "ÅÍ¾îÅ°¾î (Windows-1254)"                         ; RTL_TEXTENCODING_MS_1254          ; > ;
         < "¹ßÆ®¾î (Windows-1257)"                           ; RTL_TEXTENCODING_MS_1257          ; > ;
         < "µ¿À¯·´ (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_CENTEURO   ; > ;
-        < "µ¿À¯·´ (Apple Macintosh/Å©·Î¾ÆÆ¼¾Æ)"         ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
+        < "µ¿À¯·´ (Apple Macintosh/Å©·Î¾ÆÆ¼¾Æ¾î)"           ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
         < "Å°¸± (Apple Macintosh)"                  ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
         < "±×¸®½º¾î (Apple Macintosh)"                  ; RTL_TEXTENCODING_APPLE_GREEK      ; > ;
-        < "¼­À¯·´ (Apple Macintosh/¾ÆÀÌ½½·£µå)"         ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
-        < "µ¿À¯·´ (Apple Macintosh/·ç¸¶´Ï¾Æ)"           ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
+        < "¼­À¯·´ (Apple Macintosh/¾ÆÀÌ½½·£µå¾î)"           ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
+        < "µ¿À¯·´ (Apple Macintosh/·ç¸¶´Ï¾Æ¾î)"         ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
         < "ÅÍ¾îÅ°¾î (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
-        < "Å°¸± (Apple Macintosh/¿ìÅ©¶óÀÌ³ª)"           ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
+        < "Å°¸± (Apple Macintosh/¿ìÅ©¶óÀÌ³ª¾î)"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
         < "Áß±¹¾î °£Ã¼ (Apple Macintosh)"       ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
         < "Áß±¹¾î ÀüÅë (Apple Macintosh)"       ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
         < "ÀÏº»¾î (Apple Macintosh)"                        ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
@@ -1274,7 +1274,7 @@ ItemList [ language_user1 ] =
         < "¦è¼Ú(DOS/OS2-850/°ê»Ú)"          ; RTL_TEXTENCODING_IBM_850          ; > ;
         < "¦è¼Ú(DOS/OS2-437/¬ü°ê)"                      ; RTL_TEXTENCODING_IBM_437          ; > ;
         < "¦è¼Ú(DOS/OS2-860/¸²µå¤ú)"            ; RTL_TEXTENCODING_IBM_860          ; > ;
-        < "¦è¼Ú(DOS/OS2-861/¦B®q)"              ; RTL_TEXTENCODING_IBM_861          ; > ;
+        < "¦è¼Ú(DOS/OS2-861/¦B®q»y)"                ; RTL_TEXTENCODING_IBM_861          ; > ;
         < "¦è¼Ú(DOS/OS2-863/ªk»y(¥[®³¤j))"  ; RTL_TEXTENCODING_IBM_863          ; > ;
         < "¦è¼Ú(DOS/OS2-865/¥_¼Ú»y¨¥)"              ; RTL_TEXTENCODING_IBM_865          ; > ;
         < "¦è¼Ú(ASCII/¬ü°ê)"                            ; RTL_TEXTENCODING_ASCII_US         ; > ;
