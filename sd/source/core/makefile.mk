@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2004-01-20 10:27:28 $
+#   last change: $Author: kz $ $Date: 2004-10-04 18:16:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,6 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/stlpool.obj	\
            $(SLO)$/drawdoc.obj \
            $(SLO)$/drawdoc2.obj \
-           $(SLO)$/drawdoc3.obj \
            $(SLO)$/drawdoc4.obj \
            $(SLO)$/sdpage.obj \
            $(SLO)$/sdattr.obj \
@@ -94,13 +93,17 @@ SLOFILES = $(SLO)$/stlsheet.obj  \
            $(SLO)$/typemap.obj	\
            $(SLO)$/pglink.obj   \
            $(SLO)$/cusshow.obj  \
+           $(SLO)$/drawdoc3.obj \
            $(SLO)$/PageListWatcher.obj
 
 EXCEPTIONSFILES= \
+           $(OBJ)$/drawdoc3.obj \
+           $(SLO)$/drawdoc3.obj \
            $(SLO)$/drawdoc.obj
 
 .IF "$(SVXLIGHT)"!=""
 EXCEPTIONSFILES+= \
+           $(OBJ)$/drawdoc3.obj \
            $(OBJ)$/sxl_drawdoc.obj
 .ENDIF          # "$(SVXLIGHT)"!=""
 
