@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-24 14:50:48 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,8 +542,8 @@ void SvxShape::Init() throw()
             mpImpl->mnObjId = OBJ_CIRC;
             break;
 
-        case E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG:
-            mpImpl->mnObjId = E3D_SCENE_ID | E3D_INVENTOR_FLAG;
+        case E3D_SCENE_ID | E3D_INVENTOR_FLAG:
+            mpImpl->mnObjId = E3D_POLYSCENE_ID | E3D_INVENTOR_FLAG;
             break;
         }
     }
@@ -651,7 +651,7 @@ uno::Any SvxShape::GetBitmap( sal_Bool bMetaFile /* = sal_False */ ) const throw
 {
     uno::Any aAny;
 
-    if( pObj == NULL || pModel == NULL )
+    if( pObj == NULL || pModel == NULL || !pObj->IsInserted() || NULL == pObj->GetPage() )
         return aAny;
 
     VirtualDevice aVDev;
@@ -1004,7 +1004,7 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
         return;
 
     const SdrHint* pSdrHint = PTR_CAST( SdrHint, &rHint );
-    if (!pSdrHint || ((pSdrHint->GetKind() != HINT_OBJREMOVED) &&
+    if (!pSdrHint || ( /* (pSdrHint->GetKind() != HINT_OBJREMOVED)  && */
         (pSdrHint->GetKind() != HINT_MODELCLEARED) &&
         (pSdrHint->GetKind() != HINT_OBJLISTCLEAR) &&
         (pSdrHint->GetKind() != HINT_OBJCHG)))
@@ -1026,12 +1026,14 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
             updateShapeKind();
             break;
         }
+/*
         case HINT_OBJREMOVED:
         {
             if( pObj == pSdrHint->GetObject() )
                 bClearMe = sal_True;
             break;
         }
+*/
         case HINT_MODELCLEARED:
         {
             bClearMe = sal_True;
@@ -1057,9 +1059,6 @@ void SvxShape::Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) throw()
 
     if( bClearMe )
     {
-        if( pObj )
-            pObj->setUnoShape( NULL, SdrObject::GrantXShapeAccess() );
-
         pObj = NULL;
         if(!bDisposing)
             dispose();
@@ -1293,7 +1292,7 @@ void SAL_CALL SvxShape::dispose() throw(uno::RuntimeException)
     aDisposeListeners.disposeAndClear(aEvt);
 
     SdrObject* pObj = GetSdrObject();
-    if(pObj)
+    if(pObj && pObj->IsInserted() && pObj->GetPage() )
     {
         SdrPage* pPage = pObj->GetPage();
         // SdrObject aus der Page loeschen
