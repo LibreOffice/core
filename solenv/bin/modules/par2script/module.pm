@@ -2,9 +2,9 @@
 #
 #   $RCSfile: module.pm,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2004-01-29 11:44:31 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:50:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -185,6 +185,84 @@ sub create_rootmodule
         {
             $oneline .= "\n";
             push(@{$rootmodule}, $oneline);
+        }
+    }
+}
+
+######################################################
+# Splitting one long line into several short lines
+######################################################
+
+sub make_multiliner
+{
+    my ($itemname, $allgidstring) = @_;
+
+    my @newblock = ();
+
+    my $allitemgids = par2script::converter::convert_stringlist_into_array(\$allgidstring, ",");
+
+    if ( $#{$allitemgids} > -1 )
+    {
+        my $oneline = "\t$itemname \= \(";
+
+        for ( my $i = 0; $i <= $#{$allitemgids}; $i++ )
+        {
+            my $onegid = ${$allitemgids}[$i];
+
+            if ($oneline eq "") { $oneline = "\t\t\t\t"; }
+
+            $oneline .= $onegid;
+
+            if ( $i == $#{$allitemgids} ) { $oneline .= "\)\;"; }
+            else { $oneline .= "\,"; }
+
+            if ( length($oneline) > 100 )
+            {
+                $oneline .= "\n";
+                push(@newblock, $oneline);
+                $oneline = "";
+            }
+        }
+
+        if (! $oneline =~ /^\s*$/ )
+        {
+            $oneline .= "\n";
+            push(@newblock, $oneline);
+        }
+    }
+
+    return \@newblock;
+}
+
+###################################################
+# Shorten the lines that belong to modules, if
+# the length of the line is greater 100
+###################################################
+
+sub shorten_lines_at_modules
+{
+    my ($script) = @_;
+
+    my $ismoduleblock = 0;
+
+    for ( my $i = 0; $i <= $#{$script}; $i++ )
+    {
+        my $oneline = ${$script}[$i];
+
+        if ( $oneline =~ /^\s*Module\s+\w+\s*$/ ) { $ismoduleblock = 1; }
+        if (( $oneline =~ /^\s*End\s*$/ ) && ( $ismoduleblock )) { $ismoduleblock = 0; }
+
+        if ( $ismoduleblock )
+        {
+            if (( $oneline =~ /^\s*(\w+)\s*\=\s*\((.*)\)\s*\;\s*$/ ) && ( length($oneline) > 100 ))
+            {
+                # this line has to be splitted in several lines
+                my $item = $1;
+                my $allgidstring = $2;
+
+                my $multilines = make_multiliner($item, $allgidstring);
+                splice(@{$script}, $i, 1, @{$multilines});
+            }
         }
     }
 }
