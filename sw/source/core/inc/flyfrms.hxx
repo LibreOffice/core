@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flyfrms.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 13:58:18 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:36:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,11 +63,6 @@
 
 #include "flyfrm.hxx"
 
-// OD 29.10.2003 #110978#
-namespace objectpositioning
-{
-    class SwToCntntAnchoredObjectPosition;
-}
 // OD 11.11.2003 #i22341#
 class SwFmtAnchor;
 
@@ -126,62 +121,9 @@ public:
 //Die Flys, die an einem Cntnt haengen nicht aber im Inhalt
 class SwFlyAtCntFrm : public SwFlyFreeFrm
 {
-    // OD 29.10.2003 #110978# - access for calculation of position
-    friend class objectpositioning::SwToCntntAnchoredObjectPosition;
-    // OD 06.10.2003 #110978# - data of position calculation
-    // layout frame vertical position is orient at - typically its the upper of
-    // the anchor frame, but it could also by the upper of a follow or
-    // a following layout frame in the text flow.
-    const SwLayoutFrm* mpVertPosOrientFrm;
-
-    // Last known anchor character retangle of to-character anchored Writer
-    // fly frames.
-    // Used to decide, if invalidation has to been performed, if anchor position
-    // has changed, and used to position Writer fly frame.
-    SwRect maLastCharRect;
-
-    // OD 11.11.2003 #i22341# - for to-character anchored Writer fly frames:
-    // Last known top of line, in which the anchor character is in.
-    // Used to decide, if invalidation has to been performed, if anchor position
-    // has changed, and used to position Writer fly frame.
-    SwTwips mnLastTopOfLine;
-
-    /** check anchor character rectangle
-
-        OD 11.11.2003 #i22341#
-        helper method for method <CheckCharRectAndTopOfLine()>
-        For to-character anchored Writer fly frames the member <maLastCharRect>
-        is updated. This is checked for change and depending on the applied
-        positioning, it's decided, if the Writer fly frame has to be invalidated.
-
-        @author OD
-
-        @param _rAnch
-        input parameter - reference to anchor position
-    */
-    void _CheckCharRect( const SwFmtAnchor& _rAnch );
-
-    /** check top of line
-
-        OD 11.11.2003 #i22341#
-        helper method for method <CheckCharRectAndTopOfLine()>
-        For to-character anchored Writer fly frames the member <mnLastTopOfLine>
-        is updated. This is checked for change and depending on the applied
-        positioning, it's decided, if the Writer fly frame has to be invalidated.
-
-        @author OD
-
-        @param _rAnch
-        input parameter - reference to anchor position
-    */
-    void _CheckTopOfLine( const SwFmtAnchor& _rAnch );
-
 protected:
-    //Stellt sicher, das der Fly an der richtigen Seite haengt.
-    void AssertPage();
-
     virtual void MakeAll();
-    virtual void MakeFlyPos();
+
 public:
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
@@ -189,33 +131,11 @@ public:
 
     void SetAbsPos( const Point &rNew );
 
-    /** check anchor character rectangle and top of line
+    // OD 2004-03-23 #i26791#
+    virtual void MakeObjPos();
 
-        OD 11.11.2003 #i22341#
-        For to-character anchored Writer fly frames the members <maLastCharRect>
-        and <maLastTopOfLine> are updated. These are checked for change and
-        depending on the applied positioning, it's decided, if the Writer fly
-        frame has to be invalidated.
-
-        @author OD
-    */
-    void CheckCharRectAndTopOfLine();
-
-    SwTwips GetLastCharX() const { return maLastCharRect.Left() - Frm().Left(); }
-
-    SwTwips GetRelCharX( const SwFrm* pFrm ) const
-        { return maLastCharRect.Left() - pFrm->Frm().Left(); }
-    SwTwips GetRelCharY( const SwFrm* pFrm ) const
-        { return maLastCharRect.Bottom() - pFrm->Frm().Top(); }
-
-    void AddLastCharY( long nDiff ){ maLastCharRect.Pos().Y() += nDiff; }
-
-    // accessors to data of position calculation
-    // frame vertical position is orient at
-    inline const SwLayoutFrm* GetVertPosOrientFrm() const
-    {
-        return mpVertPosOrientFrm;
-    }
+    // OD 2004-03-24 #i26791# - made public
+    void AssertPage();
 };
 
 //Die Flys, die an einem Zeichen in einem Cntnt haengen.
@@ -226,8 +146,6 @@ class SwFlyInCntFrm : public SwFlyFrm
 
     BOOL bInvalidLayout :1;
     BOOL bInvalidCntnt  :1;
-
-    virtual void MakeFlyPos();
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -244,7 +162,7 @@ public:
     void SetRefPoint( const Point& rPoint, const Point &rRelAttr,
         const Point &rRelPos );
     const Point &GetRefPoint() const { return aRef; }
-    const Point &GetRelPos() const;
+    const Point GetRelPos() const;
           long   GetLineHeight() const { return nLine; }
 
     inline void InvalidateLayout() const;
@@ -265,6 +183,9 @@ public:
 
     //siehe layact.cxx
     void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
+
+    // OD 2004-03-23 #i26791#
+    virtual void MakeObjPos();
 };
 
 inline void SwFlyInCntFrm::InvalidateLayout() const
