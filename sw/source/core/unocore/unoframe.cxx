@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 14:24:31 $
+ *  last change: $Author: jp $ $Date: 2000-12-07 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2549,8 +2549,9 @@ uno::Reference< XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(void) thr
                     uno::Reference< util::XModifyBroadcaster >  xBrdcst(xModel, uno::UNO_QUERY);
                     if( xBrdcst.is() )
                     {
-                        SwXOLEListener* pSwOLEListener = 0;
-                        if( !xSwXOLEListener.is() )
+                        SwXOLEListener* pSwOLEListener = (SwXOLEListener*)
+                                                        xSwXOLEListener.get();
+                        if( !pSwOLEListener )
                             xSwXOLEListener = pSwOLEListener = new SwXOLEListener;
                         if( pSwOLEListener->AddOLEFmt( *pFmt ) )
                             xBrdcst->addModifyListener( xSwXOLEListener );
