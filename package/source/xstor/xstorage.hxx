@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:13:15 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_EMBED_XSTORAGERAWACCESS_HPP_
+#include <com/sun/star/embed/XStorageRawAccess.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
@@ -324,6 +328,7 @@ struct OStorage_Impl
 
 class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XStorage
+                , public ::com::sun::star::embed::XStorageRawAccess
                 , public ::com::sun::star::embed::XTransactedObject
                 , public ::com::sun::star::embed::XTransactionBroadcaster
                 , public ::com::sun::star::util::XModifiable
@@ -513,6 +518,29 @@ public:
                 ::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::container::ElementExistException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    //____________________________________________________________________________________________________
+    //  XStorageRawAccess
+    //____________________________________________________________________________________________________
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getPlainRawStreamElement(
+            const ::rtl::OUString& sStreamName )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::container::NoSuchElementException,
+                ::com::sun::star::io::IOException,
+                ::com::sun::star::embed::StorageWrappedTargetException,
+                ::com::sun::star::uno::RuntimeException );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getRawEncrStreamElement(
+            const ::rtl::OUString& sStreamName )
+        throw ( ::com::sun::star::embed::InvalidStorageException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::packages::NoEncryptionException,
+                ::com::sun::star::container::NoSuchElementException,
                 ::com::sun::star::io::IOException,
                 ::com::sun::star::embed::StorageWrappedTargetException,
                 ::com::sun::star::uno::RuntimeException );
