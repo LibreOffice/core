@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-04 07:28:58 $
+ *  last change: $Author: oj $ $Date: 2001-07-25 06:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ namespace connectivity
         static OParseContext        s_aDefaultContext;
 
     //  parts controled by mutex
-        static ::osl::Mutex         s_aMutex;
+        //  static ::osl::Mutex         s_aMutex;
         static OSQLScanner*         s_pScanner;
         static OSQLParseNodes*      s_pGarbageCollector;
         static sal_Int32            s_nRefCount;
@@ -209,6 +209,8 @@ namespace connectivity
 
         // convert a string into double trim it to scale of _nscale and than transform it back to string
         ::rtl::OUString stringToDouble(const ::rtl::OUString& _rValue,sal_Int16 _nScale);
+
+        static ::osl::Mutex& getMutex();
 
     public:
         // if NULL, a default context will be used

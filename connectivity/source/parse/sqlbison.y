@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.27 2001-06-05 13:17:11 fs Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.28 2001-07-25 06:13:55 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: fs $ $Date: 2001-06-05 13:17:11 $ $Revision: 1.27 $
+//	$Author: oj $ $Date: 2001-07-25 06:13:55 $ $Revision: 1.28 $
 //
 // Description:
 //
@@ -1744,8 +1744,8 @@ extract_exp:
 		}
 	;
 unsigned_value_spec:
-		literal
-	|	general_value_spec
+		general_value_spec
+	|	literal
 	;
 general_value_spec:
 		parameter
@@ -3144,7 +3144,7 @@ sal_uInt32			OSQLParser::s_nRuleIDs[OSQLParseNode::rule_count + 1];
 OParseContext		OSQLParser::s_aDefaultContext;
 
 sal_Int32			OSQLParser::s_nRefCount	= 0;
-::osl::Mutex		OSQLParser::s_aMutex;
+//	::osl::Mutex		OSQLParser::s_aMutex;
 OSQLScanner*		OSQLParser::s_pScanner = 0;
 OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
 ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XLocaleData>		OSQLParser::s_xLocaleData = NULL;
@@ -3157,7 +3157,7 @@ void setParser(OSQLParser* _pParser)
 OSQLParser::~OSQLParser()
 {
 	{
-		::osl::MutexGuard aGuard(s_aMutex);
+		::osl::MutexGuard aGuard(getMutex());
 		OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
 		if (!--s_nRefCount)
 		{
@@ -3176,7 +3176,7 @@ OSQLParser::~OSQLParser()
 // -------------------------------------------------------------------------
 void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
 {
-	::osl::MutexGuard aGuard(s_aMutex);
+	::osl::MutexGuard aGuard(getMutex());
 	m_pParseTree = pNewParseTree;
 }
 //-----------------------------------------------------------------------------
@@ -3187,7 +3187,7 @@ OSQLParseNode* OSQLParser::parseTree(::rtl::OUString& rErrorMessage,
 
 
 	// Guard the parsing
-	::osl::MutexGuard aGuard(s_aMutex);
+	::osl::MutexGuard aGuard(getMutex());
 	// must be reset
 	setParser(this);
 

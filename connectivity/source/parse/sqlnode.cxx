@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-28 06:30:23 $
+ *  last change: $Author: oj $ $Date: 2001-07-25 06:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,13 @@ sal_Int16 OSQLParser::buildNode_STR_NUM(OSQLParseNode*& pAppend,OSQLParseNode*& 
     }
     return aValue;
 }
+// -----------------------------------------------------------------------------
+
+::osl::Mutex& OSQLParser::getMutex()
+{
+    static ::osl::Mutex aMutex;
+    return aMutex;
+}
 
 extern void setParser(OSQLParser*);
 //-----------------------------------------------------------------------------
@@ -939,7 +946,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
     static ::osl::Mutex aMutex;
 
     // Guard the parsing
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     // must be reset
     setParser(this);
 
@@ -1085,7 +1092,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
 #endif
 #endif
 
-    ::osl::MutexGuard aGuard(s_aMutex);
+    ::osl::MutexGuard aGuard(getMutex());
     // do we have to initialize the data
     if (s_nRefCount == 0)
     {

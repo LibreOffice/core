@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.11 2001-05-30 13:37:50 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlflex.l,v 1.12 2001-07-25 06:13:55 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -10,7 +10,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2001-05-30 13:37:50 $ $Revision: 1.11 $
+//	$Author: oj $ $Date: 2001-07-25 06:13:55 $ $Revision: 1.12 $
 //
 // Description:
 //
@@ -325,7 +325,7 @@ OSQLScanner* xxx_pGLOBAL_SQLSCAN = NULL;
 
 <STRING>["-""+""*""/"":""("")"",""."";""?""{""}"]		{ return SQLyytext[0]; } /*  */
 <STRING>"["					{ return gatherString(']' ,0); }
-<STRING>[^ ':[]*			{ return gatherNamePre(SQLyytext); }
+<STRING>[^ ':["?"]*			{ return gatherNamePre(SQLyytext); }
 
 \n              {}
 
