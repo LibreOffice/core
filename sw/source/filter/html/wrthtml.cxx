@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
+ *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -561,6 +561,9 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     if( aOutlineMarkPoss.Count() )
         aOutlineMarkPoss.Remove( sal_uInt16(0), aOutlineMarkPoss.Count() );
+
+    if( aNumRuleNames.Count() )
+        aNumRuleNames.DeleteAndDestroy( sal_uInt16(0), aNumRuleNames.Count() );
 
     delete pDfltColor;
     pDfltColor = 0;
@@ -1394,11 +1397,14 @@ void GetHTMLWriter( const String&, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.3 2000-11-01 19:23:14 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/html/wrthtml.cxx,v 1.4 2000-12-12 13:11:13 mib Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/11/01 19:23:14  jp
+      export of mail graphics removed
+
       Revision 1.2  2000/10/20 13:43:17  jp
       use correct INetURL-Decode enum
 

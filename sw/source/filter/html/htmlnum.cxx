@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlnum.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:55 $
+ *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -792,6 +792,71 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
         return rWrt;
     }
 
+    sal_Bool bStartValue = sal_False;
+    if( !bSameRule && rInfo.GetDepth() )
+    {
+        String aName( rInfo.GetNumRule()->GetName() );
+        if( rWrt.aNumRuleNames.Seek_Entry( &aName ) )
+        {
+            // The rule has been applied before
+            SvxExtNumType eType = rInfo.GetNumRule()
+                ->Get( rInfo.GetDepth()-1 ).eType;
+            if( SVX_NUM_CHAR_SPECIAL != eType && SVX_NUM_BITMAP != eType )
+            {
+                // If its a numbering rule, the current number should be
+                // exported as start value, but only if there are no nodes
+                // within the numbering that have a lower level
+                bStartValue = sal_True;
+                if( rInfo.GetDepth() > 1 )
+                {
+                    sal_uInt32 nPos =
+                        rWrt.pCurPam->GetPoint()->nNode.GetIndex() + 1;
+                    do
+                    {
+                        const SwNode* pNd = rWrt.pDoc->GetNodes()[nPos];
+                        if( pNd->IsTxtNode() )
+                        {
+                            const SwTxtNode *pTxtNd = pNd->GetTxtNode();
+                            if( !pTxtNd->GetNumRule() )
+                            {
+                                // node isn't numbered => check completed
+                                break;
+                            }
+
+                            const SwNodeNum& rNum = *pTxtNd->GetNum();
+                            if( GetRealLevel( rNum.GetLevel() )+1 <
+                                                            rInfo.GetDepth() )
+                            {
+                                // node is numbered, but level is lower
+                                // => check completed
+                                bStartValue = sal_False;
+                                break;
+                            }
+                            nPos++;
+                        }
+                        else if( pNd->IsTableNode() )
+                        {
+                            // skip table
+                            nPos = pNd->EndOfSectionIndex() + 1;
+                        }
+                        else
+                        {
+                            // end node or sections start node -> check
+                            // completed
+                            break;
+                        }
+                    }
+                    while( sal_True );
+                }
+            }
+        }
+        else
+        {
+            rWrt.aNumRuleNames.Insert( new String( aName ) );
+        }
+    }
+
+
     DBG_ASSERT( rWrt.nLastParaToken == 0,
                 "<PRE> wurde nicht vor <OL> beendet." );
     sal_uInt16 nPrevDepth =
@@ -859,11 +924,14 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
             if( cType )
                 (((sOut += ' ') += sHTML_O_type) += '=') += cType;
 
-            // und evtl. den Startwert mit ausgeben
-            if( rNumFmt.GetStartValue() != 1 )
+            sal_uInt16 nStartVal = rNumFmt.GetStartValue();
+            if( bStartValue && 1 == nStartVal && i == rInfo.GetDepth()-1 )
+                nStartVal = rWrt.pCurPam->GetNode()->GetTxtNode()->GetNum()
+                                              ->GetLevelVal()[i];
+            if( nStartVal != 1 )
             {
                 (((sOut += ' ') += sHTML_O_start) += '=')
-                    += ByteString::CreateFromInt32( rNumFmt.GetStartValue() );
+                    += ByteString::CreateFromInt32( nStartVal );
             }
         }
 
@@ -872,7 +940,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
 
 #ifdef NUM_RELSPACE
         if( rWrt.bCfgOutStyles )
-            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), i );
+            OutCSS1_NumBulListStyleOpt( rWrt, *rInfo.GetNumRule(), (BYTE)i );
 #endif
 
         rWrt.Strm() << '>';
@@ -920,78 +988,3 @@ Writer& OutHTML_NumBulListEnd( SwHTMLWriter& rWrt,
 
     return rWrt;
 }
-
-
-/*************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.21  2000/09/18 16:04:45  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.20  2000/06/26 09:52:17  jp
-      must change: GetAppWindow->GetDefaultDevice
-
-      Revision 1.19  2000/04/10 12:20:56  mib
-      unicode
-
-      Revision 1.18  2000/03/21 15:06:18  os
-      UNOIII
-
-      Revision 1.17  2000/02/11 14:37:16  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.16  1999/11/19 16:40:20  os
-      modules renamed
-
-      Revision 1.15  1999/09/17 12:13:32  mib
-      support of multiple and non system text encodings
-
-      Revision 1.14  1999/03/26 10:37:28  MIB
-      #63049#: Sofortige Numerierungs-Aktualisierung in Tabellen ist jetzt unnoetig
-
-
-      Rev 1.13   26 Mar 1999 11:37:28   MIB
-   #63049#: Sofortige Numerierungs-Aktualisierung in Tabellen ist jetzt unnoetig
-
-      Rev 1.12   23 Mar 1999 15:28:16   MIB
-   #63049#: Relative Einzuege in Numerierungen
-
-      Rev 1.11   17 Mar 1999 16:47:10   MIB
-   #63049#: Numerierungen mit relativen Abstaenden
-
-      Rev 1.10   27 Jan 1999 09:43:54   OS
-   #56371# TF_ONE51
-
-      Rev 1.9   06 Jan 1999 10:33:40   MIB
-   #60311#: In Listen fuer nicht-numerierte Absaetze keine <PRE> ausgeben
-
-      Rev 1.8   17 Nov 1998 10:44:30   OS
-   #58263# NumType durch SvxExtNumType ersetzt
-
-      Rev 1.7   05 Nov 1998 12:34:30   MIB
-   #59042#: Fuer nicht verwendete Numerierungs-Ebenen sinnvolle Defaults setzen
-
-      Rev 1.6   21 Apr 1998 13:46:58   MIB
-   fix: Keine ::com::sun::star::text::Bookmark fuer abs-pos Objekte mit ID einfuegen
-
-      Rev 1.5   03 Apr 1998 12:21:48   MIB
-   Export des Rahmen-Namens als ID
-
-      Rev 1.4   25 Mar 1998 12:09:24   MIB
-   unneotige defines weg
-
-      Rev 1.3   02 Mar 1998 18:32:16   MIB
-   fix #47671#: Erste Numerierung auf einer Ebene gewinnt, Startwert
-
-      Rev 1.2   20 Feb 1998 19:01:50   MA
-   header
-
-      Rev 1.1   10 Feb 1998 09:51:24   MIB
-   fix: Fuer Absatz-Abstand am Start-/Ende von Listen auch OL/UL/DL beachten
-
-      Rev 1.0   19 Jan 1998 16:16:26   MIB
-   Initial revision.
-
-
-*************************************************************************/
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-01 19:23:14 $
+ *  last change: $Author: mib $ $Date: 2000-12-12 13:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,7 @@ public:
     SvStringsDtor aImgMapNames;     // geschriebene Image Maps
     SvStringsSortDtor aImplicitMarks;// implizite Stprungmarken
     SvStringsDtor aOutlineMarks;        // geschriebene Image Maps
+    SvStringsSortDtor aNumRuleNames;// Names of exported num rules
     SvULongs aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
     SwHTMLFmtInfos aChrFmtInfos;
