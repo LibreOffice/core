@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-28 07:35:50 $
+ *  last change: $Author: kz $ $Date: 2002-09-05 11:25:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,16 +394,16 @@ String STR_SVT_COLLATE_PHONEBOOK
     Text[ russian ] = "Phone book";
     Text[ greek ] = "Phone book";
     Text[ dutch ] = "Phone book";
-    Text[ french ] = "Phone book";
-    Text[ spanish ] = "Phone book";
+    Text[ french ] = "Annuaire t�l�phonique";
+    Text[ spanish ] = "List�n telef�nico";
     Text[ finnish ] = "Phone book";
     Text[ italian ] = "Elenco telefonico";
     Text[ danish ] = "Phone book";
-    Text[ swedish ] = "Phone book";
+    Text[ swedish ] = "Telefonkatalog";
     Text[ polish ] = "Phone book";
     Text[ japanese ] = "電話帳";
     Text[ korean ] = "전화 번호부";
-    Text[ chinese_simplified ] = "Phone book";
+    Text[ chinese_simplified ] = "电话簿";
     Text[ chinese_traditional ] = "電話簿";
     Text[ turkish ] = "Phone book";
     Text[ arabic ] = "Phone book";
@@ -413,12 +413,52 @@ String STR_SVT_COLLATE_PHONETIC_F
 {
     Text = "Phonetisch (alphanumerisch zuerst)";
     Text[ english_us ] = "Phonetic (alphanumeric first)";
+    Text[ portuguese ] = "Phonetic (alphanumeric first)";
+    Text[ russian ] = "Phonetic (alphanumeric first)";
+    Text[ greek ] = "Phonetic (alphanumeric first)";
+    Text[ dutch ] = "Phonetic (alphanumeric first)";
+    Text[ french ] = "Phonetic (alphanumeric first)";
+    Text[ spanish ] = "Phonetic (alphanumeric first)";
+    Text[ finnish ] = "Phonetic (alphanumeric first)";
+    Text[ italian ] = "Phonetic (alphanumeric first)";
+    Text[ danish ] = "Phonetic (alphanumeric first)";
+    Text[ swedish ] = "Phonetic (alphanumeric first)";
+    Text[ polish ] = "Phonetic (alphanumeric first)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first)";
+    Text[ japanese ] = "Phonetic (alphanumeric first)";
+    Text[ korean ] = "Phonetic (alphanumeric first)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric first)";
+    Text[ chinese_traditional ] = "語音的(數字排列最先)";
+    Text[ turkish ] = "Phonetic (alphanumeric first)";
+    Text[ arabic ] = "Phonetic (alphanumeric first)";
+    Text[ catalan ] = "Phonetic (alphanumeric first)";
+    Text[ thai ] = "Phonetic (alphanumeric first)";
 };
 
 String STR_SVT_COLLATE_PHONETIC_L
 {
     Text = "Phonetisch (alphanumerisch zuletzt)";
     Text[ english_us ] = "Phonetic (alphanumeric last)";
+    Text[ portuguese ] = "Phonetic (alphanumeric last)";
+    Text[ russian ] = "Phonetic (alphanumeric last)";
+    Text[ greek ] = "Phonetic (alphanumeric last)";
+    Text[ dutch ] = "Phonetic (alphanumeric last)";
+    Text[ french ] = "Phonetic (alphanumeric last)";
+    Text[ spanish ] = "Phonetic (alphanumeric last)";
+    Text[ finnish ] = "Phonetic (alphanumeric last)";
+    Text[ italian ] = "Phonetic (alphanumeric last)";
+    Text[ danish ] = "Phonetic (alphanumeric last)";
+    Text[ swedish ] = "Phonetic (alphanumeric last)";
+    Text[ polish ] = "Phonetic (alphanumeric last)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last)";
+    Text[ japanese ] = "Phonetic (alphanumeric last)";
+    Text[ korean ] = "Phonetic (alphanumeric last)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric last)";
+    Text[ chinese_traditional ] = "語音的(字母數字排列最後)";
+    Text[ turkish ] = "Phonetic (alphanumeric last)";
+    Text[ arabic ] = "Phonetic (alphanumeric last)";
+    Text[ catalan ] = "Phonetic (alphanumeric last)";
+    Text[ thai ] = "Phonetic (alphanumeric last)";
 };
 
 String STR_SVT_INDEXENTRY_ALPHANUMERIC
@@ -426,6 +466,26 @@ String STR_SVT_INDEXENTRY_ALPHANUMERIC
     /* alphanumeric indexentry algorithm */
     Text = "Alphanumerisch" ;
     Text[ english_us ] = "Alphanumeric";
+    Text[ portuguese ] = "Alphanumeric";
+    Text[ russian ] = "Alphanumeric";
+    Text[ greek ] = "Alphanumeric";
+    Text[ dutch ] = "Alphanumeric";
+    Text[ french ] = "Alphanumeric";
+    Text[ spanish ] = "Alphanumeric";
+    Text[ finnish ] = "Alphanumeric";
+    Text[ italian ] = "Alphanumeric";
+    Text[ danish ] = "Alphanumeric";
+    Text[ swedish ] = "Alphanumeric";
+    Text[ polish ] = "Alphanumeric";
+    Text[ portuguese_brazilian ] = "Alphanumeric";
+    Text[ japanese ] = "Alphanumeric";
+    Text[ korean ] = "Alphanumeric";
+    Text[ chinese_simplified ] = "Alphanumeric";
+    Text[ chinese_traditional ] = "字母數字的";
+    Text[ turkish ] = "Alphanumeric";
+    Text[ arabic ] = "Alphanumeric";
+    Text[ catalan ] = "Alphanumeric";
+    Text[ thai ] = "Alphanumeric";
 };
 
 String STR_SVT_INDEXENTRY_DICTIONARY
@@ -433,6 +493,26 @@ String STR_SVT_INDEXENTRY_DICTIONARY
     /* korean dictionary indexentry algorithm */
     Text = "W�rterbuch" ;
     Text[ english_us ] = "Dictionary";
+    Text[ portuguese ] = "Dictionary";
+    Text[ russian ] = "Dictionary";
+    Text[ greek ] = "Dictionary";
+    Text[ dutch ] = "Dictionary";
+    Text[ french ] = "Dictionary";
+    Text[ spanish ] = "Dictionary";
+    Text[ finnish ] = "Dictionary";
+    Text[ italian ] = "Dictionary";
+    Text[ danish ] = "Dictionary";
+    Text[ swedish ] = "Dictionary";
+    Text[ polish ] = "Dictionary";
+    Text[ portuguese_brazilian ] = "Dictionary";
+    Text[ japanese ] = "Dictionary";
+    Text[ korean ] = "Dictionary";
+    Text[ chinese_simplified ] = "Dictionary";
+    Text[ chinese_traditional ] = "字典";
+    Text[ turkish ] = "Dictionary";
+    Text[ arabic ] = "Dictionary";
+    Text[ catalan ] = "Dictionary";
+    Text[ thai ] = "Dictionary";
 };
 
 String STR_SVT_INDEXENTRY_PINYIN
@@ -440,6 +520,26 @@ String STR_SVT_INDEXENTRY_PINYIN
     /* chinese sorting algorithm */
     Text = "Pinyin" ;
     Text[ english_us ] = "Pinyin";
+    Text[ portuguese ] = "Pinyin";
+    Text[ russian ] = "Pinyin";
+    Text[ greek ] = "Pinyin";
+    Text[ dutch ] = "Pinyin";
+    Text[ french ] = "Pinyin";
+    Text[ spanish ] = "Pinyin";
+    Text[ finnish ] = "Pinyin";
+    Text[ italian ] = "Pinyin";
+    Text[ danish ] = "Pinyin";
+    Text[ swedish ] = "Pinyin";
+    Text[ polish ] = "Pinyin";
+    Text[ portuguese_brazilian ] = "Pinyin";
+    Text[ japanese ] = "ピンイン(中国語のローマ字表記法)";
+    Text[ korean ] = "Pinyin";
+    Text[ chinese_simplified ] = "拼音";
+    Text[ chinese_traditional ] = "拼音";
+    Text[ turkish ] = "Pinyin";
+    Text[ arabic ] = "Pinyin";
+    Text[ catalan ] = "Pinyin";
+    Text[ thai ] = "Pinyin";
 };
 
 String STR_SVT_INDEXENTRY_RADICAL
@@ -447,6 +547,26 @@ String STR_SVT_INDEXENTRY_RADICAL
     /* chinese indexentry algorithm */
     Text = "Radical" ;
     Text[ english_us ] = "Radical";
+    Text[ portuguese ] = "Radical";
+    Text[ russian ] = "������";
+    Text[ greek ] = "Radical";
+    Text[ dutch ] = "Radicaal";
+    Text[ french ] = "Radical";
+    Text[ spanish ] = "Radical";
+    Text[ finnish ] = "Juurimerkki";
+    Text[ italian ] = "Radicale";
+    Text[ danish ] = "Radikal";
+    Text[ swedish ] = "Radical";
+    Text[ polish ] = "Korze�-rdze�";
+    Text[ portuguese_brazilian ] = "Radical";
+    Text[ japanese ] = "漢字の部首";
+    Text[ korean ] = "극단";
+    Text[ chinese_simplified ] = "部首";
+    Text[ chinese_traditional ] = "部首";
+    Text[ turkish ] = "Radical";
+    Text[ arabic ] = "Radical";
+    Text[ catalan ] = "Radical";
+    Text[ thai ] = "รัศมี";
 };
 
 String STR_SVT_INDEXENTRY_STROKE
@@ -454,6 +574,26 @@ String STR_SVT_INDEXENTRY_STROKE
     /* chinese indexentry algorithm */
     Text = "Stroke" ;
     Text[ english_us ] = "Stroke";
+    Text[ portuguese ] = "Tra�o";
+    Text[ russian ] = "������";
+    Text[ greek ] = "Stroke";
+    Text[ dutch ] = "Stroke";
+    Text[ french ] = "Trait (stroke)";
+    Text[ spanish ] = "Trazo";
+    Text[ finnish ] = "Viiva";
+    Text[ italian ] = "Stroke";
+    Text[ danish ] = "Stroke";
+    Text[ swedish ] = "Stroke";
+    Text[ polish ] = "Kreski (stroke)";
+    Text[ portuguese_brazilian ] = "Stroke";
+    Text[ japanese ] = "総画数";
+    Text[ korean ] = "스트로크";
+    Text[ chinese_simplified ] = "笔画";
+    Text[ chinese_traditional ] = "筆畫";
+    Text[ turkish ] = "Stroke";
+    Text[ arabic ] = "Stroke";
+    Text[ catalan ] = "Cop";
+    Text[ thai ] = "ขีดลง";
 };
 
 String STR_SVT_INDEXENTRY_ZHUYIN
@@ -461,29 +601,129 @@ String STR_SVT_INDEXENTRY_ZHUYIN
     /* chinese indexentry algorithm */
     Text = "Zhuyin" ;
     Text[ english_us ] = "Zhuyin";
+    Text[ portuguese ] = "Zhuyin";
+    Text[ russian ] = "Zhuyin";
+    Text[ greek ] = "Zhuyin";
+    Text[ dutch ] = "Zhuyin";
+    Text[ french ] = "Zhuyin";
+    Text[ spanish ] = "Zhuyin";
+    Text[ finnish ] = "Zhuyin";
+    Text[ italian ] = "Zhuyin";
+    Text[ danish ] = "Zhuyin";
+    Text[ swedish ] = "Zhuyin";
+    Text[ polish ] = "Zhuyin";
+    Text[ portuguese_brazilian ] = "Zhuyin";
+    Text[ japanese ] = "注音（中国語の漢字の発音を表記するための表記文字）";
+    Text[ korean ] = "Zhuyin";
+    Text[ chinese_simplified ] = "注音";
+    Text[ chinese_traditional ] = "注音";
+    Text[ turkish ] = "Zhuyin";
+    Text[ arabic ] = "Zhuyin";
+    Text[ catalan ] = "Zhuyin";
+    Text[ thai ] = "Zhuyin";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FS
 {
     Text = "Phonetisch (alphanumerisch zuerst, nach Silben gruppiert)";
     Text[ english_us ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ portuguese ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ russian ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ greek ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ dutch ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ french ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ spanish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ finnish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ italian ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ danish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ swedish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ polish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ japanese ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ korean ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ chinese_traditional ] = "語音的(字母數字排列最先，按音節分組)";
+    Text[ turkish ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ arabic ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ catalan ] = "Phonetic (alphanumeric first, grouped by syllables)";
+    Text[ thai ] = "Phonetic (alphanumeric first, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FC
 {
     Text = "Phonetisch (alphanumerisch zuerst, nach  Konsonanten gruppiert)";
     Text[ english_us ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ portuguese ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ russian ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ greek ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ dutch ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ french ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ spanish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ finnish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ italian ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ danish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ swedish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ polish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ japanese ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ korean ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ chinese_traditional ] = "語音的(字母數字排列最先，按輔音分組)";
+    Text[ turkish ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ arabic ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ catalan ] = "Phonetic (alphanumeric first, grouped by consonants)";
+    Text[ thai ] = "Phonetic (alphanumeric first, grouped by consonants)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LS
 {
     Text = "Phonetisch (alphanumerisch zuletzt, nach Silben gruppiert)";
     Text[ english_us ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ portuguese ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ russian ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ greek ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ dutch ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ french ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ spanish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ finnish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ italian ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ danish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ swedish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ polish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ japanese ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ korean ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ chinese_traditional ] = "語音的(數字排列最後，按音節分組)";
+    Text[ turkish ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ arabic ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ catalan ] = "Phonetic (alphanumeric last, grouped by syllables)";
+    Text[ thai ] = "Phonetic (alphanumeric last, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
     Text = "Phonetisch (alphanumerisch zuletzt, nach Konsonanten gruppiert)";
     Text[ english_us ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ portuguese ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ russian ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ greek ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ dutch ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ french ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ spanish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ finnish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ italian ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ danish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ swedish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ polish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ portuguese_brazilian ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ japanese ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ korean ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ chinese_simplified ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ chinese_traditional ] = "語音的(數字排列最後，按輔音分組)";
+    Text[ turkish ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ arabic ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ catalan ] = "Phonetic (alphanumeric last, grouped by consonants)";
+    Text[ thai ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
 
