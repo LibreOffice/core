@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-08-12 09:04:03 $
+#   last change: $Author: hr $ $Date: 2004-10-12 10:06:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,11 +74,11 @@ TARGET=contact
 SLOFILES=\
         $(SLO)$/displayinfo.obj							\
         $(SLO)$/viewcontact.obj							\
+        $(SLO)$/viewcontactpainthelper.obj				\
         $(SLO)$/viewcontactofsdrobj.obj					\
         $(SLO)$/viewcontactofvirtobj.obj				\
         $(SLO)$/viewcontactoftextobj.obj				\
         $(SLO)$/viewcontactofsdrpage.obj				\
-        $(SLO)$/viewcontactofmasterpage.obj				\
         $(SLO)$/viewcontactofmasterpagedescriptor.obj	\
         $(SLO)$/viewcontactofgroup.obj					\
         $(SLO)$/viewcontactofe3dscene.obj				\
