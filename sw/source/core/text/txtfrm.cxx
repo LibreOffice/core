@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:56:15 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,6 +436,8 @@ void SwTxtFrm::InitCtor()
     bLocked = bFormatted = bWidow = bUndersized = bJustWidow =
         bEmpty = bInFtnConnect = bFtn = bRepaint = bBlinkPor =
         bFieldFollow = bHasAnimation = bIsSwapped = sal_False;
+    // OD 14.03.2003 #i11760#
+    mbFollowFormatAllowed = sal_True;
 }
 
 
